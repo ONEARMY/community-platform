@@ -14,6 +14,7 @@ export const generateDBEndpoints = (DB_PREFIX = '') => ({
   user_notifications: `${DB_PREFIX}user_notifications_rev20221209`,
   tags: `${DB_PREFIX}v3_tags`,
   categories: `${DB_PREFIX}v3_categories`,
+  researchCategories: `${DB_PREFIX}research_categories_rev20221224`,
   events: `${DB_PREFIX}v3_events`,
   mappins: `${DB_PREFIX}v3_mappins`,
   research: `${DB_PREFIX}research_rev20201020`,
@@ -29,10 +30,15 @@ export const dbEndpointSubollections = {
   howtos: ['stats'],
   research: ['stats'],
 }
-
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
-const e = process ? process.env : ({} as any)
+
+// Hack - allow calls to process from cypress testing (react polyfills process.env otherwise)
+if (!('process' in globalThis)) {
+  globalThis.process = {} as any
+}
+
+const e = process.env || ({} as any)
 
 // Check if sessionStorage exists (e.g. running in browser environment), and use if available
 const storage =

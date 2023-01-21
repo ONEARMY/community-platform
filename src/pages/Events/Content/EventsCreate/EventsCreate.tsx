@@ -308,6 +308,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   <PostingGuidelines />
                 </Box>
                 <Button
+                  large
                   onClick={() => {
                     if (isDigitalEvent || isLocationSelected) {
                       handleSubmit()
@@ -319,7 +320,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   variant={'primary'}
                   disabled={submitting}
                   data-cy="submit"
-                  sx={{ mb: ['40px', '40px', 0], width: '100%' }}
+                  sx={{
+                    mb: ['40px', '40px', 0],
+                    width: '100%',
+                    justifyContent: 'center',
+                  }}
                 >
                   Publish
                 </Button>

@@ -2,7 +2,8 @@ import { generateDBEndpoints } from 'oa-shared'
 
 // React apps populate a process variable, however it might not always be accessible outside
 // (e.g. cypress will instead use it's own env to populate a prefix)
-const e = process ? process.env : ({} as any)
+const process = globalThis.process || ({} as any)
+const e = process.env || ({} as any)
 
 /**
  * A prefix can be used to simplify large-scale schema changes or multisite hosting

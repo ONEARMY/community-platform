@@ -23,6 +23,7 @@ import { required } from 'src/utils/validators'
 import styled from '@emotion/styled'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -171,7 +172,7 @@ const ResearchForm = observer((props: IProps) => {
                     >
                       <PostingGuidelines />
                     </Box>
-                    <Card mt={3}>
+                    <Card mt={3} sx={{ overflow: 'visible' }}>
                       <Flex
                         p={4}
                         sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
@@ -222,7 +223,25 @@ const ResearchForm = observer((props: IProps) => {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label>Select tags for your Research</Label>
+                              <Label>What category fits your research?</Label>
+                              <Field
+                                name="researchCategory"
+                                render={({ input, ...rest }) => (
+                                  <CategoriesSelect
+                                    {...rest}
+                                    isForm={true}
+                                    onChange={(category) =>
+                                      input.onChange(category)
+                                    }
+                                    value={input.value}
+                                    placeholder="Select category"
+                                    type="research"
+                                  />
+                                )}
+                              />
+                            </Flex>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <Label>Select tags for your research</Label>
                               <Field
                                 name="tags"
                                 component={TagsSelectField}
@@ -276,6 +295,7 @@ const ResearchForm = observer((props: IProps) => {
                     )}{' '}
                   </Button>
                   <Button
+                    large
                     data-cy={'submit'}
                     onClick={() =>
                       setSubmissionHandler({ shouldSubmit: true, draft: false })
@@ -284,7 +304,11 @@ const ResearchForm = observer((props: IProps) => {
                     variant="primary"
                     type="submit"
                     disabled={submitting}
-                    sx={{ width: '100%', mb: ['40px', '40px', 0] }}
+                    sx={{
+                      width: '100%',
+                      mb: ['40px', '40px', 0],
+                      display: 'block',
+                    }}
                   >
                     <span>Publish</span>
                   </Button>

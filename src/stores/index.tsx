@@ -8,6 +8,7 @@ import { HowtoStore } from './Howto/howto.store'
 import { MapsStore } from './Maps/maps.store'
 import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
 import { PlatformStore } from './Platform/platform.store'
+import { ResearchCategoriesStore } from './ResearchCategories/researchCategories.store'
 import { TagsStore } from './Tags/tags.store'
 import { ThemeStore } from './Theme/theme.store'
 import { UserNotificationsStore } from './User/notifications.store'
@@ -33,6 +34,7 @@ const stores = (rootStore: RootStore) => {
     templateStore: new TemplateStore(rootStore),
     tagsStore: new TagsStore(rootStore),
     categoriesStore: new CategoriesStore(rootStore),
+    researchCategoriesStore: new ResearchCategoriesStore(rootStore),
     platformStore: new PlatformStore(rootStore),
     mobileMenuStore: new MobileMenuStore(rootStore),
     eventStore: new EventStore(rootStore),
@@ -50,6 +52,7 @@ export interface IStores {
   templateStore: TemplateStore
   tagsStore: TagsStore
   categoriesStore: CategoriesStore
+  researchCategoriesStore: ResearchCategoriesStore
   platformStore: PlatformStore
   mobileMenuStore: MobileMenuStore
   eventStore: EventStore

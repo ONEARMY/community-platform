@@ -3,6 +3,8 @@ import spaceBadge from 'src/assets/images/themes/fixing-fashion/avatar_space_lg.
 import memberBadgeLowDetail from 'src/assets/images/themes/fixing-fashion/avatar_member_sm.svg'
 import memberBadgeHighDetail from 'src/assets/images/themes/fixing-fashion/avatar_member_lg.svg'
 import logo from 'src/assets/images/themes/fixing-fashion/fixing-fashion-header.png'
+import { getButtons } from '../common/button'
+export type { ButtonVariants } from '../common/button'
 
 const fonts = {
   body: `'Inter', Arial, sans-serif`,
@@ -42,15 +44,6 @@ export const zIndex = {
   header: 3000,
 }
 
-export type ButtonVariants =
-  | 'primary'
-  | 'secondary'
-  | 'outline'
-  | 'disabled'
-  | 'dark'
-  | 'light'
-  | 'subtle'
-
 const space = [
   0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95,
   100, 105, 110, 115, 120, 125, 130, 135, 140,
@@ -80,127 +73,6 @@ const alerts = {
     backgroundColor: colors.red2,
     textAlign: 'center',
     fontWeight: 'normal',
-  },
-}
-
-const buttons = {
-  primary: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    bg: colors.yellow.base,
-    transition: '.2s ease-in-out',
-    '&:hover': {
-      bg: colors.yellow.hover,
-      cursor: 'pointer',
-    },
-    '&[disabled]': {
-      opacity: 0.5,
-      cursor: 'not-allowed',
-    },
-    '&[disabled]:hover': {
-      bg: colors.yellow.base,
-    },
-    borderRadius: radii[1] + 'px',
-  },
-  secondary: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    display: 'flex',
-    bg: colors.softblue,
-    transition: '.2s ease-in-out',
-    '&:hover': {
-      bg: colors.white,
-      cursor: 'pointer',
-    },
-    '&[disabled]': {
-      opacity: 0.5,
-    },
-    '&[disabled]:hover': {
-      bg: colors.softblue,
-    },
-    borderRadius: radii[1] + 'px',
-  },
-  tertiary: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    display: 'flex',
-    bg: colors.white,
-    transition: '.2s ease-in-out',
-    '&:hover': {
-      bg: colors.red,
-      cursor: 'pointer',
-    },
-    '&[disabled]': {
-      opacity: 0.5,
-    },
-    '&[disabled]:hover': {
-      bg: colors.white,
-    },
-    borderRadius: radii[1] + 'px',
-  },
-
-  outline: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    backgroundColor: colors.white,
-    transition: '.2s ease-in-out',
-    display: 'flex',
-    alignItems: 'center',
-    width: 'fit-content',
-    height: 'fit-content',
-    '&:hover': {
-      backgroundColor: colors.softblue,
-      cursor: 'pointer',
-    },
-    borderRadius: radii[1] + 'px',
-  },
-  imageInput: {
-    border: '2px dashed #e0e0e0',
-    color: '#e0e0e0',
-    backgroundColor: 'transparent',
-  },
-  colorful: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: '2px solid ' + colors.black,
-    color: colors.black,
-    display: 'flex',
-    bg: colors.white,
-    transition: '.2s ease-in-out',
-    '&:hover': {
-      bg: colors.yellow.base,
-      cursor: 'pointer',
-    },
-    '&[disabled]': {
-      opacity: 0.5,
-      cursor: 'not-allowed',
-    },
-    '&[disabled]:hover': {
-      bg: colors.yellow.base,
-    },
-    borderRadius: radii[1] + 'px',
-  },
-  subtle: {
-    fontFamily: '"Varela Round", Arial, sans-serif',
-    border: 'none',
-    color: colors.black,
-    display: 'flex',
-    bg: colors.softblue,
-    transition: '.2s ease-in-out',
-    '&:hover': {
-      bg: colors.white,
-      cursor: 'pointer',
-    },
-    '&[disabled]': {
-      opacity: 0.5,
-    },
-    '&[disabled]:hover': {
-      bg: colors.softblue,
-    },
-    borderRadius: radii[1] + 'px',
   },
 }
 
@@ -244,7 +116,7 @@ const StyledComponentTheme: ThemeWithName = {
     },
   },
   colors,
-  buttons,
+  buttons: getButtons(colors),
   breakpoints,
   space,
   radii,

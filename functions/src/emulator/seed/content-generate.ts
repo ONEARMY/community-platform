@@ -1,5 +1,5 @@
 import { IMockAuthUser, MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
-import type { IHowtoDB, IUserDB } from '../../../../src/models'
+import type { IHowtoDB, IUserDB } from '../../models'
 import { setDoc, updateDoc } from '../../Firebase/firestoreDB'
 
 /**
@@ -63,7 +63,7 @@ async function setMockNotifications(user: IMockAuthUser) {
       },
     ],
     notification_settings: {
-      emailFrequency: 'weekly',
+      emailFrequency: 'weekly' as any, // should set from Enum but want to avoid import
       enabled: {
         new_comment: true,
         howto_useful: true,

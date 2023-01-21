@@ -63,8 +63,15 @@ export const SiteFooter = () => {
       </Text>
 
       <Text mt={[2, 2, 0]}>
-        Running on our Platform software,{' '}
-        <Anchor href="https://platform.onearmy.earth/">help us build it</Anchor>
+        Please{' '}
+        <Anchor href="https://www.patreon.com/one_army">
+          sponsor the work
+        </Anchor>{' '}
+        or{' '}
+        <Anchor href="https://platform.onearmy.earth/">
+          help us build the software
+        </Anchor>
+        .
       </Text>
     </FooterContainer>
   )

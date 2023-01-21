@@ -45,7 +45,7 @@ You can find useful links to learn more about these technologies [in the resourc
 
 **Prerequisites**
 
-- [Node.js v16](https://nodejs.org/en/download/)
+- [Node.js v18](https://nodejs.org/en/download/)
 - [Yarn v3](https://yarnpkg.com/getting-started/install)
 
 With the above tools available, you are ready:

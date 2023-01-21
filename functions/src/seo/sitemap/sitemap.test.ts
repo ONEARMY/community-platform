@@ -81,7 +81,7 @@ describe('SEO', () => {
       const modulePages = ['how-to', 'map', 'research', 'events', 'academy']
       for (const modulePage of modulePages) {
         // the top-level pages should appear fully encapsulated, with domain specified from config
-        const tag = `<loc>https://functions.test/${modulePage}</loc>`
+        const tag = `<loc>http://localhost:4000/${modulePage}</loc>`
         test(modulePage, () => {
           const isIncluded = sitemapString.includes(tag)
           expect(isIncluded).toBe(true)

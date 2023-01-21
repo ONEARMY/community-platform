@@ -45,7 +45,7 @@ export class ProfileButtons extends Component<IProps> {
               <ProfileButtonItem
                 link={'/sign-up'}
                 text="Join"
-                variant="colorful"
+                variant="outline"
                 isMobile={true}
                 sx={{
                   fontSize: '12px',
@@ -71,7 +71,7 @@ export class ProfileButtons extends Component<IProps> {
             <ProfileButtonItem
               link={'/sign-up'}
               text="Join"
-              variant="colorful"
+              variant="outline"
               sx={{ fontSize: 2 }}
             />
           </>

@@ -7,19 +7,19 @@
     "db:teardown": "TODO"
   },
   "dependencies": {
-    "cypress": "9.4",
+    "cypress": "12.3.0",
     "cypress-file-upload": "5.0.8",
     "oa-shared": "workspace:*"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "^5.9.1",
+    "@cypress/webpack-preprocessor": "^5.16.1",
     "@types/fs-extra": "^9.0.13",
     "@types/wait-on": "^5.3.1",
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "fs-extra": "^10.0.0",
     "ts-node": "^10.2.1",
-    "wait-on": "^6.0.0"
+    "wait-on": "^7.0.1"
   },
   "installConfig": {
     "hoistingLimits": "workspaces"

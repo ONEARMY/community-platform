@@ -11,21 +11,31 @@ interface IAdminPageMeta extends IPageMeta {
 
 export const ADMIN_PAGES: IAdminPageMeta[] = [
   {
-    component: lazy(() => import('./pages/adminApprovals')),
+    component: lazy(
+      () =>
+        import(
+          /* webpackChunkName: "adminApprovals" */ './pages/adminApprovals'
+        ),
+    ),
     title: 'Approvals',
     description: '',
     path: '',
     moduleName,
   },
   {
-    component: lazy(() => import('./pages/adminUsers')),
+    component: lazy(
+      () => import(/* webpackChunkName: "adminUsers" */ './pages/adminUsers'),
+    ),
     title: 'Users',
     description: 'Browse Users',
     path: '/users',
     moduleName,
   },
   {
-    component: lazy(() => import('./pages/adminMappins')),
+    component: lazy(
+      () =>
+        import(/* webpackChunkName: "adminMappins" */ './pages/adminMappins'),
+    ),
     title: 'Map Pins',
     description: 'Browse Map Pins',
     path: '/map-pins',
@@ -33,7 +43,9 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
     disabled: true,
   },
   {
-    component: lazy(() => import('./pages/adminTags')),
+    component: lazy(
+      () => import(/* webpackChunkName: "adminTags" */ './pages/adminTags'),
+    ),
     title: 'Tags',
     description: 'Browse Tags',
     path: '/tags',
@@ -41,7 +53,9 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
     disabled: true,
   },
   {
-    component: lazy(() => import('./pages/adminHowtos')),
+    component: lazy(
+      () => import(/* webpackChunkName: "adminHowtos" */ './pages/adminHowtos'),
+    ),
     title: 'Howtos',
     description: 'Browse Howtos',
     path: '/howtos',
@@ -49,7 +63,10 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
   },
 
   {
-    component: lazy(() => import('./pages/adminResearch')),
+    component: lazy(
+      () =>
+        import(/* webpackChunkName: "adminResearch" */ './pages/adminResearch'),
+    ),
     title: 'Research',
     description: 'Browse Research',
     path: '/research',

@@ -82,6 +82,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
                 data-cy="move-step"
                 variant={'secondary'}
                 icon="arrow-full-up"
+                showIconOnly={true}
                 sx={{ mx: '5px' }}
                 onClick={() => this.props.moveStep(index, index - 1)}
               />
@@ -91,12 +92,14 @@ class HowtoStep extends PureComponent<IProps, IState> {
               variant={'secondary'}
               icon="arrow-full-down"
               sx={{ mx: '5px' }}
+              showIconOnly={true}
               onClick={() => this.props.moveStep(index, index + 1)}
             />
             {index >= 1 && (
               <Button
                 data-cy="delete-step"
-                variant={'tertiary'}
+                variant={'outline'}
+                showIconOnly={true}
                 icon="delete"
                 onClick={() => this.toggleDeleteModal()}
               />
@@ -119,7 +122,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
                 <Flex px={1}>
                   <Button
                     data-cy="confirm"
-                    variant={'tertiary'}
+                    variant={'outline'}
                     onClick={() => this.confirmDelete()}
                   >
                     Delete

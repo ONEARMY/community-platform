@@ -35,7 +35,6 @@ import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 
 const MAX_LINK_LENGTH = 2000
 
@@ -165,6 +164,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
+
     return (
       <>
         {showSubmitModal && (
@@ -263,25 +263,24 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                                 />
                               </Flex>
-                              <AuthWrapper roleRequired="beta-tester">
-                                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                  <Label>Category *</Label>
-                                  <Field
-                                    name="category"
-                                    render={({ input, ...rest }) => (
-                                      <CategoriesSelect
-                                        {...rest}
-                                        isForm={true}
-                                        onChange={(category) =>
-                                          input.onChange(category)
-                                        }
-                                        value={input.value}
-                                        placeholder="Select one category"
-                                      />
-                                    )}
-                                  />
-                                </Flex>
-                              </AuthWrapper>
+                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                <Label>Category *</Label>
+                                <Field
+                                  name="category"
+                                  render={({ input, ...rest }) => (
+                                    <CategoriesSelect
+                                      {...rest}
+                                      isForm={true}
+                                      onChange={(category) =>
+                                        input.onChange(category)
+                                      }
+                                      value={input.value}
+                                      placeholder="Select one category"
+                                      type="howto"
+                                    />
+                                  )}
+                                />
+                              </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
                                 <Label>Select tags for your How-to*</Label>
                                 <Field
@@ -354,7 +353,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 sx={{ flexDirection: 'column' }}
                                 mb={[4, 4, 0]}
                               >
-                                {formValues.files.length !== 0 &&
+                                {formValues.files?.length &&
                                 parentType === 'edit' &&
                                 !fileEditMode ? (
                                   <Flex
@@ -371,7 +370,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       />
                                     ))}
                                     <Button
-                                      variant={'tertiary'}
+                                      variant={'outline'}
                                       icon="delete"
                                       onClick={() =>
                                         this.setState({
@@ -490,7 +489,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 mt={[10, 10, 20]}
                                 mb={[5, 5, 20]}
                                 variant="secondary"
-                                medium
                                 onClick={() => {
                                   fields.push({
                                     title: '',
@@ -546,18 +544,23 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         <span>Save to draft</span>
                       ) : (
                         <span>Revert to draft</span>
-                      )}{' '}
+                      )}
                     </Button>
                     <Button
+                      large
                       data-cy={'submit'}
                       onClick={() => this.trySubmitForm(false)}
                       mt={3}
                       variant="primary"
                       type="submit"
                       disabled={submitting}
-                      sx={{ width: '100%', mb: ['40px', '40px', 0] }}
+                      sx={{
+                        width: '100%',
+                        display: 'block',
+                        mb: ['40px', '40px', 0],
+                      }}
                     >
-                      <span>Publish</span>
+                      Publish
                     </Button>
                   </Box>
                 </Flex>

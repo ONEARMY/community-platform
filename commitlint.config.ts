@@ -1,7 +1,7 @@
 import type { UserConfig } from '@commitlint/types'
 import path from 'path'
 
-export const Configuration: UserConfig = {
+const Configuration: UserConfig = {
   extends: ['@commitlint/config-conventional'],
   /** Add optional custom formatter */
   formatter: path.resolve(__dirname, 'commitlint.format.ts'),
@@ -120,3 +120,5 @@ export const Configuration: UserConfig = {
     },
   },
 }
+
+module.exports = Configuration

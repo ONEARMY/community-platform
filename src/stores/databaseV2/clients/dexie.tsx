@@ -13,7 +13,7 @@ import { DB_ENDPOINTS } from '../endpoints'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20221224
+const DB_CACHE_NUMBER = 20230105
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -152,7 +152,7 @@ const DEFAULT_SCHEMA = '_id,_modified'
 
 const SCHEMA_BASE: IDexieSchema = {
   events: `${DEFAULT_SCHEMA},slug`,
-  howtos: `${DEFAULT_SCHEMA},slug`,
+  howtos: `${DEFAULT_SCHEMA},slug,previousSlugs`,
   mappins: DEFAULT_SCHEMA,
   tags: DEFAULT_SCHEMA,
   categories: DEFAULT_SCHEMA,

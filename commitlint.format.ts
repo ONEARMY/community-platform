@@ -21,6 +21,8 @@ export const formatter: Formatter = function (report, options) {
   return ''
 }
 
+module.exports = formatter
+
 // Fix type definition for formattable report
 interface IFormatReport extends FormattableReport {
   errorCount: number

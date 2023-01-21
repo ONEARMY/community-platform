@@ -8,12 +8,14 @@ import {
   ModerationStatus,
   UsefulStatsButton,
   Username,
+  ViewsCounter
 } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { useResearchStore } from 'src/stores/Research/research.store'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -40,6 +42,19 @@ const ResearchDescription: React.FC<IProps> = ({
       return ''
     }
   }
+  const store = useResearchStore()
+
+  const [viewCount, setViewCount] = React.useState(research.total_views)
+
+  const incrementViewCount = async () => {
+    const updatedViewCount = await store.incrementViewCount(research._id)
+    setViewCount(updatedViewCount)
+  }
+ 
+  React.useEffect(() => {
+    setViewCount(research.total_views)
+    incrementViewCount()
+  }, [research]) 
 
   return (
     <Flex
@@ -80,7 +95,7 @@ const ResearchDescription: React.FC<IProps> = ({
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (
-            <Box sx={{ flexGrow: 1, ml: 2 }}>
+            <Box sx={{ ml: 2 }}>
               <UsefulStatsButton
                 votedUsefulCount={props.votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
@@ -89,6 +104,11 @@ const ResearchDescription: React.FC<IProps> = ({
               />
             </Box>
           )}
+          <Box style={{ flexGrow: 1 }}>
+            <ViewsCounter
+            viewsCount={viewCount!} 
+            />
+          </Box>
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

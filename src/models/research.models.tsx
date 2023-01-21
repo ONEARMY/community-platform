@@ -18,6 +18,7 @@ export namespace IResearch {
   export interface Item extends FormInput {
     updates: Update[]
     _createdBy: string
+    total_views?: number
   }
 
   /** A research item update */
@@ -27,6 +28,7 @@ export namespace IResearch {
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
     comments?: IComment[]
+    total_views?: number
   }
 
   export interface FormInput extends IModerable {

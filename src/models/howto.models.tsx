@@ -22,6 +22,7 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   // Comments were added in V2, old howto's may not have the property
   comments?: IComment[]
   total_downloads?: number
+  total_views?: number
   mentions: UserMention[]
   previousSlugs?: string[]
 }

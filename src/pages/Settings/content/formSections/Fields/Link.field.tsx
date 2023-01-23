@@ -1,11 +1,29 @@
 import { Component } from 'react'
-import { COM_TYPE_MOCKS } from 'src/mocks/Selectors'
 import { Field } from 'react-final-form'
 import { Button, FieldInput, Modal } from 'oa-components'
 import { Text, Flex, Grid } from 'theme-ui'
 import { SelectField } from 'src/common/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
 import { formatLink } from 'src/utils/formatters'
+
+const COM_TYPE_MOCKS = [
+  {
+    value: 'website',
+    label: 'website',
+  },
+  {
+    value: 'social media',
+    label: 'social media',
+  },
+  {
+    value: 'bazar',
+    label: 'bazar',
+  },
+  {
+    value: 'email',
+    label: 'email',
+  },
+]
 
 interface IProps {
   name: string

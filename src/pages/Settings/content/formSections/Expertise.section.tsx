@@ -3,13 +3,31 @@ import * as React from 'react'
 import { Flex, Heading, Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
-import { MACHINE_BUILDER_XP } from 'src/mocks/user_pp.mock'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import theme from 'src/themes/styled.theme'
+import type { IMAchineBuilderXp } from 'src/models'
 
 interface IProps {
   required: boolean
 }
+
+const MACHINE_BUILDER_XP: IMAchineBuilderXp[] = [
+  {
+    label: 'electronics',
+  },
+  {
+    label: 'machining',
+  },
+  {
+    label: 'welding',
+  },
+  {
+    label: 'assembling',
+  },
+  {
+    label: 'mould-making',
+  },
+]
 
 export class ExpertiseSection extends React.Component<IProps, any> {
   constructor(props: any) {

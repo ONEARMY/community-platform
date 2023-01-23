@@ -25,8 +25,8 @@ export const ViewsCounter = (props: IProps) => {
         icon={'star'}
       >
         <Text ml={-1}> 
-        {props.viewsCount ? props.viewsCount : 0 }
-        {props.viewsCount!== 1 ? ' views' : ' view'}
+        {props.viewsCount}
+        {props.viewsCount !== 1 ? ' views' : ' view'}
         </Text>
       </Button>
     </>

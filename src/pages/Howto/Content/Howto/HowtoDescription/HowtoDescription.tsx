@@ -46,12 +46,12 @@ interface IProps {
 
 const HowtoDescription: React.FC<IProps> = ({
   howto,
+  loggedInUser,
   ...props
 }) => {
 
   const [fileDownloadCount, setFileDownloadCount] = useState(howto.total_downloads)
   const [viewCount, setViewCount] = useState(howto.total_views)
-  const { loggedInUser } = props
   const { stores } = useCommonStores()
 
   const incrementDownloadCount = async () => {
@@ -93,10 +93,6 @@ const HowtoDescription: React.FC<IProps> = ({
       return ''
     }
   }
-
-  // useEffect(() => {
-  //   incrementViewCount()
-  // }, [])   
   
   useEffect(() => {
     setFileDownloadCount(howto.total_downloads)
@@ -157,7 +153,7 @@ const HowtoDescription: React.FC<IProps> = ({
               <UsefulStatsButton
                 votedUsefulCount={props.votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
-                isLoggedIn={props.loggedInUser ? true : false}
+                isLoggedIn={loggedInUser ? true : false}
                 onUsefulClick={props.onUsefulClick}
               />
             </Box>

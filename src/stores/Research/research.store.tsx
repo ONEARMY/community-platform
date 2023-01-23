@@ -182,6 +182,11 @@ export class ResearchStore extends ModuleStore {
     this.updateUploadStatus = getInitialUpdateUploadStatus()
   }
 
+  @action
+  public updateSelectedCategory(category: string) {
+    this.selectedCategory = category
+  }
+
   private async addUserReference(str: string): Promise<{
     text: string
     users: string[]

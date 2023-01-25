@@ -106,6 +106,26 @@ describe('research.store', () => {
           ]),
         )
       })
+
+      it('triggers notification for @mentions in comment', async () => {
+        const { store, researchItem } = await factory()
+
+        // Act
+        await store.addComment(
+          'My favourite user has to be @username',
+          researchItem.updates[0],
+        )
+
+        // Assert
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toBeCalledTimes(1)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'research_mention',
+          'username',
+          `/research/${researchItem.slug}#update-0-comment-0`,
+        )
+      })
     })
 
     describe('deleteComment', () => {
@@ -261,6 +281,41 @@ describe('research.store', () => {
         const [newResearchItem] = setFn.mock.calls[0]
         expect(newResearchItem.updates[0].description).toBe(
           '@@{userId:username}',
+        )
+      })
+
+      it('triggers a notification when editing an comment to add @mention', async () => {
+        const comment = FactoryComment({
+          _creatorId: 'fake-user',
+        })
+        const { store, researchItem, setFn } = await factory({
+          updates: [
+            FactoryResearchItemUpdate({
+              description: 'Some description',
+              comments: [comment],
+            }),
+          ],
+        })
+
+        // Act
+        await store.editComment(
+          comment._id,
+          'My favourite comment @username',
+          researchItem.updates[0],
+        )
+
+        // Assert
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(newResearchItem.updates[0].comments[0].text).toBe(
+          'My favourite comment @@{userId:username}',
+        )
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toBeCalledTimes(1)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'research_mention',
+          'username',
+          `/research/${researchItem.slug}#update-0-comment-0`,
         )
       })
     })

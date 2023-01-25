@@ -357,9 +357,7 @@ export class ResearchStore extends ModuleStore {
         } else updateWithMeta.images = []
 
         if (commentIndex !== -1) {
-          pastComments[commentIndex].text = (
-            await this.addUserReference(newText)
-          ).text
+          pastComments[commentIndex].text = newText
             .slice(0, MAX_COMMENT_LENGTH)
             .trim()
           pastComments[commentIndex]._edited = new Date().toISOString()
@@ -413,7 +411,9 @@ export class ResearchStore extends ModuleStore {
 
     await Promise.all(
       researchItem.updates.map(async (up, idx) => {
-        const { text, users } = await this.addUserReference(up.description)
+        const { text: newDescription, users } = await this.addUserReference(
+          up.description,
+        )
 
         ;(users || []).map((username) => {
           mentions.push({
@@ -422,7 +422,7 @@ export class ResearchStore extends ModuleStore {
           })
         })
 
-        researchItem.updates[idx].description = text
+        researchItem.updates[idx].description = newDescription
 
         if (researchItem.updates[idx]) {
           await Promise.all(
@@ -433,7 +433,6 @@ export class ResearchStore extends ModuleStore {
                 )
 
                 const researchUpdate = researchItem.updates[idx]
-
                 if (researchUpdate.comments) {
                   researchUpdate.comments[commentIdx].text = text
 

@@ -1,4 +1,5 @@
 /** @jsxImportSource theme-ui */
+import { Box } from 'theme-ui'
 import type { Result } from './OsmGeocoding'
 
 export interface Props {
@@ -10,8 +11,9 @@ export interface Props {
 export const OsmGeocodingResultsList = (props: Props) => {
   const { results, callback, setShowResults } = props
   return (
-    <ul
+    <Box
       data-cy="osm-geocoding-results"
+      as="ul"
       sx={{
         background: 'white',
         padding: 0,
@@ -27,7 +29,8 @@ export const OsmGeocodingResultsList = (props: Props) => {
       }}
     >
       {results.map((result: Result, index: number) => (
-        <li
+        <Box
+          as="li"
           sx={{
             paddingY: 1,
             paddingX: 2,
@@ -46,8 +49,8 @@ export const OsmGeocodingResultsList = (props: Props) => {
           }}
         >
           {result?.display_name}
-        </li>
+        </Box>
       ))}
-    </ul>
+    </Box>
   )
 }

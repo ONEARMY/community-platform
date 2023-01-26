@@ -49,7 +49,7 @@ describe('[Notifications]', () => {
     cy.visit('research')
     cy.login('howto_reader@test.com', 'test1234')
     cy.visit('/research/qwerty')
-    cy.get('[data-cy="vote-useful"]').contains('Useful').click()
+    cy.get('[data-cy="vote-useful"]').click()
     cy.wait(DB_WAIT_TIME)
     cy.step('Verify the notification has been added')
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(

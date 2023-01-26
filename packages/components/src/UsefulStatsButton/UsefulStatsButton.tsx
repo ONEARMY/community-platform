@@ -46,6 +46,8 @@ export const UsefulStatsButton = (props: IProps) => {
     props.onUsefulClick()
   }
 
+  const label = props.hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'
+
   return props.isLoggedIn ? (
     <>
       <Button
@@ -60,7 +62,9 @@ export const UsefulStatsButton = (props: IProps) => {
         }}
         icon={hasUserVotedUseful ? 'star-active' : 'star'}
       >
-        <Text ml={1}>Useful {votedUsefulCount ? votedUsefulCount : ''}</Text>
+        <Text ml={1}>
+          {label} {votedUsefulCount ? votedUsefulCount : ''}
+        </Text>
       </Button>
     </>
   ) : (
@@ -81,7 +85,9 @@ export const UsefulStatsButton = (props: IProps) => {
         }}
       >
         <Icon glyph={hasUserVotedUseful ? 'star-active' : 'star'} />
-        <Text ml={2}>Useful {votedUsefulCount ? votedUsefulCount : ''}</Text>
+        <Text ml={2}>
+          {label} {votedUsefulCount ? votedUsefulCount : ''}
+        </Text>
       </ExternalLink>
       <Tooltip />
     </>

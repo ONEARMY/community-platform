@@ -12,7 +12,7 @@ import type { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
 import { MAP_GROUPINGS } from './maps.groupings'
-import { generatePins, generatePinDetails } from 'src/mocks/maps.mock'
+import { generatePins, generatePinDetails } from 'src/stores/Maps/generatePins'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { IUploadedFileMeta } from '../storage'
 import {
@@ -25,7 +25,6 @@ import { filterMapPinsByType } from './filter'
 
 // NOTE - toggle below variable to use larger mock dataset
 const IS_MOCK = false
-const MOCK_PINS = generatePins(250)
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
   mapPins$: Subscription
@@ -67,7 +66,7 @@ export class MapsStore extends ModuleStore {
         return { ...p, verified: this.userStore.verifiedUsers[p._id] === true }
       })
     if (IS_MOCK) {
-      pins = MOCK_PINS
+      pins = generatePins(250)
     }
     this.mapPins = pins
     this.filteredPins = this.mapPins

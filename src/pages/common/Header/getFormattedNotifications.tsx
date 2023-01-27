@@ -4,7 +4,7 @@ import type { INotification } from 'src/models'
 import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
 import { Box } from 'theme-ui'
 
-export function getFormattedNotificationMessage(notification: INotification) {
+export function getFormattedMessage(notification: INotification) {
   switch (notification.type) {
     case 'new_comment':
       return (
@@ -86,6 +86,6 @@ export function getFormattedNotifications(
     .getUnreadNotifications()
     .map((notification) => ({
       type: notification.type,
-      children: getFormattedNotificationMessage(notification),
+      children: getFormattedMessage(notification),
     }))
 }

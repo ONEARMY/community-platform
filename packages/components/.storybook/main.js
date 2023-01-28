@@ -5,6 +5,9 @@ const paths = {
 const webpack = require('webpack')
 
 module.exports = {
+  core: {
+    builder: 'webpack5',
+  },
   stories: ['../src/**/*.stories.tsx', '../src/stories.mdx'],
   features: {
     emotionAlias: false,

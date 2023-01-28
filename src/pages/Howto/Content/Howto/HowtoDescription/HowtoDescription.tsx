@@ -173,21 +173,27 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
                   data-cy={'accept'}
                   variant={'primary'}
                   icon="check"
-                  mr={1}
                   onClick={() => this.props.moderateHowto(true)}
-                />
+                  showIconOnly={true}
+                >
+                  Accept
+                </Button>
                 <Button
                   data-cy="reject-howto"
                   variant={'outline'}
                   icon="delete"
                   onClick={() => this.props.moderateHowto(false)}
-                />
+                  showIconOnly={true}
+                  sx={{ ml: 1 }}
+                >
+                  Reject
+                </Button>
               </Flex>
             )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser && isAllowToEditContent(howto, loggedInUser) && (
               <Link to={'/how-to/' + this.props.howto.slug + '/edit'}>
-                <Button variant={'primary'} data-cy={'edit'}>
+                <Button variant={'primary'} data-cy={'edit'} sx={{ ml: 1 }}>
                   Edit
                 </Button>
               </Link>

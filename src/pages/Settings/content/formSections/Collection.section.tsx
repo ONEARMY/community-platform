@@ -1,14 +1,22 @@
 import * as React from 'react'
+import type { IUserPP } from 'src/models/user_pp.models'
+import type { IPlasticType } from 'src/models'
 
 import { Flex, Heading, Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
+import Pet from 'src/assets/images/plastic-types/pet.svg'
+import PP from 'src/assets/images/plastic-types/pp.svg'
+import PS from 'src/assets/images/plastic-types/ps.svg'
+import Hdpe from 'src/assets/images/plastic-types/hdpe.svg'
+import Ldpe from 'src/assets/images/plastic-types/ldpe.svg'
+import Other from 'src/assets/images/plastic-types/other.svg'
+import Pvc from 'src/assets/images/plastic-types/pvc.svg'
+
 import { FieldArray } from 'react-final-form-arrays'
 import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
-import { PLASTIC_TYPES } from 'src/mocks/user_pp.mock'
-import type { IUserPP } from 'src/models/user_pp.models'
 import theme from 'src/themes/styled.theme'
 
 interface IProps {
@@ -123,3 +131,41 @@ export class CollectionSection extends React.Component<IProps> {
     )
   }
 }
+
+const PLASTIC_TYPES: IPlasticType[] = [
+  {
+    label: 'pet',
+    number: '1',
+    imageSrc: Pet,
+  },
+  {
+    label: 'hdpe',
+    number: '2',
+    imageSrc: Hdpe,
+  },
+  {
+    label: 'pvc',
+    number: '3',
+    imageSrc: Pvc,
+  },
+  {
+    label: 'ldpe',
+    number: '4',
+    imageSrc: Ldpe,
+  },
+  {
+    label: 'pp',
+    number: '5',
+    imageSrc: PP,
+  },
+  {
+    label: 'ps',
+    number: '6',
+    imageSrc: PS,
+  },
+  {
+    label: 'other',
+    number: '7',
+    imageSrc: Other,
+  },
+]

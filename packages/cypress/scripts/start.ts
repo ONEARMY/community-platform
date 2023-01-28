@@ -1,5 +1,4 @@
 #!/usr/bin/env ts-node
-console.log('start')
 import PATHS from './paths'
 
 import { spawnSync, spawn } from 'child_process'
@@ -88,14 +87,14 @@ async function startAppServer() {
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
-  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 npm run start`
+  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 yarn start`
 
   // for production will instead serve from production build folder
   if (useProductionBuild) {
     // create local build if not running on ci (which will have build already generated)
     if (!isCi) {
       // specify CI=false to prevent throwing lint warnings as errors
-      spawnSync(`${CROSSENV_BIN} ${crossEnvArgs} CI=false npm run build`, {
+      spawnSync(`${CROSSENV_BIN} ${crossEnvArgs} CI=false yarn build`, {
         shell: true,
         stdio: ['inherit', 'inherit', 'pipe'],
       })
@@ -131,7 +130,7 @@ async function startAppServer() {
   // do not end function until server responsive on port 3456
   // give up if not reponsive after 5 minutes (assume uncaught error somewhere)
   const timeout = 5 * 60 * 1000
-  await waitOn({ resources: ['http-get://localhost:3456'], timeout })
+  await waitOn({ resources: ['http-get://127.0.0.1:3456'], timeout })
 }
 
 function randomString(length) {

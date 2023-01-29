@@ -15,6 +15,7 @@ interface IProps {
   comments: UserComment[]
   update: IResearch.UpdateDB
   updateIndex: number
+  showComments?: boolean
 }
 
 const BoxMain = styled(Box)`
@@ -24,11 +25,16 @@ const BoxMain = styled(Box)`
   margin-top: 20px;
 `
 
-export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
+export const ResearchComments = ({
+  comments,
+  update,
+  updateIndex,
+  showComments,
+}: IProps) => {
   const [comment, setComment] = useState('')
   const [, setLoading] = useState(false)
   const researchStore = useResearchStore()
-  const [viewComments, setViewComments] = useState(false)
+  const [viewComments, setViewComments] = useState(!!showComments)
   const { stores } = useCommonStores()
 
   async function onSubmit(comment: string) {
@@ -173,6 +179,10 @@ export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
             handleEdit={handleEdit}
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
+            highlightedCommentId={
+              comments[window.location.hash.replace(/#update-\d-comment-/, '')]
+                ?._id
+            }
           />
           <Box sx={{ width: '100%' }}>
             <CreateComment

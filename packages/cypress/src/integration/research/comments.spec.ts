@@ -3,10 +3,17 @@ describe('[Research]', () => {
     cy.visit('/research/qwerty')
   })
 
-  it('[Open comments]', () => {
-    cy.get('[data-cy="ResearchComments: button open-comments"]').click()
-    cy.get('[data-cy="comment"]').should('have.length.gte', 1)
-    cy.get('[data-cy="comment-submit"]').should('be.disabled')
+  describe('[Open comments]', () => {
+    it('using UI elements', () => {
+      cy.get('[data-cy="ResearchComments: button open-comments"]').click()
+      cy.get('[data-cy="comment"]').should('have.length.gte', 1)
+      cy.get('[data-cy="comment-submit"]').should('be.disabled')
+    })
+
+    it('using URL', () => {
+      cy.visit('/research/qwerty#update-0-comment:abc123')
+      cy.get('[data-cy="comment"]').should('have.length.gte', 1)
+    })
   })
 
   describe('[By Authenticated]', () => {

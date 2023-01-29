@@ -8,6 +8,12 @@ import {
 import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
 
+jest.mock('../../utils/helpers', () => ({
+  randomID: () => {
+    return 'random-id'
+  },
+}))
+
 const factory = async (researchItemOverloads: any = {}) => {
   const researchItem = FactoryResearchItem({
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
@@ -101,7 +107,7 @@ describe('research.store', () => {
           expect.arrayContaining([
             {
               username: 'username',
-              location: 'update-0-comment-0',
+              location: 'update-0-comment:random-id',
             },
           ]),
         )
@@ -123,7 +129,7 @@ describe('research.store', () => {
         expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
           'research_mention',
           'username',
-          `/research/${researchItem.slug}#update-0-comment-0`,
+          `/research/${researchItem.slug}#update-0-comment:random-id`,
         )
       })
     })
@@ -315,7 +321,7 @@ describe('research.store', () => {
         expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
           'research_mention',
           'username',
-          `/research/${researchItem.slug}#update-0-comment-0`,
+          `/research/${researchItem.slug}#update-0-comment:${newResearchItem.updates[0].comments[0]._id}`,
         )
       })
     })

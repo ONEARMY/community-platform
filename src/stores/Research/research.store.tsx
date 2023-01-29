@@ -439,7 +439,7 @@ export class ResearchStore extends ModuleStore {
                   users.map((username) => {
                     mentions.push({
                       username,
-                      location: `update-${idx}-comment-${commentIdx}`,
+                      location: `update-${idx}-comment:${comment._id}`,
                     })
                   })
                 }

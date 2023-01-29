@@ -31,7 +31,7 @@ describe('[Notifications]', () => {
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const user = docs[1]
-        let notifications = user['notifications']
+        const notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('howto_useful')
         expect(notifications[0]['relevantUrl']).to.equal(
@@ -56,7 +56,7 @@ describe('[Notifications]', () => {
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const user = docs[1]
-        let notifications = user['notifications']
+        const notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('research_useful')
         expect(notifications[0]['relevantUrl']).to.equal('/research/qwerty')
@@ -80,7 +80,7 @@ describe('[Notifications]', () => {
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const user = docs[1]
-        let notifications = user['notifications']
+        const notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('new_comment')
         expect(notifications[0]['relevantUrl']).to.equal(
@@ -107,7 +107,7 @@ describe('[Notifications]', () => {
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const user = docs[1]
-        let notifications = user['notifications']
+        const notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('new_comment_research')
         expect(notifications[0]['relevantUrl']).to.equal(
@@ -177,7 +177,6 @@ describe('[Notifications]', () => {
         })
       },
     )
-    const noNotificationsText = 'Nada, no new notifications'
     cy.get('[data-cy="NotificationList: empty state"]').should('exist')
   })
 })

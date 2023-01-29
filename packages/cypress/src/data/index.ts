@@ -11,4 +11,15 @@
  * ```
  *
  **/
-export * from 'oa-shared/mocks/data'
+
+import {
+    categories,
+    events,
+    howtos,
+    mappins,
+    research,
+    tags,
+    users
+} from 'oa-shared/mocks/data'
+
+export const MOCK_DATA = { categories, events, howtos, mappins, research, tags, users };

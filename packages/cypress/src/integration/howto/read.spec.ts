@@ -38,7 +38,7 @@ describe('[How To]', () => {
     })
   })
 
-  describe.only('[Filter by Category]', () => {
+  describe('[Filter by Category]', () => {
     beforeEach(() => {
       cy.visit('/how-to')
     })

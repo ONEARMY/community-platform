@@ -1,6 +1,6 @@
-import { DbCollectionName } from '../utils/test-utils'
+import { DbCollectionName } from '../utils/TestUtils'
 import { UserMenuItem } from '../support/commands'
-import { IUser } from '../../../../src/models/user.models'
+import type { IUser } from '../../../../src/models/user.models'
 
 interface Info {
   username: string
@@ -167,7 +167,7 @@ describe('[Settings]', () => {
     })
   })
 
-  describe.only('[Focus Member]', () => {
+  describe('[Focus Member]', () => {
     const freshSettings = {
       _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
       _id: 'settings_member_new',

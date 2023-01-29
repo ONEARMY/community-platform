@@ -1,5 +1,6 @@
 import 'cypress-file-upload'
-import { TestDB, firebase, Auth } from './db/firebase'
+import type { firebase} from './db/firebase';
+import { TestDB, Auth } from './db/firebase'
 import { deleteDB } from 'idb'
 
 export enum UserMenuItem {
@@ -150,7 +151,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
 
   Cypress.Commands.add('logout', (checkUI = true) => {
     cy.wrap('logging out').then(() => {
-      return new Cypress.Promise((resolve, reject) => {
+      return new Cypress.Promise((resolve) => {
         Auth.signOut().then(() => resolve())
       })
     })

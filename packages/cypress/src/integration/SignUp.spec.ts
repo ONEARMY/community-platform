@@ -1,4 +1,4 @@
-import { generatedId } from '../utils/test-utils'
+import { generatedId } from '../utils/TestUtils'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 
 // existing user already created in auth system

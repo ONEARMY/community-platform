@@ -1,20 +1,18 @@
 import { render } from '@testing-library/react'
-import { randomUUID } from 'crypto'
 import { MemoryRouter } from 'react-router'
 import { NotificationTypes } from 'src/models'
-import { getFormattedMessage } from './getFormattedNotifications'
+import { FactoryNotification } from 'src/test/factories/Notification'
+import { getFormattedNotifications } from './getFormattedNotifications'
 
 describe('getFormattedNotifications', () => {
   NotificationTypes.forEach((type) => {
-    it('provides formatted message for ' + type, () => {
-      const message = getFormattedMessage({
-        type,
-        userId: randomUUID(),
-        triggeredBy: {
-          userId: randomUUID(),
-        },
-      } as any)
-      const { container } = render(<MemoryRouter>{message}</MemoryRouter>)
+    it(`returns a well formatted ${type} message`, () => {
+      const [notification] = getFormattedNotifications([
+        FactoryNotification({ type }),
+      ])
+      const { container } = render(
+        <MemoryRouter>{notification.children}</MemoryRouter>,
+      )
       expect(container).not.toBeEmptyDOMElement()
     })
   })

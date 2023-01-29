@@ -157,7 +157,7 @@ export default class HowtoDescription extends PureComponent<IProps, IState> {
               </Button>
             </Link>
             {this.props.votedUsefulCount !== undefined && (
-              <Box style={{ flexGrow: 1 }}>
+              <Box sx={{ flexGrow: 1, ml: 2 }}>
                 <UsefulStatsButton
                   votedUsefulCount={this.props.votedUsefulCount}
                   hasUserVotedUseful={this.props.hasUserVotedUseful}

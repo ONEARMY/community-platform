@@ -80,7 +80,7 @@ const ResearchDescription: React.FC<IProps> = ({
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (
-            <Box style={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1, ml: 2 }}>
               <UsefulStatsButton
                 votedUsefulCount={props.votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}

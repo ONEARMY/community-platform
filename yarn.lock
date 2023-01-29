@@ -16035,6 +16035,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-mocha@npm:^10.1.0":
+  version: 10.1.0
+  resolution: "eslint-plugin-mocha@npm:10.1.0"
+  dependencies:
+    eslint-utils: ^3.0.0
+    rambda: ^7.1.0
+  peerDependencies:
+    eslint: ">=7.0.0"
+  checksum: 67c063ba190fe8ab3186baaf800a375e9f16a17f69deaac2ea0d1825f6e4260f9a56bd510ceb2ffbe6644d7090beda0efbd2ab7824e4852ce2abee53a1086179
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-prettier@npm:^3.4.0":
   version: 3.4.1
   resolution: "eslint-plugin-prettier@npm:3.4.1"
@@ -25077,6 +25089,7 @@ __metadata:
     eslint-plugin-cypress: ^2.12.1
     eslint-plugin-import: ^2.26.0
     eslint-plugin-jest: ^27.2.1
+    eslint-plugin-mocha: ^10.1.0
     eslint-plugin-prettier: ^3.4.0
     eslint-plugin-sort-class-members: ^1.15.2
     eslint-plugin-unicorn: ^36.0.0
@@ -27800,6 +27813,13 @@ __metadata:
   dependencies:
     performance-now: ^2.1.0
   checksum: 50ba284e481c8185dbcf45fc4618ba3aec580bb50c9121385d5698cb6012fe516d2015b1df6dd407a7b7c58d44be8086108236affbce1861edd6b44637c8cd52
+  languageName: node
+  linkType: hard
+
+"rambda@npm:^7.1.0":
+  version: 7.4.0
+  resolution: "rambda@npm:7.4.0"
+  checksum: 9c3f1fecd81121b94c261cdaef777c570c3df7f981f1d3cd60e671869088b9dcd29f331f049a7f29862ed392c5acce12c8f2a6c1c50d14ae75db745a350caff9
   languageName: node
   linkType: hard
 

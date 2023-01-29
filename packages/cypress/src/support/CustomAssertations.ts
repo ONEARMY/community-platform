@@ -1,8 +1,6 @@
 import type { IHowto, IHowtoStep } from '../../../../src/models/howto.models'
 import chaiSubset from 'chai-subset'
-import type {
-  IUserPPDB,
-} from '../../../../src/models/user_pp.models'
+import type { IUserPPDB } from '../../../../src/models/user_pp.models'
 
 import type { ProfileTypeLabel } from '../../../../src/modules/profile/types'
 
@@ -15,7 +13,7 @@ declare global {
   }
 }
 
-chai.use((chaiObj, utils) => {
+chai.use((chaiObj) => {
   function assertIsInViewport() {
     const subject = this._obj
 
@@ -106,7 +104,6 @@ const eqSettings = (chaiObj) => {
     constructor(...asserts: Assert<S, E>[]) {
       this.asserts.push(...asserts)
     }
-
   }
   const basicInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
     const { _authID, _deleted, _id, about, profileType, userName, verified } =
@@ -122,15 +119,8 @@ const eqSettings = (chaiObj) => {
     })
   }
   const basicMemberInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
-    const {
-      _authID,
-      _deleted,
-      _id,
-      about,
-      profileType,
-      userName,
-      verified,
-    } = expected
+    const { _authID, _deleted, _id, about, profileType, userName, verified } =
+      expected
     expect(subject, 'Basic Info').to.containSubset({
       _authID,
       _deleted,

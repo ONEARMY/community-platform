@@ -128,8 +128,7 @@ describe('[Notifications]', () => {
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
-    const notifications = cy.get('[data-cy="notification"]')
-    expect(notifications).to.exist
+    expect(cy.get('[data-cy="notification"]')).to.exist
   })
 
   it('[notifications modal is closed when clicking on the notifications icon for the second time or clicking on the header]', () => {
@@ -139,21 +138,18 @@ describe('[Notifications]', () => {
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
-    let notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
-    expect(notificationsModal).to.exist
+    expect(cy.get('[data-cy="notifications-modal-desktop"]')).to.exist
     //click on the notifications button again
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
-    notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
-    notificationsModal.should('not.exist')
+    cy.get('[data-cy="notifications-modal-desktop"]').should('not.exist')
     //click within the header area
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
     cy.get('[data-cy="header"]').click()
-    notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
-    notificationsModal.should('not.exist')
+    cy.get('[data-cy="notifications-modal-desktop"]').should('not.exist')
   })
 
   it('[are marked read when clicking on clear button]', () => {

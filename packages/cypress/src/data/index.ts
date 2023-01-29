@@ -7,19 +7,29 @@
  * ```
  * or
  * ```
- * import * as MOCK_DATA from '../data
+ * import { MOCK_DATA } from '../data
  * ```
  *
  **/
 
 import {
-    categories,
-    events,
-    howtos,
-    mappins,
-    research,
-    tags,
-    users
+  categories,
+  events,
+  howtos,
+  mappins,
+  research,
+  tags,
+  users,
 } from 'oa-shared/mocks/data'
 
-export const MOCK_DATA = { categories, events, howtos, mappins, research, tags, users };
+export { howtos, users } from 'oa-shared/mocks/data'
+
+export const MOCK_DATA = {
+  categories,
+  events,
+  howtos,
+  mappins,
+  research,
+  tags,
+  users,
+}

@@ -1,5 +1,5 @@
 import 'cypress-file-upload'
-import type { firebase} from './db/firebase';
+import type { firebase } from './db/firebase'
 import { TestDB, Auth } from './db/firebase'
 import { deleteDB } from 'idb'
 

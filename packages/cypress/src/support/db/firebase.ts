@@ -5,9 +5,7 @@ import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
-import {
-  MOCK_DATA
-} from '../../data/index'
+import { MOCK_DATA } from '../../data/index'
 import { DB_ENDPOINTS } from 'oa-shared/models'
 
 const fbConfig = {

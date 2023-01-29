@@ -46,7 +46,6 @@
     // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
     "react/no-deprecated": "warn",
     "react/no-unescaped-entities": "off",
-    "react/no-unknown-property": "warn",
     // as of v17 no longer required
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",

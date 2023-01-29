@@ -86,7 +86,7 @@ const ResearchArticle = observer((props: IProps) => {
       const researchItem = await researchStore.setActiveResearchItem(slug)
       setIsLoading(false)
       const hash = props.location.hash
-      if (hash) {
+      if (new RegExp(/^#update_\d$/).test(props.location.hash)) {
         scrollIntoRelevantSection(hash)
       }
       // Update SEO tags

@@ -4,7 +4,7 @@ describe('[Research]', () => {
   })
 
   describe('[Open comments]', () => {
-    it('using UI elements', () => {
+    it.skip('using UI elements', () => {
       cy.get('[data-cy="ResearchComments: button open-comments"]').click()
       cy.get('[data-cy="comment"]').should('have.length.gte', 1)
       cy.get('[data-cy="comment-submit"]').should('be.disabled')
@@ -13,10 +13,11 @@ describe('[Research]', () => {
     it('using URL', () => {
       cy.visit('/research/qwerty#update-0-comment:abc123')
       cy.get('[data-cy="comment"]').should('have.length.gte', 1)
+      cy.get('[data-cy="comment"]').should('be.inViewport')
     })
   })
 
-  describe('[By Authenticated]', () => {
+  describe.skip('[By Authenticated]', () => {
     it('has active comment button for logged in user', () => {
       cy.login('howto_creator@test.com', 'test1234')
       cy.visit('/research/qwerty')

@@ -179,10 +179,10 @@ export const ResearchComments = ({
             handleEdit={handleEdit}
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
-            highlightedCommentId={
-              comments[window.location.hash.replace(/#update-\d-comment-/, '')]
-                ?._id
-            }
+            highlightedCommentId={window.location.hash.replace(
+              /#update-\d-comment:/,
+              '',
+            )}
           />
           <Box sx={{ width: '100%' }}>
             <CreateComment

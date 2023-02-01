@@ -23,7 +23,7 @@ export const CreateComment = (props: Props) => {
 
   return (
     <>
-      <Flex sx={{ marginBottom: 5 }}>
+      <Flex sx={{ marginBottom: 5 }} data-target="create-comment-container">
         <Box sx={{ lineHeight: 0, marginTop: 2 }}>
           <MemberBadge profileType={userProfileType} useLowDetailVersion />
         </Box>
@@ -106,7 +106,7 @@ export const CreateComment = (props: Props) => {
           float: 'right',
         }}
       >
-        Comment
+        Leave a comment
       </Button>
     </>
   )

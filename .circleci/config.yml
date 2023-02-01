@@ -290,7 +290,7 @@ jobs:
       NODE_OPTIONS: '--max-old-space-size=5632'
     # If experiencing out-of-memory issues can increase resource_class below and max space size above
     # https://circleci.com/docs/2.0/configuration-reference/#resourceclass
-    resource_class: medium+
+    resource_class: large
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout

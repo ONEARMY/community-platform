@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
@@ -13,7 +13,7 @@ import {
   CategoryTag,
   FileInformation,
   Username,
-  ViewsCounter
+  ViewsCounter,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
@@ -32,8 +32,10 @@ import {
   addHowtoDownloadCooldown,
   updateHowtoDownloadCooldown,
 } from './downloadCooldown'
-import {retrieveSessionStorageArray, addIDToSessionStorageArray} from'src/utils/sessionStorage'
-
+import {
+  retrieveSessionStorageArray,
+  addIDToSessionStorageArray,
+} from 'src/utils/sessionStorage'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -51,16 +53,16 @@ const HowtoDescription: React.FC<IProps> = ({
   loggedInUser,
   ...props
 }) => {
-
-  const [fileDownloadCount, setFileDownloadCount] = useState(howto.total_downloads)
+  const [fileDownloadCount, setFileDownloadCount] = useState(
+    howto.total_downloads,
+  )
   const [viewCount, setViewCount] = useState(howto.total_views)
   const { stores } = useCommonStores()
 
   const incrementDownloadCount = async () => {
-    const updatedDownloadCount =
-      await stores.howtoStore.incrementDownloadCount(
-        howto._id
-      )
+    const updatedDownloadCount = await stores.howtoStore.incrementDownloadCount(
+      howto._id,
+    )
     setFileDownloadCount(updatedDownloadCount!)
   }
 
@@ -68,17 +70,17 @@ const HowtoDescription: React.FC<IProps> = ({
     const sessionStorageArray = retrieveSessionStorageArray('howto')
     console.log(sessionStorageArray)
 
-    if (!(sessionStorageArray.includes(howto._id))) {
-      const updatedViewCount = await stores.howtoStore.incrementViewCount(howto._id)
-      addIDToSessionStorageArray('howto',howto._id)
+    if (!sessionStorageArray.includes(howto._id)) {
+      const updatedViewCount = await stores.howtoStore.incrementViewCount(
+        howto._id,
+      )
+      addIDToSessionStorageArray('howto', howto._id)
       setViewCount(updatedViewCount)
     }
   }
 
   const handleClick = async () => {
-    const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(
-      howto._id
-    )
+    const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(howto._id)
 
     if (
       howtoDownloadCooldown &&
@@ -101,17 +103,17 @@ const HowtoDescription: React.FC<IProps> = ({
       return ''
     }
   }
-  
+
   useEffect(() => {
     setFileDownloadCount(howto.total_downloads)
     setViewCount(howto.total_views)
     incrementViewCount()
-  }, [howto._id])    
+  }, [howto._id])
 
   const iconFlexDirection =
     emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
-  
-  return (    
+
+  return (
     <Flex
       data-cy="how-to-basis"
       data-id={howto._id}
@@ -157,7 +159,7 @@ const HowtoDescription: React.FC<IProps> = ({
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (
-            <Box>
+            <Box sx={{ ml: 2 }}>
               <UsefulStatsButton
                 votedUsefulCount={props.votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
@@ -166,11 +168,9 @@ const HowtoDescription: React.FC<IProps> = ({
               />
             </Box>
           )}
-            <Box style={{ flexGrow: 1 }}>
-              <ViewsCounter
-              viewsCount={viewCount!} 
-              />
-            </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <ViewsCounter viewsCount={viewCount!} />
+          </Box>
           {/* Check if pin should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>
@@ -221,9 +221,7 @@ const HowtoDescription: React.FC<IProps> = ({
             {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
             {capitalizeFirstLetter(howto.title)}
           </Heading>
-          <Text
-            sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}
-          >
+          <Text sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}>
             <LinkifyText>{howto.description}</LinkifyText>
           </Text>
         </Box>
@@ -304,9 +302,7 @@ const HowtoDescription: React.FC<IProps> = ({
                 }}
               >
                 {fileDownloadCount}
-                {fileDownloadCount !== 1
-                  ? ' downloads'
-                  : ' download'}
+                {fileDownloadCount !== 1 ? ' downloads' : ' download'}
               </Text>
             )}
           </Flex>

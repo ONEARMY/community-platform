@@ -157,11 +157,14 @@ export class ResearchStore extends ModuleStore {
         total_views: totalViews! + 1,
       }
 
-    dbRef.set({
-      ... updatedResearch
-    }, {keep_modified_timestamp: true})
+      dbRef.set(
+        {
+          ...updatedResearch,
+        },
+        { keep_modified_timestamp: true },
+      )
 
-    return updatedResearch.total_views
+      return updatedResearch.total_views
     }
   }
 

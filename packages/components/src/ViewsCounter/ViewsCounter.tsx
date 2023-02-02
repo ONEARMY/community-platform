@@ -2,11 +2,10 @@ import { Text } from 'theme-ui'
 import { Button } from '..'
 
 export interface IProps {
-  viewsCount: number 
+  viewsCount: number
 }
 
 export const ViewsCounter = (props: IProps) => {
-  
   return (
     <>
       <Button
@@ -20,13 +19,13 @@ export const ViewsCounter = (props: IProps) => {
           borderColor: 'softyellow',
           opacity: 1,
           pointerEvents: 'none',
-          cursor: 'none'
+          cursor: 'none',
         }}
         icon={'star'}
       >
-        <Text ml={-1}> 
-        {props.viewsCount}
-        {props.viewsCount !== 1 ? ' views' : ' view'}
+        <Text ml={-1}>
+          {props.viewsCount}
+          {props.viewsCount !== 1 ? ' views' : ' view'}
         </Text>
       </Button>
     </>

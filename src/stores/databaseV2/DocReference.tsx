@@ -59,7 +59,7 @@ export class DocReference<T> {
    * If contains metadata fields (e.g. `_id`)
    * then this will be used instead of generated id
    */
-  async set(data: T, options?:{keep_modified_timestamp:boolean}) {
+  async set(data: T, options?: { keep_modified_timestamp: boolean }) {
     const { serverDB, cacheDB } = this.clients
     const dbDoc: DBDoc = this._setDocMeta(data, options)
     await serverDB.setDoc(this.endpoint, dbDoc)
@@ -93,8 +93,9 @@ export class DocReference<T> {
   private _setDocMeta(data: any = {}, options: any = {}): DBDoc {
     const d = data
     const o = options
-    const modifiedTimestamp = 
-      o.keep_modified_timestamp ? d._modified : new Date().toISOString()
+    const modifiedTimestamp = o.keep_modified_timestamp
+      ? d._modified
+      : new Date().toISOString()
 
     return {
       ...d,

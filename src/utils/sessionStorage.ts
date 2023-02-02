@@ -1,10 +1,8 @@
-
 export const retrieveSessionStorageArray = (key: string) => {
   const viewsArray: string | null = sessionStorage.getItem(key)
   if (typeof viewsArray === 'string') {
     return JSON.parse(viewsArray)
-  }
-  else {
+  } else {
     return []
   }
 }

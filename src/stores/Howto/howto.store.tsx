@@ -185,10 +185,13 @@ export class HowtoStore extends ModuleStore {
         total_downloads: totalDownloads! + 1,
       }
 
-      dbRef.set({
-        ... updatedHowto
-      }, {keep_modified_timestamp: true})
-      
+      dbRef.set(
+        {
+          ...updatedHowto,
+        },
+        { keep_modified_timestamp: true },
+      )
+
       return updatedHowto.total_downloads
     }
   }
@@ -204,10 +207,13 @@ export class HowtoStore extends ModuleStore {
         total_views: totalViews! + 1,
       }
 
-      dbRef.set({
-        ... updatedHowto
-      }, {keep_modified_timestamp: true})
-        
+      dbRef.set(
+        {
+          ...updatedHowto,
+        },
+        { keep_modified_timestamp: true },
+      )
+
       return updatedHowto.total_views
     }
   }

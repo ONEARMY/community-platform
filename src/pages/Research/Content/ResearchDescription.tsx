@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import * as React from 'react'
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Flex, Image, Text, Heading } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import {
@@ -9,7 +9,7 @@ import {
   ModerationStatus,
   UsefulStatsButton,
   Username,
-  ViewsCounter
+  ViewsCounter,
 } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
@@ -17,7 +17,10 @@ import type { IUser } from 'src/models/user.models'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import {retrieveSessionStorageArray, addIDToSessionStorageArray} from'src/utils/sessionStorage'
+import {
+  retrieveSessionStorageArray,
+  addIDToSessionStorageArray,
+} from 'src/utils/sessionStorage'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -51,17 +54,17 @@ const ResearchDescription: React.FC<IProps> = ({
   const incrementViewCount = async () => {
     const sessionStorageArray = retrieveSessionStorageArray('research')
 
-    if (!(sessionStorageArray.includes(research._id))) {
+    if (!sessionStorageArray.includes(research._id)) {
       const updatedViewCount = await store.incrementViewCount(research._id)
       setViewCount(updatedViewCount)
-      addIDToSessionStorageArray('research',research._id)
+      addIDToSessionStorageArray('research', research._id)
     }
   }
 
   useEffect(() => {
     setViewCount(research.total_views)
     incrementViewCount()
-  }, [research._id]) 
+  }, [research._id])
 
   return (
     <Flex
@@ -112,9 +115,7 @@ const ResearchDescription: React.FC<IProps> = ({
             </Box>
           )}
           <Box style={{ flexGrow: 1 }}>
-            <ViewsCounter
-            viewsCount={viewCount!} 
-            />
+            <ViewsCounter viewsCount={viewCount!} />
           </Box>
           {/* Check if research should be moderated */}
           {props.needsModeration && (

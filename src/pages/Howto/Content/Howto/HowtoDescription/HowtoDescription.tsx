@@ -32,6 +32,8 @@ import {
   addHowtoDownloadCooldown,
   updateHowtoDownloadCooldown,
 } from './downloadCooldown'
+import {retrieveSessionStorageArray, addIDToSessionStorageArray} from'src/utils/sessionStorage'
+
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -63,8 +65,14 @@ const HowtoDescription: React.FC<IProps> = ({
   }
 
   const incrementViewCount = async () => {
-    const updatedViewCount = await stores.howtoStore.incrementViewCount(howto._id)
-    setViewCount(updatedViewCount)
+    const sessionStorageArray = retrieveSessionStorageArray('howto')
+    console.log(sessionStorageArray)
+
+    if (!(sessionStorageArray.includes(howto._id))) {
+      const updatedViewCount = await stores.howtoStore.incrementViewCount(howto._id)
+      addIDToSessionStorageArray('howto',howto._id)
+      setViewCount(updatedViewCount)
+    }
   }
 
   const handleClick = async () => {
@@ -98,7 +106,7 @@ const HowtoDescription: React.FC<IProps> = ({
     setFileDownloadCount(howto.total_downloads)
     setViewCount(howto.total_views)
     incrementViewCount()
-  }, [howto])    
+  }, [howto._id])    
 
   const iconFlexDirection =
     emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'

@@ -1,5 +1,6 @@
 import { format } from 'date-fns'
 import * as React from 'react'
+import {useEffect, useState} from 'react'
 import { Box, Flex, Image, Text, Heading } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import {
@@ -16,6 +17,7 @@ import type { IUser } from 'src/models/user.models'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import {retrieveSessionStorageArray, addIDToSessionStorageArray} from'src/utils/sessionStorage'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -44,17 +46,22 @@ const ResearchDescription: React.FC<IProps> = ({
   }
   const store = useResearchStore()
 
-  const [viewCount, setViewCount] = React.useState(research.total_views)
+  const [viewCount, setViewCount] = useState(research.total_views)
 
   const incrementViewCount = async () => {
-    const updatedViewCount = await store.incrementViewCount(research._id)
-    setViewCount(updatedViewCount)
+    const sessionStorageArray = retrieveSessionStorageArray('research')
+
+    if (!(sessionStorageArray.includes(research._id))) {
+      const updatedViewCount = await store.incrementViewCount(research._id)
+      setViewCount(updatedViewCount)
+      addIDToSessionStorageArray('research',research._id)
+    }
   }
- 
-  React.useEffect(() => {
+
+  useEffect(() => {
     setViewCount(research.total_views)
     incrementViewCount()
-  }, [research]) 
+  }, [research._id]) 
 
   return (
     <Flex

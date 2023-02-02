@@ -157,15 +157,9 @@ export class ResearchStore extends ModuleStore {
         total_views: totalViews! + 1,
       }
 
-    // remove this comment  
-    // console.log(updatedResearch)
-
     dbRef.set({
       ... updatedResearch
-    })
-
-    // remove this comment  
-    // console.log(await toJS(this.db.collection<IResearchDB>(COLLECTION_NAME).doc(updatedResearch._id)).get())
+    }, {keep_modified_timestamp: true})
 
     return updatedResearch.total_views
     }

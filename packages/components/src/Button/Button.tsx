@@ -57,14 +57,6 @@ function getSizeProps(size: string, hasIcon: boolean) {
   return sizeProps
 }
 
-function getScaleTransform(size: string) {
-  if (size === 'large') {
-    return 1.25
-  }
-
-  return 1
-}
-
 function sanitizedProps(obj: BtnProps, keysToRemove: AvailableButtonProps) {
   const sanitizedObj = { ...obj }
 

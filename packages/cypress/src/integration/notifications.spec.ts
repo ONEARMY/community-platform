@@ -10,7 +10,7 @@ describe('[Notifications]', () => {
     cy.visit('how-to')
     cy.login('event_reader@test.com', 'test1234')
     cy.visit('/how-to/testing-testing')
-    cy.get('[data-cy="vote-useful"]').contains('Useful').click()
+    cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.step('Verify the notification has not been added')
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
@@ -24,7 +24,7 @@ describe('[Notifications]', () => {
     cy.visit('how-to')
     cy.login('howto_reader@test.com', 'test1234')
     cy.visit('/how-to/testing-testing')
-    cy.get('[data-cy="vote-useful"]').contains('Useful').click()
+    cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.wait(DB_WAIT_TIME)
     cy.step('Verify the notification has been added')
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
@@ -49,7 +49,7 @@ describe('[Notifications]', () => {
     cy.visit('research')
     cy.login('howto_reader@test.com', 'test1234')
     cy.visit('/research/qwerty')
-    cy.get('[data-cy="vote-useful"]').contains('Useful').click()
+    cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.wait(DB_WAIT_TIME)
     cy.step('Verify the notification has been added')
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(

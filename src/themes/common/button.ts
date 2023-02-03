@@ -65,8 +65,8 @@ export function getButtons(colors) {
       color: colors.black,
       bg: colors.softblue,
       '&:hover': {
-        borderColor: colors.white,
-        bg: colors.white,
+        bg: colors.offwhite,
+        borderColor: colors.offwhite,
         cursor: 'pointer',
       },
       '&[disabled]': {

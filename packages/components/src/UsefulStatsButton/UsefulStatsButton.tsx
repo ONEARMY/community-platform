@@ -58,11 +58,31 @@ export const UsefulStatsButton = (props: IProps) => {
           fontSize: 2,
           background: 'softyellow',
           borderColor: 'softyellow',
+          paddingBottom: 0,
+          paddingTop: 0,
           ...props.sx,
         }}
-        icon={hasUserVotedUseful ? 'star-active' : 'star'}
+        icon={hasUserVotedUseful ? 'star' : 'star-active'}
       >
-        <Text ml={1}>Useful {votedUsefulCount ? votedUsefulCount : ''}</Text>
+        <Text
+          pr={2}
+          py={2}
+          sx={{
+            display: 'inline-block',
+            borderRight: `1px solid ${theme.colors.lightgrey}`,
+          }}
+        >
+          {votedUsefulCount ? votedUsefulCount : ''}
+        </Text>
+        <Text
+          pl={2}
+          py={2}
+          sx={{
+            display: 'inline-block',
+          }}
+        >
+          {hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
+        </Text>
       </Button>
     </>
   ) : (

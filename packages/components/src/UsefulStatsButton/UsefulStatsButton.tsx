@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
-import { Flex, ThemeUIStyleObject } from 'theme-ui'
-import { Text } from 'theme-ui'
-import { Button, Icon, ExternalLink } from '../'
-import ReactTooltip from 'react-tooltip'
-import styled from '@emotion/styled'
 import { useTheme } from '@emotion/react'
+import styled from '@emotion/styled'
+import { useEffect, useState } from 'react'
+import ReactTooltip from 'react-tooltip'
+import type { ThemeUIStyleObject } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
+import { Button, ExternalLink, Icon } from '../'
 
 const StyledTooltip = styled(ReactTooltip)`
   opacity: 1 !important;

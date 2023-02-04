@@ -21,6 +21,7 @@ import {
   retrieveSessionStorageArray,
   addIDToSessionStorageArray,
 } from 'src/utils/sessionStorage'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -113,9 +114,11 @@ const ResearchDescription: React.FC<IProps> = ({
               />
             </Box>
           )}
-          <Box>
-            <ViewsCounter viewsCount={viewCount!} />
-          </Box>
+          <AuthWrapper roleRequired="beta-tester">
+            <Box>
+              <ViewsCounter viewsCount={viewCount!} />
+            </Box>
+          </AuthWrapper>
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

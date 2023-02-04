@@ -36,6 +36,7 @@ import {
   retrieveSessionStorageArray,
   addIDToSessionStorageArray,
 } from 'src/utils/sessionStorage'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 const iconFlexDirection =
   emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
@@ -162,9 +163,11 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               />
             </Box>
           )}
-          <Box>
-            <ViewsCounter viewsCount={viewCount!} />
-          </Box>
+          <AuthWrapper roleRequired="beta-tester">
+            <Box>
+              <ViewsCounter viewsCount={viewCount!} />
+            </Box>
+          </AuthWrapper>
           {/* Check if pin should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

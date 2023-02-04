@@ -37,7 +37,7 @@ const ResearchDescription: React.FC<IProps> = ({
   research,
   isEditable,
   ...props
-}) => {
+}: IProps) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
     const lastModifiedDate = format(new Date(research._modified), 'DD-MM-YYYY')
     const creationDate = format(new Date(research._created), 'DD-MM-YYYY')
@@ -62,7 +62,6 @@ const ResearchDescription: React.FC<IProps> = ({
   }
 
   useEffect(() => {
-    setViewCount(research.total_views)
     incrementViewCount()
   }, [research._id])
 

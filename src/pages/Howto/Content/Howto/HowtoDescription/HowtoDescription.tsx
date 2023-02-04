@@ -48,11 +48,7 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-const HowtoDescription: React.FC<IProps> = ({
-  howto,
-  loggedInUser,
-  ...props
-}) => {
+const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
@@ -105,8 +101,6 @@ const HowtoDescription: React.FC<IProps> = ({
   }
 
   useEffect(() => {
-    setFileDownloadCount(howto.total_downloads)
-    setViewCount(howto.total_views)
     incrementViewCount()
   }, [howto._id])
 

@@ -37,6 +37,9 @@ import {
   addIDToSessionStorageArray,
 } from 'src/utils/sessionStorage'
 
+const iconFlexDirection =
+  emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
+
 interface IProps {
   howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
@@ -104,9 +107,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     incrementViewCount()
   }, [howto._id])
 
-  const iconFlexDirection =
-    emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
-
   return (
     <Flex
       data-cy="how-to-basis"
@@ -131,7 +131,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           width: ['100%', '100%', `${(1 / 2) * 100}%`],
         }}
       >
-        <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
+        <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
           <Link to={'/how-to/'}>
             <Button
               variant="subtle"
@@ -153,7 +153,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (
-            <Box sx={{ ml: 2 }}>
+            <Box>
               <UsefulStatsButton
                 votedUsefulCount={props.votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
@@ -162,7 +162,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               />
             </Box>
           )}
-          <Box sx={{ flexGrow: 1 }}>
+          <Box>
             <ViewsCounter viewsCount={viewCount!} />
           </Box>
           {/* Check if pin should be moderated */}

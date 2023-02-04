@@ -82,7 +82,7 @@ const ResearchDescription: React.FC<IProps> = ({
       }}
     >
       <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
-        <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
+        <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
           <Link to={'/research'}>
             <Button
               variant="subtle"
@@ -104,7 +104,7 @@ const ResearchDescription: React.FC<IProps> = ({
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (
-            <Box sx={{ ml: 2 }}>
+            <Box>
               <UsefulStatsButton
                 votedUsefulCount={props.votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
@@ -113,7 +113,7 @@ const ResearchDescription: React.FC<IProps> = ({
               />
             </Box>
           )}
-          <Box style={{ flexGrow: 1 }}>
+          <Box>
             <ViewsCounter viewsCount={viewCount!} />
           </Box>
           {/* Check if research should be moderated */}

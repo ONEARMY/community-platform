@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { ThemeUIStyleObject } from 'theme-ui'
+import { Flex, ThemeUIStyleObject } from 'theme-ui'
 import { Text } from 'theme-ui'
 import { Button, Icon, ExternalLink } from '../'
 import ReactTooltip from 'react-tooltip'
@@ -49,42 +49,37 @@ export const UsefulStatsButton = (props: IProps) => {
   }
 
   return props.isLoggedIn ? (
-    <>
-      <Button
-        data-cy="vote-useful"
-        variant="subtle"
-        onClick={handleUsefulClick}
+    <Button
+      data-cy="vote-useful"
+      onClick={handleUsefulClick}
+      sx={{
+        fontSize: 2,
+        background: theme.colors.softyellow,
+        py: 0,
+        ...props.sx,
+      }}
+      icon={hasUserVotedUseful ? 'star' : 'star-active'}
+    >
+      <Text
+        pr={2}
+        py={2}
         sx={{
-          fontSize: 2,
-          background: 'softyellow',
-          borderColor: 'softyellow',
-          paddingBottom: 0,
-          paddingTop: 0,
-          ...props.sx,
+          display: 'inline-block',
         }}
-        icon={hasUserVotedUseful ? 'star' : 'star-active'}
       >
-        <Text
-          pr={2}
-          py={2}
-          sx={{
-            display: 'inline-block',
-          }}
-        >
-          {votedUsefulCount ? votedUsefulCount : 0}
-        </Text>
-        <Text
-          pl={2}
-          py={2}
-          sx={{
-            display: 'inline-block',
-            borderLeft: `1px solid ${theme.colors.lightgrey}`,
-          }}
-        >
-          {hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
-        </Text>
-      </Button>
-    </>
+        {votedUsefulCount ? votedUsefulCount : 0}
+      </Text>
+      <Text
+        pl={2}
+        py={2}
+        sx={{
+          display: 'inline-block',
+          borderLeft: `1px solid ${theme.colors.black}`,
+        }}
+      >
+        {hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
+      </Text>
+    </Button>
   ) : (
     <>
       <ExternalLink
@@ -93,17 +88,42 @@ export const UsefulStatsButton = (props: IProps) => {
         data-tip={'Login to add your vote'}
         sx={{
           ...theme.buttons.subtle,
-          borderColor: 'softyellow',
-          background: 'softyellow',
+          borderColor: theme.colors.black,
+          background: theme.colors.softyellow,
           display: 'inline-flex',
           fontSize: 2,
-          paddingY: 2,
-          paddingX: 3,
+          gap: 2,
+          px: 2,
+          py: 0,
+          '&:hover': {
+            background: theme.colors.yellow.hover,
+            borderColor: theme.colors.black,
+          },
           ...props.sx,
         }}
       >
-        <Icon glyph={hasUserVotedUseful ? 'star-active' : 'star'} />
-        <Text ml={2}>Useful {votedUsefulCount ? votedUsefulCount : ''}</Text>
+        <Icon glyph={hasUserVotedUseful ? 'star' : 'star-active'} />
+        <Flex>
+          <Text
+            pr={2}
+            py={2}
+            sx={{
+              display: 'inline-block',
+            }}
+          >
+            {votedUsefulCount ? votedUsefulCount : 0}
+          </Text>
+          <Text
+            pl={2}
+            py={2}
+            sx={{
+              display: 'inline-block',
+              borderLeft: `1px solid ${theme.colors.black}`,
+            }}
+          >
+            {hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
+          </Text>
+        </Flex>
       </ExternalLink>
       <Tooltip />
     </>

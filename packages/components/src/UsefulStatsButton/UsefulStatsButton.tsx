@@ -54,8 +54,11 @@ export const UsefulStatsButton = (props: IProps) => {
       onClick={handleUsefulClick}
       sx={{
         fontSize: 2,
-        background: theme.colors.softyellow,
+        backgroundColor: theme.colors.white,
         py: 0,
+        '&:hover': {
+          backgroundColor: theme.colors.softblue,
+        },
         ...props.sx,
       }}
       icon={hasUserVotedUseful ? 'star' : 'star-active'}
@@ -89,14 +92,14 @@ export const UsefulStatsButton = (props: IProps) => {
         sx={{
           ...theme.buttons.subtle,
           borderColor: theme.colors.black,
-          background: theme.colors.softyellow,
+          backgroundColor: theme.colors.white,
           display: 'inline-flex',
           fontSize: 2,
           gap: 2,
           px: 2,
           py: 0,
           '&:hover': {
-            background: theme.colors.yellow.hover,
+            backgroundColor: theme.colors.softblue,
             borderColor: theme.colors.black,
           },
           ...props.sx,

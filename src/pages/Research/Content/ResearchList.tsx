@@ -70,7 +70,7 @@ const ResearchList = observer(() => {
             fontSize: theme.fontSizes[5],
           }}
         >
-          Research topics. Can we...
+          Help out with Research & Development
         </Heading>
       </Flex>
       <ResearchListHeader>

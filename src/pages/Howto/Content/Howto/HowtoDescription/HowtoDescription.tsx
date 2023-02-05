@@ -68,7 +68,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
 
   const incrementViewCount = async () => {
     const sessionStorageArray = retrieveSessionStorageArray('howto')
-    console.log(sessionStorageArray)
 
     if (!sessionStorageArray.includes(howto._id)) {
       const updatedViewCount = await stores.howtoStore.incrementViewCount(

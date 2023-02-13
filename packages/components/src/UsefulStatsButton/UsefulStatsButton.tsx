@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { ThemeUIStyleObject } from 'theme-ui'
 import { Text } from 'theme-ui'
 import { Button, Icon, ExternalLink } from '../'
 import ReactTooltip from 'react-tooltip'
@@ -26,6 +27,7 @@ export interface IProps {
   votedUsefulCount: number
   isLoggedIn: boolean
   onUsefulClick: () => void
+  sx?: ThemeUIStyleObject
 }
 
 export const UsefulStatsButton = (props: IProps) => {
@@ -54,9 +56,9 @@ export const UsefulStatsButton = (props: IProps) => {
         onClick={handleUsefulClick}
         sx={{
           fontSize: 2,
-          ml: 1,
           background: 'softyellow',
           borderColor: 'softyellow',
+          ...props.sx,
         }}
         icon={hasUserVotedUseful ? 'star-active' : 'star'}
       >
@@ -77,7 +79,7 @@ export const UsefulStatsButton = (props: IProps) => {
           fontSize: 2,
           paddingY: 2,
           paddingX: 3,
-          ml: 2,
+          ...props.sx,
         }}
       >
         <Icon glyph={hasUserVotedUseful ? 'star-active' : 'star'} />

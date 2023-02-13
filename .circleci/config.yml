@@ -225,7 +225,7 @@ jobs:
             rm package.json
             npm config set package-lock false
             npm i @types/node @commitlint/types @commitlint/config-conventional --force
-            npx commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
+            npx @commitlint/cli@17.4.2 --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   lint:
     docker: *docker
     steps:
@@ -290,7 +290,7 @@ jobs:
       NODE_OPTIONS: '--max-old-space-size=5632'
     # If experiencing out-of-memory issues can increase resource_class below and max space size above
     # https://circleci.com/docs/2.0/configuration-reference/#resourceclass
-    resource_class: medium+
+    resource_class: large
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout

@@ -3,41 +3,32 @@ function envCheck() {
   const tests = [
     {
       message: 'Use Yarn (not npm)',
-      severity: 'failure',
       exec: () => /yarn/.test(process.env.npm_execpath),
     },
     {
       message: 'Use Node v18',
-      severity: 'failure',
       exec: () => process.versions.node.split('.')[0] === '18',
     },
   ]
 
   let failures = 0
+  let output = '\n'
 
-  console.log('\n')
   for (const test of tests) {
-    let icon = '✅'
-    let message = test.message
-    const passed = test.exec()
-    if (!passed) {
-      if (test.severity === 'failure') {
-        icon = '❌'
-        failures = failures + 1
-      } else {
-        icon = '⚠️'
-        message = '(Recommended) ' + message
-      }
+    if (!test.exec()) {
+      failures = failures + 1
+      output += `❌ ${test.message}\n`
+    } else {
+      output += `✅ ${test.message}\n`
     }
-    console.log(icon, '', message)
   }
-  console.log('\n')
 
   if (failures > 0) {
+    console.log(output)
     console.log(
-      '💻 Please setup your dev environment to meet requirements\n\nFor more info see:\n\n',
-      'https://onearmy.github.io/community-platform/\n\n',
+      '💻 Please setup your dev environment to meet requirements\n\nFor more info see:',
     )
+    console.log('https://onearmy.github.io/community-platform/\n\n')
     process.exit(1)
   }
 }

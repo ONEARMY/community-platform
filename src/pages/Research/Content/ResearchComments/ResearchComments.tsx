@@ -1,10 +1,10 @@
 import { Button, CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
 import ReactGA from 'react-ga4'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { useCommonStores } from 'src/index'
+import { MAX_COMMENT_LENGTH } from '../../../../constants'
+import { useCommonStores } from '../../../../'
 import { logger } from 'src/logger'
-import { useResearchStore } from 'src/stores/Research/research.store'
+import { useResearchStore } from '../../../../stores/Research/research.store'
 import { Box, Flex } from 'theme-ui'
 
 import styled from '@emotion/styled'
@@ -24,6 +24,9 @@ const BoxMain = styled(Box)`
   margin-right: 20px;
   margin-top: 20px;
 `
+
+export const getResearchCommentId = (s: string) =>
+  s.replace(/#update-\d+-comment:/, '')
 
 export const ResearchComments = ({
   comments,
@@ -179,10 +182,7 @@ export const ResearchComments = ({
             handleEdit={handleEdit}
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
-            highlightedCommentId={window.location.hash.replace(
-              /#update-\d-comment:/,
-              '',
-            )}
+            highlightedCommentId={getResearchCommentId(window.location.hash)}
           />
           <Box sx={{ width: '100%' }}>
             <CreateComment

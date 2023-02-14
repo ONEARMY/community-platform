@@ -143,9 +143,12 @@ export class DexieClient implements AbstractDBClient {
 /************************************************************************
  *  Interfaces and constants
  ***********************************************************************/
+// Frontend code does not access all database endpoints, exclude here
+type IFrontendEndpoints = Exclude<IDBEndpoint, 'user_notifications'>
+
 // When dexie is initialised it requires explicit knowledge of the database structures and any keys to
 // index on. The below interface and constant ensures this is done for the current db api version
-type IDexieSchema = { [key in IDBEndpoint]: string }
+type IDexieSchema = { [key in IFrontendEndpoints]: string }
 
 // by default _id will serve as primary key and additional index created on _modified for faster querying
 const DEFAULT_SCHEMA = '_id,_modified'

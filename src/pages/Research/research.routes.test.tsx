@@ -21,6 +21,9 @@ jest.mock('src/index', () => ({
         aggregationsStore: {
           aggregations: {},
         },
+        researchCategoriesStore: {
+          allResearchCategories: [],
+        },
       },
     }
   },

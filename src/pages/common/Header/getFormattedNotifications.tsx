@@ -3,7 +3,7 @@ import { InternalLink } from 'oa-components'
 import type { INotification } from 'src/models'
 import { Box } from 'theme-ui'
 
-function getFormattedMessage(notification: INotification) {
+export function getFormattedNotificationMessage(notification: INotification) {
   switch (notification.type) {
     case 'new_comment':
       return (
@@ -96,6 +96,6 @@ export function getFormattedNotifications(
 ): UserNotificationList {
   return notificationList.map((notification) => ({
     type: notification.type,
-    children: getFormattedMessage(notification),
+    children: getFormattedNotificationMessage(notification),
   }))
 }

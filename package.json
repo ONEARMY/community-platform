@@ -169,6 +169,7 @@
     "commitizen": "^4.2.4",
     "concurrently": "^6.2.0",
     "cra-bundle-analyzer": "^0.1.0",
+    "cross-env": "^7.0.3",
     "cspell": "^6.1.0",
     "env-cmd": "^10.1.0",
     "eslint": "^7.32.0",

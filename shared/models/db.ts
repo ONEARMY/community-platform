@@ -11,6 +11,7 @@
 export const generateDBEndpoints = (DB_PREFIX = '') => ({
   howtos: `${DB_PREFIX}v3_howtos`,
   users: `${DB_PREFIX}v3_users`,
+  user_notifications: `${DB_PREFIX}user_notifications_rev20221209`,
   tags: `${DB_PREFIX}v3_tags`,
   categories: `${DB_PREFIX}v3_categories`,
   researchCategories: `${DB_PREFIX}research_categories_rev20221224`,

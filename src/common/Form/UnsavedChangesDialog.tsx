@@ -4,6 +4,7 @@ import { Prompt } from 'react-router'
 
 interface IProps {
   uploadComplete?: boolean
+  message?: string
 }
 
 const CONFIRM_DIALOG_MSG =
@@ -22,6 +23,7 @@ export const UnsavedChangesDialog = memo((props: IProps) => {
   // Use memo to only re-render if props change
   const [formIsDirty, setFormIsDirty] = useState(false)
   const shouldPromptUnsavedChanges = formIsDirty && !props.uploadComplete
+  const message: string = props.message || CONFIRM_DIALOG_MSG
   // Handle confirmation outside React Router
   if (shouldPromptUnsavedChanges) {
     window.addEventListener('beforeunload', beforeUnload, false)
@@ -39,7 +41,7 @@ export const UnsavedChangesDialog = memo((props: IProps) => {
         render={() => null}
       />
       {/* Render a blocking screen prompt to prevent user leaving page via react navigation */}
-      <Prompt when={shouldPromptUnsavedChanges} message={CONFIRM_DIALOG_MSG} />
+      <Prompt when={shouldPromptUnsavedChanges} message={message} />
     </>
   )
 })

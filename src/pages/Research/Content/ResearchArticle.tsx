@@ -20,8 +20,25 @@ import { seoTagsUpdate } from 'src/utils/seo'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { isUserVerified } from 'src/common/isUserVerified'
 import ReactGA from 'react-ga4'
+import { researchCommentUrlPattern } from './helper'
 
 type IProps = RouteComponentProps<{ slug: string }>
+
+const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
+
+function areCommentVisible(updateIndex) {
+  let showComments = false
+
+  if (researchCommentUrlRegex.test(window.location.hash)) {
+    const match = window.location.hash.match(/#update-\d/)
+    if (match) {
+      showComments =
+        updateIndex === parseInt(match[0].replace('#update-', ''), 10)
+    }
+  }
+
+  return showComments
+}
 
 const ResearchArticle = observer((props: IProps) => {
   const researchStore = useResearchStore()
@@ -72,7 +89,7 @@ const ResearchArticle = observer((props: IProps) => {
       const researchItem = await researchStore.setActiveResearchItem(slug)
       setIsLoading(false)
       const hash = props.location.hash
-      if (hash) {
+      if (new RegExp(/^#update_\d$/).test(props.location.hash)) {
         scrollIntoRelevantSection(hash)
       }
       // Update SEO tags
@@ -131,21 +148,20 @@ const ResearchArticle = observer((props: IProps) => {
         />
         <Box my={16}>
           {item &&
-            item?.updates?.map((update, index) => {
-              return (
-                <ResearchUpdate
-                  update={update}
-                  key={update._id}
-                  updateIndex={index}
-                  isEditable={isEditable}
-                  slug={item.slug}
-                  comments={transformToUserComment(
-                    researchStore.getActiveResearchUpdateComments(index),
-                    loggedInUser?.userName,
-                  )}
-                />
-              )
-            })}
+            item?.updates?.map((update, index) => (
+              <ResearchUpdate
+                update={update}
+                key={update._id}
+                updateIndex={index}
+                isEditable={isEditable}
+                slug={item.slug}
+                comments={transformToUserComment(
+                  researchStore.getActiveResearchUpdateComments(index),
+                  loggedInUser?.userName,
+                )}
+                showComments={areCommentVisible(index)}
+              />
+            ))}
         </Box>
         <Box
           sx={{

@@ -1,4 +1,5 @@
 import type { INotification } from 'src/models'
+import { NotificationTypes } from 'src/models'
 import { faker } from '@faker-js/faker'
 
 export const FactoryNotification = (
@@ -12,12 +13,7 @@ export const FactoryNotification = (
     displayName: faker.name.fullName(),
     userId: faker.internet.userName(),
   },
-  type: faker.helpers.arrayElement([
-    'howto_useful',
-    'new_comment',
-    'new_comment_research',
-    'research_useful',
-  ]),
+  type: faker.helpers.arrayElement(NotificationTypes),
   relevantUrl: faker.internet.url(),
   ...userOverloads,
 })

@@ -42,6 +42,7 @@ describe('ResearchUpdate', () => {
           slug={'slug'}
           comments={[]}
           isEditable={false}
+          showComments={false}
         />
       </ThemeProvider>,
     )
@@ -70,6 +71,7 @@ describe('ResearchUpdate', () => {
           slug={'slug'}
           comments={[]}
           isEditable={false}
+          showComments={false}
         />
       </ThemeProvider>,
     )

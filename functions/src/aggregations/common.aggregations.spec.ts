@@ -21,7 +21,8 @@ const dbChangeFactory = (beforeData: any, afterData: any, docId: string) => {
   return FirebaseEmulatedTest.mockFirestoreChangeObject(
     beforeData,
     afterData,
-    `test_source/${docId}`,
+    'test_source' as any,
+    docId,
   )
 }
 
@@ -29,23 +30,15 @@ describe('Common Aggregations', () => {
   const db = FirebaseEmulatedTest.admin.firestore()
 
   beforeEach(async () => {
-    await emulatorPrep()
+    // Calls to emulator will fail if collection never created,
+    // so initialise required endpoints with a doc and then delete
+    await FirebaseEmulatedTest.seedFirestoreDB('test_source' as any)
+    await FirebaseEmulatedTest.seedFirestoreDB('aggregations' as any)
   })
   afterEach(async () => {
     jest.resetAllMocks()
     await FirebaseEmulatedTest.clearFirestoreDB()
   })
-
-  // Calls to emulator will fail if collection never created,
-  // so initialise required endpoints with a doc and then delete
-  async function emulatorPrep() {
-    const sourceRef = db.collection('test_source').doc('seed_doc')
-    await sourceRef.set({ test_field: '' })
-    await sourceRef.delete()
-    const targetRef = db.collection('aggregations').doc('seed_doc')
-    await targetRef.set({ test_field: '' })
-    await targetRef.delete()
-  }
 
   it('runs aggregation with initial seed', async () => {
     // Create 2 intial documents

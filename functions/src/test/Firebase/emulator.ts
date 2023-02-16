@@ -4,6 +4,7 @@ import http from 'http'
 import { firebaseAdmin, firebaseApp } from '../../Firebase/admin'
 import type { CallableContextOptions } from 'firebase-functions-test/lib/v1'
 import type { FeaturesList } from 'firebase-functions-test/lib/features'
+import { DB_ENDPOINTS, IDBEndpoint } from '../../models'
 
 /**
  * Utility class for executing a firebase function with a user-provided context.
@@ -37,6 +38,12 @@ class FirebaseEmulatedTestClass {
    * @param data Test data to pass to function. This corresponds to first parameter sent to the function
    * @param eventContextOptions Fields of the event context that you'd like to specify. This corresponds
    * to the second parameter sent to the function. As defaults are supplied, only include desired overrides
+   *
+   * @example
+   * ```
+   * const myFunction = require('./function-code.ts')
+   * await FirebaseEmulatedTest.run(myFunction,{})
+   * ```
    */
   public async run(
     firebaseFunction: any,
@@ -52,10 +59,12 @@ class FirebaseEmulatedTestClass {
 
   /** Generate a change snapshot object for use in firestore change-triggered function testing */
   public mockFirestoreChangeObject(
-    beforeData: any,
-    afterData: any,
-    docPath = 'document/path',
+    beforeData: Record<string, any>,
+    afterData: Record<string, any>,
+    collection: IDBEndpoint,
+    docId = 'doc_1',
   ) {
+    const docPath = `${DB_ENDPOINTS[collection] || collection}/${docId}`
     const beforeSnap = this.feature.firestore.makeDocumentSnapshot(
       beforeData,
       docPath,
@@ -68,7 +77,38 @@ class FirebaseEmulatedTestClass {
   }
 
   /**
-   * Adaptation of firebase-functions-test method to wip emulator (appears to pass wrong hostname)
+   *
+   * @param endpoint reference endpoint for collection. If exists in endpoint mapping will return
+   * fully qualified name (e.g. 'users' -> 'v3_users'). If not will populate to raw endpoint
+   * @param docs array of documents to populate. If empty will seed endpoint without documents
+   * required for emulators to not throw `toQualifiedResourcePath` error for uninitialised endpoint
+   */
+  public async seedFirestoreDB<T extends { _id: string }>(
+    endpoint: IDBEndpoint,
+    docs: T[] = [],
+  ) {
+    const db = this.admin.firestore()
+
+    const collection = db.collection(DB_ENDPOINTS[endpoint] || endpoint)
+
+    // If not docs set still initialise endpoint by seeding a fake doc and then deleting
+    if (docs.length === 0) {
+      const ref = collection.doc('seed')
+      await ref.set({ seed: true })
+      await ref.delete()
+    }
+
+    const batch = db.batch()
+    for (const doc of docs) {
+      const ref = collection.doc(doc._id)
+      batch.set(ref, doc)
+    }
+
+    return batch.commit()
+  }
+
+  /**
+   * Adaptation of firebase-functions-test method to wipe emulator (appears to pass wrong hostname)
    * https://github.dev/firebase/firebase-functions-test/blob/master/src/providers/firestore.ts#L261
    */
   public clearFirestoreDB() {

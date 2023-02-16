@@ -19,6 +19,7 @@ export namespace IResearch {
     updates: Update[]
     mentions?: UserMention[]
     _createdBy: string
+    total_views?: number
   }
 
   /** A research item update */
@@ -28,6 +29,7 @@ export namespace IResearch {
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
     comments?: IComment[]
+    total_views?: number
   }
 
   export interface FormInput extends IModerable {

@@ -146,6 +146,28 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
+  public async incrementViewCount(id: string) {
+    const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
+    const researchData = await toJS(dbRef.get())
+    const totalViews = researchData?.total_views || 0
+
+    if (researchData) {
+      const updatedResearch: IResearchDB = {
+        ...researchData,
+        total_views: totalViews! + 1,
+      }
+
+      dbRef.set(
+        {
+          ...updatedResearch,
+        },
+        { keep_modified_timestamp: true },
+      )
+
+      return updatedResearch.total_views
+    }
+  }
+
   public deleteResearchItem(id: string) {
     this.db.collection('research').doc(id).delete()
   }

@@ -136,6 +136,7 @@ const ResearchArticle = observer((props: IProps) => {
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
           research={item}
+          key={item._id}
           votedUsefulCount={votedUsefulCount}
           loggedInUser={loggedInUser}
           isEditable={isEditable}

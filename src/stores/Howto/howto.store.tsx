@@ -185,8 +185,36 @@ export class HowtoStore extends ModuleStore {
         total_downloads: totalDownloads! + 1,
       }
 
-      await this.updateHowtoItem(updatedHowto)
+      dbRef.set(
+        {
+          ...updatedHowto,
+        },
+        { keep_modified_timestamp: true },
+      )
+
       return updatedHowto.total_downloads
+    }
+  }
+
+  public async incrementViewCount(howToID: string) {
+    const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
+    const howToData = await toJS(dbRef.get())
+    const totalViews = howToData?.total_views || 0
+
+    if (howToData) {
+      const updatedHowto: IHowto = {
+        ...howToData,
+        total_views: totalViews! + 1,
+      }
+
+      dbRef.set(
+        {
+          ...updatedHowto,
+        },
+        { keep_modified_timestamp: true },
+      )
+
+      return updatedHowto.total_views
     }
   }
 

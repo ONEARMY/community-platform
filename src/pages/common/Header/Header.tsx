@@ -101,7 +101,7 @@ export class Header extends Component {
     const menu = this.injected.mobileMenuStore
     const user = this.injected.userNotificationsStore.user
     const notifications = getFormattedNotifications(
-      this.injected.userNotificationsStore,
+      this.injected.userNotificationsStore.getUnreadNotifications(),
     )
     const areThereNotifications = Boolean(notifications.length)
     const isLoggedInUser = !!user

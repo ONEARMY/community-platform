@@ -33,5 +33,6 @@ export const FactoryResearchItem = (
     'rejected',
     'accepted',
   ]),
+  mentions: [],
   ...researchItemOverloads,
 })

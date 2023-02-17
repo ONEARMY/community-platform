@@ -1,5 +1,6 @@
 import { format } from 'date-fns'
 import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Flex, Image, Text, Heading } from 'theme-ui'
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import {
@@ -8,12 +9,19 @@ import {
   ModerationStatus,
   UsefulStatsButton,
   Username,
+  ViewsCounter,
 } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import theme from 'src/themes/styled.theme'
 import type { IUser } from 'src/models/user.models'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { useResearchStore } from 'src/stores/Research/research.store'
+import {
+  retrieveSessionStorageArray,
+  addIDToSessionStorageArray,
+} from 'src/utils/sessionStorage'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -26,11 +34,7 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-const ResearchDescription: React.FC<IProps> = ({
-  research,
-  isEditable,
-  ...props
-}) => {
+const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
     const lastModifiedDate = format(new Date(research._modified), 'DD-MM-YYYY')
     const creationDate = format(new Date(research._created), 'DD-MM-YYYY')
@@ -40,6 +44,23 @@ const ResearchDescription: React.FC<IProps> = ({
       return ''
     }
   }
+  const store = useResearchStore()
+
+  const [viewCount, setViewCount] = useState(research.total_views)
+
+  const incrementViewCount = async () => {
+    const sessionStorageArray = retrieveSessionStorageArray('research')
+
+    if (!sessionStorageArray.includes(research._id)) {
+      const updatedViewCount = await store.incrementViewCount(research._id)
+      setViewCount(updatedViewCount)
+      addIDToSessionStorageArray('research', research._id)
+    }
+  }
+
+  useEffect(() => {
+    incrementViewCount()
+  }, [research._id])
 
   return (
     <Flex
@@ -58,7 +79,7 @@ const ResearchDescription: React.FC<IProps> = ({
       }}
     >
       <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
-        <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
+        <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
           <Link to={'/research'}>
             <Button
               variant="subtle"
@@ -80,7 +101,7 @@ const ResearchDescription: React.FC<IProps> = ({
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (
-            <Box sx={{ flexGrow: 1, ml: 2 }}>
+            <Box>
               <UsefulStatsButton
                 votedUsefulCount={props.votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
@@ -89,6 +110,11 @@ const ResearchDescription: React.FC<IProps> = ({
               />
             </Box>
           )}
+          <AuthWrapper roleRequired="beta-tester">
+            <Box>
+              <ViewsCounter viewsCount={viewCount!} />
+            </Box>
+          </AuthWrapper>
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

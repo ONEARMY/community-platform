@@ -95,6 +95,7 @@ export const glyphs: IGlyphs = {
   useful: iconMap.useful,
   thunderbolt: <AiFillThunderbolt />,
   filter: <RiFilter2Fill />,
+  view: iconMap.view,
 }
 
 type WrapperProps = IProps & VerticalAlignProps & SpaceProps

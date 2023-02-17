@@ -17,6 +17,7 @@ interface IProps {
   isEditable: boolean
   slug: string
   comments: IComment[]
+  showComments: boolean
 }
 
 const FlexStepNumber = styled(Flex)`
@@ -29,6 +30,7 @@ const ResearchUpdate: React.FC<IProps> = ({
   isEditable,
   slug,
   comments,
+  showComments,
 }) => {
   const theme = useTheme()
   const formattedCreateDatestamp = format(
@@ -39,6 +41,7 @@ const ResearchUpdate: React.FC<IProps> = ({
     new Date(update._modified),
     'DD-MM-YYYY',
   )
+
   return (
     <>
       <Flex
@@ -145,6 +148,7 @@ const ResearchUpdate: React.FC<IProps> = ({
               update={update}
               comments={comments as any}
               updateIndex={updateIndex}
+              showComments={showComments}
             />
           </Card>
         </Flex>

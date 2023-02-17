@@ -289,8 +289,7 @@ export const SpaceProfile = ({ user }: IProps) => {
           </Flex>
           {user.about && (
             <Text
-              mt="0"
-              mb="20px"
+              mb={6}
               color={theme.colors.grey}
               sx={{
                 ...theme.typography.paragraph,

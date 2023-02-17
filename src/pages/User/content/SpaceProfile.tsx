@@ -5,7 +5,7 @@ import type {
   PlasticTypeLabel,
 } from 'src/models/user_pp.models'
 
-import { Heading, Box, Image, Flex, Text } from 'theme-ui'
+import { Heading, Box, Image, Flex, Paragraph } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
@@ -287,19 +287,7 @@ export const SpaceProfile = ({ user }: IProps) => {
               {user.displayName}
             </Heading>
           </Flex>
-          {user.about && (
-            <Text
-              mb={6}
-              color={theme.colors.grey}
-              sx={{
-                ...theme.typography.paragraph,
-                width: ['80%', '100%'],
-                whiteSpace: 'pre-line',
-              }}
-            >
-              {user.about}
-            </Text>
-          )}
+          {user.about && <Paragraph mb={6}>{user.about}</Paragraph>}
 
           {user.profileType === ProfileType.COLLECTION_POINT &&
             user.collectedPlasticTypes &&

@@ -18,7 +18,7 @@ yarn workspace functions test:watch
 This will startup the firebase emulator suite, compile functions, and watch for any changes to function or spec test files
 
 :::info  
-The emulator console can be viewd on [localhost:4001](http://localhost:4001). All data will be cleared on script termination
+The emulator console can be viewed on [localhost:4001](http://localhost:4001). All data will be cleared on script termination
 :::
 
 To run just a single test the interactive prompts can be used to provide a matching filename path, e.g.

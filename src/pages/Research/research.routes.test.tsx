@@ -45,6 +45,9 @@ const mockResearchStore: any = {
     userName: 'jasper',
     userRoles: ['admin'],
   },
+  incrementViewCount: () => {
+    return 1
+  },
 }
 
 jest.mock('src/stores/Research/research.store', () => ({

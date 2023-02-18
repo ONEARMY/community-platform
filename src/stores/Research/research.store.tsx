@@ -146,6 +146,28 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
+  public async incrementViewCount(id: string) {
+    const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
+    const researchData = await toJS(dbRef.get())
+    const totalViews = researchData?.total_views || 0
+
+    if (researchData) {
+      const updatedResearch: IResearchDB = {
+        ...researchData,
+        total_views: totalViews! + 1,
+      }
+
+      dbRef.set(
+        {
+          ...updatedResearch,
+        },
+        { keep_modified_timestamp: true },
+      )
+
+      return updatedResearch.total_views
+    }
+  }
+
   public deleteResearchItem(id: string) {
     this.db.collection('research').doc(id).delete()
   }
@@ -187,8 +209,18 @@ export class ResearchStore extends ModuleStore {
     this.selectedCategory = category
   }
 
-  private async addUserReference(text: string): Promise<string> {
-    return (await changeMentionToUserReference(text, this.userStore)).text
+  private async addUserReference(str: string): Promise<{
+    text: string
+    users: string[]
+  }> {
+    const { text, mentionedUsers: users } = await changeMentionToUserReference(
+      str,
+      this.userStore,
+    )
+    return {
+      text,
+      users,
+    }
   }
 
   public async addComment(
@@ -212,7 +244,7 @@ export class ResearchStore extends ModuleStore {
           _creatorId: user._id,
           creatorName: user.userName,
           creatorCountry: userCountry,
-          text: await this.addUserReference(comment),
+          text: comment,
         }
 
         const updateWithMeta = { ...update }
@@ -246,6 +278,7 @@ export class ResearchStore extends ModuleStore {
         }
 
         await this.updateResearchItem(dbRef, newItem)
+
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
         runInAction(() => {
           this.activeResearchItem = createdItem
@@ -346,9 +379,7 @@ export class ResearchStore extends ModuleStore {
         } else updateWithMeta.images = []
 
         if (commentIndex !== -1) {
-          pastComments[commentIndex].text = (
-            await this.addUserReference(newText)
-          )
+          pastComments[commentIndex].text = newText
             .slice(0, MAX_COMMENT_LENGTH)
             .trim()
           pastComments[commentIndex]._edited = new Date().toISOString()
@@ -389,24 +420,94 @@ export class ResearchStore extends ModuleStore {
   private async updateResearchItem(
     dbRef: DocReference<IResearch.Item>,
     researchItem: IResearch.Item,
-  ): Promise<void> {
+  ) {
+    const { text: researchDescription, users } = await this.addUserReference(
+      researchItem.description,
+    )
     logger.debug('updateResearchItem', {
       before: researchItem.description,
-      after: await this.addUserReference(researchItem.description),
+      after: researchDescription,
     })
+
+    const mentions: any = []
 
     await Promise.all(
       researchItem.updates.map(async (up, idx) => {
-        researchItem.updates[idx].description = await this.addUserReference(
+        const { text: newDescription, users } = await this.addUserReference(
           up.description,
         )
+
+        ;(users || []).map((username) => {
+          mentions.push({
+            username,
+            location: `update-${idx}`,
+          })
+        })
+
+        researchItem.updates[idx].description = newDescription
+
+        if (researchItem.updates[idx]) {
+          await Promise.all(
+            (researchItem.updates[idx].comments || ([] as IComment[])).map(
+              async (comment, commentIdx) => {
+                const { text, users } = await this.addUserReference(
+                  comment.text,
+                )
+
+                const researchUpdate = researchItem.updates[idx]
+                if (researchUpdate.comments) {
+                  researchUpdate.comments[commentIdx].text = text
+
+                  users.map((username) => {
+                    mentions.push({
+                      username,
+                      location: `update-${idx}-comment:${comment._id}`,
+                    })
+                  })
+                }
+              },
+            ),
+          )
+        }
       }),
     )
-
-    return dbRef.set({
-      ...researchItem,
-      description: await this.addUserReference(researchItem.description),
+    ;(users || []).map((username) => {
+      mentions.push({
+        username,
+        location: 'description',
+      })
     })
+
+    await dbRef.set({
+      ...researchItem,
+      mentions,
+      description: researchDescription,
+    })
+
+    const previousMentionsList = researchItem.mentions || []
+    logger.debug(`Mentions:`, {
+      before: previousMentionsList,
+      after: mentions,
+    })
+
+    // Previous mentions
+    const previousMentions = previousMentionsList.map(
+      (mention) => `${mention.username}.${mention.location}`,
+    )
+
+    mentions.forEach((mention) => {
+      if (
+        !previousMentions.includes(`${mention.username}.${mention.location}`)
+      ) {
+        this.userNotificationsStore.triggerNotification(
+          'research_mention',
+          mention.username,
+          `/research/${researchItem.slug}#${mention.location}`,
+        )
+      }
+    })
+
+    return await dbRef.get()
   }
 
   public async uploadResearch(values: IResearch.FormInput | IResearch.ItemDB) {
@@ -423,6 +524,7 @@ export class ResearchStore extends ModuleStore {
       // define research
       const userCountry = getUserCountry(user)
       const researchItem: IResearch.Item = {
+        mentions: [],
         ...values,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
@@ -487,7 +589,7 @@ export class ResearchStore extends ModuleStore {
         )
         const newItem = {
           ...toJS(item),
-          description: await this.addUserReference(item.description),
+          description: (await this.addUserReference(item.description)).text,
           updates: [...toJS(item.updates)],
         }
         if (existingUpdateIndex === -1) {

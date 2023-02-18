@@ -1,7 +1,7 @@
 module.exports = {
   title: 'OneArmy Community Platform',
   tagline: 'Developer Documentation',
-  url: 'https://onearmy.github.io/community-platform',
+  url: 'https://onearmy.github.io',
   baseUrl: '/community-platform/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',

@@ -23,6 +23,11 @@ export interface IModerable {
   _id?: string
 }
 
+export type UserMention = {
+  username: string
+  location: string
+}
+
 /*****************************************************************
  *            Algolia Locations
  ****************************************************************/

@@ -73,7 +73,7 @@ module.exports = {
           routeBasePath: '/',
           // Please change this to your repo.
           editUrl:
-            'https://github.com/ONEARMY/community-platform/edit/master/documentation',
+            'https://github.com/ONEARMY/community-platform/edit/master/packages/documentation',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

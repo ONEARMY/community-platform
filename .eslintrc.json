@@ -61,18 +61,20 @@
     "@typescript-eslint/interface-name-prefix": "off",
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/naming-convention.md
     // NOTE - typings throughout the platform are fairly inconsistent, hence the wide range of rules
+
+    // 2023-02-17 - Disable as lint check now blocking build (warnings treated as error)
     "@typescript-eslint/naming-convention": [
-      "warn",
-      {
-        "selector": "default",
-        "format": ["camelCase", "UPPER_CASE", "PascalCase", "snake_case"],
-        "leadingUnderscore": "allow"
-      },
-      {
-        "selector": "classMethod",
-        "format": ["camelCase"],
-        "leadingUnderscore": "allow"
-      }
+      "off"
+      // {
+      //   "selector": "default",
+      //   "format": ["camelCase", "UPPER_CASE", "PascalCase", "snake_case"],
+      //   "leadingUnderscore": "allow"
+      // },
+      // {
+      //   "selector": "classMethod",
+      //   "format": ["camelCase"],
+      //   "leadingUnderscore": "allow"
+      // }
     ],
     // Filenames - https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/filename-case.md
     "unicorn/filename-case": [

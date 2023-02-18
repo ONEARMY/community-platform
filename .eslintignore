@@ -5,3 +5,4 @@ cypress
 lib
 storybook-static
 dist
+shared/lib

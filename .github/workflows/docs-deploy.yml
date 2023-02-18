@@ -21,7 +21,7 @@ jobs:
             node-version: '18.13.0'
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
         # Setup yarn 2 cache: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Setup Cache
         uses: actions/cache@v3

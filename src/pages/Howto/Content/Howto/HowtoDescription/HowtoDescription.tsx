@@ -52,11 +52,13 @@ interface IProps {
   onUsefulClick: () => void
 }
 
+let didInit = false
+
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
-  const [viewCount, setViewCount] = useState(howto.total_views)
+  const [viewCount, setViewCount] = useState<number | undefined>()
   const { stores } = useCommonStores()
 
   const incrementDownloadCount = async () => {
@@ -73,8 +75,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       const updatedViewCount = await stores.howtoStore.incrementViewCount(
         howto._id,
       )
-      addIDToSessionStorageArray('howto', howto._id)
       setViewCount(updatedViewCount)
+      addIDToSessionStorageArray('howto', howto._id)
+    } else {
+      setViewCount(howto.total_views)
     }
   }
 
@@ -104,7 +108,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   useEffect(() => {
-    incrementViewCount()
+    if (!didInit) {
+      didInit = true
+      incrementViewCount()
+    }
   }, [howto._id])
 
   return (
@@ -162,11 +169,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               />
             </Box>
           )}
-          <AuthWrapper roleRequired="beta-tester">
-            <Box>
-              <ViewsCounter viewsCount={viewCount!} />
-            </Box>
-          </AuthWrapper>
+          {viewCount ? (
+            <AuthWrapper roleRequired="beta-tester">
+              <Box>
+                <ViewsCounter viewsCount={viewCount!} />
+              </Box>
+            </AuthWrapper>
+          ) : null}
           {/* Check if pin should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

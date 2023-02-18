@@ -7,7 +7,7 @@ interface INotificationAggregation extends IAggregation {
   sourceFields: (keyof IUserDB)[]
 }
 
-const aggregations: INotificationAggregation[] = [
+const UserNotificationAggregation: INotificationAggregation =
   // When a user's list of notifications changes reflect to aggregation
   {
     sourceCollection: 'users',
@@ -19,7 +19,9 @@ const aggregations: INotificationAggregation[] = [
       const user: IUserDB = dbChange.after.data() as any
       const { _id, _authID, notification_settings, notifications } = user
       const emailFrequency = notification_settings?.emailFrequency || null
-      const pending = notifications.filter((n) => !n.notified && !n.read)
+      const pending = (notifications || []).filter(
+        (n) => !n.notified && !n.read,
+      )
       // remove user from list if they do not have emails enabled or no pending notifications
       if (!emailFrequency || pending.length === 0) {
         return {
@@ -31,12 +33,11 @@ const aggregations: INotificationAggregation[] = [
         [_id]: { _authID, emailFrequency, notifications: pending },
       }
     },
-  },
-]
+  }
 
 /** Watch changes to all user docs and apply aggregations */
 exports.default = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate((change) => {
-    return handleDBAggregations(change, aggregations)
+    return handleDBAggregations(change, [UserNotificationAggregation])
   })

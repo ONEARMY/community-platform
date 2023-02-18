@@ -16,16 +16,14 @@
     "new-component": "ts-node scripts/newComponent.ts"
   },
   "dependencies": {
-    "@emotion/react": "^11.8.2",
-    "@emotion/styled": "^11.8.1",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@faker-js/faker": "^7.6.0",
     "@react-icons/all-files": "^4.1.0",
     "date-fns": "^2.29.3",
     "linkify-plugin-mention": "^4.0.2",
     "linkify-react": "^4.0.2",
     "linkifyjs": "^4.0.2",
-    "prettier": "^2.5.1",
-    "react": "^17.0.2",
     "react-flag-icon-css": "^1.0.25",
     "react-icons": "^4.3.1",
     "react-portal": "^4.2.2",
@@ -37,6 +35,9 @@
     "theme-ui": "^0.14.1",
     "use-debounce": "^8.0.4",
     "webpack": "^5.75.0"
+  },
+  "peerDependencies": {
+    "react": "17.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -57,6 +58,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.25.4",
     "mustache": "^4.2.0",
+    "prettier": "^2.5.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.5.5"
   }

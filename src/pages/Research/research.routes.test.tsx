@@ -79,7 +79,7 @@ describe('research.routes', () => {
         </Provider>,
       )
       await waitFor(
-        () => expect(wrapper.getByText(/Research topic/)).toBeInTheDocument(),
+        () => expect(wrapper.getByText(/Help out with Research & Development/)).toBeInTheDocument(),
         {
           timeout: 2000,
         },

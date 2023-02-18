@@ -30037,7 +30037,7 @@ fsevents@^1.2.7:
   languageName: unknown
   linkType: soft
 
-"oa-shared@1.0.0, oa-shared@workspace:*, oa-shared@workspace:shared":
+"oa-shared@workspace:*, oa-shared@workspace:shared":
   version: 0.0.0-use.local
   resolution: "oa-shared@workspace:shared"
   dependencies:
@@ -30399,7 +30399,7 @@ fsevents@^1.2.7:
     mobx-react: 7.2.0
     mobx-react-devtools: ^6.0.3
     oa-components: "workspace:*"
-    oa-shared: 1.0.0
+    oa-shared: "workspace:*"
     pino: ^7.2.0
     pino-logflare: ^0.3.12
     prettier: ^2.6.1

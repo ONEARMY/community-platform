@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - master
-      - fix/docs-deploy-action
     # Only run action if changes have been made
     # to the documentation or components packages
     paths:
       - 'packages/documentation/**'
       - 'packages/components/**'
+      - '.github/workflows/docs-deploy.yml'
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

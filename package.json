@@ -209,5 +209,5 @@
     "npm": "please-use-yarn",
     "node": ">=16.10.0 <19.0.0"
   },
-  "packageManager": "yarn@3.3.0"
+  "packageManager": "yarn@3.4.1"
 }

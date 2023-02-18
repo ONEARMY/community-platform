@@ -14,7 +14,7 @@ const AGGREGATION_DOC_IDS = [
 ] as const
 
 // Utility types generated from list of aggregation docs ids
-type IAggregationId = typeof AGGREGATION_DOC_IDS[number]
+type IAggregationId = (typeof AGGREGATION_DOC_IDS)[number]
 type IAggregations = {
   [aggregationId in IAggregationId]?: { [key: string]: any }
 }

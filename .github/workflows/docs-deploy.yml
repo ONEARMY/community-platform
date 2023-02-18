@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - fix/docs-deploy-action
     # Only run action if changes have been made
     # to the documentation or components packages
     paths:

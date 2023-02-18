@@ -187,7 +187,7 @@
     "idb": "^6.0.0",
     "lint-staged": "^8.1.5",
     "mobx-react-devtools": "^6.0.3",
-    "prettier": "^2.8.4",
+    "prettier": "2.5.1",
     "react-dev-utils": "^11.0.4",
     "start-server-and-test": "^1.11.0",
     "stream-browserify": "^3.0.0",

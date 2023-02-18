@@ -26,5 +26,4 @@ export const _supportedConfigurationOptions = [
   'REACT_APP_LOGFLARE_SOURCE',
 ] as const
 
-export type ConfigurationOption =
-  (typeof _supportedConfigurationOptions)[number]
+export type ConfigurationOption = typeof _supportedConfigurationOptions[number]

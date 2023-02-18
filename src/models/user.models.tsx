@@ -100,7 +100,7 @@ export const NotificationTypes = [
   'research_mention',
 ] as const
 
-export type NotificationType = (typeof NotificationTypes)[number]
+export type NotificationType = typeof NotificationTypes[number]
 
 export enum EmailNotificationFrequency {
   NEVER = '',

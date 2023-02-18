@@ -1,4 +1,4 @@
-import type { WebpackConfigOverride } from '@craco/types'
+import type { WebpackConfigOverride, JestConfigOverride } from '@craco/types'
 import { DefinePlugin, ProvidePlugin } from 'webpack'
 import type { RuleSetRule } from 'webpack'
 
@@ -44,6 +44,18 @@ module.exports = {
         },
       ]
       return webpackConfig
+    },
+  },
+
+  jest: {
+    configure: (jestConfig: JestConfigOverride['jestConfig']) => {
+      // https://kulshekhar.github.io/ts-jest/docs/getting-started/paths-mapping/
+      jestConfig.moduleNameMapper = {
+        ...jestConfig.moduleNameMapper,
+        // Allow specific import from 'src' (used to import `useCommonStores`)
+        '^src$': '<rootDir>/src/index',
+      }
+      return jestConfig
     },
   },
 }

@@ -1,10 +1,10 @@
 import { Button, CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
 import ReactGA from 'react-ga4'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { useCommonStores } from 'src/index'
+import { MAX_COMMENT_LENGTH } from '../../../../constants'
+import { useCommonStores } from '../../../../'
 import { logger } from 'src/logger'
-import { useResearchStore } from 'src/stores/Research/research.store'
+import { useResearchStore } from '../../../../stores/Research/research.store'
 import { Box, Flex } from 'theme-ui'
 
 import styled from '@emotion/styled'
@@ -15,6 +15,7 @@ interface IProps {
   comments: UserComment[]
   update: IResearch.UpdateDB
   updateIndex: number
+  showComments?: boolean
 }
 
 const BoxMain = styled(Box)`
@@ -24,11 +25,19 @@ const BoxMain = styled(Box)`
   margin-top: 20px;
 `
 
-export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
+export const getResearchCommentId = (s: string) =>
+  s.replace(/#update-\d+-comment:/, '')
+
+export const ResearchComments = ({
+  comments,
+  update,
+  updateIndex,
+  showComments,
+}: IProps) => {
   const [comment, setComment] = useState('')
   const [, setLoading] = useState(false)
   const researchStore = useResearchStore()
-  const [viewComments, setViewComments] = useState(false)
+  const [viewComments, setViewComments] = useState(!!showComments)
   const { stores } = useCommonStores()
 
   async function onSubmit(comment: string) {
@@ -173,6 +182,7 @@ export const ResearchComments = ({ comments, update, updateIndex }: IProps) => {
             handleEdit={handleEdit}
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
+            highlightedCommentId={getResearchCommentId(window.location.hash)}
           />
           <Box sx={{ width: '100%' }}>
             <CreateComment

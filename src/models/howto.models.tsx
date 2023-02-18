@@ -1,14 +1,9 @@
 import type { ISelectedTags } from './tags.model'
-import type { DBDoc, IModerable } from './common.models'
+import type { DBDoc, IModerable, UserMention } from './common.models'
 import type { IConvertedFileMeta } from '../types'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { ICategory } from './categories.model'
 import type { IComment } from './'
-
-type UserMention = {
-  username: string
-  location: string
-}
 
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields
@@ -22,6 +17,7 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   // Comments were added in V2, old howto's may not have the property
   comments?: IComment[]
   total_downloads?: number
+  total_views?: number
   mentions: UserMention[]
   previousSlugs?: string[]
 }

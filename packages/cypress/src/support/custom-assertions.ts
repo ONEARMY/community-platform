@@ -14,6 +14,23 @@ declare global {
   }
 }
 
+chai.use((chaiObj, utils) => {
+  function assertIsInViewport() {
+    const subject = this._obj
+
+    const bottom = Cypress.$(cy.state('window')).height()
+    const width = Cypress.$(cy.state('window')).width()
+    const rect = subject[0].getBoundingClientRect()
+
+    expect(
+      rect.top < bottom && rect.right <= width && rect.left >= 0,
+      'expected #{this} to be in the viewport',
+    ).to.eq(true)
+  }
+
+  chaiObj.Assertion.addMethod('inViewport', assertIsInViewport)
+})
+
 const eqHowto = (chaiObj, utils) => {
   function compare(this: any, expected: any) {
     const subject: IHowto = this._obj

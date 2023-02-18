@@ -8,6 +8,12 @@ import {
 import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
 
+jest.mock('../../utils/helpers', () => ({
+  randomID: () => {
+    return 'random-id'
+  },
+}))
+
 const factory = async (researchItemOverloads: any = {}) => {
   const researchItem = FactoryResearchItem({
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
@@ -40,6 +46,12 @@ const factory = async (researchItemOverloads: any = {}) => {
         userName: 'username',
       }),
     ),
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.userNotificationsStore = {
+    triggerNotification: jest.fn(),
   }
 
   await store.setActiveResearchItem('fish')
@@ -91,39 +103,33 @@ describe('research.store', () => {
           }),
         )
         expect(newResearchItem.updates[1].comments).toBeUndefined()
-      })
-
-      it('preserves @mention within Research description', async () => {
-        const { store, researchItem, setFn } = await factory({
-          description: '@username',
-        })
-
-        // Act
-        await store.addComment('fish', researchItem.updates[0])
-
-        // Assert
-        expect(setFn).toHaveBeenCalledWith(
-          expect.objectContaining({
-            description: '@@{userId:username}',
-          }),
+        expect(newResearchItem.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              username: 'username',
+              location: 'update-0-comment:random-id',
+            },
+          ]),
         )
       })
 
-      it('preserves @mention within an Update description', async () => {
-        const { store, researchItem, setFn } = await factory({
-          updates: [FactoryResearchItemUpdate({ description: '@username' })],
-        })
+      it('triggers notification for @mentions in comment', async () => {
+        const { store, researchItem } = await factory()
 
         // Act
-        await store.addComment('fish', researchItem.updates[0])
+        await store.addComment(
+          'My favourite user has to be @username',
+          researchItem.updates[0],
+        )
 
         // Assert
-        const [newResearchItem] = setFn.mock.calls[0]
-        expect(setFn).toHaveBeenCalledTimes(1)
-        expect(newResearchItem.updates[0]).toEqual(
-          expect.objectContaining({
-            description: '@@{userId:username}',
-          }),
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toBeCalledTimes(1)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'research_mention',
+          'username',
+          `/research/${researchItem.slug}#update-0-comment:random-id`,
         )
       })
     })
@@ -283,10 +289,45 @@ describe('research.store', () => {
           '@@{userId:username}',
         )
       })
+
+      it('triggers a notification when editing an comment to add @mention', async () => {
+        const comment = FactoryComment({
+          _creatorId: 'fake-user',
+        })
+        const { store, researchItem, setFn } = await factory({
+          updates: [
+            FactoryResearchItemUpdate({
+              description: 'Some description',
+              comments: [comment],
+            }),
+          ],
+        })
+
+        // Act
+        await store.editComment(
+          comment._id,
+          'My favourite comment @username',
+          researchItem.updates[0],
+        )
+
+        // Assert
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(newResearchItem.updates[0].comments[0].text).toBe(
+          'My favourite comment @@{userId:username}',
+        )
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toBeCalledTimes(1)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'research_mention',
+          'username',
+          `/research/${researchItem.slug}#update-0-comment:${newResearchItem.updates[0].comments[0]._id}`,
+        )
+      })
     })
   })
 
-  describe('updates', () => {
+  describe('Updates', () => {
     describe('uploadUpdate', () => {
       it('inserts a new update', async () => {
         const { store, researchItem, setFn } = await factory()
@@ -361,7 +402,7 @@ describe('research.store', () => {
     })
   })
 
-  describe('item', () => {
+  describe('Item', () => {
     describe('uploadResearch', () => {
       it('adds @mention to Research description', async () => {
         const { store, researchItem, setFn } = await factory()
@@ -375,6 +416,56 @@ describe('research.store', () => {
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
         expect(newResearchItem.description).toBe('@@{userId:username}')
+        expect(newResearchItem.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              location: 'description',
+              username: 'username',
+            },
+          ]),
+        )
+      })
+
+      it('triggers notifications for @mentions in Research description', async () => {
+        const { store, researchItem } = await factory()
+
+        // Act
+        await store.uploadResearch({
+          ...toJS(researchItem),
+          description: '@username',
+        })
+
+        // Assert
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toBeCalledTimes(1)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'research_mention',
+          'username',
+          `/research/${researchItem.slug}#description`,
+        )
+      })
+
+      it('does not trigger notifications for existing @mentions in Research description', async () => {
+        const { store, researchItem } = await factory({
+          mentions: [
+            {
+              username: 'username',
+              location: 'description',
+            },
+          ],
+        })
+
+        // Act
+        await store.uploadResearch({
+          ...toJS(researchItem),
+          description: '@username',
+        })
+
+        // Assert
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).not.toBeCalled()
       })
 
       it('preserves @mention on existing Update description', async () => {
@@ -398,6 +489,14 @@ describe('research.store', () => {
         expect(setFn).toHaveBeenCalled()
         expect(newResearchItem.updates[0].description).toBe(
           '@@{userId:username}',
+        )
+        expect(newResearchItem.mentions).toEqual(
+          expect.arrayContaining([
+            {
+              location: `update-0`,
+              username: 'username',
+            },
+          ]),
         )
       })
     })

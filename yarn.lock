@@ -25092,7 +25092,7 @@ __metadata:
     oa-shared: "workspace:*"
     pino: ^7.2.0
     pino-logflare: ^0.3.12
-    prettier: ^2.6.1
+    prettier: ^2.8.4
     pubsub-js: ^1.7.0
     react: ^17.0.2
     react-dev-utils: ^11.0.4
@@ -27136,7 +27136,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.5.1, prettier@npm:^2.6.1":
+"prettier@npm:^2.5.1, prettier@npm:^2.8.4":
   version: 2.8.4
   resolution: "prettier@npm:2.8.4"
   bin:

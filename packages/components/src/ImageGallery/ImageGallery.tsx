@@ -62,7 +62,6 @@ export const ImageGallery = (props: IProps) => {
       }
     })
 
-
   const ImageWithPointer = styled(Image)`
     cursor: pointer;
     width: 100%;

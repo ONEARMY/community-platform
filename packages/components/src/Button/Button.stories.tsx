@@ -1,5 +1,6 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { glyphs } from '../Icon/Icon'
+import type { availableGlyphs } from '../Icon/types'
 import { Button } from './Button'
 
 export default {
@@ -124,8 +125,13 @@ export const Icons: ComponentStory<typeof Button> = () => (
   <>
     {sizeOptions.map((size) =>
       ['primary', 'secondary', 'outline'].map((variant) =>
-        Object.keys(glyphs).map((glyph: any, key) => (
-          <Button icon={glyph} key={key} {...size} variant={variant}>
+        Object.keys(glyphs).map((glyph: string, key) => (
+          <Button
+            icon={glyph as availableGlyphs}
+            key={key}
+            {...size}
+            variant={variant}
+          >
             {size.label} with Icon
           </Button>
         )),

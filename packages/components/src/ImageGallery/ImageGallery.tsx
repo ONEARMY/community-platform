@@ -5,6 +5,7 @@ import type { CardProps } from 'theme-ui'
 import { Box, Flex, Image } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useTheme } from '@emotion/react'
+import type { PlatformThemeStyles } from '../../types/theme'
 
 interface IUploadedFileMeta {
   downloadUrl: string
@@ -45,7 +46,7 @@ export const ImageGallery = (props: IProps) => {
     images: [],
     imgIndex: 0,
   })
-  const theme: any = useTheme()
+  const theme = useTheme() as PlatformThemeStyles
 
   useEffect(() => {
     const images = props.images.filter((img) => img !== null)
@@ -111,7 +112,7 @@ export const ImageGallery = (props: IProps) => {
       </Flex>
       <Flex sx={{ width: '100%', flexWrap: 'wrap' }} mx={[2, 2, '-5px']}>
         {imageNumber > 1
-          ? images.map((image: any, index: number) => (
+          ? images.map((image: IUploadedFileMeta, index: number) => (
               <ThumbCard
                 data-cy="thumbnail"
                 mb={3}

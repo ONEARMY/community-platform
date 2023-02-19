@@ -2,9 +2,10 @@ import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useTheme } from '@emotion/react'
 import { ExternalLink, Icon } from '..'
+import type { PlatformThemeStyles } from '../../types/theme'
 
 export const SiteFooter = () => {
-  const theme = useTheme() as any
+  const theme = useTheme() as PlatformThemeStyles
   const discordButtonWidth = 310
 
   const Anchor = styled(ExternalLink)`

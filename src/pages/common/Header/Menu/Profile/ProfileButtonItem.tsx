@@ -6,6 +6,7 @@ import { display } from 'styled-system'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import { Link } from 'react-router-dom'
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 const ButtonSign = styled(Button as any)<DisplayProps>`
   ${display};
@@ -20,7 +21,7 @@ interface IProps {
 }
 
 interface IProps {
-  sx?: any
+  sx?: ThemeUIStyleObject
 }
 
 interface IInjectedProps extends IProps {

@@ -1,6 +1,7 @@
 import { Flex, Image, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { keyframes, useTheme } from '@emotion/react'
+import type { PlatformThemeStyles } from '../../types/theme'
 
 const rotate = keyframes`
   from {
@@ -18,7 +19,7 @@ const RotatingLogo = styled(Image)`
 `
 
 export const Loader = () => {
-  const theme = useTheme() as any
+  const theme = useTheme() as PlatformThemeStyles
   const logo = theme.logo || null
 
   return (

@@ -8,7 +8,7 @@ export interface Props {
   placeholder?: string
   debounceMs?: number
   iconUrl?: string
-  callback?: any
+  callback?: (result: Result) => void
   city?: string
   countrycodes?: string
   acceptLanguage?: string

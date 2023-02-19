@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import Linkify from 'linkify-react'
 import 'linkify-plugin-mention'
 import { ExternalLink, InternalLink } from '..'
+import type { PlatformThemeStyles } from '../../types/theme'
 
 export interface Props {
   children?: React.ReactNode
@@ -10,7 +11,7 @@ export interface Props {
 
 export const LinkifyText = (props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const theme = useTheme() as any
+  const theme = useTheme() as PlatformThemeStyles
   const StyledExternalLink = styled(ExternalLink)`
     color: ${theme.colors.grey}!important;
     text-decoration: underline;

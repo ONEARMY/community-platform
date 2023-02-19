@@ -13,10 +13,10 @@ interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   showIconOnly?: boolean
 }
 
-type ToArray<Type> = [Type] extends [any] ? Type[] : never
+type ToArray<Type> = [Type] extends [unknown] ? Type[] : never
 type AvailableButtonProps = ToArray<keyof BtnProps>
 
-const buttonSizeProps: { [key: string]: any } = {
+const buttonSizeProps: { [key: string]: Record<string, number> } = {
   small: {
     px: 2,
     py: 1,

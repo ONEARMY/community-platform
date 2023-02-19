@@ -139,7 +139,7 @@ export const MapWithDraggablePin = (props: Props) => {
           />
           <DraggableMarker
             position={props.position}
-            ondragend={(evt: any) => {
+            ondragend={(evt: { lat: number; lng: number }) => {
               if (evt.lat && evt.lng)
                 onPositionChanged({
                   lat: evt.lat,

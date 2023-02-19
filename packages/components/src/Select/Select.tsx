@@ -7,6 +7,7 @@ import type {
 import { useTheme } from '@emotion/react'
 import { DropdownIndicator } from './DropdownIndicator'
 import { Option } from './Option'
+import type { PlatformThemeStyles } from '../../types/theme'
 
 export interface Props extends ReactSelectProps {
   options: OptionsOrGroups<any, any>
@@ -23,7 +24,7 @@ export interface Props extends ReactSelectProps {
 }
 
 export const Select = (props: Props) => {
-  const theme: any = useTheme()
+  const theme = useTheme() as PlatformThemeStyles
 
   const SelectStyles: Partial<StylesConfig> = {
     container: (provided) => ({

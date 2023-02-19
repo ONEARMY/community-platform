@@ -134,7 +134,7 @@ const Glyph = ({ glyph }: IGlyphProps) => {
 export const Icon = (props: WrapperProps) => {
   const { glyph, size, marginRight } = props
 
-  const isSizeNumeric = !isNaN(size as any)
+  const isSizeNumeric = !isNaN(size as number)
 
   let definedSize = 16
 

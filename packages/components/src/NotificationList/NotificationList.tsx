@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Box, Card, Text } from 'theme-ui'
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 import styled from '@emotion/styled'
 
@@ -11,7 +12,7 @@ export type UserNotificationList = UserNotificationItem[]
 
 export interface Props {
   notifications: UserNotificationList
-  sx?: any
+  sx?: ThemeUIStyleObject
   markAllRead?: () => void
   markAllNotified?: () => void
 }
@@ -39,10 +40,7 @@ export const NotificationList = (props: Props) => {
         <>
           <ModalItem style={{ textAlign: 'center' }}>Notifications</ModalItem>
           {notifications.map((notification, idx) => (
-            <NotificationItem
-              key={idx}
-              {...(notification as any)}
-            ></NotificationItem>
+            <NotificationItem key={idx} {...notification}></NotificationItem>
           ))}
           <Button
             style={{

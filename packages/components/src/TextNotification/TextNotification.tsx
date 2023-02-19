@@ -1,4 +1,5 @@
 import { keyframes } from '@emotion/react'
+import type { ReactNode } from 'react'
 import { Alert, Close } from 'theme-ui'
 
 const fadeIn = keyframes({
@@ -7,10 +8,10 @@ const fadeIn = keyframes({
 })
 
 export interface Props {
-  children: any
+  children: ReactNode
   variant: 'success' | 'failure'
   isVisible: boolean
-  onDismiss?: any | null
+  onDismiss?: (dismiss: boolean) => void | null
 }
 
 export const TextNotification = (props: Props) => {
@@ -37,7 +38,7 @@ export const TextNotification = (props: Props) => {
             transform: 'translateY(-50%)',
             cursor: 'pointer',
           }}
-          onClick={() => props.onDismiss(false)}
+          onClick={() => props.onDismiss && props?.onDismiss(false)}
         />
       )}
     </Alert>

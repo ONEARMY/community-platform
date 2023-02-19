@@ -1,14 +1,16 @@
 import type { FieldRenderProps } from 'react-final-form'
 import { Text, Input } from 'theme-ui'
 
-type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
+type FieldProps = FieldRenderProps<string, HTMLElement> & {
+  children?: React.ReactNode
+}
 
 export interface Props extends FieldProps {
   // additional fields intending to pass down
   disabled?: boolean
   children?: React.ReactNode
   'data-cy'?: string
-  customOnBlur?: (event: any) => void
+  customOnBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
 }
 
 type InputModifiers = {

@@ -5,6 +5,7 @@ import { Button, Icon, ExternalLink } from '../'
 import ReactTooltip from 'react-tooltip'
 import styled from '@emotion/styled'
 import { useTheme } from '@emotion/react'
+import type { PlatformThemeStyles } from '../../types/theme'
 
 const StyledTooltip = styled(ReactTooltip)`
   opacity: 1 !important;
@@ -31,7 +32,7 @@ export interface IProps {
 }
 
 export const UsefulStatsButton = (props: IProps) => {
-  const theme: any = useTheme()
+  const theme = useTheme() as PlatformThemeStyles
 
   const [votedUsefulCount, setVotedUsefulCount] = useState<number>()
   const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>()

@@ -5,7 +5,7 @@ export interface Props {
   tag: {
     label: string
   }
-  sx?: ThemeUIStyleObject | undefined
+  sx?: ThemeUIStyleObject
 }
 
 export const CategoryTag = (props: Props) => {

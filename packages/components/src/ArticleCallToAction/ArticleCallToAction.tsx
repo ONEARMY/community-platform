@@ -2,6 +2,7 @@ import { useTheme } from '@emotion/react'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 import type { User } from '../types/common'
 import { Username } from '../'
+import type { PlatformThemeStyles } from '../../types/theme'
 
 export interface Props {
   author: User & { isVerified: boolean }
@@ -10,7 +11,7 @@ export interface Props {
 }
 
 export const ArticleCallToAction = (props: Props) => {
-  const theme = useTheme() as any
+  const theme = useTheme() as PlatformThemeStyles
   return (
     <Card sx={{ py: 6, px: 4 }}>
       <Flex

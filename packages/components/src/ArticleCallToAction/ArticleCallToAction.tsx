@@ -27,8 +27,9 @@ export const ArticleCallToAction = (props: Props) => {
             sx={{ ml: 1 }}
           />
         </Text>
-        {props.contributors && Boolean(props.contributors.length) && (
+        {props.contributors && props?.contributors.length ? (
           <Text
+            data-testid="ArticleCallToAction: contributors"
             variant="quiet"
             sx={{ display: 'block', mt: 2, textAlign: 'center', fontSize: 2 }}
           >
@@ -44,7 +45,7 @@ export const ArticleCallToAction = (props: Props) => {
               />
             ))}
           </Text>
-        )}
+        ) : null}
         <Heading sx={{ my: 4 }}>Like what you see? 👇</Heading>
         <Flex
           sx={{

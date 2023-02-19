@@ -18,7 +18,7 @@ yarn workspace functions test:watch
 This will startup the firebase emulator suite, compile functions, and watch for any changes to function or spec test files
 
 :::info  
-The emulator console can be viewed on [localhost:4001](http://localhost:4001). All data will be cleared on script termination
+The emulator console can be viewed on [localhost:4001](http://localhost:4001)
 :::
 
 To run just a single test the interactive prompts can be used to provide a matching filename path, e.g.
@@ -41,11 +41,55 @@ Tests are written in [Jest](https://jestjs.io/docs/getting-started), with filena
 
 ## Utilities and Examples
 
-### Mocking
+### Mocking Methods
 
-TODO - share examples of mocking methods to avoid need for full function execution
+Mocks are a useful tool to reduce the number of additional services a test interacts with, making them more resilient to changes in the codebase.
 
-### Executing Functions Directly
+There are various ways to achieve this, many of which are outlines in the Jest [Mock Functions](https://jestjs.io/docs/mock-functions) documentation
+
+A few methods commonly used in the codebase include:
+
+**Imports**
+Return a set of mock methods or utilities in place of an import. An example from the frontend code is when we want to avoid importing all stores, but instead just mock a single method
+
+```ts
+jest.mock('src/index', () => {
+  return {
+    useCommonStores() {
+      return {
+        stores: {
+          userStore: {
+            fetchAllVerifiedUsers: jest.fn(),
+          },
+        },
+      }
+    },
+  }
+})
+```
+
+**Class Methods**
+Replace specific class method with an alternative mock method. E.g. if the code relates to the active user, a mock stub could be used instead. An an artificial example:
+
+```ts
+import UserMethods from './userMethods'
+
+UserMethods.activeUser = jest.fn().mockReturnValue({ id: 'fake_user' })
+```
+
+**Replace or extend multiple class methods with mocks**
+Similarly, entire mock classes can be used where appropriate
+
+```ts
+import UserMethods from './userMethods'
+
+class MockUserMethods implements Partial<UserMethods>{
+  activeUser: () => jest.fn().mockReturnValue({ id: 'fake_user' })
+  setUser: () => jest.fn()
+}
+```
+
+### Execute Functions Directly
 
 It is possible to directly execute any function within the test environment without its required trigger.
 A utility `FirebaseEmulatedTest` class is used to wrap the function invocation so that it can be used async, e.g.
@@ -98,6 +142,8 @@ afterEach(async () => {
 })
 ```
 
+Additionally all emulator data will be cleared when scripts are terminated
+
 :::caution  
 If your test function interacts directly with an empty database endpoint it may throw an error  
 (various issues on github, should review in the future)
@@ -108,3 +154,11 @@ The easiest workaround is to seed the endpoint without any docs, which will allo
 ```
 await FirebaseEmulatedTest.seedFirestoreDB('empty_endpoint',[])
 ```
+
+### Production Data
+
+There may also be some cases where methods want to be tested against production data to check for any additional edge-cases or give a preview new feature development.
+
+There currently isn't a single automated way to do this, however you can see an example of the manual steps involved in the `test_functions` step of the [CircleCI pipeline](https://github.com/ONEARMY/community-platform/blob/feat/aggregation-tests/.circleci/config.yml#L244-L245)
+
+Alternatively developers can follow the steps in [Firebase Emulators Docker](./firebase-emulators-docker.md) to run the docker emulators locally and manually invoke functions

@@ -1,5 +1,8 @@
 import ReactSelect from 'react-select'
 import type {
+  GetOptionLabel,
+  GetOptionValue,
+  PropsValue,
   OptionsOrGroups,
   StylesConfig,
   Props as ReactSelectProps,
@@ -10,17 +13,16 @@ import { Option } from './Option'
 import type { PlatformThemeStyles } from '../../types/theme'
 
 export interface Props extends ReactSelectProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: OptionsOrGroups<any, any>
-  value?: any
-  onChange?: any
+  value?: string
   placeholder?: string
   isMulti?: boolean
   isClearable?: boolean
-  getOptionLabel?: any
-  getOptionValue?: any
-  defaultValue?: any
+  getOptionLabel?: GetOptionLabel<unknown>
+  getOptionValue?: GetOptionValue<unknown>
+  defaultValue?: PropsValue<typeof Option>
   variant?: 'form' | 'icons'
-  components?: any
 }
 
 export const Select = (props: Props) => {
@@ -158,6 +160,7 @@ export const Select = (props: Props) => {
     }),
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const options: OptionsOrGroups<any, any> | undefined = props.options || []
   return (
     <ReactSelect

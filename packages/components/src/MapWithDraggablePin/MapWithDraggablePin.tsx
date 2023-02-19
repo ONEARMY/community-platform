@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Map, TileLayer, Marker, ZoomControl } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import type { LatLngExpression } from 'leaflet'
 import { Button, OsmGeocoding } from '../'
 import { Box, Flex, Text } from 'theme-ui'
 import customMarkerIcon from 'src/assets/icons/map-marker.png'
@@ -13,7 +14,15 @@ const customMarker = L.icon({
   iconAnchor: [10, 28],
 })
 
-const DraggableMarker = (props: { position: any; ondragend: any }) => {
+type Point = {
+  lat: number
+  lng: number
+}
+
+const DraggableMarker = (props: {
+  position: Point
+  ondragend: (point: Point) => void
+}) => {
   const [draggable] = React.useState(true)
   const markerRef = React.useRef(null)
 
@@ -21,7 +30,7 @@ const DraggableMarker = (props: { position: any; ondragend: any }) => {
     <Marker
       draggable={draggable}
       ondragend={() => {
-        const marker: any = markerRef.current
+        const marker: unknown = markerRef.current
 
         if (!marker) {
           return null
@@ -40,9 +49,9 @@ const DraggableMarker = (props: { position: any; ondragend: any }) => {
 }
 
 export interface Props {
-  position: any
-  updatePosition?: any
-  center?: any
+  position: Point
+  updatePosition?: (p: Point) => void
+  center?: LatLngExpression
   zoom?: number
   hasUserLocation?: boolean
 }
@@ -75,8 +84,8 @@ export const MapWithDraggablePin = (props: Props) => {
             callback={(data: Result) => {
               if (data.lat && data.lon) {
                 onPositionChanged({
-                  lat: data.lat,
-                  lng: data.lon,
+                  lat: parseFloat(data.lat),
+                  lng: parseFloat(data.lon),
                 })
                 setCenter([data.lat, data.lon])
                 setZoom(15)

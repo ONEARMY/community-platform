@@ -20,7 +20,10 @@ type InputModifiers = {
 const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
-const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
+const processInputModifiers = (
+  value: string,
+  modifiers: InputModifiers = {},
+) => {
   if (typeof value !== 'string') return value
   if (modifiers.capitalize) {
     value = capitalizeFirstLetter(value)

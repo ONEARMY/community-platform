@@ -1,7 +1,6 @@
 import 'react-image-lightbox/style.css'
 import { useEffect, useState } from 'react'
 import Lightbox from 'react-image-lightbox'
-import type { CardProps } from 'theme-ui'
 import { Box, Flex, Image } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useTheme } from '@emotion/react'
@@ -28,16 +27,6 @@ interface IState {
   images: Array<IUploadedFileMeta>
   imgIndex: number
 }
-
-const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
-  cursor: pointer;
-  padding: 5px;
-  overflow: hidden;
-  transition: 0.2s ease-in-out;
-  &:hover {
-    transform: translateY(-5px);
-  }
-`
 
 export const ImageGallery = (props: IProps) => {
   const [state, setState] = useState<IState>({
@@ -73,13 +62,6 @@ export const ImageGallery = (props: IProps) => {
       }
     })
 
-  const ThumbImage = styled(Image)`
-    object-fit: cover;
-    width: 100px;
-    height: 67px;
-    border: 1px solid ${theme.colors.offwhite};
-    border-radius: 5px;
-  `
 
   const ImageWithPointer = styled(Image)`
     cursor: pointer;
@@ -113,21 +95,38 @@ export const ImageGallery = (props: IProps) => {
       <Flex sx={{ width: '100%', flexWrap: 'wrap' }} mx={[2, 2, '-5px']}>
         {imageNumber > 1
           ? images.map((image: IUploadedFileMeta, index: number) => (
-              <ThumbCard
+              <Box
                 data-cy="thumbnail"
-                mb={3}
-                mt={4}
-                opacity={image === state.activeImage ? 1.0 : 0.5}
                 onClick={() => setActive(image)}
                 key={index}
+                sx={{
+                  mb: 3,
+                  mt: 4,
+                  mx: 1,
+                  opacity: image === state.activeImage ? 1.0 : 0.5,
+                  cursor: 'pointer',
+                  overflow: 'hidden',
+                  transition: '0.2s ease-in-out',
+                  border: `1px solid ${theme.colors.offwhite}`,
+                  lineHeight: 0,
+                  borderRadius: 1,
+                  '&:hover': {
+                    transform: 'translateY(-5px)',
+                  },
+                }}
               >
-                <ThumbImage
+                <Image
                   loading="lazy"
                   src={image.downloadUrl}
                   key={index}
+                  sx={{
+                    objectFit: 'cover',
+                    width: '100px',
+                    height: '67px',
+                  }}
                   crossOrigin=""
                 />
-              </ThumbCard>
+              </Box>
             ))
           : null}
       </Flex>

@@ -7,6 +7,7 @@ export interface IProps {
 }
 
 export const ViewsCounter = (props: IProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const theme: any = useTheme()
 
   return (

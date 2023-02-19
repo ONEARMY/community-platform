@@ -582,7 +582,7 @@ describe('research.store', () => {
   })
   describe('incrementViews', () => {
     it('data fetched from server db', async () => {
-      const { store, researchItem, getFn } = await factory()
+      const { store, researchItem, getFn } = await factoryResearchItem()
       // necessary as getFn gets called when active research item is set in factory
       jest.clearAllMocks()
 
@@ -593,7 +593,7 @@ describe('research.store', () => {
       expect(getFn).toHaveBeenCalledWith('server')
     })
     it('increments views by one', async () => {
-      const { store, researchItem, setFn } = await factory()
+      const { store, researchItem, setFn } = await factoryResearchItem()
 
       const views = researchItem.total_views!
       // Act

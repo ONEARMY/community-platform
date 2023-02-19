@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
+import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -7,6 +8,8 @@ import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 import Theme from 'src/themes/styled.theme'
 
 jest.mock('src/index', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {},
@@ -29,6 +32,7 @@ describe('Research Article', () => {
     setActiveResearchItem: jest.fn().mockResolvedValue(true),
     needsModeration: jest.fn(),
     getActiveResearchUpdateComments: jest.fn(),
+    incrementViewCount: jest.fn(),
   }
 
   it('does not display contributors when undefined', () => {
@@ -42,21 +46,24 @@ describe('Research Article', () => {
 
     // Act
     const wrapper = render(
-      <ThemeProvider theme={Theme}>
-        <MemoryRouter initialEntries={['/research/article']}>
-          <Route
-            path="/research/:slug"
-            exact
-            key={1}
-            component={ResearchArticle}
-          />
-        </MemoryRouter>
-      </ThemeProvider>,
+      <Provider userStore={{}}>
+        <ThemeProvider theme={Theme}>
+          <MemoryRouter initialEntries={['/research/article']}>
+            <Route
+              path="/research/:slug"
+              exact
+              key={1}
+              component={ResearchArticle}
+            />
+          </MemoryRouter>
+        </ThemeProvider>
+        ,
+      </Provider>,
     )
 
     // Assert
     expect(() => {
-      wrapper.getAllByText('With contributions from:')
+      wrapper.getAllByTestId('ArticleCallToAction: contributors')
     }).toThrow()
   })
 
@@ -71,16 +78,18 @@ describe('Research Article', () => {
 
     // Act
     const wrapper = render(
-      <ThemeProvider theme={Theme}>
-        <MemoryRouter initialEntries={['/research/article']}>
-          <Route
-            path="/research/:slug"
-            exact
-            key={1}
-            component={ResearchArticle}
-          />
-        </MemoryRouter>
-      </ThemeProvider>,
+      <Provider userStore={{}}>
+        <ThemeProvider theme={Theme}>
+          <MemoryRouter initialEntries={['/research/article']}>
+            <Route
+              path="/research/:slug"
+              exact
+              key={1}
+              component={ResearchArticle}
+            />
+          </MemoryRouter>
+        </ThemeProvider>
+      </Provider>,
     )
 
     // Assert

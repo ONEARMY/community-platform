@@ -59,7 +59,7 @@ describe('[How To]', () => {
     cy.get('[data-cy=confirm]').click()
   }
 
-  describe.only('[Create a how-to]', () => {
+  describe('[Create a how-to]', () => {
     const expected = {
       _createdBy: 'howto_creator',
       _deleted: false,

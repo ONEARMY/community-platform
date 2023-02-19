@@ -4,6 +4,7 @@ import Linkify from 'linkify-react'
 import 'linkify-plugin-mention'
 import { ExternalLink, InternalLink } from '..'
 import type { PlatformThemeStyles } from '../../types/theme'
+import type { LinkProps } from 'theme-ui'
 
 export interface Props {
   children?: React.ReactNode
@@ -21,7 +22,10 @@ export const LinkifyText = (props: Props) => {
     font-weight: bold;
   `
 
-  const renderExternalLink = ({ attributes = {} as any, content = '' }) => {
+  const renderExternalLink = ({
+    attributes = {} as LinkProps,
+    content = '',
+  }) => {
     const { href, ...props } = attributes
     return (
       <StyledExternalLink href={href} {...props}>
@@ -29,7 +33,10 @@ export const LinkifyText = (props: Props) => {
       </StyledExternalLink>
     )
   }
-  const renderInternalLink = ({ attributes = {} as any, content = '' }) => {
+  const renderInternalLink = ({
+    attributes = {} as LinkProps,
+    content = '',
+  }) => {
     const { href, ...props } = attributes
     return (
       <StyledInternalLink to={`/u${href}`} {...props}>

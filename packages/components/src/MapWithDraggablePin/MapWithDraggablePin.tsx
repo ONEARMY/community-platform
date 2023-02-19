@@ -24,13 +24,13 @@ const DraggableMarker = (props: {
   ondragend: (point: Point) => void
 }) => {
   const [draggable] = React.useState(true)
-  const markerRef = React.useRef(null)
+  const markerRef = React.useRef<Marker>(null)
 
   return (
     <Marker
       draggable={draggable}
       ondragend={() => {
-        const marker: unknown = markerRef.current
+        const marker = markerRef.current;
 
         if (!marker) {
           return null

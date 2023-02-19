@@ -1,4 +1,7 @@
 export interface PlatformThemeStyles {
+  name: string;
+  logo: string;
+  badges: Record<string, Record<string, unknown>>
   text: Record<string, unknown>
 
   fonts: {
@@ -68,7 +71,9 @@ export interface PlatformThemeStyles {
     header: number
   }
   breakpoints: string[]
-  buttons: Record<string, unknown>
+  buttons: {
+    subtle: Record<string, unknown>
+  },
   maxContainerWidth: number
   regular: number
   bold: number

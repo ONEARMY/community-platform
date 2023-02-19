@@ -139,9 +139,11 @@ export const OsmGeocoding = ({
             if (result) {
               setQueryLocationService(false)
               setSearchValue(result.display_name)
+              
+              if (callback) {
+                callback(result)
+              }
             }
-
-            callback(result)
           }}
           setShowResults={setShowResults}
         />

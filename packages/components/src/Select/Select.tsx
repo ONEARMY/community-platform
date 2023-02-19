@@ -1,5 +1,6 @@
 import ReactSelect from 'react-select'
 import type {
+  ActionMeta,
   GetOptionLabel,
   GetOptionValue,
   PropsValue,
@@ -174,7 +175,9 @@ export const Select = (props: Props) => {
       placeholder={props.placeholder}
       styles={props.variant === 'form' ? SelectStyles : FilterStyles}
       options={options}
-      onChange={(v) => props.onChange && props.onChange(v)}
+      onChange={(v: typeof Option, actionMeta: ActionMeta<typeof Option>) =>
+        props.onChange && props.onChange(v, actionMeta)
+      }
       value={props.value}
     />
   )

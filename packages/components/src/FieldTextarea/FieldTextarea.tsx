@@ -1,12 +1,14 @@
 import type { FieldRenderProps } from 'react-final-form'
 
-type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
+type FieldProps = FieldRenderProps<unknown, HTMLElement> & {
+  children?: React.ReactNode
+}
 export interface Props extends FieldProps {
   // additional fields intending to pass down
   disabled?: boolean
   children?: React.ReactNode
   'data-cy'?: string
-  customOnBlur?: (event: any) => void
+  customOnBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void
 }
 
 import { Textarea, Text } from 'theme-ui'
@@ -14,7 +16,12 @@ import { Textarea, Text } from 'theme-ui'
 const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
-const processInputModifiers = (value: any, modifiers: any = {}) => {
+const processInputModifiers = (
+  value: string,
+  modifiers: {
+    capitalize: boolean
+  },
+) => {
   if (typeof value !== 'string') return value
   if (modifiers.capitalize) {
     value = capitalizeFirstLetter(value)

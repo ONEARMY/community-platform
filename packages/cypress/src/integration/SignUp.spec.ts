@@ -1,4 +1,4 @@
-import { generatedId } from '../utils/test-utils'
+import { generatedId } from '../utils/TestUtils'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 
 // existing user already created in auth system
@@ -69,7 +69,6 @@ describe('[Sign-up - new user]', () => {
 describe('[Sign-up - authenticated user]', () => {
   it('redirects to home page', () => {
     cy.login('howto_reader@test.com', 'test1234')
-    cy.wait(3000)
     cy.visit('/sign-up').url().should('include', '/')
   })
 })

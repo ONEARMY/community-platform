@@ -38,12 +38,12 @@ export class DocReference<T> {
    *  Stream live updates from a server (where supported)
    *  Just returns the doc when not supported
    */
-  stream(): Observable<DBDoc> {
+  stream(): Observable<T & DBDoc> {
     const { serverDB } = this.clients
     if (serverDB.streamDoc) {
       return serverDB.streamDoc<T>(`${this.endpoint}/${this.id}`)
     } else {
-      return new Observable<DBDoc>((subscriber) => {
+      return new Observable<T & DBDoc>((subscriber) => {
         this.get('server').then((res) => {
           subscriber.next(res)
           subscriber.complete()

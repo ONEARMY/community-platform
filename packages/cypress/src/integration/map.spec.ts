@@ -41,7 +41,7 @@ context('map', () => {
     })
   })
 
-  describe.only('[By User]', () => {
+  describe('[By User]', () => {
     it('should show the user a message stating their pin is rejected', () => {
       cy.login(
         mapview_testing_rejected.email,

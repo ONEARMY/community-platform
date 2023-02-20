@@ -14,4 +14,4 @@
 // ***********************************************************
 import './hooks'
 import './commands'
-import './custom-assertions'
+import './CustomAssertations'

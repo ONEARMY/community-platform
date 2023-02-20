@@ -172,6 +172,11 @@ This line is also a separate paragraph, but... This line is only separated by a 
 
 ## Admonitions
 
+Admonitions are created by putting 3 colons next to each other with the name of the admonitions after the colons.
+A full list of admonitions and features can be found at https://docusaurus.io/docs/next/markdown-features/admonitions
+
+Here are a few common examples:
+
 :::note
 
 This is a note

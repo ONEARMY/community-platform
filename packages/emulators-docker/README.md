@@ -33,7 +33,7 @@ By providing a docker image we can address all issues above and provide better p
 - DB can only make write updates from client sdk if project names match, and so the DOCKER file may need to be updated if using a project name that is not the same as the one hardcoded into the frontend (currently `community-platform-emulated`)
 
 - Changes made within the workspace package.json will not be reflected in the container.
-  Node_modules cannot be bound via volumes as they depend on OS, and so updating package.json will require new build with updated modules. Workaround would be binding full functions src with platform-specific docker image (e.g. node-16-win/node-16-linux) or just documenting required build update (discussion about node-windows support: https://github.com/nodejs/docker-node/pull/362)
+  Node_modules cannot be bound via volumes as they depend on OS, and so updating package.json will require new build with updated modules. Workaround would be binding full functions src with platform-specific docker image (e.g. node-18-win/node-18-linux) or just documenting required build update (discussion about node-windows support: https://github.com/nodejs/docker-node/pull/362)
 
 - Live-reload function changes (doesn't seem to detect through volumes on WSL)
   https://forums.docker.com/t/file-system-watch-does-not-work-with-mounted-volumes/12038/20

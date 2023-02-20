@@ -1,10 +1,9 @@
 import type { UserNotificationList } from 'oa-components'
 import { InternalLink } from 'oa-components'
 import type { INotification } from 'src/models'
-import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
 import { Box } from 'theme-ui'
 
-function getFormattedMessage(notification: INotification) {
+export function getFormattedNotificationMessage(notification: INotification) {
   switch (notification.type) {
     case 'new_comment':
       return (
@@ -60,6 +59,19 @@ function getFormattedMessage(notification: INotification) {
           useful
         </Box>
       )
+    case 'research_mention':
+      return (
+        <Box>
+          You were mentioned in a
+          <InternalLink to={notification.relevantUrl || ''}>
+            research article
+          </InternalLink>
+          by
+          <InternalLink to={'/u/' + notification.triggeredBy.userId}>
+            {notification.triggeredBy.displayName}
+          </InternalLink>
+        </Box>
+      )
     case 'new_comment_research':
       return (
         <Box>
@@ -80,12 +92,10 @@ function getFormattedMessage(notification: INotification) {
 }
 
 export function getFormattedNotifications(
-  userNotificationsStore: UserNotificationsStore,
+  notificationList: INotification[],
 ): UserNotificationList {
-  return userNotificationsStore
-    .getUnreadNotifications()
-    .map((notification) => ({
-      type: notification.type,
-      children: getFormattedMessage(notification),
-    }))
+  return notificationList.map((notification) => ({
+    type: notification.type,
+    children: getFormattedNotificationMessage(notification),
+  }))
 }

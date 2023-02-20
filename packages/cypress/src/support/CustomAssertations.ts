@@ -1,9 +1,8 @@
 import type { IHowto, IHowtoStep } from '../../../../src/models/howto.models'
 import chaiSubset from 'chai-subset'
-import type {
-  IUserPPDB,
-  ProfileTypeLabel,
-} from '../../../../src/models/user_pp.models'
+import type { IUserPPDB } from '../../../../src/models/user_pp.models'
+
+import type { ProfileTypeLabel } from '../../../../src/modules/profile/types'
 
 declare global {
   namespace Chai {
@@ -14,7 +13,24 @@ declare global {
   }
 }
 
-const eqHowto = (chaiObj, utils) => {
+chai.use((chaiObj) => {
+  function assertIsInViewport() {
+    const subject = this._obj
+
+    const bottom = Cypress.$(cy.state('window')).height()
+    const width = Cypress.$(cy.state('window')).width()
+    const rect = subject[0].getBoundingClientRect()
+
+    expect(
+      rect.top < bottom && rect.right <= width && rect.left >= 0,
+      'expected #{this} to be in the viewport',
+    ).to.eq(true)
+  }
+
+  chaiObj.Assertion.addMethod('inViewport', assertIsInViewport)
+})
+
+const eqHowto = (chaiObj) => {
   function compare(this: any, expected: any) {
     const subject: IHowto = this._obj
     const {
@@ -60,7 +76,7 @@ const eqHowto = (chaiObj, utils) => {
   }
   chaiObj.Assertion.addMethod('eqHowto', compare)
 }
-const eqHowtoStep = (chaiObj, utils) => {
+const eqHowtoStep = (chaiObj) => {
   function compare(this: any, expected: any, index: number) {
     const subject: IHowtoStep = this._obj
     const { _animationKey, text, title } = expected
@@ -78,15 +94,15 @@ const eqHowtoStep = (chaiObj, utils) => {
   chaiObj.Assertion.addMethod('eqHowtoStep', compare)
 }
 
-const eqSettings = (chaiObj, utils) => {
+const eqSettings = (chaiObj) => {
   type Assert<S, E> = (subject: S, expected: E) => void
   class ChainAssert<S, E> {
     asserts: Assert<S, E>[] = []
-    constructor(...asserts: Assert<S, E>[]) {
-      this.asserts.push(...asserts)
-    }
     assert: Assert<S, E> = (subject: S, expected: E) => {
       this.asserts.forEach((assert) => assert(subject, expected))
+    }
+    constructor(...asserts: Assert<S, E>[]) {
+      this.asserts.push(...asserts)
     }
   }
   const basicInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
@@ -103,16 +119,8 @@ const eqSettings = (chaiObj, utils) => {
     })
   }
   const basicMemberInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
-    const {
-      _authID,
-      _deleted,
-      _id,
-      about,
-      country,
-      profileType,
-      userName,
-      verified,
-    } = expected
+    const { _authID, _deleted, _id, about, profileType, userName, verified } =
+      expected
     expect(subject, 'Basic Info').to.containSubset({
       _authID,
       _deleted,
@@ -192,7 +200,7 @@ const eqSettings = (chaiObj, utils) => {
     ),
   }
 
-  function compare(this: any, expected: any, index: number) {
+  function compare(this: any, expected: any) {
     assertMap[expected.profileType].assert(this._obj, expected)
   }
 

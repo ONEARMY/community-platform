@@ -16,16 +16,14 @@
     "new-component": "ts-node scripts/newComponent.ts"
   },
   "dependencies": {
-    "@emotion/react": "^11.8.2",
-    "@emotion/styled": "^11.8.1",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@faker-js/faker": "^7.6.0",
     "@react-icons/all-files": "^4.1.0",
     "date-fns": "^2.29.3",
     "linkify-plugin-mention": "^4.0.2",
     "linkify-react": "^4.0.2",
     "linkifyjs": "^4.0.2",
-    "prettier": "^2.5.1",
-    "react": "^17.0.2",
     "react-flag-icon-css": "^1.0.25",
     "react-icons": "^4.3.1",
     "react-portal": "^4.2.2",
@@ -33,21 +31,26 @@
     "react-router-dom": "^5.2.0",
     "react-select": "^5.4.0",
     "react-tooltip": "^4.2.21",
-    "storybook": "^6.4.22",
+    "storybook": "^6.5.15",
     "theme-ui": "^0.14.1",
     "use-debounce": "^8.0.4",
-    "webpack": "^5.72.0"
+    "webpack": "^5.75.0"
+  },
+  "peerDependencies": {
+    "react": "17.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@react-theming/storybook-addon": "^1.1.5",
-    "@storybook/addon-actions": "^6.4.22",
-    "@storybook/addon-docs": "^6.4.22",
-    "@storybook/addon-essentials": "^6.4.22",
-    "@storybook/addon-links": "^6.4.22",
-    "@storybook/addons": "^6.4.22",
-    "@storybook/react": "^6.4.22",
-    "@storybook/theming": "^6.4.22",
+    "@storybook/addon-actions": "^6.5.15",
+    "@storybook/addon-docs": "^6.5.15",
+    "@storybook/addon-essentials": "^6.5.15",
+    "@storybook/addon-links": "^6.5.15",
+    "@storybook/addons": "^6.5.15",
+    "@storybook/builder-webpack5": "^6.5.15",
+    "@storybook/manager-webpack5": "^6.5.15",
+    "@storybook/react": "^6.5.15",
+    "@storybook/theming": "^6.5.15",
     "@types/mustache": "^4.1.2",
     "@types/react-flag-icon-css": "^1.0.5",
     "@types/react-portal": "^4.0.4",
@@ -55,6 +58,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.25.4",
     "mustache": "^4.2.0",
+    "prettier": "2.5.1",
     "ts-node": "^10.7.0",
     "typescript": "^4.5.5"
   }

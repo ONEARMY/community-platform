@@ -64,9 +64,6 @@ describe('[Events]', () => {
   describe('[Create an event]', () => {
     it('[By Authenticated]', () => {
       cy.login('event_creator@test.com', 'test1234')
-      // as click event changes depending on logged in state wait to ensure button updated
-      // TODO - better to bind attribute to button depending on logged in state to search for
-      cy.wait(2000)
       cy.get('[data-cy=create-event]').click()
 
       cy.step('Fill up mandatory info')

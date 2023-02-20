@@ -32,7 +32,6 @@ yarn-error.log*
 # IntelliJ
 /.idea
 functions/firebase-debug.log
-.env-*
 
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 .yarn/*

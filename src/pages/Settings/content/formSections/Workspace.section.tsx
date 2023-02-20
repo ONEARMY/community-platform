@@ -2,11 +2,50 @@ import * as React from 'react'
 
 import { Flex, Heading, Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
-import { WORKSPACE_TYPES } from 'src/mocks/user_pp.mock'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { required } from 'src/utils/validators'
 import theme from 'src/themes/styled.theme'
 import { Field } from 'react-final-form'
+import type { IWorkspaceType } from 'src/models'
+
+import Extrusion from 'src/assets/images/workspace-focus/extrusion.png'
+import Injection from 'src/assets/images/workspace-focus/injection.png'
+import Mix from 'src/assets/images/workspace-focus/mix.png'
+import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.png'
+import Shredder from 'src/assets/images/workspace-focus/shredder.png'
+
+const WORKSPACE_TYPES: IWorkspaceType[] = [
+  {
+    label: 'shredder',
+    textLabel: 'Shredder',
+    subText: 'Shredding plastic waste into flakes',
+    imageSrc: Shredder,
+  },
+  {
+    label: 'sheetpress',
+    textLabel: 'Sheetpress',
+    subText: 'Making recycled plastic sheets',
+    imageSrc: Sheetpress,
+  },
+  {
+    label: 'extrusion',
+    textLabel: 'Extrusion',
+    subText: 'Extruding plastic into beams or products',
+    imageSrc: Extrusion,
+  },
+  {
+    label: 'injection',
+    textLabel: 'Injection',
+    subText: 'Making small productions of goods',
+    imageSrc: Injection,
+  },
+  {
+    label: 'mix',
+    textLabel: 'Mix',
+    subText: 'Running a workspace with multiple machines and goals',
+    imageSrc: Mix,
+  },
+]
 
 export class WorkspaceSection extends React.Component<any> {
   render() {

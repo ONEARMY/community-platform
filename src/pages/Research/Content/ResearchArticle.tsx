@@ -2,7 +2,12 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Box, Flex } from 'theme-ui'
-import { Button, Loader } from 'oa-components'
+import {
+  ArticleCallToAction,
+  Button,
+  Loader,
+  UsefulStatsButton,
+} from 'oa-components'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
@@ -13,8 +18,27 @@ import { Link } from 'react-router-dom'
 import type { IComment, UserComment } from 'src/models'
 import { seoTagsUpdate } from 'src/utils/seo'
 import type { IUploadedFileMeta } from 'src/stores/storage'
+import { isUserVerified } from 'src/common/isUserVerified'
+import ReactGA from 'react-ga4'
+import { researchCommentUrlPattern } from './helper'
 
 type IProps = RouteComponentProps<{ slug: string }>
+
+const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
+
+function areCommentVisible(updateIndex) {
+  let showComments = false
+
+  if (researchCommentUrlRegex.test(window.location.hash)) {
+    const match = window.location.hash.match(/#update-\d/)
+    if (match) {
+      showComments =
+        updateIndex === parseInt(match[0].replace('#update-', ''), 10)
+    }
+  }
+
+  return showComments
+}
 
 const ResearchArticle = observer((props: IProps) => {
   const researchStore = useResearchStore()
@@ -44,6 +68,11 @@ const ResearchArticle = observer((props: IProps) => {
     aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
       [researchId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
+    ReactGA.event({
+      category: 'Research',
+      action: 'MarkedUseful',
+      label: researchSlug,
+    })
   }
 
   const scrollIntoRelevantSection = (hash: string) => {
@@ -60,7 +89,7 @@ const ResearchArticle = observer((props: IProps) => {
       const researchItem = await researchStore.setActiveResearchItem(slug)
       setIsLoading(false)
       const hash = props.location.hash
-      if (hash) {
+      if (new RegExp(/^#update_\d$/).test(props.location.hash)) {
         scrollIntoRelevantSection(hash)
       }
       // Update SEO tags
@@ -97,11 +126,17 @@ const ResearchArticle = observer((props: IProps) => {
     const isEditable =
       !!researchStore.activeUser &&
       isAllowToEditContent(item, researchStore.activeUser)
+    const researchAuthor = {
+      userName: item._createdBy,
+      countryCode: item.creatorCountry,
+      isVerified: isUserVerified(item._createdBy),
+    }
 
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
           research={item}
+          key={item._id}
           votedUsefulCount={votedUsefulCount}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
@@ -114,21 +149,42 @@ const ResearchArticle = observer((props: IProps) => {
         />
         <Box my={16}>
           {item &&
-            item?.updates?.map((update, index) => {
-              return (
-                <ResearchUpdate
-                  update={update}
-                  key={update._id}
-                  updateIndex={index}
-                  isEditable={isEditable}
-                  slug={item.slug}
-                  comments={transformToUserComment(
-                    researchStore.getActiveResearchUpdateComments(index),
-                    loggedInUser?.userName,
-                  )}
-                />
-              )
-            })}
+            item?.updates?.map((update, index) => (
+              <ResearchUpdate
+                update={update}
+                key={update._id}
+                updateIndex={index}
+                isEditable={isEditable}
+                slug={item.slug}
+                comments={transformToUserComment(
+                  researchStore.getActiveResearchUpdateComments(index),
+                  loggedInUser?.userName,
+                )}
+                showComments={areCommentVisible(index)}
+              />
+            ))}
+        </Box>
+        <Box
+          sx={{
+            paddingLeft: [null, '12%', '12%'],
+            mb: 16,
+          }}
+        >
+          <ArticleCallToAction author={researchAuthor}>
+            <UsefulStatsButton
+              isLoggedIn={!!loggedInUser}
+              votedUsefulCount={votedUsefulCount}
+              hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
+              onUsefulClick={() => {
+                ReactGA.event({
+                  category: 'ArticleCallToAction',
+                  action: 'ReseachUseful',
+                  label: item.slug,
+                })
+                onUsefulClick(item._id, item._createdBy, item.slug)
+              }}
+            />
+          </ArticleCallToAction>
         </Box>
         {isEditable && (
           <Flex my={4}>

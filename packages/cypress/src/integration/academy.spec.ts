@@ -1,4 +1,4 @@
-import { Page } from '../utils/test-utils'
+import { Page } from '../utils/TestUtils'
 
 describe('[Academy]', () => {
   describe('[List instructions]', () => {

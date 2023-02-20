@@ -1,4 +1,5 @@
 import * as React from 'react'
+import ReactGA from 'react-ga4'
 import type { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router'
 import { inject, observer } from 'mobx-react'
@@ -7,7 +8,12 @@ import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Box, Flex, Text } from 'theme-ui'
-import { Button, Loader } from 'oa-components'
+import {
+  ArticleCallToAction,
+  Button,
+  Loader,
+  UsefulStatsButton,
+} from 'oa-components'
 import styled from '@emotion/styled'
 import theme from 'src/themes/styled.theme'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
@@ -21,6 +27,7 @@ import { seoTagsUpdate } from 'src/utils/seo'
 import { Link } from 'react-router-dom'
 import type { UserComment } from 'src/models'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
+import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -172,27 +179,81 @@ export class Howto extends React.Component<
             .filter(Boolean),
       }
 
+      const onUsefulClick = () =>
+        this.onUsefulClick(
+          activeHowto._id,
+          activeHowto._createdBy,
+          activeHowto.slug,
+        )
+      const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
+
       return (
         <>
           <HowtoDescription
             howto={howto}
-            votedUsefulCount={votedUsefulCount}
-            loggedInUser={loggedInUser}
+            key={activeHowto._id}
             needsModeration={this.store.needsModeration(activeHowto)}
-            hasUserVotedUseful={this.store.userVotedActiveHowToUseful}
+            loggedInUser={loggedInUser}
+            votedUsefulCount={votedUsefulCount}
+            hasUserVotedUseful={hasUserVotedUseful}
             moderateHowto={this.moderateHowto}
-            onUsefulClick={() =>
-              this.onUsefulClick(
-                activeHowto._id,
-                activeHowto._createdBy,
-                activeHowto.slug,
-              )
-            }
+            onUsefulClick={onUsefulClick}
           />
           <Box mt={9}>
             {activeHowto.steps.map((step: any, index: number) => (
               <Step step={step} key={index} stepindex={index} />
             ))}
+          </Box>
+          <Box
+            sx={{
+              mt: 10,
+              mb: 6,
+              mx: 'auto',
+              width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
+            }}
+          >
+            <ArticleCallToAction
+              author={{
+                userName: howto._createdBy,
+                countryCode: howto.creatorCountry,
+                isVerified: isUserVerifiedWithStore(
+                  howto._createdBy,
+                  this.injected.aggregationsStore,
+                ),
+              }}
+            >
+              <Button
+                sx={{ fontSize: 2 }}
+                onClick={() => {
+                  ReactGA.event({
+                    category: 'ArticleCallToAction',
+                    action: 'ScrollHowtoComment',
+                    label: howto.slug,
+                  })
+                  document
+                    .querySelector('[data-target="create-comment-container"]')
+                    ?.scrollIntoView({
+                      behavior: 'smooth',
+                    })
+                  return false
+                }}
+              >
+                Leave a comment
+              </Button>
+              <UsefulStatsButton
+                votedUsefulCount={votedUsefulCount}
+                hasUserVotedUseful={hasUserVotedUseful}
+                isLoggedIn={!!loggedInUser}
+                onUsefulClick={() => {
+                  ReactGA.event({
+                    category: 'ArticleCallToAction',
+                    action: 'HowtoUseful',
+                    label: howto.slug,
+                  })
+                  onUsefulClick()
+                }}
+              />
+            </ArticleCallToAction>
           </Box>
           <HowToComments comments={activeHowToComments} />
           <MoreBox py={20} mt={20}>

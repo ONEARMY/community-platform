@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import { v4 as uuid } from 'uuid'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
@@ -38,7 +38,7 @@ describe('[How To]', () => {
     })
   })
 
-  describe.only('[Filter by Category]', () => {
+  describe('[Filter by Category]', () => {
     beforeEach(() => {
       cy.visit('/how-to')
     })
@@ -212,15 +212,18 @@ describe('[How To]', () => {
   })
 
   describe('[Fail to find a How-to]', () => {
-    const uuid = crypto.randomBytes(16).toString('hex')
-    const howToNotFoundUrl = `/how-to/this-how-to-does-not-exist-${uuid}`
+    const id = uuid()
+    const howToNotFoundUrl = `/how-to/this-how-to-does-not-exist-${id}`
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)
       cy.location('pathname').should('eq', '/how-to')
       cy.location('search').should(
         'eq',
-        `?search=this+how+to+does+not+exist+${uuid}&source=how-to-not-found`,
+        `?search=this%20how%20to%20does%20not%20exist%20${id.replaceAll(
+          '-',
+          '%20',
+        )}&source=how-to-not-found`,
       )
     })
   })

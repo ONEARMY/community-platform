@@ -287,7 +287,7 @@ export const SpaceProfile = ({ user }: IProps) => {
               {user.displayName}
             </Heading>
           </Flex>
-          {user.about && <Paragraph mb={6}>{user.about}</Paragraph>}
+          {user.about && <Paragraph>{user.about}</Paragraph>}
 
           {user.profileType === ProfileType.COLLECTION_POINT &&
             user.collectedPlasticTypes &&

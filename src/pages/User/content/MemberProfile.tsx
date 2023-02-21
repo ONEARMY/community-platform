@@ -109,7 +109,7 @@ export const MemberProfile = ({ user }: IProps) => {
               {user.displayName}
             </Heading>
           </Box>
-          {user.about && <Paragraph mb={6}>{user.about}</Paragraph>}
+          {user.about && <Paragraph>{user.about}</Paragraph>}
           <UserContactAndLinks links={userLinks} />
           <Box mt={3}>
             <UserAdmin user={user} />

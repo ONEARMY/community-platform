@@ -3,6 +3,7 @@ import theme from 'src/themes/styled.theme'
 import ProfileLink from './ProfileLink'
 
 const UserContactInfo = styled.div`
+  margin-top: ${theme.space[6]}px;
   h6 {
     margin-top: ${theme.space[3]}px;
   }

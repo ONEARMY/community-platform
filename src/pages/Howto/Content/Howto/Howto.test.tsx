@@ -56,7 +56,6 @@ const factory = (howtoStore?: Partial<HowtoStore>) =>
   )
 
 describe('Howto', () => {
-  beforeAll(() => {})
   it('shows verified badge', () => {
     const { getAllByTestId } = factory({
       ...mockHowtoStore(),

@@ -185,7 +185,7 @@ export class HowtoStore extends ModuleStore {
         total_downloads: totalDownloads! + 1,
       }
 
-      dbRef.set(
+      await dbRef.set(
         {
           ...updatedHowto,
         },
@@ -207,7 +207,7 @@ export class HowtoStore extends ModuleStore {
         total_views: totalViews! + 1,
       }
 
-      dbRef.set(
+      await dbRef.set(
         {
           ...updatedHowto,
         },

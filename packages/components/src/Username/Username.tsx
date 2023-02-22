@@ -57,6 +57,7 @@ export const Username = (props: Props) => {
           <Image
             src={VerifiedBadgeIcon}
             sx={{ ml: 1, height: 16, width: 16 }}
+            data-testid="Username: verified badge"
           />
         )}
       </Flex>

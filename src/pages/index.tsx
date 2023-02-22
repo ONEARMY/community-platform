@@ -103,10 +103,7 @@ export class Routes extends React.Component<
             display: ['none', 'none', 'block'],
           }}
         >
-          <ExternalLink
-            href="https://discord.gg/gJ7Yyk4"
-            data-cy="feedback"
-          >
+          <ExternalLink href="https://discord.gg/gJ7Yyk4" data-cy="feedback">
             <Button variant="primary" icon="comment">
               Join our chat
             </Button>

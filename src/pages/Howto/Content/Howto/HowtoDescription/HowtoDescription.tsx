@@ -75,6 +75,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       )
       addIDToSessionStorageArray('howto', howto._id)
       setViewCount(updatedViewCount)
+      console.log('we are incrementing')
+      console.log('we are incrementing')
+      console.log('we are incrementing')
+      console.log(updatedViewCount)
     }
   }
 

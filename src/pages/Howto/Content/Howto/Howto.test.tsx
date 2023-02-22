@@ -8,17 +8,6 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import Theme from 'src/themes/styled.theme'
 
-const mockedAggregationsStore = {
-  aggregations: {
-    users_votedUsefulHowtos: {
-      HowtoAuthor: 0,
-    },
-    users_verified: {
-      HowtoAuthor: true,
-    },
-  },
-}
-
 const mockHowtoStore = () => ({
   setActiveHowtoBySlug: jest.fn(),
   activeHowto: FactoryHowto(),
@@ -33,7 +22,16 @@ jest.mock('src/index', () => ({
   useCommonStores: () => ({
     stores: {
       userStore: {},
-      aggregationsStore: mockedAggregationsStore,
+      aggregationsStore: {
+        aggregations: {
+          users_votedUsefulHowtos: {
+            HowtoAuthor: 0,
+          },
+          users_verified: {
+            HowtoAuthor: true,
+          },
+        },
+      },
       howtoStore: mockHowtoStore(),
       tagsStore: {},
     },
@@ -58,10 +56,8 @@ const factory = (howtoStore?: Partial<HowtoStore>) =>
   )
 
 describe('Howto', () => {
-  beforeAll(() => {})
   it('shows verified badge', () => {
-    // Act
-    const wrapper = factory({
+    const { getAllByTestId } = factory({
       ...mockHowtoStore(),
       activeHowto: FactoryHowto({
         _createdBy: 'HowtoAuthor',
@@ -69,12 +65,11 @@ describe('Howto', () => {
     })
 
     expect(() => {
-      wrapper.getAllByTestId('Username: verified badge')
+      getAllByTestId('Username: verified badge')
     }).not.toThrow()
   })
 
   it('does not show verified badge', () => {
-    // Act
     const { getAllByTestId } = factory()
 
     expect(() => {

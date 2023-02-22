@@ -12,14 +12,9 @@
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
-    "db:backup:local": "firestore-export -a service.json -b backup.json -p",
     "shell": "yarn build && firebase functions:shell",
-    "emulator:test": "firebase emulators:exec --project community-platform-emulated 'jest .'",
-    "emulator:test:watch": "firebase emulators:exec --ui --project community-platform-emulated 'jest . --watch'",
-    "emulator:start": "firebase emulators:start",
-    "emulator:seed": "ts-node scripts/emulator/seed.ts",
-    "emulator": "yarn emulator:seed && yarn emulator:start",
-    "test": "jest ."
+    "test": "firebase emulators:exec --project community-platform-emulated 'jest .'",
+    "test:watch": "firebase emulators:exec --ui --project community-platform-emulated 'jest . --watch'"
   },
   "main": "index.js",
   "dependencies": {

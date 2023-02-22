@@ -104,7 +104,7 @@ export class Routes extends React.Component<
           }}
         >
           <ExternalLink
-            href="https://discordapp.com/invite/cGZ5hKP"
+            href="https://discord.gg/gJ7Yyk4"
             data-cy="feedback"
           >
             <Button variant="primary" icon="comment">

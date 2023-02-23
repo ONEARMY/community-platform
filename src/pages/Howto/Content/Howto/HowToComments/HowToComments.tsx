@@ -98,7 +98,6 @@ export const HowToComments = ({ comments }: IProps) => {
 
   return (
     <Flex
-      ml={[0, 0, 6]}
       mt={5}
       sx={{ flexDirection: 'column', alignItems: 'center' }}
       data-cy="howto-comments"
@@ -122,7 +121,7 @@ export const HowToComments = ({ comments }: IProps) => {
       </Flex>
       <Box
         sx={{
-          width: ['100%', `calc(${(2 / 3) * 100}%)`],
+          width: ['100%', `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
         }}
       >
         <CreateComment

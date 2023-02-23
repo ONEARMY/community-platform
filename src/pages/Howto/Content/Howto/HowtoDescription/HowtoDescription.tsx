@@ -232,7 +232,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               mr="2"
               mb="2"
             />
-            {howto.steps.length} steps
+            {howto.steps.length === 1
+              ? `${howto.steps.length} step`
+              : `${howto.steps.length} steps`}
           </Flex>
           <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
             <Image

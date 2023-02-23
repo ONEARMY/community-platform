@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
 import { useCommonStores } from 'src'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { FactoryHowto } from 'src/test/factories/Howto'
+import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
 import Theme from 'src/themes/styled.theme'
 
 const mockHowtoStore = () => ({
@@ -75,5 +75,35 @@ describe('Howto', () => {
     expect(() => {
       getAllByTestId('Username: verified badge')
     }).toThrow()
+  })
+
+  describe('steps', () => {
+    it('shows 1 step', () => {
+      const { getAllByText } = factory({
+        ...mockHowtoStore(),
+        activeHowto: FactoryHowto({
+          _createdBy: 'HowtoAuthor',
+          steps: [FactoryHowtoStep()],
+        }),
+      })
+
+      expect(() => {
+        getAllByText('1 step')
+      }).not.toThrow()
+    })
+
+    it('shows 2 steps', () => {
+      const { getAllByText } = factory({
+        ...mockHowtoStore(),
+        activeHowto: FactoryHowto({
+          _createdBy: 'HowtoAuthor',
+          steps: [FactoryHowtoStep(), FactoryHowtoStep()],
+        }),
+      })
+
+      expect(() => {
+        getAllByText('2 steps')
+      }).not.toThrow()
+    })
   })
 })

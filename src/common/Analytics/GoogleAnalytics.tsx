@@ -2,9 +2,8 @@ import { Component } from 'react'
 import ReactGA from 'react-ga4'
 import { GA_TRACKING_ID } from 'src/config/config'
 import type { RouteComponentProps } from 'react-router-dom'
-import { withRouter } from 'react-router-dom'
 
-class GoogleAnalytics extends Component<RouteComponentProps> {
+export class GoogleAnalytics extends Component<RouteComponentProps> {
   constructor(props: RouteComponentProps) {
     super(props)
 
@@ -29,5 +28,3 @@ class GoogleAnalytics extends Component<RouteComponentProps> {
     return null
   }
 }
-
-export default withRouter(GoogleAnalytics)

@@ -19,8 +19,8 @@ import type { IComment, UserComment } from 'src/models'
 import { seoTagsUpdate } from 'src/utils/seo'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { isUserVerified } from 'src/common/isUserVerified'
-import ReactGA from 'react-ga4'
 import { researchCommentUrlPattern } from './helper'
+import { trackEvent } from 'src/common/Analytics'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -68,7 +68,7 @@ const ResearchArticle = observer((props: IProps) => {
     aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
       [researchId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
-    ReactGA.event({
+    trackEvent({
       category: 'Research',
       action: 'MarkedUseful',
       label: researchSlug,
@@ -176,7 +176,7 @@ const ResearchArticle = observer((props: IProps) => {
               votedUsefulCount={votedUsefulCount}
               hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
               onUsefulClick={() => {
-                ReactGA.event({
+                trackEvent({
                   category: 'ArticleCallToAction',
                   action: 'ReseachUseful',
                   label: item.slug,

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
-import GoogleAnalytics from 'src/pages/common/GoogleAnalytics'
+import { Analytics } from 'src/common/Analytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from '../common/ScrollToTop'
 import Header from './common/Header/Header'
@@ -49,7 +49,7 @@ export class Routes extends React.Component<
       >
         <BrowserRouter>
           <SWUpdateNotification />
-          <GoogleAnalytics />
+          <Analytics />
           {/* on page change scroll to top */}
           <ScrollToTop>
             {/* TODO - add better loading fallback */}

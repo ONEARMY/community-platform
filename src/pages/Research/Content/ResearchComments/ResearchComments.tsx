@@ -1,6 +1,5 @@
 import { Button, CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
-import ReactGA from 'react-ga4'
 import { MAX_COMMENT_LENGTH } from '../../../../constants'
 import { useCommonStores } from '../../../../'
 import { logger } from 'src/logger'
@@ -11,6 +10,7 @@ import styled from '@emotion/styled'
 
 import type { UserComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
+import { trackEvent } from 'src/common/Analytics'
 interface IProps {
   comments: UserComment[]
   update: IResearch.UpdateDB
@@ -55,7 +55,7 @@ export const ResearchComments = ({
         )
       }
 
-      ReactGA.event({
+      trackEvent({
         category: 'Comments',
         action: 'Submitted',
         label: researchStore.activeResearchItem?.title,
@@ -75,7 +75,7 @@ export const ResearchComments = ({
   }
 
   async function handleEditRequest() {
-    ReactGA.event({
+    trackEvent({
       category: 'Comments',
       action: 'Edit existing comment',
       label: researchStore.activeResearchItem?.title,
@@ -88,7 +88,7 @@ export const ResearchComments = ({
     )
     if (confirmation) {
       await researchStore.deleteComment(_id, update as IResearch.Update)
-      ReactGA.event({
+      trackEvent({
         category: 'Comments',
         action: 'Deleted',
         label: researchStore.activeResearchItem?.title,
@@ -105,7 +105,7 @@ export const ResearchComments = ({
   }
 
   async function handleEdit(_id: string, comment: string) {
-    ReactGA.event({
+    trackEvent({
       category: 'Comments',
       action: 'Update',
       label: researchStore.activeResearchItem?.title,
@@ -183,6 +183,7 @@ export const ResearchComments = ({
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
             highlightedCommentId={getResearchCommentId(window.location.hash)}
+            trackEvent={trackEvent}
           />
           <Box sx={{ width: '100%' }}>
             <CreateComment

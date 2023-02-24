@@ -141,8 +141,10 @@ export class Howto extends React.Component<
       isLoading: false,
     })
   }
+
   public async componentWillUnmount() {
     seoTagsUpdate({})
+    this.store.removeActiveHowto()
   }
 
   public render() {

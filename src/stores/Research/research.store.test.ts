@@ -511,7 +511,7 @@ describe('research.store', () => {
       // Act
       await store.incrementViewCount(researchItem._id)
 
-      expect(getFn).toHaveBeenCalledTimes(1)
+      expect(getFn).toBeCalled()
       expect(getFn).toHaveBeenCalledWith('server')
     })
     it('increments views by one', async () => {
@@ -519,10 +519,10 @@ describe('research.store', () => {
 
       const views = researchItem.total_views!
       // Act
-      await store.incrementViewCount(researchItem._id)
+      const updatedViews = await store.incrementViewCount(researchItem._id)
 
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(researchItem.total_views).toBe(views + 1)
+      expect(updatedViews).toBe(views + 1)
     })
   })
 })

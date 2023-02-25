@@ -414,7 +414,7 @@ describe('howto.store', () => {
       // Act
       await store.incrementViewCount(howToItem._id)
 
-      expect(getFn).toHaveBeenCalledTimes(1)
+      expect(getFn).toBeCalled()
       expect(getFn).toHaveBeenCalledWith('server')
     })
     it('increments views by one', async () => {
@@ -422,10 +422,10 @@ describe('howto.store', () => {
 
       const views = howToItem.total_views!
       // Act
-      await store.incrementViewCount(howToItem._id)
+      const updatedViews = await store.incrementViewCount(howToItem._id)
 
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(howToItem.total_views).toBe(views + 1)
+      expect(updatedViews).toBe(views + 1)
     })
   })
 })

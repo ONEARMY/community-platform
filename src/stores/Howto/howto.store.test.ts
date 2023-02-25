@@ -407,8 +407,21 @@ describe('howto.store', () => {
     })
   })
 
+  describe('incrementDownloadCount', () => {
+    it('increments download count by one', async () => {
+      const { store, howToItem, setFn } = await factory()
+
+      const downloads = howToItem.total_downloads!
+      // Act
+      const updatedDownloads = await store.incrementDownloadCount(howToItem._id)
+
+      expect(setFn).toBeCalledTimes(1)
+      expect(updatedDownloads).toBe(downloads + 1)
+    })
+  })
+
   describe('incrementViews', () => {
-    it('data fetched from server db when views incremented', async () => {
+    it('data fetched from server db', async () => {
       const { store, howToItem, getFn } = await factory()
 
       // Act

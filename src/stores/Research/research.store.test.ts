@@ -505,7 +505,7 @@ describe('research.store', () => {
     })
   })
   describe('incrementViews', () => {
-    it('data fetched from server db when views incremented', async () => {
+    it('data fetched from server db', async () => {
       const { store, researchItem, getFn } = await factory()
 
       // Act

@@ -427,7 +427,7 @@ describe('howto.store', () => {
       // Act
       await store.incrementViewCount(howToItem._id)
 
-      expect(getFn).toBeCalled()
+      expect(getFn).toBeCalledTimes(1)
       expect(getFn).toHaveBeenCalledWith('server')
     })
     it('increments views by one', async () => {

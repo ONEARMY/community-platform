@@ -507,11 +507,13 @@ describe('research.store', () => {
   describe('incrementViews', () => {
     it('data fetched from server db', async () => {
       const { store, researchItem, getFn } = await factory()
+      // necessary as getFn gets called when active research item is set in factory
+      jest.clearAllMocks()
 
       // Act
       await store.incrementViewCount(researchItem._id)
 
-      expect(getFn).toBeCalled()
+      expect(getFn).toBeCalledTimes(1)
       expect(getFn).toHaveBeenCalledWith('server')
     })
     it('increments views by one', async () => {

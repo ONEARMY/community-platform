@@ -14,6 +14,7 @@ const mockHowtoStore = () => ({
   getActiveHowToComments: jest.fn().mockReturnValue([]),
   needsModeration: jest.fn().mockReturnValue(false),
   incrementViewCount: jest.fn(),
+  removeActiveHowto: jest.fn(),
 })
 
 jest.mock('src/index', () => ({

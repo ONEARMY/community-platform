@@ -1,5 +1,5 @@
 import { firestore } from 'firebase-admin'
-import type { Change } from 'firebase-functions'
+import { Change, logger } from 'firebase-functions'
 import { DB_ENDPOINTS, IDBEndpoint } from '../models'
 import { db } from '../Firebase/firestoreDB'
 import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
@@ -28,7 +28,7 @@ export interface IAggregation {
    **/
   sourceFields: string[]
   /** function used to generate aggregation value from source data */
-  process: (aggregation: AggregationHandler) => any
+  process: (aggregation: AggregationHandler) => Record<string, any>
   /** Collection ID for output aggregated data */
   targetCollection: IDBEndpoint
   /** Document ID for aggregated data in target aggregation collection */
@@ -47,7 +47,7 @@ export async function handleDBAggregations(
   const changedFields = compareObjectDiffs(before.data(), after.data())
   if (Object.keys(changedFields).length === 0) {
     // changed detected by firestore but not locally
-    console.warn('change missed', before.data(), after.data())
+    logger.warn('change missed', before.data(), after.data())
   }
   const changedFieldnames = Object.keys(changedFields)
   for (const aggregation of aggregations) {
@@ -61,17 +61,26 @@ export async function handleDBAggregations(
   }
 }
 
-class AggregationHandler {
+export class AggregationHandler {
   /** Reference to database path for target aggregation doc */
   public targetDocRef: IDocumentRef
   /** Reference to database path for source triggered collection */
   public sourceCollectionRef: ICollectionRef
+  /** Before and after values for use in aggregation process method */
+  public dbChange: IDBChange
+  /** Reference to aggregation definition triggered as part of process */
+  public aggregation: IAggregation
 
-  constructor(public aggregation: IAggregation, public dbChange: IDBChange) {
+  constructor(aggregation: IAggregation, dbChange: IDBChange) {
+    this.aggregation = aggregation
+    this.dbChange = dbChange
+
+    // use the triggered db change to determine what the source collection is
+    // use the aggregation to specify the target collection and document id
     this.sourceCollectionRef = dbChange.after.ref.parent
     const { targetCollection, targetDocId } = aggregation
     this.targetDocRef = db
-      .collection(DB_ENDPOINTS[targetCollection])
+      .collection(DB_ENDPOINTS[targetCollection] || targetCollection)
       .doc(targetDocId)
   }
 
@@ -82,6 +91,11 @@ class AggregationHandler {
   public async run() {
     const targetDoc = await this.targetDocRef.get()
     return targetDoc.exists ? this.update() : this.seed()
+  }
+
+  public async get() {
+    const snapshot = await this.targetDocRef.get()
+    return snapshot.data()
   }
 
   /**
@@ -99,11 +113,13 @@ class AggregationHandler {
    */
   private async seed() {
     const { sourceFields } = this.aggregation
+    logger.info(`[Aggregation Seed] ${this.sourceCollectionRef.id}`)
     // orderBy will only filter to include docs with primary field populated
     const snapshot = await this.sourceCollectionRef
       .orderBy(sourceFields[0])
       .get()
     const updates: { ref: IDocumentRef; entry: any }[] = []
+
     for (const doc of snapshot.docs) {
       // for purpose of seeding before will always be empty so just track each doc in after state
       this.dbChange.before.data = () => ({})

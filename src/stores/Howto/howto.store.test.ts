@@ -50,6 +50,9 @@ async function factory(howtoOverloads: Partial<IHowtoDB> = {}) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    getFn: store.db.get,
   }
 }
 
@@ -401,6 +404,28 @@ describe('howto.store', () => {
       await store.removeActiveHowto()
 
       expect(store.activeHowto).toBe(null)
+    })
+  })
+
+  describe('incrementViews', () => {
+    it('data fetched from server db when views incremented', async () => {
+      const { store, howToItem, getFn } = await factory()
+
+      // Act
+      await store.incrementViewCount(howToItem._id)
+
+      expect(getFn).toHaveBeenCalledTimes(1)
+      expect(getFn).toHaveBeenCalledWith('server')
+    })
+    it('increments views by one', async () => {
+      const { store, howToItem, setFn } = await factory()
+
+      const views = howToItem.total_views!
+      // Act
+      await store.incrementViewCount(howToItem._id)
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(howToItem.total_views).toBe(views + 1)
     })
   })
 })

@@ -62,6 +62,9 @@ const factory = async (researchItemOverloads: any = {}) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    getFn: store.db.get,
   }
 }
 
@@ -499,6 +502,27 @@ describe('research.store', () => {
           ]),
         )
       })
+    })
+  })
+  describe('incrementViews', () => {
+    it('data fetched from server db when views incremented', async () => {
+      const { store, researchItem, getFn } = await factory()
+
+      // Act
+      await store.incrementViewCount(researchItem._id)
+
+      expect(getFn).toHaveBeenCalledTimes(1)
+      expect(getFn).toHaveBeenCalledWith('server')
+    })
+    it('increments views by one', async () => {
+      const { store, researchItem, setFn } = await factory()
+
+      const views = researchItem.total_views!
+      // Act
+      await store.incrementViewCount(researchItem._id)
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(researchItem.total_views).toBe(views + 1)
     })
   })
 })

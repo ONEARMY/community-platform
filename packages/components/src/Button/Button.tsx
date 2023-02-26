@@ -44,7 +44,8 @@ function getSizeProps(size: string, hasIcon: boolean) {
 
   if (!buttonSizeProps[`${size}`] && hasIcon) {
     return {
-      px: 2,
+      px: 3,
+      pl: 9,
     }
   }
 
@@ -55,6 +56,14 @@ function getSizeProps(size: string, hasIcon: boolean) {
   }
 
   return sizeProps
+}
+
+function getScaleTransform(size: string) {
+  if (size === 'large') {
+    return 1.25
+  }
+
+  return 1
 }
 
 function sanitizedProps(obj: BtnProps, keysToRemove: AvailableButtonProps) {
@@ -78,9 +87,6 @@ export const Button = (props: BtnProps) => {
     <ThemeUiButton
       {...sanitizedProps(props, ['small', 'large', 'showIconOnly'])}
       sx={{
-        alignItems: 'center',
-        display: 'flex',
-        gap: 2,
         ...props.sx,
         ...getSizeProps(size, !!props.icon),
         ...(props.showIconOnly ? { pr: 0 } : {}),
@@ -90,6 +96,19 @@ export const Button = (props: BtnProps) => {
         <Flex
           aria-hidden={true}
           sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            px: getSizeProps(size, !!props.icon)?.px || 0,
+            boxSizing: 'border-box',
+            fontSize: 0,
+            maxWidth: '100%',
+            lineHeight: 0,
+            transform: `translateY(-1px) scale(${getScaleTransform(size)})`,
             pointerEvents: 'none',
           }}
         >

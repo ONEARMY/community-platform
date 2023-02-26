@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { Field } from 'react-final-form'
 import { Button, FieldInput, Modal } from 'oa-components'
-import { Text, Flex, Grid } from 'theme-ui'
+import { Text, Flex, Grid, Box } from 'theme-ui'
 import { SelectField } from 'src/common/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
 import { formatLink } from 'src/utils/formatters'
@@ -49,6 +49,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
   }
 
   toggleDeleteModal() {
+    alert('Clicking delete link!')
     this.setState({ showDeleteModal: !this.state.showDeleteModal })
   }
   confirmDelete() {
@@ -88,6 +89,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
     )
     return (
       <Flex
+        data-cy={`Link.field: Container ${index}`}
         my={['10px', '10px', '5px']}
         sx={{ flexDirection: ['column', 'column', 'row'] }}
       >
@@ -149,25 +151,28 @@ export class ProfileLinkField extends Component<IProps, IState> {
             onDidDismiss={() => this.toggleDeleteModal()}
             isOpen={!!this.state.showDeleteModal}
           >
-            <Text>Are you sure you want to delete this link?</Text>
-            <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
-              <Flex px={1}>
-                <Button
-                  variant={'outline'}
-                  onClick={() => this.toggleDeleteModal()}
-                >
-                  Cancel
-                </Button>
+            <Box data-cy="Link.field: Modal">
+              <Text>Are you sure you want to delete this link?</Text>
+              <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
+                <Flex px={1}>
+                  <Button
+                    variant={'outline'}
+                    onClick={() => this.toggleDeleteModal()}
+                  >
+                    Cancel
+                  </Button>
+                </Flex>
+                <Flex px={1}>
+                  <Button
+                    data-cy="Link.field: Delete"
+                    variant={'outline'}
+                    onClick={() => this.confirmDelete()}
+                  >
+                    Delete
+                  </Button>
+                </Flex>
               </Flex>
-              <Flex px={1}>
-                <Button
-                  variant={'outline'}
-                  onClick={() => this.confirmDelete()}
-                >
-                  Delete
-                </Button>
-              </Flex>
-            </Flex>
+            </Box>
           </Modal>
         }
       </Flex>

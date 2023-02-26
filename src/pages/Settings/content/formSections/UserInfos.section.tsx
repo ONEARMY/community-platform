@@ -190,7 +190,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
               coverImages={coverImages}
             />
           </Flex>
-          <>
+          <Box data-cy="UserInfos: links">
             <Flex sx={{ alignItems: 'center', width: '100%', wrap: 'nowrap' }}>
               <Text mb={2} mt={7} sx={{ fontSize: 2 }}>
                 Contacts & links *
@@ -223,7 +223,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 </>
               )}
             </FieldArray>
-          </>
+          </Box>
         </Box>
       </FlexSectionContainer>
     )

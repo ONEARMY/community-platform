@@ -48,7 +48,7 @@ interface IState {
 
 @inject('userStore')
 @observer
-export class UserSettings extends React.Component<IProps, IState> {
+export class SettingsPage extends React.Component<IProps, IState> {
   toggleLocationDropdown = () => {
     this.setState((prevState) => ({
       ...prevState,
@@ -117,7 +117,7 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
     // Submit, show notification update and return any errors to form
     try {
-      console.debug({ profile: vals }, 'UserSettings.saveProfile')
+      console.debug({ profile: vals }, 'SettingsPage.saveProfile')
       const { adminEditableUserId } = this.props
       await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
       // throw new Error('I hate you');
@@ -132,7 +132,7 @@ export class UserSettings extends React.Component<IProps, IState> {
       )
       return {}
     } catch (error) {
-      logger.warn({ error, profile: vals }, 'UserSettings.saveProfile.error')
+      logger.warn({ error, profile: vals }, 'SettingsPage.saveProfile.error')
       this.setState({
         notification: { message: 'Save Failed', icon: 'close', show: true },
       })

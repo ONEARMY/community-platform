@@ -38,12 +38,12 @@ export class DocReference<T> {
    *  Stream live updates from a server (where supported)
    *  Just returns the doc when not supported
    */
-  stream(): Observable<DBDoc> {
+  stream(): Observable<T & DBDoc> {
     const { serverDB } = this.clients
     if (serverDB.streamDoc) {
       return serverDB.streamDoc<T>(`${this.endpoint}/${this.id}`)
     } else {
-      return new Observable<DBDoc>((subscriber) => {
+      return new Observable<T & DBDoc>((subscriber) => {
         this.get('server').then((res) => {
           subscriber.next(res)
           subscriber.complete()
@@ -59,9 +59,9 @@ export class DocReference<T> {
    * If contains metadata fields (e.g. `_id`)
    * then this will be used instead of generated id
    */
-  async set(data: T) {
+  async set(data: T, options?: { keep_modified_timestamp: boolean }) {
     const { serverDB, cacheDB } = this.clients
-    const dbDoc: DBDoc = this._setDocMeta(data)
+    const dbDoc: DBDoc = this._setDocMeta(data, options)
     await serverDB.setDoc(this.endpoint, dbDoc)
     await cacheDB.setDoc(this.endpoint, dbDoc)
   }
@@ -90,14 +90,19 @@ export class DocReference<T> {
     return this._setDocMeta(data)
   }
 
-  private _setDocMeta(data: any = {}): DBDoc {
+  private _setDocMeta(data: any = {}, options: any = {}): DBDoc {
     const d = data
+    const o = options
+    const modifiedTimestamp = o.keep_modified_timestamp
+      ? d._modified
+      : new Date().toISOString()
+
     return {
       ...d,
       _created: d._created ? d._created : new Date().toISOString(),
       _deleted: d._deleted ? d._deleted : false,
       _id: this.id,
-      _modified: new Date().toISOString(),
+      _modified: modifiedTimestamp,
     }
   }
 

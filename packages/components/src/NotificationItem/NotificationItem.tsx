@@ -9,6 +9,7 @@ type notificationType =
   | 'howto_useful'
   | 'new_comment_research'
   | 'research_useful'
+  | 'research_mention'
 
 export interface UserNotificationItem {
   type: notificationType

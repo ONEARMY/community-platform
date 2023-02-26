@@ -1,5 +1,5 @@
 import type { IConvertedFileMeta } from '../types'
-import type { DBDoc, IComment, IModerable, ISelectedTags } from '.'
+import type { DBDoc, IComment, IModerable, ISelectedTags, UserMention } from '.'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IResearchCategory } from './researchCategories.model'
 
@@ -17,7 +17,9 @@ export namespace IResearch {
   /** The main research item, as created by a user */
   export interface Item extends FormInput {
     updates: Update[]
+    mentions?: UserMention[]
     _createdBy: string
+    total_views?: number
   }
 
   /** A research item update */
@@ -27,6 +29,7 @@ export namespace IResearch {
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
     comments?: IComment[]
+    total_views?: number
   }
 
   export interface FormInput extends IModerable {

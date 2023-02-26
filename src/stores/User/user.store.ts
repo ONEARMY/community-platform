@@ -7,7 +7,7 @@ import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
-import type { IUser, IUserDB } from 'src/models/user.models'
+import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { RootStore } from '..'
@@ -151,6 +151,21 @@ export class UserStore extends ModuleStore {
     return lookup2[0]
   }
 
+  public async updateUserBadge(userId: string, badges: IUserBadges) {
+    console.log(`updateUserBadge`, badges)
+    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(userId)
+
+    console.log(`updateUserBadge.before:`, toJS(await dbRef.get('server')))
+
+    await this.db
+      .collection(COLLECTION_NAME)
+      .doc(userId)
+      .set({
+        ...toJS(await dbRef.get('server')),
+        badges,
+      })
+  }
+
   /**
    * Update a user profile
    * @param values Set of values to merge into user profile
@@ -162,6 +177,7 @@ export class UserStore extends ModuleStore {
     adminEditableUserId?: string,
   ) {
     this.setUpdateStaus('Start')
+    console.log(`updateUserProfile`, { values })
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
@@ -194,6 +210,7 @@ export class UserStore extends ModuleStore {
     }
 
     // update on db and update locally (if targeting self as user)
+    console.log(`updateUserProfile.doc.set`, { updatedUserProfile })
     await this.db
       .collection(COLLECTION_NAME)
       .doc(updatedUserProfile.userName)

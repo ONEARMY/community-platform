@@ -201,7 +201,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 <>
                   {fields.map((name, i: number) => (
                     <ProfileLinkField
-                      key={name}
+                      key={fields.value[i].key}
                       name={name}
                       onDelete={() => {
                         fields.remove(i)

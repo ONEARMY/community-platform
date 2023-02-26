@@ -31,6 +31,7 @@ export const UserBadgeSettings = observer((props: { userId: string }) => {
   return isLoading ? null : (
     <Card
       sx={{
+        background: 'red2',
         width: ['100%', '100%', `calc(${(2 / 3) * 100}% - 5px)`],
         p: 4,
       }}
@@ -81,7 +82,12 @@ export const UserBadgeSettings = observer((props: { userId: string }) => {
                     />
                   </div>
                 </Box>
-                <Button sx={{ mt: 4 }} type="submit" disabled={isSaving}>
+                <Button
+                  sx={{ mt: 4 }}
+                  type="submit"
+                  variant="outline"
+                  disabled={isSaving}
+                >
                   Update badges
                 </Button>
               </form>

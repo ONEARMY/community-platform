@@ -4,6 +4,7 @@ import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import type { User } from '../'
+import { Icon } from '../'
 
 export interface Props {
   isVerified: boolean
@@ -47,11 +48,25 @@ export const Username = (props: Props) => {
           alignItems: 'center',
         }}
       >
-        {props.user.countryCode && (
-          <Flex mr={1} sx={{ display: 'inline-flex' }}>
+        <Flex mr={1} sx={{ display: 'inline-flex' }}>
+          {props.user.countryCode ? (
             <FlagIconHowTos code={props.user.countryCode.toLowerCase()} />
-          </Flex>
-        )}
+          ) : (
+            <Flex
+              sx={{
+                background: 'black',
+                borderRadius: '3px',
+                height: '14px',
+                width: '21px !important',
+                justifyContent: 'center',
+                alignItems: 'center',
+                lineHeight: 0,
+              }}
+            >
+              <Icon glyph="star-active" size="11" />
+            </Flex>
+          )}
+        </Flex>
         <Text>{props.user.userName}</Text>
         {props.isVerified && (
           <Image

@@ -3,7 +3,10 @@ import { useEffect, useState } from 'react'
 import { Form, Field } from 'react-final-form'
 import { useCommonStores } from 'src'
 import { CheckboxInput } from 'src/common/Form/Checkbox'
+import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Card, Heading, Box, Button } from 'theme-ui'
+
+const availableBadges = ['supporter', 'verified']
 
 export const UserBadgeSettings = observer((props: { userId: string }) => {
   const { userStore } = useCommonStores().stores
@@ -49,38 +52,24 @@ export const UserBadgeSettings = observer((props: { userId: string }) => {
               Badge settings
               <form onSubmit={props.handleSubmit}>
                 <Box mt={1}>
-                  <div>
-                    <Field
-                      id="verified"
-                      name="verified"
-                      data-cy="verified"
-                      onClick={(v) => {
-                        if (badges) {
-                          badges.verified = !!v.target.checked
-                        }
-                      }}
-                      type="checkbox"
-                      labelText={'Verified'}
-                      checked={!!badges?.verified}
-                      component={CheckboxInput}
-                    />
-                  </div>
-                  <div>
-                    <Field
-                      id="supporter"
-                      name="supporter"
-                      onClick={(v) => {
-                        if (badges) {
-                          badges.supporter = !!v.target.checked
-                        }
-                      }}
-                      data-cy="supporter"
-                      labelText="Supporter"
-                      type="checkbox"
-                      checked={!!badges?.supporter}
-                      component={CheckboxInput}
-                    />
-                  </div>
+                  {availableBadges.map((badge, key) => (
+                    <div key={key}>
+                      <Field
+                        id={badge}
+                        name={badge}
+                        data-cy={badge}
+                        onClick={(v) => {
+                          if (badges) {
+                            badges[badge] = !!v.target.checked
+                          }
+                        }}
+                        type="checkbox"
+                        labelText={capitalizeFirstLetter(badge)}
+                        checked={!!badges?.[badge]}
+                        component={CheckboxInput}
+                      />
+                    </div>
+                  ))}
                 </Box>
                 <Button
                   sx={{ mt: 4 }}

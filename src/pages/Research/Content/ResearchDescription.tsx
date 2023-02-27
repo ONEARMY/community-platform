@@ -1,8 +1,4 @@
 import { format } from 'date-fns'
-import * as React from 'react'
-import { useEffect, useState } from 'react'
-import { Box, Flex, Image, Text, Heading } from 'theme-ui'
-import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import {
   Button,
   LinkifyText,
@@ -11,17 +7,20 @@ import {
   Username,
   ViewsCounter,
 } from 'oa-components'
-import type { IResearch } from 'src/models/research.models'
-import theme from 'src/themes/styled.theme'
-import type { IUser } from 'src/models/user.models'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { isUserVerified } from 'src/common/isUserVerified'
-import { useResearchStore } from 'src/stores/Research/research.store'
-import {
-  retrieveSessionStorageArray,
-  addIDToSessionStorageArray,
-} from 'src/utils/sessionStorage'
+import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { isUserVerified } from 'src/common/isUserVerified'
+import type { IResearch } from 'src/models/research.models'
+import type { IUser } from 'src/models/user.models'
+import { useResearchStore } from 'src/stores/Research/research.store'
+import theme from 'src/themes/styled.theme'
+import {
+  addIDToSessionStorageArray,
+  retrieveSessionStorageArray,
+} from 'src/utils/sessionStorage'
+import { Box, Flex, Heading, Image, Text } from 'theme-ui'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -33,6 +32,8 @@ interface IProps {
   moderateResearch: (accepted: boolean) => void
   onUsefulClick: () => void
 }
+
+let didInit = false
 
 const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
@@ -46,7 +47,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   }
   const store = useResearchStore()
 
-  const [viewCount, setViewCount] = useState(research.total_views)
+  const [viewCount, setViewCount] = useState<number | undefined>()
 
   const incrementViewCount = async () => {
     const sessionStorageArray = retrieveSessionStorageArray('research')
@@ -55,11 +56,16 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
       const updatedViewCount = await store.incrementViewCount(research._id)
       setViewCount(updatedViewCount)
       addIDToSessionStorageArray('research', research._id)
+    } else {
+      setViewCount(research.total_views)
     }
   }
 
   useEffect(() => {
-    incrementViewCount()
+    if (!didInit) {
+      didInit = true
+      incrementViewCount()
+    }
   }, [research._id])
 
   return (
@@ -110,11 +116,13 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               />
             </Box>
           )}
-          <AuthWrapper roleRequired="beta-tester">
-            <Box>
-              <ViewsCounter viewsCount={viewCount!} />
-            </Box>
-          </AuthWrapper>
+          {viewCount ? (
+            <AuthWrapper roleRequired="beta-tester">
+              <Box>
+                <ViewsCounter viewsCount={viewCount!} />
+              </Box>
+            </AuthWrapper>
+          ) : null}
           {/* Check if research should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>

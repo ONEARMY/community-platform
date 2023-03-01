@@ -70,7 +70,7 @@ const ResearchArticle = observer((props: IProps) => {
     })
     ReactGA.event({
       category: 'Research',
-      action: 'MarkedUseful',
+      action: hasUserVotedUseful ? 'UsefulMarkRemoved' : 'MarkedUseful',
       label: researchSlug,
     })
   }

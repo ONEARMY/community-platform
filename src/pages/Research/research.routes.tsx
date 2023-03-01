@@ -69,4 +69,4 @@ const routes = () => (
   </Suspense>
 )
 
-export default withRouter(routes)
+export default withRouter(routes) as React.ComponentType

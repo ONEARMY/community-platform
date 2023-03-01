@@ -1,10 +1,10 @@
 import type { ThemeUIStyleObject } from 'theme-ui'
 import { Text, Flex, Image } from 'theme-ui'
 import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
+import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import type { User } from '../'
-import { Icon } from '../'
 
 export interface Props {
   isVerified: boolean
@@ -54,17 +54,17 @@ export const Username = (props: Props) => {
           ) : (
             <Flex
               sx={{
-                background: 'black',
+                backgroundImage: `url(${flagUnknownSVG})`,
+                backgroundSize: 'cover',
                 borderRadius: '3px',
                 height: '14px',
                 width: '21px !important',
                 justifyContent: 'center',
                 alignItems: 'center',
                 lineHeight: 0,
+                overflow: 'hidden',
               }}
-            >
-              <Icon glyph="star-active" size="11" />
-            </Flex>
+            ></Flex>
           )}
         </Flex>
         <Text>{props.user.userName}</Text>

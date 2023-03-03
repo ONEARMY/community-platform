@@ -10,7 +10,8 @@ import Table from '../components/Table/Table'
 import type { ICellRenderProps, ITableProps } from '../components/Table/Table'
 
 interface IPendingEmails {
-  _authID: 'string'
+  _authID: string
+  _userId: string
   emailFrequency?: INotificationSettings['emailFrequency']
   notifications: INotification[]
 }
@@ -18,19 +19,16 @@ type IPendingEmailsDBDoc = Record<string, IPendingEmails>
 
 const EMAILS_PENDING_COLUMNS: ITableProps<IPendingEmails>['columns'] = [
   {
-    Header: 'Auth ID',
-    accessor: '_authID',
-    minWidth: 100,
+    Header: 'User ID',
+    accessor: '_userId',
   },
   {
     Header: 'Frequency',
     accessor: 'emailFrequency',
-    minWidth: 100,
   },
   {
     Header: 'Notifications',
     accessor: 'notifications',
-    minWidth: 140,
   },
 ]
 const NotificationListContainer = styled(Box)`
@@ -53,7 +51,9 @@ const AdminNotifictions = observer(() => {
       .stream()
       .subscribe((emailsPending) => {
         if (emailsPending) {
-          const values = Object.values(emailsPending)
+          const values = Object.entries(emailsPending).map(
+            ([_userId, value]) => ({ ...value, _userId }),
+          )
           if (values.length > 0) {
             setEmailsPending(values)
           }

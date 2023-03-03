@@ -157,7 +157,7 @@ export class ResearchStore extends ModuleStore {
         total_views: totalViews! + 1,
       }
 
-      dbRef.set(
+      await dbRef.set(
         {
           ...updatedResearch,
         },

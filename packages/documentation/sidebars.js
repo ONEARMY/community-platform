@@ -43,6 +43,7 @@ module.exports = {
         'Backend Development/firebase-emulators-docker',
         'Backend Development/firestore-backup',
         'Backend Development/integrations',
+        'Backend Development/tests',
       ],
     },
     {

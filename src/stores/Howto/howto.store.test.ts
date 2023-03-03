@@ -393,4 +393,14 @@ describe('howto.store', () => {
       })
     })
   })
+
+  describe('unsetActiveHowTo', () => {
+    it('removes state from activeHowto property', async () => {
+      const { store } = await factory()
+
+      await store.removeActiveHowto()
+
+      expect(store.activeHowto).toBe(null)
+    })
+  })
 })

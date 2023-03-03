@@ -38,7 +38,7 @@ describe('[How To]', () => {
     })
   })
 
-  describe.only('[Filter by Category]', () => {
+  describe('[Filter by Category]', () => {
     beforeEach(() => {
       cy.visit('/how-to')
     })
@@ -220,7 +220,10 @@ describe('[How To]', () => {
       cy.location('pathname').should('eq', '/how-to')
       cy.location('search').should(
         'eq',
-        `?search=this+how+to+does+not+exist+${id}&source=how-to-not-found`,
+        `?search=this%20how%20to%20does%20not%20exist%20${id.replaceAll(
+          '-',
+          '%20',
+        )}&source=how-to-not-found`,
       )
     })
   })

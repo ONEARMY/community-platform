@@ -19,7 +19,7 @@ before(() => {
   window.addEventListener('unhandledrejection', (event) => {
     throw event.reason
   })
-  Cypress.Promise.onPossiblyUnhandledRejection((error, promise) => {
+  Cypress.Promise.onPossiblyUnhandledRejection((error) => {
     throw error
   })
   cy.clearServiceWorkers()

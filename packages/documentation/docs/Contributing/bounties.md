@@ -61,10 +61,6 @@ Ideally you collect your bounties monthly and only add one expense to reduce tra
 
 We don't have a fixed payment schedule. But for sure it will be once a month.
 
-#### Step 7 - (optional) Join our monthly dev call
-
-If you want more feedback on the issue or suggested bounty levels, we have a monthly call welcome for all developers to join. Have a look on our [Discord Events](https://discordapp.com/invite/SSBrzeR) to join the next one.
-
 ## What if I don't want the bounty?
 
 No problem, thanks for the help :) We will keep the funds for future development

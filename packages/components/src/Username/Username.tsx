@@ -3,6 +3,7 @@ import { Text, Flex, Image } from 'theme-ui'
 import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
+import { countries } from 'countries-list'
 import type { User } from '../'
 
 export interface Props {
@@ -10,6 +11,11 @@ export interface Props {
   user: User
   sx?: ThemeUIStyleObject
 }
+
+const countryCodes = Object.keys(countries)
+
+const isValidCountryCode = (countryCode: string) =>
+  countryCode && countryCodes.includes(countryCode)
 
 export const Username = (props: Props) => {
   return (
@@ -47,9 +53,11 @@ export const Username = (props: Props) => {
           alignItems: 'center',
         }}
       >
-        {props.user.countryCode && (
+        {isValidCountryCode(props.user.countryCode || '') && (
           <Flex mr={1} sx={{ display: 'inline-flex' }}>
-            <FlagIconHowTos code={props.user.countryCode.toLowerCase()} />
+            <FlagIconHowTos
+              code={(props.user.countryCode || '').toLowerCase()}
+            />
           </Flex>
         )}
         <Text>{props.user.userName}</Text>

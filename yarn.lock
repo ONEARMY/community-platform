@@ -24732,6 +24732,7 @@ __metadata:
     "@types/react-flag-icon-css": ^1.0.5
     "@types/react-portal": ^4.0.4
     babel-loader: 8.1.0
+    countries-list: ^2.6.1
     date-fns: ^2.29.3
     eslint: ^7.32.0
     eslint-plugin-import: ^2.25.4

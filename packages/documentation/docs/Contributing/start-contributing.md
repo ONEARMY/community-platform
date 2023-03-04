@@ -67,7 +67,7 @@ Each role get paid a bit differently. Contributors and maintainers get paid acco
 
 | Tasks                                                                                                                                                      | 🤙 Contributor | ⚡️ Maintainer | 🪛 Core Maintainer |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ----------------- |
-| Invite to [Discord](https://discord.gg/gJ7Yyk4) #development                                                                                       | ☑️             | ☑️             | ☑️                |
+| Invite to [Discord](https://discord.gg/gJ7Yyk4) #development                                                                                               | ☑️             | ☑️             | ☑️                |
 | Send link to [bounty](/Contributing/bounties) system                                                                                                       | ☑️             | ☑️             | ☑️                |
 | Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                         |                | ☑️             | ☑️                |
 | Add maintainer status using [All contributors ](#recognising-contributors)                                                                                 |                | ☑️             | ☑️                |

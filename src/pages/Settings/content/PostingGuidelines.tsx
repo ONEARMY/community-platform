@@ -30,9 +30,7 @@ export const ProfileGuidelines = () => {
         </Text>
         <Text sx={{ ...theme.typography.auxiliary }} mb={1}>
           5. If something doesn't work,{' '}
-          <ExternalLink href={DISCORD_INVITE_URL}>
-            let us know.
-          </ExternalLink>
+          <ExternalLink href={DISCORD_INVITE_URL}>let us know.</ExternalLink>
         </Text>
       </Flex>
     </Card>

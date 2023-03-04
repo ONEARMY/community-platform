@@ -26,6 +26,20 @@ interface IState {
   showNotification?: boolean
 }
 
+const countriesList = [
+  {
+    label: 'Prefer not to say',
+    value: 'unknown',
+  },
+].concat(
+  Object.keys(countries)
+    .map((country) => ({
+      label: countries[country].name,
+      value: country,
+    }))
+    .sort((a, b) => (a.label > b.label ? 1 : -1)),
+)
+
 export const CoverImages = ({
   isMemberProfile,
   coverImages,
@@ -155,15 +169,16 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             {this.props.showLocationDropdown && (
               <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                 <Text my={4} sx={{ fontSize: 2 }}>
-                  Your location
+                  Your location *
                 </Text>
-                <Field data-cy="location-dropdown" name="country">
+                <Field
+                  data-cy="location-dropdown"
+                  name="country"
+                  validate={required}
+                >
                   {(field) => (
                     <SelectField
-                      options={Object.keys(countries).map((country) => ({
-                        label: countries[country].name,
-                        value: country,
-                      }))}
+                      options={countriesList}
                       placeholder="Country"
                       {...field}
                     />

@@ -226,7 +226,9 @@ describe('[Settings]', () => {
       cy.get('[data-cy=page-link]').contains('How-to').click()
       cy.step('Confirm log should log')
       cy.on('window:confirm', (text) => {
-        expect(text).to.eq('You are leaving this page without saving. Do you want to continue ?')
+        expect(text).to.eq(
+          'You are leaving this page without saving. Do you want to continue ?',
+        )
         done()
       })
     })

@@ -210,11 +210,14 @@ describe('[Settings]', () => {
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
       cy.step('Click on How to')
+      cy.on('window:confirm', () => {
+        throw new Error('Confirm dialog should not be called.')
+      })
       cy.get('[data-cy=page-link]').contains('How-to').click()
       cy.step('Confirm log should NOT appear')
     })
 
-    it('[Cancel edit profile and get confirmation]', () => {
+    it('[Cancel edit profile and get confirmation]', (done) => {
       cy.login('settings_member_new@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -222,6 +225,10 @@ describe('[Settings]', () => {
       cy.step('Click on How to')
       cy.get('[data-cy=page-link]').contains('How-to').click()
       cy.step('Confirm log should log')
+      cy.on('window:confirm', (text) => {
+        expect(text).to.eq('You are leaving this page without saving. Do you want to continue ?')
+        done()
+      })
     })
 
     it('[Edit a new profile]', () => {

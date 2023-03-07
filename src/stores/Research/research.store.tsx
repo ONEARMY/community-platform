@@ -280,6 +280,13 @@ export class ResearchStore extends ModuleStore {
 
         await this.updateResearchItem(dbRef, newItem)
 
+        // Notify author
+        await this.userNotificationsStore.triggerNotification(
+          'new_comment_research',
+          newItem._createdBy,
+          '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
+        )
+
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
         runInAction(() => {
           this.activeResearchItem = createdItem

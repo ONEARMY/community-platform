@@ -93,6 +93,16 @@ describe('research.store', () => {
           }),
         )
         expect(newResearchItem.updates[1].comments).toBeUndefined()
+
+        // Notifies research author
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toHaveBeenCalledTimes(1)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'new_comment_research',
+          researchItem._createdBy,
+          `/research/${researchItem.slug}#update_0`,
+        )
       })
 
       it('adds @mention to comment text', async () => {

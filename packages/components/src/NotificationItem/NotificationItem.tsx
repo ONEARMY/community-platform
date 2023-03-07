@@ -10,6 +10,7 @@ type notificationType =
   | 'new_comment_research'
   | 'research_useful'
   | 'research_mention'
+  | 'research_update'
 
 export interface UserNotificationItem {
   type: notificationType
@@ -19,6 +20,8 @@ export interface UserNotificationItem {
 function getIconByType(type: notificationType): availableGlyphs {
   return ['howto_useful', 'research_useful'].includes(type)
     ? 'useful'
+    : type === 'research_update'
+    ? 'thunderbolt'
     : 'comment'
 }
 

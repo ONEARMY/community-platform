@@ -79,7 +79,9 @@ describe('research.store', () => {
   describe('Comments', () => {
     describe('addComment', () => {
       it('adds new comment to update', async () => {
-        const { store, researchItem, setFn } = await factoryResearchItem()
+        const { store, researchItem, setFn } = await factoryResearchItem({
+          collaborators: ['a-contributor'],
+        })
 
         // Act
         await store.addComment('fish', researchItem.updates[0])
@@ -97,10 +99,15 @@ describe('research.store', () => {
         // Notifies research author
         expect(
           store.userNotificationsStore.triggerNotification,
-        ).toHaveBeenCalledTimes(1)
+        ).toHaveBeenCalledTimes(2)
         expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
           'new_comment_research',
           researchItem._createdBy,
+          `/research/${researchItem.slug}#update_0`,
+        )
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'new_comment_research',
+          'a-contributor',
           `/research/${researchItem.slug}#update_0`,
         )
       })

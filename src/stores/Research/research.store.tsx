@@ -135,6 +135,42 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
+  public async addSubscriberToResearchArticle(
+    docId: string,
+    userId: string,
+  ): Promise<void> {
+    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
+
+    const researchData = await toJS(dbRef.get('server'))
+    if (researchData) {
+      await this.updateResearchItem(dbRef, {
+        ...researchData,
+        subscribers: [userId].concat(researchData?.subscribers || []),
+      })
+    }
+
+    return
+  }
+
+  public async removeSubscriberToResearchArticle(
+    docId: string,
+    userId: string,
+  ): Promise<void> {
+    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
+
+    const researchData = await toJS(dbRef.get('server'))
+    if (researchData) {
+      await this.updateResearchItem(dbRef, {
+        ...researchData,
+        subscribers: (researchData?.subscribers || []).filter(
+          (id) => id !== userId,
+        ),
+      })
+    }
+
+    return
+  }
+
   @action
   private async loadResearchStats(id?: string) {
     if (id) {
@@ -522,6 +558,17 @@ export class ResearchStore extends ModuleStore {
         )
       }
     })
+
+    // Notify each subscriber
+    const subscribers = researchItem.subscribers || []
+
+    subscribers.forEach((subscriber) =>
+      this.userNotificationsStore.triggerNotification(
+        'research_update',
+        subscriber,
+        `/research/${researchItem.slug}`,
+      ),
+    )
 
     return await dbRef.get()
   }

@@ -597,6 +597,7 @@ describe('research.store', () => {
       })
     })
   })
+
   describe('incrementViews', () => {
     it('data fetched from server db', async () => {
       const { store, researchItem, getFn } = await factoryResearchItem()
@@ -618,6 +619,67 @@ describe('research.store', () => {
 
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(updatedViews).toBe(views + 1)
+    })
+  })
+
+  describe('Subscribe', () => {
+    it('adds subscriber to the research article', async () => {
+      const { store, researchItem, setFn } = await factory({
+        subscribers: ['existing-subscriber'],
+      })
+
+      // Act
+      await store.addSubscriberToResearchArticle(
+        researchItem._id,
+        'an-interested-user',
+      )
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = setFn.mock.calls[0]
+      expect(newResearchItem).toEqual(
+        expect.objectContaining({
+          subscribers: ['an-interested-user', 'existing-subscriber'],
+        }),
+      )
+    })
+
+    it('removes subscriber from the research article', async () => {
+      const { store, researchItem, setFn } = await factory({
+        subscribers: ['long-term-subscriber', 'remove-me'],
+      })
+
+      // Act
+      await store.removeSubscriberToResearchArticle(
+        researchItem._id,
+        'remove-me',
+      )
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = setFn.mock.calls[0]
+      expect(newResearchItem).toEqual(
+        expect.objectContaining({
+          subscribers: ['long-term-subscriber'],
+        }),
+      )
+    })
+
+    it('An update triggers notifications to each subscribed users', async () => {
+      const { store, researchItem, setFn } = await factory({
+        subscribers: ['subscriber'],
+      })
+
+      // Act
+      await store.uploadResearch(researchItem)
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledTimes(
+        1,
+      )
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+        'research_update',
+        'subscriber',
+        `/research/${researchItem.slug}`,
+      )
     })
   })
 })

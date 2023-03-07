@@ -12,6 +12,8 @@ export type IResearchStats = {
   votedUsefulCount: number
 }
 
+type UserIdList = string[]
+
 /** All typings related to the Research Module can be found here */
 export namespace IResearch {
   /** The main research item, as created by a user */
@@ -21,6 +23,7 @@ export namespace IResearch {
     _createdBy: string
     total_views?: number
     collaborators: string[]
+    subscribers?: UserIdList
   } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */

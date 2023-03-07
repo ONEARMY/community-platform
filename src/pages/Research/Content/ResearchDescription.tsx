@@ -105,6 +105,29 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               />
             </Box>
           )}
+          {props.loggedInUser ? (
+            <AuthWrapper roleRequired="beta-tester">
+              <Button
+                icon="thunderbolt"
+                variant="outline"
+                sx={{
+                  fontSize: 2,
+                  py: 0,
+                  height: '41.5px',
+                }}
+                onClick={() => {
+                  if (props.loggedInUser) {
+                    store.addSubscriberToResearchArticle(
+                      research._id,
+                      props.loggedInUser?.userName,
+                    )
+                  }
+                }}
+              >
+                Follow
+              </Button>
+            </AuthWrapper>
+          ) : null}
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>

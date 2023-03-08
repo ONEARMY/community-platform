@@ -1,5 +1,5 @@
 import { ModuleStore } from '../common/module.store'
-import type { RootStore } from '..'
+import type { RootStore } from '../index'
 import { action, observable, makeObservable } from 'mobx'
 import type { IUser, UserRole } from 'src/models/user.models'
 import type { ITag } from 'src/models/tags.model'

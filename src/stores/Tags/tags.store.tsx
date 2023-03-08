@@ -1,6 +1,6 @@
 import { observable, action, makeObservable } from 'mobx'
-import type { ITag, TagCategory } from 'src/models/tags.model'
-import { arrayToJson } from 'src/utils/helpers'
+import type { ITag, TagCategory } from '../../models/tags.model'
+import { arrayToJson } from '../../utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '..'
 

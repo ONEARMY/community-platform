@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import {
   Button,
+  EditorContent,
   LinkifyText,
   ModerationStatus,
   UsefulStatsButton,
@@ -183,7 +184,11 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             {research.title}
           </Heading>
           <Text sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}>
-            <LinkifyText>{research.description}</LinkifyText>
+            {typeof research.description === 'string' ? (
+              <LinkifyText>{research.description}</LinkifyText>
+            ) : (
+              <EditorContent json={research.description} />
+            )}
           </Text>
         </Box>
       </Flex>

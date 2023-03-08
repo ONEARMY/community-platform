@@ -2,9 +2,9 @@ import type {
   INotification,
   IUser,
   NotificationType,
-} from 'src/models/user.models'
+} from '../../models/user.models'
 import { action, makeObservable, toJS } from 'mobx'
-import { randomID } from 'src/utils/helpers'
+import { randomID } from '../../utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
 // eslint-disable-next-line import/namespace

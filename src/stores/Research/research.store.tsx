@@ -12,18 +12,18 @@ import type {
   IResearch,
 } from '../../models/research.models'
 import { createContext, useContext } from 'react'
-import type { IConvertedFileMeta } from 'src/types'
-import { getUserCountry } from 'src/utils/getUserCountry'
-import { logger } from 'src/logger'
-import type { IComment, IUser } from 'src/models'
+import type { IConvertedFileMeta } from '../../types'
+import { getUserCountry } from '../../utils/getUserCountry'
+import { logger } from '../../logger'
+import type { IComment, IUser } from '../../models'
 import { ModuleStore } from '../common/module.store'
 import {
   filterModerableItems,
   hasAdminRights,
   needsModeration,
   randomID,
-} from 'src/utils/helpers'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
+} from '../../utils/helpers'
+import { MAX_COMMENT_LENGTH } from '../../constants'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
@@ -116,11 +116,10 @@ export class ResearchStore extends ModuleStore {
         this.activeResearchItem = {
           ...researchItem,
           collaborators: researchItem.collaborators || [],
-          description: changeUserReferenceToPlainText(researchItem.description),
           updates: researchItem.updates?.map((update) => {
-            update.description = changeUserReferenceToPlainText(
-              update.description,
-            )
+            // update.description = changeUserReferenceToPlainText(
+            //   update.description,
+            // )
             return update
           }),
         }
@@ -437,30 +436,39 @@ export class ResearchStore extends ModuleStore {
     dbRef: DocReference<IResearch.Item>,
     researchItem: IResearch.Item,
   ) {
-    const { text: researchDescription, users } = await this.addUserReference(
-      researchItem.description,
-    )
-    logger.debug('updateResearchItem', {
-      before: researchItem.description,
-      after: researchDescription,
-    })
-
     const mentions: any = []
+
+    // LADEBUG: Restore annotating @mentions
+    // const { text: researchDescription, users } = await this.addUserReference(
+    //   researchItem.description,
+    // )
+    // logger.debug('updateResearchItem', {
+    //   before: researchItem.description,
+    //   after: researchDescription,
+    // })
+
+    // ;(users || []).map((username) => {
+    //   mentions.push({
+    //     username,
+    //     location: 'description',
+    //   })
+    // })
 
     await Promise.all(
       researchItem.updates.map(async (up, idx) => {
-        const { text: newDescription, users } = await this.addUserReference(
-          up.description,
-        )
+        // LADEBUG
+        // const { text: newDescription, users } = await this.addUserReference(
+        //   up.description,
+        // )
 
-        ;(users || []).map((username) => {
-          mentions.push({
-            username,
-            location: `update-${idx}`,
-          })
-        })
+        // ;(users || []).map((username) => {
+        //   mentions.push({
+        //     username,
+        //     location: `update-${idx}`,
+        //   })
+        // })
 
-        researchItem.updates[idx].description = newDescription
+        // researchItem.updates[idx].description = newDescription
 
         if (researchItem.updates[idx]) {
           await Promise.all(
@@ -487,17 +495,11 @@ export class ResearchStore extends ModuleStore {
         }
       }),
     )
-    ;(users || []).map((username) => {
-      mentions.push({
-        username,
-        location: 'description',
-      })
-    })
 
     await dbRef.set({
       ...researchItem,
       mentions,
-      description: researchDescription,
+      // description: researchDescription,
     })
 
     const previousMentionsList = researchItem.mentions || []
@@ -526,8 +528,8 @@ export class ResearchStore extends ModuleStore {
     return await dbRef.get()
   }
 
-  public async uploadResearch(values: IResearch.FormInput) {
-    logger.debug('uploading research')
+  public async uploadResearch(values: IResearch.FormInput | IResearch.ItemDB) {
+    logger.debug('uploadResearch', values)
     this.updateResearchUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
@@ -611,7 +613,6 @@ export class ResearchStore extends ModuleStore {
         )
         const newItem = {
           ...toJS(item),
-          description: (await this.addUserReference(item.description)).text,
           updates: [...toJS(item.updates)],
         }
         if (existingUpdateIndex === -1) {

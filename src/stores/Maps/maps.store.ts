@@ -6,7 +6,7 @@ import type {
   IMapPinDetail,
   IBoundingBox,
 } from 'src/models/maps.models'
-import type { IDBEndpoint } from 'src/models/common.models'
+import type { IDBEndpoint } from '../../models/common.models'
 import type { RootStore } from '../index'
 import type { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
@@ -19,8 +19,8 @@ import {
   hasAdminRights,
   needsModeration,
   isAllowToPin,
-} from 'src/utils/helpers'
-import { logger } from 'src/logger'
+} from '../../utils/helpers'
+import { logger } from '../../logger'
 import { filterMapPinsByType } from './filter'
 
 // NOTE - toggle below variable to use larger mock dataset

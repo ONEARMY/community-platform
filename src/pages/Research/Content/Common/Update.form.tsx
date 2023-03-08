@@ -9,8 +9,9 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import {
   Button,
   FieldInput,
-  FieldTextarea,
+  // FieldTextarea,
   ElWithBeforeIcon,
+  FieldEditor,
 } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
@@ -193,10 +194,10 @@ const UpdateForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={required}
-                                validateFields={[]}
+                                // validate={required}
+                                // validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
-                                component={FieldTextarea}
+                                component={FieldEditor}
                                 style={{
                                   resize: 'none',
                                   flex: 1,

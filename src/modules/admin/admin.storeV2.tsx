@@ -1,8 +1,8 @@
 import { makeAutoObservable, observable } from 'mobx'
 import { createContext, useContext } from 'react'
-import { useCommonStores } from 'src/index'
-import type { IDBEndpoint } from 'src/models'
-import type { DatabaseV2 } from 'src/stores/databaseV2'
+import { useCommonStores } from '../../index'
+import type { IDBEndpoint } from '../../models'
+import type { DatabaseV2 } from '../../stores/databaseV2'
 
 export class AdminStoreV2 {
   @observable

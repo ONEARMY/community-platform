@@ -1,29 +1,29 @@
+import styled from '@emotion/styled'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
+import {
+  Button,
+  ElWithBeforeIcon,
+  FieldInput,
+  FieldEditor,
+} from 'oa-components'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { useCommonStores } from 'src'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import {
-  Button,
-  FieldInput,
-  FieldTextarea,
-  ElWithBeforeIcon,
-} from 'oa-components'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import theme from 'src/themes/styled.theme'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
-import { required } from 'src/utils/validators'
-import styled from '@emotion/styled'
+import { Box, Card, Flex, Heading } from 'theme-ui'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -55,6 +55,7 @@ const beforeUnload = (e) => {
 
 const ResearchForm = observer((props: IProps) => {
   const store = useResearchStore()
+  const { userStore } = useCommonStores().stores
   const [state, setState] = React.useState<IState>({
     formSaved: false,
     _toDocsList: false,
@@ -65,10 +66,23 @@ const ResearchForm = observer((props: IProps) => {
     shouldSubmit: false,
   })
 
+  const [userList, setUserList] = React.useState([])
+
+  userStore.init()
+
   React.useEffect(() => {
     if (store.researchUploadStatus.Complete) {
       window.removeEventListener('beforeunload', beforeUnload, false)
     }
+
+    const loadUsers = async () => {
+      setUserList(
+        (await userStore.db.clients.serverDB.getCollection('v3_users'))
+          .filter((doc) => !!doc.userName)
+          .map((doc) => ({ id: doc.userName, label: doc.userName })),
+      )
+    }
+    loadUsers()
   }, [store.researchUploadStatus.Complete])
 
   React.useEffect(() => {
@@ -209,15 +223,16 @@ const ResearchForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={required}
                                 validateFields={[]}
-                                isEqual={COMPARISONS.textInput}
-                                component={FieldTextarea}
-                                style={{
-                                  resize: 'none',
-                                  flex: 1,
-                                  minHeight: '150px',
-                                }}
+                                // validate={required}
+                                // isEqual={COMPARISONS.textInput}
+                                render={({ input, ...rest }) => (
+                                  <FieldEditor
+                                    input={input}
+                                    {...rest}
+                                    users={userList}
+                                  />
+                                )}
                                 maxLength="1000"
                                 placeholder="Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max 1000 characters)"
                               />

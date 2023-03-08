@@ -3,18 +3,18 @@ import type {
   IEventFormInput,
   IEventDB,
   IEvent,
-} from 'src/models/events.models'
+} from '../../models/events.models'
 import { ModuleStore } from '../common/module.store'
-import Filters from 'src/utils/filters'
-import type { ISelectedTags } from 'src/models/tags.model'
+import Filters from '../../utils/filters'
+import type { ISelectedTags } from '../../models/tags.model'
 import type { RootStore } from '..'
-import type { ILocation } from 'src/models/common.models'
+import type { ILocation } from '../../models/common.models'
 import {
   stripSpecialCharacters,
   hasAdminRights,
   needsModeration,
-} from 'src/utils/helpers'
-import type { IUser } from 'src/models/user.models'
+} from '../../utils/helpers'
+import type { IUser } from '../../models/user.models'
 
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time

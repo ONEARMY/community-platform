@@ -63,4 +63,9 @@ export const GlobalStyle = css`
     white-space: nowrap;
     border: 0;
   }
+
+  /* https://github.com/remirror/remirror/issues/1459 */
+  .remirror-floating-popover {
+    z-index: 10;
+  }
 `

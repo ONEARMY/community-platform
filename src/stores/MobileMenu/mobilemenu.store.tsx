@@ -1,5 +1,5 @@
 import { observable, action, makeObservable } from 'mobx'
-import type { RootStore } from '..'
+import type { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
 
 export class MobileMenuStore extends ModuleStore {

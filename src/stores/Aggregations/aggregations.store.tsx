@@ -1,6 +1,6 @@
 import { action, makeAutoObservable, observable } from 'mobx'
 import type { Subscription } from 'rxjs'
-import type { RootStore } from '..'
+import type { RootStore } from '../index'
 import type { DatabaseV2 } from '../databaseV2'
 
 /**

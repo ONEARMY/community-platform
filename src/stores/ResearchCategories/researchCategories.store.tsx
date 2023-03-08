@@ -1,6 +1,6 @@
 import { observable, action, makeObservable, computed } from 'mobx'
-import type { IResearchCategory } from 'src/models/researchCategories.model'
-import { arrayToJson } from 'src/utils/helpers'
+import type { IResearchCategory } from '../../models/researchCategories.model'
+import { arrayToJson } from '../../utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '..'
 

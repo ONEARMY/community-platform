@@ -1,27 +1,27 @@
 import Fuse from 'fuse.js'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
-import type { IConvertedFileMeta } from 'src/types'
-import { getUserCountry } from 'src/utils/getUserCountry'
+import type { IConvertedFileMeta } from '../../types'
+import { getUserCountry } from '../../utils/getUserCountry'
 import type {
   IHowto,
   IHowtoDB,
   IHowtoFormInput,
   IHowtoStep,
   IHowToStepFormInput,
-} from 'src/models/howto.models'
-import type { IComment, IUser } from 'src/models'
+} from '../../models/howto.models'
+import type { IComment, IUser } from '../../models'
 import {
   filterModerableItems,
   formatLowerNoSpecial,
   hasAdminRights,
   needsModeration,
   randomID,
-} from 'src/utils/helpers'
+} from '../../utils/helpers'
 import type { RootStore } from '../index'
 import { ModuleStore } from '../common/module.store'
 import type { IUploadedFileMeta } from '../storage'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { logger } from 'src/logger'
+import { MAX_COMMENT_LENGTH } from '../../constants'
+import { logger } from '../../logger'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,

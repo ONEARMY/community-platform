@@ -108,7 +108,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   useEffect(() => {
-    console.log(didInit)
     if (!didInit) {
       didInit = true
       incrementViewCount()

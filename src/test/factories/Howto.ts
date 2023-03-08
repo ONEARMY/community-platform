@@ -38,6 +38,8 @@ export const FactoryHowto = (
     updated: '',
     size: 0,
   },
+  total_views: faker.datatype.number(),
+  total_downloads: faker.datatype.number(),
   ...howtoOverloads,
 })
 

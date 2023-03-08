@@ -53,14 +53,13 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-let didInit = false
-
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
   const [viewCount, setViewCount] = useState<number | undefined>()
   const { stores } = useCommonStores()
+  let didInit = false
 
   const incrementDownloadCount = async () => {
     const updatedDownloadCount = await stores.howtoStore.incrementDownloadCount(
@@ -109,6 +108,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   useEffect(() => {
+    console.log(didInit)
     if (!didInit) {
       didInit = true
       incrementViewCount()

@@ -33,8 +33,6 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-let didInit = false
-
 const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
     const lastModifiedDate = format(new Date(research._modified), 'DD-MM-YYYY')
@@ -45,6 +43,8 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
       return ''
     }
   }
+  let didInit = false
+
   const store = useResearchStore()
 
   const [viewCount, setViewCount] = useState<number | undefined>()

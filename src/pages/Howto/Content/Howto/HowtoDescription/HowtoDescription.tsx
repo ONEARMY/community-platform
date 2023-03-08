@@ -57,9 +57,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
+  let didInit = false
   const [viewCount, setViewCount] = useState<number | undefined>()
   const { stores } = useCommonStores()
-  let didInit = false
 
   const incrementDownloadCount = async () => {
     const updatedDownloadCount = await stores.howtoStore.incrementDownloadCount(

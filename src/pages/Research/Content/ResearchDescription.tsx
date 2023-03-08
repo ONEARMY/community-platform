@@ -44,9 +44,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
     }
   }
   let didInit = false
-
   const store = useResearchStore()
-
   const [viewCount, setViewCount] = useState<number | undefined>()
 
   const incrementViewCount = async () => {

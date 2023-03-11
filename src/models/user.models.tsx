@@ -52,6 +52,7 @@ export interface IUser {
 
 export interface IUserBadges {
   verified: boolean
+  supporter?: boolean
 }
 
 interface IExternalLink {

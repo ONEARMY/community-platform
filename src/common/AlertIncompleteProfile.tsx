@@ -14,7 +14,7 @@ export const AlertIncompleteProfile = observer(() => {
     activeUser.about &&
     activeUser.displayName &&
     activeUser.coverImages.length !== 0 &&
-    activeUser.links.length !== 0
+    activeUser.links?.length !== 0
   if (isProfileFilled) return null
   return (
     <Link to="/settings">

@@ -14,7 +14,8 @@
     {
       "files": ["**/*.stories.tsx"],
       "rules": {
-        "import/no-default-export": "off"
+        "import/no-default-export": "off",
+        "no-alert": "off"
       }
     }
   ]

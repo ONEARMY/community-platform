@@ -49,7 +49,6 @@ export class ProfileLinkField extends Component<IProps, IState> {
   }
 
   toggleDeleteModal() {
-    alert('Clicking delete link!')
     this.setState({ showDeleteModal: !this.state.showDeleteModal })
   }
   confirmDelete() {

@@ -31,7 +31,9 @@ interface IProps {
   initialType?: string
   onDelete: () => void
   'data-cy'?: string
+  isDeleteEnabled: boolean
 }
+
 interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
@@ -74,7 +76,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
   }
 
   render() {
-    const { index, name } = this.props
+    const { index, name, isDeleteEnabled } = this.props
     const DeleteButton = (props) => (
       <Button
         data-cy={`delete-link-${index}`}
@@ -84,21 +86,18 @@ export class ProfileLinkField extends Component<IProps, IState> {
         onClick={() => this.toggleDeleteModal()}
         ml={2}
         {...props}
-      />
+      >
+        Delete
+      </Button>
     )
     return (
-      <Flex
-        data-cy={`Link.field: Container ${index}`}
-        my={['10px', '10px', '5px']}
-        sx={{ flexDirection: ['column', 'column', 'row'] }}
-      >
-        <Grid
-          mb={[1, 1, 0]}
-          gap={0}
-          columns={['auto 60px', 'auto 60px', '210px']}
-          sx={{ width: ['100%', '100%', '210px'] }}
-        >
-          <div>
+      <Flex my={[2]} sx={{ flexDirection: ['column', 'column', 'row'] }}>
+        <Grid mb={[1, 1, 0]} gap={0} sx={{ width: ['100%', '100%', '210px'] }}>
+          <Box
+            sx={{
+              mr: 2,
+            }}
+          >
             <Field
               data-cy={`select-link-${index}`}
               name={`${name}.label`}
@@ -108,23 +107,24 @@ export class ProfileLinkField extends Component<IProps, IState> {
               placeholder="type"
               validate={required}
               validateFields={[]}
-              style={{ width: '100%', height: '40px', marginRight: '8px' }}
+              style={{ width: '100%', height: '40px' }}
             />
-          </div>
-          <DeleteButton
-            sx={{
-              display: ['block', 'block', 'none'],
-              height: '40px',
-              width: '50px',
-            }}
-            ml={'2px'}
-          />
+          </Box>
+          {isDeleteEnabled ? (
+            <DeleteButton
+              sx={{
+                display: ['block', 'block', 'none'],
+              }}
+              disabled={index === 0}
+              ml={'2px'}
+            />
+          ) : null}
         </Grid>
         <Grid
           mb={[1, 1, 0]}
           gap={0}
           columns={['auto', 'auto', 'auto']}
-          sx={{ width: ['100%', '100%', 'calc(100% - 270px)'] }}
+          sx={{ width: '100%' }}
         >
           <Field
             data-cy={`input-link-${index}`}
@@ -138,13 +138,14 @@ export class ProfileLinkField extends Component<IProps, IState> {
             style={{ width: '100%', height: '40px', marginBottom: '0px' }}
           />
         </Grid>
-        <DeleteButton
-          sx={{
-            display: ['none', 'none', 'block'],
-            height: '40px',
-            width: '50px',
-          }}
-        />
+        {isDeleteEnabled ? (
+          <DeleteButton
+            disabled={index === 0}
+            sx={{
+              display: ['none', 'none', 'block'],
+            }}
+          />
+        ) : null}
         {
           <Modal
             onDidDismiss={() => this.toggleDeleteModal()}

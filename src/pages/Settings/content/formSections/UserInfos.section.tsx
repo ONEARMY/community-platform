@@ -5,7 +5,7 @@ import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import theme from 'src/themes/styled.theme'
 import { FieldArray } from 'react-final-form-arrays'
-import { ProfileLinkField } from './Fields/Link.field'
+import { ProfileLinkField } from './Fields/ProfileLink.field'
 import { FlexSectionContainer } from './elements'
 import { required } from 'src/utils/validators'
 import type { IUserPP } from 'src/models/user_pp.models'
@@ -199,16 +199,19 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <FieldArray name="links" initialValue={links}>
               {({ fields }) => (
                 <>
-                  {fields.map((name, i: number) => (
-                    <ProfileLinkField
-                      key={fields.value[i].key}
-                      name={name}
-                      onDelete={() => {
-                        fields.remove(i)
-                      }}
-                      index={i}
-                    />
-                  ))}
+                  {fields
+                    ? fields.map((name, i: number) => (
+                        <ProfileLinkField
+                          key={fields.value[i].key}
+                          name={name}
+                          onDelete={() => {
+                            fields.remove(i)
+                          }}
+                          index={i}
+                          isDeleteEnabled={i > 0 || (fields as any).length > 1}
+                        />
+                      ))
+                    : null}
                   <Button
                     type="button"
                     data-cy="add-link"

@@ -115,7 +115,6 @@ export class ProfileLinkField extends Component<IProps, IState> {
               sx={{
                 display: ['block', 'block', 'none'],
               }}
-              disabled={index === 0}
               ml={'2px'}
             />
           ) : null}
@@ -140,7 +139,6 @@ export class ProfileLinkField extends Component<IProps, IState> {
         </Grid>
         {isDeleteEnabled ? (
           <DeleteButton
-            disabled={index === 0}
             sx={{
               display: ['none', 'none', 'block'],
             }}

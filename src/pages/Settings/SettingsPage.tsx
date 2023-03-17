@@ -20,12 +20,12 @@ import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.s
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import theme from 'src/themes/styled.theme'
 import INITIAL_VALUES from './Template'
-import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile/types'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -186,8 +186,8 @@ export class UserSettings extends React.Component<IProps, IState> {
           const heading = user.profileType ? 'Edit profile' : 'Create profile'
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-              <Prompt
-                when={!this.injected.userStore.updateStatus.Complete}
+              <UnsavedChangesDialog
+                uploadComplete={this.injected.userStore.updateStatus.Complete}
                 message={
                   'You are leaving this page without saving. Do you want to continue ?'
                 }

@@ -13,7 +13,7 @@ import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 
 import type { PlatformTheme } from 'src/themes/types'
 
-function findWordspaceHighlight(workspaceType?: string): string {
+const findWordspaceHighlight = (workspaceType?: string): string => {
   switch (workspaceType) {
     case ProfileType.WORKSPACE:
       return WorkspaceHighlight
@@ -30,10 +30,10 @@ function findWordspaceHighlight(workspaceType?: string): string {
   }
 }
 
-function findWorkspaceBadgeNullable(
+const findWorkspaceBadgeNullable = (
   workspaceType?: string,
   useCleanImage?: boolean,
-): string | null {
+): string | null => {
   if (!workspaceType) {
     return null
   }
@@ -53,12 +53,12 @@ function findWorkspaceBadgeNullable(
   return foundProfileTypeObj.imageSrc || null
 }
 
-function findWorkspaceBadge(
+const findWorkspaceBadge = (
   workspaceType?: string,
   ifCleanImage?: boolean,
   verifiedUser?: boolean,
   currentTheme?: PlatformTheme,
-): string {
+): string => {
   if (!workspaceType) {
     return MemberBadge
   }

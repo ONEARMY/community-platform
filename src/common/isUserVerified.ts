@@ -1,7 +1,7 @@
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import { useCommonStores } from '../'
 
-export const isUserVerified = function (userId: string) {
+export const isUserVerified = (userId: string) => {
   const { aggregationsStore } = useCommonStores().stores
   return isUserVerifiedWithStore(userId, aggregationsStore)
 }
@@ -11,9 +11,7 @@ export const isUserVerified = function (userId: string) {
  * are not compatible with hooks.
  * https://reactjs.org/docs/hooks-intro.html
  */
-export const isUserVerifiedWithStore = function (
+export const isUserVerifiedWithStore = (
   userId: string,
   store: AggregationsStore,
-) {
-  return store.aggregations.users_verified?.[userId]
-}
+) => store.aggregations.users_verified?.[userId]

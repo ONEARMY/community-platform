@@ -13,21 +13,19 @@ import type { ResearchStore } from 'src/stores/Research/research.store'
 jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useCommonStores() {
-    return {
-      stores: {
-        userStore: {
-          fetchAllVerifiedUsers: jest.fn(),
-        },
-        aggregationsStore: {
-          aggregations: {},
-        },
-        researchCategoriesStore: {
-          allResearchCategories: [],
-        },
+  useCommonStores: () => ({
+    stores: {
+      userStore: {
+        fetchAllVerifiedUsers: jest.fn(),
       },
-    }
-  },
+      aggregationsStore: {
+        aggregations: {},
+      },
+      researchCategoriesStore: {
+        allResearchCategories: [],
+      },
+    },
+  }),
 }))
 
 /** When mocking research routes replace default store methods with below */
@@ -59,9 +57,7 @@ const mockResearchStore = new mockResearchStoreClass()
 jest.mock('src/stores/Research/research.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
-  useResearchStore() {
-    return mockResearchStore
-  },
+  useResearchStore: () => mockResearchStore,
 }))
 
 describe('research.routes', () => {
@@ -211,9 +207,7 @@ describe('research.routes', () => {
       jest.doMock('src/pages/Research/Content/Common/Research.form', () => ({
         // eslint-disable-next-line @typescript-eslint/naming-convention
         __esModule: true,
-        default(props) {
-          return <div>{props.parentType} your research</div>
-        },
+        default: (props) => <div>{props.parentType} your research</div>,
       }))
 
       const wrapper = render(
@@ -263,9 +257,7 @@ describe('research.routes', () => {
       jest.doMock('src/pages/Research/Content/Common/Research.form', () => ({
         // eslint-disable-next-line @typescript-eslint/naming-convention
         __esModule: true,
-        default(props) {
-          return <div>{props.parentType} your research</div>
-        },
+        default: (props) => <div>{props.parentType} your research</div>,
       }))
 
       const wrapper = render(
@@ -319,9 +311,7 @@ describe('research.routes', () => {
       jest.doMock('src/pages/Research/Content/EditUpdate/index.tsx', () => ({
         // eslint-disable-next-line @typescript-eslint/naming-convention
         __esModule: true,
-        default() {
-          return <div>Edit update within research</div>
-        },
+        default: () => <div>Edit update within research</div>,
       }))
 
       const wrapper = render(

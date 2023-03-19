@@ -6,7 +6,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import type { RootStore } from '..'
 import { HowtoStore } from './howto.store'
 
-async function factory(howtoOverloads: Partial<IHowtoDB> = {}) {
+const factory = async (howtoOverloads: Partial<IHowtoDB> = {}) => {
   const store = new HowtoStore({} as RootStore)
   const howToItem = FactoryHowto(howtoOverloads)
 

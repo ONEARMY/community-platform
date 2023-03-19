@@ -1,6 +1,6 @@
 import type { IUser } from 'src/models/user.models'
 
-export function getUserCountry(user: IUser) {
+export const getUserCountry = (user: IUser) => {
   const userCountry =
     user.country?.toLowerCase() ||
     user.location?.countryCode?.toLowerCase() ||

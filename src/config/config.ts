@@ -25,7 +25,7 @@ import type { UserRole } from '../models'
  * @param fallbackValue - optional fallback value
  * @returns string
  */
-function _c(property: ConfigurationOption, fallbackValue?: string): string {
+const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
   const configurationSource = ['development', 'test'].includes(
     process.env.NODE_ENV,
   )
@@ -43,7 +43,7 @@ export const getConfigurationOption = _c
 // On dev sites user can override default role
 const devSiteRole: UserRole = localStorage.getItem('devSiteRole') as UserRole
 
-function getSiteVariant(): siteVariants {
+const getSiteVariant = (): siteVariants => {
   const devSiteVariant: siteVariants = localStorage.getItem(
     'devSiteVariant',
   ) as any

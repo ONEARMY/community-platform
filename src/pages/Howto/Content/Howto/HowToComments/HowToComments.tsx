@@ -16,7 +16,7 @@ export const HowToComments = ({ comments }: IProps) => {
   const [comment, setComment] = useState('')
   const { stores } = useCommonStores()
 
-  async function onSubmit(comment: string) {
+  const onSubmit = async (comment: string) => {
     try {
       const howto = stores.howtoStore.activeHowto
       await stores.howtoStore.addComment(comment)
@@ -49,7 +49,7 @@ export const HowToComments = ({ comments }: IProps) => {
     }
   }
 
-  async function handleEditRequest() {
+  const handleEditRequest = async () => {
     ReactGA.event({
       category: 'Comments',
       action: 'Edit existing comment',
@@ -57,7 +57,7 @@ export const HowToComments = ({ comments }: IProps) => {
     })
   }
 
-  async function handleDelete(_id: string) {
+  const handleDelete = async (_id: string) => {
     const confirmation = window.confirm(
       'Are you sure you want to delete this comment?',
     )
@@ -79,7 +79,7 @@ export const HowToComments = ({ comments }: IProps) => {
     }
   }
 
-  async function handleEdit(_id: string, comment: string) {
+  const handleEdit = async (_id: string, comment: string) => {
     ReactGA.event({
       category: 'Comments',
       action: 'Update',

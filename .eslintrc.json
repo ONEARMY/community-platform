@@ -41,7 +41,7 @@
     "import/no-named-as-default": "off",
     "max-classes-per-file": "error",
     "no-useless-escape": "off",
-    "react/display-name": "warn",
+    "react/display-name": "error",
     "react/jsx-no-target-blank": "warn",
     // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
     "react/no-deprecated": "warn",

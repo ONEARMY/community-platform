@@ -1,6 +1,7 @@
 import { Box, Text } from 'theme-ui'
 import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
+import { logger } from '../../../logger'
 import Table from '../components/Table/Table'
 import type {
   ITableProps,
@@ -91,7 +92,7 @@ const AdminUsers = observer(() => {
       const index = Fuse.createIndex(fuseOptions.keys, usersdata)
       fuse.setCollection(usersdata, index)
     } catch (error) {
-      console.log({ error })
+      logger.info({ error })
     }
     setLoading(false)
   }

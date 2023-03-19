@@ -9,6 +9,7 @@ import { Box } from 'theme-ui'
 
 import './styles.css'
 
+import { logger } from '../../logger'
 import type { ILatLng } from 'src/models/maps.models'
 import { GetLocation } from 'src/utils/geolocation'
 import type { Map } from 'react-leaflet'
@@ -68,7 +69,7 @@ class MapsPage extends React.Component<IProps, IState> {
         lng: position.coords.longitude,
       })
     } catch (error) {
-      console.error(error)
+      logger.error(error)
       // do nothing if location cannot be retrieved
     }
   }

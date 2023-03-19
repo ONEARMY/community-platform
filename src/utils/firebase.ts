@@ -5,6 +5,7 @@ import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
 import { FIREBASE_CONFIG, SITE } from '../config/config'
+import { logger } from '../logger'
 // initialise with config settings, additional firestore config to support future changes
 
 firebase.initializeApp(FIREBASE_CONFIG)
@@ -18,15 +19,15 @@ const functions = firebase.functions()
 
 // use emulators when running on localhost:4000
 if (SITE === 'emulated_site') {
-  console.log(`Connecting to emulated services:`)
+  logger.debug(`Connecting to emulated services:`)
   firestore.useEmulator('localhost', 4003)
-  console.log(`Connecting rtdb on port `, 4006)
+  logger.debug(`Connecting rtdb on port `, 4006)
   rtdb.useEmulator('localhost', 4006)
-  console.log(`Connecting storage on port `, 4007)
+  logger.debug(`Connecting storage on port `, 4007)
   storage.useEmulator('localhost', 4007)
-  console.log(`Connecting auth on port `, 4005)
+  logger.debug(`Connecting auth on port `, 4005)
   auth.useEmulator(`http://localhost:4005`)
-  console.log(`Connecting functions on port `, 4002)
+  logger.debug(`Connecting functions on port `, 4002)
   functions.useEmulator('localhost', 4002)
 }
 

@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/react'
+import { logger } from '../../logger'
 import { SENTRY_CONFIG } from '../../config/config'
 
 export const initErrorHandler = () => {
@@ -7,7 +8,7 @@ export const initErrorHandler = () => {
     location.search.indexOf('noSentry=true') !== -1 ||
     location.hostname === 'localhost'
   ) {
-    console.log('No error handler for this environment')
+    logger.info('No error handler for this environment')
     return
   }
 

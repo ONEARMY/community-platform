@@ -381,7 +381,7 @@ export class UserStore extends ModuleStore {
         //TODO: ensure current user is updated
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }

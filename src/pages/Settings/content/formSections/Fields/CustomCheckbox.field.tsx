@@ -69,7 +69,20 @@ class CustomCheckbox extends Component<IProps, IState> {
     return (
       <Label
         htmlFor={value}
-        sx={{ width: ['inherit', 'inherit', '100%'] }}
+        sx={{
+          width: ['inherit', 'inherit', '100%'],
+          borderRadius: 1,
+          py: 2,
+          border: '1px solid transparent',
+          cursor: 'pointer',
+          ':hover': {
+            backgroundColor: 'background',
+          },
+          '&.selected': {
+            backgroundColor: 'background',
+            borderColor: 'green',
+          },
+        }}
         className={classNames.join(' ')}
         data-cy={dataCy}
       >

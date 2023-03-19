@@ -73,22 +73,20 @@ class CustomRadioField extends Component<IProps, IState> {
     return (
       <Label
         sx={{
-          //TODO: Remove hardcoded theme values
           alignItems: 'center',
           width: '100%',
           display: 'flex',
-          padding: '10px',
           flexDirection: 'column',
-          p: '10px 0',
-          borderRadius: '5px',
-          border: `#f4f6f7`, // theme.colors.background
+          py: 2,
+          borderRadius: 1,
+          border: '1px solid transparent',
           ':hover': {
-            backgroundColor: `#f4f6f7`, // theme.colors.background
+            backgroundColor: 'background',
             cursor: 'pointer',
           },
           '&.selected': {
-            backgroundColor: `#f4f6f7`, // theme.colors.background
-            border: '1px solid ' + `#00c3a9`, // theme.colors.green
+            backgroundColor: 'background',
+            borderColor: 'green',
           },
         }}
         htmlFor={value}

@@ -152,11 +152,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserBadge(userId: string, badges: IUserBadges) {
-    console.log(`updateUserBadge`, badges)
     const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(userId)
-
-    console.log(`updateUserBadge.before:`, toJS(await dbRef.get('server')))
-
     await this.db
       .collection(COLLECTION_NAME)
       .doc(userId)
@@ -177,7 +173,6 @@ export class UserStore extends ModuleStore {
     adminEditableUserId?: string,
   ) {
     this.setUpdateStaus('Start')
-    console.log(`updateUserProfile`, { values })
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
@@ -210,7 +205,6 @@ export class UserStore extends ModuleStore {
     }
 
     // update on db and update locally (if targeting self as user)
-    console.log(`updateUserProfile.doc.set`, { updatedUserProfile })
     await this.db
       .collection(COLLECTION_NAME)
       .doc(updatedUserProfile.userName)

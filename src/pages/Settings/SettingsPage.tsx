@@ -117,17 +117,16 @@ export class SettingsPage extends React.Component<IProps, IState> {
     })
     // Submit, show notification update and return any errors to form
     try {
-      console.debug({ profile: vals }, 'SettingsPage.saveProfile')
+      logger.debug({ profile: vals }, 'SettingsPage.saveProfile')
       const { adminEditableUserId } = this.props
       await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
-      // throw new Error('I hate you');
-      console.log(`before setState`)
+      logger.debug(`before setState`)
       this.setState(
         {
           notification: { message: 'Profile Saved', icon: 'check', show: true },
         },
         () => {
-          console.log(`After setState`, this.state.notification)
+          logger.debug(`After setState`, this.state.notification)
         },
       )
       return {}

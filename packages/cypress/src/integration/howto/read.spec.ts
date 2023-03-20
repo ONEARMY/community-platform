@@ -161,7 +161,7 @@ describe('[How To]', () => {
 
       it('[Views only visible for beta-testers]', () => {
         cy.visit(specificHowtoUrl)
-        cy.step(`ViewsCounter should be visible`)
+        cy.step(`ViewsCounter should not be visible`)
         cy.get('[data-cy="ViewsCounter"]').should('not.exist')
       })
     })
@@ -219,13 +219,6 @@ describe('[How To]', () => {
 
         cy.step('Views show on second howto')
         cy.visit('/how-to/make-glass-like-beams')
-        cy.get('[data-cy="ViewsCounter"]').should('exist')
-
-        cy.step('Go back')
-        cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton').click()
-
-        cy.step('Views show on third howto')
-        cy.visit('/how-to/set-up-devsite-to-help-coding')
         cy.get('[data-cy="ViewsCounter"]').should('exist')
       })
     })

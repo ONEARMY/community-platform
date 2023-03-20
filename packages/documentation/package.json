@@ -2,23 +2,28 @@
   "name": "oa-docs",
   "version": "1.0.0",
   "private": true,
-  "__NOTE__:": "avoid hoisting in case of react/webpack conflicts",
+  "__NOTE__:": "avoid hoisting for webpack and other conflicts",
+  "installConfig": {
+    "hoistingLimits": "workspaces"
+  },
   "scripts": {
-    "docusaurus": "docusaurus",
-    "start": "docusaurus start --port 3001",
-    "build": "docusaurus build",
+    "start": "env-cmd -r ../../.env-cmdrc.js -e webpack yarn docusaurus start --port 3001",
+    "build": "env-cmd -r ../../.env-cmdrc.js -e webpack yarn docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "serve": "docusaurus serve",
     "clear": "docusaurus clear"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.18",
-    "@docusaurus/preset-classic": "2.0.0-beta.18",
+    "@docusaurus/core": "2.3.1",
+    "@docusaurus/preset-classic": "2.3.1",
     "@mdx-js/react": "^1.6.22",
-    "clsx": "^1.1.1",
+    "clsx": "^1.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
   },
   "browserslist": {
     "production": [

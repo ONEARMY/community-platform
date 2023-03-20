@@ -46,7 +46,7 @@ module.exports = {
           items: [
             {
               label: 'Discord',
-              href: 'https://discord.gg/up3nBbEbxY',
+              href: 'https://discord.gg/gJ7Yyk4',
             },
           ],
         },
@@ -75,12 +75,6 @@ module.exports = {
           editUrl:
             'https://github.com/ONEARMY/community-platform/edit/master/packages/documentation',
         },
-        // blog: {
-        //   showReadingTime: true,
-        //   // Please change this to your repo.
-        //   editUrl:
-        //     'https://github.com/facebook/docusaurus/edit/master/website/blog/',
-        // },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },

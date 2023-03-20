@@ -6,6 +6,7 @@ import { ThemeProvider } from '@theme-ui/core'
 import { render, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { Provider } from 'mobx-react'
+import type { ResearchStore } from 'src/stores/Research/research.store'
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -29,23 +30,31 @@ jest.mock('src/index', () => ({
   },
 }))
 
-const mockResearchStore: any = {
-  filteredResearches: [],
-  setActiveResearchItem: jest.fn(),
-  needsModeration: jest.fn().mockResolvedValue(true),
-  activeResearchItem: {
+/** When mocking research routes replace default store methods with below */
+class mockResearchStoreClass implements Partial<ResearchStore> {
+  setActiveResearchItem = jest.fn()
+  needsModeration = jest.fn().mockResolvedValue(true)
+  incrementViewCount = jest.fn()
+  activeResearchItem = {
     title: 'Research article title',
     updates: [],
     _createdBy: 'jasper',
-  },
-  researchUploadStatus: {},
-  updateUploadStatus: {},
-  activeUser: {
-    name: 'Jaasper',
-    userName: 'jasper',
-    userRoles: ['admin'],
-  },
+  } as any
+  researchUploadStatus = {} as any
+  updateUploadStatus = {} as any
+
+  get activeUser() {
+    return {
+      name: 'Jaasper',
+      userName: 'jasper',
+      userRoles: ['admin'],
+    } as any
+  }
+  get filteredResearches() {
+    return []
+  }
 }
+const mockResearchStore = new mockResearchStoreClass()
 
 jest.mock('src/stores/Research/research.store', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -70,7 +79,10 @@ describe('research.routes', () => {
         </Provider>,
       )
       await waitFor(
-        () => expect(wrapper.getByText(/Research topic/)).toBeInTheDocument(),
+        () =>
+          expect(
+            wrapper.getByText(/Help out with Research & Development/),
+          ).toBeInTheDocument(),
         {
           timeout: 2000,
         },

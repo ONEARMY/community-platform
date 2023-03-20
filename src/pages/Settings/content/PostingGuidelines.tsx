@@ -1,6 +1,7 @@
 import { Heading, Card, Flex, Text } from 'theme-ui'
 import { ExternalLink } from 'oa-components'
 import { useTheme } from '@emotion/react'
+import { DISCORD_INVITE_URL } from 'src/constants'
 
 export const ProfileGuidelines = () => {
   const theme = useTheme()
@@ -29,9 +30,7 @@ export const ProfileGuidelines = () => {
         </Text>
         <Text sx={{ ...theme.typography.auxiliary }} mb={1}>
           5. If something doesn't work,{' '}
-          <ExternalLink href="https://discord.com/invite/SSBrzeR">
-            let us know.
-          </ExternalLink>
+          <ExternalLink href={DISCORD_INVITE_URL}>let us know.</ExternalLink>
         </Text>
       </Flex>
     </Card>

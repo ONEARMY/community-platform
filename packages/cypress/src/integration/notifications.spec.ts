@@ -10,7 +10,7 @@ describe('[Notifications]', () => {
     cy.visit('how-to')
     cy.login('event_reader@test.com', 'test1234')
     cy.visit('/how-to/testing-testing')
-    cy.get('[data-cy="vote-useful"]').contains('Useful').click()
+    cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.step('Verify the notification has not been added')
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
@@ -24,14 +24,14 @@ describe('[Notifications]', () => {
     cy.visit('how-to')
     cy.login('howto_reader@test.com', 'test1234')
     cy.visit('/how-to/testing-testing')
-    cy.get('[data-cy="vote-useful"]').contains('Useful').click()
+    cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.wait(DB_WAIT_TIME)
     cy.step('Verify the notification has been added')
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const user = docs[1]
-        let notifications = user['notifications']
+        const notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('howto_useful')
         expect(notifications[0]['relevantUrl']).to.equal(
@@ -49,14 +49,14 @@ describe('[Notifications]', () => {
     cy.visit('research')
     cy.login('howto_reader@test.com', 'test1234')
     cy.visit('/research/qwerty')
-    cy.get('[data-cy="vote-useful"]').contains('Useful').click()
+    cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.wait(DB_WAIT_TIME)
     cy.step('Verify the notification has been added')
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const user = docs[1]
-        let notifications = user['notifications']
+        const notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('research_useful')
         expect(notifications[0]['relevantUrl']).to.equal('/research/qwerty')
@@ -80,7 +80,7 @@ describe('[Notifications]', () => {
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const user = docs[1]
-        let notifications = user['notifications']
+        const notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('new_comment')
         expect(notifications[0]['relevantUrl']).to.equal(
@@ -107,7 +107,7 @@ describe('[Notifications]', () => {
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const user = docs[1]
-        let notifications = user['notifications']
+        const notifications = user['notifications']
         expect(notifications.length).to.equal(1)
         expect(notifications[0]['type']).to.equal('new_comment_research')
         expect(notifications[0]['relevantUrl']).to.equal(
@@ -128,8 +128,7 @@ describe('[Notifications]', () => {
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
-    const notifications = cy.get('[data-cy="notification"]')
-    expect(notifications).to.exist
+    expect(cy.get('[data-cy="notification"]')).to.exist
   })
 
   it('[notifications modal is closed when clicking on the notifications icon for the second time or clicking on the header]', () => {
@@ -139,21 +138,18 @@ describe('[Notifications]', () => {
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
-    let notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
-    expect(notificationsModal).to.exist
+    expect(cy.get('[data-cy="notifications-modal-desktop"]')).to.exist
     //click on the notifications button again
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
-    notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
-    notificationsModal.should('not.exist')
+    cy.get('[data-cy="notifications-modal-desktop"]').should('not.exist')
     //click within the header area
     cy.get(
       '[data-cy="notifications-desktop"] [data-cy="toggle-notifications-modal"]',
     ).click()
     cy.get('[data-cy="header"]').click()
-    notificationsModal = cy.get('[data-cy="notifications-modal-desktop"]')
-    notificationsModal.should('not.exist')
+    cy.get('[data-cy="notifications-modal-desktop"]').should('not.exist')
   })
 
   it('[are marked read when clicking on clear button]', () => {
@@ -177,7 +173,6 @@ describe('[Notifications]', () => {
         })
       },
     )
-    const noNotificationsText = 'Nada, no new notifications'
     cy.get('[data-cy="NotificationList: empty state"]').should('exist')
   })
 })

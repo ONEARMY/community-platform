@@ -50,6 +50,9 @@ async function factory(howtoOverloads: Partial<IHowtoDB> = {}) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    getFn: store.db.get,
   }
 }
 
@@ -391,6 +394,51 @@ describe('howto.store', () => {
         expect(newHowto.comments).toHaveLength(1)
         expect(newHowto.comments[0].text).toBe('@@{userId:username}')
       })
+    })
+  })
+
+  describe('unsetActiveHowTo', () => {
+    it('removes state from activeHowto property', async () => {
+      const { store } = await factory()
+
+      await store.removeActiveHowto()
+
+      expect(store.activeHowto).toBe(null)
+    })
+  })
+
+  describe('incrementDownloadCount', () => {
+    it('increments download count by one', async () => {
+      const { store, howToItem, setFn } = await factory()
+
+      const downloads = howToItem.total_downloads!
+      // Act
+      const updatedDownloads = await store.incrementDownloadCount(howToItem._id)
+
+      expect(setFn).toBeCalledTimes(1)
+      expect(updatedDownloads).toBe(downloads + 1)
+    })
+  })
+
+  describe('incrementViews', () => {
+    it('data fetched from server db', async () => {
+      const { store, howToItem, getFn } = await factory()
+
+      // Act
+      await store.incrementViewCount(howToItem._id)
+
+      expect(getFn).toBeCalledTimes(1)
+      expect(getFn).toHaveBeenCalledWith('server')
+    })
+    it('increments views by one', async () => {
+      const { store, howToItem, setFn } = await factory()
+
+      const views = howToItem.total_views!
+      // Act
+      const updatedViews = await store.incrementViewCount(howToItem._id)
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(updatedViews).toBe(views + 1)
     })
   })
 })

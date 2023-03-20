@@ -54,7 +54,7 @@ const userRoleFilters: UserRole[] = [
   'super-admin',
 ]
 
-const badgeFilters: (keyof IUserBadges)[] = ['verified']
+const badgeFilters: (keyof IUserBadges)[] = ['verified', 'supporter']
 
 const AdminUsers = observer(() => {
   const { stores } = useCommonStores()

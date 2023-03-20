@@ -1,7 +1,7 @@
 node_modules
 functions
 build
-cypress
 lib
 storybook-static
 dist
+shared/lib

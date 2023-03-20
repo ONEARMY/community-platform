@@ -22,6 +22,10 @@ All of the current themes can be within `src/themes/`, currently there are 3 ava
 - Project Kamp
 - Fixing Fashion
 
+:::note
+Make sure .SVG images are optimised before adding them to the repository. This is a good tool to use https://jakearchibald.github.io/svgomg/
+:::
+
 ## Components
 
 You can find all the basic stateless components in `src/packages/components`, there are more information available within the [README for this package](https://github.com/ONEARMY/community-platform/tree/master/packages/components)

@@ -42,4 +42,4 @@ This documentation site for Community Platform is aimed at technical users, but 
 
 ## Discord
 
-This is where new design begins for Community Platform. We host beta testing and design feedback channels on [Discord](https://discord.com/channels/586676777334865928/949339971792306206) that are the source of a lot of improvements to the platform.
+This is where new design begins for Community Platform. We host beta testing and design feedback channels on [Discord](https://discord.gg/gJ7Yyk4) that are the source of a lot of improvements to the platform.

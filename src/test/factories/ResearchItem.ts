@@ -34,5 +34,6 @@ export const FactoryResearchItem = (
     'accepted',
   ]),
   mentions: [],
+  total_views: faker.datatype.number(),
   ...researchItemOverloads,
 })

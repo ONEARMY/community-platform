@@ -221,8 +221,11 @@ export class OpeningHoursPicker extends Component<IProps, IState> {
           variant={'outline'}
           data-cy={`delete-opening-time-${index}-desk`}
           sx={{ height: '40px', display: ['none', 'none', 'block'] }}
+          showIconOnly={true}
           onClick={() => this.toggleDeleteModal()}
-        />
+        >
+          Delete
+        </Button>
         <Modal
           onDidDismiss={() => this.toggleDeleteModal()}
           isOpen={this.state.showDeleteModal}

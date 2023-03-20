@@ -39,7 +39,7 @@ const HOWTO_SEARCH_WEIGHTS = [
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
   @observable
-  public activeHowto: IHowtoDB | undefined
+  public activeHowto: IHowtoDB | null
   @observable
   public allHowtos: IHowtoDB[]
   @observable
@@ -103,20 +103,25 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
+  public removeActiveHowto() {
+    this.activeHowto = null
+  }
+
+  @action
   public async setActiveHowtoBySlug(slug: string) {
     // clear any cached data and then load the new howto
     logger.debug(`setActiveHowtoBySlug:`, { slug })
 
     if (!slug) {
-      this.activeHowto = undefined
+      this.activeHowto = null
     }
 
-    let activeHowto: IHowtoDB | undefined = undefined
+    let activeHowto: IHowtoDB | null = null
 
     const collection = await this.db
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
-    activeHowto = collection.length > 0 ? collection[0] : undefined
+    activeHowto = collection.length > 0 ? collection[0] : null
     logger.debug('active howto', activeHowto)
 
     // try previous slugs if slug is not recognized as primary
@@ -125,7 +130,7 @@ export class HowtoStore extends ModuleStore {
         .collection<IHowto>(COLLECTION_NAME)
         .getWhere('previousSlugs', 'array-contains', slug)
 
-      activeHowto = collection.length > 0 ? collection[0] : undefined
+      activeHowto = collection.length > 0 ? collection[0] : null
     }
 
     // Change all UserReferences to mentions
@@ -176,7 +181,7 @@ export class HowtoStore extends ModuleStore {
 
   public async incrementDownloadCount(howToID: string) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
-    const howToData = await toJS(dbRef.get())
+    const howToData = await toJS(dbRef.get('server'))
     const totalDownloads = howToData?.total_downloads || 0
 
     if (howToData) {
@@ -185,7 +190,7 @@ export class HowtoStore extends ModuleStore {
         total_downloads: totalDownloads! + 1,
       }
 
-      dbRef.set(
+      await dbRef.set(
         {
           ...updatedHowto,
         },
@@ -198,7 +203,7 @@ export class HowtoStore extends ModuleStore {
 
   public async incrementViewCount(howToID: string) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
-    const howToData = await toJS(dbRef.get())
+    const howToData = await toJS(dbRef.get('server'))
     const totalViews = howToData?.total_views || 0
 
     if (howToData) {
@@ -207,7 +212,7 @@ export class HowtoStore extends ModuleStore {
         total_views: totalViews! + 1,
       }
 
-      dbRef.set(
+      await dbRef.set(
         {
           ...updatedHowto,
         },
@@ -387,7 +392,8 @@ export class HowtoStore extends ModuleStore {
       }
     })
 
-    return await dbRef.get()
+    const $doc = await dbRef.get()
+    return $doc ? $doc : null
   }
 
   @action

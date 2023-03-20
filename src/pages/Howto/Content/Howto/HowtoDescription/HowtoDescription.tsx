@@ -37,6 +37,7 @@ import {
   addIDToSessionStorageArray,
 } from 'src/utils/sessionStorage'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { isUserVerified } from 'src/common/isUserVerified'
 
 const iconFlexDirection =
   emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
@@ -52,11 +53,13 @@ interface IProps {
   onUsefulClick: () => void
 }
 
+let didInit = false
+
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
-  const [viewCount, setViewCount] = useState(howto.total_views)
+  const [viewCount, setViewCount] = useState<number | undefined>()
   const { stores } = useCommonStores()
 
   const incrementDownloadCount = async () => {
@@ -73,8 +76,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       const updatedViewCount = await stores.howtoStore.incrementViewCount(
         howto._id,
       )
-      addIDToSessionStorageArray('howto', howto._id)
       setViewCount(updatedViewCount)
+      addIDToSessionStorageArray('howto', howto._id)
+    } else {
+      setViewCount(howto.total_views)
     }
   }
 
@@ -104,7 +109,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   useEffect(() => {
-    incrementViewCount()
+    if (!didInit) {
+      didInit = true
+      incrementViewCount()
+    }
   }, [howto._id])
 
   return (
@@ -162,11 +170,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               />
             </Box>
           )}
-          <AuthWrapper roleRequired="beta-tester">
-            <Box>
-              <ViewsCounter viewsCount={viewCount!} />
-            </Box>
-          </AuthWrapper>
+          {viewCount ? (
+            <AuthWrapper roleRequired="beta-tester">
+              <Box>
+                <ViewsCounter viewsCount={viewCount!} />
+              </Box>
+            </AuthWrapper>
+          ) : null}
           {/* Check if pin should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>
@@ -200,8 +210,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               userName: howto._createdBy,
               countryCode: howto.creatorCountry,
             }}
-            isVerified={false}
-            // isVerified={isUserVerified(howto._createdBy)}
+            isVerified={isUserVerified(howto._createdBy)}
           />
           <Text
             sx={{
@@ -232,7 +241,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               mr="2"
               mb="2"
             />
-            {howto.steps.length} steps
+            {howto.steps.length === 1
+              ? `${howto.steps.length} step`
+              : `${howto.steps.length} steps`}
           </Flex>
           <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
             <Image

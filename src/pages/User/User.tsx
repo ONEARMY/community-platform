@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
 import { UserPage } from './content'
 import { NotFoundPage } from '../NotFound/NotFound'
-import { UserSettings } from '../Settings/SettingsPage'
+import { UserSettings } from '../Settings/UserSettings'
 import { AuthRoute } from '../common/AuthRoute'
 
 interface IProps {

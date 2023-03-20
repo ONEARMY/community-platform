@@ -4,17 +4,21 @@ import type { INotification } from 'src/models'
 import { Box } from 'theme-ui'
 
 export function getFormattedNotificationMessage(notification: INotification) {
+  // Some legacy notifications to not have trigger, workaround until data cleaned and caches updated
+  const triggeredBy = notification.triggeredBy || {
+    displayName: 'Anonymous',
+    userId: '',
+  }
+  const relevantUrl = notification.relevantUrl || ''
   switch (notification.type) {
     case 'new_comment':
       return (
         <Box>
           New comment on your
-          <InternalLink to={notification.relevantUrl || ''}>
-            how-to
-          </InternalLink>
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
           by
-          <InternalLink to={'/u/' + notification.triggeredBy.userId}>
-            {notification.triggeredBy.displayName}
+          <InternalLink to={'/u/' + triggeredBy.userId}>
+            {triggeredBy.displayName}
           </InternalLink>
         </Box>
       )
@@ -22,12 +26,10 @@ export function getFormattedNotificationMessage(notification: INotification) {
       return (
         <Box>
           You were mentioned in a
-          <InternalLink to={notification.relevantUrl || ''}>
-            how-to
-          </InternalLink>
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
           by
-          <InternalLink to={'/u/' + notification.triggeredBy.userId}>
-            {notification.triggeredBy.displayName}
+          <InternalLink to={'/u/' + triggeredBy.userId}>
+            {triggeredBy.displayName}
           </InternalLink>
         </Box>
       )
@@ -35,13 +37,11 @@ export function getFormattedNotificationMessage(notification: INotification) {
       return (
         <Box>
           Yay,
-          <InternalLink to={'/u/' + notification.triggeredBy.userId}>
-            {notification.triggeredBy.displayName}
+          <InternalLink to={'/u/' + triggeredBy.userId}>
+            {triggeredBy.displayName}
           </InternalLink>
           found your
-          <InternalLink to={notification.relevantUrl || ''}>
-            how-to
-          </InternalLink>
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
           useful
         </Box>
       )
@@ -49,13 +49,11 @@ export function getFormattedNotificationMessage(notification: INotification) {
       return (
         <Box>
           Yay,
-          <InternalLink to={'/u/' + notification.triggeredBy.userId}>
-            {notification.triggeredBy.displayName}
+          <InternalLink to={'/u/' + triggeredBy.userId}>
+            {triggeredBy.displayName}
           </InternalLink>
           found your
-          <InternalLink to={notification.relevantUrl || ''}>
-            research
-          </InternalLink>
+          <InternalLink to={relevantUrl}>research</InternalLink>
           useful
         </Box>
       )
@@ -63,12 +61,10 @@ export function getFormattedNotificationMessage(notification: INotification) {
       return (
         <Box>
           You were mentioned in a
-          <InternalLink to={notification.relevantUrl || ''}>
-            research article
-          </InternalLink>
+          <InternalLink to={relevantUrl}>research article</InternalLink>
           by
-          <InternalLink to={'/u/' + notification.triggeredBy.userId}>
-            {notification.triggeredBy.displayName}
+          <InternalLink to={'/u/' + triggeredBy.userId}>
+            {triggeredBy.displayName}
           </InternalLink>
         </Box>
       )
@@ -76,12 +72,10 @@ export function getFormattedNotificationMessage(notification: INotification) {
       return (
         <Box>
           New comment on your
-          <InternalLink to={notification.relevantUrl || ''}>
-            research
-          </InternalLink>
+          <InternalLink to={relevantUrl}>research</InternalLink>
           by
-          <InternalLink to={'/u/' + notification.triggeredBy.userId}>
-            {notification.triggeredBy.displayName}
+          <InternalLink to={'/u/' + triggeredBy.userId}>
+            {triggeredBy.displayName}
           </InternalLink>
         </Box>
       )

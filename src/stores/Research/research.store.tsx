@@ -148,7 +148,7 @@ export class ResearchStore extends ModuleStore {
 
   public async incrementViewCount(id: string) {
     const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
-    const researchData = await toJS(dbRef.get())
+    const researchData = await toJS(dbRef.get('server'))
     const totalViews = researchData?.total_views || 0
 
     if (researchData) {
@@ -157,7 +157,7 @@ export class ResearchStore extends ModuleStore {
         total_views: totalViews! + 1,
       }
 
-      dbRef.set(
+      await dbRef.set(
         {
           ...updatedResearch,
         },

@@ -7,19 +7,23 @@ on:
     # Only run action if changes have been made
     # to the documentation or components packages
     paths:
-      - "packages/documentation/**"
-      - "packages/components/**"
+      - 'packages/documentation/**'
+      - 'packages/components/**'
+      - '.github/workflows/docs-deploy.yml'
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.13.0'
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
         # Setup yarn 2 cache: https://github.com/actions/cache/blob/main/examples.md#node---yarn
       - name: Setup Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}

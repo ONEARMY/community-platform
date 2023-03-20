@@ -53,6 +53,7 @@ export const Username = (props: Props) => {
             <FlagIconHowTos code={props.user.countryCode.toLowerCase()} />
           ) : (
             <Flex
+              data-testid="Username: unknown flag"
               sx={{
                 backgroundImage: `url(${flagUnknownSVG})`,
                 backgroundSize: 'cover',

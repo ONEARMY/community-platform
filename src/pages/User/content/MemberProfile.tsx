@@ -2,10 +2,9 @@ import 'src/assets/css/slick.min.css'
 import type { IUserPP } from 'src/models/user_pp.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
-import { Box, Image, Text, Flex, Heading, Card } from 'theme-ui'
+import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { MemberBadge, Username } from 'oa-components'
-import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
@@ -110,20 +109,7 @@ export const MemberProfile = ({ user }: IProps) => {
               {user.displayName}
             </Heading>
           </Box>
-          {user.about && (
-            <Text
-              mt="0"
-              mb="20px"
-              color={theme.colors.grey}
-              sx={{
-                ...theme.typography.paragraph,
-                whiteSpace: 'pre-line',
-                width: ['80%', '100%'],
-              }}
-            >
-              {user.about}
-            </Text>
-          )}
+          {user.about && <Paragraph>{user.about}</Paragraph>}
           <UserContactAndLinks links={userLinks} />
           <Box mt={3}>
             <UserAdmin user={user} />

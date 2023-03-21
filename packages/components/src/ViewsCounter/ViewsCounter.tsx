@@ -7,6 +7,7 @@ export interface IProps {
 
 export const ViewsCounter = (props: IProps) => (
   <Flex
+    data-cy={'ViewsCounter'}
     px={2}
     py={1}
     mb={1}

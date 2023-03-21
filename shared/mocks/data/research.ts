@@ -388,4 +388,19 @@ export const research = {
       },
     ],
   },
+  '0up6oJCTT3M9bDYx34Et': {
+    _created: '2023-02-27T22:08:25.999Z',
+    _createdBy: 'test user',
+    _deleted: false,
+    _id: '0up6oJCTT3M9bDYx34Et',
+    _modified: '2023-03-01T19:12:11.271Z',
+    creatorCountry: 'it',
+    description: 'A test!',
+    moderation: 'accepted',
+    slug: 'A test research',
+    tags: {
+      h1wCs0o9j60lkw3AYPB1: true,
+    },
+    title: 'A test research',
+  },
 }

@@ -115,18 +115,13 @@ describe('[How To]', () => {
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
       cy.step('Warn if title is identical with the existing ones')
-      cy.get('[data-cy=intro-title]')
-        .type('Make glass-like beams')
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title]').type('Make glass-like beams').blur()
       cy.contains(
         'Titles must be unique, please try being more specific',
       ).should('exist')
 
       cy.step('Fill up the intro')
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .type('Create a how-to test')
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title').clear().type('Create a how-to test').blur()
       cy.selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
@@ -189,10 +184,7 @@ describe('[How To]', () => {
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .type('Create a how-to test')
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title').clear().type('Create a how-to test').blur()
       cy.get('[data-cy=page-link][href*="/how-to"]')
         .click()
         .then(() => {
@@ -202,7 +194,7 @@ describe('[How To]', () => {
       cy.url().should('match', /\/how-to\/create$/)
 
       cy.step('Clear title input')
-      cy.get('[data-cy=intro-title').clear().blur({ force: true })
+      cy.get('[data-cy=intro-title').clear().blur()
       cy.get('[data-cy=page-link][href*="/how-to"]')
         .click()
         .then(() => {
@@ -304,7 +296,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=edit]').click()
 
       cy.step('Warn if title is identical with the existing ones')
-      cy.get('[data-cy=intro-title]').focus().blur({ force: true })
+      cy.get('[data-cy=intro-title]').focus().blur()
       cy.wait(1000)
       cy.contains(
         'Titles must be unique, please try being more specific',
@@ -313,7 +305,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title]')
         .clear()
         .type('Make glass-like beams')
-        .blur({ force: true })
+        .blur()
       cy.contains(
         'Titles must be unique, please try being more specific',
       ).should('exist')
@@ -327,9 +319,7 @@ describe('[How To]', () => {
 
       cy.step('Update a new cover for the intro')
 
-      cy.get('[data-cy="intro-cover"]')
-        .find('[data-cy="delete-image"]')
-        .click({ force: true })
+      cy.get('[data-cy="intro-cover"]').find('[data-cy="delete-image"]').click()
 
       cy.get('[data-cy="intro-cover"]')
         .find(':file')

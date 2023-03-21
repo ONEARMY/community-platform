@@ -37,6 +37,7 @@
     "format:style": "prettier --write '**/*.{md,json,js,tsx,ts}'",
     "serve": "npx serve -s build",
     "test": "yarn workspace oa-cypress start",
+    "test:components": "yarn workspace oa-components test",
     "test:unit": "env-cmd -e cra craco test --env=jsdom",
     "test:unit:ci": "env-cmd -e cra craco test --env=jsdom --runInBand --logHeapUsage",
     "storybook": "yarn workspace oa-components start",

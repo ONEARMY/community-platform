@@ -4,7 +4,7 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { IUser } from 'src/models/user.models'
-import { UserSettings } from './SettingsPage'
+import { UserSettings } from './UserSettings'
 import { Text, Flex } from 'theme-ui'
 
 interface InjectedProps extends IProps {
@@ -14,7 +14,7 @@ type IProps = RouteComponentProps
 
 @inject('userStore')
 @observer
-class SettingsPage extends React.Component<IProps> {
+class Settings extends React.Component<IProps> {
   get injected() {
     return this.props as InjectedProps
   }
@@ -33,4 +33,4 @@ class SettingsPage extends React.Component<IProps> {
     )
   }
 }
-export default withRouter(SettingsPage)
+export default withRouter(Settings)

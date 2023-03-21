@@ -206,7 +206,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
 
   Cypress.Commands.add('toggleUserMenuOff', () => {
     Cypress.log({ displayName: 'CLOSE_USER_MENU' })
-    cy.get('[data-cy=header]').click({ force: true })
+    cy.get('[data-cy=header]').click()
   })
 
   Cypress.Commands.add('clickMenuItem', (menuItem: UserMenuItem) => {
@@ -221,7 +221,7 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
   })
 
   Cypress.Commands.add('screenClick', () => {
-    cy.get('[data-cy=header]').click({ force: true })
+    cy.get('[data-cy=header]').click()
   })
 
   Cypress.Commands.add(
@@ -229,8 +229,8 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
     (tagName: string, selector = '[data-cy=tag-select]') => {
       cy.log('select tag', tagName)
       cy.get(`${selector} input`)
-        .click({ force: true })
-        .type(tagName, { force: true })
+        .click()
+        .type(tagName)
         .get(`${selector} .data-cy__menu-list`)
         .contains(tagName)
         .click()

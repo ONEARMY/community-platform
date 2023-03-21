@@ -85,13 +85,7 @@
           "camelCase": true,
           "pascalCase": true
         },
-        "ignore": [
-          "docusaurus.config.gh-pages.js",
-          // "ServiceWorkerUpdateNotification.tsx",
-          // "react-app-env.d.ts",
-          "react-app-env.d.ts",
-          "service-worker.ts"
-        ]
+        "ignore": ["react-app-env.d.ts", "service-worker.ts"]
       }
     ],
     "@typescript-eslint/no-empty-function": "off",

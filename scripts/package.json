@@ -2,8 +2,8 @@
   "name": "oa-scripts",
   "version": "1.0.0",
   "scripts": {
-    "install:clean": "ts-node ./install-clean.ts",
-    "post-cra-build": "ts-node ./post-cra-build.ts"
+    "install:clean": "ts-node ./installClean.ts",
+    "post-cra-build": "ts-node ./postCraBuild.ts"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",

@@ -97,6 +97,7 @@ export const glyphs: IGlyphs = {
   filter: <RiFilter2Fill />,
   view: iconMap.view,
   supporter: iconMap.supporter,
+  'flag-unknown': iconMap.flagUnknown,
 }
 
 export type WrapperProps = IProps & VerticalAlignProps & SpaceProps

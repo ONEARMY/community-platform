@@ -18,7 +18,6 @@ describe('[Research]', () => {
 
   describe('[Read a research article]', () => {
     const researchArticleUrl = '/research/qwerty'
-    const researchArticleUrl2 = 'A%20test%20research'
     beforeEach(() => {
       cy.visit('/research')
     })

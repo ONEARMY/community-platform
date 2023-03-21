@@ -85,15 +85,12 @@
           "camelCase": true,
           "pascalCase": true
         },
-        // TODO - most can be renamed although holding off until after #1501 and #1533 merged
         "ignore": [
           "docusaurus.config.gh-pages.js",
           // "ServiceWorkerUpdateNotification.tsx",
           // "react-app-env.d.ts",
           "react-app-env.d.ts",
-          "service-worker.ts",
-          // "user_pp.mock.tsx",
-          // "user_pp.models.tsx",
+          "service-worker.ts"
         ]
       }
     ],

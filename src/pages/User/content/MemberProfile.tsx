@@ -1,5 +1,5 @@
 import 'src/assets/css/slick.min.css'
-import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
 import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'

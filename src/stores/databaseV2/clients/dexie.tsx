@@ -3,7 +3,7 @@ import Dexie from 'dexie'
 import type {
   DBQueryOptions,
   DBQueryWhereOptions,
-  AbstractDBClient,
+  AbstractDatabaseClient,
 } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 import { DB_ENDPOINTS } from '../endpoints'
@@ -18,7 +18,7 @@ const DB_CACHE_NUMBER = 20230105
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
-export class DexieClient implements AbstractDBClient {
+export class DexieClient implements AbstractDatabaseClient {
   constructor() {
     this._init()
   }

@@ -588,13 +588,11 @@ interface IHowToUploadStatus {
   Complete: boolean
 }
 
-function getInitialUploadStatus(): IHowToUploadStatus {
-  return {
-    Start: false,
-    Cover: false,
-    'Step Images': false,
-    Files: false,
-    Database: false,
-    Complete: false,
-  }
-}
+const getInitialUploadStatus = (): IHowToUploadStatus => ({
+  Start: false,
+  Cover: false,
+  'Step Images': false,
+  Files: false,
+  Database: false,
+  Complete: false,
+})

@@ -3,7 +3,9 @@ import { InternalLink } from 'oa-components'
 import type { INotification } from 'src/models'
 import { Box } from 'theme-ui'
 
-export function getFormattedNotificationMessage(notification: INotification) {
+export const getFormattedNotificationMessage = (
+  notification: INotification,
+) => {
   // Some legacy notifications to not have trigger, workaround until data cleaned and caches updated
   const triggeredBy = notification.triggeredBy || {
     displayName: 'Anonymous',
@@ -85,11 +87,10 @@ export function getFormattedNotificationMessage(notification: INotification) {
   }
 }
 
-export function getFormattedNotifications(
+export const getFormattedNotifications = (
   notificationList: INotification[],
-): UserNotificationList {
-  return notificationList.map((notification) => ({
+): UserNotificationList =>
+  notificationList.map((notification) => ({
     type: notification.type,
     children: getFormattedNotificationMessage(notification),
   }))
-}

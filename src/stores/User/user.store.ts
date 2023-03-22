@@ -423,7 +423,7 @@ interface IUserUpdateStatus {
   Complete: boolean
 }
 
-function getInitialUpdateStatus() {
+const getInitialUpdateStatus = () => {
   const status: IUserUpdateStatus = {
     Start: false,
     Complete: false,

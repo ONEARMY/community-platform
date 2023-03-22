@@ -12,32 +12,30 @@ const IconWrapper = styled(Flex)`
   cursor: pointer;
 `
 
-export function NotificationsIcon({
+export const NotificationsIcon = ({
   onCLick,
   isMobileMenuActive,
   areThereNotifications,
-}) {
-  return (
-    <>
-      <IconWrapper
-        data-cy="toggle-notifications-modal"
-        ml={1}
-        onClick={onCLick}
-        style={
-          isMobileMenuActive
-            ? {
-                backgroundColor: '#e2edf7',
-                borderRadius: '5px',
-              }
-            : {}
-        }
-      >
-        <IconNotifications
-          color={areThereNotifications ? 'orange' : '#bfbfbf'}
-          height="25px"
-          width="25px"
-        />
-      </IconWrapper>
-    </>
-  )
-}
+}) => (
+  <>
+    <IconWrapper
+      data-cy="toggle-notifications-modal"
+      ml={1}
+      onClick={onCLick}
+      style={
+        isMobileMenuActive
+          ? {
+              backgroundColor: '#e2edf7',
+              borderRadius: '5px',
+            }
+          : {}
+      }
+    >
+      <IconNotifications
+        color={areThereNotifications ? 'orange' : '#bfbfbf'}
+        height="25px"
+        width="25px"
+      />
+    </IconWrapper>
+  </>
+)

@@ -39,7 +39,7 @@ export const ResearchComments = ({
   const [viewComments, setViewComments] = useState(!!showComments)
   const { stores } = useCommonStores()
 
-  async function onSubmit(comment: string) {
+  const onSubmit = async (comment: string) => {
     try {
       setLoading(true)
       await researchStore.addComment(comment, update as IResearch.Update)
@@ -65,7 +65,7 @@ export const ResearchComments = ({
     }
   }
 
-  async function handleEditRequest() {
+  const handleEditRequest = async () => {
     ReactGA.event({
       category: 'Comments',
       action: 'Edit existing comment',
@@ -73,7 +73,7 @@ export const ResearchComments = ({
     })
   }
 
-  async function handleDelete(_id: string) {
+  const handleDelete = async (_id: string) => {
     // eslint-disable-next-line no-alert
     const confirmation = window.confirm(
       'Are you sure you want to delete this comment?',
@@ -96,7 +96,7 @@ export const ResearchComments = ({
     }
   }
 
-  async function handleEdit(_id: string, comment: string) {
+  const handleEdit = async (_id: string, comment: string) => {
     ReactGA.event({
       category: 'Comments',
       action: 'Update',

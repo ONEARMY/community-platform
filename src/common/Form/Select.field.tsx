@@ -20,20 +20,16 @@ interface ISelectFieldProps extends FieldProps {
 // therefore the following two functions are used for converting to-from string values and field options
 
 // depending on select type (e.g. multi) and option selected get value
-function getValueFromSelect(
+const getValueFromSelect = (
   v: ISelectOption | ISelectOption[] | null | undefined,
-) {
-  return v ? (Array.isArray(v) ? v.map((el) => el.value) : v.value) : v
-}
+) => (v ? (Array.isArray(v) ? v.map((el) => el.value) : v.value) : v)
 
 // given current values find the relevant select options
-function getValueForSelect(
+const getValueForSelect = (
   opts: ISelectOption[] = [],
   v: string | string[] | null | undefined,
-) {
-  function findVal(optVal: string) {
-    return opts.find((o) => o.value === optVal)
-  }
+) => {
+  const findVal = (optVal: string) => opts.find((o) => o.value === optVal)
   return v
     ? Array.isArray(v)
       ? v.map((optVal) => findVal(optVal) as ISelectOption)

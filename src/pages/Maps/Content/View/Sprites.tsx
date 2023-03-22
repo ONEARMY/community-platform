@@ -54,7 +54,7 @@ export const createMarkerIcon = (pin: IMapPin, currentTheme: PlatformTheme) => {
  * to scale cluster depending on value and ensure fits in icon
  * @param cluster - MarkerCluster passed from creation function
  */
-function getClusterSizes(cluster: MarkerCluster) {
+const getClusterSizes = (cluster: MarkerCluster) => {
   const count = cluster.getChildCount()
   const order = Math.round(count).toString().length
   switch (order) {

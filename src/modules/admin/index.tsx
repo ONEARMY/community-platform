@@ -7,6 +7,16 @@ import { AuthRoute } from 'src/pages/common/AuthRoute'
 
 const moduleName = MODULE.ADMIN
 
+/**
+ * Wraps the research module routing elements with the research module provider
+ */
+const AdminModuleContainer = () => (
+  <AdminStoreV2Context.Provider value={new AdminStoreV2()}>
+    <AdminSubheader />
+    <AuthRoute component={adminRoutes} roleRequired="admin" redirect="/" />
+  </AdminStoreV2Context.Provider>
+)
+
 export const AdminModule: IPageMeta = {
   moduleName,
   path: `/${moduleName}`,
@@ -14,16 +24,4 @@ export const AdminModule: IPageMeta = {
   title: 'Admin',
   description: 'Admin Home Page',
   requiredRole: 'admin',
-}
-
-/**
- * Wraps the research module routing elements with the research module provider
- */
-function AdminModuleContainer() {
-  return (
-    <AdminStoreV2Context.Provider value={new AdminStoreV2()}>
-      <AdminSubheader />
-      <AuthRoute component={adminRoutes} roleRequired="admin" redirect="/" />
-    </AdminStoreV2Context.Provider>
-  )
 }

@@ -1,9 +1,6 @@
-export function transformSpecialistWorkspaceTypeToWorkspace(
+export const transformSpecialistWorkspaceTypeToWorkspace = (
   type: string,
-): string {
-  return ['extrusion', 'injection', 'shredder', 'sheetpress', 'mix'].includes(
-    type,
-  )
+): string =>
+  ['extrusion', 'injection', 'shredder', 'sheetpress', 'mix'].includes(type)
     ? 'workspace'
     : type
-}

@@ -26,7 +26,7 @@ type IProps = RouteComponentProps<{ slug: string }>
 
 const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
 
-function areCommentVisible(updateIndex) {
+const areCommentVisible = (updateIndex) => {
   let showComments = false
 
   if (researchCommentUrlRegex.test(window.location.hash)) {
@@ -211,10 +211,10 @@ const ResearchArticle = observer((props: IProps) => {
   }
 })
 
-function transformToUserComment(
+const transformToUserComment = (
   comments: IComment[],
   loggedInUsername,
-): UserComment[] {
+): UserComment[] => {
   if (!comments) return []
   return comments.map((c) => ({
     ...c,

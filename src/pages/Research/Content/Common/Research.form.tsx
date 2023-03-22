@@ -48,7 +48,7 @@ const Label = styled.label`
   display: block;
 `
 
-const beforeUnload = function (e) {
+const beforeUnload = (e) => {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }

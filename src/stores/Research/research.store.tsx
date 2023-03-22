@@ -675,22 +675,18 @@ export interface IUpdateUploadStatus {
   Complete: boolean
 }
 
-function getInitialUpdateUploadStatus(): IUpdateUploadStatus {
-  return {
-    Start: false,
-    Images: false,
-    Database: false,
-    Complete: false,
-  }
-}
+const getInitialUpdateUploadStatus = (): IUpdateUploadStatus => ({
+  Start: false,
+  Images: false,
+  Database: false,
+  Complete: false,
+})
 
-function getInitialResearchUploadStatus(): IResearchUploadStatus {
-  return {
-    Start: false,
-    Database: false,
-    Complete: false,
-  }
-}
+const getInitialResearchUploadStatus = (): IResearchUploadStatus => ({
+  Start: false,
+  Database: false,
+  Complete: false,
+})
 
 /**
  * Export an empty context object to be shared with components

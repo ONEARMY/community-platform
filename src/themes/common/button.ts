@@ -10,74 +10,72 @@ const BASE_BUTTON = {
   border: '2px solid',
 }
 
-export function getButtons(colors) {
-  return {
-    primary: {
-      ...BASE_BUTTON,
-      color: colors.black,
+export const getButtons = (colors) => ({
+  primary: {
+    ...BASE_BUTTON,
+    color: colors.black,
+    bg: colors.yellow.base,
+    '&:hover': {
+      bg: colors.yellow.hover,
+      cursor: 'pointer',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+    '&[disabled]:hover': {
       bg: colors.yellow.base,
-      '&:hover': {
-        bg: colors.yellow.hover,
-        cursor: 'pointer',
-      },
-      '&[disabled]': {
-        opacity: 0.5,
-        cursor: 'not-allowed',
-      },
-      '&[disabled]:hover': {
-        bg: colors.yellow.base,
-      },
     },
-    secondary: {
-      ...BASE_BUTTON,
-      border: '2px solid ' + colors.black,
-      color: colors.black,
+  },
+  secondary: {
+    ...BASE_BUTTON,
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    bg: colors.softblue,
+    '&:hover': {
+      bg: colors.white,
+      cursor: 'pointer',
+    },
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
       bg: colors.softblue,
-      '&:hover': {
-        bg: colors.white,
-        cursor: 'pointer',
-      },
-      '&[disabled]': {
-        opacity: 0.5,
-      },
-      '&[disabled]:hover': {
-        bg: colors.softblue,
-      },
     },
-    outline: {
-      ...BASE_BUTTON,
-      border: '2px solid ' + colors.black,
-      color: colors.black,
-      backgroundColor: 'transparent',
-      '&:hover': {
-        backgroundColor: colors.softblue,
-        cursor: 'pointer',
-      },
+  },
+  outline: {
+    ...BASE_BUTTON,
+    border: '2px solid ' + colors.black,
+    color: colors.black,
+    backgroundColor: 'transparent',
+    '&:hover': {
+      backgroundColor: colors.softblue,
+      cursor: 'pointer',
     },
-    imageInput: {
-      border: '2px dashed #e0e0e0',
-      color: '#e0e0e0',
-      backgroundColor: 'transparent',
+  },
+  imageInput: {
+    border: '2px dashed #e0e0e0',
+    color: '#e0e0e0',
+    backgroundColor: 'transparent',
+  },
+  subtle: {
+    ...BASE_BUTTON,
+    borderColor: colors.softblue,
+    color: colors.black,
+    bg: colors.softblue,
+    '&:hover': {
+      bg: colors.offwhite,
+      borderColor: colors.offwhite,
+      cursor: 'pointer',
     },
-    subtle: {
-      ...BASE_BUTTON,
-      borderColor: colors.softblue,
-      color: colors.black,
+    '&[disabled]': {
+      opacity: 0.5,
+    },
+    '&[disabled]:hover': {
       bg: colors.softblue,
-      '&:hover': {
-        bg: colors.offwhite,
-        borderColor: colors.offwhite,
-        cursor: 'pointer',
-      },
-      '&[disabled]': {
-        opacity: 0.5,
-      },
-      '&[disabled]:hover': {
-        bg: colors.softblue,
-      },
     },
-  }
-}
+  },
+})
 
 export type ButtonVariants =
   | 'primary'

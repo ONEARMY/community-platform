@@ -7,7 +7,7 @@ import { CustomRadioField } from './Fields/CustomRadio.field'
 import { Field } from 'react-final-form'
 import { useTheme } from '@emotion/react'
 
-function ProfileTypes() {
+const ProfileTypes = () => {
   const theme = useTheme()
   const profileTypes = getSupportedProfileTypes().filter(({ label }) =>
     Object.keys(theme.badges).includes(label),
@@ -62,6 +62,6 @@ function ProfileTypes() {
   )
 }
 
-export function FocusSection() {
-  return <Field name="profileType" render={ProfileTypes} />
-}
+export const FocusSection = () => (
+  <Field name="profileType" render={ProfileTypes} />
+)

@@ -46,7 +46,7 @@ const MemberAndSpace = {
   },
 }
 
-function getProfileTypes(currentTheme?: PlatformTheme) {
+const getProfileTypes = (currentTheme?: PlatformTheme) => {
   const PROFILE_TYPES: IProfileType[] = [
     {
       label: ProfileType.MEMBER,
@@ -107,10 +107,10 @@ function getProfileTypes(currentTheme?: PlatformTheme) {
   return PROFILE_TYPES
 }
 
-export function SupportedProfileTypesFactory(
+export const SupportedProfileTypesFactory = (
   configurationString: string,
   currentTheme?: PlatformTheme,
-) {
+) => {
   const supportedProfileTypes = (configurationString || DEFAULT_PROFILE_TYPES)
     .split(',')
     .map((s) => s.trim())

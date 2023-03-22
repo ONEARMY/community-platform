@@ -18,11 +18,8 @@ const MOCK_DB_META = (id?: string) => {
 }
 
 // generate a random date between start and end
-function randomDate(start: Date, end: Date) {
-  return new Date(
-    start.getTime() + Math.random() * (end.getTime() - start.getTime()),
-  )
-}
+const randomDate = (start: Date, end: Date) =>
+  new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
 
 export const generatePins = (count: number): Array<IMapPin> => {
   const filters = MAP_GROUPINGS

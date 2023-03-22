@@ -21,6 +21,7 @@
     }
   },
   "rules": {
+    "no-alert": "error",
     "sort-class-members/sort-class-members": [
       "error",
       {

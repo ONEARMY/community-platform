@@ -53,12 +53,11 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-let didInit = false
-
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
+  let didInit = false
   const [viewCount, setViewCount] = useState<number | undefined>()
   const { stores } = useCommonStores()
 

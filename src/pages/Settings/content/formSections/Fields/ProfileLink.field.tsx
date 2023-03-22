@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { Field } from 'react-final-form'
 import { Button, FieldInput, Modal } from 'oa-components'
-import { Text, Flex, Grid } from 'theme-ui'
+import { Text, Flex, Grid, Box } from 'theme-ui'
 import { SelectField } from 'src/common/Form/Select.field'
 import { validateUrl, validateEmail, required } from 'src/utils/validators'
 import { formatLink } from 'src/utils/formatters'
@@ -31,7 +31,9 @@ interface IProps {
   initialType?: string
   onDelete: () => void
   'data-cy'?: string
+  isDeleteEnabled: boolean
 }
+
 interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
@@ -74,7 +76,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
   }
 
   render() {
-    const { index, name } = this.props
+    const { index, name, isDeleteEnabled } = this.props
     const DeleteButton = (props) => (
       <Button
         data-cy={`delete-link-${index}`}
@@ -84,20 +86,18 @@ export class ProfileLinkField extends Component<IProps, IState> {
         onClick={() => this.toggleDeleteModal()}
         ml={2}
         {...props}
-      />
+      >
+        Delete
+      </Button>
     )
     return (
-      <Flex
-        my={['10px', '10px', '5px']}
-        sx={{ flexDirection: ['column', 'column', 'row'] }}
-      >
-        <Grid
-          mb={[1, 1, 0]}
-          gap={0}
-          columns={['auto 60px', 'auto 60px', '210px']}
-          sx={{ width: ['100%', '100%', '210px'] }}
-        >
-          <div>
+      <Flex my={[2]} sx={{ flexDirection: ['column', 'column', 'row'] }}>
+        <Grid mb={[1, 1, 0]} gap={0} sx={{ width: ['100%', '100%', '210px'] }}>
+          <Box
+            sx={{
+              mr: 2,
+            }}
+          >
             <Field
               data-cy={`select-link-${index}`}
               name={`${name}.label`}
@@ -107,23 +107,23 @@ export class ProfileLinkField extends Component<IProps, IState> {
               placeholder="type"
               validate={required}
               validateFields={[]}
-              style={{ width: '100%', height: '40px', marginRight: '8px' }}
+              style={{ width: '100%', height: '40px' }}
             />
-          </div>
-          <DeleteButton
-            sx={{
-              display: ['block', 'block', 'none'],
-              height: '40px',
-              width: '50px',
-            }}
-            ml={'2px'}
-          />
+          </Box>
+          {isDeleteEnabled ? (
+            <DeleteButton
+              sx={{
+                display: ['block', 'block', 'none'],
+              }}
+              ml={'2px'}
+            />
+          ) : null}
         </Grid>
         <Grid
           mb={[1, 1, 0]}
           gap={0}
           columns={['auto', 'auto', 'auto']}
-          sx={{ width: ['100%', '100%', 'calc(100% - 270px)'] }}
+          sx={{ width: '100%' }}
         >
           <Field
             data-cy={`input-link-${index}`}
@@ -137,37 +137,40 @@ export class ProfileLinkField extends Component<IProps, IState> {
             style={{ width: '100%', height: '40px', marginBottom: '0px' }}
           />
         </Grid>
-        <DeleteButton
-          sx={{
-            display: ['none', 'none', 'block'],
-            height: '40px',
-            width: '50px',
-          }}
-        />
+        {isDeleteEnabled ? (
+          <DeleteButton
+            sx={{
+              display: ['none', 'none', 'block'],
+            }}
+          />
+        ) : null}
         {
           <Modal
             onDidDismiss={() => this.toggleDeleteModal()}
             isOpen={!!this.state.showDeleteModal}
           >
-            <Text>Are you sure you want to delete this link?</Text>
-            <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
-              <Flex px={1}>
-                <Button
-                  variant={'outline'}
-                  onClick={() => this.toggleDeleteModal()}
-                >
-                  Cancel
-                </Button>
+            <Box data-cy="Link.field: Modal">
+              <Text>Are you sure you want to delete this link?</Text>
+              <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
+                <Flex px={1}>
+                  <Button
+                    variant={'outline'}
+                    onClick={() => this.toggleDeleteModal()}
+                  >
+                    Cancel
+                  </Button>
+                </Flex>
+                <Flex px={1}>
+                  <Button
+                    data-cy="Link.field: Delete"
+                    variant={'outline'}
+                    onClick={() => this.confirmDelete()}
+                  >
+                    Delete
+                  </Button>
+                </Flex>
               </Flex>
-              <Flex px={1}>
-                <Button
-                  variant={'outline'}
-                  onClick={() => this.confirmDelete()}
-                >
-                  Delete
-                </Button>
-              </Flex>
-            </Flex>
+            </Box>
           </Modal>
         }
       </Flex>

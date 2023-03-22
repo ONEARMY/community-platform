@@ -1,4 +1,5 @@
 import loadingSVG from '../../assets/images/loading.svg'
+import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
 import starSVG from '../../assets/icons/icon-star-default.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
 import verifiedSVG from '../../assets/icons/icon-verified-badge.svg'
@@ -12,6 +13,7 @@ const imgStyle = {
 }
 
 export const iconMap = {
+  flagUnknown: <img alt="alt" style={imgStyle} src={flagUnknownSVG} />,
   loading: <img alt="icon" style={imgStyle} src={loadingSVG} />,
   star: <img alt="icon" style={imgStyle} src={starSVG} />,
   starActive: <img alt="icon" style={imgStyle} src={starActiveSVG} />,

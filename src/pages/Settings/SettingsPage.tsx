@@ -26,6 +26,7 @@ import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile/types'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
+import { v4 as uuid } from 'uuid'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -48,7 +49,7 @@ interface IState {
 
 @inject('userStore')
 @observer
-export class UserSettings extends React.Component<IProps, IState> {
+export class SettingsPage extends React.Component<IProps, IState> {
   toggleLocationDropdown = () => {
     this.setState((prevState) => ({
       ...prevState,
@@ -86,7 +87,10 @@ export class UserSettings extends React.Component<IProps, IState> {
       coverImages: new Array(4)
         .fill(null)
         .map((v, i) => (coverImages[i] ? coverImages[i] : v)),
-      links: links.length > 0 ? links : [{} as any],
+      links: (links.length > 0 ? links : [{} as any]).map((i) => ({
+        ...i,
+        key: uuid(),
+      })),
       openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
     }
     this.setState({
@@ -117,22 +121,21 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
     // Submit, show notification update and return any errors to form
     try {
-      console.debug({ profile: vals }, 'UserSettings.saveProfile')
+      logger.debug({ profile: vals }, 'SettingsPage.saveProfile')
       const { adminEditableUserId } = this.props
       await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
-      // throw new Error('I hate you');
-      console.log(`before setState`)
+      logger.debug(`before setState`)
       this.setState(
         {
           notification: { message: 'Profile Saved', icon: 'check', show: true },
         },
         () => {
-          console.log(`After setState`, this.state.notification)
+          logger.debug(`After setState`, this.state.notification)
         },
       )
       return {}
     } catch (error) {
-      logger.warn({ error, profile: vals }, 'UserSettings.saveProfile.error')
+      logger.warn({ error, profile: vals }, 'SettingsPage.saveProfile.error')
       this.setState({
         notification: { message: 'Save Failed', icon: 'close', show: true },
       })

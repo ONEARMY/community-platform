@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Card, Flex, Heading, Box, Text } from 'theme-ui'
-import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'

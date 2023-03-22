@@ -2,7 +2,7 @@ import type { IPageMeta } from 'src/pages/PageList'
 import { AdminStoreV2Context, AdminStoreV2 } from './admin.storeV2'
 import { MODULE } from '..'
 import adminRoutes from './admin.routes'
-import AdminSubheader from './components/admin-subheader'
+import AdminSubheader from './components/AdminSubheader'
 import { AuthRoute } from 'src/pages/common/AuthRoute'
 
 const moduleName = MODULE.ADMIN

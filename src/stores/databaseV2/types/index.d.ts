@@ -4,7 +4,7 @@
  * API items.  On a detail page for a single item, the summary will be
  * shown followed by the remarks section (if any).
  */
-export type { AbstractDBClient } from './DBClient'
+export type { AbstractDatabaseClient } from './DBClient'
 
 /**
  * The `DBClients` consists of separate databases for use online and offline.
@@ -17,9 +17,9 @@ export type { AbstractDBClient } from './DBClient'
  * large collections in a more economical way than firestore
  */
 export interface DBClients {
-  cacheDB: AbstractDBClient
-  serverDB: AbstractDBClient
-  serverCacheDB: AbstractDBClient
+  cacheDB: AbstractDatabaseClient
+  serverDB: AbstractDatabaseClient
+  serverCacheDB: AbstractDatabaseClient
 }
 
 /**

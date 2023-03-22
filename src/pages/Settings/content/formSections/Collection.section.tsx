@@ -1,5 +1,5 @@
 import * as React from 'react'
-import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IPlasticType } from 'src/models'
 
 import { Flex, Heading, Box, Text, Grid } from 'theme-ui'

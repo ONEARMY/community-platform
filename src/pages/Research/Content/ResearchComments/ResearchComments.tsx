@@ -31,7 +31,6 @@ export const getResearchCommentId = (s: string) =>
 export const ResearchComments = ({
   comments,
   update,
-  updateIndex,
   showComments,
 }: IProps) => {
   const [comment, setComment] = useState('')
@@ -46,14 +45,6 @@ export const ResearchComments = ({
       await researchStore.addComment(comment, update as IResearch.Update)
       setLoading(false)
       setComment('')
-      const currResearchItem = researchStore.activeResearchItem
-      if (currResearchItem) {
-        await stores.userNotificationsStore.triggerNotification(
-          'new_comment_research',
-          currResearchItem._createdBy,
-          '/research/' + currResearchItem.slug + '#update_' + updateIndex,
-        )
-      }
 
       ReactGA.event({
         category: 'Comments',
@@ -83,6 +74,7 @@ export const ResearchComments = ({
   }
 
   async function handleDelete(_id: string) {
+    // eslint-disable-next-line no-alert
     const confirmation = window.confirm(
       'Are you sure you want to delete this comment?',
     )

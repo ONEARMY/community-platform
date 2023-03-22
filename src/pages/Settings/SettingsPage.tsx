@@ -26,6 +26,7 @@ import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile/types'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
+import { v4 as uuid } from 'uuid'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -86,7 +87,10 @@ export class SettingsPage extends React.Component<IProps, IState> {
       coverImages: new Array(4)
         .fill(null)
         .map((v, i) => (coverImages[i] ? coverImages[i] : v)),
-      links: links.length > 0 ? links : [{} as any],
+      links: (links.length > 0 ? links : [{} as any]).map((i) => ({
+        ...i,
+        key: uuid(),
+      })),
       openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
     }
     this.setState({

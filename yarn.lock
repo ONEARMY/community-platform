@@ -25533,6 +25533,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"oa-themes@workspace:*, oa-themes@workspace:packages/themes":
+  version: 0.0.0-use.local
+  resolution: "oa-themes@workspace:packages/themes"
+  languageName: unknown
+  linkType: soft
+
 "oauth-sign@npm:~0.9.0":
   version: 0.9.0
   resolution: "oauth-sign@npm:0.9.0"
@@ -25816,6 +25822,7 @@ __metadata:
     mobx-react-devtools: ^6.0.3
     oa-components: "workspace:*"
     oa-shared: "workspace:*"
+    oa-themes: "workspace:*"
     pino: ^7.2.0
     pino-logflare: ^0.3.12
     prettier: 2.5.1

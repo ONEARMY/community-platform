@@ -99,6 +99,7 @@
     "mobx-react": "7.2.0",
     "oa-components": "workspace:*",
     "oa-shared": "workspace:*",
+    "oa-themes": "workspace:*",
     "pino": "^7.2.0",
     "pino-logflare": "^0.3.12",
     "pubsub-js": "^1.7.0",

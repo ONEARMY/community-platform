@@ -5,7 +5,8 @@ import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
-import Theme from 'src/themes/styled.theme'
+import { preciousPlasticTheme } from 'oa-themes'
+const Theme = preciousPlasticTheme.styles
 
 jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention

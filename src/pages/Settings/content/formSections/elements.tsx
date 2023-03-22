@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { Card, Flex } from 'theme-ui'
 import { Field } from 'react-final-form'
 

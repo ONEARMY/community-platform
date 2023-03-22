@@ -13,7 +13,9 @@ import styled from '@emotion/styled'
 
 import { MemberBadge, Icon, Username } from 'oa-components'
 
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'

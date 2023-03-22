@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom'
 import ResearchRoutes from './research.routes'
-import Theme from 'src/themes/styled.theme'
+import { preciousPlasticTheme } from 'oa-themes'
+const Theme = preciousPlasticTheme.styles
 
 import { ThemeProvider } from '@theme-ui/core'
 import { render, waitFor, cleanup } from '@testing-library/react'

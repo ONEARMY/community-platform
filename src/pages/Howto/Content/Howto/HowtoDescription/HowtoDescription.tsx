@@ -21,7 +21,9 @@ import {
   emStringToPx,
   capitalizeFirstLetter,
 } from 'src/utils/helpers'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import { Link } from 'react-router-dom'

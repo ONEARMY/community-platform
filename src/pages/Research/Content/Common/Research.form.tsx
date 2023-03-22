@@ -16,7 +16,9 @@ import {
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'

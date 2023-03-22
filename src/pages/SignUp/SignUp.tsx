@@ -2,7 +2,9 @@ import * as React from 'react'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { Button, ExternalLink, FieldInput } from 'oa-components'
 import { Form, Field } from 'react-final-form'
 import { inject, observer } from 'mobx-react'

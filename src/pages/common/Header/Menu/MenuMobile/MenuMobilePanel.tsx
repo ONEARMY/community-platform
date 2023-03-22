@@ -1,6 +1,8 @@
 import { Component } from 'react'
 import { getAvailablePageList } from 'src/pages/PageList'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'

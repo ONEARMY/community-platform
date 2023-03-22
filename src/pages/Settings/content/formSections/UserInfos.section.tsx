@@ -3,7 +3,9 @@ import { Field } from 'react-final-form'
 import { Heading, Flex, Box, Text } from 'theme-ui'
 import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea } from 'oa-components'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/ProfileLink.field'
 import { FlexSectionContainer } from './elements'

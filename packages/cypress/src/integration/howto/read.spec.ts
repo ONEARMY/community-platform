@@ -158,6 +158,12 @@ describe('[How To]', () => {
 
         cy.get(`[data-cy="comments-form"]`).should('not.exist')
       })
+
+      it('[Views only visible for beta-testers]', () => {
+        cy.visit(specificHowtoUrl)
+        cy.step(`ViewsCounter should not be visible`)
+        cy.get('[data-cy="ViewsCounter"]').should('not.exist')
+      })
     })
 
     describe('[By Authenticated]', () => {
@@ -197,6 +203,23 @@ describe('[How To]', () => {
 
           cy.get('[data-cy="CommentItem: edit button"]').should('exist')
         })
+      })
+    })
+
+    describe('[By Beta-Tester]', () => {
+      it('[Views show on multiple howtos]', () => {
+        cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
+
+        cy.step('Views show on first howto')
+        cy.visit(specificHowtoUrl)
+        cy.get('[data-cy="ViewsCounter"]').should('exist')
+
+        cy.step('Go back')
+        cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton').click()
+
+        cy.step('Views show on second howto')
+        cy.visit('/how-to/make-glass-like-beams')
+        cy.get('[data-cy="ViewsCounter"]').should('exist')
       })
     })
 

@@ -7,7 +7,7 @@ import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
-import type { IUser, IUserDB } from 'src/models/user.models'
+import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { RootStore } from '..'
@@ -149,6 +149,17 @@ export class UserStore extends ModuleStore {
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('_id', '==', _authID)
     return lookup2[0]
+  }
+
+  public async updateUserBadge(userId: string, badges: IUserBadges) {
+    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(userId)
+    await this.db
+      .collection(COLLECTION_NAME)
+      .doc(userId)
+      .set({
+        ...toJS(await dbRef.get('server')),
+        badges,
+      })
   }
 
   /**

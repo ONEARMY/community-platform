@@ -41,5 +41,7 @@ export type availableGlyphs =
   | 'verified'
   | 'filter'
   | 'view'
+  | 'supporter'
+  | 'flag-unknown'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }

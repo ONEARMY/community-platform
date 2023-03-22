@@ -2,7 +2,7 @@ import { Box, Image } from 'theme-ui'
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import { Icon, ElWithBeforeIcon } from 'oa-components'
+import { Icon, ElWithBeforeIcon, ExternalLink } from 'oa-components'
 import type { IUserPP } from 'src/models'
 import theme from 'src/themes/styled.theme'
 import styled from '@emotion/styled'
@@ -68,6 +68,20 @@ export const UserStats = ({ user }: IProps) => {
           </UserStatsBoxItem>
         </Link>
       )}
+      {user.badges?.supporter ? (
+        <UserStatsBoxItem>
+          <Icon glyph={'supporter' as any} size={22} />
+          <Box ml={1}>
+            <ExternalLink
+              href="https://www.patreon.com/one_army"
+              target="_blank"
+              color="black"
+            >
+              Supporter
+            </ExternalLink>
+          </Box>
+        </UserStatsBoxItem>
+      ) : null}
       {howtoCount > 0 && (
         <UserStatsBoxItem>
           <ElWithBeforeIcon icon={HowToCountIcon} />

@@ -74,6 +74,7 @@ export const ResearchComments = ({
   }
 
   async function handleDelete(_id: string) {
+    // eslint-disable-next-line no-alert
     const confirmation = window.confirm(
       'Are you sure you want to delete this comment?',
     )

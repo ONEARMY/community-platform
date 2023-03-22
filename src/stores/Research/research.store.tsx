@@ -300,7 +300,7 @@ export class ResearchStore extends ModuleStore {
           this.activeResearchItem = createdItem
         })
       } catch (error) {
-        console.error(error)
+        logger.error(error)
         throw new Error(error?.message)
       }
     }
@@ -359,7 +359,7 @@ export class ResearchStore extends ModuleStore {
         })
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -422,7 +422,7 @@ export class ResearchStore extends ModuleStore {
         }
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }

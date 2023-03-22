@@ -27,10 +27,11 @@ export const ArticleCallToAction = (props: Props) => {
             sx={{ ml: 1 }}
           />
         </Text>
-        {props.contributors && (
+        {props.contributors && props?.contributors.length ? (
           <Text
+            data-testid="ArticleCallToAction: contributors"
             variant="quiet"
-            sx={{ display: 'block', mt: 2, textAlign: 'center' }}
+            sx={{ display: 'block', mt: 2, textAlign: 'center', fontSize: 2 }}
           >
             With contributions from:{' '}
             {props.contributors.map((contributor, key) => (
@@ -39,14 +40,12 @@ export const ArticleCallToAction = (props: Props) => {
                 user={contributor}
                 isVerified={contributor.isVerified}
                 sx={{
-                  fontSize: '16px',
-                  color: 'grey',
                   mr: 1,
                 }}
               />
             ))}
           </Text>
-        )}
+        ) : null}
         <Heading sx={{ my: 4 }}>Like what you see? 👇</Heading>
         <Flex
           sx={{

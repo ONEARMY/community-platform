@@ -48,7 +48,7 @@ const Label = styled.label`
   display: block;
 `
 
-const beforeUnload = function (e) {
+const beforeUnload = (e) => {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
@@ -247,6 +247,17 @@ const ResearchForm = observer((props: IProps) => {
                                 component={TagsSelectField}
                                 category="research"
                                 isEqual={COMPARISONS.tags}
+                              />
+                            </Flex>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <Label>
+                                Who have you been collaborating on this Research
+                                with?
+                              </Label>
+                              <Field
+                                name="collaborators"
+                                component={FieldInput}
+                                placeholder="A comma separated list of usernames."
                               />
                             </Flex>
                           </Flex>

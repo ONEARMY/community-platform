@@ -8,8 +8,8 @@ import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpeciali
 
 const ICON_SIZE = 30
 
-function asOptions(mapStore, items: Array<IMapGrouping>): FilterGroupOption[] {
-  return (items || [])
+const asOptions = (mapStore, items: Array<IMapGrouping>): FilterGroupOption[] =>
+  (items || [])
     .filter((item) => {
       return !item.hidden
     })
@@ -39,7 +39,6 @@ function asOptions(mapStore, items: Array<IMapGrouping>): FilterGroupOption[] {
       }
     })
     .filter(({ number }) => !!number)
-}
 
 type FilterGroupOption = {
   label: string

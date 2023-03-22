@@ -21,6 +21,7 @@
     }
   },
   "rules": {
+    "no-alert": "error",
     "sort-class-members/sort-class-members": [
       "error",
       {
@@ -41,7 +42,7 @@
     "import/no-named-as-default": "off",
     "max-classes-per-file": "error",
     "no-useless-escape": "off",
-    "react/display-name": "warn",
+    "react/display-name": "error",
     "react/jsx-no-target-blank": "warn",
     // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
     "react/no-deprecated": "warn",
@@ -84,29 +85,7 @@
           "camelCase": true,
           "pascalCase": true
         },
-        // TODO - most can be renamed although holding off until after #1501 and #1533 merged
-        "ignore": [
-          "docusaurus.config.gh-pages.js",
-          "install-clean.ts",
-          "SWUpdateNotification.tsx",
-          "react-app-env.d.ts",
-          "service-worker.ts",
-          "AbstractDBClient.ts",
-          "react-firebase-file-uploader.d.ts",
-          "reset-staging-site.ts",
-          "post-cra-build.ts",
-          "user_pp.mock.tsx",
-          "user_pp.models.tsx",
-          "admin-subheader.tsx",
-          "admin-approvals.tsx",
-          "admin-howtos.tsx",
-          "admin-mappins.tsx",
-          "admin-research-detail.tsx",
-          "admin-research.tsx",
-          "admin-tags.tsx",
-          "admin-user-detail.tsx",
-          "admin-users.tsx"
-        ]
+        "ignore": ["react-app-env.d.ts", "service-worker.ts"]
       }
     ],
     "@typescript-eslint/no-empty-function": "off",

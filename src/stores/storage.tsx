@@ -38,7 +38,11 @@ export class Storage {
         Helper Methods
 /****************************************************************************** */
 
-function generateUploadedFileMeta(snapshotMeta, url: string, filetype: string) {
+const generateUploadedFileMeta = (
+  snapshotMeta,
+  url: string,
+  filetype: string,
+) => {
   const fileInfo: IUploadedFileMeta = {
     downloadUrl: url,
     contentType: snapshotMeta.contentType,

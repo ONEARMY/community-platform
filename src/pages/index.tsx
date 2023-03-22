@@ -4,7 +4,7 @@ import GoogleAnalytics from 'src/pages/common/GoogleAnalytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from '../common/ScrollToTop'
 import Header from './common/Header/Header'
-import { SWUpdateNotification } from 'src/pages/common/SWUpdateNotification/SWUpdateNotification'
+import { ServiceWorkerUpdateNotification } from 'src/pages/common/ServiceWorkerUpdateNotification/ServiceWorkerUpdateNotification'
 import Main from 'src/pages/common/Layout/Main'
 import type { IPageMeta } from './PageList'
 import {
@@ -48,7 +48,7 @@ export class Routes extends React.Component<
         data-cy="page-container"
       >
         <BrowserRouter>
-          <SWUpdateNotification />
+          <ServiceWorkerUpdateNotification />
           <GoogleAnalytics />
           {/* on page change scroll to top */}
           <ScrollToTop>

@@ -7,7 +7,7 @@ type Props = {
   onSearchChange: (text: string) => void
 }
 
-function AdminUserSearch({ total, onSearchChange }: Props) {
+const AdminUserSearch = ({ total, onSearchChange }: Props) => {
   const theme = useTheme()
 
   return (

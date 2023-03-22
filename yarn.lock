@@ -16631,6 +16631,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-prefer-arrow-functions@npm:^3.1.4":
+  version: 3.1.4
+  resolution: "eslint-plugin-prefer-arrow-functions@npm:3.1.4"
+  peerDependencies:
+    eslint: ">=5.0.0"
+  checksum: 581f1be4ea056d70aad1866ee16a0def7ecece050e03ff3bc2a6695b8bdca3751d6360fcd0e4efccd0068a0e0557b7ab36586a301afa38957acc8c58d293560c
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-prettier@npm:^3.4.0":
   version: 3.4.1
   resolution: "eslint-plugin-prettier@npm:3.4.1"
@@ -25784,6 +25793,7 @@ __metadata:
     eslint-plugin-import: ^2.26.0
     eslint-plugin-jest: ^27.2.1
     eslint-plugin-mocha: ^10.1.0
+    eslint-plugin-prefer-arrow-functions: ^3.1.4
     eslint-plugin-prettier: ^3.4.0
     eslint-plugin-sort-class-members: ^1.15.2
     eslint-plugin-unicorn: ^36.0.0

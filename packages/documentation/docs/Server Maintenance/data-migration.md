@@ -11,13 +11,13 @@ Currently this can be done in a semi-automated way using a script in the scripts
 
 ```
 cd scripts
-ts-node ./maintenance/reset-staging-site.ts
+ts-node ./maintenance/resetStagingSite.ts
 ```
 
 :::note
 This script requires access to a service worker with specific permissions for source and target projects, and intermediate storage buckets.
 :::
 
-For more information about the script and known limitations see the source code at [scripts/maintenance/reset-staging-site.ts](https://github.com/ONEARMY/community-platform/blob/master/scripts/maintenance/reset-staging-site.ts).
+For more information about the script and known limitations see the source code at [scripts/maintenance/resetStagingSite.ts](https://github.com/ONEARMY/community-platform/blob/master/scripts/maintenance/resetStagingSite.ts).
 
 The script is currently run weekly via the github action, see the source code at [.github/workflows/reset-staging-site.yml](https://github.com/ONEARMY/community-platform/blob/master/.github/workflows/reset-staging-site.yml))

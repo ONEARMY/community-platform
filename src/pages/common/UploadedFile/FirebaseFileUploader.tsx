@@ -47,7 +47,7 @@ export class FirebaseFileUploader extends React.Component<IProps, IState> {
   }
   public handleUploadError = (error: any) => {
     this.setState({ isUploading: false })
-    console.error(error)
+    logger.error(error)
   }
   // on success update progress and pass back complete url to parent component
   public handleUploadSuccess = async (filename: string) => {

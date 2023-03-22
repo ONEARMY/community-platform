@@ -26,7 +26,7 @@ type IProps = RouteComponentProps<{ slug: string }>
 
 const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
 
-function areCommentVisible(updateIndex) {
+const areCommentVisible = (updateIndex) => {
   let showComments = false
 
   if (researchCommentUrlRegex.test(window.location.hash)) {
@@ -132,6 +132,9 @@ const ResearchArticle = observer((props: IProps) => {
       isVerified: isUserVerified(item._createdBy),
     }
 
+    const collaborators = Array.isArray(item.collaborators)
+      ? item.collaborators
+      : ((item.collaborators as string) || '').split(',').filter(Boolean)
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
@@ -170,7 +173,13 @@ const ResearchArticle = observer((props: IProps) => {
             mb: 16,
           }}
         >
-          <ArticleCallToAction author={researchAuthor}>
+          <ArticleCallToAction
+            author={researchAuthor}
+            contributors={collaborators.map((c) => ({
+              userName: c,
+              isVerified: false,
+            }))}
+          >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}
               votedUsefulCount={votedUsefulCount}
@@ -202,10 +211,11 @@ const ResearchArticle = observer((props: IProps) => {
   }
 })
 
-function transformToUserComment(
+const transformToUserComment = (
   comments: IComment[],
   loggedInUsername,
-): UserComment[] {
+): UserComment[] => {
+  if (!comments) return []
   return comments.map((c) => ({
     ...c,
     isEditable: c.creatorName === loggedInUsername,

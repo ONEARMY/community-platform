@@ -3,7 +3,7 @@ import type {
   IMAchineBuilderXp,
   IOpeningHours,
   PlasticTypeLabel,
-} from 'src/models/user_pp.models'
+} from 'src/models/userPreciousPlastic.models'
 
 import { Heading, Box, Image, Flex, Paragraph } from 'theme-ui'
 // import slick and styles
@@ -153,8 +153,8 @@ const sliderSettings = {
 
 // Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
 
-function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
-  function renderIcon(type: string) {
+const renderPlasticTypes = (plasticTypes: Array<PlasticTypeLabel>) => {
+  const renderIcon = (type: string) => {
     switch (type) {
       case 'hdpe':
         return <Image loading="lazy" src={HDPEIcon} />
@@ -191,35 +191,31 @@ function renderPlasticTypes(plasticTypes: Array<PlasticTypeLabel>) {
   )
 }
 
-function renderOpeningHours(openingHours: Array<IOpeningHours>) {
-  return (
-    <div>
-      <h4>We're open on:</h4>
-      {openingHours.map((openingObj) => {
-        return (
-          <OpeningHours key={openingObj.day}>
-            {openingObj.day}: {openingObj.openFrom} - {openingObj.openTo}
-          </OpeningHours>
-        )
-      })}
-    </div>
-  )
-}
+const renderOpeningHours = (openingHours: Array<IOpeningHours>) => (
+  <div>
+    <h4>We're open on:</h4>
+    {openingHours.map((openingObj) => {
+      return (
+        <OpeningHours key={openingObj.day}>
+          {openingObj.day}: {openingObj.openFrom} - {openingObj.openTo}
+        </OpeningHours>
+      )
+    })}
+  </div>
+)
 
-function renderMachineBuilderXp(machineBuilderXp: Array<IMAchineBuilderXp>) {
-  return (
-    <>
-      <h4>We offer the following services:</h4>
-      {machineBuilderXp.map((machineExperience, index) => {
-        return (
-          <MachineExperienceTab key={`machineXp-${index}`}>
-            {machineExperience}
-          </MachineExperienceTab>
-        )
-      })}
-    </>
-  )
-}
+const renderMachineBuilderXp = (machineBuilderXp: Array<IMAchineBuilderXp>) => (
+  <>
+    <h4>We offer the following services:</h4>
+    {machineBuilderXp.map((machineExperience, index) => {
+      return (
+        <MachineExperienceTab key={`machineXp-${index}`}>
+          {machineExperience}
+        </MachineExperienceTab>
+      )
+    })}
+  </>
+)
 
 export const SpaceProfile = ({ user }: IProps) => {
   let coverImage = [

@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "unicorn/filename-case": [
+      "error",
+      {
+        "cases": {
+          "camelCase": true,
+          "pascalCase": true
+        },
+        "ignore": ["docusaurus.config.gh-pages.js"]
+      }
+    ]
+  }
+}

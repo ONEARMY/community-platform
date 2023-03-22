@@ -17,7 +17,7 @@ export const UserBadgeSettings = observer((props: { userId: string }) => {
   const [isLoading, setLoading] = useState(true)
   const [isSaving, setSaving] = useState(false)
 
-  async function fetchUser() {
+  const fetchUser = async () => {
     const user = await userStore.getUserProfile(props.userId)
     if (user && user.badges) {
       setBadges(user.badges)

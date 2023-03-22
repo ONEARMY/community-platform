@@ -56,6 +56,7 @@ export interface IUserBadges {
 }
 
 interface IExternalLink {
+  key: string
   url: string
   label:
     | 'email'

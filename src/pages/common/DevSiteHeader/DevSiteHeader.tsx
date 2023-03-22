@@ -88,12 +88,9 @@ const DevSiteHeader = observer(() => {
   )
 })
 
-function showDevSiteHeader() {
-  return (
-    devSites.some((s) => s.value === SITE) ||
-    window.location?.hostname === 'localhost'
-  )
-}
+const showDevSiteHeader = () =>
+  devSites.some((s) => s.value === SITE) ||
+  window.location?.hostname === 'localhost'
 
 const availableThemes = [
   { value: 'precious-plastic', label: 'Precious Plastic' },

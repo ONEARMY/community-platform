@@ -2,14 +2,13 @@ import { Route } from 'react-router'
 import { useCommonStores } from 'src/index'
 import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed'
 
-export function getFrameSrc(base, path): string {
-  return `${base}${path
+export const getFrameSrc = (base, path): string =>
+  `${base}${path
     .split('/')
     .filter((str) => str !== 'academy' && Boolean(str))
     .join('/')}`
-}
 
-export default function Academy() {
+const Academy = () => {
   const { stores } = useCommonStores()
   const src = stores.themeStore.currentTheme.academyResource
 
@@ -25,3 +24,5 @@ export default function Academy() {
     />
   )
 }
+
+export default Academy

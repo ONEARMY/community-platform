@@ -16,7 +16,7 @@ export const attemptReload = () => {
  * Set a sessionStorage value with a future expiry date that will prompt self-deletion
  * even if page session not closed (i.e. tab left open)
  **/
-function setWithExpiry(key: string, value: string, ttl: number) {
+const setWithExpiry = (key: string, value: string, ttl: number) => {
   const item = {
     value: value,
     expiry: new Date().getTime() + ttl,
@@ -25,7 +25,7 @@ function setWithExpiry(key: string, value: string, ttl: number) {
 }
 
 /** Get a sessionStorage value with an expiry date, returning value only if not expired */
-function getWithExpiry(key: string): string | null {
+const getWithExpiry = (key: string): string | null => {
   const itemString = window.sessionStorage.getItem(key)
   if (!itemString) return null
 

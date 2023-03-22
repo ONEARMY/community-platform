@@ -25,7 +25,7 @@ const Top = styled(Box)`
   border-bottom: 15px solid white;
 `
 
-function HeadFilter(props: Props) {
+const HeadFilter = (props: Props) => {
   const {
     field,
     filterOptions,

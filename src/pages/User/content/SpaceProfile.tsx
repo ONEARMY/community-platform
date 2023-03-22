@@ -3,7 +3,7 @@ import type {
   IMAchineBuilderXp,
   IOpeningHours,
   PlasticTypeLabel,
-} from 'src/models/user_pp.models'
+} from 'src/models/userPreciousPlastic.models'
 
 import { Heading, Box, Image, Flex, Paragraph } from 'theme-ui'
 // import slick and styles

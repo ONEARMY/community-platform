@@ -115,6 +115,7 @@ export class ResearchStore extends ModuleStore {
       runInAction(() => {
         this.activeResearchItem = {
           ...researchItem,
+          collaborators: researchItem.collaborators || [],
           description: changeUserReferenceToPlainText(researchItem.description),
           updates: researchItem.updates?.map((update) => {
             update.description = changeUserReferenceToPlainText(
@@ -279,12 +280,27 @@ export class ResearchStore extends ModuleStore {
 
         await this.updateResearchItem(dbRef, newItem)
 
+        // Notify author and contributors
+        await this.userNotificationsStore.triggerNotification(
+          'new_comment_research',
+          newItem._createdBy,
+          '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
+        )
+
+        newItem.collaborators.map((username) => {
+          this.userNotificationsStore.triggerNotification(
+            'new_comment_research',
+            username,
+            '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
+          )
+        })
+
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
         runInAction(() => {
           this.activeResearchItem = createdItem
         })
       } catch (error) {
-        console.error(error)
+        logger.error(error)
         throw new Error(error?.message)
       }
     }
@@ -343,7 +359,7 @@ export class ResearchStore extends ModuleStore {
         })
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -406,7 +422,7 @@ export class ResearchStore extends ModuleStore {
         }
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -510,15 +526,16 @@ export class ResearchStore extends ModuleStore {
     return await dbRef.get()
   }
 
-  public async uploadResearch(values: IResearch.FormInput | IResearch.ItemDB) {
+  public async uploadResearch(values: IResearch.FormInput) {
     logger.debug('uploading research')
     this.updateResearchUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
       .collection<IResearch.Item>(COLLECTION_NAME)
-      .doc((values as IResearch.ItemDB)._id)
+      .doc(values._id)
     const user = this.activeUser as IUser
     const updates = (await dbRef.get())?.updates || [] // save old updates when editing
+
     try {
       // populate DB
       // define research
@@ -526,6 +543,11 @@ export class ResearchStore extends ModuleStore {
       const researchItem: IResearch.Item = {
         mentions: [],
         ...values,
+        collaborators:
+          (values?.collaborators || '')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean) || [],
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,

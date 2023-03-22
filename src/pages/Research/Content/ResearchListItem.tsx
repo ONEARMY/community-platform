@@ -36,6 +36,7 @@ const MobileItemInfo = styled.div`
 `
 
 const ResearchListItem: React.FC<IProps> = ({ item }) => {
+  const collaborators = item['collaborators'] || []
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -80,6 +81,22 @@ const ResearchListItem: React.FC<IProps> = ({ item }) => {
                     }}
                     isVerified={isUserVerified(item._createdBy)}
                   />
+                  {Boolean(collaborators.length) && (
+                    <Text
+                      ml={4}
+                      sx={{
+                        display: ['none', 'block'],
+                        fontSize: theme.fontSizes[1] + 'px',
+                        color: theme.colors.darkGrey,
+                        transform: 'translateY(2px)',
+                      }}
+                    >
+                      {collaborators.length +
+                        (collaborators.length === 1
+                          ? ' contributor'
+                          : ' contributors')}
+                    </Text>
+                  )}
                   {/* Hide this on mobile, show on tablet & above. */}
                   <Text
                     ml={4}

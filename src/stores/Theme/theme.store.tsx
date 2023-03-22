@@ -4,6 +4,7 @@ import preciousPlasticTheme from 'src/themes/precious-plastic'
 import projectKampTheme from 'src/themes/project-kamp'
 import fixingFashionTheme from 'src/themes/fixing-fashion'
 import { getConfigurationOption } from 'src/config/config'
+import { logger } from '../../logger'
 
 const themeMap = {
   'precious-plastic': preciousPlasticTheme,
@@ -21,7 +22,7 @@ export class ThemeStore {
   constructor() {
     makeAutoObservable(this)
 
-    console.log(`Current theme:`, this.currentTheme)
+    logger.debug(`Current theme:`, this.currentTheme)
   }
 
   @action

@@ -1,5 +1,6 @@
 {
   "rules": {
+    "no-console": "error",
     "prefer-arrow-functions/prefer-arrow-functions": [
       "error",
       {

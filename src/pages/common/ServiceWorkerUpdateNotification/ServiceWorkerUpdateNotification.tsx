@@ -10,7 +10,7 @@ import { logger } from 'src/logger'
  * and refresh the page the next time the user attemps a navigation action
  **/
 
-export const SWUpdateNotification = memo(() => {
+export const ServiceWorkerUpdateNotification = memo(() => {
   const [reloadRequired, setReloadRequired] = useState(false)
   const [swLoaded, setSWLoaded] = useState(false)
 
@@ -45,4 +45,4 @@ export const SWUpdateNotification = memo(() => {
     </>
   )
 })
-SWUpdateNotification.displayName = 'SWUpdateNotification'
+ServiceWorkerUpdateNotification.displayName = 'ServiceWorkerUpdateNotification'

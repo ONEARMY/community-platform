@@ -52,7 +52,7 @@ const COLLECTION_IDS = Object.values(DB_ENDPOINTS)
  * 
  * Example execution
  * ```
-   ts-node --project scripts/tsconfig.json scripts/maintenance/reset-staging-site.ts 
+   ts-node --project scripts/tsconfig.json scripts/maintenance/resetStagingSite.ts.ts 
    ```
    Also available as a github action in the /.github/reset-staging-site.yml
  */

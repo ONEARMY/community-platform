@@ -8,7 +8,7 @@ import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
 import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
-import type { IUserPP, IUserPPDB } from 'src/models/user_pp.models'
+import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { RootStore } from '..'
 import type { IConvertedFileMeta } from 'src/types'
@@ -381,7 +381,7 @@ export class UserStore extends ModuleStore {
         //TODO: ensure current user is updated
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }

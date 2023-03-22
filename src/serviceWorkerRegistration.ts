@@ -1,5 +1,5 @@
 // https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#clientsclaim
-
+import { logger } from './logger'
 import { Workbox } from 'workbox-window'
 
 // initial code adapted from create-react-app (v4)
@@ -94,7 +94,7 @@ const checkValidServiceWorker = (
       }
     })
     .catch(() => {
-      console.log(
+      logger.info(
         'No internet connection found. App is running in offline mode.',
       )
     })
@@ -107,7 +107,7 @@ export const unregister = () => {
         registration.unregister()
       })
       .catch((error) => {
-        console.error(error.message)
+        logger.error(error.message)
       })
   }
 }

@@ -4,6 +4,7 @@ import { action, observable, makeObservable } from 'mobx'
 import type { IUser, UserRole } from 'src/models/user.models'
 import type { ITag } from 'src/models/tags.model'
 import { functions } from 'src/utils/firebase'
+import { logger } from '../../logger'
 
 /*********************************************************************************
  *  The admin store contains methods for updating user permissions.
@@ -74,7 +75,7 @@ export class AdminStore extends ModuleStore {
       const email = res.data
       return email
     } catch (error) {
-      console.error(error)
+      logger.error(error)
       return `unable to get user email - ${error.message}`
     }
   }

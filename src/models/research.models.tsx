@@ -6,7 +6,7 @@ import type { IResearchCategory } from './researchCategories.model'
 /**
  * Research retrieved from the database also include metadata such as _id, _created and _modified
  */
-export type IResearchDB = IResearch.ItemDB & DBDoc
+export type IResearchDB = DBDoc & IResearch.ItemDB
 
 export type IResearchStats = {
   votedUsefulCount: number
@@ -15,12 +15,13 @@ export type IResearchStats = {
 /** All typings related to the Research Module can be found here */
 export namespace IResearch {
   /** The main research item, as created by a user */
-  export interface Item extends FormInput {
+  export type Item = {
     updates: Update[]
     mentions?: UserMention[]
     _createdBy: string
     total_views?: number
-  }
+    collaborators: string[]
+  } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */
   export interface Update {
@@ -39,11 +40,14 @@ export namespace IResearch {
     slug: string
     tags: ISelectedTags
     creatorCountry?: string
+    collaborators: string
   }
 
   /** Research items synced from the database will contain additional metadata */
   // Use of Omit to override the 'updates' type to UpdateDB
-  export type ItemDB = Omit<Item, 'updates'> & { updates: UpdateDB[] } & DBDoc
+  export type ItemDB = Omit<Item, 'updates'> & {
+    updates: UpdateDB[]
+  } & DBDoc
 
   export type UpdateDB = Update & DBDoc
 }

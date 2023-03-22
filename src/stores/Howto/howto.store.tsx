@@ -287,8 +287,8 @@ export class HowtoStore extends ModuleStore {
         await this.setActiveHowtoBySlug(updated?.slug || '')
       }
     } catch (err) {
-      console.log({ err })
-      console.error(err)
+      logger.info({ err })
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -420,7 +420,7 @@ export class HowtoStore extends ModuleStore {
         }
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -443,7 +443,7 @@ export class HowtoStore extends ModuleStore {
         await this.setActiveHowtoBySlug(howto.slug)
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }

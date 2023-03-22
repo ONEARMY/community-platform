@@ -1,4 +1,4 @@
-import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUser } from 'src/models/user.models'
 import { ProfileType } from 'src/modules/profile/types'
 

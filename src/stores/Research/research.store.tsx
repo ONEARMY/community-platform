@@ -562,13 +562,18 @@ export class ResearchStore extends ModuleStore {
     // Notify each subscriber
     const subscribers = researchItem.subscribers || []
 
-    subscribers.forEach((subscriber) =>
-      this.userNotificationsStore.triggerNotification(
-        'research_update',
-        subscriber,
-        `/research/${researchItem.slug}`,
-      ),
-    )
+    const previousVersion = await dbRef.get('server')
+
+    // Only notify subscribers if there is a new update added
+    if (researchItem.updates.length > (previousVersion?.updates.length || 0)) {
+      subscribers.forEach((subscriber) =>
+        this.userNotificationsStore.triggerNotification(
+          'research_update',
+          subscriber,
+          `/research/${researchItem.slug}`,
+        ),
+      )
+    }
 
     return await dbRef.get()
   }

@@ -81,6 +81,7 @@ describe('research.store', () => {
       it('adds new comment to update', async () => {
         const { store, researchItem, setFn } = await factoryResearchItem({
           collaborators: ['a-contributor'],
+          subscribers: ['subscriber'],
         })
 
         // Act
@@ -624,9 +625,11 @@ describe('research.store', () => {
 
   describe('Subscribe', () => {
     it('adds subscriber to the research article', async () => {
-      const { store, researchItem, setFn } = await factory({
-        subscribers: ['existing-subscriber'],
-      })
+      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
+        {
+          subscribers: ['existing-subscriber'],
+        },
+      )
 
       // Act
       await store.addSubscriberToResearchArticle(
@@ -644,9 +647,11 @@ describe('research.store', () => {
     })
 
     it('removes subscriber from the research article', async () => {
-      const { store, researchItem, setFn } = await factory({
-        subscribers: ['long-term-subscriber', 'remove-me'],
-      })
+      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
+        {
+          subscribers: ['long-term-subscriber', 'remove-me'],
+        },
+      )
 
       // Act
       await store.removeSubscriberToResearchArticle(
@@ -663,17 +668,20 @@ describe('research.store', () => {
       )
     })
 
-    it('An update triggers notifications to each subscribed users', async () => {
-      const { store, researchItem, setFn } = await factory({
+    it('triggers a notification for each subscribed users', async () => {
+      const { store, researchItem, setFn } = await factoryResearchItem({
         subscribers: ['subscriber'],
       })
+      const newUpdate = FactoryResearchItemUpdate()
 
       // Act
-      await store.uploadResearch(researchItem)
+      await store.uploadUpdate(newUpdate)
+      await store.uploadUpdate(newUpdate)
 
-      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(setFn).toHaveBeenCalledTimes(2)
+
       expect(store.userNotificationsStore.triggerNotification).toBeCalledTimes(
-        1,
+        2,
       )
       expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
         'research_update',

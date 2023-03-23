@@ -646,6 +646,22 @@ describe('research.store', () => {
       )
     })
 
+    it('does not add a duplicate subscriber to the research article', async () => {
+      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
+        {
+          subscribers: ['a-very-interested-user'],
+        },
+      )
+
+      // Act
+      await store.addSubscriberToResearchArticle(
+        researchItem._id,
+        'a-very-interested-user',
+      )
+
+      expect(setFn).not.toBeCalled()
+    })
+
     it('removes subscriber from the research article', async () => {
       const { store, researchItem, setFn } = await factoryResearchItemFormInput(
         {
@@ -654,7 +670,7 @@ describe('research.store', () => {
       )
 
       // Act
-      await store.removeSubscriberToResearchArticle(
+      await store.removeSubscriberFromResearchArticle(
         researchItem._id,
         'remove-me',
       )

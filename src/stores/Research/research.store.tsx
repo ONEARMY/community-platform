@@ -142,17 +142,22 @@ export class ResearchStore extends ModuleStore {
     const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
 
     const researchData = await toJS(dbRef.get('server'))
-    if (researchData) {
+    if (researchData && !(researchData?.subscribers || []).includes(userId)) {
       await this.updateResearchItem(dbRef, {
         ...researchData,
         subscribers: [userId].concat(researchData?.subscribers || []),
+      })
+
+      const createdItem = (await dbRef.get()) as IResearch.ItemDB
+      runInAction(() => {
+        this.activeResearchItem = createdItem
       })
     }
 
     return
   }
 
-  public async removeSubscriberToResearchArticle(
+  public async removeSubscriberFromResearchArticle(
     docId: string,
     userId: string,
   ): Promise<void> {
@@ -165,6 +170,11 @@ export class ResearchStore extends ModuleStore {
         subscribers: (researchData?.subscribers || []).filter(
           (id) => id !== userId,
         ),
+      })
+
+      const createdItem = (await dbRef.get()) as IResearch.ItemDB
+      runInAction(() => {
+        this.activeResearchItem = createdItem
       })
     }
 

@@ -32,6 +32,7 @@ interface IProps {
   hasUserVotedUseful: boolean
   moderateResearch: (accepted: boolean) => void
   onUsefulClick: () => void
+  onFollowingClick: () => void
 }
 
 const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
@@ -116,15 +117,12 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
                   height: '41.5px',
                 }}
                 onClick={() => {
-                  if (props.loggedInUser) {
-                    store.addSubscriberToResearchArticle(
-                      research._id,
-                      props.loggedInUser?.userName,
-                    )
-                  }
+                  props.onFollowingClick()
                 }}
               >
-                Follow
+                {research.subscribers?.includes(props?.loggedInUser.userName)
+                  ? 'Following'
+                  : 'Follow'}
               </Button>
             </AuthWrapper>
           ) : null}

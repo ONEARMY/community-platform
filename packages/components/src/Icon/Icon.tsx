@@ -98,6 +98,11 @@ export const glyphs: IGlyphs = {
   view: iconMap.view,
   supporter: iconMap.supporter,
   'flag-unknown': iconMap.flagUnknown,
+  'social-media': iconMap.socialMedia,
+  website: iconMap.website,
+  bazar: iconMap.bazar,
+  'email-outline': iconMap.emailOutline,
+  discord: iconMap.discord,
 }
 
 export type WrapperProps = IProps & VerticalAlignProps & SpaceProps

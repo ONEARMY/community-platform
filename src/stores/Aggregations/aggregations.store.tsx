@@ -57,7 +57,9 @@ export class AggregationsStore {
     aggregationId: IAggregationId,
     timeoutDuration = DEFAULT_TIMEOUT,
   ) {
-    if (!this.subscriptions$.hasOwnProperty(aggregationId)) {
+    if (
+      !Object.prototype.hasOwnProperty.call(this.subscriptions$, aggregationId)
+    ) {
       const subscription = this.db
         .collection('aggregations')
         .doc(aggregationId)
@@ -94,7 +96,7 @@ export class AggregationsStore {
     timeoutDuration: number,
   ) {
     // remove any existing timeout
-    if (this.timeouts$.hasOwnProperty(aggregationId)) {
+    if (Object.prototype.hasOwnProperty.call(this.timeouts$, aggregationId)) {
       clearTimeout(this.timeouts$[aggregationId])
     }
     // add timeout to unsubscribe
@@ -104,7 +106,9 @@ export class AggregationsStore {
   }
 
   private clearSubscription(aggregationId: IAggregationId) {
-    if (this.subscriptions$.hasOwnProperty(aggregationId)) {
+    if (
+      Object.prototype.hasOwnProperty.call(this.subscriptions$, aggregationId)
+    ) {
       this.subscriptions$[aggregationId].unsubscribe()
       delete this.subscriptions$[aggregationId]
     }

@@ -192,7 +192,7 @@ export class ImageInput extends React.Component<IProps, IState> {
   private _getUploadedFiles(value: IProps['value'] = []) {
     const valArray = Array.isArray(value) ? value : [value]
     return valArray.filter((v) =>
-      v.hasOwnProperty('downloadUrl'),
+      Object.prototype.hasOwnProperty.call(v, 'downloadUrl'),
     ) as IUploadedFileMeta[]
   }
 }

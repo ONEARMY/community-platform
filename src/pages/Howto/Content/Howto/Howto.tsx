@@ -1,5 +1,4 @@
 import * as React from 'react'
-import ReactGA from 'react-ga4'
 import type { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router'
 import { inject, observer } from 'mobx-react'
@@ -28,6 +27,7 @@ import { Link } from 'react-router-dom'
 import type { UserComment } from 'src/models'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import { trackEvent } from 'src/common/Analytics'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -227,7 +227,7 @@ export class Howto extends React.Component<
               <Button
                 sx={{ fontSize: 2 }}
                 onClick={() => {
-                  ReactGA.event({
+                  trackEvent({
                     category: 'ArticleCallToAction',
                     action: 'ScrollHowtoComment',
                     label: howto.slug,
@@ -247,7 +247,7 @@ export class Howto extends React.Component<
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={!!loggedInUser}
                 onUsefulClick={() => {
-                  ReactGA.event({
+                  trackEvent({
                     category: 'ArticleCallToAction',
                     action: 'HowtoUseful',
                     label: howto.slug,

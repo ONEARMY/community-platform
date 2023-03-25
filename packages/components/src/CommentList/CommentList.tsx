@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import ReactGA from 'react-ga4'
 import { Box, Flex } from 'theme-ui'
 import { Button, CommentItem } from '../'
 import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
@@ -12,6 +11,11 @@ export const CommentList: React.FC<{
   handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
   articleTitle?: string
+  trackEvent?: (options: {
+    action: string
+    category: string
+    label?: string
+  }) => void
 }> = ({
   articleTitle,
   comments,
@@ -19,6 +23,7 @@ export const CommentList: React.FC<{
   handleDelete,
   highlightedCommentId,
   handleEdit,
+  trackEvent,
 }) => {
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
@@ -83,11 +88,12 @@ export const CommentList: React.FC<{
             }}
             variant="outline"
             onClick={() => {
-              ReactGA.event({
-                category: 'Comments',
-                action: 'Show more',
-                label: articleTitle,
-              })
+              trackEvent &&
+                trackEvent({
+                  category: 'Comments',
+                  action: 'Show more',
+                  label: articleTitle,
+                })
               return setMoreComments(moreComments + 1)
             }}
           >

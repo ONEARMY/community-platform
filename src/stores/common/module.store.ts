@@ -157,13 +157,13 @@ export class ModuleStore {
   ) {
     logger.debug('uploading file', file)
     // if already uploaded (e.g. editing but not replaced), skip
-    if (file.hasOwnProperty('downloadUrl')) {
+    if (Object.prototype.hasOwnProperty.call(file, 'downloadUrl')) {
       logger.debug('file already uploaded, skipping')
       return file as IUploadedFileMeta
     }
     // switch between converted file meta or standard file input
     let data: File | Blob = file as File
-    if (file.hasOwnProperty('photoData')) {
+    if (Object.prototype.hasOwnProperty.call(file, 'photoData')) {
       file = file as IConvertedFileMeta
       data = file.photoData
     }

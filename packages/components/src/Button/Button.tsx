@@ -80,7 +80,7 @@ function sanitizedProps(obj: BtnProps, keysToRemove: AvailableButtonProps) {
 
 export const Button = (props: BtnProps) => {
   const [size] = Object.keys(props).filter((prop) =>
-    buttonSizeProps.hasOwnProperty(prop),
+    Object.prototype.hasOwnProperty.call(buttonSizeProps, prop),
   )
 
   return (

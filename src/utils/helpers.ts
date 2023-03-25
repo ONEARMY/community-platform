@@ -29,7 +29,7 @@ export const replaceDashesWithSpaces = (str: string) => {
 export const arrayToJson = (arr: any[], keyField: string) => {
   const json = {}
   arr.forEach((el) => {
-    if (el.hasOwnProperty(keyField)) {
+    if (Object.prototype.hasOwnProperty.call(el, keyField)) {
       const key = el[keyField]
       json[key] = el
     }

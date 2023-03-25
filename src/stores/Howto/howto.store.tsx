@@ -470,7 +470,9 @@ export class HowtoStore extends ModuleStore {
       // if cover already uploaded stored as object not array
       // file and step image re-uploads handled in uploadFile script
       let processedCover
-      if (!values.cover_image.hasOwnProperty('downloadUrl')) {
+      if (
+        !Object.prototype.hasOwnProperty.call(values.cover_image, 'downloadUrl')
+      ) {
         processedCover = await this.uploadFileToCollection(
           values.cover_image,
           COLLECTION_NAME,

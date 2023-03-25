@@ -18,7 +18,7 @@ const UserContactInfo = styled.div`
 `
 
 export const UserContactAndLinks = ({ links }) =>
-  !!links.length ? (
+  links.length ? (
     <UserContactInfo>
       <span>Contact & Links</span>
       {links.map((link, i) => (

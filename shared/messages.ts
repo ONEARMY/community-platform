@@ -24,7 +24,7 @@ export const FRIENDLY_MESSAGES = {
  */
 export const getFriendlyMessage = (systemMessage = '') => {
   const messageKey = systemMessage.toLowerCase()
-  if (FRIENDLY_MESSAGES.hasOwnProperty(messageKey)) {
+  if (Object.prototype.hasOwnProperty.call(FRIENDLY_MESSAGES, messageKey)) {
     return FRIENDLY_MESSAGES[messageKey]
   } else {
     console.log(

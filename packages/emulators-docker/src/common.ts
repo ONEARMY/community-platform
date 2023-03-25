@@ -75,7 +75,7 @@ function extractArgs() {
     const [selector, value] = arg
       .split('=')
       .map((v) => v.trim().replace('--', ''))
-    if (args.hasOwnProperty(selector)) {
+    if (Object.prototype.hasOwnProperty.call(args, selector)) {
       args[selector] = value
     } else {
       console.warn('Arg not recognised', selector)

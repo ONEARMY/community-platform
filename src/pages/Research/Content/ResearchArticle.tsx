@@ -58,13 +58,11 @@ const ResearchArticle = observer((props: IProps) => {
     researchId: string,
     researchAuthor: string,
     researchSlug: string,
+    votedUsefulCount: number,
+    hasUserVotedUseful: boolean,
   ) => {
-    // Trigger update without waiting
     userStore.updateUsefulResearch(researchId, researchAuthor, researchSlug)
-    // Make an optimistic update of current aggregation to update UI
-    const votedUsefulCount =
-      aggregationsStore.aggregations.users_votedUsefulResearch![researchId] || 0
-    const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
+    // Optimistically update aggregation to keep useful buttons in sync
     aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
       [researchId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
@@ -123,6 +121,8 @@ const ResearchArticle = observer((props: IProps) => {
     const votedUsefulCount = aggregations.users_votedUsefulResearch
       ? aggregations.users_votedUsefulResearch[item._id] || 0
       : undefined
+    const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
+
     const isEditable =
       !!researchStore.activeUser &&
       isAllowToEditContent(item, researchStore.activeUser)
@@ -144,10 +144,16 @@ const ResearchArticle = observer((props: IProps) => {
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           needsModeration={researchStore.needsModeration(item)}
-          hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
+          hasUserVotedUseful={hasUserVotedUseful}
           moderateResearch={moderateResearch}
           onUsefulClick={() =>
-            onUsefulClick(item._id, item._createdBy, item.slug)
+            onUsefulClick(
+              item._id,
+              item._createdBy,
+              item.slug,
+              votedUsefulCount,
+              hasUserVotedUseful,
+            )
           }
         />
         <Box my={16}>
@@ -183,14 +189,20 @@ const ResearchArticle = observer((props: IProps) => {
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}
               votedUsefulCount={votedUsefulCount}
-              hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
+              hasUserVotedUseful={hasUserVotedUseful}
               onUsefulClick={() => {
                 ReactGA.event({
                   category: 'ArticleCallToAction',
                   action: 'ReseachUseful',
                   label: item.slug,
                 })
-                onUsefulClick(item._id, item._createdBy, item.slug)
+                onUsefulClick(
+                  item._id,
+                  item._createdBy,
+                  item.slug,
+                  votedUsefulCount,
+                  hasUserVotedUseful,
+                )
               }}
             />
           </ArticleCallToAction>

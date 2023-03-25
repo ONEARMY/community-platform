@@ -96,23 +96,21 @@ export class Howto extends React.Component<
       await this.store.moderateHowto(_howto)
     }
   }
-  private onUsefulClick = async (
+  private onUsefulClick = (
     howtoId: string,
     howtoCreatedBy: string,
     howToSlug: string,
+    votedUsefulCount: number,
+    hasUserVotedUseful: boolean,
   ) => {
-    // Trigger update without waiting
-    const { userStore } = this.injected
+    const { userStore, aggregationsStore } = this.injected
     userStore.updateUsefulHowTos(howtoId, howtoCreatedBy, howToSlug)
-    // Make an optimistic update of current aggregation to update UI
-    const { aggregationsStore } = this.injected
-    const votedUsefulCount =
-      aggregationsStore.aggregations.users_votedUsefulHowtos![howtoId] || 0
-    const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
+    // Optimistically update aggregation to keep useful buttons in sync
     aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
       [howtoId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
   }
+
   //TODO: Typing Props
   constructor(props: any) {
     super(props)
@@ -158,6 +156,15 @@ export class Howto extends React.Component<
       const votedUsefulCount = aggregations.users_votedUsefulHowtos
         ? aggregations.users_votedUsefulHowtos[activeHowto._id] || 0
         : undefined
+      const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
+      const onUsefulClick = () =>
+        this.onUsefulClick(
+          activeHowto._id,
+          activeHowto._createdBy,
+          activeHowto.slug,
+          votedUsefulCount,
+          hasUserVotedUseful,
+        )
 
       const activeHowToComments: UserComment[] = this.store
         .getActiveHowToComments()
@@ -180,14 +187,6 @@ export class Howto extends React.Component<
             .map((t) => allTagsByKey[t])
             .filter(Boolean),
       }
-
-      const onUsefulClick = () =>
-        this.onUsefulClick(
-          activeHowto._id,
-          activeHowto._createdBy,
-          activeHowto.slug,
-        )
-      const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
 
       return (
         <>

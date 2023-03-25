@@ -33,18 +33,29 @@ export interface IProps {
 export const UsefulStatsButton = (props: IProps) => {
   const theme: any = useTheme()
 
-  const [votedUsefulCount, setVotedUsefulCount] = useState<number>()
-  const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>()
+  const [votedUsefulCount, setVotedUsefulCount] = useState<number>(
+    props.votedUsefulCount,
+  )
+  const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>(
+    props.hasUserVotedUseful,
+  )
 
   useEffect(
     () => setHasUserVotedUseful(props.hasUserVotedUseful),
     [props.hasUserVotedUseful],
   )
+
   useEffect(
     () => setVotedUsefulCount(props.votedUsefulCount),
     [props.votedUsefulCount],
   )
-  const handleUsefulClick = () => {
+
+  const handleUsefulClick = async () => {
+    // Optimistically update state locally to refresh UI
+    setVotedUsefulCount(
+      hasUserVotedUseful ? votedUsefulCount - 1 : votedUsefulCount + 1,
+    )
+    setHasUserVotedUseful(!hasUserVotedUseful)
     props.onUsefulClick()
   }
 

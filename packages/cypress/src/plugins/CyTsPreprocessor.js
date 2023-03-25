@@ -1,3 +1,4 @@
+/* global require, module */
 const wp = require('@cypress/webpack-preprocessor')
 
 const options = {

@@ -1,3 +1,4 @@
+/* global module */
 module.exports = {
   mode: 'development',
   // make sure the source maps work

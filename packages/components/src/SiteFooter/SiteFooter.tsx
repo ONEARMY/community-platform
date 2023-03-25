@@ -69,7 +69,7 @@ export const SiteFooter = () => {
         </Anchor>{' '}
         or{' '}
         <Anchor href="https://platform.onearmy.earth/">
-          help us build the software
+          help&nbsp;us&nbsp;build&nbsp;the&nbsp;software
         </Anchor>
         .
       </Text>

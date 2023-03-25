@@ -541,15 +541,17 @@ export class ResearchStore extends ModuleStore {
     try {
       // populate DB
       // define research
+      const collaborators = Array.isArray(values?.collaborators)
+        ? values.collaborators
+        : (values.collaborators || '')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
       const userCountry = getUserCountry(user)
       const researchItem: IResearch.Item = {
         mentions: [],
         ...values,
-        collaborators:
-          (values?.collaborators || '')
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean) || [],
+        collaborators,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,

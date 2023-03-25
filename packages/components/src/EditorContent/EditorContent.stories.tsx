@@ -7,5 +7,5 @@ export default {
 } as ComponentMeta<typeof EditorContent>
 
 export const Default: ComponentStory<typeof EditorContent> = () => (
-  <EditorContent />
+  <EditorContent json={{ foo: 'bar' }} />
 )

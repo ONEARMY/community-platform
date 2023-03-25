@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import * as linkify from 'linkifyjs'
 import {
   EditorComponent,
@@ -7,6 +8,7 @@ import {
   Remirror,
   FloatingWrapper,
   useMention,
+  ThemeProvider,
 } from '@remirror/react'
 import { cx } from 'remirror'
 
@@ -14,15 +16,18 @@ import { useState, useEffect } from 'react'
 import {
   BoldExtension,
   BulletListExtension,
+  HeadingExtension,
   ItalicExtension,
   LinkExtension,
   MentionExtension,
   OrderedListExtension,
   TaskListExtension,
 } from 'remirror/extensions'
+import { AllStyledComponent } from '@remirror/styles/emotion'
 import type { MentionExtensionAttributes } from 'remirror/extensions'
 import { Button } from '../Button/Button'
 import { Flex, Box } from 'theme-ui'
+import styled from '@emotion/styled'
 
 const editorButtonStyle = {
   paddingX: '.1rem',
@@ -73,6 +78,8 @@ const Menu = () => {
         sx={editorButtonStyle}
         onClick={(e) => {
           toggleHeading({ level: 1 })
+
+          alert('Heading 1')
           focus()
           e.preventDefault()
         }}
@@ -290,25 +297,45 @@ export const FieldEditor = (props: any) => {
         matchers: [{ name: 'at', char: '@', appendText: ' ', matchOffset: 1 }],
       }),
       new TaskListExtension(),
+      new HeadingExtension(),
     ],
     content,
     selection: 'start',
   })
 
+  const StyledEditorContent = styled.div<any>`
+    font-family: 'Times', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background: 'red';
+  `
+
   return (
-    <div className="remirror-theme">
+    <div>
       <Remirror manager={manager} initialContent={state}>
         <Menu />
-        <EditorComponent
-          onError={(e: Error) => console.log(`FieldEditor:`, e)}
-          as="div"
-          {...input}
-          style={{
-            border: '2px solid',
-            borderRadius: 2,
-            px: 2,
+        <Box
+          sx={{
+            my: 2,
           }}
-        />
+        >
+          <AllStyledComponent>
+            <ThemeProvider theme={{}}>
+              <EditorComponent
+                onError={(e: Error) => console.log(`FieldEditor:`, e)}
+                as={StyledEditorContent}
+                placeholder={'Add your content here'}
+                {...input}
+                style={{
+                  border: '2px solid',
+                  borderRadius: 2,
+                  px: 2,
+                }}
+              />
+            </ThemeProvider>
+          </AllStyledComponent>
+        </Box>
         <UserSuggestor allUsers={allUsers} />
 
         <OnChangeJSON

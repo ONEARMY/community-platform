@@ -63,7 +63,7 @@ const markMap: MarkMap = {
   },
 }
 
-interface Props {
+export interface Props {
   json: any
 }
 

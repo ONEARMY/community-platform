@@ -37,6 +37,9 @@
         "accessorPairPositioning": "getThenSet"
       }
     ],
+    "max-lines-per-function": ["error", {
+      "skipBlankLines": true
+    }],
     "import/no-duplicates": "error",
     "import/no-unresolved": "off",
     "import/no-named-as-default": "off",

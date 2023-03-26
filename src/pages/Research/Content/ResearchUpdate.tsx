@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import * as React from 'react'
 import ReactPlayer from 'react-player'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { Button, ImageGallery, LinkifyText } from 'oa-components'
+import { Button, ImageGallery, LinkifyText, Username } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
@@ -42,6 +42,8 @@ const ResearchUpdate: React.FC<IProps> = ({
     'DD-MM-YYYY',
   )
 
+  const hasCollaborators = !!update.collaborators?.length
+
   return (
     <>
       <Flex
@@ -72,9 +74,24 @@ const ResearchUpdate: React.FC<IProps> = ({
               <Flex
                 sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
               >
-                <Heading sx={{ width: ['100%', '75%', '75%'] }} mb={2}>
-                  {update.title}
-                </Heading>
+                <Box sx={{ width: ['100%', '75%', '75%'] }}>
+                  <Heading sx={{ mb: 2 }}>{update.title}</Heading>
+
+                  {hasCollaborators ? (
+                    <Box sx={{ mb: 2 }}>
+                      {update.collaborators?.map((collab, idx) => (
+                        <Username
+                          key={idx}
+                          user={{
+                            userName: collab,
+                          }}
+                          isVerified={false}
+                        />
+                      ))}
+                    </Box>
+                  ) : null}
+                </Box>
+
                 <Flex
                   sx={{
                     flexDirection: ['row', 'column', 'column'],

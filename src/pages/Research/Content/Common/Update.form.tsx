@@ -74,7 +74,13 @@ const UpdateForm = observer((props: IProps) => {
 
   const onSubmit = (formValues: IResearch.Update) => {
     setShowSubmitModal(true)
-    store.uploadUpdate(formValues)
+    store.uploadUpdate({
+      ...formValues,
+      collaborators: [
+        ...(formValues?.collaborators || []),
+        store.activeUser?.userName || '',
+      ].filter(Boolean),
+    })
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
@@ -177,6 +183,7 @@ const UpdateForm = observer((props: IProps) => {
                             px={2}
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
+                            Current User: {store.activeUser?.userName}
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="title">
                                 Title of this update

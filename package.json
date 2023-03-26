@@ -43,6 +43,7 @@
     "test:unit": "env-cmd -e cra craco test --env=jsdom",
     "test:unit:ci": "env-cmd -e cra craco test --env=jsdom --runInBand --logHeapUsage",
     "storybook": "yarn workspace oa-components start",
+    "storybook:build": "yarn build:themes && yarn workspace oa-components build:sb",
     "docs": "yarn workspace oa-docs start",
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
     "install:clean": "yarn workspace oa-scripts install:clean",

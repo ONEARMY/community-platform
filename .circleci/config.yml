@@ -228,6 +228,7 @@ jobs:
             npx @commitlint/cli@17.4.2 --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   lint:
     docker: *docker
+    resource_class: medium+
     steps:
       - setup_repo
       - run:
@@ -440,17 +441,6 @@ workflows:
             - 'Lint code'
           name: Build Application
           context: build-context
-      - build:
-          requires:
-            - 'Lint code'
-          # Main build/deploy runs on LTS node, however still check compatibility for local dev work on other versions
-          name: Build Application (Node << matrix.node-version >>)
-          context: build-context
-          matrix:
-            parameters:
-              node-version:
-                - '16.13.1-browsers'
-                - 'current-browsers' # latest version supported https://circleci.com/developer/images/image/cimg/node
       - test_unit:
           name: 'Unit tests'
           requires:

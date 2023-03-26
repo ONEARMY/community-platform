@@ -98,7 +98,7 @@ export const CreateComment = (props: Props) => {
       </Flex>
       <Button
         data-cy="comment-submit"
-        disabled={!Boolean(comment.trim()) || !isLoggedIn}
+        disabled={!comment.trim() || !isLoggedIn}
         variant="primary"
         onClick={() => onSubmit(comment)}
         mt={3}

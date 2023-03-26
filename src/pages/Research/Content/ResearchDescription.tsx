@@ -106,26 +106,26 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               />
             </Box>
           )}
-          {props.loggedInUser ? (
-            <AuthWrapper roleRequired="beta-tester">
-              <Button
-                icon="thunderbolt"
-                variant="outline"
-                sx={{
-                  fontSize: 2,
-                  py: 0,
-                  height: '41.5px',
-                }}
-                onClick={() => {
-                  props.onFollowingClick()
-                }}
-              >
-                {research.subscribers?.includes(props?.loggedInUser.userName)
-                  ? 'Following'
-                  : 'Follow'}
-              </Button>
-            </AuthWrapper>
-          ) : null}
+          <AuthWrapper roleRequired="beta-tester">
+            <Button
+              icon="thunderbolt"
+              variant="outline"
+              sx={{
+                fontSize: 2,
+                py: 0,
+                height: '41.5px', // TODO: Ideally this is a standard size
+              }}
+              onClick={() => {
+                props.onFollowingClick()
+              }}
+            >
+              {research.subscribers?.includes(
+                props?.loggedInUser?.userName || '',
+              )
+                ? 'Following'
+                : 'Follow'}
+            </Button>
+          </AuthWrapper>
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>

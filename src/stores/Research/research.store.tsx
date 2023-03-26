@@ -608,6 +608,12 @@ export class ResearchStore extends ModuleStore {
       .doc(values._id)
     const user = this.activeUser as IUser
     const updates = (await dbRef.get())?.updates || [] // save old updates when editing
+    const collaborators = Array.isArray(values?.collaborators)
+      ? values.collaborators
+      : (values.collaborators || '')
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
 
     try {
       // populate DB
@@ -616,11 +622,7 @@ export class ResearchStore extends ModuleStore {
       const researchItem: IResearch.Item = {
         mentions: [],
         ...values,
-        collaborators:
-          (values?.collaborators || '')
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean) || [],
+        collaborators,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,
@@ -645,7 +647,8 @@ export class ResearchStore extends ModuleStore {
       this.updateResearchUploadStatus('Complete')
     } catch (error) {
       logger.debug('error', error)
-      //throw new Error(error.message)
+      //TODO: Add error handling here :(
+      throw new Error(error.message)
     }
   }
 
@@ -724,6 +727,8 @@ export class ResearchStore extends ModuleStore {
         })
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log({ error })
         logger.error('error', error)
       }
     }

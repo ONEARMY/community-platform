@@ -183,7 +183,6 @@ const UpdateForm = observer((props: IProps) => {
                             px={2}
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
-                            Current User: {store.activeUser?.userName}
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="title">
                                 Title of this update

@@ -75,8 +75,6 @@ const ResearchUpdate: React.FC<IProps> = ({
                 sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
               >
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
-                  <Heading sx={{ mb: 2 }}>{update.title}</Heading>
-
                   {hasCollaborators ? (
                     <Box sx={{ mb: 2 }}>
                       {update.collaborators?.map((collab, idx) => (
@@ -90,6 +88,8 @@ const ResearchUpdate: React.FC<IProps> = ({
                       ))}
                     </Box>
                   ) : null}
+
+                  <Heading sx={{ mb: 2 }}>{update.title}</Heading>
                 </Box>
 
                 <Flex

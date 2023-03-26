@@ -56,6 +56,14 @@ const beforeUnload = (e) => {
   e.returnValue = CONFIRM_DIALOG_MSG
 }
 
+// automatically generate the slug when the title changes
+const calculatedFields = createDecorator({
+  field: 'title',
+  updates: {
+    slug: (title) => stripSpecialCharacters(title).toLowerCase(),
+  },
+})
+
 const ResearchForm = observer((props: IProps) => {
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
@@ -96,14 +104,6 @@ const ResearchForm = observer((props: IProps) => {
       props.parentType === 'edit' ? props.formValues._id : undefined
     return store.validateTitleForSlug(value, 'research', originalId)
   }
-
-  // automatically generate the slug when the title changes
-  const calculatedFields = createDecorator({
-    field: 'title',
-    updates: {
-      slug: (title) => stripSpecialCharacters(title).toLowerCase(),
-    },
-  })
 
   // Display a confirmation dialog when leaving the page outside the React Router
   const unloadDecorator = (form) => {

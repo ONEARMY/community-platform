@@ -197,6 +197,7 @@ jobs:
   # Install workspace node_modules and persist to cache for use in other jobs
   warmup-cache:
     docker: *docker
+    resource_class: medium+
     steps:
       - setup_repo
       - *save_yarn_cache

@@ -25536,6 +25536,8 @@ __metadata:
 "oa-themes@workspace:*, oa-themes@workspace:packages/themes":
   version: 0.0.0-use.local
   resolution: "oa-themes@workspace:packages/themes"
+  dependencies:
+    typescript: ^4.5.5
   languageName: unknown
   linkType: soft
 

@@ -123,7 +123,10 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
   return doc.moderation !== 'accepted'
 }
 
-export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
+export const isAllowToEditContent = (
+  doc: IEditableDoc & { collaborators?: string[] },
+  user?: IUser,
+) => {
   if (!user) {
     return false
   }
@@ -132,6 +135,11 @@ export const isAllowToEditContent = (doc: IEditableDoc, user?: IUser) => {
   }
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
+
+  if (doc.collaborators?.includes(user.userName)) {
+    return true
+  }
+
   if (
     roles.includes('admin') ||
     roles.includes('super-admin') ||

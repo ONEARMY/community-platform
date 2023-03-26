@@ -36,6 +36,7 @@ interface IState {
   showSubmitModal?: boolean
 }
 interface IProps extends RouteComponentProps<any> {
+  'data-testid'?: string
   formValues: any
   parentType: 'create' | 'edit'
 }
@@ -119,7 +120,7 @@ const ResearchForm = observer((props: IProps) => {
   }
 
   return (
-    <>
+    <div data-testid={props['data-testid']}>
       {state.showSubmitModal && (
         <ResearchSubmitStatus
           {...props}
@@ -331,7 +332,7 @@ const ResearchForm = observer((props: IProps) => {
           )
         }}
       />
-    </>
+    </div>
   )
 })
 

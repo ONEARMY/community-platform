@@ -130,7 +130,13 @@ const UpdateForm = observer((props: IProps) => {
         decorators={[unloadDecorator]}
         render={({ submitting, dirty, handleSubmit }) => {
           return (
-            <Flex mx={-2} mb={4} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+            <Flex
+              mx={-2}
+              mb={4}
+              bg={'inherit'}
+              sx={{ flexWrap: 'wrap' }}
+              data-testid="EditResearchUpdate"
+            >
               <Flex
                 bg="inherit"
                 px={2}

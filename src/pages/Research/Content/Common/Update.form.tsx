@@ -76,10 +76,14 @@ const UpdateForm = observer((props: IProps) => {
     setShowSubmitModal(true)
     store.uploadUpdate({
       ...formValues,
-      collaborators: [
-        ...(formValues?.collaborators || []),
-        store.activeUser?.userName || '',
-      ].filter(Boolean),
+      collaborators: Array.from(
+        new Set(
+          [
+            ...(formValues?.collaborators || []),
+            store.activeUser?.userName || '',
+          ].filter(Boolean),
+        ),
+      ),
     })
   }
 

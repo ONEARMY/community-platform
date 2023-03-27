@@ -4,7 +4,9 @@ import { Flex, Heading, Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { required } from 'src/utils/validators'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { Field } from 'react-final-form'
 import type { IWorkspaceType } from 'src/models'
 

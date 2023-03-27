@@ -25,7 +25,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required, validateUrlAcceptEmpty } from 'src/utils/validators'

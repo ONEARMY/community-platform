@@ -1,6 +1,6 @@
-import memberBadgeLowDetail from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
-import memberBadgeHighDetail from 'src/assets/images/themes/project-kamp/avatar_member_lg.svg'
-import logo from 'src/assets/images/themes/project-kamp/project-kamp-header.png'
+import memberBadgeLowDetail from '../../assets/images/themes/project-kamp/avatar_member_sm.svg'
+import memberBadgeHighDetail from '../../assets/images/themes/project-kamp/avatar_member_lg.svg'
+import logo from '../../assets/images/themes/project-kamp/project-kamp-header.png'
 import type { ThemeWithName } from '../types'
 import { getButtons } from '../common/button'
 export type { ButtonVariants } from '../common/button'
@@ -88,7 +88,7 @@ const typography = {
   },
 }
 
-const StyledComponentTheme: ThemeWithName = {
+export const StyledComponentTheme: ThemeWithName = {
   name: 'Project Kamp',
   profileGuidelinesURL:
     'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
@@ -204,5 +204,3 @@ const StyledComponentTheme: ThemeWithName = {
   typography,
   zIndex,
 }
-
-export default StyledComponentTheme

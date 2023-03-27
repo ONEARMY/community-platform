@@ -1,7 +1,8 @@
 import { format } from 'date-fns'
 import { ThemeProvider } from '@theme-ui/core'
 import { render } from '@testing-library/react'
-import Theme from 'src/themes/styled.theme'
+import { preciousPlasticTheme } from 'oa-themes'
+const Theme = preciousPlasticTheme.styles
 import ResearchUpdate from './ResearchUpdate'
 import { faker } from '@faker-js/faker'
 

@@ -1,11 +1,10 @@
-import logo from 'src/assets/images/precious-plastic-logo-official.svg'
-import badge from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
-import { THEME_LIST } from '..'
+import logo from '../../assets/images/precious-plastic-logo-official.svg'
+import badge from '../../assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import type { PlatformTheme } from '../types'
-import styles from './styles'
+import { styles } from './styles'
 
-const Theme: PlatformTheme = {
-  id: THEME_LIST.PRECIOUS_PLASTIC,
+export const Theme: PlatformTheme = {
+  id: 'precious-plastic',
   siteName: 'Precious Plastic',
   logo,
   badge,
@@ -24,5 +23,3 @@ const Theme: PlatformTheme = {
     },
   ],
 }
-
-export default Theme

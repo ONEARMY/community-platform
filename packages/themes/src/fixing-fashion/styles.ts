@@ -1,8 +1,8 @@
 import type { ThemeWithName } from '../types'
-import spaceBadge from 'src/assets/images/themes/fixing-fashion/avatar_space_lg.svg'
-import memberBadgeLowDetail from 'src/assets/images/themes/fixing-fashion/avatar_member_sm.svg'
-import memberBadgeHighDetail from 'src/assets/images/themes/fixing-fashion/avatar_member_lg.svg'
-import logo from 'src/assets/images/themes/fixing-fashion/fixing-fashion-header.png'
+import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_lg.svg'
+import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'
+import memberBadgeHighDetail from '../../assets/images/themes/fixing-fashion/avatar_member_lg.svg'
+import logo from '../../assets/images/themes/fixing-fashion/fixing-fashion-header.png'
 import { getButtons } from '../common/button'
 export type { ButtonVariants } from '../common/button'
 
@@ -89,7 +89,7 @@ const typography = {
   },
 }
 
-const StyledComponentTheme: ThemeWithName = {
+export const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
   logo: logo,
   profileGuidelinesURL:
@@ -209,5 +209,3 @@ const StyledComponentTheme: ThemeWithName = {
   typography,
   zIndex,
 }
-
-export default StyledComponentTheme

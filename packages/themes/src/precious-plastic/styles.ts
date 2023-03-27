@@ -1,14 +1,14 @@
-import memberBadgeLowDetail from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
-import memberBadgeHighDetail from 'src/assets/images/themes/precious-plastic/avatar_member_lg.svg'
-import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
-import CollectionBadgeLowDetail from 'src/assets/icons/map-collection.svg'
-import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
-import MachineBadgeLowDetail from 'src/assets/icons/map-machine.svg'
-import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
-import WorkspaceBadgeLowDetail from 'src/assets/icons/map-workspace.svg'
-import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
-import LocalComBadgeLowDetail from 'src/assets/icons/map-community.svg'
-import logo from 'src/assets/images/precious-plastic-logo-official.svg'
+import memberBadgeLowDetail from '../../assets/images/themes/precious-plastic/avatar_member_sm.svg'
+import memberBadgeHighDetail from '../../assets/images/themes/precious-plastic/avatar_member_lg.svg'
+import CollectionBadge from '../../assets/images/badges/pt-collection-point.svg'
+import CollectionBadgeLowDetail from '../../assets/icons/map-collection.svg'
+import MachineBadge from '../../assets/images/badges/pt-machine-shop.svg'
+import MachineBadgeLowDetail from '../../assets/icons/map-machine.svg'
+import WorkspaceBadge from '../../assets/images/badges/pt-workspace.svg'
+import WorkspaceBadgeLowDetail from '../../assets/icons/map-workspace.svg'
+import LocalComBadge from '../../assets/images/badges/pt-local-community.svg'
+import LocalComBadgeLowDetail from '../../assets/icons/map-community.svg'
+import logo from '../../assets/images/precious-plastic-logo-official.svg'
 
 import type { ThemeWithName } from '../types'
 import { getButtons } from '../common/button'
@@ -106,7 +106,7 @@ const typography = {
   },
 }
 
-const StyledComponentTheme: ThemeWithName = {
+export const styles: ThemeWithName = {
   name: 'Precious Plastic',
   logo: logo,
   profileGuidelinesURL:
@@ -238,5 +238,3 @@ const StyledComponentTheme: ThemeWithName = {
   typography,
   zIndex,
 }
-
-export default StyledComponentTheme

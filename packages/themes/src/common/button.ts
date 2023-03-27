@@ -1,3 +1,5 @@
+import type { ThemeWithName } from '../types'
+
 const BASE_BUTTON = {
   fontFamily: '"Varela Round", Arial, sans-serif',
   fontSize: 3,
@@ -10,7 +12,7 @@ const BASE_BUTTON = {
   border: '2px solid',
 }
 
-export const getButtons = (colors) => ({
+export const getButtons = (colors: ThemeWithName['colors']) => ({
   primary: {
     ...BASE_BUTTON,
     color: colors.black,

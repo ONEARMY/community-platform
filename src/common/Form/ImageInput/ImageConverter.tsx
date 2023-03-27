@@ -3,7 +3,9 @@ import { Flex } from 'theme-ui'
 import imageCompression from 'browser-image-compression'
 import type { IConvertedFileMeta } from 'src/types'
 import styled from '@emotion/styled'
-import theme from '../../../themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 
 interface IProps {
   file: File

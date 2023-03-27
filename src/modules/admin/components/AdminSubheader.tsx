@@ -2,7 +2,9 @@ import { Box } from 'theme-ui'
 import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { MODULE } from 'src/modules'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { ADMIN_PAGES } from '../admin.routes'
 import { Fragment } from 'react'
 

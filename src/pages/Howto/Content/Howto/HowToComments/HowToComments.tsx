@@ -58,11 +58,6 @@ export const HowToComments = ({ comments }: IProps) => {
   }
 
   const handleDelete = async (_id: string) => {
-    // eslint-disable-next-line no-alert
-    const confirmation = window.confirm(
-      'Are you sure you want to delete this comment?',
-    )
-    if (confirmation) {
       await stores.howtoStore.deleteComment(_id)
       ReactGA.event({
         category: 'Comments',
@@ -78,7 +73,6 @@ export const HowToComments = ({ comments }: IProps) => {
         'comment deleted',
       )
     }
-  }
 
   const handleEdit = async (_id: string, comment: string) => {
     ReactGA.event({

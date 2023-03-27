@@ -1,11 +1,11 @@
 import { Button, CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
 import ReactGA from 'react-ga4'
-import { MAX_COMMENT_LENGTH } from '../../../../constants'
-import { useCommonStores } from '../../../../'
 import { logger } from 'src/logger'
-import { useResearchStore } from '../../../../stores/Research/research.store'
 import { Box, Flex } from 'theme-ui'
+import { useCommonStores } from '../../../../'
+import { MAX_COMMENT_LENGTH } from '../../../../constants'
+import { useResearchStore } from '../../../../stores/Research/research.store'
 
 import styled from '@emotion/styled'
 
@@ -74,26 +74,20 @@ export const ResearchComments = ({
   }
 
   const handleDelete = async (_id: string) => {
-    // eslint-disable-next-line no-alert
-    const confirmation = window.confirm(
-      'Are you sure you want to delete this comment?',
-    )
-    if (confirmation) {
-      await researchStore.deleteComment(_id, update as IResearch.Update)
-      ReactGA.event({
+    await researchStore.deleteComment(_id, update as IResearch.Update)
+    ReactGA.event({
+      category: 'Comments',
+      action: 'Deleted',
+      label: researchStore.activeResearchItem?.title,
+    })
+    logger.debug(
+      {
         category: 'Comments',
         action: 'Deleted',
         label: researchStore.activeResearchItem?.title,
-      })
-      logger.debug(
-        {
-          category: 'Comments',
-          action: 'Deleted',
-          label: researchStore.activeResearchItem?.title,
-        },
-        'comment deleted',
-      )
-    }
+      },
+      'comment deleted',
+    )
   }
 
   const handleEdit = async (_id: string, comment: string) => {

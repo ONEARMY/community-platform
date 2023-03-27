@@ -24,7 +24,6 @@ import {
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import { Link } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
@@ -146,19 +145,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               variant="subtle"
               sx={{ fontSize: '14px' }}
               data-cy="go-back"
+              icon="arrow-back"
             >
-              <Flex>
-                <Image
-                  loading="lazy"
-                  sx={{
-                    width: '10px',
-                    marginRight: '4px',
-                    transform: 'rotate(90deg)',
-                  }}
-                  src={ArrowIcon}
-                />
-                <Text>Back</Text>
-              </Flex>
+              Back
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (

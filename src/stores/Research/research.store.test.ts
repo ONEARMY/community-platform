@@ -36,9 +36,18 @@ const factory = async (mockFn, researchItemOverloads: any = {}) => {
     }),
   )
 
+  let item = researchItem
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  store.db.get.mockResolvedValue(researchItem)
+  store.db.set.mockImplementation((newValue) => {
+    item = newValue
+    return newValue
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.db.get.mockImplementation(async () => item)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -688,11 +697,10 @@ describe('research.store', () => {
       const { store, researchItem, setFn } = await factoryResearchItem({
         subscribers: ['subscriber'],
       })
-      const newUpdate = FactoryResearchItemUpdate()
 
       // Act
-      await store.uploadUpdate(newUpdate)
-      await store.uploadUpdate(newUpdate)
+      await store.uploadUpdate(FactoryResearchItemUpdate())
+      await store.uploadUpdate(FactoryResearchItemUpdate())
 
       expect(setFn).toHaveBeenCalledTimes(2)
 

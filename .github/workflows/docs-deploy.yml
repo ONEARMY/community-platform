@@ -9,6 +9,7 @@ on:
     paths:
       - 'packages/documentation/**'
       - 'packages/components/**'
+      - 'packages/themes/**'
       - '.github/workflows/docs-deploy.yml'
 jobs:
   build_and_deploy:
@@ -33,7 +34,7 @@ jobs:
 
       # Populate component storybook docs as static asset to include in overall docs
       - name: Build component docs
-        run: yarn workspace oa-components install --immutable && yarn workspace oa-components build:sb
+        run: yarn workspace oa-components install --immutable && yarn storybook:build
       - name: Copy component docs to storybook
         run: mv packages/components/storybook-static packages/documentation/static
 

@@ -1,4 +1,13 @@
-import type { ProfileTypeLabel } from 'src/modules/profile/types'
+const ProfileType = {
+  MEMBER: 'member',
+  SPACE: 'space',
+  WORKSPACE: 'workspace',
+  MACHINE_BUILDER: 'machine-builder',
+  COMMUNITY_BUILDER: 'community-builder',
+  COLLECTION_POINT: 'collection-point',
+} as const
+
+export type ProfileTypeLabel = typeof ProfileType[keyof typeof ProfileType]
 
 interface LinkList {
   label: string
@@ -12,7 +21,7 @@ export interface PlatformTheme {
   badge: string
   avatar: string
   howtoHeading: string
-  styles: any
+  styles: ThemeWithName
   academyResource: string
   externalLinks: LinkList[]
 }

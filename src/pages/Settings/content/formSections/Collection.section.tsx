@@ -17,7 +17,9 @@ import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 import { FieldArray } from 'react-final-form-arrays'
 import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 
 interface IProps {
   formValues: IUserPP

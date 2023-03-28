@@ -5,7 +5,9 @@ import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { NavLink } from 'react-router-dom'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { AuthWrapper } from '../../../../../common/AuthWrapper'
 
 interface IProps {

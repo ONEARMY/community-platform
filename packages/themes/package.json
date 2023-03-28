@@ -1,0 +1,15 @@
+{
+  "name": "oa-themes",
+  "version": "1.0.0",
+  "packageManager": "yarn@3.1.1",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "build": "tsc --build --verbose",
+    "dev": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
+}

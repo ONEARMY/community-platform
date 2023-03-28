@@ -197,6 +197,7 @@ jobs:
   # Install workspace node_modules and persist to cache for use in other jobs
   warmup-cache:
     docker: *docker
+    resource_class: medium+
     steps:
       - setup_repo
       - *save_yarn_cache
@@ -228,6 +229,7 @@ jobs:
             npx @commitlint/cli@17.4.2 --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   lint:
     docker: *docker
+    resource_class: medium+
     steps:
       - setup_repo
       - run:
@@ -281,7 +283,7 @@ jobs:
           command: yarn workspaces focus one-army-community-platform
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
-          command: yarn build:components && yarn run test:unit:ci && yarn run test:components
+          command: yarn run test:unit:ci && yarn run test:components
   build:
     <<: *docker_matrix
     environment:
@@ -324,7 +326,7 @@ jobs:
       - attach_workspace:
           at: '.'
       - run:
-          command: yarn workspace oa-components build:sb
+          command: yarn storybook:build
   deploy:
     docker: *docker
     resource_class: small
@@ -440,17 +442,6 @@ workflows:
             - 'Lint code'
           name: Build Application
           context: build-context
-      - build:
-          requires:
-            - 'Lint code'
-          # Main build/deploy runs on LTS node, however still check compatibility for local dev work on other versions
-          name: Build Application (Node << matrix.node-version >>)
-          context: build-context
-          matrix:
-            parameters:
-              node-version:
-                - '16.13.1-browsers'
-                - 'current-browsers' # latest version supported https://circleci.com/developer/images/image/cimg/node
       - test_unit:
           name: 'Unit tests'
           requires:

@@ -1,13 +1,13 @@
-import VarelaRound_woff from './VarelaRound-Regular.woff'
-import VarelaRound_ttf from './VarelaRound-Regular.ttf'
+import VarelaRound_woff from '../../assets/fonts/VarelaRound-Regular.woff'
+import VarelaRound_ttf from '../../assets/fonts/VarelaRound-Regular.ttf'
 
-import InterRegular_woff2 from './Inter-Regular.woff2'
-import InterRegular_woff from './Inter-Regular.woff'
-import InterRegular_ttf from './Inter-Regular.ttf'
+import InterRegular_woff2 from '../../assets/fonts/Inter-Regular.woff2'
+import InterRegular_woff from '../../assets/fonts/Inter-Regular.woff'
+import InterRegular_ttf from '../../assets/fonts/Inter-Regular.ttf'
 
-import InterMedium_woff2 from './Inter-Medium.woff2'
-import InterMedium_woff from './Inter-Medium.woff'
-import InterMedium_ttf from './Inter-Medium.ttf'
+import InterMedium_woff2 from '../../assets/fonts/Inter-Medium.woff2'
+import InterMedium_woff from '../../assets/fonts/Inter-Medium.woff'
+import InterMedium_ttf from '../../assets/fonts/Inter-Medium.ttf'
 
 // declare global styling overrides (fonts etc.)
 

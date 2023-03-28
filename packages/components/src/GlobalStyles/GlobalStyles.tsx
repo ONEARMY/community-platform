@@ -1,10 +1,8 @@
 import { css } from '@emotion/react'
-import theme from 'src/themes/styled.theme'
+import { preciousPlasticTheme, GlobalFonts } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 
-import { GlobalFonts } from './fonts'
-// declare global styling overrides (fonts etc.)
-
-export const GlobalStyle = css`
+export const GlobalStyles = css`
   ${GlobalFonts}
   body {
     font-family: 'Varela Round', Arial, sans-serif;
@@ -13,6 +11,7 @@ export const GlobalStyle = css`
     padding: 0;
     min-height: 100vh;
   }
+
   a {
     text-decoration: none;
   }

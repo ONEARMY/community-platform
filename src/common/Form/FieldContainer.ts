@@ -1,11 +1,14 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 
 interface IFormElement {
   invalid?: boolean
   customChange?: (location) => void
 }
+
 const inputStyles = ({ invalid }: IFormElement) => css`
   border: 1px solid ${invalid ? theme.colors.error : 'transparent'};
   border-radius: 5px;

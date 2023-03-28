@@ -1,8 +1,10 @@
 import { action, makeAutoObservable } from 'mobx'
-import type { PlatformTheme } from 'src/themes/types'
-import preciousPlasticTheme from 'src/themes/precious-plastic'
-import projectKampTheme from 'src/themes/project-kamp'
-import fixingFashionTheme from 'src/themes/fixing-fashion'
+import type { PlatformTheme } from 'oa-themes'
+import {
+  preciousPlasticTheme,
+  projectKampTheme,
+  fixingFashionTheme,
+} from 'oa-themes'
 import { getConfigurationOption } from 'src/config/config'
 import { logger } from '../../logger'
 

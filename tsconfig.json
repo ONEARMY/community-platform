@@ -42,6 +42,7 @@
     "src/utils/UserMigration",
     "src/setupProxy.js",
     "src/assets/userReportInit.js",
-    "packages/components"
+    "packages/components",
+    "packages/themes"
   ]
 }

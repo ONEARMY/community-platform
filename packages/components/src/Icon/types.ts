@@ -43,5 +43,10 @@ export type availableGlyphs =
   | 'view'
   | 'supporter'
   | 'flag-unknown'
+  | 'social-media'
+  | 'discord'
+  | 'website'
+  | 'bazar'
+  | 'email-outline'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }

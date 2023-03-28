@@ -1,7 +1,9 @@
 import { Icon, ExternalLink } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 
 interface IProps {
   link: string

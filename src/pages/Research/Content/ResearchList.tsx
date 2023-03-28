@@ -7,7 +7,9 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { useTheme } from '@emotion/react'
 import { Link, useHistory } from 'react-router-dom'
 import styled from '@emotion/styled'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { useCommonStores } from 'src'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import type { RouteComponentProps } from 'react-router'

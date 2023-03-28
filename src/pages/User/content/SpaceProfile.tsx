@@ -13,7 +13,9 @@ import styled from '@emotion/styled'
 
 import { MemberBadge, Icon, Username } from 'oa-components'
 
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -89,12 +91,6 @@ const PlasticType = styled.div`
   &:last-child {
     margin-right: 0;
   }
-`
-
-const ProfileContentWrapper = styled(Flex)`
-  background-color: ${theme.colors.white};
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
 `
 
 const SliderImage = styled.div`
@@ -250,7 +246,14 @@ export const SpaceProfile = ({ user }: IProps) => {
       <ProfileWrapperCarousel>
         <Slider {...sliderSettings}>{coverImage}</Slider>
       </ProfileWrapperCarousel>
-      <ProfileContentWrapper px={[2, 4]} py={4}>
+      <Flex
+        sx={{
+          px: [2, 4],
+          py: 4,
+          background: 'white',
+          borderTop: '2px solid',
+        }}
+      >
         <Box sx={{ width: ['100%', '100%', '80%'] }}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
@@ -314,7 +317,7 @@ export const SpaceProfile = ({ user }: IProps) => {
             <UserStats user={user} />
           </MobileBadge>
         </Box>
-      </ProfileContentWrapper>
+      </Flex>
     </ProfileWrapper>
   )
 }

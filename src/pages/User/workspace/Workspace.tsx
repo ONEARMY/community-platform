@@ -11,7 +11,7 @@ import MemberHighlight from 'src/assets/images/highlights/highlight-member.svg'
 // assets profileType
 import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 
-import type { PlatformTheme } from 'src/themes/types'
+import type { PlatformTheme } from 'oa-themes'
 
 const findWordspaceHighlight = (workspaceType?: string): string => {
   switch (workspaceType) {

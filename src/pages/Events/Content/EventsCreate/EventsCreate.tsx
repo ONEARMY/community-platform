@@ -18,7 +18,9 @@ import { PostingGuidelines } from './PostingGuidelines'
 import type { IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/common/Form/LocationSearch.field'
 import styled from '@emotion/styled'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'

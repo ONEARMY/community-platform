@@ -5,7 +5,8 @@ import { useCommonStores } from 'src'
 import { FactoryUser } from '../../test/factories/User'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
-import Theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
 
 // eslint-disable-next-line prefer-const
 let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
@@ -58,7 +59,7 @@ describe('UserSettings', () => {
           getUserEmail: jest.fn(),
         }}
       >
-        <ThemeProvider theme={Theme}>
+        <ThemeProvider theme={preciousPlasticTheme.styles}>
           <MemoryRouter>
             <UserSettings />
           </MemoryRouter>
@@ -85,7 +86,7 @@ describe('UserSettings', () => {
           getUserProfile: jest.fn().mockResolvedValue(user),
         }}
       >
-        <ThemeProvider theme={Theme}>
+        <ThemeProvider theme={preciousPlasticTheme.styles}>
           <MemoryRouter>
             <UserSettings adminEditableUserId={user._id} />
           </MemoryRouter>
@@ -119,7 +120,7 @@ describe('UserSettings', () => {
           getUserProfile: jest.fn().mockResolvedValue(user),
         }}
       >
-        <ThemeProvider theme={Theme}>
+        <ThemeProvider theme={preciousPlasticTheme.styles}>
           <MemoryRouter>
             <UserSettings adminEditableUserId={user._id} />
           </MemoryRouter>
@@ -154,7 +155,7 @@ describe('UserSettings', () => {
           getUserProfile: jest.fn().mockResolvedValue(user),
         }}
       >
-        <ThemeProvider theme={Theme}>
+        <ThemeProvider theme={preciousPlasticTheme.styles}>
           <MemoryRouter>
             <UserSettings adminEditableUserId={user._id} />
           </MemoryRouter>

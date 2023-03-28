@@ -91,6 +91,7 @@ export class AdminTags extends React.Component<IProps, IState> {
               name="label"
               placeholder="Label"
               value={tagForm.label}
+              autoFocus
               onChange={this.handleFormChange}
             />
             <Select

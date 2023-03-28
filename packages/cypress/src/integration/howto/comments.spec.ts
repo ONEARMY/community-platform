@@ -71,8 +71,6 @@ describe('[How To Commenting]', () => {
           .click()
 
         cy.get('[data-cy="Confirm.modal: Confirm"]').should('exist')
-
-        // TODO: check db to make sure comment deleted
       })
     })
   })

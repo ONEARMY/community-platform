@@ -1,13 +1,15 @@
 import { Box, Flex, Text } from 'theme-ui'
 import { Button, Modal } from '..'
 
-export const ConfirmModal: React.FC<{
+export interface Props {
   message: string
   confirmButtonText: string
   isOpen: boolean
   handleCancel: () => void
   handleConfirm: () => void
-}> = (props) => {
+}
+
+export const ConfirmModal = (props: Props) => {
   const { message, confirmButtonText, isOpen } = props
 
   return (

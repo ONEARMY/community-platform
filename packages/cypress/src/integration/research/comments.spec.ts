@@ -70,8 +70,6 @@ describe('[Research]', () => {
         .get(`[data-cy="CommentItem: delete button"]`)
         .click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').should('exist')
-
-      // TODO: check db to make sure comment deleted
     })
   })
 })

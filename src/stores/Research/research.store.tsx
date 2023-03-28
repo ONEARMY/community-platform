@@ -491,6 +491,8 @@ export class ResearchStore extends ModuleStore {
       after: researchDescription,
     })
 
+    const previousVersion = toJS(await dbRef.get('server'))
+
     const mentions: any = []
 
     await Promise.all(
@@ -572,10 +574,19 @@ export class ResearchStore extends ModuleStore {
     // Notify each subscriber
     const subscribers = researchItem.subscribers || []
 
-    const previousVersion = await dbRef.get('server')
-
     // Only notify subscribers if there is a new update added
-    if (researchItem.updates.length > (previousVersion?.updates.length || 0)) {
+    logger.debug('Notify each subscriber', {
+      subscribers,
+      beforeUpdateNumber: previousVersion?.updates
+        ? previousVersion?.updates.length
+        : 0,
+      afterUpdateNumber: researchItem?.updates.length,
+    })
+
+    if (
+      researchItem.updates.length >
+      (previousVersion?.updates ? previousVersion?.updates.length : 0)
+    ) {
       subscribers.forEach((subscriber) =>
         this.userNotificationsStore.triggerNotification(
           'research_update',

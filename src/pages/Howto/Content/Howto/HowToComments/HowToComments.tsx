@@ -58,21 +58,21 @@ export const HowToComments = ({ comments }: IProps) => {
   }
 
   const handleDelete = async (_id: string) => {
-      await stores.howtoStore.deleteComment(_id)
-      ReactGA.event({
+    await stores.howtoStore.deleteComment(_id)
+    ReactGA.event({
+      category: 'Comments',
+      action: 'Deleted',
+      label: stores.howtoStore.activeHowto?.title,
+    })
+    logger.debug(
+      {
         category: 'Comments',
         action: 'Deleted',
         label: stores.howtoStore.activeHowto?.title,
-      })
-      logger.debug(
-        {
-          category: 'Comments',
-          action: 'Deleted',
-          label: stores.howtoStore.activeHowto?.title,
-        },
-        'comment deleted',
-      )
-    }
+      },
+      'comment deleted',
+    )
+  }
 
   const handleEdit = async (_id: string, comment: string) => {
     ReactGA.event({

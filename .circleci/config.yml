@@ -197,6 +197,7 @@ jobs:
   # Install workspace node_modules and persist to cache for use in other jobs
   warmup-cache:
     docker: *docker
+    resource_class: medium+
     steps:
       - setup_repo
       - *save_yarn_cache
@@ -228,6 +229,7 @@ jobs:
             npx @commitlint/cli@17.4.2 --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   lint:
     docker: *docker
+    resource_class: medium+
     steps:
       - setup_repo
       - run:

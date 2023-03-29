@@ -16,7 +16,7 @@ If you never used it before don't worry, it makes a lot of sense and you'll just
 
 In the long term, we would like to allow easy theme swapping by simply changing the theme file for anyone.
 
-All of the current themes can be within `src/themes/`, currently there are 3 available:
+All of the current themes can be within `packages/themes/`, currently there are 3 available:
 
 - Precious Plastic
 - Project Kamp

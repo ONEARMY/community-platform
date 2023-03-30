@@ -12,7 +12,6 @@ import type { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
 import { MAP_GROUPINGS } from './maps.groupings'
-import { generatePins, generatePinDetails } from 'src/stores/Maps/generatePins'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from '../storage'
 import {
@@ -23,8 +22,6 @@ import {
 import { logger } from 'src/logger'
 import { filterMapPinsByType } from './filter'
 
-// NOTE - toggle below variable to use larger mock dataset
-const IS_MOCK = false
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
   mapPins$: Subscription
@@ -65,9 +62,6 @@ export class MapsStore extends ModuleStore {
       .map((p) => {
         return { ...p, verified: this.userStore.verifiedUsers[p._id] === true }
       })
-    if (IS_MOCK) {
-      pins = generatePins(250)
-    }
     this.mapPins = pins
     this.filteredPins = this.mapPins
   }
@@ -134,10 +128,7 @@ export class MapsStore extends ModuleStore {
   }
   // call additional action when pin detail received to inform mobx correctly of update
   private async getPinDetail(pin: IMapPin): Promise<IMapPinWithDetail> {
-    const detail: IMapPinDetail = IS_MOCK
-      ? generatePinDetails()
-      : await this.getUserProfilePin(pin._id)
-    return { ...pin, detail }
+    return { ...pin, detail: await this.getUserProfilePin(pin._id) }
   }
 
   // get base pin geo information

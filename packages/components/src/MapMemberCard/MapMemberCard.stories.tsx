@@ -16,6 +16,7 @@ export const Default: ComponentStory<typeof MapMemberCard> = () => (
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
+      country: faker.address.countryCode('alpha-2'),
     }}
     heading={`${faker.lorem.word()}`}
     isEditable={false}
@@ -32,6 +33,7 @@ export const LoadingState: ComponentStory<typeof MapMemberCard> = () => (
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
+      country: faker.address.countryCode('alpha-2'),
     }}
     heading={`${faker.lorem.word()}`}
     isEditable={false}
@@ -46,6 +48,7 @@ export const AwaitingModeration: ComponentStory<typeof MapMemberCard> = () => (
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
+      country: faker.address.countryCode('alpha-2'),
     }}
     heading={`${faker.lorem.word()}`}
     moderationStatus="awaiting-moderation"
@@ -64,6 +67,7 @@ export const Draft: ComponentStory<typeof MapMemberCard> = () => (
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
+      country: faker.address.countryCode('alpha-2'),
     }}
     heading={`${faker.lorem.word()}`}
     moderationStatus="draft"
@@ -82,6 +86,7 @@ export const Rejected: ComponentStory<typeof MapMemberCard> = () => (
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
+      country: faker.address.countryCode('alpha-2'),
     }}
     heading={`${faker.lorem.word()}`}
     moderationStatus="rejected"

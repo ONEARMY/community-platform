@@ -194,6 +194,7 @@ export class MapsStore extends ModuleStore {
         displayName: username,
         profileUrl: `${window.location.origin}/u/${username}`,
         verifiedBadge: false,
+        country: null,
       }
     }
     const avatar = getUserAvatar(username)
@@ -211,6 +212,7 @@ export class MapsStore extends ModuleStore {
       displayName: u.displayName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
       verifiedBadge: !!u.badges?.verified,
+      country: u.location?.countryCode || u.country?.toLowerCase() || null,
     }
   }
   @action

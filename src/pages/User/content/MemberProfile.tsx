@@ -58,6 +58,7 @@ export const MemberProfile = ({ user }: IProps) => {
         margin: '0 auto',
       }}
     >
+      {JSON.stringify(user)}
       <MemberBadge
         profileType="member"
         size={50}

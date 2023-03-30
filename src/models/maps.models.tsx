@@ -43,6 +43,7 @@ export interface IMapPinDetail {
   profileUrl: string
   heroImageUrl: string
   verifiedBadge: boolean
+  country: string | null
 }
 
 export interface ILatLng {

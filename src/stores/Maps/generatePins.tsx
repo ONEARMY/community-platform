@@ -60,5 +60,6 @@ export const generatePinDetails = (): IMapPinDetail => {
     profileUrl: '/testing',
     heroImageUrl: `https://picsum.photos/seed/${lastActive}/285/175`,
     verifiedBadge: false,
+    country: 'nl',
   }
 }

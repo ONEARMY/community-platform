@@ -1,3 +1,4 @@
+import { logger } from 'firebase-functions/v1'
 import { NotificationType } from '../../../src/models'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
@@ -40,7 +41,7 @@ export async function createNotificationEmails() {
     .doc('emails_pending')
     .get()
 
-  Object.entries(pendingEmails.data()).forEach(
+  Object.entries(pendingEmails.data() || []).forEach(
     async ([_userId, value]: [string, IPendingEmails]) => {
       const user = await db.collection[DB_ENDPOINTS.users].doc(_userId).get()
       if (user.exists) {

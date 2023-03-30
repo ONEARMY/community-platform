@@ -53,7 +53,7 @@ describe('[Settings]', () => {
       .click()
   }
 
-  const addContactLink = (link: ILink) => {
+  const addContactLink = (link: Omit<ILink, 'key'>) => {
     if (link.index > 0) {
       // click the button to add another set of input fields
       cy.get('[data-cy=add-link]').click()
@@ -205,6 +205,34 @@ describe('[Settings]', () => {
         },
       ],
     }
+    it('[Cancel edit profile without confirmation dialog]', () => {
+      cy.login('settings_member_new@test.com', 'test1234')
+      cy.step('Go to User Settings')
+      cy.clickMenuItem(UserMenuItem.Settings)
+      cy.step('Click on How to')
+      cy.on('window:confirm', () => {
+        throw new Error('Confirm dialog should not be called.')
+      })
+      cy.get('[data-cy=page-link]').contains('How-to').click()
+      cy.step('Confirm log should NOT appear')
+    })
+
+    it('[Cancel edit profile and get confirmation]', (done) => {
+      cy.login('settings_member_new@test.com', 'test1234')
+      cy.step('Go to User Settings')
+      cy.clickMenuItem(UserMenuItem.Settings)
+      cy.get('[data-cy=username').clear().type('Wrong user')
+      cy.step('Click on How to')
+      cy.get('[data-cy=page-link]').contains('How-to').click()
+      cy.step('Confirm log should log')
+      cy.on('window:confirm', (text) => {
+        expect(text).to.eq(
+          'You are leaving this page without saving. Do you want to continue ?',
+        )
+        done()
+      })
+    })
+
     it('[Edit a new profile]', () => {
       cy.login('settings_member_new@test.com', 'test1234')
       cy.step('Go to User Settings')
@@ -329,6 +357,50 @@ describe('[Settings]', () => {
         cy.wrap(null)
           .then(() => docs[0])
           .should('eqSettings', expected)
+      })
+    })
+
+    it('[Edit Contact and Links]', () => {
+      cy.login('settings_member_new@test.com', 'test1234')
+      cy.step('Go to User Settings')
+      cy.clickMenuItem(UserMenuItem.Settings)
+
+      addContactLink({
+        index: 1,
+        label: 'social',
+        url: 'https://social.network',
+      })
+
+      // Remove first item
+      cy.get('[data-cy="delete-link-0"]').last().trigger('click')
+
+      cy.get('[data-cy="Link.field: Modal"]').should('be.visible')
+
+      cy.get('[data-cy="Link.field: Delete"]').trigger('click')
+
+      cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=save]').should('not.be.disabled')
+
+      // Assert
+      cy.queryDocuments(
+        DbCollectionName.users,
+        'userName',
+        '==',
+        expected.userName,
+      ).then((docs) => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqSettings', {
+            ...expected,
+            links: [
+              {
+                label: 'social',
+                url: 'https://social.network',
+              },
+            ],
+          })
       })
     })
   })

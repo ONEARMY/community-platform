@@ -6,7 +6,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import type { RootStore } from '..'
 import { HowtoStore } from './howto.store'
 
-async function factory(howtoOverloads: Partial<IHowtoDB> = {}) {
+const factory = async (howtoOverloads: Partial<IHowtoDB> = {}) => {
   const store = new HowtoStore({} as RootStore)
   const howToItem = FactoryHowto(howtoOverloads)
 
@@ -50,6 +50,9 @@ async function factory(howtoOverloads: Partial<IHowtoDB> = {}) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    getFn: store.db.get,
   }
 }
 
@@ -401,6 +404,41 @@ describe('howto.store', () => {
       await store.removeActiveHowto()
 
       expect(store.activeHowto).toBe(null)
+    })
+  })
+
+  describe('incrementDownloadCount', () => {
+    it('increments download count by one', async () => {
+      const { store, howToItem, setFn } = await factory()
+
+      const downloads = howToItem.total_downloads!
+      // Act
+      const updatedDownloads = await store.incrementDownloadCount(howToItem._id)
+
+      expect(setFn).toBeCalledTimes(1)
+      expect(updatedDownloads).toBe(downloads + 1)
+    })
+  })
+
+  describe('incrementViews', () => {
+    it('data fetched from server db', async () => {
+      const { store, howToItem, getFn } = await factory()
+
+      // Act
+      await store.incrementViewCount(howToItem._id)
+
+      expect(getFn).toBeCalledTimes(1)
+      expect(getFn).toHaveBeenCalledWith('server')
+    })
+    it('increments views by one', async () => {
+      const { store, howToItem, setFn } = await factory()
+
+      const views = howToItem.total_views!
+      // Act
+      const updatedViews = await store.incrementViewCount(howToItem._id)
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(updatedViews).toBe(views + 1)
     })
   })
 })

@@ -1,6 +1,7 @@
 import type { ThemeUIStyleObject } from 'theme-ui'
 import { Text, Flex, Image } from 'theme-ui'
 import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
+import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import type { User } from '../'
@@ -47,11 +48,26 @@ export const Username = (props: Props) => {
           alignItems: 'center',
         }}
       >
-        {props.user.countryCode && (
-          <Flex mr={1} sx={{ display: 'inline-flex' }}>
+        <Flex mr={1} sx={{ display: 'inline-flex' }}>
+          {props.user.countryCode ? (
             <FlagIconHowTos code={props.user.countryCode.toLowerCase()} />
-          </Flex>
-        )}
+          ) : (
+            <Flex
+              data-testid="Username: unknown flag"
+              sx={{
+                backgroundImage: `url(${flagUnknownSVG})`,
+                backgroundSize: 'cover',
+                borderRadius: '3px',
+                height: '14px',
+                width: '21px !important',
+                justifyContent: 'center',
+                alignItems: 'center',
+                lineHeight: 0,
+                overflow: 'hidden',
+              }}
+            ></Flex>
+          )}
+        </Flex>
         <Text>{props.user.userName}</Text>
         {props.isVerified && (
           <Image

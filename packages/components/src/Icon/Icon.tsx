@@ -96,9 +96,16 @@ export const glyphs: IGlyphs = {
   thunderbolt: <AiFillThunderbolt />,
   filter: <RiFilter2Fill />,
   view: iconMap.view,
+  supporter: iconMap.supporter,
+  'flag-unknown': iconMap.flagUnknown,
+  'social-media': iconMap.socialMedia,
+  website: iconMap.website,
+  bazar: iconMap.bazar,
+  'email-outline': iconMap.emailOutline,
+  discord: iconMap.discord,
 }
 
-type WrapperProps = IProps & VerticalAlignProps & SpaceProps
+export type WrapperProps = IProps & VerticalAlignProps & SpaceProps
 
 const IconWrapper = styled.div<WrapperProps>`
   display: inline-block;

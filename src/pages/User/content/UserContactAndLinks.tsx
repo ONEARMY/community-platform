@@ -1,29 +1,21 @@
-import styled from '@emotion/styled'
-import theme from 'src/themes/styled.theme'
-import ProfileLink from './ProfileLink'
-
-const UserContactInfo = styled.div`
-  h6 {
-    margin-top: ${theme.space[3]}px;
-  }
-  div {
-    margin-bottom: ${theme.space[2]}px;
-    margin-top: ${theme.space[3]}px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-`
+import { ProfileLink } from 'oa-components'
+import { Box } from 'theme-ui'
 
 export const UserContactAndLinks = ({ links }) =>
-  !!links.length ? (
-    <UserContactInfo>
+  links.length ? (
+    <Box sx={{ mt: 6 }}>
       <span>Contact & Links</span>
       {links.map((link, i) => (
-        <ProfileLink link={link} key={'Link-' + i} />
+        <ProfileLink
+          {...link}
+          key={i}
+          sx={{ mt: 2 }}
+          icon={link.label
+            .replace('social media', 'social-media')
+            .replace('email', 'email-outline')}
+        />
       ))}
-    </UserContactInfo>
+    </Box>
   ) : null
 
 export default UserContactAndLinks

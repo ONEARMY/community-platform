@@ -3,6 +3,7 @@ import { toJS } from 'mobx'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryResearchItem,
+  FactoryResearchItemFormInput,
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
@@ -14,8 +15,14 @@ jest.mock('../../utils/helpers', () => ({
   },
 }))
 
-const factory = async (researchItemOverloads: any = {}) => {
-  const researchItem = FactoryResearchItem({
+const factoryResearchItem = async (researchItemOverloads: any = {}) =>
+  factory(FactoryResearchItem, researchItemOverloads)
+
+const factoryResearchItemFormInput = async (researchItemOverloads: any = {}) =>
+  factory(FactoryResearchItemFormInput, researchItemOverloads)
+
+const factory = async (mockFn, researchItemOverloads: any = {}) => {
+  const researchItem = mockFn({
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
@@ -62,6 +69,9 @@ const factory = async (researchItemOverloads: any = {}) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    getFn: store.db.get,
   }
 }
 
@@ -69,7 +79,9 @@ describe('research.store', () => {
   describe('Comments', () => {
     describe('addComment', () => {
       it('adds new comment to update', async () => {
-        const { store, researchItem, setFn } = await factory()
+        const { store, researchItem, setFn } = await factoryResearchItem({
+          collaborators: ['a-contributor'],
+        })
 
         // Act
         await store.addComment('fish', researchItem.updates[0])
@@ -83,10 +95,25 @@ describe('research.store', () => {
           }),
         )
         expect(newResearchItem.updates[1].comments).toBeUndefined()
+
+        // Notifies research author
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toHaveBeenCalledTimes(2)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'new_comment_research',
+          researchItem._createdBy,
+          `/research/${researchItem.slug}#update_0`,
+        )
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'new_comment_research',
+          'a-contributor',
+          `/research/${researchItem.slug}#update_0`,
+        )
       })
 
       it('adds @mention to comment text', async () => {
-        const { store, researchItem, setFn } = await factory()
+        const { store, researchItem, setFn } = await factoryResearchItem()
 
         // Act
         await store.addComment(
@@ -113,30 +140,52 @@ describe('research.store', () => {
         )
       })
 
-      it('triggers notification for @mentions in comment', async () => {
-        const { store, researchItem } = await factory()
+      it('preserves @mention within Research description', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem({
+          description: '@username',
+        })
 
         // Act
-        await store.addComment(
-          'My favourite user has to be @username',
-          researchItem.updates[0],
-        )
+        await store.addComment('fish', researchItem.updates[0])
 
         // Assert
-        expect(
-          store.userNotificationsStore.triggerNotification,
-        ).toBeCalledTimes(1)
-        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
-          'research_mention',
-          'username',
-          `/research/${researchItem.slug}#update-0-comment:random-id`,
+        expect(setFn).toHaveBeenCalledWith(
+          expect.objectContaining({
+            description: '@@{userId:username}',
+          }),
+        )
+      })
+
+      it('preserves @mention within an Update description', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem({
+          updates: [
+            FactoryResearchItemUpdate({
+              description: '@username',
+              comments: [
+                FactoryComment({
+                  _id: 'commentId',
+                  _creatorId: 'fake-user',
+                  text: 'text',
+                }),
+              ],
+            }),
+          ],
+        })
+
+        // Act
+        await store.deleteComment('commentId', researchItem.updates[0])
+
+        // Assert
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(newResearchItem.updates[0].description).toBe(
+          '@@{userId:username}',
         )
       })
     })
 
     describe('deleteComment', () => {
       it('removes a comment', async () => {
-        const { store, researchItem, setFn } = await factory({
+        const { store, researchItem, setFn } = await factoryResearchItem({
           updates: [
             FactoryResearchItemUpdate({
               description: '@username',
@@ -161,7 +210,7 @@ describe('research.store', () => {
       })
 
       it('preserves @mention within Research description', async () => {
-        const { store, researchItem, setFn } = await factory({
+        const { store, researchItem, setFn } = await factoryResearchItem({
           description: '@username',
           updates: [
             FactoryResearchItemUpdate({
@@ -185,7 +234,7 @@ describe('research.store', () => {
       })
 
       it('preserves @mention within an Update description', async () => {
-        const { store, researchItem, setFn } = await factory({
+        const { store, researchItem, setFn } = await factoryResearchItem({
           updates: [
             FactoryResearchItemUpdate({
               description: '@username',
@@ -216,7 +265,8 @@ describe('research.store', () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
         })
-        const { store, researchItem, setFn } = await factory({
+
+        const { store, researchItem, setFn } = await factoryResearchItem({
           updates: [
             FactoryResearchItemUpdate({
               comments: [comment],
@@ -242,7 +292,8 @@ describe('research.store', () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
         })
-        const { store, researchItem, setFn } = await factory({
+
+        const { store, researchItem, setFn } = await factoryResearchItem({
           description: '@username',
           updates: [
             FactoryResearchItemUpdate({
@@ -267,7 +318,8 @@ describe('research.store', () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
         })
-        const { store, researchItem, setFn } = await factory({
+
+        const { store, researchItem, setFn } = await factoryResearchItem({
           updates: [
             FactoryResearchItemUpdate({
               description: '@username',
@@ -294,7 +346,7 @@ describe('research.store', () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
         })
-        const { store, researchItem, setFn } = await factory({
+        const { store, researchItem, setFn } = await factoryResearchItem({
           updates: [
             FactoryResearchItemUpdate({
               description: 'Some description',
@@ -330,7 +382,7 @@ describe('research.store', () => {
   describe('Updates', () => {
     describe('uploadUpdate', () => {
       it('inserts a new update', async () => {
-        const { store, researchItem, setFn } = await factory()
+        const { store, researchItem, setFn } = await factoryResearchItem()
         const newUpdate = FactoryResearchItemUpdate()
 
         // Act
@@ -349,7 +401,7 @@ describe('research.store', () => {
       })
 
       it('updates an existing update', async () => {
-        const { store, researchItem, setFn } = await factory()
+        const { store, researchItem, setFn } = await factoryResearchItem()
         const editedUpdate = toJS(researchItem.updates[0])
 
         // Act
@@ -368,7 +420,7 @@ describe('research.store', () => {
       })
 
       it('preserves @mention within Research description', async () => {
-        const { store, setFn } = await factory({
+        const { store, setFn } = await factoryResearchItem({
           description: '@username',
         })
 
@@ -381,7 +433,7 @@ describe('research.store', () => {
       })
 
       it('preserves @mention within an existing Update description', async () => {
-        const { store, setFn } = await factory({
+        const { store, setFn } = await factoryResearchItem({
           description: '@username',
           updates: [
             FactoryResearchItemUpdate({
@@ -405,7 +457,8 @@ describe('research.store', () => {
   describe('Item', () => {
     describe('uploadResearch', () => {
       it('adds @mention to Research description', async () => {
-        const { store, researchItem, setFn } = await factory()
+        const { store, researchItem, setFn } =
+          await factoryResearchItemFormInput()
 
         // Act
         await store.uploadResearch({
@@ -427,7 +480,7 @@ describe('research.store', () => {
       })
 
       it('triggers notifications for @mentions in Research description', async () => {
-        const { store, researchItem } = await factory()
+        const { store, researchItem } = await factoryResearchItemFormInput()
 
         // Act
         await store.uploadResearch({
@@ -447,7 +500,7 @@ describe('research.store', () => {
       })
 
       it('does not trigger notifications for existing @mentions in Research description', async () => {
-        const { store, researchItem } = await factory({
+        const { store, researchItem } = await factoryResearchItem({
           mentions: [
             {
               username: 'username',
@@ -469,14 +522,15 @@ describe('research.store', () => {
       })
 
       it('preserves @mention on existing Update description', async () => {
-        const { store, researchItem, setFn } = await factory({
-          _createdBy: 'fake-user',
-          updates: [
-            FactoryResearchItemUpdate({
-              description: '@username',
-            }),
-          ],
-        })
+        const { store, researchItem, setFn } =
+          await factoryResearchItemFormInput({
+            _createdBy: 'fake-user',
+            updates: [
+              FactoryResearchItemUpdate({
+                description: '@username',
+              }),
+            ],
+          })
 
         // Act
         await store.uploadResearch({
@@ -499,6 +553,71 @@ describe('research.store', () => {
           ]),
         )
       })
+
+      it('formats collaborators', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem({})
+
+        // Act
+        await store.uploadResearch({
+          ...toJS(researchItem),
+          collaborators: 'abc,def',
+        } as any)
+
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(setFn).toHaveBeenCalled()
+        expect(newResearchItem.collaborators).toEqual(['abc', 'def'])
+      })
+
+      it('handles undefined collaborators', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem()
+
+        // Act
+        await store.uploadResearch({
+          ...toJS(researchItem),
+          collaborators: undefined,
+        } as any)
+
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(setFn).toHaveBeenCalled()
+        expect(newResearchItem.collaborators).toEqual([])
+      })
+
+      it('handles empty collaborators', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem()
+
+        // Act
+        await store.uploadResearch({
+          ...toJS(researchItem),
+          collaborators: ' , ,, ',
+        } as any)
+
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(setFn).toHaveBeenCalled()
+        expect(newResearchItem.collaborators).toEqual([])
+      })
+    })
+  })
+  describe('incrementViews', () => {
+    it('data fetched from server db', async () => {
+      const { store, researchItem, getFn } = await factoryResearchItem()
+      // necessary as getFn gets called when active research item is set in factory
+      jest.clearAllMocks()
+
+      // Act
+      await store.incrementViewCount(researchItem._id)
+
+      expect(getFn).toBeCalledTimes(1)
+      expect(getFn).toHaveBeenCalledWith('server')
+    })
+    it('increments views by one', async () => {
+      const { store, researchItem, setFn } = await factoryResearchItem()
+
+      const views = researchItem.total_views!
+      // Act
+      const updatedViews = await store.incrementViewCount(researchItem._id)
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(updatedViews).toBe(views + 1)
     })
   })
 })

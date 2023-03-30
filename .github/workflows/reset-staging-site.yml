@@ -1,5 +1,5 @@
 # Action to allow trigger of the firebase project migration script, used to reset the staging site
-# For more info see the script file (/scripts/maintenance/reset-staging-site)
+# For more info see the script file (/scripts/maintenance/resetStagingSite.ts)
 name: Reset Staging Site
 on:
   # Run weekly on a Sunday at 02:00
@@ -42,4 +42,4 @@ jobs:
         env:
           ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON: ${{secrets.ONEARMY_MIGRATOR_SERVICE_ACCOUNT_JSON}}
       - name: Run db migration script
-        run: ts-node --project scripts/tsconfig.json scripts/maintenance/reset-staging-site.ts
+        run: ts-node --project scripts/tsconfig.json scripts/maintenance/resetStagingSite.ts.ts

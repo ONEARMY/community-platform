@@ -4,7 +4,9 @@ import styled from '@emotion/styled'
 import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
-import theme from '../../../themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import Dropzone from 'react-dropzone'
 import type { IUploadedFileMeta } from '../../../stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
@@ -192,7 +194,7 @@ export class ImageInput extends React.Component<IProps, IState> {
   private _getUploadedFiles(value: IProps['value'] = []) {
     const valArray = Array.isArray(value) ? value : [value]
     return valArray.filter((v) =>
-      v.hasOwnProperty('downloadUrl'),
+      Object.prototype.hasOwnProperty.call(v, 'downloadUrl'),
     ) as IUploadedFileMeta[]
   }
 }

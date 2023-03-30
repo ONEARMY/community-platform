@@ -67,7 +67,7 @@ export const SeoTagsUpdateComponent = (update: Partial<ISEOMeta>) => {
  * Load the default SEO tags for the site (as currently hardcoded into the public index.html file)
  * TODO - it would be better if these were linked to the active site/deployment/theme in some way
  */
-function getDefaultSEOTags(): ISEOMeta {
+const getDefaultSEOTags = (): ISEOMeta => {
   const PUBLIC_URL = location.origin
   return {
     title: 'Community Platform',
@@ -78,13 +78,13 @@ function getDefaultSEOTags(): ISEOMeta {
   }
 }
 
-function setMetaName(name: IPlatformMetaName, value: string) {
+const setMetaName = (name: IPlatformMetaName, value: string) => {
   const el = document.querySelector(`meta[name="${name}"]`)
   if (el) {
     el.setAttribute('content', value)
   }
 }
-function setMetaProperty(property: IPlatformMetaProperty, value: string) {
+const setMetaProperty = (property: IPlatformMetaProperty, value: string) => {
   const el = document.querySelector(`meta[property="${property}"]`)
   if (el) {
     el.setAttribute('content', value)

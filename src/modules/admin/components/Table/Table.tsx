@@ -58,98 +58,96 @@ const getTHeadThProps: ComponentPropsGetterC = (
   }
 }
 
-function Table(props: ITableProps) {
-  return (
-    <>
-      {/* Override styles applied in global css */}
-      <Global
-        styles={css`
-          .ReactTable .rt-thead.-header {
-            box-shadow: none !important;
-          }
-        `}
-      />
-      <ReactTable
-        data-cy="reactTable"
-        style={{
-          border: 'none',
-          height: 'calc(100vh - 410px)',
-          minHeight: '500px',
-        }}
-        ThComponent={(row: IHeaderRenderProps) => {
-          const isSortAsc = row.className?.includes('-sort-asc')
-          const isSortDesc = row.className?.includes('-sort-desc')
-          const { header, className, toggleSort } = row
-          return (
-            <TableHead row={row}>
-              <Text
-                onClick={(e) => toggleSort?.(e)}
-                p={2}
-                sx={{
-                  backgroundColor: '#E2EDF7',
-                  borderRadius: '4px',
-                }}
-                className={className}
-              >
-                {header}
-              </Text>
-              {isSortAsc && <Text>⬆️</Text>}
-              {isSortDesc && <Text>⬇️</Text>}
-              {props.filterComponent && props.filterComponent({ ...row })}
-            </TableHead>
-          )
-        }}
-        TdComponent={(col) => (
-          <Box
-            sx={{
-              flex: '100 0 auto',
-              width: '50px',
-              a: {
-                color: '#67bfdf',
-                textDecoration: 'underline',
-              },
-              'a:hover': {
-                textDecoration: 'none',
-              },
-            }}
-          >
-            <props.rowComponent col={col} />
-          </Box>
-        )}
-        getTdProps={getTdProps}
-        getTheadThProps={getTHeadThProps}
-        getTrProps={() => {
-          return {
-            style: {
-              marginTop: '10px',
-              marginBottom: '10px',
-              border: '1px solid',
-              borderRadius: '10px',
-              display: 'flex',
-              alignItems: 'center',
-              padding: '10px',
-              height: '4rem',
-              backgroundColor: 'white',
+const Table = (props: ITableProps) => (
+  <>
+    {/* Override styles applied in global css */}
+    <Global
+      styles={css`
+        .ReactTable .rt-thead.-header {
+          box-shadow: none !important;
+        }
+      `}
+    />
+    <ReactTable
+      data-cy="reactTable"
+      style={{
+        border: 'none',
+        height: 'calc(100vh - 410px)',
+        minHeight: '500px',
+      }}
+      ThComponent={(row: IHeaderRenderProps) => {
+        const isSortAsc = row.className?.includes('-sort-asc')
+        const isSortDesc = row.className?.includes('-sort-desc')
+        const { header, className, toggleSort } = row
+        return (
+          <TableHead row={row}>
+            <Text
+              onClick={(e) => toggleSort?.(e)}
+              p={2}
+              sx={{
+                backgroundColor: '#E2EDF7',
+                borderRadius: '4px',
+              }}
+              className={className}
+            >
+              {header}
+            </Text>
+            {isSortAsc && <Text>⬆️</Text>}
+            {isSortDesc && <Text>⬇️</Text>}
+            {props.filterComponent && props.filterComponent({ ...row })}
+          </TableHead>
+        )
+      }}
+      TdComponent={(col) => (
+        <Box
+          sx={{
+            flex: '100 0 auto',
+            width: '50px',
+            a: {
+              color: '#67bfdf',
+              textDecoration: 'underline',
             },
-          }
-        }}
-        getPaginationProps={() => {
-          return {
-            style: {
-              marginTop: '10px',
+            'a:hover': {
+              textDecoration: 'none',
             },
-          }
-        }}
-        showPagination={true}
-        data={props.data}
-        columns={props.columns}
-        defaultPageSize={10}
-        minRows={props.data.length ? 3 : 1}
-        showPageSizeOptions={true}
-        sortable
-      />
-    </>
-  )
-}
+          }}
+        >
+          <props.rowComponent col={col} />
+        </Box>
+      )}
+      getTdProps={getTdProps}
+      getTheadThProps={getTHeadThProps}
+      getTrProps={() => {
+        return {
+          style: {
+            marginTop: '10px',
+            marginBottom: '10px',
+            border: '1px solid',
+            borderRadius: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '10px',
+            height: '4rem',
+            backgroundColor: 'white',
+          },
+        }
+      }}
+      getPaginationProps={() => {
+        return {
+          style: {
+            marginTop: '10px',
+          },
+        }
+      }}
+      showPagination={true}
+      data={props.data}
+      columns={props.columns}
+      defaultPageSize={10}
+      minRows={props.data.length ? 3 : 1}
+      showPageSizeOptions={true}
+      sortable
+    />
+  </>
+)
 
 export default Table

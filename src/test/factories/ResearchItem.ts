@@ -34,5 +34,26 @@ export const FactoryResearchItem = (
     'accepted',
   ]),
   mentions: [],
+  total_views: faker.datatype.number(),
+  collaborators: [],
+  ...researchItemOverloads,
+})
+
+export const FactoryResearchItemFormInput = (
+  researchItemOverloads: Partial<IResearch.FormInput> = {},
+): IResearch.FormInput => ({
+  _id: faker.datatype.uuid(),
+  _createdBy: faker.internet.userName(),
+  description: faker.lorem.paragraphs(),
+  title: faker.lorem.words(),
+  slug: faker.lorem.slug(),
+  tags: {},
+  moderation: faker.helpers.arrayElement([
+    'draft',
+    'awaiting-moderation',
+    'rejected',
+    'accepted',
+  ]),
+  collaborators: '',
   ...researchItemOverloads,
 })

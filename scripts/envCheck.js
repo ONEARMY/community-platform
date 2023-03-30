@@ -1,3 +1,4 @@
+/*eslint-env node*/
 /** Check that developer environment setup as expected */
 function envCheck() {
   const tests = [

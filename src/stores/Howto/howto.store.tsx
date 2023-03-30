@@ -181,7 +181,7 @@ export class HowtoStore extends ModuleStore {
 
   public async incrementDownloadCount(howToID: string) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
-    const howToData = await toJS(dbRef.get())
+    const howToData = await toJS(dbRef.get('server'))
     const totalDownloads = howToData?.total_downloads || 0
 
     if (howToData) {
@@ -203,7 +203,7 @@ export class HowtoStore extends ModuleStore {
 
   public async incrementViewCount(howToID: string) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
-    const howToData = await toJS(dbRef.get())
+    const howToData = await toJS(dbRef.get('server'))
     const totalViews = howToData?.total_views || 0
 
     if (howToData) {
@@ -287,8 +287,8 @@ export class HowtoStore extends ModuleStore {
         await this.setActiveHowtoBySlug(updated?.slug || '')
       }
     } catch (err) {
-      console.log({ err })
-      console.error(err)
+      logger.info({ err })
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -420,7 +420,7 @@ export class HowtoStore extends ModuleStore {
         }
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -443,7 +443,7 @@ export class HowtoStore extends ModuleStore {
         await this.setActiveHowtoBySlug(howto.slug)
       }
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw new Error(err)
     }
   }
@@ -470,7 +470,9 @@ export class HowtoStore extends ModuleStore {
       // if cover already uploaded stored as object not array
       // file and step image re-uploads handled in uploadFile script
       let processedCover
-      if (!values.cover_image.hasOwnProperty('downloadUrl')) {
+      if (
+        !Object.prototype.hasOwnProperty.call(values.cover_image, 'downloadUrl')
+      ) {
         processedCover = await this.uploadFileToCollection(
           values.cover_image,
           COLLECTION_NAME,
@@ -588,13 +590,11 @@ interface IHowToUploadStatus {
   Complete: boolean
 }
 
-function getInitialUploadStatus(): IHowToUploadStatus {
-  return {
-    Start: false,
-    Cover: false,
-    'Step Images': false,
-    Files: false,
-    Database: false,
-    Complete: false,
-  }
-}
+const getInitialUploadStatus = (): IHowToUploadStatus => ({
+  Start: false,
+  Cover: false,
+  'Step Images': false,
+  Files: false,
+  Database: false,
+  Complete: false,
+})

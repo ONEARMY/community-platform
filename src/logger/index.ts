@@ -1,6 +1,6 @@
 import Logger from 'pino'
 import { createPinoBrowserSend, createWriteStream } from 'pino-logflare'
-import { getConfigurationOption } from 'src/config/config'
+import { getConfigurationOption } from '../config/config'
 
 const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
 

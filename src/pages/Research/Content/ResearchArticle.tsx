@@ -19,14 +19,14 @@ import type { IComment, UserComment } from 'src/models'
 import { seoTagsUpdate } from 'src/utils/seo'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { isUserVerified } from 'src/common/isUserVerified'
-import ReactGA from 'react-ga4'
 import { researchCommentUrlPattern } from './helper'
+import { trackEvent } from 'src/common/Analytics'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
 const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
 
-function areCommentVisible(updateIndex) {
+const areCommentVisible = (updateIndex) => {
   let showComments = false
 
   if (researchCommentUrlRegex.test(window.location.hash)) {
@@ -68,7 +68,7 @@ const ResearchArticle = observer((props: IProps) => {
     aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
       [researchId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
     })
-    ReactGA.event({
+    trackEvent({
       category: 'Research',
       action: hasUserVotedUseful ? 'UsefulMarkRemoved' : 'MarkedUseful',
       label: researchSlug,
@@ -132,6 +132,9 @@ const ResearchArticle = observer((props: IProps) => {
       isVerified: isUserVerified(item._createdBy),
     }
 
+    const collaborators = Array.isArray(item.collaborators)
+      ? item.collaborators
+      : ((item.collaborators as string) || '').split(',').filter(Boolean)
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
@@ -170,13 +173,19 @@ const ResearchArticle = observer((props: IProps) => {
             mb: 16,
           }}
         >
-          <ArticleCallToAction author={researchAuthor}>
+          <ArticleCallToAction
+            author={researchAuthor}
+            contributors={collaborators.map((c) => ({
+              userName: c,
+              isVerified: false,
+            }))}
+          >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}
               votedUsefulCount={votedUsefulCount}
               hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
               onUsefulClick={() => {
-                ReactGA.event({
+                trackEvent({
                   category: 'ArticleCallToAction',
                   action: 'ReseachUseful',
                   label: item.slug,
@@ -202,10 +211,11 @@ const ResearchArticle = observer((props: IProps) => {
   }
 })
 
-function transformToUserComment(
+const transformToUserComment = (
   comments: IComment[],
   loggedInUsername,
-): UserComment[] {
+): UserComment[] => {
+  if (!comments) return []
   return comments.map((c) => ({
     ...c,
     isEditable: c.creatorName === loggedInUsername,

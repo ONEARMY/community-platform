@@ -5,17 +5,17 @@ import { Provider } from 'mobx-react'
 import { HowtoForm } from './Howto.form'
 declare const window: any
 
-describe('Howto form', function () {
+describe('Howto form', () => {
   let howtoStore
   let tagsStore
   let formValues
   let parentType
 
-  beforeAll(function () {
+  beforeAll(() => {
     window.confirm = jest.fn(() => true)
   })
 
-  beforeEach(function () {
+  beforeEach(() => {
     howtoStore = {
       uploadStatus: {
         Start: false,
@@ -46,7 +46,7 @@ describe('Howto form', function () {
     window.confirm.mockReset()
   })
 
-  it.skip('should not show the confirm dialog', async function () {
+  it.skip('should not show the confirm dialog', async () => {
     let renderResult
     const navProps: any = {}
     await waitFor(() => {
@@ -76,7 +76,7 @@ describe('Howto form', function () {
     expect(window.confirm).not.toBeCalled()
   })
 
-  it.skip('should show the confirm dialog, title change', async function () {
+  it.skip('should show the confirm dialog, title change', async () => {
     let renderResult
     const navProps: any = {}
     await waitFor(() => {

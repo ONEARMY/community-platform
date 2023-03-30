@@ -3,10 +3,11 @@ import Dexie from 'dexie'
 import type {
   DBQueryOptions,
   DBQueryWhereOptions,
-  AbstractDBClient,
+  AbstractDatabaseClient,
 } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 import { DB_ENDPOINTS } from '../endpoints'
+import { logger } from '../../../logger'
 
 /**
  * Update the cache number either when making changes to db architecture
@@ -17,7 +18,7 @@ const DB_CACHE_NUMBER = 20230105
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
-export class DexieClient implements AbstractDBClient {
+export class DexieClient implements AbstractDatabaseClient {
   constructor() {
     this._init()
   }
@@ -91,7 +92,7 @@ export class DexieClient implements AbstractDBClient {
       case '>':
         return ref.where(field).below(value)
       default:
-        console.error('no dexie query mapping for ' + operator)
+        logger.error('no dexie query mapping for ' + operator)
         throw new Error(
           'mapping has not been created for dexie query: ' + operator,
         )
@@ -108,7 +109,7 @@ export class DexieClient implements AbstractDBClient {
     // test open db, catch errors for upgrade version not defined or
     // idb not supported
     db.open().catch(async (err) => {
-      console.error(err)
+      logger.error(err)
       // NOTE - invalid state error suggests dexie not supported, so
       // try reloading with cachedb disabled (see db index for implementation)
       if (err.name === Dexie.errnames.InvalidState) {

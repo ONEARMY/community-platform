@@ -4,7 +4,7 @@ import './sprites.css'
 import type { IMapPin } from 'src/models/maps.models'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import Workspace from 'src/pages/User/workspace/Workspace'
-import type { PlatformTheme } from 'src/themes/types'
+import type { PlatformTheme } from 'oa-themes'
 
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
 import { logger } from 'workbox-core/_private'
@@ -54,7 +54,7 @@ export const createMarkerIcon = (pin: IMapPin, currentTheme: PlatformTheme) => {
  * to scale cluster depending on value and ensure fits in icon
  * @param cluster - MarkerCluster passed from creation function
  */
-function getClusterSizes(cluster: MarkerCluster) {
+const getClusterSizes = (cluster: MarkerCluster) => {
   const count = cluster.getChildCount()
   const order = Math.round(count).toString().length
   switch (order) {

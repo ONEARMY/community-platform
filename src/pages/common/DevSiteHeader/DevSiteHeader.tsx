@@ -88,12 +88,9 @@ const DevSiteHeader = observer(() => {
   )
 })
 
-function showDevSiteHeader() {
-  return (
-    devSites.some((s) => s.value === SITE) ||
-    window.location?.hostname === 'localhost'
-  )
-}
+const showDevSiteHeader = () =>
+  devSites.some((s) => s.value === SITE) ||
+  window.location?.hostname === 'localhost'
 
 const availableThemes = [
   { value: 'precious-plastic', label: 'Precious Plastic' },
@@ -134,7 +131,7 @@ const setSiteRole = async (role: string) => {
 
 /** Delete local,session and indexedDB storage */
 const clearCache = (reload = true) => {
-  return new Promise(async (resolve) => {
+  return new Promise((resolve) => {
     localStorage.clear()
     sessionStorage.clear()
     const req = indexedDB.deleteDatabase('OneArmyCache')

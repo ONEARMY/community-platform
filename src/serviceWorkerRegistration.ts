@@ -1,5 +1,5 @@
 // https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#clientsclaim
-
+import { logger } from './logger'
 import { Workbox } from 'workbox-window'
 
 // initial code adapted from create-react-app (v4)
@@ -21,7 +21,7 @@ interface RegisterSWCallback {
   handleSWControlling: () => void
 }
 
-export function register(callback: RegisterSWCallback) {
+export const register = (callback: RegisterSWCallback) => {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(
@@ -55,7 +55,7 @@ export function register(callback: RegisterSWCallback) {
  * adapted from https://developers.google.com/web/tools/workbox/guides/advanced-recipes
  * alternate: https://redfin.engineering/how-to-fix-the-refresh-button-when-using-service-workers-a8e27af6df68
  */
-function registerValidSW(swUrl: string, callback: RegisterSWCallback) {
+const registerValidSW = (swUrl: string, callback: RegisterSWCallback) => {
   const wb = new Workbox(swUrl)
   wb.addEventListener('waiting', () => {
     // only trigger controlling callback if previously waiting sw activated (i.e. not first ever load)
@@ -67,7 +67,10 @@ function registerValidSW(swUrl: string, callback: RegisterSWCallback) {
   wb.register()
 }
 
-function checkValidServiceWorker(swUrl: string, callback: RegisterSWCallback) {
+const checkValidServiceWorker = (
+  swUrl: string,
+  callback: RegisterSWCallback,
+) => {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl, {
     headers: { 'Service-Worker': 'script' },
@@ -91,20 +94,20 @@ function checkValidServiceWorker(swUrl: string, callback: RegisterSWCallback) {
       }
     })
     .catch(() => {
-      console.log(
+      logger.info(
         'No internet connection found. App is running in offline mode.',
       )
     })
 }
 
-export function unregister() {
+export const unregister = () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready
       .then((registration) => {
         registration.unregister()
       })
       .catch((error) => {
-        console.error(error.message)
+        logger.error(error.message)
       })
   }
 }

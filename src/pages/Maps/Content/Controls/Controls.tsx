@@ -11,7 +11,9 @@ import { GroupingFilterMobile } from './GroupingFilterMobile'
 import type { IMapPinType } from 'src/models/maps.models'
 import { HashLink as Link } from 'react-router-hash-link'
 import type { Map } from 'react-leaflet'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { inject } from 'mobx-react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { UserStore } from 'src/stores/User/user.store'

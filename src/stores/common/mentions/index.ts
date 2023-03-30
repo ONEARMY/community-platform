@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 import type { IUser } from 'src/models'
 import { logger } from 'src/logger'
 import type { UserStore } from '../../User/user.store'
@@ -16,13 +17,13 @@ import type { UserStore } from '../../User/user.store'
  *   mentionedUsers: string[],
  * }>
  */
-export const changeMentionToUserReference = async function (
+export const changeMentionToUserReference = async (
   text: string,
   userStore: UserStore,
 ): Promise<{
   text: string
   mentionedUsers: string[]
-}> {
+}> => {
   const mentions = text.match(/\B@[​a-z0-9_-]+/g)
   const mentionedUsers = new Set<string>()
 
@@ -51,8 +52,7 @@ export const changeMentionToUserReference = async function (
   return { text, mentionedUsers: Array.from(mentionedUsers) }
 }
 
-export const changeUserReferenceToPlainText = function (text: string) {
-  return text
+export const changeUserReferenceToPlainText = (text: string) =>
+  text
     .replace(/@([A-Za-z0-9_-]+)/, '@​$1')
     .replace(/@@\{([A-Za-z0-9_-]+):([a-z0-9_-]+)}/g, '@$2')
-}

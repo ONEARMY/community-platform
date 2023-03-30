@@ -16,7 +16,7 @@ import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_s
 import PreciousPlasticMember from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import ProjectKampMember from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
 import ProjectKampSpace from 'src/assets/images/themes/project-kamp/avatar_space_sm.svg'
-import type { PlatformTheme } from '../../themes/types'
+import type { PlatformTheme } from 'oa-themes'
 import type { IProfileType } from './types'
 
 export const ProfileType = {
@@ -46,7 +46,7 @@ const MemberAndSpace = {
   },
 }
 
-function getProfileTypes(currentTheme?: PlatformTheme) {
+const getProfileTypes = (currentTheme?: PlatformTheme) => {
   const PROFILE_TYPES: IProfileType[] = [
     {
       label: ProfileType.MEMBER,
@@ -107,10 +107,10 @@ function getProfileTypes(currentTheme?: PlatformTheme) {
   return PROFILE_TYPES
 }
 
-export function SupportedProfileTypesFactory(
+export const SupportedProfileTypesFactory = (
   configurationString: string,
   currentTheme?: PlatformTheme,
-) {
+) => {
   const supportedProfileTypes = (configurationString || DEFAULT_PROFILE_TYPES)
     .split(',')
     .map((s) => s.trim())

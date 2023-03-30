@@ -52,9 +52,11 @@ export interface IUser {
 
 export interface IUserBadges {
   verified: boolean
+  supporter?: boolean
 }
 
 interface IExternalLink {
+  key: string
   url: string
   label:
     | 'email'

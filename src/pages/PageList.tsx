@@ -65,11 +65,10 @@ const TermsPolicy = lazy(
   () => import(/* webpackChunkName: "terms" */ './policy/terms'),
 )
 
-export function getAvailablePageList(supportedModules: MODULE[]): IPageMeta[] {
-  return COMMUNITY_PAGES.filter((pageItem) =>
+export const getAvailablePageList = (supportedModules: MODULE[]): IPageMeta[] =>
+  COMMUNITY_PAGES.filter((pageItem) =>
     supportedModules.includes(pageItem.moduleName),
   )
-}
 
 export interface IPageMeta {
   moduleName: MODULE

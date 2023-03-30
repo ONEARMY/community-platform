@@ -16,7 +16,9 @@ import {
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
@@ -48,7 +50,7 @@ const Label = styled.label`
   display: block;
 `
 
-const beforeUnload = function (e) {
+const beforeUnload = (e) => {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
@@ -247,6 +249,17 @@ const ResearchForm = observer((props: IProps) => {
                                 component={TagsSelectField}
                                 category="research"
                                 isEqual={COMPARISONS.tags}
+                              />
+                            </Flex>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <Label>
+                                Who have you been collaborating on this Research
+                                with?
+                              </Label>
+                              <Field
+                                name="collaborators"
+                                component={FieldInput}
+                                placeholder="A comma separated list of usernames."
                               />
                             </Flex>
                           </Flex>

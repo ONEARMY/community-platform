@@ -29,7 +29,7 @@ export const replaceDashesWithSpaces = (str: string) => {
 export const arrayToJson = (arr: any[], keyField: string) => {
   const json = {}
   arr.forEach((el) => {
-    if (el.hasOwnProperty(keyField)) {
+    if (Object.prototype.hasOwnProperty.call(el, keyField)) {
       const key = el[keyField]
       json[key] = el
     }
@@ -159,7 +159,5 @@ interface IEditableDoc extends DBDoc {
 // Convert theme em string to px number
 export const emStringToPx = (width) => Number(width.replace('em', '')) * 16
 
-export function randomIntFromInterval(min, max) {
-  // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
+export const randomIntFromInterval = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1) + min)

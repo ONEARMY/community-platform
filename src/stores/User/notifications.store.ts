@@ -11,7 +11,7 @@ import { ModuleStore } from '../common/module.store'
 import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
 import type { RootStore } from '..'
-import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import { logger } from 'src/logger'
 
 // const COLLECTION_NAME = 'user_notifications'

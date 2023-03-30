@@ -1,8 +1,8 @@
 import * as React from 'react'
-import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IPlasticType } from 'src/models'
 
-import { Flex, Heading, Box, Text } from 'theme-ui'
+import { Flex, Heading, Box, Text, Grid } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
@@ -17,7 +17,9 @@ import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 import { FieldArray } from 'react-final-form-arrays'
 import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 
 interface IProps {
   formValues: IUserPP
@@ -72,60 +74,66 @@ export class CollectionSection extends React.Component<IProps> {
               </>
             )}
           </FieldArray>
-          <Text mt={4} mb={4}>
-            Plastic types accepted *
-          </Text>
-          <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }} my="10px">
-            <FieldArray name="collectedPlasticTypes">
-              {({ fields }) => (
-                <>
-                  {PLASTIC_TYPES.map((plastic, index: number) => (
-                    <CustomCheckbox
-                      data-cy={`plastic-${plastic.label}`}
-                      key={index}
-                      fullWidth
-                      value={plastic.label}
-                      index={index}
-                      isSelected={
-                        fields.value
-                          ? fields.value.includes(plastic.label)
-                          : false
-                      }
-                      onChange={() => {
-                        if (fields.value && fields.value.length !== 0) {
-                          if (fields.value.includes(plastic.label)) {
-                            // eslint-disable-next-line
-                            fields.value.map((value, selectedValIndex) => {
-                              if (value === plastic.label) {
-                                fields.remove(selectedValIndex)
-                              }
-                            })
+          <Box>
+            <Text mt={4} mb={4}>
+              Plastic types accepted *
+            </Text>
+            <Grid
+              columns={['repeat(auto-fill, minmax(100px, 1fr))']}
+              gap={2}
+              sx={{ my: 2 }}
+            >
+              <FieldArray name="collectedPlasticTypes">
+                {({ fields }) => (
+                  <>
+                    {PLASTIC_TYPES.map((plastic, index: number) => (
+                      <CustomCheckbox
+                        data-cy={`plastic-${plastic.label}`}
+                        key={index}
+                        fullWidth
+                        value={plastic.label}
+                        index={index}
+                        isSelected={
+                          fields.value
+                            ? fields.value.includes(plastic.label)
+                            : false
+                        }
+                        onChange={() => {
+                          if (fields.value && fields.value.length !== 0) {
+                            if (fields.value.includes(plastic.label)) {
+                              // eslint-disable-next-line
+                              fields.value.map((value, selectedValIndex) => {
+                                if (value === plastic.label) {
+                                  fields.remove(selectedValIndex)
+                                }
+                              })
+                            } else {
+                              fields.push(plastic.label)
+                            }
                           } else {
                             fields.push(plastic.label)
                           }
-                        } else {
-                          fields.push(plastic.label)
-                        }
-                      }}
-                      imageSrc={plastic.imageSrc}
-                    />
-                  ))}
-                </>
-              )}
-            </FieldArray>
-          </Flex>
-          {required && (
-            <Text
-              color={theme.colors.error}
-              sx={{
-                fontSize: 0.5,
-                marginLeft: 1,
-                marginRight: 1,
-              }}
-            >
-              Choose at least one plastic type{' '}
-            </Text>
-          )}
+                        }}
+                        imageSrc={plastic.imageSrc}
+                      />
+                    ))}
+                  </>
+                )}
+              </FieldArray>
+            </Grid>
+            {required && (
+              <Text
+                color={theme.colors.error}
+                sx={{
+                  fontSize: 0.5,
+                  marginLeft: 1,
+                  marginRight: 1,
+                }}
+              >
+                Choose at least one plastic type{' '}
+              </Text>
+            )}
+          </Box>
         </Box>
       </FlexSectionContainer>
     )

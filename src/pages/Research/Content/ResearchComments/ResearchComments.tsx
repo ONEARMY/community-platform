@@ -1,6 +1,5 @@
 import { Button, CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
-import ReactGA from 'react-ga4'
 import { MAX_COMMENT_LENGTH } from '../../../../constants'
 import { useCommonStores } from '../../../../'
 import { logger } from 'src/logger'
@@ -11,6 +10,7 @@ import styled from '@emotion/styled'
 
 import type { UserComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
+import { trackEvent } from 'src/common/Analytics'
 interface IProps {
   comments: UserComment[]
   update: IResearch.UpdateDB
@@ -31,7 +31,6 @@ export const getResearchCommentId = (s: string) =>
 export const ResearchComments = ({
   comments,
   update,
-  updateIndex,
   showComments,
 }: IProps) => {
   const [comment, setComment] = useState('')
@@ -40,22 +39,14 @@ export const ResearchComments = ({
   const [viewComments, setViewComments] = useState(!!showComments)
   const { stores } = useCommonStores()
 
-  async function onSubmit(comment: string) {
+  const onSubmit = async (comment: string) => {
     try {
       setLoading(true)
       await researchStore.addComment(comment, update as IResearch.Update)
       setLoading(false)
       setComment('')
-      const currResearchItem = researchStore.activeResearchItem
-      if (currResearchItem) {
-        await stores.userNotificationsStore.triggerNotification(
-          'new_comment_research',
-          currResearchItem._createdBy,
-          '/research/' + currResearchItem.slug + '#update_' + updateIndex,
-        )
-      }
 
-      ReactGA.event({
+      trackEvent({
         category: 'Comments',
         action: 'Submitted',
         label: researchStore.activeResearchItem?.title,
@@ -74,21 +65,22 @@ export const ResearchComments = ({
     }
   }
 
-  async function handleEditRequest() {
-    ReactGA.event({
+  const handleEditRequest = async () => {
+    trackEvent({
       category: 'Comments',
       action: 'Edit existing comment',
       label: researchStore.activeResearchItem?.title,
     })
   }
 
-  async function handleDelete(_id: string) {
+  const handleDelete = async (_id: string) => {
+    // eslint-disable-next-line no-alert
     const confirmation = window.confirm(
       'Are you sure you want to delete this comment?',
     )
     if (confirmation) {
       await researchStore.deleteComment(_id, update as IResearch.Update)
-      ReactGA.event({
+      trackEvent({
         category: 'Comments',
         action: 'Deleted',
         label: researchStore.activeResearchItem?.title,
@@ -104,8 +96,8 @@ export const ResearchComments = ({
     }
   }
 
-  async function handleEdit(_id: string, comment: string) {
-    ReactGA.event({
+  const handleEdit = async (_id: string, comment: string) => {
+    trackEvent({
       category: 'Comments',
       action: 'Update',
       label: researchStore.activeResearchItem?.title,
@@ -183,6 +175,7 @@ export const ResearchComments = ({
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
             highlightedCommentId={getResearchCommentId(window.location.hash)}
+            trackEvent={trackEvent}
           />
           <Box sx={{ width: '100%' }}>
             <CreateComment

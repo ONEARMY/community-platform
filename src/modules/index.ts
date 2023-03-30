@@ -11,7 +11,7 @@ export enum MODULE {
   ADMIN = 'admin_v2',
 }
 
-export function getSupportedModules(): MODULE[] {
+export const getSupportedModules = (): MODULE[] => {
   const envModules: string[] =
     getConfigurationOption(
       'REACT_APP_SUPPORTED_MODULES',
@@ -24,6 +24,5 @@ export function getSupportedModules(): MODULE[] {
   )
 }
 
-export function isModuleSupported(MODULE): boolean {
-  return getSupportedModules().includes(MODULE)
-}
+export const isModuleSupported = (MODULE): boolean =>
+  getSupportedModules().includes(MODULE)

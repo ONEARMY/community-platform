@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "no-console": "error",
+    "prefer-arrow-functions/prefer-arrow-functions": [
+      "error",
+      {
+        "classPropertiesAllowed": false,
+        "disallowPrototype": false,
+        "returnStyle": "unchanged",
+        "singleReturnOnly": false
+      }
+    ]
+  },
+  "plugins": ["prefer-arrow-functions"]
+}

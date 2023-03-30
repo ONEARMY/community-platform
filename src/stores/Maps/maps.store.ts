@@ -13,7 +13,7 @@ import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
 import { MAP_GROUPINGS } from './maps.groupings'
 import { generatePins, generatePinDetails } from 'src/stores/Maps/generatePins'
-import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from '../storage'
 import {
   hasAdminRights,
@@ -125,7 +125,7 @@ export class MapsStore extends ModuleStore {
   public async setActivePin(pin?: IMapPin | IMapPinWithDetail) {
     // HACK - CC - 2021-07-14 ignore hardcoded pin details, should be retrieved
     // from profile on open instead (needs cleaning from DB)
-    if (pin && pin.hasOwnProperty('detail')) {
+    if (pin && Object.prototype.hasOwnProperty.call(pin, 'detail')) {
       delete pin['detail']
     }
     this.activePin = pin

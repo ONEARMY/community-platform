@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Card, Flex, Heading, Box, Text } from 'theme-ui'
-import type { IUserPP } from 'src/models/user_pp.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { observer, inject } from 'mobx-react'
@@ -18,14 +18,17 @@ import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import INITIAL_VALUES from './Template'
-import { Prompt } from 'react-router'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile/types'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
+import { v4 as uuid } from 'uuid'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -48,7 +51,7 @@ interface IState {
 
 @inject('userStore')
 @observer
-export class UserSettings extends React.Component<IProps, IState> {
+export class SettingsPage extends React.Component<IProps, IState> {
   toggleLocationDropdown = () => {
     this.setState((prevState) => ({
       ...prevState,
@@ -86,7 +89,10 @@ export class UserSettings extends React.Component<IProps, IState> {
       coverImages: new Array(4)
         .fill(null)
         .map((v, i) => (coverImages[i] ? coverImages[i] : v)),
-      links: links.length > 0 ? links : [{} as any],
+      links: (links.length > 0 ? links : [{} as any]).map((i) => ({
+        ...i,
+        key: uuid(),
+      })),
       openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
     }
     this.setState({
@@ -117,22 +123,21 @@ export class UserSettings extends React.Component<IProps, IState> {
     })
     // Submit, show notification update and return any errors to form
     try {
-      console.debug({ profile: vals }, 'UserSettings.saveProfile')
+      logger.debug({ profile: vals }, 'SettingsPage.saveProfile')
       const { adminEditableUserId } = this.props
       await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
-      // throw new Error('I hate you');
-      console.log(`before setState`)
+      logger.debug(`before setState`)
       this.setState(
         {
           notification: { message: 'Profile Saved', icon: 'check', show: true },
         },
         () => {
-          console.log(`After setState`, this.state.notification)
+          logger.debug(`After setState`, this.state.notification)
         },
       )
       return {}
     } catch (error) {
-      logger.warn({ error, profile: vals }, 'UserSettings.saveProfile.error')
+      logger.warn({ error, profile: vals }, 'SettingsPage.saveProfile.error')
       this.setState({
         notification: { message: 'Save Failed', icon: 'close', show: true },
       })
@@ -186,8 +191,8 @@ export class UserSettings extends React.Component<IProps, IState> {
           const heading = user.profileType ? 'Edit profile' : 'Create profile'
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-              <Prompt
-                when={!this.injected.userStore.updateStatus.Complete}
+              <UnsavedChangesDialog
+                uploadComplete={this.injected.userStore.updateStatus.Complete}
                 message={
                   'You are leaving this page without saving. Do you want to continue ?'
                 }

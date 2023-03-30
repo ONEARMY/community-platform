@@ -10,23 +10,9 @@ import type { IPageMeta } from '../PageList'
 import ResearchRoutes from './research.routes'
 
 /**
- * Default export format used for integrating with the platform
- * @description The research module enables users to share ongoing updates for
- * experimental projects
- */
-export const ResearchModule: IPageMeta = {
-  moduleName: MODULE.RESEARCH,
-  path: '/research',
-  component: <ResearchModuleContainer />,
-  title: 'Research',
-  description: 'Welcome to research',
-  // requiredRole: 'beta-tester',
-}
-
-/**
  * Wraps the research module routing elements with the research module provider
  */
-function ResearchModuleContainer() {
+const ResearchModuleContainer = () => {
   const { aggregationsStore } = useCommonStores().stores
 
   // Ensure aggregations up-to-date when using any child pages and unsubscribe when leaving
@@ -43,4 +29,18 @@ function ResearchModuleContainer() {
       <Route component={ResearchRoutes} />
     </ResearchStoreContext.Provider>
   )
+}
+
+/**
+ * Default export format used for integrating with the platform
+ * @description The research module enables users to share ongoing updates for
+ * experimental projects
+ */
+export const ResearchModule: IPageMeta = {
+  moduleName: MODULE.RESEARCH,
+  path: '/research',
+  component: <ResearchModuleContainer />,
+  title: 'Research',
+  description: 'Welcome to research',
+  // requiredRole: 'beta-tester',
 }

@@ -131,7 +131,7 @@ const setSiteRole = async (role: string) => {
 
 /** Delete local,session and indexedDB storage */
 const clearCache = (reload = true) => {
-  return new Promise(async (resolve) => {
+  return new Promise((resolve) => {
     localStorage.clear()
     sessionStorage.clear()
     const req = indexedDB.deleteDatabase('OneArmyCache')

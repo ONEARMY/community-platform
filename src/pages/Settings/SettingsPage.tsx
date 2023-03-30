@@ -18,7 +18,9 @@ import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import INITIAL_VALUES from './Template'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'

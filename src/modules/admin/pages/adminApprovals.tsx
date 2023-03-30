@@ -3,7 +3,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { Box, Heading } from 'theme-ui'
 import type { IDBEndpoint, IHowto, IMapPin, IUserDB } from 'src/models'
 import styled from '@emotion/styled'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { useHistory } from 'react-router'
 import { useAdminStoreV2 } from '../admin.storeV2'
 

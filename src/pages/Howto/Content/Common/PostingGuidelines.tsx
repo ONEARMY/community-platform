@@ -1,5 +1,7 @@
 import { Heading, Text, Card, Flex } from 'theme-ui'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { ExternalLink } from 'oa-components'
 
 export const PostingGuidelines = () => (

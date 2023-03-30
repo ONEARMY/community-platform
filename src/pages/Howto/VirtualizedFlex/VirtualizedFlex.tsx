@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Flex, Box } from 'theme-ui'
-import themes from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const themes = preciousPlasticTheme.styles
 import type { ListRowProps } from 'react-virtualized'
 import {
   List,

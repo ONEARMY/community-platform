@@ -1,5 +1,7 @@
 import { Component } from 'react'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import styled from '@emotion/styled'
 import { Box, Flex } from 'theme-ui'
 import ProfileButtonItem from './ProfileButtonItem'

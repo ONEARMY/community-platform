@@ -14,18 +14,20 @@
   "private": true,
   "main": "lib/index.js",
   "scripts": {
-    "start": "concurrently --kill-others --names components,platform --prefix-colors blue,magenta \"yarn start:components\" \"yarn start:platform\"",
+    "start": "concurrently --kill-others --names themes,components,platform --prefix-colors cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform\"",
+    "start:themes": "yarn workspace oa-themes dev",
     "start:components": "yarn workspace oa-components dev",
     "start:platform": "yarn build:shared && env-cmd -e cra yarn craco start",
-    "start:emulated": "concurrently --kill-others --names functions,components,platform --prefix-colors yellow,blue,magenta \"yarn workspace functions start\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\"",
-    "start:emulated:docker": "concurrently --names functions,components,platform,emulators --prefix-colors yellow,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start\"",
-    "start:emulated:docker:local": "concurrently --names functions,components,platform,emulators --prefix-colors yellow,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn workspace oa-components dev\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start --repo=\"",
+    "start:emulated": "concurrently --kill-others --names functions,themes,components,platform --prefix-colors yellow,cyan,blue,magenta \"yarn workspace functions start\" \"yarn start:themes\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\"",
+    "start:emulated:docker": "concurrently --names functions,themes,components,platform,emulators --prefix-colors yellow,cyan,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn start:themes\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start\"",
+    "start:emulated:docker:local": "concurrently --names functions,themes,components,platform,emulators --prefix-colors yellow,cyan,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn start:themes\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start --repo=\"",
+    "build:themes": "yarn workspace oa-themes build",
     "build:components": "yarn workspace oa-components build",
     "build:cra": "env-cmd -e cra craco build",
     "build:post": "yarn workspace oa-scripts post-cra-build",
     "build:inject-config": "yarn build:post",
     "build:shared": "yarn workspace oa-shared build",
-    "build": "yarn build:components && yarn build:shared && yarn build:cra",
+    "build": "yarn build:themes && yarn build:components && yarn build:shared && yarn build:cra",
     "eject": "react-scripts eject",
     "lint": "yarn lint:style && yarn lint:code",
     "lint:commits": " npx commitlint --from=$(git merge-base master HEAD) --verbose",
@@ -39,8 +41,9 @@
     "test": "yarn workspace oa-cypress start",
     "test:components": "yarn workspace oa-components test",
     "test:unit": "env-cmd -e cra craco test --env=jsdom",
-    "test:unit:ci": "env-cmd -e cra craco test --env=jsdom --runInBand --logHeapUsage",
+    "test:unit:ci": "yarn build:themes && yarn build:components && env-cmd -e cra craco test --env=jsdom --runInBand --logHeapUsage",
     "storybook": "yarn workspace oa-components start",
+    "storybook:build": "yarn build:themes && yarn workspace oa-components build:sb",
     "docs": "yarn workspace oa-docs start",
     "analyze": "npx cra-bundle-analyzer && npx open-cli build/report.html",
     "install:clean": "yarn workspace oa-scripts install:clean",
@@ -99,6 +102,7 @@
     "mobx-react": "7.2.0",
     "oa-components": "workspace:*",
     "oa-shared": "workspace:*",
+    "oa-themes": "workspace:*",
     "pino": "^7.2.0",
     "pino-logflare": "^0.3.12",
     "pubsub-js": "^1.7.0",
@@ -215,7 +219,7 @@
   },
   "engines": {
     "npm": "please-use-yarn",
-    "node": ">=16.10.0 <19.0.0"
+    "node": ">=18.13.0 <19.0.0"
   },
   "packageManager": "yarn@3.4.1"
 }

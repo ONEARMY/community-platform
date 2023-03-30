@@ -40,7 +40,7 @@ class EditHowto extends React.Component<IProps, IState> {
   /* eslint-disable @typescript-eslint/naming-convention */
   public async UNSAFE_componentWillMount() {
     const loggedInUser = this.injected.howtoStore.activeUser
-    if (!!this.injected.howtoStore.activeHowto) {
+    if (this.injected.howtoStore.activeHowto) {
       this.setState({
         formValues: toJS(this.injected.howtoStore.activeHowto) as IHowtoDB,
         isLoading: false,

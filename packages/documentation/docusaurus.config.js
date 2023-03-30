@@ -1,3 +1,4 @@
+/* global module, require */
 module.exports = {
   title: 'OneArmy Community Platform',
   tagline: 'Developer Documentation',

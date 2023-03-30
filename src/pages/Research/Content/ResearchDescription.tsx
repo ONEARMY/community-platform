@@ -9,18 +9,19 @@ import {
 } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import ArrowIcon from 'src/assets/icons/icon-arrow-select.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import {
   addIDToSessionStorageArray,
   retrieveSessionStorageArray,
 } from 'src/utils/sessionStorage'
-import { Box, Flex, Heading, Image, Text } from 'theme-ui'
+import { Box, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -89,19 +90,9 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               variant="subtle"
               sx={{ fontSize: '14px' }}
               data-cy="go-back"
+              icon="arrow-back"
             >
-              <Flex>
-                <Image
-                  loading="lazy"
-                  sx={{
-                    width: '10px',
-                    marginRight: '4px',
-                    transform: 'rotate(90deg)',
-                  }}
-                  src={ArrowIcon}
-                />
-                <Text>Back</Text>
-              </Flex>
+              Back
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (

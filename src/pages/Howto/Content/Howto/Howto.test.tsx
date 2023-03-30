@@ -6,7 +6,8 @@ import { Route } from 'react-router-dom'
 import { useCommonStores } from 'src'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
-import Theme from 'src/themes/styled.theme'
+import { preciousPlasticTheme } from 'oa-themes'
+const Theme = preciousPlasticTheme.styles
 
 const mockHowtoStore = () => ({
   setActiveHowtoBySlug: jest.fn(),

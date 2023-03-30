@@ -4,7 +4,9 @@ import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
 import { Icon, ElWithBeforeIcon, ExternalLink } from 'oa-components'
 import type { IUserPP } from 'src/models'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 

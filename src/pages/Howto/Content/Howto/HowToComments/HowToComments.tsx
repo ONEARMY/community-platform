@@ -1,12 +1,12 @@
 import { CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
-import ReactGA from 'react-ga4'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { Box, Flex } from 'theme-ui'
 
 import type { UserComment } from 'src/models'
+import { trackEvent } from 'src/common/Analytics'
 interface IProps {
   comments: UserComment[]
 }
@@ -30,7 +30,7 @@ export const HowToComments = ({ comments }: IProps) => {
 
       setComment('')
 
-      ReactGA.event({
+      trackEvent({
         category: 'Comments',
         action: 'Submitted',
         label: stores.howtoStore.activeHowto?.title,
@@ -50,7 +50,7 @@ export const HowToComments = ({ comments }: IProps) => {
   }
 
   const handleEditRequest = async () => {
-    ReactGA.event({
+    trackEvent({
       category: 'Comments',
       action: 'Edit existing comment',
       label: stores.howtoStore.activeHowto?.title,
@@ -59,7 +59,7 @@ export const HowToComments = ({ comments }: IProps) => {
 
   const handleDelete = async (_id: string) => {
     await stores.howtoStore.deleteComment(_id)
-    ReactGA.event({
+    trackEvent({
       category: 'Comments',
       action: 'Deleted',
       label: stores.howtoStore.activeHowto?.title,
@@ -75,7 +75,7 @@ export const HowToComments = ({ comments }: IProps) => {
   }
 
   const handleEdit = async (_id: string, comment: string) => {
-    ReactGA.event({
+    trackEvent({
       category: 'Comments',
       action: 'Update',
       label: stores.howtoStore.activeHowto?.title,
@@ -112,6 +112,7 @@ export const HowToComments = ({ comments }: IProps) => {
           handleEditRequest={handleEditRequest}
           handleDelete={handleDelete}
           highlightedCommentId={window.location.hash.replace('#comment:', '')}
+          trackEvent={trackEvent}
         />
       </Flex>
       <Box

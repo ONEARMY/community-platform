@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
 import { Component } from 'react'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { Box } from 'theme-ui'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'

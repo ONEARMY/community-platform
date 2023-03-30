@@ -1,8 +1,8 @@
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
-import { logger } from 'src/logger'
-import { auth, EmailAuthProvider } from 'src/utils/firebase'
-import { getLocationData } from 'src/utils/getLocationData'
-import { formatLowerNoSpecial } from 'src/utils/helpers'
+import { logger } from '../../logger'
+import { auth, EmailAuthProvider } from '../../utils/firebase'
+import { getLocationData } from '../../utils/getLocationData'
+import { formatLowerNoSpecial } from '../../utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
@@ -11,7 +11,7 @@ import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { RootStore } from '..'
-import type { IConvertedFileMeta } from 'src/types'
+import type { IConvertedFileMeta } from '../../types'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
@@ -41,6 +41,11 @@ export class UserStore extends ModuleStore {
   // redirect calls for verifiedUsers to the aggregation store list
   @computed get verifiedUsers(): { [user_id: string]: boolean } {
     return this.aggregationsStore.aggregations.users_verified || {}
+  }
+
+  @action
+  public getAllUsers() {
+    return this.allDocs$
   }
 
   @action
@@ -270,17 +275,13 @@ export class UserStore extends ModuleStore {
       authUser.email as string,
       reauthPw,
     )
-    try {
-      await authUser.reauthenticateWithCredential(credential)
-      const user = this.user as IUser
-      await this.db.collection(COLLECTION_NAME).doc(user.userName).delete()
-      await authUser.delete()
-      // TODO - delete user avatar
-      // TODO - show deleted notification
-    } catch (error) {
-      // TODO show notification if invalid credential
-      throw error
-    }
+    await authUser.reauthenticateWithCredential(credential)
+    const user = this.user as IUser
+    await this.db.collection(COLLECTION_NAME).doc(user.userName).delete()
+    await authUser.delete()
+    // TODO - delete user avatar
+    // TODO - show deleted notification
+    // TODO show notification if invalid credential
   }
 
   private async createUserProfile(fields: Partial<IUser> = {}) {

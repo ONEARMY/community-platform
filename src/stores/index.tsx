@@ -1,4 +1,3 @@
-import { TemplateStore } from './_Template/template.store'
 import { AdminStore } from './Admin/admin.store'
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
@@ -31,7 +30,6 @@ const stores = (rootStore: RootStore) => {
     aggregationsStore: new AggregationsStore(rootStore),
     howtoStore: new HowtoStore(rootStore),
     userStore: new UserStore(rootStore),
-    templateStore: new TemplateStore(rootStore),
     tagsStore: new TagsStore(rootStore),
     categoriesStore: new CategoriesStore(rootStore),
     researchCategoriesStore: new ResearchCategoriesStore(rootStore),
@@ -49,7 +47,6 @@ const stores = (rootStore: RootStore) => {
 export interface IStores {
   howtoStore: HowtoStore
   userStore: UserStore
-  templateStore: TemplateStore
   tagsStore: TagsStore
   categoriesStore: CategoriesStore
   researchCategoriesStore: ResearchCategoriesStore

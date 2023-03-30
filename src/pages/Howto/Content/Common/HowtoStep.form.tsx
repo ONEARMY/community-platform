@@ -4,7 +4,9 @@ import { Heading, Card, Flex, Text } from 'theme-ui'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
-import theme from 'src/themes/styled.theme'
+// TODO: Remove direct usage of Theme
+import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { required } from 'src/utils/validators'

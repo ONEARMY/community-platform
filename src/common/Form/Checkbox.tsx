@@ -1,11 +1,6 @@
 import type { FieldProps } from './types'
-import theme from 'src/themes/styled.theme'
-import styled from '@emotion/styled'
+import { Label } from 'theme-ui'
 
-const StyledLabel = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  cursor: pointer;
-`
 export const CheckboxInput = ({
   input,
   id,
@@ -15,7 +10,15 @@ export const CheckboxInput = ({
   return (
     <>
       <input id={id} type="checkbox" {...input} {...rest}></input>
-      <StyledLabel htmlFor={id}>{labelText}</StyledLabel>
+      <Label
+        sx={{
+          fontSize: 2,
+          cursor: 'pointer',
+        }}
+        htmlFor={id}
+      >
+        {labelText}
+      </Label>
     </>
   )
 }

@@ -20,6 +20,7 @@ import {
 } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { filterMapPinsByType } from './filter'
+import { getUserCountry } from 'src/utils/getUserCountry'
 
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
@@ -212,7 +213,7 @@ export class MapsStore extends ModuleStore {
       displayName: u.displayName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
       verifiedBadge: !!u.badges?.verified,
-      country: u.location?.countryCode || u.country?.toLowerCase() || null,
+      country: getUserCountry(u) || null,
     }
   }
   @action

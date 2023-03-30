@@ -50,11 +50,6 @@ export interface ILatLng {
   lng: number
 }
 
-export interface IBoundingBox {
-  topLeft: ILatLng
-  bottomRight: ILatLng
-}
-
 export type IPinGrouping = 'individual' | 'place'
 
 export interface IMapGrouping {

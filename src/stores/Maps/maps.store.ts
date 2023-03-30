@@ -4,7 +4,6 @@ import type {
   IMapGrouping,
   IMapPinWithDetail,
   IMapPinDetail,
-  IBoundingBox,
 } from 'src/models/maps.models'
 import type { IDBEndpoint } from 'src/models/common.models'
 import type { RootStore } from '../index'
@@ -66,12 +65,6 @@ export class MapsStore extends ModuleStore {
     this.filteredPins = this.mapPins
   }
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  /** TODO CC 2021-05-28 review if still useful to keep */
-  @action
-  public setMapBoundingBox(boundingBox: IBoundingBox) {
-    // this.recalculatePinCounts(boundingBox)
-  }
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
@@ -225,30 +218,3 @@ export class MapsStore extends ModuleStore {
     return filterMapPinsByType(this.mapPins, filter).length
   }
 }
-
-/**********************************************************************************
- *  Deprecated - CC - 2019/11/04
- *
- * The code below was previously used to help calculate the number of pins currently
- * within view, however not fully implemented. It is retained in case this behaviour
- * is wanted in the future
- *********************************************************************************/
-
-// private recalculatePinCounts(boundingBox: BoundingBox) {
-//   const pinTypeMap = this.availablePinFilters.reduce(
-//     (accumulator, current) => {
-//       current.count = 0
-//       if (accumulator[current.type] === undefined) {
-//         accumulator[current.type] = current
-//       }
-//       return accumulator
-//     },
-//     {} as Record<string, IPinType>,
-//   )
-
-//   this.mapPins.forEach(pin => {
-//     if (insideBoundingBox(pin.location as LatLng, boundingBox)) {
-//       pinTypeMap[pin.type].count++
-//     }
-//   })
-// }

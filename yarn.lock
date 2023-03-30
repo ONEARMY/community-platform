@@ -14808,13 +14808,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debounce@npm:^1.2.0":
-  version: 1.2.1
-  resolution: "debounce@npm:1.2.1"
-  checksum: 682a89506d9e54fb109526f4da255c5546102fbb8e3ae75eef3b04effaf5d4853756aee97475cd4650641869794e44f410eeb20ace2b18ea592287ab2038519e
-  languageName: node
-  linkType: hard
-
 "debug@npm:2.6.9, debug@npm:^2.2.0, debug@npm:^2.3.3, debug@npm:^2.6.0, debug@npm:^2.6.9":
   version: 2.6.9
   resolution: "debug@npm:2.6.9"
@@ -25792,7 +25785,6 @@ __metadata:
     cross-env: ^7.0.3
     cspell: ^6.1.0
     date-fns: ^1.30.1
-    debounce: ^1.2.0
     dexie: ^2.0.4
     dotenv: ^10.0.0
     env-cmd: ^10.1.0

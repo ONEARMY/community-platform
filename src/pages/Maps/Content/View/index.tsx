@@ -1,5 +1,4 @@
 import * as React from 'react'
-import debounce from 'debounce'
 import { Map, TileLayer } from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css'
@@ -8,12 +7,7 @@ import './index.css'
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'
 
-import type {
-  IMapPin,
-  ILatLng,
-  IBoundingBox,
-  IMapGrouping,
-} from 'src/models/maps.models'
+import type { IMapPin, ILatLng, IMapGrouping } from 'src/models/maps.models'
 import { inject, observer } from 'mobx-react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { RouteComponentProps } from 'react-router'
@@ -23,7 +17,6 @@ import type { LatLngExpression } from 'leaflet'
 interface IProps extends RouteComponentProps<any> {
   pins: Array<IMapPin>
   filters: Array<IMapGrouping>
-  onBoundingBoxChange: (boundingBox: IBoundingBox) => void
   onPinClicked: (pin: IMapPin) => void
   center: ILatLng
   zoom: number
@@ -38,7 +31,6 @@ interface IInjectedProps extends IProps {
 class MapView extends React.Component<IProps> {
   // on move end want to calculate current bounding box and notify parent
   static defaultProps: Partial<IProps> = {
-    onBoundingBoxChange: () => null,
     onPinClicked: () => null,
     pins: [],
     filters: [],
@@ -46,19 +38,8 @@ class MapView extends React.Component<IProps> {
     zoom: 3,
   }
   // so that pins can be displayed as required
-  private handleMove = () => {
-    if (this.props.mapRef.current) {
-      const boundingBox = this.props.mapRef.current.leafletElement.getBounds()
-      const newBoundingBox: IBoundingBox = {
-        topLeft: boundingBox.getNorthWest(),
-        bottomRight: boundingBox.getSouthEast(),
-      }
-      this.props.onBoundingBoxChange(newBoundingBox)
-    }
-  }
   constructor(props: IProps) {
     super(props)
-    this.handleMove = debounce(this.handleMove, 1000)
   }
 
   get injected() {
@@ -96,7 +77,6 @@ class MapView extends React.Component<IProps> {
         maxZoom={18}
         zoomControl={isViewportGreaterThanTablet}
         style={{ height: '100%', zIndex: 0 }}
-        onmove={this.handleMove}
         onclick={() => {
           this.injected.mapsStore.setActivePin(undefined)
           this.props.history.push('/map')

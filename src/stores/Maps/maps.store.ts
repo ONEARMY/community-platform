@@ -31,7 +31,7 @@ export class MapsStore extends ModuleStore {
   @observable
   public activePinFilters: Array<IMapGrouping> = []
   @observable
-  public activePin: IMapPin | IMapPinWithDetail | undefined = undefined
+  public activePin: IMapPinWithDetail | null = null
   @observable
   private mapPins: Array<IMapPin> = []
   @observable
@@ -123,24 +123,21 @@ export class MapsStore extends ModuleStore {
    */
   @action
   public async setActivePin(pin?: IMapPin | IMapPinWithDetail) {
-    // HACK - CC - 2021-07-14 ignore hardcoded pin details, should be retrieved
-    // from profile on open instead (needs cleaning from DB)
-    if (pin && Object.prototype.hasOwnProperty.call(pin, 'detail')) {
-      delete pin['detail']
+    if (!pin) {
+      this.activePin = null
+      return
     }
-    this.activePin = pin
+
     if (pin) {
-      const pinWithDetail = await this.getPinDetail(pin)
-      this.activePin = pinWithDetail
+      this.activePin = pin ? await this.getPinDetail(pin) : null
     }
   }
   // call additional action when pin detail received to inform mobx correctly of update
-  private async getPinDetail(pin: IMapPin) {
+  private async getPinDetail(pin: IMapPin): Promise<IMapPinWithDetail> {
     const detail: IMapPinDetail = IS_MOCK
       ? generatePinDetails()
       : await this.getUserProfilePin(pin._id)
-    const pinWithDetail: IMapPinWithDetail = { ...pin, detail }
-    return pinWithDetail
+    return { ...pin, detail }
   }
 
   // get base pin geo information

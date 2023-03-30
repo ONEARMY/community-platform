@@ -16,9 +16,9 @@ import { MemoryRouter } from 'react-router-dom'
 // pass ThemeProvider and array of your themes to decorator
 addDecorator(
   withThemes(ThemeProvider, [
-    preciousPlasticTheme,
-    projectKampTheme,
-    fixingFashionTheme,
+    preciousPlasticTheme.styles,
+    projectKampTheme.styles,
+    fixingFashionTheme.styles,
   ]),
 )
 

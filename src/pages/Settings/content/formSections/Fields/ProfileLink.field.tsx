@@ -1,10 +1,10 @@
+import { Button, ConfirmModal, FieldInput } from 'oa-components'
 import { Component } from 'react'
 import { Field } from 'react-final-form'
-import { Button, FieldInput, Modal } from 'oa-components'
-import { Text, Flex, Grid, Box } from 'theme-ui'
 import { SelectField } from 'src/common/Form/Select.field'
-import { validateUrl, validateEmail, required } from 'src/utils/validators'
 import { formatLink } from 'src/utils/formatters'
+import { required, validateEmail, validateUrl } from 'src/utils/validators'
+import { Box, Flex, Grid } from 'theme-ui'
 
 const COM_TYPE_MOCKS = [
   {
@@ -145,33 +145,13 @@ export class ProfileLinkField extends Component<IProps, IState> {
           />
         ) : null}
         {
-          <Modal
-            onDidDismiss={() => this.toggleDeleteModal()}
+          <ConfirmModal
             isOpen={!!this.state.showDeleteModal}
-          >
-            <Box data-cy="Link.field: Modal">
-              <Text>Are you sure you want to delete this link?</Text>
-              <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
-                <Flex px={1}>
-                  <Button
-                    variant={'outline'}
-                    onClick={() => this.toggleDeleteModal()}
-                  >
-                    Cancel
-                  </Button>
-                </Flex>
-                <Flex px={1}>
-                  <Button
-                    data-cy="Link.field: Delete"
-                    variant={'outline'}
-                    onClick={() => this.confirmDelete()}
-                  >
-                    Delete
-                  </Button>
-                </Flex>
-              </Flex>
-            </Box>
-          </Modal>
+            message="Are you sure you want to delete this link?"
+            confirmButtonText="Delete"
+            handleCancel={() => this.toggleDeleteModal()}
+            handleConfirm={() => this.confirmDelete()}
+          />
         }
       </Flex>
     )

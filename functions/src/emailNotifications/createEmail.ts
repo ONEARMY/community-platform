@@ -1,11 +1,9 @@
 import { logger } from 'firebase-functions/v1'
 import { NotificationType } from '../../../src/models'
-import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
 
-const EMAIL_COLLECTION = 'emails'
-const TEMPLATE_NAME = 'email_digest'
+export const TEMPLATE_NAME = 'email_digest'
 
 // move to handlebars functions if possible
 const getResourceTypeFromNotificationType = (type: NotificationType) => {
@@ -61,7 +59,7 @@ export async function createNotificationEmails() {
               triggeredBy: {
                 ...notification.triggeredBy,
                 // would be nice if we could build this into the notification
-                userUrl: `https://community.preciousplastic.com/u/${triggeredByUserName}`,
+                userName: triggeredByUserName,
               },
               resourceType: getResourceTypeFromNotificationType(
                 notification.type,
@@ -90,7 +88,10 @@ export async function createNotificationEmails() {
           },
           Promise.resolve({ comments: [], usefuls: [] }),
         )
-        db.collection(EMAIL_COLLECTION).add({
+
+        const emailEndpoint = DB_ENDPOINTS.emails
+
+        db.collection(emailEndpoint).add({
           toUids: [_userId],
           template: {
             name: TEMPLATE_NAME,

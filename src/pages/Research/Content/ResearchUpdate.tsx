@@ -47,6 +47,7 @@ const ResearchUpdate: React.FC<IProps> = ({
   return (
     <>
       <Flex
+        data-testid={`ResearchUpdate: ${updateIndex}`}
         data-cy={`update_${updateIndex}`}
         id={`update_${updateIndex}`}
         mx={[0, 0, -2]}

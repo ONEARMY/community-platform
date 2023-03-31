@@ -3,6 +3,7 @@ import { Input } from 'theme-ui'
 import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
 import { useDebouncedCallback } from 'use-debounce'
 import { OsmGeocodingLoader } from './OsmGeocodingLoader'
+import type { Result } from './types'
 
 export interface Props {
   placeholder?: string
@@ -14,21 +15,6 @@ export interface Props {
   acceptLanguage?: string
   viewbox?: string
   loading?: boolean
-}
-
-export interface Result {
-  place_id: number
-  licence: string
-  osm_type: string
-  osm_id: number
-  boundingbox: Array<string>
-  display_name: string
-  lat: string
-  lon: string
-  class: string
-  type: string
-  importance: number
-  icon?: string
 }
 
 export const OsmGeocoding = ({

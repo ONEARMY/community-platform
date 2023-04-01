@@ -18,11 +18,11 @@ export interface UserNotificationItem {
 }
 
 function getIconByType(type: notificationType): availableGlyphs {
-  return ['howto_useful', 'research_useful'].includes(type)
-    ? 'useful'
-    : type === 'research_update'
-    ? 'thunderbolt'
-    : 'comment'
+  if (['howto_useful', 'research_useful'].includes(type)) return 'useful'
+
+  if (type === 'research_update') return 'thunderbolt'
+
+  return 'comment'
 }
 
 export const NotificationItem = (props: UserNotificationItem) => {

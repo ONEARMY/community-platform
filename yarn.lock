@@ -25441,6 +25441,7 @@ __metadata:
     linkify-react: ^4.0.2
     linkifyjs: ^4.0.2
     mustache: ^4.2.0
+    oa-themes: "workspace:^"
     prettier: 2.5.1
     react-flag-icon-css: ^1.0.25
     react-icons: ^4.3.1
@@ -25533,7 +25534,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"oa-themes@workspace:*, oa-themes@workspace:packages/themes":
+"oa-themes@workspace:*, oa-themes@workspace:^, oa-themes@workspace:packages/themes":
   version: 0.0.0-use.local
   resolution: "oa-themes@workspace:packages/themes"
   dependencies:

@@ -132,6 +132,24 @@ const ResearchArticle = observer((props: IProps) => {
       isVerified: isUserVerified(item._createdBy),
     }
 
+    const onFollowingClick = async () => {
+      if (!loggedInUser?.userName) {
+        return null
+      }
+
+      if (item.subscribers?.includes(loggedInUser?.userName || '')) {
+        researchStore.removeSubscriberFromResearchArticle(
+          item._id,
+          loggedInUser?.userName,
+        )
+      } else {
+        researchStore.addSubscriberToResearchArticle(
+          item._id,
+          loggedInUser?.userName,
+        )
+      }
+    }
+
     const collaborators = Array.isArray(item.collaborators)
       ? item.collaborators
       : ((item.collaborators as string) || '').split(',').filter(Boolean)
@@ -149,6 +167,9 @@ const ResearchArticle = observer((props: IProps) => {
           onUsefulClick={() =>
             onUsefulClick(item._id, item._createdBy, item.slug)
           }
+          onFollowingClick={() => {
+            onFollowingClick()
+          }}
         />
         <Box my={16}>
           {item &&

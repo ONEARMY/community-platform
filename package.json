@@ -119,7 +119,6 @@
     "react-lazy-load-image-component": "^1.5.1",
     "react-leaflet": "^2.5.0",
     "react-leaflet-markercluster": "^2.0.0-rc3",
-    "react-player": "^1.15.3",
     "react-portal": "^4.2.0",
     "react-router": "^5.2.0",
     "react-router-breadcrumbs-hoc": "^3.2.0",

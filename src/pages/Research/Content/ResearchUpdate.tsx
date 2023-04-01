@@ -1,7 +1,6 @@
 import { format } from 'date-fns'
-import ReactPlayer from 'react-player'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { Button, ImageGallery, LinkifyText, Username } from 'oa-components'
+import { Button, ImageGallery, LinkifyText, Username, VideoPlayer } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
@@ -145,12 +144,7 @@ const ResearchUpdate = ({
             </Flex>
             <Box sx={{ width: '100%' }}>
               {update.videoUrl ? (
-                <ReactPlayer
-                  width="auto"
-                  data-cy="video-embed"
-                  controls
-                  url={update.videoUrl}
-                />
+                <VideoPlayer videoUrl={update.videoUrl} />
               ) : (
                 <ImageGallery images={update.images as IUploadedFileMeta[]} />
               )}

@@ -36,9 +36,18 @@ const factory = async (mockFn, researchItemOverloads: any = {}) => {
     }),
   )
 
+  let item = researchItem
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  store.db.get.mockResolvedValue(researchItem)
+  store.db.set.mockImplementation((newValue) => {
+    item = newValue
+    return newValue
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.db.get.mockImplementation(async () => item)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -81,6 +90,7 @@ describe('research.store', () => {
       it('adds new comment to update', async () => {
         const { store, researchItem, setFn } = await factoryResearchItem({
           collaborators: ['a-contributor'],
+          subscribers: ['subscriber'],
         })
 
         // Act
@@ -597,6 +607,7 @@ describe('research.store', () => {
       })
     })
   })
+
   describe('incrementViews', () => {
     it('data fetched from server db', async () => {
       const { store, researchItem, getFn } = await factoryResearchItem()
@@ -618,6 +629,92 @@ describe('research.store', () => {
 
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(updatedViews).toBe(views + 1)
+    })
+  })
+
+  describe('Subscribe', () => {
+    it('adds subscriber to the research article', async () => {
+      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
+        {
+          subscribers: ['existing-subscriber'],
+        },
+      )
+
+      // Act
+      await store.addSubscriberToResearchArticle(
+        researchItem._id,
+        'an-interested-user',
+      )
+
+      // Assert
+      expect(setFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = setFn.mock.calls[0]
+      expect(newResearchItem).toEqual(
+        expect.objectContaining({
+          subscribers: ['an-interested-user', 'existing-subscriber'],
+        }),
+      )
+    })
+
+    it('does not add a duplicate subscriber to the research article', async () => {
+      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
+        {
+          subscribers: ['a-very-interested-user'],
+        },
+      )
+
+      // Act
+      await store.addSubscriberToResearchArticle(
+        researchItem._id,
+        'a-very-interested-user',
+      )
+
+      expect(setFn).not.toBeCalled()
+    })
+
+    it('removes subscriber from the research article', async () => {
+      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
+        {
+          subscribers: ['long-term-subscriber', 'remove-me'],
+        },
+      )
+
+      // Act
+      await store.removeSubscriberFromResearchArticle(
+        researchItem._id,
+        'remove-me',
+      )
+
+      // Assert
+      expect(setFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = setFn.mock.calls[0]
+      expect(newResearchItem).toEqual(
+        expect.objectContaining({
+          subscribers: ['long-term-subscriber'],
+        }),
+      )
+    })
+
+    it('triggers a notification for each subscribed users', async () => {
+      const { store, researchItem, setFn } = await factoryResearchItem({
+        subscribers: ['subscriber'],
+      })
+
+      // Act
+      await store.uploadUpdate(FactoryResearchItemUpdate())
+      await store.uploadUpdate(FactoryResearchItemUpdate())
+
+      // Assert
+      expect(setFn).toHaveBeenCalledTimes(2)
+
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledTimes(
+        2,
+      )
+      expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+        'research_update',
+        'subscriber',
+        `/research/${researchItem.slug}`,
+      )
     })
   })
 })

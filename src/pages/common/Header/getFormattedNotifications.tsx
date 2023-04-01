@@ -70,6 +70,16 @@ export const getFormattedNotificationMessage = (
           </InternalLink>
         </Box>
       )
+    case 'research_update':
+      return (
+        <Box>
+          <InternalLink to={'/u/' + triggeredBy.userId}>
+            {triggeredBy.displayName}
+          </InternalLink>
+          posted an update to their
+          <InternalLink to={relevantUrl}>research article</InternalLink>
+        </Box>
+      )
     case 'new_comment_research':
       return (
         <Box>

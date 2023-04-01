@@ -74,26 +74,20 @@ export const ResearchComments = ({
   }
 
   const handleDelete = async (_id: string) => {
-    // eslint-disable-next-line no-alert
-    const confirmation = window.confirm(
-      'Are you sure you want to delete this comment?',
-    )
-    if (confirmation) {
-      await researchStore.deleteComment(_id, update as IResearch.Update)
-      trackEvent({
+    await researchStore.deleteComment(_id, update as IResearch.Update)
+    trackEvent({
+      category: 'Comments',
+      action: 'Deleted',
+      label: researchStore.activeResearchItem?.title,
+    })
+    logger.debug(
+      {
         category: 'Comments',
         action: 'Deleted',
         label: researchStore.activeResearchItem?.title,
-      })
-      logger.debug(
-        {
-          category: 'Comments',
-          action: 'Deleted',
-          label: researchStore.activeResearchItem?.title,
-        },
-        'comment deleted',
-      )
-    }
+      },
+      'comment deleted',
+    )
   }
 
   const handleEdit = async (_id: string, comment: string) => {

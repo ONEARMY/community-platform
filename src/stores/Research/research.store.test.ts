@@ -646,6 +646,7 @@ describe('research.store', () => {
         'an-interested-user',
       )
 
+      // Assert
       expect(setFn).toHaveBeenCalledTimes(1)
       const [newResearchItem] = setFn.mock.calls[0]
       expect(newResearchItem).toEqual(
@@ -684,6 +685,7 @@ describe('research.store', () => {
         'remove-me',
       )
 
+      // Assert
       expect(setFn).toHaveBeenCalledTimes(1)
       const [newResearchItem] = setFn.mock.calls[0]
       expect(newResearchItem).toEqual(
@@ -702,6 +704,7 @@ describe('research.store', () => {
       await store.uploadUpdate(FactoryResearchItemUpdate())
       await store.uploadUpdate(FactoryResearchItemUpdate())
 
+      // Assert
       expect(setFn).toHaveBeenCalledTimes(2)
 
       expect(store.userNotificationsStore.triggerNotification).toBeCalledTimes(

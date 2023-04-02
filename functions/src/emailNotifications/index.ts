@@ -1,5 +1,3 @@
-/** Trigger tasks daily at 2am */
-
 import * as functions from 'firebase-functions'
 import { createNotificationEmails } from './createEmail'
 

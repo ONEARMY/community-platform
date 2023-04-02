@@ -5,12 +5,16 @@ import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import type { User } from '../'
+import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
 
 export interface Props {
   isVerified: boolean
   user: User
   sx?: ThemeUIStyleObject
 }
+
+const isValidCountryCode = (str: string) =>
+  str && twoCharacterCountryCodes.has(str.toUpperCase())
 
 export const Username = (props: Props) => {
   return (
@@ -49,7 +53,8 @@ export const Username = (props: Props) => {
         }}
       >
         <Flex mr={1} sx={{ display: 'inline-flex' }}>
-          {props.user.countryCode ? (
+          {props.user.countryCode &&
+          isValidCountryCode(props.user.countryCode) ? (
             <FlagIconHowTos code={props.user.countryCode.toLowerCase()} />
           ) : (
             <Flex

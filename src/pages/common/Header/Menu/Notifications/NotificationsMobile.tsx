@@ -34,12 +34,6 @@ export const PanelItem = styled(Box as any)`
   padding: ${theme.space[3]}px 0px;
 `
 
-export const MenuMobileLinkContainer = styled(Box as any)`
-  border-top: 1px solid ${theme.colors.lightgrey};
-  border-bottom: 1px solid ${theme.colors.lightgrey};
-  margin-top: 5px;
-`
-
 export interface Props {
   notifications: UserNotificationList
   markAllRead: () => void

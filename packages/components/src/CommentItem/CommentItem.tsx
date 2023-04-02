@@ -1,6 +1,10 @@
 import { createRef, useEffect, useState } from 'react'
 import { Box, Flex, Text } from 'theme-ui'
-import { Button, ConfirmModal, EditComment, LinkifyText, Modal } from '../index'
+import { Button } from '../Button/Button'
+import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
+import { EditComment } from '../EditComment/EditComment'
+import { LinkifyText } from '../LinkifyText/LinkifyText'
+import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
 
 export interface CommentItemProps {

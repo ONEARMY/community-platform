@@ -164,6 +164,7 @@ const SCHEMA_BASE: IDexieSchema = {
   users: `${DEFAULT_SCHEMA},_authID`,
   research: `${DEFAULT_SCHEMA},slug`,
   aggregations: `${DEFAULT_SCHEMA}`,
+  emails: `${DEFAULT_SCHEMA}`,
 }
 // Ensure dexie also handles any prefixed database schema
 const MAPPED_SCHEMA = {} as IDexieSchema
@@ -180,8 +181,8 @@ const DEXIE_SCHEMA = MAPPED_SCHEMA
  * 2020-10-13
  * Add _authID to user indexes
  *
- *
- *
+ * 2023-04-02
+ * Add emails schema
  *
  *
  *

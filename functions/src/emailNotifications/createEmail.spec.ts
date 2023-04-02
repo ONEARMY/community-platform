@@ -1,5 +1,6 @@
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { DB_ENDPOINTS, INotification, IUserDB } from '../../../src/models'
+import { INotification } from '../../../src/models'
+import { DB_ENDPOINTS, IUserDB } from '../models'
 import { createNotificationEmails, TEMPLATE_NAME } from './createEmail'
 
 const notificationFactory = (

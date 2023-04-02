@@ -42,6 +42,7 @@
     "test:components": "yarn workspace oa-components test",
     "test:unit": "env-cmd -e cra craco test --env=jsdom",
     "test:unit:ci": "yarn build:themes && yarn build:components && env-cmd -e cra craco test --env=jsdom --runInBand --logHeapUsage",
+    "test:madge": "npx madge --circular --extensions ts,tsx ./ --exclude src/stores",
     "storybook": "yarn workspace oa-components start",
     "storybook:build": "yarn build:themes && yarn workspace oa-components build:sb",
     "docs": "yarn workspace oa-docs start",

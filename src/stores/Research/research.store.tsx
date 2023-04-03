@@ -135,6 +135,52 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
+  public async addSubscriberToResearchArticle(
+    docId: string,
+    userId: string,
+  ): Promise<void> {
+    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
+
+    const researchData = await toJS(dbRef.get('server'))
+    if (researchData && !(researchData?.subscribers || []).includes(userId)) {
+      await this.updateResearchItem(dbRef, {
+        ...researchData,
+        subscribers: [userId].concat(researchData?.subscribers || []),
+      })
+
+      const createdItem = (await dbRef.get()) as IResearch.ItemDB
+      runInAction(() => {
+        this.activeResearchItem = createdItem
+      })
+    }
+
+    return
+  }
+
+  public async removeSubscriberFromResearchArticle(
+    docId: string,
+    userId: string,
+  ): Promise<void> {
+    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
+
+    const researchData = await toJS(dbRef.get('server'))
+    if (researchData) {
+      await this.updateResearchItem(dbRef, {
+        ...researchData,
+        subscribers: (researchData?.subscribers || []).filter(
+          (id) => id !== userId,
+        ),
+      })
+
+      const createdItem = (await dbRef.get()) as IResearch.ItemDB
+      runInAction(() => {
+        this.activeResearchItem = createdItem
+      })
+    }
+
+    return
+  }
+
   @action
   private async loadResearchStats(id?: string) {
     if (id) {
@@ -445,6 +491,8 @@ export class ResearchStore extends ModuleStore {
       after: researchDescription,
     })
 
+    const previousVersion = toJS(await dbRef.get('server'))
+
     const mentions: any = []
 
     await Promise.all(
@@ -522,6 +570,31 @@ export class ResearchStore extends ModuleStore {
         )
       }
     })
+
+    // Notify each subscriber
+    const subscribers = researchItem.subscribers || []
+
+    // Only notify subscribers if there is a new update added
+    logger.debug('Notify each subscriber', {
+      subscribers,
+      beforeUpdateNumber: previousVersion?.updates
+        ? previousVersion?.updates.length
+        : 0,
+      afterUpdateNumber: researchItem?.updates.length,
+    })
+
+    if (
+      researchItem.updates.length >
+      (previousVersion?.updates ? previousVersion?.updates.length : 0)
+    ) {
+      subscribers.forEach((subscriber) =>
+        this.userNotificationsStore.triggerNotification(
+          'research_update',
+          subscriber,
+          `/research/${researchItem.slug}`,
+        ),
+      )
+    }
 
     return await dbRef.get()
   }

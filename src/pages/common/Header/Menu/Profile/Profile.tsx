@@ -2,11 +2,10 @@ import { Component } from 'react'
 import Foco from 'react-foco'
 import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
-import { Flex } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import ProfileButtons from './ProfileButtons'
-import { MenuMobileLinkContainer } from '../MenuMobile/MenuMobilePanel'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { MemberBadge } from 'oa-components'
 
@@ -46,7 +45,14 @@ export default class Profile extends Component<IProps, IState> {
       <>
         {user ? (
           this.props.isMobile ? (
-            <MenuMobileLinkContainer style={{ borderBottom: 'none' }}>
+            <Box
+              sx={{
+                borderBottom: 'none',
+                borderColor: 'lightgrey',
+                borderTop: '1px solid',
+                mt: 1,
+              }}
+            >
               <MenuMobileLink
                 path={'/u/' + user.userName}
                 content={'Profile'}
@@ -63,7 +69,7 @@ export default class Profile extends Component<IProps, IState> {
                 content={'Log out'}
                 onClick={() => this.injected.userStore.logout()}
               />
-            </MenuMobileLinkContainer>
+            </Box>
           ) : (
             <div data-cy="user-menu">
               <Flex

@@ -54,6 +54,15 @@ const notifications = [
       </>
     ),
   },
+  {
+    type: 'research_update',
+    children: (
+      <>
+        {faker.lorem.words(4)}{' '}
+        <InternalLink to="#">Research Article link</InternalLink>
+      </>
+    ),
+  },
 ] as UserNotificationList
 
 export const Default: ComponentStory<typeof NotificationList> = () => (

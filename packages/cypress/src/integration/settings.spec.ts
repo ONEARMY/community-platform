@@ -367,16 +367,16 @@ describe('[Settings]', () => {
 
       addContactLink({
         index: 1,
-        label: 'social',
+        label: 'social media',
         url: 'https://social.network',
       })
 
       // Remove first item
       cy.get('[data-cy="delete-link-0"]').last().trigger('click')
 
-      cy.get('[data-cy="Link.field: Modal"]').should('be.visible')
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
 
-      cy.get('[data-cy="Link.field: Delete"]').trigger('click')
+      cy.get('[data-cy="Confirm.modal: Confirm"]').trigger('click')
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=save]').should('not.be.disabled')
@@ -396,7 +396,7 @@ describe('[Settings]', () => {
             ...expected,
             links: [
               {
-                label: 'social',
+                label: 'social media',
                 url: 'https://social.network',
               },
             ],

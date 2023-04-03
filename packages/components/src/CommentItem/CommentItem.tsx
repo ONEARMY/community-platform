@@ -1,6 +1,10 @@
 import { createRef, useEffect, useState } from 'react'
-import { Button, EditComment, Modal, LinkifyText } from '../index'
 import { Box, Flex, Text } from 'theme-ui'
+import { Button } from '../Button/Button'
+import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
+import { EditComment } from '../EditComment/EditComment'
+import { LinkifyText } from '../LinkifyText/LinkifyText'
+import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
 
 export interface CommentItemProps {
@@ -27,6 +31,7 @@ const formatDate = (d: string | undefined): string => {
 export const CommentItem = (props: CommentItemProps) => {
   const textRef = createRef<any>()
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
   const {
@@ -137,7 +142,7 @@ export const CommentItem = (props: CommentItemProps) => {
                 variant={'outline'}
                 small={true}
                 icon="delete"
-                onClick={() => handleDelete && handleDelete(_id)}
+                onClick={() => setShowDeleteModal(true)}
                 ml={2}
               >
                 delete
@@ -156,6 +161,14 @@ export const CommentItem = (props: CommentItemProps) => {
             handleCancel={() => setShowEditModal(false)}
           />
         </Modal>
+
+        <ConfirmModal
+          isOpen={showDeleteModal}
+          message="Are you sure you want to delete this comment?"
+          confirmButtonText="Delete"
+          handleCancel={() => setShowDeleteModal(false)}
+          handleConfirm={() => handleDelete && handleDelete(_id)}
+        />
       </Flex>
     </Box>
   )

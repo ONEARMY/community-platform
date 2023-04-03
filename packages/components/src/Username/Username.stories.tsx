@@ -36,6 +36,15 @@ WithoutFlag.args = {
   isVerified: false,
 }
 
+export const InvalidCountryCode = Template.bind({})
+InvalidCountryCode.args = {
+  user: {
+    userName: 'a-username',
+    countryCode: 'zz',
+  },
+  isVerified: false,
+}
+
 export const InlineStyles = Template.bind({})
 InlineStyles.args = {
   user: {

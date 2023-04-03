@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Text, Textarea } from 'theme-ui'
 import { Link } from 'react-router-dom'
 import type { ThemeUIStyleObject } from 'theme-ui'
-import { MemberBadge } from '../index'
+import { MemberBadge } from '../MemberBadge/MemberBadge'
 
 export interface Props {
   maxLength: number

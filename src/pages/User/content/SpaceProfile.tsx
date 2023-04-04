@@ -11,7 +11,7 @@ import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
 
-import { MemberBadge, Icon, Username } from 'oa-components'
+import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
 
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
@@ -31,7 +31,6 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
 
-import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
@@ -314,7 +313,20 @@ export const SpaceProfile = ({ user }: IProps) => {
           <MobileBadge>
             <MemberBadge size={150} profileType={user.profileType} />
 
-            <UserStats user={user} />
+            <Box
+              sx={{
+                mt: 3,
+              }}
+            >
+              <UserStatistics
+                userName={user.userName}
+                country={user.location?.country}
+                isVerified={isUserVerified(user.userName)}
+                isSupporter={!!user.badges?.supporter}
+                howtoCount={Object.keys(user.stats!.userCreatedHowtos).length}
+                eventCount={Object.keys(user.stats!.userCreatedEvents).length}
+              />
+            </Box>
           </MobileBadge>
         </Box>
       </Flex>

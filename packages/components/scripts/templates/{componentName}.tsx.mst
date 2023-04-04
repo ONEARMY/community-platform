@@ -1,5 +1,5 @@
-interface Props {}
+export interface {{ComponentName}}Props {}
 
-export const {{ComponentName}} = (props: Props) => {
+export const {{ComponentName}} = (props: {{ComponentName}}Props) => {
   return <>{{ComponentName}}</>
 }

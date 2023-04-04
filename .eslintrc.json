@@ -112,6 +112,10 @@
           {
             "name": "packages/components/dist",
             "message": "Please import from 'oa-components' instead"
+          },
+          {
+            "name": "theme-ui",
+            "message": "Please import components from 'oa-components' instead"
           }
         ]
       }

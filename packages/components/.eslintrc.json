@@ -8,6 +8,7 @@
       { "namedComponents": "arrow-function" }
     ],
     "import/no-unresolved": "off",
+    "no-restricted-imports": "off",
     "import/no-default-export": "error"
   },
   "overrides": [

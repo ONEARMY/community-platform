@@ -1,15 +1,21 @@
 export {
   Alert,
+  AspectImage,
   Box,
+  Card,
   Checkbox,
+  Container,
   Input,
   Image,
   Flex,
+  Grid,
   Heading,
+  Paragraph,
   ThemeProvider,
   Text,
   Label,
 } from 'theme-ui'
+export type { FlexProps } from 'theme-ui'
 export { ExternalLink } from './ExternalLink/ExternalLink'
 export { FieldDatepicker } from './FieldDatepicker/FieldDatepicker'
 export { FieldInput } from './FieldInput/FieldInput'

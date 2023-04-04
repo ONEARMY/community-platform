@@ -3,7 +3,7 @@ import ResearchRoutes from './research.routes'
 import { preciousPlasticTheme } from 'oa-themes'
 const Theme = preciousPlasticTheme.styles
 
-import { ThemeProvider } from '@oa-components/core'
+import { ThemeProvider } from 'oa-components'
 import { render, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
 import { Provider } from 'mobx-react'

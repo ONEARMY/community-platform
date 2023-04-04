@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import { ThemeProvider } from '@oa-components/core'
+import { ThemeProvider } from 'oa-components'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'

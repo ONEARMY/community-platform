@@ -29,7 +29,6 @@ interface IInjectedProps extends IProps {
 @inject('mapsStore')
 @observer
 class MapView extends React.Component<IProps> {
-  // on move end want to calculate current bounding box and notify parent
   static defaultProps: Partial<IProps> = {
     onPinClicked: () => null,
     pins: [],

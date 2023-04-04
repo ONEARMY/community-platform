@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import { getAvailablePageList } from 'src/pages/PageList'
-import { Flex } from 'theme-ui'
+import { Flex } from 'oa-components'
 import styled from '@emotion/styled'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'

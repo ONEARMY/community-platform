@@ -1,5 +1,5 @@
 import errorImage from '../../assets/images/404error.png'
-import { Flex, Image, Text } from 'theme-ui'
+import { Flex, Image, Text } from 'oa-components'
 import { Link } from 'react-router-dom'
 import type { FC } from 'react'
 

@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import { Field } from 'react-final-form'
-import { Button, Modal } from 'oa-components'
-import { Text, Flex } from 'theme-ui'
+import { Button, Modal, Text, Flex } from 'oa-components'
 import { SelectField } from 'src/common/Form/Select.field'
 import { required } from 'src/utils/validators'
 

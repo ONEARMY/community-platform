@@ -1,5 +1,5 @@
 import { useTheme } from '@emotion/react'
-import { Container, Flex, Heading, Image, Input, Text } from 'theme-ui'
+import { Container, Flex, Heading, Image, Input, Text } from 'oa-components'
 import Search from 'src/assets/icons/icon-search.svg'
 
 type Props = {

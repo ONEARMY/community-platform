@@ -1,7 +1,6 @@
 import { Component } from 'react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
-import { Box } from 'theme-ui'
-import { Select } from 'oa-components'
+import { Box, Select } from 'oa-components'
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps {

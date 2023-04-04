@@ -1,5 +1,4 @@
-import { Icon, ExternalLink } from 'oa-components'
-import { Flex, Text } from 'theme-ui'
+import { Icon, ExternalLink, Flex, Text } from 'oa-components'
 import styled from '@emotion/styled'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'

@@ -8,7 +8,7 @@ import type {
   ComponentPropsGetterC,
 } from 'react-table'
 import 'react-table/react-table.css'
-import { Box, Text } from 'theme-ui'
+import { Box, Text } from 'oa-components'
 import TableHead from './TableHead'
 import { css, Global } from '@emotion/react'
 

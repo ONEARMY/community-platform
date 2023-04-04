@@ -1,5 +1,4 @@
-import { Heading, Card, Flex, Text } from 'theme-ui'
-import { ExternalLink } from 'oa-components'
+import { Heading, Card, Flex, Text, ExternalLink } from 'oa-components'
 import { useTheme } from '@emotion/react'
 import { DISCORD_INVITE_URL } from 'src/constants'
 

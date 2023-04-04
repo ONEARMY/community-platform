@@ -2,7 +2,7 @@ import { Component } from 'react'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { Flex, Image, Text } from 'theme-ui'
+import { Flex, Image, Text } from 'oa-components'
 import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'

@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { Button } from 'oa-components'
+import { Button, Text } from 'oa-components'
 import type { AdminStore } from 'src/stores/Admin/admin.store'
 import type { IUser } from 'src/models/user.models'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import { Text } from 'theme-ui'
 import { Link } from 'react-router-dom'
 
 /*

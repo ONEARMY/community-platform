@@ -1,8 +1,16 @@
 import { PureComponent } from 'react'
 import { Field } from 'react-final-form'
-import { Heading, Card, Flex, Text } from 'theme-ui'
+import {
+  Heading,
+  Card,
+  Flex,
+  Text,
+  Button,
+  FieldInput,
+  FieldTextarea,
+  Modal,
+} from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'

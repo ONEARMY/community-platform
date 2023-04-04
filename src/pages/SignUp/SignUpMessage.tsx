@@ -1,9 +1,8 @@
 import React from 'react'
-import { Card, Flex, Heading, Text } from 'theme-ui'
+import { Card, Flex, Heading, Text, Button, ExternalLink } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { Button, ExternalLink } from 'oa-components'
 import { Link } from 'react-router-dom'
 
 class SignUpMessagePage extends React.Component {

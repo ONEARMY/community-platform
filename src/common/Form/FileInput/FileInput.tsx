@@ -4,9 +4,8 @@ import '@uppy/dashboard/dist/style.css'
 import type { UppyFile } from '@uppy/core'
 import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
-import { Button, FileInformation } from 'oa-components'
+import { Button, FileInformation, Flex } from 'oa-components'
 import { UPPY_CONFIG } from './UppyConfig'
-import { Flex } from 'theme-ui'
 
 interface IUppyFiles {
   [key: string]: UppyFile

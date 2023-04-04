@@ -2,7 +2,7 @@ import * as React from 'react'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IPlasticType } from 'src/models'
 
-import { Flex, Heading, Box, Text, Grid } from 'theme-ui'
+import { Flex, Heading, Box, Text, Grid, Button } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
 
@@ -15,7 +15,6 @@ import Other from 'src/assets/images/plastic-types/other.svg'
 import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 
 import { FieldArray } from 'react-final-form-arrays'
-import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'

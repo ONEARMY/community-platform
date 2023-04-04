@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Box, Heading } from 'theme-ui'
+import { Box, Heading } from 'oa-components'
 import type { IDBEndpoint, IHowto, IMapPin, IUserDB } from 'src/models'
 import styled from '@emotion/styled'
 // TODO: Remove direct usage of Theme

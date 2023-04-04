@@ -1,8 +1,7 @@
-import { Box, Image } from 'theme-ui'
+import { Box, Image, Icon, ElWithBeforeIcon, ExternalLink } from 'oa-components'
 import EventsIcon from 'src/assets/icons/icon-events.svg'
 import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import { Icon, ElWithBeforeIcon, ExternalLink } from 'oa-components'
 import type { IUserPP } from 'src/models'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'

@@ -5,7 +5,7 @@ import { withRouter, Route, Switch } from 'react-router'
 
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { MapView, Controls } from './Content'
-import { Box } from 'theme-ui'
+import { Box } from 'oa-components'
 
 import './styles.css'
 

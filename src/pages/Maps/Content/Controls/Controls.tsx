@@ -1,8 +1,7 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 
-import { Button, Modal, OsmGeocoding } from 'oa-components'
-import { Flex, Box } from 'theme-ui'
+import { Button, Modal, OsmGeocoding, Flex, Box } from 'oa-components'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 
 import { GroupingFilterDesktop } from './GroupingFilterDesktop'

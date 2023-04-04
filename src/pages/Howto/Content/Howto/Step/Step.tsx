@@ -1,7 +1,14 @@
 import { PureComponent } from 'react'
 import ReactPlayer from 'react-player'
-import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { ImageGallery, LinkifyText } from 'oa-components'
+import {
+  Box,
+  Card,
+  Text,
+  Flex,
+  Heading,
+  ImageGallery,
+  LinkifyText,
+} from 'oa-components'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'

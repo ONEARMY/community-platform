@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from 'theme-ui'
+import { Box } from 'oa-components'
 
 interface Props {
   children: React.ReactNode

@@ -2,9 +2,17 @@ import 'src/assets/css/slick.min.css'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
-import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
+import {
+  Box,
+  Image,
+  Flex,
+  Heading,
+  Card,
+  Paragraph,
+  MemberBadge,
+  Username,
+} from 'oa-components'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { MemberBadge, Username } from 'oa-components'
 import styled from '@emotion/styled'
 import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'

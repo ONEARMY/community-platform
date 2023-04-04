@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex } from 'oa-components'
 import styled from '@emotion/styled'
 import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'

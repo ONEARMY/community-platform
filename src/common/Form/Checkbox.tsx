@@ -1,5 +1,5 @@
 import type { FieldProps } from './types'
-import { Label } from 'theme-ui'
+import { Label } from 'oa-components'
 
 export const CheckboxInput = ({
   input,

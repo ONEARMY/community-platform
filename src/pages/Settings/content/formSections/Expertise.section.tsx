@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Flex, Heading, Box, Text } from 'theme-ui'
+import { Flex, Heading, Box, Text } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'

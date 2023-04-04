@@ -1,4 +1,4 @@
-import { Heading, Card, Text, Flex } from 'theme-ui'
+import { Heading, Card, Text, Flex } from 'oa-components'
 import { useTheme } from '@emotion/react'
 
 // TODO : create a component to avoid duplicate with how-to's guidelines

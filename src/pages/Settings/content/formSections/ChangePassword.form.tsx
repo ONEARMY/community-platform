@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button, FieldInput } from 'oa-components'
+import { Button, FieldInput, Text, Flex } from 'oa-components'
 import type { UserStore } from 'src/stores/User/user.store'
-import { Text, Flex } from 'theme-ui'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles

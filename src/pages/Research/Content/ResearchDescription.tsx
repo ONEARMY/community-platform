@@ -6,6 +6,10 @@ import {
   UsefulStatsButton,
   Username,
   ViewsCounter,
+  Box,
+  Flex,
+  Heading,
+  Text,
 } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -21,7 +25,6 @@ import {
   addIDToSessionStorageArray,
   retrieveSessionStorageArray,
 } from 'src/utils/sessionStorage'
-import { Box, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
   research: IResearch.ItemDB

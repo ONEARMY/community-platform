@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { Box, Image } from 'theme-ui'
+import { Box, Image, Button } from 'oa-components'
 import styled from '@emotion/styled'
-import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
 // TODO: Remove direct usage of Theme

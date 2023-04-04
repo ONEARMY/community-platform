@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Text } from 'theme-ui'
+import { Text } from 'oa-components'
 import { ImageInput } from './ImageInput/ImageInput'
 import { FieldContainer } from './FieldContainer'
 import type { FieldProps } from './types'

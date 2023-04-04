@@ -1,10 +1,9 @@
-import { Button, CommentList, CreateComment } from 'oa-components'
+import { Button, CommentList, CreateComment, Box, Flex } from 'oa-components'
 import { useState } from 'react'
 import { MAX_COMMENT_LENGTH } from '../../../../constants'
 import { useCommonStores } from '../../../../'
 import { logger } from 'src/logger'
 import { useResearchStore } from '../../../../stores/Research/research.store'
-import { Box, Flex } from 'theme-ui'
 
 import styled from '@emotion/styled'
 

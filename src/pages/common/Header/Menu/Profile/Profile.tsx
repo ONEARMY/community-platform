@@ -2,12 +2,11 @@ import { Component } from 'react'
 import Foco from 'react-foco'
 import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex, MemberBadge } from 'oa-components'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import ProfileButtons from './ProfileButtons'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { MemberBadge } from 'oa-components'
 
 interface IState {
   showProfileModal: boolean

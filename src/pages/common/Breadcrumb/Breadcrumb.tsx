@@ -1,7 +1,7 @@
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
 import { Link } from 'react-router-dom'
 import HowtoBreadcrumb from 'src/pages/common/Breadcrumb/HowtoBreadcrumb'
-import { Text } from 'theme-ui'
+import { Text } from 'oa-components'
 const routes = [
   { path: '/how-to', breadcrumb: 'How-to' },
   { path: '/how-to/create', breadcrumb: 'Create' },

@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
 import styled from '@emotion/styled'
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex } from 'oa-components'
 import ProfileButtonItem from './ProfileButtonItem'
 
 interface IProps {

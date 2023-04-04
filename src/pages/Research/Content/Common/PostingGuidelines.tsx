@@ -1,5 +1,4 @@
-import { Card, Text, Flex, Heading } from 'theme-ui'
-import { ExternalLink } from 'oa-components'
+import { Card, Text, Flex, Heading, ExternalLink } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles

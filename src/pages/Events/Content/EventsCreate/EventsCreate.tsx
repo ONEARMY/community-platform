@@ -9,9 +9,13 @@ import {
   FieldDatepicker,
   FieldInput,
   ElWithBeforeIcon,
+  Heading,
+  Card,
+  Flex,
+  Box,
+  Text,
 } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
-import { Heading, Card, Flex, Box, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'

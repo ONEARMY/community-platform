@@ -1,8 +1,16 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
-import { Button, Modal, Select } from 'oa-components'
-import { Heading, Box, Text, Input, Flex } from 'theme-ui'
+import {
+  Button,
+  Modal,
+  Select,
+  Heading,
+  Box,
+  Text,
+  Input,
+  Flex,
+} from 'oa-components'
 import type { ITag, TagCategory } from 'src/models/tags.model'
 // Import React Table
 import ReactTable from 'react-table'

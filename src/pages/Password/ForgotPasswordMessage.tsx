@@ -1,6 +1,5 @@
 import React from 'react'
-import { Card, Flex, Heading, Text } from 'theme-ui'
-import { Button } from 'oa-components'
+import { Card, Flex, Heading, Text, Button } from 'oa-components'
 import { Link } from 'react-router-dom'
 
 class ForgotPasswordMessagePage extends React.Component {

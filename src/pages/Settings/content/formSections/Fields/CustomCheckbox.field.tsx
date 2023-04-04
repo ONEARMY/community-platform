@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { Label, HiddenInput } from '../elements'
-import { Image, Input, Text } from 'theme-ui'
+import { Image, Input, Text } from 'oa-components'
 import type { FieldRenderProps } from 'react-final-form'
 
 interface IProps {

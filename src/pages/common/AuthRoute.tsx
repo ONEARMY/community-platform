@@ -3,7 +3,7 @@ import type { RouteProps } from 'react-router'
 import { Redirect, Route } from 'react-router'
 import { observer } from 'mobx-react'
 import type { UserRole } from 'src/models/user.models'
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 
 /*

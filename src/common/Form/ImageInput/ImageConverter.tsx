@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Flex } from 'theme-ui'
+import { Flex } from 'oa-components'
 import imageCompression from 'browser-image-compression'
 import type { IConvertedFileMeta } from 'src/types'
 import styled from '@emotion/styled'

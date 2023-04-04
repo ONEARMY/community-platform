@@ -13,7 +13,7 @@ import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { Flex } from 'theme-ui'
+import { Flex } from 'oa-components'
 
 import styled from '@emotion/styled'
 

@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { ThemeProvider } from '@theme-ui/core'
+import { ThemeProvider } from '@oa-components/core'
 import { render } from '@testing-library/react'
 import { preciousPlasticTheme } from 'oa-themes'
 const Theme = preciousPlasticTheme.styles

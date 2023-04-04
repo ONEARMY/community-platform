@@ -3,7 +3,7 @@ import { Component } from 'react'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { Box } from 'theme-ui'
+import { Box } from 'oa-components'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import { Link } from 'react-router-dom'

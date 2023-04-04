@@ -1,8 +1,15 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
-import { Heading, Flex, Box, Text } from 'theme-ui'
+import {
+  Heading,
+  Flex,
+  Box,
+  Text,
+  Button,
+  FieldInput,
+  FieldTextarea,
+} from 'oa-components'
 import { countries } from 'countries-list'
-import { Button, FieldInput, FieldTextarea } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles

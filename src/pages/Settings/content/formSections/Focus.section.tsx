@@ -1,6 +1,14 @@
-import { Heading, Box, Text, Flex, Grid, Paragraph } from 'theme-ui'
+import {
+  Heading,
+  Box,
+  Text,
+  Flex,
+  Grid,
+  Paragraph,
+  Button,
+  ExternalLink,
+} from 'oa-components'
 import { FlexSectionContainer } from './elements'
-import { Button, ExternalLink } from 'oa-components'
 import type { ProfileTypeLabel } from 'src/modules/profile/types'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import { CustomRadioField } from './Fields/CustomRadio.field'

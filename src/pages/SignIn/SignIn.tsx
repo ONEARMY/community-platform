@@ -1,9 +1,18 @@
 import * as React from 'react'
 import { getFriendlyMessage } from 'oa-shared'
-import { Card, Flex, Heading, Text, Label, Box } from 'theme-ui'
+import {
+  Card,
+  Flex,
+  Heading,
+  Text,
+  Label,
+  Box,
+  Button,
+  FieldInput,
+  TextNotification,
+} from 'oa-components'
 import type { RouteComponentProps } from 'react-router'
 import { withRouter, Redirect } from 'react-router'
-import { Button, FieldInput, TextNotification } from 'oa-components'
 import { inject, observer } from 'mobx-react'
 import { Form, Field } from 'react-final-form'
 import type { UserStore } from 'src/stores/User/user.store'

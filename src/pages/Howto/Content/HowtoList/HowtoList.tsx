@@ -1,8 +1,15 @@
 import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { Button, MoreContainer, Loader } from 'oa-components'
-import { Heading, Input, Flex, Box } from 'theme-ui'
+import {
+  Button,
+  MoreContainer,
+  Loader,
+  Heading,
+  Input,
+  Flex,
+  Box,
+} from 'oa-components'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
 import { AuthWrapper } from 'src/common/AuthWrapper'

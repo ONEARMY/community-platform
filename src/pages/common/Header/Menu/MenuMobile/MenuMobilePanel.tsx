@@ -4,7 +4,7 @@ import { getAvailablePageList } from 'src/pages/PageList'
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
 import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
+import { Box } from 'oa-components'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import { AuthWrapper } from 'src/common/AuthWrapper'

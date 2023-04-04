@@ -1,10 +1,16 @@
-import { Button, ConfirmModal, FieldInput } from 'oa-components'
+import {
+  Button,
+  ConfirmModal,
+  FieldInput,
+  Box,
+  Flex,
+  Grid,
+} from 'oa-components'
 import { Component } from 'react'
 import { Field } from 'react-final-form'
 import { SelectField } from 'src/common/Form/Select.field'
 import { formatLink } from 'src/utils/formatters'
 import { required, validateEmail, validateUrl } from 'src/utils/validators'
-import { Box, Flex, Grid } from 'theme-ui'
 
 const COM_TYPE_MOCKS = [
   {

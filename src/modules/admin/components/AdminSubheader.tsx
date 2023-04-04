@@ -1,4 +1,4 @@
-import { Box } from 'theme-ui'
+import { Box } from 'oa-components'
 import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { MODULE } from 'src/modules'

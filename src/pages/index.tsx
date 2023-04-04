@@ -14,13 +14,12 @@ import {
   POLICY_PAGES,
   getAvailablePageList,
 } from './PageList'
-import { Flex, Box } from 'theme-ui'
+import { Flex, Box, ExternalLink, Button } from 'oa-components'
 import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import { getSupportedModules } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
 import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
-import { ExternalLink, Button } from 'oa-components'
 
 export class Routes extends React.Component<
   any,

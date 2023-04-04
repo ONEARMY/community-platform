@@ -1,5 +1,13 @@
 import * as React from 'react'
-import { Card, Flex, Heading, Box, Text } from 'theme-ui'
+import {
+  Card,
+  Flex,
+  Heading,
+  Box,
+  Text,
+  Button,
+  TextNotification,
+} from 'oa-components'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -11,7 +19,6 @@ import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { EmailNotificationsSection } from './content/formSections/EmailNotifications.section'
-import { Button, TextNotification } from 'oa-components'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'

@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Select } from 'oa-components'
-import { Flex, Text } from 'theme-ui'
+import { Select, Flex, Text } from 'oa-components'
 import { FieldContainer } from './FieldContainer'
 import type { FieldProps } from './types'
 

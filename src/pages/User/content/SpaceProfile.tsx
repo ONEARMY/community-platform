@@ -5,13 +5,20 @@ import type {
   PlasticTypeLabel,
 } from 'src/models/userPreciousPlastic.models'
 
-import { Heading, Box, Image, Flex, Paragraph } from 'theme-ui'
+import {
+  Heading,
+  Box,
+  Image,
+  Flex,
+  Paragraph,
+  MemberBadge,
+  Icon,
+  Username,
+} from 'oa-components'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
-
-import { MemberBadge, Icon, Username } from 'oa-components'
 
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'

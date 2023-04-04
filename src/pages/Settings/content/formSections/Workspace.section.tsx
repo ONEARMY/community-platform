@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Flex, Heading, Box, Text } from 'theme-ui'
+import { Flex, Heading, Box, Text } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { required } from 'src/utils/validators'

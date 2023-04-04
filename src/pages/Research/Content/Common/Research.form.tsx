@@ -5,14 +5,17 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading } from 'theme-ui'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
+  Box,
+  Card,
+  Flex,
+  Heading,
   Button,
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
 } from 'oa-components'
+import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'

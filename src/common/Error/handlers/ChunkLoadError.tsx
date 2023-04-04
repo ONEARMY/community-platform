@@ -1,6 +1,5 @@
-import { Button } from 'oa-components'
 import { useEffect } from 'react'
-import { Box, Text } from 'theme-ui'
+import { Button, Box, Text } from 'oa-components'
 import { attemptReload, isReloaded } from './Reloader'
 
 /**

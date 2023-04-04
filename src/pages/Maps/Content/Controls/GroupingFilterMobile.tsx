@@ -1,6 +1,5 @@
 import { Component } from 'react'
-import { Button } from 'oa-components'
-import { Flex, Text, Image } from 'theme-ui'
+import { Button, Flex, Text, Image } from 'oa-components'
 
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 import crossClose from 'src/assets/icons/cross-close.svg'

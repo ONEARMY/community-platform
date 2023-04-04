@@ -1,9 +1,8 @@
-import { CommentList, CreateComment } from 'oa-components'
+import { CommentList, CreateComment, Box, Flex } from 'oa-components'
 import { useState } from 'react'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
-import { Box, Flex } from 'theme-ui'
 
 import type { UserComment } from 'src/models'
 import { trackEvent } from 'src/common/Analytics'

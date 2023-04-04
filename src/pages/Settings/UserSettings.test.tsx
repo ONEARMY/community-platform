@@ -4,7 +4,7 @@ import { UserSettings } from './UserSettings'
 import { useCommonStores } from 'src'
 import { FactoryUser } from '../../test/factories/User'
 import { MemoryRouter } from 'react-router'
-import { ThemeProvider } from 'theme-ui'
+import { ThemeProvider } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 

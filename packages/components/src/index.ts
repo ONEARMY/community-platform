@@ -1,3 +1,15 @@
+export {
+  Alert,
+  Box,
+  Checkbox,
+  Input,
+  Image,
+  Flex,
+  Heading,
+  ThemeProvider,
+  Text,
+  Label,
+} from 'theme-ui'
 export { ExternalLink } from './ExternalLink/ExternalLink'
 export { FieldDatepicker } from './FieldDatepicker/FieldDatepicker'
 export { FieldInput } from './FieldInput/FieldInput'

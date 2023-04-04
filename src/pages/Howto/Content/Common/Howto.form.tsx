@@ -15,9 +15,13 @@ import {
   FieldTextarea,
   ElWithBeforeIcon,
   FileInformation,
+  Heading,
+  Card,
+  Flex,
+  Box,
+  Text,
 } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { Heading, Card, Flex, Box, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { FileInputField } from 'src/common/Form/FileInput.field'

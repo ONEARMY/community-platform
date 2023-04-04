@@ -4,7 +4,7 @@ import { Form, Field } from 'react-final-form'
 import { useCommonStores } from 'src'
 import { CheckboxInput } from 'src/common/Form/Checkbox'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { Card, Heading, Box, Button } from 'theme-ui'
+import { Card, Heading, Box, Button } from 'oa-components'
 
 const availableBadges = ['supporter', 'verified']
 

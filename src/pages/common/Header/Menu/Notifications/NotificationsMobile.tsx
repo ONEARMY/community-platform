@@ -1,8 +1,7 @@
-import { NotificationList } from 'oa-components'
+import { NotificationList, Box } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { Box } from 'theme-ui'
 
 import styled from '@emotion/styled'
 

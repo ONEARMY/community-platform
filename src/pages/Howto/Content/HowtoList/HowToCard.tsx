@@ -1,10 +1,18 @@
-import { CategoryTag, Icon, ModerationStatus, Username } from 'oa-components'
+import {
+  CategoryTag,
+  Icon,
+  ModerationStatus,
+  Username,
+  Card,
+  Flex,
+  Heading,
+  Text,
+} from 'oa-components'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link as RouterLink } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { Card, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }

@@ -6,10 +6,9 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
-import { Text } from 'theme-ui'
+import { Text, Loader } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import { isAllowToEditContent } from 'src/utils/helpers'
-import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 
 interface IState {

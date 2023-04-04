@@ -1,8 +1,9 @@
 import { observer } from 'mobx-react'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
-import { Box, Flex } from 'theme-ui'
 import {
+  Box,
+  Flex,
   ArticleCallToAction,
   Button,
   Loader,

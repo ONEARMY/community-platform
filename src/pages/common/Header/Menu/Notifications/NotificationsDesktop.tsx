@@ -1,7 +1,6 @@
-import { NotificationList } from 'oa-components'
+import { NotificationList, Flex } from 'oa-components'
 import { useState } from 'react'
 import Foco from 'react-foco'
-import { Flex } from 'theme-ui'
 
 import { NotificationsIcon } from './NotificationsIcon'
 

@@ -1,7 +1,6 @@
 import * as React from 'react'
 import type { IEvent, IEventDB } from 'src/models/events.models'
-import { Button, MoreContainer } from 'oa-components'
-import { Flex, Box, Heading } from 'theme-ui'
+import { Button, MoreContainer, Flex, Box, Heading } from 'oa-components'
 import EventCard from '../../EventCard/EventCard'
 import TagsSelect from 'src/common/Tags/TagsSelect'
 import { inject, observer } from 'mobx-react'

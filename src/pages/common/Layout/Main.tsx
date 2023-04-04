@@ -1,5 +1,5 @@
-import type { FlexProps } from 'theme-ui'
-import { Flex } from 'theme-ui'
+import type { FlexProps } from 'oa-components'
+import { Flex } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles

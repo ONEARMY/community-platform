@@ -1,5 +1,4 @@
-import { ProfileLink } from 'oa-components'
-import { Box } from 'theme-ui'
+import { ProfileLink, Box } from 'oa-components'
 
 export const UserContactAndLinks = ({ links }) =>
   links.length ? (

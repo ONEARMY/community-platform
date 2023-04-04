@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import { Button } from 'oa-components'
-import { Heading, Box, Text, Flex, Input } from 'theme-ui'
+import { Button, Heading, Box, Text, Flex, Input } from 'oa-components'
 import type { AdminStore } from 'src/stores/Admin/admin.store'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 

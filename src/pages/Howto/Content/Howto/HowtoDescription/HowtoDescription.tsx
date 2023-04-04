@@ -1,11 +1,13 @@
 import { format } from 'date-fns'
 import { useState, useEffect } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
-import StepsIcon from 'src/assets/icons/icon-steps.svg'
-import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
-import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import {
+  Heading,
+  Text,
+  Box,
+  Flex,
+  Image,
+  AspectImage,
   Button,
   ModerationStatus,
   LinkifyText,
@@ -15,6 +17,9 @@ import {
   Username,
   ViewsCounter,
 } from 'oa-components'
+import StepsIcon from 'src/assets/icons/icon-steps.svg'
+import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
+import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import type { IUser } from 'src/models/user.models'
 import {
   isAllowToEditContent,

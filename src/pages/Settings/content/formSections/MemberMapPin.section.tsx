@@ -1,8 +1,15 @@
 import * as React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Heading, Text, Box, Flex } from 'theme-ui'
+import {
+  Heading,
+  Text,
+  Box,
+  Flex,
+  Button,
+  FieldTextarea,
+  MapWithDraggablePin,
+} from 'oa-components'
 import { Field } from 'react-final-form'
-import { Button, FieldTextarea, MapWithDraggablePin } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 // TODO: Remove direct usage of Theme

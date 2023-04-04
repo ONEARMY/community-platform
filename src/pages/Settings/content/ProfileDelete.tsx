@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Button, FieldInput, Modal } from 'oa-components'
-import { Text, Flex } from 'theme-ui'
+import { Button, FieldInput, Modal, Text, Flex } from 'oa-components'
 import { Form, Field } from 'react-final-form'
 
 interface IState {

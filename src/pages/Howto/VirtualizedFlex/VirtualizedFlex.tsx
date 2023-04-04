@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Flex, Box } from 'theme-ui'
+import { Flex, Box } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const themes = preciousPlasticTheme.styles

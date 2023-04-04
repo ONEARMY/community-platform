@@ -6,8 +6,10 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Box, Flex, Text } from 'theme-ui'
 import {
+  Box,
+  Flex,
+  Text,
   ArticleCallToAction,
   Button,
   Loader,

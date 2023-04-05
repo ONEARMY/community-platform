@@ -31,6 +31,8 @@ describe('ResearchUpdate', () => {
       <ThemeProvider theme={Theme}>
         <ResearchUpdate
           update={FactoryResearchItemUpdate({
+            _created: created.toString(),
+            _modified: modified.toString(),
             title: 'A title',
             description: 'A description',
           })}
@@ -54,6 +56,7 @@ describe('ResearchUpdate', () => {
       <ThemeProvider theme={Theme}>
         <ResearchUpdate
           update={FactoryResearchItemUpdate({
+            _modified: modified.toString(),
             title: 'A title',
             description: 'A description',
           })}

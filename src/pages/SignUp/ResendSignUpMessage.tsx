@@ -1,18 +1,8 @@
 import React from 'react'
-import { Card, Flex, Heading } from 'theme-ui'
-import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+import { Card, Flex, Heading, Label } from 'theme-ui'
 import { Button, FieldInput } from 'oa-components'
 import { Form, Field } from 'react-final-form'
 import { logger } from 'src/logger'
-
-const Label = styled.label`
- font-size: ${theme.fontSizes[2] + 'px'}
- margin-bottom: ${theme.space[2] + 'px'}
- display: block;
-`
 
 interface IFormValues {
   email: string
@@ -85,7 +75,15 @@ class ResendSignUpMessagePage extends React.Component<IProps, IState> {
                           width: ['100%', '100%', `${(2 / 3) * 100}%`],
                         }}
                       >
-                        <Label htmlFor="email">Email</Label>
+                        <Label
+                          htmlFor="email"
+                          sx={{
+                            fontSize: 2,
+                            mb: 2,
+                          }}
+                        >
+                          Email
+                        </Label>
                         <Field
                           name="email"
                           type="email"

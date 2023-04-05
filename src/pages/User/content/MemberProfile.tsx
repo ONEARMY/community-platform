@@ -84,8 +84,12 @@ export const MemberProfile = ({ user }: IProps) => {
             country={user.location?.country}
             isVerified={isUserVerified(user.userName)}
             isSupporter={!!user.badges?.supporter}
-            howtoCount={Object.keys(user.stats!.userCreatedHowtos).length}
-            eventCount={Object.keys(user.stats!.userCreatedEvents).length}
+            howtoCount={
+              user.stats ? Object.keys(user.stats!.userCreatedHowtos).length : 0
+            }
+            eventCount={
+              user.stats ? Object.keys(user.stats!.userCreatedEvents).length : 0
+            }
           />
         </Box>
         <Flex

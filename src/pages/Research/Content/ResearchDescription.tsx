@@ -110,6 +110,13 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             <Button
               icon="thunderbolt"
               variant="outline"
+              iconColor={
+                research.subscribers?.includes(
+                  props?.loggedInUser?.userName || '',
+                )
+                  ? 'orange'
+                  : 'black'
+              }
               sx={{
                 fontSize: 2,
                 py: 0,

@@ -6,7 +6,7 @@ import { Loader } from 'oa-components'
 import { Text } from 'theme-ui'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
-import UpdateForm from '../Common/Update.form'
+import { ResearchUpdateForm } from '../Common/ResearchUpdate.form'
 import TEMPLATE from './Template'
 
 type IProps = RouteComponentProps<{ slug: string }>
@@ -45,7 +45,7 @@ const CreateUpdate = observer((props: IProps) => {
     isAllowToEditContent(store.activeResearchItem, store.activeUser)
   ) {
     return (
-      <UpdateForm
+      <ResearchUpdateForm
         formValues={TEMPLATE.INITIAL_VALUES}
         parentType="create"
         {...props}

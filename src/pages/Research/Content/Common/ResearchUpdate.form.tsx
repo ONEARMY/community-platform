@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
@@ -17,9 +17,6 @@ import type { ResearchEditorOverviewUpdate } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { COMPARISONS } from 'src/utils/comparisons'
 import { required } from 'src/utils/validators'
 import styled from '@emotion/styled'
@@ -44,18 +41,12 @@ const FormContainer = styled.form`
   width: 100%;
 `
 
-const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
-  display: block;
-`
-
 const beforeUnload = (e) => {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
 
-const UpdateForm = observer((props: IProps) => {
+export const ResearchUpdateForm = observer((props: IProps) => {
   const store = useResearchStore()
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
   const [isDraft, setIsDraft] = React.useState<boolean>(
@@ -153,7 +144,7 @@ const UpdateForm = observer((props: IProps) => {
                 <FormContainer id="updateForm" onSubmit={handleSubmit}>
                   {/* Update Info */}
                   <Flex sx={{ flexDirection: 'column' }}>
-                    <Card bg={theme.colors.softblue}>
+                    <Card sx={{ bg: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                         <Heading>
                           {props.parentType === 'create' ? (
@@ -181,7 +172,7 @@ const UpdateForm = observer((props: IProps) => {
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title">
+                              <Label htmlFor="title" sx={{ mb: 2 }}>
                                 Title of this update
                               </Label>
                               <Field
@@ -197,7 +188,7 @@ const UpdateForm = observer((props: IProps) => {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="description">
+                              <Label htmlFor="description" sx={{ mb: 2 }}>
                                 Description of this update
                               </Label>
                               <Field
@@ -217,7 +208,7 @@ const UpdateForm = observer((props: IProps) => {
                                 placeholder="Explain what is happening in your research (max 1500 characters)"
                               />
                             </Flex>
-                            <Label htmlFor={`images`}>
+                            <Label htmlFor={`images`} sx={{ mb: 2 }}>
                               Upload image(s) for this update
                             </Label>
                             <Flex
@@ -275,7 +266,7 @@ const UpdateForm = observer((props: IProps) => {
                               </ImageInputFieldWrapper>
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor={`videoUrl`}>
+                              <Label htmlFor={`videoUrl`} sx={{ mb: 2 }}>
                                 Or embed a YouTube video
                               </Label>
                               <Field
@@ -314,7 +305,6 @@ const UpdateForm = observer((props: IProps) => {
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
                 >
-                  {props.formValues.status}
                   <Button
                     data-cy={'draft'}
                     onClick={(evt) => {
@@ -417,5 +407,3 @@ const validateMedia = (videoUrl: string, values: any) => {
   }
   return images && images[0] ? null : 'Include either images or a video'
 }
-
-export default UpdateForm

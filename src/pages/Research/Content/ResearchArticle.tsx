@@ -173,20 +173,22 @@ const ResearchArticle = observer((props: IProps) => {
         />
         <Box my={16}>
           {item &&
-            item?.updates?.map((update, index) => (
-              <ResearchUpdate
-                update={update}
-                key={update._id}
-                updateIndex={index}
-                isEditable={isEditable}
-                slug={item.slug}
-                comments={transformToUserComment(
-                  researchStore.getActiveResearchUpdateComments(index),
-                  loggedInUser?.userName,
-                )}
-                showComments={areCommentVisible(index)}
-              />
-            ))}
+            item?.updates
+              ?.filter((update) => update.status !== 'draft')
+              .map((update, index) => (
+                <ResearchUpdate
+                  update={update}
+                  key={update._id}
+                  updateIndex={index}
+                  isEditable={isEditable}
+                  slug={item.slug}
+                  comments={transformToUserComment(
+                    researchStore.getActiveResearchUpdateComments(index),
+                    loggedInUser?.userName,
+                  )}
+                  showComments={areCommentVisible(index)}
+                />
+              ))}
         </Box>
         <Box
           sx={{

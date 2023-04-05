@@ -58,6 +58,9 @@ const beforeUnload = (e) => {
 const UpdateForm = observer((props: IProps) => {
   const store = useResearchStore()
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
+  const [isDraft, setIsDraft] = React.useState<boolean>(
+    props.formValues.status === 'draft',
+  )
 
   React.useEffect(() => {
     if (store.updateUploadStatus?.Complete) {
@@ -65,13 +68,16 @@ const UpdateForm = observer((props: IProps) => {
     }
   }, [store.updateUploadStatus?.Complete])
 
-  const trySubmitForm = () => {
+  const trySubmitForm = (isDraft: boolean) => {
     const form = document.getElementById('updateForm')
-    if (typeof form !== 'undefined' && form !== null) {
-      form.dispatchEvent(
-        new Event('submit', { cancelable: true, bubbles: true }),
-      )
-    }
+    setIsDraft(isDraft)
+    setTimeout(() => {
+      if (typeof form !== 'undefined' && form !== null) {
+        form.dispatchEvent(
+          new Event('submit', { cancelable: true, bubbles: true }),
+        )
+      }
+    }, 0)
   }
 
   const onSubmit = (formValues: IResearch.Update) => {
@@ -86,6 +92,7 @@ const UpdateForm = observer((props: IProps) => {
           ].filter(Boolean),
         ),
       ),
+      status: isDraft ? 'draft' : 'published',
     })
   }
 
@@ -101,22 +108,6 @@ const UpdateForm = observer((props: IProps) => {
       },
       { dirty: true },
     )
-  }
-
-  /**
-   * Ensure either url or images included (not both), and any url formatted correctly
-   */
-  const validateMedia = (videoUrl: string, values: any) => {
-    const images = values.images
-    if (videoUrl) {
-      if (images && images[0]) {
-        return 'Do not include both images and video'
-      }
-      const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
-      const urlValid = ytRegex.test(videoUrl)
-      return urlValid ? null : 'Please provide a valid YouTube Url'
-    }
-    return images && images[0] ? null : 'Include either images or a video'
   }
 
   return (
@@ -323,14 +314,36 @@ const UpdateForm = observer((props: IProps) => {
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
                 >
+                  {props.formValues.status}
+                  <Button
+                    data-cy={'draft'}
+                    onClick={(evt) => {
+                      trySubmitForm(true)
+                      evt.preventDefault()
+                    }}
+                    variant="secondary"
+                    type="submit"
+                    disabled={submitting}
+                    sx={{ width: '100%', display: 'block', mt: 0 }}
+                  >
+                    {props.formValues.status === 'draft' ? (
+                      <span>Save to draft</span>
+                    ) : (
+                      <span>Revert to draft</span>
+                    )}
+                  </Button>
                   <Button
                     large
                     data-cy={'submit'}
-                    onClick={trySubmitForm}
+                    onClick={(evt) => {
+                      trySubmitForm(false)
+                      evt.preventDefault()
+                    }}
                     variant="primary"
                     type="submit"
                     disabled={submitting}
                     sx={{
+                      mt: 3,
                       mb: ['40px', '40px', 0],
                       width: '100%',
                       justifyContent: 'center',
@@ -387,6 +400,22 @@ const getResearchUpdates = (
         }
       : null,
   ].filter(Boolean)
+}
+
+/**
+ * Ensure either url or images included (not both), and any url formatted correctly
+ */
+const validateMedia = (videoUrl: string, values: any) => {
+  const images = values.images
+  if (videoUrl) {
+    if (images && images[0]) {
+      return 'Do not include both images and video'
+    }
+    const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
+    const urlValid = ytRegex.test(videoUrl)
+    return urlValid ? null : 'Please provide a valid YouTube Url'
+  }
+  return images && images[0] ? null : 'Include either images or a video'
 }
 
 export default UpdateForm

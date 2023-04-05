@@ -5,6 +5,7 @@ import { preciousPlasticTheme } from 'oa-themes'
 const Theme = preciousPlasticTheme.styles
 import ResearchUpdate from './ResearchUpdate'
 import { faker } from '@faker-js/faker'
+import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 
 jest.mock('src/index', () => {
   return {
@@ -29,16 +30,10 @@ describe('ResearchUpdate', () => {
     const wrapper = render(
       <ThemeProvider theme={Theme}>
         <ResearchUpdate
-          update={{
-            _id: faker.database.mongodbObjectId(),
-            _deleted: false,
-            _created: created.toString(),
-            _modified: modified.toString(),
+          update={FactoryResearchItemUpdate({
             title: 'A title',
             description: 'A description',
-            images: [],
-            comments: [],
-          }}
+          })}
           updateIndex={1}
           slug={'slug'}
           comments={[]}
@@ -58,16 +53,10 @@ describe('ResearchUpdate', () => {
     const wrapper = render(
       <ThemeProvider theme={Theme}>
         <ResearchUpdate
-          update={{
-            _id: faker.database.mongodbObjectId(),
-            _deleted: false,
-            _created: faker.date.past().toString(),
-            _modified: modified.toString(),
+          update={FactoryResearchItemUpdate({
             title: 'A title',
             description: 'A description',
-            images: [],
-            comments: [],
-          }}
+          })}
           updateIndex={1}
           slug={'slug'}
           comments={[]}

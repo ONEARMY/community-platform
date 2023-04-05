@@ -102,6 +102,46 @@ describe('Research Article', () => {
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
     })
   })
+
+  it('shows only published updates', async () => {
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+      activeResearchItem: FactoryResearchItem({
+        collaborators: ['example-username', 'another-example-username'],
+        updates: [
+          FactoryResearchItemUpdate({
+            title: 'Research Update #1',
+          }),
+          FactoryResearchItemUpdate({
+            title: 'Research Update #2',
+            status: 'draft',
+          }),
+        ],
+      }),
+    })
+
+    // Act
+    const wrapper = render(
+      <Provider userStore={{}}>
+        <ThemeProvider theme={Theme}>
+          <MemoryRouter initialEntries={['/research/article']}>
+            <Route
+              path="/research/:slug"
+              exact
+              key={1}
+              component={ResearchArticle}
+            />
+          </MemoryRouter>
+        </ThemeProvider>
+      </Provider>,
+    )
+
+    // Assert
+    expect(() => {
+      wrapper.getByText('Research Update #2')
+    }).toThrow()
+  })
 })
 
 const getWrapper = () => {

@@ -35,6 +35,7 @@ export namespace IResearch {
     comments?: IComment[]
     total_views?: number
     collaborators?: string[]
+    status: 'draft' | 'published'
   }
 
   export interface FormInput extends IModerable {

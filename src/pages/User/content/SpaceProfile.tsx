@@ -36,7 +36,6 @@ import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { isUserVerified } from 'src/common/isUserVerified'
-import { getUserCountry } from 'src/utils/getUserCountry'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -239,6 +238,9 @@ export const SpaceProfile = ({ user }: IProps) => {
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
 
+  const userCountryCode =
+    user.location?.countryCode || user.country?.toLowerCase() || undefined
+
   return (
     <ProfileWrapper mt={4} mb={6} data-cy="SpaceProfile">
       <ProfileWrapperCarousel>
@@ -268,7 +270,7 @@ export const SpaceProfile = ({ user }: IProps) => {
             <Username
               user={{
                 userName: user.userName,
-                countryCode: getUserCountry(user),
+                countryCode: userCountryCode,
               }}
               isVerified={isUserVerified(user.userName)}
             />

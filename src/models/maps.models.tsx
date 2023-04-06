@@ -43,12 +43,16 @@ export interface IMapPinDetail {
   profileUrl: string
   heroImageUrl: string
   verifiedBadge: boolean
-  country: string | null
 }
 
 export interface ILatLng {
   lat: number
   lng: number
+}
+
+export interface IBoundingBox {
+  topLeft: ILatLng
+  bottomRight: ILatLng
 }
 
 export type IPinGrouping = 'individual' | 'place'

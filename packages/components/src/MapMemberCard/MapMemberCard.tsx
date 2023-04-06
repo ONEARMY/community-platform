@@ -13,7 +13,6 @@ export interface Props {
   user: {
     isVerified: boolean
     username: string
-    country: string | null
   }
   heading: string
   moderationStatus: string
@@ -82,7 +81,6 @@ export const MapMemberCard = (props: Props) => {
                   isVerified={!!user.isVerified}
                   user={{
                     userName: user.username,
-                    countryCode: user.country,
                   }}
                 />
               </div>

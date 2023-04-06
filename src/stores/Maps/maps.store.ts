@@ -4,6 +4,7 @@ import type {
   IMapGrouping,
   IMapPinWithDetail,
   IMapPinDetail,
+  IBoundingBox,
 } from 'src/models/maps.models'
 import type { IDBEndpoint } from 'src/models/common.models'
 import type { RootStore } from '../index'
@@ -11,6 +12,7 @@ import type { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
 import { getUserAvatar } from '../User/user.store'
 import { MAP_GROUPINGS } from './maps.groupings'
+import { generatePins, generatePinDetails } from 'src/stores/Maps/generatePins'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from '../storage'
 import {
@@ -20,15 +22,16 @@ import {
 } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { filterMapPinsByType } from './filter'
-import { getUserCountry } from 'src/utils/getUserCountry'
 
+// NOTE - toggle below variable to use larger mock dataset
+const IS_MOCK = false
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
   mapPins$: Subscription
   @observable
   public activePinFilters: Array<IMapGrouping> = []
   @observable
-  public activePin: IMapPinWithDetail | null = null
+  public activePin: IMapPin | IMapPinWithDetail | undefined = undefined
   @observable
   private mapPins: Array<IMapPin> = []
   @observable
@@ -62,10 +65,19 @@ export class MapsStore extends ModuleStore {
       .map((p) => {
         return { ...p, verified: this.userStore.verifiedUsers[p._id] === true }
       })
+    if (IS_MOCK) {
+      pins = generatePins(250)
+    }
     this.mapPins = pins
     this.filteredPins = this.mapPins
   }
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  /** TODO CC 2021-05-28 review if still useful to keep */
+  @action
+  public setMapBoundingBox(boundingBox: IBoundingBox) {
+    // this.recalculatePinCounts(boundingBox)
+  }
   @action
   public async retrieveMapPins() {
     // TODO: make the function accept a bounding box to reduce load from DB
@@ -111,18 +123,24 @@ export class MapsStore extends ModuleStore {
    */
   @action
   public async setActivePin(pin?: IMapPin | IMapPinWithDetail) {
-    if (!pin) {
-      this.activePin = null
-      return
+    // HACK - CC - 2021-07-14 ignore hardcoded pin details, should be retrieved
+    // from profile on open instead (needs cleaning from DB)
+    if (pin && Object.prototype.hasOwnProperty.call(pin, 'detail')) {
+      delete pin['detail']
     }
-
+    this.activePin = pin
     if (pin) {
-      this.activePin = pin ? await this.getPinDetail(pin) : null
+      const pinWithDetail = await this.getPinDetail(pin)
+      this.activePin = pinWithDetail
     }
   }
   // call additional action when pin detail received to inform mobx correctly of update
-  private async getPinDetail(pin: IMapPin): Promise<IMapPinWithDetail> {
-    return { ...pin, detail: await this.getUserProfilePin(pin._id) }
+  private async getPinDetail(pin: IMapPin) {
+    const detail: IMapPinDetail = IS_MOCK
+      ? generatePinDetails()
+      : await this.getUserProfilePin(pin._id)
+    const pinWithDetail: IMapPinWithDetail = { ...pin, detail }
+    return pinWithDetail
   }
 
   // get base pin geo information
@@ -195,7 +213,6 @@ export class MapsStore extends ModuleStore {
         displayName: username,
         profileUrl: `${window.location.origin}/u/${username}`,
         verifiedBadge: false,
-        country: null,
       }
     }
     const avatar = getUserAvatar(username)
@@ -213,7 +230,6 @@ export class MapsStore extends ModuleStore {
       displayName: u.displayName,
       profileUrl: `${window.location.origin}/u/${u.userName}`,
       verifiedBadge: !!u.badges?.verified,
-      country: getUserCountry(u) || null,
     }
   }
   @action
@@ -221,3 +237,30 @@ export class MapsStore extends ModuleStore {
     return filterMapPinsByType(this.mapPins, filter).length
   }
 }
+
+/**********************************************************************************
+ *  Deprecated - CC - 2019/11/04
+ *
+ * The code below was previously used to help calculate the number of pins currently
+ * within view, however not fully implemented. It is retained in case this behaviour
+ * is wanted in the future
+ *********************************************************************************/
+
+// private recalculatePinCounts(boundingBox: BoundingBox) {
+//   const pinTypeMap = this.availablePinFilters.reduce(
+//     (accumulator, current) => {
+//       current.count = 0
+//       if (accumulator[current.type] === undefined) {
+//         accumulator[current.type] = current
+//       }
+//       return accumulator
+//     },
+//     {} as Record<string, IPinType>,
+//   )
+
+//   this.mapPins.forEach(pin => {
+//     if (insideBoundingBox(pin.location as LatLng, boundingBox)) {
+//       pinTypeMap[pin.type].count++
+//     }
+//   })
+// }

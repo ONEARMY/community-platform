@@ -1,4 +1,4 @@
-import { MapView } from './MapView/MapView'
+import { MapView } from './View'
 import { Controls } from './Controls/Controls'
 
 export { MapView, Controls }

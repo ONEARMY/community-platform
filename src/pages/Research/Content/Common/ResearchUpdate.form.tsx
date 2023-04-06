@@ -12,6 +12,7 @@ import {
   FieldTextarea,
   ElWithBeforeIcon,
   ResearchEditorOverview,
+  ConfirmModal,
 } from 'oa-components'
 import type { ResearchEditorOverviewUpdate } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
@@ -35,6 +36,7 @@ const CONFIRM_DIALOG_MSG =
 interface IProps extends RouteComponentProps<any> {
   formValues: any
   parentType: 'create' | 'edit'
+  redirectUrl?: string
 }
 
 const FormContainer = styled.form`
@@ -48,6 +50,7 @@ const beforeUnload = (e) => {
 
 export const ResearchUpdateForm = observer((props: IProps) => {
   const store = useResearchStore()
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
   const [isDraft, setIsDraft] = React.useState<boolean>(
     props.formValues.status === 'draft',
@@ -85,6 +88,14 @@ export const ResearchUpdateForm = observer((props: IProps) => {
       ),
       status: isDraft ? 'draft' : 'published',
     })
+  }
+
+  const handleDelete = async (_updateId: string) => {
+    setShowDeleteModal(false)
+    await store.deleteUpdate(_updateId)
+    if (props.redirectUrl) {
+      window.location.assign(props.redirectUrl)
+    }
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
@@ -321,6 +332,21 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       <span>Revert to draft</span>
                     )}
                   </Button>
+                  {props.parentType === 'edit' ? (
+                    <Button
+                      data-cy={'delete'}
+                      onClick={(evt) => {
+                        setShowDeleteModal(true)
+                        evt.preventDefault()
+                      }}
+                      variant="destructive"
+                      type="submit"
+                      disabled={submitting}
+                      sx={{ width: '100%', display: 'block', mt: 3 }}
+                    >
+                      Delete this update
+                    </Button>
+                  ) : null}
                   <Button
                     large
                     data-cy={'submit'}
@@ -359,6 +385,15 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   ) : null}
                 </Box>
               </Flex>
+              <ConfirmModal
+                isOpen={showDeleteModal}
+                message="Are you sure you want to delete this update?"
+                confirmButtonText="Delete"
+                handleCancel={() => setShowDeleteModal(false)}
+                handleConfirm={() =>
+                  handleDelete && handleDelete(props.formValues._id)
+                }
+              />
             </Flex>
           )
         }}

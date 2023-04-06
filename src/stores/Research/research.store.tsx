@@ -769,6 +769,46 @@ export class ResearchStore extends ModuleStore {
       }
     }
   }
+
+  public async deleteUpdate(updateId: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      try {
+        // populate DB
+        const existingUpdateIndex = item.updates.findIndex(
+          (upd) => upd._id === updateId,
+        )
+
+        if (existingUpdateIndex === -1) {
+          logger.debug('No update matching id found')
+          return
+        }
+
+        const newItem = {
+          ...toJS(item),
+          updates: [...toJS(item.updates)],
+        }
+
+        // editing update
+        newItem.updates[existingUpdateIndex]._deleted = true
+
+        // set the database document
+        await this.updateResearchItem(dbRef, newItem)
+        const createdItem = (await dbRef.get()) as IResearch.ItemDB
+        runInAction(() => {
+          this.activeResearchItem = createdItem
+        })
+
+        return createdItem
+      } catch (error) {
+        logger.error('error deleting article', error)
+      }
+    }
+  }
+
   get userVotedActiveResearchUseful(): boolean {
     const researchId = this.activeResearchItem!._id
     const userVotedResearch = this.activeUser?.votedUsefulResearch || {}

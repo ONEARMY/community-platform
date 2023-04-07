@@ -1,7 +1,7 @@
 import { test, expect } from './support'
 import { TestDB } from './support/db/FirebaseTestDatabase'
-import { randomUUID } from 'crypto'
 import { setDatabasePrefix } from './support/setDatabasePrefix'
+import { generateDatabasePrefix } from './support/db/generateDatabasePrefix'
 
 test.describe('[Sign in]', () => {
   test('[By Anonymous] can go to the sign-up page', async ({ page }) => {
@@ -37,7 +37,7 @@ test.describe('[Sign in]', () => {
 
 test.describe('[User]', () => {
   test('redirects to home page', async ({ page, context, signIn }) => {
-    const DB_PREFIX = 'db_' + randomUUID()
+    const DB_PREFIX = generateDatabasePrefix()
     await TestDB.seedDB(DB_PREFIX, ['users'])
     await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 

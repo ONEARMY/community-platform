@@ -1,15 +1,15 @@
 import { test, expect } from './support'
 import { users } from './data/index'
-import { randomUUID } from 'crypto'
 import { TestDB } from './support/db/FirebaseTestDatabase'
 import { setDatabasePrefix } from './support/setDatabasePrefix'
+import { generateDatabasePrefix } from './support/db/generateDatabasePrefix'
 
 const { subscriber, admin } = users
 
 test.describe('[Profile]', () => {
   test('[Can view public profile]', async ({ page, context }) => {
     // Arrange
-    const DB_PREFIX = 'db_' + randomUUID()
+    const DB_PREFIX = generateDatabasePrefix()
     await TestDB.seedDB(DB_PREFIX, ['users'])
     await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
@@ -24,7 +24,7 @@ test.describe('[Profile]', () => {
       page,
       context,
     }) => {
-      const DB_PREFIX = 'db_' + randomUUID()
+      const DB_PREFIX = generateDatabasePrefix()
       await TestDB.seedDB(DB_PREFIX, ['users'])
       await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
@@ -39,7 +39,7 @@ test.describe('[Profile]', () => {
       page,
       context,
     }) => {
-      const DB_PREFIX = 'db_' + randomUUID()
+      const DB_PREFIX = generateDatabasePrefix()
       await TestDB.seedDB(DB_PREFIX, ['users'])
       await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 

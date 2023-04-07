@@ -3,10 +3,11 @@ import { TestDB } from './support/db/FirebaseTestDatabase'
 import { setDatabasePrefix } from './support/setDatabasePrefix'
 import { randomUUID } from 'crypto'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
+import { generateDatabasePrefix } from './support/db/generateDatabasePrefix'
 
 test.describe('[Sign Up]', () => {
   test('prevent duplicate username', async ({ page, context }) => {
-    const DB_PREFIX = 'db_' + randomUUID()
+    const DB_PREFIX = generateDatabasePrefix()
     await TestDB.seedDB(DB_PREFIX, ['users'])
     await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
@@ -36,7 +37,7 @@ test.describe('[Sign Up]', () => {
   })
 
   test('prevent duplicate email', async ({ page, context }) => {
-    const DB_PREFIX = 'db_' + randomUUID()
+    const DB_PREFIX = generateDatabasePrefix()
     await TestDB.seedDB(DB_PREFIX, ['users'])
     await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
@@ -66,7 +67,7 @@ test.describe('[Sign Up]', () => {
   })
 
   test('create new account', async ({ page, context }) => {
-    const DB_PREFIX = 'db_' + randomUUID()
+    const DB_PREFIX = generateDatabasePrefix()
     await TestDB.seedDB(DB_PREFIX, ['users'])
     await context.addInitScript(setDatabasePrefix, DB_PREFIX)
     await page.goto('/sign-up')

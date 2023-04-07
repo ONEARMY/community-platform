@@ -166,7 +166,7 @@ class SignInPage extends React.Component<IProps, IState> {
                               Log in to your account
                             </Heading>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title">
+                              <Label htmlFor="email">
                                 {authProvider!.inputLabel}
                               </Label>
                               <Field
@@ -178,7 +178,7 @@ class SignInPage extends React.Component<IProps, IState> {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title">Password</Label>
+                              <Label htmlFor="password">Password</Label>
                               <Field
                                 name="password"
                                 type="password"

@@ -43,3 +43,6 @@ functions/firebase-debug.log
 .pnp.*
 
 *.tsbuildinfo
+/test-results/
+/playwright-report/
+/playwright/.cache/

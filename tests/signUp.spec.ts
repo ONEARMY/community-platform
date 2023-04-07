@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { TestDB } from './support/db/FirebaseTestDatabase'
-import { setDatabasePrefix } from './support/db/setDatabasePrefix'
+import { setDatabasePrefix } from './support/setDatabasePrefix'
 import { randomUUID } from 'crypto'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 

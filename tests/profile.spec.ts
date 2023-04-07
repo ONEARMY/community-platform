@@ -2,7 +2,7 @@ import { test, expect } from './support'
 import { users } from './data/index'
 import { randomUUID } from 'crypto'
 import { TestDB } from './support/db/FirebaseTestDatabase'
-import { setDatabasePrefix } from './support/db/setDatabasePrefix'
+import { setDatabasePrefix } from './support/setDatabasePrefix'
 
 const { subscriber, admin } = users
 

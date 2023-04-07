@@ -1,7 +1,7 @@
 import { test, expect } from './support'
 import { TestDB } from './support/db/FirebaseTestDatabase'
 import { randomUUID } from 'crypto'
-import { setDatabasePrefix } from './support/db/setDatabasePrefix'
+import { setDatabasePrefix } from './support/setDatabasePrefix'
 
 test.describe('[Sign in]', () => {
   test('[By Anonymous] can go to the sign-up page', async ({ page }) => {

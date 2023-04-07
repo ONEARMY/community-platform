@@ -294,6 +294,9 @@ jobs:
       - run:
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
+      - run: 
+          name: Playwright dependencies
+          command: npx playwright install
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
           command: yarn run test:e2e && yarn run test:components

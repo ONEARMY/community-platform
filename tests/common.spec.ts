@@ -1,4 +1,10 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './support'
+import { TestDB } from './support/db/FirebaseTestDatabase'
+import { generateDatabasePrefix } from './support/db/generateDatabasePrefix'
+import { setDatabasePrefix } from './support/setDatabasePrefix'
+import { users } from './data'
+
+const { subscriber } = users
 
 test.describe('[Common]', () => {
   test('Default Page', async ({ page }) => {
@@ -38,24 +44,40 @@ test.describe('[User Menu]', () => {
     await expect(page.locator('[data-cy=user-menu]')).not.toBeVisible()
   })
 
-  // test.todo('By Authenticated', async ({ page }) => {
-  //     const username = 'howto_reader';
-  //     await page.goto('/how-to');
-  //     await page.login({ username: `${username}@test.com`, password: 'test1234' });
-  //     await expect(page.locator('[data-cy=login]')).not.toBeVisible();
-  //     await expect(page.locator('[data-cy=join]')).not.toBeVisible();
+  test('By Authenticated', async ({ page, signIn, context }) => {
+    const DB_PREFIX = generateDatabasePrefix()
+    await TestDB.seedDB(DB_PREFIX, ['users'])
+    await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
-  //     await page.click('[data-cy=user-menu]');
-  //     await expect(page.locator('[data-cy=user-menu-list]')).toBeVisible();
+    await signIn.withEmailAndPassword(subscriber.email, subscriber.password)
 
-  //     await page.click(`[data-cy=${UserMenuItem.Profile}]`);
-  //     await expect(page.url()).toContain(`/u/${username}`);
+    await page.goto(`/u/${subscriber.userName}`)
 
-  //     await page.click(`[data-cy=${UserMenuItem.Settings}]`);
-  //     await expect(page.url()).toContain('settings');
+    await expect(await page.locator('[data-cy=login]')).not.toBeVisible()
+    await expect(await page.locator('[data-cy=join]')).not.toBeVisible()
 
-  //     await page.click(`[data-cy=${UserMenuItem.LogOut}]`);
-  //     await expect(page.locator('[data-cy=login]')).toBeVisible();
-  //     await expect(page.locator('[data-cy=join]')).toBeVisible();
-  // });
+    const triggerMenu = await page.locator('[data-cy=user-menu]')
+    await triggerMenu.click()
+
+    await expect(await page.locator('[data-cy=user-menu-list]')).toBeVisible()
+
+    const triggerMenu2 = await page.locator('[data-cy=user-menu]')
+    await triggerMenu2.click()
+
+    await page.getByText(`Profile`).click()
+    await page.waitForURL(`/u/${subscriber.userName}`)
+
+    const triggerMenu3 = await page.locator('[data-cy=user-menu]')
+    await triggerMenu3.click()
+
+    await page.getByText(`Settings`).click()
+    await page.waitForURL('settings')
+
+    const triggerMenu4 = await page.locator('[data-cy=user-menu]')
+    await triggerMenu4.click()
+
+    await page.getByText(`Log out`).click()
+    await expect(page.locator('[data-cy=login]')).toBeVisible()
+    await expect(page.locator('[data-cy=join]')).toBeVisible()
+  })
 })

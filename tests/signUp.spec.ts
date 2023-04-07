@@ -10,12 +10,12 @@ const setDatabasePrefix = (dbPrefix) => {
       DB_PREFIX: window.sessionStorage.getItem('DB_PREFIX'),
     })
   }
-};
+}
 
 test.describe('[Sign Up]', () => {
   test('prevent duplicate username', async ({ page, context }) => {
     const DB_PREFIX = 'db_' + randomUUID()
-    await TestDB.seedDB(DB_PREFIX)
+    await TestDB.seedDB(DB_PREFIX, ['users'])
     await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
     await page.goto('/sign-up')
@@ -45,7 +45,7 @@ test.describe('[Sign Up]', () => {
 
   test('prevent duplicate email', async ({ page, context }) => {
     const DB_PREFIX = 'db_' + randomUUID()
-    await TestDB.seedDB(DB_PREFIX)
+    await TestDB.seedDB(DB_PREFIX, ['users'])
     await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
     await page.goto('/sign-up')
@@ -75,31 +75,31 @@ test.describe('[Sign Up]', () => {
 
   test('create new account', async ({ page, context }) => {
     const DB_PREFIX = 'db_' + randomUUID()
-    await TestDB.seedDB(DB_PREFIX)
+    await TestDB.seedDB(DB_PREFIX, ['users'])
     await context.addInitScript(setDatabasePrefix, DB_PREFIX)
     await page.goto('/sign-up')
 
     const newUserEmail = 'demo_user_' + randomUUID() + '@example.com'
 
     const username = await page.$('input[name="displayName"]')
-    username?.fill('demo_user_' + randomUUID())
+    await username?.fill('demo_user_' + randomUUID())
 
     const email = await page.$('input[name="email"]')
-    email?.fill(newUserEmail)
+    await email?.fill(newUserEmail)
 
     const password = await page.$('input[name="password"]')
-    password?.fill('demo_user')
+    await password?.fill('demo_user')
 
     const confirmPassword = await page.$('input[name="confirm-password"]')
-    confirmPassword?.fill('demo_user')
+    await confirmPassword?.fill('demo_user')
 
     const checkbox = await page.$('input[name="consent"]')
-    checkbox?.check()
+    await checkbox?.check()
 
     const btn = await page.$('button[type="submit"]')
     await btn?.click()
 
-    await expect(page.getByText('Sign up successful')).toBeVisible()
+    await expect(await page.getByText('Sign up successful')).toBeVisible()
 
     await page.goto('/sign-in')
 
@@ -110,6 +110,6 @@ test.describe('[Sign Up]', () => {
     loginPassword?.fill('demo_user')
 
     const loginBtn = await page.$('button[type="submit"]')
-    loginBtn?.click()
+    await loginBtn?.click()
   })
 })

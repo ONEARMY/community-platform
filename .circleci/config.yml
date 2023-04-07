@@ -286,6 +286,7 @@ jobs:
           command: yarn run test:unit:ci && yarn run test:components
   test_e2e_playwright:
     docker: *docker
+    resource_class: medium+
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout

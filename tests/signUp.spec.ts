@@ -3,19 +3,20 @@ import { TestDB } from './support/db/FirebaseTestDatabase'
 import { randomUUID } from 'crypto'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 
+const setDatabasePrefix = (dbPrefix) => {
+  if (window.location.hostname === '127.0.0.1') {
+    window.sessionStorage.setItem('DB_PREFIX', dbPrefix)
+    console.log(`Init script:`, {
+      DB_PREFIX: window.sessionStorage.getItem('DB_PREFIX'),
+    })
+  }
+};
+
 test.describe('[Sign Up]', () => {
   test('prevent duplicate username', async ({ page, context }) => {
     const DB_PREFIX = 'db_' + randomUUID()
     await TestDB.seedDB(DB_PREFIX)
-    await context.addInitScript((args) => {
-      console.log(`initScript`, window.location.hostname, { args })
-      if (window.location.hostname === '127.0.0.1') {
-        window.sessionStorage.setItem('DB_PREFIX', args)
-        console.log(`Init script:`, {
-          DB_PREFIX: window.sessionStorage.getItem('DB_PREFIX'),
-        })
-      }
-    }, DB_PREFIX)
+    await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
     await page.goto('/sign-up')
 
@@ -42,8 +43,11 @@ test.describe('[Sign Up]', () => {
     ).toBeVisible()
   })
 
-  test('prevent duplicate email', async ({ page }) => {
-    await TestDB.seedDB('db_' + randomUUID())
+  test('prevent duplicate email', async ({ page, context }) => {
+    const DB_PREFIX = 'db_' + randomUUID()
+    await TestDB.seedDB(DB_PREFIX)
+    await context.addInitScript(setDatabasePrefix, DB_PREFIX)
+
     await page.goto('/sign-up')
 
     const username = await page.$('input[name="displayName"]')
@@ -69,8 +73,10 @@ test.describe('[Sign Up]', () => {
     ).toBeVisible()
   })
 
-  test('create new account', async ({ page }) => {
-    await TestDB.seedDB('db_' + randomUUID())
+  test('create new account', async ({ page, context }) => {
+    const DB_PREFIX = 'db_' + randomUUID()
+    await TestDB.seedDB(DB_PREFIX)
+    await context.addInitScript(setDatabasePrefix, DB_PREFIX)
     await page.goto('/sign-up')
 
     const newUserEmail = 'demo_user_' + randomUUID() + '@example.com'

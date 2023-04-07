@@ -1,6 +1,7 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './support'
 import { TestDB } from './support/db/FirebaseTestDatabase'
 import { randomUUID } from 'crypto'
+import { setDatabasePrefix } from './support/db/setDatabasePrefix'
 
 test.describe('[Sign in]', () => {
   test('[By Anonymous] can go to the sign-up page', async ({ page }) => {
@@ -35,36 +36,13 @@ test.describe('[Sign in]', () => {
 })
 
 test.describe('[User]', () => {
-  test('redirects to home page', async ({ page, context }) => {
-    console.log(`Creates user:`)
+  test('redirects to home page', async ({ page, context, signIn }) => {
     const DB_PREFIX = 'db_' + randomUUID()
-    await TestDB.seedDB(DB_PREFIX)
-    await context.addInitScript((args) => {
-      console.log(`initScript`, window.location.hostname, { args })
-      if (window.location.hostname === '127.0.0.1') {
-        window.sessionStorage.setItem('DB_PREFIX', args)
-        console.log(`Init script:`, {
-          DB_PREFIX: window.sessionStorage.getItem('DB_PREFIX'),
-        })
-      }
-    }, DB_PREFIX)
-    await page.goto('/sign-in')
+    await TestDB.seedDB(DB_PREFIX, ['users'])
+    await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
-    const email = await page.$('input[name="email"]')
-    email?.fill('demo_user@example.com')
-
-    const password = await page.$('input[name="password"]')
-    password?.fill('demo_user')
-
-    const btn = await page.$('button[type="submit"]')
-    await btn?.click()
-
-    await page.waitForResponse((request) =>
-      request.url().includes('/identitytoolkit/v3/relyingparty/getAccountInfo'),
-    )
-
-    // What else is happening here? Removing this timeout entirely introduces flakiness
-    await page.waitForTimeout(250)
+    // Signin
+    await signIn.withEmailAndPassword('demo_user@example.com', 'demo_user')
 
     await page.goto('/sign-in')
 

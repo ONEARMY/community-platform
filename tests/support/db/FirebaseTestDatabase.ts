@@ -19,9 +19,17 @@ firebase.initializeApp(fbConfig)
 const db = firebase.firestore()
 
 class FirestoreTestDB {
-  seedDB = async (databasePrefix) => {
+  seedDB = async (databasePrefix, collections: string[] = []) => {
     const endpoints = ensureDBPrefixes(databasePrefix, DB_ENDPOINTS)
-    const dbWrites = Object.keys(MOCK_DATA).map(async (key) => {
+    const targetData = collections.length
+      ? Object.keys(MOCK_DATA).filter((collection) =>
+          collections.includes(collection),
+        )
+      : Object.keys(MOCK_DATA)
+
+    console.log({ targetData })
+
+    const dbWrites = targetData.map(async (key) => {
       const endpoint = endpoints[key]
       await this.addDocuments(endpoint, Object.values(MOCK_DATA[key]))
       return [endpoint, MOCK_DATA[key]]

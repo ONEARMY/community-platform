@@ -727,8 +727,6 @@ export class ResearchStore extends ModuleStore {
         })
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log({ error })
         logger.error('error', error)
       }
     }

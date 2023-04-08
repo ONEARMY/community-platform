@@ -233,30 +233,6 @@ describe('research.routes', () => {
     })
   })
 
-  const renderFn = (url, fnUser?) => {
-    const localUser = fnUser || FactoryUser()
-    const history = createMemoryHistory({
-      initialEntries: [url],
-    })
-    return {
-      wrapper: render(
-        <Provider
-          userStore={{ user: localUser }}
-          tagsStore={{
-            setTagsCategory: jest.fn(),
-          }}
-        >
-          <ThemeProvider theme={Theme}>
-            <Router history={history}>
-              <ResearchRoutes />
-            </Router>
-          </ThemeProvider>
-        </Provider>,
-      ),
-      history,
-    }
-  }
-
   describe('/research/:slug/edit-update/:id', () => {
     it('rejects a request without a user present', async () => {
       const { wrapper } = renderFn(
@@ -343,3 +319,27 @@ describe('research.routes', () => {
     })
   })
 })
+
+const renderFn = (url, fnUser?) => {
+  const localUser = fnUser || FactoryUser()
+  const history = createMemoryHistory({
+    initialEntries: [url],
+  })
+  return {
+    wrapper: render(
+      <Provider
+        userStore={{ user: localUser }}
+        tagsStore={{
+          setTagsCategory: jest.fn(),
+        }}
+      >
+        <ThemeProvider theme={Theme}>
+          <Router history={history}>
+            <ResearchRoutes />
+          </Router>
+        </ThemeProvider>
+      </Provider>,
+    ),
+    history,
+  }
+}

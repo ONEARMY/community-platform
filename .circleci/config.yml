@@ -287,10 +287,11 @@ jobs:
   test_e2e_playwright:
     docker: *docker
     resource_class: medium+
+    parallelism: 4
     steps:
       # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
       - checkout
-      # - *restore_yarn_cache
+      - *restore_yarn_cache
       - run:
           name: Install dependencies
           command: yarn workspaces focus one-army-community-platform
@@ -298,8 +299,7 @@ jobs:
           name: Playwright dependencies
           command: npx playwright install
       - run:
-          # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
-          command: yarn run test:e2e && yarn run test:components
+          command: SHARD="$((${CIRCLE_NODE_INDEX}+1))"l; npx playwright test --shard=${SHARD}/${CIRCLE_NODE_TOTAL}
   build:
     <<: *docker_matrix
     environment:

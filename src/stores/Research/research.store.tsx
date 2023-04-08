@@ -648,7 +648,7 @@ export class ResearchStore extends ModuleStore {
     } catch (error) {
       logger.debug('error', error)
       //TODO: Add error handling here :(
-      throw new Error(error.message)
+      //throw new Error(error.message)
     }
   }
 

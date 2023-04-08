@@ -15,8 +15,8 @@ export default defineConfig({
   screenshotsFolder: 'src/screenshots',
   videosFolder: 'src/videos',
   projectId: '4s5zgo',
-  viewportWidth: 1500,
-  viewportHeight: 1500,
+  viewportWidth: 1366,
+  viewportHeight: 768,
   retries: {
     runMode: 2,
     openMode: 0,

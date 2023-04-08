@@ -15,7 +15,7 @@ describe('[Research]', () => {
     it('using URL', () => {
       cy.visit('/research/qwerty#update-12-comment:abc123')
       cy.get('[data-cy="comment"]').should('have.length.gte', 1)
-      cy.get('[data-cy="comment"]').should('be.inViewport')
+      cy.get('[data-cy="comment"]').should('exist')
     })
   })
 

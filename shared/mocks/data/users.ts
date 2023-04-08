@@ -116,6 +116,7 @@ export const users = {
   howto_creator: {
     _deleted: false,
     userName: 'howto_creator',
+    email: 'howto_creator@test.com',
     moderation: 'awaiting-moderation',
     verified: false,
     _modified: '2020-01-07T15:46:00.297Z',
@@ -123,6 +124,7 @@ export const users = {
     _created: '2020-01-07T15:46:00.297Z',
     displayName: 'howto_creator',
     _id: 'howto_creator',
+    password: 'test1234',
   },
   howto_editor: {
     _id: 'howto_editor',

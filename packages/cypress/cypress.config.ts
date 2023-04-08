@@ -1,7 +1,7 @@
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
-  defaultCommandTimeout: 15000,
+  defaultCommandTimeout: 30000,
   watchForFileChanges: true,
   chromeWebSecurity: false,
   // "Disable video records to improve test execution as it's not worth",

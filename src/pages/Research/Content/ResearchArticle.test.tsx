@@ -98,8 +98,8 @@ describe('Research Article', () => {
       expect(
         within(update).getAllByTestId('Username: unknown flag'),
       ).toHaveLength(1)
-      // expect(wrapper.getAllByText('example-username')).toHaveLength(1)
-      // expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
+      expect(wrapper.getAllByText('example-username')).toHaveLength(1)
+      expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
     })
   })
 })

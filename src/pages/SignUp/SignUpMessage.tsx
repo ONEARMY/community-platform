@@ -1,8 +1,5 @@
 import React from 'react'
 import { Card, Flex, Heading, Text } from 'theme-ui'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { Button, ExternalLink } from 'oa-components'
 import { Link } from 'react-router-dom'
 
@@ -19,7 +16,7 @@ class SignUpMessagePage extends React.Component {
         mb={3}
       >
         <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-          <Card bg={theme.colors.softblue} px={3} py={2}>
+          <Card sx={{ backgroundColor: 'softblue', px: 3, py: 2 }}>
             <Heading>Sent</Heading>
           </Card>
           <Card mt={3}>
@@ -40,8 +37,7 @@ class SignUpMessagePage extends React.Component {
                 <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
                   Didn't receive the email?{' '}
                   <ExternalLink
-                    color={theme.colors.grey}
-                    sx={{ textDecoration: 'underline' }}
+                    sx={{ textDecoration: 'underline', color: 'grey' }}
                     href="mailto:hello@onearmy.earth?subject=Email%20confirmation%20failed%20community-platform"
                   >
                     Let us know

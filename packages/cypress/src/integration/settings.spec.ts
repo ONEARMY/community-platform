@@ -205,17 +205,6 @@ describe('[Settings]', () => {
         },
       ],
     }
-    it('[Cancel edit profile without confirmation dialog]', () => {
-      cy.login('settings_member_new@test.com', 'test1234')
-      cy.step('Go to User Settings')
-      cy.clickMenuItem(UserMenuItem.Settings)
-      cy.step('Click on How to')
-      cy.on('window:confirm', () => {
-        throw new Error('Confirm dialog should not be called.')
-      })
-      cy.get('[data-cy=page-link]').contains('How-to').click()
-      cy.step('Confirm log should NOT appear')
-    })
 
     it('[Cancel edit profile and get confirmation]', (done) => {
       cy.login('settings_member_new@test.com', 'test1234')

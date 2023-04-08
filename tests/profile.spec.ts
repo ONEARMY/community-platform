@@ -19,7 +19,7 @@ test.describe('[Profile]', () => {
   })
 
   test.describe('[By User]', () => {
-    test.skip('User directed to profile page', async ({
+    test('[Cannot edit another user profile]', async ({
       signIn,
       page,
       context,
@@ -29,7 +29,19 @@ test.describe('[Profile]', () => {
       await context.addInitScript(setDatabasePrefix, DB_PREFIX)
 
       await signIn.withEmailAndPassword(subscriber.email, subscriber.password)
-      await page.goto(`/`)
+
+      // Act
+      await page.goto(`/u/${admin.userName}`)
+
+      await expect(page.getByText(admin.userName).last()).toBeVisible()
+
+      await expect(await page.getByText('Edit')).not.toBeVisible()
+
+      await page.goto(`/u/${admin.userName}/edit`)
+
+      await expect(
+        page.getByText('admin role required to access this page'),
+      ).toBeVisible()
     })
   })
 
@@ -68,7 +80,7 @@ test.describe('[Profile]', () => {
 
       await page.getByText('Save').click()
 
-      await page.waitForTimeout(1000)
+      await page.waitForTimeout(1000 * 2)
 
       await page.goto(`/u/${subscriber.userName}`)
 

@@ -1,3 +1,5 @@
+import json from '../fixtures/json/events-location.json';
+
 describe('[Events]', () => {
   beforeEach(() => {
     // navigate to events page and wait for data load
@@ -81,7 +83,7 @@ describe('[Events]', () => {
       cy.intercept(
         'GET',
         'https://nominatim.openstreetmap.org/search?format=json&limit=5&q=Atucucho',
-        [{ "place_id": 43773071, "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright", "osm_type": "node", "osm_id": 3605552095, "boundingbox": ["-0.1489647", "-0.1089647", "-78.5336987", "-78.4936987"], "lat": "-0.1289647", "lon": "-78.5136987", "display_name": "Atucucho, Quito Canton, Pichincha, 170318, Ecuador", "class": "place", "type": "village", "importance": 0.385, "icon": "https://nominatim.openstreetmap.org/ui/mapicons/poi_place_village.p.20.png" }, { "place_id": 110541582, "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright", "osm_type": "way", "osm_id": 24595282, "boundingbox": ["-0.1229944", "-0.1229169", "-78.4966957", "-78.4955442"], "lat": "-0.1229632", "lon": "-78.4961544", "display_name": "Atucucho, Quito Norte, San Carlos, Cotocollao, Quito Canton, Pichincha, 170315, Ecuador", "class": "highway", "type": "residential", "importance": 0.21000999999999995 }, { "place_id": 289589639, "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright", "osm_type": "way", "osm_id": 1012561203, "boundingbox": ["-0.1229053", "-0.1228171", "-78.4949059", "-78.4942423"], "lat": "-0.1228203", "lon": "-78.4944492", "display_name": "Atucucho, Quito Norte, San Carlos, Cotocollao, Quito Canton, Pichincha, 170315, Ecuador", "class": "highway", "type": "footway", "importance": 0.18500999999999992 }, { "place_id": 746703, "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright", "osm_type": "node", "osm_id": 270138840, "boundingbox": ["-0.127946", "-0.127846", "-78.5132014", "-78.5131014"], "lat": "-0.127896", "lon": "-78.5131514", "display_name": "Atucucho, Manuel de Jesus Alvarez Loor, Cochapamba, Atucucho, Quito Canton, Pichincha, 170318, Ecuador", "class": "highway", "type": "bus_stop", "importance": 0.11010000000000002, "icon": "https://nominatim.openstreetmap.org/ui/mapicons/transport_bus_stop2.p.20.png" }, { "place_id": 49626378, "licence": "Data © OpenStreetMap contributors, ODbL 1.0. https://osm.org/copyright", "osm_type": "node", "osm_id": 4313278078, "boundingbox": ["-0.1306504", "-0.1305504", "-78.5153499", "-78.5152499"], "lat": "-0.1306004", "lon": "-78.5152999", "display_name": "Atucucho, Antonio Cabezas, Cochapamba, Atucucho, Quito Canton, Pichincha, 170318, Ecuador", "class": "highway", "type": "bus_stop", "importance": 0.11010000000000002, "icon": "https://nominatim.openstreetmap.org/ui/mapicons/transport_bus_stop2.p.20.png" }]
+        json,
       ).as('osm-geocoding')
 
       cy.get('[data-cy="osm-geocoding-input"]').type('Atucucho')

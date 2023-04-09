@@ -10,9 +10,10 @@ import type { IUser } from 'src/models/user.models'
 import ResearchForm from 'src/pages/Research/Content/Common/Research.form'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
+import { logger } from '../../../../logger'
 
 interface IState {
-  formValues: IResearch.ItemDB
+  formValues?: IResearch.ItemDB
   formSaved: boolean
   isLoading: boolean
   _toDocsList: boolean
@@ -24,7 +25,7 @@ type IProps = RouteComponentProps<any>
 const EditResearch = observer((props: IProps) => {
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
-    formValues: {} as IResearch.ItemDB,
+    formValues: store.activeResearchItem,
     formSaved: false,
     _toDocsList: false,
     isLoading: !store.activeResearchItem,
@@ -68,9 +69,15 @@ const EditResearch = observer((props: IProps) => {
   if (formValues && !isLoading) {
     if (loggedInUser && isAllowToEditContent(formValues, loggedInUser)) {
       return (
-        <ResearchForm formValues={formValues} parentType="edit" {...props} />
+        <ResearchForm
+          data-testid="EditResearch"
+          formValues={formValues}
+          parentType="edit"
+          {...props}
+        />
       )
     } else {
+      logger.debug(`Redirect:`, '/research/' + formValues.slug)
       return <Redirect to={'/research/' + formValues.slug} />
     }
   } else {

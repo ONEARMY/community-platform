@@ -36,6 +36,7 @@ interface IState {
   showSubmitModal?: boolean
 }
 interface IProps extends RouteComponentProps<any> {
+  'data-testid'?: string
   formValues: any
   parentType: 'create' | 'edit'
 }
@@ -54,6 +55,14 @@ const beforeUnload = (e) => {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
+
+// automatically generate the slug when the title changes
+const calculatedFields = createDecorator({
+  field: 'title',
+  updates: {
+    slug: (title) => stripSpecialCharacters(title).toLowerCase(),
+  },
+})
 
 const ResearchForm = observer((props: IProps) => {
   const store = useResearchStore()
@@ -96,14 +105,6 @@ const ResearchForm = observer((props: IProps) => {
     return store.validateTitleForSlug(value, 'research', originalId)
   }
 
-  // automatically generate the slug when the title changes
-  const calculatedFields = createDecorator({
-    field: 'title',
-    updates: {
-      slug: (title) => stripSpecialCharacters(title).toLowerCase(),
-    },
-  })
-
   // Display a confirmation dialog when leaving the page outside the React Router
   const unloadDecorator = (form) => {
     return form.subscribe(
@@ -119,7 +120,7 @@ const ResearchForm = observer((props: IProps) => {
   }
 
   return (
-    <>
+    <div data-testid={props['data-testid']}>
       {state.showSubmitModal && (
         <ResearchSubmitStatus
           {...props}
@@ -331,7 +332,7 @@ const ResearchForm = observer((props: IProps) => {
           )
         }}
       />
-    </>
+    </div>
   )
 })
 

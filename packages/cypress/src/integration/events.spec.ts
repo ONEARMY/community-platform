@@ -1,4 +1,4 @@
-import json from '../fixtures/json/events-location.json';
+import json from '../fixtures/json/events-location.json'
 
 describe('[Events]', () => {
   beforeEach(() => {

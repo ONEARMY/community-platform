@@ -1,4 +1,5 @@
 import { UserMenuItem } from '../support/commands'
+import json from '../fixtures/json/notifications-banner-location.json'
 
 describe('[Notification Banner]', () => {
   beforeEach(() => {
@@ -29,6 +30,13 @@ describe('[Notification Banner]', () => {
       cy.get('[data-cy="add-a-map-pin"]').click()
       cy.step('Update Member section')
       cy.get('[data-cy=pin-description]').clear().type('test')
+
+      cy.intercept(
+        'GET',
+        'https://nominatim.openstreetmap.org/search?format=json&limit=5&q=Atucucho',
+        json,
+      ).as('osm-geocoding')
+
       cy.get('[data-cy="osm-geocoding-input"]').clear().type('singapo')
       cy.get('[data-cy="osm-geocoding-results"]')
         .find('li:eq(0)', { timeout: 10000 })

@@ -61,8 +61,7 @@ describe('[Events]', () => {
     })
   })
 
-  // eslint-disable-next-line mocha/no-skipped-tests
-  describe.skip('[Create an event]', () => {
+  describe('[Create an event]', () => {
     it('[By Authenticated]', () => {
       cy.login('event_creator@test.com', 'test1234')
       cy.get('[data-cy=create-event]').click()

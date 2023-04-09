@@ -466,14 +466,6 @@ workflows:
             branches:
               ignore:
                 - production
-      - test_e2e_playwright:
-          name: 'Playwright tests'
-          requires:
-            - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - storybook:
           name: Build Storybook
           requires:
@@ -487,6 +479,17 @@ workflows:
           requires:
             - 'Lint code'
           context: build-context
+          filters:
+            branches:
+              ignore:
+                - production
+      - test_e2e_playwright:
+          name: 'Playwright tests'
+          requires:
+            - 'Build Application'
+            - 'Unit tests'
+            - 'Cloud Function tests'
+            - 'Build Storybook'
           filters:
             branches:
               ignore:

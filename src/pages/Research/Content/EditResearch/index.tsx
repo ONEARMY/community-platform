@@ -1,15 +1,15 @@
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { Loader } from 'oa-components'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router'
+import { Loader, BlockedRoute } from 'oa-components'
+import { Text } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import ResearchForm from 'src/pages/Research/Content/Common/Research.form'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
-import { Text } from 'theme-ui'
 import { logger } from '../../../../logger'
 
 interface IState {
@@ -68,6 +68,19 @@ const EditResearch = observer((props: IProps) => {
 
   if (formValues && !isLoading) {
     if (loggedInUser && isAllowedToEditContent(formValues, loggedInUser)) {
+      if (
+        formValues.locked &&
+        formValues.locked.by !== loggedInUser?.userName
+      ) {
+        logger.info('Research is locked', formValues.locked)
+        return (
+          <BlockedRoute>
+            The research description is currently being edited by another
+            editor.
+          </BlockedRoute>
+        )
+      }
+
       return (
         <ResearchForm
           data-testid="EditResearch"

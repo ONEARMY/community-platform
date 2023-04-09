@@ -140,7 +140,7 @@ describe('[Research]', () => {
     it('[By Anonymous]', () => {
       cy.step('Prevent anonymous access to edit research article')
       cy.visit(editResearchUrl)
-      cy.get('[data-cy=auth-route-deny]').should('be.exist')
+      cy.get('[data-cy=BlockedRoute]').should('be.exist')
     })
 
     it('[By Authenticated]', () => {
@@ -166,6 +166,13 @@ describe('[Research]', () => {
 
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]').clear().type(expected.title)
+
+      cy.step('Enter research article details')
+      cy.get('[data-cy="intro-description"]')
+        .clear()
+        .type(expected.description)
+        .blur({ force: true })
+
       cy.get('[data-cy=submit]').click()
 
       cy.step('Open the updated research article')

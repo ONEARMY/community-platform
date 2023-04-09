@@ -1,6 +1,7 @@
 import { DbCollectionName } from '../utils/TestUtils'
 import { UserMenuItem } from '../support/commands'
 import type { IUser } from '../../../../src/models/user.models'
+import json from '../fixtures/json/settings-singapo.json'
 
 interface Info {
   username: string
@@ -31,6 +32,12 @@ describe('[Settings]', () => {
     cy.get('[data-cy=coverImages-0]').find(':file').attachFile(info.coverImage)
   }
   const setWorkspaceMapPin = (mapPin: IMapPin) => {
+    cy.intercept(
+      'GET',
+      'https://nominatim.openstreetmap.org/search?format=json&limit=5&q=' + mapPin.searchKeyword,
+      json,
+    ).as('osm-geocoding')
+
     cy.step('Update Workspace Map section')
     cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
     cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
@@ -468,6 +475,7 @@ describe('[Settings]', () => {
         label: 'bazar',
         url: `http://settings_machine_bazarlink.com`,
       })
+
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'singapo',

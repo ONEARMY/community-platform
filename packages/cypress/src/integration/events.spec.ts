@@ -99,7 +99,7 @@ describe('[Events]', () => {
       cy.get('[data-cy=submit]').should('not.be.disabled').click()
       cy.step('The new event is shown in /events')
       cy.wait(2000)
-      cy.visit('/')
+      cy.visit('/events')
       cy.get('[data-cy=card]')
         .contains('Create a test event')
         .should('be.exist')

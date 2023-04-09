@@ -34,7 +34,8 @@ describe('[Settings]', () => {
   const setWorkspaceMapPin = (mapPin: IMapPin) => {
     cy.intercept(
       'GET',
-      'https://nominatim.openstreetmap.org/search?format=json&limit=5&q=' + mapPin.searchKeyword,
+      'https://nominatim.openstreetmap.org/search?format=json&limit=5&q=' +
+        mapPin.searchKeyword,
       json,
     ).as('osm-geocoding')
 

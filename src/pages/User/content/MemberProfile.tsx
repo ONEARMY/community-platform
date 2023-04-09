@@ -8,6 +8,7 @@ import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { getUserCountry } from 'src/utils/getUserCountry'
 
 interface IProps {
   user: IUserPP
@@ -17,9 +18,6 @@ export const MemberProfile = ({ user }: IProps) => {
   const userLinks = user?.links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
-
-  const userCountryCode =
-    user.location?.countryCode || user.country?.toLowerCase() || undefined
 
   const memberPictureSource =
     user.coverImages && user.coverImages[0]
@@ -106,7 +104,7 @@ export const MemberProfile = ({ user }: IProps) => {
             <Username
               user={{
                 userName: user.userName,
-                countryCode: userCountryCode,
+                countryCode: getUserCountry(user),
               }}
               isVerified={isUserVerified(user.userName)}
             />

@@ -132,9 +132,6 @@ class MapsPage extends React.Component<IProps, IState> {
                   mapRef={this.mapRef}
                   pins={filteredPins}
                   filters={activePinFilters}
-                  onBoundingBoxChange={(boundingBox) =>
-                    this.props.mapsStore.setMapBoundingBox(boundingBox)
-                  }
                   center={center}
                   zoom={zoom}
                   history={this.props.history}

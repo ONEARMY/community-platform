@@ -14,6 +14,7 @@ import {
   FileInformation,
   Username,
   ViewsCounter,
+  DownloadFiles,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
@@ -24,7 +25,6 @@ import {
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { DownloadExternal } from 'src/pages/Howto/DownloadExternal/DownloadExternal'
 import { Link } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
@@ -271,10 +271,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             sx={{ flexDirection: 'column' }}
           >
             {howto.fileLink && (
-              <DownloadExternal
-                handleClick={handleClick}
-                link={howto.fileLink}
-              />
+              <DownloadFiles handleClick={handleClick} link={howto.fileLink} />
             )}
             {howto.files
               .filter(Boolean)

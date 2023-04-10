@@ -4,13 +4,14 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
+  InternalLink,
 } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
@@ -338,6 +339,53 @@ const UpdateForm = observer((props: IProps) => {
                       {props.parentType === 'edit' ? 'Save' : 'Add update'}
                     </span>
                   </Button>
+
+                  {store.activeResearchItem ? (
+                    <Card sx={{ mt: 4, p: 4 }}>
+                      <Heading as="h3" mb={3} variant="small">
+                        Updates
+                      </Heading>
+                      <Box as={'ol'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
+                        {store.activeResearchItem.updates.map(
+                          (update, index) => (
+                            <Box as={'li'} key={index} sx={{ mb: 1 }}>
+                              <Text variant={'quiet'}>
+                                {update._id === props.formValues._id ? (
+                                  <strong>{update.title}</strong>
+                                ) : (
+                                  <>
+                                    {update.title}
+                                    <InternalLink
+                                      to={`/research/${store.activeResearchItem?.slug}/edit-update/${update._id}`}
+                                      sx={{ display: 'inline-block', ml: 1 }}
+                                    >
+                                      Edit
+                                    </InternalLink>
+                                  </>
+                                )}
+                              </Text>
+                            </Box>
+                          ),
+                        )}
+                      </Box>
+                      <Button small>
+                        <InternalLink
+                          to={`/research/${store.activeResearchItem?.slug}/new-update`}
+                          sx={{ color: 'black' }}
+                        >
+                          Create update
+                        </InternalLink>
+                      </Button>
+                      <Button small variant={'outline'} sx={{ ml: 2 }}>
+                        <InternalLink
+                          to={`/research/${store.activeResearchItem?.slug}/edit`}
+                          sx={{ color: 'black' }}
+                        >
+                          Back to research
+                        </InternalLink>
+                      </Button>
+                    </Card>
+                  ) : null}
                 </Box>
               </Flex>
             </Flex>

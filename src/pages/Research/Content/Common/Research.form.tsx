@@ -5,13 +5,14 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
+  InternalLink,
 } from 'oa-components'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
@@ -283,7 +284,6 @@ const ResearchForm = observer((props: IProps) => {
               >
                 <Box
                   sx={{
-                    position: ['relative', 'relative', 'sticky'],
                     top: 3,
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
@@ -327,6 +327,37 @@ const ResearchForm = observer((props: IProps) => {
                     <span>Publish</span>
                   </Button>
                 </Box>
+
+                {props.formValues.updates ? (
+                  <Card sx={{ mt: 4, p: 4 }}>
+                    <Heading as="h3" mb={3} variant="small">
+                      Updates
+                    </Heading>
+                    <Box as={'ol'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
+                      {props.formValues?.updates.map((update, index) => (
+                        <Box as={'li'} key={index} sx={{ mb: 1 }}>
+                          <Text variant={'quiet'}>
+                            {update.title}
+                            <InternalLink
+                              to={`/research/${props.formValues.slug}/edit-update/${update._id}`}
+                              sx={{ display: 'inline-block', ml: 1 }}
+                            >
+                              Edit
+                            </InternalLink>
+                          </Text>
+                        </Box>
+                      ))}
+                    </Box>
+                    <Button small>
+                      <InternalLink
+                        to={`/research/${props.formValues.slug}/new-update`}
+                        sx={{ color: 'black' }}
+                      >
+                        Create update
+                      </InternalLink>
+                    </Button>
+                  </Card>
+                ) : null}
               </Flex>
             </Flex>
           )

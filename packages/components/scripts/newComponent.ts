@@ -48,9 +48,11 @@ function createComponentFileFromTemplate(templateName: string) {
   )
 }
 
-;['{componentName}.tsx.mst', '{componentName}.stories.tsx.mst'].map(
-  createComponentFileFromTemplate,
-)
+;[
+  '{componentName}.tsx.mst',
+  '{componentName}.stories.tsx.mst',
+  '{componentName}.test.tsx.mst',
+].map(createComponentFileFromTemplate)
 
 writeFileSync(
   resolve(__dirname, '../src/index.ts'),

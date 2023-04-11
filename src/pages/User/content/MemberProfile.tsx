@@ -4,39 +4,22 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 
 import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { MemberBadge, Username } from 'oa-components'
-import styled from '@emotion/styled'
-import { UserStats } from './UserStats'
+import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { isUserVerified } from 'src/common/isUserVerified'
-import { getUserCountry } from 'src/utils/getUserCountry'
 
 interface IProps {
   user: IUserPP
 }
 
-const MemberPicture = styled('figure')`
-  display: block;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  max-width: none;
-  overflow: hidden;
-  margin: 0 auto;
-
-  img {
-    outline: 100px solid red;
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
-`
-
 export const MemberProfile = ({ user }: IProps) => {
   const userLinks = user?.links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
+
+  const userCountryCode =
+    user.location?.countryCode || user.country?.toLowerCase() || undefined
 
   const memberPictureSource =
     user.coverImages && user.coverImages[0]
@@ -73,11 +56,41 @@ export const MemberProfile = ({ user }: IProps) => {
         py={4}
         sx={{ borderRadius: 1, flexDirection: ['column', 'row'] }}
       >
-        <Box mr={3} style={{ flexGrow: 1, minWidth: 'initial' }}>
-          <MemberPicture>
-            <Image loading="lazy" src={memberPictureSource} />
-          </MemberPicture>
-          <UserStats user={user} />
+        <Box sx={{ flexGrow: 1, minWidth: 'initial', mr: 3 }}>
+          <Box
+            sx={{
+              display: 'block',
+              width: '120px',
+              height: '120px',
+              borderRadius: '50%',
+              maxWidth: 'none',
+              overflow: 'hidden',
+              margin: '0 auto',
+              mb: 3,
+            }}
+          >
+            <Image
+              loading="lazy"
+              src={memberPictureSource}
+              sx={{
+                objectFit: 'cover',
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          </Box>
+          <UserStatistics
+            userName={user.userName}
+            country={user.location?.country}
+            isVerified={isUserVerified(user.userName)}
+            isSupporter={!!user.badges?.supporter}
+            howtoCount={
+              user.stats ? Object.keys(user.stats!.userCreatedHowtos).length : 0
+            }
+            eventCount={
+              user.stats ? Object.keys(user.stats!.userCreatedEvents).length : 0
+            }
+          />
         </Box>
         <Flex
           mt={[0, 3]}
@@ -93,7 +106,7 @@ export const MemberProfile = ({ user }: IProps) => {
             <Username
               user={{
                 userName: user.userName,
-                countryCode: getUserCountry(user),
+                countryCode: userCountryCode,
               }}
               isVerified={isUserVerified(user.userName)}
             />

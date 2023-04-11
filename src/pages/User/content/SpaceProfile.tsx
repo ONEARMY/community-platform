@@ -11,7 +11,7 @@ import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
 
-import { MemberBadge, Icon, Username } from 'oa-components'
+import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
 
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
@@ -31,12 +31,10 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
 
-import { UserStats } from './UserStats'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { isUserVerified } from 'src/common/isUserVerified'
-import { getUserCountry } from 'src/utils/getUserCountry'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -239,6 +237,9 @@ export const SpaceProfile = ({ user }: IProps) => {
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
 
+  const userCountryCode =
+    user.location?.countryCode || user.country?.toLowerCase() || undefined
+
   return (
     <ProfileWrapper mt={4} mb={6} data-cy="SpaceProfile">
       <ProfileWrapperCarousel>
@@ -268,7 +269,7 @@ export const SpaceProfile = ({ user }: IProps) => {
             <Username
               user={{
                 userName: user.userName,
-                countryCode: getUserCountry(user),
+                countryCode: userCountryCode,
               }}
               isVerified={isUserVerified(user.userName)}
             />
@@ -312,7 +313,28 @@ export const SpaceProfile = ({ user }: IProps) => {
           <MobileBadge>
             <MemberBadge size={150} profileType={user.profileType} />
 
-            <UserStats user={user} />
+            <Box
+              sx={{
+                mt: 3,
+              }}
+            >
+              <UserStatistics
+                userName={user.userName}
+                country={user.location?.country}
+                isVerified={isUserVerified(user.userName)}
+                isSupporter={!!user.badges?.supporter}
+                howtoCount={
+                  user.stats
+                    ? Object.keys(user.stats!.userCreatedHowtos).length
+                    : 0
+                }
+                eventCount={
+                  user.stats
+                    ? Object.keys(user.stats!.userCreatedEvents).length
+                    : 0
+                }
+              />
+            </Box>
           </MobileBadge>
         </Box>
       </Flex>

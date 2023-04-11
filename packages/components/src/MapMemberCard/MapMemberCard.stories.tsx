@@ -13,7 +13,10 @@ export const Default: ComponentStory<typeof MapMemberCard> = () => (
     moderationStatus="accepted"
     description={`${faker.lorem.sentence()}`}
     lastActive={`${faker.date.past().toString()}`}
-    user={getUser()}
+    user={{
+      username: faker.internet.userName(),
+      isVerified: faker.datatype.boolean(),
+    }}
     heading={`${faker.lorem.word()}`}
     isEditable={false}
   />
@@ -26,7 +29,10 @@ export const LoadingState: ComponentStory<typeof MapMemberCard> = () => (
     description={`${faker.lorem.sentence()}`}
     lastActive={`${faker.date.past()}`}
     moderationStatus="accepted"
-    user={getUser()}
+    user={{
+      username: faker.internet.userName(),
+      isVerified: faker.datatype.boolean(),
+    }}
     heading={`${faker.lorem.word()}`}
     isEditable={false}
   />
@@ -37,7 +43,10 @@ export const AwaitingModeration: ComponentStory<typeof MapMemberCard> = () => (
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
     lastActive={`${faker.date.past()}`}
-    user={getUser()}
+    user={{
+      username: faker.internet.userName(),
+      isVerified: faker.datatype.boolean(),
+    }}
     heading={`${faker.lorem.word()}`}
     moderationStatus="awaiting-moderation"
     onPinModerated={(isPinApproved) => {
@@ -52,7 +61,10 @@ export const Draft: ComponentStory<typeof MapMemberCard> = () => (
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
     lastActive={`${faker.date.past()}`}
-    user={getUser()}
+    user={{
+      username: faker.internet.userName(),
+      isVerified: faker.datatype.boolean(),
+    }}
     heading={`${faker.lorem.word()}`}
     moderationStatus="draft"
     onPinModerated={(isPinApproved) => {
@@ -67,7 +79,10 @@ export const Rejected: ComponentStory<typeof MapMemberCard> = () => (
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
     lastActive={`${faker.date.past()}`}
-    user={getUser()}
+    user={{
+      username: faker.internet.userName(),
+      isVerified: faker.datatype.boolean(),
+    }}
     heading={`${faker.lorem.word()}`}
     moderationStatus="rejected"
     onPinModerated={(isPinApproved) => {
@@ -76,9 +91,3 @@ export const Rejected: ComponentStory<typeof MapMemberCard> = () => (
     isEditable={false}
   />
 )
-
-const getUser = () => ({
-  username: faker.internet.userName(),
-  isVerified: faker.datatype.boolean(),
-  country: faker.address.countryCode('alpha-2'),
-})

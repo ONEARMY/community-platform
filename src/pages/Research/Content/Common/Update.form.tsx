@@ -74,7 +74,17 @@ const UpdateForm = observer((props: IProps) => {
 
   const onSubmit = (formValues: IResearch.Update) => {
     setShowSubmitModal(true)
-    store.uploadUpdate(formValues)
+    store.uploadUpdate({
+      ...formValues,
+      collaborators: Array.from(
+        new Set(
+          [
+            ...(formValues?.collaborators || []),
+            store.activeUser?.userName || '',
+          ].filter(Boolean),
+        ),
+      ),
+    })
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
@@ -130,7 +140,13 @@ const UpdateForm = observer((props: IProps) => {
         decorators={[unloadDecorator]}
         render={({ submitting, dirty, handleSubmit }) => {
           return (
-            <Flex mx={-2} mb={4} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+            <Flex
+              mx={-2}
+              mb={4}
+              bg={'inherit'}
+              sx={{ flexWrap: 'wrap' }}
+              data-testid="EditResearchUpdate"
+            >
               <Flex
                 bg="inherit"
                 px={2}

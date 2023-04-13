@@ -198,18 +198,3 @@ export class ImageInput extends React.Component<IProps, IState> {
     ) as IUploadedFileMeta[]
   }
 }
-
-/************************************************************************************
- *    Exported helpers (could be moved to appropriate utils)
- *
- *************************************************************************************/
-
-export const bytesToSize = (bytes: number) => {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-  if (bytes === 0) {
-    return '0 Byte'
-  }
-  const i = Number(Math.floor(Math.log(bytes) / Math.log(1024)))
-  const size = (bytes / Math.pow(1024, i)).toPrecision(3) + ' ' + sizes[i]
-  return size
-}

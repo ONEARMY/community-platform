@@ -118,6 +118,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     const value = this.props.multiple ? convertedFiles : convertedFiles[0]
     this.props.onFilesChange(value)
   }
+
   public handleImageDelete(event: Event) {
     // TODO - handle case where a server image is deleted (remove from server)
     event.stopPropagation()
@@ -128,6 +129,17 @@ export class ImageInput extends React.Component<IProps, IState> {
     })
     this.props.onFilesChange(null)
   }
+
+  componentDidUpdate(previousProps): void {
+    if (
+      JSON.stringify(this.props.value) !== JSON.stringify(previousProps.value)
+    ) {
+      this.setState({
+        uploadedFiles: this._getUploadedFiles(this.props.value),
+      })
+    }
+  }
+
   render() {
     const { inputFiles, uploadedFiles } = this.state
     const { multiple } = this.props

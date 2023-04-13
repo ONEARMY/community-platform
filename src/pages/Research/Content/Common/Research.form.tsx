@@ -331,7 +331,7 @@ const ResearchForm = observer((props: IProps) => {
                 {props.formValues.updates ? (
                   <Card sx={{ mt: 4, p: 4 }}>
                     <Heading as="h3" mb={3} variant="small">
-                      Updates
+                      Research overview
                     </Heading>
                     <Box as={'ol'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
                       {props.formValues?.updates.map((update, index) => (

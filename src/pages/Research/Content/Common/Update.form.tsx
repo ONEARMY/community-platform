@@ -343,7 +343,7 @@ const UpdateForm = observer((props: IProps) => {
                   {store.activeResearchItem ? (
                     <Card sx={{ mt: 4, p: 4 }}>
                       <Heading as="h3" mb={3} variant="small">
-                        Updates
+                        Research overview
                       </Heading>
                       <Box as={'ol'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
                         {store.activeResearchItem.updates.map(

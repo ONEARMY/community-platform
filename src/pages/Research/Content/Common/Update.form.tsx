@@ -345,7 +345,7 @@ const UpdateForm = observer((props: IProps) => {
                       <Heading as="h3" mb={3} variant="small">
                         Research overview
                       </Heading>
-                      <Box as={'ol'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
+                      <Box as={'ul'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
                         {store.activeResearchItem.updates.map(
                           (update, index) => (
                             <Box as={'li'} key={index} sx={{ mb: 1 }}>

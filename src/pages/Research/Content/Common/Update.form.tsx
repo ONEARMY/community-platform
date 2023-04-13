@@ -139,7 +139,7 @@ const UpdateForm = observer((props: IProps) => {
         }}
         validateOnBlur
         decorators={[unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit }) => {
+        render={({ submitting, dirty, handleSubmit, values }) => {
           return (
             <Flex
               mx={-2}
@@ -367,16 +367,26 @@ const UpdateForm = observer((props: IProps) => {
                             </Box>
                           ),
                         )}
+                        {props.parentType !== 'edit' ? (
+                          <Box as={'li'} sx={{ mb: 1 }}>
+                            <Text variant={'quiet'}>
+                              {values.title || '---'}
+                            </Text>
+                          </Box>
+                        ) : null}
                       </Box>
-                      <Button small>
-                        <InternalLink
-                          to={`/research/${store.activeResearchItem?.slug}/new-update`}
-                          sx={{ color: 'black' }}
-                        >
-                          Create update
-                        </InternalLink>
-                      </Button>
-                      <Button small variant={'outline'} sx={{ ml: 2 }}>
+                      {props.parentType === 'edit' ? (
+                        <Button small sx={{ mr: 2 }}>
+                          <InternalLink
+                            to={`/research/${store.activeResearchItem?.slug}/new-update`}
+                            sx={{ color: 'black' }}
+                          >
+                            Create update
+                          </InternalLink>
+                        </Button>
+                      ) : null}
+
+                      <Button small variant={'outline'}>
                         <InternalLink
                           to={`/research/${store.activeResearchItem?.slug}/edit`}
                           sx={{ color: 'black' }}

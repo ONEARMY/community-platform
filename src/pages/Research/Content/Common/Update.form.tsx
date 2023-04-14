@@ -4,14 +4,14 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading, Text } from 'theme-ui'
+import { Box, Card, Flex, Heading } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
-  InternalLink,
+  ResearchEditorOverview,
 } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
@@ -341,60 +341,24 @@ const UpdateForm = observer((props: IProps) => {
                   </Button>
 
                   {store.activeResearchItem ? (
-                    <Card sx={{ mt: 4, p: 4 }}>
-                      <Heading as="h3" mb={3} variant="small">
-                        Research overview
-                      </Heading>
-                      <Box as={'ul'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
-                        {store.activeResearchItem.updates.map(
-                          (update, index) => (
-                            <Box as={'li'} key={index} sx={{ mb: 1 }}>
-                              <Text variant={'quiet'}>
-                                {update._id === props.formValues._id ? (
-                                  <strong>{update.title}</strong>
-                                ) : (
-                                  <>
-                                    {update.title}
-                                    <InternalLink
-                                      to={`/research/${store.activeResearchItem?.slug}/edit-update/${update._id}`}
-                                      sx={{ display: 'inline-block', ml: 1 }}
-                                    >
-                                      Edit
-                                    </InternalLink>
-                                  </>
-                                )}
-                              </Text>
-                            </Box>
-                          ),
-                        )}
-                        {props.parentType !== 'edit' ? (
-                          <Box as={'li'} sx={{ mb: 1 }}>
-                            <Text variant={'quiet'}>
-                              {values.title || '---'}
-                            </Text>
-                          </Box>
-                        ) : null}
-                      </Box>
-                      {props.parentType === 'edit' ? (
-                        <Button small sx={{ mr: 2 }}>
-                          <InternalLink
-                            to={`/research/${store.activeResearchItem?.slug}/new-update`}
-                            sx={{ color: 'black' }}
-                          >
-                            Create update
-                          </InternalLink>
-                        </Button>
-                      ) : null}
-
-                      <Button small variant={'outline'}>
-                        <InternalLink
-                          to={`/research/${store.activeResearchItem?.slug}/edit`}
-                          sx={{ color: 'black' }}
-                        >
-                          Back to research
-                        </InternalLink>
-                      </Button>
-                    </Card>
+                    <ResearchEditorOverview
+                      sx={{ mt: 4 }}
+                      updates={[
+                        ...store.activeResearchItem.updates.map((u) => ({
+                          isActive: false,
+                          title: u.title,
+                          slug: u._id,
+                        })),
+                        {
+                          isActive: false,
+                          title: values.title || 'Title of this update',
+                          slug: null,
+                        },
+                      ]}
+                      researchSlug={store.activeResearchItem?.slug}
+                      showCreateUpdateButton={props.parentType === 'edit'}
+                      showBackToResearchButton={true}
+                    />
                   ) : null}
                 </Box>
               </Flex>

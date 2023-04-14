@@ -91,6 +91,7 @@ export class Popup extends React.Component<IProps> {
             user={{
               isVerified: !!activePin.detail?.verifiedBadge,
               username: activePin.detail?.name,
+              country: activePin.detail?.country,
             }}
             heading={this.getHeading(activePin)}
             moderationStatus={activePin.moderation}

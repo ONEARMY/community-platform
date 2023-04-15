@@ -1,12 +1,12 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { CategoryTag } from './CategoryTag'
 
 export default {
   title: 'Components/CategoryTag',
   component: CategoryTag,
-} as ComponentMeta<typeof CategoryTag>
+} as Meta<typeof CategoryTag>
 
-export const Default: ComponentStory<typeof CategoryTag> = () => (
+export const Default: StoryFn<typeof CategoryTag> = () => (
   <CategoryTag
     tag={{
       label: 'Label',

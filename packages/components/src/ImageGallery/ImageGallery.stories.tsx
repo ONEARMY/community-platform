@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { ImageGallery } from './ImageGallery'
 
 interface IUploadedFileMeta {
@@ -35,8 +35,8 @@ const testImages: IUploadedFileMeta[] = imageUrls.map((elt, i) => {
 export default {
   title: 'Components/ImageGallery',
   component: ImageGallery,
-} as ComponentMeta<typeof ImageGallery>
+} as Meta<typeof ImageGallery>
 
-export const Default: ComponentStory<typeof ImageGallery> = () => {
+export const Default: StoryFn<typeof ImageGallery> = () => {
   return <ImageGallery images={testImages} />
 }

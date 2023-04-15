@@ -1,9 +1,9 @@
 import { Loader } from './Loader'
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 
 export default {
   title: 'Components/Loader',
   component: Loader,
-} as ComponentMeta<typeof Loader>
+} as Meta<typeof Loader>
 
-export const Default: ComponentStory<typeof Loader> = () => <Loader />
+export const Default: StoryFn<typeof Loader> = () => <Loader />

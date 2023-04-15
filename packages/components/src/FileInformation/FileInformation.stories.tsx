@@ -1,12 +1,12 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { FileInformation } from './FileInformation'
 
 export default {
   title: 'Components/FileInformation',
   component: FileInformation,
-} as ComponentMeta<typeof FileInformation>
+} as Meta<typeof FileInformation>
 
-export const Default: ComponentStory<typeof FileInformation> = () => (
+export const Default: StoryFn<typeof FileInformation> = () => (
   <FileInformation
     file={{
       name: 'example',

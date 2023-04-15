@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { Text } from 'theme-ui'
 import { Icon } from '..'
 import { ExternalLink } from './ExternalLink'
@@ -10,19 +10,19 @@ export default {
    */
   title: 'Components/ExternalLink',
   component: ExternalLink,
-} as ComponentMeta<typeof ExternalLink>
+} as Meta<typeof ExternalLink>
 
-export const Basic: ComponentStory<typeof ExternalLink> = () => (
+export const Basic: StoryFn<typeof ExternalLink> = () => (
   <ExternalLink href="#">Link Text</ExternalLink>
 )
 
-export const Styled: ComponentStory<typeof ExternalLink> = () => (
+export const Styled: StoryFn<typeof ExternalLink> = () => (
   <ExternalLink href="#" color="black" sx={{ textDecoration: 'underline' }}>
     Link Text
   </ExternalLink>
 )
 
-export const WithIcon: ComponentStory<typeof ExternalLink> = () => (
+export const WithIcon: StoryFn<typeof ExternalLink> = () => (
   <ExternalLink href="#">
     <Text>Link Text</Text>
     <Icon glyph="external-link" ml={[1]}></Icon>

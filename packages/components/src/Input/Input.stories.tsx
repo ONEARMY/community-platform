@@ -1,19 +1,19 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { Input } from 'theme-ui'
 
 export default {
   title: 'Components/Input',
   component: Input,
-} as ComponentMeta<typeof Input>
+} as Meta<typeof Input>
 
-export const Default: ComponentStory<typeof Input> = () => (
+export const Default: StoryFn<typeof Input> = () => (
   <Input placeholder="Placeholder" />
 )
 
-export const Error: ComponentStory<typeof Input> = () => (
+export const Error: StoryFn<typeof Input> = () => (
   <Input variant="error" value="Invalid input" />
 )
 
-export const Outlined: ComponentStory<typeof Input> = () => (
+export const Outlined: StoryFn<typeof Input> = () => (
   <Input variant="inputOutline" placeholder="Placeholder" />
 )

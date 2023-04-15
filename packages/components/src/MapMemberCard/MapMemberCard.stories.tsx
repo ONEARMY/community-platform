@@ -1,13 +1,13 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { MapMemberCard } from './MapMemberCard'
 import { faker } from '@faker-js/faker'
 
 export default {
   title: 'Components/MapMemberCard',
   component: MapMemberCard,
-} as ComponentMeta<typeof MapMemberCard>
+} as Meta<typeof MapMemberCard>
 
-export const Default: ComponentStory<typeof MapMemberCard> = () => (
+export const Default: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     imageUrl="https://placekitten.com/450/450"
     moderationStatus="accepted"
@@ -23,7 +23,7 @@ export const Default: ComponentStory<typeof MapMemberCard> = () => (
   />
 )
 
-export const LoadingState: ComponentStory<typeof MapMemberCard> = () => (
+export const LoadingState: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     loading
     imageUrl="https://placekitten.com/450/450"
@@ -40,7 +40,7 @@ export const LoadingState: ComponentStory<typeof MapMemberCard> = () => (
   />
 )
 
-export const AwaitingModeration: ComponentStory<typeof MapMemberCard> = () => (
+export const AwaitingModeration: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
@@ -59,7 +59,7 @@ export const AwaitingModeration: ComponentStory<typeof MapMemberCard> = () => (
   />
 )
 
-export const Draft: ComponentStory<typeof MapMemberCard> = () => (
+export const Draft: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
@@ -78,7 +78,7 @@ export const Draft: ComponentStory<typeof MapMemberCard> = () => (
   />
 )
 
-export const Rejected: ComponentStory<typeof MapMemberCard> = () => (
+export const Rejected: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}

@@ -1,13 +1,13 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { useState } from 'react'
 import { Select } from './Select'
 
 export default {
   title: 'Components/Select',
   component: Select,
-} as ComponentMeta<typeof Select>
+} as Meta<typeof Select>
 
-export const Default: ComponentStory<typeof Select> = () => {
+export const Default: StoryFn<typeof Select> = () => {
   return (
     <Select
       value={''}
@@ -26,7 +26,7 @@ export const Default: ComponentStory<typeof Select> = () => {
   )
 }
 
-export const Clearable: ComponentStory<typeof Select> = () => {
+export const Clearable: StoryFn<typeof Select> = () => {
   const [value, setValue] = useState()
   return (
     <Select
@@ -48,7 +48,7 @@ export const Clearable: ComponentStory<typeof Select> = () => {
   )
 }
 
-export const MultipleSelect: ComponentStory<typeof Select> = () => {
+export const MultipleSelect: StoryFn<typeof Select> = () => {
   const [value, setValue] = useState([
     {
       value: 'value-three',
@@ -80,7 +80,7 @@ export const MultipleSelect: ComponentStory<typeof Select> = () => {
   )
 }
 
-export const FormSelect: ComponentStory<typeof Select> = () => {
+export const FormSelect: StoryFn<typeof Select> = () => {
   const [value, setValue] = useState()
   return (
     <Select
@@ -103,7 +103,7 @@ export const FormSelect: ComponentStory<typeof Select> = () => {
   )
 }
 
-export const SelectWithIcons: ComponentStory<typeof Select> = () => {
+export const SelectWithIcons: StoryFn<typeof Select> = () => {
   const [value, setValue] = useState()
   return (
     <Select

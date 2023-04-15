@@ -1,12 +1,12 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { CommentItem } from './CommentItem'
 
 export default {
   title: 'Components/CommentItem',
   component: CommentItem,
-} as ComponentMeta<typeof CommentItem>
+} as Meta<typeof CommentItem>
 
-export const Default: ComponentStory<typeof CommentItem> = () => (
+export const Default: StoryFn<typeof CommentItem> = () => (
   <CommentItem
     creatorName="example"
     creatorCountry="us"
@@ -18,7 +18,7 @@ export const Default: ComponentStory<typeof CommentItem> = () => (
   />
 )
 
-export const Editable: ComponentStory<typeof CommentItem> = () => (
+export const Editable: StoryFn<typeof CommentItem> = () => (
   <CommentItem
     creatorName="example"
     creatorCountry="us"
@@ -30,7 +30,7 @@ export const Editable: ComponentStory<typeof CommentItem> = () => (
   />
 )
 
-export const Edited: ComponentStory<typeof CommentItem> = () => (
+export const Edited: StoryFn<typeof CommentItem> = () => (
   <CommentItem
     creatorName="example"
     creatorCountry="us"
@@ -43,7 +43,7 @@ export const Edited: ComponentStory<typeof CommentItem> = () => (
   />
 )
 
-export const LongText: ComponentStory<typeof CommentItem> = () => (
+export const LongText: StoryFn<typeof CommentItem> = () => (
   <CommentItem
     creatorName="example"
     creatorCountry="us"
@@ -55,7 +55,7 @@ export const LongText: ComponentStory<typeof CommentItem> = () => (
   />
 )
 
-export const ShortText: ComponentStory<typeof CommentItem> = () => (
+export const ShortText: StoryFn<typeof CommentItem> = () => (
   <CommentItem
     creatorName="example"
     creatorCountry="us"
@@ -67,7 +67,7 @@ export const ShortText: ComponentStory<typeof CommentItem> = () => (
   />
 )
 
-export const ShortTextWithLink: ComponentStory<typeof CommentItem> = () => (
+export const ShortTextWithLink: StoryFn<typeof CommentItem> = () => (
   <CommentItem
     creatorName="example"
     creatorCountry="us"

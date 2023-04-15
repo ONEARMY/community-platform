@@ -1,16 +1,16 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { FieldInput } from './FieldInput'
 
 export default {
   title: 'Components/FieldInput',
   component: FieldInput,
-} as ComponentMeta<typeof FieldInput>
+} as Meta<typeof FieldInput>
 
-export const Default: ComponentStory<typeof FieldInput> = () => (
+export const Default: StoryFn<typeof FieldInput> = () => (
   <FieldInput placeholder="Input placeholder" meta={{}} input={{} as any} />
 )
 
-export const WithError: ComponentStory<typeof FieldInput> = () => (
+export const WithError: StoryFn<typeof FieldInput> = () => (
   <FieldInput
     placeholder="Text area input"
     input={{} as any}

@@ -6382,7 +6382,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-docs@npm:7.0.4, @storybook/addon-docs@npm:^7.0.4":
+"@storybook/addon-docs@npm:7.0.4":
   version: 7.0.4
   resolution: "@storybook/addon-docs@npm:7.0.4"
   dependencies:
@@ -23830,7 +23830,6 @@ __metadata:
     "@faker-js/faker": ^7.6.0
     "@react-icons/all-files": ^4.1.0
     "@storybook/addon-actions": ^7.0.4
-    "@storybook/addon-docs": ^7.0.4
     "@storybook/addon-essentials": ^7.0.4
     "@storybook/addon-links": ^7.0.4
     "@storybook/addons": ^7.0.4

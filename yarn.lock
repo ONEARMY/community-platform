@@ -7713,99 +7713,84 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@theme-ui/color-modes@npm:0.14.7":
-  version: 0.14.7
-  resolution: "@theme-ui/color-modes@npm:0.14.7"
+"@theme-ui/color-modes@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "@theme-ui/color-modes@npm:0.15.7"
   dependencies:
-    "@theme-ui/core": 0.14.7
-    "@theme-ui/css": 0.14.7
+    "@theme-ui/core": ^0.15.7
+    "@theme-ui/css": ^0.15.7
     deepmerge: ^4.2.2
   peerDependencies:
     "@emotion/react": ^11
-    react: ">16"
-  checksum: 42baa541fd5d13c029abc63add668b75b099cd2d5257391b28ba3cd894bbeb6de32179bfed79181ff4fc3abd5aa8459a9f536f545e61f120557021a44465a79c
+    react: ">=18"
+  checksum: 519628636b94f1f6c3e3c5097359d5aa2d8db049b7e52687ec4faa50a13bea3e25b383b4ee1dee4bb95b8379fee34e02d3da43eaf104b9ce4c82821dc3b0d77b
   languageName: node
   linkType: hard
 
-"@theme-ui/components@npm:0.14.7":
-  version: 0.14.7
-  resolution: "@theme-ui/components@npm:0.14.7"
+"@theme-ui/components@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "@theme-ui/components@npm:0.15.7"
   dependencies:
     "@styled-system/color": ^5.1.2
     "@styled-system/should-forward-prop": ^5.1.2
     "@styled-system/space": ^5.1.2
-    "@theme-ui/css": 0.14.7
+    "@theme-ui/css": ^0.15.7
     "@types/styled-system": ^5.1.13
   peerDependencies:
     "@emotion/react": ^11
-    react: ">16"
-  checksum: bfe298ac03684008151df00796072082db5dbfb4960dcca2fceaaf9b1a817d28145bd7fbd3b6b1b1d0bef29c990de25a748bf11e27f3bccf610883918f6a3da3
+    react: ">=18"
+  checksum: 9f3d50d4ecdbbfef6522577abac4eda914b62c31afae4374558485adfd2d80ae8e44e4a22da70ee00c908f279a77dbdbfe7441074d17d447d695f50c71bf3d61
   languageName: node
   linkType: hard
 
-"@theme-ui/core@npm:0.14.7":
-  version: 0.14.7
-  resolution: "@theme-ui/core@npm:0.14.7"
+"@theme-ui/core@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "@theme-ui/core@npm:0.15.7"
   dependencies:
-    "@theme-ui/css": 0.14.7
-    "@theme-ui/parse-props": 0.14.7
+    "@theme-ui/css": ^0.15.7
     deepmerge: ^4.2.2
   peerDependencies:
     "@emotion/react": ^11
-    react: ">16"
-  checksum: 0c3d72b1531ee1ad067c17f26a1fa4dcc9c565b0a9c90f4f5d55ac8924ca7211b73a9271054d2ab3278dba75cc95645fa7a82713bcdc74758be213e3d6359847
+    react: ">=18"
+  checksum: 9019ee8ece0b273f04f12933220ce78ef77f0c4899583210d2d5b64f2258b2312b3175fbb0e4499811e32ed04e6e1a8bfee93d416a9ea82647ca30d16cfe1acd
   languageName: node
   linkType: hard
 
-"@theme-ui/css@npm:0.14.7":
-  version: 0.14.7
-  resolution: "@theme-ui/css@npm:0.14.7"
+"@theme-ui/css@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "@theme-ui/css@npm:0.15.7"
   dependencies:
     csstype: ^3.0.10
   peerDependencies:
     "@emotion/react": ^11
-  checksum: 62a8c91f8960a9c53028222ea19f8e5289b561170bf9af0edc7bd7aaf28654a562a22f0f42177f2b427571f70deee97f6c3e3b63d59548d69d12e83247ada84d
+  checksum: 864cf84d528b16a69c25cc4ce2d8997d7bdf28a0e687a6fe4860dc8fcaaab6f087bfe47d9ab3f8ead3045df8d08bc23be8ad88a1bfc2c7e4091a515f51e28e2b
   languageName: node
   linkType: hard
 
-"@theme-ui/mdx@npm:0.14.7":
-  version: 0.14.7
-  resolution: "@theme-ui/mdx@npm:0.14.7"
+"@theme-ui/global@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "@theme-ui/global@npm:0.15.7"
   dependencies:
-    "@theme-ui/core": 0.14.7
-    "@theme-ui/css": 0.14.7
+    "@theme-ui/core": ^0.15.7
+    "@theme-ui/css": ^0.15.7
   peerDependencies:
     "@emotion/react": ^11
-    "@mdx-js/react": ^1 || ^2
-    react: ">16"
-  checksum: c38c133a564d7f869bf5835b57b68fcb45d05ae467994c2309150c23b01f69f753d12d828d582911bc7c17dbc276072cbcdf62572c941db800aae10d30ab6084
+    react: ">=18"
+  checksum: d53652d388ba8ec08783799651c37a9ed7528772e6e8ad130f0c4162143723e262bcc0f34664d03e9aab843091d3fa8123da117b46d4bfb01cb8ba8bb4873aa6
   languageName: node
   linkType: hard
 
-"@theme-ui/parse-props@npm:0.14.7":
-  version: 0.14.7
-  resolution: "@theme-ui/parse-props@npm:0.14.7"
+"@theme-ui/theme-provider@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "@theme-ui/theme-provider@npm:0.15.7"
   dependencies:
-    "@theme-ui/css": 0.14.7
+    "@theme-ui/color-modes": ^0.15.7
+    "@theme-ui/core": ^0.15.7
+    "@theme-ui/css": ^0.15.7
   peerDependencies:
     "@emotion/react": ^11
-    react: ">16"
-  checksum: 2f75ea378d4404c422395c8459e8db8a2d5f336257add65073e32e3ee3e95d010db5b8e9dff68f8a39f4e283a6908d9687f8b22eed52b7a10afbeb6d47c6c57b
-  languageName: node
-  linkType: hard
-
-"@theme-ui/theme-provider@npm:0.14.7":
-  version: 0.14.7
-  resolution: "@theme-ui/theme-provider@npm:0.14.7"
-  dependencies:
-    "@theme-ui/color-modes": 0.14.7
-    "@theme-ui/core": 0.14.7
-    "@theme-ui/css": 0.14.7
-    "@theme-ui/mdx": 0.14.7
-  peerDependencies:
-    "@emotion/react": ^11
-    react: ">16"
-  checksum: 2f29b98eafecd3610613fe60cefb5d80c7ec73034aaf62feddd118f379c8f7237ccb8d3885ee00bfd577a31a0505f19d4a2ad727206c7c96c8b4bb2af469781e
+    react: ">=18"
+  checksum: 45e208ff577af5c2a24c965b0c63ea6a88c88b1103897237763683b45e9420b7100d6f589040cf2c9a7a2ea63534087bdee356ead1d2d80068e926fb7518cadd
   languageName: node
   linkType: hard
 
@@ -23879,7 +23864,7 @@ __metadata:
     react-select: ^5.4.0
     react-tooltip: ^4.2.21
     storybook: ^7.0.4
-    theme-ui: ^0.14.1
+    theme-ui: ^0.15.7
     ts-node: ^10.7.0
     typescript: ^4.5.5
     use-debounce: ^8.0.4
@@ -24283,7 +24268,7 @@ __metadata:
     stream-browserify: ^3.0.0
     styled-system: ^5.1.5
     terser: 3.14.1
-    theme-ui: ^0.14.1
+    theme-ui: ^0.15.7
     ts-loader: ^7.0.5
     ts-node: ^10.4.0
     typescript: 4.5.5
@@ -30457,20 +30442,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"theme-ui@npm:^0.14.1":
-  version: 0.14.7
-  resolution: "theme-ui@npm:0.14.7"
+"theme-ui@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "theme-ui@npm:0.15.7"
   dependencies:
-    "@theme-ui/color-modes": 0.14.7
-    "@theme-ui/components": 0.14.7
-    "@theme-ui/core": 0.14.7
-    "@theme-ui/css": 0.14.7
-    "@theme-ui/mdx": 0.14.7
-    "@theme-ui/theme-provider": 0.14.7
+    "@theme-ui/color-modes": ^0.15.7
+    "@theme-ui/components": ^0.15.7
+    "@theme-ui/core": ^0.15.7
+    "@theme-ui/css": ^0.15.7
+    "@theme-ui/global": ^0.15.7
+    "@theme-ui/theme-provider": ^0.15.7
   peerDependencies:
-    react: ">16"
-    react-dom: ">16"
-  checksum: 1d6eed3a5c2b12dfa4ea0ac18d14ca0536ad82e06cb32652964d488a0c209685526abfd8b84df7f6a0d1425d84d90cc2ced11d950dcc8e067e7fe1cca101c3ea
+    react: ">=18"
+  checksum: 2cbd1c48c9eaf6338f2ec7db2955bb4d0a7c41e880b660ad2e2ac4f52102fa9a62e3fbc8646cf5bafb473650a3b7c27eb8f73769324344bc573b81a73fcd8bef
   languageName: node
   linkType: hard
 

@@ -34,7 +34,7 @@
     "react-select": "^5.4.0",
     "react-tooltip": "^4.2.21",
     "storybook": "^7.0.4",
-    "theme-ui": "^0.14.1",
+    "theme-ui": "^0.15.7",
     "use-debounce": "^8.0.4",
     "webpack": "^5.75.0",
     "yup": "^1.1.1"

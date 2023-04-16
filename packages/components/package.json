@@ -36,7 +36,8 @@
     "storybook": "^6.5.15",
     "theme-ui": "^0.14.1",
     "use-debounce": "^8.0.4",
-    "webpack": "^5.75.0"
+    "webpack": "^5.75.0",
+    "yup": "^1.1.1"
   },
   "peerDependencies": {
     "react": "17.0.2"

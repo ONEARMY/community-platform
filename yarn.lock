@@ -25457,6 +25457,7 @@ __metadata:
     use-debounce: ^8.0.4
     vitest: ^0.29.5
     webpack: ^5.75.0
+    yup: ^1.1.1
   peerDependencies:
     react: 17.0.2
   languageName: unknown
@@ -28183,7 +28184,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"property-expr@npm:^2.0.4":
+"property-expr@npm:^2.0.4, property-expr@npm:^2.0.5":
   version: 2.0.5
   resolution: "property-expr@npm:2.0.5"
   checksum: 4ebe82ce45aaf1527e96e2ab84d75d25217167ec3ff6378cf83a84fb4abc746e7c65768a79d275881602ae82f168f9a6dfaa7f5e331d0fcc83d692770bcce5f1
@@ -32767,6 +32768,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tiny-case@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "tiny-case@npm:1.0.3"
+  checksum: 3f7a30c39d5b0e1bc097b0b271bec14eb5b836093db034f35a0de26c14422380b50dc12bfd37498cf35b192f5df06f28a710712c87ead68872a9e37ad6f6049d
+  languageName: node
+  linkType: hard
+
 "tiny-invariant@npm:^1.0.2":
   version: 1.3.1
   resolution: "tiny-invariant@npm:1.3.1"
@@ -33341,7 +33349,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^2.5.0":
+"type-fest@npm:^2.19.0, type-fest@npm:^2.5.0":
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: a4ef07ece297c9fba78fc1bd6d85dff4472fe043ede98bd4710d2615d15776902b595abf62bd78339ed6278f021235fb28a96361f8be86ed754f778973a0d278
@@ -35812,6 +35820,18 @@ __metadata:
     property-expr: ^2.0.4
     toposort: ^2.0.2
   checksum: 43a16786b47cc910fed4891cebdd89df6d6e31702e9462e8f969c73eac88551ce750732608012201ea6b93802c8847cb0aa27b5d57370640f4ecf30f9f97d4b0
+  languageName: node
+  linkType: hard
+
+"yup@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "yup@npm:1.1.1"
+  dependencies:
+    property-expr: ^2.0.5
+    tiny-case: ^1.0.3
+    toposort: ^2.0.2
+    type-fest: ^2.19.0
+  checksum: 2245b64f7086f8fe9b5efdb363021e2a9c2f5735f87cff91f697a0655f6bed12ce0f85b2493b9538a8fd36c02b42bf7d4ea6dcf7b250148f0817ec026b6aa8ef
   languageName: node
   linkType: hard
 

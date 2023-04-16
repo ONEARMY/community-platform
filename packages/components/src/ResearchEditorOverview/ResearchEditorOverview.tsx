@@ -2,6 +2,7 @@ import { Card, Heading, Box, Text } from 'theme-ui'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { Button } from '../Button/Button'
+import { boolean, object, string } from 'yup'
 
 type Update = {
   isActive: boolean
@@ -18,6 +19,12 @@ export interface ResearchEditorOverviewProps {
   sx?: ThemeUIStyleObject
 }
 
+const updateSchema = object({
+  isActive: boolean().required(),
+  title: string().required(),
+  slug: string().nullable(),
+})
+
 export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
   const {
     updates,
@@ -31,29 +38,33 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
       <Heading as="h3" mb={3} variant="small">
         Research overview
       </Heading>
-      <Box as={'ul'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
-        {updates.map((update, index) => (
-          <Box as={'li'} key={index} sx={{ mb: 1 }}>
-            <Text variant={'quiet'}>
-              {update.isActive ? (
-                <strong>{update.title}</strong>
-              ) : (
-                <>
-                  {update.title}
-                  {update.slug ? (
-                    <InternalLink
-                      to={`/research/${researchSlug}/edit-update/${update.slug}`}
-                      sx={{ display: 'inline-block', ml: 1 }}
-                    >
-                      Edit
-                    </InternalLink>
-                  ) : null}
-                </>
-              )}
-            </Text>
-          </Box>
-        ))}
-      </Box>
+      {updates?.length ? (
+        <Box as={'ul'} sx={{ margin: 0, mb: 4, p: 0, pl: 3 }}>
+          {updates
+            .filter((update) => updateSchema.isValidSync(update))
+            .map((update, index) => (
+              <Box as={'li'} key={index} sx={{ mb: 1 }}>
+                <Text variant={'quiet'}>
+                  {update.isActive ? (
+                    <strong>{update.title}</strong>
+                  ) : (
+                    <>
+                      {update.title}
+                      {update.slug ? (
+                        <InternalLink
+                          to={`/research/${researchSlug}/edit-update/${update.slug}`}
+                          sx={{ display: 'inline-block', ml: 1 }}
+                        >
+                          Edit
+                        </InternalLink>
+                      ) : null}
+                    </>
+                  )}
+                </Text>
+              </Box>
+            ))}
+        </Box>
+      ) : null}
       {showCreateUpdateButton ? (
         <Button small sx={{ mr: 2 }}>
           <InternalLink

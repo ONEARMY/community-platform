@@ -1,10 +1,6 @@
 import * as React from 'react'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
-import { Card, Flex, Heading, Text } from 'theme-ui'
-import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+import { Card, Flex, Heading, Text, Label } from 'theme-ui'
 import { Button, ExternalLink, FieldInput } from 'oa-components'
 import { Form, Field } from 'react-final-form'
 import { inject, observer } from 'mobx-react'
@@ -15,18 +11,6 @@ import { string, object, ref, bool } from 'yup'
 import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { Link } from 'react-router-dom'
-
-const CheckboxLabel = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  display: flex;
-  align-items: center;
-`
-
-const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
-  display: block;
-`
 
 interface IFormValues {
   email: string
@@ -233,7 +217,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                         mt={2}
                         sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
                       >
-                        <CheckboxLabel>
+                        <Label>
                           <Field
                             data-cy="consent"
                             name="consent"
@@ -241,7 +225,11 @@ class SignUpPage extends React.Component<IProps, IState> {
                             component="input"
                             validate={required}
                           />
-                          <Text>
+                          <Text
+                            sx={{
+                              fontSize: 2,
+                            }}
+                          >
                             I agree to the{' '}
                             <ExternalLink href="/terms">
                               Terms of Service
@@ -251,7 +239,7 @@ class SignUpPage extends React.Component<IProps, IState> {
                               Privacy Policy
                             </ExternalLink>
                           </Text>
-                        </CheckboxLabel>
+                        </Label>
                       </Flex>
                       <Text color={'red'} data-cy="error-msg">
                         {this.state.errorMsg}

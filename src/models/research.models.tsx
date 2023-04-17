@@ -34,6 +34,7 @@ export namespace IResearch {
     videoUrl?: string
     comments?: IComment[]
     total_views?: number
+    collaborators?: string[]
   }
 
   export interface FormInput extends IModerable {

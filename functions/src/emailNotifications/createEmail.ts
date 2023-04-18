@@ -5,7 +5,7 @@ import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
 
 export const TEMPLATE_NAME = 'email_digest'
 
-// TODO: move following 2 fns to handlebars if possible
+// Consider moving following two fns to handlebars
 const getResourceLabelFromNotificationType = (type: NotificationType) => {
   switch (type) {
     case 'new_comment_research':
@@ -74,7 +74,8 @@ export async function createNotificationEmails() {
 
           if (['howto_useful', 'research_useful'].includes(notification.type)) {
             usefuls.push(templateNotification)
-          } else if (
+          }
+          if (
             [
               'new_comment',
               'howto_mention',
@@ -89,7 +90,7 @@ export async function createNotificationEmails() {
         Promise.resolve({ comments: [], usefuls: [] }),
       )
 
-      // Adding emails to this collection triggers an email notification to be sent to the user.
+      // Adding emails to this collection triggers an email notification to be sent to the user
       await db.collection(DB_ENDPOINTS.emails).add({
         toUids: [_userId],
         template: {

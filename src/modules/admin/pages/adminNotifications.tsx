@@ -4,17 +4,11 @@ import { NotificationItem } from 'oa-components'
 import { useCallback, useEffect, useState } from 'react'
 import { Box, Text } from 'theme-ui'
 import { useDB } from 'src/App'
-import type { INotification, INotificationSettings } from 'src/models'
+import type { INotification, IPendingEmails } from 'src/models'
 import { getFormattedNotificationMessage } from 'src/pages/common/Header/getFormattedNotifications'
 import Table from '../components/Table/Table'
 import type { ICellRenderProps, ITableProps } from '../components/Table/Table'
 
-interface IPendingEmails {
-  _authID: string
-  _userId: string
-  emailFrequency?: INotificationSettings['emailFrequency']
-  notifications: INotification[]
-}
 type IPendingEmailsDBDoc = Record<string, IPendingEmails>
 
 const EMAILS_PENDING_COLUMNS: ITableProps<IPendingEmails>['columns'] = [

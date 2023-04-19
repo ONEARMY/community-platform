@@ -1,6 +1,6 @@
 import type { ThemeUIStyleObject } from 'theme-ui'
 import { Box } from 'theme-ui'
-import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
+import checkmarkIcon from '../../assets/icons/icon-checkmark.svg'
 
 export interface ElWithBeforeIconProps {
   icon: JSX.Element | string

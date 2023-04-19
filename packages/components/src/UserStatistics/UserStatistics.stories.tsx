@@ -1,13 +1,13 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { UserStatistics } from './UserStatistics'
 import { faker } from '@faker-js/faker'
 
 export default {
   title: 'Components/UserStatistics',
   component: UserStatistics,
-} as ComponentMeta<typeof UserStatistics>
+} as Meta<typeof UserStatistics>
 
-export const Default: ComponentStory<typeof UserStatistics> = () => (
+export const Default: StoryFn<typeof UserStatistics> = () => (
   <UserStatistics
     userName={faker.internet.userName()}
     country={faker.address.country()}

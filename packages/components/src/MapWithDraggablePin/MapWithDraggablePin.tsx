@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { Button, OsmGeocoding } from '../'
 import { Box, Flex, Text } from 'theme-ui'
-import customMarkerIcon from 'src/assets/icons/map-marker.png'
+import customMarkerIcon from '../../assets/icons/map-marker.png'
 import type { Result } from '../OsmGeocoding/types'
 
 const customMarker = L.icon({

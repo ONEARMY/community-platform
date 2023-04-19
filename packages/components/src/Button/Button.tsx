@@ -5,7 +5,7 @@ import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui'
 import { Button as ThemeUiButton, Flex, Text } from 'theme-ui'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
-interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
+export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {
   icon?: keyof IGlyphs
   disabled?: boolean
   small?: boolean

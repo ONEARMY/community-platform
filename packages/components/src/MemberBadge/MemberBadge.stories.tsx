@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryObj, StoryFn, Meta } from '@storybook/react'
 import { MemberBadge } from './MemberBadge'
 
 export default {
@@ -8,31 +8,33 @@ export default {
    */
   title: 'Components/MemberBadge',
   component: MemberBadge,
-} as ComponentMeta<typeof MemberBadge>
+} as Meta<typeof MemberBadge>
 
-export const Basic: ComponentStory<typeof MemberBadge> = () => <MemberBadge />
+export const Basic: StoryFn<typeof MemberBadge> = () => <MemberBadge />
 
-export const Sizes: ComponentStory<typeof MemberBadge> = (args) => (
-  <>
-    <MemberBadge size={args.size} />
-    <MemberBadge size={(args.size || 40) * 2} />
-    <MemberBadge size={(args.size || 40) * 3} />
-  </>
-)
+export const Sizes: StoryObj<typeof MemberBadge> = {
+  render: (args) => (
+    <>
+      <MemberBadge size={args.size} />
+      <MemberBadge size={(args.size || 40) * 2} />
+      <MemberBadge size={(args.size || 40) * 3} />
+    </>
+  ),
+}
 
-export const TypeMember: ComponentStory<typeof MemberBadge> = () => (
+export const TypeMember: StoryFn<typeof MemberBadge> = () => (
   <>
     <MemberBadge size={100} profileType={'member'} />
     <MemberBadge size={100} profileType={'member'} useLowDetailVersion />
   </>
 )
-export const TypeWorkspace: ComponentStory<typeof MemberBadge> = () => (
+export const TypeWorkspace: StoryFn<typeof MemberBadge> = () => (
   <>
     <MemberBadge size={100} profileType={'workspace'} />
     <MemberBadge size={100} profileType={'workspace'} useLowDetailVersion />
   </>
 )
-export const TypeCommunityBuilder: ComponentStory<typeof MemberBadge> = () => (
+export const TypeCommunityBuilder: StoryFn<typeof MemberBadge> = () => (
   <>
     <MemberBadge size={100} profileType={'community-builder'} />
     <MemberBadge
@@ -42,7 +44,7 @@ export const TypeCommunityBuilder: ComponentStory<typeof MemberBadge> = () => (
     />
   </>
 )
-export const TypeCollectionPoint: ComponentStory<typeof MemberBadge> = () => (
+export const TypeCollectionPoint: StoryFn<typeof MemberBadge> = () => (
   <>
     <MemberBadge size={100} profileType={'collection-point'} />
     <MemberBadge
@@ -52,7 +54,7 @@ export const TypeCollectionPoint: ComponentStory<typeof MemberBadge> = () => (
     />
   </>
 )
-export const TypeMachineBuilder: ComponentStory<typeof MemberBadge> = () => (
+export const TypeMachineBuilder: StoryFn<typeof MemberBadge> = () => (
   <>
     <MemberBadge size={100} profileType={'machine-builder'} />
     <MemberBadge
@@ -63,7 +65,7 @@ export const TypeMachineBuilder: ComponentStory<typeof MemberBadge> = () => (
   </>
 )
 
-export const TypeSpace: ComponentStory<typeof MemberBadge> = () => (
+export const TypeSpace: StoryFn<typeof MemberBadge> = () => (
   <>
     <MemberBadge size={100} profileType={'space'} />
     <MemberBadge size={100} profileType={'space'} useLowDetailVersion />

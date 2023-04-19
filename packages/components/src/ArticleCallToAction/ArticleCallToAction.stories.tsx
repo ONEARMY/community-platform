@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { Button } from '../Button/Button'
 import { LoggedOutWithCount } from '../UsefulStatsButton/UsefulStatsButton.stories'
 import { ArticleCallToAction } from './ArticleCallToAction'
@@ -7,9 +7,9 @@ import { ArticleCallToAction } from './ArticleCallToAction'
 export default {
   title: 'Components/ArticleCallToAction',
   component: ArticleCallToAction,
-} as ComponentMeta<typeof ArticleCallToAction>
+} as Meta<typeof ArticleCallToAction>
 
-export const ArticleCallToActionCommentAndUseful: ComponentStory<
+export const ArticleCallToActionCommentAndUseful: StoryFn<
   typeof ArticleCallToAction
 > = () => (
   <ArticleCallToAction author={makeFakeUser()}>
@@ -25,7 +25,7 @@ export const ArticleCallToActionCommentAndUseful: ComponentStory<
   </ArticleCallToAction>
 )
 
-export const ArticleCallToActionUseful: ComponentStory<
+export const ArticleCallToActionUseful: StoryFn<
   typeof ArticleCallToAction
 > = () => (
   <ArticleCallToAction author={makeFakeUser()}>
@@ -40,7 +40,7 @@ export const ArticleCallToActionUseful: ComponentStory<
   </ArticleCallToAction>
 )
 
-export const ArticleCallToActionSingleContributor: ComponentStory<
+export const ArticleCallToActionSingleContributor: StoryFn<
   typeof ArticleCallToAction
 > = () => (
   <ArticleCallToAction
@@ -63,7 +63,7 @@ const makeFakeUser = () => ({
   isVerified: faker.datatype.boolean(),
 })
 
-export const ArticleCallToActionMultipleContributors: ComponentStory<
+export const ArticleCallToActionMultipleContributors: StoryFn<
   typeof ArticleCallToAction
 > = () => (
   <ArticleCallToAction

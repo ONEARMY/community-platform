@@ -3,8 +3,8 @@ import { Box, Card, Flex } from 'theme-ui'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'
-import EventsIcon from 'src/assets/icons/icon-events.svg'
-import HowToCountIcon from 'src/assets/icons/icon-how-to.svg'
+import EventsIcon from '../../assets/icons/icon-events.svg'
+import HowToCountIcon from '../../assets/icons/icon-how-to.svg'
 
 export interface UserStatisticsProps {
   userName: string

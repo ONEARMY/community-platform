@@ -1,13 +1,13 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { useState } from 'react'
 import { CreateComment } from './CreateComment'
 
 export default {
   title: 'Components/CreateComment',
   component: CreateComment,
-} as ComponentMeta<typeof CreateComment>
+} as Meta<typeof CreateComment>
 
-export const Default: ComponentStory<typeof CreateComment> = () => {
+export const Default: StoryFn<typeof CreateComment> = () => {
   const [comment, setComment] = useState('')
   return (
     <CreateComment
@@ -21,7 +21,7 @@ export const Default: ComponentStory<typeof CreateComment> = () => {
   )
 }
 
-export const LoggedOut: ComponentStory<typeof CreateComment> = () => {
+export const LoggedOut: StoryFn<typeof CreateComment> = () => {
   const [comment, setComment] = useState('')
   return (
     <CreateComment
@@ -35,7 +35,7 @@ export const LoggedOut: ComponentStory<typeof CreateComment> = () => {
   )
 }
 
-export const WithLongComment: ComponentStory<typeof CreateComment> = () => {
+export const WithLongComment: StoryFn<typeof CreateComment> = () => {
   const [comment, setComment] =
     useState(`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sodales sodales nunc, ut pharetra magna. Nulla malesuada sodales finibus. In condimentum nulla et nunc convallis, ac interdum turpis convallis. Praesent nec ipsum et lacus rhoncus facilisis id ac enim. Nunc cursus facilisis libero non blandit. Maecenas in mauris vel odio sollicitudin rutrum. Sed suscipit fermentum mi, nec faucibus urna mattis quis. In euismod mi ut lorem imperdiet semper.
 

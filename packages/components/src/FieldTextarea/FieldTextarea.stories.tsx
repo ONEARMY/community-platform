@@ -1,16 +1,16 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { FieldTextarea } from './FieldTextarea'
 
 export default {
   title: 'Components/FieldTextarea',
   component: FieldTextarea,
-} as ComponentMeta<typeof FieldTextarea>
+} as Meta<typeof FieldTextarea>
 
-export const Default: ComponentStory<typeof FieldTextarea> = () => (
+export const Default: StoryFn<typeof FieldTextarea> = () => (
   <FieldTextarea input={{} as any} placeholder="Text area input" meta={{}} />
 )
 
-export const WithoutResizeHandle: ComponentStory<typeof FieldTextarea> = () => (
+export const WithoutResizeHandle: StoryFn<typeof FieldTextarea> = () => (
   <FieldTextarea
     input={{} as any}
     placeholder="Text area input is not resizable"
@@ -19,7 +19,7 @@ export const WithoutResizeHandle: ComponentStory<typeof FieldTextarea> = () => (
   />
 )
 
-export const WithError: ComponentStory<typeof FieldTextarea> = () => (
+export const WithError: StoryFn<typeof FieldTextarea> = () => (
   <FieldTextarea
     input={{} as any}
     placeholder="Text area input"

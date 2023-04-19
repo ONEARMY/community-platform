@@ -1,4 +1,3 @@
-import { logger } from 'firebase-functions/v1'
 import { NotificationType } from '../../../src/models'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
@@ -42,7 +41,7 @@ export async function createNotificationEmails() {
     pendingEmails.data() ?? [],
   )) {
     const [_userId, { notifications }] = entry
-    if (!notifications.length) return
+    if (!notifications.length) continue
     const user = await db.collection(DB_ENDPOINTS.users).doc(_userId).get()
     if (user.exists) {
       const { displayName } = user.data() as IUserDB

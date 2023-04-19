@@ -95,7 +95,7 @@ describe('create email test', () => {
         },
         ['user_2']: {
           _authId: '',
-          _userId: 'user_1',
+          _userId: 'user_2',
           notifications: [],
         },
       })
@@ -107,6 +107,14 @@ describe('create email test', () => {
 
   it('Creates email from pending notifications', async () => {
     await createNotificationEmails()
+
+    const countSnapshot = await db
+      .collection(DB_ENDPOINTS.emails)
+      .where('toUids', 'array-contains', 'user_1')
+      .count()
+      .get()
+
+    expect(countSnapshot.data().count).toEqual(1)
 
     const querySnapshot = await db
       .collection(DB_ENDPOINTS.emails)

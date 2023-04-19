@@ -1,0 +1,4 @@
+try{
+var h=__STORYBOOKADDONS__,{addons:r,types:m,mockChannel:_}=__STORYBOOKADDONS__;var b=__STORYBOOKTHEMING__,{CacheProvider:f,ClassNames:S,Global:g,ThemeProvider:P,background:R,color:w,convert:y,create:s,createCache:C,createGlobal:N,createReset:v,css:x,darken:k,ensure:B,ignoreSsrWarning:D,isPropValid:G,jsx:K,keyframes:Y,lighten:A,styled:E,themes:H,typography:I,useTheme:M,withTheme:j}=__STORYBOOKTHEMING__;r.setConfig({isFullscreen:!1,showNav:!0,showPanel:!0,panelPosition:"bottom",enableShortcuts:!0,isToolshown:!0,theme:s({base:"light",brandTitle:"Platform Components",brandUrl:"https://onearmy.world"}),selectedPanel:void 0,initialActive:"sidebar",sidebar:{showRoots:!1,collapsedRoots:["other"]}});
+}catch(e){ console.error("[Storybook] One of your manager-entries failed: " + import.meta.url, e); }
+//# sourceMappingURL=manager-bundle.mjs.map

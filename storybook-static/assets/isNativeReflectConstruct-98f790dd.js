@@ -1,0 +1,2 @@
+function o(t){if(t===void 0)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}function r(t){return r=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},r(t)}function f(){if(typeof Reflect>"u"||!Reflect.construct||Reflect.construct.sham)return!1;if(typeof Proxy=="function")return!0;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],function(){})),!0}catch{return!1}}export{o as _,f as a,r as b};
+//# sourceMappingURL=isNativeReflectConstruct-98f790dd.js.map

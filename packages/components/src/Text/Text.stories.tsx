@@ -1,16 +1,16 @@
 import { faker } from '@faker-js/faker'
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { Text } from 'theme-ui'
 
 export default {
   title: 'Components/Text',
   component: Text,
-} as ComponentMeta<typeof Text>
+} as Meta<typeof Text>
 
-export const Default: ComponentStory<typeof Text> = () => (
+export const Default: StoryFn<typeof Text> = () => (
   <Text>{faker.lorem.paragraphs(3)}</Text>
 )
 
-export const Quiet: ComponentStory<typeof Text> = () => (
+export const Quiet: StoryFn<typeof Text> = () => (
   <Text variant="quiet">{faker.lorem.paragraphs(3)}</Text>
 )

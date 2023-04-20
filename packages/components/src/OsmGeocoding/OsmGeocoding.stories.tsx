@@ -1,23 +1,21 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { OsmGeocoding } from './OsmGeocoding'
 import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
 
 export default {
   title: 'Components/OsmGeocoding',
   component: OsmGeocoding,
-} as ComponentMeta<typeof OsmGeocoding>
+} as Meta<typeof OsmGeocoding>
 
-export const Default: ComponentStory<typeof OsmGeocoding> = () => (
+export const Default: StoryFn<typeof OsmGeocoding> = () => (
   <OsmGeocoding loading={false} />
 )
 
-export const Loading: ComponentStory<typeof OsmGeocoding> = () => (
+export const Loading: StoryFn<typeof OsmGeocoding> = () => (
   <OsmGeocoding loading />
 )
 
-export const ResultsList: ComponentStory<
-  typeof OsmGeocodingResultsList
-> = () => (
+export const ResultsList: StoryFn<typeof OsmGeocodingResultsList> = () => (
   <OsmGeocodingResultsList
     results={[
       {

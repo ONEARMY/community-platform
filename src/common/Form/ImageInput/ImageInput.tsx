@@ -118,6 +118,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     const value = this.props.multiple ? convertedFiles : convertedFiles[0]
     this.props.onFilesChange(value)
   }
+
   public handleImageDelete(event: Event) {
     // TODO - handle case where a server image is deleted (remove from server)
     event.stopPropagation()
@@ -128,6 +129,17 @@ export class ImageInput extends React.Component<IProps, IState> {
     })
     this.props.onFilesChange(null)
   }
+
+  componentDidUpdate(previousProps): void {
+    if (
+      JSON.stringify(this.props.value) !== JSON.stringify(previousProps.value)
+    ) {
+      this.setState({
+        uploadedFiles: this._getUploadedFiles(this.props.value),
+      })
+    }
+  }
+
   render() {
     const { inputFiles, uploadedFiles } = this.state
     const { multiple } = this.props
@@ -197,19 +209,4 @@ export class ImageInput extends React.Component<IProps, IState> {
       Object.prototype.hasOwnProperty.call(v, 'downloadUrl'),
     ) as IUploadedFileMeta[]
   }
-}
-
-/************************************************************************************
- *    Exported helpers (could be moved to appropriate utils)
- *
- *************************************************************************************/
-
-export const bytesToSize = (bytes: number) => {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-  if (bytes === 0) {
-    return '0 Byte'
-  }
-  const i = Number(Math.floor(Math.log(bytes) / Math.log(1024)))
-  const size = (bytes / Math.pow(1024, i)).toPrecision(3) + ' ' + sizes[i]
-  return size
 }

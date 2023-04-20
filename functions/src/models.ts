@@ -18,6 +18,7 @@ import type {
   IModerable,
   IResearchDB,
   IUserDB,
+  IPendingEmails,
 } from '../../src/models'
 export {
   DBDoc,
@@ -28,6 +29,7 @@ export {
   IMapPin,
   IModerable,
   IResearchDB,
+  IPendingEmails,
 }
 
 import { dbEndpointSubollections, generateDBEndpoints } from 'oa-shared'

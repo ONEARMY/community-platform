@@ -1,12 +1,12 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { ProfileLink } from './ProfileLink'
 
 export default {
   title: 'Components/ProfileLink',
   component: ProfileLink,
-} as ComponentMeta<typeof ProfileLink>
+} as Meta<typeof ProfileLink>
 
-export const Instagram: ComponentStory<typeof ProfileLink> = () => (
+export const Instagram: StoryFn<typeof ProfileLink> = () => (
   <ProfileLink
     url="https://instagram.com"
     label="social media"
@@ -14,7 +14,7 @@ export const Instagram: ComponentStory<typeof ProfileLink> = () => (
   />
 )
 
-export const Facebook: ComponentStory<typeof ProfileLink> = () => (
+export const Facebook: StoryFn<typeof ProfileLink> = () => (
   <ProfileLink
     url="https://facebook.com"
     label="social media"
@@ -22,7 +22,7 @@ export const Facebook: ComponentStory<typeof ProfileLink> = () => (
   />
 )
 
-export const Youtube: ComponentStory<typeof ProfileLink> = () => (
+export const Youtube: StoryFn<typeof ProfileLink> = () => (
   <ProfileLink
     url="https://youtube.com"
     label="social media"
@@ -30,7 +30,7 @@ export const Youtube: ComponentStory<typeof ProfileLink> = () => (
   />
 )
 
-export const Twitter: ComponentStory<typeof ProfileLink> = () => (
+export const Twitter: StoryFn<typeof ProfileLink> = () => (
   <ProfileLink
     url="https://twitter.com"
     label="social media"
@@ -38,11 +38,11 @@ export const Twitter: ComponentStory<typeof ProfileLink> = () => (
   />
 )
 
-export const Email: ComponentStory<typeof ProfileLink> = () => (
+export const Email: StoryFn<typeof ProfileLink> = () => (
   <ProfileLink url="info@preciousplastic.com" label="email" icon="email" />
 )
 
-export const Bazaar: ComponentStory<typeof ProfileLink> = () => (
+export const Bazaar: StoryFn<typeof ProfileLink> = () => (
   <ProfileLink
     url="https://bazar.preciousplastic.com/abc"
     label="bazar"
@@ -50,6 +50,6 @@ export const Bazaar: ComponentStory<typeof ProfileLink> = () => (
   />
 )
 
-export const Website: ComponentStory<typeof ProfileLink> = () => (
+export const Website: StoryFn<typeof ProfileLink> = () => (
   <ProfileLink url="https://example.com" label="website" icon="website" />
 )

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { NotificationList } from './NotificationList'
 import type { UserNotificationList } from './NotificationList'
@@ -7,7 +7,7 @@ import type { UserNotificationList } from './NotificationList'
 export default {
   title: 'Components/NotificationList',
   component: NotificationList,
-} as ComponentMeta<typeof NotificationList>
+} as Meta<typeof NotificationList>
 
 const notifications = [
   {
@@ -65,11 +65,11 @@ const notifications = [
   },
 ] as UserNotificationList
 
-export const Default: ComponentStory<typeof NotificationList> = () => (
+export const Default: StoryFn<typeof NotificationList> = () => (
   <NotificationList notifications={notifications} />
 )
 
-export const LongList: ComponentStory<typeof NotificationList> = () => (
+export const LongList: StoryFn<typeof NotificationList> = () => (
   <NotificationList
     notifications={[
       ...notifications,
@@ -80,6 +80,6 @@ export const LongList: ComponentStory<typeof NotificationList> = () => (
   />
 )
 
-export const Empty: ComponentStory<typeof NotificationList> = () => (
+export const Empty: StoryFn<typeof NotificationList> = () => (
   <NotificationList notifications={[]} />
 )

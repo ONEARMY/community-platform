@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { glyphs } from '../Icon/Icon'
 import { Button } from './Button'
 
@@ -9,7 +9,7 @@ export default {
    */
   title: 'Components/Button',
   component: Button,
-} as ComponentMeta<typeof Button>
+} as Meta<typeof Button>
 
 const sizeOptions = [
   {
@@ -25,11 +25,9 @@ const sizeOptions = [
   },
 ]
 
-export const Basic: ComponentStory<typeof Button> = () => (
-  <Button>Button Text</Button>
-)
+export const Basic: StoryFn<typeof Button> = () => <Button>Button Text</Button>
 
-export const Disabled: ComponentStory<typeof Button> = () => (
+export const Disabled: StoryFn<typeof Button> = () => (
   <>
     <Button disabled>Disabled</Button>
     <Button icon="delete" disabled>
@@ -38,7 +36,7 @@ export const Disabled: ComponentStory<typeof Button> = () => (
   </>
 )
 
-export const Primary: ComponentStory<typeof Button> = () => (
+export const Primary: StoryFn<typeof Button> = () => (
   <>
     <Button variant={'primary'}>Primary</Button>
     <Button icon="delete" variant={'primary'}>
@@ -52,7 +50,7 @@ export const Primary: ComponentStory<typeof Button> = () => (
   </>
 )
 
-export const Secondary: ComponentStory<typeof Button> = () => (
+export const Secondary: StoryFn<typeof Button> = () => (
   <>
     <Button variant={'secondary'}>Secondary</Button>
     <Button icon="delete" variant={'secondary'}>
@@ -66,7 +64,7 @@ export const Secondary: ComponentStory<typeof Button> = () => (
   </>
 )
 
-export const Subtle: ComponentStory<typeof Button> = () => (
+export const Subtle: StoryFn<typeof Button> = () => (
   <>
     <Button variant={'subtle'}>Subtle</Button>
     <Button variant={'subtle'} icon="account-circle">
@@ -80,7 +78,7 @@ export const Subtle: ComponentStory<typeof Button> = () => (
   </>
 )
 
-export const Outline: ComponentStory<typeof Button> = () => (
+export const Outline: StoryFn<typeof Button> = () => (
   <>
     <Button variant={'outline'}>Outline</Button>
     <Button variant={'outline'} icon="account-circle">
@@ -94,7 +92,7 @@ export const Outline: ComponentStory<typeof Button> = () => (
   </>
 )
 
-export const Small: ComponentStory<typeof Button> = () => (
+export const Small: StoryFn<typeof Button> = () => (
   <>
     <Button small={true}>Small Button</Button>
     <Button small={true} icon="delete">
@@ -103,7 +101,7 @@ export const Small: ComponentStory<typeof Button> = () => (
   </>
 )
 
-export const Large: ComponentStory<typeof Button> = () => (
+export const Large: StoryFn<typeof Button> = () => (
   <>
     <Button large={true}>Large Button</Button>
     <Button large={true} icon="delete">
@@ -112,7 +110,7 @@ export const Large: ComponentStory<typeof Button> = () => (
   </>
 )
 
-export const IconOnly: ComponentStory<typeof Button> = () => (
+export const IconOnly: StoryFn<typeof Button> = () => (
   <>
     <Button large={true} icon="delete" showIconOnly={true}>
       Icon Button with hidden text
@@ -120,7 +118,7 @@ export const IconOnly: ComponentStory<typeof Button> = () => (
   </>
 )
 
-export const Icons: ComponentStory<typeof Button> = () => (
+export const Icons: StoryFn<typeof Button> = () => (
   <>
     {sizeOptions.map((size) =>
       ['primary', 'secondary', 'outline'].map((variant) =>

@@ -1,27 +1,27 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { ModerationStatus } from './ModerationStatus'
 
 export default {
   title: 'Components/ModerationStatus',
   component: ModerationStatus,
-} as ComponentMeta<typeof ModerationStatus>
+} as Meta<typeof ModerationStatus>
 
-export const Default: ComponentStory<typeof ModerationStatus> = () => (
+export const Default: StoryFn<typeof ModerationStatus> = () => (
   <ModerationStatus contentType={'event'} status={'draft'} />
 )
 
-export const Rejected: ComponentStory<typeof ModerationStatus> = () => (
+export const Rejected: StoryFn<typeof ModerationStatus> = () => (
   <ModerationStatus contentType={'event'} status={'rejected'} />
 )
-export const Awaiting: ComponentStory<typeof ModerationStatus> = () => (
+export const Awaiting: StoryFn<typeof ModerationStatus> = () => (
   <ModerationStatus contentType={'event'} status={'awaiting-moderation'} />
 )
 
-export const HowtoDraft: ComponentStory<typeof ModerationStatus> = () => (
+export const HowtoDraft: StoryFn<typeof ModerationStatus> = () => (
   <ModerationStatus contentType={'howto'} status={'draft'} />
 )
 
-export const Accepted: ComponentStory<typeof ModerationStatus> = () => (
+export const Accepted: StoryFn<typeof ModerationStatus> = () => (
   <>
     <ModerationStatus contentType={'event'} status={'accepted'} />
     The status text should not be shown.

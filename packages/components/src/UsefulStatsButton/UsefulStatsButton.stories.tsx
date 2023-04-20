@@ -1,12 +1,12 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { UsefulStatsButton } from './UsefulStatsButton'
 
 export default {
   title: 'Components/UsefulStatsButton',
   component: UsefulStatsButton,
-} as ComponentMeta<typeof UsefulStatsButton>
+} as Meta<typeof UsefulStatsButton>
 
-export const LoggedOut: ComponentStory<typeof UsefulStatsButton> = () => (
+export const LoggedOut: StoryFn<typeof UsefulStatsButton> = () => (
   <UsefulStatsButton
     isLoggedIn={false}
     votedUsefulCount={0}
@@ -15,9 +15,7 @@ export const LoggedOut: ComponentStory<typeof UsefulStatsButton> = () => (
   />
 )
 
-export const LoggedOutWithCount: ComponentStory<
-  typeof UsefulStatsButton
-> = () => (
+export const LoggedOutWithCount: StoryFn<typeof UsefulStatsButton> = () => (
   <UsefulStatsButton
     isLoggedIn={false}
     hasUserVotedUseful={false}
@@ -26,9 +24,7 @@ export const LoggedOutWithCount: ComponentStory<
   />
 )
 
-export const LoggedInWithCount: ComponentStory<
-  typeof UsefulStatsButton
-> = () => (
+export const LoggedInWithCount: StoryFn<typeof UsefulStatsButton> = () => (
   <UsefulStatsButton
     votedUsefulCount={99}
     hasUserVotedUseful={false}
@@ -37,9 +33,7 @@ export const LoggedInWithCount: ComponentStory<
   />
 )
 
-export const CurrentUserHasVoted: ComponentStory<
-  typeof UsefulStatsButton
-> = () => (
+export const CurrentUserHasVoted: StoryFn<typeof UsefulStatsButton> = () => (
   <UsefulStatsButton
     votedUsefulCount={99}
     hasUserVotedUseful={true}

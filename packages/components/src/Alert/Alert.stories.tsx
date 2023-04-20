@@ -1,24 +1,24 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 import { Alert } from 'theme-ui'
 
 export default {
   title: 'Components/Alert',
   component: Alert,
-} as ComponentMeta<typeof Alert>
+} as Meta<typeof Alert>
 
-export const Success: ComponentStory<typeof Alert> = () => (
+export const Success: StoryFn<typeof Alert> = () => (
   <Alert variant="success">A successful message</Alert>
 )
 
-export const Failure: ComponentStory<typeof Alert> = () => (
+export const Failure: StoryFn<typeof Alert> = () => (
   <Alert variant="failure">An error message</Alert>
 )
 
-export const Information: ComponentStory<typeof Alert> = () => (
+export const Information: StoryFn<typeof Alert> = () => (
   <Alert variant="info">An information message</Alert>
 )
 
-export const FailureLong: ComponentStory<typeof Alert> = () => (
+export const FailureLong: StoryFn<typeof Alert> = () => (
   <Alert variant="failure">
     An error message: Veniam explicabo dolor ipsam impedit. Eum eos ut et
     consequatur eos eaque explicabo et inventore. Aperiam aut consequatur sit

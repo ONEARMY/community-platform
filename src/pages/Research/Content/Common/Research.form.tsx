@@ -12,6 +12,7 @@ import {
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
+  ResearchEditorOverview,
 } from 'oa-components'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
@@ -283,7 +284,6 @@ const ResearchForm = observer((props: IProps) => {
               >
                 <Box
                   sx={{
-                    position: ['relative', 'relative', 'sticky'],
                     top: 3,
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
@@ -327,6 +327,19 @@ const ResearchForm = observer((props: IProps) => {
                     <span>Publish</span>
                   </Button>
                 </Box>
+
+                {props.formValues.updates ? (
+                  <ResearchEditorOverview
+                    sx={{ mt: 4 }}
+                    updates={props.formValues?.updates.map((u) => ({
+                      isActive: false,
+                      title: u.title,
+                      slug: u._id,
+                    }))}
+                    researchSlug={props.formValues.slug}
+                    showCreateUpdateButton={true}
+                  />
+                ) : null}
               </Flex>
             </Flex>
           )

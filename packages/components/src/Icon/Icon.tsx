@@ -45,7 +45,7 @@ interface IGlyphProps {
   glyph: keyof IGlyphs
 }
 
-interface IProps {
+export interface IProps {
   glyph: keyof IGlyphs
   size?: number | string
   marginRight?: string
@@ -105,9 +105,9 @@ export const glyphs: IGlyphs = {
   discord: iconMap.discord,
 }
 
-export type WrapperProps = IProps & VerticalAlignProps & SpaceProps
+export type Props = IProps & VerticalAlignProps & SpaceProps
 
-const IconWrapper = styled.div<WrapperProps>`
+const IconWrapper = styled.div<Props>`
   display: inline-block;
   flex: 0 0 ${(props) => (props.size ? `${props.size}px` : '32px')};
   width: ${(props) => (props.size ? `${props.size}px` : '32px')};
@@ -138,7 +138,7 @@ const Glyph = ({ glyph }: IGlyphProps) => {
   return glyphs[glyph] || null
 }
 
-export const Icon = (props: WrapperProps) => {
+export const Icon = (props: Props) => {
   const { glyph, size, marginRight } = props
 
   const isSizeNumeric = !isNaN(size as any)

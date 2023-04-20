@@ -11,6 +11,7 @@ import {
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
+  ResearchEditorOverview,
 } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
@@ -138,7 +139,7 @@ const UpdateForm = observer((props: IProps) => {
         }}
         validateOnBlur
         decorators={[unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit }) => {
+        render={({ submitting, dirty, handleSubmit, values }) => {
           return (
             <Flex
               mx={-2}
@@ -338,6 +339,27 @@ const UpdateForm = observer((props: IProps) => {
                       {props.parentType === 'edit' ? 'Save' : 'Add update'}
                     </span>
                   </Button>
+
+                  {store.activeResearchItem ? (
+                    <ResearchEditorOverview
+                      sx={{ mt: 4 }}
+                      updates={[
+                        ...store.activeResearchItem.updates.map((u) => ({
+                          isActive: false,
+                          title: u.title,
+                          slug: u._id,
+                        })),
+                        {
+                          isActive: false,
+                          title: values.title || 'Title of this update',
+                          slug: null,
+                        },
+                      ]}
+                      researchSlug={store.activeResearchItem?.slug}
+                      showCreateUpdateButton={props.parentType === 'edit'}
+                      showBackToResearchButton={true}
+                    />
+                  ) : null}
                 </Box>
               </Flex>
             </Flex>

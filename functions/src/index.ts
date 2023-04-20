@@ -4,7 +4,7 @@ import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'
 
 // the following endpoints are exposed for use by various triggers
-// see individual files for more informaiton
+// see individual files for more information
 exports.weeklyTasks = weeklyTasks
 exports.dailyTasks = dailyTasks
 
@@ -21,6 +21,8 @@ exports.userUpdates = UserUpdates.handleUserUpdates
 exports.adminGetUserEmail = Admin.getUserEmail
 
 exports.seo = require('./seo')
+
+exports.emailNotifications = require('./emailNotifications')
 
 // Only export development api when working locally (with functions emulator)
 if (process.env.FUNCTIONS_EMULATOR === 'true') {

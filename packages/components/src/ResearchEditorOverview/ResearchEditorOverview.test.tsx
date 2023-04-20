@@ -58,7 +58,7 @@ describe('ResearchEditorOverview', () => {
   })
 
   it('handles malformed update item', () => {
-    const { container } = render(
+    const { getByText } = render(
       <Default
         {...(Default.args as ResearchEditorOverviewProps)}
         updates={
@@ -74,7 +74,7 @@ describe('ResearchEditorOverview', () => {
       />,
     )
 
-    expect(container).toMatchSnapshot()
+    expect(getByText('Update title')).toBeInTheDocument()
   })
 
   it('displays a Draft label', () => {

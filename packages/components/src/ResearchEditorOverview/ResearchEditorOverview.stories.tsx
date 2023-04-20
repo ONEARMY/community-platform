@@ -17,7 +17,7 @@ Default.args = {
       isActive: true,
       title: 'Update 1',
       slug: 'update-1',
-      status: 'draft',
+      status: 'published',
     },
     {
       isActive: false,

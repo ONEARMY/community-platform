@@ -76,4 +76,22 @@ describe('ResearchEditorOverview', () => {
 
     expect(container).toMatchSnapshot()
   })
+
+  it('displays a Draft label', () => {
+    const { getByText } = render(
+      <Default
+        {...(Default.args as ResearchEditorOverviewProps)}
+        updates={[
+          {
+            isActive: true,
+            title: 'Update title',
+            slug: 'a-slug',
+            status: 'draft',
+          },
+        ]}
+      />,
+    )
+
+    expect(getByText('Draft')).toBeInTheDocument()
+  })
 })

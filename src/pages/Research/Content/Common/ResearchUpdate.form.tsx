@@ -381,12 +381,14 @@ const getResearchUpdates = (
       isActive: false,
       title: u.title,
       slug: u._id,
+      status: u.status,
     })),
     addPlaceholderItem
       ? {
           isActive: true,
           title: placeholderTitle || 'New update',
           slug: '',
+          status: 'draft',
         }
       : null,
   ].filter(Boolean)

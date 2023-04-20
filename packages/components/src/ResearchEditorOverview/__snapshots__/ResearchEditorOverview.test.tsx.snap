@@ -100,19 +100,7 @@ exports[`ResearchEditorOverview > handles malformed update item 1`] = `
     </h3>
     <ul
       class="css-47e4wa-Box"
-    >
-      <li
-        class="css-snegf5-Box"
-      >
-        <span
-          class="css-1peva9n-Box"
-        >
-          <strong>
-            Update title
-          </strong>
-        </span>
-      </li>
-    </ul>
+    />
     <button
       class="css-1d5rya2-Box"
       type="button"
@@ -159,49 +147,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
     </h3>
     <ul
       class="css-47e4wa-Box"
-    >
-      <li
-        class="css-snegf5-Box"
-      >
-        <span
-          class="css-1peva9n-Box"
-        >
-          <strong>
-            Update 1
-          </strong>
-        </span>
-      </li>
-      <li
-        class="css-snegf5-Box"
-      >
-        <span
-          class="css-1peva9n-Box"
-        >
-          Update 2
-          <a
-            class="css-1b0j0ya-Box"
-            href="/research/abc/edit-update/update-2"
-          >
-            Edit
-          </a>
-        </span>
-      </li>
-      <li
-        class="css-snegf5-Box"
-      >
-        <span
-          class="css-1peva9n-Box"
-        >
-          Update 3
-          <a
-            class="css-1b0j0ya-Box"
-            href="/research/abc/edit-update/update-3"
-          >
-            Edit
-          </a>
-        </span>
-      </li>
-    </ul>
+    />
     <button
       class="css-1d5rya2-Box"
       type="button"

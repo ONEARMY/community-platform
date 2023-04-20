@@ -347,9 +347,16 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     <ResearchEditorOverview
                       sx={{ mt: 4 }}
                       updates={getResearchUpdates(
+<<<<<<< HEAD
                         store.activeResearchItem.updates || [],
                         props.parentType !== 'edit',
                         values.title,
+=======
+                        store.activeResearchItem.updates,
+                        props.formValues._id,
+                        props.parentType !== 'edit',
+                        values.title || 'Title of this update',
+>>>>>>> 3129cc8e (chore: refactor to load types)
                       )}
                       researchSlug={store.activeResearchItem?.slug}
                       showCreateUpdateButton={props.parentType === 'edit'}
@@ -368,6 +375,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
 
 const getResearchUpdates = (
   updates,
+<<<<<<< HEAD
   addPlaceholderItem,
   placeholderTitle,
 ): ResearchEditorOverviewUpdate[] => {
@@ -392,6 +400,28 @@ const getResearchUpdates = (
       : null,
   ].filter(Boolean)
 }
+=======
+  activeResearchId,
+  isCreating,
+  researchTitle,
+): ResearchEditorOverviewUpdate[] =>
+  [
+    ...updates.map((u) => ({
+      isActive: u._id === activeResearchId,
+      title: u.title,
+      status: u.status,
+      slug: u._id,
+    })),
+    isCreating
+      ? {
+          isActive: false,
+          title: researchTitle,
+          status: 'draft',
+          slug: null,
+        }
+      : null,
+  ].filter(Boolean)
+>>>>>>> 3129cc8e (chore: refactor to load types)
 
 /**
  * Ensure either url or images included (not both), and any url formatted correctly

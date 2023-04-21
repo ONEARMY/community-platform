@@ -7,6 +7,7 @@ import type { ITag, TagCategory } from 'src/models/tags.model'
 // Import React Table
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
+import type { Column } from 'react-table'
 import { Form, Field } from 'react-final-form'
 
 // we include props from react-final-form fields so it can be used as a custom field component
@@ -159,7 +160,7 @@ export class AdminTags extends React.Component<IProps, IState> {
   }
 }
 
-const TAG_TABLE_COLUMNS: { [key: string]: keyof ITag }[] = [
+const TAG_TABLE_COLUMNS: Array<Column<ITag>> = [
   {
     Header: '_id',
     accessor: '_id',
@@ -170,7 +171,8 @@ const TAG_TABLE_COLUMNS: { [key: string]: keyof ITag }[] = [
   },
   {
     Header: 'categories',
-    accessor: 'categories',
+    id: 'categories',
+    accessor: (tag: ITag) => tag.categories.join(', '),
   },
 ]
 // TODO - currently all hard-coded, would be good to allow custom categories and organisation

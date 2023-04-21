@@ -462,7 +462,7 @@ workflows:
               ignore:
                 - production
       - test_circular_dependency:
-          name: 'Circuar dependency test'
+          name: 'Circular dependency test'
           requires:
             - 'Lint code'
           filters:
@@ -491,7 +491,7 @@ workflows:
           requires:
             - 'Build Application'
             - 'Unit tests'
-            - 'Circuar dependency test'
+            - 'Circular dependency test'
             - 'Cloud Function tests'
             - 'Build Storybook'
           context:

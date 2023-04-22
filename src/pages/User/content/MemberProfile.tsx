@@ -1,21 +1,19 @@
 import 'src/assets/css/slick.min.css'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-
 import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { isUserVerified } from 'src/common/isUserVerified'
-import { useCommonStores } from 'src/index'
+import { useUserUsefulCount } from 'src/common/userUsefulCount'
 
 interface IProps {
   user: IUserPP
 }
 
 export const MemberProfile = ({ user }: IProps) => {
-  const { userStore } = useCommonStores().stores
   const userLinks = user?.links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
@@ -92,7 +90,7 @@ export const MemberProfile = ({ user }: IProps) => {
             eventCount={
               user.stats ? Object.keys(user.stats!.userCreatedEvents).length : 0
             }
-            usefulCount={userStore.getUserUsefulCount()}
+            usefulCount={useUserUsefulCount(user) ?? 0}
           />
         </Box>
         <Flex

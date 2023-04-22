@@ -64,7 +64,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           </Flex>
         ) : null}
 
-        {props.usefulCount && props.usefulCount > 0 ? (
+        {props.usefulCount ? (
           <Flex>
             <ElWithBeforeIcon icon={starActiveSVG} />
             Useful:&nbsp;{props.usefulCount}

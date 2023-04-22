@@ -16,35 +16,42 @@ interface IRouterCustomParams {
 
 interface IProps extends RouteComponentProps<IRouterCustomParams> {}
 
-const UserPage = observer((props: IProps) => {
+export const UserPage = observer((props: IProps) => {
   const { userStore, aggregationsStore } = useCommonStores().stores
   const [user, setUser] = useState<IUserPP | undefined>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const userid = props.match.params.id
-    const fetchData = async () => {
+
+    const fetchUserData = async () => {
       try {
         const userData = await userStore.getUserProfile(userid)
-        setUser(userData ?? null)
+        setUser(
+          userData
+            ? {
+                ...userData,
+              }
+            : null,
+        )
         setIsLoading(false)
       } catch (error) {
         logger.error('Error getting user profile', error)
       }
     }
-    fetchData()
+    fetchUserData()
   }, [props.match.params.id])
 
+  // Ensure aggregations up-to-date when using any child pages and unsubscribe when leaving
   useEffect(() => {
-    // Ensure aggregations up-to-date when using any child pages
+    // Ensure aggregations up-to-date
     aggregationsStore.updateAggregation('users_votedUsefulHowtos')
     aggregationsStore.updateAggregation('users_votedUsefulResearch')
     return () => {
-      // Stop receiving updates when navigating away from child pages
       aggregationsStore.stopAggregationUpdates('users_votedUsefulHowtos')
       aggregationsStore.stopAggregationUpdates('users_votedUsefulResearch')
     }
-  }, [aggregationsStore])
+  })
 
   if (isLoading) {
     return <Loader />
@@ -76,5 +83,3 @@ const UserPage = observer((props: IProps) => {
     </>
   )
 })
-
-export default UserPage

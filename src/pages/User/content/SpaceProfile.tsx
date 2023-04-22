@@ -12,7 +12,6 @@ import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
 
 import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
-import { useCommonStores } from 'src/index'
 
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
@@ -36,6 +35,7 @@ import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { useUserUsefulCount } from 'src/common/userUsefulCount'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -241,8 +241,6 @@ export const SpaceProfile = ({ user }: IProps) => {
   const userCountryCode =
     user.location?.countryCode || user.country?.toLowerCase() || undefined
 
-  const { userStore } = useCommonStores().stores
-
   return (
     <ProfileWrapper mt={4} mb={6} data-cy="SpaceProfile">
       <ProfileWrapperCarousel>
@@ -336,7 +334,7 @@ export const SpaceProfile = ({ user }: IProps) => {
                     ? Object.keys(user.stats!.userCreatedEvents).length
                     : 0
                 }
-                usefulCount={userStore.getUserUsefulCount()}
+                usefulCount={useUserUsefulCount(user) ?? 0}
               />
             </Box>
           </MobileBadge>

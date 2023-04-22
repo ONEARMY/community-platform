@@ -1,10 +1,10 @@
 import { NotificationType } from '../../../src/models'
+import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
 
 export const TEMPLATE_NAME = 'email_digest'
 
-// Consider moving following two fns to handlebars
 const getResourceLabelFromNotificationType = (type: NotificationType) => {
   switch (type) {
     case 'new_comment_research':
@@ -41,23 +41,44 @@ export async function createNotificationEmails() {
     pendingEmails.data() ?? [],
   )) {
     const [_userId, { notifications }] = entry
+
     if (!notifications.length) continue
+
     const user = await db.collection(DB_ENDPOINTS.users).doc(_userId).get()
+
     if (user.exists) {
       const { displayName } = user.data() as IUserDB
-      // Aggregate list of notifications into comment and useful categories and decorate with
-      // additional fields
-      const { comments, usefuls } = await notifications.reduce(
-        async (aggPromise, notification) => {
+      let hasComments = false,
+        hasUsefuls = false
+
+      // Decorate notifications with additional fields for email template
+      const templateNotifications = await Promise.all(
+        notifications.map(async (notification) => {
           const triggeredByUser = await db
             .collection(DB_ENDPOINTS.users)
             .doc(notification.triggeredBy.userId)
             .get()
+
           const triggeredByUserName = triggeredByUser.exists
             ? (triggeredByUser.data() as IUserDB).userName
             : undefined
 
-          const templateNotification = {
+          const actionType = getActionTypeFromNotificationType(
+            notification.type,
+          )
+
+          const isComment = actionType === 'comment'
+          const isMention = actionType === 'mention'
+          const isUseful = actionType === 'useful'
+
+          if (isComment || isMention) {
+            hasComments = true
+          }
+          if (isUseful) {
+            hasUsefuls = true
+          }
+
+          return {
             ...notification,
             triggeredBy: {
               ...notification.triggeredBy,
@@ -66,38 +87,25 @@ export async function createNotificationEmails() {
             resourceLabel: getResourceLabelFromNotificationType(
               notification.type,
             ),
-            actionType: getActionTypeFromNotificationType(notification.type),
+            isComment,
+            isMention,
+            isUseful,
           }
-
-          const { comments, usefuls } = await aggPromise
-
-          if (['howto_useful', 'research_useful'].includes(notification.type)) {
-            usefuls.push(templateNotification)
-          }
-          if (
-            [
-              'new_comment',
-              'howto_mention',
-              'new_comment_research',
-              'research_mention',
-            ].includes(notification.type)
-          ) {
-            comments.push(templateNotification)
-          }
-          return { comments, usefuls }
-        },
-        Promise.resolve({ comments: [], usefuls: [] }),
+        }),
       )
+
+      const { email } = await firebaseAuth.getUser(_userId)
 
       // Adding emails to this collection triggers an email notification to be sent to the user
       await db.collection(DB_ENDPOINTS.emails).add({
-        toUids: [_userId],
+        to: [email],
         template: {
           name: TEMPLATE_NAME,
           data: {
             displayName,
-            comments,
-            usefuls,
+            hasComments,
+            hasUsefuls,
+            notifications: templateNotifications,
           },
         },
       })

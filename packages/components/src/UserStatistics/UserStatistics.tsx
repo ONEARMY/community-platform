@@ -5,6 +5,7 @@ import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'
 import EventsIcon from '../../assets/icons/icon-events.svg'
 import HowToCountIcon from '../../assets/icons/icon-how-to.svg'
+import starActiveSVG from '../../assets/icons/icon-star-active.svg'
 
 export interface UserStatisticsProps {
   userName: string
@@ -13,6 +14,7 @@ export interface UserStatisticsProps {
   isSupporter: boolean
   howtoCount: number
   eventCount: number
+  usefulCount: number
 }
 
 export const UserStatistics = (props: UserStatisticsProps) => {
@@ -59,6 +61,13 @@ export const UserStatistics = (props: UserStatisticsProps) => {
                 Supporter
               </ExternalLink>
             </Box>
+          </Flex>
+        ) : null}
+
+        {props.usefulCount && props.usefulCount > 0 ? (
+          <Flex>
+            <ElWithBeforeIcon icon={starActiveSVG} />
+            Useful:&nbsp;{props.usefulCount}
           </Flex>
         ) : null}
 

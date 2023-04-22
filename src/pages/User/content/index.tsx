@@ -7,6 +7,9 @@ import type { IUserPP } from 'src/models'
 import { ProfileType } from 'src/modules/profile/types'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
+import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+// import { useCommonStores } from 'src/index'
+
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 
@@ -17,6 +20,7 @@ interface IRouterCustomParams {
 interface InjectedProps extends RouteComponentProps<IRouterCustomParams> {
   userStore: UserStore
   themeStore: ThemeStore
+  aggregationsStore: AggregationsStore
 }
 
 interface IState {
@@ -27,7 +31,7 @@ interface IState {
 interface IProps {}
 
 // TODO: Replace this logic with a simpler mobx-react hook: https://mobx-react.js.org/recipes-migration
-@inject('userStore', 'themeStore')
+@inject('userStore', 'themeStore', 'aggregationsStore')
 @observer
 export class UserPage extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
@@ -54,6 +58,25 @@ export class UserPage extends React.Component<
       user: userData || null,
       isLoading: false,
     })
+  }
+
+  componentDidMount() {
+    // Ensure aggregations up-to-date when using any child pages
+    this.injected.aggregationsStore!.updateAggregation(
+      'users_votedUsefulHowtos',
+    )
+    this.injected.aggregationsStore!.updateAggregation(
+      'users_votedUsefulResearch',
+    )
+  }
+  componentWillUnmount() {
+    // Stop receiving updates when navigating away from child pages
+    this.injected.aggregationsStore!.stopAggregationUpdates(
+      'users_votedUsefulHowtos',
+    )
+    this.injected.aggregationsStore!.stopAggregationUpdates(
+      'users_votedUsefulResearch',
+    )
   }
 
   render() {

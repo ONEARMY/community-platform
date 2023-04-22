@@ -387,6 +387,26 @@ export class UserStore extends ModuleStore {
     }
   }
 
+  public getUserUsefulCount(): number {
+    const contentTypes = ['Howtos', 'Research']
+
+    const usefulCounts: number[] = contentTypes.map((type) => {
+      const userContent = this.user?.stats?.[`userCreated${type}`]
+      const usefulContent =
+        this.aggregationsStore.aggregations[`users_votedUseful${type}`]
+
+      if (userContent && usefulContent) {
+        return Object.keys(usefulContent)
+          .filter((key) => Object.keys(userContent).includes(key))
+          .map((key) => usefulContent[key])
+          .reduce((acc, cur) => acc + cur, 0)
+      } else {
+        return 0
+      }
+    })
+    return usefulCounts.reduce((acc, cur) => acc + cur, 0)
+  }
+
   // use firebase auth to listen to change to signed in user
   // on sign in want to load user profile
   // strange implementation return the unsubscribe object on subscription, so stored

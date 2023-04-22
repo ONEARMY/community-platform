@@ -8,12 +8,14 @@ import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { useCommonStores } from 'src/index'
 
 interface IProps {
   user: IUserPP
 }
 
 export const MemberProfile = ({ user }: IProps) => {
+  const { userStore } = useCommonStores().stores
   const userLinks = user?.links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
@@ -90,6 +92,7 @@ export const MemberProfile = ({ user }: IProps) => {
             eventCount={
               user.stats ? Object.keys(user.stats!.userCreatedEvents).length : 0
             }
+            usefulCount={userStore.getUserUsefulCount()}
           />
         </Box>
         <Flex

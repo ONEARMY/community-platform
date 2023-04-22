@@ -15,5 +15,6 @@ export const Default: StoryFn<typeof UserStatistics> = () => (
     isSupporter={true}
     howtoCount={faker.datatype.number()}
     eventCount={faker.datatype.number()}
+    usefulCount={faker.datatype.number()}
   />
 )

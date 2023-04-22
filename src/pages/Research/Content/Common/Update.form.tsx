@@ -13,6 +13,7 @@ import {
   ElWithBeforeIcon,
   ResearchEditorOverview,
 } from 'oa-components'
+import type { ResearchEditorOverviewUpdate } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -343,18 +344,13 @@ const UpdateForm = observer((props: IProps) => {
                   {store.activeResearchItem ? (
                     <ResearchEditorOverview
                       sx={{ mt: 4 }}
-                      updates={[
-                        ...store.activeResearchItem.updates.map((u) => ({
-                          isActive: false,
-                          title: u.title,
-                          slug: u._id,
-                        })),
-                        {
-                          isActive: false,
-                          title: values.title || 'Title of this update',
-                          slug: null,
-                        },
-                      ]}
+                      updates={getResearchUpdates(
+                        store.activeResearch?.updates ||
+                          store.activeResearchItem.updates ||
+                          [],
+                        props.parentType !== 'edit',
+                        values.title,
+                      )}
                       researchSlug={store.activeResearchItem?.slug}
                       showCreateUpdateButton={props.parentType === 'edit'}
                       showBackToResearchButton={true}
@@ -369,5 +365,30 @@ const UpdateForm = observer((props: IProps) => {
     </>
   )
 })
+
+const getResearchUpdates = (
+  updates,
+  addPlaceholderItem,
+  placeholderTitle,
+): ResearchEditorOverviewUpdate[] => {
+  if (!updates) {
+    return []
+  }
+
+  return [
+    ...updates.map((u) => ({
+      isActive: false,
+      title: u.title,
+      slug: u._id,
+    })),
+    addPlaceholderItem
+      ? {
+          isActive: true,
+          title: placeholderTitle || 'New update',
+          slug: '',
+        }
+      : null,
+  ].filter(Boolean)
+}
 
 export default UpdateForm

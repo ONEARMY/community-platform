@@ -14,11 +14,11 @@ declare global {
 }
 
 chai.use((chaiObj) => {
-  function assertIsInViewport() {
+  function assertIsInViewport(tolerance = 0) {
     const subject = this._obj
 
-    const bottom = Cypress.$(cy.state('window')).height() + 100
-    const width = Cypress.$(cy.state('window')).width() + 100
+    const bottom = Cypress.$(cy.state('window')).height() + tolerance
+    const width = Cypress.$(cy.state('window')).width() + tolerance
     const rect = subject[0].getBoundingClientRect()
 
     expect(

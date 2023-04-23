@@ -20,6 +20,7 @@ export interface UserStatisticsProps {
 export const UserStatistics = (props: UserStatisticsProps) => {
   const hasLocation =
     props.country !== undefined && props.userName !== undefined
+
   return (
     <Card
       sx={{

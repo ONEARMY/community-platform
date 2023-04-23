@@ -48,8 +48,6 @@ export interface IUser {
   votedUsefulResearch?: { [researchId: string]: boolean }
   notification_settings?: INotificationSettings
   notifications?: INotification[]
-  // Store the total number of useful votes received by a user
-  receivedTotalUsefulVotes?: number
 }
 
 export interface IUserBadges {

@@ -1,20 +1,22 @@
-import type { StoryFn, Meta } from '@storybook/react'
+import type { ComponentStory, Meta } from '@storybook/react'
 import { UserStatistics } from './UserStatistics'
-import { faker } from '@faker-js/faker'
 
 export default {
   title: 'Components/UserStatistics',
   component: UserStatistics,
 } as Meta<typeof UserStatistics>
 
-export const Default: StoryFn<typeof UserStatistics> = () => (
-  <UserStatistics
-    userName={faker.internet.userName()}
-    country={faker.address.country()}
-    isVerified={true}
-    isSupporter={true}
-    howtoCount={faker.datatype.number()}
-    eventCount={faker.datatype.number()}
-    usefulCount={faker.datatype.number()}
-  />
+const Template: ComponentStory<typeof UserStatistics> = (args) => (
+  <UserStatistics {...args} />
 )
+
+export const Default = Template.bind({})
+Default.args = {
+  userName: 'Test User',
+  country: 'Greenland',
+  isVerified: true,
+  isSupporter: true,
+  howtoCount: 10,
+  eventCount: 4,
+  usefulCount: 20,
+}

@@ -54,6 +54,8 @@ declare global {
        * @param selector Specify the selector of the react-select element
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>
+
+      interceptAddressFetch(addressResponse): Chainable<void>
     }
   }
 }
@@ -236,6 +238,12 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         .click()
     },
   )
+
+  Cypress.Commands.add('interceptAddressFetch', (addressResponse) => {
+    cy.intercept('GET', 'https://nominatim.openstreetmap.org/search*', {
+      body: addressResponse,
+    }).as('fetchAddress')
+  })
 }
 
 attachCustomCommands(Cypress)

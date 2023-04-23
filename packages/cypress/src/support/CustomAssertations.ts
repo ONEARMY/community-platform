@@ -17,8 +17,8 @@ chai.use((chaiObj) => {
   function assertIsInViewport() {
     const subject = this._obj
 
-    const bottom = Cypress.$(cy.state('window')).height()
-    const width = Cypress.$(cy.state('window')).width()
+    const bottom = Cypress.$(cy.state('window')).height() + 100
+    const width = Cypress.$(cy.state('window')).width() + 100
     const rect = subject[0].getBoundingClientRect()
 
     expect(

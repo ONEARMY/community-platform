@@ -27,6 +27,7 @@ import styled from '@emotion/styled'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from '../../constants'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -201,8 +202,9 @@ const ResearchForm = observer((props: IProps) => {
                                 validate={validateTitle}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldInput}
-                                maxLength="60"
-                                placeholder="Can we make a chair from.. (max 60 characters)"
+                                maxLength={RESEARCH_TITLE_MAX_LENGTH}
+                                showCharacterCount
+                                placeholder={`Can we make a chair from.. (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -222,8 +224,8 @@ const ResearchForm = observer((props: IProps) => {
                                   flex: 1,
                                   minHeight: '150px',
                                 }}
-                                maxLength="1000"
-                                placeholder="Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max 1000 characters)"
+                                maxLength={RESEARCH_MAX_LENGTH}
+                                placeholder={`Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>

@@ -1,0 +1,2 @@
+export const RESEARCH_TITLE_MAX_LENGTH = 60
+export const RESEARCH_MAX_LENGTH = 1000

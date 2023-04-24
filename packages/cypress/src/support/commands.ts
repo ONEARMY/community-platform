@@ -144,8 +144,6 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         .should('eq', email)
       cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
         if (checkUI) {
-          // waits for the element to fully render
-          cy.wait(500)
           cy.get('[data-cy=user-menu]').should('be.visible')
         }
       })

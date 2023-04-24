@@ -90,6 +90,8 @@ export const MemberProfile = ({ user }: IProps) => {
             eventCount={
               user.stats ? Object.keys(user.stats!.userCreatedEvents).length : 0
             }
+            // ** TODO: Beta-tester Authentication needs to be removed from useUserUsefulCount
+            // ** once aggregations are fixed
             usefulCount={useUserUsefulCount(user) ?? 0}
           />
         </Box>

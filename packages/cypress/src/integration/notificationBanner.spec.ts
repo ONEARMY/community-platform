@@ -1,4 +1,5 @@
 import { UserMenuItem } from '../support/commands'
+import { SingaporeStubResponse } from '../fixtures/searchResults'
 
 describe('[Notification Banner]', () => {
   beforeEach(() => {
@@ -21,6 +22,8 @@ describe('[Notification Banner]', () => {
 
   describe('[By Authenticated user with filled profile]', () => {
     it('[Notification Banner is visible for user with blank profile]', () => {
+      cy.interceptAddressFetch(SingaporeStubResponse)
+
       cy.login('howto_reader@test.com', 'test1234')
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
@@ -31,8 +34,9 @@ describe('[Notification Banner]', () => {
       cy.get('[data-cy=pin-description]').clear().type('test')
       cy.get('[data-cy="osm-geocoding-input"]').clear().type('singapo')
       cy.get('[data-cy="osm-geocoding-results"]')
-        .find('li:eq(0)', { timeout: 10000 })
-        .click()
+      cy.wait('@fetchAddress').then(() => {
+        cy.get('[data-cy="osm-geocoding-results"]').find('li:eq(0)').click()
+      })
 
       cy.step('Update Info section')
       cy.get('[data-cy=username').clear().type('tester')
@@ -45,7 +49,7 @@ describe('[Notification Banner]', () => {
       cy.selectTag('email', `[data-cy=select-link-0]`)
       cy.get(`[data-cy=input-link-0]`).clear().type('test@test.com')
       cy.get('[data-cy=save]').click()
-      cy.wait(2000)
+      cy.wait(3000)
       cy.get('[data-cy=notificationBanner]').should('not.exist')
     })
   })

@@ -139,12 +139,14 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
               .catch(reject)
           })
         })
-        // after login ensure the auth user matches expected and user menu visable
+        // after login ensure the auth user matches expected and user menu visible
         .its('email')
         .should('eq', email)
       cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
         if (checkUI) {
-          cy.get('[data-cy=user-menu]').should('exist')
+          // waits for the element to fully render
+          cy.wait(500)
+          cy.get('[data-cy=user-menu]').should('be.visible')
         }
       })
       cy.log('user', Auth.currentUser)

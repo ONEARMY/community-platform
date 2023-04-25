@@ -191,7 +191,7 @@ commands:
 examples:
 
 # Anchors can be used to duplicate/inherit properties
-base: &base
+defaults: &defaults
   run:
     when: << pipeline.parameters.skip_ci != "true" >>
 
@@ -201,15 +201,14 @@ base: &base
 jobs:
   # Install workspace node_modules and persist to cache for use in other jobs
   warmup-cache:
-    <<: *base
     docker: *docker
     resource_class: medium+
+    <<: *defaults
     steps:
       - setup_repo
       - *save_yarn_cache
 
   spellcheck:
-    <<: *base
     docker: *docker
     resource_class: small
     steps:

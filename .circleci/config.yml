@@ -577,3 +577,6 @@ workflows:
           context:
             - circle-ci-slack-context
             - project-kamp-production
+      paths-ignore:
+       - README.md
+

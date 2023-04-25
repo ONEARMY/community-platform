@@ -14,7 +14,7 @@
 
 # 🌍 &nbsp; Community Platform
 
-Welcome to our Community Platform!
+Welcome to our Community Platform!ee
 We are building this giant castle to help unite people and contribute to social & environmental projects, such as [Precious Plastic](https://preciousplastic.com), [Phonebloks](https://phonebloks.com/), [ProjectKamp](https://projectkamp.com/) or [Story Hopper](https://story-hopper.com/). A platform to connect, educate and empower our global community (65K) to solve society's greatest challenges. Together.
 
 ## 👀 &nbsp; Why?

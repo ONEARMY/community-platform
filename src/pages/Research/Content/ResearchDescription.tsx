@@ -6,6 +6,8 @@ import {
   UsefulStatsButton,
   Username,
   ViewsCounter,
+  DownloadFiles,
+  FileInformation,
 } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -48,6 +50,16 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   let didInit = false
   const store = useResearchStore()
   const [viewCount, setViewCount] = useState<number | undefined>()
+  const [fileDownloadCount, setFileDownloadCount] = useState(
+    research.total_downloads,
+  )
+
+  const incrementDownloadCount = async () => {
+    const updatedDownloadCount = await store.incrementDownloadCount(
+      research._id,
+    )
+    setFileDownloadCount(updatedDownloadCount!)
+  }
 
   const incrementViewCount = async () => {
     const sessionStorageArray = retrieveSessionStorageArray('research')
@@ -59,6 +71,10 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
     } else {
       setViewCount(research.total_views)
     }
+  }
+
+  const handleClick = async () => {
+    incrementDownloadCount()
   }
 
   useEffect(() => {
@@ -209,6 +225,44 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             right: 0,
           }}
         />
+      )}
+      {((research.files && research.files.length > 0) || research.fileLink) && (
+        <Flex
+          className="file-container"
+          mt={3}
+          sx={{ flexDirection: 'column' }}
+        >
+          {research.fileLink && (
+            <DownloadFiles handleClick={handleClick} link={research.fileLink} />
+          )}
+          {research.files &&
+            research.files
+              .filter(Boolean)
+              .map(
+                (file, index) =>
+                  file && (
+                    <FileInformation
+                      allowDownload
+                      file={file}
+                      key={file ? file.name : `file-${index}`}
+                      handleClick={handleClick}
+                    />
+                  ),
+              )}
+          {typeof fileDownloadCount === 'number' && (
+            <Text
+              data-cy="file-download-counter"
+              sx={{
+                fontSize: '12px',
+                color: '#61646B',
+                paddingLeft: '8px',
+              }}
+            >
+              {fileDownloadCount}
+              {fileDownloadCount !== 1 ? ' downloads' : ' download'}
+            </Text>
+          )}
+        </Flex>
       )}
     </Flex>
   )

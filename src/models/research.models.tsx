@@ -24,6 +24,9 @@ export namespace IResearch {
     total_views?: number
     collaborators: string[]
     subscribers?: UserIdList
+    total_downloads?: number
+    fileLink?: string
+    files?: Array<IUploadedFileMeta | File | null>
   } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */
@@ -33,7 +36,6 @@ export namespace IResearch {
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
     comments?: IComment[]
-    total_views?: number
     collaborators?: string[]
     status: 'draft' | 'published'
   }
@@ -46,6 +48,8 @@ export namespace IResearch {
     tags: ISelectedTags
     creatorCountry?: string
     collaborators: string
+    fileLink?: string
+    files?: Array<IUploadedFileMeta | File | null>
   }
 
   /** Research items synced from the database will contain additional metadata */

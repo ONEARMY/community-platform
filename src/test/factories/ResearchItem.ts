@@ -37,6 +37,7 @@ export const FactoryResearchItem = (
   mentions: [],
   total_views: faker.datatype.number(),
   collaborators: [],
+  files: [],
   ...researchItemOverloads,
 })
 
@@ -56,5 +57,6 @@ export const FactoryResearchItemFormInput = (
     'accepted',
   ]),
   collaborators: '',
+  files: [],
   ...researchItemOverloads,
 })

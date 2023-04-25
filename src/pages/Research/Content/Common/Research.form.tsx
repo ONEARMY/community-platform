@@ -13,18 +13,21 @@ import {
   FieldTextarea,
   ElWithBeforeIcon,
   ResearchEditorOverview,
+  FileInformation,
 } from 'oa-components'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { FileInputField } from 'src/common/Form/FileInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
-import { required } from 'src/utils/validators'
+import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from '../../constants'
 
+const MAX_LINK_LENGTH = 2000
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
 
@@ -32,6 +35,7 @@ interface IState {
   formSaved: boolean
   _toDocsList: boolean
   showSubmitModal?: boolean
+  fileEditMode?: boolean
 }
 interface IProps extends RouteComponentProps<any> {
   'data-testid'?: string
@@ -64,6 +68,7 @@ const ResearchForm = observer((props: IProps) => {
     formSaved: false,
     _toDocsList: false,
     showSubmitModal: false,
+    fileEditMode: false,
   })
   const [submissionHandler, setSubmissionHandler] = React.useState({
     draft: props.formValues.moderation === 'draft',
@@ -257,15 +262,99 @@ const ResearchForm = observer((props: IProps) => {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <ResearchFormLabel>
+                              <ResearchFormLabel htmlFor="collaborators">
                                 Who have you been collaborating on this Research
                                 with?
                               </ResearchFormLabel>
                               <Field
                                 name="collaborators"
+                                id="collaborators"
                                 component={FieldInput}
                                 placeholder="A comma separated list of usernames."
                               />
+                            </Flex>
+                            <Label>
+                              Do you have supporting file you would like to add?
+                            </Label>
+                            <Flex
+                              sx={{ flexDirection: 'column' }}
+                              mb={[4, 4, 0]}
+                            >
+                              {props.formValues.files?.length &&
+                              props.parentType === 'edit' &&
+                              !state.fileEditMode ? (
+                                <Flex
+                                  sx={{
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                  }}
+                                >
+                                  {props.formValues.files.map((file) => (
+                                    <FileInformation
+                                      allowDownload
+                                      file={file}
+                                      key={file.name}
+                                    />
+                                  ))}
+                                  <Button
+                                    variant={'outline'}
+                                    icon="delete"
+                                    onClick={() =>
+                                      setState((prevState) => ({
+                                        ...prevState,
+                                        fileEditMode: !state.fileEditMode,
+                                      }))
+                                    }
+                                  >
+                                    Re-upload files (this will delete the
+                                    existing ones)
+                                  </Button>
+                                </Flex>
+                              ) : (
+                                <>
+                                  <Flex
+                                    sx={{
+                                      flexDirection: 'column',
+                                    }}
+                                    mb={3}
+                                  >
+                                    <Label
+                                      htmlFor="fileLink"
+                                      style={{ fontSize: '12px' }}
+                                    >
+                                      Add a download link
+                                    </Label>
+                                    <Field
+                                      id="fileLink"
+                                      name="fileLink"
+                                      data-cy="fileLink"
+                                      component={FieldInput}
+                                      placeholder="Link to Gdrive, Dropbox, Grabcad etc"
+                                      isEqual={COMPARISONS.textInput}
+                                      maxLength={MAX_LINK_LENGTH}
+                                      validate={validateUrlAcceptEmpty}
+                                      validateFields={[]}
+                                    />
+                                  </Flex>
+                                  <Flex
+                                    sx={{
+                                      flexDirection: 'column',
+                                    }}
+                                  >
+                                    <Label
+                                      htmlFor="files"
+                                      style={{ fontSize: '12px' }}
+                                    >
+                                      Or upload your files here
+                                    </Label>
+                                    <Field
+                                      name="files"
+                                      id="files"
+                                      component={FileInputField}
+                                    />
+                                  </Flex>
+                                </>
+                              )}
                             </Flex>
                           </Flex>
                         </Flex>

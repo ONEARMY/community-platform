@@ -196,8 +196,34 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async incrementViewCount(id: string) {
-    const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
+  public async incrementDownloadCount(ResearchId: string) {
+    const dbRef = this.db
+      .collection<IResearchDB>(COLLECTION_NAME)
+      .doc(ResearchId)
+    const researchData = await toJS(dbRef.get('server'))
+    const totalDownloads = researchData?.total_downloads || 0
+
+    if (researchData) {
+      const updatedResearch: IResearchDB = {
+        ...researchData,
+        total_downloads: totalDownloads! + 1,
+      }
+
+      await dbRef.set(
+        {
+          ...updatedResearch,
+        },
+        { keep_modified_timestamp: true },
+      )
+
+      return updatedResearch.total_downloads
+    }
+  }
+
+  public async incrementViewCount(ResearchId: string) {
+    const dbRef = this.db
+      .collection<IResearchDB>(COLLECTION_NAME)
+      .doc(ResearchId)
     const researchData = await toJS(dbRef.get('server'))
     const totalViews = researchData?.total_views || 0
 
@@ -609,6 +635,7 @@ export class ResearchStore extends ModuleStore {
     const dbRef = this.db
       .collection<IResearch.Item>(COLLECTION_NAME)
       .doc(values._id)
+    const id = dbRef.id
     const user = this.activeUser as IUser
     const updates = (await dbRef.get())?.updates || [] // save old updates when editing
     const collaborators = Array.isArray(values?.collaborators)
@@ -617,6 +644,23 @@ export class ResearchStore extends ModuleStore {
           .split(',')
           .map((s) => s.trim())
           .filter(Boolean)
+
+    // upload files
+    //eslint-disable-next-line
+    console.log(values.fileLink)
+    //eslint-disable-next-line
+    console.log(values.fileLink)
+    //eslint-disable-next-line
+    console.log(values.files)
+
+    const processedFiles =
+      values.files && values.files.length > 0
+        ? await this.uploadCollectionBatch(
+            values.files as File[],
+            COLLECTION_NAME,
+            id,
+          )
+        : []
 
     try {
       // populate DB
@@ -628,6 +672,8 @@ export class ResearchStore extends ModuleStore {
         collaborators,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
+        fileLink: values.fileLink ?? '',
+        files: processedFiles ?? [],
         updates,
         creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||
@@ -637,6 +683,12 @@ export class ResearchStore extends ModuleStore {
             ? values.creatorCountry
             : '',
       }
+      if (
+        (processedFiles || values.fileLink) &&
+        !researchItem['total_downloads']
+      )
+        researchItem['total_downloads'] = 0
+
       logger.debug('populating database', researchItem)
       // set the database document
       await this.updateResearchItem(dbRef, researchItem)

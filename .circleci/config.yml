@@ -190,11 +190,6 @@ commands:
 
 examples:
 
-# Anchors can be used to duplicate/inherit properties
-defaults: &defaults
-  run:
-    when: << pipeline.parameters.skip_ci != "true" >>
-
 ######################################################################################################
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
@@ -203,7 +198,6 @@ jobs:
   warmup-cache:
     docker: *docker
     resource_class: medium+
-    <<: *defaults
     steps:
       - setup_repo
       - *save_yarn_cache
@@ -436,6 +430,8 @@ workflows:
             branches:
               ignore:
                 - production
+          when:
+            unless: /skip ci/i
       - lint-commits:
           name: Lint commits
           filters:

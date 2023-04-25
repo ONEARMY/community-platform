@@ -9,6 +9,9 @@ import {
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
 import { preciousPlasticTheme } from 'oa-themes'
+import ResearchArticle from './ResearchArticle'
+import { FactoryUser } from 'src/test/factories/User'
+
 const Theme = preciousPlasticTheme.styles
 
 jest.mock('src/index', () => ({
@@ -28,7 +31,9 @@ jest.mock('src/index', () => ({
 
 jest.mock('src/stores/Research/research.store')
 
-import ResearchArticle from './ResearchArticle'
+const activeUser = FactoryUser({
+  userRoles: ['beta-tester'],
+})
 
 describe('Research Article', () => {
   const mockResearchStore = {
@@ -73,6 +78,36 @@ describe('Research Article', () => {
     expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
     expect(wrapper.getAllByText('example-username')).toHaveLength(1)
     expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
+  })
+
+  it('displays "Follow" button text if not subscribed', async () => {
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+    })
+
+    // Act
+    const wrapper = getWrapper()
+
+    // Assert
+    expect(wrapper.getAllByText('Follow').length).toBeGreaterThan(0)
+  })
+
+  it('displays "Following" button text if user is subscribed', async () => {
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+      activeResearchItem: FactoryResearchItem({
+        subscribers: [activeUser.userName],
+      }),
+      activeUser,
+    })
+
+    // Act
+    const wrapper = getWrapper()
+
+    // Assert
+    expect(wrapper.getAllByText('Following').length).toBeGreaterThan(0)
   })
 
   describe('Research Update', () => {
@@ -147,7 +182,11 @@ describe('Research Article', () => {
 
 const getWrapper = () => {
   return render(
-    <Provider userStore={{}}>
+    <Provider
+      userStore={{
+        user: activeUser,
+      }}
+    >
       <ThemeProvider theme={Theme}>
         <MemoryRouter initialEntries={['/research/article']}>
           <Route

@@ -35,6 +35,7 @@ import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { useUserUsefulCount } from 'src/common/userUsefulCount'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -333,6 +334,9 @@ export const SpaceProfile = ({ user }: IProps) => {
                     ? Object.keys(user.stats!.userCreatedEvents).length
                     : 0
                 }
+                // ** TODO: Beta-tester Authentication needs to be removed from useUserUsefulCount
+                // ** once aggregations are fixed
+                usefulCount={useUserUsefulCount(user) ?? 0}
               />
             </Box>
           </MobileBadge>

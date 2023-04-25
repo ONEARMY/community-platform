@@ -5,7 +5,7 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
@@ -17,16 +17,13 @@ import {
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
-import styled from '@emotion/styled'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from '../../constants'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -42,15 +39,11 @@ interface IProps extends RouteComponentProps<any> {
   parentType: 'create' | 'edit'
 }
 
-const FormContainer = styled.form`
-  width: 100%;
-`
-
-const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
-  display: block;
-`
+const ResearchFormLabel = ({ children, ...props }) => (
+  <Label sx={{ fontSize: 2, mb: 2, display: 'block' }} {...props}>
+    {children}
+  </Label>
+)
 
 const beforeUnload = (e) => {
   e.preventDefault()
@@ -154,10 +147,15 @@ const ResearchForm = observer((props: IProps) => {
                   when={!store.researchUploadStatus.Complete && dirty}
                   message={CONFIRM_DIALOG_MSG}
                 />
-                <FormContainer id="researchForm" onSubmit={handleSubmit}>
+                <Box
+                  as="form"
+                  id="researchForm"
+                  sx={{ width: '100%' }}
+                  onSubmit={handleSubmit}
+                >
                   {/* Research Info */}
                   <Flex sx={{ flexDirection: 'column' }}>
-                    <Card bg={theme.colors.softblue}>
+                    <Card sx={{ backgroundColor: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                         <Heading>
                           {props.parentType === 'create' ? (
@@ -190,9 +188,9 @@ const ResearchForm = observer((props: IProps) => {
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title">
+                              <ResearchFormLabel htmlFor="title">
                                 Title of your research. Can we...
-                              </Label>
+                              </ResearchFormLabel>
                               <Field
                                 id="title"
                                 name="title"
@@ -201,14 +199,15 @@ const ResearchForm = observer((props: IProps) => {
                                 validate={validateTitle}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldInput}
-                                maxLength="60"
-                                placeholder="Can we make a chair from.. (max 60 characters)"
+                                maxLength={RESEARCH_TITLE_MAX_LENGTH}
+                                showCharacterCount
+                                placeholder={`Can we make a chair from.. (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="description">
+                              <ResearchFormLabel htmlFor="description">
                                 What are you trying to find out?
-                              </Label>
+                              </ResearchFormLabel>
                               <Field
                                 id="description"
                                 name="description"
@@ -222,12 +221,14 @@ const ResearchForm = observer((props: IProps) => {
                                   flex: 1,
                                   minHeight: '150px',
                                 }}
-                                maxLength="1000"
-                                placeholder="Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max 1000 characters)"
+                                maxLength={RESEARCH_MAX_LENGTH}
+                                placeholder={`Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label>What category fits your research?</Label>
+                              <ResearchFormLabel>
+                                What category fits your research?
+                              </ResearchFormLabel>
                               <Field
                                 name="researchCategory"
                                 render={({ input, ...rest }) => (
@@ -245,7 +246,9 @@ const ResearchForm = observer((props: IProps) => {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label>Select tags for your research</Label>
+                              <ResearchFormLabel>
+                                Select tags for your research
+                              </ResearchFormLabel>
                               <Field
                                 name="tags"
                                 component={TagsSelectField}
@@ -254,10 +257,10 @@ const ResearchForm = observer((props: IProps) => {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label>
+                              <ResearchFormLabel>
                                 Who have you been collaborating on this Research
                                 with?
-                              </Label>
+                              </ResearchFormLabel>
                               <Field
                                 name="collaborators"
                                 component={FieldInput}
@@ -269,7 +272,7 @@ const ResearchForm = observer((props: IProps) => {
                       </Flex>
                     </Card>
                   </Flex>
-                </FormContainer>
+                </Box>
               </Flex>
               {/* post guidelines container */}
               <Flex

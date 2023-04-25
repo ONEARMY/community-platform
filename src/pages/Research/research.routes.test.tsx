@@ -228,7 +228,7 @@ describe('research.routes', () => {
       )
 
       await waitFor(() => {
-        expect(wrapper.getByText(/new update/i)).toBeInTheDocument()
+        expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
       })
     })
   })

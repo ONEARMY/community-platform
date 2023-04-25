@@ -33,6 +33,9 @@ import type { DocReference } from '../databaseV2/DocReference'
 const COLLECTION_NAME = 'research'
 
 export class ResearchStore extends ModuleStore {
+  /**
+   * @deprecated
+   */
   @observable
   public activeResearch: IResearchDB | undefined
 

@@ -206,6 +206,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cerkiewny",
+      "name": "Devtato",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4504330?v=4",
+      "profile": "http://devtato.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

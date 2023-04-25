@@ -345,9 +345,7 @@ const UpdateForm = observer((props: IProps) => {
                     <ResearchEditorOverview
                       sx={{ mt: 4 }}
                       updates={getResearchUpdates(
-                        store.activeResearch?.updates ||
-                          store.activeResearchItem.updates ||
-                          [],
+                        store.activeResearchItem.updates || [],
                         props.parentType !== 'edit',
                         values.title,
                       )}

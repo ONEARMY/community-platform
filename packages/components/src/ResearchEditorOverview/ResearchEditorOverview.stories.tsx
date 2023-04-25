@@ -48,3 +48,16 @@ ShowCreateUpdateButton.args = {
   ...Default.args,
   showCreateUpdateButton: true,
 }
+
+export const DraftItem = Template.bind({})
+DraftItem.args = {
+  ...Default.args,
+  updates: [
+    {
+      isActive: false,
+      title: 'Update 1',
+      slug: 'update-1',
+      status: 'draft',
+    },
+  ],
+}

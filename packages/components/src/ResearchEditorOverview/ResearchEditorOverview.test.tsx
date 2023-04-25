@@ -3,6 +3,7 @@ import {
   Default,
   ShowBackToResearchButton,
   ShowCreateUpdateButton,
+  DraftItem,
 } from './ResearchEditorOverview.stories'
 import type { ResearchEditorOverviewProps } from './ResearchEditorOverview'
 
@@ -79,17 +80,7 @@ describe('ResearchEditorOverview', () => {
 
   it('displays a Draft label', () => {
     const { getByText } = render(
-      <Default
-        {...(Default.args as ResearchEditorOverviewProps)}
-        updates={[
-          {
-            isActive: true,
-            title: 'Update title',
-            slug: 'a-slug',
-            status: 'draft',
-          },
-        ]}
-      />,
+      <DraftItem {...(DraftItem.args as ResearchEditorOverviewProps)} />,
     )
 
     expect(getByText('Draft')).toBeInTheDocument()

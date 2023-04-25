@@ -430,8 +430,7 @@ workflows:
             branches:
               ignore:
                 - production
-          when:
-            unless: /skip ci/i
+          unless: /skip ci/i
       - lint-commits:
           name: Lint commits
           filters:

@@ -11165,6 +11165,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"blueimp-canvas-to-blob@npm:^3.14.0":
+  version: 3.29.0
+  resolution: "blueimp-canvas-to-blob@npm:3.29.0"
+  checksum: 6a55b90fbe958b75f7c78ff9e7617c01254d29cc8567ea6c853cd26a52518b3dfce28635f6964130ac738ee8ff9fb9c0ca094db2ceeaa021ff0432c1985416eb
+  languageName: node
+  linkType: hard
+
 "body-parser@npm:1.20.1, body-parser@npm:^1.18.3, body-parser@npm:^1.19.0":
   version: 1.20.1
   resolution: "body-parser@npm:1.20.1"
@@ -11330,6 +11337,18 @@ __metadata:
     core-js: ^3.16.1
     uzip: 0.20201231.0
   checksum: 200d6731486d45aebc96f3251aca19d269a9b8d7721e1a1eb31f573c03415a070ac936dd108a6e698ff2252a001ffa3bcf80f3c30b6b9bdde425bd684640bab4
+  languageName: node
+  linkType: hard
+
+"browser-image-manipulation@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "browser-image-manipulation@npm:0.4.0"
+  dependencies:
+    blueimp-canvas-to-blob: ^3.14.0
+    pica: ^9.0.1
+    piexifjs: ^1.0.6
+    stackblur-canvas: ~2.2.0
+  checksum: ab91a852571962ee118c28366dcef1a5442ffb9435791a1e469d7ad9a7c746480493f68ea231a04e0bf7fc15a8c76d511ab11899a1694a35ac21c5bd4da6e050
   languageName: node
   linkType: hard
 
@@ -17975,6 +17994,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glur@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "glur@npm:1.1.2"
+  checksum: d80a50fe7f713a564cf50a8e46e2385e5256233c1180b94c06dfdf038655c8b11aa648dd8516b66025abfe437f4201aa10c0e759b68b9a37241375707cf107ea
+  languageName: node
+  linkType: hard
+
 "google-auth-library@npm:^6.0.0, google-auth-library@npm:^6.1.1":
   version: 6.1.6
   resolution: "google-auth-library@npm:6.1.6"
@@ -23400,6 +23426,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"multimath@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "multimath@npm:2.0.0"
+  dependencies:
+    glur: ^1.1.2
+    object-assign: ^4.1.1
+  checksum: 420d2090e4c9466c8195281011643a7087a3f8db9f7621fb19e13dce34d468d16f6e686625426efd4dbd1c9fa1cbc3c07ff634d9d9534dc6fa47b0849c2bcd69
+  languageName: node
+  linkType: hard
+
 "mustache@npm:^4.2.0":
   version: 4.2.0
   resolution: "mustache@npm:4.2.0"
@@ -24188,6 +24224,7 @@ __metadata:
     "@uppy/react": ^2.1.2
     all-contributors-cli: ^6.20.0
     browser-image-compression: ^1.0.15
+    browser-image-manipulation: ^0.4.0
     buffer: ^6.0.3
     chai-subset: ^1.6.0
     cheerio: ^1.0.0-rc.10
@@ -24858,6 +24895,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pica@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "pica@npm:9.0.1"
+  dependencies:
+    glur: ^1.1.2
+    multimath: ^2.0.0
+    object-assign: ^4.1.1
+    webworkify: ^1.5.0
+  checksum: 0063206643ef54c6641f3f8795807de9567acebbe3160839ae87bbf870ff2e4e4caca8135dd050e1f5427d12737488d4ede7f3cce4525ae86f2a0138d397f738
+  languageName: node
+  linkType: hard
+
 "picocolors@npm:^0.2.1":
   version: 0.2.1
   resolution: "picocolors@npm:0.2.1"
@@ -24876,6 +24925,13 @@ __metadata:
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
   checksum: 050c865ce81119c4822c45d3c84f1ced46f93a0126febae20737bd05ca20589c564d6e9226977df859ed5e03dc73f02584a2b0faad36e896936238238b0446cf
+  languageName: node
+  linkType: hard
+
+"piexifjs@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "piexifjs@npm:1.0.6"
+  checksum: 137caf5ca36c0ad98cfd445c0ec40737f7589469e750ac417a2019b940cf6534e9834f3f01dc6a85a6d6c127c3eb5b5dc750812c800e6567392b67da94a755bd
   languageName: node
   linkType: hard
 
@@ -29481,6 +29537,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"stackblur-canvas@npm:~2.2.0":
+  version: 2.2.0
+  resolution: "stackblur-canvas@npm:2.2.0"
+  checksum: 849e5af5833993bae96d71263e4e9e2a7e30a950d5661037208624608810686f9c6446b93a54a1c59d01989a3befb583fc6f20822b8d905838d9cf713c7ba341
+  languageName: node
+  linkType: hard
+
 "stackframe@npm:^1.3.4":
   version: 1.3.4
   resolution: "stackframe@npm:1.3.4"
@@ -32485,6 +32548,13 @@ __metadata:
   version: 0.1.4
   resolution: "websocket-extensions@npm:0.1.4"
   checksum: 5976835e68a86afcd64c7a9762ed85f2f27d48c488c707e67ba85e717b90fa066b98ab33c744d64255c9622d349eedecf728e65a5f921da71b58d0e9591b9038
+  languageName: node
+  linkType: hard
+
+"webworkify@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "webworkify@npm:1.5.0"
+  checksum: 426c10e0b94cac0678aed05fdf1abce98e8e11a523380537bab99fcd63df7c4b71b3630e61ab8052fdbd8d6e55e53700523b423cd475b258f95be5189d8cde49
   languageName: node
   linkType: hard
 

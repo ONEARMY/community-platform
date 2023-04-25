@@ -37,8 +37,12 @@ export const CoverImages = ({
 }) =>
   isMemberProfile ? (
     <>
-      <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
+      <Text mb={1} mt={7} sx={{ width: '100%', fontSize: 2 }}>
         Add a profile image *
+      </Text>
+      <Text mb={2} mt={0} sx={{ width: '100%', fontSize: 1 }}>
+        For best results, use a 400x400 pixel square image. Larger images will
+        be resized and may be cropped.
       </Text>
       <Box
         sx={{
@@ -54,6 +58,7 @@ export const CoverImages = ({
           validate={required}
           validateFields={[]}
           component={ImageInputField}
+          maxImageSize={400}
           data-cy={`coverImages-0`}
           initialValue={coverImages[0]}
         />

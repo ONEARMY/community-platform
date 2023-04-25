@@ -194,6 +194,19 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
+  check-skip-ci:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - run:
+          name: Check for [skip ci]
+          command: |
+            if git log -n 1 --pretty=format:%s | grep -q '\[skip ci\]'; then
+              echo "Skipping CircleCI build due to [skip ci] in commit message"
+              circleci-agent step halt
+            else
+              echo "Starting CircleCI build"
+            fi
   # Install workspace node_modules and persist to cache for use in other jobs
   warmup-cache:
     docker: *docker
@@ -420,10 +433,9 @@ jobs:
 workflows:
   version: 2
   main_workflow:
-  paths-ignore:
-  - README.md
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - check-skip-ci
       - warmup-cache:
           name: Warmup Cache
       - spellcheck:
@@ -579,4 +591,3 @@ workflows:
           context:
             - circle-ci-slack-context
             - project-kamp-production
-

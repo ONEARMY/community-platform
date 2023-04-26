@@ -11,6 +11,7 @@ export const FactoryResearchItemUpdate = (
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
+  status: faker.helpers.arrayElement(['draft', 'published']),
   ...researchItemUpdateOverloads,
 })
 

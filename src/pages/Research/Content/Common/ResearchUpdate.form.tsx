@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
@@ -13,12 +13,10 @@ import {
   ElWithBeforeIcon,
   ResearchEditorOverview,
 } from 'oa-components'
+import type { ResearchEditorOverviewUpdate } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { COMPARISONS } from 'src/utils/comparisons'
 import { required } from 'src/utils/validators'
 import styled from '@emotion/styled'
@@ -43,20 +41,17 @@ const FormContainer = styled.form`
   width: 100%;
 `
 
-const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
-  display: block;
-`
-
 const beforeUnload = (e) => {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
 
-const UpdateForm = observer((props: IProps) => {
+export const ResearchUpdateForm = observer((props: IProps) => {
   const store = useResearchStore()
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
+  const [isDraft, setIsDraft] = React.useState<boolean>(
+    props.formValues.status === 'draft',
+  )
 
   React.useEffect(() => {
     if (store.updateUploadStatus?.Complete) {
@@ -64,13 +59,16 @@ const UpdateForm = observer((props: IProps) => {
     }
   }, [store.updateUploadStatus?.Complete])
 
-  const trySubmitForm = () => {
+  const trySubmitForm = (isDraft: boolean) => {
     const form = document.getElementById('updateForm')
-    if (typeof form !== 'undefined' && form !== null) {
-      form.dispatchEvent(
-        new Event('submit', { cancelable: true, bubbles: true }),
-      )
-    }
+    setIsDraft(isDraft)
+    setTimeout(() => {
+      if (typeof form !== 'undefined' && form !== null) {
+        form.dispatchEvent(
+          new Event('submit', { cancelable: true, bubbles: true }),
+        )
+      }
+    }, 0)
   }
 
   const onSubmit = (formValues: IResearch.Update) => {
@@ -85,6 +83,7 @@ const UpdateForm = observer((props: IProps) => {
           ].filter(Boolean),
         ),
       ),
+      status: isDraft ? 'draft' : 'published',
     })
   }
 
@@ -100,22 +99,6 @@ const UpdateForm = observer((props: IProps) => {
       },
       { dirty: true },
     )
-  }
-
-  /**
-   * Ensure either url or images included (not both), and any url formatted correctly
-   */
-  const validateMedia = (videoUrl: string, values: any) => {
-    const images = values.images
-    if (videoUrl) {
-      if (images && images[0]) {
-        return 'Do not include both images and video'
-      }
-      const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
-      const urlValid = ytRegex.test(videoUrl)
-      return urlValid ? null : 'Please provide a valid YouTube Url'
-    }
-    return images && images[0] ? null : 'Include either images or a video'
   }
 
   return (
@@ -161,7 +144,7 @@ const UpdateForm = observer((props: IProps) => {
                 <FormContainer id="updateForm" onSubmit={handleSubmit}>
                   {/* Update Info */}
                   <Flex sx={{ flexDirection: 'column' }}>
-                    <Card bg={theme.colors.softblue}>
+                    <Card sx={{ bg: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                         <Heading>
                           {props.parentType === 'create' ? (
@@ -189,7 +172,7 @@ const UpdateForm = observer((props: IProps) => {
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title">
+                              <Label htmlFor="title" sx={{ mb: 2 }}>
                                 Title of this update
                               </Label>
                               <Field
@@ -205,7 +188,7 @@ const UpdateForm = observer((props: IProps) => {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="description">
+                              <Label htmlFor="description" sx={{ mb: 2 }}>
                                 Description of this update
                               </Label>
                               <Field
@@ -225,7 +208,7 @@ const UpdateForm = observer((props: IProps) => {
                                 placeholder="Explain what is happening in your research (max 1500 characters)"
                               />
                             </Flex>
-                            <Label htmlFor={`images`}>
+                            <Label htmlFor={`images`} sx={{ mb: 2 }}>
                               Upload image(s) for this update
                             </Label>
                             <Flex
@@ -283,7 +266,7 @@ const UpdateForm = observer((props: IProps) => {
                               </ImageInputFieldWrapper>
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor={`videoUrl`}>
+                              <Label htmlFor={`videoUrl`} sx={{ mb: 2 }}>
                                 Or embed a YouTube video
                               </Label>
                               <Field
@@ -323,13 +306,33 @@ const UpdateForm = observer((props: IProps) => {
                   }}
                 >
                   <Button
+                    data-cy={'draft'}
+                    onClick={() => {
+                      trySubmitForm(true)
+                    }}
+                    variant="secondary"
+                    type="submit"
+                    disabled={submitting}
+                    sx={{ width: '100%', display: 'block', mt: 0 }}
+                  >
+                    {props.formValues.status === 'draft' ? (
+                      <span>Save to draft</span>
+                    ) : (
+                      <span>Revert to draft</span>
+                    )}
+                  </Button>
+                  <Button
                     large
                     data-cy={'submit'}
-                    onClick={trySubmitForm}
+                    onClick={(evt) => {
+                      trySubmitForm(false)
+                      evt.preventDefault()
+                    }}
                     variant="primary"
                     type="submit"
                     disabled={submitting}
                     sx={{
+                      mt: 3,
                       mb: ['40px', '40px', 0],
                       width: '100%',
                       justifyContent: 'center',
@@ -343,18 +346,12 @@ const UpdateForm = observer((props: IProps) => {
                   {store.activeResearchItem ? (
                     <ResearchEditorOverview
                       sx={{ mt: 4 }}
-                      updates={[
-                        ...store.activeResearchItem.updates.map((u) => ({
-                          isActive: false,
-                          title: u.title,
-                          slug: u._id,
-                        })),
-                        {
-                          isActive: false,
-                          title: values.title || 'Title of this update',
-                          slug: null,
-                        },
-                      ]}
+                      updates={getResearchUpdates(
+                        store.activeResearchItem.updates || [],
+                        store.activeResearchItem._id,
+                        props.parentType !== 'edit',
+                        values.title,
+                      )}
                       researchSlug={store.activeResearchItem?.slug}
                       showCreateUpdateButton={props.parentType === 'edit'}
                       showBackToResearchButton={true}
@@ -370,4 +367,41 @@ const UpdateForm = observer((props: IProps) => {
   )
 })
 
-export default UpdateForm
+const getResearchUpdates = (
+  updates,
+  activeResearchId: string,
+  isCreating: boolean,
+  researchTitle: string,
+): ResearchEditorOverviewUpdate[] =>
+  [
+    ...updates.map((u) => ({
+      isActive: u._id === activeResearchId,
+      title: u.title,
+      status: u.status,
+      slug: u._id,
+    })),
+    isCreating
+      ? {
+          isActive: false,
+          title: researchTitle,
+          status: 'draft',
+          slug: null,
+        }
+      : null,
+  ].filter(Boolean)
+
+/**
+ * Ensure either url or images included (not both), and any url formatted correctly
+ */
+const validateMedia = (videoUrl: string, values: any) => {
+  const images = values.images
+  if (videoUrl) {
+    if (images && images[0]) {
+      return 'Do not include both images and video'
+    }
+    const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
+    const urlValid = ytRegex.test(videoUrl)
+    return urlValid ? null : 'Please provide a valid YouTube Url'
+  }
+  return images && images[0] ? null : 'Include either images or a video'
+}

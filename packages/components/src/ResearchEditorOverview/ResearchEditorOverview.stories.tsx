@@ -17,16 +17,19 @@ Default.args = {
       isActive: true,
       title: 'Update 1',
       slug: 'update-1',
+      status: 'published',
     },
     {
       isActive: false,
       title: 'Update 2',
       slug: 'update-2',
+      status: 'published',
     },
     {
       isActive: false,
       title: 'Update 3',
       slug: 'update-3',
+      status: 'published',
     },
   ],
   researchSlug: 'abc',
@@ -44,4 +47,17 @@ export const ShowCreateUpdateButton = Template.bind({})
 ShowCreateUpdateButton.args = {
   ...Default.args,
   showCreateUpdateButton: true,
+}
+
+export const DraftItem = Template.bind({})
+DraftItem.args = {
+  ...Default.args,
+  updates: [
+    {
+      isActive: false,
+      title: 'Update 1',
+      slug: 'update-1',
+      status: 'draft',
+    },
+  ],
 }

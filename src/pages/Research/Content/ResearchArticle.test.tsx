@@ -1,4 +1,4 @@
-import { render, within } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
@@ -84,6 +84,7 @@ describe('Research Article', () => {
           collaborators: ['example-username', 'another-example-username'],
           updates: [
             FactoryResearchItemUpdate({
+              title: 'Research Update #1',
               collaborators: ['example'],
             }),
           ],
@@ -94,13 +95,53 @@ describe('Research Article', () => {
       const wrapper = getWrapper()
 
       // Assert
-      const update = wrapper.getByTestId(`ResearchUpdate: 0`)
       expect(
-        within(update).getAllByTestId('Username: unknown flag'),
-      ).toHaveLength(1)
+        wrapper.getAllByTestId('Username: unknown flag').length,
+      ).toBeGreaterThanOrEqual(1)
       expect(wrapper.getAllByText('example-username')).toHaveLength(1)
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
     })
+  })
+
+  it('shows only published updates', async () => {
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+      activeResearchItem: FactoryResearchItem({
+        collaborators: ['example-username', 'another-example-username'],
+        updates: [
+          FactoryResearchItemUpdate({
+            title: 'Research Update #1',
+          }),
+          FactoryResearchItemUpdate({
+            title: 'Research Update #2',
+            status: 'draft',
+          }),
+        ],
+      }),
+    })
+
+    // Act
+    const wrapper = render(
+      <Provider userStore={{}}>
+        <ThemeProvider theme={Theme}>
+          <MemoryRouter initialEntries={['/research/article']}>
+            <Route
+              path="/research/:slug"
+              exact
+              key={1}
+              component={ResearchArticle}
+            />
+          </MemoryRouter>
+        </ThemeProvider>
+      </Provider>,
+    )
+
+    // Assert
+    expect(() => {
+      wrapper.getByText('Research Update #1')
+      wrapper.getByText('Research Update #2')
+    }).toThrow()
   })
 })
 

@@ -4,14 +4,15 @@ import { InternalLink } from '../InternalLink/InternalLink'
 import { Button } from '../Button/Button'
 import { boolean, object, string } from 'yup'
 
-type Update = {
+export type ResearchEditorOverviewUpdate = {
   isActive: boolean
   title: string
+  status: 'draft' | 'published'
   slug: string | null
 }
 
 export interface ResearchEditorOverviewProps {
-  updates: Update[]
+  updates: ResearchEditorOverviewUpdate[]
   researchSlug: string
   newItemTitle?: string
   showCreateUpdateButton?: boolean
@@ -22,6 +23,7 @@ export interface ResearchEditorOverviewProps {
 const updateSchema = object({
   isActive: boolean().required(),
   title: string().required(),
+  status: string().optional(),
   slug: string().nullable(),
 })
 
@@ -45,6 +47,26 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
             .map((update, index) => (
               <Box as={'li'} key={index} sx={{ mb: 1 }}>
                 <Text variant={'quiet'}>
+                  {update.status === 'draft' ? (
+                    <Text
+                      sx={{
+                        display: 'inline-block',
+                        verticalAlign: 'middle',
+                        color: 'black',
+                        fontSize: 1,
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        background: 'yellow.base',
+                        padding: 1,
+                        borderRadius: 1,
+                        borderBottomRightRadius: 1,
+                        mr: 1,
+                      }}
+                    >
+                      Draft
+                    </Text>
+                  ) : null}
                   {update.isActive ? (
                     <strong>{update.title}</strong>
                   ) : (

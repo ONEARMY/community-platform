@@ -336,6 +336,7 @@ const ResearchForm = observer((props: IProps) => {
                     sx={{ mt: 4 }}
                     updates={props.formValues?.updates.map((u) => ({
                       isActive: false,
+                      status: u.status,
                       title: u.title,
                       slug: u._id,
                     }))}

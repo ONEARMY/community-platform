@@ -3,6 +3,7 @@ import {
   Default,
   ShowBackToResearchButton,
   ShowCreateUpdateButton,
+  DraftItem,
 } from './ResearchEditorOverview.stories'
 import type { ResearchEditorOverviewProps } from './ResearchEditorOverview'
 
@@ -58,7 +59,7 @@ describe('ResearchEditorOverview', () => {
   })
 
   it('handles malformed update item', () => {
-    const { container } = render(
+    const { getByText } = render(
       <Default
         {...(Default.args as ResearchEditorOverviewProps)}
         updates={
@@ -74,6 +75,14 @@ describe('ResearchEditorOverview', () => {
       />,
     )
 
-    expect(container).toMatchSnapshot()
+    expect(getByText('Update title')).toBeInTheDocument()
+  })
+
+  it('displays a Draft label', () => {
+    const { getByText } = render(
+      <DraftItem {...(DraftItem.args as ResearchEditorOverviewProps)} />,
+    )
+
+    expect(getByText('Draft')).toBeInTheDocument()
   })
 })

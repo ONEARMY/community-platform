@@ -47,7 +47,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   let didInit = false
   const store = useResearchStore()
   const [viewCount, setViewCount] = useState<number | undefined>()
-  const theme = useTheme();
+  const theme = useTheme()
 
   const incrementViewCount = async () => {
     const sessionStorageArray = retrieveSessionStorageArray('research')
@@ -110,11 +110,13 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             <Button
               icon="thunderbolt"
               variant="outline"
-              iconColor={research.subscribers?.includes(
-                props?.loggedInUser?.userName || '',
-              )
-                ? theme.colors.subscribed
-                : theme.colors['not-subscribed']}
+              iconColor={
+                research.subscribers?.includes(
+                  props?.loggedInUser?.userName || '',
+                )
+                  ? theme.colors.subscribed
+                  : theme.colors['not-subscribed']
+              }
               sx={{
                 fontSize: 2,
                 py: 0,

@@ -10,7 +10,7 @@ export type { ButtonVariants } from '../common/button'
 export const colors = {
   ...commonColors,
   primary: 'green',
-  yellow: { base: '#8ab57f', hover: 'hsl(108, 25%, 68%)' }
+  yellow: { base: '#8ab57f', hover: 'hsl(108, 25%, 68%)' },
 }
 
 export const zIndex = {

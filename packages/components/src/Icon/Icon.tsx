@@ -1,4 +1,4 @@
- /** @jsxImportSource theme-ui */
+/** @jsxImportSource theme-ui */
 import styled from '@emotion/styled'
 import type { VerticalAlignProps, SpaceProps } from 'styled-system'
 import { verticalAlign, space } from 'styled-system'
@@ -155,7 +155,12 @@ export const Icon = (props: Props) => {
   }
 
   return (
-    <IconWrapper {...props} sx={{color: props.color ? `${props.color}` : 'inherit'}} size={definedSize} style={{ marginRight }}>
+    <IconWrapper
+      {...props}
+      sx={{ color: props.color ? `${props.color}` : 'inherit' }}
+      size={definedSize}
+      style={{ marginRight }}
+    >
       <IconContext.Provider
         value={{
           style: { width: definedSize + 'px', height: definedSize + 'px' },

@@ -1,4 +1,4 @@
-import { commonColors } from './../common/colors';
+import { commonColors } from './../common/colors'
 import type { ThemeWithName } from '../types'
 import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_lg.svg'
 import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'

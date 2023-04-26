@@ -1,3 +1,4 @@
+import { commonColors } from './../common/colors';
 import type { ThemeWithName } from '../types'
 import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_lg.svg'
 import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'
@@ -12,25 +13,9 @@ const fonts = {
 
 // use enum to specify list of possible colors for typing
 export const colors = {
-  white: 'white',
-  offwhite: '#ececec',
-  black: '#1b1b1b',
+  ...commonColors,
   primary: 'green',
-  softyellow: '#f5ede2',
   yellow: { base: '#E95628', hover: 'hsl(14, 81%, 43%)' },
-  blue: '#83ceeb',
-  red: '#eb1b1f',
-  red2: '#f58d8e',
-  softblue: '#e2edf7',
-  bluetag: '#5683b0',
-  grey: '#61646b',
-  green: '#00c3a9',
-  error: 'red',
-  background: '#f4f6f7',
-  silver: '#c0c0c0',
-  softgrey: '#c2d4e4',
-  lightgrey: '#ababac',
-  darkGrey: '#686868',
 }
 
 export const zIndex = {

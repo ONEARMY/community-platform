@@ -3,29 +3,14 @@ import memberBadgeHighDetail from '../../assets/images/themes/project-kamp/avata
 import logo from '../../assets/images/themes/project-kamp/project-kamp-header.png'
 import type { ThemeWithName } from '../types'
 import { getButtons } from '../common/button'
+import { commonColors } from '../common/colors'
 export type { ButtonVariants } from '../common/button'
 
 // use enum to specify list of possible colors for typing
 export const colors = {
-  white: 'white',
-  offwhite: '#ececec',
-  black: '#1b1b1b',
+  ...commonColors,
   primary: 'green',
-  softyellow: '#f5ede2',
-  yellow: { base: '#8ab57f', hover: 'hsl(108, 25%, 68%)' },
-  blue: '#83ceeb',
-  red: '#eb1b1f',
-  red2: '#f58d8e',
-  softblue: '#e2edf7',
-  bluetag: '#5683b0',
-  grey: '#61646b',
-  green: '#00c3a9',
-  error: 'red',
-  background: '#f4f6f7',
-  silver: '#c0c0c0',
-  softgrey: '#c2d4e4',
-  lightgrey: '#ababac',
-  darkGrey: '#686868',
+  yellow: { base: '#8ab57f', hover: 'hsl(108, 25%, 68%)' }
 }
 
 export const zIndex = {

@@ -1,3 +1,4 @@
+import { commonColors } from './../common/colors';
 import memberBadgeLowDetail from '../../assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import memberBadgeHighDetail from '../../assets/images/themes/precious-plastic/avatar_member_lg.svg'
 import CollectionBadge from '../../assets/images/badges/pt-collection-point.svg'
@@ -20,25 +21,9 @@ const fonts = {
 
 // use enum to specify list of possible colors for typing
 export const colors = {
-  white: 'white',
-  offwhite: '#ececec',
-  black: '#1b1b1b',
+  ...commonColors,
   primary: 'red',
-  softyellow: '#f5ede2',
   yellow: { base: '#fee77b', hover: '#ffde45' },
-  blue: '#83ceeb',
-  red: '#eb1b1f',
-  red2: '#f58d8e',
-  softblue: '#e2edf7',
-  bluetag: '#5683b0',
-  grey: '#61646b',
-  green: '#00c3a9',
-  error: 'red',
-  background: '#f4f6f7',
-  silver: '#c0c0c0',
-  softgrey: '#c2d4e4',
-  lightgrey: '#ababac',
-  darkGrey: '#686868',
 }
 
 export const zIndex = {

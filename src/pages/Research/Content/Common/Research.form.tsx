@@ -318,12 +318,12 @@ const ResearchForm = observer((props: IProps) => {
                                     }}
                                     mb={3}
                                   >
-                                    <Label
+                                    <ResearchFormLabel
                                       htmlFor="fileLink"
                                       sx={{ fontSize: 1, mb: 2 }}
                                     >
                                       Add a download link
-                                    </Label>
+                                    </ResearchFormLabel>
                                     <Field
                                       id="fileLink"
                                       name="fileLink"
@@ -341,12 +341,12 @@ const ResearchForm = observer((props: IProps) => {
                                       flexDirection: 'column',
                                     }}
                                   >
-                                    <Label
+                                    <ResearchFormLabel
                                       htmlFor="files"
                                       sx={{ fontSize: 1, mb: 2 }}
                                     >
                                       Or upload your files here
-                                    </Label>
+                                    </ResearchFormLabel>
                                     <Field
                                       name="files"
                                       id="files"

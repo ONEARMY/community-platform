@@ -646,13 +646,6 @@ export class ResearchStore extends ModuleStore {
           .filter(Boolean)
 
     // upload files
-    //eslint-disable-next-line
-    console.log(values.fileLink)
-    //eslint-disable-next-line
-    console.log(values.fileLink)
-    //eslint-disable-next-line
-    console.log(values.files)
-
     const processedFiles =
       values.files && values.files.length > 0
         ? await this.uploadCollectionBatch(

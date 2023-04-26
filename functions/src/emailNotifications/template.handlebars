@@ -25,7 +25,7 @@
       <p>You've missed notifications. No worries.</p>
       <p>I'm here to give you an overview :)</p>
     </div>
-    {{#if comments.length}}
+    {{#if hasComments}}
       <div class='section-container'>
         <div class='section-header'>
           <img
@@ -36,31 +36,31 @@
           You've got comments
         </div>
         <div class='section-items'>
-          {{#each commments}}
-            {{#if eq this.actionType 'comment'}}
+          {{#each notifications}}
+            {{#if this.isComment}}
               <p>
                 New comment on your
-                <a href='{{this.relevantUrl}}'>{{this.resourceType}}</a>
+                <a href='{{this.relevantUrl}}'>{{this.resourceLabel}}</a>
                 by
                 <a
                   href='{{this.triggeredBy.userUrl}}'
                 >{{this.triggeredBy.displayName}}</a>
               </p>
             {{/if}}
-            {{#if eq this.type 'mention'}}
+            {{#if isMention}}
               <p>
                 <a
                   href='{{this.triggeredBy.userUrl}}'
                 >{{this.triggeredBy.displayName}}</a>
                 mentioned you in this
-                <a href='{{this.relevantUrl}}'>{{this.resourceType}}</a>
+                <a href='{{this.relevantUrl}}'>{{this.resourceLabel}}</a>
               </p>
             {{/if}}
           {{/each}}
         </div>
       </div>
     {{/if}}
-    {{#if usefuls.length}}
+    {{#if hasUsefuls}}
       <div class='section-container'>
         <div class='section-header'>
           <img
@@ -71,13 +71,17 @@
           People found your work useful. Well done!
         </div>
         <div class='section-items'>
-          {{#each usefuls}}
-            <p>
-              <a href='{{this.triggeredBy.userUrl}}'>{{this.user_name}}</a>
-              found your
-              <a href='{{this.resource_link}}'>{{this.resource_name}}</a>
-              useful
-            </p>
+          {{#each notifications}}
+            {{#if isMention}}
+              <p>
+                <a
+                  href='{{this.triggeredBy.userUrl}}'
+                >{{this.triggeredBy.displayName}}</a>
+                found your
+                <a href='{{this.relevantUrl}}'>{{this.resourceLabel}}</a>
+                useful
+              </p>
+            {{/if}}
           {{/each}}
         </div>
       </div>

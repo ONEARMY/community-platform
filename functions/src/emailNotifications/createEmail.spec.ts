@@ -3,6 +3,14 @@ import { INotification } from '../../../src/models'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { createNotificationEmails, TEMPLATE_NAME } from './createEmail'
 
+jest.mock('../Firebase/auth', () => ({
+  firebaseAuth: {
+    getUser: () => ({
+      email: 'test@test.com',
+    }),
+  },
+}))
+
 const notificationFactory = (
   _userId: string,
   _id: string,
@@ -110,7 +118,7 @@ describe('create email test', () => {
 
     const countSnapshot = await db
       .collection(DB_ENDPOINTS.emails)
-      .where('toUids', 'array-contains', 'user_1')
+      .where('template.data.displayName', '==', 'User 1')
       .count()
       .get()
 
@@ -128,7 +136,26 @@ describe('create email test', () => {
           name: TEMPLATE_NAME,
           data: {
             displayName: 'User 1',
-            comments: [
+            hasComments: true,
+            hasUsefuls: true,
+            notifications: [
+              {
+                _id: 'notification_1',
+                _created: '',
+                triggeredBy: {
+                  displayName: 'User 2',
+                  userId: 'user_2',
+                  userName: 'user2',
+                },
+                relevantUrl: 'https://community.preciousplastic.com/test',
+                type: 'howto_useful',
+                read: false,
+                notified: false,
+                resourceLabel: 'how-to',
+                isComment: false,
+                isMention: false,
+                isUseful: true,
+              },
               {
                 _id: 'notification_2',
                 _created: '',
@@ -142,7 +169,9 @@ describe('create email test', () => {
                 read: false,
                 notified: false,
                 resourceLabel: 'research',
-                actionType: 'comment',
+                isComment: true,
+                isMention: false,
+                isUseful: false,
               },
               {
                 _id: 'notification_3',
@@ -157,29 +186,14 @@ describe('create email test', () => {
                 read: false,
                 notified: false,
                 resourceLabel: 'how-to',
-                actionType: 'mention',
-              },
-            ],
-            usefuls: [
-              {
-                _id: 'notification_1',
-                _created: '',
-                triggeredBy: {
-                  displayName: 'User 2',
-                  userId: 'user_2',
-                  userName: 'user2',
-                },
-                relevantUrl: 'https://community.preciousplastic.com/test',
-                type: 'howto_useful',
-                read: false,
-                notified: false,
-                resourceLabel: 'how-to',
-                actionType: 'useful',
+                isComment: false,
+                isMention: true,
+                isUseful: false,
               },
             ],
           },
         },
-        toUids: ['user_1'],
+        to: ['test@test.com'],
       })
       return
     })

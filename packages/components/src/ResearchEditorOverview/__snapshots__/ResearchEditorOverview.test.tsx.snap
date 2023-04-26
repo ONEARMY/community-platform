@@ -88,65 +88,6 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
 </div>
 `;
 
-exports[`ResearchEditorOverview > handles malformed update item 1`] = `
-<div>
-  <div
-    class="css-vnzk4a-Box"
-  >
-    <h3
-      class="css-1fqez35-Box"
-    >
-      Research overview
-    </h3>
-    <ul
-      class="css-47e4wa-Box"
-    >
-      <li
-        class="css-snegf5-Box"
-      >
-        <span
-          class="css-1peva9n-Box"
-        >
-          <strong>
-            Update title
-          </strong>
-        </span>
-      </li>
-    </ul>
-    <button
-      class="css-1d5rya2-Box"
-      type="button"
-    >
-      <span
-        class="css-1peva9n-Box"
-      >
-        <a
-          class="css-17ig1b0-Box"
-          href="/research/abc/new-update"
-        >
-          Create update
-        </a>
-      </span>
-    </button>
-    <button
-      class="css-erxxwt-Box"
-      type="button"
-    >
-      <span
-        class="css-1peva9n-Box"
-      >
-        <a
-          class="css-17ig1b0-Box"
-          href="/research/abc/edit"
-        >
-          Back to research
-        </a>
-      </span>
-    </button>
-  </div>
-</div>
-`;
-
 exports[`ResearchEditorOverview > renders correctly 1`] = `
 <div>
   <div

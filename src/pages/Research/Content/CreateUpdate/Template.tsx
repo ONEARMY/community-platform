@@ -4,6 +4,7 @@ const INITIAL_VALUES: IResearch.Update = {
   title: '',
   description: '',
   images: [],
+  status: 'published',
 }
 
 export default {

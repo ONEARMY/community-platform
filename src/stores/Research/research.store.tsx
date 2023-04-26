@@ -661,6 +661,7 @@ export class ResearchStore extends ModuleStore {
    * @param update
    */
   public async uploadUpdate(update: IResearch.Update | IResearch.UpdateDB) {
+    logger.debug(`uploadUpdate`, { update })
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db

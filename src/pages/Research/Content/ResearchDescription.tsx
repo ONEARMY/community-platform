@@ -24,6 +24,12 @@ import {
   retrieveSessionStorageArray,
 } from 'src/utils/sessionStorage'
 import { Box, Flex, Heading, Text } from 'theme-ui'
+import {
+  retrieveResearchDownloadCooldown,
+  isResearchDownloadCooldownExpired,
+  addResearchDownloadCooldown,
+  updateResearchDownloadCooldown,
+} from './downloadCooldown'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -74,7 +80,20 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   }
 
   const handleClick = async () => {
-    incrementDownloadCount()
+    const researchDownloadCooldown = retrieveResearchDownloadCooldown(
+      research._id,
+    )
+
+    if (
+      researchDownloadCooldown &&
+      isResearchDownloadCooldownExpired(researchDownloadCooldown)
+    ) {
+      updateResearchDownloadCooldown(research._id)
+      incrementDownloadCount()
+    } else if (!researchDownloadCooldown) {
+      addResearchDownloadCooldown(research._id)
+      incrementDownloadCount()
+    }
   }
 
   useEffect(() => {

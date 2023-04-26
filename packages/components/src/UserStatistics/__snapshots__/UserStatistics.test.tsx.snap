@@ -12,7 +12,7 @@ exports[`UserStatistics > renders correctly 1`] = `
         class="css-i1ihic-Box"
       >
         <div
-          class="css-1f8r5dj"
+          class="css-gz1tr0"
           size="22"
         >
           <img
@@ -35,7 +35,7 @@ exports[`UserStatistics > renders correctly 1`] = `
           class="css-i1ihic-Box"
         >
           <div
-            class="css-1f8r5dj"
+            class="css-gz1tr0"
             size="22"
           >
             <svg
@@ -64,7 +64,7 @@ exports[`UserStatistics > renders correctly 1`] = `
         class="css-i1ihic-Box"
       >
         <div
-          class="css-1f8r5dj"
+          class="css-gz1tr0"
           size="22"
         >
           <img

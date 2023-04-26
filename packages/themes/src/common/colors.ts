@@ -17,5 +17,5 @@ export const commonColors = {
   lightgrey: '#ababac',
   darkGrey: '#686868',
   subscribed: 'orange',
-  'not-subscribed': '#1b1b1b',
+  notSubscribed: '#1b1b1b',
 }

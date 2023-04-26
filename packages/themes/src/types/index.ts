@@ -98,7 +98,7 @@ export interface ThemeWithName {
     lightgrey: string
     darkGrey: string
     subscribed: string
-    'not-subscribed': string
+    notSubscribed: string
   }
 
   fontSizes: number[]

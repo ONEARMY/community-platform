@@ -527,10 +527,8 @@ export class HowtoStore extends ModuleStore {
             : values.creatorCountry
             ? values.creatorCountry
             : '',
+        total_downloads: existingDoc?.total_downloads ?? 0,
       }
-      // Set downloads to 0 if no value exists
-      if ((processedFiles || values.fileLink) && !howTo['total_downloads'])
-        howTo['total_downloads'] = 0
 
       logger.debug('populating database', howTo)
       // set the database document

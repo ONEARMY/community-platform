@@ -636,6 +636,8 @@ export class ResearchStore extends ModuleStore {
       .collection<IResearch.Item>(COLLECTION_NAME)
       .doc(values._id)
     const id = dbRef.id
+    // get existing document
+    const existingDoc = await dbRef.get()
     const user = this.activeUser as IUser
     const updates = (await dbRef.get())?.updates || [] // save old updates when editing
     const collaborators = Array.isArray(values?.collaborators)
@@ -675,12 +677,8 @@ export class ResearchStore extends ModuleStore {
             : values.creatorCountry
             ? values.creatorCountry
             : '',
+        total_downloads: existingDoc?.total_downloads ?? 0,
       }
-      if (
-        (processedFiles || values.fileLink) &&
-        !researchItem['total_downloads']
-      )
-        researchItem['total_downloads'] = 0
 
       logger.debug('populating database', researchItem)
       // set the database document

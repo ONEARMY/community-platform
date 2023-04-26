@@ -273,9 +273,9 @@ const ResearchForm = observer((props: IProps) => {
                                 placeholder="A comma separated list of usernames."
                               />
                             </Flex>
-                            <Label>
+                            <ResearchFormLabel>
                               Do you have supporting file you would like to add?
-                            </Label>
+                            </ResearchFormLabel>
                             <Flex
                               sx={{ flexDirection: 'column' }}
                               mb={[4, 4, 0]}
@@ -320,7 +320,7 @@ const ResearchForm = observer((props: IProps) => {
                                   >
                                     <Label
                                       htmlFor="fileLink"
-                                      style={{ fontSize: '12px' }}
+                                      sx={{ fontSize: 1, mb: 2 }}
                                     >
                                       Add a download link
                                     </Label>
@@ -343,7 +343,7 @@ const ResearchForm = observer((props: IProps) => {
                                   >
                                     <Label
                                       htmlFor="files"
-                                      style={{ fontSize: '12px' }}
+                                      sx={{ fontSize: 1, mb: 2 }}
                                     >
                                       Or upload your files here
                                     </Label>

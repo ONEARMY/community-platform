@@ -24261,6 +24261,7 @@ __metadata:
     react-table: ^6.11.5
     react-tooltip: ^4.2.20
     react-virtualized: ^9.22.3
+    resize-observer-polyfill: ^1.5.1
     rxjs: ^6.6.3
     sass: ^1.45.2
     start-server-and-test: ^1.11.0
@@ -27980,7 +27981,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resize-observer-polyfill@npm:^1.5.0":
+"resize-observer-polyfill@npm:^1.5.0, resize-observer-polyfill@npm:^1.5.1":
   version: 1.5.1
   resolution: "resize-observer-polyfill@npm:1.5.1"
   checksum: 57e7f79489867b00ba43c9c051524a5c8f162a61d5547e99333549afc23e15c44fd43f2f318ea0261ea98c0eb3158cca261e6f48d66e1ed1cd1f340a43977094

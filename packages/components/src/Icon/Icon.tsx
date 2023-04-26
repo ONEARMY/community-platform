@@ -115,10 +115,11 @@ const IconWrapper = styled.div<Props>`
   min-width: ${(props) => (props.size ? `${props.size}px` : '32px')};
   min-height: ${(props) => (props.size ? `${props.size}px` : '32px')};
   position: relative;
-  color: ${(props) => props.color || 'inherit'} ${verticalAlign} ${space}
+  color: ${(props) => props.color || 'inherit'};
+  ${verticalAlign} ${space}
     ${(props) =>
-      props.onClick &&
-      `
+    props.onClick &&
+    `
     cursor: pointer;
   `};
 `

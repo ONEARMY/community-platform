@@ -80,7 +80,7 @@ describe('Research Article', () => {
     expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
   })
 
-  it('displays "Follow" button text if not subscribed', async () => {
+  it('displays "Follow" button text and color if not subscribed', async () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
@@ -88,12 +88,18 @@ describe('Research Article', () => {
 
     // Act
     const wrapper = getWrapper()
+    const followingButton = wrapper.getByTestId('following-button')
 
     // Assert
     expect(wrapper.getAllByText('Follow').length).toBeGreaterThan(0)
+    expect(followingButton).toBeInTheDocument()
+    expect(followingButton).toHaveAttribute(
+      'iconcolor',
+      Theme.colors.notSubscribed,
+    )
   })
 
-  it('displays "Following" button text if user is subscribed', async () => {
+  it('displays "Following" button text and color if user is subscribed', async () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
@@ -105,9 +111,16 @@ describe('Research Article', () => {
 
     // Act
     const wrapper = getWrapper()
+    const followingButton = wrapper.getByTestId('following-button')
 
     // Assert
     expect(wrapper.getAllByText('Following').length).toBeGreaterThan(0)
+
+    expect(followingButton).toBeInTheDocument()
+    expect(followingButton).toHaveAttribute(
+      'iconcolor',
+      Theme.colors.subscribed,
+    )
   })
 
   describe('Research Update', () => {

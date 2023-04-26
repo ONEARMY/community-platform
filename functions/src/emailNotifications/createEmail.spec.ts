@@ -43,7 +43,7 @@ const userFactory = (_id: string, user: Partial<IUserDB> = {}): IUserDB => ({
 describe('create email test', () => {
   const db = FirebaseEmulatedTest.admin.firestore()
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     await FirebaseEmulatedTest.clearFirestoreDB()
     await FirebaseEmulatedTest.seedFirestoreDB('emails')
 
@@ -107,7 +107,6 @@ describe('create email test', () => {
           notifications: [],
         },
       })
-    await createNotificationEmails()
   })
 
   afterEach(async () => {
@@ -115,6 +114,8 @@ describe('create email test', () => {
   })
 
   it('Creates email from pending notifications', async () => {
+    await createNotificationEmails()
+
     const countSnapshot = await db
       .collection(DB_ENDPOINTS.emails)
       .where('template.data.displayName', '==', 'User 1')
@@ -199,6 +200,8 @@ describe('create email test', () => {
   })
 
   it('Does not create an email if no notifications are present', async () => {
+    await createNotificationEmails()
+
     const querySnapshot = await db
       .collection(DB_ENDPOINTS.emails)
       .where('toUids', 'array-contains', 'user_2')

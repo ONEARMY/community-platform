@@ -41,74 +41,68 @@ export async function createNotificationEmails() {
     pendingEmails.data() ?? [],
   )) {
     const [_userId, { notifications }] = entry
-
-    if (!notifications.length) continue
-
     const user = await db.collection(DB_ENDPOINTS.users).doc(_userId).get()
+    const { email } = await firebaseAuth.getUser(_userId)
 
-    if (user.exists) {
-      const { displayName } = user.data() as IUserDB
-      let hasComments = false,
-        hasUsefuls = false
+    if (!notifications.length || !email || !user.exists) continue
 
-      // Decorate notifications with additional fields for email template
-      const templateNotifications = await Promise.all(
-        notifications.map(async (notification) => {
-          const triggeredByUser = await db
-            .collection(DB_ENDPOINTS.users)
-            .doc(notification.triggeredBy.userId)
-            .get()
+    const { displayName } = user.data() as IUserDB
+    let hasComments = false,
+      hasUsefuls = false
 
-          const triggeredByUserName = triggeredByUser.exists
-            ? (triggeredByUser.data() as IUserDB).userName
-            : undefined
+    // Decorate notifications with additional fields for email template
+    const templateNotifications = await Promise.all(
+      notifications.map(async (notification) => {
+        const triggeredByUser = await db
+          .collection(DB_ENDPOINTS.users)
+          .doc(notification.triggeredBy.userId)
+          .get()
 
-          const actionType = getActionTypeFromNotificationType(
-            notification.type,
-          )
+        const triggeredByUserName = triggeredByUser.exists
+          ? (triggeredByUser.data() as IUserDB).userName
+          : 'Unknown User'
 
-          const isComment = actionType === 'comment'
-          const isMention = actionType === 'mention'
-          const isUseful = actionType === 'useful'
+        const actionType = getActionTypeFromNotificationType(notification.type)
 
-          if (isComment || isMention) {
-            hasComments = true
-          }
-          if (isUseful) {
-            hasUsefuls = true
-          }
+        const isComment = actionType === 'comment'
+        const isMention = actionType === 'mention'
+        const isUseful = actionType === 'useful'
 
-          return {
-            ...notification,
-            triggeredBy: {
-              ...notification.triggeredBy,
-              userName: triggeredByUserName,
-            },
-            resourceLabel: getResourceLabelFromNotificationType(
-              notification.type,
-            ),
-            isComment,
-            isMention,
-            isUseful,
-          }
-        }),
-      )
+        if (isComment || isMention) {
+          hasComments = true
+        }
+        if (isUseful) {
+          hasUsefuls = true
+        }
 
-      const { email } = await firebaseAuth.getUser(_userId)
-
-      // Adding emails to this collection triggers an email notification to be sent to the user
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: [email],
-        template: {
-          name: TEMPLATE_NAME,
-          data: {
-            displayName,
-            hasComments,
-            hasUsefuls,
-            notifications: templateNotifications,
+        return {
+          ...notification,
+          triggeredBy: {
+            ...notification.triggeredBy,
+            userName: triggeredByUserName,
           },
+          resourceLabel: getResourceLabelFromNotificationType(
+            notification.type,
+          ),
+          isComment,
+          isMention,
+          isUseful,
+        }
+      }),
+    )
+
+    // Adding emails to this collection triggers an email notification to be sent to the user
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: [email],
+      template: {
+        name: TEMPLATE_NAME,
+        data: {
+          displayName,
+          hasComments,
+          hasUsefuls,
+          notifications: templateNotifications,
         },
-      })
-    }
+      },
+    })
   }
 }

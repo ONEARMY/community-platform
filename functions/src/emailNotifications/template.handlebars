@@ -72,14 +72,16 @@
         </div>
         <div class='section-items'>
           {{#each notifications}}
-            <p>
-              <a
-                href='{{this.triggeredBy.userUrl}}'
-              >{{this.triggeredBy.displayName}}</a>
-              found your
-              <a href='{{this.relevantUrl}}'>{{this.resourceLabel}}</a>
-              useful
-            </p>
+            {{#if isMention}}
+              <p>
+                <a
+                  href='{{this.triggeredBy.userUrl}}'
+                >{{this.triggeredBy.displayName}}</a>
+                found your
+                <a href='{{this.relevantUrl}}'>{{this.resourceLabel}}</a>
+                useful
+              </p>
+            {{/if}}
           {{/each}}
         </div>
       </div>

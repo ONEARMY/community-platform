@@ -4,14 +4,14 @@ import { InternalLink } from '../InternalLink/InternalLink'
 import { Button } from '../Button/Button'
 import { boolean, object, string } from 'yup'
 
-type Update = {
+export type ResearchEditorOverviewUpdate = {
   isActive: boolean
   title: string
   slug: string | null
 }
 
 export interface ResearchEditorOverviewProps {
-  updates: Update[]
+  updates: ResearchEditorOverviewUpdate[]
   researchSlug: string
   newItemTitle?: string
   showCreateUpdateButton?: boolean

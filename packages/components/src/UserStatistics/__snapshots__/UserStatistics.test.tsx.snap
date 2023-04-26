@@ -1,0 +1,119 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UserStatistics > renders correctly 1`] = `
+<div>
+  <div
+    class="css-1m50i6j-Box"
+  >
+    <div
+      class="css-n3dlyc-Box"
+    >
+      <div
+        class="css-i1ihic-Box"
+      >
+        <div
+          class="css-sqxgz6"
+          size="22"
+        >
+          <img
+            alt="icon"
+            src="/assets/icons/icon-verified-badge.svg"
+            style="max-width: 100%;"
+          />
+        </div>
+        <div
+          class="css-tj1vn5-Box"
+        >
+          Verified
+        </div>
+      </div>
+      <a
+        class="css-17ig1b0-Box"
+        href="/map/#Test User"
+      >
+        <div
+          class="css-i1ihic-Box"
+        >
+          <div
+            class="css-sqxgz6"
+            size="22"
+          >
+            <svg
+              fill="currentColor"
+              height="1em"
+              stroke="currentColor"
+              stroke-width="0"
+              style="width: 22px; height: 22px;"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+              />
+            </svg>
+          </div>
+          <div
+            class="css-tj1vn5-Box"
+          >
+            Greenland
+          </div>
+        </div>
+      </a>
+      <div
+        class="css-i1ihic-Box"
+      >
+        <div
+          class="css-sqxgz6"
+          size="22"
+        >
+          <img
+            alt="icon"
+            src="/assets/icons/supporter.svg"
+            style="max-width: 100%;"
+          />
+        </div>
+        <div
+          class="css-tj1vn5-Box"
+        >
+          <a
+            class="css-17ig1b0-Box"
+            href="https://www.patreon.com/one_army"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Supporter
+          </a>
+        </div>
+      </div>
+      <div
+        class="css-i1ihic-Box"
+      >
+        <div
+          class="css-1bhrp1g-Box"
+        />
+        Useful: 
+        20
+      </div>
+      <div
+        class="css-i1ihic-Box"
+      >
+        <div
+          class="css-19048r3-Box"
+        />
+        How‑to: 
+        10
+      </div>
+      <div
+        class="css-i1ihic-Box"
+      >
+        <div
+          class="css-8n4scg-Box"
+        />
+        Events: 
+        4
+      </div>
+    </div>
+  </div>
+</div>
+`;

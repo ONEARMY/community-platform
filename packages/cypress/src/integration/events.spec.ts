@@ -1,3 +1,5 @@
+import { SingaporeStubResponse } from '../fixtures/searchResults'
+
 describe('[Events]', () => {
   beforeEach(() => {
     // navigate to events page and wait for data load
@@ -61,9 +63,10 @@ describe('[Events]', () => {
     })
   })
 
-  // eslint-disable-next-line mocha/no-skipped-tests
-  describe.skip('[Create an event]', () => {
+  describe('[Create an event]', () => {
     it('[By Authenticated]', () => {
+      cy.interceptAddressFetch(SingaporeStubResponse)
+
       cy.login('event_creator@test.com', 'test1234')
       cy.get('[data-cy=create-event]').click()
 
@@ -79,10 +82,11 @@ describe('[Events]', () => {
         )}-${String(d.getUTCDate()).padStart(2, '0')}`,
       )
       cy.selectTag('event_testing')
-      cy.get('[data-cy="osm-geocoding-input"]').type('Atucucho')
+      cy.get('[data-cy="osm-geocoding-input"]').type('singapo')
       cy.get('[data-cy="osm-geocoding-results"]')
-        .find('li:eq(0)', { timeout: 10000 })
-        .click()
+      cy.wait('@fetchAddress').then(() => {
+        cy.get('[data-cy="osm-geocoding-results"]').find('li:eq(0)').click()
+      })
       // cy.get('[data-cy=tag-select]').click()
       cy.get('[data-cy=url]')
         .type('https://www.meetup.com/pt-BR/cities/br/rio_de_janeiro/')
@@ -90,6 +94,8 @@ describe('[Events]', () => {
 
       cy.step('Publish the event')
       cy.get('[data-cy=submit]').should('not.be.disabled').click()
+      cy.wait(3000)
+
       cy.step('The new event is shown in /events')
       cy.get('[data-cy=card]')
         .contains('Create a test event')

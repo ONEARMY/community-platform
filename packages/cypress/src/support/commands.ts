@@ -54,6 +54,8 @@ declare global {
        * @param selector Specify the selector of the react-select element
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>
+
+      interceptAddressFetch(addressResponse): Chainable<void>
     }
   }
 }
@@ -137,12 +139,12 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
               .catch(reject)
           })
         })
-        // after login ensure the auth user matches expected and user menu visable
+        // after login ensure the auth user matches expected and user menu visible
         .its('email')
         .should('eq', email)
       cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
         if (checkUI) {
-          cy.get('[data-cy=user-menu]').should('exist')
+          cy.get('[data-cy=user-menu]').should('be.visible')
         }
       })
       cy.log('user', Auth.currentUser)
@@ -236,6 +238,12 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
         .click()
     },
   )
+
+  Cypress.Commands.add('interceptAddressFetch', (addressResponse) => {
+    cy.intercept('GET', 'https://nominatim.openstreetmap.org/search*', {
+      body: addressResponse,
+    }).as('fetchAddress')
+  })
 }
 
 attachCustomCommands(Cypress)

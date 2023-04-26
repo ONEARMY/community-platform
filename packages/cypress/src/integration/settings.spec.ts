@@ -1,6 +1,7 @@
 import { DbCollectionName } from '../utils/TestUtils'
 import { UserMenuItem } from '../support/commands'
 import type { IUser } from '../../../../src/models/user.models'
+import { SingaporeStubResponse } from '../fixtures/searchResults'
 
 interface Info {
   username: string
@@ -35,8 +36,10 @@ describe('[Settings]', () => {
     cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
     cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
     cy.get('[data-cy="osm-geocoding-results"]')
-      .find('li:eq(0)', { timeout: 10000 })
-      .click()
+    cy.wait('@fetchAddress').then(() => {
+      cy.get('[data-cy="osm-geocoding-results"]').find('li:eq(0)').click()
+    })
+
     cy.get('[data-cy="osm-geocoding-input"]').should(($input) => {
       const val = $input.val()
 
@@ -49,8 +52,9 @@ describe('[Settings]', () => {
     cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
     cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
     cy.get('[data-cy="osm-geocoding-results"]')
-      .find('li:eq(0)', { timeout: 10000 })
-      .click()
+    cy.wait('@fetchAddress').then(() => {
+      cy.get('[data-cy="osm-geocoding-results"]').find('li:eq(0)').click()
+    })
   }
 
   const addContactLink = (link: Omit<ILink, 'key'>) => {
@@ -64,8 +68,7 @@ describe('[Settings]', () => {
     cy.get(`[data-cy=input-link-${link.index}]`).clear().type(link.url)
   }
 
-  // eslint-disable-next-line mocha/no-skipped-tests
-  describe.skip('[Focus Workplace]', () => {
+  describe('[Focus Workplace]', () => {
     const freshSettings = {
       _authID: 'l9N5HFHzSjQvtP9g9MyFnPpkFmM2',
       _id: 'settings_workplace_new',
@@ -100,16 +103,13 @@ describe('[Settings]', () => {
         },
       ],
       location: {
-        administrative: 'Franklin County',
-        country: 'United States',
-        countryCode: 'us',
-        latlng: {
-          lat: '39.9622601',
-          lng: '-83.0007065',
-        },
-        name: '10 West Broad, 10, West Broad Street, High Street Corridor, Columbus, Franklin County, Ohio, 43215, United States',
-        postcode: '43215',
-        value: 'Columbus',
+        administrative: 'Central',
+        country: 'Singapore',
+        countryCode: 'sg',
+        latlng: { lng: '103.8194992', lat: '1.357107' },
+        name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+        postcode: '578774',
+        value: 'Singapore',
       },
       mapPinDescription: "Come in & let's make cool stuff out of plastic!",
       profileType: 'workspace',
@@ -143,14 +143,15 @@ describe('[Settings]', () => {
         url: `http://www.${freshSettings.userName}.com`,
       })
 
+      cy.interceptAddressFetch(SingaporeStubResponse)
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
-        searchKeyword: 'Columbus, Ohio',
+        searchKeyword: 'Singapo',
         locationName: expected.location.value,
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(2000)
+      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.step('Verify if all changes were saved correctly')
       cy.queryDocuments(
@@ -253,7 +254,7 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(2000)
+      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
@@ -299,16 +300,13 @@ describe('[Settings]', () => {
         ],
         mapPinDescription: 'Fun, vibrant and full of amazing people',
         location: {
-          administrative: null,
+          administrative: 'Central',
           country: 'Singapore',
           countryCode: 'sg',
-          latlng: {
-            lat: 1.29048,
-            lng: 103.852,
-          },
-          name: 'Singapore',
-          postcode: '178957',
-          value: 'Singapore, Singapore',
+          latlng: { lng: '103.8194992', lat: '1.357107' },
+          name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+          postcode: '578774',
+          value: 'Singapore',
         },
       }
       cy.login('settings_member_new@test.com', 'test1234')
@@ -333,9 +331,10 @@ describe('[Settings]', () => {
         url: `${freshSettings.userName}@test.com`,
       })
 
+      cy.interceptAddressFetch(SingaporeStubResponse)
       setMemberMapPin({
         description: expected.mapPinDescription,
-        searchKeyword: 'singapo',
+        searchKeyword: 'Singapo',
         locationName: expected.location.value,
       })
       cy.get('[data-cy=location-dropdown]').should('not.exist')
@@ -434,10 +433,7 @@ describe('[Settings]', () => {
         administrative: 'Central',
         country: 'Singapore',
         countryCode: 'sg',
-        latlng: {
-          lat: '1.357107',
-          lng: '103.8194992',
-        },
+        latlng: { lng: '103.8194992', lat: '1.357107' },
         name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
         postcode: '578774',
         value: 'Singapore',
@@ -468,6 +464,8 @@ describe('[Settings]', () => {
         label: 'bazar',
         url: `http://settings_machine_bazarlink.com`,
       })
+
+      cy.interceptAddressFetch(SingaporeStubResponse)
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'singapo',
@@ -475,7 +473,7 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(2000)
+      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
@@ -492,8 +490,7 @@ describe('[Settings]', () => {
     })
   })
 
-  // eslint-disable-next-line mocha/no-skipped-tests
-  describe.skip('[Focus Community Builder]', () => {
+  describe('[Focus Community Builder]', () => {
     const expected = {
       _authID: 'vWAbQvq21UbvhGldakIy1x4FpeF2',
       _deleted: false,
@@ -520,16 +517,13 @@ describe('[Settings]', () => {
         },
       ],
       location: {
-        administrative: '',
-        country: 'United Kingdom',
-        countryCode: 'gb',
-        latlng: {
-          lat: '51.5156177',
-          lng: '-0.0919983',
-        },
-        name: 'Roman Amphitheatre Site, Guildhall Yard, Cheap, City of London, Greater London, England, EC2V 5AE, United Kingdom',
-        postcode: 'EC2V 5AE',
-        value: 'City of London',
+        administrative: 'Central',
+        country: 'Singapore',
+        countryCode: 'sg',
+        latlng: { lng: '103.8194992', lat: '1.357107' },
+        name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+        postcode: '578774',
+        value: 'Singapore',
       },
     }
 
@@ -550,14 +544,15 @@ describe('[Settings]', () => {
         addContactLink({ index, label: 'website', url: link.url }),
       )
 
+      cy.interceptAddressFetch(SingaporeStubResponse)
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
-        searchKeyword: 'london, city of london',
+        searchKeyword: 'Singa',
         locationName: expected.location.value,
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(2000)
+      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
@@ -574,8 +569,7 @@ describe('[Settings]', () => {
     })
   })
 
-  // eslint-disable-next-line mocha/no-skipped-tests
-  describe.skip('Focus Plastic Collection Point', () => {
+  describe('Focus Plastic Collection Point', () => {
     const freshSettings = {
       _authID: 'uxupeYR7glagQyhBy8q0blr0chd2',
       _id: 'settings_plastic_new',
@@ -614,16 +608,13 @@ describe('[Settings]', () => {
         },
       ],
       location: {
-        administrative: 'Melaka',
-        country: 'Malaysia',
-        countryCode: 'my',
-        latlng: {
-          lat: '2.19082',
-          lng: '102.256',
-        },
-        name: 'Malacca',
-        postcode: '75000',
-        value: 'Malacca',
+        administrative: 'Central',
+        country: 'Singapore',
+        countryCode: 'sg',
+        latlng: { lng: '103.8194992', lat: '1.357107' },
+        name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+        postcode: '578774',
+        value: 'Singapore',
       },
       mapPinDescription: 'Feed us plastic!',
       openingHours: [
@@ -740,13 +731,14 @@ describe('[Settings]', () => {
       cy.get('[data-cy=plastic-pvc]').click()
       cy.get('[data-cy=plastic-other]').click()
 
+      cy.interceptAddressFetch(SingaporeStubResponse)
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
-        searchKeyword: 'Malacca',
+        searchKeyword: 'Singapo',
         locationName: expected.location.value,
       })
       cy.get('[data-cy=save]').click()
-      cy.wait(2000)
+      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
@@ -756,7 +748,6 @@ describe('[Settings]', () => {
       ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
-        console.log({ docs })
         cy.wrap(null)
           .then(() => docs[0])
           .should('eqSettings', expected)

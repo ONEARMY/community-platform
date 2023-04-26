@@ -288,6 +288,8 @@ jobs:
           command: yarn run test:unit:ci && yarn run test:components
       - store_artifacts:
           path: coverage
+      - store_artifacts:
+          path: packages/components/coverage
       - codecov/upload
 
   test_circular_dependency:

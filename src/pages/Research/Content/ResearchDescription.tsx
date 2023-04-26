@@ -1,3 +1,5 @@
+/** @jsxImportSource theme-ui */
+import { useTheme } from '@emotion/react'
 import { format } from 'date-fns'
 import {
   Button,
@@ -14,9 +16,6 @@ import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import {
   addIDToSessionStorageArray,
   retrieveSessionStorageArray,
@@ -48,6 +47,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   let didInit = false
   const store = useResearchStore()
   const [viewCount, setViewCount] = useState<number | undefined>()
+  const theme = useTheme();
 
   const incrementViewCount = async () => {
     const sessionStorageArray = retrieveSessionStorageArray('research')
@@ -110,21 +110,17 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             <Button
               icon="thunderbolt"
               variant="outline"
-              iconColor={
-                research.subscribers?.includes(
-                  props?.loggedInUser?.userName || '',
-                )
-                  ? 'orange'
-                  : 'black'
-              }
+              iconColor={research.subscribers?.includes(
+                props?.loggedInUser?.userName || '',
+              )
+                ? theme.colors.subscribed
+                : theme.colors['not-subscribed']}
               sx={{
                 fontSize: 2,
                 py: 0,
                 height: '41.5px', // TODO: Ideally this is a standard size
               }}
-              onClick={() => {
-                props.onFollowingClick()
-              }}
+              onClick={props.onFollowingClick}
             >
               {research.subscribers?.includes(
                 props?.loggedInUser?.userName || '',

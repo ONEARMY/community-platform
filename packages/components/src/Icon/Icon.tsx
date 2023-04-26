@@ -1,3 +1,4 @@
+ /** @jsxImportSource theme-ui */
 import styled from '@emotion/styled'
 import type { VerticalAlignProps, SpaceProps } from 'styled-system'
 import { verticalAlign, space } from 'styled-system'
@@ -40,6 +41,7 @@ import { iconMap } from './svgs'
 import { DownloadIcon } from './DownloadIcon'
 import { ExternalUrl } from './ExternalUrl'
 import type { IGlyphs } from './types'
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 interface IGlyphProps {
   glyph: keyof IGlyphs
@@ -51,6 +53,7 @@ export interface IProps {
   marginRight?: string
   color?: string
   onClick?: () => void
+  sx?: ThemeUIStyleObject
 }
 
 export const glyphs: IGlyphs = {
@@ -115,7 +118,6 @@ const IconWrapper = styled.div<Props>`
   min-width: ${(props) => (props.size ? `${props.size}px` : '32px')};
   min-height: ${(props) => (props.size ? `${props.size}px` : '32px')};
   position: relative;
-  color: ${(props) => (props.color ? `${props.color}` : 'inherit')};
   ${verticalAlign}
   ${space}
 
@@ -153,7 +155,7 @@ export const Icon = (props: Props) => {
   }
 
   return (
-    <IconWrapper {...props} size={definedSize} style={{ marginRight }}>
+    <IconWrapper {...props} sx={{color: props.color ? `${props.color}` : 'inherit'}} size={definedSize} style={{ marginRight }}>
       <IconContext.Provider
         value={{
           style: { width: definedSize + 'px', height: definedSize + 'px' },

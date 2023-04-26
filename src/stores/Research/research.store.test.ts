@@ -608,6 +608,21 @@ describe('research.store', () => {
     })
   })
 
+  describe('incrementDownloadCount', () => {
+    it('increments download count by one', async () => {
+      const { store, researchItem, setFn } = await factoryResearchItem()
+
+      const downloads = researchItem.total_downloads!
+      // Act
+      const updatedDownloads = await store.incrementDownloadCount(
+        researchItem._id,
+      )
+
+      expect(setFn).toBeCalledTimes(1)
+      expect(updatedDownloads).toBe(downloads + 1)
+    })
+  })
+
   describe('incrementViews', () => {
     it('data fetched from server db', async () => {
       const { store, researchItem, getFn } = await factoryResearchItem()

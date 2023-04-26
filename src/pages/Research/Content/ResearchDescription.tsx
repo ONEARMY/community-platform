@@ -232,6 +232,48 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
           <Text sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}>
             <LinkifyText>{research.description}</LinkifyText>
           </Text>
+          {((research.files && research.files.length > 0) ||
+            research.fileLink) && (
+            <Flex
+              className="file-container"
+              mt={3}
+              sx={{ flexDirection: 'column' }}
+            >
+              {research.fileLink && (
+                <DownloadFiles
+                  handleClick={handleClick}
+                  link={research.fileLink}
+                />
+              )}
+              {research.files &&
+                research.files
+                  .filter(Boolean)
+                  .map(
+                    (file, index) =>
+                      file && (
+                        <FileInformation
+                          allowDownload
+                          file={file}
+                          key={file ? file.name : `file-${index}`}
+                          handleClick={handleClick}
+                        />
+                      ),
+                  )}
+              {typeof fileDownloadCount === 'number' && (
+                <Text
+                  data-cy="file-download-counter"
+                  sx={{
+                    fontSize: 1,
+                    color: 'grey',
+                    paddingLeft: 1,
+                  }}
+                >
+                  {fileDownloadCount}
+                  {fileDownloadCount !== 1 ? ' downloads' : ' download'}
+                </Text>
+              )}
+            </Flex>
+          )}
         </Box>
       </Flex>
       {research.moderation !== 'accepted' && (
@@ -244,44 +286,6 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             right: 0,
           }}
         />
-      )}
-      {((research.files && research.files.length > 0) || research.fileLink) && (
-        <Flex
-          className="file-container"
-          mt={3}
-          sx={{ flexDirection: 'column' }}
-        >
-          {research.fileLink && (
-            <DownloadFiles handleClick={handleClick} link={research.fileLink} />
-          )}
-          {research.files &&
-            research.files
-              .filter(Boolean)
-              .map(
-                (file, index) =>
-                  file && (
-                    <FileInformation
-                      allowDownload
-                      file={file}
-                      key={file ? file.name : `file-${index}`}
-                      handleClick={handleClick}
-                    />
-                  ),
-              )}
-          {typeof fileDownloadCount === 'number' && (
-            <Text
-              data-cy="file-download-counter"
-              sx={{
-                fontSize: '12px',
-                color: '#61646B',
-                paddingLeft: '8px',
-              }}
-            >
-              {fileDownloadCount}
-              {fileDownloadCount !== 1 ? ' downloads' : ' download'}
-            </Text>
-          )}
-        </Flex>
       )}
     </Flex>
   )

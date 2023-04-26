@@ -290,9 +290,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               <Text
                 data-cy="file-download-counter"
                 sx={{
-                  fontSize: '12px',
-                  color: '#61646B',
-                  paddingLeft: '8px',
+                  fontSize: 1,
+                  color: 'grey',
+                  paddingLeft: 1,
                 }}
               >
                 {fileDownloadCount}

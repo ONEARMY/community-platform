@@ -2,12 +2,13 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react'
 import { NotificationItem } from 'oa-components'
 import { useCallback, useEffect, useState } from 'react'
-import { Box, Text } from 'theme-ui'
+import { Box, Button, Text } from 'theme-ui'
 import { useDB } from 'src/App'
 import type { INotification, IPendingEmails } from 'src/models'
 import { getFormattedNotificationMessage } from 'src/pages/common/Header/getFormattedNotifications'
 import Table from '../components/Table/Table'
 import type { ICellRenderProps, ITableProps } from '../components/Table/Table'
+import { functions } from 'src/utils/firebase'
 
 type IPendingEmailsDBDoc = Record<string, IPendingEmails>
 
@@ -33,6 +34,9 @@ const NotificationListContainer = styled(Box)`
 const AdminNotifictions = observer(() => {
   const { db } = useDB()
   const [emailsPending, setEmailsPending] = useState<IPendingEmails[]>([])
+  const [triggerEmailState, setTriggerEmailState] = useState<string>(
+    'Click the button to trigger emails.',
+  )
 
   // Load list of pending approvals on mount only, dependencies empty to avoid reloading
   useEffect(() => {
@@ -54,6 +58,16 @@ const AdminNotifictions = observer(() => {
         }
       })
   }, [])
+
+  const triggerEmails = async () => {
+    setTriggerEmailState('Sending...')
+    try {
+      await functions.httpsCallable('emailNotifications-sendOnce')()
+      setTriggerEmailState('Emails sent successfully.')
+    } catch (error) {
+      setTriggerEmailState(`Error sending emails: \n ${error}`)
+    }
+  }
 
   /** Function applied to render each table row cell */
   const RenderContent: React.FC<ICellRenderProps> = (
@@ -82,6 +96,8 @@ const AdminNotifictions = observer(() => {
     <>
       <h2>Admin Notifictions</h2>
       <h4>Pending Emails</h4>
+      <Button onClick={triggerEmails}>Trigger Test Emails</Button>
+      {triggerEmailState && <p>{triggerEmailState}</p>}
       <Table
         data={emailsPending}
         columns={EMAILS_PENDING_COLUMNS}

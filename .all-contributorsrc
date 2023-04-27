@@ -215,10 +215,20 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "NoHara42",
+      "name": "Ned O'Hara",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43496778?v=4",
+      "profile": "https://github.com/NoHara42",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",
   "projectOwner": "ONEARMY",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "commitConvention": "angular"
 }

@@ -612,7 +612,7 @@ describe('research.store', () => {
     it('increments download count by one', async () => {
       const { store, researchItem, setFn } = await factoryResearchItem()
 
-      const downloads = researchItem.total_downloads!
+      const downloads = researchItem.attachments.total_downloads!
       // Act
       const updatedDownloads = await store.incrementDownloadCount(
         researchItem._id,

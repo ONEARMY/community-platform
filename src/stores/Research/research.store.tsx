@@ -201,12 +201,15 @@ export class ResearchStore extends ModuleStore {
       .collection<IResearchDB>(COLLECTION_NAME)
       .doc(ResearchId)
     const researchData = await toJS(dbRef.get('server'))
-    const totalDownloads = researchData?.total_downloads || 0
+    const totalDownloads = researchData?.attachments?.total_downloads || 0
 
     if (researchData) {
       const updatedResearch: IResearchDB = {
         ...researchData,
-        total_downloads: totalDownloads! + 1,
+        attachments: {
+          ...researchData.attachments,
+          ['total_downloads']: totalDownloads + 1,
+        },
       }
 
       await dbRef.set(
@@ -216,7 +219,7 @@ export class ResearchStore extends ModuleStore {
         { keep_modified_timestamp: true },
       )
 
-      return updatedResearch.total_downloads
+      return updatedResearch.attachments!.total_downloads
     }
   }
 
@@ -667,8 +670,7 @@ export class ResearchStore extends ModuleStore {
         collaborators,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
-        fileLink: values.fileLink ?? '',
-        files: processedFiles ?? [],
+
         updates,
         creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||
@@ -677,7 +679,11 @@ export class ResearchStore extends ModuleStore {
             : values.creatorCountry
             ? values.creatorCountry
             : '',
-        total_downloads: existingDoc?.total_downloads ?? 0,
+        attachments: {
+          total_downloads: existingDoc?.attachments?.total_downloads ?? 0,
+          fileLink: values.fileLink ?? '',
+          files: processedFiles ?? [],
+        },
       }
 
       logger.debug('populating database', researchItem)

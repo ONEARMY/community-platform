@@ -24,9 +24,11 @@ export namespace IResearch {
     total_views?: number
     collaborators: string[]
     subscribers?: UserIdList
-    total_downloads?: number
-    fileLink?: string
-    files?: Array<IUploadedFileMeta | File | null>
+    attachments?: {
+      total_downloads: number
+      fileLink?: string
+      files?: Array<IUploadedFileMeta | File | null>
+    }
   } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */

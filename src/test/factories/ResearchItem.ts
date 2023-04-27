@@ -35,10 +35,12 @@ export const FactoryResearchItem = (
     'accepted',
   ]),
   mentions: [],
+  attachments: {
+    total_downloads: faker.datatype.number(),
+    files: [],
+  },
   total_views: faker.datatype.number(),
-  total_downloads: faker.datatype.number(),
   collaborators: [],
-  files: [],
   ...researchItemOverloads,
 })
 

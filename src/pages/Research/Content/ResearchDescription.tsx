@@ -57,7 +57,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   const store = useResearchStore()
   const [viewCount, setViewCount] = useState<number | undefined>()
   const [fileDownloadCount, setFileDownloadCount] = useState(
-    research.total_downloads,
+    research.attachments?.total_downloads,
   )
 
   const incrementDownloadCount = async () => {

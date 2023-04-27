@@ -44,17 +44,17 @@ exports.sendOnce = functions.https.onCall(async (_, context) => {
   )
 })
 
-exports.setEmailNotificationSettings = functions.https.onRequest(async () => {
-  await db
-    .collection(DB_ENDPOINTS.users)
-    .get()
-    .then((snapshot) => {
-      Promise.all(
-        snapshot.docs.map((doc) => {
-          doc.ref.update({
-            notification_settings: { emailFrequency: 'daily' },
-          })
-        }),
-      )
-    })
-})
+// exports.setEmailNotificationSettings = functions.https.onRequest(async () => {
+//   await db
+//     .collection(DB_ENDPOINTS.users)
+//     .get()
+//     .then((snapshot) => {
+//       Promise.all(
+//         snapshot.docs.map((doc) => {
+//           doc.ref.update({
+//             notification_settings: { emailFrequency: 'daily' },
+//           })
+//         }),
+//       )
+//     })
+// })

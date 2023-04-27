@@ -108,16 +108,22 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
           )}
           <AuthWrapper roleRequired="beta-tester">
             <Button
+              data-testid="following-button"
               icon="thunderbolt"
               variant="outline"
+              iconColor={
+                research.subscribers?.includes(
+                  props?.loggedInUser?.userName || '',
+                )
+                  ? theme.colors.subscribed
+                  : theme.colors.notSubscribed
+              }
               sx={{
                 fontSize: 2,
                 py: 0,
                 height: '41.5px', // TODO: Ideally this is a standard size
               }}
-              onClick={() => {
-                props.onFollowingClick()
-              }}
+              onClick={props.onFollowingClick}
             >
               {research.subscribers?.includes(
                 props?.loggedInUser?.userName || '',

@@ -22,9 +22,7 @@ import {
   emStringToPx,
   capitalizeFirstLetter,
 } from 'src/utils/helpers'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+import { useTheme } from '@emotion/react'
 import { Link } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
@@ -40,9 +38,6 @@ import {
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
 
-const iconFlexDirection =
-  emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
-
 interface IProps {
   howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
@@ -55,6 +50,11 @@ interface IProps {
 }
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
+  const theme = useTheme()
+
+  const iconFlexDirection =
+    emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
+
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
@@ -121,9 +121,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       data-id={howto._id}
       className="howto-description-container"
       sx={{
-        borderRadius: theme.radii[2] + 'px',
+        borderRadius: 2,
         bg: 'white',
-        borderColor: theme.colors.black,
+        borderColor: 'black',
         borderStyle: 'solid',
         borderWidth: '2px',
         overflow: 'hidden',
@@ -205,7 +205,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           <Text
             sx={{
               ...theme.typography.auxiliary,
-              color: `${theme.colors.lightgrey} !important`,
+              color: 'lightgrey',
+              '&!important': {
+                color: 'lightgrey',
+              },
             }}
             mt={1}
             mb={2}
@@ -290,9 +293,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               <Text
                 data-cy="file-download-counter"
                 sx={{
-                  fontSize: '12px',
-                  color: '#61646B',
-                  paddingLeft: '8px',
+                  fontSize: 1,
+                  color: 'grey',
+                  paddingLeft: 1,
                 }}
               >
                 {fileDownloadCount}

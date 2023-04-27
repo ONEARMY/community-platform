@@ -1,4 +1,5 @@
 import { commonColors } from './../common/colors'
+import { variants } from '../common/variants'
 import type { ThemeWithName } from '../types'
 import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_lg.svg'
 import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'
@@ -190,6 +191,7 @@ export const StyledComponentTheme: ThemeWithName = {
       fontFamily: fonts.body,
       color: 'grey',
     },
+    ...variants,
   },
   typography,
   zIndex,

@@ -194,7 +194,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Link>
           )}
         </Flex>
-        <Box mt={3} mb={2}>
+        <Box mt={4} mb={2}>
           <Username
             user={{
               userName: howto._createdBy,
@@ -203,8 +203,8 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             isVerified={isUserVerified(howto._createdBy)}
           />
           <Text
+            variant="auxiliary"
             sx={{
-              ...theme.typography.auxiliary,
               color: 'lightgrey',
               '&!important': {
                 color: 'lightgrey',
@@ -219,7 +219,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
             {capitalizeFirstLetter(howto.title)}
           </Heading>
-          <Text sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}>
+          <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
             <LinkifyText>{howto.description}</LinkifyText>
           </Text>
         </Box>

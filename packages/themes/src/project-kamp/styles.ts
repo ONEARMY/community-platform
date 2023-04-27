@@ -1,3 +1,4 @@
+import { variants } from '../common/variants'
 import memberBadgeLowDetail from '../../assets/images/themes/project-kamp/avatar_member_sm.svg'
 import memberBadgeHighDetail from '../../assets/images/themes/project-kamp/avatar_member_lg.svg'
 import logo from '../../assets/images/themes/project-kamp/project-kamp-header.png'
@@ -185,6 +186,7 @@ export const StyledComponentTheme: ThemeWithName = {
       fontFamily: fonts.body,
       color: 'grey',
     },
+    ...variants,
   },
   typography,
   zIndex,

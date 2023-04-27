@@ -263,9 +263,9 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
                 <Text
                   data-cy="file-download-counter"
                   sx={{
-                    fontSize: 1,
-                    color: 'grey',
-                    paddingLeft: 1,
+                    fontSize: '12px',
+                    color: '#61646B',
+                    paddingLeft: '8px',
                   }}
                 >
                   {fileDownloadCount}

@@ -85,6 +85,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://devtato.com"><img src="https://avatars.githubusercontent.com/u/4504330?v=4?s=60" width="60px;" alt="Devtato"/><br /><sub><b>Devtato</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=cerkiewny" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/NoHara42"><img src="https://avatars.githubusercontent.com/u/43496778?v=4?s=60" width="60px;" alt="Ned O'Hara"/><br /><sub><b>Ned O'Hara</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=NoHara42" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

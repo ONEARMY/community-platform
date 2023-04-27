@@ -91,6 +91,7 @@ export interface INotification {
   type: NotificationType
   read: boolean
   notified: boolean
+  emailed?: boolean
 }
 
 export const NotificationTypes = [

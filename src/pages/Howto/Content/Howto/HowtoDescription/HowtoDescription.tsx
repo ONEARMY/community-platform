@@ -17,12 +17,7 @@ import {
   DownloadFiles,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
-import {
-  isAllowToEditContent,
-  emStringToPx,
-  capitalizeFirstLetter,
-} from 'src/utils/helpers'
-import { useTheme } from '@emotion/react'
+import { isAllowToEditContent, capitalizeFirstLetter } from 'src/utils/helpers'
 import { Link } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
@@ -50,11 +45,6 @@ interface IProps {
 }
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
-  const theme = useTheme()
-
-  const iconFlexDirection =
-    emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
-
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
@@ -225,7 +215,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
         </Box>
 
         <Flex mt="4">
-          <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
             <Image
               loading="lazy"
               src={StepsIcon}
@@ -238,7 +228,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               ? `${howto.steps.length} step`
               : `${howto.steps.length} steps`}
           </Flex>
-          <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
             <Image
               loading="lazy"
               src={TimeNeeded}
@@ -249,7 +239,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             />
             {howto.time}
           </Flex>
-          <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
             <Image
               loading="lazy"
               src={DifficultyLevel}

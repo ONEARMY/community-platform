@@ -105,13 +105,13 @@ export class UserStore extends ModuleStore {
     newUserCreated = false,
   ) {
     if (user) {
-      logger.debug('user signed in', user)
+      logger.debug({ user: toJS(user) }, 'user signed in')
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)
       if (userMeta) {
         this.updateActiveUser(userMeta)
-        logger.debug('userMeta', userMeta)
+        logger.debug(toJS(userMeta), 'userSignedIn')
 
         // Update last active for user
         await this.db
@@ -289,7 +289,7 @@ export class UserStore extends ModuleStore {
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
-    logger.debug('creating user profile', userName)
+    logger.debug({ userName }, 'creating user profile')
     if (!userName) {
       throw new Error('No Username Provided')
     }

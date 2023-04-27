@@ -10,6 +10,7 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import { Link } from 'react-router-dom'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
+import { logger } from 'src/logger'
 
 interface InjectedProps {
   eventStore: EventStore
@@ -40,6 +41,7 @@ export class EventsListings extends React.Component<any> {
   }
 
   public render() {
+    logger.debug('EventsListings render')
     const { filteredEvents, upcomingEvents, pastEvents } =
       this.injected.eventStore
     let recentPastEvents: IEventDB[] = []

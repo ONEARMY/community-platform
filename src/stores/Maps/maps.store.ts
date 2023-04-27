@@ -146,13 +146,13 @@ export class MapsStore extends ModuleStore {
   // get base pin geo information
   public async getPin(id: string) {
     const pin = await this.db.collection<IMapPin>(COLLECTION_NAME).doc(id).get()
-    logger.debug({ pin }, 'MapsStore.getPin')
+    logger.debug({ pin } as any, 'MapsStore.getPin')
     return pin as IMapPin
   }
 
   // add new pin or update existing
   public async upsertPin(pin: IMapPin) {
-    logger.debug({ pin }, 'MapsStore.upsertPin')
+    logger.debug({ pin } as any, 'MapsStore.upsertPin')
     // generate standard doc meta
     if (!isAllowToPin(pin, this.activeUser)) {
       return false
@@ -190,7 +190,7 @@ export class MapsStore extends ModuleStore {
     if (type !== 'member' && user.workspaceType) {
       pin.subType = user.workspaceType
     }
-    logger.debug('setting user pin', pin)
+    logger.debug({ pin } as any, 'MapsStore.setUserPin')
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).set(pin)
   }
 

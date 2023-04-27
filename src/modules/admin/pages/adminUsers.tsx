@@ -92,7 +92,7 @@ const AdminUsers = observer(() => {
       const index = Fuse.createIndex(fuseOptions.keys, usersdata)
       fuse.setCollection(usersdata, index)
     } catch (error) {
-      logger.info({ error })
+      logger.info({ error }, 'Failed to load user data')
     }
     setLoading(false)
   }

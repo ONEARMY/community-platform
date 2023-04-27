@@ -110,7 +110,7 @@ export class HowtoStore extends ModuleStore {
   @action
   public async setActiveHowtoBySlug(slug: string) {
     // clear any cached data and then load the new howto
-    logger.debug(`setActiveHowtoBySlug:`, { slug })
+    logger.debug({ slug }, `setActiveHowtoBySlug:`)
 
     if (!slug) {
       this.activeHowto = null
@@ -122,7 +122,7 @@ export class HowtoStore extends ModuleStore {
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     activeHowto = collection.length > 0 ? collection[0] : null
-    logger.debug('active howto', activeHowto)
+    logger.debug(activeHowto as any, 'active howto')
 
     // try previous slugs if slug is not recognized as primary
     if (!activeHowto) {
@@ -276,7 +276,7 @@ export class HowtoStore extends ModuleStore {
           creatorCountry: getUserCountry(user),
           text: text.slice(0, MAX_COMMENT_LENGTH).trim(),
         }
-        logger.debug('addComment.newComment', { newComment })
+        logger.debug({ newComment } as any, 'addComment.newComment')
 
         // Update and refresh the active howto
         const updated = await this.updateHowtoItem({
@@ -287,8 +287,8 @@ export class HowtoStore extends ModuleStore {
         await this.setActiveHowtoBySlug(updated?.slug || '')
       }
     } catch (err) {
-      logger.info({ err })
-      logger.error(err)
+      logger.info({ err }, 'addComment error')
+      logger.error(err, 'Failed to add comment')
       throw new Error(err)
     }
   }
@@ -296,10 +296,13 @@ export class HowtoStore extends ModuleStore {
   private async updateHowtoItem(howToItem: IHowto) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToItem._id)
 
-    logger.debug('updateHowtoItem', {
-      before: this.activeHowto,
-      after: howToItem,
-    })
+    logger.debug(
+      {
+        before: this.activeHowto,
+        after: howToItem,
+      } as any,
+      'updateHowtoItem',
+    )
 
     const { text: description, users } = await this.addUserReference(
       howToItem.description,
@@ -370,10 +373,13 @@ export class HowtoStore extends ModuleStore {
     // - Steps
     // - Comments
     const previousMentionsList = howToItem.mentions || []
-    logger.debug(`Mentions:`, {
-      before: previousMentionsList,
-      after: mentions,
-    })
+    logger.debug(
+      {
+        before: previousMentionsList,
+        after: mentions,
+      } as any,
+      `Mentions`,
+    )
 
     // Previous mentions
     const previousMentions = previousMentionsList.map(
@@ -450,7 +456,7 @@ export class HowtoStore extends ModuleStore {
 
   // upload a new or update an existing how-to
   public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
-    logger.debug('uploading howto', { values })
+    logger.debug({ values } as any, 'uploading howto')
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
@@ -531,7 +537,7 @@ export class HowtoStore extends ModuleStore {
       if (processedFiles && !howTo['total_downloads'])
         howTo['total_downloads'] = 0
 
-      logger.debug('populating database', howTo)
+      logger.debug(howTo as any, 'populating database')
       // set the database document
       this.activeHowto = await this.updateHowtoItem(howTo)
       this.updateUploadStatus('Database')

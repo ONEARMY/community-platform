@@ -77,7 +77,7 @@ const EditResearch = observer((props: IProps) => {
         />
       )
     } else {
-      logger.debug(`Redirect:`, '/research/' + formValues.slug)
+      logger.debug(`EditResearch.Redirect: /research/ ${formValues.slug}`)
       return <Redirect to={'/research/' + formValues.slug} />
     }
   } else {

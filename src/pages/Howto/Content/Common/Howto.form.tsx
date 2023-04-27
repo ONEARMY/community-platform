@@ -128,7 +128,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     }
     this.setState({ showSubmitModal: true })
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
-    logger.debug('submitting form', formValues)
+    logger.debug(formValues as any, 'Howto.form submitting form')
     await this.store.uploadHowTo(formValues)
   }
   public validateTitle = async (value: any) => {

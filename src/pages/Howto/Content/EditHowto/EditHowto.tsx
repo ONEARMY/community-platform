@@ -65,7 +65,7 @@ class EditHowto extends React.Component<IProps, IState> {
   }
 
   public render() {
-    logger.debug('edit', this.state)
+    logger.debug(this.state as any, 'EditHowto.render')
     const { formValues, isLoading, loggedInUser } = this.state
     if (formValues && !isLoading) {
       if (loggedInUser && isAllowToEditContent(formValues, loggedInUser)) {

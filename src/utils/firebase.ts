@@ -21,13 +21,13 @@ const functions = firebase.functions()
 if (SITE === 'emulated_site') {
   logger.debug(`Connecting to emulated services:`)
   firestore.useEmulator('localhost', 4003)
-  logger.debug(`Connecting rtdb on port `, 4006)
+  logger.debug(`Connecting rtdb on port ${4006}`)
   rtdb.useEmulator('localhost', 4006)
-  logger.debug(`Connecting storage on port `, 4007)
+  logger.debug(`Connecting storage on port ${4007}`)
   storage.useEmulator('localhost', 4007)
-  logger.debug(`Connecting auth on port `, 4005)
+  logger.debug(`Connecting auth on port ${4005}`)
   auth.useEmulator(`http://localhost:4005`)
-  logger.debug(`Connecting functions on port `, 4002)
+  logger.debug(`Connecting functions on port ${4002}`)
   functions.useEmulator('localhost', 4002)
 }
 

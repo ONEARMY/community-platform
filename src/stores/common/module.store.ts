@@ -155,7 +155,7 @@ export class ModuleStore {
     collection: string,
     id: string,
   ) {
-    logger.debug('uploading file', file)
+    logger.debug(file as any, 'uploading file')
     // if already uploaded (e.g. editing but not replaced), skip
     if (Object.prototype.hasOwnProperty.call(file, 'downloadUrl')) {
       logger.debug('file already uploaded, skipping')

@@ -74,7 +74,7 @@ export class ResearchStore extends ModuleStore {
     super.init()
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
-      logger.debug('docs', docs)
+      logger.debug(docs as any, 'research.store.allDocs$')
       const sortedItems = docs.sort((a, b) =>
         a._modified < b._modified ? 1 : -1,
       )
@@ -191,7 +191,7 @@ export class ResearchStore extends ModuleStore {
         .collection<IResearchStats>('research')
         .doc(`${id}/stats/all`)
       const researchStats = await ref.get('server')
-      logger.debug('researchStats', researchStats)
+      logger.debug(researchStats as any, 'loadResearchStats')
       this.researchStats = researchStats || { votedUsefulCount: 0 }
     }
   }
@@ -489,10 +489,13 @@ export class ResearchStore extends ModuleStore {
     const { text: researchDescription, users } = await this.addUserReference(
       researchItem.description,
     )
-    logger.debug('updateResearchItem', {
-      before: researchItem.description,
-      after: researchDescription,
-    })
+    logger.debug(
+      {
+        before: researchItem.description,
+        after: researchDescription,
+      },
+      'updateResearchItem',
+    )
 
     const previousVersion = toJS(await dbRef.get('server'))
 
@@ -552,10 +555,13 @@ export class ResearchStore extends ModuleStore {
     })
 
     const previousMentionsList = researchItem.mentions || []
-    logger.debug(`Mentions:`, {
-      before: previousMentionsList,
-      after: mentions,
-    })
+    logger.debug(
+      {
+        before: previousMentionsList,
+        after: mentions,
+      },
+      `Mentions`,
+    )
 
     // Previous mentions
     const previousMentions = previousMentionsList.map(
@@ -578,13 +584,16 @@ export class ResearchStore extends ModuleStore {
     const subscribers = researchItem.subscribers || []
 
     // Only notify subscribers if there is a new update added
-    logger.debug('Notify each subscriber', {
-      subscribers,
-      beforeUpdateNumber: previousVersion?.updates
-        ? previousVersion?.updates.length
-        : 0,
-      afterUpdateNumber: researchItem?.updates.length,
-    })
+    logger.debug(
+      {
+        subscribers,
+        beforeUpdateNumber: previousVersion?.updates
+          ? previousVersion?.updates.length
+          : 0,
+        afterUpdateNumber: researchItem?.updates.length,
+      },
+      'Notify each subscriber',
+    )
 
     if (
       researchItem.updates.length >
@@ -637,7 +646,7 @@ export class ResearchStore extends ModuleStore {
             ? values.creatorCountry
             : '',
       }
-      logger.debug('populating database', researchItem)
+      logger.debug(researchItem as any, 'populating database')
       // set the database document
       await this.updateResearchItem(dbRef, researchItem)
       this.updateResearchUploadStatus('Database')
@@ -649,7 +658,7 @@ export class ResearchStore extends ModuleStore {
       // complete
       this.updateResearchUploadStatus('Complete')
     } catch (error) {
-      logger.debug('error', error)
+      logger.debug(error, 'error')
       //TODO: Add error handling here :(
       //throw new Error(error.message)
     }
@@ -661,7 +670,7 @@ export class ResearchStore extends ModuleStore {
    * @param update
    */
   public async uploadUpdate(update: IResearch.Update | IResearch.UpdateDB) {
-    logger.debug(`uploadUpdate`, { update })
+    logger.debug({ update } as any, `uploadUpdate`)
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
@@ -715,11 +724,18 @@ export class ResearchStore extends ModuleStore {
 
         //
         logger.debug(
+          {
+            updateModified: (update as IResearch.UpdateDB)._modified,
+            newItemModified: newItem._modified,
+          } as any,
           'old and new modified:',
-          (update as IResearch.UpdateDB)._modified,
-          newItem._modified,
         )
-        logger.debug('created:', newItem._created)
+        logger.debug(
+          {
+            created: newItem._created,
+          },
+          'uploadUpdate.created',
+        )
 
         // set the database document
         await this.updateResearchItem(dbRef, newItem)

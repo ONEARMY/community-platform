@@ -17,6 +17,8 @@ orbs:
   browser-tools: circleci/browser-tools@1.1.3
   # used to enable slack integration (required api key set in environment)
   slack: circleci/slack@4.4.2
+  # used to track coverage
+  codecov: codecov/codecov@3.2.4
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -284,6 +286,12 @@ jobs:
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
           command: yarn run test:unit:ci && yarn run test:components
+      - store_artifacts:
+          path: coverage
+      - store_artifacts:
+          path: packages/components/coverage
+      - codecov/upload
+
   test_circular_dependency:
     docker: *docker
     steps:
@@ -295,6 +303,7 @@ jobs:
           command: yarn workspaces focus one-army-community-platform
       - run:
           command: yarn run test:madge
+
   build:
     <<: *docker_matrix
     environment:

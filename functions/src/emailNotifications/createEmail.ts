@@ -13,6 +13,7 @@ const getResourceLabelFromNotificationType = (type: NotificationType) => {
       return 'research'
     case 'howto_useful':
     case 'howto_mention':
+    case 'new_comment':
       return 'how-to'
   }
 }

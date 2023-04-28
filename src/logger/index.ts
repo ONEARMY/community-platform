@@ -2,6 +2,7 @@ import { toJS } from 'mobx'
 import { LogflareHttpClient } from 'logflare-transport-core'
 import { getConfigurationOption } from '../config/config'
 import { Roarr, type Logger } from 'roarr'
+import { v4 as uuidv4 } from 'uuid'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
@@ -9,7 +10,7 @@ const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
 let loggerInstance: Logger
 let writeFn: any
 
-const USER_ID = window.crypto.randomUUID()
+const USER_ID = uuidv4()
 
 const roarrToLogFlareMapper = (msg) => {
   const { message, level, ...rest } = msg
@@ -42,7 +43,14 @@ const getLevelLabelFromNumber = (level) => {
   }
 }
 
-export const getLogger = ({ LOGFLARE_KEY, LOGFLARE_SOURCE }) => {
+export const getLogger = (
+  logFlareConfiguration: {
+    LOGFLARE_KEY: string
+    LOGFLARE_SOURCE: string
+  },
+  console,
+) => {
+  const { LOGFLARE_KEY, LOGFLARE_SOURCE } = logFlareConfiguration
   if (LOGFLARE_KEY && LOGFLARE_SOURCE) {
     const client = new LogflareHttpClient({
       apiKey: LOGFLARE_KEY,
@@ -90,7 +98,10 @@ export const getLogger = ({ LOGFLARE_KEY, LOGFLARE_SOURCE }) => {
   return loggerInstance
 }
 
-export const logger = getLogger({
-  LOGFLARE_KEY: getConfigurationOption('REACT_APP_LOGFLARE_KEY', ''),
-  LOGFLARE_SOURCE: getConfigurationOption('REACT_APP_LOGFLARE_SOURCE', ''),
-})
+export const logger = getLogger(
+  {
+    LOGFLARE_KEY: getConfigurationOption('REACT_APP_LOGFLARE_KEY', ''),
+    LOGFLARE_SOURCE: getConfigurationOption('REACT_APP_LOGFLARE_SOURCE', ''),
+  },
+  console,
+)

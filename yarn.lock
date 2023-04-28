@@ -24088,6 +24088,7 @@ __metadata:
     ts-loader: ^7.0.5
     ts-node: ^10.4.0
     typescript: 4.5.5
+    uuid: ^9.0.0
     wait-on: ^5.2.1
     web-vitals: ^1.1.2
     workbox-background-sync: ^6.1.5

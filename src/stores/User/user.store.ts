@@ -105,7 +105,7 @@ export class UserStore extends ModuleStore {
     newUserCreated = false,
   ) {
     if (user) {
-      logger.debug({ user: toJS(user) }, 'user signed in')
+      logger.debug({ user: user.uid }, 'user signed in')
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)

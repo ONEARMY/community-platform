@@ -1,12 +1,12 @@
 import { toJS } from 'mobx'
 import { LogflareHttpClient } from 'logflare-transport-core'
 import { getConfigurationOption } from '../config/config'
-import { Roarr } from 'roarr'
+import { Roarr, type Logger } from 'roarr'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
 
-let loggerInstance: any
+let loggerInstance: Logger
 let writeFn: any
 
 const USER_ID = window.crypto.randomUUID()

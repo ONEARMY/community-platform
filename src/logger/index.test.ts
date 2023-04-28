@@ -22,6 +22,9 @@ describe('logger', () => {
   })
 
   it.todo('validates formatting for each log level')
+  it.todo('validates filtering for each log level')
+  it.todo('validates unique id for each sesssion')
+  it.todo('provides well structured logs for logflare')
 
   it('should log to logflare if configured', () => {
     const logger = getLogger({

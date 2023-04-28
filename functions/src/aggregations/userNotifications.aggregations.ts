@@ -20,7 +20,7 @@ const UserNotificationAggregation: INotificationAggregation =
       const { _id, _authID, notification_settings, notifications } = user
       const emailFrequency = notification_settings?.emailFrequency || null
       const pending = (notifications || []).filter(
-        (n) => !n.notified && !n.read && !n.emailed,
+        (n) => !n.notified && !n.read && !n.email,
       )
       // remove user from list if they do not have emails enabled or no pending notifications
       if (!emailFrequency || pending.length === 0) {

@@ -119,9 +119,3 @@ export type INotificationSettings = {
   }
   emailFrequency: EmailNotificationFrequency
 }
-
-export interface IEmailNotificationsQueueItem {
-  _id: ISODateString
-  usersWithNotifications: string[]
-  usersEmailed: string[]
-}

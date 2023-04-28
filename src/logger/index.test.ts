@@ -9,7 +9,7 @@ describe('logger', () => {
     ;(LogflareHttpClient as any).mockClear()
   })
 
-  it('should log to console by default', () => {
+  it('should log formatted message to console by default', () => {
     const mockConsole = {
       log: jest.fn(),
     }
@@ -19,40 +19,128 @@ describe('logger', () => {
         LOGFLARE_SOURCE: '',
       },
       mockConsole,
+      'debug',
     )
     logger.error('test')
-    expect(mockConsole.log.mock.calls[1]).toEqual(
-      expect.arrayContaining(['%c[error]', 'color: red', 'test']),
+    expect(mockConsole.log.mock.calls[1]).toEqual([
+      '%c[error]',
+      'color: orangered',
+      'test',
+    ])
+
+    logger.warn('test')
+    expect(mockConsole.log.mock.calls[2]).toEqual([
+      '%c[warn]',
+      'color: gold',
+      'test',
+    ])
+
+    logger.info('test')
+    expect(mockConsole.log.mock.calls[3]).toEqual([
+      '%c[info]',
+      'color: paleturquoise',
+      'test',
+    ])
+
+    logger.debug({ key: 'value' }, 'test')
+    expect(mockConsole.log.mock.calls[4]).toEqual(
+      expect.arrayContaining([
+        '%c[debug]',
+        'color: aquamarine',
+        'test',
+        { key: 'value' },
+      ]),
     )
   })
 
-  it.todo('validates formatting for each log level')
-  it.todo('validates filtering for each log level')
-  it.todo('validates unique id for each sesssion')
-  it.todo('provides well structured logs for logflare')
+  it('validates filtering for each log level', () => {
+    const mockConsole = { log: jest.fn() }
 
-  it.skip('should log to logflare if configured', () => {
-    const mockConsole = {
-      log: jest.fn(),
-    }
-    const logger = getLogger(
-      {
-        LOGFLARE_KEY: 'test',
-        LOGFLARE_SOURCE: 'test',
-      },
-      mockConsole,
-    )
-    const msg = faker.lorem.sentence()
+    const logger = getLogger({} as any, mockConsole, 'warn')
 
-    // Act
-    logger.error(msg)
+    logger.debug('test')
 
-    // Assert
     expect(mockConsole.log).not.toHaveBeenCalled()
+  })
 
-    expect(
-      (LogflareHttpClient as any).mock.instances[0].addLogEvent.mock.calls[1][0]
-        .message,
-    ).toBe(msg)
+  describe('logflare', () => {
+    it('writes to external service', () => {
+      const mockConsole = {
+        log: jest.fn(),
+      }
+      const logger = getLogger(
+        {
+          LOGFLARE_KEY: 'test',
+          LOGFLARE_SOURCE: 'test',
+        },
+        mockConsole,
+        'debug',
+      )
+      const msg = faker.lorem.sentence()
+
+      // Act
+      logger.error(msg)
+
+      // Assert
+      expect(mockConsole.log).not.toHaveBeenCalled()
+
+      expect(
+        (LogflareHttpClient as any).mock.instances[0].addLogEvent.mock
+          .calls[1][0].message,
+      ).toBe(msg)
+    })
+
+    it('validates consistent id for each sesssion', () => {
+      const mockConsole = { log: jest.fn() }
+
+      const logger = getLogger(
+        {
+          LOGFLARE_KEY: 'test',
+          LOGFLARE_SOURCE: 'test',
+        },
+        mockConsole,
+        'debug',
+      )
+
+      logger.debug('test')
+      logger.debug('test2')
+
+      expect(
+        (LogflareHttpClient as any).mock.instances[0].addLogEvent.mock
+          .calls[2][0].metadata.browserSessionId,
+      ).toBe(
+        (LogflareHttpClient as any).mock.instances[0].addLogEvent.mock
+          .calls[1][0].metadata.browserSessionId,
+      )
+    })
+
+    it('provides well structured logs for logflare', () => {
+      const mockConsole = {
+        log: jest.fn(),
+      }
+      const logger = getLogger(
+        {
+          LOGFLARE_KEY: 'test',
+          LOGFLARE_SOURCE: 'test',
+        },
+        mockConsole,
+        'debug',
+      )
+      const msg = faker.lorem.sentence()
+
+      // Act
+      logger.error(msg)
+
+      // Assert
+      expect(
+        (LogflareHttpClient as any).mock.instances[0].addLogEvent.mock
+          .calls[1][0].metadata,
+      ).toEqual(
+        expect.objectContaining({
+          browserSessionId: expect.any(String),
+          level: expect.any(String),
+        }),
+      )
+    })
   })
 })

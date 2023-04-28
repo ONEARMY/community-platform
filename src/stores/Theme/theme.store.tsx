@@ -24,7 +24,10 @@ export class ThemeStore {
   constructor() {
     makeAutoObservable(this)
 
-    logger.debug(this.currentTheme, `ThemeStore.Currenttheme`)
+    logger.debug(
+      { siteName: this.currentTheme.siteName },
+      `ThemeStore.Currenttheme`,
+    )
   }
 
   @action

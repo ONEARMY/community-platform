@@ -1,24 +1,23 @@
 import { toJS } from 'mobx'
 import { LogflareHttpClient } from 'logflare-transport-core'
 import { getConfigurationOption } from '../config/config'
-import { Roarr, type Logger } from 'roarr'
+import { Roarr, type Logger, logLevels } from 'roarr'
 import { v4 as uuidv4 } from 'uuid'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
 
 let loggerInstance: Logger
-let writeFn: any
 
 const USER_ID = uuidv4()
 
 const roarrToLogFlareMapper = (msg) => {
-  const { message, level, ...rest } = msg
+  const { message, logLevel, ...rest } = msg
   return {
     message,
     metadata: {
-      user_id: USER_ID,
-      level,
+      browserSessionId: USER_ID,
+      level: getLevelLabelFromNumber(logLevel),
       ...rest,
     },
   }
@@ -43,12 +42,21 @@ const getLevelLabelFromNumber = (level) => {
   }
 }
 
+const logLevelColourMap = {
+  trace: 'black',
+  debug: 'aquamarine',
+  info: 'paleturquoise',
+  warn: 'gold',
+  error: 'orangered',
+}
+
 export const getLogger = (
   logFlareConfiguration: {
     LOGFLARE_KEY: string
     LOGFLARE_SOURCE: string
   },
-  console,
+  injectedConsole,
+  minLogLevel: 'warn' | 'info' | 'debug' | 'trace' | 'error' | 'fatal' = 'info',
 ) => {
   const { LOGFLARE_KEY, LOGFLARE_SOURCE } = logFlareConfiguration
   if (LOGFLARE_KEY && LOGFLARE_SOURCE) {
@@ -57,17 +65,13 @@ export const getLogger = (
       sourceToken: LOGFLARE_SOURCE,
     })
 
-    writeFn = (message) => {
-      client.addLogEvent(roarrToLogFlareMapper(JSON.parse(message)))
-    }
-
     loggerInstance = Roarr.child<{ error: Error }>((msg) => {
       const message = toJS(msg)
       return {
         ...message,
         level: message.context.logLevel,
         context: {
-          env: 'local',
+          env: getConfigurationOption('REACT_APP_SITE_VARIANT', 'local'),
           ...toJS(message.context),
           ...(message.context.error && {
             error: {
@@ -77,26 +81,37 @@ export const getLogger = (
         },
       }
     })
-  } else {
-    writeFn = (message) => {
-      const msg = JSON.parse(message)
-      const logLevel = getLevelLabelFromNumber(msg.context.logLevel)
-      // eslint-disable-next-line no-console
-      console.log(
-        `%c[${logLevel}]`,
-        `color: ${logLevel === 'error' ? 'red' : 'black'}`,
-        msg.message,
-      )
+    globalThis.ROARR.write = (message) => {
+      client.addLogEvent(roarrToLogFlareMapper(JSON.parse(message)))
     }
+    loggerInstance.debug('Logflare logging initialized')
+  } else {
     loggerInstance = Roarr.child({})
+    globalThis.ROARR.write = (message) => {
+      const msg = JSON.parse(message)
+      const { logLevel, ...cleanedContext } = msg.context
+      const logLevelLabel = getLevelLabelFromNumber(logLevel)
+
+      // eslint-disable-next-line no-console
+      if (logLevel >= logLevels[minLogLevel]) {
+        injectedConsole.log(
+          ...[
+            `%c[${logLevelLabel}]`,
+            `color: ${logLevelColourMap[logLevelLabel]}`,
+            msg.message,
+            isEmpty(cleanedContext) ? undefined : cleanedContext,
+          ].filter(Boolean),
+        )
+      }
+    }
+    loggerInstance.debug('Console logging initialized')
   }
-
-  globalThis.ROARR.write = writeFn
-
-  loggerInstance.info('Logger initialized')
 
   return loggerInstance
 }
+
+const isEmpty = (empty) =>
+  Object.keys(empty).length === 0 && empty.constructor === Object
 
 export const logger = getLogger(
   {
@@ -104,4 +119,11 @@ export const logger = getLogger(
     LOGFLARE_SOURCE: getConfigurationOption('REACT_APP_LOGFLARE_SOURCE', ''),
   },
   console,
+  getConfigurationOption('REACT_APP_LOG_LEVEL', 'info') as
+    | 'warn'
+    | 'info'
+    | 'debug'
+    | 'trace'
+    | 'error'
+    | 'fatal',
 )

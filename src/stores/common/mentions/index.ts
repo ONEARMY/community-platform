@@ -36,7 +36,7 @@ export const changeMentionToUserReference = async (
       mention.replace(/[@​]/g, ''),
     )
 
-    logger.debug({ userProfile: foundUseProfile } as any, 'Found user profile')
+    logger.debug({ userProfile: foundUseProfile }, 'Found user profile')
 
     if (foundUseProfile) {
       text = text.replace(

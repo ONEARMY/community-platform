@@ -74,7 +74,7 @@ export class ResearchStore extends ModuleStore {
     super.init()
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
-      logger.debug(docs as any, 'research.store.allDocs$')
+      logger.debug(docs, 'research.store.allDocs$')
       const sortedItems = docs.sort((a, b) =>
         a._modified < b._modified ? 1 : -1,
       )
@@ -191,7 +191,7 @@ export class ResearchStore extends ModuleStore {
         .collection<IResearchStats>('research')
         .doc(`${id}/stats/all`)
       const researchStats = await ref.get('server')
-      logger.debug(researchStats as any, 'loadResearchStats')
+      logger.debug(researchStats, 'loadResearchStats')
       this.researchStats = researchStats || { votedUsefulCount: 0 }
     }
   }
@@ -646,7 +646,7 @@ export class ResearchStore extends ModuleStore {
             ? values.creatorCountry
             : '',
       }
-      logger.debug(researchItem as any, 'populating database')
+      logger.debug(researchItem, 'populating database')
       // set the database document
       await this.updateResearchItem(dbRef, researchItem)
       this.updateResearchUploadStatus('Database')
@@ -670,7 +670,7 @@ export class ResearchStore extends ModuleStore {
    * @param update
    */
   public async uploadUpdate(update: IResearch.Update | IResearch.UpdateDB) {
-    logger.debug({ update } as any, `uploadUpdate`)
+    logger.debug({ update }, `uploadUpdate`)
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
@@ -727,7 +727,7 @@ export class ResearchStore extends ModuleStore {
           {
             updateModified: (update as IResearch.UpdateDB)._modified,
             newItemModified: newItem._modified,
-          } as any,
+          },
           'old and new modified:',
         )
         logger.debug(

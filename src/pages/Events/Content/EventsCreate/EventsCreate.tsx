@@ -52,7 +52,7 @@ const Label = styled.label`
 export class EventsCreate extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   public onSubmit = async (formValues: IEventFormInput) => {
-    logger.debug({formValues}, 'EventsCreate form values')
+    logger.debug({ formValues }, 'EventsCreate form values')
     await this.store.uploadEvent(formValues)
     this.props.history.push('/events')
   }

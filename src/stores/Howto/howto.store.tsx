@@ -122,7 +122,7 @@ export class HowtoStore extends ModuleStore {
       .collection<IHowto>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
     activeHowto = collection.length > 0 ? collection[0] : null
-    logger.debug(activeHowto as any, 'active howto')
+    logger.debug(activeHowto, 'active howto')
 
     // try previous slugs if slug is not recognized as primary
     if (!activeHowto) {
@@ -276,7 +276,7 @@ export class HowtoStore extends ModuleStore {
           creatorCountry: getUserCountry(user),
           text: text.slice(0, MAX_COMMENT_LENGTH).trim(),
         }
-        logger.debug({ newComment } as any, 'addComment.newComment')
+        logger.debug({ newComment }, 'addComment.newComment')
 
         // Update and refresh the active howto
         const updated = await this.updateHowtoItem({
@@ -300,7 +300,7 @@ export class HowtoStore extends ModuleStore {
       {
         before: this.activeHowto,
         after: howToItem,
-      } as any,
+      },
       'updateHowtoItem',
     )
 
@@ -377,7 +377,7 @@ export class HowtoStore extends ModuleStore {
       {
         before: previousMentionsList,
         after: mentions,
-      } as any,
+      },
       `Mentions`,
     )
 
@@ -456,7 +456,7 @@ export class HowtoStore extends ModuleStore {
 
   // upload a new or update an existing how-to
   public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
-    logger.debug({ values } as any, 'uploading howto')
+    logger.debug({ values }, 'uploading howto')
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db

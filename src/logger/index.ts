@@ -42,12 +42,7 @@ const getLevelLabelFromNumber = (level) => {
   }
 }
 
-export const getLogger = () => {
-  const LOGFLARE_KEY = getConfigurationOption('REACT_APP_LOGFLARE_KEY', '')
-  const LOGFLARE_SOURCE = getConfigurationOption(
-    'REACT_APP_LOGFLARE_SOURCE',
-    '',
-  )
+export const getLogger = ({ LOGFLARE_KEY, LOGFLARE_SOURCE }) => {
   if (LOGFLARE_KEY && LOGFLARE_SOURCE) {
     const client = new LogflareHttpClient({
       apiKey: LOGFLARE_KEY,
@@ -95,4 +90,7 @@ export const getLogger = () => {
   return loggerInstance
 }
 
-export const logger = getLogger()
+export const logger = getLogger({
+  LOGFLARE_KEY: getConfigurationOption('REACT_APP_LOGFLARE_KEY', ''),
+  LOGFLARE_SOURCE: getConfigurationOption('REACT_APP_LOGFLARE_SOURCE', ''),
+})

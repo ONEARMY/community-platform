@@ -10,11 +10,11 @@ describe('logger', () => {
   })
 
   it('should log to console by default', () => {
-    delete process.env.REACT_APP_LOGFLARE_KEY
-    delete process.env.REACT_APP_LOGFLARE_SOURCE
-
     const consoleSpy = jest.spyOn(console, 'log')
-    const logger = getLogger()
+    const logger = getLogger({
+      LOGFLARE_KEY: '',
+      LOGFLARE_SOURCE: '',
+    })
     logger.error('test')
     expect(consoleSpy.mock.calls[1]).toEqual(
       expect.arrayContaining(['%c[error]', 'color: red', 'test']),
@@ -24,9 +24,10 @@ describe('logger', () => {
   it.todo('validates formatting for each log level')
 
   it('should log to logflare if configured', () => {
-    process.env.REACT_APP_LOGFLARE_KEY = 'test'
-    process.env.REACT_APP_LOGFLARE_SOURCE = 'test'
-    const logger = getLogger()
+    const logger = getLogger({
+      LOGFLARE_KEY: 'test',
+      LOGFLARE_SOURCE: 'test',
+    })
     const consoleSpy = jest.spyOn(console, 'log')
     const msg = faker.lorem.sentence()
 
@@ -41,7 +42,5 @@ describe('logger', () => {
     ).toBe(msg)
 
     // Cleanup
-    delete process.env.REACT_APP_LOGFLARE_KEY
-    delete process.env.REACT_APP_LOGFLARE_SOURCE
   })
 })

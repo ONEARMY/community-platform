@@ -1,4 +1,4 @@
-import { variants } from '../common/variants'
+import { textVariants } from '../common/textVariants'
 import memberBadgeLowDetail from '../../assets/images/themes/project-kamp/avatar_member_sm.svg'
 import memberBadgeHighDetail from '../../assets/images/themes/project-kamp/avatar_member_lg.svg'
 import logo from '../../assets/images/themes/project-kamp/project-kamp-header.png'
@@ -58,19 +58,6 @@ const alerts = {
     backgroundColor: colors.red2,
     textAlign: 'center',
     fontWeight: 'normal',
-  },
-}
-
-const typography = {
-  auxiliary: {
-    fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
-    fontSize: '12px',
-    color: colors.grey,
-  },
-  paragraph: {
-    fontFamily: '"Inter", Helvetica Neue, Arial, sans-serif;',
-    fontSize: '16px',
-    color: colors.grey,
   },
 }
 
@@ -168,26 +155,6 @@ export const StyledComponentTheme: ThemeWithName = {
   maxContainerWidth,
   regular,
   bold,
-  text: {
-    heading: {
-      fontFamily: '"Varela Round", Arial, sans-serif',
-      fontSize: fontSizes[5],
-      fontWeight: 'normal',
-    },
-    small: {
-      fontFamily: '"Varela Round", Arial, sans-serif',
-      fontSize: fontSizes[4],
-      fontWeight: 'normal',
-    },
-    body: {
-      fontFamily: fonts.body,
-    },
-    quiet: {
-      fontFamily: fonts.body,
-      color: 'grey',
-    },
-    ...variants,
-  },
-  typography,
+  text: textVariants,
   zIndex,
 }

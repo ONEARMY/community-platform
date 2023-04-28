@@ -68,10 +68,6 @@ export interface ThemeWithName {
    * inlined. However some behaviour is making this hard to
    * achieve at the moment.
    */
-  typography: {
-    auxiliary: any
-    paragraph: any
-  }
 
   cards?: {
     primary: any

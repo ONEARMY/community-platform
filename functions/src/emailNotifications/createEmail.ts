@@ -1,4 +1,4 @@
-import { NotificationType } from '../../../src/models'
+import { INotification, NotificationType } from '../../../src/models'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
@@ -32,6 +32,16 @@ const getActionTypeFromNotificationType = (type: NotificationType) => {
   }
 }
 
+const getUserEmail = async (uid: string): Promise<string | null> => {
+  try {
+    const { email } = await firebaseAuth.getUser(uid)
+    return email
+  } catch (error) {
+    console.error('Unable to fetch user email', { error, userId: uid })
+    return null
+  }
+}
+
 export async function createNotificationEmails() {
   const pendingEmails = await db
     .collection(DB_ENDPOINTS.user_notifications)
@@ -41,69 +51,81 @@ export async function createNotificationEmails() {
   for (const entry of Object.entries<IPendingEmails>(
     pendingEmails.data() ?? [],
   )) {
-    const [_userId, { notifications }] = entry
+    const [_userId, { notifications: pendingNotifications }] = entry
     const user = await db.collection(DB_ENDPOINTS.users).doc(_userId).get()
-    const { email } = await firebaseAuth.getUser(_userId)
+    const email = await getUserEmail(_userId)
 
-    if (!notifications.length || !email || !user.exists) continue
+    if (!pendingNotifications.length || !email || !user.exists) continue
 
-    const { displayName } = user.data() as IUserDB
     let hasComments = false,
       hasUsefuls = false
 
-    // Decorate notifications with additional fields for email template
-    const templateNotifications = await Promise.all(
-      notifications.map(async (notification) => {
-        const triggeredByUser = await db
-          .collection(DB_ENDPOINTS.users)
-          .doc(notification.triggeredBy.userId)
-          .get()
+    try {
+      // Decorate notifications with additional fields for email template
+      const templateNotifications = await Promise.all(
+        pendingNotifications.map(async (notification) => {
+          const triggeredByUser = await db
+            .collection(DB_ENDPOINTS.users)
+            .doc(notification.triggeredBy.userId)
+            .get()
 
-        const triggeredByUserName = triggeredByUser.exists
-          ? (triggeredByUser.data() as IUserDB).userName
-          : 'Unknown User'
+          const triggeredByUserName = triggeredByUser.exists
+            ? (triggeredByUser.data() as IUserDB).userName
+            : 'Unknown User'
 
-        const actionType = getActionTypeFromNotificationType(notification.type)
-
-        const isComment = actionType === 'comment'
-        const isMention = actionType === 'mention'
-        const isUseful = actionType === 'useful'
-
-        if (isComment || isMention) {
-          hasComments = true
-        }
-        if (isUseful) {
-          hasUsefuls = true
-        }
-
-        return {
-          ...notification,
-          triggeredBy: {
-            ...notification.triggeredBy,
-            userName: triggeredByUserName,
-          },
-          resourceLabel: getResourceLabelFromNotificationType(
+          const actionType = getActionTypeFromNotificationType(
             notification.type,
-          ),
-          isComment,
-          isMention,
-          isUseful,
-        }
-      }),
-    )
+          )
 
-    // Adding emails to this collection triggers an email notification to be sent to the user
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: [email],
-      template: {
-        name: TEMPLATE_NAME,
-        data: {
-          displayName,
-          hasComments,
-          hasUsefuls,
-          notifications: templateNotifications,
+          const isComment = actionType === 'comment'
+          const isMention = actionType === 'mention'
+          const isUseful = actionType === 'useful'
+
+          if (isComment || isMention) {
+            hasComments = true
+          }
+          if (isUseful) {
+            hasUsefuls = true
+          }
+
+          return {
+            ...notification,
+            triggeredBy: {
+              ...notification.triggeredBy,
+              userName: triggeredByUserName,
+            },
+            resourceLabel: getResourceLabelFromNotificationType(
+              notification.type,
+            ),
+            isComment,
+            isMention,
+            isUseful,
+          }
+        }),
+      )
+
+      const { displayName, notifications } = user.data() as IUserDB
+
+      // Adding emails to this collection triggers an email notification to be sent to the user
+      const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
+        to: [email],
+        template: {
+          name: TEMPLATE_NAME,
+          data: {
+            displayName,
+            hasComments,
+            hasUsefuls,
+            notifications: templateNotifications,
+          },
         },
-      },
-    })
+      })
+      const updatedNotifications = notifications.map((n) => ({
+        ...n,
+        email: sentEmailRef.id,
+      }))
+      await user.ref.update({ notifications: updatedNotifications })
+    } catch (error) {
+      console.error('Error sending an email', { error, userId: _userId })
+    }
   }
 }

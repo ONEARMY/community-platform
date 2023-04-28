@@ -43,18 +43,3 @@ exports.sendOnce = functions.https.onCall(async (_, context) => {
     'Emails can be triggered by admins only.',
   )
 })
-
-// exports.setEmailNotificationSettings = functions.https.onRequest(async () => {
-//   await db
-//     .collection(DB_ENDPOINTS.users)
-//     .get()
-//     .then((snapshot) => {
-//       Promise.all(
-//         snapshot.docs.map((doc) => {
-//           doc.ref.update({
-//             notification_settings: { emailFrequency: 'daily' },
-//           })
-//         }),
-//       )
-//     })
-// })

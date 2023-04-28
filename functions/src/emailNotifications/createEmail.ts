@@ -37,7 +37,8 @@ const getUserEmail = async (uid: string): Promise<string | undefined> => {
     const { email } = await firebaseAuth.getUser(uid)
     return email
   } catch (error) {
-    return undefined
+    console.error('Unable to fetch user email', { error, userId: uid })
+    return null
   }
 }
 
@@ -106,7 +107,7 @@ export async function createNotificationEmails() {
       const { displayName, notifications } = user.data() as IUserDB
 
       // Adding emails to this collection triggers an email notification to be sent to the user
-      await db.collection(DB_ENDPOINTS.emails).add({
+      const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
         to: [email],
         template: {
           name: TEMPLATE_NAME,
@@ -120,11 +121,11 @@ export async function createNotificationEmails() {
       })
       const updatedNotifications = notifications.map((n) => ({
         ...n,
-        emailed: true,
+        email: sentEmailRef.id,
       }))
       await user.ref.update({ notifications: updatedNotifications })
     } catch (error) {
-      console.error('Error sending an email', error)
+      console.error('Error sending an email', { error, userId: _userId })
     }
   }
 }

@@ -14,9 +14,6 @@ import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import {
   addIDToSessionStorageArray,
   retrieveSessionStorageArray,
@@ -74,9 +71,9 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
       data-id={research._id}
       sx={{
         position: 'relative',
-        borderRadius: theme.radii[2] + 'px',
+        borderRadius: 2,
         bg: 'white',
-        borderColor: theme.colors.black,
+        borderColor: 'black',
         borderStyle: 'solid',
         borderWidth: '2px',
         overflow: 'hidden',
@@ -115,8 +112,8 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
                 research.subscribers?.includes(
                   props?.loggedInUser?.userName || '',
                 )
-                  ? theme.colors.subscribed
-                  : theme.colors.notSubscribed
+                  ? 'subscribed'
+                  : 'notSubscribed'
               }
               sx={{
                 fontSize: 2,
@@ -177,8 +174,8 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
                 isVerified={isUserVerified(research._createdBy)}
               />
               <Text
+                variant="auxiliary"
                 sx={{
-                  ...theme.typography.auxiliary,
                   marginTop: 2,
                   marginBottom: 2,
                 }}
@@ -188,9 +185,12 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             </Flex>
           </Flex>
           <Text
+            variant="auxiliary"
             sx={{
-              ...theme.typography.auxiliary,
-              color: `${theme.colors.lightgrey} !important`,
+              color: 'lightgrey',
+              '&!important': {
+                color: 'lightgrey',
+              },
             }}
             mt={1}
             mb={2}
@@ -200,7 +200,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
           <Heading mt={2} mb={1}>
             {research.title}
           </Heading>
-          <Text sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}>
+          <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
             <LinkifyText>{research.description}</LinkifyText>
           </Text>
         </Box>

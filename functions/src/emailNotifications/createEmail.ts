@@ -32,7 +32,7 @@ const getActionTypeFromNotificationType = (type: NotificationType) => {
   }
 }
 
-const getUserEmail = async (uid: string): Promise<string | undefined> => {
+const getUserEmail = async (uid: string): Promise<string | null> => {
   try {
     const { email } = await firebaseAuth.getUser(uid)
     return email

@@ -91,7 +91,7 @@ export interface INotification {
   type: NotificationType
   read: boolean
   notified: boolean
-  emailed?: boolean
+  emailed?: string // id of the doc in the emails collection
 }
 
 export const NotificationTypes = [

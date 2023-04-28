@@ -8,7 +8,6 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
-import { useTheme } from '@emotion/react'
 import { Link } from 'react-router-dom'
 
 interface IProps {
@@ -31,8 +30,7 @@ const ResearchUpdate = ({
   slug,
   comments,
   showComments,
-}: IProps) => {
-  const theme = useTheme()
+}) => {
   const formattedCreateDatestamp = format(
     new Date(update._created),
     'DD-MM-YYYY',
@@ -103,9 +101,9 @@ const ResearchUpdate = ({
                 >
                   <Flex sx={{ flexDirection: ['column'] }}>
                     <Text
+                      variant="auxiliary"
                       sx={{
                         textAlign: ['left', 'right', 'right'],
-                        ...theme.typography.auxiliary,
                       }}
                     >
                       {'created ' + formattedCreateDatestamp}
@@ -114,9 +112,9 @@ const ResearchUpdate = ({
                     {formattedCreateDatestamp !==
                       formattedModifiedDatestamp && (
                       <Text
+                        variant="auxiliary"
                         sx={{
                           textAlign: ['left', 'right', 'right'],
-                          ...theme.typography.auxiliary,
                         }}
                       >
                         {'edited ' + formattedModifiedDatestamp}
@@ -143,8 +141,9 @@ const ResearchUpdate = ({
               <Box>
                 <Text
                   mt={3}
+                  variant="auxiliary"
                   color={'grey'}
-                  sx={{ whiteSpace: 'pre-line', ...theme.typography.paragraph }}
+                  sx={{ whiteSpace: 'pre-line' }}
                 >
                   <LinkifyText>{update.description}</LinkifyText>
                 </Text>

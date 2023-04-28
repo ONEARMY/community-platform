@@ -6,9 +6,6 @@ import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 
 interface IProps {
   step: IHowtoStep
@@ -67,8 +64,8 @@ export default class Step extends PureComponent<IProps> {
                     <Text
                       mt={3}
                       color={'grey'}
+                      variant="paragraph"
                       sx={{
-                        ...theme.typography.paragraph,
                         whiteSpace: 'pre-line',
                       }}
                     >

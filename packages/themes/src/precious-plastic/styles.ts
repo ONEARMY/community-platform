@@ -1,4 +1,5 @@
 import { commonColors } from './../common/colors'
+import { variants } from '../common/variants'
 import memberBadgeLowDetail from '../../assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import memberBadgeHighDetail from '../../assets/images/themes/precious-plastic/avatar_member_lg.svg'
 import CollectionBadge from '../../assets/images/badges/pt-collection-point.svg'
@@ -219,6 +220,7 @@ export const styles: ThemeWithName = {
       fontFamily: fonts.body,
       color: 'grey',
     },
+    ...variants,
   },
   typography,
   zIndex,

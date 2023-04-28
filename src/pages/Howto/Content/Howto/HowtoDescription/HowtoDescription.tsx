@@ -17,14 +17,7 @@ import {
   DownloadFiles,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
-import {
-  isAllowToEditContent,
-  emStringToPx,
-  capitalizeFirstLetter,
-} from 'src/utils/helpers'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+import { isAllowToEditContent, capitalizeFirstLetter } from 'src/utils/helpers'
 import { Link } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
@@ -39,9 +32,6 @@ import {
 } from 'src/utils/sessionStorage'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
-
-const iconFlexDirection =
-  emStringToPx(theme.breakpoints[0]) > window.innerWidth ? 'column' : 'row'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -121,9 +111,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       data-id={howto._id}
       className="howto-description-container"
       sx={{
-        borderRadius: theme.radii[2] + 'px',
+        borderRadius: 2,
         bg: 'white',
-        borderColor: theme.colors.black,
+        borderColor: 'black',
         borderStyle: 'solid',
         borderWidth: '2px',
         overflow: 'hidden',
@@ -194,7 +184,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Link>
           )}
         </Flex>
-        <Box mt={3} mb={2}>
+        <Box mt={4} mb={2}>
           <Username
             user={{
               userName: howto._createdBy,
@@ -203,9 +193,12 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             isVerified={isUserVerified(howto._createdBy)}
           />
           <Text
+            variant="auxiliary"
             sx={{
-              ...theme.typography.auxiliary,
-              color: `${theme.colors.lightgrey} !important`,
+              color: 'lightgrey',
+              '&!important': {
+                color: 'lightgrey',
+              },
             }}
             mt={1}
             mb={2}
@@ -216,13 +209,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
             {capitalizeFirstLetter(howto.title)}
           </Heading>
-          <Text sx={{ ...theme.typography.paragraph, whiteSpace: 'pre-line' }}>
+          <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
             <LinkifyText>{howto.description}</LinkifyText>
           </Text>
         </Box>
 
         <Flex mt="4">
-          <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
             <Image
               loading="lazy"
               src={StepsIcon}
@@ -235,7 +228,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               ? `${howto.steps.length} step`
               : `${howto.steps.length} steps`}
           </Flex>
-          <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
             <Image
               loading="lazy"
               src={TimeNeeded}
@@ -246,7 +239,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             />
             {howto.time}
           </Flex>
-          <Flex mr="4" sx={{ flexDirection: iconFlexDirection }}>
+          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
             <Image
               loading="lazy"
               src={DifficultyLevel}
@@ -290,9 +283,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               <Text
                 data-cy="file-download-counter"
                 sx={{
-                  fontSize: '12px',
-                  color: '#61646B',
-                  paddingLeft: '8px',
+                  fontSize: 1,
+                  color: 'grey',
+                  paddingLeft: 1,
                 }}
               >
                 {fileDownloadCount}

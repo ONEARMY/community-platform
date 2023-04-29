@@ -42,6 +42,28 @@ const getUserEmail = async (uid: string): Promise<string | null> => {
   }
 }
 
+const updateEmailedNotifications = async (
+  user: FirebaseFirestore.DocumentSnapshot<IUserDB>,
+  emailedNotifications: INotification[],
+  emailField: string,
+) => {
+  const updatedNotifications = user.data().notifications.map((notification) => {
+    if (
+      emailedNotifications.some(
+        (emailedNotification) => (emailedNotification._id = notification._id),
+      )
+    ) {
+      return {
+        ...notification,
+        email: emailField,
+      }
+    }
+    return notification
+  })
+
+  await user.ref.update({ notifications: updatedNotifications })
+}
+
 export async function createNotificationEmails() {
   const pendingEmails = await db
     .collection(DB_ENDPOINTS.user_notifications)
@@ -52,10 +74,21 @@ export async function createNotificationEmails() {
     pendingEmails.data() ?? [],
   )) {
     const [_userId, { notifications: pendingNotifications }] = entry
-    const user = await db.collection(DB_ENDPOINTS.users).doc(_userId).get()
+
+    if (!pendingNotifications.length) continue
+
+    const user = (await db
+      .collection(DB_ENDPOINTS.users)
+      .doc(_userId)
+      .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
+
     const email = await getUserEmail(_userId)
 
-    if (!pendingNotifications.length || !email || !user.exists) continue
+    if (!user.exists || !email) {
+      console.error('Cannot get user info', { userId: _userId })
+      await updateEmailedNotifications(user, pendingNotifications, 'failed')
+      continue
+    }
 
     let hasComments = false,
       hasUsefuls = false
@@ -104,7 +137,7 @@ export async function createNotificationEmails() {
         }),
       )
 
-      const { displayName, notifications } = user.data() as IUserDB
+      const { displayName } = user.data()
 
       // Adding emails to this collection triggers an email notification to be sent to the user
       const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
@@ -119,13 +152,14 @@ export async function createNotificationEmails() {
           },
         },
       })
-      const updatedNotifications = notifications.map((n) => ({
-        ...n,
-        email: sentEmailRef.id,
-      }))
-      await user.ref.update({ notifications: updatedNotifications })
+      await updateEmailedNotifications(
+        user,
+        pendingNotifications,
+        sentEmailRef.id,
+      )
     } catch (error) {
       console.error('Error sending an email', { error, userId: _userId })
+      await updateEmailedNotifications(user, pendingNotifications, 'failed')
     }
   }
 }

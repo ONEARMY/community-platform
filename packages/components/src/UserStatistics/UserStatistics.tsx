@@ -21,6 +21,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
   const hasLocation =
     props.country !== undefined && props.userName !== undefined
 
+  if (isEmpty(props) && !hasLocation) {
+    return null
+  }
+
   return (
     <Card
       sx={{
@@ -93,3 +97,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
     </Card>
   )
 }
+
+const isEmpty = (props: UserStatisticsProps) =>
+  !props.isVerified &&
+  !props.isSupporter &&
+  !props.usefulCount &&
+  !props.howtoCount &&
+  !props.eventCount

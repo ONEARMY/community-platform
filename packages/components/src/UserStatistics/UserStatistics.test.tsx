@@ -60,4 +60,19 @@ describe('UserStatistics', () => {
 
     expect(eventCount).toHaveTextContent('Events: 4')
   })
+
+  it('renders nothing if there are no stats', () => {
+    const { container } = render(
+      <Default
+        howtoCount={0}
+        eventCount={0}
+        usefulCount={0}
+        isVerified={false}
+        userName="Test User"
+        isSupporter={false}
+      />,
+    )
+
+    expect(container).toBeEmptyDOMElement()
+  })
 })

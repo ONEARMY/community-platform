@@ -105,7 +105,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
           )}
           <AuthWrapper roleRequired="beta-tester">
             <Button
-              data-testid="following-button"
+              data-testid="follow-button"
               icon="thunderbolt"
               variant="outline"
               iconColor={

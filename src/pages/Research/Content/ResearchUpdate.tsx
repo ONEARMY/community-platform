@@ -30,7 +30,7 @@ const ResearchUpdate = ({
   slug,
   comments,
   showComments,
-}) => {
+}: IProps) => {
   const formattedCreateDatestamp = format(
     new Date(update._created),
     'DD-MM-YYYY',

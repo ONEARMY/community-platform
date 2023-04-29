@@ -38,7 +38,7 @@ const fullWidthMarginOverride = `calc((${
 const SubheaderContainer = styled(Box)`
   @media only screen and (min-width: ${theme.maxContainerWidth}px) {
     margin-left: ${fullWidthMarginOverride}!important;
-    margin-right ${fullWidthMarginOverride}!important;
+    margin-right: ${fullWidthMarginOverride}!important;
   }
 `
 

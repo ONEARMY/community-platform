@@ -22,7 +22,6 @@ describe('UserStatistics', () => {
     )
     const locationLink = getByTestId('location-link')
 
-    expect(locationLink).toBeInTheDocument()
     expect(locationLink).toHaveTextContent('Greenland')
   })
 
@@ -41,7 +40,6 @@ describe('UserStatistics', () => {
     )
     const usefulCount = getByTestId('useful-stat')
 
-    expect(usefulCount).toBeInTheDocument()
     expect(usefulCount).toHaveTextContent('Useful: 20')
   })
 
@@ -51,7 +49,6 @@ describe('UserStatistics', () => {
     )
     const howtoCount = getByTestId('howto-stat')
 
-    expect(howtoCount).toBeInTheDocument()
     expect(howtoCount).toHaveTextContent(/^How[-‑]?to: 10$/)
   })
 
@@ -60,6 +57,7 @@ describe('UserStatistics', () => {
       <Default {...(Default.args as UserStatisticsProps)} />,
     )
     const eventCount = getByTestId('event-stat')
+
     expect(eventCount).toHaveTextContent('Events: 4')
   })
 })

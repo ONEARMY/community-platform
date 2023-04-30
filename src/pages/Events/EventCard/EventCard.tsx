@@ -9,7 +9,6 @@ import {
 } from 'oa-components'
 import type { IEvent } from '../../../models/events.models'
 import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
-import { useTheme } from '@emotion/react'
 import laptopIcon from 'src/assets/icons/icon-laptop.png'
 import { isUserVerified } from 'src/common/isUserVerified'
 
@@ -26,7 +25,6 @@ interface IProps {
 }
 
 export const EventCard = (props: IProps) => {
-  const theme = useTheme()
   return (
     <Card mt={4} key={props.event.slug}>
       <Flex
@@ -118,20 +116,14 @@ export const EventCard = (props: IProps) => {
           {props.event?.isDigital ? (
             <>
               <Image src={laptopIcon} alt="" width="36px" />
-              <Text
-                sx={{ width: '100%', ...theme.typography.auxiliary }}
-                ml={[1, 1, 2]}
-              >
+              <Text variant="auxiliary" sx={{ width: '100%' }} ml={[1, 1, 2]}>
                 Digital
               </Text>
             </>
           ) : (
             <>
               <FlagIconEvents code={props.event.location.countryCode} />
-              <Text
-                sx={{ width: '100%', ...theme.typography.auxiliary }}
-                ml={[1, 1, 2]}
-              >
+              <Text variant="auxiliary" sx={{ width: '100%' }} ml={[1, 1, 2]}>
                 {[
                   props.event.location.administrative,
                   props.event.location?.countryCode?.toUpperCase(),
@@ -204,9 +196,9 @@ export const EventCard = (props: IProps) => {
             sx={{ width: '100%' }}
           >
             <Text
+              variant="auxiliary"
               sx={{
                 width: '100%',
-                ...theme.typography.auxiliary,
                 textAlign: 'right',
               }}
             >

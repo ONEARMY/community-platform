@@ -233,6 +233,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "evakill",
+      "name": "Eva Killenberg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37253846?v=4",
+      "profile": "https://www.evakillenberg.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

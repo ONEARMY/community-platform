@@ -24,21 +24,6 @@ export class AdminStoreV2 {
       .collection(endpoint)
       .getWhere('moderation', '==', 'awaiting-moderation')
   }
-
-  /**
-   * Alt syntax via raw firestore TODO
-   * Future proposed implementation that could include pagination and/or multiple queries
-   **/
-  //  private async queryDBRaw() {
-  // const db = (dbClient.clients.serverDB as FirestoreClient)._raw // <-- will need to be exposed
-  // const mappedEndpoint = DB_ENDPOINTS[endpoint]
-  // const res = await db
-  //   .collection(mappedEndpoint)
-  //   .where('moderation', '==', 'awaiting-moderation')
-  //   // .limit(10)
-  //   .get()
-  // return res.docs.map(d => d.data())
-  // }
 }
 
 /**

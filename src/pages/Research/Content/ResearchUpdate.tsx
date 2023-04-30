@@ -24,14 +24,14 @@ const FlexStepNumber = styled(Flex)`
   height: fit-content;
 `
 
-const ResearchUpdate: React.FC<IProps> = ({
+const ResearchUpdate = ({
   update,
   updateIndex,
   isEditable,
   slug,
   comments,
   showComments,
-}) => {
+}: IProps) => {
   const theme = useTheme()
   const formattedCreateDatestamp = format(
     new Date(update._created),

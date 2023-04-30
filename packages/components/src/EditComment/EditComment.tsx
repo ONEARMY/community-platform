@@ -2,13 +2,14 @@ import { Flex, Text } from 'theme-ui'
 import { FieldTextarea, Button } from '../'
 import { Field, Form } from 'react-final-form'
 
-export const EditComment: React.FC<{
+type EditCommentProps = {
   comment: string
   handleCancel: () => void
   handleSubmit: (commentText: string) => void
-}> = (props) => {
-  const { comment } = props
+}
 
+export const EditComment = (props: EditCommentProps) => {
+  const { comment } = props
   return (
     <Form
       onSubmit={() => {}}

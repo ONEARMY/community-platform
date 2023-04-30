@@ -129,7 +129,7 @@ const AdminUsers = observer(() => {
   }
 
   /** Render filter options for column type */
-  const RenderFilter: React.FC<IHeaderRenderProps> = ({ field, header }) => {
+  const RenderFilter = ({ field, header }: IHeaderRenderProps) => {
     const filterMapping = {
       profileType: profileTypeFilters,
       userRoles: userRoleFilters,
@@ -182,9 +182,7 @@ const AdminUsers = observer(() => {
   }
 
   /** Function applied to render each table row cell */
-  const RenderContent: React.FC<ICellRenderProps> = (
-    props: ICellRenderProps,
-  ) => {
+  const RenderContent = (props: ICellRenderProps) => {
     const { col } = props
     const { field, value, rowInfo } = col
     const userField = field as keyof IUserPPDB

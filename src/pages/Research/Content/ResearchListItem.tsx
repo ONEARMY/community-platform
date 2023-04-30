@@ -37,7 +37,7 @@ const MobileItemInfo = styled.div`
   }
 `
 
-const ResearchListItem: React.FC<IProps> = ({ item }) => {
+const ResearchListItem = ({ item }: IProps) => {
   const collaborators = item['collaborators'] || []
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>

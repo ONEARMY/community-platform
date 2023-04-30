@@ -95,47 +95,30 @@ export async function createNotificationEmails() {
 
     try {
       // Decorate notifications with additional fields for email template
-      const templateNotifications = await Promise.all(
-        pendingNotifications.map(async (notification) => {
-          const triggeredByUser = await db
-            .collection(DB_ENDPOINTS.users)
-            .doc(notification.triggeredBy.userId)
-            .get()
+      const templateNotifications = pendingNotifications.map((notification) => {
+        const actionType = getActionTypeFromNotificationType(notification.type)
 
-          const triggeredByUserName = triggeredByUser.exists
-            ? (triggeredByUser.data() as IUserDB).userName
-            : 'Unknown User'
+        const isComment = actionType === 'comment'
+        const isMention = actionType === 'mention'
+        const isUseful = actionType === 'useful'
 
-          const actionType = getActionTypeFromNotificationType(
+        if (isComment || isMention) {
+          hasComments = true
+        }
+        if (isUseful) {
+          hasUsefuls = true
+        }
+
+        return {
+          ...notification,
+          resourceLabel: getResourceLabelFromNotificationType(
             notification.type,
-          )
-
-          const isComment = actionType === 'comment'
-          const isMention = actionType === 'mention'
-          const isUseful = actionType === 'useful'
-
-          if (isComment || isMention) {
-            hasComments = true
-          }
-          if (isUseful) {
-            hasUsefuls = true
-          }
-
-          return {
-            ...notification,
-            triggeredBy: {
-              ...notification.triggeredBy,
-              userName: triggeredByUserName,
-            },
-            resourceLabel: getResourceLabelFromNotificationType(
-              notification.type,
-            ),
-            isComment,
-            isMention,
-            isUseful,
-          }
-        }),
-      )
+          ),
+          isComment,
+          isMention,
+          isUseful,
+        }
+      })
 
       const { displayName } = user.data()
 

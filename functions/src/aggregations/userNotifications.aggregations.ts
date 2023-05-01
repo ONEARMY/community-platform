@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-import { DB_ENDPOINTS, IUserDB } from '../models'
+import { DB_ENDPOINTS, EmailNotificationFrequency, IUserDB } from '../models'
 import { handleDBAggregations, VALUE_MODIFIERS } from './common.aggregations'
 import type { IAggregation } from './common.aggregations'
 
@@ -23,7 +23,11 @@ const UserNotificationAggregation: INotificationAggregation =
         (n) => !n.notified && !n.read && !n.email,
       )
       // remove user from list if they do not have emails enabled or no pending notifications
-      if (!emailFrequency || pending.length === 0) {
+      if (
+        !emailFrequency ||
+        emailFrequency === EmailNotificationFrequency.NEVER ||
+        pending.length === 0
+      ) {
         return {
           [_id]: VALUE_MODIFIERS.delete(),
         }

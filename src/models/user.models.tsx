@@ -109,14 +109,14 @@ export const NotificationTypes = [
 export type NotificationType = typeof NotificationTypes[number]
 
 export enum EmailNotificationFrequency {
-  NEVER = '',
+  NEVER = 'never',
   DAILY = 'daily',
   WEEKLY = 'weekly',
   MONTHLY = 'monthly',
 }
 
 export type INotificationSettings = {
-  enabled: {
+  enabled?: {
     [T in NotificationType]: boolean
   }
   emailFrequency: EmailNotificationFrequency

@@ -425,6 +425,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       </Label>
                                       <Field
                                         name="files"
+                                        data-cy="files"
                                         component={FileInputField}
                                       />
                                     </Flex>

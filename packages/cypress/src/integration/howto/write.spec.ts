@@ -335,6 +335,24 @@ describe('[How To]', () => {
         .find(':file')
         .attachFile('images/howto-intro.jpg')
 
+      cy.step('Upload a new file')
+
+      cy.get('[data-cy="files"]').click({ force: true })
+
+      cy.fixture('files/Example.pdf').then((fileContent) => {
+        cy.get('[data-cy="uppy-dashboard"] .uppy-Dashboard-input').attachFile({
+          fileContent: fileContent,
+          fileName: 'example.pdf',
+          mimeType: 'application/pdf',
+        })
+      })
+
+      // wait for file to be uploaded
+      cy.wait(1000)
+      cy.contains('Upload 1 file').click()
+
+      cy.step('Update steps')
+
       deleteStep(5)
       deleteStep(4)
       deleteStep(2)

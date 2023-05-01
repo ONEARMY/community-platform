@@ -151,7 +151,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       editCoverImg: false,
       fileEditMode: false,
       showSubmitModal: false,
-      showInvalidFileWarning: false,
+      showInvalidFileWarning:
+        this.props.formValues.files?.length > 0 &&
+        this.props.formValues.fileLink,
     }
     this.isDraft = props.moderation === 'draft'
   }
@@ -353,6 +355,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   <Text
                                     id="invalid-file-warning"
                                     data-cy="invalid-file-warning"
+                                    data-testid="invalid-file-warning"
                                     sx={{
                                       color: 'error',
                                     }}
@@ -438,6 +441,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         Or upload your files here
                                       </Label>
                                       <Field
+                                        id="files"
                                         name="files"
                                         data-cy="files"
                                         component={FileInputField}

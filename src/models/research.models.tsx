@@ -46,6 +46,7 @@ export namespace IResearch {
     tags: ISelectedTags
     creatorCountry?: string
     collaborators: string
+    previousSlugs?: string[]
   }
 
   /** Research items synced from the database will contain additional metadata */

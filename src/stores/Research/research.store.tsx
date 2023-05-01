@@ -6,28 +6,29 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import type {
-  IResearchStats,
-  IResearchDB,
-  IResearch,
-} from '../../models/research.models'
 import { createContext, useContext } from 'react'
-import type { IConvertedFileMeta } from 'src/types'
-import { getUserCountry } from 'src/utils/getUserCountry'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import type { IComment, IUser } from 'src/models'
-import { ModuleStore } from '../common/module.store'
+import type { IConvertedFileMeta } from 'src/types'
+import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
+  formatLowerNoSpecial,
   hasAdminRights,
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
+import type {
+  IResearch,
+  IResearchDB,
+  IResearchStats,
+} from '../../models/research.models'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
 } from '../common/mentions'
+import { ModuleStore } from '../common/module.store'
 import type { DocReference } from '../databaseV2/DocReference'
 
 const COLLECTION_NAME = 'research'
@@ -107,35 +108,50 @@ export class ResearchStore extends ModuleStore {
     })
   }
 
-  public async setActiveResearchItem(slug?: string) {
+  @action
+  public async setActiveResearchItemBySlug(slug?: string) {
+    logger.debug(`setActiveResearchItemBySlug:`, { slug })
+    let activeResearchItem: IResearchDB | undefined = undefined
+
     if (slug) {
       this.researchStats = undefined
+
       const collection = await this.db
         .collection<IResearch.ItemDB>(COLLECTION_NAME)
         .getWhere('slug', '==', slug)
-      const researchItem: IResearch.ItemDB =
-        collection.length > 0 ? collection[0] : undefined
-      runInAction(() => {
-        this.activeResearchItem = {
-          ...researchItem,
-          collaborators: researchItem.collaborators || [],
-          description: changeUserReferenceToPlainText(researchItem.description),
-          updates: researchItem.updates?.map((update) => {
+      activeResearchItem = collection.length > 0 ? collection[0] : null
+      logger.debug('active research item', activeResearchItem)
+
+      if (!activeResearchItem) {
+        const collection = await this.db
+          .collection<IResearch.ItemDB>(COLLECTION_NAME)
+          .getWhere('previousSlugs', 'array-contains', slug)
+
+        activeResearchItem = collection.length > 0 ? collection[0] : null
+      }
+
+      if (activeResearchItem) {
+        activeResearchItem.collaborators =
+          activeResearchItem.collaborators || []
+        activeResearchItem.description = changeUserReferenceToPlainText(
+          activeResearchItem.description,
+        )
+        activeResearchItem.updates = activeResearchItem.updates?.map(
+          (update) => {
             update.description = changeUserReferenceToPlainText(
               update.description,
             )
             return update
-          }),
-        }
-      })
+          },
+        )
+      }
+
       // load Research stats which are stored in a separate subcollection
-      await this.loadResearchStats(researchItem?._id)
-      return researchItem as IResearch.ItemDB
-    } else {
-      runInAction(() => {
-        this.activeResearchItem = undefined
-      })
+      await this.loadResearchStats(activeResearchItem?._id)
     }
+
+    this.activeResearchItem = activeResearchItem
+    return activeResearchItem
   }
 
   public async addSubscriberToResearchArticle(
@@ -545,6 +561,14 @@ export class ResearchStore extends ModuleStore {
       })
     })
 
+    if (researchItem.previousSlugs === undefined) {
+      researchItem.previousSlugs = []
+    }
+
+    if (!researchItem.previousSlugs.includes(researchItem.slug)) {
+      researchItem.previousSlugs.push(researchItem.slug)
+    }
+
     await dbRef.set({
       ...researchItem,
       mentions,
@@ -622,6 +646,16 @@ export class ResearchStore extends ModuleStore {
       // populate DB
       // define research
       const userCountry = getUserCountry(user)
+
+      // create previousSlugs based on available slug or title
+      const previousSlugs: string[] = []
+      if (values.slug) {
+        previousSlugs.push(values.slug)
+      } else if (values.title) {
+        const titleToSlug = formatLowerNoSpecial(values.title)
+        previousSlugs.push(titleToSlug)
+      }
+
       const researchItem: IResearch.Item = {
         mentions: [],
         ...values,

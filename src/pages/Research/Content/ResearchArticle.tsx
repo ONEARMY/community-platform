@@ -1,26 +1,26 @@
 import { observer } from 'mobx-react'
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
-import { Box, Flex } from 'theme-ui'
 import {
   ArticleCallToAction,
   Button,
   Loader,
   UsefulStatsButton,
 } from 'oa-components'
+import * as React from 'react'
+import type { RouteComponentProps } from 'react-router'
+import { Link } from 'react-router-dom'
+import { trackEvent } from 'src/common/Analytics'
+import { isUserVerified } from 'src/common/isUserVerified'
+import type { IComment, UserComment } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 import { isAllowToEditContent } from 'src/utils/helpers'
+import { seoTagsUpdate } from 'src/utils/seo'
+import { Box, Flex } from 'theme-ui'
+import { useCommonStores } from '../../../index'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
-import { useCommonStores } from '../../../index'
-import { Link } from 'react-router-dom'
-import type { IComment, UserComment } from 'src/models'
-import { seoTagsUpdate } from 'src/utils/seo'
-import type { IUploadedFileMeta } from 'src/stores/storage'
-import { isUserVerified } from 'src/common/isUserVerified'
 import { researchCommentUrlPattern } from './helper'
-import { trackEvent } from 'src/common/Analytics'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -86,7 +86,7 @@ const ResearchArticle = observer((props: IProps) => {
   React.useEffect(() => {
     ;(async () => {
       const { slug } = props.match.params
-      const researchItem = await researchStore.setActiveResearchItem(slug)
+      const researchItem = await researchStore.setActiveResearchItemBySlug(slug)
       setIsLoading(false)
       const hash = props.location.hash
       if (new RegExp(/^#update_\d$/).test(props.location.hash)) {
@@ -109,7 +109,7 @@ const ResearchArticle = observer((props: IProps) => {
 
     // Reset the store's active item and seo tags on component cleanup
     return () => {
-      researchStore.setActiveResearchItem()
+      researchStore.setActiveResearchItemBySlug()
       seoTagsUpdate({})
     }
   }, [props, researchStore])

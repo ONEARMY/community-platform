@@ -347,7 +347,7 @@ describe('[How To]', () => {
         })
       })
 
-      // wait for file to be uploaded
+      // wait for file to be uploaded and click upload button
       cy.wait(1000)
       cy.contains('Upload 1 file').click()
 
@@ -366,6 +366,14 @@ describe('[How To]', () => {
         ])
       })
 
+      cy.step('Submit updated Howto')
+
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=invalid-file-warning]').contains(
+        'Please provide either a file link or upload a file, not both.',
+      )
+
+      cy.get('[data-cy=fileLink]').clear()
       cy.get('[data-cy=submit]').click()
 
       cy.step('Open the updated how-to')

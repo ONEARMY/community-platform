@@ -348,6 +348,20 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   placeholder="Introduction to your How-To (max 400 characters)"
                                 />
                               </Flex>
+                              <Flex sx={{ mb: 2 }}>
+                                {this.state.showInvalidFileWarning && (
+                                  <Text
+                                    id="invalid-file-warning"
+                                    data-cy="invalid-file-warning"
+                                    sx={{
+                                      color: 'error',
+                                    }}
+                                  >
+                                    Please provide either a file link or upload
+                                    a file, not both.
+                                  </Text>
+                                )}
+                              </Flex>
                               <Label htmlFor="description">
                                 Do you have supporting file to help others
                                 replicate your How-to?

@@ -369,12 +369,11 @@ describe('[How To]', () => {
       cy.step('Submit updated Howto')
 
       cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=invalid-file-warning]').contains(
-        'Please provide either a file link or upload a file, not both.',
-      )
+      cy.get('[data-cy=invalid-file-warning]').should('be.visible')
 
       cy.get('[data-cy=fileLink]').clear()
       cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=invalid-file-warning]').should('not.exist')
 
       cy.step('Open the updated how-to')
 

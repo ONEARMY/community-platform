@@ -91,6 +91,9 @@ export interface INotification {
   type: NotificationType
   read: boolean
   notified: boolean
+  // email contains the id of the doc in the emails collection if the notification was included in
+  // an email or 'failed' if an email with this notification was attempted and encountered an error
+  email?: string
 }
 
 export const NotificationTypes = [
@@ -117,10 +120,4 @@ export type INotificationSettings = {
     [T in NotificationType]: boolean
   }
   emailFrequency: EmailNotificationFrequency
-}
-
-export interface IEmailNotificationsQueueItem {
-  _id: ISODateString
-  usersWithNotifications: string[]
-  usersEmailed: string[]
 }

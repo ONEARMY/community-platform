@@ -51,6 +51,14 @@
     // as of v17 no longer required
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "types": {
+          "React.FC": "`React.FC/React.FunctionComponent is deprecated and should be avoided. Consider using a function declaration instead`"
+        }
+      }
+    ],
     "@typescript-eslint/consistent-type-imports": [
       "error",
       {

@@ -17,10 +17,14 @@ exports.sendOnce = functions.https.onCall(async (_, context) => {
     )
   }
   // Validate user exists and has admin status before triggering function.
-  const { uid } = context.auth
-  const user = await db.collection(DB_ENDPOINTS.users).doc(uid).get()
-  if (user.exists) {
-    const { userRoles } = user.data() as IUserDB
+  const { uid: authId } = context.auth
+  const user = await db
+    .collection(DB_ENDPOINTS.users)
+    .where('_authID', '==', authId)
+    .get()
+
+  if (user) {
+    const { userRoles } = user.docs[0].data() as IUserDB
     if (userRoles?.some((role) => ['admin', 'super-admin'].includes(role))) {
       try {
         await createNotificationEmails()

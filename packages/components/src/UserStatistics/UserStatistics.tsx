@@ -21,6 +21,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
   const hasLocation =
     props.country !== undefined && props.userName !== undefined
 
+  if (isEmpty(props) && !hasLocation) {
+    return null
+  }
+
   return (
     <Card
       sx={{
@@ -35,14 +39,18 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         }}
       >
         {props.isVerified && (
-          <Flex>
+          <Flex data-testid="verified-stat">
             <Icon glyph="verified" size={22} />
             <Box ml={1}>Verified</Box>
           </Flex>
         )}
 
         {hasLocation ? (
-          <InternalLink to={'/map/#' + props.userName} sx={{ color: 'black' }}>
+          <InternalLink
+            to={'/map/#' + props.userName}
+            sx={{ color: 'black' }}
+            data-testid="location-link"
+          >
             <Flex>
               <Icon glyph="location-on" size={22} />
               <Box ml={1}>{props.country || 'View on Map'}</Box>
@@ -51,7 +59,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         ) : null}
 
         {props?.isSupporter ? (
-          <Flex>
+          <Flex data-testid="supporter-stat">
             <Icon glyph={'supporter'} size={22} />
             <Box ml={1}>
               <ExternalLink
@@ -66,21 +74,21 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         ) : null}
 
         {props.usefulCount ? (
-          <Flex>
+          <Flex data-testid="useful-stat">
             <ElWithBeforeIcon icon={starActiveSVG} />
             Useful:&nbsp;{props.usefulCount}
           </Flex>
         ) : null}
 
         {props.howtoCount ? (
-          <Flex>
+          <Flex data-testid="howto-stat">
             <ElWithBeforeIcon icon={HowToCountIcon} />
             How‑to:&nbsp;{props.howtoCount}
           </Flex>
         ) : null}
 
         {props.eventCount ? (
-          <Flex>
+          <Flex data-testid="event-stat">
             <ElWithBeforeIcon icon={EventsIcon} />
             Events:&nbsp;{props.eventCount}
           </Flex>
@@ -89,3 +97,10 @@ export const UserStatistics = (props: UserStatisticsProps) => {
     </Card>
   )
 }
+
+const isEmpty = (props: UserStatisticsProps) =>
+  !props.isVerified &&
+  !props.isSupporter &&
+  !props.usefulCount &&
+  !props.howtoCount &&
+  !props.eventCount

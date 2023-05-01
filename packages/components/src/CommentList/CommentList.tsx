@@ -4,7 +4,7 @@ import { Button, CommentItem } from '../'
 import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 const MAX_COMMENTS = 5
 
-export const CommentList: React.FC<{
+type CommentListProps = {
   comments: Comment[]
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
@@ -16,7 +16,9 @@ export const CommentList: React.FC<{
     category: string
     label?: string
   }) => void
-}> = ({
+}
+
+export const CommentList = ({
   articleTitle,
   comments,
   handleEditRequest,
@@ -24,7 +26,7 @@ export const CommentList: React.FC<{
   highlightedCommentId,
   handleEdit,
   trackEvent,
-}) => {
+}: CommentListProps) => {
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
   const scrollIntoRelevantComment = (commentId: string) => {

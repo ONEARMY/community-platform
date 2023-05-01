@@ -11,14 +11,20 @@ const StyledTooltip = styled(ReactTooltip)`
   z-index: 9999 !important;
 `
 
-const Tooltip: React.FC = (props) => {
+type TooltipProps = {
+  children?: React.ReactNode
+}
+
+const Tooltip = ({ children, ...props }: TooltipProps) => {
   return (
     <StyledTooltip
       event="mouseenter focus"
       eventOff="mouseleave blur"
       effect="solid"
       {...props}
-    />
+    >
+      {children}
+    </StyledTooltip>
   )
 }
 

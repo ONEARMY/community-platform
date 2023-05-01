@@ -40,20 +40,24 @@
             {{#if this.isComment}}
               <p>
                 New comment on your
-                <a href='{{this.relevantUrl}}'>{{this.resourceLabel}}</a>
+                <a
+                  href='https://community.preciousplastic.com{{this.relevantUrl}}'
+                >{{this.resourceLabel}}</a>
                 by
                 <a
-                  href='{{this.triggeredBy.userUrl}}'
+                  href='https://community.preciousplastic.com/u/{{this.triggeredBy.displayName}}'
                 >{{this.triggeredBy.displayName}}</a>
               </p>
             {{/if}}
             {{#if isMention}}
               <p>
                 <a
-                  href='{{this.triggeredBy.userUrl}}'
+                  href='https://community.preciousplastic.com/u/{{this.triggeredBy.displayName}}'
                 >{{this.triggeredBy.displayName}}</a>
                 mentioned you in this
-                <a href='{{this.relevantUrl}}'>{{this.resourceLabel}}</a>
+                <a
+                  href='https://community.preciousplastic.com{{this.relevantUrl}}'
+                >{{this.resourceLabel}}</a>
               </p>
             {{/if}}
           {{/each}}
@@ -72,13 +76,15 @@
         </div>
         <div class='section-items'>
           {{#each notifications}}
-            {{#if isMention}}
+            {{#if isUseful}}
               <p>
                 <a
-                  href='{{this.triggeredBy.userUrl}}'
+                  href='https://community.preciousplastic.com/u/{{this.triggeredBy.displayName}}'
                 >{{this.triggeredBy.displayName}}</a>
                 found your
-                <a href='{{this.relevantUrl}}'>{{this.resourceLabel}}</a>
+                <a
+                  href='https://community.preciousplastic.com{{this.relevantUrl}}'
+                >{{this.resourceLabel}}</a>
                 useful
               </p>
             {{/if}}

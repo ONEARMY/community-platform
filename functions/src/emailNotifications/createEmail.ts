@@ -1,4 +1,4 @@
-import { NotificationType } from '../../../src/models'
+import { INotification, NotificationType } from '../../../src/models'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
@@ -32,6 +32,38 @@ const getActionTypeFromNotificationType = (type: NotificationType) => {
   }
 }
 
+const getUserEmail = async (uid: string): Promise<string | null> => {
+  try {
+    const { email } = await firebaseAuth.getUser(uid)
+    return email
+  } catch (error) {
+    console.error('Unable to fetch user email', { error, userId: uid })
+    return null
+  }
+}
+
+const updateEmailedNotifications = async (
+  user: FirebaseFirestore.DocumentSnapshot<IUserDB>,
+  emailedNotifications: INotification[],
+  emailField: string,
+) => {
+  const updatedNotifications = user.data().notifications.map((notification) => {
+    if (
+      emailedNotifications.some(
+        (emailedNotification) => (emailedNotification._id = notification._id),
+      )
+    ) {
+      return {
+        ...notification,
+        email: emailField,
+      }
+    }
+    return notification
+  })
+
+  await user.ref.update({ notifications: updatedNotifications })
+}
+
 export async function createNotificationEmails() {
   const pendingEmails = await db
     .collection(DB_ENDPOINTS.user_notifications)
@@ -41,28 +73,29 @@ export async function createNotificationEmails() {
   for (const entry of Object.entries<IPendingEmails>(
     pendingEmails.data() ?? [],
   )) {
-    const [_userId, { notifications }] = entry
-    const user = await db.collection(DB_ENDPOINTS.users).doc(_userId).get()
-    const { email } = await firebaseAuth.getUser(_userId)
+    const [_userId, { notifications: pendingNotifications }] = entry
 
-    if (!notifications.length || !email || !user.exists) continue
+    if (!pendingNotifications.length) continue
 
-    const { displayName } = user.data() as IUserDB
+    const user = (await db
+      .collection(DB_ENDPOINTS.users)
+      .doc(_userId)
+      .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
+
+    const email = await getUserEmail(_userId)
+
+    if (!user.exists || !email) {
+      console.error('Cannot get user info', { userId: _userId })
+      await updateEmailedNotifications(user, pendingNotifications, 'failed')
+      continue
+    }
+
     let hasComments = false,
       hasUsefuls = false
 
-    // Decorate notifications with additional fields for email template
-    const templateNotifications = await Promise.all(
-      notifications.map(async (notification) => {
-        const triggeredByUser = await db
-          .collection(DB_ENDPOINTS.users)
-          .doc(notification.triggeredBy.userId)
-          .get()
-
-        const triggeredByUserName = triggeredByUser.exists
-          ? (triggeredByUser.data() as IUserDB).userName
-          : 'Unknown User'
-
+    try {
+      // Decorate notifications with additional fields for email template
+      const templateNotifications = pendingNotifications.map((notification) => {
         const actionType = getActionTypeFromNotificationType(notification.type)
 
         const isComment = actionType === 'comment'
@@ -78,10 +111,6 @@ export async function createNotificationEmails() {
 
         return {
           ...notification,
-          triggeredBy: {
-            ...notification.triggeredBy,
-            userName: triggeredByUserName,
-          },
           resourceLabel: getResourceLabelFromNotificationType(
             notification.type,
           ),
@@ -89,21 +118,31 @@ export async function createNotificationEmails() {
           isMention,
           isUseful,
         }
-      }),
-    )
+      })
 
-    // Adding emails to this collection triggers an email notification to be sent to the user
-    await db.collection(DB_ENDPOINTS.emails).add({
-      to: [email],
-      template: {
-        name: TEMPLATE_NAME,
-        data: {
-          displayName,
-          hasComments,
-          hasUsefuls,
-          notifications: templateNotifications,
+      const { displayName } = user.data()
+
+      // Adding emails to this collection triggers an email notification to be sent to the user
+      const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
+        to: [email],
+        template: {
+          name: TEMPLATE_NAME,
+          data: {
+            displayName,
+            hasComments,
+            hasUsefuls,
+            notifications: templateNotifications,
+          },
         },
-      },
-    })
+      })
+      await updateEmailedNotifications(
+        user,
+        pendingNotifications,
+        sentEmailRef.id,
+      )
+    } catch (error) {
+      console.error('Error sending an email', { error, userId: _userId })
+      await updateEmailedNotifications(user, pendingNotifications, 'failed')
+    }
   }
 }

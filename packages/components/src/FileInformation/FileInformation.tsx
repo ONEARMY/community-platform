@@ -55,11 +55,11 @@ const FileDetails = (props: {
   )
 }
 
-export const FileInformation: React.FC<IProps> = ({
+export const FileInformation = ({
   file,
   allowDownload,
   handleClick,
-}) => {
+}: IProps) => {
   const size = bytesToSize(file.size || 0)
 
   if (!file) {

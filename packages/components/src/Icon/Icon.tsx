@@ -1,7 +1,7 @@
+/** @jsxImportSource theme-ui */
 import styled from '@emotion/styled'
 import type { VerticalAlignProps, SpaceProps } from 'styled-system'
 import { verticalAlign, space } from 'styled-system'
-
 import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
 import { MdAdd } from '@react-icons/all-files/md/MdAdd'
 import { MdCheck } from '@react-icons/all-files/md/MdCheck'
@@ -115,7 +115,6 @@ const IconWrapper = styled.div<Props>`
   min-width: ${(props) => (props.size ? `${props.size}px` : '32px')};
   min-height: ${(props) => (props.size ? `${props.size}px` : '32px')};
   position: relative;
-  color: ${(props) => props.color || 'inherit'};
   ${verticalAlign} ${space}
     ${(props) =>
     props.onClick &&
@@ -151,7 +150,12 @@ export const Icon = (props: Props) => {
   }
 
   return (
-    <IconWrapper {...props} size={definedSize} style={{ marginRight }}>
+    <IconWrapper
+      {...props}
+      sx={{ color: props.color ?? 'inherit' }}
+      size={definedSize}
+      style={{ marginRight }}
+    >
       <IconContext.Provider
         value={{
           style: { width: definedSize + 'px', height: definedSize + 'px' },

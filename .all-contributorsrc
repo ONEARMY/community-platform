@@ -42,7 +42,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/472589?v=4",
       "profile": "https://thisis.la/",
       "contributions": [
-        "code"
+        "code",
+        "maintainer"
       ]
     },
     {
@@ -85,9 +86,10 @@
       "login": "AlfonsoGhislieri",
       "name": "Alfonso",
       "avatar_url": "https://avatars.githubusercontent.com/u/652368?v=4",
-      "profile": "https://medium.com/@Alfonso_Ghislieri",
+      "profile": "https://github.com/AlfonsoGhislieri",
       "contributions": [
-        "code"
+        "code",
+        "maintainer"
       ]
     },
     {
@@ -223,6 +225,25 @@
       "profile": "https://github.com/NoHara42",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "SophXN",
+      "name": "Sophia Nguyen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/80185757?v=4",
+      "profile": "https://github.com/SophXN",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "evakill",
+      "name": "Eva Killenberg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/37253846?v=4",
+      "profile": "https://www.evakillenberg.com",
+      "contributions": [
+        "code",
+        "maintainer"
       ]
     }
   ],

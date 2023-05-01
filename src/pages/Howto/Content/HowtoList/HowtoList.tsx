@@ -248,7 +248,6 @@ export class HowtoList extends React.Component<any, IState> {
                 sx={{
                   width: '100%',
                   textAlign: 'center',
-                  ...theme.typography?.auxiliary,
                 }}
               >
                 {searchValue.length === 0 && selectedCategory.length === 0 ? (

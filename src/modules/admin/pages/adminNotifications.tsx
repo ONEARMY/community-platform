@@ -70,9 +70,7 @@ const AdminNotifictions = observer(() => {
   }
 
   /** Function applied to render each table row cell */
-  const RenderContent: React.FC<ICellRenderProps> = (
-    props: ICellRenderProps,
-  ) => {
+  const RenderContent = (props: ICellRenderProps) => {
     const { col } = props
     const { field, value } = col
     const tableField = field as keyof IPendingEmails

@@ -4,12 +4,11 @@ import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import { Button, ImageGallery, LinkifyText, Username } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { useCommonStores } from 'src'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
 import { Link } from 'react-router-dom'
-import type { Collaborator } from 'src/models/common.models'
+import { useContributorsData } from 'src/common/contributorData'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -41,29 +40,7 @@ const ResearchUpdate = ({
     'DD-MM-YYYY',
   )
 
-  const { userStore } = useCommonStores().stores
-
-  const hasCollaborators = !!update.collaborators?.length
-  const [contributors, setContributors] = React.useState<Collaborator[]>([])
-
-  React.useEffect(() => {
-    if (hasCollaborators) {
-      const getContributorsData = async () => {
-        const contributorsData = await Promise.all(
-          update.collaborators!.map(async (c) => {
-            const user = await userStore.getUserByUsername(c)
-            return {
-              userName: c,
-              isVerified: false,
-              countryCode: user.location?.countryCode || user.country || '',
-            }
-          }),
-        )
-        setContributors(contributorsData)
-      }
-      getContributorsData()
-    }
-  }, [update])
+  const contributors = useContributorsData(update.collaborators || [])
 
   return (
     <>
@@ -97,7 +74,7 @@ const ResearchUpdate = ({
                 sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
               >
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
-                  {hasCollaborators ? (
+                  {contributors ? (
                     <Box sx={{ mb: 2 }}>
                       {contributors.map((collab, idx) => (
                         <Username key={idx} user={collab} isVerified={false} />

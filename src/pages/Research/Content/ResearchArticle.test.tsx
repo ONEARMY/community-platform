@@ -11,12 +11,22 @@ import {
 import { preciousPlasticTheme } from 'oa-themes'
 import ResearchArticle from './ResearchArticle'
 import { FactoryUser } from 'src/test/factories/User'
+import { useContributorsData } from 'src/common/contributorData'
 
 const Theme = preciousPlasticTheme.styles
 
 const activeUser = FactoryUser({
   userRoles: ['beta-tester'],
 })
+
+const mockContributorsData = [
+  { userName: 'example-username', isVerified: false, countryCode: 'AF' },
+  {
+    userName: 'another-example-username',
+    isVerified: false,
+    countryCode: 'IT',
+  },
+]
 
 jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -36,6 +46,10 @@ jest.mock('src/index', () => ({
 }))
 
 jest.mock('src/stores/Research/research.store')
+
+jest.mock('src/common/contributorData', () => ({
+  useContributorsData: jest.fn(),
+}))
 
 describe('Research Article', () => {
   const mockResearchStore = {
@@ -66,6 +80,10 @@ describe('Research Article', () => {
 
   it('displays contributors', async () => {
     // Arrange
+    // Mock custom hook that gets contributorData
+    ;(
+      useContributorsData as jest.MockedFunction<typeof useContributorsData>
+    ).mockReturnValueOnce(mockContributorsData)
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
       activeResearchItem: FactoryResearchItem({
@@ -80,6 +98,7 @@ describe('Research Article', () => {
     expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
     expect(wrapper.getAllByText('example-username')).toHaveLength(1)
     expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
+    expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(2)
   })
 
   it('displays "Follow" button text and color if not subscribed', async () => {
@@ -122,6 +141,10 @@ describe('Research Article', () => {
   describe('Research Update', () => {
     it('displays contributors', async () => {
       // Arrange
+      // Mock custom hook that gets contributorData
+      ;(
+        useContributorsData as jest.MockedFunction<typeof useContributorsData>
+      ).mockReturnValueOnce(mockContributorsData)
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeResearchItem: FactoryResearchItem({
@@ -139,11 +162,9 @@ describe('Research Article', () => {
       const wrapper = getWrapper()
 
       // Assert
-      expect(
-        wrapper.getAllByTestId('Username: unknown flag').length,
-      ).toBeGreaterThanOrEqual(1)
       expect(wrapper.getAllByText('example-username')).toHaveLength(1)
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
+      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(2)
     })
     it('shows only published updates', async () => {
       // Arrange

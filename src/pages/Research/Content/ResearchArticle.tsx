@@ -22,7 +22,7 @@ import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { researchCommentUrlPattern } from './helper'
 import { trackEvent } from 'src/common/Analytics'
-import type { Collaborator } from 'src/models/common.models'
+import { useContributorsData } from 'src/common/contributorData'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -47,7 +47,6 @@ const ResearchArticle = observer((props: IProps) => {
   const { userStore, aggregationsStore } = useCommonStores().stores
 
   const [isLoading, setIsLoading] = React.useState(true)
-  const [contributors, setContributors] = React.useState<Collaborator[]>([])
 
   const moderateResearch = async (accepted: boolean) => {
     const item = researchStore.activeResearchItem
@@ -120,31 +119,13 @@ const ResearchArticle = observer((props: IProps) => {
   const item = researchStore.activeResearchItem
   const loggedInUser = researchStore.activeUser
 
-  React.useEffect(() => {
-    if (item) {
-      const collaborators = Array.isArray(item.collaborators)
-        ? item.collaborators
-        : ((item.collaborators as string) || '').split(',').filter(Boolean)
+  const collaborators = Array.isArray(item?.collaborators)
+    ? item?.collaborators
+    : ((item?.collaborators as string | undefined)?.split(',') || []).filter(
+        Boolean,
+      )
 
-      const getContributorsData = async () => {
-        if (collaborators.length === 0) {
-          return
-        }
-        const contributorsData = await Promise.all(
-          collaborators.map(async (c) => {
-            const user = await userStore.getUserByUsername(c)
-            return {
-              userName: c,
-              isVerified: false,
-              countryCode: user.location?.countryCode || user.country || '',
-            }
-          }),
-        )
-        setContributors(contributorsData)
-      }
-      getContributorsData()
-    }
-  }, [item])
+  const contributors = useContributorsData(collaborators || [])
 
   if (item) {
     const { aggregations } = aggregationsStore
@@ -178,10 +159,6 @@ const ResearchArticle = observer((props: IProps) => {
         )
       }
     }
-
-    const collaborators = Array.isArray(item.collaborators)
-      ? item.collaborators
-      : ((item.collaborators as string) || '').split(',').filter(Boolean)
 
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
@@ -228,14 +205,7 @@ const ResearchArticle = observer((props: IProps) => {
         >
           <ArticleCallToAction
             author={researchAuthor}
-            contributors={
-              contributors.length > 0
-                ? contributors
-                : collaborators.map((c) => ({
-                    userName: c,
-                    isVerified: false,
-                  }))
-            }
+            contributors={contributors}
           >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}

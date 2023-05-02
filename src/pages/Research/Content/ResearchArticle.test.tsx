@@ -14,7 +14,7 @@ import { FactoryUser } from 'src/test/factories/User'
 
 const Theme = preciousPlasticTheme.styles
 
-const mockActiveUser = FactoryUser({
+const activeUser = FactoryUser({
   userRoles: ['beta-tester'],
 })
 
@@ -24,7 +24,7 @@ jest.mock('src/index', () => ({
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserByUsername: jest.fn().mockResolvedValue(mockActiveUser),
+        getUserByUsername: jest.fn().mockResolvedValue({ country: '' }),
       },
       aggregationsStore: {
         aggregations: {
@@ -103,9 +103,9 @@ describe('Research Article', () => {
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
       activeResearchItem: FactoryResearchItem({
-        subscribers: [mockActiveUser.userName],
+        subscribers: [activeUser.userName],
       }),
-      mockActiveUser,
+      activeUser,
     })
 
     // Act
@@ -237,7 +237,7 @@ const getWrapper = () => {
   return render(
     <Provider
       userStore={{
-        mockActiveUser,
+        user: activeUser,
       }}
     >
       <ThemeProvider theme={Theme}>

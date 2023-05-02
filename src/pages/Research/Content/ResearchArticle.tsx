@@ -176,6 +176,10 @@ const ResearchArticle = observer((props: IProps) => {
       }
     }
 
+    const collaborators = Array.isArray(item.collaborators)
+      ? item.collaborators
+      : ((item.collaborators as string) || '').split(',').filter(Boolean)
+
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
@@ -221,7 +225,14 @@ const ResearchArticle = observer((props: IProps) => {
         >
           <ArticleCallToAction
             author={researchAuthor}
-            contributors={contributors}
+            contributors={
+              contributors.length > 0
+                ? contributors
+                : collaborators.map((c) => ({
+                    userName: c,
+                    isVerified: false,
+                  }))
+            }
           >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}

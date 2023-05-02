@@ -143,7 +143,7 @@ describe('[Settings]', () => {
         url: `http://www.${freshSettings.userName}.com`,
       })
 
-      cy.interceptAddressFetch(SingaporeStubResponse)
+      cy.interceptAddressSearchFetch(SingaporeStubResponse)
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'Singapo',
@@ -331,7 +331,7 @@ describe('[Settings]', () => {
         url: `${freshSettings.userName}@test.com`,
       })
 
-      cy.interceptAddressFetch(SingaporeStubResponse)
+      cy.interceptAddressSearchFetch(SingaporeStubResponse)
       setMemberMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'Singapo',
@@ -465,7 +465,7 @@ describe('[Settings]', () => {
         url: `http://settings_machine_bazarlink.com`,
       })
 
-      cy.interceptAddressFetch(SingaporeStubResponse)
+      cy.interceptAddressSearchFetch(SingaporeStubResponse)
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'singapo',
@@ -544,7 +544,7 @@ describe('[Settings]', () => {
         addContactLink({ index, label: 'website', url: link.url }),
       )
 
-      cy.interceptAddressFetch(SingaporeStubResponse)
+      cy.interceptAddressSearchFetch(SingaporeStubResponse)
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'Singa',
@@ -731,7 +731,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy=plastic-pvc]').click()
       cy.get('[data-cy=plastic-other]').click()
 
-      cy.interceptAddressFetch(SingaporeStubResponse)
+      cy.interceptAddressSearchFetch(SingaporeStubResponse)
       setWorkspaceMapPin({
         description: expected.mapPinDescription,
         searchKeyword: 'Singapo',

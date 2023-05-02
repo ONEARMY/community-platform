@@ -55,7 +55,9 @@ declare global {
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>
 
-      interceptAddressFetch(addressResponse): Chainable<void>
+      interceptAddressSearchFetch(addressResponse): Chainable<void>
+
+      interceptAddressReverseFetch(addressResponse): Chainable<void>
     }
   }
 }
@@ -239,10 +241,16 @@ const attachCustomCommands = (Cypress: Cypress.Cypress) => {
     },
   )
 
-  Cypress.Commands.add('interceptAddressFetch', (addressResponse) => {
+  Cypress.Commands.add('interceptAddressSearchFetch', (addressResponse) => {
     cy.intercept('GET', 'https://nominatim.openstreetmap.org/search*', {
       body: addressResponse,
     }).as('fetchAddress')
+  })
+
+  Cypress.Commands.add('interceptAddressReverseFetch', (addressResponse) => {
+    cy.intercept('GET', 'https://nominatim.openstreetmap.org/reverse?*', {
+      body: addressResponse,
+    }).as('fetchAddressReverse')
   })
 }
 

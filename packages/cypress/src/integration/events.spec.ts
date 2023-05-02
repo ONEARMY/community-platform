@@ -1,4 +1,7 @@
-import { SingaporeStubResponse } from '../fixtures/searchResults'
+import {
+  SingaporeStubResponse,
+  SingaporeReverseStubResponse,
+} from '../fixtures/searchResults'
 
 describe('[Events]', () => {
   beforeEach(() => {
@@ -65,7 +68,8 @@ describe('[Events]', () => {
 
   describe('[Create an event]', () => {
     it('[By Authenticated]', () => {
-      cy.interceptAddressFetch(SingaporeStubResponse)
+      cy.interceptAddressSearchFetch(SingaporeStubResponse)
+      cy.interceptAddressReverseFetch(SingaporeReverseStubResponse)
 
       cy.login('event_creator@test.com', 'test1234')
       cy.get('[data-cy=create-event]').click()
@@ -93,10 +97,14 @@ describe('[Events]', () => {
         .blur()
 
       cy.step('Publish the event')
+
       cy.get('[data-cy=submit]').should('not.be.disabled').click()
+
+      // Wait for event to be posted
       cy.wait(3000)
 
       cy.step('The new event is shown in /events')
+
       cy.get('[data-cy=card]')
         .contains('Create a test event')
         .should('be.exist')

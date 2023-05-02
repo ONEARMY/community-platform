@@ -3,7 +3,6 @@ import { Provider } from 'mobx-react'
 import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
-// TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 import { useCommonStores } from 'src'
 import { FactoryHowto } from 'src/test/factories/Howto'

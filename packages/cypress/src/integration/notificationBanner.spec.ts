@@ -22,7 +22,7 @@ describe('[Notification Banner]', () => {
 
   describe('[By Authenticated user with filled profile]', () => {
     it('[Notification Banner is visible for user with blank profile]', () => {
-      cy.interceptAddressFetch(SingaporeStubResponse)
+      cy.interceptAddressSearchFetch(SingaporeStubResponse)
 
       cy.login('howto_reader@test.com', 'test1234')
       cy.step('Go to User Settings')

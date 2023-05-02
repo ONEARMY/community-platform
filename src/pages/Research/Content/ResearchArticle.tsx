@@ -127,13 +127,16 @@ const ResearchArticle = observer((props: IProps) => {
         : ((item.collaborators as string) || '').split(',').filter(Boolean)
 
       const getContributorsData = async () => {
+        if (collaborators.length === 0) {
+          return
+        }
         const contributorsData = await Promise.all(
           collaborators.map(async (c) => {
             const user = await userStore.getUserByUsername(c)
             return {
               userName: c,
               isVerified: false,
-              countryCode: user.country ?? '',
+              countryCode: user.location?.countryCode || user.country || '',
             }
           }),
         )

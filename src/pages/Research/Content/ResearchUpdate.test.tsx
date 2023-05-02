@@ -9,8 +9,13 @@ import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 
 jest.mock('src/index', () => {
   return {
-    useCommonStores: jest.fn().mockReturnValue({
-      stores: { userStore: { fetchAllVerifiedUsers: jest.fn() } },
+    useCommonStores: () => ({
+      stores: {
+        userStore: {
+          fetchAllVerifiedUsers: jest.fn(),
+          getUserByUsername: jest.fn().mockResolvedValue({ country: '' }),
+        },
+      },
     }),
   }
 })

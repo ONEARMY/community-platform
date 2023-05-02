@@ -347,8 +347,6 @@ describe('[How To]', () => {
         })
       })
 
-      // wait for file to be uploaded and click upload button
-      cy.wait(1000)
       cy.contains('Upload 1 file').click()
 
       cy.step('Update steps')

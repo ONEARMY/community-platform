@@ -21,6 +21,7 @@ export const FactoryUser = (
     'rejected',
     'accepted',
   ]),
+  country: faker.address.countryCode(),
   notifications: [],
   coverImages: [] as any[],
   ...userOverloads,

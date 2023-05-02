@@ -28,6 +28,12 @@ export type UserMention = {
   location: string
 }
 
+export type Collaborator = {
+  countryCode?: string | null
+  userName: string
+  isVerified: boolean
+}
+
 export interface ILocation {
   name: string
   country: string

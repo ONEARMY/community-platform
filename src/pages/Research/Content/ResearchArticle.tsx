@@ -21,6 +21,8 @@ import { useCommonStores } from '../../../index'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { researchCommentUrlPattern } from './helper'
+import { trackEvent } from 'src/common/Analytics'
+import type { Collaborator } from 'src/models/common.models'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -45,7 +47,7 @@ const ResearchArticle = observer((props: IProps) => {
   const { userStore, aggregationsStore } = useCommonStores().stores
 
   const [isLoading, setIsLoading] = React.useState(true)
-  const [contributors, setContributors] = React.useState<any[]>([])
+  const [contributors, setContributors] = React.useState<Collaborator[]>([])
 
   const moderateResearch = async (accepted: boolean) => {
     const item = researchStore.activeResearchItem
@@ -131,7 +133,7 @@ const ResearchArticle = observer((props: IProps) => {
             return {
               userName: c,
               isVerified: false,
-              countryCode: user.country,
+              countryCode: user.country ?? '',
             }
           }),
         )

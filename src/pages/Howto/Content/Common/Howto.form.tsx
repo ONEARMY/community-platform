@@ -190,7 +190,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           }}
           validateOnBlur
           decorators={[this.calculatedFields]}
-          render={({ submitting, handleSubmit }) => {
+          render={({ submitting, handleSubmit, form }) => {
             return (
               <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
                 <UnsavedChangesDialog
@@ -392,12 +392,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     <Button
                                       variant={'outline'}
                                       icon="delete"
-                                      onClick={() =>
+                                      onClick={() => {
                                         this.setState({
                                           fileEditMode:
                                             !this.state.fileEditMode,
                                         })
-                                      }
+                                        form.change('files', [])
+                                      }}
                                     >
                                       Re-upload files (this will delete the
                                       existing ones)

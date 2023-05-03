@@ -33,7 +33,7 @@ export {
 }
 
 // Cannot import type with enums
-import { EmailNotificationFrequency } from 'oa-shared/models'
+import { EmailNotificationFrequency } from 'oa-shared'
 export { EmailNotificationFrequency }
 
 import { dbEndpointSubollections, generateDBEndpoints } from 'oa-shared'

@@ -5,10 +5,8 @@ import type {
   DBDoc,
   IModerationStatus,
 } from './common.models'
-import type { UserRole } from 'oa-shared'
+import type { UserRole, EmailNotificationFrequency } from 'oa-shared'
 export type { UserRole }
-import { EmailNotificationFrequency } from 'oa-shared'
-export { EmailNotificationFrequency }
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 

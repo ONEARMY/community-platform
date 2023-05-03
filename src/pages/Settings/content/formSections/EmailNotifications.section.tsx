@@ -4,7 +4,7 @@ import { FlexSectionContainer } from './elements'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
 import type { INotificationSettings } from 'src/models/user.models'
-import { EmailNotificationFrequency } from 'src/models/user.models'
+import { EmailNotificationFrequency } from 'oa-shared'
 import { Field } from 'react-final-form'
 
 interface IProps {

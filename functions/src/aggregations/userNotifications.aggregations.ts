@@ -1,7 +1,8 @@
 import * as functions from 'firebase-functions'
-import { DB_ENDPOINTS, EmailNotificationFrequency, IUserDB } from '../models'
+import { DB_ENDPOINTS, IUserDB } from '../models'
 import { handleDBAggregations, VALUE_MODIFIERS } from './common.aggregations'
 import type { IAggregation } from './common.aggregations'
+import { EmailNotificationFrequency } from 'oa-shared'
 
 interface INotificationAggregation extends IAggregation {
   sourceFields: (keyof IUserDB)[]

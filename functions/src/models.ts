@@ -32,10 +32,6 @@ export {
   IPendingEmails,
 }
 
-// Cannot import type with enums
-import { EmailNotificationFrequency } from 'oa-shared'
-export { EmailNotificationFrequency }
-
 import { dbEndpointSubollections, generateDBEndpoints } from 'oa-shared'
 export const DB_ENDPOINTS = generateDBEndpoints()
 export const DB_ENDPOINT_SUBCOLLECTIONS = dbEndpointSubollections

@@ -141,7 +141,7 @@ const ResearchUpdate = ({
               <Box>
                 <Text
                   mt={3}
-                  variant="auxiliary"
+                  variant="paragraph"
                   color={'grey'}
                   sx={{ whiteSpace: 'pre-line' }}
                 >

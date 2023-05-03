@@ -26,7 +26,6 @@ import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile/types'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { v4 as uuid } from 'uuid'
 
@@ -265,11 +264,9 @@ export class SettingsPage extends React.Component<IProps, IState> {
                         showLocationDropdown={this.state.showLocationDropdown}
                       />
                     </Flex>
-                    <AuthWrapper roleRequired="beta-tester">
-                      <EmailNotificationsSection
-                        notificationSettings={values.notification_settings}
-                      />
-                    </AuthWrapper>
+                    <EmailNotificationsSection
+                      notificationSettings={values.notification_settings}
+                    />
                   </form>
                   <AccountSettingsSection />
                 </Box>

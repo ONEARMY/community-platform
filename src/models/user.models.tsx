@@ -5,7 +5,7 @@ import type {
   DBDoc,
   IModerationStatus,
 } from './common.models'
-import type { UserRole } from 'oa-shared/models'
+import type { UserRole, EmailNotificationFrequency } from 'oa-shared'
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
@@ -108,15 +108,8 @@ export const NotificationTypes = [
 
 export type NotificationType = typeof NotificationTypes[number]
 
-export enum EmailNotificationFrequency {
-  NEVER = '',
-  DAILY = 'daily',
-  WEEKLY = 'weekly',
-  MONTHLY = 'monthly',
-}
-
 export type INotificationSettings = {
-  enabled: {
+  enabled?: {
     [T in NotificationType]: boolean
   }
   emailFrequency: EmailNotificationFrequency

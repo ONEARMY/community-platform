@@ -390,6 +390,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       />
                                     ))}
                                     <Button
+                                      data-testid="re-upload-files"
                                       variant={'outline'}
                                       icon="delete"
                                       onClick={() => {
@@ -572,6 +573,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Button
                       large
                       data-cy={'submit'}
+                      data-testid="submit-form"
                       onClick={() => this.trySubmitForm(false)}
                       mt={3}
                       variant="primary"

@@ -13,6 +13,7 @@ interface IUppyFiles {
 }
 interface IProps {
   onFilesChange?: (files: (Blob | File)[]) => void
+  'data-cy'?: string
 }
 interface IState {
   open: boolean
@@ -73,6 +74,7 @@ export class FileInput extends React.Component<IProps, IState> {
                 icon="upload"
                 variant="outline"
                 mb={1}
+                data-cy={this.props['data-cy']}
               >
                 Add Files (.zip)
               </Button>
@@ -90,6 +92,7 @@ export class FileInput extends React.Component<IProps, IState> {
               onClick={() => this.toggleModal()}
               type="button"
               variant="outline"
+              data-cy={this.props['data-cy']}
             >
               Upload Files (.zip)
             </Button>
@@ -98,6 +101,7 @@ export class FileInput extends React.Component<IProps, IState> {
             proudlyDisplayPoweredByUppy={false}
             uppy={this.uppy}
             open={this.state.open}
+            data-cy="uppy-dashboard"
             closeModalOnClickOutside
             onRequestClose={() => this.toggleModal()}
           />

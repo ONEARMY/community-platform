@@ -21,7 +21,7 @@ describe('[Research]', () => {
 
   describe('[By Authenticated]', () => {
     it('has active comment button for logged in user', () => {
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login('research_creator@test.com', 'research_creator')
       cy.visit('/research/qwerty')
       cy.get('[data-cy="ResearchComments: button open-comments"]')
         .first()
@@ -31,7 +31,7 @@ describe('[Research]', () => {
     })
 
     it('allows logged in user to post a commment', () => {
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login('research_creator@test.com', 'research_creator')
       cy.visit('/research/qwerty')
       cy.get('[data-cy="ResearchComments: button open-comments"]')
         .first()
@@ -46,7 +46,7 @@ describe('[Research]', () => {
     })
 
     it('allows comment author to edit', () => {
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login('research_creator@test.com', 'research_creator')
       cy.visit('/research/qwerty')
       cy.get('[data-cy="ResearchComments: button open-comments"]')
         .first()
@@ -59,7 +59,7 @@ describe('[Research]', () => {
     })
 
     it('allows comment author to delete', () => {
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login('research_creator@test.com', 'research_creator')
       cy.visit('/research/qwerty')
       cy.get('[data-cy="ResearchComments: button open-comments"]')
         .first()

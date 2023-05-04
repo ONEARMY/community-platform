@@ -335,6 +335,22 @@ describe('[How To]', () => {
         .find(':file')
         .attachFile('images/howto-intro.jpg')
 
+      cy.step('Upload a new file')
+
+      cy.get('[data-cy="files"]').click({ force: true })
+
+      cy.fixture('files/Example.pdf').then((fileContent) => {
+        cy.get('[data-cy="uppy-dashboard"] .uppy-Dashboard-input').attachFile({
+          fileContent: fileContent,
+          fileName: 'example.pdf',
+          mimeType: 'application/pdf',
+        })
+      })
+
+      cy.contains('Upload 1 file').click()
+
+      cy.step('Update steps')
+
       deleteStep(5)
       deleteStep(4)
       deleteStep(2)
@@ -348,7 +364,14 @@ describe('[How To]', () => {
         ])
       })
 
+      cy.step('Submit updated Howto')
+
       cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=invalid-file-warning]').should('be.visible')
+
+      cy.get('[data-cy=fileLink]').clear()
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=invalid-file-warning]').should('not.exist')
 
       cy.step('Open the updated how-to')
 

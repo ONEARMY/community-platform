@@ -151,7 +151,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       editCoverImg: false,
       fileEditMode: false,
       showSubmitModal: false,
-      showInvalidFileWarning: false,
+      showInvalidFileWarning:
+        this.props.formValues.files?.length > 0 &&
+        this.props.formValues.fileLink,
     }
     this.isDraft = props.moderation === 'draft'
   }
@@ -348,6 +350,21 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   placeholder="Introduction to your How-To (max 400 characters)"
                                 />
                               </Flex>
+                              <Flex sx={{ mb: 2 }}>
+                                {this.state.showInvalidFileWarning && (
+                                  <Text
+                                    id="invalid-file-warning"
+                                    data-cy="invalid-file-warning"
+                                    data-testid="invalid-file-warning"
+                                    sx={{
+                                      color: 'error',
+                                    }}
+                                  >
+                                    Please provide either a file link or upload
+                                    a file, not both.
+                                  </Text>
+                                )}
+                              </Flex>
                               <Label htmlFor="description">
                                 Do you have supporting file to help others
                                 replicate your How-to?
@@ -424,7 +441,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         Or upload your files here
                                       </Label>
                                       <Field
+                                        id="files"
                                         name="files"
+                                        data-cy="files"
                                         component={FileInputField}
                                       />
                                     </Flex>

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
@@ -11,7 +11,6 @@ import {
 import { preciousPlasticTheme } from 'oa-themes'
 import ResearchArticle from './ResearchArticle'
 import { FactoryUser } from 'src/test/factories/User'
-import { useContributorsData } from 'src/common/contributorData'
 
 const Theme = preciousPlasticTheme.styles
 
@@ -19,22 +18,13 @@ const activeUser = FactoryUser({
   userRoles: ['beta-tester'],
 })
 
-const mockContributorsData = [
-  { userName: 'example-username', isVerified: false, countryCode: 'AF' },
-  {
-    userName: 'another-example-username',
-    isVerified: false,
-    countryCode: 'IT',
-  },
-]
-
 jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserByUsername: jest.fn().mockResolvedValue({ country: '' }),
+        getUserByUsername: jest.fn().mockResolvedValue({ country: 'AF' }),
       },
       aggregationsStore: {
         aggregations: {
@@ -47,10 +37,6 @@ jest.mock('src/index', () => ({
 
 jest.mock('src/stores/Research/research.store')
 
-jest.mock('src/common/contributorData', () => ({
-  useContributorsData: jest.fn(),
-}))
-
 describe('Research Article', () => {
   const mockResearchStore = {
     activeResearchItem: FactoryResearchItem(),
@@ -60,7 +46,7 @@ describe('Research Article', () => {
     incrementViewCount: jest.fn(),
   }
 
-  it('does not display contributors when undefined', () => {
+  it('does not display contributors when undefined', async () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
@@ -70,8 +56,10 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
-
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
     // Assert
     expect(() => {
       wrapper.getAllByTestId('ArticleCallToAction: contributors')
@@ -80,10 +68,6 @@ describe('Research Article', () => {
 
   it('displays contributors', async () => {
     // Arrange
-    // Mock custom hook that gets contributorData
-    ;(
-      useContributorsData as jest.MockedFunction<typeof useContributorsData>
-    ).mockReturnValueOnce(mockContributorsData)
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
       activeResearchItem: FactoryResearchItem({
@@ -92,7 +76,10 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
 
     // Assert
     expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
@@ -108,7 +95,10 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
     const followButton = wrapper.getByTestId('follow-button')
 
     // Assert
@@ -141,10 +131,6 @@ describe('Research Article', () => {
   describe('Research Update', () => {
     it('displays contributors', async () => {
       // Arrange
-      // Mock custom hook that gets contributorData
-      ;(
-        useContributorsData as jest.MockedFunction<typeof useContributorsData>
-      ).mockReturnValueOnce(mockContributorsData)
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeResearchItem: FactoryResearchItem({
@@ -152,19 +138,24 @@ describe('Research Article', () => {
           updates: [
             FactoryResearchItemUpdate({
               title: 'Research Update #1',
-              collaborators: ['example'],
+              collaborators: ['third-example-username'],
             }),
           ],
         }),
       })
 
-      // Act
-      const wrapper = getWrapper()
+      // wait for Promise to resolve and state to update
+      let wrapper
+      await act(async () => {
+        wrapper = getWrapper()
+      })
 
       // Assert
-      expect(wrapper.getAllByText('example-username')).toHaveLength(1)
-      expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(2)
+      expect(wrapper.getByText('With contributions from:')).toBeInTheDocument()
+      expect(wrapper.getByText('example-username')).toBeInTheDocument()
+      expect(wrapper.getByText('another-example-username')).toBeInTheDocument()
+      expect(wrapper.getByText('third-example-username')).toBeInTheDocument()
+      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(3)
     })
     it('shows only published updates', async () => {
       // Arrange
@@ -244,7 +235,23 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
+    let wrapper
+    await act(async () => {
+      wrapper = render(
+        <Provider userStore={{}}>
+          <ThemeProvider theme={Theme}>
+            <MemoryRouter initialEntries={['/research/article']}>
+              <Route
+                path="/research/:slug"
+                exact
+                key={1}
+                component={ResearchArticle}
+              />
+            </MemoryRouter>
+          </ThemeProvider>
+        </Provider>,
+      )
+    })
 
     // Assert
     expect(() => {

@@ -60,6 +60,7 @@ describe('Research Article', () => {
     await act(async () => {
       wrapper = getWrapper()
     })
+
     // Assert
     expect(() => {
       wrapper.getAllByTestId('ArticleCallToAction: contributors')
@@ -118,7 +119,10 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
     const followButton = wrapper.getByTestId('follow-button')
 
     // Assert
@@ -139,6 +143,7 @@ describe('Research Article', () => {
             FactoryResearchItemUpdate({
               title: 'Research Update #1',
               collaborators: ['third-example-username'],
+              status: 'published',
             }),
           ],
         }),
@@ -225,6 +230,7 @@ describe('Research Article', () => {
         updates: [
           FactoryResearchItemUpdate({
             title: 'Research Update #1',
+            status: 'published',
           }),
           FactoryResearchItemUpdate({
             title: 'Research Update #2',
@@ -237,27 +243,12 @@ describe('Research Article', () => {
     // Act
     let wrapper
     await act(async () => {
-      wrapper = render(
-        <Provider userStore={{}}>
-          <ThemeProvider theme={Theme}>
-            <MemoryRouter initialEntries={['/research/article']}>
-              <Route
-                path="/research/:slug"
-                exact
-                key={1}
-                component={ResearchArticle}
-              />
-            </MemoryRouter>
-          </ThemeProvider>
-        </Provider>,
-      )
+      wrapper = getWrapper()
     })
 
     // Assert
-    expect(() => {
-      wrapper.getByText('Research Update #1')
-      wrapper.getByText('Research Update #2')
-    }).toThrow()
+    expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
+    expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
   })
 })
 

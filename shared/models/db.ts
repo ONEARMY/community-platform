@@ -26,7 +26,7 @@ export const generateDBEndpoints = (DB_PREFIX = '') => ({
  * A list of known subcollections used in endpoints, e.g.
  * /howtos/my-howto-id/stats
  */
-export const dbEndpointSubollections = {
+export const dbEndpointSubcollections = {
   user: ['revisions'],
   howtos: ['stats'],
   research: ['stats'],

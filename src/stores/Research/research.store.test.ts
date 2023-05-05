@@ -70,7 +70,7 @@ const factory = async (mockFn, researchItemOverloads: any = {}) => {
     triggerNotification: jest.fn(),
   }
 
-  await store.setActiveResearchItem('fish')
+  await store.setActiveResearchItemBySlug('fish')
 
   return {
     store,

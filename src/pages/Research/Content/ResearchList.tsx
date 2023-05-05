@@ -1,18 +1,18 @@
-import { observer } from 'mobx-react'
-import { Box, Flex, Heading, Text } from 'theme-ui'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { Button, Icon } from 'oa-components'
-import ResearchListItem from './ResearchListItem'
-import { useResearchStore } from 'src/stores/Research/research.store'
 import { useTheme } from '@emotion/react'
-import { Link, useHistory } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { observer } from 'mobx-react'
+import { Button, Icon } from 'oa-components'
+import { Link, useHistory } from 'react-router-dom'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import { useResearchStore } from 'src/stores/Research/research.store'
+import { Box, Flex, Heading, Text } from 'theme-ui'
+import ResearchListItem from './ResearchListItem'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+import type { RouteComponentProps } from 'react-router'
 import { useCommonStores } from 'src'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import type { RouteComponentProps } from 'react-router'
+const theme = preciousPlasticTheme.styles
 
 const ResearchListHeader = styled.header`
   display: grid;
@@ -76,24 +76,45 @@ const ResearchList = observer(() => {
         </Heading>
       </Flex>
       <ResearchListHeader>
-        <Flex sx={{ width: ['100%', '240px', '240px'] }}>
-          <CategoriesSelect
-            value={
-              store.selectedCategory ? { label: store.selectedCategory } : null
-            }
-            onChange={(category) => {
-              updateQueryParams(
-                window.location.href,
-                'category',
-                category ? category.label : '',
-                history,
-              )
-              store.updateSelectedCategory(category ? category.label : '')
-            }}
-            placeholder="Filter by category"
-            isForm={false}
-            type="research"
-          />
+        <Flex
+          sx={{
+            flexWrap: 'nowrap',
+            gap: '2em',
+            flexDirection: ['column', 'column', 'row'],
+          }}
+        >
+          <Flex sx={{ width: ['100%', '240px', '240px'] }}>
+            <CategoriesSelect
+              value={
+                store.selectedCategory
+                  ? { label: store.selectedCategory }
+                  : null
+              }
+              onChange={(category) => {
+                updateQueryParams(
+                  window.location.href,
+                  'category',
+                  category ? category.label : '',
+                  history,
+                )
+                store.updateSelectedCategory(category ? category.label : '')
+              }}
+              placeholder="Filter by category"
+              isForm={false}
+              type="research"
+            />
+          </Flex>
+          <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
+            <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
+              <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
+                <AuthWrapper roleRequired="beta-tester">
+                  <Button variant={'primary'} data-cy="create">
+                    Add Research
+                  </Button>
+                </AuthWrapper>
+              </Link>
+            </Box>
+          </Flex>
         </Flex>
         <Flex
           sx={{
@@ -139,7 +160,7 @@ const ResearchList = observer(() => {
       <Box mb={[3, 3, 0]}>
         <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
           <AuthWrapper roleRequired="beta-tester">
-            <Button>Add Research</Button>
+            <Button variant={'primary'}>Add Research</Button>
           </AuthWrapper>
         </Link>
       </Box>

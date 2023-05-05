@@ -28,7 +28,7 @@ const CreateUpdate = observer((props: IProps) => {
         )
       }
       if (!store.activeResearchItem) {
-        await store.setActiveResearchItem(props.match.params.slug)
+        await store.setActiveResearchItemBySlug(props.match.params.slug)
       }
       setIsLoading(false)
     })()

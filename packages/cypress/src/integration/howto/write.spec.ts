@@ -68,6 +68,7 @@ describe('[How To]', () => {
       time: '1-2 weeks',
       title: 'Create a how-to test',
       slug: 'create-a-how-to-test',
+      previousSlugs: ['create-a-how-to-test'],
       fileLink: 'http://google.com/',
       files: [],
       total_downloads: 0,
@@ -125,7 +126,7 @@ describe('[How To]', () => {
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title')
         .clear()
-        .type('Create a how-to test')
+        .type(expected.title)
         .blur({ force: true })
       cy.selectTag('howto_testing')
       selectTimeDuration(expected.time as Duration)
@@ -157,7 +158,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
-        .should('include', `/how-to/create-a-how-to-test`)
+        .should('include', `/how-to/${expected.slug}`)
 
       cy.step('Howto was created correctly')
       cy.get('[data-cy=file-download-counter]')
@@ -191,7 +192,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title')
         .clear()
-        .type('Create a how-to test')
+        .type(expected.title)
         .blur({ force: true })
       cy.get('[data-cy=page-link][href*="/how-to"]')
         .click()
@@ -225,6 +226,7 @@ describe('[How To]', () => {
       fileLink: 'http://google.com/',
       total_downloads: 10,
       slug: 'this-is-an-edit-test',
+      previousSlugs: ['set-up-devsite-to-help-coding', 'this-is-an-edit-test'],
       tags: { EOVeOZaKKw1UJkDIf3c3: true },
       time: '3-4 weeks',
       title: 'This is an edit test',
@@ -392,6 +394,11 @@ describe('[How To]', () => {
             .should('eqHowto', expected)
         },
       )
+
+      cy.step('Open the old slug')
+
+      cy.visit('/how-to/set-up-devsite-to-help-coding')
+      cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
     })
   })
 })

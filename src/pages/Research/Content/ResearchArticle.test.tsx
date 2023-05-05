@@ -38,7 +38,7 @@ const activeUser = FactoryUser({
 describe('Research Article', () => {
   const mockResearchStore = {
     activeResearchItem: FactoryResearchItem(),
-    setActiveResearchItem: jest.fn().mockResolvedValue(true),
+    setActiveResearchItemBySlug: jest.fn().mockResolvedValue(true),
     needsModeration: jest.fn(),
     getActiveResearchUpdateComments: jest.fn(),
     incrementViewCount: jest.fn(),

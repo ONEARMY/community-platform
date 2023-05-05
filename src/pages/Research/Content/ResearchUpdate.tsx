@@ -1,5 +1,4 @@
 import { format } from 'date-fns'
-import * as React from 'react'
 import ReactPlayer from 'react-player'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import { Button, ImageGallery, LinkifyText, Username } from 'oa-components'

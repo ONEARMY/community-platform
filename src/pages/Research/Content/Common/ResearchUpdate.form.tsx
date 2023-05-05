@@ -409,12 +409,14 @@ const getResearchUpdates = (
   researchTitle: string,
 ): ResearchEditorOverviewUpdate[] =>
   [
-    ...updates.map((u) => ({
-      isActive: u._id === activeResearchId,
-      title: u.title,
-      status: u.status,
-      slug: u._id,
-    })),
+    ...updates
+      .filter((u) => !u._deleted)
+      .map((u) => ({
+        isActive: u._id === activeResearchId,
+        title: u.title,
+        status: u.status,
+        slug: u._id,
+      })),
     isCreating
       ? {
           isActive: false,

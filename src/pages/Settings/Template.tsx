@@ -21,6 +21,7 @@ const USER_PP_TEMPLATE: IUserPP = {
   machineBuilderXp: null,
   isExpert: null,
   isV4Member: null,
+  notification_settings: undefined,
 }
 
 // use default export to avoid naming confusion

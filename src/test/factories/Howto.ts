@@ -5,13 +5,14 @@ export const FactoryHowto = (
   howtoOverloads: Partial<IHowtoDB> = {},
 ): IHowtoDB => ({
   files: [],
+  fileLink: '',
   difficulty_level: faker.helpers.arrayElement([
     'Easy',
     'Medium',
     'Hard',
     'Very Hard',
   ]),
-  time: '',
+  time: '< 1 hour',
   slug: faker.lorem.slug(),
   moderation: faker.helpers.arrayElement([
     'draft',

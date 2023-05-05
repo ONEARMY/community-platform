@@ -28,13 +28,6 @@ export type UserMention = {
   location: string
 }
 
-/*****************************************************************
- *            Algolia Locations
- ****************************************************************/
-// algolia doesn't provide typings so taken from
-// https://community.algolia.com/places/documentation.html
-// implementation contains more fields but assumed not relevant
-
 export interface ILocation {
   name: string
   country: string

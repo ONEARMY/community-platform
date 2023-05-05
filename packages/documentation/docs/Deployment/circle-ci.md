@@ -46,13 +46,6 @@ See [circleci slack orb](https://github.com/CircleCI-Public/slack-orb) for info)
 
 Any variables prefixed with `REACT_APP_` are automatically included with the runtime build. Currently we require:
 
-Algolia places location lookup
-
-```
-REACT_APP_ALGOLIA_PLACES_API_KEY
-REACT_APP_ALGOLIA_PLACES_APP_ID
-```
-
 Firebase configuration
 
 ```

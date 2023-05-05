@@ -2,12 +2,26 @@ import * as functions from 'firebase-functions'
 import { createNotificationEmails } from './createEmail'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
+import { EmailNotificationFrequency } from 'oa-shared'
 
-/** Trigger daily process to send any pending email notifications */
 exports.sendDaily = functions.pubsub
   // Trigger daily at 5pm (https://crontab.guru/#0_17_*_*_*)
   .schedule('0 17 * * *')
-  .onRun(async () => createNotificationEmails())
+  .onRun(async () => createNotificationEmails(EmailNotificationFrequency.DAILY))
+
+exports.sendWeekly = functions.pubsub
+  // Trigger weekly at 5pm on Sunday (https://crontab.guru/#0_17_*_*_0)
+  .schedule('0 17 * * 0')
+  .onRun(async () =>
+    createNotificationEmails(EmailNotificationFrequency.WEEKLY),
+  )
+
+exports.sendMonthly = functions.pubsub
+  // Trigger monthly at 5pm on the first day of the month (https://crontab.guru/#0_17_1_*_*)
+  .schedule('0 17 1 * *')
+  .onRun(async () =>
+    createNotificationEmails(EmailNotificationFrequency.MONTHLY),
+  )
 
 exports.sendOnce = functions.https.onCall(async (_, context) => {
   if (!context.auth) {

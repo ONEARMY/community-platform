@@ -10,7 +10,7 @@ import type { RouteComponentProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import { trackEvent } from 'src/common/Analytics'
 import { isUserVerified } from 'src/common/isUserVerified'
-import type { IComment, UserComment } from 'src/models'
+import type { IComment, IResearch, UserComment } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import type { IUploadedFileMeta } from 'src/stores/storage'
@@ -174,7 +174,7 @@ const ResearchArticle = observer((props: IProps) => {
         <Box my={16}>
           {item &&
             item?.updates
-              ?.filter((update) => update.status !== 'draft')
+              ?.filter(isUpdateVisible)
               .map((update, index) => (
                 <ResearchUpdate
                   update={update}
@@ -233,6 +233,10 @@ const ResearchArticle = observer((props: IProps) => {
     return isLoading ? <Loader /> : <NotFoundPage />
   }
 })
+
+const isUpdateVisible = (update: IResearch.UpdateDB) => {
+  return update.status !== 'draft' && update._deleted === false
+}
 
 const transformToUserComment = (
   comments: IComment[],

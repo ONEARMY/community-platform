@@ -462,6 +462,34 @@ describe('research.store', () => {
         )
       })
     })
+
+    describe('deleteUpdate', () => {
+      it('removes an update', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem()
+
+        // Act
+        await store.deleteUpdate(researchItem.updates[0]._id)
+
+        // Assert
+        expect(setFn).toBeCalledTimes(1)
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(
+          newResearchItem.updates.find(
+            ({ title }) => title === researchItem.updates[0].title,
+          )._deleted,
+        ).toBe(true)
+      })
+
+      it('handles malformed update id', async () => {
+        const { store, setFn } = await factoryResearchItem()
+
+        // Act
+        await store.deleteUpdate('malformed-id')
+
+        // Assert
+        expect(setFn).not.toBeCalled()
+      })
+    })
   })
 
   describe('Item', () => {

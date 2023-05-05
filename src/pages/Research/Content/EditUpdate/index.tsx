@@ -89,6 +89,7 @@ const EditUpdate = observer((props: IProps) => {
       return (
         <ResearchUpdateForm
           formValues={formValues}
+          redirectUrl={'/research/' + store.activeResearchItem!.slug + '/edit'}
           parentType="edit"
           {...props}
         />

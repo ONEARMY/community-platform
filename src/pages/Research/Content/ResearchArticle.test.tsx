@@ -143,6 +143,63 @@ describe('Research Article', () => {
       expect(wrapper.getAllByText('example-username')).toHaveLength(1)
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
     })
+    it('shows only published updates', async () => {
+      // Arrange
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        activeResearchItem: FactoryResearchItem({
+          collaborators: ['example-username', 'another-example-username'],
+          updates: [
+            FactoryResearchItemUpdate({
+              title: 'Research Update #1',
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #2',
+              status: 'draft',
+            }),
+          ],
+        }),
+      })
+
+      // Act
+      const wrapper = getWrapper()
+
+      // Assert
+      expect(() => {
+        wrapper.getByText('Research Update #2')
+      }).toThrow()
+    })
+
+    it('does not show deleted updates', async () => {
+      // Arrange
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        activeResearchItem: FactoryResearchItem({
+          collaborators: ['example-username', 'another-example-username'],
+          updates: [
+            FactoryResearchItemUpdate({
+              title: 'Research Update #1',
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #2',
+              status: 'draft',
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #3',
+              _deleted: true,
+            }),
+          ],
+        }),
+      })
+
+      // Act
+      const wrapper = getWrapper()
+
+      // Assert
+      expect(() => {
+        wrapper.getByText('Research Update #3')
+      }).toThrow()
+    })
   })
 
   it('shows only published updates', async () => {
@@ -164,20 +221,7 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = render(
-      <Provider userStore={{}}>
-        <ThemeProvider theme={Theme}>
-          <MemoryRouter initialEntries={['/research/article']}>
-            <Route
-              path="/research/:slug"
-              exact
-              key={1}
-              component={ResearchArticle}
-            />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    )
+    const wrapper = getWrapper()
 
     // Assert
     expect(() => {

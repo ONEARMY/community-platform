@@ -1,3 +1,4 @@
+import { EmailNotificationFrequency } from 'oa-shared'
 import { INotification, NotificationType } from '../../../src/models'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
@@ -64,7 +65,10 @@ const updateEmailedNotifications = async (
   await user.ref.update({ notifications: updatedNotifications })
 }
 
-export async function createNotificationEmails() {
+// Create emails from pending notifications. Filter by frequency (setting of email recipient) if defined.
+export async function createNotificationEmails(
+  frequency?: EmailNotificationFrequency,
+) {
   const pendingEmails = await db
     .collection(DB_ENDPOINTS.user_notifications)
     .doc('emails_pending')
@@ -73,9 +77,15 @@ export async function createNotificationEmails() {
   for (const entry of Object.entries<IPendingEmails>(
     pendingEmails.data() ?? [],
   )) {
-    const [_userId, { notifications: pendingNotifications }] = entry
+    const [_userId, { notifications: pendingNotifications, emailFrequency }] =
+      entry
 
-    if (!pendingNotifications.length) continue
+    if (
+      !pendingNotifications.length ||
+      (frequency !== undefined && emailFrequency !== frequency) ||
+      emailFrequency === EmailNotificationFrequency.NEVER
+    )
+      continue
 
     const user = (await db
       .collection(DB_ENDPOINTS.users)

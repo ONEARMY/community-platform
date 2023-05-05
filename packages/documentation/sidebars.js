@@ -82,6 +82,22 @@ module.exports = {
       id: 'Security',
     },
     {
+      type: 'category',
+      label: 'Maintainers',
+      items: [
+        {
+          type: 'doc',
+          label: 'Overview',
+          id: 'Maintainers/overview',
+        },
+        {
+          type: 'doc',
+          label: 'Onboarding',
+          id: 'Maintainers/onboarding',
+        },
+      ],
+    },
+    {
       type: 'link',
       label: 'Component Storybook',
       href: 'pathname:///storybook-static/index.html',

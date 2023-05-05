@@ -21,6 +21,7 @@ import { useCommonStores } from '../../../index'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { researchCommentUrlPattern } from './helper'
+import { useContributorsData } from 'src/common/hooks/contributorsData'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -117,6 +118,14 @@ const ResearchArticle = observer((props: IProps) => {
   const item = researchStore.activeResearchItem
   const loggedInUser = researchStore.activeUser
 
+  const collaborators = Array.isArray(item?.collaborators)
+    ? item?.collaborators
+    : ((item?.collaborators as string | undefined)?.split(',') || []).filter(
+        Boolean,
+      )
+
+  const contributors = useContributorsData(collaborators || [])
+
   if (item) {
     const { aggregations } = aggregationsStore
     // Distinguish between undefined aggregations (not loaded) and undefined aggregation (no votes)
@@ -150,9 +159,6 @@ const ResearchArticle = observer((props: IProps) => {
       }
     }
 
-    const collaborators = Array.isArray(item.collaborators)
-      ? item.collaborators
-      : ((item.collaborators as string) || '').split(',').filter(Boolean)
     return (
       <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
         <ResearchDescription
@@ -198,10 +204,7 @@ const ResearchArticle = observer((props: IProps) => {
         >
           <ArticleCallToAction
             author={researchAuthor}
-            contributors={collaborators.map((c) => ({
-              userName: c,
-              isVerified: false,
-            }))}
+            contributors={contributors}
           >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}

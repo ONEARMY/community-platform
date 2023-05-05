@@ -8,7 +8,7 @@ import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
 import { Link } from 'react-router-dom'
-import { useContributorsData } from 'src/common/contributorData'
+import { useContributorsData } from 'src/common/hooks/contributorsData'
 
 interface IProps {
   update: IResearch.UpdateDB

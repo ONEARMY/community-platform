@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useCommonStores } from '..'
-import type { Collaborator } from '../models/common.models'
+import { useCommonStores } from '../..'
+import type { Collaborator } from '../../models/common.models'
 
 export const useContributorsData = (collaborators: string[]) => {
   const { userStore } = useCommonStores().stores

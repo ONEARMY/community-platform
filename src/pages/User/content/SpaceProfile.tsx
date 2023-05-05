@@ -35,7 +35,7 @@ import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { isUserVerified } from 'src/common/isUserVerified'
-import { useUserUsefulCount } from 'src/common/userUsefulCount'
+import { useUserUsefulCount } from 'src/common/hooks/userUsefulCount'
 
 interface IBackgroundImageProps {
   bgImg: string

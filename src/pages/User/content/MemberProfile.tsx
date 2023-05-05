@@ -7,7 +7,7 @@ import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { isUserVerified } from 'src/common/isUserVerified'
-import { useUserUsefulCount } from 'src/common/userUsefulCount'
+import { useUserUsefulCount } from 'src/common/hooks/userUsefulCount'
 
 interface IProps {
   user: IUserPP

@@ -21,7 +21,7 @@ import { useCommonStores } from '../../../index'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { researchCommentUrlPattern } from './helper'
-import { useContributorsData } from 'src/common/contributorData'
+import { useContributorsData } from 'src/common/hooks/contributorsData'
 
 type IProps = RouteComponentProps<{ slug: string }>
 

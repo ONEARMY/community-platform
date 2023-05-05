@@ -1,4 +1,4 @@
-import { render, act, waitFor } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
@@ -18,13 +18,15 @@ const activeUser = FactoryUser({
   userRoles: ['beta-tester'],
 })
 
+const mockUser = FactoryUser({ country: 'AF' })
+
 jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserByUsername: jest.fn().mockResolvedValue({ country: 'AF' }),
+        getUserByUsername: jest.fn().mockResolvedValue(mockUser),
       },
       aggregationsStore: {
         aggregations: {

@@ -1,4 +1,4 @@
-import { render, act } from '@testing-library/react'
+import { render, act, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
@@ -144,6 +144,7 @@ describe('Research Article', () => {
               title: 'Research Update #1',
               collaborators: ['third-example-username'],
               status: 'published',
+              _deleted: false,
             }),
           ],
         }),
@@ -162,63 +163,6 @@ describe('Research Article', () => {
       expect(wrapper.getByText('third-example-username')).toBeInTheDocument()
       expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(3)
     })
-    it('shows only published updates', async () => {
-      // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
-        ...mockResearchStore,
-        activeResearchItem: FactoryResearchItem({
-          collaborators: ['example-username', 'another-example-username'],
-          updates: [
-            FactoryResearchItemUpdate({
-              title: 'Research Update #1',
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #2',
-              status: 'draft',
-            }),
-          ],
-        }),
-      })
-
-      // Act
-      const wrapper = getWrapper()
-
-      // Assert
-      expect(() => {
-        wrapper.getByText('Research Update #2')
-      }).toThrow()
-    })
-
-    it('does not show deleted updates', async () => {
-      // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
-        ...mockResearchStore,
-        activeResearchItem: FactoryResearchItem({
-          collaborators: ['example-username', 'another-example-username'],
-          updates: [
-            FactoryResearchItemUpdate({
-              title: 'Research Update #1',
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #2',
-              status: 'draft',
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #3',
-              _deleted: true,
-            }),
-          ],
-        }),
-      })
-
-      // Act
-      const wrapper = getWrapper()
-
-      // Assert
-      expect(() => {
-        wrapper.getByText('Research Update #3')
-      }).toThrow()
-    })
   })
 
   it('shows only published updates', async () => {
@@ -231,10 +175,12 @@ describe('Research Article', () => {
           FactoryResearchItemUpdate({
             title: 'Research Update #1',
             status: 'published',
+            _deleted: false,
           }),
           FactoryResearchItemUpdate({
             title: 'Research Update #2',
             status: 'draft',
+            _deleted: false,
           }),
         ],
       }),

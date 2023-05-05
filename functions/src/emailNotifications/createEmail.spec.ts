@@ -102,12 +102,15 @@ describe('create email test', () => {
 
     await FirebaseEmulatedTest.seedFirestoreDB('users', [
       userFactory('user_1', {
+        notifications: user1Notifications,
         displayName: 'User 1',
       }),
       userFactory('user_2', {
+        notifications: user2Notifications,
         displayName: 'User 2',
       }),
       userFactory('user_3', {
+        notifications: user3Notifications,
         displayName: 'User 3',
       }),
       userFactory('user_4', {
@@ -223,8 +226,17 @@ describe('create email test', () => {
         },
         to: ['test@test.com'],
       })
-      return
     })
+
+    // Notifications should have been updated with email id
+    const notificationsQuerySnapshot = await db
+      .collection(DB_ENDPOINTS.users)
+      .doc('user_1')
+      .get()
+    const { notifications } = notificationsQuerySnapshot.data()
+    notifications.forEach(({ email }) =>
+      expect(email).toBe(querySnapshot.docs[0].id),
+    )
   })
 
   it('Creates email from pending notifications monthly', async () => {
@@ -235,7 +247,6 @@ describe('create email test', () => {
     expect(countSnapshot.data().count).toEqual(1)
 
     const querySnapshot = await db.collection(DB_ENDPOINTS.emails).get()
-
     querySnapshot.forEach((doc) => {
       expect(doc.data()).toMatchObject({
         template: {
@@ -284,6 +295,16 @@ describe('create email test', () => {
       })
       return
     })
+
+    // Notifications should have been updated with email id
+    const notificationsQuerySnapshot = await db
+      .collection(DB_ENDPOINTS.users)
+      .doc('user_2')
+      .get()
+    const { notifications } = notificationsQuerySnapshot.data()
+    notifications.forEach(({ email }) =>
+      expect(email).toBe(querySnapshot.docs[0].id),
+    )
   })
 
   it('Creates emails from pending notifications all', async () => {

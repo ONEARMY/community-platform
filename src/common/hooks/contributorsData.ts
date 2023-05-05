@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useCommonStores } from '../..'
 import type { Collaborator } from '../../models/common.models'
+import { getUserCountry } from 'src/utils/getUserCountry'
 
 export const useContributorsData = (collaborators: string[]) => {
   const { userStore } = useCommonStores().stores
@@ -16,7 +17,7 @@ export const useContributorsData = (collaborators: string[]) => {
             return {
               userName: c,
               isVerified: false,
-              countryCode: user.location?.countryCode || user.country,
+              countryCode: getUserCountry(user),
             }
           }),
         )

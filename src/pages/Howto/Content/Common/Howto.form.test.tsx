@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router'
@@ -40,54 +40,88 @@ jest.mock('src/index', () => {
 })
 
 describe('Howto form', () => {
-  it('Invalid file warning does not appear when submitting only fileLink', async () => {
-    // Arrange
-    const formValues = FactoryHowto({ fileLink: 'www.test.com' })
+  describe('Invalid file warning', () => {
+    it('Does not appear when submitting only fileLink', async () => {
+      // Arrange
+      const formValues = FactoryHowto({ fileLink: 'www.test.com' })
+      // Act
+      const wrapper = getWrapper(formValues, 'edit', {})
 
-    // Act
-    const wrapper = getWrapper(formValues, 'edit', {})
-
-    // Assert
-    expect(
-      wrapper.queryByTestId('invalid-file-warning'),
-    ).not.toBeInTheDocument()
-  })
-
-  it('Invalid file warning does not appear when submitting only files', async () => {
-    // Arrange
-    const formValues = FactoryHowto({
-      files: [
-        new File(['test file content'], 'test-file.pdf', {
-          type: 'application/pdf',
-        }),
-      ],
+      // Assert
+      expect(
+        wrapper.queryByTestId('invalid-file-warning'),
+      ).not.toBeInTheDocument()
     })
 
-    // Act
-    const wrapper = getWrapper(formValues, 'edit', {})
+    it('Does not appear when submitting only files', async () => {
+      // Arrange
+      const formValues = FactoryHowto({
+        files: [
+          new File(['test file content'], 'test-file.pdf', {
+            type: 'application/pdf',
+          }),
+        ],
+      })
 
-    // Assert
-    expect(
-      wrapper.queryByTestId('invalid-file-warning'),
-    ).not.toBeInTheDocument()
-  })
+      // Act
+      const wrapper = getWrapper(formValues, 'edit', {})
 
-  it('Invalid file warning appears when submitting 2 file types', async () => {
-    // Arrange
-    const formValues = FactoryHowto({
-      files: [
-        new File(['test file content'], 'test-file.pdf', {
-          type: 'application/pdf',
-        }),
-      ],
-      fileLink: 'www.test.com',
+      // Assert
+      expect(
+        wrapper.queryByTestId('invalid-file-warning'),
+      ).not.toBeInTheDocument()
     })
 
-    // Act
-    const wrapper = getWrapper(formValues, 'edit', {})
+    it('Appears when submitting 2 file types', async () => {
+      // Arrange
+      const formValues = FactoryHowto({
+        files: [
+          new File(['test file content'], 'test-file.pdf', {
+            type: 'application/pdf',
+          }),
+        ],
+        fileLink: 'www.test.com',
+      })
 
-    // Assert
-    expect(wrapper.queryByTestId('invalid-file-warning')).toBeInTheDocument()
+      // Act
+      const wrapper = getWrapper(formValues, 'edit', {})
+
+      // Assert
+      expect(wrapper.queryByTestId('invalid-file-warning')).toBeInTheDocument()
+    })
+
+    it('Does not appear when files are removed and filelink added', async () => {
+      // Arrange
+      const formValues = FactoryHowto({
+        files: [
+          new File(['test file content'], 'test-file.pdf', {
+            type: 'application/pdf',
+          }),
+        ],
+      })
+
+      // Act
+      const wrapper = getWrapper(formValues, 'edit', {})
+
+      // clear files
+      const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
+      fireEvent.click(reuploadFilesButton)
+
+      // add fileLink
+      const fileLink = wrapper.getByPlaceholderText(
+        'Link to Gdrive, Dropbox, Grabcad etc',
+      )
+      fireEvent.change(fileLink, { target: { value: '<http://www.test.com>' } })
+
+      // submit form
+      const submitFormButton = wrapper.getByTestId('submit-form')
+      fireEvent.click(submitFormButton)
+
+      // Assert
+      expect(
+        wrapper.queryByTestId('invalid-file-warning'),
+      ).not.toBeInTheDocument()
+    })
   })
 })
 

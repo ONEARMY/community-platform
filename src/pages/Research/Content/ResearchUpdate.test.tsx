@@ -6,11 +6,19 @@ const Theme = preciousPlasticTheme.styles
 import ResearchUpdate from './ResearchUpdate'
 import { faker } from '@faker-js/faker'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
+import { FactoryUser } from 'src/test/factories/User'
+
+const mockUser = FactoryUser({ country: '' })
 
 jest.mock('src/index', () => {
   return {
-    useCommonStores: jest.fn().mockReturnValue({
-      stores: { userStore: { fetchAllVerifiedUsers: jest.fn() } },
+    useCommonStores: () => ({
+      stores: {
+        userStore: {
+          fetchAllVerifiedUsers: jest.fn(),
+          getUserByUsername: jest.fn().mockResolvedValue(mockUser),
+        },
+      },
     }),
   }
 })

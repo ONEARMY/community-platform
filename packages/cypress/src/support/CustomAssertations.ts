@@ -1,5 +1,6 @@
-import type { IHowto, IHowtoStep } from '../../../../src/models/howto.models'
 import chaiSubset from 'chai-subset'
+import type { IHowto, IHowtoStep } from '../../../../src/models/howto.models'
+import type { IResearchDB } from '../../../../src/models/research.models'
 import type { IUserPPDB } from '../../../../src/models/user_pp.models'
 
 import type { ProfileTypeLabel } from '../../../../src/modules/profile/types'
@@ -42,6 +43,7 @@ const eqHowto = (chaiObj) => {
       time,
       title,
       tags,
+      previousSlugs,
     } = expected
     expect(subject, 'Basic info').to.containSubset({
       _createdBy,
@@ -52,6 +54,7 @@ const eqHowto = (chaiObj) => {
       time,
       title,
       tags,
+      previousSlugs,
     })
 
     // We want to validate that uploaded filename matches that originally specified
@@ -92,6 +95,23 @@ const eqHowtoStep = (chaiObj) => {
   }
 
   chaiObj.Assertion.addMethod('eqHowtoStep', compare)
+}
+
+const eqResearch = (chaiObj) => {
+  function compare(this: any, expected: any) {
+    const subject: IResearchDB = this._obj
+    const { _createdBy, _deleted, description, title, slug, previousSlugs } =
+      expected
+    expect(subject, 'Basic info').to.containSubset({
+      _createdBy,
+      _deleted,
+      description,
+      title,
+      slug,
+      previousSlugs,
+    })
+  }
+  chaiObj.Assertion.addMethod('eqResearch', compare)
 }
 
 const eqSettings = (chaiObj) => {
@@ -208,5 +228,6 @@ const eqSettings = (chaiObj) => {
 }
 chai.use(eqHowto)
 chai.use(eqHowtoStep)
+chai.use(eqResearch)
 chai.use(eqSettings)
 chai.use(chaiSubset)

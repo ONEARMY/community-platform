@@ -55,7 +55,9 @@ export const Username = (props: Props) => {
         <Flex mr={1} sx={{ display: 'inline-flex' }}>
           {props.user.countryCode &&
           isValidCountryCode(props.user.countryCode) ? (
-            <FlagIconHowTos code={props.user.countryCode.toLowerCase()} />
+            <Flex data-testid="Username: known flag">
+              <FlagIconHowTos code={props.user.countryCode.toLowerCase()} />
+            </Flex>
           ) : (
             <Flex
               data-testid="Username: unknown flag"

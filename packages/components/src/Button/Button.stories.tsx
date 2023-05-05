@@ -64,6 +64,20 @@ export const Secondary: StoryFn<typeof Button> = () => (
   </>
 )
 
+export const Destructive: StoryFn<typeof Button> = () => (
+  <>
+    <Button variant={'destructive'}>Destructive</Button>
+    <Button icon="delete" variant={'destructive'}>
+      Destructive
+    </Button>
+    {sizeOptions.map((v, k) => (
+      <Button key={k} variant={'destructive'} {...v}>
+        {v.label}
+      </Button>
+    ))}
+  </>
+)
+
 export const Subtle: StoryFn<typeof Button> = () => (
   <>
     <Button variant={'subtle'}>Subtle</Button>

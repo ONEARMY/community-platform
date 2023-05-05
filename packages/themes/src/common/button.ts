@@ -45,6 +45,13 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
       bg: colors.softblue,
     },
   },
+  destructive: {
+    ...BASE_BUTTON,
+    border: '2px solid ' + colors.black,
+    backgroundColor: colors.red2,
+    color: colors.black,
+    cursor: 'pointer',
+  },
   outline: {
     ...BASE_BUTTON,
     border: '2px solid ' + colors.black,

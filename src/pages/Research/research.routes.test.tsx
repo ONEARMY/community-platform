@@ -1,19 +1,19 @@
 import '@testing-library/jest-dom'
-import ResearchRoutes from './research.routes'
 import { preciousPlasticTheme } from 'oa-themes'
+import ResearchRoutes from './research.routes'
 const Theme = preciousPlasticTheme.styles
 
+import { cleanup, render, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
-import { render, waitFor, cleanup } from '@testing-library/react'
-import { Router } from 'react-router-dom'
-import { Provider } from 'mobx-react'
 import { createMemoryHistory } from 'history'
+import { Provider } from 'mobx-react'
+import { Router } from 'react-router-dom'
 import type { ResearchStore } from 'src/stores/Research/research.store'
+import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
-import { useResearchStore } from 'src/stores/Research/research.store'
 import { FactoryUser } from 'src/test/factories/User'
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
@@ -38,7 +38,7 @@ jest.mock('src/index', () => ({
 
 /** When mocking research routes replace default store methods with below */
 class mockResearchStoreClass implements Partial<ResearchStore> {
-  setActiveResearchItem = jest.fn()
+  setActiveResearchItemBySlug = jest.fn()
   needsModeration = jest.fn().mockResolvedValue(true)
   incrementViewCount = jest.fn()
   activeResearchItem = FactoryResearchItem({
@@ -96,9 +96,9 @@ describe('research.routes', () => {
 
       await waitFor(
         () => {
-          expect(mockResearchStore.setActiveResearchItem).toHaveBeenCalledWith(
-            'research-slug',
-          )
+          expect(
+            mockResearchStore.setActiveResearchItemBySlug,
+          ).toHaveBeenCalledWith('research-slug')
           expect(
             wrapper.getByText(/Research article title/),
           ).toBeInTheDocument()

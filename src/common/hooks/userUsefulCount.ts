@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useCommonStores } from '../index'
+import { useCommonStores } from '../../index'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import { SITE, DEV_SITE_ROLE } from 'src/config/config'

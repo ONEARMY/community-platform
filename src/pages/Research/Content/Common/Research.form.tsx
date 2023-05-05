@@ -334,12 +334,14 @@ const ResearchForm = observer((props: IProps) => {
                 {props.formValues.updates ? (
                   <ResearchEditorOverview
                     sx={{ mt: 4 }}
-                    updates={props.formValues?.updates.map((u) => ({
-                      isActive: false,
-                      status: u.status,
-                      title: u.title,
-                      slug: u._id,
-                    }))}
+                    updates={props.formValues?.updates
+                      .filter((u) => !u._deleted)
+                      .map((u) => ({
+                        isActive: false,
+                        status: u.status,
+                        title: u.title,
+                        slug: u._id,
+                      }))}
                     researchSlug={props.formValues.slug}
                     showCreateUpdateButton={true}
                   />

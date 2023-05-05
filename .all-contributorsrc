@@ -245,6 +245,16 @@
         "code",
         "maintainer"
       ]
+    },
+    {
+      "login": "iSCJT",
+      "name": "Sean Thompson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/80723794?v=4",
+      "profile": "https://speckledbanana.com",
+      "contributions": [
+        "code",
+        "maintainer"
+      ]
     }
   ],
   "projectName": "community-platform",

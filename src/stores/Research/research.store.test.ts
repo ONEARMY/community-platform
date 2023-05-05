@@ -70,7 +70,7 @@ const factory = async (mockFn, researchItemOverloads: any = {}) => {
     triggerNotification: jest.fn(),
   }
 
-  await store.setActiveResearchItem('fish')
+  await store.setActiveResearchItemBySlug('fish')
 
   return {
     store,
@@ -460,6 +460,34 @@ describe('research.store', () => {
         expect(newResearchItem.updates[0].description).toBe(
           '@@{userId:username}',
         )
+      })
+    })
+
+    describe('deleteUpdate', () => {
+      it('removes an update', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem()
+
+        // Act
+        await store.deleteUpdate(researchItem.updates[0]._id)
+
+        // Assert
+        expect(setFn).toBeCalledTimes(1)
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(
+          newResearchItem.updates.find(
+            ({ title }) => title === researchItem.updates[0].title,
+          )._deleted,
+        ).toBe(true)
+      })
+
+      it('handles malformed update id', async () => {
+        const { store, setFn } = await factoryResearchItem()
+
+        // Act
+        await store.deleteUpdate('malformed-id')
+
+        // Assert
+        expect(setFn).not.toBeCalled()
       })
     })
   })

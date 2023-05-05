@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
@@ -14,12 +14,20 @@ import { FactoryUser } from 'src/test/factories/User'
 
 const Theme = preciousPlasticTheme.styles
 
+const activeUser = FactoryUser({
+  userRoles: ['beta-tester'],
+})
+
+const mockUser = FactoryUser({ country: 'AF' })
+
 jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
-      userStore: {},
+      userStore: {
+        getUserByUsername: jest.fn().mockResolvedValue(mockUser),
+      },
       aggregationsStore: {
         aggregations: {
           users_votedUsefulResearch: {},
@@ -31,20 +39,16 @@ jest.mock('src/index', () => ({
 
 jest.mock('src/stores/Research/research.store')
 
-const activeUser = FactoryUser({
-  userRoles: ['beta-tester'],
-})
-
 describe('Research Article', () => {
   const mockResearchStore = {
     activeResearchItem: FactoryResearchItem(),
-    setActiveResearchItem: jest.fn().mockResolvedValue(true),
+    setActiveResearchItemBySlug: jest.fn().mockResolvedValue(true),
     needsModeration: jest.fn(),
     getActiveResearchUpdateComments: jest.fn(),
     incrementViewCount: jest.fn(),
   }
 
-  it('does not display contributors when undefined', () => {
+  it('does not display contributors when undefined', async () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
@@ -54,7 +58,10 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
 
     // Assert
     expect(() => {
@@ -72,12 +79,16 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
 
     // Assert
     expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
     expect(wrapper.getAllByText('example-username')).toHaveLength(1)
     expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
+    expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(2)
   })
 
   it('displays "Follow" button text and color if not subscribed', async () => {
@@ -87,7 +98,10 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
     const followButton = wrapper.getByTestId('follow-button')
 
     // Assert
@@ -107,7 +121,10 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = getWrapper()
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
     const followButton = wrapper.getByTestId('follow-button')
 
     // Assert
@@ -127,21 +144,26 @@ describe('Research Article', () => {
           updates: [
             FactoryResearchItemUpdate({
               title: 'Research Update #1',
-              collaborators: ['example'],
+              collaborators: ['third-example-username'],
+              status: 'published',
+              _deleted: false,
             }),
           ],
         }),
       })
 
-      // Act
-      const wrapper = getWrapper()
+      // wait for Promise to resolve and state to update
+      let wrapper
+      await act(async () => {
+        wrapper = getWrapper()
+      })
 
       // Assert
-      expect(
-        wrapper.getAllByTestId('Username: unknown flag').length,
-      ).toBeGreaterThanOrEqual(1)
-      expect(wrapper.getAllByText('example-username')).toHaveLength(1)
-      expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
+      expect(wrapper.getByText('With contributions from:')).toBeInTheDocument()
+      expect(wrapper.getByText('example-username')).toBeInTheDocument()
+      expect(wrapper.getByText('another-example-username')).toBeInTheDocument()
+      expect(wrapper.getByText('third-example-username')).toBeInTheDocument()
+      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(3)
     })
   })
 
@@ -154,36 +176,27 @@ describe('Research Article', () => {
         updates: [
           FactoryResearchItemUpdate({
             title: 'Research Update #1',
+            status: 'published',
+            _deleted: false,
           }),
           FactoryResearchItemUpdate({
             title: 'Research Update #2',
             status: 'draft',
+            _deleted: false,
           }),
         ],
       }),
     })
 
     // Act
-    const wrapper = render(
-      <Provider userStore={{}}>
-        <ThemeProvider theme={Theme}>
-          <MemoryRouter initialEntries={['/research/article']}>
-            <Route
-              path="/research/:slug"
-              exact
-              key={1}
-              component={ResearchArticle}
-            />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    )
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
 
     // Assert
-    expect(() => {
-      wrapper.getByText('Research Update #1')
-      wrapper.getByText('Research Update #2')
-    }).toThrow()
+    expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
+    expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
   })
 })
 

@@ -16,9 +16,9 @@ import type {
   IHowtoDB,
   IMapPin,
   IModerable,
+  IPendingEmails,
   IResearchDB,
   IUserDB,
-  IPendingEmails,
 } from '../../src/models'
 export {
   DBDoc,
@@ -32,9 +32,9 @@ export {
   IPendingEmails,
 }
 
-import { dbEndpointSubollections, generateDBEndpoints } from 'oa-shared'
+import { dbEndpointSubcollections, generateDBEndpoints } from 'oa-shared'
 export const DB_ENDPOINTS = generateDBEndpoints()
-export const DB_ENDPOINT_SUBCOLLECTIONS = dbEndpointSubollections
+export const DB_ENDPOINT_SUBCOLLECTIONS = dbEndpointSubcollections
 
 export type IDBDocChange =
   functions.Change<functions.firestore.DocumentSnapshot>

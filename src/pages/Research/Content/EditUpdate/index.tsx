@@ -60,7 +60,7 @@ const EditUpdate = observer((props: IProps) => {
         }))
       } else {
         const slug = props.match.params.slug
-        const doc = await store.setActiveResearchItem(slug)
+        const doc = await store.setActiveResearchItemBySlug(slug)
         let update
         if (doc) {
           update = doc.updates.find((upd) => upd._id === updateId)
@@ -89,6 +89,7 @@ const EditUpdate = observer((props: IProps) => {
       return (
         <ResearchUpdateForm
           formValues={formValues}
+          redirectUrl={'/research/' + store.activeResearchItem!.slug + '/edit'}
           parentType="edit"
           {...props}
         />

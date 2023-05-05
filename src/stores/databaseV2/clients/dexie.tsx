@@ -1,13 +1,13 @@
-import type { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import Dexie from 'dexie'
+import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
+import { logger } from '../../../logger'
+import { DB_ENDPOINTS } from '../endpoints'
 import type {
+  AbstractDatabaseClient,
   DBQueryOptions,
   DBQueryWhereOptions,
-  AbstractDatabaseClient,
 } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
-import { DB_ENDPOINTS } from '../endpoints'
-import { logger } from '../../../logger'
 
 /**
  * Update the cache number either when making changes to db architecture
@@ -162,7 +162,7 @@ const SCHEMA_BASE: IDexieSchema = {
   categories: DEFAULT_SCHEMA,
   researchCategories: DEFAULT_SCHEMA,
   users: `${DEFAULT_SCHEMA},_authID`,
-  research: `${DEFAULT_SCHEMA},slug`,
+  research: `${DEFAULT_SCHEMA},slug,previousSlugs`,
   aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
 }

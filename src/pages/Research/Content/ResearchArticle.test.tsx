@@ -162,20 +162,7 @@ describe('Research Article', () => {
       })
 
       // Act
-      const wrapper = render(
-        <Provider userStore={{}}>
-          <ThemeProvider theme={Theme}>
-            <MemoryRouter initialEntries={['/research/article']}>
-              <Route
-                path="/research/:slug"
-                exact
-                key={1}
-                component={ResearchArticle}
-              />
-            </MemoryRouter>
-          </ThemeProvider>
-        </Provider>,
-      )
+      const wrapper = getWrapper()
 
       // Assert
       expect(() => {
@@ -206,20 +193,7 @@ describe('Research Article', () => {
       })
 
       // Act
-      const wrapper = render(
-        <Provider userStore={{}}>
-          <ThemeProvider theme={Theme}>
-            <MemoryRouter initialEntries={['/research/article']}>
-              <Route
-                path="/research/:slug"
-                exact
-                key={1}
-                component={ResearchArticle}
-              />
-            </MemoryRouter>
-          </ThemeProvider>
-        </Provider>,
-      )
+      const wrapper = getWrapper()
 
       // Assert
       expect(() => {
@@ -247,20 +221,7 @@ describe('Research Article', () => {
     })
 
     // Act
-    const wrapper = render(
-      <Provider userStore={{}}>
-        <ThemeProvider theme={Theme}>
-          <MemoryRouter initialEntries={['/research/article']}>
-            <Route
-              path="/research/:slug"
-              exact
-              key={1}
-              component={ResearchArticle}
-            />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    )
+    const wrapper = getWrapper()
 
     // Assert
     expect(() => {

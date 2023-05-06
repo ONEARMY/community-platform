@@ -103,9 +103,10 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               />
             </Box>
           )}
-          <AuthWrapper roleRequired="beta-tester">
+          {props.loggedInUser && (
             <Button
               data-testid="follow-button"
+              data-cy="follow-button"
               icon="thunderbolt"
               variant="outline"
               iconColor={
@@ -128,7 +129,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
                 ? 'Following'
                 : 'Follow'}
             </Button>
-          </AuthWrapper>
+          )}
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>

@@ -284,7 +284,7 @@ export class UserStore extends ModuleStore {
     // TODO show notification if invalid credential
   }
 
-  private async createUserProfile(fields: Partial<IUser> = {}) {
+  private async createUserProfile() {
     const authUser = auth.currentUser as firebase.default.User
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
@@ -294,15 +294,16 @@ export class UserStore extends ModuleStore {
       throw new Error('No Username Provided')
     }
     const user: IUser = {
-      ...USER_BASE,
+      coverImages: [],
+      links: [],
+      moderation: 'awaiting-moderation',
+      verified: false,
       _authID: authUser.uid,
       displayName,
       userName,
-      moderation: 'awaiting-moderation',
       votedUsefulHowtos: {},
       votedUsefulResearch: {},
       notifications: [],
-      ...fields,
     }
     // update db
     await dbRef.set(user)
@@ -438,11 +439,4 @@ const getInitialUpdateStatus = () => {
 // take the username and return matching avatar url (includes undefined.jpg match if no user)
 export const getUserAvatar = (userName: string | undefined) => {
   return Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
-}
-
-const USER_BASE = {
-  coverImages: [],
-  links: [],
-  moderation: 'awaiting-moderation',
-  verified: false,
 }

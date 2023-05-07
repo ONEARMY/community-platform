@@ -74,7 +74,7 @@ export class UserStore extends ModuleStore {
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
-      await this.createUserProfile()
+      await this._createUserProfile()
       // when checking auth state change also send confirmation email
       this._listenToAuthStateChanges(true)
     }
@@ -119,7 +119,7 @@ export class UserStore extends ModuleStore {
           .doc(userMeta._id)
           .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
-        await this.createUserProfile()
+        await this._createUserProfile()
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
         if (!newUserCreated) {
           return this.userSignedIn(user, true)
@@ -284,31 +284,6 @@ export class UserStore extends ModuleStore {
     // TODO show notification if invalid credential
   }
 
-  private async createUserProfile() {
-    const authUser = auth.currentUser as firebase.default.User
-    const displayName = authUser.displayName as string
-    const userName = formatLowerNoSpecial(displayName)
-    const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
-    logger.debug('creating user profile', userName)
-    if (!userName) {
-      throw new Error('No Username Provided')
-    }
-    const user: IUser = {
-      coverImages: [],
-      links: [],
-      moderation: 'awaiting-moderation',
-      verified: false,
-      _authID: authUser.uid,
-      displayName,
-      userName,
-      votedUsefulHowtos: {},
-      votedUsefulResearch: {},
-      notifications: [],
-    }
-    // update db
-    await dbRef.set(user)
-  }
-
   @action
   public async updateUsefulHowTos(
     howtoId: string,
@@ -386,6 +361,31 @@ export class UserStore extends ModuleStore {
       logger.error(err)
       throw new Error(err)
     }
+  }
+
+  private async _createUserProfile() {
+    const authUser = auth.currentUser as firebase.default.User
+    const displayName = authUser.displayName as string
+    const userName = formatLowerNoSpecial(displayName)
+    const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
+    logger.debug('creating user profile', userName)
+    if (!userName) {
+      throw new Error('No Username Provided')
+    }
+    const user: IUser = {
+      coverImages: [],
+      links: [],
+      moderation: 'awaiting-moderation',
+      verified: false,
+      _authID: authUser.uid,
+      displayName,
+      userName,
+      votedUsefulHowtos: {},
+      votedUsefulResearch: {},
+      notifications: [],
+    }
+    // update db
+    await dbRef.set(user)
   }
 
   // use firebase auth to listen to change to signed in user

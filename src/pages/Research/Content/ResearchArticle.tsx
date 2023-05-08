@@ -141,22 +141,31 @@ const ResearchArticle = observer((props: IProps) => {
       isVerified: isUserVerified(item._createdBy),
     }
 
-    const onFollowingClick = async () => {
+    const onFollowingClick = async (researchSlug: string) => {
       if (!loggedInUser?.userName) {
         return null
       }
+
+      let action: string
 
       if (item.subscribers?.includes(loggedInUser?.userName || '')) {
         researchStore.removeSubscriberFromResearchArticle(
           item._id,
           loggedInUser?.userName,
         )
+        action = 'Unsubscribed'
       } else {
         researchStore.addSubscriberToResearchArticle(
           item._id,
           loggedInUser?.userName,
         )
+        action = 'Subscribed'
       }
+      trackEvent({
+        category: 'Research',
+        action: action,
+        label: researchSlug,
+      })
     }
 
     return (
@@ -174,7 +183,7 @@ const ResearchArticle = observer((props: IProps) => {
             onUsefulClick(item._id, item._createdBy, item.slug)
           }
           onFollowingClick={() => {
-            onFollowingClick()
+            onFollowingClick(item.slug)
           }}
         />
         <Box my={16}>
@@ -213,7 +222,7 @@ const ResearchArticle = observer((props: IProps) => {
               onUsefulClick={() => {
                 trackEvent({
                   category: 'ArticleCallToAction',
-                  action: 'ReseachUseful',
+                  action: 'ResearchUseful',
                   label: item.slug,
                 })
                 onUsefulClick(item._id, item._createdBy, item.slug)

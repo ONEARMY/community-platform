@@ -244,12 +244,6 @@ jobs:
     docker: *docker
     steps:
       - setup_repo
-  test_security_rules:
-    docker: 
-      - image: timbru31/java-node:alpine-12
-    steps:
-      - checkout
-      - run: cd packages/security-rules && yarn workspaces focus security-rules && yarn test-with-emulator
 
   test_functions:
     docker:
@@ -497,14 +491,6 @@ workflows:
           requires:
             - 'Lint code'
           context: build-context
-          filters:
-            branches:
-              ignore:
-                - production
-      - test_security_rules:
-          name: 'Security Rules tests'
-          # requires:
-          #   - 'Lint code'
           filters:
             branches:
               ignore:

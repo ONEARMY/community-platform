@@ -249,7 +249,7 @@ jobs:
       - image: timbru31/java-node:alpine-12
     steps:
       - checkout
-      - run: cd packages/security-rules && yarn && yarn test-with-emulator
+      - run: cd packages/security-rules && yarn workspaces focus security-rules && yarn test-with-emulator
 
   test_functions:
     docker:

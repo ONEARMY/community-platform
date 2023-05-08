@@ -1,6 +1,7 @@
-import { render, act } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
+import { preciousPlasticTheme } from 'oa-themes'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -8,9 +9,8 @@ import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
-import { preciousPlasticTheme } from 'oa-themes'
-import ResearchArticle from './ResearchArticle'
 import { FactoryUser } from 'src/test/factories/User'
+import ResearchArticle from './ResearchArticle'
 
 const Theme = preciousPlasticTheme.styles
 
@@ -95,6 +95,7 @@ describe('Research Article', () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
+      activeUser,
     })
 
     // Act

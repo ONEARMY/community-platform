@@ -6,7 +6,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
 import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const theme = getTestingThemeStyles()
+const Theme = getTestingThemeStyles()
 
 // eslint-disable-next-line prefer-const
 let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)

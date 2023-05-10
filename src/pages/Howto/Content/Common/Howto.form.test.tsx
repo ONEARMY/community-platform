@@ -6,7 +6,7 @@ import { ThemeProvider } from 'theme-ui'
 import { useCommonStores } from 'src'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const theme = getTestingThemeStyles()
+const Theme = getTestingThemeStyles()
 
 jest.mock('src/index', () => {
   return {
@@ -129,7 +129,7 @@ describe('Howto form', () => {
 const getWrapper = (formValues, parentType, navProps) => {
   return render(
     <Provider {...useCommonStores().stores}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={Theme}>
         <MemoryRouter>
           <HowtoForm
             formValues={formValues}

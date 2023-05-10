@@ -6,7 +6,7 @@ import { faker } from '@faker-js/faker'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const theme = getTestingThemeStyles()
+const Theme = getTestingThemeStyles()
 
 const mockUser = FactoryUser({ country: '' })
 

@@ -11,7 +11,7 @@ import {
 import { FactoryUser } from 'src/test/factories/User'
 import ResearchArticle from './ResearchArticle'
 import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const theme = getTestingThemeStyles()
+const Theme = getTestingThemeStyles()
 
 const activeUser = FactoryUser({
   userRoles: ['beta-tester'],
@@ -207,7 +207,7 @@ const getWrapper = () => {
         user: activeUser,
       }}
     >
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={Theme}>
         <MemoryRouter initialEntries={['/research/article']}>
           <Route
             path="/research/:slug"

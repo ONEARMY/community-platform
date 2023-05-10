@@ -13,7 +13,7 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const theme = getTestingThemeStyles()
+const Theme = getTestingThemeStyles()
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -332,7 +332,7 @@ const renderFn = (url, fnUser?) => {
           setTagsCategory: jest.fn(),
         }}
       >
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={Theme}>
           <Router history={history}>
             <ResearchRoutes />
           </Router>

@@ -1,15 +1,24 @@
 import Fuse from 'fuse.js'
-import { action, computed, makeObservable, observable, toJS } from 'mobx'
-import type { IConvertedFileMeta } from 'src/types'
-import { getUserCountry } from 'src/utils/getUserCountry'
+import {
+  action,
+  computed,
+  makeObservable,
+  observable,
+  runInAction,
+  toJS,
+} from 'mobx'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { logger } from 'src/logger'
+import type { IComment, ISharedStats, IUser } from 'src/models'
 import type {
+  IHowToStepFormInput,
   IHowto,
   IHowtoDB,
   IHowtoFormInput,
   IHowtoStep,
-  IHowToStepFormInput,
 } from 'src/models/howto.models'
-import type { IComment, IUser } from 'src/models'
+import type { IConvertedFileMeta } from 'src/types'
+import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
   formatLowerNoSpecial,
@@ -17,15 +26,13 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import type { RootStore } from '../index'
-import { ModuleStore } from '../common/module.store'
-import type { IUploadedFileMeta } from '../storage'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { logger } from 'src/logger'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
 } from '../common/mentions'
+import { ModuleStore } from '../common/module.store'
+import type { RootStore } from '../index'
+import type { IUploadedFileMeta } from '../storage'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -50,6 +57,8 @@ export class HowtoStore extends ModuleStore {
   public referrerSource: string
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
+
+  @observable howtoStats: ISharedStats | undefined
 
   public filterHowtosByCategory = (
     collection: IHowtoDB[] = [],
@@ -108,44 +117,79 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
-  public async setActiveHowtoBySlug(slug: string) {
+  public async setActiveHowtoBySlug(slug?: string) {
     // clear any cached data and then load the new howto
     logger.debug(`setActiveHowtoBySlug:`, { slug })
-
-    if (!slug) {
-      this.activeHowto = null
-    }
-
     let activeHowto: IHowtoDB | null = null
 
-    const collection = await this.db
-      .collection<IHowto>(COLLECTION_NAME)
-      .getWhere('slug', '==', slug)
-    activeHowto = collection.length > 0 ? collection[0] : null
-    logger.debug('active howto', activeHowto)
 
-    // try previous slugs if slug is not recognized as primary
-    if (!activeHowto) {
+    if (slug) {
+      this.howtoStats = undefined
+
       const collection = await this.db
         .collection<IHowto>(COLLECTION_NAME)
-        .getWhere('previousSlugs', 'array-contains', slug)
-
+        .getWhere('slug', '==', slug)
       activeHowto = collection.length > 0 ? collection[0] : null
-    }
+      logger.debug('active howto', activeHowto)
 
-    // Change all UserReferences to mentions
-    if (activeHowto) {
-      activeHowto.description = changeUserReferenceToPlainText(
-        activeHowto.description,
-      )
+      // try previous slugs if slug is not recognized as primary
+      if (!activeHowto) {
+        const collection = await this.db
+          .collection<IHowto>(COLLECTION_NAME)
+          .getWhere('previousSlugs', 'array-contains', slug)
 
-      activeHowto.steps.forEach((step) => {
-        step.text = changeUserReferenceToPlainText(step.text)
-      })
+        activeHowto = collection.length > 0 ? collection[0] : null
+      }
+
+      // Change all UserReferences to mentions
+      if (activeHowto) {
+        activeHowto.description = changeUserReferenceToPlainText(
+          activeHowto.description,
+        )
+
+        activeHowto.steps.forEach((step) => {
+          step.text = changeUserReferenceToPlainText(step.text)
+        })
+      }
     }
 
     this.activeHowto = activeHowto
     return activeHowto
+  }
+
+  @action
+  public async toggleUsefulByUser(
+    docId: string,
+    userId: string,
+  ): Promise<void> {
+    const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(docId)
+
+    const howtoData = await toJS(dbRef.get('server'))
+    if (!howtoData) return
+
+    const updatedHowtoDoc = () => {
+      if (!(howtoData?.votedUsefulBy || []).includes(userId)) {
+        return {
+          ...howtoData,
+          votedUsefulBy: [userId].concat(howtoData?.votedUsefulBy || []),
+        }
+      } else {
+        return {
+          ...howtoData,
+          votedUsefulBy: (howtoData?.votedUsefulBy || []).filter(
+            (id) => id !== userId,
+          ),
+        }
+      }
+    }
+    await this.updateHowtoItem(updatedHowtoDoc())
+
+    const createdItem = (await dbRef.get()) as IHowtoDB
+    runInAction(() => {
+      this.activeHowto = createdItem
+    })
+
+    return
   }
 
   @action
@@ -576,8 +620,12 @@ export class HowtoStore extends ModuleStore {
   /** As users retain their own list of voted howtos lookup the current howto from the active user vote stats */
   @computed
   get userVotedActiveHowToUseful(): boolean {
-    const howtoId = this.activeHowto!._id
-    return !!this.activeUser?.votedUsefulHowtos?.[howtoId]
+    if (!this.activeUser) return false
+    return (this.activeHowto?.votedUsefulBy || []).includes(this.activeUser._id)
+  }
+
+  get votedUsefulCount(): number {
+    return (this.activeHowto?.votedUsefulBy || []).length
   }
 }
 

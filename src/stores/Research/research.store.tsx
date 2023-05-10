@@ -200,6 +200,41 @@ export class ResearchStore extends ModuleStore {
     return
   }
 
+  public async toggleUsefulByUser(
+    docId: string,
+    userId: string,
+  ): Promise<void> {
+    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
+
+    const researchData = await toJS(dbRef.get('server'))
+    if (!researchData) return
+
+    const updatedResearchDoc = () => {
+      if (!(researchData?.votedUsefulBy || []).includes(userId)) {
+        return {
+          ...researchData,
+          votedUsefulBy: [userId].concat(researchData?.votedUsefulBy || []),
+        }
+      } else {
+        return {
+          ...researchData,
+          votedUsefulBy: (researchData?.votedUsefulBy || []).filter(
+            (id) => id !== userId,
+          ),
+        }
+      }
+    }
+
+    await this.updateResearchItem(dbRef, updatedResearchDoc())
+
+    const createdItem = (await dbRef.get()) as IResearch.ItemDB
+    runInAction(() => {
+      this.activeResearchItem = createdItem
+    })
+
+    return
+  }
+
   @action
   private async loadResearchStats(id?: string) {
     if (id) {
@@ -810,9 +845,14 @@ export class ResearchStore extends ModuleStore {
   }
 
   get userVotedActiveResearchUseful(): boolean {
-    const researchId = this.activeResearchItem!._id
-    const userVotedResearch = this.activeUser?.votedUsefulResearch || {}
-    return userVotedResearch[researchId] ? true : false
+    if (!this.activeUser) return false
+    return (this.activeResearchItem?.votedUsefulBy || []).includes(
+      this.activeUser._id,
+    )
+  }
+
+  get votedUsefulCount(): number {
+    return (this.activeResearchItem?.votedUsefulBy || []).length
   }
 }
 

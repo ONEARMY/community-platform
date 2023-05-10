@@ -53,7 +53,7 @@ describe('UserSettings', () => {
     const user = FactoryUser()
 
     // Act
-    const wrapper = getWrapper(user, null)
+    const wrapper = getWrapper(user)
 
     // Assert
     expect(wrapper.getByText('Edit profile'))
@@ -118,7 +118,9 @@ describe('UserSettings', () => {
   })
 })
 
-const getWrapper = (user, adminEditableUserId = user._id) => {
+const getWrapper = (user) => {
+  const isAdmin = user.userRoles?.includes('admin')
+
   return render(
     <Provider
       {...useCommonStores().stores}
@@ -131,7 +133,7 @@ const getWrapper = (user, adminEditableUserId = user._id) => {
     >
       <ThemeProvider theme={preciousPlasticTheme.styles}>
         <MemoryRouter>
-          <UserSettings adminEditableUserId={adminEditableUserId} />
+          <UserSettings adminEditableUserId={isAdmin ? user._id : null} />
         </MemoryRouter>
       </ThemeProvider>
     </Provider>,

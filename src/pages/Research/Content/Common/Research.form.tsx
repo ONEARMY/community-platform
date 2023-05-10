@@ -1,29 +1,29 @@
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
+import {
+  Button,
+  ElWithBeforeIcon,
+  FieldInput,
+  FieldTextarea,
+  ResearchEditorOverview,
+} from 'oa-components'
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import {
-  Button,
-  FieldInput,
-  FieldTextarea,
-  ElWithBeforeIcon,
-  ResearchEditorOverview,
-} from 'oa-components'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import type { IResearch } from 'src/models/research.models'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
+import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from '../../constants'
+import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from '../../constants'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'

@@ -1,11 +1,11 @@
 import type { ThemeUIStyleObject } from 'theme-ui'
-import { Text, Flex, Image } from 'theme-ui'
-import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
+import { Flex, Image, Text } from 'theme-ui'
+import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
+import type { User } from '../'
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
+import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
-import type { User } from '../'
-import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
 
 export interface Props {
   isVerified: boolean

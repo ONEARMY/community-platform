@@ -1,6 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
-import type { IUser } from 'src/models'
 import { logger } from 'src/logger'
+import type { IUser } from 'src/models'
 import type { UserStore } from '../../User/user.store'
 
 /**

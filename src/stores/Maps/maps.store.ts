@@ -1,27 +1,27 @@
-import { observable, action, makeObservable } from 'mobx'
-import type {
-  IMapPin,
-  IMapGrouping,
-  IMapPinWithDetail,
-  IMapPinDetail,
-  IBoundingBox,
-} from 'src/models/maps.models'
-import type { IDBEndpoint } from 'src/models/common.models'
-import type { RootStore } from '../index'
+import { action, makeObservable, observable } from 'mobx'
 import type { Subscription } from 'rxjs'
-import { ModuleStore } from '../common/module.store'
-import { getUserAvatar } from '../User/user.store'
-import { MAP_GROUPINGS } from './maps.groupings'
-import { generatePins, generatePinDetails } from 'src/stores/Maps/generatePins'
+import { logger } from 'src/logger'
+import type { IDBEndpoint } from 'src/models/common.models'
+import type {
+  IBoundingBox,
+  IMapGrouping,
+  IMapPin,
+  IMapPinDetail,
+  IMapPinWithDetail,
+} from 'src/models/maps.models'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import type { IUploadedFileMeta } from '../storage'
+import { generatePinDetails, generatePins } from 'src/stores/Maps/generatePins'
 import {
   hasAdminRights,
-  needsModeration,
   isAllowToPin,
+  needsModeration,
 } from 'src/utils/helpers'
-import { logger } from 'src/logger'
 import { filterMapPinsByType } from './filter'
+import { MAP_GROUPINGS } from './maps.groupings'
+import { ModuleStore } from '../common/module.store'
+import type { RootStore } from '../index'
+import type { IUploadedFileMeta } from '../storage'
+import { getUserAvatar } from '../User/user.store'
 
 // NOTE - toggle below variable to use larger mock dataset
 const IS_MOCK = false

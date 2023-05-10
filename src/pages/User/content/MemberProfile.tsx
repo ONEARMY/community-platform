@@ -1,13 +1,13 @@
 import 'src/assets/css/slick.min.css'
+import { MemberBadge, Username, UserStatistics } from 'oa-components'
+import DefaultMemberImage from 'src/assets/images/default_member.svg'
+import { useUserUsefulCount } from 'src/common/hooks/userUsefulCount'
+import { isUserVerified } from 'src/common/isUserVerified'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
-import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { MemberBadge, UserStatistics, Username } from 'oa-components'
-import UserContactAndLinks from './UserContactAndLinks'
+import { Box, Card, Flex, Heading, Image, Paragraph } from 'theme-ui'
 import { UserAdmin } from './UserAdmin'
-import { isUserVerified } from 'src/common/isUserVerified'
-import { useUserUsefulCount } from 'src/common/hooks/userUsefulCount'
+import UserContactAndLinks from './UserContactAndLinks'
 
 interface IProps {
   user: IUserPP

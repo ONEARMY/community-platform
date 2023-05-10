@@ -1,7 +1,7 @@
 import { spawnSync } from 'child_process'
+import fs from 'fs'
 import globby from 'globby'
 import path from 'path'
-import fs from 'fs'
 import rimraf from 'rimraf'
 
 const REPO_SRC = path.resolve(__dirname, '../')

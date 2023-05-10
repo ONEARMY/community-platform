@@ -1,12 +1,12 @@
-import { render, waitFor, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { UserSettings } from './UserSettings'
-import { useCommonStores } from 'src'
-import { FactoryUser } from '../../test/factories/User'
-import { MemoryRouter } from 'react-router'
-import { ThemeProvider } from 'theme-ui'
-// TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+import { MemoryRouter } from 'react-router'
+import { useCommonStores } from 'src'
+import { ThemeProvider } from 'theme-ui'
+import { UserSettings } from './UserSettings'
+import { FactoryUser } from '../../test/factories/User'
+// TODO: Remove direct usage of Theme
 
 // eslint-disable-next-line prefer-const
 let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)

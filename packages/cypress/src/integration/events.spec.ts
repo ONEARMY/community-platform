@@ -1,6 +1,6 @@
 import {
-  SingaporeStubResponse,
   SingaporeReverseStubResponse,
+  SingaporeStubResponse,
 } from '../fixtures/searchResults'
 
 describe('[Events]', () => {

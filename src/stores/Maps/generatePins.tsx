@@ -1,8 +1,8 @@
 import { loremIpsum } from 'lorem-ipsum'
-import type { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 import type { DBDoc } from 'src/models/common.models'
-import { randomID } from 'src/utils/helpers'
+import type { IMapPin, IMapPinDetail } from 'src/models/maps.models'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import { randomID } from 'src/utils/helpers'
 
 // helper methods used in generation of mock db data
 const MOCK_DB_META = (id?: string) => {

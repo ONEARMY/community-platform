@@ -1,10 +1,10 @@
-import { ModuleStore } from '../common/module.store'
-import type { RootStore } from '..'
-import { action, observable, makeObservable } from 'mobx'
-import type { IUser, UserRole } from 'src/models/user.models'
+import { action, makeObservable, observable } from 'mobx'
 import type { ITag } from 'src/models/tags.model'
+import type { IUser, UserRole } from 'src/models/user.models'
 import { functions } from 'src/utils/firebase'
+import type { RootStore } from '..'
 import { logger } from '../../logger'
+import { ModuleStore } from '../common/module.store'
 
 /*********************************************************************************
  *  The admin store contains methods for updating user permissions.

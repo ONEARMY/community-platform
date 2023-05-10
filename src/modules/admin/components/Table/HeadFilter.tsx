@@ -1,7 +1,7 @@
+import styled from '@emotion/styled'
+import { Icon } from 'oa-components'
 import React from 'react'
 import { Box, Checkbox, Label, Text } from 'theme-ui'
-import { Icon } from 'oa-components'
-import styled from '@emotion/styled'
 
 type Props = {
   field: string

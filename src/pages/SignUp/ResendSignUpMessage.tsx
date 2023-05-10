@@ -1,8 +1,8 @@
-import React from 'react'
-import { Card, Flex, Heading, Label } from 'theme-ui'
 import { Button, FieldInput } from 'oa-components'
-import { Form, Field } from 'react-final-form'
+import React from 'react'
+import { Field, Form } from 'react-final-form'
 import { logger } from 'src/logger'
+import { Card, Flex, Heading, Label } from 'theme-ui'
 
 interface IFormValues {
   email: string

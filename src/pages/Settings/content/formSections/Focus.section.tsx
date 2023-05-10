@@ -1,11 +1,11 @@
-import { Heading, Box, Text, Flex, Grid, Paragraph } from 'theme-ui'
-import { FlexSectionContainer } from './elements'
-import { Button, ExternalLink } from 'oa-components'
-import type { ProfileTypeLabel } from 'src/modules/profile/types'
-import { getSupportedProfileTypes } from 'src/modules/profile'
-import { CustomRadioField } from './Fields/CustomRadio.field'
-import { Field } from 'react-final-form'
 import { useTheme } from '@emotion/react'
+import { Button, ExternalLink } from 'oa-components'
+import { Field } from 'react-final-form'
+import { getSupportedProfileTypes } from 'src/modules/profile'
+import type { ProfileTypeLabel } from 'src/modules/profile/types'
+import { Box, Flex, Grid, Heading, Paragraph, Text } from 'theme-ui'
+import { FlexSectionContainer } from './elements'
+import { CustomRadioField } from './Fields/CustomRadio.field'
 
 const ProfileTypes = () => {
   const theme = useTheme()

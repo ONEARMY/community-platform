@@ -1,6 +1,6 @@
 // https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#clientsclaim
-import { logger } from './logger'
 import { Workbox } from 'workbox-window'
+import { logger } from './logger'
 
 // initial code adapted from create-react-app (v4)
 

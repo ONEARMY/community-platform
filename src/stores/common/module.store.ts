@@ -2,15 +2,15 @@ import isUrl from 'is-url'
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
+import type { IDBEndpoint, ILocation } from 'src/models/common.models'
+import type { ISelectedTags } from 'src/models/tags.model'
 import { includesAll } from 'src/utils/filters'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 
+import type { IConvertedFileMeta } from '../../types'
+import type { RootStore } from '../index'
 import { Storage } from '../storage'
 
-import type { ISelectedTags } from 'src/models/tags.model'
-import type { IDBEndpoint, ILocation } from 'src/models/common.models'
-import type { RootStore } from '../index'
-import type { IConvertedFileMeta } from '../../types'
 import type { IUploadedFileMeta } from '../storage'
 /**
  * The module store is used to share methods and data between other stores, including

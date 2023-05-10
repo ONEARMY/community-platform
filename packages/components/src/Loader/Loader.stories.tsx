@@ -1,5 +1,5 @@
+import type { Meta, StoryFn } from '@storybook/react'
 import { Loader } from './Loader'
-import type { StoryFn, Meta } from '@storybook/react'
 
 export default {
   title: 'Components/Loader',

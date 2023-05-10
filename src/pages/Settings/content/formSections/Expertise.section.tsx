@@ -1,11 +1,11 @@
+import { preciousPlasticTheme } from 'oa-themes'
 import * as React from 'react'
 
-import { Flex, Heading, Box, Text } from 'theme-ui'
-import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
+import { Box, Flex, Heading, Text } from 'theme-ui'
+import { FlexSectionContainer } from './elements'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 // TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
 import type { IMAchineBuilderXp } from 'src/models'
 

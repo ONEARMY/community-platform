@@ -1,14 +1,14 @@
-import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import type { TagsStore } from 'src/stores/Tags/tags.store'
 import { Button, Modal } from 'oa-components'
-import { Heading, Box, Input, Select, Flex, Label, Text } from 'theme-ui'
-import type { ITag, TagCategory } from 'src/models/tags.model'
-// Import React Table
+import * as React from 'react'
 import ReactTable from 'react-table'
+import type { ITag, TagCategory } from 'src/models/tags.model'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
+import { Box, Flex, Heading, Input, Label, Select, Text } from 'theme-ui'
+// Import React Table
 import 'react-table/react-table.css'
 import type { Column } from 'react-table'
-import { Form, Field } from 'react-final-form'
+import { Field, Form } from 'react-final-form'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 interface IProps {

@@ -1,4 +1,4 @@
-import type { ISODateString, IModerable } from './common.models'
+import type { IModerable, ISODateString } from './common.models'
 import type { WorkspaceType } from './userPreciousPlastic.models'
 import type { ProfileTypeLabel } from '../modules/profile/types'
 

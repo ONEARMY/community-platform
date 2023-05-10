@@ -1,11 +1,11 @@
+import styled from '@emotion/styled'
 import { Component } from 'react'
 import { NavLink } from 'react-router-dom'
-import { getAvailablePageList } from 'src/pages/PageList'
-import { Flex } from 'theme-ui'
-import styled from '@emotion/styled'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
+import { getAvailablePageList } from 'src/pages/PageList'
+import { Flex } from 'theme-ui'
 
 const MenuLink = styled(NavLink)`
   padding: 0px ${(props) => props.theme.space[4]}px;

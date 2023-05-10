@@ -2,13 +2,13 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react'
 import { NotificationItem } from 'oa-components'
 import { useCallback, useEffect, useState } from 'react'
-import { Box, Button, Text } from 'theme-ui'
 import { useDB } from 'src/App'
 import type { INotification, IPendingEmails } from 'src/models'
 import { getFormattedNotificationMessage } from 'src/pages/common/Header/getFormattedNotifications'
+import { functions } from 'src/utils/firebase'
+import { Box, Button, Text } from 'theme-ui'
 import Table from '../components/Table/Table'
 import type { ICellRenderProps, ITableProps } from '../components/Table/Table'
-import { functions } from 'src/utils/firebase'
 
 type IPendingEmailsDBDoc = Record<string, IPendingEmails>
 

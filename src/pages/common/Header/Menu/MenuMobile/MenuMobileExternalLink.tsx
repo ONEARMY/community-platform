@@ -1,12 +1,12 @@
 import styled from '@emotion/styled'
+import { preciousPlasticTheme } from 'oa-themes'
 import { Component } from 'react'
 // TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { Box } from 'theme-ui'
-import { observer, inject } from 'mobx-react'
-import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import { Link } from 'react-router-dom'
+import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import { Box } from 'theme-ui'
+import { inject, observer } from 'mobx-react'
 
 interface IProps {
   content: string

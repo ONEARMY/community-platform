@@ -1,6 +1,6 @@
+import chalk from 'chalk'
 import type { SpawnSyncOptions } from 'child_process'
 import { spawnSync } from 'child_process'
-import chalk from 'chalk'
 import { generateDBEndpoints } from 'oa-shared'
 
 /***********************************************************************************

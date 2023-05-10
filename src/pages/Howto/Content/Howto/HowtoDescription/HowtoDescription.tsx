@@ -1,37 +1,37 @@
 import { format } from 'date-fns'
-import { useState, useEffect } from 'react'
-import type { IHowtoDB } from 'src/models/howto.models'
-import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
-import StepsIcon from 'src/assets/icons/icon-steps.svg'
-import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
-import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import {
   Button,
-  ModerationStatus,
-  LinkifyText,
-  UsefulStatsButton,
   CategoryTag,
+  DownloadFiles,
   FileInformation,
+  LinkifyText,
+  ModerationStatus,
+  UsefulStatsButton,
   Username,
   ViewsCounter,
-  DownloadFiles,
 } from 'oa-components'
-import type { IUser } from 'src/models/user.models'
-import { isAllowToEditContent, capitalizeFirstLetter } from 'src/utils/helpers'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useCommonStores } from 'src/index'
-import {
-  retrieveHowtoDownloadCooldown,
-  isHowtoDownloadCooldownExpired,
-  addHowtoDownloadCooldown,
-  updateHowtoDownloadCooldown,
-} from './downloadCooldown'
-import {
-  retrieveSessionStorageArray,
-  addIDToSessionStorageArray,
-} from 'src/utils/sessionStorage'
+import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import StepsIcon from 'src/assets/icons/icon-steps.svg'
+import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { useCommonStores } from 'src/index'
+import type { IHowtoDB } from 'src/models/howto.models'
+import type { IUser } from 'src/models/user.models'
+import { capitalizeFirstLetter, isAllowToEditContent } from 'src/utils/helpers'
+import {
+  addIDToSessionStorageArray,
+  retrieveSessionStorageArray,
+} from 'src/utils/sessionStorage'
+import { AspectImage, Box, Flex, Heading, Image, Text } from 'theme-ui'
+import {
+  addHowtoDownloadCooldown,
+  isHowtoDownloadCooldownExpired,
+  retrieveHowtoDownloadCooldown,
+  updateHowtoDownloadCooldown,
+} from './downloadCooldown'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }

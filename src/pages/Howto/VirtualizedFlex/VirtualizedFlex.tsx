@@ -1,14 +1,14 @@
-import * as React from 'react'
-import { Flex, Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+import * as React from 'react'
 const themes = preciousPlasticTheme.styles
 import type { ListRowProps } from 'react-virtualized'
 import {
+  CellMeasurer,
+  CellMeasurerCache,
   List,
   WindowScroller,
-  CellMeasurerCache,
-  CellMeasurer,
 } from 'react-virtualized'
 import { emStringToPx } from 'src/utils/helpers'
 

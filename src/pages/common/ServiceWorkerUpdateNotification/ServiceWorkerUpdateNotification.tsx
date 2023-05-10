@@ -1,8 +1,8 @@
 import { memo, useEffect, useState } from 'react'
 
-import * as serviceWorkerRegistration from 'src/serviceWorkerRegistration'
 import { Prompt } from 'react-router'
 import { logger } from 'src/logger'
+import * as serviceWorkerRegistration from 'src/serviceWorkerRegistration'
 
 /**
  * Handle the registration and update of service worker

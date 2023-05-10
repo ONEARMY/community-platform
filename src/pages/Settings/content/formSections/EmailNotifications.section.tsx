@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { Heading, Box, Text } from 'theme-ui'
-import { FlexSectionContainer } from './elements'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
-import type { INotificationSettings } from 'src/models/user.models'
 import { EmailNotificationFrequency } from 'oa-shared'
+import * as React from 'react'
 import { Field } from 'react-final-form'
+import type { INotificationSettings } from 'src/models/user.models'
+import { Box, Heading, Text } from 'theme-ui'
+import { FlexSectionContainer } from './elements'
 
 interface IProps {
   notificationSettings?: INotificationSettings

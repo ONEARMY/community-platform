@@ -1,4 +1,4 @@
-import { Heading, Card, Text, Flex } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 
 // TODO : create a component to avoid duplicate with how-to's guidelines
 

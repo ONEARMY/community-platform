@@ -1,11 +1,11 @@
+import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router-dom'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { inject, observer } from 'mobx-react'
-import type { UserStore } from 'src/stores/User/user.store'
 import type { IUser } from 'src/models/user.models'
+import type { UserStore } from 'src/stores/User/user.store'
+import { Flex, Text } from 'theme-ui'
 import { UserSettings } from './UserSettings'
-import { Text, Flex } from 'theme-ui'
 
 interface InjectedProps extends IProps {
   userStore: UserStore

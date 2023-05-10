@@ -1,5 +1,5 @@
-import { Component } from 'react'
 import { inject, observer } from 'mobx-react'
+import { Component } from 'react'
 
 @inject('howtoStore')
 @observer

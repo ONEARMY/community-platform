@@ -1,10 +1,10 @@
-import { observer } from 'mobx-react'
-import { useCallback, useEffect, useState } from 'react'
-import { Box, Heading } from 'theme-ui'
-import type { IDBEndpoint, IHowto, IMapPin, IUserDB } from 'src/models'
 import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
+import { observer } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
+import { useCallback, useEffect, useState } from 'react'
+import type { IDBEndpoint, IHowto, IMapPin, IUserDB } from 'src/models'
+import { Box, Heading } from 'theme-ui'
+// TODO: Remove direct usage of Theme
 const theme = preciousPlasticTheme.styles
 import { useHistory } from 'react-router'
 import { useAdminStoreV2 } from '../admin.storeV2'

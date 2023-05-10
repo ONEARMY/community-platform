@@ -5,8 +5,8 @@ import { MODULE } from 'src/modules'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { ADMIN_PAGES } from '../admin.routes'
 import { Fragment } from 'react'
+import { ADMIN_PAGES } from '../admin.routes'
 
 const moduleName = MODULE.ADMIN
 

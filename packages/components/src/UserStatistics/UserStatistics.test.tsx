@@ -1,6 +1,6 @@
-import { render } from '../tests/utils'
-import { Default } from './UserStatistics.stories'
 import type { UserStatisticsProps } from './UserStatistics'
+import { Default } from './UserStatistics.stories'
+import { render } from '../tests/utils'
 
 describe('UserStatistics', () => {
   it('renders correctly', () => {

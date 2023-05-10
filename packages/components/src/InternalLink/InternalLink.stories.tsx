@@ -1,4 +1,4 @@
-import type { StoryFn, Meta } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 import { InternalLink } from './InternalLink'
 
 export default {

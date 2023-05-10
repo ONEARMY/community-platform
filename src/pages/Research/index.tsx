@@ -6,8 +6,8 @@ import {
   ResearchStore,
   ResearchStoreContext,
 } from 'src/stores/Research/research.store'
-import type { IPageMeta } from '../PageList'
 import ResearchRoutes from './research.routes'
+import type { IPageMeta } from '../PageList'
 
 /**
  * Wraps the research module routing elements with the research module provider

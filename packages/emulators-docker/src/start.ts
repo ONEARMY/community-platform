@@ -1,7 +1,7 @@
-import Dockerode from 'dockerode'
 import boxen from 'boxen'
-import logUpdate from 'log-update'
+import Dockerode from 'dockerode'
 import fs from 'fs-extra'
+import logUpdate from 'log-update'
 import {
   CONTAINER_NAME,
   getFirebasePortMapping,

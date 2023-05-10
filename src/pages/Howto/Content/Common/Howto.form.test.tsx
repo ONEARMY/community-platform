@@ -1,11 +1,11 @@
-import { render, fireEvent } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { HowtoForm } from './Howto.form'
-import { MemoryRouter } from 'react-router'
-import { ThemeProvider } from 'theme-ui'
 import { preciousPlasticTheme } from 'oa-themes'
+import { MemoryRouter } from 'react-router'
 import { useCommonStores } from 'src'
 import { FactoryHowto } from 'src/test/factories/Howto'
+import { ThemeProvider } from 'theme-ui'
+import { HowtoForm } from './Howto.form'
 
 jest.mock('src/index', () => {
   return {

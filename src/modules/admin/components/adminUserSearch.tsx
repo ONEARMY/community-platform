@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react'
-import { Container, Flex, Heading, Image, Input, Text } from 'theme-ui'
 import Search from 'src/assets/icons/icon-search.svg'
+import { Container, Flex, Heading, Image, Input, Text } from 'theme-ui'
 
 type Props = {
   total: number

@@ -1,11 +1,11 @@
-import { Component } from 'react'
 import { Button } from 'oa-components'
-import { Flex, Text, Image } from 'theme-ui'
+import { Component } from 'react'
 
-import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 import crossClose from 'src/assets/icons/cross-close.svg'
+import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'
 
 import type { MapsStore } from 'src/stores/Maps/maps.store'
+import { Flex, Image, Text } from 'theme-ui'
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps {

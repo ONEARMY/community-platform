@@ -1,17 +1,17 @@
 import type {
-  IUserPP,
   IMAchineBuilderXp,
   IOpeningHours,
+  IUserPP,
   PlasticTypeLabel,
 } from 'src/models/userPreciousPlastic.models'
 
-import { Heading, Box, Image, Flex, Paragraph } from 'theme-ui'
+import { Box, Flex, Heading, Image, Paragraph } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
 
-import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
+import { Icon, MemberBadge, Username, UserStatistics } from 'oa-components'
 
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
@@ -28,14 +28,14 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 // import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
+
+import { useUserUsefulCount } from 'src/common/hooks/userUsefulCount'
+import { isUserVerified } from 'src/common/isUserVerified'
+import { ProfileType } from 'src/modules/profile/types'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
-
-import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
-import { ProfileType } from 'src/modules/profile/types'
-import { isUserVerified } from 'src/common/isUserVerified'
-import { useUserUsefulCount } from 'src/common/hooks/userUsefulCount'
+import UserContactAndLinks from './UserContactAndLinks'
 
 interface IBackgroundImageProps {
   bgImg: string

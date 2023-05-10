@@ -1,5 +1,5 @@
-import { getSupportedProfileTypes } from './index'
 import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
+import { getSupportedProfileTypes } from './index'
 
 describe('getSupportedProfileTypes', () => {
   expect(typeof getSupportedProfileTypes).toBe('function')

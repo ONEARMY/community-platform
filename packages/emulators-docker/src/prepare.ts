@@ -1,5 +1,5 @@
-import { execSync, spawnSync } from 'child_process'
 import chalk from 'chalk'
+import { execSync, spawnSync } from 'child_process'
 import fs from 'fs-extra'
 import { runtimeConfigTest } from 'functions/scripts/runtimeConfig/model'
 import { sync as globbySync } from 'globby'

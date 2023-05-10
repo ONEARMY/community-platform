@@ -1,17 +1,17 @@
-import * as React from 'react'
-import { observer, inject } from 'mobx-react'
-import { Heading, Text, Box, Flex } from 'theme-ui'
-import { Field } from 'react-final-form'
+import { inject, observer } from 'mobx-react'
+import { Box, Flex, Heading, Text } from 'theme-ui'
 import { Button, FieldTextarea, MapWithDraggablePin } from 'oa-components'
-import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+import * as React from 'react'
+import { Field } from 'react-final-form'
 const theme = preciousPlasticTheme.styles
-import { required } from 'src/utils/validators'
 import type { ILocation } from 'src/models/common.models'
 import type { UserStore } from 'src/stores/User/user.store'
 import { randomIntFromInterval } from 'src/utils/helpers'
+import { required } from 'src/utils/validators'
+import { FlexSectionContainer } from './elements'
 
 interface IState {
   showAddressEdit: boolean

@@ -1,9 +1,9 @@
 import * as React from 'react'
-import { Map, TileLayer, Marker, ZoomControl } from 'react-leaflet'
+import { Map, Marker, TileLayer, ZoomControl } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import { Button, OsmGeocoding } from '../'
 import { Box, Flex, Text } from 'theme-ui'
+import { Button, OsmGeocoding } from '../'
 import customMarkerIcon from '../../assets/icons/map-marker.png'
 import type { Result } from '../OsmGeocoding/types'
 

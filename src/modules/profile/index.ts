@@ -1,6 +1,6 @@
-import { getConfigurationOption } from '../../config/config'
-import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
 import type { PlatformTheme } from 'oa-themes'
+import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
+import { getConfigurationOption } from '../../config/config'
 
 export const getSupportedProfileTypes = (currentTheme?: PlatformTheme) => {
   const supportedProfileTypes = SupportedProfileTypesFactory(

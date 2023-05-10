@@ -1,7 +1,7 @@
-import * as React from 'react'
 import { Button, FieldInput, Modal } from 'oa-components'
-import { Text, Flex } from 'theme-ui'
-import { Form, Field } from 'react-final-form'
+import * as React from 'react'
+import { Field, Form } from 'react-final-form'
+import { Flex, Text } from 'theme-ui'
 
 interface IState {
   showDeleteDialog: boolean

@@ -1,11 +1,11 @@
+import { inject, observer } from 'mobx-react'
 import React from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
 import { UserPage } from './content'
+import { AuthRoute } from '../common/AuthRoute'
 import { NotFoundPage } from '../NotFound/NotFound'
 import { UserSettings } from '../Settings/UserSettings'
-import { AuthRoute } from '../common/AuthRoute'
 
 interface IProps {
   userStore?: UserStore

@@ -1,7 +1,7 @@
-import { DbCollectionName } from '../utils/TestUtils'
-import { UserMenuItem } from '../support/commands'
 import type { IUser } from '../../../../src/models/user.models'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
+import { UserMenuItem } from '../support/commands'
+import { DbCollectionName } from '../utils/TestUtils'
 
 interface Info {
   username: string

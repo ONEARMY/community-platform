@@ -1,6 +1,6 @@
-import { render } from '../tests/utils'
-import { InvalidCountryCode, WithoutFlag } from './Username.stories'
 import { Username } from './Username'
+import { InvalidCountryCode, WithoutFlag } from './Username.stories'
+import { render } from '../tests/utils'
 
 describe('Username', () => {
   it('shows an unknown flag for empty value', () => {

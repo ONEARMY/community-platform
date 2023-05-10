@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react'
-import type { RouteComponentProps } from 'react-router'
-import { Box, Flex, Text, Heading } from 'theme-ui'
 import { Button, Icon, Modal } from 'oa-components'
+import type { RouteComponentProps } from 'react-router'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { Box, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps extends RouteComponentProps<any> {
   onClose: () => void

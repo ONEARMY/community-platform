@@ -1,5 +1,5 @@
-import type { IUser } from './user.models'
 import type { DBDoc } from './common.models'
+import type { IUser } from './user.models'
 import type { ProfileTypeLabel } from '../modules/profile/types'
 
 export type PlasticTypeLabel =

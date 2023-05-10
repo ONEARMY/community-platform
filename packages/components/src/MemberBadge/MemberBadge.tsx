@@ -1,6 +1,6 @@
+import { useTheme } from '@emotion/react'
 import type { ImageProps } from 'theme-ui'
 import { Image } from 'theme-ui'
-import { useTheme } from '@emotion/react'
 import badge from '../../assets/icons/icon-star-active.svg'
 
 export interface Props extends ImageProps {

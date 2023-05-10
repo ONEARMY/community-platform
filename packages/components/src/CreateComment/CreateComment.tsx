@@ -1,5 +1,5 @@
-import { Box, Button, Flex, Text, Textarea } from 'theme-ui'
 import { Link } from 'react-router-dom'
+import { Box, Button, Flex, Text, Textarea } from 'theme-ui'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 

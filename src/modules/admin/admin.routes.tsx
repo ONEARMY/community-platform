@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { lazy, Suspense } from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import type { IPageMeta } from 'src/pages/PageList'
 import { MODULE } from '..'

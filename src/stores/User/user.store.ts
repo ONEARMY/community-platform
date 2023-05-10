@@ -1,5 +1,10 @@
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
+import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
+import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
+import type { IFirebaseUser } from 'src/utils/firebase'
+import type { RootStore } from '..'
 import { logger } from '../../logger'
+import type { IConvertedFileMeta } from '../../types'
 import { auth, EmailAuthProvider } from '../../utils/firebase'
 import { getLocationData } from '../../utils/getLocationData'
 import { formatLowerNoSpecial } from '../../utils/helpers'
@@ -7,11 +12,6 @@ import { formatLowerNoSpecial } from '../../utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
-import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
-import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
-import type { IFirebaseUser } from 'src/utils/firebase'
-import type { RootStore } from '..'
-import type { IConvertedFileMeta } from '../../types'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */

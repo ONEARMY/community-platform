@@ -1,21 +1,21 @@
-import * as React from 'react'
-import { Field } from 'react-final-form'
-import { Heading, Flex, Box, Text } from 'theme-ui'
+import { Box, Flex, Heading, Text } from 'theme-ui'
 import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+import * as React from 'react'
+import { Field } from 'react-final-form'
 const theme = preciousPlasticTheme.styles
 import { FieldArray } from 'react-final-form-arrays'
-import { ProfileLinkField } from './Fields/ProfileLink.field'
-import { FlexSectionContainer } from './elements'
-import { required } from 'src/utils/validators'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import type { IUser } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
-import { ProfileType } from 'src/modules/profile/types'
 import { SelectField } from 'src/common/Form/Select.field'
+import type { IUser } from 'src/models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import { ProfileType } from 'src/modules/profile/types'
+import type { IUploadedFileMeta } from 'src/stores/storage'
+import { required } from 'src/utils/validators'
+import { FlexSectionContainer } from './elements'
+import { ProfileLinkField } from './Fields/ProfileLink.field'
 
 interface IProps {
   formValues: IUserPP

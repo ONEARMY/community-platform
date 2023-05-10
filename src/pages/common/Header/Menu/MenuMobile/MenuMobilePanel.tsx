@@ -1,16 +1,16 @@
-import { Component } from 'react'
-import { getAvailablePageList } from 'src/pages/PageList'
-// TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
-import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
-import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
+import { Component } from 'react'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
-import { inject } from 'mobx-react'
+import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
+import { getAvailablePageList } from 'src/pages/PageList'
+// TODO: Remove direct usage of Theme
+const theme = preciousPlasticTheme.styles
+import styled from '@emotion/styled'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import { Box } from 'theme-ui'
+import { inject } from 'mobx-react'
 
 const PanelContainer = styled(Box)`
   width: 100%;

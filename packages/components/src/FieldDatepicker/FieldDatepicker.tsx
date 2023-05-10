@@ -1,5 +1,5 @@
-import { Input, Text } from 'theme-ui'
 import type { FieldRenderProps } from 'react-final-form'
+import { Input, Text } from 'theme-ui'
 
 // any props can be passed to field and down to child component
 // input and meta props come from react field render props and will be

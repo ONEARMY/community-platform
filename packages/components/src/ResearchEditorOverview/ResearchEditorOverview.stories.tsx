@@ -1,4 +1,4 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
+import type { ComponentMeta, ComponentStory } from '@storybook/react'
 import { ResearchEditorOverview } from './ResearchEditorOverview'
 
 export default {

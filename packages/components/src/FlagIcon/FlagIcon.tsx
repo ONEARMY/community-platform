@@ -1,6 +1,6 @@
+import styled from '@emotion/styled'
 import * as React from 'react'
 import FlagIconFactory from 'react-flag-icon-css'
-import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 
 // Please only use `FlagIconFactory` one time in your application, there is no

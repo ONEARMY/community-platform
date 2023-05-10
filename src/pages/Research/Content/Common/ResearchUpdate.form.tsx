@@ -1,26 +1,26 @@
+import styled from '@emotion/styled'
 import arrayMutators from 'final-form-arrays'
 import { observer } from 'mobx-react'
-import * as React from 'react'
-import { Field, Form } from 'react-final-form'
-import type { RouteComponentProps } from 'react-router'
-import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading, Label } from 'theme-ui'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
+  ConfirmModal,
+  ElWithBeforeIcon,
   FieldInput,
   FieldTextarea,
-  ElWithBeforeIcon,
   ResearchEditorOverview,
-  ConfirmModal,
 } from 'oa-components'
 import type { ResearchEditorOverviewUpdate } from 'oa-components'
+import * as React from 'react'
+import { Field, Form } from 'react-final-form'
+import { Prompt } from 'react-router'
+import type { RouteComponentProps } from 'react-router'
+import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { required } from 'src/utils/validators'
-import styled from '@emotion/styled'
+import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
 const ImageInputFieldWrapper = styled.div`

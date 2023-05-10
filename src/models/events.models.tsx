@@ -1,10 +1,10 @@
-import type { ISelectedTags } from './tags.model'
 import type {
   DBDoc,
-  ISODateString,
-  IModerable,
   ILocation,
+  IModerable,
+  ISODateString,
 } from './common.models'
+import type { ISelectedTags } from './tags.model'
 
 export interface IEvent extends IEventFormInput, IModerable {
   _createdBy: string

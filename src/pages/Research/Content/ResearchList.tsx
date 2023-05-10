@@ -2,16 +2,16 @@ import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react'
 import { Button, Icon } from 'oa-components'
+import { preciousPlasticTheme } from 'oa-themes'
+import type { RouteComponentProps } from 'react-router'
 import { Link, useHistory } from 'react-router-dom'
+import { useCommonStores } from 'src'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
 // TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-import type { RouteComponentProps } from 'react-router'
-import { useCommonStores } from 'src'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 const theme = preciousPlasticTheme.styles
 
 const ResearchListHeader = styled.header`

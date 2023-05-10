@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react'
-import { Flex, Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import { Icon } from '../Icon/Icon'
 import type { availableGlyphs } from '../Icon/types'
 

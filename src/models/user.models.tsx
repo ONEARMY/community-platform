@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention*/
+import type { EmailNotificationFrequency, UserRole } from 'oa-shared'
 import type {
-  ISODateString,
-  ILocation,
   DBDoc,
+  ILocation,
   IModerationStatus,
+  ISODateString,
 } from './common.models'
-import type { UserRole, EmailNotificationFrequency } from 'oa-shared'
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'

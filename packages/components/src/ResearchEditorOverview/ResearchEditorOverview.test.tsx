@@ -1,11 +1,11 @@
-import { render } from '../tests/utils'
+import type { ResearchEditorOverviewProps } from './ResearchEditorOverview'
 import {
   Default,
+  DraftItem,
   ShowBackToResearchButton,
   ShowCreateUpdateButton,
-  DraftItem,
 } from './ResearchEditorOverview.stories'
-import type { ResearchEditorOverviewProps } from './ResearchEditorOverview'
+import { render } from '../tests/utils'
 
 describe('ResearchEditorOverview', () => {
   it('renders correctly', () => {

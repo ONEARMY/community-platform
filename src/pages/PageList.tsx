@@ -1,9 +1,9 @@
-import { lazy } from 'react'
 import type { CSSObject } from '@styled-system/css'
+import { lazy } from 'react'
 import type { UserRole } from 'src/models/user.models'
-import { ResearchModule } from './Research'
 import { MODULE } from 'src/modules'
 import { AdminModule } from 'src/modules/admin'
+import { ResearchModule } from './Research'
 
 /**
  * Import all pages for use in lazy loading

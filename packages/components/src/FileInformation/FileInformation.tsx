@@ -1,6 +1,6 @@
 import * as React from 'react'
-import type { availableGlyphs } from '../'
 import { Flex, Text } from 'theme-ui'
+import type { availableGlyphs } from '../'
 import { ExternalLink, Icon } from '../'
 
 export interface IProps {

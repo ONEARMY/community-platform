@@ -1,3 +1,4 @@
+import type { PlatformTheme } from 'oa-themes'
 import LogoCollectionVerified from 'src/assets/icons/map-collection-verified.svg'
 import LogoCollection from 'src/assets/icons/map-collection.svg'
 import LogoCommunityVerified from 'src/assets/icons/map-community-verified.svg'
@@ -16,7 +17,6 @@ import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_s
 import PreciousPlasticMember from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import ProjectKampMember from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
 import ProjectKampSpace from 'src/assets/images/themes/project-kamp/avatar_space_sm.svg'
-import type { PlatformTheme } from 'oa-themes'
 import type { IProfileType } from './types'
 
 export const ProfileType = {

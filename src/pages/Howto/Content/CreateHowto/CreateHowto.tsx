@@ -1,13 +1,13 @@
+import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { withRouter } from 'react-router'
 import type { IHowtoFormInput } from 'src/models/howto.models'
-import TEMPLATE from './Template'
+import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 
-import { inject, observer } from 'mobx-react'
-import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
 import type { UserStore } from 'src/stores/User/user.store'
+import TEMPLATE from './Template'
 
 interface IState {
   formValues: IHowtoFormInput

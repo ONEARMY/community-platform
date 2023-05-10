@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react'
-import { FieldContainer } from '../../../common/Form/FieldContainer'
 import { Select } from 'oa-components'
 import { useCommonStores } from 'src/index'
 import type { ICategory } from 'src/models/categories.model'
+import { FieldContainer } from '../../../common/Form/FieldContainer'
 
 export const CategoriesSelect = observer(
   ({ value, onChange, placeholder, isForm, type }) => {

@@ -1,26 +1,26 @@
+import { Button, ExternalLink } from 'oa-components'
 import React, { Suspense } from 'react'
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
+import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
 import { Analytics } from 'src/common/Analytics'
+import { getSupportedModules } from 'src/modules'
+import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
+import Main from 'src/pages/common/Layout/Main'
+import { ServiceWorkerUpdateNotification } from 'src/pages/common/ServiceWorkerUpdateNotification/ServiceWorkerUpdateNotification'
+import { SeoTagsUpdateComponent } from 'src/utils/seo'
+import { Box, Flex } from 'theme-ui'
+import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
+import Header from './common/Header/Header'
 import { NotFoundPage } from './NotFound/NotFound'
 import ScrollToTop from '../common/ScrollToTop'
-import Header from './common/Header/Header'
-import { ServiceWorkerUpdateNotification } from 'src/pages/common/ServiceWorkerUpdateNotification/ServiceWorkerUpdateNotification'
-import Main from 'src/pages/common/Layout/Main'
 import type { IPageMeta } from './PageList'
 import {
-  COMMUNITY_PAGES_PROFILE,
   ADMIN_PAGES,
+  COMMUNITY_PAGES_PROFILE,
+  getAvailablePageList,
   NO_HEADER_PAGES,
   POLICY_PAGES,
-  getAvailablePageList,
 } from './PageList'
-import { Flex, Box } from 'theme-ui'
-import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
-import { getSupportedModules } from 'src/modules'
-import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
-import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
-import { SeoTagsUpdateComponent } from 'src/utils/seo'
-import { ExternalLink, Button } from 'oa-components'
 
 export class Routes extends React.Component<
   any,

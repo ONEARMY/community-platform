@@ -1,10 +1,10 @@
+import { useTheme } from '@emotion/react'
 import ReactSelect from 'react-select'
 import type {
   OptionsOrGroups,
-  StylesConfig,
   Props as ReactSelectProps,
+  StylesConfig,
 } from 'react-select'
-import { useTheme } from '@emotion/react'
 import { DropdownIndicator } from './DropdownIndicator'
 import { Option } from './Option'
 

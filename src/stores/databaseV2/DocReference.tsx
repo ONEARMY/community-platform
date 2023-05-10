@@ -1,5 +1,5 @@
-import type { DBClients, DBDoc } from './types'
 import { Observable } from 'rxjs'
+import type { DBClients, DBDoc } from './types'
 
 export class DocReference<T> {
   public id: string

@@ -1,11 +1,11 @@
 import { commonColors } from './../common/colors'
-import { textVariants } from '../common/textVariants'
-import type { ThemeWithName } from '../types'
-import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_lg.svg'
-import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'
 import memberBadgeHighDetail from '../../assets/images/themes/fixing-fashion/avatar_member_lg.svg'
+import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'
+import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_lg.svg'
 import logo from '../../assets/images/themes/fixing-fashion/fixing-fashion-header.png'
 import { getButtons } from '../common/button'
+import { textVariants } from '../common/textVariants'
+import type { ThemeWithName } from '../types'
 export type { ButtonVariants } from '../common/button'
 
 const fonts = {

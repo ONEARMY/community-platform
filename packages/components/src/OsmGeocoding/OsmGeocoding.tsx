@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Input } from 'theme-ui'
-import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
 import { useDebouncedCallback } from 'use-debounce'
 import { OsmGeocodingLoader } from './OsmGeocodingLoader'
+import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
 import type { Result } from './types'
 
 export interface Props {

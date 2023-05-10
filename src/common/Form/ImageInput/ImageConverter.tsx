@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { Flex } from 'theme-ui'
-import imageCompression from 'browser-image-compression'
-import type { IConvertedFileMeta } from 'src/types'
 import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
+import imageCompression from 'browser-image-compression'
 import { preciousPlasticTheme } from 'oa-themes'
+import * as React from 'react'
+import type { IConvertedFileMeta } from 'src/types'
+import { Flex } from 'theme-ui'
+// TODO: Remove direct usage of Theme
 const theme = preciousPlasticTheme.styles
 
 interface IProps {

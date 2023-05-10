@@ -1,12 +1,12 @@
 import type { MarkerCluster } from 'leaflet'
 import L from 'leaflet'
 import './sprites.css'
-import type { IMapPin } from 'src/models/maps.models'
-import clusterIcon from 'src/assets/icons/map-cluster.svg'
-import Workspace from 'src/pages/User/workspace/Workspace'
 import type { PlatformTheme } from 'oa-themes'
-
+import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
+import type { IMapPin } from 'src/models/maps.models'
+import Workspace from 'src/pages/User/workspace/Workspace'
+
 import { logger } from 'workbox-core/_private'
 
 /**

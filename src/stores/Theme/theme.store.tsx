@@ -1,9 +1,9 @@
 import { action, makeAutoObservable } from 'mobx'
 import type { PlatformTheme } from 'oa-themes'
 import {
+  fixingFashionTheme,
   preciousPlasticTheme,
   projectKampTheme,
-  fixingFashionTheme,
 } from 'oa-themes'
 import { getConfigurationOption } from 'src/config/config'
 import { logger } from '../../logger'

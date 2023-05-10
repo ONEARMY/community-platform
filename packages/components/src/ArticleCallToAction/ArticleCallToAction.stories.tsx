@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
-import type { StoryFn, Meta } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
+import { ArticleCallToAction } from './ArticleCallToAction'
 import { Button } from '../Button/Button'
 import { LoggedOutWithCount } from '../UsefulStatsButton/UsefulStatsButton.stories'
-import { ArticleCallToAction } from './ArticleCallToAction'
 
 export default {
   title: 'Components/ArticleCallToAction',

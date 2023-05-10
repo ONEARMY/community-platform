@@ -1,8 +1,8 @@
 import * as React from 'react'
+import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui'
+import { Flex, Text, Button as ThemeUiButton } from 'theme-ui'
 import { Icon } from '../Icon/Icon'
 import type { IGlyphs } from '../Icon/types'
-import type { ButtonProps as ThemeUiButtonProps } from 'theme-ui'
-import { Button as ThemeUiButton, Flex, Text } from 'theme-ui'
 
 // extend to allow any default button props (e.g. onClick) to also be passed
 export interface IBtnProps extends React.ButtonHTMLAttributes<HTMLElement> {

@@ -1,6 +1,6 @@
-import { Box, Card, Flex, Text, Image, AspectRatio, Alert } from 'theme-ui'
-import { Button } from '../Button/Button'
 import { formatDistanceToNowStrict } from 'date-fns'
+import { Alert, AspectRatio, Box, Card, Flex, Image, Text } from 'theme-ui'
+import { Button } from '../Button/Button'
 
 import { InternalLink } from '../InternalLink/InternalLink'
 import { Username } from '../Username/Username'

@@ -1,7 +1,7 @@
-import { Heading, Card, Flex, Text } from 'theme-ui'
-import { ExternalLink } from 'oa-components'
 import { useTheme } from '@emotion/react'
+import { ExternalLink } from 'oa-components'
 import { DISCORD_INVITE_URL } from 'src/constants'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 
 export const ProfileGuidelines = () => {
   const theme = useTheme()

@@ -1,5 +1,5 @@
-import type { FieldProps } from './types'
 import { Label } from 'theme-ui'
+import type { FieldProps } from './types'
 
 export const CheckboxInput = ({
   input,

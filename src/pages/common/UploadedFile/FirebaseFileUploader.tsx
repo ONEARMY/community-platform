@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { storage } from '../../../utils/firebase'
-import FileUploader from 'react-firebase-file-uploader'
 import type { FullMetadata } from '@firebase/storage-types'
 import { Button, Loader } from 'oa-components'
 import type { IGlyphs } from 'oa-components'
-import { Flex } from 'theme-ui'
+import * as React from 'react'
+import FileUploader from 'react-firebase-file-uploader'
 import { logger } from 'src/logger'
+import { Flex } from 'theme-ui'
+import { storage } from '../../../utils/firebase'
 /*
 This component takes a folder storage path and uploads files to firebase storage
 onUploadSucess allows URLs of completed uploads to be passed back to parent component

@@ -1,6 +1,6 @@
+import { SiteFooter } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import { SiteFooter } from 'oa-components'
 
 const isFooterVisible = (path) => {
   return (

@@ -1,12 +1,12 @@
-import React, { Suspense, lazy } from 'react'
+import { inject } from 'mobx-react'
+import React, { lazy, Suspense } from 'react'
 import type { RouteComponentProps } from 'react-router-dom'
 import { Route, Switch, withRouter } from 'react-router-dom'
-import { inject } from 'mobx-react'
-import { AuthRoute } from '../common/AuthRoute'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { HowtoList } from './Content/HowtoList/HowtoList'
-import { Howto } from './Content/Howto/Howto'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import { Howto } from './Content/Howto/Howto'
+import { HowtoList } from './Content/HowtoList/HowtoList'
+import { AuthRoute } from '../common/AuthRoute'
 // lazy load editor pages
 const CreateHowto = lazy(
   () =>

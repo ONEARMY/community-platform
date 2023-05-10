@@ -1,5 +1,5 @@
-import { generatedId } from '../utils/TestUtils'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
+import { generatedId } from '../utils/TestUtils'
 
 // existing user already created in auth system
 const authUser = {

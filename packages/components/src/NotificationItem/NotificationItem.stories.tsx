@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import type { StoryFn, Meta } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 import { NotificationItem } from './NotificationItem'
 
 export default {

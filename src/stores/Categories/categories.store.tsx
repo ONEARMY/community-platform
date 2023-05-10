@@ -1,8 +1,8 @@
-import { observable, action, makeObservable, computed } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 import type { ICategory } from 'src/models/categories.model'
 import { arrayToJson } from 'src/utils/helpers'
-import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '..'
+import { ModuleStore } from '../common/module.store'
 
 export class CategoriesStore extends ModuleStore {
   @observable

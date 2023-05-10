@@ -9,7 +9,7 @@ export interface Props extends FieldProps {
   customOnBlur?: (event: any) => void
 }
 
-import { Textarea, Text } from 'theme-ui'
+import { Text, Textarea } from 'theme-ui'
 
 const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)

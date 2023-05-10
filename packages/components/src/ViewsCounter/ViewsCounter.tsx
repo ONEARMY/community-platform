@@ -1,4 +1,4 @@
-import { Text, Flex } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import { Icon } from '..'
 
 export interface IProps {

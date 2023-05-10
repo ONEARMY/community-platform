@@ -1,30 +1,30 @@
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
-import { Form, Field } from 'react-final-form'
-import arrayMutators from 'final-form-arrays'
 import TEMPLATE from './Template'
 import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import {
-  Button,
-  FieldDatepicker,
-  FieldInput,
-  ElWithBeforeIcon,
-} from 'oa-components'
-import type { EventStore } from 'src/stores/Events/events.store'
-import { Heading, Card, Flex, Box, Text } from 'theme-ui'
-import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
-import { inject } from 'mobx-react'
-import { PostingGuidelines } from './PostingGuidelines'
 import type { IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/common/Form/LocationSearch.field'
 import styled from '@emotion/styled'
+import arrayMutators from 'final-form-arrays'
+import { inject } from 'mobx-react'
+import {
+  Button,
+  ElWithBeforeIcon,
+  FieldDatepicker,
+  FieldInput,
+} from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+import * as React from 'react'
+import { Field, Form } from 'react-final-form'
+import type { RouteComponentProps } from 'react-router'
 const theme = preciousPlasticTheme.styles
-import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
-import { logger } from 'src/logger'
 import { CheckboxInput } from 'src/common/Form/Checkbox'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { logger } from 'src/logger'
+import type { EventStore } from 'src/stores/Events/events.store'
+import { addProtocolMutator, required, validateUrl } from 'src/utils/validators'
+import { Box, Card, Flex, Heading, Text } from 'theme-ui'
+import { PostingGuidelines } from './PostingGuidelines'
 
 interface IState {
   formValues: IEventFormInput

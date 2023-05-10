@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
 import { Button, FieldInput } from 'oa-components'
-import { Form, Field } from 'react-final-form'
+import { Field, Form } from 'react-final-form'
 import { logger } from 'workbox-core/_private'
 
 const Label = styled.label`

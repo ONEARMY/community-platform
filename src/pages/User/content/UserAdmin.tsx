@@ -1,11 +1,11 @@
-import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import { Button } from 'oa-components'
-import type { AdminStore } from 'src/stores/Admin/admin.store'
-import type { IUser } from 'src/models/user.models'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { Text } from 'theme-ui'
+import * as React from 'react'
 import { Link } from 'react-router-dom'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import type { IUser } from 'src/models/user.models'
+import type { AdminStore } from 'src/stores/Admin/admin.store'
+import { Text } from 'theme-ui'
 
 /*
     Button to request a user's email from the firebase auth database and open in default mail client

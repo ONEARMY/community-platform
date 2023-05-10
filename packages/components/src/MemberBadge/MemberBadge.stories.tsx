@@ -1,4 +1,4 @@
-import type { StoryObj, StoryFn, Meta } from '@storybook/react'
+import type { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { MemberBadge } from './MemberBadge'
 
 export default {

@@ -1,6 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
-import { CommentList } from './CommentList'
 import { faker } from '@faker-js/faker'
+import type { Meta, StoryFn } from '@storybook/react'
+import { CommentList } from './CommentList'
 
 export default {
   title: 'Components/CommentList',

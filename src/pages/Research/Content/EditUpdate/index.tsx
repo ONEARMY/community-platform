@@ -1,15 +1,15 @@
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
-import { Redirect } from 'react-router'
 import { Loader } from 'oa-components'
-import { Text } from 'theme-ui'
+import * as React from 'react'
+import { Redirect } from 'react-router'
+import type { RouteComponentProps } from 'react-router'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdate.form'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
+import { Text } from 'theme-ui'
 
 interface IState {
   formValues: IResearch.UpdateDB

@@ -3,9 +3,9 @@ import type { MouseEvent } from 'react'
 import ReactTable from 'react-table'
 import type {
   Column,
+  ComponentPropsGetterC,
   ComponentPropsGetterRC,
   RowInfo,
-  ComponentPropsGetterC,
 } from 'react-table'
 import 'react-table/react-table.css'
 import { Box, Text } from 'theme-ui'

@@ -2,12 +2,12 @@ import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Switch, withRouter } from 'react-router'
-import { Flex, Text } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import ResearchForm from 'src/pages/Research/Content/Common/Research.form'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 import type { UserStore } from 'src/stores/User/user.store'
+import { Flex, Text } from 'theme-ui'
 import TEMPLATE from './Template'
 
 interface IState {

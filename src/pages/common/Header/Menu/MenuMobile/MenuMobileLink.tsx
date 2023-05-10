@@ -1,10 +1,10 @@
-import * as React from 'react'
 import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
+import { inject, observer } from 'mobx-react'
+import * as React from 'react'
 import { NavLink } from 'react-router-dom'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import { Box } from 'theme-ui'
 
 interface IProps {
   path: string

@@ -1,16 +1,16 @@
-import { Card, Text, Flex, Image } from 'theme-ui'
 import {
   Button,
-  FlagIconEvents,
-  ExternalLink,
-  ModerationStatus,
   CategoryTag,
+  ExternalLink,
+  FlagIconEvents,
+  ModerationStatus,
   Username,
 } from 'oa-components'
-import type { IEvent } from '../../../models/events.models'
-import { getMonth, getDay, capitalizeFirstLetter } from 'src/utils/helpers'
 import laptopIcon from 'src/assets/icons/icon-laptop.png'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { capitalizeFirstLetter, getDay, getMonth } from 'src/utils/helpers'
+import { Card, Flex, Image, Text } from 'theme-ui'
+import type { IEvent } from '../../../models/events.models'
 
 interface IProps {
   event: IEvent

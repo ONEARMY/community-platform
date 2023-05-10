@@ -1,14 +1,14 @@
-import { format } from 'date-fns'
-import ReactPlayer from 'react-player'
-import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { Button, ImageGallery, LinkifyText, Username } from 'oa-components'
-import type { IResearch } from 'src/models/research.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
-import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
-import type { IComment } from 'src/models'
+import { format } from 'date-fns'
+import { Button, ImageGallery, LinkifyText, Username } from 'oa-components'
+import ReactPlayer from 'react-player'
 import { Link } from 'react-router-dom'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
+import type { IComment } from 'src/models'
+import type { IResearch } from 'src/models/research.models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
+import { Box, Card, Flex, Heading, Text } from 'theme-ui'
+import { ResearchComments } from './ResearchComments/ResearchComments'
 
 interface IProps {
   update: IResearch.UpdateDB

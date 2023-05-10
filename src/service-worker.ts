@@ -1,14 +1,14 @@
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
 
+import { BackgroundSyncPlugin } from 'workbox-background-sync'
+import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { clientsClaim, setCacheNameDetails } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
-import { registerRoute } from 'workbox-routing'
-import { CacheableResponsePlugin } from 'workbox-cacheable-response'
-import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
-import { BackgroundSyncPlugin } from 'workbox-background-sync'
+import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
 import type { PrecacheEntry } from 'workbox-precaching/_types'
+import { registerRoute } from 'workbox-routing'
+import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 
 setCacheNameDetails({
   prefix: 'oa',

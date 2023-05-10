@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react'
+import { Loader } from 'oa-components'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router'
-import { Loader } from 'oa-components'
-import { Text } from 'theme-ui'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowToEditContent } from 'src/utils/helpers'
-import { ResearchUpdateForm } from '../Common/ResearchUpdate.form'
+import { Text } from 'theme-ui'
 import TEMPLATE from './Template'
+import { ResearchUpdateForm } from '../Common/ResearchUpdate.form'
 
 type IProps = RouteComponentProps<{ slug: string }>
 

@@ -1,16 +1,16 @@
-import { PureComponent } from 'react'
-import { Field } from 'react-final-form'
-import { Heading, Card, Flex, Text } from 'theme-ui'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
+import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+import { PureComponent } from 'react'
+import { Field } from 'react-final-form'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
 const theme = preciousPlasticTheme.styles
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { required } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
+import { required } from 'src/utils/validators'
 import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 
 const ImageInputFieldWrapper = styled.div`

@@ -2,13 +2,13 @@ import { Component } from 'react'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
-import { Flex, Image, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
-import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
-import { VERSION } from 'src/config/config'
 import { Link } from 'react-router-dom'
+import { VERSION } from 'src/config/config'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import { Flex, Image, Text } from 'theme-ui'
 
 interface IProps {
   isMobile?: boolean

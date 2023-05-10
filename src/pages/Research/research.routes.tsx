@@ -1,6 +1,6 @@
-import { Suspense, lazy } from 'react'
-import { AuthRoute } from '../common/AuthRoute'
+import { lazy, Suspense } from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
+import { AuthRoute } from '../common/AuthRoute'
 const CreateResearch = lazy(
   () =>
     import(/* webpackChunkName: "CreateResearch" */ './Content/CreateResearch'),

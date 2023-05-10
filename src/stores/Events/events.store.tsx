@@ -1,20 +1,20 @@
-import { observable, computed, toJS, makeObservable } from 'mobx'
-import type {
-  IEventFormInput,
-  IEventDB,
-  IEvent,
-} from 'src/models/events.models'
-import { ModuleStore } from '../common/module.store'
-import Filters from 'src/utils/filters'
-import type { ISelectedTags } from 'src/models/tags.model'
-import type { RootStore } from '..'
+import { computed, makeObservable, observable, toJS } from 'mobx'
 import type { ILocation } from 'src/models/common.models'
+import type {
+  IEvent,
+  IEventDB,
+  IEventFormInput,
+} from 'src/models/events.models'
+import type { ISelectedTags } from 'src/models/tags.model'
+import type { IUser } from 'src/models/user.models'
+import Filters from 'src/utils/filters'
 import {
-  stripSpecialCharacters,
   hasAdminRights,
   needsModeration,
+  stripSpecialCharacters,
 } from 'src/utils/helpers'
-import type { IUser } from 'src/models/user.models'
+import type { RootStore } from '..'
+import { ModuleStore } from '../common/module.store'
 
 export class EventStore extends ModuleStore {
   // observables are data variables that can be subscribed to and change over time

@@ -1,18 +1,18 @@
+import { action, makeObservable, toJS } from 'mobx'
+import { logger } from 'src/logger'
 import type {
   INotification,
   IUser,
   NotificationType,
 } from 'src/models/user.models'
-import { action, makeObservable, toJS } from 'mobx'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import { randomID } from 'src/utils/helpers'
 
+import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
+import type { RootStore } from '..'
 import { ModuleStore } from '../common/module.store'
 // eslint-disable-next-line import/namespace
-import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
-import type { RootStore } from '..'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import { logger } from 'src/logger'
 
 // const COLLECTION_NAME = 'user_notifications'
 

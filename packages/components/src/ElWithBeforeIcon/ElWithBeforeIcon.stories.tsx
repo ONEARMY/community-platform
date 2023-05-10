@@ -1,4 +1,4 @@
-import type { StoryObj, StoryFn, Meta } from '@storybook/react'
+import type { Meta, StoryFn, StoryObj } from '@storybook/react'
 import { ElWithBeforeIcon } from './ElWithBeforeIcon'
 
 import HeaderHowtoIcon from '../../../../src/assets/images/header-section/howto-header-icon.svg'

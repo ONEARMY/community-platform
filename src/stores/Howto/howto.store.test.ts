@@ -3,8 +3,8 @@ import type { IHowtoDB } from 'src/models'
 import { FactoryComment } from 'src/test/factories/Comment'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
 import { FactoryUser } from 'src/test/factories/User'
-import type { RootStore } from '..'
 import { HowtoStore } from './howto.store'
+import type { RootStore } from '..'
 
 const factory = async (howtoOverloads: Partial<IHowtoDB> = {}) => {
   const store = new HowtoStore({} as RootStore)

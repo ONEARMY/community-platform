@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
-import { Form, Field } from 'react-final-form'
+import { Field, Form } from 'react-final-form'
 import { useCommonStores } from 'src'
 import { CheckboxInput } from 'src/common/Form/Checkbox'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { Card, Heading, Box, Button } from 'theme-ui'
+import { Box, Button, Card, Heading } from 'theme-ui'
 
 const availableBadges = ['supporter', 'verified']
 

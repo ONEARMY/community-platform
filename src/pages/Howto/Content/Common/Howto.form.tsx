@@ -1,42 +1,42 @@
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
-import { Form, Field } from 'react-final-form'
 import styled from '@emotion/styled'
-import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
-import type { IHowtoFormInput } from 'src/models/howto.models'
-import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { SelectField } from 'src/common/Form/Select.field'
-import { HowtoStep } from './HowtoStep.form'
-import {
-  Button,
-  FieldInput,
-  FieldTextarea,
-  ElWithBeforeIcon,
-  FileInformation,
-} from 'oa-components'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { Heading, Card, Flex, Box, Text } from 'theme-ui'
+import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { FileInputField } from 'src/common/Form/FileInput.field'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
+import {
+  Button,
+  ElWithBeforeIcon,
+  FieldInput,
+  FieldTextarea,
+  FileInformation,
+} from 'oa-components'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+import * as React from 'react'
+import { Field, Form } from 'react-final-form'
+import { FieldArray } from 'react-final-form-arrays'
+import type { RouteComponentProps } from 'react-router'
 const theme = preciousPlasticTheme.styles
-import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { HowToSubmitStatus } from './SubmitStatus'
-import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { COMPARISONS } from 'src/utils/comparisons'
+import { SelectField } from 'src/common/Form/Select.field'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
-import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
+import type { IHowtoFormInput } from 'src/models/howto.models'
+import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import { COMPARISONS } from 'src/utils/comparisons'
+import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
+import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
+import { HowtoStep } from './HowtoStep.form'
+import { HowToSubmitStatus } from './SubmitStatus'
+import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
 
 const MAX_LINK_LENGTH = 2000
 

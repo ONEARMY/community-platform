@@ -1,10 +1,10 @@
 #!/usr/bin/env ts-node
-import PATHS from './paths'
 
-import { spawnSync, spawn } from 'child_process'
-const e2eEnv = require('dotenv').config()
+import { spawn, spawnSync } from 'child_process'
 import fs from 'fs-extra'
 import waitOn from 'wait-on'
+import PATHS from './paths'
+const e2eEnv = require('dotenv').config()
 
 const isCi = process.argv.includes('ci')
 const useProductionBuild = process.argv.includes('prod')

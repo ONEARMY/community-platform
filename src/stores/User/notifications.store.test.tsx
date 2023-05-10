@@ -2,8 +2,8 @@ jest.mock('../common/module.store')
 import { FactoryNotification } from 'src/test/factories/Notification'
 
 import { FactoryUser } from 'src/test/factories/User'
-import { MockDBStore } from '../common/__mocks__/module.store'
 import { UserNotificationsStore } from './notifications.store'
+import { MockDBStore } from '../common/__mocks__/module.store'
 
 /**
  * When mocking unit tests the db will be mocked from the common module store mock

@@ -1,9 +1,9 @@
-import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
-import type { UserRole } from 'src/models'
-import { Flex, Box, Text } from 'theme-ui'
-import { Select } from 'oa-components'
 import { observer } from 'mobx-react-lite'
+import { Select } from 'oa-components'
+import { DEV_SITE_ROLE, SITE, VERSION } from 'src/config/config'
 import { useCommonStores } from 'src/index'
+import type { UserRole } from 'src/models'
+import { Box, Flex, Text } from 'theme-ui'
 
 /**
  * A simple header component that reminds developers that they are working on a dev

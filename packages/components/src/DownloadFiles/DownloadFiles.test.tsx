@@ -1,6 +1,6 @@
-import { render } from '../tests/utils'
 import type { DownloadFilesProps } from './DownloadFiles'
 import { Default } from './DownloadFiles.stories'
+import { render } from '../tests/utils'
 
 describe('DownloadFiles', () => {
   it('validates the component behaviour', () => {

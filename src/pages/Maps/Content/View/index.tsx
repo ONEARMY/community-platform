@@ -1,22 +1,22 @@
-import * as React from 'react'
 import debounce from 'debounce'
+import * as React from 'react'
 import { Map, TileLayer } from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css'
 import './index.css'
 
+import type { RouteComponentProps } from 'react-router'
+import type {
+  IBoundingBox,
+  ILatLng,
+  IMapGrouping,
+  IMapPin,
+} from 'src/models/maps.models'
+import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'
 
-import type {
-  IMapPin,
-  ILatLng,
-  IBoundingBox,
-  IMapGrouping,
-} from 'src/models/maps.models'
 import { inject, observer } from 'mobx-react'
-import type { MapsStore } from 'src/stores/Maps/maps.store'
-import type { RouteComponentProps } from 'react-router'
 import { toJS } from 'mobx'
 import type { LatLngExpression } from 'leaflet'
 

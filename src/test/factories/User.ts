@@ -1,5 +1,5 @@
-import type { IUserPPDB } from 'src/models'
 import { faker } from '@faker-js/faker'
+import type { IUserPPDB } from 'src/models'
 import { ProfileType } from 'src/modules/profile/types'
 
 export const FactoryUser = (

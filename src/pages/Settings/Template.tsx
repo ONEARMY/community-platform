@@ -1,5 +1,5 @@
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUser } from 'src/models/user.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import { ProfileType } from 'src/modules/profile/types'
 
 // when using the user settings page a base user will already exist

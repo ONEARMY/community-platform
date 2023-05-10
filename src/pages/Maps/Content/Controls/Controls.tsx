@@ -1,24 +1,24 @@
-import * as React from 'react'
 import styled from '@emotion/styled'
-
 import { Button, Modal, OsmGeocoding } from 'oa-components'
-import { Flex, Box } from 'theme-ui'
+import { preciousPlasticTheme } from 'oa-themes'
+import * as React from 'react'
+
+import type { Map } from 'react-leaflet'
+import type { RouteComponentProps } from 'react-router'
+import { HashLink as Link } from 'react-router-hash-link'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
+import { logger } from 'src/logger'
+import type { IMapPinType } from 'src/models/maps.models'
+import { Box, Flex } from 'theme-ui'
 
 import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
 
-import type { IMapPinType } from 'src/models/maps.models'
-import { HashLink as Link } from 'react-router-hash-link'
-import type { Map } from 'react-leaflet'
 // TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
 import { inject } from 'mobx-react'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { UserStore } from 'src/stores/User/user.store'
-import type { RouteComponentProps } from 'react-router'
-import { logger } from 'src/logger'
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps extends RouteComponentProps<any> {

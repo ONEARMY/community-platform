@@ -4,10 +4,10 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
 
+import { useCommonStores } from 'src'
+import type { IMapPin } from 'src/models/maps.models'
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 
-import type { IMapPin } from 'src/models/maps.models'
-import { useCommonStores } from 'src'
 
 interface IProps {
   pins: Array<IMapPin>

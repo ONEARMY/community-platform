@@ -1,12 +1,12 @@
+import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 
-import { Flex, Heading, Box } from 'theme-ui'
 import type { UserStore } from 'src/stores/User/user.store'
-import { FlexSectionContainer } from './elements'
-import { ChangePasswordForm } from './ChangePassword.form'
+import { Box, Flex, Heading } from 'theme-ui'
 import { ChangeEmailForm } from './ChangeEmail.form'
+import { ChangePasswordForm } from './ChangePassword.form'
+import { FlexSectionContainer } from './elements'
 import { ProfileDelete } from '../ProfileDelete'
-import { observer, inject } from 'mobx-react'
 
 interface IProps {}
 interface IInjectedProps extends IProps {

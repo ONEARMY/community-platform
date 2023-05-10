@@ -1,13 +1,13 @@
+import { observer } from 'mobx-react-lite'
+import { Loader } from 'oa-components'
 import { useEffect, useState } from 'react'
 import type { RouteComponentProps } from 'react-router'
-import { Loader } from 'oa-components'
-import { Text } from 'theme-ui'
-import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src/index'
+import type { IUserPP } from 'src/models'
 import { ProfileType } from 'src/modules/profile/types'
+import { Text } from 'theme-ui'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
-import type { IUserPP } from 'src/models'
 import { logger } from '../../../logger'
 
 interface IRouterCustomParams {

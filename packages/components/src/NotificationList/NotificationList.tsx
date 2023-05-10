@@ -1,7 +1,7 @@
+import styled from '@emotion/styled'
 import { useEffect } from 'react'
 import { Box, Card, Text } from 'theme-ui'
 
-import styled from '@emotion/styled'
 
 import { Button } from '../Button/Button'
 import { NotificationItem } from '../NotificationItem/NotificationItem'

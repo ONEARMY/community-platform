@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
+import { preciousPlasticTheme } from 'oa-themes'
 import { Component } from 'react'
 import HamburgerMenu from 'react-hamburger-menu'
 import { isModuleSupported, MODULE } from 'src/modules'
@@ -11,14 +12,13 @@ import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/No
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 // TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
+import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
 import { Flex } from 'theme-ui'
 
 import styled from '@emotion/styled'
 
-import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
-import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
 import { getFormattedNotifications } from './getFormattedNotifications'
 interface IInjectedProps {
   mobileMenuStore: MobileMenuStore

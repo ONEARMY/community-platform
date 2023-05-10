@@ -1,12 +1,12 @@
-import * as React from 'react'
-import { Box, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
-import type { UserStore } from 'src/stores/User/user.store'
 import { inject, observer } from 'mobx-react'
-import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { NavLink } from 'react-router-dom'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+import * as React from 'react'
+import { NavLink } from 'react-router-dom'
+import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
+import type { UserStore } from 'src/stores/User/user.store'
+import { Box, Flex } from 'theme-ui'
 const theme = preciousPlasticTheme.styles
 import { AuthWrapper } from '../../../../../common/AuthWrapper'
 

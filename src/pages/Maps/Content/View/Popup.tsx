@@ -1,6 +1,6 @@
-import * as React from 'react'
 import L from 'leaflet'
 import { MapMemberCard } from 'oa-components'
+import * as React from 'react'
 import type { Map } from 'react-leaflet'
 import { Popup as LeafletPopup } from 'react-leaflet'
 
@@ -8,8 +8,8 @@ import type { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
 
 import './popup.css'
 import { inject } from 'mobx-react'
-import type { MapsStore } from 'src/stores/Maps/maps.store'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import type { MapsStore } from 'src/stores/Maps/maps.store'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail

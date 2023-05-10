@@ -1,12 +1,12 @@
+import { AbstractDatabase } from './AbstractDatabase'
 import { DexieClient } from './clients/dexie'
 import { FirestoreClient } from './clients/firestore'
 import { RealtimeDBClient } from './clients/rtdb'
-import type { DBClients } from './types'
-
+import { CollectionReference } from './CollectionReference'
 import type { DBEndpoint } from './endpoints'
 import { DB_ENDPOINTS } from './endpoints'
-import { CollectionReference } from './CollectionReference'
-import { AbstractDatabase } from './AbstractDatabase'
+import type { DBClients } from './types'
+
 import { SITE } from '../../config/config'
 
 /**

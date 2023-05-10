@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
+import { getUserCountry } from 'src/utils/getUserCountry'
 import { useCommonStores } from '../..'
 import type { Collaborator } from '../../models/common.models'
-import { getUserCountry } from 'src/utils/getUserCountry'
 
 export const useContributorsData = (collaborators: string[]) => {
   const { userStore } = useCommonStores().stores

@@ -1,20 +1,20 @@
-import * as React from 'react'
 import { inject, observer } from 'mobx-react'
+import * as React from 'react'
+import type { Map } from 'react-leaflet'
 import type { RouteComponentProps } from 'react-router'
-import { withRouter, Route, Switch } from 'react-router'
+import { Route, Switch, withRouter } from 'react-router'
 
+import type { ILatLng } from 'src/models/maps.models'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
-import { MapView, Controls } from './Content'
+import { GetLocation } from 'src/utils/geolocation'
 import { Box } from 'theme-ui'
+import { Controls, MapView } from './Content'
 
 import './styles.css'
 
-import { logger } from '../../logger'
-import type { ILatLng } from 'src/models/maps.models'
-import { GetLocation } from 'src/utils/geolocation'
-import type { Map } from 'react-leaflet'
-import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
+import { logger } from '../../logger'
 
 interface IProps extends RouteComponentProps<any> {
   mapsStore: MapsStore

@@ -1,12 +1,12 @@
 import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { Icon, ModerationStatus, Username } from 'oa-components'
+import { preciousPlasticTheme } from 'oa-themes'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 // TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
 import { Card, Flex, Grid, Heading, Text } from 'theme-ui'
 

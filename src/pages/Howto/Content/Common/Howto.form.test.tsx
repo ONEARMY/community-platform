@@ -3,9 +3,10 @@ import { Provider } from 'mobx-react'
 import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
-import { preciousPlasticTheme } from 'oa-themes'
 import { useCommonStores } from 'src'
 import { FactoryHowto } from 'src/test/factories/Howto'
+import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
+const theme = getTestingThemeStyles()
 
 jest.mock('src/index', () => {
   return {
@@ -128,7 +129,7 @@ describe('Howto form', () => {
 const getWrapper = (formValues, parentType, navProps) => {
   return render(
     <Provider {...useCommonStores().stores}>
-      <ThemeProvider theme={preciousPlasticTheme.styles}>
+      <ThemeProvider theme={theme}>
         <MemoryRouter>
           <HowtoForm
             formValues={formValues}

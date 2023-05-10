@@ -1,12 +1,12 @@
 import { format } from 'date-fns'
 import { ThemeProvider } from '@theme-ui/core'
 import { render } from '@testing-library/react'
-import { preciousPlasticTheme } from 'oa-themes'
-const Theme = preciousPlasticTheme.styles
 import ResearchUpdate from './ResearchUpdate'
 import { faker } from '@faker-js/faker'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
+import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
+const theme = getTestingThemeStyles()
 
 const mockUser = FactoryUser({ country: '' })
 

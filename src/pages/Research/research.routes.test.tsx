@@ -1,8 +1,5 @@
 import '@testing-library/jest-dom'
-import { preciousPlasticTheme } from 'oa-themes'
 import ResearchRoutes from './research.routes'
-const Theme = preciousPlasticTheme.styles
-
 import { cleanup, render, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { createMemoryHistory } from 'history'
@@ -15,6 +12,8 @@ import {
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
+import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
+const theme = getTestingThemeStyles()
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -333,7 +332,7 @@ const renderFn = (url, fnUser?) => {
           setTagsCategory: jest.fn(),
         }}
       >
-        <ThemeProvider theme={Theme}>
+        <ThemeProvider theme={theme}>
           <Router history={history}>
             <ResearchRoutes />
           </Router>

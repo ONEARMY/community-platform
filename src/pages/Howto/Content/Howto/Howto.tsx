@@ -1,35 +1,35 @@
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
-import { Redirect } from 'react-router'
+import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import HowtoDescription from './HowtoDescription/HowtoDescription'
-import Step from './Step/Step'
-import type { IHowtoDB } from 'src/models/howto.models'
-import { Box, Flex, Text } from 'theme-ui'
 import {
   ArticleCallToAction,
   Button,
   Loader,
   UsefulStatsButton,
 } from 'oa-components'
-import styled from '@emotion/styled'
+import * as React from 'react'
+import type { RouteComponentProps } from 'react-router'
+import { Redirect } from 'react-router'
+import type { IHowtoDB } from 'src/models/howto.models'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import { Box, Flex, Text } from 'theme-ui'
+import HowtoDescription from './HowtoDescription/HowtoDescription'
+import Step from './Step/Step'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+import { Link } from 'react-router-dom'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
 import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
 import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
-import type { UserStore } from 'src/stores/User/user.store'
-import { HowToComments } from './HowToComments/HowToComments'
-import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
-import { seoTagsUpdate } from 'src/utils/seo'
-import { Link } from 'react-router-dom'
-import type { UserComment } from 'src/models'
-import type { TagsStore } from 'src/stores/Tags/tags.store'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { trackEvent } from 'src/common/Analytics'
+import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import type { UserComment } from 'src/models'
+import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
+import type { TagsStore } from 'src/stores/Tags/tags.store'
+import type { UserStore } from 'src/stores/User/user.store'
+import { seoTagsUpdate } from 'src/utils/seo'
+import { HowToComments } from './HowToComments/HowToComments'
+const theme = preciousPlasticTheme.styles
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -48,6 +48,7 @@ interface IState {
   isLoading: boolean
   changedIsUseful?: boolean
 }
+
 const MoreBox = styled(Box)`
   position: relative;
   &:after {
@@ -98,23 +99,28 @@ export class Howto extends React.Component<
       await this.store.moderateHowto(_howto)
     }
   }
+
   private onUsefulClick = async (
     howtoId: string,
-    howtoCreatedBy: string,
     howToSlug: string,
+    eventCategory: string,
   ) => {
-    // Trigger update without waiting
-    const { userStore } = this.injected
-    userStore.updateUsefulHowTos(howtoId, howtoCreatedBy, howToSlug)
-    // Make an optimistic update of current aggregation to update UI
-    const { aggregationsStore } = this.injected
-    const votedUsefulCount =
-      aggregationsStore.aggregations.users_votedUsefulHowtos![howtoId] || 0
+    const loggedInUser = this.store.activeUser
+    // const howtoStore = useHowtoStore()
+    if (!loggedInUser?.userName) {
+      return null
+    }
+
+    this.store.toggleUsefulByUser(howtoId, loggedInUser?.userName)
     const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
-    aggregationsStore.overrideAggregationValue('users_votedUsefulHowtos', {
-      [howtoId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
+
+    trackEvent({
+      category: eventCategory,
+      action: hasUserVotedUseful ? 'HowtoUseful' : 'HowtoUsefulRemoved',
+      label: howToSlug,
     })
   }
+
   //TODO: Typing Props
   constructor(props: any) {
     super(props)
@@ -155,11 +161,7 @@ export class Howto extends React.Component<
     const { activeHowto } = this.store
 
     if (activeHowto) {
-      const { aggregations } = this.injected.aggregationsStore
-      // Distinguish between undefined aggregations (not loaded) and undefined aggregation (no votes)
-      const votedUsefulCount = aggregations.users_votedUsefulHowtos
-        ? aggregations.users_votedUsefulHowtos[activeHowto._id] || 0
-        : undefined
+      const votedUsefulCount = this.store.votedUsefulCount
 
       const activeHowToComments: UserComment[] = this.store
         .getActiveHowToComments()
@@ -183,12 +185,6 @@ export class Howto extends React.Component<
             .filter(Boolean),
       }
 
-      const onUsefulClick = () =>
-        this.onUsefulClick(
-          activeHowto._id,
-          activeHowto._createdBy,
-          activeHowto.slug,
-        )
       const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
 
       return (
@@ -201,7 +197,9 @@ export class Howto extends React.Component<
             votedUsefulCount={votedUsefulCount}
             hasUserVotedUseful={hasUserVotedUseful}
             moderateHowto={this.moderateHowto}
-            onUsefulClick={onUsefulClick}
+            onUsefulClick={() =>
+              this.onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
+            }
           />
           <Box mt={9}>
             {activeHowto.steps.map((step: any, index: number) => (
@@ -249,12 +247,11 @@ export class Howto extends React.Component<
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={!!loggedInUser}
                 onUsefulClick={() => {
-                  trackEvent({
-                    category: 'ArticleCallToAction',
-                    action: 'HowtoUseful',
-                    label: howto.slug,
-                  })
-                  onUsefulClick()
+                  this.onUsefulClick(
+                    howto._id,
+                    howto.slug,
+                    'ArticleCallToAction',
+                  )
                 }}
               />
             </ArticleCallToAction>

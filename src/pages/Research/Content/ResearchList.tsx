@@ -10,7 +10,6 @@ import ResearchListItem from './ResearchListItem'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 import type { RouteComponentProps } from 'react-router'
-import { useCommonStores } from 'src'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 const theme = preciousPlasticTheme.styles
 
@@ -55,8 +54,6 @@ const updateQueryParams = (
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
-  const { aggregationsStore } = useCommonStores().stores
-  const { aggregations } = aggregationsStore
   const theme = useTheme()
   const history = useHistory()
 
@@ -143,16 +140,13 @@ const ResearchList = observer(() => {
         </Flex>
       </ResearchListHeader>
       {filteredResearches.map((item) => {
-        const votedUsefulCount = aggregations.users_votedUsefulResearch
-          ? aggregations.users_votedUsefulResearch[item._id] || '-'
-          : '-'
-
+        const votedUsefulCount = item.votedUsefulCount ?? 0
         return (
           <ResearchListItem
             key={item._id}
             item={{
               ...item,
-              votedUsefulCount,
+              votedUsefulCount
             }}
           />
         )

@@ -103,7 +103,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               />
             </Box>
           )}
-          {(
+
             <Button
               data-testid="follow-button"
               data-cy="follow-button"
@@ -130,7 +130,7 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
                 ? 'Following'
                 : 'Follow'}
             </Button>
-          )}
+          
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>

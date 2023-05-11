@@ -9,7 +9,7 @@ import {
 } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type { IComment, ISharedStats, IUser } from 'src/models'
+import type { IComment, IVotedUsefulUpdate, IUser } from 'src/models'
 import type {
   IHowToStepFormInput,
   IHowto,
@@ -57,8 +57,6 @@ export class HowtoStore extends ModuleStore {
   public referrerSource: string
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
-
-  @observable howtoStats: ISharedStats | undefined
 
   public filterHowtosByCategory = (
     collection: IHowtoDB[] = [],
@@ -122,10 +120,7 @@ export class HowtoStore extends ModuleStore {
     logger.debug(`setActiveHowtoBySlug:`, { slug })
     let activeHowto: IHowtoDB | null = null
 
-
     if (slug) {
-      this.howtoStats = undefined
-
       const collection = await this.db
         .collection<IHowto>(COLLECTION_NAME)
         .getWhere('slug', '==', slug)
@@ -162,31 +157,28 @@ export class HowtoStore extends ModuleStore {
     docId: string,
     userId: string,
   ): Promise<void> {
-    const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(docId)
+    const dbRef = this.db
+      .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
+      .doc(docId)
 
     const howtoData = await toJS(dbRef.get('server'))
     if (!howtoData) return
 
-    const updatedHowtoDoc = () => {
-      if (!(howtoData?.votedUsefulBy || []).includes(userId)) {
-        return {
-          ...howtoData,
-          votedUsefulBy: [userId].concat(howtoData?.votedUsefulBy || []),
-        }
-      } else {
-        return {
-          ...howtoData,
-          votedUsefulBy: (howtoData?.votedUsefulBy || []).filter(
-            (id) => id !== userId,
-          ),
-        }
-      }
-    }
-    await this.updateHowtoItem(updatedHowtoDoc())
+    const votedUsefulBy = !(howtoData?.votedUsefulBy || []).includes(userId)
+      ? [userId].concat(howtoData?.votedUsefulBy || [])
+      : (howtoData?.votedUsefulBy || []).filter((id) => id !== userId)
 
-    const createdItem = (await dbRef.get()) as IHowtoDB
+    const votedUsefulUpdate = {
+      _id: docId,
+      votedUsefulBy: votedUsefulBy,
+      votedUsefulCount: votedUsefulBy.length,
+    }
+
+    await dbRef.update(votedUsefulUpdate)
+
+    const updatedItem = (await dbRef.get()) as IHowtoDB
     runInAction(() => {
-      this.activeHowto = createdItem
+      this.activeHowto = updatedItem
     })
 
     return
@@ -622,10 +614,6 @@ export class HowtoStore extends ModuleStore {
   get userVotedActiveHowToUseful(): boolean {
     if (!this.activeUser) return false
     return (this.activeHowto?.votedUsefulBy || []).includes(this.activeUser._id)
-  }
-
-  get votedUsefulCount(): number {
-    return (this.activeHowto?.votedUsefulBy || []).length
   }
 }
 

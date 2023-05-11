@@ -9,7 +9,7 @@ import {
 import { createContext, useContext } from 'react'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type { IComment, IUser } from 'src/models'
+import type { IComment, IUser, IVotedUsefulUpdate } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
@@ -19,11 +19,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import type {
-  IResearch,
-  IResearchDB,
-  IResearchStats,
-} from '../../models/research.models'
+import type { IResearch, IResearchDB } from '../../models/research.models'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
@@ -56,8 +52,6 @@ export class ResearchStore extends ModuleStore {
   @observable
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
-
-  @observable researchStats: IResearchStats | undefined
 
   public filterResearchesByCategory = (
     collection: IResearch.ItemDB[] = [],
@@ -114,8 +108,6 @@ export class ResearchStore extends ModuleStore {
     let activeResearchItem: IResearchDB | undefined = undefined
 
     if (slug) {
-      this.researchStats = undefined
-
       const collection = await this.db
         .collection<IResearch.ItemDB>(COLLECTION_NAME)
         .getWhere('slug', '==', slug)
@@ -145,9 +137,6 @@ export class ResearchStore extends ModuleStore {
           },
         )
       }
-
-      // load Research stats which are stored in a separate subcollection
-      await this.loadResearchStats(activeResearchItem?._id)
     }
 
     this.activeResearchItem = activeResearchItem
@@ -204,48 +193,33 @@ export class ResearchStore extends ModuleStore {
     docId: string,
     userId: string,
   ): Promise<void> {
-    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
+    const dbRef = this.db
+      .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
+      .doc(docId)
 
     const researchData = await toJS(dbRef.get('server'))
     if (!researchData) return
 
-    const updatedResearchDoc = () => {
-      if (!(researchData?.votedUsefulBy || []).includes(userId)) {
-        return {
-          ...researchData,
-          votedUsefulBy: [userId].concat(researchData?.votedUsefulBy || []),
-        }
-      } else {
-        return {
-          ...researchData,
-          votedUsefulBy: (researchData?.votedUsefulBy || []).filter(
-            (id) => id !== userId,
-          ),
-        }
-      }
+    const votedUsefulBy = !(researchData?.votedUsefulBy || []).includes(userId)
+      ? [userId].concat(researchData?.votedUsefulBy || [])
+      : (researchData?.votedUsefulBy || []).filter((id) => id !== userId)
+
+    const votedUsefulUpdate = {
+      _id: docId,
+      votedUsefulBy: votedUsefulBy,
+      votedUsefulCount: votedUsefulBy.length,
     }
 
-    await this.updateResearchItem(dbRef, updatedResearchDoc())
+    await dbRef.update(votedUsefulUpdate)
 
-    const createdItem = (await dbRef.get()) as IResearch.ItemDB
+    const updatedItem = (await dbRef.get()) as IResearch.ItemDB
     runInAction(() => {
-      this.activeResearchItem = createdItem
+      this.activeResearchItem = updatedItem
     })
 
     return
   }
 
-  @action
-  private async loadResearchStats(id?: string) {
-    if (id) {
-      const ref = this.db
-        .collection<IResearchStats>('research')
-        .doc(`${id}/stats/all`)
-      const researchStats = await ref.get('server')
-      logger.debug('researchStats', researchStats)
-      this.researchStats = researchStats || { votedUsefulCount: 0 }
-    }
-  }
 
   public async incrementViewCount(id: string) {
     const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)

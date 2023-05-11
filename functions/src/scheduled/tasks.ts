@@ -7,19 +7,12 @@ import * as functions from 'firebase-functions'
 import { BackupDatabase } from '../Firebase/firestoreDBExport'
 import * as FirebaseSync from '../Firebase/firebaseSync'
 
-/** Trigger tasks weekly on Sunday at 2am */
-export const weeklyTasks = functions.pubsub
-  .schedule('0 2 * * SUN')
-  .onRun(async (context) => {
-    functions.logger.log('[weeklyTasks] Start', context)
-    const backupStatus = await BackupDatabase()
-    functions.logger.log(backupStatus)
-  })
-
-/** Trigger tasks daily at 2am */
+/** Trigger tasks daily at 2am – https://crontab.guru/#0_2_*_*_* */
 export const dailyTasks = functions.pubsub
   .schedule('0 2 * * *')
   .onRun(async (context) => {
     functions.logger.log('[dailyTasks] Start', context)
+    const backupStatus = await BackupDatabase()
+    functions.logger.log(backupStatus)
     await FirebaseSync.syncAll()
   })

@@ -103,10 +103,11 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               />
             </Box>
           )}
-          {props.loggedInUser && (
+          {(
             <Button
               data-testid="follow-button"
               data-cy="follow-button"
+              data-tip={'Login to follow'}
               icon="thunderbolt"
               variant="outline"
               iconColor={

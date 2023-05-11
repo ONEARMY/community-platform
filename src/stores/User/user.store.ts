@@ -74,7 +74,7 @@ export class UserStore extends ModuleStore {
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
-      await this.createUserProfile()
+      await this._createUserProfile()
       // when checking auth state change also send confirmation email
       this._listenToAuthStateChanges(true)
     }
@@ -119,7 +119,7 @@ export class UserStore extends ModuleStore {
           .doc(userMeta._id)
           .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
-        await this.createUserProfile()
+        await this._createUserProfile()
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
         if (!newUserCreated) {
           return this.userSignedIn(user, true)
@@ -284,30 +284,6 @@ export class UserStore extends ModuleStore {
     // TODO show notification if invalid credential
   }
 
-  private async createUserProfile(fields: Partial<IUser> = {}) {
-    const authUser = auth.currentUser as firebase.default.User
-    const displayName = authUser.displayName as string
-    const userName = formatLowerNoSpecial(displayName)
-    const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
-    logger.debug('creating user profile', userName)
-    if (!userName) {
-      throw new Error('No Username Provided')
-    }
-    const user: IUser = {
-      ...USER_BASE,
-      _authID: authUser.uid,
-      displayName,
-      userName,
-      moderation: 'awaiting-moderation',
-      votedUsefulHowtos: {},
-      votedUsefulResearch: {},
-      notifications: [],
-      ...fields,
-    }
-    // update db
-    await dbRef.set(user)
-  }
-
   @action
   public async updateUsefulHowTos(
     howtoId: string,
@@ -387,6 +363,31 @@ export class UserStore extends ModuleStore {
     }
   }
 
+  private async _createUserProfile() {
+    const authUser = auth.currentUser as firebase.default.User
+    const displayName = authUser.displayName as string
+    const userName = formatLowerNoSpecial(displayName)
+    const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
+    logger.debug('creating user profile', userName)
+    if (!userName) {
+      throw new Error('No Username Provided')
+    }
+    const user: IUser = {
+      coverImages: [],
+      links: [],
+      moderation: 'awaiting-moderation',
+      verified: false,
+      _authID: authUser.uid,
+      displayName,
+      userName,
+      votedUsefulHowtos: {},
+      votedUsefulResearch: {},
+      notifications: [],
+    }
+    // update db
+    await dbRef.set(user)
+  }
+
   // use firebase auth to listen to change to signed in user
   // on sign in want to load user profile
   // strange implementation return the unsubscribe object on subscription, so stored
@@ -438,11 +439,4 @@ const getInitialUpdateStatus = () => {
 // take the username and return matching avatar url (includes undefined.jpg match if no user)
 export const getUserAvatar = (userName: string | undefined) => {
   return Storage.getPublicDownloadUrl(`avatars/${userName}.jpg`)
-}
-
-const USER_BASE = {
-  coverImages: [],
-  links: [],
-  moderation: 'awaiting-moderation',
-  verified: false,
 }

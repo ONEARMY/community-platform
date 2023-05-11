@@ -1,11 +1,10 @@
-import { weeklyTasks, dailyTasks } from './scheduled/tasks'
+import { dailyTasks } from './scheduled/tasks'
 
 import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more information
-exports.weeklyTasks = weeklyTasks
 exports.dailyTasks = dailyTasks
 
 // export all integration functions as a single group

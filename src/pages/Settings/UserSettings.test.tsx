@@ -50,23 +50,12 @@ describe('UserSettings', () => {
   })
 
   it('displays user settings', () => {
-    const wrapper = render(
-      <Provider
-        {...useCommonStores().stores}
-        userStore={{
-          user: FactoryUser(),
-          updateStatus: { Complete: true },
-          getUserEmail: jest.fn(),
-        }}
-      >
-        <ThemeProvider theme={preciousPlasticTheme.styles}>
-          <MemoryRouter>
-            <UserSettings />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    )
+    const user = FactoryUser()
 
+    // Act
+    const wrapper = getWrapper(user)
+
+    // Assert
     expect(wrapper.getByText('Edit profile'))
     expect(() => wrapper.getByText('Admin settings')).toThrow()
   })
@@ -76,23 +65,8 @@ describe('UserSettings', () => {
       userRoles: ['admin'],
     })
 
-    const wrapper = render(
-      <Provider
-        {...useCommonStores().stores}
-        userStore={{
-          user,
-          updateStatus: { Complete: true },
-          getUserEmail: jest.fn(),
-          getUserProfile: jest.fn().mockResolvedValue(user),
-        }}
-      >
-        <ThemeProvider theme={preciousPlasticTheme.styles}>
-          <MemoryRouter>
-            <UserSettings adminEditableUserId={user._id} />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    )
+    // Act
+    const wrapper = getWrapper(user)
 
     // Assert
     await waitFor(() => wrapper.getByText('Admin settings'))
@@ -110,23 +84,7 @@ describe('UserSettings', () => {
     mockGetUserProfile.mockResolvedValue(user)
 
     // Act
-    const wrapper = render(
-      <Provider
-        {...useCommonStores().stores}
-        userStore={{
-          user,
-          updateStatus: { Complete: true },
-          getUserEmail: jest.fn(),
-          getUserProfile: jest.fn().mockResolvedValue(user),
-        }}
-      >
-        <ThemeProvider theme={preciousPlasticTheme.styles}>
-          <MemoryRouter>
-            <UserSettings adminEditableUserId={user._id} />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    )
+    const wrapper = getWrapper(user)
 
     // Assert
     await waitFor(() => {
@@ -145,23 +103,7 @@ describe('UserSettings', () => {
     mockGetUserProfile.mockResolvedValue(user)
 
     // Act
-    const wrapper = render(
-      <Provider
-        {...useCommonStores().stores}
-        userStore={{
-          user,
-          updateStatus: { Complete: true },
-          getUserEmail: jest.fn(),
-          getUserProfile: jest.fn().mockResolvedValue(user),
-        }}
-      >
-        <ThemeProvider theme={preciousPlasticTheme.styles}>
-          <MemoryRouter>
-            <UserSettings adminEditableUserId={user._id} />
-          </MemoryRouter>
-        </ThemeProvider>
-      </Provider>,
-    )
+    const wrapper = getWrapper(user)
 
     // Assert
     await waitFor(() => screen.getByText('Update badges').click())
@@ -175,3 +117,25 @@ describe('UserSettings', () => {
     })
   })
 })
+
+const getWrapper = (user) => {
+  const isAdmin = user.userRoles?.includes('admin')
+
+  return render(
+    <Provider
+      {...useCommonStores().stores}
+      userStore={{
+        user,
+        updateStatus: { Complete: true },
+        getUserEmail: jest.fn(),
+        getUserProfile: jest.fn().mockResolvedValue(user),
+      }}
+    >
+      <ThemeProvider theme={preciousPlasticTheme.styles}>
+        <MemoryRouter>
+          <UserSettings adminEditableUserId={isAdmin ? user._id : null} />
+        </MemoryRouter>
+      </ThemeProvider>
+    </Provider>,
+  )
+}

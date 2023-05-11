@@ -24,7 +24,7 @@ export interface DBClients {
 
 /**
  * @remarks
- * The `DBDoc` metadata is automatically popuplated to every document that
+ * The `DBDoc` metadata is automatically populated to every document that
  * goes into the database to allow for easier querying and management
  */
 export interface DBDoc {

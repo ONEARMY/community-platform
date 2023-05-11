@@ -4,7 +4,6 @@ import type {
   IModerable,
   ISelectedTags,
   ISharedFeatures,
-  ISharedStats,
   UserMention,
 } from '.'
 import type { IUploadedFileMeta } from '../stores/storage'
@@ -16,8 +15,6 @@ import type { IResearchCategory } from './researchCategories.model'
  */
 export type IResearchDB = DBDoc & IResearch.ItemDB
 
-export type IResearchStats = ISharedStats
-
 /** All typings related to the Research Module can be found here */
 export namespace IResearch {
   /** The main research item, as created by a user */
@@ -25,7 +22,6 @@ export namespace IResearch {
     updates: Update[]
     mentions?: UserMention[]
     _createdBy: string
-    total_views?: number
     collaborators: string[]
     subscribers?: string[]
   } & Omit<FormInput, 'collaborators'> &
@@ -38,7 +34,6 @@ export namespace IResearch {
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
     comments?: IComment[]
-    total_views?: number
     collaborators?: string[]
     subscribers?: string[]
     status: 'draft' | 'published'

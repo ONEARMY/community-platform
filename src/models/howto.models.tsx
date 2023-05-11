@@ -6,7 +6,6 @@ import type {
   DBDoc,
   IModerable,
   ISharedFeatures,
-  ISharedStats,
   UserMention,
 } from './common.models'
 import type { ISelectedTags } from './tags.model'
@@ -23,15 +22,13 @@ export interface IHowto extends IHowtoFormInput, IModerable, ISharedFeatures {
   // Comments were added in V2, old howto's may not have the property
   comments?: IComment[]
   total_downloads?: number
-  total_views?: number
   mentions: UserMention[]
-  previousSlugs?: string[]
 }
 
 /**
  * Howtos retrieved from the database also include metadata such as _id, _created and _modified
  */
-export type IHowtoDB = IHowto & DBDoc & ISharedStats
+export type IHowtoDB = IHowto & DBDoc
 
 export interface IHowtoStep extends IHowToStepFormInput {
   // *** NOTE - adding an '_animationKey' field to track when specific array element removed for

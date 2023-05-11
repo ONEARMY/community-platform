@@ -47,10 +47,16 @@ interface ILatLng {
   lat: number
   lng: number
 }
-export interface ISharedFeatures {
-  votedUsefulBy?: string[]
-}
 
-export type ISharedStats = {
+export interface IVotedUseful {
+  votedUsefulBy?: string[]
   votedUsefulCount?: number
 }
+export interface ISharedFeatures extends IVotedUseful {
+  total_views?: number
+  previousSlugs?: string[]
+}
+
+export type IVotedUsefulUpdate = {
+  _id: string
+} & IVotedUseful

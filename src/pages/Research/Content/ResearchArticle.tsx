@@ -18,7 +18,6 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
-// import { useCommonStores } from '../../../index'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { researchCommentUrlPattern } from './helper'
@@ -43,7 +42,6 @@ const areCommentVisible = (updateIndex) => {
 
 const ResearchArticle = observer((props: IProps) => {
   const researchStore = useResearchStore()
-  // const { userStore, aggregationsStore } = useCommonStores().stores
 
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -124,7 +122,6 @@ const ResearchArticle = observer((props: IProps) => {
   const contributors = useContributorsData(collaborators || [])
 
   if (item) {
-    const votedUsefulCount = researchStore.votedUsefulCount
     const isEditable =
       !!researchStore.activeUser &&
       isAllowToEditContent(item, researchStore.activeUser)
@@ -166,7 +163,7 @@ const ResearchArticle = observer((props: IProps) => {
         <ResearchDescription
           research={item}
           key={item._id}
-          votedUsefulCount={votedUsefulCount}
+          votedUsefulCount={item.votedUsefulCount ?? 0}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           needsModeration={researchStore.needsModeration(item)}
@@ -210,7 +207,7 @@ const ResearchArticle = observer((props: IProps) => {
           >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}
-              votedUsefulCount={votedUsefulCount}
+              votedUsefulCount={item.votedUsefulCount ?? 0}
               hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
               onUsefulClick={() => {
                 onUsefulClick(item._id, item.slug, 'ArticleCallToAction')

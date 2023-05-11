@@ -30,7 +30,7 @@ const Tooltip = ({ children, ...props }: TooltipProps) => {
 
 export interface IProps {
   hasUserVotedUseful: boolean
-  votedUsefulCount: number
+  votedUsefulCount: number | undefined
   isLoggedIn: boolean
   onUsefulClick: () => void
   sx?: ThemeUIStyleObject
@@ -83,7 +83,7 @@ export const UsefulStatsButton = (props: IProps) => {
           display: 'inline-block',
         }}
       >
-        {votedUsefulCount ? votedUsefulCount : 0}
+        {votedUsefulCount ?? 0}
       </Text>
       <Text
         pl={2}
@@ -127,7 +127,7 @@ export const UsefulStatsButton = (props: IProps) => {
               display: 'inline-block',
             }}
           >
-            {votedUsefulCount ? votedUsefulCount : 0}
+            {votedUsefulCount ?? 0}
           </Text>
           <Text
             pl={2}

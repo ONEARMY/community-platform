@@ -106,7 +106,6 @@ export class Howto extends React.Component<
     eventCategory: string,
   ) => {
     const loggedInUser = this.store.activeUser
-    // const howtoStore = useHowtoStore()
     if (!loggedInUser?.userName) {
       return null
     }
@@ -161,8 +160,6 @@ export class Howto extends React.Component<
     const { activeHowto } = this.store
 
     if (activeHowto) {
-      const votedUsefulCount = this.store.votedUsefulCount
-
       const activeHowToComments: UserComment[] = this.store
         .getActiveHowToComments()
         .map(
@@ -194,7 +191,7 @@ export class Howto extends React.Component<
             key={activeHowto._id}
             needsModeration={this.store.needsModeration(activeHowto)}
             loggedInUser={loggedInUser}
-            votedUsefulCount={votedUsefulCount}
+            votedUsefulCount={activeHowto.votedUsefulCount ?? 0}
             hasUserVotedUseful={hasUserVotedUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={() =>
@@ -243,7 +240,7 @@ export class Howto extends React.Component<
                 Leave a comment
               </Button>
               <UsefulStatsButton
-                votedUsefulCount={votedUsefulCount}
+                votedUsefulCount={activeHowto.votedUsefulCount ?? 0}
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={!!loggedInUser}
                 onUsefulClick={() => {

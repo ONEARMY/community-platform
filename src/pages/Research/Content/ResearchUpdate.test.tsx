@@ -5,8 +5,8 @@ import ResearchUpdate from './ResearchUpdate'
 import { faker } from '@faker-js/faker'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
-import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const Theme = getTestingThemeStyles()
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+const Theme = testingThemeStyles
 
 const mockUser = FactoryUser({ country: '' })
 

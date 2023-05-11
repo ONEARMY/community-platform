@@ -12,8 +12,8 @@ import {
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
-import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const Theme = getTestingThemeStyles()
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+const Theme = testingThemeStyles
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call

@@ -5,8 +5,8 @@ import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
 import { useCommonStores } from 'src'
 import { FactoryHowto } from 'src/test/factories/Howto'
-import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const Theme = getTestingThemeStyles()
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+const Theme = testingThemeStyles
 
 jest.mock('src/index', () => {
   return {

@@ -5,8 +5,8 @@ import { useCommonStores } from 'src'
 import { FactoryUser } from 'src/test/factories/User'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
-import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const Theme = getTestingThemeStyles()
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
 let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
@@ -131,7 +131,7 @@ const getWrapper = (user) => {
         getUserProfile: jest.fn().mockResolvedValue(user),
       }}
     >
-      <ThemeProvider theme={preciousPlasticTheme.styles}>
+      <ThemeProvider theme={Theme}>
         <MemoryRouter>
           <UserSettings adminEditableUserId={isAdmin ? user._id : null} />
         </MemoryRouter>

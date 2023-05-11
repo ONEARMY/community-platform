@@ -10,8 +10,8 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import ResearchArticle from './ResearchArticle'
-import { getTestingThemeStyles } from 'src/test/utils/themeUtils'
-const Theme = getTestingThemeStyles()
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+const Theme = testingThemeStyles
 
 const activeUser = FactoryUser({
   userRoles: ['beta-tester'],

@@ -4,10 +4,12 @@ import { logger } from '../../../logger'
 import { DB_ENDPOINTS } from '../endpoints'
 import type {
   AbstractDatabaseClient,
+  DBAggregationQuery,
   DBQueryOptions,
   DBQueryWhereOptions,
 } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
+import type { IHowtoDB, IResearchDB } from 'src/models'
 
 /**
  * Update the cache number either when making changes to db architecture
@@ -32,6 +34,11 @@ export class DexieClient implements AbstractDatabaseClient {
   setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
     return db.table(endpoint).put(doc)
   }
+  updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
+    const { _id, ...updateValues } = doc
+    logger.debug('updateValues', updateValues)
+    return db.table(endpoint).update(_id, updateValues)
+  }
   setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     return db.table(endpoint).bulkPut(docs)
   }
@@ -41,6 +48,11 @@ export class DexieClient implements AbstractDatabaseClient {
   queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     return this._processQuery<T>(endpoint, queryOpts)
   }
+
+  calculateAggregation(id: string, aggregation: DBAggregationQuery) {
+    return this._processCalculateAggregation(id, aggregation)
+  }
+
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
     return db.table(endpoint).delete(docId)
   }
@@ -77,6 +89,68 @@ export class DexieClient implements AbstractDatabaseClient {
           reject(err)
         })
     })
+  }
+
+  private async _processCalculateAggregation(
+    id: string,
+    aggregation: DBAggregationQuery,
+  ): Promise<number | undefined> {
+    if (aggregation === 'useful_count') {
+      let totalUseful = 0
+
+      // Fetch total howto useful
+      const howtoTable = db.table<IHowtoDB>('howtos')
+      const howtoUseful = await howtoTable
+        .where({ _createdBy: id })
+        .toArray()
+        .then((docs) => {
+          let useful = 0
+          for (let i = 0; i < docs.length; i++) {
+            const doc = docs[i]
+            useful += doc.votedUsefulCount ?? 0
+          }
+          return useful
+        })
+        .catch((err) => logger.error(err))
+
+      if (howtoUseful) totalUseful += howtoUseful
+
+      // Fetch total research useful
+
+      const researchTable = db.table<IResearchDB>('research')
+      const userResearch = {}
+
+      await researchTable
+        .where({ _createdBy: id })
+        .toArray()
+        .then((docs) => {
+          for (let i = 0; i < docs.length; i++) {
+            const doc = docs[i]
+            if (doc.votedUsefulCount)
+              userResearch[doc._id] = doc.votedUsefulCount
+          }
+        })
+        .catch((err) => logger.error(err))
+
+      await researchTable
+        .where({ collaborators: id })
+        .toArray()
+        .then((docs) => {
+          for (let i = 0; i < docs.length; i++) {
+            const doc = docs[i]
+            if (doc.votedUsefulCount)
+              userResearch[doc._id] = doc.votedUsefulCount
+          }
+        })
+        .catch((err) => logger.error(err))
+
+      const useful: number[] = Object.values(userResearch)
+      totalUseful += useful.reduce((a, b) => a + b)
+
+      return totalUseful
+    }
+
+    return
   }
 
   private _generateQueryWhereRef<T>(

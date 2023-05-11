@@ -1,4 +1,5 @@
 import type {
+  DBAggregationQuery,
   DBClients,
   DBDoc,
   DBQueryWhereOperator,
@@ -133,6 +134,28 @@ export class CollectionReference<T> {
       }
     }
     return docs
+  }
+
+  /**
+   * Query the value of an aggregation given an id and aggregation type
+   * If nothing found then an undefined value is returned
+   * @param id - The id to search for, eg user id
+   * @param aggregation - pre-configured aggregation type to run
+
+   */
+  async getAggregation(id: string, aggregation: DBAggregationQuery) {
+    const { serverDB, cacheDB } = this.clients
+    let count = await serverDB.aggregationQuery(id, aggregation)
+    // if not found on live try find on cached (might be offline)
+    if (typeof aggregation === undefined) {
+      try {
+        count = await cacheDB.aggregationQuery(id, aggregation)
+      } catch (error) {
+        logger.error(error)
+        // at least we can say we tried...
+      }
+    }
+    return count
   }
 
   private async _getCacheLastModified(endpoint: string) {

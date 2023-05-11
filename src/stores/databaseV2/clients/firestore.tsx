@@ -1,6 +1,10 @@
 import type { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import { firestore } from 'src/utils/firebase'
-import type { DBQueryOptions, AbstractDatabaseClient } from '../types'
+import type {
+  DBAggregationQuery,
+  DBQueryOptions,
+  AbstractDatabaseClient,
+} from '../types'
 import type { Observer } from 'rxjs'
 import { Observable } from 'rxjs'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
@@ -18,6 +22,11 @@ export class FirestoreClient implements AbstractDatabaseClient {
 
   async setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
     return db.doc(`${endpoint}/${doc._id}`).set(doc)
+  }
+
+  async updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
+    const { _id, ...updateValues } = doc
+    return db.doc(`${endpoint}/${_id}`).update(updateValues)
   }
 
   async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
@@ -39,6 +48,67 @@ export class FirestoreClient implements AbstractDatabaseClient {
     const data = await ref.get()
     return data.empty ? [] : data.docs.map((doc) => doc.data() as T)
   }
+
+  async calculateAggregation(id: string, aggregation: DBAggregationQuery) {
+    if (aggregation === 'useful_count') {
+      // Get how to created by useful
+
+      const howtos = await db
+        .collection('howtos')
+        .where('_createdBy', '==', id)
+        .where('votedUsefulCount', '>', 0)
+        .get()
+
+      let totalUseful = 0
+
+      if (!howtos.empty) {
+        for (let i = 0; i < howtos.docs.length; i++) {
+          const data = howtos.docs[i].data()
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          totalUseful += data.votedUsefulCount
+        }
+      }
+
+      const userResearch = {}
+
+      // get research created by useful
+      const createdResearch = await db
+        .collection('research')
+        .where('_createdBy', '==', id)
+        .where('votedUsefulCount', '>', 0)
+        .get()
+
+      if (!createdResearch.empty) {
+        for (let i = 0; i < createdResearch.docs.length; i++) {
+          const data = createdResearch.docs[i].data()
+
+          userResearch[data._id] = data.votedUsefulCount
+        }
+      }
+
+      // get research collaborator useful
+
+      const collaboratedResearch = await db
+        .collection('research')
+        .where('collaborators', 'array-contains', id)
+        .where('votedUsefulCount', '>', 0)
+        .get()
+
+      if (!collaboratedResearch.empty) {
+        for (let i = 0; i < collaboratedResearch.docs.length; i++) {
+          const data = collaboratedResearch.docs[i].data()
+          userResearch[data._id] = data.votedUsefulCount
+        }
+      }
+
+      const useful: number[] = Object.values(userResearch)
+      totalUseful += useful.reduce((a, b) => a + b)
+      return totalUseful
+    }
+
+    return undefined
+  }
+
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
     return db.collection(endpoint).doc(docId).delete()
   }

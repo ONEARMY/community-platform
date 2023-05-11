@@ -1,10 +1,12 @@
 import type { Observable } from 'rxjs'
-import type { DBDoc, DBQueryOptions } from '.'
+import type { DBDoc, DBAggregationQuery, DBQueryOptions } from '.'
 
 export interface AbstractDatabaseClient {
   getDoc<T>(endpoint: string, docId: string): Promise<(T & DBDoc) | undefined>
 
   setDoc(endpoint: string, doc: any): Promise<void>
+
+  updateDoc(endpoint: string, doc: any): Promise<void>
 
   setBulkDocs(endpoint: string, docs: any): Promise<void>
 
@@ -14,6 +16,11 @@ export interface AbstractDatabaseClient {
     endpoint: string,
     queryOpts: DBQueryOptions,
   ): Promise<(T & DBDoc)[]>
+
+  calculateAggregation(
+    id: string,
+    aggregation: DBAggregationQuery,
+  ): Promise<number | undefined>
 
   streamCollection?<T>(
     endpoint: string,

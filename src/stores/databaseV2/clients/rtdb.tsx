@@ -17,6 +17,11 @@ export class RealtimeDBClient implements AbstractDatabaseClient {
     return db.ref(`${endpoint}/${doc._id}`).set(doc)
   }
 
+  async updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
+    const { _id, ...updateValues } = doc
+    return db.ref(`${endpoint}/${_id}`).update(updateValues)
+  }
+
   async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     const updates = {}
     docs.forEach((d) => (updates[d._id] = d))
@@ -40,6 +45,13 @@ export class RealtimeDBClient implements AbstractDatabaseClient {
     // eslint-disable-next-line
     return []
   }
+
+  async calculateAggregation() {
+    throw new Error('aggregation calculations not available on this database')
+    // eslint-disable-next-line
+    return []
+  }
+
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
     return db.ref(`${endpoint}/${docId}`).remove()
   }

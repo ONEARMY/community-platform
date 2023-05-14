@@ -68,6 +68,7 @@ export const FollowButton = (props: IProps) => {
       <ExternalLink
         href="/sign-in"
         data-cy="follow-redirect"
+        data-testid="follow-redirect"
         data-tip={'Login to follow'}
         sx={{
           ...theme.buttons.subtle,

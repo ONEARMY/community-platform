@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read and write access to all documents except the 'emails' collection
+
+    match /{collectionId}/{document=**} {
+      // Allow read to all documents
+      allow read: if true;
+      // Do not allow write to emails collection
+      allow write: if collectionId != 'emails';
+    }
+  }
+}

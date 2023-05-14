@@ -4,6 +4,7 @@ import { MODULE } from '..'
 import adminRoutes from './admin.routes'
 import AdminSubheader from './components/AdminSubheader'
 import { AuthRoute } from 'src/pages/common/AuthRoute'
+import { Container } from 'theme-ui'
 
 const moduleName = MODULE.ADMIN
 
@@ -13,7 +14,9 @@ const moduleName = MODULE.ADMIN
 const AdminModuleContainer = () => (
   <AdminStoreV2Context.Provider value={new AdminStoreV2()}>
     <AdminSubheader />
-    <AuthRoute component={adminRoutes} roleRequired="admin" redirect="/" />
+    <Container>
+      <AuthRoute component={adminRoutes} roleRequired="admin" redirect="/" />
+    </Container>
   </AdminStoreV2Context.Provider>
 )
 
@@ -24,4 +27,5 @@ export const AdminModule: IPageMeta = {
   title: 'Admin',
   description: 'Admin Home Page',
   requiredRole: 'admin',
+  fullPageWidth: true,
 }

@@ -123,6 +123,9 @@ export const styles: ThemeWithName = {
   colors,
   fonts,
   fontSizes,
+  sizes: {
+    container: maxContainerWidth,
+  },
   forms: {
     input: {
       background: colors.background,

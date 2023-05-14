@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
   Button,
+  FollowButton,
   Loader,
   UsefulStatsButton,
 } from 'oa-components'
@@ -141,7 +142,7 @@ const ResearchArticle = observer((props: IProps) => {
       isVerified: isUserVerified(item._createdBy),
     }
 
-    const onFollowingClick = async (researchSlug: string) => {
+    const onFollowClick = async (researchSlug: string) => {
       if (!loggedInUser?.userName) {
         return null
       }
@@ -178,12 +179,13 @@ const ResearchArticle = observer((props: IProps) => {
           isEditable={isEditable}
           needsModeration={researchStore.needsModeration(item)}
           hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
+          hasUserSubscribed={researchStore.userHasSubscribed}
           moderateResearch={moderateResearch}
           onUsefulClick={() =>
             onUsefulClick(item._id, item._createdBy, item.slug)
           }
-          onFollowingClick={() => {
-            onFollowingClick(item.slug)
+          onFollowClick={() => {
+            onFollowClick(item.slug)
           }}
         />
         <Box my={16}>
@@ -228,6 +230,11 @@ const ResearchArticle = observer((props: IProps) => {
                 onUsefulClick(item._id, item._createdBy, item.slug)
               }}
             />
+            <FollowButton
+              isLoggedIn={!!loggedInUser}
+              hasUserSubscribed={researchStore.userHasSubscribed}
+              onFollowClick={() => onFollowClick(item.slug)}
+            ></FollowButton>
           </ArticleCallToAction>
         </Box>
         {isEditable && (

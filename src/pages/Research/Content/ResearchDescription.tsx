@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import {
   Button,
+  FollowButton,
   LinkifyText,
   ModerationStatus,
   UsefulStatsButton,
@@ -27,9 +28,10 @@ interface IProps {
   needsModeration: boolean
   votedUsefulCount?: number
   hasUserVotedUseful: boolean
+  hasUserSubscribed: boolean
   moderateResearch: (accepted: boolean) => void
   onUsefulClick: () => void
-  onFollowingClick: () => void
+  onFollowClick: () => void
 }
 
 const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
@@ -94,40 +96,18 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (
-            <Box>
-              <UsefulStatsButton
-                votedUsefulCount={props.votedUsefulCount}
-                hasUserVotedUseful={props.hasUserVotedUseful}
-                isLoggedIn={props.loggedInUser ? true : false}
-                onUsefulClick={props.onUsefulClick}
-              />
-            </Box>
+            <UsefulStatsButton
+              votedUsefulCount={props.votedUsefulCount}
+              hasUserVotedUseful={props.hasUserVotedUseful}
+              isLoggedIn={props.loggedInUser ? true : false}
+              onUsefulClick={props.onUsefulClick}
+            />
           )}
-
-          <Button
-            data-testid="follow-button"
-            data-cy="follow-button"
-            data-tip={'Login to follow'}
-            icon="thunderbolt"
-            variant="outline"
-            iconColor={
-              research.subscribers?.includes(
-                props?.loggedInUser?.userName || '',
-              )
-                ? 'subscribed'
-                : 'notSubscribed'
-            }
-            sx={{
-              fontSize: 2,
-              py: 0,
-              height: '41.5px', // TODO: Ideally this is a standard size
-            }}
-            onClick={props.onFollowingClick}
-          >
-            {research.subscribers?.includes(props?.loggedInUser?.userName || '')
-              ? 'Following'
-              : 'Follow'}
-          </Button>
+          <FollowButton
+            hasUserSubscribed={props.hasUserSubscribed}
+            isLoggedIn={props.loggedInUser ? true : false}
+            onFollowClick={props.onFollowClick}
+          ></FollowButton>
 
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">

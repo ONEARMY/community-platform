@@ -1,4 +1,6 @@
-import { Box, NavLink } from 'theme-ui'
+/** @jsxImportSource theme-ui */
+import { Box } from 'theme-ui'
+import { NavLink as ReactRouterNavLink } from 'react-router-dom'
 import { MODULE } from 'src/modules'
 import { ADMIN_PAGES } from '../admin.routes'
 import { Fragment } from 'react'
@@ -10,8 +12,8 @@ const AdminSubheader = () => (
     {ADMIN_PAGES.map((page) => {
       return page.disabled ? (
         <Fragment key={page.path}>
-          <NavLink
-            href={`/${moduleName}${page.path}`}
+          <ReactRouterNavLink
+            to={`/${moduleName}${page.path}`}
             className="disabled"
             data-tip={'Coming soon...'}
             onClick={(e) => {
@@ -20,16 +22,16 @@ const AdminSubheader = () => (
             sx={{ color: 'white', opacity: 0.5, px: 1 }}
           >
             {page.title}
-          </NavLink>
+          </ReactRouterNavLink>
         </Fragment>
       ) : (
-        <NavLink
+        <ReactRouterNavLink
           key={page.path}
-          href={`/${moduleName}${page.path}`}
+          to={`/${moduleName}${page.path}`}
           sx={{ color: 'white', px: 1 }}
         >
           {page.title}
-        </NavLink>
+        </ReactRouterNavLink>
       )
     })}
   </Box>

@@ -86,7 +86,12 @@ export const Button = (props: BtnProps) => {
 
   return (
     <ThemeUiButton
-      {...sanitizedProps(props, ['small', 'large', 'showIconOnly'])}
+      {...sanitizedProps(props, [
+        'small',
+        'large',
+        'showIconOnly',
+        'iconColor',
+      ])}
       sx={{
         ...props.sx,
         ...getSizeProps(size, !!props.icon),

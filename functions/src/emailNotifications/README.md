@@ -53,7 +53,7 @@ Development in this space is complicated because elements must be updated in con
 
 ### Testing
 
-We do not have the email extension set up in the emulator environment, so testing the end-to-end flow is difficult locally. These were the steps I used to test:
+We do not have the email extension set up in the emulator environment, so testing the end-to-end flow is difficult locally. Here are suggested steps for testing:
 
 1. Use unit tests to test the transformation of data in [createNotificationEmails](./createEmail.ts).
 2. Use handlebars sandbox to test the templates with sample data.

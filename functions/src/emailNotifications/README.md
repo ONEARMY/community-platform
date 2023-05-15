@@ -24,9 +24,9 @@ Once emails are successfully written to the `emails` collection database, we add
 
 We use [firebase scheduled functions](https://firebase.google.com/docs/functions/schedule-functions?gen=1st) in [index.js](./index.ts) to trigger the [createNotificationEmails](./createEmail.ts) function for the different email cadences. We use the following schedule:
 
-- Daily emails: each day at 5pm
-- Weekly emails: each Sunday at 5pm
-- Monthly emails: first day of each month at 5pm
+- Daily emails: each day at 3pm Portugal Time
+- Weekly emails: each Sunday at 3pm Portugal Time
+- Monthly emails: first day of each month at 3pm Portugal Time
 
 ### Firebase extension
 

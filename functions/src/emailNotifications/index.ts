@@ -5,20 +5,23 @@ import { DB_ENDPOINTS, IUserDB } from '../models'
 import { EmailNotificationFrequency } from 'oa-shared'
 
 exports.sendDaily = functions.pubsub
-  // Trigger daily at 5pm (https://crontab.guru/#0_17_*_*_*)
-  .schedule('0 17 * * *')
+  // Trigger daily at 3pm PT (https://crontab.guru/#0_15_*_*_*)
+  .schedule('0 15 * * *')
+  .timeZone('Europe/Lisbon')
   .onRun(async () => createNotificationEmails(EmailNotificationFrequency.DAILY))
 
 exports.sendWeekly = functions.pubsub
-  // Trigger weekly at 5pm on Sunday (https://crontab.guru/#0_17_*_*_0)
-  .schedule('0 17 * * 0')
+  // Trigger weekly at 3pm PT on Sunday (https://crontab.guru/#0_15_*_*_0)
+  .schedule('0 15 * * 0')
+  .timeZone('Europe/Lisbon')
   .onRun(async () =>
     createNotificationEmails(EmailNotificationFrequency.WEEKLY),
   )
 
 exports.sendMonthly = functions.pubsub
-  // Trigger monthly at 5pm on the first day of the month (https://crontab.guru/#0_17_1_*_*)
-  .schedule('0 17 1 * *')
+  // Trigger monthly at 3pm PT on the first day of the month (https://crontab.guru/#0_15_1_*_*)
+  .schedule('0 15 1 * *')
+  .timeZone('Europe/Lisbon')
   .onRun(async () =>
     createNotificationEmails(EmailNotificationFrequency.MONTHLY),
   )

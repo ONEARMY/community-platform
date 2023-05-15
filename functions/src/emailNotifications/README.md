@@ -4,19 +4,19 @@ This folder contains code and templates that we use to send emails to users abou
 
 ## Background on Notification and Email Process
 
-Users receive notifications when other users comment on their content or mark it as useful. These noitifications are stored in a `notifications` array for each user in the user collection. When a notification is created, it has two fields, `read` and `notified` which track the user's interaction with the notification. A notification is marked as `notified=true` when it is rendered in the collapsed notification list dropdown as a red dot, which indicates the user has notifications. If the user clicks the dropdown to see the contents of their notifications, the notification is marked `read=true`.
+Users receive notifications when other users comment on their content or mark it as useful. These are stored in a `notifications` array for each user in the `users` collection. When a notification is created, it has two fields, `read` and `notified` which track the user's interaction with the notification. A notification is marked as `notified=true` when it is rendered in the collapsed notification list dropdown as a red dot, which indicates the user has notifications. If the user clicks the dropdown to see the contents of their notifications, the notification is marked `read=true`.
 
 If a user has not been active in the platform, then their notifications will remain un-notified and un-read. In these situations, we send them in an email.
 
 Users can choose if they would like to receive these emails, and if so, at what cadence (daily, weekly, or monthly). They do this in their settings page. This is stored for each user in `notification_settings.emailFrequency`.
 
-Based on the users `notifications` and `notification_settings`, the [user notifications aggregation](../aggregations/userNotifications.aggregations.ts) creates a `pending_emails` collection to store any notifications for users that are not yet `notified` or `read`. This aggregation is refreshed any time the users colelction is updated.
+Based on the users `notifications` and `notification_settings`, the [user notifications aggregation](../aggregations/userNotifications.aggregations.ts) creates a `pending_emails` collection to store any notifications for users that are not yet `notified` or `read`. This aggregation is refreshed any time the `users` collection is updated.
 
 The function [createNotificationEmails](./createEmail.ts) in this directory reads from the `pending_emails` collection and transforms the notifications for each user into a format that can be understood by our [handlebars](https://handlebarsjs.com/) email templates, which you can also find in this folder.
 
 This data is then written to the `emails` collection in Firebase, which is set up with the [trigger email extension](https://firebase.google.com/docs/extensions/official/firestore-send-email) to send emails to users via [Brevo](https://www.brevo.com/) (formerly Sendinblue).
 
-Once emails are successfully written to the `emails` collection database, we add an `emailed` field to the notification, which contains the id of the email object in the `emails` collection. Once a notification has been sent as an email, we exclude it from the `pending_emails` aggregtion (we're not spammers 🙂).
+Once emails are successfully written to the `emails` collection database, we add an `emailed` field to the notification, which contains the id of the email object in the `emails` collection. Once a notification has been sent as an email, we exclude it from the `pending_emails` aggregation (we're not spammers 🙂).
 
 ## Technical Implementation
 

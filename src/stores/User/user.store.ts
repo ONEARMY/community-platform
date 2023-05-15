@@ -99,7 +99,7 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
+  // handle user sign in, when firebase authenticates want to also fetch user document from the database
   public async userSignedIn(
     user: IFirebaseUser | null,
     newUserCreated = false,

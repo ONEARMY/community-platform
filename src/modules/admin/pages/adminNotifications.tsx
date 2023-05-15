@@ -4,18 +4,19 @@ import { NotificationItem } from 'oa-components'
 import { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Text } from 'theme-ui'
 import { useDB } from 'src/App'
-import type { INotification, IPendingEmails } from 'src/models'
+import type { INotification, IPendingEmails, IUserPP } from 'src/models'
 import { getFormattedNotificationMessage } from 'src/pages/common/Header/getFormattedNotifications'
 import Table from '../components/Table/Table'
 import type { ICellRenderProps, ITableProps } from '../components/Table/Table'
 import { functions } from 'src/utils/firebase'
+import { useCommonStores } from 'src'
 
 type IPendingEmailsDBDoc = Record<string, IPendingEmails>
 
 const EMAILS_PENDING_COLUMNS: ITableProps<IPendingEmails>['columns'] = [
   {
     Header: 'User ID',
-    accessor: '_userId',
+    accessor: 'displayName',
   },
   {
     Header: 'Frequency',
@@ -33,7 +34,11 @@ const NotificationListContainer = styled(Box)`
 
 const AdminNotifictions = observer(() => {
   const { db } = useDB()
-  const [emailsPending, setEmailsPending] = useState<IPendingEmails[]>([])
+  const { userStore } = useCommonStores().stores
+  const [emailsPending, setEmailsPending] = useState<
+    Array<IPendingEmails & Pick<IUserPP, 'displayName'>>
+  >([])
+
   const [triggerEmailState, setTriggerEmailState] = useState<string>(
     'Click the button to trigger emails.',
   )
@@ -47,10 +52,15 @@ const AdminNotifictions = observer(() => {
     db.collection<IPendingEmailsDBDoc>('user_notifications')
       .doc('emails_pending')
       .stream()
-      .subscribe((emailsPending) => {
+      .subscribe(async (emailsPending) => {
         if (emailsPending) {
-          const values = Object.entries(emailsPending).map(
-            ([_userId, value]) => ({ ...value, _userId }),
+          const values = await Promise.all(
+            Object.values(emailsPending).map(async (value) => {
+              const { displayName } = await userStore.getUserProfile(
+                value._authID,
+              )
+              return { ...value, displayName }
+            }),
           )
           if (values.length > 0) {
             setEmailsPending(values)

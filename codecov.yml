@@ -1,2 +1,9 @@
 ignore:
   - "packages/documentation"
+status: 
+  project:
+    default:
+      target: auto
+      threshold: 1%
+comment:
+  require_changes: true

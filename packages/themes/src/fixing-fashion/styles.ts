@@ -160,6 +160,9 @@ export const StyledComponentTheme: ThemeWithName = {
   maxContainerWidth,
   regular,
   bold,
+  sizes: {
+    container: maxContainerWidth,
+  },
   text: textVariants,
   zIndex,
 }

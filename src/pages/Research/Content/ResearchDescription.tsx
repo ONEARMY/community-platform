@@ -103,33 +103,32 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               />
             </Box>
           )}
-          {props.loggedInUser && (
-            <Button
-              data-testid="follow-button"
-              data-cy="follow-button"
-              icon="thunderbolt"
-              variant="outline"
-              iconColor={
-                research.subscribers?.includes(
-                  props?.loggedInUser?.userName || '',
-                )
-                  ? 'subscribed'
-                  : 'notSubscribed'
-              }
-              sx={{
-                fontSize: 2,
-                py: 0,
-                height: '41.5px', // TODO: Ideally this is a standard size
-              }}
-              onClick={props.onFollowingClick}
-            >
-              {research.subscribers?.includes(
+
+          <Button
+            data-testid="follow-button"
+            data-cy="follow-button"
+            data-tip={'Login to follow'}
+            icon="thunderbolt"
+            variant="outline"
+            iconColor={
+              research.subscribers?.includes(
                 props?.loggedInUser?.userName || '',
               )
-                ? 'Following'
-                : 'Follow'}
-            </Button>
-          )}
+                ? 'subscribed'
+                : 'notSubscribed'
+            }
+            sx={{
+              fontSize: 2,
+              py: 0,
+              height: '41.5px', // TODO: Ideally this is a standard size
+            }}
+            onClick={props.onFollowingClick}
+          >
+            {research.subscribers?.includes(props?.loggedInUser?.userName || '')
+              ? 'Following'
+              : 'Follow'}
+          </Button>
+
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>

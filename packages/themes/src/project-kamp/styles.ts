@@ -157,4 +157,7 @@ export const StyledComponentTheme: ThemeWithName = {
   bold,
   text: textVariants,
   zIndex,
+  sizes: {
+    container: maxContainerWidth,
+  },
 }

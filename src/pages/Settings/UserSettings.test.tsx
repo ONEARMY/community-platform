@@ -2,11 +2,11 @@ import { render, waitFor, screen } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { UserSettings } from './UserSettings'
 import { useCommonStores } from 'src'
-import { FactoryUser } from '../../test/factories/User'
+import { FactoryUser } from 'src/test/factories/User'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
 let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
@@ -131,7 +131,7 @@ const getWrapper = (user) => {
         getUserProfile: jest.fn().mockResolvedValue(user),
       }}
     >
-      <ThemeProvider theme={preciousPlasticTheme.styles}>
+      <ThemeProvider theme={Theme}>
         <MemoryRouter>
           <UserSettings adminEditableUserId={isAdmin ? user._id : null} />
         </MemoryRouter>

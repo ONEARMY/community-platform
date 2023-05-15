@@ -46,8 +46,6 @@ export interface DBQueryWhereOptions {
   value: DBQueryWhereValue
 }
 
-export type DBAggregationQuery = 'useful_count'
-
 export type DBQueryWhereOperator = '>' | '<' | '==' | 'array-contains'
 export type DBQueryWhereValue = string | number
 

@@ -1,5 +1,4 @@
 import type {
-  DBAggregationQuery,
   DBClients,
   DBDoc,
   DBQueryWhereOperator,
@@ -9,6 +8,7 @@ import type { Observer } from 'rxjs'
 import { Observable } from 'rxjs'
 import { DocReference } from './DocReference'
 import { logger } from '../../logger'
+import type { IAggregationId } from '../Aggregations/aggregations.store'
 
 export class CollectionReference<T> {
   constructor(private endpoint: string, private clients: DBClients) {}
@@ -137,19 +137,19 @@ export class CollectionReference<T> {
   }
 
   /**
-   * Query the value of an aggregation given an id and aggregation type
+   * Calculate the value of an aggregation given an id and aggregation type
    * If nothing found then an undefined value is returned
    * @param id - The id to search for, eg user id
    * @param aggregation - pre-configured aggregation type to run
-
+   * @returns count of aggregation | undefined
    */
-  async getAggregation(id: string, aggregation: DBAggregationQuery) {
+  async calculateAggregation(id: string, aggregation: IAggregationId) {
     const { serverDB, cacheDB } = this.clients
-    let count = await serverDB.aggregationQuery(id, aggregation)
+    let count = await serverDB.calculateAggregation(id, aggregation)
     // if not found on live try find on cached (might be offline)
     if (typeof aggregation === undefined) {
       try {
-        count = await cacheDB.aggregationQuery(id, aggregation)
+        count = await cacheDB.calculateAggregation(id, aggregation)
       } catch (error) {
         logger.error(error)
         // at least we can say we tried...

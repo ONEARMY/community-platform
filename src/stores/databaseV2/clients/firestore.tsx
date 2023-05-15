@@ -1,13 +1,10 @@
 import type { IDBEndpoint, DBDoc } from 'src/models/common.models'
 import { firestore } from 'src/utils/firebase'
-import type {
-  DBAggregationQuery,
-  DBQueryOptions,
-  AbstractDatabaseClient,
-} from '../types'
+import type { DBQueryOptions, AbstractDatabaseClient } from '../types'
 import type { Observer } from 'rxjs'
 import { Observable } from 'rxjs'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
+import type { IAggregationId } from 'src/stores/Aggregations/aggregations.store'
 
 const db = firestore
 
@@ -49,8 +46,8 @@ export class FirestoreClient implements AbstractDatabaseClient {
     return data.empty ? [] : data.docs.map((doc) => doc.data() as T)
   }
 
-  async calculateAggregation(id: string, aggregation: DBAggregationQuery) {
-    if (aggregation === 'useful_count') {
+  async calculateAggregation(id: string, aggregation: IAggregationId) {
+    if (aggregation === 'users_totalUseful') {
       // Get how to created by useful
 
       const howtos = await db

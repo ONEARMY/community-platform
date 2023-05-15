@@ -4,12 +4,12 @@ import { logger } from '../../../logger'
 import { DB_ENDPOINTS } from '../endpoints'
 import type {
   AbstractDatabaseClient,
-  DBAggregationQuery,
   DBQueryOptions,
   DBQueryWhereOptions,
 } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 import type { IHowtoDB, IResearchDB } from 'src/models'
+import type { IAggregationId } from 'src/stores/Aggregations/aggregations.store'
 
 /**
  * Update the cache number either when making changes to db architecture
@@ -49,7 +49,7 @@ export class DexieClient implements AbstractDatabaseClient {
     return this._processQuery<T>(endpoint, queryOpts)
   }
 
-  calculateAggregation(id: string, aggregation: DBAggregationQuery) {
+  calculateAggregation(id: string, aggregation: IAggregationId) {
     return this._processCalculateAggregation(id, aggregation)
   }
 
@@ -93,9 +93,9 @@ export class DexieClient implements AbstractDatabaseClient {
 
   private async _processCalculateAggregation(
     id: string,
-    aggregation: DBAggregationQuery,
+    aggregation: IAggregationId,
   ): Promise<number | undefined> {
-    if (aggregation === 'useful_count') {
+    if (aggregation === 'users_totalUseful') {
       let totalUseful = 0
 
       // Fetch total howto useful

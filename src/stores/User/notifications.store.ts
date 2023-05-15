@@ -88,7 +88,7 @@ export class UserNotificationsStore extends ModuleStore {
         if (!user) {
           throw new Error('User not found.')
         }
-        const updatedUser: IUser = {
+        const updatedUser = {
           ...toJS(user),
           notifications: user.notifications
             ? [...toJS(user.notifications), newNotification]
@@ -97,7 +97,7 @@ export class UserNotificationsStore extends ModuleStore {
 
         const dbRef = this.db
           .collection<IUser>(USER_COLLECTION_NAME)
-          .doc(updatedUser._authID)
+          .doc(updatedUser._id)
 
         await dbRef.set(updatedUser)
       }
@@ -114,14 +114,14 @@ export class UserNotificationsStore extends ModuleStore {
       if (user) {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.notified = true))
-        const updatedUser: IUser = {
+        const updatedUser = {
           ...toJS(user),
           notifications,
         }
 
         const dbRef = this.db
           .collection<IUser>(USER_COLLECTION_NAME)
-          .doc(updatedUser._authID)
+          .doc(updatedUser._id)
 
         await dbRef.set(updatedUser)
         await this.userStore.updateUserProfile({ notifications })
@@ -139,14 +139,14 @@ export class UserNotificationsStore extends ModuleStore {
       if (user) {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.read = true))
-        const updatedUser: IUser = {
+        const updatedUser = {
           ...toJS(user),
           notifications,
         }
 
         const dbRef = this.db
           .collection<IUser>(USER_COLLECTION_NAME)
-          .doc(updatedUser._authID)
+          .doc(updatedUser._id)
 
         await dbRef.set(updatedUser)
         await this.userStore.updateUserProfile({ notifications })
@@ -166,14 +166,14 @@ export class UserNotificationsStore extends ModuleStore {
           (notification) => !(notification._id === id),
         )
 
-        const updatedUser: IUser = {
+        const updatedUser = {
           ...toJS(user),
           notifications,
         }
 
         const dbRef = this.db
           .collection<IUser>(USER_COLLECTION_NAME)
-          .doc(updatedUser._authID)
+          .doc(updatedUser._id)
         await dbRef.set(updatedUser)
         //TODO: ensure current user is updated
       }

@@ -102,7 +102,7 @@ describe('Research Article', () => {
     await act(async () => {
       wrapper = getWrapper()
     })
-    const followButton = wrapper.getByTestId('follow-button')
+    const followButton = wrapper.getAllByTestId('follow-button')[0]
 
     // Assert
     expect(wrapper.getAllByText('Follow').length).toBeGreaterThan(0)
@@ -126,7 +126,7 @@ describe('Research Article', () => {
     await act(async () => {
       wrapper = getWrapper()
     })
-    const followButton = wrapper.getByTestId('follow-button')
+    const followButton = wrapper.getAllByTestId('follow-button')[0]
 
     // Assert
     expect(wrapper.getAllByText('Following').length).toBeGreaterThan(0)

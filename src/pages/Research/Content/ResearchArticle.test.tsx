@@ -42,6 +42,7 @@ describe('Research Article', () => {
   const mockResearchStore = {
     activeResearchItem: FactoryResearchItem(),
     setActiveResearchItemBySlug: jest.fn().mockResolvedValue(true),
+    addSubscriberToResearchArticle: jest.fn(),
     needsModeration: jest.fn(),
     getActiveResearchUpdateComments: jest.fn(),
     incrementViewCount: jest.fn(),
@@ -90,10 +91,13 @@ describe('Research Article', () => {
     expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(2)
   })
 
-  it('displays "Follow" button text', async () => {
+  it('displays "Follow" button for non-subscriber', async () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
+      activeResearchItem: FactoryResearchItem({
+        userHasSubscribed: false,
+      }),
       activeUser,
     })
 
@@ -106,32 +110,32 @@ describe('Research Article', () => {
 
     // Assert
     expect(followButton).toBeInTheDocument()
-    expect(wrapper.getAllByText('Follow').length).toBeGreaterThan(0)
+    expect(followButton).toHaveTextContent('Follow')
+    expect(followButton).not.toHaveTextContent('Following')
   })
 
-  // TODO : 14/05/23 Sean - Work out how to mock a calculated store prop correctly for userHasSubscribed
-  // it('displays "Following" button text', async () => {
-  //   // Arrange
-  //   ;(useResearchStore as jest.Mock).mockReturnValue({
-  //     ...mockResearchStore,
-  //     activeResearchItem: FactoryResearchItem({
-  //       subscribers: [activeUser.userName],
-  //       userHasSubscribed: true,
-  //     }),
-  //     activeUser,
-  //   })
+  it.todo('displays "Following" button for subscriber', async () => {
+    // TODO: Work out how to simulate store subscribe functionality
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+      activeResearchItem: FactoryResearchItem({
+        subscribers: [activeUser._id],
+        userHasSubscribed: true,
+      }),
+      activeUser,
+    })
 
-  //   // Act
-  //   let wrapper
-  //   await act(async () => {
-  //     wrapper = getWrapper()
-  //   })
-  //   const followButton = wrapper.getAllByTestId('follow-button')[0]
+    // Act
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
+    const followButton = wrapper.getAllByTestId('follow-button')[0]
 
-  //   // Assert
-  //   expect(followButton).toBeInTheDocument()
-  //   expect(wrapper.getAllByText('Following').length).toBeGreaterThan(0)
-  // })
+    // Assert
+    expect(followButton).toBeInTheDocument()
+  })
 
   describe('Research Update', () => {
     it('displays contributors', async () => {

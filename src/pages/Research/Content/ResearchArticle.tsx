@@ -2,6 +2,7 @@ import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
   Button,
+  FollowResearchButton,
   Loader,
   UsefulStatsButton,
 } from 'oa-components'
@@ -228,6 +229,18 @@ const ResearchArticle = observer((props: IProps) => {
                 onUsefulClick(item._id, item._createdBy, item.slug)
               }}
             />
+            <FollowResearchButton
+              itemColor={
+                item.subscribers?.includes(loggedInUser?.userName || '')
+                  ? 'subscribed'
+                  : 'notSubscribed'
+              }
+              onClick={() => onFollowingClick(item.slug)}
+            >
+              {item.subscribers?.includes(loggedInUser?.userName || '')
+                ? 'Following'
+                : 'Follow'}
+            </FollowResearchButton>
           </ArticleCallToAction>
         </Box>
         {isEditable && (

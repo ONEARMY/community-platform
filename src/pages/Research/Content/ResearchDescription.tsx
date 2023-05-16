@@ -108,7 +108,6 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             isLoggedIn={props.loggedInUser ? true : false}
             onFollowClick={props.onFollowClick}
           ></FollowButton>
-
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>

@@ -114,28 +114,30 @@ describe('Research Article', () => {
     expect(followButton).not.toHaveTextContent('Following')
   })
 
-  it.todo('displays "Following" button for subscriber', async () => {
-    // TODO: Work out how to simulate store subscribe functionality
-    // Arrange
-    ;(useResearchStore as jest.Mock).mockReturnValue({
-      ...mockResearchStore,
-      activeResearchItem: FactoryResearchItem({
-        subscribers: [activeUser._id],
-        userHasSubscribed: true,
-      }),
-      activeUser,
-    })
+  it.todo('displays "Following" button for subscriber')
 
-    // Act
-    let wrapper
-    await act(async () => {
-      wrapper = getWrapper()
-    })
-    const followButton = wrapper.getAllByTestId('follow-button')[0]
+  // TODO: Work out how to simulate store subscribe functionality
+  // it('displays "Following" button for subscriber', async () => {
+  //   // Arrange
+  //   ;(useResearchStore as jest.Mock).mockReturnValue({
+  //     ...mockResearchStore,
+  //     activeResearchItem: FactoryResearchItem({
+  //       subscribers: [activeUser._id],
+  //       userHasSubscribed: true,
+  //     }),
+  //     activeUser,
+  //   })
 
-    // Assert
-    expect(followButton).toBeInTheDocument()
-  })
+  //   // Act
+  //   let wrapper
+  //   await act(async () => {
+  //     wrapper = getWrapper()
+  //   })
+  //   const followButton = wrapper.getAllByTestId('follow-button')[0]
+
+  //   // Assert
+  //   expect(followButton).toBeInTheDocument()
+  // })
 
   describe('Research Update', () => {
     it('displays contributors', async () => {

@@ -6,6 +6,27 @@ import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
 
 export const TEMPLATE_NAME = 'email_digest'
 
+// These types correspond to the data needed to populate our handlebars email templates.
+// Changes to these types without template updates in the database may cause errors.
+interface EmailTemplateNotificationData {
+  resourceLabel: string
+  isComment: boolean
+  isMention: boolean
+  isUseful: boolean
+  triggeredBy: {
+    displayName: string
+    userId: string
+  }
+  relevantUrl: string
+}
+
+interface EmailTemplateData {
+  displayName: string
+  hasComments: boolean
+  hasUsefuls: boolean
+  notifications: EmailTemplateNotificationData[]
+}
+
 const getResourceLabelFromNotificationType = (type: NotificationType) => {
   switch (type) {
     case 'new_comment_research':
@@ -105,44 +126,51 @@ export async function createNotificationEmails(
 
     try {
       // Decorate notifications with additional fields for email template
-      const templateNotifications = pendingNotifications.map((notification) => {
-        const actionType = getActionTypeFromNotificationType(notification.type)
+      const templateNotifications =
+        pendingNotifications.map<EmailTemplateNotificationData>(
+          (notification) => {
+            const actionType = getActionTypeFromNotificationType(
+              notification.type,
+            )
 
-        const isComment = actionType === 'comment'
-        const isMention = actionType === 'mention'
-        const isUseful = actionType === 'useful'
+            const isComment = actionType === 'comment'
+            const isMention = actionType === 'mention'
+            const isUseful = actionType === 'useful'
 
-        if (isComment || isMention) {
-          hasComments = true
-        }
-        if (isUseful) {
-          hasUsefuls = true
-        }
+            if (isComment || isMention) {
+              hasComments = true
+            }
+            if (isUseful) {
+              hasUsefuls = true
+            }
 
-        return {
-          ...notification,
-          resourceLabel: getResourceLabelFromNotificationType(
-            notification.type,
-          ),
-          isComment,
-          isMention,
-          isUseful,
-        }
-      })
+            return {
+              triggeredBy: notification.triggeredBy,
+              relevantUrl: notification.relevantUrl,
+              resourceLabel: getResourceLabelFromNotificationType(
+                notification.type,
+              ),
+              isComment,
+              isMention,
+              isUseful,
+            }
+          },
+        )
 
       const { displayName } = user.data()
 
+      const emailTemplateData: EmailTemplateData = {
+        displayName,
+        hasComments,
+        hasUsefuls,
+        notifications: templateNotifications,
+      }
       // Adding emails to this collection triggers an email notification to be sent to the user
       const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
         to: [email],
         template: {
           name: TEMPLATE_NAME,
-          data: {
-            displayName,
-            hasComments,
-            hasUsefuls,
-            notifications: templateNotifications,
-          },
+          data: emailTemplateData,
         },
       })
       await updateEmailedNotifications(

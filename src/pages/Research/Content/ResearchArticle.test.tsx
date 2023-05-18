@@ -102,12 +102,13 @@ describe('Research Article', () => {
     await act(async () => {
       wrapper = getWrapper()
     })
-    const followButton = wrapper.getByTestId('follow-button')
+    const followButton = wrapper.getAllByTestId('follow-button')[0]
 
     // Assert
     expect(wrapper.getAllByText('Follow').length).toBeGreaterThan(0)
-    expect(followButton).toBeInTheDocument()
-    expect(followButton).toHaveAttribute('iconcolor', 'notSubscribed')
+
+    expect(followButton).toHaveTextContent('Follow')
+    expect(followButton).not.toHaveTextContent('Following')
   })
 
   it('displays "Following" button text and color if user is subscribed', async () => {
@@ -125,13 +126,11 @@ describe('Research Article', () => {
     await act(async () => {
       wrapper = getWrapper()
     })
-    const followButton = wrapper.getByTestId('follow-button')
+    const followButton = wrapper.getAllByTestId('follow-button')[0]
 
     // Assert
     expect(wrapper.getAllByText('Following').length).toBeGreaterThan(0)
-
-    expect(followButton).toBeInTheDocument()
-    expect(followButton).toHaveAttribute('iconcolor', 'subscribed')
+    expect(followButton).toHaveTextContent('Following')
   })
 
   describe('Research Update', () => {

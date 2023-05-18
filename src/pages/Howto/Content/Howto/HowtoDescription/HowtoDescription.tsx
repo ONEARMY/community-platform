@@ -32,6 +32,30 @@ import {
 } from 'src/utils/sessionStorage'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
+import ReactTooltip from 'react-tooltip'
+import styled from '@emotion/styled'
+
+const StyledTooltip = styled(ReactTooltip)`
+  opacity: 1 !important;
+  z-index: 9999 !important;
+`
+
+type TooltipProps = {
+  children?: React.ReactNode
+}
+
+const Tooltip = ({ children, ...props }: TooltipProps) => {
+  return (
+    <StyledTooltip
+      event="mouseenter focus"
+      eventOff="mouseleave blur"
+      effect="solid"
+      {...props}
+    >
+      {children}
+    </StyledTooltip>
+  )
+}
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -166,13 +190,16 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 icon="check"
                 mr={1}
                 onClick={() => props.moderateHowto(true)}
+                data-tip={'Accept'}
               />
               <Button
                 data-cy="reject-howto"
                 variant={'outline'}
-                icon="delete"
+                icon="close"
+                data-tip={'Request changes'}
                 onClick={() => props.moderateHowto(false)}
               />
+              <Tooltip />
             </Flex>
           )}
           {/* Check if logged in user is the creator of the how-to OR a super-admin */}

@@ -15,6 +15,7 @@ import {
   Username,
   ViewsCounter,
   DownloadFiles,
+  Tooltip,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import { isAllowToEditContent, capitalizeFirstLetter } from 'src/utils/helpers'
@@ -32,31 +33,6 @@ import {
 } from 'src/utils/sessionStorage'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
-import ReactTooltip from 'react-tooltip'
-import styled from '@emotion/styled'
-
-const StyledTooltip = styled(ReactTooltip)`
-  opacity: 1 !important;
-  z-index: 9999 !important;
-`
-
-type TooltipProps = {
-  children?: React.ReactNode
-}
-
-const Tooltip = ({ children, ...props }: TooltipProps) => {
-  return (
-    <StyledTooltip
-      event="mouseenter focus"
-      eventOff="mouseleave blur"
-      effect="solid"
-      {...props}
-    >
-      {children}
-    </StyledTooltip>
-  )
-}
-
 interface IProps {
   howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
@@ -189,8 +165,8 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 variant={'primary'}
                 icon="check"
                 mr={1}
-                onClick={() => props.moderateHowto(true)}
                 data-tip={'Accept'}
+                onClick={() => props.moderateHowto(true)}
               />
               <Button
                 data-cy="reject-howto"

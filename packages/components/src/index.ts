@@ -35,6 +35,7 @@ export { ResearchEditorOverview } from './ResearchEditorOverview/ResearchEditorO
 export { Select } from './Select/Select'
 export { SiteFooter } from './SiteFooter/SiteFooter'
 export { TextNotification } from './TextNotification/TextNotification'
+export { Tooltip } from './Tooltip/Tooltip'
 export { UsefulStatsButton } from './UsefulStatsButton/UsefulStatsButton'
 export { Username } from './Username/Username'
 export { UserStatistics } from './UserStatistics/UserStatistics'

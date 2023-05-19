@@ -1,5 +1,0 @@
-import{j as p,F as a,a as t}from"./jsx-runtime-93f93352.js";import{T as i}from"./Tooltip-7747d292.js";import{B as m}from"./theme-ui-components.esm-8feed514.js";import"./index-ba39e096.js";import"./_commonjsHelpers-042e6b4d.js";import"./index-4d501b15.js";import"./emotion-styled.browser.esm-70334677.js";import"./emotion-use-insertion-effect-with-fallbacks.browser.esm-789fca20.js";import"./theme-ui-css.esm-915c1cc4.js";import"./emotion-react.browser.esm-1405c41e.js";const B={title:"Components/Tooltip",component:i},o=()=>p(a,{children:[t(m,{"data-tip":"This is a tooltip",children:"Hover over me"}),t(i,{})]});var r,e,s;o.parameters={...o.parameters,docs:{...(r=o.parameters)==null?void 0:r.docs,source:{originalSource:`() => <>
-    <Button data-tip="This is a tooltip">Hover over me</Button>
-    <Tooltip />
-  </>`,...(s=(e=o.parameters)==null?void 0:e.docs)==null?void 0:s.source}}};const H=["Hover"];export{o as Hover,H as __namedExportsOrder,B as default};
-//# sourceMappingURL=Tooltip.stories-0c49993a.js.map

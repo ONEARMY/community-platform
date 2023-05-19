@@ -1,0 +1,4 @@
+import{a as s}from"./jsx-runtime-93f93352.js";import{C as e}from"./CategoryTag-28bd3178.js";import"./index-ba39e096.js";import"./_commonjsHelpers-042e6b4d.js";import"./theme-ui-components.esm-0c9c5d78.js";import"./emotion-react.browser.esm-9dc67e04.js";import"./theme-ui-css.esm-dbfa45af.js";import"./emotion-use-insertion-effect-with-fallbacks.browser.esm-789fca20.js";const u={title:"Components/CategoryTag",component:e},a=()=>s(e,{tag:{label:"Label"}});var o,r,t;a.parameters={...a.parameters,docs:{...(o=a.parameters)==null?void 0:o.docs,source:{originalSource:`() => <CategoryTag tag={{
+  label: 'Label'
+}} />`,...(t=(r=a.parameters)==null?void 0:r.docs)==null?void 0:t.source}}};const C=["Default"];export{a as Default,C as __namedExportsOrder,u as default};
+//# sourceMappingURL=CategoryTag.stories-b1fe548f.js.map

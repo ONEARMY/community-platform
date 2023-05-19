@@ -11,12 +11,10 @@ describe('[Research]', () => {
         cy.get('[data-cy="follow-button"]').should('not.exist')
         cy.get('[data-cy="follow-redirect"]').should('exist')
         cy.get(`[data-cy="follow-redirect"]`)
-          .should('have.attr', 'href', '/sign-in')
-          .should('have.attr', 'target', '_blank')
-          .should('have.attr', 'rel', 'noopener noreferrer')
-          .then((link) => {
-            cy.request(link.prop('href')).its('status').should('eq', 200)
-          })
+          .first()
+          .click()
+          .url()
+          .should('include', '/sign-in')
       })
     })
 

@@ -814,6 +814,14 @@ export class ResearchStore extends ModuleStore {
     const userVotedResearch = this.activeUser?.votedUsefulResearch || {}
     return userVotedResearch[researchId] ? true : false
   }
+
+  get userHasSubscribed(): boolean {
+    return (
+      this.activeResearchItem?.subscribers?.includes(
+        this.activeUser?._id ?? '',
+      ) ?? false
+    )
+  }
 }
 
 interface IResearchUploadStatus {

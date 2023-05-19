@@ -1,6 +1,10 @@
 import { faker } from '@faker-js/faker'
 import type { IResearch, IResearchDB } from 'src/models'
 
+type ResearchCalculatedFields = {
+  userHasSubscribed: boolean
+}
+
 export const FactoryResearchItemUpdate = (
   researchItemUpdateOverloads: Partial<IResearch.UpdateDB> = {},
 ): IResearch.UpdateDB => ({
@@ -16,8 +20,8 @@ export const FactoryResearchItemUpdate = (
 })
 
 export const FactoryResearchItem = (
-  researchItemOverloads: Partial<IResearchDB> = {},
-): IResearchDB => ({
+  researchItemOverloads: Partial<IResearchDB & ResearchCalculatedFields> = {},
+): IResearchDB & ResearchCalculatedFields => ({
   _id: faker.datatype.uuid(),
   _createdBy: faker.internet.userName(),
   _modified: faker.date.past().toString(),
@@ -38,6 +42,8 @@ export const FactoryResearchItem = (
   previousSlugs: [],
   total_views: faker.datatype.number(),
   collaborators: [],
+  subscribers: [],
+  userHasSubscribed: faker.datatype.boolean(),
   ...researchItemOverloads,
 })
 

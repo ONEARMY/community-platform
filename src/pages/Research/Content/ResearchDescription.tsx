@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import {
   Button,
-  FollowResearchButton,
+  FollowButton,
   LinkifyText,
   ModerationStatus,
   UsefulStatsButton,
@@ -28,9 +28,10 @@ interface IProps {
   needsModeration: boolean
   votedUsefulCount?: number
   hasUserVotedUseful: boolean
+  hasUserSubscribed: boolean
   moderateResearch: (accepted: boolean) => void
   onUsefulClick: () => void
-  onFollowingClick: () => void
+  onFollowClick: () => void
 }
 
 const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
@@ -95,31 +96,18 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             </Button>
           </Link>
           {props.votedUsefulCount !== undefined && (
-            <Box>
-              <UsefulStatsButton
-                votedUsefulCount={props.votedUsefulCount}
-                hasUserVotedUseful={props.hasUserVotedUseful}
-                isLoggedIn={props.loggedInUser ? true : false}
-                onUsefulClick={props.onUsefulClick}
-              />
-            </Box>
+            <UsefulStatsButton
+              votedUsefulCount={props.votedUsefulCount}
+              hasUserVotedUseful={props.hasUserVotedUseful}
+              isLoggedIn={props.loggedInUser ? true : false}
+              onUsefulClick={props.onUsefulClick}
+            />
           )}
-
-          <FollowResearchButton
-            itemColor={
-              research.subscribers?.includes(
-                props?.loggedInUser?.userName || '',
-              )
-                ? 'subscribed'
-                : 'notSubscribed'
-            }
-            onClick={props.onFollowingClick}
-          >
-            {research.subscribers?.includes(props?.loggedInUser?.userName || '')
-              ? 'Following'
-              : 'Follow'}
-          </FollowResearchButton>
-
+          <FollowButton
+            hasUserSubscribed={props.hasUserSubscribed}
+            isLoggedIn={props.loggedInUser ? true : false}
+            onFollowClick={props.onFollowClick}
+          ></FollowButton>
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>

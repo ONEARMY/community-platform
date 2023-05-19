@@ -33,7 +33,7 @@ const buttonSizeProps: { [key: string]: any } = {
     py: 3,
     pl: 10,
     fontSize: 4,
-    height: '62.25px',
+    height: '3.5rem',
   },
 }
 

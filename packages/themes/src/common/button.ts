@@ -10,7 +10,7 @@ const BASE_BUTTON = {
   borderRadius: 1,
   width: 'auto',
   border: '2px solid',
-  height: '41.5px',
+  height: '2.75rem',
 }
 
 export const getButtons = (colors: ThemeWithName['colors']) => ({

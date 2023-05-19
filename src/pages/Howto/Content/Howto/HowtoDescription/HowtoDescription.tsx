@@ -15,6 +15,7 @@ import {
   Username,
   ViewsCounter,
   DownloadFiles,
+  Tooltip,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import { isAllowToEditContent, capitalizeFirstLetter } from 'src/utils/helpers'
@@ -32,7 +33,6 @@ import {
 } from 'src/utils/sessionStorage'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
-
 interface IProps {
   howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
@@ -165,14 +165,17 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 variant={'primary'}
                 icon="check"
                 mr={1}
+                data-tip={'Accept'}
                 onClick={() => props.moderateHowto(true)}
               />
               <Button
                 data-cy="reject-howto"
                 variant={'outline'}
-                icon="delete"
+                icon="close"
+                data-tip={'Request changes'}
                 onClick={() => props.moderateHowto(false)}
               />
+              <Tooltip />
             </Flex>
           )}
           {/* Check if logged in user is the creator of the how-to OR a super-admin */}

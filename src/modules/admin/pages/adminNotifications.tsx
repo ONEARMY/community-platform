@@ -32,7 +32,7 @@ const NotificationListContainer = styled(Box)`
   height: 6rem;
 `
 
-const AdminNotifictions = observer(() => {
+const AdminNotifications = observer(() => {
   const { db } = useDB()
   const { userStore } = useCommonStores().stores
   const [emailsPending, setEmailsPending] = useState<
@@ -114,4 +114,4 @@ const AdminNotifictions = observer(() => {
     </>
   )
 })
-export default AdminNotifictions
+export default AdminNotifications

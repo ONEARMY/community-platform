@@ -4,6 +4,7 @@ import { NavLink as ReactRouterNavLink } from 'react-router-dom'
 import { MODULE } from 'src/modules'
 import { ADMIN_PAGES } from '../admin.routes'
 import { Fragment } from 'react'
+import { Tooltip } from 'oa-components'
 
 const moduleName = MODULE.ADMIN
 
@@ -34,6 +35,7 @@ const AdminSubheader = () => (
         </ReactRouterNavLink>
       )
     })}
+    <Tooltip />
   </Box>
 )
 

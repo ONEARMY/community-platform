@@ -1,5 +1,5 @@
 jest.mock('../common/module.store')
-import { toJS } from 'mobx'
+import { isObservable, observable, toJS } from 'mobx'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryResearchItem,
@@ -87,6 +87,31 @@ const factory = async (mockFn, researchItemOverloads: any = {}) => {
 describe('research.store', () => {
   describe('Comments', () => {
     describe('addComment', () => {
+      it('does not pass observable to set', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem({
+          collaborators: ['a-contributor'],
+          subscribers: ['subscriber'],
+          updates: [
+            FactoryResearchItemUpdate({
+              collaborators: observable(['a-contributor']),
+            }),
+            FactoryResearchItemUpdate({
+              collaborators: observable(['a-contributor']),
+            }),
+          ],
+        })
+
+        // Act
+        await store.addComment('fish', researchItem.updates[0])
+
+        // Assert
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(setFn).toHaveBeenCalledTimes(1)
+        expect(isObservable(newResearchItem.updates[0].collaborators)).toBe(
+          false,
+        )
+      })
+
       it('adds new comment to update', async () => {
         const { store, researchItem, setFn } = await factoryResearchItem({
           collaborators: ['a-contributor'],
@@ -98,6 +123,7 @@ describe('research.store', () => {
 
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
+
         expect(setFn).toHaveBeenCalledTimes(1)
         expect(newResearchItem.updates[0].comments[0]).toEqual(
           expect.objectContaining({

@@ -24321,9 +24321,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx-react-lite@npm:^3.2.0":
-  version: 3.4.0
-  resolution: "mobx-react-lite@npm:3.4.0"
+"mobx-react-lite@npm:^3.4.0":
+  version: 3.4.3
+  resolution: "mobx-react-lite@npm:3.4.3"
   peerDependencies:
     mobx: ^6.1.0
     react: ^16.8.0 || ^17 || ^18
@@ -24332,31 +24332,31 @@ __metadata:
       optional: true
     react-native:
       optional: true
-  checksum: 9294e127e281c8b37ec7bcaf17de479f50519e6ad485b58d7b991291900511541a5a718653759d3cf6503462c70325d025e1c2ed376d4584fb1b2d3aac9d9b48
+  checksum: 60a2580eb9a0b9988fc76959d7299f018733dc33cacaa73c45500953006d4d45e738d9ae39ccfc767ac19a75656dbc028d833282c848fbc67d8d18a2bcb5c262
   languageName: node
   linkType: hard
 
-"mobx-react@npm:7.2.0":
-  version: 7.2.0
-  resolution: "mobx-react@npm:7.2.0"
+"mobx-react@npm:7.6.0":
+  version: 7.6.0
+  resolution: "mobx-react@npm:7.6.0"
   dependencies:
-    mobx-react-lite: ^3.2.0
+    mobx-react-lite: ^3.4.0
   peerDependencies:
     mobx: ^6.1.0
-    react: ^16.8.0 || ^17
+    react: ^16.8.0 || ^17 || ^18
   peerDependenciesMeta:
     react-dom:
       optional: true
     react-native:
       optional: true
-  checksum: b19bc40c330bd7006a9a0b41dd1859815ee98498c67793bc0b2b5c2721a115821afeb7eba85f4e855ac4d62f9c6b30f5d271e0be502b87464c0d8bb9a52f9b56
+  checksum: 07ce6eb297ddab2cc693df7350a3e2f730194cc6eb56bd912f80e28f9427237569e0bda6b30167154faf094e7c5e5ff360abd52acd2860d9a0d0e53320617ee8
   languageName: node
   linkType: hard
 
-"mobx@npm:6.3.2":
-  version: 6.3.2
-  resolution: "mobx@npm:6.3.2"
-  checksum: da853901ddd9bc5347f778b1aebfcbf5215d0cb0909fa17a9580dec2915b034b385e8cea6f2a85bd917078a29fcbb129c28be10e61db06c59bd3c94ace15f4a9
+"mobx@npm:6.9.0":
+  version: 6.9.0
+  resolution: "mobx@npm:6.9.0"
+  checksum: ae03e95334887305c49d3e63e54f5e5e571b21f6a649fc0b7f6f1afd83470db63d8ab3e7c4b9e6ace2aaf6eded5255878c5f69d293efa9fd35af3d640b4a4756
   languageName: node
   linkType: hard
 
@@ -25262,8 +25262,8 @@ __metadata:
     leaflet.markercluster: ^1.4.1
     lint-staged: ^8.1.5
     lorem-ipsum: ^2.0.3
-    mobx: 6.3.2
-    mobx-react: 7.2.0
+    mobx: 6.9.0
+    mobx-react: 7.6.0
     mobx-react-devtools: ^6.0.3
     oa-components: "workspace:*"
     oa-shared: "workspace:*"

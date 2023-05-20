@@ -1,10 +1,12 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 import { mergeConfig } from 'vite'
-
 const Config: StorybookConfig = {
   stories: ['../src/**/*.stories.tsx', '../src/*.mdx'],
-
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
+  addons: [
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-mdx-gfm',
+  ],
   framework: {
     name: '@storybook/react-vite',
     options: {},

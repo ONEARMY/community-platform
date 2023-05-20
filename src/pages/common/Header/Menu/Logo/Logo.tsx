@@ -1,9 +1,5 @@
 import { Component } from 'react'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { Flex, Image, Text } from 'theme-ui'
-import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 
@@ -14,16 +10,16 @@ interface IProps {
   isMobile?: boolean
 }
 
-const LogoContainer = styled(Flex)`
-  align-items: center;
-  position: relative;
-  padding: 10px 0;
+// const LogoContainer = styled(Flex)`
+//   align-items: center;
+//   position: relative;
+//   padding: 10px 0;
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    margin-bottom: -50px;
-    padding: 0;
-  }
-`
+//   @media only screen and (min-width: ${theme.breakpoints[1]}) {
+//     margin-bottom: -50px;
+//     padding: 0;
+//   }
+// `
 
 interface InjectedProps {
   themeStore: ThemeStore
@@ -48,10 +44,19 @@ export class Logo extends Component<IProps> {
 
     return (
       <>
-        <LogoContainer>
+        <Flex
+          sx={{
+            position: 'relative',
+            alignItems: 'center',
+            p: [2, 2, 0],
+            paddingX: [0, 0, 2],
+            mb: 0,
+            top: [0, 0, 7],
+          }}
+        >
           <Link to="/">
             <Flex
-              ml={[0, 4]}
+              ml={[0, 0, 4]}
               sx={{
                 zIndex: 1000,
                 display: 'flex',
@@ -80,7 +85,7 @@ export class Logo extends Component<IProps> {
               Precious Plastic
             </Text>
           </Link>
-        </LogoContainer>
+        </Flex>
       </>
     )
   }

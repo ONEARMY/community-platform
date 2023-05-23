@@ -11,7 +11,7 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
       Research overview
     </h3>
     <button
-      class="css-1d5rya2-Box"
+      class="css-3hb35i-Box"
       type="button"
     >
       <span
@@ -26,7 +26,7 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
       </span>
     </button>
     <button
-      class="css-erxxwt-Box"
+      class="css-1pdlsbk-Box"
       type="button"
     >
       <span
@@ -55,7 +55,7 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
       Research overview
     </h3>
     <button
-      class="css-1d5rya2-Box"
+      class="css-3hb35i-Box"
       type="button"
     >
       <span
@@ -70,7 +70,7 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
       </span>
     </button>
     <button
-      class="css-erxxwt-Box"
+      class="css-1pdlsbk-Box"
       type="button"
     >
       <span
@@ -144,7 +144,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
       </li>
     </ul>
     <button
-      class="css-1d5rya2-Box"
+      class="css-3hb35i-Box"
       type="button"
     >
       <span
@@ -159,7 +159,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
       </span>
     </button>
     <button
-      class="css-erxxwt-Box"
+      class="css-1pdlsbk-Box"
       type="button"
     >
       <span

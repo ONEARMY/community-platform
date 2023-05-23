@@ -16,6 +16,8 @@ export const ViewsCounter = (props: IProps) => (
       background: 'softyellow',
       borderRadius: 1,
       fontSize: 2,
+      border: '1px solid',
+      borderColor: 'rgba(0,0,0,0)',
     }}
   >
     <Icon glyph={'view'} mr={2} size={'md'} />

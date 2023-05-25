@@ -43,17 +43,6 @@ export class UserStore extends ModuleStore {
     return this.aggregationsStore.aggregations.users_verified || {}
   }
 
-  // redirect calls for allUsersTotalUseful list to the aggregation store list
-  @computed get allUsersTotalUseful(): { [user_id: string]: number } {
-    return this.aggregationsStore.aggregations.users_totalUseful || {}
-  }
-
-  // redirect calls for allUsersTotalUseful list to the aggregation store list
-  @computed get activeUserTotalUseful(): number {
-    const totalUseful = this.aggregationsStore.aggregations.users_totalUseful
-    return totalUseful && this.activeUser ? totalUseful[this.activeUser?._id] ?? 0 : 0
-  }
-
   @action
   public getAllUsers() {
     return this.allDocs$

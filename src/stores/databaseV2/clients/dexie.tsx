@@ -8,8 +8,6 @@ import type {
   DBQueryWhereOptions,
 } from '../types'
 import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
-import type { IHowtoDB, IResearchDB } from 'src/models'
-import type { IAggregationId } from 'src/stores/Aggregations/aggregations.store'
 
 /**
  * Update the cache number either when making changes to db architecture
@@ -49,10 +47,6 @@ export class DexieClient implements AbstractDatabaseClient {
     return this._processQuery<T>(endpoint, queryOpts)
   }
 
-  calculateAggregation(id: string, aggregation: IAggregationId) {
-    return this._processCalculateAggregation(id, aggregation)
-  }
-
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
     return db.table(endpoint).delete(docId)
   }
@@ -89,68 +83,6 @@ export class DexieClient implements AbstractDatabaseClient {
           reject(err)
         })
     })
-  }
-
-  private async _processCalculateAggregation(
-    id: string,
-    aggregation: IAggregationId,
-  ): Promise<number | undefined> {
-    if (aggregation === 'users_totalUseful') {
-      let totalUseful = 0
-
-      // Fetch total howto useful
-      const howtoTable = db.table<IHowtoDB>('howtos')
-      const howtoUseful = await howtoTable
-        .where({ _createdBy: id })
-        .toArray()
-        .then((docs) => {
-          let useful = 0
-          for (let i = 0; i < docs.length; i++) {
-            const doc = docs[i]
-            useful += doc.votedUsefulCount ?? 0
-          }
-          return useful
-        })
-        .catch((err) => logger.error(err))
-
-      if (howtoUseful) totalUseful += howtoUseful
-
-      // Fetch total research useful
-
-      const researchTable = db.table<IResearchDB>('research')
-      const userResearch = {}
-
-      await researchTable
-        .where({ _createdBy: id })
-        .toArray()
-        .then((docs) => {
-          for (let i = 0; i < docs.length; i++) {
-            const doc = docs[i]
-            if (doc.votedUsefulCount)
-              userResearch[doc._id] = doc.votedUsefulCount
-          }
-        })
-        .catch((err) => logger.error(err))
-
-      await researchTable
-        .where({ collaborators: id })
-        .toArray()
-        .then((docs) => {
-          for (let i = 0; i < docs.length; i++) {
-            const doc = docs[i]
-            if (doc.votedUsefulCount)
-              userResearch[doc._id] = doc.votedUsefulCount
-          }
-        })
-        .catch((err) => logger.error(err))
-
-      const useful: number[] = Object.values(userResearch)
-      totalUseful += useful.reduce((a, b) => a + b)
-
-      return totalUseful
-    }
-
-    return
   }
 
   private _generateQueryWhereRef<T>(

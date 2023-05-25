@@ -28,7 +28,7 @@ export interface IAggregation {
    **/
   sourceFields: string[]
   /** function used to generate aggregation value from source data */
-  process: (aggregation: AggregationHandler) => Record<string, any>
+  process: (aggregation: AggregationHandler) => Record<string, any> | string[]
   /** Collection ID for output aggregated data */
   targetCollection: IDBEndpoint
   /** Document ID for aggregated data in target aggregation collection */
@@ -71,9 +71,14 @@ export class AggregationHandler {
   /** Reference to aggregation definition triggered as part of process */
   public aggregation: IAggregation
 
+  public processValues: Record<string, any> | string[]
+
+  public updates: Record<string, any>
+
   constructor(aggregation: IAggregation, dbChange: IDBChange) {
     this.aggregation = aggregation
     this.dbChange = dbChange
+    this.processValues = this.aggregation.process(this)
 
     // use the triggered db change to determine what the source collection is
     // use the aggregation to specify the target collection and document id
@@ -103,8 +108,10 @@ export class AggregationHandler {
    * entry in case where updated field no longer valid for aggregation
    */
   private async update() {
-    const aggregationEntry = this.aggregation.process(this)
-    return aggregationEntry ? this.targetDocRef.update(aggregationEntry) : null
+    const aggregationValues = await this.calculateAggregation()
+    return aggregationValues
+      ? this.targetDocRef.update(aggregationValues)
+      : null
   }
 
   /**
@@ -112,26 +119,50 @@ export class AggregationHandler {
    * watched field and batch update all aggregation entries
    */
   private async seed() {
-    const { sourceFields } = this.aggregation
     logger.info(`[Aggregation Seed] ${this.sourceCollectionRef.id}`)
-    // orderBy will only filter to include docs with primary field populated
-    const snapshot = await this.sourceCollectionRef
-      .orderBy(sourceFields[0])
-      .get()
-    const updates: { ref: IDocumentRef; entry: any }[] = []
+    const updateEntries: { ref: IDocumentRef; entry: any }[] = []
 
-    for (const doc of snapshot.docs) {
-      // for purpose of seeding before will always be empty so just track each doc in after state
-      this.dbChange.before.data = () => ({})
-      this.dbChange.after = doc
-      const aggregationEntry = this.aggregation.process(this)
-      if (aggregationEntry) {
-        updates.push({ ref: this.targetDocRef, entry: aggregationEntry })
+    // Seed total useful aggregation
+    if (this.aggregation.targetDocId === 'users_totalUseful') {
+      const users = await db.collection(DB_ENDPOINTS['users']).get()
+
+      const userIds = []
+      users.forEach((user) => userIds.push(user.id))
+      for (let i = 0; i < userIds.length; i++) {
+        const count = await this.calculateTotalUseful(userIds[i])
+        if (count[userIds[i]] > 0) {
+          updateEntries.push({
+            ref: this.targetDocRef,
+            entry: count,
+          })
+        }
       }
     }
+    // Seed other aggregation types
+    else {
+      //orderBy will only filter to include docs with primary field populated
+      const { sourceFields } = this.aggregation
+      const snapshot = await this.sourceCollectionRef
+        .orderBy(sourceFields[0])
+        .get()
+      for (const doc of snapshot.docs) {
+        // for purpose of seeding before will always be empty so just track each doc in after state
+        this.dbChange.before.data = () => ({})
+        this.dbChange.after = doc
+        const aggregationEntry = this.aggregation.process(this)
+        if (aggregationEntry) {
+          updateEntries.push({
+            ref: this.targetDocRef,
+            entry: aggregationEntry,
+          })
+        }
+      }
+    }
+
     // firebase supports up to 500 requests every second
     // as each update uses 2 ops (set + update) run in batches of 250
-    const chunks = splitArrayToChunks(updates, 250)
+
+    const chunks = splitArrayToChunks(updateEntries, 250)
     for (const [index, chunk] of chunks.entries()) {
       const batch = db.batch()
       if (index === 0) {
@@ -141,6 +172,82 @@ export class AggregationHandler {
       await batch.commit()
       await _sleep(1000)
     }
+  }
+
+  private async calculateAggregation() {
+    // If key/value pairs then set update object values immediately
+    if (!Array.isArray(this.processValues)) {
+      this.updates = this.processValues
+      return
+    }
+
+    // If an array but length = 0 then return
+    if (this.processValues.length === 0) return
+
+    // We have an array so continue with calculations
+    let calculations = {}
+    for (let i = 0; i < this.processValues.length; i++) {
+      const id = this.processValues[i]
+      if (this.aggregation.targetDocId === 'users_totalUseful') {
+        const update = await this.calculateTotalUseful(id)
+        calculations = { ...calculations, ...update }
+      }
+    }
+    return calculations
+  }
+
+  private async calculateTotalUseful(id: string) {
+    const userTotalUseful = {}
+
+    const howtos = await db
+      .collection(DB_ENDPOINTS['howtos'])
+      .where('_createdBy', '==', id)
+      .where('votedUsefulCount', '>', 0)
+      .get()
+
+    let totalUseful = 0
+
+    if (!howtos.empty) {
+      for (let i = 0; i < howtos.docs.length; i++) {
+        const data = howtos.docs[i].data()
+        totalUseful += data.votedUsefulCount
+      }
+    }
+
+    const userResearch = {}
+
+    // get research useful if created by user
+    const createdResearch = await db
+      .collection(DB_ENDPOINTS['research'])
+      .where('_createdBy', '==', id)
+      .where('votedUsefulCount', '>', 0)
+      .get()
+
+    if (!createdResearch.empty) {
+      for (let i = 0; i < createdResearch.docs.length; i++) {
+        const data = createdResearch.docs[i].data()
+        userResearch[data._id] = data.votedUsefulCount
+      }
+    }
+
+    // get research useful if user is a collaborator
+    const collaboratedResearch = await db
+      .collection(DB_ENDPOINTS['research'])
+      .where('collaborators', 'array-contains', id)
+      .where('votedUsefulCount', '>', 0)
+      .get()
+
+    if (!collaboratedResearch.empty) {
+      for (let i = 0; i < collaboratedResearch.docs.length; i++) {
+        const data = collaboratedResearch.docs[i].data()
+        userResearch[data._id] = data.votedUsefulCount
+      }
+    }
+
+    const useful: number[] = Object.values(userResearch)
+    totalUseful += useful.length > 0 ? useful.reduce((a, b) => a + b) : 0
+    userTotalUseful[id] = totalUseful
+    return userTotalUseful
   }
 }
 

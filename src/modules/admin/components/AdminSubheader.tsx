@@ -1,75 +1,42 @@
+/** @jsxImportSource theme-ui */
 import { Box } from 'theme-ui'
-import { NavLink } from 'react-router-dom'
-import styled from '@emotion/styled'
+import { NavLink as ReactRouterNavLink } from 'react-router-dom'
 import { MODULE } from 'src/modules'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { ADMIN_PAGES } from '../admin.routes'
 import { Fragment } from 'react'
+import { Tooltip } from 'oa-components'
 
 const moduleName = MODULE.ADMIN
 
-const SubmenuLink = styled(NavLink)`
-  font-family: 'Inter', helveticaNeue, Arial, sans-serif;
-  padding: 0px ${(props) => props.theme.space[4]}px;
-  color: ${theme.colors.white};
-  &:hover {
-  }
-  &.active {
-    color: ${theme.colors.yellow.base};
-    text-decoration: underline;
-  }
-  &.disabled {
-    opacity: 0.5;
-  }
-`
-
-SubmenuLink.defaultProps = {
-  activeClassName: 'active',
-}
-
-// The parent container limits max width (at 1280px). Use custom query
-// to retain full width beyond this limit
-const fullWidthMarginOverride = `calc((${
-  theme.maxContainerWidth / 2
-}px - 50vw) - ${theme.space[4]}px  )`
-
-const SubheaderContainer = styled(Box)`
-  @media only screen and (min-width: ${theme.maxContainerWidth}px) {
-    margin-left: ${fullWidthMarginOverride}!important;
-    margin-right: ${fullWidthMarginOverride}!important;
-  }
-`
-
 const AdminSubheader = () => (
-  <SubheaderContainer
-    bg={theme.colors.black}
-    p={2}
-    sx={{ textAlign: 'right' }}
-    ml={[-2, -3, -4]} // adjust for main-container padding on regular screen breakpoints
-    mr={[-2, -3, -4]}
-    data-cy="admin-subheader"
-  >
-    {ADMIN_PAGES.map((p) => {
-      return p.disabled ? (
-        <Fragment key={p.path}>
-          <SubmenuLink
-            to={`/${moduleName}${p.path}`}
-            onClick={(e) => e.preventDefault()}
+  <Box bg={'black'} p={2} sx={{ textAlign: 'right' }} data-cy="admin-subheader">
+    {ADMIN_PAGES.map((page) => {
+      return page.disabled ? (
+        <Fragment key={page.path}>
+          <ReactRouterNavLink
+            to={`/${moduleName}${page.path}`}
             className="disabled"
             data-tip={'Coming soon...'}
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+            sx={{ color: 'white', opacity: 0.5, px: 1 }}
           >
-            {p.title}
-          </SubmenuLink>
+            {page.title}
+          </ReactRouterNavLink>
         </Fragment>
       ) : (
-        <SubmenuLink key={p.path} to={`/${moduleName}${p.path}`} exact>
-          {p.title}
-        </SubmenuLink>
+        <ReactRouterNavLink
+          key={page.path}
+          to={`/${moduleName}${page.path}`}
+          sx={{ color: 'white', px: 1 }}
+        >
+          {page.title}
+        </ReactRouterNavLink>
       )
     })}
-  </SubheaderContainer>
+    <Tooltip />
+  </Box>
 )
 
 export default AdminSubheader

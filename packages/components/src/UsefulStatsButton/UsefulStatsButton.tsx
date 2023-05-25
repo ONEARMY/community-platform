@@ -1,32 +1,8 @@
 import { useTheme } from '@emotion/react'
-import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
-import ReactTooltip from 'react-tooltip'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import { Flex, Text } from 'theme-ui'
-import { Button, ExternalLink, Icon } from '../'
-
-const StyledTooltip = styled(ReactTooltip)`
-  opacity: 1 !important;
-  z-index: 9999 !important;
-`
-
-type TooltipProps = {
-  children?: React.ReactNode
-}
-
-const Tooltip = ({ children, ...props }: TooltipProps) => {
-  return (
-    <StyledTooltip
-      event="mouseenter focus"
-      eventOff="mouseleave blur"
-      effect="solid"
-      {...props}
-    >
-      {children}
-    </StyledTooltip>
-  )
-}
+import { Button, ExternalLink, Icon, Tooltip } from '../'
 
 export interface IProps {
   hasUserVotedUseful: boolean

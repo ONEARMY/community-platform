@@ -41,6 +41,8 @@
     "runtimeconfig",
     "strikethrough",
     "taskkill",
-    "teardown"
+    "teardown",
+    "Brevo",
+    "Sendinblue"
   ]
 }

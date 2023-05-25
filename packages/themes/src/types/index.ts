@@ -117,4 +117,8 @@ export interface ThemeWithName {
   maxContainerWidth: number
   regular: number
   bold: number
+
+  sizes: {
+    container: number
+  }
 }

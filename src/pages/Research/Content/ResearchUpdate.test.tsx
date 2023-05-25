@@ -1,12 +1,12 @@
 import { format } from 'date-fns'
 import { ThemeProvider } from '@theme-ui/core'
 import { render } from '@testing-library/react'
-import { preciousPlasticTheme } from 'oa-themes'
-const Theme = preciousPlasticTheme.styles
 import ResearchUpdate from './ResearchUpdate'
 import { faker } from '@faker-js/faker'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+const Theme = testingThemeStyles
 
 const mockUser = FactoryUser({ country: '' })
 
@@ -34,25 +34,17 @@ describe('ResearchUpdate', () => {
     const created = faker.date.past()
     const modified = new Date(created)
     modified.setHours(15)
+    const update = FactoryResearchItemUpdate({
+      _created: created.toString(),
+      _modified: modified.toString(),
+      title: 'A title',
+      description: 'A description',
+    })
 
-    const wrapper = render(
-      <ThemeProvider theme={Theme}>
-        <ResearchUpdate
-          update={FactoryResearchItemUpdate({
-            _created: created.toString(),
-            _modified: modified.toString(),
-            title: 'A title',
-            description: 'A description',
-          })}
-          updateIndex={1}
-          slug={'slug'}
-          comments={[]}
-          isEditable={false}
-          showComments={false}
-        />
-      </ThemeProvider>,
-    )
+    // Act
+    const wrapper = getWrapper(update)
 
+    // Assert
     expect(() =>
       wrapper.getAllByText(`edited ${format(modified, 'DD-MM-YYYY')}`),
     ).toThrow()
@@ -60,25 +52,33 @@ describe('ResearchUpdate', () => {
 
   it('does show both created and edit timestamp, when different', () => {
     const modified = faker.date.past()
-    const wrapper = render(
-      <ThemeProvider theme={Theme}>
-        <ResearchUpdate
-          update={FactoryResearchItemUpdate({
-            _modified: modified.toString(),
-            title: 'A title',
-            description: 'A description',
-          })}
-          updateIndex={1}
-          slug={'slug'}
-          comments={[]}
-          isEditable={false}
-          showComments={false}
-        />
-      </ThemeProvider>,
-    )
+    const update = FactoryResearchItemUpdate({
+      _modified: modified.toString(),
+      title: 'A title',
+      description: 'A description',
+    })
 
+    // Act
+    const wrapper = getWrapper(update)
+
+    // Assert
     expect(() =>
       wrapper.getAllByText(`edited ${format(modified, 'DD-MM-YYYY')}`),
     ).not.toThrow()
   })
 })
+
+const getWrapper = (update) => {
+  return render(
+    <ThemeProvider theme={Theme}>
+      <ResearchUpdate
+        update={update}
+        updateIndex={1}
+        slug={'slug'}
+        comments={[]}
+        isEditable={false}
+        showComments={false}
+      />
+    </ThemeProvider>,
+  )
+}

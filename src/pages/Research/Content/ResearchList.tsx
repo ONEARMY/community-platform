@@ -1,32 +1,13 @@
 import { useTheme } from '@emotion/react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react'
 import { Button, Icon } from 'oa-components'
 import { Link, useHistory } from 'react-router-dom'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { Box, Flex, Heading, Text } from 'theme-ui'
+import { Box, Flex, Grid, Heading, Text } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
 import type { RouteComponentProps } from 'react-router'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-const theme = preciousPlasticTheme.styles
-
-const ResearchListHeader = styled.header`
-  display: grid;
-  grid-template-columns: 2fr minmax(274px, 1fr);
-  gap: 60px;
-  padding: 15px;
-  padding-left: 0;
-  margin-bottom: 16px;
-
-  @media (max-width: ${theme.breakpoints[0]}) {
-    padding: 15px 0;
-    grid-template-columns: unset;
-    gap: unset;
-  }
-`
 
 // Update query params for categories
 const updateQueryParams = (
@@ -72,7 +53,16 @@ const ResearchList = observer(() => {
           Help out with Research & Development
         </Heading>
       </Flex>
-      <ResearchListHeader>
+
+      <Grid
+        sx={{
+          gridTemplateColumns: ['unset', '2fr minmax(274px, 1fr)', null],
+          gap: '60px',
+          padding: 2,
+          px: 0,
+          mb: 2,
+        }}
+      >
         <Flex
           sx={{
             flexWrap: 'nowrap',
@@ -138,7 +128,7 @@ const ResearchList = observer(() => {
             Updates
           </Text>
         </Flex>
-      </ResearchListHeader>
+      </Grid>
       {filteredResearches.map((item) => {
         const votedUsefulCount = item.votedUsefulCount ?? 0
         return (

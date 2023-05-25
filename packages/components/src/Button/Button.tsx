@@ -23,6 +23,7 @@ const buttonSizeProps: { [key: string]: any } = {
     py: 1,
     pl: 7,
     fontSize: 1,
+    height: '2rem',
   },
   default: {
     px: 3,
@@ -33,6 +34,7 @@ const buttonSizeProps: { [key: string]: any } = {
     py: 3,
     pl: 10,
     fontSize: 4,
+    height: '3.5rem',
   },
 }
 
@@ -86,7 +88,12 @@ export const Button = (props: BtnProps) => {
 
   return (
     <ThemeUiButton
-      {...sanitizedProps(props, ['small', 'large', 'showIconOnly'])}
+      {...sanitizedProps(props, [
+        'small',
+        'large',
+        'showIconOnly',
+        'iconColor',
+      ])}
       sx={{
         ...props.sx,
         ...getSizeProps(size, !!props.icon),

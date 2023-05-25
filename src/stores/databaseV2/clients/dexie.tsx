@@ -27,21 +27,27 @@ export class DexieClient implements AbstractDatabaseClient {
    *  Main Methods - taken from abstract class
    ***********************************************************************/
   getDoc<T>(endpoint: IDBEndpoint, docId: string) {
+    logger.debug('dexie.getDoc', { endpoint, docId })
     return db.table<T & DBDoc>(endpoint).get(docId)
   }
   setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
+    logger.debug('dexie.setDoc', { endpoint, doc })
     return db.table(endpoint).put(doc)
   }
   setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
+    logger.debug('dexie.setBulkDocs', { endpoint, docs })
     return db.table(endpoint).bulkPut(docs)
   }
   getCollection<T>(endpoint: IDBEndpoint) {
+    logger.debug('dexie.getCollection', { endpoint })
     return db.table<T & DBDoc>(endpoint).toArray()
   }
   queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
+    logger.debug('dexie.queryCollection', { endpoint, queryOpts })
     return this._processQuery<T>(endpoint, queryOpts)
   }
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
+    logger.debug('dexie.deleteDoc', { endpoint, docId })
     return db.table(endpoint).delete(docId)
   }
 

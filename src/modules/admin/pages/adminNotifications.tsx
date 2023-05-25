@@ -31,7 +31,7 @@ const NotificationListContainer = styled(Box)`
   height: 6rem;
 `
 
-const AdminNotifictions = observer(() => {
+const AdminNotifications = observer(() => {
   const { db } = useDB()
   const [emailsPending, setEmailsPending] = useState<IPendingEmails[]>([])
   const [triggerEmailState, setTriggerEmailState] = useState<string>(
@@ -92,7 +92,7 @@ const AdminNotifictions = observer(() => {
 
   return (
     <>
-      <h2>Admin Notifictions</h2>
+      <h2>Admin Notifications</h2>
       <h4>Pending Emails</h4>
       <Button onClick={triggerEmails}>Trigger Test Emails</Button>
       {triggerEmailState && <p>{triggerEmailState}</p>}
@@ -104,4 +104,4 @@ const AdminNotifictions = observer(() => {
     </>
   )
 })
-export default AdminNotifictions
+export default AdminNotifications

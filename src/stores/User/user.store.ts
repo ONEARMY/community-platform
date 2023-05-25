@@ -35,12 +35,23 @@ export class UserStore extends ModuleStore {
     this._listenToAuthStateChanges()
     // Update verified users on intial load. use timeout to ensure aggregation store initialised
     setTimeout(() => {
-      this.loadVerifiedUsers()
+      this.loadUserAggregations()
     }, 50)
   }
   // redirect calls for verifiedUsers to the aggregation store list
   @computed get verifiedUsers(): { [user_id: string]: boolean } {
     return this.aggregationsStore.aggregations.users_verified || {}
+  }
+
+  // redirect calls for allUsersTotalUseful list to the aggregation store list
+  @computed get allUsersTotalUseful(): { [user_id: string]: number } {
+    return this.aggregationsStore.aggregations.users_totalUseful || {}
+  }
+
+  // redirect calls for allUsersTotalUseful list to the aggregation store list
+  @computed get activeUserTotalUseful(): number {
+    const totalUseful = this.aggregationsStore.aggregations.users_totalUseful
+    return totalUseful && this.activeUser ? totalUseful[this.activeUser?._id] ?? 0 : 0
   }
 
   @action
@@ -54,7 +65,7 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public setUpdateStaus(update: keyof IUserUpdateStatus) {
+  public setUpdateStatus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
   }
 
@@ -177,7 +188,7 @@ export class UserStore extends ModuleStore {
     values: Partial<IUserPP>,
     adminEditableUserId?: string,
   ) {
-    this.setUpdateStaus('Start')
+    this.setUpdateStatus('Start')
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
@@ -225,7 +236,7 @@ export class UserStore extends ModuleStore {
     if (values.location) {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
-    this.setUpdateStaus('Complete')
+    this.setUpdateStatus('Complete')
   }
 
   public async sendEmailVerification() {
@@ -309,8 +320,9 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async loadVerifiedUsers() {
+  public async loadUserAggregations() {
     this.aggregationsStore.updateAggregation('users_verified')
+    this.aggregationsStore.updateAggregation('users_totalUseful')
   }
 
   @action

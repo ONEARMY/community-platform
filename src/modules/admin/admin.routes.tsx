@@ -80,6 +80,13 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
     path: '/notifications',
     moduleName,
   },
+  {
+    component: lazy(() => import('./pages/adminDatabase')),
+    title: 'DB',
+    description: 'DB Tasks',
+    path: '/db',
+    moduleName,
+  },
 ]
 
 const routes = () => (

@@ -36,7 +36,7 @@ export class DexieClient implements AbstractDatabaseClient {
   }
   updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
     const { _id, ...updateValues } = doc
-    logger.debug('updateValues', updateValues)
+    logger.debug('dexie.updateValues', updateValues)
     return db.table(endpoint).update(_id, updateValues)
   }
   setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {

@@ -221,7 +221,6 @@ export class ResearchStore extends ModuleStore {
     return
   }
 
-
   public async incrementViewCount(id: string) {
     const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
     const researchData = await toJS(dbRef.get('server'))
@@ -690,10 +689,6 @@ export class ResearchStore extends ModuleStore {
     return (this.activeResearchItem?.votedUsefulBy || []).includes(
       this.activeUser._id,
     )
-  }
-
-  get votedUsefulCount(): number {
-    return (this.activeResearchItem?.votedUsefulBy || []).length
   }
 
   get userHasSubscribed(): boolean {

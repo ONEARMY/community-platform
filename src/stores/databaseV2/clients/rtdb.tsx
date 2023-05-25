@@ -46,12 +46,6 @@ export class RealtimeDBClient implements AbstractDatabaseClient {
     return []
   }
 
-  async calculateAggregation() {
-    throw new Error('aggregation calculations not available on this database')
-    // eslint-disable-next-line
-    return []
-  }
-
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
     return db.ref(`${endpoint}/${docId}`).remove()
   }

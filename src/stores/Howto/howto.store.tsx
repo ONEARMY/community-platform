@@ -125,7 +125,6 @@ export class HowtoStore extends ModuleStore {
         .collection<IHowto>(COLLECTION_NAME)
         .getWhere('slug', '==', slug)
       activeHowto = collection.length > 0 ? collection[0] : null
-      logger.debug('active howto', activeHowto)
 
       // try previous slugs if slug is not recognized as primary
       if (!activeHowto) {

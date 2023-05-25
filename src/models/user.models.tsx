@@ -43,10 +43,10 @@ export interface IUser {
   year?: ISODateString
   stats?: IUserStats
   /** keep a map of all howto ids that a user has voted as useful */
-  /** this will be deprecated but required during migration of useful to how-to object */
+  /** 25/05/2023 this will be deprecated but required during migration of useful to how-to object */
   votedUsefulHowtos?: { [howtoId: string]: boolean }
   /** keep a map of all Research ids that a user has voted as useful */
-  /** this will be deprecated but required during migration of useful to how-to object */
+  /** 25/05/2023 this will be deprecated but required during migration of useful to how-to object */
   votedUsefulResearch?: { [researchId: string]: boolean }
   notification_settings?: INotificationSettings
   notifications?: INotification[]

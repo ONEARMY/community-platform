@@ -136,7 +136,7 @@ const ResearchList = observer(() => {
             key={item._id}
             item={{
               ...item,
-              votedUsefulCount
+              votedUsefulCount,
             }}
           />
         )

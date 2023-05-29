@@ -685,7 +685,7 @@ export class ResearchStore extends ModuleStore {
   get userHasSubscribed(): boolean {
     return (
       this.activeResearchItem?.subscribers?.includes(
-        this.activeUser?._id ?? '',
+        this.activeUser?.userName ?? '',
       ) ?? false
     )
   }

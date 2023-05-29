@@ -116,20 +116,7 @@ export class ResearchStore extends ModuleStore {
 
     if (slug) {
       this.researchStats = undefined
-
-      const collection = await this.db
-        .collection<IResearch.ItemDB>(COLLECTION_NAME)
-        .getWhere('slug', '==', slug)
-      activeResearchItem = collection.length > 0 ? collection[0] : null
-      logger.debug('active research item', activeResearchItem)
-
-      if (!activeResearchItem) {
-        const collection = await this.db
-          .collection<IResearch.ItemDB>(COLLECTION_NAME)
-          .getWhere('previousSlugs', 'array-contains', slug)
-
-        activeResearchItem = collection.length > 0 ? collection[0] : null
-      }
+      activeResearchItem = await this._getResearchItemBySlug(slug)
 
       if (activeResearchItem) {
         activeResearchItem.collaborators =
@@ -151,7 +138,9 @@ export class ResearchStore extends ModuleStore {
       await this.loadResearchStats(activeResearchItem?._id)
     }
 
-    this.activeResearchItem = activeResearchItem
+    runInAction(() => {
+      this.activeResearchItem = activeResearchItem
+    })
     return activeResearchItem
   }
 
@@ -163,15 +152,14 @@ export class ResearchStore extends ModuleStore {
 
     const researchData = await toJS(dbRef.get('server'))
     if (researchData && !(researchData?.subscribers || []).includes(userId)) {
-      await this._updateResearchItem(dbRef, {
+      const updatedItem = await this._updateResearchItem(dbRef, {
         ...researchData,
         subscribers: [userId].concat(researchData?.subscribers || []),
       })
 
-      const createdItem = (await dbRef.get()) as IResearch.ItemDB
-      runInAction(() => {
-        this.activeResearchItem = createdItem
-      })
+      if (updatedItem) {
+        this.setActiveResearchItemBySlug(updatedItem.slug)
+      }
     }
 
     return
@@ -185,17 +173,16 @@ export class ResearchStore extends ModuleStore {
 
     const researchData = await toJS(dbRef.get('server'))
     if (researchData) {
-      await this._updateResearchItem(dbRef, {
+      const updatedItem = await this._updateResearchItem(dbRef, {
         ...researchData,
         subscribers: (researchData?.subscribers || []).filter(
           (id) => id !== userId,
         ),
       })
 
-      const createdItem = (await dbRef.get()) as IResearch.ItemDB
-      runInAction(() => {
-        this.activeResearchItem = createdItem
-      })
+      if (updatedItem) {
+        this.setActiveResearchItemBySlug(updatedItem.slug)
+      }
     }
 
     return
@@ -362,9 +349,9 @@ export class ResearchStore extends ModuleStore {
         })
 
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
-        runInAction(() => {
-          this.activeResearchItem = createdItem
-        })
+        if (createdItem) {
+          this.setActiveResearchItemBySlug(createdItem.slug)
+        }
       } catch (error) {
         logger.error(error)
         throw new Error(error?.message)
@@ -418,11 +405,10 @@ export class ResearchStore extends ModuleStore {
           ...(updateWithMeta as IResearch.UpdateDB),
         }
 
-        await this._updateResearchItem(dbRef, newItem)
-        const createdItem = (await dbRef.get()) as IResearch.ItemDB
-        runInAction(() => {
-          this.activeResearchItem = createdItem
-        })
+        const updatedItem = await this._updateResearchItem(dbRef, newItem)
+        if (updatedItem) {
+          this.setActiveResearchItemBySlug(updatedItem.slug)
+        }
       }
     } catch (err) {
       logger.error(err)
@@ -480,11 +466,11 @@ export class ResearchStore extends ModuleStore {
             ...(updateWithMeta as IResearch.UpdateDB),
           }
 
-          await this._updateResearchItem(dbRef, newItem)
-          const createdItem = (await dbRef.get()) as IResearch.ItemDB
-          runInAction(() => {
-            this.activeResearchItem = createdItem
-          })
+          const updatedItem = await this._updateResearchItem(dbRef, newItem)
+
+          if (updatedItem) {
+            this.setActiveResearchItemBySlug(updatedItem.slug)
+          }
         }
       }
     } catch (err) {
@@ -540,13 +526,12 @@ export class ResearchStore extends ModuleStore {
       }
       logger.debug('populating database', researchItem)
       // set the database document
-      await this._updateResearchItem(dbRef, researchItem)
+      const updatedItem = await this._updateResearchItem(dbRef, researchItem)
       this.updateResearchUploadStatus('Database')
       logger.debug('post added')
-      const newItem = (await dbRef.get()) as IResearch.ItemDB
-      runInAction(() => {
-        this.activeResearchItem = newItem
-      })
+      if (updatedItem) {
+        this.setActiveResearchItemBySlug(updatedItem.slug)
+      }
       // complete
       this.updateResearchUploadStatus('Complete')
     } catch (error) {
@@ -663,13 +648,13 @@ export class ResearchStore extends ModuleStore {
         newItem.updates[existingUpdateIndex]._deleted = true
 
         // set the database document
-        await this._updateResearchItem(dbRef, newItem)
-        const createdItem = (await dbRef.get()) as IResearch.ItemDB
-        runInAction(() => {
-          this.activeResearchItem = createdItem
-        })
+        const updatedItem = await this._updateResearchItem(dbRef, newItem)
 
-        return createdItem
+        if (updatedItem) {
+          this.setActiveResearchItemBySlug(updatedItem.slug)
+        }
+
+        return updatedItem
       } catch (error) {
         logger.error('error deleting article', error)
       }
@@ -823,6 +808,28 @@ export class ResearchStore extends ModuleStore {
     }
 
     return await dbRef.get()
+  }
+
+  private async _getResearchItemBySlug(
+    slug: string,
+  ): Promise<IResearchDB | undefined> {
+    const collection = await this.db
+      .collection<IResearch.ItemDB>(COLLECTION_NAME)
+      .getWhere('slug', '==', slug)
+
+    if (collection && collection.length) {
+      return collection[0]
+    }
+
+    const previousSlugCollection = await this.db
+      .collection<IResearch.ItemDB>(COLLECTION_NAME)
+      .getWhere('previousSlugs', 'array-contains', slug)
+
+    if (previousSlugCollection && previousSlugCollection.length) {
+      return previousSlugCollection[0]
+    }
+
+    return undefined
   }
 }
 

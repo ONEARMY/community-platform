@@ -404,7 +404,9 @@ export class HowtoStore extends ModuleStore {
       if (id && howto && user && howto.comments) {
         const comments = toJS(howto.comments)
         const commentIndex = comments.findIndex(
-          (comment) => comment._creatorId === user._id && comment._id === id,
+          (comment) =>
+            (comment._creatorId === user._id || hasAdminRights(user)) &&
+            comment._id === id,
         )
         if (commentIndex !== -1) {
           comments[commentIndex].text = newText
@@ -436,7 +438,10 @@ export class HowtoStore extends ModuleStore {
           ...toJS(howto),
           comments: toJS(howto.comments).filter(
             (comment) =>
-              !(comment._creatorId === user._id && comment._id === id),
+              !(
+                (comment._creatorId === user._id || hasAdminRights(user)) &&
+                comment._id === id
+              ),
           ),
         })
 

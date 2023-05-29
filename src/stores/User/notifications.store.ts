@@ -11,7 +11,7 @@ import { ModuleStore } from '../common/module.store'
 import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
 import type { RootStore } from '..'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import { logger } from 'src/logger'
 
 // const COLLECTION_NAME = 'user_notifications'
@@ -88,18 +88,11 @@ export class UserNotificationsStore extends ModuleStore {
         if (!user) {
           throw new Error('User not found.')
         }
-        const updatedUser: IUser = {
-          ...toJS(user),
-          notifications: user.notifications
-            ? [...toJS(user.notifications), newNotification]
-            : [newNotification],
-        }
+        const notifications = user.notifications
+          ? [...toJS(user.notifications), newNotification]
+          : [newNotification]
 
-        const dbRef = this.db
-          .collection<IUser>(USER_COLLECTION_NAME)
-          .doc(updatedUser._authID)
-
-        await dbRef.set(updatedUser)
+        await this._updateUserNofications(user, notifications)
       }
     } catch (err) {
       logger.error(err)
@@ -114,16 +107,8 @@ export class UserNotificationsStore extends ModuleStore {
       if (user) {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.notified = true))
-        const updatedUser: IUser = {
-          ...toJS(user),
-          notifications,
-        }
 
-        const dbRef = this.db
-          .collection<IUser>(USER_COLLECTION_NAME)
-          .doc(updatedUser._authID)
-
-        await dbRef.set(updatedUser)
+        await this._updateUserNofications(user, notifications)
         await this.userStore.updateUserProfile({ notifications })
       }
     } catch (err) {
@@ -139,16 +124,8 @@ export class UserNotificationsStore extends ModuleStore {
       if (user) {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.read = true))
-        const updatedUser: IUser = {
-          ...toJS(user),
-          notifications,
-        }
 
-        const dbRef = this.db
-          .collection<IUser>(USER_COLLECTION_NAME)
-          .doc(updatedUser._authID)
-
-        await dbRef.set(updatedUser)
+        await this._updateUserNofications(user, { notifications })
         await this.userStore.updateUserProfile({ notifications })
       }
     } catch (err) {
@@ -166,20 +143,20 @@ export class UserNotificationsStore extends ModuleStore {
           (notification) => !(notification._id === id),
         )
 
-        const updatedUser: IUser = {
-          ...toJS(user),
-          notifications,
-        }
-
-        const dbRef = this.db
-          .collection<IUser>(USER_COLLECTION_NAME)
-          .doc(updatedUser._authID)
-        await dbRef.set(updatedUser)
-        //TODO: ensure current user is updated
+        await this._updateUserNofications(user, notifications)
       }
     } catch (err) {
       logger.error(err)
       throw new Error(err)
     }
+  }
+
+  private async _updateUserNofications(user: IUserPPDB, notifications) {
+    const dbRef = this.db.collection<IUser>(USER_COLLECTION_NAME).doc(user._id)
+
+    return dbRef.set({
+      ...toJS(user),
+      notifications,
+    })
   }
 }

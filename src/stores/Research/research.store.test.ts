@@ -15,13 +15,21 @@ jest.mock('../../utils/helpers', () => ({
   },
 }))
 
-const factoryResearchItem = async (researchItemOverloads: any = {}) =>
-  factory(FactoryResearchItem, researchItemOverloads)
+const factoryResearchItem = async (researchItemOverloads: any = {}, ...rest) =>
+  factory(FactoryResearchItem, researchItemOverloads, ...rest)
 
-const factoryResearchItemFormInput = async (researchItemOverloads: any = {}) =>
-  factory(FactoryResearchItemFormInput, researchItemOverloads)
+const factoryResearchItemFormInput = async (
+  researchItemOverloads: any = {},
+  ...rest
+) => factory(FactoryResearchItemFormInput, researchItemOverloads, ...rest)
 
-const factory = async (mockFn, researchItemOverloads: any = {}) => {
+const factory = async (
+  mockFn,
+  researchItemOverloads: any = {},
+  activeUser = FactoryUser({
+    _id: 'fake-user',
+  }),
+) => {
   const researchItem = mockFn({
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
@@ -30,11 +38,7 @@ const factory = async (mockFn, researchItemOverloads: any = {}) => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  store.setActiveUser(
-    FactoryUser({
-      _id: 'fake-user',
-    }),
-  )
+  store.setActiveUser(activeUser)
 
   let item = researchItem
 
@@ -769,6 +773,35 @@ describe('research.store', () => {
         'subscriber',
         `/research/${researchItem.slug}`,
       )
+    })
+
+    it('matches subscriber state for logged in user', async () => {
+      const { store } = await factoryResearchItem(
+        {
+          subscribers: ['subscriber'],
+        },
+        FactoryUser({
+          _id: 'fake-user-id',
+          userName: 'subscriber',
+        }),
+      )
+
+      // Assert
+      expect(store.userHasSubscribed).toBe(true)
+    })
+
+    it('does not match subscriber state for logged in user', async () => {
+      const { store } = await factoryResearchItem(
+        {
+          subscribers: ['subscriber'],
+        },
+        FactoryUser({
+          userName: 'another-user',
+        }),
+      )
+
+      // Assert
+      expect(store.userHasSubscribed).toBe(false)
     })
   })
 })

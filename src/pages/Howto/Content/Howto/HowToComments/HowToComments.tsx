@@ -80,15 +80,11 @@ export const HowToComments = ({ comments }: IProps) => {
       action: 'Update',
       label: stores.howtoStore.activeHowto?.title,
     })
-
-    //eslint-disable-next-line
-    console.log(
+    logger.debug(
       {
         category: 'Comments',
         action: 'Update',
         label: stores.howtoStore.activeHowto?.title,
-        id: _id,
-        comment: comment,
       },
       'comment edited',
     )

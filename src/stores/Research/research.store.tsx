@@ -151,7 +151,9 @@ export class ResearchStore extends ModuleStore {
       await this.loadResearchStats(activeResearchItem?._id)
     }
 
-    this.activeResearchItem = activeResearchItem
+    runInAction(() => {
+      this.activeResearchItem = activeResearchItem
+    })
     return activeResearchItem
   }
 
@@ -163,15 +165,14 @@ export class ResearchStore extends ModuleStore {
 
     const researchData = await toJS(dbRef.get('server'))
     if (researchData && !(researchData?.subscribers || []).includes(userId)) {
-      await this._updateResearchItem(dbRef, {
+      const updatedItem = await this._updateResearchItem(dbRef, {
         ...researchData,
         subscribers: [userId].concat(researchData?.subscribers || []),
       })
 
-      const createdItem = (await dbRef.get()) as IResearch.ItemDB
-      runInAction(() => {
-        this.activeResearchItem = createdItem
-      })
+      if (updatedItem) {
+        this.setActiveResearchItemBySlug(updatedItem.slug)
+      }
     }
 
     return
@@ -185,17 +186,16 @@ export class ResearchStore extends ModuleStore {
 
     const researchData = await toJS(dbRef.get('server'))
     if (researchData) {
-      await this._updateResearchItem(dbRef, {
+      const updatedItem = await this._updateResearchItem(dbRef, {
         ...researchData,
         subscribers: (researchData?.subscribers || []).filter(
           (id) => id !== userId,
         ),
       })
 
-      const createdItem = (await dbRef.get()) as IResearch.ItemDB
-      runInAction(() => {
-        this.activeResearchItem = createdItem
-      })
+      if (updatedItem) {
+        this.setActiveResearchItemBySlug(updatedItem.slug)
+      }
     }
 
     return

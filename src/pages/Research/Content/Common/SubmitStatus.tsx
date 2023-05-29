@@ -36,18 +36,20 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
           </Flex>
         ))}
       </Box>
-      <Button
-        data-cy={uploadStatus.Complete ? 'view-research' : ''}
-        disabled={!uploadStatus.Complete}
-        variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
-        icon="arrow-forward"
-        onClick={() => {
-          props.history.push('/research/' + store.activeResearchItem!.slug)
-          props.onClose()
-        }}
-      >
-        View Research
-      </Button>
+      {store.activeResearchItem && store.activeResearchItem?.slug ? (
+        <Button
+          data-cy={uploadStatus.Complete ? 'view-research' : ''}
+          disabled={!uploadStatus.Complete}
+          variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
+          icon="arrow-forward"
+          onClick={() => {
+            props.history.push('/research/' + store.activeResearchItem!.slug)
+            props.onClose()
+          }}
+        >
+          View Research
+        </Button>
+      ) : null}
     </Modal>
   )
 })

@@ -1,12 +1,15 @@
 jest.mock('../common/module.store')
-import type { IHowtoDB } from 'src/models'
+import type { IHowtoDB, IUser } from 'src/models'
 import { FactoryComment } from 'src/test/factories/Comment'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
 import { FactoryUser } from 'src/test/factories/User'
 import type { RootStore } from '..'
 import { HowtoStore } from './howto.store'
 
-const factory = async (howtoOverloads: Partial<IHowtoDB> = {}) => {
+const factory = async (
+  howtoOverloads: Partial<IHowtoDB> = {},
+  userOverloads?: Partial<IUser>,
+) => {
   const store = new HowtoStore({} as RootStore)
   const howToItem = FactoryHowto(howtoOverloads)
 
@@ -15,6 +18,7 @@ const factory = async (howtoOverloads: Partial<IHowtoDB> = {}) => {
   store.setActiveUser(
     FactoryUser({
       _id: 'fake-user',
+      ...userOverloads,
     }),
   )
 
@@ -301,6 +305,28 @@ describe('howto.store', () => {
           }),
         )
       })
+
+      it('admin updates another users comment', async () => {
+        const comment = FactoryComment({
+          _creatorId: 'test-user',
+        })
+        const { store, setFn } = await factory(
+          {
+            comments: [comment],
+          },
+          { userRoles: ['admin'] },
+        )
+
+        // Act
+        await store.editComment(comment._id, 'New text')
+
+        const [newHowto] = setFn.mock.calls[0]
+        expect(newHowto.comments[0]).toEqual(
+          expect.objectContaining({
+            text: 'New text',
+          }),
+        )
+      })
       it('preserves @mentions in description', async () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
@@ -348,6 +374,24 @@ describe('howto.store', () => {
         const { store, setFn } = await factory({
           comments: [comment],
         })
+
+        // Act
+        await store.deleteComment(comment._id)
+
+        const [newHowto] = setFn.mock.calls[0]
+        expect(newHowto.comments).toHaveLength(0)
+      })
+
+      it('admin deletes another users comment', async () => {
+        const comment = FactoryComment({
+          _creatorId: 'test-user',
+        })
+        const { store, setFn } = await factory(
+          {
+            comments: [comment],
+          },
+          { userRoles: ['admin'] },
+        )
 
         // Act
         await store.deleteComment(comment._id)

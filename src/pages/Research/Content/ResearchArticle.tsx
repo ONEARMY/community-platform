@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { isUserVerified } from 'src/common/isUserVerified'
-import type { IComment, IResearch, UserComment } from 'src/models'
+import type { IComment, IResearch, UserComment, IUser } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import type { IUploadedFileMeta } from 'src/stores/storage'
@@ -191,7 +191,8 @@ const ResearchArticle = observer((props: IProps) => {
                   slug={item.slug}
                   comments={transformToUserComment(
                     researchStore.getActiveResearchUpdateComments(index),
-                    loggedInUser?.userName,
+                    loggedInUser,
+                    item,
                   )}
                   showComments={areCommentVisible(index)}
                 />
@@ -244,12 +245,15 @@ const isUpdateVisible = (update: IResearch.UpdateDB) => {
 
 const transformToUserComment = (
   comments: IComment[],
-  loggedInUsername,
+  loggedInUser: IUser | undefined,
+  item: IResearch.ItemDB,
 ): UserComment[] => {
   if (!comments) return []
   return comments.map((c) => ({
     ...c,
-    isEditable: c.creatorName === loggedInUsername,
+    isEditable:
+      c.creatorName === loggedInUser?.userName ||
+      isAllowToEditContent(item, loggedInUser),
   }))
 }
 

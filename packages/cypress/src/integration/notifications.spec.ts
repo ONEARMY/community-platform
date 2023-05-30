@@ -30,9 +30,10 @@ describe('[Notifications]', () => {
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
-        const user = docs[1]
+        const [user] = docs
         const notifications = user['notifications']
-        expect(notifications.length).to.equal(1)
+        expect(notifications.length).to.be.greaterThan(0)
+
         expect(notifications[0]['type']).to.equal('howto_useful')
         expect(notifications[0]['relevantUrl']).to.equal(
           '/how-to/testing-testing',
@@ -55,13 +56,17 @@ describe('[Notifications]', () => {
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
-        const user = docs[1]
+        const [user] = docs
         const notifications = user['notifications']
-        expect(notifications.length).to.equal(1)
-        expect(notifications[0]['type']).to.equal('research_useful')
-        expect(notifications[0]['relevantUrl']).to.equal('/research/qwerty')
-        expect(notifications[0]['read']).to.equal(false)
-        expect(notifications[0]['triggeredBy']['displayName']).to.equal(
+        expect(notifications.length).to.be.greaterThan(0)
+
+        const notification = notifications.find(
+          (item) => item['type'] === 'research_useful',
+        )
+
+        expect(notification['relevantUrl']).to.equal('/research/qwerty')
+        expect(notification['read']).to.equal(false)
+        expect(notification['triggeredBy']['displayName']).to.equal(
           'howto_reader',
         )
       },
@@ -79,15 +84,19 @@ describe('[Notifications]', () => {
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
-        const user = docs[1]
+        const [user] = docs
         const notifications = user['notifications']
-        expect(notifications.length).to.equal(1)
-        expect(notifications[0]['type']).to.equal('new_comment')
-        expect(notifications[0]['relevantUrl']).to.equal(
-          '/how-to/testing-testing',
+
+        expect(notifications.length).to.be.greaterThan(0)
+
+        const notification = notifications.find(
+          (n) => n['type'] === 'new_comment',
         )
-        expect(notifications[0]['read']).to.equal(false)
-        expect(notifications[0]['triggeredBy']['displayName']).to.equal(
+
+        expect(notification['type']).to.equal('new_comment')
+        expect(notification['relevantUrl']).to.equal('/how-to/testing-testing')
+        expect(notification['read']).to.equal(false)
+        expect(notification['triggeredBy']['displayName']).to.equal(
           'howto_reader',
         )
       },
@@ -106,15 +115,19 @@ describe('[Notifications]', () => {
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
-        const user = docs[1]
+        const [user] = docs
         const notifications = user['notifications']
-        expect(notifications.length).to.equal(1)
-        expect(notifications[0]['type']).to.equal('new_comment_research')
-        expect(notifications[0]['relevantUrl']).to.equal(
+        expect(notifications.length).to.greaterThan(0)
+        const notification = notifications.find(
+          (n) => n['type'] === 'new_comment_research',
+        )
+
+        expect(notification['type']).to.equal('new_comment_research')
+        expect(notification['relevantUrl']).to.equal(
           '/research/qwerty#update_0',
         )
-        expect(notifications[0]['read']).to.equal(false)
-        expect(notifications[0]['triggeredBy']['displayName']).to.equal(
+        expect(notification['read']).to.equal(false)
+        expect(notification['triggeredBy']['displayName']).to.equal(
           'howto_reader',
         )
       },
@@ -165,7 +178,7 @@ describe('[Notifications]', () => {
     cy.queryDocuments('users', 'userName', '==', 'event_reader').then(
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
-        const user = docs[1]
+        const [user] = docs
         const notifications = user['notifications']
         expect(notifications.length).to.be.greaterThan(0)
         notifications.forEach((n) => {

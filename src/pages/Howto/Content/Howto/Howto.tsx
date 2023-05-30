@@ -12,10 +12,15 @@ import { Redirect } from 'react-router'
 import type { IHowtoDB } from 'src/models/howto.models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Box, Flex, Text } from 'theme-ui'
+import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
+import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import { isAllowToEditContent } from 'src/utils/helpers'
+import { seoTagsUpdate } from 'src/utils/seo'
 import Step from './Step/Step'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+const theme = preciousPlasticTheme.styles
 import { Link } from 'react-router-dom'
 import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
 import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
@@ -26,10 +31,7 @@ import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import type { UserComment } from 'src/models'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
-import type { UserStore } from 'src/stores/User/user.store'
-import { seoTagsUpdate } from 'src/utils/seo'
-import { HowToComments } from './HowToComments/HowToComments'
-const theme = preciousPlasticTheme.styles
+
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
 // We can't directly provide the store as a prop though, and later user a get method to define it
@@ -165,10 +167,10 @@ export class Howto extends React.Component<
         .map(
           (c): UserComment => ({
             ...c,
-            isEditable: [
-              this.injected.userStore.user?._id,
-              this.injected.userStore.user?.userName,
-            ].includes(c._creatorId),
+            isEditable:
+              [loggedInUser?._id, loggedInUser?.userName].includes(
+                c._creatorId,
+              ) || isAllowToEditContent(activeHowto, loggedInUser),
           }),
         )
 

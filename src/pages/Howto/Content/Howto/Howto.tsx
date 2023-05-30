@@ -29,6 +29,7 @@ import { Link } from 'react-router-dom'
 import type { UserComment } from 'src/models'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import { isAllowToEditContent } from 'src/utils/helpers'
 import { trackEvent } from 'src/common/Analytics'
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -166,10 +167,10 @@ export class Howto extends React.Component<
         .map(
           (c): UserComment => ({
             ...c,
-            isEditable: [
-              this.injected.userStore.user?._id,
-              this.injected.userStore.user?.userName,
-            ].includes(c._creatorId),
+            isEditable:
+              [loggedInUser?._id, loggedInUser?.userName].includes(
+                c._creatorId,
+              ) || isAllowToEditContent(activeHowto, loggedInUser),
           }),
         )
 

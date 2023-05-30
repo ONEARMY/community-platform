@@ -10,9 +10,9 @@ import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
 
 jest.mock('../../utils/helpers', () => ({
-  randomID: () => {
-    return 'random-id'
-  },
+  // Preserve the original implementation of other helpers
+  ...jest.requireActual('../../utils/helpers'),
+  randomID: () => 'random-id',
 }))
 
 const factoryResearchItem = async (researchItemOverloads: any = {}, ...rest) =>
@@ -249,6 +249,37 @@ describe('research.store', () => {
         expect(newResearchItem.updates[0].comments).toHaveLength(0)
       })
 
+      it('admin removes another users comment', async () => {
+        const { store, researchItem, setFn } = await factoryResearchItem(
+          {
+            updates: [
+              FactoryResearchItemUpdate({
+                description: '@username',
+                comments: [
+                  FactoryComment({
+                    _id: 'commentId',
+                    _creatorId: 'fake-user',
+                    text: 'text',
+                  }),
+                ],
+              }),
+            ],
+          },
+          FactoryUser({
+            _id: 'test-user',
+            userRoles: ['admin'],
+          }),
+        )
+
+        // Act
+        await store.deleteComment('commentId', researchItem.updates[0])
+
+        // Assert
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(setFn).toHaveBeenCalledTimes(1)
+        expect(newResearchItem.updates[0].comments).toHaveLength(0)
+      })
+
       it('preserves @mention within Research description', async () => {
         const { store, researchItem, setFn } = await factoryResearchItem({
           description: '@username',
@@ -313,6 +344,39 @@ describe('research.store', () => {
             }),
           ],
         })
+
+        // Act
+        await store.editComment(
+          comment._id,
+          'My favourite comment',
+          researchItem.updates[0],
+        )
+
+        // Assert
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(newResearchItem.updates[0].comments[0].text).toBe(
+          'My favourite comment',
+        )
+      })
+
+      it('admin updates another users comment', async () => {
+        const comment = FactoryComment({
+          _creatorId: 'fake-user',
+        })
+
+        const { store, researchItem, setFn } = await factoryResearchItem(
+          {
+            updates: [
+              FactoryResearchItemUpdate({
+                comments: [comment],
+              }),
+            ],
+          },
+          FactoryUser({
+            _id: 'test-user',
+            userRoles: ['admin'],
+          }),
+        )
 
         // Act
         await store.editComment(

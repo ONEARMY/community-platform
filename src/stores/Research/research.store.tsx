@@ -374,7 +374,10 @@ export class ResearchStore extends ModuleStore {
 
         const newComments = toJS(update.comments).filter(
           (comment) =>
-            !(comment._creatorId === user._id && comment._id === commentId),
+            !(
+              (comment._creatorId === user._id || hasAdminRights(user)) &&
+              comment._id === commentId
+            ),
         )
 
         const updateWithMeta = { ...update }
@@ -433,7 +436,8 @@ export class ResearchStore extends ModuleStore {
         const pastComments = toJS(update.comments)
         const commentIndex = pastComments.findIndex(
           (comment) =>
-            comment._creatorId === user._id && comment._id === commentId,
+            (comment._creatorId === user._id || hasAdminRights(user)) &&
+            comment._id === commentId,
         )
         const updateWithMeta = { ...update }
         if (update.images.length > 0) {

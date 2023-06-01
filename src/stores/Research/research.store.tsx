@@ -109,7 +109,6 @@ export class ResearchStore extends ModuleStore {
     let activeResearchItem: IResearchDB | undefined = undefined
 
     if (slug) {
-      this.researchStats = undefined
       activeResearchItem = await this._getResearchItemBySlug(slug)
 
       if (activeResearchItem) {

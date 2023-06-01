@@ -14,7 +14,6 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Box, Flex, Text } from 'theme-ui'
 import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import Step from './Step/Step'
@@ -31,6 +30,7 @@ import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import type { UserComment } from 'src/models'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
+import type { UserStore } from 'src/stores/User/user.store'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.

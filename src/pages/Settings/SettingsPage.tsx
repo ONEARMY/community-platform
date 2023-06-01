@@ -206,7 +206,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
                 <Box sx={{ width: '100%' }}>
                   <form id="userProfileForm" onSubmit={handleSubmit}>
                     <Flex sx={{ flexDirection: 'column' }}>
-                      <Card sx={{bg:theme.styles.colors.softblue}}>
+                      <Card sx={{ bg: theme.styles.colors.softblue }}>
                         <Flex px={3} py={2}>
                           <Heading>{heading}</Heading>
                         </Flex>

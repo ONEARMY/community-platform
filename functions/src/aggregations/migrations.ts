@@ -28,7 +28,6 @@ async function batchGeneration(
     if (doc) {
       const update: Partial<IHowtoDB | IResearchDB> = {
         votedUsefulBy: usefulData[id],
-        votedUsefulCount: usefulData[id].length,
         _modified: new Date().toISOString(),
       }
       operations.updated.push({ _id: id, ...update })

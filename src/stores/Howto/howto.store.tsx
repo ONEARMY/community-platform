@@ -170,7 +170,6 @@ export class HowtoStore extends ModuleStore {
     const votedUsefulUpdate = {
       _id: docId,
       votedUsefulBy: votedUsefulBy,
-      votedUsefulCount: votedUsefulBy.length,
     }
 
     await dbRef.update(votedUsefulUpdate)
@@ -613,11 +612,15 @@ export class HowtoStore extends ModuleStore {
     return stepsWithImgMeta
   }
 
-  /** As users retain their own list of voted howtos lookup the current howto from the active user vote stats */
   @computed
   get userVotedActiveHowToUseful(): boolean {
     if (!this.activeUser) return false
     return (this.activeHowto?.votedUsefulBy || []).includes(this.activeUser._id)
+  }
+
+  @computed
+  get votedUsefulCount(): number {
+    return (this.activeHowto?.votedUsefulBy || []).length
   }
 }
 

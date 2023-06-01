@@ -50,7 +50,6 @@ interface ILatLng {
 
 export interface IVotedUseful {
   votedUsefulBy?: string[]
-  votedUsefulCount?: number
 }
 export interface ISharedFeatures extends IVotedUseful {
   total_views?: number

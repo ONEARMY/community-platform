@@ -164,7 +164,7 @@ const ResearchArticle = observer((props: IProps) => {
         <ResearchDescription
           research={item}
           key={item._id}
-          votedUsefulCount={item.votedUsefulCount ?? 0}
+          votedUsefulCount={researchStore.votedUsefulCount}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           needsModeration={researchStore.needsModeration(item)}
@@ -210,7 +210,7 @@ const ResearchArticle = observer((props: IProps) => {
           >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}
-              votedUsefulCount={item.votedUsefulCount ?? 0}
+              votedUsefulCount={researchStore.votedUsefulCount}
               hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
               onUsefulClick={() => {
                 onUsefulClick(item._id, item.slug, 'ArticleCallToAction')

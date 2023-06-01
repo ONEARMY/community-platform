@@ -130,7 +130,7 @@ const ResearchList = observer(() => {
         </Flex>
       </Grid>
       {filteredResearches.map((item) => {
-        const votedUsefulCount = item.votedUsefulCount ?? 0
+        const votedUsefulCount = (item.votedUsefulBy || []).length
         return (
           <ResearchListItem
             key={item._id}

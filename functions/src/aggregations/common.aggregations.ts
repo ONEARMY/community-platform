@@ -202,7 +202,7 @@ export class AggregationHandler {
     const howtos = await db
       .collection(DB_ENDPOINTS['howtos'])
       .where('_createdBy', '==', id)
-      .where('votedUsefulCount', '>', 0)
+      .where('votedUsefulBy', '!=', [])
       .get()
 
     let totalUseful = 0
@@ -210,7 +210,7 @@ export class AggregationHandler {
     if (!howtos.empty) {
       for (let i = 0; i < howtos.docs.length; i++) {
         const data = howtos.docs[i].data()
-        totalUseful += data.votedUsefulCount
+        totalUseful += data.votedUsefulBy.length
       }
     }
 
@@ -220,13 +220,13 @@ export class AggregationHandler {
     const createdResearch = await db
       .collection(DB_ENDPOINTS['research'])
       .where('_createdBy', '==', id)
-      .where('votedUsefulCount', '>', 0)
+      .where('votedUsefulBy', '!=', [])
       .get()
 
     if (!createdResearch.empty) {
       for (let i = 0; i < createdResearch.docs.length; i++) {
         const data = createdResearch.docs[i].data()
-        userResearch[data._id] = data.votedUsefulCount
+        userResearch[data._id] = data.votedUsefulBy.length
       }
     }
 
@@ -234,13 +234,13 @@ export class AggregationHandler {
     const collaboratedResearch = await db
       .collection(DB_ENDPOINTS['research'])
       .where('collaborators', 'array-contains', id)
-      .where('votedUsefulCount', '>', 0)
+      .where('votedUsefulBy', '!=', [])
       .get()
 
     if (!collaboratedResearch.empty) {
       for (let i = 0; i < collaboratedResearch.docs.length; i++) {
         const data = collaboratedResearch.docs[i].data()
-        userResearch[data._id] = data.votedUsefulCount
+        userResearch[data._id] = data.votedUsefulBy.length
       }
     }
 

@@ -193,7 +193,7 @@ export class Howto extends React.Component<
             key={activeHowto._id}
             needsModeration={this.store.needsModeration(activeHowto)}
             loggedInUser={loggedInUser}
-            votedUsefulCount={activeHowto.votedUsefulCount ?? 0}
+            votedUsefulCount={this.store.votedUsefulCount}
             hasUserVotedUseful={hasUserVotedUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={() =>
@@ -242,7 +242,7 @@ export class Howto extends React.Component<
                 Leave a comment
               </Button>
               <UsefulStatsButton
-                votedUsefulCount={activeHowto.votedUsefulCount ?? 0}
+                votedUsefulCount={this.store.votedUsefulCount}
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={!!loggedInUser}
                 onUsefulClick={() => {

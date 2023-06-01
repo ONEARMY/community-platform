@@ -206,7 +206,7 @@ export class HowtoList extends React.Component<any, IState> {
             <SortSelect
               usefulCounts={howtoItems.map((item) => {
                 const i = {}
-                i[item._id] = item.votedUsefulCount
+                i[item._id] = (item.votedUsefulBy || []).length
                 return i
               })}
             />
@@ -273,7 +273,7 @@ export class HowtoList extends React.Component<any, IState> {
               renderItem={(howto: any) => (
                 <HowToCard
                   howto={howto}
-                  votedUsefulCount={howto.votedUsefulCount}
+                  votedUsefulCount={(howto.votedUsefulBy || []).length}
                 />
               )}
             />

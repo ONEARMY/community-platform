@@ -196,7 +196,6 @@ export class ResearchStore extends ModuleStore {
     const votedUsefulUpdate = {
       _id: docId,
       votedUsefulBy: votedUsefulBy,
-      votedUsefulCount: votedUsefulBy.length,
     }
 
     await dbRef.update(votedUsefulUpdate)
@@ -674,6 +673,7 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
+  @computed
   get userVotedActiveResearchUseful(): boolean {
     if (!this.activeUser) return false
     return (this.activeResearchItem?.votedUsefulBy || []).includes(
@@ -681,12 +681,18 @@ export class ResearchStore extends ModuleStore {
     )
   }
 
+  @computed
   get userHasSubscribed(): boolean {
     return (
       this.activeResearchItem?.subscribers?.includes(
         this.activeUser?.userName ?? '',
       ) ?? false
     )
+  }
+
+  @computed
+  get votedUsefulCount(): number {
+    return (this.activeResearchItem?.votedUsefulBy || []).length
   }
 
   /**

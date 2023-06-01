@@ -18,9 +18,6 @@ import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import INITIAL_VALUES from './Template'
 import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
@@ -49,6 +46,7 @@ interface IState {
 }
 
 @inject('userStore')
+@inject('themeStore')
 @observer
 export class SettingsPage extends React.Component<IProps, IState> {
   toggleLocationDropdown = () => {
@@ -164,6 +162,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
 
   render() {
     const { formValues, user } = this.state
+    const theme = this.injected.themeStore.currentTheme
     return user ? (
       <Form
         onSubmit={(v) =>
@@ -207,7 +206,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
                 <Box sx={{ width: '100%' }}>
                   <form id="userProfileForm" onSubmit={handleSubmit}>
                     <Flex sx={{ flexDirection: 'column' }}>
-                      <Card bg={theme.colors.softblue}>
+                      <Card sx={{bg:theme.styles.colors.softblue}}>
                         <Flex px={3} py={2}>
                           <Heading>{heading}</Heading>
                         </Flex>

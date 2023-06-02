@@ -100,7 +100,7 @@
     "lorem-ipsum": "^2.0.3",
     "mobx": "6.3.2",
     "mobx-react": "7.2.0",
-    "oa-components": "workspace:*",
+    "oa-components": "0.1.1",
     "oa-shared": "workspace:*",
     "oa-themes": "workspace:*",
     "pino": "^7.2.0",

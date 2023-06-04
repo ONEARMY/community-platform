@@ -28,4 +28,4 @@ if (process.env.FUNCTIONS_EMULATOR === 'true') {
   exports.emulator = require('./emulator')
 }
 
-exports.logToCloudLogging = require('./logging')
+exports.logToCloudLogging = require('./logging/logging')

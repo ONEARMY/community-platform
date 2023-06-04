@@ -14,7 +14,7 @@
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "shell": "yarn build && firebase functions:shell",
     "test": "firebase emulators:exec --project community-platform-emulated 'jest . --forceExit --detectOpenHandles'",
-    "test:watch": "firebase emulators:exec --ui --project community-platform-emulated 'jest . --watch'"
+    "test:watch": "firebase emulators:exec --ui --project community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'"
   },
   "main": "index.js",
   "dependencies": {
@@ -57,6 +57,7 @@
     "cross-env": "^7.0.3",
     "firebase-functions-test": "^3.0.0",
     "jest": "29.2.2",
+    "supertest": "^6.3.3",
     "ts-jest": "29.0.3",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.0.0",

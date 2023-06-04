@@ -5360,6 +5360,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@google-cloud/common@npm:^4.0.0":
+  version: 4.0.3
+  resolution: "@google-cloud/common@npm:4.0.3"
+  dependencies:
+    "@google-cloud/projectify": ^3.0.0
+    "@google-cloud/promisify": ^3.0.0
+    arrify: ^2.0.1
+    duplexify: ^4.1.1
+    ent: ^2.2.0
+    extend: ^3.0.2
+    google-auth-library: ^8.0.2
+    retry-request: ^5.0.0
+    teeny-request: ^8.0.0
+  checksum: 2660da8da2295f2792a7eaa08579d3c76274b58c5d5cd652f7e242f8e593948f753925790340029db383144780b35e7ae09c3088ddbffe3dcfab950e5850de89
+  languageName: node
+  linkType: hard
+
 "@google-cloud/firestore@npm:^6.4.0":
   version: 6.4.3
   resolution: "@google-cloud/firestore@npm:6.4.3"
@@ -5369,6 +5386,29 @@ __metadata:
     google-gax: ^3.5.3
     protobufjs: ^7.0.0
   checksum: 8bbde2c9bad94459c231d41855e65866b2383f20e2741aa93d86204370172dd62af94e1eb66d977e000e0c7292c986eb25fe967db7ee847593fd9a68c9fb91e3
+  languageName: node
+  linkType: hard
+
+"@google-cloud/logging@npm:^10.5.0":
+  version: 10.5.0
+  resolution: "@google-cloud/logging@npm:10.5.0"
+  dependencies:
+    "@google-cloud/common": ^4.0.0
+    "@google-cloud/paginator": ^4.0.0
+    "@google-cloud/projectify": ^3.0.0
+    "@google-cloud/promisify": ^3.0.0
+    arrify: ^2.0.1
+    dot-prop: ^6.0.0
+    eventid: ^2.0.0
+    extend: ^3.0.2
+    gcp-metadata: ^4.0.0
+    google-auth-library: ^8.0.2
+    google-gax: ^3.5.8
+    on-finished: ^2.3.0
+    pumpify: ^2.0.1
+    stream-events: ^1.0.5
+    uuid: ^9.0.0
+  checksum: 8847fbe7acffa599137cc470d453e9b1fada8875e9ceefb03b4523b0aeba8491e74690390f6bbd672d402b7bf0de638d34c92dfcab8fd7b9e0a89421b8887770
   languageName: node
   linkType: hard
 
@@ -11041,7 +11081,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"arrify@npm:^2.0.0":
+"arrify@npm:^2.0.0, arrify@npm:^2.0.1":
   version: 2.0.1
   resolution: "arrify@npm:2.0.1"
   checksum: 067c4c1afd182806a82e4c1cb8acee16ab8b5284fbca1ce29408e6e91281c36bb5b612f6ddfbd40a0f7a7e0c75bf2696eb94c027f6e328d6e9c52465c98e4209
@@ -15052,6 +15092,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dot-prop@npm:^6.0.0":
+  version: 6.0.1
+  resolution: "dot-prop@npm:6.0.1"
+  dependencies:
+    is-obj: ^2.0.0
+  checksum: 0f47600a4b93e1dc37261da4e6909652c008832a5d3684b5bf9a9a0d3f4c67ea949a86dceed9b72f5733ed8e8e6383cc5958df3bbd0799ee317fd181f2ece700
+  languageName: node
+  linkType: hard
+
 "dotenv-expand@npm:^10.0.0":
   version: 10.0.0
   resolution: "dotenv-expand@npm:10.0.0"
@@ -16445,6 +16494,15 @@ __metadata:
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
+  languageName: node
+  linkType: hard
+
+"eventid@npm:^2.0.0":
+  version: 2.0.1
+  resolution: "eventid@npm:2.0.1"
+  dependencies:
+    uuid: ^8.0.0
+  checksum: d7de09a0792127796d8ff413e972c0fd2bf52547fd38b7d67bc6dcb10464eb6508f60b92b60e118ecce035586326b2e159be3cec7074fcd5e0e0217c754db3be
   languageName: node
   linkType: hard
 
@@ -17921,6 +17979,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "functions@workspace:functions"
   dependencies:
+    "@google-cloud/logging": ^10.5.0
     "@types/axios": ^0.14.0
     "@types/concurrently": ^6.2.1
     "@types/cors": ^2.8.8
@@ -18043,7 +18102,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gcp-metadata@npm:^4.2.0":
+"gcp-metadata@npm:^4.0.0, gcp-metadata@npm:^4.2.0":
   version: 4.3.1
   resolution: "gcp-metadata@npm:4.3.1"
   dependencies:
@@ -18564,6 +18623,32 @@ __metadata:
     compileProtos: build/tools/compileProtos.js
     minifyProtoJson: build/tools/minify.js
   checksum: 1f3c647fc1ddc00a6a017be0f83b89691997358720763db13a69a94c7a74f6d31a49b0fd56f7bab18689914c784328901b118bdf150d742719995c705d0fa65d
+  languageName: node
+  linkType: hard
+
+"google-gax@npm:^3.5.8":
+  version: 3.6.0
+  resolution: "google-gax@npm:3.6.0"
+  dependencies:
+    "@grpc/grpc-js": ~1.8.0
+    "@grpc/proto-loader": ^0.7.0
+    "@types/long": ^4.0.0
+    "@types/rimraf": ^3.0.2
+    abort-controller: ^3.0.0
+    duplexify: ^4.0.0
+    fast-text-encoding: ^1.0.3
+    google-auth-library: ^8.0.2
+    is-stream-ended: ^0.1.4
+    node-fetch: ^2.6.1
+    object-hash: ^3.0.0
+    proto3-json-serializer: ^1.0.0
+    protobufjs: 7.2.3
+    protobufjs-cli: 1.1.1
+    retry-request: ^5.0.0
+  bin:
+    compileProtos: build/tools/compileProtos.js
+    minifyProtoJson: build/tools/minify.js
+  checksum: 4c7b1b5a278ffda3eaa92e7f25a9e0ea2d0a76aca704aca4baee4fe9d109916e97e83062ad751006ed93ac675a7fd74028061204fa9ed92833a853e6657a71a1
   languageName: node
   linkType: hard
 
@@ -25096,7 +25181,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"on-finished@npm:2.4.1, on-finished@npm:^2.2.0":
+"on-finished@npm:2.4.1, on-finished@npm:^2.2.0, on-finished@npm:^2.3.0":
   version: 2.4.1
   resolution: "on-finished@npm:2.4.1"
   dependencies:
@@ -27367,6 +27452,26 @@ __metadata:
     "@types/node": ">=13.7.0"
     long: ^5.0.0
   checksum: 86166e8f3e46789fa4d117ae72c17356db36bf87c0e0710d224be32e543b1c378a94e66dc2b1de5af45edfc25f56acfc7e688c50c956426a3ae97bc474f4445c
+  languageName: node
+  linkType: hard
+
+"protobufjs@npm:7.2.3":
+  version: 7.2.3
+  resolution: "protobufjs@npm:7.2.3"
+  dependencies:
+    "@protobufjs/aspromise": ^1.1.2
+    "@protobufjs/base64": ^1.1.2
+    "@protobufjs/codegen": ^2.0.4
+    "@protobufjs/eventemitter": ^1.1.0
+    "@protobufjs/fetch": ^1.1.0
+    "@protobufjs/float": ^1.0.2
+    "@protobufjs/inquire": ^1.1.0
+    "@protobufjs/path": ^1.1.2
+    "@protobufjs/pool": ^1.1.0
+    "@protobufjs/utf8": ^1.1.0
+    "@types/node": ">=13.7.0"
+    long: ^5.0.0
+  checksum: 9afa6de5fced0139a5180c063718508fac3ea734a9f1aceb99712367b15473a83327f91193f16b63540f9112b09a40912f5f0441a9b0d3f3c6a1c7f707d78249
   languageName: node
   linkType: hard
 

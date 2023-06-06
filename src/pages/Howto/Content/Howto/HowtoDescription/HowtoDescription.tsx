@@ -167,12 +167,14 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 mr={1}
                 data-tip={'Accept'}
                 onClick={() => props.moderateHowto(true)}
+                showIconOnly={true}
               />
               <Button
                 data-cy="reject-howto"
                 variant={'outline'}
                 icon="close"
                 data-tip={'Request changes'}
+                showIconOnly={true}
                 onClick={() => props.moderateHowto(false)}
               />
               <Tooltip />

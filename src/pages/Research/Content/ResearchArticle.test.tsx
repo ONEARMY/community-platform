@@ -28,9 +28,7 @@ jest.mock('src/index', () => ({
         getUserByUsername: jest.fn().mockResolvedValue(mockUser),
       },
       aggregationsStore: {
-        aggregations: {
-          users_votedUsefulResearch: {},
-        },
+        aggregations: {},
       },
     },
   }),

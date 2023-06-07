@@ -285,6 +285,13 @@ export class UserStore extends ModuleStore {
   }
 
   @action
+  public async loadUserAggregations() {
+    this.aggregationsStore.updateAggregation('users_verified')
+    this.aggregationsStore.updateAggregation('users_totalUseful')
+  }
+
+  /* The below actions will be deprecated in a future update https://github.com/ONEARMY/community-platform/issues/2407 */
+  @action
   public async updateUsefulHowTos(
     howtoId: string,
     howtoAuthor: string,
@@ -309,12 +316,6 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public async loadUserAggregations() {
-    this.aggregationsStore.updateAggregation('users_verified')
-    this.aggregationsStore.updateAggregation('users_totalUseful')
-  }
-
-  @action
   public async updateUsefulResearch(
     researchId: string,
     researchAuthor: string,
@@ -336,6 +337,7 @@ export class UserStore extends ModuleStore {
       await this.updateUserProfile({ votedUsefulResearch })
     }
   }
+  /* END OF DEPRECATIONS */
 
   @action
   public async deleteNotification(id: string) {

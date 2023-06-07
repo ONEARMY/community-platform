@@ -6,6 +6,7 @@ import type { DatabaseV2 } from '../databaseV2'
 /**
  * List of existing aggregation docs
  * TODO - refactor to shared list (search targetDocId)
+ * Values below will require updating https://github.com/ONEARMY/community-platform/issues/2407
  */
 const AGGREGATION_DOC_IDS = [
   'users_totalUseful',

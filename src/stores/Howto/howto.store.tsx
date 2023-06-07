@@ -154,7 +154,7 @@ export class HowtoStore extends ModuleStore {
   @action
   public async toggleUsefulByUser(
     docId: string,
-    userId: string,
+    userName: string,
   ): Promise<void> {
     const dbRef = this.db
       .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
@@ -163,9 +163,9 @@ export class HowtoStore extends ModuleStore {
     const howtoData = await toJS(dbRef.get('server'))
     if (!howtoData) return
 
-    const votedUsefulBy = !(howtoData?.votedUsefulBy || []).includes(userId)
-      ? [userId].concat(howtoData?.votedUsefulBy || [])
-      : (howtoData?.votedUsefulBy || []).filter((id) => id !== userId)
+    const votedUsefulBy = !(howtoData?.votedUsefulBy || []).includes(userName)
+      ? [userName].concat(howtoData?.votedUsefulBy || [])
+      : (howtoData?.votedUsefulBy || []).filter((uName) => uName !== userName)
 
     const votedUsefulUpdate = {
       _id: docId,
@@ -615,7 +615,9 @@ export class HowtoStore extends ModuleStore {
   @computed
   get userVotedActiveHowToUseful(): boolean {
     if (!this.activeUser) return false
-    return (this.activeHowto?.votedUsefulBy || []).includes(this.activeUser._id)
+    return (this.activeHowto?.votedUsefulBy || []).includes(
+      this.activeUser.userName,
+    )
   }
 
   @computed

@@ -180,7 +180,7 @@ export class ResearchStore extends ModuleStore {
 
   public async toggleUsefulByUser(
     docId: string,
-    userId: string,
+    userName: string,
   ): Promise<void> {
     const dbRef = this.db
       .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
@@ -189,9 +189,13 @@ export class ResearchStore extends ModuleStore {
     const researchData = await toJS(dbRef.get('server'))
     if (!researchData) return
 
-    const votedUsefulBy = !(researchData?.votedUsefulBy || []).includes(userId)
-      ? [userId].concat(researchData?.votedUsefulBy || [])
-      : (researchData?.votedUsefulBy || []).filter((id) => id !== userId)
+    const votedUsefulBy = !(researchData?.votedUsefulBy || []).includes(
+      userName,
+    )
+      ? [userName].concat(researchData?.votedUsefulBy || [])
+      : (researchData?.votedUsefulBy || []).filter(
+          (uName) => uName !== userName,
+        )
 
     const votedUsefulUpdate = {
       _id: docId,
@@ -677,7 +681,7 @@ export class ResearchStore extends ModuleStore {
   get userVotedActiveResearchUseful(): boolean {
     if (!this.activeUser) return false
     return (this.activeResearchItem?.votedUsefulBy || []).includes(
-      this.activeUser._id,
+      this.activeUser.userName,
     )
   }
 

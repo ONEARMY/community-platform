@@ -25,7 +25,7 @@ export const UsefulStatsButton = (props: IProps) => {
     [props.hasUserVotedUseful],
   )
   useEffect(
-    () => setVotedUsefulCount(props.votedUsefulCount),
+    () => setVotedUsefulCount(props.votedUsefulCount || 0),
     [props.votedUsefulCount],
   )
   useEffect(() => setDisabled(props.disabled), [props.disabled])
@@ -59,7 +59,7 @@ export const UsefulStatsButton = (props: IProps) => {
           display: 'inline-block',
         }}
       >
-        {votedUsefulCount ?? 0}
+        {votedUsefulCount}
       </Text>
       <Text
         pl={2}
@@ -103,7 +103,7 @@ export const UsefulStatsButton = (props: IProps) => {
               display: 'inline-block',
             }}
           >
-            {votedUsefulCount ?? 0}
+            {votedUsefulCount}
           </Text>
           <Text
             pl={2}

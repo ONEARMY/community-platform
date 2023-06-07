@@ -71,14 +71,11 @@ export class AggregationHandler {
   /** Reference to aggregation definition triggered as part of process */
   public aggregation: IAggregation
 
-  public processValues: Record<string, any> | string[]
-
   public updates: Record<string, any>
 
   constructor(aggregation: IAggregation, dbChange: IDBChange) {
     this.aggregation = aggregation
     this.dbChange = dbChange
-    this.processValues = this.aggregation.process(this)
 
     // use the triggered db change to determine what the source collection is
     // use the aggregation to specify the target collection and document id
@@ -176,18 +173,19 @@ export class AggregationHandler {
 
   private async calculateAggregation() {
     // If key/value pairs then set update object values immediately
-    if (!Array.isArray(this.processValues)) {
-      this.updates = this.processValues
+    const processValues = this.aggregation.process(this)
+    if (!Array.isArray(processValues)) {
+      this.updates = processValues
       return
     }
 
     // If an array but length = 0 then return
-    if (this.processValues.length === 0) return
+    if (processValues.length === 0) return
 
     // We have an array so continue with calculations
     let calculations = {}
-    for (let i = 0; i < this.processValues.length; i++) {
-      const id = this.processValues[i]
+    for (let i = 0; i < processValues.length; i++) {
+      const id = processValues[i]
       if (this.aggregation.targetDocId === 'users_totalUseful') {
         const update = await this.calculateTotalUseful(id)
         calculations = { ...calculations, ...update }

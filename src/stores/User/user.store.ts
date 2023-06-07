@@ -294,8 +294,8 @@ export class UserStore extends ModuleStore {
   @action
   public async updateUsefulHowTos(
     howtoId: string,
-    howtoAuthor: string,
-    howtoSlug: string,
+    // howtoAuthor: string,
+    // howtoSlug: string,
   ) {
     if (this.user) {
       // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
@@ -303,14 +303,14 @@ export class UserStore extends ModuleStore {
       const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
       votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
 
-      if (votedUsefulHowtos[howtoId]) {
-        //get how to author from howtoid
-        this.userNotificationsStore.triggerNotification(
-          'howto_useful',
-          howtoAuthor,
-          '/how-to/' + howtoSlug,
-        )
-      }
+      // if (votedUsefulHowtos[howtoId]) {
+      //   //get how to author from howtoid
+      //   this.userNotificationsStore.triggerNotification(
+      //     'howto_useful',
+      //     howtoAuthor,
+      //     '/how-to/' + howtoSlug,
+      //   )
+      // }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
   }
@@ -318,8 +318,8 @@ export class UserStore extends ModuleStore {
   @action
   public async updateUsefulResearch(
     researchId: string,
-    researchAuthor: string,
-    researchSlug: string,
+    // researchAuthor: string,
+    // researchSlug: string,
   ) {
     if (this.user) {
       // toggle entry on user votedUsefulResearch to either vote or unvote a Research
@@ -327,13 +327,13 @@ export class UserStore extends ModuleStore {
       const votedUsefulResearch = toJS(this.user.votedUsefulResearch) || {}
       votedUsefulResearch[researchId] = !votedUsefulResearch[researchId]
 
-      if (votedUsefulResearch[researchId]) {
-        this.userNotificationsStore.triggerNotification(
-          'research_useful',
-          researchAuthor,
-          '/research/' + researchSlug,
-        )
-      }
+      // if (votedUsefulResearch[researchId]) {
+      //   this.userNotificationsStore.triggerNotification(
+      //     'research_useful',
+      //     researchAuthor,
+      //     '/research/' + researchSlug,
+      //   )
+      // }
       await this.updateUserProfile({ votedUsefulResearch })
     }
   }

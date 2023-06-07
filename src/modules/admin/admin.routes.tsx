@@ -1,7 +1,8 @@
 import { Suspense, lazy } from 'react'
-import { Route, Switch, withRouter } from 'react-router-dom'
+import { Switch, withRouter } from 'react-router-dom'
 import type { IPageMeta } from 'src/pages/PageList'
 import { MODULE } from '..'
+import { AuthRoute } from 'src/pages/common/AuthRoute'
 
 const moduleName = MODULE.ADMIN
 
@@ -85,6 +86,7 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
     title: 'DB',
     description: 'DB Tasks',
     path: '/db',
+    requiredRole: 'super-admin',
     moduleName,
   },
 ]
@@ -93,11 +95,12 @@ const routes = () => (
   <Suspense fallback={<div></div>}>
     <Switch>
       {ADMIN_PAGES.map((page) => (
-        <Route
+        <AuthRoute
           key={page.path}
           path={`/${moduleName}${page.path}`}
           component={page.component}
           exact={true}
+          roleRequired={page.requiredRole || 'admin'}
         />
       ))}
     </Switch>

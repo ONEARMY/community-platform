@@ -16,6 +16,8 @@ import type { IResearchCategory } from './researchCategories.model'
 export type IResearchDB = DBDoc & IResearch.ItemDB
 
 /** All typings related to the Research Module can be found here */
+type UserIdList = string[]
+
 export namespace IResearch {
   /** The main research item, as created by a user */
   export type Item = {
@@ -23,7 +25,7 @@ export namespace IResearch {
     mentions?: UserMention[]
     _createdBy: string
     collaborators: string[]
-    subscribers?: string[]
+    subscribers?: UserIdList
   } & Omit<FormInput, 'collaborators'> &
     ISharedFeatures
 
@@ -35,7 +37,6 @@ export namespace IResearch {
     videoUrl?: string
     comments?: IComment[]
     collaborators?: string[]
-    subscribers?: string[]
     status: 'draft' | 'published'
   }
 

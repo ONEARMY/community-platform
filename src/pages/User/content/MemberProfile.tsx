@@ -13,7 +13,7 @@ interface IProps {
 }
 
 export const MemberProfile = ({ user }: IProps) => {
-  const userLinks = user?.links.filter(
+  const userLinks = (user?.links || []).filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
 

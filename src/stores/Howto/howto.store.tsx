@@ -177,6 +177,13 @@ export class HowtoStore extends ModuleStore {
     const updatedItem = (await dbRef.get()) as IHowtoDB
     runInAction(() => {
       this.activeHowto = updatedItem
+      if ((updatedItem.votedUsefulBy || []).includes(userName)) {
+        this.userNotificationsStore.triggerNotification(
+          'howto_useful',
+          this.activeHowto._createdBy,
+          '/how-to/' + this.activeHowto.slug,
+        )
+      }
     })
 
     return

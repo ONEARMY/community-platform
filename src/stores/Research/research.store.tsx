@@ -207,6 +207,24 @@ export class ResearchStore extends ModuleStore {
     const updatedItem = (await dbRef.get()) as IResearch.ItemDB
     runInAction(() => {
       this.activeResearchItem = updatedItem
+      if ((updatedItem.votedUsefulBy || []).includes(userName)) {
+        this.userNotificationsStore.triggerNotification(
+          'research_useful',
+          this.activeResearchItem._createdBy,
+          '/research/' + this.activeResearchItem.slug,
+        )
+        for (
+          let i = 0;
+          i < (this.activeResearchItem.collaborators || []).length;
+          i++
+        ) {
+          this.userNotificationsStore.triggerNotification(
+            'research_useful',
+            this.activeResearchItem.collaborators[i],
+            '/research/' + this.activeResearchItem.slug,
+          )
+        }
+      }
     })
 
     return

@@ -255,11 +255,21 @@
         "code",
         "maintainer"
       ]
+    },
+    {
+      "login": "NguyenVanDo51",
+      "name": "Nguyễn Văn Đỏ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30190734?v=4",
+      "profile": "https://github.com/NguyenVanDo51",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",
   "projectOwner": "ONEARMY",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }

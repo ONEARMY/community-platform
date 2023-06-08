@@ -10,57 +10,49 @@ import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications
 import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+import type { ThemeWithName } from 'oa-themes'
 import { Flex } from 'theme-ui'
-
-import styled from '@emotion/styled'
 
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
 import { getFormattedNotifications } from './getFormattedNotifications'
+import { useTheme, withTheme } from '@emotion/react'
+
 interface IInjectedProps {
   mobileMenuStore: MobileMenuStore
   userNotificationsStore: UserNotificationsStore
 }
 
-const MobileNotificationsWrapper = styled(Flex)`
-  position: relative;
+const MobileNotificationsWrapper = ({ children }) => {
+  const theme = useTheme()
 
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
-    display: flex;
-    margin-left: 1em;
-    margin-right: auto;
-  }
+  return (
+    <Flex
+      sx={{
+        position: 'relative',
+        [`@media only screen and (max-width: ${theme.breakpoints[1]})`]: {
+          display: 'flex',
+          marginLeft: '1em',
+          marginRight: 'auto',
+        },
+        [`@media only screen and (min-width: ${theme.breakpoints[1]})`]: {
+          display: 'none',
+        },
+      }}
+    >
+      {children}
+    </Flex>
+  )
+}
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    display: none;
-  }
-`
-
-const MobileMenuWrapper = styled(Flex)`
-  position: relative;
-
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
-    display: flex;
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    display: none;
-  }
-`
-const DesktopMenuWrapper = styled(Flex)`
-  position: relative;
-
-  @media only screen and (max-width: ${theme.breakpoints[1]}) {
-    display: none;
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    display: flex;
-  }
-`
+const MobileMenuWrapper = ({ children, ...props }) => (
+  <Flex
+    {...props}
+    sx={{ position: 'relative', display: ['flex', 'flex', 'none'] }}
+  >
+    {children}
+  </Flex>
+)
 
 const AnimationContainer = (props: any) => {
   const variants = {
@@ -100,6 +92,7 @@ export class Header extends Component {
   }
 
   render() {
+    const { theme } = this.props as { theme: ThemeWithName }
     const menu = this.injected.mobileMenuStore
     const user = this.injected.userNotificationsStore.user
     const notifications = getFormattedNotifications(
@@ -135,7 +128,14 @@ export class Header extends Component {
               />
             </MobileNotificationsWrapper>
           )}
-          <DesktopMenuWrapper className="menu-desktop" px={2}>
+          <Flex
+            className="menu-desktop"
+            px={2}
+            sx={{
+              position: 'relative',
+              display: ['none', 'none', 'flex'],
+            }}
+          >
             <MenuDesktop />
             {isLoggedInUser && (
               <>
@@ -151,7 +151,7 @@ export class Header extends Component {
               </>
             )}
             {isModuleSupported(MODULE.USER) && <Profile isMobile={false} />}
-          </DesktopMenuWrapper>
+          </Flex>
           <MobileMenuWrapper className="menu-mobile">
             <Flex pl={5}>
               <HamburgerMenu
@@ -195,4 +195,4 @@ export class Header extends Component {
   }
 }
 
-export default Header
+export default withTheme(Header)

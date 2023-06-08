@@ -345,14 +345,14 @@ export class UserStore extends ModuleStore {
           (notification) => !(notification._id === id),
         )
 
-        const updatedUser: IUser = {
+        const updatedUser: IUserPPDB = {
           ...toJS(user),
           notifications,
         }
 
         const dbRef = this.db
           .collection<IUser>(COLLECTION_NAME)
-          .doc(updatedUser._authID)
+          .doc(updatedUser._id)
 
         await dbRef.set(updatedUser)
         //TODO: ensure current user is updated

@@ -34,6 +34,11 @@ export class DexieClient implements AbstractDatabaseClient {
     logger.debug('dexie.setDoc', { endpoint, doc })
     return db.table(endpoint).put(doc)
   }
+  updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
+    const { _id, ...updateValues } = doc
+    logger.debug('dexie.updateValues', updateValues)
+    return db.table(endpoint).update(_id, updateValues)
+  }
   setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     logger.debug('dexie.setBulkDocs', { endpoint, docs })
     return db.table(endpoint).bulkPut(docs)
@@ -46,6 +51,7 @@ export class DexieClient implements AbstractDatabaseClient {
     logger.debug('dexie.queryCollection', { endpoint, queryOpts })
     return this._processQuery<T>(endpoint, queryOpts)
   }
+
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
     logger.debug('dexie.deleteDoc', { endpoint, docId })
     return db.table(endpoint).delete(docId)

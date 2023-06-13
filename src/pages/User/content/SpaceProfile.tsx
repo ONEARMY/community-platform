@@ -34,8 +34,7 @@ import type { IConvertedFileMeta } from 'src/types'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
-import { isUserVerified } from 'src/common/isUserVerified'
-import { useUserUsefulCount } from 'src/common/hooks/userUsefulCount'
+import { userStats } from 'src/common/hooks/userStats'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -234,6 +233,8 @@ export const SpaceProfile = ({ user }: IProps) => {
     )
   }
 
+  const stats = userStats(user.userName)
+
   const userLinks = user?.links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
@@ -272,7 +273,7 @@ export const SpaceProfile = ({ user }: IProps) => {
                 userName: user.userName,
                 countryCode: userCountryCode,
               }}
-              isVerified={isUserVerified(user.userName)}
+              isVerified={stats.verified}
             />
           </Flex>
 
@@ -322,7 +323,7 @@ export const SpaceProfile = ({ user }: IProps) => {
               <UserStatistics
                 userName={user.userName}
                 country={user.location?.country}
-                isVerified={isUserVerified(user.userName)}
+                isVerified={stats.verified}
                 isSupporter={!!user.badges?.supporter}
                 howtoCount={
                   user.stats
@@ -334,9 +335,7 @@ export const SpaceProfile = ({ user }: IProps) => {
                     ? Object.keys(user.stats!.userCreatedEvents).length
                     : 0
                 }
-                // ** TODO: Beta-tester Authentication needs to be removed from useUserUsefulCount
-                // ** once aggregations are fixed
-                usefulCount={useUserUsefulCount(user) ?? 0}
+                usefulCount={stats.totalUseful}
               />
             </Box>
           </MobileBadge>

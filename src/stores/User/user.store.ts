@@ -35,7 +35,7 @@ export class UserStore extends ModuleStore {
     this._listenToAuthStateChanges()
     // Update verified users on intial load. use timeout to ensure aggregation store initialised
     setTimeout(() => {
-      this.loadVerifiedUsers()
+      this.loadUserAggregations()
     }, 50)
   }
   // redirect calls for verifiedUsers to the aggregation store list
@@ -54,7 +54,7 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  public setUpdateStaus(update: keyof IUserUpdateStatus) {
+  public setUpdateStatus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
   }
 
@@ -99,7 +99,7 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  // handle user sign in, when firebase authenticates wnat to also fetch user document from the database
+  // handle user sign in, when firebase authenticates want to also fetch user document from the database
   public async userSignedIn(
     user: IFirebaseUser | null,
     newUserCreated = false,
@@ -177,7 +177,7 @@ export class UserStore extends ModuleStore {
     values: Partial<IUserPP>,
     adminEditableUserId?: string,
   ) {
-    this.setUpdateStaus('Start')
+    this.setUpdateStatus('Start')
     const dbRef = this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .doc((values as IUserDB)._id)
@@ -225,7 +225,7 @@ export class UserStore extends ModuleStore {
     if (values.location) {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
-    this.setUpdateStaus('Complete')
+    this.setUpdateStatus('Complete')
   }
 
   public async sendEmailVerification() {
@@ -285,10 +285,17 @@ export class UserStore extends ModuleStore {
   }
 
   @action
+  public async loadUserAggregations() {
+    this.aggregationsStore.updateAggregation('users_verified')
+    this.aggregationsStore.updateAggregation('users_totalUseful')
+  }
+
+  /* The below actions will be deprecated in a future update https://github.com/ONEARMY/community-platform/issues/2407 */
+  @action
   public async updateUsefulHowTos(
     howtoId: string,
-    howtoAuthor: string,
-    howtoSlug: string,
+    // howtoAuthor: string,
+    // howtoSlug: string,
   ) {
     if (this.user) {
       // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
@@ -296,28 +303,23 @@ export class UserStore extends ModuleStore {
       const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
       votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
 
-      if (votedUsefulHowtos[howtoId]) {
-        //get how to author from howtoid
-        this.userNotificationsStore.triggerNotification(
-          'howto_useful',
-          howtoAuthor,
-          '/how-to/' + howtoSlug,
-        )
-      }
+      // if (votedUsefulHowtos[howtoId]) {
+      //   //get how to author from howtoid
+      //   this.userNotificationsStore.triggerNotification(
+      //     'howto_useful',
+      //     howtoAuthor,
+      //     '/how-to/' + howtoSlug,
+      //   )
+      // }
       await this.updateUserProfile({ votedUsefulHowtos })
     }
   }
 
   @action
-  public async loadVerifiedUsers() {
-    this.aggregationsStore.updateAggregation('users_verified')
-  }
-
-  @action
   public async updateUsefulResearch(
     researchId: string,
-    researchAuthor: string,
-    researchSlug: string,
+    // researchAuthor: string,
+    // researchSlug: string,
   ) {
     if (this.user) {
       // toggle entry on user votedUsefulResearch to either vote or unvote a Research
@@ -325,16 +327,17 @@ export class UserStore extends ModuleStore {
       const votedUsefulResearch = toJS(this.user.votedUsefulResearch) || {}
       votedUsefulResearch[researchId] = !votedUsefulResearch[researchId]
 
-      if (votedUsefulResearch[researchId]) {
-        this.userNotificationsStore.triggerNotification(
-          'research_useful',
-          researchAuthor,
-          '/research/' + researchSlug,
-        )
-      }
+      // if (votedUsefulResearch[researchId]) {
+      //   this.userNotificationsStore.triggerNotification(
+      //     'research_useful',
+      //     researchAuthor,
+      //     '/research/' + researchSlug,
+      //   )
+      // }
       await this.updateUserProfile({ votedUsefulResearch })
     }
   }
+  /* END OF DEPRECATIONS */
 
   @action
   public async deleteNotification(id: string) {

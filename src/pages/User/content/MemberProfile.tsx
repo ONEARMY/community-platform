@@ -6,8 +6,7 @@ import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
-import { isUserVerified } from 'src/common/isUserVerified'
-import { useUserUsefulCount } from 'src/common/hooks/userUsefulCount'
+import { userStats } from 'src/common/hooks/userStats'
 
 interface IProps {
   user: IUserPP
@@ -17,6 +16,8 @@ export const MemberProfile = ({ user }: IProps) => {
   const userLinks = (user?.links || []).filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
+
+  const stats = userStats(user.userName)
 
   const userCountryCode =
     user.location?.countryCode || user.country?.toLowerCase() || undefined
@@ -82,7 +83,7 @@ export const MemberProfile = ({ user }: IProps) => {
           <UserStatistics
             userName={user.userName}
             country={user.location?.country}
-            isVerified={isUserVerified(user.userName)}
+            isVerified={stats.verified}
             isSupporter={!!user.badges?.supporter}
             howtoCount={
               user.stats ? Object.keys(user.stats!.userCreatedHowtos).length : 0
@@ -90,9 +91,7 @@ export const MemberProfile = ({ user }: IProps) => {
             eventCount={
               user.stats ? Object.keys(user.stats!.userCreatedEvents).length : 0
             }
-            // ** TODO: Beta-tester Authentication needs to be removed from useUserUsefulCount
-            // ** once aggregations are fixed
-            usefulCount={useUserUsefulCount(user) ?? 0}
+            usefulCount={stats.totalUseful}
           />
         </Box>
         <Flex
@@ -111,7 +110,7 @@ export const MemberProfile = ({ user }: IProps) => {
                 userName: user.userName,
                 countryCode: userCountryCode,
               }}
-              isVerified={isUserVerified(user.userName)}
+              isVerified={stats.verified}
             />
           </Flex>
           <Box sx={{ flexDirection: 'column' }} mb={3}>

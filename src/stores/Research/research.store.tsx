@@ -10,7 +10,7 @@ import { cloneDeep } from 'lodash'
 import { createContext, useContext } from 'react'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type { IComment, IUser } from 'src/models'
+import type { IComment, IUser, IVotedUsefulUpdate } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
@@ -20,11 +20,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import type {
-  IResearch,
-  IResearchDB,
-  IResearchStats,
-} from '../../models/research.models'
+import type { IResearch, IResearchDB } from '../../models/research.models'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
@@ -57,8 +53,6 @@ export class ResearchStore extends ModuleStore {
   @observable
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
-
-  @observable researchStats: IResearchStats | undefined
 
   public filterResearchesByCategory = (
     collection: IResearch.ItemDB[] = [],
@@ -115,7 +109,6 @@ export class ResearchStore extends ModuleStore {
     let activeResearchItem: IResearchDB | undefined = undefined
 
     if (slug) {
-      this.researchStats = undefined
       activeResearchItem = await this._getResearchItemBySlug(slug)
 
       if (activeResearchItem) {
@@ -133,9 +126,6 @@ export class ResearchStore extends ModuleStore {
           },
         )
       }
-
-      // load Research stats which are stored in a separate subcollection
-      await this.loadResearchStats(activeResearchItem?._id)
     }
 
     runInAction(() => {
@@ -188,16 +178,56 @@ export class ResearchStore extends ModuleStore {
     return
   }
 
-  @action
-  private async loadResearchStats(id?: string) {
-    if (id) {
-      const ref = this.db
-        .collection<IResearchStats>('research')
-        .doc(`${id}/stats/all`)
-      const researchStats = await ref.get('server')
-      logger.debug('researchStats', researchStats)
-      this.researchStats = researchStats || { votedUsefulCount: 0 }
+  public async toggleUsefulByUser(
+    docId: string,
+    userName: string,
+  ): Promise<void> {
+    const dbRef = this.db
+      .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
+      .doc(docId)
+
+    const researchData = await toJS(dbRef.get('server'))
+    if (!researchData) return
+
+    const votedUsefulBy = !(researchData?.votedUsefulBy || []).includes(
+      userName,
+    )
+      ? [userName].concat(researchData?.votedUsefulBy || [])
+      : (researchData?.votedUsefulBy || []).filter(
+          (uName) => uName !== userName,
+        )
+
+    const votedUsefulUpdate = {
+      _id: docId,
+      votedUsefulBy: votedUsefulBy,
     }
+
+    await dbRef.update(votedUsefulUpdate)
+
+    const updatedItem = (await dbRef.get()) as IResearch.ItemDB
+    runInAction(() => {
+      this.activeResearchItem = updatedItem
+      if ((updatedItem.votedUsefulBy || []).includes(userName)) {
+        this.userNotificationsStore.triggerNotification(
+          'research_useful',
+          this.activeResearchItem._createdBy,
+          '/research/' + this.activeResearchItem.slug,
+        )
+        for (
+          let i = 0;
+          i < (this.activeResearchItem.collaborators || []).length;
+          i++
+        ) {
+          this.userNotificationsStore.triggerNotification(
+            'research_useful',
+            this.activeResearchItem.collaborators[i],
+            '/research/' + this.activeResearchItem.slug,
+          )
+        }
+      }
+    })
+
+    return
   }
 
   public async incrementViewCount(id: string) {
@@ -665,18 +695,26 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
+  @computed
   get userVotedActiveResearchUseful(): boolean {
-    const researchId = this.activeResearchItem!._id
-    const userVotedResearch = this.activeUser?.votedUsefulResearch || {}
-    return userVotedResearch[researchId] ? true : false
+    if (!this.activeUser) return false
+    return (this.activeResearchItem?.votedUsefulBy || []).includes(
+      this.activeUser.userName,
+    )
   }
 
+  @computed
   get userHasSubscribed(): boolean {
     return (
       this.activeResearchItem?.subscribers?.includes(
         this.activeUser?.userName ?? '',
       ) ?? false
     )
+  }
+
+  @computed
+  get votedUsefulCount(): number {
+    return (this.activeResearchItem?.votedUsefulBy || []).length
   }
 
   /**

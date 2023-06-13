@@ -6,10 +6,11 @@ import { Button, ExternalLink, Icon, Tooltip } from '../'
 
 export interface IProps {
   hasUserVotedUseful: boolean
-  votedUsefulCount: number
+  votedUsefulCount: number | undefined
   isLoggedIn: boolean
   onUsefulClick: () => void
   sx?: ThemeUIStyleObject
+  disabled?: boolean
 }
 
 export const UsefulStatsButton = (props: IProps) => {
@@ -17,23 +18,29 @@ export const UsefulStatsButton = (props: IProps) => {
 
   const [votedUsefulCount, setVotedUsefulCount] = useState<number>()
   const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>()
+  const [disabled, setDisabled] = useState<boolean>()
 
   useEffect(
     () => setHasUserVotedUseful(props.hasUserVotedUseful),
     [props.hasUserVotedUseful],
   )
   useEffect(
-    () => setVotedUsefulCount(props.votedUsefulCount),
+    () => setVotedUsefulCount(props.votedUsefulCount || 0),
     [props.votedUsefulCount],
   )
+  useEffect(() => setDisabled(props.disabled), [props.disabled])
+
   const handleUsefulClick = () => {
+    setDisabled(true)
     props.onUsefulClick()
+    setDisabled(false)
   }
 
   return props.isLoggedIn ? (
     <Button
       data-cy="vote-useful"
       onClick={handleUsefulClick}
+      disabled={disabled}
       sx={{
         fontSize: 2,
         backgroundColor: theme.colors.white,
@@ -52,7 +59,7 @@ export const UsefulStatsButton = (props: IProps) => {
           display: 'inline-block',
         }}
       >
-        {votedUsefulCount ? votedUsefulCount : 0}
+        {votedUsefulCount}
       </Text>
       <Text
         pl={2}
@@ -96,7 +103,7 @@ export const UsefulStatsButton = (props: IProps) => {
               display: 'inline-block',
             }}
           >
-            {votedUsefulCount ? votedUsefulCount : 0}
+            {votedUsefulCount}
           </Text>
           <Text
             pl={2}

@@ -12,7 +12,7 @@ import { Card, Flex, Grid, Heading, Text } from 'theme-ui'
 
 interface IProps {
   item: IResearch.ItemDB & {
-    votedUsefulCount: number | string
+    votedUsefulCount: number
   }
 }
 
@@ -39,6 +39,8 @@ const MobileItemInfo = styled.div`
 
 const ResearchListItem = ({ item }: IProps) => {
   const collaborators = item['collaborators'] || []
+  const usefulDisplayCount =
+    item.votedUsefulCount > 0 ? item.votedUsefulCount : '-'
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -123,7 +125,7 @@ const ResearchListItem = ({ item }: IProps) => {
                       fontSize: ['12px', '16px', '16px'],
                     }}
                   >
-                    {item.votedUsefulCount}
+                    {usefulDisplayCount}
                     <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text
@@ -154,7 +156,7 @@ const ResearchListItem = ({ item }: IProps) => {
             {/* Hide these on mobile, show on tablet & above. */}
             <DesktopItemInfo>
               <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
-                {item.votedUsefulCount}
+                {usefulDisplayCount}
               </Text>
               <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
                 {calculateTotalComments(item)}

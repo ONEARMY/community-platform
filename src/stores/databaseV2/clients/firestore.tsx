@@ -20,6 +20,11 @@ export class FirestoreClient implements AbstractDatabaseClient {
     return db.doc(`${endpoint}/${doc._id}`).set(doc)
   }
 
+  async updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
+    const { _id, ...updateValues } = doc
+    return db.doc(`${endpoint}/${_id}`).update(updateValues)
+  }
+
   async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     const batch = db.batch()
     docs.forEach((d) => {
@@ -39,6 +44,7 @@ export class FirestoreClient implements AbstractDatabaseClient {
     const data = await ref.get()
     return data.empty ? [] : data.docs.map((doc) => doc.data() as T)
   }
+
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
     return db.collection(endpoint).doc(docId).delete()
   }

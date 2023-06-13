@@ -95,14 +95,12 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               Back
             </Button>
           </Link>
-          {props.votedUsefulCount !== undefined && (
-            <UsefulStatsButton
-              votedUsefulCount={props.votedUsefulCount}
-              hasUserVotedUseful={props.hasUserVotedUseful}
-              isLoggedIn={props.loggedInUser ? true : false}
-              onUsefulClick={props.onUsefulClick}
-            />
-          )}
+          <UsefulStatsButton
+            votedUsefulCount={props.votedUsefulCount}
+            hasUserVotedUseful={props.hasUserVotedUseful}
+            isLoggedIn={props.loggedInUser ? true : false}
+            onUsefulClick={props.onUsefulClick}
+          />
           <FollowButton
             hasUserSubscribed={props.hasUserSubscribed}
             isLoggedIn={props.loggedInUser ? true : false}

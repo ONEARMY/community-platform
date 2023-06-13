@@ -44,11 +44,9 @@ export const UserPage = observer((props: IProps) => {
 
   // Ensure aggregations up-to-date when using any child pages and unsubscribe when leaving
   useEffect(() => {
-    aggregationsStore.updateAggregation('users_votedUsefulHowtos')
-    aggregationsStore.updateAggregation('users_votedUsefulResearch')
+    aggregationsStore.updateAggregation('users_totalUseful')
     return () => {
-      aggregationsStore.stopAggregationUpdates('users_votedUsefulHowtos')
-      aggregationsStore.stopAggregationUpdates('users_votedUsefulResearch')
+      aggregationsStore.stopAggregationUpdates('users_totalUseful')
     }
   })
 

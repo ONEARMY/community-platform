@@ -6,8 +6,10 @@ import type { DatabaseV2 } from '../databaseV2'
 /**
  * List of existing aggregation docs
  * TODO - refactor to shared list (search targetDocId)
+ * Values below will require updating https://github.com/ONEARMY/community-platform/issues/2407
  */
 const AGGREGATION_DOC_IDS = [
+  'users_totalUseful',
   'users_votedUsefulHowtos',
   'users_votedUsefulResearch',
   'users_verified',
@@ -44,9 +46,13 @@ export class AggregationsStore {
     makeAutoObservable(this, { aggregations: observable })
   }
 
-  @action
-  private updateAggregationValue(aggregationId: IAggregationId, value: any) {
-    this.aggregations[aggregationId] = value
+  /**
+   * fetch specific value for aggregation given id and aggregationid
+   */
+  public getAggregationValue(aggregationId: IAggregationId, id: string) {
+    const aggregation = this.aggregations[aggregationId]
+    if (!aggregation) return null
+    return aggregation[id] || null
   }
 
   /**
@@ -85,6 +91,11 @@ export class AggregationsStore {
   /** Stop subscribing to updates for specific aggregation */
   public stopAggregationUpdates(aggregationId: IAggregationId) {
     this.setSubscriptionTimeout(aggregationId, 0)
+  }
+
+  @action
+  private updateAggregationValue(aggregationId: IAggregationId, value: any) {
+    this.aggregations[aggregationId] = value
   }
 
   /**

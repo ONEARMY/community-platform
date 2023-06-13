@@ -32,13 +32,6 @@ exports.userStatsCountEvents = functions.firestore
     await updateContentCounterStats(change, 'userCreatedEvents')
   })
 
-exports.howtoStatsCountVotes = functions.firestore
-  .document(`${DB_ENDPOINTS.users}/{id}`)
-  .onUpdate(async (change, context) => {
-    // DEPRECATED - 2022-02-19
-    // replaced with aggregations, should be removed in future update (breaking change)
-  })
-
 /********************************************************************
  * Helper functions
  ********************************************************************/

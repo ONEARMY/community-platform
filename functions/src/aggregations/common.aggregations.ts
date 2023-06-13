@@ -121,7 +121,7 @@ export class AggregationHandler {
 
     // Seed total useful aggregation
     if (this.aggregation.targetDocId === 'users_totalUseful') {
-      const users = await db.collection(DB_ENDPOINTS['users']).get()
+      const users = await db.collection(DB_ENDPOINTS.users).get()
 
       const userIds = []
       users.forEach((user) => userIds.push(user.id))
@@ -198,7 +198,7 @@ export class AggregationHandler {
     const userTotalUseful = {}
 
     const howtos = await db
-      .collection(DB_ENDPOINTS['howtos'])
+      .collection(DB_ENDPOINTS.howtos)
       .where('_createdBy', '==', id)
       .where('votedUsefulBy', '!=', [])
       .get()
@@ -216,7 +216,7 @@ export class AggregationHandler {
 
     // get research useful if created by user
     const createdResearch = await db
-      .collection(DB_ENDPOINTS['research'])
+      .collection(DB_ENDPOINTS.research)
       .where('_createdBy', '==', id)
       .where('votedUsefulBy', '!=', [])
       .get()
@@ -230,7 +230,7 @@ export class AggregationHandler {
 
     // get research useful if user is a collaborator
     const collaboratedResearch = await db
-      .collection(DB_ENDPOINTS['research'])
+      .collection(DB_ENDPOINTS.research)
       .where('collaborators', 'array-contains', id)
       .where('votedUsefulBy', '!=', [])
       .get()

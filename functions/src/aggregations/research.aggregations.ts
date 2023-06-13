@@ -22,8 +22,10 @@ const researchAggregations: IResearchAggregation[] = [
       )
 
       const userIds: string[] = []
-      if (before.data().collaborators) userIds.push(before.data().collaborators)
-      if (after.data().collaborators) userIds.push(after.data().collaborators)
+      if (before.data().collaborators)
+        userIds.push(...before.data().collaborators)
+      if (after.data().collaborators)
+        userIds.push(...after.data().collaborators)
 
       if (Object.entries(changedVotes))
         userIds.push(dbChange.after.data()._createdBy)

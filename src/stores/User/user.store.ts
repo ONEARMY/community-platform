@@ -276,9 +276,8 @@ export class UserStore extends ModuleStore {
       reauthPw,
     )
     await authUser.reauthenticateWithCredential(credential)
-    const user = this.user as IUser
-    await this.db.collection(COLLECTION_NAME).doc(user.userName).delete()
     await authUser.delete()
+
     // TODO - delete user avatar
     // TODO - show deleted notification
     // TODO show notification if invalid credential

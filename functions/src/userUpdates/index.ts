@@ -21,7 +21,19 @@ export const handleUserUpdates = functions.firestore
   .onUpdate(async (change, context) => {
     await backupUser(change)
     await processHowToUpdates(change)
+    // await deleteUser(change)
   })
+
+export const deleteUserRecord = functions.auth.user().onDelete(async (user) => {
+  const userRecords = await db
+    .collection(DB_ENDPOINTS.users)
+    .where('_authID', '==', user.uid)
+    .get()
+
+  userRecords.forEach(async (record) => {
+    await db.collection(DB_ENDPOINTS.users).doc(record.id).delete()
+  })
+})
 
 async function processHowToUpdates(change: IDBDocChange) {
   const info = (change.after.exists ? change.after.data() : {}) as IUserDB

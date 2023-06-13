@@ -15,6 +15,7 @@ exports.stats = require('./stats')
 exports.aggregations = require('./aggregations')
 
 exports.userUpdates = UserUpdates.handleUserUpdates
+exports.deleteUserRecord = UserUpdates.deleteUserRecord
 // CC Note, 2020-04-40
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail

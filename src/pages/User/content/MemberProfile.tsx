@@ -91,6 +91,11 @@ export const MemberProfile = ({ user }: IProps) => {
             eventCount={
               user.stats ? Object.keys(user.stats!.userCreatedEvents).length : 0
             }
+            researchCount={
+              user.stats
+                ? Object.keys(user.stats!.userCreatedResearch).length
+                : 0
+            }
             usefulCount={stats.totalUseful}
           />
         </Box>

@@ -336,6 +336,11 @@ export const SpaceProfile = ({ user }: IProps) => {
                     : 0
                 }
                 usefulCount={stats.totalUseful}
+                researchCount={
+                  user.stats
+                    ? Object.keys(user.stats!.userCreatedResearch).length
+                    : 0
+                }
               />
             </Box>
           </MobileBadge>

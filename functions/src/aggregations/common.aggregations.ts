@@ -169,9 +169,11 @@ export class AggregationHandler {
 
       logger.info(`${targetAggregation} Creating update entries`)
       for (const u in userUseful) {
+        const entry = {}
+        entry[u] = userUseful[u]
         updateEntries.push({
           ref: this.targetDocRef,
-          entry: { u: userUseful[u] },
+          entry: entry,
         })
       }
     }

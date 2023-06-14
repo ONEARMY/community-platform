@@ -118,8 +118,6 @@ export class HowtoList extends React.Component<any, IState> {
 
     const theme = this.props?.themeStore?.currentTheme
     const { allTagsByKey } = this.injected.tagsStore
-    const { users_votedUsefulHowtos } =
-      this.injected.aggregationsStore.aggregations
 
     const howtoItems = filteredHowtos.map((howto: IHowto) => ({
       ...howto,
@@ -205,7 +203,13 @@ export class HowtoList extends React.Component<any, IState> {
             mb={['10px', '10px', 0]}
             sx={{ width: ['100%', '100%', '20%'] }}
           >
-            <SortSelect usefulCounts={users_votedUsefulHowtos || {}} />
+            <SortSelect
+              usefulCounts={howtoItems.map((item) => {
+                const i = {}
+                i[item._id] = (item.votedUsefulBy || []).length
+                return i
+              })}
+            />
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
             <Input
@@ -269,7 +273,7 @@ export class HowtoList extends React.Component<any, IState> {
               renderItem={(howto: any) => (
                 <HowToCard
                   howto={howto}
-                  votedUsefulCount={users_votedUsefulHowtos?.[howto._id]}
+                  votedUsefulCount={(howto.votedUsefulBy || []).length}
                 />
               )}
             />

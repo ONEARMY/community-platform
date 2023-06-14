@@ -6,6 +6,8 @@ export interface AbstractDatabaseClient {
 
   setDoc(endpoint: string, doc: any): Promise<void>
 
+  updateDoc(endpoint: string, doc: any): Promise<void>
+
   setBulkDocs(endpoint: string, docs: any): Promise<void>
 
   getCollection<T>(endpoint: string): Promise<(T & DBDoc)[]>

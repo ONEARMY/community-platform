@@ -1,14 +1,19 @@
-import type { ISelectedTags } from './tags.model'
-import type { DBDoc, IModerable, UserMention } from './common.models'
-import type { IConvertedFileMeta } from '../types'
 import type { IUploadedFileMeta } from '../stores/storage'
-import type { ICategory } from './categories.model'
+import type { IConvertedFileMeta } from '../types'
 import type { IComment } from './'
+import type { ICategory } from './categories.model'
+import type {
+  DBDoc,
+  IModerable,
+  ISharedFeatures,
+  UserMention,
+} from './common.models'
+import type { ISelectedTags } from './tags.model'
 
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields
 // Additionally convert from local filemeta to uploaded filemeta
-export interface IHowto extends IHowtoFormInput, IModerable {
+export interface IHowto extends IHowtoFormInput, IModerable, ISharedFeatures {
   _createdBy: string
   cover_image: IUploadedFileMeta
   fileLink?: string
@@ -17,9 +22,7 @@ export interface IHowto extends IHowtoFormInput, IModerable {
   // Comments were added in V2, old howto's may not have the property
   comments?: IComment[]
   total_downloads?: number
-  total_views?: number
   mentions: UserMention[]
-  previousSlugs?: string[]
 }
 
 /**
@@ -57,6 +60,6 @@ export interface IHowtoFormInput extends IModerable {
   category?: ICategory
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)
   tags?: ISelectedTags
-  // Added to be able to recover on eddit by admin
+  // Added to be able to recover on edit by admin
   creatorCountry?: string
 }

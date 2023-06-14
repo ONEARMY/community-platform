@@ -10,6 +10,7 @@ import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import { trackEvent } from 'src/common/Analytics'
+import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IComment, IResearch, UserComment, IUser } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
@@ -18,11 +19,13 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { isAllowToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
-import { useCommonStores } from '../../../index'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { researchCommentUrlPattern } from './helper'
-import { useContributorsData } from 'src/common/hooks/contributorsData'
+
+/* Will be deprecated as part of https://github.com/ONEARMY/community-platform/issues/2407 */
+import { useCommonStores } from '../../../index'
+/* End of deprecation */
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -44,7 +47,10 @@ const areCommentVisible = (updateIndex) => {
 
 const ResearchArticle = observer((props: IProps) => {
   const researchStore = useResearchStore()
-  const { userStore, aggregationsStore } = useCommonStores().stores
+
+  /* Will be deprecated as part of https://github.com/ONEARMY/community-platform/issues/2407 */
+  const { userStore } = useCommonStores().stores
+  /* End of deprecation */
 
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -58,21 +64,23 @@ const ResearchArticle = observer((props: IProps) => {
 
   const onUsefulClick = async (
     researchId: string,
-    researchAuthor: string,
     researchSlug: string,
+    eventCategory = 'Research',
   ) => {
+    if (!loggedInUser?.userName) {
+      return null
+    }
+
+    /* Will be deprecated as part of https://github.com/ONEARMY/community-platform/issues/2407 */
+    userStore.updateUsefulResearch(researchId)
+    /* End of deprecation */
+
     // Trigger update without waiting
-    userStore.updateUsefulResearch(researchId, researchAuthor, researchSlug)
-    // Make an optimistic update of current aggregation to update UI
-    const votedUsefulCount =
-      aggregationsStore.aggregations.users_votedUsefulResearch![researchId] || 0
+    researchStore.toggleUsefulByUser(researchId, loggedInUser?.userName)
     const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
-    aggregationsStore.overrideAggregationValue('users_votedUsefulResearch', {
-      [researchId]: votedUsefulCount + (hasUserVotedUseful ? -1 : 1),
-    })
     trackEvent({
-      category: 'Research',
-      action: hasUserVotedUseful ? 'UsefulMarkRemoved' : 'MarkedUseful',
+      category: eventCategory,
+      action: hasUserVotedUseful ? 'ResearchUseful' : 'ResearchUsefulRemoved',
       label: researchSlug,
     })
   }
@@ -128,11 +136,6 @@ const ResearchArticle = observer((props: IProps) => {
   const contributors = useContributorsData(collaborators || [])
 
   if (item) {
-    const { aggregations } = aggregationsStore
-    // Distinguish between undefined aggregations (not loaded) and undefined aggregation (no votes)
-    const votedUsefulCount = aggregations.users_votedUsefulResearch
-      ? aggregations.users_votedUsefulResearch[item._id] || 0
-      : undefined
     const isEditable =
       !!researchStore.activeUser &&
       isAllowToEditContent(item, researchStore.activeUser)
@@ -174,7 +177,7 @@ const ResearchArticle = observer((props: IProps) => {
         <ResearchDescription
           research={item}
           key={item._id}
-          votedUsefulCount={votedUsefulCount}
+          votedUsefulCount={researchStore.votedUsefulCount}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           needsModeration={researchStore.needsModeration(item)}
@@ -182,7 +185,7 @@ const ResearchArticle = observer((props: IProps) => {
           hasUserSubscribed={researchStore.userHasSubscribed}
           moderateResearch={moderateResearch}
           onUsefulClick={() =>
-            onUsefulClick(item._id, item._createdBy, item.slug)
+            onUsefulClick(item._id, item.slug, 'ResearchDescription')
           }
           onFollowClick={() => {
             onFollowClick(item.slug)
@@ -220,15 +223,10 @@ const ResearchArticle = observer((props: IProps) => {
           >
             <UsefulStatsButton
               isLoggedIn={!!loggedInUser}
-              votedUsefulCount={votedUsefulCount}
+              votedUsefulCount={researchStore.votedUsefulCount}
               hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
               onUsefulClick={() => {
-                trackEvent({
-                  category: 'ArticleCallToAction',
-                  action: 'ResearchUseful',
-                  label: item.slug,
-                })
-                onUsefulClick(item._id, item._createdBy, item.slug)
+                onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
               }}
             />
             <FollowButton

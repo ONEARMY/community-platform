@@ -102,7 +102,7 @@ const AdminNotifications = observer(() => {
 
   return (
     <>
-      <h2>Admin Notifictions</h2>
+      <h2>Admin Notifications</h2>
       <h4>Pending Emails</h4>
       <Button onClick={triggerEmails}>Trigger Test Emails</Button>
       {triggerEmailState && <p>{triggerEmailState}</p>}

@@ -67,6 +67,20 @@ export class DocReference<T> {
   }
 
   /**
+   * Update data to the document. Will automatically populate with metadata including
+   * `_created`, `_id`, `_modified` and `_deleted` fields
+   * @param data - specified data in any format.
+   * If contains metadata fields (e.g. `_id`)
+   * then this will be used instead of generated id
+   */
+  async update(data: T, options?: { keep_modified_timestamp: boolean }) {
+    const { serverDB, cacheDB } = this.clients
+    const dbDoc: DBDoc = this._setDocMeta(data, options)
+    await serverDB.updateDoc(this.endpoint, dbDoc)
+    await cacheDB.updateDoc(this.endpoint, dbDoc)
+  }
+
+  /**
    * Documents are artificially deleted by moving to an `_archived` collection, with separate entries
    * for a metadata summary and the raw doc. This is required so that other users can sync deleted docs
    * and delete from their own caches accordingly.

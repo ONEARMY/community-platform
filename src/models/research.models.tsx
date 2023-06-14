@@ -1,6 +1,13 @@
-import type { IConvertedFileMeta } from '../types'
-import type { DBDoc, IComment, IModerable, ISelectedTags, UserMention } from '.'
+import type {
+  DBDoc,
+  IComment,
+  IModerable,
+  ISelectedTags,
+  ISharedFeatures,
+  UserMention,
+} from '.'
 import type { IUploadedFileMeta } from '../stores/storage'
+import type { IConvertedFileMeta } from '../types'
 import type { IResearchCategory } from './researchCategories.model'
 
 /**
@@ -8,23 +15,19 @@ import type { IResearchCategory } from './researchCategories.model'
  */
 export type IResearchDB = DBDoc & IResearch.ItemDB
 
-export type IResearchStats = {
-  votedUsefulCount: number
-}
-
+/** All typings related to the Research Module can be found here */
 type UserIdList = string[]
 
-/** All typings related to the Research Module can be found here */
 export namespace IResearch {
   /** The main research item, as created by a user */
   export type Item = {
     updates: Update[]
     mentions?: UserMention[]
     _createdBy: string
-    total_views?: number
     collaborators: string[]
     subscribers?: UserIdList
-  } & Omit<FormInput, 'collaborators'>
+  } & Omit<FormInput, 'collaborators'> &
+    ISharedFeatures
 
   /** A research item update */
   export interface Update {
@@ -33,7 +36,6 @@ export namespace IResearch {
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     videoUrl?: string
     comments?: IComment[]
-    total_views?: number
     collaborators?: string[]
     status: 'draft' | 'published'
   }

@@ -26,7 +26,7 @@ jest.mock('src/index', () => ({
       userStore: {},
       aggregationsStore: {
         aggregations: {
-          users_votedUsefulHowtos: {
+          users_totalUseful: {
             HowtoAuthor: 0,
           },
           users_verified: {

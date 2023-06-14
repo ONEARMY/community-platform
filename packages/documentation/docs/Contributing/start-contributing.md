@@ -40,12 +40,15 @@ By default we consider everyone that submits a PR a contributor. People that con
 
 #### Review complex PRs & Releasing Changes
 
-1. Merge the PR
-2. A deployment will be triggered to the development environments.
-3. Verify changes in the development environment
-4. An automated Release PR will be generated
-5. Approve and merge the Release PR
-6. A deployment will be triggered to production environments.
+The workflow for deploying code changes from development to production environments. It ensures proper review, testing, and versioning before reaching production sites.
+
+The steps are as follows:
+
+- Pull Request (PR) is merged into the `master` branch.
+- `master` branch triggers an automated build and deployment to development environments.
+- A Release PR is automatically raised to merge `master` into the `production` branch.
+- Manual approval is required by a maintainer, then merge Release PR into `production`.
+- After merge, an automated build, versioning, and deployment to production sites.
 
 # Rewards:
 

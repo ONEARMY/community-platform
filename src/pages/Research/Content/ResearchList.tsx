@@ -7,7 +7,6 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { Box, Flex, Grid, Heading, Text } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
 import type { RouteComponentProps } from 'react-router'
-import { useCommonStores } from 'src'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
 // Update query params for categories
@@ -36,8 +35,6 @@ const updateQueryParams = (
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
-  const { aggregationsStore } = useCommonStores().stores
-  const { aggregations } = aggregationsStore
   const theme = useTheme()
   const history = useHistory()
 
@@ -133,10 +130,7 @@ const ResearchList = observer(() => {
         </Flex>
       </Grid>
       {filteredResearches.map((item) => {
-        const votedUsefulCount = aggregations.users_votedUsefulResearch
-          ? aggregations.users_votedUsefulResearch[item._id] || '-'
-          : '-'
-
+        const votedUsefulCount = (item.votedUsefulBy || []).length
         return (
           <ResearchListItem
             key={item._id}

@@ -13,7 +13,7 @@ export class DocReference<T> {
 
   /**
    * Get the target document data. Returns `undefined` if doc does not exist
-   * @param source - Specify whether to fectch from cache or server.
+   * @param source - Specify whether to fetch from cache or server.
    * By default will first check cache, and if doesn't exist will fetch from server
    * This is usually sufficient as the cache is updated when full collection sync'd
    */
@@ -67,15 +67,12 @@ export class DocReference<T> {
   }
 
   /**
-   * Update data to the document. Will automatically populate with metadata including
-   * `_created`, `_id`, `_modified` and `_deleted` fields
-   * @param data - specified data in any format.
-   * If contains metadata fields (e.g. `_id`)
-   * then this will be used instead of generated id
+   * Update data to the document. Will automatically populate with _modified timestamp
+   * @param data - specified update data in any format.
    */
   async update(data: T, options?: { keep_modified_timestamp: boolean }) {
     const { serverDB, cacheDB } = this.clients
-    const dbDoc: DBDoc = this._setDocMeta(data, options)
+    const dbDoc: DBDoc = this._setDocMeta(data, options, true)
     await serverDB.updateDoc(this.endpoint, dbDoc)
     await cacheDB.updateDoc(this.endpoint, dbDoc)
   }
@@ -104,20 +101,30 @@ export class DocReference<T> {
     return this._setDocMeta(data)
   }
 
-  private _setDocMeta(data: any = {}, options: any = {}): DBDoc {
+  private _setDocMeta(
+    data: any = {},
+    options: any = {},
+    update = false,
+  ): DBDoc {
     const d = data
     const o = options
     const modifiedTimestamp = o.keep_modified_timestamp
       ? d._modified
       : new Date().toISOString()
 
-    return {
+    const meta = {
       ...d,
       _created: d._created ? d._created : new Date().toISOString(),
       _deleted: d._deleted ? d._deleted : false,
       _id: this.id,
       _modified: modifiedTimestamp,
     }
+
+    if (update) {
+      delete meta._created
+      delete meta._deleted
+    }
+    return meta
   }
 
   private _generateDocID() {

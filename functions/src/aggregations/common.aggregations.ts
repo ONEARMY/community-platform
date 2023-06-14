@@ -116,23 +116,63 @@ export class AggregationHandler {
    * watched field and batch update all aggregation entries
    */
   private async seed() {
-    logger.info(`[Aggregation Seed] ${this.sourceCollectionRef.id}`)
+    const seedStart = Date.now()
+    const targetAggregation = `[${this.aggregation.targetDocId} Seed]`
     const updateEntries: { ref: IDocumentRef; entry: any }[] = []
+
+    logger.info(`${targetAggregation} Starting`)
 
     // Seed total useful aggregation
     if (this.aggregation.targetDocId === 'users_totalUseful') {
-      const users = await db.collection(DB_ENDPOINTS.users).get()
+      const howtos = await db
+        .collection(DB_ENDPOINTS.howtos)
+        .where('votedUsefulBy', '!=', [])
+        .get()
 
-      const userIds = []
-      users.forEach((user) => userIds.push(user.id))
-      for (let i = 0; i < userIds.length; i++) {
-        const count = await this.calculateTotalUseful(userIds[i])
-        if (count[userIds[i]] > 0) {
-          updateEntries.push({
-            ref: this.targetDocRef,
-            entry: count,
-          })
+      logger.info(`${targetAggregation} Howtos - ${howtos.docs.length}`)
+      const userUseful = {}
+      if (!howtos.empty) {
+        for (let i = 0; i < howtos.docs.length; i++) {
+          const data = howtos.docs[i].data()
+          userUseful[data._createdBy] =
+            (userUseful[data._createdBy] || 0) + data.votedUsefulBy.length
         }
+      }
+
+      const research = await db
+        .collection(DB_ENDPOINTS.research)
+        .where('votedUsefulBy', '!=', [])
+        .get()
+
+      logger.info(
+        `${targetAggregation} Research articles - ${research.docs.length}`,
+      )
+
+      if (!research.empty) {
+        for (let i = 0; i < research.docs.length; i++) {
+          const data = research.docs[i].data()
+          const usefulCount = data.votedUsefulBy.length
+          userUseful[data._createdBy] =
+            (userUseful[data._createdBy] || 0) + usefulCount
+
+          if (data.collaborators) {
+            for (let c = 0; c < data.collaborators.length; c++) {
+              const collaborator = data.collaborators[c]
+              // Check that created by user also not collaborator so that they don't get double useful
+              if (collaborator == data._createdBy) continue
+              userUseful[collaborator] =
+                (userUseful[collaborator] || 0) + usefulCount
+            }
+          }
+        }
+      }
+
+      logger.info(`${targetAggregation} Creating update entries`)
+      for (const u in userUseful) {
+        updateEntries.push({
+          ref: this.targetDocRef,
+          entry: { u: userUseful[u] },
+        })
       }
     }
     // Seed other aggregation types
@@ -159,6 +199,8 @@ export class AggregationHandler {
     // firebase supports up to 500 requests every second
     // as each update uses 2 ops (set + update) run in batches of 250
 
+    logger.info(`${targetAggregation} ${updateEntries.length} update entries`)
+    logger.info(`${targetAggregation} Beginning batch commits`)
     const chunks = splitArrayToChunks(updateEntries, 250)
     for (const [index, chunk] of chunks.entries()) {
       const batch = db.batch()
@@ -169,6 +211,10 @@ export class AggregationHandler {
       await batch.commit()
       await _sleep(1000)
     }
+
+    logger.info(
+      `${targetAggregation} Elapsed time - ${Date.now() - seedStart} ms`,
+    )
   }
 
   private async calculateAggregation() {

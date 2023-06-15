@@ -104,7 +104,7 @@ export class DocReference<T> {
   private _setDocMeta(
     data: any = {},
     options: any = {},
-    update = false,
+    isDocUpdate = false,
   ): DBDoc {
     const d = data
     const o = options
@@ -120,7 +120,7 @@ export class DocReference<T> {
       _modified: modifiedTimestamp,
     }
 
-    if (update) {
+    if (isDocUpdate) {
       delete meta._created
       delete meta._deleted
     }

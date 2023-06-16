@@ -118,7 +118,7 @@ export class EventStore extends ModuleStore {
         moderation: 'awaiting-moderation',
       }
       const doc = this.db.collection('events').doc()
-      return doc.set(event)
+      return doc.set(event, { set_last_edit_timestamp: true })
     } catch (error) {
       throw Error
     }

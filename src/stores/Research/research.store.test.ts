@@ -189,11 +189,9 @@ describe('research.store', () => {
         await store.addComment('fish', researchItem.updates[0])
 
         // Assert
-        expect(setFn).toHaveBeenCalledWith(
-          expect.objectContaining({
-            description: '@@{userId:username}',
-          }),
-        )
+        expect(setFn).toHaveBeenCalledTimes(1)
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(newResearchItem.description).toBe('@@{userId:username}')
       })
 
       it('preserves @mention within an Update description', async () => {

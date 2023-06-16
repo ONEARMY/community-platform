@@ -1,6 +1,11 @@
 import type { DBClients, DBDoc } from './types'
 import { Observable } from 'rxjs'
 
+interface DocMetaOptions {
+  keep_modified_timestamp?: boolean
+  set_last_edit_timestamp?: boolean
+}
+
 export class DocReference<T> {
   public id: string
   constructor(
@@ -59,7 +64,7 @@ export class DocReference<T> {
    * If contains metadata fields (e.g. `_id`)
    * then this will be used instead of generated id
    */
-  async set(data: T, options?: { keep_modified_timestamp: boolean }) {
+  async set(data: T, options?: DocMetaOptions) {
     const { serverDB, cacheDB } = this.clients
     const dbDoc: DBDoc = this._setDocMeta(data, options)
     await serverDB.setDoc(this.endpoint, dbDoc)
@@ -70,7 +75,7 @@ export class DocReference<T> {
    * Update data to the document. Will automatically populate with _modified timestamp
    * @param data - specified update data in any format.
    */
-  async update(data: T, options?: { keep_modified_timestamp: boolean }) {
+  async update(data: T, options?: DocMetaOptions) {
     const { serverDB, cacheDB } = this.clients
     const dbDoc: DBDoc = this._setDocMeta(data, options, true)
     await serverDB.updateDoc(this.endpoint, dbDoc)
@@ -120,10 +125,14 @@ export class DocReference<T> {
       _modified: modifiedTimestamp,
     }
 
+    if (o.set_last_edit_timestamp)
+      meta._lastEditTimestamp = new Date().toISOString()
+
     if (isDocUpdate) {
       delete meta._created
       delete meta._deleted
     }
+
     return meta
   }
 

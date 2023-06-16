@@ -11,6 +11,7 @@ import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 
 import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
+import UserDocumentItem from './UserDocumentItem'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -30,6 +31,7 @@ import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { userStats } from 'src/common/hooks/userStats'
+import type { UserCreatedDocs } from '.'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -37,6 +39,7 @@ interface IBackgroundImageProps {
 
 interface IProps {
   user: IUserPP
+  docs: UserCreatedDocs | undefined
 }
 
 const SliderImage = (props: IBackgroundImageProps) => (
@@ -181,7 +184,7 @@ const MobileBadge = ({ children }) => (
   </Flex>
 )
 
-export const SpaceProfile = ({ user }: IProps) => {
+export const SpaceProfile = ({ user, docs }: IProps) => {
   let coverImage = [
     <SliderImage
       key="default-image"
@@ -303,16 +306,8 @@ export const SpaceProfile = ({ user }: IProps) => {
                 country={user.location?.country}
                 isVerified={stats.verified}
                 isSupporter={!!user.badges?.supporter}
-                howtoCount={
-                  user.stats
-                    ? Object.keys(user.stats!.userCreatedHowtos).length
-                    : 0
-                }
-                eventCount={
-                  user.stats
-                    ? Object.keys(user.stats!.userCreatedEvents).length
-                    : 0
-                }
+                howtoCount={docs?.howtos.length || 0}
+                eventCount={docs?.events.length || 0}
                 usefulCount={stats.totalUseful}
                 researchCount={
                   user.stats
@@ -324,6 +319,45 @@ export const SpaceProfile = ({ user }: IProps) => {
           </MobileBadge>
         </Box>
       </Flex>
+      {(docs?.howtos || docs?.research) && (
+        <Flex pt={2} sx={{ justifyContent: 'space-between' }}>
+          {docs?.howtos.length > 0 && (
+            <Flex
+              mt={2}
+              mb={6}
+              mx={2}
+              px={2}
+              sx={{ flexDirection: 'column', flexBasis: '50%' }}
+            >
+              <Heading mb={1}>Created How-To's</Heading>
+              {docs?.howtos.map((item) => {
+                return (
+                  <UserDocumentItem key={item._id} type="how-to" item={item} />
+                )
+              })}
+            </Flex>
+          )}
+          {docs?.research.length > 0 && (
+            <Flex
+              my={2}
+              mx={2}
+              px={2}
+              sx={{ flexDirection: 'column', flexBasis: '50%' }}
+            >
+              <Heading mb={1}>Created Research</Heading>
+              {docs?.research.map((item) => {
+                return (
+                  <UserDocumentItem
+                    key={item._id}
+                    type="research"
+                    item={item}
+                  />
+                )
+              })}
+            </Flex>
+          )}
+        </Flex>
+      )}
     </Container>
   )
 }

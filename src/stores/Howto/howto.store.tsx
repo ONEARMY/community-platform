@@ -334,7 +334,10 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  private async updateHowtoItem(howToItem: IHowto) {
+  private async updateHowtoItem(
+    howToItem: IHowto,
+    setLastEditTimestamp = false,
+  ) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToItem._id)
 
     logger.debug('updateHowtoItem', {
@@ -393,13 +396,16 @@ export class HowtoStore extends ModuleStore {
       howToItem.previousSlugs.push(howToItem.slug)
     }
 
-    await dbRef.set({
-      ...howToItem,
-      description,
-      comments,
-      mentions,
-      steps,
-    })
+    await dbRef.set(
+      {
+        ...howToItem,
+        description,
+        comments,
+        mentions,
+        steps,
+      },
+      { set_last_edit_timestamp: setLastEditTimestamp },
+    )
 
     // After successfully updating the database document queue up all the notifications
     // Should a notification be issued?
@@ -579,7 +585,7 @@ export class HowtoStore extends ModuleStore {
 
       logger.debug('populating database', howTo)
       // set the database document
-      this.activeHowto = await this.updateHowtoItem(howTo)
+      this.activeHowto = await this.updateHowtoItem(howTo, true)
       this.updateUploadStatus('Database')
       logger.debug('post added')
       // complete

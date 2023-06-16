@@ -32,6 +32,7 @@ export interface DBDoc {
   _created: ISODateString
   _modified: ISODateString
   _deleted: boolean
+  _lastEditTimestamp: ISODateString
 }
 
 export interface DBQueryOptions {

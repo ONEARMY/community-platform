@@ -15,6 +15,7 @@ export const FactoryResearchItemUpdate = (
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
+  _lastEditTimestamp: faker.date.past().toString(),
   status: faker.helpers.arrayElement(['draft', 'published']),
   ...researchItemUpdateOverloads,
 })
@@ -27,6 +28,7 @@ export const FactoryResearchItem = (
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
+  _lastEditTimestamp: faker.date.past().toString(),
   description: faker.lorem.paragraphs(),
   title: faker.lorem.words(),
   slug: faker.lorem.slug(),

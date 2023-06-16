@@ -89,10 +89,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   const dateLastEditText = (howto: IHowtoDB): string => {
-    const lastModifiedDate = format(new Date(howto._modified), 'DD-MM-YYYY')
+    const lastEditDate = format(
+      new Date(howto._lastEditTimestamp),
+      'DD-MM-YYYY',
+    )
     const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
-    if (lastModifiedDate !== creationDate) {
-      return 'Last edit on ' + format(new Date(howto._modified), 'DD-MM-YYYY')
+    if (lastEditDate !== creationDate) {
+      return `Last edit on ${lastEditDate}`
     } else {
       return ''
     }

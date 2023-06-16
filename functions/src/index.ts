@@ -16,6 +16,8 @@ exports.integrations = require('./Integrations')
 
 exports.aggregations = require('./aggregations')
 
+exports.database = require('./database')
+
 exports.userUpdates = UserUpdates.handleUserUpdates
 // CC Note, 2020-04-40
 // folder-based naming conventions should be encourage from now on

@@ -132,9 +132,10 @@ async function batchGeneration(
       `${logPrefix}Committing a batch of ${collection} updates`,
     )
     await batch.commit()
-    batch = db.batch()
-    BATCH_COUNT = 0
+    await _sleep(1000)
   }
+  batch = db.batch()
+  BATCH_COUNT = 0
 }
 
 function _sleep(ms: number) {

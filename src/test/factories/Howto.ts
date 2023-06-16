@@ -26,6 +26,7 @@ export const FactoryHowto = (
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
+  _lastEditTimestamp: faker.date.past().toString(),
   _createdBy: faker.internet.userName(),
   steps: [],
   mentions: [],

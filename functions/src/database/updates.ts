@@ -8,10 +8,10 @@ let BATCH_COUNT = 0
 const operations = { updated: [], skipped: [] }
 
 /**
- * One-off script to set lastEditTimestamp for all docs
+ * One-off script to set contentModifiedTimestamp for all docs
  * Once run this code will be deprecated, but retained for future reference
  */
-export const lastEditTimestamp = functions.https.onCall(
+export const contentModifiedTimestamp = functions.https.onCall(
   async (dryRun: boolean, context) => {
     if (!context.auth) {
       throw new functions.https.HttpsError(
@@ -23,7 +23,7 @@ export const lastEditTimestamp = functions.https.onCall(
     const logPrefix = dryRun ? '[DRY RUN] ' : ''
 
     try {
-      functions.logger.info(`${logPrefix}Starting lastEditTimestamp Setting`)
+      functions.logger.info(`${logPrefix}Starting contentModfiedTimestamp Setting`)
 
       const howtoUpdates = []
       const researchUpdates = []
@@ -36,7 +36,10 @@ export const lastEditTimestamp = functions.https.onCall(
         // Get howto updates
         howtos.forEach((ht) => {
           const data = ht.data()
-          howtoUpdates.push({ id: ht.id, _lastEditTimestamp: data._modified })
+          howtoUpdates.push({
+            id: ht.id,
+            _contentModifiedTimestamp: data._modified,
+          })
         })
         await batchGeneration(howtoUpdates, 'howtos', dryRun, logPrefix)
       }
@@ -51,7 +54,7 @@ export const lastEditTimestamp = functions.https.onCall(
             : null
           researchUpdates.push({
             id: r.id,
-            _lastEditTimestamp: latestUpdate
+            _contentModifiedTimestamp: latestUpdate
               ? latestUpdate._created
               : data._modified,
           })
@@ -65,7 +68,10 @@ export const lastEditTimestamp = functions.https.onCall(
         // Get event updates
         events.forEach((e) => {
           const data = e.data()
-          eventUpdates.push({ id: e.id, _lastEditTimestamp: data._modified })
+          eventUpdates.push({
+            id: e.id,
+            _contentModifiedTimestamp: data._modified,
+          })
         })
         functions.logger.info(`${logPrefix}Starting event batch generation`)
         await batchGeneration(eventUpdates, 'events', dryRun, logPrefix)

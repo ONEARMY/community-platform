@@ -90,7 +90,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
 
   const dateLastEditText = (howto: IHowtoDB): string => {
     const lastEditDate = format(
-      new Date(howto._lastEditTimestamp),
+      new Date(howto._contentModifiedTimestamp),
       'DD-MM-YYYY',
     )
     const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')

@@ -626,7 +626,7 @@ export class ResearchStore extends ModuleStore {
             _id: randomID(),
             _created: new Date().toISOString(),
             _modified: new Date().toISOString(),
-            _lastEditTimestamp: new Date().toISOString(),
+            _contentModifiedTimestamp: new Date().toISOString(),
             _deleted: false,
             comments: [],
           })

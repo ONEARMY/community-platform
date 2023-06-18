@@ -54,6 +54,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: ['12px', '12px', '14px'],
+                  minWidth: '30px',
                 }}
               >
                 {totalUseful}

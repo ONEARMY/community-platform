@@ -88,14 +88,14 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     }
   }
 
-  const dateLastEditText = (howto: IHowtoDB): string => {
-    const lastEditDate = format(
-      new Date(howto._contentModifiedTimestamp),
+  const dateContentModifiedText = (howto: IHowtoDB): string => {
+    const contentModifiedDate = format(
+      new Date(howto._contentModifiedTimestamp || howto._modified),
       'DD-MM-YYYY',
     )
     const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
-    if (lastEditDate !== creationDate) {
-      return `Last edit on ${lastEditDate}`
+    if (contentModifiedDate !== creationDate) {
+      return `Last edit on ${contentModifiedDate}`
     } else {
       return ''
     }
@@ -211,7 +211,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             mt={1}
             mb={2}
           >
-            {dateLastEditText(howto)}
+            {dateContentModifiedText(howto)}
           </Text>
           <Heading mt={2} mb={1}>
             {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}

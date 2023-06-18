@@ -163,12 +163,17 @@ export class UserStore extends ModuleStore {
     const research = await this.db
       .collection('research')
       .getWhere('_createdBy', '==', userID)
+    const researchCollaborated = await this.db
+      .collection('research')
+      .getWhere('collaborators', 'array-contains', userID)
     const events = await this.db
       .collection('events')
       .getWhere('_createdBy', '==', userID)
 
+    const researchCombined = [...research, ...researchCollaborated]
+
     const howtosFiltered = howtos.filter((doc) => doc.moderation === 'accepted')
-    const researchFiltered = research.filter(
+    const researchFiltered = researchCombined.filter(
       (doc) => doc.moderation === 'accepted',
     )
     const eventsFiltered = events.filter((doc) => doc.moderation === 'accepted')

@@ -21,7 +21,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               px={2}
               sx={{ flexDirection: 'column', flexBasis: '50%' }}
             >
-              <Heading mb={1}>Created How-To's</Heading>
+              <Heading mb={1}>How-To's</Heading>
               {docs?.howtos.map((item) => {
                 return (
                   <UserCreatedDocumentsItem
@@ -40,7 +40,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               px={2}
               sx={{ flexDirection: 'column', flexBasis: '50%' }}
             >
-              <Heading mb={1}>Created Research</Heading>
+              <Heading mb={1}>Research</Heading>
               {docs?.research.map((item) => {
                 return (
                   <UserCreatedDocumentsItem

@@ -23,7 +23,7 @@ async function setMockHowto(user: IMockAuthUser) {
     _id,
     _created: new Date().toISOString(),
     _modified: new Date().toISOString(),
-    _lastEditTimestamp: new Date().toISOString(),
+    _contentModifiedTimestamp: new Date().toISOString(),
     _deleted: false,
     _createdBy: uid,
     cover_image: {

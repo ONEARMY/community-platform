@@ -13,7 +13,9 @@ const AdminDB = observer(() => {
     updateRecords.howtoUpdates.map((howto) => (
       <li key={howto.id}>
         {howto.id}{' '}
-        {howto._lastEditTimestamp ? ' - ' + howto._lastEditTimestamp : ''}
+        {howto._contentModifiedTimestamp
+          ? ' - ' + howto._contentModifiedTimestamp
+          : ''}
         {howto.votedUseful && (
           <ul>
             {howto.votedUseful.map((vote) => (
@@ -31,7 +33,9 @@ const AdminDB = observer(() => {
     updateRecords.researchUpdates.map((research) => (
       <li key={research.id}>
         {research.id}{' '}
-        {research._lastEditTimestamp ? ' - ' + research._lastEditTimestamp : ''}
+        {research.__contentModifiedTimestamp
+          ? ' - ' + research._contentModifiedTimestamp
+          : ''}
         {research.votedUseful && (
           <ul>
             {research.votedUseful.map((vote) => (
@@ -48,7 +52,9 @@ const AdminDB = observer(() => {
     updateRecords.eventUpdates.map((event) => (
       <li key={event.id}>
         {event.id}{' '}
-        {event._lastEditTimestamp ? ' - ' + event._lastEditTimestamp : ''}
+        {event._contentModifiedTimestamp
+          ? ' - ' + event._contentModifiedTimestamp
+          : ''}
       </li>
     ))
   ) : (
@@ -80,11 +86,11 @@ const AdminDB = observer(() => {
     }
   }
 
-  const updateLastEditDryRun = async () => {
-    setUpdateState('Performing last edit timestamp dry run...')
+  const updateContentModifiedDryRun = async () => {
+    setUpdateState('Performing content modified timestamp dry run...')
     try {
       const operations = await functions.httpsCallable(
-        'database-updates-lastEditTimestamp',
+        'database-updates-contentModifiedTimestamp',
       )(true)
       setUpdateState('Dry run successful.')
       setUpdateRecords({ ...operations?.data?.meta })
@@ -92,16 +98,16 @@ const AdminDB = observer(() => {
       setUpdateState(`Error during dry run: \n ${error}`)
     }
   }
-  const updateLastEdit = async () => {
-    setUpdateState('Setting last edit timestamps...')
+  const updateContentModified = async () => {
+    setUpdateState('Setting content modified timestamps...')
     try {
       const operations = await functions.httpsCallable(
-        'database-updates-lastEditTimestamp',
+        'database-updates-contentModifiedTimestamp',
       )(false)
-      setUpdateState('Last edit timestamps set successfully.')
+      setUpdateState('Content modified timestamps set successfully.')
       setUpdateRecords({ ...operations?.data?.meta })
     } catch (error) {
-      setUpdateState(`Error setting last edit timestamps: \n ${error}`)
+      setUpdateState(`Error setting content modified timestamps: \n ${error}`)
     }
   }
 
@@ -111,14 +117,20 @@ const AdminDB = observer(() => {
       <Flex mb={6} sx={{ flexDirection: 'column' }}>
         <Flex mb={4} sx={{ flexDirection: 'column' }}>
           <Heading mb={2} variant="small" color={'black'}>
-            Set last edit timestamps
+            Set content modified timestamps
           </Heading>
           <Flex sx={{ flexDirection: 'row' }}>
-            <Button sx={{ marginRight: '10px' }} onClick={updateLastEditDryRun}>
-              Dry run setting last edit timestamps
+            <Button
+              sx={{ marginRight: '10px' }}
+              onClick={updateContentModifiedDryRun}
+            >
+              Dry run setting content modified timestamps
             </Button>
-            <Button sx={{ marginRight: '10px' }} onClick={updateLastEdit}>
-              Set last edit timestamps
+            <Button
+              sx={{ marginRight: '10px' }}
+              onClick={updateContentModified}
+            >
+              Set content modified timestamps
             </Button>
             {triggerUpdateState && <p>{triggerUpdateState}</p>}
           </Flex>

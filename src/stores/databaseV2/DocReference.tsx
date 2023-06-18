@@ -126,7 +126,7 @@ export class DocReference<T> {
     }
 
     if (o.set_last_edit_timestamp)
-      meta._lastEditTimestamp = new Date().toISOString()
+      meta._contentModifiedTimestamp = new Date().toISOString()
 
     if (isDocUpdate) {
       delete meta._created

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Flex, Heading } from 'theme-ui'
-import UserDocumentItem from './UserDocumentItem'
+import UserCreatedDocumentsItem from './UserCreatedDocumentsItem'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import type { UserCreatedDocs } from '.'
 
@@ -24,7 +24,11 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               <Heading mb={1}>Created How-To's</Heading>
               {docs?.howtos.map((item) => {
                 return (
-                  <UserDocumentItem key={item._id} type="how-to" item={item} />
+                  <UserCreatedDocumentsItem
+                    key={item._id}
+                    type="how-to"
+                    item={item}
+                  />
                 )
               })}
             </Flex>
@@ -39,7 +43,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               <Heading mb={1}>Created Research</Heading>
               {docs?.research.map((item) => {
                 return (
-                  <UserDocumentItem
+                  <UserCreatedDocumentsItem
                     key={item._id}
                     type="research"
                     item={item}

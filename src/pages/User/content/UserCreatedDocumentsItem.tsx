@@ -1,6 +1,5 @@
 import { Icon } from 'oa-components'
 import * as React from 'react'
-// TODO: Remove direct usage of Theme
 import { Flex, Heading, Text } from 'theme-ui'
 import { Link } from 'react-router-dom'
 

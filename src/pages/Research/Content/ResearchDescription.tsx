@@ -32,6 +32,7 @@ interface IProps {
   moderateResearch: (accepted: boolean) => void
   onUsefulClick: () => void
   onFollowClick: () => void
+  contributors?: { userName: string; isVerified: boolean }[]
 }
 
 const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
@@ -141,39 +142,76 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
           )}
         </Flex>
         <Box mt={3} mb={2}>
-          <Flex sx={{ alignItems: 'center' }}>
-            <Flex sx={{ alignItems: 'center' }}>
-              <Username
-                user={{
-                  userName: research._createdBy,
-                  countryCode: research.creatorCountry,
-                }}
-                isVerified={isUserVerified(research._createdBy)}
-              />
+          <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
+            <Flex sx={{ flexDirection: 'column' }}>
+              <Flex sx={{ alignItems: 'center' }}>
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Username
+                    user={{
+                      userName: research._createdBy,
+                      countryCode: research.creatorCountry,
+                    }}
+                    isVerified={isUserVerified(research._createdBy)}
+                  />
+                  <Text
+                    variant="auxiliary"
+                    sx={{
+                      marginTop: 2,
+                      marginBottom: 2,
+                    }}
+                  >
+                    Started on{' '}
+                    {format(new Date(research._created), 'DD-MM-YYYY')}
+                  </Text>
+                </Flex>
+              </Flex>
+
               <Text
                 variant="auxiliary"
                 sx={{
-                  marginTop: 2,
-                  marginBottom: 2,
+                  color: 'lightgrey',
+                  '&!important': {
+                    color: 'lightgrey',
+                  },
                 }}
+                mt={1}
+                mb={2}
               >
-                Started on {format(new Date(research._created), 'DD-MM-YYYY')}
+                {dateLastUpdateText(research)}
               </Text>
             </Flex>
+            {props.contributors && props?.contributors.length ? (
+              <Flex
+                mt={1}
+                sx={{
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Text
+                    variant="auxiliary"
+                    mt={1}
+                    mr={1}
+                    sx={{
+                      color: 'lightgrey',
+                    }}
+                  >
+                    With contributions from
+                  </Text>
+                </Flex>
+                {props.contributors.map((contributor, key) => (
+                  <Username
+                    key={key}
+                    user={contributor}
+                    isVerified={contributor.isVerified}
+                  />
+                ))}
+              </Flex>
+            ) : null}
           </Flex>
-          <Text
-            variant="auxiliary"
-            sx={{
-              color: 'lightgrey',
-              '&!important': {
-                color: 'lightgrey',
-              },
-            }}
-            mt={1}
-            mb={2}
-          >
-            {dateLastUpdateText(research)}
-          </Text>
+
           <Heading mt={2} mb={1}>
             {research.title}
           </Heading>

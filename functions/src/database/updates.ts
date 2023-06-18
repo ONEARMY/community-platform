@@ -23,7 +23,9 @@ export const contentModifiedTimestamp = functions.https.onCall(
     const logPrefix = dryRun ? '[DRY RUN] ' : ''
 
     try {
-      functions.logger.info(`${logPrefix}Starting contentModfiedTimestamp Setting`)
+      functions.logger.info(
+        `${logPrefix}Starting contentModifiedTimestamp Setting`,
+      )
 
       const howtoUpdates = []
       const researchUpdates = []

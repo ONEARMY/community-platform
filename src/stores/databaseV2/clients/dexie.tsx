@@ -14,7 +14,7 @@ import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20230105
+const DB_CACHE_NUMBER = 20230618
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -103,6 +103,8 @@ export class DexieClient implements AbstractDatabaseClient {
         return ref.where(field).equals(value)
       case '>':
         return ref.where(field).below(value)
+      case 'array-contains':
+        return ref.where(field).equals(value)
       default:
         logger.error('no dexie query mapping for ' + operator)
         throw new Error(
@@ -167,14 +169,14 @@ type IDexieSchema = { [key in IFrontendEndpoints]: string }
 const DEFAULT_SCHEMA = '_id,_modified'
 
 const SCHEMA_BASE: IDexieSchema = {
-  events: `${DEFAULT_SCHEMA},slug`,
-  howtos: `${DEFAULT_SCHEMA},slug,previousSlugs`,
+  events: `${DEFAULT_SCHEMA},_createdBy,slug`,
+  howtos: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs`,
   mappins: DEFAULT_SCHEMA,
   tags: DEFAULT_SCHEMA,
   categories: DEFAULT_SCHEMA,
   researchCategories: DEFAULT_SCHEMA,
   users: `${DEFAULT_SCHEMA},_authID`,
-  research: `${DEFAULT_SCHEMA},slug,previousSlugs`,
+  research: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs,*collaborators`,
   aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
 }
@@ -196,8 +198,8 @@ const DEXIE_SCHEMA = MAPPED_SCHEMA
  * 2023-04-02
  * Add emails schema
  *
- *
- *
+ * 2023-06-18
+ * Add collaborators key to research schema + _createdBy to events, howtos & research
  *
  *
  *

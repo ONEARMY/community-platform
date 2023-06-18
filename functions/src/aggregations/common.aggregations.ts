@@ -127,6 +127,7 @@ export class AggregationHandler {
       const howtos = await db
         .collection(DB_ENDPOINTS.howtos)
         .where('votedUsefulBy', '!=', [])
+        .where('moderation', '==', 'accepted')
         .get()
 
       logger.info(`${targetAggregation} Howtos - ${howtos.docs.length}`)
@@ -142,6 +143,7 @@ export class AggregationHandler {
       const research = await db
         .collection(DB_ENDPOINTS.research)
         .where('votedUsefulBy', '!=', [])
+        .where('moderation', '==', 'accepted')
         .get()
 
       logger.info(
@@ -249,6 +251,7 @@ export class AggregationHandler {
       .collection(DB_ENDPOINTS.howtos)
       .where('_createdBy', '==', id)
       .where('votedUsefulBy', '!=', [])
+      .where('moderation', '==', 'accepted')
       .get()
 
     let totalUseful = 0
@@ -267,6 +270,7 @@ export class AggregationHandler {
       .collection(DB_ENDPOINTS.research)
       .where('_createdBy', '==', id)
       .where('votedUsefulBy', '!=', [])
+      .where('moderation', '==', 'accepted')
       .get()
 
     if (!createdResearch.empty) {
@@ -281,6 +285,7 @@ export class AggregationHandler {
       .collection(DB_ENDPOINTS.research)
       .where('collaborators', 'array-contains', id)
       .where('votedUsefulBy', '!=', [])
+      .where('moderation', '==', 'accepted')
       .get()
 
     if (!collaboratedResearch.empty) {

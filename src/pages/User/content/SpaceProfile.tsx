@@ -12,7 +12,7 @@ import 'src/assets/css/slick.min.css'
 import styled from '@emotion/styled'
 
 import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
-import UserDocumentItem from './UserDocumentItem'
+import UserCreatedDocuments from './UserCreatedDocuments'
 
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
@@ -336,45 +336,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
           </MobileBadge>
         </Box>
       </Flex>
-      {(docs?.howtos || docs?.research) && (
-        <Flex pt={2} sx={{ justifyContent: 'space-between' }}>
-          {docs?.howtos.length > 0 && (
-            <Flex
-              mt={2}
-              mb={6}
-              mx={2}
-              px={2}
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
-            >
-              <Heading mb={1}>Created How-To's</Heading>
-              {docs?.howtos.map((item) => {
-                return (
-                  <UserDocumentItem key={item._id} type="how-to" item={item} />
-                )
-              })}
-            </Flex>
-          )}
-          {docs?.research.length > 0 && (
-            <Flex
-              my={2}
-              mx={2}
-              px={2}
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
-            >
-              <Heading mb={1}>Created Research</Heading>
-              {docs?.research.map((item) => {
-                return (
-                  <UserDocumentItem
-                    key={item._id}
-                    type="research"
-                    item={item}
-                  />
-                )
-              })}
-            </Flex>
-          )}
-        </Flex>
-      )}
+      <UserCreatedDocuments docs={docs} />
     </ProfileWrapper>
   )
 }

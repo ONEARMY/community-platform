@@ -11,7 +11,7 @@ import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 
 import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
-import UserDocumentItem from './UserDocumentItem'
+import UserCreatedDocuments from './UserCreatedDocuments'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -32,6 +32,7 @@ import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { userStats } from 'src/common/hooks/userStats'
 import type { UserCreatedDocs } from '.'
+import UserDocumentItem from './UserDocumentItem'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -358,6 +359,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
           )}
         </Flex>
       )}
+      <UserCreatedDocuments docs={docs} />
     </Container>
   )
 }

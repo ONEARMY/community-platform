@@ -7,7 +7,7 @@ import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { userStats } from 'src/common/hooks/userStats'
-import UserDocumentItem from './UserDocumentItem'
+import UserCreatedDocuments from './UserCreatedDocuments'
 import type { UserCreatedDocs } from '.'
 
 interface IProps {
@@ -137,45 +137,7 @@ export const MemberProfile = ({ user, docs }: IProps) => {
           </Flex>
         </Flex>
       </Flex>
-      {(docs?.howtos || docs?.research) && (
-        <Flex pt={2} sx={{ justifyContent: 'space-between' }}>
-          {docs?.howtos.length > 0 && (
-            <Flex
-              my={2}
-              mx={2}
-              px={2}
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
-            >
-              <Heading mb={1}>Created How-To's</Heading>
-              {docs?.howtos.map((item) => {
-                return (
-                  <UserDocumentItem key={item._id} type="how-to" item={item} />
-                )
-              })}
-            </Flex>
-          )}
-          {docs?.research.length > 0 && (
-            <Flex
-              mx={2}
-              mt={2}
-              mb={6}
-              px={2}
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
-            >
-              <Heading mb={1}>Created Research</Heading>
-              {docs?.research.map((item) => {
-                return (
-                  <UserDocumentItem
-                    key={item._id}
-                    type="research"
-                    item={item}
-                  />
-                )
-              })}
-            </Flex>
-          )}
-        </Flex>
-      )}
+      <UserCreatedDocuments docs={docs} />
     </Card>
   )
 }

@@ -51,10 +51,7 @@ export const notifyEventAccepted = functions.firestore
   .document('v3_events/{id}')
   .onUpdate(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
-    const prevInfo = change.before.exists ? change.before.data() : null
-    const previouslyAccepted = prevInfo?.moderation === 'accepted'
-    const shouldNotify = info.moderation === 'accepted' && !previouslyAccepted
-    if (!shouldNotify) {
+    if (info === null || info.moderation !== 'accepted') {
       return null
     }
 

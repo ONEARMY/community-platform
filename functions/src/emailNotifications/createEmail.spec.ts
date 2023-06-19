@@ -104,17 +104,21 @@ describe('create email test', () => {
       userFactory('user_1', {
         notifications: user1Notifications,
         displayName: 'User 1',
+        userName: 'user1',
       }),
       userFactory('user_2', {
         notifications: user2Notifications,
         displayName: 'User 2',
+        userName: 'user2',
       }),
       userFactory('user_3', {
         notifications: user3Notifications,
         displayName: 'User 3',
+        // test undefined userName case - should not have userName field in template data
       }),
       userFactory('user_4', {
         displayName: 'User 4',
+        userName: 'user4',
       }),
     ])
 
@@ -177,6 +181,7 @@ describe('create email test', () => {
                 triggeredBy: {
                   displayName: 'User 2',
                   userId: 'user_2',
+                  userName: 'user2',
                 },
                 relevantUrl: 'https://community.preciousplastic.com/test',
                 resourceLabel: 'how-to',
@@ -188,6 +193,7 @@ describe('create email test', () => {
                 triggeredBy: {
                   displayName: 'User 2',
                   userId: 'user_2',
+                  userName: 'user2',
                 },
                 relevantUrl: 'https://community.preciousplastic.com/test',
                 resourceLabel: 'research',
@@ -245,6 +251,7 @@ describe('create email test', () => {
                 triggeredBy: {
                   displayName: 'User 1',
                   userId: 'user_1',
+                  userName: 'user1',
                 },
                 relevantUrl: 'https://community.preciousplastic.com/test',
                 resourceLabel: 'how-to',

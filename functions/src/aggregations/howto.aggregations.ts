@@ -10,7 +10,7 @@ interface IHowToAggregation extends IAggregation {
 const howtoAggregations: IHowToAggregation[] = [
   {
     sourceCollection: 'howtos',
-    sourceFields: ['votedUsefulBy'],
+    sourceFields: ['votedUsefulBy', 'moderation'],
     changeType: 'updated',
     targetCollection: 'aggregations',
     targetDocId: 'users_totalUseful',

@@ -30,11 +30,11 @@ export class Logo extends Component<IProps> {
     const logo = this.injected.themeStore?.currentTheme.logo
 
     const nameAndVersion = `${name} logo ${VERSION}`
-
+    const logoSize = [50, 50, 100]
     return (
       <Box
         sx={{
-          py: ['10px', '10px', 0], // padding on y axes ( top & bottom )
+          py: [2, 2, 0], // padding on y axes ( top & bottom )
           marginBottom: [0, 0, '-50px'],
           position: 'relative',
         }}
@@ -46,16 +46,16 @@ export class Logo extends Component<IProps> {
               zIndex: 1000,
               display: 'flex',
               alignItems: 'center',
-              width: ['50px', '50px', '100px'],
-              height: ['50px', '50px', '100px'],
+              width: logoSize,
+              height: logoSize,
             }}
           >
             <Image
               loading="lazy"
               src={logo}
               sx={{
-                width: [50, 50, 100],
-                height: [50, 50, 100],
+                width: logoSize,
+                height: logoSize,
               }}
               alt={nameAndVersion}
               title={nameAndVersion}

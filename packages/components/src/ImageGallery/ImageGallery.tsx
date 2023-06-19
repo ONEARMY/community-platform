@@ -4,9 +4,6 @@ import Lightbox from 'react-image-lightbox'
 import type { CardProps } from 'theme-ui'
 import { Box, Flex, Image } from 'theme-ui'
 import styled from '@emotion/styled'
-import { useTheme } from '@emotion/react'
-import type { ThemeWithName } from 'oa-themes'
-import { object } from 'yup'
 
 interface IUploadedFileMeta {
   downloadUrl: string

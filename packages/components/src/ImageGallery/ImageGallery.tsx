@@ -5,6 +5,8 @@ import type { CardProps } from 'theme-ui'
 import { Box, Flex, Image } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useTheme } from '@emotion/react'
+import type { ThemeWithName } from 'oa-themes'
+import { object } from 'yup'
 
 interface IUploadedFileMeta {
   downloadUrl: string
@@ -45,10 +47,9 @@ export const ImageGallery = (props: IProps) => {
     images: [],
     imgIndex: 0,
   })
-  const theme: any = useTheme()
 
   useEffect(() => {
-    const images = props.images.filter((img) => img !== null)
+    const images = (props.images || []).filter((img) => img !== null)
     const activeImage = images.length > 0 ? images[0] : null
     setState({
       ...state,
@@ -72,36 +73,21 @@ export const ImageGallery = (props: IProps) => {
       }
     })
 
-  const ThumbImage = styled(Image)`
-    object-fit: cover;
-    width: 100px;
-    height: 67px;
-    border: 1px solid ${theme.colors.offwhite};
-    border-radius: 5px;
-  `
-
-  const ImageWithPointer = styled(Image)`
-    cursor: pointer;
-    width: 100%;
-    height: 450px;
-    object-fit: cover;
-
-    // Reduce height for mobile devices
-    @media (max-width: ${theme.breakpoints[0]}) {
-      height: 300px;
-    }
-  `
-
   const images = state.images
   const imageNumber = images.length
 
   return state.activeImage ? (
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ width: '100%' }}>
-        <ImageWithPointer
+        <Image
           loading="lazy"
           data-cy="active-image"
-          sx={{ width: '100%' }}
+          sx={{
+            width: '100%',
+            cursor: 'pointer',
+            objectFit: 'cover',
+            height: [300, 450],
+          }}
           src={state.activeImage.downloadUrl}
           onClick={() => {
             triggerLightbox()
@@ -120,10 +106,17 @@ export const ImageGallery = (props: IProps) => {
                 onClick={() => setActive(image)}
                 key={index}
               >
-                <ThumbImage
+                <Image
                   loading="lazy"
                   src={image.downloadUrl}
                   key={index}
+                  sx={{
+                    width: 100,
+                    height: 67,
+                    objectFit: 'cover',
+                    borderRadius: 1,
+                    border: '1px solid offwhite',
+                  }}
                   crossOrigin=""
                 />
               </ThumbCard>

@@ -139,7 +139,7 @@ Here's a more detailed explanation of how you can format the commit message head
 
 ## 🤝 &nbsp; Joining the team
 
-We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. [Join us on Discord](https://discord.gg/gJ7Yyk4), introducing yourself and outline:
+We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. [Join us on Discord](https://discord.gg/gJ7Yyk4) and checkout the [development](https://discord.com/channels/586676777334865928/938781727017558018) channel. Feel free to introduce yourself and outline:
 
 1. How much time you feel you can dedicate to the project
 2. Any relevant experience working with web technologies

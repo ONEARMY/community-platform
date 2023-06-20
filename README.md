@@ -94,6 +94,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/BaltacMihai"><img src="https://avatars.githubusercontent.com/u/72079422?v=4?s=60" width="60px;" alt="Mihai-Cristian Bâltac"/><br /><sub><b>Mihai-Cristian Bâltac</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=BaltacMihai" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/CDeighton"><img src="https://avatars.githubusercontent.com/u/13475443?v=4?s=60" width="60px;" alt="Cullum Deighton"/><br /><sub><b>Cullum Deighton</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=CDeighton" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

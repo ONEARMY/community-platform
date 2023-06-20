@@ -92,6 +92,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/NguyenVanDo51"><img src="https://avatars.githubusercontent.com/u/30190734?v=4?s=60" width="60px;" alt="Nguyễn Văn Đỏ"/><br /><sub><b>Nguyễn Văn Đỏ</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=NguyenVanDo51" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://kungraseri.dev"><img src="https://avatars.githubusercontent.com/u/1054240?v=4?s=60" width="60px;" alt="KungRaseri"/><br /><sub><b>KungRaseri</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=KungRaseri" title="Documentation">📖</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/BaltacMihai"><img src="https://avatars.githubusercontent.com/u/72079422?v=4?s=60" width="60px;" alt="Mihai-Cristian Bâltac"/><br /><sub><b>Mihai-Cristian Bâltac</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=BaltacMihai" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

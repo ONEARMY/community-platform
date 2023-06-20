@@ -15,6 +15,7 @@ import type { ISelectedTags } from './tags.model'
 // Additionally convert from local filemeta to uploaded filemeta
 export interface IHowto extends IHowtoFormInput, IModerable, ISharedFeatures {
   _createdBy: string
+  _deleted: boolean
   cover_image: IUploadedFileMeta
   fileLink?: string
   files: Array<IUploadedFileMeta | File | null>

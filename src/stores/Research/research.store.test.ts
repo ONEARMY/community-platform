@@ -584,6 +584,21 @@ describe('research.store', () => {
     })
   })
 
+  describe('deleteResearch', () => {
+    it('updates _deleted property after confirming delete', async () => {
+      const { store, researchItem, setFn, getFn } = await factoryResearchItem()
+
+      // Act
+      await store.deleteResearch(researchItem._id)
+
+      // Assert
+      const [deletedResearchItem] = setFn.mock.calls[0]
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(getFn).toHaveBeenCalledTimes(3)
+      expect(deletedResearchItem._deleted).toBeTruthy()
+    })
+  })
+
   describe('Item', () => {
     describe('uploadResearch', () => {
       it('adds @mention to Research description', async () => {

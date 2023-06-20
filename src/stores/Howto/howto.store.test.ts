@@ -227,6 +227,23 @@ describe('howto.store', () => {
     })
   })
 
+  describe('deleteHowTo', () => {
+    it('updates _deleted property after confirming delete', async () => {
+      const { store, howToItem, setFn, getFn } = await factory()
+
+      // Act
+      await store.deleteHowTo(howToItem._id)
+
+      // Assert
+      const [deletedHowTo] = setFn.mock.calls[0]
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(getFn).toHaveBeenCalledTimes(2)
+      expect(getFn).toHaveBeenCalledWith('server')
+      expect(deletedHowTo._deleted).toBeTruthy()
+    })
+  })
+
   describe('Comments', () => {
     describe('addComment', () => {
       it('adds comment to howto', async () => {
@@ -497,7 +514,7 @@ describe('howto.store', () => {
     it('removes state from activeHowto property', async () => {
       const { store } = await factory()
 
-      await store.removeActiveHowto()
+      store.removeActiveHowto()
 
       expect(store.activeHowto).toBe(null)
     })

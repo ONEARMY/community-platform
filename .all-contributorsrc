@@ -273,6 +273,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "BaltacMihai",
+      "name": "Mihai-Cristian Bâltac",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72079422?v=4",
+      "profile": "https://github.com/BaltacMihai",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

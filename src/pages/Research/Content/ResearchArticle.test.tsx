@@ -84,9 +84,9 @@ describe('Research Article', () => {
 
     // Assert
     expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
-    expect(wrapper.getAllByText('example-username')).toHaveLength(1)
-    expect(wrapper.getAllByText('another-example-username')).toHaveLength(1)
-    expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(2)
+    expect(wrapper.getAllByText('example-username')).toHaveLength(2)
+    expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
+    expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(4)
   })
 
   it('displays "Follow" button for non-subscriber', async () => {
@@ -162,11 +162,11 @@ describe('Research Article', () => {
       })
 
       // Assert
-      expect(wrapper.getByText('With contributions from:')).toBeInTheDocument()
-      expect(wrapper.getByText('example-username')).toBeInTheDocument()
-      expect(wrapper.getByText('another-example-username')).toBeInTheDocument()
-      expect(wrapper.getByText('third-example-username')).toBeInTheDocument()
-      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(3)
+      expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
+      expect(wrapper.getAllByText('example-username')).toHaveLength(2)
+      expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
+      expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
+      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
     })
   })
 

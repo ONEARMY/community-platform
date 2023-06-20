@@ -137,7 +137,37 @@ export const isAllowToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
     user = toJS(user)
   }
 
-  if (doc._createdBy && doc._createdBy === user.userName) {
+  const roles =
+    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
+
+  if (
+    roles.includes('admin') ||
+    roles.includes('super-admin') ||
+    (doc._createdBy && doc._createdBy === user.userName)
+  ) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export const isAllowToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
+  if (!user) {
+    return false
+  }
+
+  if (isObservableObject(user)) {
+    user = toJS(user)
+  }
+
+  const roles =
+    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
+
+  if (
+    roles.includes('admin') ||
+    roles.includes('super-admin') ||
+    (doc._createdBy && doc._createdBy === user.userName)
+  ) {
     return true
   } else {
     return false

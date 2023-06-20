@@ -82,6 +82,23 @@ export class HowtoStore extends ModuleStore {
     this.allHowtos = this.filterSorterDecorator?.sort(query)
   }
 
+  @action
+  public sortHowtosByLatest(docs?: IHowtoDB[]) {
+    const howtos = docs || this.allHowtos
+    this.allHowtos = [...howtos]
+      .filter((doc) => {
+        return !doc._deleted
+      })
+      .sort((a, b) => (a._created < b._created ? 1 : -1))
+  }
+
+  @action
+  public sortHowtosByUsefulCount(usefulCounts: { [key: string]: number }) {
+    this.allHowtos = [...this.allHowtos].sort((a, b) =>
+      (usefulCounts[a._id] || 0) < (usefulCounts[b._id] || 0) ? 1 : -1,
+    )
+  }
+
   public getActiveHowToComments(): IComment[] {
     return this.activeHowto?.comments
       ? this.activeHowto?.comments.map((comment: IComment) => {
@@ -173,8 +190,6 @@ export class HowtoStore extends ModuleStore {
         )
       }
     })
-
-    return
   }
 
   @action
@@ -462,13 +477,20 @@ export class HowtoStore extends ModuleStore {
     try {
       const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(id)
 
-      const howto = this.activeHowto
+      const howToData = await dbRef.get('server')
       const user = this.activeUser
 
-      if (id && howto && user) {
-        await dbRef.delete()
+      if (id && howToData && user) {
+        await this.updateHowtoItem({
+          ...howToData,
+          _deleted: true,
+        })
 
-        await this.setActiveHowtoBySlug()
+        if (this.allHowtos && this.activeHowto !== null) {
+          this.allHowtos = this.allHowtos.filter((howto) => {
+            return howToData._id !== howto._id
+          })
+        }
       }
     } catch (err) {
       logger.error(err)
@@ -566,6 +588,7 @@ export class HowtoStore extends ModuleStore {
         comments,
 
         _createdBy: values._createdBy ? values._createdBy : user.userName,
+        _deleted: false,
         cover_image: processedCover,
         steps: processedSteps,
         fileLink: values.fileLink ?? '',

@@ -24,7 +24,7 @@ import {
   isAllowToDeleteContent,
   capitalizeFirstLetter,
 } from 'src/utils/helpers'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
   retrieveHowtoDownloadCooldown,
@@ -54,6 +54,7 @@ interface IProps {
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const history = useHistory()
 
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
@@ -112,8 +113,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           action: 'Deleted',
           label: stores.howtoStore.activeHowto?.title,
         },
-        'how-to deleted',
+        'How-to marked for deletion',
       )
+
+      history.push('/how-to')
     } catch (err) {
       logger.error(err)
       // at least log the error
@@ -168,6 +171,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           width: ['100%', '100%', `${(1 / 2) * 100}%`],
         }}
       >
+        {howto._deleted && (
+          <Fragment>
+            <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
+              * Marked for deletion
+            </Text>
+          </Fragment>
+        )}
         <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
           <Link to={'/how-to/'}>
             <Button
@@ -235,6 +245,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 data-cy="How-To: delete button"
                 variant={'secondary'}
                 icon="delete"
+                disabled={howto._deleted}
                 onClick={() => setShowDeleteModal(true)}
               >
                 Delete

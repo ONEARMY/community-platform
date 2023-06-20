@@ -3,22 +3,22 @@
 exports[`ResearchEditorOverview > handles empty updates 1`] = `
 <div>
   <div
-    class="css-vnzk4a-Box"
+    class="css-u349le-Box"
   >
     <h3
-      class="css-1fqez35-Box"
+      class="css-1ycqext-Box"
     >
       Research overview
     </h3>
     <button
-      class="css-3hb35i-Box"
+      class="css-1hxcni7-Box"
       type="button"
     >
       <span
         class="css-1peva9n-Box"
       >
         <a
-          class="css-17ig1b0-Box"
+          class="css-9gmhzp-Box"
           href="/research/abc/new-update"
         >
           Create update
@@ -26,14 +26,14 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
       </span>
     </button>
     <button
-      class="css-1pdlsbk-Box"
+      class="css-1yzkb2q-Box"
       type="button"
     >
       <span
         class="css-1peva9n-Box"
       >
         <a
-          class="css-17ig1b0-Box"
+          class="css-9gmhzp-Box"
           href="/research/abc/edit"
         >
           Back to research
@@ -47,22 +47,22 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
 exports[`ResearchEditorOverview > handles falsey updates 1`] = `
 <div>
   <div
-    class="css-vnzk4a-Box"
+    class="css-u349le-Box"
   >
     <h3
-      class="css-1fqez35-Box"
+      class="css-1ycqext-Box"
     >
       Research overview
     </h3>
     <button
-      class="css-3hb35i-Box"
+      class="css-1hxcni7-Box"
       type="button"
     >
       <span
         class="css-1peva9n-Box"
       >
         <a
-          class="css-17ig1b0-Box"
+          class="css-9gmhzp-Box"
           href="/research/abc/new-update"
         >
           Create update
@@ -70,14 +70,14 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
       </span>
     </button>
     <button
-      class="css-1pdlsbk-Box"
+      class="css-1yzkb2q-Box"
       type="button"
     >
       <span
         class="css-1peva9n-Box"
       >
         <a
-          class="css-17ig1b0-Box"
+          class="css-9gmhzp-Box"
           href="/research/abc/edit"
         >
           Back to research
@@ -91,21 +91,21 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
 exports[`ResearchEditorOverview > renders correctly 1`] = `
 <div>
   <div
-    class="css-vnzk4a-Box"
+    class="css-u349le-Box"
   >
     <h3
-      class="css-1fqez35-Box"
+      class="css-1ycqext-Box"
     >
       Research overview
     </h3>
     <ul
-      class="css-47e4wa-Box"
+      class="css-ozht5o-Box"
     >
       <li
-        class="css-snegf5-Box"
+        class="css-1cpoejb-Box"
       >
         <span
-          class="css-1peva9n-Box"
+          class="css-1mkhdrb-Box"
         >
           <strong>
             Update 1
@@ -113,14 +113,14 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
         </span>
       </li>
       <li
-        class="css-snegf5-Box"
+        class="css-1cpoejb-Box"
       >
         <span
-          class="css-1peva9n-Box"
+          class="css-1mkhdrb-Box"
         >
           Update 2
           <a
-            class="css-1b0j0ya-Box"
+            class="css-1uvpm5b-Box"
             href="/research/abc/edit-update/update-2"
           >
             Edit
@@ -128,14 +128,14 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
         </span>
       </li>
       <li
-        class="css-snegf5-Box"
+        class="css-1cpoejb-Box"
       >
         <span
-          class="css-1peva9n-Box"
+          class="css-1mkhdrb-Box"
         >
           Update 3
           <a
-            class="css-1b0j0ya-Box"
+            class="css-1uvpm5b-Box"
             href="/research/abc/edit-update/update-3"
           >
             Edit
@@ -144,14 +144,14 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
       </li>
     </ul>
     <button
-      class="css-3hb35i-Box"
+      class="css-1hxcni7-Box"
       type="button"
     >
       <span
         class="css-1peva9n-Box"
       >
         <a
-          class="css-17ig1b0-Box"
+          class="css-9gmhzp-Box"
           href="/research/abc/new-update"
         >
           Create update
@@ -159,14 +159,14 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
       </span>
     </button>
     <button
-      class="css-1pdlsbk-Box"
+      class="css-1yzkb2q-Box"
       type="button"
     >
       <span
         class="css-1peva9n-Box"
       >
         <a
-          class="css-17ig1b0-Box"
+          class="css-9gmhzp-Box"
           href="/research/abc/edit"
         >
           Back to research

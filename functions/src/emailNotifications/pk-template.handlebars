@@ -44,16 +44,23 @@
                   href='https://community.projectkamp.com{{this.relevantUrl}}'
                 >{{this.resourceLabel}}</a>
                 by
-                <a
-                  href='https://community.projectkamp.com/u/{{this.triggeredBy.displayName}}'
-                >{{this.triggeredBy.displayName}}</a>
+                {{#if this.triggeredBy.userName}}
+                  <a
+                    href='https://community.projectkamp.com/u/{{this.triggeredBy.userName}}'
+                  >{{this.triggeredBy.displayName}}</a>
+                {{else}}
+                  {{this.triggeredBy.displayName}}
+                {{/if}}
               </p>
-            {{/if}}
             {{#if isMention}}
               <p>
-                <a
-                  href='https://community.projectkamp.com/u/{{this.triggeredBy.displayName}}'
-                >{{this.triggeredBy.displayName}}</a>
+                {{#if this.triggeredBy.userName}}
+                  <a
+                    href='https://community.projectkamp.com/u/{{this.triggeredBy.userName}}'
+                  >{{this.triggeredBy.displayName}}</a>
+                {{else}}
+                  {{this.triggeredBy.displayName}}
+                {{/if}}
                 mentioned you in this
                 <a
                   href='https://community.projectkamp.com{{this.relevantUrl}}'
@@ -78,9 +85,13 @@
           {{#each notifications}}
             {{#if isUseful}}
               <p>
-                <a
-                  href='https://community.projectkamp.com/u/{{this.triggeredBy.displayName}}'
-                >{{this.triggeredBy.displayName}}</a>
+                {{#if this.triggeredBy.userName}}
+                  <a
+                    href='https://community.projectkamp.com/u/{{this.triggeredBy.userName}}'
+                  >{{this.triggeredBy.displayName}}</a>
+                {{else}}
+                  {{this.triggeredBy.displayName}}
+                {{/if}}
                 found your
                 <a
                   href='https://community.projectkamp.com{{this.relevantUrl}}'

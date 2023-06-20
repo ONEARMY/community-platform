@@ -52,6 +52,15 @@ describe('UserStatistics', () => {
     expect(howtoCount).toHaveTextContent(/^How[-‑]?to: 10$/)
   })
 
+  it('renders research count when researchCount is provided', () => {
+    const { getByTestId } = render(
+      <Default {...(Default.args as UserStatisticsProps)} />,
+    )
+    const researchCount = getByTestId('research-stat')
+
+    expect(researchCount).toHaveTextContent(/^Research: 2$/)
+  })
+
   it('renders event count when eventCount is provided', () => {
     const { getByTestId } = render(
       <Default {...(Default.args as UserStatisticsProps)} />,
@@ -67,6 +76,7 @@ describe('UserStatistics', () => {
         howtoCount={0}
         eventCount={0}
         usefulCount={0}
+        researchCount={0}
         isVerified={false}
         userName="Test User"
         isSupporter={false}

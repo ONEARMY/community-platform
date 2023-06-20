@@ -282,6 +282,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "CDeighton",
+      "name": "Cullum Deighton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13475443?v=4",
+      "profile": "https://github.com/CDeighton",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

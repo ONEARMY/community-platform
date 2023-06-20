@@ -458,6 +458,25 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
+  public async deleteHowTo(id: string) {
+    try {
+      const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(id)
+
+      const howto = this.activeHowto
+      const user = this.activeUser
+
+      if (id && howto && user) {
+        await dbRef.delete()
+
+        await this.setActiveHowtoBySlug()
+      }
+    } catch (err) {
+      logger.error(err)
+      throw new Error(err)
+    }
+  }
+
+  @action
   public async deleteComment(id: string) {
     try {
       const howto = this.activeHowto

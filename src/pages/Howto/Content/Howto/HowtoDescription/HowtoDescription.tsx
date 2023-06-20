@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
@@ -16,10 +16,15 @@ import {
   ViewsCounter,
   DownloadFiles,
   Tooltip,
+  ConfirmModal,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
-import { isAllowToEditContent, capitalizeFirstLetter } from 'src/utils/helpers'
-import { Link } from 'react-router-dom'
+import {
+  isAllowToEditContent,
+  isAllowToDeleteContent,
+  capitalizeFirstLetter,
+} from 'src/utils/helpers'
+import { Link, useHistory } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
   retrieveHowtoDownloadCooldown,
@@ -33,6 +38,9 @@ import {
 } from 'src/utils/sessionStorage'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { trackEvent } from 'src/common/Analytics'
+import { logger } from 'src/logger'
+
 interface IProps {
   howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
@@ -45,6 +53,9 @@ interface IProps {
 }
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const history = useHistory()
+
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
@@ -85,6 +96,30 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     } else if (!howtoDownloadCooldown) {
       addHowtoDownloadCooldown(howto._id)
       incrementDownloadCount()
+    }
+  }
+
+  const handleDelete = async (_id: string) => {
+    try {
+      await stores.howtoStore.deleteHowTo(_id)
+      trackEvent({
+        category: 'How-To',
+        action: 'Deleted',
+        label: stores.howtoStore.activeHowto?.title,
+      })
+      logger.debug(
+        {
+          category: 'How-To',
+          action: 'Deleted',
+          label: stores.howtoStore.activeHowto?.title,
+        },
+        'How-to marked for deletion',
+      )
+
+      history.push('/how-to')
+    } catch (err) {
+      logger.error(err)
+      // at least log the error
     }
   }
 
@@ -136,6 +171,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           width: ['100%', '100%', `${(1 / 2) * 100}%`],
         }}
       >
+        {howto._deleted && (
+          <Fragment>
+            <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
+              * Marked for deletion
+            </Text>
+          </Fragment>
+        )}
         <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
           <Link to={'/how-to/'}>
             <Button
@@ -195,6 +237,29 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 Edit
               </Button>
             </Link>
+          )}
+
+          {loggedInUser && isAllowToDeleteContent(howto, loggedInUser) && (
+            <Fragment key={'how-to-delete-action'}>
+              <Button
+                data-cy="How-To: delete button"
+                variant={'secondary'}
+                icon="delete"
+                disabled={howto._deleted}
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Delete
+              </Button>
+
+              <ConfirmModal
+                key={howto._id}
+                isOpen={showDeleteModal}
+                message="Are you sure you want to delete this How-To?"
+                confirmButtonText="Delete"
+                handleCancel={() => setShowDeleteModal(false)}
+                handleConfirm={() => handleDelete && handleDelete(howto._id)}
+              />
+            </Fragment>
           )}
         </Flex>
         <Box mt={3} mb={2}>

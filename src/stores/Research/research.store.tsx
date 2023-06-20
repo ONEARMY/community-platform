@@ -66,6 +66,17 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
+  public filterResearchesByCategory = (
+    collection: IResearch.ItemDB[] = [],
+    category: string,
+  ) => {
+    return category
+      ? collection.filter((obj) => {
+          return obj.researchCategory?.label === category
+        })
+      : collection
+  }
+
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
@@ -73,9 +84,12 @@ export class ResearchStore extends ModuleStore {
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
       logger.debug('docs', docs)
-      const sortedItems = docs.sort((a, b) =>
-        a._modified < b._modified ? 1 : -1,
-      )
+      const sortedItems = [...docs]
+        .filter((doc) => {
+          return !doc._deleted
+        })
+        .sort((a, b) => (a._modified < b._modified ? 1 : -1))
+
       runInAction(() => {
         this.allResearchItems = sortedItems
         // Create an instance of FilterSorterDecorator with the allResearchItems array
@@ -280,8 +294,32 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public deleteResearchItem(id: string) {
-    this.db.collection('research').doc(id).delete()
+  @action
+  public async deleteResearch(id: string) {
+    try {
+      const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
+      const researchData = await toJS(dbRef.get('server'))
+
+      const user = this.activeUser
+
+      if (id && researchData && user) {
+        await this._updateResearchItem(dbRef, {
+          ...researchData,
+          _deleted: true,
+        })
+
+        if (this.activeResearchItem !== undefined) {
+          this.allResearchItems = this.allResearchItems.filter(
+            (researchItem) => {
+              return researchItem._id !== researchData._id
+            },
+          )
+        }
+      }
+    } catch (err) {
+      logger.error(err)
+      throw new Error(err)
+    }
   }
 
   public async moderateResearch(research: IResearch.ItemDB) {
@@ -580,6 +618,7 @@ export class ResearchStore extends ModuleStore {
         ...values,
         collaborators,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
+        _deleted: false,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,
         creatorCountry:

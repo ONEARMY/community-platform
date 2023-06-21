@@ -20,7 +20,7 @@ const ResearchListItem = ({ item }: IProps) => {
   const _commonStatisticStyle = {
     display: 'flex',
     alignItems: 'center',
-    fontSize: [1, '16px', '16px'],
+    fontSize: [1, 3, 3],
   }
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>

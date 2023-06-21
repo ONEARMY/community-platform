@@ -1,14 +1,10 @@
-import styled from '@emotion/styled'
 import { format } from 'date-fns'
 import { Icon, ModerationStatus, Username } from 'oa-components'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
-import { Card, Flex, Grid, Heading, Text } from 'theme-ui'
+import { Card, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 
 interface IProps {
   item: IResearch.ItemDB & {
@@ -16,31 +12,16 @@ interface IProps {
   }
 }
 
-const DesktopItemInfo = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-
-  @media (max-width: ${theme.breakpoints[0]}) {
-    display: none;
-    align-items: unset;
-    justify-content: unset;
-  }
-`
-
-const MobileItemInfo = styled.div`
-  display: none;
-
-  @media (max-width: ${theme.breakpoints[0]}) {
-    display: flex;
-    align-items: center;
-  }
-`
-
 const ResearchListItem = ({ item }: IProps) => {
   const collaborators = item['collaborators'] || []
   const usefulDisplayCount =
-    item.votedUsefulCount > 0 ? item.votedUsefulCount : '-'
+    item.votedUsefulCount > 0 ? item.votedUsefulCount : '0'
+
+  const _commonStatisticStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: [1, '16px', '16px'],
+  }
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -65,7 +46,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 color={'black'}
                 mb={2}
                 sx={{
-                  fontSize: ['18px', '18px', '22px'],
+                  fontSize: [3, 3, 4],
                 }}
               >
                 {item.title}
@@ -90,8 +71,8 @@ const ResearchListItem = ({ item }: IProps) => {
                       ml={4}
                       sx={{
                         display: ['none', 'block'],
-                        fontSize: theme.fontSizes[1] + 'px',
-                        color: theme.colors.darkGrey,
+                        fontSize: 1,
+                        color: 'darkGrey',
                         transform: 'translateY(2px)',
                       }}
                     >
@@ -106,8 +87,8 @@ const ResearchListItem = ({ item }: IProps) => {
                     ml={4}
                     sx={{
                       display: ['none', 'block'],
-                      fontSize: theme.fontSizes[1] + 'px',
-                      color: theme.colors.darkGrey,
+                      fontSize: 1,
+                      color: 'darkGrey',
                       transform: 'translateY(2px)',
                     }}
                   >
@@ -115,60 +96,59 @@ const ResearchListItem = ({ item }: IProps) => {
                   </Text>
                 </Flex>
                 {/* Show these on mobile, hide on tablet & above. */}
-                <MobileItemInfo>
-                  <Text
-                    color="black"
-                    ml={3}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      fontSize: ['12px', '16px', '16px'],
-                    }}
-                  >
+                <Box
+                  sx={{
+                    display: ['flex', 'none', 'none'],
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text color="black" ml={3} sx={_commonStatisticStyle}>
                     {usefulDisplayCount}
                     <Icon glyph="star-active" ml={1} />
                   </Text>
-                  <Text
-                    color="black"
-                    ml={3}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      fontSize: ['12px', '16px', '16px'],
-                    }}
-                  >
+                  <Text color="black" ml={3} sx={_commonStatisticStyle}>
                     {calculateTotalComments(item)}
-                    <Icon glyph="comment" ml={1} mb={-1} />
+                    <Icon glyph="comment" ml={1} />
                   </Text>
                   <Text
                     ml={3}
                     sx={{
                       display: ['block', 'none'],
-                      fontSize: '12px',
-                      color: theme.colors.darkGrey,
+                      fontSize: 1,
+                      color: 'darkGrey',
                     }}
                   >
                     {getItemDate(item, 'short')}
                   </Text>
-                </MobileItemInfo>
+                </Box>
               </Flex>
             </Flex>
             {/* Hide these on mobile, show on tablet & above. */}
-            <DesktopItemInfo>
-              <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
+            <Box
+              sx={{
+                display: ['none', 'flex', 'flex'],
+                alignItems: 'center',
+                justifyContent: 'space-around',
+              }}
+            >
+              <Text color="black" sx={_commonStatisticStyle}>
                 {usefulDisplayCount}
+                <Icon glyph="star-active" ml={1} />
               </Text>
-              <Text color="black" sx={{ fontSize: ['12px', '16px', '16px'] }}>
+              <Text color="black" sx={_commonStatisticStyle}>
                 {calculateTotalComments(item)}
+                <Icon glyph="comment" ml={1} />
               </Text>
               <Text
                 color="black"
-                sx={{ fontSize: ['12px', '16px', '16px'] }}
+                sx={_commonStatisticStyle}
                 data-cy="ItemUpdateText"
               >
                 {getUpdateText(item)}
+                {/* TODO: This is a placeholder icon */}
+                <Icon glyph="turned-in" ml={1} />
               </Text>
-            </DesktopItemInfo>
+            </Box>
           </Grid>
           {item.moderation !== 'accepted' && (
             <ModerationStatus
@@ -205,14 +185,14 @@ const calculateTotalComments = (item: IResearch.ItemDB) => {
       return totalComments + updateCommentsLength
     }, 0)
 
-    return commentOnUpdates ? String(commentOnUpdates) : '-'
+    return commentOnUpdates ? String(commentOnUpdates) : '0'
   } else {
-    return '-'
+    return '0'
   }
 }
 
 const getUpdateText = (item: IResearch.ItemDB) => {
-  return item.updates?.length ? String(item.updates?.length) : '-'
+  return item.updates?.length ? String(item.updates?.length) : '0'
 }
 
 export default ResearchListItem

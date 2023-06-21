@@ -7,12 +7,15 @@ import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { userStats } from 'src/common/hooks/userStats'
+import UserCreatedDocuments from './UserCreatedDocuments'
+import type { UserCreatedDocs } from '.'
 
 interface IProps {
   user: IUserPP
+  docs: UserCreatedDocs | undefined
 }
 
-export const MemberProfile = ({ user }: IProps) => {
+export const MemberProfile = ({ user, docs }: IProps) => {
   const userLinks = (user?.links || []).filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
@@ -38,102 +41,104 @@ export const MemberProfile = ({ user }: IProps) => {
         maxWidth: '42em',
         width: '100%',
         margin: '0 auto',
+        backgroundColor: 'transparent',
       }}
     >
-      <MemberBadge
-        profileType="member"
-        size={50}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          marginLeft: 50 * -0.5,
-          marginTop: 50 * -0.5,
-        }}
-        useLowDetailVersion
-      />
       <Flex
-        px={4}
-        py={4}
-        sx={{ borderRadius: 1, flexDirection: ['column', 'row'] }}
+        sx={{
+          px: [2, 4],
+          py: 4,
+          background: 'white',
+        }}
       >
-        <Box sx={{ flexGrow: 1, minWidth: 'initial', mr: 3 }}>
-          <Box
-            sx={{
-              display: 'block',
-              width: '120px',
-              height: '120px',
-              borderRadius: '50%',
-              maxWidth: 'none',
-              overflow: 'hidden',
-              margin: '0 auto',
-              mb: 3,
-            }}
-          >
-            <Image
-              loading="lazy"
-              src={memberPictureSource}
-              sx={{
-                objectFit: 'cover',
-                width: '100%',
-                height: '100%',
-              }}
-            />
-          </Box>
-          <UserStatistics
-            userName={user.userName}
-            country={user.location?.country}
-            isVerified={stats.verified}
-            isSupporter={!!user.badges?.supporter}
-            howtoCount={
-              user.stats ? Object.keys(user.stats!.userCreatedHowtos).length : 0
-            }
-            eventCount={
-              user.stats ? Object.keys(user.stats!.userCreatedEvents).length : 0
-            }
-            researchCount={
-              user.stats
-                ? Object.keys(user.stats!.userCreatedResearch).length
-                : 0
-            }
-            usefulCount={stats.totalUseful}
-          />
-        </Box>
+        <MemberBadge
+          profileType="member"
+          size={50}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            marginLeft: 50 * -0.5,
+            marginTop: 50 * -0.5,
+          }}
+          useLowDetailVersion
+        />
         <Flex
-          mt={[0, 3]}
-          ml={[0, 3]}
-          sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}
+          px={4}
+          py={4}
+          sx={{ borderRadius: 1, flexDirection: ['column', 'row'] }}
         >
-          <Flex
-            sx={{
-              alignItems: 'center',
-              pt: ['40px', '40px', '0'],
-            }}
-          >
-            <Username
-              user={{
-                userName: user.userName,
-                countryCode: userCountryCode,
+          <Box sx={{ flexGrow: 1, minWidth: 'initial', mr: 3 }}>
+            <Box
+              sx={{
+                display: 'block',
+                width: '120px',
+                height: '120px',
+                borderRadius: '50%',
+                maxWidth: 'none',
+                overflow: 'hidden',
+                margin: '0 auto',
+                mb: 3,
               }}
-              isVerified={stats.verified}
-            />
-          </Flex>
-          <Box sx={{ flexDirection: 'column' }} mb={3}>
-            <Heading
-              color={'black'}
-              style={{ wordWrap: 'break-word' }}
-              data-cy="userDisplayName"
             >
-              {user.displayName}
-            </Heading>
+              <Image
+                loading="lazy"
+                src={memberPictureSource}
+                sx={{
+                  objectFit: 'cover',
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </Box>
+            <UserStatistics
+              userName={user.userName}
+              country={user.location?.country}
+              isVerified={stats.verified}
+              isSupporter={!!user.badges?.supporter}
+              howtoCount={docs?.howtos.length || 0}
+              eventCount={docs?.events.length || 0}
+              researchCount={docs?.research.length || 0}
+              usefulCount={stats.totalUseful}
+            />
           </Box>
-          {user.about && <Paragraph>{user.about}</Paragraph>}
-          <UserContactAndLinks links={userLinks} />
-          <Box mt={3}>
-            <UserAdmin user={user} />
-          </Box>
+          <Flex
+            mt={[0, 3]}
+            ml={[0, 3]}
+            sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}
+          >
+            <Flex
+              sx={{
+                alignItems: 'center',
+                pt: ['40px', '40px', '0'],
+              }}
+            >
+              <Username
+                user={{
+                  userName: user.userName,
+                  countryCode: userCountryCode,
+                }}
+                isVerified={stats.verified}
+              />
+            </Flex>
+            <Box sx={{ flexDirection: 'column' }} mb={3}>
+              <Heading
+                color={'black'}
+                style={{ wordWrap: 'break-word' }}
+                data-cy="userDisplayName"
+              >
+                {user.displayName}
+              </Heading>
+            </Box>
+            {user.about && <Paragraph>{user.about}</Paragraph>}
+            <UserContactAndLinks links={userLinks} />
+            <Box mt={3}>
+              <UserAdmin user={user} />
+            </Box>
+          </Flex>
         </Flex>
       </Flex>
+      <UserCreatedDocuments docs={docs} />
     </Card>
   )
 }

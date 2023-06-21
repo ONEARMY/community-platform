@@ -4,6 +4,7 @@ import { IUserDB, IDBDocChange, DB_ENDPOINTS, IModerable } from '../models'
 export * from './migration'
 
 /**
+ * DEPRECATED 16/06/2023 - To be removed https://github.com/ONEARMY/community-platform/issues/2427
  * User-generated content stats
  * Keep count of user contributions, including
  * - total howtos created

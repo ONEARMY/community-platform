@@ -88,9 +88,9 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
-  public sortHowtosByUsefulCount(usefulCounts: { [key: string]: number }) {
+  public sortHowtosByUsefulCount() {
     this.allHowtos = this.allHowtos.sort((a, b) =>
-      (usefulCounts[a._id] || 0) < (usefulCounts[b._id] || 0) ? 1 : -1,
+      (a.votedUsefulBy || []).length < (b.votedUsefulBy || []).length ? 1 : -1,
     )
   }
 

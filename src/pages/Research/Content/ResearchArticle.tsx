@@ -190,6 +190,7 @@ const ResearchArticle = observer((props: IProps) => {
           onFollowClick={() => {
             onFollowClick(item.slug)
           }}
+          contributors={contributors}
         />
         <Box my={16}>
           {item &&

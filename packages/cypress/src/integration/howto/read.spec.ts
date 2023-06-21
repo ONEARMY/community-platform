@@ -5,7 +5,8 @@ describe('[How To]', () => {
   const totalHowTo = 8
 
   describe('[List how-tos]', () => {
-    const howtoUrl = '/how-to/make-glass-like-beams'
+    const howtoSlug = 'make-glass-like-beams'
+    const howtoUrl = `/how-to/${howtoSlug}`
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
     beforeEach(() => {
       cy.visit('/how-to')
@@ -19,15 +20,16 @@ describe('[How To]', () => {
       cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
 
       cy.step('How-to cards has basic info')
-      cy.get(`[data-cy=card] a[href="${howtoUrl}"]`).within(() => {
+      cy.get(`[data-cy=card][data-cy-howto-slug=${howtoSlug}]`).within(() => {
         cy.contains('Make glass-like beams').should('be.exist')
-        cy.contains('howto_creator').should('be.exist')
         cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
+        cy.contains('howto_creator').should('be.exist')
         cy.contains('extrusion').should('be.exist')
+        cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
       })
 
       cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
-      cy.get(`[data-cy=card] a[href="${howtoUrl}"]`, SKIP_TIMEOUT).click()
+      cy.get(`[data-cy=card] a[href="${howtoUrl}"]:first`, SKIP_TIMEOUT).click()
       cy.url().should('include', howtoUrl)
     })
 

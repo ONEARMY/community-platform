@@ -4,9 +4,6 @@ import { Flex, Heading, Box, Text } from 'theme-ui'
 import { FlexSectionContainer } from './elements'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { required } from 'src/utils/validators'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { Field } from 'react-final-form'
 import type { IWorkspaceType } from 'src/models'
 
@@ -85,8 +82,8 @@ export class WorkspaceSection extends React.Component<any> {
               </Flex>
               {meta.touched && meta.error && (
                 <Text
-                  color={theme.colors.error}
                   sx={{
+                    color: 'error',
                     fontSize: 0.5,
                     marginLeft: 1,
                     marginRight: 1,

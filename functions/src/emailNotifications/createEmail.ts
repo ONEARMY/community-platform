@@ -16,6 +16,7 @@ interface EmailTemplateNotificationData {
   triggeredBy: {
     displayName: string
     userId: string
+    userName?: string
   }
   relevantUrl: string
 }
@@ -126,9 +127,17 @@ export async function createNotificationEmails(
 
     try {
       // Decorate notifications with additional fields for email template
-      const templateNotifications =
-        pendingNotifications.map<EmailTemplateNotificationData>(
-          (notification) => {
+      const templateNotifications = await Promise.all(
+        pendingNotifications.map<Promise<EmailTemplateNotificationData>>(
+          async (notification) => {
+            const triggeredByUser = (await db
+              .collection(DB_ENDPOINTS.users)
+              .doc(notification.triggeredBy.userId)
+              .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
+            const triggeredByUserName = triggeredByUser.exists
+              ? triggeredByUser.data().userName
+              : undefined
+
             const actionType = getActionTypeFromNotificationType(
               notification.type,
             )
@@ -144,18 +153,26 @@ export async function createNotificationEmails(
               hasUsefuls = true
             }
 
-            return {
-              triggeredBy: notification.triggeredBy,
-              relevantUrl: notification.relevantUrl,
-              resourceLabel: getResourceLabelFromNotificationType(
-                notification.type,
-              ),
-              isComment,
-              isMention,
-              isUseful,
-            }
+            return new Promise((resolve) =>
+              resolve({
+                triggeredBy: {
+                  ...notification.triggeredBy,
+                  ...(triggeredByUserName
+                    ? { userName: triggeredByUserName }
+                    : {}),
+                },
+                relevantUrl: notification.relevantUrl,
+                resourceLabel: getResourceLabelFromNotificationType(
+                  notification.type,
+                ),
+                isComment,
+                isMention,
+                isUseful,
+              }),
+            )
           },
-        )
+        ),
+      )
 
       const { displayName } = user.data()
 

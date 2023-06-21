@@ -2,11 +2,7 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import { Button, FieldInput } from 'oa-components'
 import type { UserStore } from 'src/stores/User/user.store'
-import { Text, Flex } from 'theme-ui'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
-import styled from '@emotion/styled'
+import { Text, Flex, Label } from 'theme-ui'
 
 interface IFormValues {
   oldPassword?: string
@@ -22,12 +18,6 @@ interface IState {
 interface IProps {
   userStore: UserStore
 }
-
-const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
-  display: block;
-`
 
 export class ChangePasswordForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -53,6 +43,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
   }
 
   public render() {
+    const _labelStyle = { fontSize: 2, mb: 2 }
     return (
       <>
         <Button
@@ -82,7 +73,9 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
               return (
                 <form onSubmit={handleSubmit}>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                    <Label htmlFor="oldPassword">Old password :</Label>
+                    <Label htmlFor="oldPassword" sx={_labelStyle}>
+                      Old password :
+                    </Label>
                     <Field
                       name="oldPassword"
                       component={FieldInput}
@@ -93,7 +86,9 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     />
                   </Flex>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                    <Label htmlFor="newPassword">New password :</Label>
+                    <Label htmlFor="newPassword" sx={_labelStyle}>
+                      New password :
+                    </Label>
                     <Field
                       name="newPassword"
                       component={FieldInput}
@@ -104,7 +99,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     />
                   </Flex>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                    <Label htmlFor="repeatPassword">
+                    <Label htmlFor="repeatPassword" sx={_labelStyle}>
                       Repeat new password :
                     </Label>
                     <Field

@@ -1,6 +1,7 @@
 import type {
   DBDoc,
   IComment,
+  ILockable,
   IModerable,
   ISelectedTags,
   ISharedFeatures,
@@ -40,7 +41,7 @@ export namespace IResearch {
     status: 'draft' | 'published'
   }
 
-  export interface FormInput extends IModerable {
+  export interface FormInput extends ILockable, IModerable {
     title: string
     description: string
     researchCategory?: IResearchCategory

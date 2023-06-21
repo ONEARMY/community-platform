@@ -17,6 +17,10 @@ export type IModerationStatus =
   | 'rejected'
   | 'accepted'
 
+export interface ILockable {
+  lockVersion?: number
+}
+
 export interface IModerable {
   moderation: IModerationStatus
   _createdBy?: string

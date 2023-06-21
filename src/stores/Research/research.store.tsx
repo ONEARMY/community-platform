@@ -521,13 +521,22 @@ export class ResearchStore extends ModuleStore {
       .collection<IResearch.Item>(COLLECTION_NAME)
       .doc(values._id)
     const user = this.activeUser as IUser
-    const updates = (await dbRef.get())?.updates || [] // save old updates when editing
+    const record = await dbRef.get()
+    const updates = record?.updates || [] // save old updates when editing
     const collaborators = Array.isArray(values?.collaborators)
       ? values.collaborators
       : (values.collaborators || '')
           .split(',')
           .map((s) => s.trim())
           .filter(Boolean)
+
+    // TODO: if lockVersion is an acceptable idea, then the next step would be to add a nice message to the UI.
+    // Potentially just an 'Another user just updated this article, you'll need to refresh and try again' message in the
+    // Upload progress modal
+    if (values.lockVersion !== record?.lockVersion)
+      throw new Error(
+        `lock version ${values.lockVersion} | ${record?.lockVersion}`,
+      )
 
     try {
       // populate DB
@@ -550,6 +559,7 @@ export class ResearchStore extends ModuleStore {
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
         updates,
+        lockVersion: (values.lockVersion || 0) + 1,
         creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||
           !values._createdBy

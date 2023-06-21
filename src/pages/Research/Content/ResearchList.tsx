@@ -1,10 +1,10 @@
 import { useTheme } from '@emotion/react'
 import { observer } from 'mobx-react'
-import { Button, Icon } from 'oa-components'
+import { Button } from 'oa-components'
 import { Link, useHistory } from 'react-router-dom'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { Box, Flex, Grid, Heading, Text } from 'theme-ui'
+import { Box, Flex, Grid, Heading } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
 import type { RouteComponentProps } from 'react-router'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
@@ -102,31 +102,6 @@ const ResearchList = observer(() => {
               </Link>
             </Box>
           </Flex>
-        </Flex>
-        <Flex
-          sx={{
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            display: ['none', 'flex'],
-          }}
-        >
-          <Text
-            color={theme.colors.black}
-            sx={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}
-          >
-            <Icon glyph="star-active" mr={1} />
-            Useful
-          </Text>
-          <Text
-            color={theme.colors.black}
-            sx={{ display: 'flex', alignItems: 'center', fontSize: '16px' }}
-          >
-            <Icon glyph="comment" mr={1} />
-            Comments
-          </Text>
-          <Text color={theme.colors.black} sx={{ fontSize: '16px' }}>
-            Updates
-          </Text>
         </Flex>
       </Grid>
       {filteredResearches.map((item) => {

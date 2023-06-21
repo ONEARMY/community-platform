@@ -156,6 +156,35 @@ export class UserStore extends ModuleStore {
     return lookup2[0]
   }
 
+  public async getUserCreatedDocs(userID: string) {
+    const howtos = await this.db
+      .collection('howtos')
+      .getWhere('_createdBy', '==', userID)
+    const research = await this.db
+      .collection('research')
+      .getWhere('_createdBy', '==', userID)
+    const researchCollaborated = await this.db
+      .collection('research')
+      .getWhere('collaborators', 'array-contains', userID)
+    const events = await this.db
+      .collection('events')
+      .getWhere('_createdBy', '==', userID)
+
+    const researchCombined = [...research, ...researchCollaborated]
+
+    const howtosFiltered = howtos.filter((doc) => doc.moderation === 'accepted')
+    const researchFiltered = researchCombined.filter(
+      (doc) => doc.moderation === 'accepted',
+    )
+    const eventsFiltered = events.filter((doc) => doc.moderation === 'accepted')
+
+    return {
+      howtos: howtosFiltered,
+      research: researchFiltered,
+      events: eventsFiltered,
+    }
+  }
+
   public async updateUserBadge(userId: string, badges: IUserBadges) {
     const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(userId)
     await this.db

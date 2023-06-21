@@ -40,5 +40,5 @@ const getUserTotalUseful = async (
     'users_totalUseful',
     id,
   )
-  return totalUseful ?? 0
+  return totalUseful || 0
 }

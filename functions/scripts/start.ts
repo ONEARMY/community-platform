@@ -12,7 +12,7 @@ import { EMULATOR_EXPORT_FOLDER, EMULATOR_IMPORT_FOLDER } from './paths'
  *
  * NOTE - whilst similar functionality can be achieved with packages like 'concurrently',
  * SIGTERM signals don't seem to always be handled correctly and the emulator doesn't complete
- * export operations. Similarly webpack watch cli respawns even after SIGINT so better to run programatically
+ * export operations. Similarly webpack watch cli respawns even after SIGINT so better to run programmatically
  */
 function main() {
   // CLI: concurrently --kill-others-on-fail --names \"emulator,functions\" -c \"blue,magenta\" \"yarn serve:emulated\" \"yarn watch\"
@@ -31,7 +31,7 @@ function main() {
 }
 main()
 
-/** Programatically run webpack in watch mode */
+/** Programmatically run webpack in watch mode */
 async function compileAndWatchFunctions(): Promise<webpack.Compiler.Watching> {
   // CLI: webpack --watch
   const compiler = webpack(webpackConfig)

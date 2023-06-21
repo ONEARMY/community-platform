@@ -5,6 +5,8 @@ node_modules
 
 # testing
 /coverage
+/reports
+/junit.xml
 
 functions/service.json
 functions/backup.json

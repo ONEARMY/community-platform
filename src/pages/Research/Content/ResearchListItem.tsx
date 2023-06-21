@@ -146,7 +146,7 @@ const ResearchListItem = ({ item }: IProps) => {
               >
                 {getUpdateText(item)}
                 {/* TODO: This is a placeholder icon */}
-                <Icon glyph="turned-in" ml={1} />
+                <Icon glyph="update" ml={1} />
               </Text>
             </Box>
           </Grid>

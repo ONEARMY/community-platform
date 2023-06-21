@@ -103,6 +103,7 @@ export const glyphs: IGlyphs = {
   bazar: iconMap.bazar,
   'email-outline': iconMap.emailOutline,
   discord: iconMap.discord,
+  update: iconMap.update,
 }
 
 export type Props = IProps & VerticalAlignProps & SpaceProps

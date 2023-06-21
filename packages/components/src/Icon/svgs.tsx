@@ -12,6 +12,7 @@ import discordSVG from '../../assets/icons/icon-discord.svg'
 import websiteSVG from '../../assets/icons/icon-website.svg'
 import bazarSVG from '../../assets/icons/icon-bazar.svg'
 import emailOutlineSVG from '../../assets/icons/icon-email.svg'
+import updateSVG from '../../assets/icons/icon-update.svg'
 
 const imgStyle = {
   maxWidth: '100%',
@@ -32,4 +33,5 @@ export const iconMap = {
   website: <img alt="icon" style={imgStyle} src={websiteSVG} />,
   bazar: <img alt="icon" style={imgStyle} src={bazarSVG} />,
   emailOutline: <img alt="icon" style={imgStyle} src={emailOutlineSVG} />,
+  update: <img alt="icon" style={imgStyle} src={updateSVG} />,
 }

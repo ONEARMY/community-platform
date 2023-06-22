@@ -11,7 +11,7 @@ import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/No
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
 import type { ThemeWithName } from 'oa-themes'
-import { Flex } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
@@ -117,7 +117,29 @@ export class Header extends Component {
           }}
         >
           <Flex>
-            <Logo isMobile={true} />
+            <Flex>
+              <Logo isMobile={true} />
+            </Flex>
+            {isLoggedInUser && (user.userRoles || []).includes('beta-tester') && (
+              <Flex
+                className="user-beta-icon"
+                ml={4}
+                sx={{ alignItems: 'center' }}
+              >
+                <Text
+                  sx={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '1.4rem',
+                    borderRadius: '4px',
+                    padding: '2px 6px',
+                    backgroundColor: 'lightgrey',
+                  }}
+                >
+                  BETA
+                </Text>
+              </Flex>
+            )}
           </Flex>
           {isLoggedInUser && (
             <MobileNotificationsWrapper>

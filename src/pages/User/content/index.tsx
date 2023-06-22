@@ -16,9 +16,18 @@ interface IRouterCustomParams {
 
 interface IProps extends RouteComponentProps<IRouterCustomParams> {}
 
+export interface UserCreatedDocs {
+  howtos: any
+  research: any
+  events: any
+}
+
 export const UserPage = observer((props: IProps) => {
   const { userStore, aggregationsStore } = useCommonStores().stores
   const [user, setUser] = useState<IUserPP | undefined>()
+  const [userCreatedDocs, setUserCreatedDocs] = useState<
+    UserCreatedDocs | undefined
+  >()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -34,12 +43,23 @@ export const UserPage = observer((props: IProps) => {
               }
             : null,
         )
-        setIsLoading(false)
       } catch (error) {
         logger.error('Error getting user profile', error)
       }
     }
+
+    const fetchUserDocs = async () => {
+      try {
+        const docs = await userStore.getUserCreatedDocs(userid)
+
+        await setUserCreatedDocs(docs || null)
+        setIsLoading(false)
+      } catch (error) {
+        logger.error('Error getting user created docs', error)
+      }
+    }
     fetchUserData()
+    fetchUserDocs()
   }, [props.match.params.id])
 
   // Ensure aggregations up-to-date when using any child pages and unsubscribe when leaving
@@ -73,9 +93,17 @@ export const UserPage = observer((props: IProps) => {
     <>
       {user.profileType === ProfileType.MEMBER ||
       user.profileType === undefined ? (
-        <MemberProfile data-cy="memberProfile" user={user} />
+        <MemberProfile
+          data-cy="memberProfile"
+          user={user}
+          docs={userCreatedDocs}
+        />
       ) : (
-        <SpaceProfile data-cy="spaceProfile" user={user} />
+        <SpaceProfile
+          data-cy="spaceProfile"
+          user={user}
+          docs={userCreatedDocs}
+        />
       )}
     </>
   )

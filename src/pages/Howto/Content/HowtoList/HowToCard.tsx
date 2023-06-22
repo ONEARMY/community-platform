@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { Card, Flex, Heading, Text } from 'theme-ui'
+import { Card, Flex, Heading, Text, Box } from 'theme-ui'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -16,9 +16,10 @@ export const HowToCard = (props: IProps) => {
   return (
     <Card
       data-cy="card"
+      data-cy-howto-slug={howto.slug}
       sx={{ borderRadius: 2, position: 'relative', height: '100%' }}
     >
-      <Flex>
+      <Box>
         {howto.moderation !== 'accepted' && (
           <>
             <ModerationStatus
@@ -50,37 +51,44 @@ export const HowToCard = (props: IProps) => {
               crossOrigin=""
             />
           </Flex>
-          <Flex sx={{ flexDirection: 'column', padding: 3 }}>
-            <Heading variant="small" color={'black'}>
-              {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-              {capitalizeFirstLetter(howto.title)}
-            </Heading>
-            <Flex sx={{ alignItems: 'center' }}>
-              <Username
-                user={{
-                  userName: howto._createdBy,
-                  countryCode: howto.creatorCountry,
-                }}
-                isVerified={isUserVerified(howto._createdBy)}
-              />
-            </Flex>
-            <Flex mt={4}>
-              <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
-                {howto.taglist &&
-                  howto.taglist.map((tag, idx) => (
-                    <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
-                  ))}
-              </Flex>
-              {votedUsefulCount > 0 && (
-                <Flex ml={1} sx={{ alignItems: 'center' }}>
-                  <Icon glyph="star-active" marginRight="4px" />
-                  <Text color="black">{votedUsefulCount}</Text>
-                </Flex>
-              )}
-            </Flex>
-          </Flex>
         </RouterLink>
-      </Flex>
+
+        <Flex sx={{ flexDirection: 'column', padding: 3 }}>
+          <Heading variant="small" color={'black'}>
+            {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+            <RouterLink
+              key={howto._id}
+              to={`/how-to/${encodeURIComponent(howto.slug)}`}
+              style={{ width: '100%', color: 'black' }}
+            >
+              {capitalizeFirstLetter(howto.title)}
+            </RouterLink>
+          </Heading>
+          <Flex sx={{ alignItems: 'center' }}>
+            <Username
+              user={{
+                userName: howto._createdBy,
+                countryCode: howto.creatorCountry,
+              }}
+              isVerified={isUserVerified(howto._createdBy)}
+            />
+          </Flex>
+          <Flex mt={4}>
+            <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
+              {howto.taglist &&
+                howto.taglist.map((tag, idx) => (
+                  <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+                ))}
+            </Flex>
+            {votedUsefulCount > 0 && (
+              <Flex ml={1} sx={{ alignItems: 'center' }}>
+                <Icon glyph="star-active" marginRight="4px" />
+                <Text color="black">{votedUsefulCount}</Text>
+              </Flex>
+            )}
+          </Flex>
+        </Flex>
+      </Box>
     </Card>
   )
 }

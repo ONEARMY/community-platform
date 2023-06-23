@@ -9,6 +9,7 @@ export const FactoryUser = (
   _created: faker.date.past().toString(),
   _modified: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
+  _contentModifiedTimestamp: faker.date.past().toString(),
   _authID: faker.datatype.uuid(),
   profileType: faker.helpers.arrayElement(Object.values(ProfileType)),
   userName: faker.internet.userName(),

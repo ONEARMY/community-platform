@@ -168,11 +168,16 @@ const ResearchListItem = ({ item }: IProps) => {
 }
 
 const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
-  const lastModifiedDate = format(new Date(item._modified), 'DD-MM-YYYY')
+  const contentModifiedDate = format(
+    new Date(item._contentModifiedTimestamp || item._modified),
+    'DD-MM-YYYY',
+  )
   const creationDate = format(new Date(item._created), 'DD-MM-YYYY')
 
-  if (lastModifiedDate !== creationDate) {
-    return variant === 'long' ? `Updated ${lastModifiedDate}` : lastModifiedDate
+  if (contentModifiedDate !== creationDate) {
+    return variant === 'long'
+      ? `Updated ${contentModifiedDate}`
+      : contentModifiedDate
   } else {
     return variant === 'long' ? `Created ${creationDate}` : creationDate
   }

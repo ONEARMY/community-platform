@@ -560,7 +560,11 @@ export class ResearchStore extends ModuleStore {
       }
       logger.debug('populating database', researchItem)
       // set the database document
-      const updatedItem = await this._updateResearchItem(dbRef, researchItem)
+      const updatedItem = await this._updateResearchItem(
+        dbRef,
+        researchItem,
+        true,
+      )
       this.updateResearchUploadStatus('Database')
       logger.debug('post added')
       if (updatedItem) {
@@ -622,6 +626,7 @@ export class ResearchStore extends ModuleStore {
             _id: randomID(),
             _created: new Date().toISOString(),
             _modified: new Date().toISOString(),
+            _contentModifiedTimestamp: new Date().toISOString(),
             _deleted: false,
             comments: [],
           })
@@ -642,7 +647,7 @@ export class ResearchStore extends ModuleStore {
         logger.debug('created:', newItem._created)
 
         // set the database document
-        await this._updateResearchItem(dbRef, newItem)
+        await this._updateResearchItem(dbRef, newItem, true)
         logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
@@ -682,7 +687,7 @@ export class ResearchStore extends ModuleStore {
         newItem.updates[existingUpdateIndex]._deleted = true
 
         // set the database document
-        const updatedItem = await this._updateResearchItem(dbRef, newItem)
+        const updatedItem = await this._updateResearchItem(dbRef, newItem, true)
 
         if (updatedItem) {
           this.setActiveResearchItemBySlug(updatedItem.slug)
@@ -726,6 +731,7 @@ export class ResearchStore extends ModuleStore {
   private async _updateResearchItem(
     dbRef: DocReference<IResearch.Item>,
     researchItem: IResearch.Item,
+    setLastEditTimestamp = false,
   ) {
     const { text: researchDescription, users } = await this.addUserReference(
       researchItem.description,
@@ -793,11 +799,14 @@ export class ResearchStore extends ModuleStore {
       researchItem.previousSlugs.push(researchItem.slug)
     }
 
-    await dbRef.set({
-      ...cloneDeep(researchItem),
-      mentions,
-      description: researchDescription,
-    })
+    await dbRef.set(
+      {
+        ...cloneDeep(researchItem),
+        mentions,
+        description: researchDescription,
+      },
+      { set_last_edit_timestamp: setLastEditTimestamp },
+    )
 
     // Side effects from updating research item
     // consider moving these out of the store.

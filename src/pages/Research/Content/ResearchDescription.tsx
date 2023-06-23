@@ -37,10 +37,13 @@ interface IProps {
 
 const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
-    const lastModifiedDate = format(new Date(research._modified), 'DD-MM-YYYY')
+    const contentModifiedDate = format(
+      new Date(research._contentModifiedTimestamp || research._modified),
+      'DD-MM-YYYY',
+    )
     const creationDate = format(new Date(research._created), 'DD-MM-YYYY')
-    if (lastModifiedDate !== creationDate) {
-      return 'Last update on ' + lastModifiedDate
+    if (contentModifiedDate !== creationDate) {
+      return `Last update on ${contentModifiedDate}`
     } else {
       return ''
     }

@@ -203,13 +203,7 @@ export class HowtoList extends React.Component<any, IState> {
             mb={['10px', '10px', 0]}
             sx={{ width: ['100%', '100%', '20%'] }}
           >
-            <SortSelect
-              usefulCounts={howtoItems.map((item) => {
-                const i = {}
-                i[item._id] = (item.votedUsefulBy || []).length
-                return i
-              })}
-            />
+            <SortSelect />
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
             <Input

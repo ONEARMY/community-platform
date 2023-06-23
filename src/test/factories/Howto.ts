@@ -26,6 +26,7 @@ export const FactoryHowto = (
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
+  _contentModifiedTimestamp: faker.date.past().toString(),
   _createdBy: faker.internet.userName(),
   steps: [],
   mentions: [],
@@ -41,6 +42,7 @@ export const FactoryHowto = (
   },
   total_views: faker.datatype.number(),
   total_downloads: faker.datatype.number(),
+  votedUsefulBy: [],
   ...howtoOverloads,
 })
 

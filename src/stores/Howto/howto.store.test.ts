@@ -7,11 +7,12 @@ import type { RootStore } from '..'
 import { HowtoStore } from './howto.store'
 
 const factory = async (
-  howtoOverloads: Partial<IHowtoDB> = {},
+  howTos: IHowtoDB[] = [FactoryHowto({})],
   userOverloads?: Partial<IUser>,
 ) => {
   const store = new HowtoStore({} as RootStore)
-  const howToItem = FactoryHowto(howtoOverloads)
+
+  const howToItem = howTos[0]
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -21,6 +22,8 @@ const factory = async (
       ...userOverloads,
     }),
   )
+
+  store.sortHowtosByLatest(howTos)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -65,9 +68,12 @@ describe('howto.store', () => {
     it.todo('updates an existing item')
 
     it('captures mentions within description', async () => {
-      const { store, howToItem, setFn } = await factory({
-        description: '@username',
-      })
+      const howtos = [
+        FactoryHowto({
+          description: '@username',
+        }),
+      ]
+      const { store, howToItem, setFn } = await factory(howtos)
 
       // Act
       await store.uploadHowTo(howToItem)
@@ -79,11 +85,16 @@ describe('howto.store', () => {
     })
 
     it('captures mentions within a how-step', async () => {
-      const { store, howToItem, setFn } = await factory({
-        steps: [
-          FactoryHowtoStep({ text: 'Step description featuring a @username' }),
-        ],
-      })
+      const howtos = [
+        FactoryHowto({
+          steps: [
+            FactoryHowtoStep({
+              text: 'Step description featuring a @username',
+            }),
+          ],
+        }),
+      ]
+      const { store, howToItem, setFn } = await factory(howtos)
 
       // Act
       await store.uploadHowTo(howToItem)
@@ -97,20 +108,23 @@ describe('howto.store', () => {
     })
 
     it('creates notifications for any new mentions in description', async () => {
-      const { store, howToItem, setFn } = await factory({
-        description: '@username',
-        mentions: [
-          {
-            username: 'username',
-            location: 'description',
-          },
-        ],
-        comments: [
-          FactoryComment({
-            text: '@commentauthor',
-          }),
-        ],
-      })
+      const howtos = [
+        FactoryHowto({
+          description: '@username',
+          mentions: [
+            {
+              username: 'username',
+              location: 'description',
+            },
+          ],
+          comments: [
+            FactoryComment({
+              text: '@commentauthor',
+            }),
+          ],
+        }),
+      ]
+      const { store, howToItem, setFn } = await factory(howtos)
 
       await store.uploadHowTo({
         ...howToItem,
@@ -128,37 +142,40 @@ describe('howto.store', () => {
     })
 
     it('creates notifications for any new mentions in a how-to step', async () => {
-      const { store, howToItem, setFn } = await factory({
-        description: '@username',
-        mentions: [
-          {
-            username: 'username',
-            location: 'description',
-          },
-        ],
-        steps: [
-          {
-            images: [
-              {
-                downloadUrl: 'string',
-                fullPath: 'string',
-                name: 'string',
-                type: 'string',
-                size: 2300,
-                timeCreated: 'string',
-                updated: 'string',
-              },
-            ],
-            title: 'How to step',
-            text: 'Step description featuring a howto',
-          },
-        ],
-        comments: [
-          FactoryComment({
-            text: '@commentauthor',
-          }),
-        ],
-      })
+      const howtos = [
+        FactoryHowto({
+          description: '@username',
+          mentions: [
+            {
+              username: 'username',
+              location: 'description',
+            },
+          ],
+          steps: [
+            {
+              images: [
+                {
+                  downloadUrl: 'string',
+                  fullPath: 'string',
+                  name: 'string',
+                  type: 'string',
+                  size: 2300,
+                  timeCreated: 'string',
+                  updated: 'string',
+                },
+              ],
+              title: 'How to step',
+              text: 'Step description featuring a howto',
+            },
+          ],
+          comments: [
+            FactoryComment({
+              text: '@commentauthor',
+            }),
+          ],
+        }),
+      ]
+      const { store, howToItem, setFn } = await factory(howtos)
 
       await store.uploadHowTo({
         ...howToItem,
@@ -184,10 +201,14 @@ describe('howto.store', () => {
           text: '@username',
         }),
       ]
-      const { store, howToItem, setFn } = await factory({
-        comments,
-        description: '@username',
-      })
+
+      const howtos = [
+        FactoryHowto({
+          comments,
+          description: '@username',
+        }),
+      ]
+      const { store, howToItem, setFn } = await factory(howtos)
 
       // Act
       await store.uploadHowTo(howToItem)
@@ -234,9 +255,12 @@ describe('howto.store', () => {
       })
 
       it('preserves @mentions in description', async () => {
-        const { store, setFn } = await factory({
-          description: '@username',
-        })
+        const howtos = [
+          FactoryHowto({
+            description: '@username',
+          }),
+        ]
+        const { store, setFn } = await factory(howtos)
 
         // Act
         await store.addComment('fish')
@@ -256,14 +280,17 @@ describe('howto.store', () => {
       })
 
       it('preserves @mentions in existing comments', async () => {
-        const { store, setFn } = await factory({
-          description: '@username',
-          comments: [
-            FactoryComment({
-              text: 'Existing comment @username',
-            }),
-          ],
-        })
+        const howtos = [
+          FactoryHowto({
+            description: '@username',
+            comments: [
+              FactoryComment({
+                text: 'Existing comment @username',
+              }),
+            ],
+          }),
+        ]
+        const { store, setFn } = await factory(howtos)
 
         // Act
         await store.addComment('fish')
@@ -291,9 +318,13 @@ describe('howto.store', () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
         })
-        const { store, setFn } = await factory({
-          comments: [comment],
-        })
+
+        const howtos = [
+          FactoryHowto({
+            comments: [comment],
+          }),
+        ]
+        const { store, setFn } = await factory(howtos)
 
         // Act
         await store.editComment(comment._id, 'New text')
@@ -310,12 +341,13 @@ describe('howto.store', () => {
         const comment = FactoryComment({
           _creatorId: 'test-user',
         })
-        const { store, setFn } = await factory(
-          {
+
+        const howtos = [
+          FactoryHowto({
             comments: [comment],
-          },
-          { userRoles: ['admin'] },
-        )
+          }),
+        ]
+        const { store, setFn } = await factory(howtos, { userRoles: ['admin'] })
 
         // Act
         await store.editComment(comment._id, 'New text')
@@ -331,10 +363,14 @@ describe('howto.store', () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
         })
-        const { store, setFn } = await factory({
-          comments: [comment],
-          description: '@username',
-        })
+
+        const howtos = [
+          FactoryHowto({
+            comments: [comment],
+            description: '@username',
+          }),
+        ]
+        const { store, setFn } = await factory(howtos)
 
         // Act
         await store.editComment(comment._id, 'New text')
@@ -351,10 +387,14 @@ describe('howto.store', () => {
             text: '@username',
           }),
         ]
-        const { store, setFn } = await factory({
-          comments,
-          description: '@username',
-        })
+
+        const howtos = [
+          FactoryHowto({
+            comments,
+            description: '@username',
+          }),
+        ]
+        const { store, setFn } = await factory(howtos)
 
         // Act
         await store.editComment(comments[0]._id, 'An updated message')
@@ -371,9 +411,13 @@ describe('howto.store', () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
         })
-        const { store, setFn } = await factory({
-          comments: [comment],
-        })
+
+        const howtos = [
+          FactoryHowto({
+            comments: [comment],
+          }),
+        ]
+        const { store, setFn } = await factory(howtos)
 
         // Act
         await store.deleteComment(comment._id)
@@ -386,12 +430,12 @@ describe('howto.store', () => {
         const comment = FactoryComment({
           _creatorId: 'test-user',
         })
-        const { store, setFn } = await factory(
-          {
+        const howtos = [
+          FactoryHowto({
             comments: [comment],
-          },
-          { userRoles: ['admin'] },
-        )
+          }),
+        ]
+        const { store, setFn } = await factory(howtos, { userRoles: ['admin'] })
 
         // Act
         await store.deleteComment(comment._id)
@@ -404,10 +448,14 @@ describe('howto.store', () => {
         const comment = FactoryComment({
           _creatorId: 'fake-user',
         })
-        const { store, setFn } = await factory({
-          comments: [comment],
-          description: '@username',
-        })
+
+        const howtos = [
+          FactoryHowto({
+            comments: [comment],
+            description: '@username',
+          }),
+        ]
+        const { store, setFn } = await factory(howtos)
 
         // Act
         await store.deleteComment(comment._id)
@@ -425,10 +473,14 @@ describe('howto.store', () => {
             text: '@username',
           }),
         ]
-        const { store, setFn } = await factory({
-          comments,
-          description: '@username',
-        })
+
+        const howtos = [
+          FactoryHowto({
+            comments,
+            description: '@username',
+          }),
+        ]
+        const { store, setFn } = await factory(howtos)
 
         // Act
         await store.deleteComment(comments[0]._id)
@@ -484,5 +536,35 @@ describe('howto.store', () => {
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(updatedViews).toBe(views + 1)
     })
+  })
+})
+
+describe('sortListByMostUseful', () => {
+  it('returns correct order', async () => {
+    const howtos = [
+      FactoryHowto({
+        votedUsefulBy: ['user1', 'user2', 'user3'],
+      }),
+      FactoryHowto(),
+      FactoryHowto({
+        votedUsefulBy: ['user1', 'user2', 'user3', 'user4', 'user5'],
+      }),
+      FactoryHowto({
+        votedUsefulBy: ['user1', 'user2'],
+      }),
+    ]
+
+    const { store } = await factory(howtos)
+
+    // Act
+    await store.sortHowtosByUsefulCount()
+
+    const howToUsefulCounts = store.allHowtos.map((howto) => {
+      return (howto.votedUsefulBy || []).length
+    })
+
+    const expectedUseful = [5, 3, 2, 0]
+
+    expect(howToUsefulCounts).toEqual(expectedUseful)
   })
 })

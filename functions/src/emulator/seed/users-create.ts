@@ -38,6 +38,7 @@ export async function seedUsersCreate() {
       _id: uid,
       _created: '2022-01-30T18:51:57.719Z',
       _modified: '2022-01-30T18:51:57.719Z',
+      _contentModifiedTimestamp: '2022-01-30T18:51:57.719Z',
       _deleted: false,
       displayName: user.label,
       userName: uid,

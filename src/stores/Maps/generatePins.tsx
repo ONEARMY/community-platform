@@ -13,6 +13,7 @@ const MOCK_DB_META = (id?: string) => {
     _modified: d2.toISOString(),
     _deleted: false,
     _id: id ? id : randomID(),
+    _contentModifiedTimestamp: d2.toISOString(),
   }
   return meta
 }

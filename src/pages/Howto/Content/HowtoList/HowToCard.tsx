@@ -53,27 +53,34 @@ export const HowToCard = (props: IProps) => {
           </Flex>
         </RouterLink>
 
-        <Flex sx={{ flexDirection: 'column', padding: 3 }}>
-          <Heading variant="small" color={'black'}>
-            {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-            <RouterLink
-              key={howto._id}
-              to={`/how-to/${encodeURIComponent(howto.slug)}`}
-              style={{ width: '100%', color: 'black' }}
-            >
-              {capitalizeFirstLetter(howto.title)}
-            </RouterLink>
-          </Heading>
-          <Flex sx={{ alignItems: 'center' }}>
-            <Username
-              user={{
-                userName: howto._createdBy,
-                countryCode: howto.creatorCountry,
-              }}
-              isVerified={isUserVerified(howto._createdBy)}
-            />
+        <Flex sx={{ flexDirection: 'column', padding: 3, paddingBottom: 2 }}>
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              height: 'calc(((350px) / 3) * 0.5)',
+            }}
+          >
+            <Heading variant="small" color={'black'}>
+              {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+              <RouterLink
+                key={howto._id}
+                to={`/how-to/${encodeURIComponent(howto.slug)}`}
+                style={{ width: '100%', color: 'black' }}
+              >
+                {capitalizeFirstLetter(howto.title)}
+              </RouterLink>
+            </Heading>
+            <Flex sx={{ alignItems: 'center' }}>
+              <Username
+                user={{
+                  userName: howto._createdBy,
+                  countryCode: howto.creatorCountry,
+                }}
+                isVerified={isUserVerified(howto._createdBy)}
+              />
+            </Flex>
           </Flex>
-          <Flex mt={4}>
+          <Flex mt={5}>
             <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
               {howto.taglist &&
                 howto.taglist.map((tag, idx) => (

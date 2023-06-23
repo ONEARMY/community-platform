@@ -9,9 +9,7 @@ interface ISortOption {
   label: string
 }
 
-interface IProps {
-  usefulCounts: { [key: string]: number }
-}
+interface IProps {}
 
 interface InjectedProps extends IProps {
   howtoStore: HowtoStore
@@ -47,7 +45,7 @@ class SortSelect extends Component<IProps, IState> {
   onSortValueChange(value: ISortOption) {
     this.setState({ value })
     if (value.value === 'most useful') {
-      this.injected.howtoStore.sortHowtosByUsefulCount(this.props.usefulCounts)
+      this.injected.howtoStore.sortHowtosByUsefulCount()
     } else {
       this.injected.howtoStore.sortHowtosByLatest()
     }

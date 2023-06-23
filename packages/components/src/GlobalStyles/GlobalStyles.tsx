@@ -20,6 +20,14 @@ export const GlobalStyles = css`
     box-sizing: border-box;
   }
 
+  .beta-tester-feature {
+    border: 4px dashed ${theme.colors.betaGreen};
+  }
+
+  body:has(.beta-tester-feature) .user-beta-icon > span {
+    background-color: ${theme.colors.betaGreen};
+  }
+
   .slick-prev,
   .slick-next {
     position: absolute !important;

@@ -17,7 +17,7 @@ import {
   FileInformation,
 } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { Heading, Card, Flex, Box, Text } from 'theme-ui'
+import { Heading, Card, Flex, Box, Text, Label } from 'theme-ui'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { FileInputField } from 'src/common/Form/FileInput.field'
@@ -25,9 +25,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { inject, observer } from 'mobx-react'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import { PostingGuidelines } from './PostingGuidelines'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { HowToSubmitStatus } from './SubmitStatus'
 import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
@@ -87,12 +85,6 @@ const AnimationContainer = (props: any) => {
 
 const FormContainer = styled.form`
   width: 100%;
-`
-
-const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
-  display: block;
 `
 
 @inject('howtoStore')
@@ -168,7 +160,11 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   public render() {
     const { formValues, parentType } = this.props
     const { fileEditMode, showSubmitModal } = this.state
-
+    const _labelStyle = {
+      fontSize: 2,
+      marginBottom: 2,
+      display: 'block',
+    }
     return (
       <>
         {showSubmitModal && (
@@ -210,7 +206,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                   >
                     {/* How To Info */}
                     <Flex sx={{ flexDirection: 'column' }}>
-                      <Card bg={theme.colors.softblue}>
+                      <Card sx={{ bg: 'softblue' }}>
                         <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                           <Heading>
                             {this.props.parentType === 'create' ? (
@@ -251,7 +247,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                             >
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label htmlFor="title">
+                                <Label sx={_labelStyle} htmlFor="title">
                                   Title of your How-to *
                                 </Label>
                                 <Field
@@ -269,7 +265,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label>Category *</Label>
+                                <Label sx={_labelStyle}>Category *</Label>
                                 <Field
                                   name="category"
                                   render={({ input, ...rest }) => (
@@ -287,7 +283,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label>Select tags for your How-to*</Label>
+                                <Label sx={_labelStyle}>
+                                  Select tags for your How-to*
+                                </Label>
                                 <Field
                                   name="tags"
                                   component={TagsSelectField}
@@ -296,7 +294,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label htmlFor="time">
+                                <Label sx={_labelStyle} htmlFor="time">
                                   How long does it take? *
                                 </Label>
                                 <Field
@@ -312,7 +310,10 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label htmlFor="difficulty_level">
+                                <Label
+                                  sx={_labelStyle}
+                                  htmlFor="difficulty_level"
+                                >
                                   Difficulty level? *
                                 </Label>
                                 <Field
@@ -329,7 +330,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label htmlFor="description">
+                                <Label sx={_labelStyle} htmlFor="description">
                                   Short description of your How-to *
                                 </Label>
                                 <Field
@@ -365,7 +366,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   </Text>
                                 )}
                               </Flex>
-                              <Label htmlFor="description">
+                              <Label sx={_labelStyle} htmlFor="description">
                                 Do you have supporting file to help others
                                 replicate your How-to?
                               </Label>
@@ -414,6 +415,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       mb={3}
                                     >
                                       <Label
+                                        sx={_labelStyle}
                                         htmlFor="file-download-link"
                                         style={{ fontSize: '12px' }}
                                       >
@@ -437,6 +439,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       }}
                                     >
                                       <Label
+                                        sx={_labelStyle}
                                         htmlFor="files"
                                         style={{ fontSize: '12px' }}
                                       >
@@ -459,7 +462,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               sx={{ flexDirection: 'column', flex: [1, 1, 3] }}
                               data-cy={'intro-cover'}
                             >
-                              <Label htmlFor="cover_image">Cover image *</Label>
+                              <Label sx={_labelStyle} htmlFor="cover_image">
+                                Cover image *
+                              </Label>
                               <Box sx={{ height: '230px' }}>
                                 <Field
                                   id="cover_image"

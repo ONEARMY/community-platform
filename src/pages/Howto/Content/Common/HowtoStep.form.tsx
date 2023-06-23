@@ -1,12 +1,9 @@
 import { PureComponent } from 'react'
 import { Field } from 'react-final-form'
-import { Heading, Card, Flex, Text } from 'theme-ui'
+import { Heading, Card, Flex, Text, Label } from 'theme-ui'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { required } from 'src/utils/validators'
@@ -30,11 +27,12 @@ interface IState {
   showDeleteModal: boolean
   _toDocsList: boolean
 }
+// font-size: ${theme.fontSizes[2] + 'px'};
 
-const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
-`
+// const Label = styled.label`
+//   font-size: ${theme.fontSizes[2] + 'px'};
+//   margin-bottom: ${theme.space[2] + 'px'};
+// `
 
 class HowtoStep extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
@@ -70,6 +68,10 @@ class HowtoStep extends PureComponent<IProps, IState> {
 
   render() {
     const { step, index } = this.props
+    const _labelStyle = {
+      fontSize: 2,
+      marginBottom: 2,
+    }
 
     return (
       // NOTE - animation parent container in CreateHowTo
@@ -135,7 +137,9 @@ class HowtoStep extends PureComponent<IProps, IState> {
           </Flex>
 
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
-            <Label htmlFor={`${step}.title`}>Title of this step *</Label>
+            <Label sx={_labelStyle} htmlFor={`${step}.title`}>
+              Title of this step *
+            </Label>
             <Field
               name={`${step}.title`}
               data-cy="step-title"
@@ -149,7 +153,9 @@ class HowtoStep extends PureComponent<IProps, IState> {
             />
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
-            <Label htmlFor={`${step}.text`}>Description of this step *</Label>
+            <Label sx={_labelStyle} htmlFor={`${step}.text`}>
+              Description of this step *
+            </Label>
             <Field
               name={`${step}.text`}
               placeholder="Explain what you are doing in this step. If it gets too long, consider breaking it into multiple steps (max 700 characters)"
@@ -163,7 +169,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               isEqual={COMPARISONS.textInput}
             />
           </Flex>
-          <Label htmlFor={`${step}.text`}>
+          <Label sx={_labelStyle} htmlFor={`${step}.text`}>
             Upload image(s) for this step *
           </Label>
           <Flex
@@ -196,7 +202,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             </ImageInputFieldWrapper>
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
-            <Label htmlFor={`${step}.videoUrl`}>
+            <Label sx={_labelStyle} htmlFor={`${step}.videoUrl`}>
               Or embed a YouTube video*
             </Label>
             <Field

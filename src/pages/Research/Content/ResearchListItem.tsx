@@ -20,7 +20,7 @@ const ResearchListItem = ({ item }: IProps) => {
   const _commonStatisticStyle = {
     display: 'flex',
     alignItems: 'center',
-    fontSize: [1, 3, 3],
+    fontSize: [1, 2, 2],
   }
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
@@ -145,7 +145,6 @@ const ResearchListItem = ({ item }: IProps) => {
                 data-cy="ItemUpdateText"
               >
                 {getUpdateText(item)}
-                {/* TODO: This is a placeholder icon */}
                 <Icon glyph="update" ml={1} />
               </Text>
             </Box>

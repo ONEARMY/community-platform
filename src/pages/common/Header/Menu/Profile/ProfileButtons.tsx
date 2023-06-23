@@ -35,7 +35,7 @@ export class ProfileButtons extends Component<IProps> {
                 text="Login"
                 variant="secondary"
                 sx={{
-                  ..._commonMobileBtnStyle, // Merge with common style
+                  ..._commonMobileBtnStyle,
                   fontWeight: 'bold',
                   marginRight: 2,
                   marginBottom: 2,
@@ -48,7 +48,7 @@ export class ProfileButtons extends Component<IProps> {
                 variant="outline"
                 isMobile={true}
                 sx={{
-                  ..._commonMobileBtnStyle, // Merge with common style
+                  ..._commonMobileBtnStyle,
                 }}
               />
             </Box>

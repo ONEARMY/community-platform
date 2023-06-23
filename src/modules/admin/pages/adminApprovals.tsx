@@ -1,11 +1,7 @@
 import { observer } from 'mobx-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Box, Heading } from 'theme-ui'
+import { Box, Heading, Divider } from 'theme-ui'
 import type { IDBEndpoint, IHowto, IMapPin, IUserDB } from 'src/models'
-import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { useHistory } from 'react-router'
 import { useAdminStoreV2 } from '../admin.storeV2'
 
@@ -16,38 +12,6 @@ interface IPendingApprovals {
 }
 
 const endpoints: IDBEndpoint[] = ['mappins', 'howtos']
-
-const Divider = styled('hr')`
-  border: 2px solid black;
-`
-
-const ContentTable = styled('table')`
-  border-collapse: separate;
-  border-spacing: 0 8px;
-  table-layout: fixed;
-  width: 100%;
-`
-
-const ContentRow = styled('tr')`
-  background: white;
-  &:hover {
-    cursor: pointer;
-    background: ${theme.colors.yellow.hover};
-  }
-  & > td {
-    padding: 8px;
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
-  }
-  & > td:first-of-type {
-    border-left: 2px solid black;
-    border-radius: 5px 0 0 5px;
-  }
-  & > td:last-of-type {
-    border-right: 2px solid black;
-    border-radius: 0 5px 5px 0;
-  }
-`
 
 const AdminHome = observer(() => {
   const adminStore = useAdminStoreV2()
@@ -67,6 +31,35 @@ const AdminHome = observer(() => {
   useEffect(() => {
     getApprovals()
   }, [])
+  const _tableStyle = {
+    textAlign: 'left',
+    borderCollapse: 'separate',
+    borderSpacing: '0 8px',
+    tableLayout: 'fixed',
+    width: '100%',
+  } as React.CSSProperties
+
+  const _trStyle = {
+    background: 'white',
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: 'yellow.hover',
+    },
+    '& > td': {
+      padding: '8px',
+      borderTop: '2px solid black',
+      borderBottom: '2px solid black',
+
+      '&:first-of-type': {
+        borderLeft: '2px solid black',
+        borderRadius: '5px 0 0 5px',
+      },
+      '&:last-of-type': {
+        borderRight: '2px solid black',
+        borderRadius: '0 5px 5px 0',
+      },
+    },
+  }
   return (
     <>
       <Heading my={9}>Pending Content Approvals</Heading>
@@ -74,8 +67,12 @@ const AdminHome = observer(() => {
       {pending.mappins && (
         <Box mb={4}>
           <Heading variant="small">Map Pins {pending.mappins.length}</Heading>
-          <Divider />
-          <ContentTable style={{ textAlign: 'left', width: '100%' }}>
+          <Divider
+            sx={{
+              border: '2px solid black',
+            }}
+          />
+          <table style={_tableStyle}>
             <thead>
               <tr>
                 <th>Type</th>
@@ -84,16 +81,18 @@ const AdminHome = observer(() => {
             </thead>
             <tbody>
               {pending.mappins.map((p) => (
-                <ContentRow
+                <Box
+                  as="tr"
+                  sx={_trStyle}
                   key={p._id}
                   onClick={() => history.push(`/map#${p._id}`)}
                 >
                   <td>{p.type}</td>
                   <td>{p._id}</td>
-                </ContentRow>
+                </Box>
               ))}
             </tbody>
-          </ContentTable>
+          </table>
         </Box>
       )}
       {/* Howtos */}
@@ -101,7 +100,7 @@ const AdminHome = observer(() => {
         <Box mb={4}>
           <Heading variant="small">HowTos {pending.howtos.length}</Heading>
           <Divider />
-          <ContentTable style={{ textAlign: 'left', width: '100%' }}>
+          <table style={_tableStyle}>
             <thead>
               <tr>
                 <th>Author</th>
@@ -110,16 +109,18 @@ const AdminHome = observer(() => {
             </thead>
             <tbody>
               {pending.howtos.map((p) => (
-                <ContentRow
+                <Box
+                  as="tr"
+                  sx={_trStyle}
                   key={p._id}
                   onClick={() => history.push(`/how-to/${p.slug}`)}
                 >
                   <td>{p._createdBy}</td>
                   <td>{p.title}</td>
-                </ContentRow>
+                </Box>
               ))}
             </tbody>
-          </ContentTable>
+          </table>
         </Box>
       )}
       {/* Users (not currently used) */}
@@ -127,7 +128,7 @@ const AdminHome = observer(() => {
         <Box mb={4}>
           <Heading variant="small">Users {pending.users.length}</Heading>
           <Divider />
-          <ContentTable style={{ textAlign: 'left', width: '100%' }}>
+          <table style={_tableStyle}>
             <thead>
               <tr>
                 <th>Type</th>
@@ -136,16 +137,18 @@ const AdminHome = observer(() => {
             </thead>
             <tbody>
               {pending.users.map((p) => (
-                <ContentRow
+                <Box
+                  as="tr"
+                  sx={_trStyle}
                   key={p._id}
                   onClick={() => history.push(`/u/${p.userName}`)}
                 >
                   <td></td>
                   <td>{p.userName}</td>
-                </ContentRow>
+                </Box>
               ))}
             </tbody>
-          </ContentTable>
+          </table>
         </Box>
       )}
     </>

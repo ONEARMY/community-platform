@@ -5,9 +5,6 @@ import { Field } from 'react-final-form'
 import { ExternalLink, FieldTextarea, MapWithDraggablePin } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { required } from 'src/utils/validators'
 import type { ILocation } from 'src/models/common.models'
 import { randomIntFromInterval } from 'src/utils/helpers'
@@ -86,11 +83,7 @@ export class WorkspaceMapPinSection extends React.Component<any> {
                       Your workspace location
                     </Text>
                     {props.meta.invalid && (
-                      <Text
-                        color={theme.colors.red}
-                        mb="5px"
-                        sx={{ fontSize: 1 }}
-                      >
+                      <Text mb="5px" sx={{ fontSize: 1, color: 'red' }}>
                         Please select your location
                       </Text>
                     )}

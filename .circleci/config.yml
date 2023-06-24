@@ -286,11 +286,17 @@ jobs:
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
           command: yarn run test:unit:ci && yarn run test:components
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: reports
       - store_artifacts:
           path: coverage
       - store_artifacts:
           path: packages/components/coverage
       - codecov/upload
+      - store_artifacts:
+          path: reports
+      - store_test_results:
+          path: reports
 
   test_circular_dependency:
     docker: *docker

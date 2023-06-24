@@ -51,7 +51,6 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
     description: 'Browse Tags',
     path: '/tags',
     moduleName,
-    disabled: true,
   },
   {
     component: lazy(

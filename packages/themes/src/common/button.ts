@@ -17,9 +17,9 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
   primary: {
     ...BASE_BUTTON,
     color: colors.black,
-    bg: colors.yellow.base,
+    bg: colors.accent.base,
     '&:hover': {
-      bg: colors.yellow.hover,
+      bg: colors.accent.hover,
       cursor: 'pointer',
     },
     '&[disabled]': {
@@ -27,7 +27,7 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
       cursor: 'not-allowed',
     },
     '&[disabled]:hover': {
-      bg: colors.yellow.base,
+      bg: colors.accent.base,
     },
   },
   secondary: {

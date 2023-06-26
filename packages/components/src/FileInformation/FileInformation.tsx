@@ -29,7 +29,7 @@ const FileDetails = (props: {
       sx={{
         borderRadius: 1,
         border: '2px solid black',
-        background: 'yellow.base',
+        background: 'accent.base',
         color: 'black',
         justifyContent: 'space-between',
         alignItems: 'center',

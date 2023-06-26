@@ -16,7 +16,7 @@ const fonts = {
 export const colors = {
   ...commonColors,
   primary: 'green',
-  yellow: { base: '#E95628', hover: 'hsl(14, 81%, 43%)' },
+  accent: { base: '#E95628', hover: 'hsl(14, 81%, 43%)' },
 }
 
 export const zIndex = {

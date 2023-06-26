@@ -3,9 +3,6 @@ import { Field } from 'react-final-form'
 import { Heading, Flex, Box, Text } from 'theme-ui'
 import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea } from 'oa-components'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/ProfileLink.field'
 import { FlexSectionContainer } from './elements'
@@ -35,7 +32,7 @@ export const CoverImages = ({
   isMemberProfile: boolean
   coverImages: IUser['coverImages']
 }) =>
-  isMemberProfile ? (
+  !isMemberProfile ? (
     <>
       <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
         Add a profile image *
@@ -101,10 +98,9 @@ export const CoverImages = ({
       </FieldArray>
 
       <Box
-        bg={theme.colors.softblue}
         mt={2}
         p={2}
-        sx={{ width: '100%', borderRadius: '3px' }}
+        sx={{ width: '100%', borderRadius: '3px', background: 'softblue' }}
       >
         <Text sx={{ fontSize: 1 }}>
           The cover images are shown in your profile and helps us evaluate your

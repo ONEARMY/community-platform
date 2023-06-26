@@ -78,7 +78,7 @@ export interface ThemeWithName {
     black: string
     primary: string
     softyellow: string
-    yellow: { base: string; hover: string }
+    accent: { base: string; hover: string }
     blue: string
     red: string
     red2: string

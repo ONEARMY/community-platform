@@ -11,16 +11,13 @@ import {
   ElWithBeforeIcon,
 } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
-import { Heading, Card, Flex, Box, Text } from 'theme-ui'
+import { Heading, Card, Flex, Box, Text, Label } from 'theme-ui'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
 import type { IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/common/Form/LocationSearch.field'
 import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
@@ -41,11 +38,6 @@ interface IInjectedProps extends IProps {
 
 const FormContainer = styled.form`
   width: 100%;
-`
-
-const Label = styled.label`
-  font-size: ${theme.fontSizes[2] + 'px'};
-  margin-bottom: ${theme.space[2] + 'px'};
 `
 
 @inject('eventStore')
@@ -85,6 +77,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
     const shouldShowLocationError =
       !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
+
+    const _labelStyle = {
+      fontSize: 2,
+      marginBottom: 2,
+    }
     return (
       <Form
         onSubmit={(v) => {
@@ -122,8 +119,11 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Card>
                       <Flex
-                        bg={theme.colors.softblue}
-                        sx={{ alignItems: 'center', padding: 3 }}
+                        sx={{
+                          alignItems: 'center',
+                          padding: 3,
+                          background: 'softblue',
+                        }}
                       >
                         <Heading>Create an event</Heading>
                         <Box ml="15px">
@@ -145,7 +145,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             flexDirection: 'column',
                           }}
                         >
-                          <Label htmlFor="title">Title of the event *</Label>
+                          <Label sx={_labelStyle} htmlFor="title">
+                            Title of the event *
+                          </Label>
                           <Field
                             id="title"
                             name="title"
@@ -171,7 +173,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             sx={{ width: '100%', flexDirection: 'column' }}
                             data-cy="date"
                           >
-                            <Label htmlFor="date">
+                            <Label sx={_labelStyle} htmlFor="date">
                               When is your event taking place? *
                             </Label>
                             <Field
@@ -196,7 +198,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             px={2}
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
-                            <Label htmlFor="url">Link to your event *</Label>
+                            <Label sx={_labelStyle} htmlFor="url">
+                              Link to your event *
+                            </Label>
                             <Field
                               name="url"
                               data-cy="url"
@@ -227,7 +231,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           >
                             {!isDigitalEvent && (
                               <>
-                                <Label htmlFor="location">
+                                <Label sx={_labelStyle} htmlFor="location">
                                   In which city is the event taking place?
                                 </Label>
                                 <Field
@@ -249,9 +253,8 @@ export class EventsCreate extends React.Component<IProps, IState> {
                                 />
                                 {shouldShowLocationError && (
                                   <Text
-                                    color={theme.colors.red}
                                     mb="5px"
-                                    sx={{ fontSize: 1 }}
+                                    sx={{ fontSize: 1, color: 'red' }}
                                   >
                                     Select a location for your event
                                   </Text>
@@ -279,7 +282,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             px={2}
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
-                            <Label htmlFor="location">
+                            <Label sx={_labelStyle} htmlFor="location">
                               Select tags for your event
                             </Label>
                             <Field

@@ -50,11 +50,19 @@ module.exports = {
   jest: {
     configure: (jestConfig: JestConfigOverride['jestConfig']) => {
       // https://kulshekhar.github.io/ts-jest/docs/getting-started/paths-mapping/
+      jestConfig.reporters = [
+        [
+          'jest-junit',
+          { outputDirectory: 'reports', outputName: 'report.xml' },
+        ],
+      ]
+
       jestConfig.moduleNameMapper = {
         ...jestConfig.moduleNameMapper,
         // Allow specific import from 'src' (used to import `useCommonStores`)
         '^src$': '<rootDir>/src/index',
       }
+
       return jestConfig
     },
   },

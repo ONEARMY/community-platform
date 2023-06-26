@@ -7,9 +7,7 @@ export const PasswordField = ({ name, component, ...rest }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   return (
-    <Box
-      style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
-    >
+    <Box style={{ position: 'relative' }}>
       <Field
         {...rest}
         name={name}
@@ -21,6 +19,7 @@ export const PasswordField = ({ name, component, ...rest }) => {
         sx={{
           position: 'absolute',
           right: 2,
+          top: 1,
           opacity: 0.7,
         }}
       >

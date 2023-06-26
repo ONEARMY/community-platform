@@ -1,12 +1,9 @@
 import * as React from 'react'
-import { Box, Image } from 'theme-ui'
-import styled from '@emotion/styled'
+import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
+import { Box, Flex, Image } from 'theme-ui'
 import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import Dropzone from 'react-dropzone'
 import type { IUploadedFileMeta } from '../../../stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
@@ -15,44 +12,52 @@ interface ITitleProps {
   hasUploadedImg: boolean
 }
 
-const AlignCenterWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-`
-// any export to fix: https://github.com/microsoft/TypeScript/issues/37597
-const ImageInputWrapper = styled(AlignCenterWrapper as any)<ITitleProps>`
-  position: relative;
-  height: 100%;
-  width: 100%;
-  border: ${(props) =>
-    props.hasUploadedImg ? 0 : `2px dashed ${theme.colors.background}`};
-  border-radius: ${theme.space[1]}px;
-  background-color: ${theme.colors.white};
-  cursor: pointer;
-`
+const alignCenterWrapperStyles: ThemeUIStyleObject = {
+  height: '100%',
+  width: '100%',
+  overflow: 'hidden',
+  justifyContent: 'center',
+  alignItems: 'center',
+}
 
-const UploadImageOverlay = styled(AlignCenterWrapper as any)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
-  opacity:0;
-  visibility:hidden
-  transition: opacity 300ms ease-in;
-  border-radius: ${theme.space[1]}px;
-  
-  .image-input__wrapper:hover & {
-    visibility: visible;
-    opacity: 1;
-  }
-`
+// any export to fix: https://github.com/microsoft/TypeScript/issues/37597
+const ImageInputWrapper = (props: BoxProps & ITitleProps): JSX.Element => (
+  <Flex
+    sx={{
+      ...alignCenterWrapperStyles,
+      position: 'relative',
+      borderColor: 'background',
+      borderStyle: props.hasUploadedImg ? 'none' : 'dashed',
+      borderRadius: 1,
+      backgroundColor: 'white',
+    }}
+  >
+    {props.children}
+  </Flex>
+)
+
+const UploadImageOverlay = (props: BoxProps): JSX.Element => (
+  <Flex
+    sx={{
+      ...alignCenterWrapperStyles,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.2)',
+      opacity: 0,
+      visibility: 'hidden',
+      transition: 'opacity 300ms ease-in',
+      borderRadius: 1,
+      '.image-input__wrapper:hover &': {
+        visibility: 'visible',
+        opacity: 1,
+      },
+    }}
+  >
+    {props.children}
+  </Flex>
+)
 
 /*
     This component takes multiple image using filepicker and resized clientside

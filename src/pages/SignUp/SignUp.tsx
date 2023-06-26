@@ -11,6 +11,7 @@ import { string, object, ref, bool } from 'yup'
 import { required } from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { Link } from 'react-router-dom'
+import { PasswordField } from 'src/common/Form/PasswordField'
 
 interface IFormValues {
   email: string
@@ -186,10 +187,9 @@ class SignUpPage extends React.Component<IProps, IState> {
                         }}
                       >
                         <Label htmlFor="password">Password*</Label>
-                        <Field
+                        <PasswordField
                           data-cy="password"
                           name="password"
-                          type="password"
                           component={FieldInput}
                           validate={required}
                         />
@@ -204,10 +204,9 @@ class SignUpPage extends React.Component<IProps, IState> {
                         <Label htmlFor="confirm-password">
                           Confirm Password*
                         </Label>
-                        <Field
+                        <PasswordField
                           data-cy="confirm-password"
                           name="confirm-password"
-                          type="password"
                           component={FieldInput}
                           validate={required}
                         />

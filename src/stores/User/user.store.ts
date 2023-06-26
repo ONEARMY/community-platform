@@ -384,7 +384,7 @@ export class UserStore extends ModuleStore {
 
         const dbRef = this.db
           .collection<IUser>(COLLECTION_NAME)
-          .doc(updatedUser._id)
+          .doc(updatedUser.userName)
 
         await dbRef.set(updatedUser)
         //TODO: ensure current user is updated

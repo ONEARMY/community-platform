@@ -325,7 +325,7 @@ export class ResearchStore extends ModuleStore {
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
-          _creatorId: user._id,
+          _creatorId: user.userName,
           creatorName: user.userName,
           creatorCountry: userCountry,
           text: comment,
@@ -405,7 +405,7 @@ export class ResearchStore extends ModuleStore {
         const newComments = toJS(update.comments).filter(
           (comment) =>
             !(
-              (comment._creatorId === user._id || hasAdminRights(user)) &&
+              (comment._creatorId === user.userName || hasAdminRights(user)) &&
               comment._id === commentId
             ),
         )
@@ -466,7 +466,7 @@ export class ResearchStore extends ModuleStore {
         const pastComments = toJS(update.comments)
         const commentIndex = pastComments.findIndex(
           (comment) =>
-            (comment._creatorId === user._id || hasAdminRights(user)) &&
+            (comment._creatorId === user.userName || hasAdminRights(user)) &&
             comment._id === commentId,
         )
         const updateWithMeta = { ...update }

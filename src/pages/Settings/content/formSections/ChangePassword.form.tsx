@@ -1,8 +1,9 @@
 import * as React from 'react'
-import { Field, Form } from 'react-final-form'
+import { Form } from 'react-final-form'
 import { Button, FieldInput } from 'oa-components'
 import type { UserStore } from 'src/stores/User/user.store'
 import { Text, Flex, Label } from 'theme-ui'
+import { PasswordField } from 'src/common/Form/PasswordField'
 
 interface IFormValues {
   oldPassword?: string
@@ -76,11 +77,10 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     <Label htmlFor="oldPassword" sx={_labelStyle}>
                       Old password :
                     </Label>
-                    <Field
+                    <PasswordField
                       name="oldPassword"
                       component={FieldInput}
                       placeholder="Old password"
-                      type="password"
                       autocomplete="off"
                       required
                     />
@@ -89,11 +89,10 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     <Label htmlFor="newPassword" sx={_labelStyle}>
                       New password :
                     </Label>
-                    <Field
+                    <PasswordField
                       name="newPassword"
                       component={FieldInput}
                       placeholder="New password"
-                      type="password"
                       autocomplete="off"
                       required
                     />
@@ -102,11 +101,10 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     <Label htmlFor="repeatPassword" sx={_labelStyle}>
                       Repeat new password :
                     </Label>
-                    <Field
+                    <PasswordField
                       name="repeatPassword"
                       component={FieldInput}
                       placeholder="Repeat new password"
-                      type="password"
                       autocomplete="off"
                       required
                     />

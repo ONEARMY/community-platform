@@ -43,7 +43,7 @@ const AdminHome = observer(() => {
     background: 'white',
     '&:hover': {
       cursor: 'pointer',
-      backgroundColor: 'yellow.hover',
+      backgroundColor: 'accent.hover',
     },
     '& > td': {
       padding: '8px',

@@ -24,7 +24,7 @@ const fonts = {
 export const colors = {
   ...commonColors,
   primary: 'red',
-  yellow: { base: '#fee77b', hover: '#ffde45' },
+  accent: { base: '#fee77b', hover: '#ffde45' },
 }
 
 export const zIndex = {
@@ -56,7 +56,7 @@ const alerts = {
     borderRadius: 1,
     paddingX: 3,
     paddingY: 3,
-    backgroundColor: colors.yellow.base,
+    backgroundColor: colors.accent.base,
     color: colors.black,
     textAlign: 'center',
     fontWeight: 'normal',

@@ -39,7 +39,7 @@ const TextLimitIndicator = ({
   const colorVec = [
     { value: 1.0, color: 'red' },
     { value: 0.75, color: 'red2' },
-    { value: 0.6, color: 'yellow.base' },
+    { value: 0.6, color: 'accent.base' },
   ]
   const color = colorVec.find((cur) => cur.value <= percMax)?.color ?? 'black'
   return (

@@ -7,47 +7,8 @@ const BATCH_SIZE = 200
 let BATCH_COUNT = 0
 const operations = { updated: [], skipped: [] }
 
-function separateUseful(updates) {
-  const docs = []
-  const keys = Object.keys(updates)
-  keys.forEach((key) => {
-    docs.push({ id: key, votedUseful: updates[key] })
-  })
-  return docs
-}
-
-async function batchGeneration(
-  usefulData: Record<string, any>,
-  collection: 'howtos' | 'research',
-  dryRun: boolean,
-) {
-  const docIds = Object.keys(usefulData)
-  for (const id of docIds) {
-    const ref = db.collection(DB_ENDPOINTS[collection]).doc(id)
-    const doc = (await ref.get()).data()
-    if (doc) {
-      const update: Partial<IHowtoDB | IResearchDB> = {
-        votedUsefulBy: usefulData[id],
-        _modified: new Date().toISOString(),
-      }
-      operations.updated.push({ _id: id, ...update })
-      batch.update(ref, update)
-
-      BATCH_COUNT++
-      // Commit batch in chunks to ensure firebase limits not hit
-      if (BATCH_COUNT === BATCH_SIZE && !dryRun) {
-        await batch.commit()
-        await _sleep(1000)
-        batch = db.batch()
-        BATCH_COUNT = 0
-      }
-    } else {
-      operations.skipped.push({ _id: id })
-    }
-  }
-}
-
 /**
+ * ====== DEPRECATED =======
  * One-off script to migrate user useful counts to individual objects
  * Once run this code will be deprecated, but retained in case
  * it can be used in future migrations
@@ -118,6 +79,46 @@ export const userUseful = functions.https.onCall(
     }
   },
 )
+
+function separateUseful(updates) {
+  const docs = []
+  const keys = Object.keys(updates)
+  keys.forEach((key) => {
+    docs.push({ id: key, votedUseful: updates[key] })
+  })
+  return docs
+}
+
+async function batchGeneration(
+  usefulData: Record<string, any>,
+  collection: 'howtos' | 'research',
+  dryRun: boolean,
+) {
+  const docIds = Object.keys(usefulData)
+  for (const id of docIds) {
+    const ref = db.collection(DB_ENDPOINTS[collection]).doc(id)
+    const doc = (await ref.get()).data()
+    if (doc) {
+      const update: Partial<IHowtoDB | IResearchDB> = {
+        votedUsefulBy: usefulData[id],
+        _modified: new Date().toISOString(),
+      }
+      operations.updated.push({ _id: id, ...update })
+      batch.update(ref, update)
+
+      BATCH_COUNT++
+      // Commit batch in chunks to ensure firebase limits not hit
+      if (BATCH_COUNT === BATCH_SIZE && !dryRun) {
+        await batch.commit()
+        await _sleep(1000)
+        batch = db.batch()
+        BATCH_COUNT = 0
+      }
+    } else {
+      operations.skipped.push({ _id: id })
+    }
+  }
+}
 
 function _sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))

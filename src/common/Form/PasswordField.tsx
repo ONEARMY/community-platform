@@ -21,13 +21,13 @@ export const PasswordField = ({ name, component, ...rest }) => {
         sx={{
           position: 'absolute',
           right: 2,
-          zIndex: 'default',
-          opacity: '0.2',
+          opacity: 0.7,
         }}
       >
         <Icon
-          glyph={isPasswordVisible ? 'comment' : 'external-link'}
+          glyph={isPasswordVisible ? 'hide' : 'show'}
           onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          size="25"
         ></Icon>
       </Box>
     </Box>

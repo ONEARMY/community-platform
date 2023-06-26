@@ -112,11 +112,6 @@ export class Howto extends React.Component<
       return null
     }
 
-    /* Will be deprecated as part of https://github.com/ONEARMY/community-platform/issues/2407 */
-    const { userStore } = this.injected
-    userStore.updateUsefulHowTos(howtoId)
-    /* End of deprecation */
-
     this.store.toggleUsefulByUser(howtoId, loggedInUser?.userName)
     const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
 

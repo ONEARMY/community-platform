@@ -21,15 +21,10 @@ import { PostingGuidelines } from './PostingGuidelines'
 import type { IEventFormInput } from 'src/models/events.models'
 import { LocationSearchField } from 'src/common/Form/LocationSearch.field'
 import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
-
 import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
 import { CheckboxInput } from 'src/common/Form/Checkbox'
-
 interface IState {
   formValues: IEventFormInput
   formSaved: boolean
@@ -46,13 +41,6 @@ interface IInjectedProps extends IProps {
 const FormContainer = styled.form`
   width: 100%;
 `
-
-// const Label = styled.label`
-//   font-size: ${theme.fontSizes[2] + 'px'};
-//   margin-bottom: ${theme.space[2] + 'px'};
-// `
-
-
 @inject('eventStore')
 export class EventsCreate extends React.Component<IProps, IState> {
   uploadRefs: { [key: string]: UploadedFile | null } = {}
@@ -83,13 +71,14 @@ export class EventsCreate extends React.Component<IProps, IState> {
   get store() {
     return this.injected.eventStore
   }
-
+  
   public render() {
     const { formValues, isLocationSelected, selectedDate, isDigitalEvent } =
       this.state
 
     const shouldShowLocationError =
       !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
+
     return (
       <Form
         onSubmit={(v) => {
@@ -127,7 +116,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Card>
                       <Flex
-                        sx={{ alignItems: 'center', padding: 3 , backgroundColor: theme.colors.softblue }}
+                        sx={{ alignItems: 'center', padding: 3 , backgroundColor: 'softblue' }}
                       >
                         <Heading>Create an event</Heading>
                         <Box ml="15px">
@@ -254,7 +243,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                                 {shouldShowLocationError && (
                                   <Text
                                     mb="5px"
-                                    sx={{ fontSize: 1, backgroundColor:theme.colors.red}}
+                                    sx={{ fontSize: 1, color:'red'}}
                                   >
                                     Select a location for your event
                                   </Text>

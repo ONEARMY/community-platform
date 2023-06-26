@@ -72,7 +72,7 @@ export class UserNotificationsStore extends ModuleStore {
           _created: new Date().toISOString(),
           triggeredBy: {
             displayName: triggeredBy.displayName,
-            userId: triggeredBy._id,
+            userId: triggeredBy.userName,
           },
           relevantUrl: relevantUrl,
           type: type,
@@ -152,7 +152,7 @@ export class UserNotificationsStore extends ModuleStore {
   }
 
   private async _updateUserNofications(user: IUserPPDB, notifications) {
-    const dbRef = this.db.collection<IUser>(USER_COLLECTION_NAME).doc(user._id)
+    const dbRef = this.db.collection<IUser>(USER_COLLECTION_NAME).doc(user.userName)
 
     return dbRef.set({
       ...toJS(user),

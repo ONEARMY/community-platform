@@ -2,10 +2,6 @@ import * as React from 'react'
 import { Flex } from 'theme-ui'
 import imageCompression from 'browser-image-compression'
 import type { IConvertedFileMeta } from 'src/types'
-import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 
 interface IProps {
   file: File
@@ -23,17 +19,6 @@ const imageSizes = {
   normal: 1280,
   high: 1920,
 }
-
-const PreviewImage = styled(Flex)`
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 100%;
-  width: 100%;
-  border-radius: 5px;
-  border: 1px solid ${theme.colors.offwhite};
-`
 
 export class ImageConverter extends React.Component<IProps, IState> {
   public static defaultProps: Partial<IProps>
@@ -80,9 +65,19 @@ export class ImageConverter extends React.Component<IProps, IState> {
     }
 
     return (
-      <PreviewImage
+      <Flex
         style={{
           backgroundImage: `url(${convertedFile.objectUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          width: '100%',
+          height: '100%',
+        }}
+        sx={{
+          border: '1px solid ',
+          borderColor: 'offwhite',
+          borderRadius: 1,
         }}
         id="preview"
         onClick={() => this.props.onImgClicked(convertedFile)}

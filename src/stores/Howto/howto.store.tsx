@@ -312,7 +312,7 @@ export class HowtoStore extends ModuleStore {
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
-          _creatorId: user._id,
+          _creatorId: user.userName,
           creatorName: user.userName,
           creatorCountry: getUserCountry(user),
           text: text.slice(0, MAX_COMMENT_LENGTH).trim(),
@@ -452,7 +452,7 @@ export class HowtoStore extends ModuleStore {
         const comments = toJS(howto.comments)
         const commentIndex = comments.findIndex(
           (comment) =>
-            (comment._creatorId === user._id || hasAdminRights(user)) &&
+            (comment._creatorId === user.userName || hasAdminRights(user)) &&
             comment._id === id,
         )
         if (commentIndex !== -1) {
@@ -486,7 +486,8 @@ export class HowtoStore extends ModuleStore {
           comments: toJS(howto.comments).filter(
             (comment) =>
               !(
-                (comment._creatorId === user._id || hasAdminRights(user)) &&
+                (comment._creatorId === user.userName ||
+                  hasAdminRights(user)) &&
                 comment._id === id
               ),
           ),

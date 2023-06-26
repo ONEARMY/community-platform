@@ -111,7 +111,7 @@ describe('UserSettings', () => {
     wrapper.getByLabelText('Verified').click()
 
     expect(mockUpdateUserBadge).toBeCalledTimes(1)
-    expect(mockUpdateUserBadge).toBeCalledWith(user._id, {
+    expect(mockUpdateUserBadge).toBeCalledWith(user.userName, {
       supporter: false,
       verified: true,
     })
@@ -133,7 +133,7 @@ const getWrapper = (user) => {
     >
       <ThemeProvider theme={Theme}>
         <MemoryRouter>
-          <UserSettings adminEditableUserId={isAdmin ? user._id : null} />
+          <UserSettings adminEditableUserId={isAdmin ? user.userName : null} />
         </MemoryRouter>
       </ThemeProvider>
     </Provider>,

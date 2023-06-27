@@ -31,72 +31,47 @@ export const CoverImages = ({
 }: {
   isMemberProfile: boolean
   coverImages: IUser['coverImages']
-}) =>
-  !isMemberProfile ? (
-    <>
-      <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
-        Add a profile image *
-      </Text>
-      <Box
-        sx={{
-          height: '190px',
-          width: '190px',
-        }}
-        m="10px"
-        data-cy="cover-image"
-      >
-        <Field
-          hasText={false}
-          name="coverImages[0]"
-          validate={required}
-          validateFields={[]}
-          component={ImageInputField}
-          data-cy={`coverImages-0`}
-          initialValue={coverImages[0]}
-        />
-      </Box>
-    </>
-  ) : (
-    <>
-      <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
-        Cover Image *
-      </Text>
-      <FieldArray
-        name="coverImages"
-        initialValue={coverImages as IUploadedFileMeta[]}
-      >
-        {({ fields, meta }) => {
-          return (
-            <>
-              {fields.map((name, index: number) => (
-                <Box
-                  key={name}
-                  sx={{
-                    height: '100px',
-                    width: '150px',
-                  }}
-                  m="10px"
-                  data-cy="cover-image"
-                >
-                  <Field
-                    hasText={false}
-                    name={name}
-                    validateFields={[]}
-                    data-cy={`coverImages-${index}`}
-                    component={ImageInputField}
-                  />
-                </Box>
-              ))}
-              {meta.error && (
-                <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
-                  {meta.error}
-                </Text>
-              )}
-            </>
-          )
-        }}
-      </FieldArray>
-
+}) => (
+  <>
+    <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
+      {!isMemberProfile ? 'Add a profile image *' : 'Cover Image *'}
+    </Text>
+    <FieldArray
+      name="coverImages"
+      initialValue={coverImages as IUploadedFileMeta[]}
+    >
+      {({ fields, meta }) => {
+        return (
+          <>
+            {fields.map((name, index: number) => (
+              <Box
+                key={name}
+                sx={{
+                  height: '100px',
+                  width: '150px',
+                }}
+                m="10px"
+                data-cy="cover-image"
+              >
+                <Field
+                  hasText={false}
+                  name={name}
+                  validateFields={[]}
+                  data-cy={`coverImages-${index}`}
+                  component={ImageInputField}
+                />
+              </Box>
+            ))}
+            {meta.error && (
+              <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
+                {meta.error}
+              </Text>
+            )}
+          </>
+        )
+      }}
+    </FieldArray>
+    {!isMemberProfile && (
       <Box
         mt={2}
         p={2}
@@ -104,14 +79,13 @@ export const CoverImages = ({
       >
         <Text sx={{ fontSize: 1 }}>
           The cover images are shown in your profile and helps us evaluate your
-          account.
-        </Text>
-        <Text sx={{ fontSize: 1 }}>
-          Make sure the first image shows your space. Best size is 1920x1080.
+          account. Make sure the first image shows your space. Best size is
+          1920x1080.
         </Text>
       </Box>
-    </>
-  )
+    )}
+  </>
+)
 
 export class UserInfosSection extends React.Component<IProps, IState> {
   constructor(props: IProps) {

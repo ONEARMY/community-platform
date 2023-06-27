@@ -29,7 +29,7 @@ export const MemberProfile = ({ user, docs }: IProps) => {
     user.coverImages && user.coverImages[0]
       ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
       : DefaultMemberImage
-  
+
   //Get all images except the first one from user.coverImages
   const coverImages = user.coverImages ? user.coverImages.slice(1) : []
 
@@ -190,12 +190,8 @@ export const MemberProfile = ({ user, docs }: IProps) => {
               />
             </Box>
           ))}
-
-         
         </Flex>
       </Flex>
     </Card>
-
-          
   )
 }

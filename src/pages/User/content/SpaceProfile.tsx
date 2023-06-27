@@ -32,7 +32,6 @@ import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { userStats } from 'src/common/hooks/userStats'
 import type { UserCreatedDocs } from '.'
-import UserDocumentItem from './UserDocumentItem'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -300,55 +299,12 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 howtoCount={docs?.howtos.length || 0}
                 eventCount={docs?.events.length || 0}
                 usefulCount={stats.totalUseful}
-                researchCount={
-                  user.stats
-                    ? Object.keys(user.stats!.userCreatedResearch).length
-                    : 0
-                }
+                researchCount={docs?.research.length || 0}
               />
             </Box>
           </MobileBadge>
         </Box>
       </Flex>
-      {(docs?.howtos || docs?.research) && (
-        <Flex pt={2} sx={{ justifyContent: 'space-between' }}>
-          {docs?.howtos.length > 0 && (
-            <Flex
-              mt={2}
-              mb={6}
-              mx={2}
-              px={2}
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
-            >
-              <Heading mb={1}>Created How-To's</Heading>
-              {docs?.howtos.map((item) => {
-                return (
-                  <UserDocumentItem key={item._id} type="how-to" item={item} />
-                )
-              })}
-            </Flex>
-          )}
-          {docs?.research.length > 0 && (
-            <Flex
-              my={2}
-              mx={2}
-              px={2}
-              sx={{ flexDirection: 'column', flexBasis: '50%' }}
-            >
-              <Heading mb={1}>Created Research</Heading>
-              {docs?.research.map((item) => {
-                return (
-                  <UserDocumentItem
-                    key={item._id}
-                    type="research"
-                    item={item}
-                  />
-                )
-              })}
-            </Flex>
-          )}
-        </Flex>
-      )}
       <UserCreatedDocuments docs={docs} />
     </Container>
   )

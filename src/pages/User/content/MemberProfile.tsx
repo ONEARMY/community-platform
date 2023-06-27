@@ -29,6 +29,9 @@ export const MemberProfile = ({ user, docs }: IProps) => {
     user.coverImages && user.coverImages[0]
       ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
       : DefaultMemberImage
+  
+  //Get all images except the first one from user.coverImages
+  const coverImages = user.coverImages ? user.coverImages.slice(1) : []
 
   return (
     <Card
@@ -139,6 +142,60 @@ export const MemberProfile = ({ user, docs }: IProps) => {
         </Flex>
       </Flex>
       <UserCreatedDocuments docs={docs} />
+      <Flex
+        sx={{
+          px: [2, 4],
+          py: 4,
+          background: 'white',
+        }}
+      >
+        <MemberBadge
+          profileType="member"
+          size={50}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            marginLeft: 50 * -0.5,
+            marginTop: 50 * -0.5,
+          }}
+          useLowDetailVersion
+        />
+        <Flex
+          px={4}
+          py={4}
+          sx={{ borderRadius: 1, flexDirection: ['column', 'row'] }}
+        >
+          {coverImages.map((image, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: 'block',
+                width: '120px',
+                height: '120px',
+                maxWidth: 'none',
+                overflow: 'hidden',
+                margin: '0 auto',
+                mb: 3,
+              }}
+            >
+              <Image
+                loading="lazy"
+                src={image.downloadUrl}
+                sx={{
+                  objectFit: 'cover',
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+            </Box>
+          ))}
+
+         
+        </Flex>
+      </Flex>
     </Card>
+
+          
   )
 }

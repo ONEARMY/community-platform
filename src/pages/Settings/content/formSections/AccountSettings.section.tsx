@@ -1,8 +1,7 @@
 import * as React from 'react'
 
-import { Flex, Heading, Box } from 'theme-ui'
+import { Flex, Heading, Box, Card } from 'theme-ui'
 import type { UserStore } from 'src/stores/User/user.store'
-import { FlexSectionContainer } from './elements'
 import { ChangePasswordForm } from './ChangePassword.form'
 import { ChangeEmailForm } from './ChangeEmail.form'
 import { ProfileDelete } from '../ProfileDelete'
@@ -29,7 +28,7 @@ export class AccountSettingsSection extends React.Component<any> {
 
   render() {
     return (
-      <FlexSectionContainer>
+      <Card sx={{ background: 'red2', padding: 4, marginTop: 4 }}>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading variant="small">Account settings</Heading>
         </Flex>
@@ -40,7 +39,7 @@ export class AccountSettingsSection extends React.Component<any> {
             onConfirmation={(reauthPw) => this.deleteProfile(reauthPw)}
           />
         </Box>
-      </FlexSectionContainer>
+      </Card>
     )
   }
 }

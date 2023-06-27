@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Button, FieldInput, Modal } from 'oa-components'
 import { Text, Flex } from 'theme-ui'
-import { Form, Field } from 'react-final-form'
+import { Form } from 'react-final-form'
+import { PasswordField } from 'src/common/Form/PasswordField'
 
 interface IState {
   showDeleteDialog: boolean
@@ -56,12 +57,12 @@ export class ProfileDelete extends React.Component<IProps, IState> {
             render={({ values, handleSubmit }) => {
               return (
                 <form onSubmit={handleSubmit}>
-                  <Field
+                  <PasswordField
                     name="password"
                     component={FieldInput}
-                    type="password"
+                    sx={{ marginTop: 4 }}
                   />
-                  <Flex p={0}>
+                  <Flex p={0} sx={{ marginTop: 4 }}>
                     <Button
                       style={{ marginLeft: 'auto' }}
                       variant="secondary"
@@ -74,6 +75,7 @@ export class ProfileDelete extends React.Component<IProps, IState> {
                       variant={'outline'}
                       ml={1}
                       disabled={values.password ? false : true}
+                      icon="delete"
                     >
                       Delete
                     </Button>

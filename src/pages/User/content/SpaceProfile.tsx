@@ -46,17 +46,12 @@ interface IProps {
 const SliderImage = (props: IBackgroundImageProps) => (
   <Box
     sx={{
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center',
-      minHeight: '300px',
-      height: '300px',
       backgroundImage: `url(${props.bgImg})`,
-
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      height: ['300px', '300px', '300px', '500px'],
       width: '100%',
-      '@media only screen and (min-width: 70em})': {
-        height: '500px',
-      },
     }}
     {...props}
   ></Box>
@@ -167,18 +162,13 @@ const renderMachineBuilderXp = (machineBuilderXp: Array<IMAchineBuilderXp>) => (
 const MobileBadge = ({ children }) => (
   <Flex
     sx={{
+      alignItems: ['left', 'left', 'center'],
       flexDirection: 'column',
       marginBottom: 0,
+      marginLeft: [0, 0, 'auto'],
+      marginRight: [0, 0, 'auto'],
+      marginTop: [0, 0, '-50%'],
       position: 'relative',
-      width: '100%',
-      '@media only screen and (min-width: 52em)': {
-        alignItems: 'center',
-      },
-      '@media only screen and (min-width: 70em)': {
-        marginTop: '-50%',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      },
     }}
   >
     {children}

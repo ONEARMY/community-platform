@@ -57,6 +57,9 @@ export class ResearchStore extends ModuleStore {
   public searchValue: string
 
   @observable
+  public activeSorter: string
+
+  @observable
   public researchUploadStatus: IResearchUploadStatus =
     getInitialResearchUploadStatus()
 
@@ -74,22 +77,91 @@ export class ResearchStore extends ModuleStore {
         })
       : collection
   }
+
+  @action
+  private calculateTotalComments = (item: IResearch.ItemDB) => {
+    if (item.updates) {
+      const commentOnUpdates = item.updates.reduce((totalComments, update) => {
+        const updateCommentsLength = update.comments
+          ? update.comments.length
+          : 0
+        return totalComments + updateCommentsLength
+      }, 0)
+
+      return commentOnUpdates ? commentOnUpdates : '0'
+    } else {
+      return '0'
+    }
+  }
+
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
     super.init()
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
-      logger.debug('docs', docs)
-      const sortedItems = docs.sort((a, b) =>
-        a._modified < b._modified ? 1 : -1,
-      )
-      runInAction(() => {
-        this.allResearchItems = sortedItems
-      })
+      switch (this.activeSorter) {
+        case 'modified':
+          this.sortResearchByLatestModified(docs)
+          break
+
+        case 'created':
+          this.sortResearchByLatestCreated(docs)
+          break
+
+        case 'mostUseful':
+          this.sortResearchByMostUseful(docs)
+          break
+
+        case 'comments':
+          this.sortResearchByComments(docs)
+          break
+
+        default:
+          this.sortResearchByLatestModified(docs)
+          break
+      }
     })
     this.selectedCategory = ''
     this.searchValue = ''
+    this.activeSorter = 'comments'
+  }
+
+  @action
+  private sortResearchByLatestModified(docs?: IResearchDB[]) {
+    const researchItems = docs || this.allResearchItems
+    this.allResearchItems = researchItems.sort((a, b) =>
+      a._modified < b._modified ? 1 : -1,
+    )
+  }
+
+  @action
+  private sortResearchByLatestCreated(docs?: IResearchDB[]) {
+    const researchItems = docs || this.allResearchItems
+    this.allResearchItems = researchItems.sort((a, b) =>
+      a._created < b._created ? 1 : -1,
+    )
+  }
+
+  @action
+  private sortResearchByMostUseful(docs?: IResearchDB[]) {
+    const researchItems = docs || this.allResearchItems
+    this.allResearchItems = researchItems.sort((a, b) =>
+      (a.votedUsefulBy || []).length < (b.votedUsefulBy || []).length ? 1 : -1,
+    )
+  }
+  @action
+  private sortResearchByComments(docs?: IResearchDB[]) {
+    const researchItems = docs || this.allResearchItems
+
+    this.allResearchItems = researchItems.sort((a, b) =>
+      this.calculateTotalComments(a) < this.calculateTotalComments(b) ? 1 : -1,
+    )
+    /* eslint-disable no-console */
+    console.log(
+      this.calculateTotalComments(researchItems[14]),
+      researchItems[14],
+    )
   }
 
   @computed get filteredResearches() {
@@ -103,10 +175,10 @@ export class ResearchStore extends ModuleStore {
       const fuse = new Fuse(validResearches, {
         keys: HOWTO_SEARCH_WEIGHTS,
       })
-      /* eslint-disable no-console */
-      console.log('A INTRAT')
+
       validResearches = fuse.search(this.searchValue).map((v) => v.item)
     }
+
     return validResearches
   }
 

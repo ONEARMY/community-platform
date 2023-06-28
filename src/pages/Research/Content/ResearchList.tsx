@@ -91,17 +91,25 @@ const ResearchList = observer(() => {
               type="research"
             />
           </Flex>
-          <Input
-            variant="inputOutline"
-            data-cy="how-to-search-box"
-            value={searchValue}
-            placeholder="Search for a how-to"
-            onChange={(evt) => {
-              const value = evt.target.value
-              updateQueryParams(window.location.href, 'search', value, history)
-              store.updateSearchValue(value)
-            }}
-          />
+          <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
+            <Input
+              variant="inputOutline"
+              data-cy="how-to-search-box"
+              value={searchValue}
+              placeholder="Search for a how-to"
+              onChange={(evt) => {
+                const value = evt.target.value
+                updateQueryParams(
+                  window.location.href,
+                  'search',
+                  value,
+                  history,
+                )
+                store.updateSearchValue(value)
+              }}
+            />
+          </Flex>
+
           <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
               <Link to={store.activeUser ? '/research/create' : 'sign-up'}>

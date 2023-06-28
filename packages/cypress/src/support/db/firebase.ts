@@ -94,7 +94,7 @@ function ensureDBPrefixes(endpoints: { [key: string]: string }) {
   const prefix = Cypress.env('DB_PREFIX')
   Object.entries(endpoints).forEach(([key, value]) => {
     if (!value.startsWith(prefix)) {
-      endpoints[key] = `${prefix}${value}`
+      endpoints[key] = `${prefix}${value.replace(/^[A-z0-9]{5}_/, '')}`
     }
   })
   return endpoints

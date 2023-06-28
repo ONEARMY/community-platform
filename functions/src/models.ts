@@ -12,7 +12,6 @@ import * as functions from 'firebase-functions'
 import type {
   DBDoc,
   IDBEndpoint,
-  IEventDB,
   IHowtoDB,
   IMapPin,
   IModerable,
@@ -23,7 +22,6 @@ import type {
 export {
   DBDoc,
   IDBEndpoint,
-  IEventDB,
   IHowtoDB,
   IUserDB,
   IMapPin,

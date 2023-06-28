@@ -59,29 +59,3 @@ export const notifyNewHowTo = functions.firestore
       },
     )
   })
-export const notifyNewEvent = functions.firestore
-  .document('v3_events/{id}')
-  .onCreate((snapshot, context) => {
-    const info = snapshot.data()
-    const user = info._createdBy
-    const url = info.url
-    const location = info.location.country
-    console.info(info)
-    request.post(
-      SLACK_WEBHOOK_URL,
-      {
-        json: {
-          text: `📅 Jeej new event in *${location}* by _${user}_ awaiting moderation, posted here:
-            ${url}`,
-        },
-      },
-      (err, res) => {
-        if (err) {
-          console.error(err)
-        } else {
-          console.log('post success')
-          return res
-        }
-      },
-    )
-  })

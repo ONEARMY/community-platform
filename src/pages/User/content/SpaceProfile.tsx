@@ -329,7 +329,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 isVerified={stats.verified}
                 isSupporter={!!user.badges?.supporter}
                 howtoCount={docs?.howtos.length || 0}
-                eventCount={docs?.events.length || 0}
                 usefulCount={stats.totalUseful}
                 researchCount={docs?.research.length || 0}
               />

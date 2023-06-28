@@ -97,7 +97,6 @@ export const MemberProfile = ({ user, docs }: IProps) => {
               isVerified={stats.verified}
               isSupporter={!!user.badges?.supporter}
               howtoCount={docs?.howtos.length || 0}
-              eventCount={docs?.events.length || 0}
               researchCount={docs?.research.length || 0}
               usefulCount={stats.totalUseful}
             />

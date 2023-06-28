@@ -100,27 +100,13 @@ export class ResearchStore extends ModuleStore {
     super.init()
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
-      switch (this.activeSorter) {
-        case 'modified':
-          this.sortResearchByLatestModified(docs)
-          break
-
-        case 'created':
-          this.sortResearchByLatestCreated(docs)
-          break
-
-        case 'mostUseful':
-          this.sortResearchByMostUseful(docs)
-          break
-
-        case 'comments':
-          this.sortResearchByComments(docs)
-          break
-
-        default:
-          this.sortResearchByLatestModified(docs)
-          break
-      }
+      logger.debug('docs', docs)
+      const sortedItems = docs.sort((a, b) =>
+        a._modified < b._modified ? 1 : -1,
+      )
+      runInAction(() => {
+        this.allResearchItems = sortedItems
+      })
     })
     this.selectedCategory = ''
     this.searchValue = ''
@@ -130,23 +116,19 @@ export class ResearchStore extends ModuleStore {
   @action
   private sortResearchByLatestModified(docs?: IResearchDB[]) {
     const researchItems = docs || this.allResearchItems
-    this.allResearchItems = researchItems.sort((a, b) =>
-      a._modified < b._modified ? 1 : -1,
-    )
+    return researchItems.sort((a, b) => (a._modified < b._modified ? 1 : -1))
   }
 
   @action
   private sortResearchByLatestCreated(docs?: IResearchDB[]) {
     const researchItems = docs || this.allResearchItems
-    this.allResearchItems = researchItems.sort((a, b) =>
-      a._created < b._created ? 1 : -1,
-    )
+    return researchItems.sort((a, b) => (a._created < b._created ? 1 : -1))
   }
 
   @action
   private sortResearchByMostUseful(docs?: IResearchDB[]) {
     const researchItems = docs || this.allResearchItems
-    this.allResearchItems = researchItems.sort((a, b) =>
+    return researchItems.sort((a, b) =>
       (a.votedUsefulBy || []).length < (b.votedUsefulBy || []).length ? 1 : -1,
     )
   }
@@ -154,13 +136,8 @@ export class ResearchStore extends ModuleStore {
   private sortResearchByComments(docs?: IResearchDB[]) {
     const researchItems = docs || this.allResearchItems
 
-    this.allResearchItems = researchItems.sort((a, b) =>
+    return researchItems.sort((a, b) =>
       this.calculateTotalComments(a) < this.calculateTotalComments(b) ? 1 : -1,
-    )
-    /* eslint-disable no-console */
-    console.log(
-      this.calculateTotalComments(researchItems[14]),
-      researchItems[14],
     )
   }
 
@@ -177,6 +154,28 @@ export class ResearchStore extends ModuleStore {
       })
 
       validResearches = fuse.search(this.searchValue).map((v) => v.item)
+    }
+
+    switch (this.activeSorter) {
+      case 'modified':
+        validResearches = this.sortResearchByLatestModified(validResearches)
+        break
+
+      case 'created':
+        validResearches = this.sortResearchByLatestCreated(validResearches)
+        break
+
+      case 'most useful':
+        validResearches = this.sortResearchByMostUseful(validResearches)
+        break
+
+      case 'comments':
+        validResearches = this.sortResearchByComments(validResearches)
+        break
+
+      default:
+        validResearches = this.sortResearchByLatestModified(validResearches)
+        break
     }
 
     return validResearches
@@ -364,6 +363,9 @@ export class ResearchStore extends ModuleStore {
 
   public updateSearchValue(query: string) {
     this.searchValue = query
+  }
+  public updateActiveSorter(query: string) {
+    this.activeSorter = query
   }
 
   @action

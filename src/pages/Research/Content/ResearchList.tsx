@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react'
 import { observer } from 'mobx-react'
-import { Button } from 'oa-components'
+import { Button, Select } from 'oa-components'
 import { Link, useHistory } from 'react-router-dom'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -8,6 +8,7 @@ import { Box, Flex, Grid, Heading, Input } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
 import type { RouteComponentProps } from 'react-router'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { FieldContainer } from 'src/common/Form/FieldContainer'
 
 // Update query params for categories
 const updateQueryParams = (
@@ -38,6 +39,13 @@ const ResearchList = observer(() => {
   const theme = useTheme()
   const history = useHistory()
 
+  const sortingOptions = ['Modified', 'Created', 'Most Useful', 'Comments'].map(
+    (label) => ({
+      label,
+      value: label.toLowerCase(),
+    }),
+  )
+  const state = { value: '' }
   const { filteredResearches, searchValue } = store
   return (
     <>
@@ -90,6 +98,22 @@ const ResearchList = observer(() => {
               isForm={false}
               type="research"
             />
+          </Flex>
+          <Flex
+            ml={[0, 0, '8px']}
+            mb={['10px', '10px', 0]}
+            sx={{ width: ['100%', '100%', '20%'] }}
+          >
+            <FieldContainer>
+              <Select
+                options={sortingOptions}
+                placeholder="Sort by"
+                value={state.value}
+                onChange={(value) =>
+                  store.updateActiveSorter(String(value.value))
+                }
+              />
+            </FieldContainer>
           </Flex>
           <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
             <Input

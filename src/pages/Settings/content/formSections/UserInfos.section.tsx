@@ -44,6 +44,7 @@ export const CoverImages = ({
         }}
         m="2"
         data-cy="cover-image"
+        data-testid="cover-image"
       >
         <Field
           hasText={false}
@@ -77,6 +78,7 @@ export const CoverImages = ({
                   }}
                   m="10px"
                   data-cy="cover-image"
+                  data-testid="cover-image"
                 >
                   <Field
                     hasText={false}

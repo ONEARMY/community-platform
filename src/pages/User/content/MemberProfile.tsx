@@ -3,7 +3,12 @@ import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { MemberBadge, UserStatistics, Username,ImageGallery } from 'oa-components'
+import {
+  MemberBadge,
+  UserStatistics,
+  Username,
+  ImageGallery,
+} from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { userStats } from 'src/common/hooks/userStats'
@@ -30,7 +35,6 @@ export const MemberProfile = ({ user, docs }: IProps) => {
       ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
       : DefaultMemberImage
 
-  
   const coverImages = user.coverImages ? user.coverImages.slice(1) : []
   const coverImagesMeta = coverImages.map((image) => {
     return {
@@ -175,7 +179,6 @@ export const MemberProfile = ({ user, docs }: IProps) => {
         />
 
         {coverImages.length > 0 && <ImageGallery images={coverImagesMeta} />}
-
       </Flex>
     </Card>
   )

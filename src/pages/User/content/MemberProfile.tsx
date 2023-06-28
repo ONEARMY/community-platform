@@ -3,7 +3,7 @@ import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { MemberBadge, UserStatistics, Username } from 'oa-components'
+import { MemberBadge, UserStatistics, Username,ImageGallery } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { UserAdmin } from './UserAdmin'
 import { userStats } from 'src/common/hooks/userStats'
@@ -30,8 +30,20 @@ export const MemberProfile = ({ user, docs }: IProps) => {
       ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
       : DefaultMemberImage
 
-  //Get all images except the first one from user.coverImages
+  
   const coverImages = user.coverImages ? user.coverImages.slice(1) : []
+  const coverImagesMeta = coverImages.map((image) => {
+    return {
+      downloadUrl: image.downloadUrl,
+      contentType: image.contentType,
+      fullPath: image.fullPath,
+      name: image.name,
+      type: image.type,
+      size: image.size,
+      timeCreated: image.timeCreated,
+      updated: image.updated,
+    }
+  })
 
   return (
     <Card
@@ -161,36 +173,9 @@ export const MemberProfile = ({ user, docs }: IProps) => {
           }}
           useLowDetailVersion
         />
-        <Flex
-          px={4}
-          py={4}
-          sx={{ borderRadius: 1, flexDirection: ['column', 'row'] }}
-        >
-          {coverImages.map((image, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'block',
-                width: '120px',
-                height: '120px',
-                maxWidth: 'none',
-                overflow: 'hidden',
-                margin: '0 auto',
-                mb: 3,
-              }}
-            >
-              <Image
-                loading="lazy"
-                src={image.downloadUrl}
-                sx={{
-                  objectFit: 'cover',
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
-            </Box>
-          ))}
-        </Flex>
+
+        {coverImages.length > 0 && <ImageGallery images={coverImagesMeta} />}
+
       </Flex>
     </Card>
   )

@@ -50,7 +50,7 @@ export const CoverImages = ({
                   height: '100px',
                   width: '150px',
                 }}
-                m="10px"
+                m={2}
                 data-cy="cover-image"
               >
                 <Field

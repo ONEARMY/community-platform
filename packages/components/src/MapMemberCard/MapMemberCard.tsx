@@ -7,7 +7,6 @@ import { Username } from '../Username/Username'
 export interface Props {
   loading?: boolean
   imageUrl: string
-  lastActive: string
   description: string
   user: {
     isVerified: boolean

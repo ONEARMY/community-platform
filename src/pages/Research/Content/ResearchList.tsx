@@ -40,12 +40,16 @@ const ResearchList = observer(() => {
   const theme = useTheme()
   const history = useHistory()
 
-  const sortingOptions = ['Modified', 'Created', 'Most Useful', 'Comments'].map(
-    (label) => ({
-      label,
-      value: label.toLowerCase(),
-    }),
-  )
+  const sortingOptions = [
+    'Modified',
+    'Created',
+    'Most Useful',
+    'Comments',
+    'Updates',
+  ].map((label) => ({
+    label,
+    value: label.toLowerCase(),
+  }))
   const [sortState, setSortState] = useState('')
   const { filteredResearches, searchValue } = store
   return (
@@ -110,7 +114,7 @@ const ResearchList = observer(() => {
         <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
           <Input
             variant="inputOutline"
-            data-cy="how-to-search-box"
+            data-cy="research-search-box"
             value={searchValue}
             placeholder="Search for a research"
             onChange={(evt) => {

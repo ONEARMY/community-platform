@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js'
 import {
   action,
   computed,
@@ -29,7 +30,13 @@ import { ModuleStore } from '../common/module.store'
 import type { DocReference } from '../databaseV2/DocReference'
 
 const COLLECTION_NAME = 'research'
-
+const HOWTO_SEARCH_WEIGHTS = [
+  { name: 'title', weight: 0.5 },
+  { name: 'description', weight: 0.2 },
+  { name: '_createdBy', weight: 0.15 },
+  { name: 'steps.title', weight: 0.1 },
+  { name: 'steps.text', weight: 0.05 },
+]
 export class ResearchStore extends ModuleStore {
   /**
    * @deprecated
@@ -45,6 +52,9 @@ export class ResearchStore extends ModuleStore {
 
   @observable
   public selectedCategory: string
+
+  @observable
+  public searchValue: string
 
   @observable
   public researchUploadStatus: IResearchUploadStatus =
@@ -79,13 +89,25 @@ export class ResearchStore extends ModuleStore {
       })
     })
     this.selectedCategory = ''
+    this.searchValue = ''
   }
+
   @computed get filteredResearches() {
     const researches = this.filterResearchesByCategory(
       this.allResearchItems,
       this.selectedCategory,
     )
-    return filterModerableItems(researches, this.activeUser)
+    let validResearches = filterModerableItems(researches, this.activeUser)
+
+    if (this.searchValue) {
+      const fuse = new Fuse(validResearches, {
+        keys: HOWTO_SEARCH_WEIGHTS,
+      })
+      /* eslint-disable no-console */
+      console.log('A INTRAT')
+      validResearches = fuse.search(this.searchValue).map((v) => v.item)
+    }
+    return validResearches
   }
 
   public getActiveResearchUpdateComments(pointer: number): IComment[] {
@@ -266,6 +288,10 @@ export class ResearchStore extends ModuleStore {
 
   public needsModeration(research: IResearch.ItemDB) {
     return needsModeration(research, toJS(this.activeUser))
+  }
+
+  public updateSearchValue(query: string) {
+    this.searchValue = query
   }
 
   @action

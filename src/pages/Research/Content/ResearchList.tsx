@@ -4,7 +4,7 @@ import { Button } from 'oa-components'
 import { Link, useHistory } from 'react-router-dom'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { Box, Flex, Grid, Heading } from 'theme-ui'
+import { Box, Flex, Grid, Heading, Input } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
 import type { RouteComponentProps } from 'react-router'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
@@ -38,7 +38,7 @@ const ResearchList = observer(() => {
   const theme = useTheme()
   const history = useHistory()
 
-  const { filteredResearches } = store
+  const { filteredResearches, searchValue } = store
   return (
     <>
       <Flex my={[18, 26]}>
@@ -91,6 +91,17 @@ const ResearchList = observer(() => {
               type="research"
             />
           </Flex>
+          <Input
+            variant="inputOutline"
+            data-cy="how-to-search-box"
+            value={searchValue}
+            placeholder="Search for a how-to"
+            onChange={(evt) => {
+              const value = evt.target.value
+              updateQueryParams(window.location.href, 'search', value, history)
+              store.updateSearchValue(value)
+            }}
+          />
           <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
               <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
@@ -104,18 +115,20 @@ const ResearchList = observer(() => {
           </Flex>
         </Flex>
       </Grid>
-      {filteredResearches.map((item) => {
-        const votedUsefulCount = (item.votedUsefulBy || []).length
-        return (
-          <ResearchListItem
-            key={item._id}
-            item={{
-              ...item,
-              votedUsefulCount,
-            }}
-          />
-        )
-      })}
+      {filteredResearches?.length !== 0
+        ? filteredResearches.map((item) => {
+            const votedUsefulCount = (item.votedUsefulBy || []).length
+            return (
+              <ResearchListItem
+                key={item._id}
+                item={{
+                  ...item,
+                  votedUsefulCount,
+                }}
+              />
+            )
+          })
+        : 'No research to show'}
       <Box mb={[3, 3, 0]}>
         <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
           <AuthWrapper roleRequired="beta-tester">

@@ -212,6 +212,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
         border: '2px solid black',
         borderRadius: '10px',
         overflow: 'hidden',
+        maxWidth: '1000px',
       }}
       data-cy="SpaceProfile"
     >

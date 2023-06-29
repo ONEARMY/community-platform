@@ -82,7 +82,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   public updateActiveSorter(query: string) {
-    this.allHowtos = this.filterSorterDecorator.sort(query)
+    this.allHowtos = this.filterSorterDecorator?.sort(query)
   }
 
   public getActiveHowToComments(): IComment[] {

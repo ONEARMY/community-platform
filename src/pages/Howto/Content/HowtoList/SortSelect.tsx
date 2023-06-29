@@ -26,7 +26,7 @@ class SortSelect extends Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = { value: null }
-    sortingOptions = this.injected.howtoStore.availableItemSortingOption.map(
+    sortingOptions = this.injected.howtoStore.availableItemSortingOption?.map(
       (label) => ({
         label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
         value: label,

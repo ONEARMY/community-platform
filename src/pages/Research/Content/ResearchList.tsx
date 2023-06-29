@@ -40,7 +40,7 @@ const ResearchList = observer(() => {
   const theme = useTheme()
   const history = useHistory()
 
-  const sortingOptions = store.availableItemSortingOption.map((label) => ({
+  const sortingOptions = store.availableItemSortingOption?.map((label) => ({
     label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
     value: label,
   }))

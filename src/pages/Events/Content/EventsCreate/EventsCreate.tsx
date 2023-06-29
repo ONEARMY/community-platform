@@ -22,7 +22,6 @@ import { validateUrl, addProtocolMutator, required } from 'src/utils/validators'
 import IconHeaderEvents from 'src/assets/images/header-section/events-header-icon.svg'
 import { logger } from 'src/logger'
 import { CheckboxInput } from 'src/common/Form/Checkbox'
-
 interface IState {
   formValues: IEventFormInput
   formSaved: boolean
@@ -75,13 +74,14 @@ export class EventsCreate extends React.Component<IProps, IState> {
     const { formValues, isLocationSelected, selectedDate, isDigitalEvent } =
       this.state
 
-    const shouldShowLocationError =
-      !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
-
     const _labelStyle = {
       fontSize: 2,
       marginBottom: 2,
     }
+
+    const shouldShowLocationError =
+      !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
+
     return (
       <Form
         onSubmit={(v) => {
@@ -122,7 +122,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                         sx={{
                           alignItems: 'center',
                           padding: 3,
-                          background: 'softblue',
+                          backgroundColor: 'softblue',
                         }}
                       >
                         <Heading>Create an event</Heading>

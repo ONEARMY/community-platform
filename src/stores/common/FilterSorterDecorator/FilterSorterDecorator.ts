@@ -1,10 +1,13 @@
 import { action, observable } from 'mobx'
 import type { IComment } from 'src/models'
+import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
   _modified: string
   _created: string
   votedUsefulBy?: string[]
+  category?: ICategory
+  researchCategory?: ICategory
   updates?: {
     comments?: IComment[]
   }[]
@@ -48,6 +51,17 @@ export class FilterSorterDecorator<T extends IItem> {
       { name: 'steps.title', weight: 0.1 },
       { name: 'steps.text', weight: 0.05 },
     ]
+  }
+
+  public filterByCategory(listItems: T[] = [], category: string): T[] {
+    return category
+      ? listItems.filter((obj) => {
+          if (obj.category) return obj.category?.label === category
+          else {
+            return obj.researchCategory?.label === category
+          }
+        })
+      : listItems
   }
 
   private sortByLatestModified(listItems: T[]) {

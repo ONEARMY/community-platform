@@ -68,17 +68,6 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
-  public filterResearchesByCategory = (
-    collection: IResearch.ItemDB[] = [],
-    category: string,
-  ) => {
-    return category
-      ? collection.filter((obj) => {
-          return obj.researchCategory?.label === category
-        })
-      : collection
-  }
-
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
@@ -105,10 +94,13 @@ export class ResearchStore extends ModuleStore {
   }
 
   @computed get filteredResearches() {
-    const researches = this.filterResearchesByCategory(
+    /* eslint-disable no-console */
+
+    const researches = this.filterSorterDecorator.filterByCategory(
       this.allResearchItems,
       this.selectedCategory,
     )
+
     let validResearches = filterModerableItems(researches, this.activeUser)
 
     if (this.searchValue) {
@@ -118,6 +110,8 @@ export class ResearchStore extends ModuleStore {
 
       validResearches = fuse.search(this.searchValue).map((v) => v.item)
     }
+
+    this.filterSorterDecorator.allItems = validResearches
 
     return this.filterSorterDecorator.getSortedItems()
   }

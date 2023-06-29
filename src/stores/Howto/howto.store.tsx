@@ -62,16 +62,6 @@ export class HowtoStore extends ModuleStore {
   @observable
   private filterSorterDecorator: FilterSorterDecorator<IHowtoDB>
 
-  public filterHowtosByCategory = (
-    collection: IHowtoDB[] = [],
-    category: string,
-  ) => {
-    return category
-      ? collection.filter((obj) => {
-          return obj.category?.label === category
-        })
-      : collection
-  }
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
@@ -196,7 +186,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    const howtos = this.filterHowtosByCategory(
+    const howtos = this.filterSorterDecorator.filterByCategory(
       this.allHowtos,
       this.selectedCategory,
     )

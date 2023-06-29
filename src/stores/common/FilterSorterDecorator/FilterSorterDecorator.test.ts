@@ -1,4 +1,5 @@
-import { FilterSorterDecorator, IItem } from './FilterSorterDecorator'
+import { FilterSorterDecorator } from './FilterSorterDecorator'
+import type { IItem } from './FilterSorterDecorator'
 
 describe('FilterSorterDecorator', () => {
   let decorator: FilterSorterDecorator<IItem>

@@ -11,7 +11,7 @@ import {
   ElWithBeforeIcon,
 } from 'oa-components'
 import type { EventStore } from 'src/stores/Events/events.store'
-import { Heading, Card, Flex, Box, Text, Label } from 'theme-ui'
+import { Heading, Card, Flex, Box, Text,Label } from 'theme-ui'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { inject } from 'mobx-react'
 import { PostingGuidelines } from './PostingGuidelines'
@@ -75,7 +75,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
     const shouldShowLocationError =
       !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
-
     return (
       <Form
         onSubmit={(v) => {
@@ -113,11 +112,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Card>
                       <Flex
-                        sx={{
-                          alignItems: 'center',
-                          padding: 3,
-                          backgroundColor: 'softblue',
-                        }}
+                        sx={{ alignItems: 'center', padding: 3 , backgroundColor: 'softblue' }}
                       >
                         <Heading>Create an event</Heading>
                         <Box ml="15px">
@@ -190,7 +185,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             px={2}
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
-                            <Label htmlFor="url">Link to your event *</Label>
+                            <Label htmlFor="url">
+                              Link to your event *
+                            </Label>
                             <Field
                               name="url"
                               data-cy="url"

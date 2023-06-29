@@ -13,6 +13,8 @@ import websiteSVG from '../../assets/icons/icon-website.svg'
 import bazarSVG from '../../assets/icons/icon-bazar.svg'
 import emailOutlineSVG from '../../assets/icons/icon-email.svg'
 import updateSVG from '../../assets/icons/icon-update.svg'
+import eyeSVG from '../../assets/icons/eye.svg'
+import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
 
 const imgStyle = {
   maxWidth: '100%',
@@ -34,4 +36,6 @@ export const iconMap = {
   bazar: <img alt="icon" style={imgStyle} src={bazarSVG} />,
   emailOutline: <img alt="icon" style={imgStyle} src={emailOutlineSVG} />,
   update: <img alt="icon" style={imgStyle} src={updateSVG} />,
+  show: <img alt="icon" style={imgStyle} src={eyeSVG} />,
+  hide: <img alt="icon" style={imgStyle} src={eyeCrossedSVG} />,
 }

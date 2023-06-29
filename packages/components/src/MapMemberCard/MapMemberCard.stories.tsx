@@ -12,7 +12,6 @@ export const Default: StoryFn<typeof MapMemberCard> = () => (
     imageUrl="https://placekitten.com/450/450"
     moderationStatus="accepted"
     description={`${faker.lorem.sentence()}`}
-    lastActive={`${faker.date.past().toString()}`}
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
@@ -28,7 +27,6 @@ export const LoadingState: StoryFn<typeof MapMemberCard> = () => (
     loading
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
-    lastActive={`${faker.date.past()}`}
     moderationStatus="accepted"
     user={{
       username: faker.internet.userName(),
@@ -44,7 +42,6 @@ export const AwaitingModeration: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
-    lastActive={`${faker.date.past()}`}
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
@@ -63,7 +60,6 @@ export const Draft: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
-    lastActive={`${faker.date.past()}`}
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
@@ -82,7 +78,6 @@ export const Rejected: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
-    lastActive={`${faker.date.past()}`}
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),

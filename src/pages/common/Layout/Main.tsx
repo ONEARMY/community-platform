@@ -1,8 +1,5 @@
 import type { FlexProps } from 'theme-ui'
 import { Flex } from 'theme-ui'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import type { CSSObject } from '@styled-system/css'
 
 interface ILayoutProps {
@@ -25,7 +22,7 @@ const Main = (props: IProps) => {
             ? {
                 // Base css for all the pages, except Map & Academy
                 position: 'relative',
-                maxWidth: theme.maxContainerWidth,
+                maxWidth: 'container',
                 px: [2, 3, 4],
                 mx: 'auto',
                 my: 0,

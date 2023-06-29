@@ -49,5 +49,7 @@ export type availableGlyphs =
   | 'bazar'
   | 'email-outline'
   | 'update'
+  | 'show'
+  | 'hide'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }

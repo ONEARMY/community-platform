@@ -104,6 +104,8 @@ export const glyphs: IGlyphs = {
   'email-outline': iconMap.emailOutline,
   discord: iconMap.discord,
   update: iconMap.update,
+  show: iconMap.show,
+  hide: iconMap.hide,
 }
 
 export type Props = IProps & VerticalAlignProps & SpaceProps

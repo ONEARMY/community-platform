@@ -206,7 +206,6 @@ export class MapsStore extends ModuleStore {
     if (!u) {
       return {
         heroImageUrl: '',
-        lastActive: '',
         profilePicUrl: '',
         shortDescription: '',
         name: username,
@@ -224,7 +223,6 @@ export class MapsStore extends ModuleStore {
 
     return {
       heroImageUrl,
-      lastActive: u._lastActive ? u._lastActive : u._modified,
       profilePicUrl: avatar,
       shortDescription: u.mapPinDescription ? u.mapPinDescription : '',
       name: u.userName,

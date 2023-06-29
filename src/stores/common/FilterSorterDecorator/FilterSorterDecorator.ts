@@ -14,9 +14,18 @@ export interface IItem {
   }[]
 }
 
+export enum ItemSortingOption {
+  None = 'None',
+  Modified = 'Modified',
+  Created = 'Created',
+  MostUseful = 'MostUseful',
+  Comments = 'Comments',
+  Updates = 'Updates',
+}
+
 export class FilterSorterDecorator<T extends IItem> {
   @observable
-  public activeSorter: string
+  public activeSorter: ItemSortingOption
 
   @observable
   public allItems: T[] = []
@@ -39,7 +48,7 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   constructor(_allItems: T[]) {
-    this.activeSorter = 'comments'
+    this.activeSorter = ItemSortingOption.None
     this.allItems = _allItems
     this.SEARCH_WEIGHTS = [
       { name: 'title', weight: 0.5 },
@@ -94,28 +103,28 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   @action
-  public getSortedItems(): any[] {
+  public getSortedItems(): T[] {
     let validItems = this.allItems.slice()
 
     if (this.activeSorter) {
       switch (this.activeSorter) {
-        case 'modified':
+        case ItemSortingOption.Modified:
           validItems = this.sortByLatestModified(validItems)
           break
 
-        case 'created':
+        case ItemSortingOption.Created:
           validItems = this.sortByLatestCreated(validItems)
           break
 
-        case 'most useful':
+        case ItemSortingOption.MostUseful:
           validItems = this.sortByMostUseful(validItems)
           break
 
-        case 'comments':
+        case ItemSortingOption.Comments:
           validItems = this.sortByComments(validItems)
           break
 
-        case 'updates':
+        case ItemSortingOption.Updates:
           validItems = this.sortByUpdates(validItems)
           break
 
@@ -130,7 +139,13 @@ export class FilterSorterDecorator<T extends IItem> {
 
   @action
   public sort(query: string): any[] {
-    this.activeSorter = query
+    const sortingOption: ItemSortingOption =
+      ItemSortingOption[query as keyof typeof ItemSortingOption]
+    this.activeSorter = sortingOption
+
+    /* eslint-disable no-console */
+
+    console.log(sortingOption)
 
     return this.getSortedItems()
   }

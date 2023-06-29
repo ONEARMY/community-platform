@@ -40,15 +40,9 @@ const ResearchList = observer(() => {
   const theme = useTheme()
   const history = useHistory()
 
-  const sortingOptions = [
-    'Modified',
-    'Created',
-    'Most Useful',
-    'Comments',
-    'Updates',
-  ].map((label) => ({
-    label,
-    value: label.toLowerCase(),
+  const sortingOptions = store.availableItemSortingOption.map((label) => ({
+    label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
+    value: label,
   }))
   const [sortState, setSortState] = useState('')
   const { filteredResearches, searchValue } = store

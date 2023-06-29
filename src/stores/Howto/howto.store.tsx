@@ -32,7 +32,10 @@ import {
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
 import type { IUploadedFileMeta } from '../storage'
-import { FilterSorterDecorator } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import {
+  FilterSorterDecorator,
+  ItemSortingOption,
+} from '../common/FilterSorterDecorator/FilterSorterDecorator'
 
 const COLLECTION_NAME = 'howtos'
 
@@ -55,6 +58,8 @@ export class HowtoStore extends ModuleStore {
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
+  public availableItemSortingOption: ItemSortingOption[]
+
   @observable
   private filterSorterDecorator: FilterSorterDecorator<IHowtoDB>
 
@@ -70,6 +75,10 @@ export class HowtoStore extends ModuleStore {
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
+    this.availableItemSortingOption = [
+      ItemSortingOption.Created,
+      ItemSortingOption.MostUseful,
+    ]
   }
 
   public updateActiveSorter(query: string) {

@@ -27,7 +27,10 @@ import {
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import type { DocReference } from '../databaseV2/DocReference'
-import { FilterSorterDecorator } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import {
+  FilterSorterDecorator,
+  ItemSortingOption,
+} from '../common/FilterSorterDecorator/FilterSorterDecorator'
 
 const COLLECTION_NAME = 'research'
 
@@ -49,6 +52,8 @@ export class ResearchStore extends ModuleStore {
 
   @observable
   public searchValue: string
+
+  public availableItemSortingOption: ItemSortingOption[]
 
   @observable
   private filterSorterDecorator: FilterSorterDecorator<IResearch.ItemDB>
@@ -80,6 +85,13 @@ export class ResearchStore extends ModuleStore {
     })
     this.selectedCategory = ''
     this.searchValue = ''
+    this.availableItemSortingOption = [
+      ItemSortingOption.Created,
+      ItemSortingOption.Modified,
+      ItemSortingOption.MostUseful,
+      ItemSortingOption.Comments,
+      ItemSortingOption.Updates,
+    ]
   }
 
   public updateActiveSorter(query: string) {

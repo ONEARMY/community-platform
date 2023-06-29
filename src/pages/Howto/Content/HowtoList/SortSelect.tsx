@@ -19,19 +19,19 @@ interface IState {
   value: ISortOption | null
 }
 
-const sortingOptions: ISortOption[] = ['Created', 'Most useful'].map(
-  (label) => ({
-    label,
-    value: label.toLowerCase(),
-  }),
-)
-
+let sortingOptions: ISortOption[]
 @inject('howtoStore')
 @observer
 class SortSelect extends Component<IProps, IState> {
   constructor(props: any) {
     super(props)
     this.state = { value: null }
+    sortingOptions = this.injected.howtoStore.availableItemSortingOption.map(
+      (label) => ({
+        label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
+        value: label,
+      }),
+    )
   }
 
   get injected() {

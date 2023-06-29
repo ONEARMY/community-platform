@@ -1,4 +1,3 @@
-import Fuse from 'fuse.js'
 import {
   action,
   computed,
@@ -31,13 +30,7 @@ import type { DocReference } from '../databaseV2/DocReference'
 import { FilterSorterDecorator } from '../common/FilterSorterDecorator/FilterSorterDecorator'
 
 const COLLECTION_NAME = 'research'
-const HOWTO_SEARCH_WEIGHTS = [
-  { name: 'title', weight: 0.5 },
-  { name: 'description', weight: 0.2 },
-  { name: '_createdBy', weight: 0.15 },
-  { name: 'steps.title', weight: 0.1 },
-  { name: 'steps.text', weight: 0.05 },
-]
+
 export class ResearchStore extends ModuleStore {
   /**
    * @deprecated
@@ -94,8 +87,6 @@ export class ResearchStore extends ModuleStore {
   }
 
   @computed get filteredResearches() {
-    /* eslint-disable no-console */
-
     const researches = this.filterSorterDecorator.filterByCategory(
       this.allResearchItems,
       this.selectedCategory,
@@ -103,13 +94,10 @@ export class ResearchStore extends ModuleStore {
 
     let validResearches = filterModerableItems(researches, this.activeUser)
 
-    if (this.searchValue) {
-      const fuse = new Fuse(validResearches, {
-        keys: HOWTO_SEARCH_WEIGHTS,
-      })
-
-      validResearches = fuse.search(this.searchValue).map((v) => v.item)
-    }
+    validResearches = this.filterSorterDecorator.search(
+      validResearches,
+      this.searchValue,
+    )
 
     this.filterSorterDecorator.allItems = validResearches
 

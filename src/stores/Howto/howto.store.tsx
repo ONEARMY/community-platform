@@ -1,4 +1,3 @@
-import Fuse from 'fuse.js'
 import {
   action,
   computed,
@@ -36,13 +35,6 @@ import type { IUploadedFileMeta } from '../storage'
 import { FilterSorterDecorator } from '../common/FilterSorterDecorator/FilterSorterDecorator'
 
 const COLLECTION_NAME = 'howtos'
-const HOWTO_SEARCH_WEIGHTS = [
-  { name: 'title', weight: 0.5 },
-  { name: 'description', weight: 0.2 },
-  { name: '_createdBy', weight: 0.15 },
-  { name: 'steps.title', weight: 0.1 },
-  { name: 'steps.text', weight: 0.05 },
-]
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -54,6 +46,10 @@ export class HowtoStore extends ModuleStore {
   public selectedCategory: string
   @observable
   public searchValue: string
+
+  @observable
+  public sortValue: string
+
   @observable
   public referrerSource: string
   @observable
@@ -193,15 +189,10 @@ export class HowtoStore extends ModuleStore {
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
     let validHowtos = filterModerableItems(howtos, this.activeUser)
 
-    // If user searched, filter remaining howtos by the search query with Fuse
-    if (this.searchValue) {
-      const fuse = new Fuse(validHowtos, {
-        keys: HOWTO_SEARCH_WEIGHTS,
-      })
-
-      // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
-      validHowtos = fuse.search(this.searchValue).map((v) => v.item)
-    }
+    validHowtos = this.filterSorterDecorator.search(
+      validHowtos,
+      this.searchValue,
+    )
 
     return validHowtos
   }

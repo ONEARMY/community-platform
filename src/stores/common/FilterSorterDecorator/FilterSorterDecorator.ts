@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
 import type { IComment } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
@@ -14,9 +15,6 @@ export interface IItem {
 }
 
 export class FilterSorterDecorator<T extends IItem> {
-  @observable
-  public searchValue: string
-
   @observable
   public activeSorter: string
 
@@ -41,7 +39,6 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   constructor(_allItems: T[]) {
-    this.searchValue = ''
     this.activeSorter = 'comments'
     this.allItems = _allItems
     this.SEARCH_WEIGHTS = [
@@ -136,5 +133,19 @@ export class FilterSorterDecorator<T extends IItem> {
     this.activeSorter = query
 
     return this.getSortedItems()
+  }
+
+  @action
+  public search(listItem: T[], searchValue: string): any {
+    if (searchValue) {
+      const fuse = new Fuse(listItem, {
+        keys: this.SEARCH_WEIGHTS,
+      })
+
+      // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
+      return fuse.search(searchValue).map((v) => v.item)
+    } else {
+      return listItem
+    }
   }
 }

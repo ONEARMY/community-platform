@@ -90,32 +90,32 @@ describe('FilterSorterDecorator', () => {
   })
 
   test('sort by latest modified', () => {
-    const sortedItems = decorator.sort('modified')
+    const sortedItems = decorator.sort('Modified')
     expect(sortedItems[0]._modified).toBe('2022-02-01')
     expect(sortedItems[1]._modified).toBe('2022-01-01')
   })
 
   test('sort by latest created', () => {
-    const sortedItems = decorator.sort('created')
+    const sortedItems = decorator.sort('Created')
     expect(sortedItems[0]._created).toBe('2022-02-01')
     expect(sortedItems[1]._created).toBe('2022-01-01')
   })
 
   test('sort by most useful', () => {
-    const sortedItems = decorator.sort('most useful')
+    const sortedItems = decorator.sort('MostUseful')
     expect(sortedItems[0].votedUsefulBy.length).toBe(2)
     expect(sortedItems[1].votedUsefulBy.length).toBe(1)
   })
 
-  test('sort by comments', () => {
-    const sortedItems = decorator.sort('comments')
-    expect(decorator.calculateTotalComments(sortedItems[0])).toBe(4)
-    expect(decorator.calculateTotalComments(sortedItems[1])).toBe(3)
+  test('sort by updates', () => {
+    const sortedItems = decorator.sort('Updates')
+    expect(sortedItems[0].updates.length).toBe(2)
+    expect(sortedItems[1].updates.length).toBe(2)
   })
 
-  test('sort by updates', () => {
-    const sortedItems = decorator.sort('updates')
-    expect(sortedItems[0].updates.length).toBe(2)
-    expect(sortedItems[1].updates.length).toBe(1)
+  test('sort by comments', () => {
+    const sortedItems = decorator.sort('Comments')
+    expect(decorator.calculateTotalComments(sortedItems[0])).toBe(4)
+    expect(decorator.calculateTotalComments(sortedItems[1])).toBe(3)
   })
 })

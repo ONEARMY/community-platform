@@ -143,10 +143,6 @@ export class FilterSorterDecorator<T extends IItem> {
       ItemSortingOption[query as keyof typeof ItemSortingOption]
     this.activeSorter = sortingOption
 
-    /* eslint-disable no-console */
-
-    console.log(sortingOption)
-
     return this.getSortedItems()
   }
 

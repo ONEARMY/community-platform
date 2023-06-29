@@ -45,13 +45,24 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
   },
   {
     component: lazy(
+      () =>
+        import(
+          /* webpackChunkName: "adminCategories" */ './pages/adminCategories'
+        ),
+    ),
+    title: 'Categories',
+    description: 'Browse Categories',
+    path: '/categories',
+    moduleName,
+  },
+  {
+    component: lazy(
       () => import(/* webpackChunkName: "adminTags" */ './pages/adminTags'),
     ),
     title: 'Tags',
     description: 'Browse Tags',
     path: '/tags',
     moduleName,
-    disabled: true,
   },
   {
     component: lazy(

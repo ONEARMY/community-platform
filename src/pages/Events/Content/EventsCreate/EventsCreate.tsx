@@ -75,7 +75,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
 
     const shouldShowLocationError =
       !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
-
     return (
       <Form
         onSubmit={(v) => {
@@ -139,7 +138,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             flexDirection: 'column',
                           }}
                         >
-                          <Label htmlFor="title">Title of the event *</Label>
+                          <Label sx={_labelStyle} htmlFor="title">
+                            Title of the event *
+                          </Label>
                           <Field
                             id="title"
                             name="title"
@@ -165,7 +166,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             sx={{ width: '100%', flexDirection: 'column' }}
                             data-cy="date"
                           >
-                            <Label htmlFor="date">
+                            <Label sx={_labelStyle} htmlFor="date">
                               When is your event taking place? *
                             </Label>
                             <Field
@@ -190,7 +191,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             px={2}
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
-                            <Label htmlFor="url">Link to your event *</Label>
+                            <Label sx={_labelStyle} htmlFor="url">
+                              Link to your event *
+                            </Label>
                             <Field
                               name="url"
                               data-cy="url"
@@ -221,7 +224,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                           >
                             {!isDigitalEvent && (
                               <>
-                                <Label htmlFor="location">
+                                <Label sx={_labelStyle} htmlFor="location">
                                   In which city is the event taking place?
                                 </Label>
                                 <Field
@@ -272,7 +275,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             px={2}
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
-                            <Label htmlFor="location">
+                            <Label sx={_labelStyle} htmlFor="location">
                               Select tags for your event
                             </Label>
                             <Field

@@ -300,6 +300,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "jonboiser",
+      "name": "Jonathan Boiser",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10248067?v=4",
+      "profile": "http://jonboiser.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

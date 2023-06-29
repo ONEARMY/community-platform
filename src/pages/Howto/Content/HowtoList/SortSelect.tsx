@@ -19,7 +19,7 @@ interface IState {
   value: ISortOption | null
 }
 
-const sortingOptions: ISortOption[] = ['Latest', 'Most useful'].map(
+const sortingOptions: ISortOption[] = ['Created', 'Most useful'].map(
   (label) => ({
     label,
     value: label.toLowerCase(),
@@ -44,11 +44,13 @@ class SortSelect extends Component<IProps, IState> {
 
   onSortValueChange(value: ISortOption) {
     this.setState({ value })
-    if (value.value === 'most useful') {
-      this.injected.howtoStore.sortHowtosByUsefulCount()
-    } else {
-      this.injected.howtoStore.sortHowtosByLatest()
-    }
+    this.injected.howtoStore.updateActiveSorter(value.value)
+
+    // if (value.value === 'most useful') {
+    //   this.injected.howtoStore.sortHowtosByUsefulCount()
+    // } else {
+    //   this.injected.howtoStore.sortHowtosByLatest()
+    // }
   }
 
   render() {

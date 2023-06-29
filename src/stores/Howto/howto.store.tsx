@@ -33,6 +33,7 @@ import {
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
 import type { IUploadedFileMeta } from '../storage'
+import { FilterSorterDecorator } from '../common/FilterSorterDecorator/FilterSorterDecorator'
 
 const COLLECTION_NAME = 'howtos'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -58,6 +59,9 @@ export class HowtoStore extends ModuleStore {
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
+  @observable
+  private filterSorterDecorator: FilterSorterDecorator<IHowtoDB>
+
   public filterHowtosByCategory = (
     collection: IHowtoDB[] = [],
     category: string,
@@ -74,24 +78,16 @@ export class HowtoStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.sortHowtosByLatest(docs)
+      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
+      this.updateActiveSorter('created')
     })
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
   }
 
-  @action
-  public sortHowtosByLatest(docs?: IHowtoDB[]) {
-    const howtos = docs || this.allHowtos
-    this.allHowtos = howtos.sort((a, b) => (a._created < b._created ? 1 : -1))
-  }
-
-  @action
-  public sortHowtosByUsefulCount() {
-    this.allHowtos = this.allHowtos.sort((a, b) =>
-      (a.votedUsefulBy || []).length < (b.votedUsefulBy || []).length ? 1 : -1,
-    )
+  public updateActiveSorter(query: string) {
+    this.allHowtos = this.filterSorterDecorator.sort(query)
   }
 
   public getActiveHowToComments(): IComment[] {

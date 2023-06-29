@@ -28,6 +28,7 @@ import {
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import type { DocReference } from '../databaseV2/DocReference'
+import { FilterSorterDecorator } from '../common/FilterSorterDecorator/FilterSorterDecorator'
 
 const COLLECTION_NAME = 'research'
 const HOWTO_SEARCH_WEIGHTS = [
@@ -57,7 +58,7 @@ export class ResearchStore extends ModuleStore {
   public searchValue: string
 
   @observable
-  public activeSorter: string
+  private filterSorterDecorator: FilterSorterDecorator<IResearch.ItemDB>
 
   @observable
   public researchUploadStatus: IResearchUploadStatus =
@@ -78,22 +79,6 @@ export class ResearchStore extends ModuleStore {
       : collection
   }
 
-  @action
-  private calculateTotalComments = (item: IResearch.ItemDB) => {
-    if (item.updates) {
-      const commentOnUpdates = item.updates.reduce((totalComments, update) => {
-        const updateCommentsLength = update.comments
-          ? update.comments.length
-          : 0
-        return totalComments + updateCommentsLength
-      }, 0)
-
-      return commentOnUpdates ? commentOnUpdates : '0'
-    } else {
-      return '0'
-    }
-  }
-
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
@@ -106,48 +91,17 @@ export class ResearchStore extends ModuleStore {
       )
       runInAction(() => {
         this.allResearchItems = sortedItems
+        // Create an instance of FilterSorterDecorator with the allResearchItems array
+        this.filterSorterDecorator =
+          new FilterSorterDecorator<IResearch.ItemDB>(this.allResearchItems)
       })
     })
     this.selectedCategory = ''
     this.searchValue = ''
-    this.activeSorter = 'comments'
   }
 
-  @action
-  private sortResearchByLatestModified(research) {
-    const researchItems = research || this.allResearchItems
-    return researchItems.sort((a, b) => (a._modified < b._modified ? 1 : -1))
-  }
-
-  @action
-  private sortResearchByLatestCreated(research) {
-    const researchItems = research || this.allResearchItems
-    return researchItems.sort((a, b) => (a._created < b._created ? 1 : -1))
-  }
-
-  @action
-  private sortResearchByMostUseful(research) {
-    const researchItems = research || this.allResearchItems
-    return researchItems.sort((a, b) =>
-      (a.votedUsefulBy || []).length < (b.votedUsefulBy || []).length ? 1 : -1,
-    )
-  }
-
-  @action
-  private sortResearchByUpdates(research) {
-    const researchItems = research || this.allResearchItems
-    return researchItems.sort((a, b) =>
-      (a.updates || []).length < (b.updates || []).length ? 1 : -1,
-    )
-  }
-
-  @action
-  private sortResearchByComments(research) {
-    const researchItems = research || this.allResearchItems
-
-    return researchItems.sort((a, b) =>
-      this.calculateTotalComments(a) < this.calculateTotalComments(b) ? 1 : -1,
-    )
+  public updateActiveSorter(query: string) {
+    this.allResearchItems = this.filterSorterDecorator.sort(query)
   }
 
   @computed get filteredResearches() {
@@ -165,33 +119,7 @@ export class ResearchStore extends ModuleStore {
       validResearches = fuse.search(this.searchValue).map((v) => v.item)
     }
 
-    switch (this.activeSorter) {
-      case 'modified':
-        validResearches = this.sortResearchByLatestModified(validResearches)
-        break
-
-      case 'created':
-        validResearches = this.sortResearchByLatestCreated(validResearches)
-        break
-
-      case 'most useful':
-        validResearches = this.sortResearchByMostUseful(validResearches)
-        break
-
-      case 'comments':
-        validResearches = this.sortResearchByComments(validResearches)
-        break
-
-      case 'updates':
-        validResearches = this.sortResearchByUpdates(validResearches)
-        break
-
-      default:
-        validResearches = this.sortResearchByLatestModified(validResearches)
-        break
-    }
-
-    return validResearches
+    return this.filterSorterDecorator.getSortedItems()
   }
 
   public getActiveResearchUpdateComments(pointer: number): IComment[] {
@@ -376,9 +304,6 @@ export class ResearchStore extends ModuleStore {
 
   public updateSearchValue(query: string) {
     this.searchValue = query
-  }
-  public updateActiveSorter(query: string) {
-    this.activeSorter = query
   }
 
   @action

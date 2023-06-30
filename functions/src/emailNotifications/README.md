@@ -4,7 +4,7 @@ This folder contains code that we use to send emails to users about missed notif
 
 ## Background on Notification and Email Process
 
-Users receive notifications when other users comment on their content or mark it as useful. These are stored in a `notifications` array for each user in the `users` collection. When a notification is created, it `read` and `notified` boolean fields which track the user's interaction with the notification. A notification is marked as `notified=true` when it is rendered in the collapsed notification list dropdown as a red dot, which indicates the user has notifications. If the user clicks the dropdown to see the contents of their notifications, the notification is marked `read=true`.
+Users receive notifications when other users comment on their content or mark it as useful. These are stored in a `notifications` array for each user in the `users` collection. When a notification is created, it has `read` and `notified` boolean fields which track the user's interaction with the notification. A notification is marked as `notified=true` when it is rendered in the collapsed notification list dropdown as a red dot, which indicates the user has notifications. If the user clicks the dropdown to see the contents of their notifications, the notification is marked `read=true`.
 
 If a user has not been active in the platform, then their notifications will remain un-notified and un-read. In these situations, we send them in an email.
 
@@ -50,17 +50,17 @@ Once the document is added to the `emails` collection, a `delivery` field with a
 
 The firebase email extension requires integration with a transactional email provider. We use [Brevo](https://www.brevo.com/) (formerly Sendinblue). This integration is managed within the firebase extension setup. You can login to our Brevo account to see information about sent emails. Reach out to a maintainer with questions about this.
 
-### Development and Testing
+## Development and Testing
 
 We do not have the email extension set up in the emulator environment, so testing the end-to-end flow is difficult locally. Here are suggested steps for development and testing:
 
-#### Changes to email UI
+### Changes to email UI
 
 1. Make changes to the function.
 2. Use the [unit tests](./createEmailNotifications.spec.ts) to test new transformation functionality and generate new html snapshots.
 3. To preview the new email, either copy/paste the html snapshot into a [free online site](https://codebeautify.org/htmlviewer) or into new file and use a VSCode extension like HTML Preview (george-alisson.html-preview-vscode). Include a screenshot in your PR descripton.
 
-#### Changes to email sending logic\*
+### Changes to email sending logic\*
 
 1. Make changes to the function.
 2. \*Deploy the function to the development environment using the [firebase cli](https://firebase.google.com/docs/functions/get-started?gen=1st)

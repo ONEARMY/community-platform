@@ -12,6 +12,7 @@ export const FactoryNotification = (
   triggeredBy: {
     displayName: faker.name.fullName(),
     userId: faker.internet.userName(),
+    userName: faker.internet.userName(),
   },
   type: faker.helpers.arrayElement(NotificationTypes),
   relevantUrl: faker.internet.url(),

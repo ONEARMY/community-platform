@@ -75,7 +75,7 @@ export class UserNotificationsStore extends ModuleStore {
             userId: triggeredBy.userName,
           },
           relevantUrl: relevantUrl,
-          type: type,
+          type,
           read: false,
           notified: false,
         }

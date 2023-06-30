@@ -18,6 +18,7 @@ import type {
   IPendingEmails,
   IResearchDB,
   IUserDB,
+  INotification,
 } from '../../src/models'
 export {
   DBDoc,
@@ -28,6 +29,7 @@ export {
   IModerable,
   IResearchDB,
   IPendingEmails,
+  INotification,
 }
 
 import { dbEndpointSubcollections, generateDBEndpoints } from 'oa-shared'

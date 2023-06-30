@@ -1,4 +1,7 @@
-import { FilterSorterDecorator } from './FilterSorterDecorator'
+import {
+  FilterSorterDecorator,
+  ItemSortingOption,
+} from './FilterSorterDecorator'
 import type { IItem } from './FilterSorterDecorator'
 
 describe('FilterSorterDecorator', () => {
@@ -8,6 +11,14 @@ describe('FilterSorterDecorator', () => {
       _modified: '2022-01-01',
       _created: '2022-01-01',
       votedUsefulBy: ['user1', 'user2'],
+      category: {
+        _contentModifiedTimestamp: '2022-12-24T07:50:55.226Z',
+        _created: '2022-12-24T07:50:55.226Z',
+        _modified: '2022-12-24T07:50:55.226Z',
+        label: 'Category 1',
+        _deleted: false,
+        _id: '5jxuTdvzSBuCtqcH36MV',
+      },
       updates: [
         {
           comments: [
@@ -44,6 +55,14 @@ describe('FilterSorterDecorator', () => {
       _modified: '2022-02-01',
       _created: '2022-02-01',
       votedUsefulBy: ['user3'],
+      researchCategory: {
+        _contentModifiedTimestamp: '2022-12-24T07:50:55.226Z',
+        _created: '2022-12-24T07:50:55.226Z',
+        _modified: '2022-12-24T07:50:55.226Z',
+        label: 'Research Category 2',
+        _deleted: false,
+        _id: '5jxuTdvzSBuCtqcH36MV',
+      },
       updates: [
         {
           comments: [
@@ -89,6 +108,7 @@ describe('FilterSorterDecorator', () => {
     decorator = new FilterSorterDecorator(mockItems)
   })
 
+  //#region Sorting
   test('sort by latest modified', () => {
     const sortedItems = decorator.sort('Modified')
     expect(sortedItems[0]._modified).toBe('2022-02-01')
@@ -118,4 +138,57 @@ describe('FilterSorterDecorator', () => {
     expect(decorator.calculateTotalComments(sortedItems[0])).toBe(4)
     expect(decorator.calculateTotalComments(sortedItems[1])).toBe(3)
   })
+
+  test('get sorted items with no active sorter', () => {
+    const sortedItems = decorator.getSortedItems()
+    expect(sortedItems).toEqual(mockItems) // No sorting applied, should return original order
+  })
+
+  test('get sorted items with default sorting option', () => {
+    decorator.activeSorter = ItemSortingOption.None
+    const sortedItems = decorator.getSortedItems()
+    expect(sortedItems).toEqual(mockItems) // No sorting applied, should return original order
+  })
+
+  //#endregion Sorting
+
+  //#region  Filter
+  test('filter by category', () => {
+    const category = 'Category 1'
+    const filteredItems = decorator.filterByCategory(mockItems, category)
+    expect(filteredItems.length).toBe(1)
+    expect(filteredItems[0].category?.label).toBe(category)
+  })
+
+  test('filter by research category', () => {
+    const category = 'Research Category 2'
+    const filteredItems = decorator.filterByCategory(mockItems, category)
+    expect(filteredItems.length).toBe(1)
+    expect(filteredItems[0].researchCategory?.label).toBe(category)
+  })
+
+  //#endregion Filter
+
+  //#region  Search
+
+  test('search with empty search value', () => {
+    const searchValue = ''
+    const searchResult = decorator.search(mockItems, searchValue)
+    expect(searchResult).toEqual(mockItems) // No search value provided, should return original list
+  })
+
+  test('search with matching search value', () => {
+    const searchValue = 'Comment 1'
+    const searchResult = decorator.search(mockItems, searchValue)
+    expect(searchResult.length).toBe(1)
+    expect(searchResult[0].updates?.[0].comments?.[0].text).toBe(searchValue)
+  })
+
+  test('search with non-matching search value', () => {
+    const searchValue = 'Non-existent comment'
+    const searchResult = decorator.search(mockItems, searchValue)
+    expect(searchResult.length).toBe(0)
+  })
+
+  //#endregion Search
 })

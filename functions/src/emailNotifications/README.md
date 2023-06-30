@@ -58,7 +58,7 @@ We do not have the email extension set up in the emulator environment, so testin
 
 1. Make changes to the function.
 2. Use the [unit tests](./createEmailNotifications.spec.ts) to test new transformation functionality and generate new html snapshots.
-3. To preview the new email, either copy/paste the html snapshot into a [free online site](https://codebeautify.org/htmlviewer) or into new file and use a VSCode extension like HTML Preview (george-alisson.html-preview-vscode). Include a screenshot in your PR descripton.
+3. To preview the new email, either copy/paste the html snapshot into a [free online site](https://codebeautify.org/htmlviewer) or into new file and use a VSCode extension like HTML Preview. Include a screenshot in your PR description.
 
 ### Changes to email sending logic\*
 

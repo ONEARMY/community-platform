@@ -1,6 +1,12 @@
 import { format } from 'date-fns'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { Button, ImageGallery, LinkifyText, Username, VideoPlayer } from 'oa-components'
+import {
+  Button,
+  ImageGallery,
+  LinkifyText,
+  Username,
+  VideoPlayer,
+} from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'

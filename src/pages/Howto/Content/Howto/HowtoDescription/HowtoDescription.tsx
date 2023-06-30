@@ -200,24 +200,22 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
             <Flex sx={{ flexDirection: 'column' }}>
               <Flex sx={{ alignItems: 'center' }}>
-                <Flex sx={{ alignItems: 'center' }}>
-                  <Username
-                    user={{
-                      userName: howto._createdBy,
-                      countryCode: howto.creatorCountry,
-                    }}
-                    isVerified={isUserVerified(howto._createdBy)}
-                  />
-                  <Text
-                    variant="auxiliary"
-                    sx={{
-                      marginTop: 2,
-                      marginBottom: 2,
-                    }}
-                  >
-                    {dateCreatedText}
-                  </Text>
-                </Flex>
+                <Username
+                  user={{
+                    userName: howto._createdBy,
+                    countryCode: howto.creatorCountry,
+                  }}
+                  isVerified={isUserVerified(howto._createdBy)}
+                />
+                <Text
+                  variant="auxiliary"
+                  sx={{
+                    marginTop: 2,
+                    marginBottom: 2,
+                  }}
+                >
+                  {dateCreatedText}
+                </Text>
               </Flex>
 
               <Text
@@ -233,14 +231,15 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               >
                 {dateContentModifiedText(howto)}
               </Text>
+
+              <Heading mt={2} mb={1}>
+                {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+                {capitalizeFirstLetter(howto.title)}
+              </Heading>
+              <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+                <LinkifyText>{howto.description}</LinkifyText>
+              </Text>
             </Flex>
-            <Heading mt={2} mb={1}>
-              {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-              {capitalizeFirstLetter(howto.title)}
-            </Heading>
-            <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
-              <LinkifyText>{howto.description}</LinkifyText>
-            </Text>
           </Flex>
         </Box>
 

@@ -22,7 +22,12 @@ const UserDocumentItem = ({ type, item }: IProps) => {
         borderBottom: '1px solid #c7c7c7',
       }}
     >
-      <Link to={url} key={id} style={{ width: '100%' }}>
+      <Link
+        to={url}
+        key={id}
+        style={{ width: '100%' }}
+        data-testid={`${type}-link`}
+      >
         <Flex
           pb={1}
           pt={1}

@@ -8,7 +8,7 @@ describe('FilterSorterDecorator', () => {
   let decorator: FilterSorterDecorator<IItem>
   const mockItems: IItem[] = [
     {
-      title: 'Item 2',
+      title: 'Item 1',
       _modified: '2022-01-01',
       _created: '2022-01-01',
       votedUsefulBy: ['user1', 'user2'],

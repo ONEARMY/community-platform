@@ -61,9 +61,6 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   public filterByCategory(listItems: T[] = [], category: string): T[] {
-    /* eslint-disable no-console */
-    console.log(listItems)
-
     return category
       ? listItems.filter((obj) => {
           if (obj.category) return obj.category?.label === category

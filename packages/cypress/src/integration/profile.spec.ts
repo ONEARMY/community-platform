@@ -6,14 +6,18 @@ describe('[Profile]', () => {
     cy.visit('/')
   })
 
-  const subscriber = users.subscriber
-  const userProfiletype = users.settings_workplace_new
   const admin = users.admin
+  const eventReader = users.event_reader
+  const userProfiletype = users.settings_workplace_new
+  const subscriber = users.subscriber
 
   describe('[By Anonymous]', () => {
-    it('[Can view public profile]', () => {
-      cy.visit(`/u/${subscriber.userName}`)
-      cy.get('[data-cy="Username"]').should('contain.text', subscriber.userName)
+    it('[Can view all public profile information]', () => {
+      cy.step('Go to Profile')
+      cy.visit(`/u/${eventReader.userName}`)
+      cy.get('[data-cy=userDisplayName]').contains(eventReader.userName)
+      cy.get('[data-testid=howto-stat]').contains('1')
+      cy.get('[data-testid=research-stat]').contains('1')
     })
   })
 

@@ -39,6 +39,8 @@ export const SortFilterHeader = (props) => {
       value: label,
     }),
   )
+  /* eslint-disable no-console */
+  console.log(type)
 
   const [sortState, setSortState] = useState('')
   const { searchValue } = currentStore
@@ -76,7 +78,7 @@ export const SortFilterHeader = (props) => {
           }}
           placeholder="Filter by category"
           isForm={false}
-          type={type}
+          type={type.replace(/-/g, '')}
         />
       </Flex>
       <Flex sx={_inputStyle}>
@@ -95,9 +97,11 @@ export const SortFilterHeader = (props) => {
       <Flex sx={_inputStyle}>
         <Input
           variant="inputOutline"
-          data-cy="research-search-box"
+          data-cy={`${type}-search-box`}
           value={searchValue}
-          placeholder="Search for a research"
+          placeholder={`Search for a ${(
+            type.charAt(0).toUpperCase() + type.slice(1)
+          ).split('-')}`}
           onChange={(evt) => {
             const value = evt.target.value
             updateQueryParams(window.location.href, 'search', value, history)

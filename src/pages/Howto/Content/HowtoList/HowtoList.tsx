@@ -151,7 +151,7 @@ export class HowtoList extends React.Component<any, IState> {
             flexDirection: ['column', 'column', 'row'],
           }}
         >
-          <SortFilterHeader store={this.props.howtoStore} type="howto" />
+          <SortFilterHeader store={this.props.howtoStore} type="how-to" />
           <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Link
               to={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}

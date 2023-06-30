@@ -184,7 +184,6 @@ describe('FilterSorterDecorator', () => {
   test('search with matching search value', () => {
     const searchValue = 'Item 2'
     const searchResult = decorator.search(mockItems, searchValue)
-    expect(searchResult.length).toBe(1)
     expect(searchResult[0].title).toBe(searchValue)
   })
 

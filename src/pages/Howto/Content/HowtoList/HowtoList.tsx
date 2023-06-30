@@ -2,19 +2,17 @@ import { inject, observer } from 'mobx-react'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, MoreContainer, Loader } from 'oa-components'
-import { Heading, Input, Flex, Box } from 'theme-ui'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { Heading, Flex, Box } from 'theme-ui'
 import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import HowToCard from './HowToCard'
-import SortSelect from './SortSelect'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { IHowto } from 'src/models'
-import type { RouteComponentProps } from 'react-router'
+import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
 
 interface InjectedProps {
   howtoStore: HowtoStore
@@ -30,28 +28,6 @@ interface IState {
 }
 
 // Update query params for search and categories
-const updateQueryParams = (
-  url: string,
-  key: string,
-  val: string,
-  history: RouteComponentProps['history'],
-) => {
-  const newUrl = new URL(url)
-  const urlParams = new URLSearchParams(newUrl.search)
-  if (val) {
-    urlParams.set(key, val)
-  } else {
-    urlParams.delete(key)
-  }
-  newUrl.search = urlParams.toString()
-
-  const { pathname, search } = newUrl
-
-  history.push({
-    pathname,
-    search,
-  })
-}
 
 // First we use the @inject decorator to bind to the howtoStore state
 @inject(
@@ -175,54 +151,7 @@ export class HowtoList extends React.Component<any, IState> {
             flexDirection: ['column', 'column', 'row'],
           }}
         >
-          <Flex
-            sx={{ width: ['100%', '100%', '20%'] }}
-            mb={['10px', '10px', 0]}
-            mr={[0, 0, '8px']}
-          >
-            <CategoriesSelect
-              value={selectedCategory ? { label: selectedCategory } : null}
-              onChange={(category) => {
-                updateQueryParams(
-                  window.location.href,
-                  'category',
-                  category ? category.label : '',
-                  this.props.history,
-                )
-                this.props.howtoStore.updateSelectedCategory(
-                  category ? category.label : '',
-                )
-              }}
-              placeholder="Filter by category"
-              isForm={false}
-              type="howto"
-            />
-          </Flex>
-          <Flex
-            ml={[0, 0, '8px']}
-            mb={['10px', '10px', 0]}
-            sx={{ width: ['100%', '100%', '20%'] }}
-          >
-            <SortSelect />
-          </Flex>
-          <Flex ml={[0, 0, '8px']} mr={[0, 0, 'auto']} mb={['10px', '10px', 0]}>
-            <Input
-              variant="inputOutline"
-              data-cy="how-to-search-box"
-              value={searchValue}
-              placeholder="Search for a how-to"
-              onChange={(evt) => {
-                const value = evt.target.value
-                updateQueryParams(
-                  window.location.href,
-                  'search',
-                  value,
-                  this.props.history,
-                )
-                this.props.howtoStore.updateSearchValue(value)
-              }}
-            />
-          </Flex>
+          <SortFilterHeader store={this.props.howtoStore} type="howto" />
           <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Link
               to={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}

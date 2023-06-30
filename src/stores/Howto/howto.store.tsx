@@ -51,9 +51,6 @@ export class HowtoStore extends ModuleStore {
   public searchValue: string
 
   @observable
-  public sortValue: string
-
-  @observable
   public referrerSource: string
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()

@@ -1,4 +1,3 @@
-import Fuse from 'fuse.js'
 import {
   action,
   computed,
@@ -28,15 +27,13 @@ import {
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import type { DocReference } from '../databaseV2/DocReference'
+import {
+  FilterSorterDecorator,
+  ItemSortingOption,
+} from '../common/FilterSorterDecorator/FilterSorterDecorator'
 
 const COLLECTION_NAME = 'research'
-const HOWTO_SEARCH_WEIGHTS = [
-  { name: 'title', weight: 0.5 },
-  { name: 'description', weight: 0.2 },
-  { name: '_createdBy', weight: 0.15 },
-  { name: 'steps.title', weight: 0.1 },
-  { name: 'steps.text', weight: 0.05 },
-]
+
 export class ResearchStore extends ModuleStore {
   /**
    * @deprecated
@@ -56,6 +53,11 @@ export class ResearchStore extends ModuleStore {
   @observable
   public searchValue: string
 
+  public availableItemSortingOption: ItemSortingOption[]
+
+  @observable
+  private filterSorterDecorator: FilterSorterDecorator<IResearch.ItemDB>
+
   @observable
   public researchUploadStatus: IResearchUploadStatus =
     getInitialResearchUploadStatus()
@@ -64,16 +66,6 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
-  public filterResearchesByCategory = (
-    collection: IResearch.ItemDB[] = [],
-    category: string,
-  ) => {
-    return category
-      ? collection.filter((obj) => {
-          return obj.researchCategory?.label === category
-        })
-      : collection
-  }
   constructor() {
     super(null as any, 'research')
     makeObservable(this)
@@ -86,28 +78,42 @@ export class ResearchStore extends ModuleStore {
       )
       runInAction(() => {
         this.allResearchItems = sortedItems
+        // Create an instance of FilterSorterDecorator with the allResearchItems array
+        this.filterSorterDecorator =
+          new FilterSorterDecorator<IResearch.ItemDB>(this.allResearchItems)
       })
     })
     this.selectedCategory = ''
     this.searchValue = ''
+    this.availableItemSortingOption = [
+      ItemSortingOption.Created,
+      ItemSortingOption.Modified,
+      ItemSortingOption.MostUseful,
+      ItemSortingOption.Comments,
+      ItemSortingOption.Updates,
+    ]
+  }
+
+  public updateActiveSorter(query: string) {
+    this.allResearchItems = this.filterSorterDecorator?.sort(query)
   }
 
   @computed get filteredResearches() {
-    const researches = this.filterResearchesByCategory(
+    const researches = this.filterSorterDecorator.filterByCategory(
       this.allResearchItems,
       this.selectedCategory,
     )
+
     let validResearches = filterModerableItems(researches, this.activeUser)
 
-    if (this.searchValue) {
-      const fuse = new Fuse(validResearches, {
-        keys: HOWTO_SEARCH_WEIGHTS,
-      })
-      /* eslint-disable no-console */
-      console.log('A INTRAT')
-      validResearches = fuse.search(this.searchValue).map((v) => v.item)
-    }
-    return validResearches
+    validResearches = this.filterSorterDecorator.search(
+      validResearches,
+      this.searchValue,
+    )
+
+    this.filterSorterDecorator.allItems = validResearches
+
+    return this.filterSorterDecorator.getSortedItems()
   }
 
   public getActiveResearchUpdateComments(pointer: number): IComment[] {

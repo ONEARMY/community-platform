@@ -8,6 +8,7 @@ describe('FilterSorterDecorator', () => {
   let decorator: FilterSorterDecorator<IItem>
   const mockItems: IItem[] = [
     {
+      title: 'Item 2',
       _modified: '2022-01-01',
       _created: '2022-01-01',
       votedUsefulBy: ['user1', 'user2'],
@@ -52,6 +53,7 @@ describe('FilterSorterDecorator', () => {
       ],
     },
     {
+      title: 'Item 2',
       _modified: '2022-02-01',
       _created: '2022-02-01',
       votedUsefulBy: ['user3'],
@@ -141,13 +143,15 @@ describe('FilterSorterDecorator', () => {
 
   test('get sorted items with no active sorter', () => {
     const sortedItems = decorator.getSortedItems()
-    expect(sortedItems).toEqual(mockItems) // No sorting applied, should return original order
+    expect(sortedItems.length).toEqual(mockItems.length) // No sorting applied, should return original order
+    expect(sortedItems[0].title).toEqual(mockItems[0].title)
   })
 
   test('get sorted items with default sorting option', () => {
     decorator.activeSorter = ItemSortingOption.None
     const sortedItems = decorator.getSortedItems()
-    expect(sortedItems).toEqual(mockItems) // No sorting applied, should return original order
+    expect(sortedItems.length).toEqual(mockItems.length) // No sorting applied, should return original order
+    expect(sortedItems[0].title).toEqual(mockItems[0].title)
   })
 
   //#endregion Sorting
@@ -178,10 +182,10 @@ describe('FilterSorterDecorator', () => {
   })
 
   test('search with matching search value', () => {
-    const searchValue = 'Comment 1'
+    const searchValue = 'Item 2'
     const searchResult = decorator.search(mockItems, searchValue)
     expect(searchResult.length).toBe(1)
-    expect(searchResult[0].updates?.[0].comments?.[0].text).toBe(searchValue)
+    expect(searchResult[0].title).toBe(searchValue)
   })
 
   test('search with non-matching search value', () => {

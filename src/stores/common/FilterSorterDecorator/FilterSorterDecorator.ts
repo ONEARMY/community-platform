@@ -6,6 +6,7 @@ import type { ICategory } from 'src/models/categories.model'
 export interface IItem {
   _modified: string
   _created: string
+  title?: string
   votedUsefulBy?: string[]
   category?: ICategory
   researchCategory?: ICategory
@@ -60,6 +61,9 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   public filterByCategory(listItems: T[] = [], category: string): T[] {
+    /* eslint-disable no-console */
+    console.log(listItems)
+
     return category
       ? listItems.filter((obj) => {
           if (obj.category) return obj.category?.label === category

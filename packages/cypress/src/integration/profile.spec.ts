@@ -9,8 +9,8 @@ describe('[Profile]', () => {
   const admin = users.admin
   const betaTester = users['beta-tester']
   const eventReader = users.event_reader
-  const userProfiletype = users.settings_workplace_new
   const subscriber = users.subscriber
+  const userProfiletype = users.settings_workplace_new
 
   describe('[By Anonymous]', () => {
     it('[Can view all public profile information]', () => {

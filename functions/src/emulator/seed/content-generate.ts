@@ -60,7 +60,11 @@ async function setMockNotifications(user: IMockAuthUser) {
         read: false,
         _created: new Date().toISOString(),
         _id: 'mock_notification',
-        triggeredBy: { displayName: 'Demo User', userId: 'demo_user' },
+        triggeredBy: {
+          displayName: 'Demo User',
+          userId: 'demo_user',
+          userName: 'demo_user',
+        },
       },
     ],
     notification_settings: {

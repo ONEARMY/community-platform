@@ -246,7 +246,7 @@ export class Howto extends React.Component<
               >
                 Leave a comment
               </Button>
-              <UsefulStatsButton
+              {howto.moderation === 'accepted' && (<UsefulStatsButton
                 votedUsefulCount={this.store.votedUsefulCount}
                 hasUserVotedUseful={hasUserVotedUseful}
                 isLoggedIn={!!loggedInUser}
@@ -257,7 +257,7 @@ export class Howto extends React.Component<
                     'ArticleCallToAction',
                   )
                 }}
-              />
+              />)}
             </ArticleCallToAction>
           </Box>
           <HowToComments comments={activeHowToComments} />

@@ -181,12 +181,17 @@ export class MapsStore extends ModuleStore {
   public async setUserPin(user: IUserPP) {
     const type = user.profileType || 'member'
     const existingPin = await this.getPin(user.userName, 'server')
-    const existingModeration = existingPin ? existingPin.moderation : null
+    const existingModeration = existingPin
+      ? existingPin.moderation
+      : 'awaiting-moderation'
 
     const moderation =
       type === 'member'
         ? 'accepted'
-        : existingModeration || 'awaiting-moderation'
+        : existingModeration !== 'rejected'
+        ? existingModeration
+        : 'awaiting-moderation'
+
     const pin: IMapPin = {
       _id: user.userName,
       _deleted: !user.location?.latlng,

@@ -313,55 +313,6 @@ export class UserStore extends ModuleStore {
     this.aggregationsStore.updateAggregation('users_totalUseful')
   }
 
-  /* The below actions will be deprecated in a future update https://github.com/ONEARMY/community-platform/issues/2407 */
-  @action
-  public async updateUsefulHowTos(
-    howtoId: string,
-    // howtoAuthor: string,
-    // howtoSlug: string,
-  ) {
-    if (this.user) {
-      // toggle entry on user votedUsefulHowtos to either vote or unvote a howto
-      // this will updated the main howto via backend `updateUserVoteStats` function
-      const votedUsefulHowtos = toJS(this.user.votedUsefulHowtos) || {}
-      votedUsefulHowtos[howtoId] = !votedUsefulHowtos[howtoId]
-
-      // if (votedUsefulHowtos[howtoId]) {
-      //   //get how to author from howtoid
-      //   this.userNotificationsStore.triggerNotification(
-      //     'howto_useful',
-      //     howtoAuthor,
-      //     '/how-to/' + howtoSlug,
-      //   )
-      // }
-      await this.updateUserProfile({ votedUsefulHowtos })
-    }
-  }
-
-  @action
-  public async updateUsefulResearch(
-    researchId: string,
-    // researchAuthor: string,
-    // researchSlug: string,
-  ) {
-    if (this.user) {
-      // toggle entry on user votedUsefulResearch to either vote or unvote a Research
-      // this will updated the main Research via backend `updateUserVoteStats` function
-      const votedUsefulResearch = toJS(this.user.votedUsefulResearch) || {}
-      votedUsefulResearch[researchId] = !votedUsefulResearch[researchId]
-
-      // if (votedUsefulResearch[researchId]) {
-      //   this.userNotificationsStore.triggerNotification(
-      //     'research_useful',
-      //     researchAuthor,
-      //     '/research/' + researchSlug,
-      //   )
-      // }
-      await this.updateUserProfile({ votedUsefulResearch })
-    }
-  }
-  /* END OF DEPRECATIONS */
-
   @action
   public async deleteNotification(id: string) {
     try {
@@ -406,8 +357,6 @@ export class UserStore extends ModuleStore {
       _authID: authUser.uid,
       displayName,
       userName,
-      votedUsefulHowtos: {},
-      votedUsefulResearch: {},
       notifications: [],
     }
     // update db

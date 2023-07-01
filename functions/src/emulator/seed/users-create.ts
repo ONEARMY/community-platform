@@ -43,8 +43,6 @@ export async function seedUsersCreate() {
       displayName: user.label,
       userName: uid,
       moderation: 'awaiting-moderation',
-      votedUsefulHowtos: {},
-      votedUsefulResearch: {},
       notifications: [],
       userRoles: roles,
       links: [],

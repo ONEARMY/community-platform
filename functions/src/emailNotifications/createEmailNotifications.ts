@@ -64,7 +64,9 @@ export async function createEmailNotifications(
       .doc(_userId)
       .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
 
-    const toUserEmail = await getUserEmail(_userId)
+    const toUser = toUserDoc.data()
+
+    const toUserEmail = await getUserEmail(toUser._authID)
 
     if (!toUserDoc.exists || !toUserEmail) {
       console.error('Cannot get user info', { userId: _userId })
@@ -80,10 +82,7 @@ export async function createEmailNotifications(
       // Adding emails to this collection triggers an email notification to be sent to the user
       const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,
-        message: getEmailNotificationTemplate(
-          toUserDoc.data(),
-          pendingNotifications,
-        ),
+        message: getEmailNotificationTemplate(toUser, pendingNotifications),
       })
 
       await updateEmailedNotifications(

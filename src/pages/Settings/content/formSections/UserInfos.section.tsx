@@ -32,7 +32,7 @@ export const CoverImages = ({
   isMemberProfile: boolean
   coverImages: IUser['coverImages']
 }) =>
-  isMemberProfile ? (
+  !isMemberProfile ? (
     <>
       <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
         Add a profile image *
@@ -42,9 +42,8 @@ export const CoverImages = ({
           height: '190px',
           width: '190px',
         }}
-        m="2"
+        m="10px"
         data-cy="cover-image"
-        data-testid="cover-image"
       >
         <Field
           hasText={false}
@@ -78,7 +77,6 @@ export const CoverImages = ({
                   }}
                   m="10px"
                   data-cy="cover-image"
-                  data-testid="cover-image"
                 >
                   <Field
                     hasText={false}
@@ -106,8 +104,10 @@ export const CoverImages = ({
       >
         <Text sx={{ fontSize: 1 }}>
           The cover images are shown in your profile and helps us evaluate your
-          account. Make sure the first image shows your space. Best size is
-          1920x1080.
+          account.
+        </Text>
+        <Text sx={{ fontSize: 1 }}>
+          Make sure the first image shows your space. Best size is 1920x1080.
         </Text>
       </Box>
     </>

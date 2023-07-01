@@ -45,6 +45,7 @@ export const generatePins = (count: number): Array<IMapPin> => {
 export const generatePinDetails = (): IMapPinDetail => {
   const randomDate = new Date()
   randomDate.setSeconds(randomDate.getSeconds() - Math.random() * 10000)
+  const lastActive = randomDate.toISOString()
   return {
     name: loremIpsum({ count: 2, units: 'words' })
       .split(' ')
@@ -55,9 +56,10 @@ export const generatePinDetails = (): IMapPinDetail => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' '),
     shortDescription: loremIpsum({ count: 2, units: 'sentences' }),
+    lastActive,
     profilePicUrl: 'https://picsum.photos/50/50',
     profileUrl: '/testing',
-    heroImageUrl: `https://picsum.photos/seed/285/175`,
+    heroImageUrl: `https://picsum.photos/seed/${lastActive}/285/175`,
     verifiedBadge: false,
     country: 'nl',
   }

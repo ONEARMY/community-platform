@@ -22,12 +22,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
         borderBottom: '1px solid #c7c7c7',
       }}
     >
-      <Link
-        to={url}
-        key={id}
-        style={{ width: '100%' }}
-        data-testid={`${type}-link`}
-      >
+      <Link to={url} key={id} style={{ width: '100%' }}>
         <Flex
           pb={1}
           pt={1}
@@ -59,8 +54,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
                   display: 'flex',
                   alignItems: 'center',
                   fontSize: ['12px', '12px', '14px'],
-                  minWidth: '40px',
-                  justifyContent: 'flex-end',
+                  minWidth: '30px',
                 }}
               >
                 {totalUseful}

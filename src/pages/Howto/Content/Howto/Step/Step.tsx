@@ -1,6 +1,7 @@
 import { PureComponent } from 'react'
+import ReactPlayer from 'react-player'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
+import { ImageGallery, LinkifyText } from 'oa-components'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
@@ -77,7 +78,12 @@ export default class Step extends PureComponent<IProps> {
                 </Flex>
                 <Box sx={{ width: ['100%', '100%', `${(1 / 2) * 100}%`] }}>
                   {step.videoUrl ? (
-                    <VideoPlayer videoUrl={step.videoUrl} />
+                    <ReactPlayer
+                      width="auto"
+                      data-cy="video-embed"
+                      controls
+                      url={step.videoUrl}
+                    />
                   ) : (
                     <ImageGallery images={step.images as IUploadedFileMeta[]} />
                   )}

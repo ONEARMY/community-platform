@@ -94,8 +94,7 @@ function ensureDBPrefixes(endpoints: { [key: string]: string }) {
   const prefix = Cypress.env('DB_PREFIX')
   Object.entries(endpoints).forEach(([key, value]) => {
     if (!value.startsWith(prefix)) {
-      // The regex here is intended to remove collectionPrefix
-      endpoints[key] = `${prefix}${value.replace(/^[A-Za-z0-9]{5}_/, '')}`
+      endpoints[key] = `${prefix}${value}`
     }
   })
   return endpoints

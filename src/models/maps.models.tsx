@@ -1,4 +1,4 @@
-import type { IModerable } from './common.models'
+import type { ISODateString, IModerable } from './common.models'
 import type { WorkspaceType } from './userPreciousPlastic.models'
 import type { ProfileTypeLabel } from '../modules/profile/types'
 
@@ -38,6 +38,7 @@ export interface IMapPinDetail {
   name: string
   displayName: string
   shortDescription: string
+  lastActive: ISODateString
   profilePicUrl: string
   profileUrl: string
   heroImageUrl: string

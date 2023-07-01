@@ -23,7 +23,7 @@ const factory = async (
     }),
   )
 
-  store.sortHowtosByLatest(howTos)
+  store.updateActiveSorter('created')
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -536,35 +536,5 @@ describe('howto.store', () => {
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(updatedViews).toBe(views + 1)
     })
-  })
-})
-
-describe('sortListByMostUseful', () => {
-  it('returns correct order', async () => {
-    const howtos = [
-      FactoryHowto({
-        votedUsefulBy: ['user1', 'user2', 'user3'],
-      }),
-      FactoryHowto(),
-      FactoryHowto({
-        votedUsefulBy: ['user1', 'user2', 'user3', 'user4', 'user5'],
-      }),
-      FactoryHowto({
-        votedUsefulBy: ['user1', 'user2'],
-      }),
-    ]
-
-    const { store } = await factory(howtos)
-
-    // Act
-    await store.sortHowtosByUsefulCount()
-
-    const howToUsefulCounts = store.allHowtos.map((howto) => {
-      return (howto.votedUsefulBy || []).length
-    })
-
-    const expectedUseful = [5, 3, 2, 0]
-
-    expect(howToUsefulCounts).toEqual(expectedUseful)
   })
 })

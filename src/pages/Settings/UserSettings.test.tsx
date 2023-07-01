@@ -72,48 +72,6 @@ describe('UserSettings', () => {
     await waitFor(() => wrapper.getByText('Admin settings'))
   })
 
-  it('displays one photo for member', () => {
-    const user = FactoryUser({ profileType: 'member' })
-    // Act
-    const wrapper = getWrapper(user)
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(1)
-  })
-
-  it('displays four photos for collection point', () => {
-    const user = FactoryUser({ profileType: 'collection-point' })
-    // Act
-    const wrapper = getWrapper(user)
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-  })
-
-  it('displays four photos for community builder', () => {
-    const user = FactoryUser({ profileType: 'community-builder' })
-    // Act
-    const wrapper = getWrapper(user)
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-  })
-
-  it('displays four photos for machine builder', () => {
-    const user = FactoryUser({ profileType: 'machine-builder' })
-    // Act
-    const wrapper = getWrapper(user)
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-  })
-
-  it('displays four photos for space', () => {
-    const user = FactoryUser({ profileType: 'space' })
-    // Act
-    const wrapper = getWrapper(user)
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-  })
-
-  it('displays four photos for workspace', () => {
-    const user = FactoryUser({ profileType: 'workspace' })
-    // Act
-    const wrapper = getWrapper(user)
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-  })
-
   it('presents the state', async () => {
     const user = FactoryUser({
       userRoles: ['admin'],

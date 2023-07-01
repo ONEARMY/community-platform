@@ -132,7 +132,7 @@ describe('[How To]', () => {
         cy.get(`[data-cy="comments-login-prompt"]`).should('be.exist')
 
         cy.step('Video embed exists')
-        cy.get('[data-testid="VideoPlayer"]').within(() => {
+        cy.get('[data-cy="video-embed"]').within(() => {
           cy.get('iframe').should('have.attr', 'src').and('include', 'youtube')
         })
         // This fails in firefox due to cross security, simply check url

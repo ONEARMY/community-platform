@@ -1,5 +1,6 @@
 import { Box, Card, Flex, Text, Image, AspectRatio, Alert } from 'theme-ui'
 import { Button } from '../Button/Button'
+import { formatDistanceToNowStrict } from 'date-fns'
 
 import { InternalLink } from '../InternalLink/InternalLink'
 import { Username } from '../Username/Username'
@@ -7,6 +8,7 @@ import { Username } from '../Username/Username'
 export interface Props {
   loading?: boolean
   imageUrl: string
+  lastActive: string
   description: string
   user: {
     isVerified: boolean
@@ -31,7 +33,7 @@ const wave = keyframes`
 `
 
 export const MapMemberCard = (props: Props) => {
-  const { imageUrl, description, user, heading } = props
+  const { imageUrl, lastActive, description, user, heading } = props
   const moderationStatusMsg =
     props.moderationStatus !== 'rejected'
       ? 'This pin is awaiting moderation, it will be shown on general map once accepted.'
@@ -94,6 +96,18 @@ export const MapMemberCard = (props: Props) => {
                 }}
               >
                 {description}
+              </Text>
+              <Text
+                sx={{
+                  fontSize: 0,
+                  color: 'grey',
+                }}
+              >
+                Last active{' '}
+                {lastActive
+                  ? `${formatDistanceToNowStrict(new Date(lastActive))}`
+                  : 'a long time'}{' '}
+                ago
               </Text>
             </Box>
           </>

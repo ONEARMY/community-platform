@@ -163,10 +163,8 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
                       marginBottom: 2,
                     }}
                   >
-                    {`| Started on ${format(
-                      new Date(research._created),
-                      'DD-MM-YYYY',
-                    )}`}
+                    Started on{' '}
+                    {format(new Date(research._created), 'DD-MM-YYYY')}
                   </Text>
                 </Flex>
               </Flex>

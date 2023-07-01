@@ -11,7 +11,7 @@ import { TestDB } from './db/firebase'
  */
 before(() => {
   if (!Cypress.env('DB_PREFIX')) {
-    Cypress.env('DB_PREFIX', `${collectionPrefix()}_`)
+    Cypress.env('DB_PREFIX', `${randomString(5)}_`)
   }
 
   // Add error handlers
@@ -81,8 +81,7 @@ after(() => {
   // remove service workers at end of test set
 })
 
-function collectionPrefix() {
-  const length = 5
+function randomString(length: number) {
   let result = ''
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'

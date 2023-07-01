@@ -106,7 +106,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
   }
 
   public async saveProfile(values: IUserPP) {
-    // use a copy of values to allow manipulsation without re-render
+    // use a copy of values to allow manipulation without re-render
     const vals = { ...values }
     // remove empty images
     vals.coverImages = (vals.coverImages as any[]).filter((cover) =>

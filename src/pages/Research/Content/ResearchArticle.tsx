@@ -222,14 +222,16 @@ const ResearchArticle = observer((props: IProps) => {
             author={researchAuthor}
             contributors={contributors}
           >
-            <UsefulStatsButton
-              isLoggedIn={!!loggedInUser}
-              votedUsefulCount={researchStore.votedUsefulCount}
-              hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
-              onUsefulClick={() => {
-                onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
-              }}
-            />
+            {item.moderation === 'accepted' && (
+              <UsefulStatsButton
+                isLoggedIn={!!loggedInUser}
+                votedUsefulCount={researchStore.votedUsefulCount}
+                hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
+                onUsefulClick={() => {
+                  onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
+                }}
+              />
+            )}
             <FollowButton
               isLoggedIn={!!loggedInUser}
               hasUserSubscribed={researchStore.userHasSubscribed}

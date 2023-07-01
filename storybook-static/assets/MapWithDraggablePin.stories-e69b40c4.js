@@ -1,0 +1,14 @@
+import{a}from"./jsx-runtime-913be41c.js";import{M as n}from"./UsefulStatsButton-92fe8f0c.js";import"./index-2506bfc3.js";import"./Button-9c286d35.js";import"./Icon-0e0ff6c0.js";import"./theme-ui-core-jsx-runtime.esm-9e16d62c.js";import"./theme-ui-css.esm-b19fe7ec.js";import"./emotion-use-insertion-effect-with-fallbacks.browser.esm-11801e73.js";import"./parseProps-376f43a7.esm-45b791e5.js";import"./emotion-styled.browser.esm-09c6e9f5.js";import"./icon-verified-badge-7d7bdb14.js";import"./icon-star-active-9fadbee7.js";import"./theme-ui-components.esm-a8d58c50.js";import"./emotion-react.browser.esm-aba50b66.js";import"./CategoryTag-627d389c.js";import"./CreateComment-7b36302c.js";import"./react-router-dom-66940fa3.js";import"./react-router-e884db87.js";import"./inheritsLoose-d541526f.js";import"./setPrototypeOf-0bb37fbe.js";import"./index-4d501b15.js";import"./objectWithoutPropertiesLoose-4f48578a.js";import"./MemberBadge-014b757b.js";import"./DownloadFiles-e8c6ed8f.js";import"./ExternalLink-443ce632.js";import"./ElWithBeforeIcon-73c64692.js";import"./FieldDatepicker-172be27f.js";import"./FieldInput-c18a375f.js";import"./FieldTextarea-858bfdfe.js";import"./Username-70498745.js";import"./InternalLink-902afeab.js";import"./GlobalStyles-e2e0952a.js";import"./ImageGallery-132cb4e9.js";import"./index-0dfb046a.js";import"./Loader-f4e86c64.js";import"./MapMemberCard-c7f7971c.js";import"./Modal-f4c8fc37.js";import"./ModerationStatus-2d90b47f.js";import"./MoreContainer-1b7417b0.js";import"./NotificationItem-fddf7dde.js";import"./NotificationList-51cbb496.js";import"./OsmGeocoding-74b7ec6b.js";import"./ProfileLink-c887baca.js";import"./ResearchEditorOverview-9522eec5.js";import"./Select-14502d64.js";import"./isNativeReflectConstruct-98f790dd.js";import"./TextNotification-72465045.js";import"./Tooltip-9f520354.js";import"./UserStatistics-c3250719.js";import"./VideoPlayer-9558c562.js";import"./iframe-aafdbd1d.js";import"../sb-preview/runtime.js";import"./cjs-89e33937.js";const at={title:"Components/MapWithDraggablePin",component:n},t=()=>{const o={lat:0,lng:0};return a(n,{position:o,updatePosition:i=>{o.lat=i.lat,o.lng=i.lng}})};var r,p,m;t.parameters={...t.parameters,docs:{...(r=t.parameters)==null?void 0:r.docs,source:{originalSource:`() => {
+  const position = {
+    lat: 0,
+    lng: 0
+  };
+  return <MapWithDraggablePin position={position} updatePosition={(_position: {
+    lat: number;
+    lng: number;
+  }) => {
+    position.lat = _position.lat;
+    position.lng = _position.lng;
+  }} />;
+}`,...(m=(p=t.parameters)==null?void 0:p.docs)==null?void 0:m.source}}};const st=["Default"];export{t as Default,st as __namedExportsOrder,at as default};
+//# sourceMappingURL=MapWithDraggablePin.stories-e69b40c4.js.map

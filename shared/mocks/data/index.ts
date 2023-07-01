@@ -1,5 +1,4 @@
 export { categories } from './categories'
-export { events } from './events'
 export { howtos } from './howtos'
 export { mappins } from './mappins'
 export { research } from './research'

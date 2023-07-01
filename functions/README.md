@@ -90,16 +90,16 @@ A couple tips to help implementing:
 gcloud firestore export gs://[BUCKET_NAME] --collection-ids=[COLLECTION_ID_1],[COLLECTION_ID_2]
 ```
 
-E.g. for the staging server, updating howtos and events:
+E.g. for the staging server, updating howtos:
 
 ```
-gcloud firestore export gs://precious-plastics-v4-dev-exports/2020-10-12 --collection-ids=v3_howtos,v3_events
+gcloud firestore export gs://precious-plastics-v4-dev-exports/2020-10-12 --collection-ids=v3_howtos
 ```
 
 Or production
 
 ```
-gcloud firestore export gs://onearmyworld-exports/2020-10-12_manual_backup --collection-ids=v3_events,v3_howtos,v3_mappings,v3_tags,v3_users
+gcloud firestore export gs://onearmyworld-exports/2020-10-12_manual_backup --collection-ids=v3_howtos,v3_mappings,v3_tags,v3_users
 ```
 
 (note - whilst the full database can be backed up without specifying collection ids, this makes it harder to re-import a single collection)

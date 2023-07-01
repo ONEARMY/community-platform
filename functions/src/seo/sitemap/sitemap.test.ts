@@ -35,13 +35,6 @@ const testDocs = [
     moderation: 'awaiting-moderation',
     _modified: '2022-06-20T23:28:24.653Z',
   },
-  {
-    endpoint: DB_ENDPOINTS.events,
-    expectIncluded: false,
-    slug: 'event-accepted',
-    moderation: 'accepted',
-    _modified: '2022-06-20T23:28:24.653Z',
-  },
 ]
 
 describe('SEO', () => {
@@ -78,7 +71,7 @@ describe('SEO', () => {
       }
     })
     describe('sitemap includes additional top-level routes', () => {
-      const modulePages = ['how-to', 'map', 'research', 'events', 'academy']
+      const modulePages = ['how-to', 'map', 'research', 'academy']
       for (const modulePage of modulePages) {
         // the top-level pages should appear fully encapsulated, with domain specified from config
         const tag = `<loc>http://localhost:4000/${modulePage}</loc>`

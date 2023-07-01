@@ -12,7 +12,7 @@ const USE_SMALL_SAMPLE_SEED = false
  * Script used to generate a cleaner export of seed data for use in development
  *
  * Given a full dump of site data in the emulator, strips away all user docs and revisions
- * for users that have not posted content to mappins, howtos, research or events
+ * for users that have not posted content to mappins, howtos or research
  * (basically anywhere their profile might be linked from)
  */
 export async function seedDataClean() {
@@ -36,13 +36,13 @@ export async function seedDataClean() {
 
   // setup variables and types for tracking data
   const keptUsers = {}
-  const endpointsToCheck = ['mappins', 'howtos', 'research', 'events'] as const
+  const endpointsToCheck = ['mappins', 'howtos', 'research'] as const
   type ICheckedEndpoint = typeof endpointsToCheck[number]
   const allDocs: {
     [endpoint in ICheckedEndpoint]: firestore.QuerySnapshot<firestore.DocumentData>
   } = {} as any
 
-  // Get list of users with howtos, mappins or events to retain data
+  // Get list of users with howtos or mappins to retain data
   for (const endpoint of endpointsToCheck) {
     const mappedEndpoint = DB_ENDPOINTS[endpoint]
     if (mappedEndpoint) {
@@ -111,7 +111,6 @@ async function WiPReduceSeedSize(allDocs) {
       allDocs.mappins.docs.filter((d) => !keptUsers[d.id]),
       '[Mappins Deleted]',
     )
-    // Delete events (TBD)
     // Delete research (TBD)
     return { deletedHowtos, deletedMappins, keptUsers }
   }

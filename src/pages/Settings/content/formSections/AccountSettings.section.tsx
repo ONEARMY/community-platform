@@ -1,11 +1,12 @@
 import * as React from 'react'
 
-import { Flex, Heading, Box, Card } from 'theme-ui'
+import { Flex, Heading, Box, Card, Text } from 'theme-ui'
 import type { UserStore } from 'src/stores/User/user.store'
 import { ChangePasswordForm } from './ChangePassword.form'
 import { ChangeEmailForm } from './ChangeEmail.form'
-import { ProfileDelete } from '../ProfileDelete'
 import { observer, inject } from 'mobx-react'
+import { ExternalLink } from 'oa-components'
+import { DISCORD_INVITE_URL } from 'src/constants'
 
 interface IProps {}
 interface IInjectedProps extends IProps {
@@ -35,9 +36,17 @@ export class AccountSettingsSection extends React.Component<any> {
         <Box mt={2}>
           <ChangeEmailForm userStore={this.props.userStore} />
           <ChangePasswordForm userStore={this.props.userStore} />
-          <ProfileDelete
-            onConfirmation={(reauthPw) => this.deleteProfile(reauthPw)}
-          />
+        </Box>
+        <Box mt={2}>
+          <Text variant="body">
+            Would you like to delete your account?
+            <ExternalLink
+              sx={{ ml: 1, textDecoration: 'underline' }}
+              href={DISCORD_INVITE_URL}
+            >
+              Please reach out to support.
+            </ExternalLink>
+          </Text>
         </Box>
       </Card>
     )

@@ -30,9 +30,11 @@ const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
 
 const TextLimitIndicator = ({
   curSize,
+  minSize,
   maxSize,
 }: {
   curSize: number
+  minSize: number
   maxSize: number
 }) => {
   const percMax = curSize / maxSize
@@ -41,7 +43,8 @@ const TextLimitIndicator = ({
     { value: 0.75, color: 'red2' },
     { value: 0.6, color: 'accent.base' },
   ]
-  const color = colorVec.find((cur) => cur.value <= percMax)?.color ?? 'black'
+  const colorLessThanMin = 'red'
+  const color = curSize < minSize ? colorLessThanMin : colorVec.find((cur) => cur.value <= percMax)?.color ?? 'black'
   return (
     <Text color={color} ml="auto" mr={2} mt={2} sx={{ fontSize: 1 }}>
       {curSize} / {maxSize}
@@ -56,6 +59,7 @@ export const FieldInput = ({
   modifiers,
   customOnBlur,
   showCharacterCount,
+  minLength,
   maxLength,
   ...rest
 }: Props) => {
@@ -67,6 +71,7 @@ export const FieldInput = ({
         variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
         {...input}
         {...rest}
+        minLength={minLength}
         maxLength={maxLength}
         onBlur={(e) => {
           if (modifiers) {
@@ -89,7 +94,7 @@ export const FieldInput = ({
         </Text>
       )}
       {showCharacterCount && maxLength && (
-        <TextLimitIndicator maxSize={maxLength} curSize={curLength} />
+        <TextLimitIndicator maxSize={maxLength} minSize={minLength} curSize={curLength} />
       )}
     </>
   )

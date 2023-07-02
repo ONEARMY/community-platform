@@ -4,6 +4,7 @@ import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { includesAll } from 'src/utils/filters'
 import { stripSpecialCharacters } from 'src/utils/helpers'
+import { HOWTO_TITLE_MIN_LENGTH } from 'src/pages/Howto/constants'
 
 import { Storage } from '../storage'
 
@@ -61,6 +62,9 @@ export class ModuleStore {
   ) => {
     if (title) {
       const slug = stripSpecialCharacters(title).toLowerCase()
+      if(slug.length < HOWTO_TITLE_MIN_LENGTH){
+        return `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`
+      }
       const unique = await this.checkIsUnique(
         endpoint,
         'slug',

@@ -186,7 +186,7 @@ commands:
       - run:
           # Use version of firebase-tools already installed in functions workspace to deploy
           name: Deploy to Firebase
-          command: ./functions/node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
+          command: ./functions/node_modules/.bin/firebase deploy --debug -P << parameters.alias >> --non-interactive
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 

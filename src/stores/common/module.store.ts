@@ -62,7 +62,7 @@ export class ModuleStore {
   ) => {
     if (title) {
       const slug = stripSpecialCharacters(title).toLowerCase()
-      if(slug.length < HOWTO_TITLE_MIN_LENGTH){
+      if (slug.length < HOWTO_TITLE_MIN_LENGTH) {
         return `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`
       }
       const unique = await this.checkIsUnique(

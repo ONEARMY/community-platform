@@ -33,7 +33,11 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
-import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH, HOWTO_TITLE_MIN_LENGTH } from '../../constants'
+import {
+  HOWTO_MAX_LENGTH,
+  HOWTO_TITLE_MAX_LENGTH,
+  HOWTO_TITLE_MIN_LENGTH,
+} from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
 const MAX_LINK_LENGTH = 2000

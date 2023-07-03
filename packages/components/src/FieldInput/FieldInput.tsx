@@ -43,8 +43,10 @@ const TextLimitIndicator = ({
     { value: 0.75, color: 'red2' },
     { value: 0.6, color: 'accent.base' },
   ]
-  const colorLessThanMin = 'red'
-  const color = curSize < minSize ? colorLessThanMin : colorVec.find((cur) => cur.value <= percMax)?.color ?? 'black'
+  let color = colorVec.find((cur) => cur.value <= percMax)?.color ?? 'black'
+  if (curSize < minSize) {
+    color = colorVec[0].color
+  }
   return (
     <Text color={color} ml="auto" mr={2} mt={2} sx={{ fontSize: 1 }}>
       {curSize} / {maxSize}
@@ -94,7 +96,11 @@ export const FieldInput = ({
         </Text>
       )}
       {showCharacterCount && maxLength && (
-        <TextLimitIndicator maxSize={maxLength} minSize={minLength} curSize={curLength} />
+        <TextLimitIndicator
+          maxSize={maxLength}
+          minSize={minLength}
+          curSize={curLength}
+        />
       )}
     </>
   )

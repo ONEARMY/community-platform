@@ -47,6 +47,18 @@ export const ADMIN_PAGES: IAdminPageMeta[] = [
   {
     component: lazy(
       () =>
+        import(
+          /* webpackChunkName: "adminAdminUsers" */ './pages/adminAdminUsers'
+        ),
+    ),
+    title: 'Admin Users',
+    description: 'Admin User Management',
+    path: '/admin_users',
+    moduleName,
+  },
+  {
+    component: lazy(
+      () =>
         import(/* webpackChunkName: "adminMappins" */ './pages/adminMappins'),
     ),
     title: 'Map Pins',

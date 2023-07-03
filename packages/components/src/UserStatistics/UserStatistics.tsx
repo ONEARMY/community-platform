@@ -3,7 +3,6 @@ import { Box, Card, Flex } from 'theme-ui'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'
-import EventsIcon from '../../assets/icons/icon-events.svg'
 import ResearchIcon from '../../assets/icons/icon-research.svg'
 import HowToCountIcon from '../../assets/icons/icon-how-to.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
@@ -14,7 +13,6 @@ export interface UserStatisticsProps {
   isVerified: boolean
   isSupporter: boolean
   howtoCount: number
-  eventCount: number
   usefulCount: number
   researchCount: number
 }
@@ -89,13 +87,6 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           </Flex>
         ) : null}
 
-        {props.eventCount ? (
-          <Flex data-testid="event-stat">
-            <ElWithBeforeIcon icon={EventsIcon} />
-            Events:&nbsp;{props.eventCount}
-          </Flex>
-        ) : null}
-
         {props.researchCount ? (
           <Flex data-testid="research-stat">
             <ElWithBeforeIcon icon={ResearchIcon} />
@@ -111,5 +102,4 @@ const isEmpty = (props: UserStatisticsProps) =>
   !props.isVerified &&
   !props.isSupporter &&
   !props.usefulCount &&
-  !props.howtoCount &&
-  !props.eventCount
+  !props.howtoCount

@@ -18,7 +18,7 @@ class MockNotificationsStore extends UserNotificationsStore {
   userStore = {
     user: FactoryUser({
       _id: 'userId',
-      userName: 'username',
+      userName: 'userName',
       notifications: [],
     }),
     updateUserProfile: jest.fn(),
@@ -36,7 +36,9 @@ describe('triggerNotification', () => {
 
   it('adds a new notification to user', async () => {
     const store = new MockNotificationsStore()
-    store.db.getWhere.mockReturnValue([FactoryUser({ _id: 'example' })])
+    store.db.getWhere.mockReturnValue([
+      FactoryUser({ _id: 'example', userName: 'example' }),
+    ])
     // Act
     await store.triggerNotification(
       'howto_mention',
@@ -98,7 +100,7 @@ describe('notifications.store', () => {
   it('deletes a notification', async () => {
     await store.deleteNotification(store.user!.notifications![0]._id)
 
-    expect(store.db.doc).toBeCalledWith('userId')
+    expect(store.db.doc).toBeCalledWith('userName')
     expect(store.db.set).toHaveBeenCalledTimes(1)
 
     const updatedUser = store.db.set.mock.calls[0][0]
@@ -109,13 +111,13 @@ describe('notifications.store', () => {
   it('marks all notifications as notified', async () => {
     await store.markAllNotificationsNotified()
 
-    expect(store.db.doc).toBeCalledWith('userId')
+    expect(store.db.doc).toBeCalledWith('userName')
     expect(store.db.set).toHaveBeenCalledTimes(1)
   })
   it('marks all notifications as read', async () => {
     await store.markAllNotificationsRead()
 
-    expect(store.db.doc).toBeCalledWith('userId')
+    expect(store.db.doc).toBeCalledWith('userName')
     expect(store.db.set).toHaveBeenCalledTimes(1)
   })
 })

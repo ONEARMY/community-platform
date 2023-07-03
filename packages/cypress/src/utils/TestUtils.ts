@@ -1,7 +1,6 @@
 export enum Page {
   HOWTO = '/how-to',
   ACADEMY = '/academy',
-  EVENTS = '/events',
   SETTINGS = '/settings',
 }
 

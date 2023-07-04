@@ -25377,7 +25377,6 @@ __metadata:
     pino: ^7.2.0
     pino-logflare: ^0.3.12
     prettier: 2.5.1
-    pubsub-js: ^1.7.0
     react: 17.0.2
     react-dev-utils: ^11.0.4
     react-dom: 17.0.2
@@ -27639,13 +27638,6 @@ __metadata:
   version: 1.9.0
   resolution: "psl@npm:1.9.0"
   checksum: 20c4277f640c93d393130673f392618e9a8044c6c7bf61c53917a0fddb4952790f5f362c6c730a9c32b124813e173733f9895add8d26f566ed0ea0654b2e711d
-  languageName: node
-  linkType: hard
-
-"pubsub-js@npm:^1.7.0":
-  version: 1.9.4
-  resolution: "pubsub-js@npm:1.9.4"
-  checksum: 4644a74d0731786bc10b5b01418ee8221f1dcd3ce6b6b011cf383059f625d6ce658e83c234c67dcdd3058023867bdcf128c1edff6cc05d09a3206d2276e14d36
   languageName: node
   linkType: hard
 

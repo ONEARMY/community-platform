@@ -19,9 +19,7 @@ const SettingsPage = lazy(
 const AcademyPage = lazy(
   () => import(/* webpackChunkName: "Academy" */ './Academy/Academy'),
 )
-const EventsPage = lazy(
-  () => import(/* webpackChunkName: "Events" */ './Events/Events'),
-)
+
 const AdminPage = lazy(
   () => import(/* webpackChunkName: "Admin" */ './admin/Admin'),
 )
@@ -114,13 +112,7 @@ const academy = {
   },
   fullPageWidth: true,
 }
-const events = {
-  moduleName: MODULE.EVENTS,
-  path: '/events',
-  component: <EventsPage />,
-  title: 'Events',
-  description: 'Welcome to Events',
-}
+
 const maps = {
   moduleName: MODULE.MAP,
   path: '/map',
@@ -208,7 +200,6 @@ const termsPolicy = {
 export const COMMUNITY_PAGES: IPageMeta[] = [
   howTo,
   maps,
-  events,
   academy,
   ResearchModule,
 ]

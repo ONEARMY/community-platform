@@ -14,7 +14,6 @@
 
 import {
   categories,
-  events,
   howtos,
   mappins,
   research,
@@ -26,7 +25,6 @@ export { howtos, users } from 'oa-shared/mocks/data'
 
 export const MOCK_DATA = {
   categories,
-  events,
   howtos,
   mappins,
   research,

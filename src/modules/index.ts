@@ -4,7 +4,6 @@ export enum MODULE {
   CORE = 'core', // This is enabled on all installations
   HOWTO = 'howto',
   MAP = 'map',
-  EVENTS = 'events',
   RESEARCH = 'research',
   ACADEMY = 'academy',
   USER = 'user',
@@ -15,7 +14,7 @@ export const getSupportedModules = (): MODULE[] => {
   const envModules: string[] =
     getConfigurationOption(
       'REACT_APP_SUPPORTED_MODULES',
-      'howto,map,events,research,academy,user,admin_v2',
+      'howto,map,research,academy,user,admin_v2',
     )
       .split(',')
       .map((s) => s.trim()) || []

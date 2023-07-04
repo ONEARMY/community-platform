@@ -1,8 +1,6 @@
 # Configuration for pr-labeller actions
 "Mod: HowTo 📰":
   - src/pages/Howto/**/*
-"Mod: Events 🎉":
-  - src/pages/Events/**/*
 "Mod: Maps 🗺":
   - src/pages/Maps/**/*
 "Mod: Research 🔬":

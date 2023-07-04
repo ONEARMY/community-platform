@@ -28,7 +28,7 @@ This platform aims to tackle these problems by creating a strong unified communi
 
 ## ⚡️ &nbsp; What is this platform?
 
-Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally, find events and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to, Events and Maps.
+Our community platform helps people to grow communities and make it easier to collaborate on environmental projects in one single place. A place where people can meet, help each other, ask and answer questions, share their innovative ways of fixing problems, discover people around them, connect locally and more. It aims to provide the tools to connect both online and offline. Amongst other features we have How-to and Maps.
 
 ### Have a look on our [website](https://platform.onearmy.earth) to have a clear overview
 
@@ -98,6 +98,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/d-skowronski"><img src="https://avatars.githubusercontent.com/u/98740166?v=4?s=60" width="60px;" alt="Dawid Skowroński"/><br /><sub><b>Dawid Skowroński</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=d-skowronski" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://jonboiser.com"><img src="https://avatars.githubusercontent.com/u/10248067?v=4?s=60" width="60px;" alt="Jonathan Boiser"/><br /><sub><b>Jonathan Boiser</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=jonboiser" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/benfurber"><img src="https://avatars.githubusercontent.com/u/16688508?v=4?s=60" width="60px;" alt="benfurber"/><br /><sub><b>benfurber</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=benfurber" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/AlimurtuzaCodes"><img src="https://avatars.githubusercontent.com/u/88965204?v=4?s=60" width="60px;" alt="Alimurtuza"/><br /><sub><b>Alimurtuza</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=AlimurtuzaCodes" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

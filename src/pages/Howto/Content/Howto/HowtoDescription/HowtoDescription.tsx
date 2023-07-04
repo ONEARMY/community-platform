@@ -147,16 +147,17 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               Back
             </Button>
           </Link>
-          {props.votedUsefulCount !== undefined && (
-            <Box>
-              <UsefulStatsButton
-                votedUsefulCount={props.votedUsefulCount}
-                hasUserVotedUseful={props.hasUserVotedUseful}
-                isLoggedIn={loggedInUser ? true : false}
-                onUsefulClick={props.onUsefulClick}
-              />
-            </Box>
-          )}
+          {props.votedUsefulCount !== undefined &&
+            howto.moderation === 'accepted' && (
+              <Box>
+                <UsefulStatsButton
+                  votedUsefulCount={props.votedUsefulCount}
+                  hasUserVotedUseful={props.hasUserVotedUseful}
+                  isLoggedIn={loggedInUser ? true : false}
+                  onUsefulClick={props.onUsefulClick}
+                />
+              </Box>
+            )}
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>

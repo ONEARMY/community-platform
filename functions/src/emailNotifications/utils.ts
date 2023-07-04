@@ -61,7 +61,7 @@ export const getCommentListItem = (notification: INotification) => `
       notification.relevantUrl,
     )} by ${getUserLink(
   notification.triggeredBy.displayName,
-  notification.triggeredBy.userName,
+  notification.triggeredBy.userId,
 )}
 </p>`
 
@@ -69,7 +69,7 @@ export const getMentionListItem = (notification: INotification) => `
 <p>
   ${getUserLink(
     notification.triggeredBy.displayName,
-    notification.triggeredBy.userName,
+    notification.triggeredBy.userId,
   )} mentioned you in this ${getResourceLink(
   notification.type,
   notification.relevantUrl,
@@ -80,7 +80,7 @@ export const getUsefulListItem = (notification: INotification) => `
 <p>
     ${getUserLink(
       notification.triggeredBy.displayName,
-      notification.triggeredBy.userName,
+      notification.triggeredBy.userId,
     )} found your ${getResourceLink(
   notification.type,
   notification.relevantUrl,

@@ -29,7 +29,6 @@ const notificationFactory = (
   triggeredBy: {
     displayName: '',
     userId: '',
-    userName: '',
   },
   relevantUrl: '',
   type: 'new_comment',
@@ -56,7 +55,6 @@ describe('create email test', () => {
         triggeredBy: {
           displayName: 'User 2',
           userId: 'user_2',
-          userName: 'user2',
         },
         relevantUrl: '/test',
         type: 'howto_useful',
@@ -65,7 +63,6 @@ describe('create email test', () => {
         triggeredBy: {
           displayName: 'User 2',
           userId: 'user_2',
-          userName: 'user2',
         },
         relevantUrl: '/test',
         type: 'new_comment_research',
@@ -74,7 +71,6 @@ describe('create email test', () => {
         triggeredBy: {
           displayName: 'User 3',
           userId: 'user_3',
-          userName: 'user3',
         },
         relevantUrl: '/test',
         type: 'howto_mention',
@@ -86,7 +82,6 @@ describe('create email test', () => {
         triggeredBy: {
           displayName: 'User 1',
           userId: 'user_1',
-          userName: 'user1',
         },
         relevantUrl: '/test',
         type: 'new_comment',
@@ -95,7 +90,6 @@ describe('create email test', () => {
         triggeredBy: {
           displayName: 'User 3',
           userId: 'user_3',
-          userName: 'user3',
         },
         relevantUrl: '/test',
         type: 'new_comment_research',
@@ -107,7 +101,6 @@ describe('create email test', () => {
         triggeredBy: {
           displayName: 'User 1',
           userId: 'user_1',
-          userName: 'user1',
         },
         relevantUrl: '/test',
         type: 'new_comment',

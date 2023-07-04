@@ -246,18 +246,20 @@ export class Howto extends React.Component<
               >
                 Leave a comment
               </Button>
-              {howto.moderation === 'accepted' && (<UsefulStatsButton
-                votedUsefulCount={this.store.votedUsefulCount}
-                hasUserVotedUseful={hasUserVotedUseful}
-                isLoggedIn={!!loggedInUser}
-                onUsefulClick={() => {
-                  this.onUsefulClick(
-                    howto._id,
-                    howto.slug,
-                    'ArticleCallToAction',
-                  )
-                }}
-              />)}
+              {howto.moderation === 'accepted' && (
+                <UsefulStatsButton
+                  votedUsefulCount={this.store.votedUsefulCount}
+                  hasUserVotedUseful={hasUserVotedUseful}
+                  isLoggedIn={!!loggedInUser}
+                  onUsefulClick={() => {
+                    this.onUsefulClick(
+                      howto._id,
+                      howto.slug,
+                      'ArticleCallToAction',
+                    )
+                  }}
+                />
+              )}
             </ArticleCallToAction>
           </Box>
           <HowToComments comments={activeHowToComments} />

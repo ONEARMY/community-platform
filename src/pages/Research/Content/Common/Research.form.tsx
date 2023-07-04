@@ -70,6 +70,12 @@ const ResearchForm = observer((props: IProps) => {
     shouldSubmit: false,
   })
 
+  const [skipValidation, setSkipValidation] = React.useState(true)
+
+  const changeSkipValidation = (newState: boolean) => {
+    setSkipValidation(newState)
+  }
+
   React.useEffect(() => {
     if (store.researchUploadStatus.Complete) {
       window.removeEventListener('beforeunload', beforeUnload, false)
@@ -111,6 +117,10 @@ const ResearchForm = observer((props: IProps) => {
       },
       { dirty: true },
     )
+  }
+
+  const validationWrapper = (validation) => {
+    return skipValidation ? undefined : validation
   }
 
   return (
@@ -212,7 +222,7 @@ const ResearchForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={required}
+                                validate={validationWrapper(required)}
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldTextarea}
@@ -314,9 +324,10 @@ const ResearchForm = observer((props: IProps) => {
                   <Button
                     large
                     data-cy={'submit'}
-                    onClick={() =>
+                    onClick={() => {
+                      changeSkipValidation(false)
                       setSubmissionHandler({ shouldSubmit: true, draft: false })
-                    }
+                    }}
                     mt={3}
                     variant="primary"
                     type="submit"

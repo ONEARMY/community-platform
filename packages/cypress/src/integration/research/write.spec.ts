@@ -1,3 +1,6 @@
+const researcherEmail = 'research_creator@test.com'
+const researcherPassword = 'research_creator'
+
 describe('[Research]', () => {
   beforeEach(() => {
     cy.visit('/research')
@@ -12,9 +15,35 @@ describe('[Research]', () => {
     previousSlugs: ['create-research-article-test'],
   }
 
+  describe('[Create draft article]', () => {
+    it('[By Authenticated]', () => {
+      cy.login(researcherEmail, researcherPassword)
+      cy.wait(2000)
+      cy.step('Create the research article')
+      cy.get('[data-cy=create]').click()
+
+      cy.step('Enter research article details')
+      cy.get('[data-cy=intro-title')
+        .clear()
+        .type('Quick draft')
+        .blur({ force: true })
+
+      cy.get('[data-cy=draft]').click()
+      cy.wait(2000)
+
+      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
+        .click()
+        .url()
+        .should('include', `/research/quick-draft`)
+
+      cy.step('Research article draft was created correctly')
+      cy.get('[data-cy=moderationstatus-draft]').should('exist')
+    })
+  })
+
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
-      cy.login('research_creator@test.com', 'research_creator')
+      cy.login(researcherEmail, researcherPassword)
       cy.wait(2000)
       cy.step('Create the research article')
       cy.get('[data-cy=create]').click()
@@ -63,7 +92,7 @@ describe('[Research]', () => {
       stub.returns(false)
       cy.on('window:confirm', stub)
 
-      cy.login('research_creator@test.com', 'research_creator')
+      cy.login(researcherEmail, researcherPassword)
       cy.wait(2000)
       cy.step('Access the create research article')
       cy.get('[data-cy=create]').click()
@@ -118,7 +147,7 @@ describe('[Research]', () => {
         'create-research-article-test-edited',
       ]
       cy.visit(researchUrl)
-      cy.login('research_creator@test.com', 'research_creator')
+      cy.login(researcherEmail, researcherPassword)
       cy.step('Go to Edit mode')
       cy.get('[data-cy=edit]').click()
 

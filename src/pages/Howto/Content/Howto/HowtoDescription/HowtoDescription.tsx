@@ -73,7 +73,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     }
   }
 
-  const handleClick = async () => {
+  const handleDownloadClick = async () => {
     const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(howto._id)
 
     if (
@@ -294,7 +294,11 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             sx={{ flexDirection: 'column' }}
           >
             {howto.fileLink && (
-              <DownloadFiles handleClick={handleClick} link={howto.fileLink} />
+              <DownloadFiles
+                handleClick={handleDownloadClick}
+                link={howto.fileLink}
+                redirectToSignIn={!loggedInUser ? true : false}
+              />
             )}
             {howto.files
               .filter(Boolean)
@@ -305,7 +309,8 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                       allowDownload
                       file={file}
                       key={file ? file.name : `file-${index}`}
-                      handleClick={handleClick}
+                      handleClick={handleDownloadClick}
+                      redirectToSignIn={!loggedInUser ? true : false}
                     />
                   ),
               )}

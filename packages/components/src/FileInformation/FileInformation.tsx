@@ -2,6 +2,8 @@ import * as React from 'react'
 import type { availableGlyphs } from '../'
 import { Flex, Text } from 'theme-ui'
 import { ExternalLink, Icon } from '../'
+import { useHistory } from 'react-router-dom'
+import { Tooltip } from 'oa-components'
 
 export interface IProps {
   file: {
@@ -11,6 +13,7 @@ export interface IProps {
   }
   allowDownload?: boolean
   handleClick?: () => Promise<void>
+  redirectToSignIn?: boolean
 }
 
 const FileDetails = (props: {
@@ -19,39 +22,49 @@ const FileDetails = (props: {
   }
   glyph: availableGlyphs
   size: string
+  redirectToSignIn: boolean
 }) => {
-  const { file, glyph, size } = props
+  const { file, glyph, size, redirectToSignIn } = props
+  const history = useHistory()
 
   return (
-    <Flex
-      p={2}
-      mb={1}
-      sx={{
-        borderRadius: 1,
-        border: '2px solid black',
-        background: 'accent.base',
-        color: 'black',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-        width: '300px',
-      }}
-    >
-      <Icon size={24} glyph={glyph} mr={3} />
-      <Text
+    <>
+      <Flex
+        p={2}
+        mb={1}
         sx={{
-          flex: 1,
-          fontSize: 1,
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-          overflow: 'hidden',
+          borderRadius: 1,
+          border: '2px solid black',
+          background: 'accent.base',
+          color: 'black',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexDirection: 'row',
+          width: '300px',
+          cursor: 'pointer',
         }}
-        mr={3}
+        onClick={() =>
+          redirectToSignIn ? history.push('/sign-in') : undefined
+        }
+        data-tip={redirectToSignIn ? 'Login to download' : ''}
       >
-        {file.name}
-      </Text>
-      <Text sx={{ fontSize: 1 }}>{size}</Text>
-    </Flex>
+        <Icon size={24} glyph={glyph} mr={3} />
+        <Text
+          sx={{
+            flex: 1,
+            fontSize: 1,
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+          }}
+          mr={3}
+        >
+          {file.name}
+        </Text>
+        <Text sx={{ fontSize: 1 }}>{size}</Text>
+      </Flex>
+      <Tooltip />
+    </>
   )
 }
 
@@ -59,6 +72,7 @@ export const FileInformation = ({
   file,
   allowDownload,
   handleClick,
+  redirectToSignIn,
 }: IProps) => {
   const size = bytesToSize(file.size || 0)
 
@@ -68,7 +82,7 @@ export const FileInformation = ({
 
   return (
     <>
-      {allowDownload && file.downloadUrl ? (
+      {allowDownload && file.downloadUrl && !redirectToSignIn ? (
         <ExternalLink
           m={1}
           onClick={() => handleClick && handleClick()}
@@ -76,10 +90,20 @@ export const FileInformation = ({
           download={file.name}
           style={{ width: '300px', marginLeft: 0 }}
         >
-          <FileDetails file={file} glyph="download-cloud" size={size} />
+          <FileDetails
+            file={file}
+            glyph="download-cloud"
+            size={size}
+            redirectToSignIn={false}
+          />
         </ExternalLink>
       ) : (
-        <FileDetails file={file} glyph="download-cloud" size={size} />
+        <FileDetails
+          file={file}
+          glyph="download-cloud"
+          size={size}
+          redirectToSignIn={redirectToSignIn || false}
+        />
       )}
     </>
   )

@@ -265,7 +265,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   component={FieldInput}
                                   minLength={HOWTO_TITLE_MIN_LENGTH}
                                   maxLength={HOWTO_TITLE_MAX_LENGTH}
-                                  placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
+                                  placeholder={`Make a chair from... (${HOWTO_TITLE_MIN_LENGTH} - ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                                   showCharacterCount
                                 />
                               </Flex>

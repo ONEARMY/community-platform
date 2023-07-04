@@ -18,6 +18,7 @@ interface IUploadedFileMeta {
 
 export interface IProps {
   images: IUploadedFileMeta[]
+  allowPortrait?: boolean
 }
 
 interface IState {
@@ -82,7 +83,7 @@ export const ImageGallery = (props: IProps) => {
           sx={{
             width: '100%',
             cursor: 'pointer',
-            objectFit: 'cover',
+            objectFit: props.allowPortrait ? 'contain' : 'cover',
             height: [300, 450],
           }}
           src={state.activeImage.downloadUrl}
@@ -110,7 +111,7 @@ export const ImageGallery = (props: IProps) => {
                   sx={{
                     width: 100,
                     height: 67,
-                    objectFit: 'cover',
+                    objectFit: props.allowPortrait ? 'contain' : 'cover',
                     borderRadius: 1,
                     border: '1px solid offwhite',
                   }}

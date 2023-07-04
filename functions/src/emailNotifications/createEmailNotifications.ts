@@ -37,66 +37,65 @@ const updateEmailedNotifications = async (
   await user.ref.update({ notifications: updatedNotifications })
 }
 
-// Create emails from pending notifications. Filter by frequency (setting of email recipient) if defined.
+// Create an email from a set of pending notifications for a user.
+const handlePendingEmailEntry = async (
+  userName: string,
+  { notifications: pendingNotifications, emailFrequency }: IPendingEmails,
+  targetFrequency?: EmailNotificationFrequency,
+) => {
+  if (
+    !pendingNotifications.length ||
+    (targetFrequency !== undefined && emailFrequency !== targetFrequency) ||
+    emailFrequency === EmailNotificationFrequency.NEVER
+  ) {
+    return
+  }
+
+  const toUserDoc = (await db
+    .collection(DB_ENDPOINTS.users)
+    .doc(userName)
+    .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
+
+  const toUser = toUserDoc.data()
+
+  const toUserEmail = await getUserEmail(toUser._authID)
+
+  if (!toUserDoc.exists || !toUserEmail) {
+    console.error('Cannot get user info', { userName })
+    await updateEmailedNotifications(toUserDoc, pendingNotifications, 'failed')
+    return
+  }
+
+  try {
+    // Adding emails to this collection triggers an email notification to be sent to the user
+    const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: getEmailNotificationTemplate(toUser, pendingNotifications),
+    })
+
+    await updateEmailedNotifications(
+      toUserDoc,
+      pendingNotifications,
+      sentEmailRef.id,
+    )
+  } catch (error) {
+    console.error('Error sending an email', { error, userName })
+    await updateEmailedNotifications(toUserDoc, pendingNotifications, 'failed')
+  }
+}
+
 export async function createEmailNotifications(
-  frequency?: EmailNotificationFrequency,
+  targetFrequency?: EmailNotificationFrequency,
 ) {
   const pendingEmails = await db
     .collection(DB_ENDPOINTS.user_notifications)
     .doc('emails_pending')
     .get()
 
-  for (const entry of Object.entries<IPendingEmails>(
-    pendingEmails.data() ?? [],
-  )) {
-    const [_userId, { notifications: pendingNotifications, emailFrequency }] =
-      entry
+  const pendingEmailEntries =
+    Object.entries<IPendingEmails>(pendingEmails.data()) ?? []
 
-    if (
-      !pendingNotifications.length ||
-      (frequency !== undefined && emailFrequency !== frequency) ||
-      emailFrequency === EmailNotificationFrequency.NEVER
-    )
-      continue
-
-    const toUserDoc = (await db
-      .collection(DB_ENDPOINTS.users)
-      .doc(_userId)
-      .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
-
-    const toUser = toUserDoc.data()
-
-    const toUserEmail = await getUserEmail(toUser._authID)
-
-    if (!toUserDoc.exists || !toUserEmail) {
-      console.error('Cannot get user info', { userId: _userId })
-      await updateEmailedNotifications(
-        toUserDoc,
-        pendingNotifications,
-        'failed',
-      )
-      continue
-    }
-
-    try {
-      // Adding emails to this collection triggers an email notification to be sent to the user
-      const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: getEmailNotificationTemplate(toUser, pendingNotifications),
-      })
-
-      await updateEmailedNotifications(
-        toUserDoc,
-        pendingNotifications,
-        sentEmailRef.id,
-      )
-    } catch (error) {
-      console.error('Error sending an email', { error, userId: _userId })
-      await updateEmailedNotifications(
-        toUserDoc,
-        pendingNotifications,
-        'failed',
-      )
-    }
+  for (const entry of pendingEmailEntries) {
+    await handlePendingEmailEntry(...entry, targetFrequency)
   }
 }

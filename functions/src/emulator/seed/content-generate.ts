@@ -63,7 +63,6 @@ async function setMockNotifications(user: IMockAuthUser) {
         triggeredBy: {
           displayName: 'Demo User',
           userId: 'demo_user',
-          userName: 'demo_user',
         },
       },
     ],

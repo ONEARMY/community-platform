@@ -111,21 +111,21 @@ describe('create email test', () => {
       userFactory('user_1', {
         notifications: user1Notifications,
         displayName: 'User 1',
-        userName: 'user1',
+        userName: 'user_1',
       }),
       userFactory('user_2', {
         notifications: user2Notifications,
         displayName: 'User 2',
-        userName: 'user2',
+        userName: 'user_2',
       }),
       userFactory('user_3', {
         notifications: user3Notifications,
         displayName: 'User 3',
-        userName: 'user3',
+        userName: 'user_3',
       }),
       userFactory('user_4', {
         displayName: 'User 4',
-        userName: 'user4',
+        userName: 'user_4',
       }),
     ])
 

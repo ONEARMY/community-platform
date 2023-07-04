@@ -65,12 +65,12 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
         <p>
           New comment on your
           <a href="https://community.preciousplastic.com/test">research</a> by
-          <a href="https://community.preciousplastic.com/u/user1">User 1</a>
+          <a href="https://community.preciousplastic.com/u/user_1">User 1</a>
         </p>
         <p>
           New comment on your
           <a href="https://community.preciousplastic.com/test">research</a> by
-          <a href="https://community.preciousplastic.com/u/user3">User 3</a>
+          <a href="https://community.preciousplastic.com/u/user_3">User 3</a>
         </p>
       </div>
     </div>
@@ -149,12 +149,12 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
         <p>
           New comment on your
           <a href="https://community.preciousplastic.com/test">research</a> by
-          <a href="https://community.preciousplastic.com/u/user2">User 2</a>
+          <a href="https://community.preciousplastic.com/u/user_2">User 2</a>
         </p>
         <p>
           New comment on your
           <a href="https://community.preciousplastic.com/test">research</a> by
-          <a href="https://community.preciousplastic.com/u/user3">User 3</a>
+          <a href="https://community.preciousplastic.com/u/user_3">User 3</a>
         </p>
       </div>
     </div>
@@ -170,7 +170,7 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
       </div>
       <div class="section-items">
         <p>
-          <a href="https://community.preciousplastic.com/u/user2">User 2</a>
+          <a href="https://community.preciousplastic.com/u/user_2">User 2</a>
           found your
           <a href="https://community.preciousplastic.com/test">research</a>
           useful

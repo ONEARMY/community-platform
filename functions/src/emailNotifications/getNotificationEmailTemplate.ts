@@ -8,7 +8,7 @@ import {
   getNotificationListItem,
 } from './utils'
 
-export const getEmailNotificationTemplate = (
+export const getNotificationEmailTemplate = (
   user: IUserDB,
   notifications: INotification[],
 ): { html: string; subject: string } => {

@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-import { createEmailNotifications } from './createEmailNotifications'
+import { createNotificationEmails } from './createNotificationEmails'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { EmailNotificationFrequency } from 'oa-shared'
@@ -8,14 +8,14 @@ exports.sendDaily = functions.pubsub
   // Trigger daily at 3pm PT (https://crontab.guru/#0_15_*_*_*)
   .schedule('0 15 * * *')
   .timeZone('Europe/Lisbon')
-  .onRun(async () => createEmailNotifications(EmailNotificationFrequency.DAILY))
+  .onRun(async () => createNotificationEmails(EmailNotificationFrequency.DAILY))
 
 exports.sendWeekly = functions.pubsub
   // Trigger weekly at 3pm PT on Sunday (https://crontab.guru/#0_15_*_*_0)
   .schedule('0 15 * * 0')
   .timeZone('Europe/Lisbon')
   .onRun(async () =>
-    createEmailNotifications(EmailNotificationFrequency.WEEKLY),
+    createNotificationEmails(EmailNotificationFrequency.WEEKLY),
   )
 
 exports.sendMonthly = functions.pubsub
@@ -23,7 +23,7 @@ exports.sendMonthly = functions.pubsub
   .schedule('0 15 1 * *')
   .timeZone('Europe/Lisbon')
   .onRun(async () =>
-    createEmailNotifications(EmailNotificationFrequency.MONTHLY),
+    createNotificationEmails(EmailNotificationFrequency.MONTHLY),
   )
 
 exports.sendOnce = functions.https.onCall(async (_, context) => {
@@ -44,7 +44,7 @@ exports.sendOnce = functions.https.onCall(async (_, context) => {
     const { userRoles } = user.docs[0].data() as IUserDB
     if (userRoles?.some((role) => ['admin', 'super-admin'].includes(role))) {
       try {
-        await createEmailNotifications()
+        await createNotificationEmails()
         return 'OK'
       } catch (error) {
         console.error(error)

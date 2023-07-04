@@ -2,17 +2,19 @@
 
 This folder contains code that we use to send emails to users about missed notifications. This readme explains the notification and email process.
 
-## Background on Notification and Email Process
+## Background on Notifications
 
-Users receive notifications when other users comment on their content or mark it as useful. These are stored in a `notifications` array for each user in the `users` collection. When a notification is created, it has `read` and `notified` boolean fields which track the user's interaction with the notification. A notification is marked as `notified=true` when it is rendered in the collapsed notification list dropdown as a red dot, which indicates the user has notifications. If the user clicks the dropdown to see the contents of their notifications, the notification is marked `read=true`.
+Users receive notifications when other users interact with their content. These are stored in a `notifications` array for each user in the `users` collection. When a notification is created, it has `read` and `notified` boolean fields which track the user's interaction with the notification. A notification is marked as `notified=true` when it is rendered in the collapsed notification list dropdown as a red dot, which indicates the user has notifications. If the user clicks the dropdown to see the contents of their notifications, the notification is marked `read=true`.
 
 If a user has not been active in the platform, then their notifications will remain un-notified and un-read. In these situations, we send them in an email.
 
 Users can choose if they would like to receive these emails, and if so, at what cadence (daily, weekly, or monthly). They do this in their settings page. This is stored for each user in `notification_settings.emailFrequency`.
 
+## Notification Email Process
+
 Based on the user's `notifications` and `notification_settings`, the [user notifications aggregation](../aggregations/userNotifications.aggregations.ts) creates a `pending_emails` collection to store any notifications for users that are not yet `notified` or `read`. This aggregation is refreshed any time the `users` collection is updated.
 
-The function [createEmailNotifications](./createEmailNotifications.ts) in this directory reads from the `pending_emails` collection and writes to the `emails` collection. The `emails` collection is set up with the [trigger email extension](https://firebase.google.com/docs/extensions/official/firestore-send-email) to send emails to users via [Brevo](https://www.brevo.com/) (formerly Sendinblue).
+The function [createNotificationEmails](./createNotificationEmails.ts) in this directory reads from the `pending_emails` collection and writes to the `emails` collection. The `emails` collection is set up with the [trigger email extension](https://firebase.google.com/docs/extensions/official/firestore-send-email) to send emails to users via [Brevo](https://www.brevo.com/) (formerly Sendinblue).
 
 The object written to the `emails` collection must be in the format
 
@@ -26,15 +28,17 @@ The object written to the `emails` collection must be in the format
 }
 ```
 
-The function [getEmailNotificationTemplate](functions/src/emailNotifications/getEmailNotificationTemplate.ts) dynamically generates a subject line and html string to enter into the `emails` collection for each `pendingEmails` object.
+The function [getNotificationEmailTemplate](./getNotificationEmailTemplate.ts) dynamically generates a subject line and html string to enter into the `emails` collection for each `pendingEmails` object.
 
-Once emails are successfully written to the `emails` collection database, we add an `emailed` field to the notification, which contains the `_id` of the email object in the `emails` collection. Once a notification has been sent as an email, we exclude it from the `pending_emails` aggregation (we're not spammers 🙂).
+Once emails are successfully written to the `emails` collection database, we add an `emailed` field to the notification, which contains the `_id` of the email object in the `emails` collection. If an error occurs in the email function, we populate this field with the string `'failed'`.
+
+Once a notification has been sent as an email, we exclude it from the `pending_emails` aggregation (we're not spammers 🙂).
 
 ## Technical Implementation
 
 ### Scheduled functions
 
-We use [firebase scheduled functions](https://firebase.google.com/docs/functions/schedule-functions?gen=1st) in [index.js](./index.ts) to trigger the [createEmailNotifications](./createEmailNotifications.ts) function for the different email cadences. We use the following schedule:
+We use [firebase scheduled functions](https://firebase.google.com/docs/functions/schedule-functions?gen=1st) in [index.js](./index.ts) to trigger the [createNotificationEmails](./createNotificationEmails.ts) function for the different email cadences. We use the following schedule:
 
 - Daily emails: each day at 3pm Portugal Time
 - Weekly emails: each Sunday at 3pm Portugal Time
@@ -57,7 +61,7 @@ We do not have the email extension set up in the emulator environment, so testin
 ### Changes to email UI
 
 1. Make changes to the function.
-2. Use the [unit tests](./createEmailNotifications.spec.ts) to test new transformation functionality and generate new html snapshots.
+2. Use the [unit tests](./createNotificationEmails.spec.ts) to test new transformation functionality and generate new html snapshots.
 3. To preview the new email, either copy/paste the html snapshot into a [free online site](https://codebeautify.org/htmlviewer) or into new file and use a VSCode extension like HTML Preview. Include a screenshot in your PR description.
 
 ### Changes to email sending logic\*

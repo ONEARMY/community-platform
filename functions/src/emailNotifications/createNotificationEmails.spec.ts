@@ -1,6 +1,6 @@
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
 import { DB_ENDPOINTS, IUserDB, INotification } from '../models'
-import { createEmailNotifications } from './createEmailNotifications'
+import { createNotificationEmails } from './createNotificationEmails'
 import { EmailNotificationFrequency } from 'oa-shared'
 
 jest.mock('../Firebase/auth', () => ({
@@ -167,7 +167,7 @@ describe('create email test', () => {
   })
 
   it('Creates email from pending notifications weekly', async () => {
-    await createEmailNotifications(EmailNotificationFrequency.WEEKLY)
+    await createNotificationEmails(EmailNotificationFrequency.WEEKLY)
 
     // Only one weekly email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
@@ -197,7 +197,7 @@ describe('create email test', () => {
   })
 
   it('Creates email from pending notifications monthly', async () => {
-    await createEmailNotifications(EmailNotificationFrequency.MONTHLY)
+    await createNotificationEmails(EmailNotificationFrequency.MONTHLY)
 
     // Only one monthly email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
@@ -226,7 +226,7 @@ describe('create email test', () => {
   })
 
   it('Creates emails from pending notifications all', async () => {
-    await createEmailNotifications()
+    await createNotificationEmails()
 
     // Two emails should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()

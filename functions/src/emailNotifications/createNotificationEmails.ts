@@ -3,7 +3,7 @@ import { INotification } from '../../../src/models'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
-import { getEmailNotificationTemplate } from './getEmailNotificationTemplate'
+import { getNotificationEmailTemplate } from './getNotificationEmailTemplate'
 
 const getUserEmail = async (uid: string): Promise<string | null> => {
   try {
@@ -70,7 +70,7 @@ const handlePendingEmailEntry = async (
     // Adding emails to this collection triggers an email notification to be sent to the user
     const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
-      message: getEmailNotificationTemplate(toUser, pendingNotifications),
+      message: getNotificationEmailTemplate(toUser, pendingNotifications),
     })
 
     await updateEmailedNotifications(
@@ -84,7 +84,7 @@ const handlePendingEmailEntry = async (
   }
 }
 
-export async function createEmailNotifications(
+export async function createNotificationEmails(
   targetFrequency?: EmailNotificationFrequency,
 ) {
   const pendingEmails = await db

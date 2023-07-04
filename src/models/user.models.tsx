@@ -42,14 +42,6 @@ export interface IUser {
   location?: ILocation | null
   year?: ISODateString
   stats?: IUserStats
-
-  /** 25/05/2023 these items will be deprecated https://github.com/ONEARMY/community-platform/issues/2407 */
-  /** keep a map of all howto ids that a user has voted as useful */
-  votedUsefulHowtos?: { [howtoId: string]: boolean }
-  /** keep a map of all Research ids that a user has voted as useful */
-  votedUsefulResearch?: { [researchId: string]: boolean }
-  /** end of deprecated items */
-
   notification_settings?: INotificationSettings
   notifications?: INotification[]
 }
@@ -79,7 +71,6 @@ interface IExternalLink {
 interface IUserStats {
   userCreatedHowtos: { [id: string]: IModerationStatus }
   userCreatedResearch: { [id: string]: IModerationStatus }
-  userCreatedEvents: { [id: string]: IModerationStatus }
 }
 
 export type IUserDB = IUser & DBDoc

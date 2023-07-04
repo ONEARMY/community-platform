@@ -544,9 +544,10 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                   sx={{
                     flexDirection: 'column',
                     width: ['100%', '100%', `${100 / 3}%`],
-                    height: '100%',
+                    height: 'auto',
                     position: ['relative', 'relative', 'sticky'],
                     top: 3,
+                    alignSelf: 'flex-start',
                   }}
                   bg="inherit"
                   px={2}

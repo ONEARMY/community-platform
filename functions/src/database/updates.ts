@@ -29,10 +29,8 @@ export const contentModifiedTimestamp = functions.https.onCall(
 
       const howtoUpdates = []
       const researchUpdates = []
-      const eventUpdates = []
       const howtos = await db.collection(DB_ENDPOINTS.howtos).get()
       const research = await db.collection(DB_ENDPOINTS.research).get()
-      const events = await db.collection(DB_ENDPOINTS.events).get()
 
       if (!howtos.empty) {
         // Get howto updates
@@ -65,27 +63,12 @@ export const contentModifiedTimestamp = functions.https.onCall(
         await batchGeneration(researchUpdates, 'research', dryRun, logPrefix)
       }
 
-      if (!events.empty) {
-        functions.logger.info(`${logPrefix}Events: ${events.docs.length}`)
-        // Get event updates
-        events.forEach((e) => {
-          const data = e.data()
-          eventUpdates.push({
-            id: e.id,
-            _contentModifiedTimestamp: data._modified,
-          })
-        })
-        functions.logger.info(`${logPrefix}Starting event batch generation`)
-        await batchGeneration(eventUpdates, 'events', dryRun, logPrefix)
-      }
-
       return {
         _dryRun: dryRun,
         operations,
         meta: {
           howtoUpdates: howtoUpdates,
           researchUpdates: researchUpdates,
-          eventUpdates: eventUpdates,
         },
       }
     } catch (error) {
@@ -100,7 +83,7 @@ export const contentModifiedTimestamp = functions.https.onCall(
 
 async function batchGeneration(
   updateData: Record<string, any>[],
-  collection: 'events' | 'howtos' | 'research',
+  collection: 'howtos' | 'research',
   dryRun: boolean,
   logPrefix: string,
 ) {

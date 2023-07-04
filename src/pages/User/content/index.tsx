@@ -19,7 +19,6 @@ interface IProps extends RouteComponentProps<IRouterCustomParams> {}
 export interface UserCreatedDocs {
   howtos: any
   research: any
-  events: any
 }
 
 export const UserPage = observer((props: IProps) => {

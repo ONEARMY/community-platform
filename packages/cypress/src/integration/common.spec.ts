@@ -25,11 +25,6 @@ describe('[Common]', () => {
     //     'https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488=',
     //   )
 
-    cy.step('Go to Events page')
-    cy.get('[data-cy=page-link]').contains('Events').click()
-    cy.url().should('include', '/events')
-    // cy.get('[data-cy=feedback] > button').should('be.visible')
-
     cy.step('Go to Map page')
     cy.get('[data-cy=page-link]').contains('Map').click()
     cy.url().should('include', '/map')

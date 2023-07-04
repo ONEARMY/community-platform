@@ -23,10 +23,6 @@ import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { researchCommentUrlPattern } from './helper'
 
-/* Will be deprecated as part of https://github.com/ONEARMY/community-platform/issues/2407 */
-import { useCommonStores } from '../../../index'
-/* End of deprecation */
-
 type IProps = RouteComponentProps<{ slug: string }>
 
 const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
@@ -48,10 +44,6 @@ const areCommentVisible = (updateIndex) => {
 const ResearchArticle = observer((props: IProps) => {
   const researchStore = useResearchStore()
 
-  /* Will be deprecated as part of https://github.com/ONEARMY/community-platform/issues/2407 */
-  const { userStore } = useCommonStores().stores
-  /* End of deprecation */
-
   const [isLoading, setIsLoading] = React.useState(true)
 
   const moderateResearch = async (accepted: boolean) => {
@@ -70,10 +62,6 @@ const ResearchArticle = observer((props: IProps) => {
     if (!loggedInUser?.userName) {
       return null
     }
-
-    /* Will be deprecated as part of https://github.com/ONEARMY/community-platform/issues/2407 */
-    userStore.updateUsefulResearch(researchId)
-    /* End of deprecation */
 
     // Trigger update without waiting
     researchStore.toggleUsefulByUser(researchId, loggedInUser?.userName)

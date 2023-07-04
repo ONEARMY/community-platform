@@ -1,4 +1,3 @@
-import Fuse from 'fuse.js'
 import {
   action,
   computed,
@@ -33,15 +32,12 @@ import {
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
 import type { IUploadedFileMeta } from '../storage'
+import {
+  FilterSorterDecorator,
+  ItemSortingOption,
+} from '../common/FilterSorterDecorator/FilterSorterDecorator'
 
 const COLLECTION_NAME = 'howtos'
-const HOWTO_SEARCH_WEIGHTS = [
-  { name: 'title', weight: 0.5 },
-  { name: 'description', weight: 0.2 },
-  { name: '_createdBy', weight: 0.15 },
-  { name: 'steps.title', weight: 0.1 },
-  { name: 'steps.text', weight: 0.05 },
-]
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
@@ -53,45 +49,37 @@ export class HowtoStore extends ModuleStore {
   public selectedCategory: string
   @observable
   public searchValue: string
+
   @observable
   public referrerSource: string
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
-  public filterHowtosByCategory = (
-    collection: IHowtoDB[] = [],
-    category: string,
-  ) => {
-    return category
-      ? collection.filter((obj) => {
-          return obj.category?.label === category
-        })
-      : collection
-  }
+  public availableItemSortingOption: ItemSortingOption[]
+
+  @observable
+  private filterSorterDecorator: FilterSorterDecorator<IHowtoDB>
+
   constructor(rootStore: RootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.sortHowtosByLatest(docs)
+      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
+      this.updateActiveSorter('created')
     })
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
+    this.availableItemSortingOption = [
+      ItemSortingOption.Created,
+      ItemSortingOption.MostUseful,
+    ]
   }
 
-  @action
-  public sortHowtosByLatest(docs?: IHowtoDB[]) {
-    const howtos = docs || this.allHowtos
-    this.allHowtos = howtos.sort((a, b) => (a._created < b._created ? 1 : -1))
-  }
-
-  @action
-  public sortHowtosByUsefulCount() {
-    this.allHowtos = this.allHowtos.sort((a, b) =>
-      (a.votedUsefulBy || []).length < (b.votedUsefulBy || []).length ? 1 : -1,
-    )
+  public updateActiveSorter(query: string) {
+    this.allHowtos = this.filterSorterDecorator?.sort(query)
   }
 
   public getActiveHowToComments(): IComment[] {
@@ -200,22 +188,17 @@ export class HowtoStore extends ModuleStore {
   }
 
   @computed get filteredHowtos() {
-    const howtos = this.filterHowtosByCategory(
+    const howtos = this.filterSorterDecorator.filterByCategory(
       this.allHowtos,
       this.selectedCategory,
     )
     // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
     let validHowtos = filterModerableItems(howtos, this.activeUser)
 
-    // If user searched, filter remaining howtos by the search query with Fuse
-    if (this.searchValue) {
-      const fuse = new Fuse(validHowtos, {
-        keys: HOWTO_SEARCH_WEIGHTS,
-      })
-
-      // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
-      validHowtos = fuse.search(this.searchValue).map((v) => v.item)
-    }
+    validHowtos = this.filterSorterDecorator.search(
+      validHowtos,
+      this.searchValue,
+    )
 
     return validHowtos
   }

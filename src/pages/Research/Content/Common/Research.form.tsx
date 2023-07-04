@@ -306,7 +306,7 @@ const ResearchForm = observer((props: IProps) => {
                     sx={{ width: '100%', display: 'block' }}
                   >
                     {props.formValues.moderation !== 'draft' ? (
-                      <span>Revert to draft</span>
+                      <span>Save as draft</span>
                     ) : (
                       <span>Save to draft</span>
                     )}{' '}

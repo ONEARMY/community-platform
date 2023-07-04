@@ -1,8 +1,9 @@
 import { useTheme } from '@emotion/react'
 import { useEffect, useState } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
-import { Flex, Text } from 'theme-ui'
-import { Button, ExternalLink, Icon, Tooltip } from '../'
+import { Text } from 'theme-ui'
+import { Button, Tooltip } from '../'
+import { useHistory } from 'react-router-dom'
 
 export interface IProps {
   hasUserVotedUseful: boolean
@@ -15,6 +16,7 @@ export interface IProps {
 
 export const UsefulStatsButton = (props: IProps) => {
   const theme: any = useTheme()
+  const history = useHistory()
 
   const [votedUsefulCount, setVotedUsefulCount] = useState<number>()
   const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>()
@@ -36,87 +38,46 @@ export const UsefulStatsButton = (props: IProps) => {
     setDisabled(false)
   }
 
-  return props.isLoggedIn ? (
-    <Button
-      data-cy="vote-useful"
-      onClick={handleUsefulClick}
-      disabled={disabled}
-      sx={{
-        fontSize: 2,
-        backgroundColor: theme.colors.white,
-        py: 0,
-        '&:hover': {
-          backgroundColor: theme.colors.softblue,
-        },
-        ...props.sx,
-      }}
-      icon={hasUserVotedUseful ? 'star' : 'star-active'}
-    >
-      <Text
-        pr={2}
-        py={2}
-        sx={{
-          display: 'inline-block',
-        }}
-      >
-        {votedUsefulCount}
-      </Text>
-      <Text
-        pl={2}
-        py={2}
-        sx={{
-          display: 'inline-block',
-          borderLeft: `1px solid ${theme.colors.black}`,
-        }}
-      >
-        {hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
-      </Text>
-    </Button>
-  ) : (
+  return (
     <>
-      <ExternalLink
-        href="/sign-in"
-        data-cy="vote-useful-redirect"
-        data-tip={'Login to add your vote'}
+      <Button
+        data-tip={props.isLoggedIn ? '' : 'Login to add your vote'}
+        data-cy={props.isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
+        onClick={() =>
+          props.isLoggedIn ? handleUsefulClick() : history.push('/sign-in')
+        }
+        disabled={disabled}
         sx={{
-          ...theme.buttons.subtle,
-          borderColor: theme.colors.black,
-          backgroundColor: theme.colors.white,
-          display: 'inline-flex',
           fontSize: 2,
-          gap: 2,
-          px: 2,
+          backgroundColor: theme.colors.white,
           py: 0,
           '&:hover': {
             backgroundColor: theme.colors.softblue,
-            borderColor: theme.colors.black,
           },
           ...props.sx,
         }}
+        icon={hasUserVotedUseful ? 'star' : 'star-active'}
       >
-        <Icon glyph={hasUserVotedUseful ? 'star' : 'star-active'} />
-        <Flex>
-          <Text
-            pr={2}
-            py={2}
-            sx={{
-              display: 'inline-block',
-            }}
-          >
-            {votedUsefulCount}
-          </Text>
-          <Text
-            pl={2}
-            py={2}
-            sx={{
-              display: 'inline-block',
-              borderLeft: `1px solid ${theme.colors.black}`,
-            }}
-          >
-            {hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
-          </Text>
-        </Flex>
-      </ExternalLink>
+        <Text
+          pr={2}
+          py={2}
+          sx={{
+            display: 'inline-block',
+          }}
+        >
+          {votedUsefulCount}
+        </Text>
+        <Text
+          pl={2}
+          py={2}
+          sx={{
+            display: 'inline-block',
+            borderLeft: `1px solid ${theme.colors.black}`,
+          }}
+        >
+          {hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
+        </Text>
+      </Button>
       <Tooltip />
     </>
   )

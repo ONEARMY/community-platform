@@ -22,17 +22,7 @@ interface IInjectedProps extends IProps {
 @inject('mapsStore')
 export class Popup extends React.Component<IProps> {
   leafletRef: React.RefObject<LeafletPopup> = React.createRef()
-  private _moderatePin = async (pin: IMapPin, isAccepted: boolean) => {
-    await this.store.moderatePin({
-      ...pin,
-      moderation: isAccepted ? 'accepted' : 'rejected',
-    })
-    if (!isAccepted) {
-      this.injected.mapsStore.setActivePin(undefined)
-    }
-  }
 
-  // eslint-disable-next-line
   constructor(props: IProps) {
     super(props)
   }
@@ -93,10 +83,6 @@ export class Popup extends React.Component<IProps> {
               country: activePin.detail?.country,
             }}
             heading={this.getHeading(activePin)}
-            moderationStatus={activePin.moderation}
-            onPinModerated={(isPinApproved) => {
-              this._moderatePin(activePin, isPinApproved)
-            }}
             isEditable={!!this.store.needsModeration(activePin)}
           />
         </LeafletPopup>

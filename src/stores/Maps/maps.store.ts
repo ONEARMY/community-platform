@@ -150,24 +150,6 @@ export class MapsStore extends ModuleStore {
     return pin as IMapPin
   }
 
-  // add new pin or update existing
-  public async upsertPin(pin: IMapPin) {
-    logger.debug({ pin }, 'MapsStore.upsertPin')
-    // generate standard doc meta
-    if (!isAllowToPin(pin, this.activeUser)) {
-      return false
-    }
-    return this.db.collection(COLLECTION_NAME).doc(pin._id).set(pin)
-  }
-
-  // Moderate Pin
-  public async moderatePin(pin: IMapPin) {
-    if (!hasAdminRights(this.activeUser)) {
-      return false
-    }
-    await this.upsertPin(pin)
-    this.setActivePin(pin)
-  }
   public needsModeration(pin: IMapPin) {
     return needsModeration(pin, this.activeUser)
   }

@@ -99,12 +99,14 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
               Back
             </Button>
           </Link>
-          <UsefulStatsButton
-            votedUsefulCount={props.votedUsefulCount}
-            hasUserVotedUseful={props.hasUserVotedUseful}
-            isLoggedIn={props.loggedInUser ? true : false}
-            onUsefulClick={props.onUsefulClick}
-          />
+          {research.moderation === 'accepted' && (
+            <UsefulStatsButton
+              votedUsefulCount={props.votedUsefulCount}
+              hasUserVotedUseful={props.hasUserVotedUseful}
+              isLoggedIn={props.loggedInUser ? true : false}
+              onUsefulClick={props.onUsefulClick}
+            />
+          )}
           <FollowButton
             hasUserSubscribed={props.hasUserSubscribed}
             isLoggedIn={props.loggedInUser ? true : false}

@@ -51,7 +51,6 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
       <p>You've missed notifications. No worries.</p>
       <p>I'm here to give you an overview :)</p>
     </div>
-
     <div class="section-container">
       <div class="section-header">
         <img
@@ -59,7 +58,7 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
           alt=""
           src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/1e6f3be3-e6fd-46c5-b30f-bcde950b0dbc/165x131.png"
         />
-        You've got comments
+        Missed Notifications
       </div>
       <div class="section-items">
         <p>
@@ -74,7 +73,6 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
         </p>
       </div>
     </div>
-
     <div class="notifications">
       Manage your notifications
       <a href="https://community.preciousplastic.com/settings"> here</a>
@@ -135,7 +133,6 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
       <p>You've missed notifications. No worries.</p>
       <p>I'm here to give you an overview :)</p>
     </div>
-
     <div class="section-container">
       <div class="section-header">
         <img
@@ -143,30 +140,7 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
           alt=""
           src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/1e6f3be3-e6fd-46c5-b30f-bcde950b0dbc/165x131.png"
         />
-        You've got comments
-      </div>
-      <div class="section-items">
-        <p>
-          New comment on your
-          <a href="https://community.preciousplastic.com/test">research</a> by
-          <a href="https://community.preciousplastic.com/u/user_2">User 2</a>
-        </p>
-        <p>
-          New comment on your
-          <a href="https://community.preciousplastic.com/test">research</a> by
-          <a href="https://community.preciousplastic.com/u/user_3">User 3</a>
-        </p>
-      </div>
-    </div>
-
-    <div class="section-container">
-      <div class="section-header">
-        <img
-          width="30"
-          alt=""
-          src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/57314667-9a0f-4904-a39c-6effa6b2afbc/64x63.png"
-        />
-        People found your work useful. Well done!
+        Missed Notifications
       </div>
       <div class="section-items">
         <p>
@@ -175,9 +149,19 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
           <a href="https://community.preciousplastic.com/test">research</a>
           useful
         </p>
+
+        <p>
+          New comment on your
+          <a href="https://community.preciousplastic.com/test">research</a> by
+          <a href="https://community.preciousplastic.com/u/user_2">User 2</a>
+        </p>
+        <p>
+          <a href="https://community.preciousplastic.com/u/user_3">User 3</a>
+          mentioned you in this
+          <a href="https://community.preciousplastic.com/test">research</a>
+        </p>
       </div>
     </div>
-
     <div class="notifications">
       Manage your notifications
       <a href="https://community.preciousplastic.com/settings"> here</a>

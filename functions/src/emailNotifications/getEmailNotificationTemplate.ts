@@ -1,81 +1,13 @@
-import { INotification, IUserDB, NotificationType } from '../../../src/models'
-import {
-  COMMENT_SECTION_IMAGE,
-  COMMENT_SECTION_TEXT,
-  USEFUL_SECTION_IMAGE,
-  USEFUL_SECTION_TEXT,
-} from './consts'
+import { INotification, IUserDB } from '../../../src/models'
+import { NOTIFICATION_LIST_IMAGE } from './consts'
 import prettier from 'prettier'
 import {
-  isCommentNotification,
-  isMentionNotification,
-  getCommentListItem,
-  getMentionListItem,
-  isUsefulNotification,
-  getUsefulListItem,
   getProjectImageSrc,
   SITE_URL,
   getProjectName,
+  getNotificationListItem,
 } from './utils'
 
-enum NotificationEmailSection {
-  COMMENTS = 'comments',
-  USEFULS = 'usefuls',
-}
-
-interface NotificationEmailSectionConfig {
-  sectionHeader: string
-  sectionImage: string
-  notificationFilterFunction: (n: INotification) => boolean
-  getListItemFunction: (n: INotification) => string
-}
-
-const NOTIFICATION_EMAIL_SECTION_CONFIG: Record<
-  NotificationEmailSection,
-  NotificationEmailSectionConfig
-> = {
-  [NotificationEmailSection.COMMENTS]: {
-    sectionHeader: COMMENT_SECTION_TEXT,
-    sectionImage: COMMENT_SECTION_IMAGE,
-    notificationFilterFunction: (n: INotification) =>
-      isCommentNotification(n) || isMentionNotification(n),
-    getListItemFunction: (n: INotification) =>
-      isCommentNotification ? getCommentListItem(n) : getMentionListItem(n),
-  },
-  [NotificationEmailSection.USEFULS]: {
-    sectionHeader: USEFUL_SECTION_TEXT,
-    sectionImage: USEFUL_SECTION_IMAGE,
-    notificationFilterFunction: isUsefulNotification,
-    getListItemFunction: getUsefulListItem,
-  },
-}
-
-const getNotificationEmailSection = (
-  section: NotificationEmailSection,
-  notifications: INotification[],
-) => {
-  const config = NOTIFICATION_EMAIL_SECTION_CONFIG[section]
-  const sectionNotifications = notifications.filter(
-    config.notificationFilterFunction,
-  )
-  return sectionNotifications.length
-    ? `
-  <div class='section-container'>
-    <div class='section-header'>
-      <img
-          width='30'
-          alt=''
-          src='${config.sectionImage}'
-      />
-      ${config.sectionHeader}
-    </div>
-    <div class='section-items'>
-        ${sectionNotifications.map(config.getListItemFunction).join('')}
-    </div>  
-  </div>
-  `
-    : ''
-}
 export const getEmailNotificationTemplate = (
   user: IUserDB,
   notifications: INotification[],
@@ -107,11 +39,19 @@ export const getEmailNotificationTemplate = (
                   <p>You've missed notifications. No worries.</p>
                   <p>I'm here to give you an overview :)</p>
               </div>
-              ${Object.values(NotificationEmailSection)
-                .map((section) =>
-                  getNotificationEmailSection(section, notifications),
-                )
-                .join('')}
+              <div class='section-container'>
+                <div class='section-header'>
+                  <img
+                      width='30'
+                      alt=''
+                      src='${NOTIFICATION_LIST_IMAGE}'
+                  />
+                  Missed Notifications
+                </div>
+                <div class='section-items'>
+                    ${notifications.map(getNotificationListItem).join('')}
+                </div>  
+              </div>
               <div class='notifications'>
                   Manage your notifications
                   <a href='${SITE_URL}/settings'> here</a>

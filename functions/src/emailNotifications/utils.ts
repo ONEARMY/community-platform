@@ -54,7 +54,7 @@ export const getResourceLink = (
   return `<a href='${SITE_URL}${relevantUrl}'>${resourceLabel}</a>`
 }
 
-export const getCommentListItem = (notification: INotification) => `
+const getCommentListItem = (notification: INotification) => `
 <p>
     New comment on your ${getResourceLink(
       notification.type,
@@ -65,7 +65,7 @@ export const getCommentListItem = (notification: INotification) => `
 )}
 </p>`
 
-export const getMentionListItem = (notification: INotification) => `
+const getMentionListItem = (notification: INotification) => `
 <p>
   ${getUserLink(
     notification.triggeredBy.displayName,
@@ -76,7 +76,7 @@ export const getMentionListItem = (notification: INotification) => `
 )}
 </p>`
 
-export const getUsefulListItem = (notification: INotification) => `
+const getUsefulListItem = (notification: INotification) => `
 <p>
     ${getUserLink(
       notification.triggeredBy.displayName,
@@ -89,11 +89,25 @@ useful
 </p>
 `
 
-export const isCommentNotification = (notification: INotification) =>
+const isCommentNotification = (notification: INotification) =>
   ['new_comment_research', 'new_comment'].includes(notification.type)
 
-export const isMentionNotification = (notification: INotification) =>
+const isMentionNotification = (notification: INotification) =>
   ['research_mention', 'howto_mention'].includes(notification.type)
 
-export const isUsefulNotification = (notification: INotification) =>
+const isUsefulNotification = (notification: INotification) =>
   ['research_useful', 'howto_useful'].includes(notification.type)
+
+export const getNotificationListItem = (
+  notification: INotification,
+): string => {
+  if (isCommentNotification(notification)) {
+    return getCommentListItem(notification)
+  }
+  if (isMentionNotification(notification)) {
+    return getMentionListItem(notification)
+  }
+  if (isUsefulNotification(notification)) {
+    return getUsefulListItem(notification)
+  }
+}

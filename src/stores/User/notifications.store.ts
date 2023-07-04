@@ -72,6 +72,10 @@ export class UserNotificationsStore extends ModuleStore {
           _created: new Date().toISOString(),
           triggeredBy: {
             displayName: triggeredBy.displayName,
+            // userName is used here as user records now use userName as userId.
+            // The property name hasn't been refactored as it would require a data migration for existing records.
+            // Plan is to move to a relational database when time allows.
+            // Notifications would be migrated to their own table at this point.
             userId: triggeredBy.userName,
           },
           relevantUrl: relevantUrl,

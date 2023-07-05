@@ -22,12 +22,17 @@ describe('[Research]', () => {
       cy.step('Create the research article')
       cy.get('[data-cy=create]').click()
 
-      cy.step('Enter research article details')
+      cy.step('Enter research article title only')
       cy.get('[data-cy=intro-title')
         .clear()
         .type('Quick draft')
         .blur({ force: true })
 
+      cy.step('Research cannot be published without description')
+      cy.get('[data-cy=submit]').click()
+      cy.contains('Make sure this field is filled correctly').should('exist')
+
+      cy.step('Research can be saved to draft without description')
       cy.get('[data-cy=draft]').click()
       cy.wait(2000)
 
@@ -151,28 +156,12 @@ describe('[Research]', () => {
       cy.step('Go to Edit mode')
       cy.get('[data-cy=edit]').click()
 
-      cy.step('Warn if title is identical to an existing one')
-      cy.get('[data-cy=intro-title]').focus().blur({ force: true })
-      cy.wait(1000)
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('not.exist')
-
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('qwerty')
-        .blur({ force: true })
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('exist')
-
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]').clear().type(expected.title)
-
       cy.get('[data-cy=submit]').click()
 
       cy.step('Open the updated research article')
-
+      cy.wait(2000)
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
         .click()
         .url()

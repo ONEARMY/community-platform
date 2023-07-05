@@ -6,7 +6,7 @@ import type {
   IMapPinDetail,
   IBoundingBox,
 } from 'src/models/maps.models'
-import type { IDBEndpoint } from 'src/models/common.models'
+import type { IDBEndpoint, IModerationStatus } from 'src/models/common.models'
 import type { RootStore } from '../index'
 import type { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
@@ -181,16 +181,17 @@ export class MapsStore extends ModuleStore {
   public async setUserPin(user: IUserPP) {
     const type = user.profileType || 'member'
     const existingPin = await this.getPin(user.userName, 'server')
-    const existingModeration = existingPin
-      ? existingPin.moderation
-      : 'awaiting-moderation'
+    const existingModeration = existingPin.moderation || 'awaiting-moderation'
 
-    const moderation =
-      type === 'member'
-        ? 'accepted'
-        : existingModeration !== 'rejected'
-        ? existingModeration
-        : 'awaiting-moderation'
+    let moderation: IModerationStatus = existingModeration
+
+    if (type === 'member') {
+      moderation = 'accepted'
+    }
+
+    if (type !== 'member' && existingModeration === 'rejected') {
+      moderation = 'awaiting-moderation'
+    }
 
     const pin: IMapPin = {
       _id: user.userName,
@@ -200,6 +201,7 @@ export class MapsStore extends ModuleStore {
       moderation,
       verified: user.verified,
     }
+
     if (type !== 'member' && user.workspaceType) {
       pin.subType = user.workspaceType
     }

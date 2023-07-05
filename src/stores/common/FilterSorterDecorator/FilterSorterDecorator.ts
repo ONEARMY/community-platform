@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
-import type { IComment } from 'src/models'
+import type {IComment, IModerationStatus} from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
@@ -13,6 +13,7 @@ export interface IItem {
   updates?: {
     comments?: IComment[]
   }[]
+  moderation?: IModerationStatus
 }
 
 export enum ItemSortingOption {
@@ -103,11 +104,21 @@ export class FilterSorterDecorator<T extends IItem> {
     )
   }
 
+  private sortByModerationStatus(listItems: T[]) {
+    const _listItems = listItems || this.allItems
+
+    return _listItems.sort((a) => {
+      if (!a.moderation) return 1
+      if (a.moderation !== 'accepted') return -1
+      return 1
+    })
+  }
+
   @action
   public getSortedItems(): T[] {
     let validItems = this.allItems.slice()
 
-    if (this.activeSorter) {
+    if (this.activeSorter !== ItemSortingOption.None) {
       switch (this.activeSorter) {
         case ItemSortingOption.Modified:
           validItems = this.sortByLatestModified(validItems)
@@ -133,6 +144,8 @@ export class FilterSorterDecorator<T extends IItem> {
           break
       }
     }
+
+    validItems = this.sortByModerationStatus(validItems)
 
     return validItems
   }

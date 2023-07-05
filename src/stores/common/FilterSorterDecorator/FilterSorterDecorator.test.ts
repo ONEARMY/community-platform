@@ -3,7 +3,7 @@ import {
   ItemSortingOption,
 } from './FilterSorterDecorator'
 import type { IItem } from './FilterSorterDecorator'
-import {IModerationStatus} from "../../../models";
+import type {IModerationStatus} from "../../../models";
 
 describe('FilterSorterDecorator', () => {
   let decorator: FilterSorterDecorator<IItem>

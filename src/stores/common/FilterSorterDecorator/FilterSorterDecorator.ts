@@ -152,9 +152,7 @@ export class FilterSorterDecorator<T extends IItem> {
 
   @action
   public sort(query: string): any[] {
-    const sortingOption: ItemSortingOption =
-      ItemSortingOption[query as keyof typeof ItemSortingOption]
-    this.activeSorter = sortingOption
+    this.activeSorter = ItemSortingOption[query as keyof typeof ItemSortingOption]
 
     return this.getSortedItems()
   }

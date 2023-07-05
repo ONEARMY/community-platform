@@ -12,6 +12,10 @@
         "function": "seo-seoRender"
       },
       {
+        "source": "/_logging",
+        "function": "logToCloudLogging-logToCloudLogging"
+      },
+      {
         "source": "/research/**",
         "function": "seo-seoRender"
       },

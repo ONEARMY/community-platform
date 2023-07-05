@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
-import type {IComment, IModerationStatus} from 'src/models'
+import type { IComment, IModerationStatus } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
@@ -152,7 +152,8 @@ export class FilterSorterDecorator<T extends IItem> {
 
   @action
   public sort(query: string): any[] {
-    this.activeSorter = ItemSortingOption[query as keyof typeof ItemSortingOption]
+    this.activeSorter =
+      ItemSortingOption[query as keyof typeof ItemSortingOption]
 
     return this.getSortedItems()
   }

@@ -1,7 +1,8 @@
 import type {
   DBDoc,
   IComment,
-  IModerable, IModerationStatus,
+  IModerable,
+  IModerationStatus,
   ISelectedTags,
   ISharedFeatures,
   UserMention,

@@ -3,7 +3,7 @@ import {
   ItemSortingOption,
 } from './FilterSorterDecorator'
 import type { IItem } from './FilterSorterDecorator'
-import type {IModerationStatus} from "../../../models";
+import type { IModerationStatus } from '../../../models'
 
 describe('FilterSorterDecorator', () => {
   let decorator: FilterSorterDecorator<IItem>
@@ -104,7 +104,7 @@ describe('FilterSorterDecorator', () => {
           ],
         },
       ],
-      moderation: "accepted"
+      moderation: 'accepted',
     },
   ]
 
@@ -161,37 +161,40 @@ describe('FilterSorterDecorator', () => {
       {
         _modified: '2022-01-01',
         _created: '2022-01-01',
-        moderation: "awaiting-moderation"
+        moderation: 'awaiting-moderation',
       },
       {
         _modified: '2022-01-01',
         _created: '2022-01-01',
-        moderation: "draft"
+        moderation: 'draft',
       },
       {
         _modified: '2022-01-01',
         _created: '2022-01-01',
-        moderation: "rejected"
-      }
+        moderation: 'rejected',
+      },
     ])
 
-    test.each(Object.values(ItemSortingOption))
-    (
+    test.each(Object.values(ItemSortingOption))(
       'sort moderation status any other than accepted to top for sorting option %p',
       // Testing all sorting options, as sorting by moderation should be in effect regardless or chosen sorting option
-      sortingOption => {
+      (sortingOption) => {
         decorator = new FilterSorterDecorator(mockItemsWithModeration)
         decorator.activeSorter = sortingOption as ItemSortingOption
-        const moderationStatusAtTop: IModerationStatus[] = ['draft', 'awaiting-moderation', 'rejected']
+        const moderationStatusAtTop: IModerationStatus[] = [
+          'draft',
+          'awaiting-moderation',
+          'rejected',
+        ]
 
         const sortedItems = decorator.getSortedItems()
 
-        for (let i=0; i<=2; i++) {
+        for (let i = 0; i <= 2; i++) {
           expect(moderationStatusAtTop).toContain(sortedItems[i].moderation)
         }
-      }
+      },
     )
-  });
+  })
 
   //#endregion Sorting
 

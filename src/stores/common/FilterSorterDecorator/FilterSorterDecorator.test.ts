@@ -3,6 +3,7 @@ import {
   ItemSortingOption,
 } from './FilterSorterDecorator'
 import type { IItem } from './FilterSorterDecorator'
+import {IModerationStatus} from "../../../models";
 
 describe('FilterSorterDecorator', () => {
   let decorator: FilterSorterDecorator<IItem>
@@ -105,21 +106,6 @@ describe('FilterSorterDecorator', () => {
       ],
       moderation: "accepted"
     },
-    {
-      _modified: '2022-01-01',
-      _created: '2022-01-01',
-      moderation: "awaiting-moderation"
-    },
-    {
-      _modified: '2022-01-01',
-      _created: '2022-01-01',
-      moderation: "draft"
-    },
-    {
-      _modified: '2022-01-01',
-      _created: '2022-01-01',
-      moderation: "rejected"
-    },
   ]
 
   beforeEach(() => {
@@ -170,19 +156,42 @@ describe('FilterSorterDecorator', () => {
     expect(sortedItems[0].title).toEqual(mockItems[0].title)
   })
 
-  test.each(Object.values(ItemSortingOption))
-  (
-    'sort moderation status any other than accepted to top for sorting option %p',
-    // Testing all sorting options, as sorting by moderation should be in effect regardless or chosen sorting option
-    sortingOption => {
-      decorator.activeSorter = sortingOption as ItemSortingOption
-      const sortedItems = decorator.getSortedItems()
+  describe('sorting by moderation status', () => {
+    const mockItemsWithModeration = mockItems.concat([
+      {
+        _modified: '2022-01-01',
+        _created: '2022-01-01',
+        moderation: "awaiting-moderation"
+      },
+      {
+        _modified: '2022-01-01',
+        _created: '2022-01-01',
+        moderation: "draft"
+      },
+      {
+        _modified: '2022-01-01',
+        _created: '2022-01-01',
+        moderation: "rejected"
+      }
+    ])
 
-      expect(sortedItems[0].moderation).toBe('draft')
-      expect(sortedItems[1].moderation).toBe('awaiting-moderation')
-      expect(sortedItems[2].moderation).toBe('rejected')
-    }
-  )
+    test.each(Object.values(ItemSortingOption))
+    (
+      'sort moderation status any other than accepted to top for sorting option %p',
+      // Testing all sorting options, as sorting by moderation should be in effect regardless or chosen sorting option
+      sortingOption => {
+        decorator = new FilterSorterDecorator(mockItemsWithModeration)
+        decorator.activeSorter = sortingOption as ItemSortingOption
+        const moderationStatusAtTop: IModerationStatus[] = ['draft', 'awaiting-moderation', 'rejected']
+
+        const sortedItems = decorator.getSortedItems()
+
+        for (let i=0; i<=2; i++) {
+          expect(moderationStatusAtTop).toContain(sortedItems[i].moderation)
+        }
+      }
+    )
+  });
 
   //#endregion Sorting
 

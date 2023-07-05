@@ -80,6 +80,7 @@ export interface INotification {
   _created: string
   triggeredBy: {
     displayName: string
+    // this field is the userName of the user, which we use as a unique id as of https://github.com/ONEARMY/community-platform/pull/2479/files
     userId: string
   }
   relevantUrl?: string

@@ -1,0 +1,172 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`create email test Creates email from pending notifications monthly 1`] = `
+"<html>
+  <head>
+    <style>
+      body {
+        font-family: arial, helvetica, sans-serif;
+        font-size: 14px;
+        color: #000000;
+        padding: 8%;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+      a {
+        color: #000000;
+      }
+      .image-container {
+        align-self: center;
+      }
+      .section-header {
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .notifications {
+        align-self: center;
+      }
+      @media screen and (max-width: 480px) {
+        body {
+          font-size: 12px;
+        }
+        .section-header {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="image-container">
+      <img
+        width="144"
+        alt=""
+        src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/f48e2455-6dbb-4102-bde9-2ee07d3008c4/859x860.png"
+      />
+    </div>
+    <div class="greeting">
+      <p>Hey User 2</p>
+      <p>You've missed notifications. No worries.</p>
+      <p>I'm here to give you an overview :)</p>
+    </div>
+    <div class="section-container">
+      <div class="section-header">
+        <img
+          width="30"
+          alt=""
+          src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/1e6f3be3-e6fd-46c5-b30f-bcde950b0dbc/165x131.png"
+        />
+        Missed Notifications
+      </div>
+      <div class="section-items">
+        <p>
+          New comment on your
+          <a href="https://community.preciousplastic.com/test">research</a> by
+          <a href="https://community.preciousplastic.com/u/user_1">User 1</a>
+        </p>
+        <p>
+          New comment on your
+          <a href="https://community.preciousplastic.com/test">research</a> by
+          <a href="https://community.preciousplastic.com/u/user_3">User 3</a>
+        </p>
+      </div>
+    </div>
+    <div class="notifications">
+      Manage your notifications
+      <a href="https://community.preciousplastic.com/settings"> here</a>
+    </div>
+  </body>
+</html>
+"
+`;
+
+exports[`create email test Creates email from pending notifications weekly 1`] = `
+"<html>
+  <head>
+    <style>
+      body {
+        font-family: arial, helvetica, sans-serif;
+        font-size: 14px;
+        color: #000000;
+        padding: 8%;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+      a {
+        color: #000000;
+      }
+      .image-container {
+        align-self: center;
+      }
+      .section-header {
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .notifications {
+        align-self: center;
+      }
+      @media screen and (max-width: 480px) {
+        body {
+          font-size: 12px;
+        }
+        .section-header {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="image-container">
+      <img
+        width="144"
+        alt=""
+        src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/f48e2455-6dbb-4102-bde9-2ee07d3008c4/859x860.png"
+      />
+    </div>
+    <div class="greeting">
+      <p>Hey User 1</p>
+      <p>You've missed notifications. No worries.</p>
+      <p>I'm here to give you an overview :)</p>
+    </div>
+    <div class="section-container">
+      <div class="section-header">
+        <img
+          width="30"
+          alt=""
+          src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/1e6f3be3-e6fd-46c5-b30f-bcde950b0dbc/165x131.png"
+        />
+        Missed Notifications
+      </div>
+      <div class="section-items">
+        <p>
+          <a href="https://community.preciousplastic.com/u/user_2">User 2</a>
+          found your
+          <a href="https://community.preciousplastic.com/test">research</a>
+          useful
+        </p>
+
+        <p>
+          New comment on your
+          <a href="https://community.preciousplastic.com/test">research</a> by
+          <a href="https://community.preciousplastic.com/u/user_2">User 2</a>
+        </p>
+        <p>
+          <a href="https://community.preciousplastic.com/u/user_3">User 3</a>
+          mentioned you in this
+          <a href="https://community.preciousplastic.com/test">research</a>
+        </p>
+      </div>
+    </div>
+    <div class="notifications">
+      Manage your notifications
+      <a href="https://community.preciousplastic.com/settings"> here</a>
+    </div>
+  </body>
+</html>
+"
+`;

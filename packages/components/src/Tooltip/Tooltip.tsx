@@ -11,7 +11,7 @@ type TooltipProps = {
   children?: React.ReactNode
 }
 
-export const Tooltip = ({ children, ...props }: TooltipProps) => {
+export const Tooltip = ({ children = null, ...props }: TooltipProps) => {
   return (
     <StyledTooltip
       event="mouseenter focus"

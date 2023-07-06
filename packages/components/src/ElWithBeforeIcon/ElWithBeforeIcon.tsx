@@ -15,9 +15,9 @@ const DEFAULT_ICON_SIZE = 22
 export const ElWithBeforeIcon = ({
   icon,
   size,
-  children,
-  ticked,
-  contain,
+  children = null,
+  ticked = undefined,
+  contain = undefined,
 }: ElWithBeforeIconProps) => {
   let after: ThemeUIStyleObject = {}
 

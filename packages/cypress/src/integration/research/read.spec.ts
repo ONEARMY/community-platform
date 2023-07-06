@@ -1,6 +1,6 @@
 describe('[Research]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-  const totalResearchCount = 3
+  const totalResearchCount = 2
 
   describe('[List research articles]', () => {
     beforeEach(() => {

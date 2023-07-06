@@ -403,19 +403,4 @@ export const research = {
     },
     title: 'A test research',
   },
-  '0up6oJCTT3M9bDYx34Ez': {
-    _created: '2023-03-27T22:08:25.999Z',
-    _createdBy: 'test user',
-    _deleted: false,
-    _id: '0up6oJCTT3M9bDYx35Gz',
-    _modified: '2023-04-01T19:12:11.271Z',
-    creatorCountry: 'it',
-    description: 'A test to check for title requirement',
-    moderation: 'accepted',
-    slug: 'a-test-research-with-a-very-long-title',
-    tags: {
-      h1wCs0o9j60lkw3AYPB1: true,
-    },
-    title: 'A test research with a very long title',
-  },
 }

@@ -1,3 +1,5 @@
+import { HOWTO_TITLE_MIN_LENGTH } from '../../../../../src/pages/Howto/constants'
+
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/how-to')
@@ -121,6 +123,15 @@ describe('[How To]', () => {
         .blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',
+      ).should('exist')
+
+      cy.step('Warn if title has less than minimum required characters')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('qwerty')
+        .blur({ force: true })
+      cy.contains(
+        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
       cy.step('Fill up the intro')
@@ -311,6 +322,15 @@ describe('[How To]', () => {
       cy.contains(
         'Titles must be unique, please try being more specific',
       ).should('not.exist')
+
+      cy.step('Warn if title has less than minimum required characters')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('qwerty')
+        .blur({ force: true })
+      cy.contains(
+        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
+      ).should('exist')
 
       cy.get('[data-cy=intro-title]')
         .clear()

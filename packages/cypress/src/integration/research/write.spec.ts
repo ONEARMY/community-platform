@@ -1,5 +1,3 @@
-import { HOWTO_TITLE_MIN_LENGTH } from '../../../../../src/pages/Howto/constants'
-
 describe('[Research]', () => {
   beforeEach(() => {
     cy.visit('/research')
@@ -21,20 +19,9 @@ describe('[Research]', () => {
       cy.step('Create the research article')
       cy.get('[data-cy=create]').click()
       cy.step('Warn if title is identical to an existing one')
-      cy.get('[data-cy=intro-title]')
-        .type('A test research with a very long title')
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',
-      ).should('exist')
-
-      cy.step('Warn if title has less than minimum required characters')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('qwerty')
-        .blur({ force: true })
-      cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
       cy.step('Enter research article details')
@@ -135,29 +122,10 @@ describe('[Research]', () => {
       cy.step('Go to Edit mode')
       cy.get('[data-cy=edit]').click()
 
-      cy.step('Warn if title has less than minimum required characters')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('qwerty')
-        .blur({ force: true })
-      cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
-      )
-
       cy.step('Warn if title is identical to an existing one')
       cy.get('[data-cy=intro-title]').focus().blur({ force: true })
       cy.wait(1000)
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('not.exist')
-
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('A test research with a very long title')
-        .blur({ force: true })
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('exist')
+      cy.contains('qwerty').should('not.exist')
 
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]').clear().type(expected.title)

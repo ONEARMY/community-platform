@@ -25332,7 +25332,6 @@ __metadata:
     browser-image-compression: ^1.0.15
     buffer: ^6.0.3
     chai-subset: ^1.6.0
-    cheerio: ^1.0.0-rc.10
     commitizen: ^4.2.4
     concurrently: ^6.2.0
     countries-list: ^2.6.1

@@ -99,6 +99,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="http://jonboiser.com"><img src="https://avatars.githubusercontent.com/u/10248067?v=4?s=60" width="60px;" alt="Jonathan Boiser"/><br /><sub><b>Jonathan Boiser</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=jonboiser" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/benfurber"><img src="https://avatars.githubusercontent.com/u/16688508?v=4?s=60" width="60px;" alt="benfurber"/><br /><sub><b>benfurber</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=benfurber" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/AlimurtuzaCodes"><img src="https://avatars.githubusercontent.com/u/88965204?v=4?s=60" width="60px;" alt="Alimurtuza"/><br /><sub><b>Alimurtuza</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=AlimurtuzaCodes" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/AliAbuSalam"><img src="https://avatars.githubusercontent.com/u/17426615?v=4?s=60" width="60px;" alt="Askell"/><br /><sub><b>Askell</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=AliAbuSalam" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

@@ -130,6 +130,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   public validateTitle = async (value: any) => {
     const originalId =
       this.props.parentType === 'edit' ? this.props.formValues._id : undefined
+    const strippedTitle = stripSpecialCharacters(value)
+    if (
+      strippedTitle.length < HOWTO_TITLE_MIN_LENGTH &&
+      strippedTitle.length > 0
+    ) {
+      return `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`
+    }
     return this.store.validateTitleForSlug(value, 'howtos', originalId)
   }
   // automatically generate the slug when the title changes

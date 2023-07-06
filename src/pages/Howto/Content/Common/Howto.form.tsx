@@ -33,7 +33,11 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
-import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
+import {
+  HOWTO_MAX_LENGTH,
+  HOWTO_TITLE_MAX_LENGTH,
+  HOWTO_TITLE_MIN_LENGTH,
+} from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
 const MAX_LINK_LENGTH = 2000
@@ -126,6 +130,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
   public validateTitle = async (value: any) => {
     const originalId =
       this.props.parentType === 'edit' ? this.props.formValues._id : undefined
+    const strippedTitle = stripSpecialCharacters(value)
+    if (
+      strippedTitle.length < HOWTO_TITLE_MIN_LENGTH &&
+      strippedTitle.length > 0
+    ) {
+      return `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`
+    }
     return this.store.validateTitleForSlug(value, 'howtos', originalId)
   }
   // automatically generate the slug when the title changes
@@ -259,8 +270,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   isEqual={COMPARISONS.textInput}
                                   modifiers={{ capitalize: true }}
                                   component={FieldInput}
+                                  minLength={HOWTO_TITLE_MIN_LENGTH}
                                   maxLength={HOWTO_TITLE_MAX_LENGTH}
-                                  placeholder={`Make a chair from... (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
+                                  placeholder={`Make a chair from... (${HOWTO_TITLE_MIN_LENGTH} - ${HOWTO_TITLE_MAX_LENGTH} characters)`}
                                   showCharacterCount
                                 />
                               </Flex>

@@ -30,11 +30,11 @@ describe('[Research]', () => {
 
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]')
-        .clear()  
+        .clear()
         .type('qwerty')
         .blur({ force: true })
       cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`
+        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
       cy.step('Enter research article details')
@@ -141,7 +141,7 @@ describe('[Research]', () => {
         .type('qwerty')
         .blur({ force: true })
       cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`
+        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       )
 
       cy.step('Warn if title is identical to an existing one')

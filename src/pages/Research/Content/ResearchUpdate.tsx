@@ -152,7 +152,10 @@ const ResearchUpdate = ({
               {update.videoUrl ? (
                 <VideoPlayer videoUrl={update.videoUrl} />
               ) : (
-                <ImageGallery images={update.images as IUploadedFileMeta[]} />
+                <ImageGallery
+                  images={update.images as IUploadedFileMeta[]}
+                  allowPortrait={true}
+                />
               )}
             </Box>
             <ResearchComments

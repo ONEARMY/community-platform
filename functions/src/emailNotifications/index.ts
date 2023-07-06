@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions'
-import { createNotificationEmails } from './createEmail'
+import { createNotificationEmails } from './createNotificationEmails'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { EmailNotificationFrequency } from 'oa-shared'

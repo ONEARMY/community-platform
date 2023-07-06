@@ -247,6 +247,8 @@ jobs:
   test_security_rules:
     docker: *docker
     resource_class: medium+
+    environment:
+      GCLOUD_PROJECT: onearmy-test-ci
     steps:
       - setup_repo
       - attach_workspace:

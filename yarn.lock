@@ -25399,7 +25399,6 @@ __metadata:
     react-scripts: 5.0.1
     react-slick: ^0.25.2
     react-table: ^6.11.5
-    react-tooltip: ^4.2.20
     react-virtualized: ^9.22.3
     resize-observer-polyfill: ^1.5.1
     rxjs: ^6.6.3
@@ -28590,7 +28589,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^4.2.20, react-tooltip@npm:^4.2.21":
+"react-tooltip@npm:^4.2.21":
   version: 4.5.1
   resolution: "react-tooltip@npm:4.5.1"
   dependencies:

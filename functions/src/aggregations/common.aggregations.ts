@@ -71,8 +71,6 @@ export class AggregationHandler {
   /** Reference to aggregation definition triggered as part of process */
   public aggregation: IAggregation
 
-  public updates: Record<string, any>
-
   constructor(aggregation: IAggregation, dbChange: IDBChange) {
     this.aggregation = aggregation
     this.dbChange = dbChange
@@ -105,9 +103,15 @@ export class AggregationHandler {
    * entry in case where updated field no longer valid for aggregation
    */
   private async update() {
-    const aggregationValues = await this.calculateAggregation()
+    let aggregationValues = this.aggregation.process(this)
+    if (
+      this.aggregation.targetDocId === 'users_totalUseful' &&
+      Array.isArray(aggregationValues)
+    ) {
+      aggregationValues = this.calculateUsefulAggregation(aggregationValues)
+    }
     return aggregationValues
-      ? this.targetDocRef.update(aggregationValues)
+      ? this.targetDocRef.update(aggregationValues as Record<string, any>)
       : null
   }
 
@@ -221,25 +225,14 @@ export class AggregationHandler {
     )
   }
 
-  private async calculateAggregation() {
-    // If key/value pairs then set update object values immediately
-    const processValues = this.aggregation.process(this)
-    if (!Array.isArray(processValues)) {
-      this.updates = processValues
-      return
-    }
-
-    // If an array but length = 0 then return
+  private async calculateUsefulAggregation(processValues: string[]) {
     if (processValues.length === 0) return
 
-    // We have an array so continue with calculations
     let calculations = {}
     for (let i = 0; i < processValues.length; i++) {
       const id = processValues[i]
-      if (this.aggregation.targetDocId === 'users_totalUseful') {
-        const update = await this.calculateTotalUseful(id)
-        calculations = { ...calculations, ...update }
-      }
+      const update = await this.calculateTotalUseful(id)
+      calculations = { ...calculations, ...update }
     }
     return calculations
   }

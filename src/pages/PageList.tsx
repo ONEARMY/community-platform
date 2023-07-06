@@ -19,10 +19,6 @@ const SettingsPage = lazy(
 const AcademyPage = lazy(
   () => import(/* webpackChunkName: "Academy" */ './Academy/Academy'),
 )
-
-const AdminPage = lazy(
-  () => import(/* webpackChunkName: "Admin" */ './admin/Admin'),
-)
 const MapsPage = lazy(
   () => import(/* webpackChunkName: "Maps" */ './Maps/Maps'),
 )
@@ -127,13 +123,6 @@ const maps = {
   },
   fullPageWidth: true,
 }
-const admin = {
-  moduleName: MODULE.USER,
-  path: '/admin',
-  component: <AdminPage />,
-  title: 'Admin',
-  description: '',
-}
 
 const signup = {
   moduleName: MODULE.USER,
@@ -205,7 +194,6 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
 ]
 /** Additional pages to show in signed-in profile dropdown */
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings, AdminModule]
-export const ADMIN_PAGES: IPageMeta[] = [admin]
 export const POLICY_PAGES: IPageMeta[] = [privacyPolicy, termsPolicy]
 export const NO_HEADER_PAGES: IPageMeta[] = [
   user,

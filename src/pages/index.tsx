@@ -9,7 +9,6 @@ import Main from 'src/pages/common/Layout/Main'
 import type { IPageMeta } from './PageList'
 import {
   COMMUNITY_PAGES_PROFILE,
-  ADMIN_PAGES,
   NO_HEADER_PAGES,
   POLICY_PAGES,
   getAvailablePageList,
@@ -37,7 +36,6 @@ export class Routes extends React.Component<
     const menuItems = [
       ...getAvailablePageList(getSupportedModules()),
       ...COMMUNITY_PAGES_PROFILE,
-      ...ADMIN_PAGES,
       ...NO_HEADER_PAGES,
       ...POLICY_PAGES,
     ]

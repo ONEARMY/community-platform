@@ -14,6 +14,17 @@ describe('[How To]', () => {
     cy.selectTag(difficultLevel, '[data-cy=difficulty-select]')
   }
 
+  const longLipsum = `Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim
+  labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi
+  animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est
+  aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia
+  pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit
+  commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa
+  proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia
+  eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim.
+  Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et
+  culpa duis.`
+
   const fillStep = (
     stepNumber: number,
     title: string,
@@ -26,9 +37,39 @@ describe('[How To]', () => {
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
       cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
+
       cy.get('[data-cy=step-description]')
         .clear()
-        .type(`Description for step ${stepNumber}`)
+        .type(`description for step ${stepNumber}`)
+        .blur({ force: true })
+
+      cy.wrap($step).should(
+        'contain',
+        `Descriptions must be more than 100 characters`,
+      )
+
+      cy.get('[data-cy=step-description]')
+        .clear()
+        .type(longLipsum, { delay: 0 })
+        .blur({ force: true })
+
+      cy.wrap($step).should(
+        'contain',
+        `Descriptions must be less than 700 characters`,
+      )
+
+      cy.get('[data-cy=step-description]')
+        .clear()
+        .type(
+          `description for step ${stepNumber}. This description should be more than 100 characters and less than 700 characters.`,
+        )
+        .blur({ force: true })
+
+      cy.get('[data-cy=step-description]').should('have.value', description)
+      cy.get('[data-cy=text-limit-indicator]')
+        .should('be.visible')
+        .contains('105 / 700')
+
       if (videoUrl) {
         cy.step('Adding Video Url')
         cy.get('[data-cy=step-videoUrl]').clear().type(videoUrl)
@@ -100,13 +141,13 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 1',
+          text: 'Description for step 1. This description should be more than 100 characters and less than 700 characters.',
           title: 'Step 1 is easy',
         },
         {
           _animationKey: 'unique2',
           images: [],
-          text: 'Description for step 2',
+          text: 'Description for step 2. This description should be more than 100 characters and less than 700 characters.',
           title: 'Step 2 is easy',
         },
       ],
@@ -264,7 +305,7 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 1',
+          text: 'Description for step 1. This description should be more than 100 characters and less than 700 characters.',
           title: 'Step 1 is easy',
         },
         {
@@ -289,7 +330,7 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 2',
+          text: 'Description for step 2. This description should be more than 100 characters and less than 700 characters.',
           title: 'Step 2 is easy',
         },
       ],

@@ -21,7 +21,9 @@ describe('[Research]', () => {
       cy.step('Create the research article')
       cy.get('[data-cy=create]').click()
       cy.step('Warn if title is identical to an existing one')
-      cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
+      cy.get('[data-cy=intro-title]')
+        .type('A test research with a very long title')
+        .blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',
       ).should('exist')
@@ -151,7 +153,7 @@ describe('[Research]', () => {
 
       cy.get('[data-cy=intro-title]')
         .clear()
-        .type('qwerty')
+        .type('A test research with a very long title')
         .blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',

@@ -37,7 +37,7 @@ This will start the following:
 
 ## Emulator Dashboard
 
-The emulator should start at http://localhost:4001. Follow the link to see an overview of the available services
+The emulator should start at [http://localhost:4001](http://localhost:4001). Follow the link to see an overview of the available services
 
 ![Dashboard](./images/firebase-emulators-dashboard.png)
 
@@ -97,6 +97,8 @@ http://localhost:4002/community-platform-emulated/us-central1/emulator/seed-user
 ```
 
 ![](images/emulators-docker-http-req.png)
+
+Read more about [Connecting your app the Cloud Functions Emulator](https://firebase.google.com/docs/emulator-suite/connect_functions).
 
 ### Accessing Logs
 

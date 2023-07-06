@@ -89,6 +89,19 @@ useful
 </p>
 `
 
+const getUpdateListItem = (notification: INotification) => `
+<p>
+    ${getUserLink(
+      notification.triggeredBy.displayName,
+      notification.triggeredBy.userId,
+    )} posted an update to this ${getResourceLink(
+  notification.type,
+  notification.relevantUrl,
+)}
+you follow
+</p>
+`
+
 const isCommentNotification = (notification: INotification) =>
   ['new_comment_research', 'new_comment'].includes(notification.type)
 
@@ -97,6 +110,9 @@ const isMentionNotification = (notification: INotification) =>
 
 const isUsefulNotification = (notification: INotification) =>
   ['research_useful', 'howto_useful'].includes(notification.type)
+
+const isUpdateNotification = (notification: INotification) =>
+  notification.type === 'research_update'
 
 export const getNotificationListItem = (
   notification: INotification,
@@ -109,5 +125,8 @@ export const getNotificationListItem = (
   }
   if (isUsefulNotification(notification)) {
     return getUsefulListItem(notification)
+  }
+  if (isUpdateNotification(notification)) {
+    return getUpdateListItem(notification)
   }
 }

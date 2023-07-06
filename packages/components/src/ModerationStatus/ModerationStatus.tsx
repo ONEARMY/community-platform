@@ -53,6 +53,7 @@ export const ModerationStatus = (props: Props) => {
         borderRadius: 1,
         borderBottomRightRadius: 1,
       }}
+      data-cy={`moderationstatus-${status}`}
     >
       {moderationMessage}
     </Text>

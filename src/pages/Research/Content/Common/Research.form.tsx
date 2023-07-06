@@ -99,6 +99,10 @@ const ResearchForm = observer((props: IProps) => {
     return store.validateTitleForSlug(value, 'research', originalId)
   }
 
+  const validateDescription = (value, allValues) => {
+    return allValues.isDraft ? undefined : required(value)
+  }
+
   // Display a confirmation dialog when leaving the page outside the React Router
   const unloadDecorator = (form) => {
     return form.subscribe(
@@ -130,11 +134,17 @@ const ResearchForm = observer((props: IProps) => {
         }}
         initialValues={props.formValues}
         mutators={{
+          setIsDraftTrue: (_, state, utils) => {
+            utils.changeValue(state, 'isDraft', () => true)
+          },
+          setIsDraftFalse: (_, state, utils) => {
+            utils.changeValue(state, 'isDraft', () => false)
+          },
           ...arrayMutators,
         }}
         validateOnBlur
         decorators={[calculatedFields, unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit }) => {
+        render={({ submitting, dirty, handleSubmit, form }) => {
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
               <Flex
@@ -212,7 +222,7 @@ const ResearchForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={required}
+                                validate={validateDescription}
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldTextarea}
@@ -296,9 +306,10 @@ const ResearchForm = observer((props: IProps) => {
                   </Box>
                   <Button
                     data-cy={'draft'}
-                    onClick={() =>
+                    onClick={() => {
+                      form.mutators.setIsDraftTrue()
                       setSubmissionHandler({ shouldSubmit: true, draft: true })
-                    }
+                    }}
                     mt={[0, 0, 3]}
                     variant="secondary"
                     type="submit"
@@ -314,9 +325,13 @@ const ResearchForm = observer((props: IProps) => {
                   <Button
                     large
                     data-cy={'submit'}
-                    onClick={() =>
-                      setSubmissionHandler({ shouldSubmit: true, draft: false })
-                    }
+                    onClick={() => {
+                      form.mutators.setIsDraftFalse()
+                      setSubmissionHandler({
+                        shouldSubmit: true,
+                        draft: false,
+                      })
+                    }}
                     mt={3}
                     variant="primary"
                     type="submit"
@@ -330,7 +345,6 @@ const ResearchForm = observer((props: IProps) => {
                     <span>Publish</span>
                   </Button>
                 </Box>
-
                 {props.formValues.updates ? (
                   <ResearchEditorOverview
                     sx={{ mt: 4 }}

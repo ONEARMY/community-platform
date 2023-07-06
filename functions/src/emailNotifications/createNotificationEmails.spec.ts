@@ -94,6 +94,14 @@ describe('create email test', () => {
         relevantUrl: '/test',
         type: 'new_comment_research',
       }),
+      notificationFactory('user_2', 'notification_3', {
+        triggeredBy: {
+          displayName: 'User 3',
+          userId: 'user_3',
+        },
+        relevantUrl: '/test',
+        type: 'research_update',
+      }),
     ]
 
     const user3Notifications = [

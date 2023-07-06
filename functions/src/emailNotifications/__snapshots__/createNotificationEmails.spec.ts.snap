@@ -71,6 +71,12 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
           <a href="https://community.preciousplastic.com/test">research</a> by
           <a href="https://community.preciousplastic.com/u/user_3">User 3</a>
         </p>
+        <p>
+          <a href="https://community.preciousplastic.com/u/user_3">User 3</a>
+          posted an update to this
+          <a href="https://community.preciousplastic.com/test">research</a>
+          you follow
+        </p>
       </div>
     </div>
     <div class="notifications">

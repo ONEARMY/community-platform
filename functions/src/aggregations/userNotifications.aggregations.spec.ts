@@ -25,7 +25,9 @@ describe('User Notifications Aggregation', () => {
         notifications: [mockNotification as INotification],
       }),
     ])
-    await FirebaseEmulatedTest.seedFirestoreDB('user_notifications')
+    await FirebaseEmulatedTest.seedFirestoreDB('user_notifications', [
+      { _id: 'emails_pending' },
+    ])
   })
   afterEach(async () => {
     await FirebaseEmulatedTest.clearFirestoreDB()

@@ -18069,7 +18069,7 @@ __metadata:
     ts-loader: ^9.4.2
     ts-node: ^10.0.0
     tslint: ^6.1.3
-    typescript: 4.5.5
+    typescript: ^5.1.6
     uuid: ^9.0.0
     webpack: 5.75.0
     webpack-cli: 5.0.1
@@ -25007,7 +25007,7 @@ __metadata:
     storybook: ^7.0.12
     theme-ui: ^0.15.7
     ts-node: ^10.7.0
-    typescript: ^4.5.5
+    typescript: ^5.1.6
     use-debounce: ^8.0.4
     vitest: ^0.30.1
     webpack: 5.76.0
@@ -25062,7 +25062,7 @@ __metadata:
     globby: ^11.0.2
     log-update: ^4.0.0
     ts-node: ^10.7.0
-    typescript: ^4.5.5
+    typescript: ^5.1.6
   languageName: unknown
   linkType: soft
 
@@ -25085,7 +25085,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "oa-shared@workspace:shared"
   dependencies:
-    typescript: ^4.5.5
+    typescript: ^5.1.6
   languageName: unknown
   linkType: soft
 
@@ -25093,7 +25093,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "oa-themes@workspace:packages/themes"
   dependencies:
-    typescript: ^4.5.5
+    typescript: ^5.1.6
   languageName: unknown
   linkType: soft
 
@@ -25411,7 +25411,7 @@ __metadata:
     theme-ui: ^0.15.7
     ts-loader: ^7.0.5
     ts-node: ^10.4.0
-    typescript: 4.5.5
+    typescript: ^5.1.6
     wait-on: ^5.2.1
     web-vitals: ^1.1.2
     workbox-background-sync: ^6.1.5
@@ -32364,17 +32364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.5.5":
-  version: 4.5.5
-  resolution: "typescript@npm:4.5.5"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 506f4c919dc8aeaafa92068c997f1d213b9df4d9756d0fae1a1e7ab66b585ab3498050e236113a1c9e57ee08c21ec6814ca7a7f61378c058d79af50a4b1f5a5e
-  languageName: node
-  linkType: hard
-
-"typescript@npm:^4.4.3, typescript@npm:^4.5.5, typescript@npm:^4.6.4":
+"typescript@npm:^4.4.3, typescript@npm:^4.6.4":
   version: 4.9.5
   resolution: "typescript@npm:4.9.5"
   bin:
@@ -32384,23 +32374,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.5.5#~builtin<compat/typescript>":
-  version: 4.5.5
-  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=bcec9a"
+"typescript@npm:^5.1.6":
+  version: 5.1.6
+  resolution: "typescript@npm:5.1.6"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 858c61fa63f7274ca4aaaffeced854d550bf416cff6e558c4884041b3311fb662f476f167cf5c9f8680c607239797e26a2ee0bcc6467fbc05bfcb218e1c6c671
+  checksum: b2f2c35096035fe1f5facd1e38922ccb8558996331405eb00a5111cc948b2e733163cc22fab5db46992aba7dd520fff637f2c1df4996ff0e134e77d3249a7350
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>, typescript@patch:typescript@^4.5.5#~builtin<compat/typescript>, typescript@patch:typescript@^4.6.4#~builtin<compat/typescript>":
+"typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>, typescript@patch:typescript@^4.6.4#~builtin<compat/typescript>":
   version: 4.9.5
   resolution: "typescript@patch:typescript@npm%3A4.9.5#~builtin<compat/typescript>::version=4.9.5&hash=23ec76"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: ab417a2f398380c90a6cf5a5f74badd17866adf57f1165617d6a551f059c3ba0a3e4da0d147b3ac5681db9ac76a303c5876394b13b3de75fdd5b1eaa06181c9d
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^5.1.6#~builtin<compat/typescript>":
+  version: 5.1.6
+  resolution: "typescript@patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=1f5320"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 21e88b0a0c0226f9cb9fd25b9626fb05b4c0f3fddac521844a13e1f30beb8f14e90bd409a9ac43c812c5946d714d6e0dee12d5d02dfc1c562c5aacfa1f49b606
   languageName: node
   linkType: hard
 

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { FieldRenderProps } from 'react-final-form'
 import { Textarea, Text } from 'theme-ui'
+import { CharacterCount } from '../CharacterCount/CharacterCount'
 
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
 export interface Props extends FieldProps {
@@ -21,40 +22,6 @@ const processInputModifiers = (value: any, modifiers: any = {}) => {
     value = capitalizeFirstLetter(value)
   }
   return value
-}
-
-const TextLimitIndicator = ({
-  curSize,
-  maxSize,
-  minSize,
-}: {
-  curSize: number
-  maxSize: number
-  minSize: number
-}) => {
-  const percMax = curSize / maxSize
-  const colorVec = [
-    { value: 1.0, color: 'red' },
-    { value: 0.75, color: 'red2' },
-    { value: 0.6, color: 'accent.base' },
-  ]
-
-  let color = colorVec.find((cur) => cur.value <= percMax)?.color ?? 'black'
-
-  if (curSize < minSize) {
-    color = colorVec[0].color
-  }
-
-  return (
-    <Text
-      data-cy="text-limit-indicator"
-      color={color}
-      ml="auto"
-      sx={{ fontSize: 1, margin: 1 }}
-    >
-      {curSize} / {maxSize}
-    </Text>
-  )
 }
 
 export const FieldTextarea = ({
@@ -100,10 +67,10 @@ export const FieldTextarea = ({
       )}
 
       {showCharacterCount && maxLength && (meta.touched || meta.dirty) && (
-        <TextLimitIndicator
+        <CharacterCount
           minSize={minLength}
           maxSize={maxLength}
-          curSize={curLength}
+          currentSize={curLength}
         />
       )}
     </>

@@ -66,7 +66,7 @@ describe('[How To]', () => {
         .blur({ force: true })
 
       cy.get('[data-cy=step-description]').should('have.value', description)
-      cy.get('[data-cy=text-limit-indicator]')
+      cy.get('[data-cy=character-count]')
         .should('be.visible')
         .contains('105 / 700')
 

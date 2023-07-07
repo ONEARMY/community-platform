@@ -285,7 +285,7 @@ jobs:
           command: yarn workspaces focus one-army-community-platform
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
-          command: yarn run test:unit:ci && yarn run test:components
+          command: yarn run test:unit && yarn run test:components
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports
       - store_artifacts:

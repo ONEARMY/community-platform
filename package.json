@@ -127,7 +127,6 @@
     "react-tooltip": "^4.2.20",
     "react-virtualized": "^9.22.3",
     "rxjs": "^6.6.3",
-    "sass": "^1.45.2",
     "styled-system": "^5.1.5",
     "theme-ui": "^0.15.7",
     "ts-node": "^10.4.0",

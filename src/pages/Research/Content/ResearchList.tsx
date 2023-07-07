@@ -2,7 +2,6 @@ import { useTheme } from '@emotion/react'
 import { observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import { Link } from 'react-router-dom'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { Box, Flex, Heading } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
@@ -41,11 +40,9 @@ const ResearchList = observer(() => {
         <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
           <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
             <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
-              <AuthWrapper roleRequired="beta-tester">
-                <Button variant={'primary'} data-cy="create">
-                  Add Research
-                </Button>
-              </AuthWrapper>
+              <Button variant={'primary'} data-cy="create">
+                Add Research
+              </Button>
             </Link>
           </Box>
         </Flex>
@@ -66,9 +63,7 @@ const ResearchList = observer(() => {
         : 'No research to show'}
       <Box mb={[3, 3, 0]}>
         <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
-          <AuthWrapper roleRequired="beta-tester">
-            <Button variant={'primary'}>Add Research</Button>
-          </AuthWrapper>
+          <Button variant={'primary'}>Add Research</Button>
         </Link>
       </Box>
     </>

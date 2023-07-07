@@ -12,11 +12,13 @@ import type { UserRole } from 'src/models/user.models'
 export const AuthRoute = observer(
   (props: {
     component: React.ComponentType<any>
-    roleRequired?: UserRole
+    roleRequired?: UserRole | UserRole[]
     /** User ids to be treated as admin, e.g. content creator */
     additionalAdmins?: string[]
     /** Page to redirect if role not satisfied (default shows message) */
     redirect?: string
+    path?: string
+    exact?: boolean
   }) => {
     const {
       component: Component,
@@ -41,8 +43,8 @@ export const AuthRoute = observer(
             >
               <Text>
                 {roleRequired
-                  ? `${roleRequired} role required to access this page`
-                  : 'Please login to access this page'}
+                  ? `${roleRequired} role required to access this page. Please contact an admin.`
+                  : 'Please login to access this page.'}
               </Text>
             </Flex>
           )

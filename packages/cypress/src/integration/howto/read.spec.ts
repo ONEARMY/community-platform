@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-  const totalHowTo = 8
+  const totalHowTo = 9
 
   describe('[List how-tos]', () => {
     const howtoSlug = 'make-glass-like-beams'

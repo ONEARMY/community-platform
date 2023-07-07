@@ -6,6 +6,8 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { Box, Flex, Heading } from 'theme-ui'
 import ResearchListItem from './ResearchListItem'
 import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import { RESEARCH_EDITOR_ROLES } from '../constants'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
@@ -39,11 +41,13 @@ const ResearchList = observer(() => {
 
         <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
           <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
-            <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
-              <Button variant={'primary'} data-cy="create">
-                Add Research
-              </Button>
-            </Link>
+            <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+              <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
+                <Button variant={'primary'} data-cy="create">
+                  Add Research
+                </Button>
+              </Link>
+            </AuthWrapper>
           </Box>
         </Flex>
       </Flex>
@@ -61,11 +65,13 @@ const ResearchList = observer(() => {
             )
           })
         : 'No research to show'}
-      <Box mb={[3, 3, 0]}>
-        <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
-          <Button variant={'primary'}>Add Research</Button>
-        </Link>
-      </Box>
+      <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+        <Box mb={[3, 3, 0]}>
+          <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
+            <Button variant={'primary'}>Add Research</Button>
+          </Link>
+        </Box>
+      </AuthWrapper>
     </>
   )
 })

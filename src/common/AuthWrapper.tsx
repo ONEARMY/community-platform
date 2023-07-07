@@ -22,7 +22,8 @@ interface IProps {
 @observer
 export class AuthWrapper extends React.Component<IProps> {
   render() {
-    const { userStore, roleRequired, additionalAdmins, children, fallback } = this.props
+    const { userStore, roleRequired, additionalAdmins, children, fallback } =
+      this.props
     const isAuthorized = isUserAuthorized(
       userStore?.user,
       roleRequired,
@@ -34,7 +35,7 @@ export class AuthWrapper extends React.Component<IProps> {
       ) : (
         children
       )
-    return isAuthorized === true ? childElements : fallback || null;
+    return isAuthorized === true ? childElements : fallback || null
   }
 }
 

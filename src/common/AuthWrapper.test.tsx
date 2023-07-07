@@ -4,7 +4,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import type { UserStore } from 'src/stores/User/user.store'
 
 describe('AuthWrapper', () => {
-  it('renders child components when user is authorized', () => {
+  it('renders child components when user is authorized with role array', () => {
     const { getByText } = render(
       <AuthWrapper
         userStore={
@@ -14,7 +14,43 @@ describe('AuthWrapper', () => {
             }),
           } as UserStore
         }
-        roleRequired="admin"
+        roleRequired={['admin']}
+      >
+        <div>Test Content</div>
+      </AuthWrapper>,
+    )
+    expect(getByText('Test Content')).toBeTruthy()
+  })
+
+  it('renders child components when user is authorized with role string', () => {
+    const { getByText } = render(
+      <AuthWrapper
+        userStore={
+          {
+            user: FactoryUser({
+              userRoles: ['admin'],
+            }),
+          } as UserStore
+        }
+        roleRequired={'admin'}
+      >
+        <div>Test Content</div>
+      </AuthWrapper>,
+    )
+    expect(getByText('Test Content')).toBeTruthy()
+  })
+
+  it('renders child components when user exists but no roles specified', () => {
+    const { getByText } = render(
+      <AuthWrapper
+        userStore={
+          {
+            user: FactoryUser({
+              userRoles: ['admin'],
+            }),
+          } as UserStore
+        }
+        roleRequired={[]}
       >
         <div>Test Content</div>
       </AuthWrapper>,
@@ -28,7 +64,7 @@ describe('AuthWrapper', () => {
         userStore={
           {
             user: FactoryUser({
-              userRoles: [],
+              userRoles: ['admin'],
             }),
           } as UserStore
         }
@@ -40,6 +76,4 @@ describe('AuthWrapper', () => {
     )
     expect(getByText('Fallback Content')).toBeTruthy()
   })
-
-  // More tests for other scenarios...
 })

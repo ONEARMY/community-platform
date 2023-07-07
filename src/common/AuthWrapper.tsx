@@ -11,61 +11,63 @@ import { SITE, DEV_SITE_ROLE } from 'src/config/config'
 
 interface IProps {
   userStore?: UserStore
-  roleRequired?: UserRole
+  roleRequired?: UserRole | UserRole[]
   fallback?: React.ReactNode
   /** Optional additional user IDs that have admin rights (e.g. content creators) */
   additionalAdmins?: string[]
+  children: React.ReactNode
 }
-interface IState {}
+
 @inject('userStore')
 @observer
-export class AuthWrapper extends React.Component<IProps, IState> {
-  isUserAuthorized() {
-    const { user } = this.props.userStore!
-    const { additionalAdmins } = this.props
-
-    // provide access to named users
-    if (additionalAdmins && user?._id && additionalAdmins.includes(user?._id)) {
-      return true
-    }
-
-    const { roleRequired } = this.props
-    const userRoles = user?.userRoles || []
-
-    // If no role required just check if user is logged in
-    if (!roleRequired) {
-      return user ? true : false
-    }
-
-    // if running dev or preview site allow user-overridden permissions (ignoring db user role)
-    if (
-      process.env.NODE_ENV !== 'test' &&
-      (SITE === 'dev_site' || SITE === 'preview')
-    ) {
-      if (DEV_SITE_ROLE) {
-        return DEV_SITE_ROLE === roleRequired
-      }
-    }
-    // otherwise use logged in user profile values
-    if (user) {
-      if (roleRequired) {
-        return userRoles.includes(roleRequired)
-      } else {
-        return true
-      }
-    }
-    return false
-  }
-
+export class AuthWrapper extends React.Component<IProps> {
   render() {
-    const isAuthorized = this.isUserAuthorized()
-    const fallback = this.props.fallback || null
-    const children =
-      this.props.roleRequired === 'beta-tester' ? (
-        <div className="beta-tester-feature">{this.props.children}</div>
+    const { userStore, roleRequired, additionalAdmins, children, fallback } = this.props
+    const isAuthorized = isUserAuthorized(
+      userStore?.user,
+      roleRequired,
+      additionalAdmins,
+    )
+    const childElements =
+      roleRequired === 'beta-tester' ? (
+        <div className="beta-tester-feature">{children}</div>
       ) : (
-        this.props.children
+        children
       )
-    return isAuthorized === true ? children : fallback
+    return isAuthorized === true ? childElements : fallback || null;
   }
+}
+
+const isUserAuthorized = (user, roleRequired, additionalAdmins) => {
+  // provide access to named users
+  if (additionalAdmins && user?._id && additionalAdmins.includes(user?._id)) {
+    return true
+  }
+
+  const userRoles = user?.userRoles || []
+
+  // If no role required just check if user is logged in
+  if (!roleRequired || roleRequired.length === 0) {
+    return user ? true : false
+  }
+
+  // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
+  if (
+    process.env.NODE_ENV !== 'test' &&
+    (SITE === 'dev_site' || SITE === 'preview')
+  ) {
+    if (DEV_SITE_ROLE) {
+      return DEV_SITE_ROLE === roleRequired
+    }
+  }
+  // otherwise use logged in user profile values
+  if (user && roleRequired) {
+    const rolesRequired = Array.isArray(roleRequired)
+      ? roleRequired
+      : [roleRequired]
+
+    return userRoles.some((role) => rolesRequired.includes(role))
+  }
+
+  return false
 }

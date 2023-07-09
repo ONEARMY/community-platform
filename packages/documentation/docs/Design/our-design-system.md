@@ -18,14 +18,20 @@ We're looking for volunteers in either mission, so whether you love mocking up n
 
 ## Figma
 
-We have an organization in Figma named ONE ARMY with one project for Community Platform, and within that project is one file named [ONE ARMY Community Platform](https://www.figma.com/file/nPDwFo0Ee4wcHvtnEGtAu9/ONE-ARMY-Community-Platform). In this file you'll find pages for the following:
+
+We have an organization in Figma named ONE ARMY with one project for Community Platform, and within that project is one file named [ONE ARMY Community Platform PUBLIC](https://www.figma.com/file/nPDwFo0Ee4wcHvtnEGtAu9/ONE-ARMY-Community-Platform). In this file you'll find pages for the following:
+
 
 1. Design System
 2. Page Mockups
 3. Features under development, denoted with a number
 4. Empty slots
 
+<iframe width="100%" height="450" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FnPDwFo0Ee4wcHvtnEGtAu9%2FONE-ARMY-Community-Platform-PUBLIC%3Ftype%3Ddesign%26mode%3Ddesign%26t%3DR0gwaHMw71Cbi3nx-1" allowfullscreen></iframe>
+
 Figma at time of writing has a peculiar limitation on Free Team Projects, on the number of pages you can have in a file. We were able to keep all of the pages we had in our file when we migrated though, so we're consolidating our designs to a few pages to be able to make the most of our time in the free tier. Please please do not delete any empty slot pages if you're editing the file 🙏🏻.
+
+** Have a look at our [FIGMA file](https://www.figma.com/file/nPDwFo0Ee4wcHvtnEGtAu9/ONE-ARMY-Community-Platform)**
 
 ## UI Kit in Storybook
 

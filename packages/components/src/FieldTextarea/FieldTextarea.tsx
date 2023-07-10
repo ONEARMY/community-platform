@@ -1,15 +1,17 @@
+import { useState } from 'react'
 import type { FieldRenderProps } from 'react-final-form'
+import { Textarea, Text } from 'theme-ui'
+import { CharacterCount } from '../CharacterCount/CharacterCount'
 
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
 export interface Props extends FieldProps {
   // additional fields intending to pass down
   disabled?: boolean
   children?: React.ReactNode
+  showCharacterCount?: boolean
   'data-cy'?: string
   customOnBlur?: (event: any) => void
 }
-
-import { Textarea, Text } from 'theme-ui'
 
 const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
@@ -28,28 +30,49 @@ export const FieldTextarea = ({
   disabled,
   modifiers,
   customOnBlur,
+  minLength = 0,
+  maxLength,
+  showCharacterCount,
   ...rest
-}: Props) => (
-  <>
-    <Textarea
-      disabled={disabled}
-      variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
-      {...input}
-      {...rest}
-      onBlur={(e) => {
-        if (modifiers) {
-          e.target.value = processInputModifiers(e.target.value, modifiers)
-          input.onChange(e)
-        }
-        if (customOnBlur) {
-          customOnBlur(e)
-        }
-        input.onBlur()
-      }}
-    />
+}: Props) => {
+  const [curLength, setLength] = useState<number>(input?.value?.length ?? 0)
 
-    {meta.error && meta.touched && (
-      <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>{meta.error}</Text>
-    )}
-  </>
-)
+  return (
+    <>
+      <Textarea
+        disabled={disabled}
+        variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
+        {...input}
+        {...rest}
+        onBlur={(e) => {
+          if (modifiers) {
+            e.target.value = processInputModifiers(e.target.value, modifiers)
+            input.onChange(e)
+          }
+          if (customOnBlur) {
+            customOnBlur(e)
+          }
+          input.onBlur()
+        }}
+        onChange={(ev) => {
+          showCharacterCount && setLength(ev.target.value.length)
+          input.onChange(ev)
+        }}
+      />
+
+      {meta.error && meta.touched && (
+        <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
+          {meta.error}
+        </Text>
+      )}
+
+      {showCharacterCount && maxLength && (meta.touched || meta.dirty) && (
+        <CharacterCount
+          minSize={minLength}
+          maxSize={maxLength}
+          currentSize={curLength}
+        />
+      )}
+    </>
+  )
+}

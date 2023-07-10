@@ -8,7 +8,11 @@ import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { required } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { HOWTO_MAX_LENGTH, HOWTO_TITLE_MAX_LENGTH } from '../../constants'
+import {
+  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
+  HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
+  HOWTO_TITLE_MAX_LENGTH,
+} from '../../constants'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -64,6 +68,30 @@ class HowtoStep extends PureComponent<IProps, IState> {
       return urlValid ? null : 'Please provide a valid YouTube Url'
     }
     return images[0] ? null : 'Include either images or a video'
+  }
+
+  /**
+   * Ensure that the How to description meets the following criteria:
+   * - required
+   * - minimum character length of 100 characters
+   * - maximum character length of 700 characters
+   *
+   * @param value - How to step description field value
+   */
+  validateDescription(value: string): string | null {
+    if (!value) {
+      return 'Make sure this field is filled correctly'
+    }
+
+    if (value.length < 100) {
+      return `Descriptions must be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`
+    }
+
+    if (value.length > 700) {
+      return `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`
+    }
+
+    return null
   }
 
   render() {
@@ -158,15 +186,17 @@ class HowtoStep extends PureComponent<IProps, IState> {
             </Label>
             <Field
               name={`${step}.text`}
-              placeholder="Explain what you are doing in this step. If it gets too long, consider breaking it into multiple steps (max 700 characters)"
-              maxLength={HOWTO_MAX_LENGTH}
+              placeholder={`Explain what you are doing in this step. If it gets too long, consider breaking it into multiple steps (${HOWTO_STEP_DESCRIPTION_MIN_LENGTH}-${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters)`}
+              minLength={HOWTO_STEP_DESCRIPTION_MIN_LENGTH}
+              maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
               modifiers={{ capitalize: true }}
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
-              validate={required}
+              validate={this.validateDescription}
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
+              showCharacterCount
             />
           </Flex>
           <Label sx={_labelStyle} htmlFor={`${step}.text`}>

@@ -56,10 +56,11 @@ export const ImageGallery = (props: IProps) => {
     })
   }, [])
 
-  const setActive = (image: IUploadedFileMeta) => {
+  const setActive = (image: IUploadedFileMeta, imgIndex: number) => {
     setState({
       ...state,
       activeImage: image,
+      imgIndex: imgIndex,
     })
   }
 
@@ -101,7 +102,7 @@ export const ImageGallery = (props: IProps) => {
                 mb={3}
                 mt={4}
                 opacity={image === state.activeImage ? 1.0 : 0.5}
-                onClick={() => setActive(image)}
+                onClick={() => setActive(image, index)}
                 key={index}
               >
                 <Image

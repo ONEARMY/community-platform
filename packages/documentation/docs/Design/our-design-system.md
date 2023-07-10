@@ -18,9 +18,7 @@ We're looking for volunteers in either mission, so whether you love mocking up n
 
 ## Figma
 
-
 We have an organization in Figma named ONE ARMY with one project for Community Platform, and within that project is one file named [ONE ARMY Community Platform PUBLIC](https://www.figma.com/file/nPDwFo0Ee4wcHvtnEGtAu9/ONE-ARMY-Community-Platform). In this file you'll find pages for the following:
-
 
 1. Design System
 2. Page Mockups

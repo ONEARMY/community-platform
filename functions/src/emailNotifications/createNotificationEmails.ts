@@ -10,7 +10,6 @@ const getUserEmail = async (uid: string): Promise<string | null> => {
     const { email } = await firebaseAuth.getUser(uid)
     return email
   } catch (error) {
-    console.error('Unable to fetch user email', { error, userId: uid })
     return null
   }
 }
@@ -34,7 +33,13 @@ const updateEmailedNotifications = async (
     return notification
   })
 
-  await user.ref.update({ notifications: updatedNotifications })
+  await user.ref
+    .update({ notifications: updatedNotifications })
+    .catch((error) => {
+      throw new Error(
+        `Error updating user notifications: ${JSON.stringify(error)}`,
+      )
+    })
 }
 
 // Create an email from a set of pending notifications for a user.
@@ -56,14 +61,12 @@ const handlePendingEmailEntry = async (
     .doc(userName)
     .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
 
-  const toUser = toUserDoc.data()
+  const toUser = toUserDoc.exists ? toUserDoc.data() : undefined
+  const toUserEmail = toUser ? await getUserEmail(toUser._authID) : undefined
 
-  const toUserEmail = await getUserEmail(toUser._authID)
-
-  if (!toUserDoc.exists || !toUserEmail) {
-    console.error('Cannot get user info', { userName })
+  if (!toUser || !toUserEmail) {
     await updateEmailedNotifications(toUserDoc, pendingNotifications, 'failed')
-    return
+    throw new Error(`Cannot get user ${userName}`)
   }
 
   try {
@@ -79,8 +82,10 @@ const handlePendingEmailEntry = async (
       sentEmailRef.id,
     )
   } catch (error) {
-    console.error('Error sending an email', { error, userName })
     await updateEmailedNotifications(toUserDoc, pendingNotifications, 'failed')
+    throw new Error(
+      `'Error sending an email to ${userName}: ${JSON.stringify(error)}`,
+    )
   }
 }
 

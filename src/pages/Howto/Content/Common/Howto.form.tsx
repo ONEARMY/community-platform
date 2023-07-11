@@ -463,6 +463,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         data-cy="files"
                                         component={FileInputField}
                                       />
+                                      <Text
+                                        color={'grey'}
+                                        mt={4}
+                                        sx={{ fontSize: 1 }}
+                                      >
+                                        Maximum file size 50MB
+                                      </Text>
                                     </Flex>
                                   </>
                                 )}

@@ -41,6 +41,17 @@ jest.mock('src/index', () => {
 })
 
 describe('Howto form', () => {
+  describe('Provides user information', () => {
+    it('shows maximum file size', async () => {
+      // Arrange
+      const formValues = FactoryHowto()
+      // Act
+      const wrapper = getWrapper(formValues, 'edit', {})
+
+      // Assert
+      expect(wrapper.getByText('Maximum file size 50MB')).toBeInTheDocument()
+    })
+  })
   describe('Invalid file warning', () => {
     it('Does not appear when submitting only fileLink', async () => {
       // Arrange

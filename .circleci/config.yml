@@ -57,7 +57,7 @@ aliases:
       # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
       command: |
         yarn install --immutable
-        yarn install --immutable
+        yarn install --immutable --immutable-cache
         if [ ! -f /home/circleci/.yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz

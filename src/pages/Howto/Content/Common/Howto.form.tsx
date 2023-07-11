@@ -438,7 +438,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         name="fileLink"
                                         data-cy="fileLink"
                                         component={FieldInput}
-                                        placeholder="Link to Gdrive, Dropbox, Grabcad etc"
+                                        placeholder="Link to Google Drive, Dropbox, Grabcad etc"
                                         isEqual={COMPARISONS.textInput}
                                         maxLength={MAX_LINK_LENGTH}
                                         validate={validateUrlAcceptEmpty}

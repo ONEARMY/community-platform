@@ -146,7 +146,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/browser-image-compression": "^1.0.9",
     "@types/flux-standard-action": "1.1.0",
-    "@types/jest": "^27.4.3",
+    "@types/jest": "^27.4.1",
     "@types/node": "18",
     "@types/pubsub-js": "^1.5.18",
     "@types/react": "17.0.2",

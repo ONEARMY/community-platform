@@ -110,7 +110,7 @@ describe('Howto form', () => {
 
       // add fileLink
       const fileLink = wrapper.getByPlaceholderText(
-        'Link to Gdrive, Dropbox, Grabcad etc',
+        'Link to Google Drive, Dropbox, Grabcad etc',
       )
       fireEvent.change(fileLink, { target: { value: '<http://www.test.com>' } })
 

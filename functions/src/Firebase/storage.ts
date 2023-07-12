@@ -5,7 +5,7 @@ import { getStorage } from 'firebase-admin/storage'
  *    Exports
  ************************************************************************/
 const FIREBASE_CONFIG = JSON.parse(
-  process.env.FIREBASE_CONFIG
+  process.env.FIREBASE_CONFIG,
 ) as IFirebaseConfig
 const storage = getStorage(firebaseApp)
 export const bucket = storage.bucket(FIREBASE_CONFIG.storageBucket)

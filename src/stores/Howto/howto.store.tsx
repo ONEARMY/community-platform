@@ -125,11 +125,14 @@ export class HowtoStore extends ModuleStore {
 
       // Change all UserReferences to mentions
       if (activeHowto) {
-        activeHowto.description = changeUserReferenceToPlainText(
-          activeHowto.description,
-        )
+        if (activeHowto.description) {
+          activeHowto.description = changeUserReferenceToPlainText(
+            activeHowto.description,
+          )
+        }
 
         activeHowto.steps.forEach((step) => {
+          if (!step.text) return
           step.text = changeUserReferenceToPlainText(step.text)
         })
       }
@@ -329,7 +332,7 @@ export class HowtoStore extends ModuleStore {
     })
 
     const { text: description, users } = await this.addUserReference(
-      howToItem.description,
+      howToItem.description || '',
     )
 
     const mentions = users.map((username) => ({
@@ -355,7 +358,7 @@ export class HowtoStore extends ModuleStore {
 
     const steps = await Promise.all(
       [...toJS(howToItem.steps || [])].map(async (step) => {
-        const { text, users } = await this.addUserReference(step.text)
+        const { text, users } = await this.addUserReference(step.text || '')
 
         users.forEach((username) => {
           mentions.push({
@@ -504,33 +507,21 @@ export class HowtoStore extends ModuleStore {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array
       // file and step image re-uploads handled in uploadFile script
-      let processedCover
-      if (
-        !Object.prototype.hasOwnProperty.call(values.cover_image, 'downloadUrl')
-      ) {
-        processedCover = await this.uploadFileToCollection(
-          values.cover_image,
-          COLLECTION_NAME,
-          id,
-        )
-      } else {
-        processedCover = values.cover_image as IUploadedFileMeta
-      }
-
+      const cover_image = await this.setCoverImage(values, id)
       this.updateUploadStatus('Cover')
-      const processedSteps = await this.processSteps(values.steps, id)
+
+      const stepValues = values.steps || []
+      const steps = await this.processSteps(stepValues, id)
       this.updateUploadStatus('Step Images')
       // upload files
-      const processedFiles = await this.uploadCollectionBatch(
+      const files = await this.uploadCollectionBatch(
         values.files as File[],
         COLLECTION_NAME,
         id,
       )
       this.updateUploadStatus('Files')
-      // populate DB
-      // redefine howTo based on processing done above (should match stronger typing)
-      const userCountry = getUserCountry(user)
 
+      // populate DB
       // create previousSlugs based on available slug or title
       const previousSlugs: string[] = []
       if (values.slug) {
@@ -540,31 +531,43 @@ export class HowtoStore extends ModuleStore {
         previousSlugs.push(titleToSlug)
       }
 
-      const howTo: IHowto = {
-        mentions: [],
-        previousSlugs,
-        ...values,
-        comments,
+      // populate DB
 
-        _createdBy: values._createdBy ? values._createdBy : user.userName,
-        cover_image: processedCover,
-        steps: processedSteps,
-        fileLink: values.fileLink ?? '',
-        files: processedFiles,
-        moderation: values.moderation
-          ? values.moderation
-          : 'awaiting-moderation',
-        // Avoid replacing user flag on admin edit
-        creatorCountry:
-          (values._createdBy && values._createdBy === user.userName) ||
-          !values._createdBy
-            ? userCountry
-            : values.creatorCountry
-            ? values.creatorCountry
-            : '',
+      const {
+        description,
+        difficulty_level,
+        moderation,
+        slug,
+        tags,
+        time,
+        title,
+      } = values
+      const _createdBy = values._createdBy ? values._createdBy : user.userName
+      const creatorCountry = this.setCreatorCountry(user, values)
+      const fileLink = values.fileLink ?? ''
+      const mentions = (values as IHowtoDB)?.mentions ?? []
+      const total_downloads =
+        files && !values['total_downloads'] ? 0 : values['total_downloads']
+
+      const howTo: IHowto = {
+        _createdBy,
+        comments,
+        creatorCountry,
+        description,
+        fileLink,
+        files,
+        mentions,
+        moderation,
+        previousSlugs,
+        slug,
+        steps,
+        title,
+        total_downloads,
+        ...(cover_image ? { cover_image } : {}),
+        ...(difficulty_level ? { difficulty_level } : {}),
+        ...(tags ? { tags } : {}),
+        ...(time ? { time } : {}),
       }
-      if (processedFiles && !howTo['total_downloads'])
-        howTo['total_downloads'] = 0
 
       logger.debug('populating database', howTo)
       // set the database document
@@ -606,6 +609,30 @@ export class HowtoStore extends ModuleStore {
       })
     }
     return stepsWithImgMeta
+  }
+
+  private setCreatorCountry(user, values) {
+    const { creatorCountry, _createdBy } = values
+    const userCountry = getUserCountry(user)
+
+    return (_createdBy && _createdBy === user.userName) || !_createdBy
+      ? userCountry
+      : creatorCountry
+      ? creatorCountry
+      : ''
+  }
+
+  private async setCoverImage(
+    { cover_image }: IHowtoFormInput | IHowto,
+    id: string,
+  ) {
+    if (!cover_image) return undefined
+
+    if (!Object.prototype.hasOwnProperty.call(cover_image, 'downloadUrl')) {
+      return await this.uploadFileToCollection(cover_image, COLLECTION_NAME, id)
+    } else {
+      return cover_image as IUploadedFileMeta
+    }
   }
 
   @computed

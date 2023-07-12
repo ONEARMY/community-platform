@@ -28,6 +28,11 @@ interface IProps {
   images: IUploadedFileMeta[]
   onDelete: (index: number) => void
   moveStep: (indexfrom: number, indexTo: number) => void
+  validationWrapper: (
+    value: string,
+    allValues: any,
+    validator: (string) => void,
+  ) => void
 }
 interface IState {
   showDeleteModal: boolean
@@ -81,7 +86,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
    * @param value - How to step description field value
    */
   render() {
-    const { step, index } = this.props
+    const { step, index, validationWrapper } = this.props
     const _labelStyle = {
       fontSize: 2,
       marginBottom: 2,
@@ -164,10 +169,13 @@ class HowtoStep extends PureComponent<IProps, IState> {
               placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
               minLength={HOWTO_TITLE_MIN_LENGTH}
-              validate={composeValidators(
-                required,
-                minValue(HOWTO_TITLE_MIN_LENGTH),
-              )}
+              validate={(value, allValues) =>
+                validationWrapper(
+                  value,
+                  allValues,
+                  composeValidators(required, minValue(HOWTO_TITLE_MIN_LENGTH)),
+                )
+              }
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
               showCharacterCount
@@ -187,10 +195,16 @@ class HowtoStep extends PureComponent<IProps, IState> {
               modifiers={{ capitalize: true }}
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
-              validate={composeValidators(
-                required,
-                minValue(HOWTO_STEP_DESCRIPTION_MIN_LENGTH),
-              )}
+              validate={(value, allValues) =>
+                validationWrapper(
+                  value,
+                  allValues,
+                  composeValidators(
+                    required,
+                    minValue(HOWTO_STEP_DESCRIPTION_MIN_LENGTH),
+                  ),
+                )
+              }
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
               showCharacterCount
@@ -237,7 +251,13 @@ class HowtoStep extends PureComponent<IProps, IState> {
               data-cy="step-videoUrl"
               component={FieldInput}
               placeholder="https://youtube.com/watch?v="
-              validate={(url) => this.validateMedia(url)}
+              validate={(value, allValues) =>
+                validationWrapper(
+                  value,
+                  allValues,
+                  this.validateMedia.bind(this),
+                )
+              }
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
             />

@@ -18,12 +18,13 @@ import type { UserStore } from '../../User/user.store'
  * }>
  */
 export const changeMentionToUserReference = async (
-  text: string,
+  text: string | undefined,
   userStore: UserStore,
 ): Promise<{
   text: string
   mentionedUsers: string[]
 }> => {
+  text = text || ''
   const mentions = text.match(/\B@[​a-z0-9_-]+/g)
   const mentionedUsers = new Set<string>()
 

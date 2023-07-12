@@ -4,6 +4,8 @@ import {
   HOWTO_TITLE_MIN_LENGTH,
   HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
+const creatorEmail = 'howto_creator@test.com'
+const creatorPassword = 'test1234'
 
 describe('[How To]', () => {
   beforeEach(() => {
@@ -102,6 +104,35 @@ describe('[How To]', () => {
     cy.get('[data-cy=confirm]').click()
   }
 
+  describe('[Draft a how-to]', () => {
+    it('[By Authenticated]', () => {
+      cy.login(creatorEmail, creatorPassword)
+      cy.wait(2000)
+      cy.step('Access the create-how-to')
+      cy.get('[data-cy=create]').click()
+
+      cy.step('Add required title')
+      cy.get('[data-cy=intro-title]').type('Quick draft').blur({ force: true })
+
+      cy.step('Cannot be published')
+      cy.get('[data-cy=submit]').click()
+      cy.contains('Make sure this field is filled correctly').should('exist')
+
+      cy.step('Draft was created')
+      cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
+        .click()
+        .url()
+        .should('include', `/how-to/quick-draft`)
+      cy.get('[data-cy=moderationstatus-draft]').should('exist')
+
+      // Then add everything so that it could be submitted, but save of draft again
+
+      // Then submit and check again
+
+    })
+  })
+
   describe('[Create a how-to]', () => {
     const expected = {
       _createdBy: 'howto_creator',
@@ -173,7 +204,7 @@ describe('[How To]', () => {
     }
 
     it('[By Authenticated]', () => {
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login(creatorEmail, creatorPassword)
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
@@ -254,7 +285,7 @@ describe('[How To]', () => {
       stub.returns(false)
       cy.on('window:confirm', stub)
 
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login(creatorEmail, creatorPassword)
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
@@ -380,7 +411,7 @@ describe('[How To]', () => {
     it('[By Authenticated]', () => {
       cy.step('Prevent non-owner access to edit howto')
       cy.visit('/how-to')
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login(creatorEmail, creatorPassword)
       cy.visit(editHowtoUrl)
       // user should be redirect to how-to page
       cy.location('pathname').should('eq', howtoUrl)

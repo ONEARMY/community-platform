@@ -20,9 +20,11 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
-  required,
-  minValue,
   composeValidators,
+  minValue,
+  required,
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
   validateTitle,
 } from 'src/utils/validators'
 import { PostingGuidelines } from './PostingGuidelines'
@@ -133,12 +135,8 @@ const ResearchForm = observer((props: IProps) => {
         }}
         initialValues={props.formValues}
         mutators={{
-          setIsDraftTrue: (_, state, utils) => {
-            utils.changeValue(state, 'isDraft', () => true)
-          },
-          setIsDraftFalse: (_, state, utils) => {
-            utils.changeValue(state, 'isDraft', () => false)
-          },
+          setAllowDraftSaveFalse,
+          setAllowDraftSaveTrue,
           ...arrayMutators,
         }}
         validateOnBlur
@@ -321,7 +319,7 @@ const ResearchForm = observer((props: IProps) => {
                   <Button
                     data-cy={'draft'}
                     onClick={() => {
-                      form.mutators.setIsDraftTrue()
+                      form.mutators.setAllowDraftSaveTrue()
                       setSubmissionHandler({ shouldSubmit: true, draft: true })
                     }}
                     mt={[0, 0, 3]}
@@ -340,7 +338,7 @@ const ResearchForm = observer((props: IProps) => {
                     large
                     data-cy={'submit'}
                     onClick={() => {
-                      form.mutators.setIsDraftFalse()
+                      form.mutators.setAllowDraftSaveFalse()
                       setSubmissionHandler({
                         shouldSubmit: true,
                         draft: false,

@@ -29,11 +29,13 @@ import { PostingGuidelines } from './PostingGuidelines'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { HowToSubmitStatus } from './SubmitStatus'
 import {
-  required,
-  validateUrlAcceptEmpty,
-  minValue,
   composeValidators,
+  minValue,
+  required,
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
   validateTitle,
+  validateUrlAcceptEmpty,
 } from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
@@ -205,12 +207,8 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           }}
           initialValues={formValues}
           mutators={{
-            setAllowDraftSaveTrue: (_, state, utils) => {
-              utils.changeValue(state, 'allowDraftSave', () => true)
-            },
-            setAllowDraftSaveFalse: (_, state, utils) => {
-              utils.changeValue(state, 'allowDraftSave', () => false)
-            },
+            setAllowDraftSaveTrue,
+            setAllowDraftSaveFalse,
             ...arrayMutators,
           }}
           validateOnBlur
@@ -647,7 +645,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Box sx={{ display: ['none', 'none', 'block'] }}>
                       <PostingGuidelines />
                     </Box>
-                    <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+                    <Flex
+                      sx={{ flexDirection: 'column', alignItems: 'center' }}
+                    >
                       <Button
                         data-cy={'draft'}
                         onClick={() => {

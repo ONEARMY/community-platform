@@ -86,11 +86,20 @@ const addProtocolMutator = ([name], state, { changeValue }) => {
 const ensureExternalUrl = (url: string) =>
   typeof url === 'string' && url.indexOf('://') === -1 ? `https://${url}` : url
 
+const setAllowDraftSaveFalse = (_, state, utils) =>
+  utils.changeValue(state, 'allowDraftSave', () => false)
+
+const setAllowDraftSaveTrue = (_, state, utils) => {
+  utils.changeValue(state, 'allowDraftSave', () => true)
+}
+
 export {
   validateUrl,
   validateUrlAcceptEmpty,
   validateEmail,
   required,
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
   addProtocolMutator,
   ensureExternalUrl,
   maxValue,

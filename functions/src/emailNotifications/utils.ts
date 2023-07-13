@@ -6,7 +6,7 @@ import {
   PK_PROJECT_IMAGE,
   PP_PROJECT_NAME,
   PK_PROJECT_NAME,
-} from './consts'
+} from './constants'
 
 export const SITE_URL = CONFIG.deployment.site_url
 

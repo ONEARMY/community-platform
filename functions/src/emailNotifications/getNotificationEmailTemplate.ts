@@ -1,5 +1,5 @@
 import { INotification, IUserDB } from '../../../src/models'
-import { NOTIFICATION_LIST_IMAGE } from './consts'
+import { NOTIFICATION_LIST_IMAGE } from './constants'
 import prettier from 'prettier'
 import {
   getProjectImageSrc,

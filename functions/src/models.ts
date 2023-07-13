@@ -12,24 +12,24 @@ import * as functions from 'firebase-functions'
 import type {
   DBDoc,
   IDBEndpoint,
-  IEventDB,
   IHowtoDB,
   IMapPin,
   IModerable,
   IPendingEmails,
   IResearchDB,
   IUserDB,
+  INotification,
 } from '../../src/models'
 export {
   DBDoc,
   IDBEndpoint,
-  IEventDB,
   IHowtoDB,
   IUserDB,
   IMapPin,
   IModerable,
   IResearchDB,
   IPendingEmails,
+  INotification,
 }
 
 import { dbEndpointSubcollections, generateDBEndpoints } from 'oa-shared'

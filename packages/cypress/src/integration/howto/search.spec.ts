@@ -12,8 +12,6 @@ describe('[How To]', () => {
       cy.url().should('include', 'search=raincoat')
       cy.url().should('include', 'category=howto_testing')
 
-      cy.get('[data-cy=page-link]').contains('Events').click()
-
       cy.get('[data-cy=page-link]').contains('How-to').click()
 
       cy.get('[data-cy=how-to-search-box]')

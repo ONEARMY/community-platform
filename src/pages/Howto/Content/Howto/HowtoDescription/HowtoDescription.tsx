@@ -100,6 +100,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       return ''
     }
   }
+  const dateCreatedText = ` | Published on ${format(
+    new Date(howto._created),
+    'DD-MM-YYYY',
+  )}`
 
   useEffect(() => {
     if (!didInit) {
@@ -143,16 +147,17 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               Back
             </Button>
           </Link>
-          {props.votedUsefulCount !== undefined && (
-            <Box>
-              <UsefulStatsButton
-                votedUsefulCount={props.votedUsefulCount}
-                hasUserVotedUseful={props.hasUserVotedUseful}
-                isLoggedIn={loggedInUser ? true : false}
-                onUsefulClick={props.onUsefulClick}
-              />
-            </Box>
-          )}
+          {props.votedUsefulCount !== undefined &&
+            howto.moderation === 'accepted' && (
+              <Box>
+                <UsefulStatsButton
+                  votedUsefulCount={props.votedUsefulCount}
+                  hasUserVotedUseful={props.hasUserVotedUseful}
+                  isLoggedIn={loggedInUser ? true : false}
+                  onUsefulClick={props.onUsefulClick}
+                />
+              </Box>
+            )}
           {viewCount ? (
             <AuthWrapper roleRequired="beta-tester">
               <Box>
@@ -192,34 +197,51 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Link>
           )}
         </Flex>
-        <Box mt={4} mb={2}>
-          <Username
-            user={{
-              userName: howto._createdBy,
-              countryCode: howto.creatorCountry,
-            }}
-            isVerified={isUserVerified(howto._createdBy)}
-          />
-          <Text
-            variant="auxiliary"
-            sx={{
-              color: 'lightgrey',
-              '&!important': {
-                color: 'lightgrey',
-              },
-            }}
-            mt={1}
-            mb={2}
-          >
-            {dateContentModifiedText(howto)}
-          </Text>
-          <Heading mt={2} mb={1}>
-            {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-            {capitalizeFirstLetter(howto.title)}
-          </Heading>
-          <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
-            <LinkifyText>{howto.description}</LinkifyText>
-          </Text>
+        <Box mt={3} mb={2}>
+          <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
+            <Flex sx={{ flexDirection: 'column' }}>
+              <Flex sx={{ alignItems: 'center' }}>
+                <Username
+                  user={{
+                    userName: howto._createdBy,
+                    countryCode: howto.creatorCountry,
+                  }}
+                  isVerified={isUserVerified(howto._createdBy)}
+                />
+                <Text
+                  variant="auxiliary"
+                  sx={{
+                    marginTop: 2,
+                    marginBottom: 2,
+                  }}
+                >
+                  {dateCreatedText}
+                </Text>
+              </Flex>
+
+              <Text
+                variant="auxiliary"
+                sx={{
+                  color: 'lightgrey',
+                  '&!important': {
+                    color: 'lightgrey',
+                  },
+                }}
+                mt={1}
+                mb={2}
+              >
+                {dateContentModifiedText(howto)}
+              </Text>
+
+              <Heading mt={2} mb={1}>
+                {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+                {capitalizeFirstLetter(howto.title)}
+              </Heading>
+              <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+                <LinkifyText>{howto.description}</LinkifyText>
+              </Text>
+            </Flex>
+          </Flex>
         </Box>
 
         <Flex mt="4">

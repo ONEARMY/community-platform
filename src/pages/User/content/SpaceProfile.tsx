@@ -5,18 +5,13 @@ import type {
   PlasticTypeLabel,
 } from 'src/models/userPreciousPlastic.models'
 
-import { Heading, Box, Image, Flex, Paragraph } from 'theme-ui'
+import { Box, Container, Flex, Heading, Image, Paragraph } from 'theme-ui'
 // import slick and styles
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
-import styled from '@emotion/styled'
 
 import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
 import UserCreatedDocuments from './UserCreatedDocuments'
-
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -47,83 +42,35 @@ interface IProps {
   docs: UserCreatedDocs | undefined
 }
 
-const MobileBadge = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 0;
+const SliderImage = (props: IBackgroundImageProps) => (
+  <Box
+    sx={{
+      backgroundImage: `url(${props.bgImg})`,
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      height: ['300px', '300px', '300px', '500px'],
+      width: '100%',
+    }}
+    {...props}
+  ></Box>
+)
 
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    align-items: center;
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[2]}) {
-    margin-top: -50%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-`
-
-const ProfileWrapper = styled(Box)`
-  /* margin-top: 40px;
-  margin-bottom: 40px; */
-  border: 2px solid black;
-  border-radius: 10px;
-  overflow: hidden;
-  max-width: 1000px;
-  width: 100%;
-  align-self: center;
-`
-
-const ProfileWrapperCarousel = styled.div`
-  line-height: 0;
-`
-
-const OpeningHours = styled.p`
-  color: ${theme.colors.grey};
-  margin-bottom: 5px;
-  margin-top: 5px;
-`
-
-const PlasticType = styled.div`
-  width: 50px;
-  margin-right: 15px;
-
-  &:last-child {
-    margin-right: 0;
-  }
-`
-
-const SliderImage = styled.div`
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  /* padding-bottom: 52%; */
-  min-height: 300px;
-  height: 300px;
-
-  ${(props: IBackgroundImageProps) =>
-    props.bgImg &&
-    `
-    background-image: url(${props.bgImg});
-  `}
-
-  @media only screen and (min-width: ${(props) => props.theme.breakpoints[2]}) {
-    height: 500px;
-  }
-`
-
-const MachineExperienceTab = styled.div`
-  display: inline-block;
-  padding: 10px;
-  border-style: solid;
-  border-width: 1px;
-  border-color: ${theme.colors.background};
-  border-radius: 5px;
-  background-color: ${theme.colors.background};
-  margin-right: 10px;
-`
+const MobileBadge = ({ children }) => (
+  <Flex
+    sx={{
+      alignItems: ['left', 'left', 'center'],
+      flexDirection: 'column',
+      marginBottom: 0,
+      marginLeft: [0, 0, 'auto'],
+      marginRight: [0, 0, 'auto'],
+      marginTop: [0, 0, '-50%'],
+      position: 'relative',
+    }}
+  >
+    {children}
+  </Flex>
+)
 
 const sliderSettings = {
   dots: false,
@@ -132,20 +79,10 @@ const sliderSettings = {
   slidesToScroll: 1,
   adaptiveHeight: false,
   nextArrow: (
-    <Icon
-      glyph="chevron-right"
-      color={theme.colors.white}
-      size={60}
-      marginRight="4px"
-    />
+    <Icon glyph="chevron-right" color="white" size={60} marginRight="4px" />
   ),
   prevArrow: (
-    <Icon
-      glyph="chevron-left"
-      color={theme.colors.white}
-      size={60}
-      marginRight="4px"
-    />
+    <Icon glyph="chevron-left" color="white" size={60} marginRight="4px" />
   ),
 }
 
@@ -176,12 +113,22 @@ const renderPlasticTypes = (plasticTypes: Array<PlasticTypeLabel>) => {
   return (
     <div>
       <h4>We collect the following plastic types:</h4>
-      <Flex sx={{ flexWrap: 'wrap' }}>
+      <Flex
+        sx={{
+          flexWrap: 'wrap',
+          columnGap: '15px',
+        }}
+      >
         {plasticTypes.map((plasticType) => {
           return (
-            <PlasticType key={plasticType}>
+            <Box
+              key={plasticType}
+              sx={{
+                width: '50px',
+              }}
+            >
               {renderIcon(plasticType)}
-            </PlasticType>
+            </Box>
           )
         })}
       </Flex>
@@ -194,9 +141,9 @@ const renderOpeningHours = (openingHours: Array<IOpeningHours>) => (
     <h4>We're open on:</h4>
     {openingHours.map((openingObj) => {
       return (
-        <OpeningHours key={openingObj.day}>
+        <p key={openingObj.day}>
           {openingObj.day}: {openingObj.openFrom} - {openingObj.openTo}
-        </OpeningHours>
+        </p>
       )
     })}
   </div>
@@ -207,9 +154,21 @@ const renderMachineBuilderXp = (machineBuilderXp: Array<IMAchineBuilderXp>) => (
     <h4>We offer the following services:</h4>
     {machineBuilderXp.map((machineExperience, index) => {
       return (
-        <MachineExperienceTab key={`machineXp-${index}`}>
+        <Box
+          sx={{
+            backgroundColor: 'background',
+            borderColor: 'background',
+            borderRadius: '5px',
+            borderStyle: 'solid',
+            borderWidth: '1px',
+            display: 'inline-block',
+            marginRight: '10px',
+            padding: '10px',
+          }}
+          key={`machineXp-${index}`}
+        >
           {machineExperience}
-        </MachineExperienceTab>
+        </Box>
       )
     })}
   </>
@@ -246,10 +205,20 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
     user.location?.countryCode || user.country?.toLowerCase() || undefined
 
   return (
-    <ProfileWrapper mt={4} mb={6} data-cy="SpaceProfile">
-      <ProfileWrapperCarousel>
+    <Container
+      mt={4}
+      mb={6}
+      sx={{
+        border: '2px solid black',
+        borderRadius: '10px',
+        overflow: 'hidden',
+        maxWidth: '1000px',
+      }}
+      data-cy="SpaceProfile"
+    >
+      <Box sx={{ lineHeight: 0 }}>
         <Slider {...sliderSettings}>{coverImage}</Slider>
-      </ProfileWrapperCarousel>
+      </Box>
       <Flex
         sx={{
           px: [2, 4],
@@ -329,7 +298,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 isVerified={stats.verified}
                 isSupporter={!!user.badges?.supporter}
                 howtoCount={docs?.howtos.length || 0}
-                eventCount={docs?.events.length || 0}
                 usefulCount={stats.totalUseful}
                 researchCount={docs?.research.length || 0}
               />
@@ -338,6 +306,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
         </Box>
       </Flex>
       <UserCreatedDocuments docs={docs} />
-    </ProfileWrapper>
+    </Container>
   )
 }

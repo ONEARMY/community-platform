@@ -2,7 +2,6 @@ import { AdminStore } from './Admin/admin.store'
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
 import { DatabaseV2 } from './databaseV2'
-import { EventStore } from './Events/events.store'
 import { HowtoStore } from './Howto/howto.store'
 import { MapsStore } from './Maps/maps.store'
 import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
@@ -35,7 +34,6 @@ const stores = (rootStore: RootStore) => {
     researchCategoriesStore: new ResearchCategoriesStore(rootStore),
     platformStore: new PlatformStore(rootStore),
     mobileMenuStore: new MobileMenuStore(rootStore),
-    eventStore: new EventStore(rootStore),
     mapsStore: new MapsStore(rootStore),
     adminStore: new AdminStore(rootStore),
     themeStore: new ThemeStore(),
@@ -52,7 +50,6 @@ export interface IStores {
   researchCategoriesStore: ResearchCategoriesStore
   platformStore: PlatformStore
   mobileMenuStore: MobileMenuStore
-  eventStore: EventStore
   mapsStore: MapsStore
   adminStore: AdminStore
   themeStore: ThemeStore

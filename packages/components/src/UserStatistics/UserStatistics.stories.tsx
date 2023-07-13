@@ -17,7 +17,6 @@ Default.args = {
   isVerified: true,
   isSupporter: true,
   howtoCount: 10,
-  eventCount: 4,
   usefulCount: 20,
   researchCount: 2,
 }

@@ -60,29 +60,4 @@ describe('UserStatistics', () => {
 
     expect(researchCount).toHaveTextContent(/^Research: 2$/)
   })
-
-  it('renders event count when eventCount is provided', () => {
-    const { getByTestId } = render(
-      <Default {...(Default.args as UserStatisticsProps)} />,
-    )
-    const eventCount = getByTestId('event-stat')
-
-    expect(eventCount).toHaveTextContent('Events: 4')
-  })
-
-  it('renders nothing if there are no stats', () => {
-    const { container } = render(
-      <Default
-        howtoCount={0}
-        eventCount={0}
-        usefulCount={0}
-        researchCount={0}
-        isVerified={false}
-        userName="Test User"
-        isSupporter={false}
-      />,
-    )
-
-    expect(container).toBeEmptyDOMElement()
-  })
 })

@@ -10,7 +10,7 @@ import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_l
 export const colors = {
   ...baseTheme.colors,
   primary: 'green',
-  accent: { base: '#E95628', hover: 'hsl(14, 81%, 43%)' },
+  accent: { base: '#F82F03', hover: 'hsl(14, 81%, 63%)' },
 }
 
 // cc - assume standard image widths are 4:3, however not clearly defined

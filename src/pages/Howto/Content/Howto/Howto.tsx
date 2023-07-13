@@ -112,11 +112,6 @@ export class Howto extends React.Component<
       return null
     }
 
-    /* Will be deprecated as part of https://github.com/ONEARMY/community-platform/issues/2407 */
-    const { userStore } = this.injected
-    userStore.updateUsefulHowTos(howtoId)
-    /* End of deprecation */
-
     this.store.toggleUsefulByUser(howtoId, loggedInUser?.userName)
     const hasUserVotedUseful = this.store.userVotedActiveHowToUseful
 
@@ -246,18 +241,20 @@ export class Howto extends React.Component<
               >
                 Leave a comment
               </Button>
-              <UsefulStatsButton
-                votedUsefulCount={this.store.votedUsefulCount}
-                hasUserVotedUseful={hasUserVotedUseful}
-                isLoggedIn={!!loggedInUser}
-                onUsefulClick={() => {
-                  this.onUsefulClick(
-                    howto._id,
-                    howto.slug,
-                    'ArticleCallToAction',
-                  )
-                }}
-              />
+              {howto.moderation === 'accepted' && (
+                <UsefulStatsButton
+                  votedUsefulCount={this.store.votedUsefulCount}
+                  hasUserVotedUseful={hasUserVotedUseful}
+                  isLoggedIn={!!loggedInUser}
+                  onUsefulClick={() => {
+                    this.onUsefulClick(
+                      howto._id,
+                      howto.slug,
+                      'ArticleCallToAction',
+                    )
+                  }}
+                />
+              )}
             </ArticleCallToAction>
           </Box>
           <HowToComments comments={activeHowToComments} />

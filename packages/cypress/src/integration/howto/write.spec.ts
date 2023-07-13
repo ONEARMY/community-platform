@@ -167,10 +167,7 @@ describe('[How To]', () => {
       ).should('exist')
 
       cy.step('Warn if title has less than minimum required characters')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('qwerty')
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
         `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
@@ -365,10 +362,7 @@ describe('[How To]', () => {
       ).should('not.exist')
 
       cy.step('Warn if title has less than minimum required characters')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('qwerty')
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
         `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')

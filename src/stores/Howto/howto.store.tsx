@@ -20,7 +20,6 @@ import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
-  formatLowerNoSpecial,
   hasAdminRights,
   needsModeration,
   randomID,
@@ -374,10 +373,6 @@ export class HowtoStore extends ModuleStore {
       }),
     )
 
-    if (howToItem.previousSlugs === undefined) {
-      howToItem.previousSlugs = []
-    }
-
     if (!howToItem.previousSlugs.includes(howToItem.slug)) {
       howToItem.previousSlugs.push(howToItem.slug)
     }
@@ -522,16 +517,6 @@ export class HowtoStore extends ModuleStore {
       this.updateUploadStatus('Files')
 
       // populate DB
-      // create previousSlugs based on available slug or title
-      const previousSlugs: string[] = []
-      if (values.slug) {
-        previousSlugs.push(values.slug)
-      } else if (values.title) {
-        const titleToSlug = formatLowerNoSpecial(values.title)
-        previousSlugs.push(titleToSlug)
-      }
-
-      // populate DB
 
       const {
         description,
@@ -546,6 +531,7 @@ export class HowtoStore extends ModuleStore {
       const creatorCountry = this.setCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
+      const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
       const total_downloads =
         files && !values['total_downloads'] ? 0 : values['total_downloads']
 

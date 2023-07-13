@@ -8,6 +8,7 @@ export const runtimeConfigTest: configVars = {
   },
   integrations: {
     discord_webhook: 'fake_discord_webhook',
+    discord_alert_channel_webhook: 'fake_discord_alert_channel_webhook',
     slack_webhook: 'fake_slack_webhook',
   },
   service: null as any,

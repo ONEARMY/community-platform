@@ -37,6 +37,7 @@ interface IAnalytics {
 interface IIntergrations {
   slack_webhook: string
   discord_webhook: string
+  discord_alert_channel_webhook: string
 }
 interface IDeployment {
   site_url: string

@@ -10,6 +10,7 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { TextNotificationProps } from 'oa-components'
 import { required } from 'src/utils/validators'
 import { Link } from 'react-router-dom'
+import { PasswordField } from 'src/common/Form/PasswordField'
 
 interface IFormValues {
   email: string
@@ -179,9 +180,8 @@ class SignInPage extends React.Component<IProps, IState> {
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="title">Password</Label>
-                              <Field
+                              <PasswordField
                                 name="password"
-                                type="password"
                                 data-cy="password"
                                 component={FieldInput}
                                 validate={required}

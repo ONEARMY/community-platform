@@ -3,9 +3,6 @@ import { Field } from 'react-final-form'
 import { Heading, Flex, Box, Text } from 'theme-ui'
 import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea } from 'oa-components'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { FieldArray } from 'react-final-form-arrays'
 import { ProfileLinkField } from './Fields/ProfileLink.field'
 import { FlexSectionContainer } from './elements'
@@ -45,8 +42,9 @@ export const CoverImages = ({
           height: '190px',
           width: '190px',
         }}
-        m="10px"
+        m="2"
         data-cy="cover-image"
+        data-testid="cover-image"
       >
         <Field
           hasText={false}
@@ -80,6 +78,7 @@ export const CoverImages = ({
                   }}
                   m="10px"
                   data-cy="cover-image"
+                  data-testid="cover-image"
                 >
                   <Field
                     hasText={false}
@@ -101,17 +100,14 @@ export const CoverImages = ({
       </FieldArray>
 
       <Box
-        bg={theme.colors.softblue}
         mt={2}
         p={2}
-        sx={{ width: '100%', borderRadius: '3px' }}
+        sx={{ width: '100%', borderRadius: '3px', background: 'softblue' }}
       >
         <Text sx={{ fontSize: 1 }}>
           The cover images are shown in your profile and helps us evaluate your
-          account.
-        </Text>
-        <Text sx={{ fontSize: 1 }}>
-          Make sure the first image shows your space. Best size is 1920x1080.
+          account. Make sure the first image shows your space. Best size is
+          1920x1080.
         </Text>
       </Box>
     </>

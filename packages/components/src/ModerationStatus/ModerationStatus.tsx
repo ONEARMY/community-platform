@@ -48,7 +48,7 @@ export const ModerationStatus = (props: Props) => {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
-        background: 'yellow.base',
+        background: 'accent.base',
         padding: 1,
         borderRadius: 1,
         borderBottomRightRadius: 1,

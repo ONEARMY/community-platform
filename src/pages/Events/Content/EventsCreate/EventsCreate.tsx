@@ -1,6 +1,3 @@
-/** @jsxImportSource theme-ui */
-
-
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
@@ -71,14 +68,13 @@ export class EventsCreate extends React.Component<IProps, IState> {
   get store() {
     return this.injected.eventStore
   }
-  
+
   public render() {
     const { formValues, isLocationSelected, selectedDate, isDigitalEvent } =
       this.state
 
     const shouldShowLocationError =
       !isDigitalEvent && isLocationSelected !== undefined && !isLocationSelected
-
     return (
       <Form
         onSubmit={(v) => {
@@ -138,7 +134,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             flexDirection: 'column',
                           }}
                         >
-                          <Label htmlFor='title'>Title of the event *</Label>
+                          <Label htmlFor="title">Title of the event *</Label>
                           <Field
                             id="title"
                             name="title"
@@ -189,7 +185,9 @@ export class EventsCreate extends React.Component<IProps, IState> {
                             px={2}
                             sx={{ width: '100%', flexDirection: 'column' }}
                           >
-                            <Label htmlFor="url">Link to your event *</Label>
+                            <Label htmlFor="url">
+                              Link to your event *
+                            </Label>
                             <Field
                               name="url"
                               data-cy="url"
@@ -243,7 +241,7 @@ export class EventsCreate extends React.Component<IProps, IState> {
                                 {shouldShowLocationError && (
                                   <Text
                                     mb="5px"
-                                    sx={{ fontSize: 1, color:'red'}}
+                                    sx={{ fontSize: 1, color: 'red' }}
                                   >
                                     Select a location for your event
                                   </Text>
@@ -286,7 +284,6 @@ export class EventsCreate extends React.Component<IProps, IState> {
                   </Flex>
                 </FormContainer>
               </Flex>
-
               {/* post guidelines container */}
               <Flex
                 sx={{

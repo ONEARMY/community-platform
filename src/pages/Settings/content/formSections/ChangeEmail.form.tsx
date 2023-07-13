@@ -3,6 +3,7 @@ import { Field, Form } from 'react-final-form'
 import { Button, FieldInput } from 'oa-components'
 import type { UserStore } from 'src/stores/User/user.store'
 import { Text, Flex, Label } from 'theme-ui'
+import { PasswordField } from 'src/common/Form/PasswordField'
 
 interface IFormValues {
   password?: string
@@ -98,10 +99,9 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
                     <Label htmlFor="oldPassword" sx={_labelStyle}>
                       Password :
                     </Label>
-                    <Field
+                    <PasswordField
                       name="password"
                       component={FieldInput}
-                      placeholder="password"
                       type="password"
                       autocomplete="off"
                       required

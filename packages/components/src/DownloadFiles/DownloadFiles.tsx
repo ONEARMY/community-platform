@@ -17,7 +17,7 @@ export const DownloadFiles = (props: DownloadFilesProps) => {
         p={2}
         mb={1}
         sx={{
-          background: 'yellow.base',
+          background: 'accent.base',
           border: '2px solid black',
           justifyContent: 'space-between',
           alignItems: 'center',

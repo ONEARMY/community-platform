@@ -89,7 +89,7 @@ const ResearchForm = observer((props: IProps) => {
   }, [submissionHandler])
 
   const onSubmit = async (formValues: IResearch.FormInput) => {
-    formValues.moderation = submissionHandler.draft ? 'draft' : 'accepted' // No moderation for researches for now
+    formValues.moderation = submissionHandler.draft ? 'draft' : 'awaiting-moderation' // No moderation for researches for now --> Now Change to awaiting-moderation
     await store.uploadResearch(formValues)
   }
 

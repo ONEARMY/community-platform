@@ -84,7 +84,7 @@ const handlePendingEmailEntry = async (
   } catch (error) {
     await updateEmailedNotifications(toUserDoc, pendingNotifications, 'failed')
     throw new Error(
-      `'Error sending an email to ${userName}: ${JSON.stringify(error)}`,
+      `Error sending an email to ${userName}: ${JSON.stringify(error)}`,
     )
   }
 }

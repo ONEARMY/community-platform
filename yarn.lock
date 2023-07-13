@@ -25335,6 +25335,9 @@ __metadata:
     workbox-streams: ^6.1.5
     workbox-window: ^6.1.5
     yup: ^0.32.9
+  dependenciesMeta:
+    cypress:
+      built: true
   languageName: unknown
   linkType: soft
 

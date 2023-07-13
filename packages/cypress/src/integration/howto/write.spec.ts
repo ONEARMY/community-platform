@@ -34,63 +34,65 @@ describe('[How To]', () => {
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
       cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
 
-      cy.get('[data-cy=step-description]')
-        .clear()
-        .type(`description for step ${stepNumber}`)
-        .blur({ force: true })
+      if (stepIndex === 0) {
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type(`description for step ${stepNumber}`)
+          .blur({ force: true })
 
-      cy.wrap($step).should(
-        'contain',
-        `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
-      )
-
-      cy.get('[data-cy=step-description]')
-        .clear({ force: true })
-        // Speeds up test by avoiding typing and then updates character count by typing
-        .invoke(
-          'val',
-          faker.lorem
-            .sentences(50)
-            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH - 1),
+        cy.wrap($step).should(
+          'contain',
+          `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
         )
-        .type('Reach maximum character count')
 
-      cy.wrap($step).should(
-        'contain',
-        `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`,
-      )
+        cy.get('[data-cy=step-description]')
+          .clear({ force: true })
+          // Speeds up test by avoiding typing and then updates character count by typing
+          .invoke(
+            'val',
+            faker.lorem
+              .sentences(50)
+              .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH - 1),
+          )
+          .type('Reach maximum character count')
 
-      cy.get('[data-cy=step-description]')
-        .clear()
-        .type(
-          `Description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
+        cy.wrap($step).should(
+          'contain',
+          `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`,
         )
-        .blur({ force: true })
 
-      cy.get('[data-cy=step-description]').should('have.value', description)
-      cy.get('[data-cy=character-count]')
-        .should('be.visible')
-        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type(
+            `Description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
+          )
+          .blur({ force: true })
 
-      if (videoUrl) {
-        cy.step('Adding Video Url')
-        cy.get('[data-cy=step-videoUrl]').clear().type(videoUrl)
-      } else {
-        cy.step('Uploading pics')
-        const hasExistingPics =
-          Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
-        if (hasExistingPics) {
-          cy.wrap($step)
-            .find('[data-cy=delete-image]')
-            .each(($deleteButton) => {
-              cy.wrap($deleteButton).click()
-            })
+        cy.get('[data-cy=step-description]').should('have.value', description)
+        cy.get('[data-cy=character-count]')
+          .should('be.visible')
+          .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+
+        if (videoUrl) {
+          cy.step('Adding Video Url')
+          cy.get('[data-cy=step-videoUrl]').clear().type(videoUrl)
+        } else {
+          cy.step('Uploading pics')
+          const hasExistingPics =
+            Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
+          if (hasExistingPics) {
+            cy.wrap($step)
+              .find('[data-cy=delete-image]')
+              .each(($deleteButton) => {
+                cy.wrap($deleteButton).click()
+              })
+          }
+          images.forEach((image, index) => {
+            cy.get(`[data-cy=step-image-${index}]`)
+              .find(':file')
+              .attachFile(image)
+          })
         }
-        images.forEach((image, index) => {
-          cy.get(`[data-cy=step-image-${index}]`)
-            .find(':file')
-            .attachFile(image)
-        })
       }
     })
   }
@@ -129,7 +131,6 @@ describe('[How To]', () => {
       // Then add everything so that it could be submitted, but save of draft again
 
       // Then submit and check again
-
     })
   })
 

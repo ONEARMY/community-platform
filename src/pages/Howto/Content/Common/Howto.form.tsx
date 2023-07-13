@@ -647,24 +647,29 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Box sx={{ display: ['none', 'none', 'block'] }}>
                       <PostingGuidelines />
                     </Box>
-                    <Button
-                      data-cy={'draft'}
-                      onClick={() => {
-                        form.mutators.setAllowDraftSaveTrue()
-                        this.trySubmitForm(true)
-                      }}
-                      mt={[0, 0, 3]}
-                      variant="secondary"
-                      type="submit"
-                      disabled={submitting}
-                      sx={{ width: '100%', display: 'block' }}
-                    >
-                      {formValues.moderation !== 'draft' ? (
-                        <span>Save to draft</span>
-                      ) : (
-                        <span>Revert to draft</span>
-                      )}
-                    </Button>
+                    <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+                      <Button
+                        data-cy={'draft'}
+                        onClick={() => {
+                          form.mutators.setAllowDraftSaveTrue()
+                          this.trySubmitForm(true)
+                        }}
+                        mt={[0, 0, 3]}
+                        variant="secondary"
+                        type="submit"
+                        disabled={submitting}
+                        sx={{ width: '100%', display: 'block' }}
+                      >
+                        {formValues.moderation !== 'draft' ? (
+                          <span>Save draft</span>
+                        ) : (
+                          <span>Revert to draft</span>
+                        )}
+                      </Button>
+                      <Text sx={{ fontSize: 1, textAlign: 'center' }}>
+                        A draft can be saved any time
+                      </Text>
+                    </Flex>
                     <Button
                       large
                       data-cy={'submit'}

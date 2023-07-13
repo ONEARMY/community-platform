@@ -1,29 +1,38 @@
 import * as functions from 'firebase-functions'
-import { createNotificationEmails } from './createEmail'
+import { createNotificationEmails } from './createNotificationEmails'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { EmailNotificationFrequency } from 'oa-shared'
+import { withErrorAlerting } from '../alerting/errorAlerting'
 
 exports.sendDaily = functions.pubsub
   // Trigger daily at 3pm PT (https://crontab.guru/#0_15_*_*_*)
   .schedule('0 15 * * *')
   .timeZone('Europe/Lisbon')
-  .onRun(async () => createNotificationEmails(EmailNotificationFrequency.DAILY))
+  .onRun((context) =>
+    withErrorAlerting(context, () =>
+      createNotificationEmails(EmailNotificationFrequency.DAILY),
+    ),
+  )
 
 exports.sendWeekly = functions.pubsub
   // Trigger weekly at 3pm PT on Sunday (https://crontab.guru/#0_15_*_*_0)
   .schedule('0 15 * * 0')
   .timeZone('Europe/Lisbon')
-  .onRun(async () =>
-    createNotificationEmails(EmailNotificationFrequency.WEEKLY),
+  .onRun(async (context) =>
+    withErrorAlerting(context, () =>
+      createNotificationEmails(EmailNotificationFrequency.WEEKLY),
+    ),
   )
 
 exports.sendMonthly = functions.pubsub
   // Trigger monthly at 3pm PT on the first day of the month (https://crontab.guru/#0_15_1_*_*)
   .schedule('0 15 1 * *')
   .timeZone('Europe/Lisbon')
-  .onRun(async () =>
-    createNotificationEmails(EmailNotificationFrequency.MONTHLY),
+  .onRun(async (context) =>
+    withErrorAlerting(context, () =>
+      createNotificationEmails(EmailNotificationFrequency.MONTHLY),
+    ),
   )
 
 exports.sendOnce = functions.https.onCall(async (_, context) => {

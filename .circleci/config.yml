@@ -186,7 +186,7 @@ commands:
       - run:
           # Use version of firebase-tools already installed in functions workspace to deploy
           name: Deploy to Firebase
-          command: ./functions/node_modules/.bin/firebase deploy --debug -P << parameters.alias >>
+          command: ./functions/node_modules/.bin/firebase deploy --debug -P << parameters.alias >> --non-interactive
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 
@@ -285,7 +285,7 @@ jobs:
           command: yarn workspaces focus one-army-community-platform
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
-          command: yarn run test:unit:ci && yarn run test:components
+          command: yarn run test:unit && yarn run test:components
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports
       - store_artifacts:

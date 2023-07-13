@@ -1,7 +1,6 @@
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { INotification } from '../../../src/models'
-import { DB_ENDPOINTS, IUserDB } from '../models'
-import { createNotificationEmails, TEMPLATE_NAME } from './createEmail'
+import { DB_ENDPOINTS, IUserDB, INotification } from '../models'
+import { createNotificationEmails } from './createNotificationEmails'
 import { EmailNotificationFrequency } from 'oa-shared'
 
 jest.mock('../Firebase/auth', () => ({
@@ -9,6 +8,14 @@ jest.mock('../Firebase/auth', () => ({
     getUser: () => ({
       email: 'test@test.com',
     }),
+  },
+}))
+
+jest.mock('../config/config', () => ({
+  CONFIG: {
+    deployment: {
+      site_url: 'https://community.preciousplastic.com',
+    },
   },
 }))
 
@@ -49,7 +56,7 @@ describe('create email test', () => {
           displayName: 'User 2',
           userId: 'user_2',
         },
-        relevantUrl: 'https://community.preciousplastic.com/test',
+        relevantUrl: '/test',
         type: 'howto_useful',
       }),
       notificationFactory('user_1', 'notification_2', {
@@ -57,7 +64,7 @@ describe('create email test', () => {
           displayName: 'User 2',
           userId: 'user_2',
         },
-        relevantUrl: 'https://community.preciousplastic.com/test',
+        relevantUrl: '/test',
         type: 'new_comment_research',
       }),
       notificationFactory('user_1', 'notification_3', {
@@ -65,7 +72,7 @@ describe('create email test', () => {
           displayName: 'User 3',
           userId: 'user_3',
         },
-        relevantUrl: 'https://community.preciousplastic.com/test',
+        relevantUrl: '/test',
         type: 'howto_mention',
       }),
     ]
@@ -76,7 +83,7 @@ describe('create email test', () => {
           displayName: 'User 1',
           userId: 'user_1',
         },
-        relevantUrl: 'https://community.preciousplastic.com/test',
+        relevantUrl: '/test',
         type: 'new_comment',
       }),
       notificationFactory('user_2', 'notification_2', {
@@ -84,8 +91,16 @@ describe('create email test', () => {
           displayName: 'User 3',
           userId: 'user_3',
         },
-        relevantUrl: 'https://community.preciousplastic.com/test',
+        relevantUrl: '/test',
         type: 'new_comment_research',
+      }),
+      notificationFactory('user_2', 'notification_3', {
+        triggeredBy: {
+          displayName: 'User 3',
+          userId: 'user_3',
+        },
+        relevantUrl: '/test',
+        type: 'research_update',
       }),
     ]
 
@@ -95,7 +110,7 @@ describe('create email test', () => {
           displayName: 'User 1',
           userId: 'user_1',
         },
-        relevantUrl: 'https://community.preciousplastic.com/test',
+        relevantUrl: '/test',
         type: 'new_comment',
       }),
     ]
@@ -104,21 +119,21 @@ describe('create email test', () => {
       userFactory('user_1', {
         notifications: user1Notifications,
         displayName: 'User 1',
-        userName: 'user1',
+        userName: 'user_1',
       }),
       userFactory('user_2', {
         notifications: user2Notifications,
         displayName: 'User 2',
-        userName: 'user2',
+        userName: 'user_2',
       }),
       userFactory('user_3', {
         notifications: user3Notifications,
         displayName: 'User 3',
-        // test undefined userName case - should not have userName field in template data
+        userName: 'user_3',
       }),
       userFactory('user_4', {
         displayName: 'User 4',
-        userName: 'user4',
+        userName: 'user_4',
       }),
     ])
 
@@ -169,54 +184,13 @@ describe('create email test', () => {
     const querySnapshot = await db.collection(DB_ENDPOINTS.emails).get()
 
     querySnapshot.forEach((doc) => {
-      expect(doc.data()).toMatchObject({
-        template: {
-          name: TEMPLATE_NAME,
-          data: {
-            displayName: 'User 1',
-            hasComments: true,
-            hasUsefuls: true,
-            notifications: [
-              {
-                triggeredBy: {
-                  displayName: 'User 2',
-                  userId: 'user_2',
-                  userName: 'user2',
-                },
-                relevantUrl: 'https://community.preciousplastic.com/test',
-                resourceLabel: 'how-to',
-                isComment: false,
-                isMention: false,
-                isUseful: true,
-              },
-              {
-                triggeredBy: {
-                  displayName: 'User 2',
-                  userId: 'user_2',
-                  userName: 'user2',
-                },
-                relevantUrl: 'https://community.preciousplastic.com/test',
-                resourceLabel: 'research',
-                isComment: true,
-                isMention: false,
-                isUseful: false,
-              },
-              {
-                triggeredBy: {
-                  displayName: 'User 3',
-                  userId: 'user_3',
-                },
-                relevantUrl: 'https://community.preciousplastic.com/test',
-                resourceLabel: 'how-to',
-                isComment: false,
-                isMention: true,
-                isUseful: false,
-              },
-            ],
-          },
-        },
-        to: ['test@test.com'],
-      })
+      const {
+        message: { html, subject },
+        to,
+      } = doc.data()
+      expect(html).toMatchSnapshot()
+      expect(subject).toBe(`You've missed notifications from Precious Plastic`)
+      expect(to).toBe('test@test.com')
     })
 
     // Notifications should have been updated with email id
@@ -239,43 +213,13 @@ describe('create email test', () => {
 
     const querySnapshot = await db.collection(DB_ENDPOINTS.emails).get()
     querySnapshot.forEach((doc) => {
-      expect(doc.data()).toMatchObject({
-        template: {
-          name: TEMPLATE_NAME,
-          data: {
-            displayName: 'User 2',
-            hasComments: true,
-            hasUsefuls: false,
-            notifications: [
-              {
-                triggeredBy: {
-                  displayName: 'User 1',
-                  userId: 'user_1',
-                  userName: 'user1',
-                },
-                relevantUrl: 'https://community.preciousplastic.com/test',
-                resourceLabel: 'how-to',
-                isComment: true,
-                isMention: false,
-                isUseful: false,
-              },
-              {
-                triggeredBy: {
-                  displayName: 'User 3',
-                  userId: 'user_3',
-                },
-                relevantUrl: 'https://community.preciousplastic.com/test',
-                resourceLabel: 'research',
-                isComment: true,
-                isMention: false,
-                isUseful: false,
-              },
-            ],
-          },
-        },
-        to: ['test@test.com'],
-      })
-      return
+      const {
+        message: { html, subject },
+        to,
+      } = doc.data()
+      expect(html).toMatchSnapshot()
+      expect(subject).toBe(`You've missed notifications from Precious Plastic`)
+      expect(to).toBe('test@test.com')
     })
 
     // Notifications should have been updated with email id

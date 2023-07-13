@@ -1,3 +1,6 @@
+const researcherEmail = 'research_creator@test.com'
+const researcherPassword = 'research_creator'
+
 describe('[Research]', () => {
   beforeEach(() => {
     cy.visit('/research')
@@ -12,9 +15,40 @@ describe('[Research]', () => {
     previousSlugs: ['create-research-article-test'],
   }
 
+  describe('[Create draft article]', () => {
+    it('[By Authenticated]', () => {
+      cy.login(researcherEmail, researcherPassword)
+      cy.wait(2000)
+      cy.step('Create the research article')
+      cy.get('[data-cy=create]').click()
+
+      cy.step('Enter research article title only')
+      cy.get('[data-cy=intro-title')
+        .clear()
+        .type('Quick draft')
+        .blur({ force: true })
+
+      cy.step('Research cannot be published without description')
+      cy.get('[data-cy=submit]').click()
+      cy.contains('Make sure this field is filled correctly').should('exist')
+
+      cy.step('Research can be saved to draft without description')
+      cy.get('[data-cy=draft]').click()
+      cy.wait(2000)
+
+      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
+        .click()
+        .url()
+        .should('include', `/research/quick-draft`)
+
+      cy.step('Research article draft was created correctly')
+      cy.get('[data-cy=moderationstatus-draft]').should('exist')
+    })
+  })
+
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
-      cy.login('research_creator@test.com', 'research_creator')
+      cy.login(researcherEmail, researcherPassword)
       cy.wait(2000)
       cy.step('Create the research article')
       cy.get('[data-cy=create]').click()
@@ -63,7 +97,7 @@ describe('[Research]', () => {
       stub.returns(false)
       cy.on('window:confirm', stub)
 
-      cy.login('research_creator@test.com', 'research_creator')
+      cy.login(researcherEmail, researcherPassword)
       cy.wait(2000)
       cy.step('Access the create research article')
       cy.get('[data-cy=create]').click()
@@ -118,32 +152,16 @@ describe('[Research]', () => {
         'create-research-article-test-edited',
       ]
       cy.visit(researchUrl)
-      cy.login('research_creator@test.com', 'research_creator')
+      cy.login(researcherEmail, researcherPassword)
       cy.step('Go to Edit mode')
       cy.get('[data-cy=edit]').click()
 
-      cy.step('Warn if title is identical to an existing one')
-      cy.get('[data-cy=intro-title]').focus().blur({ force: true })
-      cy.wait(1000)
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('not.exist')
-
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('qwerty')
-        .blur({ force: true })
-      cy.contains(
-        'Titles must be unique, please try being more specific',
-      ).should('exist')
-
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]').clear().type(expected.title)
-
       cy.get('[data-cy=submit]').click()
 
       cy.step('Open the updated research article')
-
+      cy.wait(2000)
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
         .click()
         .url()

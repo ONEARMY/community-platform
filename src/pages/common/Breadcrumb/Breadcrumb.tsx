@@ -6,8 +6,6 @@ const routes = [
   { path: '/how-to', breadcrumb: 'How-to' },
   { path: '/how-to/create', breadcrumb: 'Create' },
   { path: '/how-to/:slug', breadcrumb: HowtoBreadcrumb },
-  { path: '/events', breadcrumb: 'Events' },
-  { path: '/events/create', breadcrumb: 'Create' },
   { path: '/map', breadcrumb: 'Welcome to the Map' },
 ]
 

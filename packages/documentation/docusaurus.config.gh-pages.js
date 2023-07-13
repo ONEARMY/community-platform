@@ -2,8 +2,8 @@
 module.exports = {
   title: 'OneArmy Community Platform',
   tagline: 'Developer Documentation',
-  url: 'https://onearmy.github.io',
-  baseUrl: '/community-platform/',
+  url: 'https://docs.platform.onearmy.earth/',
+  baseUrl: '/',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',

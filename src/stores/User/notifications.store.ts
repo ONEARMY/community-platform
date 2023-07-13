@@ -72,10 +72,14 @@ export class UserNotificationsStore extends ModuleStore {
           _created: new Date().toISOString(),
           triggeredBy: {
             displayName: triggeredBy.displayName,
-            userId: triggeredBy._id,
+            // userName is used here as user records now use userName as userId.
+            // The property name hasn't been refactored as it would require a data migration for existing records.
+            // Plan is to move to a relational database when time allows.
+            // Notifications would be migrated to their own table at this point.
+            userId: triggeredBy.userName,
           },
           relevantUrl: relevantUrl,
-          type: type,
+          type,
           read: false,
           notified: false,
         }
@@ -92,7 +96,7 @@ export class UserNotificationsStore extends ModuleStore {
           ? [...toJS(user.notifications), newNotification]
           : [newNotification]
 
-        await this._updateUserNofications(user, notifications)
+        await this._updateUserNotifications(user, notifications)
       }
     } catch (err) {
       logger.error(err)
@@ -108,7 +112,7 @@ export class UserNotificationsStore extends ModuleStore {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.notified = true))
 
-        await this._updateUserNofications(user, notifications)
+        await this._updateUserNotifications(user, notifications)
         await this.userStore.updateUserProfile({ notifications })
       }
     } catch (err) {
@@ -125,7 +129,7 @@ export class UserNotificationsStore extends ModuleStore {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.read = true))
 
-        await this._updateUserNofications(user, { notifications })
+        await this._updateUserNotifications(user, { notifications })
         await this.userStore.updateUserProfile({ notifications })
       }
     } catch (err) {
@@ -143,7 +147,7 @@ export class UserNotificationsStore extends ModuleStore {
           (notification) => !(notification._id === id),
         )
 
-        await this._updateUserNofications(user, notifications)
+        await this._updateUserNotifications(user, notifications)
       }
     } catch (err) {
       logger.error(err)
@@ -151,8 +155,10 @@ export class UserNotificationsStore extends ModuleStore {
     }
   }
 
-  private async _updateUserNofications(user: IUserPPDB, notifications) {
-    const dbRef = this.db.collection<IUser>(USER_COLLECTION_NAME).doc(user._id)
+  private async _updateUserNotifications(user: IUserPPDB, notifications) {
+    const dbRef = this.db
+      .collection<IUser>(USER_COLLECTION_NAME)
+      .doc(user.userName)
 
     return dbRef.set({
       ...toJS(user),

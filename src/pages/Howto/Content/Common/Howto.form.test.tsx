@@ -41,6 +41,17 @@ jest.mock('src/index', () => {
 })
 
 describe('Howto form', () => {
+  describe('Provides user information', () => {
+    it('shows maximum file size', async () => {
+      // Arrange
+      const formValues = FactoryHowto()
+      // Act
+      const wrapper = getWrapper(formValues, 'edit', {})
+
+      // Assert
+      expect(wrapper.getByText('Maximum file size 50MB')).toBeInTheDocument()
+    })
+  })
   describe('Invalid file warning', () => {
     it('Does not appear when submitting only fileLink', async () => {
       // Arrange
@@ -110,7 +121,7 @@ describe('Howto form', () => {
 
       // add fileLink
       const fileLink = wrapper.getByPlaceholderText(
-        'Link to Gdrive, Dropbox, Grabcad etc',
+        'Link to Google Drive, Dropbox, Grabcad etc',
       )
       fireEvent.change(fileLink, { target: { value: '<http://www.test.com>' } })
 

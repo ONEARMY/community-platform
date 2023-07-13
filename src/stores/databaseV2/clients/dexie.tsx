@@ -169,7 +169,6 @@ type IDexieSchema = { [key in IFrontendEndpoints]: string }
 const DEFAULT_SCHEMA = '_id,_modified'
 
 const SCHEMA_BASE: IDexieSchema = {
-  events: `${DEFAULT_SCHEMA},_createdBy,slug`,
   howtos: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs`,
   mappins: DEFAULT_SCHEMA,
   tags: DEFAULT_SCHEMA,
@@ -201,7 +200,8 @@ const DEXIE_SCHEMA = MAPPED_SCHEMA
  * 2023-06-18
  * Add collaborators key to research schema + _createdBy to events, howtos & research
  *
- *
+ * 2023-06-29
+ * Drop events collection
  *
  *
  *

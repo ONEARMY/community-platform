@@ -438,7 +438,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         name="fileLink"
                                         data-cy="fileLink"
                                         component={FieldInput}
-                                        placeholder="Link to Gdrive, Dropbox, Grabcad etc"
+                                        placeholder="Link to Google Drive, Dropbox, Grabcad etc"
                                         isEqual={COMPARISONS.textInput}
                                         maxLength={MAX_LINK_LENGTH}
                                         validate={validateUrlAcceptEmpty}
@@ -463,6 +463,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         data-cy="files"
                                         component={FileInputField}
                                       />
+                                      <Text
+                                        color={'grey'}
+                                        mt={4}
+                                        sx={{ fontSize: 1 }}
+                                      >
+                                        Maximum file size 50MB
+                                      </Text>
                                     </Flex>
                                   </>
                                 )}

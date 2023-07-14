@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import { Component } from 'react'
 import { Box } from 'theme-ui'
 import { ExternalLink as Link } from 'oa-components'
@@ -13,8 +12,6 @@ interface IProps {
 interface IInjectedProps extends IProps {
   mobileMenuStore: MobileMenuStore
 }
-
-const PanelItem = styled(Box)``
 
 @inject('mobileMenuStore')
 @observer
@@ -34,7 +31,7 @@ export class MenuMobileExternalLink extends Component<IProps> {
     const id = content.toLowerCase().replace(' ', '-')
     return (
       <>
-        <PanelItem
+        <Box
           data-cy="mobile-menu-item"
           sx={{ paddingTop: 3, paddingBottom: 3 }}
         >
@@ -46,7 +43,7 @@ export class MenuMobileExternalLink extends Component<IProps> {
           >
             {content}
           </Link>
-        </PanelItem>
+        </Box>
       </>
     )
   }

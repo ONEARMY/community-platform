@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Component } from 'react'
 import { Box } from 'theme-ui'
-import { ExternalLink as Link} from 'oa-components'
+import { ExternalLink as Link } from 'oa-components'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 
@@ -14,7 +14,7 @@ interface IInjectedProps extends IProps {
   mobileMenuStore: MobileMenuStore
 }
 
-const PanelItem = styled(Box)``;
+const PanelItem = styled(Box)``
 
 @inject('mobileMenuStore')
 @observer

@@ -156,7 +156,13 @@ describe('Research Article', () => {
             }),
             FactoryResearchItemUpdate({
               title: 'Research Update #2',
-              collaborators: [],
+              collaborators: null!,
+              status: 'published',
+              _deleted: false,
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #3',
+              collaborators: undefined,
               status: 'published',
               _deleted: false,
             }),

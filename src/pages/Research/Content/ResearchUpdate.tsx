@@ -81,7 +81,11 @@ const ResearchUpdate = ({
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
                   {contributors.length > 0 ? (
                     <Box sx={{ mb: 2 }}>
-                      <Username user={contributors[0]} isVerified={false} />
+                      <Username
+                        user={contributors[0]}
+                        isVerified={false}
+                        data-testid="collaborator/creator"
+                      />
                     </Box>
                   ) : null}
 

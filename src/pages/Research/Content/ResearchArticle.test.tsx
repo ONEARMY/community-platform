@@ -140,14 +140,17 @@ describe('Research Article', () => {
   describe('Research Update', () => {
     it('displays contributors', async () => {
       // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeResearchItem: FactoryResearchItem({
           collaborators: ['example-username', 'another-example-username'],
           updates: [
             FactoryResearchItemUpdate({
               title: 'Research Update #1',
-              collaborators: ['third-example-username', 'fourth-example-username'],
+              collaborators: [
+                'third-example-username',
+                'fourth-example-username',
+              ],
               status: 'published',
               _deleted: false,
             }),

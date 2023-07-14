@@ -154,6 +154,12 @@ describe('Research Article', () => {
               status: 'published',
               _deleted: false,
             }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #2',
+              collaborators: [],
+              status: 'published',
+              _deleted: false,
+            }),
           ],
         }),
       })
@@ -170,6 +176,7 @@ describe('Research Article', () => {
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
       expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
       expect(wrapper.queryByText('fourth-example-username')).toBeNull()
+      expect(wrapper.getAllByTestId("collaborator/creator")).toHaveLength(1)
       expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
     })
   })

@@ -140,7 +140,7 @@ describe('Research Article', () => {
   describe('Research Update', () => {
     it('displays contributors', async () => {
       // Arrange
-      ;;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeResearchItem: FactoryResearchItem({
           collaborators: ['example-username', 'another-example-username'],
@@ -176,7 +176,7 @@ describe('Research Article', () => {
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
       expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
       expect(wrapper.queryByText('fourth-example-username')).toBeNull()
-      expect(wrapper.getAllByTestId("collaborator/creator")).toHaveLength(1)
+      expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
       expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
     })
   })

@@ -101,6 +101,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/AlimurtuzaCodes"><img src="https://avatars.githubusercontent.com/u/88965204?v=4?s=60" width="60px;" alt="Alimurtuza"/><br /><sub><b>Alimurtuza</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=AlimurtuzaCodes" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/AliAbuSalam"><img src="https://avatars.githubusercontent.com/u/17426615?v=4?s=60" width="60px;" alt="Askell"/><br /><sub><b>Askell</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=AliAbuSalam" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://linkedin.com/in/manacesneto"><img src="https://avatars.githubusercontent.com/u/8915867?v=4?s=60" width="60px;" alt="Manacés Pereira"/><br /><sub><b>Manacés Pereira</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=manacespereira" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

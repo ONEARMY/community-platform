@@ -195,7 +195,7 @@
     "stream-browserify": "^3.0.0",
     "terser": "3.14.1",
     "ts-loader": "^7.0.5",
-    "typescript": "4.5.5",
+    "typescript": "^5.1.6",
     "wait-on": "^5.2.1",
     "workbox-background-sync": "^6.1.5",
     "workbox-broadcast-update": "^6.1.5",

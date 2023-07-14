@@ -1,5 +1,5 @@
 import { INotification, IUserDB } from '../../../src/models'
-import { NOTIFICATION_LIST_IMAGE } from './consts'
+import { NOTIFICATION_LIST_IMAGE } from './constants'
 import prettier from 'prettier'
 import {
   getProjectImageSrc,
@@ -23,11 +23,16 @@ export const getNotificationEmailTemplate = (
               font-family: Arial, Helvetica, sans-serif;
               font-size: 14px;
               color: #000000;
-              padding: 8%;
-              width: 600px;
             }
             #body a {
               color: inherit;
+            }
+            .border {
+              border: 3px solid black;
+              border-radius: 10px;
+              padding: 4% 0;
+              margin: 4% 0;
+              width: 550px;
             }
             table {
               width: 100%;
@@ -35,9 +40,12 @@ export const getNotificationEmailTemplate = (
             }
             .settings-table-container,
             .project-image-table-container,
+            .greeting-container {
+              margin-bottom: 8%;
+            }
             .greeting-container,
             .notifications-container {
-              margin-bottom: 8%;
+              margin-left: 8%;
             }
             .notifications-header {
               font-size: 24px;
@@ -45,14 +53,18 @@ export const getNotificationEmailTemplate = (
             .notifications-header-icon {
               margin-right: 8px;
             }
-            @media screen and (max-width: 480px) {
-              #body {
-                width: 100%
+            @media only screen and (max-width: 550px) {
+              .table-container {
+                width: 100%;
               }
             }
           </style>
         </head>
         <body id="body">
+        <table class="email-table-container">
+        <tr>
+          <td align="center">
+            <div class="border">
           <table class="project-image-table-container">
             <tr>
               <td align="center">
@@ -64,12 +76,12 @@ export const getNotificationEmailTemplate = (
               </td>
             </tr>
           </table>
-          <div class="greeting-container">
+          <div align="left" class="greeting-container">
             <p>Hey ${user.displayName}</p>
             <p>You've missed notifications. No worries.</p>
             <p>I'm here to give you an overview :)</p>
           </div>
-          <div class="notifications-container">
+          <div align="left" class="notifications-container">
             <div class="notifications-header">
               <img
                 class="notifications-header-icon"
@@ -82,6 +94,7 @@ export const getNotificationEmailTemplate = (
             </div>
             ${notifications.map(getNotificationListItem).join('')}
           </div>
+          </div>
           <table class="settings-table-container">
             <tr>
               <td align="center">
@@ -92,6 +105,9 @@ export const getNotificationEmailTemplate = (
               </td>
             </tr>
           </table>
+          </td>
+          </tr>
+        </table>
         </body>
       </html>`,
       { parser: 'html' },

@@ -110,7 +110,6 @@ export interface ThemeWithName {
     slickArrows: number
     modalProfile: number
     logoContainer: number
-    mapFlexBar: number
     header: number
   }
   breakpoints: string[]

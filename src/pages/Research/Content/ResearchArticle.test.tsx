@@ -46,6 +46,25 @@ describe('Research Article', () => {
     incrementViewCount: jest.fn(),
   }
 
+  it('displays author country flag', async () => {
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+      activeResearchItem: FactoryResearchItem({
+        creatorCountry: 'NL',
+      }),
+    })
+
+    // Act
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
+
+    // Assert
+    expect(wrapper.container.querySelector('.flag-icon-nl')).toBeInTheDocument()
+  })
+
   it('does not display contributors when undefined', async () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({

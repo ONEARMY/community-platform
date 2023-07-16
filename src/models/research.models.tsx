@@ -46,7 +46,6 @@ export namespace IResearch {
     researchCategory?: IResearchCategory
     slug: string
     tags: ISelectedTags
-    creatorCountry?: string
     collaborators: string
     previousSlugs?: string[]
   }

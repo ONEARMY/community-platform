@@ -131,6 +131,12 @@ export class ResearchStore extends ModuleStore {
     })
   }
 
+  public async getResearchItems() {
+    return await this.db
+      .collection<IResearchDB>(COLLECTION_NAME)
+      .getWhere('moderation', '==', 'accepted')
+  }
+
   @action
   public async setActiveResearchItemBySlug(slug?: string) {
     logger.debug(`setActiveResearchItemBySlug:`, { slug })

@@ -7,6 +7,11 @@ import { Provider } from 'mobx-react'
 import { Router } from 'react-router-dom'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { useResearchItem } from './Content/ResearchArticle.hooks'
+jest.mock('src/pages/Research/Content/ResearchArticle.hooks')
+import { useResearchList } from './Content/ResearchList.hooks'
+jest.mock('./Content/ResearchList.hooks')
+
 import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
@@ -76,6 +81,12 @@ describe('research.routes', () => {
 
   describe('/research/', () => {
     it('renders the research listing', async () => {
+      ;(useResearchList as jest.Mock).mockReturnValue({
+        isLoading: false,
+        fullResearchListItems: [],
+        activeUser: FactoryUser(),
+      })
+
       let wrapper
       await act(async () => {
         wrapper = (await renderFn('/research')).wrapper
@@ -415,6 +426,20 @@ const renderFn = async (url, fnUser?) => {
   const history = createMemoryHistory({
     initialEntries: [url],
   })
+
+  ;(useResearchItem as jest.Mock).mockImplementation(() => ({
+    isLoading: false,
+    researchAuthor: {
+      userName: 'testUser',
+      countryCode: 'nl',
+      isVerified: true,
+    },
+    researchItem: FactoryResearchItem({
+      title: 'Research article title',
+      slug: 'research-slug',
+    }),
+  }))
+
   return {
     wrapper: render(
       <Provider

@@ -11,7 +11,6 @@ import {
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -22,7 +21,13 @@ import {
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
-  research: IResearch.ItemDB
+  research: IResearch.ItemDB & {
+    author: {
+      userName: string
+      countryCode?: string
+      isVerified?: boolean
+    }
+  }
   isEditable: boolean
   loggedInUser: IUser | undefined
   needsModeration: boolean
@@ -152,13 +157,12 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             <Flex sx={{ flexDirection: 'column' }}>
               <Flex sx={{ alignItems: 'center' }}>
                 <Flex sx={{ alignItems: 'center' }}>
-                  <Username
-                    user={{
-                      userName: research._createdBy,
-                      countryCode: research.creatorCountry,
-                    }}
-                    isVerified={isUserVerified(research._createdBy)}
-                  />
+                  {research.author ? (
+                    <Username
+                      user={research.author}
+                      isVerified={!!research.author.isVerified}
+                    />
+                  ) : null}
                   <Text
                     variant="auxiliary"
                     sx={{

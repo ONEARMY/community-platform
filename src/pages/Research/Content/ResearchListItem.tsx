@@ -9,6 +9,11 @@ import { Card, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 interface IProps {
   item: IResearch.ItemDB & {
     votedUsefulCount: number
+    author: {
+      userName: string
+      countryCode: string
+      isVerified: boolean
+    }
   }
 }
 
@@ -23,24 +28,24 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
   return (
-    <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
+    <Card data-cy="ResearchListItem" data-id={item._id} mb={3} key={item._id}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
-        <Link
-          to={`/research/${encodeURIComponent(item.slug)}`}
-          key={item._id}
-          style={{ width: '100%' }}
+        <Grid
+          px={3}
+          py={3}
+          columns={[1, '2fr minmax(274px, 1fr)']}
+          gap="60px"
+          sx={{ width: '100%' }}
         >
-          <Grid
-            px={3}
-            py={3}
-            columns={[1, '2fr minmax(274px, 1fr)']}
-            gap="60px"
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
           >
-            <Flex
-              sx={{
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-              }}
+            <Link
+              to={`/research/${encodeURIComponent(item.slug)}`}
+              style={{ width: '100%' }}
             >
               <Heading
                 color={'black'}
@@ -51,38 +56,22 @@ const ResearchListItem = ({ item }: IProps) => {
               >
                 {item.title}
               </Heading>
-              <Flex
-                sx={{
-                  width: '100%',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Flex sx={{ alignItems: 'center' }}>
+            </Link>
+            <Flex
+              sx={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Flex sx={{ alignItems: 'center' }}>
+                {item.author ? (
                   <Username
-                    user={{
-                      userName: item._createdBy,
-                      countryCode: item.creatorCountry,
-                    }}
+                    user={item.author}
                     isVerified={isUserVerified(item._createdBy)}
                   />
-                  {Boolean(collaborators.length) && (
-                    <Text
-                      ml={4}
-                      sx={{
-                        display: ['none', 'block'],
-                        fontSize: 1,
-                        color: 'darkGrey',
-                        transform: 'translateY(2px)',
-                      }}
-                    >
-                      {collaborators.length +
-                        (collaborators.length === 1
-                          ? ' contributor'
-                          : ' contributors')}
-                    </Text>
-                  )}
-                  {/* Hide this on mobile, show on tablet & above. */}
+                ) : null}
+                {Boolean(collaborators.length) && (
                   <Text
                     ml={4}
                     sx={{
@@ -92,75 +81,90 @@ const ResearchListItem = ({ item }: IProps) => {
                       transform: 'translateY(2px)',
                     }}
                   >
-                    {getItemDate(item, 'long')}
+                    {collaborators.length +
+                      (collaborators.length === 1
+                        ? ' contributor'
+                        : ' contributors')}
                   </Text>
-                </Flex>
-                {/* Show these on mobile, hide on tablet & above. */}
-                <Box
+                )}
+                {/* Hide this on mobile, show on tablet & above. */}
+                <Text
+                  ml={4}
                   sx={{
-                    display: ['flex', 'none', 'none'],
-                    alignItems: 'center',
+                    display: ['none', 'block'],
+                    fontSize: 1,
+                    color: 'darkGrey',
+                    transform: 'translateY(2px)',
                   }}
                 >
-                  <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                    {usefulDisplayCount}
-                    <Icon glyph="star-active" ml={1} />
-                  </Text>
-                  <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                    {calculateTotalComments(item)}
-                    <Icon glyph="comment" ml={1} />
-                  </Text>
-                  <Text
-                    ml={3}
-                    sx={{
-                      display: ['block', 'none'],
-                      fontSize: 1,
-                      color: 'darkGrey',
-                    }}
-                  >
-                    {getItemDate(item, 'short')}
-                  </Text>
-                </Box>
+                  {getItemDate(item, 'long')}
+                </Text>
               </Flex>
-            </Flex>
-            {/* Hide these on mobile, show on tablet & above. */}
-            <Box
-              sx={{
-                display: ['none', 'flex', 'flex'],
-                alignItems: 'center',
-                justifyContent: 'space-around',
-              }}
-            >
-              <Text color="black" sx={_commonStatisticStyle}>
-                {usefulDisplayCount}
-                <Icon glyph="star-active" ml={1} />
-              </Text>
-              <Text color="black" sx={_commonStatisticStyle}>
-                {calculateTotalComments(item)}
-                <Icon glyph="comment" ml={1} />
-              </Text>
-              <Text
-                color="black"
-                sx={_commonStatisticStyle}
-                data-cy="ItemUpdateText"
+              {/* Show these on mobile, hide on tablet & above. */}
+              <Box
+                sx={{
+                  display: ['flex', 'none', 'none'],
+                  alignItems: 'center',
+                }}
               >
-                {getUpdateText(item)}
-                <Icon glyph="update" ml={1} />
-              </Text>
-            </Box>
-          </Grid>
-          {item.moderation !== 'accepted' && (
-            <ModerationStatus
-              status={item.moderation}
-              contentType="research"
-              sx={{
-                position: 'absolute',
-                bottom: 0,
-                right: 0,
-              }}
-            />
-          )}
-        </Link>
+                <Text color="black" ml={3} sx={_commonStatisticStyle}>
+                  {usefulDisplayCount}
+                  <Icon glyph="star-active" ml={1} />
+                </Text>
+                <Text color="black" ml={3} sx={_commonStatisticStyle}>
+                  {calculateTotalComments(item)}
+                  <Icon glyph="comment" ml={1} />
+                </Text>
+                <Text
+                  ml={3}
+                  sx={{
+                    display: ['block', 'none'],
+                    fontSize: 1,
+                    color: 'darkGrey',
+                  }}
+                >
+                  {getItemDate(item, 'short')}
+                </Text>
+              </Box>
+            </Flex>
+          </Flex>
+          {/* Hide these on mobile, show on tablet & above. */}
+          <Box
+            sx={{
+              display: ['none', 'flex', 'flex'],
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            }}
+          >
+            <Text color="black" sx={_commonStatisticStyle}>
+              {usefulDisplayCount}
+              <Icon glyph="star-active" ml={1} />
+            </Text>
+            <Text color="black" sx={_commonStatisticStyle}>
+              {calculateTotalComments(item)}
+              <Icon glyph="comment" ml={1} />
+            </Text>
+            <Text
+              color="black"
+              sx={_commonStatisticStyle}
+              data-cy="ItemUpdateText"
+            >
+              {getUpdateText(item)}
+              <Icon glyph="update" ml={1} />
+            </Text>
+          </Box>
+        </Grid>
+        {item.moderation !== 'accepted' && (
+          <ModerationStatus
+            status={item.moderation}
+            contentType="research"
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              right: 0,
+            }}
+          />
+        )}
       </Flex>
     </Card>
   )

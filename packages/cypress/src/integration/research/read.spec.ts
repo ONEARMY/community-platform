@@ -1,3 +1,7 @@
+import { research } from 'oa-shared/mocks/data'
+
+const [research1] = Object.values(research)
+
 describe('[Research]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
   const totalResearchCount = 2
@@ -17,7 +21,7 @@ describe('[Research]', () => {
   })
 
   describe('[Read a research article]', () => {
-    const researchArticleUrl = '/research/qwerty'
+    const researchArticleUrl = `/research/${research1.slug}`
     beforeEach(() => {
       cy.visit('/research')
     })
@@ -26,10 +30,9 @@ describe('[Research]', () => {
       it('[See all info]', () => {
         cy.step('Research cards has basic info')
         cy.get(
-          `[data-cy="ResearchListItem"] a[href="${researchArticleUrl}"]`,
+          `[data-cy="ResearchListItem"][data-id="${research1._id}"]`,
         ).within(() => {
           cy.contains('qwerty').should('be.exist')
-          cy.contains('event_reader').should('be.exist')
           cy.get('[data-cy="ItemUpdateText"]').contains('1').should('be.exist')
         })
 

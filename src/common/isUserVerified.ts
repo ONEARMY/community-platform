@@ -14,4 +14,4 @@ export const isUserVerified = (userId: string) => {
 export const isUserVerifiedWithStore = (
   userId: string,
   store: AggregationsStore,
-) => store.aggregations.users_verified?.[userId]
+) => !!store.aggregations.users_verified?.[userId]

@@ -29,6 +29,8 @@ export class UserStore extends ModuleStore {
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
+  private _fetchedUserCache = {}
+
   constructor(rootStore: RootStore) {
     super(rootStore)
     makeObservable(this)
@@ -132,9 +134,19 @@ export class UserStore extends ModuleStore {
   }
 
   public async getUserByUsername(username: string) {
+    // Introduce basic caching to avoid multiple calls to the same user
+    if (this._fetchedUserCache[username]) {
+      // eslint-disable-next-line no-console
+      console.log(`Fetched from cache: ${username}`)
+      return this._fetchedUserCache[username]
+    }
+
     const [user] = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('_id', '==', username)
+
+    this._fetchedUserCache[username] = user
+
     return user
   }
 

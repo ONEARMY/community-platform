@@ -11,7 +11,6 @@ import type { RouteComponentProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
-import { isUserVerified } from 'src/common/isUserVerified'
 import type { IComment, IResearch, UserComment, IUser } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -22,6 +21,8 @@ import { Box, Flex } from 'theme-ui'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 import { researchCommentUrlPattern } from './helper'
+import { useCommonStores } from 'src'
+import { useResearchItem } from './ResearchArticle.hooks'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -43,8 +44,7 @@ const areCommentVisible = (updateIndex) => {
 
 const ResearchArticle = observer((props: IProps) => {
   const researchStore = useResearchStore()
-
-  const [isLoading, setIsLoading] = React.useState(true)
+  const { aggregationsStore, userStore } = useCommonStores().stores
 
   const moderateResearch = async (accepted: boolean) => {
     const item = researchStore.activeResearchItem
@@ -73,23 +73,18 @@ const ResearchArticle = observer((props: IProps) => {
     })
   }
 
-  const scrollIntoRelevantSection = (hash: string) => {
-    setTimeout(() => {
-      const section = document.querySelector(hash)
-      // the delay is needed, otherwise the scroll is not happening in Firefox
-      section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 500)
-  }
+  const { isLoading, researchItem, activeUser } = useResearchItem(
+    props,
+    researchStore,
+    userStore,
+    aggregationsStore,
+  )
 
   React.useEffect(() => {
     ;(async () => {
       const { slug } = props.match.params
+
       const researchItem = await researchStore.setActiveResearchItemBySlug(slug)
-      setIsLoading(false)
-      const hash = props.location.hash
-      if (new RegExp(/^#update_\d$/).test(props.location.hash)) {
-        scrollIntoRelevantSection(hash)
-      }
       // Update SEO tags
       if (researchItem) {
         // Use whatever image used in most recent update for SEO image
@@ -112,8 +107,15 @@ const ResearchArticle = observer((props: IProps) => {
     }
   }, [props, researchStore])
 
-  const item = researchStore.activeResearchItem
-  const loggedInUser = researchStore.activeUser
+  React.useEffect(() => {
+    const hash = props.location.hash
+    if (new RegExp(/^#update_\d$/).test(props.location.hash)) {
+      scrollIntoRelevantSection(hash)
+    }
+  }, [researchItem])
+
+  const item = researchItem
+  const loggedInUser = activeUser
 
   const collaborators = Array.isArray(item?.collaborators)
     ? item?.collaborators
@@ -124,14 +126,7 @@ const ResearchArticle = observer((props: IProps) => {
   const contributors = useContributorsData(collaborators || [])
 
   if (item) {
-    const isEditable =
-      !!researchStore.activeUser &&
-      isAllowToEditContent(item, researchStore.activeUser)
-    const researchAuthor = {
-      userName: item._createdBy,
-      countryCode: item.creatorCountry,
-      isVerified: isUserVerified(item._createdBy),
-    }
+    const isEditable = !!activeUser && isAllowToEditContent(item, activeUser)
 
     const onFollowClick = async (researchSlug: string) => {
       if (!loggedInUser?.userName) {
@@ -165,10 +160,10 @@ const ResearchArticle = observer((props: IProps) => {
         <ResearchDescription
           research={item}
           key={item._id}
-          votedUsefulCount={researchStore.votedUsefulCount}
+          votedUsefulCount={researchItem.votedUsefulBy?.length || 0}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
-          needsModeration={researchStore.needsModeration(item)}
+          needsModeration={researchStore.needsModeration(researchItem)}
           hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
           hasUserSubscribed={researchStore.userHasSubscribed}
           moderateResearch={moderateResearch}
@@ -206,26 +201,30 @@ const ResearchArticle = observer((props: IProps) => {
             mb: 16,
           }}
         >
-          <ArticleCallToAction
-            author={researchAuthor}
-            contributors={contributors}
-          >
-            {item.moderation === 'accepted' && (
-              <UsefulStatsButton
+          {researchItem.author ? (
+            <ArticleCallToAction
+              author={researchItem.author}
+              contributors={contributors}
+            >
+              {item.moderation === 'accepted' && (
+                <UsefulStatsButton
+                  isLoggedIn={!!loggedInUser}
+                  votedUsefulCount={researchStore.votedUsefulCount}
+                  hasUserVotedUseful={
+                    researchStore.userVotedActiveResearchUseful
+                  }
+                  onUsefulClick={() => {
+                    onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
+                  }}
+                />
+              )}
+              <FollowButton
                 isLoggedIn={!!loggedInUser}
-                votedUsefulCount={researchStore.votedUsefulCount}
-                hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
-                onUsefulClick={() => {
-                  onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
-                }}
+                hasUserSubscribed={researchStore.userHasSubscribed}
+                onFollowClick={() => onFollowClick(item.slug)}
               />
-            )}
-            <FollowButton
-              isLoggedIn={!!loggedInUser}
-              hasUserSubscribed={researchStore.userHasSubscribed}
-              onFollowClick={() => onFollowClick(item.slug)}
-            ></FollowButton>
-          </ArticleCallToAction>
+            </ArticleCallToAction>
+          ) : null}
         </Box>
         {isEditable && (
           <Flex my={4}>
@@ -242,6 +241,14 @@ const ResearchArticle = observer((props: IProps) => {
     return isLoading ? <Loader /> : <NotFoundPage />
   }
 })
+
+const scrollIntoRelevantSection = (hash: string) => {
+  setTimeout(() => {
+    const section = document.querySelector(hash)
+    // the delay is needed, otherwise the scroll is not happening in Firefox
+    section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, 500)
+}
 
 const isUpdateVisible = (update: IResearch.UpdateDB) => {
   return update.status !== 'draft' && update._deleted === false

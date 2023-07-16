@@ -26,6 +26,7 @@ import {
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,
   validateTitle,
+  validationWrapper,
 } from 'src/utils/validators'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
@@ -230,9 +231,14 @@ const ResearchForm = observer((props: IProps) => {
                                 name="description"
                                 data-cy="intro-description"
                                 validate={(value, allValues) =>
-                                  allValues.isDraft
-                                    ? undefined
-                                    : required(value)
+                                  validationWrapper(
+                                    value,
+                                    allValues,
+                                    (value, allValues) =>
+                                      allValues.isDraft
+                                        ? undefined
+                                        : required(value),
+                                  )
                                 }
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}

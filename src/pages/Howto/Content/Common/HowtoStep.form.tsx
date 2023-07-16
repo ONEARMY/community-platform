@@ -6,7 +6,12 @@ import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { required, minValue, composeValidators } from 'src/utils/validators'
+import {
+  required,
+  minValue,
+  composeValidators,
+  validationWrapper,
+} from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
@@ -28,11 +33,6 @@ interface IProps {
   images: IUploadedFileMeta[]
   onDelete: (index: number) => void
   moveStep: (indexfrom: number, indexTo: number) => void
-  validationWrapper: (
-    value: string,
-    allValues: any,
-    validator: (string) => void,
-  ) => void
 }
 interface IState {
   showDeleteModal: boolean
@@ -86,7 +86,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
    * @param value - How to step description field value
    */
   render() {
-    const { step, index, validationWrapper } = this.props
+    const { step, index } = this.props
     const _labelStyle = {
       fontSize: 2,
       marginBottom: 2,

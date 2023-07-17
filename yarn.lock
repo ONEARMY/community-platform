@@ -25015,6 +25015,7 @@ __metadata:
   resolution: "oa-cypress@workspace:packages/cypress"
   dependencies:
     "@cypress/webpack-preprocessor": ^5.16.1
+    "@faker-js/faker": ^7.6.0
     "@types/fs-extra": ^9.0.13
     "@types/wait-on": ^5.3.1
     cross-env: ^7.0.3

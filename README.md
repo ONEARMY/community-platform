@@ -103,6 +103,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://linkedin.com/in/manacesneto"><img src="https://avatars.githubusercontent.com/u/8915867?v=4?s=60" width="60px;" alt="Manacés Pereira"/><br /><sub><b>Manacés Pereira</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=manacespereira" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/5niperspider"><img src="https://avatars.githubusercontent.com/u/62932392?v=4?s=60" width="60px;" alt="Georg Karl"/><br /><sub><b>Georg Karl</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=5niperspider" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

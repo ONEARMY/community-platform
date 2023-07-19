@@ -4,7 +4,7 @@ import '@uppy/dashboard/dist/style.css'
 import type { UppyFile } from '@uppy/core'
 import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
-import { Button, FileInformation } from 'oa-components'
+import { Button, DownloadStaticFile } from 'oa-components'
 import { UPPY_CONFIG } from './UppyConfig'
 import { Flex } from 'theme-ui'
 
@@ -79,7 +79,7 @@ export class FileInput extends React.Component<IProps, IState> {
                 Add Files (.zip)
               </Button>
               {this.filesArray.map((file) => (
-                <FileInformation
+                <DownloadStaticFile
                   key={file.name}
                   file={file}
                   allowDownload={false}

@@ -79,11 +79,9 @@ const ResearchUpdate = ({
                 sx={{ width: '100%', flexDirection: ['column', 'row', 'row'] }}
               >
                 <Box sx={{ width: ['100%', '75%', '75%'] }}>
-                  {contributors ? (
-                    <Box sx={{ mb: 2 }}>
-                      {contributors.map((collab, idx) => (
-                        <Username key={idx} user={collab} isVerified={false} />
-                      ))}
+                  {contributors.length > 0 ? (
+                    <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
+                      <Username user={contributors[0]} isVerified={false} />
                     </Box>
                   ) : null}
 

@@ -1,4 +1,8 @@
-import { HOWTO_TITLE_MIN_LENGTH } from '../../../../../src/pages/Howto/constants'
+import { faker } from '@faker-js/faker'
+import {
+  HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
+  HOWTO_TITLE_MIN_LENGTH,
+} from '../../../../../src/pages/Howto/constants'
 
 describe('[How To]', () => {
   beforeEach(() => {
@@ -13,17 +17,6 @@ describe('[How To]', () => {
   const selectDifficultLevel = (difficultLevel: Difficulty) => {
     cy.selectTag(difficultLevel, '[data-cy=difficulty-select]')
   }
-
-  const longLipsum = `Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim
-  labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi
-  animcupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est
-  aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia
-  pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit
-  commodo officia dolor Lorem duis laboris cupidatat officia voluptate. Culpa
-  proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia
-  eiusmod. Aliqua reprehenderit commodo ex non excepteur duis sunt velit enim.
-  Voluptate laboris sint cupidatat ullamco ut ea consectetur et est culpa et
-  culpa duis.`
 
   const fillStep = (
     stepNumber: number,
@@ -50,12 +43,17 @@ describe('[How To]', () => {
 
       cy.get('[data-cy=step-description]')
         .clear()
-        .type(longLipsum, { delay: 0 })
+        .type(
+          faker.lorem
+            .sentences(50)
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
+          { delay: 1 },
+        )
         .blur({ force: true })
 
       cy.wrap($step).should(
         'contain',
-        `Descriptions must be less than 700 characters`,
+        `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`,
       )
 
       cy.get('[data-cy=step-description]')
@@ -68,7 +66,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]').should('have.value', description)
       cy.get('[data-cy=character-count]')
         .should('be.visible')
-        .contains('105 / 700')
+        .contains(`105 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
 
       if (videoUrl) {
         cy.step('Adding Video Url')

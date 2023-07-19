@@ -14,7 +14,7 @@ import {
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
-  FileInformation,
+  DownloadStaticFile,
 } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading, Card, Flex, Box, Text, Label } from 'theme-ui'
@@ -396,7 +396,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     }}
                                   >
                                     {formValues.files.map((file) => (
-                                      <FileInformation
+                                      <DownloadStaticFile
                                         allowDownload
                                         file={file}
                                         key={file.name}

@@ -13,8 +13,10 @@ export const notifyNewPin = functions.firestore
     const info = snapshot.data()
     const id = info._id
     const type = info.type
-    const loc = info.location
-    //  console.log(info);
+    const moderation = info.moderation
+
+    if (moderation !== 'awaiting-moderation') return
+
     request.post(
       SLACK_WEBHOOK_URL,
       {

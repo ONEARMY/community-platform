@@ -6,7 +6,7 @@ import type {
   IMapPinDetail,
   IBoundingBox,
 } from 'src/models/maps.models'
-import type { IDBEndpoint } from 'src/models/common.models'
+import type { IDBEndpoint, IModerationStatus } from 'src/models/common.models'
 import type { RootStore } from '../index'
 import type { Subscription } from 'rxjs'
 import { ModuleStore } from '../common/module.store'
@@ -144,8 +144,11 @@ export class MapsStore extends ModuleStore {
   }
 
   // get base pin geo information
-  public async getPin(id: string) {
-    const pin = await this.db.collection<IMapPin>(COLLECTION_NAME).doc(id).get()
+  public async getPin(id: string, source: 'server' | 'cache' = 'cache') {
+    const pin = await this.db
+      .collection<IMapPin>(COLLECTION_NAME)
+      .doc(id)
+      .get(source)
     logger.debug({ pin }, 'MapsStore.getPin')
     return pin as IMapPin
   }
@@ -177,8 +180,19 @@ export class MapsStore extends ModuleStore {
 
   public async setUserPin(user: IUserPP) {
     const type = user.profileType || 'member'
-    // NOTE - if pin previously accepted this will be updated on backend function
-    const moderation = type === 'member' ? 'accepted' : 'awaiting-moderation'
+    const existingPin = await this.getPin(user.userName, 'server')
+    const existingModeration = existingPin.moderation || 'awaiting-moderation'
+
+    let moderation: IModerationStatus = existingModeration
+
+    if (type === 'member') {
+      moderation = 'accepted'
+    }
+
+    if (type !== 'member' && existingModeration === 'rejected') {
+      moderation = 'awaiting-moderation'
+    }
+
     const pin: IMapPin = {
       _id: user.userName,
       _deleted: !user.location?.latlng,
@@ -187,6 +201,7 @@ export class MapsStore extends ModuleStore {
       moderation,
       verified: user.verified,
     }
+
     if (type !== 'member' && user.workspaceType) {
       pin.subType = user.workspaceType
     }

@@ -114,7 +114,7 @@ As this is a large project spread across many developers it is important that th
 
 We also expect code to follow standard best practices, such as sensible variable naming, informative comments and avoiding files larger than a couple hundred lines of code (with emphasis on usability and reusability).
 
-Running `yarn format` from the project route prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
+Running `yarn format` from the project root prior to committing will ensure the code you're adding is formatted to align with the standards of this project.
 
 ## 🔬 &nbsp; Commit style guide
 

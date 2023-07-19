@@ -57,7 +57,7 @@ aliases:
       # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
       command: |
         yarn install --immutable
-        yarn install --immutable
+        yarn install --immutable --immutable-cache
         if [ ! -f /home/circleci/.yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
@@ -277,12 +277,7 @@ jobs:
   test_unit:
     docker: *docker
     steps:
-      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - checkout
-      # - *restore_yarn_cache
-      - run:
-          name: Install dependencies
-          command: yarn workspaces focus one-army-community-platform
+      - setup_repo
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
           command: yarn run test:unit && yarn run test:components
@@ -301,12 +296,7 @@ jobs:
   test_circular_dependency:
     docker: *docker
     steps:
-      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - checkout
-      # - *restore_yarn_cache
-      - run:
-          name: Install dependencies
-          command: yarn workspaces focus one-army-community-platform
+      - setup_repo
       - run:
           command: yarn run test:madge
 
@@ -320,12 +310,7 @@ jobs:
     # https://circleci.com/docs/2.0/configuration-reference/#resourceclass
     resource_class: large
     steps:
-      # whilst checkout-install could be persisted from previous step, that is less efficient than just using caching
-      - checkout
-      # - *restore_yarn_cache
-      - run:
-          name: Install dependencies
-          command: yarn workspaces focus one-army-community-platform
+      - setup_repo
       # As environment variables can only be set from strings add additional dynamic variable mappings here
       # https://discuss.circleci.com/t/using-environment-variables-in-config-yml-not-working/14237/13
       - run:

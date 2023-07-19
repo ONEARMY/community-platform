@@ -1,18 +1,15 @@
 import { Flex, Text } from 'theme-ui'
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
-import { useHistory } from 'react-router-dom'
-import { Tooltip } from 'oa-components'
+import { Tooltip } from '..'
 
-export interface DownloadFilesProps {
+export interface DownloadFileFromLinkProps {
   link: string
   handleClick?: () => Promise<void>
-  redirectToSignIn?: boolean
+  redirectToSignIn?: () => Promise<void>
 }
 
-const DownloadButton = (props: { redirectToSignIn: boolean }) => {
-  const history = useHistory()
-
+const DownloadButton = (props: { redirectToSignIn?: () => Promise<void> }) => {
   return (
     <>
       <Flex
@@ -27,9 +24,7 @@ const DownloadButton = (props: { redirectToSignIn: boolean }) => {
           maxWidth: '300px',
           borderRadius: 1,
         }}
-        onClick={() =>
-          props.redirectToSignIn ? history.push('/sign-in') : undefined
-        }
+        onClick={() => props.redirectToSignIn && props.redirectToSignIn()}
         data-tip={props.redirectToSignIn ? 'Login to download' : ''}
       >
         <Icon size={24} glyph={'external-url'} mr={3} />
@@ -42,7 +37,7 @@ const DownloadButton = (props: { redirectToSignIn: boolean }) => {
   )
 }
 
-export const DownloadFiles = (props: DownloadFilesProps) => {
+export const DownloadFileFromLink = (props: DownloadFileFromLinkProps) => {
   return (
     <>
       {!props.redirectToSignIn ? (
@@ -50,10 +45,10 @@ export const DownloadFiles = (props: DownloadFilesProps) => {
           href={props.link}
           onClick={() => props.handleClick && props.handleClick()}
         >
-          <DownloadButton redirectToSignIn={false} />
+          <DownloadButton />
         </ExternalLink>
       ) : (
-        <DownloadButton redirectToSignIn={props.redirectToSignIn || false} />
+        <DownloadButton redirectToSignIn={props.redirectToSignIn} />
       )}
     </>
   )

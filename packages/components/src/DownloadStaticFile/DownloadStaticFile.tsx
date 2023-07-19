@@ -1,9 +1,7 @@
 import * as React from 'react'
-import type { availableGlyphs } from '../'
+import type { availableGlyphs } from '..'
 import { Flex, Text } from 'theme-ui'
-import { ExternalLink, Icon } from '../'
-import { useHistory } from 'react-router-dom'
-import { Tooltip } from 'oa-components'
+import { ExternalLink, Icon, Tooltip } from '..'
 
 export interface IProps {
   file: {
@@ -13,7 +11,7 @@ export interface IProps {
   }
   allowDownload?: boolean
   handleClick?: () => Promise<void>
-  redirectToSignIn?: boolean
+  redirectToSignIn?: () => Promise<void>
 }
 
 const FileDetails = (props: {
@@ -22,10 +20,9 @@ const FileDetails = (props: {
   }
   glyph: availableGlyphs
   size: string
-  redirectToSignIn: boolean
+  redirectToSignIn?: () => Promise<void>
 }) => {
   const { file, glyph, size, redirectToSignIn } = props
-  const history = useHistory()
 
   return (
     <>
@@ -43,9 +40,7 @@ const FileDetails = (props: {
           width: '300px',
           cursor: 'pointer',
         }}
-        onClick={() =>
-          redirectToSignIn ? history.push('/sign-in') : undefined
-        }
+        onClick={() => redirectToSignIn && redirectToSignIn()}
         data-tip={redirectToSignIn ? 'Login to download' : ''}
       >
         <Icon size={24} glyph={glyph} mr={3} />
@@ -68,7 +63,7 @@ const FileDetails = (props: {
   )
 }
 
-export const FileInformation = ({
+export const DownloadStaticFile = ({
   file,
   allowDownload,
   handleClick,
@@ -90,19 +85,14 @@ export const FileInformation = ({
           download={file.name}
           style={{ width: '300px', marginLeft: 0 }}
         >
-          <FileDetails
-            file={file}
-            glyph="download-cloud"
-            size={size}
-            redirectToSignIn={false}
-          />
+          <FileDetails file={file} glyph="download-cloud" size={size} />
         </ExternalLink>
       ) : (
         <FileDetails
           file={file}
           glyph="download-cloud"
           size={size}
-          redirectToSignIn={redirectToSignIn || false}
+          redirectToSignIn={redirectToSignIn}
         />
       )}
     </>

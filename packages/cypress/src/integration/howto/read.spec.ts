@@ -93,19 +93,15 @@ describe('[How To]', () => {
             .match(coverFileRegex)
         })
 
-        cy.step('Attachments are opened in new tabs')
-        cy.get(`a[href*="art%20final%201.skp"]`).should(
-          'have.attr',
-          'target',
-          '_blank',
-        )
-        cy.get(`a[href*="art%20final%202.skp"]`).should(
-          'have.attr',
-          'target',
-          '_blank',
-        )
+        cy.step('Download file button should redirect to sign in')
+        cy.get('div[data-tip="Login to download"]')
+          .first()
+          .click()
+          .url()
+          .should('include', 'sign-in')
 
         cy.step('All steps are shown')
+        cy.visit(specificHowtoUrl)
         cy.get('[data-cy^=step_]').should('have.length', 12)
 
         cy.step('All step info is shown')
@@ -157,6 +153,25 @@ describe('[How To]', () => {
         cy.visit(specificHowtoUrl)
         cy.step(`ViewsCounter should not be visible`)
         cy.get('[data-cy="ViewsCounter"]').should('not.exist')
+      })
+    })
+
+    describe('[By Authenticated]', () => {
+      it('[Allows opening of attachments]', () => {
+        cy.login('howto_reader@test.com', 'test1234')
+        cy.visit(specificHowtoUrl)
+
+        cy.step('Attachments are opened in new tabs')
+        cy.get(`a[href*="art%20final%201.skp"]`).should(
+          'have.attr',
+          'target',
+          '_blank',
+        )
+        cy.get(`a[href*="art%20final%202.skp"]`).should(
+          'have.attr',
+          'target',
+          '_blank',
+        )
       })
     })
 

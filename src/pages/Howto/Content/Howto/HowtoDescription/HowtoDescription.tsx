@@ -11,15 +11,15 @@ import {
   LinkifyText,
   UsefulStatsButton,
   CategoryTag,
-  FileInformation,
+  DownloadStaticFile,
   Username,
   ViewsCounter,
-  DownloadFiles,
+  DownloadFileFromLink,
   Tooltip,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import { isAllowToEditContent, capitalizeFirstLetter } from 'src/utils/helpers'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
   retrieveHowtoDownloadCooldown,
@@ -51,6 +51,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   let didInit = false
   const [viewCount, setViewCount] = useState<number | undefined>()
   const { stores } = useCommonStores()
+  const history = useHistory()
 
   const incrementDownloadCount = async () => {
     const updatedDownloadCount = await stores.howtoStore.incrementDownloadCount(
@@ -71,6 +72,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     } else {
       setViewCount(howto.total_views)
     }
+  }
+
+  const redirectToSignIn = async () => {
+    history.push('/sign-in')
   }
 
   const handleDownloadClick = async () => {
@@ -294,10 +299,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             sx={{ flexDirection: 'column' }}
           >
             {howto.fileLink && (
-              <DownloadFiles
+              <DownloadFileFromLink
                 handleClick={handleDownloadClick}
                 link={howto.fileLink}
-                redirectToSignIn={!loggedInUser ? true : false}
+                redirectToSignIn={!loggedInUser ? redirectToSignIn : undefined}
               />
             )}
             {howto.files
@@ -305,12 +310,14 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               .map(
                 (file, index) =>
                   file && (
-                    <FileInformation
+                    <DownloadStaticFile
                       allowDownload
                       file={file}
                       key={file ? file.name : `file-${index}`}
                       handleClick={handleDownloadClick}
-                      redirectToSignIn={!loggedInUser ? true : false}
+                      redirectToSignIn={
+                        !loggedInUser ? redirectToSignIn : undefined
+                      }
                     />
                   ),
               )}

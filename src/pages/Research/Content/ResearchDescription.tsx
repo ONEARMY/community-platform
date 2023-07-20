@@ -120,23 +120,24 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
             </AuthWrapper>
           ) : null}
           {/* Check if research should be moderated */}
-          {props.needsModeration && research.moderation !== 'draft' && (
-            <Flex sx={{ justifyContent: 'space-between' }}>
-              <Button
-                data-cy={'accept'}
-                variant={'primary'}
-                icon="check"
-                mr={1}
-                onClick={() => props.moderateResearch(true)}
-              />
-              <Button
-                data-cy="reject-research"
-                variant={'outline'}
-                icon="delete"
-                onClick={() => props.moderateResearch(false)}
-              />
-            </Flex>
-          )}
+          {props.needsModeration &&
+            research.moderation === 'awaiting-moderation' && (
+              <Flex sx={{ justifyContent: 'space-between' }}>
+                <Button
+                  data-cy={'accept'}
+                  variant={'primary'}
+                  icon="check"
+                  mr={1}
+                  onClick={() => props.moderateResearch(true)}
+                />
+                <Button
+                  data-cy="reject-research"
+                  variant={'outline'}
+                  icon="delete"
+                  onClick={() => props.moderateResearch(false)}
+                />
+              </Flex>
+            )}
           {/* Show edit button for the creator of the research OR a super-admin */}
           {isEditable && (
             <Link to={'/research/' + research.slug + '/edit'}>

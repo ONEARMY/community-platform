@@ -38,16 +38,16 @@ describe('[How To]', () => {
 
       cy.wrap($step).should(
         'contain',
-        `Descriptions must be more than 100 characters`,
+        `Descriptions must be at least 100 characters`,
       )
 
       cy.get('[data-cy=step-description]')
         .clear()
-        .type(
+        .invoke(
+          'val',
           faker.lorem
             .sentences(50)
             .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
-          { delay: 1 },
         )
         .blur({ force: true })
 
@@ -59,14 +59,14 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]')
         .clear()
         .type(
-          `description for step ${stepNumber}. This description should be more than 100 characters and less than 700 characters.`,
+          `description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
         )
         .blur({ force: true })
 
       cy.get('[data-cy=step-description]').should('have.value', description)
       cy.get('[data-cy=character-count]')
         .should('be.visible')
-        .contains(`105 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
 
       if (videoUrl) {
         cy.step('Adding Video Url')
@@ -139,13 +139,13 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 1. This description should be more than 100 characters and less than 700 characters.',
+          text: 'Description for step 1. This description should be between the minimum and maximum description length',
           title: 'Step 1 is easy',
         },
         {
           _animationKey: 'unique2',
           images: [],
-          text: 'Description for step 2. This description should be more than 100 characters and less than 700 characters.',
+          text: 'Description for step 2. This description should be between the minimum and maximum description length',
           title: 'Step 2 is easy',
         },
       ],
@@ -300,7 +300,7 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 1. This description should be more than 100 characters and less than 700 characters.',
+          text: 'Description for step 1. This description should be between the minimum and maximum description length',
           title: 'Step 1 is easy',
         },
         {
@@ -325,7 +325,7 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 2. This description should be more than 100 characters and less than 700 characters.',
+          text: 'Description for step 2. This description should be between the minimum and maximum description length',
           title: 'Step 2 is easy',
         },
       ],

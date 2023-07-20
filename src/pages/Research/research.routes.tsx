@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react'
 import { AuthRoute } from '../common/AuthRoute'
 import { Route, Switch, withRouter } from 'react-router-dom'
+import { RESEARCH_EDITOR_ROLES } from './constants'
 const CreateResearch = lazy(
   () =>
     import(/* webpackChunkName: "CreateResearch" */ './Content/CreateResearch'),
@@ -39,29 +40,29 @@ const routes = () => (
       <AuthRoute
         path="/research/create"
         component={CreateResearch}
-        roleRequired="beta-tester"
+        roleRequired={RESEARCH_EDITOR_ROLES}
       />
       <AuthRoute
         exact
         path="/research/:slug/new-update"
         component={CreateUpdate}
-        roleRequired="beta-tester"
+        roleRequired={RESEARCH_EDITOR_ROLES}
       />
       <AuthRoute
         exact
         path="/research/:slug/edit"
         component={ResearchItemEditor}
-        roleRequired="beta-tester"
+        roleRequired={RESEARCH_EDITOR_ROLES}
       />
       <AuthRoute
         exact
         path="/research/:slug/edit-update/:update"
         component={UpdateItemEditor}
-        roleRequired="beta-tester"
+        roleRequired={RESEARCH_EDITOR_ROLES}
       />
       <Route
-        path="/research/:slug"
         exact
+        path="/research/:slug"
         key={getRandomInt(55555)}
         component={ResearchArticle}
       />

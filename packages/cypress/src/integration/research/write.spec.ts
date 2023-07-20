@@ -89,7 +89,7 @@ describe('[Research]', () => {
     it('[By Anonymous]', () => {
       cy.step('Ask users to login before creating a research item')
       cy.visit('/research/create')
-      cy.get('div').contains('beta-tester role required to access this page')
+      cy.get('div').contains('role required to access this page')
     })
 
     it('[Warning on leaving page]', () => {

@@ -115,7 +115,7 @@ describe('research.routes', () => {
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
@@ -125,15 +125,34 @@ describe('research.routes', () => {
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
-    it('accepts a logged in user with required role', async () => {
+    it('accepts a logged in user with required role [research_creator]', async () => {
       const { wrapper } = renderFn(
         '/research/create',
-        FactoryUser({ userRoles: ['beta-tester'] }),
+        FactoryUser({
+          userRoles: ['research_creator'],
+        }),
+      )
+      await waitFor(
+        () => {
+          expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
+        },
+        {
+          timeout: 2000,
+        },
+      )
+    })
+
+    it('accepts a logged in user with required role [research_creator]', async () => {
+      const { wrapper } = renderFn(
+        '/research/create',
+        FactoryUser({
+          userRoles: ['research_editor'],
+        }),
       )
       await waitFor(
         () => {
@@ -152,7 +171,7 @@ describe('research.routes', () => {
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
@@ -160,7 +179,7 @@ describe('research.routes', () => {
     it('accepts a logged in user with required role', async () => {
       const { wrapper } = renderFn(
         '/research/an-example/edit',
-        FactoryUser({ userName: 'Jaasper', userRoles: ['beta-tester'] }),
+        FactoryUser({ userName: 'Jaasper', userRoles: ['research_editor'] }),
       )
 
       await waitFor(() => {
@@ -170,7 +189,7 @@ describe('research.routes', () => {
 
     it('rejects a logged in user with required role but not author of document', async () => {
       const activeUser = FactoryUser({
-        userRoles: ['beta-tester'],
+        userRoles: ['research_editor'],
       })
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({
@@ -191,7 +210,7 @@ describe('research.routes', () => {
 
     it('accepts a user with required role and contributor acccess', async () => {
       const activeUser = FactoryUser({
-        userRoles: ['beta-tester'],
+        userRoles: ['research_editor'],
       })
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
@@ -215,7 +234,7 @@ describe('research.routes', () => {
       const { wrapper } = renderFn('/research/an-example/new-update', {})
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
@@ -223,7 +242,7 @@ describe('research.routes', () => {
     it('accepts a logged in user with required role', async () => {
       const { wrapper } = renderFn(
         '/research/an-example/new-update',
-        FactoryUser({ userRoles: ['beta-tester'] }),
+        FactoryUser({ userRoles: ['research_editor'] }),
       )
 
       await waitFor(() => {
@@ -240,14 +259,14 @@ describe('research.routes', () => {
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
     it('accept logged in author present', async () => {
       const activeUser = FactoryUser({
-        userRoles: ['beta-tester'],
+        userRoles: ['research_editor'],
       })
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({
@@ -283,14 +302,14 @@ describe('research.routes', () => {
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
     it('accept logged in user who is collaborator', async () => {
       const activeUser = FactoryUser({
-        userRoles: ['beta-tester'],
+        userRoles: ['research_editor'],
       })
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({

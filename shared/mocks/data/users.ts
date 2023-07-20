@@ -156,7 +156,7 @@ export const users = {
     _created: '2020-01-07T15:46:00.297Z',
     displayName: 'research_creator',
     _id: 'research_creator',
-    userRoles: ['beta-tester'],
+    userRoles: ['research_creator'],
   },
   research_editor: {
     _id: 'research_editor',
@@ -168,7 +168,7 @@ export const users = {
     _authID: 'cNksr9jiL8cGvwU88gHFNvfz4SK2',
     displayName: 'research_editor',
     _created: '2020-01-07T12:12:41.566Z',
-    userRoles: ['beta-tester'],
+    userRoles: ['research_editor'],
   },
   research_reader: {
     verified: false,
@@ -180,7 +180,7 @@ export const users = {
     _deleted: false,
     userName: 'research_reader',
     moderation: 'awaiting-moderation',
-    userRoles: ['beta-tester'],
+    userRoles: [],
   },
   settings_community_new: {
     _id: 'settings_community_new',

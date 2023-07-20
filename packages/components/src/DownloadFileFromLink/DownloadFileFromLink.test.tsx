@@ -1,11 +1,11 @@
 import { render } from '../tests/utils'
-import type { DownloadFilesProps } from './DownloadFiles'
-import { Default } from './DownloadFiles.stories'
+import type { DownloadFileFromLinkProps } from './DownloadFileFromLink'
+import { Default } from './DownloadFileFromLink.stories'
 
 describe('DownloadFiles', () => {
   it('validates the component behaviour', () => {
     const { getByText } = render(
-      <Default {...(Default.args as DownloadFilesProps)} />,
+      <Default {...(Default.args as DownloadFileFromLinkProps)} />,
     )
 
     expect(getByText('Download files')).toBeInTheDocument()

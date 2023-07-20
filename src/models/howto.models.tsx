@@ -59,7 +59,7 @@ export interface IHowtoFormInput extends IModerable, ISharedFeatures {
   files?: Array<IUploadedFileMeta | File | null>
   fileLink?: string
   mentions?: UserMention[]
-  steps: IHowToStepFormInput[] | []
+  steps: IHowToStepFormInput[]
   // note, tags will remain optional as if populated {} will be stripped by db (firestore)
   tags?: ISelectedTags
   time?: string

@@ -8,13 +8,17 @@ import {
 } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type { IComment, IVotedUsefulUpdate, IUser } from 'src/models'
+import type {
+  IComment,
+  IVotedUsefulUpdate,
+  IUser,
+  UserMention,
+} from 'src/models'
 import type {
   IHowToStepFormInput,
   IHowto,
   IHowtoDB,
   IHowtoFormInput,
-  IHowtoStep,
 } from 'src/models/howto.models'
 import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
@@ -339,39 +343,14 @@ export class HowtoStore extends ModuleStore {
       location: 'description',
     }))
 
-    const comments = await Promise.all(
-      [...toJS(howToItem.comments || [])].map(async (comment) => {
-        const { text, users } = await this.addUserReference(comment.text)
-        comment.text = text
-
-        users.forEach((username) => {
-          mentions.push({
-            username,
-            location: `comment:${comment._id}`,
-          })
-        })
-
-        return comment
-      }),
+    const { comments, commentMentions } = await this.findMentionsInComments(
+      howToItem.comments,
+    )
+    const { steps, stepMentions } = await this.findMentionsInSteps(
+      howToItem.steps,
     )
 
-    const steps = await Promise.all(
-      [...toJS(howToItem.steps || [])].map(async (step) => {
-        const { text, users } = await this.addUserReference(step.text || '')
-
-        users.forEach((username) => {
-          mentions.push({
-            username,
-            location: `step`,
-          })
-        })
-
-        return {
-          ...step,
-          text,
-        }
-      }),
-    )
+    mentions.push(...commentMentions, ...stepMentions)
 
     if (!howToItem.previousSlugs.includes(howToItem.slug)) {
       howToItem.previousSlugs.push(howToItem.slug)
@@ -502,13 +481,12 @@ export class HowtoStore extends ModuleStore {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array
       // file and step image re-uploads handled in uploadFile script
-      const cover_image = await this.setCoverImage(values, id)
+      const cover_image = await this.uploadCoverImage(values.cover_image, id)
       this.updateUploadStatus('Cover')
 
-      const stepValues = values.steps || []
-      const steps = await this.processSteps(stepValues, id)
+      const steps = await this.uploadStepImages(values.steps, id)
       this.updateUploadStatus('Step Images')
-      // upload files
+
       const files = await this.uploadCollectionBatch(
         values.files as File[],
         COLLECTION_NAME,
@@ -527,15 +505,16 @@ export class HowtoStore extends ModuleStore {
         time,
         title,
       } = values
+      const _id = id
       const _createdBy = values._createdBy ? values._createdBy : user.userName
-      const creatorCountry = this.setCreatorCountry(user, values)
+      const creatorCountry = this.getCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
       const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
-      const total_downloads =
-        files && !values['total_downloads'] ? 0 : values['total_downloads']
+      const total_downloads = values['total_downloads'] ?? 0
 
       const howTo: IHowto = {
+        _id,
         _createdBy,
         comments,
         creatorCountry,
@@ -548,7 +527,7 @@ export class HowtoStore extends ModuleStore {
         slug,
         steps,
         title,
-        total_downloads,
+        ...(files ? { total_downloads } : {}),
         ...(cover_image ? { cover_image } : {}),
         ...(difficulty_level ? { difficulty_level } : {}),
         ...(tags ? { tags } : {}),
@@ -568,36 +547,62 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  // go through each step, upload images and replace data
-  private async processSteps(steps: IHowToStepFormInput[], id: string) {
-    // NOTE - outer loop could be a map and done in parallel but for loop easier to manage
-    const stepsWithImgMeta: IHowtoStep[] = []
-    for (const step of steps) {
-      // determine any new images to upload
-      const stepImages = (step.images as IConvertedFileMeta[]).filter(
-        (img) => !!img,
-      )
-      const imgMeta = await this.uploadCollectionBatch(
-        stepImages,
-        COLLECTION_NAME,
-        id,
-      )
-      step.images = imgMeta
-      stepsWithImgMeta.push({
-        ...step,
-        images: (imgMeta || []).map((f) => {
-          if (f === undefined) {
-            return null
-          }
+  private async findMentionsInComments(rawComments: IComment[] | undefined) {
+    const commentMentions: UserMention[] = []
 
-          return f
-        }),
-      })
+    if (rawComments === undefined) {
+      return {
+        comments: [],
+        commentMentions,
+      }
     }
-    return stepsWithImgMeta
+
+    const comments = await Promise.all(
+      [...toJS(rawComments || [])].map(async (comment) => {
+        const { text, users } = await this.addUserReference(comment.text)
+        comment.text = text
+
+        users.forEach((username) => {
+          commentMentions.push({
+            username,
+            location: `comment:${comment._id}`,
+          })
+        })
+
+        return comment
+      }),
+    )
+
+    return {
+      comments,
+      commentMentions,
+    }
   }
 
-  private setCreatorCountry(user, values) {
+  private async findMentionsInSteps(steps: IHowToStepFormInput[]) {
+    const stepMentions: UserMention[] = []
+
+    for (const step of steps) {
+      if (step.text) {
+        const { text, users } = await this.addUserReference(step.text)
+
+        step.text = text
+        users.forEach((username) => {
+          stepMentions.push({
+            username,
+            location: `step`,
+          })
+        })
+      }
+    }
+
+    return {
+      steps,
+      stepMentions,
+    }
+  }
+
+  private getCreatorCountry(user: IUser, values: IHowtoFormInput) {
     const { creatorCountry, _createdBy } = values
     const userCountry = getUserCountry(user)
 
@@ -608,8 +613,8 @@ export class HowtoStore extends ModuleStore {
       : ''
   }
 
-  private async setCoverImage(
-    { cover_image }: IHowtoFormInput | IHowto,
+  private async uploadCoverImage(
+    cover_image: IConvertedFileMeta | IUploadedFileMeta | undefined,
     id: string,
   ) {
     if (!cover_image) return undefined
@@ -619,6 +624,23 @@ export class HowtoStore extends ModuleStore {
     } else {
       return cover_image as IUploadedFileMeta
     }
+  }
+
+  private async uploadStepImages(steps: IHowToStepFormInput[], id: string) {
+    for (const step of steps) {
+      // determine any new images to upload
+      const stepImages = (step.images as IConvertedFileMeta[]).filter(
+        (img) => !!img,
+      )
+      const uploadedImages = await this.uploadCollectionBatch(
+        stepImages,
+        COLLECTION_NAME,
+        id,
+      )
+      step.images = uploadedImages
+    }
+
+    return steps
   }
 
   @computed

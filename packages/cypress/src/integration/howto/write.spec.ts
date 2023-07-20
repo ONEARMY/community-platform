@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
 import {
+  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
-  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
 const creatorEmail = 'howto_creator@test.com'
 const creatorPassword = 'test1234'
@@ -29,7 +29,7 @@ describe('[How To]', () => {
     videoUrl?: string,
   ) => {
     const stepIndex = stepNumber - 1
-    console.log('stepIndex', stepIndex)
+
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
       cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
@@ -42,57 +42,49 @@ describe('[How To]', () => {
 
         cy.wrap($step).should(
           'contain',
-          `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
-        )
-
-        cy.get('[data-cy=step-description]')
-          .clear({ force: true })
-          // Speeds up test by avoiding typing and then updates character count by typing
-          .invoke(
-            'val',
-            faker.lorem
-              .sentences(50)
-              .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH - 1),
-          )
-          .type('Reach maximum character count')
-
-        cy.wrap($step).should(
-          'contain',
-          `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`,
+          `Descriptions must be at least ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
         )
 
         cy.get('[data-cy=step-description]')
           .clear()
           .type(
-            `Description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
+            faker.lorem
+              .sentences(50)
+              .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
+            { delay: 1 },
           )
           .blur({ force: true })
 
-        cy.get('[data-cy=step-description]').should('have.value', description)
-        cy.get('[data-cy=character-count]')
-          .should('be.visible')
-          .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+        cy.wrap($step).should(
+          'contain',
+          `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`,
+        )
+      }
 
-        if (videoUrl) {
-          cy.step('Adding Video Url')
-          cy.get('[data-cy=step-videoUrl]').clear().type(videoUrl)
-        } else {
-          cy.step('Uploading pics')
-          const hasExistingPics =
-            Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
-          if (hasExistingPics) {
-            cy.wrap($step)
-              .find('[data-cy=delete-image]')
-              .each(($deleteButton) => {
-                cy.wrap($deleteButton).click()
-              })
-          }
-          images.forEach((image, index) => {
-            cy.get(`[data-cy=step-image-${index}]`)
-              .find(':file')
-              .attachFile(image)
-          })
+      cy.get('[data-cy=step-description]').should('have.value', description)
+      cy.get('[data-cy=character-count]')
+        .should('be.visible')
+        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+
+      if (videoUrl) {
+        cy.step('Adding Video Url')
+        cy.get('[data-cy=step-videoUrl]').clear().type(videoUrl)
+      } else {
+        cy.step('Uploading pics')
+        const hasExistingPics =
+          Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
+        if (hasExistingPics) {
+          cy.wrap($step)
+            .find('[data-cy=delete-image]')
+            .each(($deleteButton) => {
+              cy.wrap($deleteButton).click()
+            })
         }
+        images.forEach((image, index) => {
+          cy.get(`[data-cy=step-image-${index}]`)
+            .find(':file')
+            .attachFile(image)
+        })
       }
     })
   }
@@ -105,34 +97,6 @@ describe('[How To]', () => {
       .click()
     cy.get('[data-cy=confirm]').click()
   }
-
-  describe('[Draft a how-to]', () => {
-    it('[By Authenticated]', () => {
-      cy.login(creatorEmail, creatorPassword)
-      cy.wait(2000)
-      cy.step('Access the create-how-to')
-      cy.get('[data-cy=create]').click()
-
-      cy.step('Add required title')
-      cy.get('[data-cy=intro-title]').type('Quick draft').blur({ force: true })
-
-      cy.step('Cannot be published')
-      cy.get('[data-cy=submit]').click()
-      cy.contains('Make sure this field is filled correctly').should('exist')
-
-      cy.step('Draft was created')
-      cy.get('[data-cy=draft]').click()
-      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-        .should('include', `/how-to/quick-draft`)
-      cy.get('[data-cy=moderationstatus-draft]').should('exist')
-
-      // Then add everything so that it could be submitted, but save of draft again
-
-      // Then submit and check again
-    })
-  })
 
   describe('[Create a how-to]', () => {
     const expected = {
@@ -223,6 +187,21 @@ describe('[How To]', () => {
         `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
+      cy.step('Cannot be published yet')
+      cy.get('[data-cy=submit]').click()
+      cy.contains('Make sure this field is filled correctly').should('exist')
+
+      cy.step('A basic draft was created')
+      cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
+        .click()
+        .url()
+        .should('include', `/how-to/qwer`)
+      cy.get('[data-cy=moderationstatus-draft]').should('exist')
+
+      cy.step('Back to completing the how-to')
+      cy.get('[data-cy=edit]').click()
+
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title')
         .clear()
@@ -253,8 +232,16 @@ describe('[How To]', () => {
 
       cy.wait(2000)
 
-      cy.get('[data-cy=submit]').click()
+      cy.screenClick()
 
+      cy.step('A full draft was saved')
+      cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 }).click()
+
+      cy.step('A full draft can be submitted for review')
+      cy.get('[data-cy=edit]').click()
+
+      cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
@@ -419,9 +406,10 @@ describe('[How To]', () => {
     })
 
     it('[By Owner]', () => {
-      cy.visit(howtoUrl)
       cy.login('howto_editor@test.com', 'test1234')
+
       cy.step('Go to Edit mode')
+      cy.visit(howtoUrl)
       cy.get('[data-cy=edit]').click()
 
       cy.step('Warn if title is identical with the existing ones')

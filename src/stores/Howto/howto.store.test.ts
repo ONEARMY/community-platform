@@ -69,8 +69,6 @@ const factory = async (
 
 describe('howto.store', () => {
   describe('uploadHowTo', () => {
-    it.todo('updates an existing item')
-
     it('creates a draft when only a title is provided', async () => {
       const howtos = [FactoryHowtoDraft({})]
       const { store, howToItem, setFn } = await factory(howtos)
@@ -80,6 +78,28 @@ describe('howto.store', () => {
       const [newHowto] = setFn.mock.calls[0]
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(newHowto.title).toBe('Quick draft')
+    })
+
+    it('updates an existing item', async () => {
+      const { store, setFn } = await factory()
+
+      const howto = FactoryHowtoDraft({})
+      await store.uploadHowTo(howto)
+
+      const [originalHowto] = setFn.mock.calls[0]
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(originalHowto.title).toBe('Quick draft')
+
+      const updatedHowtos = FactoryHowtoDraft({
+        _id: originalHowto._id,
+        steps: [FactoryHowtoStep(), FactoryHowtoStep(), FactoryHowtoStep()],
+      })
+
+      await store.uploadHowTo(updatedHowtos)
+
+      const [finalHowto] = setFn.mock.calls[1]
+      expect(setFn).toHaveBeenCalledTimes(2)
+      expect(finalHowto.steps).toHaveLength(3)
     })
 
     it('captures mentions within description', async () => {

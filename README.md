@@ -105,6 +105,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://linkedin.com/in/manacesneto"><img src="https://avatars.githubusercontent.com/u/8915867?v=4?s=60" width="60px;" alt="Manacés Pereira"/><br /><sub><b>Manacés Pereira</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=manacespereira" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/5niperspider"><img src="https://avatars.githubusercontent.com/u/62932392?v=4?s=60" width="60px;" alt="Georg Karl"/><br /><sub><b>Georg Karl</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=5niperspider" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/fletcher-larue/"><img src="https://avatars.githubusercontent.com/u/42685363?v=4?s=60" width="60px;" alt="asdFletcher"/><br /><sub><b>asdFletcher</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=asdFletcher" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/bagiyal"><img src="https://avatars.githubusercontent.com/u/63339447?v=4?s=60" width="60px;" alt="Abhishek Bagiyal"/><br /><sub><b>Abhishek Bagiyal</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=bagiyal" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

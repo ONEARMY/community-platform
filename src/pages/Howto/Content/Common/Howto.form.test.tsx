@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, act } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router'
@@ -27,6 +27,8 @@ jest.mock('src/index', () => {
             Database: false,
             Complete: false,
           },
+          validateTitleForSlug: jest.fn(),
+          uploadHowTo: jest.fn(),
         },
         tagsStore: {
           categoryTags: [
@@ -49,18 +51,25 @@ describe('Howto form', () => {
       // Arrange
       const formValues = FactoryHowto()
       // Act
-      const wrapper = getWrapper(formValues, 'edit', {})
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(formValues, 'edit', {})
+      })
 
       // Assert
       expect(wrapper.getByText('Maximum file size 50MB')).toBeInTheDocument()
     })
   })
+
   describe('Invalid file warning', () => {
     it('Does not appear when submitting only fileLink', async () => {
       // Arrange
       const formValues = FactoryHowto({ fileLink: 'www.test.com' })
       // Act
-      const wrapper = getWrapper(formValues, 'edit', {})
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(formValues, 'edit', {})
+      })
 
       // Assert
       expect(
@@ -79,7 +88,10 @@ describe('Howto form', () => {
       })
 
       // Act
-      const wrapper = getWrapper(formValues, 'edit', {})
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(formValues, 'edit', {})
+      })
 
       // Assert
       expect(
@@ -99,7 +111,10 @@ describe('Howto form', () => {
       })
 
       // Act
-      const wrapper = getWrapper(formValues, 'edit', {})
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(formValues, 'edit', {})
+      })
 
       // Assert
       expect(wrapper.queryByTestId('invalid-file-warning')).toBeInTheDocument()
@@ -116,11 +131,16 @@ describe('Howto form', () => {
       })
 
       // Act
-      const wrapper = getWrapper(formValues, 'edit', {})
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(formValues, 'edit', {})
+      })
 
       // clear files
       const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
-      fireEvent.click(reuploadFilesButton)
+      await act(async () => {
+        fireEvent.click(reuploadFilesButton)
+      })
 
       // add fileLink
       const fileLink = wrapper.getByPlaceholderText(
@@ -150,14 +170,19 @@ describe('Howto form', () => {
         })
 
         // Act
-        const wrapper = getWrapper(formValues, 'edit', {})
+        let wrapper
+        await act(async () => {
+          wrapper = await getWrapper(formValues, 'edit', {})
+        })
+
         const descriptionTextAreaElement =
           wrapper.getByTestId('step-description')
-        descriptionTextAreaElement.focus()
+
+        fireEvent.focus(descriptionTextAreaElement)
         fireEvent.change(descriptionTextAreaElement, {
           target: { value: `${longText}` },
         })
-        descriptionTextAreaElement.blur()
+        fireEvent.blur(descriptionTextAreaElement)
 
         // Assert
         expect(
@@ -170,7 +195,7 @@ describe('Howto form', () => {
   })
 })
 
-const getWrapper = (formValues, parentType, navProps) => {
+const getWrapper = async (formValues, parentType, navProps) => {
   return render(
     <Provider {...useCommonStores().stores}>
       <ThemeProvider theme={Theme}>

@@ -99,18 +99,21 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
-  const unloadDecorator = (form) => {
-    return form.subscribe(
-      ({ dirty }) => {
-        if (dirty && !store.updateUploadStatus.Complete) {
-          window.addEventListener('beforeunload', beforeUnload, false)
-          return
-        }
-        window.removeEventListener('beforeunload', beforeUnload, false)
-      },
-      { dirty: true },
-    )
-  }
+  const unloadDecorator = React.useCallback(
+    (form) => {
+      return form.subscribe(
+        ({ dirty }) => {
+          if (dirty && !store.updateUploadStatus.Complete) {
+            window.addEventListener('beforeunload', beforeUnload, false)
+            return
+          }
+          window.removeEventListener('beforeunload', beforeUnload, false)
+        },
+        { dirty: true },
+      )
+    },
+    [store.updateUploadStatus.Complete, beforeUnload],
+  )
 
   return (
     <>

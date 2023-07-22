@@ -21,6 +21,9 @@ const processInputModifiers = (value: any, modifiers: any = {}) => {
   if (modifiers.capitalize) {
     value = capitalizeFirstLetter(value)
   }
+  if (modifiers.trim) {
+    value = value.trim()
+  }
   return value
 }
 

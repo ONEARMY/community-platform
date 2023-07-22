@@ -78,7 +78,6 @@ class HowtoStep extends PureComponent<IProps, IState> {
    *
    * @param value - How to step description field value
    */
-
   validateDescription(value: string): string | null {
     if (!value) {
       return 'Make sure this field is filled correctly'
@@ -192,7 +191,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
               data-testid="step-description"
-              modifiers={{ capitalize: true }}
+              modifiers={{ capitalize: true, trim: true }}
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
               validate={this.validateDescription}

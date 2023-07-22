@@ -22,10 +22,9 @@ export interface IProps {
 }
 
 interface IState {
-  activeImage: IUploadedFileMeta | null
+  activeImageIndex: number
   showLightbox: boolean
   images: Array<IUploadedFileMeta>
-  imgIndex: number
 }
 
 const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
@@ -40,26 +39,24 @@ const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
 
 export const ImageGallery = (props: IProps) => {
   const [state, setState] = useState<IState>({
-    activeImage: null,
+    activeImageIndex: 0,
     showLightbox: false,
     images: [],
-    imgIndex: 0,
   })
 
   useEffect(() => {
     const images = (props.images || []).filter((img) => img !== null)
-    const activeImage = images.length > 0 ? images[0] : null
     setState({
       ...state,
-      activeImage: activeImage,
+      activeImageIndex: 0,
       images: images,
     })
   }, [])
 
-  const setActive = (image: IUploadedFileMeta) => {
+  const setActive = (imageIndex: number) => {
     setState({
       ...state,
-      activeImage: image,
+      activeImageIndex: imageIndex,
     })
   }
 
@@ -72,9 +69,11 @@ export const ImageGallery = (props: IProps) => {
     })
 
   const images = state.images
+  const activeImageIndex = state.activeImageIndex
+  const activeImage = images[activeImageIndex]
   const imageNumber = images.length
 
-  return state.activeImage ? (
+  return activeImage ? (
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ width: '100%' }}>
         <Image
@@ -86,7 +85,7 @@ export const ImageGallery = (props: IProps) => {
             objectFit: props.allowPortrait ? 'contain' : 'cover',
             height: [300, 450],
           }}
-          src={state.activeImage.downloadUrl}
+          src={activeImage.downloadUrl}
           onClick={() => {
             triggerLightbox()
           }}
@@ -100,8 +99,8 @@ export const ImageGallery = (props: IProps) => {
                 data-cy="thumbnail"
                 mb={3}
                 mt={4}
-                opacity={image === state.activeImage ? 1.0 : 0.5}
-                onClick={() => setActive(image)}
+                opacity={image === activeImage ? 1.0 : 0.5}
+                onClick={() => setActive(index)}
                 key={index}
               >
                 <Image
@@ -124,27 +123,23 @@ export const ImageGallery = (props: IProps) => {
 
       {state.showLightbox && (
         <Lightbox
-          mainSrc={state.images[state.imgIndex].downloadUrl}
-          nextSrc={
-            images[(state.imgIndex + 1) % state.images.length].downloadUrl
-          }
+          mainSrc={activeImage.downloadUrl}
+          nextSrc={images[(activeImageIndex + 1) % images.length].downloadUrl}
           prevSrc={
-            state.images[
-              (state.imgIndex + state.images.length - 1) % state.images.length
-            ].downloadUrl
+            images[(activeImageIndex + images.length - 1) % images.length]
+              .downloadUrl
           }
           onMovePrevRequest={() => {
             setState({
               ...state,
-              imgIndex:
-                (state.imgIndex + state.images.length - 1) %
-                state.images.length,
+              activeImageIndex:
+                (activeImageIndex + images.length - 1) % images.length,
             })
           }}
           onMoveNextRequest={() =>
             setState({
               ...state,
-              imgIndex: (state.imgIndex + 1) % state.images.length,
+              activeImageIndex: (activeImageIndex + 1) % images.length,
             })
           }
           onCloseRequest={() => triggerLightbox()}

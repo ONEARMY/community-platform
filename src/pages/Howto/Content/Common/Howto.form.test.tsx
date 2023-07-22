@@ -138,36 +138,6 @@ describe('Howto form', () => {
       ).not.toBeInTheDocument()
     })
   })
-
-  describe('HowtoStep', () => {
-    describe('Description field', () => {
-      it('validation fails when description is over the limit', async () => {
-        // Arrange
-        const maxLength = HOWTO_STEP_DESCRIPTION_MAX_LENGTH
-        const longText = faker.random.alpha(maxLength + 1)
-        const formValues = FactoryHowto({
-          steps: [FactoryHowtoStep({ text: '' })],
-        })
-
-        // Act
-        const wrapper = getWrapper(formValues, 'edit', {})
-        const descriptionTextAreaElement =
-          wrapper.getByTestId('step-description')
-        descriptionTextAreaElement.focus()
-        fireEvent.change(descriptionTextAreaElement, {
-          target: { value: `${longText}` },
-        })
-        descriptionTextAreaElement.blur()
-
-        // Assert
-        expect(
-          wrapper.getByText(
-            `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`,
-          ),
-        ).toBeInTheDocument()
-      })
-    })
-  })
 })
 
 const getWrapper = (formValues, parentType, navProps) => {

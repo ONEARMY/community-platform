@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
-import type { UserRole } from 'src/models/user.models'
+import type { UserRole, IUser } from 'src/models/user.models'
 import { SITE, DEV_SITE_ROLE } from 'src/config/config'
 
 /*
@@ -10,7 +10,6 @@ import { SITE, DEV_SITE_ROLE } from 'src/config/config'
 */
 
 interface IProps {
-  userStore?: UserStore
   roleRequired?: UserRole | UserRole[]
   fallback?: React.ReactNode
   /** Optional additional user IDs that have admin rights (e.g. content creators) */
@@ -18,14 +17,22 @@ interface IProps {
   children: React.ReactNode
 }
 
+interface IInjectedProps extends IProps {
+  userStore: UserStore
+}
+
 @inject('userStore')
 @observer
 export class AuthWrapper extends React.Component<IProps> {
+  get injected() {
+    return this.props as IInjectedProps
+  }
+
   render() {
-    const { userStore, roleRequired, additionalAdmins, children, fallback } =
-      this.props
+    const { roleRequired, additionalAdmins, children, fallback } = this.props
+    const currentUser = this.injected.userStore.user as IUser
     const isAuthorized = isUserAuthorized(
-      userStore?.user,
+      currentUser,
       roleRequired,
       additionalAdmins,
     )
@@ -52,22 +59,24 @@ const isUserAuthorized = (user, roleRequired, additionalAdmins) => {
     return user ? true : false
   }
 
-  // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
-  if (
-    process.env.NODE_ENV !== 'test' &&
-    (SITE === 'dev_site' || SITE === 'preview')
-  ) {
-    if (DEV_SITE_ROLE) {
-      return DEV_SITE_ROLE === roleRequired
-    }
-  }
-  // otherwise use logged in user profile values
-  if (user && roleRequired) {
+  if (roleRequired) {
     const rolesRequired = Array.isArray(roleRequired)
       ? roleRequired
       : [roleRequired]
 
-    return userRoles.some((role) => rolesRequired.includes(role))
+    // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
+    if (
+      process.env.NODE_ENV !== 'test' &&
+      (SITE === 'dev_site' || SITE === 'preview')
+    ) {
+      if (DEV_SITE_ROLE) {
+        return rolesRequired.includes(DEV_SITE_ROLE)
+      }
+    }
+    // otherwise use logged in user profile values
+    if (user) {
+      return userRoles.some((role) => rolesRequired.includes(role))
+    }
   }
 
   return false

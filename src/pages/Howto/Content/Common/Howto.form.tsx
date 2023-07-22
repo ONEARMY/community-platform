@@ -507,6 +507,14 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       <FieldArray name="steps" isEqual={COMPARISONS.step}>
                         {({ fields }) => (
                           <>
+                            <Box paddingTop={5}>
+                              <Heading>Steps</Heading>
+                              <Text sx={{ fontSize: 2 }}>
+                                Each step needs an intro, a description and
+                                photos or video. You'll need to have
+                                <strong> at least three steps</strong>.
+                              </Text>
+                            </Box>
                             <AnimatePresence>
                               {fields.map((name, index: number) => (
                                 <AnimationContainer

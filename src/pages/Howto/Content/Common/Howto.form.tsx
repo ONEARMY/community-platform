@@ -268,7 +268,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   validateFields={[]}
                                   validate={this.validateTitle}
                                   isEqual={COMPARISONS.textInput}
-                                  modifiers={{ capitalize: true }}
+                                  modifiers={{ capitalize: true, trim: true }}
                                   component={FieldInput}
                                   minLength={HOWTO_TITLE_MIN_LENGTH}
                                   maxLength={HOWTO_TITLE_MAX_LENGTH}

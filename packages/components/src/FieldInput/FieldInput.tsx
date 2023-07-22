@@ -14,16 +14,23 @@ export interface Props extends FieldProps {
 }
 
 type InputModifiers = {
-  capitalize?: boolean
+  capitalize?: boolean,
+  trim?: boolean
 }
 
 const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
+const trimWhitespace = (str: string) =>
+  str.trim()
+
 const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
   if (typeof value !== 'string') return value
   if (modifiers.capitalize) {
     value = capitalizeFirstLetter(value)
+  }
+  if (modifiers.trim) {
+    value = trimWhitespace(value)
   }
   return value
 }

@@ -4,7 +4,6 @@ import {
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
 
-// ZECHY: Learn this shit
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/how-to')
@@ -78,6 +77,22 @@ describe('[How To]', () => {
         .blur({ force: true })
 
       cy.get('[data-cy=step-description]').should('have.value', description)
+
+      // add test for trimming whitespace from step description
+
+      cy.get('[data-cy=step-description]')
+          .clear()
+          .type(
+            '  test for trailing whitespace  '
+          )
+          .blur()
+
+      cy.get('[data-cy=step-description]')
+            .should(
+              'have.value', 
+              'test for trailing whitespace'
+              )
+
       cy.get('[data-cy=character-count]')
         .should('be.visible')
         .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)

@@ -73,8 +73,8 @@ const validateTitle =
 
     return await store.validateTitleForSlug(value, documentType, originalId)
   }
-  
-const validationWrapper = (value, allValues, validator) => {
+
+const draftValidationWrapper = (value, allValues, validator) => {
   return allValues.allowDraftSave ? undefined : validator(value)
 }
 
@@ -103,7 +103,7 @@ export {
   validateUrl,
   validateUrlAcceptEmpty,
   validateEmail,
-  validationWrapper,
+  draftValidationWrapper,
   required,
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,

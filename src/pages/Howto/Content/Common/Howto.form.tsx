@@ -30,13 +30,13 @@ import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { HowToSubmitStatus } from './SubmitStatus'
 import {
   composeValidators,
+  draftValidationWrapper,
   minValue,
   required,
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,
   validateTitle,
   validateUrlAcceptEmpty,
-  validationWrapper,
 } from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
@@ -336,7 +336,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   id="time"
                                   name="time"
                                   validate={(values, allValues) =>
-                                    validationWrapper(
+                                    draftValidationWrapper(
                                       values,
                                       allValues,
                                       required,
@@ -363,7 +363,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   name="difficulty_level"
                                   data-cy="difficulty-select"
                                   validate={(values, allValues) =>
-                                    validationWrapper(
+                                    draftValidationWrapper(
                                       values,
                                       allValues,
                                       required,
@@ -385,7 +385,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   name="description"
                                   data-cy="intro-description"
                                   validate={(values, allValues) =>
-                                    validationWrapper(
+                                    draftValidationWrapper(
                                       values,
                                       allValues,
                                       required,
@@ -484,7 +484,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         isEqual={COMPARISONS.textInput}
                                         maxLength={MAX_LINK_LENGTH}
                                         validate={(values, allValues) =>
-                                          validationWrapper(
+                                          draftValidationWrapper(
                                             values,
                                             allValues,
                                             validateUrlAcceptEmpty,
@@ -537,7 +537,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   id="cover_image"
                                   name="cover_image"
                                   validate={(values, allValues) =>
-                                    validationWrapper(
+                                    draftValidationWrapper(
                                       values,
                                       allValues,
                                       required,

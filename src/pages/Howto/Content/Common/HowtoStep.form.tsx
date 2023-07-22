@@ -7,10 +7,10 @@ import styled from '@emotion/styled'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import {
+  draftValidationWrapper,
   required,
   minValue,
   composeValidators,
-  validationWrapper,
 } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
@@ -170,7 +170,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               maxLength={HOWTO_TITLE_MAX_LENGTH}
               minLength={HOWTO_TITLE_MIN_LENGTH}
               validate={(value, allValues) =>
-                validationWrapper(
+                draftValidationWrapper(
                   value,
                   allValues,
                   composeValidators(required, minValue(HOWTO_TITLE_MIN_LENGTH)),
@@ -196,7 +196,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
               validate={(value, allValues) =>
-                validationWrapper(
+                draftValidationWrapper(
                   value,
                   allValues,
                   composeValidators(
@@ -252,7 +252,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               component={FieldInput}
               placeholder="https://youtube.com/watch?v="
               validate={(value, allValues) =>
-                validationWrapper(
+                draftValidationWrapper(
                   value,
                   allValues,
                   this.validateMedia.bind(this),

@@ -26,7 +26,7 @@ import {
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,
   validateTitle,
-  validationWrapper,
+  draftValidationWrapper,
 } from 'src/utils/validators'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
@@ -231,7 +231,7 @@ const ResearchForm = observer((props: IProps) => {
                                 name="description"
                                 data-cy="intro-description"
                                 validate={(value, allValues) =>
-                                  validationWrapper(
+                                  draftValidationWrapper(
                                     value,
                                     allValues,
                                     (value, allValues) =>

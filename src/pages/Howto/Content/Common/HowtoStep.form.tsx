@@ -13,6 +13,7 @@ import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_MIN_REQUIRED_STEPS,
   HOWTO_TITLE_MAX_LENGTH,
+  HOWTO_TITLE_MIN_LENGTH,
 } from '../../constants'
 
 const ImageInputFieldWrapper = styled.div`
@@ -178,6 +179,8 @@ class HowtoStep extends PureComponent<IProps, IState> {
               component={FieldInput}
               placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
+              minLength={HOWTO_TITLE_MIN_LENGTH}
+              showCharacterCount
               validate={required}
               validateFields={[]}
               isEqual={COMPARISONS.textInput}

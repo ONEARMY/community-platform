@@ -4,6 +4,7 @@ import {
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
 
+// ZECHY: Learn this shit
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/how-to')
@@ -29,7 +30,20 @@ describe('[How To]', () => {
     console.log('stepIndex', stepIndex)
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
-      cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
+
+      cy.get('[data-cy=step-title]')
+        .clear()
+        .type(`Step ${stepNumber} is easy`)
+
+      cy.get('[data-cy=step-title]')
+        .clear()
+        .type(' between spaces ')
+        .blur()
+
+      cy.get('[data-cy=step-title]').should(
+        'have.value',
+        'between spaces'
+      )
 
       cy.get('[data-cy=step-description]')
         .clear()

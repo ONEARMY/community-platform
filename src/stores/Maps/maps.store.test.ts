@@ -9,7 +9,30 @@ describe('maps.store', () => {
   })
 
   describe('setUserPin', () => {
-    it('always sets a member pin as approved', async () => {
+    it('adds a new member pin as approved', async () => {
+      // Arrange
+      store.db.get = jest.fn().mockResolvedValue(null)
+
+      // Act
+      await store.setUserPin({
+        profileType: 'member',
+        location: {
+          latlng: {
+            lat: 0,
+            lng: 0,
+          },
+        },
+      } as any)
+
+      // Assert
+      expect(store.db.set).toHaveBeenCalledWith(
+        expect.objectContaining({
+          moderation: 'accepted',
+        }),
+      )
+    })
+
+    it('updates a member pin with requiring approval', async () => {
       // Act
       await store.setUserPin({
         profileType: 'member',
@@ -47,6 +70,10 @@ describe('maps.store', () => {
     })
 
     it('sets a non member pin as awaiting moderation', async () => {
+      // Arrange
+      store.db.get = jest.fn().mockResolvedValue(null)
+
+      // Act
       await store.setUserPin({
         profileType: 'workspace',
         location: {

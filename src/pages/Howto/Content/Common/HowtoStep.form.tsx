@@ -11,7 +11,9 @@ import { COMPARISONS } from 'src/utils/comparisons'
 import {
   HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
+  HOWTO_MIN_REQUIRED_STEPS,
   HOWTO_TITLE_MAX_LENGTH,
+  HOWTO_TITLE_MIN_LENGTH,
 } from '../../constants'
 
 const ImageInputFieldWrapper = styled.div`
@@ -101,13 +103,15 @@ class HowtoStep extends PureComponent<IProps, IState> {
       marginBottom: 2,
     }
 
+    const isAboveMinimumStep = index >= HOWTO_MIN_REQUIRED_STEPS
+
     return (
       // NOTE - animation parent container in CreateHowTo
       <Card data-cy={`step_${index}`} mt={5} key={index}>
         <Flex p={3} sx={{ flexDirection: 'column' }}>
           <Flex p={0}>
             <Heading variant="small" sx={{ flex: 1 }} mb={3}>
-              Step {index + 1}
+              Step {index + 1} {!isAboveMinimumStep && '*'}
             </Heading>
             {index >= 1 && (
               <Button
@@ -127,7 +131,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               showIconOnly={true}
               onClick={() => this.props.moveStep(index, index + 1)}
             />
-            {index >= 1 && (
+            {isAboveMinimumStep && (
               <Button
                 data-cy="delete-step"
                 variant={'outline'}
@@ -175,6 +179,8 @@ class HowtoStep extends PureComponent<IProps, IState> {
               component={FieldInput}
               placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
+              minLength={HOWTO_TITLE_MIN_LENGTH}
+              showCharacterCount
               validate={required}
               validateFields={[]}
               isEqual={COMPARISONS.textInput}

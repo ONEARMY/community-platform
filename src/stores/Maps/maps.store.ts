@@ -181,7 +181,7 @@ export class MapsStore extends ModuleStore {
   public async setUserPin(user: IUserPP) {
     const type = user.profileType || 'member'
     const existingPin = await this.getPin(user.userName, 'server')
-    const existingModeration = existingPin.moderation || 'awaiting-moderation'
+    const existingModeration = existingPin?.moderation || 'awaiting-moderation'
 
     let moderation: IModerationStatus = existingModeration
 

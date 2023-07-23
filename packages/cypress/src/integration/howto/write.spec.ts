@@ -59,7 +59,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]')
         .clear()
         .type(
-          `description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
+          `Description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
         )
         .blur({ force: true })
 
@@ -144,9 +144,28 @@ describe('[How To]', () => {
         },
         {
           _animationKey: 'unique2',
-          images: [],
+          images: [
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic1.jpg',
+              size: 19410,
+              type: 'image/jpeg',
+            },
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic2.jpg',
+              size: 20009,
+              type: 'image/jpeg',
+            },
+          ],
           text: 'Description for step 2. This description should be between the minimum and maximum description length',
           title: 'Step 2 is easy',
+        },
+        {
+          _animationKey: 'unique3',
+          images: [],
+          text: 'Description for step 3. This description should be between the minimum and maximum description length',
+          title: 'Step 3 is easy',
         },
       ],
     }
@@ -188,7 +207,7 @@ describe('[How To]', () => {
 
       expected.steps.forEach((step, i) => {
         const videoUrl =
-          i === 1 ? 'https://www.youtube.com/watch?v=Os7dREQ00l4' : undefined
+          i === 2 ? 'https://www.youtube.com/watch?v=Os7dREQ00l4' : undefined
         fillStep(
           i + 1,
           step.title,
@@ -197,9 +216,9 @@ describe('[How To]', () => {
           videoUrl,
         )
       })
-      deleteStep(3)
 
-      cy.screenClick()
+      cy.wait(2000)
+
       cy.get('[data-cy=submit]').click()
 
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
@@ -304,6 +323,25 @@ describe('[How To]', () => {
           title: 'Step 1 is easy',
         },
         {
+          _animationKey: 'unique2',
+          images: [
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic1.jpg',
+              size: 19410,
+              type: 'image/jpeg',
+            },
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic2.jpg',
+              size: 20009,
+              type: 'image/jpeg',
+            },
+          ],
+          text: 'Description for step 2. This description should be between the minimum and maximum description length',
+          title: 'Step 2 is easy',
+        },
+        {
           _animationKey: 'unique3',
           images: [
             {
@@ -325,8 +363,8 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 2. This description should be between the minimum and maximum description length',
-          title: 'Step 2 is easy',
+          text: 'Description for step 3. This description should be between the minimum and maximum description length',
+          title: 'Step 3 is easy',
         },
       ],
     }
@@ -404,12 +442,9 @@ describe('[How To]', () => {
 
       cy.contains('Upload 1 file').click()
 
-      cy.step('Update steps')
-
+      cy.step('Steps beyond the minimum can be deleted')
       deleteStep(5)
       deleteStep(4)
-      deleteStep(2)
-      // wait for delete animations to complete
       cy.wait(1000)
 
       expected.steps.forEach((step, index) => {

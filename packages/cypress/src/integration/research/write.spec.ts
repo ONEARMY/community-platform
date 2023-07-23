@@ -7,10 +7,6 @@ import {
 const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'
 
-const maxLengthResearch = faker.lorem
-  .sentences(50)
-  .slice(0, RESEARCH_MAX_LENGTH + 1)
-
 describe('[Research]', () => {
   beforeEach(() => {
     cy.visit('/research')
@@ -77,8 +73,12 @@ describe('[Research]', () => {
 
       cy.get('[data-cy=intro-description]')
         .clear({ force: true })
-        .type(maxLengthResearch, { delay: 0 })
-
+        // Speeds up test by avoiding typing and then updates character count by typing
+        .invoke(
+          'val',
+          faker.lorem.sentences(50).slice(0, RESEARCH_MAX_LENGTH - 1),
+        )
+        .type('Reach maximum character count')
       cy.contains(`${RESEARCH_MAX_LENGTH} / ${RESEARCH_MAX_LENGTH}`)
 
       cy.step('Enter research article details')

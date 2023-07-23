@@ -5,10 +5,6 @@ import {
   HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
 
-const maxLengthStepDescription = faker.lorem
-  .sentences(50)
-  .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1)
-
 describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/how-to')
@@ -48,7 +44,14 @@ describe('[How To]', () => {
 
       cy.get('[data-cy=step-description]')
         .clear({ force: true })
-        .type(maxLengthStepDescription, { delay: 0 })
+        // Speeds up test by avoiding typing and then updates character count by typing
+        .invoke(
+          'val',
+          faker.lorem
+            .sentences(50)
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH - 1),
+        )
+        .type('Reach maximum character count')
 
       cy.wrap($step).should(
         'contain',

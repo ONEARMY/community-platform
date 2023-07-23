@@ -4,10 +4,8 @@ import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
 import { useCommonStores } from 'src'
-import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
+import { FactoryHowto } from 'src/test/factories/Howto'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { HOWTO_STEP_DESCRIPTION_MAX_LENGTH } from '../../constants'
-import { faker } from '@faker-js/faker'
 
 const Theme = testingThemeStyles
 

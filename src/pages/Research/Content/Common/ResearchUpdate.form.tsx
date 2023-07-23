@@ -227,7 +227,11 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={required}
+                                validate={(value, allValues) =>
+                                  allValues.isDraft
+                                    ? undefined
+                                    : required(value)
+                                }
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldTextarea}

@@ -24,7 +24,7 @@ const minValue = (min: number) => (value) => {
   const strippedString = stripSpecialCharacters(value)
 
   return strippedString.length < min
-    ? `Should be greater than ${min} characters`
+    ? `Should be more than ${min} characters`
     : undefined
 }
 

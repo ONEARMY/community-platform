@@ -840,6 +840,21 @@ describe('research.store', () => {
       )
     })
 
+    it('reset research upload status', async () => {
+      const { store } = await factoryResearchItemFormInput(undefined)
+
+      store.updateResearchUploadStatus('Start')
+      store.updateResearchUploadStatus('Database')
+      store.updateResearchUploadStatus('Complete')
+      store.resetResearchUploadStatus()
+
+      expect(store.researchUploadStatus).toEqual({
+        Start: false,
+        Database: false,
+        Complete: false,
+      })
+    })
+
     it('triggers a notification for each subscribed users', async () => {
       const { store, researchItem, setFn } = await factoryResearchItem({
         subscribers: ['subscriber'],

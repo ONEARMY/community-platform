@@ -1,4 +1,4 @@
-import * as ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { initErrorHandler } from './common/Error/handler'
 import { App, useCommonStores } from './App'
 
@@ -6,4 +6,6 @@ initErrorHandler()
 
 export { useCommonStores }
 
-ReactDOM.render(<App />, document.getElementById('root') as HTMLElement)
+const container = document.getElementById('root')
+const root = createRoot(container!)
+root.render(<App />)

@@ -84,7 +84,7 @@ describe('[Research]', () => {
       cy.step('Enter research article details')
       cy.get('[data-cy=intro-title')
         .clear()
-        .type('Create research article test')
+        .type(expected.title)
         .blur({ force: true })
 
       cy.get('[data-cy=intro-description]')
@@ -109,6 +109,42 @@ describe('[Research]', () => {
             .should('eqResearch', expected)
         },
       )
+
+      cy.step('Edit the research article')
+      const editedResearchSlug = `${expected.slug}-edited`
+      const editedTitle = `${expected.title} edited`
+
+      cy.step('Go to Edit mode')
+      cy.get('[data-cy=edit]').click()
+
+      cy.step('Update the intro')
+      cy.get('[data-cy=intro-title]').clear().type(editedTitle)
+      cy.get('[data-cy=submit]').click()
+
+      cy.step('Open the updated research article')
+      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
+      cy.wait(2000)
+      cy.get('[data-cy=view-research]:enabled').click()
+
+      cy.url().should('include', editedResearchSlug)
+      cy.get('[data-cy=research-basis]').contains(editedTitle)
+
+      cy.queryDocuments('research', 'title', '==', editedTitle).then((docs) => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqResearch', {
+            ...expected,
+            title: editedTitle,
+            slug: editedResearchSlug,
+            previousSlugs: [...expected.previousSlugs, editedResearchSlug],
+          })
+      })
+
+      cy.step('Open the old slug')
+      cy.visit(`/research/${expected.slug}`)
+      cy.get('[data-cy=research-basis]').contains(expected.title)
     })
 
     it('[By Anonymous]', () => {
@@ -151,8 +187,7 @@ describe('[Research]', () => {
   })
 
   describe('[Edit a research article]', () => {
-    const researchUrl = '/research/create-research-article-test'
-    const editResearchUrl = '/research/create-research-article-test/edit'
+    const editResearchUrl = `/research/${expected.slug}/edit`
 
     it('[By Anonymous]', () => {
       cy.step('Prevent anonymous access to edit research article')
@@ -167,46 +202,6 @@ describe('[Research]', () => {
       cy.visit(editResearchUrl)
       // user should be redirect to research page
       // cy.location('pathname').should('eq', researchUrl)
-    })
-
-    it('[By Owner]', () => {
-      expected.title = `${expected.title} edited`
-      expected.slug = `${expected.slug}-edited`
-      expected.previousSlugs = [
-        'create-research-article-test',
-        'create-research-article-test-edited',
-      ]
-      cy.visit(researchUrl)
-      cy.login(researcherEmail, researcherPassword)
-      cy.step('Go to Edit mode')
-      cy.get('[data-cy=edit]').click()
-
-      cy.step('Update the intro')
-      cy.get('[data-cy=intro-title]').clear().type(expected.title)
-      cy.get('[data-cy=submit]').click()
-
-      cy.step('Open the updated research article')
-      cy.wait(2000)
-      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-        .should('include', `${researchUrl}-edited`)
-      cy.get('[data-cy=research-basis]').contains(expected.title)
-
-      cy.queryDocuments('research', 'title', '==', expected.title).then(
-        (docs) => {
-          cy.log('queryDocs', docs)
-          expect(docs.length).to.equal(1)
-          cy.wrap(null)
-            .then(() => docs[0])
-            .should('eqResearch', expected)
-        },
-      )
-
-      cy.step('Open the old slug')
-
-      cy.visit(researchUrl)
-      cy.get('[data-cy=research-basis]').contains(expected.title)
     })
   })
 })

@@ -259,6 +259,8 @@ describe('Research Article', () => {
     let wrapper
     await act(async () => {
       wrapper = getWrapper()
+    })
+    await act(() => {
       wrapper.getByText('View 2 Comments').click()
     })
 

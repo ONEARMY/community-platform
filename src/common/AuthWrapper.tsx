@@ -13,8 +13,6 @@ interface IProps {
   userStore?: UserStore
   roleRequired?: UserRole | UserRole[]
   fallback?: React.ReactNode
-  /** Optional additional user IDs that have admin rights (e.g. content creators) */
-  additionalAdmins?: string[]
   children: React.ReactNode
 }
 
@@ -22,13 +20,8 @@ interface IProps {
 @observer
 export class AuthWrapper extends React.Component<IProps> {
   render() {
-    const { userStore, roleRequired, additionalAdmins, children, fallback } =
-      this.props
-    const isAuthorized = isUserAuthorized(
-      userStore?.user,
-      roleRequired,
-      additionalAdmins,
-    )
+    const { userStore, roleRequired, children, fallback } = this.props
+    const isAuthorized = isUserAuthorized(userStore?.user, roleRequired)
     const childElements =
       roleRequired === 'beta-tester' ? (
         <div className="beta-tester-feature">{children}</div>
@@ -39,12 +32,7 @@ export class AuthWrapper extends React.Component<IProps> {
   }
 }
 
-const isUserAuthorized = (user, roleRequired, additionalAdmins) => {
-  // provide access to named users
-  if (additionalAdmins && user?._id && additionalAdmins.includes(user?._id)) {
-    return true
-  }
-
+const isUserAuthorized = (user, roleRequired) => {
   const userRoles = user?.userRoles || []
 
   // If no role required just check if user is logged in

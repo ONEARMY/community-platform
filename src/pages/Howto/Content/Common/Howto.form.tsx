@@ -14,7 +14,7 @@ import {
   FieldInput,
   FieldTextarea,
   ElWithBeforeIcon,
-  FileInformation,
+  DownloadStaticFile,
 } from 'oa-components'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Heading, Card, Flex, Box, Text, Label } from 'theme-ui'
@@ -28,7 +28,13 @@ import { PostingGuidelines } from './PostingGuidelines'
 
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { HowToSubmitStatus } from './SubmitStatus'
-import { required, validateUrlAcceptEmpty } from 'src/utils/validators'
+import {
+  required,
+  validateUrlAcceptEmpty,
+  minValue,
+  composeValidators,
+  validateTitle,
+} from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
@@ -126,18 +132,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
     logger.debug('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
-  }
-  public validateTitle = async (value: any) => {
-    const originalId =
-      this.props.parentType === 'edit' ? this.props.formValues._id : undefined
-    const strippedTitle = stripSpecialCharacters(value)
-    if (
-      strippedTitle.length < HOWTO_TITLE_MIN_LENGTH &&
-      strippedTitle.length > 0
-    ) {
-      return `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`
-    }
-    return this.store.validateTitleForSlug(value, 'howtos', originalId)
   }
   // automatically generate the slug when the title changes
   private calculatedFields = createDecorator({
@@ -266,7 +260,16 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   name="title"
                                   data-cy="intro-title"
                                   validateFields={[]}
-                                  validate={this.validateTitle}
+                                  validate={composeValidators(
+                                    required,
+                                    minValue(HOWTO_TITLE_MIN_LENGTH),
+                                    validateTitle(
+                                      this.props.parentType,
+                                      this.props.formValues._id,
+                                      'howtos',
+                                      this.store,
+                                    ),
+                                  )}
                                   isEqual={COMPARISONS.textInput}
                                   modifiers={{ capitalize: true }}
                                   component={FieldInput}
@@ -360,7 +363,8 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     minHeight: '150px',
                                   }}
                                   maxLength={HOWTO_MAX_LENGTH}
-                                  placeholder="Introduction to your How-To (max 400 characters)"
+                                  showCharacterCount
+                                  placeholder={`Introduction to your How-To (max ${HOWTO_MAX_LENGTH} characters)`}
                                 />
                               </Flex>
                               <Flex sx={{ mb: 2 }}>
@@ -396,7 +400,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                     }}
                                   >
                                     {formValues.files.map((file) => (
-                                      <FileInformation
+                                      <DownloadStaticFile
                                         allowDownload
                                         file={file}
                                         key={file.name}
@@ -507,13 +511,21 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                       <FieldArray name="steps" isEqual={COMPARISONS.step}>
                         {({ fields }) => (
                           <>
+                            <Box paddingTop={5}>
+                              <Heading>Steps</Heading>
+                              <Text sx={{ fontSize: 2 }}>
+                                Each step needs an intro, a description and
+                                photos or video. You'll need to have
+                                <strong> at least three steps</strong>.
+                              </Text>
+                            </Box>
                             <AnimatePresence>
                               {fields.map((name, index: number) => (
                                 <AnimationContainer
-                                  key={fields.value[index]._animationKey}
+                                  key={`${fields.value[index]._animationKey}-1`}
                                 >
                                   <HowtoStep
-                                    key={fields.value[index]._animationKey}
+                                    key={`${fields.value[index]._animationKey}-2`}
                                     step={name}
                                     index={index}
                                     moveStep={(from, to) => {

@@ -43,20 +43,7 @@ With the above tools available, you are ready:
 4. Run the dev server
    `yarn start`
 
-5. Run the end-to-end tests
-   `yarn test`
-
-More information is available in the developer documentation.
-
-### Additional commands
-
-- Run the component documentation
-  `yarn storybook`
-
-We use [Cypress](https://www.cypress.io/) to carry out end-to-end testing. For more information about how to setup, use and add tests refer to the sections in the [Testing Overview](https://onearmy.github.io/community-platform/Testing/overview).
-
-We use [BrowserStack](https://www.browserstack.com/) to test our platform on multiple devices and browsers.
-Note: Builds are currently tested on Chrome/Firefox. If your browser is not supported, then consider contributing.
+More information is available in the [developer documentation](https://docs.platform.onearmy.earth/).
 
 ## 🐛 &nbsp; Issue Tracking and Management
 

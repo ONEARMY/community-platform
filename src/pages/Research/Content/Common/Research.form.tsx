@@ -19,11 +19,20 @@ import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
-import { required } from 'src/utils/validators'
+import {
+  required,
+  minValue,
+  composeValidators,
+  validateTitle,
+} from 'src/utils/validators'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from '../../constants'
+import {
+  RESEARCH_TITLE_MAX_LENGTH,
+  RESEARCH_TITLE_MIN_LENGTH,
+  RESEARCH_MAX_LENGTH,
+} from '../../constants'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -91,16 +100,6 @@ const ResearchForm = observer((props: IProps) => {
   const onSubmit = async (formValues: IResearch.FormInput) => {
     formValues.moderation = submissionHandler.draft ? 'draft' : 'awaiting-moderation' // No moderation for researches for now --> Now Change to awaiting-moderation
     await store.uploadResearch(formValues)
-  }
-
-  const validateTitle = async (value: any) => {
-    const originalId =
-      props.parentType === 'edit' ? props.formValues._id : undefined
-    return store.validateTitleForSlug(value, 'research', originalId)
-  }
-
-  const validateDescription = (value, allValues) => {
-    return allValues.isDraft ? undefined : required(value)
   }
 
   // Display a confirmation dialog when leaving the page outside the React Router
@@ -206,10 +205,20 @@ const ResearchForm = observer((props: IProps) => {
                                 name="title"
                                 data-cy="intro-title"
                                 validateFields={[]}
-                                validate={validateTitle}
+                                validate={composeValidators(
+                                  required,
+                                  minValue(RESEARCH_TITLE_MIN_LENGTH),
+                                  validateTitle(
+                                    props.parentType,
+                                    props.formValues._id,
+                                    'research',
+                                    store,
+                                  ),
+                                )}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldInput}
                                 maxLength={RESEARCH_TITLE_MAX_LENGTH}
+                                minLength={RESEARCH_TITLE_MIN_LENGTH}
                                 showCharacterCount
                                 placeholder={`Can we make a chair from.. (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
                               />
@@ -222,7 +231,11 @@ const ResearchForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={validateDescription}
+                                validate={(value, allValues) =>
+                                  allValues.isDraft
+                                    ? undefined
+                                    : required(value)
+                                }
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldTextarea}
@@ -232,6 +245,7 @@ const ResearchForm = observer((props: IProps) => {
                                   minHeight: '150px',
                                 }}
                                 maxLength={RESEARCH_MAX_LENGTH}
+                                showCharacterCount
                                 placeholder={`Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`}
                               />
                             </Flex>

@@ -354,6 +354,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "asdFletcher",
+      "name": "asdFletcher",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42685363?v=4",
+      "profile": "https://www.linkedin.com/in/fletcher-larue/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bagiyal",
+      "name": "Abhishek Bagiyal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63339447?v=4",
+      "profile": "https://github.com/bagiyal",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "CrowsVeldt",
+      "name": "Zack",
+      "avatar_url": "https://avatars.githubusercontent.com/u/8883408?v=4",
+      "profile": "https://github.com/CrowsVeldt",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

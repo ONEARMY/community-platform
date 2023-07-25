@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
+  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
 
 describe('[How To]', () => {
@@ -38,35 +39,36 @@ describe('[How To]', () => {
 
       cy.wrap($step).should(
         'contain',
-        `Descriptions must be more than 100 characters`,
+        `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
       )
 
       cy.get('[data-cy=step-description]')
-        .clear()
-        .type(
+        .clear({ force: true })
+        // Speeds up test by avoiding typing and then updates character count by typing
+        .invoke(
+          'val',
           faker.lorem
             .sentences(50)
-            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
-          { delay: 1 },
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH - 1),
         )
-        .blur({ force: true })
+        .type('Reach maximum character count')
 
       cy.wrap($step).should(
         'contain',
-        `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`,
+        `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`,
       )
 
       cy.get('[data-cy=step-description]')
         .clear()
         .type(
-          `description for step ${stepNumber}. This description should be more than 100 characters and less than 700 characters.`,
+          `Description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
         )
         .blur({ force: true })
 
       cy.get('[data-cy=step-description]').should('have.value', description)
       cy.get('[data-cy=character-count]')
         .should('be.visible')
-        .contains(`105 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
 
       if (videoUrl) {
         cy.step('Adding Video Url')
@@ -139,14 +141,33 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 1. This description should be more than 100 characters and less than 700 characters.',
+          text: 'Description for step 1. This description should be between the minimum and maximum description length',
           title: 'Step 1 is easy',
         },
         {
           _animationKey: 'unique2',
-          images: [],
-          text: 'Description for step 2. This description should be more than 100 characters and less than 700 characters.',
+          images: [
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic1.jpg',
+              size: 19410,
+              type: 'image/jpeg',
+            },
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic2.jpg',
+              size: 20009,
+              type: 'image/jpeg',
+            },
+          ],
+          text: 'Description for step 2. This description should be between the minimum and maximum description length',
           title: 'Step 2 is easy',
+        },
+        {
+          _animationKey: 'unique3',
+          images: [],
+          text: 'Description for step 3. This description should be between the minimum and maximum description length',
+          title: 'Step 3 is easy',
         },
       ],
     }
@@ -167,7 +188,7 @@ describe('[How To]', () => {
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
+        `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
       cy.step('Fill up the intro')
@@ -188,7 +209,7 @@ describe('[How To]', () => {
 
       expected.steps.forEach((step, i) => {
         const videoUrl =
-          i === 1 ? 'https://www.youtube.com/watch?v=Os7dREQ00l4' : undefined
+          i === 2 ? 'https://www.youtube.com/watch?v=Os7dREQ00l4' : undefined
         fillStep(
           i + 1,
           step.title,
@@ -197,9 +218,9 @@ describe('[How To]', () => {
           videoUrl,
         )
       })
-      deleteStep(3)
 
-      cy.screenClick()
+      cy.wait(2000)
+
       cy.get('[data-cy=submit]').click()
 
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
@@ -300,8 +321,27 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 1. This description should be more than 100 characters and less than 700 characters.',
+          text: 'Description for step 1. This description should be between the minimum and maximum description length',
           title: 'Step 1 is easy',
+        },
+        {
+          _animationKey: 'unique2',
+          images: [
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic1.jpg',
+              size: 19410,
+              type: 'image/jpeg',
+            },
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic2.jpg',
+              size: 20009,
+              type: 'image/jpeg',
+            },
+          ],
+          text: 'Description for step 2. This description should be between the minimum and maximum description length',
+          title: 'Step 2 is easy',
         },
         {
           _animationKey: 'unique3',
@@ -325,8 +365,8 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 2. This description should be more than 100 characters and less than 700 characters.',
-          title: 'Step 2 is easy',
+          text: 'Description for step 3. This description should be between the minimum and maximum description length',
+          title: 'Step 3 is easy',
         },
       ],
     }
@@ -362,7 +402,7 @@ describe('[How To]', () => {
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
+        `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
       cy.get('[data-cy=intro-title]')
@@ -404,12 +444,9 @@ describe('[How To]', () => {
 
       cy.contains('Upload 1 file').click()
 
-      cy.step('Update steps')
-
+      cy.step('Steps beyond the minimum can be deleted')
       deleteStep(5)
       deleteStep(4)
-      deleteStep(2)
-      // wait for delete animations to complete
       cy.wait(1000)
 
       expected.steps.forEach((step, index) => {

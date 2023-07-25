@@ -1,3 +1,9 @@
+import { faker } from '@faker-js/faker'
+import {
+  RESEARCH_TITLE_MIN_LENGTH,
+  RESEARCH_MAX_LENGTH,
+} from '../../../../../src/pages/Research/constants'
+
 const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'
 
@@ -52,11 +58,28 @@ describe('[Research]', () => {
       cy.wait(2000)
       cy.step('Create the research article')
       cy.get('[data-cy=create]').click()
+
       cy.step('Warn if title is identical to an existing one')
       cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',
       ).should('exist')
+
+      cy.step('Warn if title not long enough')
+      cy.get('[data-cy=intro-title').clear().type('Q').blur({ force: true })
+      cy.contains(`Should be more than ${RESEARCH_TITLE_MIN_LENGTH} characters`)
+
+      cy.step('Limit description text to maximum length')
+
+      cy.get('[data-cy=intro-description]')
+        .clear({ force: true })
+        // Speeds up test by avoiding typing and then updates character count by typing
+        .invoke(
+          'val',
+          faker.lorem.sentences(50).slice(0, RESEARCH_MAX_LENGTH - 1),
+        )
+        .type('Reach maximum character count')
+      cy.contains(`${RESEARCH_MAX_LENGTH} / ${RESEARCH_MAX_LENGTH}`)
 
       cy.step('Enter research article details')
       cy.get('[data-cy=intro-title')
@@ -64,7 +87,9 @@ describe('[Research]', () => {
         .type('Create research article test')
         .blur({ force: true })
 
-      cy.get('[data-cy=intro-description]').type(expected.description)
+      cy.get('[data-cy=intro-description]')
+        .clear({ force: true })
+        .type(expected.description)
 
       cy.screenClick()
       cy.get('[data-cy=submit]').click()
@@ -89,7 +114,7 @@ describe('[Research]', () => {
     it('[By Anonymous]', () => {
       cy.step('Ask users to login before creating a research item')
       cy.visit('/research/create')
-      cy.get('div').contains('beta-tester role required to access this page')
+      cy.get('div').contains('role required to access this page')
     })
 
     it('[Warning on leaving page]', () => {

@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import ResearchRoutes from './research.routes'
-import { cleanup, render, waitFor } from '@testing-library/react'
+import { cleanup, render, waitFor, act } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { createMemoryHistory } from 'history'
 import { Provider } from 'mobx-react'
@@ -76,7 +76,11 @@ describe('research.routes', () => {
 
   describe('/research/', () => {
     it('renders the research listing', async () => {
-      const { wrapper } = renderFn('/research')
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/research')).wrapper
+      })
+
       await waitFor(
         () =>
           expect(
@@ -91,7 +95,10 @@ describe('research.routes', () => {
 
   describe('/research/:slug', () => {
     it('renders an individual research article', async () => {
-      const { wrapper } = renderFn('/research/research-slug')
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/research/research-slug')).wrapper
+      })
 
       await waitFor(
         () => {
@@ -111,30 +118,66 @@ describe('research.routes', () => {
 
   describe('/research/create', () => {
     it('rejects a request without a user present', async () => {
-      const { wrapper } = renderFn('/research/create')
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/research/create')).wrapper
+      })
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
     it('rejects a logged in user missing required role', async () => {
-      const { wrapper } = renderFn('/research/create')
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/research/create')).wrapper
+      })
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
-    it('accepts a logged in user with required role', async () => {
-      const { wrapper } = renderFn(
-        '/research/create',
-        FactoryUser({ userRoles: ['beta-tester'] }),
+    it('accepts a logged in user with required role [research_creator]', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = (
+          await renderFn(
+            '/research/create',
+            FactoryUser({
+              userRoles: ['research_creator'],
+            }),
+          )
+        ).wrapper
+      })
+
+      await waitFor(
+        () => {
+          expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
+        },
+        {
+          timeout: 2000,
+        },
       )
+    })
+
+    it('accepts a logged in user with required role [research_creator]', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = (
+          await renderFn(
+            '/research/create',
+            FactoryUser({
+              userRoles: ['research_editor'],
+            }),
+          )
+        ).wrapper
+      })
       await waitFor(
         () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
@@ -148,20 +191,31 @@ describe('research.routes', () => {
 
   describe('/research/:slug/edit', () => {
     it('rejects a request without a user present', async () => {
-      const { wrapper } = renderFn('/research/an-example/edit', {})
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/research/an-example/edit', {})).wrapper
+      })
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
     it('accepts a logged in user with required role', async () => {
-      const { wrapper } = renderFn(
-        '/research/an-example/edit',
-        FactoryUser({ userName: 'Jaasper', userRoles: ['beta-tester'] }),
-      )
+      let wrapper
+      await act(async () => {
+        wrapper = (
+          await renderFn(
+            '/research/an-example/edit',
+            FactoryUser({
+              userName: 'Jaasper',
+              userRoles: ['research_editor'],
+            }),
+          )
+        ).wrapper
+      })
 
       await waitFor(() => {
         expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
@@ -170,7 +224,7 @@ describe('research.routes', () => {
 
     it('rejects a logged in user with required role but not author of document', async () => {
       const activeUser = FactoryUser({
-        userRoles: ['beta-tester'],
+        userRoles: ['research_editor'],
       })
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({
@@ -182,7 +236,11 @@ describe('research.routes', () => {
         }),
       })
 
-      const { history } = renderFn('/research/an-example/edit', activeUser)
+      let history
+      await act(async () => {
+        history = (await renderFn('/research/an-example/edit', activeUser))
+          .history
+      })
 
       await waitFor(() => {
         expect(history.location.pathname).toBe('/research/an-example')
@@ -191,7 +249,7 @@ describe('research.routes', () => {
 
     it('accepts a user with required role and contributor acccess', async () => {
       const activeUser = FactoryUser({
-        userRoles: ['beta-tester'],
+        userRoles: ['research_editor'],
       })
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
@@ -202,7 +260,11 @@ describe('research.routes', () => {
         }),
       })
 
-      const { wrapper } = renderFn('/research/an-example/edit', activeUser)
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/research/an-example/edit', activeUser))
+          .wrapper
+      })
 
       await waitFor(() => {
         expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
@@ -212,20 +274,29 @@ describe('research.routes', () => {
 
   describe('/research/:slug/new-update', () => {
     it('rejects a request without a user present', async () => {
-      const { wrapper } = renderFn('/research/an-example/new-update', {})
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/research/an-example/new-update', {}))
+          .wrapper
+      })
+
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
     it('accepts a logged in user with required role', async () => {
-      const { wrapper } = renderFn(
-        '/research/an-example/new-update',
-        FactoryUser({ userRoles: ['beta-tester'] }),
-      )
-
+      let wrapper
+      await act(async () => {
+        wrapper = (
+          await renderFn(
+            '/research/an-example/new-update',
+            FactoryUser({ userRoles: ['research_editor'] }),
+          )
+        ).wrapper
+      })
       await waitFor(() => {
         expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
       })
@@ -234,20 +305,25 @@ describe('research.routes', () => {
 
   describe('/research/:slug/edit-update/:id', () => {
     it('rejects a request without a user present', async () => {
-      const { wrapper } = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-      )
+      let wrapper
+      await act(async () => {
+        wrapper = (
+          await renderFn(
+            '/research/an-example/edit-update/nested-research-update',
+          )
+        ).wrapper
+      })
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
     it('accept logged in author present', async () => {
       const activeUser = FactoryUser({
-        userRoles: ['beta-tester'],
+        userRoles: ['research_editor'],
       })
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({
@@ -265,10 +341,15 @@ describe('research.routes', () => {
         }),
       })
 
-      const { wrapper } = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-        activeUser,
-      )
+      let wrapper
+      await act(async () => {
+        wrapper = (
+          await renderFn(
+            '/research/an-example/edit-update/nested-research-update',
+            activeUser,
+          )
+        ).wrapper
+      })
 
       await waitFor(() => {
         expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
@@ -276,21 +357,26 @@ describe('research.routes', () => {
     })
 
     it('rejects logged in user who is not author', async () => {
-      const { wrapper } = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-        FactoryUser(),
-      )
+      let wrapper
+      await act(async () => {
+        wrapper = (
+          await renderFn(
+            '/research/an-example/edit-update/nested-research-update',
+            FactoryUser(),
+          )
+        ).wrapper
+      })
 
       await waitFor(() => {
         expect(
-          wrapper.getByText(/beta-tester role required to access this page/),
+          wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
       })
     })
 
     it('accept logged in user who is collaborator', async () => {
       const activeUser = FactoryUser({
-        userRoles: ['beta-tester'],
+        userRoles: ['research_editor'],
       })
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({
@@ -307,10 +393,15 @@ describe('research.routes', () => {
         }),
       })
 
-      const { wrapper } = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-        activeUser,
-      )
+      let wrapper
+      await act(async () => {
+        wrapper = (
+          await renderFn(
+            '/research/an-example/edit-update/nested-research-update',
+            activeUser,
+          )
+        ).wrapper
+      })
 
       await waitFor(() => {
         expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
@@ -319,7 +410,7 @@ describe('research.routes', () => {
   })
 })
 
-const renderFn = (url, fnUser?) => {
+const renderFn = async (url, fnUser?) => {
   const localUser = fnUser || FactoryUser()
   const history = createMemoryHistory({
     initialEntries: [url],

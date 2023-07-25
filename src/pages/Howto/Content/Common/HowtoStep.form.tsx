@@ -6,12 +6,14 @@ import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { required } from 'src/utils/validators'
+import { required, minValue, composeValidators } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
+  HOWTO_MIN_REQUIRED_STEPS,
   HOWTO_TITLE_MAX_LENGTH,
+  HOWTO_TITLE_MIN_LENGTH,
 } from '../../constants'
 
 const ImageInputFieldWrapper = styled.div`
@@ -74,26 +76,10 @@ class HowtoStep extends PureComponent<IProps, IState> {
    * Ensure that the How to description meets the following criteria:
    * - required
    * - minimum character length of 100 characters
-   * - maximum character length of 700 characters
+   * - maximum character length of 1000 characters
    *
    * @param value - How to step description field value
    */
-  validateDescription(value: string): string | null {
-    if (!value) {
-      return 'Make sure this field is filled correctly'
-    }
-
-    if (value.length < 100) {
-      return `Descriptions must be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`
-    }
-
-    if (value.length > 700) {
-      return `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`
-    }
-
-    return null
-  }
-
   render() {
     const { step, index } = this.props
     const _labelStyle = {
@@ -101,13 +87,15 @@ class HowtoStep extends PureComponent<IProps, IState> {
       marginBottom: 2,
     }
 
+    const isAboveMinimumStep = index >= HOWTO_MIN_REQUIRED_STEPS
+
     return (
       // NOTE - animation parent container in CreateHowTo
       <Card data-cy={`step_${index}`} mt={5} key={index}>
         <Flex p={3} sx={{ flexDirection: 'column' }}>
           <Flex p={0}>
             <Heading variant="small" sx={{ flex: 1 }} mb={3}>
-              Step {index + 1}
+              Step {index + 1} {!isAboveMinimumStep && '*'}
             </Heading>
             {index >= 1 && (
               <Button
@@ -127,7 +115,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
               showIconOnly={true}
               onClick={() => this.props.moveStep(index, index + 1)}
             />
-            {index >= 1 && (
+            {isAboveMinimumStep && (
               <Button
                 data-cy="delete-step"
                 variant={'outline'}
@@ -175,9 +163,14 @@ class HowtoStep extends PureComponent<IProps, IState> {
               component={FieldInput}
               placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
-              validate={required}
+              minLength={HOWTO_TITLE_MIN_LENGTH}
+              validate={composeValidators(
+                required,
+                minValue(HOWTO_TITLE_MIN_LENGTH),
+              )}
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
+              showCharacterCount
             />
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -190,10 +183,14 @@ class HowtoStep extends PureComponent<IProps, IState> {
               minLength={HOWTO_STEP_DESCRIPTION_MIN_LENGTH}
               maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
+              data-testid="step-description"
               modifiers={{ capitalize: true }}
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
-              validate={this.validateDescription}
+              validate={composeValidators(
+                required,
+                minValue(HOWTO_STEP_DESCRIPTION_MIN_LENGTH),
+              )}
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
               showCharacterCount

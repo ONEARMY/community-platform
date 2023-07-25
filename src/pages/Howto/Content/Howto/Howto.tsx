@@ -94,11 +94,10 @@ export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
 > {
-  private moderateHowto = async (accepted: boolean) => {
-    const _howto = this.store.activeHowto
-    if (_howto && _howto.moderation !== 'draft') {
-      _howto.moderation = accepted ? 'accepted' : 'rejected'
-      await this.store.moderateHowto(_howto)
+  private moderateHowto = async (accepted: boolean, feedback?: string) => {
+    const _id = this.store.activeHowto?._id
+    if (_id) {
+      await this.store.moderateHowto(_id, accepted, feedback)
     }
   }
 

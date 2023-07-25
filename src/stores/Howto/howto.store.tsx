@@ -10,9 +10,11 @@ import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import type {
   IComment,
+  UserMention,
+  IModerationUpdate,
   IVotedUsefulUpdate,
   IUser,
-  UserMention,
+  IModerationFeedback,
 } from 'src/models'
 import type {
   IHowToStepFormInput,
@@ -267,11 +269,49 @@ export class HowtoStore extends ModuleStore {
   }
 
   // Moderate Howto
-  public async moderateHowto(howto: IHowto) {
+  @action
+  public async moderateHowto(
+    docId: string,
+    accepted: boolean,
+    feedback?: string,
+  ): Promise<void> {
     if (!hasAdminRights(toJS(this.activeUser))) {
-      return false
+      return
     }
-    return this.updateHowtoItem(toJS(howto))
+    const dbRef = this.db
+      .collection<IModerationUpdate>(COLLECTION_NAME)
+      .doc(docId)
+
+    const howtoData = await toJS(dbRef.get('server'))
+    if (!howtoData) return
+
+    const newFeedback: IModerationFeedback[] | null = feedback
+      ? [
+          {
+            feedbackTimestamp: new Date().toISOString(),
+            feedbackComments: feedback,
+            adminUsername: this.activeUser?.userName || '',
+          },
+        ]
+      : null
+
+    const moderationUpdate: IModerationUpdate = {
+      _id: docId,
+      moderation: accepted ? 'accepted' : 'rejected',
+    }
+
+    if (newFeedback) {
+      moderationUpdate.moderationFeedback = [
+        ...(howtoData.moderationFeedback || []),
+        ...newFeedback,
+      ]
+    }
+
+    await dbRef.update(moderationUpdate)
+
+    this.activeHowto = (await dbRef.get()) as IHowtoDB
+
+    return
   }
 
   public needsModeration(howto: IHowto) {

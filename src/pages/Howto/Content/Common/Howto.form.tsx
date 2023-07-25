@@ -522,10 +522,10 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                             <AnimatePresence>
                               {fields.map((name, index: number) => (
                                 <AnimationContainer
-                                  key={fields.value[index]._animationKey}
+                                  key={`${fields.value[index]._animationKey}-1`}
                                 >
                                   <HowtoStep
-                                    key={fields.value[index]._animationKey}
+                                    key={`${fields.value[index]._animationKey}-2`}
                                     step={name}
                                     index={index}
                                     moveStep={(from, to) => {

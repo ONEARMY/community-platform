@@ -6,7 +6,7 @@ import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { required } from 'src/utils/validators'
+import { required, minValue, composeValidators } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
@@ -80,22 +80,6 @@ class HowtoStep extends PureComponent<IProps, IState> {
    *
    * @param value - How to step description field value
    */
-  validateDescription(value: string): string | null {
-    if (!value) {
-      return 'Make sure this field is filled correctly'
-    }
-
-    if (value.length < HOWTO_STEP_DESCRIPTION_MIN_LENGTH) {
-      return `Descriptions must be at least ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`
-    }
-
-    if (value.length >= HOWTO_STEP_DESCRIPTION_MAX_LENGTH) {
-      return `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`
-    }
-
-    return null
-  }
-
   render() {
     const { step, index } = this.props
     const _labelStyle = {
@@ -180,10 +164,13 @@ class HowtoStep extends PureComponent<IProps, IState> {
               placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
               minLength={HOWTO_TITLE_MIN_LENGTH}
-              showCharacterCount
-              validate={required}
+              validate={composeValidators(
+                required,
+                minValue(HOWTO_TITLE_MIN_LENGTH),
+              )}
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
+              showCharacterCount
             />
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -200,7 +187,10 @@ class HowtoStep extends PureComponent<IProps, IState> {
               modifiers={{ capitalize: true }}
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
-              validate={this.validateDescription}
+              validate={composeValidators(
+                required,
+                minValue(HOWTO_STEP_DESCRIPTION_MIN_LENGTH),
+              )}
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
               showCharacterCount

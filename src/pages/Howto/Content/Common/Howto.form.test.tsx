@@ -4,10 +4,8 @@ import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
 import { useCommonStores } from 'src'
-import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
+import { FactoryHowto } from 'src/test/factories/Howto'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { HOWTO_STEP_DESCRIPTION_MAX_LENGTH } from '../../constants'
-import { faker } from '@faker-js/faker'
 
 const Theme = testingThemeStyles
 
@@ -156,41 +154,6 @@ describe('Howto form', () => {
       expect(
         wrapper.queryByTestId('invalid-file-warning'),
       ).not.toBeInTheDocument()
-    })
-  })
-
-  describe('HowtoStep', () => {
-    describe('Description field', () => {
-      it('validation fails when description is over the limit', async () => {
-        // Arrange
-        const maxLength = HOWTO_STEP_DESCRIPTION_MAX_LENGTH
-        const longText = faker.random.alpha(maxLength + 1)
-        const formValues = FactoryHowto({
-          steps: [FactoryHowtoStep({ text: '' })],
-        })
-
-        // Act
-        let wrapper
-        await act(async () => {
-          wrapper = await getWrapper(formValues, 'edit', {})
-        })
-
-        const descriptionTextAreaElement =
-          wrapper.getByTestId('step-description')
-
-        fireEvent.focus(descriptionTextAreaElement)
-        fireEvent.change(descriptionTextAreaElement, {
-          target: { value: `${longText}` },
-        })
-        fireEvent.blur(descriptionTextAreaElement)
-
-        // Assert
-        expect(
-          wrapper.getByText(
-            `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`,
-          ),
-        ).toBeInTheDocument()
-      })
     })
   })
 })

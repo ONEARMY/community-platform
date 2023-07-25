@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
+  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
 
 describe('[How To]', () => {
@@ -38,22 +39,23 @@ describe('[How To]', () => {
 
       cy.wrap($step).should(
         'contain',
-        `Descriptions must be at least 100 characters`,
+        `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
       )
 
       cy.get('[data-cy=step-description]')
-        .clear()
+        .clear({ force: true })
+        // Speeds up test by avoiding typing and then updates character count by typing
         .invoke(
           'val',
           faker.lorem
             .sentences(50)
-            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH - 1),
         )
-        .blur({ force: true })
+        .type('Reach maximum character count')
 
       cy.wrap($step).should(
         'contain',
-        `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`,
+        `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`,
       )
 
       cy.get('[data-cy=step-description]')
@@ -186,7 +188,7 @@ describe('[How To]', () => {
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
+        `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
       cy.step('Fill up the intro')
@@ -400,7 +402,7 @@ describe('[How To]', () => {
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
+        `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
       cy.get('[data-cy=intro-title]')

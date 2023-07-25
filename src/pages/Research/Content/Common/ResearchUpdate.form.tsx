@@ -19,9 +19,19 @@ import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { required } from 'src/utils/validators'
+import {
+  required,
+  minValue,
+  composeValidators,
+  validateTitle,
+} from 'src/utils/validators'
 import styled from '@emotion/styled'
 import { UpdateSubmitStatus } from './SubmitStatus'
+import {
+  RESEARCH_TITLE_MAX_LENGTH,
+  RESEARCH_TITLE_MIN_LENGTH,
+  RESEARCH_MAX_LENGTH,
+} from '../../constants'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -194,11 +204,22 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 name="title"
                                 data-cy="intro-title"
                                 validateFields={[]}
-                                validate={required}
+                                validate={composeValidators(
+                                  required,
+                                  minValue(RESEARCH_TITLE_MIN_LENGTH),
+                                  validateTitle(
+                                    props.parentType,
+                                    props.formValues._id,
+                                    'research',
+                                    store,
+                                  ),
+                                )}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldInput}
-                                maxLength="40"
-                                placeholder="Title of this update (max 40 characters)"
+                                maxLength={RESEARCH_TITLE_MAX_LENGTH}
+                                minLength={RESEARCH_TITLE_MIN_LENGTH}
+                                showCharacterCount
+                                placeholder={`Title of this update (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -209,7 +230,11 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={required}
+                                validate={(value, allValues) =>
+                                  allValues.isDraft
+                                    ? undefined
+                                    : required(value)
+                                }
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldTextarea}
@@ -218,8 +243,9 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                   flex: 1,
                                   minHeight: '150px',
                                 }}
-                                maxLength="1500"
-                                placeholder="Explain what is happening in your research (max 1500 characters)"
+                                maxLength={RESEARCH_MAX_LENGTH}
+                                showCharacterCount
+                                placeholder={`Explain what is happening in your research (max ${RESEARCH_MAX_LENGTH} characters)`}
                               />
                             </Flex>
                             <Label htmlFor={`images`} sx={{ mb: 2 }}>

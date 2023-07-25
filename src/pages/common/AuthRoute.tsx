@@ -13,24 +13,15 @@ export const AuthRoute = observer(
   (props: {
     component: React.ComponentType<any>
     roleRequired?: UserRole | UserRole[]
-    /** User ids to be treated as admin, e.g. content creator */
-    additionalAdmins?: string[]
     /** Page to redirect if role not satisfied (default shows message) */
     redirect?: string
     path?: string
     exact?: boolean
   }) => {
-    const {
-      component: Component,
-      roleRequired,
-      additionalAdmins,
-      redirect,
-      ...rest
-    } = props
+    const { component: Component, roleRequired, redirect, ...rest } = props
 
     return (
       <AuthWrapper
-        additionalAdmins={additionalAdmins}
         roleRequired={roleRequired}
         fallback={
           redirect ? (

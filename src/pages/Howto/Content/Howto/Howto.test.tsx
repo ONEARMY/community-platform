@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
@@ -42,7 +42,7 @@ jest.mock('src/index', () => ({
 
 import { Howto } from './Howto'
 
-const factory = (howtoStore?: Partial<HowtoStore>) =>
+const factory = async (howtoStore?: Partial<HowtoStore>) =>
   render(
     <Provider
       {...useCommonStores().stores}
@@ -58,53 +58,65 @@ const factory = (howtoStore?: Partial<HowtoStore>) =>
   )
 
 describe('Howto', () => {
-  it('shows verified badge', () => {
-    const { getAllByTestId } = factory({
-      ...mockHowtoStore(),
-      activeHowto: FactoryHowto({
-        _createdBy: 'HowtoAuthor',
-      }),
+  it('shows verified badge', async () => {
+    let wrapper
+    await act(async () => {
+      wrapper = await factory({
+        ...mockHowtoStore(),
+        activeHowto: FactoryHowto({
+          _createdBy: 'HowtoAuthor',
+        }),
+      })
     })
 
     expect(() => {
-      getAllByTestId('Username: verified badge')
+      wrapper.getAllByTestId('Username: verified badge')
     }).not.toThrow()
   })
 
-  it('does not show verified badge', () => {
-    const { getAllByTestId } = factory()
+  it('does not show verified badge', async () => {
+    let wrapper
+    await act(async () => {
+      wrapper = await factory()
+    })
 
     expect(() => {
-      getAllByTestId('Username: verified badge')
+      wrapper.getAllByTestId('Username: verified badge')
     }).toThrow()
   })
 
   describe('steps', () => {
-    it('shows 1 step', () => {
-      const { getAllByText } = factory({
-        ...mockHowtoStore(),
-        activeHowto: FactoryHowto({
-          _createdBy: 'HowtoAuthor',
-          steps: [FactoryHowtoStep()],
-        }),
+    it('shows 1 step', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = await factory({
+          ...mockHowtoStore(),
+          activeHowto: FactoryHowto({
+            _createdBy: 'HowtoAuthor',
+            steps: [FactoryHowtoStep()],
+          }),
+        })
       })
 
       expect(() => {
-        getAllByText('1 step')
+        wrapper.getAllByText('1 step')
       }).not.toThrow()
     })
 
-    it('shows 2 steps', () => {
-      const { getAllByText } = factory({
-        ...mockHowtoStore(),
-        activeHowto: FactoryHowto({
-          _createdBy: 'HowtoAuthor',
-          steps: [FactoryHowtoStep(), FactoryHowtoStep()],
-        }),
+    it('shows 2 steps', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = await factory({
+          ...mockHowtoStore(),
+          activeHowto: FactoryHowto({
+            _createdBy: 'HowtoAuthor',
+            steps: [FactoryHowtoStep(), FactoryHowtoStep()],
+          }),
+        })
       })
 
       expect(() => {
-        getAllByText('2 steps')
+        wrapper.getAllByText('2 steps')
       }).not.toThrow()
     })
   })

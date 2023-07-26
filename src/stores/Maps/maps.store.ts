@@ -55,11 +55,14 @@ export class MapsStore extends ModuleStore {
     const isAdmin = hasAdminRights(activeUser)
     pins = pins
       .filter((p) => {
+        const isDeleted = p._deleted || false
         const isPinAccepted = p.moderation === 'accepted'
         const wasCreatedByUser = activeUser && p._id === activeUser.userName
         const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
         return (
-          p.type && (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
+          p.type &&
+          !isDeleted &&
+          (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
         )
       })
       .map((p) => {

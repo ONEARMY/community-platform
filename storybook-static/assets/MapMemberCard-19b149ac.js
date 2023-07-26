@@ -1,0 +1,9 @@
+import{a as e,j as i,F as n}from"./jsx-runtime-913be41c.js";import{I as m}from"./InternalLink-902afeab.js";import{U as p}from"./Username-70498745.js";import{k as g}from"./emotion-react.browser.esm-aba50b66.js";import{C as h,d as t,a as d,c as f,T as o}from"./theme-ui-components.esm-a8d58c50.js";const b=g`
+  from {
+    background: lightgrey;
+  }
+  to {
+    background: grey;
+  }
+`,s=r=>{const{imageUrl:l,description:u,user:a,heading:c}=r;return e(h,{sx:{maxWidth:"230px"},"data-cy":"MapMemberCard",children:i(m,{to:`/u/${a.username}`,children:[!!r.loading&&i(n,{children:[e(t,{ratio:230/120,sx:{background:"lightgrey",animation:`${b} 800ms ease infinite`}}),e(d,{sx:{p:2,height:"109px"}})]}),!r.loading&&i(n,{children:[e(t,{ratio:230/120,sx:{background:"lightgrey"},children:e(f,{src:l,sx:{objectFit:"cover",width:"100%",height:"100%"}})}),i(d,{sx:{p:2},children:[e(o,{mb:2,sx:{fontSize:"12px",color:"blue"},children:c}),e("div",{children:e(p,{isVerified:!!a.isVerified,user:{userName:a.username,countryCode:a.country}})}),e(o,{mb:2,sx:{wordBreak:"break-word",fontSize:1,display:"block",color:"black"},children:u})]})]})]})})};try{s.displayName="MapMemberCard",s.__docgenInfo={description:"",displayName:"MapMemberCard",props:{loading:{defaultValue:null,description:"",name:"loading",required:!1,type:{name:"boolean"}},imageUrl:{defaultValue:null,description:"",name:"imageUrl",required:!0,type:{name:"string"}},description:{defaultValue:null,description:"",name:"description",required:!0,type:{name:"string"}},user:{defaultValue:null,description:"",name:"user",required:!0,type:{name:"{ isVerified: boolean; username: string; country: string | null; }"}},heading:{defaultValue:null,description:"",name:"heading",required:!0,type:{name:"string"}},isEditable:{defaultValue:null,description:"",name:"isEditable",required:!0,type:{name:"boolean"}}}}}catch{}export{s as M};
+//# sourceMappingURL=MapMemberCard-19b149ac.js.map

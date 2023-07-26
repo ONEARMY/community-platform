@@ -8,6 +8,7 @@ import {
   IUserDB,
 } from '../models'
 import { backupUser } from './backupUser'
+import { del } from 'request'
 
 /*********************************************************************
  * Side-effects to be carried out on various user updates, namely:
@@ -31,6 +32,8 @@ async function processHowToUpdates(change: IDBDocChange) {
   const newCountryCode = info.location?.countryCode
   const prevCountry = prevInfo.country
   const newCountry = info.country
+  const prevDeleted = prevInfo._deleted || false
+  const deleted = info._deleted || false
 
   const didChangeCountry =
     prevCountryCode !== newCountryCode || prevCountry !== newCountry
@@ -51,6 +54,11 @@ async function processHowToUpdates(change: IDBDocChange) {
       newUserName: didChangeUserName ? info.userName : undefined,
       originalUserName: prevInfo.userName,
     })
+  }
+
+  const didDelete = prevDeleted !== deleted && deleted
+  if (didDelete) {
+    await deleteMapPin(info._id)
   }
 }
 
@@ -243,4 +251,19 @@ async function updateUserCommentsInfo({
     }
   }
   console.log('Successfully updated', count, 'research comments!')
+}
+
+async function deleteMapPin(_id: string) {
+  const pin = await db.collection(DB_ENDPOINTS.mappins).doc(_id).get()
+
+  if (pin.exists) {
+    try {
+      await pin.ref.update({
+        _deleted: true,
+        _modified: new Date().toISOString(),
+      })
+    } catch (error) {
+      console.error('Error marking map pin as deleted: ', error)
+    }
+  }
 }

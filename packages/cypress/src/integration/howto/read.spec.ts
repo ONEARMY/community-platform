@@ -1,8 +1,9 @@
 import { v4 as uuid } from 'uuid'
+import { MOCK_DATA } from '../../data'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-  const totalHowTo = 8
+  const totalHowTo = Object.values(MOCK_DATA.howtos).length
 
   describe('[List how-tos]', () => {
     const howtoSlug = 'make-glass-like-beams'

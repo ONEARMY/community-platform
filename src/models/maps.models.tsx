@@ -1,4 +1,4 @@
-import type { IModerable } from './common.models'
+import type { IModerationStatus } from './common.models'
 import type { WorkspaceType } from './userPreciousPlastic.models'
 import type { ProfileTypeLabel } from '../modules/profile/types'
 
@@ -13,11 +13,15 @@ import type { ProfileTypeLabel } from '../modules/profile/types'
 export type IMapPinType = ProfileTypeLabel
 export type IMapPinSubtype = WorkspaceType
 
+export type IMapPinModerationStatus = IModerationStatus & 'improvements-needed'
+
 /**
  * Map pins have a `type` which correspond to icon
  * They can also optionally have a subtype for additional filtering
  */
-export interface IMapPin extends IModerable {
+export interface IMapPin {
+  moderation: IMapPinModerationStatus
+  _createdBy?: string
   _id: string
   _deleted: boolean
   type: IMapPinType

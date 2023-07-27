@@ -285,22 +285,20 @@ export class HowtoStore extends ModuleStore {
     const howtoData = await toJS(dbRef.get('server'))
     if (!howtoData) return
 
-    const newFeedback: IModerationFeedback[] | null = feedback
-      ? [
-          {
-            feedbackTimestamp: new Date().toISOString(),
-            feedbackComments: feedback,
-            adminUsername: this.activeUser?.userName || '',
-          },
-        ]
-      : null
-
     const moderationUpdate: IModerationUpdate = {
       _id: docId,
       moderation: accepted ? 'accepted' : 'rejected',
     }
 
-    if (newFeedback) {
+    if (feedback) {
+      const newFeedback: IModerationFeedback[] = [
+        {
+          feedbackTimestamp: new Date().toISOString(),
+          feedbackComments: feedback,
+          adminUsername: this.activeUser?.userName || '',
+        },
+      ]
+
       moderationUpdate.moderationFeedback = [
         ...(howtoData.moderationFeedback || []),
         ...newFeedback,

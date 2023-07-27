@@ -23,7 +23,7 @@ export interface IModerationFeedback {
   adminUsername: string
 }
 export interface IModeration {
-  moderation: string
+  moderation: IModerationStatus
   moderationFeedback?: IModerationFeedback[]
 }
 export interface IModerable extends IModeration {

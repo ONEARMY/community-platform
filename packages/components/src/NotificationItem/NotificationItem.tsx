@@ -2,28 +2,13 @@ import { ThemeProvider } from '@emotion/react'
 import { Flex, Box } from 'theme-ui'
 import { Icon } from '../Icon/Icon'
 import type { availableGlyphs } from '../Icon/types'
-
-type notificationType =
-  | 'new_comment'
-  | 'howto_useful'
-  | 'howto_mention'
-  | 'howto_approved'
-  | 'howto_needs_updates'
-  | 'map_pin_approved'
-  | 'map_pin_needs_updates'
-  | 'new_comment_research'
-  | 'research_useful'
-  | 'research_mention'
-  | 'research_update'
-  | 'research_approved'
-  | 'research_needs_updates'
-
+import type { NotificationType } from 'oa-shared'
 export interface UserNotificationItem {
-  type: notificationType
+  type: NotificationType
   children: React.ReactNode
 }
 
-function getIconByType(type: notificationType): availableGlyphs {
+function getIconByType(type: NotificationType): availableGlyphs {
   if (['howto_useful', 'research_useful'].includes(type)) return 'useful'
   if (
     ['howto_approved', 'map_pin_approved', 'research_approved'].includes(type)

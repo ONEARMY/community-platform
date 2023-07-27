@@ -1,4 +1,3 @@
-import { AdminStore } from './Admin/admin.store'
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
 import { DatabaseV2 } from './databaseV2'
@@ -35,7 +34,6 @@ const stores = (rootStore: RootStore) => {
     platformStore: new PlatformStore(rootStore),
     mobileMenuStore: new MobileMenuStore(rootStore),
     mapsStore: new MapsStore(rootStore),
-    adminStore: new AdminStore(rootStore),
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
   }
@@ -51,7 +49,6 @@ export interface IStores {
   platformStore: PlatformStore
   mobileMenuStore: MobileMenuStore
   mapsStore: MapsStore
-  adminStore: AdminStore
   themeStore: ThemeStore
   aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore

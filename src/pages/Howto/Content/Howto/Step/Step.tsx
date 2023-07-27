@@ -2,7 +2,7 @@ import { PureComponent } from 'react'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
 import type { IHowtoStep } from 'src/models/howto.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'src/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import styled from '@emotion/styled'
 

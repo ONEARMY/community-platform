@@ -5,7 +5,7 @@ import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
 import type { IHowtoStep } from 'src/models/howto.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'src/storage'
 import { required, minValue, composeValidators } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {

@@ -33,7 +33,6 @@ export class ImageConverter extends React.Component<IProps, IState> {
   }
 
   async compressFiles(file: File) {
-
     const convertedMeta = this._generateFileMeta(file)
     this.setState({
       convertedFile: convertedMeta,

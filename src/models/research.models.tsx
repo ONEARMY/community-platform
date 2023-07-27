@@ -6,7 +6,7 @@ import type {
   ISharedFeatures,
   UserMention,
 } from '.'
-import type { IUploadedFileMeta } from '../stores/storage'
+import type { IUploadedFileMeta } from '../storage'
 import type { IConvertedFileMeta } from '../types'
 import type { IResearchCategory } from './researchCategories.model'
 

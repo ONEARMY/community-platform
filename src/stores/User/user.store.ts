@@ -5,7 +5,7 @@ import { getLocationData } from '../../utils/getLocationData'
 import { formatLowerNoSpecial } from '../../utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
-import { Storage } from '../storage'
+import { Storage } from '../../storage'
 
 import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'

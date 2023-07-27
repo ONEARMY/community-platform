@@ -8,7 +8,7 @@ import {
   VideoPlayer,
 } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'src/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'

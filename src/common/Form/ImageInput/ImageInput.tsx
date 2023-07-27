@@ -5,7 +5,7 @@ import { Button } from 'oa-components'
 import 'react-image-lightbox/style.css'
 import { ImageConverter } from './ImageConverter'
 import Dropzone from 'react-dropzone'
-import type { IUploadedFileMeta } from '../../../stores/storage'
+import type { IUploadedFileMeta } from '../../../storage'
 import type { IConvertedFileMeta } from 'src/types'
 
 interface ITitleProps {

@@ -10,7 +10,7 @@ import { required } from 'src/utils/validators'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import type { IUser } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'src/storage'
 import { ProfileType } from 'src/modules/profile/types'
 import { SelectField } from 'src/common/Form/Select.field'
 

@@ -7,7 +7,7 @@ import type {
 } from './common.models'
 import type { UserRole, EmailNotificationFrequency } from 'oa-shared'
 export type { UserRole }
-import type { IUploadedFileMeta } from '../stores/storage'
+import type { IUploadedFileMeta } from '../storage'
 import type { IConvertedFileMeta } from '../types'
 
 export interface IUserState {

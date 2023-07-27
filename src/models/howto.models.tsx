@@ -1,4 +1,4 @@
-import type { IUploadedFileMeta } from '../stores/storage'
+import type { IUploadedFileMeta } from '../storage'
 import type { IConvertedFileMeta } from '../types'
 import type { IComment } from './'
 import type { ICategory } from './categories.model'

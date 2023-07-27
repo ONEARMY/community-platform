@@ -31,7 +31,7 @@ import {
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
-import type { IUploadedFileMeta } from '../storage'
+import type { IUploadedFileMeta } from '../../storage'
 import {
   FilterSorterDecorator,
   ItemSortingOption,

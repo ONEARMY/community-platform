@@ -24,7 +24,7 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 // import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
 
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'src/storage'
 import type { IConvertedFileMeta } from 'src/types'
 
 import UserContactAndLinks from './UserContactAndLinks'

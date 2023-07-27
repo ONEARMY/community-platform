@@ -69,8 +69,3 @@ export interface IUploadedFileMeta {
   timeCreated: string
   updated: string
 }
-
-// interface batchUploadFileMeta{
-//   storageFolder:string,
-//   // filenam
-// }

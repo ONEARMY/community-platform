@@ -5,6 +5,7 @@
 */
 
 import { storage } from '../utils/firebase'
+import type { IUploadedFileMeta } from './types'
 export type { IUploadedFileMeta } from './types'
 
 export class Storage {

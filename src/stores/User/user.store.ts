@@ -266,6 +266,17 @@ export class UserStore extends ModuleStore {
     this.setUpdateStatus('Complete')
   }
 
+  public async refreshActiveUserDetails() {
+    if (!this.activeUser) return
+
+    const user = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .doc(this.activeUser._id)
+      .get('server')
+
+    this.updateActiveUser(user)
+  }
+
   public async sendEmailVerification() {
     if (this.authUser) {
       return this.authUser.sendEmailVerification()

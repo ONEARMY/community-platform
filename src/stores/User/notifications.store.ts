@@ -1,6 +1,6 @@
 import type {
   INotification,
-  IUser,
+  INotificationUpdate,
   NotificationType,
 } from 'src/models/user.models'
 import { action, makeObservable, toJS } from 'mobx'
@@ -157,12 +157,14 @@ export class UserNotificationsStore extends ModuleStore {
 
   private async _updateUserNotifications(user: IUserPPDB, notifications) {
     const dbRef = this.db
-      .collection<IUser>(USER_COLLECTION_NAME)
+      .collection<INotificationUpdate>(USER_COLLECTION_NAME)
       .doc(user.userName)
 
-    return dbRef.set({
-      ...toJS(user),
+    const notificationUpdate = {
+      _id: user.userName,
       notifications,
-    })
+    }
+
+    await dbRef.update(notificationUpdate)
   }
 }

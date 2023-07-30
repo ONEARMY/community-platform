@@ -111,3 +111,13 @@ export type INotificationSettings = {
   }
   emailFrequency: EmailNotificationFrequency
 }
+
+export type IBadgeUpdate = {
+  _id: string
+  badges?: IUserBadges
+}
+
+export type INotificationUpdate = {
+  _id: string
+  notifications?: INotification[]
+}

@@ -7,7 +7,13 @@ import { formatLowerNoSpecial } from '../../utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
-import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
+import type {
+  IBadgeUpdate,
+  INotificationUpdate,
+  IUser,
+  IUserBadges,
+  IUserDB,
+} from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { RootStore } from '..'
@@ -194,14 +200,14 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserBadge(userId: string, badges: IUserBadges) {
-    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(userId)
-    await this.db
-      .collection(COLLECTION_NAME)
-      .doc(userId)
-      .set({
-        ...toJS(await dbRef.get('server')),
-        badges,
-      })
+    const dbRef = this.db.collection<IBadgeUpdate>(COLLECTION_NAME).doc(userId)
+
+    const badgeUpdate = {
+      _id: userId,
+      badges,
+    }
+
+    await dbRef.update(badgeUpdate)
   }
 
   /**
@@ -336,17 +342,16 @@ export class UserStore extends ModuleStore {
           (notification) => !(notification._id === id),
         )
 
-        const updatedUser: IUserPPDB = {
-          ...toJS(user),
+        const dbRef = this.db
+          .collection<INotificationUpdate>(COLLECTION_NAME)
+          .doc(user._id)
+
+        const notificationUpdate = {
+          _id: user._id,
           notifications,
         }
 
-        const dbRef = this.db
-          .collection<IUser>(COLLECTION_NAME)
-          .doc(updatedUser._id)
-
-        await dbRef.set(updatedUser)
-        //TODO: ensure current user is updated
+        await dbRef.update(notificationUpdate)
       }
     } catch (err) {
       logger.error(err)

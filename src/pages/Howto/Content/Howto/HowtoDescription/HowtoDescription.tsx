@@ -305,22 +305,23 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 redirectToSignIn={!loggedInUser ? redirectToSignIn : undefined}
               />
             )}
-            {howto.files
-              .filter(Boolean)
-              .map(
-                (file, index) =>
-                  file && (
-                    <DownloadStaticFile
-                      allowDownload
-                      file={file}
-                      key={file ? file.name : `file-${index}`}
-                      handleClick={handleDownloadClick}
-                      redirectToSignIn={
-                        !loggedInUser ? redirectToSignIn : undefined
-                      }
-                    />
-                  ),
-              )}
+            {howto.files &&
+              howto.files
+                .filter(Boolean)
+                .map(
+                  (file, index) =>
+                    file && (
+                      <DownloadStaticFile
+                        allowDownload
+                        file={file}
+                        key={file ? file.name : `file-${index}`}
+                        handleClick={handleDownloadClick}
+                        redirectToSignIn={
+                          !loggedInUser ? redirectToSignIn : undefined
+                        }
+                      />
+                    ),
+                )}
             {typeof fileDownloadCount === 'number' && (
               <Text
                 data-cy="file-download-counter"
@@ -343,17 +344,19 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           position: 'relative',
         }}
       >
-        <AspectImage
-          loading="lazy"
-          ratio={12 / 9}
-          sx={{
-            objectFit: 'cover',
-            width: '100%',
-          }}
-          src={howto.cover_image.downloadUrl}
-          crossOrigin=""
-          alt="how-to cover"
-        />
+        {howto.cover_image && (
+          <AspectImage
+            loading="lazy"
+            ratio={12 / 9}
+            sx={{
+              objectFit: 'cover',
+              width: '100%',
+            }}
+            src={howto.cover_image.downloadUrl}
+            crossOrigin=""
+            alt="how-to cover"
+          />
+        )}
         {howto.moderation !== 'accepted' && (
           <ModerationStatus
             status={howto.moderation}

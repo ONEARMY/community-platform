@@ -96,7 +96,7 @@ export class Howto extends React.Component<
 > {
   private moderateHowto = async (accepted: boolean) => {
     const _howto = this.store.activeHowto
-    if (_howto) {
+    if (_howto && _howto.moderation !== 'draft') {
       _howto.moderation = accepted ? 'accepted' : 'rejected'
       await this.store.moderateHowto(_howto)
     }
@@ -144,7 +144,7 @@ export class Howto extends React.Component<
     seoTagsUpdate({
       title: this.store.activeHowto?.title,
       description: this.store.activeHowto?.description,
-      imageUrl: this.store.activeHowto?.cover_image.downloadUrl,
+      imageUrl: this.store.activeHowto?.cover_image?.downloadUrl,
     })
     this.setState({
       isLoading: false,

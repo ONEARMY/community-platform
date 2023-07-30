@@ -47,6 +47,7 @@ async function setMockHowto(user: IMockAuthUser) {
         text: 'Mock generated comment',
       },
     ],
+    previousSlugs: [_id],
   }
   await setDoc('howtos', _id, howto)
 }

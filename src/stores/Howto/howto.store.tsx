@@ -511,6 +511,9 @@ export class HowtoStore extends ModuleStore {
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
       const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
+      if (!previousSlugs.includes(slug)) {
+        previousSlugs.push(slug)
+      }
       const total_downloads = values['total_downloads'] ?? 0
 
       const howTo: IHowto = {

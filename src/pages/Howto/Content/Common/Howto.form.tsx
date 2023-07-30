@@ -140,17 +140,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     logger.debug('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
   }
-  public validateTitle = async (value: any, allValues: any) => {
-    if (allValues.allowDraftSave) return required(value)
-
-    const { formValues, parentType } = this.props
-    const { length } = stripSpecialCharacters(value)
-    const originalId = parentType === 'edit' ? formValues._id : undefined
-    if (length < HOWTO_TITLE_MIN_LENGTH && length > 0) {
-      return `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`
-    }
-    return this.store.validateTitleForSlug(value, 'howtos', originalId)
-  }
   // automatically generate the slug when the title changes
   private calculatedFields = createDecorator({
     field: 'title',
@@ -158,6 +147,22 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       slug: (title) => stripSpecialCharacters(title).toLowerCase(),
     },
   })
+
+  private titleValidation = (values, allValues) => {
+    const validators = composeValidators(
+      required,
+      minValue(HOWTO_TITLE_MIN_LENGTH),
+      validateTitle(
+        this.props.parentType,
+        this.props.formValues._id,
+        'howtos',
+        this.store,
+      ),
+    )
+
+    return draftValidationWrapper(values, allValues, validators)
+  }
+
   constructor(props: any) {
     super(props)
     this.state = {
@@ -280,16 +285,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   name="title"
                                   data-cy="intro-title"
                                   validateFields={[]}
-                                  validate={composeValidators(
-                                    required,
-                                    minValue(HOWTO_TITLE_MIN_LENGTH),
-                                    validateTitle(
-                                      this.props.parentType,
-                                      this.props.formValues._id,
-                                      'howtos',
-                                      this.store,
-                                    ),
-                                  )}
+                                  validate={this.titleValidation}
                                   isEqual={COMPARISONS.textInput}
                                   modifiers={{ capitalize: true }}
                                   component={FieldInput}

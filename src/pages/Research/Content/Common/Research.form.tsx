@@ -234,10 +234,7 @@ const ResearchForm = observer((props: IProps) => {
                                   draftValidationWrapper(
                                     value,
                                     allValues,
-                                    (value, allValues) =>
-                                      allValues.isDraft
-                                        ? undefined
-                                        : required(value),
+                                    required,
                                   )
                                 }
                                 validateFields={[]}

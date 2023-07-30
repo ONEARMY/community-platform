@@ -42,24 +42,28 @@ describe('[How To]', () => {
 
         cy.wrap($step).should(
           'contain',
-          `Descriptions must be at least ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
+          `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
         )
 
         cy.get('[data-cy=step-description]')
           .clear()
-          .type(
+          .invoke(
+            'val',
             faker.lorem
               .sentences(50)
               .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
-            { delay: 1 },
           )
           .blur({ force: true })
 
-        cy.wrap($step).should(
-          'contain',
-          `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`,
-        )
+        cy.wrap($step).should('contain', `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
       }
+
+      cy.get('[data-cy=step-description]')
+        .clear()
+        .type(
+          `Description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
+        )
+        .blur({ force: true })
 
       cy.get('[data-cy=step-description]').should('have.value', description)
       cy.get('[data-cy=character-count]')

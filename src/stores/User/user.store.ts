@@ -359,6 +359,15 @@ export class UserStore extends ModuleStore {
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
+
+    if (userName === authUser.uid) {
+      logger.error(
+        'attempted to create duplicate user record with authId',
+        userName,
+      )
+      throw new Error('attempted to create duplicate user')
+    }
+
     logger.debug('creating user profile', userName)
     if (!userName) {
       throw new Error('No Username Provided')
@@ -372,6 +381,7 @@ export class UserStore extends ModuleStore {
       displayName,
       userName,
       notifications: [],
+      profileCreated: new Date().toISOString(),
     }
     // update db
     await dbRef.set(user)

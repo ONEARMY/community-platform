@@ -44,6 +44,7 @@ export interface IUser {
   stats?: IUserStats
   notification_settings?: INotificationSettings
   notifications?: INotification[]
+  profileCreated?: ISODateString
 }
 
 export interface IUserBadges {

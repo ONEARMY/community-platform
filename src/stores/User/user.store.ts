@@ -109,6 +109,7 @@ export class UserStore extends ModuleStore {
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)
+
       if (userMeta) {
         this.updateActiveUser(userMeta)
         logger.debug('userMeta', userMeta)
@@ -147,12 +148,25 @@ export class UserStore extends ModuleStore {
     const lookup = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('_authID', '==', _authID)
+
     if (lookup.length === 1) {
       return lookup[0]
     }
+
+    if (lookup.length > 1) {
+      logger.warn('Multiple user records fetched', lookup)
+      return lookup
+        .sort(
+          (a, b) =>
+            new Date(a._created).getTime() - new Date(b._created).getTime(),
+        )
+        .filter((user) => user._lastActive)[0]
+    }
+
     const lookup2 = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('_id', '==', _authID)
+
     return lookup2[0]
   }
 
@@ -235,7 +249,7 @@ export class UserStore extends ModuleStore {
     // update on db and update locally (if targeting self as user)
     await this.db
       .collection(COLLECTION_NAME)
-      .doc(updatedUserProfile.userName)
+      .doc(updatedUserProfile._id)
       .set(updatedUserProfile)
 
     if (!adminEditableUserId) {

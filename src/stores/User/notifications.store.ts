@@ -113,7 +113,7 @@ export class UserNotificationsStore extends ModuleStore {
         notifications?.forEach((notification) => (notification.notified = true))
 
         await this._updateUserNotifications(user, notifications)
-        await this.userStore.updateUserProfile({ notifications })
+        await this.userStore.refreshActiveUserDetails()
       }
     } catch (err) {
       logger.error(err)
@@ -129,8 +129,8 @@ export class UserNotificationsStore extends ModuleStore {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.read = true))
 
-        await this._updateUserNotifications(user, { notifications })
-        await this.userStore.updateUserProfile({ notifications })
+        await this._updateUserNotifications(user, notifications)
+        await this.userStore.refreshActiveUserDetails()
       }
     } catch (err) {
       logger.error(err)

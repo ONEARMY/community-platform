@@ -86,8 +86,10 @@ interface IProps {
   value?: IInputValue | IMultipleInputValue
   hasText?: boolean
   multiple?: boolean
+  dataTestId?: string
 }
 const defaultProps: IProps = {
+  dataTestId: 'image-input',
   onFilesChange: () => null,
   multiple: false,
 }
@@ -156,7 +158,7 @@ export class ImageInput extends React.Component<IProps, IState> {
 
   render() {
     const { inputFiles, presentFiles } = this.state
-    const { multiple } = this.props
+    const { dataTestId, multiple } = this.props
 
     const hasImages = presentFiles.length > 0 || inputFiles.length > 0
     const showUploadedImg = presentFiles.length > 0
@@ -176,7 +178,7 @@ export class ImageInput extends React.Component<IProps, IState> {
               hasUploadedImg={showUploadedImg}
               {...getRootProps()}
             >
-              <input {...getInputProps()} />
+              <input data-testid={dataTestId} {...getInputProps()} />
 
               {showUploadedImg && <Image src={src} />}
 
@@ -202,6 +204,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                 <UploadImageOverlay>
                   <Button
                     data-cy="delete-image"
+                    data-testid="delete-image"
                     small
                     variant="secondary"
                     icon="delete"

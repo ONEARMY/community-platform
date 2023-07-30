@@ -32,10 +32,12 @@ describe('[How To]', () => {
 
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
-      cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
+      cy.get('[data-testid=step-title]')
+        .clear()
+        .type(`Step ${stepNumber} is easy`)
 
       if (stepIndex === 0) {
-        cy.get('[data-cy=step-description]')
+        cy.get('[data-testid=step-description]')
           .clear()
           .type(`description for step ${stepNumber}`)
           .blur({ force: true })
@@ -45,7 +47,7 @@ describe('[How To]', () => {
           `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
         )
 
-        cy.get('[data-cy=step-description]')
+        cy.get('[data-testid=step-description]')
           .clear()
           .invoke(
             'val',
@@ -58,36 +60,34 @@ describe('[How To]', () => {
         cy.wrap($step).should('contain', `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
       }
 
-      cy.get('[data-cy=step-description]')
+      cy.get('[data-testid=step-description]')
         .clear()
         .type(
           `Description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
         )
         .blur({ force: true })
 
-      cy.get('[data-cy=step-description]').should('have.value', description)
+      cy.get('[data-testid=step-description]').should('have.value', description)
       cy.get('[data-cy=character-count]')
         .should('be.visible')
         .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
 
       if (videoUrl) {
         cy.step('Adding Video Url')
-        cy.get('[data-cy=step-videoUrl]').clear().type(videoUrl)
+        cy.get('[data-testid=step-videoUrl]').clear().type(videoUrl)
       } else {
         cy.step('Uploading pics')
         const hasExistingPics =
           Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
         if (hasExistingPics) {
           cy.wrap($step)
-            .find('[data-cy=delete-image]')
+            .find('[data-testid=delete-image]')
             .each(($deleteButton) => {
               cy.wrap($deleteButton).click()
             })
         }
         images.forEach((image, index) => {
-          cy.get(`[data-cy=step-image-${index}]`)
-            .find(':file')
-            .attachFile(image)
+          cy.get(`[data-testid=step-image-${index}]`).attachFile(image)
         })
       }
     })
@@ -97,9 +97,9 @@ describe('[How To]', () => {
     const stepIndex = stepNumber - 1
     cy.step(`Deleting step [${stepNumber}]`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`)
-      .find('[data-cy=delete-step]')
+      .find('[data-testid=delete-step]')
       .click()
-    cy.get('[data-cy=confirm]').click()
+    cy.get('[data-testid=confirm]').click()
   }
 
   describe('[Create a how-to]', () => {
@@ -447,7 +447,7 @@ describe('[How To]', () => {
       cy.step('Update a new cover for the intro')
 
       cy.get('[data-cy="intro-cover"]')
-        .find('[data-cy="delete-image"]')
+        .find('[data-testid="delete-image"]')
         .click({ force: true })
 
       cy.get('[data-cy="intro-cover"]')

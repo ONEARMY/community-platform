@@ -18,6 +18,7 @@ export const ImageInputField = ({
   input,
   meta,
   'data-cy': dataCy,
+  dataTestId,
   customChange,
   ...rest
 }: IExtendedFieldProps) => (
@@ -33,6 +34,7 @@ export const ImageInputField = ({
     >
       <ImageInput
         {...rest}
+        dataTestId={dataTestId}
         value={input.value}
         // as validation happens on blur also want to artificially trigger when values change
         // (no native blur event)

@@ -20,10 +20,11 @@ interface IProps {
 
 const BoxMain = styled(Box)`
   padding-bottom: 15px;
-  margin-left: 20px;
-  margin-right: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
   margin-top: 20px;
-`
+` 
 
 export const getResearchCommentId = (s: string) =>
   s.replace(/#update-\d+-comment:/, '')
@@ -129,13 +130,7 @@ export const ResearchComments = ({
   }
 
   return (
-    <BoxMain
-      paddingTop={viewComments ? '15px' : '0'}
-      paddingLeft={viewComments ? '25px' : '0'}
-      paddingRight={viewComments ? '25px' : '0'}
-      backgroundColor={viewComments ? '#e2edf7' : 'inherit'}
-      marginBottom={viewComments ? '20px' : '0'}
-    >
+    <BoxMain backgroundColor={viewComments ? '#e2edf7' : 'inherit'}>
       <Button
         variant="subtle"
         sx={{

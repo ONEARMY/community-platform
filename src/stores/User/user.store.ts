@@ -80,7 +80,7 @@ export class UserStore extends ModuleStore {
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
-      await this._createUserProfile()
+      await this._createUserProfile('registration')
       // when checking auth state change also send confirmation email
       this._listenToAuthStateChanges(true)
     }
@@ -126,7 +126,7 @@ export class UserStore extends ModuleStore {
           .doc(userMeta._id)
           .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
-        await this._createUserProfile()
+        await this._createUserProfile('sign-in')
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
         if (!newUserCreated) {
           return this.userSignedIn(user, true)
@@ -213,6 +213,7 @@ export class UserStore extends ModuleStore {
    */
   public async updateUserProfile(
     values: Partial<IUserPP>,
+    trigger: string,
     adminEditableUserId?: string,
   ) {
     this.setUpdateStatus('Start')
@@ -226,6 +227,11 @@ export class UserStore extends ModuleStore {
     const updatedUserProfile: IUserPPDB = adminEditableUserId
       ? (values as any)
       : { ...toJS(this.user), ...toJS(values) }
+
+    // TODO: Remove this once source of duplicate profiles determined
+    if (!updatedUserProfile.profileCreationTrigger) {
+      updatedUserProfile.profileCreationTrigger = trigger
+    }
 
     // upload any new cover images
     if (values.coverImages) {
@@ -365,7 +371,7 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  private async _createUserProfile() {
+  private async _createUserProfile(trigger: string) {
     const authUser = auth.currentUser as firebase.default.User
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
@@ -393,6 +399,7 @@ export class UserStore extends ModuleStore {
       userName,
       notifications: [],
       profileCreated: new Date().toISOString(),
+      profileCreationTrigger: trigger,
     }
     // update db
     await dbRef.set(user)

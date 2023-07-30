@@ -161,7 +161,7 @@ export class UserStore extends ModuleStore {
 
     if (lookup.length > 1) {
       logger.warn('Multiple user records fetched', lookup)
-      return lookup.filter((user) => user._id !== user._authId)[0]
+      return lookup.filter((user) => user._id !== user._authID)[0]
     }
 
     const lookup2 = await this.db

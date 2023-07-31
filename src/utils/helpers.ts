@@ -144,7 +144,7 @@ export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
     roles.includes('admin') ||
     roles.includes('super-admin') ||
     (doc._createdBy && doc._createdBy === user.userName)
-  ) 
+  )
 }
 
 export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {

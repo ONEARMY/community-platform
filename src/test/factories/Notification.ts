@@ -1,5 +1,5 @@
 import type { INotification } from 'src/models'
-import { NotificationTypes } from 'src/models'
+import { NotificationTypes } from 'oa-shared'
 import { faker } from '@faker-js/faker'
 
 export const FactoryNotification = (

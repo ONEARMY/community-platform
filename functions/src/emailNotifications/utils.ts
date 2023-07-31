@@ -1,4 +1,4 @@
-import { NotificationType } from '../../../src/models'
+import type { NotificationType } from 'oa-shared'
 import { CONFIG } from '../config/config'
 import { INotification } from '../models'
 import {

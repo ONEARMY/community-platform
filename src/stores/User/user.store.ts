@@ -7,7 +7,13 @@ import { formatLowerNoSpecial } from '../../utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
-import type { IUser, IUserBadges, IUserDB } from 'src/models/user.models'
+import type {
+  IBadgeUpdate,
+  INotificationUpdate,
+  IUser,
+  IUserBadges,
+  IUserDB,
+} from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { RootStore } from '..'
@@ -74,7 +80,7 @@ export class UserStore extends ModuleStore {
         photoURL: authReq.user.photoURL,
       })
       // populate db user profile and resume auth listener
-      await this._createUserProfile()
+      await this._createUserProfile('registration')
       // when checking auth state change also send confirmation email
       this._listenToAuthStateChanges(true)
     }
@@ -109,6 +115,7 @@ export class UserStore extends ModuleStore {
       // legacy user formats did not save names so get profile via email - this option be removed in later version
       // (assumes migration strategy and check)
       const userMeta = await this.getUserProfile(user.uid)
+
       if (userMeta) {
         this.updateActiveUser(userMeta)
         logger.debug('userMeta', userMeta)
@@ -119,7 +126,7 @@ export class UserStore extends ModuleStore {
           .doc(userMeta._id)
           .set({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
-        await this._createUserProfile()
+        await this._createUserProfile('sign-in')
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
         if (!newUserCreated) {
           return this.userSignedIn(user, true)
@@ -147,12 +154,20 @@ export class UserStore extends ModuleStore {
     const lookup = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('_authID', '==', _authID)
+
     if (lookup.length === 1) {
       return lookup[0]
     }
+
+    if (lookup.length > 1) {
+      logger.warn('Multiple user records fetched', lookup)
+      return lookup.filter((user) => user._id !== user._authID)[0]
+    }
+
     const lookup2 = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('_id', '==', _authID)
+
     return lookup2[0]
   }
 
@@ -180,14 +195,14 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserBadge(userId: string, badges: IUserBadges) {
-    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(userId)
-    await this.db
-      .collection(COLLECTION_NAME)
-      .doc(userId)
-      .set({
-        ...toJS(await dbRef.get('server')),
-        badges,
-      })
+    const dbRef = this.db.collection<IBadgeUpdate>(COLLECTION_NAME).doc(userId)
+
+    const badgeUpdate = {
+      _id: userId,
+      badges,
+    }
+
+    await dbRef.update(badgeUpdate)
   }
 
   /**
@@ -198,6 +213,7 @@ export class UserStore extends ModuleStore {
    */
   public async updateUserProfile(
     values: Partial<IUserPP>,
+    trigger: string,
     adminEditableUserId?: string,
   ) {
     this.setUpdateStatus('Start')
@@ -211,6 +227,11 @@ export class UserStore extends ModuleStore {
     const updatedUserProfile: IUserPPDB = adminEditableUserId
       ? (values as any)
       : { ...toJS(this.user), ...toJS(values) }
+
+    // TODO: Remove this once source of duplicate profiles determined
+    if (!updatedUserProfile.profileCreationTrigger) {
+      updatedUserProfile.profileCreationTrigger = trigger
+    }
 
     // upload any new cover images
     if (values.coverImages) {
@@ -235,7 +256,7 @@ export class UserStore extends ModuleStore {
     // update on db and update locally (if targeting self as user)
     await this.db
       .collection(COLLECTION_NAME)
-      .doc(updatedUserProfile.userName)
+      .doc(updatedUserProfile._id)
       .set(updatedUserProfile)
 
     if (!adminEditableUserId) {
@@ -249,6 +270,17 @@ export class UserStore extends ModuleStore {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this.setUpdateStatus('Complete')
+  }
+
+  public async refreshActiveUserDetails() {
+    if (!this.activeUser) return
+
+    const user = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .doc(this.activeUser._id)
+      .get('server')
+
+    this.updateActiveUser(user)
   }
 
   public async sendEmailVerification() {
@@ -322,17 +354,16 @@ export class UserStore extends ModuleStore {
           (notification) => !(notification._id === id),
         )
 
-        const updatedUser: IUserPPDB = {
-          ...toJS(user),
+        const dbRef = this.db
+          .collection<INotificationUpdate>(COLLECTION_NAME)
+          .doc(user._id)
+
+        const notificationUpdate = {
+          _id: user._id,
           notifications,
         }
 
-        const dbRef = this.db
-          .collection<IUser>(COLLECTION_NAME)
-          .doc(updatedUser._id)
-
-        await dbRef.set(updatedUser)
-        //TODO: ensure current user is updated
+        await dbRef.update(notificationUpdate)
       }
     } catch (err) {
       logger.error(err)
@@ -340,11 +371,20 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  private async _createUserProfile() {
+  private async _createUserProfile(trigger: string) {
     const authUser = auth.currentUser as firebase.default.User
     const displayName = authUser.displayName as string
     const userName = formatLowerNoSpecial(displayName)
     const dbRef = this.db.collection<IUser>(COLLECTION_NAME).doc(userName)
+
+    if (userName === authUser.uid) {
+      logger.error(
+        'attempted to create duplicate user record with authId',
+        userName,
+      )
+      throw new Error('attempted to create duplicate user')
+    }
+
     logger.debug('creating user profile', userName)
     if (!userName) {
       throw new Error('No Username Provided')
@@ -358,6 +398,8 @@ export class UserStore extends ModuleStore {
       displayName,
       userName,
       notifications: [],
+      profileCreated: new Date().toISOString(),
+      profileCreationTrigger: trigger,
     }
     // update db
     await dbRef.set(user)

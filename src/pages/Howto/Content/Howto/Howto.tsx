@@ -14,7 +14,7 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Box, Flex, Text } from 'theme-ui'
 import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
-import { isAllowToEditContent } from 'src/utils/helpers'
+import { isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import Step from './Step/Step'
 // TODO: Remove direct usage of Theme
@@ -94,11 +94,10 @@ export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
 > {
-  private moderateHowto = async (accepted: boolean) => {
-    const _howto = this.store.activeHowto
-    if (_howto) {
-      _howto.moderation = accepted ? 'accepted' : 'rejected'
-      await this.store.moderateHowto(_howto)
+  private moderateHowto = async (accepted: boolean, feedback?: string) => {
+    const _id = this.store.activeHowto?._id
+    if (_id) {
+      await this.store.moderateHowto(_id, accepted, feedback)
     }
   }
 
@@ -144,7 +143,7 @@ export class Howto extends React.Component<
     seoTagsUpdate({
       title: this.store.activeHowto?.title,
       description: this.store.activeHowto?.description,
-      imageUrl: this.store.activeHowto?.cover_image.downloadUrl,
+      imageUrl: this.store.activeHowto?.cover_image?.downloadUrl,
     })
     this.setState({
       isLoading: false,
@@ -170,7 +169,7 @@ export class Howto extends React.Component<
             isEditable:
               [loggedInUser?._id, loggedInUser?.userName].includes(
                 c._creatorId,
-              ) || isAllowToEditContent(activeHowto, loggedInUser),
+              ) || isAllowedToEditContent(activeHowto, loggedInUser),
           }),
         )
 

@@ -122,7 +122,11 @@ export class SettingsPage extends React.Component<IProps, IState> {
     try {
       logger.debug({ profile: vals }, 'SettingsPage.saveProfile')
       const { adminEditableUserId } = this.props
-      await this.injected.userStore.updateUserProfile(vals, adminEditableUserId)
+      await this.injected.userStore.updateUserProfile(
+        vals,
+        'settings-save-profile',
+        adminEditableUserId,
+      )
       logger.debug(`before setState`)
       this.setState(
         {

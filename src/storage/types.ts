@@ -2,6 +2,7 @@
         Interfaces
 /****************************************************************************** */
 export interface IUploadedFileMeta {
+  sizes: { thumb: string; small: string; medium: string; large: string }
   downloadUrl: string
   contentType?: string | null
   fullPath: string

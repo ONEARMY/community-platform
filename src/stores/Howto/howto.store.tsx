@@ -36,6 +36,7 @@ import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { getResizedImageUrls } from 'src/common/getResizedImageUrls'
 
 const COLLECTION_NAME = 'howtos'
 
@@ -131,6 +132,13 @@ export class HowtoStore extends ModuleStore {
 
         activeHowto.steps.forEach((step) => {
           step.text = changeUserReferenceToPlainText(step.text)
+          if (step.images) {
+            step.images.forEach((image) => {
+              if (image) {
+                image.sizes = getResizedImageUrls(image.fullPath)
+              }
+            })
+          }
         })
       }
     }

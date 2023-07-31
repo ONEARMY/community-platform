@@ -197,7 +197,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
 
   const stats = userStats(user.userName)
 
-  const userLinks = user?.links.filter(
+  const userLinks = (user?.links || []).filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
 

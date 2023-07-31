@@ -14,6 +14,12 @@ interface IUploadedFileMeta {
   size: number
   timeCreated: string
   updated: string
+  sizes?: {
+    thumb: string
+    small: string
+    medium: string
+    large: string
+  }
 }
 
 export interface IProps {
@@ -45,7 +51,18 @@ export const ImageGallery = (props: IProps) => {
   })
 
   useEffect(() => {
-    const images = (props.images || []).filter((img) => img !== null)
+    const images = (props.images || [])
+      .filter((img) => img !== null)
+      .map((img) => ({
+        sizes: {
+          thumb: img.downloadUrl,
+          small: img.downloadUrl,
+          medium: img.downloadUrl,
+          large: img.downloadUrl,
+        },
+        ...img,
+      }))
+
     setState({
       ...state,
       activeImageIndex: 0,
@@ -85,7 +102,7 @@ export const ImageGallery = (props: IProps) => {
             objectFit: props.allowPortrait ? 'contain' : 'cover',
             height: [300, 450],
           }}
-          src={activeImage.downloadUrl}
+          src={activeImage.sizes['large']}
           onClick={() => {
             triggerLightbox()
           }}
@@ -105,7 +122,7 @@ export const ImageGallery = (props: IProps) => {
               >
                 <Image
                   loading="lazy"
-                  src={image.downloadUrl}
+                  src={image.sizes['thumb']}
                   key={index}
                   sx={{
                     width: 100,

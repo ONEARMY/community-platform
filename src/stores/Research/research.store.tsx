@@ -31,6 +31,7 @@ import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { getResizedImageUrls } from 'src/common/getResizedImageUrls'
 
 const COLLECTION_NAME = 'research'
 
@@ -150,6 +151,16 @@ export class ResearchStore extends ModuleStore {
             update.description = changeUserReferenceToPlainText(
               update.description,
             )
+
+            update.images = update.images?.filter(Boolean).map((image) => {
+              if (!image) return image
+
+              image['sizes'] = getResizedImageUrls(
+                image?.fullPath || image?.downloadUrl,
+              )
+              return image
+            })
+
             return update
           },
         )

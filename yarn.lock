@@ -9208,16 +9208,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-lazy-load-image-component@npm:^1.5.1":
-  version: 1.5.2
-  resolution: "@types/react-lazy-load-image-component@npm:1.5.2"
-  dependencies:
-    "@types/react": "*"
-    csstype: ^3.0.2
-  checksum: f52dfd2eb58d14c3cb7ba4ca5938a10d4925bee7fa8d654f13c8af36e81d9fce3ebce7d51c29f1f78e09134244e0b91607a4b8051a6eb33d63c4355685442d08
-  languageName: node
-  linkType: hard
-
 "@types/react-leaflet-markercluster@npm:^2.0.0":
   version: 2.0.1
   resolution: "@types/react-leaflet-markercluster@npm:2.0.1"
@@ -25213,7 +25203,6 @@ __metadata:
     "@types/react": 17.0.2
     "@types/react-dom": 17.0.2
     "@types/react-hamburger-menu": ^0.0.3
-    "@types/react-lazy-load-image-component": ^1.5.1
     "@types/react-leaflet": ^1.1.6
     "@types/react-leaflet-markercluster": ^2.0.0
     "@types/react-router-dom": 5.1.7
@@ -25287,7 +25276,6 @@ __metadata:
     react-ga4: ^1.4.1
     react-hamburger-menu: ^1.1.1
     react-image-lightbox: ^5.1.0
-    react-lazy-load-image-component: ^1.5.1
     react-leaflet: ^2.5.0
     react-leaflet-markercluster: ^2.0.0-rc3
     react-router: ^5.2.0
@@ -28144,19 +28132,6 @@ __metadata:
     react: ^17.0.0 || ^16.3.0 || ^15.5.4
     react-dom: ^17.0.0 || ^16.3.0 || ^15.5.4
   checksum: 5718bcd9210ad5b06eb9469cf8b9b44be9498845a7702e621343618e8251f26357e6e1c865532cf170db6165df1cb30202787e057309d8848c220bc600ec0d1a
-  languageName: node
-  linkType: hard
-
-"react-lazy-load-image-component@npm:^1.5.1":
-  version: 1.5.6
-  resolution: "react-lazy-load-image-component@npm:1.5.6"
-  dependencies:
-    lodash.debounce: ^4.0.8
-    lodash.throttle: ^4.1.1
-  peerDependencies:
-    react: ^15.x.x || ^16.x.x || ^17.x.x || ^18.x.x
-    react-dom: ^15.x.x || ^16.x.x || ^17.x.x || ^18.x.x
-  checksum: 2db8dd56e5926c4831e58b05650e310fd8eabc24607716ad7ffda3e0f6b325434edb098ad27068ea8db7f42fec37bc17eaffbaf562a322e6f1ace16dcc3d5422
   languageName: node
   linkType: hard
 

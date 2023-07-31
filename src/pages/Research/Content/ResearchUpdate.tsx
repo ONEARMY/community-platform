@@ -8,7 +8,7 @@ import {
   VideoPlayer,
 } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
-import { Storage, type IUploadedFileMeta } from 'src/storage'
+import type { IUploadedFileMeta } from 'src/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
@@ -47,17 +47,8 @@ const ResearchUpdate = ({
 
   const contributors = useContributorsData(update.collaborators || [])
 
-  const originalPageParts = update.images[0].fullPath.split('/')
-  originalPageParts.splice(originalPageParts.length - 1, 0, 'resized')
-
-  const optimizedImageUrl = Storage.getPublicDownloadUrl(
-    originalPageParts.join('/').replace('.jpg', '_640x640.jpg'),
-  )
-
   return (
     <>
-      {originalPageParts.join('/').replace('.jpg', '_640x640.jpg')}
-      <a href={optimizedImageUrl}>{optimizedImageUrl}</a>
       <Flex
         data-testid={`ResearchUpdate: ${updateIndex}`}
         data-cy={`update_${updateIndex}`}

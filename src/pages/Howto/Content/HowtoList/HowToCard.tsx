@@ -1,10 +1,9 @@
 import { CategoryTag, Icon, ModerationStatus, Username } from 'oa-components'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link as RouterLink } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { Card, Flex, Heading, Text, Box } from 'theme-ui'
+import { Card, Flex, Heading, Text, Box, AspectImage } from 'theme-ui'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -34,23 +33,14 @@ export const HowToCard = (props: IProps) => {
           to={`/how-to/${encodeURIComponent(howto.slug)}`}
           style={{ width: '100%' }}
         >
-          <Flex
+          <AspectImage
+            ratio={4 / 3}
+            src={howto.cover_image.downloadUrl}
             sx={{
               width: '100%',
-              fontSize: 0,
+              height: '100%',
             }}
-          >
-            <LazyLoadImage
-              style={{
-                width: '100%',
-                height: 'calc(((350px) / 3) * 2)',
-                objectFit: 'cover',
-              }}
-              threshold={500}
-              src={howto.cover_image.downloadUrl}
-              crossOrigin=""
-            />
-          </Flex>
+          />
         </RouterLink>
 
         <Flex sx={{ flexDirection: 'column', padding: 3, paddingBottom: 2 }}>

@@ -13,14 +13,12 @@ import type { ProfileTypeLabel } from '../modules/profile/types'
 export type IMapPinType = ProfileTypeLabel
 export type IMapPinSubtype = WorkspaceType
 
-export type IMapPinModerationStatus = IModerationStatus & 'improvements-needed'
-
 /**
  * Map pins have a `type` which correspond to icon
  * They can also optionally have a subtype for additional filtering
  */
 export interface IMapPin {
-  moderation: IMapPinModerationStatus
+  moderation: IModerationStatus
   _createdBy?: string
   _id: string
   _deleted: boolean

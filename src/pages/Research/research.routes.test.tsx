@@ -47,7 +47,7 @@ class mockResearchStoreClass implements Partial<ResearchStore> {
   })
   researchUploadStatus = {} as any
   updateUploadStatus = {} as any
-  getActiveResearchUpdateComments = jest.fn()
+  formatResearchCommentList = jest.fn()
 
   get activeUser() {
     return {

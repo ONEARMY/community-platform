@@ -121,9 +121,7 @@ export class ResearchStore extends ModuleStore {
     return this.filterSorterDecorator.getSortedItems()
   }
 
-  public getActiveResearchUpdateComments(pointer: number): IComment[] {
-    const comments = this.activeResearchItem?.updates[pointer]?.comments || []
-
+  public formatResearchCommentList(comments: IComment[] = []): IComment[] {
     return comments.map((comment: IComment) => {
       return {
         ...comment,

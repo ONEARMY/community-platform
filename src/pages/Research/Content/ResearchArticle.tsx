@@ -197,7 +197,7 @@ const ResearchArticle = observer((props: IProps) => {
                   isEditable={isEditable}
                   slug={item.slug}
                   comments={transformToUserComment(
-                    researchStore.getActiveResearchUpdateComments(index),
+                    researchStore.formatResearchCommentList(update.comments),
                     loggedInUser,
                     item,
                   )}

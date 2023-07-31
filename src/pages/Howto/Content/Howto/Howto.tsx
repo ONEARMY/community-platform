@@ -94,11 +94,10 @@ export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
 > {
-  private moderateHowto = async (accepted: boolean) => {
-    const _howto = this.store.activeHowto
-    if (_howto) {
-      _howto.moderation = accepted ? 'accepted' : 'rejected'
-      await this.store.moderateHowto(_howto)
+  private moderateHowto = async (accepted: boolean, feedback?: string) => {
+    const _id = this.store.activeHowto?._id
+    if (_id) {
+      await this.store.moderateHowto(_id, accepted, feedback)
     }
   }
 
@@ -144,7 +143,7 @@ export class Howto extends React.Component<
     seoTagsUpdate({
       title: this.store.activeHowto?.title,
       description: this.store.activeHowto?.description,
-      imageUrl: this.store.activeHowto?.cover_image.downloadUrl,
+      imageUrl: this.store.activeHowto?.cover_image?.downloadUrl,
     })
     this.setState({
       isLoading: false,

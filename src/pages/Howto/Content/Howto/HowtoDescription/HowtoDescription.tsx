@@ -20,8 +20,8 @@ import {
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
-  isAllowToEditContent,
-  isAllowToDeleteContent,
+  isAllowedToEditContent,
+  isAllowedToDeleteContent,
   capitalizeFirstLetter,
 } from 'src/utils/helpers'
 import { Link, useHistory } from 'react-router-dom'
@@ -242,7 +242,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Flex>
           )}
           {/* Check if logged in user is the creator of the how-to OR a super-admin */}
-          {loggedInUser && isAllowToEditContent(howto, loggedInUser) && (
+          {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
             <Link to={'/how-to/' + howto.slug + '/edit'}>
               <Button variant={'primary'} data-cy={'edit'}>
                 Edit
@@ -250,7 +250,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Link>
           )}
 
-          {loggedInUser && isAllowToDeleteContent(howto, loggedInUser) && (
+          {loggedInUser && isAllowedToDeleteContent(howto, loggedInUser) && (
             <Fragment key={'how-to-delete-action'}>
               <Button
                 data-cy="How-To: delete button"

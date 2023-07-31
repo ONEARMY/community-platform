@@ -14,7 +14,7 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { Box, Flex, Text } from 'theme-ui'
 import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
-import { isAllowToEditContent } from 'src/utils/helpers'
+import { isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import Step from './Step/Step'
 // TODO: Remove direct usage of Theme
@@ -169,7 +169,7 @@ export class Howto extends React.Component<
             isEditable:
               [loggedInUser?._id, loggedInUser?.userName].includes(
                 c._creatorId,
-              ) || isAllowToEditContent(activeHowto, loggedInUser),
+              ) || isAllowedToEditContent(activeHowto, loggedInUser),
           }),
         )
 

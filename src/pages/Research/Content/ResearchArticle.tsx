@@ -16,7 +16,10 @@ import type { IComment, IResearch, UserComment, IUser } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { isAllowToDeleteContent, isAllowToEditContent } from 'src/utils/helpers'
+import {
+  isAllowedToDeleteContent,
+  isAllowedToEditContent,
+} from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 import ResearchDescription from './ResearchDescription'
@@ -126,10 +129,10 @@ const ResearchArticle = observer((props: IProps) => {
   if (item) {
     const isEditable =
       !!researchStore.activeUser &&
-      isAllowToEditContent(item, researchStore.activeUser)
+      isAllowedToEditContent(item, researchStore.activeUser)
     const isDeletable =
       !!researchStore.activeUser &&
-      isAllowToDeleteContent(item, researchStore.activeUser)
+      isAllowedToDeleteContent(item, researchStore.activeUser)
 
     const researchAuthor = {
       userName: item._createdBy,
@@ -262,7 +265,7 @@ const transformToUserComment = (
     ...c,
     isEditable:
       c.creatorName === loggedInUser?.userName ||
-      isAllowToEditContent(item, loggedInUser),
+      isAllowedToEditContent(item, loggedInUser),
   }))
 }
 

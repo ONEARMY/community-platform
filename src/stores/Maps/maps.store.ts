@@ -18,7 +18,7 @@ import type { IUploadedFileMeta } from '../storage'
 import {
   hasAdminRights,
   needsModeration,
-  isAllowToPin,
+  isAllowedToPin,
 } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { filterMapPinsByType } from './filter'
@@ -160,7 +160,7 @@ export class MapsStore extends ModuleStore {
     return needsModeration(pin, this.activeUser)
   }
   public canSeePin(pin: IMapPin) {
-    return pin.moderation === 'accepted' || isAllowToPin(pin, this.activeUser)
+    return pin.moderation === 'accepted' || isAllowedToPin(pin, this.activeUser)
   }
 
   public async setUserPin(user: IUserPP) {

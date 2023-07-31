@@ -9,7 +9,7 @@ import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import { ResearchUpdateForm } from 'src/pages/Research/Content/Common/ResearchUpdate.form'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { isAllowToEditContent } from 'src/utils/helpers'
+import { isAllowedToEditContent } from 'src/utils/helpers'
 
 interface IState {
   formValues: IResearch.UpdateDB
@@ -84,7 +84,7 @@ const EditUpdate = observer((props: IProps) => {
   if (formValues && !isLoading) {
     if (
       loggedInUser &&
-      isAllowToEditContent(store.activeResearchItem!, loggedInUser)
+      isAllowedToEditContent(store.activeResearchItem!, loggedInUser)
     ) {
       return (
         <ResearchUpdateForm

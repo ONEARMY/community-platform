@@ -40,7 +40,7 @@ interface IProps {
   votedUsefulCount?: number
   verified?: boolean
   hasUserVotedUseful: boolean
-  moderateHowto: (accepted: boolean) => void
+  moderateHowto: (accepted: boolean, feedback?: string) => void
   onUsefulClick: () => void
 }
 
@@ -170,7 +170,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               </Box>
             </AuthWrapper>
           ) : null}
-          {/* Check if pin should be moderated */}
+          {/* Check if how to should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>
               <Button
@@ -188,7 +188,14 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 icon="close"
                 data-tip={'Request changes'}
                 showIconOnly={true}
-                onClick={() => props.moderateHowto(false)}
+                onClick={() => {
+                  // Prompt used for testing purposes, will be removed once retool functionality in place
+                  const feedback =
+                    // eslint-disable-next-line no-alert
+                    prompt('Please provide detail of required changes') ||
+                    undefined
+                  props.moderateHowto(false, feedback)
+                }}
               />
               <Tooltip />
             </Flex>
@@ -202,6 +209,47 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Link>
           )}
         </Flex>
+        {howto.moderationFeedback && howto.moderation === 'rejected' && (
+          <Flex
+            mt={4}
+            sx={{
+              display: 'block',
+              fontSize: 1,
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              padding: 2,
+              borderRadius: 1,
+              borderBottomRightRadius: 1,
+              flexDirection: 'column',
+              border: '2px solid red',
+              paddingTop: 3,
+            }}
+          >
+            <Heading variant="small" mb={2}>
+              Moderator Feedback
+            </Heading>
+            {howto.moderationFeedback.map((feedback) => {
+              return (
+                <Flex
+                  mb={2}
+                  pb={2}
+                  sx={{
+                    flexDirection: 'column',
+                  }}
+                  key={feedback.feedbackTimestamp}
+                >
+                  <Text mb={1} sx={{ fontWeight: 'bold' }}>
+                    {format(feedback.feedbackTimestamp, 'DD-MM-YYYY HH:mm')}
+                  </Text>
+                  <Text key={feedback.feedbackTimestamp} sx={{ fontSize: 2 }}>
+                    {feedback.feedbackComments}
+                  </Text>
+                </Flex>
+              )
+            })}
+          </Flex>
+        )}
         <Box mt={3} mb={2}>
           <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
             <Flex sx={{ flexDirection: 'column' }}>

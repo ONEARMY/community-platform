@@ -181,8 +181,6 @@ export class HowtoStore extends ModuleStore {
         )
       }
     })
-
-    return
   }
 
   @action
@@ -473,6 +471,36 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
+  public async deleteHowTo(id: string) {
+    try {
+      const user = this.activeUser
+
+      if (!user) {
+        return
+      }
+
+      const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(id)
+      const howToData = await dbRef.get('server')
+
+      if (id && howToData) {
+        await this.updateHowtoItem({
+          ...howToData,
+          _deleted: true,
+        })
+
+        if (this.allHowtos && this.activeHowto !== null) {
+          this.allHowtos = this.allHowtos.filter((howto) => {
+            return howToData._id !== howto._id
+          })
+        }
+      }
+    } catch (err) {
+      logger.error(err)
+      throw new Error(err)
+    }
+  }
+
+  @action
   public async deleteComment(id: string) {
     try {
       const howto = this.activeHowto
@@ -558,6 +586,7 @@ export class HowtoStore extends ModuleStore {
         _id,
         _createdBy,
         comments,
+        _deleted: false,
         creatorCountry,
         description,
         fileLink,

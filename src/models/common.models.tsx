@@ -14,6 +14,7 @@ export type ISODateString = string
 export type IModerationStatus =
   | 'draft'
   | 'awaiting-moderation'
+  | 'improvements-needed'
   | 'rejected'
   | 'accepted'
 

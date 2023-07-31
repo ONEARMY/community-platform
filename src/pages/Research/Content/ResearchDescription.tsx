@@ -7,9 +7,10 @@ import {
   UsefulStatsButton,
   Username,
   ViewsCounter,
+  ConfirmModal,
 } from 'oa-components'
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState, Fragment } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
@@ -20,10 +21,13 @@ import {
   retrieveSessionStorageArray,
 } from 'src/utils/sessionStorage'
 import { Box, Flex, Heading, Text } from 'theme-ui'
+import { trackEvent } from 'src/common/Analytics'
+import { logger } from 'src/logger'
 
 interface IProps {
   research: IResearch.ItemDB
   isEditable: boolean
+  isDeletable: boolean
   loggedInUser: IUser | undefined
   needsModeration: boolean
   votedUsefulCount?: number
@@ -35,7 +39,15 @@ interface IProps {
   contributors?: { userName: string; isVerified: boolean }[]
 }
 
-const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
+const ResearchDescription = ({
+  research,
+  isEditable,
+  isDeletable,
+  ...props
+}: IProps) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const history = useHistory()
+
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
     const contentModifiedDate = format(
       new Date(research._contentModifiedTimestamp || research._modified),
@@ -64,6 +76,30 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
     }
   }
 
+  const handleDelete = async (_id: string) => {
+    try {
+      await store.deleteResearch(_id)
+      trackEvent({
+        category: 'Research',
+        action: 'Deleted',
+        label: store.activeResearchItem?.title,
+      })
+      logger.debug(
+        {
+          category: 'Research',
+          action: 'Deleted',
+          label: store.activeResearchItem?.title,
+        },
+        'Research marked for deletion',
+      )
+
+      history.push('/research')
+    } catch (err) {
+      logger.error(err)
+      // at least log the error
+    }
+  }
+
   useEffect(() => {
     if (!didInit) {
       didInit = true
@@ -88,6 +124,14 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
       }}
     >
       <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
+        {research._deleted && (
+          <Fragment>
+            <Text color="red" pl={2} mb={2} data-cy="research-deleted">
+              * Marked for deletion
+            </Text>
+          </Fragment>
+        )}
+
         <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
           <Link to={'/research'}>
             <Button
@@ -145,6 +189,29 @@ const ResearchDescription = ({ research, isEditable, ...props }: IProps) => {
                 Edit
               </Button>
             </Link>
+          )}
+
+          {isDeletable && (
+            <Fragment>
+              <Button
+                data-cy="Research: delete button"
+                variant={'secondary'}
+                icon="delete"
+                disabled={research._deleted}
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Delete
+              </Button>
+
+              <ConfirmModal
+                key={research._id}
+                isOpen={showDeleteModal}
+                message="Are you sure you want to delete this Research?"
+                confirmButtonText="Delete"
+                handleCancel={() => setShowDeleteModal(false)}
+                handleConfirm={() => handleDelete && handleDelete(research._id)}
+              />
+            </Fragment>
           )}
         </Flex>
         <Box mt={3} mb={2}>

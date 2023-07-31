@@ -5,6 +5,7 @@ export class MockDBStore {
   set = jest.fn().mockReturnThis()
   get = jest.fn().mockReturnThis()
   getWhere = jest.fn().mockReturnThis()
+  update = jest.fn().mockReturnThis()
 }
 
 export class ModuleStore {

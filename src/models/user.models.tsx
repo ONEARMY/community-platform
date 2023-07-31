@@ -48,6 +48,8 @@ export interface IUser {
   stats?: IUserStats
   notification_settings?: INotificationSettings
   notifications?: INotification[]
+  profileCreated?: ISODateString
+  profileCreationTrigger?: string
 }
 
 export interface IUserBadges {
@@ -119,4 +121,14 @@ export type INotificationSettings = {
     [T in NotificationType]: boolean
   }
   emailFrequency: EmailNotificationFrequency
+}
+
+export type IBadgeUpdate = {
+  _id: string
+  badges?: IUserBadges
+}
+
+export type INotificationUpdate = {
+  _id: string
+  notifications?: INotification[]
 }

@@ -12,7 +12,7 @@ describe('userStore', () => {
       store.db.getWhere.mockReturnValueOnce([
         FactoryUser({
           _authID: 'an-auth-id',
-          _id: 'unwanted-user-doc',
+          _id: 'an-auth-id',
           _created: new Date('2023-01-01').toString(),
           _lastActive: new Date('2020-01-01').toString(),
         }),

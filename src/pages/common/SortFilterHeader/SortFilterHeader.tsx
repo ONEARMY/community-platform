@@ -6,6 +6,8 @@ import { Flex, Input } from 'theme-ui'
 import { useState } from 'react'
 import { Select } from 'oa-components'
 
+import { capitalizeFirstLetter } from 'src/utils/helpers'
+
 const updateQueryParams = (
   url: string,
   key: string,
@@ -97,9 +99,7 @@ export const SortFilterHeader = (props) => {
           variant="inputOutline"
           data-cy={`${type}-search-box`}
           value={searchValue}
-          placeholder={`Search for a ${(
-            type.charAt(0).toUpperCase() + type.slice(1)
-          ).split('-')}`}
+          placeholder={`Search for a ${capitalizeFirstLetter(type)}`}
           onChange={(evt) => {
             const value = evt.target.value
             updateQueryParams(window.location.href, 'search', value, history)

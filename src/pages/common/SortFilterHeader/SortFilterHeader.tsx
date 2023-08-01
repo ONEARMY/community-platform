@@ -1,10 +1,14 @@
 import { useHistory } from 'react-router'
 import type { RouteComponentProps } from 'react-router'
-import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { Flex, Input } from 'theme-ui'
 import { useState } from 'react'
 import { Select } from 'oa-components'
+
+import { FieldContainer } from 'src/common/Form/FieldContainer'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import type { ResearchStore } from 'src/stores/Research/research.store'
 
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 
@@ -30,9 +34,16 @@ const updateQueryParams = (
     search,
   })
 }
-export const SortFilterHeader = (props) => {
-  const currentStore = props.store
-  const type = props.type
+
+interface SortFilterHeaderProps {
+  store: HowtoStore | ResearchStore
+  type: 'how-to' | 'research'
+}
+
+export const SortFilterHeader = ({
+  type,
+  store: currentStore,
+}: SortFilterHeaderProps) => {
   const history = useHistory()
 
   const sortingOptions = currentStore.availableItemSortingOption?.map(

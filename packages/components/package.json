@@ -34,7 +34,7 @@
     "react-router-dom": "^5.2.0",
     "react-select": "^5.4.0",
     "react-tooltip": "^4.2.21",
-    "storybook": "^7.0.12",
+    "storybook": "^7.2.0",
     "theme-ui": "^0.15.7",
     "use-debounce": "^8.0.4",
     "webpack": "5.76.0",

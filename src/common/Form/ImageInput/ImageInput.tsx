@@ -200,7 +200,7 @@ export class ImageInput extends React.Component<IProps, IState> {
                   <Button
                     data-cy="delete-image"
                     small
-                    variant="outline"
+                    variant="secondary"
                     icon="delete"
                     onClick={(event) => this.handleImageDelete(event)}
                   >

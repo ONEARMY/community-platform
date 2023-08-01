@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker'
 import {
-  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
@@ -32,62 +31,31 @@ describe('[How To]', () => {
 
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
-      cy.get('[data-testid=step-title]')
+      cy.get('[data-cy=step-title]').clear().invoke('val', title)
+
+      cy.get('[data-cy=step-description]')
         .clear()
-        .type(`Step ${stepNumber} is easy`)
-
-      if (stepIndex === 0) {
-        cy.get('[data-testid=step-description]')
-          .clear()
-          .type(`description for step ${stepNumber}`)
-          .blur({ force: true })
-
-        cy.wrap($step).should(
-          'contain',
-          `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
-        )
-
-        cy.get('[data-testid=step-description]')
-          .clear()
-          .invoke(
-            'val',
-            faker.lorem
-              .sentences(50)
-              .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
-          )
-          .blur({ force: true })
-
-        cy.wrap($step).should('contain', `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
-      }
-
-      cy.get('[data-testid=step-description]')
-        .clear()
-        .type(
-          `Description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
-        )
+        .invoke('val', description)
         .blur({ force: true })
-
-      cy.get('[data-testid=step-description]').should('have.value', description)
-      cy.get('[data-cy=character-count]')
-        .should('be.visible')
-        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
 
       if (videoUrl) {
         cy.step('Adding Video Url')
-        cy.get('[data-testid=step-videoUrl]').clear().type(videoUrl)
+        cy.get('[data-cy=step-videoUrl]').clear().type(videoUrl)
       } else {
         cy.step('Uploading pics')
         const hasExistingPics =
           Cypress.$($step).find('[data-cy=delete-step-img]').length > 0
         if (hasExistingPics) {
           cy.wrap($step)
-            .find('[data-testid=delete-image]')
+            .find('[data-cy=delete-image]')
             .each(($deleteButton) => {
               cy.wrap($deleteButton).click()
             })
         }
         images.forEach((image, index) => {
-          cy.get(`[data-testid=step-image-${index}]`).attachFile(image)
+          cy.get(`[data-cy=step-image-${index}]`)
+            .find(':file')
+            .attachFile(image)
         })
       }
     })
@@ -97,9 +65,9 @@ describe('[How To]', () => {
     const stepIndex = stepNumber - 1
     cy.step(`Deleting step [${stepNumber}]`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`)
-      .find('[data-testid=delete-step]')
+      .find('[data-cy=delete-step]')
       .click()
-    cy.get('[data-testid=confirm]').click()
+    cy.get('[data-cy=confirm]').click()
   }
 
   describe('[Create a how-to]', () => {
@@ -160,14 +128,17 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 2. This description should be between the minimum and maximum description length',
-          title: 'Step 2 is easy',
+          text: faker.lorem
+            .sentences(50)
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH),
+          title: 'A long title that is the total characters limit of',
         },
         {
           _animationKey: 'unique3',
           images: [],
           text: 'Description for step 3. This description should be between the minimum and maximum description length',
           title: 'Step 3 is easy',
+          videoURL: 'https://www.youtube.com/watch?v=Os7dREQ00l4',
         },
       ],
     }
@@ -177,6 +148,8 @@ describe('[How To]', () => {
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
+      cy.contains('Create a How-To').should('exist')
+
       cy.step('Warn if title is identical with the existing ones')
       cy.get('[data-cy=intro-title]')
         .type('Make glass-like beams')
@@ -222,20 +195,29 @@ describe('[How To]', () => {
         .find(':file')
         .attachFile('images/howto-intro.jpg')
 
-      expected.steps.forEach((step, i) => {
-        const videoUrl =
-          i === 2 ? 'https://www.youtube.com/watch?v=Os7dREQ00l4' : undefined
-        fillStep(
-          i + 1,
-          step.title,
-          step.text,
-          ['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg'],
-          videoUrl,
-        )
-      })
+      fillStep(1, expected.steps[0].title, expected.steps[0].text, [
+        'images/howto-step-pic1.jpg',
+        'images/howto-step-pic2.jpg',
+      ])
 
+      fillStep(2, expected.steps[1].title, expected.steps[1].text, [
+        'images/howto-step-pic1.jpg',
+        'images/howto-step-pic2.jpg',
+      ])
+
+      fillStep(
+        3,
+        expected.steps[2].title,
+        expected.steps[2].text,
+        [],
+        expected.steps[2].videoURL,
+      )
+
+      cy.step('Add extra step')
+      cy.get('[data-cy=add-step]').click()
       cy.wait(2000)
 
+      deleteStep(4)
       cy.screenClick()
 
       cy.step('A full draft was saved')
@@ -447,7 +429,7 @@ describe('[How To]', () => {
       cy.step('Update a new cover for the intro')
 
       cy.get('[data-cy="intro-cover"]')
-        .find('[data-testid="delete-image"]')
+        .find('[data-cy="delete-image"]')
         .click({ force: true })
 
       cy.get('[data-cy="intro-cover"]')

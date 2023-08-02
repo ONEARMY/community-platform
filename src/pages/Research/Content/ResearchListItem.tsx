@@ -4,16 +4,12 @@ import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
+import type { IResearchWithAuthor } from '..'
 import { Card, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 
 interface IProps {
-  item: IResearch.ItemDB & {
+  item: IResearchWithAuthor & {
     votedUsefulCount: number
-    author: {
-      userName: string
-      countryCode: string
-      isVerified: boolean
-    }
   }
 }
 

@@ -19,15 +19,10 @@ import {
   retrieveSessionStorageArray,
 } from 'src/utils/sessionStorage'
 import { Box, Flex, Heading, Text } from 'theme-ui'
+import type { IResearchWithAuthor } from '..'
 
 interface IProps {
-  research: IResearch.ItemDB & {
-    author: {
-      userName: string
-      countryCode?: string
-      isVerified?: boolean
-    }
-  }
+  research: IResearchWithAuthor
   isEditable: boolean
   loggedInUser: IUser | undefined
   needsModeration: boolean

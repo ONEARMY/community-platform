@@ -6,6 +6,7 @@ import {
 } from 'src/stores/Research/research.store'
 import type { IPageMeta } from '../PageList'
 import ResearchRoutes from './research.routes'
+import type { IResearch } from 'src/models/research.models'
 
 /**
  * Wraps the research module routing elements with the research module provider
@@ -29,4 +30,12 @@ export const ResearchModule: IPageMeta = {
   component: <ResearchModuleContainer />,
   title: 'Research',
   description: 'Welcome to research',
+}
+
+export type IResearchWithAuthor = IResearch.ItemDB & {
+  author: {
+    userName: string
+    countryCode?: string
+    isVerified?: boolean
+  }
 }

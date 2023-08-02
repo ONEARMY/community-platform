@@ -36,9 +36,7 @@ const ResearchList = observer(() => {
 
   useEffect(() => {
     if (filterState.sort?.value) {
-      setResearchListItems(
-        filterSorterDecorator.sort(filterState?.sort?.value) as any,
-      )
+      setResearchListItems(filterSorterDecorator.sort(filterState?.sort?.value))
     }
 
     if (filterState?.category) {
@@ -46,7 +44,7 @@ const ResearchList = observer(() => {
         filterSorterDecorator.filterByCategory(
           fullResearchListItems,
           filterState?.category,
-        ) as any,
+        ),
       )
     }
 
@@ -55,7 +53,7 @@ const ResearchList = observer(() => {
         filterSorterDecorator.search(
           fullResearchListItems,
           filterState?.search,
-        ) as any,
+        ),
       )
     }
   }, [filterState])

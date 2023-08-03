@@ -316,9 +316,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle}>
-                                  Select tags for your How-to*
-                                </Label>
+                                <Label sx={_labelStyle}>Select tags *</Label>
                                 <Field
                                   name="tags"
                                   component={TagsSelectField}
@@ -376,7 +374,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
                                 <Label sx={_labelStyle} htmlFor="description">
-                                  Short description of your How-to *
+                                  Short description *
                                 </Label>
                                 <Field
                                   id="description"
@@ -400,7 +398,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   }}
                                   maxLength={HOWTO_MAX_LENGTH}
                                   showCharacterCount
-                                  placeholder={`Introduction to your How-To (max ${HOWTO_MAX_LENGTH} characters)`}
+                                  placeholder={`Provide a short introduction (max ${HOWTO_MAX_LENGTH} characters)`}
                                 />
                               </Flex>
                               <Flex sx={{ mb: 2 }}>
@@ -419,7 +417,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 )}
                               </Flex>
                               <Label sx={_labelStyle} htmlFor="description">
-                                Do you have supporting file to help others
+                                Do you have supporting files to help others
                                 replicate your How-to?
                               </Label>
                               <Flex

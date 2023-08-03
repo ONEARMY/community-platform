@@ -86,7 +86,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
    * @param value - How to step description field value
    */
   render() {
-    const { step, index } = this.props
+    const { step, images, index } = this.props
     const _labelStyle = {
       fontSize: 2,
       marginBottom: 2,
@@ -223,6 +223,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
                 name={`${step}.images[0]`}
                 component={ImageInputField}
                 isEqual={COMPARISONS.image}
+                image={images[0]}
               />
             </ImageInputFieldWrapper>
             <ImageInputFieldWrapper data-cy="step-image-1">
@@ -231,6 +232,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
                 name={`${step}.images[1]`}
                 component={ImageInputField}
                 isEqual={COMPARISONS.image}
+                image={images[1]}
               />
             </ImageInputFieldWrapper>
             <ImageInputFieldWrapper data-cy="step-image-2">
@@ -239,6 +241,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
                 name={`${step}.images[2]`}
                 component={ImageInputField}
                 isEqual={COMPARISONS.image}
+                image={images[2]}
               />
             </ImageInputFieldWrapper>
           </Flex>

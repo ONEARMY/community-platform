@@ -1,6 +1,7 @@
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
+import type { FormApi } from 'final-form'
 import styled from '@emotion/styled'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
@@ -131,7 +132,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       return true
     }
   }
-  public onSubmit = async (formValues: IHowtoFormInput) => {
+  public onSubmit = async (formValues: IHowtoFormInput, form: FormApi) => {
     if (!this.checkFilesValid(formValues)) {
       return
     }
@@ -139,6 +140,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
     logger.debug('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
+    form.reset(formValues)
   }
   // automatically generate the slug when the title changes
   private calculatedFields = createDecorator({
@@ -205,8 +207,8 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           />
         )}
         <Form
-          onSubmit={(v) => {
-            this.onSubmit(v as IHowtoFormInput)
+          onSubmit={(formValues, form) => {
+            this.onSubmit(formValues, form)
           }}
           initialValues={formValues}
           mutators={{

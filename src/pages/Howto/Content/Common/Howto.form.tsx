@@ -1,6 +1,7 @@
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
+import type { FormApi } from 'final-form'
 import styled from '@emotion/styled'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
@@ -29,11 +30,14 @@ import { PostingGuidelines } from './PostingGuidelines'
 import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
 import { HowToSubmitStatus } from './SubmitStatus'
 import {
-  required,
-  validateUrlAcceptEmpty,
-  minValue,
   composeValidators,
+  draftValidationWrapper,
+  minValue,
+  required,
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
   validateTitle,
+  validateUrlAcceptEmpty,
 } from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { COMPARISONS } from 'src/utils/comparisons'
@@ -116,7 +120,11 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     }
   }
   public checkFilesValid = (formValues: IHowtoFormInput) => {
-    if (formValues.fileLink && formValues.files.length > 0) {
+    if (
+      formValues.fileLink &&
+      formValues.files &&
+      formValues.files.length > 0
+    ) {
       this.setState({ showInvalidFileWarning: true })
       return false
     } else {
@@ -124,7 +132,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       return true
     }
   }
-  public onSubmit = async (formValues: IHowtoFormInput) => {
+  public onSubmit = async (formValues: IHowtoFormInput, form: FormApi) => {
     if (!this.checkFilesValid(formValues)) {
       return
     }
@@ -132,6 +140,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
     logger.debug('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
+    form.reset(formValues)
   }
   // automatically generate the slug when the title changes
   private calculatedFields = createDecorator({
@@ -140,6 +149,22 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       slug: (title) => stripSpecialCharacters(title).toLowerCase(),
     },
   })
+
+  private titleValidation = (values, allValues) => {
+    const validators = composeValidators(
+      required,
+      minValue(HOWTO_TITLE_MIN_LENGTH),
+      validateTitle(
+        this.props.parentType,
+        this.props.formValues._id,
+        'howtos',
+        this.store,
+      ),
+    )
+
+    return draftValidationWrapper(values, allValues, validators)
+  }
+
   constructor(props: any) {
     super(props)
     this.state = {
@@ -182,11 +207,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           />
         )}
         <Form
-          onSubmit={(v) => {
-            this.onSubmit(v as IHowtoFormInput)
+          onSubmit={(formValues, form) => {
+            this.onSubmit(formValues, form)
           }}
           initialValues={formValues}
           mutators={{
+            setAllowDraftSaveTrue,
+            setAllowDraftSaveFalse,
             ...arrayMutators,
           }}
           validateOnBlur
@@ -260,16 +287,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   name="title"
                                   data-cy="intro-title"
                                   validateFields={[]}
-                                  validate={composeValidators(
-                                    required,
-                                    minValue(HOWTO_TITLE_MIN_LENGTH),
-                                    validateTitle(
-                                      this.props.parentType,
-                                      this.props.formValues._id,
-                                      'howtos',
-                                      this.store,
-                                    ),
-                                  )}
+                                  validate={this.titleValidation}
                                   isEqual={COMPARISONS.textInput}
                                   modifiers={{ capitalize: true }}
                                   component={FieldInput}
@@ -315,7 +333,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 <Field
                                   id="time"
                                   name="time"
-                                  validate={required}
+                                  validate={(values, allValues) =>
+                                    draftValidationWrapper(
+                                      values,
+                                      allValues,
+                                      required,
+                                    )
+                                  }
                                   validateFields={[]}
                                   isEqual={COMPARISONS.textInput}
                                   options={TIME_OPTIONS}
@@ -336,7 +360,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   id="difficulty_level"
                                   name="difficulty_level"
                                   data-cy="difficulty-select"
-                                  validate={required}
+                                  validate={(values, allValues) =>
+                                    draftValidationWrapper(
+                                      values,
+                                      allValues,
+                                      required,
+                                    )
+                                  }
                                   validateFields={[]}
                                   isEqual={COMPARISONS.textInput}
                                   component={SelectField}
@@ -352,7 +382,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   id="description"
                                   name="description"
                                   data-cy="intro-description"
-                                  validate={required}
+                                  validate={(values, allValues) =>
+                                    draftValidationWrapper(
+                                      values,
+                                      allValues,
+                                      required,
+                                    )
+                                  }
                                   validateFields={[]}
                                   modifiers={{ capitalize: true }}
                                   isEqual={COMPARISONS.textInput}
@@ -445,7 +481,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         placeholder="Link to Google Drive, Dropbox, Grabcad etc"
                                         isEqual={COMPARISONS.textInput}
                                         maxLength={MAX_LINK_LENGTH}
-                                        validate={validateUrlAcceptEmpty}
+                                        validate={(values, allValues) =>
+                                          draftValidationWrapper(
+                                            values,
+                                            allValues,
+                                            validateUrlAcceptEmpty,
+                                          )
+                                        }
                                         validateFields={[]}
                                       />
                                     </Flex>
@@ -492,7 +534,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 <Field
                                   id="cover_image"
                                   name="cover_image"
-                                  validate={required}
+                                  validate={(values, allValues) =>
+                                    draftValidationWrapper(
+                                      values,
+                                      allValues,
+                                      required,
+                                    )
+                                  }
                                   isEqual={COMPARISONS.image}
                                   component={ImageInputField}
                                 />
@@ -592,26 +640,39 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Box sx={{ display: ['none', 'none', 'block'] }}>
                       <PostingGuidelines />
                     </Box>
-                    <Button
-                      data-cy={'draft'}
-                      onClick={() => this.trySubmitForm(true)}
-                      mt={[0, 0, 3]}
-                      variant="secondary"
-                      type="submit"
-                      disabled={submitting}
-                      sx={{ width: '100%', display: 'block' }}
+                    <Flex
+                      sx={{ flexDirection: 'column', alignItems: 'center' }}
                     >
-                      {formValues.moderation !== 'draft' ? (
-                        <span>Save to draft</span>
-                      ) : (
-                        <span>Revert to draft</span>
-                      )}
-                    </Button>
+                      <Button
+                        data-cy={'draft'}
+                        onClick={() => {
+                          form.mutators.setAllowDraftSaveTrue()
+                          this.trySubmitForm(true)
+                        }}
+                        mt={[0, 0, 3]}
+                        variant="secondary"
+                        type="submit"
+                        disabled={submitting}
+                        sx={{ width: '100%', display: 'block' }}
+                      >
+                        {formValues.moderation !== 'draft' ? (
+                          <span>Save draft</span>
+                        ) : (
+                          <span>Revert to draft</span>
+                        )}
+                      </Button>
+                      <Text sx={{ fontSize: 1, textAlign: 'center' }}>
+                        A draft can be saved any time
+                      </Text>
+                    </Flex>
                     <Button
                       large
                       data-cy={'submit'}
                       data-testid="submit-form"
-                      onClick={() => this.trySubmitForm(false)}
+                      onClick={() => {
+                        form.mutators.setAllowDraftSaveFalse()
+                        this.trySubmitForm(false)
+                      }}
                       mt={3}
                       variant="primary"
                       type="submit"

@@ -24,6 +24,7 @@ export namespace IResearch {
     updates: Update[]
     mentions?: UserMention[]
     _createdBy: string
+    _deleted: boolean
     collaborators: string[]
     subscribers?: UserIdList
   } & Omit<FormInput, 'collaborators'> &

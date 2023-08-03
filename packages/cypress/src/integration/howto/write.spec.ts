@@ -1,9 +1,11 @@
 import { faker } from '@faker-js/faker'
 import {
+  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
-  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
+const creatorEmail = 'howto_creator@test.com'
+const creatorPassword = 'test1234'
 
 describe('[How To]', () => {
   beforeEach(() => {
@@ -27,36 +29,34 @@ describe('[How To]', () => {
     videoUrl?: string,
   ) => {
     const stepIndex = stepNumber - 1
-    console.log('stepIndex', stepIndex)
+
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
       cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
 
-      cy.get('[data-cy=step-description]')
-        .clear()
-        .type(`description for step ${stepNumber}`)
-        .blur({ force: true })
+      if (stepIndex === 0) {
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .type(`description for step ${stepNumber}`)
+          .blur({ force: true })
 
-      cy.wrap($step).should(
-        'contain',
-        `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
-      )
-
-      cy.get('[data-cy=step-description]')
-        .clear({ force: true })
-        // Speeds up test by avoiding typing and then updates character count by typing
-        .invoke(
-          'val',
-          faker.lorem
-            .sentences(50)
-            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH - 1),
+        cy.wrap($step).should(
+          'contain',
+          `Should be more than ${HOWTO_STEP_DESCRIPTION_MIN_LENGTH} characters`,
         )
-        .type('Reach maximum character count')
 
-      cy.wrap($step).should(
-        'contain',
-        `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`,
-      )
+        cy.get('[data-cy=step-description]')
+          .clear()
+          .invoke(
+            'val',
+            faker.lorem
+              .sentences(50)
+              .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
+          )
+          .blur({ force: true })
+
+        cy.wrap($step).should('contain', `${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+      }
 
       cy.get('[data-cy=step-description]')
         .clear()
@@ -173,7 +173,7 @@ describe('[How To]', () => {
     }
 
     it('[By Authenticated]', () => {
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login(creatorEmail, creatorPassword)
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
@@ -190,6 +190,21 @@ describe('[How To]', () => {
       cy.contains(
         `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
+
+      cy.step('Cannot be published yet')
+      cy.get('[data-cy=submit]').click()
+      cy.contains('Make sure this field is filled correctly').should('exist')
+
+      cy.step('A basic draft was created')
+      cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
+        .click()
+        .url()
+        .should('include', `/how-to/qwer`)
+      cy.get('[data-cy=moderationstatus-draft]').should('exist')
+
+      cy.step('Back to completing the how-to')
+      cy.get('[data-cy=edit]').click()
 
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title')
@@ -221,8 +236,16 @@ describe('[How To]', () => {
 
       cy.wait(2000)
 
-      cy.get('[data-cy=submit]').click()
+      cy.screenClick()
 
+      cy.step('A full draft was saved')
+      cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 }).click()
+
+      cy.step('A full draft can be submitted for review')
+      cy.get('[data-cy=edit]').click()
+
+      cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
@@ -254,7 +277,7 @@ describe('[How To]', () => {
       stub.returns(false)
       cy.on('window:confirm', stub)
 
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login(creatorEmail, creatorPassword)
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
@@ -380,16 +403,17 @@ describe('[How To]', () => {
     it('[By Authenticated]', () => {
       cy.step('Prevent non-owner access to edit howto')
       cy.visit('/how-to')
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login(creatorEmail, creatorPassword)
       cy.visit(editHowtoUrl)
       // user should be redirect to how-to page
       cy.location('pathname').should('eq', howtoUrl)
     })
 
     it('[By Owner]', () => {
-      cy.visit(howtoUrl)
       cy.login('howto_editor@test.com', 'test1234')
+
       cy.step('Go to Edit mode')
+      cy.visit(howtoUrl)
       cy.get('[data-cy=edit]').click()
 
       cy.step('Warn if title is identical with the existing ones')

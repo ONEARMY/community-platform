@@ -36,6 +36,7 @@ export const Select = (props: Props) => {
       border: '1px solid ' + theme.colors.softblue,
       backgroundColor: theme.colors.background,
       minHeight: '40px',
+      cursor: 'pointer',
       boxShadow: 'none',
       ':focus': {
         border: '1px solid ' + theme.colors.blue,
@@ -50,6 +51,7 @@ export const Select = (props: Props) => {
       ...provided,
       backgroundColor: theme.colors.background,
       boxShadow: 'none',
+      cursor: 'pointer',
       color: theme.colors.black,
       ':hover': {
         outline: 'none',
@@ -103,6 +105,7 @@ export const Select = (props: Props) => {
       ...provided,
       backgroundColor: theme.colors.white,
       minHeight: '40px',
+      cursor: 'pointer',
       boxShadow: 'none',
       ':hover': {
         border: '1px solid ' + theme.colors.blue,
@@ -119,6 +122,7 @@ export const Select = (props: Props) => {
       ...provided,
       color: theme.colors.black,
       backgroundColor: theme.colors.white,
+      cursor: 'pointer',
       boxShadow: 'none',
       ':hover': {
         outline: 'none',

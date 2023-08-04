@@ -20,6 +20,7 @@ import {
   HOWTO_TITLE_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../constants'
+import { steps } from '../../labels'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -66,15 +67,17 @@ class HowtoStep extends PureComponent<IProps, IState> {
    */
   validateMedia(videoUrl: string) {
     const { images } = { ...this.props }
+    const { both, empty, invalidUrl } = steps.video.errors
+
     if (videoUrl) {
       if (images[0]) {
-        return 'Do not include both images and video'
+        return both
       }
       const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
       const urlValid = ytRegex.test(videoUrl)
-      return urlValid ? null : 'Please provide a valid YouTube Url'
+      return urlValid ? null : invalidUrl
     }
-    return images[0] ? null : 'Include either images or a video'
+    return images[0] ? null : empty
   }
 
   /**
@@ -87,6 +90,8 @@ class HowtoStep extends PureComponent<IProps, IState> {
    */
   render() {
     const { step, index } = this.props
+    const { buttons, description, heading, images, title, video } = steps
+    const { deleteButton } = buttons
     const _labelStyle = {
       fontSize: 2,
       marginBottom: 2,
@@ -100,7 +105,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
         <Flex p={3} sx={{ flexDirection: 'column' }}>
           <Flex p={0}>
             <Heading variant="small" sx={{ flex: 1 }} mb={3}>
-              Step {index + 1} {!isAboveMinimumStep && '*'}
+              {heading.title} {index + 1} {!isAboveMinimumStep && '*'}
             </Heading>
             {index >= 1 && (
               <Button
@@ -134,24 +139,22 @@ class HowtoStep extends PureComponent<IProps, IState> {
               onDidDismiss={() => this.toggleDeleteModal()}
               isOpen={!!this.state.showDeleteModal}
             >
-              <Text>Are you sure you want to delete this step?</Text>
+              <Text>{deleteButton.warning}</Text>
               <Flex mt={3} p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
                 <Flex px={1}>
                   <Button
                     variant={'outline'}
                     onClick={() => this.toggleDeleteModal()}
-                  >
-                    Cancel
-                  </Button>
+                    value={deleteButton.cancel}
+                  />
                 </Flex>
                 <Flex px={1}>
                   <Button
                     data-cy="confirm"
                     variant={'outline'}
                     onClick={() => this.confirmDelete()}
-                  >
-                    Delete
-                  </Button>
+                    value={buttons.deleteButton.title}
+                  />
                 </Flex>
               </Flex>
             </Modal>
@@ -159,14 +162,14 @@ class HowtoStep extends PureComponent<IProps, IState> {
 
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Label sx={_labelStyle} htmlFor={`${step}.title`}>
-              Title of this step *
+              {title.title}
             </Label>
             <Field
               name={`${step}.title`}
               data-cy="step-title"
               modifiers={{ capitalize: true }}
               component={FieldInput}
-              placeholder={`Provide a title (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
+              placeholder={title.placeholder}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
               minLength={HOWTO_TITLE_MIN_LENGTH}
               validate={(value, allValues) =>
@@ -183,11 +186,11 @@ class HowtoStep extends PureComponent<IProps, IState> {
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-              Step Description *
+              {description.title}
             </Label>
             <Field
               name={`${step}.text`}
-              placeholder={`Explain what you are doing. If it gets too long, consider breaking it into multiple steps (${HOWTO_STEP_DESCRIPTION_MIN_LENGTH}-${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters)`}
+              placeholder={description.placeholder}
               minLength={HOWTO_STEP_DESCRIPTION_MIN_LENGTH}
               maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
@@ -211,7 +214,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             />
           </Flex>
           <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-            Upload image(s) *
+            {images}
           </Label>
           <Flex
             sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
@@ -244,13 +247,13 @@ class HowtoStep extends PureComponent<IProps, IState> {
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Label sx={_labelStyle} htmlFor={`${step}.videoUrl`}>
-              Or embed a YouTube video*
+              {video.title}
             </Label>
             <Field
               name={`${step}.videoUrl`}
               data-cy="step-videoUrl"
               component={FieldInput}
-              placeholder="https://youtube.com/watch?v="
+              placeholder={video.placeholder}
               validate={(value, allValues) =>
                 draftValidationWrapper(
                   value,

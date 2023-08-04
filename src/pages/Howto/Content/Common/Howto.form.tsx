@@ -43,13 +43,14 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+
+import { buttons, intro, headings, steps } from '../../labels'
 import {
   HOWTO_MAX_LENGTH,
   HOWTO_TITLE_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../constants'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-
 import { MAX_LINK_LENGTH } from '../../../constants'
 
 interface IState {
@@ -195,6 +196,24 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       marginBottom: 2,
       display: 'block',
     }
+    const {
+      category,
+      coverImage,
+      description,
+      difficulty,
+      files,
+      tags,
+      time,
+      title,
+      heading,
+    } = intro
+    const { create, edit } = headings
+    const headingText = parentType === 'create' ? create : edit
+
+    const { draft, publish } = buttons
+    const draftButton =
+      formValues.moderation !== 'draft' ? draft.create : draft.update
+
     return (
       <>
         {showSubmitModal && (
@@ -240,14 +259,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Flex sx={{ flexDirection: 'column' }}>
                       <Card sx={{ bg: 'softblue' }}>
                         <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
-                          <Heading>
-                            {this.props.parentType === 'create' ? (
-                              <span>Create</span>
-                            ) : (
-                              <span>Edit</span>
-                            )}{' '}
-                            a How-To
-                          </Heading>
+                          <Heading
+                            dangerouslySetInnerHTML={{ __html: headingText }}
+                          />
                           <Box ml="15px">
                             <ElWithBeforeIcon
                               icon={IconHeaderHowto}
@@ -268,7 +282,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         >
                           {/* Left Side */}
                           <Heading variant="small" mb={3}>
-                            Intro
+                            {heading}
                           </Heading>
                           <Flex
                             mx={-2}
@@ -280,7 +294,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                             >
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
                                 <Label sx={_labelStyle} htmlFor="title">
-                                  Title of your How-to *
+                                  {title.title}
                                 </Label>
                                 <Field
                                   id="title"
@@ -293,12 +307,12 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   component={FieldInput}
                                   minLength={HOWTO_TITLE_MIN_LENGTH}
                                   maxLength={HOWTO_TITLE_MAX_LENGTH}
-                                  placeholder={`Make a chair from... (${HOWTO_TITLE_MIN_LENGTH} - ${HOWTO_TITLE_MAX_LENGTH} characters)`}
+                                  placeholder={title.placeholder}
                                   showCharacterCount
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle}>Category *</Label>
+                                <Label sx={_labelStyle}>{category.title}</Label>
                                 <Field
                                   name="category"
                                   render={({ input, ...rest }) => (
@@ -309,14 +323,14 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         input.onChange(category)
                                       }
                                       value={input.value}
-                                      placeholder="Select one category"
+                                      placeholder={category.placeholder}
                                       type="howto"
                                     />
                                   )}
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle}>Select tags *</Label>
+                                <Label sx={_labelStyle}>{tags}</Label>
                                 <Field
                                   name="tags"
                                   component={TagsSelectField}
@@ -326,7 +340,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
                                 <Label sx={_labelStyle} htmlFor="time">
-                                  How long does it take? *
+                                  {time.title}
                                 </Label>
                                 <Field
                                   id="time"
@@ -343,7 +357,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   options={TIME_OPTIONS}
                                   component={SelectField}
                                   data-cy="time-select"
-                                  placeholder="How much time?"
+                                  placeholder={time.placeholder}
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -351,7 +365,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   sx={_labelStyle}
                                   htmlFor="difficulty_level"
                                 >
-                                  Difficulty level? *
+                                  {difficulty.title}
                                 </Label>
                                 <Field
                                   px={1}
@@ -369,12 +383,12 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   isEqual={COMPARISONS.textInput}
                                   component={SelectField}
                                   options={DIFFICULTY_OPTIONS}
-                                  placeholder="How hard is it?"
+                                  placeholder={difficulty.placeholder}
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
                                 <Label sx={_labelStyle} htmlFor="description">
-                                  Short description *
+                                  {description.title}
                                 </Label>
                                 <Field
                                   id="description"
@@ -398,7 +412,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   }}
                                   maxLength={HOWTO_MAX_LENGTH}
                                   showCharacterCount
-                                  placeholder={`Provide a short introduction (max ${HOWTO_MAX_LENGTH} characters)`}
+                                  placeholder={description.description}
                                 />
                               </Flex>
                               <Flex sx={{ mb: 2 }}>
@@ -411,14 +425,12 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                       color: 'error',
                                     }}
                                   >
-                                    Please provide either a file link or upload
-                                    a file, not both.
+                                    {files.error}
                                   </Text>
                                 )}
                               </Flex>
                               <Label sx={_labelStyle} htmlFor="description">
-                                Do you have supporting files to help others
-                                replicate your How-to?
+                                {files.title}
                               </Label>
                               <Flex
                                 sx={{ flexDirection: 'column' }}
@@ -452,8 +464,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         form.change('files', [])
                                       }}
                                     >
-                                      Re-upload files (this will delete the
-                                      existing ones)
+                                      {files.upload.warning}
                                     </Button>
                                   </Flex>
                                 ) : (
@@ -469,14 +480,14 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         htmlFor="file-download-link"
                                         style={{ fontSize: '12px' }}
                                       >
-                                        Add a download link
+                                        {files.link.title}
                                       </Label>
                                       <Field
                                         id="fileLink"
                                         name="fileLink"
                                         data-cy="fileLink"
                                         component={FieldInput}
-                                        placeholder="Link to Google Drive, Dropbox, Grabcad etc"
+                                        placeholder={files.link.description}
                                         isEqual={COMPARISONS.textInput}
                                         maxLength={MAX_LINK_LENGTH}
                                         validate={(values, allValues) =>
@@ -499,7 +510,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         htmlFor="files"
                                         style={{ fontSize: '12px' }}
                                       >
-                                        Or upload your files here
+                                        {files.upload.title}
                                       </Label>
                                       <Field
                                         id="files"
@@ -512,7 +523,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                         mt={4}
                                         sx={{ fontSize: 1 }}
                                       >
-                                        Maximum file size 50MB
+                                        {files.upload.description}
                                       </Text>
                                     </Flex>
                                   </>
@@ -526,7 +537,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               data-cy={'intro-cover'}
                             >
                               <Label sx={_labelStyle} htmlFor="cover_image">
-                                Cover image *
+                                {coverImage.title}
                               </Label>
                               <Box sx={{ height: '230px' }}>
                                 <Field
@@ -545,8 +556,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               </Box>
 
                               <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-                                This image should be landscape. We advise
-                                1280x960px
+                                {coverImage.description}
                               </Text>
                             </Flex>
                           </Flex>
@@ -558,12 +568,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         {({ fields }) => (
                           <>
                             <Box paddingTop={5}>
-                              <Heading>Steps</Heading>
-                              <Text sx={{ fontSize: 2 }}>
-                                Each step needs an intro, a description and
-                                photos or video. You'll need to have
-                                <strong> at least three steps</strong>.
-                              </Text>
+                              <Heading>{steps.heading.title}</Heading>
+                              <Text
+                                sx={{ fontSize: 2 }}
+                                dangerouslySetInnerHTML={{
+                                  __html: steps.heading.description,
+                                }}
+                              />
                             </Box>
                             <AnimatePresence>
                               {fields.map((name, index: number) => (
@@ -607,7 +618,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   })
                                 }}
                               >
-                                Add step
+                                {steps.buttons.add}
                               </Button>
                             </Flex>
                           </>
@@ -653,14 +664,10 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         disabled={submitting}
                         sx={{ width: '100%', display: 'block' }}
                       >
-                        {formValues.moderation !== 'draft' ? (
-                          <span>Save draft</span>
-                        ) : (
-                          <span>Revert to draft</span>
-                        )}
+                        <span>{draftButton}</span>
                       </Button>
                       <Text sx={{ fontSize: 1, textAlign: 'center' }}>
-                        A draft can be saved any time
+                        {draft.description}
                       </Text>
                     </Flex>
                     <Button
@@ -681,7 +688,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         mb: ['40px', '40px', 0],
                       }}
                     >
-                      Publish
+                      {publish}
                     </Button>
                   </Box>
                 </Flex>

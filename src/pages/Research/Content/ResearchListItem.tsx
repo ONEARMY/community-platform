@@ -1,6 +1,5 @@
 import { format } from 'date-fns'
 import { Icon, ModerationStatus, Username } from 'oa-components'
-import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
@@ -196,7 +195,13 @@ const calculateTotalComments = (item: IResearch.ItemDB) => {
 }
 
 const getUpdateText = (item: IResearch.ItemDB) => {
-  return item.updates?.length ? String(item.updates?.length) : '0'
+  return item.updates?.length
+    ? String(
+        item.updates.filter(
+          (update) => update.status !== 'draft' && update._deleted !== true,
+        ).length,
+      )
+    : '0'
 }
 
 export default ResearchListItem

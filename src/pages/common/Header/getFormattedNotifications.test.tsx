@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
-import { NotificationTypes } from 'src/models'
+import { NotificationTypes } from 'oa-shared'
 import { FactoryNotification } from 'src/test/factories/Notification'
 import { getFormattedNotifications } from './getFormattedNotifications'
 

@@ -6,7 +6,12 @@ import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
 import type { IHowtoStep } from 'src/models/howto.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { required, minValue, composeValidators } from 'src/utils/validators'
+import {
+  draftValidationWrapper,
+  required,
+  minValue,
+  composeValidators,
+} from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
@@ -161,13 +166,16 @@ class HowtoStep extends PureComponent<IProps, IState> {
               data-cy="step-title"
               modifiers={{ capitalize: true }}
               component={FieldInput}
-              placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
+              placeholder={`Provide a title (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
               minLength={HOWTO_TITLE_MIN_LENGTH}
-              validate={composeValidators(
-                required,
-                minValue(HOWTO_TITLE_MIN_LENGTH),
-              )}
+              validate={(value, allValues) =>
+                draftValidationWrapper(
+                  value,
+                  allValues,
+                  composeValidators(required, minValue(HOWTO_TITLE_MIN_LENGTH)),
+                )
+              }
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
               showCharacterCount
@@ -175,11 +183,11 @@ class HowtoStep extends PureComponent<IProps, IState> {
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-              Description of this step *
+              Step Description *
             </Label>
             <Field
               name={`${step}.text`}
-              placeholder={`Explain what you are doing in this step. If it gets too long, consider breaking it into multiple steps (${HOWTO_STEP_DESCRIPTION_MIN_LENGTH}-${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters)`}
+              placeholder={`Explain what you are doing. If it gets too long, consider breaking it into multiple steps (${HOWTO_STEP_DESCRIPTION_MIN_LENGTH}-${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters)`}
               minLength={HOWTO_STEP_DESCRIPTION_MIN_LENGTH}
               maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
@@ -187,17 +195,23 @@ class HowtoStep extends PureComponent<IProps, IState> {
               modifiers={{ capitalize: true }}
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
-              validate={composeValidators(
-                required,
-                minValue(HOWTO_STEP_DESCRIPTION_MIN_LENGTH),
-              )}
+              validate={(value, allValues) =>
+                draftValidationWrapper(
+                  value,
+                  allValues,
+                  composeValidators(
+                    required,
+                    minValue(HOWTO_STEP_DESCRIPTION_MIN_LENGTH),
+                  ),
+                )
+              }
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
               showCharacterCount
             />
           </Flex>
           <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-            Upload image(s) for this step *
+            Upload image(s) *
           </Label>
           <Flex
             sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
@@ -237,7 +251,13 @@ class HowtoStep extends PureComponent<IProps, IState> {
               data-cy="step-videoUrl"
               component={FieldInput}
               placeholder="https://youtube.com/watch?v="
-              validate={(url) => this.validateMedia(url)}
+              validate={(value, allValues) =>
+                draftValidationWrapper(
+                  value,
+                  allValues,
+                  this.validateMedia.bind(this),
+                )
+              }
               validateFields={[]}
               isEqual={COMPARISONS.textInput}
             />

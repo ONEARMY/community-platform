@@ -8,7 +8,7 @@ import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import ResearchForm from 'src/pages/Research/Content/Common/Research.form'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { isAllowToEditContent } from 'src/utils/helpers'
+import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Text } from 'theme-ui'
 import { logger } from '../../../../logger'
 
@@ -67,7 +67,7 @@ const EditResearch = observer((props: IProps) => {
   const { formValues, isLoading, loggedInUser } = state
 
   if (formValues && !isLoading) {
-    if (loggedInUser && isAllowToEditContent(formValues, loggedInUser)) {
+    if (loggedInUser && isAllowedToEditContent(formValues, loggedInUser)) {
       return (
         <ResearchForm
           data-testid="EditResearch"

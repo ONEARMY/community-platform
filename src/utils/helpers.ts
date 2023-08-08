@@ -103,7 +103,7 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
   return doc.moderation !== 'accepted'
 }
 
-export const isAllowToEditContent = (
+export const isAllowedToEditContent = (
   doc: IEditableDoc & { collaborators?: string[] },
   user?: IUser,
 ) => {
@@ -128,7 +128,26 @@ export const isAllowToEditContent = (
   }
 }
 
-export const isAllowToPin = (pin: IMapPin, user?: IUser) => {
+export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
+  if (!user) {
+    return false
+  }
+
+  if (isObservableObject(user)) {
+    user = toJS(user)
+  }
+
+  const roles =
+    user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
+
+  return (
+    roles.includes('admin') ||
+    roles.includes('super-admin') ||
+    (doc._createdBy && doc._createdBy === user.userName)
+  )
+}
+
+export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {
   if (hasAdminRights(user) || (pin._id && user && pin._id === user.userName)) {
     return true
   } else {

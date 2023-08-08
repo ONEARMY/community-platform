@@ -11,6 +11,7 @@ import {
 import { FactoryUser } from 'src/test/factories/User'
 import ResearchArticle from './ResearchArticle'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { FactoryComment } from 'src/test/factories/Comment'
 const Theme = testingThemeStyles
 
 const activeUser = FactoryUser({
@@ -42,7 +43,7 @@ describe('Research Article', () => {
     setActiveResearchItemBySlug: jest.fn().mockResolvedValue(true),
     addSubscriberToResearchArticle: jest.fn(),
     needsModeration: jest.fn(),
-    getActiveResearchUpdateComments: jest.fn(),
+    formatResearchCommentList: jest.fn(),
     incrementViewCount: jest.fn(),
   }
 
@@ -217,6 +218,52 @@ describe('Research Article', () => {
     // Assert
     expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
     expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
+  })
+
+  it('shows comments for a research update', async () => {
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+      formatResearchCommentList: jest.fn().mockImplementation((c) => {
+        return c
+      }),
+      activeResearchItem: FactoryResearchItem({
+        updates: [
+          FactoryResearchItemUpdate({
+            title: 'Research Update #1',
+            status: 'published',
+            _deleted: false,
+          }),
+          FactoryResearchItemUpdate({
+            title: 'Research Update #2',
+            status: 'draft',
+            _deleted: false,
+          }),
+          FactoryResearchItemUpdate({
+            title: 'Research Update #3',
+            status: 'published',
+            _deleted: false,
+            comments: [
+              FactoryComment({
+                text: 'First test comment',
+              }),
+              FactoryComment({
+                text: 'Second test comment',
+              }),
+            ],
+          }),
+        ],
+      }),
+    })
+    // Act
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+      wrapper.getByText('View 2 Comments').click()
+    })
+
+    // Assert
+    expect(wrapper.getByText('First test comment')).toBeInTheDocument()
   })
 })
 

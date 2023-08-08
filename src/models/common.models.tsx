@@ -14,11 +14,20 @@ export type ISODateString = string
 export type IModerationStatus =
   | 'draft'
   | 'awaiting-moderation'
+  | 'improvements-needed'
   | 'rejected'
   | 'accepted'
 
-export interface IModerable {
+export interface IModerationFeedback {
+  feedbackTimestamp: ISODateString
+  feedbackComments: string
+  adminUsername: string
+}
+export interface IModeration {
   moderation: IModerationStatus
+  moderationFeedback?: IModerationFeedback[]
+}
+export interface IModerable extends IModeration {
   _createdBy?: string
   _id?: string
 }
@@ -59,3 +68,7 @@ export interface ISharedFeatures extends IVotedUseful {
 export type IVotedUsefulUpdate = {
   _id: string
 } & IVotedUseful
+
+export type IModerationUpdate = {
+  _id: string
+} & IModeration

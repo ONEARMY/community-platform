@@ -1,6 +1,4 @@
-import { Box, Card, Flex, Text, Image, AspectRatio, Alert } from 'theme-ui'
-import { Button } from '../Button/Button'
-
+import { Box, Card, Text, Image, AspectRatio } from 'theme-ui'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { Username } from '../Username/Username'
 
@@ -14,8 +12,6 @@ export interface Props {
     country: string | null
   }
   heading: string
-  moderationStatus: string
-  onPinModerated?: (isPinApproved: boolean) => void
   isEditable: boolean
 }
 
@@ -32,17 +28,6 @@ const wave = keyframes`
 
 export const MapMemberCard = (props: Props) => {
   const { imageUrl, description, user, heading } = props
-  const moderationStatusMsg =
-    props.moderationStatus !== 'rejected'
-      ? 'This pin is awaiting moderation, it will be shown on general map once accepted.'
-      : 'This pin has been rejected, it will not show on general map.'
-  const pin = {
-    type: 'member',
-    moderation: props.moderationStatus,
-  }
-
-  const onPinModerated = props.onPinModerated
-
   return (
     <Card sx={{ maxWidth: '230px' }} data-cy="MapMemberCard">
       <InternalLink to={`/u/${user.username}`}>
@@ -98,50 +83,7 @@ export const MapMemberCard = (props: Props) => {
             </Box>
           </>
         )}
-        {pin.moderation !== 'accepted' && (
-          <Alert
-            mb={2}
-            data-cy="MapMemberCard: moderation status"
-            variant={pin.moderation === 'rejected' ? 'failure' : 'info'}
-            sx={{
-              mx: 2,
-              fontSize: 1,
-              textAlign: 'left',
-              padding: 2,
-            }}
-          >
-            {moderationStatusMsg}
-          </Alert>
-        )}
       </InternalLink>
-      {props.isEditable && (
-        <Flex
-          sx={{
-            m: 2,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Button
-            small
-            data-cy="MapMemberCard: accept"
-            variant={'primary'}
-            icon="check"
-            onClick={() => onPinModerated && onPinModerated(true)}
-          >
-            Approve
-          </Button>
-          <Button
-            small
-            data-cy="MapMemberCard: reject"
-            variant={'outline'}
-            icon="delete"
-            onClick={() => onPinModerated && onPinModerated(false)}
-          >
-            Reject
-          </Button>
-        </Flex>
-      )}
     </Card>
   )
 }

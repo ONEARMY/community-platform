@@ -47,6 +47,7 @@ async function setMockHowto(user: IMockAuthUser) {
         text: 'Mock generated comment',
       },
     ],
+    previousSlugs: [_id],
   }
   await setDoc('howtos', _id, howto)
 }
@@ -72,10 +73,16 @@ async function setMockNotifications(user: IMockAuthUser) {
         new_comment: true,
         howto_useful: true,
         howto_mention: true,
+        howto_approved: true,
+        howto_needs_updates: true,
+        map_pin_approved: true,
+        map_pin_needs_updates: true,
         new_comment_research: true,
         research_useful: true,
         research_mention: true,
         research_update: true,
+        research_approved: true,
+        research_needs_updates: true,
       },
     },
   }

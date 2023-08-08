@@ -46,7 +46,7 @@ interface IState {
 //   margin-bottom: ${theme.space[2] + 'px'};
 // `
 
-class HowtoStep extends PureComponent<IProps, IState> {
+class HowtoFieldStep extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = {
@@ -67,7 +67,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
    */
   validateMedia(videoUrl: string) {
     const { images } = { ...this.props }
-    const { both, empty, invalidUrl } = steps.video.errors
+    const { both, empty, invalidUrl } = steps.videoUrl.errors
 
     if (videoUrl) {
       if (images[0]) {
@@ -90,7 +90,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
    */
   render() {
     const { step, index } = this.props
-    const { buttons, description, heading, images, title, video } = steps
+    const { buttons, heading, images, text, title, videoUrl } = steps
     const { deleteButton } = buttons
     const _labelStyle = {
       fontSize: 2,
@@ -145,16 +145,18 @@ class HowtoStep extends PureComponent<IProps, IState> {
                   <Button
                     variant={'outline'}
                     onClick={() => this.toggleDeleteModal()}
-                    value={deleteButton.cancel}
-                  />
+                  >
+                    {deleteButton.cancel}
+                  </Button>
                 </Flex>
                 <Flex px={1}>
                   <Button
                     data-cy="confirm"
                     variant={'outline'}
                     onClick={() => this.confirmDelete()}
-                    value={buttons.deleteButton.title}
-                  />
+                  >
+                    {deleteButton.title}
+                  </Button>
                 </Flex>
               </Flex>
             </Modal>
@@ -162,7 +164,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
 
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Label sx={_labelStyle} htmlFor={`${step}.title`}>
-              {title.title}
+              {`${title.title} *`}
             </Label>
             <Field
               name={`${step}.title`}
@@ -186,11 +188,11 @@ class HowtoStep extends PureComponent<IProps, IState> {
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-              {description.title}
+              {`${text.title} *`}
             </Label>
             <Field
               name={`${step}.text`}
-              placeholder={description.placeholder}
+              placeholder={text.placeholder}
               minLength={HOWTO_STEP_DESCRIPTION_MIN_LENGTH}
               maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
@@ -214,7 +216,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             />
           </Flex>
           <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-            {images}
+            {`${images} *`}
           </Label>
           <Flex
             sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
@@ -247,13 +249,13 @@ class HowtoStep extends PureComponent<IProps, IState> {
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Label sx={_labelStyle} htmlFor={`${step}.videoUrl`}>
-              {video.title}
+              {`${videoUrl.title} *`}
             </Label>
             <Field
               name={`${step}.videoUrl`}
               data-cy="step-videoUrl"
               component={FieldInput}
-              placeholder={video.placeholder}
+              placeholder={videoUrl.placeholder}
               validate={(value, allValues) =>
                 draftValidationWrapper(
                   value,
@@ -271,4 +273,4 @@ class HowtoStep extends PureComponent<IProps, IState> {
   }
 }
 
-export { HowtoStep }
+export { HowtoFieldStep }

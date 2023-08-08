@@ -1,57 +1,43 @@
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
-import { Form, Field } from 'react-final-form'
+import { Form } from 'react-final-form'
 import type { FormApi } from 'final-form'
 import styled from '@emotion/styled'
-import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
-import type { IHowtoFormInput } from 'src/models/howto.models'
-import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
-import { SelectField } from 'src/common/Form/Select.field'
-import { HowtoStep } from './HowtoStep.form'
-import {
-  Button,
-  FieldInput,
-  FieldTextarea,
-  ElWithBeforeIcon,
-  DownloadStaticFile,
-} from 'oa-components'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { Heading, Card, Flex, Box, Text, Label } from 'theme-ui'
-import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { FileInputField } from 'src/common/Form/FileInput.field'
-import { motion, AnimatePresence } from 'framer-motion'
+import { ElWithBeforeIcon } from 'oa-components'
+import { Heading, Card, Flex, Box } from 'theme-ui'
 import { inject, observer } from 'mobx-react'
-import { stripSpecialCharacters } from 'src/utils/helpers'
-import { PostingGuidelines } from './PostingGuidelines'
 
-import { DIFFICULTY_OPTIONS, TIME_OPTIONS } from './FormSettings'
-import { HowToSubmitStatus } from './SubmitStatus'
-import {
-  composeValidators,
-  draftValidationWrapper,
-  minValue,
-  required,
-  setAllowDraftSaveFalse,
-  setAllowDraftSaveTrue,
-  validateTitle,
-  validateUrlAcceptEmpty,
-} from 'src/utils/validators'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { COMPARISONS } from 'src/utils/comparisons'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { logger } from 'src/logger'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-
-import { buttons, intro, headings, steps } from '../../labels'
+import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
-  HOWTO_MAX_LENGTH,
-  HOWTO_TITLE_MAX_LENGTH,
-  HOWTO_TITLE_MIN_LENGTH,
-} from '../../constants'
-const MAX_LINK_LENGTH = 2000
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
+} from 'src/utils/validators'
+import { intro, headings } from '../../labels'
+import {
+  HowtoButtonDraft,
+  HowtoButtonPublish,
+  HowtoFieldCategory,
+  HowtoFieldCoverImage,
+  HowtoFieldDescription,
+  HowtoFieldDifficulty,
+  HowtoFieldFiles,
+  HowtoFieldStepsContainer,
+  HowtoFieldTags,
+  HowtoFieldTime,
+  HowtoFieldTitle,
+  HowToSubmitStatus,
+  PostingGuidelines,
+} from '.'
+
+import type { IHowtoFormInput } from 'src/models/howto.models'
+import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+export type ParentType = 'create' | 'edit'
 
 interface IState {
   formSaved: boolean
@@ -63,39 +49,10 @@ interface IState {
 }
 interface IProps extends RouteComponentProps<any> {
   formValues: any
-  parentType: 'create' | 'edit'
+  parentType: ParentType
 }
 interface IInjectedProps extends IProps {
   howtoStore: HowtoStore
-}
-
-const AnimationContainer = (props: any) => {
-  const variants = {
-    pre: {
-      opacity: 0,
-    },
-    enter: {
-      opacity: 1,
-      duration: 0.2,
-      display: 'block',
-    },
-    post: {
-      display: 'none',
-      duration: 0.2,
-      top: '-100%',
-    },
-  }
-  return (
-    <motion.div
-      layout
-      initial="pre"
-      animate="enter"
-      exit="post"
-      variants={variants}
-    >
-      {props.children}
-    </motion.div>
-  )
 }
 
 const FormContainer = styled.form`
@@ -105,21 +62,8 @@ const FormContainer = styled.form`
 @inject('howtoStore')
 @observer
 export class HowtoForm extends React.PureComponent<IProps, IState> {
-  isDraft = false
   uploadRefs: { [key: string]: UploadedFile | null } = {}
   formContainerRef = React.createRef<HTMLElement>()
-  /** When submitting from outside the form dispatch an event from the form container ref to trigger validation */
-  private trySubmitForm = (draft: boolean) => {
-    this.isDraft = draft
-    const formContainerRef = this.formContainerRef.current
-    // dispatch submit from the element
-    if (formContainerRef) {
-      // https://github.com/final-form/react-final-form/issues/878
-      formContainerRef.dispatchEvent(
-        new Event('submit', { cancelable: true, bubbles: true }),
-      )
-    }
-  }
   public checkFilesValid = (formValues: IHowtoFormInput) => {
     if (
       formValues.fileLink &&
@@ -138,7 +82,9 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       return
     }
     this.setState({ showSubmitModal: true })
-    formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
+    formValues.moderation = formValues.allowDraftSave
+      ? 'draft'
+      : 'awaiting-moderation'
     logger.debug('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
     form.reset(formValues)
@@ -150,21 +96,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       slug: (title) => stripSpecialCharacters(title).toLowerCase(),
     },
   })
-
-  private titleValidation = (values, allValues) => {
-    const validators = composeValidators(
-      required,
-      minValue(HOWTO_TITLE_MIN_LENGTH),
-      validateTitle(
-        this.props.parentType,
-        this.props.formValues._id,
-        'howtos',
-        this.store,
-      ),
-    )
-
-    return draftValidationWrapper(values, allValues, validators)
-  }
 
   constructor(props: any) {
     super(props)
@@ -178,7 +109,6 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
         this.props.formValues.files?.length > 0 &&
         this.props.formValues.fileLink,
     }
-    this.isDraft = props.moderation === 'draft'
   }
 
   get injected() {
@@ -190,29 +120,12 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
 
   public render() {
     const { formValues, parentType } = this.props
-    const { fileEditMode, showSubmitModal } = this.state
-    const _labelStyle = {
-      fontSize: 2,
-      marginBottom: 2,
-      display: 'block',
-    }
-    const {
-      category,
-      coverImage,
-      description,
-      difficulty,
-      files,
-      tags,
-      time,
-      title,
-      heading,
-    } = intro
+    const { fileEditMode, showSubmitModal, showInvalidFileWarning } = this.state
+    const { heading } = intro
     const { create, edit } = headings
-    const headingText = parentType === 'create' ? create : edit
 
-    const { draft, publish } = buttons
-    const draftButton =
-      formValues.moderation !== 'draft' ? draft.create : draft.update
+    const formId = 'howtoForm'
+    const headingText = parentType === 'create' ? create : edit
 
     return (
       <>
@@ -250,11 +163,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                   sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
                   mt={4}
                 >
-                  <FormContainer
-                    ref={this.formContainerRef as any}
-                    id="howtoForm"
-                    onSubmit={handleSubmit}
-                  >
+                  <FormContainer id={formId} onSubmit={handleSubmit}>
                     {/* How To Info */}
                     <Flex sx={{ flexDirection: 'column' }}>
                       <Card sx={{ bg: 'softblue' }}>
@@ -292,243 +201,27 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               px={2}
                               sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                             >
-                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle} htmlFor="title">
-                                  {title.title}
-                                </Label>
-                                <Field
-                                  id="title"
-                                  name="title"
-                                  data-cy="intro-title"
-                                  validateFields={[]}
-                                  validate={this.titleValidation}
-                                  isEqual={COMPARISONS.textInput}
-                                  modifiers={{ capitalize: true }}
-                                  component={FieldInput}
-                                  minLength={HOWTO_TITLE_MIN_LENGTH}
-                                  maxLength={HOWTO_TITLE_MAX_LENGTH}
-                                  placeholder={title.placeholder}
-                                  showCharacterCount
-                                />
-                              </Flex>
-                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle}>{category.title}</Label>
-                                <Field
-                                  name="category"
-                                  render={({ input, ...rest }) => (
-                                    <CategoriesSelect
-                                      {...rest}
-                                      isForm={true}
-                                      onChange={(category) =>
-                                        input.onChange(category)
-                                      }
-                                      value={input.value}
-                                      placeholder={category.placeholder}
-                                      type="howto"
-                                    />
-                                  )}
-                                />
-                              </Flex>
-                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle}>{tags}</Label>
-                                <Field
-                                  name="tags"
-                                  component={TagsSelectField}
-                                  category="how-to"
-                                  isEqual={COMPARISONS.tags}
-                                />
-                              </Flex>
-                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle} htmlFor="time">
-                                  {time.title}
-                                </Label>
-                                <Field
-                                  id="time"
-                                  name="time"
-                                  validate={(values, allValues) =>
-                                    draftValidationWrapper(
-                                      values,
-                                      allValues,
-                                      required,
-                                    )
-                                  }
-                                  validateFields={[]}
-                                  isEqual={COMPARISONS.textInput}
-                                  options={TIME_OPTIONS}
-                                  component={SelectField}
-                                  data-cy="time-select"
-                                  placeholder={time.placeholder}
-                                />
-                              </Flex>
-                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label
-                                  sx={_labelStyle}
-                                  htmlFor="difficulty_level"
-                                >
-                                  {difficulty.title}
-                                </Label>
-                                <Field
-                                  px={1}
-                                  id="difficulty_level"
-                                  name="difficulty_level"
-                                  data-cy="difficulty-select"
-                                  validate={(values, allValues) =>
-                                    draftValidationWrapper(
-                                      values,
-                                      allValues,
-                                      required,
-                                    )
-                                  }
-                                  validateFields={[]}
-                                  isEqual={COMPARISONS.textInput}
-                                  component={SelectField}
-                                  options={DIFFICULTY_OPTIONS}
-                                  placeholder={difficulty.placeholder}
-                                />
-                              </Flex>
-                              <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle} htmlFor="description">
-                                  {description.title}
-                                </Label>
-                                <Field
-                                  id="description"
-                                  name="description"
-                                  data-cy="intro-description"
-                                  validate={(values, allValues) =>
-                                    draftValidationWrapper(
-                                      values,
-                                      allValues,
-                                      required,
-                                    )
-                                  }
-                                  validateFields={[]}
-                                  modifiers={{ capitalize: true }}
-                                  isEqual={COMPARISONS.textInput}
-                                  component={FieldTextarea}
-                                  style={{
-                                    resize: 'none',
-                                    flex: 1,
-                                    minHeight: '150px',
-                                  }}
-                                  maxLength={HOWTO_MAX_LENGTH}
-                                  showCharacterCount
-                                  placeholder={description.description}
-                                />
-                              </Flex>
-                              <Flex sx={{ mb: 2 }}>
-                                {this.state.showInvalidFileWarning && (
-                                  <Text
-                                    id="invalid-file-warning"
-                                    data-cy="invalid-file-warning"
-                                    data-testid="invalid-file-warning"
-                                    sx={{
-                                      color: 'error',
-                                    }}
-                                  >
-                                    {files.error}
-                                  </Text>
-                                )}
-                              </Flex>
-                              <Label sx={_labelStyle} htmlFor="description">
-                                {files.title}
-                              </Label>
-                              <Flex
-                                sx={{ flexDirection: 'column' }}
-                                mb={[4, 4, 0]}
-                              >
-                                {formValues.files?.length &&
-                                parentType === 'edit' &&
-                                !fileEditMode ? (
-                                  <Flex
-                                    sx={{
-                                      flexDirection: 'column',
-                                      alignItems: 'center',
-                                    }}
-                                  >
-                                    {formValues.files.map((file) => (
-                                      <DownloadStaticFile
-                                        allowDownload
-                                        file={file}
-                                        key={file.name}
-                                      />
-                                    ))}
-                                    <Button
-                                      data-testid="re-upload-files"
-                                      variant={'outline'}
-                                      icon="delete"
-                                      onClick={() => {
-                                        this.setState({
-                                          fileEditMode:
-                                            !this.state.fileEditMode,
-                                        })
-                                        form.change('files', [])
-                                      }}
-                                    >
-                                      {files.upload.warning}
-                                    </Button>
-                                  </Flex>
-                                ) : (
-                                  <>
-                                    <Flex
-                                      sx={{
-                                        flexDirection: 'column',
-                                      }}
-                                      mb={3}
-                                    >
-                                      <Label
-                                        sx={_labelStyle}
-                                        htmlFor="file-download-link"
-                                        style={{ fontSize: '12px' }}
-                                      >
-                                        {files.link.title}
-                                      </Label>
-                                      <Field
-                                        id="fileLink"
-                                        name="fileLink"
-                                        data-cy="fileLink"
-                                        component={FieldInput}
-                                        placeholder={files.link.description}
-                                        isEqual={COMPARISONS.textInput}
-                                        maxLength={MAX_LINK_LENGTH}
-                                        validate={(values, allValues) =>
-                                          draftValidationWrapper(
-                                            values,
-                                            allValues,
-                                            validateUrlAcceptEmpty,
-                                          )
-                                        }
-                                        validateFields={[]}
-                                      />
-                                    </Flex>
-                                    <Flex
-                                      sx={{
-                                        flexDirection: 'column',
-                                      }}
-                                    >
-                                      <Label
-                                        sx={_labelStyle}
-                                        htmlFor="files"
-                                        style={{ fontSize: '12px' }}
-                                      >
-                                        {files.upload.title}
-                                      </Label>
-                                      <Field
-                                        id="files"
-                                        name="files"
-                                        data-cy="files"
-                                        component={FileInputField}
-                                      />
-                                      <Text
-                                        color={'grey'}
-                                        mt={4}
-                                        sx={{ fontSize: 1 }}
-                                      >
-                                        {files.upload.description}
-                                      </Text>
-                                    </Flex>
-                                  </>
-                                )}
-                              </Flex>
+                              <HowtoFieldTitle
+                                _id={formValues._id}
+                                parentType={parentType}
+                                store={this.store}
+                              />
+                              <HowtoFieldCategory />
+                              <HowtoFieldTags />
+                              <HowtoFieldTime />
+                              <HowtoFieldDifficulty />
+                              <HowtoFieldDescription />
+                              <HowtoFieldFiles
+                                fileEditMode={fileEditMode}
+                                files={formValues.files}
+                                onClick={() => {
+                                  this.setState({
+                                    fileEditMode: !this.state.fileEditMode,
+                                  })
+                                  form.change('files', [])
+                                }}
+                                showInvalidFileWarning={showInvalidFileWarning}
+                              />
                             </Flex>
                             {/* Right side */}
                             <Flex
@@ -536,94 +229,13 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               sx={{ flexDirection: 'column', flex: [1, 1, 3] }}
                               data-cy={'intro-cover'}
                             >
-                              <Label sx={_labelStyle} htmlFor="cover_image">
-                                {coverImage.title}
-                              </Label>
-                              <Box sx={{ height: '230px' }}>
-                                <Field
-                                  id="cover_image"
-                                  name="cover_image"
-                                  validate={(values, allValues) =>
-                                    draftValidationWrapper(
-                                      values,
-                                      allValues,
-                                      required,
-                                    )
-                                  }
-                                  isEqual={COMPARISONS.image}
-                                  component={ImageInputField}
-                                />
-                              </Box>
-
-                              <Text color={'grey'} mt={4} sx={{ fontSize: 1 }}>
-                                {coverImage.description}
-                              </Text>
+                              <HowtoFieldCoverImage />
                             </Flex>
                           </Flex>
                         </Flex>
                       </Card>
 
-                      {/* Steps Info */}
-                      <FieldArray name="steps" isEqual={COMPARISONS.step}>
-                        {({ fields }) => (
-                          <>
-                            <Box paddingTop={5}>
-                              <Heading>{steps.heading.title}</Heading>
-                              <Text
-                                sx={{ fontSize: 2 }}
-                                dangerouslySetInnerHTML={{
-                                  __html: steps.heading.description,
-                                }}
-                              />
-                            </Box>
-                            <AnimatePresence>
-                              {fields.map((name, index: number) => (
-                                <AnimationContainer
-                                  key={`${fields.value[index]._animationKey}-1`}
-                                >
-                                  <HowtoStep
-                                    key={`${fields.value[index]._animationKey}-2`}
-                                    step={name}
-                                    index={index}
-                                    moveStep={(from, to) => {
-                                      if (to !== fields.length) {
-                                        fields.move(from, to)
-                                      }
-                                    }}
-                                    images={fields.value[index].images}
-                                    onDelete={(fieldIndex: number) => {
-                                      fields.remove(fieldIndex)
-                                    }}
-                                  />
-                                </AnimationContainer>
-                              ))}
-                            </AnimatePresence>
-                            <Flex>
-                              <Button
-                                icon={'add'}
-                                data-cy={'add-step'}
-                                mx="auto"
-                                mt={[10, 10, 20]}
-                                mb={[5, 5, 20]}
-                                variant="secondary"
-                                onClick={() => {
-                                  fields.push({
-                                    title: '',
-                                    text: '',
-                                    images: [],
-                                    // HACK - need unique key, this is a rough method to generate form random numbers
-                                    _animationKey: `unique${Math.random()
-                                      .toString(36)
-                                      .substring(7)}`,
-                                  })
-                                }}
-                              >
-                                {steps.buttons.add}
-                              </Button>
-                            </Flex>
-                          </>
-                        )}
-                      </FieldArray>
+                      <HowtoFieldStepsContainer />
                     </Flex>
                   </FormContainer>
                 </Flex>
@@ -649,47 +261,17 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Box sx={{ display: ['none', 'none', 'block'] }}>
                       <PostingGuidelines />
                     </Box>
-                    <Flex
-                      sx={{ flexDirection: 'column', alignItems: 'center' }}
-                    >
-                      <Button
-                        data-cy={'draft'}
-                        onClick={() => {
-                          form.mutators.setAllowDraftSaveTrue()
-                          this.trySubmitForm(true)
-                        }}
-                        mt={[0, 0, 3]}
-                        variant="secondary"
-                        type="submit"
-                        disabled={submitting}
-                        sx={{ width: '100%', display: 'block' }}
-                      >
-                        <span>{draftButton}</span>
-                      </Button>
-                      <Text sx={{ fontSize: 1, textAlign: 'center' }}>
-                        {draft.description}
-                      </Text>
-                    </Flex>
-                    <Button
-                      large
-                      data-cy={'submit'}
-                      data-testid="submit-form"
-                      onClick={() => {
-                        form.mutators.setAllowDraftSaveFalse()
-                        this.trySubmitForm(false)
-                      }}
-                      mt={3}
-                      variant="primary"
-                      type="submit"
-                      disabled={submitting}
-                      sx={{
-                        width: '100%',
-                        display: 'block',
-                        mb: ['40px', '40px', 0],
-                      }}
-                    >
-                      {publish}
-                    </Button>
+                    <HowtoButtonDraft
+                      form={form}
+                      formId={formId}
+                      moderation={formValues.moderation}
+                      submitting={submitting}
+                    />
+                    <HowtoButtonPublish
+                      form={form}
+                      formId={formId}
+                      submitting={submitting}
+                    />
                   </Box>
                 </Flex>
               </Flex>

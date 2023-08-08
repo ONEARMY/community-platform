@@ -1,6 +1,6 @@
 import type {
   INotification,
-  IUser,
+  INotificationUpdate,
   NotificationType,
 } from 'src/models/user.models'
 import { action, makeObservable, toJS } from 'mobx'
@@ -113,7 +113,7 @@ export class UserNotificationsStore extends ModuleStore {
         notifications?.forEach((notification) => (notification.notified = true))
 
         await this._updateUserNotifications(user, notifications)
-        await this.userStore.updateUserProfile({ notifications })
+        await this.userStore.refreshActiveUserDetails()
       }
     } catch (err) {
       logger.error(err)
@@ -129,8 +129,8 @@ export class UserNotificationsStore extends ModuleStore {
         const notifications = toJS(user.notifications)
         notifications?.forEach((notification) => (notification.read = true))
 
-        await this._updateUserNotifications(user, { notifications })
-        await this.userStore.updateUserProfile({ notifications })
+        await this._updateUserNotifications(user, notifications)
+        await this.userStore.refreshActiveUserDetails()
       }
     } catch (err) {
       logger.error(err)
@@ -157,12 +157,14 @@ export class UserNotificationsStore extends ModuleStore {
 
   private async _updateUserNotifications(user: IUserPPDB, notifications) {
     const dbRef = this.db
-      .collection<IUser>(USER_COLLECTION_NAME)
+      .collection<INotificationUpdate>(USER_COLLECTION_NAME)
       .doc(user.userName)
 
-    return dbRef.set({
-      ...toJS(user),
+    const notificationUpdate = {
+      _id: user.userName,
       notifications,
-    })
+    }
+
+    await dbRef.update(notificationUpdate)
   }
 }

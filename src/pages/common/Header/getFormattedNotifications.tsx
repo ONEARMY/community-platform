@@ -47,6 +47,38 @@ export const getFormattedNotificationMessage = (
           useful
         </Box>
       )
+    case 'howto_approved':
+      return (
+        <Box>
+          Yay, your
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          has been approved
+        </Box>
+      )
+    case 'howto_needs_updates':
+      return (
+        <Box>
+          Your
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          needs some updates before we can approve it
+        </Box>
+      )
+    case 'map_pin_approved':
+      return (
+        <Box>
+          Yay, your
+          <InternalLink to={relevantUrl}>map pin</InternalLink>
+          has been approved
+        </Box>
+      )
+    case 'map_pin_needs_updates':
+      return (
+        <Box>
+          Your
+          <InternalLink to={relevantUrl}>map pin</InternalLink>
+          needs some updates before we can approve it
+        </Box>
+      )
     case 'research_useful':
       return (
         <Box>
@@ -79,6 +111,22 @@ export const getFormattedNotificationMessage = (
           posted an update to this
           <InternalLink to={relevantUrl}>research</InternalLink>
           you follow
+        </Box>
+      )
+    case 'research_approved':
+      return (
+        <Box>
+          Yay, your
+          <InternalLink to={relevantUrl}>research</InternalLink>
+          has been approved
+        </Box>
+      )
+    case 'research_needs_updates':
+      return (
+        <Box>
+          Your
+          <InternalLink to={relevantUrl}>research</InternalLink>
+          needs some updates before we can approve it
         </Box>
       )
     case 'new_comment_research':

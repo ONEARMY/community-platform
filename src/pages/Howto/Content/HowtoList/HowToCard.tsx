@@ -47,7 +47,7 @@ export const HowToCard = (props: IProps) => {
                 objectFit: 'cover',
               }}
               threshold={500}
-              src={howto.cover_image.downloadUrl}
+              src={howto.cover_image?.downloadUrl}
               crossOrigin=""
             />
           </Flex>

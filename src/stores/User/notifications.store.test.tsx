@@ -21,7 +21,7 @@ class MockNotificationsStore extends UserNotificationsStore {
       userName: 'userName',
       notifications: [],
     }),
-    updateUserProfile: jest.fn(),
+    refreshActiveUserDetails: jest.fn(),
   }
   constructor() {
     super(null as any)
@@ -46,10 +46,10 @@ describe('triggerNotification', () => {
       'https://example.com',
     )
     // Expect
-    const [newUser] = store.db.set.mock.calls[0]
+    const [newUser] = store.db.update.mock.calls[0]
 
     expect(store.db.doc).toBeCalledWith('example')
-    expect(store.db.set).toBeCalledTimes(1)
+    expect(store.db.update).toBeCalledTimes(1)
     expect(newUser.notifications).toHaveLength(1)
     expect(newUser.notifications[0]).toEqual(
       expect.objectContaining({
@@ -101,9 +101,9 @@ describe('notifications.store', () => {
     await store.deleteNotification(store.user!.notifications![0]._id)
 
     expect(store.db.doc).toBeCalledWith('userName')
-    expect(store.db.set).toHaveBeenCalledTimes(1)
+    expect(store.db.update).toHaveBeenCalledTimes(1)
 
-    const updatedUser = store.db.set.mock.calls[0][0]
+    const updatedUser = store.db.update.mock.calls[0][0]
     expect(updatedUser.notifications).toHaveLength(
       store.userStore.user!.notifications!.length - 1,
     )
@@ -112,12 +112,12 @@ describe('notifications.store', () => {
     await store.markAllNotificationsNotified()
 
     expect(store.db.doc).toBeCalledWith('userName')
-    expect(store.db.set).toHaveBeenCalledTimes(1)
+    expect(store.db.update).toHaveBeenCalledTimes(1)
   })
   it('marks all notifications as read', async () => {
     await store.markAllNotificationsRead()
 
     expect(store.db.doc).toBeCalledWith('userName')
-    expect(store.db.set).toHaveBeenCalledTimes(1)
+    expect(store.db.update).toHaveBeenCalledTimes(1)
   })
 })

@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
@@ -16,9 +16,14 @@ import {
   ViewsCounter,
   DownloadFileFromLink,
   Tooltip,
+  ConfirmModal,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
-import { isAllowToEditContent, capitalizeFirstLetter } from 'src/utils/helpers'
+import {
+  isAllowedToEditContent,
+  isAllowedToDeleteContent,
+  capitalizeFirstLetter,
+} from 'src/utils/helpers'
 import { Link, useHistory } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
@@ -33,6 +38,9 @@ import {
 } from 'src/utils/sessionStorage'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isUserVerified } from 'src/common/isUserVerified'
+import { trackEvent } from 'src/common/Analytics'
+import { logger } from 'src/logger'
+
 interface IProps {
   howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
@@ -40,18 +48,20 @@ interface IProps {
   votedUsefulCount?: number
   verified?: boolean
   hasUserVotedUseful: boolean
-  moderateHowto: (accepted: boolean) => void
+  moderateHowto: (accepted: boolean, feedback?: string) => void
   onUsefulClick: () => void
 }
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const history = useHistory()
+
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
   let didInit = false
   const [viewCount, setViewCount] = useState<number | undefined>()
   const { stores } = useCommonStores()
-  const history = useHistory()
 
   const incrementDownloadCount = async () => {
     const updatedDownloadCount = await stores.howtoStore.incrementDownloadCount(
@@ -90,6 +100,30 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     } else if (!howtoDownloadCooldown) {
       addHowtoDownloadCooldown(howto._id)
       incrementDownloadCount()
+    }
+  }
+
+  const handleDelete = async (_id: string) => {
+    try {
+      await stores.howtoStore.deleteHowTo(_id)
+      trackEvent({
+        category: 'How-To',
+        action: 'Deleted',
+        label: stores.howtoStore.activeHowto?.title,
+      })
+      logger.debug(
+        {
+          category: 'How-To',
+          action: 'Deleted',
+          label: stores.howtoStore.activeHowto?.title,
+        },
+        'How-to marked for deletion',
+      )
+
+      history.push('/how-to')
+    } catch (err) {
+      logger.error(err)
+      // at least log the error
     }
   }
 
@@ -141,6 +175,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           width: ['100%', '100%', `${(1 / 2) * 100}%`],
         }}
       >
+        {howto._deleted && (
+          <Fragment>
+            <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
+              * Marked for deletion
+            </Text>
+          </Fragment>
+        )}
         <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
           <Link to={'/how-to/'}>
             <Button
@@ -170,7 +211,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               </Box>
             </AuthWrapper>
           ) : null}
-          {/* Check if pin should be moderated */}
+          {/* Check if how to should be moderated */}
           {props.needsModeration && (
             <Flex sx={{ justifyContent: 'space-between' }}>
               <Button
@@ -188,20 +229,91 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 icon="close"
                 data-tip={'Request changes'}
                 showIconOnly={true}
-                onClick={() => props.moderateHowto(false)}
+                onClick={() => {
+                  // Prompt used for testing purposes, will be removed once retool functionality in place
+                  const feedback =
+                    // eslint-disable-next-line no-alert
+                    prompt('Please provide detail of required changes') ||
+                    undefined
+                  props.moderateHowto(false, feedback)
+                }}
               />
               <Tooltip />
             </Flex>
           )}
           {/* Check if logged in user is the creator of the how-to OR a super-admin */}
-          {loggedInUser && isAllowToEditContent(howto, loggedInUser) && (
+          {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
             <Link to={'/how-to/' + howto.slug + '/edit'}>
               <Button variant={'primary'} data-cy={'edit'}>
                 Edit
               </Button>
             </Link>
           )}
+
+          {loggedInUser && isAllowedToDeleteContent(howto, loggedInUser) && (
+            <Fragment key={'how-to-delete-action'}>
+              <Button
+                data-cy="How-To: delete button"
+                variant={'secondary'}
+                icon="delete"
+                disabled={howto._deleted}
+                onClick={() => setShowDeleteModal(true)}
+              >
+                Delete
+              </Button>
+
+              <ConfirmModal
+                key={howto._id}
+                isOpen={showDeleteModal}
+                message="Are you sure you want to delete this How-To?"
+                confirmButtonText="Delete"
+                handleCancel={() => setShowDeleteModal(false)}
+                handleConfirm={() => handleDelete && handleDelete(howto._id)}
+              />
+            </Fragment>
+          )}
         </Flex>
+        {howto.moderationFeedback && howto.moderation === 'rejected' && (
+          <Flex
+            mt={4}
+            sx={{
+              display: 'block',
+              fontSize: 1,
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              padding: 2,
+              borderRadius: 1,
+              borderBottomRightRadius: 1,
+              flexDirection: 'column',
+              border: '2px solid red',
+              paddingTop: 3,
+            }}
+          >
+            <Heading variant="small" mb={2}>
+              Moderator Feedback
+            </Heading>
+            {howto.moderationFeedback.map((feedback) => {
+              return (
+                <Flex
+                  mb={2}
+                  pb={2}
+                  sx={{
+                    flexDirection: 'column',
+                  }}
+                  key={feedback.feedbackTimestamp}
+                >
+                  <Text mb={1} sx={{ fontWeight: 'bold' }}>
+                    {format(feedback.feedbackTimestamp, 'DD-MM-YYYY HH:mm')}
+                  </Text>
+                  <Text key={feedback.feedbackTimestamp} sx={{ fontSize: 2 }}>
+                    {feedback.feedbackComments}
+                  </Text>
+                </Flex>
+              )
+            })}
+          </Flex>
+        )}
         <Box mt={3} mb={2}>
           <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
             <Flex sx={{ flexDirection: 'column' }}>
@@ -305,22 +417,23 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 redirectToSignIn={!loggedInUser ? redirectToSignIn : undefined}
               />
             )}
-            {howto.files
-              .filter(Boolean)
-              .map(
-                (file, index) =>
-                  file && (
-                    <DownloadStaticFile
-                      allowDownload
-                      file={file}
-                      key={file ? file.name : `file-${index}`}
-                      handleClick={handleDownloadClick}
-                      redirectToSignIn={
-                        !loggedInUser ? redirectToSignIn : undefined
-                      }
-                    />
-                  ),
-              )}
+            {howto.files &&
+              howto.files
+                .filter(Boolean)
+                .map(
+                  (file, index) =>
+                    file && (
+                      <DownloadStaticFile
+                        allowDownload
+                        file={file}
+                        key={file ? file.name : `file-${index}`}
+                        handleClick={handleDownloadClick}
+                        redirectToSignIn={
+                          !loggedInUser ? redirectToSignIn : undefined
+                        }
+                      />
+                    ),
+                )}
             {typeof fileDownloadCount === 'number' && (
               <Text
                 data-cy="file-download-counter"
@@ -343,17 +456,19 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           position: 'relative',
         }}
       >
-        <AspectImage
-          loading="lazy"
-          ratio={12 / 9}
-          sx={{
-            objectFit: 'cover',
-            width: '100%',
-          }}
-          src={howto.cover_image.downloadUrl}
-          crossOrigin=""
-          alt="how-to cover"
-        />
+        {howto.cover_image && (
+          <AspectImage
+            loading="lazy"
+            ratio={12 / 9}
+            sx={{
+              objectFit: 'cover',
+              width: '100%',
+            }}
+            src={howto.cover_image.downloadUrl}
+            crossOrigin=""
+            alt="how-to cover"
+          />
+        )}
         {howto.moderation !== 'accepted' && (
           <ModerationStatus
             status={howto.moderation}

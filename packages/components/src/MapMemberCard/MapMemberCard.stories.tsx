@@ -10,7 +10,6 @@ export default {
 export const Default: StoryFn<typeof MapMemberCard> = () => (
   <MapMemberCard
     imageUrl="https://placekitten.com/450/450"
-    moderationStatus="accepted"
     description={`${faker.lorem.sentence()}`}
     user={{
       username: faker.internet.userName(),
@@ -27,67 +26,12 @@ export const LoadingState: StoryFn<typeof MapMemberCard> = () => (
     loading
     imageUrl="https://placekitten.com/450/450"
     description={`${faker.lorem.sentence()}`}
-    moderationStatus="accepted"
     user={{
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
       country: faker.address.countryCode('alpha-2'),
     }}
     heading={`${faker.lorem.word()}`}
-    isEditable={false}
-  />
-)
-
-export const AwaitingModeration: StoryFn<typeof MapMemberCard> = () => (
-  <MapMemberCard
-    imageUrl="https://placekitten.com/450/450"
-    description={`${faker.lorem.sentence()}`}
-    user={{
-      username: faker.internet.userName(),
-      isVerified: faker.datatype.boolean(),
-      country: faker.address.countryCode('alpha-2'),
-    }}
-    heading={`${faker.lorem.word()}`}
-    moderationStatus="awaiting-moderation"
-    onPinModerated={(isPinApproved) => {
-      alert('Approved? ' + JSON.stringify(isPinApproved))
-    }}
-    isEditable={true}
-  />
-)
-
-export const Draft: StoryFn<typeof MapMemberCard> = () => (
-  <MapMemberCard
-    imageUrl="https://placekitten.com/450/450"
-    description={`${faker.lorem.sentence()}`}
-    user={{
-      username: faker.internet.userName(),
-      isVerified: faker.datatype.boolean(),
-      country: faker.address.countryCode('alpha-2'),
-    }}
-    heading={`${faker.lorem.word()}`}
-    moderationStatus="draft"
-    onPinModerated={(isPinApproved) => {
-      alert('Approved? ' + JSON.stringify(isPinApproved))
-    }}
-    isEditable={true}
-  />
-)
-
-export const Rejected: StoryFn<typeof MapMemberCard> = () => (
-  <MapMemberCard
-    imageUrl="https://placekitten.com/450/450"
-    description={`${faker.lorem.sentence()}`}
-    user={{
-      username: faker.internet.userName(),
-      isVerified: faker.datatype.boolean(),
-      country: faker.address.countryCode('alpha-2'),
-    }}
-    heading={`${faker.lorem.word()}`}
-    moderationStatus="rejected"
-    onPinModerated={(isPinApproved) => {
-      alert('Approved? ' + JSON.stringify(isPinApproved))
-    }}
     isEditable={false}
   />
 )

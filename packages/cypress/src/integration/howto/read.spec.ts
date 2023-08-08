@@ -1,8 +1,9 @@
 import { v4 as uuid } from 'uuid'
+import { MOCK_DATA } from '../../data'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-  const totalHowTo = 8
+  const totalHowTo = Object.values(MOCK_DATA.howtos).length
 
   describe('[List how-tos]', () => {
     const howtoSlug = 'make-glass-like-beams'
@@ -149,6 +150,11 @@ describe('[How To]', () => {
           .should('include', '/how-to')
       })
 
+      it('[Delete button should not be visible to everyone', () => {
+        cy.step('Delete button should not be visible')
+        cy.get('[data-cy="How-To: delete button"]').should('not.exist')
+      })
+
       it('[Views only visible for beta-testers]', () => {
         cy.visit(specificHowtoUrl)
         cy.step(`ViewsCounter should not be visible`)
@@ -192,14 +198,81 @@ describe('[How To]', () => {
       })
     })
 
-    it('[By Owner]', () => {
-      cy.step('Edit button is available to the owner')
-      cy.visit(specificHowtoUrl)
-      cy.login('howto_creator@test.com', 'test1234')
-      cy.get('[data-cy=edit]')
-        .click()
-        .url()
-        .should('include', `${specificHowtoUrl}/edit`)
+    describe('[By Owner]', () => {
+      beforeEach(() => {
+        cy.visit(specificHowtoUrl)
+        cy.login('howto_creator@test.com', 'test1234')
+      })
+
+      it('[Delete button is visible]', () => {
+        cy.step('Delete button should be visible to the author of the how-to')
+
+        cy.get('[data-cy="How-To: delete button"]').should('exist')
+      })
+
+      it('[Edit button is visible]', () => {
+        cy.step('Edit button is available to the owner')
+        cy.get('[data-cy=edit]')
+          .click()
+          .url()
+          .should('include', `${specificHowtoUrl}/edit`)
+      })
+    })
+
+    describe('[By Admin]', () => {
+      beforeEach(() => {
+        cy.login('demo_admin@example.com', 'demo_admin')
+        cy.visit(specificHowtoUrl)
+      })
+
+      it('[Delete button is visible]', () => {
+        cy.step('Delete button should be visible to the author of the article')
+
+        cy.get('[data-cy="How-To: delete button"]').should('exist')
+      })
+    })
+  })
+
+  describe('[Read a soft-deleted How-to]', () => {
+    const deletedHowtoUrl = '/how-to/deleted-how-to'
+    beforeEach(() => {
+      cy.visit(deletedHowtoUrl)
+    })
+
+    describe('[By Everyone]', () => {
+      it('[Marked for deletion message]', () => {
+        cy.step(
+          'There should be a message stating the how-to is marked for deletion',
+        )
+
+        cy.get('[data-cy="how-to-deleted"]').contains('Marked for deletion')
+      })
+    })
+
+    describe('[By Owner]', () => {
+      beforeEach(() => {
+        cy.login('demo_user@example.com', 'demo_user')
+        cy.visit(deletedHowtoUrl)
+      })
+
+      it('[Delete Button is disabled]', () => {
+        cy.step('Delete button should be disabled')
+
+        cy.get('[data-cy="How-To: delete button"]').should('be.disabled')
+      })
+    })
+
+    describe('[By Admin]', () => {
+      beforeEach(() => {
+        cy.login('demo_user@example.com', 'demo_user')
+        cy.visit(deletedHowtoUrl)
+      })
+
+      it('[Delete Button is disabled]', () => {
+        cy.step('Delete button should be disabled')
+
+        cy.get('[data-cy="How-To: delete button"]').should('be.disabled')
+      })
     })
   })
 

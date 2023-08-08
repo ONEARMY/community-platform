@@ -2,23 +2,26 @@ import { ThemeProvider } from '@emotion/react'
 import { Flex, Box } from 'theme-ui'
 import { Icon } from '../Icon/Icon'
 import type { availableGlyphs } from '../Icon/types'
-
-type notificationType =
-  | 'howto_mention'
-  | 'new_comment'
-  | 'howto_useful'
-  | 'new_comment_research'
-  | 'research_useful'
-  | 'research_mention'
-  | 'research_update'
-
+import type { NotificationType } from 'oa-shared'
 export interface UserNotificationItem {
-  type: notificationType
+  type: NotificationType
   children: React.ReactNode
 }
 
-function getIconByType(type: notificationType): availableGlyphs {
+function getIconByType(type: NotificationType): availableGlyphs {
   if (['howto_useful', 'research_useful'].includes(type)) return 'useful'
+  if (
+    ['howto_approved', 'map_pin_approved', 'research_approved'].includes(type)
+  )
+    return 'check'
+  if (
+    [
+      'howto_needs_updates',
+      'map_pin_needs_updates',
+      'research_needs_updates',
+    ].includes(type)
+  )
+    return 'edit'
 
   if (type === 'research_update') return 'thunderbolt'
 
@@ -55,7 +58,7 @@ export const NotificationItem = (props: UserNotificationItem) => {
       >
         <Flex style={{ textAlign: 'left', color: 'black' }}>
           <Box sx={{ opacity: 0.6 }}>
-            <Icon glyph={getIconByType(type)} size={15} mr={2} />
+            <Icon glyph={getIconByType(type)} size={15} mr={3} />
           </Box>
           {props.children}
         </Flex>

@@ -4,6 +4,7 @@ import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
+import { headings } from '../../../../../src/pages/Howto/labels'
 const creatorEmail = 'howto_creator@test.com'
 const creatorPassword = 'test1234'
 
@@ -193,6 +194,8 @@ describe('[How To]', () => {
 
       cy.step('Cannot be published yet')
       cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=errors-container]').should('be.visible')
+      cy.contains(headings.errors).should('exist')
       cy.contains('Make sure this field is filled correctly').should('exist')
 
       cy.step('A basic draft was created')

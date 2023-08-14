@@ -9,6 +9,7 @@ import {
 export const headings = {
   create: '<span>Create</span> a How-To',
   edit: '<span>Edit</span> a How-To',
+  errors: "Ouch, something's wrong",
   uploading: 'Uploading How To',
 }
 

@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import {
   Button,
+  DownloadStaticFile,
   ImageGallery,
   LinkifyText,
   Username,
@@ -14,6 +15,7 @@ import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
 import { Link } from 'react-router-dom'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
+import { useResearchStore } from 'src/stores/Research/research.store'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -36,6 +38,8 @@ const ResearchUpdate = ({
   comments,
   showComments,
 }: IProps) => {
+  const researchStore = useResearchStore()
+
   const formattedCreateDatestamp = format(
     new Date(update._created),
     'DD-MM-YYYY',
@@ -46,6 +50,10 @@ const ResearchUpdate = ({
   )
 
   const contributors = useContributorsData(update.collaborators || [])
+
+  const handleDownloadClick = async () => {
+    researchStore.incrementDownloadCount(update._id)
+  }
 
   return (
     <>
@@ -156,6 +164,39 @@ const ResearchUpdate = ({
                 />
               )}
             </Box>
+            {update.files && update.files.length > 0 && (
+              <Flex
+                className="file-container"
+                mt={3}
+                sx={{ flexDirection: 'column', px: 4 }}
+              >
+                {update.files &&
+                  update.files
+                    .filter(Boolean)
+                    .map(
+                      (file, index) =>
+                        file && (
+                          <DownloadStaticFile
+                            allowDownload
+                            file={file}
+                            key={file ? file.name : `file-${index}`}
+                            handleClick={handleDownloadClick}
+                          />
+                        ),
+                    )}
+                {update.downloadCount > 0 && (<Text
+                  data-cy="file-download-counter"
+                  sx={{
+                    fontSize: 1,
+                    color: 'grey',
+                    paddingLeft: 1,
+                  }}
+                >
+                  {update.downloadCount}
+                  {update.downloadCount !== 1 ? ' downloads' : ' download'}
+                </Text>)}
+              </Flex>
+            )}
             <ResearchComments
               update={update}
               comments={comments as any}

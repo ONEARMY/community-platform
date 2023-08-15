@@ -20,9 +20,13 @@ import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
-  required,
-  minValue,
   composeValidators,
+  draftValidationWrapper,
+  minValue,
+  required,
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
+  validateMedia,
   validateTitle,
 } from 'src/utils/validators'
 import styled from '@emotion/styled'
@@ -316,6 +320,12 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 placeholder="https://youtube.com/watch?v="
                                 validate={(url, values) =>
                                   validateMedia(url, values)
+                                validate={(value, allValues) =>
+                                  draftValidationWrapper(
+                                    value,
+                                    allValues,
+                                    validateMedia,
+                                  )
                                 }
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
@@ -455,19 +465,3 @@ const getResearchUpdates = (
         }
       : null,
   ].filter(Boolean)
-
-/**
- * Ensure either url or images included (not both), and any url formatted correctly
- */
-const validateMedia = (videoUrl: string, values: any) => {
-  const images = values.images
-  if (videoUrl) {
-    if (images && images[0]) {
-      return 'Do not include both images and video'
-    }
-    const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
-    const urlValid = ytRegex.test(videoUrl)
-    return urlValid ? null : 'Please provide a valid YouTube Url'
-  }
-  return images && images[0] ? null : 'Include either images or a video'
-}

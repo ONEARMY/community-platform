@@ -11,6 +11,7 @@ import {
   required,
   minValue,
   composeValidators,
+  validateMedia,
 } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
@@ -62,22 +63,8 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
     this.toggleDeleteModal()
     this.props.onDelete(this.props.index)
   }
-  /**
-   * Ensure either url or images included (not both), and any url formatted correctly
-   */
   validateMedia(videoUrl: string) {
-    const { images } = { ...this.props }
-    const { both, empty, invalidUrl } = steps.videoUrl.errors
-
-    if (videoUrl) {
-      if (images[0]) {
-        return both
-      }
-      const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
-      const urlValid = ytRegex.test(videoUrl)
-      return urlValid ? null : invalidUrl
-    }
-    return images[0] ? null : empty
+    return validateMedia(videoUrl, this.props)
   }
 
   /**

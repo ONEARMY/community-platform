@@ -1,12 +1,15 @@
 import isUrl from 'is-url'
 import { stripSpecialCharacters } from './helpers'
+import { videoUrl } from './labels'
+
+import type { Mutator } from 'final-form'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
-
 type documentTypes = 'howtos' | 'research'
 type storeTypes = HowtoStore | ResearchStore
 
-import type { Mutator } from 'final-form'
+const { errors } = videoUrl
+
 /****************************************************************************
  *            General Validation Methods
  * **************************************************************************/
@@ -37,6 +40,21 @@ const composeValidators =
       (error, validator) => error || validator(value),
       undefined,
     )
+
+const validateMedia = (videoUrl: string, allValues: any) => {
+  const { images } = allValues
+  const { both, empty, invalidUrl } = errors
+
+  if (videoUrl) {
+    if (images && images[0]) {
+      return both
+    }
+    const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
+    const urlValid = ytRegex.test(videoUrl)
+    return urlValid ? null : invalidUrl
+  }
+  return images && images[0] ? null : empty
+}
 
 const validateUrl = (value: any) => {
   if (value) {
@@ -75,7 +93,7 @@ const validateTitle =
   }
 
 const draftValidationWrapper = (value, allValues, validator) => {
-  return allValues.allowDraftSave ? undefined : validator(value)
+  return allValues.allowDraftSave ? undefined : validator(value, allValues)
 }
 
 /****************************************************************************
@@ -100,6 +118,7 @@ const setAllowDraftSaveTrue: Mutator = (_, state, utils) => {
 }
 
 export {
+  validateMedia,
   validateUrl,
   validateUrlAcceptEmpty,
   validateEmail,

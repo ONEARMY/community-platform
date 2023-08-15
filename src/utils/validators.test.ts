@@ -10,7 +10,7 @@ describe('draftValidationWrapper', () => {
 
     draftValidationWrapper(value, allValues, validator)
 
-    expect(validator).toHaveBeenCalledWith(value)
+    expect(validator).toHaveBeenCalledWith(value, allValues)
   })
 
   it('returns undefined when draft save is allowed', () => {

@@ -36,6 +36,7 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
+import { buttons, update } from '../../labels'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -63,11 +64,15 @@ const beforeUnload = (e) => {
 }
 
 export const ResearchUpdateForm = observer((props: IProps) => {
+  const { formValues, parentType, redirectUrl } = props
+  const { deletion, description, headings, images, title, videoUrl } = update
+  const { draft } = buttons
+
   const store = useResearchStore()
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
   const [isDraft, setIsDraft] = React.useState<boolean>(
-    props.formValues.status === 'draft',
+    formValues.status === 'draft',
   )
 
   React.useEffect(() => {
@@ -107,8 +112,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   const handleDelete = async (_updateId: string) => {
     setShowDeleteModal(false)
     await store.deleteUpdate(_updateId)
-    if (props.redirectUrl) {
-      window.location.assign(props.redirectUrl)
+    if (redirectUrl) {
+      window.location.assign(redirectUrl)
     }
   }
 
@@ -129,6 +134,12 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     [store.updateUploadStatus.Complete, beforeUnload],
   )
 
+  const draftButtonText =
+    formValues.moderation !== 'draft' ? draft.create : draft.update
+  const isEdit = parentType === 'edit'
+  const publishButtonText = isEdit ? 'Save' : 'Add update'
+  const pageTitle = headings[parentType]
+
   return (
     <>
       {showSubmitModal && (
@@ -144,8 +155,10 @@ export const ResearchUpdateForm = observer((props: IProps) => {
         onSubmit={(v) => {
           onSubmit(v as IResearch.Update)
         }}
-        initialValues={props.formValues}
+        initialValues={formValues}
         mutators={{
+          setAllowDraftSaveFalse,
+          setAllowDraftSaveTrue,
           ...arrayMutators,
         }}
         validateOnBlur
@@ -175,11 +188,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     <Card sx={{ bg: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                         <Heading>
-                          {props.parentType === 'create' ? (
-                            <span>New update</span>
-                          ) : (
-                            <span>Edit your update</span>
-                          )}{' '}
+                          <span>{pageTitle}</span>{' '}
                         </Heading>
                         <Box ml="15px">
                           <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
@@ -201,7 +210,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="title" sx={{ mb: 2 }}>
-                                Title of this update
+                                {title.title}
                               </Label>
                               <Field
                                 id="title"
@@ -212,8 +221,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                   required,
                                   minValue(RESEARCH_TITLE_MIN_LENGTH),
                                   validateTitle(
-                                    props.parentType,
-                                    props.formValues._id,
+                                    parentType,
+                                    formValues._id,
                                     'research',
                                     store,
                                   ),
@@ -223,21 +232,23 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 maxLength={RESEARCH_TITLE_MAX_LENGTH}
                                 minLength={RESEARCH_TITLE_MIN_LENGTH}
                                 showCharacterCount
-                                placeholder={`Title of this update (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
+                                placeholder={title.placeholder}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor="description" sx={{ mb: 2 }}>
-                                Description of this update
+                                {description.title}
                               </Label>
                               <Field
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
                                 validate={(value, allValues) =>
-                                  allValues.isDraft
-                                    ? undefined
-                                    : required(value)
+                                  draftValidationWrapper(
+                                    value,
+                                    allValues,
+                                    required,
+                                  )
                                 }
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
@@ -249,11 +260,11 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 }}
                                 maxLength={RESEARCH_MAX_LENGTH}
                                 showCharacterCount
-                                placeholder={`Explain what is happening in your research (max ${RESEARCH_MAX_LENGTH} characters)`}
+                                placeholder={description.placeholder}
                               />
                             </Flex>
                             <Label htmlFor={`images`} sx={{ mb: 2 }}>
-                              Upload image(s) for this update
+                              {images.title}
                             </Label>
                             <Flex
                               sx={{
@@ -311,15 +322,13 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor={`videoUrl`} sx={{ mb: 2 }}>
-                                Or embed a YouTube video
+                                {videoUrl.title}
                               </Label>
                               <Field
                                 name={`videoUrl`}
                                 data-cy="videoUrl"
                                 component={FieldInput}
-                                placeholder="https://youtube.com/watch?v="
-                                validate={(url, values) =>
-                                  validateMedia(url, values)
+                                placeholder={videoUrl.placeholder}
                                 validate={(value, allValues) =>
                                   draftValidationWrapper(
                                     value,
@@ -365,13 +374,9 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     disabled={submitting}
                     sx={{ width: '100%', display: 'block', mt: 0 }}
                   >
-                    {props.formValues.status === 'draft' ? (
-                      <span>Save to draft</span>
-                    ) : (
-                      <span>Revert to draft</span>
-                    )}
+                    <span>{draftButtonText}</span>
                   </Button>
-                  {props.parentType === 'edit' ? (
+                  {isEdit ? (
                     <Button
                       data-cy={'delete'}
                       onClick={(evt) => {
@@ -383,7 +388,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       disabled={submitting}
                       sx={{ width: '100%', display: 'block', mt: 3 }}
                     >
-                      Delete this update
+                      {deletion.button}
                     </Button>
                   ) : null}
                   <Button
@@ -403,9 +408,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       justifyContent: 'center',
                     }}
                   >
-                    <span>
-                      {props.parentType === 'edit' ? 'Save' : 'Add update'}
-                    </span>
+                    <span>{publishButtonText}</span>
                   </Button>
 
                   {store.activeResearchItem ? (
@@ -414,11 +417,11 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       updates={getResearchUpdates(
                         store.activeResearchItem.updates || [],
                         store.activeResearchItem._id,
-                        props.parentType !== 'edit',
+                        !isEdit,
                         values.title,
                       )}
                       researchSlug={store.activeResearchItem?.slug}
-                      showCreateUpdateButton={props.parentType === 'edit'}
+                      showCreateUpdateButton={isEdit}
                       showBackToResearchButton={true}
                     />
                   ) : null}
@@ -426,11 +429,11 @@ export const ResearchUpdateForm = observer((props: IProps) => {
               </Flex>
               <ConfirmModal
                 isOpen={showDeleteModal}
-                message="Are you sure you want to delete this update?"
-                confirmButtonText="Delete"
+                message={deletion.message}
+                confirmButtonText={deletion.confirm}
                 handleCancel={() => setShowDeleteModal(false)}
                 handleConfirm={() =>
-                  handleDelete && handleDelete(props.formValues._id)
+                  handleDelete && handleDelete(formValues._id)
                 }
               />
             </Flex>

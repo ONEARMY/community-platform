@@ -36,6 +36,7 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
+import { buttons, overview } from '../../labels'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -71,6 +72,10 @@ const calculatedFields = createDecorator({
 })
 
 const ResearchForm = observer((props: IProps) => {
+  const { formValues, parentType } = props
+  const { create, update } = buttons.draft
+  const { categories, collaborators, description, headings, tags, title } = overview
+
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
     formSaved: false,
@@ -78,7 +83,7 @@ const ResearchForm = observer((props: IProps) => {
     showSubmitModal: false,
   })
   const [submissionHandler, setSubmissionHandler] = React.useState({
-    draft: props.formValues.moderation === 'draft',
+    draft: formValues.moderation === 'draft',
     shouldSubmit: false,
   })
 
@@ -119,6 +124,9 @@ const ResearchForm = observer((props: IProps) => {
     )
   }
 
+  const draftButtonText = formValues.moderation !== 'draft' ? create : update
+  const pageTitle = headings[parentType]
+
   return (
     <div data-testid={props['data-testid']}>
       {state.showSubmitModal && (
@@ -134,7 +142,7 @@ const ResearchForm = observer((props: IProps) => {
         onSubmit={(v) => {
           onSubmit(v as IResearch.FormInput)
         }}
-        initialValues={props.formValues}
+        initialValues={formValues}
         mutators={{
           setAllowDraftSaveFalse,
           setAllowDraftSaveTrue,
@@ -166,11 +174,7 @@ const ResearchForm = observer((props: IProps) => {
                     <Card sx={{ backgroundColor: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                         <Heading>
-                          {props.parentType === 'create' ? (
-                            <span>Start your Research</span>
-                          ) : (
-                            <span>Edit your Research</span>
-                          )}{' '}
+                          <span>{pageTitle}</span>{' '}
                         </Heading>
                         <Box ml="15px">
                           <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
@@ -197,7 +201,7 @@ const ResearchForm = observer((props: IProps) => {
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel htmlFor="title">
-                                Research Title
+                                {title.title}
                               </ResearchFormLabel>
                               <Field
                                 id="title"
@@ -208,8 +212,8 @@ const ResearchForm = observer((props: IProps) => {
                                   required,
                                   minValue(RESEARCH_TITLE_MIN_LENGTH),
                                   validateTitle(
-                                    props.parentType,
-                                    props.formValues._id,
+                                    parentType,
+                                    formValues._id,
                                     'research',
                                     store,
                                   ),
@@ -219,12 +223,12 @@ const ResearchForm = observer((props: IProps) => {
                                 maxLength={RESEARCH_TITLE_MAX_LENGTH}
                                 minLength={RESEARCH_TITLE_MIN_LENGTH}
                                 showCharacterCount
-                                placeholder={`Can we make a chair from.. (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
+                                placeholder={title.placeholder}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel htmlFor="description">
-                                What are you trying to find out?
+                                {description.title}
                               </ResearchFormLabel>
                               <Field
                                 id="description"
@@ -247,12 +251,12 @@ const ResearchForm = observer((props: IProps) => {
                                 }}
                                 maxLength={RESEARCH_MAX_LENGTH}
                                 showCharacterCount
-                                placeholder={`Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`}
+                                placeholder={description.placeholder}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel>
-                                Which categories fit your research?
+                                {categories.title}
                               </ResearchFormLabel>
                               <Field
                                 name="researchCategory"
@@ -264,14 +268,16 @@ const ResearchForm = observer((props: IProps) => {
                                       input.onChange(category)
                                     }
                                     value={input.value}
-                                    placeholder="Select category"
+                                    placeholder={categories.placeholder}
                                     type="research"
                                   />
                                 )}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <ResearchFormLabel>Select tags</ResearchFormLabel>
+                              <ResearchFormLabel>
+                                {tags.title}
+                              </ResearchFormLabel>
                               <Field
                                 name="tags"
                                 component={TagsSelectField}
@@ -281,13 +287,12 @@ const ResearchForm = observer((props: IProps) => {
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel>
-                                Who have you been collaborating on this Research
-                                with?
+                                {collaborators.title}
                               </ResearchFormLabel>
                               <Field
                                 name="collaborators"
                                 component={FieldInput}
-                                placeholder="A comma separated list of usernames."
+                                placeholder={collaborators.placeholder}
                               />
                             </Flex>
                           </Flex>
@@ -329,11 +334,7 @@ const ResearchForm = observer((props: IProps) => {
                     disabled={submitting}
                     sx={{ width: '100%', display: 'block' }}
                   >
-                    {props.formValues.moderation !== 'draft' ? (
-                      <span>Save as draft</span>
-                    ) : (
-                      <span>Save to draft</span>
-                    )}{' '}
+                    <span>{draftButtonText}</span>
                   </Button>
                   <Button
                     large
@@ -355,13 +356,13 @@ const ResearchForm = observer((props: IProps) => {
                       display: 'block',
                     }}
                   >
-                    <span>Publish</span>
+                    <span>{buttons.publish}</span>
                   </Button>
                 </Box>
-                {props.formValues.updates ? (
+                {formValues.updates ? (
                   <ResearchEditorOverview
                     sx={{ mt: 4 }}
-                    updates={props.formValues?.updates
+                    updates={formValues?.updates
                       .filter((u) => !u._deleted)
                       .map((u) => ({
                         isActive: false,
@@ -369,7 +370,7 @@ const ResearchForm = observer((props: IProps) => {
                         title: u.title,
                         slug: u._id,
                       }))}
-                    researchSlug={props.formValues.slug}
+                    researchSlug={formValues.slug}
                     showCreateUpdateButton={true}
                   />
                 ) : null}

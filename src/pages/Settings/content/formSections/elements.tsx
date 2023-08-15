@@ -1,7 +1,4 @@
 import styled from '@emotion/styled'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 import { Card, Flex } from 'theme-ui'
 import { Field } from 'react-final-form'
 
@@ -13,15 +10,16 @@ export const Label = (props) => (
       m: '5px',
       p: '10px 0',
       borderRadius: '5px',
-      border: `${theme.colors.background}`,
+      border: 'background',
       ':hover': {
-        backgroundColor: `${theme.colors.background}`,
+        backgroundColor: 'background',
         cursor: 'pointer',
       },
       '&.selected': {
-        backgroundColor: `${theme.colors.background}`,
-        // eslint-disable-next-line
-        border: '1px solid ' + `${theme.colors.green}`,
+        backgroundColor: 'background',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'green',
       },
     }}
     {...props}

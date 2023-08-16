@@ -255,7 +255,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                               Upload your file(s) for this update
                             </Label>
                             {props.formValues.files?.length > 0 &&
-                            props.parentType === 'edit' && !fileEditMode ? (
+                            props.parentType === 'edit' &&
+                            !fileEditMode ? (
                               <Flex
                                 sx={{
                                   flexDirection: 'column',

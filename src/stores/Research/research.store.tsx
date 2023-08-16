@@ -772,32 +772,32 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-   /**
+  /**
    * Increments the download count of files in reasearch update
    *
    * @param updateId
    */
-  public async incrementDownloadCount(updateId: string) : Promise<number>{
+  public async incrementDownloadCount(updateId: string): Promise<number> {
     try {
       let downloadCount = 0
-      const item = this.activeResearchItem      
-      
+      const item = this.activeResearchItem
+
       if (item) {
         const dbRef = this.db
           .collection<IResearch.Item>(COLLECTION_NAME)
           .doc(item._id)
-        
-        const newUpdates = item.updates.map(update => {
-          if (update._id  == updateId) {
+
+        const newUpdates = item.updates.map((update) => {
+          if (update._id == updateId) {
             update.downloadCount += 1
             downloadCount = update.downloadCount
           }
           return update
         })
-        
+
         const newItem = {
           ...toJS(item),
-          updates: [...toJS(newUpdates)]
+          updates: [...toJS(newUpdates)],
         }
 
         const updatedItem = await this._updateResearchItem(dbRef, newItem)

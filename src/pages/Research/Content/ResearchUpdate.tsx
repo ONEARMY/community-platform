@@ -188,7 +188,9 @@ const ResearchUpdate = ({
                             file={file}
                             key={file ? file.name : `file-${index}`}
                             handleClick={handleDownloadClick}
-                            redirectToSignIn={!loggedInUser ? redirectToSignIn: undefined}
+                            redirectToSignIn={
+                              !loggedInUser ? redirectToSignIn : undefined
+                            }
                           />
                         ),
                     )}

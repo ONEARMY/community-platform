@@ -1,6 +1,6 @@
 import isUrl from 'is-url'
 import { stripSpecialCharacters } from './helpers'
-import { videoUrl } from './labels'
+import { videoUrl } from '../common/Form/labels'
 
 import type { Mutator } from 'final-form'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'

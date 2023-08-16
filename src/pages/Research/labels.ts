@@ -1,5 +1,5 @@
 import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from './constants'
-import { videoUrl } from '../../../src/utils/labels'
+import { videoUrl } from '../../common/Form/labels'
 
 export const buttons = {
   draft: {

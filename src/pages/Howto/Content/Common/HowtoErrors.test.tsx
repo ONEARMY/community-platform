@@ -4,9 +4,11 @@ import { HowtoProvider } from 'src/test/components'
 import { HowtoErrors } from '.'
 
 describe('HowtoErrors', () => {
-  it('renders component when visible and has errors', async () => {
+  it('renders component when visible and has intro errors', async () => {
+    const titleError = 'Make sure this field is filled correctly'
+
     const errors = {
-      title: 'Make sure this field is filled correctly',
+      title: titleError,
     }
 
     render(
@@ -15,11 +17,12 @@ describe('HowtoErrors', () => {
       </HowtoProvider>,
     )
 
-    await screen.findByText(errors.title, { exact: false })
+    await screen.findByText(titleError, { exact: false })
   })
 
-  it('renders errors for steps', async () => {
-    const text = 'Make sure this field is filled correctly'
+  it('renders component when visible and has step errors', async () => {
+    const text = 'Make sure this other field correctly'
+
     const errors = {
       steps: [{}, { text }],
     }

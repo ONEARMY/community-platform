@@ -6,7 +6,7 @@ import {
   HOWTO_TITLE_MAX_LENGTH,
 } from './constants'
 
-import { videoUrl } from '../../../src/utils/labels'
+import { videoUrl } from '../../common/Form/labels'
 
 export const headings = {
   create: '<span>Create</span> a How-To',

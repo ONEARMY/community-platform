@@ -1,12 +1,10 @@
+import * as React from 'react'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
-import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
   FieldInput,
@@ -14,8 +12,9 @@ import {
   ElWithBeforeIcon,
   ResearchEditorOverview,
 } from 'oa-components'
+
+import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
-import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
@@ -28,14 +27,17 @@ import {
   validateTitle,
   draftValidationWrapper,
 } from 'src/utils/validators'
-import { PostingGuidelines } from './PostingGuidelines'
-import { ResearchSubmitStatus } from './SubmitStatus'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import {
   RESEARCH_TITLE_MAX_LENGTH,
   RESEARCH_TITLE_MIN_LENGTH,
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
+import { buttons, overview } from '../../labels'
+import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
+
+import type { RouteComponentProps } from 'react-router'
+import type { IResearch } from 'src/models/research.models'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -71,6 +73,11 @@ const calculatedFields = createDecorator({
 })
 
 const ResearchForm = observer((props: IProps) => {
+  const { formValues, parentType } = props
+  const { create, update } = buttons.draft
+  const { categories, collaborators, description, headings, tags, title } =
+    overview
+
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
     formSaved: false,
@@ -78,7 +85,7 @@ const ResearchForm = observer((props: IProps) => {
     showSubmitModal: false,
   })
   const [submissionHandler, setSubmissionHandler] = React.useState({
-    draft: props.formValues.moderation === 'draft',
+    draft: formValues.moderation === 'draft',
     shouldSubmit: false,
   })
 
@@ -119,6 +126,9 @@ const ResearchForm = observer((props: IProps) => {
     )
   }
 
+  const draftButtonText = formValues.moderation !== 'draft' ? create : update
+  const pageTitle = headings[parentType]
+
   return (
     <div data-testid={props['data-testid']}>
       {state.showSubmitModal && (
@@ -134,7 +144,7 @@ const ResearchForm = observer((props: IProps) => {
         onSubmit={(v) => {
           onSubmit(v as IResearch.FormInput)
         }}
-        initialValues={props.formValues}
+        initialValues={formValues}
         mutators={{
           setAllowDraftSaveFalse,
           setAllowDraftSaveTrue,
@@ -142,7 +152,15 @@ const ResearchForm = observer((props: IProps) => {
         }}
         validateOnBlur
         decorators={[calculatedFields, unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit, form }) => {
+        render={({
+          dirty,
+          errors,
+          form,
+          handleSubmit,
+          hasValidationErrors,
+          submitting,
+          submitFailed,
+        }) => {
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
               <Flex
@@ -166,11 +184,7 @@ const ResearchForm = observer((props: IProps) => {
                     <Card sx={{ backgroundColor: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                         <Heading>
-                          {props.parentType === 'create' ? (
-                            <span>Start your Research</span>
-                          ) : (
-                            <span>Edit your Research</span>
-                          )}{' '}
+                          <span>{pageTitle}</span>{' '}
                         </Heading>
                         <Box ml="15px">
                           <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
@@ -197,7 +211,8 @@ const ResearchForm = observer((props: IProps) => {
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel htmlFor="title">
-                                Research Title
+                                {title.title}
+                                {' *'}
                               </ResearchFormLabel>
                               <Field
                                 id="title"
@@ -208,8 +223,8 @@ const ResearchForm = observer((props: IProps) => {
                                   required,
                                   minValue(RESEARCH_TITLE_MIN_LENGTH),
                                   validateTitle(
-                                    props.parentType,
-                                    props.formValues._id,
+                                    parentType,
+                                    formValues._id,
                                     store,
                                   ),
                                 )}
@@ -218,12 +233,13 @@ const ResearchForm = observer((props: IProps) => {
                                 maxLength={RESEARCH_TITLE_MAX_LENGTH}
                                 minLength={RESEARCH_TITLE_MIN_LENGTH}
                                 showCharacterCount
-                                placeholder={`Can we make a chair from.. (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
+                                placeholder={title.placeholder}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel htmlFor="description">
-                                What are you trying to find out?
+                                {description.title}
+                                {' *'}
                               </ResearchFormLabel>
                               <Field
                                 id="description"
@@ -246,12 +262,12 @@ const ResearchForm = observer((props: IProps) => {
                                 }}
                                 maxLength={RESEARCH_MAX_LENGTH}
                                 showCharacterCount
-                                placeholder={`Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`}
+                                placeholder={description.placeholder}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel>
-                                Which categories fit your research?
+                                {categories.title}
                               </ResearchFormLabel>
                               <Field
                                 name="researchCategory"
@@ -263,14 +279,16 @@ const ResearchForm = observer((props: IProps) => {
                                       input.onChange(category)
                                     }
                                     value={input.value}
-                                    placeholder="Select category"
+                                    placeholder={categories.placeholder}
                                     type="research"
                                   />
                                 )}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <ResearchFormLabel>Select tags</ResearchFormLabel>
+                              <ResearchFormLabel>
+                                {tags.title}
+                              </ResearchFormLabel>
                               <Field
                                 name="tags"
                                 component={TagsSelectField}
@@ -280,13 +298,12 @@ const ResearchForm = observer((props: IProps) => {
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel>
-                                Who have you been collaborating on this Research
-                                with?
+                                {collaborators.title}
                               </ResearchFormLabel>
                               <Field
                                 name="collaborators"
                                 component={FieldInput}
-                                placeholder="A comma separated list of usernames."
+                                placeholder={collaborators.placeholder}
                               />
                             </Flex>
                           </Flex>
@@ -316,6 +333,7 @@ const ResearchForm = observer((props: IProps) => {
                   <Box sx={{ display: ['none', 'none', 'block'] }}>
                     <PostingGuidelines />
                   </Box>
+
                   <Button
                     data-cy={'draft'}
                     onClick={() => {
@@ -328,12 +346,9 @@ const ResearchForm = observer((props: IProps) => {
                     disabled={submitting}
                     sx={{ width: '100%', display: 'block' }}
                   >
-                    {props.formValues.moderation !== 'draft' ? (
-                      <span>Save as draft</span>
-                    ) : (
-                      <span>Save to draft</span>
-                    )}{' '}
+                    <span>{draftButtonText}</span>
                   </Button>
+
                   <Button
                     large
                     data-cy={'submit'}
@@ -354,13 +369,19 @@ const ResearchForm = observer((props: IProps) => {
                       display: 'block',
                     }}
                   >
-                    <span>Publish</span>
+                    <span>{buttons.publish}</span>
                   </Button>
+
+                  <ResearchErrors
+                    errors={errors}
+                    isVisible={submitFailed && hasValidationErrors}
+                    labels={overview}
+                  />
                 </Box>
-                {props.formValues.updates ? (
+                {formValues.updates ? (
                   <ResearchEditorOverview
                     sx={{ mt: 4 }}
-                    updates={props.formValues?.updates
+                    updates={formValues?.updates
                       .filter((u) => !u._deleted)
                       .map((u) => ({
                         isActive: false,
@@ -368,7 +389,7 @@ const ResearchForm = observer((props: IProps) => {
                         title: u.title,
                         slug: u._id,
                       }))}
-                    researchSlug={props.formValues.slug}
+                    researchSlug={formValues.slug}
                     showCreateUpdateButton={true}
                   />
                 ) : null}

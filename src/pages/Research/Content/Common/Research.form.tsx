@@ -1,12 +1,10 @@
+import * as React from 'react'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
-import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
   FieldInput,
@@ -14,8 +12,9 @@ import {
   ElWithBeforeIcon,
   ResearchEditorOverview,
 } from 'oa-components'
+
+import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
-import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
@@ -28,8 +27,6 @@ import {
   validateTitle,
   draftValidationWrapper,
 } from 'src/utils/validators'
-import { PostingGuidelines } from './PostingGuidelines'
-import { ResearchSubmitStatus } from './SubmitStatus'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import {
   RESEARCH_TITLE_MAX_LENGTH,
@@ -37,6 +34,10 @@ import {
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
 import { buttons, overview } from '../../labels'
+import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
+
+import type { RouteComponentProps } from 'react-router'
+import type { IResearch } from 'src/models/research.models'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -74,7 +75,8 @@ const calculatedFields = createDecorator({
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
   const { create, update } = buttons.draft
-  const { categories, collaborators, description, headings, tags, title } = overview
+  const { categories, collaborators, description, headings, tags, title } =
+    overview
 
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
@@ -150,7 +152,15 @@ const ResearchForm = observer((props: IProps) => {
         }}
         validateOnBlur
         decorators={[calculatedFields, unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit, form }) => {
+        render={({
+          dirty,
+          errors,
+          form,
+          handleSubmit,
+          hasValidationErrors,
+          submitting,
+          submitFailed,
+        }) => {
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
               <Flex
@@ -202,6 +212,7 @@ const ResearchForm = observer((props: IProps) => {
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel htmlFor="title">
                                 {title.title}
+                                {' *'}
                               </ResearchFormLabel>
                               <Field
                                 id="title"
@@ -229,6 +240,7 @@ const ResearchForm = observer((props: IProps) => {
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel htmlFor="description">
                                 {description.title}
+                                {' *'}
                               </ResearchFormLabel>
                               <Field
                                 id="description"
@@ -322,6 +334,7 @@ const ResearchForm = observer((props: IProps) => {
                   <Box sx={{ display: ['none', 'none', 'block'] }}>
                     <PostingGuidelines />
                   </Box>
+
                   <Button
                     data-cy={'draft'}
                     onClick={() => {
@@ -336,6 +349,7 @@ const ResearchForm = observer((props: IProps) => {
                   >
                     <span>{draftButtonText}</span>
                   </Button>
+
                   <Button
                     large
                     data-cy={'submit'}
@@ -358,6 +372,12 @@ const ResearchForm = observer((props: IProps) => {
                   >
                     <span>{buttons.publish}</span>
                   </Button>
+
+                  <ResearchErrors
+                    errors={errors}
+                    isVisible={submitFailed && hasValidationErrors}
+                    labels={overview}
+                  />
                 </Box>
                 {formValues.updates ? (
                   <ResearchEditorOverview

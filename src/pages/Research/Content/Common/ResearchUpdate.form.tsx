@@ -1,11 +1,10 @@
+import * as React from 'react'
 import arrayMutators from 'final-form-arrays'
 import { observer } from 'mobx-react'
-import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import styled from '@emotion/styled'
 import {
   Button,
   FieldInput,
@@ -14,9 +13,9 @@ import {
   ResearchEditorOverview,
   ConfirmModal,
 } from 'oa-components'
-import type { ResearchEditorOverviewUpdate } from 'oa-components'
+
+import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
@@ -29,7 +28,6 @@ import {
   validateMedia,
   validateTitle,
 } from 'src/utils/validators'
-import styled from '@emotion/styled'
 import { UpdateSubmitStatus } from './SubmitStatus'
 import {
   RESEARCH_TITLE_MAX_LENGTH,
@@ -37,6 +35,11 @@ import {
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
 import { buttons, update } from '../../labels'
+import { ResearchErrors } from './ResearchErrors'
+
+import type { RouteComponentProps } from 'react-router'
+import type { IResearch } from 'src/models/research.models'
+import type { ResearchEditorOverviewUpdate } from 'oa-components'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -163,7 +166,15 @@ export const ResearchUpdateForm = observer((props: IProps) => {
         }}
         validateOnBlur
         decorators={[unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit, values }) => {
+        render={({
+          dirty,
+          handleSubmit,
+          hasValidationErrors,
+          errors,
+          submitting,
+          submitFailed,
+          values,
+        }) => {
           return (
             <Flex
               mx={-2}
@@ -410,6 +421,12 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   >
                     <span>{publishButtonText}</span>
                   </Button>
+
+                  <ResearchErrors
+                    errors={errors}
+                    isVisible={submitFailed && hasValidationErrors}
+                    labels={update}
+                  />
 
                   {store.activeResearchItem ? (
                     <ResearchEditorOverview

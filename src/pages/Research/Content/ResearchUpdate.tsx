@@ -13,9 +13,10 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { useCommonStores } from 'src'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -39,6 +40,8 @@ const ResearchUpdate = ({
   showComments,
 }: IProps) => {
   const researchStore = useResearchStore()
+  const history = useHistory()
+  const { activeUser } = useCommonStores().stores.userStore
 
   const formattedCreateDatestamp = format(
     new Date(update._created),
@@ -53,6 +56,10 @@ const ResearchUpdate = ({
 
   const handleDownloadClick = async () => {
     researchStore.incrementDownloadCount(update._id)
+  }
+
+  const redirectToSignIn = async () => {
+    history.push('/sign-in')
   }
 
   return (
@@ -181,20 +188,23 @@ const ResearchUpdate = ({
                             file={file}
                             key={file ? file.name : `file-${index}`}
                             handleClick={handleDownloadClick}
+                            redirectToSignIn={!activeUser ? redirectToSignIn: undefined}
                           />
                         ),
                     )}
-                {update.downloadCount > 0 && (<Text
-                  data-cy="file-download-counter"
-                  sx={{
-                    fontSize: 1,
-                    color: 'grey',
-                    paddingLeft: 1,
-                  }}
-                >
-                  {update.downloadCount}
-                  {update.downloadCount !== 1 ? ' downloads' : ' download'}
-                </Text>)}
+                {update.downloadCount > 0 && (
+                  <Text
+                    data-cy="file-download-counter"
+                    sx={{
+                      fontSize: 1,
+                      color: 'grey',
+                      paddingLeft: 1,
+                    }}
+                  >
+                    {update.downloadCount}
+                    {update.downloadCount !== 1 ? ' downloads' : ' download'}
+                  </Text>
+                )}
               </Flex>
             )}
             <ResearchComments

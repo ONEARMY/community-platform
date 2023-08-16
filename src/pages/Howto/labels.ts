@@ -44,16 +44,16 @@ export const intro = {
   },
   files: {
     title: 'Do you have supporting files to help others replicate your How-to?',
-    link: {
-      title: 'Add a download link',
-      description: 'Link to Google Drive, Dropbox, Grabcad etc',
-    },
     upload: {
       title: 'Or upload your files here',
       description: 'Maximum file size 50MB',
       warning: 'Re-upload files (this will delete the existing ones)',
     },
     error: 'Please provide either a file link or upload a file, not both.',
+  },
+  fileLink: {
+    title: 'Add a download link',
+    description: 'Link to Google Drive, Dropbox, Grabcad etc',
   },
   heading: 'Intro',
   tags: 'Select tags',

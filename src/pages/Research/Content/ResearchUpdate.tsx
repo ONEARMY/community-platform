@@ -41,7 +41,7 @@ const ResearchUpdate = ({
 }: IProps) => {
   const researchStore = useResearchStore()
   const history = useHistory()
-  const { activeUser } = useCommonStores().stores.userStore
+  const loggedInUser = useCommonStores().stores.userStore.activeUser
 
   const formattedCreateDatestamp = format(
     new Date(update._created),
@@ -188,7 +188,7 @@ const ResearchUpdate = ({
                             file={file}
                             key={file ? file.name : `file-${index}`}
                             handleClick={handleDownloadClick}
-                            redirectToSignIn={!activeUser ? redirectToSignIn: undefined}
+                            redirectToSignIn={!loggedInUser ? redirectToSignIn: undefined}
                           />
                         ),
                     )}

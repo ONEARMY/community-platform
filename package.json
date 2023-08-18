@@ -143,7 +143,7 @@
     "@semantic-release/git": "^10.0.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "@testing-library/user-event": "^14.4.3",
     "@types/browser-image-compression": "^1.0.9",
     "@types/flux-standard-action": "1.1.0",
     "@types/jest": "^27.4.1",

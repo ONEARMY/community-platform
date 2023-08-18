@@ -104,7 +104,8 @@ class HowtoStep extends PureComponent<IProps, IState> {
             </Heading>
             {index >= 1 && (
               <Button
-                data-cy="move-step"
+                data-cy="move-step-up"
+                data-testid="move-step-up"
                 variant={'secondary'}
                 icon="arrow-full-up"
                 showIconOnly={true}
@@ -113,7 +114,8 @@ class HowtoStep extends PureComponent<IProps, IState> {
               />
             )}
             <Button
-              data-cy="move-step"
+              data-cy="move-step-down"
+              data-testid="move-step-down"
               variant={'secondary'}
               icon="arrow-full-down"
               sx={{ mx: '5px' }}
@@ -123,6 +125,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             {isAboveMinimumStep && (
               <Button
                 data-cy="delete-step"
+                data-testid="delete-step"
                 variant={'outline'}
                 showIconOnly={true}
                 icon="delete"
@@ -147,6 +150,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
                 <Flex px={1}>
                   <Button
                     data-cy="confirm"
+                    data-testid="confirm"
                     variant={'outline'}
                     onClick={() => this.confirmDelete()}
                   >
@@ -164,6 +168,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             <Field
               name={`${step}.title`}
               data-cy="step-title"
+              data-testid="step-title"
               modifiers={{ capitalize: true }}
               component={FieldInput}
               placeholder={`Provide a title (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
@@ -219,6 +224,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
           >
             <ImageInputFieldWrapper data-cy="step-image-0">
               <Field
+                dataTestId="step-image-0"
                 hasText={false}
                 name={`${step}.images[0]`}
                 component={ImageInputField}
@@ -227,6 +233,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             </ImageInputFieldWrapper>
             <ImageInputFieldWrapper data-cy="step-image-1">
               <Field
+                dataTestId="step-image-1"
                 hasText={false}
                 name={`${step}.images[1]`}
                 component={ImageInputField}
@@ -235,6 +242,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             </ImageInputFieldWrapper>
             <ImageInputFieldWrapper data-cy="step-image-2">
               <Field
+                dataTestId="step-image-2"
                 hasText={false}
                 name={`${step}.images[2]`}
                 component={ImageInputField}
@@ -249,6 +257,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             <Field
               name={`${step}.videoUrl`}
               data-cy="step-videoUrl"
+              data-testid="step-videoUrl"
               component={FieldInput}
               placeholder="https://youtube.com/watch?v="
               validate={(value, allValues) =>

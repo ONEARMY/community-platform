@@ -4,15 +4,19 @@ import { Heading, Flex, Box, Text, Alert } from 'theme-ui'
 import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import { FieldArray } from 'react-final-form-arrays'
+
 import { ProfileLinkField } from './Fields/ProfileLink.field'
 import { FlexSectionContainer } from './elements'
 import { required } from 'src/utils/validators'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import type { IUser } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ProfileType } from 'src/modules/profile/types'
 import { SelectField } from 'src/common/Form/Select.field'
+
+import { fields } from 'src/pages/Settings/labels'
+
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUser } from 'src/models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   formValues: IUserPP
@@ -25,6 +29,7 @@ interface IState {
   showNotification?: boolean
 }
 
+const { title, description } = fields.coverImages
 export const CoverImages = ({
   isMemberProfile,
   coverImages,
@@ -35,7 +40,7 @@ export const CoverImages = ({
   isMemberProfile ? (
     <>
       <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
-        Add a profile image *
+        {`${title} *`}
       </Text>
       <Box
         sx={{
@@ -60,7 +65,7 @@ export const CoverImages = ({
   ) : (
     <>
       <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
-        Cover Image *
+        {`${title} *`}
       </Text>
       <FieldArray
         name="coverImages"
@@ -100,11 +105,7 @@ export const CoverImages = ({
       </FieldArray>
 
       <Alert mt={2} variant="info">
-        <Text sx={{ fontSize: 1, textAlign: 'left' }}>
-          The cover images are shown in your profile and helps us evaluate your
-          account. Make sure the first image shows your space. Best size is
-          1920x1080.
-        </Text>
+        <Text sx={{ fontSize: 1, textAlign: 'left' }}>{description}</Text>
       </Alert>
     </>
   )
@@ -121,6 +122,8 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     const { formValues } = this.props
     const { profileType, links, coverImages } = formValues
     const isMemberProfile = profileType === ProfileType.MEMBER
+    const buttonText = fields.links.button
+
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
@@ -167,15 +170,13 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             )}
 
             <Text mb={2} mt={7} sx={{ fontSize: 2 }}>
-              {isMemberProfile
-                ? 'Tell us a bit about yourself *'
-                : 'Description *'}
+              {`${fields.about.title} *`}
             </Text>
             <Field
               data-cy="info-description"
               name="about"
               component={FieldTextarea}
-              placeholder="Describe in details what you do and who you are. Write in English otherwise your profile won't be approved."
+              placeholder={fields.about.placeholder}
               validate={required}
               validateFields={[]}
             />
@@ -187,7 +188,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
           <Box data-cy="UserInfos: links">
             <Flex sx={{ alignItems: 'center', width: '100%', wrap: 'nowrap' }}>
               <Text mb={2} mt={7} sx={{ fontSize: 2 }}>
-                Contacts & links *
+                {`${fields.links.title} *`}
               </Text>
             </Flex>
             <FieldArray name="links" initialValue={links}>
@@ -215,7 +216,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                       fields.push({} as any)
                     }}
                   >
-                    add link
+                    {buttonText}
                   </Button>
                 </>
               )}

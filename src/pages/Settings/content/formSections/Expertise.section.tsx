@@ -1,12 +1,14 @@
 import * as React from 'react'
-
 import { Flex, Heading, Box, Text } from 'theme-ui'
-import { FlexSectionContainer } from './elements'
 import { FieldArray } from 'react-final-form-arrays'
-import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
 const theme = preciousPlasticTheme.styles
+
+import { CustomCheckbox } from './Fields/CustomCheckbox.field'
+import { FlexSectionContainer } from './elements'
+import { headings, fields } from 'src/pages/Settings/labels'
+
 import type { IMAchineBuilderXp } from 'src/models'
 
 interface IProps {
@@ -38,14 +40,16 @@ export class ExpertiseSection extends React.Component<IProps, any> {
 
   render() {
     const { required } = this.props
+    const { description, title } = fields.expertise
+
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading variant="small">Expertise</Heading>
+          <Heading variant="small">{headings.expertise}</Heading>
         </Flex>
         <Box>
           <Text mt={4} mb={4}>
-            What are you specialised in ? *
+            {`${title} *`}
           </Text>
           <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
             <FieldArray name="machineBuilderXp">
@@ -92,7 +96,7 @@ export class ExpertiseSection extends React.Component<IProps, any> {
                 marginRight: 1,
               }}
             >
-              Choose at least one expertise
+              {description}
             </Text>
           )}
         </Box>

@@ -1,9 +1,13 @@
 import * as React from 'react'
 import { Card, Flex, Heading, Box, Text } from 'theme-ui'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import type { ThemeStore } from 'src/stores/Theme/theme.store'
-import type { UserStore } from 'src/stores/User/user.store'
+import { Button, TextNotification } from 'oa-components'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
+import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
+import arrayMutators from 'final-form-arrays'
+import { Form } from 'react-final-form'
+import { v4 as uuid } from 'uuid'
+
 import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { FocusSection } from './content/formSections/Focus.section'
 import { ExpertiseSection } from './content/formSections/Expertise.section'
@@ -11,21 +15,20 @@ import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { EmailNotificationsSection } from './content/formSections/EmailNotifications.section'
-import { Button, TextNotification } from 'oa-components'
 import { ProfileGuidelines } from './content/PostingGuidelines'
-import { Form } from 'react-final-form'
-import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
-import arrayMutators from 'final-form-arrays'
 import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 
+import { buttons, headings } from './labels'
 import INITIAL_VALUES from './Template'
-import { toJS } from 'mobx'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { logger } from 'src/logger'
 import { ProfileType } from 'src/modules/profile/types'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { v4 as uuid } from 'uuid'
+
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import type { UserStore } from 'src/stores/User/user.store'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -182,14 +185,18 @@ export class SettingsPage extends React.Component<IProps, IState> {
         validateOnBlur
         render={({
           form,
+          submitFailed,
           submitting,
           values,
           handleSubmit,
+          hasValidationErrors,
           valid,
           errors,
           ...rest
         }) => {
-          const heading = user.profileType ? 'Edit profile' : 'Create profile'
+          const { createProfile, editProfile } = headings
+          const heading = user.profileType ? editProfile : createProfile
+
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
               <UnsavedChangesDialog
@@ -332,7 +339,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
                     // ensure enabled after submit error
                     disabled={submitting}
                   >
-                    Save profile
+                    {buttons.save}
                   </Button>
                   {this.state.showFormSubmitResult && (
                     <TextNotification

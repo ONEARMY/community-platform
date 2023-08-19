@@ -1,10 +1,12 @@
-import { Button, ConfirmModal, FieldInput } from 'oa-components'
 import { Component } from 'react'
+import { Button, ConfirmModal, FieldInput } from 'oa-components'
+import { Box, Flex, Grid } from 'theme-ui'
 import { Field } from 'react-final-form'
+
 import { SelectField } from 'src/common/Form/Select.field'
 import { formatLink } from 'src/utils/formatters'
 import { required, validateEmail, validateUrl } from 'src/utils/validators'
-import { Box, Flex, Grid } from 'theme-ui'
+import { buttons, fields } from 'src/pages/Settings/labels'
 
 const COM_TYPE_MOCKS = [
   {
@@ -77,6 +79,9 @@ export class ProfileLinkField extends Component<IProps, IState> {
 
   render() {
     const { index, name, isDeleteEnabled } = this.props
+    const { message, text } = buttons.deleteLink
+    const { link, type } = fields.links
+
     const DeleteButton = (props) => (
       <Button
         data-cy={`delete-link-${index}`}
@@ -87,9 +92,10 @@ export class ProfileLinkField extends Component<IProps, IState> {
         ml={2}
         {...props}
       >
-        Delete
+        {text}
       </Button>
     )
+
     return (
       <Flex my={[2]} sx={{ flexDirection: ['column', 'column', 'row'] }}>
         <Grid mb={[1, 1, 0]} gap={0} sx={{ width: ['100%', '100%', '210px'] }}>
@@ -104,7 +110,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
               options={COM_TYPE_MOCKS}
               component={SelectField}
               onCustomChange={(linkType: string) => this.setState({ linkType })}
-              placeholder="type"
+              placeholder={type}
               validate={required}
               validateFields={[]}
               style={{ width: '100%', height: '40px' }}
@@ -131,7 +137,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
             validate={(value) => this.validateDependingOnType(value)}
             validateFields={[]}
             component={FieldInput}
-            placeholder="Link"
+            placeholder={link}
             format={(v) => formatLink(v, this.state.linkType)}
             formatOnBlur={true}
             style={{ width: '100%', height: '40px', marginBottom: '0px' }}
@@ -147,8 +153,8 @@ export class ProfileLinkField extends Component<IProps, IState> {
         {
           <ConfirmModal
             isOpen={!!this.state.showDeleteModal}
-            message="Are you sure you want to delete this link?"
-            confirmButtonText="Delete"
+            message={message}
+            confirmButtonText={text}
             handleCancel={() => this.toggleDeleteModal()}
             handleConfirm={() => this.confirmDelete()}
           />

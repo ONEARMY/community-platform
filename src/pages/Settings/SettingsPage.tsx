@@ -15,6 +15,7 @@ import { WorkspaceSection } from './content/formSections/Workspace.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { EmailNotificationsSection } from './content/formSections/EmailNotifications.section'
+import { SettingsErrors } from './content/formSections/SettingsErrors'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
@@ -341,21 +342,18 @@ export class SettingsPage extends React.Component<IProps, IState> {
                   >
                     {buttons.save}
                   </Button>
-                  {this.state.showFormSubmitResult && (
+
+                  <SettingsErrors
+                    errors={errors}
+                    isVisible={submitFailed && hasValidationErrors}
+                  />
+
+                  {this.state.showFormSubmitResult && valid && (
                     <TextNotification
                       isVisible={this.state.showFormSubmitResult}
                       variant={valid ? 'success' : 'failure'}
                     >
-                      <Text>
-                        {valid ? (
-                          <>Profile saved successfully</>
-                        ) : (
-                          <>
-                            Ouch, something's wrong. Make sure all fields are
-                            filled correctly to save your profile.
-                          </>
-                        )}
-                      </Text>
+                      <Text>{buttons.success}</Text>
                     </TextNotification>
                   )}
                 </Box>

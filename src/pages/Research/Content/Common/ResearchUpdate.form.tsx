@@ -240,7 +240,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={(value, allValues) =>
+                                validate={(value, allValues: any) =>
                                   allValues.isDraft
                                     ? undefined
                                     : required(value)

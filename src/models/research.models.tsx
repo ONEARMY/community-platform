@@ -36,6 +36,7 @@ export namespace IResearch {
     description: string
     images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
     files: Array<IUploadedFileMeta | File | null>
+    fileLink: string
     downloadCount: number
     videoUrl?: string
     comments?: IComment[]

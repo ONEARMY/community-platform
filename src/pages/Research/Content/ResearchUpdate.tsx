@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import {
   Button,
+  DownloadFileFromLink,
   DownloadStaticFile,
   ImageGallery,
   LinkifyText,
@@ -171,12 +172,21 @@ const ResearchUpdate = ({
                 />
               )}
             </Box>
-            {update.files && update.files.length > 0 && (
+            {((update.files && update.files.length > 0) || update.fileLink) && (
               <Flex
                 className="file-container"
                 mt={3}
                 sx={{ flexDirection: 'column', px: 4 }}
               >
+                {update.fileLink && (
+                  <DownloadFileFromLink
+                    handleClick={handleDownloadClick}
+                    link={update.fileLink}
+                    redirectToSignIn={
+                      !loggedInUser ? redirectToSignIn : undefined
+                    }
+                  />
+                )}
                 {update.files &&
                   update.files
                     .filter(Boolean)

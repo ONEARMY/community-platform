@@ -347,7 +347,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                               )}
                             </Flex>
                             <Label htmlFor="files" mb={2}>
-                              Set your file(s) for this update
+                              Attach your file(s) for this update
                             </Label>
                             {props.formValues.files?.length > 0 &&
                             props.parentType === 'edit' &&

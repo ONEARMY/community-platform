@@ -669,11 +669,11 @@ export class ResearchStore extends ModuleStore {
         logger.debug('upload images ok')
         this.updateUpdateUploadStatus('Images')
 
-        if (update.files.length || update.fileLink) {
+        if ((update.files && update.files.length) || update.fileLink) {
           updateWithMeta.downloadCount = 0
         }
 
-        if (update.files.length) {
+        if (update.files && update.files.length) {
           const fileMeta = await this.uploadCollectionBatch(
             update.files as File[],
             COLLECTION_NAME,

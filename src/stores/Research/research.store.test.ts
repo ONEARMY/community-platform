@@ -522,7 +522,7 @@ describe('research.store', () => {
       })
 
       it('increment download count of research update media', async () => {
-        const { store, getFn, researchItem } = await factoryResearchItem()
+        const { store, researchItem } = await factoryResearchItem()
         const update = toJS(researchItem.updates[0])
 
         await store.uploadUpdate(update)

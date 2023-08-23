@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react"
+import { fireEvent, render } from "@testing-library/react"
 import { Provider } from "mobx-react"
 import { act } from "react-dom/test-utils"
 import { useCommonStores } from "src"
@@ -13,13 +13,7 @@ import { FactoryUser } from "src/test/factories/User"
 
 const Theme = testingThemeStyles
 
-const activeUser = FactoryUser({
-  userRoles: ['beta-tester'],
-})
-
-const mockUser = FactoryUser({ country: 'AF' })
-
-jest.mock('src/index', () => {
+jest.mock('src/stores/Research/research.store', () => {
   return {
     useResearchStore: () => ({
       updateUploadStatus: {
@@ -28,12 +22,11 @@ jest.mock('src/index', () => {
         Files: false,
         Database: false,
         Complete: false
-      }
+      },
+      validateTitleForSlug: jest.fn(),
     })
   }
 })
-
-jest.mock('src/stores/Research/research.store')
 
 describe('Research update form', () => {
   describe('Invalid file warning', () => {
@@ -48,22 +41,68 @@ describe('Research update form', () => {
 
       expect(wrapper.queryByTestId('invalid-file-warning')).not.toBeInTheDocument()
     })
+
+    it('Does not appear when submitting only files', async () => {
+      // Arrange
+      const formValues = FactoryResearchItemUpdate({
+        files: [
+          new File(['test file content'], 'test-file.zip')
+        ]
+      })
+
+      // Act
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(formValues, 'create', {})
+      })
+
+      // Assert
+      expect(
+        wrapper.queryByTestId('invalid-file-warning'),
+      ).not.toBeInTheDocument()
+    })
+
+    it('Appears when submitting 2 file types', async () => {
+      // Arrange
+      const formValues = FactoryResearchItemUpdate({
+        images: [
+          new File(['hello'], 'hello.png')
+        ],
+        files: [
+          new File(['test file content'], 'test-file.zip')
+        ],
+        fileLink: 'www.filedonwload.test'
+      })
+
+
+      // Act
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(formValues, 'create', {})
+        // submit form
+        const submitFormButton = wrapper.getByTestId('submit-form')
+        fireEvent.click(submitFormButton)
+      })
+      
+      // Assert
+      expect(wrapper.queryByTestId('invalid-file-warning')).toBeInTheDocument()
+    })
   })
+
+  
 
 })
 
 const getWrapper = async (formValues, parentType, navProps) => {
   return render(
-    <Provider {...useResearchStore()}>
-      <ThemeProvider theme={Theme}>
-        <MemoryRouter initialEntries={['/research/:slug/update']}>
-          <ResearchUpdateForm
-            formValues={formValues}
-            parentType={parentType}
-            {...navProps}
-          />
-        </MemoryRouter>
-      </ThemeProvider>
-    </Provider>,
+    <ThemeProvider theme={Theme}>
+      <MemoryRouter initialEntries={['/research/:slug/update']}>
+        <ResearchUpdateForm
+          formValues={formValues}
+          parentType={parentType}
+          {...navProps}
+        />
+      </MemoryRouter>
+    </ThemeProvider>
   )
 }

@@ -484,6 +484,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     </Button>
                   ) : null}
                   <Button
+                    id="submit-form"
+                    data-testid="submit-form"
                     large
                     data-cy={'submit'}
                     onClick={(evt) => {

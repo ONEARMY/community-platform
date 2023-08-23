@@ -50,7 +50,7 @@ import {
 } from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
-const MAX_LINK_LENGTH = 2000
+import { MAX_LINK_LENGTH } from '../../../constants'
 
 interface IState {
   formSaved: boolean

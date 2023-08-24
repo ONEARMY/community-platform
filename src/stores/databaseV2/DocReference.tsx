@@ -113,7 +113,7 @@ export class DocReference<T> {
   ): DBDoc {
     const d = data
     const o = options
-    const modifiedTimestamp = o.keep_modified_timestamp
+    const modifiedTimestamp = o.keep_modified_timestamp && d._modified
       ? d._modified
       : new Date().toISOString()
 

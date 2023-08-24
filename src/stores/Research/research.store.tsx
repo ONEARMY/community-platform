@@ -212,6 +212,7 @@ export class ResearchStore extends ModuleStore {
   public async toggleUsefulByUser(
     docId: string,
     userName: string,
+    keep_modified_timestamp = true,
   ): Promise<void> {
     const dbRef = this.db
       .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
@@ -233,7 +234,9 @@ export class ResearchStore extends ModuleStore {
       votedUsefulBy: votedUsefulBy,
     }
 
-    await dbRef.update(votedUsefulUpdate)
+    await dbRef.update(votedUsefulUpdate, {
+      keep_modified_timestamp: keep_modified_timestamp,
+    })
 
     const updatedItem = (await dbRef.get()) as IResearch.ItemDB
     runInAction(() => {
@@ -722,7 +725,7 @@ export class ResearchStore extends ModuleStore {
         logger.debug('created:', newItem._created)
 
         // set the database document
-        await this._updateResearchItem(dbRef, newItem, true)
+        await this._updateResearchItem(dbRef, newItem, true, false)
         logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
         const createdItem = (await dbRef.get()) as IResearch.ItemDB
@@ -849,6 +852,7 @@ export class ResearchStore extends ModuleStore {
     dbRef: DocReference<IResearch.Item>,
     researchItem: IResearch.Item,
     setLastEditTimestamp = false,
+    keep_modified_timestamp = true,
   ) {
     const { text: researchDescription, users } = await this.addUserReference(
       researchItem.description,
@@ -922,7 +926,10 @@ export class ResearchStore extends ModuleStore {
         mentions,
         description: researchDescription,
       },
-      { set_last_edit_timestamp: setLastEditTimestamp },
+      {
+        set_last_edit_timestamp: setLastEditTimestamp,
+        keep_modified_timestamp: keep_modified_timestamp,
+      },
     )
 
     // Side effects from updating research item

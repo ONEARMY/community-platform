@@ -104,7 +104,8 @@ class HowtoStep extends PureComponent<IProps, IState> {
             </Heading>
             {index >= 1 && (
               <Button
-                data-cy="move-step"
+                data-cy="move-step-up"
+                data-testid="move-step-up"
                 variant={'secondary'}
                 icon="arrow-full-up"
                 showIconOnly={true}
@@ -113,7 +114,8 @@ class HowtoStep extends PureComponent<IProps, IState> {
               />
             )}
             <Button
-              data-cy="move-step"
+              data-cy="move-step-down"
+              data-testid="move-step-down"
               variant={'secondary'}
               icon="arrow-full-down"
               sx={{ mx: '5px' }}
@@ -123,6 +125,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             {isAboveMinimumStep && (
               <Button
                 data-cy="delete-step"
+                data-testid="delete-step"
                 variant={'outline'}
                 showIconOnly={true}
                 icon="delete"
@@ -147,6 +150,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
                 <Flex px={1}>
                   <Button
                     data-cy="confirm"
+                    data-testid="confirm"
                     variant={'outline'}
                     onClick={() => this.confirmDelete()}
                   >
@@ -164,9 +168,10 @@ class HowtoStep extends PureComponent<IProps, IState> {
             <Field
               name={`${step}.title`}
               data-cy="step-title"
+              data-testid="step-title"
               modifiers={{ capitalize: true }}
               component={FieldInput}
-              placeholder={`Title of this step (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
+              placeholder={`Provide a title (max ${HOWTO_TITLE_MAX_LENGTH} characters)`}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
               minLength={HOWTO_TITLE_MIN_LENGTH}
               validate={(value, allValues) =>
@@ -183,11 +188,11 @@ class HowtoStep extends PureComponent<IProps, IState> {
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-              Description of this step *
+              Step Description *
             </Label>
             <Field
               name={`${step}.text`}
-              placeholder={`Explain what you are doing in this step. If it gets too long, consider breaking it into multiple steps (${HOWTO_STEP_DESCRIPTION_MIN_LENGTH}-${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters)`}
+              placeholder={`Explain what you are doing. If it gets too long, consider breaking it into multiple steps (${HOWTO_STEP_DESCRIPTION_MIN_LENGTH}-${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters)`}
               minLength={HOWTO_STEP_DESCRIPTION_MIN_LENGTH}
               maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
@@ -211,7 +216,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             />
           </Flex>
           <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-            Upload image(s) for this step *
+            Upload image(s) *
           </Label>
           <Flex
             sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
@@ -219,6 +224,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
           >
             <ImageInputFieldWrapper data-cy="step-image-0">
               <Field
+                dataTestId="step-image-0"
                 hasText={false}
                 name={`${step}.images[0]`}
                 component={ImageInputField}
@@ -227,6 +233,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             </ImageInputFieldWrapper>
             <ImageInputFieldWrapper data-cy="step-image-1">
               <Field
+                dataTestId="step-image-1"
                 hasText={false}
                 name={`${step}.images[1]`}
                 component={ImageInputField}
@@ -235,6 +242,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             </ImageInputFieldWrapper>
             <ImageInputFieldWrapper data-cy="step-image-2">
               <Field
+                dataTestId="step-image-2"
                 hasText={false}
                 name={`${step}.images[2]`}
                 component={ImageInputField}
@@ -249,6 +257,7 @@ class HowtoStep extends PureComponent<IProps, IState> {
             <Field
               name={`${step}.videoUrl`}
               data-cy="step-videoUrl"
+              data-testid="step-videoUrl"
               component={FieldInput}
               placeholder="https://youtube.com/watch?v="
               validate={(value, allValues) =>

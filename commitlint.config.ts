@@ -1,10 +1,10 @@
 import type { UserConfig } from '@commitlint/types'
-import path from 'path'
 
 export const Configuration: UserConfig = {
   extends: ['@commitlint/config-conventional'],
   /** Add optional custom formatter */
-  formatter: path.resolve(__dirname, 'commitlint.format.ts'),
+  // Temporarily removed due to unresolved error: https://app.circleci.com/pipelines/github/ONEARMY/community-platform/5891/workflows/59757a07-b416-43be-9a57-eedc1190d5a0/jobs/44654
+  // formatter: path.resolve(__dirname, 'commitlint.format.ts'),
   /** Add optional override rules (https://www.npmjs.com/package/@commitlint/config-conventional) */
   // rules: {},
   helpUrl:

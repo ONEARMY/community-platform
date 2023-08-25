@@ -1,8 +1,5 @@
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 
 interface IFormElement {
   invalid?: boolean
@@ -10,21 +7,23 @@ interface IFormElement {
 }
 
 const inputStyles = ({ invalid }: IFormElement) => css`
-  border: 1px solid ${invalid ? theme.colors.error : 'transparent'};
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${invalid ? 'error' : 'transparent'};
   border-radius: 5px;
   font-family: 'Inter', Arial, sans-serif;
-  font-size: ${theme.fontSizes[1] + 'px'};
-  background: ${theme.colors.background};
+  font-size: 12px;
+  background-color: background;
   width: 100%;
   box-sizing: border-box;
 
   &:disabled {
     border: none;
-    color: ${theme.colors.black};
+    color: black;
   }
 
   &:focus {
-    border-color: ${theme.colors.blue};
+    border-color: blue;
     outline: none;
   }
 `

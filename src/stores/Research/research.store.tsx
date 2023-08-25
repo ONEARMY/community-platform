@@ -672,6 +672,21 @@ export class ResearchStore extends ModuleStore {
         logger.debug('upload images ok')
         this.updateUpdateUploadStatus('Images')
 
+        if ((update.files && update.files.length) || update.fileLink) {
+          updateWithMeta.downloadCount = 0
+        }
+
+        if (update.files && update.files.length) {
+          const fileMeta = await this.uploadCollectionBatch(
+            update.files as File[],
+            COLLECTION_NAME,
+            id,
+          )
+          updateWithMeta.files = fileMeta
+        }
+        logger.debug('upload files ok')
+        this.updateUpdateUploadStatus('Files')
+
         // populate DB
         const existingUpdateIndex = item.updates.findIndex(
           (upd) => upd._id === (update as IResearch.UpdateDB)._id,
@@ -760,6 +775,48 @@ export class ResearchStore extends ModuleStore {
       } catch (error) {
         logger.error('error deleting article', error)
       }
+    }
+  }
+
+  /**
+   * Increments the download count of files in reasearch update
+   *
+   * @param updateId
+   */
+  public async incrementDownloadCount(updateId: string): Promise<number> {
+    try {
+      let downloadCount = 0
+      const item = this.activeResearchItem
+
+      if (item) {
+        const dbRef = this.db
+          .collection<IResearch.Item>(COLLECTION_NAME)
+          .doc(item._id)
+
+        const newUpdates = item.updates.map((update) => {
+          if (update._id == updateId) {
+            update.downloadCount += 1
+            downloadCount = update.downloadCount
+          }
+          return update
+        })
+
+        const newItem = {
+          ...toJS(item),
+          updates: [...toJS(newUpdates)],
+        }
+
+        const updatedItem = await this._updateResearchItem(dbRef, newItem)
+
+        if (updatedItem) {
+          this.setActiveResearchItemBySlug(updatedItem.slug)
+        }
+      }
+
+      return downloadCount
+    } catch (err) {
+      logger.error(err)
+      throw new Error(err)
     }
   }
 
@@ -960,6 +1017,7 @@ interface IResearchUploadStatus {
 export interface IUpdateUploadStatus {
   Start: boolean
   Images: boolean
+  Files: boolean
   Database: boolean
   Complete: boolean
 }
@@ -967,6 +1025,7 @@ export interface IUpdateUploadStatus {
 const getInitialUpdateUploadStatus = (): IUpdateUploadStatus => ({
   Start: false,
   Images: false,
+  Files: false,
   Database: false,
   Complete: false,
 })

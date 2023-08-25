@@ -1,6 +1,7 @@
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Form, Field } from 'react-final-form'
+import type { FormApi } from 'final-form'
 import styled from '@emotion/styled'
 import { FieldArray } from 'react-final-form-arrays'
 import arrayMutators from 'final-form-arrays'
@@ -49,7 +50,7 @@ import {
 } from '../../constants'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 
-const MAX_LINK_LENGTH = 2000
+import { MAX_LINK_LENGTH } from '../../../constants'
 
 interface IState {
   formSaved: boolean
@@ -131,7 +132,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
       return true
     }
   }
-  public onSubmit = async (formValues: IHowtoFormInput) => {
+  public onSubmit = async (formValues: IHowtoFormInput, form: FormApi) => {
     if (!this.checkFilesValid(formValues)) {
       return
     }
@@ -139,6 +140,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
     formValues.moderation = this.isDraft ? 'draft' : 'awaiting-moderation'
     logger.debug('submitting form', formValues)
     await this.store.uploadHowTo(formValues)
+    form.reset(formValues)
   }
   // automatically generate the slug when the title changes
   private calculatedFields = createDecorator({
@@ -205,8 +207,8 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           />
         )}
         <Form
-          onSubmit={(v) => {
-            this.onSubmit(v as IHowtoFormInput)
+          onSubmit={(formValues, form) => {
+            this.onSubmit(formValues, form)
           }}
           initialValues={formValues}
           mutators={{
@@ -314,9 +316,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 />
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                <Label sx={_labelStyle}>
-                                  Select tags for your How-to*
-                                </Label>
+                                <Label sx={_labelStyle}>Select tags *</Label>
                                 <Field
                                   name="tags"
                                   component={TagsSelectField}
@@ -374,7 +374,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               </Flex>
                               <Flex sx={{ flexDirection: 'column' }} mb={3}>
                                 <Label sx={_labelStyle} htmlFor="description">
-                                  Short description of your How-to *
+                                  Short description *
                                 </Label>
                                 <Field
                                   id="description"
@@ -398,7 +398,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                   }}
                                   maxLength={HOWTO_MAX_LENGTH}
                                   showCharacterCount
-                                  placeholder={`Introduction to your How-To (max ${HOWTO_MAX_LENGTH} characters)`}
+                                  placeholder={`Provide a short introduction (max ${HOWTO_MAX_LENGTH} characters)`}
                                 />
                               </Flex>
                               <Flex sx={{ mb: 2 }}>
@@ -417,7 +417,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                                 )}
                               </Flex>
                               <Label sx={_labelStyle} htmlFor="description">
-                                Do you have supporting file to help others
+                                Do you have supporting files to help others
                                 replicate your How-to?
                               </Label>
                               <Flex

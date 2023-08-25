@@ -74,8 +74,8 @@ const UploadImageOverlay = (props: BoxProps): JSX.Element => (
     https://github.com/davejm/client-compress
 */
 // Input can either come from uploaded or local converted meta
-type IInputValue = IUploadedFileMeta | IUploadedFileMeta
-type IMultipleInputValue = (IConvertedFileMeta | IUploadedFileMeta)[]
+type IInputValue = IUploadedFileMeta | File
+type IMultipleInputValue = IInputValue[]
 
 interface IProps {
   // if multiple sends array, otherwise single object (or null on delete)
@@ -86,15 +86,17 @@ interface IProps {
   value?: IInputValue | IMultipleInputValue
   hasText?: boolean
   multiple?: boolean
+  dataTestId?: string
 }
 const defaultProps: IProps = {
+  dataTestId: 'image-input',
   onFilesChange: () => null,
   multiple: false,
 }
 
 interface IState {
   convertedFiles: IConvertedFileMeta[]
-  uploadedFiles: IUploadedFileMeta[]
+  presentFiles: IMultipleInputValue
   inputFiles: File[]
   lightboxImg?: IConvertedFileMeta
   openLightbox?: boolean
@@ -102,18 +104,18 @@ interface IState {
 
 export class ImageInput extends React.Component<IProps, IState> {
   static defaultProps = defaultProps
-
   private fileInputRef = React.createRef<HTMLInputElement>()
 
   public handleFileUpload = (filesToUpload: Array<File>) => {
     this.setState({ inputFiles: filesToUpload })
   }
+
   constructor(props: IProps) {
     super(props)
     this.state = {
       inputFiles: [],
       convertedFiles: [],
-      uploadedFiles: this._getUploadedFiles(props.value),
+      presentFiles: this._getPresentFiles(props.value),
     }
   }
 
@@ -139,7 +141,7 @@ export class ImageInput extends React.Component<IProps, IState> {
     this.setState({
       inputFiles: [],
       convertedFiles: [],
-      uploadedFiles: [],
+      presentFiles: [],
     })
     this.props.onFilesChange(null)
   }
@@ -149,16 +151,19 @@ export class ImageInput extends React.Component<IProps, IState> {
       JSON.stringify(this.props.value) !== JSON.stringify(previousProps.value)
     ) {
       this.setState({
-        uploadedFiles: this._getUploadedFiles(this.props.value),
+        presentFiles: this._getPresentFiles(this.props.value),
       })
     }
   }
 
   render() {
-    const { inputFiles, uploadedFiles } = this.state
-    const { multiple } = this.props
-    const showUploadedImg = uploadedFiles.length > 0
-    const hasImages = uploadedFiles.length > 0 || inputFiles.length > 0
+    const { inputFiles, presentFiles } = this.state
+    const { dataTestId, multiple } = this.props
+
+    const hasImages = presentFiles.length > 0 || inputFiles.length > 0
+    const showUploadedImg = presentFiles.length > 0
+    const src = this._setSrc(presentFiles[0])
+
     return (
       <Box p={0} sx={{ height: '100%' }}>
         <Dropzone
@@ -173,9 +178,9 @@ export class ImageInput extends React.Component<IProps, IState> {
               hasUploadedImg={showUploadedImg}
               {...getRootProps()}
             >
-              <input {...getInputProps()} />
+              <input data-testid={dataTestId} {...getInputProps()} />
 
-              {showUploadedImg && <Image src={uploadedFiles[0].downloadUrl} />}
+              {showUploadedImg && <Image src={src} />}
 
               {!showUploadedImg &&
                 inputFiles.map((file, index) => {
@@ -199,8 +204,9 @@ export class ImageInput extends React.Component<IProps, IState> {
                 <UploadImageOverlay>
                   <Button
                     data-cy="delete-image"
+                    data-testid="delete-image"
                     small
-                    variant="outline"
+                    variant="secondary"
                     icon="delete"
                     onClick={(event) => this.handleImageDelete(event)}
                   >
@@ -214,14 +220,33 @@ export class ImageInput extends React.Component<IProps, IState> {
       </Box>
     )
   }
+
   /**
    * As input can be both array or single object and either uploaded or converted meta,
    * require extra function to separate out to handle preview of previously uploaded
    */
-  private _getUploadedFiles(value: IProps['value'] = []) {
+  private _getPresentFiles(
+    value: IProps['value'] = [],
+  ): IState['presentFiles'] {
     const valArray = Array.isArray(value) ? value : [value]
-    return valArray.filter((v) =>
-      Object.prototype.hasOwnProperty.call(v, 'downloadUrl'),
-    ) as IUploadedFileMeta[]
+    return valArray.filter((value) => {
+      if (Object.prototype.hasOwnProperty.call(value, 'downloadUrl')) {
+        return value as IUploadedFileMeta
+      }
+      if (Object.prototype.hasOwnProperty.call(value, 'objectUrl')) {
+        return value as File
+      }
+    })
+  }
+
+  private _setSrc(file): string {
+    if (file === undefined) return ''
+    if (file.downloadUrl as IUploadedFileMeta) {
+      return file.downloadUrl
+    }
+    if (file.photoData as File) {
+      return URL.createObjectURL(file.photoData)
+    }
+    return ''
   }
 }

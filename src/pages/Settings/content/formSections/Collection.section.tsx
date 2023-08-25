@@ -17,9 +17,6 @@ import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 import { FieldArray } from 'react-final-form-arrays'
 import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
 
 interface IProps {
   formValues: IUserPP
@@ -123,11 +120,11 @@ export class CollectionSection extends React.Component<IProps> {
             </Grid>
             {required && (
               <Text
-                color={theme.colors.error}
                 sx={{
                   fontSize: 0.5,
                   marginLeft: 1,
                   marginRight: 1,
+                  color: 'error',
                 }}
               >
                 Choose at least one plastic type{' '}

@@ -19,7 +19,7 @@ jest.mock('src/stores/Research/research.store', () => {
         Database: false,
         Complete: false,
       },
-      validateTitleForSlug: jest.fn(),
+      isTitleThatReusesSlug: jest.fn(),
     }),
   }
 })
@@ -64,7 +64,7 @@ describe('Research update form', () => {
       const formValues = FactoryResearchItemUpdate({
         images: [new File(['hello'], 'hello.png')],
         files: [new File(['test file content'], 'test-file.zip')],
-        fileLink: 'www.filedonwload.test',
+        fileLink: 'www.filedownload.test',
       })
 
       // Act

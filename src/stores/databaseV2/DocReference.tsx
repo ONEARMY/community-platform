@@ -131,6 +131,9 @@ export class DocReference<T> {
     if (isDocUpdate) {
       delete meta._created
       delete meta._deleted
+      if(o.keep_modified_timestamp) {
+        delete meta._modified
+      }
     }
 
     return meta

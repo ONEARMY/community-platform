@@ -4,7 +4,7 @@ import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
-import { Box, Card, Flex, Heading, Label } from 'theme-ui'
+import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import {
   Button,
@@ -13,9 +13,11 @@ import {
   ElWithBeforeIcon,
   ResearchEditorOverview,
   ConfirmModal,
+  DownloadStaticFile,
 } from 'oa-components'
 import type { ResearchEditorOverviewUpdate } from 'oa-components'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
+import { FileInputField } from 'src/common/Form/FileInput.field'
 import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
@@ -32,6 +34,7 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
+import { MAX_LINK_LENGTH } from '../../../constants'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -60,11 +63,14 @@ const beforeUnload = (e) => {
 
 export const ResearchUpdateForm = observer((props: IProps) => {
   const store = useResearchStore()
-  const [showDeleteModal, setShowDeleteModal] = React.useState(false)
+  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false)
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
+  const [showInvalidFileWarning, setInvalidFileWarning] =
+    React.useState<boolean>(false)
   const [isDraft, setIsDraft] = React.useState<boolean>(
     props.formValues.status === 'draft',
   )
+  const [fileEditMode, setFileEditMode] = React.useState(false)
 
   React.useEffect(() => {
     if (store.updateUploadStatus?.Complete) {
@@ -86,6 +92,10 @@ export const ResearchUpdateForm = observer((props: IProps) => {
 
   const onSubmit = (formValues: IResearch.Update) => {
     setShowSubmitModal(true)
+    if (formValues.fileLink && formValues.files && formValues.files.length > 0)
+      return setInvalidFileWarning(true)
+    else setInvalidFileWarning(false)
+
     store.uploadUpdate({
       ...formValues,
       collaborators: Array.from(
@@ -196,7 +206,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title" sx={{ mb: 2 }}>
+                              <Label htmlFor="title" mb={2}>
                                 Title of this update
                               </Label>
                               <Field
@@ -223,14 +233,14 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="description" sx={{ mb: 2 }}>
+                              <Label htmlFor="description" mb={2}>
                                 Description of this update
                               </Label>
                               <Field
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={(value, allValues) =>
+                                validate={(value, allValues: any) =>
                                   allValues.isDraft
                                     ? undefined
                                     : required(value)
@@ -248,7 +258,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 placeholder={`Explain what is happening in your research (max ${RESEARCH_MAX_LENGTH} characters)`}
                               />
                             </Flex>
-                            <Label htmlFor={`images`} sx={{ mb: 2 }}>
+                            <Label htmlFor={`images`} mb={2}>
                               Upload image(s) for this update
                             </Label>
                             <Flex
@@ -306,7 +316,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                               </ImageInputFieldWrapper>
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor={`videoUrl`} sx={{ mb: 2 }}>
+                              <Label htmlFor={`videoUrl`} mb={2}>
                                 Or embed a YouTube video
                               </Label>
                               <Field
@@ -321,6 +331,103 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 isEqual={COMPARISONS.textInput}
                               />
                             </Flex>
+                            <Flex sx={{ mb: 2 }}>
+                              {showInvalidFileWarning && (
+                                <Text
+                                  id="invalid-file-warning"
+                                  data-cy="invalid-file-warning"
+                                  data-testid="invalid-file-warning"
+                                  sx={{
+                                    color: 'error',
+                                  }}
+                                >
+                                  Please provide either a file link or upload a
+                                  file, not both.
+                                </Text>
+                              )}
+                            </Flex>
+                            <Label htmlFor="files" mb={2}>
+                              Attach your file(s) for this update
+                            </Label>
+                            {props.formValues.files?.length > 0 &&
+                            props.parentType === 'edit' &&
+                            !fileEditMode ? (
+                              <Flex
+                                sx={{
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                }}
+                                mb={3}
+                              >
+                                {props.formValues.files.map((file) => (
+                                  <DownloadStaticFile
+                                    allowDownload
+                                    file={file}
+                                    key={file.name}
+                                  />
+                                ))}
+                                <Button
+                                  variant={'outline'}
+                                  icon="delete"
+                                  onClick={() => {
+                                    props.formValues.files = []
+                                    setFileEditMode(true)
+                                  }}
+                                >
+                                  Re-upload files (this will delete the existing
+                                  ones)
+                                </Button>
+                              </Flex>
+                            ) : (
+                              <>
+                                <Flex
+                                  sx={{
+                                    flexDirection: 'column',
+                                  }}
+                                  mb={3}
+                                >
+                                  <Label
+                                    mb={2}
+                                    htmlFor="file-download-link"
+                                    style={{ fontSize: '12px' }}
+                                  >
+                                    Add a download link
+                                  </Label>
+                                  <Field
+                                    id="fileLink"
+                                    name="fileLink"
+                                    data-cy="fileLink"
+                                    component={FieldInput}
+                                    placeholder="Link to Google Drive, Dropbox, Grabcad etc"
+                                    isEqual={COMPARISONS.textInput}
+                                    maxLength={MAX_LINK_LENGTH}
+                                    validateFields={[]}
+                                    mb={2}
+                                  />
+                                </Flex>
+                                <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                                  <Label
+                                    mb={2}
+                                    htmlFor="file-download-link"
+                                    style={{ fontSize: '12px' }}
+                                  >
+                                    Or upload your files here
+                                  </Label>
+                                  <Field
+                                    hasText={false}
+                                    name={'files'}
+                                    component={FileInputField}
+                                  />
+                                  <Text
+                                    color={'grey'}
+                                    mt={4}
+                                    sx={{ fontSize: 1 }}
+                                  >
+                                    Maximum file size 50MB
+                                  </Text>
+                                </Flex>
+                              </>
+                            )}
                           </Flex>
                         </Flex>
                       </Flex>
@@ -377,6 +484,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     </Button>
                   ) : null}
                   <Button
+                    id="submit-form"
+                    data-testid="submit-form"
                     large
                     data-cy={'submit'}
                     onClick={(evt) => {
@@ -457,17 +566,19 @@ const getResearchUpdates = (
   ].filter(Boolean)
 
 /**
- * Ensure either url or images included (not both), and any url formatted correctly
+ * Ensure the url is formatted correctly
+ * Ensure either url, images or files are included (not both of each)
  */
 const validateMedia = (videoUrl: string, values: any) => {
-  const images = values.images
+  const images = values.images ?? []
+
   if (videoUrl) {
-    if (images && images[0]) {
-      return 'Do not include both images and video'
-    }
+    if (images.length) return 'Do not include both images and video'
+
     const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
     const urlValid = ytRegex.test(videoUrl)
     return urlValid ? null : 'Please provide a valid YouTube Url'
   }
-  return images && images[0] ? null : 'Include either images or a video'
+
+  if (!images.length) return 'Include either images or video'
 }

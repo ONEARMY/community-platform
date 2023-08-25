@@ -521,6 +521,16 @@ describe('research.store', () => {
         ).toBeTruthy()
       })
 
+      it('increment download count of research update media', async () => {
+        const { store, researchItem } = await factoryResearchItem()
+        const update = toJS(researchItem.updates[0])
+
+        await store.uploadUpdate(update)
+
+        const count = await store.incrementDownloadCount(update._id)
+        expect(count).toBe(1)
+      })
+
       it('preserves @mention within Research description', async () => {
         const { store, setFn } = await factoryResearchItem({
           description: '@username',

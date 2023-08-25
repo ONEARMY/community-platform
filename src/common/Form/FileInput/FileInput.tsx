@@ -76,7 +76,7 @@ export class FileInput extends React.Component<IProps, IState> {
                 mb={1}
                 data-cy={this.props['data-cy']}
               >
-                Add Files (.zip)
+                Add Files
               </Button>
               {this.filesArray.map((file) => (
                 <DownloadStaticFile
@@ -94,7 +94,7 @@ export class FileInput extends React.Component<IProps, IState> {
               variant="outline"
               data-cy={this.props['data-cy']}
             >
-              Upload Files (.zip)
+              Upload Files
             </Button>
           )}
           <DashboardModal

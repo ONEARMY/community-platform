@@ -66,12 +66,29 @@ const isEmail = (email: string) => {
   return re.test(String(email).toLowerCase())
 }
 
+/** Validator method to pass to react-final-form. Takes a given title,
+ *  converts to corresponding slug and checks uniqueness.
+ *  Provide originalId to prevent matching against own entry.
+ *  NOTE - return value represents the error, so FALSE actually means valid
+ */
 const validateTitle =
   (parentType, id, documentType: documentTypes, store: storeTypes) =>
-  async (value: any) => {
+  async (title?: string) => {
     const originalId = parentType === 'edit' ? id : undefined
 
-    return await store.validateTitleForSlug(value, documentType, originalId)
+    if (!title) {
+      // if no title submitted, simply return message to say that it is required
+      return 'Required'
+    }
+
+    const titleReusesSlug = await store.isTitleThatReusesSlug(
+      title,
+      documentType,
+      originalId,
+    )
+    return (
+      titleReusesSlug && 'Titles must be unique, please try being more specific'
+    )
   }
 
 const draftValidationWrapper = (value, allValues, validator) => {

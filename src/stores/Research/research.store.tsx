@@ -212,7 +212,7 @@ export class ResearchStore extends ModuleStore {
   public async toggleUsefulByUser(
     docId: string,
     userName: string,
-    keep_modified_timestamp = true,
+    keepModifiedTimestamp = true,
   ): Promise<void> {
     const dbRef = this.db
       .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
@@ -235,7 +235,7 @@ export class ResearchStore extends ModuleStore {
     }
 
     await dbRef.update(votedUsefulUpdate, {
-      keep_modified_timestamp: keep_modified_timestamp,
+      keep_modified_timestamp: keepModifiedTimestamp,
     })
 
     const updatedItem = (await dbRef.get()) as IResearch.ItemDB

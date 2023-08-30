@@ -33,7 +33,7 @@ export const HowtoFieldTitle = (props: IProps) => {
     const validators = composeValidators(
       required,
       minValue(HOWTO_TITLE_MIN_LENGTH),
-      validateTitle(parentType, _id, 'howtos', store),
+      validateTitle(parentType, _id, store),
     )
 
     return draftValidationWrapper(values, allValues, validators)

@@ -31,15 +31,11 @@ export class ModuleStore {
   /****************************************************************************
    *            Data Validation Methods
    * **************************************************************************/
-  public isTitleThatReusesSlug = async (
-    title: string,
-    endpoint: IDBEndpoint,
-    originalId?: string,
-  ) => {
+  public isTitleThatReusesSlug = async (title: string, originalId?: string) => {
     const slug = stripSpecialCharacters(title).toLowerCase()
 
     const matches = await this.db
-      .collection(endpoint)
+      .collection(this.basePath!)
       .getWhere('previousSlugs', 'array-contains', slug)
     const otherMatches = matches.filter((match) => match._id !== originalId)
     return otherMatches.length > 0

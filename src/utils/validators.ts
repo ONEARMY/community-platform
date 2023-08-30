@@ -3,7 +3,6 @@ import { stripSpecialCharacters } from './helpers'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
-type documentTypes = 'howtos' | 'research'
 type storeTypes = HowtoStore | ResearchStore
 
 import type { Mutator } from 'final-form'
@@ -72,8 +71,7 @@ const isEmail = (email: string) => {
  *  NOTE - return value represents the error, so FALSE actually means valid
  */
 const validateTitle =
-  (parentType, id, documentType: documentTypes, store: storeTypes) =>
-  async (title?: string) => {
+  (parentType, id, store: storeTypes) => async (title?: string) => {
     const originalId = parentType === 'edit' ? id : undefined
 
     if (!title) {
@@ -81,11 +79,7 @@ const validateTitle =
       return 'Required'
     }
 
-    const titleReusesSlug = await store.isTitleThatReusesSlug(
-      title,
-      documentType,
-      originalId,
-    )
+    const titleReusesSlug = await store.isTitleThatReusesSlug(title, originalId)
     return (
       titleReusesSlug && 'Titles must be unique, please try being more specific'
     )

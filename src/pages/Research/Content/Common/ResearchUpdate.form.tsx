@@ -220,7 +220,6 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                   validateTitle(
                                     props.parentType,
                                     props.formValues._id,
-                                    'research',
                                     store,
                                   ),
                                 )}

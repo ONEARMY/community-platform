@@ -8,7 +8,7 @@ import { toJS } from 'mobx'
 import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
 import { Text } from 'theme-ui'
 import type { IUser } from 'src/models/user.models'
-import { isAllowToEditContent } from 'src/utils/helpers'
+import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 
@@ -68,7 +68,7 @@ class EditHowto extends React.Component<IProps, IState> {
     logger.debug('edit', this.state)
     const { formValues, isLoading, loggedInUser } = this.state
     if (formValues && !isLoading) {
-      if (loggedInUser && isAllowToEditContent(formValues, loggedInUser)) {
+      if (loggedInUser && isAllowedToEditContent(formValues, loggedInUser)) {
         return (
           <HowtoForm
             formValues={formValues}

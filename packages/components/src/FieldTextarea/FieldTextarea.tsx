@@ -41,6 +41,8 @@ export const FieldTextarea = ({
     <>
       <Textarea
         disabled={disabled}
+        minLength={minLength}
+        maxLength={maxLength}
         variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
         {...input}
         {...rest}

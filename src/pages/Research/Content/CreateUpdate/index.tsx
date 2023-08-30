@@ -5,7 +5,7 @@ import { Redirect } from 'react-router'
 import { Loader } from 'oa-components'
 import { Text } from 'theme-ui'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { isAllowToEditContent } from 'src/utils/helpers'
+import { isAllowedToEditContent } from 'src/utils/helpers'
 import { ResearchUpdateForm } from '../Common/ResearchUpdate.form'
 import TEMPLATE from './Template'
 
@@ -42,7 +42,7 @@ const CreateUpdate = observer((props: IProps) => {
   }
   if (
     store.activeResearchItem &&
-    isAllowToEditContent(store.activeResearchItem, store.activeUser)
+    isAllowedToEditContent(store.activeResearchItem, store.activeUser)
   ) {
     return (
       <ResearchUpdateForm

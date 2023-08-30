@@ -3,6 +3,8 @@ import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
+const creatorEmail = 'howto_creator@test.com'
+const creatorPassword = 'test1234'
 
 describe('[How To]', () => {
   beforeEach(() => {
@@ -26,47 +28,18 @@ describe('[How To]', () => {
     videoUrl?: string,
   ) => {
     const stepIndex = stepNumber - 1
-    console.log('stepIndex', stepIndex)
+
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
-      cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
+      cy.get('[data-cy=step-title]')
+        .clear()
+        .invoke('val', title)
+        .blur({ force: true })
 
       cy.get('[data-cy=step-description]')
         .clear()
-        .type(`description for step ${stepNumber}`)
+        .invoke('val', description)
         .blur({ force: true })
-
-      cy.wrap($step).should(
-        'contain',
-        `Descriptions must be at least 100 characters`,
-      )
-
-      cy.get('[data-cy=step-description]')
-        .clear()
-        .invoke(
-          'val',
-          faker.lorem
-            .sentences(50)
-            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH + 1),
-        )
-        .blur({ force: true })
-
-      cy.wrap($step).should(
-        'contain',
-        `Descriptions must be less than ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters`,
-      )
-
-      cy.get('[data-cy=step-description]')
-        .clear()
-        .type(
-          `description for step ${stepNumber}. This description should be between the minimum and maximum description length`,
-        )
-        .blur({ force: true })
-
-      cy.get('[data-cy=step-description]').should('have.value', description)
-      cy.get('[data-cy=character-count]')
-        .should('be.visible')
-        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
 
       if (videoUrl) {
         cy.step('Adding Video Url')
@@ -143,19 +116,58 @@ describe('[How To]', () => {
           title: 'Step 1 is easy',
         },
         {
+          _animationKey: 'unique3',
+          images: [
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic1.jpg',
+              size: 19410,
+              type: 'image/jpeg',
+            },
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic2.jpg',
+              size: 20009,
+              type: 'image/jpeg',
+            },
+          ],
+          text: faker.lorem
+            .sentences(50)
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH),
+          title: 'A long title that is the total characters limit of',
+        },
+        {
           _animationKey: 'unique2',
           images: [],
-          text: 'Description for step 2. This description should be between the minimum and maximum description length',
-          title: 'Step 2 is easy',
+          text: 'Description for step 3. This description should be between the minimum and maximum description length',
+          title: 'Step 3 is easy',
+          videoURL: 'https://www.youtube.com/watch?v=Os7dREQ00l4',
         },
       ],
     }
 
     it('[By Authenticated]', () => {
-      cy.login('howto_creator@test.com', 'test1234')
+      const {
+        description,
+        difficulty_level,
+        fileLink,
+        slug,
+        steps,
+        time,
+        title,
+        total_downloads,
+      } = expected
+      const imagePaths = [
+        'images/howto-step-pic1.jpg',
+        'images/howto-step-pic2.jpg',
+      ]
+
+      cy.login(creatorEmail, creatorPassword)
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
+      cy.contains('Create a How-To').should('exist')
+
       cy.step('Warn if title is identical with the existing ones')
       cy.get('[data-cy=intro-title]')
         .type('Make glass-like beams')
@@ -164,62 +176,91 @@ describe('[How To]', () => {
         'Titles must be unique, please try being more specific',
       ).should('exist')
 
+      cy.step('Warn if title is identical with a previously existing one')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('Make glassy beams')
+        .blur({ force: true })
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('exist')
+
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
+        `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
-      cy.step('Fill up the intro')
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .type(expected.title)
-        .blur({ force: true })
-      cy.selectTag('howto_testing')
-      selectTimeDuration(expected.time as Duration)
-      selectDifficultLevel(expected.difficulty_level as Difficulty)
+      cy.step('Cannot be published yet')
+      cy.get('[data-cy=submit]').click()
+      cy.contains('Make sure this field is filled correctly').should('exist')
 
-      cy.get('[data-cy=intro-description]').type(expected.description)
-      cy.get('[data-cy=fileLink]').type(expected.fileLink)
+      cy.step('A basic draft was created')
+      cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
+        .click()
+        .url()
+        .should('include', `/how-to/qwer`)
+      cy.get('[data-cy=moderationstatus-draft]').should('exist')
+
+      cy.step('Back to completing the how-to')
+      cy.get('[data-cy=edit]').click()
+
+      cy.step('Fill up the intro')
+      cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
+      cy.selectTag('howto_testing')
+      selectTimeDuration(time as Duration)
+      selectDifficultLevel(difficulty_level as Difficulty)
+
+      cy.get('[data-cy=intro-description]').type(description)
+      cy.get('[data-cy=fileLink]').type(fileLink)
       cy.step('Upload a cover for the intro')
       cy.get('[data-cy=intro-cover]')
         .find(':file')
         .attachFile('images/howto-intro.jpg')
 
-      expected.steps.forEach((step, i) => {
-        const videoUrl =
-          i === 1 ? 'https://www.youtube.com/watch?v=Os7dREQ00l4' : undefined
-        fillStep(
-          i + 1,
-          step.title,
-          step.text,
-          ['images/howto-step-pic1.jpg', 'images/howto-step-pic2.jpg'],
-          videoUrl,
-        )
-      })
-      deleteStep(3)
+      fillStep(1, steps[0].title, steps[0].text, imagePaths)
 
+      fillStep(2, steps[2].title, steps[2].text, [], steps[2].videoURL)
+
+      cy.step('Move step two down to step three')
+      cy.get(`[data-cy=step_${1}]:visible`)
+        .find('[data-cy=move-step-down]')
+        .click()
+
+      fillStep(2, steps[1].title, steps[1].text, imagePaths)
+
+      cy.step('Add extra step')
+      cy.get('[data-cy=add-step]').click()
+      cy.wait(2000)
+
+      deleteStep(4)
       cy.screenClick()
-      cy.get('[data-cy=submit]').click()
 
+      cy.step('A full draft was saved')
+      cy.get('[data-cy=draft]').click()
+      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 }).click()
+
+      cy.step('A full draft can be submitted for review')
+      cy.get('[data-cy=edit]').click()
+
+      cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
-        .should('include', `/how-to/${expected.slug}`)
+        .should('include', `/how-to/${slug}`)
 
       cy.step('Howto was created correctly')
       cy.get('[data-cy=file-download-counter]')
-        .contains(expected.total_downloads)
+        .contains(total_downloads)
         .should('exist')
-      cy.queryDocuments('howtos', 'title', '==', expected.title).then(
-        (docs) => {
-          cy.log('queryDocs', docs)
-          expect(docs.length).to.equal(1)
-          cy.wrap(null)
-            .then(() => docs[0])
-            .should('eqHowto', expected)
-        },
-      )
+      cy.queryDocuments('howtos', 'title', '==', title).then((docs) => {
+        cy.log('queryDocs', docs)
+        expect(docs.length).to.equal(1)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqHowto', expected)
+      })
     })
 
     it('[By Anonymous]', () => {
@@ -233,7 +274,7 @@ describe('[How To]', () => {
       stub.returns(false)
       cy.on('window:confirm', stub)
 
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login(creatorEmail, creatorPassword)
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
@@ -304,6 +345,25 @@ describe('[How To]', () => {
           title: 'Step 1 is easy',
         },
         {
+          _animationKey: 'unique2',
+          images: [
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic1.jpg',
+              size: 19410,
+              type: 'image/jpeg',
+            },
+            {
+              contentType: 'image/jpeg',
+              name: 'howto-step-pic2.jpg',
+              size: 20009,
+              type: 'image/jpeg',
+            },
+          ],
+          text: 'Description for step 2. This description should be between the minimum and maximum description length',
+          title: 'Step 2 is easy',
+        },
+        {
           _animationKey: 'unique3',
           images: [
             {
@@ -325,8 +385,8 @@ describe('[How To]', () => {
               type: 'image/jpeg',
             },
           ],
-          text: 'Description for step 2. This description should be between the minimum and maximum description length',
-          title: 'Step 2 is easy',
+          text: 'Description for step 3. This description should be between the minimum and maximum description length',
+          title: 'Step 3 is easy',
         },
       ],
     }
@@ -340,16 +400,17 @@ describe('[How To]', () => {
     it('[By Authenticated]', () => {
       cy.step('Prevent non-owner access to edit howto')
       cy.visit('/how-to')
-      cy.login('howto_creator@test.com', 'test1234')
+      cy.login(creatorEmail, creatorPassword)
       cy.visit(editHowtoUrl)
       // user should be redirect to how-to page
       cy.location('pathname').should('eq', howtoUrl)
     })
 
     it('[By Owner]', () => {
-      cy.visit(howtoUrl)
       cy.login('howto_editor@test.com', 'test1234')
+
       cy.step('Go to Edit mode')
+      cy.visit(howtoUrl)
       cy.get('[data-cy=edit]').click()
 
       cy.step('Warn if title is identical with the existing ones')
@@ -362,7 +423,7 @@ describe('[How To]', () => {
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
-        `Titles must be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
+        `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
 
       cy.get('[data-cy=intro-title]')
@@ -404,12 +465,9 @@ describe('[How To]', () => {
 
       cy.contains('Upload 1 file').click()
 
-      cy.step('Update steps')
-
+      cy.step('Steps beyond the minimum can be deleted')
       deleteStep(5)
       deleteStep(4)
-      deleteStep(2)
-      // wait for delete animations to complete
       cy.wait(1000)
 
       expected.steps.forEach((step, index) => {

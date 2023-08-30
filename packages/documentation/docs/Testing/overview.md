@@ -3,8 +3,17 @@ id: overview
 title: Testing Overview
 ---
 
-When the platform was first developed we only had a few small modules and use cases, and were able to reasonably manage testing via user testing and strict(ish) typescript typings. Those lightweight days didn't last forever however, and it was decided that an initial testing strategy would first focus on end-to-end tests for common user journeys through core modules (e.g. reading and creating howtos, updating user profiles etc.)
+In the earlier stages of our platform when it consisted of a small number of modules and use cases, we relied on user testing and strict TypeScript typings. However, as the platform grew in complexity, we acknowledged the need for a more comprehensive testing strategy and first started introducing end-to-end (E2E) tests, focusing primarily on core modules like reading and creating how-tos, updating user profiles, etc. For E2E testing, we use Cypress, which has proven to be a valuable asset in our testing arsenal.
 
-Since then we've mostly focused on building out end-to-end tests in cypress, and are yet to implement specific unit or integration testing strategies (although jest is currently supported and some spec files already exist). You can find documentation in the following pages to help get up and running with the existing test suite.
+While this approach has served us well, we are continuously evolving our testing strategies to ensure the robustness of our platform. Recently, we've expanded our tools to adopt [`@testing-library`](https://testing-library.com/) so that we can continue to write tests which mimic user interactions but run significantly faster than the Cypress E2E test suites. There are two specific aims of this approach:
 
-If you would be interested in helping us to develop an improved long-term testing strategy feel free to [Open A Discussion](https://github.com/ONEARMY/community-platform/discussions) on Github
+- Speed up local development workflows by providing fast feedback after changes have been made
+- Reduce the cost around introducing new tests so that it is easier for contributors to include tests as part of their changes.
+
+## Running tests
+
+Core application
+`yarn test:unit`
+
+Application e2e
+`yarn test`

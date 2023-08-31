@@ -13,8 +13,6 @@ interface IProps {
   userStore?: UserStore
   roleRequired?: UserRole | UserRole[]
   fallback?: React.ReactNode
-  /** Optional additional user IDs that have admin rights (e.g. content creators) */
-  additionalAdmins?: string[]
   children: React.ReactNode
 }
 
@@ -22,13 +20,8 @@ interface IProps {
 @observer
 export class AuthWrapper extends React.Component<IProps> {
   render() {
-    const { userStore, roleRequired, additionalAdmins, children, fallback } =
-      this.props
-    const isAuthorized = isUserAuthorized(
-      userStore?.user,
-      roleRequired,
-      additionalAdmins,
-    )
+    const { userStore, roleRequired, children, fallback } = this.props
+    const isAuthorized = isUserAuthorized(userStore?.user, roleRequired)
     const childElements =
       roleRequired === 'beta-tester' ? (
         <div className="beta-tester-feature">{children}</div>
@@ -39,12 +32,7 @@ export class AuthWrapper extends React.Component<IProps> {
   }
 }
 
-const isUserAuthorized = (user, roleRequired, additionalAdmins) => {
-  // provide access to named users
-  if (additionalAdmins && user?._id && additionalAdmins.includes(user?._id)) {
-    return true
-  }
-
+const isUserAuthorized = (user, roleRequired) => {
   const userRoles = user?.userRoles || []
 
   // If no role required just check if user is logged in
@@ -52,21 +40,21 @@ const isUserAuthorized = (user, roleRequired, additionalAdmins) => {
     return user ? true : false
   }
 
+  const rolesRequired = Array.isArray(roleRequired)
+    ? roleRequired
+    : [roleRequired]
+
   // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
   if (
     process.env.NODE_ENV !== 'test' &&
     (SITE === 'dev_site' || SITE === 'preview')
   ) {
     if (DEV_SITE_ROLE) {
-      return DEV_SITE_ROLE === roleRequired
+      return rolesRequired.includes(DEV_SITE_ROLE)
     }
   }
   // otherwise use logged in user profile values
   if (user && roleRequired) {
-    const rolesRequired = Array.isArray(roleRequired)
-      ? roleRequired
-      : [roleRequired]
-
     return userRoles.some((role) => rolesRequired.includes(role))
   }
 

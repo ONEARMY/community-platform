@@ -19,11 +19,23 @@ import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
-import { required } from 'src/utils/validators'
+import {
+  composeValidators,
+  minValue,
+  required,
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
+  validateTitle,
+  draftValidationWrapper,
+} from 'src/utils/validators'
 import { PostingGuidelines } from './PostingGuidelines'
 import { ResearchSubmitStatus } from './SubmitStatus'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from '../../constants'
+import {
+  RESEARCH_TITLE_MAX_LENGTH,
+  RESEARCH_TITLE_MIN_LENGTH,
+  RESEARCH_MAX_LENGTH,
+} from '../../constants'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -93,16 +105,6 @@ const ResearchForm = observer((props: IProps) => {
     await store.uploadResearch(formValues)
   }
 
-  const validateTitle = async (value: any) => {
-    const originalId =
-      props.parentType === 'edit' ? props.formValues._id : undefined
-    return store.validateTitleForSlug(value, 'research', originalId)
-  }
-
-  const validateDescription = (value, allValues) => {
-    return allValues.isDraft ? undefined : required(value)
-  }
-
   // Display a confirmation dialog when leaving the page outside the React Router
   const unloadDecorator = (form) => {
     return form.subscribe(
@@ -134,12 +136,8 @@ const ResearchForm = observer((props: IProps) => {
         }}
         initialValues={props.formValues}
         mutators={{
-          setIsDraftTrue: (_, state, utils) => {
-            utils.changeValue(state, 'isDraft', () => true)
-          },
-          setIsDraftFalse: (_, state, utils) => {
-            utils.changeValue(state, 'isDraft', () => false)
-          },
+          setAllowDraftSaveFalse,
+          setAllowDraftSaveTrue,
           ...arrayMutators,
         }}
         validateOnBlur
@@ -199,17 +197,27 @@ const ResearchForm = observer((props: IProps) => {
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel htmlFor="title">
-                                Title of your research. Can we...
+                                Research Title
                               </ResearchFormLabel>
                               <Field
                                 id="title"
                                 name="title"
                                 data-cy="intro-title"
                                 validateFields={[]}
-                                validate={validateTitle}
+                                validate={composeValidators(
+                                  required,
+                                  minValue(RESEARCH_TITLE_MIN_LENGTH),
+                                  validateTitle(
+                                    props.parentType,
+                                    props.formValues._id,
+                                    'research',
+                                    store,
+                                  ),
+                                )}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldInput}
                                 maxLength={RESEARCH_TITLE_MAX_LENGTH}
+                                minLength={RESEARCH_TITLE_MIN_LENGTH}
                                 showCharacterCount
                                 placeholder={`Can we make a chair from.. (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
                               />
@@ -222,7 +230,13 @@ const ResearchForm = observer((props: IProps) => {
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={validateDescription}
+                                validate={(value, allValues) =>
+                                  draftValidationWrapper(
+                                    value,
+                                    allValues,
+                                    required,
+                                  )
+                                }
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
                                 component={FieldTextarea}
@@ -232,12 +246,13 @@ const ResearchForm = observer((props: IProps) => {
                                   minHeight: '150px',
                                 }}
                                 maxLength={RESEARCH_MAX_LENGTH}
+                                showCharacterCount
                                 placeholder={`Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel>
-                                What category fits your research?
+                                Which categories fit your research?
                               </ResearchFormLabel>
                               <Field
                                 name="researchCategory"
@@ -256,9 +271,7 @@ const ResearchForm = observer((props: IProps) => {
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <ResearchFormLabel>
-                                Select tags for your research
-                              </ResearchFormLabel>
+                              <ResearchFormLabel>Select tags</ResearchFormLabel>
                               <Field
                                 name="tags"
                                 component={TagsSelectField}
@@ -307,7 +320,7 @@ const ResearchForm = observer((props: IProps) => {
                   <Button
                     data-cy={'draft'}
                     onClick={() => {
-                      form.mutators.setIsDraftTrue()
+                      form.mutators.setAllowDraftSaveTrue()
                       setSubmissionHandler({ shouldSubmit: true, draft: true })
                     }}
                     mt={[0, 0, 3]}
@@ -326,7 +339,7 @@ const ResearchForm = observer((props: IProps) => {
                     large
                     data-cy={'submit'}
                     onClick={() => {
-                      form.mutators.setIsDraftFalse()
+                      form.mutators.setAllowDraftSaveFalse()
                       setSubmissionHandler({
                         shouldSubmit: true,
                         draft: false,

@@ -2506,7 +2506,7 @@ export const howtos = {
     _modified: '2019-09-18T21:53:33.211Z',
     _created: '2019-09-18T14:49:54.311Z',
     slug: 'make-glass-like-beams',
-    previousSlugs: ['make-glass-like-beams'],
+    previousSlugs: ['make-glass-like-beams', 'make-glassy-beams'],
     _deleted: false,
     time: '< 1 week',
   },
@@ -2855,7 +2855,7 @@ export const howtos = {
   zVVjXc34gKhUNIcgLEXg: {
     _created: '2022-01-06T14:50:38.830Z',
     _createdBy: 'event_reader',
-    deleted: false,
+    _deleted: false,
     _id: 'zVVjXc34gKhUNIcgLEXg',
     _modified: '2022-01-06T14:50:38.830Z',
     comments: [],
@@ -2894,5 +2894,47 @@ export const howtos = {
     ],
     time: '< 1 hour',
     title: 'Testing-testing',
+  },
+  zVVjXc34gKhIBVcgLEXg: {
+    _created: '2022-01-06T14:50:38.830Z',
+    _createdBy: 'demo_user',
+    _deleted: true,
+    _id: 'zVVjXc34gKhIBVcgLEXg',
+    _modified: '2022-01-06T14:50:38.830Z',
+    comments: [],
+    cover_image: {
+      contentType: 'image/jpeg',
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Fhowtos%2FzVVjXc34gKhUNIcgLEXg%2F244427120_1013223122865247_1166144840734038200_n.jpg?alt=media&token=48af308c-6743-4ea9-bb14-bcdb0342e28a',
+      fullPath:
+        'uploads/howtos/zVVjXc34gKhIBVcgLEXg/244427120_1013223122865247_1166144840734038200_n.jpg',
+      name: '244427120_1013223122865247_1166144840734038200_n.jpg',
+      size: 44971,
+      timeCreated: '2022-01-06T14:50:38.415Z',
+      type: 'image/jpeg',
+      updated: '2022-01-06T14:50:38.415Z',
+    },
+    creatorCountry: '',
+    description: 'deleted how to',
+    difficulty_level: 'Medium',
+    files: [],
+    moderation: 'accepted',
+    slug: 'deleted-how-to',
+    steps: [
+      {
+        _animationKey: 'unique1',
+        text: 'Test',
+        title: 'Test',
+        videoUrl:
+          'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+      },
+    ],
+    tags: [
+      {
+        uruGBJvokGat2aCvZW0J: true,
+      },
+    ],
+    time: '< 1 hour',
+    title: 'Deleted how to',
   },
 }

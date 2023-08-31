@@ -1,8 +1,5 @@
 import * as React from 'react'
 import { Flex, Box } from 'theme-ui'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const themes = preciousPlasticTheme.styles
 import type { ListRowProps } from 'react-virtualized'
 import {
   List,
@@ -10,7 +7,6 @@ import {
   CellMeasurerCache,
   CellMeasurer,
 } from 'react-virtualized'
-import { emStringToPx } from 'src/utils/helpers'
 
 interface IProps {
   data: any[]
@@ -35,7 +31,7 @@ const cache = new CellMeasurerCache({
  */
 export class VirtualizedFlex extends React.Component<IProps, IState> {
   static defaultProps: IProps = {
-    widthBreakpoints: themes.breakpoints.map(emStringToPx),
+    widthBreakpoints: [640, 832, 1120],
     data: [],
     renderItem: (data) => <div>RenderItem {data}</div>,
   }

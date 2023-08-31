@@ -5,7 +5,11 @@ import type {
   DBDoc,
   IModerationStatus,
 } from './common.models'
-import type { UserRole, EmailNotificationFrequency } from 'oa-shared'
+import type {
+  UserRole,
+  EmailNotificationFrequency,
+  NotificationType,
+} from 'oa-shared'
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
@@ -44,6 +48,8 @@ export interface IUser {
   stats?: IUserStats
   notification_settings?: INotificationSettings
   notifications?: INotification[]
+  profileCreated?: ISODateString
+  profileCreationTrigger?: string
 }
 
 export interface IUserBadges {
@@ -92,21 +98,37 @@ export interface INotification {
   email?: string
 }
 
-export const NotificationTypes = [
-  'new_comment',
-  'howto_useful',
-  'howto_mention',
-  'new_comment_research',
-  'research_useful',
-  'research_mention',
-  'research_update',
-] as const
+// export const NotificationTypes = [
+//   'new_comment',
+//   'howto_useful',
+//   'howto_mention',
+//   'howto_approved',
+//   'howto_needs_updates',
+//   'map_pin_approved',
+//   'map_pin_needs_updates',
+//   'new_comment_research',
+//   'research_useful',
+//   'research_mention',
+//   'research_update',
+//   'research_approved',
+//   'research_needs_updates',
+// ] as const
 
-export type NotificationType = typeof NotificationTypes[number]
+// export type NotificationType = typeof NotificationTypes[number]
 
 export type INotificationSettings = {
   enabled?: {
     [T in NotificationType]: boolean
   }
   emailFrequency: EmailNotificationFrequency
+}
+
+export type IBadgeUpdate = {
+  _id: string
+  badges?: IUserBadges
+}
+
+export type INotificationUpdate = {
+  _id: string
+  notifications?: INotification[]
 }

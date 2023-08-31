@@ -24,6 +24,7 @@ export namespace IResearch {
     updates: Update[]
     mentions?: UserMention[]
     _createdBy: string
+    _deleted: boolean
     collaborators: string[]
     subscribers?: UserIdList
   } & Omit<FormInput, 'collaborators'> &
@@ -33,7 +34,10 @@ export namespace IResearch {
   export interface Update {
     title: string
     description: string
-    images: Array<IUploadedFileMeta | IConvertedFileMeta | null>
+    images: Array<IUploadedFileMeta | IConvertedFileMeta | File | null>
+    files: Array<IUploadedFileMeta | File | null>
+    fileLink: string
+    downloadCount: number
     videoUrl?: string
     comments?: IComment[]
     collaborators?: string[]

@@ -1,41 +1,28 @@
-import type { ValidationErrors } from 'final-form'
+import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
+import { transformHowtoErrors } from './utils/'
 
-import { ErrorsContainer } from '../../../../../src/common/Form/ErrorsContainer'
-import { intro, steps } from '../../labels'
-
-const stepErrors = (stepErrors) => {
-  const emptyList = new Array(stepErrors.length).fill([])
-  const stepsWithErrors = emptyList.map((_, index) =>
-    Object.keys(stepErrors[index]),
-  )
-  const errors = stepsWithErrors.map((keys, index) => {
-    const errors = stepErrors[index]
-    const labels = steps
-    const title = `${steps.heading.title} ${index + 1}`
-
-    if (keys.length > 0) return { errors, keys, labels, title }
-  })
-
-  return errors.filter((error) => error !== undefined)
-}
-
-const introErrors = (errors) => {
-  const labels = intro
-  const title = intro.heading
-  const keys = Object.keys(errors).filter((key) => intro[key])
-
-  if (keys.length !== 0) return { errors, keys, labels, title }
-}
+import type { IErrorsListSet, ITopLevelErrorsList } from 'src/common/Form/types'
 
 interface IProps {
-  errors: ValidationErrors
+  errors: ITopLevelErrorsList | undefined
   isVisible: boolean
 }
 
 export const HowtoErrors = ({ errors, isVisible }: IProps) => {
-  if (!isVisible || errors === undefined || errors.length === 0) return null
+  const errorsListSet = errors ? transformHowtoErrors(errors) : []
 
-  const errorsListSet = [introErrors(errors), ...stepErrors(errors.steps || [])]
+  if (
+    !isVisible ||
+    errors === undefined ||
+    Object.keys(errors).length === 0 ||
+    errorsListSet.length === 0
+  )
+    return null
 
-  return <ErrorsContainer errorsListSet={errorsListSet} isVisible={isVisible} />
+  return (
+    <ErrorsContainer
+      errorsListSet={errorsListSet as IErrorsListSet[]}
+      isVisible={isVisible}
+    />
+  )
 }

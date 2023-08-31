@@ -33,9 +33,9 @@ describe('[How To]', () => {
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
       cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
 
-      cy.get('[data-cy=step-title]').clear().type(' between spaces ').blur()
+      cy.get('[data-cy=step-title]').clear().type(' Between spaces ').blur()
 
-      cy.get('[data-cy=step-title]').should('have.value', 'between spaces')
+      cy.get('[data-cy=step-title]').should('have.value', 'Between spaces')
 
       cy.get('[data-cy=step-description]')
         .clear()
@@ -51,12 +51,12 @@ describe('[How To]', () => {
 
       cy.get('[data-cy=step-description]')
         .clear()
-        .type('  test for trailing whitespace  ')
+        .type('  Test for trailing whitespace  ')
         .blur()
 
       cy.get('[data-cy=step-description]').should(
         'have.value',
-        'test for trailing whitespace',
+        'Test for trailing whitespace',
       )
 
       cy.get('[data-cy=character-count]')
@@ -207,21 +207,21 @@ describe('[How To]', () => {
         'Titles must be unique, please try being more specific',
       ).should('exist')
 
+      cy.step('Check title for trailing whitespace')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type(' Title with whitespace ')
+        .blur()
+      cy.get('[data-cy=intro-title]').should(
+        'have.value',
+        'Title with whitespace',
+      )
+
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
         `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('exist')
-
-      cy.step('Check title for trailing whitespace')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type(' title with whitespace ')
-        .blur()
-      cy.get('[data-cy=intro-title]').should(
-        'have.value',
-        'title with whitespace',
-      )
 
       cy.step('Cannot be published yet')
       cy.get('[data-cy=submit]').click()

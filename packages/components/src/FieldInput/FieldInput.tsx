@@ -24,11 +24,12 @@ const capitalizeFirstLetter = (str: string) =>
 
 const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
   if (typeof value !== 'string') return value
-  if (modifiers.capitalize) {
-    value = capitalizeFirstLetter(value)
-  }
   if (modifiers.trim) {
     value = value.trim()
+  }
+
+  if (modifiers.capitalize) {
+    value = capitalizeFirstLetter(value)
   }
   return value
 }

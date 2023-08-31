@@ -563,6 +563,7 @@ export class HowtoStore extends ModuleStore {
       // populate DB
 
       const {
+        category,
         description,
         difficulty_level,
         moderation,
@@ -584,10 +585,11 @@ export class HowtoStore extends ModuleStore {
 
       const howTo: IHowto = {
         _id,
+        category,
         _createdBy,
         comments,
-        _deleted: false,
         creatorCountry,
+        _deleted: false,
         description,
         fileLink,
         files,

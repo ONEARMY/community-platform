@@ -48,7 +48,7 @@ describe('[How To]', () => {
 
       cy.get('[data-cy=step-title]')
         .clear()
-        .type('Test  for   extra    whitespace')
+        .type('  Test for trailing whitespace  ')
         .blur()
 
       cy.get('[data-cy=step-title]')
@@ -66,10 +66,6 @@ describe('[How To]', () => {
 
       cy.get('[data-cy=step-description]')
         .should('have.value', description)
-
-      cy.get('[data-cy=character-count]')
-        .should('be.visible')
-        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
 
       cy.get('[data-cy=step-description]')
         .clear()

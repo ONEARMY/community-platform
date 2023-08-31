@@ -40,21 +40,21 @@ const isUserAuthorized = (user, roleRequired) => {
     return user ? true : false
   }
 
+  const rolesRequired = Array.isArray(roleRequired)
+    ? roleRequired
+    : [roleRequired]
+
   // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
   if (
     process.env.NODE_ENV !== 'test' &&
     (SITE === 'dev_site' || SITE === 'preview')
   ) {
     if (DEV_SITE_ROLE) {
-      return DEV_SITE_ROLE === roleRequired
+      return rolesRequired.includes(DEV_SITE_ROLE)
     }
   }
   // otherwise use logged in user profile values
   if (user && roleRequired) {
-    const rolesRequired = Array.isArray(roleRequired)
-      ? roleRequired
-      : [roleRequired]
-
     return userRoles.some((role) => rolesRequired.includes(role))
   }
 

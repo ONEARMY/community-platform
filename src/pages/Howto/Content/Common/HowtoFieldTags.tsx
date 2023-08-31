@@ -7,7 +7,7 @@ import { FormFieldWrapper } from '.'
 
 export const HowtoFieldTags = () => {
   return (
-    <FormFieldWrapper text={intro.tags} required>
+    <FormFieldWrapper text={intro.tags.title} required>
       <Field
         name="tags"
         component={TagsSelectField}

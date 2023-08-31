@@ -199,7 +199,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         >
                           {/* Left Side */}
                           <Heading variant="small" mb={3}>
-                            {heading}
+                            {heading.title}
                           </Heading>
                           <Flex
                             mx={-2}

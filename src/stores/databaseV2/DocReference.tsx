@@ -113,9 +113,10 @@ export class DocReference<T> {
   ): DBDoc {
     const d = data
     const o = options
-    const modifiedTimestamp = o.keep_modified_timestamp && d._modified
-      ? d._modified
-      : new Date().toISOString()
+    const modifiedTimestamp =
+      o.keep_modified_timestamp && d._modified
+        ? d._modified
+        : new Date().toISOString()
 
     const meta = {
       ...d,
@@ -131,9 +132,6 @@ export class DocReference<T> {
     if (isDocUpdate) {
       delete meta._created
       delete meta._deleted
-      if(o.keep_modified_timestamp) {
-        delete meta._modified
-      }
     }
 
     return meta

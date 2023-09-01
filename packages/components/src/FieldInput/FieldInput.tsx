@@ -19,13 +19,17 @@ type InputModifiers = {
   trim?: boolean
 }
 
+const trimWhitespace = (input: string) => {
+  return input.replace(/\s+/g, ' ').trim()
+}
+
 const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
 const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
   if (typeof value !== 'string') return value
   if (modifiers.trim) {
-    value = value.trim()
+    value = trimWhitespace(value)
   }
 
   if (modifiers.capitalize) {

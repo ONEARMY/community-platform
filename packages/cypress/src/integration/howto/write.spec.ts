@@ -46,6 +46,14 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-title]')
         .should('have.value', 'Test for trailing whitespace')
 
+      cy.get('[data-cy=step-title]')
+        .clear()
+        .type('Test  for   extra    whitespace')
+        .blur()
+
+      cy.get('[data-cy=step-title]')
+        .should('have.value', 'Test for extra whitespace')
+
       cy.get('[data-cy=step-description]')
         .clear()
         .invoke('val', title)
@@ -59,6 +67,10 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]')
         .should('have.value', description)
 
+      cy.get('[data-cy=character-count]')
+        .should('be.visible')
+        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+
       cy.get('[data-cy=step-description]')
         .clear()
         .type('  Test for trailing whitespace  ')
@@ -67,9 +79,13 @@ describe('[How To]', () => {
       cy.get('[data-cy=step-description]')
         .should('have.value', 'Test for trailing whitespace',)
 
-      cy.get('[data-cy=character-count]')
-        .should('be.visible')
-        .contains(`101 / ${HOWTO_STEP_DESCRIPTION_MAX_LENGTH}`)
+      cy.get('[data-cy=step-description]')
+        .clear()
+        .type('Test  for   extra    whitespace')
+        .blur()
+
+      cy.get('[data-cy=step-description]')
+        .should('have.value', 'Test for extra whitespace')
 
       if (videoUrl) {
         cy.step('Adding Video Url')
@@ -239,6 +255,18 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title]')
         .clear()
 
+      cy.step('Check title for extra whitespace')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('title  with    extra  whitespace')
+        .blur()
+      cy.get('[data-cy=intro-title]').should(
+        'have.value',
+        'Title with extra whitespace',
+      )
+      cy.get('[data-cy=intro-title]')
+        .clear()
+
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
@@ -265,6 +293,18 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-description]').should(
         'have.value',
         'Just a normal description'
+      )
+      cy.get('[data-cy=intro-description]')
+        .clear()
+
+      cy.step('Check description for extra whitespace')
+      cy.get('[data-cy=intro-description]')
+        .clear()
+        .type('description  with    extra  whitespace')
+        .blur()
+      cy.get('[data-cy=intro-description]').should(
+        'have.value',
+        'Description with extra whitespace',
       )
       cy.get('[data-cy=intro-description]')
         .clear()

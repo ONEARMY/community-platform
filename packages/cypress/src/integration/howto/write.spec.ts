@@ -61,7 +61,7 @@ describe('[How To]', () => {
 
       cy.get('[data-cy=step-description]')
         .clear()
-        .invoke('val', description)
+        .type(description)
         .blur({ force: true })
 
       cy.get('[data-cy=step-description]')

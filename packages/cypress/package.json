@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
-    "cypress": "12.17.2",
+    "cypress": "13.0.0",
     "cypress-file-upload": "5.0.8",
     "oa-shared": "workspace:*"
   },

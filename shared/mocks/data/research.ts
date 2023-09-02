@@ -9,6 +9,7 @@ export const research = {
     description: 'qwertyefew',
     moderation: 'accepted',
     slug: 'qwerty',
+    previousSlugs: ['qwerty'],
     tags: {
       h1wCs0o9j60lkw3AYPB1: true,
     },
@@ -397,7 +398,8 @@ export const research = {
     creatorCountry: 'it',
     description: 'A test!',
     moderation: 'accepted',
-    slug: 'A test research',
+    slug: 'a-test-research',
+    previousSlugs: ['a-test-research'],
     tags: {
       h1wCs0o9j60lkw3AYPB1: true,
     },
@@ -413,6 +415,7 @@ export const research = {
     description: 'A deleted research test!',
     moderation: 'accepted',
     slug: 'a-deleted-test-research',
+    previousSlugs: ['a-deleted-test-research'],
     tags: {
       h1wCs0o9j60lkw3AYPB1: true,
     },

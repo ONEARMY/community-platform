@@ -176,6 +176,15 @@ describe('[How To]', () => {
         'Titles must be unique, please try being more specific',
       ).should('exist')
 
+      cy.step('Warn if title is identical with a previously existing one')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('Make glassy beams')
+        .blur({ force: true })
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('exist')
+
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(

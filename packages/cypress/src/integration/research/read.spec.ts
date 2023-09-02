@@ -2,7 +2,7 @@ describe('[Research]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
   const totalResearchCount = 2
   const researchArticleUrl = '/research/qwerty'
-  const authoredResearchArticleUrl = '/research/A%20test%20research'
+  const authoredResearchArticleUrl = '/research/a-test-research'
 
   beforeEach(() => {
     cy.visit('/research')
@@ -84,7 +84,7 @@ describe('[Research]', () => {
         cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton').click()
 
         cy.step('Views show on second research article')
-        cy.visit('/research/A%20test%20research')
+        cy.visit('/research/a-test-research')
         cy.get('[data-cy="ViewsCounter"]').should('exist')
       })
     })

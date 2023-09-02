@@ -244,7 +244,18 @@ jobs:
     docker: *docker
     steps:
       - setup_repo
-
+  test_security_rules:
+    docker: *docker
+    resource_class: medium+
+    environment:
+      GCLOUD_PROJECT: onearmy-test-ci
+    steps:
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - run:
+          name: Test Security Rules
+          command: yarn workspace security-rules test-with-emulator
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility
@@ -477,6 +488,14 @@ workflows:
             branches:
               ignore:
                 - production
+      - test_security_rules:
+          name: Test Security Rules
+          requires:
+            - 'Lint code'
+          filters:
+            branches:
+              ignore:
+                - production
       - test_functions:
           name: 'Cloud Function tests'
           requires:
@@ -494,6 +513,7 @@ workflows:
             - 'Circular dependency test'
             - 'Cloud Function tests'
             - 'Build Storybook'
+            - 'Test Security Rules'
           context:
             - e2e-tests
           matrix:

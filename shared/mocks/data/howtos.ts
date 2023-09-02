@@ -2506,7 +2506,7 @@ export const howtos = {
     _modified: '2019-09-18T21:53:33.211Z',
     _created: '2019-09-18T14:49:54.311Z',
     slug: 'make-glass-like-beams',
-    previousSlugs: ['make-glass-like-beams'],
+    previousSlugs: ['make-glass-like-beams', 'make-glassy-beams'],
     _deleted: false,
     time: '< 1 week',
   },

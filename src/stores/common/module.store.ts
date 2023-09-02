@@ -31,50 +31,16 @@ export class ModuleStore {
   /****************************************************************************
    *            Data Validation Methods
    * **************************************************************************/
-  public checkIsUnique = async (
-    endpoint: IDBEndpoint,
-    field: string,
-    value: string,
-    originalId?: string,
-  ) => {
+  public isTitleThatReusesSlug = async (title: string, originalId?: string) => {
+    const slug = stripSpecialCharacters(title).toLowerCase()
+
     const matches = await this.db
-      .collection(endpoint)
-      .getWhere(field, '==', value)
-    if (
-      typeof originalId !== 'undefined' &&
-      matches.length === 1 &&
-      matches[0]._id === originalId
-    ) {
-      return true
-    }
-    return matches.length > 0 ? false : true
+      .collection(this.basePath!)
+      .getWhere('previousSlugs', 'array-contains', slug)
+    const otherMatches = matches.filter((match) => match._id !== originalId)
+    return otherMatches.length > 0
   }
-  /** Validator method to pass to react-final-form. Takes a given title,
-   *  converts to corresponding slug and checks uniqueness.
-   *  Provide originalId to prevent matching against own entry.
-   *  NOTE - return value represents the error, so FALSE actually means valid
-   */
-  public validateTitleForSlug = async (
-    title: string,
-    endpoint: IDBEndpoint,
-    originalId?: string,
-  ) => {
-    if (title) {
-      const slug = stripSpecialCharacters(title).toLowerCase()
-      const unique = await this.checkIsUnique(
-        endpoint,
-        'slug',
-        slug,
-        originalId,
-      )
-      return unique
-        ? false
-        : 'Titles must be unique, please try being more specific'
-    } else {
-      // if no title submitted, simply return message to say that it is required
-      return 'Required'
-    }
-  }
+
   public validateUrl = async (value: any) => {
     return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }

@@ -381,6 +381,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "benkelaar",
+      "name": "Bart Enkelaar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1822855?v=4",
+      "profile": "https://careers.bol.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

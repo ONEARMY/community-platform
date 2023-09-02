@@ -585,7 +585,6 @@ export class HowtoStore extends ModuleStore {
 
       const howTo: IHowto = {
         _id,
-        category,
         _createdBy,
         comments,
         creatorCountry,
@@ -600,6 +599,7 @@ export class HowtoStore extends ModuleStore {
         steps,
         title,
         ...(files ? { total_downloads } : {}),
+        ...(category ? { category } : {}),
         ...(cover_image ? { cover_image } : {}),
         ...(difficulty_level ? { difficulty_level } : {}),
         ...(tags ? { tags } : {}),

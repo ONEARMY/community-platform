@@ -50,6 +50,7 @@ export interface IProps {
   size?: number | string
   marginRight?: string
   color?: string
+  opacity?: string
   onClick?: () => void
 }
 
@@ -155,7 +156,7 @@ export const Icon = (props: Props) => {
   return (
     <IconWrapper
       {...props}
-      sx={{ color: props.color ?? 'inherit' }}
+      sx={{ color: props.color ?? 'inherit', opacity: props.opacity }}
       size={definedSize}
       style={{ marginRight }}
     >

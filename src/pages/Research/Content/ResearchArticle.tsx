@@ -174,6 +174,9 @@ const ResearchArticle = observer((props: IProps) => {
           research={item}
           key={item._id}
           votedUsefulCount={researchStore.votedUsefulCount}
+          subscribersCount={researchStore.subscribersCount}
+          commentsCount={researchStore.commentsCount}
+          updatesCount={researchStore.updatesCount}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           isDeletable={isDeletable}

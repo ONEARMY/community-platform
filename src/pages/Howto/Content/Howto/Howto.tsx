@@ -147,6 +147,7 @@ export class Howto extends React.Component<
             needsModeration={this.store.needsModeration(activeHowto)}
             loggedInUser={loggedInUser}
             votedUsefulCount={this.store.votedUsefulCount}
+            commentsCount={this.store.commentsCount}
             hasUserVotedUseful={hasUserVotedUseful}
             moderateHowto={this.moderateHowto}
             onUsefulClick={() =>

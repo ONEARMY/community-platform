@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import { useState, useEffect, Fragment } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Heading, Text, Box, Flex, Image, AspectImage } from 'theme-ui'
+import { Heading, Text, Box, Flex, Image, AspectImage, Divider } from 'theme-ui'
 import StepsIcon from 'src/assets/icons/icon-steps.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
@@ -17,6 +17,7 @@ import {
   DownloadFileFromLink,
   Tooltip,
   ConfirmModal,
+  HowToStatistics,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
@@ -45,7 +46,8 @@ interface IProps {
   howto: IHowtoDB & { taglist: any }
   loggedInUser: IUser | undefined
   needsModeration: boolean
-  votedUsefulCount?: number
+  votedUsefulCount: number
+  commentsCount: number
   verified?: boolean
   hasUserVotedUseful: boolean
   moderateHowto: (accepted: boolean, feedback?: string) => void
@@ -163,38 +165,43 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
         borderStyle: 'solid',
         borderWidth: '2px',
         overflow: 'hidden',
-        flexDirection: ['column-reverse', 'column-reverse', 'row'],
+        flexDirection: 'column',
         mt: 4,
       }}
     >
       <Flex
-        px={4}
-        py={4}
         sx={{
-          flexDirection: 'column',
-          width: ['100%', '100%', `${(1 / 2) * 100}%`],
+          overflow: 'hidden',
+          flexDirection: ['column-reverse', 'column-reverse', 'row'],
         }}
       >
-        {howto._deleted && (
-          <Fragment>
-            <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
-              * Marked for deletion
-            </Text>
-          </Fragment>
-        )}
-        <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-          <Link to={'/how-to/'}>
-            <Button
-              variant="subtle"
-              sx={{ fontSize: '14px' }}
-              data-cy="go-back"
-              icon="arrow-back"
-            >
-              Back
-            </Button>
-          </Link>
-          {props.votedUsefulCount !== undefined &&
-            howto.moderation === 'accepted' && (
+        <Flex
+          px={4}
+          pt={4}
+          sx={{
+            flexDirection: 'column',
+            width: ['100%', '100%', `${(1 / 2) * 100}%`],
+          }}
+        >
+          {howto._deleted && (
+            <Fragment>
+              <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
+                * Marked for deletion
+              </Text>
+            </Fragment>
+          )}
+          <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
+            <Link to={'/how-to/'}>
+              <Button
+                variant="subtle"
+                sx={{ fontSize: '14px' }}
+                data-cy="go-back"
+                icon="arrow-back"
+              >
+                Back
+              </Button>
+            </Link>
+            {howto.moderation === 'accepted' && (
               <Box>
                 <UsefulStatsButton
                   votedUsefulCount={props.votedUsefulCount}
@@ -204,279 +211,295 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 />
               </Box>
             )}
-          {viewCount ? (
-            <AuthWrapper roleRequired="beta-tester">
-              <Box>
-                <ViewsCounter viewsCount={viewCount!} />
-              </Box>
-            </AuthWrapper>
-          ) : null}
-          {/* Check if how to should be moderated */}
-          {props.needsModeration && (
-            <Flex sx={{ justifyContent: 'space-between' }}>
-              <Button
-                data-cy={'accept'}
-                variant={'primary'}
-                icon="check"
-                mr={1}
-                data-tip={'Accept'}
-                onClick={() => props.moderateHowto(true)}
-                showIconOnly={true}
-              />
-              <Button
-                data-cy="reject-howto"
-                variant={'outline'}
-                icon="close"
-                data-tip={'Request changes'}
-                showIconOnly={true}
-                onClick={() => {
-                  // Prompt used for testing purposes, will be removed once retool functionality in place
-                  const feedback =
-                    // eslint-disable-next-line no-alert
-                    prompt('Please provide detail of required changes') ||
-                    undefined
-                  props.moderateHowto(false, feedback)
-                }}
-              />
-              <Tooltip />
+            {viewCount ? (
+              <AuthWrapper roleRequired="beta-tester">
+                <Box>
+                  <ViewsCounter viewsCount={viewCount!} />
+                </Box>
+              </AuthWrapper>
+            ) : null}
+            {/* Check if how to should be moderated */}
+            {props.needsModeration && (
+              <Flex sx={{ justifyContent: 'space-between' }}>
+                <Button
+                  data-cy={'accept'}
+                  variant={'primary'}
+                  icon="check"
+                  mr={1}
+                  data-tip={'Accept'}
+                  onClick={() => props.moderateHowto(true)}
+                  showIconOnly={true}
+                />
+                <Button
+                  data-cy="reject-howto"
+                  variant={'outline'}
+                  icon="close"
+                  data-tip={'Request changes'}
+                  showIconOnly={true}
+                  onClick={() => {
+                    // Prompt used for testing purposes, will be removed once retool functionality in place
+                    const feedback =
+                      // eslint-disable-next-line no-alert
+                      prompt('Please provide detail of required changes') ||
+                      undefined
+                    props.moderateHowto(false, feedback)
+                  }}
+                />
+                <Tooltip />
+              </Flex>
+            )}
+            {/* Check if logged in user is the creator of the how-to OR a super-admin */}
+            {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
+              <Link to={'/how-to/' + howto.slug + '/edit'}>
+                <Button variant={'primary'} data-cy={'edit'}>
+                  Edit
+                </Button>
+              </Link>
+            )}
+
+            {loggedInUser && isAllowedToDeleteContent(howto, loggedInUser) && (
+              <Fragment key={'how-to-delete-action'}>
+                <Button
+                  data-cy="How-To: delete button"
+                  variant={'secondary'}
+                  icon="delete"
+                  disabled={howto._deleted}
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  Delete
+                </Button>
+
+                <ConfirmModal
+                  key={howto._id}
+                  isOpen={showDeleteModal}
+                  message="Are you sure you want to delete this How-To?"
+                  confirmButtonText="Delete"
+                  handleCancel={() => setShowDeleteModal(false)}
+                  handleConfirm={() => handleDelete && handleDelete(howto._id)}
+                />
+              </Fragment>
+            )}
+          </Flex>
+          {howto.moderationFeedback && howto.moderation === 'rejected' && (
+            <Flex
+              mt={4}
+              sx={{
+                display: 'block',
+                fontSize: 1,
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                padding: 2,
+                borderRadius: 1,
+                borderBottomRightRadius: 1,
+                flexDirection: 'column',
+                border: '2px solid red',
+                paddingTop: 3,
+              }}
+            >
+              <Heading variant="small" mb={2}>
+                Moderator Feedback
+              </Heading>
+              {howto.moderationFeedback.map((feedback) => {
+                return (
+                  <Flex
+                    mb={2}
+                    pb={2}
+                    sx={{
+                      flexDirection: 'column',
+                    }}
+                    key={feedback.feedbackTimestamp}
+                  >
+                    <Text mb={1} sx={{ fontWeight: 'bold' }}>
+                      {format(feedback.feedbackTimestamp, 'DD-MM-YYYY HH:mm')}
+                    </Text>
+                    <Text key={feedback.feedbackTimestamp} sx={{ fontSize: 2 }}>
+                      {feedback.feedbackComments}
+                    </Text>
+                  </Flex>
+                )
+              })}
             </Flex>
           )}
-          {/* Check if logged in user is the creator of the how-to OR a super-admin */}
-          {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
-            <Link to={'/how-to/' + howto.slug + '/edit'}>
-              <Button variant={'primary'} data-cy={'edit'}>
-                Edit
-              </Button>
-            </Link>
-          )}
-
-          {loggedInUser && isAllowedToDeleteContent(howto, loggedInUser) && (
-            <Fragment key={'how-to-delete-action'}>
-              <Button
-                data-cy="How-To: delete button"
-                variant={'secondary'}
-                icon="delete"
-                disabled={howto._deleted}
-                onClick={() => setShowDeleteModal(true)}
-              >
-                Delete
-              </Button>
-
-              <ConfirmModal
-                key={howto._id}
-                isOpen={showDeleteModal}
-                message="Are you sure you want to delete this How-To?"
-                confirmButtonText="Delete"
-                handleCancel={() => setShowDeleteModal(false)}
-                handleConfirm={() => handleDelete && handleDelete(howto._id)}
-              />
-            </Fragment>
-          )}
-        </Flex>
-        {howto.moderationFeedback && howto.moderation === 'rejected' && (
-          <Flex
-            mt={4}
-            sx={{
-              display: 'block',
-              fontSize: 1,
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              padding: 2,
-              borderRadius: 1,
-              borderBottomRightRadius: 1,
-              flexDirection: 'column',
-              border: '2px solid red',
-              paddingTop: 3,
-            }}
-          >
-            <Heading variant="small" mb={2}>
-              Moderator Feedback
-            </Heading>
-            {howto.moderationFeedback.map((feedback) => {
-              return (
-                <Flex
-                  mb={2}
-                  pb={2}
-                  sx={{
-                    flexDirection: 'column',
-                  }}
-                  key={feedback.feedbackTimestamp}
-                >
-                  <Text mb={1} sx={{ fontWeight: 'bold' }}>
-                    {format(feedback.feedbackTimestamp, 'DD-MM-YYYY HH:mm')}
-                  </Text>
-                  <Text key={feedback.feedbackTimestamp} sx={{ fontSize: 2 }}>
-                    {feedback.feedbackComments}
+          <Box mt={3} mb={2}>
+            <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
+              <Flex sx={{ flexDirection: 'column' }}>
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Username
+                    user={{
+                      userName: howto._createdBy,
+                      countryCode: howto.creatorCountry,
+                    }}
+                    isVerified={isUserVerified(howto._createdBy)}
+                  />
+                  <Text
+                    variant="auxiliary"
+                    sx={{
+                      marginTop: 2,
+                      marginBottom: 2,
+                    }}
+                  >
+                    {dateCreatedText}
                   </Text>
                 </Flex>
-              )
-            })}
-          </Flex>
-        )}
-        <Box mt={3} mb={2}>
-          <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-            <Flex sx={{ flexDirection: 'column' }}>
-              <Flex sx={{ alignItems: 'center' }}>
-                <Username
-                  user={{
-                    userName: howto._createdBy,
-                    countryCode: howto.creatorCountry,
-                  }}
-                  isVerified={isUserVerified(howto._createdBy)}
-                />
+
                 <Text
                   variant="auxiliary"
                   sx={{
-                    marginTop: 2,
-                    marginBottom: 2,
+                    color: 'lightgrey',
+                    '&!important': {
+                      color: 'lightgrey',
+                    },
                   }}
+                  mt={1}
+                  mb={2}
                 >
-                  {dateCreatedText}
+                  {dateContentModifiedText(howto)}
+                </Text>
+
+                <Heading mt={2} mb={1}>
+                  {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
+                  {capitalizeFirstLetter(howto.title)}
+                </Heading>
+                <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+                  <LinkifyText>{howto.description}</LinkifyText>
                 </Text>
               </Flex>
+            </Flex>
+          </Box>
 
-              <Text
-                variant="auxiliary"
-                sx={{
-                  color: 'lightgrey',
-                  '&!important': {
-                    color: 'lightgrey',
-                  },
-                }}
-                mt={1}
-                mb={2}
-              >
-                {dateContentModifiedText(howto)}
-              </Text>
-
-              <Heading mt={2} mb={1}>
-                {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
-                {capitalizeFirstLetter(howto.title)}
-              </Heading>
-              <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
-                <LinkifyText>{howto.description}</LinkifyText>
-              </Text>
+          <Flex mt="4">
+            <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
+              <Image
+                loading="lazy"
+                src={StepsIcon}
+                height="16"
+                width="23"
+                mr="2"
+                mb="2"
+              />
+              {howto.steps.length === 1
+                ? `${howto.steps.length} step`
+                : `${howto.steps.length} steps`}
+            </Flex>
+            <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
+              <Image
+                loading="lazy"
+                src={TimeNeeded}
+                height="16"
+                width="16"
+                mr="2"
+                mb="2"
+              />
+              {howto.time}
+            </Flex>
+            <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
+              <Image
+                loading="lazy"
+                src={DifficultyLevel}
+                height="15"
+                width="16"
+                mr="2"
+                mb="2"
+              />
+              {howto.difficulty_level}
             </Flex>
           </Flex>
+          <Flex mt={4}>
+            {howto.taglist &&
+              howto.taglist.map((tag, idx) => (
+                <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+              ))}
+          </Flex>
+          {((howto.files && howto.files.length > 0) || howto.fileLink) && (
+            <Flex
+              className="file-container"
+              mt={3}
+              sx={{ flexDirection: 'column' }}
+            >
+              {howto.fileLink && (
+                <DownloadFileFromLink
+                  handleClick={handleDownloadClick}
+                  link={howto.fileLink}
+                  redirectToSignIn={
+                    !loggedInUser ? redirectToSignIn : undefined
+                  }
+                />
+              )}
+              {howto.files &&
+                howto.files
+                  .filter(Boolean)
+                  .map(
+                    (file, index) =>
+                      file && (
+                        <DownloadStaticFile
+                          allowDownload
+                          file={file}
+                          key={file ? file.name : `file-${index}`}
+                          handleClick={handleDownloadClick}
+                          redirectToSignIn={
+                            !loggedInUser ? redirectToSignIn : undefined
+                          }
+                        />
+                      ),
+                  )}
+              {typeof fileDownloadCount === 'number' && (
+                <Text
+                  data-cy="file-download-counter"
+                  sx={{
+                    fontSize: 1,
+                    color: 'grey',
+                    paddingLeft: 1,
+                  }}
+                >
+                  {fileDownloadCount}
+                  {fileDownloadCount !== 1 ? ' downloads' : ' download'}
+                </Text>
+              )}
+            </Flex>
+          )}
+        </Flex>
+        <Box
+          sx={{
+            width: ['100%', '100%', `${(1 / 2) * 100}%`],
+            position: 'relative',
+          }}
+        >
+          {howto.cover_image && (
+            <AspectImage
+              loading="lazy"
+              ratio={12 / 9}
+              sx={{
+                objectFit: 'cover',
+                width: '100%',
+              }}
+              src={howto.cover_image.downloadUrl}
+              crossOrigin=""
+              alt="how-to cover"
+            />
+          )}
+          {howto.moderation !== 'accepted' && (
+            <ModerationStatus
+              status={howto.moderation}
+              contentType="howto"
+              sx={{ top: 0, position: 'absolute', right: 0 }}
+            />
+          )}
         </Box>
-
-        <Flex mt="4">
-          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
-            <Image
-              loading="lazy"
-              src={StepsIcon}
-              height="16"
-              width="23"
-              mr="2"
-              mb="2"
-            />
-            {howto.steps.length === 1
-              ? `${howto.steps.length} step`
-              : `${howto.steps.length} steps`}
-          </Flex>
-          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
-            <Image
-              loading="lazy"
-              src={TimeNeeded}
-              height="16"
-              width="16"
-              mr="2"
-              mb="2"
-            />
-            {howto.time}
-          </Flex>
-          <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
-            <Image
-              loading="lazy"
-              src={DifficultyLevel}
-              height="15"
-              width="16"
-              mr="2"
-              mb="2"
-            />
-            {howto.difficulty_level}
-          </Flex>
-        </Flex>
-        <Flex mt={4}>
-          {howto.taglist &&
-            howto.taglist.map((tag, idx) => (
-              <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
-            ))}
-        </Flex>
-        {((howto.files && howto.files.length > 0) || howto.fileLink) && (
-          <Flex
-            className="file-container"
-            mt={3}
-            sx={{ flexDirection: 'column' }}
-          >
-            {howto.fileLink && (
-              <DownloadFileFromLink
-                handleClick={handleDownloadClick}
-                link={howto.fileLink}
-                redirectToSignIn={!loggedInUser ? redirectToSignIn : undefined}
-              />
-            )}
-            {howto.files &&
-              howto.files
-                .filter(Boolean)
-                .map(
-                  (file, index) =>
-                    file && (
-                      <DownloadStaticFile
-                        allowDownload
-                        file={file}
-                        key={file ? file.name : `file-${index}`}
-                        handleClick={handleDownloadClick}
-                        redirectToSignIn={
-                          !loggedInUser ? redirectToSignIn : undefined
-                        }
-                      />
-                    ),
-                )}
-            {typeof fileDownloadCount === 'number' && (
-              <Text
-                data-cy="file-download-counter"
-                sx={{
-                  fontSize: 1,
-                  color: 'grey',
-                  paddingLeft: 1,
-                }}
-              >
-                {fileDownloadCount}
-                {fileDownloadCount !== 1 ? ' downloads' : ' download'}
-              </Text>
-            )}
-          </Flex>
-        )}
       </Flex>
-      <Box
-        sx={{
-          width: ['100%', '100%', `${(1 / 2) * 100}%`],
-          position: 'relative',
-        }}
-      >
-        {howto.cover_image && (
-          <AspectImage
-            loading="lazy"
-            ratio={12 / 9}
-            sx={{
-              objectFit: 'cover',
-              width: '100%',
-            }}
-            src={howto.cover_image.downloadUrl}
-            crossOrigin=""
-            alt="how-to cover"
-          />
-        )}
-        {howto.moderation !== 'accepted' && (
-          <ModerationStatus
-            status={howto.moderation}
-            contentType="howto"
-            sx={{ top: 0, position: 'absolute', right: 0 }}
-          />
-        )}
-      </Box>
+      <AuthWrapper roleRequired="beta-tester">
+        <Divider
+          sx={{
+            border: '1px solid black',
+          }}
+        />
+        <HowToStatistics
+          viewCount={viewCount!}
+          usefulCount={props.votedUsefulCount}
+          commentCount={props.commentsCount}
+          stepCount={howto.steps.length}
+        />
+      </AuthWrapper>
     </Flex>
   )
 }

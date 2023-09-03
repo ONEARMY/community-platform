@@ -725,6 +725,11 @@ export class HowtoStore extends ModuleStore {
   get votedUsefulCount(): number {
     return (this.activeHowto?.votedUsefulBy || []).length
   }
+
+  @computed
+  get commentsCount(): number {
+    return (this.activeHowto?.comments || []).length
+  }
 }
 
 interface IHowToUploadStatus {

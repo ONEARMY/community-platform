@@ -53,10 +53,14 @@ export const SortFilterHeader = ({
     }),
   )
 
-  const [sortState, setSortState] = useState(
-    sortingOptions.find((sortingOption) => sortingOption.value == 'Modified') ??
-      sortingOptions[0],
-  )
+  // if sortingOptions is populated, use Modified or first sortingOption. else set to empty string
+  const defaultSortingOption =
+    sortingOptions.length > 0
+      ? sortingOptions.find(
+          (sortingOption) => sortingOption.value == 'Modified',
+        ) ?? sortingOptions[0]
+      : ''
+  const [sortState, setSortState] = useState(defaultSortingOption)
   const { searchValue } = currentStore
 
   const _inputStyle = {

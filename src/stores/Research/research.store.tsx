@@ -839,6 +839,37 @@ export class ResearchStore extends ModuleStore {
     return (this.activeResearchItem?.votedUsefulBy || []).length
   }
 
+  @computed
+  get subscribersCount(): number {
+    return (this.activeResearchItem?.subscribers || []).length
+  }
+
+  @computed
+  get commentsCount(): number {
+    if (this.activeResearchItem?.updates) {
+      const commentOnUpdates = this.activeResearchItem?.updates.reduce(
+        (totalComments, update) => {
+          const updateCommentsLength = update.comments
+            ? update.comments.length
+            : 0
+          return totalComments + updateCommentsLength
+        },
+        0,
+      )
+      return commentOnUpdates ? commentOnUpdates : 0
+    } else {
+      return 0
+    }
+  }
+
+  @computed
+  get updatesCount(): number {
+    return this.activeResearchItem?.updates?.length
+      ? this.activeResearchItem?.updates.filter(
+          (update) => update.status !== 'draft' && update._deleted !== true,
+        ).length
+      : 0
+  }
   /**
    * Updates supplied dbRef after
    * converting @mentions to user references

@@ -1,5 +1,5 @@
 import isUrl from 'is-url'
-import { stripSpecialCharacters } from './helpers'
+import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
@@ -12,6 +12,13 @@ import type { Mutator } from 'final-form'
 
 const required = (value: any) =>
   value ? undefined : 'Make sure this field is filled correctly'
+
+const noSpecialCharacters = (value: string) => {
+  const specialCharacters = getSpecialCharacters(value)
+  return specialCharacters.length > 0
+    ? 'Only letters and numbers are allowed'
+    : undefined
+}
 
 const maxValue = (max: number) => (value) => {
   const strippedString = stripSpecialCharacters(value)
@@ -124,4 +131,5 @@ export {
   minValue,
   composeValidators,
   validateTitle,
+  noSpecialCharacters,
 }

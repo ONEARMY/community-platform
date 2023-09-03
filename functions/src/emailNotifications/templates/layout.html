@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <style>
+      #body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #000000;
+      }
+      #body a {
+        color: inherit;
+      }
+      .border {
+        border: 3px solid black;
+        border-radius: 10px;
+        padding: 4% 0;
+        margin: 4% 0;
+        width: 550px;
+      }
+      table {
+        width: 100%;
+        border: 0;
+      }
+      .settings-table-container,
+      .project-image-table-container {
+        margin-bottom: 8%;
+      }
+
+      @media only screen and (max-width: 550px) {
+        .table-container {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body id="body">
+    <table class="email-table-container">
+      <tr>
+        <td align="center">
+          <div class="border">
+            <table class="project-image-table-container">
+              <tr>
+                <td align="center">
+                  <img width="144" alt="{{site.name}}" src="{{site.image}}" />
+                </td>
+              </tr>
+            </table>
+            <div
+              align="left"
+              class="greeting-container"
+              style="margin-left: 8%; margin-right: 8%"
+            >
+              {{> @partial-block }}
+
+              <p>
+                Cheers,<br />
+                {{site.signOff}}
+              </p>
+            </div>
+          </div>
+          <table class="settings-table-container">
+            <tr>
+              <td align="center">
+                <div class="notifications">
+                  Manage your notifications
+                  <a href="{{site.url}}/settings"> here</a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

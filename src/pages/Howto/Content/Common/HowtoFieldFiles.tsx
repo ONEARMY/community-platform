@@ -1,14 +1,19 @@
 import { Button, DownloadStaticFile } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
-import { intro } from '../../labels'
-import { FormFieldWrapper, HowtoFieldFileLink, HowtoFieldFileUpload } from '.'
+import { buttons, headings, intro } from '../../labels'
+import {
+  HowtoCategoryGuidance,
+  FormFieldWrapper,
+  HowtoFieldFileLink,
+  HowtoFieldFileUpload,
+} from '.'
 
-const { error, title, upload } = intro.files
-
+import type { ICategory } from 'src/models/categories.model'
 import type { IHowtoFormInput } from 'src/models/howto.models'
 
 interface IProps {
+  category: ICategory | undefined
   fileEditMode: boolean | undefined
   files: IHowtoFormInput['files']
   onClick: () => void
@@ -16,13 +21,15 @@ interface IProps {
 }
 
 export const HowtoFieldFiles = (props: IProps) => {
-  const { onClick, showInvalidFileWarning, files, fileEditMode } = props
+  const { category, onClick, showInvalidFileWarning, files, fileEditMode } =
+    props
 
   return (
     <>
       <Flex sx={{ mb: 2 }}>{showInvalidFileWarning && <Error />}</Flex>
-      <FormFieldWrapper htmlFor="description" text={title}>
+      <FormFieldWrapper htmlFor="description" text={headings.files}>
         <Flex sx={{ flexDirection: 'column' }} mb={[4, 4, 0]}>
+          <HowtoCategoryGuidance category={category} type="files" />
           {files?.length && !fileEditMode ? (
             <FilesWrapper files={files} onClick={onClick} />
           ) : (
@@ -45,7 +52,7 @@ const DeleteButton = ({ onClick }) => {
       icon="delete"
       onClick={() => onClick()}
     >
-      {upload.warning}
+      {buttons.files}
     </Button>
   )
 }
@@ -60,7 +67,7 @@ const Error = () => {
         color: 'error',
       }}
     >
-      {error}
+      {intro.files.error}
     </Text>
   )
 }

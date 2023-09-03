@@ -1,4 +1,5 @@
-import type { IModerable } from 'src/models'
+import type { IModerable, IResearch } from 'src/models'
+import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 import {
   stripSpecialCharacters,
   formatLowerNoSpecial,
@@ -9,8 +10,11 @@ import {
   needsModeration,
   isAllowedToEditContent,
   isAllowedToPin,
+  buildStatisticsLabel,
+  calculateTotalComments,
 } from './helpers'
 import { FactoryUser } from 'src/test/factories/User'
+import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {
@@ -198,6 +202,88 @@ describe('src/utils/helpers', () => {
           }),
         ),
       ).toBe(false)
+    })
+  })
+
+  describe('buildStatisticsLabel', () => {
+    it('should return label with non-plural stat unit when stat is <= 1', () => {
+      expect(
+        buildStatisticsLabel({ stat: 1, statUnit: 'count', usePlural: true }),
+      ).toBe('1 count')
+    })
+
+    it('should return label with plural stat unit when stat is > 1 and usePlural is true ', () => {
+      expect(
+        buildStatisticsLabel({ stat: 100, statUnit: 'count', usePlural: true }),
+      ).toBe('100 counts')
+    })
+
+    it('should return label with non-plural stat when stat is > 1 and usePlural is false ', () => {
+      expect(
+        buildStatisticsLabel({
+          stat: 100,
+          statUnit: 'count',
+          usePlural: false,
+        }),
+      ).toBe('100 count')
+    })
+  })
+  describe('calculateTotalComments Function', () => {
+    it('should return 0 when item has no updates', () => {
+      const item = { item: {} } as any
+      expect(calculateTotalComments(item)).toBe('0')
+    })
+
+    it('should return 0 when updates have no comments', () => {
+      const item = {
+        updates: Array.from({ length: 3 }).fill(
+          FactoryResearchItemUpdate({
+            status: 'published',
+            _deleted: false,
+            comments: [],
+          }),
+        ),
+      } as IResearch.ItemDB | IItem
+      expect(calculateTotalComments(item)).toBe('0')
+    })
+
+    it('should return the correct amount of comments', () => {
+      const item = {
+        updates: Array.from({ length: 3 }).fill(
+          FactoryResearchItemUpdate({
+            status: 'published',
+            _deleted: false,
+            comments: Array.from({ length: 3 }),
+          }),
+        ),
+      } as IResearch.ItemDB | IItem
+      expect(calculateTotalComments(item)).toBe('9')
+    })
+
+    it('should ignore deleted and draft updates', () => {
+      const item = {
+        updates: Array.from({ length: 2 })
+          .fill(
+            FactoryResearchItemUpdate({
+              status: 'published',
+              _deleted: false,
+              comments: Array.from({ length: 2 }),
+            }),
+          )
+          .concat([
+            FactoryResearchItemUpdate({
+              status: 'published',
+              _deleted: true,
+              comments: Array.from({ length: 3 }),
+            }),
+            FactoryResearchItemUpdate({
+              status: 'draft',
+              _deleted: false,
+              comments: Array.from({ length: 6 }),
+            }),
+          ]),
+      } as IResearch.ItemDB | IItem
+      expect(calculateTotalComments(item)).toBe('4')
     })
   })
 })

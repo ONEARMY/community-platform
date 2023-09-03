@@ -8,7 +8,11 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { RouteComponentProps } from 'react-router'
 import { withRouter, Redirect } from 'react-router'
 import { string, object, ref, bool } from 'yup'
-import { required } from 'src/utils/validators'
+import {
+  composeValidators,
+  noSpecialCharacters,
+  required,
+} from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { Link } from 'react-router-dom'
 import { PasswordField } from 'src/common/Form/PasswordField'
@@ -157,7 +161,10 @@ class SignUpPage extends React.Component<IProps, IState> {
                           type="userName"
                           component={FieldInput}
                           placeholder="Pick a unique name"
-                          validate={required}
+                          validate={composeValidators(
+                            required,
+                            noSpecialCharacters,
+                          )}
                         />
                       </Flex>
                       <Flex

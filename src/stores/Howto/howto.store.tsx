@@ -48,15 +48,22 @@ export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
   @observable
   public activeHowto: IHowtoDB | null
+
   @observable
   public allHowtos: IHowtoDB[]
+
   @observable
   public selectedCategory: string
+
   @observable
   public searchValue: string
 
   @observable
+  public activeSorter: ItemSortingOption
+
+  @observable
   public referrerSource: string
+
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
@@ -70,21 +77,38 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
+    super.init()
+
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
-      this.updateActiveSorter('created')
+      logger.debug('docs', docs)
+      const activeItems = [...docs].filter((doc) => {
+        return !doc._deleted
+      })
+
+      runInAction(() => {
+        this.activeSorter = ItemSortingOption.Random
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allHowtos = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
+      })
     })
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
     this.availableItemSortingOption = [
-      ItemSortingOption.Created,
+      ItemSortingOption.Newest,
       ItemSortingOption.MostUseful,
+      ItemSortingOption.LatestUpdated,
+      ItemSortingOption.TotalDownloads,
+      ItemSortingOption.Comments,
+      ItemSortingOption.Random,
     ]
   }
 
-  public updateActiveSorter(query: string) {
-    this.allHowtos = this.filterSorterDecorator?.sort(query)
+  public updateActiveSorter(sorter: ItemSortingOption) {
+    this.activeSorter = sorter
   }
 
   public getActiveHowToComments(): IComment[] {
@@ -206,7 +230,11 @@ export class HowtoStore extends ModuleStore {
       this.searchValue,
     )
 
-    return validHowtos
+    return this.filterSorterDecorator.sort(
+      this.activeSorter,
+      validHowtos,
+      this.activeUser,
+    )
   }
 
   public async incrementDownloadCount(howToID: string) {
@@ -562,11 +590,13 @@ export class HowtoStore extends ModuleStore {
 
       // populate DB
 
+      let { slug } = values
+
       const {
+        category,
         description,
         difficulty_level,
         moderation,
-        slug,
         tags,
         time,
         title,
@@ -576,6 +606,14 @@ export class HowtoStore extends ModuleStore {
       const creatorCountry = this.getCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
+
+      const previousSlug =
+        existingDoc && existingDoc.slug ? existingDoc.slug : undefined
+      // check for duplicate only if updated title/slug
+      if (previousSlug != slug) {
+        const titleReusesSlug = await this.isTitleThatReusesSlug(title, _id)
+        slug = titleReusesSlug ? slug + '-' + this.generateUniqueID(5) : slug
+      }
       const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
       if (!previousSlugs.includes(slug)) {
         previousSlugs.push(slug)
@@ -586,8 +624,8 @@ export class HowtoStore extends ModuleStore {
         _id,
         _createdBy,
         comments,
-        _deleted: false,
         creatorCountry,
+        _deleted: false,
         description,
         fileLink,
         files,
@@ -598,6 +636,7 @@ export class HowtoStore extends ModuleStore {
         steps,
         title,
         ...(files ? { total_downloads } : {}),
+        ...(category ? { category } : {}),
         ...(cover_image ? { cover_image } : {}),
         ...(difficulty_level ? { difficulty_level } : {}),
         ...(tags ? { tags } : {}),
@@ -683,6 +722,16 @@ export class HowtoStore extends ModuleStore {
       : ''
   }
 
+  // generate a numeric unique ID
+  private generateUniqueID(length: number) {
+    const chars = '0123456789'
+    let autoId = ''
+    for (let i = 0; i < length; i++) {
+      autoId += chars.charAt(Math.floor(Math.random() * chars.length))
+    }
+    return autoId
+  }
+
   private async uploadCoverImage(
     cover_image: IConvertedFileMeta | IUploadedFileMeta | undefined,
     id: string,
@@ -724,6 +773,11 @@ export class HowtoStore extends ModuleStore {
   @computed
   get votedUsefulCount(): number {
     return (this.activeHowto?.votedUsefulBy || []).length
+  }
+
+  @computed
+  get commentsCount(): number {
+    return (this.activeHowto?.comments || []).length
   }
 }
 

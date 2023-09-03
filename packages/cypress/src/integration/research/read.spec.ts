@@ -55,6 +55,11 @@ describe('[Research]', () => {
         cy.step(`ViewsCounter should not be visible`)
         cy.get('[data-cy="ViewsCounter"]').should('not.exist')
       })
+
+      it('[ContentStatistics only visible for beta-testers]', () => {
+        cy.step(`ContentStatistics should not be visible`)
+        cy.get('[data-cy="ContentStatistics"]').should('not.exist')
+      })
     })
 
     describe('[By Author]', () => {
@@ -81,11 +86,25 @@ describe('[Research]', () => {
         cy.get('[data-cy="ViewsCounter"]').should('exist')
 
         cy.step('Go back')
-        cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton').click()
+        cy.go('back')
 
         cy.step('Views show on second research article')
         cy.visit('/research/a-test-research')
         cy.get('[data-cy="ViewsCounter"]').should('exist')
+      })
+
+      it('[ContentStatistics show on multiple research articles]', () => {
+        cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
+
+        cy.step('ContentStatistics show on first howto')
+        cy.get('[data-cy="ContentStatistics"]').should('exist')
+
+        cy.step('Go back')
+        cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton').click()
+
+        cy.step('ContentStatistics show on second research article')
+        cy.visit('/research/a-test-research')
+        cy.get('[data-cy="ContentStatistics"]').should('exist')
       })
     })
 

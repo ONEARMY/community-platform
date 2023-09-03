@@ -19,6 +19,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import {
   isAllowedToDeleteContent,
   isAllowedToEditContent,
+  getPublicUpdates,
 } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
@@ -173,6 +174,9 @@ const ResearchArticle = observer((props: IProps) => {
           research={item}
           key={item._id}
           votedUsefulCount={researchStore.votedUsefulCount}
+          subscribersCount={researchStore.subscribersCount}
+          commentsCount={researchStore.commentsCount}
+          updatesCount={researchStore.updatesCount}
           loggedInUser={loggedInUser}
           isEditable={isEditable}
           isDeletable={isDeletable}
@@ -190,23 +194,21 @@ const ResearchArticle = observer((props: IProps) => {
         />
         <Box my={16}>
           {item &&
-            item?.updates
-              ?.filter(isUpdateVisible)
-              .map((update, index) => (
-                <ResearchUpdate
-                  update={update}
-                  key={update._id}
-                  updateIndex={index}
-                  isEditable={isEditable}
-                  slug={item.slug}
-                  comments={transformToUserComment(
-                    researchStore.formatResearchCommentList(update.comments),
-                    loggedInUser,
-                    item,
-                  )}
-                  showComments={areCommentVisible(index)}
-                />
-              ))}
+            getPublicUpdates(item).map((update, index) => (
+              <ResearchUpdate
+                update={update}
+                key={update._id}
+                updateIndex={index}
+                isEditable={isEditable}
+                slug={item.slug}
+                comments={transformToUserComment(
+                  researchStore.formatResearchCommentList(update.comments),
+                  loggedInUser,
+                  item,
+                )}
+                showComments={areCommentVisible(index)}
+              />
+            ))}
         </Box>
         <Box
           sx={{
@@ -250,10 +252,6 @@ const ResearchArticle = observer((props: IProps) => {
     return isLoading ? <Loader /> : <NotFoundPage />
   }
 })
-
-const isUpdateVisible = (update: IResearch.UpdateDB) => {
-  return update.status !== 'draft' && update._deleted === false
-}
 
 const transformToUserComment = (
   comments: IComment[],

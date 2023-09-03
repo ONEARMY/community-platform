@@ -48,6 +48,10 @@ class mockResearchStoreClass implements Partial<ResearchStore> {
   researchUploadStatus = {} as any
   updateUploadStatus = {} as any
   formatResearchCommentList = jest.fn()
+  getActiveResearchUpdateComments = jest.fn()
+  lockResearchItem = jest.fn()
+  lockResearchUpdate = jest.fn()
+  unlockResearchUpdate = jest.fn()
 
   get activeUser() {
     return {
@@ -247,6 +251,67 @@ describe('research.routes', () => {
       })
     })
 
+    it('blocks a valid editor when document is locked by another user', async () => {
+      const activeUser = FactoryUser({
+        userRoles: ['research_editor'],
+      })
+
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        activeUser,
+        activeResearchItem: FactoryResearchItem({
+          collaborators: [activeUser.userName],
+          slug: 'research-slug',
+          locked: {
+            by: 'jasper', // user_id
+            at: new Date().toISOString(),
+          },
+        }),
+      })
+
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/research/an-example/edit', activeUser))
+          .wrapper
+      })
+
+      await waitFor(() => {
+        expect(
+          wrapper.getByText(
+            'The research description is currently being edited by another editor.',
+          ),
+        ).toBeInTheDocument()
+      })
+    })
+
+    it('accepts a user when document is mark locked by them', async () => {
+      const activeUser = FactoryUser({
+        userRoles: ['research_editor'],
+      })
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        activeUser,
+        activeResearchItem: FactoryResearchItem({
+          collaborators: [activeUser.userName],
+          slug: 'research-slug',
+          locked: {
+            by: activeUser.userName,
+            at: new Date().toISOString(),
+          },
+        }),
+      })
+
+      let wrapper
+      act(async () => {
+        wrapper = (await renderFn('/research/an-example/edit', activeUser))
+          .wrapper
+      })
+
+      await waitFor(() => {
+        expect(wrapper.getByText('Edit your Research')).toBeInTheDocument()
+      })
+    })
+
     it('accepts a user with required role and contributor acccess', async () => {
       const activeUser = FactoryUser({
         userRoles: ['research_editor'],
@@ -353,6 +418,77 @@ describe('research.routes', () => {
 
       await waitFor(() => {
         expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
+      })
+    })
+
+    it('blocks valid author when document is locked', async () => {
+      // Arrange
+      const activeUser = FactoryUser({
+        userRoles: ['research_editor'],
+      })
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        activeUser,
+        activeResearchItem: FactoryResearchItem({
+          collaborators: undefined,
+          _createdBy: activeUser.userName,
+          slug: 'an-example',
+          updates: [
+            FactoryResearchItemUpdate({
+              _id: 'nested-research-update',
+              locked: {
+                by: 'jasper', // user_id
+                at: new Date().toISOString(),
+              },
+            }),
+          ],
+        }),
+      })
+
+      const { wrapper } = await renderFn(
+        '/research/an-example/edit-update/nested-research-update',
+        activeUser,
+      )
+
+      await waitFor(() => {
+        expect(
+          wrapper.getByText(
+            /This research update is currently being edited by another editor/,
+          ),
+        ).toBeInTheDocument()
+      })
+    })
+
+    it('accepts a user when document is mark locked by them', async () => {
+      const activeUser = FactoryUser({
+        userRoles: ['research_editor'],
+      })
+
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        activeUser,
+        activeResearchItem: FactoryResearchItem({
+          collaborators: [activeUser.userName],
+          slug: 'research-slug',
+          updates: [
+            FactoryResearchItemUpdate({
+              _id: 'nested-research-update',
+              locked: {
+                by: activeUser.userName,
+                at: new Date().toISOString(),
+              },
+            }),
+          ],
+        }),
+      })
+
+      const { wrapper } = await renderFn(
+        '/research/an-example/edit-update/nested-research-update',
+        activeUser,
+      )
+
+      await waitFor(() => {
+        expect(wrapper.getByText('Edit your update')).toBeInTheDocument()
       })
     })
 

@@ -21,6 +21,7 @@ import { intro, headings } from '../../labels'
 import {
   HowtoButtonDraft,
   HowtoButtonPublish,
+  HowtoErrors,
   HowtoFieldCategory,
   HowtoFieldCoverImage,
   HowtoFieldDescription,
@@ -150,7 +151,15 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
           }}
           validateOnBlur
           decorators={[this.calculatedFields]}
-          render={({ submitting, handleSubmit, form }) => {
+          render={({
+            errors,
+            form,
+            handleSubmit,
+            hasValidationErrors,
+            submitFailed,
+            submitting,
+            values,
+          }) => {
             return (
               <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
                 <UnsavedChangesDialog
@@ -191,7 +200,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                         >
                           {/* Left Side */}
                           <Heading variant="small" mb={3}>
-                            {heading}
+                            {heading.title}
                           </Heading>
                           <Flex
                             mx={-2}
@@ -202,16 +211,16 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                             >
                               <HowtoFieldTitle
-                                _id={formValues._id}
-                                parentType={parentType}
                                 store={this.store}
+                                _id={formValues._id}
                               />
-                              <HowtoFieldCategory />
+                              <HowtoFieldCategory category={values.category} />
                               <HowtoFieldTags />
                               <HowtoFieldTime />
                               <HowtoFieldDifficulty />
                               <HowtoFieldDescription />
                               <HowtoFieldFiles
+                                category={values.category}
                                 fileEditMode={fileEditMode}
                                 files={formValues.files}
                                 onClick={() => {
@@ -261,16 +270,23 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                     <Box sx={{ display: ['none', 'none', 'block'] }}>
                       <PostingGuidelines />
                     </Box>
+
                     <HowtoButtonDraft
                       form={form}
                       formId={formId}
                       moderation={formValues.moderation}
                       submitting={submitting}
                     />
+
                     <HowtoButtonPublish
                       form={form}
                       formId={formId}
                       submitting={submitting}
+                    />
+
+                    <HowtoErrors
+                      errors={errors}
+                      isVisible={submitFailed && hasValidationErrors}
                     />
                   </Box>
                 </Flex>

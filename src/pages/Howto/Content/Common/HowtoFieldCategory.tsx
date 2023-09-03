@@ -1,10 +1,19 @@
 import { Field } from 'react-final-form'
 
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-import { intro } from '../../labels'
-import { FormFieldWrapper } from '.'
+import {
+  FormFieldWrapper,
+  HowtoCategoryGuidance,
+} from 'src/pages/Howto/Content/Common'
+import { intro } from 'src/pages/Howto/labels'
 
-export const HowtoFieldCategory = () => {
+import type { ICategory } from 'src/models/categories.model'
+
+interface IProps {
+  category: ICategory | undefined
+}
+
+export const HowtoFieldCategory = ({ category }: IProps) => {
   const { placeholder, title } = intro.category
 
   return (
@@ -22,6 +31,7 @@ export const HowtoFieldCategory = () => {
           />
         )}
       />
+      <HowtoCategoryGuidance category={category} type="main" />
     </FormFieldWrapper>
   )
 }

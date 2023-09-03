@@ -2,9 +2,7 @@
   "name": "oa-cypress",
   "version": "1.0.0",
   "scripts": {
-    "start": "ts-node scripts/start.ts",
-    "db:seed": "TODO",
-    "db:teardown": "TODO"
+    "start": "ts-node scripts/start.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",

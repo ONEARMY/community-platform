@@ -9,6 +9,7 @@ import {
   ViewsCounter,
   ConfirmModal,
   ContentStatistics,
+  ResearchStatistics,
 } from 'oa-components'
 import { useEffect, useState, Fragment } from 'react'
 import { Link, useHistory } from 'react-router-dom'
@@ -161,7 +162,7 @@ const ResearchDescription = ({
             </Link>
             {research.moderation === 'accepted' && (
               <UsefulStatsButton
-                votedUsefulCount={votedUsefulCount}
+                votedUsefulCount={props.votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
                 isLoggedIn={props.loggedInUser ? true : false}
                 onUsefulClick={props.onUsefulClick}
@@ -325,60 +326,19 @@ const ResearchDescription = ({
           />
         )}
       </Flex>
-      {viewCount ? (
-        <AuthWrapper roleRequired="beta-tester">
-          <Divider
-            m={0}
-            sx={{
-              border: '1px solid black',
-            }}
-          />
-          <ContentStatistics
-            statistics={[
-              {
-                icon: 'view',
-                label: buildStatisticsLabel({
-                  stat: viewCount,
-                  statUnit: 'view',
-                  usePlural: true,
-                }),
-              },
-              {
-                icon: 'thunderbolt',
-                label: buildStatisticsLabel({
-                  stat: subscribersCount,
-                  statUnit: 'following',
-                  usePlural: false,
-                }),
-              },
-              {
-                icon: 'star',
-                label: buildStatisticsLabel({
-                  stat: votedUsefulCount,
-                  statUnit: 'useful',
-                  usePlural: false,
-                }),
-              },
-              {
-                icon: 'comment',
-                label: buildStatisticsLabel({
-                  stat: commentsCount,
-                  statUnit: 'comment',
-                  usePlural: true,
-                }),
-              },
-              {
-                icon: 'update',
-                label: buildStatisticsLabel({
-                  stat: updatesCount,
-                  statUnit: 'step',
-                  usePlural: true,
-                }),
-              },
-            ]}
-          />
-        </AuthWrapper>
-      ) : null}
+      <Divider
+        m={0}
+        sx={{
+          border: '1px solid black',
+        }}
+      />
+      <ResearchStatistics
+        viewCount={viewCount!}
+        followingCount={props.subscribersCount}
+        usefulCount={props.votedUsefulCount}
+        commentCount={props.commentsCount}
+        updateCount={props.updatesCount}
+      />
     </Flex>
   )
 }

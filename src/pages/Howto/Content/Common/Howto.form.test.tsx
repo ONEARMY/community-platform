@@ -1,4 +1,4 @@
-import { render, fireEvent, act } from '@testing-library/react'
+import { act, fireEvent, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router'
@@ -132,23 +132,22 @@ describe('Howto form', () => {
       let wrapper
       await act(async () => {
         wrapper = await getWrapper(formValues, 'edit', {})
-      })
 
-      // clear files
-      const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
-      await act(async () => {
+        // clear files
+        const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
         fireEvent.click(reuploadFilesButton)
+
+        // add fileLink
+        const fileLink = wrapper.getByPlaceholderText(
+          'Link to Google Drive, Dropbox, Grabcad etc',
+        )
+        fireEvent.change(fileLink, {
+          target: { value: '<http://www.test.com>' },
+        })
+
+        // submit form
+        fireEvent.click(wrapper.getByTestId('submit-form'))
       })
-
-      // add fileLink
-      const fileLink = wrapper.getByPlaceholderText(
-        'Link to Google Drive, Dropbox, Grabcad etc',
-      )
-      fireEvent.change(fileLink, { target: { value: '<http://www.test.com>' } })
-
-      // submit form
-      const submitFormButton = wrapper.getByTestId('submit-form')
-      fireEvent.click(submitFormButton)
 
       // Assert
       expect(

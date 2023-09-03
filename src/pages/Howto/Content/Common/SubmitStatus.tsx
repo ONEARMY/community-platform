@@ -5,6 +5,8 @@ import { Heading, Flex, Box, Text } from 'theme-ui'
 import { Icon, Button, Modal } from 'oa-components'
 import type { RouteComponentProps } from 'react-router'
 
+import { headings, buttons } from '../../labels'
+
 interface IProps extends RouteComponentProps<any> {
   onClose: () => void
 }
@@ -30,7 +32,7 @@ export class HowToSubmitStatus extends React.Component<IProps> {
       <Modal isOpen={!!uploadStatus.Start}>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading variant="small" sx={{ textAlign: 'center' }}>
-            Uploading How To
+            {headings.uploading}
           </Heading>
           <Icon
             glyph={'close'}
@@ -62,7 +64,7 @@ export class HowToSubmitStatus extends React.Component<IProps> {
             this.props.onClose()
           }}
         >
-          View How-To
+          {buttons.view}
         </Button>
       </Modal>
     )

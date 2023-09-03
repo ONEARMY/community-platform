@@ -50,6 +50,7 @@ export interface IHowToStepFormInput {
 export interface IHowtoFormInput extends IModerable, ISharedFeatures {
   slug: string
   title: string
+  allowDraftSave?: boolean
   category?: ICategory
   // NOTE cover image input starts as convertedFileMeta but is transformed on upload
   cover_image?: IUploadedFileMeta | IConvertedFileMeta

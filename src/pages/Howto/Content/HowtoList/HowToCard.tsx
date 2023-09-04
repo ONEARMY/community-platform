@@ -1,4 +1,10 @@
-import { CategoryTag, Icon, ModerationStatus, Username } from 'oa-components'
+import {
+  CategoryTag,
+  Icon,
+  ModerationStatus,
+  Username,
+  Tooltip,
+} from 'oa-components'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link as RouterLink } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
@@ -88,11 +94,16 @@ export const HowToCard = (props: IProps) => {
                 ))}
             </Flex>
             {votedUsefulCount > 0 && (
-              <Flex ml={1} sx={{ alignItems: 'center' }}>
+              <Flex
+                ml={1}
+                sx={{ alignItems: 'center' }}
+                data-tip="How useful is it"
+              >
                 <Icon glyph="star-active" marginRight="4px" />
                 <Text color="black">{votedUsefulCount}</Text>
               </Flex>
             )}
+            <Tooltip />
           </Flex>
         </Flex>
       </Box>

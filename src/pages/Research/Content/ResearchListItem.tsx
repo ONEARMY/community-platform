@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { Icon, ModerationStatus, Username } from 'oa-components'
+import { Icon, ModerationStatus, Username, Tooltip } from 'oa-components'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
@@ -130,22 +130,36 @@ const ResearchListItem = ({ item }: IProps) => {
                 justifyContent: 'space-around',
               }}
             >
-              <Text color="black" sx={_commonStatisticStyle}>
+              <Text
+                data-tip="How useful is it"
+                color="black"
+                sx={_commonStatisticStyle}
+              >
                 {usefulDisplayCount}
                 <Icon glyph="star-active" ml={1} />
               </Text>
-              <Text color="black" sx={_commonStatisticStyle}>
+              <Tooltip />
+
+              <Text
+                data-tip="Total comments"
+                color="black"
+                sx={_commonStatisticStyle}
+              >
                 {calculateTotalComments(item)}
                 <Icon glyph="comment" ml={1} />
               </Text>
+              <Tooltip />
+
               <Text
                 color="black"
                 sx={_commonStatisticStyle}
+                data-tip="Amount of updates"
                 data-cy="ItemUpdateText"
               >
                 {getUpdateText(item)}
                 <Icon glyph="update" ml={1} />
               </Text>
+              <Tooltip />
             </Box>
           </Grid>
           {item.moderation !== 'accepted' && (

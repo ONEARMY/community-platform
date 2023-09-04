@@ -1,12 +1,13 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
-import type { IComment } from 'src/models'
+import type { IComment, IModerationStatus, IUser } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
   _modified: string
   _contentModifiedTimestamp: string
   _created: string
+  _createdBy: string
   title?: string
   votedUsefulBy?: string[]
   category?: ICategory
@@ -14,6 +15,7 @@ export interface IItem {
   updates?: {
     comments?: IComment[]
   }[]
+  moderation?: IModerationStatus
 }
 
 export enum ItemSortingOption {
@@ -106,8 +108,31 @@ export class FilterSorterDecorator<T extends IItem> {
     )
   }
 
+  private sortByModerationStatus(listItems: T[], user?: IUser) {
+    const _listItems = listItems || this.allItems
+    const isCreatedByUser = (item: T) =>
+      user && item._createdBy === user.userName
+    const isModerationMatch = (item: T) =>
+      item.moderation === 'draft' ||
+      item.moderation === 'awaiting-moderation' ||
+      item.moderation === 'rejected'
+
+    return _listItems.sort((a, b) => {
+      const aMatchesCondition = isCreatedByUser(a) && isModerationMatch(a)
+      const bMatchesCondition = isCreatedByUser(b) && isModerationMatch(b)
+
+      if (aMatchesCondition && !bMatchesCondition) {
+        return -1
+      } else if (!aMatchesCondition && bMatchesCondition) {
+        return 1
+      } else {
+        return 0
+      }
+    })
+  }
+
   @action
-  public getSortedItems(): T[] {
+  public getSortedItems(activeUser?: IUser): T[] {
     let validItems = this.allItems.slice()
 
     if (this.activeSorter) {
@@ -136,6 +161,8 @@ export class FilterSorterDecorator<T extends IItem> {
           break
       }
     }
+
+    validItems = this.sortByModerationStatus(validItems, activeUser)
 
     return validItems
   }

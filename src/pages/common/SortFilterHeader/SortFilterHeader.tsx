@@ -55,7 +55,7 @@ export const SortFilterHeader = ({
 
   // if sortingOptions is populated, use Modified or first sortingOption. else set to empty string
   const defaultSortingOption =
-    sortingOptions.length > 0
+    Array.isArray(sortingOptions) && sortingOptions.length > 0
       ? sortingOptions.find(
           (sortingOption) => sortingOption.value == 'Modified',
         ) ?? sortingOptions[0]

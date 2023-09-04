@@ -5,6 +5,7 @@ import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
   _modified: string
+  _contentModifiedTimestamp: string
   _created: string
   title?: string
   votedUsefulBy?: string[]
@@ -73,7 +74,9 @@ export class FilterSorterDecorator<T extends IItem> {
 
   private sortByLatestModified(listItems: T[]) {
     const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) => (a._modified < b._modified ? 1 : -1))
+    return _listItems.sort((a, b) =>
+      a._contentModifiedTimestamp < b._contentModifiedTimestamp ? 1 : -1,
+    )
   }
 
   private sortByLatestCreated(listItems: T[]) {

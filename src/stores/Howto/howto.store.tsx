@@ -563,6 +563,7 @@ export class HowtoStore extends ModuleStore {
       // populate DB
 
       const {
+        category,
         description,
         difficulty_level,
         moderation,
@@ -586,8 +587,8 @@ export class HowtoStore extends ModuleStore {
         _id,
         _createdBy,
         comments,
-        _deleted: false,
         creatorCountry,
+        _deleted: false,
         description,
         fileLink,
         files,
@@ -598,6 +599,7 @@ export class HowtoStore extends ModuleStore {
         steps,
         title,
         ...(files ? { total_downloads } : {}),
+        ...(category ? { category } : {}),
         ...(cover_image ? { cover_image } : {}),
         ...(difficulty_level ? { difficulty_level } : {}),
         ...(tags ? { tags } : {}),

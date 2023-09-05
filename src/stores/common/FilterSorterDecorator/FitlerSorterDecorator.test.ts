@@ -10,6 +10,7 @@ describe('FilterSorterDecorator', () => {
     {
       title: 'Item 1',
       _modified: '2022-01-01',
+      _contentModifiedTimestamp: '2022-01-01',
       _created: '2022-01-01',
       votedUsefulBy: ['user1', 'user2'],
       category: {
@@ -55,6 +56,7 @@ describe('FilterSorterDecorator', () => {
     {
       title: 'Item 2',
       _modified: '2022-02-01',
+      _contentModifiedTimestamp: '2022-02-01',
       _created: '2022-02-01',
       votedUsefulBy: ['user3'],
       researchCategory: {
@@ -113,8 +115,8 @@ describe('FilterSorterDecorator', () => {
   //#region Sorting
   test('sort by latest modified', () => {
     const sortedItems = decorator.sort('Modified')
-    expect(sortedItems[0]._modified).toBe('2022-02-01')
-    expect(sortedItems[1]._modified).toBe('2022-01-01')
+    expect(sortedItems[0]._contentModifiedTimestamp).toBe('2022-02-01')
+    expect(sortedItems[1]._contentModifiedTimestamp).toBe('2022-01-01')
   })
 
   test('sort by latest created', () => {

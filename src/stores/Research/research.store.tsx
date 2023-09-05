@@ -922,7 +922,9 @@ export class ResearchStore extends ModuleStore {
         mentions,
         description: researchDescription,
       },
-      { set_last_edit_timestamp: setLastEditTimestamp },
+      {
+        set_last_edit_timestamp: setLastEditTimestamp,
+      },
     )
 
     // Side effects from updating research item

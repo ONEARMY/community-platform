@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import type { CSSObject } from '@styled-system/css'
 import type { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
+import { DirectoryModule } from './Directory'
 import { MODULE } from 'src/modules'
 import { AdminModule } from 'src/modules/admin'
 
@@ -204,4 +205,5 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   forgotpassword,
   forgotpasswordmessage,
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
+  DirectoryModule,
 ]

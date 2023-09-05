@@ -107,6 +107,11 @@ export class MapsStore extends ModuleStore {
     this.activePinFilters = MAP_GROUPINGS
   }
 
+  @observable
+  public getAllMapPins() {
+    return this.mapPins
+  }
+
   @action
   public async setActivePinFilters(filters: Array<string>) {
     if (filters.length === 0) {

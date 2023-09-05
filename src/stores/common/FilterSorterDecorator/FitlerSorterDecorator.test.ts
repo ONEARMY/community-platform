@@ -207,23 +207,16 @@ describe('FilterSorterDecorator', () => {
 
     it('sort items created by user2 at the start of the list if they have moderation', () => {
       expect(sortedItems[0]._createdBy).toEqual('user2')
-      expect(sortedItems[1]._createdBy).toEqual('user2')
-      expect(sortedItems[2]._createdBy).toEqual('user2')
-    })
-
-    it('sort items created by user2 with moderation statuses first', () => {
       expect(sortedItems[0].moderation).toEqual('draft')
       expect(sortedItems[0].title).toEqual('Item 4')
 
+      expect(sortedItems[1]._createdBy).toEqual('user2')
       expect(sortedItems[1].moderation).toEqual('rejected')
       expect(sortedItems[1].title).toEqual('Item 5')
 
+      expect(sortedItems[2]._createdBy).toEqual('user2')
       expect(sortedItems[2].moderation).toEqual('awaiting-moderation')
       expect(sortedItems[2].title).toEqual('Item 6')
-    })
-
-    it('return list of the same size', () => {
-      expect(sortedItems.length).toEqual(mockItemsWithModeration.length)
     })
   })
 

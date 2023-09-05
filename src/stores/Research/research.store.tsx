@@ -118,7 +118,7 @@ export class ResearchStore extends ModuleStore {
 
     this.filterSorterDecorator.allItems = validResearches
 
-    return this.filterSorterDecorator.getSortedItems()
+    return this.filterSorterDecorator.getSortedItems(this.activeUser)
   }
 
   public formatResearchCommentList(comments: IComment[] = []): IComment[] {

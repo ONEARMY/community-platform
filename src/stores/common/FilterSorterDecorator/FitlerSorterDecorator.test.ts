@@ -3,6 +3,7 @@ import {
   ItemSortingOption,
 } from './FilterSorterDecorator'
 import type { IItem } from './FilterSorterDecorator'
+import { FactoryUser } from 'src/test/factories/User'
 
 describe('FilterSorterDecorator', () => {
   let decorator: FilterSorterDecorator<IItem>
@@ -12,6 +13,8 @@ describe('FilterSorterDecorator', () => {
       _modified: '2022-01-01',
       _contentModifiedTimestamp: '2022-01-01',
       _created: '2022-01-01',
+      _createdBy: 'user3',
+      moderation: 'accepted',
       votedUsefulBy: ['user1', 'user2'],
       category: {
         _contentModifiedTimestamp: '2022-12-24T07:50:55.226Z',
@@ -58,6 +61,8 @@ describe('FilterSorterDecorator', () => {
       _modified: '2022-02-01',
       _contentModifiedTimestamp: '2022-02-01',
       _created: '2022-02-01',
+      _createdBy: 'user1',
+      moderation: 'accepted',
       votedUsefulBy: ['user3'],
       researchCategory: {
         _contentModifiedTimestamp: '2022-12-24T07:50:55.226Z',
@@ -154,6 +159,70 @@ describe('FilterSorterDecorator', () => {
     const sortedItems = decorator.getSortedItems()
     expect(sortedItems.length).toEqual(mockItems.length) // No sorting applied, should return original order
     expect(sortedItems[0].title).toEqual(mockItems[0].title)
+  })
+
+  describe('sorting multiple items by moderation status', () => {
+    const mockUser = FactoryUser({ userName: 'user2' })
+
+    const mockItemsWithModeration = mockItems.concat([
+      {
+        _modified: '2022-10-10',
+        _contentModifiedTimestamp: '2022-10-10',
+        _createdBy: 'user2',
+        title: 'Item 3',
+        _created: '2022-10-10',
+        moderation: 'accepted',
+      },
+      {
+        _modified: '2022-10-10',
+        _contentModifiedTimestamp: '2022-10-10',
+        _createdBy: 'user2',
+        title: 'Item 4',
+        _created: '2022-10-10',
+        moderation: 'draft',
+      },
+      {
+        _modified: '2022-01-01',
+        _contentModifiedTimestamp: '2022-01-01',
+        _createdBy: 'user2',
+        title: 'Item 5',
+        _created: '2022-01-01',
+        moderation: 'rejected',
+      },
+      {
+        _modified: '2022-01-01',
+        _contentModifiedTimestamp: '2022-01-01',
+        _createdBy: 'user2',
+        title: 'Item 6',
+        _created: '2022-01-01',
+        moderation: 'awaiting-moderation',
+      },
+      {
+        _modified: '2022-01-01',
+        _contentModifiedTimestamp: '2022-01-01',
+        _createdBy: 'user3',
+        title: 'Item 7',
+        _created: '2022-01-01',
+        moderation: 'accepted',
+      },
+    ])
+
+    decorator = new FilterSorterDecorator(mockItemsWithModeration)
+    const sortedItems = decorator.getSortedItems(mockUser)
+
+    it('sort items created by user2 at the start of the list if they have moderation', () => {
+      expect(sortedItems[0]._createdBy).toEqual('user2')
+      expect(sortedItems[0].moderation).toEqual('draft')
+      expect(sortedItems[0].title).toEqual('Item 4')
+
+      expect(sortedItems[1]._createdBy).toEqual('user2')
+      expect(sortedItems[1].moderation).toEqual('rejected')
+      expect(sortedItems[1].title).toEqual('Item 5')
+
+      expect(sortedItems[2]._createdBy).toEqual('user2')
+      expect(sortedItems[2].moderation).toEqual('awaiting-moderation')
+      expect(sortedItems[2].title).toEqual('Item 6')
+    })
   })
 
   //#endregion Sorting

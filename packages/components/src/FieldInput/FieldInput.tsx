@@ -20,7 +20,7 @@ type InputModifiers = {
 }
 
 const trimWhitespace = (input: string) => {
-  return input.replace(/\s+/g, ' ').trim()
+  return input.trim()
 }
 
 const capitalizeFirstLetter = (str: string) =>
@@ -31,7 +31,6 @@ const processInputModifiers = (value: any, modifiers: InputModifiers = {}) => {
   if (modifiers.trim) {
     value = trimWhitespace(value)
   }
-
   if (modifiers.capitalize) {
     value = capitalizeFirstLetter(value)
   }

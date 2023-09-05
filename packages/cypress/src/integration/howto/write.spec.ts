@@ -31,28 +31,32 @@ describe('[How To]', () => {
 
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
-      cy.get('[data-cy=step-title]')
-        .clear()
-        .type(`Step ${stepNumber} is easy`)
+      cy.get('[data-cy=step-title]').clear().type(`Step ${stepNumber} is easy`)
 
-      cy.get('[data-cy=step-title]')
-        .should('have.value', `Step ${stepNumber} is easy`)
-
-      cy.get('[data-cy=step-title]')
-        .clear()
-        .type('  Test for trailing whitespace  ')
-        .blur()
-
-      cy.get('[data-cy=step-title]')
-        .should('have.value', 'Test for trailing whitespace')
+      cy.get('[data-cy=step-title]').should(
+        'have.value',
+        `Step ${stepNumber} is easy`,
+      )
 
       cy.get('[data-cy=step-title]')
         .clear()
         .type('  Test for trailing whitespace  ')
         .blur()
 
+      cy.get('[data-cy=step-title]').should(
+        'have.value',
+        'Test for trailing whitespace',
+      )
+
       cy.get('[data-cy=step-title]')
-        .should('have.value', 'Test for extra whitespace')
+        .clear()
+        .type(' Test  inner  whitespace  is  not  trimmed ')
+        .blur()
+
+      cy.get('[data-cy=step-title]').should(
+        'have.value',
+        'Test  inner  whitespace  is  not  trimmed',
+      )
 
       cy.get('[data-cy=step-description]')
         .clear()
@@ -72,16 +76,20 @@ describe('[How To]', () => {
         .type('  Test for trailing whitespace  ')
         .blur()
 
-      cy.get('[data-cy=step-description]')
-        .should('have.value', 'Test for trailing whitespace',)
+      cy.get('[data-cy=step-description]').should(
+        'have.value',
+        'Test for trailing whitespace',
+      )
 
       cy.get('[data-cy=step-description]')
         .clear()
-        .type('Test  for   extra    whitespace')
+        .type(' Test  inner  whitespace  is  not  trimmed ')
         .blur()
 
-      cy.get('[data-cy=step-description]')
-        .should('have.value', 'Test for extra whitespace')
+      cy.get('[data-cy=step-description]').should(
+        'have.value',
+        'Test  inner  whitespace  is  not  trimmed',
+      )
 
       if (videoUrl) {
         cy.step('Adding Video Url')
@@ -228,16 +236,12 @@ describe('[How To]', () => {
       ).should('exist')
 
       cy.step('Check title capitilization')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('just a normal title')
-        .blur()
+      cy.get('[data-cy=intro-title]').clear().type('just a normal title').blur()
       cy.get('[data-cy=intro-title]').should(
         'have.value',
         'Just a normal title',
       )
-      cy.get('[data-cy=intro-title]')
-        .clear()
+      cy.get('[data-cy=intro-title]').clear()
 
       cy.step('Check title for trailing whitespace')
       cy.get('[data-cy=intro-title]')
@@ -248,20 +252,18 @@ describe('[How To]', () => {
         'have.value',
         'Title with whitespace',
       )
-      cy.get('[data-cy=intro-title]')
-        .clear()
+      cy.get('[data-cy=intro-title]').clear()
 
       cy.step('Check title for extra whitespace')
       cy.get('[data-cy=intro-title]')
         .clear()
-        .type('title  with    extra  whitespace')
+        .type(' Title  with  extra  whitespace ')
         .blur()
       cy.get('[data-cy=intro-title]').should(
         'have.value',
-        'Title with extra whitespace',
+        'Title  with  extra  whitespace',
       )
-      cy.get('[data-cy=intro-title]')
-        .clear()
+      cy.get('[data-cy=intro-title]').clear()
 
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
@@ -272,14 +274,13 @@ describe('[How To]', () => {
       cy.step('Check description for trailing whitespace')
       cy.get('[data-cy=intro-description]')
         .clear()
-        .type(' Description with trailing whitespace')
+        .type(' Description with trailing whitespace ')
         .blur()
       cy.get('[data-cy=intro-description]').should(
         'have.value',
-        'Description with trailing whitespace'
+        'Description with trailing whitespace',
       )
-      cy.get('[data-cy=intro-description]')
-        .clear()
+      cy.get('[data-cy=intro-description]').clear()
 
       cy.step('Check description capitilization')
       cy.get('[data-cy=intro-description]')
@@ -288,22 +289,20 @@ describe('[How To]', () => {
         .blur()
       cy.get('[data-cy=intro-description]').should(
         'have.value',
-        'Just a normal description'
+        'Just a normal description',
       )
-      cy.get('[data-cy=intro-description]')
-        .clear()
+      cy.get('[data-cy=intro-description]').clear()
 
       cy.step('Check description for extra whitespace')
       cy.get('[data-cy=intro-description]')
         .clear()
-        .type('description  with    extra  whitespace')
+        .type(' Description  with  extra  whitespace ')
         .blur()
       cy.get('[data-cy=intro-description]').should(
         'have.value',
-        'Description with extra whitespace',
+        'Description  with  extra  whitespace',
       )
-      cy.get('[data-cy=intro-description]')
-        .clear()
+      cy.get('[data-cy=intro-description]').clear()
 
       cy.step('Cannot be published yet')
       cy.get('[data-cy=submit]').click()

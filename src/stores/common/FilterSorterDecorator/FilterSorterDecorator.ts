@@ -133,6 +133,7 @@ export class FilterSorterDecorator<T extends IItem> {
           break
 
         default:
+          validItems = this.sortByLatestModified(validItems)
           break
       }
     }

@@ -167,6 +167,7 @@ describe('FilterSorterDecorator', () => {
     const mockItemsWithModeration = mockItems.concat([
       {
         _modified: '2022-10-10',
+        _contentModifiedTimestamp: '2022-10-10',
         _createdBy: 'user2',
         title: 'Item 3',
         _created: '2022-10-10',
@@ -174,30 +175,34 @@ describe('FilterSorterDecorator', () => {
       },
       {
         _modified: '2022-10-10',
+        _contentModifiedTimestamp: '2022-10-10',
         _createdBy: 'user2',
         title: 'Item 4',
         _created: '2022-10-10',
         moderation: 'draft',
       },
       {
-        _modified: '2022-10-10',
+        _modified: '2022-01-01',
+        _contentModifiedTimestamp: '2022-01-01',
         _createdBy: 'user2',
         title: 'Item 5',
         _created: '2022-01-01',
         moderation: 'rejected',
       },
       {
-        _modified: '2022-10-10',
+        _modified: '2022-01-01',
+        _contentModifiedTimestamp: '2022-01-01',
         _createdBy: 'user2',
         title: 'Item 6',
-        _created: '2022-10-10',
+        _created: '2022-01-01',
         moderation: 'awaiting-moderation',
       },
       {
-        _modified: '2022-10-10',
+        _modified: '2022-01-01',
+        _contentModifiedTimestamp: '2022-01-01',
         _createdBy: 'user3',
         title: 'Item 7',
-        _created: '2022-10-10',
+        _created: '2022-01-01',
         moderation: 'accepted',
       },
     ])

@@ -158,10 +158,12 @@ export class FilterSorterDecorator<T extends IItem> {
           break
 
         default:
-          validItems = this.sortByModerationStatus(validItems, activeUser)
           break
       }
     }
+
+    validItems = this.sortByModerationStatus(validItems, activeUser)
+
     return validItems
   }
 

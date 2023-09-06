@@ -256,9 +256,6 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
             </ImageInputFieldWrapper>
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
-            <Label sx={_labelStyle} htmlFor={`${step}.videoUrl`}>
-              {`${videoUrl.title} *`}
-            </Label>
             <Field
               name={`${step}.videoUrl`}
               data-cy="step-videoUrl"

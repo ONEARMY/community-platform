@@ -219,7 +219,10 @@ export class HowtoStore extends ModuleStore {
       this.searchValue,
     )
 
-    return validHowtos
+    return this.filterSorterDecorator.getSortedItems(
+      this.activeUser,
+      validHowtos,
+    )
   }
 
   public async incrementDownloadCount(howToID: string) {

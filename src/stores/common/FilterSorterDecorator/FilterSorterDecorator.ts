@@ -137,8 +137,8 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   @action
-  public getSortedItems(activeUser?: IUser): T[] {
-    let validItems = this.allItems.slice()
+  public getSortedItems(activeUser?: IUser, listItems?: T[]): T[] {
+    let validItems = listItems || this.allItems.slice()
 
     if (this.activeSorter) {
       switch (this.activeSorter) {

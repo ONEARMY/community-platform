@@ -86,9 +86,8 @@ export const steps = {
     title: 'Step Description',
     placeholder: `Explain what you are doing. If it gets too long, consider breaking it into multiple steps (${HOWTO_STEP_DESCRIPTION_MIN_LENGTH}-${HOWTO_STEP_DESCRIPTION_MAX_LENGTH} characters)`,
   },
-  images: 'Upload image(s)',
+  images: 'Upload image(s) or a video',
   videoUrl: {
-    title: 'Or embed a YouTube video',
     placeholder: 'https://youtube.com/watch?v=',
     errors: {
       both: 'Do not include both images and video',

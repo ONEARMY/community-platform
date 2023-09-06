@@ -53,6 +53,9 @@ export class ResearchStore extends ModuleStore {
   @observable
   public searchValue: string
 
+  @observable
+  public activeSorter: string
+
   public availableItemSortingOption: ItemSortingOption[]
 
   @observable
@@ -86,8 +89,10 @@ export class ResearchStore extends ModuleStore {
         // Create an instance of FilterSorterDecorator with the allResearchItems array
         this.filterSorterDecorator =
           new FilterSorterDecorator<IResearch.ItemDB>(this.allResearchItems)
+        this.updateActiveSorter('Modified')
       })
     })
+    this.activeSorter = this.filterSorterDecorator?.activeSorter ?? ''
     this.selectedCategory = ''
     this.searchValue = ''
     this.availableItemSortingOption = [

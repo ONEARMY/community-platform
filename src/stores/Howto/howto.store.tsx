@@ -48,15 +48,22 @@ export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
   @observable
   public activeHowto: IHowtoDB | null
+
   @observable
   public allHowtos: IHowtoDB[]
+
   @observable
   public selectedCategory: string
+
   @observable
   public searchValue: string
 
   @observable
+  public activeSorter: string
+
+  @observable
   public referrerSource: string
+
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
@@ -72,8 +79,9 @@ export class HowtoStore extends ModuleStore {
     makeObservable(this)
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
       this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
-      this.updateActiveSorter('created')
+      this.updateActiveSorter('Created')
     })
+    this.activeSorter = this.filterSorterDecorator?.activeSorter ?? ''
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''

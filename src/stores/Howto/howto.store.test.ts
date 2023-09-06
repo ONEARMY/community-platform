@@ -27,7 +27,7 @@ const factory = async (
     }),
   )
 
-  store.updateActiveSorter('created')
+  store.updateActiveSorter('Created')
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

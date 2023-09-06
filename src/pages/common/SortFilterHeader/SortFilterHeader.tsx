@@ -46,22 +46,21 @@ export const SortFilterHeader = ({
 }: SortFilterHeaderProps) => {
   const history = useHistory()
 
-  const sortingOptions = currentStore.availableItemSortingOption?.map(
-    (label) => ({
-      label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
-      value: label,
-    }),
-  )
+  const { searchValue, activeSorter, availableItemSortingOption } = currentStore
 
-  // if sortingOptions is populated, use Modified or first sortingOption. else set to empty string
+  const sortingOptions = availableItemSortingOption?.map((label) => ({
+    label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
+    value: label,
+  }))
+
   const defaultSortingOption =
     Array.isArray(sortingOptions) && sortingOptions.length > 0
       ? sortingOptions.find(
-          (sortingOption) => sortingOption.value == 'Modified',
+          (sortingOption) => sortingOption.value == activeSorter,
         ) ?? sortingOptions[0]
       : ''
+
   const [sortState, setSortState] = useState(defaultSortingOption)
-  const { searchValue } = currentStore
 
   const _inputStyle = {
     width: ['100%', '100%', '240px'],

@@ -77,8 +77,12 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-
-    this.activeSorter = ItemSortingOption.None
+    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      runInAction(() => {
+        this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
+        this.updateActiveSorter('Created')
+      })
+    })
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
@@ -219,10 +223,9 @@ export class HowtoStore extends ModuleStore {
       this.searchValue,
     )
 
-    return this.filterSorterDecorator.getSortedItems(
-      this.activeUser,
-      validHowtos,
-    )
+    this.filterSorterDecorator.allItems = validHowtos
+
+    return this.filterSorterDecorator.sort(this.activeSorter, this.activeUser)
   }
 
   public async incrementDownloadCount(howToID: string) {

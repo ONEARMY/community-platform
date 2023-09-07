@@ -1,6 +1,10 @@
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 
-import type { ValidationErrors } from 'final-form'
+import type {
+  IErrorsListSet,
+  ILabels,
+  ITopLevelErrorsList,
+} from 'src/common/Form/types'
 
 const createSet = (errors, labels) => {
   const keys = Object.keys(errors).filter((key) => labels[key])
@@ -8,12 +12,8 @@ const createSet = (errors, labels) => {
   if (keys.length !== 0) return { errors, keys, labels }
 }
 
-interface ILabels {
-  [key: string]: object
-}
-
 interface IProps {
-  errors: ValidationErrors
+  errors: ITopLevelErrorsList | undefined
   isVisible: boolean
   labels: ILabels
 }
@@ -23,5 +23,10 @@ export const ResearchErrors = ({ errors, isVisible, labels }: IProps) => {
 
   const errorsListSet = [createSet(errors, labels)]
 
-  return <ErrorsContainer errorsListSet={errorsListSet} isVisible={isVisible} />
+  return (
+    <ErrorsContainer
+      errorsListSet={errorsListSet as IErrorsListSet[]}
+      isVisible={isVisible}
+    />
+  )
 }

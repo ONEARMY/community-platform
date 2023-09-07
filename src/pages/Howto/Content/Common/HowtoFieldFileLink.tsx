@@ -11,7 +11,7 @@ import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'
 
 export const HowtoFieldFileLink = () => {
-  const { description, title } = intro.files.link
+  const { description, title } = intro.fileLink
   const name = 'fileLink'
 
   return (

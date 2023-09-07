@@ -4,7 +4,7 @@ import { Heading, Flex, Box, Text } from 'theme-ui'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { COMPARISONS } from 'src/utils/comparisons'
-import { steps } from '../../labels'
+import { buttons, steps } from '../../labels'
 import { HowtoFieldStep } from '.'
 
 interface IPropsAnimation {
@@ -50,7 +50,7 @@ export const HowtoFieldStepsContainer = () => {
             <Text
               sx={{ fontSize: 2 }}
               dangerouslySetInnerHTML={{
-                __html: steps.heading.description,
+                __html: steps.heading.description as string,
               }}
             />
           </Box>
@@ -96,7 +96,7 @@ export const HowtoFieldStepsContainer = () => {
                 })
               }}
             >
-              {steps.buttons.add}
+              {buttons.steps.add}
             </Button>
           </Flex>
         </>

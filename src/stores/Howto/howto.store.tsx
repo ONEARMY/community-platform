@@ -48,15 +48,22 @@ export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
   @observable
   public activeHowto: IHowtoDB | null
+
   @observable
   public allHowtos: IHowtoDB[]
+
   @observable
   public selectedCategory: string
+
   @observable
   public searchValue: string
 
   @observable
+  public activeSorter: ItemSortingOption
+
+  @observable
   public referrerSource: string
+
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
@@ -70,10 +77,8 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
-      this.updateActiveSorter('created')
-    })
+
+    this.activeSorter = ItemSortingOption.None
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
@@ -81,10 +86,18 @@ export class HowtoStore extends ModuleStore {
       ItemSortingOption.Created,
       ItemSortingOption.MostUseful,
     ]
+
+    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      logger.debug('docs', docs)
+      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
+      // Sets default starting sort filter for howto list items
+      this.updateActiveSorter(ItemSortingOption.Created)
+    })
   }
 
-  public updateActiveSorter(query: string) {
-    this.allHowtos = this.filterSorterDecorator?.sort(query)
+  public updateActiveSorter(sorter: ItemSortingOption) {
+    this.allHowtos = this.filterSorterDecorator?.sort(sorter)
+    this.activeSorter = sorter
   }
 
   public getActiveHowToComments(): IComment[] {

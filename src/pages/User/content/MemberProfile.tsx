@@ -5,7 +5,6 @@ import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
-import { UserAdmin } from './UserAdmin'
 import { userStats } from 'src/common/hooks/userStats'
 import UserCreatedDocuments from './UserCreatedDocuments'
 import type { UserCreatedDocs } from '.'
@@ -131,9 +130,6 @@ export const MemberProfile = ({ user, docs }: IProps) => {
             </Box>
             {user.about && <Paragraph>{user.about}</Paragraph>}
             <UserContactAndLinks links={userLinks} />
-            <Box mt={3}>
-              <UserAdmin user={user} />
-            </Box>
           </Flex>
         </Flex>
       </Flex>

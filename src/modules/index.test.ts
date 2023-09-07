@@ -14,7 +14,6 @@ describe('getSupportedModules', () => {
       MODULE.RESEARCH,
       MODULE.ACADEMY,
       MODULE.USER,
-      MODULE.ADMIN,
     ])
   })
 

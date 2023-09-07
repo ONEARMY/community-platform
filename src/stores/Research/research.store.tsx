@@ -106,6 +106,7 @@ export class ResearchStore extends ModuleStore {
 
   public updateActiveSorter(query: string) {
     this.allResearchItems = this.filterSorterDecorator?.sort(query)
+    this.activeSorter = query
   }
 
   @computed get filteredResearches() {

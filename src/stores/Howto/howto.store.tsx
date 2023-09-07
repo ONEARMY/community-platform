@@ -93,6 +93,7 @@ export class HowtoStore extends ModuleStore {
 
   public updateActiveSorter(query: string) {
     this.allHowtos = this.filterSorterDecorator?.sort(query)
+    this.activeSorter = query
   }
 
   public getActiveHowToComments(): IComment[] {

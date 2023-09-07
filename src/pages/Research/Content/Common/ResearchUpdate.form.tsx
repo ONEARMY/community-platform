@@ -33,7 +33,7 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
-import { buttons, update } from '../../labels'
+import { buttons, errors, headings, update } from '../../labels'
 import { ResearchErrors } from './ResearchErrors'
 
 import type { RouteComponentProps } from 'react-router'
@@ -67,8 +67,8 @@ const beforeUnload = (e) => {
 
 export const ResearchUpdateForm = observer((props: IProps) => {
   const { formValues, parentType, redirectUrl } = props
-  const { deletion, description, headings, images, title, videoUrl } = update
-  const { draft } = buttons
+  const { description, images, title, videoUrl } = update
+  const { deletion, draft } = buttons
 
   const store = useResearchStore()
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
@@ -140,7 +140,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     formValues.moderation !== 'draft' ? draft.create : draft.update
   const isEdit = parentType === 'edit'
   const publishButtonText = isEdit ? 'Save' : 'Add update'
-  const pageTitle = headings[parentType]
+  const pageTitle = headings.update[parentType]
 
   return (
     <>
@@ -393,7 +393,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       disabled={submitting}
                       sx={{ width: '100%', display: 'block', mt: 3 }}
                     >
-                      {deletion.button}
+                      {deletion.text}
                     </Button>
                   ) : null}
                   <Button
@@ -484,14 +484,16 @@ const getResearchUpdates = (
  * Ensure either url or images included (not both), and any url formatted correctly
  */
 const validateMedia = (videoUrl: string, values: any) => {
+  const { both, empty, invalidUrl } = errors.videoUrl
   const images = values.images
+
   if (videoUrl) {
     if (images && images[0]) {
-      return 'Do not include both images and video'
+      return both
     }
     const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
     const urlValid = ytRegex.test(videoUrl)
-    return urlValid ? null : 'Please provide a valid YouTube Url'
+    return urlValid ? null : invalidUrl
   }
-  return images && images[0] ? null : 'Include either images or a video'
+  return images && images[0] ? null : empty
 }

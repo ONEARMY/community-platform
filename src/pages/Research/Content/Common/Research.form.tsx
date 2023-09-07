@@ -33,7 +33,7 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
-import { buttons, overview } from '../../labels'
+import { buttons, headings, overview } from '../../labels'
 import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
 
 import type { RouteComponentProps } from 'react-router'
@@ -75,8 +75,7 @@ const calculatedFields = createDecorator({
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
   const { create, update } = buttons.draft
-  const { categories, collaborators, description, headings, tags, title } =
-    overview
+  const { categories, collaborators, description, tags, title } = overview
 
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
@@ -127,7 +126,7 @@ const ResearchForm = observer((props: IProps) => {
   }
 
   const draftButtonText = formValues.moderation !== 'draft' ? create : update
-  const pageTitle = headings[parentType]
+  const pageTitle = headings.overview[parentType]
 
   return (
     <div data-testid={props['data-testid']}>

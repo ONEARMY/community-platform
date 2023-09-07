@@ -1,18 +1,40 @@
 import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from './constants'
 
+import type { ILabels } from 'src/common/Form/types'
+
 export const buttons = {
   draft: {
     create: 'Save as draft',
     update: 'Save to draft',
   },
+  deletion: {
+    text: 'Delete this update',
+    confirm: 'Delete',
+    message: 'Are you sure you want to delete this update?',
+  },
   publish: 'Publish',
 }
 
-export const overview = {
-  headings: {
+export const headings = {
+  overview: {
     create: 'Start your Research',
     edit: 'Edit your Research',
   },
+  update: {
+    create: 'New update',
+    edit: 'Edit your update',
+  },
+}
+
+export const errors = {
+  videoUrl: {
+    both: 'Do not include both images and video',
+    empty: 'Include either images or a video',
+    invalidUrl: 'Please provide a valid YouTube Url',
+  },
+}
+
+export const overview: ILabels = {
   categories: {
     placeholder: 'Select category',
     title: 'Which categories fit your research?',
@@ -34,19 +56,10 @@ export const overview = {
   },
 }
 
-export const update = {
-  deletion: {
-    button: 'Delete this update',
-    confirm: 'Delete',
-    message: 'Are you sure you want to delete this update?',
-  },
+export const update: ILabels = {
   description: {
     placeholder: `Explain what is happening in your research (max ${RESEARCH_MAX_LENGTH} characters)`,
     title: 'Description of this update',
-  },
-  headings: {
-    create: 'New update',
-    edit: 'Edit your update',
   },
   title: {
     placeholder: `Title of this update (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`,
@@ -58,10 +71,5 @@ export const update = {
   videoUrl: {
     title: 'Or embed a YouTube video',
     placeholder: 'https://youtube.com/watch?v=',
-    errors: {
-      both: 'Do not include both images and video',
-      empty: 'Include either images or a video',
-      invalidUrl: 'Please provide a valid YouTube Url',
-    },
   },
 }

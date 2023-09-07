@@ -77,11 +77,8 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
-      this.updateActiveSorter('Created')
-    })
-    this.activeSorter = this.filterSorterDecorator?.activeSorter ?? ''
+
+    this.activeSorter = ''
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
@@ -89,6 +86,12 @@ export class HowtoStore extends ModuleStore {
       ItemSortingOption.Created,
       ItemSortingOption.MostUseful,
     ]
+
+    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
+      // Sets default starting sort filter for howto list items
+      this.updateActiveSorter('Created')
+    })
   }
 
   public updateActiveSorter(query: string) {

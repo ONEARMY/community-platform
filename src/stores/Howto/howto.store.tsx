@@ -71,7 +71,10 @@ export class HowtoStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
+      const sortedItems = [...docs].filter((doc) => {
+        return !doc._deleted
+      })
+      this.filterSorterDecorator = new FilterSorterDecorator<any>(sortedItems)
       this.updateActiveSorter('created')
     })
     this.selectedCategory = ''

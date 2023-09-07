@@ -91,17 +91,21 @@ export class ResearchStore extends ModuleStore {
       })
 
       runInAction(() => {
+        this.allResearchItems = activeItems
         // Create an instance of FilterSorterDecorator with the allResearchItems array
         this.filterSorterDecorator =
-          new FilterSorterDecorator<IResearch.ItemDB>(activeItems)
+          new FilterSorterDecorator<IResearch.ItemDB>(this.allResearchItems)
         // Sets default starting sort filter for research list items
-        this.updateActiveSorter(ItemSortingOption.Modified)
+        this.activeSorter = ItemSortingOption.Modified
       })
     })
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {
-    this.allResearchItems = this.filterSorterDecorator?.sort(sorter)
+    this.allResearchItems = this.filterSorterDecorator?.sort(
+      sorter,
+      this.activeUser,
+    )
     this.activeSorter = sorter
   }
 

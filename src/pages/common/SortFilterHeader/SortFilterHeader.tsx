@@ -105,7 +105,7 @@ export const SortFilterHeader = ({
             placeholder="Sort by"
             value={sortState}
             onChange={(sortBy) => {
-              currentStore.updateActiveSorter(String(sortBy.value))
+              currentStore.updateActiveSorter(sortBy.value)
               setSortState(sortBy)
             }}
           />

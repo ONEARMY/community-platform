@@ -54,7 +54,7 @@ export class ResearchStore extends ModuleStore {
   public searchValue: string
 
   @observable
-  public activeSorter: string
+  public activeSorter: ItemSortingOption
 
   public availableItemSortingOption: ItemSortingOption[]
 
@@ -74,7 +74,7 @@ export class ResearchStore extends ModuleStore {
     makeObservable(this)
     super.init()
 
-    this.activeSorter = ''
+    this.activeSorter = ItemSortingOption.None
     this.selectedCategory = ''
     this.searchValue = ''
     this.availableItemSortingOption = [
@@ -101,14 +101,14 @@ export class ResearchStore extends ModuleStore {
         this.filterSorterDecorator =
           new FilterSorterDecorator<IResearch.ItemDB>(this.allResearchItems)
         // Sets default starting sort filter for research list items
-        this.updateActiveSorter('Modified')
+        this.updateActiveSorter(ItemSortingOption.Modified)
       })
     })
   }
 
-  public updateActiveSorter(query: string) {
-    this.allResearchItems = this.filterSorterDecorator?.sort(query)
-    this.activeSorter = query
+  public updateActiveSorter(sorter: ItemSortingOption) {
+    this.allResearchItems = this.filterSorterDecorator?.sort(sorter)
+    this.activeSorter = sorter
   }
 
   @computed get filteredResearches() {

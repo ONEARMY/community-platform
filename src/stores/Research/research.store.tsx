@@ -74,7 +74,6 @@ export class ResearchStore extends ModuleStore {
     makeObservable(this)
     super.init()
 
-    this.activeSorter = ItemSortingOption.None
     this.selectedCategory = ''
     this.searchValue = ''
     this.availableItemSortingOption = [
@@ -87,19 +86,11 @@ export class ResearchStore extends ModuleStore {
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
       logger.debug('docs', docs)
-      const sortedItems = [...docs]
-        .filter((doc) => {
-          return !doc._deleted
-        })
-        .sort((a, b) =>
-          a._contentModifiedTimestamp < b._contentModifiedTimestamp ? 1 : -1,
-        )
 
       runInAction(() => {
-        this.allResearchItems = sortedItems
         // Create an instance of FilterSorterDecorator with the allResearchItems array
         this.filterSorterDecorator =
-          new FilterSorterDecorator<IResearch.ItemDB>(this.allResearchItems)
+          new FilterSorterDecorator<IResearch.ItemDB>(docs)
         // Sets default starting sort filter for research list items
         this.updateActiveSorter(ItemSortingOption.Modified)
       })

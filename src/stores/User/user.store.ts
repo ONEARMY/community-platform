@@ -12,7 +12,6 @@ import type {
   INotificationUpdate,
   IUser,
   IUserBadges,
-  IUserDB,
 } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
@@ -212,14 +211,12 @@ export class UserStore extends ModuleStore {
    * (default is current logged in user)
    */
   public async updateUserProfile(
-    values: Partial<IUserPP>,
+    values: Partial<IUserPP> & { _id: string },
     trigger: string,
     adminEditableUserId?: string,
   ) {
     this.setUpdateStatus('Start')
-    const dbRef = this.db
-      .collection<IUserPP>(COLLECTION_NAME)
-      .doc((values as IUserDB)._id)
+    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(values._id)
     const id = dbRef.id
 
     // If admin updating another user assume full user passed as values, otherwise merge updates with current user.
@@ -257,7 +254,7 @@ export class UserStore extends ModuleStore {
     await this.db
       .collection(COLLECTION_NAME)
       .doc(updatedUserProfile._id)
-      .set(updatedUserProfile)
+      .update(updatedUserProfile)
 
     if (!adminEditableUserId) {
       this.updateActiveUser(updatedUserProfile)

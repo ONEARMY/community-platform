@@ -59,7 +59,7 @@ export class HowtoStore extends ModuleStore {
   public searchValue: string
 
   @observable
-  public activeSorter: string
+  public activeSorter: ItemSortingOption
 
   @observable
   public referrerSource: string
@@ -78,7 +78,7 @@ export class HowtoStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
 
-    this.activeSorter = ''
+    this.activeSorter = ItemSortingOption.None
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
@@ -90,13 +90,13 @@ export class HowtoStore extends ModuleStore {
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
       this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
       // Sets default starting sort filter for howto list items
-      this.updateActiveSorter('Created')
+      this.updateActiveSorter(ItemSortingOption.Created)
     })
   }
 
-  public updateActiveSorter(query: string) {
-    this.allHowtos = this.filterSorterDecorator?.sort(query)
-    this.activeSorter = query
+  public updateActiveSorter(sorter: ItemSortingOption) {
+    this.allHowtos = this.filterSorterDecorator?.sort(sorter)
+    this.activeSorter = sorter
   }
 
   public getActiveHowToComments(): IComment[] {

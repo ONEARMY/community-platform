@@ -88,6 +88,7 @@ export class HowtoStore extends ModuleStore {
     ]
 
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      logger.debug('docs', docs)
       this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
       // Sets default starting sort filter for howto list items
       this.updateActiveSorter(ItemSortingOption.Created)

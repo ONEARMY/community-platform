@@ -86,11 +86,14 @@ export class ResearchStore extends ModuleStore {
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
       logger.debug('docs', docs)
+      const sortedItems = [...docs].filter((doc) => {
+        return !doc._deleted
+      })
 
       runInAction(() => {
         // Create an instance of FilterSorterDecorator with the allResearchItems array
         this.filterSorterDecorator =
-          new FilterSorterDecorator<IResearch.ItemDB>(docs)
+          new FilterSorterDecorator<IResearch.ItemDB>(sortedItems)
         // Sets default starting sort filter for research list items
         this.updateActiveSorter(ItemSortingOption.Modified)
       })

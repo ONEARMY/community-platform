@@ -4,7 +4,6 @@ import { FieldInput } from 'oa-components'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   composeValidators,
-  draftValidationWrapper,
   minValue,
   required,
   validateTitle,
@@ -29,14 +28,14 @@ export const HowtoFieldTitle = (props: IProps) => {
 
   const name = 'title'
 
-  const titleValidation = (values, allValues) => {
+  const titleValidation = (value) => {
     const validators = composeValidators(
       required,
       minValue(HOWTO_TITLE_MIN_LENGTH),
       validateTitle(parentType, _id, store),
     )
 
-    return draftValidationWrapper(values, allValues, validators)
+    return validators(value)
   }
 
   return (
@@ -46,7 +45,7 @@ export const HowtoFieldTitle = (props: IProps) => {
         name={name}
         data-cy="intro-title"
         validateFields={[]}
-        validate={(value, allValues) => titleValidation(value, allValues)}
+        validate={(value) => titleValidation(value)}
         isEqual={COMPARISONS.textInput}
         modifiers={{ capitalize: true }}
         component={FieldInput}

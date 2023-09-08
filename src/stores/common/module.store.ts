@@ -36,8 +36,8 @@ export class ModuleStore {
 
     const matches = await this.db
       .collection(this.basePath!)
-      .getWhere('previousSlugs', 'array-contains', slug)
-    const otherMatches = matches.filter((match) => match._id !== originalId)
+      .getWhere('slug', '==', slug)
+    const otherMatches = matches.filter((match) => match._id !== originalId) // exclude current document
     return otherMatches.length > 0
   }
 

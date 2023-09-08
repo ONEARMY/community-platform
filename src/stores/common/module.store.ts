@@ -34,11 +34,22 @@ export class ModuleStore {
   public isTitleThatReusesSlug = async (title: string, originalId?: string) => {
     const slug = stripSpecialCharacters(title).toLowerCase()
 
-    const matches = await this.db
+    // check for previous titles
+    const previousMatches = await this.db
+      .collection(this.basePath!)
+      .getWhere('previousSlugs', 'array-contains', slug)
+    const previousOtherMatches = previousMatches.filter(
+      (match) => match._id !== originalId,
+    ) // exclude current document
+
+    // check for current titles
+    const currentMatches = await this.db
       .collection(this.basePath!)
       .getWhere('slug', '==', slug)
-    const otherMatches = matches.filter((match) => match._id !== originalId) // exclude current document
-    return otherMatches.length > 0
+    const currentOtherMatches = currentMatches.filter(
+      (match) => match._id !== originalId,
+    ) // exclude current document
+    return currentOtherMatches.length > 0 || previousOtherMatches.length > 0
   }
 
   public validateUrl = async (value: any) => {

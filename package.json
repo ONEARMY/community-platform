@@ -8,8 +8,7 @@
     "functions",
     "shared",
     "packages/*",
-    "scripts",
-    "cypress"
+    "scripts"
   ],
   "private": true,
   "main": "lib/index.js",

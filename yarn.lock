@@ -18252,13 +18252,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"exenv@npm:^1.2.0":
-  version: 1.2.2
-  resolution: "exenv@npm:1.2.2"
-  checksum: a894f3b60ab8419e0b6eec99c690a009c8276b4c90655ccaf7d28faba2de3a6b93b3d92210f9dc5efd36058d44f04098f6bbccef99859151104bfd49939904dc
-  languageName: node
-  linkType: hard
-
 "exifr@npm:^7.0.0":
   version: 7.1.3
   resolution: "exifr@npm:7.1.3"
@@ -26835,6 +26828,7 @@ __metadata:
     oa-components: "workspace:*"
     oa-shared: "workspace:*"
     oa-themes: "workspace:*"
+    photoswipe: ^5.4.0
     pino: ^7.2.0
     pino-logflare: ^0.3.12
     prettier: 2.5.1
@@ -26848,7 +26842,6 @@ __metadata:
     react-foco: ^1.3.1
     react-ga4: ^1.4.1
     react-hamburger-menu: ^1.1.1
-    react-image-lightbox: ^5.1.0
     react-lazy-load-image-component: ^1.5.1
     react-leaflet: ^2.5.0
     react-leaflet-markercluster: ^2.0.0-rc3
@@ -27477,6 +27470,13 @@ __metadata:
   version: 2.1.0
   resolution: "performance-now@npm:2.1.0"
   checksum: 534e641aa8f7cba160f0afec0599b6cecefbb516a2e837b512be0adbe6c1da5550e89c78059c7fabc5c9ffdf6627edabe23eb7c518c4500067a898fa65c2b550
+  languageName: node
+  linkType: hard
+
+"photoswipe@npm:^5.4.0":
+  version: 5.4.0
+  resolution: "photoswipe@npm:5.4.0"
+  checksum: 87aeab23edc88482057e893c89f0a7317837143dfdb801ac6e6c4604d737f34d798de8a94111efa84db766ea8c48774372ef5ef1eaf1dcc63df8fdd5ed347832
   languageName: node
   linkType: hard
 
@@ -29644,19 +29644,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-image-lightbox@npm:^5.1.0":
-  version: 5.1.4
-  resolution: "react-image-lightbox@npm:5.1.4"
-  dependencies:
-    prop-types: ^15.7.2
-    react-modal: ^3.11.1
-  peerDependencies:
-    react: 16.x || 17.x
-    react-dom: 16.x || 17.x
-  checksum: 59a209eba5d23301ae450413d2ce87c72c645964e8d797d55060c9261ba9043c6f8c44347ae51ed9db47fd696db13a1e05dfea33da08ef09a4e0acaa0b9065bc
-  languageName: node
-  linkType: hard
-
 "react-inspector@npm:^6.0.0":
   version: 6.0.1
   resolution: "react-inspector@npm:6.0.1"
@@ -29753,7 +29740,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-lifecycles-compat@npm:^3.0.0, react-lifecycles-compat@npm:^3.0.4":
+"react-lifecycles-compat@npm:^3.0.4":
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: a904b0fc0a8eeb15a148c9feb7bc17cec7ef96e71188280061fc340043fd6d8ee3ff233381f0e8f95c1cf926210b2c4a31f38182c8f35ac55057e453d6df204f
@@ -29769,21 +29756,6 @@ __metadata:
     react-loadable: "*"
     webpack: ">=4.41.1 || 5.x"
   checksum: 1cf7ceb488d329a5be15f891dae16727fb7ade08ef57826addd21e2c3d485e2440259ef8be94f4d54e9afb4bcbd2fcc22c3c5bad92160c9c06ae6ba7b5562497
-  languageName: node
-  linkType: hard
-
-"react-modal@npm:^3.11.1":
-  version: 3.16.1
-  resolution: "react-modal@npm:3.16.1"
-  dependencies:
-    exenv: ^1.2.0
-    prop-types: ^15.7.2
-    react-lifecycles-compat: ^3.0.0
-    warning: ^4.0.3
-  peerDependencies:
-    react: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
-    react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
-  checksum: 978936e9320fad839c039b9ee4de55d40888156cb40e093615d6fbc2ff07139d5db06f14782cb7767f780bd5fb57956778669426c535ebc0068a7a03882c7e75
   languageName: node
   linkType: hard
 

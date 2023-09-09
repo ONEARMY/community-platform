@@ -199,7 +199,10 @@ describe('[How To]', () => {
       cy.contains('Make sure this field is filled correctly').should('exist')
 
       cy.step('A basic draft was created')
-      cy.get('[data-cy=intro-title]').clear().type('qwerty').blur({ force: true })
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('qwerty')
+        .blur({ force: true })
       cy.get('[data-cy=draft]').click()
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()

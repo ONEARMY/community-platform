@@ -137,8 +137,8 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   @action
-  public getSortedItems(activeUser?: IUser): T[] {
-    let validItems = this.allItems.slice()
+  public getSortedItems(listItems: T[], activeUser?: IUser): T[] {
+    let validItems = listItems || this.allItems.slice()
 
     if (this.activeSorter) {
       switch (this.activeSorter) {
@@ -173,12 +173,14 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   @action
-  public sort(sorter: ItemSortingOption, activeUser?: IUser): T[] {
-    const sortingOption: ItemSortingOption =
-      ItemSortingOption[sorter as keyof typeof ItemSortingOption]
-    this.activeSorter = sortingOption
+  public sort(
+    sorter: ItemSortingOption,
+    listItems: T[],
+    activeUser?: IUser,
+  ): T[] {
+    this.activeSorter = sorter
 
-    return this.getSortedItems(activeUser)
+    return this.getSortedItems(listItems, activeUser)
   }
 
   @action

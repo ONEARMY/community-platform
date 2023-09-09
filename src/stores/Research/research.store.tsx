@@ -102,11 +102,13 @@ export class ResearchStore extends ModuleStore {
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {
+    this.activeSorter = sorter
+
     this.allResearchItems = this.filterSorterDecorator?.sort(
       sorter,
+      this.allResearchItems,
       this.activeUser,
     )
-    this.activeSorter = sorter
   }
 
   @computed get filteredResearches() {
@@ -122,9 +124,11 @@ export class ResearchStore extends ModuleStore {
       this.searchValue,
     )
 
-    this.filterSorterDecorator.allItems = validResearches
-
-    return this.filterSorterDecorator.sort(this.activeSorter, this.activeUser)
+    return this.filterSorterDecorator.sort(
+      this.activeSorter,
+      validResearches,
+      this.activeUser,
+    )
   }
 
   public formatResearchCommentList(comments: IComment[] = []): IComment[] {

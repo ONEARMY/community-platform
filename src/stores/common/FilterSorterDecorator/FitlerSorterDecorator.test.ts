@@ -119,27 +119,27 @@ describe('FilterSorterDecorator', () => {
 
   //#region Sorting
   test('sort by latest modified', () => {
-    const sortedItems = decorator.sort('Modified')
+    const sortedItems = decorator.sort(ItemSortingOption.Modified, mockItems)
     expect(sortedItems[0]._contentModifiedTimestamp).toBe('2022-02-01')
     expect(sortedItems[1]._contentModifiedTimestamp).toBe('2022-01-01')
   })
 
   test('sort by latest created', () => {
-    const sortedItems = decorator.sort('Created')
+    const sortedItems = decorator.sort(ItemSortingOption.Created, mockItems)
     expect(sortedItems[0]._created).toBe('2022-02-01')
     expect(sortedItems[1]._created).toBe('2022-01-01')
   })
 
   test('sort by most useful', () => {
-    const sortedItems = decorator.sort('MostUseful')
-    expect(sortedItems[0].votedUsefulBy.length).toBe(2)
-    expect(sortedItems[1].votedUsefulBy.length).toBe(1)
+    const sortedItems = decorator.sort(ItemSortingOption.MostUseful, mockItems)
+    expect(sortedItems[0].votedUsefulBy!.length).toBe(2)
+    expect(sortedItems[1].votedUsefulBy!.length).toBe(1)
   })
 
   test('sort by updates', () => {
-    const sortedItems = decorator.sort('Updates')
-    expect(sortedItems[0].updates.length).toBe(2)
-    expect(sortedItems[1].updates.length).toBe(2)
+    const sortedItems = decorator.sort(ItemSortingOption.Updates, mockItems)
+    expect(sortedItems[0].updates!.length).toBe(2)
+    expect(sortedItems[1].updates!.length).toBe(2)
   })
 
   test('sort by comments', () => {
@@ -149,14 +149,14 @@ describe('FilterSorterDecorator', () => {
   })
 
   test('get sorted items with no active sorter', () => {
-    const sortedItems = decorator.getSortedItems()
+    const sortedItems = decorator.getSortedItems(mockItems)
     expect(sortedItems.length).toEqual(mockItems.length) // No sorting applied, should return original order
     expect(sortedItems[0].title).toEqual(mockItems[0].title)
   })
 
   test('get sorted items with default sorting option', () => {
     decorator.activeSorter = ItemSortingOption.None
-    const sortedItems = decorator.getSortedItems()
+    const sortedItems = decorator.getSortedItems(mockItems)
     expect(sortedItems.length).toEqual(mockItems.length) // No sorting applied, should return original order
     expect(sortedItems[0].title).toEqual(mockItems[0].title)
   })
@@ -235,7 +235,10 @@ describe('FilterSorterDecorator', () => {
     ])
 
     decorator = new FilterSorterDecorator(mockItemsWithModeration)
-    const sortedItems = decorator.getSortedItems(mockUser)
+    const sortedItems = decorator.getSortedItems(
+      mockItemsWithModeration,
+      mockUser,
+    )
 
     it('sort items created by user2 at the start of the list if they have moderation', () => {
       expect(sortedItems[0]._createdBy).toEqual('user2')

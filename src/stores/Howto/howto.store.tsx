@@ -84,7 +84,7 @@ export class HowtoStore extends ModuleStore {
 
       runInAction(() => {
         this.allHowtos = activeItems
-        this.filterSorterDecorator = new FilterSorterDecorator<any>(
+        this.filterSorterDecorator = new FilterSorterDecorator<IHowtoDB>(
           this.allHowtos,
         )
         // sets default starting sort filter for howto list items
@@ -101,8 +101,13 @@ export class HowtoStore extends ModuleStore {
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {
-    this.allHowtos = this.filterSorterDecorator?.sort(sorter, this.activeUser)
     this.activeSorter = sorter
+
+    this.allHowtos = this.filterSorterDecorator?.sort(
+      sorter,
+      this.allHowtos,
+      this.activeUser,
+    )
   }
 
   public getActiveHowToComments(): IComment[] {
@@ -224,9 +229,11 @@ export class HowtoStore extends ModuleStore {
       this.searchValue,
     )
 
-    this.filterSorterDecorator.allItems = validHowtos
-
-    return this.filterSorterDecorator.sort(this.activeSorter, this.activeUser)
+    return this.filterSorterDecorator.sort(
+      this.activeSorter,
+      validHowtos,
+      this.activeUser,
+    )
   }
 
   public async incrementDownloadCount(howToID: string) {

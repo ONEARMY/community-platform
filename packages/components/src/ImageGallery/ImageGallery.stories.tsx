@@ -13,10 +13,10 @@ interface IUploadedFileMeta {
 }
 
 const imageUrls = [
-  'https://picsum.photos/1500/500',
-  'https://picsum.photos/4000/3000',
-  'https://picsum.photos/800/1200',
-  'https://picsum.photos/1500/1500',
+  'https://picsum.photos/id/29/1500/1000',
+  'https://picsum.photos/id/50/4000/3000',
+  'https://picsum.photos/id/110/800/1200',
+  'https://picsum.photos/id/300/1500/1500',
 ]
 
 const testImages: IUploadedFileMeta[] = imageUrls.map((elt, i) => {

@@ -49,7 +49,7 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
         - v9-yarn-{{ checksum "yarn.lock" }}
-        - v9-yarn
+        - v9-yarn-
   - &install_packages
     run:
       name: Install Packages

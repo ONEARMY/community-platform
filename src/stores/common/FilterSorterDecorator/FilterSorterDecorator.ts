@@ -81,7 +81,6 @@ export class FilterSorterDecorator<T extends IItem> {
       const valueA = a[propertyName]
       const valueB = b[propertyName]
 
-      // Check if it's an array and get its length
       const lengthA = Array.isArray(valueA) ? valueA.length : valueA ?? 0
       const lengthB = Array.isArray(valueB) ? valueB.length : valueB ?? 0
 
@@ -117,7 +116,7 @@ export class FilterSorterDecorator<T extends IItem> {
       const totalCommentsB = this.calculateTotalComments(b)
 
       if (totalCommentsA === totalCommentsB) {
-        return 1
+        return 0
       }
 
       return totalCommentsA < totalCommentsB ? 1 : -1

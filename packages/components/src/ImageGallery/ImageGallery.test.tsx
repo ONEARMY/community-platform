@@ -1,112 +1,77 @@
 import { render } from '../tests/utils'
+import { waitFor } from '@testing-library/react'
+import { vi } from 'vitest'
+import { Default } from './ImageGallery.stories';
 import { ImageGallery } from './ImageGallery'
+import type { ImageGalleryProps } from './ImageGallery'
 
 describe('ImageGallery', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      value: vi.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(), // Deprecated
+        removeListener: vi.fn(), // Deprecated
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }))
+    });
+  })
+
   it('handles empty image prop', () => {
     const { container } = render(<ImageGallery images={undefined as any} />)
 
     expect(container).toBeEmptyDOMElement()
-  })
+  });
 
-  it('renders first image', () => {
-    const { getByAltText } = render(
-      <ImageGallery
-        images={[
-          {
-            downloadUrl: 'https://example.com/image.jpg',
-            fullPath: 'image.jpg',
-            name: 'image.jpg',
-            size: 100,
-            timeCreated: '2021-01-01',
-            type: 'image/jpeg',
-            updated: '2021-01-01',
-          },
-        ]}
-      />,
+  it('renders correct image after clicking in its thumbnail', () => {
+    const { getByTestId, getAllByTestId } = render(
+      <Default {...(Default.args as ImageGalleryProps)} />,
     )
+    const mainImage = getByTestId('active-image');
+    expect(mainImage).toBeInTheDocument();
 
-    expect(getByAltText('image.jpg')).toBeInTheDocument()
-  })
+    const thumbnails = getAllByTestId('thumbnail');
+    const firstThumbnail = thumbnails[0];
 
-  it('handles thumbnails', () => {
-    const { getByAltText, getAllByAltText, getByTestId } = render(
-      <ImageGallery
-        images={[
-          {
-            downloadUrl: 'https://example.com/image.jpg',
-            fullPath: 'image.jpg',
-            name: 'image.jpg',
-            size: 100,
-            timeCreated: '2021-01-01',
-            type: 'image/jpeg',
-            updated: '2021-01-01',
-          },
-          {
-            downloadUrl: 'https://example.com/image_001.jpg',
-            fullPath: 'image_001.jpg',
-            name: 'image_001.jpg',
-            size: 100,
-            timeCreated: '2021-01-01',
-            type: 'image/jpeg',
-            updated: '2021-01-01',
-          },
-          {
-            downloadUrl: 'https://example.com/image_002.jpg',
-            fullPath: 'image_002.jpg',
-            name: 'image_002.jpg',
-            size: 100,
-            timeCreated: '2021-01-01',
-            type: 'image/jpeg',
-            updated: '2021-01-01',
-          },
-        ]}
-      />,
+    firstThumbnail.click();
+
+    const firstThumbnailImage = firstThumbnail.firstElementChild;
+    expect(mainImage.getAttribute("src")).toEqual(firstThumbnailImage?.getAttribute("src"));
+
+
+    const thirdThumbnail = thumbnails[2];
+    thirdThumbnail.click();
+
+    const thirdThumbnailImage = thirdThumbnail.firstElementChild;
+    expect(mainImage.getAttribute("src")).toEqual(thirdThumbnailImage?.getAttribute("src"));
+  });
+
+  it('displays correct image in lightbox after clicking on the main image', async () => {
+    const { getByRole, findByRole, getByTestId } = render(
+      <Default {...(Default.args as ImageGalleryProps)} />,
     )
+    const mainImage = getByTestId('active-image');
+    expect(mainImage).toBeInTheDocument();
 
-    // Appears twice
-    // 1. As active image
-    // 2. In thumbnail listing
-    expect(getAllByAltText('image.jpg')).toHaveLength(2)
+    mainImage.click();
 
-    expect(getByAltText('image_001.jpg')).toBeInTheDocument()
-    expect(getByAltText('image_002.jpg')).toBeInTheDocument()
+    const lightboxDialog = await findByRole('dialog');
+    expect(lightboxDialog).toBeInTheDocument();
 
-    // Click on thumbnail
-    getByAltText('image_001.jpg').click()
-
-    expect(getByTestId('active-image').getAttribute('src')).toBe(
-      `https://example.com/image_001.jpg`,
-    )
-  })
-
-  it('has a lightbox', () => {
-    const { getByTestId, getByLabelText } = render(
-      <ImageGallery
-        images={[
-          {
-            downloadUrl: 'https://example.com/image.jpg',
-            fullPath: 'image.jpg',
-            name: 'image.jpg',
-            size: 100,
-            timeCreated: '2021-01-01',
-            type: 'image/jpeg',
-            updated: '2021-01-01',
-          },
-          {
-            downloadUrl: 'https://example.com/image.jpg',
-            fullPath: 'image_001.jpg',
-            name: 'image_001.jpg',
-            size: 100,
-            timeCreated: '2021-01-01',
-            type: 'image/jpeg',
-            updated: '2021-01-01',
-          },
-        ]}
-      />,
-    )
-
-    getByTestId('active-image').click()
-
-    expect(getByLabelText('Lightbox')).toBeInTheDocument()
-  })
+    // Waits for the image to load
+    // TODO: fix this, not working
+    await waitFor(() => {
+      const group = getByRole("group", { hidden: false });
+      expect(group).toBeInTheDocument();
+      
+      const image = group.querySelector("img");
+      expect(image).toBeInTheDocument();
+      expect(image?.getAttribute("src")).toEqual(mainImage.getAttribute("src"));
+    })
+  });
 })

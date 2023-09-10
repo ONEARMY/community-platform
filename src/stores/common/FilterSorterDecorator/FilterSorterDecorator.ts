@@ -59,9 +59,7 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByProperty(listItems: T[], propertyName: keyof IItem): T[] {
-    const _listItems = listItems
-
-    return _listItems.sort((a, b) => {
+    return listItems.sort((a, b) => {
       const valueA = a[propertyName]
       const valueB = b[propertyName]
 
@@ -108,7 +106,6 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByModerationStatus(listItems: T[], user?: IUser) {
-    const _listItems = listItems
     const isCreatedByUser = (item: T) =>
       user && item._createdBy === user.userName
     const isModerationMatch = (item: T) =>
@@ -116,7 +113,7 @@ export class FilterSorterDecorator<T extends IItem> {
       item.moderation === 'awaiting-moderation' ||
       item.moderation === 'rejected'
 
-    return _listItems.sort((a, b) => {
+    return listItems.sort((a, b) => {
       const aMatchesCondition = isCreatedByUser(a) && isModerationMatch(a)
       const bMatchesCondition = isCreatedByUser(b) && isModerationMatch(b)
 

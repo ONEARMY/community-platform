@@ -183,7 +183,7 @@ describe('FilterSorterDecorator', () => {
 
     decorator = new FilterSorterDecorator(mockItems)
 
-    const sortedItems = decorator.sort('MostUseful')
+    const sortedItems = decorator.sort(ItemSortingOption.MostUseful, mockItems)
     expect(sortedItems[0].title).toEqual(mockItems[0].title)
     expect(sortedItems[1].title).toEqual(mockItems[1].title)
   })

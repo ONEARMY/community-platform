@@ -77,18 +77,21 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
+    super.init()
+
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      logger.debug('docs', docs)
       const activeItems = [...docs].filter((doc) => {
         return !doc._deleted
       })
 
       runInAction(() => {
-        this.allHowtos = activeItems
-        this.filterSorterDecorator = new FilterSorterDecorator<IHowtoDB>(
-          this.allHowtos,
-        )
-        // sets default starting sort filter for howto list items
         this.activeSorter = ItemSortingOption.Created
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allHowtos = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
       })
     })
     this.selectedCategory = ''
@@ -102,12 +105,6 @@ export class HowtoStore extends ModuleStore {
 
   public updateActiveSorter(sorter: ItemSortingOption) {
     this.activeSorter = sorter
-
-    this.allHowtos = this.filterSorterDecorator?.sort(
-      sorter,
-      this.allHowtos,
-      this.activeUser,
-    )
   }
 
   public getActiveHowToComments(): IComment[] {

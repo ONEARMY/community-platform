@@ -34,14 +34,10 @@ export class FilterSorterDecorator<T extends IItem> {
   @observable
   public activeSorter: ItemSortingOption
 
-  @observable
-  public allItems: T[] = []
-
   public SEARCH_WEIGHTS: { name: string; weight: number }[]
 
   constructor(_allItems: T[]) {
     this.activeSorter = ItemSortingOption.None
-    this.allItems = _allItems
     this.SEARCH_WEIGHTS = [
       { name: 'title', weight: 0.5 },
       { name: 'description', weight: 0.2 },
@@ -63,7 +59,7 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByProperty(listItems: T[], propertyName: keyof IItem): T[] {
-    const _listItems = listItems || this.allItems
+    const _listItems = listItems
 
     return _listItems.sort((a, b) => {
       const valueA = a[propertyName]
@@ -97,7 +93,7 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByComments(listItems: T[]) {
-    const _listItems = listItems || this.allItems
+    const _listItems = listItems
 
     return _listItems.sort((a, b) => {
       const totalCommentsA = calculateTotalComments(a)
@@ -112,7 +108,7 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByModerationStatus(listItems: T[], user?: IUser) {
-    const _listItems = listItems || this.allItems
+    const _listItems = listItems
     const isCreatedByUser = (item: T) =>
       user && item._createdBy === user.userName
     const isModerationMatch = (item: T) =>
@@ -138,7 +134,7 @@ export class FilterSorterDecorator<T extends IItem> {
 
   @action
   public getSortedItems(listItems: T[], activeUser?: IUser): T[] {
-    let validItems = listItems || this.allItems.slice()
+    let validItems = listItems
 
     if (this.activeSorter) {
       switch (this.activeSorter) {

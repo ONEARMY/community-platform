@@ -114,7 +114,7 @@ describe('FilterSorterDecorator', () => {
   ]
 
   beforeEach(() => {
-    decorator = new FilterSorterDecorator(mockItems)
+    decorator = new FilterSorterDecorator()
   })
 
   //#region Sorting
@@ -181,7 +181,7 @@ describe('FilterSorterDecorator', () => {
       },
     ]
 
-    decorator = new FilterSorterDecorator(mockItems)
+    decorator = new FilterSorterDecorator()
 
     const sortedItems = decorator.sort(ItemSortingOption.MostUseful, mockItems)
     expect(sortedItems[0].title).toEqual(mockItems[0].title)
@@ -234,7 +234,7 @@ describe('FilterSorterDecorator', () => {
       },
     ])
 
-    decorator = new FilterSorterDecorator(mockItemsWithModeration)
+    decorator = new FilterSorterDecorator()
     const sortedItems = decorator.getSortedItems(
       mockItemsWithModeration,
       mockUser,

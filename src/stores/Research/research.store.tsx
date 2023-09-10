@@ -26,6 +26,7 @@ import {
   changeUserReferenceToPlainText,
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
+import type { RootStore } from '../index'
 import type { DocReference } from '../databaseV2/DocReference'
 import {
   FilterSorterDecorator,
@@ -69,8 +70,8 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
-  constructor() {
-    super(null as any, 'research')
+  constructor(rootStore: RootStore) {
+    super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
 
@@ -91,24 +92,18 @@ export class ResearchStore extends ModuleStore {
       })
 
       runInAction(() => {
-        this.allResearchItems = activeItems
-        // Create an instance of FilterSorterDecorator with the allResearchItems array
-        this.filterSorterDecorator =
-          new FilterSorterDecorator<IResearch.ItemDB>(this.allResearchItems)
-        // Sets default starting sort filter for research list items
         this.activeSorter = ItemSortingOption.Modified
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allResearchItems = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
       })
     })
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {
     this.activeSorter = sorter
-
-    this.allResearchItems = this.filterSorterDecorator?.sort(
-      sorter,
-      this.allResearchItems,
-      this.activeUser,
-    )
   }
 
   @computed get filteredResearches() {

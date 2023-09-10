@@ -161,6 +161,33 @@ describe('FilterSorterDecorator', () => {
     expect(sortedItems[0].title).toEqual(mockItems[0].title)
   })
 
+  test('sorted items stay in same order if they have equal values', () => {
+    const mockItems: IItem[] = [
+      {
+        _modified: '2022-10-10',
+        _contentModifiedTimestamp: '2022-10-10',
+        _createdBy: 'user1',
+        title: 'Item 1',
+        _created: '2022-10-10',
+        votedUsefulBy: ['user2'],
+      },
+      {
+        _modified: '2022-10-10',
+        _contentModifiedTimestamp: '2022-10-10',
+        _createdBy: 'user1',
+        title: 'Item 2',
+        _created: '2022-10-10',
+        votedUsefulBy: ['user2'],
+      },
+    ]
+
+    decorator = new FilterSorterDecorator(mockItems)
+
+    const sortedItems = decorator.sort('MostUseful')
+    expect(sortedItems[0].title).toEqual(mockItems[0].title)
+    expect(sortedItems[1].title).toEqual(mockItems[1].title)
+  })
+
   describe('sorting multiple items by moderation status', () => {
     const mockUser = FactoryUser({ userName: 'user2' })
 

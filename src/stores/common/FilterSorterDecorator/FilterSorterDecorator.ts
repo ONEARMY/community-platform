@@ -74,38 +74,53 @@ export class FilterSorterDecorator<T extends IItem> {
       : listItems
   }
 
-  private sortByLatestModified(listItems: T[]) {
+  private sortByProperty(listItems: T[], propertyName: keyof IItem): T[] {
     const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) =>
-      a._contentModifiedTimestamp < b._contentModifiedTimestamp ? 1 : -1,
-    )
+
+    return _listItems.sort((a, b) => {
+      const valueA = a[propertyName]
+      const valueB = b[propertyName]
+
+      const lengthA = Array.isArray(valueA) ? valueA.length : valueA ?? 0
+      const lengthB = Array.isArray(valueB) ? valueB.length : valueB ?? 0
+
+      if (lengthA === lengthB) {
+        return 0
+      }
+
+      return lengthA < lengthB ? 1 : -1
+    })
+  }
+
+  private sortByLatestModified(listItems: T[]) {
+    return this.sortByProperty(listItems, '_contentModifiedTimestamp')
   }
 
   private sortByLatestCreated(listItems: T[]) {
-    const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) => (a._created < b._created ? 1 : -1))
+    return this.sortByProperty(listItems, '_created')
   }
 
   private sortByMostUseful(listItems: T[]) {
-    const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) =>
-      (a.votedUsefulBy || []).length < (b.votedUsefulBy || []).length ? 1 : -1,
-    )
+    return this.sortByProperty(listItems, 'votedUsefulBy')
   }
 
   private sortByUpdates(listItems: T[]) {
-    const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) =>
-      (a.updates || []).length < (b.updates || []).length ? 1 : -1,
-    )
+    return this.sortByProperty(listItems, 'updates')
   }
 
   private sortByComments(listItems: T[]) {
     const _listItems = listItems || this.allItems
 
-    return _listItems.sort((a, b) =>
-      this.calculateTotalComments(a) < this.calculateTotalComments(b) ? 1 : -1,
-    )
+    return _listItems.sort((a, b) => {
+      const totalCommentsA = this.calculateTotalComments(a)
+      const totalCommentsB = this.calculateTotalComments(b)
+
+      if (totalCommentsA === totalCommentsB) {
+        return 0
+      }
+
+      return totalCommentsA < totalCommentsB ? 1 : -1
+    })
   }
 
   private sortByModerationStatus(listItems: T[], user?: IUser) {
@@ -123,11 +138,13 @@ export class FilterSorterDecorator<T extends IItem> {
 
       if (aMatchesCondition && !bMatchesCondition) {
         return -1
-      } else if (!aMatchesCondition && bMatchesCondition) {
-        return 1
-      } else {
-        return 0
       }
+
+      if (!aMatchesCondition && bMatchesCondition) {
+        return 1
+      }
+
+      return 0
     })
   }
 

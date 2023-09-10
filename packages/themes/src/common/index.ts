@@ -106,5 +106,10 @@ export const baseTheme = {
       ...commonStyles.alert,
       backgroundColor: commonStyles.colors.red2,
     },
+    info: {
+      ...commonStyles.alert,
+      backgroundColor: commonStyles.colors.softblue,
+      color: commonStyles.colors.black,
+    },
   },
 }

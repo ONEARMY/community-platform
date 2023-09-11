@@ -7,8 +7,9 @@ const MAX_COMMENTS = 5
 type CommentListProps = {
   comments: Comment[]
   handleEdit: (_id: string, comment: string) => Promise<void>
-  handleEditRequest: () => Promise<void>
+  handleEditRequest: (_id: string) => Promise<void>
   handleDelete: (_id: string) => Promise<void>
+  handleReply?: (_id: string, comment: string) => Promise<void>
   highlightedCommentId?: string
   articleTitle?: string
   trackEvent?: (options: {
@@ -16,6 +17,7 @@ type CommentListProps = {
     category: string
     label?: string
   }) => void
+  isLoggedIn: boolean
 }
 
 export const CommentList = ({
@@ -25,7 +27,9 @@ export const CommentList = ({
   handleDelete,
   highlightedCommentId,
   handleEdit,
+  handleReply,
   trackEvent,
+  isLoggedIn
 }: CommentListProps) => {
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
@@ -74,11 +78,14 @@ export const CommentList = ({
           >
             <CommentItem
               {...comment}
+              replies={comment.replies}
               isUserVerified={!!comment.isUserVerified}
               isEditable={!!comment.isEditable}
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
+              handleReply={handleReply}
+              isLoggedIn={isLoggedIn}
             />
           </Box>
         ))}

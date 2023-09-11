@@ -27,6 +27,8 @@ export const Default: StoryFn<typeof CommentList> = () => (
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    handleReply={() => Promise.resolve()}
+    isLoggedIn={false}
   />
 )
 
@@ -37,6 +39,8 @@ export const Expandable: StoryFn<typeof CommentList> = () => (
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    handleReply={() => Promise.resolve()}
+    isLoggedIn={false}
   />
 )
 
@@ -52,5 +56,7 @@ export const Highlighted: StoryFn<typeof CommentList> = () => (
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    handleReply={() => Promise.resolve()}
+    isLoggedIn={false}
   />
 )

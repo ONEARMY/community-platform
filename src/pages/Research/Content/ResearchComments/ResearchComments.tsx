@@ -66,6 +66,10 @@ export const ResearchComments = ({
     }
   }
 
+  const handleReplySubmit = async (commentId:string, comment: string) => {
+    await researchStore.addComment(comment, update, commentId)
+  }
+
   const handleEditRequest = async () => {
     trackEvent({
       category: 'Comments',
@@ -163,8 +167,10 @@ export const ResearchComments = ({
             handleEdit={handleEdit}
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
+            handleReply={handleReplySubmit}
             highlightedCommentId={getResearchCommentId(window.location.hash)}
             trackEvent={trackEvent}
+            isLoggedIn={!!stores.userStore.activeUser}
           />
           <Box sx={{ width: '100%' }}>
             <CreateComment

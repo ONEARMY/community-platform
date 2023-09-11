@@ -262,12 +262,27 @@ const transformToUserComment = (
   item: IResearch.ItemDB,
 ): UserComment[] => {
   if (!comments) return []
-  return comments.map((c) => ({
-    ...c,
-    isEditable:
-      c.creatorName === loggedInUser?.userName ||
-      isAllowedToEditContent(item, loggedInUser),
-  }))
+  return comments.map((c) => {
+    const userComments = {
+      ...c,
+      isEditable:
+        c.creatorName === loggedInUser?.userName ||
+        isAllowedToEditContent(item, loggedInUser),
+    }
+
+    if (userComments.replies) {
+      const userReplies = userComments.replies.map(reply => ({
+        ...reply,
+        isEditable: 
+          reply.creatorName === loggedInUser?.userName ||
+          isAllowedToEditContent(item, loggedInUser),
+      }))
+
+      userComments.replies = userReplies
+    }
+
+    return userComments
+  })
 }
 
 export default ResearchArticle

@@ -147,7 +147,8 @@ export class ResearchStore extends ModuleStore {
 
   public formatResearchCommentList(comments: IComment[] = []): IComment[] {
     return comments.map((comment: IComment) => {
-      return {
+
+      const formatedComment = {
         ...comment,
         text: changeUserReferenceToPlainText(comment.text),
         isUserVerified:
@@ -155,6 +156,23 @@ export class ResearchStore extends ModuleStore {
             comment.creatorName
           ],
       }
+
+      if (comment.replies) {
+        const formatedReplies = comment.replies.map((reply: IComment) => {
+          return {
+            ...reply,
+            text: changeUserReferenceToPlainText(reply.text),
+            isUserVerified:
+              !!this.aggregationsStore.aggregations.users_verified?.[
+                reply.creatorName
+              ],
+          }
+        })
+
+        formatedComment.replies = formatedReplies
+      }
+
+      return formatedComment
     })
   }
 
@@ -378,6 +396,7 @@ export class ResearchStore extends ModuleStore {
   public async addComment(
     text: string,
     update: IResearch.Update | IResearch.UpdateDB,
+    commentId?: string
   ) {
     const user = this.activeUser
     const researchItem = this.activeResearchItem
@@ -412,9 +431,27 @@ export class ResearchStore extends ModuleStore {
           updateWithMeta.images = []
         }
 
-        updateWithMeta.comments = updateWithMeta.comments
-          ? [...toJS(updateWithMeta.comments), newComment]
-          : [newComment]
+        if (commentId) {
+          logger.info(newComment)
+          const newComments = updateWithMeta.comments?.map(c => {
+            if (c._id == commentId) {
+              if (!c.replies)
+                c.replies = []
+
+              c.replies.push(newComment)
+            }
+            logger.info(c.replies)
+            return c
+          })
+
+          updateWithMeta.comments = newComments
+        } else {
+          newComment.replies = []
+
+          updateWithMeta.comments = updateWithMeta.comments
+            ? [...toJS(updateWithMeta.comments), newComment]
+            : [newComment]
+        }
 
         const existingUpdateIndex = researchItem.updates.findIndex(
           (upd) => upd._id === (update as IResearch.UpdateDB)._id,
@@ -470,12 +507,18 @@ export class ResearchStore extends ModuleStore {
           .doc(item._id)
         const id = dbRef.id
 
-        const newComments = toJS(update.comments).filter(
-          (comment) =>
-            !(
-              (comment._creatorId === user._id || hasAdminRights(user)) &&
-              comment._id === commentId
-            ),
+        const filterValidation = (comment: IComment) => {
+          return !((comment._creatorId === user._id || hasAdminRights(user)) &&
+          comment._id === commentId)
+        }
+
+        const filteredReplies = toJS(update.comments).map(comment => {
+          const newReplies = comment.replies?.filter(reply => filterValidation(reply))
+          return {...comment, replies: newReplies}
+        })
+
+        const newComments = filteredReplies.filter(
+          (comment) => filterValidation(comment),
         )
 
         const updateWithMeta = { ...update }
@@ -531,12 +574,6 @@ export class ResearchStore extends ModuleStore {
           .doc(item._id)
         const id = dbRef.id
 
-        const pastComments = toJS(update.comments)
-        const commentIndex = pastComments.findIndex(
-          (comment) =>
-            (comment._creatorId === user._id || hasAdminRights(user)) &&
-            comment._id === commentId,
-        )
         const updateWithMeta = { ...update }
         if (update.images.length > 0) {
           const imgMeta = await this.uploadCollectionBatch(
@@ -547,33 +584,46 @@ export class ResearchStore extends ModuleStore {
           const newImg = imgMeta.map((img) => ({ ...img }))
           updateWithMeta.images = newImg
         } else updateWithMeta.images = []
-
-        if (commentIndex !== -1) {
-          pastComments[commentIndex].text = newText
-            .slice(0, MAX_COMMENT_LENGTH)
-            .trim()
-          pastComments[commentIndex]._edited = new Date().toISOString()
-          updateWithMeta.comments = pastComments
-
-          const existingUpdateIndex = item.updates.findIndex(
-            (upd) => upd._id === (update as IResearch.UpdateDB)._id,
-          )
-
-          const newItem = {
-            ...toJS(item),
-            updates: [...toJS(item.updates)],
+        
+        const editedComments = toJS(update.comments).map(comment => {
+          if ((comment._creatorId === user._id || hasAdminRights(user)) &&
+          comment._id === commentId) {
+            comment.text = newText.slice(0, MAX_COMMENT_LENGTH).trim()
+            comment._edited = new Date().toISOString()
+          } else {
+            comment.replies = comment.replies?.map(reply => {
+              if ((reply._creatorId === user._id || hasAdminRights(user)) &&
+              reply._id === commentId) {
+                reply.text = newText.slice(0, MAX_COMMENT_LENGTH).trim()
+                reply._edited = new Date().toISOString()
+              }
+              return reply
+            })
           }
+          return comment
+        })
 
-          newItem.updates[existingUpdateIndex] = {
-            ...(updateWithMeta as IResearch.UpdateDB),
-          }
+        updateWithMeta.comments = editedComments
 
-          const updatedItem = await this._updateResearchItem(dbRef, newItem)
+        const existingUpdateIndex = item.updates.findIndex(
+          (upd) => upd._id === (update as IResearch.UpdateDB)._id,
+        )
 
-          if (updatedItem) {
-            this.setActiveResearchItemBySlug(updatedItem.slug)
-          }
+        const newItem = {
+          ...toJS(item),
+          updates: [...toJS(item.updates)],
         }
+
+        newItem.updates[existingUpdateIndex] = {
+          ...(updateWithMeta as IResearch.UpdateDB),
+        }
+
+        const updatedItem = await this._updateResearchItem(dbRef, newItem)
+
+        if (updatedItem) {
+          this.setActiveResearchItemBySlug(updatedItem.slug)
+        }
+        
       }
     } catch (err) {
       logger.error(err)

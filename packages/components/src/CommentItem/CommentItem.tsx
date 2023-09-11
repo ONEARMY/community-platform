@@ -6,6 +6,8 @@ import { EditComment } from '../EditComment/EditComment'
 import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
+import { CreateComment } from '../CreateComment/CreateComment'
+import { CommentList } from '../CommentList/CommentList'
 
 export interface CommentItemProps {
   text: string
@@ -16,9 +18,12 @@ export interface CommentItemProps {
   _id: string
   _edited?: string
   _created?: string
-  handleEdit?: (commentId: string, newCommentText: string) => void
+  replies?: any[]
+  handleEdit?: (commentId: string, newCommentText: string) => Promise<void>
   handleDelete?: (commentId: string) => Promise<void>
   handleEditRequest?: (commentId: string) => Promise<void>
+  handleReply?: (commentId: string, replyComment: string) => Promise<void>
+  isLoggedIn?: boolean
 }
 
 const formatDate = (d: string | undefined): string => {
@@ -34,6 +39,9 @@ export const CommentItem = (props: CommentItemProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
+  const [isShowReplies, setShowReplies] = useState(false)
+  const [replyToComment, setToReply] = useState(false)
+  const [replyComment, setReplyComment] = useState('')
   const {
     creatorCountry,
     creatorName,
@@ -45,7 +53,10 @@ export const CommentItem = (props: CommentItemProps) => {
     handleEditRequest,
     handleDelete,
     handleEdit,
+    handleReply,
     isEditable,
+    isLoggedIn,
+    replies
   } = props
 
   useEffect(() => {
@@ -65,111 +76,179 @@ export const CommentItem = (props: CommentItemProps) => {
     }
   }
 
+  const showReplies = () => {
+    setShowReplies(!isShowReplies)
+    if (isShowReplies) {
+      setToReply(false)
+    }
+  }
+
+  const openReply = () => {
+    setToReply(!replyToComment)
+    setShowReplies(true)
+  }
+  
+  const replyBtnStyle = {
+    color: 'gray',
+    cursor: 'pointer',
+    fontSize: '14px',
+    marginTop: 'auto',
+    marginBottom: 'auto'
+  }
+  
+  const onSubmitReply = async (comment: string) => {
+    if (handleReply)
+      handleReply(_id, comment)
+      setReplyComment('')
+  }
+
   return (
-    <Box id={`comment:${_id}`} data-cy="comment">
-      <Flex
-        p="3"
-        bg={'white'}
-        sx={{
-          width: '100%',
-          flexDirection: 'column',
-          borderRadius: '5px',
-        }}
-      >
-        <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <Username
-            user={{
-              userName: creatorName,
-              countryCode: creatorCountry,
-            }}
-            isVerified={!!isUserVerified}
-          />
-          <Flex sx={{ alignItems: 'center' }}>
-            <>
-              {_edited && (
-                <Text sx={{ fontSize: 0, color: 'grey' }} mr={2}>
-                  (Edited)
-                </Text>
-              )}
-              <Text sx={{ fontSize: 1 }}>
-                {formatDate(_edited || _created)}
-              </Text>
-            </>
-          </Flex>
-        </Flex>
-        <Text
-          data-cy="comment-text"
-          mt={2}
-          mb={2}
+    <>
+      <Box id={`comment:${_id}`} data-cy="comment">
+        <Flex
+          p="3"
+          bg={'white'}
           sx={{
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            overflow: 'hidden',
-            maxHeight: isShowMore ? 'max-content' : '128px',
-            fontFamily: 'body',
-            lineHeight: 1.3,
+            width: '100%',
+            flexDirection: 'column',
+            borderRadius: '5px',
           }}
-          ref={textRef}
         >
-          <LinkifyText>{text}</LinkifyText>
-        </Text>
-        {textHeight > 129 && (
-          <a
-            onClick={showMore}
-            style={{
-              color: 'gray',
-              cursor: 'pointer',
-              fontSize: '14px',
+          <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <Username
+              user={{
+                userName: creatorName,
+                countryCode: creatorCountry,
+              }}
+              isVerified={!!isUserVerified}
+            />
+            <Flex sx={{ alignItems: 'center' }}>
+              <>
+                {_edited && (
+                  <Text sx={{ fontSize: 0, color: 'grey' }} mr={2}>
+                    (Edited)
+                  </Text>
+                )}
+                <Text sx={{ fontSize: 1 }}>
+                  {formatDate(_edited || _created)}
+                </Text>
+              </>
+            </Flex>
+          </Flex>
+          <Text
+            data-cy="comment-text"
+            mt={2}
+            mb={2}
+            sx={{
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+              overflow: 'hidden',
+              maxHeight: isShowMore ? 'max-content' : '128px',
+              fontFamily: 'body',
+              lineHeight: 1.3,
             }}
+            ref={textRef}
           >
-            {isShowMore ? 'Show less' : 'Show more'}
-          </a>
-        )}
-        <Flex ml="auto">
-          {isEditable && (
-            <>
-              <Button
-                data-cy="CommentItem: edit button"
-                variant={'outline'}
-                small={true}
-                icon={'edit'}
-                onClick={() => onEditRequest(_id)}
-              >
-                edit
-              </Button>
-              <Button
-                data-cy="CommentItem: delete button"
-                variant={'outline'}
-                small={true}
-                icon="delete"
-                onClick={() => setShowDeleteModal(true)}
-                ml={2}
-              >
-                delete
-              </Button>
-            </>
+            <LinkifyText>{text}</LinkifyText>
+          </Text>
+          {replies && replies.length > 0 && (
+            <a
+              onClick={showReplies}
+              style={{
+                ...replyBtnStyle
+              }}
+            >
+              {replies.length} replies
+            </a>
           )}
-        </Flex>
+          {textHeight > 129 && (
+            <a
+              onClick={showMore}
+              style={{
+                color: 'gray',
+                cursor: 'pointer',
+                fontSize: '14px',
+              }}
+            >
+              {isShowMore ? 'Show less' : 'Show more'}
+            </a>
+          )}
+          <Flex ml="auto">
+            {handleReply && <a
+              onClick={openReply}
+              style={isEditable ? {
+                ...replyBtnStyle,
+                marginRight: '10px',
+              } : {...replyBtnStyle}}
+            >
+              reply
+            </a>}
+            {isEditable && (
+              <>
+                <Button
+                  data-cy="CommentItem: edit button"
+                  variant={'outline'}
+                  small={true}
+                  icon={'edit'}
+                  onClick={() => onEditRequest(_id)}
+                >
+                  edit
+                </Button>
+                <Button
+                  data-cy="CommentItem: delete button"
+                  variant={'outline'}
+                  small={true}
+                  icon="delete"
+                  onClick={() => setShowDeleteModal(true)}
+                  ml={2}
+                >
+                  delete
+                </Button>
+              </>
+            )}
+          </Flex>
 
-        <Modal width={600} isOpen={showEditModal}>
-          <EditComment
-            comment={text}
-            handleSubmit={(commentText) => {
-              handleEdit && handleEdit(_id, commentText)
-              setShowEditModal(false)
-            }}
-            handleCancel={() => setShowEditModal(false)}
+          <Modal width={600} isOpen={showEditModal}>
+            <EditComment
+              comment={text}
+              handleSubmit={(commentText) => {
+                handleEdit && handleEdit(_id, commentText)
+                setShowEditModal(false)
+              }}
+              handleCancel={() => setShowEditModal(false)}
+            />
+          </Modal>
+
+          <ConfirmModal
+            isOpen={showDeleteModal}
+            message="Are you sure you want to delete this comment?"
+            confirmButtonText="Delete"
+            handleCancel={() => setShowDeleteModal(false)}
+            handleConfirm={() => handleDelete && handleDelete(_id)}
           />
-        </Modal>
-
-        <ConfirmModal
-          isOpen={showDeleteModal}
-          message="Are you sure you want to delete this comment?"
-          confirmButtonText="Delete"
-          handleCancel={() => setShowDeleteModal(false)}
-          handleConfirm={() => handleDelete && handleDelete(_id)}
-        />
+        </Flex>
+      </Box>
+      {replies && (handleDelete && handleEdit && handleEditRequest && handleReply) && isShowReplies &&
+      <Flex mt={5} ml={6}>
+        <CommentList
+            comments={replies}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            handleEditRequest={handleEditRequest}
+            isLoggedIn={!!isLoggedIn}
+          />
       </Flex>
-    </Box>
+      }
+      {replyToComment && handleReply && <Box  sx={{ width: 'auto' }} mb={3} ml={6}>
+        <CreateComment
+          maxLength={3000}
+          comment={replyComment}
+          onChange={setReplyComment}
+          onSubmit={onSubmitReply}
+          isLoggedIn={!!isLoggedIn}
+          isReply={true}
+        />
+      </Box>}
+    </> 
   )
 }

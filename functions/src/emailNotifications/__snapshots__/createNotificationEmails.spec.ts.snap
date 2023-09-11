@@ -82,9 +82,7 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
 
               <p>
                 New comment on your
-                <a href="https://community.preciousplastic.com/test"
-                  >research</a
-                >
+                <a href="https://community.preciousplastic.com/test">how-to</a>
                 by
                 <a href="https://community.preciousplastic.com/u/user_1"
                   >User 1</a
@@ -109,6 +107,14 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
                   >research</a
                 >
                 you follow
+              </p>
+
+              <p>
+                Your
+                <a href="https://community.preciousplastic.com/test"
+                  >research</a
+                >
+                needs updates.
               </p>
             </div>
           </div>
@@ -217,9 +223,7 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
                   >User 2</a
                 >
                 found your
-                <a href="https://community.preciousplastic.com/test"
-                  >research</a
-                >
+                <a href="https://community.preciousplastic.com/test">how-to</a>
                 useful
               </p>
 
@@ -238,9 +242,12 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
                   >User 3</a
                 >
                 mentioned you in this
-                <a href="https://community.preciousplastic.com/test"
-                  >research</a
-                >
+                <a href="https://community.preciousplastic.com/test">how-to</a>
+              </p>
+              <p>
+                Your
+                <a href="https://community.preciousplastic.com/test">map pin</a>
+                has been approved!
               </p>
             </div>
           </div>

@@ -39,19 +39,30 @@ export const getResourceLink = (
   notificationType: NotificationType,
   relevantUrl: string,
 ) => {
-  let resourceLabel: string
-  switch (notificationType) {
-    case 'new_comment':
-    case 'howto_useful':
-    case 'howto_mention':
-      resourceLabel = 'how-to'
-    case 'new_comment_research':
-    case 'research_useful':
-    case 'research_mention':
-    case 'research_update':
-      resourceLabel = 'research'
+  const getLabel = (type: NotificationType) => {
+    switch (type) {
+      case 'new_comment':
+      case 'howto_useful':
+      case 'howto_mention':
+      case 'howto_approved':
+      case 'howto_needs_updates':
+        return 'how-to'
+      case 'new_comment_research':
+      case 'research_useful':
+      case 'research_mention':
+      case 'research_update':
+      case 'research_approved':
+      case 'research_needs_updates':
+        return 'research'
+      case 'map_pin_approved':
+      case 'map_pin_needs_updates':
+        return 'map pin'
+      default:
+        return 'item'
+    }
   }
-  return `<a href='${SITE_URL}${relevantUrl}'>${resourceLabel}</a>`
+
+  return `<a href='${SITE_URL}${relevantUrl}'>${getLabel(notificationType)}</a>`
 }
 
 const getCommentListItem = (notification: INotification) => `
@@ -102,6 +113,22 @@ you follow
 </p>
 `
 
+const getModerationApprovedListItem = (notification: INotification) => `
+<p>
+    Your ${getResourceLink(
+      notification.type,
+      notification.relevantUrl,
+    )} has been approved!
+</p>`
+
+const getModerationRejectedListItem = (notification: INotification) => `
+<p>
+    Your ${getResourceLink(
+      notification.type,
+      notification.relevantUrl,
+    )} needs updates.
+</p>`
+
 const isCommentNotification = (notification: INotification) =>
   ['new_comment_research', 'new_comment'].includes(notification.type)
 
@@ -113,6 +140,18 @@ const isUsefulNotification = (notification: INotification) =>
 
 const isUpdateNotification = (notification: INotification) =>
   notification.type === 'research_update'
+
+const isModerationApprovedNotification = (notification: INotification) =>
+  ['howto_approved', 'map_pin_approved', 'research_approved'].includes(
+    notification.type,
+  )
+
+const isModerationRejectedNotification = (notification: INotification) =>
+  [
+    'howto_needs_updates',
+    'map_pin_needs_updates',
+    'research_needs_updates',
+  ].includes(notification.type)
 
 export const getNotificationListItem = (
   notification: INotification,
@@ -128,5 +167,11 @@ export const getNotificationListItem = (
   }
   if (isUpdateNotification(notification)) {
     return getUpdateListItem(notification)
+  }
+  if (isModerationApprovedNotification(notification)) {
+    return getModerationApprovedListItem(notification)
+  }
+  if (isModerationRejectedNotification(notification)) {
+    return getModerationRejectedListItem(notification)
   }
 }

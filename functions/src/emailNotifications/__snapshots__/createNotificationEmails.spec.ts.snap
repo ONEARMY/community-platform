@@ -114,7 +114,7 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
                 <a href="https://community.preciousplastic.com/test"
                   >research</a
                 >
-                needs updates.
+                needs updates
               </p>
             </div>
           </div>
@@ -247,7 +247,7 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
               <p>
                 Your
                 <a href="https://community.preciousplastic.com/test">map pin</a>
-                has been approved!
+                has been approved
               </p>
             </div>
           </div>

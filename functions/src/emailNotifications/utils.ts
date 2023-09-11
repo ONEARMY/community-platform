@@ -118,7 +118,7 @@ const getModerationApprovedListItem = (notification: INotification) => `
     Your ${getResourceLink(
       notification.type,
       notification.relevantUrl,
-    )} has been approved!
+    )} has been approved
 </p>`
 
 const getModerationRejectedListItem = (notification: INotification) => `
@@ -126,7 +126,7 @@ const getModerationRejectedListItem = (notification: INotification) => `
     Your ${getResourceLink(
       notification.type,
       notification.relevantUrl,
-    )} needs updates.
+    )} needs updates
 </p>`
 
 const isCommentNotification = (notification: INotification) =>

@@ -143,7 +143,7 @@ export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
   return (
     roles.includes('admin') ||
     roles.includes('super-admin') ||
-    (doc._createdBy! === user.userName)
+    doc._createdBy! === user.userName
   )
 }
 

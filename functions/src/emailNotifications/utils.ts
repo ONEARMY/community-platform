@@ -35,35 +35,43 @@ export const getProjectName = () => {
 export const getUserLink = (displayName: string, userName: string) =>
   `<a href='${SITE_URL}/u/${userName}'>${displayName}</a>`
 
-export const getResourceLink = (
+const HOWTO_NOTIFICATIONS: NotificationType[] = [
+  'new_comment',
+  'howto_useful',
+  'howto_mention',
+  'howto_approved',
+  'howto_needs_updates',
+]
+const RESEARCH_NOTIFICATIONS = [
+  'new_comment_research',
+  'research_useful',
+  'research_mention',
+  'research_update',
+  'research_approved',
+  'research_needs_updates',
+]
+const MAP_PIN_NOTIFICATIONS = ['map_pin_approved', 'map_pin_needs_updates']
+
+const getResourceLabel = (type: NotificationType) => {
+  if (HOWTO_NOTIFICATIONS.includes(type)) {
+    return 'how-to'
+  }
+  if (RESEARCH_NOTIFICATIONS.includes(type)) {
+    return 'research'
+  }
+  if (MAP_PIN_NOTIFICATIONS.includes(type)) {
+    return 'map pin'
+  }
+  return 'item'
+}
+
+const getResourceLink = (
   notificationType: NotificationType,
   relevantUrl: string,
-) => {
-  const getLabel = (type: NotificationType) => {
-    switch (type) {
-      case 'new_comment':
-      case 'howto_useful':
-      case 'howto_mention':
-      case 'howto_approved':
-      case 'howto_needs_updates':
-        return 'how-to'
-      case 'new_comment_research':
-      case 'research_useful':
-      case 'research_mention':
-      case 'research_update':
-      case 'research_approved':
-      case 'research_needs_updates':
-        return 'research'
-      case 'map_pin_approved':
-      case 'map_pin_needs_updates':
-        return 'map pin'
-      default:
-        return 'item'
-    }
-  }
-
-  return `<a href='${SITE_URL}${relevantUrl}'>${getLabel(notificationType)}</a>`
-}
+) =>
+  `<a href='${SITE_URL}${relevantUrl}'>${getResourceLabel(
+    notificationType,
+  )}</a>`
 
 const getCommentListItem = (notification: INotification) => `
 <p>

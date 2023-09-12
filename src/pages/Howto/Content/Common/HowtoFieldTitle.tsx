@@ -2,28 +2,12 @@ import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
 
 import { COMPARISONS } from 'src/utils/comparisons'
-import {
-  composeValidators,
-  minValue,
-  required,
-  validateTitle,
-} from 'src/utils/validators'
+import { composeValidators, minValue, required } from 'src/utils/validators'
 import { HOWTO_TITLE_MAX_LENGTH, HOWTO_TITLE_MIN_LENGTH } from '../../constants'
 import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'
 
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import type { IModerable } from 'src/models/common.models'
-import type { ParentType } from './Howto.form'
-
-interface IProps {
-  _id: IModerable['_id']
-  parentType: ParentType
-  store: HowtoStore
-}
-
-export const HowtoFieldTitle = (props: IProps) => {
-  const { _id, parentType, store } = props
+export const HowtoFieldTitle = () => {
   const { placeholder, title } = intro.title
 
   const name = 'title'
@@ -32,7 +16,6 @@ export const HowtoFieldTitle = (props: IProps) => {
     const validators = composeValidators(
       required,
       minValue(HOWTO_TITLE_MIN_LENGTH),
-      validateTitle(parentType, _id, store),
     )
 
     return validators(value)

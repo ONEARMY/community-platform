@@ -198,7 +198,7 @@ const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
 const calculateTotalComments = (item: IResearch.ItemDB) => {
   if (item.updates) {
     const commentOnUpdates = item.updates.reduce((totalComments, update) => {
-      const updateCommentsLength = update.comments ? update.comments.length : 0
+      const updateCommentsLength = !update._deleted && update.comments ? update.comments.length : 0
       return totalComments + updateCommentsLength
     }, 0)
 
@@ -212,7 +212,7 @@ const getUpdateText = (item: IResearch.ItemDB) => {
   return item.updates?.length
     ? String(
         item.updates.filter(
-          (update) => update.status !== 'draft' && update._deleted !== true,
+          (update) => update.status !== 'draft' && !update._deleted,
         ).length,
       )
     : '0'

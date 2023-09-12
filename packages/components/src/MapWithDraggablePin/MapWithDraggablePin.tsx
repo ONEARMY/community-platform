@@ -3,7 +3,7 @@ import { Map, TileLayer, Marker, ZoomControl } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { Button, OsmGeocoding } from '../'
-import { Box, Flex, Text } from 'theme-ui'
+import { Alert, Box, Flex, Text } from 'theme-ui'
 import customMarkerIcon from '../../assets/icons/map-marker.png'
 import type { Result } from '../OsmGeocoding/types'
 
@@ -149,18 +149,16 @@ export const MapWithDraggablePin = (props: Props) => {
           />
         </Map>
       </div>
-      <Box
+      <Alert
+        variant="info"
         sx={{
-          p: 2,
           mt: 2,
-          background: 'softblue',
-          borderRadius: 1,
         }}
       >
         <Text sx={{ fontSize: 1 }}>
           You can click on the map, or drag the marker to adjust it's position.
         </Text>
-      </Box>
+      </Alert>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
-import { Heading, Flex, Box, Text } from 'theme-ui'
+import { Heading, Flex, Box, Text, Alert } from 'theme-ui'
 import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea } from 'oa-components'
 import { FieldArray } from 'react-final-form-arrays'
@@ -99,17 +99,13 @@ export const CoverImages = ({
         }}
       </FieldArray>
 
-      <Box
-        mt={2}
-        p={2}
-        sx={{ width: '100%', borderRadius: '3px', background: 'softblue' }}
-      >
-        <Text sx={{ fontSize: 1 }}>
+      <Alert mt={2} variant="info">
+        <Text sx={{ fontSize: 1, textAlign: 'left' }}>
           The cover images are shown in your profile and helps us evaluate your
           account. Make sure the first image shows your space. Best size is
           1920x1080.
         </Text>
-      </Box>
+      </Alert>
     </>
   )
 

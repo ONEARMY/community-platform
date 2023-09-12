@@ -66,7 +66,7 @@ export const ResearchComments = ({
     }
   }
 
-  const handleReplySubmit = async (commentId:string, comment: string) => {
+  const handleReplySubmit = async (commentId: string, comment: string) => {
     await researchStore.addComment(comment, update, commentId)
   }
 

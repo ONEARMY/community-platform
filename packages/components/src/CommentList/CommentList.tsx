@@ -29,7 +29,7 @@ export const CommentList = ({
   handleEdit,
   handleReply,
   trackEvent,
-  isLoggedIn
+  isLoggedIn,
 }: CommentListProps) => {
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS

@@ -56,7 +56,7 @@ export const CommentItem = (props: CommentItemProps) => {
     handleReply,
     isEditable,
     isLoggedIn,
-    replies
+    replies,
   } = props
 
   useEffect(() => {
@@ -87,19 +87,16 @@ export const CommentItem = (props: CommentItemProps) => {
     setToReply(!replyToComment)
     setShowReplies(true)
   }
-  
-  const replyBtnStyle = {
+
+  const secondaryBtnStyle = {
     color: 'gray',
     cursor: 'pointer',
     fontSize: '14px',
-    marginTop: 'auto',
-    marginBottom: 'auto'
   }
-  
+
   const onSubmitReply = async (comment: string) => {
-    if (handleReply)
-      handleReply(_id, comment)
-      setReplyComment('')
+    if (handleReply) handleReply(_id, comment)
+    setReplyComment('')
   }
 
   return (
@@ -114,7 +111,9 @@ export const CommentItem = (props: CommentItemProps) => {
             borderRadius: '5px',
           }}
         >
-          <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
+          <Flex
+            sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}
+          >
             <Username
               user={{
                 userName: creatorName,
@@ -151,38 +150,40 @@ export const CommentItem = (props: CommentItemProps) => {
           >
             <LinkifyText>{text}</LinkifyText>
           </Text>
-          {replies && replies.length > 0 && (
-            <a
-              onClick={showReplies}
-              style={{
-                ...replyBtnStyle
-              }}
-            >
-              {replies.length} replies
-            </a>
-          )}
-          {textHeight > 129 && (
-            <a
-              onClick={showMore}
-              style={{
-                color: 'gray',
-                cursor: 'pointer',
-                fontSize: '14px',
-              }}
-            >
-              {isShowMore ? 'Show less' : 'Show more'}
-            </a>
-          )}
+          <Flex mb={3}>
+            {textHeight > 129 && (
+              <a onClick={showMore} style={{ ...secondaryBtnStyle }}>
+                {isShowMore ? 'Show less' : 'Show more'}
+              </a>
+            )}
+            {replies && replies.length > 0 && (
+              <a
+                onClick={showReplies}
+                style={
+                  textHeight > 129
+                    ? {
+                        ...secondaryBtnStyle,
+                        marginLeft: '10px',
+                      }
+                    : { ...secondaryBtnStyle }
+                }
+              >
+                {replies.length} replies
+              </a>
+            )}
+            {handleReply && (
+              <a
+                onClick={openReply}
+                style={{
+                  ...secondaryBtnStyle,
+                  marginLeft: 'auto',
+                }}
+              >
+                reply
+              </a>
+            )}
+          </Flex>
           <Flex ml="auto">
-            {handleReply && <a
-              onClick={openReply}
-              style={isEditable ? {
-                ...replyBtnStyle,
-                marginRight: '10px',
-              } : {...replyBtnStyle}}
-            >
-              reply
-            </a>}
             {isEditable && (
               <>
                 <Button
@@ -228,27 +229,34 @@ export const CommentItem = (props: CommentItemProps) => {
           />
         </Flex>
       </Box>
-      {replies && (handleDelete && handleEdit && handleEditRequest && handleReply) && isShowReplies &&
-      <Flex mt={5} ml={6}>
-        <CommentList
-            comments={replies}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-            handleEditRequest={handleEditRequest}
+      {replies &&
+        handleDelete &&
+        handleEdit &&
+        handleEditRequest &&
+        handleReply &&
+        isShowReplies && (
+          <Flex mt={5} ml={6}>
+            <CommentList
+              comments={replies}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+              handleEditRequest={handleEditRequest}
+              isLoggedIn={!!isLoggedIn}
+            />
+          </Flex>
+        )}
+      {replyToComment && handleReply && (
+        <Box sx={{ width: 'auto' }} mb={3} ml={6}>
+          <CreateComment
+            maxLength={3000}
+            comment={replyComment}
+            onChange={setReplyComment}
+            onSubmit={onSubmitReply}
             isLoggedIn={!!isLoggedIn}
+            isReply={true}
           />
-      </Flex>
-      }
-      {replyToComment && handleReply && <Box  sx={{ width: 'auto' }} mb={3} ml={6}>
-        <CreateComment
-          maxLength={3000}
-          comment={replyComment}
-          onChange={setReplyComment}
-          onSubmit={onSubmitReply}
-          isLoggedIn={!!isLoggedIn}
-          isReply={true}
-        />
-      </Box>}
-    </> 
+        </Box>
+      )}
+    </>
   )
 }

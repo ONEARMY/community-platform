@@ -3,6 +3,7 @@ import { Icon, ModerationStatus, Username, Tooltip } from 'oa-components'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
+import { calculateTotalComments } from 'src/utils/helpers'
 import { Card, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 
 interface IProps {
@@ -192,20 +193,6 @@ const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
       : contentModifiedDate
   } else {
     return variant === 'long' ? `Created ${creationDate}` : creationDate
-  }
-}
-
-const calculateTotalComments = (item: IResearch.ItemDB) => {
-  if (item.updates) {
-    const commentOnUpdates = item.updates.reduce((totalComments, update) => {
-      const updateCommentsLength =
-        !update._deleted && update.comments ? update.comments.length : 0
-      return totalComments + updateCommentsLength
-    }, 0)
-
-    return commentOnUpdates ? String(commentOnUpdates) : '0'
-  } else {
-    return '0'
   }
 }
 

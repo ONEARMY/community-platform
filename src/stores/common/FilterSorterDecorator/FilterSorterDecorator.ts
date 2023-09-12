@@ -2,6 +2,7 @@ import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
 import type { IComment, IModerationStatus, IUser } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
+import { calculateTotalComments } from 'src/utils/helpers'
 
 export interface IItem {
   _modified: string
@@ -13,7 +14,9 @@ export interface IItem {
   category?: ICategory
   researchCategory?: ICategory
   updates?: {
+    _deleted?: boolean
     comments?: IComment[]
+    status: 'draft' | 'published'
   }[]
   moderation?: IModerationStatus
 }
@@ -35,21 +38,6 @@ export class FilterSorterDecorator<T extends IItem> {
   public allItems: T[] = []
 
   public SEARCH_WEIGHTS: { name: string; weight: number }[]
-
-  public calculateTotalComments = (item: T) => {
-    if (item.updates) {
-      const commentOnUpdates = item.updates.reduce((totalComments, update) => {
-        const updateCommentsLength = update.comments
-          ? update.comments.length
-          : 0
-        return totalComments + updateCommentsLength
-      }, 0)
-
-      return commentOnUpdates ? commentOnUpdates : '0'
-    } else {
-      return '0'
-    }
-  }
 
   constructor(_allItems: T[]) {
     this.activeSorter = ItemSortingOption.None
@@ -112,8 +100,8 @@ export class FilterSorterDecorator<T extends IItem> {
     const _listItems = listItems || this.allItems
 
     return _listItems.sort((a, b) => {
-      const totalCommentsA = this.calculateTotalComments(a)
-      const totalCommentsB = this.calculateTotalComments(b)
+      const totalCommentsA = calculateTotalComments(a)
+      const totalCommentsB = calculateTotalComments(b)
 
       if (totalCommentsA === totalCommentsB) {
         return 0

@@ -9,6 +9,7 @@ import {
   needsModeration,
   isAllowedToEditContent,
   isAllowedToPin,
+  calculateTotalComments,
 } from './helpers'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -198,6 +199,71 @@ describe('src/utils/helpers', () => {
           }),
         ),
       ).toBe(false)
+    })
+  })
+
+  describe('calculateTotalComments Function', () => {
+    it('should return 0 when item has no updates', () => {
+      const item = { item: {} } as any
+      expect(calculateTotalComments(item)).toBe('0')
+    })
+
+    it('should return 0 when updates have no comments', () => {
+      const item = {
+        updates: Array.from({ length: 3 }).fill(
+          {
+            status: 'published',
+            _deleted: false,
+            comments: [],
+          },
+          0,
+          3,
+        ),
+      } as any
+      expect(calculateTotalComments(item)).toBe('0')
+    })
+
+    it('should return the correct amount of comments', () => {
+      const item = {
+        updates: Array.from({ length: 3 }).fill(
+          {
+            status: 'published',
+            _deleted: false,
+            comments: Array.from({ length: 3 }),
+          },
+          0,
+          3,
+        ),
+      } as any
+      expect(calculateTotalComments(item)).toBe('9')
+    })
+
+    it('should ignore deleted and draft updates', () => {
+      const item = {
+        updates: Array.from({ length: 2 })
+          .fill(
+            {
+              status: 'published',
+              _deleted: false,
+              comments: Array.from({ length: 2 }),
+            },
+            0,
+            3,
+          )
+          .concat([
+            {
+              status: 'published',
+              _deleted: true,
+              comments: Array.from({ length: 3 }),
+            },
+            {
+              status: 'draft',
+              _deleted: false,
+              comments: Array.from({ length: 6 }),
+            },
+          ]),
+      } as any
+      expect(calculateTotalComments(item)).toBe('4')
     })
   })
 })

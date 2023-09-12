@@ -144,8 +144,8 @@ describe('FilterSorterDecorator', () => {
 
   test('sort by comments', () => {
     const sortedItems = decorator.sort('Comments')
-    expect(decorator.calculateTotalComments(sortedItems[0])).toBe(4)
-    expect(decorator.calculateTotalComments(sortedItems[1])).toBe(3)
+    expect(sortedItems[0].title).toBe(mockItems[1].title)
+    expect(sortedItems[1].title).toBe(mockItems[0].title)
   })
 
   test('get sorted items with no active sorter', () => {

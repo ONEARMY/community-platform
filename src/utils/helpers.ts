@@ -1,7 +1,9 @@
 import { isObservableObject, toJS } from 'mobx'
+import type { IResearch } from 'src/models'
 import type { DBDoc, IModerable } from 'src/models/common.models'
 import type { IMapPin } from 'src/models/maps.models'
 import type { IUser } from 'src/models/user.models'
+import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text: string) => {
@@ -143,7 +145,7 @@ export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
   return (
     roles.includes('admin') ||
     roles.includes('super-admin') ||
-    (doc._createdBy && doc._createdBy === user.userName)
+    doc._createdBy! === user.userName
   )
 }
 
@@ -152,6 +154,22 @@ export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {
     return true
   } else {
     return false
+  }
+}
+
+export const calculateTotalComments = (item: IResearch.ItemDB | IItem) => {
+  if (item.updates) {
+    const commentOnUpdates = item.updates.reduce((totalComments, update) => {
+      const updateCommentsLength =
+        !update._deleted && update.status !== 'draft' && update.comments
+          ? update.comments.length
+          : 0
+      return totalComments + updateCommentsLength
+    }, 0)
+
+    return commentOnUpdates ? String(commentOnUpdates) : '0'
+  } else {
+    return '0'
   }
 }
 

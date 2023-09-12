@@ -1,4 +1,5 @@
-import type { IModerable } from 'src/models'
+import type { IModerable, IResearch } from 'src/models'
+import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 import {
   stripSpecialCharacters,
   formatLowerNoSpecial,
@@ -12,6 +13,7 @@ import {
   calculateTotalComments,
 } from './helpers'
 import { FactoryUser } from 'src/test/factories/User'
+import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {
@@ -211,30 +213,26 @@ describe('src/utils/helpers', () => {
     it('should return 0 when updates have no comments', () => {
       const item = {
         updates: Array.from({ length: 3 }).fill(
-          {
+          FactoryResearchItemUpdate({
             status: 'published',
             _deleted: false,
             comments: [],
-          },
-          0,
-          3,
+          }),
         ),
-      } as any
+      } as IResearch.ItemDB | IItem
       expect(calculateTotalComments(item)).toBe('0')
     })
 
     it('should return the correct amount of comments', () => {
       const item = {
         updates: Array.from({ length: 3 }).fill(
-          {
+          FactoryResearchItemUpdate({
             status: 'published',
             _deleted: false,
             comments: Array.from({ length: 3 }),
-          },
-          0,
-          3,
+          }),
         ),
-      } as any
+      } as IResearch.ItemDB | IItem
       expect(calculateTotalComments(item)).toBe('9')
     })
 
@@ -242,27 +240,25 @@ describe('src/utils/helpers', () => {
       const item = {
         updates: Array.from({ length: 2 })
           .fill(
-            {
+            FactoryResearchItemUpdate({
               status: 'published',
               _deleted: false,
               comments: Array.from({ length: 2 }),
-            },
-            0,
-            3,
+            }),
           )
           .concat([
-            {
+            FactoryResearchItemUpdate({
               status: 'published',
               _deleted: true,
               comments: Array.from({ length: 3 }),
-            },
-            {
+            }),
+            FactoryResearchItemUpdate({
               status: 'draft',
               _deleted: false,
               comments: Array.from({ length: 6 }),
-            },
+            }),
           ]),
-      } as any
+      } as IResearch.ItemDB | IItem
       expect(calculateTotalComments(item)).toBe('4')
     })
   })

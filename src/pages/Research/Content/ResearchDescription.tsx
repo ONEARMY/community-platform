@@ -133,16 +133,7 @@ const ResearchDescription = ({
         )}
 
         <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-          <Link to={'/research'}>
-            <Button
-              variant="subtle"
-              sx={{ fontSize: '14px' }}
-              data-cy="go-back"
-              icon="arrow-back"
-            >
-              Back
-            </Button>
-          </Link>
+          
           {research.moderation === 'accepted' && (
             <UsefulStatsButton
               votedUsefulCount={props.votedUsefulCount}

@@ -26,6 +26,7 @@ describe('FilterSorterDecorator', () => {
       },
       updates: [
         {
+          status: 'published',
           comments: [
             {
               _id: '1',
@@ -44,6 +45,7 @@ describe('FilterSorterDecorator', () => {
           ],
         },
         {
+          status: 'published',
           comments: [
             {
               _id: '3',
@@ -74,6 +76,7 @@ describe('FilterSorterDecorator', () => {
       },
       updates: [
         {
+          status: 'published',
           comments: [
             {
               _id: '4',
@@ -85,6 +88,7 @@ describe('FilterSorterDecorator', () => {
           ],
         },
         {
+          status: 'published',
           comments: [
             {
               _id: '5',
@@ -143,7 +147,7 @@ describe('FilterSorterDecorator', () => {
   })
 
   test('sort by comments', () => {
-    const sortedItems = decorator.sort('Comments')
+    const sortedItems = decorator.sort(ItemSortingOption.Comments, mockItems)
     expect(sortedItems[0].title).toBe(mockItems[1].title)
     expect(sortedItems[1].title).toBe(mockItems[0].title)
   })

@@ -36,7 +36,7 @@ export class FilterSorterDecorator<T extends IItem> {
 
   public SEARCH_WEIGHTS: { name: string; weight: number }[]
 
-  constructor(_allItems: T[]) {
+  constructor() {
     this.activeSorter = ItemSortingOption.None
     this.SEARCH_WEIGHTS = [
       { name: 'title', weight: 0.5 },
@@ -59,7 +59,7 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByProperty(listItems: T[], propertyName: keyof IItem): T[] {
-    return listItems.sort((a, b) => {
+    return [...listItems].sort((a, b) => {
       const valueA = a[propertyName]
       const valueB = b[propertyName]
 
@@ -91,9 +91,7 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByComments(listItems: T[]) {
-    const _listItems = listItems
-
-    return _listItems.sort((a, b) => {
+    return [...listItems].sort((a, b) => {
       const totalCommentsA = calculateTotalComments(a)
       const totalCommentsB = calculateTotalComments(b)
 
@@ -113,7 +111,7 @@ export class FilterSorterDecorator<T extends IItem> {
       item.moderation === 'awaiting-moderation' ||
       item.moderation === 'rejected'
 
-    return listItems.sort((a, b) => {
+    return [...listItems].sort((a, b) => {
       const aMatchesCondition = isCreatedByUser(a) && isModerationMatch(a)
       const bMatchesCondition = isCreatedByUser(b) && isModerationMatch(b)
 

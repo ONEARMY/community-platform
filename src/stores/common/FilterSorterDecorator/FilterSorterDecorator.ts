@@ -1,11 +1,13 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
-import type { IComment } from 'src/models'
+import type { IComment, IModerationStatus, IUser } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
   _modified: string
+  _contentModifiedTimestamp: string
   _created: string
+  _createdBy: string
   title?: string
   votedUsefulBy?: string[]
   category?: ICategory
@@ -13,6 +15,7 @@ export interface IItem {
   updates?: {
     comments?: IComment[]
   }[]
+  moderation?: IModerationStatus
 }
 
 export enum ItemSortingOption {
@@ -71,40 +74,82 @@ export class FilterSorterDecorator<T extends IItem> {
       : listItems
   }
 
-  private sortByLatestModified(listItems: T[]) {
+  private sortByProperty(listItems: T[], propertyName: keyof IItem): T[] {
     const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) => (a._modified < b._modified ? 1 : -1))
+
+    return _listItems.sort((a, b) => {
+      const valueA = a[propertyName]
+      const valueB = b[propertyName]
+
+      const lengthA = Array.isArray(valueA) ? valueA.length : valueA ?? 0
+      const lengthB = Array.isArray(valueB) ? valueB.length : valueB ?? 0
+
+      if (lengthA === lengthB) {
+        return 0
+      }
+
+      return lengthA < lengthB ? 1 : -1
+    })
+  }
+
+  private sortByLatestModified(listItems: T[]) {
+    return this.sortByProperty(listItems, '_contentModifiedTimestamp')
   }
 
   private sortByLatestCreated(listItems: T[]) {
-    const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) => (a._created < b._created ? 1 : -1))
+    return this.sortByProperty(listItems, '_created')
   }
 
   private sortByMostUseful(listItems: T[]) {
-    const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) =>
-      (a.votedUsefulBy || []).length < (b.votedUsefulBy || []).length ? 1 : -1,
-    )
+    return this.sortByProperty(listItems, 'votedUsefulBy')
   }
 
   private sortByUpdates(listItems: T[]) {
-    const _listItems = listItems || this.allItems
-    return _listItems.sort((a, b) =>
-      (a.updates || []).length < (b.updates || []).length ? 1 : -1,
-    )
+    return this.sortByProperty(listItems, 'updates')
   }
 
   private sortByComments(listItems: T[]) {
     const _listItems = listItems || this.allItems
 
-    return _listItems.sort((a, b) =>
-      this.calculateTotalComments(a) < this.calculateTotalComments(b) ? 1 : -1,
-    )
+    return _listItems.sort((a, b) => {
+      const totalCommentsA = this.calculateTotalComments(a)
+      const totalCommentsB = this.calculateTotalComments(b)
+
+      if (totalCommentsA === totalCommentsB) {
+        return 0
+      }
+
+      return totalCommentsA < totalCommentsB ? 1 : -1
+    })
+  }
+
+  private sortByModerationStatus(listItems: T[], user?: IUser) {
+    const _listItems = listItems || this.allItems
+    const isCreatedByUser = (item: T) =>
+      user && item._createdBy === user.userName
+    const isModerationMatch = (item: T) =>
+      item.moderation === 'draft' ||
+      item.moderation === 'awaiting-moderation' ||
+      item.moderation === 'rejected'
+
+    return _listItems.sort((a, b) => {
+      const aMatchesCondition = isCreatedByUser(a) && isModerationMatch(a)
+      const bMatchesCondition = isCreatedByUser(b) && isModerationMatch(b)
+
+      if (aMatchesCondition && !bMatchesCondition) {
+        return -1
+      }
+
+      if (!aMatchesCondition && bMatchesCondition) {
+        return 1
+      }
+
+      return 0
+    })
   }
 
   @action
-  public getSortedItems(): T[] {
+  public getSortedItems(activeUser?: IUser): T[] {
     let validItems = this.allItems.slice()
 
     if (this.activeSorter) {
@@ -133,6 +178,8 @@ export class FilterSorterDecorator<T extends IItem> {
           break
       }
     }
+
+    validItems = this.sortByModerationStatus(validItems, activeUser)
 
     return validItems
   }

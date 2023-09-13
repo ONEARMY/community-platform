@@ -2,6 +2,7 @@ import type {
   DBDoc,
   IComment,
   IModerable,
+  IModerationStatus,
   ISelectedTags,
   ISharedFeatures,
   UserMention,
@@ -27,6 +28,7 @@ export namespace IResearch {
     _deleted: boolean
     collaborators: string[]
     subscribers?: UserIdList
+    moderation: IModerationStatus
   } & Omit<FormInput, 'collaborators'> &
     ISharedFeatures
 

@@ -148,6 +148,12 @@ describe('[How To]', () => {
         cy.step(`ViewsCounter should not be visible`)
         cy.get('[data-cy="ViewsCounter"]').should('not.exist')
       })
+
+      it('[How to stats only visible for beta-testers]', () => {
+        cy.visit(specificHowtoUrl)
+        cy.step(`HowToStatistics should not be visible`)
+        cy.get('[data-cy="HowToStatistics"]').should('not.exist')
+      })
     })
 
     describe('[By Authenticated]', () => {
@@ -183,6 +189,21 @@ describe('[How To]', () => {
         cy.step('Views show on second howto')
         cy.visit('/how-to/make-glass-like-beams')
         cy.get('[data-cy="ViewsCounter"]').should('exist')
+      })
+
+      it('[HowToStatistics show on multiple howtos]', () => {
+        cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
+
+        cy.step('HowToStatistics show on first howto')
+        cy.visit(specificHowtoUrl)
+        cy.get('[data-cy="HowToStatistics"]').should('exist')
+
+        cy.step('Go back')
+        cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton').click()
+
+        cy.step('HowToStatistics show on second howto')
+        cy.visit('/how-to/make-glass-like-beams')
+        cy.get('[data-cy="HowToStatistics"]').should('exist')
       })
     })
 

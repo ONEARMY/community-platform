@@ -12,7 +12,11 @@ const ICON_OPACITY = '0.5'
 const FONT_SIZE = '1'
 
 export const HowToStatistics = (props: IProps) => (
-  <Flex py={1} sx={{ alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+  <Flex
+    data-cy={'HowToStatistics'}
+    py={1}
+    sx={{ alignItems: 'center', justifyContent: 'center', gap: 2 }}
+  >
     <Flex
       data-cy={'ViewStatsCounter'}
       px={2}

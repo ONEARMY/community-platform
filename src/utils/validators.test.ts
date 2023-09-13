@@ -1,4 +1,8 @@
-import { draftValidationWrapper, validateTitle } from './validators'
+import {
+  draftValidationWrapper,
+  noSpecialCharacters,
+  validateTitle,
+} from './validators'
 
 // Mock out module store to limit impact of circular dependency
 jest.mock('src/stores/common/module.store')
@@ -62,5 +66,19 @@ describe('validateTitle', () => {
       'Titles must be unique, please try being more specific',
     )
     expect(isReusedMock).toHaveBeenCalledWith(duplicatedTitle, id)
+  })
+})
+
+describe('noSpecialCharacters', () => {
+  it('returns undefined when no special characters are present', () => {
+    const result = noSpecialCharacters('validUsername')
+
+    expect(result).toBeUndefined()
+  })
+
+  it('returns proper message for email values', () => {
+    const result = noSpecialCharacters('someones@email.com')
+
+    expect(result).toContain("Only letters and numbers are allowed")
   })
 })

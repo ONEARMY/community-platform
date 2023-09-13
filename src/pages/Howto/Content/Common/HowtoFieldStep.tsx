@@ -174,7 +174,7 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
               name={`${step}.title`}
               data-cy="step-title"
               data-testid="step-title"
-              modifiers={{ capitalize: true }}
+              modifiers={{ capitalize: true, trim: true }}
               component={FieldInput}
               placeholder={title.placeholder}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
@@ -202,7 +202,7 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
               maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
               data-testid="step-description"
-              modifiers={{ capitalize: true }}
+              modifiers={{ capitalize: true, trim: true }}
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
               validate={(value, allValues) =>

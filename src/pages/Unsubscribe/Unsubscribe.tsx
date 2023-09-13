@@ -4,17 +4,51 @@ import { useEffect, useState } from 'react'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { useCommonStores } from 'src'
-import { Card, Flex, Heading } from 'theme-ui'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 import { logger } from 'src/logger'
 
-const LOADING_TEXT = 'Please wait...'
-const SUCCESS_TEXT =
-  'You have been unsubscibed. You can log in to change your email settings.'
-const ERROR_TEXT =
-  'Oops, something went wrong. Please log in to change your email settings.'
+enum Status {
+  LOADING,
+  SUCCESS,
+  ERROR,
+}
+
+const StatusMessage = ({ status }: { status: Status }) => {
+  const loginLink = (
+    <a
+      href="/sign-in"
+      style={{
+        textDecoration: 'underline',
+        color: 'inherit',
+        display: 'inline',
+      }}
+    >
+      login
+    </a>
+  )
+
+  switch (status) {
+    case Status.LOADING:
+      return <Text>Please wait...</Text>
+    case Status.SUCCESS:
+      return (
+        <Text>
+          You have been unsubscibed. You can {loginLink} to change your email
+          settings.
+        </Text>
+      )
+    case Status.ERROR:
+      return (
+        <Text>
+          Oops, something went wrong. Please {loginLink} to change your email
+          settings.
+        </Text>
+      )
+  }
+}
 
 const Unsubscribe = observer(({ userName }: { userName: string }) => {
-  const [statusText, setStatusText] = useState(LOADING_TEXT)
+  const [status, setStatus] = useState<Status>(Status.LOADING)
   const { userStore } = useCommonStores().stores
 
   useEffect(() => {
@@ -34,10 +68,10 @@ const Unsubscribe = observer(({ userName }: { userName: string }) => {
           'unsubscribe',
           userName,
         )
-        setStatusText(SUCCESS_TEXT)
+        setStatus(Status.SUCCESS)
       } catch (error) {
         logger.debug('Error unsubscribing user:', error)
-        setStatusText(ERROR_TEXT)
+        setStatus(Status.ERROR)
       }
     }
 
@@ -49,16 +83,17 @@ const Unsubscribe = observer(({ userName }: { userName: string }) => {
       sx={{ flexDirection: 'column', maxWidth: '400px', textAlign: 'center' }}
       mx="auto"
       mt={15}
+      data-cy="unsubscribe"
     >
       <Card p={3} bg={'softblue'} sx={{}} mb={3}>
         <Heading>Unsubscribe </Heading>
       </Card>
-      {statusText}
+      <StatusMessage status={status} />
     </Flex>
   )
 })
 
-const UnsubscribeRoutes = () => (
+const UnsubscribeRoute = () => (
   <Router>
     <Switch>
       <Route
@@ -72,4 +107,4 @@ const UnsubscribeRoutes = () => (
   </Router>
 )
 
-export default UnsubscribeRoutes
+export default UnsubscribeRoute

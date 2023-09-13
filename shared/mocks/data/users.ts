@@ -43,6 +43,9 @@ export const users = {
     links: [],
     email: 'demo_beta_tester@example.com',
     password: 'demo_beta_tester',
+    notification_settings: {
+      emailFrequency: 'daily',
+    },
   },
   admin: {
     _authID: 'RaU8WzbqSIQFdj7iHxiz3fWz0cj1',

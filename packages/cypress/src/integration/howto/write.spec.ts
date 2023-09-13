@@ -157,7 +157,8 @@ describe('[How To]', () => {
           ],
           text: faker.lorem
             .sentences(50)
-            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH),
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH)
+            .trim(),
           title: 'A long title that is the total characters limit of',
         },
         {

@@ -1,0 +1,2 @@
+import{a as r}from"./jsx-runtime-913be41c.js";import{L as a}from"./react-router-dom-86bdf492.js";import{L as t}from"./theme-ui-components.esm-23584dac.js";const n=e=>r(t,{as:a,...e,children:e.children});try{n.displayName="InternalLink",n.__docgenInfo={description:"",displayName:"InternalLink",props:{ref:{defaultValue:null,description:"",name:"ref",required:!1,type:{name:"((instance: HTMLAnchorElement | null) => void) | RefObject<HTMLAnchorElement> | null"}}}}}catch{}export{n as I};
+//# sourceMappingURL=InternalLink-d2d00239.js.map

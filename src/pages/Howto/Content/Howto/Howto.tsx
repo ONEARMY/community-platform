@@ -189,6 +189,12 @@ export class Howto extends React.Component<
                     ?.scrollIntoView({
                       behavior: 'smooth',
                     })
+                  ;(
+                    document.querySelector(
+                      '[data-cy="comments-form"]',
+                    ) as HTMLTextAreaElement
+                  )?.focus()
+
                   return false
                 }}
               >

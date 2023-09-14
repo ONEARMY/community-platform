@@ -48,3 +48,4 @@ export type { Props as TextNotificationProps } from './TextNotification/TextNoti
 export type { ResearchEditorOverviewUpdate } from './ResearchEditorOverview/ResearchEditorOverview'
 export type { User } from './types/common'
 export type { UserNotificationList } from './NotificationList/NotificationList'
+export { ContentStatistics } from './ContentStatistics/ContentStatistics'

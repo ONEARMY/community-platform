@@ -28,7 +28,6 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
 
 import UserContactAndLinks from './UserContactAndLinks'
-import { UserAdmin } from './UserAdmin'
 import { ProfileType } from 'src/modules/profile/types'
 import { userStats } from 'src/common/hooks/userStats'
 import type { UserCreatedDocs } from '.'
@@ -274,9 +273,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             renderMachineBuilderXp(user.machineBuilderXp)}
 
           <UserContactAndLinks links={userLinks} />
-          <Box mt={3}>
-            <UserAdmin user={user} />
-          </Box>
         </Box>
         <Box
           sx={{

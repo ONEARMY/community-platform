@@ -390,6 +390,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "laviodias",
+      "name": "Lávio Vale",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44332001?v=4",
+      "profile": "https://github.com/laviodias",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

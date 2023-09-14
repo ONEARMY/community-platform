@@ -1,14 +1,15 @@
+import { dirname, join } from 'path'
 import type { StorybookConfig } from '@storybook/react-vite'
 import { mergeConfig } from 'vite'
 const Config: StorybookConfig = {
   stories: ['../src/**/*.stories.tsx', '../src/*.mdx'],
   addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-mdx-gfm',
+    getAbsolutePath('@storybook/addon-links'),
+    getAbsolutePath('@storybook/addon-essentials'),
+    getAbsolutePath('@storybook/addon-mdx-gfm'),
   ],
   framework: {
-    name: '@storybook/react-vite',
+    name: getAbsolutePath('@storybook/react-vite'),
     options: {},
   },
   docs: {
@@ -21,3 +22,7 @@ const Config: StorybookConfig = {
   },
 }
 export default Config
+
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, 'package.json')))
+}

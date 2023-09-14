@@ -3,6 +3,7 @@ import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
+import { headings } from '../../../../../src/pages/Howto/labels'
 const creatorEmail = 'howto_creator@test.com'
 const creatorPassword = 'test1234'
 
@@ -31,15 +32,23 @@ describe('[How To]', () => {
 
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
+      checkWhitespaceTrim('step-title')
+
       cy.get('[data-cy=step-title]')
         .clear()
         .invoke('val', title)
         .blur({ force: true })
 
+      cy.get('[data-cy=step-title]').should('have.value', title)
+
+      checkWhitespaceTrim('step-description')
+
       cy.get('[data-cy=step-description]')
         .clear()
         .invoke('val', description)
         .blur({ force: true })
+
+      cy.get('[data-cy=step-description]').should('have.value', description)
 
       if (videoUrl) {
         cy.step('Adding Video Url')
@@ -55,6 +64,7 @@ describe('[How To]', () => {
               cy.wrap($deleteButton).click()
             })
         }
+
         images.forEach((image, index) => {
           cy.get(`[data-cy=step-image-${index}]`)
             .find(':file')
@@ -71,6 +81,20 @@ describe('[How To]', () => {
       .find('[data-cy=delete-step]')
       .click()
     cy.get('[data-cy=confirm]').click()
+  }
+
+  const checkWhitespaceTrim = (element: string) => {
+    cy.step(`Check whitespace trim for [${element}]`)
+    cy.get(`[data-cy=${element}]`)
+      .clear()
+      .invoke('val', '  Test for trailing whitespace  ')
+      .blur()
+
+    cy.get(`[data-cy=${element}]`).should(
+      'have.value',
+      'Test for trailing whitespace',
+    )
+    cy.get(`[data-cy=${element}]`).clear()
   }
 
   describe('[Create a how-to]', () => {
@@ -133,7 +157,8 @@ describe('[How To]', () => {
           ],
           text: faker.lorem
             .sentences(50)
-            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH),
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH)
+            .trim(),
           title: 'A long title that is the total characters limit of',
         },
         {
@@ -193,6 +218,8 @@ describe('[How To]', () => {
 
       cy.step('Cannot be published yet')
       cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=errors-container]').should('be.visible')
+      cy.contains(headings.errors).should('exist')
       cy.contains('Make sure this field is filled correctly').should('exist')
 
       cy.step('A basic draft was created')
@@ -206,11 +233,15 @@ describe('[How To]', () => {
       cy.step('Back to completing the how-to')
       cy.get('[data-cy=edit]').click()
 
+      checkWhitespaceTrim('intro-title')
+
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
       cy.selectTag('howto_testing')
       selectTimeDuration(time as Duration)
       selectDifficultLevel(difficulty_level as Difficulty)
+
+      checkWhitespaceTrim('intro-description')
 
       cy.get('[data-cy=intro-description]').type(description)
       cy.get('[data-cy=fileLink]').type(fileLink)

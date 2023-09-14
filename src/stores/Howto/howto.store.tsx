@@ -48,15 +48,22 @@ export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
   @observable
   public activeHowto: IHowtoDB | null
+
   @observable
   public allHowtos: IHowtoDB[]
+
   @observable
   public selectedCategory: string
+
   @observable
   public searchValue: string
 
   @observable
+  public activeSorter: ItemSortingOption
+
+  @observable
   public referrerSource: string
+
   @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
@@ -70,9 +77,22 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
+    super.init()
+
     this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
-      this.updateActiveSorter('created')
+      logger.debug('docs', docs)
+      const activeItems = [...docs].filter((doc) => {
+        return !doc._deleted
+      })
+
+      runInAction(() => {
+        this.activeSorter = ItemSortingOption.Created
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allHowtos = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
+      })
     })
     this.selectedCategory = ''
     this.searchValue = ''
@@ -83,8 +103,8 @@ export class HowtoStore extends ModuleStore {
     ]
   }
 
-  public updateActiveSorter(query: string) {
-    this.allHowtos = this.filterSorterDecorator?.sort(query)
+  public updateActiveSorter(sorter: ItemSortingOption) {
+    this.activeSorter = sorter
   }
 
   public getActiveHowToComments(): IComment[] {
@@ -206,7 +226,11 @@ export class HowtoStore extends ModuleStore {
       this.searchValue,
     )
 
-    return validHowtos
+    return this.filterSorterDecorator.sort(
+      this.activeSorter,
+      validHowtos,
+      this.activeUser,
+    )
   }
 
   public async incrementDownloadCount(howToID: string) {

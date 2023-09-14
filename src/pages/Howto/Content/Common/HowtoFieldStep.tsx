@@ -20,7 +20,7 @@ import {
   HOWTO_TITLE_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../constants'
-import { steps } from '../../labels'
+import { buttons, errors, steps } from '../../labels'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -67,7 +67,7 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
    */
   validateMedia(videoUrl: string) {
     const { images } = { ...this.props }
-    const { both, empty, invalidUrl } = steps.videoUrl.errors
+    const { both, empty, invalidUrl } = errors.videoUrl
 
     if (videoUrl) {
       if (images[0]) {
@@ -90,8 +90,8 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
    */
   render() {
     const { step, index } = this.props
-    const { buttons, heading, images, text, title, videoUrl } = steps
-    const { deleteButton } = buttons
+    const { heading, images, text, title, videoUrl } = steps
+    const { deleteButton } = buttons.steps
     const _labelStyle = {
       fontSize: 2,
       marginBottom: 2,
@@ -174,7 +174,7 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
               name={`${step}.title`}
               data-cy="step-title"
               data-testid="step-title"
-              modifiers={{ capitalize: true }}
+              modifiers={{ capitalize: true, trim: true }}
               component={FieldInput}
               placeholder={title.placeholder}
               maxLength={HOWTO_TITLE_MAX_LENGTH}
@@ -202,7 +202,7 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
               maxLength={HOWTO_STEP_DESCRIPTION_MAX_LENGTH}
               data-cy="step-description"
               data-testid="step-description"
-              modifiers={{ capitalize: true }}
+              modifiers={{ capitalize: true, trim: true }}
               component={FieldTextarea}
               style={{ resize: 'vertical', height: '300px' }}
               validate={(value, allValues) =>
@@ -221,7 +221,7 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
             />
           </Flex>
           <Label sx={_labelStyle} htmlFor={`${step}.text`}>
-            {`${images} *`}
+            {`${images.title} *`}
           </Label>
           <Flex
             sx={{ flexDirection: ['column', 'row'], alignItems: 'center' }}
@@ -256,9 +256,6 @@ class HowtoFieldStep extends PureComponent<IProps, IState> {
             </ImageInputFieldWrapper>
           </Flex>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
-            <Label sx={_labelStyle} htmlFor={`${step}.videoUrl`}>
-              {`${videoUrl.title} *`}
-            </Label>
             <Field
               name={`${step}.videoUrl`}
               data-cy="step-videoUrl"

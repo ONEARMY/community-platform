@@ -26,6 +26,7 @@ import {
   changeUserReferenceToPlainText,
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
+import type { RootStore } from '../index'
 import type { DocReference } from '../databaseV2/DocReference'
 import {
   FilterSorterDecorator,
@@ -53,6 +54,9 @@ export class ResearchStore extends ModuleStore {
   @observable
   public searchValue: string
 
+  @observable
+  public activeSorter: ItemSortingOption
+
   public availableItemSortingOption: ItemSortingOption[]
 
   @observable
@@ -66,28 +70,11 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
-  constructor() {
-    super(null as any, 'research')
+  constructor(rootStore: RootStore) {
+    super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
 
-    this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
-      logger.debug('docs', docs)
-      const sortedItems = [...docs]
-        .filter((doc) => {
-          return !doc._deleted
-        })
-        .sort((a, b) =>
-          a._contentModifiedTimestamp < b._contentModifiedTimestamp ? 1 : -1,
-        )
-
-      runInAction(() => {
-        this.allResearchItems = sortedItems
-        // Create an instance of FilterSorterDecorator with the allResearchItems array
-        this.filterSorterDecorator =
-          new FilterSorterDecorator<IResearch.ItemDB>(this.allResearchItems)
-      })
-    })
     this.selectedCategory = ''
     this.searchValue = ''
     this.availableItemSortingOption = [
@@ -97,10 +84,26 @@ export class ResearchStore extends ModuleStore {
       ItemSortingOption.Comments,
       ItemSortingOption.Updates,
     ]
+
+    this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
+      logger.debug('docs', docs)
+      const activeItems = [...docs].filter((doc) => {
+        return !doc._deleted
+      })
+
+      runInAction(() => {
+        this.activeSorter = ItemSortingOption.Modified
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allResearchItems = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
+      })
+    })
   }
 
-  public updateActiveSorter(query: string) {
-    this.allResearchItems = this.filterSorterDecorator?.sort(query)
+  public updateActiveSorter(sorter: ItemSortingOption) {
+    this.activeSorter = sorter
   }
 
   @computed get filteredResearches() {
@@ -116,9 +119,11 @@ export class ResearchStore extends ModuleStore {
       this.searchValue,
     )
 
-    this.filterSorterDecorator.allItems = validResearches
-
-    return this.filterSorterDecorator.getSortedItems(this.activeUser)
+    return this.filterSorterDecorator.sort(
+      this.activeSorter,
+      validResearches,
+      this.activeUser,
+    )
   }
 
   public formatResearchCommentList(comments: IComment[] = []): IComment[] {

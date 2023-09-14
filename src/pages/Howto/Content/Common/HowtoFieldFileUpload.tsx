@@ -6,7 +6,7 @@ import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'
 
 export const HowtoFieldFileUpload = () => {
-  const { description, title } = intro.files.upload
+  const { description, title } = intro.files
   const name = 'files'
 
   return (

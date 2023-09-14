@@ -1,4 +1,4 @@
-import { render, act, waitFor, screen } from '@testing-library/react'
+import { render, act } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { UserSettings } from './UserSettings'
 import { useCommonStores } from 'src'
@@ -57,21 +57,6 @@ describe('UserSettings', () => {
 
     // Assert
     expect(wrapper.getByText('Edit profile'))
-    expect(() => wrapper.getByText('Admin settings')).toThrow()
-  })
-
-  it('displays admin only settings', async () => {
-    const user = FactoryUser({
-      userRoles: ['admin'],
-    })
-
-    let wrapper
-    await act(async () => {
-      wrapper = await getWrapper(user)
-    })
-
-    // Assert
-    await waitFor(() => wrapper.getByText('Admin settings'))
   })
 
   it('displays one photo for member', async () => {
@@ -132,57 +117,6 @@ describe('UserSettings', () => {
       wrapper = await getWrapper(user)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-  })
-
-  it('presents the state', async () => {
-    const user = FactoryUser({
-      userRoles: ['admin'],
-      badges: {
-        verified: true,
-        supporter: true,
-      },
-    })
-
-    mockGetUserProfile.mockResolvedValue(user)
-
-    // Act
-    let wrapper
-    await act(async () => {
-      wrapper = await getWrapper(user)
-    })
-
-    // Assert
-    await waitFor(() => {
-      screen.getByText('Update badges')
-    })
-
-    expect(wrapper.getByLabelText('Verified')).toBeChecked()
-    expect(wrapper.getByLabelText('Supporter')).toBeChecked()
-  })
-
-  it('saves state', async () => {
-    const user = FactoryUser({
-      userRoles: ['admin'],
-    })
-
-    mockGetUserProfile.mockResolvedValue(user)
-
-    // Act
-    let wrapper
-    await act(async () => {
-      wrapper = await getWrapper(user)
-    })
-
-    // Assert
-    await waitFor(() => screen.getByText('Update badges').click())
-
-    wrapper.getByLabelText('Verified').click()
-
-    expect(mockUpdateUserBadge).toBeCalledTimes(1)
-    expect(mockUpdateUserBadge).toBeCalledWith(user._id, {
-      supporter: false,
-      verified: true,
-    })
   })
 })
 

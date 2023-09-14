@@ -32,18 +32,25 @@ const ResearchListItem = ({ item }: IProps) => {
           key={item._id}
           style={{ width: '100%' }}
         >
-          <Grid px={3} py={3} columns={['60px 2fr 1fr']} gap="40px">
+          <Grid px={3} py={3} columns={[1, '60px 2fr 1fr']} gap="40px">
+            <Box
+              sx={{
+                display: ['none', 'block'],
+              }}
+            >
               <LazyLoadImage
                 style={{
                   width: `calc(100% + 32px)`,
                   aspectRatio: '1 / 1',
                   objectFit: 'cover',
                   margin: '-15px',
+                  verticalAlign: 'top',
                 }}
                 threshold={500}
                 src={getItemThumbnail(item)}
                 crossOrigin=""
               />
+            </Box>
             <Flex
               sx={{
                 flexDirection: 'column',

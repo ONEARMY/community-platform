@@ -26,6 +26,7 @@ import {
   changeUserReferenceToPlainText,
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
+import type { RootStore } from '../index'
 import type { DocReference } from '../databaseV2/DocReference'
 import {
   FilterSorterDecorator,
@@ -69,8 +70,8 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
-  constructor() {
-    super(null as any, 'research')
+  constructor(rootStore: RootStore) {
+    super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
 
@@ -91,17 +92,17 @@ export class ResearchStore extends ModuleStore {
       })
 
       runInAction(() => {
-        // Create an instance of FilterSorterDecorator with the allResearchItems array
-        this.filterSorterDecorator =
-          new FilterSorterDecorator<IResearch.ItemDB>(activeItems)
-        // Sets default starting sort filter for research list items
-        this.updateActiveSorter(ItemSortingOption.Modified)
+        this.activeSorter = ItemSortingOption.Modified
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allResearchItems = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
       })
     })
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {
-    this.allResearchItems = this.filterSorterDecorator?.sort(sorter)
     this.activeSorter = sorter
   }
 
@@ -118,9 +119,11 @@ export class ResearchStore extends ModuleStore {
       this.searchValue,
     )
 
-    this.filterSorterDecorator.allItems = validResearches
-
-    return this.filterSorterDecorator.getSortedItems(this.activeUser)
+    return this.filterSorterDecorator.sort(
+      this.activeSorter,
+      validResearches,
+      this.activeUser,
+    )
   }
 
   public formatResearchCommentList(comments: IComment[] = []): IComment[] {

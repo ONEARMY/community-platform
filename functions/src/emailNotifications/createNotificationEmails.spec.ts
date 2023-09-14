@@ -75,6 +75,14 @@ describe('create email test', () => {
         relevantUrl: '/test',
         type: 'howto_mention',
       }),
+      notificationFactory('user_1', 'notification_4', {
+        triggeredBy: {
+          displayName: 'User 1',
+          userId: 'user_1',
+        },
+        relevantUrl: '/test',
+        type: 'map_pin_approved',
+      }),
     ]
 
     const user2Notifications = [
@@ -101,6 +109,14 @@ describe('create email test', () => {
         },
         relevantUrl: '/test',
         type: 'research_update',
+      }),
+      notificationFactory('user_2', 'notification_4', {
+        triggeredBy: {
+          displayName: 'User 2',
+          userId: 'user_2',
+        },
+        relevantUrl: '/test',
+        type: 'research_needs_updates',
       }),
     ]
 

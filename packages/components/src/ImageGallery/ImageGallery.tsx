@@ -79,6 +79,7 @@ export const ImageGallery = (props: IProps) => {
         <Image
           loading="lazy"
           data-cy="active-image"
+          data-testid="active-image"
           sx={{
             width: '100%',
             cursor: 'pointer',
@@ -89,6 +90,7 @@ export const ImageGallery = (props: IProps) => {
           onClick={() => {
             triggerLightbox()
           }}
+          alt={activeImage.name}
           crossOrigin=""
         />
       </Flex>
@@ -107,6 +109,7 @@ export const ImageGallery = (props: IProps) => {
                   loading="lazy"
                   src={image.downloadUrl}
                   key={index}
+                  alt={image.name}
                   sx={{
                     width: 100,
                     height: 67,

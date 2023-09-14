@@ -81,7 +81,7 @@ describe('[Research]', () => {
         cy.get('[data-cy="ViewsCounter"]').should('exist')
 
         cy.step('Go back')
-        cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton').click()
+        cy.go('back')
 
         cy.step('Views show on second research article')
         cy.visit('/research/a-test-research')

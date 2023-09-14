@@ -110,6 +110,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://careers.bol.com/"><img src="https://avatars.githubusercontent.com/u/1822855?v=4?s=60" width="60px;" alt="Bart Enkelaar"/><br /><sub><b>Bart Enkelaar</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=benkelaar" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/laviodias"><img src="https://avatars.githubusercontent.com/u/44332001?v=4?s=60" width="60px;" alt="Lávio Vale"/><br /><sub><b>Lávio Vale</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=laviodias" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/manuelrurda"><img src="https://avatars.githubusercontent.com/u/62727899?v=4?s=60" width="60px;" alt="Manuel Rodriguez Urdapilelta"/><br /><sub><b>Manuel Rodriguez Urdapilelta</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=manuelrurda" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

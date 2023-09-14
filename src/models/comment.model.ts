@@ -10,6 +10,7 @@ export interface IComment {
   _created: string
   _edited?: string
   _creatorId: string
+  _deleted?: boolean
   creatorName: string
   creatorCountry?: string | null
   text: string

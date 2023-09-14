@@ -77,8 +77,23 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
+    super.init()
 
-    this.activeSorter = ItemSortingOption.None
+    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
+      logger.debug('docs', docs)
+      const activeItems = [...docs].filter((doc) => {
+        return !doc._deleted
+      })
+
+      runInAction(() => {
+        this.activeSorter = ItemSortingOption.Created
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allHowtos = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
+      })
+    })
     this.selectedCategory = ''
     this.searchValue = ''
     this.referrerSource = ''
@@ -86,17 +101,9 @@ export class HowtoStore extends ModuleStore {
       ItemSortingOption.Created,
       ItemSortingOption.MostUseful,
     ]
-
-    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      logger.debug('docs', docs)
-      this.filterSorterDecorator = new FilterSorterDecorator<any>(docs)
-      // Sets default starting sort filter for howto list items
-      this.updateActiveSorter(ItemSortingOption.Created)
-    })
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {
-    this.allHowtos = this.filterSorterDecorator?.sort(sorter)
     this.activeSorter = sorter
   }
 
@@ -219,7 +226,11 @@ export class HowtoStore extends ModuleStore {
       this.searchValue,
     )
 
-    return validHowtos
+    return this.filterSorterDecorator.sort(
+      this.activeSorter,
+      validHowtos,
+      this.activeUser,
+    )
   }
 
   public async incrementDownloadCount(howToID: string) {

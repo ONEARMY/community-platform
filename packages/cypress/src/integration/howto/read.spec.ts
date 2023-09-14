@@ -3,7 +3,9 @@ import { MOCK_DATA } from '../../data'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-  const totalHowTo = Object.values(MOCK_DATA.howtos).length
+  const totalHowTo = Object.values(MOCK_DATA.howtos).filter(
+    (howTo) => howTo._deleted === false,
+  ).length
 
   describe('[List how-tos]', () => {
     const howtoSlug = 'make-glass-like-beams'

@@ -65,6 +65,7 @@ export default class Step extends PureComponent<IProps> {
                       color={'grey'}
                       variant="paragraph"
                       sx={{
+                        wordBreak: 'break-word',
                         whiteSpace: 'pre-line',
                       }}
                     >

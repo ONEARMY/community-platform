@@ -252,7 +252,7 @@ const ResearchArticle = observer((props: IProps) => {
 })
 
 const isUpdateVisible = (update: IResearch.UpdateDB) => {
-  return update.status !== 'draft' && update._deleted === false
+  return update.status !== 'draft' && !update._deleted
 }
 
 const transformToUserComment = (

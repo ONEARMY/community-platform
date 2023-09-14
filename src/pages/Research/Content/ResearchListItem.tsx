@@ -5,6 +5,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
+import { calculateTotalComments } from 'src/utils/helpers'
 import { Card, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 
@@ -216,24 +217,11 @@ const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
   }
 }
 
-const calculateTotalComments = (item: IResearch.ItemDB) => {
-  if (item.updates) {
-    const commentOnUpdates = item.updates.reduce((totalComments, update) => {
-      const updateCommentsLength = update.comments ? update.comments.length : 0
-      return totalComments + updateCommentsLength
-    }, 0)
-
-    return commentOnUpdates ? String(commentOnUpdates) : '0'
-  } else {
-    return '0'
-  }
-}
-
 const getUpdateText = (item: IResearch.ItemDB) => {
   return item.updates?.length
     ? String(
         item.updates.filter(
-          (update) => update.status !== 'draft' && update._deleted !== true,
+          (update) => update.status !== 'draft' && !update._deleted,
         ).length,
       )
     : '0'

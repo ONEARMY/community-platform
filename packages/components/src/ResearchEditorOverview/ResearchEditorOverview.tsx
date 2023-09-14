@@ -88,7 +88,7 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
         </Box>
       ) : null}
       {showCreateUpdateButton ? (
-        <Button small sx={{ mr: 2 }}>
+        <Button small sx={{ mr: 2 }} data-cy="create-update">
           <InternalLink
             to={`/research/${researchSlug}/new-update`}
             sx={{ color: 'black' }}

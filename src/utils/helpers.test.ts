@@ -9,6 +9,7 @@ import {
   needsModeration,
   isAllowedToEditContent,
   isAllowedToPin,
+  buildStatisticsLabel,
 } from './helpers'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -198,6 +199,30 @@ describe('src/utils/helpers', () => {
           }),
         ),
       ).toBe(false)
+    })
+  })
+
+  describe('buildStatisticsLabel', () => {
+    it('should return label with non-plural stat unit when stat is <= 1', () => {
+      expect(
+        buildStatisticsLabel({ stat: 1, statUnit: 'count', usePlural: true }),
+      ).toBe('1 count')
+    })
+
+    it('should return label with plural stat unit when stat is > 1 and usePlural is true ', () => {
+      expect(
+        buildStatisticsLabel({ stat: 100, statUnit: 'count', usePlural: true }),
+      ).toBe('100 counts')
+    })
+
+    it('should return label with non-plural stat when stat is > 1 and usePlural is false ', () => {
+      expect(
+        buildStatisticsLabel({
+          stat: 100,
+          statUnit: 'count',
+          usePlural: false,
+        }),
+      ).toBe('100 count')
     })
   })
 })

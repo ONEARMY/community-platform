@@ -162,3 +162,19 @@ export interface IEditableDoc extends DBDoc {
 
 export const randomIntFromInterval = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min)
+
+export const buildStatisticsLabel = ({
+  stat,
+  statUnit,
+  usePlural,
+}: {
+  stat: number
+  statUnit: string
+  usePlural: boolean
+}): string => {
+  if (stat > 1 && usePlural) {
+    return `${stat} ${statUnit}s`
+  } else {
+    return `${stat} ${statUnit}`
+  }
+}

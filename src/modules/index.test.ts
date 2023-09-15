@@ -5,6 +5,7 @@ describe('getSupportedModules', () => {
   afterAll(() => {
     process.env = oldProcessEnv
   })
+
   it('returns a default set of modules', () => {
     process.env.REACT_APP_SUPPORTED_MODULES = ''
     expect(getSupportedModules()).toStrictEqual([
@@ -14,6 +15,7 @@ describe('getSupportedModules', () => {
       MODULE.RESEARCH,
       MODULE.ACADEMY,
       MODULE.USER,
+      MODULE.QUESTION,
     ])
   })
 

@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import type { CSSObject } from 'theme-ui'
 import type { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
+import { QuestionModule } from './Question'
 import { MODULE } from 'src/modules'
 /**
  * Import all pages for use in lazy loading
@@ -200,6 +201,7 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   maps,
   academy,
   ResearchModule,
+  QuestionModule,
 ]
 /** Additional pages to show in signed-in profile dropdown */
 export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
@@ -214,4 +216,5 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   forgotpasswordmessage,
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
   unsubscribe,
+  QuestionModule, // CC 2021-06-24 - Temporary - make question module accessible to all in production but hide from nav
 ]

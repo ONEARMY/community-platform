@@ -23,8 +23,8 @@ export interface IItem {
 
 export enum ItemSortingOption {
   None = 'None',
-  Modified = 'Modified',
-  Created = 'Created',
+  LatestUpdated = 'LatestUpdated',
+  Newest = 'Newest',
   MostUseful = 'MostUseful',
   Comments = 'Comments',
   Updates = 'Updates',
@@ -141,11 +141,11 @@ export class FilterSorterDecorator<T extends IItem> {
 
     if (this.activeSorter) {
       switch (this.activeSorter) {
-        case ItemSortingOption.Modified:
+        case ItemSortingOption.LatestUpdated:
           validItems = this.sortByLatestModified(validItems)
           break
 
-        case ItemSortingOption.Created:
+        case ItemSortingOption.Newest:
           validItems = this.sortByLatestCreated(validItems)
           break
 

@@ -123,13 +123,16 @@ describe('FilterSorterDecorator', () => {
 
   //#region Sorting
   test('sort by latest modified', () => {
-    const sortedItems = decorator.sort(ItemSortingOption.Modified, mockItems)
+    const sortedItems = decorator.sort(
+      ItemSortingOption.LatestUpdated,
+      mockItems,
+    )
     expect(sortedItems[0]._contentModifiedTimestamp).toBe('2022-02-01')
     expect(sortedItems[1]._contentModifiedTimestamp).toBe('2022-01-01')
   })
 
-  test('sort by latest created', () => {
-    const sortedItems = decorator.sort(ItemSortingOption.Created, mockItems)
+  test('sort by newest', () => {
+    const sortedItems = decorator.sort(ItemSortingOption.Newest, mockItems)
     expect(sortedItems[0]._created).toBe('2022-02-01')
     expect(sortedItems[1]._created).toBe('2022-01-01')
   })

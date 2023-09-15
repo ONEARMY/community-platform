@@ -30,6 +30,7 @@ export enum ItemSortingOption {
   Comments = 'Comments',
   Updates = 'Updates',
   TotalDownloads = 'TotalDownloads',
+  Random = 'Random',
 }
 
 export class FilterSorterDecorator<T extends IItem> {
@@ -141,6 +142,20 @@ export class FilterSorterDecorator<T extends IItem> {
     })
   }
 
+  private sortRandomly(listItems: T[]) {
+    const _listItems = [...listItems]
+
+    // randomize array by using Fisher-Yates algorith
+    for (let i = _listItems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      const temp = _listItems[i]
+      _listItems[i] = _listItems[j]
+      _listItems[j] = temp
+    }
+
+    return _listItems
+  }
+
   @action
   public getSortedItems(listItems: T[], activeUser?: IUser): T[] {
     let validItems = listItems
@@ -169,6 +184,10 @@ export class FilterSorterDecorator<T extends IItem> {
 
         case ItemSortingOption.TotalDownloads:
           validItems = this.sortByMostDownloads(validItems)
+          break
+
+        case ItemSortingOption.Random:
+          validItems = this.sortRandomly(validItems)
           break
 
         default:

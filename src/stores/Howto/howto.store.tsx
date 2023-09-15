@@ -86,7 +86,7 @@ export class HowtoStore extends ModuleStore {
       })
 
       runInAction(() => {
-        this.activeSorter = ItemSortingOption.Newest
+        this.activeSorter = ItemSortingOption.Random
         this.filterSorterDecorator = new FilterSorterDecorator()
         this.allHowtos = this.filterSorterDecorator.sort(
           this.activeSorter,
@@ -99,9 +99,10 @@ export class HowtoStore extends ModuleStore {
     this.referrerSource = ''
     this.availableItemSortingOption = [
       ItemSortingOption.Newest,
-      ItemSortingOption.LatestUpdated,
       ItemSortingOption.MostUseful,
+      ItemSortingOption.LatestUpdated,
       ItemSortingOption.TotalDownloads,
+      ItemSortingOption.Random,
     ]
   }
 

@@ -102,6 +102,7 @@ export class HowtoStore extends ModuleStore {
       ItemSortingOption.MostUseful,
       ItemSortingOption.LatestUpdated,
       ItemSortingOption.TotalDownloads,
+      ItemSortingOption.Comments,
       ItemSortingOption.Random,
     ]
   }

@@ -20,6 +20,7 @@ export interface IItem {
   }[]
   moderation?: IModerationStatus
   total_downloads?: number
+  comments?: IComment[]
 }
 
 export enum ItemSortingOption {
@@ -107,8 +108,8 @@ export class FilterSorterDecorator<T extends IItem> {
 
   private sortByComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
-      const totalCommentsA = calculateTotalComments(a)
-      const totalCommentsB = calculateTotalComments(b)
+      const totalCommentsA = a.comments?.length || calculateTotalComments(a)
+      const totalCommentsB = b.comments?.length || calculateTotalComments(b)
 
       if (totalCommentsA === totalCommentsB) {
         return 0

@@ -19,6 +19,7 @@ export interface IItem {
     status: 'draft' | 'published'
   }[]
   moderation?: IModerationStatus
+  total_downloads?: number
 }
 
 export enum ItemSortingOption {
@@ -28,6 +29,7 @@ export enum ItemSortingOption {
   MostUseful = 'MostUseful',
   Comments = 'Comments',
   Updates = 'Updates',
+  TotalDownloads = 'TotalDownloads',
 }
 
 export class FilterSorterDecorator<T extends IItem> {
@@ -84,6 +86,10 @@ export class FilterSorterDecorator<T extends IItem> {
 
       return dateA < dateB ? 1 : -1
     })
+  }
+
+  private sortByMostDownloads(listItems: T[]) {
+    return this.sortByProperty(listItems, 'total_downloads')
   }
 
   private sortByLatestCreated(listItems: T[]) {
@@ -159,6 +165,10 @@ export class FilterSorterDecorator<T extends IItem> {
 
         case ItemSortingOption.Updates:
           validItems = this.sortByUpdates(validItems)
+          break
+
+        case ItemSortingOption.TotalDownloads:
+          validItems = this.sortByMostDownloads(validItems)
           break
 
         default:

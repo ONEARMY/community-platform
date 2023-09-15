@@ -66,6 +66,7 @@ describe('FilterSorterDecorator', () => {
       _createdBy: 'user1',
       moderation: 'accepted',
       votedUsefulBy: ['user3'],
+      total_downloads: 10,
       researchCategory: {
         _contentModifiedTimestamp: '2022-12-24T07:50:55.226Z',
         _created: '2022-12-24T07:50:55.226Z',
@@ -151,6 +152,15 @@ describe('FilterSorterDecorator', () => {
 
   test('sort by comments', () => {
     const sortedItems = decorator.sort(ItemSortingOption.Comments, mockItems)
+    expect(sortedItems[0].title).toBe(mockItems[1].title)
+    expect(sortedItems[1].title).toBe(mockItems[0].title)
+  })
+
+  test('sort by total_downloads', () => {
+    const sortedItems = decorator.sort(
+      ItemSortingOption.TotalDownloads,
+      mockItems,
+    )
     expect(sortedItems[0].title).toBe(mockItems[1].title)
     expect(sortedItems[1].title).toBe(mockItems[0].title)
   })

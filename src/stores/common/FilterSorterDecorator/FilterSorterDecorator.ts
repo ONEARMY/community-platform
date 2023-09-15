@@ -75,7 +75,15 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByLatestModified(listItems: T[]) {
-    return this.sortByProperty(listItems, '_contentModifiedTimestamp')
+    return [...listItems].sort((a, b) => {
+      const dateA = new Date(a._contentModifiedTimestamp).toISOString()
+      const dateB = new Date(b._contentModifiedTimestamp).toISOString()
+      if (dateA === dateB) {
+        return 0
+      }
+
+      return dateA < dateB ? 1 : -1
+    })
   }
 
   private sortByLatestCreated(listItems: T[]) {

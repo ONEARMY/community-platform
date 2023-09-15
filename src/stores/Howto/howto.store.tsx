@@ -99,6 +99,7 @@ export class HowtoStore extends ModuleStore {
     this.referrerSource = ''
     this.availableItemSortingOption = [
       ItemSortingOption.Created,
+      ItemSortingOption.Modified,
       ItemSortingOption.MostUseful,
     ]
   }

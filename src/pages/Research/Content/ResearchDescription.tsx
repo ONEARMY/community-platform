@@ -8,7 +8,7 @@ import {
   Username,
   ViewsCounter,
   ConfirmModal,
-  ResearchStatistics,
+  ContentStatistics,
 } from 'oa-components'
 import { useEffect, useState, Fragment } from 'react'
 import { Link, useHistory } from 'react-router-dom'
@@ -24,6 +24,7 @@ import {
 import { Box, Divider, Flex, Heading, Text } from 'theme-ui'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
+import { buildStatisticsLabel } from 'src/utils/helpers'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -47,6 +48,10 @@ const ResearchDescription = ({
   research,
   isEditable,
   isDeletable,
+  subscribersCount,
+  votedUsefulCount,
+  commentsCount,
+  updatesCount,
   ...props
 }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -156,7 +161,7 @@ const ResearchDescription = ({
             </Link>
             {research.moderation === 'accepted' && (
               <UsefulStatsButton
-                votedUsefulCount={props.votedUsefulCount}
+                votedUsefulCount={votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
                 isLoggedIn={props.loggedInUser ? true : false}
                 onUsefulClick={props.onUsefulClick}
@@ -320,21 +325,60 @@ const ResearchDescription = ({
           />
         )}
       </Flex>
-      <AuthWrapper roleRequired="beta-tester">
-        <Divider
-          m={0}
-          sx={{
-            border: '1px solid black',
-          }}
-        />
-        <ResearchStatistics
-          viewCount={viewCount!}
-          followingCount={props.subscribersCount}
-          usefulCount={props.votedUsefulCount}
-          commentCount={props.commentsCount}
-          updateCount={props.updatesCount}
-        />
-      </AuthWrapper>
+      {viewCount ? (
+        <AuthWrapper roleRequired="beta-tester">
+          <Divider
+            m={0}
+            sx={{
+              border: '1px solid black',
+            }}
+          />
+          <ContentStatistics
+            statistics={[
+              {
+                icon: 'view',
+                label: buildStatisticsLabel({
+                  stat: viewCount,
+                  statUnit: 'view',
+                  usePlural: true,
+                }),
+              },
+              {
+                icon: 'thunderbolt',
+                label: buildStatisticsLabel({
+                  stat: subscribersCount,
+                  statUnit: 'following',
+                  usePlural: false,
+                }),
+              },
+              {
+                icon: 'star',
+                label: buildStatisticsLabel({
+                  stat: votedUsefulCount,
+                  statUnit: 'useful',
+                  usePlural: false,
+                }),
+              },
+              {
+                icon: 'comment',
+                label: buildStatisticsLabel({
+                  stat: commentsCount,
+                  statUnit: 'comment',
+                  usePlural: true,
+                }),
+              },
+              {
+                icon: 'update',
+                label: buildStatisticsLabel({
+                  stat: updatesCount,
+                  statUnit: 'step',
+                  usePlural: true,
+                }),
+              },
+            ]}
+          />
+        </AuthWrapper>
+      ) : null}
     </Flex>
   )
 }

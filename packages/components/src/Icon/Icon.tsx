@@ -156,7 +156,7 @@ export const Icon = (props: Props) => {
   return (
     <IconWrapper
       {...props}
-      sx={{ color: props.color ?? 'inherit', opacity: props.opacity }}
+      sx={{ color: props.color ?? 'inherit', opacity: props.opacity ?? '1' }}
       size={definedSize}
       style={{ marginRight }}
     >

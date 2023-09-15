@@ -17,13 +17,14 @@ import {
   DownloadFileFromLink,
   Tooltip,
   ConfirmModal,
-  HowToStatistics,
+  ContentStatistics,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
   isAllowedToEditContent,
   isAllowedToDeleteContent,
   capitalizeFirstLetter,
+  buildStatisticsLabel,
 } from 'src/utils/helpers'
 import { Link, useHistory } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
@@ -54,7 +55,13 @@ interface IProps {
   onUsefulClick: () => void
 }
 
-const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
+const HowtoDescription = ({
+  howto,
+  loggedInUser,
+  votedUsefulCount,
+  commentsCount,
+  ...props
+}: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const history = useHistory()
 
@@ -204,7 +211,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             {howto.moderation === 'accepted' && (
               <Box>
                 <UsefulStatsButton
-                  votedUsefulCount={props.votedUsefulCount}
+                  votedUsefulCount={votedUsefulCount}
                   hasUserVotedUseful={props.hasUserVotedUseful}
                   isLoggedIn={loggedInUser ? true : false}
                   onUsefulClick={props.onUsefulClick}
@@ -487,19 +494,51 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           )}
         </Box>
       </Flex>
-      <AuthWrapper roleRequired="beta-tester">
-        <Divider
-          sx={{
-            border: '1px solid black',
-          }}
-        />
-        <HowToStatistics
-          viewCount={viewCount!}
-          usefulCount={props.votedUsefulCount}
-          commentCount={props.commentsCount}
-          stepCount={howto.steps.length}
-        />
-      </AuthWrapper>
+      {viewCount ? (
+        <AuthWrapper roleRequired="beta-tester">
+          <Divider
+            sx={{
+              border: '1px solid black',
+            }}
+          />
+          <ContentStatistics
+            statistics={[
+              {
+                icon: 'view',
+                label: buildStatisticsLabel({
+                  stat: viewCount,
+                  statUnit: 'view',
+                  usePlural: true,
+                }),
+              },
+              {
+                icon: 'star',
+                label: buildStatisticsLabel({
+                  stat: votedUsefulCount,
+                  statUnit: 'useful',
+                  usePlural: false,
+                }),
+              },
+              {
+                icon: 'comment',
+                label: buildStatisticsLabel({
+                  stat: commentsCount,
+                  statUnit: 'comment',
+                  usePlural: true,
+                }),
+              },
+              {
+                icon: 'update',
+                label: buildStatisticsLabel({
+                  stat: howto.steps.length,
+                  statUnit: 'step',
+                  usePlural: true,
+                }),
+              },
+            ]}
+          />
+        </AuthWrapper>
+      ) : null}
     </Flex>
   )
 }

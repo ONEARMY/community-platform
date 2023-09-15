@@ -25,16 +25,30 @@ export const Default: StoryFn<typeof ContentStatistics> = () => (
       {
         icon: 'update',
         label: `${faker.datatype.number()} steps`,
-      }
+      },
     ]}
   />
 )
 
 export const SingleCount: StoryFn<typeof ContentStatistics> = () => (
   <ContentStatistics
-    viewCount={1}
-    usefulCount={faker.datatype.number()}
-    commentCount={1}
-    stepCount={1}
+    statistics={[
+      {
+        icon: 'view',
+        label: '1 view',
+      },
+      {
+        icon: 'star',
+        label: '1 useful',
+      },
+      {
+        icon: 'comment',
+        label: '1 comment',
+      },
+      {
+        icon: 'update',
+        label: '1 step',
+      },
+    ]}
   />
 )

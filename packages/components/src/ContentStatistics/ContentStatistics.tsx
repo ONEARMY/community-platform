@@ -3,16 +3,11 @@ import type { availableGlyphs } from '..'
 import { Icon } from '..'
 
 export interface IProps {
-  statistics: [
-    {
-      icon: availableGlyphs
-      label: string
-    },
-  ]
+  statistics: {
+    icon: availableGlyphs
+    label: string
+  }[]
 }
-
-const ICON_OPACITY = '0.5'
-const FONT_SIZE = '1'
 
 export const ContentStatistics = (props: IProps) => (
   <Flex
@@ -28,15 +23,10 @@ export const ContentStatistics = (props: IProps) => (
         mb={1}
         sx={{
           alignItems: 'center',
-          fontSize: FONT_SIZE,
+          fontSize: '1',
         }}
       >
-        <Icon
-          glyph={statistic.icon}
-          mr={1}
-          size={'sm'}
-          opacity={ICON_OPACITY}
-        />
+        <Icon glyph={statistic.icon} mr={1} size={'sm'} opacity={'0.5'} />
         <Text>{statistic.label}</Text>
       </Flex>
     ))}

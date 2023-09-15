@@ -11,6 +11,7 @@ import {
   isAllowedToEditContent,
   isAllowedToPin,
   calculateTotalComments,
+  buildStatisticsLabel,
 } from './helpers'
 import { FactoryUser } from 'src/test/factories/User'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
@@ -261,5 +262,30 @@ describe('src/utils/helpers', () => {
       } as IResearch.ItemDB | IItem
       expect(calculateTotalComments(item)).toBe('4')
     })
+
+    describe('buildStatisticsLabel', () => {
+      it('should return label with non-plural stat unit when stat is <= 1', () => {
+        expect(
+          buildStatisticsLabel({ stat: 1, statUnit: 'count', usePlural: true }),
+        ).toBe('1 count')
+      })
+
+      it('should return label with plural stat unit when stat is > 1 and usePlural is true ', () => {
+        expect(
+          buildStatisticsLabel({ stat: 100, statUnit: 'count', usePlural: true }),
+        ).toBe('100 counts')
+      })
+
+      it('should return label with non-plural stat when stat is > 1 and usePlural is false ', () => {
+        expect(
+          buildStatisticsLabel({
+            stat: 100,
+            statUnit: 'count',
+            usePlural: false,
+          }),
+        ).toBe('100 count')
+      })
+    })
   })
+
 })

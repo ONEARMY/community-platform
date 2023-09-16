@@ -604,7 +604,7 @@ export class HowtoStore extends ModuleStore {
       const mentions = (values as IHowtoDB)?.mentions ?? []
 
       const previousSlug =
-      existingDoc && existingDoc.slug ? existingDoc.slug : undefined
+        existingDoc && existingDoc.slug ? existingDoc.slug : undefined
       // check for duplicate only if updated title/slug
       if (previousSlug != slug) {
         const titleReusesSlug = await this.isTitleThatReusesSlug(title, _id)

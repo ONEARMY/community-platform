@@ -21,11 +21,13 @@ export const HowtoFieldTitle = (props: IProps) => {
 
   const name = 'title'
   const [duplicateTitleNotice, setduDuplicateTitleNotice] = useState(false)
+  const [text, setText] = useState(intro.title.title)
 
   const handleBlur = async (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const title = ev.target.value
-    const duplicateTitle = await store.isTitleThatReusesSlug(title)
-    setduDuplicateTitleNotice(duplicateTitle)
+    const newTitle = ev.target.value
+    setText(newTitle)
+    const isDuplicateTitle = await store.isTitleThatReusesSlug(newTitle)
+    setduDuplicateTitleNotice(isDuplicateTitle)
   }
 
   const titleValidation = (value) => {
@@ -57,9 +59,9 @@ export const HowtoFieldTitle = (props: IProps) => {
       {duplicateTitleNotice && (
         <Card sx={{ bg: 'softblue', padding: 2, marginTop: 1, border: 0 }}>
           <Text sx={{ fontSize: 1 }}>
-            Did you know there is an existing how-to with the title Existing
-            how-to Title? Using a unique title helps readers decide which how-to
-            better meet their needs.
+            Did you know there is an existing how-to with the title '{text}'?
+            Using a unique title helps readers decide which how-to better meet
+            their needs.
           </Text>
         </Card>
       )}

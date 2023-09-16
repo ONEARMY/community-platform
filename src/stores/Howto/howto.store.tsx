@@ -603,8 +603,13 @@ export class HowtoStore extends ModuleStore {
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
 
-      const titleReusesSlug = await this.isTitleThatReusesSlug(title, _id)
-      slug = titleReusesSlug ? slug + '-' + this.generateUniqueID(5) : slug
+      const previousSlug =
+      existingDoc && existingDoc.slug ? existingDoc.slug : undefined
+      // check for duplicate only if updated title/slug
+      if (previousSlug != slug) {
+        const titleReusesSlug = await this.isTitleThatReusesSlug(title, _id)
+        slug = titleReusesSlug ? slug + '-' + this.generateUniqueID(5) : slug
+      }
       const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
       if (!previousSlugs.includes(slug)) {
         previousSlugs.push(slug)

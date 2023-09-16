@@ -132,7 +132,7 @@ describe('FilterSorterDecorator', () => {
     expect(sortedItems[1]._contentModifiedTimestamp).toBe('2022-01-01')
   })
 
-  test('sort by newest', () => {
+  test('sort by latest created', () => {
     const sortedItems = decorator.sort(ItemSortingOption.Newest, mockItems)
     expect(sortedItems[0]._created).toBe('2022-02-01')
     expect(sortedItems[1]._created).toBe('2022-01-01')

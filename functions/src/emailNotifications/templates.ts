@@ -1,10 +1,4 @@
-import {
-  IHowtoDB,
-  IMapPin,
-  INotification,
-  IResearchDB,
-  IUserDB,
-} from '../../../src/models'
+import { IHowtoDB, INotification, IUserDB } from '../../../src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
 import prettier from 'prettier'
 import {
@@ -138,14 +132,35 @@ export const getNotificationEmail = (
   }
 }
 
-const HOW_TO_APPROVAL_SUBJECT = 'Your how-to has been approved!'
+export const HOW_TO_APPROVAL_SUBJECT = 'Your how-to has been approved!'
 export const getHowToApprovalEmail = (
   user: IUserDB,
   resource: IHowtoDB,
 ): Email => {
-  // TODO
-  const styles = ``
-  const content = ``
+  const styles = `
+  .greeting-container,
+  .main-container {
+    margin-bottom: 8%;
+  }
+  .greeting-container,
+  .main-container,
+  .closing-containter {
+    margin-left: 8%;
+  }`
+
+  const content = `
+  <div align="left" class="greeting-container">
+    <p>Hey ${user.displayName}</p>
+    <p>Huzzah! Your How-To ${resource.title} has been approved.</p>
+  </div>
+  <div align="left" class="main-container">
+    <p>It is visible on the community platform <a href="${SITE_URL}/how-to/${resource.slug}">here</a>.</p>
+    <p>Users are now be able to comment and mark it as useful.</p>
+  </div>
+  <div align="left" class="closing-containter">
+    <p>Thanks for sharing your knowledge!</p>
+    <p>Charlie your Precious Plastic Community Manager</p>
+  </div>`
   return {
     html: getEmailTemplate(styles, content),
     subject: HOW_TO_APPROVAL_SUBJECT,

@@ -6,6 +6,7 @@ import {
   SITE_URL,
   getProjectName,
   getNotificationListItem,
+  getProjectSignoff,
 } from './utils'
 
 interface Email {
@@ -154,12 +155,14 @@ export const getHowToApprovalEmail = (
     <p>Huzzah! Your How-To ${resource.title} has been approved.</p>
   </div>
   <div align="left" class="main-container">
-    <p>It is visible on the community platform <a href="${SITE_URL}/how-to/${resource.slug}">here</a>.</p>
+    <p>It is visible on the community platform <a href="${SITE_URL}/how-to/${
+    resource.slug
+  }">here</a>.</p>
     <p>Users are now be able to comment and mark it as useful.</p>
   </div>
   <div align="left" class="closing-containter">
     <p>Thanks for sharing your knowledge!</p>
-    <p>Charlie your Precious Plastic Community Manager</p>
+    <p>${getProjectSignoff()}</p>
   </div>`
   return {
     html: getEmailTemplate(styles, content),

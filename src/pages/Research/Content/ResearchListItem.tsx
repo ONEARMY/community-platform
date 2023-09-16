@@ -5,7 +5,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
-import { calculateTotalComments } from 'src/utils/helpers'
+import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
 import { Card, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 
@@ -198,7 +198,7 @@ const ResearchListItem = ({ item }: IProps) => {
 
 const getItemThumbnail = (researchItem: IResearch.ItemDB): string => {
   if (researchItem.updates?.length) {
-    const latestImage = researchItem?.updates
+    const latestImage = getPublicUpdates(researchItem)
       ?.map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
       .filter((url: string) => !!url)
       .pop()

@@ -173,6 +173,16 @@ export const calculateTotalComments = (item: IResearch.ItemDB | IItem) => {
   }
 }
 
+export const getPublicUpdates = (item: IResearch.ItemDB) => {
+  if (item.updates) {
+    return item.updates.filter(
+      (update) => update.status !== 'draft' && !update._deleted,
+    )
+  } else {
+    return []
+  }
+}
+
 // ensure docs passed to edit check contain _createdBy field
 export interface IEditableDoc extends DBDoc {
   _createdBy: string

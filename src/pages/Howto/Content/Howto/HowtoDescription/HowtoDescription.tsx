@@ -183,16 +183,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           </Fragment>
         )}
         <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-          <Link to={'/how-to/'}>
-            <Button
-              variant="subtle"
-              sx={{ fontSize: '14px' }}
-              data-cy="go-back"
-              icon="arrow-back"
-            >
-              Back
-            </Button>
-          </Link>
           {props.votedUsefulCount !== undefined &&
             howto.moderation === 'accepted' && (
               <Box>

@@ -28,4 +28,7 @@ if (process.env.FUNCTIONS_EMULATOR === 'true') {
   exports.emulator = require('./emulator')
 }
 
-exports.logToCloudLogging = require('./logging/logging')
+// Only log to cloud if not running locally
+if (process.env.FUNCTIONS_EMULATOR !== 'true') {
+  exports.logToCloudLogging = require('./logging/logging')
+}

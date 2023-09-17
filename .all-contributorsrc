@@ -408,6 +408,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "LiptonB",
+      "name": "Ben Lipton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/467965?v=4",
+      "profile": "https://github.com/LiptonB",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

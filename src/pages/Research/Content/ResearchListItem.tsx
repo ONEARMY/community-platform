@@ -1,10 +1,13 @@
 import { format } from 'date-fns'
 import { Icon, ModerationStatus, Username, Tooltip } from 'oa-components'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
-import { calculateTotalComments } from 'src/utils/helpers'
+import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
 import { Card, Flex, Grid, Heading, Text, Box } from 'theme-ui'
+import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 
 interface IProps {
   item: IResearch.ItemDB & {
@@ -30,12 +33,25 @@ const ResearchListItem = ({ item }: IProps) => {
           key={item._id}
           style={{ width: '100%' }}
         >
-          <Grid
-            px={3}
-            py={3}
-            columns={[1, '2fr minmax(274px, 1fr)']}
-            gap="60px"
-          >
+          <Grid px={3} py={3} columns={[1, '60px 2fr 1fr']} gap="40px">
+            <Box
+              sx={{
+                display: ['none', 'block'],
+              }}
+            >
+              <LazyLoadImage
+                style={{
+                  width: `calc(100% + 32px)`,
+                  aspectRatio: '1 / 1',
+                  objectFit: 'cover',
+                  margin: '-15px',
+                  verticalAlign: 'top',
+                }}
+                threshold={500}
+                src={getItemThumbnail(item)}
+                crossOrigin=""
+              />
+            </Box>
             <Flex
               sx={{
                 flexDirection: 'column',
@@ -178,6 +194,18 @@ const ResearchListItem = ({ item }: IProps) => {
       </Flex>
     </Card>
   )
+}
+
+const getItemThumbnail = (researchItem: IResearch.ItemDB): string => {
+  if (researchItem.updates?.length) {
+    const latestImage = getPublicUpdates(researchItem)
+      ?.map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
+      .filter((url: string) => !!url)
+      .pop()
+    return latestImage ?? defaultResearchThumbnail
+  } else {
+    return defaultResearchThumbnail
+  }
 }
 
 const getItemDate = (item: IResearch.ItemDB, variant: string): string => {

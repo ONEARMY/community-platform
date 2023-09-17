@@ -11,9 +11,13 @@ describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/how-to')
   })
+  type Category = 'brainstorm' | 'exhibition' | 'product'
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
   type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
 
+  const selectCategory = (category: Category) => {
+    cy.selectTag(category, '[data-cy=category-select]')
+  }
   const selectTimeDuration = (duration: Duration) => {
     cy.selectTag(duration, '[data-cy=time-select]')
   }
@@ -101,6 +105,7 @@ describe('[How To]', () => {
     const expected = {
       _createdBy: 'howto_creator',
       _deleted: false,
+      category: 'product',
       description: 'After creating, the how-to will be deleted',
       difficulty_level: 'Medium',
       time: '1-2 weeks',
@@ -173,6 +178,7 @@ describe('[How To]', () => {
 
     it('[By Authenticated]', () => {
       const {
+        category,
         description,
         difficulty_level,
         fileLink,
@@ -242,6 +248,7 @@ describe('[How To]', () => {
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
       cy.selectTag('howto_testing')
+      selectCategory(category as Category)
       selectTimeDuration(time as Duration)
       selectDifficultLevel(difficulty_level as Difficulty)
 
@@ -343,6 +350,7 @@ describe('[How To]', () => {
     const expected = {
       _createdBy: 'howto_editor',
       _deleted: false,
+      category: 'exhibition',
       description: 'After editing, all changes are reverted',
       difficulty_level: 'Hard',
       files: [],
@@ -472,6 +480,7 @@ describe('[How To]', () => {
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]').clear().type(expected.title)
       cy.selectTag('howto_testing')
+      selectCategory(expected.category as Category)
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
       cy.get('[data-cy=intro-description]').clear().type(expected.description)

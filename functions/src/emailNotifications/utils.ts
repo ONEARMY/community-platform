@@ -7,6 +7,16 @@ import {
   PP_PROJECT_NAME,
   PK_PROJECT_NAME,
 } from './constants'
+import { firebaseAuth } from '../Firebase/auth'
+
+export const getUserEmail = async (uid: string): Promise<string | null> => {
+  try {
+    const { email } = await firebaseAuth.getUser(uid)
+    return email
+  } catch (error) {
+    return null
+  }
+}
 
 export const SITE_URL = CONFIG.deployment.site_url
 

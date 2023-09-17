@@ -26,7 +26,10 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
         border: 0;
       }
       .settings-table-container,
-      .project-image-table-container,
+      .project-image-table-container {
+        margin-bottom: 8%;
+      }
+
       .greeting-container {
         margin-bottom: 8%;
       }
@@ -40,6 +43,7 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
       .notifications-header-icon {
         margin-right: 8px;
       }
+
       @media only screen and (max-width: 550px) {
         .table-container {
           width: 100%;
@@ -63,6 +67,7 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
                 </td>
               </tr>
             </table>
+
             <div align="left" class="greeting-container">
               <p>Hey User 2</p>
               <p>You've missed notifications. No worries.</p>
@@ -164,7 +169,10 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
         border: 0;
       }
       .settings-table-container,
-      .project-image-table-container,
+      .project-image-table-container {
+        margin-bottom: 8%;
+      }
+
       .greeting-container {
         margin-bottom: 8%;
       }
@@ -178,6 +186,7 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
       .notifications-header-icon {
         margin-right: 8px;
       }
+
       @media only screen and (max-width: 550px) {
         .table-container {
           width: 100%;
@@ -201,6 +210,7 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
                 </td>
               </tr>
             </table>
+
             <div align="left" class="greeting-container">
               <p>Hey User 1</p>
               <p>You've missed notifications. No worries.</p>

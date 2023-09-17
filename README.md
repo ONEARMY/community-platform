@@ -112,6 +112,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/manuelrurda"><img src="https://avatars.githubusercontent.com/u/62727899?v=4?s=60" width="60px;" alt="Manuel Rodriguez Urdapilelta"/><br /><sub><b>Manuel Rodriguez Urdapilelta</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=manuelrurda" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LiptonB"><img src="https://avatars.githubusercontent.com/u/467965?v=4?s=60" width="60px;" alt="Ben Lipton"/><br /><sub><b>Ben Lipton</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=LiptonB" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

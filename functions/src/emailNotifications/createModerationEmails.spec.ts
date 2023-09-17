@@ -86,6 +86,18 @@ describe('create email test', () => {
       } = doc.data()
       expect(html).toMatchSnapshot()
       expect(subject).toBe(HOW_TO_APPROVAL_SUBJECT)
+      // Check that the email contains the correct user name
+      expect(html).toContain('Hey User 1')
+      // Check that the email contains the correct howto title
+      expect(html).toContain(
+        'Huzzah! Your How-To Mock Howto has been approved.',
+      )
+      // Check that the email contains the correct howto link
+      expect(html).toContain(
+        'https://community.preciousplastic.com/how-to/00_user_1_howto',
+      )
+      // Check that the email contains the correct PP signoff
+      expect(html).toContain('Charlie your Precious Plastic Community Manager')
       expect(to).toBe('test@test.com')
     })
   })

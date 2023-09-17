@@ -28,6 +28,8 @@ export class ModuleStore {
   public setActiveUser(user: any) {
     this.activeUser = user
   }
+
+  public isTitleThatReusesSlug = async () => {}
 }
 
 export type IMockDB = typeof ModuleStore.prototype.db

@@ -204,7 +204,7 @@ describe('[How To]', () => {
         .type('Make glass-like beams')
         .blur({ force: true })
       cy.contains(
-        'Did you know there is an existing how-to with the title \'Make glass-like beams\'? Using a unique title helps readers decide which how-to better meet their needs.',
+        "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Warn if title is identical with a previously existing one')
@@ -213,7 +213,7 @@ describe('[How To]', () => {
         .type('Make glassy beams')
         .blur({ force: true })
       cy.contains(
-        'Did you know there is an existing how-to with the title \'Make glassy beams\'? Using a unique title helps readers decide which how-to better meet their needs.',
+        "Did you know there is an existing how-to with the title 'Make glassy beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Warn if title has less than minimum required characters')
@@ -474,7 +474,7 @@ describe('[How To]', () => {
         .type('Make glass-like beams')
         .blur({ force: true })
       cy.contains(
-        'Did you know there is an existing how-to with the title \'Make glass-like beams\'? Using a unique title helps readers decide which how-to better meet their needs.',
+        "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Update the intro')

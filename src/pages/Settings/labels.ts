@@ -28,6 +28,9 @@ export const fields = {
     placeholder:
       "Describe in details what you do and who you are. Write in English otherwise your profile won't be approved.",
   },
+  country: {
+    title: 'Your location',
+  },
   coverImages: {
     description:
       'The cover images are shown in your profile and helps us evaluate your account. Make sure the first image shows your space. Best size is 1920x1080.',
@@ -36,6 +39,9 @@ export const fields = {
   deleteAccount: {
     description: 'Please reach out to support.',
     title: 'Would you like to delete your account?',
+  },
+  displayName: {
+    title: 'Display Name',
   },
   email: {
     title: 'Current email address',
@@ -101,6 +107,7 @@ export const headings = {
   editProfile: 'Edit profile',
   expertise: 'Expertise',
   focus: 'Focus',
+  infos: 'Infos',
   map: {
     description:
       'Add yourself to the map as an individual who wants to get started. Find local community members and meetup to join forces and collaborate.',

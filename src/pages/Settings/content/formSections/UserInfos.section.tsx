@@ -12,7 +12,7 @@ import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { ProfileType } from 'src/modules/profile/types'
 import { SelectField } from 'src/common/Form/Select.field'
 
-import { fields } from 'src/pages/Settings/labels'
+import { fields, headings } from 'src/pages/Settings/labels'
 
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUser } from 'src/models'
@@ -123,11 +123,12 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     const { profileType, links, coverImages } = formValues
     const isMemberProfile = profileType === ProfileType.MEMBER
     const buttonText = fields.links.button
+    const { about, country, displayName, } = fields
 
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading variant="small">Infos</Heading>
+          <Heading variant="small">{headings.infos}</Heading>
         </Flex>
         <Box>
           <Flex sx={{ flexWrap: 'wrap' }}>
@@ -139,7 +140,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                 display: 'block',
               }}
             >
-              Display Name *
+              {`${displayName.title} *`}
             </Text>
             <Field
               data-cy="username"
@@ -152,7 +153,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             {this.props.showLocationDropdown && (
               <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                 <Text my={4} sx={{ fontSize: 2 }}>
-                  Your location
+                  {country.title}
                 </Text>
                 <Field data-cy="location-dropdown" name="country">
                   {(field) => (
@@ -170,13 +171,13 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             )}
 
             <Text mb={2} mt={7} sx={{ fontSize: 2 }}>
-              {`${fields.about.title} *`}
+              {`${about.title} *`}
             </Text>
             <Field
               data-cy="info-description"
               name="about"
               component={FieldTextarea}
-              placeholder={fields.about.placeholder}
+              placeholder={about.placeholder}
               validate={required}
               validateFields={[]}
             />

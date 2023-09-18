@@ -1,7 +1,7 @@
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
 import { defaultError, fields } from 'src/pages/Settings/labels'
 
-import type { ValidationErrors } from 'final-form'
+import type { IErrorsListSet, ITopLevelErrorsList } from 'src/common/Form/types'
 
 const flattenErrors = (formErrors) => {
   const errors = {}
@@ -23,7 +23,7 @@ const createSet = (formErrors: object) => {
 }
 
 interface IProps {
-  errors: ValidationErrors
+  errors: ITopLevelErrorsList | undefined
   isVisible: boolean
 }
 
@@ -32,5 +32,10 @@ export const SettingsErrors = ({ errors, isVisible }: IProps) => {
 
   const errorsListSet = [createSet(errors)]
 
-  return <ErrorsContainer errorsListSet={errorsListSet} isVisible={isVisible} />
+  return (
+    <ErrorsContainer
+      errorsListSet={errorsListSet as IErrorsListSet[]}
+      isVisible={isVisible}
+    />
+  )
 }

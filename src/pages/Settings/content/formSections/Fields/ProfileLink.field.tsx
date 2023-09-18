@@ -80,7 +80,6 @@ export class ProfileLinkField extends Component<IProps, IState> {
   render() {
     const { index, name, isDeleteEnabled } = this.props
     const { message, text } = buttons.deleteLink
-    const { link, type } = fields.links
 
     const DeleteButton = (props) => (
       <Button
@@ -110,7 +109,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
               options={COM_TYPE_MOCKS}
               component={SelectField}
               onCustomChange={(linkType: string) => this.setState({ linkType })}
-              placeholder={type}
+              placeholder={buttons.link.type}
               validate={required}
               validateFields={[]}
               style={{ width: '100%', height: '40px' }}
@@ -137,7 +136,7 @@ export class ProfileLinkField extends Component<IProps, IState> {
             validate={(value) => this.validateDependingOnType(value)}
             validateFields={[]}
             component={FieldInput}
-            placeholder={link}
+            placeholder={fields.links.placeholder}
             format={(v) => formatLink(v, this.state.linkType)}
             formatOnBlur={true}
             style={{ width: '100%', height: '40px', marginBottom: '0px' }}

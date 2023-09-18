@@ -1,5 +1,7 @@
 import { MAX_PIN_LENGTH } from './constants'
 
+import type { ILabels } from 'src/common/Form/types'
+
 export const buttons = {
   changeEmail: 'Change email',
   changePassword: 'Change password',
@@ -8,6 +10,10 @@ export const buttons = {
     text: 'Delete',
   },
   guidelines: 'Check out our guidelines',
+  link: {
+    add: 'Add link',
+    type: 'type',
+  },
   map: 'Add a map pin',
   removePin: 'Remove map pin',
   save: 'Save profile',
@@ -17,7 +23,7 @@ export const buttons = {
 
 export const defaultError = 'Make sure this field is filled correctly'
 
-export const fields = {
+export const fields: ILabels = {
   activities: {
     description: 'Not sure about your focus?',
     error: 'Please select a focus',
@@ -56,10 +62,8 @@ export const fields = {
     title: 'What are you specialised in ?',
   },
   links: {
-    button: 'Add link',
-    link: 'Link',
+    placeholder: 'Link',
     title: 'Contacts & links',
-    type: 'type',
   },
   location: {
     error: 'Please select your location',

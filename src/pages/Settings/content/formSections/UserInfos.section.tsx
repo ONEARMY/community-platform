@@ -12,7 +12,7 @@ import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { ProfileType } from 'src/modules/profile/types'
 import { SelectField } from 'src/common/Form/Select.field'
 
-import { fields, headings } from 'src/pages/Settings/labels'
+import { buttons, fields, headings } from 'src/pages/Settings/labels'
 
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUser } from 'src/models'
@@ -122,8 +122,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
     const { formValues } = this.props
     const { profileType, links, coverImages } = formValues
     const isMemberProfile = profileType === ProfileType.MEMBER
-    const buttonText = fields.links.button
-    const { about, country, displayName, } = fields
+    const { about, country, displayName } = fields
 
     return (
       <FlexSectionContainer>
@@ -217,7 +216,7 @@ export class UserInfosSection extends React.Component<IProps, IState> {
                       fields.push({} as any)
                     }}
                   >
-                    {buttonText}
+                    {buttons.link.add}
                   </Button>
                 </>
               )}

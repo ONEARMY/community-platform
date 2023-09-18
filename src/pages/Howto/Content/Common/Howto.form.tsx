@@ -209,7 +209,10 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               px={2}
                               sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                             >
-                              <HowtoFieldTitle store={this.store} />
+                              <HowtoFieldTitle
+                                store={this.store}
+                                _id={formValues._id}
+                              />
                               <HowtoFieldCategory />
                               <HowtoFieldTags />
                               <HowtoFieldTime />

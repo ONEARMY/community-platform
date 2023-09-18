@@ -13,20 +13,21 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 
 interface IProps {
   store: HowtoStore
+  _id: string
 }
 
 export const HowtoFieldTitle = (props: IProps) => {
-  const { store } = props
+  const { store, _id } = props
   const { placeholder, title } = intro.title
 
   const name = 'title'
   const [duplicateTitleNotice, setduDuplicateTitleNotice] = useState(false)
-  const [text, setText] = useState(intro.title.title)
+  const [text, setText] = useState('')
 
   const handleBlur = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = ev.target.value
     setText(newTitle)
-    const isDuplicateTitle = await store.isTitleThatReusesSlug(newTitle)
+    const isDuplicateTitle = await store.isTitleThatReusesSlug(newTitle, _id)
     setduDuplicateTitleNotice(isDuplicateTitle)
   }
 

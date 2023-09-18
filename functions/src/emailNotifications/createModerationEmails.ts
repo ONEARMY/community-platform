@@ -29,10 +29,8 @@ export async function createHowtoModerationEmail(howto: IHowtoDB) {
     throw new Error(`Cannot get user ${userName}`)
   }
 
-  if (
-    toUser.notification_settings?.emailFrequency !==
-    EmailNotificationFrequency.NEVER
-  ) {
+  // Release first under beta to test.
+  if (toUser.userRoles?.includes('beta-tester')) {
     if (howto.moderation === 'accepted') {
       await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,

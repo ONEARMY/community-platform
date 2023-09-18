@@ -1,6 +1,5 @@
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
 import { DB_ENDPOINTS, IUserDB } from '../models'
-import { EmailNotificationFrequency } from 'oa-shared'
 import { HOW_TO_APPROVAL_SUBJECT } from './templates'
 import { setMockHowto } from '../emulator/seed/content-generate'
 import { handleHowToModerationUpdate } from './createModerationEmails'
@@ -39,16 +38,11 @@ describe('create email test', () => {
       userFactory('user_1', {
         displayName: 'User 1',
         userName: 'user_1',
-        notification_settings: {
-          emailFrequency: EmailNotificationFrequency.DAILY,
-        },
+        userRoles: ['beta-tester'],
       }),
       userFactory('user_2', {
         displayName: 'User 2',
         userName: 'user_2',
-        notification_settings: {
-          emailFrequency: EmailNotificationFrequency.NEVER,
-        },
       }),
     ])
 
@@ -102,7 +96,8 @@ describe('create email test', () => {
     })
   })
 
-  it('Does not creates email for people unsubscribed from emails', async () => {
+  // Remove this test once released to all users.
+  it('Does not creates email for people who are not beta testers', async () => {
     const howtoApproved = await setMockHowto({ uid: 'user_2' })
     const howtoAwaitingModeration = {
       ...howtoApproved,

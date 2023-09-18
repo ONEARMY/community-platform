@@ -1,10 +1,12 @@
 import * as React from 'react'
-
 import { Flex, Heading, Box, Text } from 'theme-ui'
+import { Field } from 'react-final-form'
+
 import { FlexSectionContainer } from './elements'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { required } from 'src/utils/validators'
-import { Field } from 'react-final-form'
+import { fields } from 'src/pages/Settings/labels'
+
 import type { IWorkspaceType } from 'src/models'
 
 import Extrusion from 'src/assets/images/workspace-focus/extrusion.png'
@@ -48,6 +50,8 @@ const WORKSPACE_TYPES: IWorkspaceType[] = [
 
 export class WorkspaceSection extends React.Component<any> {
   render() {
+    const { description, error, title } = fields.workspaceType
+
     return (
       <Field
         name="workspaceType"
@@ -56,11 +60,11 @@ export class WorkspaceSection extends React.Component<any> {
         render={({ input, meta }) => (
           <FlexSectionContainer>
             <Flex sx={{ justifyContent: 'space-between' }}>
-              <Heading variant="small">Workspace</Heading>
+              <Heading variant="small">{title}</Heading>
             </Flex>
             <Box>
               <Text mt={4} mb={4}>
-                What kind of Precious Plastic workspace do you run?
+                {description}
               </Text>
               <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
                 {WORKSPACE_TYPES.map((workspace, index: number) => (
@@ -89,7 +93,7 @@ export class WorkspaceSection extends React.Component<any> {
                     marginRight: 1,
                   }}
                 >
-                  Please select your workspace type
+                  {error}
                 </Text>
               )}
             </Box>

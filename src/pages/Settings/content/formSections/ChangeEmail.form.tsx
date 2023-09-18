@@ -1,9 +1,12 @@
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button, FieldInput } from 'oa-components'
-import type { UserStore } from 'src/stores/User/user.store'
 import { Text, Flex, Label } from 'theme-ui'
+import { Button, FieldInput } from 'oa-components'
+
 import { PasswordField } from 'src/common/Form/PasswordField'
+import { buttons, fields } from 'src/pages/Settings/labels'
+
+import type { UserStore } from 'src/stores/User/user.store'
 
 interface IFormValues {
   password?: string
@@ -64,7 +67,7 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
             })
           }
         >
-          Change email
+          {buttons.changeEmail}
         </Button>
         {this.state.showChangeEmailForm && (
           <Form
@@ -80,16 +83,18 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
               return (
                 <form onSubmit={handleSubmit}>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                    <Text>Current email address: {this.state.email}</Text>
+                    <Text>
+                      {fields.email.title}: {this.state.email}
+                    </Text>
                   </Flex>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="newEmail" sx={_labelStyle}>
-                      New email address :
+                      {fields.newEmail.title} :
                     </Label>
                     <Field
                       name="newEmail"
                       component={FieldInput}
-                      placeholder="New email address"
+                      placeholder={fields.newEmail.placeholder}
                       type="email"
                       autocomplete="off"
                       required
@@ -97,7 +102,7 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
                   </Flex>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="oldPassword" sx={_labelStyle}>
-                      Password :
+                      {fields.password.title} :
                     </Label>
                     <PasswordField
                       name="password"
@@ -112,7 +117,7 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
                     disabled={disabled}
                     variant={disabled ? 'primary' : 'primary'}
                   >
-                    Submit
+                    {buttons.submit}
                   </Button>
                   <Text color="error">{this.state.errorMsg}</Text>
                 </form>

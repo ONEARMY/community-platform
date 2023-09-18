@@ -1,13 +1,17 @@
 import { Heading, Box, Text, Flex, Grid, Paragraph } from 'theme-ui'
-import { FlexSectionContainer } from './elements'
 import { Button, ExternalLink } from 'oa-components'
-import type { ProfileTypeLabel } from 'src/modules/profile/types'
-import { getSupportedProfileTypes } from 'src/modules/profile'
-import { CustomRadioField } from './Fields/CustomRadio.field'
 import { Field } from 'react-final-form'
 import { useTheme } from '@emotion/react'
 
+import { FlexSectionContainer } from './elements'
+import { getSupportedProfileTypes } from 'src/modules/profile'
+import { CustomRadioField } from './Fields/CustomRadio.field'
+import { buttons, headings, fields } from 'src/pages/Settings/labels'
+
+import type { ProfileTypeLabel } from 'src/modules/profile/types'
+
 const ProfileTypes = () => {
+  const { description, error, title } = fields.activities
   const theme = useTheme()
   const profileTypes = getSupportedProfileTypes().filter(({ label }) =>
     Object.keys(theme.badges).includes(label),
@@ -19,12 +23,10 @@ const ProfileTypes = () => {
       render={(props) => (
         <FlexSectionContainer>
           <Flex sx={{ justifyContent: 'space-between' }}>
-            <Heading variant="small">Focus</Heading>
+            <Heading variant="small">{headings.focus}</Heading>
           </Flex>
           <Box>
-            <Paragraph my={4}>
-              What is your main {theme.name} activity?
-            </Paragraph>
+            <Paragraph my={4}>{title}</Paragraph>
             <Grid columns={['repeat(auto-fill, minmax(150px, 1fr))']} gap={2}>
               {profileTypes.map((profile, index: number) => (
                 <Box key={index}>
@@ -45,16 +47,14 @@ const ProfileTypes = () => {
               ))}
             </Grid>
             <Flex sx={{ flexWrap: 'wrap', alignItems: 'center' }} mt={4}>
-              <Text my={2}>Not sure about your focus ?</Text>
+              <Text my={2}>{description}</Text>
               <ExternalLink href={theme.profileGuidelinesURL}>
                 <Button ml={[1, 2, 2]} variant="outline" data-cy="go-to">
-                  Check out our guidelines
+                  {buttons.guidelines}
                 </Button>
               </ExternalLink>
             </Flex>
-            {props.meta.error && (
-              <Text color={theme.colors.red}>Please select a focus</Text>
-            )}
+            {props.meta.error && <Text color={theme.colors.red}>{error}</Text>}
           </Box>
         </FlexSectionContainer>
       )}

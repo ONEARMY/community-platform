@@ -3,12 +3,16 @@ import { observer, inject } from 'mobx-react'
 import { Heading, Text, Box, Flex } from 'theme-ui'
 import { Field } from 'react-final-form'
 import { Button, FieldTextarea, MapWithDraggablePin } from 'oa-components'
+
 import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { required } from 'src/utils/validators'
+import { randomIntFromInterval } from 'src/utils/helpers'
+import { MAX_PIN_LENGTH } from 'src/pages/Settings/constants'
+import { buttons, headings, fields } from 'src/pages/Settings/labels'
+
 import type { ILocation } from 'src/models/common.models'
 import type { UserStore } from 'src/stores/User/user.store'
-import { randomIntFromInterval } from 'src/utils/helpers'
 
 interface IState {
   showAddressEdit: boolean
@@ -44,15 +48,13 @@ export class MemberMapPinSection extends React.Component<any, IState> {
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Heading variant="small" id="your-map-pin">
-            Add yourself to the map!
+            {headings.map.title}
           </Heading>
         </Flex>
 
         <Box>
           <Text mt={4} mb={4} sx={{ display: 'block' }}>
-            Add yourself to the map as an individual who wants to get started.
-            Find local community members and meetup to join forces and
-            collaborate.
+            {headings.map.description}
           </Text>
 
           {!this.state.hasMapPin && (
@@ -64,7 +66,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                   this.setState({ hasMapPin: !this.state.hasMapPin })
                 }}
               >
-                Add a map pin
+                {buttons.map}
               </Button>
 
               <Field
@@ -80,16 +82,16 @@ export class MemberMapPinSection extends React.Component<any, IState> {
           {this.state.hasMapPin && (
             <>
               <Text mb={2} mt={4} sx={{ fontSize: 2, display: 'block' }}>
-                Short description of your pin*
+                {fields.mapPinDescription.title}
               </Text>
               <Field
                 data-cy="pin-description"
                 name="mapPinDescription"
                 component={FieldTextarea}
-                maxLength="70"
+                maxLength={MAX_PIN_LENGTH}
                 style={{ height: 'inherit' }}
                 rows="1"
-                placeholder="Short description of your pin (max 70 characters)"
+                placeholder={fields.mapPinDescription.placeholder}
                 validate={required}
                 validateFields={[]}
               />
@@ -113,7 +115,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                           mt={4}
                           sx={{ fontSize: 2, display: 'block' }}
                         >
-                          Your location
+                          {fields.location.title}
                         </Text>
                         {props.meta.invalid && (
                           <Text
@@ -123,7 +125,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                               color: 'red',
                             }}
                           >
-                            Please select your location
+                            {fields.location.error}
                           </Text>
                         )}
 
@@ -150,7 +152,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                             })
                           }}
                         >
-                          Remove map pin
+                          {buttons.removePin}
                         </Button>
                       </Box>
                     </>

@@ -1,9 +1,12 @@
 import * as React from 'react'
 import { Form } from 'react-final-form'
-import { Button, FieldInput } from 'oa-components'
-import type { UserStore } from 'src/stores/User/user.store'
 import { Text, Flex, Label } from 'theme-ui'
+import { Button, FieldInput } from 'oa-components'
+
 import { PasswordField } from 'src/common/Form/PasswordField'
+import { buttons, fields } from 'src/pages/Settings/labels'
+
+import type { UserStore } from 'src/stores/User/user.store'
 
 interface IFormValues {
   oldPassword?: string
@@ -57,7 +60,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
             })
           }
         >
-          Change password
+          {buttons.changePassword}
         </Button>
         {this.state.showChangePasswordForm && (
           <Form
@@ -75,7 +78,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                 <form onSubmit={handleSubmit}>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="oldPassword" sx={_labelStyle}>
-                      Old password :
+                      {fields.oldPassword.title} :
                     </Label>
                     <PasswordField
                       name="oldPassword"
@@ -87,7 +90,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                   </Flex>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="newPassword" sx={_labelStyle}>
-                      New password :
+                      {fields.newPassword.title} :
                     </Label>
                     <PasswordField
                       name="newPassword"
@@ -99,7 +102,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                   </Flex>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
                     <Label htmlFor="repeatPassword" sx={_labelStyle}>
-                      Repeat new password :
+                      {fields.repeatPassword.title} :
                     </Label>
                     <PasswordField
                       name="repeatPassword"
@@ -114,7 +117,7 @@ export class ChangePasswordForm extends React.Component<IProps, IState> {
                     disabled={disabled}
                     variant={disabled ? 'primary' : 'primary'}
                   >
-                    Submit
+                    {buttons.submit}
                   </Button>
 
                   <Text color="error">{this.state.errorMsg}</Text>

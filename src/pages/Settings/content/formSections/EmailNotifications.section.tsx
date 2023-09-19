@@ -1,11 +1,14 @@
 import * as React from 'react'
 import { Heading, Box, Text } from 'theme-ui'
-import { FlexSectionContainer } from './elements'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
-import type { INotificationSettings } from 'src/models/user.models'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { Field } from 'react-final-form'
+
+import { FlexSectionContainer } from './elements'
+import { fields } from 'src/pages/Settings/labels'
+
+import type { INotificationSettings } from 'src/models/user.models'
 
 interface IProps {
   notificationSettings?: INotificationSettings
@@ -22,6 +25,7 @@ const emailFrequencyOptions: {
 ]
 
 export const EmailNotificationsSection = observer((props: IProps) => {
+  const { description, title } = fields.emailNotifications
   const defaultValue = React.useMemo(
     () =>
       emailFrequencyOptions.find(
@@ -34,10 +38,9 @@ export const EmailNotificationsSection = observer((props: IProps) => {
   )
   return (
     <FlexSectionContainer>
-      <Heading variant="small">Email notifications (beta)</Heading>
+      <Heading variant="small">{title}</Heading>
       <Text mt={4} mb={4} sx={{ display: 'block' }}>
-        We send an email with all the notifications you've missed. Select how
-        often you want to receive this:
+        {`${description}:`}
       </Text>
       <Box mt={2} sx={{ width: '40%' }}>
         <Field name="notification_settings.emailFrequency">

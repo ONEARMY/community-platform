@@ -5,7 +5,7 @@ import { EventContext } from 'firebase-functions/v1'
 const DISCORD_ALERT_CHANNEL_WEBHOOK_URL =
   CONFIG?.integrations?.discord_alert_channel_webhook
 
-const sendErrorAlert = async (functionName: string, error: Error) => {
+export const sendErrorAlert = async (functionName: string, error: Error) => {
   console.error(`Error in ${functionName}`, error)
   if (!DISCORD_ALERT_CHANNEL_WEBHOOK_URL) {
     console.error(
@@ -23,7 +23,7 @@ const sendErrorAlert = async (functionName: string, error: Error) => {
 export const withErrorAlerting = async (
   context: EventContext,
   fn: (...params: any) => any,
-  params?: any[],
+  params: any[] = [],
 ) => {
   try {
     fn(...params)

@@ -123,14 +123,18 @@ describe('[Settings]', () => {
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
-      cy.get(`[data-cy=${expected.workspaceType}]`).click()
 
+      cy.step("Can't save without required fields being populated")
+      cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('be.visible')
+
+      cy.step('Populate profile')
+      cy.get(`[data-cy=${expected.workspaceType}]`).click()
       setInfo({
         username: expected.userName,
         description: expected.about,
         coverImage: 'images/profile-cover-1.jpg',
       })
-
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
@@ -151,8 +155,10 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('not.exist')
       cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
+
       cy.step('Verify if all changes were saved correctly')
       cy.queryDocuments(
         DbCollectionName.users,
@@ -240,6 +246,10 @@ describe('[Settings]', () => {
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
 
+      cy.step("Can't save without required fields being populated")
+      cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('be.visible')
+
       setInfo({
         username: expected.userName,
         country: expected.country,
@@ -254,6 +264,7 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('not.exist')
       cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
@@ -448,6 +459,11 @@ describe('[Settings]', () => {
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
 
+      cy.step("Can't save without required fields being populated")
+      cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('be.visible')
+
+      cy.step('Populate profile')
       setInfo({
         username: expected.userName,
         description: expected.about,
@@ -473,8 +489,10 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('not.exist')
       cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
+
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
@@ -681,6 +699,11 @@ describe('[Settings]', () => {
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
 
+      cy.step("Can't save without required fields being populated")
+      cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('be.visible')
+
+      cy.step('Populate profile')
       setInfo({
         username: expected.userName,
         description: expected.about,
@@ -738,6 +761,7 @@ describe('[Settings]', () => {
         locationName: expected.location.value,
       })
       cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('not.exist')
       cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(

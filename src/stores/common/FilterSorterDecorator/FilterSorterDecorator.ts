@@ -80,8 +80,12 @@ export class FilterSorterDecorator<T extends IItem> {
 
   private sortByLatestModified(listItems: T[]) {
     return [...listItems].sort((a, b) => {
-      const dateA = new Date(a._contentModifiedTimestamp).toISOString()
-      const dateB = new Date(b._contentModifiedTimestamp).toISOString()
+      const dateA = new Date(
+        a._contentModifiedTimestamp || a._modified,
+      ).toISOString()
+      const dateB = new Date(
+        b._contentModifiedTimestamp || b._modified,
+      ).toISOString()
       if (dateA === dateB) {
         return 0
       }

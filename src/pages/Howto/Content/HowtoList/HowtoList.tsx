@@ -90,7 +90,7 @@ export class HowtoList extends React.Component<any, IState> {
 
   public render() {
     const { filteredHowtos, selectedCategory, searchValue, referrerSource } =
-      this.props.howtoStore
+      this.injected.howtoStore
 
     const theme = this.props?.themeStore?.currentTheme
     const { allTagsByKey } = this.injected.tagsStore
@@ -103,6 +103,11 @@ export class HowtoList extends React.Component<any, IState> {
           .map((key) => allTagsByKey[key])
           .filter(Boolean),
     }))
+
+    const availableAuthors =
+      filteredHowtos?.length !== 0
+        ? Array.from(new Set(filteredHowtos.map((item) => item._createdBy)))
+        : []
 
     return (
       <Box>
@@ -151,7 +156,11 @@ export class HowtoList extends React.Component<any, IState> {
             flexDirection: ['column', 'column', 'row'],
           }}
         >
-          <SortFilterHeader store={this.props.howtoStore} type="how-to" />
+          <SortFilterHeader
+            store={this.props.howtoStore}
+            type="how-to"
+            authors={availableAuthors}
+          />
           <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Link
               to={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}

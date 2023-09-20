@@ -52,6 +52,9 @@ export class ResearchStore extends ModuleStore {
   public selectedCategory: string
 
   @observable
+  public selectedAuthor: string
+
+  @observable
   public searchValue: string
 
   @observable
@@ -76,6 +79,7 @@ export class ResearchStore extends ModuleStore {
     super.init()
 
     this.selectedCategory = ''
+    this.selectedAuthor = ''
     this.searchValue = ''
     this.availableItemSortingOption = [
       ItemSortingOption.Created,
@@ -106,6 +110,10 @@ export class ResearchStore extends ModuleStore {
     this.activeSorter = sorter
   }
 
+  public updateSelectedAuthor(author: string) {
+    this.selectedAuthor = author
+  }
+
   @computed get filteredResearches() {
     const researches = this.filterSorterDecorator.filterByCategory(
       this.allResearchItems,
@@ -117,6 +125,11 @@ export class ResearchStore extends ModuleStore {
     validResearches = this.filterSorterDecorator.search(
       validResearches,
       this.searchValue,
+    )
+
+    validResearches = this.filterSorterDecorator.filterByAuthor(
+      validResearches,
+      this.selectedAuthor,
     )
 
     return this.filterSorterDecorator.sort(

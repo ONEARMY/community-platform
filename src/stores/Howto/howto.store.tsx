@@ -56,6 +56,9 @@ export class HowtoStore extends ModuleStore {
   public selectedCategory: string
 
   @observable
+  public selectedAuthor: string
+
+  @observable
   public searchValue: string
 
   @observable
@@ -95,6 +98,7 @@ export class HowtoStore extends ModuleStore {
       })
     })
     this.selectedCategory = ''
+    this.selectedAuthor = ''
     this.searchValue = ''
     this.referrerSource = ''
     this.availableItemSortingOption = [
@@ -105,6 +109,10 @@ export class HowtoStore extends ModuleStore {
 
   public updateActiveSorter(sorter: ItemSortingOption) {
     this.activeSorter = sorter
+  }
+
+  public updateSelectedAuthor(author: string) {
+    this.selectedAuthor = author
   }
 
   public getActiveHowToComments(): IComment[] {
@@ -224,6 +232,11 @@ export class HowtoStore extends ModuleStore {
     validHowtos = this.filterSorterDecorator.search(
       validHowtos,
       this.searchValue,
+    )
+
+    validHowtos = this.filterSorterDecorator.filterByAuthor(
+      validHowtos,
+      this.selectedAuthor,
     )
 
     return this.filterSorterDecorator.sort(

@@ -58,6 +58,14 @@ export class FilterSorterDecorator<T extends IItem> {
       : listItems
   }
 
+  public filterByAuthor(listItems: T[] = [], author: string): T[] {
+    return author
+      ? listItems.filter((obj) => {
+          return obj._createdBy === author
+        })
+      : listItems
+  }
+
   private sortByProperty(listItems: T[], propertyName: keyof IItem): T[] {
     return [...listItems].sort((a, b) => {
       const valueA = a[propertyName]

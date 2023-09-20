@@ -38,11 +38,13 @@ const updateQueryParams = (
 interface SortFilterHeaderProps {
   store: HowtoStore | ResearchStore
   type: 'how-to' | 'research'
+  authors: string[]
 }
 
 export const SortFilterHeader = ({
   type,
   store: currentStore,
+  authors,
 }: SortFilterHeaderProps) => {
   const history = useHistory()
 
@@ -61,6 +63,12 @@ export const SortFilterHeader = ({
       : ''
 
   const [sortState, setSortState] = useState(defaultSortingOption)
+  const [selectedAuthor, setSelectedAuthor] = useState(null)
+
+  const authorsOptions = authors.map((author) => ({
+    label: author,
+    value: author,
+  }))
 
   const _inputStyle = {
     width: ['100%', '100%', '240px'],
@@ -108,6 +116,20 @@ export const SortFilterHeader = ({
               currentStore.updateActiveSorter(sortBy.value)
               setSortState(sortBy)
             }}
+          />
+        </FieldContainer>
+      </Flex>
+      <Flex sx={_inputStyle}>
+        <FieldContainer>
+          <Select
+            options={authorsOptions}
+            placeholder="Filter by author"
+            value={selectedAuthor}
+            onChange={(author) => {
+              currentStore.updateSelectedAuthor(author?.value ?? null)
+              setSelectedAuthor(author)
+            }}
+            isClearable={true}
           />
         </FieldContainer>
       </Flex>

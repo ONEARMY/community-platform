@@ -14,10 +14,6 @@ const ResearchList = observer(() => {
   const theme = useTheme()
 
   const { filteredResearches } = store
-  const availableAuthors =
-    filteredResearches?.length !== 0
-      ? Array.from(new Set(filteredResearches.map((item) => item._createdBy)))
-      : []
   return (
     <>
       <Flex my={[18, 26]}>
@@ -41,11 +37,7 @@ const ResearchList = observer(() => {
           mb: 3,
         }}
       >
-        <SortFilterHeader
-          store={store}
-          type="research"
-          authors={availableAuthors}
-        />
+        <SortFilterHeader store={store} type="research" />
 
         <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
           <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>

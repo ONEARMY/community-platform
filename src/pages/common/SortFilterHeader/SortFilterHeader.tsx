@@ -38,13 +38,11 @@ const updateQueryParams = (
 interface SortFilterHeaderProps {
   store: HowtoStore | ResearchStore
   type: 'how-to' | 'research'
-  authors: string[]
 }
 
 export const SortFilterHeader = ({
   type,
   store: currentStore,
-  authors,
 }: SortFilterHeaderProps) => {
   const history = useHistory()
 
@@ -65,6 +63,16 @@ export const SortFilterHeader = ({
   const [sortState, setSortState] = useState(defaultSortingOption)
   const [selectedAuthor, setSelectedAuthor] = useState(null)
 
+  const items =
+    type == 'how-to'
+      ? (currentStore as HowtoStore).filteredHowtos
+      : (currentStore as ResearchStore).filteredResearches
+  const authors =
+    items?.length !== 0
+      ? Array.from(new Set(items.map((item) => item._createdBy))).filter(
+          (item) => item != '',
+        )
+      : []
   const authorsOptions = authors.map((author) => ({
     label: author,
     value: author,

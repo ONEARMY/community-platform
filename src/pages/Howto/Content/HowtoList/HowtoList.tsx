@@ -104,11 +104,6 @@ export class HowtoList extends React.Component<any, IState> {
           .filter(Boolean),
     }))
 
-    const availableAuthors =
-      filteredHowtos?.length !== 0
-        ? Array.from(new Set(filteredHowtos.map((item) => item._createdBy)))
-        : []
-
     return (
       <Box>
         <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
@@ -156,11 +151,7 @@ export class HowtoList extends React.Component<any, IState> {
             flexDirection: ['column', 'column', 'row'],
           }}
         >
-          <SortFilterHeader
-            store={this.props.howtoStore}
-            type="how-to"
-            authors={availableAuthors}
-          />
+          <SortFilterHeader store={this.props.howtoStore} type="how-to" />
           <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
             <Link
               to={this.props.userStore!.user ? '/how-to/create' : 'sign-up'}

@@ -78,8 +78,8 @@ export class ResearchStore extends ModuleStore {
     this.selectedCategory = ''
     this.searchValue = ''
     this.availableItemSortingOption = [
-      ItemSortingOption.Created,
-      ItemSortingOption.Modified,
+      ItemSortingOption.Newest,
+      ItemSortingOption.LatestUpdated,
       ItemSortingOption.MostUseful,
       ItemSortingOption.Comments,
       ItemSortingOption.Updates,
@@ -92,7 +92,7 @@ export class ResearchStore extends ModuleStore {
       })
 
       runInAction(() => {
-        this.activeSorter = ItemSortingOption.Modified
+        this.activeSorter = ItemSortingOption.LatestUpdated
         this.filterSorterDecorator = new FilterSorterDecorator()
         this.allResearchItems = this.filterSorterDecorator.sort(
           this.activeSorter,

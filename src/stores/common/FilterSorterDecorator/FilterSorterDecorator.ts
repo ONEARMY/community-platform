@@ -19,6 +19,7 @@ export interface IItem {
     status: 'draft' | 'published'
   }[]
   moderation?: IModerationStatus
+  collaborators?: string[]
 }
 
 export enum ItemSortingOption {
@@ -61,7 +62,7 @@ export class FilterSorterDecorator<T extends IItem> {
   public filterByAuthor(listItems: T[] = [], author: string): T[] {
     return author
       ? listItems.filter((obj) => {
-          return obj._createdBy === author
+          return obj._createdBy === author || (obj.collaborators && obj.collaborators.includes(author));
         })
       : listItems
   }

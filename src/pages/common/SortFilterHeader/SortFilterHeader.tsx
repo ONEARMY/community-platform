@@ -67,13 +67,17 @@ export const SortFilterHeader = ({
     type == 'how-to'
       ? (currentStore as HowtoStore).filteredHowtos
       : (currentStore as ResearchStore).filteredResearches
-  const authors =
-    items?.length !== 0
-      ? Array.from(new Set(items.map((item) => item._createdBy))).filter(
-          (item) => item != '',
-        )
+  const authorsAndCollaborators = items?.length !== 0
+      ? Array.from(
+          new Set(
+            items.flatMap((item) => [
+              item._createdBy,
+              ...(item.collaborators || []),
+            ])
+          )
+        ).filter((item) => item !== '')
       : []
-  const authorsOptions = authors.map((author) => ({
+  const authorsOptions = authorsAndCollaborators.map((author) => ({
     label: author,
     value: author,
   }))

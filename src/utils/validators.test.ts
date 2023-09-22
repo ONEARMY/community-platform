@@ -79,6 +79,6 @@ describe('noSpecialCharacters', () => {
   it('returns proper message for email values', () => {
     const result = noSpecialCharacters('someones@email.com')
 
-    expect(result).toContain("Only letters and numbers are allowed")
+    expect(result).toContain('Only letters and numbers are allowed')
   })
 })

@@ -67,16 +67,8 @@ export const SortFilterHeader = ({
     type == 'how-to'
       ? (currentStore as HowtoStore).filteredHowtos
       : (currentStore as ResearchStore).filteredResearches
-  const authors =
-    items?.length !== 0
-      ? Array.from(new Set(items.map((item) => item._createdBy))).filter(
-          (item) => item != '',
-        )
-      : []
-  const authorsOptions = authors.map((author) => ({
-    label: author,
-    value: author,
-  }))
+
+  const authorsOptions = getAuthorOptions(items)
 
   const _inputStyle = {
     width: ['100%', '100%', '240px'],
@@ -156,4 +148,16 @@ export const SortFilterHeader = ({
       </Flex>
     </Flex>
   )
+}
+
+const getAuthorOptions = (items) => {
+  if (!items?.length) return []
+
+  return Array.from(new Set<string>(items.map((item) => item._createdBy)))
+    .filter(Boolean)
+    .sort()
+    .map((author) => ({
+      label: author,
+      value: author,
+    }))
 }

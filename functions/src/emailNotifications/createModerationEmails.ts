@@ -5,7 +5,16 @@ import { DB_ENDPOINTS, IUserDB } from '../models'
 import { getHowToApprovalEmail } from './templates'
 import { getUserEmail } from './utils'
 
-// TODO: trigger this function on howto moderation change
+export const handleHowToModerationUpdate = async (change) => {
+  const howto = change.after.exists ? change.after.data() : null
+  const prevHowTo = change.before.exists ? change.before.data() : null
+  const prevModeration = prevHowTo?.moderation
+  const currModeration = howto?.moderation
+  if (currModeration && prevModeration !== currModeration) {
+    await createHowtoModerationEmail(howto)
+  }
+}
+
 export async function createHowtoModerationEmail(howto: IHowtoDB) {
   const userName = howto._createdBy
   const toUserDoc = (await db
@@ -20,10 +29,8 @@ export async function createHowtoModerationEmail(howto: IHowtoDB) {
     throw new Error(`Cannot get user ${userName}`)
   }
 
-  if (
-    toUser.notification_settings?.emailFrequency !==
-    EmailNotificationFrequency.NEVER
-  ) {
+  // Release first under beta to test.
+  if (toUser.userRoles?.includes('beta-tester')) {
     if (howto.moderation === 'accepted') {
       await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,

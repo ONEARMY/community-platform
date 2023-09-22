@@ -4,6 +4,7 @@ import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { withErrorAlerting } from '../alerting/errorAlerting'
+import { handleHowToModerationUpdate } from './createModerationEmails'
 
 const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
 
@@ -76,3 +77,10 @@ exports.sendOnce = functions
       'Emails can be triggered by admins only.',
     )
   })
+
+/** Watch changes to all howto docs and trigger emails on moderation changes */
+exports.sendHowToModerationEmail = functions.firestore
+  .document(`${DB_ENDPOINTS.howtos}/{id}`)
+  .onUpdate((change, context) =>
+    withErrorAlerting(context, handleHowToModerationUpdate, [change]),
+  )

@@ -6,6 +6,8 @@ import {
   PK_PROJECT_IMAGE,
   PP_PROJECT_NAME,
   PK_PROJECT_NAME,
+  PP_SIGNOFF,
+  PK_SIGNOFF,
 } from './constants'
 import { firebaseAuth } from '../Firebase/auth'
 
@@ -39,6 +41,17 @@ export const getProjectName = () => {
     case 'https://dev.community.projectkamp.com':
     case 'https://community.projectkamp.com':
       return PK_PROJECT_NAME
+  }
+}
+
+export const getProjectSignoff = () => {
+  switch (SITE_URL) {
+    case 'https://dev.onearmy.world':
+    case 'https://community.preciousplastic.com':
+      return PP_SIGNOFF
+    case 'https://dev.community.projectkamp.com':
+    case 'https://community.projectkamp.com':
+      return PK_SIGNOFF
   }
 }
 

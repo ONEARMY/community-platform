@@ -153,7 +153,11 @@ export const SortFilterHeader = ({
 const getAuthorOptions = (items) => {
   if (!items?.length) return []
 
-  return Array.from(new Set<string>(items.map((item) => item._createdBy)))
+  return Array.from(
+    new Set<string>(
+      items.flatMap((item) => [item._createdBy, ...(item.collaborators || [])]),
+    ),
+  )
     .filter(Boolean)
     .sort()
     .map((author) => ({

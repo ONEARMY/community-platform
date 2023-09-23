@@ -46,6 +46,8 @@ const ResearchDescription = ({
   ...props
 }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showMoreOptions, setShowMoreOptions] = useState(false)
+
   const history = useHistory()
 
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
@@ -100,6 +102,10 @@ const ResearchDescription = ({
     }
   }
 
+  const handleMoreOptions = () => {
+    setShowMoreOptions(!showMoreOptions)
+  }
+
   useEffect(() => {
     if (!didInit) {
       didInit = true
@@ -131,8 +137,27 @@ const ResearchDescription = ({
             </Text>
           </Fragment>
         )}
-
-        <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
+        <Flex
+          sx={{
+            display: ['flex','none','none'],
+            flexWrap: 'wrap', 
+            mb: showMoreOptions?'10px':'0px' 
+          }}
+        >
+            <Button
+              variant={'outline'}
+              icon="more-vert"
+              onClick={handleMoreOptions}
+              showIconOnly={true}
+            />
+        </Flex>
+        <Flex 
+          sx={{
+            display: [showMoreOptions?'flex':'none','flex','flex'],
+            flexDirection: ['column', 'row', 'row'],
+            flexWrap: 'wrap', 
+            gap: '10px' 
+          }}>
           {research.moderation === 'accepted' && (
             <UsefulStatsButton
               votedUsefulCount={props.votedUsefulCount}

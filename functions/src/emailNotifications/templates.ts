@@ -206,3 +206,74 @@ export const getMapPinApprovalEmail = (
     subject: MAP_PIN_APPROVAL_SUBJECT,
   }
 }
+
+export const HOW_TO_SUBMISSION_SUBJECT = 'Your how-to has been submitted'
+export const getHowToSubmissionEmail = (
+  user: IUserDB,
+  resource: IHowtoDB,
+): Email => {
+  const styles = `
+  .greeting-container,
+  .main-container {
+    margin-bottom: 8%;
+  }
+  .greeting-container,
+  .main-container,
+  .closing-containter {
+    margin-left: 8%;
+    margin-right: 8%;
+  }`
+
+  const content = `
+  <div align="left" class="greeting-container">
+    <p>Hey ${user.displayName}</p>
+    <p>Huzzah! Your How-To ${resource.title} has been submitted.</p>
+  </div>
+  <div align="left" class="main-container">
+    <p>Our team is currently reviewing it and will get back to you within a few business days.</p>
+    <p>Thank you for taking the time, the community will benefit from this knowledge and more plastic will be recycled thanks to YOU.</p>
+  </div>
+  <div align="left" class="closing-containter">
+    <p>Cheers,</p>
+    <p>${getProjectSignoff()}</p>
+  </div>`
+  return {
+    html: getEmailTemplate(styles, content),
+    subject: HOW_TO_SUBMISSION_SUBJECT,
+  }
+}
+
+export const MAP_PIN_SUBMISSION_SUBJECT = 'Your map pin has been submitted'
+export const getMapPinSubmissionEmail = (
+  user: IUserDB,
+  resource: IMapPin,
+): Email => {
+  const styles = `
+  .greeting-container,
+  .main-container {
+    margin-bottom: 8%;
+  }
+  .greeting-container,
+  .main-container,
+  .closing-containter {
+    margin-left: 8%;
+    margin-right: 8%;
+  }`
+
+  const content = `
+  <div align="left" class="greeting-container">
+    <p>Hey ${user.displayName}</p>
+    <p>Your map pin has been submitted.</p>
+  </div>
+  <div align="left" class="main-container">
+    <p>Our team is currently reviewing it and will get back to you within a few business days.</p>
+  </div>
+  <div align="left" class="closing-containter">
+    <p>Cheers,</p>
+    <p>${getProjectSignoff()}</p>
+  </div>`
+  return {
+    html: getEmailTemplate(styles, content),
+    subject: MAP_PIN_SUBMISSION_SUBJECT,
+  }
+}

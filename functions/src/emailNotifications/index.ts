@@ -9,6 +9,10 @@ import {
   createMapPinModerationEmail,
   handleModerationUpdate,
 } from './createModerationEmails'
+import {
+  createHowtoSubmissionEmail,
+  createMapPinSubmissionEmail,
+} from './createSubmissionEmails'
 
 const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
 
@@ -100,4 +104,18 @@ exports.sendMapPinModerationEmail = functions.firestore
       change,
       createMapPinModerationEmail,
     ]),
+  )
+
+/** Watch new howto docs and trigger emails on creation */
+exports.sendHowToSubmissionEmail = functions.firestore
+  .document(`${DB_ENDPOINTS.howtos}/{id}`)
+  .onCreate((snapshot, context) =>
+    withErrorAlerting(context, createHowtoSubmissionEmail, [snapshot.data()]),
+  )
+
+/** Watch new map pin docs and trigger emails on creation */
+exports.sendMapPinSubmissionEmail = functions.firestore
+  .document(`${DB_ENDPOINTS.mappins}/{id}`)
+  .onCreate((snapshot, context) =>
+    withErrorAlerting(context, createMapPinSubmissionEmail, [snapshot.data()]),
   )

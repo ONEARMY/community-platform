@@ -844,6 +844,90 @@ export class ResearchStore extends ModuleStore {
     return (this.activeResearchItem?.votedUsefulBy || []).length
   }
 
+  @action
+  public async lockResearchItem(username: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const newItem = {
+        ...item,
+        locked: {
+          by: username,
+          at: new Date().toISOString(),
+        },
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+  @action
+  public async unlockResearchItem() {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const newItem = {
+        ...item,
+        locked: null,
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+  @action
+  public async lockResearchUpdate(username: string, updateId: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
+      const newItem = {
+        ...item,
+        updates: [...item.updates],
+      }
+
+      if (updateIndex && newItem.updates[updateIndex]) {
+        newItem.updates[updateIndex].locked = {
+          by: username,
+          at: new Date().toISOString(),
+        }
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+  @action
+  public async unlockResearchUpdate(updateId: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
+      const newItem = {
+        ...item,
+        updates: [...item.updates],
+      }
+
+      if (newItem.updates[updateIndex]) {
+        newItem.updates[updateIndex].locked = null
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
   /**
    * Updates supplied dbRef after
    * converting @mentions to user references

@@ -1,8 +1,8 @@
 import { Redirect, Route } from 'react-router'
 import { observer } from 'mobx-react'
-import { Flex, Text } from 'theme-ui'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import type { UserRole } from 'src/models/user.models'
+import { BlockedRoute } from 'oa-components'
 
 /*
     This provides a <AuthRoute /> component that can be used in place of <Route /> components
@@ -27,17 +27,11 @@ export const AuthRoute = observer(
           redirect ? (
             <Redirect to={redirect} />
           ) : (
-            <Flex
-              sx={{ justifyContent: 'center' }}
-              mt="40px"
-              data-cy="auth-route-deny"
-            >
-              <Text>
-                {roleRequired
-                  ? `${roleRequired} role required to access this page. Please contact an admin.`
-                  : 'Please login to access this page.'}
-              </Text>
-            </Flex>
+            <BlockedRoute>
+              {roleRequired
+                ? `${roleRequired} role required to access this page. Please contact an admin.`
+                : 'Please login to access this page'}
+            </BlockedRoute>
           )
         }
       >

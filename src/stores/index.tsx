@@ -9,6 +9,7 @@ import { ResearchCategoriesStore } from './ResearchCategories/researchCategories
 import { TagsStore } from './Tags/tags.store'
 import { ThemeStore } from './Theme/theme.store'
 import { UserNotificationsStore } from './User/notifications.store'
+import { QuestionStore } from './Question/question.store'
 import { UserStore } from './User/user.store'
 
 export class RootStore {
@@ -36,6 +37,7 @@ const stores = (rootStore: RootStore) => {
     mapsStore: new MapsStore(rootStore),
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
+    questionStore: new QuestionStore(rootStore),
   }
   return stores
 }
@@ -52,4 +54,5 @@ export interface IStores {
   themeStore: ThemeStore
   aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore
+  questionStore: QuestionStore
 }

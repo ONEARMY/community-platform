@@ -1,4 +1,3 @@
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
@@ -39,6 +38,7 @@ export default defineConfig({
   // https://vitejs.dev/config/server-options.html#server-options
   server: {
     open: '/',
+    port: 3000,
   },
   resolve: {
     // TODO - determine why vite can't import from workspaces (or just use these paths instead)
@@ -57,24 +57,7 @@ export default defineConfig({
       },
     ],
   },
-  optimizeDeps: {
-    esbuildOptions: {
-      tsconfig: 'tsconfig.vite.json',
-      // support calls to 'global' (required for pino-logflare)
-      define: {
-        global: 'globalThis',
-      },
-      // support calls to 'buffer' (required for pino-logflare)
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true,
-        }),
-      ],
-    },
-  },
 })
-
-
 
 const WRONG_CODE = `import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";`
 
@@ -89,12 +72,14 @@ function reactVirtualized(): PluginOption {
     configResolved: async () => {
       const require = createRequire(import.meta.url)
       const reactVirtualizedPath = require.resolve('react-virtualized')
-      const { pathname: reactVirtualizedFilePath } = new url.URL(reactVirtualizedPath, import.meta.url)
-      const file = reactVirtualizedFilePath
-        .replace(
-          path.join('dist', 'commonjs', 'index.js'),
-          path.join('dist', 'es', 'WindowScroller', 'utils', 'onScroll.js'),
-        )
+      const { pathname: reactVirtualizedFilePath } = new url.URL(
+        reactVirtualizedPath,
+        import.meta.url,
+      )
+      const file = reactVirtualizedFilePath.replace(
+        path.join('dist', 'commonjs', 'index.js'),
+        path.join('dist', 'es', 'WindowScroller', 'utils', 'onScroll.js'),
+      )
       const code = await fs.readFile(file, 'utf-8')
       const modified = code.replace(WRONG_CODE, '')
       await fs.writeFile(file, modified)

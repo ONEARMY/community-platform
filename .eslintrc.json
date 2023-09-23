@@ -100,7 +100,7 @@
           "camelCase": true,
           "pascalCase": true
         },
-        "ignore": ["react-app-env.d.ts", "service-worker.ts"]
+        "ignore": ["vite-env.d.ts", "service-worker.ts"]
       }
     ],
     "@typescript-eslint/no-explicit-any": "off",

@@ -44,6 +44,15 @@ export const getProjectName = () => {
   }
 }
 
+export const getGreeting = (
+  userDisplayName: string,
+  greetingMessage: string = '',
+) => `
+<div align="left" class="greeting-container">
+<p>Hey ${userDisplayName}</p>
+<p>${greetingMessage}</p>
+</div>`
+
 export const getProjectSignoff = () => {
   switch (SITE_URL) {
     case 'https://dev.onearmy.world':

@@ -1,4 +1,4 @@
-import { IHowtoDB, INotification, IUserDB } from '../../../src/models'
+import { IHowtoDB, IMapPin, INotification, IUserDB } from '../../../src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
 import prettier from 'prettier'
 import {
@@ -9,7 +9,7 @@ import {
   getProjectSignoff,
 } from './utils'
 
-interface Email {
+export interface Email {
   html: string
   subject: string
 }
@@ -167,5 +167,42 @@ export const getHowToApprovalEmail = (
   return {
     html: getEmailTemplate(styles, content),
     subject: HOW_TO_APPROVAL_SUBJECT,
+  }
+}
+
+export const MAP_PIN_APPROVAL_SUBJECT = 'Your map pin has been approved!'
+export const getMapPinApprovalEmail = (
+  user: IUserDB,
+  resource: IMapPin,
+): Email => {
+  const styles = `
+  .greeting-container,
+  .main-container {
+    margin-bottom: 8%;
+  }
+  .greeting-container,
+  .main-container,
+  .closing-containter {
+    margin-left: 8%;
+    margin-right: 8%;
+  }`
+
+  const content = `
+  <div align="left" class="greeting-container">
+    <p>Hey ${user.displayName}</p>
+    <p>Huzzah! We are happy to inform you that your map pin has been approved and is now visible!</p>
+  </div>
+  <div align="left" class="main-container">
+    <p>It is visible on the community platform map <a href="${SITE_URL}/map#${
+    resource._id
+  }">here</a>.</p>
+  </div>
+  <div align="left" class="closing-containter">
+    <p>Thanks,</p>
+    <p>${getProjectSignoff()}</p>
+  </div>`
+  return {
+    html: getEmailTemplate(styles, content),
+    subject: MAP_PIN_APPROVAL_SUBJECT,
   }
 }

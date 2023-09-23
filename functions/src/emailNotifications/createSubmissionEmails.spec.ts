@@ -1,12 +1,14 @@
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { DB_ENDPOINTS, IUserDB } from '../models'
-import { HOW_TO_APPROVAL_SUBJECT, MAP_PIN_APPROVAL_SUBJECT } from './templates'
+import { DB_ENDPOINTS, IMapPin, IUserDB } from '../models'
+import {
+  HOW_TO_SUBMISSION_SUBJECT,
+  MAP_PIN_SUBMISSION_SUBJECT,
+} from './templates'
 import { setMockHowto } from '../emulator/seed/content-generate'
 import {
-  createHowtoModerationEmail,
-  createMapPinModerationEmail,
-  handleModerationUpdate,
-} from './createModerationEmails'
+  createHowtoSubmissionEmail,
+  createMapPinSubmissionEmail,
+} from './createSubmissionEmails'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -31,7 +33,7 @@ const userFactory = (_id: string, user: Partial<IUserDB> = {}): IUserDB =>
     ...user,
   } as IUserDB)
 
-describe('Create howto moderation emails', () => {
+describe('Create howto submission emails', () => {
   const db = FirebaseEmulatedTest.admin.firestore()
 
   beforeAll(async () => {
@@ -57,20 +59,9 @@ describe('Create howto moderation emails', () => {
     await FirebaseEmulatedTest.clearFirestoreDB()
   })
 
-  it('Creates an email for an accepted howto', async () => {
-    const howtoApproved = await setMockHowto({ uid: 'user_1' })
-    const howtoAwaitingModeration = {
-      ...howtoApproved,
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      howtoAwaitingModeration,
-      howtoApproved,
-      'howtos',
-      howtoApproved._id,
-    )
-
-    await handleModerationUpdate(change, createHowtoModerationEmail)
+  it('Creates an email for a submitted howto', async () => {
+    const howto = await setMockHowto({ uid: 'user_1' })
+    await createHowtoSubmissionEmail(howto)
 
     // Only one approved howto email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
@@ -83,16 +74,12 @@ describe('Create howto moderation emails', () => {
         to,
       } = doc.data()
       expect(html).toMatchSnapshot()
-      expect(subject).toBe(HOW_TO_APPROVAL_SUBJECT)
+      expect(subject).toBe(HOW_TO_SUBMISSION_SUBJECT)
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
       expect(html).toContain(
-        'Huzzah! Your How-To Mock Howto has been approved.',
-      )
-      // Check that the email contains the correct howto link
-      expect(html).toContain(
-        'https://community.preciousplastic.com/how-to/00_user_1_howto',
+        `Huzzah! Your How-To Mock Howto has been submitted.`,
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain('Charlie your Precious Plastic Community Manager')
@@ -102,39 +89,8 @@ describe('Create howto moderation emails', () => {
 
   // Remove this test once released to all users.
   it('Does not creates email for people who are not beta testers', async () => {
-    const howtoApproved = await setMockHowto({ uid: 'user_2' })
-    const howtoAwaitingModeration = {
-      ...howtoApproved,
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      howtoAwaitingModeration,
-      howtoApproved,
-      'howtos',
-      howtoApproved._id,
-    )
-
-    await handleModerationUpdate(change, createHowtoModerationEmail)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(1)
-  })
-
-  it('Does not creates email for non-approved howtos', async () => {
-    const howtoApproved = await setMockHowto({ uid: 'user_1' })
-    const howtoDraft = {
-      ...howtoApproved,
-      moderation: 'draft',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      howtoApproved,
-      howtoDraft,
-      'howtos',
-      howtoApproved._id,
-    )
-
-    await handleModerationUpdate(change, createHowtoModerationEmail)
+    const howto = await setMockHowto({ uid: 'user_2' })
+    await createHowtoSubmissionEmail(howto)
 
     // No new emails should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
@@ -142,7 +98,7 @@ describe('Create howto moderation emails', () => {
   })
 })
 
-describe('Create map pin moderation emails', () => {
+describe('Create map pin submission emails', () => {
   const db = FirebaseEmulatedTest.admin.firestore()
 
   beforeAll(async () => {
@@ -168,25 +124,13 @@ describe('Create map pin moderation emails', () => {
     await FirebaseEmulatedTest.clearFirestoreDB()
   })
 
-  it('Creates an email for an accepted map pin', async () => {
-    const mapPinApproved = {
+  it('Creates an email for a submitted map pin', async () => {
+    const mapPin = {
       _id: 'map_pin_1',
       _createdBy: 'user_1',
       moderation: 'accepted',
     }
-    const mapPinAwaitingModeration = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      mapPinAwaitingModeration,
-      mapPinApproved,
-      'mappins',
-      mapPinApproved._id,
-    )
-
-    await handleModerationUpdate(change, createMapPinModerationEmail)
+    await createMapPinSubmissionEmail(mapPin as IMapPin)
 
     // Only one approved howto email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
@@ -199,13 +143,11 @@ describe('Create map pin moderation emails', () => {
         to,
       } = doc.data()
       expect(html).toMatchSnapshot()
-      expect(subject).toBe(MAP_PIN_APPROVAL_SUBJECT)
+      expect(subject).toBe(MAP_PIN_SUBMISSION_SUBJECT)
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
-      // Check that the email contains the correct map pin link
-      expect(html).toContain(
-        'https://community.preciousplastic.com/map#map_pin_1',
-      )
+      // Check that the email contains the correct title
+      expect(html).toContain('Your map pin has been submitted.')
       // Check that the email contains the correct PP signoff
       expect(html).toContain('Charlie your Precious Plastic Community Manager')
       expect(to).toBe('test@test.com')
@@ -214,49 +156,8 @@ describe('Create map pin moderation emails', () => {
 
   // Remove this test once released to all users.
   it('Does not creates email for people who are not beta testers', async () => {
-    const mapPinApproved = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_2',
-      moderation: 'accepted',
-    }
-    const mapPinAwaitingModeration = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_2',
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      mapPinAwaitingModeration,
-      mapPinApproved,
-      'mappins',
-      mapPinApproved._id,
-    )
-
-    await handleModerationUpdate(change, createMapPinModerationEmail)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(1)
-  })
-
-  it('Does not creates email for non-approved map pins', async () => {
-    const mapPinDraft = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
-      moderation: 'draft',
-    }
-    const mapPinAwaitingModeration = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      mapPinAwaitingModeration,
-      mapPinDraft,
-      'mappins',
-      mapPinDraft._id,
-    )
-
-    await handleModerationUpdate(change, createMapPinModerationEmail)
+    const howto = await setMockHowto({ uid: 'user_2' })
+    await createHowtoSubmissionEmail(howto)
 
     // No new emails should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()

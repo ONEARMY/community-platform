@@ -4,7 +4,15 @@ import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { withErrorAlerting } from '../alerting/errorAlerting'
-import { handleHowToModerationUpdate } from './createModerationEmails'
+import {
+  createHowtoModerationEmail,
+  createMapPinModerationEmail,
+  handleModerationUpdate,
+} from './createModerationEmails'
+import {
+  createHowtoSubmissionEmail,
+  createMapPinSubmissionEmail,
+} from './createSubmissionEmails'
 
 const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
 
@@ -82,5 +90,32 @@ exports.sendOnce = functions
 exports.sendHowToModerationEmail = functions.firestore
   .document(`${DB_ENDPOINTS.howtos}/{id}`)
   .onUpdate((change, context) =>
-    withErrorAlerting(context, handleHowToModerationUpdate, [change]),
+    withErrorAlerting(context, handleModerationUpdate, [
+      change,
+      createHowtoModerationEmail,
+    ]),
+  )
+
+/** Watch changes to all map pin docs and trigger emails on moderation changes */
+exports.sendMapPinModerationEmail = functions.firestore
+  .document(`${DB_ENDPOINTS.mappins}/{id}`)
+  .onUpdate((change, context) =>
+    withErrorAlerting(context, handleModerationUpdate, [
+      change,
+      createMapPinModerationEmail,
+    ]),
+  )
+
+/** Watch new howto docs and trigger emails on creation */
+exports.sendHowToSubmissionEmail = functions.firestore
+  .document(`${DB_ENDPOINTS.howtos}/{id}`)
+  .onCreate((snapshot, context) =>
+    withErrorAlerting(context, createHowtoSubmissionEmail, [snapshot.data()]),
+  )
+
+/** Watch new map pin docs and trigger emails on creation */
+exports.sendMapPinSubmissionEmail = functions.firestore
+  .document(`${DB_ENDPOINTS.mappins}/{id}`)
+  .onCreate((snapshot, context) =>
+    withErrorAlerting(context, createMapPinSubmissionEmail, [snapshot.data()]),
   )

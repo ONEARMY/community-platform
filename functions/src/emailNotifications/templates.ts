@@ -1,10 +1,4 @@
-import {
-  IHowtoDB,
-  IMapPin,
-  INotification,
-  IResearchDB,
-  IUserDB,
-} from '../../../src/models'
+import { IHowtoDB, IMapPin, INotification, IUserDB } from '../../../src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
 import prettier from 'prettier'
 import {
@@ -12,9 +6,10 @@ import {
   SITE_URL,
   getProjectName,
   getNotificationListItem,
+  getProjectSignoff,
 } from './utils'
 
-interface Email {
+export interface Email {
   html: string
   subject: string
 }
@@ -138,16 +133,147 @@ export const getNotificationEmail = (
   }
 }
 
-const HOW_TO_APPROVAL_SUBJECT = 'Your how-to has been approved!'
+export const HOW_TO_APPROVAL_SUBJECT = 'Your how-to has been approved!'
 export const getHowToApprovalEmail = (
   user: IUserDB,
   resource: IHowtoDB,
 ): Email => {
-  // TODO
-  const styles = ``
-  const content = ``
+  const styles = `
+  .greeting-container,
+  .main-container {
+    margin-bottom: 8%;
+  }
+  .greeting-container,
+  .main-container,
+  .closing-containter {
+    margin-left: 8%;
+  }`
+
+  const content = `
+  <div align="left" class="greeting-container">
+    <p>Hey ${user.displayName}</p>
+    <p>Huzzah! Your How-To ${resource.title} has been approved.</p>
+  </div>
+  <div align="left" class="main-container">
+    <p>It is visible on the community platform <a href="${SITE_URL}/how-to/${
+    resource.slug
+  }">here</a>.</p>
+    <p>Users are now be able to comment and mark it as useful.</p>
+  </div>
+  <div align="left" class="closing-containter">
+    <p>Thanks for sharing your knowledge!</p>
+    <p>${getProjectSignoff()}</p>
+  </div>`
   return {
     html: getEmailTemplate(styles, content),
     subject: HOW_TO_APPROVAL_SUBJECT,
+  }
+}
+
+export const MAP_PIN_APPROVAL_SUBJECT = 'Your map pin has been approved!'
+export const getMapPinApprovalEmail = (
+  user: IUserDB,
+  resource: IMapPin,
+): Email => {
+  const styles = `
+  .greeting-container,
+  .main-container {
+    margin-bottom: 8%;
+  }
+  .greeting-container,
+  .main-container,
+  .closing-containter {
+    margin-left: 8%;
+    margin-right: 8%;
+  }`
+
+  const content = `
+  <div align="left" class="greeting-container">
+    <p>Hey ${user.displayName}</p>
+    <p>Huzzah! We are happy to inform you that your map pin has been approved and is now visible!</p>
+  </div>
+  <div align="left" class="main-container">
+    <p>It is visible on the community platform map <a href="${SITE_URL}/map#${
+    resource._id
+  }">here</a>.</p>
+  </div>
+  <div align="left" class="closing-containter">
+    <p>Thanks,</p>
+    <p>${getProjectSignoff()}</p>
+  </div>`
+  return {
+    html: getEmailTemplate(styles, content),
+    subject: MAP_PIN_APPROVAL_SUBJECT,
+  }
+}
+
+export const HOW_TO_SUBMISSION_SUBJECT = 'Your how-to has been submitted'
+export const getHowToSubmissionEmail = (
+  user: IUserDB,
+  resource: IHowtoDB,
+): Email => {
+  const styles = `
+  .greeting-container,
+  .main-container {
+    margin-bottom: 8%;
+  }
+  .greeting-container,
+  .main-container,
+  .closing-containter {
+    margin-left: 8%;
+    margin-right: 8%;
+  }`
+
+  const content = `
+  <div align="left" class="greeting-container">
+    <p>Hey ${user.displayName}</p>
+    <p>Huzzah! Your How-To ${resource.title} has been submitted.</p>
+  </div>
+  <div align="left" class="main-container">
+    <p>Our team is currently reviewing it and will get back to you within a few business days.</p>
+    <p>Thank you for taking the time, the community will benefit from this knowledge and more plastic will be recycled thanks to YOU.</p>
+  </div>
+  <div align="left" class="closing-containter">
+    <p>Cheers,</p>
+    <p>${getProjectSignoff()}</p>
+  </div>`
+  return {
+    html: getEmailTemplate(styles, content),
+    subject: HOW_TO_SUBMISSION_SUBJECT,
+  }
+}
+
+export const MAP_PIN_SUBMISSION_SUBJECT = 'Your map pin has been submitted'
+export const getMapPinSubmissionEmail = (
+  user: IUserDB,
+  resource: IMapPin,
+): Email => {
+  const styles = `
+  .greeting-container,
+  .main-container {
+    margin-bottom: 8%;
+  }
+  .greeting-container,
+  .main-container,
+  .closing-containter {
+    margin-left: 8%;
+    margin-right: 8%;
+  }`
+
+  const content = `
+  <div align="left" class="greeting-container">
+    <p>Hey ${user.displayName}</p>
+    <p>Your map pin has been submitted.</p>
+  </div>
+  <div align="left" class="main-container">
+    <p>Our team is currently reviewing it and will get back to you within a few business days.</p>
+  </div>
+  <div align="left" class="closing-containter">
+    <p>Cheers,</p>
+    <p>${getProjectSignoff()}</p>
+  </div>`
+  return {
+    html: getEmailTemplate(styles, content),
+    subject: MAP_PIN_SUBMISSION_SUBJECT,
   }
 }

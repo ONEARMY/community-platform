@@ -10,7 +10,7 @@ interface IResearchAggregation extends IAggregation {
 const researchAggregations: IResearchAggregation[] = [
   {
     sourceCollection: 'research',
-    sourceFields: ['votedUsefulBy', 'collaborators', 'moderation'],
+    sourceFields: ['collaborators', 'moderation'],
     changeType: 'updated',
     targetCollection: 'aggregations',
     targetDocId: 'users_totalUseful',

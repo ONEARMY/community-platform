@@ -1,33 +1,47 @@
-import { EmailNotificationFrequency } from 'oa-shared'
-import { IHowtoDB } from '../../../src/models'
+import { QueryDocumentSnapshot } from 'firebase-admin/firestore'
+import { IHowtoDB, IMapPin, IModerable } from '../../../src/models'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IUserDB } from '../models'
-import { getHowToApprovalEmail } from './templates'
-import { getUserEmail } from './utils'
+import { DB_ENDPOINTS } from '../models'
+import { getHowToApprovalEmail, getMapPinApprovalEmail } from './templates'
+import { getUserFromModerable } from './utils'
+import { Change } from 'firebase-functions/v1'
 
-// TODO: trigger this function on howto moderation change
-export async function createHowtoModerationEmail(howto: IHowtoDB) {
-  const userName = howto._createdBy
-  const toUserDoc = (await db
-    .collection(DB_ENDPOINTS.users)
-    .doc(userName)
-    .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
-
-  const toUser = toUserDoc.exists ? toUserDoc.data() : undefined
-  const toUserEmail = toUser ? await getUserEmail(toUser._authID) : undefined
-
-  if (!toUser || !toUserEmail) {
-    throw new Error(`Cannot get user ${userName}`)
+export async function handleModerationUpdate<T extends IModerable>(
+  change: Change<QueryDocumentSnapshot<T>>,
+  createModerationEmail: (item: T) => Promise<void>,
+) {
+  const curr = change.after.exists ? change.after.data() : null
+  const prev = change.before.exists ? change.before.data() : null
+  const prevModeration = prev?.moderation
+  const currModeration = curr?.moderation
+  if (currModeration && prevModeration !== currModeration) {
+    await createModerationEmail(curr)
   }
+}
 
-  if (
-    toUser.notification_settings?.emailFrequency !==
-    EmailNotificationFrequency.NEVER
-  ) {
+export async function createHowtoModerationEmail(howto: IHowtoDB) {
+  const { toUser, toUserEmail } = await getUserFromModerable(howto)
+
+  // Release first under beta to test.
+  if (toUser.userRoles?.includes('beta-tester')) {
     if (howto.moderation === 'accepted') {
       await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,
         message: getHowToApprovalEmail(toUser, howto),
+      })
+    }
+  }
+}
+
+export async function createMapPinModerationEmail(mapPin: IMapPin) {
+  const { toUser, toUserEmail } = await getUserFromModerable(mapPin)
+
+  // Release first under beta to test.
+  if (toUser.userRoles?.includes('beta-tester')) {
+    if (mapPin.moderation === 'accepted') {
+      await db.collection(DB_ENDPOINTS.emails).add({
+        to: toUserEmail,
+        message: getMapPinApprovalEmail(toUser, mapPin),
       })
     }
   }

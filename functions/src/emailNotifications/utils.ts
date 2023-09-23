@@ -1,13 +1,17 @@
 import type { NotificationType } from 'oa-shared'
 import { CONFIG } from '../config/config'
-import { INotification } from '../models'
+import { IModerable, INotification } from '../models'
 import {
   PP_PROJECT_IMAGE,
   PK_PROJECT_IMAGE,
   PP_PROJECT_NAME,
   PK_PROJECT_NAME,
+  PP_SIGNOFF,
+  PK_SIGNOFF,
 } from './constants'
 import { firebaseAuth } from '../Firebase/auth'
+import { db } from '../Firebase/firestoreDB'
+import { DB_ENDPOINTS, IUserDB } from '../models'
 
 export const getUserEmail = async (uid: string): Promise<string | null> => {
   try {
@@ -16,6 +20,23 @@ export const getUserEmail = async (uid: string): Promise<string | null> => {
   } catch (error) {
     return null
   }
+}
+
+export async function getUserFromModerable<T extends IModerable>(moderable: T) {
+  const userName = moderable._createdBy
+  const toUserDoc = (await db
+    .collection(DB_ENDPOINTS.users)
+    .doc(userName)
+    .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
+
+  const toUser = toUserDoc.exists ? toUserDoc.data() : undefined
+  const toUserEmail = toUser ? await getUserEmail(toUser._authID) : undefined
+
+  if (!toUser || !toUserEmail) {
+    throw new Error(`Cannot get user ${userName}`)
+  }
+
+  return { toUser, toUserEmail }
 }
 
 export const SITE_URL = CONFIG.deployment.site_url
@@ -39,6 +60,26 @@ export const getProjectName = () => {
     case 'https://dev.community.projectkamp.com':
     case 'https://community.projectkamp.com':
       return PK_PROJECT_NAME
+  }
+}
+
+export const getGreeting = (
+  userDisplayName: string,
+  greetingMessage: string = '',
+) => `
+<div align="left" class="greeting-container">
+<p>Hey ${userDisplayName}</p>
+<p>${greetingMessage}</p>
+</div>`
+
+export const getProjectSignoff = () => {
+  switch (SITE_URL) {
+    case 'https://dev.onearmy.world':
+    case 'https://community.preciousplastic.com':
+      return PP_SIGNOFF
+    case 'https://dev.community.projectkamp.com':
+    case 'https://community.projectkamp.com':
+      return PK_SIGNOFF
   }
 }
 

@@ -7911,15 +7911,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-icons/all-files@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "@react-icons/all-files@npm:4.1.0"
-  peerDependencies:
-    react: "*"
-  checksum: c34c644650a144e4f2157c20b3106200ac1f76b3132dcda1a40f061e000a34c78df188266395afae571d5c85bf48365824db7b1bf8b7ae6229fdc148c941ab85
-  languageName: node
-  linkType: hard
-
 "@rollup/plugin-babel@npm:^5.2.0":
   version: 5.3.1
   resolution: "@rollup/plugin-babel@npm:5.3.1"
@@ -26875,7 +26866,6 @@ __metadata:
     "@emotion/styled": ^11.10.6
     "@faker-js/faker": ^7.6.0
     "@mui/base": ^5.0.0-beta.18
-    "@react-icons/all-files": ^4.1.0
     "@storybook/addon-actions": ^7.4.1
     "@storybook/addon-essentials": ^7.4.1
     "@storybook/addon-links": ^7.4.1
@@ -26906,7 +26896,7 @@ __metadata:
     react: ^17.0.2
     react-dom: ^17.0.2
     react-flag-icon-css: ^1.0.25
-    react-icons: ^4.3.1
+    react-icons: ^4.11.0
     react-player: ^2.12.0
     react-portal: ^4.2.2
     react-router: ^5.2.0
@@ -30029,12 +30019,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-icons@npm:^4.3.1":
-  version: 4.7.1
-  resolution: "react-icons@npm:4.7.1"
+"react-icons@npm:^4.11.0":
+  version: 4.11.0
+  resolution: "react-icons@npm:4.11.0"
   peerDependencies:
     react: "*"
-  checksum: ed3cbdc5fc0c4d7d2debf78fdc8c4c80aeacf85a506a9a3c11b1d5922de393ac0a6542012b7fb81761e9280c54d0f26827d50a92b54ec8f0c8e52364d89970b5
+  checksum: 7b8b80bbe2dabcc54b6c2129b7761a04b19caebe24389adc7683478ef41212b9ca0b53c63abcc06b3c01b94c84855ec5142b4c357e19c4aaaad9a4db23a3c485
   languageName: node
   linkType: hard
 

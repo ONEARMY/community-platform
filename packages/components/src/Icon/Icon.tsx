@@ -1,44 +1,42 @@
 /** @jsxImportSource theme-ui */
 import styled from '@emotion/styled'
-import type { VerticalAlignProps, SpaceProps } from 'styled-system'
-import { verticalAlign, space } from 'styled-system'
-import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
-import { MdAdd } from '@react-icons/all-files/md/MdAdd'
-import { MdCheck } from '@react-icons/all-files/md/MdCheck'
-import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
-import { MdArrowDownward } from '@react-icons/all-files/md/MdArrowDownward'
-import { MdArrowUpward } from '@react-icons/all-files/md/MdArrowUpward'
-import { MdKeyboardArrowDown } from '@react-icons/all-files/md/MdKeyboardArrowDown'
-import { MdMailOutline } from '@react-icons/all-files/md/MdMailOutline'
-import { MdNotifications } from '@react-icons/all-files/md/MdNotifications'
-import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
-import { MdLock } from '@react-icons/all-files/md/MdLock'
-import { MdClose } from '@react-icons/all-files/md/MdClose'
-import { MdMoreVert } from '@react-icons/all-files/md/MdMoreVert'
-import { MdTurnedIn } from '@react-icons/all-files/md/MdTurnedIn'
-import { MdEdit } from '@react-icons/all-files/md/MdEdit'
-import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
-import { MdList } from '@react-icons/all-files/md/MdList'
-import { MdImage } from '@react-icons/all-files/md/MdImage'
-import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
-import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
-import { MdMail } from '@react-icons/all-files/md/MdMail'
-import { MdChevronLeft } from '@react-icons/all-files/md/MdChevronLeft'
-import { MdChevronRight } from '@react-icons/all-files/md/MdChevronRight'
-import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
-import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
-import { GoTrashcan } from '@react-icons/all-files/go/GoTrashcan'
-import { GoLinkExternal } from '@react-icons/all-files/go/GoLinkExternal'
-import { AiFillThunderbolt } from '@react-icons/all-files/ai/AiFillThunderbolt'
-import { FaSignal } from '@react-icons/all-files/fa/FaSignal'
-import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
-import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
-import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
-import { RiFilter2Fill } from '@react-icons/all-files/ri/RiFilter2Fill'
-import { IconContext } from '@react-icons/all-files'
-import { iconMap } from './svgs'
+import { AiFillThunderbolt } from 'react-icons/ai'
+import { BsCloudUpload, BsTrash } from 'react-icons/bs'
+import { FaFacebookF, FaInstagram, FaSignal, FaSlack } from 'react-icons/fa'
+import { GoLinkExternal } from 'react-icons/go'
+import { GrDocumentPdf } from 'react-icons/gr'
+import {
+  MdAccessTime,
+  MdAccountCircle,
+  MdAdd,
+  MdArrowBack,
+  MdArrowDownward,
+  MdArrowForward,
+  MdArrowUpward,
+  MdCheck,
+  MdChevronLeft,
+  MdChevronRight,
+  MdClose,
+  MdEdit,
+  MdFileDownload,
+  MdImage,
+  MdKeyboardArrowDown,
+  MdList,
+  MdLocationOn,
+  MdLock,
+  MdMail,
+  MdMailOutline,
+  MdMoreVert,
+  MdNotifications,
+  MdTurnedIn,
+} from 'react-icons/md'
+import { RiFilter2Fill } from 'react-icons/ri'
+import type { SpaceProps, VerticalAlignProps } from 'styled-system'
+import { space, verticalAlign } from 'styled-system'
+import { Box } from 'theme-ui'
 import { DownloadIcon } from './DownloadIcon'
 import { ExternalUrl } from './ExternalUrl'
+import { iconMap } from './svgs'
 import type { IGlyphs } from './types'
 
 interface IGlyphProps {
@@ -58,7 +56,7 @@ export const glyphs: IGlyphs = {
   download: <MdFileDownload />,
   'download-cloud': <DownloadIcon />,
   'external-url': <ExternalUrl />,
-  upload: <GoCloudUpload />,
+  upload: <BsCloudUpload />,
   add: <MdAdd />,
   check: <MdCheck />,
   'arrow-back': <MdArrowBack />,
@@ -71,7 +69,7 @@ export const glyphs: IGlyphs = {
   'account-circle': <MdAccountCircle />,
   lock: <MdLock />,
   close: <MdClose />,
-  delete: <GoTrashcan />,
+  delete: <BsTrash />,
   'more-vert': <MdMoreVert />,
   comment: iconMap.comment,
   'turned-in': <MdTurnedIn />,
@@ -80,7 +78,7 @@ export const glyphs: IGlyphs = {
   step: <MdList />,
   difficulty: <FaSignal />,
   image: <MdImage />,
-  pdf: <GoFilePdf />,
+  pdf: <GrDocumentPdf />,
   loading: iconMap.loading,
   'location-on': <MdLocationOn />,
   'external-link': <GoLinkExternal />,
@@ -160,13 +158,14 @@ export const Icon = (props: Props) => {
       size={definedSize}
       style={{ marginRight }}
     >
-      <IconContext.Provider
-        value={{
-          style: { width: definedSize + 'px', height: definedSize + 'px' },
+      <Box
+        style={{
+          width: definedSize + 'px',
+          height: definedSize + 'px',
         }}
       >
         <Glyph glyph={glyph} />
-      </IconContext.Provider>
+      </Box>
     </IconWrapper>
   )
 }

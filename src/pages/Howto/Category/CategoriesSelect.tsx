@@ -15,10 +15,12 @@ export const CategoriesSelect = observer(
       categories = researchCategoriesStore.allResearchCategories
     }
 
+
     const selectOptions = categories.map((category) => ({
       value: { ...category },
       label: category.label,
-    }))
+    })).filter(option => option?.value?.label!== value?.label);
+
     const handleChange = (changedValue) => {
       onChange(changedValue?.value ?? null)
     }

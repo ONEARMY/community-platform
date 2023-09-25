@@ -11,6 +11,7 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
 import { capitalizeFirstLetter } from 'src/utils/helpers'
+import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 const updateQueryParams = (
   url: string,
@@ -51,16 +52,16 @@ export const SortFilterHeader = ({
   const sortingOptions = availableItemSortingOption?.map((label) => ({
     label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
     value: label,
-  }))
+  })).filter(option => option.value !== activeSorter)
 
   const defaultSortingOption =
     Array.isArray(sortingOptions) && sortingOptions.length > 0
       ? sortingOptions.find(
-          (sortingOption) => sortingOption.value == activeSorter,
-        ) ?? sortingOptions[0]
+        (sortingOption) => sortingOption.value == activeSorter,
+      ) ?? sortingOptions[0]
       : ''
 
-  const [sortState, setSortState] = useState(defaultSortingOption)
+  const [sortState, setSortState] = useState(activeSorter === ItemSortingOption.Random ? '' : defaultSortingOption)
 
   const _inputStyle = {
     width: ['100%', '100%', '240px'],

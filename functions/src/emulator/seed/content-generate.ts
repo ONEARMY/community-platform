@@ -15,7 +15,10 @@ export async function seedContentGenerate() {
   return
 }
 
-export async function setMockHowto(user: Pick<IMockAuthUser, 'uid'>) {
+export async function setMockHowto(
+  user: Pick<IMockAuthUser, 'uid'>,
+  moderation: IHowtoDB['moderation'] = 'accepted',
+) {
   const { uid } = user
   const _id = `00_${uid}_howto`
   const loginInfo = `username : ${uid}@example.com\npassword : ${uid}`
@@ -37,7 +40,7 @@ export async function setMockHowto(user: Pick<IMockAuthUser, 'uid'>) {
     steps: [],
     time: '',
     title: 'Mock Howto',
-    moderation: 'accepted',
+    moderation,
     comments: [
       {
         _created: new Date().toISOString(),

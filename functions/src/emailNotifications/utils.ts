@@ -1,6 +1,6 @@
 import type { NotificationType } from 'oa-shared'
 import { CONFIG } from '../config/config'
-import { IModerable, INotification } from '../models'
+import { INotification } from '../models'
 import {
   PP_PROJECT_IMAGE,
   PK_PROJECT_IMAGE,
@@ -22,8 +22,7 @@ export const getUserEmail = async (uid: string): Promise<string | null> => {
   }
 }
 
-export async function getUserFromModerable<T extends IModerable>(moderable: T) {
-  const userName = moderable._createdBy
+export const getUserAndEmail = async (userName: string) => {
   const toUserDoc = (await db
     .collection(DB_ENDPOINTS.users)
     .doc(userName)

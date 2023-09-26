@@ -170,13 +170,11 @@ describe('Create map pin moderation emails', () => {
 
   it('Creates an email for an accepted map pin', async () => {
     const mapPinApproved = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
+      _id: 'user_1',
       moderation: 'accepted',
     }
     const mapPinAwaitingModeration = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
+      _id: 'user_1',
       moderation: 'awaiting-moderation',
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
@@ -204,7 +202,7 @@ describe('Create map pin moderation emails', () => {
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct map pin link
       expect(html).toContain(
-        'https://community.preciousplastic.com/map#map_pin_1',
+        `https://community.preciousplastic.com/map#${mapPinApproved._id}`,
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain('Charlie your Precious Plastic Community Manager')
@@ -215,13 +213,11 @@ describe('Create map pin moderation emails', () => {
   // Remove this test once released to all users.
   it('Does not creates email for people who are not beta testers', async () => {
     const mapPinApproved = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_2',
+      _id: 'user_2',
       moderation: 'accepted',
     }
     const mapPinAwaitingModeration = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_2',
+      _id: 'user_2',
       moderation: 'awaiting-moderation',
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
@@ -240,13 +236,11 @@ describe('Create map pin moderation emails', () => {
 
   it('Does not creates email for non-approved map pins', async () => {
     const mapPinDraft = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
+      _id: 'user_1',
       moderation: 'draft',
     }
     const mapPinAwaitingModeration = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
+      _id: 'user_1',
       moderation: 'awaiting-moderation',
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(

@@ -8,6 +8,7 @@ import {
   getNotificationListItem,
   getProjectSignoff,
 } from './utils'
+import { getEmailHtml } from './templates/index'
 
 export interface Email {
   html: string
@@ -277,3 +278,23 @@ export const getMapPinSubmissionEmail = (
     subject: MAP_PIN_SUBMISSION_SUBJECT,
   }
 }
+
+const site = {
+  name: getProjectName(),
+  url: SITE_URL,
+  image: getProjectImageSrc(),
+  signOff: getProjectSignoff(),
+}
+
+export const getUserSupporterBadgeAddedEmail = (user: IUserDB): Email => ({
+  subject: `${user.displayName} - Your ${site.name} Supporter Badge!`,
+  html: getEmailHtml('supporter-badge-added', { user, site }),
+})
+
+export const getUserSupporterBadgeRemovedEmail = (user: IUserDB): Email => ({
+  subject: `${site.name} Supporter - We are sad to see you go.`,
+  html: getEmailHtml('supporter-badge-removed', {
+    user,
+    site,
+  }),
+})

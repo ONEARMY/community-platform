@@ -14,11 +14,13 @@
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "shell": "yarn build && firebase functions:shell",
     "test": "firebase emulators:exec --project community-platform-emulated 'jest . --forceExit --detectOpenHandles'",
-    "test:watch": "firebase emulators:exec --ui --project community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'"
+    "test:watch": "firebase emulators:exec --ui --project community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'",
+    "serve:email-templates": "node ./src/emailNotifications/development/server.mjs"
   },
   "main": "index.js",
   "dependencies": {
     "@google-cloud/logging": "^10.5.0",
+    "@rollup/plugin-replace": "^5.0.2",
     "axios": "^0.21.1",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -30,6 +32,7 @@
     "fs-extra": "^9.0.1",
     "google-auth-library": "^6.1.1",
     "googleapis": "^61.0.0",
+    "handlebars": "^4.7.8",
     "log-update": "^4.0.0",
     "node-fetch": "2",
     "oa-shared": "workspace:*",
@@ -38,6 +41,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "7.6.0",
     "@types/axios": "^0.14.0",
     "@types/concurrently": "^6.2.1",
     "@types/cors": "^2.8.8",

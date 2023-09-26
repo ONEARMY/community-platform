@@ -3,7 +3,7 @@ import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
-import { headings } from '../../../../../src/pages/Howto/labels'
+import { headings, guidance } from '../../../../../src/pages/Howto/labels'
 const creatorEmail = 'howto_creator@test.com'
 const creatorPassword = 'test1234'
 
@@ -105,7 +105,7 @@ describe('[How To]', () => {
     const expected = {
       _createdBy: 'howto_creator',
       _deleted: false,
-      category: 'product',
+      category: 'Moulds',
       description: 'After creating, the how-to will be deleted',
       difficulty_level: 'Medium',
       time: '1-2 weeks',
@@ -192,6 +192,8 @@ describe('[How To]', () => {
         'images/howto-step-pic1.jpg',
         'images/howto-step-pic2.jpg',
       ]
+      const categoryGuidanceMain = guidance.moulds.main.slice(0, 40)
+      const categoryGuidanceFiles = guidance.moulds.files
 
       cy.login(creatorEmail, creatorPassword)
       cy.wait(2000)
@@ -244,7 +246,14 @@ describe('[How To]', () => {
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
       cy.selectTag('howto_testing')
+
+      cy.step('Select a category and see further guidance')
+      cy.contains(categoryGuidanceMain).should('not.exist')
+      cy.contains(categoryGuidanceFiles).should('not.exist')
       selectCategory(category as Category)
+      cy.contains(categoryGuidanceMain).should('exist')
+      cy.contains(categoryGuidanceFiles).should('exist')
+
       selectTimeDuration(time as Duration)
       selectDifficultLevel(difficulty_level as Difficulty)
 

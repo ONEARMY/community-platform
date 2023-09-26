@@ -1,5 +1,6 @@
 import type { StoryFn, Meta } from '@storybook/react'
 import { ImageGallery } from './ImageGallery'
+import type { ImageGalleryProps } from './ImageGallery'
 
 interface IUploadedFileMeta {
   downloadUrl: string
@@ -37,6 +38,8 @@ export default {
   component: ImageGallery,
 } as Meta<typeof ImageGallery>
 
-export const Default: StoryFn<typeof ImageGallery> = () => {
-  return <ImageGallery images={testImages} />
+export const Default: StoryFn<typeof ImageGallery> = (
+  props: Omit<ImageGalleryProps, 'images'>,
+) => {
+  return <ImageGallery images={testImages} {...props} />
 }

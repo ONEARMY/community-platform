@@ -60,10 +60,10 @@ describe('Create howto submission emails', () => {
   })
 
   it('Creates an email for a submitted howto', async () => {
-    const howto = await setMockHowto({ uid: 'user_1' })
+    const howto = await setMockHowto({ uid: 'user_1' }, 'awaiting-moderation')
     await createHowtoSubmissionEmail(howto)
 
-    // Only one approved howto email should have been created
+    // Only one submitted howto email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
     expect(countSnapshot.data().count).toEqual(1)
 
@@ -87,8 +87,17 @@ describe('Create howto submission emails', () => {
     })
   })
 
+  it('Does not create email for draft how tos', async () => {
+    const howto = await setMockHowto({ uid: 'user_2' }, 'draft')
+    await createHowtoSubmissionEmail(howto)
+
+    // No new emails should have been created
+    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
+    expect(countSnapshot.data().count).toEqual(1)
+  })
+
   // Remove this test once released to all users.
-  it('Does not creates email for people who are not beta testers', async () => {
+  it('Does not create email for people who are not beta testers', async () => {
     const howto = await setMockHowto({ uid: 'user_2' })
     await createHowtoSubmissionEmail(howto)
 
@@ -126,13 +135,12 @@ describe('Create map pin submission emails', () => {
 
   it('Creates an email for a submitted map pin', async () => {
     const mapPin = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
-      moderation: 'accepted',
+      _id: 'user_1',
+      moderation: 'awaiting-moderation',
     }
     await createMapPinSubmissionEmail(mapPin as IMapPin)
 
-    // Only one approved howto email should have been created
+    // Only one submitted map pin email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
     expect(countSnapshot.data().count).toEqual(1)
 

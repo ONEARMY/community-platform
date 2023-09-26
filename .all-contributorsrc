@@ -417,6 +417,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "ayachish",
+      "name": "Ayachi Sharma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/102033230?v=4",
+      "profile": "https://github.com/ayachish",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "projectName": "community-platform",

@@ -20,7 +20,7 @@ import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
 import type { DocReference } from '../databaseV2/DocReference'
 
-const COLLECTION_NAME = 'question'
+const COLLECTION_NAME = 'questions'
 
 export class QuestionStore extends ModuleStore {
   @observable

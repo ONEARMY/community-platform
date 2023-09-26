@@ -135,8 +135,7 @@ describe('Create map pin submission emails', () => {
 
   it('Creates an email for a submitted map pin', async () => {
     const mapPin = {
-      _id: 'map_pin_1',
-      _createdBy: 'user_1',
+      _id: 'user_1',
       moderation: 'awaiting-moderation',
     }
     await createMapPinSubmissionEmail(mapPin as IMapPin)

@@ -2,10 +2,10 @@ import { IHowtoDB, IMapPin } from '../../../src/models'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import { getHowToSubmissionEmail, getMapPinSubmissionEmail } from './templates'
-import { getUserFromModerable } from './utils'
+import { getUserAndEmail } from './utils'
 
 export async function createHowtoSubmissionEmail(howto: IHowtoDB) {
-  const { toUser, toUserEmail } = await getUserFromModerable(howto)
+  const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
 
   // Release first under beta to test.
   if (toUser.userRoles?.includes('beta-tester')) {
@@ -19,7 +19,7 @@ export async function createHowtoSubmissionEmail(howto: IHowtoDB) {
 }
 
 export async function createMapPinSubmissionEmail(mapPin: IMapPin) {
-  const { toUser, toUserEmail } = await getUserFromModerable(mapPin)
+  const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
 
   // Release first under beta to test.
   if (toUser.userRoles?.includes('beta-tester')) {

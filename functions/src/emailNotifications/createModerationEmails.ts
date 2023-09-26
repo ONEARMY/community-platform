@@ -3,7 +3,7 @@ import { IHowtoDB, IMapPin, IModerable } from '../../../src/models'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import { getHowToApprovalEmail, getMapPinApprovalEmail } from './templates'
-import { getUserFromModerable } from './utils'
+import { getUserAndEmail } from './utils'
 import { Change } from 'firebase-functions/v1'
 
 export async function handleModerationUpdate<T extends IModerable>(
@@ -20,7 +20,7 @@ export async function handleModerationUpdate<T extends IModerable>(
 }
 
 export async function createHowtoModerationEmail(howto: IHowtoDB) {
-  const { toUser, toUserEmail } = await getUserFromModerable(howto)
+  const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
 
   // Release first under beta to test.
   if (toUser.userRoles?.includes('beta-tester')) {
@@ -34,7 +34,7 @@ export async function createHowtoModerationEmail(howto: IHowtoDB) {
 }
 
 export async function createMapPinModerationEmail(mapPin: IMapPin) {
-  const { toUser, toUserEmail } = await getUserFromModerable(mapPin)
+  const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
 
   // Release first under beta to test.
   if (toUser.userRoles?.includes('beta-tester')) {

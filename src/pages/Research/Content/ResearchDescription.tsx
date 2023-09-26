@@ -8,6 +8,7 @@ import {
   Username,
   ViewsCounter,
   ConfirmModal,
+  Icon
 } from 'oa-components'
 import { useEffect, useState, Fragment } from 'react'
 import { Link, useHistory } from 'react-router-dom'
@@ -46,8 +47,8 @@ const ResearchDescription = ({
   ...props
 }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [showMoreOptions, setShowMoreOptions] = useState(false)
-
+  const [researchStats, setResearchStats] = useState([])
+  const [showStats, setShowStats] = useState(false)
   const history = useHistory()
 
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
@@ -102,8 +103,8 @@ const ResearchDescription = ({
     }
   }
 
-  const handleMoreOptions = () => {
-    setShowMoreOptions(!showMoreOptions)
+  const handleShowStats = () => {
+    setShowStats(!showStats)
   }
 
   useEffect(() => {
@@ -111,24 +112,163 @@ const ResearchDescription = ({
       didInit = true
       incrementViewCount()
     }
+    const researchStats = [
+      {
+        icon: 'view',
+        key: 'total_views',
+        text: 'views'
+      },
+      {
+        icon: 'thunderbolt',
+        key: 'subscribers',
+        text: 'following',
+      },
+      {
+        icon: 'star',
+        key: 'votedUsefulBy',
+        text: 'useful',
+      },
+      {
+        icon: 'update',
+        key: 'updates',
+        text: 'updates',
+      },
+    ]
+    setResearchStats(researchStats)
   }, [research._id])
 
   return (
-    <Flex
-      data-cy="research-basis"
-      data-id={research._id}
-      sx={{
-        position: 'relative',
-        borderRadius: 2,
-        bg: 'white',
-        borderColor: 'black',
-        borderStyle: 'solid',
-        borderWidth: '2px',
-        overflow: 'hidden',
-        flexDirection: ['column-reverse', 'column-reverse', 'row'],
-        mt: 4,
-      }}
-    >
+      <Flex
+        data-cy="research-basis"
+        data-id={research._id}
+        sx={{
+          position: 'relative',
+          borderRadius: 2,
+          bg: 'white',
+          borderColor: 'black',
+          borderStyle: 'solid',
+          borderWidth: '2px',
+          overflow: 'hidden',
+          flexDirection: ['column-reverse', 'column-reverse', 'row'],
+          mt: 4,
+        }}
+      >
+        <Flex
+          sx={{
+            pt: '2%',
+            pl: '5%',
+            pr: '5%',
+            pb: showStats?'10%':'2%',
+            borderRadius: 0,
+            bg: 'white',
+            borderColor: 'black',
+            borderStyle: 'solid',
+            borderWidth: '1px 0px 0px 0px',
+            overflow: 'hidden',
+            flexDirection: ['column', 'column', 'column'],
+            display: ['flex', 'none', 'none'],
+            mb: 0,
+          }}
+        >
+          <Flex 
+            sx={{
+              flexDirection: ['row', 'row', 'row'],
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              display: ['flex', 'none', 'none'],
+            }}
+          > 
+            <Text
+              variant="auxiliary"
+              pl={2}
+              sx={{
+                color: 'black',
+                display: 'inline-block',
+                fontFamily: 'Varela Round',
+                fontSize: '13px'
+              }}
+            >
+              {showStats?'':'More Information'}
+            </Text>
+            <Button
+              variant={'subtle'}
+              showIconOnly={true}
+              icon={showStats?'chevron-up':'chevron-down'}
+              onClick={handleShowStats}
+              small={true}
+              sx={{
+                bg:'white',
+                borderWidth: '0px',
+                '&:hover': {
+                  bg: 'white'
+                },
+                '&:active': {
+                  bg: 'white'
+                }
+              }}
+            />
+          </Flex>
+          {
+            researchStats.map((stat,i) => 
+            <Flex 
+              key={i}
+              sx={{
+                pb: 1,
+                pl: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                display: showStats?'flex':'none'
+              }}
+            >
+              <Icon size={18} glyph={stat.icon}/>
+              <Text
+                variant="auxiliary"
+                sx={{
+                  color: 'lightgrey',
+                  '&!important': {
+                    color: 'lightgrey',
+                  },
+                  fontFamily: 'Varela Round',
+                  ml: 1
+                }}
+              >
+                {`${typeof research[stat.key]=='number'?research[stat.key]:research[stat.key].length} ${stat.text}`}
+              </Text>
+            </Flex>
+            )
+          }
+          {props.contributors && props?.contributors.length ? (
+            <Flex
+              mt={1}
+              sx={{
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                flexWrap: 'wrap',
+                display: [showStats?'flex':'none','none','none']
+              }}
+            >
+              <Flex sx={{ alignItems: 'center' }}>
+                <Text
+                  variant="auxiliary"
+                  mt={1}
+                  mr={1}
+                  sx={{
+                    color: 'lightgrey',
+                  }}
+                >
+                  With contributions from
+                </Text>
+              </Flex>
+              {props.contributors.map((contributor, key) => (
+                <Username
+                  key={key}
+                  user={contributor}
+                  isVerified={contributor.isVerified}
+                />
+              ))}
+            </Flex>
+          ) : null}
+        </Flex>
       <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
         {research._deleted && (
           <Fragment>
@@ -137,27 +277,8 @@ const ResearchDescription = ({
             </Text>
           </Fragment>
         )}
-        <Flex
-          sx={{
-            display: ['flex','none','none'],
-            flexWrap: 'wrap', 
-            mb: showMoreOptions?'10px':'0px' 
-          }}
-        >
-            <Button
-              variant={'outline'}
-              icon="more-vert"
-              onClick={handleMoreOptions}
-              showIconOnly={true}
-            />
-        </Flex>
-        <Flex 
-          sx={{
-            display: [showMoreOptions?'flex':'none','flex','flex'],
-            flexDirection: ['column', 'row', 'row'],
-            flexWrap: 'wrap', 
-            gap: '10px' 
-          }}>
+
+        <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
           {research.moderation === 'accepted' && (
             <UsefulStatsButton
               votedUsefulCount={props.votedUsefulCount}
@@ -171,13 +292,6 @@ const ResearchDescription = ({
             isLoggedIn={props.loggedInUser ? true : false}
             onFollowClick={props.onFollowClick}
           ></FollowButton>
-          {viewCount ? (
-            <AuthWrapper roleRequired="beta-tester">
-              <Box>
-                <ViewsCounter viewsCount={viewCount!} />
-              </Box>
-            </AuthWrapper>
-          ) : null}
           {/* Check if research should be moderated */}
           {props.needsModeration &&
             research.moderation === 'awaiting-moderation' && (
@@ -277,6 +391,7 @@ const ResearchDescription = ({
                   flexDirection: 'row',
                   alignItems: 'flex-start',
                   flexWrap: 'wrap',
+                  display: ['none','flex','flex']
                 }}
               >
                 <Flex sx={{ alignItems: 'center' }}>
@@ -308,6 +423,7 @@ const ResearchDescription = ({
           <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
             <LinkifyText>{research.description}</LinkifyText>
           </Text>
+          
         </Box>
       </Flex>
       {research.moderation !== 'accepted' && (

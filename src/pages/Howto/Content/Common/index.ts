@@ -1,6 +1,7 @@
 export { FormFieldWrapper } from './FormFieldWrapper'
 export { HowtoButtonDraft } from './HowtoButtonDraft'
 export { HowtoButtonPublish } from './HowtoButtonPublish'
+export { HowtoCategoryGuidance } from './HowtoCategoryGuidance'
 export { HowtoErrors } from './HowtoErrors'
 export { HowtoFieldCategory } from './HowtoFieldCategory'
 export { HowtoFieldCoverImage } from './HowtoFieldCoverImage'

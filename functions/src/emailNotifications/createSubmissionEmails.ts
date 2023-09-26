@@ -9,7 +9,7 @@ export async function createHowtoSubmissionEmail(howto: IHowtoDB) {
 
   // Release first under beta to test.
   if (toUser.userRoles?.includes('beta-tester')) {
-    if (howto.moderation === 'accepted') {
+    if (howto.moderation === 'awaiting-moderation') {
       await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,
         message: getHowToSubmissionEmail(toUser, howto),
@@ -23,7 +23,7 @@ export async function createMapPinSubmissionEmail(mapPin: IMapPin) {
 
   // Release first under beta to test.
   if (toUser.userRoles?.includes('beta-tester')) {
-    if (mapPin.moderation === 'accepted') {
+    if (mapPin.moderation === 'awaiting-moderation') {
       await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,
         message: getMapPinSubmissionEmail(toUser, mapPin),

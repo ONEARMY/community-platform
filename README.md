@@ -41,7 +41,7 @@ Society and the environment are kind of screwed 💩 in many ways. We think free
 Contributions, issues and feature requests are very welcome.
 Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request.
 
-It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22++label%3A%22Help+wanted%22+) to work on.
+It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22%2C%22Help+wanted%22) to work on.
 
 If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=contact%20from%20github) 👋
 Or join our [Discord channel](https://discord.gg/gJ7Yyk4)

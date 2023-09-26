@@ -1,6 +1,7 @@
-import 'photoswipe/style.css';
+import 'photoswipe/style.css'
 import { useEffect, useRef, useState } from 'react'
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import PhotoSwipeLightbox from 'photoswipe/lightbox'
+import type { PhotoSwipeOptions } from 'photoswipe/lightbox'
 import type { CardProps } from 'theme-ui'
 import { Box, Flex, Image as ThemeImage } from 'theme-ui'
 import styled from '@emotion/styled'
@@ -19,6 +20,7 @@ interface IUploadedFileMeta {
 export interface ImageGalleryProps {
   images: IUploadedFileMeta[]
   allowPortrait?: boolean
+  photoSwipeOptions?: PhotoSwipeOptions
 }
 
 interface IState {
@@ -43,7 +45,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     showLightbox: false,
     images: [],
   })
-  const lightbox = useRef<PhotoSwipeLightbox>();
+  const lightbox = useRef<PhotoSwipeLightbox>()
 
   useEffect(() => {
     const images = (props.images || []).filter((img) => img !== null)
@@ -55,39 +57,39 @@ export const ImageGallery = (props: ImageGalleryProps) => {
 
     // Initializes the Photoswipe lightbox to use the provided images
     lightbox.current = new PhotoSwipeLightbox({
-      dataSource: images.map(image => ({
-        src: image.downloadUrl
+      dataSource: images.map((image) => ({
+        src: image.downloadUrl,
       })),
       pswpModule: () => import('photoswipe'),
-    });
+      ...(props.photoSwipeOptions ?? {}),
+    })
 
-    // Before opening the lightbox, calculates the image sizes and 
+    // Before opening the lightbox, calculates the image sizes and
     // refreshes lightbox slide to adapt to these updated dimensions
     lightbox.current.on('beforeOpen', () => {
-      const photoswipe = lightbox.current.pswp;
-      const dataSource = photoswipe?.options?.dataSource;
+      const photoswipe = lightbox.current.pswp
+      const dataSource = photoswipe?.options?.dataSource
 
       if (Array.isArray(dataSource)) {
         dataSource.forEach((source, index) => {
-          const img = new Image();
+          const img = new Image()
           img.onload = () => {
             source.width = img.naturalWidth
             source.height = img.naturalHeight
             photoswipe?.refreshSlideContent(index)
-          };
-          img.src = source.src as string;
+          }
+          img.src = source.src as string
         })
       }
-    });
+    })
 
-    lightbox.current.init();
+    lightbox.current.init()
 
     return () => {
-      lightbox.current.destroy();
-      lightbox.current = null;
-    };
+      lightbox.current.destroy()
+      lightbox.current = null
+    }
   }, [props.images])
-
 
   const setActive = (imageIndex: number) => {
     setState({
@@ -96,7 +98,8 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     })
   }
 
-  const triggerLightbox = (): void => lightbox.current.loadAndOpen(state.activeImageIndex);
+  const triggerLightbox = (): void =>
+    lightbox.current.loadAndOpen(state.activeImageIndex)
 
   const images = state.images
   const activeImageIndex = state.activeImageIndex

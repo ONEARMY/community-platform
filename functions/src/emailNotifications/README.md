@@ -62,7 +62,8 @@ We do not have the email extension set up in the emulator environment, so testin
 
 1. Make changes to the function.
 2. Use the [unit tests](./createNotificationEmails.spec.ts) to test new transformation functionality and generate new html snapshots.
-3. To preview the new email, either copy/paste the html snapshot into a [free online site](https://codebeautify.org/htmlviewer) or into new file and use a VSCode extension like HTML Preview. Include a screenshot in your PR description.
+
+Additionally you can run `yarn serve:email-templates` to run a local vite server that will serve the email templates. This is useful for testing the email templates in a browser. You can find the code for this in the [development](./development) directory.
 
 ### Changes to email sending logic\*
 

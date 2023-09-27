@@ -2,11 +2,18 @@ import { Button, DownloadStaticFile } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
 import { buttons, headings, intro } from '../../labels'
-import { FormFieldWrapper, HowtoFieldFileLink, HowtoFieldFileUpload } from '.'
+import {
+  HowtoCategoryGuidance,
+  FormFieldWrapper,
+  HowtoFieldFileLink,
+  HowtoFieldFileUpload,
+} from '.'
 
+import type { ICategory } from 'src/models/categories.model'
 import type { IHowtoFormInput } from 'src/models/howto.models'
 
 interface IProps {
+  category: ICategory | undefined
   fileEditMode: boolean | undefined
   files: IHowtoFormInput['files']
   onClick: () => void
@@ -14,13 +21,15 @@ interface IProps {
 }
 
 export const HowtoFieldFiles = (props: IProps) => {
-  const { onClick, showInvalidFileWarning, files, fileEditMode } = props
+  const { category, onClick, showInvalidFileWarning, files, fileEditMode } =
+    props
 
   return (
     <>
       <Flex sx={{ mb: 2 }}>{showInvalidFileWarning && <Error />}</Flex>
       <FormFieldWrapper htmlFor="description" text={headings.files}>
         <Flex sx={{ flexDirection: 'column' }} mb={[4, 4, 0]}>
+          <HowtoCategoryGuidance category={category} type="files" />
           {files?.length && !fileEditMode ? (
             <FilesWrapper files={files} onClick={onClick} />
           ) : (

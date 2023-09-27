@@ -26448,6 +26448,7 @@ __metadata:
     linkifyjs: ^4.0.2
     mustache: ^4.2.0
     oa-themes: "workspace:^"
+    photoswipe: ^5.4.1
     prettier: 2.5.1
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -26828,7 +26829,6 @@ __metadata:
     oa-components: "workspace:*"
     oa-shared: "workspace:*"
     oa-themes: "workspace:*"
-    photoswipe: ^5.4.0
     pino: ^7.2.0
     pino-logflare: ^0.3.12
     prettier: 2.5.1
@@ -27473,10 +27473,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"photoswipe@npm:^5.4.0":
-  version: 5.4.0
-  resolution: "photoswipe@npm:5.4.0"
-  checksum: 87aeab23edc88482057e893c89f0a7317837143dfdb801ac6e6c4604d737f34d798de8a94111efa84db766ea8c48774372ef5ef1eaf1dcc63df8fdd5ed347832
+"photoswipe@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "photoswipe@npm:5.4.1"
+  checksum: edc58bec3aae2db7570980fd7bc7fc544d38abc0866dc7e2c0a611cc32d5787ebfc8084d7c1e000a081de23d40faed6b3f3c140fbf9e5ad82dfdc50402196534
   languageName: node
   linkType: hard
 

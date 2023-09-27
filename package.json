@@ -99,7 +99,6 @@
     "oa-components": "workspace:*",
     "oa-shared": "workspace:*",
     "oa-themes": "workspace:*",
-    "photoswipe": "^5.4.0",
     "pino": "^7.2.0",
     "pino-logflare": "^0.3.12",
     "react": "17.0.2",

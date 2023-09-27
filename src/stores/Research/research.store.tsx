@@ -100,8 +100,8 @@ export class ResearchStore extends ModuleStore {
           this.activeSorter,
           activeItems,
         )
-        if(docs.length) {
-          this.isFetching = false;
+        if (docs.length) {
+          this.isFetching = false
         }
       })
     })

@@ -8,13 +8,13 @@ import ResearchListItem from './ResearchListItem'
 import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { RESEARCH_EDITOR_ROLES } from '../constants'
-import * as React from "react";
+import * as React from 'react'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
   const theme = useTheme()
 
-  const { filteredResearches , isFetching } = store
+  const { filteredResearches, isFetching } = store
   return (
     <>
       <Flex my={[18, 26]}>
@@ -52,20 +52,22 @@ const ResearchList = observer(() => {
           </Box>
         </Flex>
       </Flex>
-        {isFetching && <Loader />}
-        {(!isFetching && filteredResearches?.length !== 0) && filteredResearches.map((item) => {
-            const votedUsefulCount = (item.votedUsefulBy || []).length
-            return (
-                <ResearchListItem
-                    key={item._id}
-                    item={{
-                        ...item,
-                        votedUsefulCount,
-                    }}
-                />
-            )
+      {isFetching && <Loader />}
+      {!isFetching &&
+        filteredResearches?.length !== 0 &&
+        filteredResearches.map((item) => {
+          const votedUsefulCount = (item.votedUsefulBy || []).length
+          return (
+            <ResearchListItem
+              key={item._id}
+              item={{
+                ...item,
+                votedUsefulCount,
+              }}
+            />
+          )
         })}
-        {(!isFetching && filteredResearches?.length === 0) && 'No research to show'}
+      {!isFetching && filteredResearches?.length === 0 && 'No research to show'}
       <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
         <Box mb={[3, 3, 0]}>
           <Link to={store.activeUser ? '/research/create' : 'sign-up'}>

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import * as React from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router'
-import { Loader } from 'oa-components'
+import { Loader, BlockedRoute } from 'oa-components'
 import { Text } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
@@ -86,6 +86,20 @@ const EditUpdate = observer((props: IProps) => {
       loggedInUser &&
       isAllowedToEditContent(store.activeResearchItem!, loggedInUser)
     ) {
+      if (
+        formValues.locked &&
+        formValues.locked.by !== loggedInUser?.userName
+      ) {
+        return (
+          <BlockedRoute
+            redirectLabel="Back to research"
+            redirectUrl={`/research/${props.match.params.slug}`}
+          >
+            This research update is currently being edited by another editor.
+          </BlockedRoute>
+        )
+      }
+
       return (
         <ResearchUpdateForm
           formValues={formValues}

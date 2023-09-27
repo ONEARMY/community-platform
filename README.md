@@ -41,7 +41,7 @@ Society and the environment are kind of screwed 💩 in many ways. We think free
 Contributions, issues and feature requests are very welcome.
 Please make sure to read the [Contributing Guide](/CONTRIBUTING.md) before making a pull request.
 
-It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?utf8=%E2%9C%93&q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22++label%3A%22Help+wanted%22+) to work on.
+It also covers lots of handy additional information such as setting up a local server, or finding [good first issues](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22) to work on.
 
 If needed you can [drop us a line here](mailto:platform@onearmy.earth?subject=contact%20from%20github) 👋
 Or join our [Discord channel](https://discord.gg/gJ7Yyk4)
@@ -113,6 +113,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/manuelrurda"><img src="https://avatars.githubusercontent.com/u/62727899?v=4?s=60" width="60px;" alt="Manuel Rodriguez Urdapilelta"/><br /><sub><b>Manuel Rodriguez Urdapilelta</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=manuelrurda" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LiptonB"><img src="https://avatars.githubusercontent.com/u/467965?v=4?s=60" width="60px;" alt="Ben Lipton"/><br /><sub><b>Ben Lipton</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=LiptonB" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ayachish"><img src="https://avatars.githubusercontent.com/u/102033230?v=4?s=60" width="60px;" alt="Ayachi Sharma"/><br /><sub><b>Ayachi Sharma</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ayachish" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>

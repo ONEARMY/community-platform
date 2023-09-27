@@ -433,7 +433,7 @@ describe('[How To]', () => {
     it('[By Anonymous]', () => {
       cy.step('Prevent anonymous access to edit howto')
       cy.visit(editHowtoUrl)
-      cy.get('[data-cy=auth-route-deny]').should('be.exist')
+      cy.get('[data-cy=BlockedRoute]').should('be.exist')
     })
 
     it('[By Authenticated]', () => {

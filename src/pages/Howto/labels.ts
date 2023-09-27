@@ -90,23 +90,23 @@ export const guidance = {
     main:
       '✅ Cover image should show the topic of the guide<br/>' +
       '👍 Few steps we advise having: ' +
-      '<ul><li>Step 1 > Explain the Guide</li>' +
-      '<li>Step 2 (as many steps as needed) > Talk about the process</li>' +
-      '<li>Step 3 (as many steps as needed) > Talk about the challenges</li>' +
-      '<li>Step 5 > Tips & tricks</li>' +
-      '<li>Step 6 > Show the final outcome</li>',
-    files: '👍 Include files to replicate if needed<br/>',
+      '<ol><li>Explain the Guide</li>' +
+      '<li>(As many steps as needed) talk about the process</li>' +
+      '<li>(As many steps as needed) talk about the challenges</li>' +
+      '<li>Tips & tricks</li>' +
+      '<li>Show the final outcome</li></ol>',
+    files: '👍 Include files to replicate if needed.',
   },
   machines: {
     main:
       '✅ Cover image should show the fully built machine<br/>' +
       '👍 Few steps we advise having: ' +
-      '<ul><li>Step 1 > Explain the machine</li>' +
-      '<li>Step 2 > Mention tools required</li>' +
-      '<li>Step 3 > Challenges building the machine </li>' +
-      '<li>Step 4 > Explain how to run it</li>' +
-      '<li>Step 5 > Tips & tricks</li>' +
-      '<li>Step 6 > Link to the Bazar if you sell it there</li></ul>',
+      '<ol><li>Explain the machine</li>' +
+      '<li>Mention tools required</li>' +
+      '<li>Challenges building the machine </li>' +
+      '<li>Explain how to run it</li>' +
+      '<li>Tips & tricks</li>' +
+      '<li>Link to the Bazar if you sell it there</li></ol>',
     files:
       '✅ Include files to replicate the machine (drawings, cad, 3d files, etc..)',
   },
@@ -114,26 +114,26 @@ export const guidance = {
     main:
       '✅ Cover image should show the fully built mould<br/>' +
       '👍 Few steps we advise having:' +
-      '<ul><li>Step 1 > Explain the mould</li>' +
-      '<li>Step 2 > Mention tools required</li>' +
-      '<li>Step 3 > Challenges producing the mould</li>' +
-      '<li>Step 4 > Explain how to use the mould</li>' +
-      '<li>Step 5 > Tips & tricks</li>' +
-      '<li>Step 6 > Show the final product</li>' +
-      '<li>Step 7 > Link to the Bazar if you sell it there</li></ul>',
+      '<ol><li>Explain the mould</li>' +
+      '<li>Mention tools required</li>' +
+      '<li>Challenges producing the mould</li>' +
+      '<li>Explain how to use the mould</li>' +
+      '<li>Tips & tricks</li>' +
+      '<li>Show the final product</li>' +
+      '<li>Link to the Bazar if you sell it there</li></ol>',
     files: '✅ Include files to replicate the mould (cad, 3d files, etc..)',
   },
   products: {
     main:
       '✅ Cover image should show the final product<br/>' +
       '👍 Few steps we advise having: ' +
-      '<ul><li>Step 1 > Explain the product</li>' +
-      '<li>Step 2 (as many steps as needed) > Talk about the process</li>' +
-      '<li>Step 3 (as many steps as needed) > Challenges making the product</li>' +
-      '<li>Step 5 > Tips & tricks</li>' +
-      '<li>Step 6 > Show the final product</li>' +
-      '<li>Step 7 > Link to the Bazar if you sell it there</li></ul>',
-    files: '👍 Include files to replicate the product if needed<br/>',
+      '<ol><li>Explain the product</li>' +
+      '<li>(As many steps as needed) talk about the process</li>' +
+      '<li>(As many steps as needed) challenges making the product</li>' +
+      '<li>Tips & tricks</li>' +
+      '<li>Show the final product</li>' +
+      '<li>Link to the Bazar if you sell it there</li></ol>',
+    files: '👍 Include files to replicate the product if needed.',
   },
 }
 

@@ -53,6 +53,7 @@ export const getProjectImageSrc = () => {
 
 export const getProjectName = () => {
   switch (SITE_URL) {
+    case 'http://localhost:4000':
     case 'https://dev.onearmy.world':
     case 'https://community.preciousplastic.com':
       return PP_PROJECT_NAME

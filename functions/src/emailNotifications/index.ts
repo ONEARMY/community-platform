@@ -13,6 +13,7 @@ import {
   createHowtoSubmissionEmail,
   createMapPinSubmissionEmail,
 } from './createSubmissionEmails'
+import * as supporterBadgeEmails from './supporterBadgeEmails'
 
 const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
 
@@ -119,3 +120,8 @@ exports.sendMapPinSubmissionEmail = functions.firestore
   .onCreate((snapshot, context) =>
     withErrorAlerting(context, createMapPinSubmissionEmail, [snapshot.data()]),
   )
+
+/** Watch new user docs and trigger emails on supporter */
+exports.sendSupporterEmail = (
+  supporterBadgeEmails as any
+).handleUserSupporterBadgeUpdate

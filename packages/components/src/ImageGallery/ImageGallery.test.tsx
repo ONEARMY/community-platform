@@ -27,7 +27,7 @@ describe('ImageGallery', () => {
     // unmounts, so that each test initializes the component correctly. The cleanup
     // of the window.pswp is made asynchronously with no way of waiting except this one
     await waitFor(() => {
-      expect(global.window.pswp).toBeFalsy()
+      expect((global.window as any).pswp).toBeFalsy()
     })
   })
 

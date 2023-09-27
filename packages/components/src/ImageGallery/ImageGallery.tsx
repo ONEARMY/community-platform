@@ -67,7 +67,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     // Before opening the lightbox, calculates the image sizes and
     // refreshes lightbox slide to adapt to these updated dimensions
     lightbox.current.on('beforeOpen', () => {
-      const photoswipe = lightbox.current.pswp
+      const photoswipe = lightbox.current?.pswp
       const dataSource = photoswipe?.options?.dataSource
 
       if (Array.isArray(dataSource)) {
@@ -86,8 +86,8 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     lightbox.current.init()
 
     return () => {
-      lightbox.current.destroy()
-      lightbox.current = null
+      lightbox.current?.destroy()
+      lightbox.current = undefined
     }
   }, [props.images])
 
@@ -98,8 +98,12 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     })
   }
 
-  const triggerLightbox = (): void =>
-    lightbox.current.loadAndOpen(state.activeImageIndex)
+  const triggerLightbox = (): void => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore: Looks like a bug on their side, already a bug for it is open,
+    // it should allow only one argument, as mentioned in their docs
+    lightbox.current?.loadAndOpen(state.activeImageIndex)
+  }
 
   const images = state.images
   const activeImageIndex = state.activeImageIndex

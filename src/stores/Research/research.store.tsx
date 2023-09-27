@@ -70,6 +70,8 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
+  isFetching = true
+
   constructor(rootStore: RootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
@@ -98,6 +100,9 @@ export class ResearchStore extends ModuleStore {
           this.activeSorter,
           activeItems,
         )
+        if(docs.length) {
+          this.isFetching = false;
+        }
       })
     })
   }

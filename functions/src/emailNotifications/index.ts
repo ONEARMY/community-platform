@@ -7,6 +7,7 @@ import { withErrorAlerting } from '../alerting/errorAlerting'
 import * as moderationEmails from './createModerationEmails'
 import * as submissionEmails from './createSubmissionEmails'
 import * as supporterBadgeEmails from './supporterBadgeEmails'
+import * as verifiedBadgeEmails from './verifiedBadgeEmails'
 
 const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
 
@@ -97,3 +98,7 @@ exports.sendMapPinSubmissionEmail = submissionEmails.handleMapPinSubmission
 exports.sendSupporterEmail = (
   supporterBadgeEmails as any
 ).handleUserSupporterBadgeUpdate
+
+exports.sendVerifiedEmail = (
+  verifiedBadgeEmails as any
+).handleUserVerifiedBadgeUpdate

@@ -4,15 +4,8 @@ import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { withErrorAlerting } from '../alerting/errorAlerting'
-import {
-  createHowtoModerationEmail,
-  createMapPinModerationEmail,
-  handleModerationUpdate,
-} from './createModerationEmails'
-import {
-  createHowtoSubmissionEmail,
-  createMapPinSubmissionEmail,
-} from './createSubmissionEmails'
+import * as moderationEmails from './createModerationEmails'
+import * as submissionEmails from './createSubmissionEmails'
 import * as supporterBadgeEmails from './supporterBadgeEmails'
 
 const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
@@ -88,38 +81,17 @@ exports.sendOnce = functions
   })
 
 /** Watch changes to all howto docs and trigger emails on moderation changes */
-exports.sendHowToModerationEmail = functions.firestore
-  .document(`${DB_ENDPOINTS.howtos}/{id}`)
-  .onUpdate((change, context) =>
-    withErrorAlerting(context, handleModerationUpdate, [
-      change,
-      createHowtoModerationEmail,
-    ]),
-  )
+exports.sendHowToModerationEmail = moderationEmails.handleHowToModerationUpdate
 
 /** Watch changes to all map pin docs and trigger emails on moderation changes */
-exports.sendMapPinModerationEmail = functions.firestore
-  .document(`${DB_ENDPOINTS.mappins}/{id}`)
-  .onUpdate((change, context) =>
-    withErrorAlerting(context, handleModerationUpdate, [
-      change,
-      createMapPinModerationEmail,
-    ]),
-  )
+exports.sendMapPinModerationEmail =
+  moderationEmails.handleMapPinModerationUpdate
 
 /** Watch new howto docs and trigger emails on creation */
-exports.sendHowToSubmissionEmail = functions.firestore
-  .document(`${DB_ENDPOINTS.howtos}/{id}`)
-  .onCreate((snapshot, context) =>
-    withErrorAlerting(context, createHowtoSubmissionEmail, [snapshot.data()]),
-  )
+exports.sendHowToSubmissionEmail = submissionEmails.handleHowToSubmission
 
 /** Watch new map pin docs and trigger emails on creation */
-exports.sendMapPinSubmissionEmail = functions.firestore
-  .document(`${DB_ENDPOINTS.mappins}/{id}`)
-  .onCreate((snapshot, context) =>
-    withErrorAlerting(context, createMapPinSubmissionEmail, [snapshot.data()]),
-  )
+exports.sendMapPinSubmissionEmail = submissionEmails.handleMapPinSubmission
 
 /** Watch new user docs and trigger emails on supporter */
 exports.sendSupporterEmail = (

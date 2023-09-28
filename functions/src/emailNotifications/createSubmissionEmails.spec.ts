@@ -9,6 +9,7 @@ import {
   createHowtoSubmissionEmail,
   createMapPinSubmissionEmail,
 } from './createSubmissionEmails'
+import { PP_SIGNOFF } from './constants'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -82,7 +83,7 @@ describe('Create howto submission emails', () => {
         `Huzzah! Your How-To Mock Howto has been submitted.`,
       )
       // Check that the email contains the correct PP signoff
-      expect(html).toContain('Charlie your Precious Plastic Community Manager')
+      expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')
     })
   })
@@ -157,7 +158,7 @@ describe('Create map pin submission emails', () => {
       // Check that the email contains the correct title
       expect(html).toContain('Your map pin has been submitted.')
       // Check that the email contains the correct PP signoff
-      expect(html).toContain('Charlie your Precious Plastic Community Manager')
+      expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')
     })
   })

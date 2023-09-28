@@ -298,3 +298,25 @@ export const getUserSupporterBadgeRemovedEmail = (user: IUserDB): Email => ({
     site,
   }),
 })
+
+export const HOW_TO_REJECTED_SUBJECT = 'Your how-to has been rejected'
+export const getHowToRejectedEmail = (
+  user: IUserDB,
+  howto: IHowtoDB,
+): Email => ({
+  subject: HOW_TO_REJECTED_SUBJECT,
+  html: getEmailHtml('how-to-rejected', {
+    user,
+    howto,
+    site,
+  }),
+})
+
+export const MAP_PIN_REJECTED_SUBJECT = 'Your map pin has been rejected'
+export const getMapPinRejectedEmail = (user: IUserDB): Email => ({
+  subject: MAP_PIN_REJECTED_SUBJECT,
+  html: getEmailHtml('map-pin-rejected', {
+    user,
+    site,
+  }),
+})

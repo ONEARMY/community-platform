@@ -2,8 +2,10 @@ import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import {
   HOW_TO_APPROVAL_SUBJECT,
+  HOW_TO_REJECTED_SUBJECT,
   HOW_TO_SUBMISSION_SUBJECT,
   MAP_PIN_APPROVAL_SUBJECT,
+  MAP_PIN_REJECTED_SUBJECT,
   MAP_PIN_SUBMISSION_SUBJECT,
 } from './templates'
 import { setMockHowto } from '../emulator/seed/content-generate'
@@ -138,6 +140,48 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct howto title
       expect(html).toContain(
         `Huzzah! Your How-To Mock Howto has been submitted.`,
+      )
+      // Check that the email contains the correct PP signoff
+      expect(html).toContain(PP_SIGNOFF)
+      expect(to).toBe('test@test.com')
+    })
+  })
+
+  it('Creates an email for a rejected howto', async () => {
+    const howtoAwaitingModeration = await setMockHowto(
+      { uid: 'user_1' },
+      'awaiting-moderation',
+    )
+    const howtoRejected = {
+      ...howtoAwaitingModeration,
+      moderation: 'rejected',
+    }
+    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
+      howtoAwaitingModeration,
+      howtoRejected,
+      'howtos',
+      howtoAwaitingModeration._id,
+    )
+
+    await handleModerationUpdate(change, createHowtoModerationEmail)
+
+    // Only one rejected howto email should have been created
+    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
+    expect(countSnapshot.data().count).toEqual(1)
+
+    const querySnapshot = await db.collection(DB_ENDPOINTS.emails).get()
+    querySnapshot.forEach((doc) => {
+      const {
+        message: { html, subject },
+        to,
+      } = doc.data()
+      expect(subject).toBe(HOW_TO_REJECTED_SUBJECT)
+      // Check that the email contains the correct user name
+      expect(html).toContain('Hey User 1')
+      // Check that the email contains the correct howto title
+      expect(html).toContain(`Thank you for submitting your How-To, Mock Howto`)
+      expect(html).toContain(
+        'However, after reviewing your submission, we feel that',
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
@@ -289,6 +333,50 @@ describe('Create map pin moderation emails', () => {
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct title
       expect(html).toContain('Your map pin has been submitted.')
+      // Check that the email contains the correct PP signoff
+      expect(html).toContain(PP_SIGNOFF)
+      expect(to).toBe('test@test.com')
+    })
+  })
+
+  it('Creates an email for a rejected map pin', async () => {
+    const mapPinAwaitingModeration = {
+      _id: 'user_1',
+      moderation: 'awaiting-moderation',
+    }
+    const mapPinRejected = {
+      _id: 'user_1',
+      moderation: 'rejected',
+    }
+    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
+      mapPinAwaitingModeration,
+      mapPinRejected,
+      'mappins',
+      mapPinRejected._id,
+    )
+
+    await handleModerationUpdate(change, createMapPinModerationEmail)
+
+    // Only one approved map pin email should have been created
+    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
+    expect(countSnapshot.data().count).toEqual(1)
+
+    const querySnapshot = await db.collection(DB_ENDPOINTS.emails).get()
+    querySnapshot.forEach((doc) => {
+      const {
+        message: { html, subject },
+        to,
+      } = doc.data()
+      expect(subject).toBe(MAP_PIN_REJECTED_SUBJECT)
+      // Check that the email contains the correct user name
+      expect(html).toContain('Hey User 1')
+      expect(html).toContain(
+        'Thank you for applying to be on the Precious Plastic Map.',
+      )
+      // Check that the email contains the correct guidelines link
+      expect(html).toContain(
+        `https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view`,
+      )
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')

@@ -22,6 +22,9 @@ export function render(url) {
         url: 'https://community.preciousplastic.com',
         signOff: PP_SIGNOFF,
       },
+      howto: {
+        title: 'Mock Howto Title',
+      },
     })
     return html
   }

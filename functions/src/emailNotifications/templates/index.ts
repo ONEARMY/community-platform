@@ -5,6 +5,8 @@ import path from 'path'
 type SupportedEmailTemplates =
   | 'supporter-badge-removed'
   | 'supporter-badge-added'
+  | 'how-to-rejected'
+  | 'map-pin-rejected'
 
 export function getEmailHtml(emailType: SupportedEmailTemplates, ctx: {}) {
   const layoutTmpl = Handlebars.compile(

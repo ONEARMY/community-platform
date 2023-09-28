@@ -80,7 +80,7 @@ exports[`Create howto submission emails Creates an email for a submitted howto 1
             </div>
             <div align="left" class="closing-containter">
               <p>Cheers,</p>
-              <p>Charlie your Precious Plastic Community Manager</p>
+              <p>The Precious Plastic Team</p>
             </div>
           </div>
           <table class="settings-table-container">
@@ -179,7 +179,7 @@ exports[`Create map pin submission emails Creates an email for a submitted map p
             </div>
             <div align="left" class="closing-containter">
               <p>Cheers,</p>
-              <p>Charlie your Precious Plastic Community Manager</p>
+              <p>The Precious Plastic Team</p>
             </div>
           </div>
           <table class="settings-table-container">

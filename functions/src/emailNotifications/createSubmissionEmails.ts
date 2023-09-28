@@ -1,8 +1,10 @@
+import * as functions from 'firebase-functions'
 import { IHowtoDB, IMapPin } from '../../../src/models'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import { getHowToSubmissionEmail, getMapPinSubmissionEmail } from './templates'
 import { getUserAndEmail } from './utils'
+import { withErrorAlerting } from '../alerting/errorAlerting'
 
 export async function createHowtoSubmissionEmail(howto: IHowtoDB) {
   const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
@@ -31,3 +33,15 @@ export async function createMapPinSubmissionEmail(mapPin: IMapPin) {
     }
   }
 }
+
+export const handleHowToSubmission = functions.firestore
+  .document(`${DB_ENDPOINTS.howtos}/{id}`)
+  .onCreate((snapshot, context) =>
+    withErrorAlerting(context, createHowtoSubmissionEmail, [snapshot.data()]),
+  )
+
+export const handleMapPinSubmission = functions.firestore
+  .document(`${DB_ENDPOINTS.mappins}/{id}`)
+  .onCreate((snapshot, context) =>
+    withErrorAlerting(context, createMapPinSubmissionEmail, [snapshot.data()]),
+  )

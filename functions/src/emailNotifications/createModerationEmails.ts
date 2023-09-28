@@ -1,10 +1,12 @@
+import * as functions from 'firebase-functions'
 import { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import { IHowtoDB, IMapPin, IModerable } from '../../../src/models'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
-import { getHowToApprovalEmail, getMapPinApprovalEmail } from './templates'
+import * as templates from './templates'
 import { getUserAndEmail } from './utils'
 import { Change } from 'firebase-functions/v1'
+import { withErrorAlerting } from '../alerting/errorAlerting'
 
 export async function handleModerationUpdate<T extends IModerable>(
   change: Change<QueryDocumentSnapshot<T>>,
@@ -27,7 +29,18 @@ export async function createHowtoModerationEmail(howto: IHowtoDB) {
     if (howto.moderation === 'accepted') {
       await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,
-        message: getHowToApprovalEmail(toUser, howto),
+        message: templates.getHowToApprovalEmail(toUser, howto),
+      })
+    } else if (howto.moderation === 'awaiting-moderation') {
+      // If a how to is resumbitted, send another submission confirmation email.
+      await db.collection(DB_ENDPOINTS.emails).add({
+        to: toUserEmail,
+        message: templates.getHowToSubmissionEmail(toUser, howto),
+      })
+    } else if (howto.moderation === 'rejected') {
+      await db.collection(DB_ENDPOINTS.emails).add({
+        to: toUserEmail,
+        message: templates.getHowToRejectedEmail(toUser, howto),
       })
     }
   }
@@ -41,8 +54,37 @@ export async function createMapPinModerationEmail(mapPin: IMapPin) {
     if (mapPin.moderation === 'accepted') {
       await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,
-        message: getMapPinApprovalEmail(toUser, mapPin),
+        message: templates.getMapPinApprovalEmail(toUser, mapPin),
+      })
+    } else if (mapPin.moderation === 'awaiting-moderation') {
+      // If a pin is resumbitted, send another submission confirmation email.
+      await db.collection(DB_ENDPOINTS.emails).add({
+        to: toUserEmail,
+        message: templates.getMapPinSubmissionEmail(toUser, mapPin),
+      })
+    } else if (mapPin.moderation === 'rejected') {
+      await db.collection(DB_ENDPOINTS.emails).add({
+        to: toUserEmail,
+        message: templates.getMapPinRejectedEmail(toUser),
       })
     }
   }
 }
+
+export const handleHowToModerationUpdate = functions.firestore
+  .document(`${DB_ENDPOINTS.howtos}/{id}`)
+  .onUpdate((change, context) =>
+    withErrorAlerting(context, handleModerationUpdate, [
+      change,
+      createHowtoModerationEmail,
+    ]),
+  )
+
+export const handleMapPinModerationUpdate = functions.firestore
+  .document(`${DB_ENDPOINTS.mappins}/{id}`)
+  .onUpdate((change, context) =>
+    withErrorAlerting(context, handleModerationUpdate, [
+      change,
+      createMapPinModerationEmail,
+    ]),
+  )

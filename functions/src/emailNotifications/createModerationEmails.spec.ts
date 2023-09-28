@@ -121,7 +121,7 @@ describe('Create howto moderation emails', () => {
 
     await handleModerationUpdate(change, createHowtoModerationEmail)
 
-    // Only one approved howto email should have been created
+    // Only one submitted howto email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
     expect(countSnapshot.data().count).toEqual(1)
 
@@ -231,7 +231,7 @@ describe('Create map pin moderation emails', () => {
 
     await handleModerationUpdate(change, createMapPinModerationEmail)
 
-    // Only one approved howto email should have been created
+    // Only one approved map pin email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
     expect(countSnapshot.data().count).toEqual(1)
 
@@ -273,7 +273,7 @@ describe('Create map pin moderation emails', () => {
 
     await handleModerationUpdate(change, createMapPinModerationEmail)
 
-    // Only one approved howto email should have been created
+    // Only one submitted map pin email should have been created
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
     expect(countSnapshot.data().count).toEqual(1)
 

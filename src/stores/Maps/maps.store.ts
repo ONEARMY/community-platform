@@ -166,15 +166,21 @@ export class MapsStore extends ModuleStore {
   public async setUserPin(user: IUserPP) {
     const type = user.profileType || 'member'
     const existingPin = await this.getPin(user.userName, 'server')
-    const existingModeration = existingPin?.moderation || 'awaiting-moderation'
+    const existingModeration = existingPin?.moderation
+    const existingPinType = existingPin?.type
 
     let moderation: IModerationStatus = existingModeration
 
+    // Member pins do not require moderation.
     if (type === 'member') {
       moderation = 'accepted'
     }
 
-    if (type !== 'member' && existingModeration === 'rejected') {
+    // Require re-moderation for non-member pins if pin type changes or if pin was not previously accepted.
+    if (
+      type !== 'member' &&
+      (existingModeration !== 'accepted' || existingPinType !== type)
+    ) {
       moderation = 'awaiting-moderation'
     }
 

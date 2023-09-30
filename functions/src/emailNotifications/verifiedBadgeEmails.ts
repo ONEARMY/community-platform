@@ -7,7 +7,7 @@ import type { IUserDB } from '../models'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 
-exports.handleUserVerifiedBadgeUpdate = functions.firestore
+export const handleUserVerifiedBadgeUpdate = functions.firestore
   .document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate((change, ctx) =>
     withErrorAlerting(ctx, handleUserVerifiedBadgeChange, [change]),

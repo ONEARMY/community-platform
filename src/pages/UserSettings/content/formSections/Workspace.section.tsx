@@ -48,58 +48,56 @@ const WORKSPACE_TYPES: IWorkspaceType[] = [
   },
 ]
 
-export class WorkspaceSection extends React.Component<any> {
-  render() {
-    const { description, error, title } = fields.workspaceType
+export const WorkspaceSection = () => {
+  const { description, error, title } = fields.workspaceType
 
-    return (
-      <Field
-        name="workspaceType"
-        validate={required}
-        validateFields={[]}
-        render={({ input, meta }) => (
-          <FlexSectionContainer>
-            <Flex sx={{ justifyContent: 'space-between' }}>
-              <Heading variant="small">{title}</Heading>
-            </Flex>
-            <Box>
-              <Text mt={4} mb={4}>
-                {description}
-              </Text>
-              <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
-                {WORKSPACE_TYPES.map((workspace, index: number) => (
-                  <CustomRadioField
-                    data-cy={workspace.label}
-                    key={index}
-                    value={workspace.label}
-                    name="workspaceType"
-                    isSelected={workspace.label === input.value}
-                    onChange={(v) => {
-                      input.onChange(v)
-                      input.onBlur()
-                    }}
-                    imageSrc={workspace.imageSrc}
-                    textLabel={workspace.textLabel}
-                    subText={workspace.subText}
-                  />
-                ))}
-              </Flex>
-              {meta.touched && meta.error && (
-                <Text
-                  sx={{
-                    color: 'error',
-                    fontSize: 0.5,
-                    marginLeft: 1,
-                    marginRight: 1,
+  return (
+    <Field
+      name="workspaceType"
+      validate={required}
+      validateFields={[]}
+      render={({ input, meta }) => (
+        <FlexSectionContainer>
+          <Flex sx={{ justifyContent: 'space-between' }}>
+            <Heading variant="small">{title}</Heading>
+          </Flex>
+          <Box>
+            <Text mt={4} mb={4}>
+              {description}
+            </Text>
+            <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
+              {WORKSPACE_TYPES.map((workspace, index: number) => (
+                <CustomRadioField
+                  data-cy={workspace.label}
+                  key={index}
+                  value={workspace.label}
+                  name="workspaceType"
+                  isSelected={workspace.label === input.value}
+                  onChange={(v) => {
+                    input.onChange(v)
+                    input.onBlur()
                   }}
-                >
-                  {error}
-                </Text>
-              )}
-            </Box>
-          </FlexSectionContainer>
-        )}
-      />
-    )
-  }
+                  imageSrc={workspace.imageSrc}
+                  textLabel={workspace.textLabel}
+                  subText={workspace.subText}
+                />
+              ))}
+            </Flex>
+            {meta.touched && meta.error && (
+              <Text
+                sx={{
+                  color: 'error',
+                  fontSize: 0.5,
+                  marginLeft: 1,
+                  marginRight: 1,
+                }}
+              >
+                {error}
+              </Text>
+            )}
+          </Box>
+        </FlexSectionContainer>
+      )}
+    />
+  )
 }

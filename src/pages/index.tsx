@@ -5,7 +5,6 @@ import { NotFoundPage } from './NotFound/NotFound'
 import { ScrollToTop } from '../common/ScrollToTop'
 import Header from './common/Header/Header'
 import Main from 'src/pages/common/Layout/Main'
-import type { IPageMeta } from './PageList'
 import {
   COMMUNITY_PAGES_PROFILE,
   NO_HEADER_PAGES,
@@ -20,24 +19,23 @@ import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
 import { ExternalLink, Button } from 'oa-components'
 
-export class Routes extends React.Component<
-  any,
-  {
-    singlePageMode: boolean
-    displayPageComponent?: any
-    supportedRoutes?: IPageMeta[]
-  }
-> {
-  public render() {
-    // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
-    // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
-    // platform into other sites. The first case is direct nav
-    const menuItems = [
-      ...getAvailablePageList(getSupportedModules()),
-      ...COMMUNITY_PAGES_PROFILE,
-      ...NO_HEADER_PAGES,
-      ...POLICY_PAGES,
-    ]
+export const Routes = () => {
+  //   any,
+  //   {
+  //     singlePageMode: boolean
+  //     displayPageComponent?: any
+  //     supportedRoutes?: IPageMeta[]
+  //   }
+  // > {
+  // we are rendering different pages and navigation dependent on whether the user has navigated directly to view the
+  // entire site, or just one page of it via subdomains. This is so we can effectively integrate just parts of this
+  // platform into other sites. The first case is direct nav
+  const menuItems = [
+    ...getAvailablePageList(getSupportedModules()),
+    ...COMMUNITY_PAGES_PROFILE,
+    ...NO_HEADER_PAGES,
+    ...POLICY_PAGES,
+  ]
 
     return (
       <Flex

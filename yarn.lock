@@ -26882,7 +26882,6 @@ __metadata:
     ts-node: ^10.4.0
     typescript: ^5.1.6
     wait-on: ^5.2.1
-    web-vitals: ^1.1.2
     workbox-background-sync: ^6.1.5
     workbox-broadcast-update: ^6.1.5
     workbox-cacheable-response: ^6.1.5
@@ -35066,13 +35065,6 @@ __metadata:
   version: 1.1.4
   resolution: "web-namespaces@npm:1.1.4"
   checksum: 5149842ccbfbc56fe4f8758957b3f8c8616a281874a5bb84aa1b305e4436a9bad853d21c629a7b8f174902449e1489c7a6c724fccf60965077c5636bd8aed42b
-  languageName: node
-  linkType: hard
-
-"web-vitals@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "web-vitals@npm:1.1.2"
-  checksum: 92071029089277166e11141b735831d9011e85737d32c1360034676db898ab0ca95f19041ee01904f2189ad6e711b9da6b17567e4831290a429a586c98bc573f
   languageName: node
   linkType: hard
 

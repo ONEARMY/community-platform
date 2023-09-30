@@ -27306,7 +27306,6 @@ __metadata:
     react-foco: ^1.3.1
     react-ga4: ^1.4.1
     react-hamburger-menu: ^1.1.1
-    react-lazy-load-image-component: ^1.5.1
     react-leaflet: ^2.5.0
     react-leaflet-markercluster: ^2.0.0-rc3
     react-router: ^5.2.0
@@ -30197,19 +30196,6 @@ __metadata:
     react: ^17.0.0 || ^16.3.0 || ^15.5.4
     react-dom: ^17.0.0 || ^16.3.0 || ^15.5.4
   checksum: 5718bcd9210ad5b06eb9469cf8b9b44be9498845a7702e621343618e8251f26357e6e1c865532cf170db6165df1cb30202787e057309d8848c220bc600ec0d1a
-  languageName: node
-  linkType: hard
-
-"react-lazy-load-image-component@npm:^1.5.1":
-  version: 1.5.6
-  resolution: "react-lazy-load-image-component@npm:1.5.6"
-  dependencies:
-    lodash.debounce: ^4.0.8
-    lodash.throttle: ^4.1.1
-  peerDependencies:
-    react: ^15.x.x || ^16.x.x || ^17.x.x || ^18.x.x
-    react-dom: ^15.x.x || ^16.x.x || ^17.x.x || ^18.x.x
-  checksum: 2db8dd56e5926c4831e58b05650e310fd8eabc24607716ad7ffda3e0f6b325434edb098ad27068ea8db7f42fec37bc17eaffbaf562a322e6f1ace16dcc3d5422
   languageName: node
   linkType: hard
 

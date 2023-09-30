@@ -1,56 +1,49 @@
 import * as React from 'react'
-import { Field, Form } from 'react-final-form'
+import { Form } from 'react-final-form'
 import { Text, Flex, Label } from 'theme-ui'
 import { Button, FieldInput } from 'oa-components'
 
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { buttons, fields } from 'src/pages/Settings/labels'
+import { buttons, fields } from 'src/pages/UserSettings/labels'
 
 import type { UserStore } from 'src/stores/User/user.store'
 
 interface IFormValues {
-  password?: string
-  newEmail?: string
+  oldPassword?: string
+  newPassword?: string
+  repeatPassword?: string
 }
 interface IState {
   errorMsg?: string
   msg?: string
-  showChangeEmailForm?: boolean
+  showChangePasswordForm?: boolean
   formValues: IFormValues
-  email?: string
 }
 interface IProps {
   userStore: UserStore
 }
 
-export class ChangeEmailForm extends React.Component<IProps, IState> {
+export class ChangePasswordForm extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
     this.state = { formValues: {} }
-    this.getUserEmail()
   }
 
   public async submit(values: IFormValues) {
-    const { password, newEmail } = values
-    if (password && newEmail) {
+    const { oldPassword, newPassword } = values
+    if (oldPassword && newPassword) {
       try {
-        await this.props.userStore.changeUserEmail(password, newEmail)
+        await this.props.userStore.changeUserPassword(oldPassword, newPassword)
         this.setState({
-          msg: 'Email changed',
+          msg: 'Password changed',
           formValues: {},
           errorMsg: undefined,
-          showChangeEmailForm: false,
+          showChangePasswordForm: false,
         })
-        this.getUserEmail()
       } catch (error) {
         this.setState({ errorMsg: error.message, formValues: {} })
       }
     }
-  }
-
-  public async getUserEmail() {
-    const email = await this.props.userStore.getUserEmail()
-    this.setState({ email: email })
   }
 
   public render() {
@@ -63,51 +56,58 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
           variant={'secondary'}
           onClick={() =>
             this.setState({
-              showChangeEmailForm: !this.state.showChangeEmailForm,
+              showChangePasswordForm: !this.state.showChangePasswordForm,
             })
           }
         >
-          {buttons.changeEmail}
+          {buttons.changePassword}
         </Button>
-        {this.state.showChangeEmailForm && (
+        {this.state.showChangePasswordForm && (
           <Form
             onSubmit={(values) => this.submit(values as IFormValues)}
             initialValues={this.state.formValues}
             render={({ submitting, values, handleSubmit }) => {
-              const { password, newEmail } = values
+              const { oldPassword, newPassword, repeatPassword } = values
               const disabled =
                 submitting ||
-                !password ||
-                !newEmail ||
-                newEmail === this.state.email
+                !oldPassword ||
+                !newPassword ||
+                repeatPassword !== newPassword ||
+                oldPassword === newPassword
               return (
                 <form onSubmit={handleSubmit}>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                    <Text>
-                      {fields.email.title}: {this.state.email}
-                    </Text>
-                  </Flex>
-                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                    <Label htmlFor="newEmail" sx={_labelStyle}>
-                      {fields.newEmail.title} :
+                    <Label htmlFor="oldPassword" sx={_labelStyle}>
+                      {fields.oldPassword.title} :
                     </Label>
-                    <Field
-                      name="newEmail"
+                    <PasswordField
+                      name="oldPassword"
                       component={FieldInput}
-                      placeholder={fields.newEmail.placeholder}
-                      type="email"
+                      placeholder="Old password"
                       autocomplete="off"
                       required
                     />
                   </Flex>
                   <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                    <Label htmlFor="oldPassword" sx={_labelStyle}>
-                      {fields.password.title} :
+                    <Label htmlFor="newPassword" sx={_labelStyle}>
+                      {fields.newPassword.title} :
                     </Label>
                     <PasswordField
-                      name="password"
+                      name="newPassword"
                       component={FieldInput}
-                      type="password"
+                      placeholder="New password"
+                      autocomplete="off"
+                      required
+                    />
+                  </Flex>
+                  <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                    <Label htmlFor="repeatPassword" sx={_labelStyle}>
+                      {fields.repeatPassword.title} :
+                    </Label>
+                    <PasswordField
+                      name="repeatPassword"
+                      component={FieldInput}
+                      placeholder="Repeat new password"
                       autocomplete="off"
                       required
                     />
@@ -119,6 +119,7 @@ export class ChangeEmailForm extends React.Component<IProps, IState> {
                   >
                     {buttons.submit}
                   </Button>
+
                   <Text color="error">{this.state.errorMsg}</Text>
                 </form>
               )

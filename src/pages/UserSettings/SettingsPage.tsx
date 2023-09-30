@@ -59,7 +59,7 @@ const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
   return mapPin?.comments && mapPin.moderation == 'improvements-needed' ? (
     <Alert variant="info" sx={{ mt: 3, fontSize: 2, textAlign: 'left' }}>
       <Box>
-        This comment has been marked as requiring further changes. Specifically
+        This map pin has been marked as requiring further changes. Specifically
         the moderator comments are:
         <br />
         <em>{mapPin?.comments}</em>

@@ -7,7 +7,7 @@ const theme = preciousPlasticTheme.styles
 
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { FlexSectionContainer } from './elements'
-import { headings, fields } from 'src/pages/Settings/labels'
+import { headings, fields } from 'src/pages/UserSettings/labels'
 
 import type { IMAchineBuilderXp } from 'src/models'
 

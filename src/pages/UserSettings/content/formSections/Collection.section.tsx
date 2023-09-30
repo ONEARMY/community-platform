@@ -6,7 +6,7 @@ import { Button } from 'oa-components'
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { FlexSectionContainer } from './elements'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
-import { headings, fields } from 'src/pages/Settings/labels'
+import { headings, fields } from 'src/pages/UserSettings/labels'
 
 import Pet from 'src/assets/images/plastic-types/pet.svg'
 import PP from 'src/assets/images/plastic-types/pp.svg'

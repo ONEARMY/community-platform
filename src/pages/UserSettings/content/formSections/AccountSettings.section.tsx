@@ -6,7 +6,7 @@ import { ExternalLink } from 'oa-components'
 import { ChangePasswordForm } from './ChangePassword.form'
 import { ChangeEmailForm } from './ChangeEmail.form'
 import { DISCORD_INVITE_URL } from 'src/constants'
-import { fields, headings } from 'src/pages/Settings/labels'
+import { fields, headings } from 'src/pages/UserSettings/labels'
 
 import type { UserStore } from 'src/stores/User/user.store'
 

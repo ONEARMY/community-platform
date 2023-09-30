@@ -115,6 +115,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LiptonB"><img src="https://avatars.githubusercontent.com/u/467965?v=4?s=60" width="60px;" alt="Ben Lipton"/><br /><sub><b>Ben Lipton</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=LiptonB" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ayachish"><img src="https://avatars.githubusercontent.com/u/102033230?v=4?s=60" width="60px;" alt="Ayachi Sharma"/><br /><sub><b>Ayachi Sharma</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ayachish" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://tyukayev.com"><img src="https://avatars.githubusercontent.com/u/9029936?v=4?s=60" width="60px;" alt="Arthur Tyukayev"/><br /><sub><b>Arthur Tyukayev</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=arthurtyukayev" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jgable"><img src="https://avatars.githubusercontent.com/u/164497?v=4?s=60" width="60px;" alt="Jacob Gable"/><br /><sub><b>Jacob Gable</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=jgable" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

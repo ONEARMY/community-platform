@@ -37,68 +37,67 @@ export const Routes = () => {
     ...POLICY_PAGES,
   ]
 
-    return (
-      <Flex
-        sx={{ height: '100vh', flexDirection: 'column' }}
-        data-cy="page-container"
-      >
-        <BrowserRouter>
-          <Analytics />
-          {/* on page change scroll to top */}
-          <ScrollToTop />
+  return (
+    <Flex
+      sx={{ height: '100vh', flexDirection: 'column' }}
+      data-cy="page-container"
+    >
+      <BrowserRouter>
+        <Analytics />
+        {/* on page change scroll to top */}
+        <ScrollToTop />
 
-          {/* TODO - add better loading fallback */}
-          <DevSiteHeader />
-          <AlertIncompleteProfile />
-          <Header />
-          <Suspense
-            fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}
-          >
-            <Switch>
-              {menuItems.map((page) => (
-                <Route
-                  exact={page.exact}
-                  path={page.path}
-                  key={page.path}
-                  render={() => (
-                    <React.Fragment>
-                      <SeoTagsUpdateComponent title={page.title} />
-                      <Main
-                        data-cy="main-layout-container"
-                        style={{ flex: 1 }}
-                        customStyles={page.customStyles}
-                        ignoreMaxWidth={page.fullPageWidth}
-                      >
-                        <>{page.component}</>
-                      </Main>
-                    </React.Fragment>
-                  )}
-                />
-              ))}
-              <Route component={NotFoundPage} />
-            </Switch>
-            <Switch>
-              <Route exact path="/" render={() => <Redirect to="/academy" />} />
-            </Switch>
-          </Suspense>
-
-          <GlobalSiteFooter />
-        </BrowserRouter>
-        <Box
-          sx={{
-            position: 'fixed',
-            bottom: '30px',
-            right: '30px',
-            display: ['none', 'none', 'block'],
-          }}
+        {/* TODO - add better loading fallback */}
+        <DevSiteHeader />
+        <AlertIncompleteProfile />
+        <Header />
+        <Suspense
+          fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}
         >
-          <ExternalLink href="https://discord.gg/gJ7Yyk4" data-cy="feedback">
-            <Button variant="primary" icon="comment">
-              Join our chat
-            </Button>
-          </ExternalLink>
-        </Box>
-      </Flex>
-    )
-  }
+          <Switch>
+            {menuItems.map((page) => (
+              <Route
+                exact={page.exact}
+                path={page.path}
+                key={page.path}
+                render={() => (
+                  <React.Fragment>
+                    <SeoTagsUpdateComponent title={page.title} />
+                    <Main
+                      data-cy="main-layout-container"
+                      style={{ flex: 1 }}
+                      customStyles={page.customStyles}
+                      ignoreMaxWidth={page.fullPageWidth}
+                    >
+                      <>{page.component}</>
+                    </Main>
+                  </React.Fragment>
+                )}
+              />
+            ))}
+            <Route component={NotFoundPage} />
+          </Switch>
+          <Switch>
+            <Route exact path="/" render={() => <Redirect to="/academy" />} />
+          </Switch>
+        </Suspense>
+
+        <GlobalSiteFooter />
+      </BrowserRouter>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: '30px',
+          right: '30px',
+          display: ['none', 'none', 'block'],
+        }}
+      >
+        <ExternalLink href="https://discord.gg/gJ7Yyk4" data-cy="feedback">
+          <Button variant="primary" icon="comment">
+            Join our chat
+          </Button>
+        </ExternalLink>
+      </Box>
+    </Flex>
+  )
 }

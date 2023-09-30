@@ -8,6 +8,8 @@ type SupportedEmailTemplates =
   | 'how-to-rejected'
   | 'map-pin-rejected'
   | 'verified-badge-added'
+  | 'how-to-needs-improvements'
+  | 'map-pin-needs-improvements'
 
 export function getEmailHtml(emailType: SupportedEmailTemplates, ctx: {}) {
   const layoutTmpl = Handlebars.compile(

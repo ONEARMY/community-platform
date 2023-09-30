@@ -24,6 +24,10 @@ export function render(url) {
       },
       howto: {
         title: 'Mock Howto Title',
+        comments: 'Mock Howto Moderation Comments',
+      },
+      mappin: {
+        comments: 'Mock Mappin Moderation Comments',
       },
     })
     return html

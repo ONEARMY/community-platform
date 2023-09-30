@@ -42,6 +42,11 @@ export async function createHowtoModerationEmail(howto: IHowtoDB) {
         to: toUserEmail,
         message: templates.getHowToRejectedEmail(toUser, howto),
       })
+    } else if (howto.moderation === 'improvements-needed') {
+      await db.collection(DB_ENDPOINTS.emails).add({
+        to: toUserEmail,
+        message: templates.getHowToNeedsImprovementsEmail(toUser, howto),
+      })
     }
   }
 }
@@ -66,6 +71,11 @@ export async function createMapPinModerationEmail(mapPin: IMapPin) {
       await db.collection(DB_ENDPOINTS.emails).add({
         to: toUserEmail,
         message: templates.getMapPinRejectedEmail(toUser),
+      })
+    } else if (mapPin.moderation === 'improvements-needed') {
+      await db.collection(DB_ENDPOINTS.emails).add({
+        to: toUserEmail,
+        message: templates.getMapPinNeedsImprovementsEmail(toUser, mapPin),
       })
     }
   }

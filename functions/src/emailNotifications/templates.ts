@@ -299,6 +299,11 @@ export const getUserSupporterBadgeRemovedEmail = (user: IUserDB): Email => ({
   }),
 })
 
+export const getUserVerifiedBadgeAddedEmail = (user: IUserDB): Email => ({
+  subject: `${user.displayName} - You are now part of the Verified Workspaces :)`,
+  html: getEmailHtml('verified-badge-added', { user, site }),
+})
+
 export const HOW_TO_REJECTED_SUBJECT = 'Your how-to has been rejected'
 export const getHowToRejectedEmail = (
   user: IUserDB,
@@ -321,7 +326,30 @@ export const getMapPinRejectedEmail = (user: IUserDB): Email => ({
   }),
 })
 
-export const getUserVerifiedBadgeAddedEmail = (user: IUserDB): Email => ({
-  subject: `${user.displayName} - You are now part of the Verified Workspaces :)`,
-  html: getEmailHtml('verified-badge-added', { user, site }),
+export const HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT =
+  'Your how-to needs improvements'
+export const getHowToNeedsImprovementsEmail = (
+  user: IUserDB,
+  howto: IHowtoDB,
+): Email => ({
+  subject: HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT,
+  html: getEmailHtml('how-to-needs-improvements', {
+    user,
+    howto,
+    site,
+  }),
+})
+
+export const MAP_PIN_NEEDS_IMPROVEMENTS_SUBJECT =
+  'Your map pin needs improvements'
+export const getMapPinNeedsImprovementsEmail = (
+  user: IUserDB,
+  mapPin: IMapPin,
+): Email => ({
+  subject: MAP_PIN_NEEDS_IMPROVEMENTS_SUBJECT,
+  html: getEmailHtml('map-pin-needs-improvements', {
+    user,
+    mapPin,
+    site,
+  }),
 })

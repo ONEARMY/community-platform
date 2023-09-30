@@ -1,11 +1,11 @@
-import { Box, Card, Text, Image, AspectRatio } from 'theme-ui'
-import { InternalLink } from '../InternalLink/InternalLink'
+import { Box, Card, Text, Image, AspectRatio, Alert } from 'theme-ui'
 import { Username } from '../Username/Username'
 
 export interface Props {
   loading?: boolean
   imageUrl: string
   description: string
+  comments: string | null
   user: {
     isVerified: boolean
     username: string
@@ -27,10 +27,10 @@ const wave = keyframes`
 `
 
 export const MapMemberCard = (props: Props) => {
-  const { imageUrl, description, user, heading } = props
+  const { imageUrl, description, user, heading, comments } = props
   return (
     <Card sx={{ maxWidth: '230px' }} data-cy="MapMemberCard">
-      <InternalLink to={`/u/${user.username}`}>
+      <Box>
         {!!props.loading && (
           <>
             <AspectRatio
@@ -80,10 +80,23 @@ export const MapMemberCard = (props: Props) => {
               >
                 {description}
               </Text>
+
+              {comments ? (
+                <Alert
+                  variant="info"
+                  sx={{ fontSize: 1, textAlign: 'left' }}
+                  data-testid="MapMemberCard: moderation comments"
+                >
+                  <Box>
+                    This map pin has been marked as requiring further changes.
+                    <Box>{comments}</Box>
+                  </Box>
+                </Alert>
+              ) : null}
             </Box>
           </>
         )}
-      </InternalLink>
+      </Box>
     </Card>
   )
 }

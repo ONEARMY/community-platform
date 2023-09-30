@@ -94,7 +94,6 @@
     "is-url": "^1.2.4",
     "leaflet": "^1.5.1",
     "leaflet.markercluster": "^1.4.1",
-    "lorem-ipsum": "^2.0.3",
     "mobx": "6.9.0",
     "mobx-react": "7.6.0",
     "oa-components": "workspace:*",

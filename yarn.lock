@@ -10883,7 +10883,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-table@npm:^6.8.5, @types/react-table@npm:^6.8.9":
+"@types/react-table@npm:^6.8.9":
   version: 6.8.9
   resolution: "@types/react-table@npm:6.8.9"
   dependencies:
@@ -26870,7 +26870,6 @@ __metadata:
     react-router-hash-link: ^2.4.3
     react-scripts: 5.0.1
     react-slick: ^0.25.2
-    react-table: ^6.11.5
     react-virtualized: ^9.22.3
     resize-observer-polyfill: ^1.5.1
     rxjs: ^6.6.3
@@ -29686,7 +29685,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0, react-is@npm:^16.8.1":
+"react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
@@ -30063,21 +30062,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 7ee8ef3aab74c7ae1d70ff34a27643d11ba1a8d62d072c767827d9ff9a520905223e567002e0bf6c772929d8ea1c781a3ba0cc4a563e92b1e3dc2eaa817ecbe8
-  languageName: node
-  linkType: hard
-
-"react-table@npm:^6.11.5":
-  version: 6.11.5
-  resolution: "react-table@npm:6.11.5"
-  dependencies:
-    "@types/react-table": ^6.8.5
-    classnames: ^2.2.5
-    react-is: ^16.8.1
-  peerDependencies:
-    prop-types: ^15.7.0
-    react: ^16.x.x
-    react-dom: ^16.x.x
-  checksum: dda0e7f661664fe7e6331a2b518772160923195c6b9beb56f937cc1d617690d4124e31d4d4c6c1b9068f57b59ae00ae3b35c82a04f633ca2cfd2de83d5fd6da2
   languageName: node
   linkType: hard
 

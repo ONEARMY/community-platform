@@ -13,6 +13,8 @@ import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 
+export const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
+
 export const getUserEmail = async (uid: string): Promise<string | null> => {
   try {
     const { email } = await firebaseAuth.getUser(uid)

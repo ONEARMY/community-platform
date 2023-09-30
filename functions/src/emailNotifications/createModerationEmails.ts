@@ -7,6 +7,7 @@ import * as templates from './templates'
 import { getUserAndEmail } from './utils'
 import { Change } from 'firebase-functions/v1'
 import { withErrorAlerting } from '../alerting/errorAlerting'
+import { EMAIL_FUNCTION_MEMORY_LIMIT } from './utils'
 
 export async function handleModerationUpdate<T extends IModerable>(
   change: Change<QueryDocumentSnapshot<T>>,
@@ -23,7 +24,6 @@ export async function handleModerationUpdate<T extends IModerable>(
 
 export async function createHowtoModerationEmail(howto: IHowtoDB) {
   const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
-
   // Release first under beta to test.
   if (toUser.userRoles?.includes('beta-tester')) {
     if (howto.moderation === 'accepted') {
@@ -81,8 +81,9 @@ export async function createMapPinModerationEmail(mapPin: IMapPin) {
   }
 }
 
-export const handleHowToModerationUpdate = functions.firestore
-  .document(`${DB_ENDPOINTS.howtos}/{id}`)
+export const handleHowToModerationUpdate = functions
+  .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
+  .firestore.document(`${DB_ENDPOINTS.howtos}/{id}`)
   .onUpdate((change, context) =>
     withErrorAlerting(context, handleModerationUpdate, [
       change,
@@ -90,8 +91,9 @@ export const handleHowToModerationUpdate = functions.firestore
     ]),
   )
 
-export const handleMapPinModerationUpdate = functions.firestore
-  .document(`${DB_ENDPOINTS.mappins}/{id}`)
+export const handleMapPinModerationUpdate = functions
+  .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
+  .firestore.document(`${DB_ENDPOINTS.mappins}/{id}`)
   .onUpdate((change, context) =>
     withErrorAlerting(context, handleModerationUpdate, [
       change,

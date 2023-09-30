@@ -426,6 +426,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "arthurtyukayev",
+      "name": "Arthur Tyukayev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9029936?v=4",
+      "profile": "https://tyukayev.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

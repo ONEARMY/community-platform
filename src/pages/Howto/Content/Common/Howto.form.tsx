@@ -211,9 +211,8 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                             >
                               <HowtoFieldTitle
-                                _id={formValues._id}
-                                parentType={parentType}
                                 store={this.store}
+                                _id={formValues._id}
                               />
                               <HowtoFieldCategory category={values.category} />
                               <HowtoFieldTags />

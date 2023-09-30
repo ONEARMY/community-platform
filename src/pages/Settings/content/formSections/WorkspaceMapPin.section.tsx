@@ -14,7 +14,7 @@ import { fields, headings } from 'src/pages/Settings/labels'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { ILocation } from 'src/models/common.models'
 
-@inject('mapsStore', 'userStore', 'themeStore')
+@inject('themeStore')
 @observer
 export class WorkspaceMapPinSection extends React.Component<any> {
   pinFilters = MAP_GROUPINGS
@@ -39,6 +39,7 @@ export class WorkspaceMapPinSection extends React.Component<any> {
             {title}
           </Heading>
         </Flex>
+        {this.props.children}
         <Alert sx={{ fontSize: 2, textAlign: 'left', my: 2 }} variant="failure">
           <Box>
             <ExternalLink

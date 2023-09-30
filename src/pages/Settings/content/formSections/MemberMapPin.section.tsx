@@ -52,6 +52,8 @@ export class MemberMapPinSection extends React.Component<any, IState> {
           </Heading>
         </Flex>
 
+        {this.props.children}
+
         <Box>
           <Text mt={4} mb={4} sx={{ display: 'block' }}>
             {headings.map.description}

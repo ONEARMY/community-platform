@@ -5,7 +5,7 @@ import { Field } from 'react-final-form'
 import { FlexSectionContainer } from './elements'
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { required } from 'src/utils/validators'
-import { fields } from 'src/pages/Settings/labels'
+import { fields } from 'src/pages/UserSettings/labels'
 
 import type { IWorkspaceType } from 'src/models'
 

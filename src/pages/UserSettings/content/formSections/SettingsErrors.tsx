@@ -1,5 +1,5 @@
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
-import { defaultError, fields } from 'src/pages/Settings/labels'
+import { defaultError, fields } from 'src/pages/UserSettings/labels'
 
 import type { IErrorsListSet, ITopLevelErrorsList } from 'src/common/Form/types'
 

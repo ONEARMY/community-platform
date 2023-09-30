@@ -6,7 +6,7 @@ import { useTheme } from '@emotion/react'
 import { FlexSectionContainer } from './elements'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import { CustomRadioField } from './Fields/CustomRadio.field'
-import { buttons, headings, fields } from 'src/pages/Settings/labels'
+import { buttons, headings, fields } from 'src/pages/UserSettings/labels'
 
 import type { ProfileTypeLabel } from 'src/modules/profile/types'
 

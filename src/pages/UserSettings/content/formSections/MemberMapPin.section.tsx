@@ -8,8 +8,8 @@ import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { required } from 'src/utils/validators'
 import { randomIntFromInterval } from 'src/utils/helpers'
-import { MAX_PIN_LENGTH } from 'src/pages/Settings/constants'
-import { buttons, headings, fields } from 'src/pages/Settings/labels'
+import { MAX_PIN_LENGTH } from 'src/pages/UserSettings/constants'
+import { buttons, headings, fields } from 'src/pages/UserSettings/labels'
 
 import type { ILocation } from 'src/models/common.models'
 import type { UserStore } from 'src/stores/User/user.store'
@@ -51,6 +51,8 @@ export class MemberMapPinSection extends React.Component<any, IState> {
             {headings.map.title}
           </Heading>
         </Flex>
+
+        {this.props.children}
 
         <Box>
           <Text mt={4} mb={4} sx={{ display: 'block' }}>

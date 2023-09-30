@@ -11,7 +11,7 @@ const HowtoPage = lazy(
   () => import(/* webpackChunkName: "Howto" */ './Howto/Howto'),
 )
 const SettingsPage = lazy(
-  () => import(/* webpackChunkName: "Settings" */ './Settings'),
+  () => import(/* webpackChunkName: "Settings" */ './UserSettings'),
 )
 
 const AcademyPage = lazy(

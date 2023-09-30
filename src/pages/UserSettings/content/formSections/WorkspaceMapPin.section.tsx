@@ -8,13 +8,13 @@ import { FlexSectionContainer } from './elements'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { required } from 'src/utils/validators'
 import { randomIntFromInterval } from 'src/utils/helpers'
-import { MAX_PIN_LENGTH } from 'src/pages/Settings/constants'
-import { fields, headings } from 'src/pages/Settings/labels'
+import { MAX_PIN_LENGTH } from 'src/pages/UserSettings/constants'
+import { fields, headings } from 'src/pages/UserSettings/labels'
 
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { ILocation } from 'src/models/common.models'
 
-@inject('mapsStore', 'userStore', 'themeStore')
+@inject('themeStore')
 @observer
 export class WorkspaceMapPinSection extends React.Component<any> {
   pinFilters = MAP_GROUPINGS
@@ -39,6 +39,7 @@ export class WorkspaceMapPinSection extends React.Component<any> {
             {title}
           </Heading>
         </Flex>
+        {this.props.children}
         <Alert sx={{ fontSize: 2, textAlign: 'left', my: 2 }} variant="failure">
           <Box>
             <ExternalLink

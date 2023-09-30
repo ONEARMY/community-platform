@@ -6,7 +6,7 @@ import { Field } from 'react-final-form'
 import { SelectField } from 'src/common/Form/Select.field'
 import { formatLink } from 'src/utils/formatters'
 import { required, validateEmail, validateUrl } from 'src/utils/validators'
-import { buttons, fields } from 'src/pages/Settings/labels'
+import { buttons, fields } from 'src/pages/UserSettings/labels'
 
 const COM_TYPE_MOCKS = [
   {

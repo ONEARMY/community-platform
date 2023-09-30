@@ -6,10 +6,12 @@ import { FactoryUser } from 'src/test/factories/User'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { FactoryMapPin } from 'src/test/factories/MapPin'
 const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
 let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
+const mockGetPin = jest.fn()
 const mockUpdateUserBadge = jest.fn()
 
 jest.mock('src/index', () => ({
@@ -38,7 +40,9 @@ jest.mock('src/index', () => ({
           },
         },
       },
-      mapsStore: {},
+      mapsStore: {
+        getPin: mockGetPin,
+      },
       tagsStore: {},
     },
   }),
@@ -117,6 +121,41 @@ describe('UserSettings', () => {
       wrapper = await getWrapper(user)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+  })
+
+  describe('map pin', () => {
+    it('displays moderation comments to user', async () => {
+      const user = FactoryUser({ profileType: 'workspace' })
+      mockGetPin.mockResolvedValue(
+        FactoryMapPin({
+          moderation: 'improvements-needed',
+          comments: 'Moderator comment',
+        }),
+      )
+      // Act
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(user)
+      })
+      expect(wrapper.getByText('Moderator comment')).toBeInTheDocument()
+    })
+
+    it('does not show moderation comments for approved pin', async () => {
+      const user = FactoryUser({ profileType: 'workspace' })
+      mockGetPin.mockResolvedValue(
+        FactoryMapPin({
+          moderation: 'accepted',
+          comments: 'Moderator comment',
+        }),
+      )
+      // Act
+      let wrapper
+      await act(async () => {
+        wrapper = await getWrapper(user)
+      })
+
+      expect(() => wrapper.getByText('Moderator comment')).toThrow()
+    })
   })
 })
 

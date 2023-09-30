@@ -1,0 +1,14 @@
+{{#> layout}}
+
+<p>Hey {{user.displayName}},</p>
+
+<p>Your How-To, {{howto.title}}, needs more work before we can publish it.</p>
+
+{{#if howto.comments}}
+<p>Please review the following & re-submit your How-to:</p>
+<li>{{howto.comments}}</li>
+{{/if}}
+
+<p>We look forward to hearing back from you.</p>
+
+{{/layout}}

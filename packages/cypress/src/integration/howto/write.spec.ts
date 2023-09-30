@@ -206,7 +206,7 @@ describe('[How To]', () => {
         .type('Make glass-like beams')
         .blur({ force: true })
       cy.contains(
-        'Titles must be unique, please try being more specific',
+        "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Warn if title is identical with a previously existing one')
@@ -215,7 +215,7 @@ describe('[How To]', () => {
         .type('Make glassy beams')
         .blur({ force: true })
       cy.contains(
-        'Titles must be unique, please try being more specific',
+        "Did you know there is an existing how-to with the title 'Make glassy beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Warn if title has less than minimum required characters')
@@ -231,11 +231,15 @@ describe('[How To]', () => {
       cy.contains('Make sure this field is filled correctly').should('exist')
 
       cy.step('A basic draft was created')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('qwerty')
+        .blur({ force: true })
       cy.get('[data-cy=draft]').click()
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
-        .should('include', `/how-to/qwer`)
+        .should('include', `/how-to/qwerty`)
       cy.get('[data-cy=moderationstatus-draft]').should('exist')
 
       cy.step('Back to completing the how-to')
@@ -465,7 +469,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title]').focus().blur({ force: true })
       cy.wait(1000)
       cy.contains(
-        'Titles must be unique, please try being more specific',
+        'Did you know there is an existing how-to with the title',
       ).should('not.exist')
 
       cy.step('Warn if title has less than minimum required characters')
@@ -479,7 +483,7 @@ describe('[How To]', () => {
         .type('Make glass-like beams')
         .blur({ force: true })
       cy.contains(
-        'Titles must be unique, please try being more specific',
+        "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Update the intro')

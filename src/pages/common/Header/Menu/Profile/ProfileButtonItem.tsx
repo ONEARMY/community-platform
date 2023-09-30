@@ -1,14 +1,12 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 import { Button } from 'oa-components'
-import type { DisplayProps } from 'styled-system'
-import { display } from 'styled-system'
 import { observer, inject } from 'mobx-react'
 import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
 import { Link } from 'react-router-dom'
 
-const ButtonSign = styled(Button as any)<DisplayProps>`
-  ${display};
+const ButtonSign = styled(Button as any)`
+  display: block;
   cursor: pointer;
 `
 interface IProps {

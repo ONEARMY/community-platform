@@ -20,7 +20,7 @@ const handleUserVerifiedBadgeChange = async (
   const before = change.before.exists ? change.before.data() : null
   const toUserEmail = after ? await getUserEmail(after._authID) : null
 
-  if (before.badges?.verified === false && after.badges?.verified === true) {
+  if (!before.badges?.verified && after.badges?.verified === true) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: getUserVerifiedBadgeAddedEmail(after),

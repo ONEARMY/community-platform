@@ -156,8 +156,9 @@ export const getHowToApprovalEmail = (
     <p>Huzzah! Your How-To ${resource.title} has been approved.</p>
   </div>
   <div align="left" class="main-container">
-    <p>It is visible on the community platform <a href="${SITE_URL}/how-to/${resource.slug
-    }">here</a>.</p>
+    <p>It is visible on the community platform <a href="${SITE_URL}/how-to/${
+    resource.slug
+  }">here</a>.</p>
     <p>Users are now be able to comment and mark it as useful.</p>
   </div>
   <div align="left" class="closing-containter">
@@ -193,8 +194,9 @@ export const getMapPinApprovalEmail = (
     <p>Huzzah! We are happy to inform you that your map pin has been approved and is now visible!</p>
   </div>
   <div align="left" class="main-container">
-    <p>It is visible on the community platform map <a href="${SITE_URL}/map#${resource._id
-    }">here</a>.</p>
+    <p>It is visible on the community platform map <a href="${SITE_URL}/map#${
+    resource._id
+  }">here</a>.</p>
   </div>
   <div align="left" class="closing-containter">
     <p>Thanks,</p>

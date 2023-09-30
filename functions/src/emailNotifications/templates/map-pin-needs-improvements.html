@@ -1,0 +1,29 @@
+{{#> layout}}
+
+<p>Hey {{user.displayName}},</p>
+
+<p>We're really happy to see you on the Precious Plastic Map 👐</p>
+
+<p>Your profile needs more work before we can publish your map pin.</p>
+
+{{#if mapPin.comments}}
+<p>Please review the following & re-submit your How-to:</p>
+<li>{{mapPin.comments}}</li>
+{{/if}}
+
+<p>
+  Check out the
+  <a
+    href="https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view"
+    >profile guidelines</a
+  >
+  to review our requirements.
+</p>
+
+<p>
+  Until you update your information, your pin will remain hidden from the map.
+  We hope to see your edits soon, so we can get your project online as soon as
+  possible :)
+</p>
+
+{{/layout}}

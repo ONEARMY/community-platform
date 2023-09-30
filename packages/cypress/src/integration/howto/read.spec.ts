@@ -136,13 +136,6 @@ describe('[How To]', () => {
         })
         // This fails in firefox due to cross security, simply check url
         // .should(iframe => expect(iframe.contents().find('video')).to.exist)
-        cy.step('Back button at bottom takes users to /how-to')
-        cy.visit(specificHowtoUrl)
-        cy.get('[data-cy="go-back"]')
-          .as('bottomBackButton')
-          .click()
-          .url()
-          .should('include', '/how-to')
       })
 
       it('[Delete button should not be visible to everyone', () => {

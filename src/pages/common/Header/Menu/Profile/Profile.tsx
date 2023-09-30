@@ -8,9 +8,11 @@ import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLi
 import ProfileButtons from './ProfileButtons'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { MemberBadge } from 'oa-components'
+import './profile.css'
 
 interface IState {
   showProfileModal: boolean
+  isLoading: boolean
 }
 
 interface IProps {
@@ -28,6 +30,7 @@ export default class Profile extends Component<IProps, IState> {
     super(props)
     this.state = {
       showProfileModal: false,
+      isLoading: true,
     }
   }
   get injected() {
@@ -41,6 +44,19 @@ export default class Profile extends Component<IProps, IState> {
   render() {
     const user = this.injected.userStore.user
     const { showProfileModal } = this.state
+    // eslint-disable-next-line no-console
+    console.log(`Profile`, { user })
+
+    if (typeof user === 'undefined' && this.state.isLoading) {
+      return (
+        <Box
+          sx={{
+            width: '143px',
+          }}
+        />
+      )
+    }
+
     return (
       <>
         {user ? (
@@ -71,7 +87,12 @@ export default class Profile extends Component<IProps, IState> {
               />
             </Box>
           ) : (
-            <div data-cy="user-menu">
+            <div
+              data-cy="user-menu"
+              style={{
+                width: '93px',
+              }}
+            >
               <Flex
                 onClick={() => this.toggleProfileModal()}
                 ml={1}

@@ -2,6 +2,7 @@ import { NotificationList } from 'oa-components'
 import { useState } from 'react'
 import Foco from 'react-foco'
 import { Flex } from 'theme-ui'
+import '../Profile/profile.css'
 
 import { NotificationsIcon } from './NotificationsIcon'
 
@@ -20,7 +21,7 @@ export const NotificationsDesktop = (props: Props) => {
 
   return (
     <Foco onClickOutside={() => setMobileNotificationVisibility(false)}>
-      <div data-cy="notifications-desktop">
+      <div data-cy="notifications-desktop" className="util__fade-in">
         <NotificationsIcon
           onCLick={() =>
             setMobileNotificationVisibility(!showMobileNotifications)

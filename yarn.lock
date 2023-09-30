@@ -26865,7 +26865,6 @@ __metadata:
     react-leaflet: ^2.5.0
     react-leaflet-markercluster: ^2.0.0-rc3
     react-router: ^5.2.0
-    react-router-breadcrumbs-hoc: ^3.2.0
     react-router-dom: ^5.2.0
     react-router-hash-link: ^2.4.3
     react-scripts: 5.0.1
@@ -29873,16 +29872,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 2c7fe9cbd766f5e54beb4bec2e2efb2de3583037b23fef8fa511ab426ed7f1ae992382db5acd8ab5bfb030a4b93a06a2ebca41377d6eeaf0e6791bb0a59616a4
-  languageName: node
-  linkType: hard
-
-"react-router-breadcrumbs-hoc@npm:^3.2.0":
-  version: 3.4.0
-  resolution: "react-router-breadcrumbs-hoc@npm:3.4.0"
-  peerDependencies:
-    react: ">=16.8"
-    react-router: ">=4"
-  checksum: ff88ea01a2dc81815a0529de90b084dc61c06da1f704719e8b8ff286200bb31a01b5e76addad66363ffb9ab7d4a188e8ec4c48c925e7c89fe659f24ad4eb8c5b
   languageName: node
   linkType: hard
 

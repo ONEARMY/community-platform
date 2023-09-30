@@ -116,7 +116,6 @@
     "react-leaflet": "^2.5.0",
     "react-leaflet-markercluster": "^2.0.0-rc3",
     "react-router": "^5.2.0",
-    "react-router-breadcrumbs-hoc": "^3.2.0",
     "react-router-dom": "^5.2.0",
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "5.0.1",

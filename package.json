@@ -140,7 +140,7 @@
     "@types/browser-image-compression": "^1.0.9",
     "@types/flux-standard-action": "1.1.0",
     "@types/jest": "^27.4.1",
-    "@types/node": "18",
+    "@types/node": "^20.8.0",
     "@types/pubsub-js": "^1.5.18",
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",
@@ -211,7 +211,7 @@
   },
   "engines": {
     "npm": "please-use-yarn",
-    "node": ">=18.17.1 <19.0.0"
+    "node": ">=20"
   },
   "packageManager": "yarn@3.6.3"
 }

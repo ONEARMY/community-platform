@@ -289,7 +289,7 @@ export class Howto extends React.Component<
             pathname: '/how-to',
             search:
               '?search=' +
-              (this.props?.match?.params?.slug).replace(/\-/gi, ' ') +
+              (this.props?.match?.params?.slug || '').replace(/\-/gi, ' ') +
               '&source=how-to-not-found',
           }}
         />

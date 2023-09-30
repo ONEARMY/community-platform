@@ -49,19 +49,23 @@ export const SortFilterHeader = ({
 
   const { searchValue, activeSorter, availableItemSortingOption } = currentStore
 
-  const sortingOptions = availableItemSortingOption?.map((label) => ({
-    label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
-    value: label,
-  })).filter(option => option.value !== activeSorter)
+  const sortingOptions = availableItemSortingOption
+    ?.map((label) => ({
+      label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
+      value: label,
+    }))
+    .filter((option) => option.value !== activeSorter)
 
   const defaultSortingOption =
     Array.isArray(sortingOptions) && sortingOptions.length > 0
       ? sortingOptions.find(
-        (sortingOption) => sortingOption.value == activeSorter,
-      ) ?? sortingOptions[0]
+          (sortingOption) => sortingOption.value == activeSorter,
+        ) ?? sortingOptions[0]
       : ''
 
-  const [sortState, setSortState] = useState(activeSorter === ItemSortingOption.Random ? '' : defaultSortingOption)
+  const [sortState, setSortState] = useState(
+    activeSorter === ItemSortingOption.Random ? '' : defaultSortingOption,
+  )
 
   const _inputStyle = {
     width: ['100%', '100%', '240px'],

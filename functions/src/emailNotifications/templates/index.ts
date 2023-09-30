@@ -13,7 +13,7 @@ export type SupportedEmailTemplates =
   | 'map-pin-needs-improvements'
 
 export function getEmailHtml(emailType: SupportedEmailTemplates, ctx: {}) {
-  const availableFiles = fs.readdirSync(__dirname)
+  const availableFiles = fs.readdirSync(path.resolve(__dirname, '../templates'))
   if (!availableFiles.includes(`${emailType}.html`)) {
     throw new Error(`Email template ${emailType} not found`)
   }

@@ -8,8 +8,7 @@ import * as moderationEmails from './createModerationEmails'
 import * as submissionEmails from './createSubmissionEmails'
 import * as supporterBadgeEmails from './supporterBadgeEmails'
 import * as verifiedBadgeEmails from './verifiedBadgeEmails'
-
-const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
+import { EMAIL_FUNCTION_MEMORY_LIMIT } from './utils'
 
 exports.sendDaily = functions
   .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })

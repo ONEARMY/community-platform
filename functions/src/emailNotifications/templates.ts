@@ -320,3 +320,8 @@ export const getMapPinRejectedEmail = (user: IUserDB): Email => ({
     site,
   }),
 })
+
+export const getUserVerifiedBadgeAddedEmail = (user: IUserDB): Email => ({
+  subject: `${user.displayName} - You are now part of the Verified Workspaces :)`,
+  html: getEmailHtml('verified-badge-added', { user, site }),
+})

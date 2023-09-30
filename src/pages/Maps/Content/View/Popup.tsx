@@ -76,6 +76,12 @@ export class Popup extends React.Component<IProps> {
           <MapMemberCard
             loading={!activePin.detail}
             imageUrl={activePin.detail?.heroImageUrl}
+            comments={
+              activePin.comments &&
+              activePin.moderation === 'improvements-needed'
+                ? activePin.comments
+                : null
+            }
             description={activePin.detail?.shortDescription}
             user={{
               isVerified: !!activePin.detail?.verifiedBadge,

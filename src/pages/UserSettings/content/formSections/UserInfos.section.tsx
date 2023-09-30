@@ -12,7 +12,7 @@ import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { ProfileType } from 'src/modules/profile/types'
 import { SelectField } from 'src/common/Form/Select.field'
 
-import { buttons, fields, headings } from 'src/pages/Settings/labels'
+import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
 
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUser } from 'src/models'

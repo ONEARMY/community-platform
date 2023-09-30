@@ -14711,7 +14711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^9.3.0, commander@npm:^9.4.1":
+"commander@npm:^9.4.1":
   version: 9.5.0
   resolution: "commander@npm:9.5.0"
   checksum: c7a3e27aa59e913b54a1bafd366b88650bc41d6651f0cbe258d4ff09d43d6a7394232a4dadd0bf518b3e696fdf595db1028a0d82c785b88bd61f8a440cecfade
@@ -24574,17 +24574,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lorem-ipsum@npm:^2.0.3":
-  version: 2.0.8
-  resolution: "lorem-ipsum@npm:2.0.8"
-  dependencies:
-    commander: ^9.3.0
-  bin:
-    lorem-ipsum: dist/bin/lorem-ipsum.bin.js
-  checksum: 63049aab1f0fa2887fab11dc8a3882f9eef76b2ebc80d0c13659b45709b5c78c291f3328b999f12441ef74f8e49606be62e97033d76e72551629c1467b7b6528
-  languageName: node
-  linkType: hard
-
 "loupe@npm:^2.3.1, loupe@npm:^2.3.6":
   version: 2.3.6
   resolution: "loupe@npm:2.3.6"
@@ -26840,7 +26829,6 @@ __metadata:
     leaflet: ^1.5.1
     leaflet.markercluster: ^1.4.1
     lint-staged: ^8.1.5
-    lorem-ipsum: ^2.0.3
     mobx: 6.9.0
     mobx-react: 7.6.0
     mobx-react-devtools: ^6.0.3
@@ -26865,7 +26853,6 @@ __metadata:
     react-leaflet: ^2.5.0
     react-leaflet-markercluster: ^2.0.0-rc3
     react-router: ^5.2.0
-    react-router-breadcrumbs-hoc: ^3.2.0
     react-router-dom: ^5.2.0
     react-router-hash-link: ^2.4.3
     react-scripts: 5.0.1
@@ -29873,16 +29860,6 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 2c7fe9cbd766f5e54beb4bec2e2efb2de3583037b23fef8fa511ab426ed7f1ae992382db5acd8ab5bfb030a4b93a06a2ebca41377d6eeaf0e6791bb0a59616a4
-  languageName: node
-  linkType: hard
-
-"react-router-breadcrumbs-hoc@npm:^3.2.0":
-  version: 3.4.0
-  resolution: "react-router-breadcrumbs-hoc@npm:3.4.0"
-  peerDependencies:
-    react: ">=16.8"
-    react-router: ">=4"
-  checksum: ff88ea01a2dc81815a0529de90b084dc61c06da1f704719e8b8ff286200bb31a01b5e76addad66363ffb9ab7d4a188e8ec4c48c925e7c89fe659f24ad4eb8c5b
   languageName: node
   linkType: hard
 

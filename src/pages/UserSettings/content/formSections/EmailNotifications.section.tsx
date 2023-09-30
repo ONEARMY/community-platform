@@ -6,7 +6,7 @@ import { EmailNotificationFrequency } from 'oa-shared'
 import { Field } from 'react-final-form'
 
 import { FlexSectionContainer } from './elements'
-import { fields } from 'src/pages/Settings/labels'
+import { fields } from 'src/pages/UserSettings/labels'
 
 import type { INotificationSettings } from 'src/models/user.models'
 

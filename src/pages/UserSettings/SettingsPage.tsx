@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, Flex, Heading, Box, Text } from 'theme-ui'
+import { Alert, Card, Flex, Heading, Box, Text } from 'theme-ui'
 import { Button, TextNotification } from 'oa-components'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
@@ -30,6 +30,8 @@ import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
+import type { MapsStore } from 'src/stores/Maps/maps.store'
+import type { IMapPin } from 'src/models'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -39,6 +41,7 @@ interface IProps {
 interface IInjectedProps extends IProps {
   userStore: UserStore
   themeStore: ThemeStore
+  mapsStore: MapsStore
 }
 
 interface IState {
@@ -47,10 +50,25 @@ interface IState {
   showDeleteDialog?: boolean
   showLocationDropdown: boolean
   user?: IUserPP
+  userMapPin: IMapPin | null
   showFormSubmitResult: boolean
 }
 
-@inject('userStore')
+const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
+  const { mapPin } = props
+  return mapPin?.comments && mapPin.moderation == 'improvements-needed' ? (
+    <Alert variant="info" sx={{ mt: 3, fontSize: 2, textAlign: 'left' }}>
+      <Box>
+        This map pin has been marked as requiring further changes. Specifically
+        the moderator comments are:
+        <br />
+        <em>{mapPin?.comments}</em>
+      </Box>
+    </Alert>
+  ) : null
+}
+
+@inject('mapsStore', 'userStore')
 @observer
 export class SettingsPage extends React.Component<IProps, IState> {
   toggleLocationDropdown = () => {
@@ -71,10 +89,15 @@ export class SettingsPage extends React.Component<IProps, IState> {
   }
   async componentDidMount() {
     let user = this.injected.userStore.user as IUserPP
+    let userMapPin: IMapPin | null = null
     if (this.props.adminEditableUserId) {
       user = await this.injected.userStore.getUserProfile(
         this.props.adminEditableUserId,
       )
+    }
+
+    if (isModuleSupported(MODULE.MAP)) {
+      userMapPin = (await this.injected.mapsStore.getPin(user.userName)) || null
     }
 
     // ensure user form includes all user fields (merge any legacy user with correct format)
@@ -102,6 +125,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
       user,
       showLocationDropdown: !user?.location?.latlng,
       showFormSubmitResult: false,
+      userMapPin,
     })
   }
 
@@ -169,7 +193,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { formValues, user } = this.state
+    const { formValues, user, userMapPin } = this.state
     return user ? (
       <Form
         onSubmit={(v) =>
@@ -263,14 +287,18 @@ export class SettingsPage extends React.Component<IProps, IState> {
                       {/* General fields */}
                       {values.profileType !== ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
-                          <WorkspaceMapPinSection />
+                          <WorkspaceMapPinSection>
+                            <MapPinModerationComments mapPin={userMapPin} />
+                          </WorkspaceMapPinSection>
                         )}
 
                       {values.profileType === ProfileType.MEMBER &&
                         isModuleSupported(MODULE.MAP) && (
                           <MemberMapPinSection
                             toggleLocationDropdown={this.toggleLocationDropdown}
-                          />
+                          >
+                            <MapPinModerationComments mapPin={userMapPin} />
+                          </MemberMapPinSection>
                         )}
                       <UserInfosSection
                         formValues={values}

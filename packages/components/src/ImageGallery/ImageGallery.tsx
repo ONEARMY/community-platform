@@ -1,8 +1,9 @@
-import 'react-image-lightbox/style.css'
-import { useEffect, useState } from 'react'
-import Lightbox from 'react-image-lightbox'
+import 'photoswipe/style.css'
+import { useEffect, useRef, useState } from 'react'
+import PhotoSwipeLightbox from 'photoswipe/lightbox'
+import type { PhotoSwipeOptions } from 'photoswipe/lightbox'
 import type { CardProps } from 'theme-ui'
-import { Box, Flex, Image } from 'theme-ui'
+import { Box, Flex, Image as ThemeImage } from 'theme-ui'
 import styled from '@emotion/styled'
 
 interface IUploadedFileMeta {
@@ -16,9 +17,10 @@ interface IUploadedFileMeta {
   updated: string
 }
 
-export interface IProps {
+export interface ImageGalleryProps {
   images: IUploadedFileMeta[]
   allowPortrait?: boolean
+  photoSwipeOptions?: PhotoSwipeOptions
 }
 
 interface IState {
@@ -37,12 +39,13 @@ const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
   }
 `
 
-export const ImageGallery = (props: IProps) => {
+export const ImageGallery = (props: ImageGalleryProps) => {
   const [state, setState] = useState<IState>({
     activeImageIndex: 0,
     showLightbox: false,
     images: [],
   })
+  const lightbox = useRef<PhotoSwipeLightbox>()
 
   useEffect(() => {
     const images = (props.images || []).filter((img) => img !== null)
@@ -51,7 +54,42 @@ export const ImageGallery = (props: IProps) => {
       activeImageIndex: 0,
       images: images,
     })
-  }, [])
+
+    // Initializes the Photoswipe lightbox to use the provided images
+    lightbox.current = new PhotoSwipeLightbox({
+      dataSource: images.map((image) => ({
+        src: image.downloadUrl,
+      })),
+      pswpModule: () => import('photoswipe'),
+      ...(props.photoSwipeOptions ?? {}),
+    })
+
+    // Before opening the lightbox, calculates the image sizes and
+    // refreshes lightbox slide to adapt to these updated dimensions
+    lightbox.current.on('beforeOpen', () => {
+      const photoswipe = lightbox.current?.pswp
+      const dataSource = photoswipe?.options?.dataSource
+
+      if (Array.isArray(dataSource)) {
+        dataSource.forEach((source, index) => {
+          const img = new Image()
+          img.onload = () => {
+            source.width = img.naturalWidth
+            source.height = img.naturalHeight
+            photoswipe?.refreshSlideContent(index)
+          }
+          img.src = source.src as string
+        })
+      }
+    })
+
+    lightbox.current.init()
+
+    return () => {
+      lightbox.current?.destroy()
+      lightbox.current = undefined
+    }
+  }, [props.images])
 
   const setActive = (imageIndex: number) => {
     setState({
@@ -60,13 +98,12 @@ export const ImageGallery = (props: IProps) => {
     })
   }
 
-  const triggerLightbox = (): void =>
-    setState(({ showLightbox }) => {
-      return {
-        ...state,
-        showLightbox: !showLightbox,
-      }
-    })
+  const triggerLightbox = (): void => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore: Looks like a bug on their side, already a bug for it is open,
+    // it should allow only one argument, as mentioned in their docs
+    lightbox.current?.loadAndOpen(state.activeImageIndex)
+  }
 
   const images = state.images
   const activeImageIndex = state.activeImageIndex
@@ -76,7 +113,7 @@ export const ImageGallery = (props: IProps) => {
   return activeImage ? (
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ width: '100%' }}>
-        <Image
+        <ThemeImage
           loading="lazy"
           data-cy="active-image"
           data-testid="active-image"
@@ -99,13 +136,14 @@ export const ImageGallery = (props: IProps) => {
           ? images.map((image: any, index: number) => (
               <ThumbCard
                 data-cy="thumbnail"
+                data-testid="thumbnail"
                 mb={3}
                 mt={4}
                 opacity={image === activeImage ? 1.0 : 0.5}
                 onClick={() => setActive(index)}
                 key={index}
               >
-                <Image
+                <ThemeImage
                   loading="lazy"
                   src={image.downloadUrl}
                   key={index}
@@ -123,31 +161,6 @@ export const ImageGallery = (props: IProps) => {
             ))
           : null}
       </Flex>
-
-      {state.showLightbox && (
-        <Lightbox
-          mainSrc={activeImage.downloadUrl}
-          nextSrc={images[(activeImageIndex + 1) % images.length].downloadUrl}
-          prevSrc={
-            images[(activeImageIndex + images.length - 1) % images.length]
-              .downloadUrl
-          }
-          onMovePrevRequest={() => {
-            setState({
-              ...state,
-              activeImageIndex:
-                (activeImageIndex + images.length - 1) % images.length,
-            })
-          }}
-          onMoveNextRequest={() =>
-            setState({
-              ...state,
-              activeImageIndex: (activeImageIndex + 1) % images.length,
-            })
-          }
-          onCloseRequest={() => triggerLightbox()}
-        />
-      )}
     </Flex>
   ) : null
 }

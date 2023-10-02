@@ -1,5 +1,6 @@
 import type { StoryFn, Meta } from '@storybook/react'
 import { ImageGallery } from './ImageGallery'
+import type { ImageGalleryProps } from './ImageGallery'
 
 interface IUploadedFileMeta {
   downloadUrl: string
@@ -13,10 +14,10 @@ interface IUploadedFileMeta {
 }
 
 const imageUrls = [
-  'https://picsum.photos/1500/500',
-  'https://picsum.photos/4000/3000',
-  'https://picsum.photos/800/1200',
-  'https://picsum.photos/1500/1500',
+  'https://picsum.photos/id/29/1500/1000',
+  'https://picsum.photos/id/50/4000/3000',
+  'https://picsum.photos/id/110/800/1200',
+  'https://picsum.photos/id/300/1500/1500',
 ]
 
 const testImages: IUploadedFileMeta[] = imageUrls.map((elt, i) => {
@@ -37,6 +38,8 @@ export default {
   component: ImageGallery,
 } as Meta<typeof ImageGallery>
 
-export const Default: StoryFn<typeof ImageGallery> = () => {
-  return <ImageGallery images={testImages} />
+export const Default: StoryFn<typeof ImageGallery> = (
+  props: Omit<ImageGalleryProps, 'images'>,
+) => {
+  return <ImageGallery images={testImages} {...props} />
 }

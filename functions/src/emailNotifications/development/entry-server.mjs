@@ -6,8 +6,8 @@ import { faker } from '@faker-js/faker'
 
 export function render(url) {
   const availableTemplates = fs
-    .readdirSync(path.resolve(__dirname, '../templates'))
-    .filter((f) => !['index.ts', 'layout.html'].includes(f))
+    .readdirSync(path.resolve(__dirname, './templates'))
+    .filter((f) => f.endsWith('.html') && f !== 'layout.html')
     .map((f) => f.replace('.html', ''))
 
   const template = url.replace(/^\//g, '')

@@ -21,7 +21,7 @@ async function createServer() {
         preventAssignment: true,
         values: {
           __dirname() {
-            return JSON.stringify(path.resolve(__dirname, ''))
+            return JSON.stringify(path.resolve(__dirname, '../'))
           },
         },
       }),

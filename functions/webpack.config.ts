@@ -69,7 +69,7 @@ const config: webpack.Configuration = {
         {
           from: path.resolve(__dirname, './src/emailNotifications/templates'),
           to: 'templates',
-        }
+        },
       ],
     }),
   ],

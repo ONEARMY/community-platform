@@ -71,7 +71,7 @@ export const SortFilterHeader = ({
   const authorsOptions = getAuthorOptions(items)
 
   const _inputStyle = {
-    width: ['100%', '100%', '240px'],
+    width: ['100%', '100%', '200px'],
     mr: [0, 0, 2],
     mb: [3, 3, 0],
   }

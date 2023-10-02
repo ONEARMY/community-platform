@@ -20,7 +20,7 @@ export function getEmailHtml(emailType: SupportedEmailTemplates, ctx: {}) {
 
   const layoutTmpl = Handlebars.compile(
     fs.readFileSync(
-      path.resolve(__dirname, '../templates/layout.html'),
+      path.resolve(__dirname, './templates/layout.html'),
       'utf-8',
     ),
   )
@@ -29,7 +29,7 @@ export function getEmailHtml(emailType: SupportedEmailTemplates, ctx: {}) {
 
   const tmpl = Handlebars.compile(
     fs.readFileSync(
-      path.resolve(__dirname, `../templates/${emailType}.html`),
+      path.resolve(__dirname, `./templates/${emailType}.html`),
       'utf-8',
     ),
   )

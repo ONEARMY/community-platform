@@ -12,24 +12,23 @@ export type SupportedEmailTemplates =
   | 'how-to-needs-improvements'
   | 'map-pin-needs-improvements'
 
+const dirPath = (__dirname || '').replace('/templates', '')
+
 export function getEmailHtml(emailType: SupportedEmailTemplates, ctx: {}) {
-  const availableFiles = fs.readdirSync(path.resolve(__dirname, '../templates'))
+  const availableFiles = fs.readdirSync(path.join(dirPath, '/templates'))
   if (!availableFiles.includes(`${emailType}.html`)) {
     throw new Error(`Email template ${emailType} not found`)
   }
 
   const layoutTmpl = Handlebars.compile(
-    fs.readFileSync(
-      path.resolve(__dirname, '../templates/layout.html'),
-      'utf-8',
-    ),
+    fs.readFileSync(path.resolve(dirPath, './templates/layout.html'), 'utf-8'),
   )
 
   Handlebars.registerPartial('layout', layoutTmpl)
 
   const tmpl = Handlebars.compile(
     fs.readFileSync(
-      path.resolve(__dirname, `../templates/${emailType}.html`),
+      path.resolve(dirPath, `./templates/${emailType}.html`),
       'utf-8',
     ),
   )

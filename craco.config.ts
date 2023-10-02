@@ -59,8 +59,10 @@ module.exports = {
 
       jestConfig.moduleNameMapper = {
         ...jestConfig.moduleNameMapper,
-        'photoswipe/lightbox': '<rootDir>/node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js',
-        'photoswipe/style.css': '<rootDir>/node_modules/photoswipe/dist/photoswipe.css',
+        'photoswipe/lightbox':
+          '<rootDir>/node_modules/photoswipe/dist/umd/photoswipe-lightbox.umd.min.js',
+        'photoswipe/style.css':
+          '<rootDir>/node_modules/photoswipe/dist/photoswipe.css',
         // Allow specific import from 'src' (used to import `useCommonStores`)
         '^src$': '<rootDir>/src/index',
       }

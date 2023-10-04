@@ -1,11 +1,11 @@
-import { NotificationList } from 'oa-components'
+import { NotificationList } from '../../../NotificationList/NotificationList'
 import { useState } from 'react'
 import Foco from 'react-foco'
 import { Flex } from 'theme-ui'
 
 import { NotificationsIcon } from './NotificationsIcon'
 
-import type { UserNotificationList } from '../../../'
+import type { UserNotificationList } from '../../../NotificationList/NotificationList'
 export interface Props {
   notifications: UserNotificationList
   markAllRead: () => void

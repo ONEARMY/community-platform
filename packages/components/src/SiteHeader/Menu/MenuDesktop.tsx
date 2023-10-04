@@ -38,11 +38,14 @@ MenuLink.defaultProps = {
   activeClassName: 'current',
 }
 
-export const MenuDesktop = (pageList: any) => {
+export const MenuDesktop = (props:{
+  pageList: any[]
+}) => {
+  const { pageList } = props
   return (
     <>
       <Flex sx={{ alignItems: 'center', width: '100%' }}>
-        {pageList.map((page) => {
+        {(pageList || []).map((page: any) => {
           return (
             <Flex key={page.path}>
               <MenuLink to={page.path} data-cy="page-link">

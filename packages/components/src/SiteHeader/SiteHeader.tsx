@@ -2,23 +2,24 @@ import { motion } from 'framer-motion'
 import { useTheme } from '@emotion/react'
 import HamburgerMenu from 'react-hamburger-menu'
 import { Flex, Text } from 'theme-ui'
-import Logo from './Menu/Logo/Logo'
-import MenuDesktop from './Menu/MenuDesktop'
-import MenuMobilePanel from './Menu/MenuMobile/MenuMobilePanel'
+import { Logo } from './Menu/Logo/Logo'
+import { MenuDesktop } from './Menu/MenuDesktop'
+import { MenuMobilePanel } from './Menu/MenuMobile/MenuMobilePanel'
 import { NotificationsDesktop } from './Menu/Notifications/NotificationsDesktop'
 import { NotificationsIcon } from './Menu/Notifications/NotificationsIcon'
 import { NotificationsMobile } from './Menu/Notifications/NotificationsMobile'
-import Profile from './Menu/Profile/Profile'
+import { Profile } from './Menu/Profile/Profile'
 
 export interface SiteHeaderProps {
   // TODO
   user: any
   menu: any
+  notifications: any
 }
 
 export const SiteHeader = (props: SiteHeaderProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { user, menu } = props
+  const { user, menu, notifications } = props
   const theme = useTheme() as any
   const isLoggedInUser = !!user
   const areThereNotifications = false
@@ -40,7 +41,7 @@ export const SiteHeader = (props: SiteHeaderProps) => {
       >
         <Flex>
           <Flex>
-            <Logo isMobile={true} />
+            <Logo />
           </Flex>
           {isLoggedInUser && (user.userRoles || []).includes('beta-tester') && (
             <Flex
@@ -80,21 +81,25 @@ export const SiteHeader = (props: SiteHeaderProps) => {
             display: ['none', 'none', 'flex'],
           }}
         >
-          <MenuDesktop />
+          <MenuDesktop pageList={[]} />
           {isLoggedInUser && (
             <>
               <NotificationsDesktop
                 notifications={notifications}
                 markAllRead={() =>
-                  this.injected.userNotificationsStore.markAllNotificationsRead()
+                  console.log(
+                    `TODO: this.injected.userNotificationsStore.markAllNotificationsRead()`,
+                  )
                 }
                 markAllNotified={() =>
-                  this.injected.userNotificationsStore.markAllNotificationsNotified()
+                  console.log(
+                    `TODO: this.injected.userNotificationsStore.markAllNotificationsNotified()`,
+                  )
                 }
               />
             </>
           )}
-          {isModuleSupported(MODULE.USER) && <Profile isMobile={false} />}
+          <Profile isMobile={false} />
         </Flex>
         <MobileMenuWrapper className="menu-mobile">
           <Flex pl={5}>
@@ -125,10 +130,14 @@ export const SiteHeader = (props: SiteHeaderProps) => {
             <NotificationsMobile
               notifications={notifications}
               markAllRead={() =>
-                this.injected.userNotificationsStore.markAllNotificationsRead()
+                console.log(
+                  `this.injected.userNotificationsStore.markAllNotificationsRead()`,
+                )
               }
               markAllNotified={() =>
-                this.injected.userNotificationsStore.markAllNotificationsNotified()
+                console.log(
+                  `this.injected.userNotificationsStore.markAllNotificationsNotified()`,
+                )
               }
             />
           </MobileMenuWrapper>

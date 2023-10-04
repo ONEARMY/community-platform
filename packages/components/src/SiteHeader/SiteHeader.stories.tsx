@@ -7,5 +7,5 @@ export default {
 } as Meta<typeof SiteHeader>
 
 export const Default: StoryFn<typeof SiteHeader> = () => (
-  <SiteHeader user={{}} menu={[]} />
+  <SiteHeader user={{}} menu={[]} notifications={[]} />
 )

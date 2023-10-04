@@ -1,5 +1,4 @@
 import { Flex } from 'theme-ui'
-import IconNotifications from '../../../../assets/icons/icon-notification.svg'
 import styled from '@emotion/styled'
 
 const IconWrapper = styled(Flex)`
@@ -31,11 +30,12 @@ export const NotificationsIcon = ({
           : {}
       }
     >
-      <IconNotifications
+      console.log(`TODO:`, {areThereNotifications})
+      {/* <IconNotifications
         color={areThereNotifications ? 'orange' : '#bfbfbf'}
         height="25px"
         width="25px"
-      />
+      /> */}
     </IconWrapper>
   </>
 )

@@ -7,6 +7,7 @@ const Config: StorybookConfig = {
     getAbsolutePath('@storybook/addon-links'),
     getAbsolutePath('@storybook/addon-essentials'),
     getAbsolutePath('@storybook/addon-mdx-gfm'),
+    getAbsolutePath('@storybook/addon-mdx-gfm'),
   ],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),

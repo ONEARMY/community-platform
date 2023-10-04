@@ -1,0 +1,409 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Create howto moderation emails Creates an email for a howto awaiting moderation 1`] = `
+"<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <style>
+      #body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #000000;
+      }
+      #body a {
+        color: inherit;
+      }
+      .border {
+        border: 3px solid black;
+        border-radius: 10px;
+        padding: 4% 0;
+        margin: 4% 0;
+        width: 550px;
+      }
+      table {
+        width: 100%;
+        border: 0;
+      }
+      .settings-table-container,
+      .project-image-table-container {
+        margin-bottom: 8%;
+      }
+
+      .greeting-container,
+      .main-container {
+        margin-bottom: 8%;
+      }
+      .greeting-container,
+      .main-container,
+      .closing-containter {
+        margin-left: 8%;
+        margin-right: 8%;
+      }
+      @media only screen and (max-width: 550px) {
+        .table-container {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body id="body">
+    <table class="email-table-container">
+      <tr>
+        <td align="center">
+          <div class="border">
+            <table class="project-image-table-container">
+              <tr>
+                <td align="center">
+                  <img
+                    width="144"
+                    alt=""
+                    src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/f48e2455-6dbb-4102-bde9-2ee07d3008c4/859x860.png"
+                  />
+                </td>
+              </tr>
+            </table>
+
+            <div align="left" class="greeting-container">
+              <p>Hey User 1</p>
+              <p>Huzzah! Your How-To Mock Howto has been submitted.</p>
+            </div>
+            <div align="left" class="main-container">
+              <p>
+                Our team is currently reviewing it and will get back to you
+                within a few business days.
+              </p>
+              <p>
+                Thank you for taking the time, the community will benefit from
+                this knowledge and more plastic will be recycled thanks to YOU.
+              </p>
+            </div>
+            <div align="left" class="closing-containter">
+              <p>Cheers,</p>
+              <p>The Precious Plastic Team</p>
+            </div>
+          </div>
+          <table class="settings-table-container">
+            <tr>
+              <td align="center">
+                <div class="notifications">
+                  Manage your notifications
+                  <a href="https://community.preciousplastic.com/settings">
+                    here</a
+                  >
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+"
+`;
+
+exports[`Create howto moderation emails Creates an email for an accepted howto 1`] = `
+"<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <style>
+      #body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #000000;
+      }
+      #body a {
+        color: inherit;
+      }
+      .border {
+        border: 3px solid black;
+        border-radius: 10px;
+        padding: 4% 0;
+        margin: 4% 0;
+        width: 550px;
+      }
+      table {
+        width: 100%;
+        border: 0;
+      }
+      .settings-table-container,
+      .project-image-table-container {
+        margin-bottom: 8%;
+      }
+
+      .greeting-container,
+      .main-container {
+        margin-bottom: 8%;
+      }
+      .greeting-container,
+      .main-container,
+      .closing-containter {
+        margin-left: 8%;
+      }
+      @media only screen and (max-width: 550px) {
+        .table-container {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body id="body">
+    <table class="email-table-container">
+      <tr>
+        <td align="center">
+          <div class="border">
+            <table class="project-image-table-container">
+              <tr>
+                <td align="center">
+                  <img
+                    width="144"
+                    alt=""
+                    src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/f48e2455-6dbb-4102-bde9-2ee07d3008c4/859x860.png"
+                  />
+                </td>
+              </tr>
+            </table>
+
+            <div align="left" class="greeting-container">
+              <p>Hey User 1</p>
+              <p>Huzzah! Your How-To Mock Howto has been approved.</p>
+            </div>
+            <div align="left" class="main-container">
+              <p>
+                It is visible on the community platform
+                <a
+                  href="https://community.preciousplastic.com/how-to/00_user_1_howto"
+                  >here</a
+                >.
+              </p>
+              <p>Users are now be able to comment and mark it as useful.</p>
+            </div>
+            <div align="left" class="closing-containter">
+              <p>Thanks for sharing your knowledge!</p>
+              <p>The Precious Plastic Team</p>
+            </div>
+          </div>
+          <table class="settings-table-container">
+            <tr>
+              <td align="center">
+                <div class="notifications">
+                  Manage your notifications
+                  <a href="https://community.preciousplastic.com/settings">
+                    here</a
+                  >
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+"
+`;
+
+exports[`Create map pin moderation emails Creates an email for a map pin awaiting moderation 1`] = `
+"<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <style>
+      #body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #000000;
+      }
+      #body a {
+        color: inherit;
+      }
+      .border {
+        border: 3px solid black;
+        border-radius: 10px;
+        padding: 4% 0;
+        margin: 4% 0;
+        width: 550px;
+      }
+      table {
+        width: 100%;
+        border: 0;
+      }
+      .settings-table-container,
+      .project-image-table-container {
+        margin-bottom: 8%;
+      }
+
+      .greeting-container,
+      .main-container {
+        margin-bottom: 8%;
+      }
+      .greeting-container,
+      .main-container,
+      .closing-containter {
+        margin-left: 8%;
+        margin-right: 8%;
+      }
+      @media only screen and (max-width: 550px) {
+        .table-container {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body id="body">
+    <table class="email-table-container">
+      <tr>
+        <td align="center">
+          <div class="border">
+            <table class="project-image-table-container">
+              <tr>
+                <td align="center">
+                  <img
+                    width="144"
+                    alt=""
+                    src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/f48e2455-6dbb-4102-bde9-2ee07d3008c4/859x860.png"
+                  />
+                </td>
+              </tr>
+            </table>
+
+            <div align="left" class="greeting-container">
+              <p>Hey User 1</p>
+              <p>Your map pin has been submitted.</p>
+            </div>
+            <div align="left" class="main-container">
+              <p>
+                Our team is currently reviewing it and will get back to you
+                within a few business days.
+              </p>
+            </div>
+            <div align="left" class="closing-containter">
+              <p>Cheers,</p>
+              <p>The Precious Plastic Team</p>
+            </div>
+          </div>
+          <table class="settings-table-container">
+            <tr>
+              <td align="center">
+                <div class="notifications">
+                  Manage your notifications
+                  <a href="https://community.preciousplastic.com/settings">
+                    here</a
+                  >
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+"
+`;
+
+exports[`Create map pin moderation emails Creates an email for an accepted map pin 1`] = `
+"<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+    <style>
+      #body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        color: #000000;
+      }
+      #body a {
+        color: inherit;
+      }
+      .border {
+        border: 3px solid black;
+        border-radius: 10px;
+        padding: 4% 0;
+        margin: 4% 0;
+        width: 550px;
+      }
+      table {
+        width: 100%;
+        border: 0;
+      }
+      .settings-table-container,
+      .project-image-table-container {
+        margin-bottom: 8%;
+      }
+
+      .greeting-container,
+      .main-container {
+        margin-bottom: 8%;
+      }
+      .greeting-container,
+      .main-container,
+      .closing-containter {
+        margin-left: 8%;
+        margin-right: 8%;
+      }
+      @media only screen and (max-width: 550px) {
+        .table-container {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body id="body">
+    <table class="email-table-container">
+      <tr>
+        <td align="center">
+          <div class="border">
+            <table class="project-image-table-container">
+              <tr>
+                <td align="center">
+                  <img
+                    width="144"
+                    alt=""
+                    src="http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/f48e2455-6dbb-4102-bde9-2ee07d3008c4/859x860.png"
+                  />
+                </td>
+              </tr>
+            </table>
+
+            <div align="left" class="greeting-container">
+              <p>Hey User 1</p>
+              <p>
+                Huzzah! We are happy to inform you that your map pin has been
+                approved and is now visible!
+              </p>
+            </div>
+            <div align="left" class="main-container">
+              <p>
+                It is visible on the community platform map
+                <a href="https://community.preciousplastic.com/map#user_1"
+                  >here</a
+                >.
+              </p>
+            </div>
+            <div align="left" class="closing-containter">
+              <p>Thanks,</p>
+              <p>The Precious Plastic Team</p>
+            </div>
+          </div>
+          <table class="settings-table-container">
+            <tr>
+              <td align="center">
+                <div class="notifications">
+                  Manage your notifications
+                  <a href="https://community.preciousplastic.com/settings">
+                    here</a
+                  >
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+"
+`;

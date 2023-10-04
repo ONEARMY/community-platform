@@ -4,8 +4,11 @@ import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB } from '../models'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { withErrorAlerting } from '../alerting/errorAlerting'
-
-const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
+import * as moderationEmails from './createModerationEmails'
+import * as submissionEmails from './createSubmissionEmails'
+import * as supporterBadgeEmails from './supporterBadgeEmails'
+import * as verifiedBadgeEmails from './verifiedBadgeEmails'
+import { EMAIL_FUNCTION_MEMORY_LIMIT } from './utils'
 
 exports.sendDaily = functions
   .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
@@ -76,3 +79,25 @@ exports.sendOnce = functions
       'Emails can be triggered by admins only.',
     )
   })
+
+/** Watch changes to all howto docs and trigger emails on moderation changes */
+exports.sendHowToModerationEmail = moderationEmails.handleHowToModerationUpdate
+
+/** Watch changes to all map pin docs and trigger emails on moderation changes */
+exports.sendMapPinModerationEmail =
+  moderationEmails.handleMapPinModerationUpdate
+
+/** Watch new howto docs and trigger emails on creation */
+exports.sendHowToSubmissionEmail = submissionEmails.handleHowToSubmission
+
+/** Watch new map pin docs and trigger emails on creation */
+exports.sendMapPinSubmissionEmail = submissionEmails.handleMapPinSubmission
+
+/** Watch new user docs and trigger emails on supporter */
+exports.sendSupporterEmail = (
+  supporterBadgeEmails as any
+).handleUserSupporterBadgeUpdate
+
+exports.sendVerifiedEmail = (
+  verifiedBadgeEmails as any
+).handleUserVerifiedBadgeUpdate

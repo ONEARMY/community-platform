@@ -21,7 +21,7 @@ export const HowtoFieldDescription = () => {
           draftValidationWrapper(values, allValues, required)
         }
         validateFields={[]}
-        modifiers={{ capitalize: true }}
+        modifiers={{ capitalize: true, trim: true }}
         isEqual={COMPARISONS.textInput}
         component={FieldTextarea}
         style={{

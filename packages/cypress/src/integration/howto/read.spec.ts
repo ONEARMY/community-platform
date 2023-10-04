@@ -3,7 +3,9 @@ import { MOCK_DATA } from '../../data'
 
 describe('[How To]', () => {
   const SKIP_TIMEOUT = { timeout: 300 }
-  const totalHowTo = Object.values(MOCK_DATA.howtos).length
+  const totalHowTo = Object.values(MOCK_DATA.howtos).filter(
+    (howTo) => howTo._deleted === false,
+  ).length
 
   describe('[List how-tos]', () => {
     const howtoSlug = 'make-glass-like-beams'
@@ -134,20 +136,6 @@ describe('[How To]', () => {
         })
         // This fails in firefox due to cross security, simply check url
         // .should(iframe => expect(iframe.contents().find('video')).to.exist)
-        cy.step('Back button at top takes users to /how-to')
-        cy.get('[data-cy="go-back"]:eq(0)')
-          .as('topBackButton')
-          .click()
-          .url()
-          .should('include', '/how-to')
-
-        cy.step('Back button at bottom takes users to /how-to')
-        cy.visit(specificHowtoUrl)
-        cy.get('[data-cy="go-back"]:eq(1)')
-          .as('bottomBackButton')
-          .click()
-          .url()
-          .should('include', '/how-to')
       })
 
       it('[Delete button should not be visible to everyone', () => {
@@ -196,7 +184,7 @@ describe('[How To]', () => {
         cy.get('[data-cy="ViewsCounter"]').should('exist')
 
         cy.step('Go back')
-        cy.get('[data-cy="go-back"]:eq(0)').as('topBackButton').click()
+        cy.go('back')
 
         cy.step('Views show on second howto')
         cy.visit('/how-to/make-glass-like-beams')

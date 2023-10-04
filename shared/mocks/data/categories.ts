@@ -35,7 +35,7 @@ export const categories = {
     label: 'compression',
   },
   PNtr9asrGucgt7JKdRpc: {
-    label: 'mould',
+    label: 'Moulds',
     _deleted: false,
     _modified: '2019-04-15T18:51:56.479Z',
     _created: '2018-11-29T12:56:47.901Z',

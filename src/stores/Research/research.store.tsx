@@ -26,6 +26,7 @@ import {
   changeUserReferenceToPlainText,
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
+import type { RootStore } from '../index'
 import type { DocReference } from '../databaseV2/DocReference'
 import {
   FilterSorterDecorator,
@@ -69,16 +70,16 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
-  constructor() {
-    super(null as any, 'research')
+  constructor(rootStore: RootStore) {
+    super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
 
     this.selectedCategory = ''
     this.searchValue = ''
     this.availableItemSortingOption = [
-      ItemSortingOption.Created,
-      ItemSortingOption.Modified,
+      ItemSortingOption.Newest,
+      ItemSortingOption.LatestUpdated,
       ItemSortingOption.MostUseful,
       ItemSortingOption.Comments,
       ItemSortingOption.Updates,
@@ -91,17 +92,17 @@ export class ResearchStore extends ModuleStore {
       })
 
       runInAction(() => {
-        // Create an instance of FilterSorterDecorator with the allResearchItems array
-        this.filterSorterDecorator =
-          new FilterSorterDecorator<IResearch.ItemDB>(activeItems)
-        // Sets default starting sort filter for research list items
-        this.updateActiveSorter(ItemSortingOption.Modified)
+        this.activeSorter = ItemSortingOption.LatestUpdated
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allResearchItems = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
       })
     })
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {
-    this.allResearchItems = this.filterSorterDecorator?.sort(sorter)
     this.activeSorter = sorter
   }
 
@@ -118,9 +119,11 @@ export class ResearchStore extends ModuleStore {
       this.searchValue,
     )
 
-    this.filterSorterDecorator.allItems = validResearches
-
-    return this.filterSorterDecorator.getSortedItems(this.activeUser)
+    return this.filterSorterDecorator.sort(
+      this.activeSorter,
+      validResearches,
+      this.activeUser,
+    )
   }
 
   public formatResearchCommentList(comments: IComment[] = []): IComment[] {
@@ -871,6 +874,91 @@ export class ResearchStore extends ModuleStore {
           (update) => update.status !== 'draft' && update._deleted !== true,
         ).length
       : 0
+  }
+
+  @action
+  public async lockResearchItem(username: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const newItem = {
+        ...item,
+        locked: {
+          by: username,
+          at: new Date().toISOString(),
+        },
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+  @action
+  public async unlockResearchItem() {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const newItem = {
+        ...item,
+        locked: null,
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+  @action
+  public async lockResearchUpdate(username: string, updateId: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
+      const newItem = {
+        ...item,
+        updates: [...item.updates],
+      }
+
+      if (updateIndex && newItem.updates[updateIndex]) {
+        newItem.updates[updateIndex].locked = {
+          by: username,
+          at: new Date().toISOString(),
+        }
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+  @action
+  public async unlockResearchUpdate(updateId: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearch.Item>(COLLECTION_NAME)
+        .doc(item._id)
+      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
+      const newItem = {
+        ...item,
+        updates: [...item.updates],
+      }
+
+      if (newItem.updates[updateIndex]) {
+        newItem.updates[updateIndex].locked = null
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
   }
   /**
    * Updates supplied dbRef after

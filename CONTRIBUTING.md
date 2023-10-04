@@ -124,6 +124,30 @@ Here's a more detailed explanation of how you can format the commit message head
   └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
 ```
 
+## Writing Tests for Pull Requests
+
+Writing tests is crucial for maintaining a robust and reliable codebase. Tests provide a safety net that helps catch errors and unintended behaviour changes before they reach production. By submitting tests with your pull request, you:
+
+- Ensure stability: Tests verify that your contribution doesn’t break existing functionality.
+- Facilitate review: Tests demonstrate the intended behaviour, making the review process smoother and more efficient.
+- Document code: Tests serve as examples, illustrating how your code is supposed to work.
+
+Test Writing Guidelines:
+
+- Write meaningful tests: Focus on testing significant aspects and edge cases, not just writing tests for the sake of coverage.
+- Follow the testing style: Adhere to the testing conventions and styles established in the project.
+- Update existing tests: If your changes affect existing functionality, update the corresponding tests to reflect the new behaviour.
+
+How to Add Tests:
+
+1. Locate the test folder: Navigate to the appropriate directory containing existing tests.
+2. Create a test file: If a test file for the modified module doesn’t exist, create one.
+3. Write your tests: Following the project’s testing conventions, write tests that cover your changes.
+4. Run tests locally: Before submitting, run tests locally to ensure they pass.
+5. Submit with confidence: Include your tests in the pull request along with your changes.
+
+Read more about testing in the [Testing Overview](https://onearmy.github.io/community-platform/Testing/overview)
+
 ## 🤝 &nbsp; Joining the team
 
 We are always open to have more people involved. If you would like to contribute more often, we would love to welcome you to the team. [Join us on Discord](https://discord.gg/gJ7Yyk4) and checkout the [development](https://discord.com/channels/586676777334865928/938781727017558018) channel. Feel free to introduce yourself and outline:

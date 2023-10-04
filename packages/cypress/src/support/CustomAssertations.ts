@@ -37,6 +37,7 @@ const eqHowto = (chaiObj) => {
     const {
       _createdBy,
       _deleted,
+      category,
       description,
       difficulty_level,
       slug,
@@ -56,6 +57,7 @@ const eqHowto = (chaiObj) => {
       tags,
       previousSlugs,
     })
+    expect(subject.category.label, 'Category').to.eq(category)
 
     // We want to validate that uploaded filename matches that originally specified
     // by the user. The filename will include a timestamp to avoid collisions with

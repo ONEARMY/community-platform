@@ -1,4 +1,5 @@
-import type { IModerable } from 'src/models'
+import type { IModerable, IResearch } from 'src/models'
+import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 import {
   stripSpecialCharacters,
   formatLowerNoSpecial,
@@ -10,8 +11,10 @@ import {
   isAllowedToEditContent,
   isAllowedToPin,
   buildStatisticsLabel,
+  calculateTotalComments,
 } from './helpers'
 import { FactoryUser } from 'src/test/factories/User'
+import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {
@@ -223,6 +226,64 @@ describe('src/utils/helpers', () => {
           usePlural: false,
         }),
       ).toBe('100 count')
+    })
+  })
+  describe('calculateTotalComments Function', () => {
+    it('should return 0 when item has no updates', () => {
+      const item = { item: {} } as any
+      expect(calculateTotalComments(item)).toBe('0')
+    })
+
+    it('should return 0 when updates have no comments', () => {
+      const item = {
+        updates: Array.from({ length: 3 }).fill(
+          FactoryResearchItemUpdate({
+            status: 'published',
+            _deleted: false,
+            comments: [],
+          }),
+        ),
+      } as IResearch.ItemDB | IItem
+      expect(calculateTotalComments(item)).toBe('0')
+    })
+
+    it('should return the correct amount of comments', () => {
+      const item = {
+        updates: Array.from({ length: 3 }).fill(
+          FactoryResearchItemUpdate({
+            status: 'published',
+            _deleted: false,
+            comments: Array.from({ length: 3 }),
+          }),
+        ),
+      } as IResearch.ItemDB | IItem
+      expect(calculateTotalComments(item)).toBe('9')
+    })
+
+    it('should ignore deleted and draft updates', () => {
+      const item = {
+        updates: Array.from({ length: 2 })
+          .fill(
+            FactoryResearchItemUpdate({
+              status: 'published',
+              _deleted: false,
+              comments: Array.from({ length: 2 }),
+            }),
+          )
+          .concat([
+            FactoryResearchItemUpdate({
+              status: 'published',
+              _deleted: true,
+              comments: Array.from({ length: 3 }),
+            }),
+            FactoryResearchItemUpdate({
+              status: 'draft',
+              _deleted: false,
+              comments: Array.from({ length: 6 }),
+            }),
+          ]),
+      } as IResearch.ItemDB | IItem
+      expect(calculateTotalComments(item)).toBe('4')
     })
   })
 })

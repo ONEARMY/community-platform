@@ -1,12 +1,4 @@
-import type {
-  DBDoc,
-  IComment,
-  IModerable,
-  IModerationStatus,
-  ISelectedTags,
-  ISharedFeatures,
-  UserMention,
-} from '.'
+import type { DBDoc, IComment, IModerable, ISelectedTags, UserMention } from '.'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 import type { IResearchCategory } from './researchCategories.model'
@@ -16,8 +8,21 @@ import type { IResearchCategory } from './researchCategories.model'
  */
 export type IResearchDB = DBDoc & IResearch.ItemDB
 
-/** All typings related to the Research Module can be found here */
-type UserIdList = string[]
+export type IResearchStats = {
+  votedUsefulCount: number
+}
+
+type UserId = string
+type DateString = string
+
+type ResearchDocumentLockInformation = {
+  by: UserId
+  at: DateString
+}
+
+type ResearchDocumentLock = ResearchDocumentLockInformation | null
+
+type UserIdList = UserId[]
 
 export namespace IResearch {
   /** The main research item, as created by a user */
@@ -28,9 +33,8 @@ export namespace IResearch {
     _deleted: boolean
     collaborators: string[]
     subscribers?: UserIdList
-    moderation: IModerationStatus
-  } & Omit<FormInput, 'collaborators'> &
-    ISharedFeatures
+    locked?: ResearchDocumentLock
+  } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */
   export interface Update {
@@ -44,6 +48,7 @@ export namespace IResearch {
     comments?: IComment[]
     collaborators?: string[]
     status: 'draft' | 'published'
+    locked?: ResearchDocumentLock
   }
 
   export interface FormInput extends IModerable {

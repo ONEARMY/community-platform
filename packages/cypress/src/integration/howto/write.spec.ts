@@ -3,7 +3,7 @@ import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
-import { headings } from '../../../../../src/pages/Howto/labels'
+import { headings, guidance } from '../../../../../src/pages/Howto/labels'
 const creatorEmail = 'howto_creator@test.com'
 const creatorPassword = 'test1234'
 
@@ -11,9 +11,13 @@ describe('[How To]', () => {
   beforeEach(() => {
     cy.visit('/how-to')
   })
+  type Category = 'brainstorm' | 'exhibition' | 'product'
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
   type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
 
+  const selectCategory = (category: Category) => {
+    cy.selectTag(category, '[data-cy=category-select]')
+  }
   const selectTimeDuration = (duration: Duration) => {
     cy.selectTag(duration, '[data-cy=time-select]')
   }
@@ -32,15 +36,23 @@ describe('[How To]', () => {
 
     cy.step(`Filling step ${stepNumber}`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`).within(($step) => {
+      checkWhitespaceTrim('step-title')
+
       cy.get('[data-cy=step-title]')
         .clear()
         .invoke('val', title)
         .blur({ force: true })
 
+      cy.get('[data-cy=step-title]').should('have.value', title)
+
+      checkWhitespaceTrim('step-description')
+
       cy.get('[data-cy=step-description]')
         .clear()
         .invoke('val', description)
         .blur({ force: true })
+
+      cy.get('[data-cy=step-description]').should('have.value', description)
 
       if (videoUrl) {
         cy.step('Adding Video Url')
@@ -56,6 +68,7 @@ describe('[How To]', () => {
               cy.wrap($deleteButton).click()
             })
         }
+
         images.forEach((image, index) => {
           cy.get(`[data-cy=step-image-${index}]`)
             .find(':file')
@@ -74,10 +87,25 @@ describe('[How To]', () => {
     cy.get('[data-cy=confirm]').click()
   }
 
+  const checkWhitespaceTrim = (element: string) => {
+    cy.step(`Check whitespace trim for [${element}]`)
+    cy.get(`[data-cy=${element}]`)
+      .clear()
+      .invoke('val', '  Test for trailing whitespace  ')
+      .blur()
+
+    cy.get(`[data-cy=${element}]`).should(
+      'have.value',
+      'Test for trailing whitespace',
+    )
+    cy.get(`[data-cy=${element}]`).clear()
+  }
+
   describe('[Create a how-to]', () => {
     const expected = {
       _createdBy: 'howto_creator',
       _deleted: false,
+      category: 'Moulds',
       description: 'After creating, the how-to will be deleted',
       difficulty_level: 'Medium',
       time: '1-2 weeks',
@@ -134,7 +162,8 @@ describe('[How To]', () => {
           ],
           text: faker.lorem
             .sentences(50)
-            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH),
+            .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH)
+            .trim(),
           title: 'A long title that is the total characters limit of',
         },
         {
@@ -149,6 +178,7 @@ describe('[How To]', () => {
 
     it('[By Authenticated]', () => {
       const {
+        category,
         description,
         difficulty_level,
         fileLink,
@@ -162,6 +192,8 @@ describe('[How To]', () => {
         'images/howto-step-pic1.jpg',
         'images/howto-step-pic2.jpg',
       ]
+      const categoryGuidanceMain = guidance.moulds.main.slice(0, 40)
+      const categoryGuidanceFiles = guidance.moulds.files
 
       cy.login(creatorEmail, creatorPassword)
       cy.wait(2000)
@@ -174,7 +206,7 @@ describe('[How To]', () => {
         .type('Make glass-like beams')
         .blur({ force: true })
       cy.contains(
-        'Titles must be unique, please try being more specific',
+        "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Warn if title is identical with a previously existing one')
@@ -183,7 +215,7 @@ describe('[How To]', () => {
         .type('Make glassy beams')
         .blur({ force: true })
       cy.contains(
-        'Titles must be unique, please try being more specific',
+        "Did you know there is an existing how-to with the title 'Make glassy beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Warn if title has less than minimum required characters')
@@ -199,21 +231,37 @@ describe('[How To]', () => {
       cy.contains('Make sure this field is filled correctly').should('exist')
 
       cy.step('A basic draft was created')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type('qwerty')
+        .blur({ force: true })
       cy.get('[data-cy=draft]').click()
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
-        .should('include', `/how-to/qwer`)
+        .should('include', `/how-to/qwerty`)
       cy.get('[data-cy=moderationstatus-draft]').should('exist')
 
       cy.step('Back to completing the how-to')
       cy.get('[data-cy=edit]').click()
 
+      checkWhitespaceTrim('intro-title')
+
       cy.step('Fill up the intro')
       cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
       cy.selectTag('howto_testing')
+
+      cy.step('Select a category and see further guidance')
+      cy.contains(categoryGuidanceMain).should('not.exist')
+      cy.contains(categoryGuidanceFiles).should('not.exist')
+      selectCategory(category as Category)
+      cy.contains(categoryGuidanceMain).should('exist')
+      cy.contains(categoryGuidanceFiles).should('exist')
+
       selectTimeDuration(time as Duration)
       selectDifficultLevel(difficulty_level as Difficulty)
+
+      checkWhitespaceTrim('intro-description')
 
       cy.get('[data-cy=intro-description]').type(description)
       cy.get('[data-cy=fileLink]').type(fileLink)
@@ -311,6 +359,7 @@ describe('[How To]', () => {
     const expected = {
       _createdBy: 'howto_editor',
       _deleted: false,
+      category: 'exhibition',
       description: 'After editing, all changes are reverted',
       difficulty_level: 'Hard',
       files: [],
@@ -397,7 +446,7 @@ describe('[How To]', () => {
     it('[By Anonymous]', () => {
       cy.step('Prevent anonymous access to edit howto')
       cy.visit(editHowtoUrl)
-      cy.get('[data-cy=auth-route-deny]').should('be.exist')
+      cy.get('[data-cy=BlockedRoute]').should('be.exist')
     })
 
     it('[By Authenticated]', () => {
@@ -420,7 +469,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title]').focus().blur({ force: true })
       cy.wait(1000)
       cy.contains(
-        'Titles must be unique, please try being more specific',
+        'Did you know there is an existing how-to with the title',
       ).should('not.exist')
 
       cy.step('Warn if title has less than minimum required characters')
@@ -434,12 +483,13 @@ describe('[How To]', () => {
         .type('Make glass-like beams')
         .blur({ force: true })
       cy.contains(
-        'Titles must be unique, please try being more specific',
+        "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('exist')
 
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]').clear().type(expected.title)
       cy.selectTag('howto_testing')
+      selectCategory(expected.category as Category)
       selectTimeDuration(expected.time as Duration)
       selectDifficultLevel(expected.difficulty_level as Difficulty)
       cy.get('[data-cy=intro-description]').clear().type(expected.description)

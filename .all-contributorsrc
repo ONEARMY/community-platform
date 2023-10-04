@@ -390,6 +390,69 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "laviodias",
+      "name": "Lávio Vale",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44332001?v=4",
+      "profile": "https://github.com/laviodias",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "manuelrurda",
+      "name": "Manuel Rodriguez Urdapilelta",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62727899?v=4",
+      "profile": "https://github.com/manuelrurda",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "LiptonB",
+      "name": "Ben Lipton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/467965?v=4",
+      "profile": "https://github.com/LiptonB",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ayachish",
+      "name": "Ayachi Sharma",
+      "avatar_url": "https://avatars.githubusercontent.com/u/102033230?v=4",
+      "profile": "https://github.com/ayachish",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "arthurtyukayev",
+      "name": "Arthur Tyukayev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9029936?v=4",
+      "profile": "https://tyukayev.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jgable",
+      "name": "Jacob Gable",
+      "avatar_url": "https://avatars.githubusercontent.com/u/164497?v=4",
+      "profile": "https://github.com/jgable",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "BeeMargarida",
+      "name": "Ana Margarida Silva",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25725586?v=4",
+      "profile": "https://beemargarida.github.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

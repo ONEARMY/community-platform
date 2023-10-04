@@ -504,21 +504,3 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
 }
 
 export default HowtoDescription
-{
-  /* <Divider
-sx={{
-  width: '100vw',
-  position: 'relative',
-  left: '50%',
-  right: '50%',
-  margin: '15px -50vw 0 -50vw',
-  border: '1px solid black',
-}}
-/>
-<HowToStatistics
-viewCount={viewCount!}
-usefulCount={props.votedUsefulCount}
-commentCount={props.commentsCount}
-stepCount={howto.steps.length}
-/> */
-}

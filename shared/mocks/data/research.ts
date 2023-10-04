@@ -5,6 +5,7 @@ export const research = {
     _deleted: false,
     _id: '0up6oJCPP3M9bDYx34Et',
     _modified: '2022-03-27T22:10:11.271Z',
+    _contentModifiedTimestamp: '2022-03-27T22:10:11.271Z',
     creatorCountry: 'ge',
     description: 'qwertyefew',
     moderation: 'accepted',

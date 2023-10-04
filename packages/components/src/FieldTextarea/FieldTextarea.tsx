@@ -13,11 +13,19 @@ export interface Props extends FieldProps {
   customOnBlur?: (event: any) => void
 }
 
+type InputModifiers = {
+  capitalize?: boolean
+  trim?: boolean
+}
+
 const capitalizeFirstLetter = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
 
-const processInputModifiers = (value: any, modifiers: any = {}) => {
+const processInputModifiers = (value: any, modifiers: InputModifiers) => {
   if (typeof value !== 'string') return value
+  if (modifiers.trim) {
+    value = value.trim()
+  }
   if (modifiers.capitalize) {
     value = capitalizeFirstLetter(value)
   }

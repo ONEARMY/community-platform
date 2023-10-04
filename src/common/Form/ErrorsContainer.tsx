@@ -2,20 +2,7 @@ import { Box, Card, Text } from 'theme-ui'
 
 import { headings } from './labels'
 
-interface IErrors {
-  [key: string]: string
-}
-
-interface ILabels {
-  [key: string]: { title: string }
-}
-
-interface IErrorsListSet {
-  errors: IErrors[]
-  keys: string[]
-  labels: ILabels[]
-  title?: string
-}
+import type { IErrorsListSet } from './types'
 
 interface IProps {
   errorsListSet: IErrorsListSet[]

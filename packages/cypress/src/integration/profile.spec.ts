@@ -39,7 +39,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy="Username"]').should('contain.text', admin.userName)
       cy.get('[data-cy=adminEdit]').should('not.exist')
       cy.visit(`/u/${admin.userName}/edit`)
-      cy.get('[data-cy=auth-route-deny]').should('exist')
+      cy.get('[data-cy=BlockedRoute]').should('exist')
     })
   })
 
@@ -71,32 +71,6 @@ describe('[Profile]', () => {
       cy.get('[data-cy=Username]').contains(`${userName}`).click()
       cy.get('[data-testid=research-link]').click()
       cy.get('[data-cy=Username]').contains(`${userName}`).should('exist')
-    })
-  })
-
-  describe('[By Admin]', () => {
-    beforeEach(() => {
-      cy.login(admin.email, admin.password)
-    })
-    it('[Can edit another user profile]', () => {
-      cy.visit(`/u/${subscriber.userName}`)
-      cy.get('[data-cy=userDisplayName]').should(
-        'contain.text',
-        subscriber.displayName,
-      )
-      cy.get('[data-cy=UserAdminEdit]').click()
-      cy.url().should('include', `/u/${subscriber.userName}/edit`)
-      const editedName = `EDITED ${subscriber.displayName}`
-      cy.get("input[name='displayName']")
-        .should('have.value', subscriber.displayName)
-        .clear()
-        .type(editedName)
-      cy.get('[data-cy=save]').should('not.be.disabled')
-      cy.get('[data-cy=save]').click()
-      cy.wait(2000)
-      cy.get('[data-cy=save]').should('not.be.disabled')
-      cy.visit(`/u/${subscriber.userName}`)
-      cy.get('[data-cy=userDisplayName]').should('contain.text', editedName)
     })
   })
 })

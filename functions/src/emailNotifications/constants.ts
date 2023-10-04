@@ -5,3 +5,6 @@ export const PP_PROJECT_IMAGE = `http://cdn.mcauto-images-production.sendgrid.ne
 
 export const PK_PROJECT_NAME = 'Project Kamp'
 export const PP_PROJECT_NAME = 'Precious Plastic'
+
+export const PP_SIGNOFF = 'The Precious Plastic Team'
+export const PK_SIGNOFF = 'The Project Kamp Team'

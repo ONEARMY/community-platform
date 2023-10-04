@@ -3,8 +3,6 @@ import type { CSSObject } from '@styled-system/css'
 import type { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
 import { MODULE } from 'src/modules'
-import { AdminModule } from 'src/modules/admin'
-
 /**
  * Import all pages for use in lazy loading
  * NOTE - requires default export in page class (https://reactjs.org/docs/code-splitting.html#named-exports)
@@ -13,7 +11,7 @@ const HowtoPage = lazy(
   () => import(/* webpackChunkName: "Howto" */ './Howto/Howto'),
 )
 const SettingsPage = lazy(
-  () => import(/* webpackChunkName: "Settings" */ './Settings'),
+  () => import(/* webpackChunkName: "Settings" */ './UserSettings'),
 )
 
 const AcademyPage = lazy(
@@ -193,7 +191,7 @@ export const COMMUNITY_PAGES: IPageMeta[] = [
   ResearchModule,
 ]
 /** Additional pages to show in signed-in profile dropdown */
-export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings, AdminModule]
+export const COMMUNITY_PAGES_PROFILE: IPageMeta[] = [settings]
 export const POLICY_PAGES: IPageMeta[] = [privacyPolicy, termsPolicy]
 export const NO_HEADER_PAGES: IPageMeta[] = [
   user,

@@ -1,11 +1,10 @@
+import * as React from 'react'
 import arrayMutators from 'final-form-arrays'
 import { observer } from 'mobx-react'
-import * as React from 'react'
 import { Field, Form } from 'react-final-form'
-import type { RouteComponentProps } from 'react-router'
 import { Prompt } from 'react-router'
 import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
-import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import styled from '@emotion/styled'
 import {
   Button,
   FieldInput,
@@ -15,19 +14,21 @@ import {
   ConfirmModal,
   DownloadStaticFile,
 } from 'oa-components'
-import type { ResearchEditorOverviewUpdate } from 'oa-components'
+
+import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { FileInputField } from 'src/common/Form/FileInput.field'
-import type { IResearch } from 'src/models/research.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
-  required,
-  minValue,
   composeValidators,
+  draftValidationWrapper,
+  minValue,
+  required,
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
   validateTitle,
 } from 'src/utils/validators'
-import styled from '@emotion/styled'
 import { UpdateSubmitStatus } from './SubmitStatus'
 import {
   RESEARCH_TITLE_MAX_LENGTH,
@@ -35,6 +36,12 @@ import {
   RESEARCH_MAX_LENGTH,
 } from '../../constants'
 import { MAX_LINK_LENGTH } from '../../../constants'
+import { buttons, errors, headings, update } from '../../labels'
+import { ResearchErrors } from './ResearchErrors'
+
+import type { RouteComponentProps } from 'react-router'
+import type { IResearch } from 'src/models/research.models'
+import type { ResearchEditorOverviewUpdate } from 'oa-components'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -62,13 +69,17 @@ const beforeUnload = (e) => {
 }
 
 export const ResearchUpdateForm = observer((props: IProps) => {
+  const { formValues, parentType, redirectUrl } = props
+  const { description, fileLink, files, images, title, videoUrl } = update
+  const { deletion, draft } = buttons
+
   const store = useResearchStore()
-  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false)
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
   const [showInvalidFileWarning, setInvalidFileWarning] =
     React.useState<boolean>(false)
   const [isDraft, setIsDraft] = React.useState<boolean>(
-    props.formValues.status === 'draft',
+    formValues.status === 'draft',
   )
   const [fileEditMode, setFileEditMode] = React.useState(false)
 
@@ -77,6 +88,16 @@ export const ResearchUpdateForm = observer((props: IProps) => {
       window.removeEventListener('beforeunload', beforeUnload, false)
     }
   }, [store.updateUploadStatus?.Complete])
+
+  // Managing locked state
+  React.useEffect(() => {
+    if (store.activeUser)
+      store.lockResearchUpdate(store.activeUser.userName, props.formValues._id)
+
+    return () => {
+      store.unlockResearchUpdate(props.formValues._id)
+    }
+  }, [store.activeUser])
 
   const trySubmitForm = (isDraft: boolean) => {
     const form = document.getElementById('updateForm')
@@ -113,8 +134,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   const handleDelete = async (_updateId: string) => {
     setShowDeleteModal(false)
     await store.deleteUpdate(_updateId)
-    if (props.redirectUrl) {
-      window.location.assign(props.redirectUrl)
+    if (redirectUrl) {
+      window.location.assign(redirectUrl)
     }
   }
 
@@ -135,6 +156,12 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     [store.updateUploadStatus.Complete, beforeUnload],
   )
 
+  const draftButtonText =
+    formValues.moderation !== 'draft' ? draft.create : draft.update
+  const isEdit = parentType === 'edit'
+  const publishButtonText = isEdit ? 'Save' : 'Add update'
+  const pageTitle = headings.update[parentType]
+
   return (
     <>
       {showSubmitModal && (
@@ -150,13 +177,23 @@ export const ResearchUpdateForm = observer((props: IProps) => {
         onSubmit={(v) => {
           onSubmit(v as IResearch.Update)
         }}
-        initialValues={props.formValues}
+        initialValues={formValues}
         mutators={{
+          setAllowDraftSaveFalse,
+          setAllowDraftSaveTrue,
           ...arrayMutators,
         }}
         validateOnBlur
         decorators={[unloadDecorator]}
-        render={({ submitting, dirty, handleSubmit, values }) => {
+        render={({
+          dirty,
+          handleSubmit,
+          hasValidationErrors,
+          errors,
+          submitting,
+          submitFailed,
+          values,
+        }) => {
           return (
             <Flex
               mx={-2}
@@ -181,11 +218,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     <Card sx={{ bg: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                         <Heading>
-                          {props.parentType === 'create' ? (
-                            <span>New update</span>
-                          ) : (
-                            <span>Edit your update</span>
-                          )}{' '}
+                          <span>{pageTitle}</span>{' '}
                         </Heading>
                         <Box ml="15px">
                           <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
@@ -206,8 +239,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title" mb={2}>
-                                Title of this update
+                              <Label htmlFor="title" sx={{ mb: 2 }}>
+                                {title.title}
                               </Label>
                               <Field
                                 id="title"
@@ -218,8 +251,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                   required,
                                   minValue(RESEARCH_TITLE_MIN_LENGTH),
                                   validateTitle(
-                                    props.parentType,
-                                    props.formValues._id,
+                                    parentType,
+                                    formValues._id,
                                     store,
                                   ),
                                 )}
@@ -228,21 +261,23 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 maxLength={RESEARCH_TITLE_MAX_LENGTH}
                                 minLength={RESEARCH_TITLE_MIN_LENGTH}
                                 showCharacterCount
-                                placeholder={`Title of this update (max ${RESEARCH_TITLE_MAX_LENGTH} characters)`}
+                                placeholder={title.placeholder}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="description" mb={2}>
-                                Description of this update
+                              <Label htmlFor="description" sx={{ mb: 2 }}>
+                                {description.title}
                               </Label>
                               <Field
                                 id="description"
                                 name="description"
                                 data-cy="intro-description"
-                                validate={(value, allValues: any) =>
-                                  allValues.isDraft
-                                    ? undefined
-                                    : required(value)
+                                validate={(value, allValues) =>
+                                  draftValidationWrapper(
+                                    value,
+                                    allValues,
+                                    required,
+                                  )
                                 }
                                 validateFields={[]}
                                 isEqual={COMPARISONS.textInput}
@@ -254,11 +289,11 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                 }}
                                 maxLength={RESEARCH_MAX_LENGTH}
                                 showCharacterCount
-                                placeholder={`Explain what is happening in your research (max ${RESEARCH_MAX_LENGTH} characters)`}
+                                placeholder={description.placeholder}
                               />
                             </Flex>
-                            <Label htmlFor={`images`} mb={2}>
-                              Upload image(s) for this update
+                            <Label htmlFor={`images`} sx={{ mb: 2 }}>
+                              {images.title}
                             </Label>
                             <Flex
                               sx={{
@@ -315,14 +350,14 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                               </ImageInputFieldWrapper>
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor={`videoUrl`} mb={2}>
-                                Or embed a YouTube video
+                              <Label htmlFor={`videoUrl`} sx={{ mb: 2 }}>
+                                {videoUrl.title}
                               </Label>
                               <Field
                                 name={`videoUrl`}
                                 data-cy="videoUrl"
                                 component={FieldInput}
-                                placeholder="https://youtube.com/watch?v="
+                                placeholder={videoUrl.placeholder}
                                 validate={(url, values) =>
                                   validateMedia(url, values)
                                 }
@@ -340,13 +375,12 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                     color: 'error',
                                   }}
                                 >
-                                  Please provide either a file link or upload a
-                                  file, not both.
+                                  {files.error}
                                 </Text>
                               )}
                             </Flex>
                             <Label htmlFor="files" mb={2}>
-                              Attach your file(s) for this update
+                              {files.title}
                             </Label>
                             {props.formValues.files?.length > 0 &&
                             props.parentType === 'edit' &&
@@ -373,8 +407,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                     setFileEditMode(true)
                                   }}
                                 >
-                                  Re-upload files (this will delete the existing
-                                  ones)
+                                  {buttons.files}
                                 </Button>
                               </Flex>
                             ) : (
@@ -390,7 +423,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                     htmlFor="file-download-link"
                                     style={{ fontSize: '12px' }}
                                   >
-                                    Add a download link
+                                    {fileLink.title}
                                   </Label>
                                   <Field
                                     id="fileLink"
@@ -410,7 +443,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                     htmlFor="file-download-link"
                                     style={{ fontSize: '12px' }}
                                   >
-                                    Or upload your files here
+                                    {files.title}
                                   </Label>
                                   <Field
                                     hasText={false}
@@ -422,7 +455,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                                     mt={4}
                                     sx={{ fontSize: 1 }}
                                   >
-                                    Maximum file size 50MB
+                                    {files.description}
                                   </Text>
                                 </Flex>
                               </>
@@ -461,13 +494,9 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     disabled={submitting}
                     sx={{ width: '100%', display: 'block', mt: 0 }}
                   >
-                    {props.formValues.status === 'draft' ? (
-                      <span>Save to draft</span>
-                    ) : (
-                      <span>Revert to draft</span>
-                    )}
+                    <span>{draftButtonText}</span>
                   </Button>
-                  {props.parentType === 'edit' ? (
+                  {isEdit ? (
                     <Button
                       data-cy={'delete'}
                       onClick={(evt) => {
@@ -479,13 +508,13 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       disabled={submitting}
                       sx={{ width: '100%', display: 'block', mt: 3 }}
                     >
-                      Delete this update
+                      {deletion.text}
                     </Button>
                   ) : null}
                   <Button
+                    large
                     id="submit-form"
                     data-testid="submit-form"
-                    large
                     data-cy={'submit'}
                     onClick={(evt) => {
                       trySubmitForm(false)
@@ -501,10 +530,14 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       justifyContent: 'center',
                     }}
                   >
-                    <span>
-                      {props.parentType === 'edit' ? 'Save' : 'Add update'}
-                    </span>
+                    <span>{publishButtonText}</span>
                   </Button>
+
+                  <ResearchErrors
+                    errors={errors}
+                    isVisible={submitFailed && hasValidationErrors}
+                    labels={update}
+                  />
 
                   {store.activeResearchItem ? (
                     <ResearchEditorOverview
@@ -512,11 +545,11 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       updates={getResearchUpdates(
                         store.activeResearchItem.updates || [],
                         store.activeResearchItem._id,
-                        props.parentType !== 'edit',
+                        !isEdit,
                         values.title,
                       )}
                       researchSlug={store.activeResearchItem?.slug}
-                      showCreateUpdateButton={props.parentType === 'edit'}
+                      showCreateUpdateButton={isEdit}
                       showBackToResearchButton={true}
                     />
                   ) : null}
@@ -524,11 +557,11 @@ export const ResearchUpdateForm = observer((props: IProps) => {
               </Flex>
               <ConfirmModal
                 isOpen={showDeleteModal}
-                message="Are you sure you want to delete this update?"
-                confirmButtonText="Delete"
+                message={deletion.message}
+                confirmButtonText={deletion.confirm}
                 handleCancel={() => setShowDeleteModal(false)}
                 handleConfirm={() =>
-                  handleDelete && handleDelete(props.formValues._id)
+                  handleDelete && handleDelete(formValues._id)
                 }
               />
             </Flex>
@@ -565,19 +598,19 @@ const getResearchUpdates = (
   ].filter(Boolean)
 
 /**
- * Ensure the url is formatted correctly
- * Ensure either url, images or files are included (not both of each)
+ * Ensure either url or images included (not both), and any url formatted correctly
  */
 const validateMedia = (videoUrl: string, values: any) => {
-  const images = values.images ?? []
+  const { both, empty, invalidUrl } = errors.videoUrl
+  const images = values.images
 
   if (videoUrl) {
-    if (images.length) return 'Do not include both images and video'
-
+    if (images && images[0]) {
+      return both
+    }
     const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
     const urlValid = ytRegex.test(videoUrl)
-    return urlValid ? null : 'Please provide a valid YouTube Url'
+    return urlValid ? null : invalidUrl
   }
-
-  if (!images.length) return 'Include either images or video'
+  return images && images[0] ? null : empty
 }

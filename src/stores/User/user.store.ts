@@ -228,6 +228,9 @@ export class UserStore extends ModuleStore {
       ? (values as any)
       : { ...toJS(this.user), ...toJS(values) }
 
+    if (updatedUserProfile.profileType !== 'workspace')
+      delete updatedUserProfile['workspaceType']
+
     // TODO: Remove this once source of duplicate profiles determined
     if (!updatedUserProfile.profileCreationTrigger) {
       updatedUserProfile.profileCreationTrigger = trigger

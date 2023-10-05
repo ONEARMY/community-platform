@@ -93,6 +93,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                 maxLength={MAX_PIN_LENGTH}
                 style={{ height: 'inherit' }}
                 rows="1"
+                showCharacterCount
                 placeholder={fields.mapPinDescription.placeholder}
                 validate={required}
                 validateFields={[]}

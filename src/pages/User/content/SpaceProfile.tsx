@@ -10,7 +10,16 @@ import { Box, Container, Flex, Heading, Image, Paragraph } from 'theme-ui'
 import Slider from 'react-slick'
 import 'src/assets/css/slick.min.css'
 
-import { MemberBadge, Icon, Username, UserStatistics } from 'oa-components'
+import {
+  MemberBadge,
+  Icon,
+  Username,
+  UserStatistics,
+  Tab,
+  TabsList,
+  Tabs,
+  TabPanel,
+} from 'oa-components'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
 // Plastic types
@@ -258,21 +267,35 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               {user.displayName}
             </Heading>
           </Flex>
-          {user.about && <Paragraph>{user.about}</Paragraph>}
 
-          {user.profileType === ProfileType.COLLECTION_POINT &&
-            user.collectedPlasticTypes &&
-            renderPlasticTypes(user.collectedPlasticTypes)}
+          <Tabs defaultValue={0}>
+            <TabsList>
+              <Tab>Profile</Tab>
+              <Tab>Contributions</Tab>
+              <Tab>Impact</Tab>
+              <Tab>Contact</Tab>
+            </TabsList>
+            <TabPanel>
+              {user.about && <Paragraph>{user.about}</Paragraph>}
 
-          {user.profileType === ProfileType.COLLECTION_POINT &&
-            user.openingHours &&
-            renderOpeningHours(user.openingHours)}
+              {user.profileType === ProfileType.COLLECTION_POINT &&
+                user.collectedPlasticTypes &&
+                renderPlasticTypes(user.collectedPlasticTypes)}
 
-          {user.profileType === ProfileType.MACHINE_BUILDER &&
-            user.machineBuilderXp &&
-            renderMachineBuilderXp(user.machineBuilderXp)}
+              {user.profileType === ProfileType.COLLECTION_POINT &&
+                user.openingHours &&
+                renderOpeningHours(user.openingHours)}
 
-          <UserContactAndLinks links={userLinks} />
+              {user.profileType === ProfileType.MACHINE_BUILDER &&
+                user.machineBuilderXp &&
+                renderMachineBuilderXp(user.machineBuilderXp)}
+
+              <UserContactAndLinks links={userLinks} />
+            </TabPanel>
+            <TabPanel>
+              <UserCreatedDocuments docs={docs} />
+            </TabPanel>
+          </Tabs>
         </Box>
         <Box
           sx={{
@@ -290,7 +313,8 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             >
               <UserStatistics
                 userName={user.userName}
-                country={user.location?.country}
+                count
+                ry={user.location?.country}
                 isVerified={stats.verified}
                 isSupporter={!!user.badges?.supporter}
                 howtoCount={docs?.howtos.length || 0}
@@ -301,7 +325,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
           </MobileBadge>
         </Box>
       </Flex>
-      <UserCreatedDocuments docs={docs} />
     </Container>
   )
 }

@@ -6,10 +6,14 @@ import path from 'path'
 export type SupportedEmailTemplates =
   | 'supporter-badge-removed'
   | 'supporter-badge-added'
-  | 'how-to-rejected'
-  | 'map-pin-rejected'
   | 'verified-badge-added'
+  | 'how-to-submission'
+  | 'how-to-approval'
+  | 'how-to-rejected'
   | 'how-to-needs-improvements'
+  | 'map-pin-submission'
+  | 'map-pin-approval'
+  | 'map-pin-rejected'
   | 'map-pin-needs-improvements'
 
 const dirPath = (__dirname || '').replace('/templates', '')

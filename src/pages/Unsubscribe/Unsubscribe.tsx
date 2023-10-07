@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react'
 import { useEffect, useState } from 'react'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { EmailNotificationFrequency } from 'oa-shared'
 import { useCommonStores } from 'src'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 import { logger } from 'src/logger'
@@ -46,60 +45,49 @@ const StatusMessage = ({ status }: { status: Status }) => {
   }
 }
 
-const Unsubscribe = observer(({ userName }: { userName: string }) => {
-  const [status, setStatus] = useState<Status>(Status.LOADING)
-  const { userStore } = useCommonStores().stores
+const Unsubscribe = observer(
+  ({ unsubscribeToken }: { unsubscribeToken: string }) => {
+    const [status, setStatus] = useState<Status>(Status.LOADING)
+    const { userStore } = useCommonStores().stores
 
-  useEffect(() => {
-    const unsubscribeUser = async () => {
-      try {
-        const user = await userStore.getUserByUsername(userName)
-        if (!user) {
-          throw new Error('User not found.')
+    useEffect(() => {
+      const unsubscribeUser = async () => {
+        try {
+          await userStore.unsubscribeUser(unsubscribeToken)
+          setStatus(Status.SUCCESS)
+        } catch (error) {
+          logger.debug('Error unsubscribing user:', error)
+          setStatus(Status.ERROR)
         }
-        await userStore.updateUserProfile(
-          {
-            ...user,
-            notification_settings: {
-              emailFrequency: EmailNotificationFrequency.NEVER,
-            },
-          },
-          'unsubscribe',
-          userName,
-        )
-        setStatus(Status.SUCCESS)
-      } catch (error) {
-        logger.debug('Error unsubscribing user:', error)
-        setStatus(Status.ERROR)
       }
-    }
 
-    unsubscribeUser()
-  }, [])
+      unsubscribeUser()
+    }, [])
 
-  return (
-    <Flex
-      sx={{ flexDirection: 'column', maxWidth: '400px', textAlign: 'center' }}
-      mx="auto"
-      mt={15}
-      data-cy="unsubscribe"
-    >
-      <Card p={3} bg={'softblue'} sx={{}} mb={3}>
-        <Heading>Unsubscribe </Heading>
-      </Card>
-      <StatusMessage status={status} />
-    </Flex>
-  )
-})
+    return (
+      <Flex
+        sx={{ flexDirection: 'column', maxWidth: '400px', textAlign: 'center' }}
+        mx="auto"
+        mt={15}
+        data-cy="unsubscribe"
+      >
+        <Card p={3} bg={'softblue'} sx={{}} mb={3}>
+          <Heading>Unsubscribe </Heading>
+        </Card>
+        <StatusMessage status={status} />
+      </Flex>
+    )
+  },
+)
 
 const UnsubscribeRoute = () => (
   <Router>
     <Switch>
       <Route
         exact
-        path="/unsubscribe/:userName"
+        path="/unsubscribe/:unsubscribeToken"
         component={(props) => (
-          <Unsubscribe userName={props.match.params.userName} />
+          <Unsubscribe unsubscribeToken={props.match.params.unsubscribeToken} />
         )}
       ></Route>
     </Switch>

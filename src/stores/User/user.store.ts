@@ -17,6 +17,7 @@ import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { RootStore } from '..'
 import type { IConvertedFileMeta } from '../../types'
+import { EmailNotificationFrequency } from 'oa-shared'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
@@ -267,6 +268,26 @@ export class UserStore extends ModuleStore {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this.setUpdateStatus('Complete')
+  }
+
+  public async unsubscribeUser(unsubscribeToken: string) {
+    const [user] = await this.db
+      .collection(COLLECTION_NAME)
+      .getWhere('unsubscribeToken', '==', unsubscribeToken)
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    await this.db
+      .collection(COLLECTION_NAME)
+      .doc(user._id)
+      .update({
+        _id: user._id,
+        notification_settings: {
+          emailFrequency: EmailNotificationFrequency.NEVER,
+        },
+      })
   }
 
   public async refreshActiveUserDetails() {

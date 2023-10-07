@@ -329,6 +329,7 @@ export class HowtoStore extends ModuleStore {
         ...(howtoData.moderationFeedback || []),
         ...newFeedback,
       ]
+      moderationUpdate.moderation = 'improvements-needed'
     }
 
     await dbRef.update(moderationUpdate)

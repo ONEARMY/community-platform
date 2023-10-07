@@ -46,6 +46,7 @@ export const users = {
     notification_settings: {
       emailFrequency: 'daily',
     },
+    unsubscribeToken: '123abc',
   },
   admin: {
     _authID: 'RaU8WzbqSIQFdj7iHxiz3fWz0cj1',

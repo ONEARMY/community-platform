@@ -5,7 +5,7 @@ context('unsubscribe', () => {
   const betaTester = users['beta-tester']
 
   beforeEach(() => {
-    cy.visit(`/unsubscribe/${betaTester.userName}`)
+    cy.visit(`/unsubscribe/${betaTester.unsubscribeToken}`)
   })
 
   it('should render Unsubscribe page', () => {

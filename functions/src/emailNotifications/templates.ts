@@ -111,13 +111,13 @@ export const getNotificationEmailHtml = (
           <table class="settings-table-container">
             <tr>
               <td align="center">
-                <div class="notifications">
+                <p>
                   Manage your notifications
                   <a href="${SITE_URL}/settings"> here</a>
-                </div>
-                <div class="notifications">
-                <a href="${SITE_URL}/unsubscribe/${unsubscribeToken}">Unsubscribe</a>
-              </div>
+                </p>
+                <p>
+                  <a href="${SITE_URL}/unsubscribe/${unsubscribeToken}">Unsubscribe</a>
+                </p>
               </td>
             </tr>
           </table>

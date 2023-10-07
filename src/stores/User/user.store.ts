@@ -254,7 +254,7 @@ export class UserStore extends ModuleStore {
     await this.db
       .collection(COLLECTION_NAME)
       .doc(updatedUserProfile._id)
-      .update(updatedUserProfile)
+      .set(updatedUserProfile)
 
     if (!adminEditableUserId) {
       this.updateActiveUser(updatedUserProfile)

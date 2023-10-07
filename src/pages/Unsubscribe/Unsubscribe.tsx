@@ -1,4 +1,3 @@
-// import { useTheme } from '@emotion/react'
 import { observer } from 'mobx-react'
 import { useEffect, useState } from 'react'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'

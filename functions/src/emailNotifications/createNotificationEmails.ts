@@ -1,15 +1,16 @@
 import { EmailNotificationFrequency } from 'oa-shared'
 import { INotification } from '../../../src/models'
-import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
 import { getNotificationEmail } from './templates'
 import { getUserEmail } from './utils'
+import { v4 as uuid } from 'uuid'
 
 const updateEmailedNotifications = async (
   user: FirebaseFirestore.DocumentSnapshot<IUserDB>,
   emailedNotifications: INotification[],
   emailField: string,
+  unsubscribeToken?: string,
 ) => {
   const updatedNotifications = user.data().notifications.map((notification) => {
     if (
@@ -26,7 +27,10 @@ const updateEmailedNotifications = async (
   })
 
   await user.ref
-    .update({ notifications: updatedNotifications })
+    .update({
+      notifications: updatedNotifications,
+      ...(unsubscribeToken ? { unsubscribeToken } : {}),
+    })
     .catch((error) => {
       throw new Error(
         `Error updating user notifications: ${JSON.stringify(error)}`,
@@ -62,16 +66,24 @@ const handlePendingEmailEntry = async (
   }
 
   try {
+    // Associate a unique token with the user in order to create an encrypted unsubscribe link.
+    const unsubscribeToken = toUser.unsubscribeToken ?? uuid()
+
     // Adding emails to this collection triggers an email notification to be sent to the user
     const sentEmailRef = await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
-      message: getNotificationEmail(toUser, pendingNotifications),
+      message: getNotificationEmail(
+        toUser,
+        pendingNotifications,
+        unsubscribeToken,
+      ),
     })
 
     await updateEmailedNotifications(
       toUserDoc,
       pendingNotifications,
       sentEmailRef.id,
+      unsubscribeToken,
     )
   } catch (error) {
     await updateEmailedNotifications(toUserDoc, pendingNotifications, 'failed')

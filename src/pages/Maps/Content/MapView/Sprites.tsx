@@ -79,36 +79,3 @@ const getClusterSizes = (cluster: MarkerCluster) => {
       }
   }
 }
-/*************************************************************************
- *  Deprecated
- *  The code below is not currently in use, but will be retained
- *  in case we decide in the near future to add more fine-grained
- *  control of clusters, such as a more-linear size scaling (see scale fn)
- *  or custom classes
- *************************************************************************/
-
-// if(cluster.getChildCount() > 999) {
-//   className.push('icon-cluster-thousands')
-// } else if(cluster.getChildCount() > 99) {
-//   className.push('icon-cluster-hundreds')
-// } else if(cluster.getChildCount() > 9) {
-//   className.push('icon-cluster-tens')
-// }
-
-// const iconSize = scale(0, totalEntries, cluster.getChildCount(), 35, 50)
-// const fontSize = scale(0, totalEntries, cluster.getChildCount(), 24, 36)
-// const lineHeight = scale(0, totalEntries, cluster.getChildCount(), 36, 50)
-
-// Scale the cluster size between 35 and 50
-// https://stackoverflow.com/a/929104
-// function scale(
-//   oldMin: number,
-//   oldMax: number,
-//   oldValue: number,
-//   newMin: number,
-//   newMax: number,
-// ): number {
-//   return Math.ceil(
-//     ((oldValue - oldMin) / (oldMax - oldMin)) * (newMax - newMin) + newMin,
-//   )
-// }

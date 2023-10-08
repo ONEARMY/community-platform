@@ -31,9 +31,12 @@ export function render(url) {
             feedbackTimestamp: '2023-10-07T19:31:21.944Z',
           },
         ],
+        comments: 'Mock Howto Moderation Comments',
+        slug: 'mock-howto-title',
       },
       mappin: {
         comments: 'Mock Mappin Moderation Comments',
+        _id: 'mock-mappin-id',
       },
     })
     return html

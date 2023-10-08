@@ -7,8 +7,8 @@ function envCheck() {
       exec: () => /yarn/.test(process.env.npm_execpath),
     },
     {
-      message: 'Use Node v18',
-      exec: () => process.versions.node.split('.')[0] === '18',
+      message: 'Use Node v20',
+      exec: () => process.versions.node.split('.')[0] === '20',
     },
   ]
 

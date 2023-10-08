@@ -1,4 +1,10 @@
-import { IHowtoDB, IMapPin, INotification, IUserDB } from '../../../src/models'
+import {
+  IHowtoDB,
+  IMapPin,
+  INotification,
+  IUser,
+  IUserDB,
+} from '../../../src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
 import prettier from 'prettier'
 import {
@@ -15,7 +21,11 @@ export interface Email {
   subject: string
 }
 
-export const getEmailTemplate = (styles: string, content: string) =>
+export const getNotificationEmailHtml = (
+  user: IUserDB,
+  notifications: INotification[],
+  unsubscribeToken: string,
+) =>
   prettier.format(
     `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html>
@@ -42,10 +52,20 @@ export const getEmailTemplate = (styles: string, content: string) =>
             border: 0;
           }
           .settings-table-container,
-          .project-image-table-container {
+          .project-image-table-container,
+          .greeting-container {
             margin-bottom: 8%;
           }
-          ${styles}
+          .greeting-container,
+          .notifications-container {
+            margin-left: 8%;
+          }
+          .notifications-header {
+            font-size: 24px;
+          }
+          .notifications-header-icon {
+            margin-right: 8px;
+          }
           @media only screen and (max-width: 550px) {
             .table-container {
               width: 100%;
@@ -69,15 +89,35 @@ export const getEmailTemplate = (styles: string, content: string) =>
                 </td>
               </tr>
             </table>
-            ${content}
+            <div align="left" class="greeting-container">
+            <p>Hey ${user.displayName}</p>
+            <p>You've missed notifications. No worries.</p>
+            <p>I'm here to give you an overview :)</p>
+          </div>
+          <div align="left" class="notifications-container">
+            <div class="notifications-header">
+              <img
+                class="notifications-header-icon"
+                width="30"
+                height="24"
+                alt=""
+                src="${NOTIFICATION_LIST_IMAGE}"
+              />
+              Missed Notifications
+            </div>
+            ${notifications.map(getNotificationListItem).join('')}
+          </div>
           </div>
           <table class="settings-table-container">
             <tr>
               <td align="center">
-                <div class="notifications">
+                <p>
                   Manage your notifications
                   <a href="${SITE_URL}/settings"> here</a>
-                </div>
+                </p>
+                <p>
+                  <a href="${SITE_URL}/unsubscribe/${unsubscribeToken}">Unsubscribe</a>
+                </p>
               </td>
             </tr>
           </table>
@@ -92,44 +132,10 @@ export const getEmailTemplate = (styles: string, content: string) =>
 export const getNotificationEmail = (
   user: IUserDB,
   notifications: INotification[],
+  unsubscribeToken: string,
 ): Email => {
-  const styles = `
-    .greeting-container {
-      margin-bottom: 8%;
-    }
-    .greeting-container,
-    .notifications-container {
-      margin-left: 8%;
-    }
-    .notifications-header {
-      font-size: 24px;
-    }
-    .notifications-header-icon {
-      margin-right: 8px;
-    }
-  `
-  const content = `
-    <div align="left" class="greeting-container">
-      <p>Hey ${user.displayName}</p>
-      <p>You've missed notifications. No worries.</p>
-      <p>I'm here to give you an overview :)</p>
-    </div>
-    <div align="left" class="notifications-container">
-      <div class="notifications-header">
-        <img
-          class="notifications-header-icon"
-          width="30"
-          height="24"
-          alt=""
-          src="${NOTIFICATION_LIST_IMAGE}"
-        />
-        Missed Notifications
-      </div>
-      ${notifications.map(getNotificationListItem).join('')}
-    </div>
-  `
   return {
-    html: getEmailTemplate(styles, content),
+    html: getNotificationEmailHtml(user, notifications, unsubscribeToken),
     subject: `You've missed notifications from ${getProjectName()}`,
   }
 }

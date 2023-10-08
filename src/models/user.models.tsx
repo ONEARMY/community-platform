@@ -50,6 +50,8 @@ export interface IUser {
   notifications?: INotification[]
   profileCreated?: ISODateString
   profileCreationTrigger?: string
+  // Used to generate an encrypted unsubscribe url in emails
+  unsubscribeToken?: string
 }
 
 export interface IUserBadges {

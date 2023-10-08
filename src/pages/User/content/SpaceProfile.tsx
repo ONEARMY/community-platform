@@ -6,19 +6,16 @@ import type {
 } from 'src/models/userPreciousPlastic.models'
 
 import { Box, Container, Flex, Heading, Image, Paragraph } from 'theme-ui'
-// import slick and styles
-import Slider from 'react-slick'
-import 'src/assets/css/slick.min.css'
 
 import {
   MemberBadge,
-  Icon,
-  Username,
-  UserStatistics,
   Tab,
   TabsList,
   Tabs,
   TabPanel,
+  Username,
+  UserStatistics,
+  ImageGallery,
 } from 'oa-components'
 import UserCreatedDocuments from './UserCreatedDocuments'
 import { useCommonStores } from 'src/index'
@@ -43,28 +40,10 @@ import { AuthWrapper } from 'src/common/AuthWrapper'
 
 import type { UserCreatedDocs } from '.'
 
-interface IBackgroundImageProps {
-  bgImg: string
-}
-
 interface IProps {
   user: IUserPP
   docs: UserCreatedDocs | undefined
 }
-
-const SliderImage = (props: IBackgroundImageProps) => (
-  <Box
-    sx={{
-      backgroundImage: `url(${props.bgImg})`,
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
-      height: ['300px', '300px', '300px', '500px'],
-      width: '100%',
-    }}
-    {...props}
-  ></Box>
-)
 
 const MobileBadge = ({ children }) => (
   <Flex
@@ -81,22 +60,6 @@ const MobileBadge = ({ children }) => (
     {children}
   </Flex>
 )
-
-const sliderSettings = {
-  dots: false,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  adaptiveHeight: false,
-  nextArrow: (
-    <Icon glyph="chevron-right" color="white" size={60} marginRight="4px" />
-  ),
-  prevArrow: (
-    <Icon glyph="chevron-left" color="white" size={60} marginRight="4px" />
-  ),
-}
-
-// Comment on 6.05.20 by BG : renderCommitmentBox commented for now, will be reused with #974
 
 const renderPlasticTypes = (plasticTypes: Array<PlasticTypeLabel>) => {
   const renderIcon = (type: string) => {
@@ -185,24 +148,11 @@ const renderMachineBuilderXp = (machineBuilderXp: Array<IMAchineBuilderXp>) => (
 )
 
 export const SpaceProfile = ({ user, docs }: IProps) => {
-  let coverImage = [
-    <SliderImage
-      key="default-image"
-      bgImg="https://i.ibb.co/zhkxbb9/no-image.jpg"
-    />,
-  ]
+  let coverImage: any = []
   if (user.coverImages && user.coverImages.length > 0) {
     const coverImages: Array<IConvertedFileMeta | IUploadedFileMeta> =
       user.coverImages
-    coverImage = coverImages.map(
-      (image: IConvertedFileMeta | IUploadedFileMeta) => {
-        if ('downloadUrl' in image) {
-          return <SliderImage key={image.name} bgImg={image.downloadUrl} />
-        }
-
-        return <SliderImage key={image.name} bgImg={image.objectUrl} />
-      },
-    )
+    coverImage = coverImages
   }
 
   const stats = userStats(user.userName)
@@ -231,7 +181,11 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       data-cy="SpaceProfile"
     >
       <Box sx={{ lineHeight: 0 }}>
-        <Slider {...sliderSettings}>{coverImage}</Slider>
+        <ImageGallery
+          images={coverImage}
+          hideThumbnails={true}
+          showNextPrevButton={true}
+        />
       </Box>
       <Flex
         sx={{

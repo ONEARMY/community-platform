@@ -2,10 +2,10 @@ import 'photoswipe/style.css'
 import { useEffect, useRef, useState } from 'react'
 import PhotoSwipeLightbox from 'photoswipe/lightbox'
 import type { PhotoSwipeOptions } from 'photoswipe/lightbox'
+import { Icon } from '../Icon/Icon'
 import type { CardProps } from 'theme-ui'
 import { Box, Flex, Image as ThemeImage } from 'theme-ui'
 import styled from '@emotion/styled'
-import { relative } from 'path'
 
 interface IUploadedFileMeta {
   downloadUrl: string
@@ -23,6 +23,7 @@ export interface ImageGalleryProps {
   allowPortrait?: boolean
   photoSwipeOptions?: PhotoSwipeOptions
   hideThumbnails?: boolean
+  showNextPrevButton?: boolean
 }
 
 interface IState {
@@ -112,6 +113,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   const activeImage = images[activeImageIndex]
   const imageNumber = images.length
   const showThumbnails = !props.hideThumbnails && images.length >= 1
+  const showNextPrevButton = !!props.showNextPrevButton
 
   return activeImage ? (
     <Flex sx={{ flexDirection: 'column' }}>
@@ -133,51 +135,57 @@ export const ImageGallery = (props: ImageGalleryProps) => {
           alt={activeImage.name}
           crossOrigin=""
         />
-        <button
-          style={{
-            background: 'transparent',
-            border: 0,
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            height: '100%',
-          }}
-          onClick={() =>
-            setActive(
-              activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0,
-            )
-          }
-        >
-          <svg
-            stroke="currentColor"
-            fill="currentColor"
-            strokeWidth="0"
-            viewBox="0 0 24 24"
-            height="1em"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{ width: '60px', height: '60px' }}
-          >
-            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-          </svg>
-        </button>
-        <button
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
-          }}
-          onClick={() =>
-            setActive(
-              activeImageIndex - 1 >= 0
-                ? activeImageIndex - 1
-                : imageNumber - 1,
-            )
-          }
-        >
-          Prev
-        </button>
+        {showNextPrevButton ? (
+          <>
+            <button
+              style={{
+                background: 'transparent',
+                border: 0,
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                height: '100%',
+              }}
+              onClick={() =>
+                setActive(
+                  activeImageIndex + 1 < imageNumber ? activeImageIndex + 1 : 0,
+                )
+              }
+            >
+              <Icon
+                glyph="chevron-right"
+                color="white"
+                size={60}
+                marginRight="4px"
+              />
+            </button>
+            <button
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                background: 'transparent',
+                border: 'none',
+                height: '100%',
+                cursor: 'pointer',
+              }}
+              onClick={() =>
+                setActive(
+                  activeImageIndex - 1 >= 0
+                    ? activeImageIndex - 1
+                    : imageNumber - 1,
+                )
+              }
+            >
+              <Icon
+                glyph="chevron-left"
+                color="white"
+                size={60}
+                marginRight="4px"
+              />
+            </button>
+          </>
+        ) : null}
       </Flex>
       {showThumbnails ? (
         <Flex sx={{ width: '100%', flexWrap: 'wrap' }} mx={[2, 2, '-5px']}>

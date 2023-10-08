@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable max-classes-per-file */
 export class MockDBStore {
   collection = jest.fn().mockReturnThis()

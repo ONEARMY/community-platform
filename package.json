@@ -118,7 +118,6 @@
     "react-router-hash-link": "^2.4.3",
     "react-scripts": "5.0.1",
     "react-slick": "^0.25.2",
-    "react-table": "^6.11.5",
     "react-virtualized": "^9.22.3",
     "rxjs": "^6.6.3",
     "styled-system": "^5.1.5",

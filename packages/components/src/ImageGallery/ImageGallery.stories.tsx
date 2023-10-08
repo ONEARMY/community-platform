@@ -17,7 +17,7 @@ const imageUrls = [
   'https://picsum.photos/id/29/1500/1000',
   'https://picsum.photos/id/50/4000/3000',
   'https://picsum.photos/id/110/800/1200',
-  'https://picsum.photos/id/300/1500/1500',
+  'https://picsum.photos/id/2/1500/1500',
 ]
 
 const testImages: IUploadedFileMeta[] = imageUrls.map((elt, i) => {
@@ -42,4 +42,10 @@ export const Default: StoryFn<typeof ImageGallery> = (
   props: Omit<ImageGalleryProps, 'images'>,
 ) => {
   return <ImageGallery images={testImages} {...props} />
+}
+
+export const NoThumbnails: StoryFn<typeof ImageGallery> = (
+  props: Omit<ImageGalleryProps, 'images'>,
+) => {
+  return <ImageGallery images={testImages} {...props} hideThumbnails />
 }

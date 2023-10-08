@@ -156,4 +156,6 @@ describe('ImageGallery', () => {
       thumbnails[0].firstElementChild?.getAttribute('src'),
     )
   })
+
+  it('supports no thumbnail option', async () => {})
 })

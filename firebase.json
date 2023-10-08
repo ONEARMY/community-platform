@@ -118,5 +118,8 @@
   },
   "storage": {
     "rules": "firebase.storage.rules"
+  },
+  "extensions": {
+    "firestore-send-email": "firebase/firestore-send-email@0.1.27"
   }
 }

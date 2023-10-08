@@ -39,7 +39,12 @@
       }
     ],
     "import/no-duplicates": "error",
-    "import/no-unresolved": "off",
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": ["^src/"]
+      }
+    ],
     "import/no-named-as-default": "off",
     "max-classes-per-file": "error",
     "no-useless-escape": "off",

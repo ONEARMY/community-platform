@@ -28,3 +28,7 @@ Run the following command from the project root directory:
 ```bash
 firebase deploy --only extensions [--project project_id]
 ```
+
+**Note:** Deploying this extensions requires admin access to the target Firebase project. This can be achieved by adding the user to the project with the `Firebase Admin` role.
+
+Project maintainers will have access to the production instances, contributors are recommended to setup their own Firebase project to test the extension.

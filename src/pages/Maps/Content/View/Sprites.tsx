@@ -7,7 +7,7 @@ import Workspace from 'src/pages/User/workspace/Workspace'
 import type { PlatformTheme } from 'oa-themes'
 
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
-import { logger } from 'workbox-core/_private'
+import { logger } from 'src/logger'
 
 /**
  * Generate custom cluster icon, including style formatting, size, image etc.

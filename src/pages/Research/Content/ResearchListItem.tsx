@@ -1,12 +1,11 @@
 import { format } from 'date-fns'
 import { Icon, ModerationStatus, Username, Tooltip } from 'oa-components'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Link } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
-import { Card, Flex, Grid, Heading, Text, Box } from 'theme-ui'
+import { Card, Image, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 
 interface IProps {
@@ -39,7 +38,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 display: ['none', 'block'],
               }}
             >
-              <LazyLoadImage
+              <Image
                 style={{
                   width: `calc(100% + 32px)`,
                   aspectRatio: '1 / 1',
@@ -47,7 +46,7 @@ const ResearchListItem = ({ item }: IProps) => {
                   margin: '-15px',
                   verticalAlign: 'top',
                 }}
-                threshold={500}
+                loading="lazy"
                 src={getItemThumbnail(item)}
                 crossOrigin=""
               />

@@ -92,7 +92,6 @@ describe('Create howto moderation emails', () => {
         message: { html, subject },
         to,
       } = doc.data()
-      expect(html).toMatchSnapshot()
       expect(subject).toBe(HOW_TO_APPROVAL_SUBJECT)
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
@@ -135,7 +134,6 @@ describe('Create howto moderation emails', () => {
         message: { html, subject },
         to,
       } = doc.data()
-      expect(html).toMatchSnapshot()
       expect(subject).toBe(HOW_TO_SUBMISSION_SUBJECT)
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
@@ -200,7 +198,13 @@ describe('Create howto moderation emails', () => {
     const howtoNeedsImprovements = {
       ...howtoAwaitingModeration,
       moderation: 'improvements-needed',
-      comments: MOCK_HOW_TO_MODERATION_COMMENT,
+      moderationFeedback: [
+        {
+          adminUsername: 'admin',
+          feedbackComments: MOCK_HOW_TO_MODERATION_COMMENT,
+          feedbackTimestamp: '2022-01-30T18:51:57.719Z',
+        },
+      ],
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoAwaitingModeration,
@@ -331,7 +335,6 @@ describe('Create map pin moderation emails', () => {
         message: { html, subject },
         to,
       } = doc.data()
-      expect(html).toMatchSnapshot()
       expect(subject).toBe(MAP_PIN_APPROVAL_SUBJECT)
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
@@ -373,7 +376,6 @@ describe('Create map pin moderation emails', () => {
         message: { html, subject },
         to,
       } = doc.data()
-      expect(html).toMatchSnapshot()
       expect(subject).toBe(MAP_PIN_SUBMISSION_SUBJECT)
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')

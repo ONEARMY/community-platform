@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import { Analytics } from 'src/common/Analytics'
 import { NotFoundPage } from './NotFound/NotFound'
-import ScrollToTop from '../common/ScrollToTop'
+import { ScrollToTop } from '../common/ScrollToTop'
 import Header from './common/Header/Header'
 import { ServiceWorkerUpdateNotification } from 'src/pages/common/ServiceWorkerUpdateNotification/ServiceWorkerUpdateNotification'
 import Main from 'src/pages/common/Layout/Main'
@@ -49,48 +49,43 @@ export class Routes extends React.Component<
           <ServiceWorkerUpdateNotification />
           <Analytics />
           {/* on page change scroll to top */}
-          <ScrollToTop>
-            {/* TODO - add better loading fallback */}
-            <DevSiteHeader />
-            <AlertIncompleteProfile />
-            <Header />
-            <Suspense
-              fallback={
-                <div style={{ minHeight: 'calc(100vh - 175px)' }}></div>
-              }
-            >
-              <Switch>
-                {menuItems.map((page) => (
-                  <Route
-                    exact={page.exact}
-                    path={page.path}
-                    key={page.path}
-                    render={() => (
-                      <React.Fragment>
-                        <SeoTagsUpdateComponent title={page.title} />
-                        <Main
-                          data-cy="main-layout-container"
-                          style={{ flex: 1 }}
-                          customStyles={page.customStyles}
-                          ignoreMaxWidth={page.fullPageWidth}
-                        >
-                          <>{page.component}</>
-                        </Main>
-                      </React.Fragment>
-                    )}
-                  />
-                ))}
-                <Route component={NotFoundPage} />
-              </Switch>
-              <Switch>
+          <ScrollToTop />
+
+          {/* TODO - add better loading fallback */}
+          <DevSiteHeader />
+          <AlertIncompleteProfile />
+          <Header />
+          <Suspense
+            fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}
+          >
+            <Switch>
+              {menuItems.map((page) => (
                 <Route
-                  exact
-                  path="/"
-                  render={() => <Redirect to="/academy" />}
+                  exact={page.exact}
+                  path={page.path}
+                  key={page.path}
+                  render={() => (
+                    <React.Fragment>
+                      <SeoTagsUpdateComponent title={page.title} />
+                      <Main
+                        data-cy="main-layout-container"
+                        style={{ flex: 1 }}
+                        customStyles={page.customStyles}
+                        ignoreMaxWidth={page.fullPageWidth}
+                      >
+                        <>{page.component}</>
+                      </Main>
+                    </React.Fragment>
+                  )}
                 />
-              </Switch>
-            </Suspense>
-          </ScrollToTop>
+              ))}
+              <Route component={NotFoundPage} />
+            </Switch>
+            <Switch>
+              <Route exact path="/" render={() => <Redirect to="/academy" />} />
+            </Switch>
+          </Suspense>
+
           <GlobalSiteFooter />
         </BrowserRouter>
         <Box

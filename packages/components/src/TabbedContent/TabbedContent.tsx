@@ -13,10 +13,10 @@ export const Tab = styled(MuiTab)`
   box-shadow: 0 2px 0px 0px transparent;
   cursor: pointer;
   font-family: ${(p) =>
-    (p.theme as PlatformTheme['styles']).text.heading.fontFamily};
-  font-size: ${(p) => (p.theme as PlatformTheme['styles']).fontSizes[2]}px;
-  padding: ${(p) => (p.theme as PlatformTheme['styles']).space[2]}px 0;
-  margin-right: ${(p) => (p.theme as PlatformTheme['styles']).space[3]}px;
+    (p.theme as PlatformTheme['styles'])?.text?.heading.fontFamily};
+  font-size: ${(p) => (p.theme as PlatformTheme['styles'])?.fontSizes?.[2]}px;
+  padding: ${(p) => (p.theme as PlatformTheme['styles'])?.space?.[2]}px 0;
+  margin-right: ${(p) => (p.theme as PlatformTheme['styles'])?.space?.[3]}px;
 
   &:first-of-type {
     padding-left: 0;
@@ -24,7 +24,7 @@ export const Tab = styled(MuiTab)`
 
   &.Mui-selected {
     box-shadow: 0 2px 0px 0px
-      ${(p) => (p.theme as PlatformTheme['styles']).colors.accent.base};
+      ${(p) => (p.theme as PlatformTheme['styles'])?.colors?.accent.base};
   }
 `
 

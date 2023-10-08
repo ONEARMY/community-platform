@@ -87,7 +87,8 @@
   },
   "functions": {
     "predeploy": ["yarn workspace functions build"],
-    "source": "functions/dist"
+    "source": "functions/dist",
+    "runtime": "nodejs20"
   },
   "emulators": {
     "ui": {

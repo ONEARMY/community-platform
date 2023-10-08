@@ -69,8 +69,5 @@
     "webpack-cli": "5.0.1",
     "webpack-node-externals": "^3.0.0"
   },
-  "engines": {
-    "node": "20"
-  },
   "private": true
 }

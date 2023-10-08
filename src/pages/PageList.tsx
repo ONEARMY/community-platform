@@ -56,6 +56,9 @@ const PrivacyPolicy = lazy(
 const TermsPolicy = lazy(
   () => import(/* webpackChunkName: "terms" */ './policy/terms'),
 )
+const Unsubscribe = lazy(
+  () => import(/* webpackChunkName: "terms" */ './Unsubscribe/Unsubscribe'),
+)
 
 export const getAvailablePageList = (supportedModules: MODULE[]): IPageMeta[] =>
   COMMUNITY_PAGES.filter((pageItem) =>
@@ -184,6 +187,14 @@ const termsPolicy = {
   description: '',
 }
 
+const unsubscribe = {
+  moduleName: MODULE.CORE,
+  path: '/unsubscribe/:id',
+  component: <Unsubscribe />,
+  title: 'Unsubscribe',
+  description: '',
+}
+
 export const COMMUNITY_PAGES: IPageMeta[] = [
   howTo,
   maps,
@@ -202,4 +213,5 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   forgotpassword,
   forgotpasswordmessage,
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
+  unsubscribe,
 ]

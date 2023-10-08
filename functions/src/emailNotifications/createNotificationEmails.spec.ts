@@ -19,6 +19,10 @@ jest.mock('../config/config', () => ({
   },
 }))
 
+jest.mock('uuid', () => ({
+  v4: () => 'test',
+}))
+
 const notificationFactory = (
   _userId: string,
   _id: string,

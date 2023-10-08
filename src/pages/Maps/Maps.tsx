@@ -11,7 +11,7 @@ import './styles.css'
 
 import { logger } from '../../logger'
 import type { ILatLng } from 'src/models/maps.models'
-import { GetLocation } from 'src/utils/geolocation'
+import { GetLocation } from './utils/geolocation'
 import type { Map } from 'react-leaflet'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'

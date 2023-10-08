@@ -4,10 +4,11 @@
 
 <p>Your How-To, {{howto.title}}, needs more work before we can publish it.</p>
 
-{{#if howto.comments}}
+{{#if howto.moderationFeedback}}
 <p>Please review the following & re-submit your How-to:</p>
-<li>{{howto.comments}}</li>
-{{/if}}
+{{#each howto.moderationFeedback}}
+<li>{{this.feedbackComments}}</li>
+{{/each}} {{/if}}
 
 <p>We look forward to hearing back from you.</p>
 

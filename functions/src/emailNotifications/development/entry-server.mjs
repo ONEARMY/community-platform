@@ -24,7 +24,13 @@ export function render(url) {
       },
       howto: {
         title: 'Mock Howto Title',
-        comments: 'Mock Howto Moderation Comments',
+        moderationFeedback: [
+          {
+            adminUsername: 'Mock Admin Username',
+            feedbackComments: 'Mock Howto Moderation Comments',
+            feedbackTimestamp: '2023-10-07T19:31:21.944Z',
+          },
+        ],
       },
       mappin: {
         comments: 'Mock Mappin Moderation Comments',

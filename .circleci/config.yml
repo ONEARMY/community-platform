@@ -183,6 +183,9 @@ commands:
       - run:
           name: Export application credentials
           command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
+      - run: 
+          name: Configure Firebase Extensions
+          command: envsubst < extensions/firestore-send-email.config > extensions/firestore-send-email.env
       - run:
           # Use version of firebase-tools already installed in functions workspace to deploy
           name: Deploy to Firebase

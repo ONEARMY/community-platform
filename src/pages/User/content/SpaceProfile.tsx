@@ -40,6 +40,7 @@ import UserContactAndLinks from './UserContactAndLinks'
 import { ProfileType } from 'src/modules/profile/types'
 import { userStats } from 'src/common/hooks/userStats'
 import type { UserCreatedDocs } from '.'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -268,34 +269,56 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             </Heading>
           </Flex>
 
-          <Tabs defaultValue={0}>
-            <TabsList>
-              <Tab>Profile</Tab>
-              <Tab>Contributions</Tab>
-              <Tab>Impact</Tab>
-              <Tab>Contact</Tab>
-            </TabsList>
-            <TabPanel>
-              {user.about && <Paragraph>{user.about}</Paragraph>}
+          <AuthWrapper roleRequired="beta-tester">
+            <Tabs defaultValue={0}>
+              <TabsList>
+                <Tab>Profile</Tab>
+                <Tab>Contributions</Tab>
+                <Tab>Impact</Tab>
+                <Tab>Contact</Tab>
+              </TabsList>
+              <TabPanel>
+                <Box sx={{ mt: 3 }}>
+                  {user.about && <Paragraph>{user.about}</Paragraph>}
 
-              {user.profileType === ProfileType.COLLECTION_POINT &&
-                user.collectedPlasticTypes &&
-                renderPlasticTypes(user.collectedPlasticTypes)}
+                  {user.profileType === ProfileType.COLLECTION_POINT &&
+                    user.collectedPlasticTypes &&
+                    renderPlasticTypes(user.collectedPlasticTypes)}
 
-              {user.profileType === ProfileType.COLLECTION_POINT &&
-                user.openingHours &&
-                renderOpeningHours(user.openingHours)}
+                  {user.profileType === ProfileType.COLLECTION_POINT &&
+                    user.openingHours &&
+                    renderOpeningHours(user.openingHours)}
 
-              {user.profileType === ProfileType.MACHINE_BUILDER &&
-                user.machineBuilderXp &&
-                renderMachineBuilderXp(user.machineBuilderXp)}
+                  {user.profileType === ProfileType.MACHINE_BUILDER &&
+                    user.machineBuilderXp &&
+                    renderMachineBuilderXp(user.machineBuilderXp)}
 
-              <UserContactAndLinks links={userLinks} />
-            </TabPanel>
-            <TabPanel>
-              <UserCreatedDocuments docs={docs} />
-            </TabPanel>
-          </Tabs>
+                  <UserContactAndLinks links={userLinks} />
+                </Box>
+              </TabPanel>
+              <TabPanel>
+                <UserCreatedDocuments docs={docs} />
+              </TabPanel>
+            </Tabs>
+          </AuthWrapper>
+
+          <Box>
+            {user.about && <Paragraph>{user.about}</Paragraph>}
+
+            {user.profileType === ProfileType.COLLECTION_POINT &&
+              user.collectedPlasticTypes &&
+              renderPlasticTypes(user.collectedPlasticTypes)}
+
+            {user.profileType === ProfileType.COLLECTION_POINT &&
+              user.openingHours &&
+              renderOpeningHours(user.openingHours)}
+
+            {user.profileType === ProfileType.MACHINE_BUILDER &&
+              user.machineBuilderXp &&
+              renderMachineBuilderXp(user.machineBuilderXp)}
+
+            <UserContactAndLinks links={userLinks} />
+          </Box>
         </Box>
         <Box
           sx={{
@@ -313,8 +336,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             >
               <UserStatistics
                 userName={user.userName}
-                count
-                ry={user.location?.country}
+                country={user.location?.country}
                 isVerified={stats.verified}
                 isSupporter={!!user.badges?.supporter}
                 howtoCount={docs?.howtos.length || 0}

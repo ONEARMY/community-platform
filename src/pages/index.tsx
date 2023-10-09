@@ -4,7 +4,6 @@ import { Analytics } from 'src/common/Analytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import { ScrollToTop } from '../common/ScrollToTop'
 import Header from './common/Header/Header'
-import { ServiceWorkerUpdateNotification } from 'src/pages/common/ServiceWorkerUpdateNotification/ServiceWorkerUpdateNotification'
 import Main from 'src/pages/common/Layout/Main'
 import type { IPageMeta } from './PageList'
 import {
@@ -46,7 +45,6 @@ export class Routes extends React.Component<
         data-cy="page-container"
       >
         <BrowserRouter>
-          <ServiceWorkerUpdateNotification />
           <Analytics />
           {/* on page change scroll to top */}
           <ScrollToTop />

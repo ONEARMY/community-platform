@@ -12,7 +12,7 @@ import { generateSitemap } from './sitemapGenerate'
  * http://localhost:4002/community-platform-emulated/us-central1/seo-sitemapProxy
  */
 export const handleSitemapProxy = async (
-  req: functions.runWith({ memory: '512MB' }).https.Request,
+  req: functions.https.Request,
   res: functions.Response,
 ) => {
   let sitemapString: string

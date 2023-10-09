@@ -15,7 +15,7 @@ import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20230926
+const DB_CACHE_NUMBER = 20231022
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -174,6 +174,7 @@ const DEFAULT_SCHEMA = '_id,_modified'
 const SCHEMA_BASE: IDexieSchema = {
   howtos: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs`,
   mappins: DEFAULT_SCHEMA,
+  messages: `${DEFAULT_SCHEMA}`,
   tags: DEFAULT_SCHEMA,
   categories: DEFAULT_SCHEMA,
   researchCategories: DEFAULT_SCHEMA,
@@ -210,6 +211,9 @@ const DEXIE_SCHEMA = MAPPED_SCHEMA
  *
  * 2023-09-24
  * Add question schema
+ *
+ * 2023-10-22
+ * Add message schema
  *
  *
  *

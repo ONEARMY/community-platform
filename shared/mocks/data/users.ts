@@ -231,6 +231,7 @@ export const users = {
     profileType: null,
     coverImages: [],
     isExpert: null,
+    isContactableByPublic: true,
   },
   settings_member_new: {
     isV4Member: null,

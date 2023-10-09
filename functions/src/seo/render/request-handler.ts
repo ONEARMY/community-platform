@@ -23,7 +23,7 @@ export interface RequestHandlerDeps {
 
 export const requestHandler =
   (dependencyOverrides: Partial<RequestHandlerDeps>) =>
-  async (request: functions.https.Request, res: any) => {
+  async (request: functions.runWith({ memory: '512MB' }).https.Request, res: any) => {
     const pathName = request.path
     const dependencies: RequestHandlerDeps = {
       httpClient: axios.get,

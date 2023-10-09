@@ -9,7 +9,7 @@ const logger = new Logging()
 
 export const handleCloudLoggingRequest =
   (deps: { logger: Logging }) =>
-  async (req: functions.https.Request, res: functions.Response) =>
+  async (req: functions.runWith({ memory: '512MB' }).https.Request, res: functions.Response) =>
     // Parse JSON and limits body size (default is 100kb)
     jsonParser(req, res, async (err) => {
       const { logger } = deps
@@ -50,7 +50,7 @@ export const handleCloudLoggingRequest =
       }
     })
 
-export const logToCloudLogging = functions.https.onRequest(
+export const logToCloudLogging = functions.runWith({ memory: '512MB' }).https.onRequest(
   handleCloudLoggingRequest({
     logger,
   }),

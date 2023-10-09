@@ -11,10 +11,11 @@ const operations = { updated: [], skipped: [] }
  * One-off script to set contentModifiedTimestamp for all docs
  * Once run this code will be deprecated, but retained for future reference
  */
-export const contentModifiedTimestamp = functions.https.onCall(
-  async (dryRun: boolean, context) => {
+export const contentModifiedTimestamp = functions
+  .runWith({ memory: '512MB' })
+  .https.onCall(async (dryRun: boolean, context) => {
     if (!context.auth) {
-      throw new functions.https.HttpsError(
+      throw new functions.runWith({ memory: '512MB' }).https.HttpsError(
         'failed-precondition',
         'The function must be called while authenticated.',
       )
@@ -73,13 +74,12 @@ export const contentModifiedTimestamp = functions.https.onCall(
       }
     } catch (error) {
       console.error(error)
-      throw new functions.https.HttpsError(
+      throw new functions.runWith({ memory: '512MB' }).https.HttpsError(
         'internal',
         'There was an error setting last edit timestamps.',
       )
     }
-  },
-)
+  })
 
 async function batchGeneration(
   updateData: Record<string, any>[],

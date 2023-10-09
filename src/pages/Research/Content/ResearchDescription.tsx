@@ -9,7 +9,6 @@ import {
   ViewsCounter,
   ConfirmModal,
   ContentStatistics,
-  ResearchStatistics,
 } from 'oa-components'
 import { useEffect, useState, Fragment } from 'react'
 import { Link, useHistory } from 'react-router-dom'
@@ -162,7 +161,7 @@ const ResearchDescription = ({
             </Link>
             {research.moderation === 'accepted' && (
               <UsefulStatsButton
-                votedUsefulCount={props.votedUsefulCount}
+                votedUsefulCount={votedUsefulCount}
                 hasUserVotedUseful={props.hasUserVotedUseful}
                 isLoggedIn={props.loggedInUser ? true : false}
                 onUsefulClick={props.onUsefulClick}
@@ -332,12 +331,49 @@ const ResearchDescription = ({
           border: '1px solid black',
         }}
       />
-      <ResearchStatistics
-        viewCount={viewCount!}
-        followingCount={props.subscribersCount}
-        usefulCount={props.votedUsefulCount}
-        commentCount={props.commentsCount}
-        updateCount={props.updatesCount}
+      <ContentStatistics
+        statistics={[
+          {
+            icon: 'view',
+            label: buildStatisticsLabel({
+              stat: viewCount || 0,
+              statUnit: 'view',
+              usePlural: true,
+            }),
+          },
+          {
+            icon: 'thunderbolt',
+            label: buildStatisticsLabel({
+              stat: subscribersCount,
+              statUnit: 'following',
+              usePlural: false,
+            }),
+          },
+          {
+            icon: 'star',
+            label: buildStatisticsLabel({
+              stat: votedUsefulCount,
+              statUnit: 'useful',
+              usePlural: false,
+            }),
+          },
+          {
+            icon: 'comment',
+            label: buildStatisticsLabel({
+              stat: commentsCount,
+              statUnit: 'comment',
+              usePlural: true,
+            }),
+          },
+          {
+            icon: 'update',
+            label: buildStatisticsLabel({
+              stat: updatesCount,
+              statUnit: 'step',
+              usePlural: true,
+            }),
+          },
+        ]}
       />
     </Flex>
   )

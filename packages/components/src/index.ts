@@ -47,8 +47,4 @@ export type { Props as TextNotificationProps } from './TextNotification/TextNoti
 export type { ResearchEditorOverviewUpdate } from './ResearchEditorOverview/ResearchEditorOverview'
 export type { User } from './types/common'
 export type { UserNotificationList } from './NotificationList/NotificationList'
-<<<<<<< HEAD
 export { BlockedRoute } from './BlockedRoute/BlockedRoute'
-export { ContentStatistics } from './ContentStatistics/ContentStatistics'
-=======
->>>>>>> d19e7f1bb (feat: use ContentStatistics for both HowTo and Research descriptions)

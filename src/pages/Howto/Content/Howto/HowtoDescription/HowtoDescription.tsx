@@ -17,6 +17,7 @@ import {
   DownloadFileFromLink,
   Tooltip,
   ConfirmModal,
+  ContentStatistics,
 } from 'oa-components'
 import type { IUser } from 'src/models/user.models'
 import {
@@ -492,7 +493,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             border: '1px solid black',
           }}
         />
-        <HowToStatistics
+        <ContentStatistics
           viewCount={viewCount!}
           usefulCount={props.votedUsefulCount}
           commentCount={props.commentsCount}

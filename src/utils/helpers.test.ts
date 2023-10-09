@@ -272,7 +272,11 @@ describe('src/utils/helpers', () => {
 
       it('should return label with plural stat unit when stat is > 1 and usePlural is true ', () => {
         expect(
-          buildStatisticsLabel({ stat: 100, statUnit: 'count', usePlural: true }),
+          buildStatisticsLabel({
+            stat: 100,
+            statUnit: 'count',
+            usePlural: true,
+          }),
         ).toBe('100 counts')
       })
 
@@ -287,5 +291,4 @@ describe('src/utils/helpers', () => {
       })
     })
   })
-
 })

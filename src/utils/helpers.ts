@@ -3,7 +3,10 @@ import type { IResearch } from 'src/models'
 import type { DBDoc, IModerable } from 'src/models/common.models'
 import type { IMapPin } from 'src/models/maps.models'
 import type { IUser } from 'src/models/user.models'
-import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
+import type {
+  IItem,
+  AuthorOption,
+} from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text: string) => {
@@ -190,3 +193,22 @@ export interface IEditableDoc extends DBDoc {
 
 export const randomIntFromInterval = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min)
+
+export const getAuthorOptions = (items: IItem[]): AuthorOption[] => {
+  if (!items?.length) return []
+
+  return Array.from(
+    new Set<string>(
+      items.flatMap((item: IItem) => [
+        item._createdBy,
+        ...(item.collaborators || []),
+      ]),
+    ),
+  )
+    .filter(Boolean)
+    .sort()
+    .map((author) => ({
+      label: author,
+      value: author,
+    }))
+}

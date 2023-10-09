@@ -110,7 +110,7 @@ export class ResearchStore extends ModuleStore {
     this.activeSorter = sorter
   }
 
-  public updateSelectedAuthor(author: string) {
+  public updateSelectedAuthor(author: IUser['userName']) {
     this.selectedAuthor = author
   }
 

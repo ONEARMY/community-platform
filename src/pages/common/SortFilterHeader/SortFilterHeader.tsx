@@ -10,7 +10,7 @@ import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
-import { capitalizeFirstLetter } from 'src/utils/helpers'
+import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
 
 const updateQueryParams = (
   url: string,
@@ -61,7 +61,6 @@ export const SortFilterHeader = ({
       : ''
 
   const [sortState, setSortState] = useState(defaultSortingOption)
-  const [selectedAuthor, setSelectedAuthor] = useState(null)
 
   const items =
     type == 'how-to'
@@ -124,10 +123,16 @@ export const SortFilterHeader = ({
           <Select
             options={authorsOptions}
             placeholder="Filter by author"
-            value={selectedAuthor}
+            value={
+              currentStore.selectedAuthor
+                ? {
+                    label: currentStore.selectedAuthor,
+                    value: currentStore.selectedAuthor,
+                  }
+                : null
+            }
             onChange={(author) => {
               currentStore.updateSelectedAuthor(author?.value ?? null)
-              setSelectedAuthor(author)
             }}
             isClearable={true}
           />
@@ -148,20 +153,4 @@ export const SortFilterHeader = ({
       </Flex>
     </Flex>
   )
-}
-
-const getAuthorOptions = (items) => {
-  if (!items?.length) return []
-
-  return Array.from(
-    new Set<string>(
-      items.flatMap((item) => [item._createdBy, ...(item.collaborators || [])]),
-    ),
-  )
-    .filter(Boolean)
-    .sort()
-    .map((author) => ({
-      label: author,
-      value: author,
-    }))
 }

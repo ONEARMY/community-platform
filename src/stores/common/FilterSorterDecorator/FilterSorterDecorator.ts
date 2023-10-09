@@ -31,6 +31,11 @@ export enum ItemSortingOption {
   Updates = 'Updates',
 }
 
+export interface AuthorOption {
+  label: IUser['userName']
+  value: IUser['userName']
+}
+
 export class FilterSorterDecorator<T extends IItem> {
   @observable
   public activeSorter: ItemSortingOption
@@ -59,7 +64,7 @@ export class FilterSorterDecorator<T extends IItem> {
       : listItems
   }
 
-  public filterByAuthor(listItems: T[] = [], author: string): T[] {
+  public filterByAuthor(listItems: T[] = [], author: IUser['userName']): T[] {
     return author
       ? listItems.filter((obj) => {
           return (

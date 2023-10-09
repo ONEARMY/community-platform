@@ -23,8 +23,9 @@ export const seoRender = functions
  * Local emulators test path:
  * http://localhost:4002/community-platform-emulated/us-central1/emulator/pubsub/schedule/seo-sitemapGenerate
  */
-export const sitemapGenerate = functions.pubsub
-  .schedule('0 2 * * MON')
+export const sitemapGenerate = functions
+  .runWith({ memory: '512MB' })
+  .pubsub.schedule('0 2 * * MON')
   .onRun(() => generateSitemap())
 
 /**

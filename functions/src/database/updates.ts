@@ -15,7 +15,7 @@ export const contentModifiedTimestamp = functions
   .runWith({ memory: '512MB' })
   .https.onCall(async (dryRun: boolean, context) => {
     if (!context.auth) {
-      throw new functions.runWith({ memory: '512MB' }).https.HttpsError(
+      throw new functions.https.HttpsError(
         'failed-precondition',
         'The function must be called while authenticated.',
       )
@@ -74,7 +74,7 @@ export const contentModifiedTimestamp = functions
       }
     } catch (error) {
       console.error(error)
-      throw new functions.runWith({ memory: '512MB' }).https.HttpsError(
+      throw new functions.https.HttpsError(
         'internal',
         'There was an error setting last edit timestamps.',
       )

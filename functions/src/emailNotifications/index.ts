@@ -47,7 +47,7 @@ exports.sendOnce = functions
   .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
   .https.onCall(async (_, context) => {
     if (!context.auth) {
-      throw new functions.runWith({ memory: '512MB' }).https.HttpsError(
+      throw new functions.https.HttpsError(
         'failed-precondition',
         'The function must be called while authenticated.',
       )
@@ -67,14 +67,14 @@ exports.sendOnce = functions
           return 'OK'
         } catch (error) {
           console.error(error)
-          throw new functions.runWith({ memory: '512MB' }).https.HttpsError(
+          throw new functions.https.HttpsError(
             'internal',
             'There was an error creating emails.',
           )
         }
       }
     }
-    throw new functions.runWith({ memory: '512MB' }).https.HttpsError(
+    throw new functions.https.HttpsError(
       'permission-denied',
       'Emails can be triggered by admins only.',
     )

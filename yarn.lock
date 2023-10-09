@@ -19457,9 +19457,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-tools@npm:12.4.5":
-  version: 12.4.5
-  resolution: "firebase-tools@npm:12.4.5"
+"firebase-tools@npm:12.4.6":
+  version: 12.4.6
+  resolution: "firebase-tools@npm:12.4.6"
   dependencies:
     "@google-cloud/pubsub": ^3.0.1
     abort-controller: ^3.0.0
@@ -19523,7 +19523,7 @@ __metadata:
     ws: ^7.2.3
   bin:
     firebase: lib/bin/firebase.js
-  checksum: 394579b856fad5e6906f7498ab141f23283a67a07c157f0e7290b6f948a1e77d29d110358b1806ab4d5e38d472dc42166055531c8e7f7cc0ac95d3f71de05f3a
+  checksum: f21981b5109fc1b2ceba9582b5825ee84e2db0eb4cefbfaff3f64a48fddca5131da858db39c4e86787b41de8037bfbac805c8205462fb845d571259d1c4557f6
   languageName: node
   linkType: hard
 
@@ -20058,7 +20058,7 @@ __metadata:
     firebase-admin: 11.4.1
     firebase-functions: 4.1.1
     firebase-functions-test: ^3.0.0
-    firebase-tools: 12.4.5
+    firebase-tools: 12.4.6
     fs-extra: ^9.0.1
     google-auth-library: ^6.1.1
     googleapis: ^61.0.0

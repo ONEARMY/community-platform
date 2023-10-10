@@ -72,7 +72,7 @@ describe('userStore', () => {
       // Assert
       expect(store.db.set).toHaveBeenCalledWith(
         expect.not.objectContaining({
-          subType: 'extrusion',
+          workspaceType: 'extrusion',
         }),
       )
     })

@@ -209,6 +209,19 @@ describe('create email test', () => {
         to,
       } = doc.data()
       expect(html).toMatchSnapshot()
+      expect(html).toContain(
+        `<p><a href='https://community.preciousplastic.com/u/user_2'>User 2</a> found your <a href='https://community.preciousplastic.com/test'>how-to</a> useful</p>`,
+      )
+      expect(html).toContain(
+        `<p>New comment on your <a href='https://community.preciousplastic.com/test'>research</a> by <a href='https://community.preciousplastic.com/u/user_2'>User 2</a></p>`,
+      )
+      expect(html).toContain(
+        `<p><a href='https://community.preciousplastic.com/u/user_2'>User 2</a> mentioned you in this <a href='https://community.preciousplastic.com/test'>how-to</a></p>`,
+      )
+      expect(html).toContain(
+        `<p>Your <a href='https://community.preciousplastic.com/test'>map pin</a> has been approved</p>`,
+      )
+
       expect(subject).toBe(`You've missed notifications from Precious Plastic`)
       expect(to).toBe('test@test.com')
     })
@@ -238,6 +251,18 @@ describe('create email test', () => {
         to,
       } = doc.data()
       expect(html).toMatchSnapshot()
+      expect(html).toContain(
+        `<p>New comment on your <a href='https://community.preciousplastic.com/test'>how-to</a> by <a href='https://community.preciousplastic.com/u/user_1'>User 1</a></p>`,
+      )
+      expect(html).toContain(
+        `<p>New comment on your <a href='https://community.preciousplastic.com/test'>research</a> by <a href='https://community.preciousplastic.com/u/user_2'>User 2</a></p>`,
+      )
+      expect(html).toContain(
+        `<p><a href='https://community.preciousplastic.com/u/user_3'>User 3</a> posted an update to this <a href='https://community.preciousplastic.com/test'>research</a></p>`,
+      )
+      expect(html).toContain(
+        `<p>Your <a href='https://community.preciousplastic.com/test'>research</a> needs updates</p>`,
+      )
       expect(subject).toBe(`You've missed notifications from Precious Plastic`)
       expect(to).toBe('test@test.com')
     })

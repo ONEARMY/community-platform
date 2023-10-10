@@ -8,8 +8,9 @@ const SITE_URL = CONFIG.deployment.site_url
 
 const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 
-export const notifyPinAccepted = functions.firestore
-  .document('v3_mappins/{pinId}')
+export const notifyPinAccepted = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document('v3_mappins/{pinId}')
   .onUpdate(async (change, context) => {
     const info = (change.after.data() as IMapPin) || null
     const prevInfo = (change.before.data() as IMapPin) || null
@@ -27,8 +28,9 @@ export const notifyPinAccepted = functions.firestore
       .catch(handleErr)
   })
 
-export const notifyHowToAccepted = functions.firestore
-  .document('v3_howtos/{id}')
+export const notifyHowToAccepted = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document('v3_howtos/{id}')
   .onUpdate(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
     const prevInfo = change.before.exists ? change.before.data() : null

@@ -10,8 +10,9 @@ import type { IUserDB } from '../models'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 
-exports.handleUserSupporterBadgeUpdate = functions.firestore
-  .document(`${DB_ENDPOINTS.users}/{id}`)
+exports.handleUserSupporterBadgeUpdate = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate((change, ctx) =>
     withErrorAlerting(ctx, handleUserSupporterBadgeChange, [change]),
   )

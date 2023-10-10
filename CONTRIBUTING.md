@@ -27,7 +27,7 @@ This project and everyone participating in it is governed by the [Code of Conduc
 
 **Prerequisites**
 
-- [Node.js v18](https://nodejs.org/en/download/)
+- [Node.js v20](https://nodejs.org/en/download/)
 - [Yarn v3](https://yarnpkg.com/getting-started/install)
 
 With the above tools available, you are ready:

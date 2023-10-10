@@ -50,8 +50,10 @@ export const handleCloudLoggingRequest =
       }
     })
 
-export const logToCloudLogging = functions.https.onRequest(
-  handleCloudLoggingRequest({
-    logger,
-  }),
-)
+export const logToCloudLogging = functions
+  .runWith({ memory: '512MB' })
+  .https.onRequest(
+    handleCloudLoggingRequest({
+      logger,
+    }),
+  )

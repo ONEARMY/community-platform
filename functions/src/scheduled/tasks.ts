@@ -8,8 +8,9 @@ import { BackupDatabase } from '../Firebase/firestoreDBExport'
 import * as FirebaseSync from '../Firebase/firebaseSync'
 
 /** Trigger tasks daily at 2am – https://crontab.guru/#0_2_*_*_* */
-export const dailyTasks = functions.pubsub
-  .schedule('0 2 * * *')
+export const dailyTasks = functions
+  .runWith({ memory: '512MB' })
+  .pubsub.schedule('0 2 * * *')
   .onRun(async (context) => {
     functions.logger.log('[dailyTasks] Start', context)
     const backupStatus = await BackupDatabase()

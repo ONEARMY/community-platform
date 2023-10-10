@@ -7,8 +7,9 @@ const SITE_URL = CONFIG.deployment.site_url
 
 const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
 
-export const notifyNewPin = functions.firestore
-  .document('v3_mappins/{pinId}')
+export const notifyNewPin = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document('v3_mappins/{pinId}')
   .onCreate((snapshot) => {
     const info = snapshot.data()
     const id = info._id
@@ -35,8 +36,9 @@ export const notifyNewPin = functions.firestore
     )
   })
 
-export const notifyNewHowTo = functions.firestore
-  .document('v3_howtos/{id}')
+export const notifyNewHowTo = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document('v3_howtos/{id}')
   .onCreate((snapshot) => {
     const info = snapshot.data()
     const user = info._createdBy

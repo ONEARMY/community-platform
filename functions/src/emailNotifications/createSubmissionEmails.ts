@@ -34,14 +34,16 @@ export async function createMapPinSubmissionEmail(mapPin: IMapPin) {
   }
 }
 
-export const handleHowToSubmission = functions.firestore
-  .document(`${DB_ENDPOINTS.howtos}/{id}`)
+export const handleHowToSubmission = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document(`${DB_ENDPOINTS.howtos}/{id}`)
   .onCreate((snapshot, context) =>
     withErrorAlerting(context, createHowtoSubmissionEmail, [snapshot.data()]),
   )
 
-export const handleMapPinSubmission = functions.firestore
-  .document(`${DB_ENDPOINTS.mappins}/{id}`)
+export const handleMapPinSubmission = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document(`${DB_ENDPOINTS.mappins}/{id}`)
   .onCreate((snapshot, context) =>
     withErrorAlerting(context, createMapPinSubmissionEmail, [snapshot.data()]),
   )

@@ -27,7 +27,7 @@ aliases:
   # use a base image running node v18 with chrome/firefox browsers preinstalled
   # This can be applied to any job via `docker: *docker` syntax
   - &docker
-    - image: cimg/node:18.17.1-browsers
+    - image: cimg/node:20.7.0-browsers
 
   # Use base image with support for node version parameter and matrix
   # This can be applied to any job via `<<: *docker_matrix` syntax
@@ -35,7 +35,7 @@ aliases:
       parameters:
         node-version:
           type: string
-          default: 18.17.1-browsers
+          default: 20.7.0-browsers
       docker:
         - image: cimg/node:<< parameters.node-version >>
 
@@ -183,6 +183,9 @@ commands:
       - run:
           name: Export application credentials
           command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
+      - run: 
+          name: Configure Firebase Extensions
+          command: envsubst < extensions/firestore-send-email.config > extensions/firestore-send-email.env
       - run:
           # Use version of firebase-tools already installed in functions workspace to deploy
           name: Deploy to Firebase

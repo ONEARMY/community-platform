@@ -17,8 +17,9 @@ import { del } from 'request'
  * - update howTo creator flag on change
  * - update userName and flag on any comments made by user
  *********************************************************************/
-export const handleUserUpdates = functions.firestore
-  .document(`${DB_ENDPOINTS.users}/{id}`)
+export const handleUserUpdates = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate(async (change, context) => {
     await backupUser(change)
     await processHowToUpdates(change)

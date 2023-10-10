@@ -45,6 +45,7 @@ const ResearchListItem = ({ item }: IProps) => {
                   objectFit: 'cover',
                   margin: '-15px',
                   verticalAlign: 'top',
+                  maxWidth: 'none',
                 }}
                 loading="lazy"
                 src={getItemThumbnail(item)}

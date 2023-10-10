@@ -1,4 +1,4 @@
-image: node:18
+image: node:20
 tasks:
   - init: yarn install && yarn run build
     command: yarn run start

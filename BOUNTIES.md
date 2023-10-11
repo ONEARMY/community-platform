@@ -18,7 +18,7 @@ We currently have 3 bounty levels
 
 Simply go to the `Issues` page on github and look for issues with labelled with [Bounty](https://github.com/ONEARMY/community-platform/labels/bounty).
 
-_Note_ - the exact bounty level is not included as knowing in advance how much work will be involved is hard! Instead we assign levels collectively on the monthly developer call.
+_Note_ - the exact bounty level is not included as knowing in advance how much work will be involved is hard! Instead we assign levels collectively in our monthly maintainer's call.
 
 ---
 
@@ -36,11 +36,7 @@ Once assigned try to complete the issue within the next month. Once complete mak
 
 We handle payments through [Open Collective](https://opencollective.com/onearmy). Follow the link and register as a contributor to the project. You can add your paypal or bank details there which will be used to
 
-### Step 4 - (optional) Join our monthly dev call
-
-If you want more feedback on the issue or suggested bounty levels, we have a monthly call welcome for all developers to join. After the call we will finalise the bounties and organise the admin.
-
-### Step 5 - Receive payment
+### Step 4 - Receive payment
 
 ---
 
@@ -65,4 +61,4 @@ These roles include tasks like:
 - Documentation
 - Issue management
 
-There is a separate hourly pay scale for these roles, aimed at developers who help a bit more consistently at around 2-3h per week. If you're interested in these roles then feel free to reach out on slack or during the monthly dev call.
+There is a separate hourly pay scale for these roles, aimed at developers who help a bit more consistently at around 2-3h per week. If you're interested in these roles then feel free to reach out on Discord.

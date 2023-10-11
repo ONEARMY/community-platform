@@ -7,7 +7,7 @@
   "contributorsSortAlphabetically": false,
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors)",
   "types": {
-    "maintainer": {
+    "maintenance": {
       "symbol": "💪",
       "description": "Maintainer",
       "link": "[<%= symbol %>](\"<%= description %>\"),"
@@ -23,7 +23,7 @@
         "design",
         "ideas",
         "projectManagement",
-        "maintainer"
+        "maintenance"
       ]
     },
     {
@@ -33,7 +33,7 @@
       "profile": "https://c2dev.co.uk/",
       "contributions": [
         "code",
-        "maintainer"
+        "maintenance"
       ]
     },
     {
@@ -43,7 +43,7 @@
       "profile": "https://thisis.la/",
       "contributions": [
         "code",
-        "maintainer"
+        "maintenance"
       ]
     },
     {
@@ -89,7 +89,7 @@
       "profile": "https://github.com/AlfonsoGhislieri",
       "contributions": [
         "code",
-        "maintainer"
+        "maintenance"
       ]
     },
     {
@@ -243,7 +243,7 @@
       "profile": "https://www.evakillenberg.com",
       "contributions": [
         "code",
-        "maintainer"
+        "maintenance"
       ]
     },
     {
@@ -253,7 +253,7 @@
       "profile": "https://speckledbanana.com",
       "contributions": [
         "code",
-        "maintainer"
+        "maintenance"
       ]
     },
     {
@@ -316,7 +316,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/16688508?v=4",
       "profile": "https://github.com/benfurber",
       "contributions": [
-        "code"
+        "code",
+        "maintenance"
       ]
     },
     {

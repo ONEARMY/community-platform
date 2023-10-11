@@ -169,6 +169,8 @@ export class ResearchStore extends ModuleStore {
         })
 
         formatedComment.replies = formatedReplies
+      } else {
+        formatedComment.replies = []
       }
 
       return formatedComment
@@ -692,6 +694,7 @@ export class ResearchStore extends ModuleStore {
       this.updateResearchUploadStatus('Database')
       logger.debug('post added')
       if (updatedItem) {
+        
         this.setActiveResearchItemBySlug(updatedItem.slug)
       }
       // complete

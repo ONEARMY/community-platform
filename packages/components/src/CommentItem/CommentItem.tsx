@@ -246,7 +246,7 @@ export const CommentItem = (props: CommentItemProps) => {
           </Flex>
         )}
       {replyToComment && handleReply && (
-        <Box sx={{ width: 'auto' }} mb={3} ml={6}>
+        <Box mb={3} ml={6}>
           <CreateComment
             maxLength={3000}
             comment={replyComment}

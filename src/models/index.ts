@@ -15,5 +15,6 @@ export * from './userPreciousPlastic.models'
 export * from './notifications.models'
 export * from './question.models'
 export interface UserComment extends IComment {
-  isEditable: boolean
+  isEditable: boolean,
+  showReplies: boolean,
 }

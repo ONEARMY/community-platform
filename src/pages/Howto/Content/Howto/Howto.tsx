@@ -22,6 +22,7 @@ import type { UserComment } from 'src/models'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
 import type { UserStore } from 'src/stores/User/user.store'
+import { Discussion } from 'src/pages/common/Discussion/Discussion'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -117,6 +118,7 @@ export class Howto extends React.Component<
               [loggedInUser?._id, loggedInUser?.userName].includes(
                 c._creatorId,
               ) || isAllowedToEditContent(activeHowto, loggedInUser),
+            showReplies: false
           }),
         )
 
@@ -210,6 +212,31 @@ export class Howto extends React.Component<
             </ArticleCallToAction>
           </Box>
           <HowToComments comments={activeHowToComments} />
+          <Discussion
+            sourceId={activeHowto._id}
+            sourceType='howto'
+          />
+          <MoreBox py={20} mt={20}>
+            <Text
+              sx={{
+                fontSize: [4, 4, 5],
+                display: 'block',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}
+            >
+              You're done.
+              <br />
+              Nice one!
+            </Text>
+            <Flex sx={{ justifyContent: 'center' }} mt={2}>
+              <Link to={'/how-to/'}>
+                <Button variant={'secondary'} data-cy="go-back">
+                  Back
+                </Button>
+              </Link>
+            </Flex>
+          </MoreBox>
         </>
       )
     } else {

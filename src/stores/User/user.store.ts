@@ -12,12 +12,12 @@ import type {
   INotificationUpdate,
   IUser,
   IUserBadges,
-  IUserDB,
 } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { RootStore } from '..'
 import type { IConvertedFileMeta } from '../../types'
+import { EmailNotificationFrequency } from 'oa-shared'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
@@ -212,14 +212,12 @@ export class UserStore extends ModuleStore {
    * (default is current logged in user)
    */
   public async updateUserProfile(
-    values: Partial<IUserPP>,
+    values: Partial<IUserPP> & { _id: string },
     trigger: string,
     adminEditableUserId?: string,
   ) {
     this.setUpdateStatus('Start')
-    const dbRef = this.db
-      .collection<IUserPP>(COLLECTION_NAME)
-      .doc((values as IUserDB)._id)
+    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(values._id)
     const id = dbRef.id
 
     // If admin updating another user assume full user passed as values, otherwise merge updates with current user.
@@ -270,6 +268,26 @@ export class UserStore extends ModuleStore {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this.setUpdateStatus('Complete')
+  }
+
+  public async unsubscribeUser(unsubscribeToken: string) {
+    const [user] = await this.db
+      .collection(COLLECTION_NAME)
+      .getWhere('unsubscribeToken', '==', unsubscribeToken)
+
+    if (!user) {
+      throw new Error('User not found')
+    }
+
+    await this.db
+      .collection(COLLECTION_NAME)
+      .doc(user._id)
+      .update({
+        _id: user._id,
+        notification_settings: {
+          emailFrequency: EmailNotificationFrequency.NEVER,
+        },
+      })
   }
 
   public async refreshActiveUserDetails() {

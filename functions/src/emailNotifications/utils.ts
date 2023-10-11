@@ -6,8 +6,14 @@ import {
   PK_PROJECT_IMAGE,
   PP_PROJECT_NAME,
   PK_PROJECT_NAME,
+  PP_SIGNOFF,
+  PK_SIGNOFF,
 } from './constants'
 import { firebaseAuth } from '../Firebase/auth'
+import { db } from '../Firebase/firestoreDB'
+import { DB_ENDPOINTS, IUserDB } from '../models'
+
+export const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
 
 export const getUserEmail = async (uid: string): Promise<string | null> => {
   try {
@@ -16,6 +22,22 @@ export const getUserEmail = async (uid: string): Promise<string | null> => {
   } catch (error) {
     return null
   }
+}
+
+export const getUserAndEmail = async (userName: string) => {
+  const toUserDoc = (await db
+    .collection(DB_ENDPOINTS.users)
+    .doc(userName)
+    .get()) as FirebaseFirestore.DocumentSnapshot<IUserDB>
+
+  const toUser = toUserDoc.exists ? toUserDoc.data() : undefined
+  const toUserEmail = toUser ? await getUserEmail(toUser._authID) : undefined
+
+  if (!toUser || !toUserEmail) {
+    throw new Error(`Cannot get user ${userName}`)
+  }
+
+  return { toUser, toUserEmail }
 }
 
 export const SITE_URL = CONFIG.deployment.site_url
@@ -33,12 +55,33 @@ export const getProjectImageSrc = () => {
 
 export const getProjectName = () => {
   switch (SITE_URL) {
+    case 'http://localhost:4000':
     case 'https://dev.onearmy.world':
     case 'https://community.preciousplastic.com':
       return PP_PROJECT_NAME
     case 'https://dev.community.projectkamp.com':
     case 'https://community.projectkamp.com':
       return PK_PROJECT_NAME
+  }
+}
+
+export const getGreeting = (
+  userDisplayName: string,
+  greetingMessage: string = '',
+) => `
+<div align="left" class="greeting-container">
+<p>Hey ${userDisplayName}</p>
+<p>${greetingMessage}</p>
+</div>`
+
+export const getProjectSignoff = () => {
+  switch (SITE_URL) {
+    case 'https://dev.onearmy.world':
+    case 'https://community.preciousplastic.com':
+      return PP_SIGNOFF
+    case 'https://dev.community.projectkamp.com':
+    case 'https://community.projectkamp.com':
+      return PK_SIGNOFF
   }
 }
 

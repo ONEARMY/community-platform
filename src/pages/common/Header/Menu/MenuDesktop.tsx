@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import { getAvailablePageList } from 'src/pages/PageList'
 import { Flex } from 'theme-ui'
@@ -42,31 +41,27 @@ MenuLink.defaultProps = {
   activeClassName: 'current',
 }
 
-export class MenuDesktop extends Component {
-  render() {
-    return (
-      <>
-        <Flex sx={{ alignItems: 'center', width: '100%' }}>
-          {getAvailablePageList(getSupportedModules()).map((page) => {
-            const link = (
-              <Flex key={page.path}>
-                <MenuLink to={page.path} data-cy="page-link">
-                  <Flex>{page.title}</Flex>
-                </MenuLink>
-              </Flex>
-            )
-            return page.requiredRole ? (
-              <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
-                {link}
-              </AuthWrapper>
-            ) : (
-              link
-            )
-          })}
-        </Flex>
-      </>
-    )
-  }
-}
+export const MenuDesktop = () => (
+  <>
+    <Flex sx={{ alignItems: 'center', width: '100%' }}>
+      {getAvailablePageList(getSupportedModules()).map((page) => {
+        const link = (
+          <Flex key={page.path}>
+            <MenuLink to={page.path} data-cy="page-link">
+              <Flex>{page.title}</Flex>
+            </MenuLink>
+          </Flex>
+        )
+        return page.requiredRole ? (
+          <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+            {link}
+          </AuthWrapper>
+        ) : (
+          link
+        )
+      })}
+    </Flex>
+  </>
+)
 
 export default MenuDesktop

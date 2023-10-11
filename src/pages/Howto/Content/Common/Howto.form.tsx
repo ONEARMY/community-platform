@@ -158,6 +158,7 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
             hasValidationErrors,
             submitFailed,
             submitting,
+            values,
           }) => {
             return (
               <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
@@ -210,16 +211,16 @@ export class HowtoForm extends React.PureComponent<IProps, IState> {
                               sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                             >
                               <HowtoFieldTitle
-                                _id={formValues._id}
-                                parentType={parentType}
                                 store={this.store}
+                                _id={formValues._id}
                               />
-                              <HowtoFieldCategory />
+                              <HowtoFieldCategory category={values.category} />
                               <HowtoFieldTags />
                               <HowtoFieldTime />
                               <HowtoFieldDifficulty />
                               <HowtoFieldDescription />
                               <HowtoFieldFiles
+                                category={values.category}
                                 fileEditMode={fileEditMode}
                                 files={formValues.files}
                                 onClick={() => {

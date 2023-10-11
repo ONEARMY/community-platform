@@ -43,6 +43,7 @@
     "taskkill",
     "teardown",
     "Brevo",
-    "Sendinblue"
+    "Sendinblue",
+    "envsubst"
   ]
 }

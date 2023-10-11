@@ -8,5 +8,6 @@
     "project-kamp-production": "project-kamp-community",
     "fixing-fashion-development": "fixing-fashion-dev",
     "fixing-fashion-production": "fixing-fashion-prod"
-  }
+  },
+  "targets": {}
 }

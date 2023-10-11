@@ -24,8 +24,9 @@ export interface IMapPin {
   _deleted: boolean
   type: IMapPinType
   location: ILatLng
-  subType?: IMapPinSubtype
   verified: boolean
+  subType?: IMapPinSubtype
+  comments?: string
 }
 
 /**

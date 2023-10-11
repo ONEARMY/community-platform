@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, Flex, Heading, Label } from 'theme-ui'
 import { Button, FieldInput } from 'oa-components'
 import { Form, Field } from 'react-final-form'
-import { logger } from 'workbox-core/_private'
+import { logger } from 'src/logger'
 
 interface IFormValues {
   email: string

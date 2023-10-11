@@ -39,7 +39,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy="Username"]').should('contain.text', admin.userName)
       cy.get('[data-cy=adminEdit]').should('not.exist')
       cy.visit(`/u/${admin.userName}/edit`)
-      cy.get('[data-cy=auth-route-deny]').should('exist')
+      cy.get('[data-cy=BlockedRoute]').should('exist')
     })
   })
 

@@ -8,15 +8,18 @@ import type {
   AuthorOption,
 } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
+const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
+
 // remove special characters from string, also replacing spaces with dashes
 export const stripSpecialCharacters = (text: string) => {
   return text
-    ? text
-        .split(' ')
-        .join('-')
-        .replace(/[^a-zA-Z0-9_-]/gi, '')
+    ? text.split(' ').join('-').replace(specialCharactersPattern, '')
     : ''
 }
+
+// get special characters from string using the same pattern as stripSpecialCharacters
+export const getSpecialCharacters = (text: string): string[] =>
+  Array.from(text.matchAll(specialCharactersPattern)).map((x) => x[0])
 
 // convert to lower case and remove any special characters
 export const formatLowerNoSpecial = (text: string) => {

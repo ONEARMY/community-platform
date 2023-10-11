@@ -10,7 +10,7 @@ interface IResearchAggregation extends IAggregation {
 const researchAggregations: IResearchAggregation[] = [
   {
     sourceCollection: 'research',
-    sourceFields: ['votedUsefulBy', 'collaborators', 'moderation'],
+    sourceFields: ['collaborators', 'moderation'],
     changeType: 'updated',
     targetCollection: 'aggregations',
     targetDocId: 'users_totalUseful',
@@ -36,8 +36,9 @@ const researchAggregations: IResearchAggregation[] = [
 ]
 
 /** Watch changes to all research docs and apply aggregations */
-exports.default = functions.firestore
-  .document(`${DB_ENDPOINTS.research}/{id}`)
+exports.default = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document(`${DB_ENDPOINTS.research}/{id}`)
   .onUpdate((change) => {
     return handleDBAggregations(change, researchAggregations)
   })

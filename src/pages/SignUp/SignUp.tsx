@@ -8,10 +8,24 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { RouteComponentProps } from 'react-router'
 import { withRouter, Redirect } from 'react-router'
 import { string, object, ref, bool } from 'yup'
-import { required } from 'src/utils/validators'
+import {
+  composeValidators,
+  noSpecialCharacters,
+  required,
+} from 'src/utils/validators'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import { Link } from 'react-router-dom'
 import { PasswordField } from 'src/common/Form/PasswordField'
+
+const validationSchema = object({
+  displayName: string().min(2, 'Too short').required('Required'),
+  email: string().email('Invalid email').required('Required'),
+  password: string().required('Password is required'),
+  'confirm-password': string()
+    .oneOf([ref('password'), ''], 'Your new password does not match')
+    .required('Password confirm is required'),
+  consent: bool().oneOf([true], 'Consent is required'),
+})
 
 interface IFormValues {
   email: string
@@ -83,19 +97,6 @@ class SignUpPage extends React.Component<IProps, IState> {
       <Form
         onSubmit={(v) => this.onSignupSubmit(v as IFormValues)}
         validate={async (values: any) => {
-          const validationSchema = object({
-            displayName: string().min(2, 'Too short').required('Required'),
-            email: string().email('Invalid email').required('Required'),
-            password: string().required('Password is required'),
-            'confirm-password': string()
-              .oneOf(
-                [ref('password'), null],
-                'Your new password does not match',
-              )
-              .required('Password confirm is required'),
-            consent: bool().oneOf([true], 'Consent is required'),
-          })
-
           try {
             await validationSchema.validate(values, { abortEarly: false })
           } catch (err) {
@@ -157,7 +158,10 @@ class SignUpPage extends React.Component<IProps, IState> {
                           type="userName"
                           component={FieldInput}
                           placeholder="Pick a unique name"
-                          validate={required}
+                          validate={composeValidators(
+                            required,
+                            noSpecialCharacters,
+                          )}
                         />
                       </Flex>
                       <Flex

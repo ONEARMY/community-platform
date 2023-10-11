@@ -11,6 +11,7 @@ import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
 import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
+import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 const updateQueryParams = (
   url: string,
@@ -48,10 +49,12 @@ export const SortFilterHeader = ({
 
   const { searchValue, activeSorter, availableItemSortingOption } = currentStore
 
-  const sortingOptions = availableItemSortingOption?.map((label) => ({
-    label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
-    value: label,
-  }))
+  const sortingOptions = availableItemSortingOption
+    ?.map((label) => ({
+      label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
+      value: label,
+    }))
+    .filter((option) => option.value !== activeSorter)
 
   const defaultSortingOption =
     Array.isArray(sortingOptions) && sortingOptions.length > 0
@@ -60,7 +63,9 @@ export const SortFilterHeader = ({
         ) ?? sortingOptions[0]
       : ''
 
-  const [sortState, setSortState] = useState(defaultSortingOption)
+  const [sortState, setSortState] = useState(
+    activeSorter === ItemSortingOption.Random ? '' : defaultSortingOption,
+  )
 
   const items =
     type == 'how-to'

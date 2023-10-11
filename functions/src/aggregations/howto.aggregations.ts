@@ -28,8 +28,9 @@ const howtoAggregations: IHowToAggregation[] = [
 ]
 
 /** Watch changes to all howto docs and apply aggregations */
-exports.default = functions.firestore
-  .document(`${DB_ENDPOINTS.howtos}/{id}`)
+exports.default = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document(`${DB_ENDPOINTS.howtos}/{id}`)
   .onUpdate((change) => {
     return handleDBAggregations(change, howtoAggregations)
   })

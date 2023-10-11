@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import { inject, observer } from 'mobx-react'
 import {
   ArticleCallToAction,
@@ -11,20 +10,12 @@ import type { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router'
 import type { IHowtoDB } from 'src/models/howto.models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { Box, Flex, Text } from 'theme-ui'
+import { Box } from 'theme-ui'
 import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import Step from './Step/Step'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
-import { Link } from 'react-router-dom'
-import WhiteBubble0 from 'src/assets/images/white-bubble_0.svg'
-import WhiteBubble1 from 'src/assets/images/white-bubble_1.svg'
-import WhiteBubble2 from 'src/assets/images/white-bubble_2.svg'
-import WhiteBubble3 from 'src/assets/images/white-bubble_3.svg'
 import { trackEvent } from 'src/common/Analytics'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import type { UserComment } from 'src/models'
@@ -50,43 +41,6 @@ interface IState {
   isLoading: boolean
   changedIsUseful?: boolean
 }
-
-const MoreBox = styled(Box)`
-  position: relative;
-  &:after {
-    content: '';
-    background-image: url(${WhiteBubble0});
-    width: 100%;
-    height: 100%;
-    z-index: ${theme.zIndex.behind};
-    background-size: contain;
-    background-repeat: no-repeat;
-    position: absolute;
-    top: 55%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    max-width: 850px;
-    background-position: center 10%;
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[0]}) {
-    &:after {
-      background-image: url(${WhiteBubble1});
-    }
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[1]}) {
-    &:after {
-      background-image: url(${WhiteBubble2});
-    }
-  }
-
-  @media only screen and (min-width: ${theme.breakpoints[2]}) {
-    &:after {
-      background-image: url(${WhiteBubble3});
-    }
-  }
-`
 
 @inject('howtoStore', 'userStore', 'aggregationsStore', 'tagsStore')
 @observer
@@ -235,6 +189,12 @@ export class Howto extends React.Component<
                     ?.scrollIntoView({
                       behavior: 'smooth',
                     })
+                  ;(
+                    document.querySelector(
+                      '[data-cy="comments-form"]',
+                    ) as HTMLTextAreaElement
+                  )?.focus()
+
                   return false
                 }}
               >
@@ -257,27 +217,6 @@ export class Howto extends React.Component<
             </ArticleCallToAction>
           </Box>
           <HowToComments comments={activeHowToComments} />
-          <MoreBox py={20} mt={20}>
-            <Text
-              sx={{
-                fontSize: [4, 4, 5],
-                display: 'block',
-                fontWeight: 'bold',
-                textAlign: 'center',
-              }}
-            >
-              You're done.
-              <br />
-              Nice one!
-            </Text>
-            <Flex sx={{ justifyContent: 'center' }} mt={2}>
-              <Link to={'/how-to/'}>
-                <Button variant={'secondary'} data-cy="go-back">
-                  Back
-                </Button>
-              </Link>
-            </Flex>
-          </MoreBox>
         </>
       )
     } else {
@@ -289,7 +228,7 @@ export class Howto extends React.Component<
             pathname: '/how-to',
             search:
               '?search=' +
-              (this.props?.match?.params?.slug).replace(/\-/gi, ' ') +
+              (this.props?.match?.params?.slug || '').replace(/\-/gi, ' ') +
               '&source=how-to-not-found',
           }}
         />

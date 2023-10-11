@@ -67,6 +67,7 @@ describe('FilterSorterDecorator', () => {
       _createdBy: 'user1',
       moderation: 'accepted',
       votedUsefulBy: ['user3'],
+      total_downloads: 10,
       researchCategory: {
         _contentModifiedTimestamp: '2022-12-24T07:50:55.226Z',
         _created: '2022-12-24T07:50:55.226Z',
@@ -124,13 +125,16 @@ describe('FilterSorterDecorator', () => {
 
   //#region Sorting
   test('sort by latest modified', () => {
-    const sortedItems = decorator.sort(ItemSortingOption.Modified, mockItems)
+    const sortedItems = decorator.sort(
+      ItemSortingOption.LatestUpdated,
+      mockItems,
+    )
     expect(sortedItems[0]._contentModifiedTimestamp).toBe('2022-02-01')
     expect(sortedItems[1]._contentModifiedTimestamp).toBe('2022-01-01')
   })
 
   test('sort by latest created', () => {
-    const sortedItems = decorator.sort(ItemSortingOption.Created, mockItems)
+    const sortedItems = decorator.sort(ItemSortingOption.Newest, mockItems)
     expect(sortedItems[0]._created).toBe('2022-02-01')
     expect(sortedItems[1]._created).toBe('2022-01-01')
   })
@@ -149,6 +153,15 @@ describe('FilterSorterDecorator', () => {
 
   test('sort by comments', () => {
     const sortedItems = decorator.sort(ItemSortingOption.Comments, mockItems)
+    expect(sortedItems[0].title).toBe(mockItems[1].title)
+    expect(sortedItems[1].title).toBe(mockItems[0].title)
+  })
+
+  test('sort by total_downloads', () => {
+    const sortedItems = decorator.sort(
+      ItemSortingOption.TotalDownloads,
+      mockItems,
+    )
     expect(sortedItems[0].title).toBe(mockItems[1].title)
     expect(sortedItems[1].title).toBe(mockItems[0].title)
   })

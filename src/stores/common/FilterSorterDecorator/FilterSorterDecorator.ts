@@ -20,15 +20,19 @@ export interface IItem {
   }[]
   moderation?: IModerationStatus
   collaborators?: string[]
+  total_downloads?: number
+  comments?: IComment[]
 }
 
 export enum ItemSortingOption {
   None = 'None',
-  Modified = 'Modified',
-  Created = 'Created',
+  LatestUpdated = 'LatestUpdated',
+  Newest = 'Newest',
   MostUseful = 'MostUseful',
   Comments = 'Comments',
   Updates = 'Updates',
+  TotalDownloads = 'TotalDownloads',
+  Random = 'Random',
 }
 
 export interface AuthorOption {
@@ -92,7 +96,23 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByLatestModified(listItems: T[]) {
-    return this.sortByProperty(listItems, '_contentModifiedTimestamp')
+    return [...listItems].sort((a, b) => {
+      const dateA = new Date(
+        a._contentModifiedTimestamp || a._modified,
+      ).toISOString()
+      const dateB = new Date(
+        b._contentModifiedTimestamp || b._modified,
+      ).toISOString()
+      if (dateA === dateB) {
+        return 0
+      }
+
+      return dateA < dateB ? 1 : -1
+    })
+  }
+
+  private sortByMostDownloads(listItems: T[]) {
+    return this.sortByProperty(listItems, 'total_downloads')
   }
 
   private sortByLatestCreated(listItems: T[]) {
@@ -109,8 +129,8 @@ export class FilterSorterDecorator<T extends IItem> {
 
   private sortByComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
-      const totalCommentsA = calculateTotalComments(a)
-      const totalCommentsB = calculateTotalComments(b)
+      const totalCommentsA = a.comments?.length || calculateTotalComments(a)
+      const totalCommentsB = b.comments?.length || calculateTotalComments(b)
 
       if (totalCommentsA === totalCommentsB) {
         return 0
@@ -144,17 +164,31 @@ export class FilterSorterDecorator<T extends IItem> {
     })
   }
 
+  private sortRandomly(listItems: T[]) {
+    const _listItems = [...listItems]
+
+    // randomize array by using Fisher-Yates algorith
+    for (let i = _listItems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      const temp = _listItems[i]
+      _listItems[i] = _listItems[j]
+      _listItems[j] = temp
+    }
+
+    return _listItems
+  }
+
   @action
   public getSortedItems(listItems: T[], activeUser?: IUser): T[] {
     let validItems = listItems
 
     if (this.activeSorter) {
       switch (this.activeSorter) {
-        case ItemSortingOption.Modified:
+        case ItemSortingOption.LatestUpdated:
           validItems = this.sortByLatestModified(validItems)
           break
 
-        case ItemSortingOption.Created:
+        case ItemSortingOption.Newest:
           validItems = this.sortByLatestCreated(validItems)
           break
 
@@ -168,6 +202,14 @@ export class FilterSorterDecorator<T extends IItem> {
 
         case ItemSortingOption.Updates:
           validItems = this.sortByUpdates(validItems)
+          break
+
+        case ItemSortingOption.TotalDownloads:
+          validItems = this.sortByMostDownloads(validItems)
+          break
+
+        case ItemSortingOption.Random:
+          validItems = this.sortRandomly(validItems)
           break
 
         default:

@@ -5,12 +5,11 @@ import {
   Username,
   Tooltip,
 } from 'oa-components'
-import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { Link as RouterLink } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { Card, Flex, Heading, Text, Box } from 'theme-ui'
+import { Card, Flex, Heading, Text, Box, Image } from 'theme-ui'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -46,13 +45,13 @@ export const HowToCard = (props: IProps) => {
               fontSize: 0,
             }}
           >
-            <LazyLoadImage
+            <Image
               style={{
                 width: '100%',
                 height: 'calc(((350px) / 3) * 2)',
                 objectFit: 'cover',
               }}
-              threshold={500}
+              loading="lazy"
               src={howto.cover_image?.downloadUrl}
               crossOrigin=""
             />

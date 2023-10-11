@@ -58,7 +58,7 @@ We have adopted [all contributors](https://allcontributors.org/) and their tooli
 
 After merging a new contributors PR:
 
-1. Add a comment to the merged PR mentioning the bot, contributor and their contribution [type](https://allcontributors.org/docs/en/emoji-key), for example: `@all-contributors add @githubUsername for code`
+1. Add a comment to the merged PR mentioning the bot, contributor and their contribution [type](https://allcontributors.org/docs/en/emoji-key), for example: `@all-contributors add @username for code`
 2. A PR will be automatically raised, [example](https://github.com/ONEARMY/community-platform/pull/1952)
 3. The PR raised by the All Contributors bot will need to be merged with admin privileges as the required CI skips are deliberately skipped.
 

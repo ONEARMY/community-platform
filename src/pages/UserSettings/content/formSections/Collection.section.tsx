@@ -24,120 +24,114 @@ interface IProps {
   required: boolean
 }
 
-export class CollectionSection extends React.Component<IProps> {
-  constructor(props: IProps) {
-    super(props)
-  }
+export const CollectionSection = (props: IProps) => {
+  const { required } = props
+  const { description, title } = fields.openingHours
 
-  render() {
-    const { required } = this.props
-    const { description, title } = fields.openingHours
-
-    return (
-      <FlexSectionContainer>
-        <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading variant="small">{headings.collection}</Heading>
+  return (
+    <FlexSectionContainer>
+      <Flex sx={{ justifyContent: 'space-between' }}>
+        <Heading variant="small">{headings.collection}</Heading>
+      </Flex>
+      <Box>
+        <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>
+          <Text mt={4} mb={4}>
+            {`${title} *`}
+          </Text>
         </Flex>
-        <Box>
-          <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>
-            <Text mt={4} mb={4}>
-              {`${title} *`}
-            </Text>
-          </Flex>
-          <FieldArray name="openingHours">
-            {({ fields }) => (
-              <>
-                {fields.map((name, index: number) => (
-                  <OpeningHoursPicker
-                    key={index}
-                    openingHoursValues={name}
-                    index={index}
-                    onDelete={(fieldIndex: number) => {
-                      fields.remove(fieldIndex)
-                    }}
-                  />
-                ))}
-                <Button
-                  data-cy="add-opening-time"
-                  my={2}
-                  variant="outline"
-                  onClick={() => {
-                    fields.push({
-                      day: '',
-                      openFrom: '',
-                      openTo: '',
-                    })
+        <FieldArray name="openingHours">
+          {({ fields }) => (
+            <>
+              {fields.map((name, index: number) => (
+                <OpeningHoursPicker
+                  key={index}
+                  openingHoursValues={name}
+                  index={index}
+                  onDelete={(fieldIndex: number) => {
+                    fields.remove(fieldIndex)
                   }}
-                >
-                  {description}
-                </Button>
-              </>
-            )}
-          </FieldArray>
-          <Box>
-            <Text mt={4} mb={4}>
-              {`${fields.plastic.title}`} *
-            </Text>
-            <Grid
-              columns={['repeat(auto-fill, minmax(100px, 1fr))']}
-              gap={2}
-              sx={{ my: 2 }}
-            >
-              <FieldArray name="collectedPlasticTypes">
-                {({ fields }) => (
-                  <>
-                    {PLASTIC_TYPES.map((plastic, index: number) => (
-                      <CustomCheckbox
-                        data-cy={`plastic-${plastic.label}`}
-                        key={index}
-                        fullWidth
-                        value={plastic.label}
-                        index={index}
-                        isSelected={
-                          fields.value
-                            ? fields.value.includes(plastic.label)
-                            : false
-                        }
-                        onChange={() => {
-                          if (fields.value && fields.value.length !== 0) {
-                            if (fields.value.includes(plastic.label)) {
-                              // eslint-disable-next-line
-                              fields.value.map((value, selectedValIndex) => {
-                                if (value === plastic.label) {
-                                  fields.remove(selectedValIndex)
-                                }
-                              })
-                            } else {
-                              fields.push(plastic.label)
-                            }
+                />
+              ))}
+              <Button
+                data-cy="add-opening-time"
+                my={2}
+                variant="outline"
+                onClick={() => {
+                  fields.push({
+                    day: '',
+                    openFrom: '',
+                    openTo: '',
+                  })
+                }}
+              >
+                {description}
+              </Button>
+            </>
+          )}
+        </FieldArray>
+        <Box>
+          <Text mt={4} mb={4}>
+            {`${fields.plastic.title}`} *
+          </Text>
+          <Grid
+            columns={['repeat(auto-fill, minmax(100px, 1fr))']}
+            gap={2}
+            sx={{ my: 2 }}
+          >
+            <FieldArray name="collectedPlasticTypes">
+              {({ fields }) => (
+                <>
+                  {PLASTIC_TYPES.map((plastic, index: number) => (
+                    <CustomCheckbox
+                      data-cy={`plastic-${plastic.label}`}
+                      key={index}
+                      fullWidth
+                      value={plastic.label}
+                      index={index}
+                      isSelected={
+                        fields.value
+                          ? fields.value.includes(plastic.label)
+                          : false
+                      }
+                      onChange={() => {
+                        if (fields.value && fields.value.length !== 0) {
+                          if (fields.value.includes(plastic.label)) {
+                            // eslint-disable-next-line
+                            fields.value.map((value, selectedValIndex) => {
+                              if (value === plastic.label) {
+                                fields.remove(selectedValIndex)
+                              }
+                            })
                           } else {
                             fields.push(plastic.label)
                           }
-                        }}
-                        imageSrc={plastic.imageSrc}
-                      />
-                    ))}
-                  </>
-                )}
-              </FieldArray>
-            </Grid>
-            {required && (
-              <Text
-                sx={{
-                  fontSize: 0.5,
-                  marginLeft: 1,
-                  marginRight: 1,
-                  color: 'error',
-                }}
-              >
-                {fields.plastic.description}
-              </Text>
-            )}
-          </Box>
+                        } else {
+                          fields.push(plastic.label)
+                        }
+                      }}
+                      imageSrc={plastic.imageSrc}
+                    />
+                  ))}
+                </>
+              )}
+            </FieldArray>
+          </Grid>
+          {required && (
+            <Text
+              sx={{
+                fontSize: 0.5,
+                marginLeft: 1,
+                marginRight: 1,
+                color: 'error',
+              }}
+            >
+              {fields.plastic.description}
+            </Text>
+          )}
         </Box>
-      </FlexSectionContainer>
-    )
-  }
+      </Box>
+    </FlexSectionContainer>
+  )
 }
 
 const PLASTIC_TYPES: IPlasticType[] = [

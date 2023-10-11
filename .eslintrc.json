@@ -47,6 +47,7 @@
     "react/jsx-no-target-blank": "warn",
     // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
     "react/no-deprecated": "warn",
+    "react/prefer-stateless-function": "error",
     "react/no-unescaped-entities": "off",
     // as of v17 no longer required
     "react/react-in-jsx-scope": "off",

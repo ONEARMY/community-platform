@@ -51,10 +51,10 @@ const ForgotPasswordMessagePage = lazy(
     ),
 )
 const PrivacyPolicy = lazy(
-  () => import(/* webpackChunkName: "privacy" */ './policy/privacy'),
+  () => import(/* webpackChunkName: "privacy" */ './policy/PrivacyPolicy'),
 )
 const TermsPolicy = lazy(
-  () => import(/* webpackChunkName: "terms" */ './policy/terms'),
+  () => import(/* webpackChunkName: "terms" */ './policy/TermsPolicy'),
 )
 const Unsubscribe = lazy(
   () => import(/* webpackChunkName: "terms" */ './Unsubscribe/Unsubscribe'),

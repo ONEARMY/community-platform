@@ -36,6 +36,16 @@ const updateQueryParams = (
   })
 }
 
+const getQueryParam = (
+  url: string,
+  key: string,
+  defaultValue: string | null,
+) => {
+  const Url = new URL(url)
+  const params = new URLSearchParams(Url.search)
+  return params.get(key) ?? defaultValue
+}
+
 interface SortFilterHeaderProps {
   store: HowtoStore | ResearchStore
   type: 'how-to' | 'research'
@@ -73,6 +83,9 @@ export const SortFilterHeader = ({
       : (currentStore as ResearchStore).filteredResearches
 
   const authorsOptions = getAuthorOptions(items)
+
+  const urlSelectedAuthor = getQueryParam(window.location.href, 'author', null)
+  if (urlSelectedAuthor) currentStore.updateSelectedAuthor(urlSelectedAuthor)
 
   const _inputStyle = {
     width: ['100%', '100%', '200px'],
@@ -137,6 +150,12 @@ export const SortFilterHeader = ({
                 : null
             }
             onChange={(author) => {
+              updateQueryParams(
+                window.location.href,
+                'author',
+                author ? author.value : '',
+                history,
+              )
               currentStore.updateSelectedAuthor(author?.value ?? null)
             }}
             isClearable={true}

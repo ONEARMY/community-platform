@@ -47,6 +47,35 @@ describe('Research Article', () => {
     incrementViewCount: jest.fn(),
   }
 
+  it('displays content statistics', async () => {
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+      activeResearchItem: FactoryResearchItem({
+        collaborators: undefined,
+        updates: [
+          FactoryResearchItemUpdate({
+            status: 'published',
+            _deleted: false,
+          }),
+        ],
+      }),
+    })
+
+    // Act
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
+
+    // Assert
+    expect(wrapper.getByText('0 views')).toBeInTheDocument()
+    expect(wrapper.getByText('0 following')).toBeInTheDocument()
+    expect(wrapper.getByText('0 useful')).toBeInTheDocument()
+    expect(wrapper.getByText('0 comments')).toBeInTheDocument()
+    expect(wrapper.getByText('1 step')).toBeInTheDocument()
+  })
+
   it('does not display contributors when undefined', async () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({

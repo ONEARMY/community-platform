@@ -58,6 +58,24 @@ const factory = async (howtoStore?: Partial<HowtoStore>) =>
   )
 
 describe('Howto', () => {
+  it('displays content statistics', async () => {
+    let wrapper
+    await act(async () => {
+      wrapper = await factory({
+        ...mockHowtoStore(),
+        activeHowto: FactoryHowto({
+          _createdBy: 'HowtoAuthor',
+          steps: [FactoryHowtoStep({})],
+        }),
+      })
+    })
+
+    expect(wrapper.getByText('0 views')).toBeInTheDocument()
+    expect(wrapper.getByText('0 useful')).toBeInTheDocument()
+    expect(wrapper.getByText('0 comments')).toBeInTheDocument()
+    expect(wrapper.getByText('1 step')).toBeInTheDocument()
+  })
+
   it('shows verified badge', async () => {
     let wrapper
     await act(async () => {

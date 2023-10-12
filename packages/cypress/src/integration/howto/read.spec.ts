@@ -85,7 +85,6 @@ describe('[How To]', () => {
             'show you how to make a brick using the injection machine',
             'Description',
           )
-          expect($summary).to.contain('12 steps', 'No. of Steps')
           expect($summary).to.contain('3-4 weeks', 'Duration')
           expect($summary).to.contain('Hard', 'Difficulty')
           expect($summary).to.contain('product', 'Tag')
@@ -142,12 +141,6 @@ describe('[How To]', () => {
         cy.step('Delete button should not be visible')
         cy.get('[data-cy="How-To: delete button"]').should('not.exist')
       })
-
-      it('[Views only visible for beta-testers]', () => {
-        cy.visit(specificHowtoUrl)
-        cy.step(`ViewsCounter should not be visible`)
-        cy.get('[data-cy="ViewsCounter"]').should('not.exist')
-      })
     })
 
     describe('[By Authenticated]', () => {
@@ -166,23 +159,6 @@ describe('[How To]', () => {
           'target',
           '_blank',
         )
-      })
-    })
-
-    describe('[By Beta-Tester]', () => {
-      it('[Views show on multiple howtos]', () => {
-        cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
-
-        cy.step('Views show on first howto')
-        cy.visit(specificHowtoUrl)
-        cy.get('[data-cy="ViewsCounter"]').should('exist')
-
-        cy.step('Go back')
-        cy.go('back')
-
-        cy.step('Views show on second howto')
-        cy.visit('/how-to/make-glass-like-beams')
-        cy.get('[data-cy="ViewsCounter"]').should('exist')
       })
     })
 

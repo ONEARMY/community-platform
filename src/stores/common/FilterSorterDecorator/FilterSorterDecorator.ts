@@ -19,6 +19,7 @@ export interface IItem {
     status: 'draft' | 'published'
   }[]
   moderation?: IModerationStatus
+  collaborators?: string[]
   total_downloads?: number
   comments?: IComment[]
 }
@@ -32,6 +33,11 @@ export enum ItemSortingOption {
   Updates = 'Updates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
+}
+
+export interface AuthorOption {
+  label: IUser['userName']
+  value: IUser['userName']
 }
 
 export class FilterSorterDecorator<T extends IItem> {
@@ -58,6 +64,17 @@ export class FilterSorterDecorator<T extends IItem> {
           else {
             return obj.researchCategory?.label === category
           }
+        })
+      : listItems
+  }
+
+  public filterByAuthor(listItems: T[] = [], author: IUser['userName']): T[] {
+    return author
+      ? listItems.filter((obj) => {
+          return (
+            obj._createdBy === author ||
+            (obj.collaborators && obj.collaborators.includes(author))
+          )
         })
       : listItems
   }

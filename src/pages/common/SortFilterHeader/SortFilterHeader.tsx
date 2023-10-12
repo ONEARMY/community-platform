@@ -10,7 +10,7 @@ import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
-import { capitalizeFirstLetter } from 'src/utils/helpers'
+import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
 import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 const updateQueryParams = (
@@ -67,8 +67,15 @@ export const SortFilterHeader = ({
     activeSorter === ItemSortingOption.Random ? '' : defaultSortingOption,
   )
 
+  const items =
+    type == 'how-to'
+      ? (currentStore as HowtoStore).filteredHowtos
+      : (currentStore as ResearchStore).filteredResearches
+
+  const authorsOptions = getAuthorOptions(items)
+
   const _inputStyle = {
-    width: ['100%', '100%', '240px'],
+    width: ['100%', '100%', '200px'],
     mr: [0, 0, 2],
     mb: [3, 3, 0],
   }
@@ -113,6 +120,26 @@ export const SortFilterHeader = ({
               currentStore.updateActiveSorter(sortBy.value)
               setSortState(sortBy)
             }}
+          />
+        </FieldContainer>
+      </Flex>
+      <Flex sx={_inputStyle}>
+        <FieldContainer>
+          <Select
+            options={authorsOptions}
+            placeholder="Filter by author"
+            value={
+              currentStore.selectedAuthor
+                ? {
+                    label: currentStore.selectedAuthor,
+                    value: currentStore.selectedAuthor,
+                  }
+                : null
+            }
+            onChange={(author) => {
+              currentStore.updateSelectedAuthor(author?.value ?? null)
+            }}
+            isClearable={true}
           />
         </FieldContainer>
       </Flex>

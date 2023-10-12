@@ -57,6 +57,7 @@ describe('FilterSorterDecorator', () => {
           ],
         },
       ],
+      collaborators: ['user1'],
     },
     {
       title: 'Item 2',
@@ -287,6 +288,21 @@ describe('FilterSorterDecorator', () => {
     const filteredItems = decorator.filterByCategory(mockItems, category)
     expect(filteredItems.length).toBe(1)
     expect(filteredItems[0].researchCategory?.label).toBe(category)
+  })
+
+  test('filter by author', () => {
+    const author = 'user3'
+    const filteredItems = decorator.filterByAuthor(mockItems, author)
+    expect(filteredItems.length).toBe(1)
+    expect(filteredItems[0]._createdBy).toBe(author)
+  })
+
+  test('filter by collaborator', () => {
+    const author = 'user1'
+    const filteredItems = decorator.filterByAuthor(mockItems, author)
+    expect(filteredItems.length).toBe(2)
+    expect(filteredItems[0].collaborators).toContain(author)
+    expect(filteredItems[1]._createdBy).toBe(author)
   })
 
   //#endregion Filter

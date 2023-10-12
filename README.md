@@ -121,6 +121,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://pizzaisdavid.medium.com/"><img src="https://avatars.githubusercontent.com/u/4391884?v=4?s=60" width="60px;" alt="David Germain"/><br /><sub><b>David Germain</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=pizzaisdavid" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://ajotka.com"><img src="https://avatars.githubusercontent.com/u/15144546?v=4?s=60" width="60px;" alt="AJOTKA"/><br /><sub><b>AJOTKA</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=ajotka" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

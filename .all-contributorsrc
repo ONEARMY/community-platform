@@ -463,6 +463,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pizzaisdavid",
+      "name": "David Germain",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4391884?v=4",
+      "profile": "https://pizzaisdavid.medium.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "ajotka",
+      "name": "AJOTKA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15144546?v=4",
+      "profile": "http://ajotka.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

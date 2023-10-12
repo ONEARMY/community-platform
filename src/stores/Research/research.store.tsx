@@ -52,6 +52,9 @@ export class ResearchStore extends ModuleStore {
   public selectedCategory: string
 
   @observable
+  public selectedAuthor: string
+
+  @observable
   public searchValue: string
 
   @observable
@@ -70,12 +73,15 @@ export class ResearchStore extends ModuleStore {
   public updateUploadStatus: IUpdateUploadStatus =
     getInitialUpdateUploadStatus()
 
+  isFetching = true
+
   constructor(rootStore: RootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
 
     this.selectedCategory = ''
+    this.selectedAuthor = ''
     this.searchValue = ''
     this.availableItemSortingOption = [
       ItemSortingOption.Newest,
@@ -98,12 +104,19 @@ export class ResearchStore extends ModuleStore {
           this.activeSorter,
           activeItems,
         )
+        if (docs.length) {
+          this.isFetching = false
+        }
       })
     })
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {
     this.activeSorter = sorter
+  }
+
+  public updateSelectedAuthor(author: IUser['userName']) {
+    this.selectedAuthor = author
   }
 
   @computed get filteredResearches() {
@@ -117,6 +130,11 @@ export class ResearchStore extends ModuleStore {
     validResearches = this.filterSorterDecorator.search(
       validResearches,
       this.searchValue,
+    )
+
+    validResearches = this.filterSorterDecorator.filterByAuthor(
+      validResearches,
+      this.selectedAuthor,
     )
 
     return this.filterSorterDecorator.sort(

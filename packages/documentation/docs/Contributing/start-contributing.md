@@ -64,7 +64,7 @@ After merging a new contributors PR:
 
 ### Payment
 
-Each role get paid a bit differently. Contributors and maintainers get paid according to the [Bounty system](/Contributing/bounties). For core maintainers there is a separate hourly pay scale. Aimed at developers who help a bit more consistently at around 2-3h per week. If you're interested in these roles then feel free to reach out on [Discord](https://discord.gg/gJ7Yyk4) or during the monthly dev call.
+Each role get paid a bit differently. Contributors and maintainers get paid according to the [Bounty system](/Contributing/bounties). For core maintainers there is a separate hourly pay scale. Aimed at developers who help a bit more consistently at around 2-3h per week. If you're interested in these roles then feel free to reach out on [Discord](https://discord.gg/gJ7Yyk4).
 
 ## Onboarding checklist
 

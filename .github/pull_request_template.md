@@ -25,7 +25,7 @@ _If useful, provide screenshot or capture to highlight main changes_
 
 ## What happens next?
 
-Thanks for the contribution! We try to make sure all PRs are reviewed ahead of a monthly dev call (first Monday of the month, open to all!).
+Thanks for the contribution! We try to make sure all PRs are reviewed ahead of our monthly maintainers call (first Monday of the month)
 
 If the PR is working as intended it'll be merged and included in the next platform release, if not changes will be requested and re-reviewed once updated.
 

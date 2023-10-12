@@ -90,7 +90,7 @@ export class HowtoList extends React.Component<any, IState> {
 
   public render() {
     const { filteredHowtos, selectedCategory, searchValue, referrerSource } =
-      this.props.howtoStore
+      this.injected.howtoStore
 
     const theme = this.props?.themeStore?.currentTheme
     const { allTagsByKey } = this.injected.tagsStore

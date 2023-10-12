@@ -286,7 +286,20 @@ jobs:
       - run:
           name: Test Functions
           # Run functions emulator test command with additional flags to ensure CI receives correct exit code
-          command: cd functions && firebase emulators:exec --project community-platform-emulated "yarn jest . --forceExit --detectOpenHandles"
+          command: cd functions && firebase emulators:exec --project community-platform-emulated "yarn jest . --forceExit --detectOpenHandles --coverage"
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - functions/coverage
+    
+  test_functions_upload_coverage:
+    docker: *docker
+    resource_class: medium+
+    steps:
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - codecov/upload
 
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
@@ -506,6 +519,14 @@ workflows:
           requires:
             - 'Lint code'
           context: build-context
+          filters:
+            branches:
+              ignore:
+                - production
+      - test_functions_upload_coverage:
+          name: 'Upload Cloud Function coverage'
+          requires:
+            - 'Cloud Function tests'
           filters:
             branches:
               ignore:

@@ -1,13 +1,17 @@
 jest.mock('../common/module.store')
 import { FactoryUser } from 'src/test/factories/User'
 import { UserStore } from './user.store'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
 describe('userStore', () => {
+  let store
+
+  beforeEach(() => {
+    store = new UserStore({} as any)
+  })
+
   describe('getUserProfile', () => {
     it('returns a single user object when 2 exist', async () => {
-      // Arrange
-      const store = new UserStore({} as any)
-
       // Lookup1
       store.db.getWhere.mockReturnValueOnce([
         FactoryUser({
@@ -46,6 +50,31 @@ describe('userStore', () => {
         links: expect.any(Array),
         notifications: expect.any(Array),
       })
+    })
+  })
+
+  describe('updateUserProfile', () => {
+    it('update user profile with type of member, previously was workspace', async () => {
+      const userProfile = FactoryUser({
+        _id: 'my-user-profile',
+        _authID: 'my-user-profile',
+        profileType: 'workspace',
+        workspaceType: 'extrusion',
+      })
+      // Act
+      await store.updateUserProfile(
+        FactoryUser({
+          ...userProfile,
+          profileType: 'member',
+        }) as Partial<IUserPP>,
+      )
+
+      // Assert
+      expect(store.db.set).toHaveBeenCalledWith(
+        expect.not.objectContaining({
+          workspaceType: 'extrusion',
+        }),
+      )
     })
   })
 })

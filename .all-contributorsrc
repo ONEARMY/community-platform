@@ -472,6 +472,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "ajotka",
+      "name": "AJOTKA",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15144546?v=4",
+      "profile": "http://ajotka.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

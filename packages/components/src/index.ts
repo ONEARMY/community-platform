@@ -47,4 +47,3 @@ export type { ResearchEditorOverviewUpdate } from './ResearchEditorOverview/Rese
 export type { User } from './types/common'
 export type { UserNotificationList } from './NotificationList/NotificationList'
 export { BlockedRoute } from './BlockedRoute/BlockedRoute'
-export { MyNewComponentName } from './MyNewComponentName/MyNewComponentName'

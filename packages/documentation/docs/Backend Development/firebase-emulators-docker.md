@@ -20,6 +20,14 @@ docker -v
 
 ## Getting Started
 
+Make sure to build the project
+
+```
+yarn build
+```
+
+Then you can start the emulators
+
 ```
 yarn start:emulated:docker
 ```

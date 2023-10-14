@@ -132,22 +132,22 @@ describe('Howto form', () => {
       let wrapper
       await act(async () => {
         wrapper = await getWrapper(formValues, 'edit', {})
-
-        // clear files
-        const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
-        fireEvent.click(reuploadFilesButton)
-
-        // add fileLink
-        const fileLink = wrapper.getByPlaceholderText(
-          'Link to Google Drive, Dropbox, Grabcad etc',
-        )
-        fireEvent.change(fileLink, {
-          target: { value: '<http://www.test.com>' },
-        })
-
-        // submit form
-        fireEvent.click(wrapper.getByTestId('submit-form'))
       })
+
+      // clear files
+      const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
+      fireEvent.click(reuploadFilesButton)
+
+      // add fileLink
+      const fileLink = wrapper.getByPlaceholderText(
+        'Link to Google Drive, Dropbox, Grabcad etc',
+      )
+      fireEvent.change(fileLink, {
+        target: { value: '<http://www.test.com>' },
+      })
+
+      // submit form
+      fireEvent.click(wrapper.getByTestId('submit-form'))
 
       // Assert
       expect(

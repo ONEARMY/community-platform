@@ -50,6 +50,7 @@ class mockResearchStoreClass implements Partial<ResearchStore> {
   formatResearchCommentList = jest.fn()
   getActiveResearchUpdateComments = jest.fn()
   lockResearchItem = jest.fn()
+  unlockResearchItem = jest.fn()
   lockResearchUpdate = jest.fn()
   unlockResearchUpdate = jest.fn()
 
@@ -302,7 +303,7 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(async () => {
+      await act(async () => {
         wrapper = (await renderFn('/research/an-example/edit', activeUser))
           .wrapper
       })

@@ -57,7 +57,10 @@ describe('UserSettings', () => {
     const user = FactoryUser()
 
     // Act
-    const wrapper = await getWrapper(user)
+    let wrapper
+    await act(async () => {
+      wrapper = await getWrapper(user)
+    })
 
     // Assert
     expect(wrapper.getByText('Edit profile'))

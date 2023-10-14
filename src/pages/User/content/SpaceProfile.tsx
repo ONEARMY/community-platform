@@ -31,8 +31,6 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
-// import V4MemberIcon from 'src/assets/icons/icon-v4-member.svg'
-
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
 
@@ -40,7 +38,6 @@ import UserContactAndLinks from './UserContactAndLinks'
 import { ProfileType } from 'src/modules/profile/types'
 import { userStats } from 'src/common/hooks/userStats'
 import type { UserCreatedDocs } from '.'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IBackgroundImageProps {
   bgImg: string
@@ -236,115 +233,107 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
           borderTop: '2px solid',
         }}
       >
-        <Box sx={{ width: ['100%', '100%', '80%'] }}>
+        <Box sx={{ width: '100%' }}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
               <MemberBadge profileType={user.profileType} />
             </MobileBadge>
           </Box>
 
-          <Flex
+          <Box
             sx={{
-              alignItems: 'center',
+              position: 'relative',
               pt: ['0', '40px', '0'],
             }}
           >
-            <Username
-              user={{
-                userName: user.userName,
-                countryCode: userCountryCode,
-              }}
-              isVerified={stats.verified}
-            />
-          </Flex>
-
-          <Flex sx={{ alignItems: 'center' }}>
-            <Heading
-              color={'black'}
-              mb={3}
-              style={{ wordBreak: 'break-word' }}
-              data-cy="userDisplayName"
-            >
-              {user.displayName}
-            </Heading>
-          </Flex>
-
-          <AuthWrapper roleRequired="beta-tester">
-            <Tabs defaultValue={0}>
-              <TabsList>
-                <Tab>Profile</Tab>
-                <Tab>Contributions</Tab>
-                <Tab>Impact</Tab>
-                <Tab>Contact</Tab>
-              </TabsList>
-              <TabPanel>
-                <Box sx={{ mt: 3 }}>
-                  {user.about && <Paragraph>{user.about}</Paragraph>}
-
-                  {user.profileType === ProfileType.COLLECTION_POINT &&
-                    user.collectedPlasticTypes &&
-                    renderPlasticTypes(user.collectedPlasticTypes)}
-
-                  {user.profileType === ProfileType.COLLECTION_POINT &&
-                    user.openingHours &&
-                    renderOpeningHours(user.openingHours)}
-
-                  {user.profileType === ProfileType.MACHINE_BUILDER &&
-                    user.machineBuilderXp &&
-                    renderMachineBuilderXp(user.machineBuilderXp)}
-
-                  <UserContactAndLinks links={userLinks} />
-                </Box>
-              </TabPanel>
-              <TabPanel>
-                <UserCreatedDocuments docs={docs} />
-              </TabPanel>
-            </Tabs>
-          </AuthWrapper>
-
-          <Box>
-            {user.about && <Paragraph>{user.about}</Paragraph>}
-
-            {user.profileType === ProfileType.COLLECTION_POINT &&
-              user.collectedPlasticTypes &&
-              renderPlasticTypes(user.collectedPlasticTypes)}
-
-            {user.profileType === ProfileType.COLLECTION_POINT &&
-              user.openingHours &&
-              renderOpeningHours(user.openingHours)}
-
-            {user.profileType === ProfileType.MACHINE_BUILDER &&
-              user.machineBuilderXp &&
-              renderMachineBuilderXp(user.machineBuilderXp)}
-
-            <UserContactAndLinks links={userLinks} />
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            display: ['none', 'none', 'block'],
-            width: ['100%', '100%', '20%'],
-          }}
-        >
-          <MobileBadge>
-            <MemberBadge size={150} profileType={user.profileType} />
-
             <Box
               sx={{
-                mt: 3,
+                display: ['none', 'none', 'block'],
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                transform: 'translateY(-100px)',
               }}
             >
-              <UserStatistics
-                userName={user.userName}
-                country={user.location?.country}
-                isVerified={stats.verified}
-                isSupporter={!!user.badges?.supporter}
-                howtoCount={docs?.howtos.length || 0}
-                usefulCount={stats.totalUseful}
-                researchCount={docs?.research.length || 0}
-              />
+              <MemberBadge size={150} profileType={user.profileType} />
             </Box>
-          </MobileBadge>
+            <Box>
+              <Username
+                user={{
+                  userName: user.userName,
+                  countryCode: userCountryCode,
+                }}
+                isVerified={stats.verified}
+              />
+              <Heading
+                color={'black'}
+                mb={3}
+                style={{ wordBreak: 'break-word' }}
+                data-cy="userDisplayName"
+              >
+                {user.displayName}
+              </Heading>
+            </Box>
+          </Box>
+
+          <Tabs defaultValue={0}>
+            <TabsList>
+              <Tab>Profile</Tab>
+              <Tab>Contributions</Tab>
+            </TabsList>
+            <TabPanel>
+              <Box sx={{ mt: 3 }}>
+                <Flex
+                  sx={{
+                    flexDirection: ['column', 'column', 'row'],
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: ['100%', '100%', '80%'],
+                    }}
+                  >
+                    {user.about && <Paragraph>{user.about}</Paragraph>}
+
+                    {user.profileType === ProfileType.COLLECTION_POINT &&
+                      user.collectedPlasticTypes &&
+                      renderPlasticTypes(user.collectedPlasticTypes)}
+
+                    {user.profileType === ProfileType.COLLECTION_POINT &&
+                      user.openingHours &&
+                      renderOpeningHours(user.openingHours)}
+
+                    {user.profileType === ProfileType.MACHINE_BUILDER &&
+                      user.machineBuilderXp &&
+                      renderMachineBuilderXp(user.machineBuilderXp)}
+
+                    <UserContactAndLinks links={userLinks} />
+                  </Box>
+                  <Box
+                    sx={{
+                      width: ['auto', 'auto', '20%'],
+                      mt: [3, 3, 0],
+                    }}
+                  >
+                    <UserStatistics
+                      userName={user.userName}
+                      country={user.location?.country}
+                      isVerified={stats.verified}
+                      isSupporter={!!user.badges?.supporter}
+                      howtoCount={docs?.howtos.length || 0}
+                      usefulCount={stats.totalUseful}
+                      researchCount={docs?.research.length || 0}
+                    />
+                  </Box>
+                </Flex>
+              </Box>
+            </TabPanel>
+            <TabPanel>
+              <UserCreatedDocuments docs={docs} />
+            </TabPanel>
+          </Tabs>
         </Box>
       </Flex>
     </Container>

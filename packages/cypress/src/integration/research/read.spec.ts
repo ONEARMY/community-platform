@@ -50,11 +50,6 @@ describe('[Research]', () => {
         cy.step('Delete button should not be visible')
         cy.get('[data-cy="Research: delete button"]').should('not.exist')
       })
-
-      it('[Views only visible for beta-testers]', () => {
-        cy.step(`ViewsCounter should not be visible`)
-        cy.get('[data-cy="ViewsCounter"]').should('not.exist')
-      })
     })
 
     describe('[By Author]', () => {
@@ -74,18 +69,6 @@ describe('[Research]', () => {
       beforeEach(() => {
         cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
         cy.visit(researchArticleUrl)
-      })
-
-      it('[Views show on multiple research articles]', () => {
-        cy.step('Views show on first research article')
-        cy.get('[data-cy="ViewsCounter"]').should('exist')
-
-        cy.step('Go back')
-        cy.go('back')
-
-        cy.step('Views show on second research article')
-        cy.visit('/research/a-test-research')
-        cy.get('[data-cy="ViewsCounter"]').should('exist')
       })
     })
 

@@ -145,8 +145,6 @@
     "@types/react-leaflet-markercluster": "^2.0.0",
     "@types/react-router-dom": "5.1.7",
     "@types/react-select": "^2.0.17",
-    "@types/react-slick": "0.23.2",
-    "@types/react-table": "^6.8.9",
     "@types/react-virtualized": "^9.21.10",
     "@types/styled-system": "^5.1.11",
     "@typescript-eslint/eslint-plugin": "^6.7.3",

@@ -10976,24 +10976,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-<<<<<<< HEAD
-"@types/react-slick@npm:0.23.2":
-  version: 0.23.2
-  resolution: "@types/react-slick@npm:0.23.2"
-  dependencies:
-    "@types/react": "*"
-  checksum: a6b7fd485d6a6f64366f07ce6ba9e712c100f8d1cf7a664f5e0d01708875e829822734177cb223af8deb8ad6a8ee75f3557f98ba0d212058d26788c88095330e
-=======
-"@types/react-table@npm:^6.8.9":
-  version: 6.8.9
-  resolution: "@types/react-table@npm:6.8.9"
-  dependencies:
-    "@types/react": "*"
-  checksum: 519333ed44fca2133d2349634f0e228292715e401ae3572cbef7429729110476f79338f8d817d7de1049895a9173951691430438f9cfac48ea49aad2cc8c66d9
->>>>>>> b69d9498a (chore(deps): remove unused deps)
-  languageName: node
-  linkType: hard
-
 "@types/react-transition-group@npm:*, @types/react-transition-group@npm:^4.4.0":
   version: 4.4.5
   resolution: "@types/react-transition-group@npm:4.4.5"
@@ -27236,11 +27218,6 @@ __metadata:
     "@types/react-leaflet-markercluster": ^2.0.0
     "@types/react-router-dom": 5.1.7
     "@types/react-select": ^2.0.17
-<<<<<<< HEAD
-    "@types/react-slick": 0.23.2
-=======
-    "@types/react-table": ^6.8.9
->>>>>>> b69d9498a (chore(deps): remove unused deps)
     "@types/react-virtualized": ^9.21.10
     "@types/styled-system": ^5.1.11
     "@typescript-eslint/eslint-plugin": ^6.7.3

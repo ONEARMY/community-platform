@@ -42,6 +42,16 @@ const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
   }
 `
 
+const NavButton = styled('button')`
+  background: transparent;
+  border: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  cursor: pointer;
+`
+
 export const ImageGallery = (props: ImageGalleryProps) => {
   const [state, setState] = useState<IState>({
     activeImageIndex: 0,
@@ -137,14 +147,9 @@ export const ImageGallery = (props: ImageGalleryProps) => {
         />
         {showNextPrevButton ? (
           <>
-            <button
+            <NavButton
               style={{
-                background: 'transparent',
-                border: 0,
-                position: 'absolute',
-                top: 0,
                 right: 0,
-                height: '100%',
               }}
               onClick={() =>
                 setActive(
@@ -158,16 +163,10 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 size={60}
                 marginRight="4px"
               />
-            </button>
-            <button
+            </NavButton>
+            <NavButton
               style={{
-                position: 'absolute',
-                top: 0,
                 left: 0,
-                background: 'transparent',
-                border: 'none',
-                height: '100%',
-                cursor: 'pointer',
               }}
               onClick={() =>
                 setActive(
@@ -183,7 +182,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 size={60}
                 marginRight="4px"
               />
-            </button>
+            </NavButton>
           </>
         ) : null}
       </Flex>

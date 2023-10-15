@@ -1,32 +1,64 @@
-import Logger from 'pino'
-import { createPinoBrowserSend, createWriteStream } from 'pino-logflare'
 import { getConfigurationOption } from '../config/config'
+import { Logger } from 'tslog'
 
 const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
+const logTransport = getConfigurationOption('REACT_APP_LOG_TRANSPORT', 'none')
 
-let loggerInstance: Logger.Logger
-if (getConfigurationOption('REACT_APP_LOGFLARE_KEY', '')) {
-  const logflareConfiguration = {
-    apiKey: getConfigurationOption('REACT_APP_LOGFLARE_KEY', ''),
-    sourceToken: getConfigurationOption('REACT_APP_LOGFLARE_SOURCE', ''),
-  }
+const levelNumberToNameMap = {
+  silly: 0,
+  trace: 1,
+  debug: 2,
+  info: 3,
+  warn: 4,
+  error: 5,
+  fatal: 6,
+}
 
-  loggerInstance = Logger(
-    {
-      browser: {
-        transmit: {
-          send: createPinoBrowserSend(logflareConfiguration),
-        },
-      },
-      level: logLevel,
-    },
-    createWriteStream(logflareConfiguration),
-  )
-} else {
-  loggerInstance = Logger({
-    browser: { asObject: false },
-    level: logLevel,
+const type = 'pretty'
+
+export const logger = new Logger({
+  type,
+  minLevel: levelNumberToNameMap[logLevel],
+  hideLogPositionForProduction: true,
+})
+
+if (logTransport === 'googleCloudLogging') {
+  logger.attachTransport((logObj) => {
+    const msg = logObj[0]
+    delete logObj[0]
+    logObj['msg'] = msg
+
+    sendBeaconData(`//${window.location.hostname}/_logging`, logObj)
   })
 }
 
-export const logger = loggerInstance
+const sendBeaconData = (url, data) => {
+  const jsonData = JSON.stringify(data)
+  // eslint-disable-next-line no-console
+  console.log('sendBeaconData', jsonData)
+
+  if (navigator.sendBeacon) {
+    // Try using Beacon API
+    if (!navigator.sendBeacon(url, jsonData)) {
+      // If Beacon API fails, fallback to Fetch API
+      fallbackToFetchAPI(url, jsonData)
+    }
+  } else {
+    // If Beacon API is not available, fallback to Fetch API
+    fallbackToFetchAPI(url, jsonData)
+  }
+}
+
+const fallbackToFetchAPI = (url, data) => {
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: data,
+    keepalive: true, // In case this is a page unload event
+  }).catch((error) => {
+    // eslint-disable-next-line no-console
+    console.error('Fetch failed:', error)
+  })
+}

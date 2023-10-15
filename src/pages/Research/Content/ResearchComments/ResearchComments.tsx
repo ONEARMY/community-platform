@@ -62,7 +62,7 @@ export const ResearchComments = ({
       )
     } catch (err) {
       // Error: Comment could not be posted
-      logger.error({ err }, 'failed to submit comment')
+      logger.error(`Failed to set comment`, { err })
     }
   }
 

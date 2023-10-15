@@ -55,7 +55,7 @@ export const fields: ILabels = {
   emailNotifications: {
     description:
       "We send an email with all the notifications you've missed. Select how often you want to receive this",
-    title: 'Email notifications (beta)',
+    title: 'Email notifications',
   },
   expertise: {
     description: 'Choose at least one expertise',

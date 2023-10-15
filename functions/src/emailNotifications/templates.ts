@@ -158,10 +158,10 @@ export const getHowToApprovalEmail = (
 export const MAP_PIN_APPROVAL_SUBJECT = 'Your map pin has been approved!'
 export const getMapPinApprovalEmail = (
   user: IUserDB,
-  mappin: IMapPin,
+  mapPin: IMapPin,
 ): Email => {
   return {
-    html: getEmailHtml('map-pin-approval', { user, mappin, site }),
+    html: getEmailHtml('map-pin-approval', { user, mapPin, site }),
     subject: MAP_PIN_APPROVAL_SUBJECT,
   }
 }
@@ -184,10 +184,10 @@ export const getHowToSubmissionEmail = (
 export const MAP_PIN_SUBMISSION_SUBJECT = 'Your map pin has been submitted'
 export const getMapPinSubmissionEmail = (
   user: IUserDB,
-  mappin: IMapPin,
+  mapPin: IMapPin,
 ): Email => {
   return {
-    html: getEmailHtml('map-pin-submission', { user, mappin, site }),
+    html: getEmailHtml('map-pin-submission', { user, mapPin, site }),
     subject: MAP_PIN_SUBMISSION_SUBJECT,
   }
 }

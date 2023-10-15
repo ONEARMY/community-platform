@@ -215,3 +215,19 @@ export const getAuthorOptions = (items: IItem[]): AuthorOption[] => {
       value: author,
     }))
 }
+
+export const buildStatisticsLabel = ({
+  stat,
+  statUnit,
+  usePlural,
+}: {
+  stat: number
+  statUnit: string
+  usePlural: boolean
+}): string => {
+  if (stat === 1 || !usePlural) {
+    return `${stat} ${statUnit}`
+  }
+
+  return `${stat || 0} ${statUnit}s`
+}

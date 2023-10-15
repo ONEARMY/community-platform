@@ -188,6 +188,12 @@ const ResearchArticle = observer((props: IProps) => {
             onFollowClick(item.slug)
           }}
           contributors={contributors}
+          subscribersCount={researchStore.subscribersCount}
+          commentsCount={researchStore.commentsCount}
+          updatesCount={
+            item.updates?.filter((u) => u.status !== 'draft' && !u._deleted)
+              .length || 0
+          }
         />
         <Box my={16}>
           {item &&

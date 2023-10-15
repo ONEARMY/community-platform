@@ -34,7 +34,7 @@ export function render(url) {
         comments: 'Mock Howto Moderation Comments',
         slug: 'mock-howto-title',
       },
-      mappin: {
+      mapPin: {
         comments: 'Mock Mappin Moderation Comments',
         _id: 'mock-mappin-id',
       },

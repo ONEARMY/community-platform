@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import type { CSSObject } from '@styled-system/css'
+import type { CSSObject } from 'theme-ui'
 import type { UserRole } from 'src/models/user.models'
 import { ResearchModule } from './Research'
 import { MODULE } from 'src/modules'

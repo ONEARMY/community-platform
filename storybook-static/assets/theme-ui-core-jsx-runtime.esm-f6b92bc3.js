@@ -1,0 +1,2 @@
+import"./index-2506bfc3.js";import{h as i,E as m,c as n}from"./emotion-element-6a883da9.browser.esm-a920ce7a.js";import"./theme-ui-css.esm-8bf72815.js";import{a as t}from"./jsx-runtime-913be41c.js";import{p as c}from"./parseProps-376f43a7.esm-d1dfa265.js";function e(s,r,o){return i.call(r,"css")?t(m,n(s,r),o):t(s,r,o)}var E=function(r,o,a){return e(r,c(o),a)};export{E as j};
+//# sourceMappingURL=theme-ui-core-jsx-runtime.esm-f6b92bc3.js.map

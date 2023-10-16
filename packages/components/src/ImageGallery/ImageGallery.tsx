@@ -148,6 +148,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
         {showNextPrevButton ? (
           <>
             <NavButton
+              aria-label={'Next image'}
               style={{
                 right: 0,
               }}
@@ -165,6 +166,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
               />
             </NavButton>
             <NavButton
+              aria-label={'Previous image'}
               style={{
                 left: 0,
               }}

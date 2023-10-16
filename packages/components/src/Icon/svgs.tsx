@@ -5,6 +5,8 @@ import starActiveSVG from '../../assets/icons/icon-star-active.svg'
 import verifiedSVG from '../../assets/icons/icon-verified-badge.svg'
 import usefulSVG from '../../assets/icons/icon-useful.svg'
 import commentSVG from '../../assets/icons/icon-comment.svg'
+import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
+import chevronRightSVG from '../../assets/icons/chevron-right.svg'
 import viewSVG from '../../assets/icons/icon-views.svg'
 import supporterSVG from '../../assets/icons/supporter.svg'
 import socialMediaSVG from '../../assets/icons/icon-social-media.svg'
@@ -38,4 +40,6 @@ export const iconMap = {
   update: <img alt="icon" style={imgStyle} src={updateSVG} />,
   show: <img alt="icon" style={imgStyle} src={eyeSVG} />,
   hide: <img alt="icon" style={imgStyle} src={eyeCrossedSVG} />,
+  chevronLeft: <img alt="icon" style={imgStyle} src={chevronLeftSVG} />,
+  chevronRight: <img alt="icon" style={imgStyle} src={chevronRightSVG} />,
 }

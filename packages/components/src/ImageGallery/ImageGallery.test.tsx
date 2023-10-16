@@ -1,7 +1,11 @@
 import { render } from '../tests/utils'
 import { findByRole as globalFindByRole, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
-import { Default } from './ImageGallery.stories'
+import {
+  Default,
+  NoThumbnails,
+  ShowNextPrevButtons,
+} from './ImageGallery.stories'
 import { ImageGallery } from './ImageGallery'
 import type { ImageGalleryProps } from './ImageGallery'
 
@@ -157,5 +161,28 @@ describe('ImageGallery', () => {
     )
   })
 
-  it('supports no thumbnail option', async () => {})
+  it('supports no thumbnail option', async () => {
+    const { getAllByTestId } = render(
+      <NoThumbnails {...(NoThumbnails.args as ImageGalleryProps)} />,
+    )
+
+    expect(() => {
+      getAllByTestId('thumbnail')
+    }).toThrow()
+  })
+
+  it('supports show next/previous buttons', async () => {
+    const { getByRole } = render(
+      <ShowNextPrevButtons
+        {...(ShowNextPrevButtons.args as ImageGalleryProps)}
+      />,
+    )
+
+    const nextBtn = getByRole('button', { name: 'Next image' })
+    const previousBtn = getByRole('button', { name: 'Previous image' })
+
+    console.log(ShowNextPrevButtons.args)
+    expect(nextBtn).toBeInTheDocument()
+    expect(previousBtn).toBeInTheDocument()
+  })
 })

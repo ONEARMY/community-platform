@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { Route, Switch, withRouter } from 'react-router-dom'
 import { QuestionListing } from './QuestionListing'
-import { QuestionSingle } from './QuestionSingle'
+import { QuestionPage } from './QuestionPage'
 import { QuestionCreate } from './QuestionCreate'
 import { QuestionEdit } from './QuestionEdit'
 import { AuthRoute } from '../common/AuthRoute'
@@ -24,7 +24,7 @@ const routes = () => {
           path="/questions/:slug"
           exact
           render={(props) => (
-            <QuestionSingle
+            <QuestionPage
               {...props}
               key={'questions' + props.match.params.slug}
             />

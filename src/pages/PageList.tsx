@@ -216,5 +216,5 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   forgotpasswordmessage,
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
   unsubscribe,
-  QuestionModule, // CC 2021-06-24 - Temporary - make question module accessible to all in production but hide from nav
+  QuestionModule,
 ]

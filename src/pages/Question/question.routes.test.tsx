@@ -32,18 +32,15 @@ jest.mock('src/index', () => ({
   }),
 }))
 
-/** When mocking research routes replace default store methods with below */
+/** When mocking question routes replace default store methods with below */
 class mockQuestionStoreClass implements Partial<QuestionStore> {
-  setActiveResearchItemBySlug = jest.fn()
+  setActiveQuestionItemBySlug = jest.fn()
   needsModeration = jest.fn().mockResolvedValue(true)
   incrementViewCount = jest.fn()
-  activeResearchItem = FactoryQuestionItem({
+  activeQuestionItem = FactoryQuestionItem({
     title: 'Question title',
     _createdBy: 'jasper',
   })
-  researchUploadStatus = {} as any
-  updateUploadStatus = {} as any
-  formatResearchCommentList = jest.fn()
 
   get activeUser() {
     return {
@@ -51,9 +48,6 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
       userName: 'jasper',
       userRoles: ['admin'],
     } as any
-  }
-  get filteredResearches() {
-    return []
   }
 }
 const mockQuestionStore = new mockQuestionStoreClass()

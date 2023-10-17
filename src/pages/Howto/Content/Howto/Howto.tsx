@@ -213,6 +213,7 @@ export class Howto extends React.Component<
           </Box>
           <HowToComments comments={activeHowToComments} />
           <Discussion
+            item={activeHowto}
             sourceId={activeHowto._id}
             sourceType='howto'
           />

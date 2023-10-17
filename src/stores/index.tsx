@@ -1,6 +1,7 @@
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
 import { DatabaseV2 } from './databaseV2'
+import { DiscussionStore } from './Discussions/discussions.store'
 import { HowtoStore } from './Howto/howto.store'
 import { MapsStore } from './Maps/maps.store'
 import { MessageStore } from './Message/message.store'
@@ -39,7 +40,11 @@ const stores = (rootStore: RootStore) => {
     messageStore: new MessageStore(rootStore),
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
+<<<<<<< HEAD
     questionStore: new QuestionStore(rootStore),
+=======
+    discussionStore: new DiscussionStore(rootStore)
+>>>>>>> 718d892f7 (feat: adding discussion crud methods)
   }
   return stores
 }
@@ -58,4 +63,5 @@ export interface IStores {
   aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore
   questionStore: QuestionStore
+  discussionStore: DiscussionStore
 }

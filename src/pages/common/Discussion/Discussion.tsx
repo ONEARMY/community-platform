@@ -1,35 +1,27 @@
-import { Box, Flex } from 'theme-ui'
-import { Button, CommentItem, CommentList, CreateComment } from 'oa-components'
+import { Box } from 'theme-ui'
+import { CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
 import { useCommonStores } from 'src'
-import type { UserComment } from 'src/models'
-import { MAX_COMMENTS } from 'src/constants'
 import { trackEvent } from 'src/common/Analytics'
-import { logger } from 'src/logger'
-import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
-
-interface Discussion {
-  comments: UserComment[]
-}
+//import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
+//import { logger } from 'src/logger'
 
 type DiscussionProps = {
+  item: any
   articleTitle?: string
   sourceId: string
   sourceType: string
 }
 
 export const Discussion = ({ articleTitle }: DiscussionProps) => {
-  const  comments = []
+  const { userStore, discussionStore } = useCommonStores().stores
 
-  const { stores } = useCommonStores()
-
-  const discussionStore = useDiscussionStore()
   const [newComment, setNewComment] = useState('')
 
   const onSubmitComment = async (comment: string) => {
-    await discussionStore.addComment(comment, "")
-
+    await discussionStore.addComment(comment)
   }
+
   const handleEditRequest =  async () => {
     trackEvent({
       category: 'Comments',
@@ -39,15 +31,15 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
   }
 
   const handleEdit = async (commentId: string, comment: string) => {
-    await discussionStore.editComment(comment, "", commentId)
+    await discussionStore.editComment(comment, commentId)
   }
 
   const handleReply = async (commentId: string, comment: string) => {
-    await discussionStore.addComment(comment, "", commentId)
+    await discussionStore.addComment(comment, commentId)
   }
 
   const handleDelete = async (commentId: string) => {
-    await discussionStore.deleteComment(commentId, "")
+    await discussionStore.deleteComment(commentId)
   }
 
   return (
@@ -58,25 +50,23 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
         display: 'block',
       }}
     >
-      {comments &&
-        <CommentList
-          articleTitle={articleTitle}
-          comments={comments}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-          handleReply={handleReply}
-          handleEditRequest={handleEditRequest}
-          highlightedCommentId=''
-          trackEvent={trackEvent}
-          isLoggedIn={!!stores.userStore.activeUser}
-        />
-      }
+       <CommentList
+        articleTitle={articleTitle}
+        comments={discussionStore.discussionComments}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+        handleReply={handleReply}
+        handleEditRequest={handleEditRequest}
+        highlightedCommentId=''
+        trackEvent={trackEvent}
+        isLoggedIn={!!userStore.activeUser}
+      />
       <CreateComment
         maxLength={3000}
         comment={newComment}
         onChange={setNewComment}
         onSubmit={onSubmitComment}
-        isLoggedIn={!!stores.userStore.activeUser}
+        isLoggedIn={!!userStore.activeUser}
       />
     </Box>
   )

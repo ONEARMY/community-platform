@@ -167,6 +167,9 @@ export class HowtoStore extends ModuleStore {
           if (!step.text) return
           step.text = changeUserReferenceToPlainText(step.text)
         })
+        
+        // Set the active discussion for the specific howto
+        this.discussionStore.setActiveDiscussion(activeHowto._id)
       }
     }
 
@@ -583,6 +586,12 @@ export class HowtoStore extends ModuleStore {
       logger.debug('populating database', howTo)
       // set the database document
       this.activeHowto = await this.updateHowtoItem(howTo, true)
+
+      // create a discussion for howto
+      if (this.activeHowto) {
+       await this.discussionStore.uploadDiscussion(this.activeHowto._id, 'howto')
+      }
+
       this.updateUploadStatus('Database')
       logger.debug('post added')
       // complete

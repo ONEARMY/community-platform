@@ -42,7 +42,7 @@
     "import/no-unresolved": [
       "error",
       {
-        "ignore": ["^src/", "^oa-([a-z]+)/"]
+        "ignore": ["^src/", "^oa-([a-z]+)/", "^oa-components", "^oa-themes"]
       }
     ],
     "import/no-named-as-default": "off",

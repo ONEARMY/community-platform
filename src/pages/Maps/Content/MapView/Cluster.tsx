@@ -7,7 +7,7 @@ import 'react-leaflet-markercluster/dist/styles.min.css'
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 
 import type { IMapPin } from 'src/models/maps.models'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 
 interface IProps {
   pins: Array<IMapPin>

@@ -1,7 +1,7 @@
 import { Provider } from 'mobx-react'
 import { render, act } from '@testing-library/react'
 import { MemoryRouter } from 'react-router'
-import { useCommonStores } from 'src'
+import { useCommonStores } from '../../index'
 import { ThemeProvider } from 'theme-ui'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import Maps from './Maps'

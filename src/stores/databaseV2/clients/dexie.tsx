@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Dexie from 'dexie'
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import { logger } from '../../../logger'
@@ -123,7 +124,7 @@ export class DexieClient implements AbstractDatabaseClient {
     // test open db, catch errors for upgrade version not defined or
     // idb not supported
     db.open().catch(async (err) => {
-      logger.error(err)
+      // logger.error('Failed to open DB', err.inner)
       // NOTE - invalid state error suggests dexie not supported, so
       // try reloading with cachedb disabled (see db index for implementation)
       if (err.name === Dexie.errnames.InvalidState) {

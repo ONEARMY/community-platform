@@ -7,13 +7,14 @@ export enum MODULE {
   RESEARCH = 'research',
   ACADEMY = 'academy',
   USER = 'user',
+  QUESTION = 'question',
 }
 
 export const getSupportedModules = (): MODULE[] => {
   const envModules: string[] =
     getConfigurationOption(
       'REACT_APP_SUPPORTED_MODULES',
-      'howto,map,research,academy,user',
+      'howto,map,research,academy,user,question',
     )
       .split(',')
       .map((s) => s.trim()) || []

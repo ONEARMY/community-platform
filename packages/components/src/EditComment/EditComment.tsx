@@ -12,7 +12,9 @@ export const EditComment = (props: EditCommentProps) => {
   const { comment } = props
   return (
     <Form
-      onSubmit={() => {}}
+      onSubmit={() => {
+        // do nothing
+      }}
       initialValues={{
         comment,
       }}

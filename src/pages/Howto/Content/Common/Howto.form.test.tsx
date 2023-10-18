@@ -3,7 +3,7 @@ import { Provider } from 'mobx-react'
 import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 

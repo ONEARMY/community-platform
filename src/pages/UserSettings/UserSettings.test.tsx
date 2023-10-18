@@ -1,7 +1,7 @@
 import { render, act } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { UserSettings } from './UserSettings'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import { FactoryUser } from 'src/test/factories/User'
 import { MemoryRouter } from 'react-router'
 import { ThemeProvider } from 'theme-ui'

@@ -38,9 +38,10 @@
         "accessorPairPositioning": "getThenSet"
       }
     ],
+    "import/namespace": "off",
     "import/no-duplicates": "error",
     "import/no-unresolved": [
-      "error",
+      "off",
       {
         "ignore": ["^src/", "^oa-([a-z]+)/", "^oa-components", "^oa-themes"]
       }

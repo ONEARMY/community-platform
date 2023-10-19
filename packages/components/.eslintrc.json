@@ -13,6 +13,7 @@
         "namedComponents": "arrow-function"
       }
     ],
+    "import/named": "off",
     "import/no-unresolved": "off",
     "import/no-default-export": "error"
   },

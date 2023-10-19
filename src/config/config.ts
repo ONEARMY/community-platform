@@ -18,7 +18,7 @@ import type { UserRole } from '../models'
  * Helper function to load configuration property
  * from the global configuration object
  * During the development cycle this will be process.env
- * when running this application with the output of `yarn build`
+ * when running this application with the output of `pnpm build`
  * we will instead load from the global window
  *
  * @param property

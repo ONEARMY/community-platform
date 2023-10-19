@@ -3,8 +3,10 @@
 function envCheck() {
   const tests = [
     {
-      message: 'Use Yarn (not npm)',
-      exec: () => /yarn/.test(process.env.npm_execpath),
+      message: 'Use pnpm (not npm)',
+      exec: () => {
+        return /pnpm/.test(process.env.npm_execpath)
+      },
     },
     {
       message: 'Use Node v20',

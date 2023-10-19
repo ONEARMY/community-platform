@@ -8,6 +8,7 @@ import UserContactAndLinks from './UserContactAndLinks'
 import { userStats } from 'src/common/hooks/userStats'
 import UserCreatedDocuments from './UserCreatedDocuments'
 import type { UserCreatedDocs } from '.'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   user: IUserPP
@@ -133,7 +134,9 @@ export const MemberProfile = ({ user, docs }: IProps) => {
           </Flex>
         </Flex>
       </Flex>
-      <UserCreatedDocuments docs={docs} />
+      <AuthWrapper roleRequired={'beta-tester'}>
+        <UserCreatedDocuments docs={docs} />
+      </AuthWrapper>
     </Card>
   )
 }

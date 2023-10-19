@@ -1,0 +1,7 @@
+packages:
+  # include packages in subfolders (e.g. apps/ and packages/)
+  - "functions"
+  - 'packages/**'
+  - "scripts"
+  - "shared"
+  # if required, exclude some directories

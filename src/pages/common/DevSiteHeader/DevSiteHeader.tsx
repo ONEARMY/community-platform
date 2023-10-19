@@ -2,7 +2,7 @@ import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
 import type { UserRole } from 'src/models'
 import { Flex, Box, Text } from 'theme-ui'
 import { Select } from 'oa-components'
-import { observer } from 'mobx-react-lite'
+import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/index'
 
 /**

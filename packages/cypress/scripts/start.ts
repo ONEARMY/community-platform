@@ -87,14 +87,14 @@ async function startAppServer() {
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
-  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 yarn start`
+  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 pnpm start`
 
   // for production will instead serve from production build folder
   if (useProductionBuild) {
     // create local build if not running on ci (which will have build already generated)
     if (!isCi) {
       // specify CI=false to prevent throwing lint warnings as errors
-      spawnSync(`${CROSSENV_BIN} ${crossEnvArgs} CI=false yarn build`, {
+      spawnSync(`${CROSSENV_BIN} ${crossEnvArgs} CI=false pnpm build`, {
         shell: true,
         stdio: ['inherit', 'inherit', 'pipe'],
       })

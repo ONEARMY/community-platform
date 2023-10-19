@@ -24,7 +24,7 @@ orbs:
 #  Aliases - code snippets that can be included inline in any other markup
 ######################################################################################################
 aliases:
-  # use a base image running node v18 with chrome/firefox browsers preinstalled
+  # use a base image running node v20 with chrome/firefox browsers preinstalled
   # This can be applied to any job via `docker: *docker` syntax
   - &docker
     - image: cimg/node:20.7.0-browsers
@@ -41,35 +41,28 @@ aliases:
 
     # These can also be created as commands, but slighly tidier to just use inline
     # restore/install/save can all be done with a single circle-ci orb, but less flexible and breaks intellisense
-  - &restore_yarn_cache
+  - &restore_pnpm_cache
     restore_cache:
-      name: Restore yarn cache
+      name: Restore pnpm cache
       keys:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v9-yarn-{{ checksum "yarn.lock" }}
-        - v9-yarn-
+        - v9-pnpm-{{ checksum "pnpm-lock.yaml" }}
+        - v9-pnpm-
   - &install_packages
     run:
       name: Install Packages
-      # Install packages
-      # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
       command: |
-        yarn install --immutable
-        yarn install --immutable --immutable-cache
-        if [ ! -f /home/circleci/.yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
+        pnpm install
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
         YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
   - &save_yarn_cache
     save_cache:
-      # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
-      # NOTE - ensure always caches to consistent location when using non-circleci user
       paths:
-        - /home/circleci/.yarn/cache
-        - /home/circleci/.yarn/install-state.gz
-      key: v9-yarn-{{ checksum "yarn.lock" }}
+        - node_modules
+      key: v9-pnpm-{{ checksum "pnpm-lock.yaml" }}
 
   # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
@@ -155,7 +148,12 @@ commands:
     # parameters:
     steps:
       - checkout
-      - *restore_yarn_cache
+      - *restore_pnpm_cache
+      - run:
+          name: Install pnpm package manager
+          command: |
+            sudo corepack enable
+            sudo corepack prepare pnpm@latest-8 --activate
       - *install_packages
   inject_instance_configuration:
     steps:
@@ -166,7 +164,7 @@ commands:
       - run:
           name: Inject target environment configuration
           command: |
-            yarn build:inject-config
+            pnpm build:inject-config
 
   firebase_deploy:
     description: Deploy to Firebase
@@ -236,9 +234,9 @@ jobs:
     steps:
       - setup_repo
       - run:
-          command: yarn lint
+          command: pnpm lint
       - run:
-          command: yarn workspace oa-components lint
+          command: pnpm --dir packages/components lint
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:
@@ -256,7 +254,7 @@ jobs:
           at: '.'
       - run:
           name: Test Security Rules
-          command: yarn workspace security-rules test-with-emulator
+          command: pnpm --dir packages/security-rules test-with-emulator
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility
@@ -280,11 +278,11 @@ jobs:
             cp /app/functions/.runtimeconfig.json functions/.runtimeconfig.json
             mkdir build
             touch build/index.html
-            yarn workspace functions build
+            pnpm --dir functions build
       - run:
           name: Test Functions
           # Run functions emulator test command with additional flags to ensure CI receives correct exit code
-          command: cd functions && firebase emulators:exec --project community-platform-emulated "yarn jest . --forceExit --detectOpenHandles --coverage"
+          command: cd functions && firebase emulators:exec --project community-platform-emulated "pnpm jest . --forceExit --detectOpenHandles --coverage"
       - persist_to_workspace:
           root: .
           paths:
@@ -307,7 +305,7 @@ jobs:
       - setup_repo
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
-          command: yarn run test:unit && yarn run test:components
+          command: pnpm test:unit && pnpm test:components
           environment:
             JEST_JUNIT_OUTPUT_DIR: reports
       - store_artifacts:
@@ -325,7 +323,7 @@ jobs:
     steps:
       - setup_repo
       - run:
-          command: yarn run test:madge
+          command: pnpm test:madge
 
   build:
     <<: *docker_matrix
@@ -351,7 +349,7 @@ jobs:
             echo REACT_APP_BRANCH=$REACT_APP_BRANCH
             echo $REACT_APP_PROJECT_VERSION
       - run:
-          command: yarn build
+          command: pnpm build
       - persist_to_workspace:
           root: .
           paths:
@@ -364,7 +362,9 @@ jobs:
       - attach_workspace:
           at: '.'
       - run:
-          command: yarn storybook:build
+          command: pnpm --dir packages/components install
+      - run:
+          command: pnpm storybook:build
   deploy:
     docker: *docker
     resource_class: small

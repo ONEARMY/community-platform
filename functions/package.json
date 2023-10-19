@@ -7,12 +7,12 @@
   },
   "scripts": {
     "start": "ts-node scripts/start.ts",
-    "serve:live": "yarn copyDevConfig && yarn serve",
+    "serve:live": "pnpm copyDevConfig && pnpm serve",
     "lint": "tslint --project tsconfig.json",
     "build": "./node_modules/.bin/webpack",
     "watch": "./node_modules/.bin/webpack --watch",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
-    "shell": "yarn build && firebase functions:shell",
+    "shell": "pnpm build && firebase functions:shell",
     "test": "firebase emulators:exec --project community-platform-emulated 'jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",
     "test:watch": "firebase emulators:exec --ui --project community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'",
     "serve:email-templates": "node ./src/emailNotifications/development/server.mjs"

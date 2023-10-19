@@ -23,13 +23,13 @@ docker -v
 Make sure to build the project
 
 ```
-yarn build
+pnpm build
 ```
 
 Then you can start the emulators
 
 ```
-yarn start:emulated:docker
+pnpm start:emulated:docker
 ```
 
 This will start the following:
@@ -85,7 +85,7 @@ password: 'demo_admin',
 
 ### Writing functions code
 
-The emulators bind to the `functions/dist` folder so that changes made will be reflected in the emulators. On linux these changes should be picked up immediately, and so live-reload can be added for functions development via `yarn workspace functions watch`
+The emulators bind to the `functions/dist` folder so that changes made will be reflected in the emulators. On linux these changes should be picked up immediately, and so live-reload can be added for functions development via `pnpm workspace functions watch`
 
 If running on windows the changes are not always detected, and may require spinning the emulators down and then starting back up
 
@@ -142,17 +142,17 @@ Additionally any references to the previous data should be replaced with the upd
 A custom image can be built and run by passing custom repo or tag args to the build script, e.g.
 
 ```
-yarn workspace oa-emulators-docker build --repo=my_custom_repo --tag=my_custom_tag
+pnpm workspace oa-emulators-docker build --repo=my_custom_repo --tag=my_custom_tag
 ```
 
 If just intending to test locally a blank `--repo=` can be provided to avoid trying to pull an image from dockerhub and run locally
 
 ```
-yarn workspace oa-emulators-docker build --repo=
+pnpm workspace oa-emulators-docker build --repo=
 ```
 
 ```
-yarn start:emulated:docker:local
+pnpm start:emulated:docker:local
 ```
 
 ## Troubleshooting

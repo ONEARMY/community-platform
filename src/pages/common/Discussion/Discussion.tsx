@@ -20,6 +20,7 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
 
   const onSubmitComment = async (comment: string) => {
     await discussionStore.addComment(comment)
+    setNewComment('')
   }
 
   const handleEditRequest =  async () => {
@@ -31,6 +32,11 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
   }
 
   const handleEdit = async (commentId: string, comment: string) => {
+    trackEvent({
+      category: 'Comments',
+      action: 'Update',
+      label: 'olaaa',
+    })
     await discussionStore.editComment(comment, commentId)
   }
 
@@ -40,6 +46,11 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
 
   const handleDelete = async (commentId: string) => {
     await discussionStore.deleteComment(commentId)
+    trackEvent({
+      category: 'Comments',
+      action: 'Deleted',
+      label: 'aaaa',
+    })
   }
 
   return (

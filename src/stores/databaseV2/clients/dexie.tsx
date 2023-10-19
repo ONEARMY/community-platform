@@ -182,7 +182,11 @@ const SCHEMA_BASE: IDexieSchema = {
   research: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs,*collaborators`,
   aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
+<<<<<<< HEAD
   questions: `${DEFAULT_SCHEMA}`,
+=======
+  discussions: DEFAULT_SCHEMA
+>>>>>>> 452b4be03 (feat: adding discussion mentions method)
 }
 
 // Ensure dexie also handles any prefixed database schema

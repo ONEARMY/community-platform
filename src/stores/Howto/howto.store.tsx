@@ -169,7 +169,7 @@ export class HowtoStore extends ModuleStore {
         })
         
         // Set the active discussion for the specific howto
-        this.discussionStore.setActiveDiscussion(activeHowto._id)
+        await this.discussionStore.setActiveDiscussion(activeHowto._id)
       }
     }
 
@@ -344,9 +344,8 @@ export class HowtoStore extends ModuleStore {
       location: 'description',
     }))
 
-    const { comments, commentMentions } = await this.findMentionsInComments(
-      howToItem.comments,
-    )
+    const  commentMentions  = await this.discussionStore.findMentionsInComments(howToItem._id)
+    
     const { steps, stepMentions } = await this.findMentionsInSteps(
       howToItem.steps,
     )
@@ -362,7 +361,6 @@ export class HowtoStore extends ModuleStore {
         ...howToItem,
         previousSlugs,
         description,
-        comments,
         mentions,
         steps,
       },

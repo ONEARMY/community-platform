@@ -183,7 +183,7 @@ commands:
       - run:
           name: Export application credentials
           command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > service_account.json
-      - run: 
+      - run:
           name: Configure Firebase Extensions
           command: envsubst < extensions/firestore-send-email.config > extensions/firestore-send-email.env
       - run:
@@ -219,7 +219,8 @@ jobs:
           command: |
             npx cspell "**/*.md" --config ./.cspell.json
   lint-commits:
-    docker: *docker
+    docker:
+      - image: commitlint/commitlint
     resource_class: small
     steps:
       - checkout
@@ -228,10 +229,7 @@ jobs:
       - run:
           name: Linting commits
           command: |
-            rm package.json
-            npm config set package-lock false
-            npm i @types/node @commitlint/types @commitlint/config-conventional --force
-            npx @commitlint/cli@17.4.2 --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
+            commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   lint:
     docker: *docker
     resource_class: medium+
@@ -289,9 +287,9 @@ jobs:
           command: cd functions && firebase emulators:exec --project community-platform-emulated "yarn jest . --forceExit --detectOpenHandles --coverage"
       - persist_to_workspace:
           root: .
-          paths: 
+          paths:
             - functions/coverage
-    
+
   test_functions_upload_coverage:
     docker: *docker
     resource_class: medium+

@@ -206,6 +206,10 @@ jobs:
     steps:
       - setup_repo
       - *save_yarn_cache
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
 
   spellcheck:
     docker: *docker

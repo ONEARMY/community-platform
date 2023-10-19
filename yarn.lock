@@ -19345,9 +19345,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-tools@npm:^12.6.2":
-  version: 12.6.2
-  resolution: "firebase-tools@npm:12.6.2"
+"firebase-tools@npm:^12.7.0":
+  version: 12.7.0
+  resolution: "firebase-tools@npm:12.7.0"
   dependencies:
     "@google-cloud/pubsub": ^3.0.1
     abort-controller: ^3.0.0
@@ -19411,7 +19411,7 @@ __metadata:
     ws: ^7.2.3
   bin:
     firebase: lib/bin/firebase.js
-  checksum: e98fdb8e71ce7e0bbf2168ee97a2540ef85018f9cf401d4d8a64c0861e31b907930137d064f8111b755d6e0b15f18c8a9b929e592a9ec571f07b4c2d54262ea0
+  checksum: f861f3f10b7e3162769e527fc959f8665ae2b3d6bb192d15a6b1542158c3eefb2386ad0c59c13bb1a08018d2baeb87ac7e15b9fc2ae6d1772fc98e5ec79f54ee
   languageName: node
   linkType: hard
 
@@ -19929,7 +19929,7 @@ __metadata:
     firebase-admin: 11.4.1
     firebase-functions: 4.1.1
     firebase-functions-test: ^3.0.0
-    firebase-tools: ^12.6.2
+    firebase-tools: ^12.7.0
     fs-extra: ^9.0.1
     google-auth-library: ^6.1.1
     googleapis: ^61.0.0
@@ -31629,7 +31629,7 @@ __metadata:
     "@firebase/rules-unit-testing": ^2.0.7
     dotenv: ^16.3.1
     firebase: ^9.21.0
-    firebase-tools: ^12.6.2
+    firebase-tools: ^12.7.0
     vitest: ^0.31.0
   languageName: unknown
   linkType: soft

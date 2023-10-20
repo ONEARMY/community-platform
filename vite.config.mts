@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import envCompatible from 'vite-plugin-env-compatible'
 import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths'
-import nodePolyfills from 'rollup-plugin-node-polyfills'
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -16,9 +15,6 @@ import type { PluginOption } from 'vite'
 export default defineConfig({
   build: {
     outDir: 'build',
-    rollupOptions: {
-      plugins: [nodePolyfills()],
-    },
   },
   define: {
     process: {},

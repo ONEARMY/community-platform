@@ -178,7 +178,6 @@
     "prettier": "2.5.1",
     "react-dev-utils": "^11.0.4",
     "resize-observer-polyfill": "^1.5.1",
-    "rollup-plugin-node-polyfills": "^0.2.1",
     "start-server-and-test": "^1.11.0",
     "stream-browserify": "^3.0.0",
     "terser": "3.14.1",

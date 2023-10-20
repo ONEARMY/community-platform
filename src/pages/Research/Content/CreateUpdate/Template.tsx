@@ -1,6 +1,6 @@
 import type { IResearch } from 'src/models/research.models'
 
-const INITIAL_VALUES: IResearch.Update = {
+const INITIAL_VALUES: Partial<IResearch.Update> = {
   title: '',
   description: '',
   images: [],

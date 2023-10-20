@@ -7,8 +7,6 @@ import {
 // Mock out module store to limit impact of circular dependency
 jest.mock('src/stores/common/module.store')
 
-import { ResearchStore } from '../stores/Research/research.store'
-
 describe('draftValidationWrapper', () => {
   it('forwards to the validator when draft save is not allowed', () => {
     const allowDraftSave = false
@@ -33,7 +31,7 @@ describe('draftValidationWrapper', () => {
 describe('validateTitle', () => {
   const isReusedMock = jest.fn()
 
-  class MockStore extends ResearchStore {
+  class MockStore {
     isTitleThatReusesSlug = isReusedMock
   }
 
@@ -42,7 +40,7 @@ describe('validateTitle', () => {
   })
 
   it("returns 'Required' when title is falsy", async () => {
-    const validator = validateTitle('create', undefined, new MockStore())
+    const validator = validateTitle('create', undefined, new MockStore() as any)
 
     expect(await validator(undefined)).toEqual('Required')
   })
@@ -50,7 +48,7 @@ describe('validateTitle', () => {
   it('returns false when title reduces to a new slug', async () => {
     isReusedMock.mockReturnValue(false)
     const title = 'A Clockwork Orange'
-    const validator = validateTitle('create', 'new-id', new MockStore())
+    const validator = validateTitle('create', 'new-id', new MockStore() as any)
 
     expect(await validator(title)).toEqual(false)
     expect(isReusedMock).toHaveBeenCalledWith(title, undefined)
@@ -60,7 +58,7 @@ describe('validateTitle', () => {
     isReusedMock.mockReturnValue(true)
     const duplicatedTitle = 'Creating a ToDo list'
     const id = 'existing-id'
-    const validator = validateTitle('edit', id, new MockStore())
+    const validator = validateTitle('edit', id, new MockStore() as any)
 
     expect(await validator(duplicatedTitle)).toEqual(
       'Titles must be unique, please try being more specific',

@@ -212,7 +212,7 @@ export class UserStore extends ModuleStore {
    * (default is current logged in user)
    */
   public async updateUserProfile(
-    values: Partial<IUserPP> & { _id: string },
+    values: Partial<IUserPP> & { _id?: string },
     trigger: string,
     adminEditableUserId?: string,
   ) {

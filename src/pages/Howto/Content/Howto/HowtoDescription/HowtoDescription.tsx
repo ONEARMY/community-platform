@@ -82,9 +82,8 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     const sessionStorageArray = retrieveSessionStorageArray('howto')
 
     if (!sessionStorageArray.includes(howto._id)) {
-      const updatedViewCount = await stores.howtoStore.incrementViewCount(
-        howto._id,
-      )
+      const updatedViewCount =
+        (await stores.howtoStore.incrementViewCount(howto._id)) || 0
       setViewCount(updatedViewCount)
       addIDToSessionStorageArray('howto', howto._id)
     } else {

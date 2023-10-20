@@ -1,8 +1,5 @@
-import type {
-  INotification,
-  INotificationUpdate,
-  NotificationType,
-} from 'src/models/user.models'
+import type { INotification, INotificationUpdate } from 'src/models/user.models'
+import type { NotificationType } from 'oa-shared'
 import { action, makeObservable, toJS } from 'mobx'
 import { randomID } from 'src/utils/helpers'
 

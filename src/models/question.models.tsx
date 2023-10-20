@@ -11,6 +11,7 @@ type UserIdList = string[]
 export namespace IQuestion {
   /** The main Question item, as created by a user */
   export type Item = {
+    _created: string
     _createdBy: string
     _deleted: boolean
     subscribers?: UserIdList

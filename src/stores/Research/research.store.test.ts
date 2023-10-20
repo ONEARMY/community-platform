@@ -34,7 +34,7 @@ const factory = async (
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
-  const store = new ResearchStore()
+  const store = new ResearchStore({} as any)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

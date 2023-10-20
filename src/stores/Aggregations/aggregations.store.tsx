@@ -32,7 +32,7 @@ export class AggregationsStore {
   private db: DatabaseV2
   private subscriptions$: { [aggregationId: string]: Subscription } = {}
   private timeouts$: {
-    [aggregationId: string]: NodeJS.Timeout
+    [aggregationId: string]: ReturnType<typeof setTimeout>
   } = {}
 
   constructor(rootStore: RootStore) {

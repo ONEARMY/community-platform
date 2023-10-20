@@ -2,7 +2,6 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { UserRole } from 'src/models/user.models'
-import { SITE, DEV_SITE_ROLE } from 'src/config/config'
 
 /*
     Simple wrapper to only render a component if the user is logged in (plus optional user role required)
@@ -44,15 +43,6 @@ const isUserAuthorized = (user, roleRequired) => {
     ? roleRequired
     : [roleRequired]
 
-  // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
-  if (
-    process.env.NODE_ENV !== 'test' &&
-    (SITE === 'dev_site' || SITE === 'preview')
-  ) {
-    if (DEV_SITE_ROLE) {
-      return rolesRequired.includes(DEV_SITE_ROLE)
-    }
-  }
   // otherwise use logged in user profile values
   if (user && roleRequired) {
     return userRoles.some((role) => rolesRequired.includes(role))

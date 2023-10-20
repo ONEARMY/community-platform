@@ -4,7 +4,7 @@ import { QuestionStore } from './question.store'
 import { FactoryUser } from 'src/test/factories/User'
 
 const factory = async () => {
-  const store = new QuestionStore()
+  const store = new QuestionStore({} as any)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

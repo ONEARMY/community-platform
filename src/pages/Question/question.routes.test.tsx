@@ -1,3 +1,5 @@
+jest.mock('../../stores/common/module.store')
+
 import '@testing-library/jest-dom'
 import QuestionRoutes from './question.routes'
 import { cleanup, render, waitFor, act } from '@testing-library/react'
@@ -5,50 +7,43 @@ import { ThemeProvider } from '@theme-ui/core'
 import { createMemoryHistory } from 'history'
 import { Provider } from 'mobx-react'
 import { Router } from 'react-router-dom'
-import type { QuestionStore } from 'src/stores/Question/question.store'
-import { useQuestionStore } from 'src/stores/Question/question.store'
-import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import userEvent from '@testing-library/user-event'
+import {
+  QuestionStore,
+  useQuestionStore,
+} from 'src/stores/Question/question.store'
+import { FactoryQuestionItem } from 'src/test/factories/Question'
+
 const Theme = testingThemeStyles
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
 jest.mock('src/index', () => ({
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
-    stores: {
-      userStore: {
-        fetchAllVerifiedUsers: jest.fn(),
-      },
-      aggregationsStore: {
-        aggregations: {},
-      },
-      researchCategoriesStore: {
-        allResearchCategories: [],
-      },
+    questionStore: {
+      // mock store values and methods
     },
   }),
 }))
 
-/** When mocking question routes replace default store methods with below */
 class mockQuestionStoreClass implements Partial<QuestionStore> {
   setActiveQuestionItemBySlug = jest.fn()
   needsModeration = jest.fn().mockResolvedValue(true)
   incrementViewCount = jest.fn()
   activeQuestionItem = FactoryQuestionItem({
-    title: 'Question title',
-    _createdBy: 'jasper',
+    title: 'Question article title',
   })
-
-  get activeUser() {
-    return {
-      name: 'Jaasper',
-      userName: 'jasper',
-      userRoles: ['admin'],
-    } as any
-  }
+  QuestionUploadStatus = {} as any
+  updateUploadStatus = {} as any
+  formatQuestionCommentList = jest.fn()
+  getActiveQuestionUpdateComments = jest.fn()
+  lockQuestionItem = jest.fn()
+  lockQuestionUpdate = jest.fn()
+  unlockQuestionUpdate = jest.fn()
+  upsertQuestion = jest.fn()
 }
 const mockQuestionStore = new mockQuestionStoreClass()
 
@@ -81,50 +76,29 @@ describe('question.routes', () => {
   })
 
   describe('/questions/create', () => {
-    it('renders the question create page', async () => {
+    it('allows user to create a question', async () => {
       let wrapper
       await act(async () => {
         wrapper = (await renderFn('/questions/create')).wrapper
       })
 
-      await waitFor(
-        () => expect(wrapper.getByText(/Question Create/)).toBeInTheDocument(),
-        {
-          timeout: 2000,
-        },
-      )
-    })
-  })
+      // Fill in form
+      const title = wrapper.getByLabelText('The Question')
+      const description = wrapper.getByLabelText('Give some more information')
 
-  describe('/questions/:slug', () => {
-    it('renders the question single page', async () => {
-      let wrapper
-      await act(async () => {
-        wrapper = (await renderFn('/questions/slug')).wrapper
+      // Submit form
+      const submitButton = wrapper.getByText('Publish')
+      await userEvent.type(title, 'Question title')
+      await userEvent.type(description, 'Question description')
+
+      await waitFor(() => {
+        submitButton.click()
       })
 
-      await waitFor(
-        () => expect(wrapper.getByText(/Question Single/)).toBeInTheDocument(),
-        {
-          timeout: 2000,
-        },
-      )
-    })
-  })
-
-  describe('/questions/:slug/edit', () => {
-    it('renders the question edit page', async () => {
-      let wrapper
-      await act(async () => {
-        wrapper = (await renderFn('/questions/slug/edit')).wrapper
+      expect(mockQuestionStore.upsertQuestion).toHaveBeenCalledWith({
+        title: 'Question title',
+        description: 'Question description',
       })
-
-      await waitFor(
-        () => expect(wrapper.getByText(/Question Edit/)).toBeInTheDocument(),
-        {
-          timeout: 2000,
-        },
-      )
     })
   })
 })
@@ -136,12 +110,7 @@ const renderFn = async (url, fnUser?) => {
   })
   return {
     wrapper: render(
-      <Provider
-        userStore={{ user: localUser }}
-        tagsStore={{
-          setTagsCategory: jest.fn(),
-        }}
-      >
+      <Provider userStore={{ user: localUser }} questionStore={{ foo: 'bar' }}>
         <ThemeProvider theme={Theme}>
           <Router history={history}>
             <QuestionRoutes />

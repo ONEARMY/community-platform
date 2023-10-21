@@ -54,7 +54,10 @@ export class QuestionStore extends ModuleStore {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async upsertQuestion(values: IQuestion.FormInput) {}
+  public async upsertQuestion(values: IQuestion.FormInput) {
+    // eslint-disable-next-line no-console
+    console.log(`upsertQuestion:`, { values });
+  }
 
   private async _getQuestionItemBySlug(
     slug: string,

@@ -17,7 +17,7 @@ const routes = () => {
         <AuthRoute
           path="/questions/create"
           component={QuestionCreate}
-          key="all-howtos"
+          key="questions-create"
         />
 
         <Route

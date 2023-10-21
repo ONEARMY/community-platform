@@ -5,7 +5,7 @@ import arrayMutators from 'final-form-arrays'
 
 import { FactoryHowto } from 'src/test/factories/Howto'
 
-jest.mock('src/index', () => {
+vi.mock('src/index', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -21,8 +21,8 @@ jest.mock('src/index', () => {
             Database: false,
             Complete: false,
           },
-          validateTitleForSlug: jest.fn(),
-          uploadHowTo: jest.fn(),
+          validateTitleForSlug: vi.fn(),
+          uploadHowTo: vi.fn(),
         },
         tagsStore: {
           categoryTags: [
@@ -32,7 +32,7 @@ jest.mock('src/index', () => {
               image: 'test img',
             },
           ],
-          setTagsCategory: jest.fn(),
+          setTagsCategory: vi.fn(),
         },
       },
     }),
@@ -42,7 +42,7 @@ jest.mock('src/index', () => {
 export const HowtoProvider = ({ children }) => {
   const formProps = {
     formValues: FactoryHowto(),
-    onSubmit: jest.fn(),
+    onSubmit: vi.fn(),
     mutators: { ...arrayMutators },
     component: () => children,
   }

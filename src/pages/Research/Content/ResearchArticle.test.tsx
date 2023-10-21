@@ -20,13 +20,13 @@ const activeUser = FactoryUser({
 
 const mockUser = FactoryUser({ country: 'AF' })
 
-jest.mock('src/index', () => ({
+vi.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserByUsername: jest.fn().mockResolvedValue(mockUser),
+        getUserByUsername: vi.fn().mockResolvedValue(mockUser),
       },
       aggregationsStore: {
         aggregations: {},
@@ -35,16 +35,16 @@ jest.mock('src/index', () => ({
   }),
 }))
 
-jest.mock('src/stores/Research/research.store')
+vi.mock('src/stores/Research/research.store')
 
 describe('Research Article', () => {
   const mockResearchStore = {
     activeResearchItem: FactoryResearchItem(),
-    setActiveResearchItemBySlug: jest.fn().mockResolvedValue(true),
-    addSubscriberToResearchArticle: jest.fn(),
-    needsModeration: jest.fn(),
-    formatResearchCommentList: jest.fn(),
-    incrementViewCount: jest.fn(),
+    setActiveResearchItemBySlug: vi.fn().mockResolvedValue(true),
+    addSubscriberToResearchArticle: vi.fn(),
+    needsModeration: vi.fn(),
+    formatResearchCommentList: vi.fn(),
+    incrementViewCount: vi.fn(),
   }
 
   it('displays content statistics', async () => {
@@ -253,7 +253,7 @@ describe('Research Article', () => {
     // Arrange
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
-      formatResearchCommentList: jest.fn().mockImplementation((c) => {
+      formatResearchCommentList: vi.fn().mockImplementation((c) => {
         return c
       }),
       activeResearchItem: FactoryResearchItem({

@@ -10,15 +10,15 @@ import { preciousPlasticTheme } from 'oa-themes'
 const Theme = preciousPlasticTheme.styles
 
 const mockHowtoStore = () => ({
-  setActiveHowtoBySlug: jest.fn(),
+  setActiveHowtoBySlug: vi.fn(),
   activeHowto: FactoryHowto(),
-  getActiveHowToComments: jest.fn().mockReturnValue([]),
-  needsModeration: jest.fn().mockReturnValue(false),
-  incrementViewCount: jest.fn(),
-  removeActiveHowto: jest.fn(),
+  getActiveHowToComments: vi.fn().mockReturnValue([]),
+  needsModeration: vi.fn().mockReturnValue(false),
+  incrementViewCount: vi.fn(),
+  removeActiveHowto: vi.fn(),
 })
 
-jest.mock('src/index', () => ({
+vi.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

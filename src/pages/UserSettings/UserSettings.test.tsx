@@ -10,11 +10,11 @@ import { FactoryMapPin } from 'src/test/factories/MapPin'
 const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
-let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
-const mockGetPin = jest.fn()
-const mockUpdateUserBadge = jest.fn()
+let mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
+const mockGetPin = vi.fn()
+const mockUpdateUserBadge = vi.fn()
 
-jest.mock('src/index', () => ({
+vi.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
@@ -50,7 +50,7 @@ jest.mock('src/index', () => ({
 
 describe('UserSettings', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   it('displays user settings', async () => {
@@ -168,8 +168,8 @@ const getWrapper = async (user) => {
       userStore={{
         user,
         updateStatus: { Complete: true },
-        getUserEmail: jest.fn(),
-        getUserProfile: jest.fn().mockResolvedValue(user),
+        getUserEmail: vi.fn(),
+        getUserProfile: vi.fn().mockResolvedValue(user),
       }}
     >
       <ThemeProvider theme={Theme}>

@@ -6,7 +6,7 @@ import {
 
 describe('changeMentionToUserReference', () => {
   const mockUserStore = {
-    getUserProfile: jest.fn(),
+    getUserProfile: vi.fn(),
   }
 
   beforeEach(() => {

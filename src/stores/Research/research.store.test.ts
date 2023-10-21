@@ -1,4 +1,4 @@
-jest.mock('../common/module.store')
+vi.mock('../common/module.store')
 import { isObservable, observable, toJS } from 'mobx'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
@@ -9,11 +9,13 @@ import {
 import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
 
-jest.mock('../../utils/helpers', () => ({
+vi.mock('../../utils/helpers', async () => {
   // Preserve the original implementation of other helpers
-  ...jest.requireActual('../../utils/helpers'),
-  randomID: () => 'random-id',
-}))
+  return {
+    ...(await vi.importActual('../../utils/helpers')),
+    randomID: () => 'random-id',
+  }
+})
 
 const factoryResearchItem = async (researchItemOverloads: any = {}, ...rest) =>
   factory(FactoryResearchItem, researchItemOverloads, ...rest)
@@ -67,7 +69,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userStore = {
-    getUserProfile: jest.fn().mockResolvedValue(
+    getUserProfile: vi.fn().mockResolvedValue(
       FactoryUser({
         _authID: 'userId',
         userName: 'username',
@@ -78,7 +80,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
+    triggerNotification: vi.fn(),
   }
 
   await store.setActiveResearchItemBySlug('fish')

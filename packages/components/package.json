@@ -60,7 +60,7 @@
     "@types/mustache": "^4.1.2",
     "@types/react-flag-icon-css": "^1.0.5",
     "@types/react-portal": "^4.0.4",
-    "@vitejs/plugin-react": "^3.1.0",
+    "@vitejs/plugin-react": "^4.1.0",
     "@vitest/coverage-c8": "^0.30.1",
     "babel-loader": "8.1.0",
     "eslint": "^8.50.0",

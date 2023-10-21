@@ -3,14 +3,14 @@ import { ScrollToTop } from './ScrollToTop'
 import { useLocation } from 'react-router-dom'
 import { act } from 'react-dom/test-utils'
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useLocation: jest.fn(),
+vi.mock('react-router-dom', () => ({
+  ...vi.importActual('react-router-dom'),
+  useLocation: vi.fn(),
 }))
 
 describe('ScrollToTop', () => {
   it('should scroll to top when pathname changes', () => {
-    const scrollToSpy = jest.fn()
+    const scrollToSpy = vi.fn()
     global.window.scrollTo = scrollToSpy
     ;(useLocation as jest.Mock).mockImplementation(() => ({
       pathname: '/initial',

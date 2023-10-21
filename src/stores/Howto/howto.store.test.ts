@@ -1,4 +1,4 @@
-jest.mock('../common/module.store')
+vi.mock('../common/module.store')
 import type { IHowtoDB, IUser } from 'src/models'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
@@ -50,7 +50,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userStore = {
-    getUserProfile: jest.fn().mockImplementation((userName) =>
+    getUserProfile: vi.fn().mockImplementation((userName) =>
       FactoryUser({
         _authID: 'userId',
         userName,
@@ -60,7 +60,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
+    triggerNotification: vi.fn(),
   }
 
   await store.setActiveHowtoBySlug('howto')

@@ -1,7 +1,7 @@
 import { getSupportedProfileTypes } from './index'
 import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
 
-describe('getSupportedProfileTypes', () => {
+test('getSupportedProfileTypes', () => {
   expect(typeof getSupportedProfileTypes).toBe('function')
 })
 
@@ -13,37 +13,47 @@ describe('SupportedProfileTypesFactory', () => {
     expect(profiles).toEqual(
       expect.arrayContaining([
         {
-          cleanImageSrc: 'avatar_member_sm.svg',
-          cleanImageVerifiedSrc: 'avatar_member_sm.svg',
-          imageSrc: 'avatar_member_sm.svg',
+          cleanImageSrc: expect.stringContaining('avatar_member_sm.svg'),
+          cleanImageVerifiedSrc: expect.stringContaining(
+            'avatar_member_sm.svg',
+          ),
+          imageSrc: expect.stringContaining('avatar_member_sm.svg'),
           label: 'member',
           textLabel: 'I am a member',
         },
         {
-          cleanImageSrc: 'map-workspace.svg',
-          cleanImageVerifiedSrc: 'map-workspace-verified.svg',
-          imageSrc: 'pt-workspace.svg',
+          cleanImageSrc: expect.stringContaining('map-workspace.svg'),
+          cleanImageVerifiedSrc: expect.stringContaining(
+            'map-workspace-verified.svg',
+          ),
+          imageSrc: expect.stringContaining('pt-workspace.svg'),
           label: 'workspace',
           textLabel: 'I run a workspace',
         },
         {
-          cleanImageSrc: 'map-machine.svg',
-          cleanImageVerifiedSrc: 'map-machine-verified.svg',
-          imageSrc: 'pt-machine-shop.svg',
+          cleanImageSrc: expect.stringContaining('map-machine.svg'),
+          cleanImageVerifiedSrc: expect.stringContaining(
+            'map-machine-verified.svg',
+          ),
+          imageSrc: expect.stringContaining('pt-machine-shop.svg'),
           label: 'machine-builder',
           textLabel: 'I build machines',
         },
         {
-          cleanImageSrc: 'map-community.svg',
-          cleanImageVerifiedSrc: 'map-community-verified.svg',
-          imageSrc: 'pt-local-community.svg',
+          cleanImageSrc: expect.stringContaining('map-community.svg'),
+          cleanImageVerifiedSrc: expect.stringContaining(
+            'map-community-verified.svg',
+          ),
+          imageSrc: expect.stringContaining('pt-local-community.svg'),
           label: 'community-builder',
           textLabel: 'I run a local community',
         },
         {
-          cleanImageSrc: 'map-collection.svg',
-          cleanImageVerifiedSrc: 'map-collection-verified.svg',
-          imageSrc: 'pt-collection-point.svg',
+          cleanImageSrc: expect.stringContaining('map-collection.svg'),
+          cleanImageVerifiedSrc: expect.stringContaining(
+            'map-collection-verified.svg',
+          ),
+          imageSrc: expect.stringContaining('pt-collection-point.svg'),
           label: 'collection-point',
           textLabel: 'I collect & sort plastic',
         },
@@ -57,9 +67,11 @@ describe('SupportedProfileTypesFactory', () => {
     expect(profiles).toEqual(
       expect.arrayContaining([
         {
-          cleanImageSrc: 'avatar_member_sm.svg',
-          cleanImageVerifiedSrc: 'avatar_member_sm.svg',
-          imageSrc: 'avatar_member_sm.svg',
+          cleanImageSrc: expect.stringContaining('avatar_member_sm.svg'),
+          cleanImageVerifiedSrc: expect.stringContaining(
+            'avatar_member_sm.svg',
+          ),
+          imageSrc: expect.stringContaining('avatar_member_sm.svg'),
           label: 'member',
           textLabel: 'I am a member',
         },

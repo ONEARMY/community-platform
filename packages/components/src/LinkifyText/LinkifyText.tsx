@@ -11,6 +11,7 @@ export interface Props {
 export const LinkifyText = (props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme = useTheme() as any
+  console.log(`LinkifyText`, { theme })
   const StyledExternalLink = styled(ExternalLink)`
     color: ${theme.colors.grey}!important;
     text-decoration: underline;

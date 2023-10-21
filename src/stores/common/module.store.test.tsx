@@ -3,15 +3,15 @@ import { RootStore } from '../index'
 import { DatabaseV2 } from '../databaseV2'
 
 // Mocked to prevent App initialisation from useCommonStores dependency
-jest.mock('react-dom')
+vi.mock('react-dom')
 // Mocked to prevent indexedDB API not found error message
-jest.mock('src/stores/databaseV2/clients/dexie')
+vi.mock('src/stores/databaseV2/clients/dexie')
 // Mocked to prevent circular dependency through useCommonStores
-jest.mock('src/index')
+vi.mock('src/index')
 // Mocked to mock out RootStore
-jest.mock('src/stores/index')
+vi.mock('src/stores/index')
 
-const collectionMock = jest.fn()
+const collectionMock = vi.fn()
 class MockDB extends DatabaseV2 {
   collection = collectionMock
 }
@@ -28,7 +28,7 @@ const givenMatches = (matches: { _id: string }[]) => {
 
 describe('module.store', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   describe('isTitleThatReusesSlug', () => {

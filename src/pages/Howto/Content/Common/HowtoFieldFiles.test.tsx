@@ -11,7 +11,7 @@ describe('HowtoFieldFiles', () => {
       category: undefined,
       fileEditMode: true,
       files: [],
-      onClick: jest.fn(),
+      onClick: vi.fn(),
       showInvalidFileWarning: false,
     }
 
@@ -31,7 +31,7 @@ describe('HowtoFieldFiles', () => {
       category: FactoryCategory,
       fileEditMode: true,
       files: [],
-      onClick: jest.fn(),
+      onClick: vi.fn(),
       showInvalidFileWarning: false,
     }
 

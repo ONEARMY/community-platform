@@ -1,4 +1,4 @@
-jest.mock('../common/module.store')
+vi.mock('../common/module.store')
 import { MapsStore } from './maps.store'
 
 describe('maps.store', () => {
@@ -11,7 +11,7 @@ describe('maps.store', () => {
   describe('setUserPin', () => {
     it('adds a new member pin as approved', async () => {
       // Arrange
-      store.db.get = jest.fn().mockResolvedValue(null)
+      store.db.get = vi.fn().mockResolvedValue(null)
 
       // Act
       await store.setUserPin({
@@ -71,7 +71,7 @@ describe('maps.store', () => {
 
     it('sets a non member pin as awaiting moderation', async () => {
       // Arrange
-      store.db.get = jest.fn().mockResolvedValue(null)
+      store.db.get = vi.fn().mockResolvedValue(null)
 
       // Act
       await store.setUserPin({
@@ -94,7 +94,7 @@ describe('maps.store', () => {
 
     it('sets a non member pin as awaiting moderation if pin type changes', async () => {
       // Arrange
-      store.db.get = jest.fn().mockResolvedValue({
+      store.db.get = vi.fn().mockResolvedValue({
         profileType: 'member',
         moderation: 'accepted',
       })
@@ -120,7 +120,7 @@ describe('maps.store', () => {
 
     it('sets a non member pin as awaiting moderation if not previously accepted', async () => {
       // Arrange
-      store.db.get = jest.fn().mockResolvedValue({
+      store.db.get = vi.fn().mockResolvedValue({
         profileType: 'workspace',
         moderation: 'rejected',
       })
@@ -146,7 +146,7 @@ describe('maps.store', () => {
 
     it('sets a non member pin as accepted if previously accepted', async () => {
       // Arrange
-      store.db.get = jest.fn().mockResolvedValue({
+      store.db.get = vi.fn().mockResolvedValue({
         type: 'workspace',
         moderation: 'accepted',
       })

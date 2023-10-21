@@ -1,4 +1,4 @@
-jest.mock('../common/module.store')
+vi.mock('../common/module.store')
 import { FactoryNotification } from 'src/test/factories/Notification'
 
 import { FactoryUser } from 'src/test/factories/User'
@@ -21,7 +21,7 @@ class MockNotificationsStore extends UserNotificationsStore {
       userName: 'userName',
       notifications: [],
     }),
-    refreshActiveUserDetails: jest.fn(),
+    refreshActiveUserDetails: vi.fn(),
   }
   constructor() {
     super(null as any)

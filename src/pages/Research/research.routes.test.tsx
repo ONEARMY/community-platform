@@ -17,13 +17,13 @@ const Theme = testingThemeStyles
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
-jest.mock('src/index', () => ({
+vi.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        fetchAllVerifiedUsers: jest.fn(),
+        fetchAllVerifiedUsers: vi.fn(),
       },
       aggregationsStore: {
         aggregations: {},
@@ -37,9 +37,9 @@ jest.mock('src/index', () => ({
 
 /** When mocking research routes replace default store methods with below */
 class mockResearchStoreClass implements Partial<ResearchStore> {
-  setActiveResearchItemBySlug = jest.fn()
-  needsModeration = jest.fn().mockResolvedValue(true)
-  incrementViewCount = jest.fn()
+  setActiveResearchItemBySlug = vi.fn()
+  needsModeration = vi.fn().mockResolvedValue(true)
+  incrementViewCount = vi.fn()
   activeResearchItem = FactoryResearchItem({
     title: 'Research article title',
     updates: [],
@@ -47,11 +47,11 @@ class mockResearchStoreClass implements Partial<ResearchStore> {
   })
   researchUploadStatus = {} as any
   updateUploadStatus = {} as any
-  formatResearchCommentList = jest.fn()
-  getActiveResearchUpdateComments = jest.fn()
-  lockResearchItem = jest.fn()
-  lockResearchUpdate = jest.fn()
-  unlockResearchUpdate = jest.fn()
+  formatResearchCommentList = vi.fn()
+  getActiveResearchUpdateComments = vi.fn()
+  lockResearchItem = vi.fn()
+  lockResearchUpdate = vi.fn()
+  unlockResearchUpdate = vi.fn()
 
   get activeUser() {
     return {
@@ -66,7 +66,7 @@ class mockResearchStoreClass implements Partial<ResearchStore> {
 }
 const mockResearchStore = new mockResearchStoreClass()
 
-jest.mock('src/stores/Research/research.store')
+vi.mock('src/stores/Research/research.store')
 
 describe('research.routes', () => {
   beforeEach(() => {
@@ -74,7 +74,7 @@ describe('research.routes', () => {
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     cleanup()
   })
 
@@ -556,7 +556,7 @@ const renderFn = async (url, fnUser?) => {
       <Provider
         userStore={{ user: localUser }}
         tagsStore={{
-          setTagsCategory: jest.fn(),
+          setTagsCategory: vi.fn(),
         }}
       >
         <ThemeProvider theme={Theme}>

@@ -9,8 +9,8 @@ describe('HowtoFieldStep', () => {
       step: [],
       index: 0,
       images: [],
-      onDelete: jest.fn(() => null),
-      moveStep: jest.fn(() => null),
+      onDelete: vi.fn(() => null),
+      moveStep: vi.fn(() => null),
     }
 
     render(

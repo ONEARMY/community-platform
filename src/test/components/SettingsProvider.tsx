@@ -5,10 +5,10 @@ import { Form } from 'react-final-form'
 import { useCommonStores } from 'src/index'
 import { FactoryUser } from 'src/test/factories/User'
 
-const mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
-const mockUpdateUserBadge = jest.fn()
+const mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
+const mockUpdateUserBadge = vi.fn()
 
-jest.mock('src/index', () => ({
+vi.mock('src/index', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
@@ -44,7 +44,7 @@ export const SettingsProvider = ({ children }) => {
 
   const formProps = {
     formValues: user,
-    onSubmit: jest.fn(),
+    onSubmit: vi.fn(),
     mutators: { ...arrayMutators },
     component: () => children,
   }

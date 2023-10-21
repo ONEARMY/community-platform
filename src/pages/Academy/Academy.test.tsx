@@ -5,9 +5,9 @@ import { getFrameSrc } from './Academy'
 // being instantiated as part of the loading process
 // This is a code smell, which needs to be resolved but
 // is out of scope for the current task.
-jest.mock('src/index', () => {
+vi.mock('src/index', () => {
   return {
-    useCommonStores: jest.fn(),
+    useCommonStores: vi.fn(),
   }
 })
 

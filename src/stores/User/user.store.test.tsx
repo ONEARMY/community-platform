@@ -1,15 +1,15 @@
-jest.mock('../common/module.store')
+vi.mock('../common/module.store')
 import { FactoryUser } from 'src/test/factories/User'
 import { UserStore } from './user.store'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import { EmailNotificationFrequency } from 'oa-shared'
 
-jest.mock('../../utils/firebase', () => ({
+vi.mock('../../utils/firebase', () => ({
   auth: {
     createUserWithEmailAndPassword: () =>
       Promise.resolve({
         user: {
-          updateProfile: jest.fn(),
+          updateProfile: vi.fn(),
           photoUrl: 'testPhotoUrl',
         },
       }),
@@ -17,7 +17,7 @@ jest.mock('../../utils/firebase', () => ({
       displayName: 'testDisplayName',
       uid: 'testUid',
     },
-    onAuthStateChanged: jest.fn(),
+    onAuthStateChanged: vi.fn(),
   },
 }))
 
@@ -98,8 +98,8 @@ describe('userStore', () => {
 
   describe('registerNewUser', () => {
     it('registers a new user', async () => {
-      store.loadUserAggregations = jest.fn()
-      store.authUnsubscribe = jest.fn()
+      store.loadUserAggregations = vi.fn()
+      store.authUnsubscribe = vi.fn()
 
       await store.registerNewUser(
         'newuser@example.com',

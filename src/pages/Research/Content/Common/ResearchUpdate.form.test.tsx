@@ -9,7 +9,7 @@ import { ResearchUpdateForm } from './ResearchUpdate.form'
 
 const Theme = testingThemeStyles
 
-jest.mock('src/stores/Research/research.store', () => {
+vi.mock('src/stores/Research/research.store', () => {
   return {
     useResearchStore: () => ({
       updateUploadStatus: {
@@ -19,7 +19,7 @@ jest.mock('src/stores/Research/research.store', () => {
         Database: false,
         Complete: false,
       },
-      isTitleThatReusesSlug: jest.fn(),
+      isTitleThatReusesSlug: vi.fn(),
     }),
   }
 })

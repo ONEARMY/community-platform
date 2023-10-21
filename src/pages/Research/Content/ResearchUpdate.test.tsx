@@ -10,20 +10,20 @@ const Theme = testingThemeStyles
 
 const mockUser = FactoryUser({ country: '' })
 
-jest.mock('src/index', () => {
+vi.mock('src/index', () => {
   return {
     useCommonStores: () => ({
       stores: {
         userStore: {
-          fetchAllVerifiedUsers: jest.fn(),
-          getUserByUsername: jest.fn().mockResolvedValue(mockUser),
+          fetchAllVerifiedUsers: vi.fn(),
+          getUserByUsername: vi.fn().mockResolvedValue(mockUser),
         },
       },
     }),
   }
 })
 
-jest.mock('./ResearchComments/ResearchComments', () => ({
+vi.mock('./ResearchComments/ResearchComments', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   ResearchComments: () => <>Mocked Research Comments</>,

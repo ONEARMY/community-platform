@@ -19,11 +19,14 @@ const Theme = testingThemeStyles
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
-jest.mock('src/index', () => ({
+vi.mock('src/index', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
-      userStore: {},
+      userStore: {
+        fetchAllVerifiedUsers: vi.fn(),
+      },
       aggregationsStore: {
         aggregations: {
           users_totalUseful: {
@@ -41,9 +44,9 @@ jest.mock('src/index', () => ({
 }))
 
 class mockQuestionStoreClass implements Partial<QuestionStore> {
-  setActiveQuestionItemBySlug = jest.fn()
-  needsModeration = jest.fn().mockResolvedValue(true)
-  incrementViewCount = jest.fn()
+  setActiveQuestionItemBySlug = vi.fn()
+  needsModeration = vi.fn().mockResolvedValue(true)
+  incrementViewCount = vi.fn()
   activeQuestionItem = FactoryQuestionItem({
     title: 'Question article title',
   })
@@ -60,7 +63,7 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
 }
 const mockQuestionStore = new mockQuestionStoreClass()
 
-jest.mock('src/stores/Question/question.store')
+vi.mock('src/stores/Question/question.store')
 
 describe('question.routes', () => {
   beforeEach(() => {
@@ -68,7 +71,7 @@ describe('question.routes', () => {
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     cleanup()
   })
 
@@ -345,7 +348,13 @@ const renderFn = async (url, fnUser?) => {
   })
   return {
     wrapper: render(
-      <Provider userStore={{ user: localUser }} questionStore={{ foo: 'bar' }}>
+      <Provider
+        userStore={{ user: localUser }}
+        questionStore={{ foo: 'bar' }}
+        tagsStore={{
+          setTagsCategory: vi.fn(),
+        }}
+      >
         <ThemeProvider theme={Theme}>
           <Router history={history}>
             <QuestionRoutes />

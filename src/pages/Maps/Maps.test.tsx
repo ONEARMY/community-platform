@@ -9,24 +9,24 @@ const Theme = testingThemeStyles
 
 const mockMapStore = {
   activePin: null,
-  getPin: jest.fn(),
-  retrieveMapPins: jest.fn(),
-  retrievePinFilters: jest.fn(),
-  removeSubscriptions: jest.fn(),
-  setActivePin: jest.fn(),
-  getPinsNumberByFilterType: jest.fn(),
-  canSeePin: jest.fn(),
-  needsModeration: jest.fn(),
+  getPin: vi.fn(),
+  retrieveMapPins: vi.fn(),
+  retrievePinFilters: vi.fn(),
+  removeSubscriptions: vi.fn(),
+  setActivePin: vi.fn(),
+  getPinsNumberByFilterType: vi.fn(),
+  canSeePin: vi.fn(),
+  needsModeration: vi.fn(),
 }
 
-jest.mock('src/index', () => ({
+vi.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserProfile: jest.fn(),
-        updateUserBadge: jest.fn(),
+        getUserProfile: vi.fn(),
+        updateUserBadge: vi.fn(),
       },
       aggregationsStore: {
         aggregations: {
@@ -53,14 +53,14 @@ jest.mock('src/index', () => ({
 
 describe('Maps', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   it('prompts on load for user current position', async () => {
     Object.defineProperty(global.navigator, 'geolocation', {
       writable: true,
       value: {
-        getCurrentPosition: jest.fn(),
+        getCurrentPosition: vi.fn(),
       },
     })
 

@@ -9,7 +9,7 @@ import { testingThemeStyles } from 'src/test/utils/themeUtils'
 
 const Theme = testingThemeStyles
 
-jest.mock('src/index', () => {
+vi.mock('src/index', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -25,8 +25,8 @@ jest.mock('src/index', () => {
             Database: false,
             Complete: false,
           },
-          validateTitleForSlug: jest.fn(),
-          uploadHowTo: jest.fn(),
+          validateTitleForSlug: vi.fn(),
+          uploadHowTo: vi.fn(),
         },
         tagsStore: {
           categoryTags: [
@@ -36,7 +36,7 @@ jest.mock('src/index', () => {
               image: 'test img',
             },
           ],
-          setTagsCategory: jest.fn(),
+          setTagsCategory: vi.fn(),
         },
       },
     }),

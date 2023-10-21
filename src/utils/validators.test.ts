@@ -5,13 +5,13 @@ import {
 } from './validators'
 
 // Mock out module store to limit impact of circular dependency
-jest.mock('src/stores/common/module.store')
+vi.mock('src/stores/common/module.store')
 
 describe('draftValidationWrapper', () => {
   it('forwards to the validator when draft save is not allowed', () => {
     const allowDraftSave = false
     const value = 'title'
-    const validator = jest.fn()
+    const validator = vi.fn()
 
     draftValidationWrapper(value, { allowDraftSave }, validator)
 
@@ -20,7 +20,7 @@ describe('draftValidationWrapper', () => {
 
   it('returns undefined when draft save is allowed', () => {
     const allowDraftSave = true
-    const validator = jest.fn()
+    const validator = vi.fn()
 
     draftValidationWrapper('title', { allowDraftSave }, validator)
 
@@ -29,14 +29,14 @@ describe('draftValidationWrapper', () => {
 })
 
 describe('validateTitle', () => {
-  const isReusedMock = jest.fn()
+  const isReusedMock = vi.fn()
 
   class MockStore {
     isTitleThatReusesSlug = isReusedMock
   }
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   it("returns 'Required' when title is falsy", async () => {

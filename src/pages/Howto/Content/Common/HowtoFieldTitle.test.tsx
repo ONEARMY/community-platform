@@ -6,7 +6,7 @@ import { HowtoFieldTitle } from '.'
 
 import type { ParentType } from './Howto.form'
 
-jest.mock('src/stores/Howto/howto.store')
+vi.mock('src/stores/Howto/howto.store')
 const store = jest.createMockFromModule('src/stores/Howto/howto.store')
 
 describe('HowtoFieldTitle', () => {

@@ -1,6 +1,6 @@
-jest.mock('../common/module.store')
-import { FactoryQuestionItem } from 'src/test/factories/Question'
+vi.mock('../common/module.store')
 import { QuestionStore } from './question.store'
+import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
 const factory = async () => {

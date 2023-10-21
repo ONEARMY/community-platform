@@ -16,9 +16,6 @@ export default defineConfig({
   build: {
     outDir: 'build',
   },
-  define: {
-    process: {},
-  },
   plugins: [
     reactVirtualized(),
     react({
@@ -59,6 +56,16 @@ export default defineConfig({
         replacement: resolve(__dirname, 'packages/components/src/index.ts'),
       },
     ],
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './src/test/setup.ts',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+    },
+    include: ['./src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
   },
 })
 

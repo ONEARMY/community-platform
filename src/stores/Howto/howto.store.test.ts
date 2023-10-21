@@ -79,7 +79,12 @@ describe('howto.store', () => {
     })
 
     it('updates an existing item', async () => {
-      const { store, setFn } = await factory()
+      const { store, setFn } = await factory([
+        FactoryHowto({
+          _created: '2020-01-01T00:00:00.000Z',
+          votedUsefulBy: ['fake-user', 'fake-user2'],
+        }),
+      ])
 
       const howto = FactoryHowtoDraft({})
       await store.uploadHowTo(howto)
@@ -97,6 +102,13 @@ describe('howto.store', () => {
 
       const [finalHowto] = setFn.mock.calls[1]
       expect(setFn).toHaveBeenCalledTimes(2)
+      expect(setFn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          _created: '2020-01-01T00:00:00.000Z',
+          votedUsefulBy: ['fake-user', 'fake-user2'],
+        }),
+        expect.anything(),
+      )
       expect(finalHowto.steps).toHaveLength(3)
     })
 

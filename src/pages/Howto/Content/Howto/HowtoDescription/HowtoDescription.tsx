@@ -56,7 +56,6 @@ interface IProps {
   votedUsefulCount?: number
   verified?: boolean
   hasUserVotedUseful: boolean
-  moderateHowto: (accepted: boolean, feedback?: string) => void
   onUsefulClick: () => void
 }
 

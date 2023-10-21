@@ -11,10 +11,8 @@ import { logger } from 'src/logger'
 import type {
   IComment,
   UserMention,
-  IModerationUpdate,
   IVotedUsefulUpdate,
   IUser,
-  IModerationFeedback,
 } from 'src/models'
 import type {
   IHowToStepFormInput,
@@ -305,51 +303,6 @@ export class HowtoStore extends ModuleStore {
   @action
   public updateSelectedCategory(category: string) {
     this.selectedCategory = category
-  }
-
-  // Moderate Howto
-  @action
-  public async moderateHowto(
-    docId: string,
-    accepted: boolean,
-    feedback?: string,
-  ): Promise<void> {
-    if (!hasAdminRights(toJS(this.activeUser))) {
-      return
-    }
-    const dbRef = this.db
-      .collection<IModerationUpdate>(COLLECTION_NAME)
-      .doc(docId)
-
-    const howtoData = await toJS(dbRef.get('server'))
-    if (!howtoData) return
-
-    const moderationUpdate: IModerationUpdate = {
-      _id: docId,
-      moderation: accepted ? 'accepted' : 'rejected',
-    }
-
-    if (feedback) {
-      const newFeedback: IModerationFeedback[] = [
-        {
-          feedbackTimestamp: new Date().toISOString(),
-          feedbackComments: feedback,
-          adminUsername: this.activeUser?.userName || '',
-        },
-      ]
-
-      moderationUpdate.moderationFeedback = [
-        ...(howtoData.moderationFeedback || []),
-        ...newFeedback,
-      ]
-      moderationUpdate.moderation = 'improvements-needed'
-    }
-
-    await dbRef.update(moderationUpdate)
-
-    this.activeHowto = (await dbRef.get()) as IHowtoDB
-
-    return
   }
 
   public needsModeration(howto: IHowto) {

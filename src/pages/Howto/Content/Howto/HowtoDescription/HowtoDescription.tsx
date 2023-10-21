@@ -10,6 +10,7 @@ import {
   Image,
   AspectImage,
   Divider,
+  Alert,
 } from 'theme-ui'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
@@ -229,35 +230,23 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             )}
           </Flex>
           {howto.moderatorFeedback && howto.moderation !== 'accepted' ? (
-            <Flex
-              mt={4}
+            <Alert
+              variant="info"
               sx={{
-                display: 'block',
-                fontSize: 1,
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-                padding: 2,
-                borderRadius: 1,
-                borderBottomRightRadius: 1,
-                flexDirection: 'column',
-                border: '2px solid red',
-                paddingTop: 3,
+                my: 2,
               }}
             >
-              <Heading variant="small" mb={2}>
-                Moderator Feedback
-              </Heading>
-              <Flex
-                mb={2}
-                pb={2}
+              <Box
                 sx={{
-                  flexDirection: 'column',
+                  textAlign: 'left',
                 }}
               >
+                <Heading variant="small" mb={2}>
+                  Moderator Feedback
+                </Heading>
                 <Text sx={{ fontSize: 2 }}>{howto.moderatorFeedback}</Text>
-              </Flex>
-            </Flex>
+              </Box>
+            </Alert>
           ) : null}
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>

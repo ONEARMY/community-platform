@@ -22,7 +22,6 @@ import {
   DownloadStaticFile,
   Username,
   DownloadFileFromLink,
-  Tooltip,
   ConfirmModal,
   ContentStatistics,
 } from 'oa-components'
@@ -230,7 +229,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               </Fragment>
             )}
           </Flex>
-          {howto.moderationFeedback && howto.moderation === 'rejected' && (
+          {howto.moderatorFeedback && howto.moderation !== 'accepted' ? (
             <Flex
               mt={4}
               sx={{
@@ -250,27 +249,17 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               <Heading variant="small" mb={2}>
                 Moderator Feedback
               </Heading>
-              {howto.moderationFeedback.map((feedback) => {
-                return (
-                  <Flex
-                    mb={2}
-                    pb={2}
-                    sx={{
-                      flexDirection: 'column',
-                    }}
-                    key={feedback.feedbackTimestamp}
-                  >
-                    <Text mb={1} sx={{ fontWeight: 'bold' }}>
-                      {format(feedback.feedbackTimestamp, 'DD-MM-YYYY HH:mm')}
-                    </Text>
-                    <Text key={feedback.feedbackTimestamp} sx={{ fontSize: 2 }}>
-                      {feedback.feedbackComments}
-                    </Text>
-                  </Flex>
-                )
-              })}
+              <Flex
+                mb={2}
+                pb={2}
+                sx={{
+                  flexDirection: 'column',
+                }}
+              >
+                <Text sx={{ fontSize: 2 }}>{howto.moderatorFeedback}</Text>
+              </Flex>
             </Flex>
-          )}
+          ) : null}
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column' }}>

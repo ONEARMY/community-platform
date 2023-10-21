@@ -1,3 +1,4 @@
+import { logger } from 'src/logger'
 import type { DBClients, DBDoc } from './types'
 import { Observable } from 'rxjs'
 
@@ -65,14 +66,17 @@ export class DocReference<T> {
    * then this will be used instead of generated id
    */
   async set(data: T, options?: DocMetaOptions) {
+    logger.debug('DocReference.set', data, options)
     const { serverDB, cacheDB } = this.clients
     const dbDoc: DBDoc = this._setDocMeta(data, options)
+    logger.debug('DocReference.setDoc', dbDoc)
     await serverDB.setDoc(this.endpoint, dbDoc)
     await cacheDB.setDoc(this.endpoint, dbDoc)
   }
 
   /**
    * Update data to the document. Will automatically populate with _modified timestamp
+   *
    * @param data - specified update data in any format.
    */
   async update(data: T, options?: DocMetaOptions) {

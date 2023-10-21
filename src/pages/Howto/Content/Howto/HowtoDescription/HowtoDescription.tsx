@@ -198,36 +198,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                   />
                 </Box>
               )}
-            {/* Check if how to should be moderated */}
-            {props.needsModeration && (
-              <Flex sx={{ justifyContent: 'space-between' }}>
-                <Button
-                  data-cy={'accept'}
-                  variant={'primary'}
-                  icon="check"
-                  mr={1}
-                  data-tip={'Accept'}
-                  onClick={() => props.moderateHowto(true)}
-                  showIconOnly={true}
-                />
-                <Button
-                  data-cy="reject-howto"
-                  variant={'outline'}
-                  icon="close"
-                  data-tip={'Request changes'}
-                  showIconOnly={true}
-                  onClick={() => {
-                    // Prompt used for testing purposes, will be removed once retool functionality in place
-                    const feedback =
-                      // eslint-disable-next-line no-alert
-                      prompt('Please provide detail of required changes') ||
-                      undefined
-                    props.moderateHowto(false, feedback)
-                  }}
-                />
-                <Tooltip />
-              </Flex>
-            )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
               <Link to={'/how-to/' + howto.slug + '/edit'}>

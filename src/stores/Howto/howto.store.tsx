@@ -580,6 +580,7 @@ export class HowtoStore extends ModuleStore {
 
     // keep comments if doc existed previously
     const existingDoc = await dbRef.get()
+    logger.debug('uploadHowto.existingDoc', { existingDoc })
 
     const comments =
       existingDoc && existingDoc.comments ? existingDoc.comments : []
@@ -635,6 +636,7 @@ export class HowtoStore extends ModuleStore {
       const total_downloads = values['total_downloads'] ?? 0
 
       const howTo: IHowto = {
+        ...(existingDoc || {}),
         _id,
         _createdBy,
         comments,

@@ -135,7 +135,7 @@ describe('question.routes', () => {
         wrapper.getByRole('link', {
           name: questionTitle,
         }),
-      ).toHaveAttribute('href', `/questions/${questionSlug}`)
+      ).toHaveAttribute('href', `/question/${questionSlug}`)
     })
   })
 
@@ -166,7 +166,7 @@ describe('question.routes', () => {
     })
   })
 
-  describe('/questions/:slug', () => {
+  describe('/question/:slug', () => {
     it('renders the question single page', async () => {
       let wrapper
       const question = FactoryQuestionItem()
@@ -177,7 +177,7 @@ describe('question.routes', () => {
       })
 
       await act(async () => {
-        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+        wrapper = (await renderFn(`/question/${question.slug}`)).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -190,11 +190,11 @@ describe('question.routes', () => {
     })
   })
 
-  describe('/questions/:slug/edit', () => {
+  describe('/question/:slug/edit', () => {
     it('renders the question edit page', async () => {
       let wrapper
       await act(async () => {
-        wrapper = (await renderFn('/questions/slug/edit')).wrapper
+        wrapper = (await renderFn('/question/slug/edit')).wrapper
       })
 
       await waitFor(

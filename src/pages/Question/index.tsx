@@ -7,7 +7,7 @@ import {
   QuestionStoreContext,
 } from 'src/stores/Question/question.store'
 
-const QuestionModuleContainer = () => {
+export const QuestionModuleContainer = () => {
   return (
     <QuestionStoreContext.Provider value={new QuestionStore()}>
       <Route component={questionRoutes} />

@@ -10,6 +10,19 @@ const routes = () => {
   return (
     <Suspense fallback={<div></div>}>
       <Switch>
+        <Route
+          path="/question/:slug"
+          exact
+          render={(props) => {
+            return (
+              <QuestionPage
+                {...props}
+                key={'question' + props.match.params.slug}
+              />
+            )
+          }}
+        />
+
         <Route exact path="/questions">
           <QuestionListing />
         </Route>
@@ -20,18 +33,7 @@ const routes = () => {
           key="questions-create"
         />
 
-        <Route
-          path="/questions/:slug"
-          exact
-          render={(props) => (
-            <QuestionPage
-              {...props}
-              key={'questions' + props.match.params.slug}
-            />
-          )}
-        />
-
-        <AuthRoute path="/questions/:slug/edit" component={QuestionEdit} />
+        <AuthRoute path="/question/:slug/edit" component={QuestionEdit} />
       </Switch>
     </Suspense>
   )

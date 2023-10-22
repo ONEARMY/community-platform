@@ -39,6 +39,8 @@ export class QuestionStore extends ModuleStore {
       slug: formatLowerNoSpecial(values.title),
     })
     logger.debug(`upsertQuestion.set`, { dbRef })
+
+    return dbRef.get() || null
   }
 
   public async fetchQuestions() {

@@ -5,14 +5,23 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { PostingGuidelines } from '../Research/Content/Common'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 import { useQuestionStore } from 'src/stores/Question/question.store'
+import { logger } from 'src/logger'
 
 export const QuestionCreate = () => {
   const store = useQuestionStore()
   return (
     <Box sx={{ p: 7 }}>
       <Form
-        onSubmit={(v: any) => {
-          store.upsertQuestion(v)
+        onSubmit={async (v: any) => {
+          try {
+            const newDocument = await store.upsertQuestion(v)
+
+            if (newDocument) {
+              window.location.href = `/question/${newDocument.slug}`
+            }
+          } catch (e) {
+            logger.error(e)
+          }
         }}
         render={({ submitting, handleSubmit }) => (
           <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>

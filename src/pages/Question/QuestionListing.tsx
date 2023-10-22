@@ -42,7 +42,7 @@ export const QuestionListing = () => {
       ) : questionList.length ? (
         questionList.map((q: any, idx) => (
           <Card key={idx} mb={3} px={3} py={3}>
-            <Link to={`/questions/${encodeURIComponent(q.slug)}`} key={q._id}>
+            <Link to={`/question/${encodeURIComponent(q.slug)}`} key={q._id}>
               <Heading
                 as="span"
                 mb={2}

@@ -58,6 +58,40 @@ const factory = async (howtoStore?: Partial<HowtoStore>) =>
   )
 
 describe('Howto', () => {
+  describe('moderator feedback', () => {
+    it('displays feedback for items which are not accepted', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = await factory({
+          ...mockHowtoStore(),
+          activeHowto: FactoryHowto({
+            _createdBy: 'HowtoAuthor',
+            moderation: 'awaiting-moderation',
+            moderatorFeedback: 'Moderation comments',
+          } as any),
+        })
+      })
+
+      expect(wrapper.getByText('Moderation comments')).toBeInTheDocument()
+    })
+
+    it('hides feedback when how-to is accepted', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = await factory({
+          ...mockHowtoStore(),
+          activeHowto: FactoryHowto({
+            _createdBy: 'HowtoAuthor',
+            moderation: 'accepted',
+            moderatorFeedback: 'Moderation comments',
+          } as any),
+        })
+      })
+
+      expect(() => wrapper.getByText('Moderation comments')).toThrow()
+    })
+  })
+
   it('displays content statistics', async () => {
     let wrapper
     await act(async () => {

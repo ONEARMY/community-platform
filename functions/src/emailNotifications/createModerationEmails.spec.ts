@@ -198,13 +198,7 @@ describe('Create howto moderation emails', () => {
     const howtoNeedsImprovements = {
       ...howtoAwaitingModeration,
       moderation: 'improvements-needed',
-      moderationFeedback: [
-        {
-          adminUsername: 'admin',
-          feedbackComments: MOCK_HOW_TO_MODERATION_COMMENT,
-          feedbackTimestamp: '2022-01-30T18:51:57.719Z',
-        },
-      ],
+      moderatorFeedback: MOCK_HOW_TO_MODERATION_COMMENT,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoAwaitingModeration,
@@ -440,7 +434,7 @@ describe('Create map pin moderation emails', () => {
     const mapPinNeedsImprovements = {
       _id: 'user_1',
       moderation: 'improvements-needed',
-      comments: MOCK_MAP_PIN_MODERATION_COMMENT,
+      moderatorFeedback: MOCK_MAP_PIN_MODERATION_COMMENT,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       mapPinAwaitingModeration,

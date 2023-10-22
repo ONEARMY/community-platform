@@ -29,7 +29,7 @@ export class QuestionStore extends ModuleStore {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async upsertQuestion(values: IQuestion.FormInput) {
-    logger.debug(`upsertQuestion:`, { values })
+    logger.debug(`upsertQuestion:`, { values, activeUser: this.activeUser })
     const dbRef = this.db
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
@@ -46,6 +46,7 @@ export class QuestionStore extends ModuleStore {
 
     await dbRef.set({
       ...(values as any),
+      _createdBy: this.activeUser?.userName,
       slug,
     })
     logger.debug(`upsertQuestion.set`, { dbRef })

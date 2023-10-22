@@ -218,6 +218,31 @@ describe('question.routes', () => {
         },
       )
     })
+
+    it('redirects non-author', async () => {
+      let wrapper
+      let history
+
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        activeUser: FactoryUser({ userName: 'not-author' }),
+        fetchQuestionBySlug: jest.fn().mockResolvedValue(
+          FactoryQuestionItem({
+            slug: 'slug',
+            _createdBy: 'author',
+          }),
+        ),
+      })
+
+      await act(async () => {
+        const res = await renderFn('/question/slug/edit', FactoryUser())
+        wrapper = res.wrapper
+        history = res.history
+      })
+
+      expect(() => wrapper.getByText(/Question Edit/)).toThrow()
+      expect(history.location.pathname).toBe('/question/slug')
+    })
   })
 })
 

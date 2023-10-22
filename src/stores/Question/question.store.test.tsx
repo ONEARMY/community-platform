@@ -1,9 +1,14 @@
 jest.mock('../common/module.store')
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { QuestionStore } from './question.store'
+import { FactoryUser } from 'src/test/factories/User'
 
 const factory = async () => {
   const store = new QuestionStore()
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.activeUser = FactoryUser()
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -28,6 +33,23 @@ const factory = async () => {
 
 describe('question.store', () => {
   describe('upsertQuestion', () => {
+    it('assigns _createdBy', async () => {
+      const { store, setFn } = await factory()
+      const newQuestion = FactoryQuestionItem({
+        title: 'Question title',
+        _createdBy: undefined,
+      })
+
+      // Act
+      await store.upsertQuestion(newQuestion)
+
+      expect(setFn).toBeCalledWith(
+        expect.objectContaining({
+          _createdBy: store.activeUser?.userName,
+        }),
+      )
+    })
+
     it('generates a slug', async () => {
       const { store, setFn } = await factory()
       const newQuestion = FactoryQuestionItem({

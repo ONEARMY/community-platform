@@ -4,7 +4,7 @@ import { logger } from 'src/logger'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
-import { formatLowerNoSpecial } from 'src/utils/helpers'
+import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 
 const COLLECTION_NAME = 'questions'
 
@@ -34,9 +34,19 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
 
+    // Check for existing document
+    let slug = formatLowerNoSpecial(values.title)
+    const searchQuery = await this.db
+      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .getWhere('slug', '==', slug)
+
+    if (searchQuery && searchQuery.length) {
+      slug += `-${randomID()}`
+    }
+
     await dbRef.set({
       ...(values as any),
-      slug: formatLowerNoSpecial(values.title),
+      slug,
     })
     logger.debug(`upsertQuestion.set`, { dbRef })
 

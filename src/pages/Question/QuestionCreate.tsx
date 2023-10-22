@@ -20,6 +20,7 @@ export const QuestionCreate = (props) => {
               props.history.push('/question/' + newDocument.slug)
             }
           } catch (e) {
+            // eslint-disable-next-line no-console
             logger.error(e)
           }
         }}

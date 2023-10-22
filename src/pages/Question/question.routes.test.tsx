@@ -153,7 +153,7 @@ describe('question.routes', () => {
       })
 
       await act(async () => {
-        const render = (await renderFn('/questions/create'))
+        const render = await renderFn('/questions/create')
         wrapper = render.wrapper
         history = render.history
       })
@@ -176,7 +176,7 @@ describe('question.routes', () => {
         description: 'Question description',
       })
 
-      expect(history.location.pathname).toBe('/question/question-title')  
+      expect(history.location.pathname).toBe('/question/question-title')
     })
   })
 

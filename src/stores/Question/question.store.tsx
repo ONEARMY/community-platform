@@ -66,6 +66,16 @@ export class QuestionStore extends ModuleStore {
     console.log(`upsertQuestion.set`, { dbRef })
   }
 
+  public async fetchQuestions() {
+    const questions = await this.db
+      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .getWhere('_deleted', '!=', 'false')
+
+    // eslint-disable-next-line no-console
+    console.log(`fetchQuestions:`, { questions })
+    return questions
+  }
+
   private async _getQuestionItemBySlug(
     slug: string,
   ): Promise<IQuestionDB | undefined> {

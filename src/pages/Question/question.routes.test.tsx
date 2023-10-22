@@ -13,6 +13,7 @@ import userEvent from '@testing-library/user-event'
 import type { QuestionStore } from 'src/stores/Question/question.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
+import { faker } from '@faker-js/faker'
 
 const Theme = testingThemeStyles
 
@@ -21,8 +22,20 @@ const Theme = testingThemeStyles
 jest.mock('src/index', () => ({
   __esModule: true,
   useCommonStores: () => ({
-    questionStore: {
-      // mock store values and methods
+    stores: {
+      userStore: {},
+      aggregationsStore: {
+        aggregations: {
+          users_totalUseful: {
+            HowtoAuthor: 0,
+          },
+          users_verified: {
+            HowtoAuthor: true,
+          },
+        },
+      },
+      howtoStore: {},
+      tagsStore: {},
     },
   }),
 }))
@@ -42,6 +55,7 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   lockQuestionUpdate = jest.fn()
   unlockQuestionUpdate = jest.fn()
   upsertQuestion = jest.fn()
+  fetchQuestions = jest.fn().mockResolvedValue([])
 }
 const mockQuestionStore = new mockQuestionStoreClass()
 
@@ -58,17 +72,67 @@ describe('question.routes', () => {
   })
 
   describe('/questions/', () => {
-    it('renders the question listing', async () => {
+    it.skip('renders a loading state', async () => {
       let wrapper
       await act(async () => {
         wrapper = (await renderFn('/questions')).wrapper
       })
 
-      await waitFor(
-        () => expect(wrapper.getByText(/Question Listing/)).toBeInTheDocument(),
-        {
-          timeout: 2000,
-        },
+      expect(
+        wrapper.getByText(/Ask your questions and help others out/),
+      ).toBeInTheDocument()
+
+      expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+    })
+
+    it('renders an empty state', async () => {
+      let wrapper
+      ;(useQuestionStore as any).mockReturnValue({
+        ...mockQuestionStore,
+        fetchQuestions: jest.fn().mockResolvedValue([]),
+      })
+
+      await act(async () => {
+        wrapper = (await renderFn('/questions')).wrapper
+      })
+
+      expect(
+        wrapper.getByText(/Ask your questions and help others out/),
+      ).toBeInTheDocument()
+
+      expect(wrapper.getByText(/No questions yet/)).toBeInTheDocument()
+    })
+
+    it('renders the question listing', async () => {
+      let wrapper
+      const questionTitle = faker.lorem.words(3)
+      const questionSlug = faker.lorem.slug()
+
+      ;(useQuestionStore as any).mockReturnValue({
+        ...mockQuestionStore,
+        fetchQuestions: jest.fn().mockResolvedValue([
+          {
+            ...FactoryQuestionItem({
+              title: questionTitle,
+              slug: questionSlug,
+            }),
+            _id: '123',
+          },
+        ]),
+      })
+
+      await act(async () => {
+        wrapper = (await renderFn('/questions')).wrapper
+      })
+
+      expect(
+        wrapper.getByText(/Ask your questions and help others out/),
+      ).toBeInTheDocument()
+
+      expect(wrapper.getByText(questionTitle)).toBeInTheDocument()
+      expect(wrapper.getByRole('link')).toHaveAttribute(
+        'href',
+        `/questions/${questionSlug}`,
       )
     })
   })

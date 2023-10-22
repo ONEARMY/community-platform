@@ -20,24 +20,22 @@ const factory = async () => {
 }
 
 describe('question.store', () => {
-  describe('Item', () => {
-    describe('upsertQuestion', () => {
-      it('generates a slug', async () => {
-        const { store, setFn } = await factory()
-        const newQuestion = FactoryQuestionItem({
-          title: 'Question title',
-        })
-
-        // Act
-        await store.upsertQuestion(newQuestion)
-
-        expect(setFn).toBeCalledWith(
-          expect.objectContaining({
-            title: newQuestion.title,
-            slug: 'question-title',
-          }),
-        )
+  describe('upsertQuestion', () => {
+    it('generates a slug', async () => {
+      const { store, setFn } = await factory()
+      const newQuestion = FactoryQuestionItem({
+        title: 'Question title',
       })
+
+      // Act
+      await store.upsertQuestion(newQuestion)
+
+      expect(setFn).toBeCalledWith(
+        expect.objectContaining({
+          title: newQuestion.title,
+          slug: 'question-title',
+        }),
+      )
     })
   })
 })

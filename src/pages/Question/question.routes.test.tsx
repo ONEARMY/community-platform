@@ -56,6 +56,7 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   unlockQuestionUpdate = jest.fn()
   upsertQuestion = jest.fn()
   fetchQuestions = jest.fn().mockResolvedValue([])
+  fetchQuestionBySlug = jest.fn()
 }
 const mockQuestionStore = new mockQuestionStoreClass()
 
@@ -171,16 +172,17 @@ describe('question.routes', () => {
   describe('/questions/:slug', () => {
     it('renders the question single page', async () => {
       let wrapper
+      const question = FactoryQuestionItem()
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        fetchQuestionBySlug: jest.fn().mockResolvedValue(question),
+      })
+
       await act(async () => {
         wrapper = (await renderFn('/questions/slug')).wrapper
       })
 
-      await waitFor(
-        () => expect(wrapper.getByText(/Question Single/)).toBeInTheDocument(),
-        {
-          timeout: 2000,
-        },
-      )
+      expect(wrapper.getByText(question.title)).toBeInTheDocument()
     })
   })
 

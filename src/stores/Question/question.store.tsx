@@ -34,6 +34,11 @@ export class QuestionStore extends ModuleStore {
   }
 
   @action
+  public async fetchQuestionBySlug(slug?: string) {
+    return await this.setActiveQuestionItemBySlug(slug)
+  }
+
+  @action
   public async setActiveQuestionItemBySlug(slug?: string) {
     logger.debug(`setActiveQuestionItemBySlug:`, { slug })
     let activeQuestionItem: IQuestionDB | undefined = undefined

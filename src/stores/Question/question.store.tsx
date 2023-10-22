@@ -1,8 +1,7 @@
-import { action, makeObservable, observable, runInAction } from 'mobx'
+import { action, makeObservable, observable } from 'mobx'
 import { createContext, useContext } from 'react'
 import { logger } from 'src/logger'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
-import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
@@ -20,44 +19,12 @@ export class QuestionStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
-
-    this.allDocs$.subscribe((docs: IQuestion.Item[]) => {
-      logger.debug('docs', docs)
-      const activeItems = [...docs].filter((doc) => {
-        return !doc._deleted
-      })
-
-      runInAction(() => {
-        this.allQuestionItems = activeItems
-      })
-    })
   }
 
   @action
-  public async fetchQuestionBySlug(slug?: string) {
+  public async fetchQuestionBySlug(slug: string) {
     logger.debug(`fetchQuestionBySlug:`, { slug })
-    return await this.setActiveQuestionItemBySlug(slug)
-  }
-
-  @action
-  public async setActiveQuestionItemBySlug(slug?: string) {
-    logger.debug(`setActiveQuestionItemBySlug:`, { slug })
-    let activeQuestionItem: IQuestionDB | undefined = undefined
-
-    if (slug) {
-      activeQuestionItem = await this._getQuestionItemBySlug(slug)
-
-      if (activeQuestionItem) {
-        activeQuestionItem.description = changeUserReferenceToPlainText(
-          activeQuestionItem.description,
-        )
-      }
-    }
-
-    runInAction(() => {
-      this.activeQuestionItem = activeQuestionItem
-    })
-    return activeQuestionItem
+    return await this._getQuestionItemBySlug(slug)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -77,7 +44,7 @@ export class QuestionStore extends ModuleStore {
   public async fetchQuestions() {
     const questions = await this.db
       .collection<IQuestion.Item>(COLLECTION_NAME)
-      .getWhere('_deleted', '!=', 'false')
+      .getWhere('_deleted', '!=', 'true')
 
     logger.debug(`fetchQuestions:`, { questions })
     return questions
@@ -85,24 +52,18 @@ export class QuestionStore extends ModuleStore {
 
   private async _getQuestionItemBySlug(
     slug: string,
-  ): Promise<IQuestionDB | undefined> {
+  ): Promise<IQuestionDB | null> {
     const collection = await this.db
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
+
+    logger.debug(`_getQuestionItemBySlug.collection`, { collection })
 
     if (collection && collection.length) {
       return collection[0]
     }
 
-    const previousSlugCollection = await this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
-      .getWhere('previousSlugs', 'array-contains', slug)
-
-    if (previousSlugCollection && previousSlugCollection.length) {
-      return previousSlugCollection[0]
-    }
-
-    return undefined
+    return null
   }
 }
 

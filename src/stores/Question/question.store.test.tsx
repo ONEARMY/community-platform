@@ -46,17 +46,44 @@ describe('question.store', () => {
     })
   })
 
-  describe('fetchQuestionBySlug', () => {
-    it('queries DB based on slug', async () => {
+  describe('fetchQuestions', () => {
+    it('handles empty response', async () => {
       const { store, getWhereFn } = await factory()
+
+      getWhereFn.mockResolvedValue([])
+
+      // Act
+      const res = await store.fetchQuestions()
+
+      expect(res).toStrictEqual([])
+      expect(getWhereFn).toBeCalledWith('_deleted', '!=', 'true')
+    })
+  })
+
+  describe('fetchQuestionBySlug', () => {
+    it('handles empty query response', async () => {
+      const { store } = await factory()
       const newQuestion = FactoryQuestionItem({
         title: 'Question title',
       })
 
       // Act
-      await store.fetchQuestionBySlug(newQuestion.slug)
+      expect(await store.fetchQuestionBySlug(newQuestion.slug)).toBe(null)
+    })
+
+    it('returns a valid response', async () => {
+      const { store, getWhereFn } = await factory()
+      const newQuestion = FactoryQuestionItem({
+        title: 'Question title',
+      })
+
+      getWhereFn.mockResolvedValue([newQuestion])
+
+      // Act
+      const questionDoc = await store.fetchQuestionBySlug(newQuestion.slug)
 
       expect(getWhereFn.mock.calls[0]).toEqual(['slug', '==', newQuestion.slug])
+      expect(questionDoc).toStrictEqual(newQuestion)
     })
   })
 })

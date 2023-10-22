@@ -73,17 +73,14 @@ describe('question.routes', () => {
   })
 
   describe('/questions/', () => {
-    it.skip('renders a loading state', async () => {
+    it('renders a loading state', async () => {
       let wrapper
       await act(async () => {
         wrapper = (await renderFn('/questions')).wrapper
+        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
-      expect(
-        wrapper.getByText(/Ask your questions and help others out/),
-      ).toBeInTheDocument()
-
-      expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+      expect(() => wrapper.getByText(/loading/)).toThrow()
     })
 
     it('renders an empty state', async () => {
@@ -181,8 +178,10 @@ describe('question.routes', () => {
 
       await act(async () => {
         wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
+      expect(() => wrapper.getByText(/loading/)).toThrow()
       expect(wrapper.getByText(question.title)).toBeInTheDocument()
       expect(
         wrapper.getByText(new RegExp(`^${question.description.split(' ')[0]}`)),

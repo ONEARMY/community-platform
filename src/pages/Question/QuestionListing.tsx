@@ -1,4 +1,4 @@
-import { Loader } from 'oa-components'
+import { Button, Loader } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { Link } from 'react-router-dom'
@@ -31,6 +31,11 @@ export const QuestionListing = () => {
         >
           Ask your questions and help others out
         </Heading>
+      </Flex>
+      <Flex mb={3}>
+        <Link to={'/questions/create'}>
+          <Button variant={'primary'}>Ask a question</Button>
+        </Link>
       </Flex>
       {isLoading ? (
         <Loader />

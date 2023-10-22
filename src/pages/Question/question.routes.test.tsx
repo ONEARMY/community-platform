@@ -101,6 +101,9 @@ describe('question.routes', () => {
       ).toBeInTheDocument()
 
       expect(wrapper.getByText(/No questions yet/)).toBeInTheDocument()
+      expect(
+        wrapper.getByRole('link', { name: 'Ask a question' }),
+      ).toHaveAttribute('href', '/questions/create')
     })
 
     it('renders the question listing', async () => {
@@ -130,10 +133,11 @@ describe('question.routes', () => {
       ).toBeInTheDocument()
 
       expect(wrapper.getByText(questionTitle)).toBeInTheDocument()
-      expect(wrapper.getByRole('link')).toHaveAttribute(
-        'href',
-        `/questions/${questionSlug}`,
-      )
+      expect(
+        wrapper.getByRole('link', {
+          name: questionTitle,
+        }),
+      ).toHaveAttribute('href', `/questions/${questionSlug}`)
     })
   })
 

@@ -11,11 +11,18 @@ const factory = async () => {
     return newValue
   })
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.db.getWhere.mockImplementation(async () => {})
+
   return {
     store,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    getWhereFn: store.db.getWhere,
   }
 }
 
@@ -36,6 +43,20 @@ describe('question.store', () => {
           slug: 'question-title',
         }),
       )
+    })
+  })
+
+  describe('fetchQuestionBySlug', () => {
+    it('queries DB based on slug', async () => {
+      const { store, getWhereFn } = await factory()
+      const newQuestion = FactoryQuestionItem({
+        title: 'Question title',
+      })
+
+      // Act
+      await store.fetchQuestionBySlug(newQuestion.slug)
+
+      expect(getWhereFn.mock.calls[0]).toEqual(['slug', '==', newQuestion.slug])
     })
   })
 })

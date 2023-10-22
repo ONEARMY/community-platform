@@ -173,16 +173,18 @@ describe('question.routes', () => {
     it('renders the question single page', async () => {
       let wrapper
       const question = FactoryQuestionItem()
+      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
-        fetchQuestionBySlug: jest.fn().mockResolvedValue(question),
+        fetchQuestionBySlug: mockFetchQuestionBySlug,
       })
 
       await act(async () => {
-        wrapper = (await renderFn('/questions/slug')).wrapper
+        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
       })
 
       expect(wrapper.getByText(question.title)).toBeInTheDocument()
+      expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
     })
   })
 

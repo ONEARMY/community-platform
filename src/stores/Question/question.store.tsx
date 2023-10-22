@@ -35,6 +35,7 @@ export class QuestionStore extends ModuleStore {
 
   @action
   public async fetchQuestionBySlug(slug?: string) {
+    logger.debug(`fetchQuestionBySlug:`, { slug })
     return await this.setActiveQuestionItemBySlug(slug)
   }
 

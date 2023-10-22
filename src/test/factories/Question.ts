@@ -10,5 +10,6 @@ export const FactoryQuestionItem = (
   _contentModifiedTimestamp: faker.date.past().toString(),
   _createdBy: faker.internet.userName(),
   title: faker.lorem.sentence(),
+  slug: faker.lorem.slug(),
   ...questionOverloads,
 })

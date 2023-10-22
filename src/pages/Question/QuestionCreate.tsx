@@ -3,7 +3,7 @@ import { Form, Field } from 'react-final-form'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { PostingGuidelines } from '../Research/Content/Common'
-import { composeValidators, required } from 'src/utils/validators'
+import { composeValidators, minValue, required } from 'src/utils/validators'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 
 export const QuestionCreate = () => {
@@ -36,27 +36,38 @@ export const QuestionCreate = () => {
                     </Box>
                   </Flex>
                 </Card>
-                <Card>
-                  <Label htmlFor="title">The Question</Label>
-                  <Field
-                    name="title"
-                    id="title"
-                    validate={composeValidators(required)}
-                    component={FieldInput}
-                    placeholder="How come … does not work?"
-                  />
+                <Card mt={3} p={4}>
+                  <Box mb={3}>
+                    <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>
+                      The Question
+                    </Label>
+                    <Field
+                      name="title"
+                      id="title"
+                      validate={composeValidators(required, minValue(10))}
+                      component={FieldInput}
+                      placeholder="How come … does not work?"
+                      minLength={10}
+                      maxLength={60}
+                      showCharacterCount
+                    />
+                  </Box>
 
-                  <Label htmlFor="description">
-                    Give some more information
-                  </Label>
-                  <Field
-                    name="description"
-                    id="description"
-                    label="Information"
-                    validate={composeValidators(required)}
-                    component={FieldInput}
-                    placeholder="Introduce to your research question. Mention what you want to do, whats the goal what challenges you see, etc"
-                  />
+                  <Box mb={3}>
+                    <Label htmlFor="description" sx={{ fontSize: 2, mb: 2 }}>
+                      Give some more information
+                    </Label>
+                    <Field
+                      name="description"
+                      id="description"
+                      label="Information"
+                      validate={composeValidators(required)}
+                      component={FieldInput}
+                      placeholder="Introduce to your research question. Mention what you want to do, whats the goal what challenges you see, etc"
+                      maxLength={1000}
+                      showCharacterCount
+                    />
+                  </Box>
                 </Card>
               </Box>
             </Flex>

@@ -56,7 +56,14 @@ export class QuestionStore extends ModuleStore {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async upsertQuestion(values: IQuestion.FormInput) {
     // eslint-disable-next-line no-console
-    console.log(`upsertQuestion:`, { values });
+    console.log(`upsertQuestion:`, { values })
+    const dbRef = this.db
+      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .doc(values?._id)
+
+    await dbRef.set(values as any)
+    // eslint-disable-next-line no-console
+    console.log(`upsertQuestion.set`, { dbRef })
   }
 
   private async _getQuestionItemBySlug(

@@ -10,10 +10,8 @@ import { Router } from 'react-router-dom'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import userEvent from '@testing-library/user-event'
-import {
-  QuestionStore,
-  useQuestionStore,
-} from 'src/stores/Question/question.store'
+import type { QuestionStore } from 'src/stores/Question/question.store'
+import { useQuestionStore } from 'src/stores/Question/question.store'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 
 const Theme = testingThemeStyles
@@ -99,6 +97,38 @@ describe('question.routes', () => {
         title: 'Question title',
         description: 'Question description',
       })
+    })
+  })
+
+  describe('/questions/:slug', () => {
+    it('renders the question single page', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/questions/slug')).wrapper
+      })
+
+      await waitFor(
+        () => expect(wrapper.getByText(/Question Single/)).toBeInTheDocument(),
+        {
+          timeout: 2000,
+        },
+      )
+    })
+  })
+
+  describe('/questions/:slug/edit', () => {
+    it('renders the question edit page', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = (await renderFn('/questions/slug/edit')).wrapper
+      })
+
+      await waitFor(
+        () => expect(wrapper.getByText(/Question Edit/)).toBeInTheDocument(),
+        {
+          timeout: 2000,
+        },
+      )
     })
   })
 })

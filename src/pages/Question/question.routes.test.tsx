@@ -142,8 +142,20 @@ describe('question.routes', () => {
   describe('/questions/create', () => {
     it('allows user to create a question', async () => {
       let wrapper
+      let history
+      // Arrange
+      const mockUpsertQuestion = jest.fn().mockResolvedValue({
+        slug: 'question-title',
+      })
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        upsertQuestion: mockUpsertQuestion,
+      })
+
       await act(async () => {
-        wrapper = (await renderFn('/questions/create')).wrapper
+        const render = (await renderFn('/questions/create'))
+        wrapper = render.wrapper
+        history = render.history
       })
 
       // Fill in form
@@ -159,10 +171,12 @@ describe('question.routes', () => {
         submitButton.click()
       })
 
-      expect(mockQuestionStore.upsertQuestion).toHaveBeenCalledWith({
+      expect(mockUpsertQuestion).toHaveBeenCalledWith({
         title: 'Question title',
         description: 'Question description',
       })
+
+      expect(history.location.pathname).toBe('/question/question-title')  
     })
   })
 

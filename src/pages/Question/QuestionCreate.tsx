@@ -7,7 +7,7 @@ import { composeValidators, minValue, required } from 'src/utils/validators'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { logger } from 'src/logger'
 
-export const QuestionCreate = () => {
+export const QuestionCreate = (props) => {
   const store = useQuestionStore()
   return (
     <Box sx={{ p: 7 }}>
@@ -15,9 +15,9 @@ export const QuestionCreate = () => {
         onSubmit={async (v: any) => {
           try {
             const newDocument = await store.upsertQuestion(v)
-
             if (newDocument) {
-              window.location.href = `/question/${newDocument.slug}`
+              // eslint-disable-next-line no-console
+              props.history.push('/question/' + newDocument.slug)
             }
           } catch (e) {
             logger.error(e)

@@ -24,18 +24,11 @@ export function render(url) {
       },
       howto: {
         title: 'Mock Howto Title',
-        moderationFeedback: [
-          {
-            adminUsername: 'Mock Admin Username',
-            feedbackComments: 'Mock Howto Moderation Comments',
-            feedbackTimestamp: '2023-10-07T19:31:21.944Z',
-          },
-        ],
-        comments: 'Mock Howto Moderation Comments',
+        moderatorFeedback: 'Mock Howto Moderation Comment',
         slug: 'mock-howto-title',
       },
       mapPin: {
-        comments: 'Mock Mappin Moderation Comments',
+        moderatorFeedback: 'Mock Mappin Moderation Comments',
         _id: 'mock-mappin-id',
       },
     })

@@ -10,6 +10,7 @@ import {
   Image,
   AspectImage,
   Divider,
+  Alert,
 } from 'theme-ui'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
@@ -22,7 +23,6 @@ import {
   DownloadStaticFile,
   Username,
   DownloadFileFromLink,
-  Tooltip,
   ConfirmModal,
   ContentStatistics,
 } from 'oa-components'
@@ -57,7 +57,6 @@ interface IProps {
   votedUsefulCount?: number
   verified?: boolean
   hasUserVotedUseful: boolean
-  moderateHowto: (accepted: boolean, feedback?: string) => void
   onUsefulClick: () => void
 }
 
@@ -198,36 +197,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                   />
                 </Box>
               )}
-            {/* Check if how to should be moderated */}
-            {props.needsModeration && (
-              <Flex sx={{ justifyContent: 'space-between' }}>
-                <Button
-                  data-cy={'accept'}
-                  variant={'primary'}
-                  icon="check"
-                  mr={1}
-                  data-tip={'Accept'}
-                  onClick={() => props.moderateHowto(true)}
-                  showIconOnly={true}
-                />
-                <Button
-                  data-cy="reject-howto"
-                  variant={'outline'}
-                  icon="close"
-                  data-tip={'Request changes'}
-                  showIconOnly={true}
-                  onClick={() => {
-                    // Prompt used for testing purposes, will be removed once retool functionality in place
-                    const feedback =
-                      // eslint-disable-next-line no-alert
-                      prompt('Please provide detail of required changes') ||
-                      undefined
-                    props.moderateHowto(false, feedback)
-                  }}
-                />
-                <Tooltip />
-              </Flex>
-            )}
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
               <Link to={'/how-to/' + howto.slug + '/edit'}>
@@ -260,47 +229,25 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               </Fragment>
             )}
           </Flex>
-          {howto.moderationFeedback && howto.moderation === 'rejected' && (
-            <Flex
-              mt={4}
+          {howto.moderatorFeedback && howto.moderation !== 'accepted' ? (
+            <Alert
+              variant="info"
               sx={{
-                display: 'block',
-                fontSize: 1,
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-                padding: 2,
-                borderRadius: 1,
-                borderBottomRightRadius: 1,
-                flexDirection: 'column',
-                border: '2px solid red',
-                paddingTop: 3,
+                my: 2,
               }}
             >
-              <Heading variant="small" mb={2}>
-                Moderator Feedback
-              </Heading>
-              {howto.moderationFeedback.map((feedback) => {
-                return (
-                  <Flex
-                    mb={2}
-                    pb={2}
-                    sx={{
-                      flexDirection: 'column',
-                    }}
-                    key={feedback.feedbackTimestamp}
-                  >
-                    <Text mb={1} sx={{ fontWeight: 'bold' }}>
-                      {format(feedback.feedbackTimestamp, 'DD-MM-YYYY HH:mm')}
-                    </Text>
-                    <Text key={feedback.feedbackTimestamp} sx={{ fontSize: 2 }}>
-                      {feedback.feedbackComments}
-                    </Text>
-                  </Flex>
-                )
-              })}
-            </Flex>
-          )}
+              <Box
+                sx={{
+                  textAlign: 'left',
+                }}
+              >
+                <Heading variant="small" mb={2}>
+                  Moderator Feedback
+                </Heading>
+                <Text sx={{ fontSize: 2 }}>{howto.moderatorFeedback}</Text>
+              </Box>
+            </Alert>
+          ) : null}
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column' }}>

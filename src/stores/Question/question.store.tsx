@@ -5,6 +5,7 @@ import type { IQuestion, IQuestionDB } from '../../models/question.models'
 import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
+import { formatLowerNoSpecial } from 'src/utils/helpers'
 
 const COLLECTION_NAME = 'questions'
 
@@ -55,15 +56,16 @@ export class QuestionStore extends ModuleStore {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async upsertQuestion(values: IQuestion.FormInput) {
-    // eslint-disable-next-line no-console
-    console.log(`upsertQuestion:`, { values })
+    logger.debug(`upsertQuestion:`, { values })
     const dbRef = this.db
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
 
-    await dbRef.set(values as any)
-    // eslint-disable-next-line no-console
-    console.log(`upsertQuestion.set`, { dbRef })
+    await dbRef.set({
+      ...(values as any),
+      slug: formatLowerNoSpecial(values.title),
+    })
+    logger.debug(`upsertQuestion.set`, { dbRef })
   }
 
   public async fetchQuestions() {
@@ -71,8 +73,7 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .getWhere('_deleted', '!=', 'false')
 
-    // eslint-disable-next-line no-console
-    console.log(`fetchQuestions:`, { questions })
+    logger.debug(`fetchQuestions:`, { questions })
     return questions
   }
 

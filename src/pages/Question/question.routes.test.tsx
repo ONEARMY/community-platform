@@ -184,6 +184,9 @@ describe('question.routes', () => {
       })
 
       expect(wrapper.getByText(question.title)).toBeInTheDocument()
+      expect(
+        wrapper.getByText(new RegExp(`^${question.description.split(' ')[0]}`)),
+      ).toBeInTheDocument()
       expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
     })
   })

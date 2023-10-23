@@ -84,7 +84,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           <InternalLink
             to={'/how-to?author=' + props.userName}
             sx={{ color: 'black' }}
-            data-testid="location-link"
+            data-testid="howto-link"
           >
             <Flex data-testid="howto-stat">
               <ElWithBeforeIcon icon={HowToCountIcon} />
@@ -97,7 +97,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           <InternalLink
             to={'/research?author=' + props.userName}
             sx={{ color: 'black' }}
-            data-testid="location-link"
+            data-testid="research-link"
           >
             <Flex data-testid="research-stat">
               <ElWithBeforeIcon icon={ResearchIcon} />

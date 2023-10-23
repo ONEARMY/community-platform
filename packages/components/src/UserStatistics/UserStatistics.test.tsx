@@ -1,3 +1,6 @@
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'; // Import user-event
+import { MemoryRouter } from 'react-router-dom';
 import { render } from '../tests/utils'
 import { Default } from './UserStatistics.stories'
 import type { UserStatisticsProps } from './UserStatistics'
@@ -23,6 +26,24 @@ describe('UserStatistics', () => {
     const locationLink = getByTestId('location-link')
 
     expect(locationLink).toHaveTextContent('Greenland')
+  })
+
+  it('renders howto link when on howto stats', () => {
+    const { getByTestId } = render(
+      <Default {...(Default.args as UserStatisticsProps)} />,
+    )
+    const howtoLink = getByTestId('howto-link')
+
+    expect(howtoLink.getAttribute("href")).toBe('/how-to?author=Test User')
+  })
+
+  it('renders research link when on research stats', () => {
+    const { getByTestId } = render(
+      <Default {...(Default.args as UserStatisticsProps)} />,
+    )
+    const researchLink = getByTestId('research-link')
+
+    expect(researchLink.getAttribute("href")).toBe('/research?author=Test User')
   })
 
   it('renders supporter icon when isSupporter is true', () => {

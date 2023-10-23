@@ -8,12 +8,7 @@ import {
 } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type {
-  IComment,
-  UserMention,
-  IVotedUsefulUpdate,
-  IUser,
-} from 'src/models'
+import type { IComment, UserMention, IUser } from 'src/models'
 import type {
   IHowToStepFormInput,
   IHowto,
@@ -40,6 +35,7 @@ import {
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
+import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 const COLLECTION_NAME = 'howtos'
 
@@ -183,25 +179,13 @@ export class HowtoStore extends ModuleStore {
     docId: string,
     userName: string,
   ): Promise<void> {
-    const dbRef = this.db
-      .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
-      .doc(docId)
+    const updatedItem = (await toggleDocUsefulByUser(
+      this.db,
+      COLLECTION_NAME,
+      docId,
+      userName,
+    )) as IHowtoDB
 
-    const howtoData = await toJS(dbRef.get('server'))
-    if (!howtoData) return
-
-    const votedUsefulBy = !(howtoData?.votedUsefulBy || []).includes(userName)
-      ? [userName].concat(howtoData?.votedUsefulBy || [])
-      : (howtoData?.votedUsefulBy || []).filter((uName) => uName !== userName)
-
-    const votedUsefulUpdate = {
-      _id: docId,
-      votedUsefulBy: votedUsefulBy,
-    }
-
-    await dbRef.update(votedUsefulUpdate)
-
-    const updatedItem = (await dbRef.get()) as IHowtoDB
     runInAction(() => {
       this.activeHowto = updatedItem
       if ((updatedItem.votedUsefulBy || []).includes(userName)) {

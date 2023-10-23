@@ -34,6 +34,7 @@ export namespace IResearch {
     collaborators: string[]
     subscribers?: UserIdList
     locked?: ResearchDocumentLock
+    votesUseful?: UserIdList
   } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */

@@ -36,7 +36,7 @@ export class DiscussionStore extends ModuleStore {
         .getWhere('sourceId', '==', sourceId),
     )[0]
 
-    this.discussionComments = this.activeDiscussion.comments
+    this.discussionComments = this.activeDiscussion
       ? this.formatComments(this.activeDiscussion.comments)
       : []
   }
@@ -54,7 +54,9 @@ export class DiscussionStore extends ModuleStore {
           !!this.aggregationsStore.aggregations.users_verified?.[
             comment.creatorName
           ],
-        isEditable: true, //@TODO get correct value
+        isEditable: [this.userStore.activeUser?._id, this.userStore.activeUser?.userName].includes(
+          comment._creatorId,
+        ), //@TODO get correct value
         showReplies: false,
       }
     })
@@ -125,6 +127,8 @@ export class DiscussionStore extends ModuleStore {
           }
 
           await this._updateDiscussion(dbRef, currentDiscussion)
+
+
         }
       }
     } catch (err) {
@@ -146,7 +150,7 @@ export class DiscussionStore extends ModuleStore {
       ) {
         comment.text = newCommentText
         comment._edited = new Date().toISOString()
-      } else if (comment.replies) {
+      } else if (comment.replies && comment.replies.length) {
         comment.replies = this.findAndUpdateComment(
           user,
           comment.replies,

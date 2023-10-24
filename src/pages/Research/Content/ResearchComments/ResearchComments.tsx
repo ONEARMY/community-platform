@@ -11,11 +11,13 @@ import styled from '@emotion/styled'
 import type { UserComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 import { trackEvent } from 'src/common/Analytics'
+import { Discussion } from 'src/pages/common/Discussion/Discussion'
 interface IProps {
   comments: UserComment[]
   update: IResearch.UpdateDB
   updateIndex: number
   showComments?: boolean
+  discussion?: boolean
 }
 
 const BoxMain = styled(Box)`
@@ -33,6 +35,7 @@ export const ResearchComments = ({
   comments,
   update,
   showComments,
+  discussion
 }: IProps) => {
   const [comment, setComment] = useState('')
   const [, setLoading] = useState(false)
@@ -64,10 +67,6 @@ export const ResearchComments = ({
       // Error: Comment could not be posted
       logger.error(`Failed to set comment`, { err })
     }
-  }
-
-  const handleReplySubmit = async (commentId: string, comment: string) => {
-    await researchStore.addComment(comment, update, commentId)
   }
 
   const handleEditRequest = async () => {
@@ -154,7 +153,7 @@ export const ResearchComments = ({
       >
         <>{setButtonText()}</>
       </Button>
-      {viewComments && (
+      {viewComments && !discussion && (
         <Flex
           mt={5}
           sx={{ flexDirection: 'column', alignItems: 'end' }}
@@ -167,7 +166,6 @@ export const ResearchComments = ({
             handleEdit={handleEdit}
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
-            handleReply={handleReplySubmit}
             highlightedCommentId={getResearchCommentId(window.location.hash)}
             trackEvent={trackEvent}
             isLoggedIn={!!stores.userStore.activeUser}
@@ -183,6 +181,12 @@ export const ResearchComments = ({
           </Box>
         </Flex>
       )}
+      {viewComments && discussion && researchStore.activeResearchItem && (
+      <Discussion
+        item={researchStore.activeResearchItem}
+        sourceId={researchStore.activeResearchItem._id}
+        sourceType='update'
+      />)}
     </BoxMain>
   )
 }

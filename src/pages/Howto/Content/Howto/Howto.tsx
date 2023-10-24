@@ -23,6 +23,7 @@ import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.sto
 import type { TagsStore } from 'src/stores/Tags/tags.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import { Discussion } from 'src/pages/common/Discussion/Discussion'
+/* import { AuthWrapper } from 'src/common/AuthWrapper' */
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -212,11 +213,13 @@ export class Howto extends React.Component<
             </ArticleCallToAction>
           </Box>
           <HowToComments comments={activeHowToComments} />
-          <Discussion
-            item={activeHowto}
-            sourceId={activeHowto._id}
-            sourceType='howto'
-          />
+          {/* <AuthWrapper roleRequired="beta-tester"> */}
+            <Discussion
+              item={activeHowto}
+              sourceId={activeHowto._id}
+              sourceType='howto'
+            ></Discussion>
+         {/*  </AuthWrapper> */}
           <MoreBox py={20} mt={20}>
             <Text
               sx={{

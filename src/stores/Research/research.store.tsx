@@ -147,7 +147,7 @@ export class ResearchStore extends ModuleStore {
 
   public formatResearchCommentList(comments: IComment[] = []): IComment[] {
     return comments.map((comment: IComment) => {
-      const formatedComment = {
+      return {
         ...comment,
         text: changeUserReferenceToPlainText(comment.text),
         isUserVerified:
@@ -155,25 +155,6 @@ export class ResearchStore extends ModuleStore {
             comment.creatorName
           ],
       }
-
-      if (comment.replies) {
-        const formatedReplies = comment.replies.map((reply: IComment) => {
-          return {
-            ...reply,
-            text: changeUserReferenceToPlainText(reply.text),
-            isUserVerified:
-              !!this.aggregationsStore.aggregations.users_verified?.[
-                reply.creatorName
-              ],
-          }
-        })
-
-        formatedComment.replies = formatedReplies
-      } else {
-        formatedComment.replies = []
-      }
-
-      return formatedComment
     })
   }
 
@@ -396,8 +377,7 @@ export class ResearchStore extends ModuleStore {
 
   public async addComment(
     text: string,
-    update: IResearch.Update | IResearch.UpdateDB,
-    commentId?: string,
+    update: IResearch.Update | IResearch.UpdateDB
   ) {
     const user = this.activeUser
     const researchItem = this.activeResearchItem
@@ -432,24 +412,10 @@ export class ResearchStore extends ModuleStore {
           updateWithMeta.images = []
         }
 
-        if (commentId) {
-          const newComments = updateWithMeta.comments?.map((c) => {
-            if (c._id == commentId) {
-              if (!c.replies) c.replies = []
-              c.replies.push(newComment)
-            }
-            return c
-          })
-
-          updateWithMeta.comments = newComments
-        } else {
-          newComment.replies = []
-
-          updateWithMeta.comments = updateWithMeta.comments
-            ? [...toJS(updateWithMeta.comments), newComment]
-            : [newComment]
-        }
-
+        updateWithMeta.comments = updateWithMeta.comments
+          ? [...toJS(updateWithMeta.comments), newComment]
+          : [newComment]
+        
         const existingUpdateIndex = researchItem.updates.findIndex(
           (upd) => upd._id === (update as IResearch.UpdateDB)._id,
         )
@@ -504,25 +470,12 @@ export class ResearchStore extends ModuleStore {
           .doc(item._id)
         const id = dbRef.id
 
-        const filterValidation = (comment: IComment) => {
-          return !(
-            (comment._creatorId === user._id || hasAdminRights(user)) &&
-            comment._id === commentId
-          )
-        }
-
-        const filteredReplies = toJS(update.comments).map((comment) => {
-          if (comment.replies) {
-            const newReplies = comment.replies.filter((reply) =>
-              filterValidation(reply),
-            )
-            return { ...comment, replies: newReplies }
-          }
-          return { ...comment }
-        })
-
-        const newComments = filteredReplies.filter((comment) =>
-          filterValidation(comment),
+        const newComments = toJS(update.comments).filter(
+          (comment) =>
+            !(
+              (comment._creatorId === user._id || hasAdminRights(user)) &&
+              comment._id === commentId
+            ),
         )
 
         const updateWithMeta = { ...update }
@@ -578,6 +531,12 @@ export class ResearchStore extends ModuleStore {
           .doc(item._id)
         const id = dbRef.id
 
+        const pastComments = toJS(update.comments)
+        const commentIndex = pastComments.findIndex(
+          (comment) =>
+            (comment._creatorId === user._id || hasAdminRights(user)) &&
+            comment._id === commentId,
+        )
         const updateWithMeta = { ...update }
         if (update.images.length > 0) {
           const imgMeta = await this.uploadCollectionBatch(
@@ -589,47 +548,31 @@ export class ResearchStore extends ModuleStore {
           updateWithMeta.images = newImg
         } else updateWithMeta.images = []
 
-        const editedComments = toJS(update.comments).map((comment) => {
-          if (
-            (comment._creatorId === user._id || hasAdminRights(user)) &&
-            comment._id === commentId
-          ) {
-            comment.text = newText.slice(0, MAX_COMMENT_LENGTH).trim()
-            comment._edited = new Date().toISOString()
-          } else {
-            comment.replies = comment.replies?.map((reply) => {
-              if (
-                (reply._creatorId === user._id || hasAdminRights(user)) &&
-                reply._id === commentId
-              ) {
-                reply.text = newText.slice(0, MAX_COMMENT_LENGTH).trim()
-                reply._edited = new Date().toISOString()
-              }
-              return reply
-            })
+        if (commentIndex !== -1) {
+          pastComments[commentIndex].text = newText
+            .slice(0, MAX_COMMENT_LENGTH)
+            .trim()
+          pastComments[commentIndex]._edited = new Date().toISOString()
+          updateWithMeta.comments = pastComments
+        
+          const existingUpdateIndex = item.updates.findIndex(
+            (upd) => upd._id === (update as IResearch.UpdateDB)._id,
+          )
+
+          const newItem = {
+            ...toJS(item),
+            updates: [...toJS(item.updates)],
           }
-          return comment
-        })
 
-        updateWithMeta.comments = editedComments
+          newItem.updates[existingUpdateIndex] = {
+            ...(updateWithMeta as IResearch.UpdateDB),
+          }
 
-        const existingUpdateIndex = item.updates.findIndex(
-          (upd) => upd._id === (update as IResearch.UpdateDB)._id,
-        )
+          const updatedItem = await this._updateResearchItem(dbRef, newItem)
 
-        const newItem = {
-          ...toJS(item),
-          updates: [...toJS(item.updates)],
-        }
-
-        newItem.updates[existingUpdateIndex] = {
-          ...(updateWithMeta as IResearch.UpdateDB),
-        }
-
-        const updatedItem = await this._updateResearchItem(dbRef, newItem)
-
-        if (updatedItem) {
-          this.setActiveResearchItemBySlug(updatedItem.slug)
+          if (updatedItem) {
+            this.setActiveResearchItemBySlug(updatedItem.slug)
+          }
         }
       }
     } catch (err) {
@@ -694,7 +637,6 @@ export class ResearchStore extends ModuleStore {
       this.updateResearchUploadStatus('Database')
       logger.debug('post added')
       if (updatedItem) {
-        
         this.setActiveResearchItemBySlug(updatedItem.slug)
       }
       // complete

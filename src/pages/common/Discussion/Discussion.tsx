@@ -1,4 +1,4 @@
-import { Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import { CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
 import { useCommonStores } from 'src'
@@ -27,7 +27,7 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
     trackEvent({
       category: 'Comments',
       action: 'Edit existing comment',
-      label: '',
+      label: `comment:${articleTitle}`,
     })
   }
 
@@ -35,33 +35,36 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
     trackEvent({
       category: 'Comments',
       action: 'Update',
-      label: 'olaaa',
+      label: `comment:${articleTitle}`,
     })
     await discussionStore.editComment(comment, commentId)
   }
 
   const handleReply = async (commentId: string, comment: string) => {
+    trackEvent({
+      category: 'Comments',
+      action: 'Reply',
+      label: `comment:${articleTitle}`,
+    })
     await discussionStore.addComment(comment, commentId)
   }
 
   const handleDelete = async (commentId: string) => {
-    await discussionStore.deleteComment(commentId)
     trackEvent({
       category: 'Comments',
       action: 'Deleted',
-      label: 'aaaa',
+      label: `comment:${articleTitle}`,
     })
+    await discussionStore.deleteComment(commentId)
   }
 
   return (
-    <Box
-      mb={4}
-      sx={{
-        width: '100%',
-        display: 'block',
-      }}
-    >
-       <CommentList
+    <Flex
+        mt={5}
+        sx={{ flexDirection: 'column', alignItems: 'end', width: '100%' }}
+        data-cy="discussion-comments"
+      >
+      <CommentList
         articleTitle={articleTitle}
         comments={discussionStore.discussionComments}
         handleEdit={handleEdit}
@@ -72,13 +75,15 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
         trackEvent={trackEvent}
         isLoggedIn={!!userStore.activeUser}
       />
-      <CreateComment
-        maxLength={3000}
-        comment={newComment}
-        onChange={setNewComment}
-        onSubmit={onSubmitComment}
-        isLoggedIn={!!userStore.activeUser}
-      />
-    </Box>
+      <Box sx={{ width: '100%' }}>
+        <CreateComment
+            maxLength={3000}
+            comment={newComment}
+            onChange={setNewComment}
+            onSubmit={onSubmitComment}
+            isLoggedIn={!!userStore.activeUser}
+          />
+      </Box>
+    </Flex>
   )
 }

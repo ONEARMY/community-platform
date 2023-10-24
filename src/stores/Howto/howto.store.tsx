@@ -344,7 +344,7 @@ export class HowtoStore extends ModuleStore {
       location: 'description',
     }))
 
-    const  commentMentions  = await this.discussionStore.findMentionsInComments(howToItem._id)
+    const  {comments, commentMentions}  = await this.findMentionsInComments(howToItem.comments)
     
     const { steps, stepMentions } = await this.findMentionsInSteps(
       howToItem.steps,
@@ -360,6 +360,7 @@ export class HowtoStore extends ModuleStore {
       {
         ...howToItem,
         previousSlugs,
+        comments,
         description,
         mentions,
         steps,

@@ -194,6 +194,10 @@ export const ResearchUpdateForm = observer((props: IProps) => {
           submitFailed,
           values,
         }) => {
+          const numberOfImageInputsAvailable = values?.images
+            ? values.images.length + 1
+            : 4
+
           return (
             <Flex
               mx={-2}
@@ -303,51 +307,22 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                               }}
                               mb={3}
                             >
-                              <ImageInputFieldWrapper data-cy="image-0">
-                                <Field
-                                  hasText={false}
-                                  name={`images[0]`}
-                                  component={ImageInputField}
-                                  isEqual={COMPARISONS.image}
-                                  validateFields={['videoUrl']}
-                                />
-                              </ImageInputFieldWrapper>
-                              <ImageInputFieldWrapper data-cy="image-1">
-                                <Field
-                                  hasText={false}
-                                  name={`images[1]`}
-                                  validateFields={['videoUrl']}
-                                  component={ImageInputField}
-                                  isEqual={COMPARISONS.image}
-                                />
-                              </ImageInputFieldWrapper>
-                              <ImageInputFieldWrapper data-cy="image-2">
-                                <Field
-                                  hasText={false}
-                                  name={`images[2]`}
-                                  validateFields={['videoUrl']}
-                                  component={ImageInputField}
-                                  isEqual={COMPARISONS.image}
-                                />
-                              </ImageInputFieldWrapper>
-                              <ImageInputFieldWrapper data-cy="image-3">
-                                <Field
-                                  hasText={false}
-                                  name={`images[3]`}
-                                  validateFields={['videoUrl']}
-                                  component={ImageInputField}
-                                  isEqual={COMPARISONS.image}
-                                />
-                              </ImageInputFieldWrapper>
-                              <ImageInputFieldWrapper data-cy="image-4">
-                                <Field
-                                  hasText={false}
-                                  name={`images[4]`}
-                                  validateFields={['videoUrl']}
-                                  component={ImageInputField}
-                                  isEqual={COMPARISONS.image}
-                                />
-                              </ImageInputFieldWrapper>
+                              {[...Array(numberOfImageInputsAvailable)].map(
+                                (_, i) => (
+                                  <ImageInputFieldWrapper
+                                    key={`image-${i}`}
+                                    data-cy={`image-${i}`}
+                                  >
+                                    <Field
+                                      hasText={false}
+                                      name={`images[${i}]`}
+                                      component={ImageInputField}
+                                      isEqual={COMPARISONS.image}
+                                      validateFields={['videoUrl']}
+                                    />
+                                  </ImageInputFieldWrapper>
+                                ),
+                              )}
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <Label htmlFor={`videoUrl`} sx={{ mb: 2 }}>

@@ -377,7 +377,7 @@ export class ResearchStore extends ModuleStore {
 
   public async addComment(
     text: string,
-    update: IResearch.Update | IResearch.UpdateDB
+    update: IResearch.Update | IResearch.UpdateDB,
   ) {
     const user = this.activeUser
     const researchItem = this.activeResearchItem
@@ -415,7 +415,7 @@ export class ResearchStore extends ModuleStore {
         updateWithMeta.comments = updateWithMeta.comments
           ? [...toJS(updateWithMeta.comments), newComment]
           : [newComment]
-        
+
         const existingUpdateIndex = researchItem.updates.findIndex(
           (upd) => upd._id === (update as IResearch.UpdateDB)._id,
         )
@@ -554,7 +554,7 @@ export class ResearchStore extends ModuleStore {
             .trim()
           pastComments[commentIndex]._edited = new Date().toISOString()
           updateWithMeta.comments = pastComments
-        
+
           const existingUpdateIndex = item.updates.findIndex(
             (upd) => upd._id === (update as IResearch.UpdateDB)._id,
           )

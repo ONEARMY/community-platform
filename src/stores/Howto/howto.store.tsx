@@ -167,7 +167,7 @@ export class HowtoStore extends ModuleStore {
           if (!step.text) return
           step.text = changeUserReferenceToPlainText(step.text)
         })
-        
+
         // Set the active discussion for the specific howto
         await this.discussionStore.setActiveDiscussion(activeHowto._id)
       }
@@ -344,8 +344,10 @@ export class HowtoStore extends ModuleStore {
       location: 'description',
     }))
 
-    const  {comments, commentMentions}  = await this.findMentionsInComments(howToItem.comments)
-    
+    const { comments, commentMentions } = await this.findMentionsInComments(
+      howToItem.comments,
+    )
+
     const { steps, stepMentions } = await this.findMentionsInSteps(
       howToItem.steps,
     )
@@ -588,7 +590,10 @@ export class HowtoStore extends ModuleStore {
 
       // create a discussion for howto
       if (this.activeHowto) {
-       await this.discussionStore.uploadDiscussion(this.activeHowto._id, 'howto')
+        await this.discussionStore.uploadDiscussion(
+          this.activeHowto._id,
+          'howto',
+        )
       }
 
       this.updateUploadStatus('Database')

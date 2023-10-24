@@ -40,11 +40,8 @@ const stores = (rootStore: RootStore) => {
     messageStore: new MessageStore(rootStore),
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
-<<<<<<< HEAD
     questionStore: new QuestionStore(rootStore),
-=======
     discussionStore: new DiscussionStore(rootStore)
->>>>>>> 718d892f7 (feat: adding discussion crud methods)
   }
   return stores
 }

@@ -23,7 +23,7 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
     setNewComment('')
   }
 
-  const handleEditRequest =  async () => {
+  const handleEditRequest = async () => {
     trackEvent({
       category: 'Comments',
       action: 'Edit existing comment',
@@ -60,10 +60,10 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
 
   return (
     <Flex
-        mt={5}
-        sx={{ flexDirection: 'column', alignItems: 'end', width: '100%' }}
-        data-cy="discussion-comments"
-      >
+      mt={5}
+      sx={{ flexDirection: 'column', alignItems: 'end', width: '100%' }}
+      data-cy="discussion-comments"
+    >
       <CommentList
         articleTitle={articleTitle}
         comments={discussionStore.discussionComments}
@@ -71,18 +71,18 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
         handleDelete={handleDelete}
         handleReply={handleReply}
         handleEditRequest={handleEditRequest}
-        highlightedCommentId=''
+        highlightedCommentId=""
         trackEvent={trackEvent}
         isLoggedIn={!!userStore.activeUser}
       />
       <Box sx={{ width: '100%' }}>
         <CreateComment
-            maxLength={3000}
-            comment={newComment}
-            onChange={setNewComment}
-            onSubmit={onSubmitComment}
-            isLoggedIn={!!userStore.activeUser}
-          />
+          maxLength={3000}
+          comment={newComment}
+          onChange={setNewComment}
+          onSubmit={onSubmitComment}
+          isLoggedIn={!!userStore.activeUser}
+        />
       </Box>
     </Flex>
   )

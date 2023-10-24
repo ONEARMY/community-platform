@@ -35,7 +35,7 @@ export const ResearchComments = ({
   comments,
   update,
   showComments,
-  discussion
+  discussion,
 }: IProps) => {
   const [comment, setComment] = useState('')
   const [, setLoading] = useState(false)
@@ -182,11 +182,12 @@ export const ResearchComments = ({
         </Flex>
       )}
       {viewComments && discussion && researchStore.activeResearchItem && (
-      <Discussion
-        item={researchStore.activeResearchItem}
-        sourceId={researchStore.activeResearchItem._id}
-        sourceType='update'
-      />)}
+        <Discussion
+          item={researchStore.activeResearchItem}
+          sourceId={researchStore.activeResearchItem._id}
+          sourceType="update"
+        />
+      )}
     </BoxMain>
   )
 }

@@ -54,9 +54,10 @@ export class DiscussionStore extends ModuleStore {
           !!this.aggregationsStore.aggregations.users_verified?.[
             comment.creatorName
           ],
-        isEditable: [this.userStore.activeUser?._id, this.userStore.activeUser?.userName].includes(
-          comment._creatorId,
-        ), //@TODO get correct value
+        isEditable: [
+          this.userStore.activeUser?._id,
+          this.userStore.activeUser?.userName,
+        ].includes(comment._creatorId), //@TODO get correct value
         showReplies: false,
       }
     })
@@ -127,8 +128,6 @@ export class DiscussionStore extends ModuleStore {
           }
 
           await this._updateDiscussion(dbRef, currentDiscussion)
-
-
         }
       }
     } catch (err) {
@@ -256,8 +255,7 @@ export class DiscussionStore extends ModuleStore {
         const getUserMentions = async (discussionComments: IComment[]) => {
           return await Promise.all(
             discussionComments.map(async (c) => {
-              if (c.replies)
-                c.replies = await getUserMentions(c.replies)
+              if (c.replies) c.replies = await getUserMentions(c.replies)
 
               const { text, mentionedUsers: users } =
                 await changeMentionToUserReference(c.text, this.userStore)

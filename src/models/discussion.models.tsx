@@ -1,9 +1,8 @@
-import { IComment } from "./comment.model";
-
+import { IComment } from './comment.model'
 
 export type IDiscussion = {
   _id: string
-  sourceId: string,
-  sourceType: string,
+  sourceId: string
+  sourceType: string
   comments: IComment[]
 }

@@ -119,7 +119,7 @@ export class Howto extends React.Component<
               [loggedInUser?._id, loggedInUser?.userName].includes(
                 c._creatorId,
               ) || isAllowedToEditContent(activeHowto, loggedInUser),
-            showReplies: false
+            showReplies: false,
           }),
         )
 
@@ -214,12 +214,12 @@ export class Howto extends React.Component<
           </Box>
           <HowToComments comments={activeHowToComments} />
           {/* <AuthWrapper roleRequired="beta-tester"> */}
-            <Discussion
-              item={activeHowto}
-              sourceId={activeHowto._id}
-              sourceType='howto'
-            ></Discussion>
-         {/*  </AuthWrapper> */}
+          <Discussion
+            item={activeHowto}
+            sourceId={activeHowto._id}
+            sourceType="howto"
+          ></Discussion>
+          {/*  </AuthWrapper> */}
           <MoreBox py={20} mt={20}>
             <Text
               sx={{

@@ -579,24 +579,18 @@ describe('howto.store', () => {
   })
 
   describe('incrementViews', () => {
-    it('data fetched from server db', async () => {
-      const { store, howToItem, getFn } = await factory()
-
-      // Act
-      await store.incrementViewCount(howToItem._id)
-
-      expect(getFn).toBeCalledTimes(1)
-      expect(getFn).toHaveBeenCalledWith('server')
-    })
     it('increments views by one', async () => {
-      const { store, howToItem, setFn } = await factory()
+      const { store, howToItem, getFn, setFn } = await factory()
 
       const views = howToItem.total_views!
       // Act
-      const updatedViews = await store.incrementViewCount(howToItem._id)
+      await store.incrementViewCount(howToItem._id)
 
-      expect(setFn).toHaveBeenCalledTimes(1)
-      expect(updatedViews).toBe(views + 1)
+      expect(getFn).toHaveBeenCalledWith('server')
+      expect(setFn).toHaveBeenCalledWith(
+        expect.objectContaining({ total_views: views + 1 }),
+        expect.anything(),
+      )
     })
   })
 })

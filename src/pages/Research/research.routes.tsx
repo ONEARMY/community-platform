@@ -9,7 +9,7 @@ const CreateResearch = lazy(
 const CreateUpdate = lazy(
   () =>
     import(
-      /* webpackChunkName: "CreateResearchUpdate" */ './Content/CreateUpdate'
+      /* webpackChunkName: "CreateResearchUpdate" */ './Content/CreateUpdate/CreateUpdate'
     ),
 )
 const ResearchItemEditor = lazy(

@@ -18,7 +18,6 @@ import {
 const COLLECTION_NAME = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
-
   constructor(rootStore: RootStore) {
     super(rootStore)
     makeObservable(this)
@@ -85,7 +84,11 @@ export class DiscussionStore extends ModuleStore {
   }
 
   @action
-  public async addComment(discussion: IDiscussion, text: string, commentId?: string) : Promise<IDiscussion | undefined> {
+  public async addComment(
+    discussion: IDiscussion,
+    text: string,
+    commentId?: string,
+  ): Promise<IDiscussion | undefined> {
     try {
       const user = this.activeUser
       const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
@@ -153,7 +156,11 @@ export class DiscussionStore extends ModuleStore {
   }
 
   @action
-  public async editComment(discussion: IDiscussion, text: string, commentId: string): Promise<IDiscussion | undefined> {
+  public async editComment(
+    discussion: IDiscussion,
+    text: string,
+    commentId: string,
+  ): Promise<IDiscussion | undefined> {
     try {
       const user = this.activeUser
       const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
@@ -179,7 +186,7 @@ export class DiscussionStore extends ModuleStore {
     } catch (err) {
       logger.error(err)
       throw new Error(err?.message)
-    } 
+    }
   }
 
   private findAndDeleteComment(
@@ -203,7 +210,10 @@ export class DiscussionStore extends ModuleStore {
   }
 
   @action
-  public async deleteComment(discussion: IDiscussion, commentId: string): Promise<IDiscussion | undefined> {
+  public async deleteComment(
+    discussion: IDiscussion,
+    commentId: string,
+  ): Promise<IDiscussion | undefined> {
     try {
       const user = this.activeUser
 

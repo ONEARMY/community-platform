@@ -11,13 +11,11 @@ import styled from '@emotion/styled'
 import type { UserComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 import { trackEvent } from 'src/common/Analytics'
-import { Discussion } from 'src/pages/common/Discussion/Discussion'
 interface IProps {
   comments: UserComment[]
   update: IResearch.UpdateDB
   updateIndex: number
   showComments?: boolean
-  discussion?: boolean
 }
 
 const BoxMain = styled(Box)`
@@ -35,7 +33,6 @@ export const ResearchComments = ({
   comments,
   update,
   showComments,
-  discussion,
 }: IProps) => {
   const [comment, setComment] = useState('')
   const [, setLoading] = useState(false)
@@ -153,7 +150,7 @@ export const ResearchComments = ({
       >
         <>{setButtonText()}</>
       </Button>
-      {viewComments && !discussion && (
+      {viewComments && (
         <Flex
           mt={5}
           sx={{ flexDirection: 'column', alignItems: 'end' }}
@@ -180,13 +177,6 @@ export const ResearchComments = ({
             />
           </Box>
         </Flex>
-      )}
-      {viewComments && discussion && researchStore.activeResearchItem && (
-        <Discussion
-          item={researchStore.activeResearchItem}
-          sourceId={researchStore.activeResearchItem._id}
-          sourceType="update"
-        />
       )}
     </BoxMain>
   )

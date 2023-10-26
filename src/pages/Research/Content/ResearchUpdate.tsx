@@ -18,6 +18,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useCommonStores } from 'src/index'
+import { Discussion } from 'src/pages/common/Discussion/Discussion'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -224,8 +225,14 @@ const ResearchUpdate = ({
               comments={comments as any}
               updateIndex={updateIndex}
               showComments={showComments}
-              discussion={true}
             />
+            {/* <AuthWrapper roleRequired="beta-tester"> */}
+            <Discussion
+              item={update}
+              sourceId={update._id}
+              discussionBox={true}
+            />
+            {/*  </AuthWrapper> */}
           </Card>
         </Flex>
       </Flex>

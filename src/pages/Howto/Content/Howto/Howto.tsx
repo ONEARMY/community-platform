@@ -214,12 +214,14 @@ export class Howto extends React.Component<
           </Box>
           <HowToComments comments={activeHowToComments} />
           {/* <AuthWrapper roleRequired="beta-tester"> */}
-          <Flex mt={5} sx={{flexDirection: 'column', alignItems: 'center'}}>
-            <Flex sx={{width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`]}}>
+          <Flex mt={5} sx={{ flexDirection: 'column', alignItems: 'center' }}>
+            <Flex
+              sx={{ width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`] }}
+            >
               <Discussion
                 item={activeHowto}
                 sourceId={activeHowto._id}
-                sourceType="howto"
+                discussionBox={false}
               ></Discussion>
             </Flex>
           </Flex>

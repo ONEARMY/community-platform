@@ -167,9 +167,6 @@ export class HowtoStore extends ModuleStore {
           if (!step.text) return
           step.text = changeUserReferenceToPlainText(step.text)
         })
-
-        // Set the active discussion for the specific howto
-        await this.discussionStore.setActiveDiscussion(activeHowto._id)
       }
     }
 

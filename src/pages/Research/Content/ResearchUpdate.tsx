@@ -224,7 +224,7 @@ const ResearchUpdate = ({
               comments={comments as any}
               updateIndex={updateIndex}
               showComments={showComments}
-              discussion={false}
+              discussion={true}
             />
           </Card>
         </Flex>

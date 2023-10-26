@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, toJS } from 'mobx'
+import { action, makeObservable, toJS } from 'mobx'
 import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
 import { logger } from 'src/logger'
@@ -18,30 +18,21 @@ import {
 const COLLECTION_NAME = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
-  @observable
-  public activeDiscussion: IDiscussion
-
-  @observable
-  public discussionComments: UserComment[]
 
   constructor(rootStore: RootStore) {
     super(rootStore)
     makeObservable(this)
   }
 
-  public async setActiveDiscussion(sourceId) {
-    this.activeDiscussion = toJS(
+  public async fetchDiscussion(sourceId: string): Promise<IDiscussion> {
+    return toJS(
       await this.db
         .collection<IDiscussion>(COLLECTION_NAME)
         .getWhere('sourceId', '==', sourceId),
     )[0]
-
-    this.discussionComments = this.activeDiscussion
-      ? this.formatComments(this.activeDiscussion.comments)
-      : []
   }
 
-  private formatComments(comments: IComment[]): UserComment[] {
+  public formatComments(comments: IComment[]): UserComment[] {
     return comments.map((comment: IComment) => {
       const { replies } = comment
       if (replies && replies.length) {
@@ -94,7 +85,7 @@ export class DiscussionStore extends ModuleStore {
   }
 
   @action
-  public async addComment(text: string, commentId?: string) {
+  public async addComment(discussion: IDiscussion, text: string, commentId?: string) : Promise<IDiscussion | undefined> {
     try {
       const user = this.activeUser
       const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
@@ -102,7 +93,7 @@ export class DiscussionStore extends ModuleStore {
       if (user && comment) {
         const dbRef = this.db
           .collection<IDiscussion>(COLLECTION_NAME)
-          .doc(this.activeDiscussion._id)
+          .doc(discussion._id)
 
         const currentDiscussion = toJS(await dbRef.get())
 
@@ -127,7 +118,7 @@ export class DiscussionStore extends ModuleStore {
             currentDiscussion.comments.push(newComment)
           }
 
-          await this._updateDiscussion(dbRef, currentDiscussion)
+          return this._updateDiscussion(dbRef, currentDiscussion)
         }
       }
     } catch (err) {
@@ -162,7 +153,7 @@ export class DiscussionStore extends ModuleStore {
   }
 
   @action
-  public async editComment(text: string, commentId: string) {
+  public async editComment(discussion: IDiscussion, text: string, commentId: string): Promise<IDiscussion | undefined> {
     try {
       const user = this.activeUser
       const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
@@ -170,7 +161,7 @@ export class DiscussionStore extends ModuleStore {
       if (user && comment) {
         const dbRef = this.db
           .collection<IDiscussion>(COLLECTION_NAME)
-          .doc(this.activeDiscussion._id)
+          .doc(discussion._id)
 
         const currentDiscussion = toJS(await dbRef.get())
 
@@ -182,13 +173,13 @@ export class DiscussionStore extends ModuleStore {
             commentId,
           )
 
-          this._updateDiscussion(dbRef, currentDiscussion)
+          return this._updateDiscussion(dbRef, currentDiscussion)
         }
       }
     } catch (err) {
       logger.error(err)
       throw new Error(err?.message)
-    }
+    } 
   }
 
   private findAndDeleteComment(
@@ -212,14 +203,14 @@ export class DiscussionStore extends ModuleStore {
   }
 
   @action
-  public async deleteComment(commentId: string) {
+  public async deleteComment(discussion: IDiscussion, commentId: string): Promise<IDiscussion | undefined> {
     try {
       const user = this.activeUser
 
       if (user) {
         const dbRef = this.db
           .collection<IDiscussion>(COLLECTION_NAME)
-          .doc(this.activeDiscussion._id)
+          .doc(discussion._id)
 
         const currentDiscussion = toJS(await dbRef.get())
 
@@ -230,7 +221,7 @@ export class DiscussionStore extends ModuleStore {
             commentId,
           )
 
-          this._updateDiscussion(dbRef, currentDiscussion)
+          return this._updateDiscussion(dbRef, currentDiscussion)
         }
       }
     } catch (err) {
@@ -287,12 +278,7 @@ export class DiscussionStore extends ModuleStore {
   ) {
     await dbRef.set({ ...cloneDeep(discussion) })
 
-    const updatedDiscussion = toJS(await dbRef.get())
-
-    if (updatedDiscussion) {
-      this.activeDiscussion = updatedDiscussion
-      this.discussionComments = this.formatComments(updatedDiscussion.comments)
-    }
+    return toJS(dbRef.get())
   }
 }
 

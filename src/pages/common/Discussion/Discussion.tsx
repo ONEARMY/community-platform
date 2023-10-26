@@ -1,8 +1,10 @@
 import { Box, Flex } from 'theme-ui'
 import { CommentList, CreateComment } from 'oa-components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCommonStores } from 'src'
 import { trackEvent } from 'src/common/Analytics'
+import type { IDiscussion, UserComment } from 'src/models'
+//import { IDiscussion } from 'src/models'
 //import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 //import { logger } from 'src/logger'
 
@@ -11,15 +13,30 @@ type DiscussionProps = {
   articleTitle?: string
   sourceId: string
   sourceType: string
+  //discussion: IDiscussion
 }
 
-export const Discussion = ({ articleTitle }: DiscussionProps) => {
+export const Discussion = ({sourceId, articleTitle }: DiscussionProps) => {
   const { userStore, discussionStore } = useCommonStores().stores
 
   const [newComment, setNewComment] = useState('')
+  const [discussion, setDiscussion] = useState({} as IDiscussion)
+  const [comments, setComments] = useState([] as UserComment[])
+
+  useEffect(()=> {
+    if (!comments.length) {
+      discussionStore.fetchDiscussion(sourceId).then(discussion => {
+        setDiscussion(discussion)
+        setComments(discussionStore.formatComments(discussion.comments))
+      })
+    }
+  })
 
   const onSubmitComment = async (comment: string) => {
-    await discussionStore.addComment(comment)
+    discussionStore.addComment(discussion, comment).then((discussion: IDiscussion | undefined) => {
+      if (discussion)
+        setComments(discussionStore.formatComments(discussion.comments))
+    })
     setNewComment('')
   }
 
@@ -37,7 +54,10 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
       action: 'Update',
       label: `comment:${articleTitle}`,
     })
-    await discussionStore.editComment(comment, commentId)
+    discussionStore.editComment(discussion, comment, commentId).then((discussion: IDiscussion | undefined) => {
+      if (discussion)
+        setComments(discussionStore.formatComments(discussion.comments))
+    })
   }
 
   const handleReply = async (commentId: string, comment: string) => {
@@ -46,7 +66,10 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
       action: 'Reply',
       label: `comment:${articleTitle}`,
     })
-    await discussionStore.addComment(comment, commentId)
+    discussionStore.addComment(discussion, comment, commentId).then((discussion: IDiscussion | undefined) => {
+      if (discussion)
+        setComments(discussionStore.formatComments(discussion.comments))
+    })
   }
 
   const handleDelete = async (commentId: string) => {
@@ -55,7 +78,10 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
       action: 'Deleted',
       label: `comment:${articleTitle}`,
     })
-    await discussionStore.deleteComment(commentId)
+    discussionStore.deleteComment(discussion, commentId).then((discussion: IDiscussion | undefined) => {
+      if (discussion)
+        setComments(discussionStore.formatComments(discussion.comments))
+    })
   }
 
   return (
@@ -66,7 +92,7 @@ export const Discussion = ({ articleTitle }: DiscussionProps) => {
     >
       <CommentList
         articleTitle={articleTitle}
-        comments={discussionStore.discussionComments}
+        comments={comments}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
         handleReply={handleReply}

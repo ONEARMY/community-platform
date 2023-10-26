@@ -29,6 +29,18 @@ const factory = async (
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
+  store.db.set.mockImplementation((newValue) => {
+    return newValue
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.db.update.mockImplementation((newValue) => {
+    return newValue
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   store.db.get.mockResolvedValue(howToItem)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -59,6 +71,9 @@ const factory = async (
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    updateFn: store.db.update,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     getFn: store.db.get,
@@ -591,6 +606,36 @@ describe('howto.store', () => {
         expect.objectContaining({ total_views: views + 1 }),
         expect.anything(),
       )
+    })
+  })
+
+  describe('Useful', () => {
+    it('marks howto as useful', async () => {
+      const { store, howToItem, updateFn } = await factory([
+        FactoryHowto({ votedUsefulBy: ['fake-user2'] }),
+      ])
+
+      // Act
+      await store.toggleUsefulByUser(howToItem._id, 'fake-user')
+
+      const [newHowto] = updateFn.mock.calls[0]
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      expect(newHowto.votedUsefulBy).toEqual(
+        expect.arrayContaining(['fake-user', 'fake-user2']),
+      )
+    })
+
+    it('removes vote from a howto', async () => {
+      const { store, howToItem, updateFn } = await factory([
+        FactoryHowto({ votedUsefulBy: ['fake-user'] }),
+      ])
+
+      // Act
+      await store.toggleUsefulByUser(howToItem._id, 'fake-user')
+
+      const [newHowto] = updateFn.mock.calls[0]
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      expect(newHowto.votedUsefulBy).toEqual([])
     })
   })
 })

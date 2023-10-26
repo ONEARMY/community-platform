@@ -3,7 +3,7 @@ import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
 import { logger } from 'src/logger'
 import { ModuleStore } from '../common/module.store'
-import { hasAdminRights, randomID } from 'src/utils/helpers'
+import { hasAdminRights, isAllowedToEditContent, randomID } from 'src/utils/helpers'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -31,11 +31,11 @@ export class DiscussionStore extends ModuleStore {
     )[0]
   }
 
-  public formatComments(comments: IComment[]): UserComment[] {
+  public formatComments(item: any, comments: IComment[]): UserComment[] {
     return comments.map((comment: IComment) => {
       const { replies } = comment
       if (replies && replies.length) {
-        comment.replies = this.formatComments(replies)
+        comment.replies = this.formatComments(item, replies)
       }
       return {
         ...comment,
@@ -47,7 +47,7 @@ export class DiscussionStore extends ModuleStore {
         isEditable: [
           this.userStore.activeUser?._id,
           this.userStore.activeUser?.userName,
-        ].includes(comment._creatorId), //@TODO get correct value
+        ].includes(comment._creatorId) || isAllowedToEditContent(item, this.userStore.activeUser),
         showReplies: false,
       }
     })

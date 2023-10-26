@@ -23,6 +23,7 @@ type DiscussionProps = {
 }
 
 export const Discussion = ({
+  item,
   sourceId,
   articleTitle,
   discussionBox,
@@ -38,7 +39,7 @@ export const Discussion = ({
     if (!comments.length) {
       discussionStore.fetchDiscussion(sourceId).then((discussion) => {
         setDiscussion(discussion)
-        setComments(discussionStore.formatComments(discussion.comments))
+        setComments(discussionStore.formatComments(item, discussion.comments))
       })
     }
   })
@@ -48,7 +49,7 @@ export const Discussion = ({
       .addComment(discussion, comment)
       .then((discussion: IDiscussion | undefined) => {
         if (discussion)
-          setComments(discussionStore.formatComments(discussion.comments))
+          setComments(discussionStore.formatComments(item, discussion.comments))
       })
     setNewComment('')
   }
@@ -71,7 +72,7 @@ export const Discussion = ({
       .editComment(discussion, comment, commentId)
       .then((discussion: IDiscussion | undefined) => {
         if (discussion)
-          setComments(discussionStore.formatComments(discussion.comments))
+          setComments(discussionStore.formatComments(item, discussion.comments))
       })
   }
 
@@ -85,7 +86,7 @@ export const Discussion = ({
       .addComment(discussion, comment, commentId)
       .then((discussion: IDiscussion | undefined) => {
         if (discussion)
-          setComments(discussionStore.formatComments(discussion.comments))
+          setComments(discussionStore.formatComments(item, discussion.comments))
       })
   }
 
@@ -99,7 +100,7 @@ export const Discussion = ({
       .deleteComment(discussion, commentId)
       .then((discussion: IDiscussion | undefined) => {
         if (discussion)
-          setComments(discussionStore.formatComments(discussion.comments))
+          setComments(discussionStore.formatComments(item, discussion.comments))
       })
   }
 

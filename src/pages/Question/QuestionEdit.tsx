@@ -12,7 +12,7 @@ export const QuestionEdit = (props: IProps) => {
   useEffect(() => {
     const { slug } = props.match.params
     const fetchQuestions = async () => {
-      const question: any = await store.fetchQuestionBySlug(slug)
+      const question = await store.fetchQuestionBySlug(slug)
 
       if (question?._createdBy !== store.activeUser?.userName) {
         props.history.push(`/question/${question.slug}`)

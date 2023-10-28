@@ -40,22 +40,25 @@ export const QuestionListing = () => {
       {isLoading ? (
         <Loader />
       ) : questionList.length ? (
-        questionList.map((q: any, idx) => (
-          <Card key={idx} mb={3} px={3} py={3}>
-            <Link to={`/question/${encodeURIComponent(q.slug)}`} key={q._id}>
-              <Heading
-                as="span"
-                mb={2}
-                sx={{
-                  color: 'black',
-                  fontSize: [3, 3, 4],
-                }}
-              >
-                {q.title}
-              </Heading>
-            </Link>
-          </Card>
-        ))
+        questionList.map((q: any, idx) => {
+          const url = `/question/${encodeURIComponent(q.slug)}`
+          return (
+            <Card key={idx} mb={3} px={3} py={3}>
+              <Link to={url} key={q._id}>
+                <Heading
+                  as="span"
+                  mb={2}
+                  sx={{
+                    color: 'black',
+                    fontSize: [3, 3, 4],
+                  }}
+                >
+                  {q.title}
+                </Heading>
+              </Link>
+            </Card>
+          )
+        })
       ) : (
         <Heading>No questions yet</Heading>
       )}

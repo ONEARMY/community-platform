@@ -6,6 +6,11 @@ import { PostingGuidelines } from '../Research/Content/Common'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { logger } from 'src/logger'
+import {
+  QUESTION_MAX_DESCRIPTION_LENGTH,
+  QUESTION_MAX_TITLE_LENGTH,
+  QUESTION_MIN_TITLE_LENGTH,
+} from './constants'
 
 export const QuestionCreate = (props) => {
   const store = useQuestionStore()
@@ -16,11 +21,9 @@ export const QuestionCreate = (props) => {
           try {
             const newDocument = await store.upsertQuestion(v)
             if (newDocument) {
-              // eslint-disable-next-line no-console
               props.history.push('/question/' + newDocument.slug)
             }
           } catch (e) {
-            // eslint-disable-next-line no-console
             logger.error(e)
           }
         }}
@@ -54,11 +57,14 @@ export const QuestionCreate = (props) => {
                     <Field
                       name="title"
                       id="title"
-                      validate={composeValidators(required, minValue(10))}
+                      validate={composeValidators(
+                        required,
+                        minValue(QUESTION_MIN_TITLE_LENGTH),
+                      )}
                       component={FieldInput}
                       placeholder="How come … does not work?"
-                      minLength={10}
-                      maxLength={60}
+                      minLength={QUESTION_MIN_TITLE_LENGTH}
+                      maxLength={QUESTION_MAX_TITLE_LENGTH}
                       showCharacterCount
                     />
                   </Box>
@@ -74,7 +80,7 @@ export const QuestionCreate = (props) => {
                       validate={composeValidators(required)}
                       component={FieldInput}
                       placeholder="Introduce to your research question. Mention what you want to do, whats the goal what challenges you see, etc"
-                      maxLength={1000}
+                      maxLength={QUESTION_MAX_DESCRIPTION_LENGTH}
                       showCharacterCount
                     />
                   </Box>

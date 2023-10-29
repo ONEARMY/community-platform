@@ -128,7 +128,10 @@ export class CollectionReference<T> {
           limit,
         })
       } catch (error) {
-        logger.error(error)
+        logger.error(
+          error.message ||
+            'CollectionReference.error querying cached collection',
+        )
         // at least we can say we tried...
       }
     }

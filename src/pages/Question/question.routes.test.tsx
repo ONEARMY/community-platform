@@ -202,6 +202,48 @@ describe('question.routes', () => {
       ).toBeInTheDocument()
       expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
     })
+
+    it('does not show Edit call to action', async () => {
+      let wrapper
+      const question = FactoryQuestionItem()
+      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        fetchQuestionBySlug: mockFetchQuestionBySlug,
+      })
+
+      await act(async () => {
+        wrapper = (await renderFn(`/question/${question.slug}`, FactoryUser()))
+          .wrapper
+        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+      })
+
+      // Ability to edit
+      expect(() => wrapper.getByText(/Edit/)).toThrow()
+    })
+
+    it('shows Edit call to action', async () => {
+      let wrapper
+      const activeUser = FactoryUser({})
+      const question = FactoryQuestionItem({
+        _createdBy: activeUser.userName,
+      })
+      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        activeUser,
+        fetchQuestionBySlug: mockFetchQuestionBySlug,
+      })
+
+      await act(async () => {
+        wrapper = (await renderFn(`/question/${question.slug}`, FactoryUser()))
+          .wrapper
+        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+      })
+
+      // Ability to edit
+      expect(wrapper.getByText(/Edit/)).toBeInTheDocument()
+    })
   })
 
   describe('/question/:slug/edit', () => {

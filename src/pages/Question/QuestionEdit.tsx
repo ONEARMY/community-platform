@@ -54,7 +54,7 @@ export const QuestionEdit = (props: IProps) => {
       ) : (
         <Form
           initialValues={initialValues}
-          onSubmit={async (v: any) => {
+          onSubmit={async (v: IQuestion.FormInput) => {
             try {
               const newDocument = await store.upsertQuestion(v)
               if (newDocument) {

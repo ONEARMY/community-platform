@@ -27,7 +27,7 @@ export const ContentStatistics = (props: IProps) => {
       alignItems: ['flex-start','center','center'], 
       justifyContent: 'center', 
       gap: 2, 
-      flexDirection: ['column','row', 'row'] 
+      flexDirection: ['column','row', 'row'],
       pl: [2,0,0]
     }}
   >

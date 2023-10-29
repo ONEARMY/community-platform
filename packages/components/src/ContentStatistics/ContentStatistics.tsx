@@ -2,7 +2,7 @@ import { Text, Flex } from 'theme-ui'
 import type { availableGlyphs } from '..'
 import { Icon } from '..'
 import { useState} from 'react'
-import { Button } from 'oa-components'
+import { Button } from '../Button/Button'
 
 export interface IProps {
   statistics: {

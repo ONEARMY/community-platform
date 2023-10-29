@@ -161,9 +161,9 @@ describe('question.routes', () => {
       // Fill in form
       const title = wrapper.getByLabelText('The Question')
       const description = wrapper.getByLabelText('Give some more information')
+      const submitButton = wrapper.getByText('Publish')
 
       // Submit form
-      const submitButton = wrapper.getByText('Publish')
       await userEvent.type(title, 'Question title')
       await userEvent.type(description, 'Question description')
 
@@ -223,6 +223,9 @@ describe('question.routes', () => {
         title: faker.lorem.words(1),
         _createdBy: 'author',
       })
+      const mockUpsertQuestion = jest.fn().mockResolvedValue({
+        slug: 'question-title',
+      })
 
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
@@ -231,6 +234,7 @@ describe('question.routes', () => {
           userRoles: ['admin'],
         }),
         fetchQuestionBySlug: jest.fn().mockResolvedValue(questionItem),
+        upsertQuestion: mockUpsertQuestion,
       })
 
       await act(async () => {
@@ -240,6 +244,29 @@ describe('question.routes', () => {
 
       expect(wrapper.getByText(editFormTitle)).toBeInTheDocument()
       expect(screen.getByDisplayValue(questionItem.title)).toBeInTheDocument()
+      expect(() => wrapper.getByText('Draft')).toThrow()
+
+      // Fill in form
+      const title = wrapper.getByLabelText('The Question')
+      const description = wrapper.getByLabelText('Give some more information')
+      const submitButton = wrapper.getByText('Update')
+
+      // Submit form
+      await userEvent.clear(title)
+      await userEvent.type(title, 'Question title')
+      await userEvent.clear(description)
+      await userEvent.type(description, 'Question description')
+
+      await waitFor(() => {
+        submitButton.click()
+      })
+
+      expect(mockUpsertQuestion).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'Question title',
+          description: 'Question description',
+        }),
+      )
     })
 
     it('redirects non-author', async () => {

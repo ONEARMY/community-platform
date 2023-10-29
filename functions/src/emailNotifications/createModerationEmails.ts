@@ -24,60 +24,55 @@ export async function handleModerationUpdate<T extends IModerable>(
 
 export async function createHowtoModerationEmail(howto: IHowtoDB) {
   const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
-  // Release first under beta to test.
-  if (toUser.userRoles?.includes('beta-tester')) {
-    if (howto.moderation === 'accepted') {
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: templates.getHowToApprovalEmail(toUser, howto),
-      })
-    } else if (howto.moderation === 'awaiting-moderation') {
-      // If a how to is resumbitted, send another submission confirmation email.
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: templates.getHowToSubmissionEmail(toUser, howto),
-      })
-    } else if (howto.moderation === 'rejected') {
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: templates.getHowToRejectedEmail(toUser, howto),
-      })
-    } else if (howto.moderation === 'improvements-needed') {
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: templates.getHowToNeedsImprovementsEmail(toUser, howto),
-      })
-    }
+
+  if (howto.moderation === 'accepted') {
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: templates.getHowToApprovalEmail(toUser, howto),
+    })
+  } else if (howto.moderation === 'awaiting-moderation') {
+    // If a how to is resumbitted, send another submission confirmation email.
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: templates.getHowToSubmissionEmail(toUser, howto),
+    })
+  } else if (howto.moderation === 'rejected') {
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: templates.getHowToRejectedEmail(toUser, howto),
+    })
+  } else if (howto.moderation === 'improvements-needed') {
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: templates.getHowToNeedsImprovementsEmail(toUser, howto),
+    })
   }
 }
 
 export async function createMapPinModerationEmail(mapPin: IMapPin) {
   const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
 
-  // Release first under beta to test.
-  if (toUser.userRoles?.includes('beta-tester')) {
-    if (mapPin.moderation === 'accepted') {
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: templates.getMapPinApprovalEmail(toUser, mapPin),
-      })
-    } else if (mapPin.moderation === 'awaiting-moderation') {
-      // If a pin is resumbitted, send another submission confirmation email.
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: templates.getMapPinSubmissionEmail(toUser, mapPin),
-      })
-    } else if (mapPin.moderation === 'rejected') {
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: templates.getMapPinRejectedEmail(toUser),
-      })
-    } else if (mapPin.moderation === 'improvements-needed') {
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: templates.getMapPinNeedsImprovementsEmail(toUser, mapPin),
-      })
-    }
+  if (mapPin.moderation === 'accepted') {
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: templates.getMapPinApprovalEmail(toUser, mapPin),
+    })
+  } else if (mapPin.moderation === 'awaiting-moderation') {
+    // If a pin is resumbitted, send another submission confirmation email.
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: templates.getMapPinSubmissionEmail(toUser, mapPin),
+    })
+  } else if (mapPin.moderation === 'rejected') {
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: templates.getMapPinRejectedEmail(toUser),
+    })
+  } else if (mapPin.moderation === 'improvements-needed') {
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: templates.getMapPinNeedsImprovementsEmail(toUser, mapPin),
+    })
   }
 }
 

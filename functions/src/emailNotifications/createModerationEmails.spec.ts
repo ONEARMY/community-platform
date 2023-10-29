@@ -52,11 +52,6 @@ describe('Create howto moderation emails', () => {
       userFactory('user_1', {
         displayName: 'User 1',
         userName: 'user_1',
-        userRoles: ['beta-tester'],
-      }),
-      userFactory('user_2', {
-        displayName: 'User 2',
-        userName: 'user_2',
       }),
     ])
 
@@ -243,27 +238,6 @@ describe('Create howto moderation emails', () => {
     })
   })
 
-  // Remove this test once released to all users.
-  it('Does not create an email for people who are not beta testers', async () => {
-    const howtoApproved = await setMockHowto({ uid: 'user_2' })
-    const howtoAwaitingModeration = {
-      ...howtoApproved,
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      howtoAwaitingModeration,
-      howtoApproved,
-      'howtos',
-      howtoApproved._id,
-    )
-
-    await handleModerationUpdate(change, createHowtoModerationEmail)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(0)
-  })
-
   it('Does not create an email for non-approved howtos', async () => {
     const howtoApproved = await setMockHowto({ uid: 'user_1' })
     const howtoDraft = {
@@ -296,11 +270,6 @@ describe('Create map pin moderation emails', () => {
       userFactory('user_1', {
         displayName: 'User 1',
         userName: 'user_1',
-        userRoles: ['beta-tester'],
-      }),
-      userFactory('user_2', {
-        displayName: 'User 2',
-        userName: 'user_2',
       }),
     ])
 
@@ -480,30 +449,6 @@ describe('Create map pin moderation emails', () => {
       expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')
     })
-  })
-
-  // Remove this test once released to all users.
-  it('Does not create an email for people who are not beta testers', async () => {
-    const mapPinApproved = {
-      _id: 'user_2',
-      moderation: 'accepted',
-    }
-    const mapPinAwaitingModeration = {
-      _id: 'user_2',
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      mapPinAwaitingModeration,
-      mapPinApproved,
-      'mappins',
-      mapPinApproved._id,
-    )
-
-    await handleModerationUpdate(change, createMapPinModerationEmail)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(0)
   })
 
   it('Does not create an email for non-approved map pins', async () => {

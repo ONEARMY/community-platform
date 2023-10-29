@@ -102,6 +102,8 @@ export class DexieClient implements AbstractDatabaseClient {
         return ref.where(field).above(value)
       case '==':
         return ref.where(field).equals(value)
+      case '!=':
+        return ref.where(field).notEqual(value)
       case '>':
         return ref.where(field).below(value)
       case 'array-contains':

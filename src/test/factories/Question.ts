@@ -9,5 +9,8 @@ export const FactoryQuestionItem = (
   _deleted: faker.datatype.boolean(),
   _contentModifiedTimestamp: faker.date.past().toString(),
   _createdBy: faker.internet.userName(),
+  title: faker.lorem.sentence(),
+  description: faker.lorem.paragraph(),
+  slug: faker.lorem.slug(),
   ...questionOverloads,
 })

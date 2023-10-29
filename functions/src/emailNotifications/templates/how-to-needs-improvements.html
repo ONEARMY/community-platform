@@ -2,11 +2,25 @@
 
 <p>Hey {{user.displayName}},</p>
 
-<p>Your How-To, {{howto.title}}, needs more work before we can publish it.</p>
+<p>
+  Your How-to, <a href="{{site.url}}/how-to/{{howto.slug}}">{{howto.title}}</a>,
+  needs more work before we can publish it.
+</p>
 
 {{#if howto.moderatorFeedback}}
 <p>Please review the following & re-submit your How-to:</p>
-{{howto.moderatorFeedback}} {{/if}}
+<b>{{howto.moderatorFeedback}}</b>
+{{/if}}
+
+<p>
+  Check the
+  <a href="https://community.preciousplastic.com/academy/create/howto">
+    How-to guidelines</a
+  >
+  to review our requirements. Until you update your information, your How-to
+  will remain hidden from the community platform. We hope to see your edits
+  soon, so we can get your How-to online as soon as possible 🙂
+</p>
 
 <p>We look forward to hearing back from you.</p>
 

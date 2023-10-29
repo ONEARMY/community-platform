@@ -2,8 +2,8 @@ jest.mock('../../stores/common/module.store')
 
 import '@testing-library/jest-dom'
 import QuestionRoutes from './question.routes'
-import { cleanup, render, waitFor, act } from '@testing-library/react'
 import { ThemeProvider } from '@emotion/react'
+import { cleanup, render, waitFor, act, screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import { Provider } from 'mobx-react'
 import { Router } from 'react-router-dom'
@@ -205,17 +205,24 @@ describe('question.routes', () => {
   })
 
   describe('/question/:slug/edit', () => {
+    const editFormTitle = /Edit your question/
     it('renders the question edit page', async () => {
       let wrapper
       await act(async () => {
         wrapper = (await renderFn('/question/slug/edit')).wrapper
       })
 
-      expect(wrapper.getByText(/Question Edit/)).toBeInTheDocument()
+      expect(wrapper.getByText(editFormTitle)).toBeInTheDocument()
     })
 
     it('allows admin access', async () => {
       let wrapper
+
+      const questionItem = FactoryQuestionItem({
+        slug: 'slug',
+        title: faker.lorem.words(1),
+        _createdBy: 'author',
+      })
 
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
@@ -223,12 +230,7 @@ describe('question.routes', () => {
           userName: 'not-author',
           userRoles: ['admin'],
         }),
-        fetchQuestionBySlug: jest.fn().mockResolvedValue(
-          FactoryQuestionItem({
-            slug: 'slug',
-            _createdBy: 'author',
-          }),
-        ),
+        fetchQuestionBySlug: jest.fn().mockResolvedValue(questionItem),
       })
 
       await act(async () => {
@@ -236,7 +238,8 @@ describe('question.routes', () => {
         wrapper = res.wrapper
       })
 
-      expect(wrapper.getByText(/Question Edit/)).toBeInTheDocument()
+      expect(wrapper.getByText(editFormTitle)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(questionItem.title)).toBeInTheDocument()
     })
 
     it('redirects non-author', async () => {
@@ -260,7 +263,7 @@ describe('question.routes', () => {
         history = res.history
       })
 
-      expect(() => wrapper.getByText(/Question Edit/)).toThrow()
+      expect(() => wrapper.getByText(editFormTitle)).toThrow()
       expect(history.location.pathname).toBe('/question/slug')
     })
   })

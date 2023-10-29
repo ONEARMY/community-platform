@@ -14,6 +14,10 @@ export const QuestionEdit = (props: IProps) => {
     const fetchQuestions = async () => {
       const question = await store.fetchQuestionBySlug(slug)
 
+      if (store.activeUser?.userRoles?.includes('admin')) {
+        return
+      }
+
       if (question?._createdBy !== store.activeUser?.userName) {
         props.history.push(`/question/${question.slug}`)
         return

@@ -211,12 +211,32 @@ describe('question.routes', () => {
         wrapper = (await renderFn('/question/slug/edit')).wrapper
       })
 
-      await waitFor(
-        () => expect(wrapper.getByText(/Question Edit/)).toBeInTheDocument(),
-        {
-          timeout: 2000,
-        },
-      )
+      expect(wrapper.getByText(/Question Edit/)).toBeInTheDocument()
+    })
+
+    it('allows admin access', async () => {
+      let wrapper
+
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        activeUser: FactoryUser({
+          userName: 'not-author',
+          userRoles: ['admin'],
+        }),
+        fetchQuestionBySlug: jest.fn().mockResolvedValue(
+          FactoryQuestionItem({
+            slug: 'slug',
+            _createdBy: 'author',
+          }),
+        ),
+      })
+
+      await act(async () => {
+        const res = await renderFn('/question/slug/edit', FactoryUser())
+        wrapper = res.wrapper
+      })
+
+      expect(wrapper.getByText(/Question Edit/)).toBeInTheDocument()
     })
 
     it('redirects non-author', async () => {

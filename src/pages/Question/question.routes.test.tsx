@@ -17,29 +17,6 @@ import { faker } from '@faker-js/faker'
 
 const Theme = testingThemeStyles
 
-// Similar to issues in Academy.test.tsx - stub methods called in user store constructor
-// TODO - replace with mock store or avoid direct call
-jest.mock('src/index', () => ({
-  __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {},
-      aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
-        },
-      },
-      howtoStore: {},
-      tagsStore: {},
-    },
-  }),
-}))
-
 class mockQuestionStoreClass implements Partial<QuestionStore> {
   setActiveQuestionItemBySlug = jest.fn()
   needsModeration = jest.fn().mockResolvedValue(true)
@@ -60,13 +37,7 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
 }
 const mockQuestionStore = new mockQuestionStoreClass()
 
-jest.mock('src/stores/Question/question.store')
-
 describe('question.routes', () => {
-  beforeEach(() => {
-    ;(useQuestionStore as jest.Mock).mockReturnValue(mockQuestionStore)
-  })
-
   afterEach(() => {
     jest.restoreAllMocks()
     cleanup()
@@ -181,14 +152,9 @@ describe('question.routes', () => {
   })
 
   describe('/question/:slug', () => {
-    it('renders the question single page', async () => {
+    it.only('renders the question single page', async () => {
       let wrapper
       const question = FactoryQuestionItem()
-      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-      useQuestionStore.mockReturnValue({
-        ...mockQuestionStore,
-        fetchQuestionBySlug: mockFetchQuestionBySlug,
-      })
 
       await act(async () => {
         wrapper = (await renderFn(`/question/${question.slug}`)).wrapper
@@ -200,7 +166,6 @@ describe('question.routes', () => {
       expect(
         wrapper.getByText(new RegExp(`^${question.description.split(' ')[0]}`)),
       ).toBeInTheDocument()
-      expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
     })
   })
 

@@ -1,5 +1,5 @@
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
-import { useCommonStores } from '../'
+import { useCommonStores } from '../App'
 
 export const isUserVerified = (userId: string) => {
   const { aggregationsStore } = useCommonStores().stores

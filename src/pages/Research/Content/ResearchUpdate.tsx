@@ -17,7 +17,7 @@ import type { IComment } from 'src/models'
 import { Link, useHistory } from 'react-router-dom'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/App'
 
 interface IProps {
   update: IResearch.UpdateDB

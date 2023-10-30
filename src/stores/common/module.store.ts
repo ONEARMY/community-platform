@@ -1,6 +1,6 @@
 import isUrl from 'is-url'
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/App'
 import { logger } from 'src/logger'
 import { includesAll } from 'src/utils/filters'
 import { stripSpecialCharacters } from 'src/utils/helpers'

@@ -34,7 +34,7 @@ import {
   buildStatisticsLabel,
 } from 'src/utils/helpers'
 import { Link, useHistory } from 'react-router-dom'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/App'
 import {
   retrieveHowtoDownloadCooldown,
   isHowtoDownloadCooldownExpired,

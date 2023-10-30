@@ -3,7 +3,7 @@ import type { UserRole } from 'src/models'
 import { Flex, Box, Text } from 'theme-ui'
 import { Select } from 'oa-components'
 import { observer } from 'mobx-react-lite'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/App'
 
 /**
  * A simple header component that reminds developers that they are working on a dev

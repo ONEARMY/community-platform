@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react'
 import { useEffect, useState } from 'react'
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
-import { useCommonStores } from '../../index'
+import { useCommonStores } from '../../App'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 import { logger } from 'src/logger'
 

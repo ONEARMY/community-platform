@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useCommonStores } from '../..'
+import { useCommonStores } from '../../App'
 import type { Collaborator } from '../../models/common.models'
 import { getUserCountry } from 'src/utils/getUserCountry'
 

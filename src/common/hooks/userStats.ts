@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useCommonStores } from '../../index'
+import { useCommonStores } from '../../App'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 
 export const userStats = (userId: string) => {

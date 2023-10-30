@@ -53,7 +53,7 @@ A few methods commonly used in the codebase include:
 Return a set of mock methods or utilities in place of an import. An example from the frontend code is when we want to avoid importing all stores, but instead just mock a single method
 
 ```ts
-jest.mock('src/index', () => {
+jest.mock('src/App', () => {
   return {
     useCommonStores() {
       return {

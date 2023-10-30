@@ -20,7 +20,7 @@ const activeUser = FactoryUser({
 
 const mockUser = FactoryUser({ country: 'AF' })
 
-jest.mock('src/index', () => ({
+jest.mock('src/App', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

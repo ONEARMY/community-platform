@@ -9,7 +9,7 @@ import { testingThemeStyles } from 'src/test/utils/themeUtils'
 
 const Theme = testingThemeStyles
 
-jest.mock('src/index', () => {
+jest.mock('src/App', () => {
   return {
     useCommonStores: () => ({
       stores: {

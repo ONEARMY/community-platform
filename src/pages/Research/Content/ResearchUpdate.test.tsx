@@ -10,7 +10,7 @@ const Theme = testingThemeStyles
 
 const mockUser = FactoryUser({ country: '' })
 
-jest.mock('src/index', () => {
+jest.mock('src/App', () => {
   return {
     useCommonStores: () => ({
       stores: {

@@ -14,7 +14,7 @@ let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
 const mockGetPin = jest.fn()
 const mockUpdateUserBadge = jest.fn()
 
-jest.mock('src/index', () => ({
+jest.mock('src/App', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

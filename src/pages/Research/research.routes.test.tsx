@@ -17,7 +17,7 @@ const Theme = testingThemeStyles
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
-jest.mock('src/index', () => ({
+jest.mock('src/App', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

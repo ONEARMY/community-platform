@@ -1,11 +1,11 @@
 import { Provider } from 'mobx-react'
 import { Form } from 'react-final-form'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/App'
 import arrayMutators from 'final-form-arrays'
 
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 
-jest.mock('src/index', () => {
+jest.mock('src/App', () => {
   return {
     useCommonStores: () => ({
       stores: {

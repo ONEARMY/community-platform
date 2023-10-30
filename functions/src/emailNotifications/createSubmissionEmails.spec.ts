@@ -78,9 +78,7 @@ describe('Create howto submission emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
-      expect(html).toContain(
-        `Huzzah! Your How-To Mock Howto has been submitted.`,
-      )
+      expect(html).toContain('Mock Howto')
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')

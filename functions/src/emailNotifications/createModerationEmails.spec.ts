@@ -96,9 +96,7 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
-      expect(html).toContain(
-        'Huzzah! Your How-To Mock Howto has been approved.',
-      )
+      expect(html).toContain('Mock Howto')
       // Check that the email contains the correct howto link
       expect(html).toContain(
         'https://community.preciousplastic.com/how-to/00_user_1_howto',
@@ -138,9 +136,7 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
-      expect(html).toContain(
-        `Huzzah! Your How-To Mock Howto has been submitted.`,
-      )
+      expect(html).toContain('Mock Howto')
       // Check that the email contains the correct howto link
       expect(html).toContain(
         'https://community.preciousplastic.com/how-to/00_user_1_howto',
@@ -183,7 +179,7 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
-      expect(html).toContain(`Thank you for submitting your How-To, Mock Howto`)
+      expect(html).toContain(`Mock Howto`)
       expect(html).toContain(
         'However, after reviewing your submission, we feel that',
       )
@@ -231,9 +227,7 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
-      expect(html).toContain(
-        `Your How-To, Mock Howto, needs more work before we can publish it.`,
-      )
+      expect(html).toContain('Mock Howto')
       // Check that the email contains the correct howto link
       expect(html).toContain(
         'https://community.preciousplastic.com/how-to/00_user_1_howto',

@@ -101,7 +101,7 @@ For functions triggered by http request you can call directly either from comman
 E.g. calling the emulator `seed-users-create` function via a GET request:
 
 ```
-http://localhost:4002/community-platform-emulated/us-central1/emulator/seed-users-create
+http://localhost:4002/demo-community-platform-emulated/us-central1/emulator/seed-users-create
 ```
 
 ![](images/emulators-docker-http-req.png)

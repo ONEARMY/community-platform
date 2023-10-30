@@ -53,7 +53,7 @@ COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 
 # Copy seed data
 RUN mkdir -p /app/seed_data && mkdir -p /app/import
-COPY ./seed_data/pp-2022-12-04 /app/seed_data
+COPY ./seed_data/pp-2023-10-29 /app/seed_data
 
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config
@@ -79,7 +79,7 @@ RUN \
   # Make a first run of emulators to ensure configured correctly and allow any seed data to be processed
   # via bootstrap script. Once processed seed data is then re-exported for use at runtime
   firebase emulators:exec \
-  --project  ${FIRESTORE_PROJECT_NAME:-community-platform-emulated} \
+  --project  ${FIRESTORE_PROJECT_NAME:-demo-community-platform-emulated} \
   --import=/app/seed_data --export-on-exit=/app/import \
   "/bin/bash /app/config/bootstrap.sh" \
   # Check that data exists and remove seed once complete
@@ -97,5 +97,5 @@ EXPOSE 4001 4002 4003 4004 4005 4006 4007 5000
 
 CMD ./functions/dist/node_modules/.bin/firebase emulators:start \
   --only auth,functions,firestore,pubsub,storage,hosting,database \
-  --project ${FIRESTORE_PROJECT_NAME:-community-platform-emulated} \
+  --project ${FIRESTORE_PROJECT_NAME:-demo-community-platform-emulated} \
   --import=/app/import

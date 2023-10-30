@@ -9,28 +9,22 @@ import { withErrorAlerting } from '../alerting/errorAlerting'
 export async function createHowtoSubmissionEmail(howto: IHowtoDB) {
   const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
 
-  // Release first under beta to test.
-  if (toUser.userRoles?.includes('beta-tester')) {
-    if (howto.moderation === 'awaiting-moderation') {
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: getHowToSubmissionEmail(toUser, howto),
-      })
-    }
+  if (howto.moderation === 'awaiting-moderation') {
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: getHowToSubmissionEmail(toUser, howto),
+    })
   }
 }
 
 export async function createMapPinSubmissionEmail(mapPin: IMapPin) {
   const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
 
-  // Release first under beta to test.
-  if (toUser.userRoles?.includes('beta-tester')) {
-    if (mapPin.moderation === 'awaiting-moderation') {
-      await db.collection(DB_ENDPOINTS.emails).add({
-        to: toUserEmail,
-        message: getMapPinSubmissionEmail(toUser, mapPin),
-      })
-    }
+  if (mapPin.moderation === 'awaiting-moderation') {
+    await db.collection(DB_ENDPOINTS.emails).add({
+      to: toUserEmail,
+      message: getMapPinSubmissionEmail(toUser, mapPin),
+    })
   }
 }
 

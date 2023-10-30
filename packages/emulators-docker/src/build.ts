@@ -40,7 +40,7 @@ async function followBuildProgress(stream: NodeJS.ReadableStream) {
   await new Promise((resolve, reject) => {
     //   pipe logs, reformatting text which defaults to nested json
     docker.modem.followProgress(
-      stream,
+      stream as any,
       (error, result) => {
         if (error) {
           reject(error)

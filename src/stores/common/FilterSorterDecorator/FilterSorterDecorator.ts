@@ -33,6 +33,7 @@ export enum ItemSortingOption {
   Updates = 'Updates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
+  MostComments = 'MostComments',
 }
 
 export interface AuthorOption {

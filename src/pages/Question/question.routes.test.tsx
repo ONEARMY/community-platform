@@ -2,8 +2,8 @@ jest.mock('../../stores/common/module.store')
 
 import '@testing-library/jest-dom'
 import QuestionRoutes from './question.routes'
-import { cleanup, render, waitFor, act } from '@testing-library/react'
 import { ThemeProvider } from '@emotion/react'
+import { cleanup, render, waitFor, act, screen } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
 import { Provider } from 'mobx-react'
 import { Router } from 'react-router-dom'
@@ -161,9 +161,9 @@ describe('question.routes', () => {
       // Fill in form
       const title = wrapper.getByLabelText('The Question')
       const description = wrapper.getByLabelText('Give some more information')
+      const submitButton = wrapper.getByText('Publish')
 
       // Submit form
-      const submitButton = wrapper.getByText('Publish')
       await userEvent.type(title, 'Question title')
       await userEvent.type(description, 'Question description')
 
@@ -202,20 +202,112 @@ describe('question.routes', () => {
       ).toBeInTheDocument()
       expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
     })
+
+    it('does not show Edit call to action', async () => {
+      let wrapper
+      const question = FactoryQuestionItem()
+      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        fetchQuestionBySlug: mockFetchQuestionBySlug,
+      })
+
+      await act(async () => {
+        wrapper = (await renderFn(`/question/${question.slug}`, FactoryUser()))
+          .wrapper
+        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+      })
+
+      // Ability to edit
+      expect(() => wrapper.getByText(/Edit/)).toThrow()
+    })
+
+    it('shows Edit call to action', async () => {
+      let wrapper
+      const activeUser = FactoryUser({})
+      const question = FactoryQuestionItem({
+        _createdBy: activeUser.userName,
+      })
+      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        activeUser,
+        fetchQuestionBySlug: mockFetchQuestionBySlug,
+      })
+
+      await act(async () => {
+        wrapper = (await renderFn(`/question/${question.slug}`, FactoryUser()))
+          .wrapper
+        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+      })
+
+      // Ability to edit
+      expect(wrapper.getByText(/Edit/)).toBeInTheDocument()
+    })
   })
 
   describe('/question/:slug/edit', () => {
+    const editFormTitle = /Edit your question/
     it('renders the question edit page', async () => {
       let wrapper
       await act(async () => {
         wrapper = (await renderFn('/question/slug/edit')).wrapper
       })
 
-      await waitFor(
-        () => expect(wrapper.getByText(/Question Edit/)).toBeInTheDocument(),
-        {
-          timeout: 2000,
-        },
+      expect(wrapper.getByText(editFormTitle)).toBeInTheDocument()
+    })
+
+    it('allows admin access', async () => {
+      let wrapper
+
+      const questionItem = FactoryQuestionItem({
+        slug: 'slug',
+        title: faker.lorem.words(1),
+        _createdBy: 'author',
+      })
+      const mockUpsertQuestion = jest.fn().mockResolvedValue({
+        slug: 'question-title',
+      })
+
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        activeUser: FactoryUser({
+          userName: 'not-author',
+          userRoles: ['admin'],
+        }),
+        fetchQuestionBySlug: jest.fn().mockResolvedValue(questionItem),
+        upsertQuestion: mockUpsertQuestion,
+      })
+
+      await act(async () => {
+        const res = await renderFn('/question/slug/edit', FactoryUser())
+        wrapper = res.wrapper
+      })
+
+      expect(wrapper.getByText(editFormTitle)).toBeInTheDocument()
+      expect(screen.getByDisplayValue(questionItem.title)).toBeInTheDocument()
+      expect(() => wrapper.getByText('Draft')).toThrow()
+
+      // Fill in form
+      const title = wrapper.getByLabelText('The Question')
+      const description = wrapper.getByLabelText('Give some more information')
+      const submitButton = wrapper.getByText('Update')
+
+      // Submit form
+      await userEvent.clear(title)
+      await userEvent.type(title, 'Question title')
+      await userEvent.clear(description)
+      await userEvent.type(description, 'Question description')
+
+      await waitFor(() => {
+        submitButton.click()
+      })
+
+      expect(mockUpsertQuestion).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'Question title',
+          description: 'Question description',
+        }),
       )
     })
 
@@ -240,7 +332,7 @@ describe('question.routes', () => {
         history = res.history
       })
 
-      expect(() => wrapper.getByText(/Question Edit/)).toThrow()
+      expect(() => wrapper.getByText(editFormTitle)).toThrow()
       expect(history.location.pathname).toBe('/question/slug')
     })
   })

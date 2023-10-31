@@ -3,7 +3,7 @@ jest.mock('../../stores/common/module.store')
 import '@testing-library/jest-dom'
 import QuestionRoutes from './question.routes'
 import { cleanup, render, waitFor, act } from '@testing-library/react'
-import { ThemeProvider } from '@theme-ui/core'
+import { ThemeProvider } from '@emotion/react'
 import { createMemoryHistory } from 'history'
 import { Provider } from 'mobx-react'
 import { Router } from 'react-router-dom'

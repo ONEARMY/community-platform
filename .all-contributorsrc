@@ -490,6 +490,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Erkanerkisi",
+      "name": "Erkan Erkişi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22741824?v=4",
+      "profile": "http://erkanerkisi.github.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

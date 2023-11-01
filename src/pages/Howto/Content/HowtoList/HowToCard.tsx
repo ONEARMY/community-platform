@@ -8,6 +8,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom'
 import { isUserVerified } from 'src/common/isUserVerified'
 import type { IHowtoDB } from 'src/models/howto.models'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Card, Flex, Heading, Text, Box, Image } from 'theme-ui'
 
@@ -52,7 +53,9 @@ export const HowToCard = (props: IProps) => {
                 objectFit: 'cover',
               }}
               loading="lazy"
-              src={howto.cover_image?.downloadUrl}
+              src={
+                cdnImageUrl(howto.cover_image?.downloadUrl || '') + '&width=500'
+              }
               crossOrigin=""
             />
           </Flex>

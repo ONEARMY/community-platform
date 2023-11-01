@@ -112,6 +112,7 @@ export class FilterSorterDecorator<T extends IItem> {
     })
   }
 
+  // TODO: identify if all required new sorting functions available:
   private sortByMostDownloads(listItems: T[]) {
     return this.sortByProperty(listItems, 'total_downloads')
   }

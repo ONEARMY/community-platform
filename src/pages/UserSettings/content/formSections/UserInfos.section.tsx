@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Field } from 'react-final-form'
 import { Heading, Flex, Box, Text, Alert } from 'theme-ui'
 import { countries } from 'countries-list'
-import { Button, FieldInput, FieldTextarea } from 'oa-components'
+import { Button, FieldInput } from 'oa-components'
 import { FieldArray } from 'react-final-form-arrays'
 
 import { ProfileLinkField } from './Fields/ProfileLink.field'
@@ -17,6 +17,10 @@ import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
+import {
+  GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
+  MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH,
+} from '../../constants'
 
 interface IProps {
   formValues: IUserPP
@@ -175,7 +179,13 @@ export class UserInfosSection extends React.Component<IProps, IState> {
             <Field
               data-cy="info-description"
               name="about"
-              component={FieldTextarea}
+              component={FieldInput}
+              showCharacterCount
+              maxLength={
+                isMemberProfile
+                  ? MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH
+                  : GROUP_PROFILE_DESCRIPTION_MAX_LENGTH
+              }
               placeholder={about.placeholder}
               validate={required}
               validateFields={[]}

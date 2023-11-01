@@ -349,14 +349,15 @@ export class HowtoStore extends ModuleStore {
     )
 
     mentions.push(...commentMentions, ...stepMentions)
-
-    if (!howToItem.previousSlugs.includes(howToItem.slug)) {
-      howToItem.previousSlugs.push(howToItem.slug)
+    const previousSlugs = howToItem.previousSlugs ?? []
+    if (!previousSlugs.includes(howToItem.slug)) {
+      previousSlugs.push(howToItem.slug)
     }
 
     await dbRef.set(
       {
         ...howToItem,
+        previousSlugs,
         description,
         comments,
         mentions,

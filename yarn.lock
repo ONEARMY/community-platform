@@ -27322,7 +27322,7 @@ __metadata:
     theme-ui: ^0.15.7
     ts-loader: ^7.0.5
     ts-node: ^10.4.0
-    tslog: ^4.8.2
+    tslog: ^4.9.2
     typescript: ^5.1.6
     wait-on: ^5.2.1
     workbox-background-sync: ^6.1.5
@@ -34028,10 +34028,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslog@npm:^4.8.2":
-  version: 4.8.2
-  resolution: "tslog@npm:4.8.2"
-  checksum: 04d2c2c68be53578b090ff1729b08ee23f3b5c8c509d6ffa332c43d25bcb9599ede8cce1db2c9dcb29ea3647b21c47c1ba11180ee9652a03c901702199dc87cd
+"tslog@npm:^4.9.2":
+  version: 4.9.2
+  resolution: "tslog@npm:4.9.2"
+  checksum: 702e45647a68b127d63c5eb63a0f322af8d01f17b689127d32238d6ca2ef76889648a00b88c040430e3126acedef070022b20ebd81823879ba3766cf5188c868
   languageName: node
   linkType: hard
 

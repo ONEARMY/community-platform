@@ -3,7 +3,11 @@ import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
 import { logger } from 'src/logger'
 import { ModuleStore } from '../common/module.store'
-import { hasAdminRights, isAllowedToEditContent, randomID } from 'src/utils/helpers'
+import {
+  hasAdminRights,
+  isAllowedToEditContent,
+  randomID,
+} from 'src/utils/helpers'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -24,12 +28,18 @@ export class DiscussionStore extends ModuleStore {
   }
 
   public async fetchDiscussion(sourceId: string): Promise<IDiscussion> {
-    return toJS(await this.db
-      .collection<IDiscussion>(COLLECTION_NAME)
-      .getWhere('sourceId', '==', sourceId))[0]
+    return toJS(
+      await this.db
+        .collection<IDiscussion>(COLLECTION_NAME)
+        .getWhere('sourceId', '==', sourceId),
+    )[0]
   }
 
-  public formatComments(item: any, comments: IComment[], count:number): {comments: UserComment[], count: number} {
+  public formatComments(
+    item: any,
+    comments: IComment[],
+    count: number,
+  ): { comments: UserComment[]; count: number } {
     let commentCount = count
 
     const formatedComments = comments.map((comment: IComment) => {
@@ -47,18 +57,23 @@ export class DiscussionStore extends ModuleStore {
           !!this.aggregationsStore.aggregations.users_verified?.[
             comment.creatorName
           ],
-        isEditable: [
-          this.userStore.activeUser?._id,
-          this.userStore.activeUser?.userName,
-        ].includes(comment._creatorId) || isAllowedToEditContent(item, this.userStore.activeUser),
+        isEditable:
+          [
+            this.userStore.activeUser?._id,
+            this.userStore.activeUser?.userName,
+          ].includes(comment._creatorId) ||
+          isAllowedToEditContent(item, this.userStore.activeUser),
         showReplies: false,
       }
     })
-    
-    return {comments: formatedComments, count: commentCount}
+
+    return { comments: formatedComments, count: commentCount }
   }
 
-  public async uploadDiscussion(sourceId: string, sourceType: string): Promise<IDiscussion | undefined> {
+  public async uploadDiscussion(
+    sourceId: string,
+    sourceType: string,
+  ): Promise<IDiscussion | undefined> {
     const newDiscussion: IDiscussion = {
       _id: randomID(),
       sourceId,

@@ -7,7 +7,6 @@ import type { IDiscussion, UserComment } from 'src/models'
 
 import styled from '@emotion/styled'
 
-
 const BoxMain = styled(Box)`
   padding-bottom: 15px;
   padding-left: 20px;
@@ -19,7 +18,7 @@ const BoxMain = styled(Box)`
 type DiscussionProps = {
   item: any
   articleTitle?: string
-  sourceId: string,
+  sourceId: string
   sourceType: string
   discussionBox: boolean
 }
@@ -43,7 +42,11 @@ export const Discussion = ({
       discussionStore.fetchDiscussion(sourceId).then((discussion) => {
         if (discussion) {
           setDiscussion(discussion)
-          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          const discussionComments = discussionStore.formatComments(
+            item,
+            discussion.comments,
+            0,
+          )
           setComments(discussionComments.comments)
           setTotalComments(discussionComments.count)
         }
@@ -52,7 +55,6 @@ export const Discussion = ({
   })
 
   const onSubmitComment = async (comment: string) => {
-    
     /* if (!Object.keys(discussion).length) {
       const newDiscussion = await discussionStore.uploadDiscussion(sourceId, sourceType)
       if (newDiscussion)
@@ -63,7 +65,11 @@ export const Discussion = ({
       .addComment(discussion, comment)
       .then((discussion: IDiscussion | undefined) => {
         if (discussion) {
-          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          const discussionComments = discussionStore.formatComments(
+            item,
+            discussion.comments,
+            0,
+          )
           setComments(discussionComments.comments)
           setTotalComments(discussionComments.count)
           setNewComment('')
@@ -89,7 +95,11 @@ export const Discussion = ({
       .editComment(discussion, comment, commentId)
       .then((discussion: IDiscussion | undefined) => {
         if (discussion) {
-          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          const discussionComments = discussionStore.formatComments(
+            item,
+            discussion.comments,
+            0,
+          )
           setComments(discussionComments.comments)
           setTotalComments(discussionComments.count)
         }
@@ -106,7 +116,11 @@ export const Discussion = ({
       .addComment(discussion, comment, commentId)
       .then((discussion: IDiscussion | undefined) => {
         if (discussion) {
-          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          const discussionComments = discussionStore.formatComments(
+            item,
+            discussion.comments,
+            0,
+          )
           setComments(discussionComments.comments)
           setTotalComments(discussionComments.count)
         }
@@ -123,7 +137,11 @@ export const Discussion = ({
       .deleteComment(discussion, commentId)
       .then((discussion: IDiscussion | undefined) => {
         if (discussion) {
-          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          const discussionComments = discussionStore.formatComments(
+            item,
+            discussion.comments,
+            0,
+          )
           setComments(discussionComments.comments)
           setTotalComments(discussionComments.count)
         }
@@ -138,7 +156,9 @@ export const Discussion = ({
     let text = ''
     if (!viewComments) {
       if (comments && totalComments > 0) {
-        text = `View ${totalComments === 1 ? '1 Comment': totalComments+' Comments'}`
+        text = `View ${
+          totalComments === 1 ? '1 Comment' : totalComments + ' Comments'
+        }`
       } else {
         text = 'Start a discussion'
       }

@@ -167,15 +167,16 @@ export class HowtoStore extends ModuleStore {
           if (!step.text) return
           step.text = changeUserReferenceToPlainText(step.text)
         })
-        
+
         // Create new discussions for existing documents
-        const discussion = await this.discussionStore.fetchDiscussion(activeHowto._id)
+        const discussion = await this.discussionStore.fetchDiscussion(
+          activeHowto._id,
+        )
         if (!discussion) {
           await this.discussionStore.uploadDiscussion(activeHowto._id, 'howto')
         }
       }
     }
-    
 
     this.activeHowto = activeHowto
     return activeHowto

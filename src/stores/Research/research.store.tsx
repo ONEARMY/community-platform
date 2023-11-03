@@ -180,7 +180,7 @@ export class ResearchStore extends ModuleStore {
             return update
           },
         )
-        
+
         /* // Create new discussions for existing documents
         await Promise.all(activeResearchItem.updates.map(async update => {
           const discussion = await this.discussionStore.fetchDiscussion(update._id)
@@ -188,7 +188,6 @@ export class ResearchStore extends ModuleStore {
             return this.discussionStore.uploadDiscussion(update._id, 'update')
           }
         })) */
-
       }
     }
 

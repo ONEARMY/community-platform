@@ -221,7 +221,7 @@ export class Howto extends React.Component<
               <Discussion
                 item={activeHowto}
                 sourceId={activeHowto._id}
-                sourceType='howto'
+                sourceType="howto"
                 discussionBox={false}
               ></Discussion>
             </Flex>

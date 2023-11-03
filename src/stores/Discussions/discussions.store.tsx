@@ -24,19 +24,22 @@ export class DiscussionStore extends ModuleStore {
   }
 
   public async fetchDiscussion(sourceId: string): Promise<IDiscussion> {
-    return toJS(
-      await this.db
-        .collection<IDiscussion>(COLLECTION_NAME)
-        .getWhere('sourceId', '==', sourceId),
-    )[0]
+    return toJS(await this.db
+      .collection<IDiscussion>(COLLECTION_NAME)
+      .getWhere('sourceId', '==', sourceId))[0]
   }
 
-  public formatComments(item: any, comments: IComment[]): UserComment[] {
-    return comments.map((comment: IComment) => {
+  public formatComments(item: any, comments: IComment[], count:number): {comments: UserComment[], count: number} {
+    let commentCount = count
+
+    const formatedComments = comments.map((comment: IComment) => {
       const { replies } = comment
       if (replies && replies.length) {
-        comment.replies = this.formatComments(item, replies)
+        const formatedReplies = this.formatComments(item, replies, 0)
+        comment.replies = formatedReplies.comments
+        commentCount += formatedReplies.count
       }
+      commentCount++
       return {
         ...comment,
         text: changeUserReferenceToPlainText(comment.text),
@@ -51,9 +54,11 @@ export class DiscussionStore extends ModuleStore {
         showReplies: false,
       }
     })
+    
+    return {comments: formatedComments, count: commentCount}
   }
 
-  public async uploadDiscussion(sourceId: string, sourceType: string) {
+  public async uploadDiscussion(sourceId: string, sourceType: string): Promise<IDiscussion | undefined> {
     const newDiscussion: IDiscussion = {
       _id: randomID(),
       sourceId,
@@ -61,11 +66,11 @@ export class DiscussionStore extends ModuleStore {
       comments: [],
     }
 
-    const dbRef = this.db
+    const dbRef = await this.db
       .collection<IDiscussion>(COLLECTION_NAME)
       .doc(newDiscussion._id)
 
-    await this._updateDiscussion(dbRef, newDiscussion)
+    return this._updateDiscussion(dbRef, newDiscussion)
   }
 
   private pushReply(
@@ -240,6 +245,7 @@ export class DiscussionStore extends ModuleStore {
     }
   }
 
+  // This fuction has been create to get the mentions but it's not being used yet
   public async findMentionsInComments(sourceId) {
     const commentMentions: UserMention[] = []
 

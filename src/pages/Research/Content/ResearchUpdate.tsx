@@ -230,6 +230,7 @@ const ResearchUpdate = ({
             <Discussion
               item={update}
               sourceId={update._id}
+              sourceType='update'
               discussionBox={true}
             />
             {/*  </AuthWrapper> */}

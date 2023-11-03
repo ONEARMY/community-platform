@@ -7,6 +7,7 @@ import type { IDiscussion, UserComment } from 'src/models'
 
 import styled from '@emotion/styled'
 
+
 const BoxMain = styled(Box)`
   padding-bottom: 15px;
   padding-left: 20px;
@@ -18,7 +19,8 @@ const BoxMain = styled(Box)`
 type DiscussionProps = {
   item: any
   articleTitle?: string
-  sourceId: string
+  sourceId: string,
+  sourceType: string
   discussionBox: boolean
 }
 
@@ -34,24 +36,39 @@ export const Discussion = ({
   const [viewComments, setViewComments] = useState(false)
   const [discussion, setDiscussion] = useState({} as IDiscussion)
   const [comments, setComments] = useState([] as UserComment[])
+  const [totalComments, setTotalComments] = useState(0)
 
   useEffect(() => {
     if (!comments.length) {
       discussionStore.fetchDiscussion(sourceId).then((discussion) => {
-        setDiscussion(discussion)
-        setComments(discussionStore.formatComments(item, discussion.comments))
+        if (discussion) {
+          setDiscussion(discussion)
+          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          setComments(discussionComments.comments)
+          setTotalComments(discussionComments.count)
+        }
       })
     }
   })
 
   const onSubmitComment = async (comment: string) => {
+    
+    /* if (!Object.keys(discussion).length) {
+      const newDiscussion = await discussionStore.uploadDiscussion(sourceId, sourceType)
+      if (newDiscussion)
+        setDiscussion(newDiscussion)
+    } */
+
     discussionStore
       .addComment(discussion, comment)
       .then((discussion: IDiscussion | undefined) => {
-        if (discussion)
-          setComments(discussionStore.formatComments(item, discussion.comments))
+        if (discussion) {
+          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          setComments(discussionComments.comments)
+          setTotalComments(discussionComments.count)
+          setNewComment('')
+        }
       })
-    setNewComment('')
   }
 
   const handleEditRequest = async () => {
@@ -71,8 +88,11 @@ export const Discussion = ({
     discussionStore
       .editComment(discussion, comment, commentId)
       .then((discussion: IDiscussion | undefined) => {
-        if (discussion)
-          setComments(discussionStore.formatComments(item, discussion.comments))
+        if (discussion) {
+          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          setComments(discussionComments.comments)
+          setTotalComments(discussionComments.count)
+        }
       })
   }
 
@@ -85,8 +105,11 @@ export const Discussion = ({
     discussionStore
       .addComment(discussion, comment, commentId)
       .then((discussion: IDiscussion | undefined) => {
-        if (discussion)
-          setComments(discussionStore.formatComments(item, discussion.comments))
+        if (discussion) {
+          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          setComments(discussionComments.comments)
+          setTotalComments(discussionComments.count)
+        }
       })
   }
 
@@ -99,8 +122,11 @@ export const Discussion = ({
     discussionStore
       .deleteComment(discussion, commentId)
       .then((discussion: IDiscussion | undefined) => {
-        if (discussion)
-          setComments(discussionStore.formatComments(item, discussion.comments))
+        if (discussion) {
+          const discussionComments = discussionStore.formatComments(item, discussion.comments, 0)
+          setComments(discussionComments.comments)
+          setTotalComments(discussionComments.count)
+        }
       })
   }
 
@@ -111,11 +137,8 @@ export const Discussion = ({
   const setButtonText = () => {
     let text = ''
     if (!viewComments) {
-      if (comments && comments.length > 0) {
-        text =
-          comments.length === 1
-            ? `View 1 Comment`
-            : `View ${comments.length} Comments`
+      if (comments && totalComments > 0) {
+        text = `View ${totalComments === 1 ? '1 Comment': totalComments+' Comments'}`
       } else {
         text = 'Start a discussion'
       }

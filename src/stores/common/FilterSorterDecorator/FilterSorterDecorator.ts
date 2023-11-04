@@ -29,11 +29,10 @@ export enum ItemSortingOption {
   LatestUpdated = 'LatestUpdated',
   Newest = 'Newest',
   MostUseful = 'MostUseful',
-  Comments = 'Comments',
-  Updates = 'Updates',
+  Comments = 'MostComments',
+  Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
-  MostComments = 'MostComments',
 }
 
 export interface AuthorOption {
@@ -112,7 +111,6 @@ export class FilterSorterDecorator<T extends IItem> {
     })
   }
 
-  // TODO: identify if all required new sorting functions available:
   private sortByMostDownloads(listItems: T[]) {
     return this.sortByProperty(listItems, 'total_downloads')
   }

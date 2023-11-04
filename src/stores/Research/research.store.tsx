@@ -84,14 +84,12 @@ export class ResearchStore extends ModuleStore {
     this.selectedCategory = ''
     this.selectedAuthor = ''
     this.searchValue = ''
-    // TODO: add new sorting options:
     this.availableItemSortingOption = [
       ItemSortingOption.Newest,
       ItemSortingOption.LatestUpdated,
       ItemSortingOption.MostUseful,
       ItemSortingOption.Comments,
       ItemSortingOption.Updates,
-      ItemSortingOption.MostComments,
     ]
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {

@@ -41,6 +41,7 @@ export const ContentStatistics = (props: IProps) => {
         pr: 2,
         pl: 2
       }}
+      onClick={handleShowStats}
     >
       <Text
         sx={{
@@ -53,7 +54,6 @@ export const ContentStatistics = (props: IProps) => {
         variant={'subtle'}
         showIconOnly={true}
         icon={showStats?'chevron-up':'chevron-down'}
-        onClick={handleShowStats}
         small={true}
         sx={{
           bg:'white',

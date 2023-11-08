@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { ThemeProvider } from '@theme-ui/core'
+import { ThemeProvider } from '@emotion/react'
 import { render } from '@testing-library/react'
 import ResearchUpdate from './ResearchUpdate'
 import { faker } from '@faker-js/faker'

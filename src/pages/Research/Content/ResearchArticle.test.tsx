@@ -1,5 +1,5 @@
 import { act, render } from '@testing-library/react'
-import { ThemeProvider } from '@theme-ui/core'
+import { ThemeProvider } from '@emotion/react'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'

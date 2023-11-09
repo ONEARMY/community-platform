@@ -260,7 +260,7 @@ jobs:
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility
-      - image: onearmyplatform/community-platform-emulator:pp-2023-10-29
+      - image: onearmyplatform/community-platform-emulator:pp-2023-11-09
     resource_class: small
     environment:
       CYPRESS_INSTALL_BINARY: 0

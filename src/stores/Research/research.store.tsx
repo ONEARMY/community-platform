@@ -181,13 +181,17 @@ export class ResearchStore extends ModuleStore {
           },
         )
 
-        /* // Create new discussions for existing documents
-        await Promise.all(activeResearchItem.updates.map(async update => {
-          const discussion = await this.discussionStore.fetchDiscussion(update._id)
-          if (!discussion) {
-            return this.discussionStore.uploadDiscussion(update._id, 'update')
-          }
-        })) */
+        // Create new discussions for existing documents
+        await Promise.all(
+          activeResearchItem.updates.map(async (update) => {
+            const discussion = await this.discussionStore.fetchDiscussion(
+              update._id,
+            )
+            if (!discussion) {
+              return this.discussionStore.uploadDiscussion(update._id, 'update')
+            }
+          }),
+        )
       }
     }
 

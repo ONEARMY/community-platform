@@ -19,6 +19,7 @@ import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useCommonStores } from 'src/index'
 import { Discussion } from 'src/pages/common/Discussion/Discussion'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -226,14 +227,14 @@ const ResearchUpdate = ({
               updateIndex={updateIndex}
               showComments={showComments}
             />
-            {/* <AuthWrapper roleRequired="beta-tester"> */}
-            <Discussion
-              item={update}
-              sourceId={update._id}
-              sourceType="update"
-              discussionBox={true}
-            />
-            {/*  </AuthWrapper> */}
+            <AuthWrapper roleRequired="beta-tester">
+              <Discussion
+                item={update}
+                sourceId={update._id}
+                sourceType="update"
+                discussionBox={true}
+              />
+            </AuthWrapper>
           </Card>
         </Flex>
       </Flex>

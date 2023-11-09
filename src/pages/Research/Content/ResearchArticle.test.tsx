@@ -12,6 +12,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import ResearchArticle from './ResearchArticle'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { FactoryComment } from 'src/test/factories/Comment'
+import { FactoryDiscussion } from 'src/test/factories/Discussion'
 const Theme = testingThemeStyles
 
 const activeUser = FactoryUser({
@@ -19,6 +20,8 @@ const activeUser = FactoryUser({
 })
 
 const mockUser = FactoryUser({ country: 'AF' })
+
+const mockDiscussion = FactoryDiscussion({})
 
 jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -30,6 +33,10 @@ jest.mock('src/index', () => ({
       },
       aggregationsStore: {
         aggregations: {},
+      },
+      discussionStore: {
+        fetchDiscussion: jest.fn().mockResolvedValue(mockDiscussion),
+        formatComments: jest.fn().mockResolvedValue([]),
       },
     },
   }),

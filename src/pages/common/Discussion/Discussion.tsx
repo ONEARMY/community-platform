@@ -38,7 +38,7 @@ export const Discussion = ({
   const [totalComments, setTotalComments] = useState(0)
 
   useEffect(() => {
-    if (!comments.length) {
+    if (!Object.keys(discussion).length) {
       discussionStore.fetchDiscussion(sourceId).then((discussion) => {
         if (discussion) {
           setDiscussion(discussion)
@@ -55,26 +55,18 @@ export const Discussion = ({
   })
 
   const onSubmitComment = async (comment: string) => {
-    /* if (!Object.keys(discussion).length) {
-      const newDiscussion = await discussionStore.uploadDiscussion(sourceId, sourceType)
-      if (newDiscussion)
-        setDiscussion(newDiscussion)
-    } */
+    const newDiscussion = await discussionStore.addComment(discussion, comment)
 
-    discussionStore
-      .addComment(discussion, comment)
-      .then((discussion: IDiscussion | undefined) => {
-        if (discussion) {
-          const discussionComments = discussionStore.formatComments(
-            item,
-            discussion.comments,
-            0,
-          )
-          setComments(discussionComments.comments)
-          setTotalComments(discussionComments.count)
-          setNewComment('')
-        }
-      })
+    if (newDiscussion) {
+      const discussionComments = discussionStore.formatComments(
+        item,
+        newDiscussion.comments,
+        0,
+      )
+      setComments(discussionComments.comments)
+      setTotalComments(discussionComments.count)
+      setNewComment('')
+    }
   }
 
   const handleEditRequest = async () => {
@@ -91,19 +83,22 @@ export const Discussion = ({
       action: 'Update',
       label: `comment:${articleTitle}`,
     })
-    discussionStore
-      .editComment(discussion, comment, commentId)
-      .then((discussion: IDiscussion | undefined) => {
-        if (discussion) {
-          const discussionComments = discussionStore.formatComments(
-            item,
-            discussion.comments,
-            0,
-          )
-          setComments(discussionComments.comments)
-          setTotalComments(discussionComments.count)
-        }
-      })
+
+    const newDiscussion = await discussionStore.editComment(
+      discussion,
+      comment,
+      commentId,
+    )
+
+    if (newDiscussion) {
+      const discussionComments = discussionStore.formatComments(
+        item,
+        newDiscussion.comments,
+        0,
+      )
+      setComments(discussionComments.comments)
+      setTotalComments(discussionComments.count)
+    }
   }
 
   const handleReply = async (commentId: string, comment: string) => {
@@ -112,19 +107,22 @@ export const Discussion = ({
       action: 'Reply',
       label: `comment:${articleTitle}`,
     })
-    discussionStore
-      .addComment(discussion, comment, commentId)
-      .then((discussion: IDiscussion | undefined) => {
-        if (discussion) {
-          const discussionComments = discussionStore.formatComments(
-            item,
-            discussion.comments,
-            0,
-          )
-          setComments(discussionComments.comments)
-          setTotalComments(discussionComments.count)
-        }
-      })
+    const newDiscussion = await discussionStore.addComment(
+      discussion,
+      comment,
+      commentId,
+    )
+
+    if (newDiscussion) {
+      const discussionComments = discussionStore.formatComments(
+        item,
+        newDiscussion.comments,
+        0,
+      )
+      setComments(discussionComments.comments)
+      setTotalComments(discussionComments.count)
+      setNewComment('')
+    }
   }
 
   const handleDelete = async (commentId: string) => {
@@ -133,19 +131,20 @@ export const Discussion = ({
       action: 'Deleted',
       label: `comment:${articleTitle}`,
     })
-    discussionStore
-      .deleteComment(discussion, commentId)
-      .then((discussion: IDiscussion | undefined) => {
-        if (discussion) {
-          const discussionComments = discussionStore.formatComments(
-            item,
-            discussion.comments,
-            0,
-          )
-          setComments(discussionComments.comments)
-          setTotalComments(discussionComments.count)
-        }
-      })
+    const newDiscussion = await discussionStore.deleteComment(
+      discussion,
+      commentId,
+    )
+
+    if (newDiscussion) {
+      const discussionComments = discussionStore.formatComments(
+        item,
+        newDiscussion.comments,
+        0,
+      )
+      setComments(discussionComments.comments)
+      setTotalComments(discussionComments.count)
+    }
   }
 
   const onButtonClick = () => {

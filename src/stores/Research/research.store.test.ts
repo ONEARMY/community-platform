@@ -8,6 +8,7 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
+import { FactoryDiscussion } from 'src/test/factories/Discussion'
 
 jest.mock('../../utils/helpers', () => ({
   // Preserve the original implementation of other helpers
@@ -73,6 +74,12 @@ const factory = async (
         userName: 'username',
       }),
     ),
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.discussionStore = {
+    fetchDiscussion: jest.fn().mockResolvedValue(FactoryDiscussion({})),
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -12,5 +12,6 @@ export const FactoryComment = (
   creatorCountry: '',
   text: faker.lorem.paragraph(),
   isUserVerified: faker.datatype.boolean(),
+  replies: [],
   ...commentOverloads,
 })

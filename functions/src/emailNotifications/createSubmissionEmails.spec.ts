@@ -45,11 +45,6 @@ describe('Create howto submission emails', () => {
       userFactory('user_1', {
         displayName: 'User 1',
         userName: 'user_1',
-        userRoles: ['beta-tester'],
-      }),
-      userFactory('user_2', {
-        displayName: 'User 2',
-        userName: 'user_2',
       }),
     ])
 
@@ -78,9 +73,7 @@ describe('Create howto submission emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
-      expect(html).toContain(
-        `Huzzah! Your How-To Mock Howto has been submitted.`,
-      )
+      expect(html).toContain('Mock Howto')
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')
@@ -88,17 +81,7 @@ describe('Create howto submission emails', () => {
   })
 
   it('Does not create email for draft how tos', async () => {
-    const howto = await setMockHowto({ uid: 'user_2' }, 'draft')
-    await createHowtoSubmissionEmail(howto)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(1)
-  })
-
-  // Remove this test once released to all users.
-  it('Does not create email for people who are not beta testers', async () => {
-    const howto = await setMockHowto({ uid: 'user_2' })
+    const howto = await setMockHowto({ uid: 'user_1' }, 'draft')
     await createHowtoSubmissionEmail(howto)
 
     // No new emails should have been created
@@ -118,11 +101,6 @@ describe('Create map pin submission emails', () => {
       userFactory('user_1', {
         displayName: 'User 1',
         userName: 'user_1',
-        userRoles: ['beta-tester'],
-      }),
-      userFactory('user_2', {
-        displayName: 'User 2',
-        userName: 'user_2',
       }),
     ])
 
@@ -159,15 +137,5 @@ describe('Create map pin submission emails', () => {
       expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')
     })
-  })
-
-  // Remove this test once released to all users.
-  it('Does not creates email for people who are not beta testers', async () => {
-    const howto = await setMockHowto({ uid: 'user_2' })
-    await createHowtoSubmissionEmail(howto)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(1)
   })
 })

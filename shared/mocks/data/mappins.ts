@@ -74,4 +74,16 @@ export const mappins = {
     _id: 'mapview_testing_accepted_pin',
     _deleted: false,
   },
+  mapview_testing_pp_profile: {
+    _id: 'new_map',
+    _deleted: false,
+    type: 'member',
+    moderation: 'accepted',
+    location: {
+      lat: 51.5073,
+      lng: -0.127647,
+    },
+    _modified: '2020-01-07T12:15:09.178Z',
+    _created: '2020-01-07T12:15:09.178Z',
+  },
 }

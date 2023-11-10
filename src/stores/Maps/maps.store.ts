@@ -50,15 +50,19 @@ export class MapsStore extends ModuleStore {
     // HACK - ARH - 2019/12/09 filter unaccepted pins, should be done serverside
     const activeUser = this.activeUser
     const isAdmin = hasAdminRights(activeUser)
+    const isPP = localStorage.getItem('platformTheme') === 'precious-plastic'
+
     pins = pins
       .filter((p) => {
         const isDeleted = p._deleted || false
         const isPinAccepted = p.moderation === 'accepted'
         const wasCreatedByUser = activeUser && p._id === activeUser.userName
         const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
+        const isPPMember = isPP && p.type === 'member'
         return (
           p.type &&
           !isDeleted &&
+          !isPPMember &&
           (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
         )
       })

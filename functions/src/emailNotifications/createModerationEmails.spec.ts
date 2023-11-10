@@ -52,11 +52,6 @@ describe('Create howto moderation emails', () => {
       userFactory('user_1', {
         displayName: 'User 1',
         userName: 'user_1',
-        userRoles: ['beta-tester'],
-      }),
-      userFactory('user_2', {
-        displayName: 'User 2',
-        userName: 'user_2',
       }),
     ])
 
@@ -96,9 +91,7 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
-      expect(html).toContain(
-        'Huzzah! Your How-To Mock Howto has been approved.',
-      )
+      expect(html).toContain('Mock Howto')
       // Check that the email contains the correct howto link
       expect(html).toContain(
         'https://community.preciousplastic.com/how-to/00_user_1_howto',
@@ -138,8 +131,10 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
+      expect(html).toContain('Mock Howto')
+      // Check that the email contains the correct howto link
       expect(html).toContain(
-        `Huzzah! Your How-To Mock Howto has been submitted.`,
+        'https://community.preciousplastic.com/how-to/00_user_1_howto',
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
@@ -179,9 +174,13 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
-      expect(html).toContain(`Thank you for submitting your How-To, Mock Howto`)
+      expect(html).toContain(`Mock Howto`)
       expect(html).toContain(
         'However, after reviewing your submission, we feel that',
+      )
+      // Check that the email contains the correct howto link
+      expect(html).toContain(
+        'https://community.preciousplastic.com/how-to/00_user_1_howto',
       )
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
@@ -223,35 +222,20 @@ describe('Create howto moderation emails', () => {
       // Check that the email contains the correct user name
       expect(html).toContain('Hey User 1')
       // Check that the email contains the correct howto title
+      expect(html).toContain('Mock Howto')
+      // Check that the email contains the correct howto link
       expect(html).toContain(
-        `Your How-To, Mock Howto, needs more work before we can publish it.`,
+        'https://community.preciousplastic.com/how-to/00_user_1_howto',
+      )
+      // Check that the email contains the correct howto guidelines link
+      expect(html).toContain(
+        'https://community.preciousplastic.com/academy/create/howto',
       )
       expect(html).toContain(MOCK_HOW_TO_MODERATION_COMMENT)
       // Check that the email contains the correct PP signoff
       expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')
     })
-  })
-
-  // Remove this test once released to all users.
-  it('Does not create an email for people who are not beta testers', async () => {
-    const howtoApproved = await setMockHowto({ uid: 'user_2' })
-    const howtoAwaitingModeration = {
-      ...howtoApproved,
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      howtoAwaitingModeration,
-      howtoApproved,
-      'howtos',
-      howtoApproved._id,
-    )
-
-    await handleModerationUpdate(change, createHowtoModerationEmail)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(0)
   })
 
   it('Does not create an email for non-approved howtos', async () => {
@@ -286,11 +270,6 @@ describe('Create map pin moderation emails', () => {
       userFactory('user_1', {
         displayName: 'User 1',
         userName: 'user_1',
-        userRoles: ['beta-tester'],
-      }),
-      userFactory('user_2', {
-        displayName: 'User 2',
-        userName: 'user_2',
       }),
     ])
 
@@ -470,30 +449,6 @@ describe('Create map pin moderation emails', () => {
       expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')
     })
-  })
-
-  // Remove this test once released to all users.
-  it('Does not create an email for people who are not beta testers', async () => {
-    const mapPinApproved = {
-      _id: 'user_2',
-      moderation: 'accepted',
-    }
-    const mapPinAwaitingModeration = {
-      _id: 'user_2',
-      moderation: 'awaiting-moderation',
-    }
-    const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
-      mapPinAwaitingModeration,
-      mapPinApproved,
-      'mappins',
-      mapPinApproved._id,
-    )
-
-    await handleModerationUpdate(change, createMapPinModerationEmail)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(0)
   })
 
   it('Does not create an email for non-approved map pins', async () => {

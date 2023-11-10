@@ -288,6 +288,23 @@ describe('howto.store', () => {
   })
 
   describe('deleteHowTo', () => {
+    it('handles legacy docs without previousSlugs', async () => {
+      const howtoDoc = FactoryHowto({})
+      howtoDoc.previousSlugs = undefined
+      const { store, howToItem, setFn, getFn } = await factory([howtoDoc])
+
+      // Act
+      await store.deleteHowTo(howToItem._id)
+
+      // Assert
+      const [deletedHowTo] = setFn.mock.calls[0]
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(getFn).toHaveBeenCalledTimes(2)
+      expect(getFn).toHaveBeenCalledWith('server')
+      expect(deletedHowTo._deleted).toBeTruthy()
+    })
+
     it('updates _deleted property after confirming delete', async () => {
       const { store, howToItem, setFn, getFn } = await factory()
 

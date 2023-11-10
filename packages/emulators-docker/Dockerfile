@@ -4,6 +4,7 @@
 
 # Use node 18.15 (instead of 18.x)
 # https://github.com/firebase/firebase-tools/issues/5614#issuecomment-1508515106
+# (note - may be fixed now that procps installed - to review)
 
 FROM node:18.15.0-bullseye-slim AS community-platform-builder
 
@@ -23,7 +24,7 @@ ENV HOME=/home/node
 
 # Install Java and curl
 # NOTE - this will not cache unless running with buildkit
-RUN apt-get update && apt-get -y install openjdk-11-jre-headless dos2unix curl && apt-get clean
+RUN apt-get update && apt-get -y install openjdk-11-jre-headless dos2unix curl procps && apt-get clean
 
 # Install firebase and check versions
 RUN \
@@ -56,7 +57,7 @@ COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 
 # Copy seed data
 RUN mkdir -p /app/seed_data && mkdir -p /app/import
-COPY ./seed_data/pp-2023-11-09b /app/seed_data
+COPY ./seed_data/pp-2023-11-09c /app/seed_data
 
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config

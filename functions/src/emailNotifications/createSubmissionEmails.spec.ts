@@ -79,7 +79,7 @@ describe('Create howto submission emails', () => {
   })
 
   it('Does not create email for draft how tos', async () => {
-    const howto = getMockHowto('user_2', 'draft')
+    const howto = getMockHowto('user_1', 'draft')
     await createHowtoSubmissionEmail(howto)
 
     // No new emails should have been created

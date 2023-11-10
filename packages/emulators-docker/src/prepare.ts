@@ -220,7 +220,7 @@ function createSeedZips() {
 function generateBuildArgs() {
   const buildArgs: Record<string, string> = {}
   const functionsPackageJsonPath = path.resolve(
-    PATHS.functionsDistIndex,
+    PATHS.functionsDir,
     '../package.json',
   )
   // assign the docker firebase-tools version as same running in local functions workspace

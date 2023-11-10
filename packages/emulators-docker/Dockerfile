@@ -2,7 +2,10 @@
 # https://github.com/firebase/firebase-tools/issues/5256
 # https://github.com/micrometer-metrics/micrometer/issues/2776)
 
-FROM node:18-bullseye-slim AS community-platform-builder
+# Use node 18.15 (instead of 18.x)
+# https://github.com/firebase/firebase-tools/issues/5614#issuecomment-1508515106
+
+FROM node:18.15.0-bullseye-slim AS community-platform-builder
 
 ARG FIREBASE_TOOLS_VERSION
 ARG BUILD_DATE

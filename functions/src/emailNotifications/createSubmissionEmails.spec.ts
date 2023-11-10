@@ -4,7 +4,7 @@ import {
   HOW_TO_SUBMISSION_SUBJECT,
   MAP_PIN_SUBMISSION_SUBJECT,
 } from './templates'
-import { setMockHowto } from '../emulator/seed/content-generate'
+import { getMockHowto } from '../emulator/seed/content-generate'
 import {
   createHowtoSubmissionEmail,
   createMapPinSubmissionEmail,
@@ -47,8 +47,6 @@ describe('Create howto submission emails', () => {
         userName: 'user_1',
       }),
     ])
-
-    await FirebaseEmulatedTest.seedFirestoreDB('howtos')
   })
 
   afterAll(async () => {
@@ -56,7 +54,7 @@ describe('Create howto submission emails', () => {
   })
 
   it('Creates an email for a submitted howto', async () => {
-    const howto = await setMockHowto({ uid: 'user_1' }, 'awaiting-moderation')
+    const howto = getMockHowto('user_1', 'awaiting-moderation')
     await createHowtoSubmissionEmail(howto)
 
     // Only one submitted howto email should have been created
@@ -81,7 +79,17 @@ describe('Create howto submission emails', () => {
   })
 
   it('Does not create email for draft how tos', async () => {
-    const howto = await setMockHowto({ uid: 'user_1' }, 'draft')
+    const howto = getMockHowto('user_2', 'draft')
+    await createHowtoSubmissionEmail(howto)
+
+    // No new emails should have been created
+    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
+    expect(countSnapshot.data().count).toEqual(1)
+  })
+
+  // Remove this test once released to all users.
+  it('Does not create email for people who are not beta testers', async () => {
+    const howto = getMockHowto('user_2')
     await createHowtoSubmissionEmail(howto)
 
     // No new emails should have been created
@@ -103,8 +111,6 @@ describe('Create map pin submission emails', () => {
         userName: 'user_1',
       }),
     ])
-
-    await FirebaseEmulatedTest.seedFirestoreDB('mappins')
   })
 
   afterAll(async () => {
@@ -138,4 +144,17 @@ describe('Create map pin submission emails', () => {
       expect(to).toBe('test@test.com')
     })
   })
+<<<<<<< HEAD
+=======
+
+  // Remove this test once released to all users.
+  it('Does not creates email for people who are not beta testers', async () => {
+    const howto = getMockHowto('user_2')
+    await createHowtoSubmissionEmail(howto)
+
+    // No new emails should have been created
+    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
+    expect(countSnapshot.data().count).toEqual(1)
+  })
+>>>>>>> 3c47c1ab7 (fix(functions-tests): prevent unintended function triggers during testing)
 })

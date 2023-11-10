@@ -21,6 +21,7 @@ import {
 } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { filterMapPinsByType } from './filter'
+import { isPreciousPlastic } from 'src/utils/isPreciousPlastic'
 
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
@@ -50,9 +51,6 @@ export class MapsStore extends ModuleStore {
     // HACK - ARH - 2019/12/09 filter unaccepted pins, should be done serverside
     const activeUser = this.activeUser
     const isAdmin = hasAdminRights(activeUser)
-    const isPP =
-      (process.env.REACT_APP_PLATFORM_THEME ||
-        localStorage.getItem('platformTheme')) === 'precious-plastic'
 
     pins = pins
       .filter((p) => {
@@ -60,7 +58,7 @@ export class MapsStore extends ModuleStore {
         const isPinAccepted = p.moderation === 'accepted'
         const wasCreatedByUser = activeUser && p._id === activeUser.userName
         const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
-        const isPPMember = isPP && p.type === 'member'
+        const isPPMember = isPreciousPlastic() && p.type === 'member'
         return (
           p.type &&
           !isDeleted &&

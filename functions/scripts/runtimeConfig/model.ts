@@ -7,10 +7,10 @@ export const runtimeConfigTest: configVars = {
     view_id: 'fake_view_id',
   },
   integrations: {
-    discord_webhook: 'https://fake_discord_webhook.com',
+    discord_webhook: 'https://fake_discord_webhook.local',
     discord_alert_channel_webhook:
-      'https://fake_discord_alert_channel_webhook.com',
-    slack_webhook: 'https://fake_slack_webhook.com',
+      'https://fake_discord_alert_channel_webhook.local',
+    slack_webhook: 'https://fake_slack_webhook.local',
   },
   service: null as any,
   deployment: {

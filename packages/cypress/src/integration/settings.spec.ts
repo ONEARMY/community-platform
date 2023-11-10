@@ -326,10 +326,17 @@ describe('[Settings]', () => {
         },
       }
       cy.login('settings_member_new@test.com', 'test1234')
-      cy.step('Go to User Settings')
+
+      cy.step('Go to User Settings for Precious Plastic')
+      localStorage.setItem('platformTheme', 'precious-plastic')
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
+      cy.get('[data-cy=pin-description]').should('not.exist')
 
+      cy.step('Go to User Settings for Project Kamp')
+      localStorage.setItem('platformTheme', 'project-kamp')
+      cy.clickMenuItem(UserMenuItem.Settings)
+      selectFocus(expected.profileType)
       cy.get('[data-cy=location-dropdown]').should('exist')
 
       cy.get('[data-cy="add-a-map-pin"]').click()

@@ -261,7 +261,7 @@ jobs:
     docker:
       # use base image published by platform to ensure compatibility
       - image: onearmyplatform/community-platform-emulator:pp-2023-11-09c
-    resource_class: small
+    resource_class: large
     environment:
       CYPRESS_INSTALL_BINARY: 0
     steps:

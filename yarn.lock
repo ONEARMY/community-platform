@@ -19345,7 +19345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-tools@npm:^12.7.0":
+"firebase-tools@npm:12.7.0":
   version: 12.7.0
   resolution: "firebase-tools@npm:12.7.0"
   dependencies:
@@ -19929,7 +19929,7 @@ __metadata:
     firebase-admin: 11.4.1
     firebase-functions: 4.1.1
     firebase-functions-test: ^3.0.0
-    firebase-tools: ^12.7.0
+    firebase-tools: 12.7.0
     fs-extra: ^9.0.1
     google-auth-library: ^6.1.1
     googleapis: ^61.0.0
@@ -31628,7 +31628,7 @@ __metadata:
     "@firebase/rules-unit-testing": ^2.0.7
     dotenv: ^16.3.1
     firebase: ^9.21.0
-    firebase-tools: ^12.7.0
+    firebase-tools: 12.7.0
     vitest: ^0.31.0
   languageName: unknown
   linkType: soft

@@ -86,16 +86,6 @@ describe('Create howto submission emails', () => {
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
     expect(countSnapshot.data().count).toEqual(1)
   })
-
-  // Remove this test once released to all users.
-  it('Does not create email for people who are not beta testers', async () => {
-    const howto = getMockHowto('user_2')
-    await createHowtoSubmissionEmail(howto)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(1)
-  })
 })
 
 describe('Create map pin submission emails', () => {
@@ -144,17 +134,4 @@ describe('Create map pin submission emails', () => {
       expect(to).toBe('test@test.com')
     })
   })
-<<<<<<< HEAD
-=======
-
-  // Remove this test once released to all users.
-  it('Does not creates email for people who are not beta testers', async () => {
-    const howto = getMockHowto('user_2')
-    await createHowtoSubmissionEmail(howto)
-
-    // No new emails should have been created
-    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
-    expect(countSnapshot.data().count).toEqual(1)
-  })
->>>>>>> 3c47c1ab7 (fix(functions-tests): prevent unintended function triggers during testing)
 })

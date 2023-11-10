@@ -56,7 +56,7 @@ COPY ./app/functions/dist/index.js /app/functions/dist/index.js
 
 # Copy seed data
 RUN mkdir -p /app/seed_data && mkdir -p /app/import
-COPY ./seed_data/pp-2023-11-09 /app/seed_data
+COPY ./seed_data/pp-2023-11-09b /app/seed_data
 
 # Copy config files. Ensure executable and lf line format
 RUN mkdir -p /app/config

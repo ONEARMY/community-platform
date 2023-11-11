@@ -10,7 +10,7 @@ import {
   MAP_PIN_REJECTED_SUBJECT,
   MAP_PIN_SUBMISSION_SUBJECT,
 } from './templates'
-import { setMockHowto } from '../emulator/seed/content-generate'
+import { getMockHowto } from '../emulator/seed/content-generate'
 import {
   createHowtoModerationEmail,
   createMapPinModerationEmail,
@@ -54,8 +54,6 @@ describe('Create howto moderation emails', () => {
         userName: 'user_1',
       }),
     ])
-
-    await FirebaseEmulatedTest.seedFirestoreDB('howtos')
   })
 
   afterAll(async () => {
@@ -63,7 +61,7 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Creates an email for an accepted howto', async () => {
-    const howtoApproved = await setMockHowto({ uid: 'user_1' })
+    const howtoApproved = getMockHowto('user_1')
     const howtoAwaitingModeration = {
       ...howtoApproved,
       moderation: 'awaiting-moderation',
@@ -103,7 +101,7 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Creates an email for a howto awaiting moderation', async () => {
-    const howtoRejected = await setMockHowto({ uid: 'user_1' }, 'rejected')
+    const howtoRejected = getMockHowto('user_1', 'rejected')
     const howtoAwaitingModeration = {
       ...howtoRejected,
       moderation: 'awaiting-moderation',
@@ -143,8 +141,8 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Creates an email for a rejected howto', async () => {
-    const howtoAwaitingModeration = await setMockHowto(
-      { uid: 'user_1' },
+    const howtoAwaitingModeration = getMockHowto(
+      'user_1',
       'awaiting-moderation',
     )
     const howtoRejected = {
@@ -189,8 +187,8 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Creates an email for a howto that needs improvements', async () => {
-    const howtoAwaitingModeration = await setMockHowto(
-      { uid: 'user_1' },
+    const howtoAwaitingModeration = getMockHowto(
+      'user_1',
       'awaiting-moderation',
     )
     const MOCK_HOW_TO_MODERATION_COMMENT = 'Mock how to moderation comment'
@@ -239,7 +237,7 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Does not create an email for non-approved howtos', async () => {
-    const howtoApproved = await setMockHowto({ uid: 'user_1' })
+    const howtoApproved = getMockHowto('user_1')
     const howtoDraft = {
       ...howtoApproved,
       moderation: 'draft',
@@ -272,8 +270,6 @@ describe('Create map pin moderation emails', () => {
         userName: 'user_1',
       }),
     ])
-
-    await FirebaseEmulatedTest.seedFirestoreDB('mappins')
   })
 
   afterAll(async () => {

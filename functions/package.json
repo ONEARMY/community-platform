@@ -13,8 +13,8 @@
     "watch": "./node_modules/.bin/webpack --watch",
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "shell": "yarn build && firebase functions:shell",
-    "test": "firebase emulators:exec --project demo-community-platform-emulated 'jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",
-    "test:watch": "firebase emulators:exec --ui --project demo-community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'",
+    "test": "firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated 'jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",
+    "test:watch": "firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --ui --project demo-community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'",
     "serve:email-templates": "node ./src/emailNotifications/development/server.mjs"
   },
   "main": "index.js",

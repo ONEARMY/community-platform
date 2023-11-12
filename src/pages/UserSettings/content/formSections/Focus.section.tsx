@@ -27,7 +27,7 @@ const ProfileTypes = () => {
           </Flex>
           <Box>
             <Paragraph my={4}>{title}</Paragraph>
-            <Grid columns={['repeat(auto-fill, minmax(150px, 1fr))']} gap={2}>
+            <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
               {profileTypes.map((profile, index: number) => (
                 <Box key={index}>
                   <CustomRadioField

@@ -15,6 +15,7 @@ import { GetLocation } from './utils/geolocation'
 import type { Map } from 'react-leaflet'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
+import { MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT } from 'src/config/config'
 
 interface IProps extends RouteComponentProps<any> {
   mapsStore: MapsStore
@@ -37,12 +38,11 @@ class MapsPage extends React.Component<IProps, IState> {
       zoom: 3,
       firstLoad: true,
     }
-
     this.mapRef = React.createRef()
   }
 
   public async componentDidMount() {
-    this.props.mapsStore.retrieveMapPins()
+    this.retrieveMapPins()
     this.props.mapsStore.retrievePinFilters()
     await this.showPinFromURL()
     if (!this.props.mapsStore.activePin) {
@@ -61,6 +61,17 @@ class MapsPage extends React.Component<IProps, IState> {
     this.props.mapsStore.setActivePin(undefined)
   }
 
+  availableFilters() {
+    return transformAvailableFiltersToGroups(this.props.mapsStore, [
+      {
+        grouping: 'verified-filter',
+        displayName: 'Verified',
+        type: 'verified',
+      },
+      ...MAP_GROUPINGS,
+    ])
+  }
+
   private async promptUserLocation() {
     try {
       const position = await GetLocation()
@@ -72,6 +83,10 @@ class MapsPage extends React.Component<IProps, IState> {
       logger.error(error)
       // do nothing if location cannot be retrieved
     }
+  }
+
+  async retrieveMapPins() {
+    this.props.mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
   }
 
   private setCenter(latlng: ILatLng) {
@@ -112,20 +127,7 @@ class MapsPage extends React.Component<IProps, IState> {
               <>
                 <Controls
                   mapRef={this.mapRef}
-                  availableFilters={transformAvailableFiltersToGroups(
-                    this.props.mapsStore,
-                    [
-                      {
-                        grouping: 'verified-filter',
-                        displayName: 'Verified',
-                        type: 'verified',
-                      },
-                      ...MAP_GROUPINGS,
-                    ],
-                  )}
-                  onFilterChange={(selected) => {
-                    this.props.mapsStore.setActivePinFilters(selected)
-                  }}
+                  availableFilters={this.availableFilters()}
                   onLocationChange={(latlng) => this.setCenter(latlng)}
                   {...props}
                 />

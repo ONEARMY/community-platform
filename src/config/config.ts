@@ -157,3 +157,14 @@ export const SENTRY_CONFIG: ISentryConfig = {
 export const CDN_URL = _c('REACT_APP_CDN_URL', '')
 export const VERSION = _c('REACT_APP_PROJECT_VERSION', '')
 export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID')
+
+const isPreciousPlastic = (): boolean => {
+  return (
+    (_c('REACT_APP_PLATFORM_THEME') ||
+      localStorage.getItem('platformTheme')) === 'precious-plastic'
+  )
+}
+
+export const MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT = isPreciousPlastic()
+  ? 'member'
+  : undefined

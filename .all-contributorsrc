@@ -508,6 +508,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "zweertsk",
+      "name": "Koen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/131855633?v=4",
+      "profile": "https://github.com/zweertsk",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

@@ -41,7 +41,7 @@ const stores = (rootStore: RootStore) => {
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
     questionStore: new QuestionStore(rootStore),
-    discussionStore: new DiscussionStore(rootStore)
+    discussionStore: new DiscussionStore(rootStore),
   }
   return stores
 }

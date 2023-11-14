@@ -183,8 +183,7 @@ const SCHEMA_BASE: IDexieSchema = {
   aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
   questions: `${DEFAULT_SCHEMA}`,
-  discussions: DEFAULT_SCHEMA
-
+  discussions: DEFAULT_SCHEMA,
 }
 
 // Ensure dexie also handles any prefixed database schema

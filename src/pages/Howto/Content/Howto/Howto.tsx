@@ -10,7 +10,7 @@ import type { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router'
 import type { IHowtoDB } from 'src/models/howto.models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import { isAllowedToEditContent } from 'src/utils/helpers'
@@ -229,27 +229,6 @@ export class Howto extends React.Component<
               </Flex>
             </Flex>
           </AuthWrapper>
-          <MoreBox py={20} mt={20}>
-            <Text
-              sx={{
-                fontSize: [4, 4, 5],
-                display: 'block',
-                fontWeight: 'bold',
-                textAlign: 'center',
-              }}
-            >
-              You're done.
-              <br />
-              Nice one!
-            </Text>
-            <Flex sx={{ justifyContent: 'center' }} mt={2}>
-              <Link to={'/how-to/'}>
-                <Button variant={'secondary'} data-cy="go-back">
-                  Back
-                </Button>
-              </Link>
-            </Flex>
-          </MoreBox>
         </>
       )
     } else {

@@ -1,7 +1,7 @@
 import { Box, Button, Flex } from 'theme-ui'
 import { CommentList, CreateComment } from 'oa-components'
 import { useEffect, useState } from 'react'
-import { useCommonStores } from 'src'
+import { useCommonStores } from '../../../'
 import { trackEvent } from 'src/common/Analytics'
 import type { IDiscussion, UserComment } from 'src/models'
 

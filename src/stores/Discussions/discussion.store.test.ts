@@ -1,7 +1,7 @@
 jest.mock('../common/module.store')
-import { IDiscussion } from 'src/models'
+import type { IDiscussion } from 'src/models'
 import { DiscussionStore } from './discussions.store'
-import { RootStore } from '..'
+import type { RootStore } from '..'
 import { FactoryUser } from 'src/test/factories/User'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryComment } from 'src/test/factories/Comment'
@@ -136,7 +136,7 @@ describe('discussion.store', () => {
 
   describe('formatComments', () => {
     it('get formated comments from IComment[] type to UserCommentType[]', async () => {
-      const { store, discussionItem, setFn } = await factory([
+      const { store, discussionItem } = await factory([
         FactoryDiscussion({
           comments: [FactoryComment({ text: 'New comment' })],
         }),

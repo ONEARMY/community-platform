@@ -94,6 +94,12 @@ export const fields: ILabels = {
     description: 'Choose at least one plastic type',
     title: 'Plastic types accepted',
   },
+  publicContentPreference: {
+    title: 'Contact Preference',
+    description:
+      "Regardless of your email notifications setting, do you want people to be able to contact you? We'll email you their message whenever they do.",
+    placeholder: 'I want people to be able to contact me',
+  },
   repeatPassword: {
     title: 'Repeat new password',
   },

@@ -1,5 +1,5 @@
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { DB_ENDPOINTS, IMapPin, IUserDB } from '../models'
+import { DB_ENDPOINTS, IMapPin, IMessageDB, IUserDB } from '../models'
 import {
   HOW_TO_SUBMISSION_SUBJECT,
   MAP_PIN_SUBMISSION_SUBJECT,
@@ -8,6 +8,7 @@ import { setMockHowto } from '../emulator/seed/content-generate'
 import {
   createHowtoSubmissionEmail,
   createMapPinSubmissionEmail,
+  createMessageEmails,
 } from './createSubmissionEmails'
 import { PP_SIGNOFF } from './constants'
 
@@ -15,6 +16,9 @@ jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
     getUser: () => ({
       email: 'test@test.com',
+    }),
+    getUserByEmail: () => ({
+      email: 'jeffery@gmail.com',
     }),
   },
 }))
@@ -137,5 +141,43 @@ describe('Create map pin submission emails', () => {
       expect(html).toContain(PP_SIGNOFF)
       expect(to).toBe('test@test.com')
     })
+  })
+})
+
+describe('Message emails', () => {
+  const db = FirebaseEmulatedTest.admin.firestore()
+
+  beforeAll(async () => {
+    await FirebaseEmulatedTest.clearFirestoreDB()
+    await FirebaseEmulatedTest.seedFirestoreDB('emails')
+  })
+
+  afterAll(async () => {
+    await FirebaseEmulatedTest.clearFirestoreDB()
+  })
+
+  it('Creates emails to the sender and receiver', async () => {
+    await FirebaseEmulatedTest.seedFirestoreDB('users', [
+      userFactory('user_1', {
+        displayName: 'User 1',
+        userName: 'user_1',
+        userRoles: ['beta-tester'],
+        isContactableByPublic: true,
+      }),
+    ])
+    await FirebaseEmulatedTest.seedFirestoreDB('messages')
+
+    const message = {
+      _id: '234dfsb',
+      email: 'jeffery@gmail.com',
+      text: 'Hi, can we be friends please?',
+      toUserName: 'user_1',
+      isSent: false,
+    }
+
+    await createMessageEmails(message as IMessageDB)
+    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
+
+    expect(countSnapshot.data().count).toEqual(2)
   })
 })

@@ -52,6 +52,7 @@ export interface IUser {
   profileCreationTrigger?: string
   // Used to generate an encrypted unsubscribe url in emails
   unsubscribeToken?: string
+  isContactableByPublic?: boolean
 }
 
 export interface IUserBadges {

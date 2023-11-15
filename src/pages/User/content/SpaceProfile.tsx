@@ -21,6 +21,7 @@ import {
   TabPanel,
 } from 'oa-components'
 import UserCreatedDocuments from './UserCreatedDocuments'
+import { useCommonStores } from 'src/index'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -37,6 +38,9 @@ import type { IConvertedFileMeta } from 'src/types'
 import UserContactAndLinks from './UserContactAndLinks'
 import { ProfileType } from 'src/modules/profile/types'
 import { userStats } from 'src/common/hooks/userStats'
+import { UserContactForm } from 'src/pages/User/contact'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+
 import type { UserCreatedDocs } from '.'
 
 interface IBackgroundImageProps {
@@ -210,6 +214,10 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   const userCountryCode =
     user.location?.countryCode || user.country?.toLowerCase() || undefined
 
+  const { stores } = useCommonStores()
+  const showContactForm =
+    user.isContactableByPublic && !!stores.userStore.activeUser
+
   return (
     <Container
       mt={4}
@@ -280,6 +288,9 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabsList>
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
+              <AuthWrapper roleRequired={'beta-tester'}>
+                {showContactForm && <Tab data-cy="contact-tab">Contact</Tab>}
+              </AuthWrapper>
             </TabsList>
             <TabPanel>
               <Box sx={{ mt: 3 }}>
@@ -333,6 +344,11 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabPanel>
               <UserCreatedDocuments docs={docs} />
             </TabPanel>
+            <AuthWrapper roleRequired={'beta-tester'}>
+              <TabPanel>
+                <UserContactForm user={user} />
+              </TabPanel>
+            </AuthWrapper>
           </Tabs>
         </Box>
       </Flex>

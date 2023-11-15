@@ -1,6 +1,7 @@
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUser } from 'src/models/user.models'
 import { ProfileType } from 'src/modules/profile/types'
+import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 // when using the user settings page a base user will already exist
 // pass an empty object with IUser interface for purpose of future typings
@@ -22,6 +23,7 @@ const USER_PP_TEMPLATE: IUserPP = {
   isExpert: null,
   isV4Member: null,
   notification_settings: undefined,
+  isContactableByPublic: DEFAULT_PUBLIC_CONTACT_PREFERENCE,
 }
 
 // use default export to avoid naming confusion

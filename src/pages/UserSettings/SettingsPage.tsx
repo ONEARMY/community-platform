@@ -19,6 +19,7 @@ import { SettingsErrors } from './content/formSections/SettingsErrors'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
+import { PublicContactSection } from './content/formSections/PublicContact.section'
 
 import { buttons, headings } from './labels'
 import INITIAL_VALUES from './Template'
@@ -221,6 +222,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
         }) => {
           const { createProfile, editProfile } = headings
           const heading = user.profileType ? editProfile : createProfile
+          const isMember = values.profileType === ProfileType.MEMBER
 
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
@@ -285,21 +287,19 @@ export class SettingsPage extends React.Component<IProps, IState> {
                         />
                       )}
                       {/* General fields */}
-                      {values.profileType !== ProfileType.MEMBER &&
-                        isModuleSupported(MODULE.MAP) && (
-                          <WorkspaceMapPinSection>
-                            <MapPinModerationComments mapPin={userMapPin} />
-                          </WorkspaceMapPinSection>
-                        )}
+                      {!isMember && isModuleSupported(MODULE.MAP) && (
+                        <WorkspaceMapPinSection>
+                          <MapPinModerationComments mapPin={userMapPin} />
+                        </WorkspaceMapPinSection>
+                      )}
 
-                      {values.profileType === ProfileType.MEMBER &&
-                        isModuleSupported(MODULE.MAP) && (
-                          <MemberMapPinSection
-                            toggleLocationDropdown={this.toggleLocationDropdown}
-                          >
-                            <MapPinModerationComments mapPin={userMapPin} />
-                          </MemberMapPinSection>
-                        )}
+                      {isMember && isModuleSupported(MODULE.MAP) && (
+                        <MemberMapPinSection
+                          toggleLocationDropdown={this.toggleLocationDropdown}
+                        >
+                          <MapPinModerationComments mapPin={userMapPin} />
+                        </MemberMapPinSection>
+                      )}
                       <UserInfosSection
                         formValues={values}
                         mutators={form.mutators}
@@ -309,6 +309,11 @@ export class SettingsPage extends React.Component<IProps, IState> {
                     <EmailNotificationsSection
                       notificationSettings={values.notification_settings}
                     />
+                    {!isMember && (
+                      <PublicContactSection
+                        isContactableByPublic={values.isContactableByPublic}
+                      />
+                    )}
                   </form>
                   <AccountSettingsSection />
                 </Box>

@@ -1,6 +1,3 @@
-import { screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'; // Import user-event
-import { MemoryRouter } from 'react-router-dom';
 import { render } from '../tests/utils'
 import { Default } from './UserStatistics.stories'
 import type { UserStatisticsProps } from './UserStatistics'
@@ -34,7 +31,7 @@ describe('UserStatistics', () => {
     )
     const howtoLink = getByTestId('howto-link')
 
-    expect(howtoLink.getAttribute("href")).toBe('/how-to?author=Test User')
+    expect(howtoLink.getAttribute('href')).toBe('/how-to?author=Test User')
   })
 
   it('renders research link when on research stats', () => {
@@ -43,7 +40,7 @@ describe('UserStatistics', () => {
     )
     const researchLink = getByTestId('research-link')
 
-    expect(researchLink.getAttribute("href")).toBe('/research?author=Test User')
+    expect(researchLink.getAttribute('href')).toBe('/research?author=Test User')
   })
 
   it('renders supporter icon when isSupporter is true', () => {

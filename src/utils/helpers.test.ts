@@ -1,16 +1,17 @@
 import type { IModerable, IResearch } from 'src/models'
 import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 import {
-  stripSpecialCharacters,
-  formatLowerNoSpecial,
   arrayToJson,
+  calculateTotalComments,
   capitalizeFirstLetter,
   filterModerableItems,
+  formatLowerNoSpecial,
   hasAdminRights,
-  needsModeration,
   isAllowedToEditContent,
   isAllowedToPin,
-  calculateTotalComments,
+  needsModeration,
+  numberWithCommas,
+  stripSpecialCharacters,
 } from './helpers'
 import { FactoryUser } from 'src/test/factories/User'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
@@ -260,6 +261,13 @@ describe('src/utils/helpers', () => {
           ]),
       } as IResearch.ItemDB | IItem
       expect(calculateTotalComments(item)).toBe('4')
+    })
+  })
+
+  describe('numberWithCommas', () => {
+    it('adds a comma between every three digits', () => {
+      const expectation = '1,000'
+      expect(numberWithCommas(1000)).toEqual(expectation)
     })
   })
 })

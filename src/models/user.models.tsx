@@ -52,8 +52,26 @@ export interface IUser {
   profileCreationTrigger?: string
   // Used to generate an encrypted unsubscribe url in emails
   unsubscribeToken?: string
+  impact?: IUserImpact
   isContactableByPublic?: boolean
 }
+
+export type IUserImpact = IImpactData[] | []
+
+export interface IImpactData {
+  year: IImpactYear
+  fields: ImpactDataField[]
+}
+
+export interface ImpactDataField {
+  label: string
+  value: number
+  prefix?: string
+  suffix?: string
+  isVisible: boolean
+}
+
+export type IImpactYear = 2021 | 2022 | 2023
 
 export interface IUserBadges {
   verified: boolean

@@ -181,7 +181,6 @@ describe('ImageGallery', () => {
     const nextBtn = getByRole('button', { name: 'Next image' })
     const previousBtn = getByRole('button', { name: 'Previous image' })
 
-    console.log(ShowNextPrevButtons.args)
     expect(nextBtn).toBeInTheDocument()
     expect(previousBtn).toBeInTheDocument()
   })

@@ -38,6 +38,8 @@ import { iconMap } from './svgs'
 import { DownloadIcon } from './DownloadIcon'
 import { ExternalUrl } from './ExternalUrl'
 import type { IGlyphs } from './types'
+import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
+import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
 
 interface IGlyphProps {
   glyph: keyof IGlyphs
@@ -88,6 +90,8 @@ export const glyphs: IGlyphs = {
   email: <MdMail />,
   'chevron-left': iconMap.chevronLeft,
   'chevron-right': iconMap.chevronRight,
+  'chevron-down': <FaChevronDown />,
+  'chevron-up': <FaChevronUp />,
   star: iconMap.star,
   'star-active': iconMap.starActive,
   verified: iconMap.verified,

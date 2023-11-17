@@ -29,9 +29,6 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
-import type { IUploadedFileMeta } from 'src/stores/storage'
-import type { IConvertedFileMeta } from 'src/types'
-
 import UserContactAndLinks from './UserContactAndLinks'
 import { ProfileType } from 'src/modules/profile/types'
 import { userStats } from 'src/common/hooks/userStats'
@@ -147,14 +144,16 @@ const renderMachineBuilderXp = (machineBuilderXp: Array<IMAchineBuilderXp>) => (
   </>
 )
 
-export const SpaceProfile = ({ user, docs }: IProps) => {
-  let coverImage: any = []
-  if (user.coverImages && user.coverImages.length > 0) {
-    const coverImages: Array<IConvertedFileMeta | IUploadedFileMeta> =
-      user.coverImages
-    coverImage = coverImages
+const getCoverImages = (user: IUserPP) => {
+  if (user.coverImages && user.coverImages.length) {
+    return user.coverImages
   }
 
+  return []
+}
+
+export const SpaceProfile = ({ user, docs }: IProps) => {
+  const coverImage = getCoverImages(user)
   const stats = userStats(user.userName)
 
   const userLinks = user?.links.filter(

@@ -190,7 +190,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
       </Flex>
       {showThumbnails ? (
         <Flex sx={{ width: '100%', flexWrap: 'wrap' }} mx={[2, 2, '-5px']}>
-          {images.map((image: any, index: number) => (
+          {images.map((image, index: number) => (
             <ThumbCard
               data-cy="thumbnail"
               data-testid="thumbnail"

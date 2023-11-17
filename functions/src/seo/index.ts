@@ -21,7 +21,7 @@ export const seoRender = functions
  * Generate a weekly sitemap of all content
  *
  * Local emulators test path:
- * http://localhost:4002/community-platform-emulated/us-central1/emulator/pubsub/schedule/seo-sitemapGenerate
+ * http://localhost:4002/demo-community-platform-emulated/us-central1/emulator/pubsub/schedule/seo-sitemapGenerate
  */
 export const sitemapGenerate = functions
   .runWith({ memory: '512MB' })
@@ -32,7 +32,7 @@ export const sitemapGenerate = functions
  * Read saved sitemap.xml from storage and return on request for sitemap
  *
  * Test in emulator:
- * http://localhost:4002/community-platform-emulated/us-central1/seo-sitemapProxy
+ * http://localhost:4002/demo-community-platform-emulated/us-central1/seo-sitemapProxy
  */
 export const sitemapProxy = functions
   .runWith({ memory: '512MB' })

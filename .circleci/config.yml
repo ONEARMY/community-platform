@@ -260,8 +260,8 @@ jobs:
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility
-      - image: onearmyplatform/community-platform-emulator:pp-2022-12-04
-    resource_class: small
+      - image: onearmyplatform/community-platform-emulator:pp-2023-11-09c
+    resource_class: large
     environment:
       CYPRESS_INSTALL_BINARY: 0
     steps:
@@ -284,7 +284,7 @@ jobs:
       - run:
           name: Test Functions
           # Run functions emulator test command with additional flags to ensure CI receives correct exit code
-          command: cd functions && firebase emulators:exec --project community-platform-emulated "yarn jest . --forceExit --detectOpenHandles --coverage"
+          command: cd functions && ./node_modules/.bin/firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated "yarn jest . --forceExit --detectOpenHandles --coverage"
       - persist_to_workspace:
           root: .
           paths:

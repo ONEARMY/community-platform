@@ -163,7 +163,7 @@ function _waitForNextTick(): Promise<void> {
  */
 async function deleteCollectionAPI(endpoint: string) {
   const apiHost =
-    'http://0.0.0.0:4003/emulator/v1/projects/community-platform-emulated' // http://[::1] for non-docker env
+    'http://0.0.0.0:4003/emulator/v1/projects/demo-community-platform-emulated' // http://[::1] for non-docker env
   return axios.delete(`${apiHost}/databases/(default)/documents/${endpoint}`)
 }
 

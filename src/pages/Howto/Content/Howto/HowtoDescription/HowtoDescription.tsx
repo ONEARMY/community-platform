@@ -48,6 +48,7 @@ import {
 import { isUserVerified } from 'src/common/isUserVerified'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -386,8 +387,11 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               sx={{
                 objectFit: 'cover',
                 width: '100%',
+                height: '100%',
               }}
-              src={howto.cover_image.downloadUrl}
+              src={cdnImageUrl(howto.cover_image.downloadUrl, {
+                width: 780,
+              })}
               crossOrigin=""
               alt="how-to cover"
             />

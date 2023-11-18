@@ -1,17 +1,6 @@
 import type { StoryFn, Meta } from '@storybook/react'
 import { ImageGallery } from './ImageGallery'
-import type { ImageGalleryProps } from './ImageGallery'
-
-interface IImageGalleryItem {
-  downloadUrl: string
-  contentType?: string | null
-  fullPath: string
-  name: string
-  type: string
-  size: number
-  timeCreated: string
-  updated: string
-}
+import type { ImageGalleryProps, IImageGalleryItem } from './ImageGallery'
 
 const imageUrls = [
   {

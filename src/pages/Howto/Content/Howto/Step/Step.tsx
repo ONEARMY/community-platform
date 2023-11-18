@@ -1,9 +1,9 @@
 import { Box, Card, Text, Flex, Heading } from 'theme-ui'
 import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
 import type { IHowtoStep } from 'src/models/howto.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import styled from '@emotion/styled'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 
 interface IProps {
   step: IHowtoStep
@@ -77,9 +77,9 @@ const Step = (props: IProps) => {
               <Box sx={{ width: ['100%', '100%', `${(1 / 2) * 100}%`] }}>
                 {step.videoUrl ? (
                   <VideoPlayer videoUrl={step.videoUrl} />
-                ) : (
-                  <ImageGallery images={step.images as IUploadedFileMeta[]} />
-                )}
+                ) : step.images ? (
+                  <ImageGallery images={formatImagesForGallery(step.images)} />
+                ) : null}
               </Box>
             </Flex>
           </Card>

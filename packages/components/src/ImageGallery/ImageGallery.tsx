@@ -7,7 +7,7 @@ import type { CardProps } from 'theme-ui'
 import { Box, Flex, Image as ThemeImage } from 'theme-ui'
 import styled from '@emotion/styled'
 
-interface IImageGalleryItem {
+export interface IImageGalleryItem {
   downloadUrl: string
   thumbnailUrl: string
   contentType?: string | null

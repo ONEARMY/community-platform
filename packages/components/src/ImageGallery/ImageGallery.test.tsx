@@ -95,7 +95,7 @@ describe('ImageGallery', () => {
   })
 
   it('switches images in the lightbox after clicking on the next and previous arrows', async () => {
-    const { findByRole, getByTestId, getByLabelText, getAllByTestId } = render(
+    const { findByRole, getByTestId, getByLabelText } = render(
       <Default
         {...(Default.args as ImageGalleryProps)}
         photoSwipeOptions={{

@@ -7,8 +7,9 @@ import type { CardProps } from 'theme-ui'
 import { Box, Flex, Image as ThemeImage } from 'theme-ui'
 import styled from '@emotion/styled'
 
-interface IUploadedFileMeta {
+interface IImageGalleryItem {
   downloadUrl: string
+  thumbnailUrl: string
   contentType?: string | null
   fullPath: string
   name: string
@@ -19,7 +20,7 @@ interface IUploadedFileMeta {
 }
 
 export interface ImageGalleryProps {
-  images: IUploadedFileMeta[]
+  images: IImageGalleryItem[]
   allowPortrait?: boolean
   photoSwipeOptions?: PhotoSwipeOptions
   hideThumbnails?: boolean
@@ -29,7 +30,7 @@ export interface ImageGalleryProps {
 interface IState {
   activeImageIndex: number
   showLightbox: boolean
-  images: Array<IUploadedFileMeta>
+  images: Array<IImageGalleryItem>
 }
 
 const ThumbCard = styled<CardProps & React.ComponentProps<any>>(Box)`
@@ -202,7 +203,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
             >
               <ThemeImage
                 loading="lazy"
-                src={image.downloadUrl}
+                src={image.thumbnailUrl}
                 key={index}
                 alt={image.name}
                 sx={{

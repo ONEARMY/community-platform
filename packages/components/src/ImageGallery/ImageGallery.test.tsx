@@ -5,6 +5,7 @@ import {
   Default,
   NoThumbnails,
   ShowNextPrevButtons,
+  testImages,
 } from './ImageGallery.stories'
 import { ImageGallery } from './ImageGallery'
 import type { ImageGalleryProps } from './ImageGallery'
@@ -53,18 +54,12 @@ describe('ImageGallery', () => {
 
     firstThumbnail.click()
 
-    const firstThumbnailImage = firstThumbnail.firstElementChild
-    expect(mainImage.getAttribute('src')).toEqual(
-      firstThumbnailImage?.getAttribute('src'),
-    )
+    expect(mainImage.getAttribute('src')).toEqual(testImages[0].downloadUrl)
 
     const thirdThumbnail = thumbnails[2]
     thirdThumbnail.click()
 
-    const thirdThumbnailImage = thirdThumbnail.firstElementChild
-    expect(mainImage.getAttribute('src')).toEqual(
-      thirdThumbnailImage?.getAttribute('src'),
-    )
+    expect(mainImage.getAttribute('src')).toEqual(testImages[2].downloadUrl)
   })
 
   it('displays correct image in lightbox after clicking on the main image', async () => {
@@ -115,8 +110,6 @@ describe('ImageGallery', () => {
       />,
     )
 
-    const thumbnails = getAllByTestId('thumbnail')
-
     const mainImage = getByTestId('active-image')
     expect(mainImage).toBeInTheDocument()
 
@@ -142,9 +135,7 @@ describe('ImageGallery', () => {
 
     image = await globalFindByRole(group, 'img', { hidden: false })
     expect(image).toBeInTheDocument()
-    expect(image?.getAttribute('src')).toEqual(
-      thumbnails[1].firstElementChild?.getAttribute('src'),
-    )
+    expect(image?.getAttribute('src')).toEqual(testImages[1].downloadUrl)
 
     // Clicks on the previous button
     const previousImageButton = getByLabelText('Previous')
@@ -156,9 +147,7 @@ describe('ImageGallery', () => {
 
     image = await globalFindByRole(group, 'img', { hidden: false })
     expect(image).toBeInTheDocument()
-    expect(image?.getAttribute('src')).toEqual(
-      thumbnails[0].firstElementChild?.getAttribute('src'),
-    )
+    expect(image?.getAttribute('src')).toEqual(testImages[0].downloadUrl)
   })
 
   it('supports no thumbnail option', async () => {

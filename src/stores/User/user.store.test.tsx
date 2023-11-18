@@ -2,6 +2,24 @@ jest.mock('../common/module.store')
 import { FactoryUser } from 'src/test/factories/User'
 import { UserStore } from './user.store'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import { EmailNotificationFrequency } from 'oa-shared'
+
+jest.mock('../../utils/firebase', () => ({
+  auth: {
+    createUserWithEmailAndPassword: () =>
+      Promise.resolve({
+        user: {
+          updateProfile: jest.fn(),
+          photoUrl: 'testPhotoUrl',
+        },
+      }),
+    currentUser: {
+      displayName: 'testDisplayName',
+      uid: 'testUid',
+    },
+    onAuthStateChanged: jest.fn(),
+  },
+}))
 
 describe('userStore', () => {
   let store
@@ -75,6 +93,35 @@ describe('userStore', () => {
           workspaceType: 'extrusion',
         }),
       )
+    })
+  })
+
+  describe('registerNewUser', () => {
+    it('registers a new user', async () => {
+      store.loadUserAggregations = jest.fn()
+      store.authUnsubscribe = jest.fn()
+
+      await store.registerNewUser(
+        'newuser@example.com',
+        'password',
+        'testDisplayName',
+      )
+
+      expect(store.db.set).toHaveBeenCalledWith({
+        coverImages: [],
+        links: [],
+        moderation: 'awaiting-moderation',
+        verified: false,
+        _authID: 'testUid',
+        displayName: 'testDisplayName',
+        userName: 'testdisplayname',
+        notifications: [],
+        profileCreated: expect.any(String),
+        profileCreationTrigger: 'registration',
+        notification_settings: {
+          emailFrequency: EmailNotificationFrequency.WEEKLY,
+        },
+      })
     })
   })
 })

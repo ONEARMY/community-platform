@@ -12,7 +12,7 @@ The platform is built in [React](https://reactjs.org/), [Mobx](https://mobx.js.o
 For styling we use the popular _CSS in JS_ library [emotion](https://emotion.sh/docs/introduction).
 Alongside this we use [theme-ui](https://theme-ui.com/) to encourage a theme orientated constraint-based design approach.
 
-If you never used it before don't worry, it makes a lot of sense and you'll just need a bit of further reading and to dive into our codebase. I recommend [this article](https://medium.com/styled-components/build-better-component-libraries-with-styled-system-4951653d54ee) to understand more about the Design System philosophy behind it.
+If you never used it before don't worry, it makes a lot of sense and you'll just need a bit of further reading and to dive into our codebase.
 
 In the long term, we would like to allow easy theme swapping by simply changing the theme file for anyone.
 

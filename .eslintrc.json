@@ -39,10 +39,15 @@
       }
     ],
     "import/no-duplicates": "error",
-    "import/no-unresolved": "off",
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": ["^src/", "^oa-([a-z]+)/", "^oa-components", "^oa-themes"]
+      }
+    ],
     "import/no-named-as-default": "off",
     "max-classes-per-file": "error",
-    "no-useless-escape": "off",
+    "no-useless-escape": "error",
     "react/display-name": "error",
     "react/jsx-no-target-blank": "warn",
     // https://github.com/standard/eslint-config-standard-with-typescript/issues/248
@@ -98,7 +103,6 @@
         "ignore": ["react-app-env.d.ts", "service-worker.ts"]
       }
     ],
-    "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/no-use-before-define": "off",

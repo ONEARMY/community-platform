@@ -92,6 +92,7 @@ describe('[Settings]', () => {
           type: 'image/jpeg',
         },
       ],
+      isContactableByPublic: true,
       links: [
         {
           label: 'email',
@@ -153,6 +154,10 @@ describe('[Settings]', () => {
         searchKeyword: 'Singapo',
         locationName: expected.location.value,
       })
+
+      cy.step('Opt-in to being contacted by users')
+      cy.get('[data-cy=isContactableByPublic]').should('not.be.checked')
+      cy.get('[data-cy=isContactableByPublic]').check({ force: true })
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('not.exist')

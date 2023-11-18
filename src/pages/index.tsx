@@ -13,11 +13,12 @@ import {
 } from './PageList'
 import { Flex, Box } from 'theme-ui'
 import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
-import { getSupportedModules } from 'src/modules'
+import { MODULE, getSupportedModules, isModuleSupported } from 'src/modules'
 import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
 import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
 import { ExternalLink, Button } from 'oa-components'
+import { QuestionModuleContainer } from './Question'
 
 export const Routes = () => {
   //   any,
@@ -75,6 +76,21 @@ export const Routes = () => {
                 )}
               />
             ))}
+            {isModuleSupported(MODULE.QUESTION) ? (
+              <Route
+                path={'/question'}
+                key="question"
+                exact={false}
+                render={() => (
+                  <React.Fragment>
+                    <SeoTagsUpdateComponent title="Question" />
+                    <Main data-cy="main-layout-container" style={{ flex: 1 }}>
+                      <QuestionModuleContainer />
+                    </Main>
+                  </React.Fragment>
+                )}
+              />
+            ) : null}
             <Route component={NotFoundPage} />
           </Switch>
           <Switch>

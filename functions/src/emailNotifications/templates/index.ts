@@ -15,6 +15,8 @@ export type SupportedEmailTemplates =
   | 'map-pin-approval'
   | 'map-pin-rejected'
   | 'map-pin-needs-improvements'
+  | 'receiver-message'
+  | 'sender-message'
 
 const dirPath = (__dirname || '').replace('/templates', '')
 

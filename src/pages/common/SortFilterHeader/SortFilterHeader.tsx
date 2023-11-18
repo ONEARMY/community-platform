@@ -59,7 +59,12 @@ export const SortFilterHeader = ({
 
   const { searchValue, activeSorter, availableItemSortingOption } = currentStore
 
-  const sortingOptions = availableItemSortingOption
+  const allSortingOptions = availableItemSortingOption?.map((label) => ({
+    label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
+    value: label,
+  }))
+
+  const dropdownSortingOptions = availableItemSortingOption
     ?.map((label) => ({
       label: label.replace(/([a-z])([A-Z])/g, '$1 $2'),
       value: label,
@@ -67,10 +72,10 @@ export const SortFilterHeader = ({
     .filter((option) => option.value !== activeSorter)
 
   const defaultSortingOption =
-    Array.isArray(sortingOptions) && sortingOptions.length > 0
-      ? sortingOptions.find(
+    Array.isArray(allSortingOptions) && allSortingOptions.length > 0
+      ? allSortingOptions.find(
           (sortingOption) => sortingOption.value == activeSorter,
-        ) ?? sortingOptions[0]
+        ) ?? dropdownSortingOptions[0]
       : ''
 
   const [sortState, setSortState] = useState(
@@ -126,7 +131,7 @@ export const SortFilterHeader = ({
       <Flex sx={_inputStyle}>
         <FieldContainer>
           <Select
-            options={sortingOptions}
+            options={dropdownSortingOptions}
             placeholder="Sort by"
             value={sortState}
             onChange={(sortBy) => {

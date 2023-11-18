@@ -9,7 +9,7 @@ import { generateSitemap } from './sitemapGenerate'
  * Read saved sitemap.xml from storage and return on request for sitemap
  *
  * Test in emulator:
- * http://localhost:4002/community-platform-emulated/us-central1/seo-sitemapProxy
+ * http://localhost:4002/demo-community-platform-emulated/us-central1/seo-sitemapProxy
  */
 export const handleSitemapProxy = async (
   req: functions.https.Request,

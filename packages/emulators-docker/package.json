@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "boxen": "^5.1.2",
-    "dockerode": "^3.3.1",
+    "dockerode": "^3.3.5",
     "fs-extra": "^10.0.1",
     "functions": "workspace:*",
     "globby": "^11.0.2",

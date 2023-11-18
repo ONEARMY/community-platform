@@ -51,6 +51,13 @@ const factory = async (
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
+  store.db.update.mockImplementation((newValue) => {
+    item = newValue
+    return newValue
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   store.db.get.mockImplementation(async () => item)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -82,6 +89,9 @@ const factory = async (
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setFn: store.db.set,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    updateFn: store.db.update,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     getFn: store.db.get,
@@ -754,26 +764,18 @@ describe('research.store', () => {
   })
 
   describe('incrementViews', () => {
-    it('data fetched from server db', async () => {
-      const { store, researchItem, getFn } = await factoryResearchItem()
-      // necessary as getFn gets called when active research item is set in factory
-      jest.clearAllMocks()
-
-      // Act
-      await store.incrementViewCount(researchItem._id)
-
-      expect(getFn).toBeCalledTimes(1)
-      expect(getFn).toHaveBeenCalledWith('server')
-    })
     it('increments views by one', async () => {
-      const { store, researchItem, setFn } = await factoryResearchItem()
+      const { store, researchItem, getFn, setFn } = await factoryResearchItem()
 
       const views = researchItem.total_views!
       // Act
-      const updatedViews = await store.incrementViewCount(researchItem._id)
+      await store.incrementViewCount(researchItem._id)
 
-      expect(setFn).toHaveBeenCalledTimes(1)
-      expect(updatedViews).toBe(views + 1)
+      expect(getFn).toHaveBeenCalledWith('server')
+      expect(setFn).toHaveBeenCalledWith(
+        expect.objectContaining({ total_views: views + 1 }),
+        expect.anything(),
+      )
     })
   })
 
@@ -889,6 +891,49 @@ describe('research.store', () => {
 
       // Assert
       expect(store.userHasSubscribed).toBe(false)
+    })
+  })
+
+  describe('Useful', () => {
+    it('marks a research item as useful', async () => {
+      const { store, researchItem, updateFn } =
+        await factoryResearchItemFormInput({
+          votedUsefulBy: ['existing-user'],
+        })
+
+      // Act
+      await store.toggleUsefulByUser(researchItem._id, 'an-interested-user')
+
+      // Assert
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = updateFn.mock.calls[0]
+      expect(newResearchItem).toEqual(
+        expect.objectContaining({
+          votedUsefulBy: expect.arrayContaining([
+            'existing-user',
+            'an-interested-user',
+          ]),
+        }),
+      )
+    })
+
+    it('removes vote from a research item', async () => {
+      const { store, researchItem, updateFn } =
+        await factoryResearchItemFormInput({
+          votedUsefulBy: ['uninterested-user', 'user'],
+        })
+
+      // Act
+      await store.toggleUsefulByUser(researchItem._id, 'uninterested-user')
+
+      // Assert
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = updateFn.mock.calls[0]
+      expect(newResearchItem).toEqual(
+        expect.objectContaining({
+          votedUsefulBy: ['user'],
+        }),
+      )
     })
   })
 })

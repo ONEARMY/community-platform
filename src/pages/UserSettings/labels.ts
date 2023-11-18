@@ -55,7 +55,7 @@ export const fields: ILabels = {
   emailNotifications: {
     description:
       "We send an email with all the notifications you've missed. Select how often you want to receive this",
-    title: 'Email notifications (beta)',
+    title: 'Email notifications',
   },
   expertise: {
     description: 'Choose at least one expertise',
@@ -93,6 +93,12 @@ export const fields: ILabels = {
   plastic: {
     description: 'Choose at least one plastic type',
     title: 'Plastic types accepted',
+  },
+  publicContentPreference: {
+    title: 'Contact Preference',
+    description:
+      "Regardless of your email notifications setting, do you want people to be able to contact you? We'll email you their message whenever they do.",
+    placeholder: 'I want people to be able to contact me',
   },
   repeatPassword: {
     title: 'Repeat new password',

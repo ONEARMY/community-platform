@@ -5,7 +5,8 @@
     "types": ["node"],
     "moduleResolution": "Node",
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts"]
 }

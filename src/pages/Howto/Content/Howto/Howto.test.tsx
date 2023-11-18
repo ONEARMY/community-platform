@@ -1,9 +1,9 @@
 import { render, act } from '@testing-library/react'
-import { ThemeProvider } from '@theme-ui/core'
+import { ThemeProvider } from '@emotion/react'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
-import { useCommonStores } from 'src'
+import { useCommonStores } from 'src/index'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
 import { preciousPlasticTheme } from 'oa-themes'
@@ -58,6 +58,58 @@ const factory = async (howtoStore?: Partial<HowtoStore>) =>
   )
 
 describe('Howto', () => {
+  describe('moderator feedback', () => {
+    it('displays feedback for items which are not accepted', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = await factory({
+          ...mockHowtoStore(),
+          activeHowto: FactoryHowto({
+            _createdBy: 'HowtoAuthor',
+            moderation: 'awaiting-moderation',
+            moderatorFeedback: 'Moderation comments',
+          } as any),
+        })
+      })
+
+      expect(wrapper.getByText('Moderation comments')).toBeInTheDocument()
+    })
+
+    it('hides feedback when how-to is accepted', async () => {
+      let wrapper
+      await act(async () => {
+        wrapper = await factory({
+          ...mockHowtoStore(),
+          activeHowto: FactoryHowto({
+            _createdBy: 'HowtoAuthor',
+            moderation: 'accepted',
+            moderatorFeedback: 'Moderation comments',
+          } as any),
+        })
+      })
+
+      expect(() => wrapper.getByText('Moderation comments')).toThrow()
+    })
+  })
+
+  it('displays content statistics', async () => {
+    let wrapper
+    await act(async () => {
+      wrapper = await factory({
+        ...mockHowtoStore(),
+        activeHowto: FactoryHowto({
+          _createdBy: 'HowtoAuthor',
+          steps: [FactoryHowtoStep({})],
+        }),
+      })
+    })
+
+    expect(wrapper.getByText('0 views')).toBeInTheDocument()
+    expect(wrapper.getByText('0 useful')).toBeInTheDocument()
+    expect(wrapper.getByText('0 comments')).toBeInTheDocument()
+    expect(wrapper.getByText('1 step')).toBeInTheDocument()
+  })
+
   it('shows verified badge', async () => {
     let wrapper
     await act(async () => {

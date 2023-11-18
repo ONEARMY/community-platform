@@ -48,13 +48,6 @@ export class Howto extends React.Component<
   RouteComponentProps<IRouterCustomParams>,
   IState
 > {
-  private moderateHowto = async (accepted: boolean, feedback?: string) => {
-    const _id = this.store.activeHowto?._id
-    if (_id) {
-      await this.store.moderateHowto(_id, accepted, feedback)
-    }
-  }
-
   private onUsefulClick = async (
     howtoId: string,
     howToSlug: string,
@@ -146,9 +139,9 @@ export class Howto extends React.Component<
             key={activeHowto._id}
             needsModeration={this.store.needsModeration(activeHowto)}
             loggedInUser={loggedInUser}
+            commentsCount={this.store.commentsCount}
             votedUsefulCount={this.store.votedUsefulCount}
             hasUserVotedUseful={hasUserVotedUseful}
-            moderateHowto={this.moderateHowto}
             onUsefulClick={() =>
               this.onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
             }
@@ -228,7 +221,7 @@ export class Howto extends React.Component<
             pathname: '/how-to',
             search:
               '?search=' +
-              (this.props?.match?.params?.slug || '').replace(/\-/gi, ' ') +
+              (this.props?.match?.params?.slug || '').replace(/-/gi, ' ') +
               '&source=how-to-not-found',
           }}
         />

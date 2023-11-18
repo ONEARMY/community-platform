@@ -19,11 +19,11 @@ export const _supportedConfigurationOptions = [
   'REACT_APP_BRANCH',
   'REACT_APP_SITE_VARIANT',
   'REACT_APP_LOG_LEVEL',
+  'REACT_APP_LOG_TRANSPORT',
   'REACT_APP_SUPPORTED_MODULES',
   'REACT_APP_PLATFORM_THEME',
   'REACT_APP_PLATFORM_PROFILES',
-  'REACT_APP_LOGFLARE_KEY',
-  'REACT_APP_LOGFLARE_SOURCE',
+  'REACT_APP_CDN_URL',
 ] as const
 
 export type ConfigurationOption = typeof _supportedConfigurationOptions[number]

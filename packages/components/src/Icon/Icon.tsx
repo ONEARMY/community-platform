@@ -25,6 +25,8 @@ import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
 import { MdMail } from '@react-icons/all-files/md/MdMail'
 import { MdChevronLeft } from '@react-icons/all-files/md/MdChevronLeft'
 import { MdChevronRight } from '@react-icons/all-files/md/MdChevronRight'
+import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
+import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
 import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
 import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
 import { GoTrashcan } from '@react-icons/all-files/go/GoTrashcan'
@@ -50,6 +52,7 @@ export interface IProps {
   size?: number | string
   marginRight?: string
   color?: string
+  opacity?: string
   onClick?: () => void
 }
 
@@ -89,6 +92,8 @@ export const glyphs: IGlyphs = {
   email: <MdMail />,
   'chevron-left': <MdChevronLeft />,
   'chevron-right': <MdChevronRight />,
+  'chevron-down': <FaChevronDown />,
+  'chevron-up': <FaChevronUp />,
   star: iconMap.star,
   'star-active': iconMap.starActive,
   verified: iconMap.verified,
@@ -155,7 +160,7 @@ export const Icon = (props: Props) => {
   return (
     <IconWrapper
       {...props}
-      sx={{ color: props.color ?? 'inherit' }}
+      sx={{ color: props.color ?? 'inherit', opacity: props.opacity ?? '1' }}
       size={definedSize}
       style={{ marginRight }}
     >

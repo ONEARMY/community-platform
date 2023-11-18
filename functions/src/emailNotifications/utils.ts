@@ -1,6 +1,5 @@
 import type { NotificationType } from 'oa-shared'
 import { CONFIG } from '../config/config'
-import { INotification } from '../models'
 import {
   PP_PROJECT_IMAGE,
   PK_PROJECT_IMAGE,
@@ -11,9 +10,10 @@ import {
 } from './constants'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IUserDB } from '../models'
+import { DB_ENDPOINTS, IMessageDB, INotification, IUserDB } from '../models'
 
 export const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
+const EMAIL_ADDRESS_SEND_LIMIT = 100
 
 export const getUserEmail = async (uid: string): Promise<string | null> => {
   try {
@@ -25,6 +25,9 @@ export const getUserEmail = async (uid: string): Promise<string | null> => {
 }
 
 export const getUserAndEmail = async (userName: string) => {
+  if (!userName) {
+    throw new Error('Cannot get email for empty user name')
+  }
   const toUserDoc = (await db
     .collection(DB_ENDPOINTS.users)
     .doc(userName)
@@ -38,6 +41,35 @@ export const getUserAndEmail = async (userName: string) => {
   }
 
   return { toUser, toUserEmail }
+}
+
+export const isValidEmailCreationRequest = async ({
+  email,
+  toUserName,
+}: IMessageDB) => {
+  const user = await firebaseAuth.getUserByEmail(email)
+  if (user.email !== email) {
+    throw new Error(
+      `Emailing of new message blocked: Email address not attached to user record`,
+    )
+  }
+
+  const { docs } = await db
+    .collection(DB_ENDPOINTS.messages)
+    .where('email', '==', email)
+    .get()
+  if (docs.length >= EMAIL_ADDRESS_SEND_LIMIT) {
+    throw new Error(
+      `Emailing of new message blocked: User exceeded email message count`,
+    )
+  }
+
+  const { toUser } = await getUserAndEmail(toUserName)
+  if (!toUser.isContactableByPublic) {
+    throw new Error(`Emailing of new message blocked: Profile not contactable`)
+  }
+
+  return true
 }
 
 export const SITE_URL = CONFIG.deployment.site_url

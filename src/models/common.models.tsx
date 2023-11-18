@@ -18,14 +18,9 @@ export type IModerationStatus =
   | 'rejected'
   | 'accepted'
 
-export interface IModerationFeedback {
-  feedbackTimestamp: ISODateString
-  feedbackComments: string
-  adminUsername: string
-}
 export interface IModeration {
   moderation: IModerationStatus
-  moderationFeedback?: IModerationFeedback[]
+  moderatorFeedback?: string
 }
 export interface IModerable extends IModeration {
   _createdBy?: string

@@ -29,6 +29,18 @@ const factory = async (
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
+  store.db.set.mockImplementation((newValue) => {
+    return newValue
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.db.update.mockImplementation((newValue) => {
+    return newValue
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   store.db.get.mockResolvedValue(howToItem)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -61,6 +73,9 @@ const factory = async (
     setFn: store.db.set,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
+    updateFn: store.db.update,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     getFn: store.db.get,
   }
 }
@@ -79,7 +94,12 @@ describe('howto.store', () => {
     })
 
     it('updates an existing item', async () => {
-      const { store, setFn } = await factory()
+      const { store, setFn } = await factory([
+        FactoryHowto({
+          _created: '2020-01-01T00:00:00.000Z',
+          votedUsefulBy: ['fake-user', 'fake-user2'],
+        }),
+      ])
 
       const howto = FactoryHowtoDraft({})
       await store.uploadHowTo(howto)
@@ -97,6 +117,13 @@ describe('howto.store', () => {
 
       const [finalHowto] = setFn.mock.calls[1]
       expect(setFn).toHaveBeenCalledTimes(2)
+      expect(setFn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          _created: '2020-01-01T00:00:00.000Z',
+          votedUsefulBy: ['fake-user', 'fake-user2'],
+        }),
+        expect.anything(),
+      )
       expect(finalHowto.steps).toHaveLength(3)
     })
 
@@ -261,6 +288,23 @@ describe('howto.store', () => {
   })
 
   describe('deleteHowTo', () => {
+    it('handles legacy docs without previousSlugs', async () => {
+      const howtoDoc = FactoryHowto({})
+      howtoDoc.previousSlugs = undefined
+      const { store, howToItem, setFn, getFn } = await factory([howtoDoc])
+
+      // Act
+      await store.deleteHowTo(howToItem._id)
+
+      // Assert
+      const [deletedHowTo] = setFn.mock.calls[0]
+
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(getFn).toHaveBeenCalledTimes(2)
+      expect(getFn).toHaveBeenCalledWith('server')
+      expect(deletedHowTo._deleted).toBeTruthy()
+    })
+
     it('updates _deleted property after confirming delete', async () => {
       const { store, howToItem, setFn, getFn } = await factory()
 
@@ -567,24 +611,48 @@ describe('howto.store', () => {
   })
 
   describe('incrementViews', () => {
-    it('data fetched from server db', async () => {
-      const { store, howToItem, getFn } = await factory()
-
-      // Act
-      await store.incrementViewCount(howToItem._id)
-
-      expect(getFn).toBeCalledTimes(1)
-      expect(getFn).toHaveBeenCalledWith('server')
-    })
     it('increments views by one', async () => {
-      const { store, howToItem, setFn } = await factory()
+      const { store, howToItem, getFn, setFn } = await factory()
 
       const views = howToItem.total_views!
       // Act
-      const updatedViews = await store.incrementViewCount(howToItem._id)
+      await store.incrementViewCount(howToItem._id)
 
-      expect(setFn).toHaveBeenCalledTimes(1)
-      expect(updatedViews).toBe(views + 1)
+      expect(getFn).toHaveBeenCalledWith('server')
+      expect(setFn).toHaveBeenCalledWith(
+        expect.objectContaining({ total_views: views + 1 }),
+        expect.anything(),
+      )
+    })
+  })
+
+  describe('Useful', () => {
+    it('marks howto as useful', async () => {
+      const { store, howToItem, updateFn } = await factory([
+        FactoryHowto({ votedUsefulBy: ['fake-user2'] }),
+      ])
+
+      // Act
+      await store.toggleUsefulByUser(howToItem._id, 'fake-user')
+
+      const [newHowto] = updateFn.mock.calls[0]
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      expect(newHowto.votedUsefulBy).toEqual(
+        expect.arrayContaining(['fake-user', 'fake-user2']),
+      )
+    })
+
+    it('removes vote from a howto', async () => {
+      const { store, howToItem, updateFn } = await factory([
+        FactoryHowto({ votedUsefulBy: ['fake-user'] }),
+      ])
+
+      // Act
+      await store.toggleUsefulByUser(howToItem._id, 'fake-user')
+
+      const [newHowto] = updateFn.mock.calls[0]
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      expect(newHowto.votedUsefulBy).toEqual([])
     })
   })
 })

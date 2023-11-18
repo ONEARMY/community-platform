@@ -33,6 +33,8 @@ export type availableGlyphs =
   | 'email'
   | 'chevron-left'
   | 'chevron-right'
+  | 'chevron-down'
+  | 'chevron-up'
   | 'star'
   | 'star-active'
   | 'thunderbolt'

@@ -18,7 +18,9 @@ export const userStats = (userId: string) => {
     }
     getUseful()
     getVerified()
-    return () => {}
+    return () => {
+      // cleanup
+    }
   }, [userId])
 
   return { verified: verified, totalUseful: totalUseful }

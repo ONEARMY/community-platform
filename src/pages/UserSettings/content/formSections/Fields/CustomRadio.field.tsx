@@ -132,7 +132,7 @@ class CustomRadioField extends Component<IProps, IState> {
                   marginTop: 1,
                   marginBottom: 1,
                   fontWeight: ['bold', 'bold', 'inherit'],
-                  textAlign: ['left', 'left', 'center'],
+                  textAlign: ['center'],
                 }}
               >
                 {textLabel}

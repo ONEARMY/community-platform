@@ -56,8 +56,8 @@ app.get('/seed-content-generate', (req, res) =>
  * This allows pubsub topics to be tested when running in emulators as an api endpoint
  * It includes additional prefix (/topic or /schedule) depending on trigger
  * @example
- * `http://localhost:4002/community-platform-emulated/us-central1/emulator/pubsub/schedule/dailyTasks`
- * `http://localhost:4002/community-platform-emulated/us-central1/emulator/pubsub/topic/test-topic`
+ * `http://localhost:4002/demo-community-platform-emulated/us-central1/emulator/pubsub/schedule/dailyTasks`
+ * `http://localhost:4002/demo-community-platform-emulated/us-central1/emulator/pubsub/topic/test-topic`
  */
 app.all('/pubsub/:trigger/:name', async (req, res) => {
   if (!process.env.PUBSUB_EMULATOR_HOST) {

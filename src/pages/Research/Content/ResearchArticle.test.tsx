@@ -1,5 +1,5 @@
 import { act, render } from '@testing-library/react'
-import { ThemeProvider } from '@theme-ui/core'
+import { ThemeProvider } from '@emotion/react'
 import { Provider } from 'mobx-react'
 import { MemoryRouter } from 'react-router'
 import { Route } from 'react-router-dom'
@@ -46,6 +46,35 @@ describe('Research Article', () => {
     formatResearchCommentList: jest.fn(),
     incrementViewCount: jest.fn(),
   }
+
+  it('displays content statistics', async () => {
+    // Arrange
+    ;(useResearchStore as jest.Mock).mockReturnValue({
+      ...mockResearchStore,
+      activeResearchItem: FactoryResearchItem({
+        collaborators: undefined,
+        updates: [
+          FactoryResearchItemUpdate({
+            status: 'published',
+            _deleted: false,
+          }),
+        ],
+      }),
+    })
+
+    // Act
+    let wrapper
+    await act(async () => {
+      wrapper = getWrapper()
+    })
+
+    // Assert
+    expect(wrapper.getByText('0 views')).toBeInTheDocument()
+    expect(wrapper.getByText('0 following')).toBeInTheDocument()
+    expect(wrapper.getByText('0 useful')).toBeInTheDocument()
+    expect(wrapper.getByText('0 comments')).toBeInTheDocument()
+    expect(wrapper.getByText('1 step')).toBeInTheDocument()
+  })
 
   it('does not display contributors when undefined', async () => {
     // Arrange

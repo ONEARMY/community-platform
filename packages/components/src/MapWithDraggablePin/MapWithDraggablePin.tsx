@@ -53,7 +53,11 @@ export const MapWithDraggablePin = (props: Props) => {
     props.center || [props.position.lat, props.position.lng],
   )
   const hasUserLocation = props.hasUserLocation || false
-  const onPositionChanged = props.updatePosition || function () {}
+  const onPositionChanged =
+    props.updatePosition ||
+    function () {
+      // do nothing
+    }
 
   return (
     <div
@@ -102,7 +106,9 @@ export const MapWithDraggablePin = (props: Props) => {
                     ])
                     setZoom(15)
                   },
-                  () => {},
+                  () => {
+                    // do nothing
+                  },
                 )
               }}
             >

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import Dexie from 'dexie'
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import { logger } from '../../../logger'
@@ -14,7 +15,7 @@ import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20230618
+const DB_CACHE_NUMBER = 20231022
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -101,6 +102,8 @@ export class DexieClient implements AbstractDatabaseClient {
         return ref.where(field).above(value)
       case '==':
         return ref.where(field).equals(value)
+      case '!=':
+        return ref.where(field).notEqual(value)
       case '>':
         return ref.where(field).below(value)
       case 'array-contains':
@@ -123,7 +126,7 @@ export class DexieClient implements AbstractDatabaseClient {
     // test open db, catch errors for upgrade version not defined or
     // idb not supported
     db.open().catch(async (err) => {
-      logger.error(err)
+      // logger.error('Failed to open DB', err.inner)
       // NOTE - invalid state error suggests dexie not supported, so
       // try reloading with cachedb disabled (see db index for implementation)
       if (err.name === Dexie.errnames.InvalidState) {
@@ -171,6 +174,7 @@ const DEFAULT_SCHEMA = '_id,_modified'
 const SCHEMA_BASE: IDexieSchema = {
   howtos: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs`,
   mappins: DEFAULT_SCHEMA,
+  messages: `${DEFAULT_SCHEMA}`,
   tags: DEFAULT_SCHEMA,
   categories: DEFAULT_SCHEMA,
   researchCategories: DEFAULT_SCHEMA,
@@ -178,7 +182,9 @@ const SCHEMA_BASE: IDexieSchema = {
   research: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs,*collaborators`,
   aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
+  questions: `${DEFAULT_SCHEMA}`,
 }
+
 // Ensure dexie also handles any prefixed database schema
 const MAPPED_SCHEMA = {} as IDexieSchema
 Object.keys(SCHEMA_BASE).forEach(
@@ -202,6 +208,12 @@ const DEXIE_SCHEMA = MAPPED_SCHEMA
  *
  * 2023-06-29
  * Drop events collection
+ *
+ * 2023-09-24
+ * Add question schema
+ *
+ * 2023-10-22
+ * Add message schema
  *
  *
  *

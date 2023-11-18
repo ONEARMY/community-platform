@@ -18,8 +18,9 @@ access to all of these items, in fact from a security perspective you want to ba
   - [ ] Fixing Fashion PROD
   - [ ] Fixing Fashion DEV
 - [ ] Grant GitHub maintainer permissions
-- [ ] Raise all contributors PR stating maintainer status
+- [ ] Raise [all contributors PR](https://allcontributors.org/docs/en/bot/usage) stating maintainer status `@all-contributors please add @username for maintenance`
 - [ ] Grant access to Google Analytics for each site
+- [ ] Access to the shared account credentials
 - [ ] Google Cloud Console grant admin permissions for user
   - [ ] Precious Plastic PROD
   - [ ] Precious Plastic DEV

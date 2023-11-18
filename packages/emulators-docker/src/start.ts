@@ -1,7 +1,7 @@
 import Dockerode from 'dockerode'
 import boxen from 'boxen'
 import logUpdate from 'log-update'
-import fs from 'fs-extra'
+import { existsSync, readdirSync } from 'fs-extra'
 import {
   CONTAINER_NAME,
   getFirebasePortMapping,
@@ -9,6 +9,7 @@ import {
   TAG_NAME,
 } from './common'
 import { PATHS } from './paths'
+import { resolve } from 'path'
 
 const docker = new Dockerode()
 
@@ -96,7 +97,8 @@ function attachContainer(container: Dockerode.Container) {
 
 async function createNewContainer() {
   // ensure functions dist exists for binding
-  if (!fs.existsSync(PATHS.functionsDistIndex)) {
+  const functionsDistIndex = resolve(PATHS.functionsDir, 'dist', 'index.js')
+  if (!existsSync(functionsDistIndex)) {
     console.log('Waiting for functions to be built...')
     await _wait(5000)
     return createNewContainer()
@@ -125,10 +127,7 @@ async function createNewContainer() {
         HostConfig: {
           AutoRemove: true, // assume best to fully remove after use and provide clean environment each run
           PortBindings,
-          // Bind Volumes
-          // NOTE - as node_modules installed locally and in container could be different os,
-          // just bind compiled dist as a volume to allow any updates to be tracked
-          Binds: [`${PATHS.functionsDistIndex}:/app/functions/dist/index.js`],
+          Binds: createVolumeBinds(),
         },
       },
       function (err, container) {
@@ -177,6 +176,23 @@ function startContainer(container: Dockerode.Container) {
       process.exit(1)
     }
   })
+}
+
+/**
+ * Create a map of local files to container volume
+ * Files from local functions dist replace those in container to support local testing updates
+ * However entire dist folder not copied as container dist also includes node_modules for the
+ * specific container os (may be different to local user)
+ */
+function createVolumeBinds() {
+  const volumeBinds: string[] = []
+  const functionsDist = resolve(PATHS.functionsDir, 'dist')
+  for (const name of readdirSync(functionsDist)) {
+    const localPath = resolve(functionsDist, name)
+    const containerPath = `/app/functions/dist/${name}`
+    volumeBinds.push(`${localPath}:${containerPath}`)
+  }
+  return volumeBinds
 }
 
 /**

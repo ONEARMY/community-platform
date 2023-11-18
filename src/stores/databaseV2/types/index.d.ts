@@ -47,7 +47,7 @@ export interface DBQueryWhereOptions {
   value: DBQueryWhereValue
 }
 
-export type DBQueryWhereOperator = '>' | '<' | '==' | 'array-contains'
+export type DBQueryWhereOperator = '>' | '<' | '==' | '!=' | 'array-contains'
 export type DBQueryWhereValue = string | number
 
 /**

@@ -24,7 +24,7 @@ export const getUserEmail = functions
       const { email } = await firebaseAuth.getUser(uid)
       return email
     } catch (error) {
-      console.error(error)
+      console.error('Error getting user email', error)
       throw new functions.https.HttpsError('not-found', JSON.stringify(error))
     }
   })

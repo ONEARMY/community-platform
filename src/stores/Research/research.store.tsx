@@ -10,7 +10,7 @@ import { cloneDeep } from 'lodash'
 import { createContext, useContext } from 'react'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type { IComment, IUser, IVotedUsefulUpdate } from 'src/models'
+import type { IComment, IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
@@ -32,6 +32,7 @@ import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 const COLLECTION_NAME = 'research'
 
@@ -232,36 +233,21 @@ export class ResearchStore extends ModuleStore {
     return
   }
 
+  @action
   public async toggleUsefulByUser(
     docId: string,
     userName: string,
   ): Promise<void> {
-    const dbRef = this.db
-      .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
-      .doc(docId)
-
-    const researchData = await toJS(dbRef.get('server'))
-    if (!researchData) return
-
-    const votedUsefulBy = !(researchData?.votedUsefulBy || []).includes(
+    const updatedItem = (await toggleDocUsefulByUser(
+      this.db,
+      COLLECTION_NAME,
+      docId,
       userName,
-    )
-      ? [userName].concat(researchData?.votedUsefulBy || [])
-      : (researchData?.votedUsefulBy || []).filter(
-          (uName) => uName !== userName,
-        )
+    )) as IResearch.ItemDB
 
-    const votedUsefulUpdate = {
-      _id: docId,
-      votedUsefulBy: votedUsefulBy,
-    }
-
-    await dbRef.update(votedUsefulUpdate)
-
-    const updatedItem = (await dbRef.get()) as IResearch.ItemDB
     runInAction(() => {
       this.activeResearchItem = updatedItem
-      if ((updatedItem.votedUsefulBy || []).includes(userName)) {
+      if ((updatedItem?.votedUsefulBy || []).includes(userName)) {
         this.userNotificationsStore.triggerNotification(
           'research_useful',
           this.activeResearchItem._createdBy,
@@ -860,6 +846,38 @@ export class ResearchStore extends ModuleStore {
   @computed
   get votedUsefulCount(): number {
     return (this.activeResearchItem?.votedUsefulBy || []).length
+  }
+
+  @computed
+  get subscribersCount(): number {
+    return (this.activeResearchItem?.subscribers || []).length
+  }
+
+  @computed
+  get commentsCount(): number {
+    if (this.activeResearchItem?.updates) {
+      const commentOnUpdates = this.activeResearchItem?.updates.reduce(
+        (totalComments, update) => {
+          const updateCommentsLength = update.comments
+            ? update.comments.length
+            : 0
+          return totalComments + updateCommentsLength
+        },
+        0,
+      )
+      return commentOnUpdates ? commentOnUpdates : 0
+    } else {
+      return 0
+    }
+  }
+
+  @computed
+  get updatesCount(): number {
+    return this.activeResearchItem?.updates?.length
+      ? this.activeResearchItem?.updates.filter(
+          (update) => update.status !== 'draft' && update._deleted !== true,
+        ).length
+      : 0
   }
 
   @action

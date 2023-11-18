@@ -8,14 +8,7 @@ import {
 } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type {
-  IComment,
-  UserMention,
-  IModerationUpdate,
-  IVotedUsefulUpdate,
-  IUser,
-  IModerationFeedback,
-} from 'src/models'
+import type { IComment, UserMention, IUser } from 'src/models'
 import type {
   IHowToStepFormInput,
   IHowto,
@@ -41,6 +34,8 @@ import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { incrementDocViewCount } from '../common/incrementDocViewCount'
+import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 const COLLECTION_NAME = 'howtos'
 
@@ -184,25 +179,13 @@ export class HowtoStore extends ModuleStore {
     docId: string,
     userName: string,
   ): Promise<void> {
-    const dbRef = this.db
-      .collection<IVotedUsefulUpdate>(COLLECTION_NAME)
-      .doc(docId)
+    const updatedItem = (await toggleDocUsefulByUser(
+      this.db,
+      COLLECTION_NAME,
+      docId,
+      userName,
+    )) as IHowtoDB
 
-    const howtoData = await toJS(dbRef.get('server'))
-    if (!howtoData) return
-
-    const votedUsefulBy = !(howtoData?.votedUsefulBy || []).includes(userName)
-      ? [userName].concat(howtoData?.votedUsefulBy || [])
-      : (howtoData?.votedUsefulBy || []).filter((uName) => uName !== userName)
-
-    const votedUsefulUpdate = {
-      _id: docId,
-      votedUsefulBy: votedUsefulBy,
-    }
-
-    await dbRef.update(votedUsefulUpdate)
-
-    const updatedItem = (await dbRef.get()) as IHowtoDB
     runInAction(() => {
       this.activeHowto = updatedItem
       if ((updatedItem.votedUsefulBy || []).includes(userName)) {
@@ -273,25 +256,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   public async incrementViewCount(howToID: string) {
-    const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
-    const howToData = await toJS(dbRef.get('server'))
-    const totalViews = howToData?.total_views || 0
-
-    if (howToData) {
-      const updatedHowto: IHowto = {
-        ...howToData,
-        total_views: totalViews! + 1,
-      }
-
-      await dbRef.set(
-        {
-          ...updatedHowto,
-        },
-        { keep_modified_timestamp: true },
-      )
-
-      return updatedHowto.total_views
-    }
+    return await incrementDocViewCount(this.db, COLLECTION_NAME, howToID)
   }
 
   public updateSearchValue(query: string) {
@@ -305,51 +270,6 @@ export class HowtoStore extends ModuleStore {
   @action
   public updateSelectedCategory(category: string) {
     this.selectedCategory = category
-  }
-
-  // Moderate Howto
-  @action
-  public async moderateHowto(
-    docId: string,
-    accepted: boolean,
-    feedback?: string,
-  ): Promise<void> {
-    if (!hasAdminRights(toJS(this.activeUser))) {
-      return
-    }
-    const dbRef = this.db
-      .collection<IModerationUpdate>(COLLECTION_NAME)
-      .doc(docId)
-
-    const howtoData = await toJS(dbRef.get('server'))
-    if (!howtoData) return
-
-    const moderationUpdate: IModerationUpdate = {
-      _id: docId,
-      moderation: accepted ? 'accepted' : 'rejected',
-    }
-
-    if (feedback) {
-      const newFeedback: IModerationFeedback[] = [
-        {
-          feedbackTimestamp: new Date().toISOString(),
-          feedbackComments: feedback,
-          adminUsername: this.activeUser?.userName || '',
-        },
-      ]
-
-      moderationUpdate.moderationFeedback = [
-        ...(howtoData.moderationFeedback || []),
-        ...newFeedback,
-      ]
-      moderationUpdate.moderation = 'improvements-needed'
-    }
-
-    await dbRef.update(moderationUpdate)
-
-    this.activeHowto = (await dbRef.get()) as IHowtoDB
-
-    return
   }
 
   public needsModeration(howto: IHowto) {
@@ -429,14 +349,15 @@ export class HowtoStore extends ModuleStore {
     )
 
     mentions.push(...commentMentions, ...stepMentions)
-
-    if (!howToItem.previousSlugs.includes(howToItem.slug)) {
-      howToItem.previousSlugs.push(howToItem.slug)
+    const previousSlugs = howToItem.previousSlugs ?? []
+    if (!previousSlugs.includes(howToItem.slug)) {
+      previousSlugs.push(howToItem.slug)
     }
 
     await dbRef.set(
       {
         ...howToItem,
+        previousSlugs,
         description,
         comments,
         mentions,
@@ -580,6 +501,7 @@ export class HowtoStore extends ModuleStore {
 
     // keep comments if doc existed previously
     const existingDoc = await dbRef.get()
+    logger.debug('uploadHowto.existingDoc', { existingDoc })
 
     const comments =
       existingDoc && existingDoc.comments ? existingDoc.comments : []
@@ -635,6 +557,7 @@ export class HowtoStore extends ModuleStore {
       const total_downloads = values['total_downloads'] ?? 0
 
       const howTo: IHowto = {
+        ...(existingDoc || {}),
         _id,
         _createdBy,
         comments,
@@ -787,6 +710,11 @@ export class HowtoStore extends ModuleStore {
   @computed
   get votedUsefulCount(): number {
     return (this.activeHowto?.votedUsefulBy || []).length
+  }
+
+  @computed
+  get commentsCount(): number {
+    return (this.activeHowto?.comments || []).length
   }
 }
 

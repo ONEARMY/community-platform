@@ -29,8 +29,8 @@ export enum ItemSortingOption {
   LatestUpdated = 'LatestUpdated',
   Newest = 'Newest',
   MostUseful = 'MostUseful',
-  Comments = 'Comments',
-  Updates = 'Updates',
+  Comments = 'MostComments',
+  Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
 }

@@ -93,6 +93,9 @@ exports.sendHowToSubmissionEmail = submissionEmails.handleHowToSubmission
 /** Watch new map pin docs and trigger emails on creation */
 exports.sendMapPinSubmissionEmail = submissionEmails.handleMapPinSubmission
 
+/** Watch new message docs and trigger emails on creation */
+exports.sendMessageEmail = submissionEmails.handleMessageSubmission
+
 /** Watch new user docs and trigger emails on supporter */
 exports.sendSupporterEmail = (
   supporterBadgeEmails as any

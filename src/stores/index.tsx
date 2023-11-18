@@ -3,12 +3,14 @@ import { CategoriesStore } from './Categories/categories.store'
 import { DatabaseV2 } from './databaseV2'
 import { HowtoStore } from './Howto/howto.store'
 import { MapsStore } from './Maps/maps.store'
+import { MessageStore } from './Message/message.store'
 import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
 import { PlatformStore } from './Platform/platform.store'
 import { ResearchCategoriesStore } from './ResearchCategories/researchCategories.store'
 import { TagsStore } from './Tags/tags.store'
 import { ThemeStore } from './Theme/theme.store'
 import { UserNotificationsStore } from './User/notifications.store'
+import { QuestionStore } from './Question/question.store'
 import { UserStore } from './User/user.store'
 
 export class RootStore {
@@ -34,8 +36,10 @@ const stores = (rootStore: RootStore) => {
     platformStore: new PlatformStore(rootStore),
     mobileMenuStore: new MobileMenuStore(rootStore),
     mapsStore: new MapsStore(rootStore),
+    messageStore: new MessageStore(rootStore),
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
+    questionStore: new QuestionStore(rootStore),
   }
   return stores
 }
@@ -49,7 +53,9 @@ export interface IStores {
   platformStore: PlatformStore
   mobileMenuStore: MobileMenuStore
   mapsStore: MapsStore
+  messageStore: MessageStore
   themeStore: ThemeStore
   aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore
+  questionStore: QuestionStore
 }

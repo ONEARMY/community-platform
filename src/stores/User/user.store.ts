@@ -421,6 +421,9 @@ export class UserStore extends ModuleStore {
       notifications: [],
       profileCreated: new Date().toISOString(),
       profileCreationTrigger: trigger,
+      notification_settings: {
+        emailFrequency: EmailNotificationFrequency.WEEKLY,
+      },
     }
     // update db
     await dbRef.set(user)

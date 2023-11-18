@@ -1,8 +1,8 @@
 import {
   IHowtoDB,
   IMapPin,
+  IMessageDB,
   INotification,
-  IUser,
   IUserDB,
 } from '../../../src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
@@ -158,11 +158,37 @@ export const getHowToApprovalEmail = (
 export const MAP_PIN_APPROVAL_SUBJECT = 'Your map pin has been approved!'
 export const getMapPinApprovalEmail = (
   user: IUserDB,
-  mappin: IMapPin,
+  mapPin: IMapPin,
 ): Email => {
   return {
-    html: getEmailHtml('map-pin-approval', { user, mappin, site }),
+    html: getEmailHtml('map-pin-approval', { user, mapPin, site }),
     subject: MAP_PIN_APPROVAL_SUBJECT,
+  }
+}
+
+export const RECEIVER_MESSAGE_SUBJECT = 'Hey you got a new message from'
+export const getReceiverMessageEmail = ({
+  email,
+  name,
+  text,
+}: IMessageDB): Email => {
+  const fromUser = name ? name : email
+  const subject = `${RECEIVER_MESSAGE_SUBJECT} ${fromUser}`
+
+  return {
+    html: getEmailHtml('receiver-message', { email, fromUser, text }),
+    subject,
+  }
+}
+
+export const SENDER_MESSAGE_SUBJECT = 'We sent your message!'
+export const getSenderMessageEmail = ({
+  text,
+  toUserName,
+}: IMessageDB): Email => {
+  return {
+    html: getEmailHtml('sender-message', { text, toUserName }),
+    subject: SENDER_MESSAGE_SUBJECT,
   }
 }
 
@@ -184,10 +210,10 @@ export const getHowToSubmissionEmail = (
 export const MAP_PIN_SUBMISSION_SUBJECT = 'Your map pin has been submitted'
 export const getMapPinSubmissionEmail = (
   user: IUserDB,
-  mappin: IMapPin,
+  mapPin: IMapPin,
 ): Email => {
   return {
-    html: getEmailHtml('map-pin-submission', { user, mappin, site }),
+    html: getEmailHtml('map-pin-submission', { user, mapPin, site }),
     subject: MAP_PIN_SUBMISSION_SUBJECT,
   }
 }

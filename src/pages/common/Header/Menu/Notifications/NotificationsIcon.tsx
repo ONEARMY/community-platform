@@ -1,5 +1,5 @@
 import { Flex } from 'theme-ui'
-import { ReactComponent as IconNotifications } from 'src/assets/icons/icon-notification.svg'
+import { Icon } from 'oa-components'
 import styled from '@emotion/styled'
 
 const IconWrapper = styled(Flex)`
@@ -31,10 +31,10 @@ export const NotificationsIcon = ({
           : {}
       }
     >
-      <IconNotifications
+      <Icon
+        glyph="notifications"
         color={areThereNotifications ? 'orange' : '#bfbfbf'}
-        height="25px"
-        width="25px"
+        size="25px"
       />
     </IconWrapper>
   </>

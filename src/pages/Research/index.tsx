@@ -12,7 +12,7 @@ import ResearchRoutes from './research.routes'
  */
 const ResearchModuleContainer = () => {
   return (
-    <ResearchStoreContext.Provider value={new ResearchStore()}>
+    <ResearchStoreContext.Provider value={new ResearchStore(null as any)}>
       <Route component={ResearchRoutes} />
     </ResearchStoreContext.Provider>
   )

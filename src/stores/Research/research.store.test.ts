@@ -12,7 +12,7 @@ import { ResearchStore } from './research.store'
 vi.mock('../../utils/helpers', async () => {
   // Preserve the original implementation of other helpers
   return {
-    ...(await vi.importActual('../../utils/helpers')),
+    ...((await vi.importActual('../../utils/helpers')) || {}),
     randomID: () => 'random-id',
   }
 })

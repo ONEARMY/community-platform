@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["vite/client"],
+    "types": ["vite/client", "vitest/globals"],
     "allowJs": true,
     "baseUrl": ".",
     "skipLibCheck": true,
@@ -23,7 +23,8 @@
       "./node_modules/@types",
       "./types",
       "@testing-library/jest-dom",
-      "../src/themes/types"
+      "../src/themes/types",
+      "./node_modules"
     ],
     "declaration": true,
     "noEmit": true,

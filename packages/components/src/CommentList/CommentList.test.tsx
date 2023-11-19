@@ -5,7 +5,6 @@ import {
   WithReplies,
 } from './CommentList.stories'
 import { CommentList } from './CommentList'
-import { getAllByText } from '@testing-library/react'
 
 describe('CommentList', () => {
   it('renders a list of items', () => {

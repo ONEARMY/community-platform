@@ -1,6 +1,7 @@
 import { render } from '../tests/utils'
 import {
   Default,
+  Highlighted,
   WithDeepNestedReplies,
   WithReplies,
 } from './CommentList.stories'
@@ -15,6 +16,13 @@ describe('CommentList', () => {
 
     // Reply is not available by default
     expect(() => getByText(/reply/)).toThrow()
+  })
+
+  it('supports highlighting an item in the list', () => {
+    const { getByText } = render(<CommentList {...Highlighted.args} />)
+
+    const commentText = Highlighted.args.comments[0].text.split(' ')[0]
+    expect(getByText(new RegExp(commentText))).toBeInTheDocument()
   })
 
   it('supports nested comments', () => {

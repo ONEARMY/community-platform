@@ -32,6 +32,9 @@ export const CommentList = ({
   isLoggedIn,
 }: CommentListProps) => {
   const [moreComments, setMoreComments] = useState(1)
+  const [commentsWithState, setCommentsWithState] = useState<
+    (Comment & { showReplies?: boolean })[]
+  >(comments.map((c) => ({ ...c, showReplies: false })))
   const shownComments = moreComments * MAX_COMMENTS
   const scrollIntoRelevantComment = (commentId: string) => {
     setTimeout(() => {
@@ -45,7 +48,7 @@ export const CommentList = ({
   useEffect(() => {
     if (!highlightedCommentId) return
 
-    const i = comments.findIndex((comment) =>
+    const i = commentsWithState.findIndex((comment) =>
       highlightedCommentId.includes(comment._id),
     )
     if (i >= 0) {
@@ -62,52 +65,55 @@ export const CommentList = ({
         display: 'block',
       }}
     >
-      {comments &&
-        comments.slice(0, shownComments).map((comment: Comment) => {
-          const [showReplies, setShowReplies] = useState(false)
-          return (
-            <Box
-              key={comment._id}
-              sx={{
-                marginBottom: 4,
-                border: `${
-                  highlightedCommentId === comment._id
-                    ? '2px dashed black'
-                    : 'none'
-                }`,
-                borderRadius: 1,
-              }}
-            >
-              <CommentItem
-                {...comment}
-                replies={comment.replies}
-                isUserVerified={!!comment.isUserVerified}
-                isEditable={!!comment.isEditable}
-                handleEditRequest={handleEditRequest}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
-                handleReply={handleReply}
-                handleShowReplies={() => {
-                  setShowReplies(!showReplies)
+      {commentsWithState &&
+        commentsWithState
+          .slice(0, shownComments)
+          .map((comment: Comment & { showReplies?: boolean }, idx) => {
+            return (
+              <Box
+                key={comment._id}
+                sx={{
+                  marginBottom: 4,
+                  border: `${
+                    highlightedCommentId === comment._id
+                      ? '2px dashed black'
+                      : 'none'
+                  }`,
+                  borderRadius: 1,
                 }}
-                isLoggedIn={isLoggedIn}
-              />
-              {comment.replies && showReplies ? (
-                <Box sx={{ pt: 4, pl: 4 }}>
-                  <CommentList
-                    comments={comment.replies as Comment[]}
-                    handleEditRequest={handleEditRequest}
-                    handleDelete={handleDelete}
-                    handleEdit={handleEdit}
-                    handleReply={handleReply}
-                    isLoggedIn={isLoggedIn}
-                  />
-                </Box>
-              ) : null}
-            </Box>
-          )
-        })}
-      {comments && comments.length > shownComments && (
+              >
+                <CommentItem
+                  {...comment}
+                  replies={comment.replies}
+                  isUserVerified={!!comment.isUserVerified}
+                  isEditable={!!comment.isEditable}
+                  handleEditRequest={handleEditRequest}
+                  handleDelete={handleDelete}
+                  handleEdit={handleEdit}
+                  handleReply={handleReply}
+                  handleShowReplies={() => {
+                    commentsWithState[idx].showReplies =
+                      !commentsWithState[idx].showReplies
+                    setCommentsWithState([...commentsWithState])
+                  }}
+                  isLoggedIn={isLoggedIn}
+                />
+                {comment.replies && comment?.showReplies ? (
+                  <Box sx={{ pt: 4, pl: 4 }}>
+                    <CommentList
+                      comments={comment.replies as Comment[]}
+                      handleEditRequest={handleEditRequest}
+                      handleDelete={handleDelete}
+                      handleEdit={handleEdit}
+                      handleReply={handleReply}
+                      isLoggedIn={isLoggedIn}
+                    />
+                  </Box>
+                ) : null}
+              </Box>
+            )
+          })}
+      {commentsWithState && commentsWithState.length > shownComments && (
         <Flex>
           <Button
             sx={{

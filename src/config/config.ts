@@ -117,7 +117,7 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
   /** Site backed by sandboxed emulator */
   emulated_site: {
     apiKey: 'abc',
-    projectId: 'community-platform-emulated',
+    projectId: 'demo-community-platform-emulated',
     storageBucket: 'default-bucket',
   } as any,
   /** Production/live backend with master branch frontend */

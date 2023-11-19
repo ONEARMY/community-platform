@@ -25,6 +25,9 @@ export const getUserEmail = async (uid: string): Promise<string | null> => {
 }
 
 export const getUserAndEmail = async (userName: string) => {
+  if (!userName) {
+    throw new Error('Cannot get email for empty user name')
+  }
   const toUserDoc = (await db
     .collection(DB_ENDPOINTS.users)
     .doc(userName)

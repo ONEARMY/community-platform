@@ -23,10 +23,6 @@ import { MdImage } from '@react-icons/all-files/md/MdImage'
 import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
 import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
 import { MdMail } from '@react-icons/all-files/md/MdMail'
-import { MdChevronLeft } from '@react-icons/all-files/md/MdChevronLeft'
-import { MdChevronRight } from '@react-icons/all-files/md/MdChevronRight'
-import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
-import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
 import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
 import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
 import { GoTrashcan } from '@react-icons/all-files/go/GoTrashcan'
@@ -42,6 +38,8 @@ import { iconMap } from './svgs'
 import { DownloadIcon } from './DownloadIcon'
 import { ExternalUrl } from './ExternalUrl'
 import type { IGlyphs } from './types'
+import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
+import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
 
 interface IGlyphProps {
   glyph: keyof IGlyphs
@@ -90,8 +88,8 @@ export const glyphs: IGlyphs = {
   instagram: <FaInstagram />,
   slack: <FaSlack />,
   email: <MdMail />,
-  'chevron-left': <MdChevronLeft />,
-  'chevron-right': <MdChevronRight />,
+  'chevron-left': iconMap.chevronLeft,
+  'chevron-right': iconMap.chevronRight,
   'chevron-down': <FaChevronDown />,
   'chevron-up': <FaChevronUp />,
   star: iconMap.star,

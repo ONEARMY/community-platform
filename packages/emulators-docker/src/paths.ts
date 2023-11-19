@@ -12,19 +12,14 @@ const seedDataDir = path.resolve(workspaceDir, 'seed_data')
 
 const buildArgsFile = path.resolve(workspaceDir, 'build.args')
 
-const functionsDistIndex = path.resolve(
-  rootDir,
-  'functions',
-  'dist',
-  'index.js',
-)
+const functionsDir = path.resolve(rootDir, 'functions')
 
 export const PATHS = {
   workspaceDir,
   rootDir,
   firebaseJson,
   dockerFile,
-  functionsDistIndex,
+  functionsDir,
   seedDataDir,
   buildArgsFile,
 }

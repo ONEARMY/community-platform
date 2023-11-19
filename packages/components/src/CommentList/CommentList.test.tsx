@@ -5,6 +5,7 @@ import {
   WithReplies,
 } from './CommentList.stories'
 import { CommentList } from './CommentList'
+import { getAllByText } from '@testing-library/react'
 
 describe('CommentList', () => {
   it('renders a list of items', () => {
@@ -12,15 +13,23 @@ describe('CommentList', () => {
 
     const commentText = Default.args.comments[0].text.split(' ')[0]
     expect(getByText(new RegExp(commentText))).toBeInTheDocument()
+
+    // Reply is not available by default
+    expect(() => getByText(/reply/)).toThrow()
   })
 
   it('supports nested comments', () => {
-    const { getByText } = render(<CommentList {...WithReplies.args} />)
+    const { getByText, getAllByText } = render(
+      <CommentList {...WithReplies.args} />,
+    )
     const replyText = (
       WithReplies.args.comments[0] as any
     ).replies[0].text.split(' ')[0]
 
     expect(getByText(/3\s*replies/)).toBeInTheDocument()
+
+    // Reply option available by default
+    expect(getAllByText(/reply/)).toHaveLength(WithReplies.args.comments.length)
 
     // Replies hidden by default
     expect(() => getByText(new RegExp(replyText))).toThrow()
@@ -28,12 +37,12 @@ describe('CommentList', () => {
     const replyCta = getByText(/replies/)
     replyCta.click()
 
-    // Replies visible after clicking on the CTA
+    // Replies visible after clicking on the Show replies CTA
     expect(getByText(new RegExp(replyText))).toBeInTheDocument()
 
     replyCta.click()
 
-    // Replies hidden after clicking on the CTA again
+    // Replies hidden after clicking on the Show replies CTA again
     expect(() => getByText(new RegExp(replyText))).toThrow()
   })
 

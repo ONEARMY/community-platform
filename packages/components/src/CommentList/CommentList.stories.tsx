@@ -1,4 +1,4 @@
-import type { StoryFn, Meta } from '@storybook/react'
+import type { Meta } from '@storybook/react'
 import { CommentList } from './CommentList'
 import { faker } from '@faker-js/faker'
 
@@ -15,7 +15,7 @@ const createComments = (numberOfComments = 2, commentOverloads = {}) =>
     _id: faker.database.mongodbObjectId(),
     creatorName: faker.internet.userName(),
     isUserVerified: faker.datatype.boolean(),
-    text: faker.lorem.text(),
+    text: `Comment${faker.datatype.uuid()} ` + faker.lorem.text(),
     isEditable: faker.datatype.boolean(),
     ...commentOverloads,
   }))

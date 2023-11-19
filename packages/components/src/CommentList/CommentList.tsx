@@ -78,7 +78,6 @@ export const CommentList = ({
                 borderRadius: 1,
               }}
             >
-              {(comment?.replies || []).length}
               <CommentItem
                 {...comment}
                 replies={comment.replies}
@@ -94,7 +93,7 @@ export const CommentList = ({
                 isLoggedIn={isLoggedIn}
               />
               {comment.replies && showReplies ? (
-                <Box sx={{ border: '10px solid lime', pl: 4 }}>
+                <Box sx={{ pl: 4 }}>
                   <CommentList
                     comments={comment.replies as Comment[]}
                     handleEditRequest={handleEditRequest}

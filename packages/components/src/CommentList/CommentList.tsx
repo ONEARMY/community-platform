@@ -93,7 +93,7 @@ export const CommentList = ({
                 isLoggedIn={isLoggedIn}
               />
               {comment.replies && showReplies ? (
-                <Box sx={{ pl: 4 }}>
+                <Box sx={{ pt: 4, pl: 4 }}>
                   <CommentList
                     comments={comment.replies as Comment[]}
                     handleEditRequest={handleEditRequest}

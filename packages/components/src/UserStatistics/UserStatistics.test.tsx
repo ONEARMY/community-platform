@@ -25,6 +25,24 @@ describe('UserStatistics', () => {
     expect(locationLink).toHaveTextContent('Greenland')
   })
 
+  it('renders howto link when on howto stats', () => {
+    const { getByTestId } = render(
+      <Default {...(Default.args as UserStatisticsProps)} />,
+    )
+    const howtoLink = getByTestId('howto-link')
+
+    expect(howtoLink.getAttribute('href')).toBe('/how-to?author=Test User')
+  })
+
+  it('renders research link when on research stats', () => {
+    const { getByTestId } = render(
+      <Default {...(Default.args as UserStatisticsProps)} />,
+    )
+    const researchLink = getByTestId('research-link')
+
+    expect(researchLink.getAttribute('href')).toBe('/research?author=Test User')
+  })
+
   it('renders supporter icon when isSupporter is true', () => {
     const { getByTestId } = render(
       <Default {...(Default.args as UserStatisticsProps)} />,

@@ -7,7 +7,6 @@ import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
 import { CreateComment } from '../CreateComment/CreateComment'
-import { CommentList } from '../CommentList/CommentList'
 
 export interface CommentItemProps {
   text: string
@@ -23,6 +22,7 @@ export interface CommentItemProps {
   handleDelete?: (commentId: string) => Promise<void>
   handleEditRequest?: (commentId: string) => Promise<void>
   handleReply?: (commentId: string, replyComment: string) => Promise<void>
+  handleShowReplies?: () => void
   isLoggedIn?: boolean
 }
 
@@ -73,13 +73,6 @@ export const CommentItem = (props: CommentItemProps) => {
     if (handleEditRequest) {
       handleEditRequest(_id)
       return setShowEditModal(true)
-    }
-  }
-
-  const showReplies = () => {
-    setShowReplies(!isShowReplies)
-    if (isShowReplies) {
-      setToReply(false)
     }
   }
 
@@ -158,7 +151,9 @@ export const CommentItem = (props: CommentItemProps) => {
             )}
             {replies && replies.length > 0 && (
               <a
-                onClick={showReplies}
+                onClick={() =>
+                  props.handleShowReplies && props.handleShowReplies()
+                }
                 style={
                   textHeight > 129
                     ? {
@@ -168,7 +163,7 @@ export const CommentItem = (props: CommentItemProps) => {
                     : { ...secondaryBtnStyle }
                 }
               >
-                {replies.length} replies
+                {replies.length === 1 ? '1 reply' : `${replies.length} replies`}
               </a>
             )}
             {handleReply && (
@@ -229,22 +224,6 @@ export const CommentItem = (props: CommentItemProps) => {
           />
         </Flex>
       </Box>
-      {replies &&
-        handleDelete &&
-        handleEdit &&
-        handleEditRequest &&
-        handleReply &&
-        isShowReplies && (
-          <Flex mt={5} ml={6}>
-            <CommentList
-              comments={replies}
-              handleEdit={handleEdit}
-              handleDelete={handleDelete}
-              handleEditRequest={handleEditRequest}
-              isLoggedIn={!!isLoggedIn}
-            />
-          </Flex>
-        )}
       {replyToComment && handleReply && (
         <Box mb={3} ml={6}>
           <CreateComment

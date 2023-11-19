@@ -59,3 +59,46 @@ export const Highlighted = {
     isLoggedIn: false,
   },
 }
+
+const createNestedComments = () => {
+  const comments = createComments(2)
+  ;(comments[0] as any).replies = createComments(3)
+
+  return comments
+}
+
+export const WithReplies = {
+  args: {
+    comments: createNestedComments(),
+    replies: createComments(3),
+    articleTitle: 'Test article',
+    handleDelete: () => Promise.resolve(),
+    handleEditRequest: () => Promise.resolve(),
+    handleEdit: () => Promise.resolve(),
+    handleReply: () => Promise.resolve(),
+    isLoggedIn: false,
+  },
+}
+
+const createDeepNestedComments = () => {
+  const comments = createComments(1)
+
+  ;(comments[0] as any).replies = createComments(1)
+  ;(comments[0] as any).replies[0].replies = createComments(1)
+  ;(comments[0] as any).replies[0].replies[0].replies = createComments(1)
+
+  return comments
+}
+
+export const WithDeepNestedReplies = {
+  args: {
+    comments: createDeepNestedComments(),
+    replies: createComments(3),
+    articleTitle: 'Test article',
+    handleDelete: () => Promise.resolve(),
+    handleEditRequest: () => Promise.resolve(),
+    handleEdit: () => Promise.resolve(),
+    handleReply: () => Promise.resolve(),
+    isLoggedIn: false,
+  },
+}

@@ -11,11 +11,10 @@ export interface Props {
   comment: string
   userProfileType?: string
   sx?: ThemeUIStyleObject
-  isReply?: boolean
 }
 
 export const CreateComment = (props: Props) => {
-  const { comment, maxLength, isLoggedIn, isReply } = props
+  const { comment, maxLength, isLoggedIn } = props
   const userProfileType = props.userProfileType || 'member'
   const { onSubmit } = props
   const onChange = (newValue: string) => {
@@ -91,7 +90,7 @@ export const CreateComment = (props: Props) => {
                 >
                   Login
                 </Link>{' '}
-                to leave a {isReply ? `reply` : `comment`}
+                to leave a comment
               </Text>
             </Box>
           )}
@@ -108,7 +107,7 @@ export const CreateComment = (props: Props) => {
           float: 'right',
         }}
       >
-        Leave a {isReply ? `reply` : `comment`}
+        Leave a comment
       </Button>
     </>
   )

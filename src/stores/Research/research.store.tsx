@@ -180,18 +180,6 @@ export class ResearchStore extends ModuleStore {
             return update
           },
         )
-
-        // Create new discussions for existing documents
-        await Promise.all(
-          activeResearchItem.updates.map(async (update) => {
-            const discussion = await this.discussionStore.fetchDiscussion(
-              update._id,
-            )
-            if (!discussion) {
-              return this.discussionStore.uploadDiscussion(update._id, 'update')
-            }
-          }),
-        )
       }
     }
 
@@ -705,7 +693,6 @@ export class ResearchStore extends ModuleStore {
         logger.debug('upload files ok')
         this.updateUpdateUploadStatus('Files')
 
-        let currentUpdate: IResearch.UpdateDB
         // populate DB
         const existingUpdateIndex = item.updates.findIndex(
           (upd) => upd._id === (update as IResearch.UpdateDB)._id,
@@ -716,7 +703,7 @@ export class ResearchStore extends ModuleStore {
           updates: [...toJS(item.updates)],
         }
         if (existingUpdateIndex === -1) {
-          const newUpdate = {
+          newItem.updates.push({
             ...updateWithMeta,
             // TODO - insert metadata into the new update
             _id: randomID(),
@@ -725,20 +712,13 @@ export class ResearchStore extends ModuleStore {
             _contentModifiedTimestamp: new Date().toISOString(),
             _deleted: false,
             comments: [],
-          }
-
-          // new update
-          newItem.updates.push(newUpdate)
-
-          currentUpdate = newUpdate
+          })
         } else {
           // editing update
           newItem.updates[existingUpdateIndex] = {
             ...(updateWithMeta as IResearch.UpdateDB),
             _modified: new Date().toISOString(),
           }
-
-          currentUpdate = newItem.updates[existingUpdateIndex]
         }
 
         //
@@ -757,14 +737,6 @@ export class ResearchStore extends ModuleStore {
         runInAction(() => {
           this.activeResearchItem = createdItem
         })
-
-        // create a discussion for update
-        if (this.activeResearchItem) {
-          await this.discussionStore.uploadDiscussion(
-            currentUpdate._id,
-            'update',
-          )
-        }
 
         this.updateUpdateUploadStatus('Complete')
       } catch (error) {

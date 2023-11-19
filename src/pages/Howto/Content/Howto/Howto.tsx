@@ -10,7 +10,7 @@ import type { RouteComponentProps } from 'react-router'
 import { Redirect } from 'react-router'
 import type { IHowtoDB } from 'src/models/howto.models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { Box, Flex } from 'theme-ui'
+import { Box } from 'theme-ui'
 import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import { isAllowedToEditContent } from 'src/utils/helpers'
@@ -22,8 +22,6 @@ import type { UserComment } from 'src/models'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 import type { TagsStore } from 'src/stores/Tags/tags.store'
 import type { UserStore } from 'src/stores/User/user.store'
-import { Discussion } from 'src/pages/common/Discussion/Discussion'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 
 // The parent container injects router props along with a custom slug parameter (RouteComponentProps<IRouterCustomParams>).
 // We also have injected the doc store to access its methods to get doc by slug.
@@ -213,22 +211,6 @@ export class Howto extends React.Component<
             </ArticleCallToAction>
           </Box>
           <HowToComments comments={activeHowToComments} />
-          <AuthWrapper roleRequired="beta-tester">
-            <Flex mt={5} sx={{ flexDirection: 'column', alignItems: 'center' }}>
-              <Flex
-                sx={{
-                  width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
-                }}
-              >
-                <Discussion
-                  item={activeHowto}
-                  sourceId={activeHowto._id}
-                  sourceType="howto"
-                  discussionBox={false}
-                ></Discussion>
-              </Flex>
-            </Flex>
-          </AuthWrapper>
         </>
       )
     } else {

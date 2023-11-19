@@ -9,7 +9,6 @@ import {
 import { FactoryUser } from 'src/test/factories/User'
 import type { RootStore } from '..'
 import { HowtoStore } from './howto.store'
-import { FactoryDiscussion } from 'src/test/factories/Discussion'
 
 const factory = async (
   howTos: IHowtoDB[] = [FactoryHowto({})],
@@ -57,13 +56,6 @@ const factory = async (
         userName,
       }),
     ),
-  }
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  store.discussionStore = {
-    fetchDiscussion: jest.fn().mockResolvedValue(FactoryDiscussion({})),
-    uploadDiscussion: jest.fn().mockResolvedValue(FactoryDiscussion({})),
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -7,7 +7,6 @@ import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
 import { CreateComment } from '../CreateComment/CreateComment'
-
 export interface CommentItemProps {
   text: string
   isUserVerified?: boolean
@@ -17,7 +16,7 @@ export interface CommentItemProps {
   _id: string
   _edited?: string
   _created?: string
-  replies?: any[]
+  replies?: Comment[]
   handleEdit?: (commentId: string, newCommentText: string) => Promise<void>
   handleDelete?: (commentId: string) => Promise<void>
   handleEditRequest?: (commentId: string) => Promise<void>

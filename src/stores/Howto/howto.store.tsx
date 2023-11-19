@@ -167,14 +167,6 @@ export class HowtoStore extends ModuleStore {
           if (!step.text) return
           step.text = changeUserReferenceToPlainText(step.text)
         })
-
-        // Create new discussions for existing documents
-        const discussion = await this.discussionStore.fetchDiscussion(
-          activeHowto._id,
-        )
-        if (!discussion) {
-          await this.discussionStore.uploadDiscussion(activeHowto._id, 'howto')
-        }
       }
     }
 
@@ -592,14 +584,6 @@ export class HowtoStore extends ModuleStore {
       logger.debug('populating database', howTo)
       // set the database document
       this.activeHowto = await this.updateHowtoItem(howTo, true)
-
-      // create a discussion for howto
-      if (this.activeHowto) {
-        await this.discussionStore.uploadDiscussion(
-          this.activeHowto._id,
-          'howto',
-        )
-      }
 
       this.updateUploadStatus('Database')
       logger.debug('post added')

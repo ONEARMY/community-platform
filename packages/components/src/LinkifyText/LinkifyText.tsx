@@ -11,12 +11,13 @@ export interface Props {
 export const LinkifyText = (props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const theme = useTheme() as any
+  console.log({ theme })
   const StyledExternalLink = styled(ExternalLink)`
-    color: ${theme.colors.grey}!important;
+    color: ${theme.colors?.grey} !important;
     text-decoration: underline;
   `
   const StyledInternalLink = styled(InternalLink)`
-    color: ${theme.colors.grey};
+    color: ${theme.colors?.grey};
     font-weight: bold;
   `
 

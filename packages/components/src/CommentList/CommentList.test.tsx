@@ -9,13 +9,15 @@ import { CommentList } from './CommentList'
 
 describe('CommentList', () => {
   it('renders a list of items', () => {
-    const { getByText } = render(<CommentList {...Default.args} />)
+    const { getByText, getAllByTestId } = render(
+      <CommentList {...Default.args} />,
+    )
 
     const commentText = Default.args.comments[0].text.split(' ')[0]
     expect(getByText(new RegExp(commentText))).toBeInTheDocument()
 
     // Reply is not available by default
-    expect(() => getByText(/reply/)).toThrow()
+    expect(() => getAllByTestId('CommentItem: Reply button')).toThrow()
   })
 
   it('supports highlighting an item in the list', () => {

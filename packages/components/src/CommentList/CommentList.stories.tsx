@@ -27,7 +27,6 @@ export const Default = {
     handleDelete: () => Promise.resolve(),
     handleEditRequest: () => Promise.resolve(),
     handleEdit: () => Promise.resolve(),
-    handleReply: () => Promise.resolve(),
     isLoggedIn: false,
   },
 }

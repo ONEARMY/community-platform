@@ -39,7 +39,6 @@ export const CommentItem = (props: CommentItemProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
-  const [isShowReplies, setShowReplies] = useState(false)
   const [replyToComment, setToReply] = useState(false)
   const [replyComment, setReplyComment] = useState('')
   const {
@@ -78,7 +77,6 @@ export const CommentItem = (props: CommentItemProps) => {
 
   const openReply = () => {
     setToReply(!replyToComment)
-    setShowReplies(true)
   }
 
   const secondaryBtnStyle = {
@@ -168,6 +166,7 @@ export const CommentItem = (props: CommentItemProps) => {
             )}
             {handleReply && (
               <a
+                data-testid="CommentItem: Reply button"
                 onClick={openReply}
                 style={{
                   ...secondaryBtnStyle,
@@ -232,7 +231,6 @@ export const CommentItem = (props: CommentItemProps) => {
             onChange={setReplyComment}
             onSubmit={onSubmitReply}
             isLoggedIn={!!isLoggedIn}
-            isReply={true}
           />
         </Box>
       )}

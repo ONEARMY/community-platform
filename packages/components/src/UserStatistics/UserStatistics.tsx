@@ -81,17 +81,29 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         ) : null}
 
         {props.howtoCount ? (
-          <Flex data-testid="howto-stat">
-            <ElWithBeforeIcon icon={HowToCountIcon} />
-            How‑to:&nbsp;{props.howtoCount}
-          </Flex>
+          <InternalLink
+            to={'/how-to?author=' + props.userName}
+            sx={{ color: 'black' }}
+            data-testid="howto-link"
+          >
+            <Flex data-testid="howto-stat">
+              <ElWithBeforeIcon icon={HowToCountIcon} />
+              How‑to:&nbsp;{props.howtoCount}
+            </Flex>
+          </InternalLink>
         ) : null}
 
         {props.researchCount ? (
-          <Flex data-testid="research-stat">
-            <ElWithBeforeIcon icon={ResearchIcon} />
-            Research:&nbsp;{props.researchCount}
-          </Flex>
+          <InternalLink
+            to={'/research?author=' + props.userName}
+            sx={{ color: 'black' }}
+            data-testid="research-link"
+          >
+            <Flex data-testid="research-stat">
+              <ElWithBeforeIcon icon={ResearchIcon} />
+              Research:&nbsp;{props.researchCount}
+            </Flex>
+          </InternalLink>
         ) : null}
       </Flex>
     </Card>

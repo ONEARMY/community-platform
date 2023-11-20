@@ -126,6 +126,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="http://erkanerkisi.github.io"><img src="https://avatars.githubusercontent.com/u/22741824?v=4?s=60" width="60px;" alt="Erkan Erkişi"/><br /><sub><b>Erkan Erkişi</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Erkanerkisi" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/denyilm"><img src="https://avatars.githubusercontent.com/u/65300462?v=4?s=60" width="60px;" alt="denyilm"/><br /><sub><b>denyilm</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=denyilm" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/zweertsk"><img src="https://avatars.githubusercontent.com/u/131855633?v=4?s=60" width="60px;" alt="Koen"/><br /><sub><b>Koen</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=zweertsk" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/goratt12"><img src="https://avatars.githubusercontent.com/u/23094928?v=4?s=60" width="60px;" alt="Guy Ribak"/><br /><sub><b>Guy Ribak</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=goratt12" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

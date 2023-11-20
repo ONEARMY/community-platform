@@ -517,6 +517,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "goratt12",
+      "name": "Guy Ribak",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23094928?v=4",
+      "profile": "https://github.com/goratt12",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

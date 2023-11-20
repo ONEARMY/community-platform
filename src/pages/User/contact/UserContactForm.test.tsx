@@ -13,6 +13,9 @@ jest.mock('src/index', () => {
         messageStore: {
           upload: () => jest.fn(),
         },
+        userStore: {
+          getUserEmail: () => jest.fn().mockReturnValue('Bob@email.com'),
+        },
       },
     }),
   }
@@ -33,7 +36,6 @@ describe('UserContactForm', () => {
     await screen.findByText(`Send a message to ${profileUser.userName}`)
 
     await user.type(screen.getByTestId('name'), 'Bob')
-    await user.type(screen.getByTestId('email'), 'Bob@email.com')
     await user.type(
       screen.getByTestId('message'),
       'I need to learn about plastics',

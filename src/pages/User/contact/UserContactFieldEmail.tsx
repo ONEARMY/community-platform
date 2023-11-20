@@ -9,7 +9,13 @@ import {
 } from 'src/utils/validators'
 import { contact } from 'src/pages/User/labels'
 
-export const UserContactFieldEmail = () => {
+interface Props {
+  email: string | null
+}
+
+export const UserContactFieldEmail = ({ email }: Props) => {
+  if (!email) return null
+
   const { title, placeholder } = contact.email
   const name = 'email'
 
@@ -20,6 +26,8 @@ export const UserContactFieldEmail = () => {
         component={FieldInput}
         data-cy={name}
         data-testid={name}
+        disabled
+        initialValue={email}
         name={name}
         placeholder={placeholder}
         validate={composeValidators(validateEmail, required)}

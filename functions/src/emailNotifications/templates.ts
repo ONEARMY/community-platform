@@ -176,7 +176,7 @@ export const getReceiverMessageEmail = ({
   const subject = `${RECEIVER_MESSAGE_SUBJECT} ${fromUser}`
 
   return {
-    html: getEmailHtml('receiver-message', { email, fromUser, text }),
+    html: getEmailHtml('receiver-message', { email, fromUser, site, text }),
     subject,
   }
 }
@@ -187,7 +187,7 @@ export const getSenderMessageEmail = ({
   toUserName,
 }: IMessageDB): Email => {
   return {
-    html: getEmailHtml('sender-message', { text, toUserName }),
+    html: getEmailHtml('sender-message', { site, text, toUserName }),
     subject: SENDER_MESSAGE_SUBJECT,
   }
 }

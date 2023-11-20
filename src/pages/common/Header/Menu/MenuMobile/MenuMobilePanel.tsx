@@ -6,14 +6,19 @@ import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLi
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
 import { inject } from 'mobx-react'
-import type { ThemeStore } from 'src/stores/Theme/theme.store'
+import type { UserStore } from 'src/stores/User/user.store'
 
-@inject('themeStore')
+interface IInjectedProps {
+  userStore: UserStore
+}
+@inject('userStore')
 export class MenuMobilePanel extends Component {
-  injected() {
-    return this.props as {
-      themeStore: ThemeStore
-    }
+  constructor(props: any) {
+    super(props)
+  }
+
+  get injected() {
+    return this.props as IInjectedProps
   }
 
   render() {
@@ -54,7 +59,7 @@ export class MenuMobilePanel extends Component {
                 link
               )
             })}
-            <Profile isMobile={true} />
+            <Profile isMobile={true} user={this.injected?.userStore?.user} />
           </Flex>
         </Box>
       </>

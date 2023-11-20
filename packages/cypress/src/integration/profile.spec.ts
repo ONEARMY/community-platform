@@ -66,11 +66,6 @@ describe('[Profile]', () => {
       cy.step('fill in contact form')
       cy.get('[data-cy=name]').type('Bob')
 
-      cy.get('[data-cy=email]').type('BobNotEmail').blur()
-      cy.contains('Invalid email').should('exist')
-      cy.get('[data-cy=email]').clear().type('Bob@validEmail.com').blur()
-      cy.contains('Invalid email').should('not.exist')
-
       cy.get('[data-cy=message]').invoke('val', message).blur({ force: true })
 
       cy.step('Submit form')

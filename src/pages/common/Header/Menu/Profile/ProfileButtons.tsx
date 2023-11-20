@@ -1,5 +1,6 @@
 import { Box, Flex } from 'theme-ui'
 import ProfileButtonItem from './ProfileButtonItem'
+import './profile.css'
 
 interface IProps {
   isMobile?: boolean
@@ -16,6 +17,7 @@ const ProfileButtons = (props: IProps) => {
   if (props.isMobile) {
     return (
       <Flex
+        className="util__fade-in"
         sx={{
           width: '100%',
           justifyContent: 'center',

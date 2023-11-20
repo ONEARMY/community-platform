@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { Box, Flex, Heading } from 'theme-ui'
 import { Button } from 'oa-components'
@@ -25,6 +25,14 @@ export const UserContactForm = observer(({ user }: Props) => {
   if (!user.isContactableByPublic) return null
 
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
+  const [email, setEmail] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUserEmail = async () => {
+      return await stores.userStore.getUserEmail()
+    }
+    fetchUserEmail().then((newEmail) => setEmail(newEmail))
+  }, [email])
 
   const { button, title, successMessage } = contact
   const buttonName = 'contact-submit'
@@ -39,12 +47,14 @@ export const UserContactForm = observer(({ user }: Props) => {
       ...formValues,
     }
 
-    try {
-      await stores.messageStore.upload(values)
-      setSubmitResults({ type: 'success', message: successMessage })
-      form.restart()
-    } catch (error) {
-      setSubmitResults({ type: 'error', message: error.message })
+    if (email) {
+      try {
+        await stores.messageStore.upload(values)
+        setSubmitResults({ type: 'success', message: successMessage })
+        form.restart()
+      } catch (error) {
+        setSubmitResults({ type: 'error', message: error.message })
+      }
     }
   }
 
@@ -63,7 +73,7 @@ export const UserContactForm = observer(({ user }: Props) => {
               <UserContactError submitResults={submitResults} />
 
               <UserContactFieldName />
-              <UserContactFieldEmail />
+              <UserContactFieldEmail email={email} />
               <UserContactFieldMessage />
 
               <Box>

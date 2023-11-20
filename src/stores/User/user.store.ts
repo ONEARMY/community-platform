@@ -27,7 +27,7 @@ export const COLLECTION_NAME = 'users'
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.default.Unsubscribe
   @observable
-  public user: IUserPPDB | undefined
+  public user: IUserPPDB | null | undefined
 
   @observable
   public authUser: firebase.default.User | null
@@ -55,7 +55,7 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  private updateActiveUser(user?: IUserPPDB) {
+  private updateActiveUser(user?: IUserPPDB | null) {
     this.user = user
   }
 
@@ -443,7 +443,8 @@ export class UserStore extends ModuleStore {
           this.sendEmailVerification()
         }
       } else {
-        this.updateActiveUser(undefined)
+        // Explicitly update user to null when logged out
+        this.updateActiveUser(null)
       }
     })
   }

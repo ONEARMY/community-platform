@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 
-import { ThemeProvider } from 'theme-ui'
+import { ThemeProvider } from '@emotion/react'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { MemoryRouter } from 'react-router'
 import { ResearchUpdateForm } from './ResearchUpdate.form'

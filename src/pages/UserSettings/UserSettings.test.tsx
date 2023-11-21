@@ -4,7 +4,7 @@ import { UserSettings } from './UserSettings'
 import { useCommonStores } from 'src/index'
 import { FactoryUser } from 'src/test/factories/User'
 import { MemoryRouter } from 'react-router'
-import { ThemeProvider } from 'theme-ui'
+import { ThemeProvider } from '@emotion/react'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 const Theme = testingThemeStyles

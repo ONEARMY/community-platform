@@ -2,7 +2,7 @@ import { render as testLibReact } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
 import type { ReactElement } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { ThemeProvider } from 'theme-ui'
+import { ThemeProvider } from '@emotion/react'
 import { preciousPlasticTheme } from 'oa-themes'
 
 const customRender = (

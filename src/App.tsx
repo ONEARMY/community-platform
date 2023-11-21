@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { observer, Provider } from 'mobx-react'
-import { ThemeProvider } from 'theme-ui'
-import { Global } from '@emotion/react'
+import { ThemeProvider, Global } from '@emotion/react'
 import { GlobalStyles } from 'oa-components'
 import { RootStore } from './stores'
 import ErrorBoundary from './common/Error/ErrorBoundary'

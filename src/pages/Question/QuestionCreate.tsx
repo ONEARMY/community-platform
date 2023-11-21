@@ -109,6 +109,7 @@ export const QuestionCreate = (props) => {
 
                 <Button
                   data-cy={'draft'}
+                  // eslint-disable-next-line @typescript-eslint/no-empty-function
                   onClick={() => {}}
                   mt={[0, 0, 3]}
                   variant="secondary"

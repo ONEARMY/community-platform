@@ -303,6 +303,7 @@ jobs:
   # NOTE - not currently used in test workflow as different build_env required for each machine
   test_unit:
     docker: *docker
+    resource_class: medium+
     steps:
       - setup_repo
       - run:

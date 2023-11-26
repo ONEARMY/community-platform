@@ -33,6 +33,7 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { IMapPin } from 'src/models'
+import { PATREON_CLIENT_ID } from 'src/config/config'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -191,6 +192,14 @@ export class SettingsPage extends React.Component<IProps, IState> {
       errors.links[ARRAY_ERROR] = 'Must have at least one link'
     }
     return errors
+  }
+
+  private patreonRedirect() {
+    const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`
+
+    window.location.assign(
+      `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
+    )
   }
 
   render() {
@@ -374,6 +383,15 @@ export class SettingsPage extends React.Component<IProps, IState> {
                     disabled={submitting}
                   >
                     {buttons.save}
+                  </Button>
+                  <Button
+                    large
+                    onClick={this.patreonRedirect}
+                    mb={3}
+                    sx={{ width: '100%', justifyContent: 'center' }}
+                    variant={'primary'}
+                  >
+                    Log in with Patreon
                   </Button>
 
                   <SettingsErrors

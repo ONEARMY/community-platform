@@ -11,6 +11,8 @@ export const runtimeConfigTest: configVars = {
     discord_alert_channel_webhook:
       'https://fake_discord_alert_channel_webhook.local',
     slack_webhook: 'https://fake_slack_webhook.local',
+    patreon_client_id: 'fake_patreon_client_id',
+    patreon_client_secret: 'fake_patreon_client_secret',
   },
   service: null as any,
   deployment: {

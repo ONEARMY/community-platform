@@ -7,14 +7,29 @@ const PATREON_CLIENT_ID = CONFIG.integrations.patreon_client_id
 const PATREON_CLIENT_SECRET = CONFIG.integrations.patreon_client_secret
 const REDIRECT_URI = CONFIG.deployment.site_url + '/patreon'
 
+/*
+ * docs: https://docs.patreon.com/#get-api-oauth2-v2-identity
+ * to fetch more user attributes, add them to the include and fields query params
+ **/
 const getCurrentPatreonUser = (accessToken: string) => {
-  return fetch('https://www.patreon.com/api/oauth2/api/current_user', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
+  return fetch(
+    encodeURI(
+      'https://www.patreon.com/api/oauth2/v2/identity?include=memberships&fields[user]=about,created,email,first_name,full_name,image_url,last_name,social_connections,thumb_url,url,vanity',
+    ),
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     },
-  })
+  )
     .then((res) => res.json())
+    .then((response) => {
+      if (response.errors) {
+        throw Error(response.errors[0].detail)
+      }
+      return response
+    })
     .catch((err) => {
       console.log('Error fetching patreon user', err)
       throw new functions.https.HttpsError(

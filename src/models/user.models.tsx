@@ -53,6 +53,8 @@ export interface IUser {
   // Used to generate an encrypted unsubscribe url in emails
   unsubscribeToken?: string
   isContactableByPublic?: boolean
+  // TODO[patreon integration]: define expected patreon fields
+  patreon?: any
 }
 
 export interface IUserBadges {

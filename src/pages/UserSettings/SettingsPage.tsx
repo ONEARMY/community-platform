@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Alert, Card, Flex, Heading, Box, Text } from 'theme-ui'
+import { Alert, Card, Flex, Heading, Box, Text, Image } from 'theme-ui'
 import { Button, TextNotification } from 'oa-components'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
@@ -384,6 +384,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
                   >
                     {buttons.save}
                   </Button>
+
                   <Button
                     large
                     onClick={this.patreonRedirect}
@@ -393,7 +394,18 @@ export class SettingsPage extends React.Component<IProps, IState> {
                   >
                     Log in with Patreon
                   </Button>
-
+                  {user.patreon && (
+                    <Flex
+                      style={{ alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      <Image
+                        src={user.patreon.user.data.attributes.thumb_url}
+                        width="40px"
+                        style={{ borderRadius: '50%', marginRight: '10px' }}
+                      />
+                      <Text>Successfully linked patron account! </Text>
+                    </Flex>
+                  )}
                   <SettingsErrors
                     errors={errors}
                     isVisible={submitFailed && hasValidationErrors}

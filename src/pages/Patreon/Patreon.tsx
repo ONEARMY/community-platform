@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   Route,
   BrowserRouter as Router,
@@ -9,8 +9,10 @@ import {
 import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { functions } from 'src/utils/firebase'
+import { Text, Flex } from 'theme-ui'
 
 const Patreon = observer(() => {
+  const [error, setError] = useState<boolean>(false)
   const { search } = useLocation()
 
   const patreonCode = useMemo(() => {
@@ -30,6 +32,7 @@ const Patreon = observer(() => {
       throw new Error(resp.data.error)
     } catch (error) {
       logger.debug('Error calling the authentication endpoint', error)
+      setError(true)
     }
   }
 
@@ -39,7 +42,20 @@ const Patreon = observer(() => {
     }
   }, [patreonCode])
 
-  return <Loader />
+  return error ? (
+    <Flex
+      sx={{ flexDirection: 'column', maxWidth: '400px', textAlign: 'center' }}
+      mx="auto"
+      mt={15}
+    >
+      <Text>
+        Sorry, we encountered an error integrating your Patreon account. Please
+        try again later!
+      </Text>
+    </Flex>
+  ) : (
+    <Loader />
+  )
 })
 
 const PatreonRoute = () => (

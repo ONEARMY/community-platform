@@ -3,7 +3,7 @@ import type { RouteComponentProps } from 'react-router'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { ElWithBeforeIcon, Button, FieldInput, Loader } from 'oa-components'
-import { PostingGuidelines } from '../Research/Content/Common'
+import { PostingGuidelines } from 'src/pages/Question/Content/Common'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 import { Form, Field } from 'react-final-form'
 import { logger } from 'src/logger'
@@ -86,6 +86,9 @@ export const QuestionEdit = (props: IProps) => {
                       </Box>
                     </Flex>
                   </Card>
+                  <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
+                    <PostingGuidelines />
+                  </Box>
                   <Card mt={3} p={4}>
                     <Box mb={3}>
                       <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>

@@ -28,6 +28,7 @@ import type { UserRole } from '../models'
 const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
   const configurationSource =
     ['development', 'test'].includes(process.env.NODE_ENV) ||
+    // Preview does not use __OA_COMMUNITY_PLATFORM_CONFIGURATION, so access the env directly
     process.env.REACT_APP_SITE_VARIANT === 'preview'
       ? process.env
       : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION
@@ -66,7 +67,8 @@ const getSiteVariant = (): siteVariants => {
   ) {
     return 'test-ci'
   }
-  if (_c('REACT_APP_SITE_VARIANT') === 'preview') {
+  // Preview does not use __OA_COMMUNITY_PLATFORM_CONFIGURATION, so access the env directly
+  if (process.env.REACT_APP_SITE_VARIANT === 'preview') {
     return 'preview'
   }
   switch (_c('REACT_APP_BRANCH')) {

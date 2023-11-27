@@ -195,12 +195,10 @@ export class SettingsPage extends React.Component<IProps, IState> {
   }
 
   private patreonRedirect() {
-    // const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`
-    logger.info('check env var', PATREON_CLIENT_ID)
-    logger.info('env var', process.env.REACT_APP_PATREON_CLIENT_ID)
-    // window.location.assign(
-    //   `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
-    // )
+    const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`
+    window.location.assign(
+      `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
+    )
   }
 
   render() {

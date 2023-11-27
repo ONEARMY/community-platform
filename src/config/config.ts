@@ -26,11 +26,11 @@ import type { UserRole } from '../models'
  * @returns string
  */
 const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
-  const configurationSource = ['development', 'test'].includes(
-    process.env.NODE_ENV,
-  )
-    ? process.env
-    : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION
+  const configurationSource =
+    ['development', 'test'].includes(process.env.NODE_ENV) ||
+    process.env.REACT_APP_SITE_VARIANT === 'preview'
+      ? process.env
+      : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION
   return configurationSource?.[property] || fallbackValue
 }
 

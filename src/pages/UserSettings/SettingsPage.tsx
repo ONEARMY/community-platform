@@ -34,6 +34,7 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { IMapPin } from 'src/models'
 import { PATREON_CLIENT_ID } from 'src/config/config'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -385,27 +386,32 @@ export class SettingsPage extends React.Component<IProps, IState> {
                     {buttons.save}
                   </Button>
 
-                  <Button
-                    large
-                    onClick={this.patreonRedirect}
-                    mb={3}
-                    sx={{ width: '100%', justifyContent: 'center' }}
-                    variant={'primary'}
-                  >
-                    Log in with Patreon
-                  </Button>
-                  {user.patreon && (
-                    <Flex
-                      style={{ alignItems: 'center', justifyContent: 'center' }}
+                  <AuthWrapper roleRequired={'beta-tester'}>
+                    <Button
+                      large
+                      onClick={this.patreonRedirect}
+                      mb={3}
+                      sx={{ width: '100%', justifyContent: 'center' }}
+                      variant={'primary'}
                     >
-                      <Image
-                        src={user.patreon.user.data.attributes.thumb_url}
-                        width="40px"
-                        style={{ borderRadius: '50%', marginRight: '10px' }}
-                      />
-                      <Text>Successfully linked patron account! </Text>
-                    </Flex>
-                  )}
+                      Log in with Patreon
+                    </Button>
+                    {user.patreon && (
+                      <Flex
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Image
+                          src={user.patreon.user.data.attributes.thumb_url}
+                          width="40px"
+                          style={{ borderRadius: '50%', marginRight: '10px' }}
+                        />
+                        <Text>Successfully linked patron account! </Text>
+                      </Flex>
+                    )}
+                  </AuthWrapper>
                   <SettingsErrors
                     errors={errors}
                     isVisible={submitFailed && hasValidationErrors}

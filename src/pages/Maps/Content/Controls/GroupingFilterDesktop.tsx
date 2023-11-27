@@ -5,9 +5,8 @@ import { Select } from 'oa-components'
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps {
-  items: FilterGroup[]
+  availableFilters: FilterGroup[]
   onChange: (selectedItems: string[]) => void
-  selectedItems: Array<string>
 }
 interface IInjectedProps extends IProps {
   mapsStore: MapsStore
@@ -22,9 +21,6 @@ class GroupingFilterDesktop extends Component<IProps> {
   }
 
   render() {
-    const { items } = this.props
-    const groupedOptions = items
-
     const onSelectChange = (selectedOptions) => {
       const arr = selectedOptions.map((option) => option.value)
       this.props.onChange(arr)
@@ -43,7 +39,7 @@ class GroupingFilterDesktop extends Component<IProps> {
           variant="icons"
           isMulti
           isClearable
-          options={groupedOptions}
+          options={this.props.availableFilters}
           onChange={onSelectChange}
           placeholder="Select filters"
         />

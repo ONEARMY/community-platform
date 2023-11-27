@@ -5,6 +5,7 @@ import type {
   IMapPinWithDetail,
   IMapPinDetail,
   IBoundingBox,
+  IMapPinType,
 } from 'src/models/maps.models'
 import type { IDBEndpoint, IModerationStatus } from 'src/models/common.models'
 import type { RootStore } from '../index'
@@ -21,6 +22,8 @@ import {
 } from 'src/utils/helpers'
 import { logger } from 'src/logger'
 import { filterMapPinsByType } from './filter'
+
+type IFilterToRemove = IMapPinType | undefined
 
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
@@ -40,7 +43,10 @@ export class MapsStore extends ModuleStore {
   }
 
   @action
-  private processDBMapPins(pins: IMapPin[]) {
+  private processDBMapPins(
+    pins: IMapPin[],
+    filterToRemove: IFilterToRemove = undefined,
+  ) {
     if (pins.length === 0) {
       this.mapPins = []
       return
@@ -50,7 +56,6 @@ export class MapsStore extends ModuleStore {
     // HACK - ARH - 2019/12/09 filter unaccepted pins, should be done serverside
     const activeUser = this.activeUser
     const isAdmin = hasAdminRights(activeUser)
-    const isPP = localStorage.getItem('platformTheme') === 'precious-plastic'
 
     pins = pins
       .filter((p) => {
@@ -58,11 +63,10 @@ export class MapsStore extends ModuleStore {
         const isPinAccepted = p.moderation === 'accepted'
         const wasCreatedByUser = activeUser && p._id === activeUser.userName
         const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
-        const isPPMember = isPP && p.type === 'member'
+
         return (
           p.type &&
           !isDeleted &&
-          !isPPMember &&
           (isPinAccepted || wasCreatedByUser || isAdminAndAccepted)
         )
       })
@@ -70,7 +74,11 @@ export class MapsStore extends ModuleStore {
         return { ...p, verified: this.userStore.verifiedUsers[p._id] === true }
       })
     this.mapPins = pins
-    this.filteredPins = this.mapPins
+
+    const filters = this.activePinFilters
+      .filter(({ type }) => type !== filterToRemove)
+      .map(({ subType, type }) => (subType ? subType : type))
+    this.setActivePinFilters(filters)
   }
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -80,7 +88,7 @@ export class MapsStore extends ModuleStore {
     // this.recalculatePinCounts(boundingBox)
   }
   @action
-  public async retrieveMapPins() {
+  public async retrieveMapPins(filterToRemove: IFilterToRemove = undefined) {
     // TODO: make the function accept a bounding box to reduce load from DB
     /*
        TODO: unaccepted pins should be filtered in DB, before reaching the client
@@ -94,7 +102,7 @@ export class MapsStore extends ModuleStore {
       .stream((pins) => {
         // TODO - make more efficient by tracking only new pins received and updating
         if (pins.length !== this.mapPins.length) {
-          this.processDBMapPins(pins)
+          this.processDBMapPins(pins, filterToRemove)
         }
       })
   }

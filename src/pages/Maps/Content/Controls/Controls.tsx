@@ -8,7 +8,6 @@ import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
 
-import type { IMapPinType } from 'src/models/maps.models'
 import { HashLink as Link } from 'react-router-hash-link'
 import type { Map } from 'react-leaflet'
 import { inject } from 'mobx-react'
@@ -21,7 +20,6 @@ import type { FilterGroup } from './transformAvailableFiltersToGroups'
 interface IProps extends RouteComponentProps<any> {
   mapRef: React.RefObject<Map>
   availableFilters: FilterGroup[]
-  onFilterChange: (selected: Array<IMapPinType>) => void
   onLocationChange: (latlng: { lat: number; lng: number }) => void
 }
 interface IState {
@@ -58,10 +56,14 @@ class Controls extends React.Component<IProps, IState> {
     return this.props as IInjectedProps
   }
 
+  onChange(selected) {
+    this.injected.mapsStore.setActivePinFilters(selected)
+    this.setState({ filtersSelected: selected })
+  }
+
   public render() {
     const { availableFilters } = this.props
     const { showFiltersMobile, filtersSelected } = this.state
-    const groupedFilters = availableFilters
 
     return (
       <MapFlexBar
@@ -102,12 +104,8 @@ class Controls extends React.Component<IProps, IState> {
         </Box>
         <Flex>
           <GroupingFilterDesktop
-            items={groupedFilters}
-            selectedItems={filtersSelected}
-            onChange={(selected) => {
-              this.props.onFilterChange(selected as IMapPinType[])
-              this.setState({ filtersSelected: selected })
-            }}
+            availableFilters={availableFilters}
+            onChange={(selected) => this.onChange(selected)}
           />
           <Box
             ml={['0', '50px']}
@@ -154,12 +152,9 @@ class Controls extends React.Component<IProps, IState> {
           isOpen={showFiltersMobile}
         >
           <GroupingFilterMobile
-            items={groupedFilters}
+            availableFilters={availableFilters}
             selectedItems={filtersSelected}
-            onChange={(selected) => {
-              this.props.onFilterChange(selected as IMapPinType[])
-              this.setState({ filtersSelected: selected })
-            }}
+            onChange={(selected) => this.onChange(selected)}
             onClose={this.toggleFilterMobileModal}
           />
         </Modal>

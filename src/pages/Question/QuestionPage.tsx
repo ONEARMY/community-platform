@@ -23,7 +23,10 @@ export const QuestionPage = (props: IProps) => {
       setIsEditable(isAllowedToEditContent(question, store.activeUser))
       setIsLoading(false)
     }
-    fetchQuestions()
+
+    if (isLoading) {
+      fetchQuestions()
+    }
   }, [isLoading])
 
   return (

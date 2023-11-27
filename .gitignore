@@ -30,6 +30,7 @@ yarn-error.log*
 .vscode
 .firebase/
 *.log
+.vs
 
 # IntelliJ
 /.idea

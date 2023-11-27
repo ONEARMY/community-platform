@@ -44,7 +44,10 @@ export const QuestionEdit = (props: IProps) => {
       setInitialValues(toJS(questionDoc || {}))
       setIsLoading(false)
     }
-    fetchQuestion()
+
+    if (isLoading) {
+      fetchQuestion()
+    }
   }, [isLoading])
 
   return (

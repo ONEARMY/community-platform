@@ -5,17 +5,18 @@ import { UserMenuItem } from '../support/commands'
 import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
 import { contact } from '../../../../src/pages/User/labels'
 
+import { missing } from '../../../../src/pages/User/impact/labels'
+
+const { admin, subscriber } = users
+const betaTester = users['beta-tester']
+const eventReader = users.event_reader
+const machine = users.settings_machine_new
+const userProfiletype = users.settings_workplace_new
+
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/')
   })
-
-  const admin = users.admin
-  const betaTester = users['beta-tester']
-  const eventReader = users.event_reader
-  const machine = users.settings_machine_new
-  const subscriber = users.subscriber
-  const userProfiletype = users.settings_workplace_new
 
   describe('[By Anonymous]', () => {
     it('[Can view all public profile information]', () => {
@@ -38,6 +39,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy=MemberProfile]').should('exist')
       cy.get('.beta-tester-feature').should('not.exist')
     })
+
     it('[Cannot edit another user profile]', () => {
       cy.login(subscriber.email, subscriber.password)
 
@@ -71,6 +73,18 @@ describe('[Profile]', () => {
       cy.step('Submit form')
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage).should('exist')
+    })
+
+    it('[Can see impact data for workspaces]', () => {
+      cy.login(betaTester.email, betaTester.password)
+
+      cy.step('Can go to impact data')
+      cy.visit(`/u/${userProfiletype.userName}`)
+      cy.get('[data-cy=ImpactTab]').click()
+      cy.get('[data-cy=ImpactPanel]').should('exist')
+      cy.contains(missing.owner.label)
+      cy.contains('2021')
+      cy.contains('3 full time employees')
     })
   })
 

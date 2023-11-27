@@ -2,7 +2,7 @@ import { ElWithBeforeIcon, Button, FieldInput } from 'oa-components'
 import { Form, Field } from 'react-final-form'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { PostingGuidelines } from '../Research/Content/Common'
+import { PostingGuidelines } from 'src/pages/Question/Content/Common'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { logger } from 'src/logger'
@@ -49,6 +49,9 @@ export const QuestionCreate = (props) => {
                     </Box>
                   </Flex>
                 </Card>
+                <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
+                  <PostingGuidelines />
+                </Box>
                 <Card mt={3} p={4}>
                   <Box mb={3}>
                     <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>

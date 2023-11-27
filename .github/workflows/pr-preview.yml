@@ -56,7 +56,6 @@ jobs:
           CI: false
           # specify the 'preview' site variant to populate the relevant firebase config
           REACT_APP_SITE_VARIANT: preview
-          REACT_APP_PATREON_CLIENT_ID: ${{ secrets.REACT_APP_PATREON_CLIENT_ID }}
         # The hosting-deploy action calls firebase tools via npx, however installing globally
         # gives us control over what version will be made available
       - name: Install firebase-tools globally

@@ -40,6 +40,10 @@ export const arrayToJson = (arr: any[], keyField: string) => {
   return json
 }
 
+export const numberWithCommas = (number: number) => {
+  return new Intl.NumberFormat().format(number)
+}
+
 // Take a string and capitalises the first letter
 // hello world => Hello world
 export const capitalizeFirstLetter = (str: string) =>

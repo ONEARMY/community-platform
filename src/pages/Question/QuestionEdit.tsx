@@ -48,7 +48,7 @@ export const QuestionEdit = (props: IProps) => {
   }, [isLoading])
 
   return (
-    <Box sx={{ p: 7 }}>
+    <>
       {isLoading ? (
         <Loader />
       ) : (
@@ -169,6 +169,6 @@ export const QuestionEdit = (props: IProps) => {
           )}
         />
       )}
-    </Box>
+    </>
   )
 }

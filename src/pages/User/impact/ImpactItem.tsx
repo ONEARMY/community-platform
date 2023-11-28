@@ -18,7 +18,7 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
   }
 
   const innerBox = {
-    backgroundColor: 'background',
+    backgroundColor: 'white',
     borderRadius: 1,
     height: '100%',
     padding: 2,

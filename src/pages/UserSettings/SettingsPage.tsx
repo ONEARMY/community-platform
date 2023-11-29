@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Alert, Card, Flex, Heading, Box, Text, Image } from 'theme-ui'
+import { Alert, Card, Flex, Heading, Box, Text } from 'theme-ui'
 import { Button, TextNotification } from 'oa-components'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
@@ -35,7 +35,7 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { IMapPin } from 'src/models'
-import { PATREON_CLIENT_ID } from 'src/config/config'
+import { PatreonIntegrationBeta } from './content/formSections/PatreonIntegration'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -194,14 +194,6 @@ export class SettingsPage extends React.Component<IProps, IState> {
       errors.links[ARRAY_ERROR] = 'Must have at least one link'
     }
     return errors
-  }
-
-  private patreonRedirect() {
-    const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`
-
-    window.location.assign(
-      `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
-    )
   }
 
   render() {
@@ -396,34 +388,8 @@ export class SettingsPage extends React.Component<IProps, IState> {
                     {buttons.save}
                   </Button>
 
-                  <AuthWrapper roleRequired={'beta-tester'}>
-                    <Button
-                      large
-                      onClick={this.patreonRedirect}
-                      mb={3}
-                      sx={{ width: '100%', justifyContent: 'center' }}
-                      variant={'primary'}
-                    >
-                      Log in with Patreon
-                    </Button>
-                    {user.patreon && (
-                      <Flex
-                        style={{
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        {user.patreon.user?.data?.attributes?.thumb_url && (
-                          <Image
-                            src={user.patreon.user?.data?.attributes?.thumb_url}
-                            width="40px"
-                            style={{ borderRadius: '50%', marginRight: '10px' }}
-                          />
-                        )}
-                        <Text>Successfully linked patron account! </Text>
-                      </Flex>
-                    )}
-                  </AuthWrapper>
+                  <PatreonIntegrationBeta user={user} />
+
                   <SettingsErrors
                     errors={errors}
                     isVisible={submitFailed && hasValidationErrors}

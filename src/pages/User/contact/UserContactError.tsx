@@ -1,8 +1,7 @@
-/* eslint-disable no-console */
 import { Text } from 'theme-ui'
 import { TextNotification } from 'oa-components'
 
-type SubmitResults = { type: 'success' | 'error'; message: string }
+export type SubmitResults = { type: 'success' | 'error'; message: string }
 
 interface Props {
   submitResults: SubmitResults | null

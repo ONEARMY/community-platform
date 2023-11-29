@@ -9,6 +9,13 @@ export const buttons = {
     message: 'Are you sure you want to delete this link?',
     text: 'Delete',
   },
+  impact: {
+    create: 'Add data now',
+    edit: 'Edit data',
+    expandOpen: 'Expand and edit &#11107;',
+    expandClose: 'Close &#11105;',
+    save: 'Save impact data',
+  },
   guidelines: 'Check out our guidelines',
   link: {
     add: 'Add link',
@@ -20,8 +27,6 @@ export const buttons = {
   success: 'Profile saved successfully',
   submit: 'Submit',
 }
-
-export const defaultError = 'Make sure this field is filled correctly'
 
 export const fields: ILabels = {
   activities: {
@@ -60,6 +65,11 @@ export const fields: ILabels = {
   expertise: {
     description: 'Choose at least one expertise',
     title: 'What are you specialised in ?',
+  },
+  impact: {
+    description:
+      "Let's track our collective positive impact! Add data about your recycling work and show the world the power of a movement of small scale recyclers!",
+    title: 'Positive impact &#129305;',
   },
   links: {
     placeholder: 'Link',
@@ -110,6 +120,11 @@ export const fields: ILabels = {
   },
 }
 
+export const form = {
+  defaultError: 'Make sure this field is filled correctly',
+  saveSuccess: 'Yay! Impact data saved.',
+}
+
 export const headings = {
   accountSettings: 'Account settings',
   collection: 'Collection',
@@ -129,3 +144,5 @@ export const headings = {
     title: 'Your map pin',
   },
 }
+
+export const missingData = 'Do you have impact data for this year?'

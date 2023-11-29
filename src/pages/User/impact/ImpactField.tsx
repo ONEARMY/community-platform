@@ -3,10 +3,10 @@ import { Box, Text } from 'theme-ui'
 import { numberWithCommas } from 'src/utils/helpers'
 import { ImpactEmoji } from './ImpactEmoji'
 
-import type { ImpactDataField } from 'src/models'
+import type { IImpactDataField } from 'src/models'
 
 interface Props {
-  field: ImpactDataField
+  field: IImpactDataField
 }
 
 export const ImpactField = ({ field }: Props) => {

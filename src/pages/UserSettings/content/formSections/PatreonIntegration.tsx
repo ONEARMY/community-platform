@@ -5,7 +5,6 @@ import { Heading, Flex, Image, Text, Box } from 'theme-ui'
 import { Button } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 
-// TODO: rewrite this component to match specs https://github.com/ONEARMY/community-platform/pull/3016#issuecomment-1826722405
 export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
   const patreonRedirect = () => {
     // TODO: if user has patreon property already set, send request directly to backend, where we

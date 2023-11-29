@@ -47,7 +47,7 @@ export const patreonAuth = functions.https.onCall(async (data, context) => {
       'The function must be called while authenticated.',
     )
   }
-  //   Validate user exists and has admin status before triggering function.
+  //   Validate user exists before triggering function.
   const { uid } = context.auth
   const user = await db.collection(DB_ENDPOINTS.users).doc(uid).get()
   if (!user.exists) {

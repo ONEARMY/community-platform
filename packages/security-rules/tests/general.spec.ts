@@ -73,11 +73,11 @@ describe('community platform', () => {
       )
     })
 
-    it('does allow READ for resources belonging to the visitor', async () => {
+    it('allows READ for resources belonging to the visitor', async () => {
       await assertSucceeds(getDoc(doc(authedFoo, 'user_integrations/foo')))
     })
 
-    it('does allow WRITE for resources belonging to the visitor', async () => {
+    it('allows WRITE for resources belonging to the visitor', async () => {
       await assertSucceeds(
         setDoc(doc(authedFoo, 'user_integrations/foo'), {
           newIntegration: 'newIntegration',

@@ -35,7 +35,8 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { IMapPin } from 'src/models'
-import { PatreonIntegrationBeta } from './content/formSections/PatreonIntegration'
+import { PatreonIntegration } from './content/formSections/PatreonIntegration'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -326,6 +327,9 @@ export class SettingsPage extends React.Component<IProps, IState> {
                         isContactableByPublic={values.isContactableByPublic}
                       />
                     )}
+                    <AuthWrapper roleRequired={'beta-tester'}>
+                      <PatreonIntegration user={user} />
+                    </AuthWrapper>
                   </form>
                   <AccountSettingsSection />
                 </Box>
@@ -387,8 +391,6 @@ export class SettingsPage extends React.Component<IProps, IState> {
                   >
                     {buttons.save}
                   </Button>
-
-                  <PatreonIntegrationBeta user={user} />
 
                   <SettingsErrors
                     errors={errors}

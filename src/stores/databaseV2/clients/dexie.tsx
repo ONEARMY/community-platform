@@ -15,7 +15,7 @@ import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20231022
+const DB_CACHE_NUMBER = 20231129
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -162,7 +162,10 @@ export class DexieClient implements AbstractDatabaseClient {
  *  Interfaces and constants
  ***********************************************************************/
 // Frontend code does not access all database endpoints, exclude here
-type IFrontendEndpoints = Exclude<IDBEndpoint, 'user_notifications'>
+type IFrontendEndpoints = Exclude<
+  IDBEndpoint,
+  'user_notifications' | 'user_integrations'
+>
 
 // When dexie is initialised it requires explicit knowledge of the database structures and any keys to
 // index on. The below interface and constant ensures this is done for the current db api version

@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions'
 import { DB_ENDPOINTS } from 'oa-shared'
 import { db } from '../Firebase/firestoreDB'
 import { CONFIG } from '../config/config'
+import { IUserDB } from '../models'
 
 const PATREON_CLIENT_ID = CONFIG.integrations.patreon_client_id
 const PATREON_CLIENT_SECRET = CONFIG.integrations.patreon_client_secret
@@ -69,19 +70,28 @@ export const patreonAuth = functions.https.onCall(async (data, context) => {
     .then(async ({ access_token, refresh_token, expires_in }) => {
       const patreonUser = await getCurrentPatreonUser(access_token)
       try {
+        await db.collection(DB_ENDPOINTS.users).doc(uid).update({
+          patreon: patreonUser,
+        })
+
+        const userData = user.data() as IUserDB
+
         await db
-          .collection(DB_ENDPOINTS.users)
+          .collection(DB_ENDPOINTS.user_integrations)
           .doc(uid)
-          .update({
-            patreon: {
-              auth: {
+          .set(
+            {
+              authId: userData._authID,
+              patreon: {
                 accessToken: access_token,
                 refreshToken: refresh_token,
                 expiresAt: expires_in,
               },
-              user: patreonUser,
             },
-          })
+            {
+              merge: true,
+            },
+          )
       } catch (err) {
         console.log('Error updating patreon user', err)
         throw new functions.https.HttpsError('internal', 'User update failed')

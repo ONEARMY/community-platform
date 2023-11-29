@@ -403,11 +403,13 @@ export class SettingsPage extends React.Component<IProps, IState> {
                           justifyContent: 'center',
                         }}
                       >
-                        <Image
-                          src={user.patreon.user.data.attributes.thumb_url}
-                          width="40px"
-                          style={{ borderRadius: '50%', marginRight: '10px' }}
-                        />
+                        {user.patreon.user?.data?.attributes?.thumb_url && (
+                          <Image
+                            src={user.patreon.user?.data?.attributes?.thumb_url}
+                            width="40px"
+                            style={{ borderRadius: '50%', marginRight: '10px' }}
+                          />
+                        )}
                         <Text>Successfully linked patron account! </Text>
                       </Flex>
                     )}

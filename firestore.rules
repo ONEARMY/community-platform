@@ -1,15 +1,21 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function userIntegrationsAccess() {
-      // User integrations may only be accessed if the data pertains to the authenticated user.
-      return collectionId != 'user_integrations' || request.auth.uid == resource.data._id
+    function userIntegrationsRead() {
+      // User integrations may only be read if the data pertains to the authenticated user.
+      return request.auth.uid == resource.id
     }
 
-    // Allow read and write access to all documents except the 'emails' and 'user_integrations' collections
+    function userIntegrationsWrite() {
+      // User integrations may only be writen to if the updated resource pertains to the authenticated user.
+      return request.auth.uid == request.resource.id
+    }
+
     match /{collectionId}/{document=**} {
-      allow read: userIntegrationsAccess()
-      allow write: if collectionId != 'emails' && userIntegrationsAccess();
+      allow get: if collectionId != 'user_integrations' || userIntegrationsRead()
+      // Do not allow users to list all user integrations.
+      allow list: if collectionId != 'user_integrations'
+      allow write: if collectionId != 'emails' && (collectionId != 'user_integrations' || userIntegrationsWrite())
     }
   }
 }

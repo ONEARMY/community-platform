@@ -46,6 +46,9 @@ jest.mock('src/index', () => ({
         ],
         setTagsCategory: jest.fn(),
       },
+      questionCategoriesStore: {
+        allQuestionCategories: [],
+      },
     },
   }),
 }))
@@ -68,6 +71,7 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   fetchQuestions = jest.fn().mockResolvedValue([])
   fetchQuestionBySlug = jest.fn()
 }
+
 const mockQuestionStore = new mockQuestionStoreClass()
 
 jest.mock('src/stores/Question/question.store')

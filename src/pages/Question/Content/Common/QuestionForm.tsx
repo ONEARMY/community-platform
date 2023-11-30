@@ -25,6 +25,7 @@ import type { RouteComponentProps } from 'react-router'
 import type { IQuestion } from 'src/models'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { COMPARISONS } from 'src/utils/comparisons'
+import { CategoriesSelect } from '../../../Howto/Category/CategoriesSelect'
 
 interface IProps extends RouteComponentProps<any> {
   'data-testid'?: string
@@ -123,6 +124,25 @@ export const QuestionForm = (props: IProps) => {
                     placeholder={LABELS.overview.description.title}
                     maxLength={QUESTION_MAX_DESCRIPTION_LENGTH}
                     showCharacterCount
+                  />
+                </Box>
+
+                <Box mb={3}>
+                  <Label htmlFor="categories" sx={{ fontSize: 2, mb: 2 }}>
+                    Which categories fit your question?
+                  </Label>
+                  <Field
+                    name="questionCategory"
+                    render={({ input, ...rest }) => (
+                      <CategoriesSelect
+                        {...rest}
+                        isForm={true}
+                        onChange={input.onChange}
+                        value={input.value}
+                        placeholder="Select category"
+                        type="question"
+                      />
+                    )}
                   />
                 </Box>
 

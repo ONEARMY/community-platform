@@ -8,8 +8,9 @@ import type { IComment } from '../../../src/models'
  * Whenever a question discussion is updated, this function updates the respective question metadata with commentCount and commentRecentDate.
  * This is useful for sorting questions server-side.
  */
-exports.questionMetadata = functions.firestore
-  .document('discussions')
+exports.questionMetadata = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document('discussions/{id}')
   .onUpdate((change, context) => {
     withErrorAlerting(context, () => {
       const item = change.after.data()

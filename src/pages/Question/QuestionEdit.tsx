@@ -13,7 +13,6 @@ type IProps = RouteComponentProps<{ slug: string }>
 export const QuestionEdit = (props: IProps) => {
   const store = useQuestionStore()
   const [isLoading, setIsLoading] = useState(true)
-  const [question, setQuestion] = useState<IQuestion.Item | null>(null)
   const [initialValues, setInitialValues] = useState<Partial<IQuestion.Item>>(
     {},
   )
@@ -22,17 +21,22 @@ export const QuestionEdit = (props: IProps) => {
     const { slug } = props.match.params
     const fetchQuestion = async () => {
       logger.debug(`fetchQuestion`, slug)
+
+      const questionDoc = await store.fetchQuestionBySlug(slug)
+      logger.debug(`fetchQuestion.questionDoc`, questionDoc)
+
+      if (questionDoc === null) {
+        props.history.push(`/questions`)
+      }
+
       if (
-        question?._createdBy !== store.activeUser?.userName &&
+        questionDoc?._createdBy !== store.activeUser?.userName &&
         !store.activeUser?.userRoles?.includes('admin')
       ) {
         props.history.push(`/question/${slug}`)
         return
       }
 
-      const questionDoc = await store.fetchQuestionBySlug(slug)
-      setQuestion(questionDoc || null)
-      logger.debug(`fetchQuestion.questionDoc`, questionDoc)
       setInitialValues(toJS(questionDoc || {}))
       setIsLoading(false)
     }

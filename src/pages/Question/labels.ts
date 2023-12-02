@@ -21,4 +21,7 @@ export const overview: ILabels = {
       'Introduce to your research question. Mention what you want to do, whats the goal what challenges you see, etc',
     title: 'Give some more information',
   },
+  tags: {
+    title: 'Select tags',
+  },
 }

@@ -16,6 +16,8 @@ import * as LABELS from 'src/pages/Question/labels'
 
 import type { RouteComponentProps } from 'react-router'
 import type { IQuestion } from 'src/models'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { COMPARISONS } from 'src/utils/comparisons'
 
 interface IProps extends RouteComponentProps<any> {
   'data-testid'?: string
@@ -66,7 +68,7 @@ export const QuestionForm = (props: IProps) => {
               <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
                 <PostingGuidelines />
               </Box>
-              <Card mt={3} p={4}>
+              <Card mt={3} p={4} sx={{ overflow: 'visible' }}>
                 <Box mb={3}>
                   <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>
                     {LABELS.overview.question.title}
@@ -101,6 +103,18 @@ export const QuestionForm = (props: IProps) => {
                     showCharacterCount
                   />
                 </Box>
+
+                <Box sx={{ flexDirection: 'column' }} mb={3}>
+                  <Label htmlFor="tags" sx={{ fontSize: 2, mb: 2 }}>
+                    {LABELS.overview.tags.title}
+                  </Label>
+                  <Field
+                    name="tags"
+                    component={TagsSelectField}
+                    category="question"
+                    isEqual={COMPARISONS.tags}
+                  />
+                </Box>
               </Card>
             </Box>
           </Flex>
@@ -127,7 +141,7 @@ export const QuestionForm = (props: IProps) => {
               {props.parentType === 'create' && (
                 <Button
                   data-cy={'draft'}
-                  data-testId="draft"
+                  data-testid="draft"
                   onClick={() => {}}
                   mt={[0, 0, 3]}
                   variant="secondary"

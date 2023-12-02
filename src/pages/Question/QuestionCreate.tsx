@@ -1,4 +1,3 @@
-import { Box } from 'theme-ui'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 
 export const QuestionCreate = (props) => {

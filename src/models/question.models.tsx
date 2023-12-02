@@ -1,4 +1,4 @@
-import type { DBDoc, IModerable, ISharedFeatures } from '.'
+import type { DBDoc, IModerable, ISelectedTags, ISharedFeatures } from '.'
 
 /**
  * Question retrieved from the database also include metadata such as _id, _created and _modified
@@ -20,6 +20,7 @@ export namespace IQuestion {
   export interface FormInput extends IModerable {
     title: string
     description: string
+    tags: ISelectedTags
     slug: string
     previousSlugs?: string[]
   }

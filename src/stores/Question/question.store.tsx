@@ -14,6 +14,9 @@ export class QuestionStore extends ModuleStore {
 
   @observable
   public activeQuestionItem: IQuestion.Item | undefined
+  
+  @observable
+  public searchValue: string = ''
 
   constructor(rootStore: RootStore) {
     super(rootStore, COLLECTION_NAME)
@@ -25,6 +28,11 @@ export class QuestionStore extends ModuleStore {
   public async fetchQuestionBySlug(slug: string) {
     logger.debug(`fetchQuestionBySlug:`, { slug })
     return await this._getQuestionItemBySlug(slug)
+  }
+
+  @action
+  public updateSearchValue(query: string) {
+    this.searchValue = query
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,6 +69,20 @@ export class QuestionStore extends ModuleStore {
 
     logger.debug(`fetchQuestions:`, { questions })
     return questions
+  }
+
+  public async searchQuestions(searchQuery: string) {
+    const questions = await this.db
+      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .getWhere('_deleted', '!=', 'true')
+
+    logger.debug(`searchQuestions:`, { questions })
+
+    const filteredQuestions = questions.filter((q) =>
+      q.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+
+    return filteredQuestions
   }
 
   private async _getQuestionItemBySlug(

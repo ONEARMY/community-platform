@@ -2,7 +2,7 @@ import { Button, Loader } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { Link } from 'react-router-dom'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Box, Card, Flex, Heading, Input } from 'theme-ui'
 
 export const QuestionListing = () => {
   const store = useQuestionStore()
@@ -17,6 +17,15 @@ export const QuestionListing = () => {
     }
     fetchQuestions()
   }, [isLoading])
+
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value
+    store.updateSearchValue(searchValue)
+
+    const questions = await store.searchQuestions(searchValue)
+    setQuestionList(questions || [])
+
+  }
 
   return (
     <Box sx={{ p: 7 }}>
@@ -36,6 +45,15 @@ export const QuestionListing = () => {
         <Link to={'/questions/create'}>
           <Button variant={'primary'}>Ask a question</Button>
         </Link>
+      </Flex>
+      <Flex sx={{ width: ['100%', '100%', '200px'], mr: [0, 0, 2], mb: [3, 3, 0] }}>
+        <Input
+          variant="inputOutline"
+          data-cy={`question-search-box`}
+          placeholder={`Search for a Question`}
+          onChange={handleSearch}
+          value={store.searchValue}
+        />
       </Flex>
       {isLoading ? (
         <Loader />

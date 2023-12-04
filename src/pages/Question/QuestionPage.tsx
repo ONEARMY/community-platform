@@ -23,8 +23,9 @@ export const QuestionPage = (props: IProps) => {
       setIsEditable(isAllowedToEditContent(question, store.activeUser))
       setIsLoading(false)
     }
+
     fetchQuestions()
-  }, [isLoading])
+  }, [])
 
   return (
     <Box sx={{ p: 7 }}>

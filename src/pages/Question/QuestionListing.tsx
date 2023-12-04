@@ -15,8 +15,9 @@ export const QuestionListing = () => {
       setQuestionList(questions || [])
       setIsLoading(false)
     }
+
     fetchQuestions()
-  }, [isLoading])
+  }, [])
 
   return (
     <>

@@ -45,10 +45,8 @@ export const QuestionEdit = (props: IProps) => {
       setIsLoading(false)
     }
 
-    if (isLoading) {
-      fetchQuestion()
-    }
-  }, [isLoading])
+    fetchQuestion()
+  }, [])
 
   return (
     <Box sx={{ p: 7 }}>

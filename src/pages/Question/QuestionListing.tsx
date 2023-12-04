@@ -16,10 +16,8 @@ export const QuestionListing = () => {
       setIsLoading(false)
     }
 
-    if (isLoading) {
-      fetchQuestions()
-    }
-  }, [isLoading])
+    fetchQuestions()
+  }, [])
 
   return (
     <Box sx={{ p: 7 }}>

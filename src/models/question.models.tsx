@@ -14,7 +14,6 @@ export namespace IQuestion {
     _createdBy: string
     _deleted: boolean
     subscribers?: UserIdList
-    votedUsefulBy?: UserIdList
   } & Omit<FormInput, 'collaborators'> &
     ISharedFeatures
 

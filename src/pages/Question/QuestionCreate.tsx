@@ -15,134 +15,132 @@ import {
 export const QuestionCreate = (props) => {
   const store = useQuestionStore()
   return (
-    <Box sx={{ p: 7 }}>
-      <Form
-        onSubmit={async (v: any) => {
-          try {
-            const newDocument = await store.upsertQuestion(v)
-            if (newDocument) {
-              props.history.push('/question/' + newDocument.slug)
-            }
-          } catch (e) {
-            logger.error(e)
+    <Form
+      onSubmit={async (v: any) => {
+        try {
+          const newDocument = await store.upsertQuestion(v)
+          if (newDocument) {
+            props.history.push('/question/' + newDocument.slug)
           }
-        }}
-        render={({ submitting, handleSubmit }) => (
-          <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-            <Flex
-              bg="inherit"
-              px={2}
-              sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
-              mt={4}
+        } catch (e) {
+          logger.error(e)
+        }
+      }}
+      render={({ submitting, handleSubmit }) => (
+        <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+          <Flex
+            bg="inherit"
+            px={2}
+            sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+            mt={4}
+          >
+            <Box
+              as="form"
+              id="questionForm"
+              sx={{ width: '100%' }}
+              onSubmit={handleSubmit}
             >
-              <Box
-                as="form"
-                id="questionForm"
-                sx={{ width: '100%' }}
-                onSubmit={handleSubmit}
-              >
-                <Card sx={{ backgroundColor: 'softblue' }}>
-                  <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
-                    <Heading>Ask your question</Heading>
-                    <Box ml="15px">
-                      <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
-                    </Box>
-                  </Flex>
-                </Card>
-                <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
-                  <PostingGuidelines />
-                </Box>
-                <Card mt={3} p={4}>
-                  <Box mb={3}>
-                    <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>
-                      The Question
-                    </Label>
-                    <Field
-                      name="title"
-                      id="title"
-                      validate={composeValidators(
-                        required,
-                        minValue(QUESTION_MIN_TITLE_LENGTH),
-                      )}
-                      component={FieldInput}
-                      placeholder="How come … does not work?"
-                      minLength={QUESTION_MIN_TITLE_LENGTH}
-                      maxLength={QUESTION_MAX_TITLE_LENGTH}
-                      showCharacterCount
-                    />
+              <Card sx={{ backgroundColor: 'softblue' }}>
+                <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
+                  <Heading>Ask your question</Heading>
+                  <Box ml="15px">
+                    <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
                   </Box>
-
-                  <Box mb={3}>
-                    <Label htmlFor="description" sx={{ fontSize: 2, mb: 2 }}>
-                      Give some more information
-                    </Label>
-                    <Field
-                      name="description"
-                      id="description"
-                      label="Information"
-                      validate={composeValidators(required)}
-                      component={FieldInput}
-                      placeholder="Introduce to your research question. Mention what you want to do, whats the goal what challenges you see, etc"
-                      maxLength={QUESTION_MAX_DESCRIPTION_LENGTH}
-                      showCharacterCount
-                    />
-                  </Box>
-                </Card>
+                </Flex>
+              </Card>
+              <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
+                <PostingGuidelines />
               </Box>
-            </Flex>
-            <Flex
+              <Card mt={3} p={4}>
+                <Box mb={3}>
+                  <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>
+                    The Question
+                  </Label>
+                  <Field
+                    name="title"
+                    id="title"
+                    validate={composeValidators(
+                      required,
+                      minValue(QUESTION_MIN_TITLE_LENGTH),
+                    )}
+                    component={FieldInput}
+                    placeholder="How come … does not work?"
+                    minLength={QUESTION_MIN_TITLE_LENGTH}
+                    maxLength={QUESTION_MAX_TITLE_LENGTH}
+                    showCharacterCount
+                  />
+                </Box>
+
+                <Box mb={3}>
+                  <Label htmlFor="description" sx={{ fontSize: 2, mb: 2 }}>
+                    Give some more information
+                  </Label>
+                  <Field
+                    name="description"
+                    id="description"
+                    label="Information"
+                    validate={composeValidators(required)}
+                    component={FieldInput}
+                    placeholder="Introduce to your research question. Mention what you want to do, whats the goal what challenges you see, etc"
+                    maxLength={QUESTION_MAX_DESCRIPTION_LENGTH}
+                    showCharacterCount
+                  />
+                </Box>
+              </Card>
+            </Box>
+          </Flex>
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              width: ['100%', '100%', `${100 / 3}%`],
+              height: '100%',
+            }}
+            bg="inherit"
+            px={2}
+            mt={[0, 0, 4]}
+          >
+            <Box
               sx={{
-                flexDirection: 'column',
-                width: ['100%', '100%', `${100 / 3}%`],
-                height: '100%',
+                top: 3,
+                maxWidth: ['inherit', 'inherit', '400px'],
               }}
-              bg="inherit"
-              px={2}
-              mt={[0, 0, 4]}
             >
-              <Box
+              <Box sx={{ display: ['none', 'none', 'block'] }}>
+                <PostingGuidelines />
+              </Box>
+
+              <Button
+                data-cy={'draft'}
+                onClick={() => {}}
+                mt={[0, 0, 3]}
+                variant="secondary"
+                type="submit"
+                disabled={submitting}
+                sx={{ width: '100%', display: 'block' }}
+              >
+                <span>Draft</span>
+              </Button>
+
+              <Button
+                large
+                data-cy={'submit'}
+                mt={3}
+                onClick={handleSubmit}
+                variant="primary"
+                type="submit"
+                disabled={submitting}
                 sx={{
-                  top: 3,
-                  maxWidth: ['inherit', 'inherit', '400px'],
+                  width: '100%',
+                  mb: ['40px', '40px', 0],
+                  display: 'block',
                 }}
               >
-                <Box sx={{ display: ['none', 'none', 'block'] }}>
-                  <PostingGuidelines />
-                </Box>
-
-                <Button
-                  data-cy={'draft'}
-                  onClick={() => {}}
-                  mt={[0, 0, 3]}
-                  variant="secondary"
-                  type="submit"
-                  disabled={submitting}
-                  sx={{ width: '100%', display: 'block' }}
-                >
-                  <span>Draft</span>
-                </Button>
-
-                <Button
-                  large
-                  data-cy={'submit'}
-                  mt={3}
-                  onClick={handleSubmit}
-                  variant="primary"
-                  type="submit"
-                  disabled={submitting}
-                  sx={{
-                    width: '100%',
-                    mb: ['40px', '40px', 0],
-                    display: 'block',
-                  }}
-                >
-                  Publish
-                </Button>
-              </Box>
-            </Flex>
+                Publish
+              </Button>
+            </Box>
           </Flex>
-        )}
-      />
-    </Box>
+        </Flex>
+      )}
+    />
   )
 }

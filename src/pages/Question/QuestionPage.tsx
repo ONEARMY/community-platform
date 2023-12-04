@@ -38,7 +38,6 @@ export const QuestionPage = (props: IProps) => {
     const questionId = store.activeQuestionItem?._id
     if (questionId) {
       store.toggleUsefulByUser(questionId, store.activeUser?.userName)
-      store.userVotedActiveQuestionUseful
       setQuestion(store.activeQuestionItem)
     }
   }

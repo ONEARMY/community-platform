@@ -14,6 +14,7 @@ import type { QuestionStore } from 'src/stores/Question/question.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { faker } from '@faker-js/faker'
+import { useCommonStores } from 'src/index'
 
 const Theme = testingThemeStyles
 
@@ -35,7 +36,16 @@ jest.mock('src/index', () => ({
         },
       },
       howtoStore: {},
-      tagsStore: {},
+      tagsStore: {
+        categoryTags: [
+          {
+            categories: ['question'],
+            label: 'test tag 1',
+            image: 'test img',
+          },
+        ],
+        setTagsCategory: jest.fn(),
+      },
     },
   }),
 }))
@@ -174,6 +184,7 @@ describe('question.routes', () => {
       expect(mockUpsertQuestion).toHaveBeenCalledWith({
         title: 'Question title',
         description: 'Question description',
+        tags: {},
       })
 
       expect(history.location.pathname).toBe('/question/question-title')
@@ -345,7 +356,11 @@ const renderFn = async (url, fnUser?) => {
   })
   return {
     wrapper: render(
-      <Provider userStore={{ user: localUser }} questionStore={{ foo: 'bar' }}>
+      <Provider
+        {...useCommonStores().stores}
+        userStore={{ user: localUser }}
+        questionStore={{ foo: 'bar' }}
+      >
         <ThemeProvider theme={Theme}>
           <Router history={history}>
             <QuestionRoutes />

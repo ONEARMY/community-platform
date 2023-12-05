@@ -9,7 +9,7 @@ import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps {
-  items: FilterGroup[]
+  availableFilters: FilterGroup[]
   selectedItems: Array<string>
   onChange?: (selectedItems: string[]) => void
   onClose: () => void
@@ -47,7 +47,7 @@ class GroupingFilterMobile extends Component<IProps, IState> {
   }
 
   render() {
-    const { items, selectedItems } = this.props
+    const { availableFilters, selectedItems } = this.props
     return (
       <Flex sx={{ flexDirection: 'column' }}>
         <Flex p={0} mx={-1} sx={{ justifyContent: 'space-between' }}>
@@ -61,7 +61,7 @@ class GroupingFilterMobile extends Component<IProps, IState> {
           />
         </Flex>
 
-        {items.map((item, idx) => {
+        {availableFilters.map((item, idx) => {
           return (
             <div key={idx}>
               <Text

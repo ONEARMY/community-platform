@@ -526,6 +526,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "onim-at",
+      "name": "Cosimo Chetta",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45094836?v=4",
+      "profile": "https://github.com/onim-at",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

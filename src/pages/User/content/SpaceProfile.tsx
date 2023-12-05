@@ -17,8 +17,16 @@ import {
   UserStatistics,
   ImageGallery,
 } from 'oa-components'
+
 import UserCreatedDocuments from './UserCreatedDocuments'
 import { useCommonStores } from 'src/index'
+import UserContactAndLinks from './UserContactAndLinks'
+import { ProfileType } from 'src/modules/profile/types'
+import { userStats } from 'src/common/hooks/userStats'
+import { Impact } from '../impact/Impact'
+import { heading } from '../impact/labels'
+import { UserContactForm } from 'src/pages/User/contact'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
@@ -28,12 +36,6 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
-
-import UserContactAndLinks from './UserContactAndLinks'
-import { ProfileType } from 'src/modules/profile/types'
-import { userStats } from 'src/common/hooks/userStats'
-import { UserContactForm } from 'src/pages/User/contact'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 
 import type { UserCreatedDocs } from '.'
 
@@ -153,19 +155,30 @@ const getCoverImages = (user: IUserPP) => {
 }
 
 export const SpaceProfile = ({ user, docs }: IProps) => {
+  const {
+    about,
+    country,
+    displayName,
+    impact,
+    isContactableByPublic,
+    links,
+    location,
+    profileType,
+    userName,
+  } = user
+
   const coverImage = getCoverImages(user)
   const stats = userStats(user.userName)
 
-  const userLinks = user?.links.filter(
+  const userLinks = links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
 
   const userCountryCode =
-    user.location?.countryCode || user.country?.toLowerCase() || undefined
+    location?.countryCode || country?.toLowerCase() || undefined
 
   const { stores } = useCommonStores()
-  const showContactForm =
-    user.isContactableByPublic && !!stores.userStore.activeUser
+  const showContactForm = isContactableByPublic && !!stores.userStore.activeUser
 
   return (
     <Container
@@ -197,7 +210,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
         <Box sx={{ width: '100%' }}>
           <Box sx={{ display: ['block', 'block', 'none'] }}>
             <MobileBadge>
-              <MemberBadge profileType={user.profileType} />
+              <MemberBadge profileType={profileType} />
             </MobileBadge>
           </Box>
 
@@ -216,12 +229,12 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 transform: 'translateY(-100px)',
               }}
             >
-              <MemberBadge size={150} profileType={user.profileType} />
+              <MemberBadge size={150} profileType={profileType} />
             </Box>
             <Box>
               <Username
                 user={{
-                  userName: user.userName,
+                  userName,
                   countryCode: userCountryCode,
                 }}
                 isVerified={stats.verified}
@@ -232,7 +245,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 style={{ wordBreak: 'break-word' }}
                 data-cy="userDisplayName"
               >
-                {user.displayName}
+                {displayName}
               </Heading>
             </Box>
           </Box>
@@ -241,6 +254,11 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabsList>
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
+              {impact && (
+                <AuthWrapper roleRequired={'beta-tester'}>
+                  <Tab data-cy="ImpactTab">{heading}</Tab>
+                </AuthWrapper>
+              )}
               <AuthWrapper roleRequired={'beta-tester'}>
                 {showContactForm && <Tab data-cy="contact-tab">Contact</Tab>}
               </AuthWrapper>
@@ -259,17 +277,17 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                       width: ['100%', '100%', '80%'],
                     }}
                   >
-                    {user.about && <Paragraph>{user.about}</Paragraph>}
+                    {about && <Paragraph>{about}</Paragraph>}
 
-                    {user.profileType === ProfileType.COLLECTION_POINT &&
+                    {profileType === ProfileType.COLLECTION_POINT &&
                       user.collectedPlasticTypes &&
                       renderPlasticTypes(user.collectedPlasticTypes)}
 
-                    {user.profileType === ProfileType.COLLECTION_POINT &&
+                    {profileType === ProfileType.COLLECTION_POINT &&
                       user.openingHours &&
                       renderOpeningHours(user.openingHours)}
 
-                    {user.profileType === ProfileType.MACHINE_BUILDER &&
+                    {profileType === ProfileType.MACHINE_BUILDER &&
                       user.machineBuilderXp &&
                       renderMachineBuilderXp(user.machineBuilderXp)}
 
@@ -282,8 +300,8 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                     }}
                   >
                     <UserStatistics
-                      userName={user.userName}
-                      country={user.location?.country}
+                      userName={userName}
+                      country={location?.country}
                       isVerified={stats.verified}
                       isSupporter={!!user.badges?.supporter}
                       howtoCount={docs?.howtos.length || 0}
@@ -297,6 +315,13 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabPanel>
               <UserCreatedDocuments docs={docs} />
             </TabPanel>
+            {impact && (
+              <AuthWrapper roleRequired={'beta-tester'}>
+                <TabPanel>
+                  <Impact impact={impact} user={user} />
+                </TabPanel>
+              </AuthWrapper>
+            )}
             <AuthWrapper roleRequired={'beta-tester'}>
               <TabPanel>
                 <UserContactForm user={user} />

@@ -2,7 +2,7 @@ import { Button, Loader } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { Link } from 'react-router-dom'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Card, Flex, Heading } from 'theme-ui'
 
 export const QuestionListing = () => {
   const store = useQuestionStore()
@@ -15,11 +15,12 @@ export const QuestionListing = () => {
       setQuestionList(questions || [])
       setIsLoading(false)
     }
+
     fetchQuestions()
-  }, [isLoading])
+  }, [])
 
   return (
-    <Box sx={{ p: 7 }}>
+    <>
       <Flex my={[18, 26]}>
         <Heading
           sx={{
@@ -62,6 +63,6 @@ export const QuestionListing = () => {
       ) : (
         <Heading>No questions yet</Heading>
       )}
-    </Box>
+    </>
   )
 }

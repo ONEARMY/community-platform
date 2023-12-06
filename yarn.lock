@@ -20437,6 +20437,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:^9.2.0":
+  version: 9.3.5
+  resolution: "glob@npm:9.3.5"
+  dependencies:
+    fs.realpath: ^1.0.0
+    minimatch: ^8.0.2
+    minipass: ^4.2.4
+    path-scurry: ^1.6.1
+  checksum: 94b093adbc591bc36b582f77927d1fb0dbf3ccc231828512b017601408be98d1fe798fc8c0b19c6f2d1a7660339c3502ce698de475e9d938ccbb69b47b647c84
+  languageName: node
+  linkType: hard
+
 "global-dirs@npm:^0.1.1":
   version: 0.1.1
   resolution: "global-dirs@npm:0.1.1"
@@ -26276,6 +26288,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"minimatch@npm:^8.0.2":
+  version: 8.0.4
+  resolution: "minimatch@npm:8.0.4"
+  dependencies:
+    brace-expansion: ^2.0.1
+  checksum: 2e46cffb86bacbc524ad45a6426f338920c529dd13f3a732cc2cf7618988ee1aae88df4ca28983285aca9e0f45222019ac2d14ebd17c1edadd2ee12221ab801a
+  languageName: node
+  linkType: hard
+
 "minimatch@npm:^9.0.1":
   version: 9.0.3
   resolution: "minimatch@npm:9.0.3"
@@ -26374,6 +26395,13 @@ __metadata:
   version: 4.0.3
   resolution: "minipass@npm:4.0.3"
   checksum: a09f405e2f380ae7f6ee0cbb53b45c1fcc1b6c70fc3896f4d20649d92a10e61892c57bd9960a64cedf6c90b50022cb6c195905b515039c335b423202f99e6f18
+  languageName: node
+  linkType: hard
+
+"minipass@npm:^4.2.4":
+  version: 4.2.8
+  resolution: "minipass@npm:4.2.8"
+  checksum: 7f4914d5295a9a30807cae5227a37a926e6d910c03f315930fde52332cf0575dfbc20295318f91f0baf0e6bb11a6f668e30cde8027dea7a11b9d159867a3c830
   languageName: node
   linkType: hard
 
@@ -27098,7 +27126,7 @@ __metadata:
     globby: ^11.0.2
     mustache: ^4.2.0
     oa-shared: "workspace:*"
-    rimraf: ^3.0.2
+    rimraf: ^4.0.0
     ts-node: ^10.2.1
   languageName: unknown
   linkType: soft
@@ -27975,7 +28003,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-scurry@npm:^1.10.1":
+"path-scurry@npm:^1.10.1, path-scurry@npm:^1.6.1":
   version: 1.10.1
   resolution: "path-scurry@npm:1.10.1"
   dependencies:
@@ -31415,6 +31443,17 @@ __metadata:
   bin:
     rimraf: bin.js
   checksum: 87f4164e396f0171b0a3386cc1877a817f572148ee13a7e113b238e48e8a9f2f31d009a92ec38a591ff1567d9662c6b67fd8818a2dbbaed74bc26a87a2a4a9a0
+  languageName: node
+  linkType: hard
+
+"rimraf@npm:^4.0.0":
+  version: 4.4.1
+  resolution: "rimraf@npm:4.4.1"
+  dependencies:
+    glob: ^9.2.0
+  bin:
+    rimraf: dist/cjs/src/bin.js
+  checksum: b786adc02651e2e24bbedb04bbdea80652fc9612632931ff2d9f898c5e4708fe30956186597373c568bd5230a4dc2fadfc816ccacba8a1daded3a006a6b74f1a
   languageName: node
   linkType: hard
 

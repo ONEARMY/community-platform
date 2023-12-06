@@ -1,4 +1,5 @@
-import { Loader, UsefulStatsButton } from 'oa-components'
+import { format } from 'date-fns'
+import { Loader, UsefulStatsButton, Username } from 'oa-components'
 import { useState, useEffect } from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -6,6 +7,7 @@ import type { IQuestion } from 'src/models'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Heading, Text, Flex } from 'theme-ui'
+import { isUserVerified } from 'src/common/isUserVerified'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -57,6 +59,34 @@ export const QuestionPage = (props: IProps) => {
               onUsefulClick={onUsefulClick}
             />
           </Flex>
+
+          <Box mt={3} mb={2}>
+            <Flex sx={{ flexDirection: 'column' }}>
+              <Flex sx={{ alignItems: 'center' }}>
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Username
+                    user={{
+                      userName: question._createdBy,
+                      countryCode: question.creatorCountry,
+                    }}
+                    isVerified={isUserVerified(question._createdBy)}
+                  />
+                  <Text
+                    variant="auxiliary"
+                    sx={{
+                      marginTop: 2,
+                      marginBottom: 2,
+                    }}
+                  >
+                    {`| Asked on ${format(
+                      new Date(question._created),
+                      'DD-MM-YYYY',
+                    )}`}
+                  </Text>
+                </Flex>
+              </Flex>
+            </Flex>
+          </Box>
 
           <Box mt={3} mb={2}>
             <Heading mb={1}>{question.title}</Heading>

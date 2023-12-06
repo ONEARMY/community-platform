@@ -6,6 +6,8 @@ import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
 import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+import type { IUser } from 'src/models'
+import { getUserCountry } from 'src/utils/getUserCountry'
 
 const COLLECTION_NAME = 'questions'
 
@@ -74,9 +76,13 @@ export class QuestionStore extends ModuleStore {
       slug += `-${randomID()}`
     }
 
+    const user = this.activeUser as IUser
+    const creatorCountry = this.getCreatorCountry(user, values)
+
     await dbRef.set({
       ...(values as any),
-      _createdBy: this.activeUser?.userName,
+      _createdBy: user?.userName,
+      creatorCountry,
       slug,
     })
     logger.debug(`upsertQuestion.set`, { dbRef })
@@ -91,6 +97,17 @@ export class QuestionStore extends ModuleStore {
 
     logger.debug(`fetchQuestions:`, { questions })
     return questions
+  }
+
+  private getCreatorCountry(user: IUser, values: IQuestion.FormInput) {
+    const { creatorCountry, _createdBy } = values
+    const userCountry = getUserCountry(user)
+
+    return (_createdBy && _createdBy === user.userName) || !_createdBy
+      ? userCountry
+      : creatorCountry
+      ? creatorCountry
+      : ''
   }
 
   private async _getQuestionItemBySlug(

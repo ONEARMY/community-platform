@@ -23,5 +23,6 @@ export namespace IQuestion {
     tags: ISelectedTags
     slug: string
     previousSlugs?: string[]
+    creatorCountry?: string
   }
 }

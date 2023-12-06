@@ -1,7 +1,7 @@
-import type { ImpactDataField } from 'src/models'
+import type { IImpactDataField } from 'src/models'
 
 interface Props {
-  label: ImpactDataField['label']
+  label: IImpactDataField['label']
 }
 
 const EMOJI_MAP = {

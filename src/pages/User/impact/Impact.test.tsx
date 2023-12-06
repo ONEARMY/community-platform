@@ -7,8 +7,6 @@ import { missing } from './labels'
 import { IMPACT_YEARS } from './constants'
 import { Impact } from './Impact'
 
-import type { IImpactYear } from 'src/models'
-
 jest.mock('src/index', () => {
   return {
     useCommonStores: () => ({
@@ -23,35 +21,32 @@ jest.mock('src/index', () => {
 
 describe('Impact', () => {
   it('renders all fields with data formatted correctly', async () => {
-    const impact = [
-      {
-        year: 2022 as IImpactYear,
-        fields: [
-          {
-            label: 'volunteers',
-            value: 45,
-            isVisible: true,
-          },
-          {
-            label: 'plastic recycled',
-            suffix: 'Kg of',
-            value: 23000,
-            isVisible: true,
-          },
-          {
-            label: 'revenue',
-            prefix: '$',
-            value: 54000,
-            isVisible: true,
-          },
-          {
-            label: 'machines built',
-            value: 13,
-            isVisible: false,
-          },
-        ],
-      },
-    ]
+    const impact = {
+      2022: [
+        {
+          label: 'volunteers',
+          value: 45,
+          isVisible: true,
+        },
+        {
+          label: 'plastic recycled',
+          suffix: 'Kg of',
+          value: 23000,
+          isVisible: true,
+        },
+        {
+          label: 'revenue',
+          prefix: '$',
+          value: 54000,
+          isVisible: true,
+        },
+        {
+          label: 'machines built',
+          value: 13,
+          isVisible: false,
+        },
+      ],
+    }
     const user = FactoryUser({ impact })
 
     render(

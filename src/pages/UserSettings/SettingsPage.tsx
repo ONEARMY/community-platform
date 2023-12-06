@@ -8,6 +8,7 @@ import arrayMutators from 'final-form-arrays'
 import { Form } from 'react-final-form'
 import { v4 as uuid } from 'uuid'
 
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { FocusSection } from './content/formSections/Focus.section'
 import { ExpertiseSection } from './content/formSections/Expertise.section'
@@ -20,6 +21,7 @@ import { ProfileGuidelines } from './content/PostingGuidelines'
 import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import { PublicContactSection } from './content/formSections/PublicContact.section'
+import { ImpactSection } from './content/formSections/Impact/Impact.section'
 
 import { buttons, headings } from './labels'
 import INITIAL_VALUES from './Template'
@@ -306,6 +308,13 @@ export class SettingsPage extends React.Component<IProps, IState> {
                         showLocationDropdown={this.state.showLocationDropdown}
                       />
                     </Flex>
+
+                    {!isMember && (
+                      <AuthWrapper roleRequired={'beta-tester'}>
+                        <ImpactSection />
+                      </AuthWrapper>
+                    )}
+
                     <EmailNotificationsSection
                       notificationSettings={values.notification_settings}
                     />

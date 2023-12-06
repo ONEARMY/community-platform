@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import Dexie from 'dexie'
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import { logger } from '../../../logger'

@@ -23,7 +23,7 @@ export class TagsStore extends ModuleStore {
   }
   @action public setTagsCategory(category?: TagCategory) {
     this.activeCategory = category
-    this._filterTags()
+    this.categoryTags = this._filterTags()
   }
 
   @action

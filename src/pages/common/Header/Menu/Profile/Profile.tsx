@@ -44,8 +44,6 @@ export default class Profile extends Component<IProps, IState> {
   render() {
     const user = this.injected.userStore.user
     const { showProfileModal } = this.state
-    // eslint-disable-next-line no-console
-    console.log(`Profile`, { user })
 
     if (typeof user === 'undefined' && this.state.isLoading) {
       return (

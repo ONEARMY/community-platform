@@ -1,33 +1,36 @@
 import type { StoryFn, Meta } from '@storybook/react'
 import { ImageGallery } from './ImageGallery'
-import type { ImageGalleryProps } from './ImageGallery'
-
-interface IUploadedFileMeta {
-  downloadUrl: string
-  contentType?: string | null
-  fullPath: string
-  name: string
-  type: string
-  size: number
-  timeCreated: string
-  updated: string
-}
+import type { ImageGalleryProps, IImageGalleryItem } from './ImageGallery'
 
 const imageUrls = [
-  'https://picsum.photos/id/29/1500/1000',
-  'https://picsum.photos/id/50/4000/3000',
-  'https://picsum.photos/id/110/800/1200',
-  'https://picsum.photos/id/2/1500/1500',
+  {
+    full: 'https://picsum.photos/id/29/1500/1000',
+    thumb: 'https://picsum.photos/id/29/150/150',
+  },
+  {
+    full: 'https://picsum.photos/id/50/4000/3000',
+    thumb: 'https://picsum.photos/id/50/150/150',
+  },
+  {
+    full: 'https://picsum.photos/id/110/800/1200',
+    thumb: 'https://picsum.photos/id/110/150/150',
+  },
+  {
+    full: 'https://picsum.photos/id/2/1500/1500',
+    thumb: 'https://picsum.photos/id/2/150/150',
+  },
 ]
 
-const testImages: IUploadedFileMeta[] = imageUrls.map((elt, i) => {
+// eslint-disable-next-line storybook/prefer-pascal-case
+export const testImages: IImageGalleryItem[] = imageUrls.map((elt, i) => {
   return {
-    downloadUrl: elt,
+    downloadUrl: elt.full,
     contentType: 'image/jpeg',
     fullPath: 'cat.jpg',
     name: 'cat' + i,
     type: 'image/jpeg',
     size: 115000,
+    thumbnailUrl: elt.thumb,
     timeCreated: new Date().toISOString(),
     updated: new Date().toISOString(),
   }

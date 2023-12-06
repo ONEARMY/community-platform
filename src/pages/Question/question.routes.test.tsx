@@ -185,6 +185,47 @@ describe('question.routes', () => {
         title: 'Question title',
         description: 'Question description',
         tags: {},
+        allowDraftSave: false,
+        moderation: 'accepted',
+      })
+
+      expect(history.location.pathname).toBe('/question/question-title')
+    })
+
+    it('allows user to draft a question', async () => {
+      let wrapper
+      let history
+      // Arrange
+      const mockUpsertQuestion = jest.fn().mockResolvedValue({
+        slug: 'question-title',
+      })
+      useQuestionStore.mockReturnValue({
+        ...mockQuestionStore,
+        upsertQuestion: mockUpsertQuestion,
+      })
+
+      await act(async () => {
+        const render = await renderFn('/questions/create')
+        wrapper = render.wrapper
+        history = render.history
+      })
+
+      // Fill in form
+      const title = wrapper.getByLabelText('The Question')
+      const draftButton = wrapper.getByText('Save as draft')
+
+      // Submit form
+      await userEvent.type(title, 'Question title')
+
+      await waitFor(() => {
+        draftButton.click()
+      })
+
+      expect(mockUpsertQuestion).toHaveBeenCalledWith({
+        title: 'Question title',
+        tags: {},
+        allowDraftSave: true,
+        moderation: 'draft',
       })
 
       expect(history.location.pathname).toBe('/question/question-title')
@@ -318,6 +359,7 @@ describe('question.routes', () => {
         expect.objectContaining({
           title: 'Question title',
           description: 'Question description',
+          _createdBy: 'author',
         }),
       )
     })

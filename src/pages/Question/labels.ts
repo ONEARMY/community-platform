@@ -2,7 +2,7 @@ import type { ILabels } from 'src/common/Form/types'
 
 export const buttons = {
   create: 'Publish',
-  draft: 'Draft',
+  draft: { create: 'Save as draft', update: 'Save to draft' },
   edit: 'Update',
 }
 

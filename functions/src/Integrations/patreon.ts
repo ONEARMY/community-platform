@@ -48,9 +48,13 @@ export const patreonAuth = functions.https.onCall(async (data, context) => {
     )
   }
   //   Validate user exists before triggering function.
-  const { uid } = context.auth
-  const user = await db.collection(DB_ENDPOINTS.users).doc(uid).get()
-  if (!user.exists) {
+  const { uid: authId } = context.auth
+  const userSnapshot = await db
+    .collection(DB_ENDPOINTS.users)
+    .where('_authID', '==', authId)
+    .get()
+  const user = userSnapshot.docs[0]?.data() as IUserDB
+  if (!user) {
     throw new functions.https.HttpsError(
       'failed-precondition',
       'User does not exist.',
@@ -70,18 +74,16 @@ export const patreonAuth = functions.https.onCall(async (data, context) => {
     .then(async ({ access_token, refresh_token, expires_in }) => {
       const patreonUser = await getCurrentPatreonUser(access_token)
       try {
-        await db.collection(DB_ENDPOINTS.users).doc(uid).update({
+        await db.collection(DB_ENDPOINTS.users).doc(user._id).update({
           patreon: patreonUser,
         })
 
-        const userData = user.data() as IUserDB
-
         await db
           .collection(DB_ENDPOINTS.user_integrations)
-          .doc(uid)
+          .doc(user._id)
           .set(
             {
-              authId: userData._authID,
+              authId,
               patreon: {
                 accessToken: access_token,
                 refreshToken: refresh_token,

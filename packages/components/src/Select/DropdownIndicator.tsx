@@ -1,13 +1,13 @@
 import type { DropdownIndicatorProps } from 'react-select'
 import { components } from 'react-select'
 import { Image } from 'theme-ui'
-import ArrowSelectIcon from '../../assets/icons/icon-arrow-select.svg'
+import IconArrowDown from '../../assets/icons/icon-arrow-down.svg'
 
 // https://github.com/JedWatson/react-select/issues/685#issuecomment-420213835
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (
     <components.DropdownIndicator {...props}>
-      <Image loading="lazy" src={ArrowSelectIcon} sx={{ width: '12px' }} />
+      <Image loading="lazy" src={IconArrowDown} sx={{ width: '12px' }} />
     </components.DropdownIndicator>
   )
 }

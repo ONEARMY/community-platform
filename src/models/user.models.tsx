@@ -54,6 +54,8 @@ export interface IUser {
   unsubscribeToken?: string
   impact?: IUserImpact
   isContactableByPublic?: boolean
+  // TODO[patreon integration]: define expected patreon fields
+  patreon?: any
 }
 
 export interface IUserImpact {

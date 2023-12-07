@@ -13,7 +13,7 @@ export const ImpactField = ({ field }: Props) => {
   const { label, prefix, suffix, value } = field
 
   const sx = {
-    backgroundColor: 'white',
+    backgroundColor: 'background',
     borderRadius: 1,
     padding: 1,
     mt: 2,

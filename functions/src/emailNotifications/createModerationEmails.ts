@@ -7,7 +7,7 @@ import * as templates from './templates'
 import { getUserAndEmail } from './utils'
 import { Change } from 'firebase-functions/v1'
 import { withErrorAlerting } from '../alerting/errorAlerting'
-import { EMAIL_FUNCTION_MEMORY_LIMIT } from './utils'
+import { MEMORY_LIMIT_512_MB } from '../consts'
 
 export async function handleModerationUpdate<T extends IModerable>(
   change: Change<QueryDocumentSnapshot<T>>,
@@ -77,7 +77,7 @@ export async function createMapPinModerationEmail(mapPin: IMapPin) {
 }
 
 export const handleHowToModerationUpdate = functions
-  .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
+  .runWith({ memory: MEMORY_LIMIT_512_MB })
   .firestore.document(`${DB_ENDPOINTS.howtos}/{id}`)
   .onUpdate((change, context) =>
     withErrorAlerting(context, handleModerationUpdate, [
@@ -87,7 +87,7 @@ export const handleHowToModerationUpdate = functions
   )
 
 export const handleMapPinModerationUpdate = functions
-  .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
+  .runWith({ memory: MEMORY_LIMIT_512_MB })
   .firestore.document(`${DB_ENDPOINTS.mappins}/{id}`)
   .onUpdate((change, context) =>
     withErrorAlerting(context, handleModerationUpdate, [

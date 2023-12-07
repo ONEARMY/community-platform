@@ -130,6 +130,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/onim-at"><img src="https://avatars.githubusercontent.com/u/45094836?v=4?s=60" width="60px;" alt="Cosimo Chetta"/><br /><sub><b>Cosimo Chetta</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=onim-at" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://uk.linkedin.com/in/rogerchick"><img src="https://avatars.githubusercontent.com/u/555883?v=4?s=60" width="60px;" alt="Roger Chick"/><br /><sub><b>Roger Chick</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=rchick" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

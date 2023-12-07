@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { Heading, Box, Button, Text } from 'theme-ui'
+import { Heading, Box, Button, Image, Text } from 'theme-ui'
 
+import IconArrowDown from 'src/assets/icons/icon-arrow-down.svg'
+import IconArrowUp from 'src/assets/icons/icon-arrow-up.svg'
 import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { IMPACT_YEARS } from 'src/pages/User/impact/constants'
 import { FlexSectionContainer } from '../elements'
@@ -12,6 +14,7 @@ export const ImpactSection = () => {
   const { expandClose, expandOpen } = buttons.impact
 
   const buttonLabel = isExpanded ? expandClose : expandOpen
+  const buttonIcon = isExpanded ? IconArrowUp : IconArrowDown
 
   return (
     <FlexSectionContainer>
@@ -28,11 +31,17 @@ export const ImpactSection = () => {
       )}
       <Box mt={2}>
         <Button
-          dangerouslySetInnerHTML={{ __html: buttonLabel }}
           data-cy="impact-button-expand"
           onClick={() => setIsExpanded(!isExpanded)}
           variant="secondary"
-        />
+        >
+          {buttonLabel}
+          <Image
+            loading="lazy"
+            src={buttonIcon}
+            sx={{ marginLeft: '10px', width: '12px' }}
+          />
+        </Button>
       </Box>
     </FlexSectionContainer>
   )

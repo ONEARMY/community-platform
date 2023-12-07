@@ -36,7 +36,6 @@ import type { UserStore } from 'src/stores/User/user.store'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { IMapPin } from 'src/models'
 import { PATREON_CLIENT_ID } from 'src/config/config'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */

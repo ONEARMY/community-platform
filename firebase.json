@@ -1,7 +1,11 @@
 {
   "hosting": {
     "public": "build",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "/api",
@@ -86,7 +90,9 @@
     ]
   },
   "functions": {
-    "predeploy": ["yarn workspace functions build"],
+    "predeploy": [
+      "yarn workspace functions build"
+    ],
     "source": "functions/dist",
     "runtime": "nodejs20"
   },
@@ -121,6 +127,7 @@
     "rules": "firebase.storage.rules"
   },
   "extensions": {
-    "firestore-send-email": "firebase/firestore-send-email@0.1.27"
+    "firestore-send-email": "firebase/firestore-send-email@0.1.27",
+    "storage-resize-images": "firebase/storage-resize-images@0.2.2"
   }
 }

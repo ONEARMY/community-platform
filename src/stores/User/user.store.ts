@@ -12,6 +12,8 @@ import type {
   INotificationUpdate,
   IUser,
   IUserBadges,
+  IImpactYearFieldList,
+  IImpactYear,
 } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
@@ -271,6 +273,21 @@ export class UserStore extends ModuleStore {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this.setUpdateStatus('Complete')
+  }
+
+  @action
+  public async updateUserImpact(
+    fields: IImpactYearFieldList,
+    year: IImpactYear,
+  ) {
+    if (!this.user) {
+      throw new Error('User not found')
+    }
+
+    await this.db
+      .collection(COLLECTION_NAME)
+      .doc(this.user._id)
+      .update({ [`impact.${year}`]: fields })
   }
 
   public async unsubscribeUser(unsubscribeToken: string) {

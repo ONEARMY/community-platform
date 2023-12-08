@@ -1,5 +1,5 @@
 import { ErrorsContainer } from 'src/common/Form/ErrorsContainer'
-import { defaultError, fields } from 'src/pages/UserSettings/labels'
+import { fields, form } from 'src/pages/UserSettings/labels'
 
 import type { IErrorsListSet, ITopLevelErrorsList } from 'src/common/Form/types'
 
@@ -7,7 +7,8 @@ const flattenErrors = (formErrors) => {
   const errors = {}
 
   Object.keys(formErrors).forEach((key) => {
-    if (typeof formErrors[key] !== 'string') return (errors[key] = defaultError)
+    if (typeof formErrors[key] !== 'string')
+      return (errors[key] = form.defaultError)
     errors[key] = formErrors[key]
   })
 

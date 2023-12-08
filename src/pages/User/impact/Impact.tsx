@@ -12,10 +12,11 @@ interface Props {
 
 export const Impact = ({ impact, user }: Props) => {
   const renderByYear = IMPACT_YEARS.map((year, index) => {
-    const found = impact.find((data) => data.year === year)
+    const foundYear = Object.keys(impact).find((key) => Number(key) === year)
+
     return (
       <ImpactItem
-        fields={found && found.fields}
+        fields={foundYear && impact[foundYear]}
         year={year}
         key={index}
         user={user}

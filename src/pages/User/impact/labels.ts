@@ -8,5 +8,6 @@ export const missing = {
   },
   owner: {
     label: "Looks like you haven't added your Impact Data yet.",
+    link: 'Enter impact data',
   },
 }

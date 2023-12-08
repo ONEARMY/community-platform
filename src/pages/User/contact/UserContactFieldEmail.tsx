@@ -30,6 +30,7 @@ export const UserContactFieldEmail = ({ email }: Props) => {
         initialValue={email}
         name={name}
         placeholder={placeholder}
+        sx={{ backgroundColor: 'white' }}
         validate={composeValidators(validateEmail, required)}
         validateFields={[]}
       />

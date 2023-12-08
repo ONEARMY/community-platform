@@ -3,11 +3,11 @@ import { Box, Heading } from 'theme-ui'
 import { ImpactField } from './ImpactField'
 import { ImpactMissing } from './ImpactMissing'
 
-import type { ImpactDataField, IImpactYear, IUserPP } from 'src/models'
+import type { IImpactYearFieldList, IImpactYear, IUserPP } from 'src/models'
 
 interface Props {
   year: IImpactYear
-  fields: ImpactDataField[] | undefined
+  fields: IImpactYearFieldList | undefined
   user: IUserPP
 }
 
@@ -18,7 +18,7 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
   }
 
   const innerBox = {
-    backgroundColor: 'background',
+    backgroundColor: 'white',
     borderRadius: 1,
     height: '100%',
     padding: 2,

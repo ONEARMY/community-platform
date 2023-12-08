@@ -303,41 +303,39 @@ export const users = {
     collectedPlasticTypes: null,
     email: 'settings_workplace_new@test.com',
     password: 'test1234',
-    impact: [
-      {
-        year: 2022,
-        fields: [
-          {
-            label: 'plastic recycled',
-            value: 43000,
-            suffix: 'Kg of',
-            isVisible: true,
-          },
-          {
-            label: 'revenue',
-            value: 36000,
-            prefix: '$',
-            suffix: 'in',
-            isVisible: true,
-          },
-          {
-            label: 'full time employees',
-            value: 3,
-            isVisible: true,
-          },
-          {
-            label: 'volunteers',
-            value: 45,
-            isVisible: false,
-          },
-          {
-            label: 'machines built',
-            value: 2,
-            isVisible: true,
-          },
-        ],
-      },
-    ],
+    userRoles: ['beta-tester'],
+    impact: {
+      2022: [
+        {
+          label: 'plastic recycled',
+          value: 43000,
+          suffix: 'Kg of',
+          isVisible: true,
+        },
+        {
+          label: 'revenue',
+          value: 36000,
+          prefix: '$',
+          suffix: 'in',
+          isVisible: true,
+        },
+        {
+          label: 'full time employees',
+          value: 3,
+          isVisible: true,
+        },
+        {
+          label: 'volunteers',
+          value: 45,
+          isVisible: false,
+        },
+        {
+          label: 'machines built',
+          value: 2,
+          isVisible: true,
+        },
+      ],
+    },
   },
   mapview_testing_rejected: {
     openingHours: [],

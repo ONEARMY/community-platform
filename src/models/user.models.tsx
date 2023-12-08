@@ -54,22 +54,23 @@ export interface IUser {
   unsubscribeToken?: string
   impact?: IUserImpact
   isContactableByPublic?: boolean
+  // TODO[patreon integration]: define expected patreon fields
+  patreon?: any
 }
 
-export type IUserImpact = IImpactData[] | []
-
-export interface IImpactData {
-  year: IImpactYear
-  fields: ImpactDataField[]
+export interface IUserImpact {
+  [key: number]: IImpactYearFieldList
 }
 
-export interface ImpactDataField {
+export interface IImpactDataField {
   label: string
   value: number
   prefix?: string
   suffix?: string
   isVisible: boolean
 }
+
+export type IImpactYearFieldList = IImpactDataField[]
 
 export type IImpactYear = 2021 | 2022 | 2023
 

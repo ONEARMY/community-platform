@@ -18,17 +18,21 @@ export const ImpactMissing = observer(({ user, year }: Props) => {
 
   const isPageOwner = userStore.activeUser && user
 
-  const button = `${year} ${missing.user.link}`
-  const href = IMPACT_REPORT_LINKS[year]
+  const userButton = `${year} ${missing.user.link}`
   const label = isPageOwner ? missing.owner.label : missing.user.label
 
   return (
     <Flex sx={{ flexFlow: 'column', gap: 2, mt: 2 }}>
       <Text>{label}</Text>
       {!isPageOwner && (
-        <ExternalLink href={href}>
-          <Button>{button}</Button>
+        <ExternalLink href={IMPACT_REPORT_LINKS[year]}>
+          <Button>{userButton}</Button>
         </ExternalLink>
+      )}
+      {isPageOwner && (
+        <a href="/settings">
+          <Button>{missing.owner.link}</Button>
+        </a>
       )}
     </Flex>
   )

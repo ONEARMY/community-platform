@@ -298,6 +298,13 @@ export class SettingsPage extends React.Component<IProps, IState> {
                         />
                       )}
                       {/* General fields */}
+
+                      <UserInfosSection
+                        formValues={values}
+                        mutators={form.mutators}
+                        showLocationDropdown={this.state.showLocationDropdown}
+                      />
+
                       {!isMember && isModuleSupported(MODULE.MAP) && (
                         <WorkspaceMapPinSection>
                           <MapPinModerationComments mapPin={userMapPin} />
@@ -311,11 +318,6 @@ export class SettingsPage extends React.Component<IProps, IState> {
                           <MapPinModerationComments mapPin={userMapPin} />
                         </MemberMapPinSection>
                       )}
-                      <UserInfosSection
-                        formValues={values}
-                        mutators={form.mutators}
-                        showLocationDropdown={this.state.showLocationDropdown}
-                      />
                     </Flex>
 
                     {!isMember && (

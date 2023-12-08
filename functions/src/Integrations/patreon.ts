@@ -64,6 +64,7 @@ const getCurrentPatreonUser = (accessToken: string) => {
     'thumb_url',
     'url',
   ]
+
   const membershipFields: Array<keyof PatreonMembershipAttributes> = [
     'campaign_lifetime_support_cents',
     'currently_entitled_amount_cents',

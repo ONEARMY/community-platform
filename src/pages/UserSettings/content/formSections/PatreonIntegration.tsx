@@ -86,7 +86,15 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
       ) : (
         <Text mt={4} mb={4} sx={{ display: 'block', whiteSpace: 'pre-line' }}>
           How it works: <br />
-          1. Support us on Patreon <br />
+          1.{' '}
+          <a
+            href="https://www.patreon.com/one_army"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Support us
+          </a>{' '}
+          on Patreon <br />
           2. Connect your Patreon account by clicking below <br />
           3. You are now part of the special supporters club!
         </Text>
@@ -98,7 +106,7 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
         sx={{ width: '100%', justifyContent: 'center' }}
         variant="outline"
       >
-        {user.patreon ? 'Sync User Data' : 'Log in with Patreon'}
+        {user.patreon ? 'Sync Patreon Data' : 'Connect To Patreon'}
       </Button>
     </FlexSectionContainer>
   )

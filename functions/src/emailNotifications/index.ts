@@ -8,10 +8,10 @@ import * as moderationEmails from './createModerationEmails'
 import * as submissionEmails from './createSubmissionEmails'
 import * as supporterBadgeEmails from './supporterBadgeEmails'
 import * as verifiedBadgeEmails from './verifiedBadgeEmails'
-import { EMAIL_FUNCTION_MEMORY_LIMIT } from './utils'
+import { MEMORY_LIMIT_512_MB } from '../consts'
 
 exports.sendDaily = functions
-  .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
+  .runWith({ memory: MEMORY_LIMIT_512_MB })
   .pubsub // Trigger daily at 3pm PT (https://crontab.guru/#0_15_*_*_*)
   .schedule('0 15 * * *')
   .timeZone('Europe/Lisbon')
@@ -22,7 +22,7 @@ exports.sendDaily = functions
   )
 
 exports.sendWeekly = functions
-  .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
+  .runWith({ memory: MEMORY_LIMIT_512_MB })
   .pubsub // Trigger weekly at 3pm PT on Sunday (https://crontab.guru/#0_15_*_*_0)
   .schedule('0 15 * * 0')
   .timeZone('Europe/Lisbon')
@@ -33,7 +33,7 @@ exports.sendWeekly = functions
   )
 
 exports.sendMonthly = functions
-  .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
+  .runWith({ memory: MEMORY_LIMIT_512_MB })
   .pubsub // Trigger monthly at 3pm PT on the first day of the month (https://crontab.guru/#0_15_1_*_*)
   .schedule('0 15 1 * *')
   .timeZone('Europe/Lisbon')
@@ -44,7 +44,7 @@ exports.sendMonthly = functions
   )
 
 exports.sendOnce = functions
-  .runWith({ memory: EMAIL_FUNCTION_MEMORY_LIMIT })
+  .runWith({ memory: MEMORY_LIMIT_512_MB })
   .https.onCall(async (_, context) => {
     if (!context.auth) {
       throw new functions.https.HttpsError(

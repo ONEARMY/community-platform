@@ -12,7 +12,6 @@ import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IMessageDB, INotification, IUserDB } from '../models'
 
-export const EMAIL_FUNCTION_MEMORY_LIMIT = '512MB'
 const EMAIL_ADDRESS_SEND_LIMIT = 100
 
 export const getUserEmail = async (uid: string): Promise<string | null> => {

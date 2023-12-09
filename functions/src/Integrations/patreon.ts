@@ -1,5 +1,11 @@
 import * as functions from 'firebase-functions'
-import { DB_ENDPOINTS } from 'oa-shared'
+import {
+  DB_ENDPOINTS,
+  PatreonMembershipAttributes,
+  PatreonTierAttributes,
+  PatreonUser,
+  PatreonUserAttributes,
+} from 'oa-shared'
 import { db } from '../Firebase/firestoreDB'
 import { CONFIG } from '../config/config'
 import { IUserDB } from '../models'
@@ -9,22 +15,98 @@ const PATREON_CLIENT_ID = CONFIG.integrations.patreon_client_id
 const PATREON_CLIENT_SECRET = CONFIG.integrations.patreon_client_secret
 const REDIRECT_URI = CONFIG.deployment.site_url + '/patreon'
 
+const parsePatreonUser = (patreonUser: any): PatreonUser => {
+  // As we do not request the identity.membership scope, we only receive the user's membership to the
+  // One Army Patreon page, not other campaigns they may be part of.
+  const membership =
+    patreonUser.data.relationships.memberships.data.length > 0
+      ? patreonUser.included.find(({ type }) => type === 'member')
+      : undefined
+
+  const tiers = membership?.relationships.currently_entitled_tiers.data
+    .map(({ id }) =>
+      patreonUser.included.find(
+        ({ type, id: includedId }) => type === 'tier' && id === includedId,
+      ),
+    )
+    .map(({ id, attributes }) => ({ id, attributes }))
+
+  const userMembership = membership
+    ? {
+        id: membership.id,
+        attributes: membership.attributes,
+        tiers,
+      }
+    : undefined
+
+  return {
+    id: patreonUser.data.id,
+    attributes: patreonUser.data.attributes,
+    link: patreonUser.links.self,
+    // Only include membership if the user is a member of the One Army Patreon page.
+    ...(userMembership ? { membership: userMembership } : {}),
+  }
+}
+
 /*
  * docs: https://docs.patreon.com/#get-api-oauth2-v2-identity
  * to fetch more user attributes, add them to the include and fields query params
  **/
 const getCurrentPatreonUser = (accessToken: string) => {
-  return fetch(
-    encodeURI(
-      'https://www.patreon.com/api/oauth2/v2/identity?include=memberships&fields[user]=about,created,email,first_name,full_name,image_url,last_name,social_connections,thumb_url,url,vanity',
-    ),
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
+  const userFields: Array<keyof PatreonUserAttributes> = [
+    'about',
+    'created',
+    'email',
+    'first_name',
+    'full_name',
+    'image_url',
+    'last_name',
+    'thumb_url',
+    'url',
+  ]
+
+  const membershipFields: Array<keyof PatreonMembershipAttributes> = [
+    'campaign_lifetime_support_cents',
+    'currently_entitled_amount_cents',
+    'is_follower',
+    'last_charge_date',
+    'last_charge_status',
+    'lifetime_support_cents',
+    'next_charge_date',
+    'note',
+    'patron_status',
+    'pledge_cadence',
+    'pledge_relationship_start',
+    'will_pay_amount_cents',
+  ]
+
+  const tierFields: Array<keyof PatreonTierAttributes> = [
+    'amount_cents',
+    'created_at',
+    'description',
+    'edited_at',
+    'image_url',
+    'patron_count',
+    'published',
+    'published_at',
+    'title',
+    'url',
+  ]
+
+  const url = encodeURI(
+    `https://www.patreon.com/api/oauth2/v2/identity?include=memberships,memberships.currently_entitled_tiers&fields[user]=${userFields.join(
+      ',',
+    )}&fields[member]=${membershipFields.join(
+      ',',
+    )}&fields[tier]=${tierFields.join(',')}`,
   )
+
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
     .then((res) => res.json())
     .then((response) => {
       if (response.errors) {
@@ -76,9 +158,10 @@ export const patreonAuth = functions
       .then((res) => res.json())
       .then(async ({ access_token, refresh_token, expires_in }) => {
         const patreonUser = await getCurrentPatreonUser(access_token)
+        const patreonUserParsed = parsePatreonUser(patreonUser)
         try {
           await db.collection(DB_ENDPOINTS.users).doc(user._id).update({
-            patreon: patreonUser,
+            patreon: patreonUserParsed,
           })
 
           await db

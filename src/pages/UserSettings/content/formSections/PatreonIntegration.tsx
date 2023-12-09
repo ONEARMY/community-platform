@@ -100,10 +100,9 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
         </Text>
       )}
       <Button
-        large
         onClick={patreonRedirect}
         mb={3}
-        sx={{ width: '100%', justifyContent: 'center' }}
+        sx={{ width: '40%', justifyContent: 'center' }}
         variant="outline"
       >
         {user.patreon ? 'Sync Patreon Data' : 'Connect To Patreon'}

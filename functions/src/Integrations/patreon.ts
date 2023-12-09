@@ -123,68 +123,10 @@ const getCurrentPatreonUser = (accessToken: string) => {
     })
 }
 
-export const patreonAuth = functions.runWith({ memory: MEMORY_LIMIT_512_MB }).https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError(
-      'failed-precondition',
-      'The function must be called while authenticated.',
-    )
-  }
-  //   Validate user exists before triggering function.
-  const { uid: authId } = context.auth
-  const userSnapshot = await db
-    .collection(DB_ENDPOINTS.users)
-    .where('_authID', '==', authId)
-    .get()
-  const user = userSnapshot.docs[0]?.data() as IUserDB
-  if (!user) {
-    throw new functions.https.HttpsError(
-      'failed-precondition',
-      'User does not exist.',
-    )
-  }
-
-  await fetch(
-    `https://www.patreon.com/api/oauth2/token?code=${data.code}&grant_type=authorization_code&client_id=${PATREON_CLIENT_ID}&client_secret=${PATREON_CLIENT_SECRET}&redirect_uri=${REDIRECT_URI}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    },
-  )
-    .then((res) => res.json())
-    .then(async ({ access_token, refresh_token, expires_in }) => {
-      const patreonUser = await getCurrentPatreonUser(access_token)
-      const patreonUserParsed = parsePatreonUser(patreonUser)
-      try {
-        await db.collection(DB_ENDPOINTS.users).doc(user._id).update({
-          patreon: patreonUserParsed,
-        })
-
-        await db
-          .collection(DB_ENDPOINTS.user_integrations)
-          .doc(user._id)
-          .set(
-            {
-              authId,
-              patreon: {
-                accessToken: access_token,
-                refreshToken: refresh_token,
-                expiresAt: expires_in,
-              },
-            },
-            {
-              merge: true,
-            },
-          )
-      } catch (err) {
-        console.log('Error updating patreon user', err)
-        throw new functions.https.HttpsError('internal', 'User update failed')
-      }
-    })
-    .catch((err) => {
-      console.log('Error authenticating patreon user', err)
+export const patreonAuth = functions
+  .runWith({ memory: MEMORY_LIMIT_512_MB })
+  .https.onCall(async (data, context) => {
+    if (!context.auth) {
       throw new functions.https.HttpsError(
         'failed-precondition',
         'The function must be called while authenticated.',
@@ -216,9 +158,10 @@ export const patreonAuth = functions.runWith({ memory: MEMORY_LIMIT_512_MB }).ht
       .then((res) => res.json())
       .then(async ({ access_token, refresh_token, expires_in }) => {
         const patreonUser = await getCurrentPatreonUser(access_token)
+        const patreonUserParsed = parsePatreonUser(patreonUser)
         try {
           await db.collection(DB_ENDPOINTS.users).doc(user._id).update({
-            patreon: patreonUser,
+            patreon: patreonUserParsed,
           })
 
           await db

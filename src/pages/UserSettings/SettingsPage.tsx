@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Alert, Card, Flex, Heading, Box, Text, Image } from 'theme-ui'
+import { Alert, Card, Flex, Heading, Box, Text } from 'theme-ui'
 import { Button, TextNotification } from 'oa-components'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
@@ -7,7 +7,6 @@ import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { Form } from 'react-final-form'
 import { v4 as uuid } from 'uuid'
-
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { FocusSection } from './content/formSections/Focus.section'
@@ -35,7 +34,7 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { IMapPin } from 'src/models'
-import { PATREON_CLIENT_ID } from 'src/config/config'
+import { PatreonIntegration } from './content/formSections/PatreonIntegration'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -196,14 +195,6 @@ export class SettingsPage extends React.Component<IProps, IState> {
     return errors
   }
 
-  private patreonRedirect() {
-    const redirectUri = `${window.location.protocol}//${window.location.host}/patreon`
-
-    window.location.assign(
-      `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
-    )
-  }
-
   render() {
     const { formValues, user, userMapPin } = this.state
     return user ? (
@@ -334,6 +325,9 @@ export class SettingsPage extends React.Component<IProps, IState> {
                         isContactableByPublic={values.isContactableByPublic}
                       />
                     )}
+                    <AuthWrapper roleRequired={'beta-tester'}>
+                      <PatreonIntegration user={user} />
+                    </AuthWrapper>
                   </form>
                   <AccountSettingsSection />
                 </Box>
@@ -396,34 +390,6 @@ export class SettingsPage extends React.Component<IProps, IState> {
                     {buttons.save}
                   </Button>
 
-                  <AuthWrapper roleRequired={'beta-tester'}>
-                    <Button
-                      large
-                      onClick={this.patreonRedirect}
-                      mb={3}
-                      sx={{ width: '100%', justifyContent: 'center' }}
-                      variant={'primary'}
-                    >
-                      Log in with Patreon
-                    </Button>
-                    {user.patreon && (
-                      <Flex
-                        style={{
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        {user.patreon.user?.data?.attributes?.thumb_url && (
-                          <Image
-                            src={user.patreon.user?.data?.attributes?.thumb_url}
-                            width="40px"
-                            style={{ borderRadius: '50%', marginRight: '10px' }}
-                          />
-                        )}
-                        <Text>Successfully linked patron account! </Text>
-                      </Flex>
-                    )}
-                  </AuthWrapper>
                   <SettingsErrors
                     errors={errors}
                     isVisible={submitFailed && hasValidationErrors}

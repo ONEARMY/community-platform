@@ -9,6 +9,7 @@ import type {
   UserRole,
   EmailNotificationFrequency,
   NotificationType,
+  PatreonUser,
 } from 'oa-shared'
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
@@ -54,8 +55,7 @@ export interface IUser {
   unsubscribeToken?: string
   impact?: IUserImpact
   isContactableByPublic?: boolean
-  // TODO[patreon integration]: define expected patreon fields
-  patreon?: any
+  patreon?: PatreonUser
 }
 
 export interface IUserImpact {

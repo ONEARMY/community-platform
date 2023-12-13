@@ -70,7 +70,7 @@ export interface IImpactDataField {
 
 export type IImpactYearFieldList = IImpactDataField[]
 
-export type IImpactYear = 2021 | 2022 | 2023
+export type IImpactYear = 2019 | 2021 | 2022 | 2023
 
 export interface IUserBadges {
   verified: boolean

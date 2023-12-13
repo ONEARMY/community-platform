@@ -8,7 +8,7 @@ import type { IImpactYearFieldList, IImpactYear, IUserPP } from 'src/models'
 interface Props {
   year: IImpactYear
   fields: IImpactYearFieldList | undefined
-  user: IUserPP
+  user: IUserPP | undefined
 }
 
 export const ImpactItem = ({ fields, user, year }: Props) => {
@@ -24,16 +24,23 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
     padding: 2,
   }
 
+  const visibleFields = fields?.filter((field) => field.isVisible)
+
   return (
     <Box sx={outterBox} cy-data="ImpactItem">
       <Box sx={innerBox}>
         <Heading variant="small">{year}</Heading>
-        {fields ? (
-          fields.map((field, index) => {
+        {visibleFields && visibleFields.length > 0 ? (
+          visibleFields.map((field, index) => {
             return <ImpactField field={field} key={index} />
           })
         ) : (
-          <ImpactMissing year={year} user={user} />
+          <ImpactMissing
+            fields={fields}
+            user={user}
+            visibleFields={visibleFields}
+            year={year}
+          />
         )}
       </Box>
     </Box>

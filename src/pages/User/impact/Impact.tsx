@@ -7,7 +7,7 @@ import type { IUserImpact, IUserPP } from 'src/models'
 
 interface Props {
   impact: IUserImpact
-  user: IUserPP
+  user: IUserPP | undefined
 }
 
 export const Impact = ({ impact, user }: Props) => {

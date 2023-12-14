@@ -5,26 +5,26 @@ import { ImpactQuestionField } from './ImpactQuestion.field'
 import { impactQuestions } from './impactQuestions'
 
 interface Props {
-  id: string
+  formId: string
   handleSubmit: () => void
   submitting: boolean
 }
 
 export const ImpactYearField = (props: Props) => {
-  const { id, handleSubmit, submitting } = props
+  const { formId, handleSubmit, submitting } = props
 
   return (
     <>
       {impactQuestions.map((field, index) => (
-        <ImpactQuestionField id={id} field={field} key={index} />
+        <ImpactQuestionField field={field} formId={formId} key={index} />
       ))}
 
       <Button
-        data-cy={`${id}-button-save`}
+        data-cy={`${formId}-button-save`}
         disabled={submitting}
         type="submit"
         onClick={handleSubmit}
-        form={id}
+        form={formId}
       >
         {buttons.impact.save}
       </Button>

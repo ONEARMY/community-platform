@@ -63,10 +63,8 @@ export interface IUserImpact {
 }
 
 export interface IImpactDataField {
-  label: string
+  id: string
   value: number
-  prefix?: string
-  suffix?: string
   isVisible: boolean
 }
 

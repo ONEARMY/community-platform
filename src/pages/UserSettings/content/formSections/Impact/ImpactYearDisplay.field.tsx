@@ -9,12 +9,12 @@ import type { IImpactYearFieldList } from 'src/models'
 
 interface Props {
   fields: IImpactYearFieldList | undefined
-  id: string
+  formId: string
   setIsEditMode: (boolean) => void
 }
 
 export const ImpactYearDisplayField = observer((props: Props) => {
-  const { fields, id, setIsEditMode } = props
+  const { fields, formId, setIsEditMode } = props
   const { create, edit } = buttons.impact
 
   const buttonLabel = fields ? edit : create
@@ -33,7 +33,7 @@ export const ImpactYearDisplayField = observer((props: Props) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <ImpactField field={field} />
+                <ImpactField field={{ ...field, isVisible: true }} />
                 <Icon glyph={glyph} size={24} />
               </Flex>
             </Box>
@@ -43,7 +43,7 @@ export const ImpactYearDisplayField = observer((props: Props) => {
         <Text>{missingData}</Text>
       )}
       <Button
-        data-cy={`${id}-button-edit`}
+        data-cy={`${formId}-button-edit`}
         onClick={() => setIsEditMode(true)}
         sx={{ marginTop: 3 }}
       >

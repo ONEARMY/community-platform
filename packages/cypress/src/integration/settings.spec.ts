@@ -97,25 +97,22 @@ describe('[Settings]', () => {
       impact: {
         2022: [
           {
-            label: 'plastic recycled',
+            id: 'plastic',
             value: 43000,
-            suffix: 'Kg of',
             isVisible: true,
           },
           {
-            label: 'revenue',
+            id: 'revenue',
             value: 100000,
-            prefix: '$',
-            suffix: 'in',
             isVisible: false,
           },
           {
-            label: 'full time employees',
+            id: 'employees',
             value: 3,
             isVisible: true,
           },
           {
-            label: 'volunteers',
+            id: 'volunteers',
             value: 45,
             isVisible: false,
           },
@@ -191,7 +188,7 @@ describe('[Settings]', () => {
         .clear()
         .type('100000')
       cy.get('[data-cy="impactForm-2022-field-revenue-isVisible"]').click()
-      cy.get('[data-cy="impactForm-2022-field-machines built-value"]').clear()
+      cy.get('[data-cy="impactForm-2022-field-machines-value"]').clear()
       cy.get('[data-cy="impactForm-2022-button-save"]').click()
       cy.contains(form.saveSuccess)
 

@@ -35,7 +35,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
   }, [])
 
   const { userStore } = useCommonStores().stores
-  const id = `impactForm-${year}`
+  const formId = `impactForm-${year}`
 
   const sx = {
     backgroundColor: 'background',
@@ -65,20 +65,20 @@ export const ImpactYearSection = observer(({ year }: Props) => {
       <UserContactError submitResults={submitResults} />
 
       <Form
-        onSubmit={onSubmit}
-        id={id}
+        id={formId}
         initialValues={impact ? transformImpactData(impact) : undefined}
+        onSubmit={onSubmit}
         render={({ handleSubmit, values, submitting }) => {
           return isEditMode ? (
             <ImpactYearField
-              id={id}
+              formId={formId}
               handleSubmit={handleSubmit}
               submitting={submitting}
             />
           ) : (
             <ImpactYearDisplayField
               fields={transformImpactInputs(values)}
-              id={id}
+              formId={formId}
               setIsEditMode={setIsEditMode}
             />
           )

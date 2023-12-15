@@ -18,11 +18,11 @@ export const transformImpactData = (
 
   Object.values(fields).forEach((field) => {
     const questionField = impactQuestions.find(
-      (question) => question.label === field.label,
+      (question) => question.id === field.id,
     )
-    return (transformed[field.label] = {
+    return (transformed[field.id] = {
+      ...questionField,
       ...field,
-      description: questionField?.description,
     } as IImpactQuestion)
   })
 
@@ -36,15 +36,14 @@ export const transformImpactInputs = (
 
   Object.keys(inputs).forEach((key) => {
     const field = inputs[key]
-    const question = impactQuestions.find(({ label }) => label === key)
+    const question = impactQuestions.find(({ id }) => id === key)
+
     if (field && question && field.value) {
       fields.push({
-        label: key,
+        id: question.id,
         value: field.value,
         isVisible:
           typeof field.isVisible === 'boolean' ? field.isVisible : true,
-        ...(question.prefix && { prefix: question.prefix }),
-        ...(question.suffix && { suffix: question.suffix }),
       })
     }
   })

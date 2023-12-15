@@ -1,25 +1,18 @@
 import type { IImpactDataField } from 'src/models'
+import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
 
 interface Props {
-  label: IImpactDataField['label']
+  id: IImpactDataField['id']
 }
 
-const EMOJI_MAP = {
-  'full time employees': '&#x1f46f',
-  'machines built': '&#x2699;&#xfe0f;',
-  'plastic recycled': '&#x1f52b',
-  revenue: '&#x1f4b8',
-  volunteers: '&#x1f3c5',
-}
+export const ImpactEmoji = ({ id }: Props) => {
+  const question = impactQuestions.find((question) => question.id === id)
 
-export const ImpactEmoji = ({ label }: Props) => {
-  const emoji = EMOJI_MAP[label]
-
-  if (!emoji) return null
+  if (!question || !question.emoji) return null
 
   return (
     <div
-      dangerouslySetInnerHTML={{ __html: emoji }}
+      dangerouslySetInnerHTML={{ __html: question.emoji }}
       style={{ display: 'inline' }}
     />
   )

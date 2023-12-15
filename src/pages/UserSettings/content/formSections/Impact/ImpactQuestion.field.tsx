@@ -5,17 +5,17 @@ import { Field } from 'react-final-form'
 import type { IImpactQuestion } from './impactQuestions'
 
 interface Props {
-  id: string
+  formId: string
   field: IImpactQuestion
 }
 
-export const ImpactQuestionField = ({ id, field }: Props) => {
+export const ImpactQuestionField = ({ field, formId }: Props) => {
   const initialValue =
     typeof field.isVisible === 'boolean' ? field.isVisible : true
 
   return (
     <Box sx={{ marginBottom: 3 }}>
-      <Label htmlFor={`${field.label}.value`} sx={{ marginBottom: 1 }}>
+      <Label htmlFor={`${field.id}.value`} sx={{ marginBottom: 1 }}>
         {field.description}
       </Label>
       <Flex
@@ -42,8 +42,8 @@ export const ImpactQuestionField = ({ id, field }: Props) => {
           <Box>
             <Field
               component={FieldInput}
-              data-cy={`${id}-field-${field.label}-value`}
-              name={`${field.label}.value`}
+              data-cy={`${formId}-field-${field.id}-value`}
+              name={`${field.id}.value`}
               sx={{ background: 'white' }}
               type="number"
             />
@@ -64,9 +64,9 @@ export const ImpactQuestionField = ({ id, field }: Props) => {
           <Icon glyph="show" size={24} />
           <Field
             component="input"
-            data-cy={`${id}-field-${field.label}-isVisible`}
+            data-cy={`${formId}-field-${field.id}-isVisible`}
             initialValue={initialValue}
-            name={`${field.label}.isVisible`}
+            name={`${field.id}.isVisible`}
             type="checkbox"
           />
         </Flex>

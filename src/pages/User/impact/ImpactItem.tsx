@@ -24,14 +24,12 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
     padding: 2,
   }
 
-  const visibleFields = fields?.filter((field) => field.isVisible)
-
   return (
     <Box sx={outterBox} cy-data="ImpactItem">
       <Box sx={innerBox}>
         <Heading variant="small">{year}</Heading>
-        {visibleFields ? (
-          visibleFields.map((field, index) => {
+        {fields ? (
+          fields.map((field, index) => {
             return <ImpactField field={field} key={index} />
           })
         ) : (

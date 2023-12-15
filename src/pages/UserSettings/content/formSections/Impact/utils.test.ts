@@ -7,46 +7,44 @@ describe('transformImpactData', () => {
 
     const impactFields = [
       {
-        description,
-        label: 'revenue',
-        prefix: '$',
+        id: 'revenue',
         value: 75000,
-        isVisible: true,
+        isVisible: false,
       },
     ]
     const expected = {
       revenue: {
+        id: 'revenue',
         description,
+        emoji: '&#x1f4b8',
         label: 'revenue',
         prefix: '$',
         value: 75000,
-        isVisible: true,
+        isVisible: false,
       },
     }
     expect(transformImpactData(impactFields)).toEqual(expected)
   })
 })
 
-describe('transformImpactData', () => {
+describe('transformImpactInputs', () => {
   it('returns data structured as impact data', () => {
-    const description =
-      'What was your revenue (in $)? By revenue we mean all money coming in.'
+    const description = 'How many machines did you build?'
 
     const inputFields = {
-      revenue: {
+      machines: {
+        id: 'machines',
         description,
-        label: 'revenue',
-        prefix: '$',
-        value: 75000,
+        label: 'machines built',
+        value: 20,
         isVisible: true,
       },
     }
 
     const expected = [
       {
-        label: 'revenue',
-        prefix: '$',
-        value: 75000,
+        id: 'machines',
+        value: 20,
         isVisible: true,
       },
     ]

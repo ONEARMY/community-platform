@@ -4,8 +4,12 @@ import { logger } from 'src/logger'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
-import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+import {
+  filterModerableItems,
+  formatLowerNoSpecial,
+  randomID,
+} from 'src/utils/helpers'
 
 const COLLECTION_NAME = 'questions'
 
@@ -76,7 +80,7 @@ export class QuestionStore extends ModuleStore {
 
     await dbRef.set({
       ...(values as any),
-      _createdBy: this.activeUser?.userName,
+      _createdBy: values._createdBy ?? this.activeUser?.userName,
       slug,
     })
     logger.debug(`upsertQuestion.set`, { dbRef })
@@ -89,8 +93,9 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .getWhere('_deleted', '!=', 'true')
 
-    logger.debug(`fetchQuestions:`, { questions })
-    return questions
+    const validQuestions = filterModerableItems(questions, this.activeUser)
+    logger.debug(`fetchQuestions:`, { validQuestions })
+    return validQuestions
   }
 
   private async _getQuestionItemBySlug(

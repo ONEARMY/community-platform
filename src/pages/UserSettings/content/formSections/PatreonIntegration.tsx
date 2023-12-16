@@ -4,8 +4,30 @@ import type { IUserPP } from 'src/models'
 import { Heading, Flex, Image, Text, Box } from 'theme-ui'
 import { Button } from 'oa-components'
 import { FlexSectionContainer } from './elements'
+import { useCommonStores } from 'src/index'
 
-export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
+export const PatreonIntegration = () => {
+  const { userStore } = useCommonStores().stores
+  const [user, setUser] = React.useState<IUserPP | undefined>(
+    userStore.user ?? undefined,
+  )
+
+  const removePatreonConnection = () => {
+    if (!user) {
+      return
+    }
+    userStore.removePatreonConnection(user.userName)
+    // Perform an optimistic update to avoid waiting for database calls to return.
+    setUser({
+      ...user,
+      badges: {
+        ...user.badges,
+        supporter: false,
+      },
+      patreon: undefined,
+    })
+  }
+
   const patreonRedirect = () => {
     // TODO: if user has patreon property already set, send request directly to backend, where we
     // can lookup the existing access code.
@@ -16,6 +38,10 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
     window.location.assign(
       `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=${PATREON_CLIENT_ID}&redirect_uri=${redirectUri}`,
     )
+  }
+
+  if (!user) {
+    return null
   }
 
   return (
@@ -45,11 +71,14 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
                 height: 'auto',
               }}
             />
-            <Text>Successfully linked patron account!</Text>
+            <Text>Successfully linked Patreon account!</Text>
           </Flex>
           {user.patreon.membership && (
             <Flex sx={{ flexDirection: 'column' }}>
-              <Text mt={4}>Thanks for your support :) </Text>
+              <Text mt={4}>
+                Thanks for supporting us! :) Update your data if you changed you
+                Patreon tiers or remove the connection below.
+              </Text>
               {user.patreon.membership.tiers.map(({ id, attributes }) => (
                 <Flex
                   key={id}
@@ -99,14 +128,26 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
           3. You are now part of the special supporters club!
         </Text>
       )}
-      <Button
-        onClick={patreonRedirect}
-        mb={3}
-        sx={{ width: '40%', justifyContent: 'center' }}
-        variant="outline"
-      >
-        {user.patreon ? 'Sync Patreon Data' : 'Connect To Patreon'}
-      </Button>
+      <Flex>
+        <Button
+          onClick={patreonRedirect}
+          mb={3}
+          sx={{ width: '40%', justifyContent: 'center', mr: 3 }}
+          variant="outline"
+        >
+          {user.patreon ? 'Update Patreon Data' : 'Connect To Patreon'}
+        </Button>
+        {user.patreon && (
+          <Button
+            onClick={removePatreonConnection}
+            mb={3}
+            sx={{ width: '40%', justifyContent: 'center' }}
+            variant="outline"
+          >
+            Remove Connection
+          </Button>
+        )}
+      </Flex>
     </FlexSectionContainer>
   )
 }

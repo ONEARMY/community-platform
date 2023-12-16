@@ -160,9 +160,15 @@ export const patreonAuth = functions
         const patreonUser = await getCurrentPatreonUser(access_token)
         const patreonUserParsed = parsePatreonUser(patreonUser)
         try {
-          await db.collection(DB_ENDPOINTS.users).doc(user._id).update({
-            patreon: patreonUserParsed,
-          })
+          await db
+            .collection(DB_ENDPOINTS.users)
+            .doc(user._id)
+            .update({
+              patreon: patreonUserParsed,
+              badges: {
+                supporter: true,
+              },
+            })
 
           await db
             .collection(DB_ENDPOINTS.user_integrations)

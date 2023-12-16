@@ -11,7 +11,7 @@
     "globby": "^11.0.2",
     "mustache": "^4.2.0",
     "oa-shared": "workspace:*",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.0.0",
     "ts-node": "^10.2.1"
   },
   "devDependencies": {

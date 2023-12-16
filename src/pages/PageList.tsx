@@ -61,6 +61,10 @@ const Unsubscribe = lazy(
   () => import(/* webpackChunkName: "terms" */ './Unsubscribe/Unsubscribe'),
 )
 
+const Patreon = lazy(
+  () => import(/* webpackChunkName: "terms" */ './Patreon/Patreon'),
+)
+
 export const getAvailablePageList = (supportedModules: MODULE[]): IPageMeta[] =>
   COMMUNITY_PAGES.filter((pageItem) =>
     supportedModules.includes(pageItem.moduleName),
@@ -196,6 +200,14 @@ const unsubscribe = {
   description: '',
 }
 
+const patreon = {
+  moduleName: MODULE.CORE,
+  path: '/patreon',
+  component: <Patreon />,
+  title: 'Patreon',
+  description: '',
+}
+
 export const COMMUNITY_PAGES: IPageMeta[] = [
   howTo,
   maps,
@@ -217,4 +229,5 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
   unsubscribe,
   QuestionModule,
+  patreon,
 ]

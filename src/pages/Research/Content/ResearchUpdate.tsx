@@ -10,7 +10,6 @@ import {
   VideoPlayer,
 } from 'oa-components'
 import type { IResearch } from 'src/models/research.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
@@ -18,6 +17,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useCommonStores } from 'src/index'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 
 interface IProps {
   update: IResearch.UpdateDB
@@ -167,7 +167,7 @@ const ResearchUpdate = ({
                 <VideoPlayer videoUrl={update.videoUrl} />
               ) : (
                 <ImageGallery
-                  images={update.images as IUploadedFileMeta[]}
+                  images={formatImagesForGallery(update.images)}
                   allowPortrait={true}
                 />
               )}

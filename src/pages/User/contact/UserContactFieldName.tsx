@@ -17,6 +17,7 @@ export const UserContactFieldName = () => {
         data-testid={name}
         name={name}
         placeholder={placeholder}
+        sx={{ backgroundColor: 'white' }}
         validateFields={[]}
       />
     </Box>

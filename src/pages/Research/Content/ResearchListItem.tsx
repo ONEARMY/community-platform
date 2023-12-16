@@ -7,6 +7,7 @@ import type { IResearch } from 'src/models/research.models'
 import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
 import { Card, Image, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 
 interface IProps {
   item: IResearch.ItemDB & {
@@ -48,7 +49,9 @@ const ResearchListItem = ({ item }: IProps) => {
                   maxWidth: 'none',
                 }}
                 loading="lazy"
-                src={getItemThumbnail(item)}
+                src={cdnImageUrl(getItemThumbnail(item), {
+                  width: 125,
+                })}
                 crossOrigin=""
               />
             </Box>

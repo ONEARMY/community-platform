@@ -1,7 +1,9 @@
 import { DbCollectionName } from '../utils/TestUtils'
 import { UserMenuItem } from '../support/commands'
-import type { IUser } from '../../../../src/models/user.models'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
+import { form } from '../../../../src/pages/UserSettings/labels'
+
+import type { IUser } from '../../../../src/models/user.models'
 
 interface Info {
   username: string
@@ -92,6 +94,30 @@ describe('[Settings]', () => {
           type: 'image/jpeg',
         },
       ],
+      impact: {
+        2022: [
+          {
+            id: 'plastic',
+            value: 43000,
+            isVisible: true,
+          },
+          {
+            id: 'revenue',
+            value: 100000,
+            isVisible: false,
+          },
+          {
+            id: 'employees',
+            value: 3,
+            isVisible: true,
+          },
+          {
+            id: 'volunteers',
+            value: 45,
+            isVisible: false,
+          },
+        ],
+      },
       isContactableByPublic: true,
       links: [
         {
@@ -154,6 +180,17 @@ describe('[Settings]', () => {
         searchKeyword: 'Singapo',
         locationName: expected.location.value,
       })
+
+      cy.step('Save impact data')
+      cy.get('[data-cy="impact-button-expand"]').click()
+      cy.get('[data-cy="impactForm-2022-button-edit"]').click()
+      cy.get('[data-cy="impactForm-2022-field-revenue-value"]')
+        .clear()
+        .type('100000')
+      cy.get('[data-cy="impactForm-2022-field-revenue-isVisible"]').click()
+      cy.get('[data-cy="impactForm-2022-field-machines-value"]').clear()
+      cy.get('[data-cy="impactForm-2022-button-save"]').click()
+      cy.contains(form.saveSuccess)
 
       cy.step('Opt-in to being contacted by users')
       cy.get('[data-cy=isContactableByPublic]').should('not.be.checked')

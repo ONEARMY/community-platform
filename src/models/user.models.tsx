@@ -9,6 +9,7 @@ import type {
   UserRole,
   EmailNotificationFrequency,
   NotificationType,
+  PatreonUser,
 } from 'oa-shared'
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
@@ -54,22 +55,20 @@ export interface IUser {
   unsubscribeToken?: string
   impact?: IUserImpact
   isContactableByPublic?: boolean
+  patreon?: PatreonUser
 }
 
-export type IUserImpact = IImpactData[] | []
-
-export interface IImpactData {
-  year: IImpactYear
-  fields: ImpactDataField[]
+export interface IUserImpact {
+  [key: number]: IImpactYearFieldList
 }
 
-export interface ImpactDataField {
-  label: string
+export interface IImpactDataField {
+  id: string
   value: number
-  prefix?: string
-  suffix?: string
   isVisible: boolean
 }
+
+export type IImpactYearFieldList = IImpactDataField[]
 
 export type IImpactYear = 2021 | 2022 | 2023
 

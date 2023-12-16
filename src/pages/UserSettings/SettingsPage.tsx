@@ -7,7 +7,7 @@ import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { Form } from 'react-final-form'
 import { v4 as uuid } from 'uuid'
-
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { FocusSection } from './content/formSections/Focus.section'
 import { ExpertiseSection } from './content/formSections/Expertise.section'
@@ -20,6 +20,7 @@ import { ProfileGuidelines } from './content/PostingGuidelines'
 import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import { PublicContactSection } from './content/formSections/PublicContact.section'
+import { ImpactSection } from './content/formSections/Impact/Impact.section'
 
 import { buttons, headings } from './labels'
 import INITIAL_VALUES from './Template'
@@ -33,6 +34,7 @@ import type { ThemeStore } from 'src/stores/Theme/theme.store'
 import type { UserStore } from 'src/stores/User/user.store'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 import type { IMapPin } from 'src/models'
+import { PatreonIntegration } from './content/formSections/PatreonIntegration'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -287,6 +289,13 @@ export class SettingsPage extends React.Component<IProps, IState> {
                         />
                       )}
                       {/* General fields */}
+
+                      <UserInfosSection
+                        formValues={values}
+                        mutators={form.mutators}
+                        showLocationDropdown={this.state.showLocationDropdown}
+                      />
+
                       {!isMember && isModuleSupported(MODULE.MAP) && (
                         <WorkspaceMapPinSection>
                           <MapPinModerationComments mapPin={userMapPin} />
@@ -300,12 +309,14 @@ export class SettingsPage extends React.Component<IProps, IState> {
                           <MapPinModerationComments mapPin={userMapPin} />
                         </MemberMapPinSection>
                       )}
-                      <UserInfosSection
-                        formValues={values}
-                        mutators={form.mutators}
-                        showLocationDropdown={this.state.showLocationDropdown}
-                      />
                     </Flex>
+
+                    {!isMember && (
+                      <AuthWrapper roleRequired={'beta-tester'}>
+                        <ImpactSection />
+                      </AuthWrapper>
+                    )}
+
                     <EmailNotificationsSection
                       notificationSettings={values.notification_settings}
                     />
@@ -314,6 +325,9 @@ export class SettingsPage extends React.Component<IProps, IState> {
                         isContactableByPublic={values.isContactableByPublic}
                       />
                     )}
+                    <AuthWrapper roleRequired={'beta-tester'}>
+                      <PatreonIntegration user={user} />
+                    </AuthWrapper>
                   </form>
                   <AccountSettingsSection />
                 </Box>

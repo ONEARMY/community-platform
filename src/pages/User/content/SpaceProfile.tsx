@@ -38,6 +38,7 @@ import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
 import type { UserCreatedDocs } from '.'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 
 interface IProps {
   user: IUserPP
@@ -194,7 +195,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
     >
       <Box sx={{ lineHeight: 0 }}>
         <ImageGallery
-          images={coverImage}
+          images={formatImagesForGallery(coverImage)}
           hideThumbnails={true}
           showNextPrevButton={true}
         />

@@ -34,6 +34,42 @@ describe('cdnImageUrl', () => {
     ).toBe(`https://cdn-url.com/image.jpg`)
   })
 
+  it('should handle resize params and existing query params', () => {
+    jest.mock('src/config/config', () => ({
+      FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
+      CDN_URL: 'https://cdn-url.com',
+    }))
+
+    const { cdnImageUrl } = require('src/utils/cdnImageUrl')
+
+    expect(
+      cdnImageUrl(
+        `https://firebasestorage.googleapis.com/v0/b/${STORAGE_BUCKET}/image.jpg?query=param`,
+        {
+          width: 500,
+        },
+      ),
+    ).toBe(`https://cdn-url.com/image.jpg?query=param&width=500`)
+  })
+
+  it('should handle resize params', () => {
+    jest.mock('src/config/config', () => ({
+      FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
+      CDN_URL: 'https://cdn-url.com',
+    }))
+
+    const { cdnImageUrl } = require('src/utils/cdnImageUrl')
+
+    expect(
+      cdnImageUrl(
+        `https://firebasestorage.googleapis.com/v0/b/${STORAGE_BUCKET}/image.jpg`,
+        {
+          width: 500,
+        },
+      ),
+    ).toBe(`https://cdn-url.com/image.jpg?width=500`)
+  })
+
   it('should not modify a non-Firebase URL', () => {
     jest.mock('src/config/config', () => ({
       FIREBASE_CONFIG: { storageBucket: 'some-bucket' },

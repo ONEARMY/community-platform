@@ -53,9 +53,9 @@ export const HowToCard = (props: IProps) => {
                 objectFit: 'cover',
               }}
               loading="lazy"
-              src={
-                cdnImageUrl(howto.cover_image?.downloadUrl || '') + '&width=500'
-              }
+              src={cdnImageUrl(howto.cover_image?.downloadUrl || '', {
+                width: 500,
+              })}
               crossOrigin=""
             />
           </Flex>

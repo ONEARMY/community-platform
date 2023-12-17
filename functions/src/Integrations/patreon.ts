@@ -46,10 +46,11 @@ const isValidTierId = (id: string) => {
   }
 }
 
-const isSupporter = (patreonUser: PatreonUser) => {
+export const isSupporter = (patreonUser: PatreonUser) => {
   const supportsValidTier = patreonUser.membership?.tiers
     .map(({ id }) => id)
     .some(isValidTierId)
+  console.log('supportsValidTier', supportsValidTier)
   return (
     patreonUser.membership?.attributes.patron_status === 'active_patron' &&
     supportsValidTier

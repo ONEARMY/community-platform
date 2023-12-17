@@ -47,17 +47,14 @@ export const Select = (props: Props) => {
       },
     }),
 
-    option: (provided) => ({
+    option: (provided, state) => ({
       ...provided,
-      backgroundColor: theme.colors.background,
+      backgroundColor: state.isFocused
+        ? theme.colors.white
+        : theme.colors.background,
       boxShadow: 'none',
       cursor: 'pointer',
       color: theme.colors.black,
-      ':hover': {
-        outline: 'none',
-        backgroundColor: theme.colors.white,
-        color: theme.colors.black,
-      },
     }),
 
     menu: (provided) => ({
@@ -118,17 +115,14 @@ export const Select = (props: Props) => {
       ...provided,
       color: theme.colors.black,
     }),
-    option: (provided) => ({
+    option: (provided, state) => ({
       ...provided,
       color: theme.colors.black,
-      backgroundColor: theme.colors.white,
+      backgroundColor: state.isFocused
+        ? theme.colors.softblue
+        : theme.colors.white,
       cursor: 'pointer',
       boxShadow: 'none',
-      ':hover': {
-        outline: 'none',
-        backgroundColor: theme.colors.softblue,
-        color: theme.colors.black,
-      },
     }),
 
     menu: (provided) => ({

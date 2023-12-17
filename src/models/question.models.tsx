@@ -24,5 +24,6 @@ export namespace IQuestion {
     slug: string
     previousSlugs?: string[]
     creatorCountry?: string
+    allowDraftSave?: boolean
   }
 }

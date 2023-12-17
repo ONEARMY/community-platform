@@ -13,6 +13,12 @@ export const UserContactFieldMessage = () => {
   const { title, placeholder } = contact.message
   const name = 'message'
 
+  const sx = {
+    backgroundColor: 'white',
+    height: '300px',
+    resize: 'vertical',
+  }
+
   return (
     <Box mb={3}>
       <Label htmlFor={name}>{`${title} *`}</Label>
@@ -25,7 +31,7 @@ export const UserContactFieldMessage = () => {
         data-testid={name}
         modifiers={{ capitalize: true, trim: true }}
         component={FieldTextarea}
-        style={{ resize: 'vertical', height: '300px' }}
+        sx={sx}
         validate={required}
         validateFields={[]}
         showCharacterCount

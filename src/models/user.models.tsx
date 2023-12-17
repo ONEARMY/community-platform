@@ -9,6 +9,7 @@ import type {
   UserRole,
   EmailNotificationFrequency,
   NotificationType,
+  PatreonUser,
 } from 'oa-shared'
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
@@ -54,6 +55,7 @@ export interface IUser {
   unsubscribeToken?: string
   impact?: IUserImpact
   isContactableByPublic?: boolean
+  patreon?: PatreonUser
 }
 
 export interface IUserImpact {
@@ -61,10 +63,8 @@ export interface IUserImpact {
 }
 
 export interface IImpactDataField {
-  label: string
+  id: string
   value: number
-  prefix?: string
-  suffix?: string
   isVisible: boolean
 }
 

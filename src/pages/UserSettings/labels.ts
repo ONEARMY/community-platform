@@ -12,8 +12,8 @@ export const buttons = {
   impact: {
     create: 'Add data now',
     edit: 'Edit data',
-    expandOpen: 'Expand and edit &#11107;',
-    expandClose: 'Close &#11105;',
+    expandOpen: 'Expand and edit',
+    expandClose: 'Close',
     save: 'Save impact data',
   },
   guidelines: 'Check out our guidelines',

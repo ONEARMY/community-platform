@@ -104,6 +104,32 @@ describe('question.store', () => {
       expect(res).toStrictEqual([])
       expect(getWhereFn).toBeCalledWith('_deleted', '!=', 'true')
     })
+
+    it('handles empty response', async () => {
+      const { store, getWhereFn } = await factory()
+
+      getWhereFn.mockResolvedValue([
+        FactoryQuestionItem({
+          slug: 'question-draft',
+          _createdBy: 'author',
+          moderation: 'draft',
+        }),
+        FactoryQuestionItem({
+          slug: 'question-published',
+          _createdBy: 'author',
+          moderation: 'accepted',
+        }),
+      ])
+
+      // Act
+      const res = await store.fetchQuestions()
+      expect(res.length).toEqual(1)
+      expect(res[0]).toMatchObject({
+        slug: 'question-published',
+        _createdBy: 'author',
+        moderation: 'accepted',
+      })
+    })
   })
 
   describe('fetchQuestionBySlug', () => {

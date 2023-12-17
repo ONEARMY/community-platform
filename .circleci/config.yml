@@ -559,6 +559,7 @@ workflows:
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
+            - circle-ci-patreon-context
             - community-platform-dev
       - deploy:
           name: 'Deploy: dev.community.projectkamp.com'
@@ -569,6 +570,7 @@ workflows:
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
+            - circle-ci-patreon-context
             - project-kamp-dev
       - deploy:
           name: 'Deploy: dev.community.fixing.fashion'
@@ -579,6 +581,7 @@ workflows:
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
+            - circle-ci-patreon-context
             - fixing-fashion-dev
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
@@ -601,6 +604,7 @@ workflows:
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
+            - circle-ci-patreon-context
             - fixing-fashion-prod
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
@@ -611,6 +615,7 @@ workflows:
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
+            - circle-ci-patreon-context
             - community-platform-production
       - deploy:
           name: 'Deploy: community.projectkamp.com'
@@ -621,4 +626,5 @@ workflows:
           NOTIFY_SLACK: true
           context:
             - circle-ci-slack-context
+            - circle-ci-patreon-context
             - project-kamp-production

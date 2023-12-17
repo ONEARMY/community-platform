@@ -24,24 +24,24 @@ describe('Impact', () => {
     const impact = {
       2022: [
         {
-          label: 'volunteers',
-          value: 45,
-          isVisible: true,
-        },
-        {
-          label: 'plastic recycled',
+          id: 'plastic',
           suffix: 'Kg of',
           value: 23000,
           isVisible: true,
         },
         {
-          label: 'revenue',
+          id: 'volunteers',
+          value: 45,
+          isVisible: true,
+        },
+        {
+          id: 'revenue',
           prefix: '$',
           value: 54000,
           isVisible: true,
         },
         {
-          label: 'machines built',
+          id: 'machines',
           value: 13,
           isVisible: false,
         },

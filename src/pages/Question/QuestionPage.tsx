@@ -1,4 +1,4 @@
-import { Loader, UsefulStatsButton } from 'oa-components'
+import { Loader, ModerationStatus, UsefulStatsButton } from 'oa-components'
 import { useState, useEffect } from 'react'
 import type { RouteComponentProps } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -49,7 +49,7 @@ export const QuestionPage = (props: IProps) => {
       {isLoading ? (
         <Loader />
       ) : question ? (
-        <Card sx={{ mt: 4, p: 4 }}>
+        <Card sx={{ mt: 4, p: 4, position: 'relative' }}>
           <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
             <UsefulStatsButton
               votedUsefulCount={store.votedUsefulCount}
@@ -58,6 +58,11 @@ export const QuestionPage = (props: IProps) => {
               onUsefulClick={onUsefulClick}
             />
           </Flex>
+          <ModerationStatus
+            status={question.moderation}
+            contentType="question"
+            sx={{ top: 0, position: 'absolute', right: 0 }}
+          />
 
           <Box mt={3} mb={2}>
             <UserNameTag

@@ -35,7 +35,7 @@ export const ChunkLoadErrorHandler = () => {
           </Text>
           <Button onClick={() => attemptReload()}>Load the new site.</Button>
           <Text mt={4} sx={{ fontSize: 0.75 }}>
-            If it doesn't work you might need to close and re-open your browser
+            If it doesn't work you might need to try another browser.
             <br></br>Or send us a{' '}
             <a href="mailto:platform@onearmy.earth?subject=Platform%20Bugs">
               mail

@@ -307,30 +307,27 @@ export const users = {
     impact: {
       2022: [
         {
-          label: 'plastic recycled',
+          id: 'plastic',
           value: 43000,
-          suffix: 'Kg of',
           isVisible: true,
         },
         {
-          label: 'revenue',
+          id: 'revenue',
           value: 36000,
-          prefix: '$',
-          suffix: 'in',
           isVisible: true,
         },
         {
-          label: 'full time employees',
+          id: 'employees',
           value: 3,
           isVisible: true,
         },
         {
-          label: 'volunteers',
+          id: 'volunteers',
           value: 45,
           isVisible: false,
         },
         {
-          label: 'machines built',
+          id: 'machines',
           value: 2,
           isVisible: true,
         },

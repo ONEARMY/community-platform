@@ -21,7 +21,6 @@ import {
   UsefulStatsButton,
   CategoryTag,
   DownloadStaticFile,
-  Username,
   DownloadFileFromLink,
   ConfirmModal,
   ContentStatistics,
@@ -45,10 +44,10 @@ import {
   retrieveSessionStorageArray,
   addIDToSessionStorageArray,
 } from 'src/utils/sessionStorage'
-import { isUserVerified } from 'src/common/isUserVerified'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -148,10 +147,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       return ''
     }
   }
-  const dateCreatedText = ` | Published on ${format(
-    new Date(howto._created),
-    'DD-MM-YYYY',
-  )}`
 
   useEffect(() => {
     if (!didInit) {
@@ -252,24 +247,12 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column' }}>
-                <Flex sx={{ alignItems: 'center' }}>
-                  <Username
-                    user={{
-                      userName: howto._createdBy,
-                      countryCode: howto.creatorCountry,
-                    }}
-                    isVerified={isUserVerified(howto._createdBy)}
-                  />
-                  <Text
-                    variant="auxiliary"
-                    sx={{
-                      marginTop: 2,
-                      marginBottom: 2,
-                    }}
-                  >
-                    {dateCreatedText}
-                  </Text>
-                </Flex>
+                <UserNameTag
+                  userName={howto._createdBy}
+                  countryCode={howto.creatorCountry}
+                  created={howto._created}
+                  action="Published"
+                />
 
                 <Text
                   variant="auxiliary"

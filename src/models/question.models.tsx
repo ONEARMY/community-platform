@@ -23,6 +23,7 @@ export namespace IQuestion {
     tags: ISelectedTags
     slug: string
     previousSlugs?: string[]
+    creatorCountry?: string
     allowDraftSave?: boolean
   }
 }

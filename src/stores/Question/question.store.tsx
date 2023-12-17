@@ -5,6 +5,8 @@ import type { IQuestion, IQuestionDB } from '../../models/question.models'
 import { ModuleStore } from '../common/module.store'
 import type { RootStore } from '../index'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+import type { IUser } from 'src/models'
+import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
   formatLowerNoSpecial,
@@ -78,8 +80,12 @@ export class QuestionStore extends ModuleStore {
       slug += `-${randomID()}`
     }
 
+    const user = this.activeUser as IUser
+    const creatorCountry = this.getCreatorCountry(user, values)
+
     await dbRef.set({
       ...(values as any),
+      creatorCountry,
       _createdBy: values._createdBy ?? this.activeUser?.userName,
       slug,
     })
@@ -96,6 +102,17 @@ export class QuestionStore extends ModuleStore {
     const validQuestions = filterModerableItems(questions, this.activeUser)
     logger.debug(`fetchQuestions:`, { validQuestions })
     return validQuestions
+  }
+
+  private getCreatorCountry(user: IUser, values: IQuestion.FormInput) {
+    const { creatorCountry, _createdBy } = values
+    const userCountry = getUserCountry(user)
+
+    return (_createdBy && _createdBy === user.userName) || !_createdBy
+      ? userCountry
+      : creatorCountry
+      ? creatorCountry
+      : ''
   }
 
   private async _getQuestionItemBySlug(

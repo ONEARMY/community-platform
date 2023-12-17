@@ -65,11 +65,11 @@ async function processHowToUpdates(change: IDBDocChange) {
 
 async function updatePostsCountry(userId: string, country: IUserDB['country']) {
   if (!userId || !country) {
-    console.error('Missing information to set howToCountry')
+    console.error('Missing information to set creatorCountry')
     return false
   }
   console.log(
-    "Updating howto's and researches from user",
+    "Updating howto's, researches and question from user",
     userId,
     'to country:',
     country,
@@ -122,6 +122,30 @@ async function updatePostsCountry(userId: string, country: IUserDB['country']) {
     return false
   }
   console.log('Successfully updated', updatedResearchCount, 'researches!')
+
+  // 3. Update Questions
+  let updatedQuestionCount = 0
+  const questionQuerySnapshot = await db
+    .collection(DB_ENDPOINTS.questions)
+    .where('_createdBy', '==', userId)
+    .get()
+  if (questionQuerySnapshot) {
+    for (const doc of questionQuerySnapshot.docs) {
+      try {
+        await doc.ref.update({
+          creatorCountry: country,
+          _modified: new Date().toISOString(),
+        })
+        updatedQuestionCount += 1
+      } catch (error) {
+        console.error('Error updating Question: ', error)
+      }
+    }
+  } else {
+    console.log('Error getting user questions')
+    return false
+  }
+  console.log('Successfully updated', updatedQuestionCount, 'questions!')
 
   return false
 }

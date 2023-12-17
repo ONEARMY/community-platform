@@ -11,7 +11,6 @@ import {
 } from 'oa-components'
 import { useEffect, useState, Fragment } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { isUserVerified } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -23,6 +22,7 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { buildStatisticsLabel } from 'src/utils/helpers'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -208,30 +208,12 @@ const ResearchDescription = ({
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column' }}>
-                <Flex sx={{ alignItems: 'center' }}>
-                  <Flex sx={{ alignItems: 'center' }}>
-                    <Username
-                      user={{
-                        userName: research._createdBy,
-                        countryCode: research.creatorCountry,
-                      }}
-                      isVerified={isUserVerified(research._createdBy)}
-                    />
-                    <Text
-                      variant="auxiliary"
-                      sx={{
-                        marginTop: 2,
-                        marginBottom: 2,
-                      }}
-                    >
-                      {`| Started on ${format(
-                        new Date(research._created),
-                        'DD-MM-YYYY',
-                      )}`}
-                    </Text>
-                  </Flex>
-                </Flex>
-
+                <UserNameTag
+                  userName={research._createdBy}
+                  countryCode={research.creatorCountry}
+                  created={research._created}
+                  action="Started"
+                />
                 <Text
                   variant="auxiliary"
                   sx={{

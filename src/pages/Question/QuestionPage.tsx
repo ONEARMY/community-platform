@@ -6,6 +6,7 @@ import type { IQuestion } from 'src/models'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Heading, Text, Flex } from 'theme-ui'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 
 type IProps = RouteComponentProps<{ slug: string }>
 
@@ -62,6 +63,15 @@ export const QuestionPage = (props: IProps) => {
             contentType="question"
             sx={{ top: 0, position: 'absolute', right: 0 }}
           />
+
+          <Box mt={3} mb={2}>
+            <UserNameTag
+              userName={question._createdBy}
+              countryCode={question.creatorCountry}
+              created={question._created}
+              action="Asked"
+            />
+          </Box>
 
           <Box mt={3} mb={2}>
             <Heading mb={1}>{question.title}</Heading>

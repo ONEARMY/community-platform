@@ -18,7 +18,7 @@ export const Impact = ({ impact, user }: Props) => {
 
     return (
       <ImpactItem
-        fields={(foundYear && impact) && impact[foundYear]}
+        fields={foundYear && impact && impact[foundYear]}
         year={year}
         key={index}
         user={user}

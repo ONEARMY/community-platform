@@ -1,5 +1,17 @@
 export const heading = 'Impact'
 
+export const invisible = {
+  user: {
+    label:
+      "Their data is part of the global impact report (but they'd rather keep the specifics private).",
+    link: 'Impact Report',
+  },
+  owner: {
+    label: "You've set all your data for this year to be private.",
+    link: 'Update impact data',
+  },
+}
+
 export const missing = {
   user: {
     label:

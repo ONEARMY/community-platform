@@ -1,5 +1,5 @@
 import { createRef, useEffect, useState } from 'react'
-import { Box, Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import { Button } from '../Button/Button'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 import { EditComment } from '../EditComment/EditComment'
@@ -11,6 +11,7 @@ export interface CommentItemProps {
   text: string
   isUserVerified?: boolean
   isEditable: boolean
+  isPadding?: boolean
   creatorCountry?: string | null
   creatorName: string
   _id: string
@@ -66,9 +67,15 @@ export const CommentItem = (props: CommentItemProps) => {
   }
 
   return (
-    <Box id={`comment:${_id}`} data-cy="comment">
+    <Flex
+      id={`comment:${_id}`}
+      data-cy="comment"
+      sx={{
+        alignItems: 'stretch',
+        flexDirection: 'row',
+      }}
+    >
       <Flex
-        p="3"
         bg={'white'}
         sx={{
           width: '100%',
@@ -76,78 +83,94 @@ export const CommentItem = (props: CommentItemProps) => {
           borderRadius: '5px',
         }}
       >
-        <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <Username
-            user={{
-              userName: creatorName,
-              countryCode: creatorCountry,
-            }}
-            isVerified={!!isUserVerified}
-          />
-          <Flex sx={{ alignItems: 'center' }}>
-            <>
-              {_edited && (
-                <Text sx={{ fontSize: 0, color: 'grey' }} mr={2}>
-                  (Edited)
-                </Text>
-              )}
-              <Text sx={{ fontSize: 1 }}>
-                {formatDate(_edited || _created)}
-              </Text>
-            </>
-          </Flex>
-        </Flex>
-        <Text
-          data-cy="comment-text"
-          mt={2}
-          mb={2}
+        <Flex
           sx={{
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            overflow: 'hidden',
-            maxHeight: isShowMore ? 'max-content' : '128px',
-            fontFamily: 'body',
-            lineHeight: 1.3,
+            alignItems: 'stretch',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'flex-start',
           }}
-          ref={textRef}
         >
-          <LinkifyText>{text}</LinkifyText>
-        </Text>
-        {textHeight > 129 && (
-          <a
-            onClick={showMore}
-            style={{
-              color: 'gray',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
-          >
-            {isShowMore ? 'Show less' : 'Show more'}
-          </a>
-        )}
-        <Flex ml="auto">
+          <Flex sx={{ alignItems: 'baseline', gap: 2 }}>
+            <Username
+              user={{
+                userName: creatorName,
+                countryCode: creatorCountry,
+              }}
+              isVerified={!!isUserVerified}
+            />
+            {_edited && (
+              <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
+            )}
+            <Text sx={{ fontSize: 1 }}>{formatDate(_edited || _created)}</Text>
+          </Flex>
+
           {isEditable && (
-            <>
+            <Flex
+              sx={{
+                flexGrow: 1,
+                gap: 2,
+                justifyContent: ['flex-start', 'flex-start', 'flex-end'],
+                opacity: 0.5,
+                width: ['100%', 'auto'],
+                ':hover': { opacity: 1 },
+              }}
+            >
               <Button
                 data-cy="CommentItem: edit button"
-                variant={'outline'}
-                small={true}
-                icon={'edit'}
+                variant="outline"
+                small
+                icon="edit"
                 onClick={() => onEditRequest(_id)}
               >
                 edit
               </Button>
               <Button
                 data-cy="CommentItem: delete button"
-                variant={'outline'}
-                small={true}
+                variant="outline"
+                small
                 icon="delete"
                 onClick={() => setShowDeleteModal(true)}
-                ml={2}
               >
                 delete
               </Button>
-            </>
+            </Flex>
+          )}
+        </Flex>
+        <Flex
+          sx={{
+            alignItems: 'stretch',
+            flexDirection: 'row',
+          }}
+        >
+          <Text
+            data-cy="comment-text"
+            mt={2}
+            mb={2}
+            sx={{
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+              overflow: 'hidden',
+              maxHeight: isShowMore ? 'max-content' : '128px',
+              fontFamily: 'body',
+              lineHeight: 1.3,
+            }}
+            ref={textRef}
+          >
+            <LinkifyText>{text}</LinkifyText>
+          </Text>
+          {textHeight > 129 && (
+            <a
+              onClick={showMore}
+              style={{
+                color: 'gray',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              {isShowMore ? 'Show less' : 'Show more'}
+            </a>
           )}
         </Flex>
 
@@ -170,6 +193,6 @@ export const CommentItem = (props: CommentItemProps) => {
           handleConfirm={() => handleDelete && handleDelete(_id)}
         />
       </Flex>
-    </Box>
+    </Flex>
   )
 }

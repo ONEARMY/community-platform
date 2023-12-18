@@ -1,6 +1,9 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { useState } from 'react'
+import { Avatar } from 'theme-ui'
+
 import { CreateComment } from './CreateComment'
+
+import type { StoryFn, Meta } from '@storybook/react'
 
 export default {
   title: 'Components/CreateComment',
@@ -52,6 +55,38 @@ Donec dapibus leo quis sagittis fringilla. Phasellus ut imperdiet sapien. Nullam
       onSubmit={() => null}
       userProfileType="member"
       maxLength={12300}
+      isLoggedIn={true}
+    />
+  )
+}
+
+export const CustomButtonText: StoryFn<typeof CreateComment> = () => {
+  const [comment, setComment] = useState('')
+  return (
+    <CreateComment
+      buttonLabel="SEND THIS NOOOOW!"
+      comment={comment}
+      onChange={setComment}
+      onSubmit={() => null}
+      userProfileType="member"
+      maxLength={123}
+      isLoggedIn={false}
+    />
+  )
+}
+
+export const CustomAvatar: StoryFn<typeof CreateComment> = () => {
+  const [comment, setComment] = useState('')
+  const src =
+    'http://cdn.mcauto-images-production.sendgrid.net/cb5a685b085b7e7c/1e6f3be3-e6fd-46c5-b30f-bcde950b0dbc/165x131.png'
+
+  return (
+    <CreateComment
+      comment={comment}
+      onChange={setComment}
+      onSubmit={() => null}
+      maxLength={123}
+      userAvatar={<Avatar src={src} />}
       isLoggedIn={true}
     />
   )

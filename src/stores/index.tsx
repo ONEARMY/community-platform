@@ -62,3 +62,5 @@ export interface IStores {
   questionStore: QuestionStore
   questionCategoriesStore: QuestionCategoriesStore
 }
+
+export type CommentableStore = IStores['howtoStore']

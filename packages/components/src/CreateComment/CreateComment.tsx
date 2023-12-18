@@ -1,7 +1,10 @@
-import { Box, Button, Flex, Text, Textarea } from 'theme-ui'
+import { Box, Flex, Text, Textarea } from 'theme-ui'
 import { Link } from 'react-router-dom'
-import type { ThemeUIStyleObject } from 'theme-ui'
+
 import { MemberBadge } from '../MemberBadge/MemberBadge'
+import { Button } from '../Button/Button'
+
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface Props {
   maxLength: number
@@ -9,12 +12,15 @@ export interface Props {
   onSubmit: (value: string) => void
   onChange: (value: string) => void
   comment: string
+  buttonLabel?: string
+  userAvatar?: React.ReactNode | undefined
   userProfileType?: string
   sx?: ThemeUIStyleObject
 }
 
 export const CreateComment = (props: Props) => {
-  const { comment, maxLength, isLoggedIn } = props
+  const { comment, isLoggedIn, maxLength, userAvatar } = props
+  const buttonLabel = props.buttonLabel || 'Leave a comment'
   const userProfileType = props.userProfileType || 'member'
   const { onSubmit } = props
   const onChange = (newValue: string) => {
@@ -22,10 +28,20 @@ export const CreateComment = (props: Props) => {
   }
 
   return (
-    <>
-      <Flex sx={{ marginBottom: 5 }} data-target="create-comment-container">
-        <Box sx={{ lineHeight: 0, marginTop: 2 }}>
-          <MemberBadge profileType={userProfileType} useLowDetailVersion />
+    <Flex
+      sx={{
+        alignItems: 'stretch',
+        flexDirection: 'column',
+      }}
+    >
+      <Flex
+        sx={{ marginBottom: 5, flexDirection: 'row' }}
+        data-target="create-comment-container"
+      >
+        <Box sx={{ lineHeight: 0 }}>
+          {userAvatar || (
+            <MemberBadge profileType={userProfileType} useLowDetailVersion />
+          )}
         </Box>
         <Box
           sx={{
@@ -99,15 +115,15 @@ export const CreateComment = (props: Props) => {
       <Button
         data-cy="comment-submit"
         disabled={!comment.trim() || !isLoggedIn}
+        icon="comment"
         variant="primary"
         onClick={() => onSubmit(comment)}
-        mt={3}
         sx={{
-          float: 'right',
+          alignSelf: 'flex-end',
         }}
       >
-        Leave a comment
+        {buttonLabel}
       </Button>
-    </>
+    </Flex>
   )
 }

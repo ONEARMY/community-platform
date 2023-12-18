@@ -1,7 +1,7 @@
-import type { IComment } from './comment.model'
+import type { IHowtoDB } from './howto.models'
 
 // Re-export all other files for easy access
-export type { IComment } from './comment.model'
+export * from './comment.model'
 export * from './common.models'
 export * from './howto.models'
 export * from './research.models'
@@ -14,6 +14,5 @@ export * from './user.models'
 export * from './userPreciousPlastic.models'
 export * from './notifications.models'
 export * from './question.models'
-export interface UserComment extends IComment {
-  isEditable: boolean
-}
+
+export type CommentableModel = IHowtoDB

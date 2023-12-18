@@ -1,136 +1,83 @@
-import { CommentList, CreateComment } from 'oa-components'
-import { useState } from 'react'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { useCommonStores } from 'src/index'
-import { logger } from 'src/logger'
 import { Box, Flex } from 'theme-ui'
+import {
+  ArticleCallToAction,
+  Button,
+  UsefulStatsButton,
+  UserEngagementWrapper,
+} from 'oa-components'
 
-import type { UserComment } from 'src/models'
-import { trackEvent } from 'src/common/Analytics'
+import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import { useCommonStores } from 'src/index'
+import { Discussion } from 'src/pages/common/Discussion/Discussion'
+
+import type { IHowtoDB, UserComment } from 'src/models'
+
 interface IProps {
   comments: UserComment[]
+  howto: IHowtoDB
 }
 
-// TODO: Expect the comments as a prop from the HowTo
-export const HowToComments = ({ comments }: IProps) => {
-  const [comment, setComment] = useState('')
-  const { stores } = useCommonStores()
-
-  const onSubmit = async (comment: string) => {
-    try {
-      const howto = stores.howtoStore.activeHowto
-      await stores.howtoStore.addComment(comment)
-      if (howto) {
-        await stores.userNotificationsStore.triggerNotification(
-          'new_comment',
-          howto._createdBy,
-          '/how-to/' + howto.slug,
-        )
-      }
-
-      setComment('')
-
-      trackEvent({
-        category: 'Comments',
-        action: 'Submitted',
-        label: stores.howtoStore.activeHowto?.title,
-      })
-      logger.debug(
-        {
-          category: 'Comments',
-          action: 'Submitted',
-          label: stores.howtoStore.activeHowto?.title,
-        },
-        'comment submitted',
-      )
-    } catch (err) {
-      // Error: Comment could not be posted
-      logger.error('Failed to submit comment', { err })
-    }
-  }
-
-  const handleEditRequest = async () => {
-    trackEvent({
-      category: 'Comments',
-      action: 'Edit existing comment',
-      label: stores.howtoStore.activeHowto?.title,
-    })
-  }
-
-  const handleDelete = async (_id: string) => {
-    await stores.howtoStore.deleteComment(_id)
-    trackEvent({
-      category: 'Comments',
-      action: 'Deleted',
-      label: stores.howtoStore.activeHowto?.title,
-    })
-    logger.debug(
-      {
-        category: 'Comments',
-        action: 'Deleted',
-        label: stores.howtoStore.activeHowto?.title,
-      },
-      'comment deleted',
-    )
-  }
-
-  const handleEdit = async (_id: string, comment: string) => {
-    trackEvent({
-      category: 'Comments',
-      action: 'Update',
-      label: stores.howtoStore.activeHowto?.title,
-    })
-    logger.debug(
-      {
-        category: 'Comments',
-        action: 'Update',
-        label: stores.howtoStore.activeHowto?.title,
-      },
-      'comment edited',
-    )
-    await stores.howtoStore.editComment(_id, comment)
+export const HowToComments = ({ comments, howto }: IProps) => {
+  const { aggregationsStore, howtoStore, userStore } = useCommonStores().stores
+  const user = userStore.activeUser
+  const author = {
+    userName: howto._createdBy,
+    countryCode: howto.creatorCountry,
+    isVerified: isUserVerifiedWithStore(howto._createdBy, aggregationsStore),
   }
 
   return (
-    <Flex
-      mt={5}
-      sx={{ flexDirection: 'column', alignItems: 'center' }}
-      data-cy="howto-comments"
-    >
-      <Flex
-        mb={4}
-        sx={{
-          width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <CommentList
-          articleTitle={stores.howtoStore.activeHowto?.title}
-          comments={comments}
-          handleEdit={handleEdit}
-          handleEditRequest={handleEditRequest}
-          handleDelete={handleDelete}
-          highlightedCommentId={window.location.hash.replace('#comment:', '')}
-          trackEvent={trackEvent}
-        />
-      </Flex>
-      <Box
-        sx={{
-          width: ['100%', `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
-        }}
-      >
-        <CreateComment
-          maxLength={MAX_COMMENT_LENGTH}
-          comment={comment}
-          onChange={setComment}
-          onSubmit={onSubmit}
-          isLoggedIn={!!stores.userStore.activeUser}
-          sx={{
-            marginLeft: [0, 2 * -1],
-          }}
-        />
+    <UserEngagementWrapper>
+      <Box sx={{}}>
+        <ArticleCallToAction author={author}>
+          <Button
+            sx={{ fontSize: 2 }}
+            onClick={() => {
+              document
+                .querySelector('[data-target="create-comment-container"]')
+                ?.scrollIntoView({
+                  behavior: 'smooth',
+                })
+              ;(
+                document.querySelector(
+                  '[data-cy="comments-form"]',
+                ) as HTMLTextAreaElement
+              )?.focus()
+
+              return false
+            }}
+          >
+            Leave a comment
+          </Button>
+          {howto.moderation === 'accepted' && (
+            <UsefulStatsButton
+              votedUsefulCount={howtoStore.votedUsefulCount}
+              hasUserVotedUseful={howtoStore.userVotedActiveHowToUseful}
+              isLoggedIn={!!user}
+              onUsefulClick={() => {
+                howtoStore.toggleUsefulByUser(howto._id, user?.userName || '')
+              }}
+            />
+          )}
+        </ArticleCallToAction>
       </Box>
-    </Flex>
+
+      <Flex
+        mt={5}
+        sx={{ flexDirection: 'column', alignItems: 'center' }}
+        data-cy="howto-comments"
+      >
+        <Flex
+          mb={4}
+          sx={{
+            width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
+            flexDirection: 'column',
+            alignItems: 'stretch',
+          }}
+        >
+          <Discussion comments={comments} parent={howto} store={howtoStore} />
+        </Flex>
+      </Flex>
+    </UserEngagementWrapper>
   )
 }

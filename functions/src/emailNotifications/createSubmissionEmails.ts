@@ -23,6 +23,7 @@ export async function createMessageEmails(message: IMessageDB) {
     const { toUserEmail } = await getUserAndEmail(toUserName)
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
+      replyTo: email,
       message: getReceiverMessageEmail(message),
     })
     await db.collection(DB_ENDPOINTS.emails).add({

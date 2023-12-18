@@ -166,17 +166,14 @@ export const getMapPinApprovalEmail = (
   }
 }
 
-export const RECEIVER_MESSAGE_SUBJECT = 'Hey you got a new message from'
-export const getReceiverMessageEmail = ({
-  email,
-  name,
-  text,
-}: IMessageDB): Email => {
+export const getReceiverMessageEmail = (message: IMessageDB): Email => {
+  const { email, name } = message
+
   const fromUser = name ? name : email
-  const subject = `${RECEIVER_MESSAGE_SUBJECT} ${fromUser}`
+  const subject = `${fromUser} sent you a message via the ${site.name} Map`
 
   return {
-    html: getEmailHtml('receiver-message', { email, fromUser, site, text }),
+    html: getEmailHtml('receiver-message', { ...message, fromUser, site }),
     subject,
   }
 }

@@ -207,6 +207,18 @@ export class UserStore extends ModuleStore {
     await dbRef.update(badgeUpdate)
   }
 
+  public async removePatreonConnection(userId: string) {
+    await Promise.all([
+      this.updateUserBadge(userId, {
+        supporter: false,
+      }),
+      this.db.collection(COLLECTION_NAME).doc(userId).update({
+        patreon: null,
+      }),
+    ])
+    await this.refreshActiveUserDetails()
+  }
+
   /**
    * Update a user profile
    * @param values Set of values to merge into user profile

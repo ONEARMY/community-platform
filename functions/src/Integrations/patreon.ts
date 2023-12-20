@@ -15,6 +15,47 @@ const PATREON_CLIENT_ID = CONFIG.integrations.patreon_client_id
 const PATREON_CLIENT_SECRET = CONFIG.integrations.patreon_client_secret
 const REDIRECT_URI = CONFIG.deployment.site_url + '/patreon'
 
+// See https://www.patreon.com/one_army/membership
+const PP_SUPPORTER_TIER_ID = '9413328'
+const PK_SUPPORTER_TIER_ID = '9413287'
+const FF_SUPPORTER_TIER_ID = '9413329'
+const ONE_ARMY_SUPPORTER_TIER_ID = '3929404'
+const ONE_ARMY_PLUS_SUPPORTER_TIER_ID = '1359808'
+const ONE_ARMY_MAGIC_SUPPORTER_TIER_ID = '6369370'
+
+const isValidTierId = (id: string) => {
+  const oneArmyTierIds = [
+    ONE_ARMY_SUPPORTER_TIER_ID,
+    ONE_ARMY_PLUS_SUPPORTER_TIER_ID,
+    ONE_ARMY_MAGIC_SUPPORTER_TIER_ID,
+  ]
+  if (oneArmyTierIds.includes(id)) return true
+  switch (CONFIG.deployment.site_url) {
+    case 'https://dev.onearmy.world':
+    case 'https://community.preciousplastic.com':
+      return id === PP_SUPPORTER_TIER_ID
+    case 'https://dev.community.projectkamp.com':
+    case 'https://community.projectkamp.com':
+      return id === PK_SUPPORTER_TIER_ID
+    case 'https://dev.community.fixing.fashion':
+    case 'https://community.fixing.fashion':
+      return id === FF_SUPPORTER_TIER_ID
+    default:
+      // Return true for local development.
+      return true
+  }
+}
+
+export const isSupporter = (patreonUser: PatreonUser) => {
+  const supportsValidTier = patreonUser.membership?.tiers
+    .map(({ id }) => id)
+    .some(isValidTierId)
+  return (
+    patreonUser.membership?.attributes.patron_status === 'active_patron' &&
+    supportsValidTier
+  )
+}
+
 const parsePatreonUser = (patreonUser: any): PatreonUser => {
   // As we do not request the identity.membership scope, we only receive the user's membership to the
   // One Army Patreon page, not other campaigns they may be part of.
@@ -159,10 +200,17 @@ export const patreonAuth = functions
       .then(async ({ access_token, refresh_token, expires_in }) => {
         const patreonUser = await getCurrentPatreonUser(access_token)
         const patreonUserParsed = parsePatreonUser(patreonUser)
+        const isSupporterUser = isSupporter(patreonUserParsed)
         try {
-          await db.collection(DB_ENDPOINTS.users).doc(user._id).update({
-            patreon: patreonUserParsed,
-          })
+          await db
+            .collection(DB_ENDPOINTS.users)
+            .doc(user._id)
+            .update({
+              patreon: patreonUserParsed,
+              badges: {
+                supporter: isSupporterUser,
+              },
+            })
 
           await db
             .collection(DB_ENDPOINTS.user_integrations)

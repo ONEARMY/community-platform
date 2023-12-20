@@ -6,6 +6,19 @@ import { Button } from 'oa-components'
 import { FlexSectionContainer } from './elements'
 import { useCommonStores } from 'src/index'
 
+const HEADING = '❤️ Become a Supporter'
+const SUBHEADING =
+  'Support us on Patreon to get a badge here on the platform and special insights and voting rights on decisions.'
+const BETA_DISCLAIMER =
+  'This feature is still in beta and we will continue to roll out more features for supporters.'
+const SUCCESS_MESSAGE = 'Successfully linked Patreon account!'
+const SUPPORTER_MESSAGE =
+  'Thanks for supporting us! :) Update your data if you changed your Patreon tiers or remove the connection below.'
+
+const CONNECT_BUTTON_TEXT = 'Connect To Patreon'
+const UPDATE_BUTTON_TEXT = 'Update Patreon Data'
+const REMOVE_BUTTON_TEXT = 'Remove Connection'
+
 export const PatreonIntegration = () => {
   const { userStore } = useCommonStores().stores
   const [user, setUser] = React.useState<IUserPP | undefined>(
@@ -46,15 +59,9 @@ export const PatreonIntegration = () => {
 
   return (
     <FlexSectionContainer>
-      <Heading variant="small">❤️ Become a Supporter</Heading>
-      <Text mt={4}>
-        Support us on Patreon to get a badge here on the platform and special
-        insights and voting rights on decisions.
-      </Text>
-      <Text mt={4}>
-        This feature is still in beta and we will continue to roll out more
-        features for supporters.
-      </Text>
+      <Heading variant="small">{HEADING}</Heading>
+      <Text mt={4}>{SUBHEADING}</Text>
+      <Text mt={4}>{BETA_DISCLAIMER}</Text>
       {user.patreon ? (
         <Box mt={4} mb={4}>
           <Flex
@@ -71,14 +78,11 @@ export const PatreonIntegration = () => {
                 height: 'auto',
               }}
             />
-            <Text>Successfully linked Patreon account!</Text>
+            <Text>{SUCCESS_MESSAGE}</Text>
           </Flex>
           {user.patreon.membership && (
             <Flex sx={{ flexDirection: 'column' }}>
-              <Text mt={4}>
-                Thanks for supporting us! :) Update your data if you changed you
-                Patreon tiers or remove the connection below.
-              </Text>
+              <Text mt={4}>{SUPPORTER_MESSAGE}</Text>
               {user.patreon.membership.tiers.map(({ id, attributes }) => (
                 <Flex
                   key={id}
@@ -132,19 +136,19 @@ export const PatreonIntegration = () => {
         <Button
           onClick={patreonRedirect}
           mb={3}
-          sx={{ width: '40%', justifyContent: 'center', mr: 3 }}
+          sx={{ justifyContent: 'center', mr: 3 }}
           variant="outline"
         >
-          {user.patreon ? 'Update Patreon Data' : 'Connect To Patreon'}
+          {user.patreon ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
         </Button>
         {user.patreon && (
           <Button
             onClick={removePatreonConnection}
             mb={3}
-            sx={{ width: '40%', justifyContent: 'center' }}
+            sx={{ justifyContent: 'center' }}
             variant="outline"
           >
-            Remove Connection
+            {REMOVE_BUTTON_TEXT}
           </Button>
         )}
       </Flex>

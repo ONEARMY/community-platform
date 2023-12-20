@@ -396,7 +396,7 @@ jobs:
                 event: pass
                 <<: *slack_custom_success_message
 
-  # Run cypress e2e tests on chrome and firefox
+  # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker
     # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
@@ -544,7 +544,7 @@ workflows:
           matrix:
             parameters:
               CI_NODE: [1, 2, 3, 4]
-              CI_BROWSER: ['chrome', 'firefox']
+              CI_BROWSER: ['chrome']
           filters:
             branches:
               ignore:

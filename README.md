@@ -132,6 +132,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/onim-at"><img src="https://avatars.githubusercontent.com/u/45094836?v=4?s=60" width="60px;" alt="Cosimo Chetta"/><br /><sub><b>Cosimo Chetta</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=onim-at" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://uk.linkedin.com/in/rogerchick"><img src="https://avatars.githubusercontent.com/u/555883?v=4?s=60" width="60px;" alt="Roger Chick"/><br /><sub><b>Roger Chick</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=rchick" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://ignasplace.com"><img src="https://avatars.githubusercontent.com/u/76262712?v=4?s=60" width="60px;" alt="Ignas"/><br /><sub><b>Ignas</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=IgnasPlace" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mariojsnunes"><img src="https://avatars.githubusercontent.com/u/8073622?v=4?s=60" width="60px;" alt="Mário Nunes"/><br /><sub><b>Mário Nunes</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=mariojsnunes" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

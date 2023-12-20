@@ -51,9 +51,6 @@ const MenuLink = styled(NavLink)`
   }
 `
 
-MenuLink.defaultProps = {
-  activeClassName: 'current',
-}
 @inject('mobileMenuStore')
 @observer
 export class MenuMobileLink extends React.Component<IProps> {
@@ -80,6 +77,7 @@ export class MenuMobileLink extends React.Component<IProps> {
               }
             }}
             style={this.props.style}
+            className={({ isActive }) => (isActive ? 'current' : '')}
           >
             <span>{this.props.content}</span>
           </MenuLink>

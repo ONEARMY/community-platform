@@ -246,7 +246,7 @@ describe('[How To]', () => {
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)
-      cy.location('pathname').should('eq', '/how-to')
+      cy.location('pathname').should('eq', '/how-to/')
       cy.location('search').should(
         'eq',
         `?search=this%20how%20to%20does%20not%20exist%20${id.replaceAll(

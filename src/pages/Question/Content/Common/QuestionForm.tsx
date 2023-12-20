@@ -3,7 +3,14 @@ import { Form, Field } from 'react-final-form'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { PostingGuidelines } from 'src/pages/Question/Content/Common'
-import { composeValidators, minValue, required } from 'src/utils/validators'
+import {
+  composeValidators,
+  draftValidationWrapper,
+  minValue,
+  required,
+  setAllowDraftSaveFalse,
+  setAllowDraftSaveTrue,
+} from 'src/utils/validators'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { logger } from 'src/logger'
 import {
@@ -14,36 +21,51 @@ import {
 
 import * as LABELS from 'src/pages/Question/labels'
 
-import type { RouteComponentProps } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import type { IQuestion } from 'src/models'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { COMPARISONS } from 'src/utils/comparisons'
+import { CategoriesSelect } from '../../../Howto/Category/CategoriesSelect'
 
-interface IProps extends RouteComponentProps<any> {
+interface IProps {
   'data-testid'?: string
   formValues?: any
   parentType: 'create' | 'edit'
 }
 
 export const QuestionForm = (props: IProps) => {
-  const publishButtonText = LABELS.buttons[props.parentType]
-  const headingText = LABELS.headings[props.parentType]
+  const navigate = useNavigate()
   const store = useQuestionStore()
+  const publishButtonText =
+    props.formValues?.moderation === 'draft'
+      ? LABELS.buttons.create
+      : LABELS.buttons[props.parentType]
+  const draftButtonText =
+    props.formValues?.moderation === 'draft'
+      ? LABELS.buttons.draft.update
+      : LABELS.buttons.draft.create
+
+  const headingText = LABELS.headings[props.parentType]
+
   return (
     <Form
       data-testid={props['data-testid']}
-      onSubmit={async (v: IQuestion.FormInput) => {
+      onSubmit={async (formValues: Partial<IQuestion.FormInput>) => {
+        formValues.moderation = formValues.allowDraftSave ? 'draft' : 'accepted'
         try {
-          const newDocument = await store.upsertQuestion(v)
+          const newDocument = await store.upsertQuestion(
+            formValues as IQuestion.FormInput,
+          )
           if (newDocument) {
-            props.history.push('/question/' + newDocument.slug)
+            navigate('/questions/' + newDocument.slug)
           }
         } catch (e) {
           logger.error(e)
         }
       }}
+      mutators={{ setAllowDraftSaveFalse, setAllowDraftSaveTrue }}
       initialValues={props.formValues}
-      render={({ submitting, handleSubmit }) => (
+      render={({ submitting, handleSubmit, form }) => (
         <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
           <Flex
             bg="inherit"
@@ -96,11 +118,32 @@ export const QuestionForm = (props: IProps) => {
                     name="description"
                     id="description"
                     label="Information"
-                    validate={composeValidators(required)}
+                    validate={(value, allValues) =>
+                      draftValidationWrapper(value, allValues, required)
+                    }
                     component={FieldInput}
                     placeholder={LABELS.overview.description.title}
                     maxLength={QUESTION_MAX_DESCRIPTION_LENGTH}
                     showCharacterCount
+                  />
+                </Box>
+
+                <Box mb={3}>
+                  <Label htmlFor="categories" sx={{ fontSize: 2, mb: 2 }}>
+                    Which categories fit your question?
+                  </Label>
+                  <Field
+                    name="questionCategory"
+                    render={({ input, ...rest }) => (
+                      <CategoriesSelect
+                        {...rest}
+                        isForm={true}
+                        onChange={input.onChange}
+                        value={input.value}
+                        placeholder="Select category"
+                        type="question"
+                      />
+                    )}
                   />
                 </Box>
 
@@ -138,28 +181,32 @@ export const QuestionForm = (props: IProps) => {
                 <PostingGuidelines />
               </Box>
 
-              {props.parentType === 'create' && (
-                <Button
-                  data-cy={'draft'}
-                  data-testid="draft"
-                  onClick={() => {}}
-                  mt={[0, 0, 3]}
-                  variant="secondary"
-                  type="submit"
-                  disabled={submitting}
-                  sx={{ width: '100%', display: 'block' }}
-                >
-                  <span>{LABELS.buttons.draft}</span>
-                </Button>
-              )}
+              <Button
+                data-cy={'draft'}
+                data-testid="draft"
+                mt={[0, 0, 3]}
+                variant="secondary"
+                type="submit"
+                disabled={submitting}
+                onClick={(event) => {
+                  form.mutators.setAllowDraftSaveTrue()
+                  handleSubmit(event)
+                }}
+                sx={{ width: '100%', display: 'block' }}
+              >
+                <span>{draftButtonText}</span>
+              </Button>
               <Button
                 large
                 data-cy={'submit'}
                 mt={3}
-                onClick={handleSubmit}
                 variant="primary"
                 type="submit"
                 disabled={submitting}
+                onClick={(event) => {
+                  form.mutators.setAllowDraftSaveFalse()
+                  handleSubmit(event)
+                }}
                 sx={{
                   width: '100%',
                   mb: ['40px', '40px', 0],

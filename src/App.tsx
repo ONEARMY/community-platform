@@ -4,13 +4,13 @@ import { ThemeProvider, Global } from '@emotion/react'
 import { GlobalStyles } from 'oa-components'
 import { RootStore } from './stores'
 import ErrorBoundary from './common/Error/ErrorBoundary'
-import { Routes } from './pages'
+import { Pages } from './pages'
 
 const rootStore = new RootStore()
 
 /**
  * Additional store and db exports for use in modern context consumers
- * @example const {userStore} = useCommonStores()
+ * @example const {userStore} = useCommonStores().stores
  */
 export const rootStoreContext = React.createContext<RootStore>(rootStore)
 export const useCommonStores = () =>
@@ -29,7 +29,7 @@ export class App extends Component {
           >
             <>
               <ErrorBoundary>
-                <Routes />
+                <Pages />
               </ErrorBoundary>
               <Global styles={GlobalStyles} />
             </>

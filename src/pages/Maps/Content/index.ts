@@ -1,4 +1,2 @@
-import { MapView } from './MapView/MapView'
-import { Controls } from './Controls/Controls'
-
-export { MapView, Controls }
+export { MapView } from './MapView/MapView'
+export { Controls } from './Controls/Controls'

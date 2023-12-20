@@ -1,10 +1,15 @@
 import { Provider } from 'mobx-react'
-import { render, act } from '@testing-library/react'
-import { MemoryRouter } from 'react-router'
-import { useCommonStores } from '../../index'
+import { render, act, waitFor } from '@testing-library/react'
+import {
+  Route,
+  createMemoryRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import Maps from './Maps'
+import { useCommonStores } from 'src/index'
 const Theme = testingThemeStyles
 
 const mockMapStore = {
@@ -17,6 +22,8 @@ const mockMapStore = {
   getPinsNumberByFilterType: jest.fn(),
   canSeePin: jest.fn(),
   needsModeration: jest.fn(),
+  setMapBoundingBox: jest.fn(),
+  filteredPins: [],
 }
 
 jest.mock('src/index', () => ({
@@ -70,7 +77,7 @@ describe('Maps', () => {
   })
 
   it('loads individual map card', async () => {
-    mockMapStore.getPin.mockResolvedValueOnce({
+    mockMapStore.getPin.mockResolvedValue({
       _id: 'abc',
       title: 'title',
       description: 'description',
@@ -95,19 +102,25 @@ describe('Maps', () => {
       wrapper = await getWrapper('/map#abc')
     })
 
-    expect(mockMapStore.setActivePin).toBeCalled()
-
-    expect(wrapper.getByText('description')).toBeInTheDocument()
+    await waitFor(async () => {
+      expect(mockMapStore.setActivePin).toBeCalled()
+      expect(wrapper.getByText('description')).toBeInTheDocument()
+    })
   })
 })
 
 const getWrapper = async (path = '/map') => {
+  const router = createMemoryRouter(
+    createRoutesFromElements(<Route path="/map" element={<Maps />} />),
+    {
+      initialEntries: [path],
+    },
+  )
+
   return render(
     <Provider {...useCommonStores().stores}>
       <ThemeProvider theme={Theme}>
-        <MemoryRouter initialEntries={[path]}>
-          <Maps />
-        </MemoryRouter>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,
   )

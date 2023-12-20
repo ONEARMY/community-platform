@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
 import {
   Card,
@@ -21,7 +21,6 @@ import {
   UsefulStatsButton,
   CategoryTag,
   DownloadStaticFile,
-  Username,
   DownloadFileFromLink,
   ConfirmModal,
   ContentStatistics,
@@ -33,7 +32,7 @@ import {
   capitalizeFirstLetter,
   buildStatisticsLabel,
 } from 'src/utils/helpers'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
   retrieveHowtoDownloadCooldown,
@@ -45,10 +44,10 @@ import {
   retrieveSessionStorageArray,
   addIDToSessionStorageArray,
 } from 'src/utils/sessionStorage'
-import { isUserVerified } from 'src/common/isUserVerified'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -63,7 +62,7 @@ interface IProps {
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
@@ -86,7 +85,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       const updatedViewCount = await stores.howtoStore.incrementViewCount(
         howto._id,
       )
-      setViewCount(updatedViewCount)
+      if (updatedViewCount) {
+        setViewCount(updatedViewCount)
+      }
       addIDToSessionStorageArray('howto', howto._id)
     } else {
       setViewCount(howto.total_views || 0)
@@ -94,7 +95,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   const redirectToSignIn = async () => {
-    history.push('/sign-in')
+    navigate('/sign-in')
   }
 
   const handleDownloadClick = async () => {
@@ -129,7 +130,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
         'How-to marked for deletion',
       )
 
-      history.push('/how-to')
+      navigate('/how-to')
     } catch (err) {
       logger.error(err)
       // at least log the error
@@ -148,10 +149,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       return ''
     }
   }
-  const dateCreatedText = ` | Published on ${format(
-    new Date(howto._created),
-    'DD-MM-YYYY',
-  )}`
 
   useEffect(() => {
     if (!didInit) {
@@ -252,24 +249,12 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column' }}>
-                <Flex sx={{ alignItems: 'center' }}>
-                  <Username
-                    user={{
-                      userName: howto._createdBy,
-                      countryCode: howto.creatorCountry,
-                    }}
-                    isVerified={isUserVerified(howto._createdBy)}
-                  />
-                  <Text
-                    variant="auxiliary"
-                    sx={{
-                      marginTop: 2,
-                      marginBottom: 2,
-                    }}
-                  >
-                    {dateCreatedText}
-                  </Text>
-                </Flex>
+                <UserNameTag
+                  userName={howto._createdBy}
+                  countryCode={howto.creatorCountry}
+                  created={howto._created}
+                  action="Published"
+                />
 
                 <Text
                   variant="auxiliary"

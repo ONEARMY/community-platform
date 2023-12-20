@@ -2,7 +2,6 @@ import * as React from 'react'
 import arrayMutators from 'final-form-arrays'
 import { observer } from 'mobx-react'
 import { Field, Form } from 'react-final-form'
-import { Prompt } from 'react-router'
 import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import {
@@ -39,9 +38,9 @@ import { MAX_LINK_LENGTH } from '../../../constants'
 import { buttons, errors, headings, update } from '../../labels'
 import { ResearchErrors } from './ResearchErrors'
 
-import type { RouteComponentProps } from 'react-router'
 import type { IResearch } from 'src/models/research.models'
 import type { ResearchEditorOverviewUpdate } from 'oa-components'
+import { usePrompt } from 'src/common/hooks/usePrompt'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;
@@ -53,7 +52,7 @@ const ImageInputFieldWrapper = styled.div`
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
 
-interface IProps extends RouteComponentProps<any> {
+interface IProps {
   formValues: any
   parentType: 'create' | 'edit'
   redirectUrl?: string
@@ -74,6 +73,9 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   const { deletion, draft } = buttons
 
   const store = useResearchStore()
+  const [formState, setFormState] = React.useState<{ dirty: boolean }>({
+    dirty: false,
+  })
   const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   const [showSubmitModal, setShowSubmitModal] = React.useState<boolean>(false)
   const [showInvalidFileWarning, setInvalidFileWarning] =
@@ -156,6 +158,12 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     [store.updateUploadStatus.Complete, beforeUnload],
   )
 
+  // Block navigating elsewhere when data has been entered into the input
+  usePrompt(
+    CONFIRM_DIALOG_MSG,
+    !store.updateUploadStatus.Complete && formState.dirty,
+  )
+
   const draftButtonText =
     formValues.moderation !== 'draft' ? draft.create : draft.update
   const isEdit = parentType === 'edit'
@@ -194,6 +202,10 @@ export const ResearchUpdateForm = observer((props: IProps) => {
           submitFailed,
           values,
         }) => {
+          if (formState.dirty !== dirty) {
+            setFormState({ dirty })
+          }
+
           const numberOfImageInputsAvailable = values?.images
             ? values.images.length + 1
             : 4
@@ -212,10 +224,6 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                 sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
                 mt={4}
               >
-                <Prompt
-                  when={!store.updateUploadStatus.Complete && dirty}
-                  message={CONFIRM_DIALOG_MSG}
-                />
                 <FormContainer id="updateForm" onSubmit={handleSubmit}>
                   {/* Update Info */}
                   <Flex sx={{ flexDirection: 'column' }}>

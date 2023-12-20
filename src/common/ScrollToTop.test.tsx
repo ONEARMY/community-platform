@@ -9,14 +9,14 @@ jest.mock('react-router-dom', () => ({
 }))
 
 describe('ScrollToTop', () => {
-  it('should scroll to top when pathname changes', () => {
+  it('should scroll to top when pathname changes', async () => {
     const scrollToSpy = jest.fn()
     global.window.scrollTo = scrollToSpy
     ;(useLocation as jest.Mock).mockImplementation(() => ({
       pathname: '/initial',
     }))
 
-    act(() => {
+    await act(async () => {
       render(<ScrollToTop />)
     })
 
@@ -30,7 +30,7 @@ describe('ScrollToTop', () => {
       pathname: '/changed',
     }))
 
-    act(() => {
+    await act(async () => {
       render(<ScrollToTop />)
     })
 

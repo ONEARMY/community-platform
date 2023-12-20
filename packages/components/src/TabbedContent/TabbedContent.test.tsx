@@ -14,7 +14,7 @@ describe('TabbedContent', () => {
   it('basic interaction', async () => {
     const wrapper = render(<Default />)
 
-    await act(() => {
+    await act(async () => {
       wrapper.getByText('Tab #2').click()
     })
 

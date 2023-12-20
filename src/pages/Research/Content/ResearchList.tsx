@@ -1,3 +1,4 @@
+import React from 'react'
 import { useTheme } from '@emotion/react'
 import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
@@ -8,7 +9,6 @@ import ResearchListItem from './ResearchListItem'
 import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { RESEARCH_EDITOR_ROLES } from '../constants'
-import * as React from 'react'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()
@@ -43,7 +43,7 @@ const ResearchList = observer(() => {
         <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
           <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
             <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
-              <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
+              <Link to={store.activeUser ? '/research/create' : '/sign-up'}>
                 <Button variant={'primary'} data-cy="create">
                   Add Research
                 </Button>
@@ -70,7 +70,7 @@ const ResearchList = observer(() => {
       {!isFetching && filteredResearches?.length === 0 && 'No research to show'}
       <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
         <Box mb={[3, 3, 0]}>
-          <Link to={store.activeUser ? '/research/create' : 'sign-up'}>
+          <Link to={store.activeUser ? '/research/create' : '/sign-up'}>
             <Button variant={'primary'}>Add Research</Button>
           </Link>
         </Box>

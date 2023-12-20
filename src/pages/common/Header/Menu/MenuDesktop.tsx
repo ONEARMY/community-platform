@@ -37,17 +37,17 @@ const MenuLink = styled(NavLink)`
   }
 `
 
-MenuLink.defaultProps = {
-  activeClassName: 'current',
-}
-
 export const MenuDesktop = () => (
   <>
     <Flex sx={{ alignItems: 'center', width: '100%' }}>
       {getAvailablePageList(getSupportedModules()).map((page) => {
         const link = (
           <Flex key={page.path}>
-            <MenuLink to={page.path} data-cy="page-link">
+            <MenuLink
+              to={page.path}
+              data-cy="page-link"
+              className={({ isActive }) => (isActive ? 'current' : '')}
+            >
               <Flex>{page.title}</Flex>
             </MenuLink>
           </Flex>

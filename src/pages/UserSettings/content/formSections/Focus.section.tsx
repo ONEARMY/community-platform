@@ -17,6 +17,10 @@ const ProfileTypes = () => {
     Object.keys(theme.badges).includes(label),
   )
 
+  if (profileTypes.length < 2) {
+    return null
+  }
+
   return (
     <Field
       name="profileType"

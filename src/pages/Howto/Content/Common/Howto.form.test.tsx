@@ -1,7 +1,7 @@
 import { act, fireEvent, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { HowtoForm } from './Howto.form'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { useCommonStores } from 'src/index'
 import { FactoryHowto } from 'src/test/factories/Howto'

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { RouteComponentProps } from 'react-router'
+import { useParams } from 'react-router-dom'
 import { Loader } from 'oa-components'
 import { Text } from 'theme-ui'
 import { observer } from 'mobx-react-lite'
@@ -10,18 +10,13 @@ import { SpaceProfile } from './SpaceProfile'
 import type { IUserPP } from 'src/models'
 import { logger } from '../../../logger'
 
-interface IRouterCustomParams {
-  id: string
-}
-
-interface IProps extends RouteComponentProps<IRouterCustomParams> {}
-
 export interface UserCreatedDocs {
   howtos: any
   research: any
 }
 
-export const UserPage = observer((props: IProps) => {
+export const UserPage = observer(() => {
+  const { id } = useParams()
   const { userStore, aggregationsStore } = useCommonStores().stores
   const [user, setUser] = useState<IUserPP | undefined>()
   const [userCreatedDocs, setUserCreatedDocs] = useState<
@@ -30,36 +25,38 @@ export const UserPage = observer((props: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    const userid = props.match.params.id
+    const userId = id
 
-    const fetchUserData = async () => {
-      try {
-        const userData = await userStore.getUserProfile(userid)
-        setUser(
-          userData
-            ? {
-                ...userData,
-              }
-            : null,
-        )
-      } catch (error) {
-        logger.error('Error getting user profile', error)
+    if (userId) {
+      const fetchUserData = async () => {
+        try {
+          const userData = await userStore.getUserProfile(userId)
+          setUser(
+            userData
+              ? {
+                  ...userData,
+                }
+              : null,
+          )
+        } catch (error) {
+          logger.error('Error getting user profile', error)
+        }
       }
-    }
 
-    const fetchUserDocs = async () => {
-      try {
-        const docs = await userStore.getUserCreatedDocs(userid)
+      const fetchUserDocs = async () => {
+        try {
+          const docs = await userStore.getUserCreatedDocs(userId)
 
-        await setUserCreatedDocs(docs || null)
-        setIsLoading(false)
-      } catch (error) {
-        logger.error('Error getting user created docs', error)
+          await setUserCreatedDocs(docs || null)
+          setIsLoading(false)
+        } catch (error) {
+          logger.error('Error getting user created docs', error)
+        }
       }
+      fetchUserData()
+      fetchUserDocs()
     }
-    fetchUserData()
-    fetchUserDocs()
-  }, [props.match.params.id])
+  }, [id])
 
   // Ensure aggregations up-to-date when using any child pages and unsubscribe when leaving
   useEffect(() => {

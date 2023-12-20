@@ -1,4 +1,4 @@
-import { Button, Loader } from 'oa-components'
+import { Button, Loader, ModerationStatus } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { Link } from 'react-router-dom'
@@ -42,9 +42,9 @@ export const QuestionListing = () => {
         <Loader />
       ) : questionList.length ? (
         questionList.map((q: any, idx) => {
-          const url = `/question/${encodeURIComponent(q.slug)}`
+          const url = `/questions/${encodeURIComponent(q.slug)}`
           return (
-            <Card key={idx} mb={3} px={3} py={3}>
+            <Card key={idx} mb={3} px={3} py={3} sx={{ position: 'relative' }}>
               <Link to={url} key={q._id}>
                 <Heading
                   as="span"
@@ -57,6 +57,11 @@ export const QuestionListing = () => {
                   {q.title}
                 </Heading>
               </Link>
+              <ModerationStatus
+                status={q.moderation}
+                contentType="question"
+                sx={{ top: 0, position: 'absolute', right: 0 }}
+              />
             </Card>
           )
         })

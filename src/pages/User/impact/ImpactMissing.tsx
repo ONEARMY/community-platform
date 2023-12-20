@@ -2,24 +2,42 @@ import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
-import { useCommonStores } from 'src/'
-import { missing } from './labels'
+import { useCommonStores } from 'src/index'
+import { invisible, missing } from './labels'
 import { IMPACT_REPORT_LINKS } from './constants'
 
-import type { IImpactYear, IUserPP } from 'src/models'
+import type { IImpactYear, IImpactYearFieldList, IUserPP } from 'src/models'
 
 interface Props {
+  fields: IImpactYearFieldList | undefined
+  user: IUserPP | undefined
+  visibleFields: IImpactYearFieldList | undefined
   year: IImpactYear
-  user: IUserPP
 }
 
-export const ImpactMissing = observer(({ user, year }: Props) => {
+const isAllInvisible = (fields, visibleFields) => {
+  if (
+    visibleFields &&
+    visibleFields.length === 0 &&
+    fields &&
+    fields.length > 0
+  ) {
+    return true
+  }
+
+  return false
+}
+
+export const ImpactMissing = observer((props: Props) => {
+  const { fields, user, visibleFields, year } = props
   const { userStore } = useCommonStores().stores
+
+  const labelSet = isAllInvisible(fields, visibleFields) ? invisible : missing
 
   const isPageOwner = userStore.activeUser && user
 
-  const userButton = `${year} ${missing.user.link}`
-  const label = isPageOwner ? missing.owner.label : missing.user.label
+  const userButton = `${year} ${labelSet.user.link}`
+  const label = isPageOwner ? labelSet.owner.label : labelSet.user.label
 
   return (
     <Flex sx={{ flexFlow: 'column', gap: 2, mt: 2 }}>
@@ -31,7 +49,7 @@ export const ImpactMissing = observer(({ user, year }: Props) => {
       )}
       {isPageOwner && (
         <a href="/settings">
-          <Button>{missing.owner.link}</Button>
+          <Button>{labelSet.owner.link}</Button>
         </a>
       )}
     </Flex>

@@ -2,12 +2,13 @@ import { format } from 'date-fns'
 import { Icon, ModerationStatus, Username, Tooltip } from 'oa-components'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Link } from 'react-router-dom'
-import { isUserVerified } from 'src/common/isUserVerified'
+import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import type { IResearch } from 'src/models/research.models'
 import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
 import { Card, Image, Flex, Grid, Heading, Text, Box } from 'theme-ui'
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { useCommonStores } from 'src/index'
 
 interface IProps {
   item: IResearch.ItemDB & {
@@ -16,6 +17,7 @@ interface IProps {
 }
 
 const ResearchListItem = ({ item }: IProps) => {
+  const { aggregationsStore } = useCommonStores().stores
   const collaborators = item['collaborators'] || []
   const usefulDisplayCount =
     item.votedUsefulCount > 0 ? item.votedUsefulCount : '0'
@@ -83,7 +85,10 @@ const ResearchListItem = ({ item }: IProps) => {
                       userName: item._createdBy,
                       countryCode: item.creatorCountry,
                     }}
-                    isVerified={isUserVerified(item._createdBy)}
+                    isVerified={isUserVerifiedWithStore(
+                      item._createdBy,
+                      aggregationsStore,
+                    )}
                   />
                   {Boolean(collaborators.length) && (
                     <Text

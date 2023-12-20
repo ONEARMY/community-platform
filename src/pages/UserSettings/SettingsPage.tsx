@@ -326,7 +326,7 @@ export class SettingsPage extends React.Component<IProps, IState> {
                       />
                     )}
                     <AuthWrapper roleRequired={'beta-tester'}>
-                      <PatreonIntegration user={user} />
+                      <PatreonIntegration />
                     </AuthWrapper>
                   </form>
                   <AccountSettingsSection />

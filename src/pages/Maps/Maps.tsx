@@ -1,68 +1,61 @@
-import * as React from 'react'
-import { inject, observer } from 'mobx-react'
-import type { RouteComponentProps } from 'react-router'
-import { withRouter, Route, Switch } from 'react-router'
-
-import type { MapsStore } from 'src/stores/Maps/maps.store'
-import { MapView, Controls } from './Content'
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react'
+import { useLocation } from 'react-router-dom'
 import { Box } from 'theme-ui'
 
-import './styles.css'
-
+import { MapView, Controls } from './Content'
 import { logger } from '../../logger'
-import type { ILatLng } from 'src/models/maps.models'
 import { GetLocation } from './utils/geolocation'
-import type { Map } from 'react-leaflet'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
 import { MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT } from 'src/config/config'
+import { useCommonStores } from 'src/index'
 
-interface IProps extends RouteComponentProps<any> {
-  mapsStore: MapsStore
-}
-interface IState {
-  center: ILatLng
-  zoom: number
-  firstLoad: boolean
-}
+import type { Map } from 'react-leaflet'
+import type { ILatLng } from 'src/models/maps.models'
 
-@inject('mapsStore')
-@observer
-class MapsPage extends React.Component<IProps, IState> {
-  mapRef: React.RefObject<Map>
+import './styles.css'
 
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      center: { lat: 51.0, lng: 19.0 },
-      zoom: 3,
-      firstLoad: true,
+const MapsPage = observer(() => {
+  const mapRef = React.useRef<Map>(null)
+  const location = useLocation()
+  const { mapsStore } = useCommonStores().stores
+
+  const [state, setState] = useState<{
+    center: ILatLng
+    zoom: number
+    firstLoad: boolean
+  }>({
+    center: { lat: 51.0, lng: 19.0 },
+    zoom: 3,
+    firstLoad: true,
+  })
+
+  useEffect(() => {
+    retrieveMapPins()
+    mapsStore.retrievePinFilters()
+
+    const showPin = async () => {
+      await showPinFromURL()
+
+      if (!mapsStore.activePin) {
+        promptUserLocation()
+      }
     }
-    this.mapRef = React.createRef()
-  }
+    showPin()
 
-  public async componentDidMount() {
-    this.retrieveMapPins()
-    this.props.mapsStore.retrievePinFilters()
-    await this.showPinFromURL()
-    if (!this.props.mapsStore.activePin) {
-      this.promptUserLocation()
+    return () => {
+      mapsStore.removeSubscriptions()
+      mapsStore.setActivePin(undefined)
     }
-  }
+  }, [])
 
-  public async componentDidUpdate(prevProps) {
-    if (this.props.location.hash !== prevProps.location.hash) {
-      this.showPinFromURL()
-    }
-  }
+  useEffect(() => {
+    showPinFromURL()
+  }, [location.hash])
 
-  public async componentWillUnmount() {
-    this.props.mapsStore.removeSubscriptions()
-    this.props.mapsStore.setActivePin(undefined)
-  }
-
-  availableFilters() {
-    return transformAvailableFiltersToGroups(this.props.mapsStore, [
+  const availableFilters = () => {
+    return transformAvailableFiltersToGroups(mapsStore, [
       {
         grouping: 'verified-filter',
         displayName: 'Verified',
@@ -72,10 +65,10 @@ class MapsPage extends React.Component<IProps, IState> {
     ])
   }
 
-  private async promptUserLocation() {
+  const promptUserLocation = async () => {
     try {
       const position = await GetLocation()
-      this.setCenter({
+      setCenter({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       })
@@ -85,70 +78,53 @@ class MapsPage extends React.Component<IProps, IState> {
     }
   }
 
-  async retrieveMapPins() {
-    this.props.mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
-  }
-
-  private setCenter(latlng: ILatLng) {
-    this.setState({
-      center: latlng as ILatLng,
+  const retrieveMapPins = () =>
+    mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
+  const setCenter = (latlng: ILatLng) => {
+    setState((state) => ({
+      ...state,
+      center: latlng,
       zoom: 8,
       firstLoad: false,
-    })
+    }))
   }
 
   /** Check current hash in case matches a mappin and try to load */
-  private async showPinFromURL() {
-    const pinId = this.props.location.hash.substr(1)
+  const showPinFromURL = async () => {
+    const pinId = location.hash.slice(1)
     // Only lookup if not already the active pin
-    if (pinId && pinId !== this.props.mapsStore.activePin?._id) {
-      const pin = await this.props.mapsStore.getPin(pinId)
+    if (pinId && pinId !== mapsStore.activePin?._id) {
+      const pin = await mapsStore.getPin(pinId)
       if (pin._deleted) return
-      this.props.mapsStore.setActivePin(pin)
+      mapsStore.setActivePin(pin)
     }
     // Center on the pin if first load
-    if (this.state.firstLoad && this.props.mapsStore.activePin) {
-      this.setCenter(this.props.mapsStore.activePin.location)
+    if (state.firstLoad && mapsStore.activePin) {
+      setCenter(mapsStore.activePin.location)
     }
     // TODO - handle pin not found
   }
 
-  public render() {
-    const { filteredPins, activePinFilters } = this.props.mapsStore
-    const { center, zoom } = this.state
-    return (
-      // the calculation for the height is kind of hacky for now, will set properly on final mockups
-      <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
-        <Switch>
-          <Route
-            exact
-            path="/map"
-            render={(props) => (
-              <>
-                <Controls
-                  mapRef={this.mapRef}
-                  availableFilters={this.availableFilters()}
-                  onLocationChange={(latlng) => this.setCenter(latlng)}
-                  {...props}
-                />
-                <MapView
-                  mapRef={this.mapRef}
-                  pins={filteredPins}
-                  filters={activePinFilters}
-                  onBoundingBoxChange={(boundingBox) =>
-                    this.props.mapsStore.setMapBoundingBox(boundingBox)
-                  }
-                  center={center}
-                  zoom={zoom}
-                  history={this.props.history}
-                />
-              </>
-            )}
-          />
-        </Switch>
-      </Box>
-    )
-  }
-}
+  const { filteredPins, activePinFilters } = mapsStore
+  return (
+    // the calculation for the height is kind of hacky for now, will set properly on final mockups
+    <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
+      <Controls
+        availableFilters={availableFilters()}
+        onLocationChange={(latlng) => setCenter(latlng)}
+      />
+      <MapView
+        mapRef={mapRef}
+        pins={filteredPins}
+        filters={activePinFilters}
+        onBoundingBoxChange={(boundingBox) =>
+          mapsStore.setMapBoundingBox(boundingBox)
+        }
+        center={state.center}
+        zoom={state.zoom}
+      />
+    </Box>
+  )
+})
 
-export default withRouter(MapsPage as any)
+export default MapsPage

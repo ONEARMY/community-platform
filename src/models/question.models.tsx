@@ -1,4 +1,5 @@
 import type { DBDoc, IModerable, ISelectedTags, ISharedFeatures } from '.'
+import type { IQuestionCategory } from './questionCategories.model'
 
 /**
  * Question retrieved from the database also include metadata such as _id, _created and _modified
@@ -21,7 +22,10 @@ export namespace IQuestion {
     title: string
     description: string
     tags: ISelectedTags
+    category?: IQuestionCategory
     slug: string
     previousSlugs?: string[]
+    creatorCountry?: string
+    allowDraftSave?: boolean
   }
 }

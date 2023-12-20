@@ -4,8 +4,43 @@ import type { IUserPP } from 'src/models'
 import { Heading, Flex, Image, Text, Box } from 'theme-ui'
 import { Button } from 'oa-components'
 import { FlexSectionContainer } from './elements'
+import { useCommonStores } from 'src/index'
 
-export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
+const HEADING = '❤️ Become a Supporter'
+const SUBHEADING =
+  'Support us on Patreon to get a badge here on the platform and special insights and voting rights on decisions.'
+const BETA_DISCLAIMER =
+  'This feature is still in beta and we will continue to roll out more features for supporters.'
+const SUCCESS_MESSAGE = 'Successfully linked Patreon account!'
+const SUPPORTER_MESSAGE =
+  'Thanks for supporting us! :) Update your data if you changed your Patreon tiers or remove the connection below.'
+
+const CONNECT_BUTTON_TEXT = 'Connect To Patreon'
+const UPDATE_BUTTON_TEXT = 'Update Patreon Data'
+const REMOVE_BUTTON_TEXT = 'Remove Connection'
+
+export const PatreonIntegration = () => {
+  const { userStore } = useCommonStores().stores
+  const [user, setUser] = React.useState<IUserPP | undefined>(
+    userStore.user ?? undefined,
+  )
+
+  const removePatreonConnection = () => {
+    if (!user) {
+      return
+    }
+    userStore.removePatreonConnection(user.userName)
+    // Perform an optimistic update to avoid waiting for database calls to return.
+    setUser({
+      ...user,
+      badges: {
+        ...user.badges,
+        supporter: false,
+      },
+      patreon: undefined,
+    })
+  }
+
   const patreonRedirect = () => {
     // TODO: if user has patreon property already set, send request directly to backend, where we
     // can lookup the existing access code.
@@ -18,17 +53,15 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
     )
   }
 
+  if (!user) {
+    return null
+  }
+
   return (
     <FlexSectionContainer>
-      <Heading variant="small">❤️ Become a Supporter</Heading>
-      <Text mt={4}>
-        Support us on Patreon to get a badge here on the platform and special
-        insights and voting rights on decisions.
-      </Text>
-      <Text mt={4}>
-        This feature is still in beta and we will continue to roll out more
-        features for supporters.
-      </Text>
+      <Heading variant="small">{HEADING}</Heading>
+      <Text mt={4}>{SUBHEADING}</Text>
+      <Text mt={4}>{BETA_DISCLAIMER}</Text>
       {user.patreon ? (
         <Box mt={4} mb={4}>
           <Flex
@@ -45,11 +78,11 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
                 height: 'auto',
               }}
             />
-            <Text>Successfully linked patron account!</Text>
+            <Text>{SUCCESS_MESSAGE}</Text>
           </Flex>
           {user.patreon.membership && (
             <Flex sx={{ flexDirection: 'column' }}>
-              <Text mt={4}>Thanks for your support :) </Text>
+              <Text mt={4}>{SUPPORTER_MESSAGE}</Text>
               {user.patreon.membership.tiers.map(({ id, attributes }) => (
                 <Flex
                   key={id}
@@ -99,14 +132,26 @@ export const PatreonIntegration = ({ user }: { user: IUserPP }) => {
           3. You are now part of the special supporters club!
         </Text>
       )}
-      <Button
-        onClick={patreonRedirect}
-        mb={3}
-        sx={{ width: '40%', justifyContent: 'center' }}
-        variant="outline"
-      >
-        {user.patreon ? 'Sync Patreon Data' : 'Connect To Patreon'}
-      </Button>
+      <Flex>
+        <Button
+          onClick={patreonRedirect}
+          mb={3}
+          sx={{ justifyContent: 'center', mr: 3 }}
+          variant="outline"
+        >
+          {user.patreon ? UPDATE_BUTTON_TEXT : CONNECT_BUTTON_TEXT}
+        </Button>
+        {user.patreon && (
+          <Button
+            onClick={removePatreonConnection}
+            mb={3}
+            sx={{ justifyContent: 'center' }}
+            variant="outline"
+          >
+            {REMOVE_BUTTON_TEXT}
+          </Button>
+        )}
+      </Flex>
     </FlexSectionContainer>
   )
 }

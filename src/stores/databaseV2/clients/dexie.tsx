@@ -185,6 +185,7 @@ const SCHEMA_BASE: IDexieSchema = {
   aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
   questions: `${DEFAULT_SCHEMA}`,
+  questionCategories: `${DEFAULT_SCHEMA}`,
 }
 
 // Ensure dexie also handles any prefixed database schema
@@ -217,7 +218,8 @@ const DEXIE_SCHEMA = MAPPED_SCHEMA
  * 2023-10-22
  * Add message schema
  *
- *
+ * 2023-11-01
+ * Add question categories
  *
  *
  ****************************************************************************/

@@ -544,6 +544,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "IgnasPlace",
+      "name": "Ignas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/76262712?v=4",
+      "profile": "http://ignasplace.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

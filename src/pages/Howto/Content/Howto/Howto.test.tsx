@@ -1,17 +1,22 @@
 import { render, act } from '@testing-library/react'
 import { ThemeProvider } from '@emotion/react'
 import { Provider } from 'mobx-react'
-import { MemoryRouter } from 'react-router'
-import { Route } from 'react-router-dom'
-import { useCommonStores } from 'src/index'
+import {
+  RouterProvider,
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+} from 'react-router-dom'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
 import { preciousPlasticTheme } from 'oa-themes'
 const Theme = preciousPlasticTheme.styles
 
+const howto = FactoryHowto()
+
 const mockHowtoStore = () => ({
   setActiveHowtoBySlug: jest.fn(),
-  activeHowto: FactoryHowto(),
+  activeHowto: howto,
   getActiveHowToComments: jest.fn().mockReturnValue([]),
   needsModeration: jest.fn().mockReturnValue(false),
   incrementViewCount: jest.fn(),
@@ -42,34 +47,34 @@ jest.mock('src/index', () => ({
 
 import { Howto } from './Howto'
 
-const factory = async (howtoStore?: Partial<HowtoStore>) =>
-  render(
-    <Provider
-      {...useCommonStores().stores}
-      howtoStore={howtoStore || useCommonStores().stores.howtoStore}
-    >
-      <ThemeProvider theme={Theme}>
-        <MemoryRouter initialEntries={['/howto/article']}>
-          <Route path="/howto/:slug" exact key={1} component={Howto} />
-        </MemoryRouter>
-      </ThemeProvider>
-      ,
-    </Provider>,
+const factory = async (howtoStore?: Partial<HowtoStore>) => {
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route path="/howto/:slug" key={1} element={<Howto />} />,
+    ),
+    {
+      initialEntries: ['/howto/article'],
+    },
   )
 
+  return render(
+    <Provider howtoStore={howtoStore}>
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>,
+  )
+}
 describe('Howto', () => {
   describe('moderator feedback', () => {
     it('displays feedback for items which are not accepted', async () => {
       let wrapper
+
       await act(async () => {
-        wrapper = await factory({
-          ...mockHowtoStore(),
-          activeHowto: FactoryHowto({
-            _createdBy: 'HowtoAuthor',
-            moderation: 'awaiting-moderation',
-            moderatorFeedback: 'Moderation comments',
-          } as any),
-        })
+        howto.moderation = 'awaiting-moderation'
+        howto.moderatorFeedback = 'Moderation comments'
+
+        wrapper = await factory()
       })
 
       expect(wrapper.getByText('Moderation comments')).toBeInTheDocument()
@@ -78,14 +83,9 @@ describe('Howto', () => {
     it('hides feedback when how-to is accepted', async () => {
       let wrapper
       await act(async () => {
-        wrapper = await factory({
-          ...mockHowtoStore(),
-          activeHowto: FactoryHowto({
-            _createdBy: 'HowtoAuthor',
-            moderation: 'accepted',
-            moderatorFeedback: 'Moderation comments',
-          } as any),
-        })
+        howto.moderation = 'accepted'
+        howto.moderatorFeedback = 'Moderation comments'
+        wrapper = await factory()
       })
 
       expect(() => wrapper.getByText('Moderation comments')).toThrow()
@@ -95,13 +95,12 @@ describe('Howto', () => {
   it('displays content statistics', async () => {
     let wrapper
     await act(async () => {
-      wrapper = await factory({
-        ...mockHowtoStore(),
-        activeHowto: FactoryHowto({
-          _createdBy: 'HowtoAuthor',
-          steps: [FactoryHowtoStep({})],
-        }),
-      })
+      howto._id = 'testid'
+      howto._createdBy = 'HowtoAuthor'
+      howto.steps = [FactoryHowtoStep({})]
+      howto.moderation = 'accepted'
+
+      wrapper = await factory()
     })
 
     expect(wrapper.getByText('0 views')).toBeInTheDocument()
@@ -112,13 +111,11 @@ describe('Howto', () => {
 
   it('shows verified badge', async () => {
     let wrapper
+
+    howto._createdBy = 'HowtoAuthor'
+
     await act(async () => {
-      wrapper = await factory({
-        ...mockHowtoStore(),
-        activeHowto: FactoryHowto({
-          _createdBy: 'HowtoAuthor',
-        }),
-      })
+      wrapper = await factory()
     })
 
     expect(() => {
@@ -128,6 +125,8 @@ describe('Howto', () => {
 
   it('does not show verified badge', async () => {
     let wrapper
+    howto._createdBy = 'NotHowtoAuthor'
+
     await act(async () => {
       wrapper = await factory()
     })
@@ -158,13 +157,8 @@ describe('Howto', () => {
     it('shows 2 steps', async () => {
       let wrapper
       await act(async () => {
-        wrapper = await factory({
-          ...mockHowtoStore(),
-          activeHowto: FactoryHowto({
-            _createdBy: 'HowtoAuthor',
-            steps: [FactoryHowtoStep(), FactoryHowtoStep()],
-          }),
-        })
+        howto.steps = [FactoryHowtoStep(), FactoryHowtoStep()]
+        wrapper = await factory()
       })
 
       expect(() => {

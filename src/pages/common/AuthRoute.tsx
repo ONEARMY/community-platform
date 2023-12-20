@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router'
+import { Navigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import type { UserRole } from 'src/models/user.models'
@@ -11,21 +11,19 @@ import { BlockedRoute } from 'oa-components'
 
 export const AuthRoute = observer(
   (props: {
-    component: React.ComponentType<any>
     roleRequired?: UserRole | UserRole[]
     /** Page to redirect if role not satisfied (default shows message) */
     redirect?: string
-    path?: string
-    exact?: boolean
+    children: React.ReactNode
   }) => {
-    const { component: Component, roleRequired, redirect, ...rest } = props
+    const { roleRequired, redirect, children } = props
 
     return (
       <AuthWrapper
         roleRequired={roleRequired}
         fallback={
           redirect ? (
-            <Redirect to={redirect} />
+            <Navigate to={redirect} />
           ) : (
             <BlockedRoute>
               {roleRequired
@@ -35,7 +33,7 @@ export const AuthRoute = observer(
           )
         }
       >
-        <Route {...rest} render={(props) => <Component {...props} />} />
+        {children}
       </AuthWrapper>
     )
   },

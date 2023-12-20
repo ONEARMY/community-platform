@@ -133,6 +133,7 @@ const maps = {
 const signup = {
   moduleName: MODULE.USER,
   path: '/sign-up',
+  exact: true,
   component: <SignUpPage />,
   title: 'Sign Up',
   description: '',
@@ -141,6 +142,7 @@ const signup = {
 const signin = {
   moduleName: MODULE.USER,
   path: '/sign-in',
+  exact: true,
   component: <SignInPage />,
   title: 'Sign In',
   description: '',
@@ -149,6 +151,7 @@ const signin = {
 const signupmessage = {
   moduleName: MODULE.USER,
   path: '/sign-up-message',
+  exact: true,
   component: <SignUpMessagePage />,
   title: 'Sign Up Message',
   description: '',
@@ -157,6 +160,7 @@ const signupmessage = {
 const resendsignupmessage = {
   moduleName: MODULE.USER,
   path: '/resend-sign-up-message',
+  exact: true,
   component: <ResendSignUpMessagePage />,
   title: 'Resend Sign Up Message',
   description: '',
@@ -165,6 +169,7 @@ const resendsignupmessage = {
 const forgotpassword = {
   moduleName: MODULE.USER,
   path: '/forgot-password',
+  exact: true,
   component: <ForgotPasswordPage />,
   title: 'Forgot Password',
   description: '',
@@ -173,6 +178,7 @@ const forgotpassword = {
 const forgotpasswordmessage = {
   moduleName: MODULE.USER,
   path: '/forgot-password-message',
+  exact: true,
   component: <ForgotPasswordMessagePage />,
   title: 'Forgot Password Message',
   description: '',
@@ -180,6 +186,7 @@ const forgotpasswordmessage = {
 const privacyPolicy = {
   moduleName: MODULE.CORE,
   path: '/privacy',
+  exact: true,
   component: <PrivacyPolicy />,
   title: 'Privacy Policy',
   description: '',
@@ -187,6 +194,7 @@ const privacyPolicy = {
 const termsPolicy = {
   moduleName: MODULE.CORE,
   path: '/terms',
+  exact: true,
   component: <TermsPolicy />,
   title: 'Terms of Use',
   description: '',
@@ -194,7 +202,7 @@ const termsPolicy = {
 
 const unsubscribe = {
   moduleName: MODULE.CORE,
-  path: '/unsubscribe/:id',
+  path: '/unsubscribe',
   component: <Unsubscribe />,
   title: 'Unsubscribe',
   description: '',

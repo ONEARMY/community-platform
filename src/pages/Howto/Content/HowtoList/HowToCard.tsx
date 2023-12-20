@@ -6,7 +6,8 @@ import {
   Tooltip,
 } from 'oa-components'
 import { Link as RouterLink } from 'react-router-dom'
-import { isUserVerified } from 'src/common/isUserVerified'
+import { useCommonStores } from 'src/index'
+import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import type { IHowtoDB } from 'src/models/howto.models'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
@@ -18,7 +19,9 @@ interface IProps {
 }
 
 export const HowToCard = (props: IProps) => {
+  const { aggregationsStore } = useCommonStores().stores
   const { howto, votedUsefulCount } = props
+
   return (
     <Card
       data-cy="card"
@@ -84,7 +87,10 @@ export const HowToCard = (props: IProps) => {
                   userName: howto._createdBy,
                   countryCode: howto.creatorCountry,
                 }}
-                isVerified={isUserVerified(howto._createdBy)}
+                isVerified={isUserVerifiedWithStore(
+                  howto._createdBy,
+                  aggregationsStore,
+                )}
               />
             </Flex>
           </Flex>

@@ -10,7 +10,7 @@ import {
   ContentStatistics,
 } from 'oa-components'
 import { useEffect, useState, Fragment } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -53,7 +53,7 @@ const ResearchDescription = ({
   ...props
 }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const dateLastUpdateText = (research: IResearch.ItemDB): string => {
     const contentModifiedDate = format(
@@ -100,7 +100,7 @@ const ResearchDescription = ({
         'Research marked for deletion',
       )
 
-      history.push('/research')
+      navigate('/research')
     } catch (err) {
       logger.error(err)
       // at least log the error

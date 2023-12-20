@@ -1,7 +1,8 @@
 import { Suspense, lazy } from 'react'
 import { AuthRoute } from '../common/AuthRoute'
-import { Route, Switch, withRouter } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { RESEARCH_EDITOR_ROLES } from './constants'
+
 const CreateResearch = lazy(
   () =>
     import(/* webpackChunkName: "CreateResearch" */ './Content/CreateResearch'),
@@ -33,41 +34,53 @@ const getRandomInt = (max) => {
   return Math.floor(Math.random() * max)
 }
 
+export const researchRouteElements = (
+  <>
+    <Route index element={<ResearchList />} />
+    <Route
+      path="create"
+      element={
+        <AuthRoute roleRequired={RESEARCH_EDITOR_ROLES}>
+          <CreateResearch />
+        </AuthRoute>
+      }
+    />
+    <Route
+      path=":slug/new-update"
+      element={
+        <AuthRoute roleRequired={RESEARCH_EDITOR_ROLES}>
+          <CreateUpdate />
+        </AuthRoute>
+      }
+    />
+    <Route
+      path=":slug/edit"
+      element={
+        <AuthRoute roleRequired={RESEARCH_EDITOR_ROLES}>
+          <ResearchItemEditor />
+        </AuthRoute>
+      }
+    />
+    <Route
+      path=":slug/edit-update/:update"
+      element={
+        <AuthRoute roleRequired={RESEARCH_EDITOR_ROLES}>
+          <UpdateItemEditor />
+        </AuthRoute>
+      }
+    />
+    <Route
+      path=":slug"
+      key={getRandomInt(55555)}
+      element={<ResearchArticle />}
+    />
+  </>
+)
+
 const routes = () => (
   <Suspense fallback={<div></div>}>
-    <Switch>
-      <Route exact path="/research" component={ResearchList} />
-      <AuthRoute
-        path="/research/create"
-        component={CreateResearch}
-        roleRequired={RESEARCH_EDITOR_ROLES}
-      />
-      <AuthRoute
-        exact
-        path="/research/:slug/new-update"
-        component={CreateUpdate}
-        roleRequired={RESEARCH_EDITOR_ROLES}
-      />
-      <AuthRoute
-        exact
-        path="/research/:slug/edit"
-        component={ResearchItemEditor}
-        roleRequired={RESEARCH_EDITOR_ROLES}
-      />
-      <AuthRoute
-        exact
-        path="/research/:slug/edit-update/:update"
-        component={UpdateItemEditor}
-        roleRequired={RESEARCH_EDITOR_ROLES}
-      />
-      <Route
-        exact
-        path="/research/:slug"
-        key={getRandomInt(55555)}
-        component={ResearchArticle}
-      />
-    </Switch>
+    <Routes>{researchRouteElements}</Routes>
   </Suspense>
 )
 
-export default withRouter(routes) as React.ComponentType
+export default routes

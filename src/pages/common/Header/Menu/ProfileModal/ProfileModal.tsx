@@ -57,10 +57,6 @@ const ModalLink = styled(NavLink)`
   }
 `
 
-ModalLink.defaultProps = {
-  activeClassName: 'current',
-}
-
 const LogoutButton = styled.button`
   font-family: inherit;
   font-size: inherit;
@@ -99,14 +95,22 @@ export class ProfileModal extends React.Component<IProps> {
       <ModalContainer data-cy="user-menu-list">
         <ModalContainerInner>
           <Flex>
-            <ModalLink to={'/u/' + username} data-cy="menu-Profile">
+            <ModalLink
+              to={'/u/' + username}
+              data-cy="menu-Profile"
+              className={({ isActive }) => (isActive ? 'current' : '')}
+            >
               Profile
             </ModalLink>
           </Flex>
           {COMMUNITY_PAGES_PROFILE.map((page) => (
             <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
               <Flex>
-                <ModalLink to={page.path} data-cy={`menu-${page.title}`}>
+                <ModalLink
+                  to={page.path}
+                  data-cy={`menu-${page.title}`}
+                  className={({ isActive }) => (isActive ? 'current' : '')}
+                >
                   {page.title}
                 </ModalLink>
               </Flex>

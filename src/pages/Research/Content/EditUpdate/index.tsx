@@ -1,8 +1,7 @@
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
-import { Redirect } from 'react-router'
+import React, { useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Loader, BlockedRoute } from 'oa-components'
 import { Text } from 'theme-ui'
 import type { IResearch } from 'src/models/research.models'
@@ -13,28 +12,25 @@ import { isAllowedToEditContent } from 'src/utils/helpers'
 
 interface IState {
   formValues: IResearch.UpdateDB
-  formSaved: boolean
   isLoading: boolean
-  _toDocsList: boolean
-  showSubmitModal?: boolean
   loggedInUser?: IUser | undefined
 }
-type IProps = RouteComponentProps<{ update: string; slug: string }> & {
+type IProps = {
   updateId?: string
 }
 
 const EditUpdate = observer((props: IProps) => {
+  const { update, slug } = useParams()
   const store = useResearchStore()
+  const navigate = useNavigate()
   const [state, setState] = React.useState<IState>({
     formValues: {} as IResearch.UpdateDB,
-    formSaved: false,
-    _toDocsList: false,
     isLoading: !store.activeResearchItem,
-    loggedInUser: store.activeUser,
+    loggedInUser: store.activeUser as IUser,
   })
 
   React.useEffect(() => {
-    ;(async () => {
+    const init = async () => {
       let loggedInUser = store.activeUser
       if (!loggedInUser) {
         // TODO - handle the case where user is still loading
@@ -45,9 +41,7 @@ const EditUpdate = observer((props: IProps) => {
           }, 3000),
         )
       }
-      const updateId = props.updateId
-        ? props.updateId
-        : props.match.params.update
+      const updateId = props.updateId ? props.updateId : update
       if (store.activeResearchItem! !== undefined) {
         const update = store.activeResearchItem.updates.find(
           (upd) => upd._id === updateId,
@@ -56,10 +50,9 @@ const EditUpdate = observer((props: IProps) => {
           ...prevState,
           formValues: toJS(update) as IResearch.UpdateDB,
           isLoading: false,
-          loggedInUser,
+          loggedInUser: loggedInUser as IUser,
         }))
       } else {
-        const slug = props.match.params.slug
         const doc = await store.setActiveResearchItemBySlug(slug)
         let update
         if (doc) {
@@ -69,57 +62,55 @@ const EditUpdate = observer((props: IProps) => {
           ...prevState,
           formValues: update as IResearch.UpdateDB,
           isLoading: false,
-          loggedInUser,
+          loggedInUser: loggedInUser as IUser,
         }))
       }
-    })()
-  }, [
-    store,
-    props.match.params.slug,
-    props.match.params.update,
-    props.updateId,
-  ])
-
-  const { formValues, isLoading, loggedInUser } = state
-  if (formValues && !isLoading) {
-    if (
-      loggedInUser &&
-      isAllowedToEditContent(store.activeResearchItem!, loggedInUser)
-    ) {
-      if (
-        formValues.locked &&
-        formValues.locked.by !== loggedInUser?.userName
-      ) {
-        return (
-          <BlockedRoute
-            redirectLabel="Back to research"
-            redirectUrl={`/research/${props.match.params.slug}`}
-          >
-            This research update is currently being edited by another editor.
-          </BlockedRoute>
-        )
-      }
-
-      return (
-        <ResearchUpdateForm
-          formValues={formValues}
-          redirectUrl={'/research/' + store.activeResearchItem!.slug + '/edit'}
-          parentType="edit"
-          {...props}
-        />
-      )
-    } else {
-      return <Redirect to={'/research/' + store.activeResearchItem!.slug} />
     }
-  } else {
-    return isLoading ? (
-      <Loader />
-    ) : (
+    init()
+  }, [slug, update, props.updateId])
+
+  useEffect(() => {
+    if (
+      !state.loggedInUser ||
+      !isAllowedToEditContent(store.activeResearchItem!, state.loggedInUser)
+    ) {
+      navigate('/research/' + store.activeResearchItem!.slug)
+    }
+  }, [state.loggedInUser, store.activeResearchItem])
+
+  if (state.isLoading) {
+    return <Loader />
+  }
+
+  if (!state.formValues) {
+    return (
       <Text mt="50px" sx={{ width: '100%', textAlign: 'center' }}>
         Research update not found
       </Text>
     )
   }
+
+  if (
+    state.formValues.locked &&
+    state.formValues.locked.by !== state.loggedInUser?.userName
+  ) {
+    return (
+      <BlockedRoute
+        redirectLabel="Back to research"
+        redirectUrl={`/research/${slug}`}
+      >
+        This research update is currently being edited by another editor.
+      </BlockedRoute>
+    )
+  }
+
+  return (
+    <ResearchUpdateForm
+      formValues={state.formValues}
+      redirectUrl={'/research/' + store.activeResearchItem!.slug + '/edit'}
+      parentType="edit"
+    />
+  )
 })
 
 export default EditUpdate

@@ -1,5 +1,5 @@
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 /*************************************************************************************
  *  Embed an Iframe
@@ -10,21 +10,31 @@ import type { RouteComponentProps } from 'react-router'
  *  page.
  *************************************************************************************/
 
-interface IProps extends RouteComponentProps {
+interface IProps {
   src: string
-}
-interface IState {
-  src: string
-  targetOrigin: string
 }
 
-class ExternalEmbed extends React.Component<IProps, IState> {
+const ExternalEmbed = ({ src }: IProps) => {
+  const navigate = useNavigate()
+  const url = new URL(src)
+  const targetOrigin = url.protocol + '//' + url.hostname
+
+  useEffect(() => {
+    // TODO - possible compatibility fallback for addEventListener (IE8)
+    // Example: https://davidwalsh.name/window-iframe
+    window.addEventListener('message', handlePostmessageFromIframe, false)
+
+    return () => {
+      window.removeEventListener('message', handlePostmessageFromIframe, false)
+    }
+  }, [])
+
   /**
    * Custom method to allow communication from Iframe to parent via postmessage
    */
-  handlePostmessageFromIframe = (e: MessageEvent) => {
+  const handlePostmessageFromIframe = (e: MessageEvent) => {
     // only allow messages from specific sites (academy dev and live)
-    if ([this.state.targetOrigin].includes(e.origin)) {
+    if ([targetOrigin].includes(e.origin)) {
       // communicate url changes, update navbar
       if (e.data && e.data.pathname) {
         let newPathName = e.data.pathname
@@ -37,7 +47,7 @@ class ExternalEmbed extends React.Component<IProps, IState> {
         if (!newPathName.startsWith(`/academy`)) {
           newPathName = `/academy${newPathName}`
         }
-        this.props.history.push(newPathName)
+        navigate(newPathName)
       }
       // communicate a href link clicks, open link in new tab
       if (e.data && e.data.linkClick) {
@@ -45,49 +55,24 @@ class ExternalEmbed extends React.Component<IProps, IState> {
       }
     }
   }
-  constructor(props) {
-    super(props)
 
-    const url = new URL(this.props.src)
-
-    this.state = {
-      src: this.props.src,
-      targetOrigin: url.protocol + '//' + url.hostname,
-    }
-  }
-
-  componentDidMount() {
-    // TODO - possible compatibility fallback for addEventListener (IE8)
-    // Example: https://davidwalsh.name/window-iframe
-    window.addEventListener('message', this.handlePostmessageFromIframe, false)
-  }
-  componentWillUnmount() {
-    window.removeEventListener(
-      'message',
-      this.handlePostmessageFromIframe,
-      false,
-    )
-  }
-
-  render() {
-    return (
-      <div
+  return (
+    <div
+      style={{
+        position: 'relative',
+        height: '100%',
+      }}
+    >
+      <iframe
+        src={src}
         style={{
-          position: 'relative',
+          border: 0,
           height: '100%',
+          width: '100%',
         }}
-      >
-        <iframe
-          src={this.state.src}
-          style={{
-            border: 0,
-            height: '100%',
-            width: '100%',
-          }}
-          title="precious plastic academy"
-        />
-      </div>
-    )
-  }
+        title="precious plastic academy"
+      />
+    </div>
+  )
 }
 export default ExternalEmbed

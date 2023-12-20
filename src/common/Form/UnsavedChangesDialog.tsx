@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { FormSpy } from 'react-final-form'
-import { Prompt } from 'react-router'
+import { usePrompt } from '../hooks/usePrompt'
 
 interface IProps {
   uploadComplete?: boolean
@@ -24,12 +24,15 @@ export const UnsavedChangesDialog = memo((props: IProps) => {
   const [formIsDirty, setFormIsDirty] = useState(false)
   const shouldPromptUnsavedChanges = formIsDirty && !props.uploadComplete
   const message: string = props.message || CONFIRM_DIALOG_MSG
+  usePrompt(message, shouldPromptUnsavedChanges)
+
   // Handle confirmation outside React Router
   if (shouldPromptUnsavedChanges) {
     window.addEventListener('beforeunload', beforeUnload, false)
   } else {
     window.removeEventListener('beforeunload', beforeUnload, false)
   }
+
   // Handle confirmaiton inside react route
   return (
     <>
@@ -40,8 +43,6 @@ export const UnsavedChangesDialog = memo((props: IProps) => {
         }}
         render={() => null}
       />
-      {/* Render a blocking screen prompt to prevent user leaving page via react navigation */}
-      <Prompt when={shouldPromptUnsavedChanges} message={message} />
     </>
   )
 })

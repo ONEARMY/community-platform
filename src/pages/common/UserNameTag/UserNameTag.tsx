@@ -1,7 +1,8 @@
 import { format } from 'date-fns'
 import { Text, Flex } from 'theme-ui'
 import { Username } from 'oa-components'
-import { isUserVerified } from 'src/common/isUserVerified'
+import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import { useCommonStores } from 'src/index'
 
 interface UserNameTagProps {
   userName: string
@@ -16,6 +17,8 @@ export const UserNameTag = ({
   created,
   action = 'Published',
 }: UserNameTagProps) => {
+  const { aggregationsStore } = useCommonStores().stores
+
   const dateText = `| ${action} on ${format(new Date(created), 'DD-MM-YYYY')}`
   return (
     <Flex sx={{ flexDirection: 'column' }}>
@@ -26,7 +29,7 @@ export const UserNameTag = ({
               userName: userName,
               countryCode: countryCode,
             }}
-            isVerified={isUserVerified(userName)}
+            isVerified={isUserVerifiedWithStore(userName, aggregationsStore)}
           />
           <Text
             variant="auxiliary"

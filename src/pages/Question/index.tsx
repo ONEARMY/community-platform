@@ -1,7 +1,6 @@
 import { MODULE } from 'src/modules'
 import type { IPageMeta } from '../PageList'
-import { Route } from 'react-router'
-import questionRoutes from './question.routes'
+import QuestionRoutes from './question.routes'
 import {
   QuestionStore,
   QuestionStoreContext,
@@ -10,7 +9,7 @@ import {
 export const QuestionModuleContainer = () => {
   return (
     <QuestionStoreContext.Provider value={new QuestionStore()}>
-      <Route component={questionRoutes} />
+      <QuestionRoutes />
     </QuestionStoreContext.Provider>
   )
 }

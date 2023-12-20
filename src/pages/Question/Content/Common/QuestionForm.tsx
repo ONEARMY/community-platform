@@ -21,19 +21,21 @@ import {
 
 import * as LABELS from 'src/pages/Question/labels'
 
-import type { RouteComponentProps } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import type { IQuestion } from 'src/models'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { CategoriesSelect } from '../../../Howto/Category/CategoriesSelect'
 
-interface IProps extends RouteComponentProps<any> {
+interface IProps {
   'data-testid'?: string
   formValues?: any
   parentType: 'create' | 'edit'
 }
 
 export const QuestionForm = (props: IProps) => {
+  const navigate = useNavigate()
+  const store = useQuestionStore()
   const publishButtonText =
     props.formValues?.moderation === 'draft'
       ? LABELS.buttons.create
@@ -45,7 +47,6 @@ export const QuestionForm = (props: IProps) => {
 
   const headingText = LABELS.headings[props.parentType]
 
-  const store = useQuestionStore()
   return (
     <Form
       data-testid={props['data-testid']}
@@ -56,7 +57,7 @@ export const QuestionForm = (props: IProps) => {
             formValues as IQuestion.FormInput,
           )
           if (newDocument) {
-            props.history.push('/question/' + newDocument.slug)
+            navigate('/questions/' + newDocument.slug)
           }
         } catch (e) {
           logger.error(e)

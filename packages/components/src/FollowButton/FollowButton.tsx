@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import { Button, Tooltip } from '..'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export interface IProps {
   hasUserSubscribed: boolean
@@ -11,7 +11,7 @@ export interface IProps {
 }
 
 export const FollowButton = (props: IProps) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const [hasUserSubscribed, setHasUserSubscribed] = useState<boolean>()
 
   useEffect(
@@ -33,7 +33,7 @@ export const FollowButton = (props: IProps) => {
           py: 0,
         }}
         onClick={() =>
-          props.isLoggedIn ? props.onFollowClick() : history.push('/sign-in')
+          props.isLoggedIn ? props.onFollowClick() : navigate('/sign-in')
         }
       >
         {hasUserSubscribed ? 'Following' : 'Follow'}

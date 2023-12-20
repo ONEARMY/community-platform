@@ -12,6 +12,7 @@ import { ThemeStore } from './Theme/theme.store'
 import { UserNotificationsStore } from './User/notifications.store'
 import { QuestionStore } from './Question/question.store'
 import { UserStore } from './User/user.store'
+import { QuestionCategoriesStore } from './QuestionCategories/questionCategories.store'
 
 export class RootStore {
   dbV2 = new DatabaseV2()
@@ -40,6 +41,7 @@ const stores = (rootStore: RootStore) => {
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
     questionStore: new QuestionStore(rootStore),
+    questionCategoriesStore: new QuestionCategoriesStore(rootStore),
   }
   return stores
 }
@@ -58,4 +60,5 @@ export interface IStores {
   aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore
   questionStore: QuestionStore
+  questionCategoriesStore: QuestionCategoriesStore
 }

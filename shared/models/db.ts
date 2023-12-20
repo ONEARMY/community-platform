@@ -21,6 +21,7 @@ export const generateDBEndpoints = (DB_PREFIX = '') => ({
   aggregations: `${DB_PREFIX}aggregations_rev20220126`,
   emails: `${DB_PREFIX}emails`,
   questions: `${DB_PREFIX}questions_rev20230926`,
+  questionCategories: `${DB_PREFIX}question_categories_rev20231130`,
   user_integrations: `${DB_PREFIX}user_integrations`,
 })
 

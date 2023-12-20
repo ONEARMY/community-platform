@@ -13,6 +13,9 @@ export const CategoriesSelect = observer(
     } else if (type === 'research') {
       const { researchCategoriesStore } = useCommonStores().stores
       categories = researchCategoriesStore.allResearchCategories
+    } else if (type === 'question') {
+      const { questionCategoriesStore } = useCommonStores().stores
+      categories = questionCategoriesStore.allQuestionCategories
     }
 
     const selectOptions = categories

@@ -1,12 +1,12 @@
 import { render, act } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { UserSettings } from './UserSettings'
 import { useCommonStores } from 'src/index'
 import { FactoryUser } from 'src/test/factories/User'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
+import { SettingsPage } from './SettingsPage'
 const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
@@ -174,7 +174,7 @@ const getWrapper = async (user) => {
     >
       <ThemeProvider theme={Theme}>
         <MemoryRouter>
-          <UserSettings adminEditableUserId={isAdmin ? user._id : null} />
+          <SettingsPage adminEditableUserId={isAdmin ? user._id : null} />
         </MemoryRouter>
       </ThemeProvider>
     </Provider>,

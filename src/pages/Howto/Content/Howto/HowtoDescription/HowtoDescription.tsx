@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
 import {
   Card,
@@ -32,7 +32,7 @@ import {
   capitalizeFirstLetter,
   buildStatisticsLabel,
 } from 'src/utils/helpers'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
 import {
   retrieveHowtoDownloadCooldown,
@@ -62,7 +62,7 @@ interface IProps {
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
@@ -85,7 +85,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       const updatedViewCount = await stores.howtoStore.incrementViewCount(
         howto._id,
       )
-      setViewCount(updatedViewCount)
+      if (updatedViewCount) {
+        setViewCount(updatedViewCount)
+      }
       addIDToSessionStorageArray('howto', howto._id)
     } else {
       setViewCount(howto.total_views || 0)
@@ -93,7 +95,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   const redirectToSignIn = async () => {
-    history.push('/sign-in')
+    navigate('/sign-in')
   }
 
   const handleDownloadClick = async () => {
@@ -128,7 +130,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
         'How-to marked for deletion',
       )
 
-      history.push('/how-to')
+      navigate('/how-to')
     } catch (err) {
       logger.error(err)
       // at least log the error

@@ -3,7 +3,6 @@ import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
 import { Field, Form } from 'react-final-form'
-import { Prompt } from 'react-router'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import {
   Button,
@@ -36,18 +35,17 @@ import {
 import { buttons, headings, overview } from '../../labels'
 import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
 
-import type { RouteComponentProps } from 'react-router'
 import type { IResearch } from 'src/models/research.models'
+import { usePrompt } from 'src/common/hooks/usePrompt'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
-
 interface IState {
   formSaved: boolean
-  _toDocsList: boolean
+  dirty: boolean
   showSubmitModal?: boolean
 }
-interface IProps extends RouteComponentProps<any> {
+interface IProps {
   'data-testid'?: string
   formValues: any
   parentType: 'create' | 'edit'
@@ -76,11 +74,10 @@ const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
   const { create, update } = buttons.draft
   const { categories, collaborators, description, tags, title } = overview
-
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
     formSaved: false,
-    _toDocsList: false,
+    dirty: false,
     showSubmitModal: false,
   })
   const [submissionHandler, setSubmissionHandler] = React.useState({
@@ -134,6 +131,12 @@ const ResearchForm = observer((props: IProps) => {
     )
   }
 
+  // Block navigating elsewhere when data has been entered into the input
+  usePrompt(
+    CONFIRM_DIALOG_MSG,
+    !store.updateUploadStatus.Complete && state.dirty,
+  )
+
   const draftButtonText = formValues.moderation !== 'draft' ? create : update
   const pageTitle = headings.overview[parentType]
 
@@ -148,6 +151,7 @@ const ResearchForm = observer((props: IProps) => {
           }}
         />
       )}
+
       <Form
         onSubmit={(v) => {
           onSubmit(v as IResearch.FormInput)
@@ -169,6 +173,10 @@ const ResearchForm = observer((props: IProps) => {
           submitting,
           submitFailed,
         }) => {
+          if (state.dirty !== dirty) {
+            setState((prev) => ({ ...prev, dirty }))
+          }
+
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
               <Flex
@@ -177,10 +185,6 @@ const ResearchForm = observer((props: IProps) => {
                 sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
                 mt={4}
               >
-                <Prompt
-                  when={!store.researchUploadStatus.Complete && dirty}
-                  message={CONFIRM_DIALOG_MSG}
-                />
                 <Box
                   as="form"
                   id="researchForm"

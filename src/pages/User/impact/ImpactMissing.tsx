@@ -2,7 +2,7 @@ import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
 import { Flex, Text } from 'theme-ui'
 
-import { useCommonStores } from 'src/'
+import { useCommonStores } from 'src/index'
 import { invisible, missing } from './labels'
 import { IMPACT_REPORT_LINKS } from './constants'
 

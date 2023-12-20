@@ -42,7 +42,7 @@ export const QuestionListing = () => {
         <Loader />
       ) : questionList.length ? (
         questionList.map((q: any, idx) => {
-          const url = `/question/${encodeURIComponent(q.slug)}`
+          const url = `/questions/${encodeURIComponent(q.slug)}`
           return (
             <Card key={idx} mb={3} px={3} py={3} sx={{ position: 'relative' }}>
               <Link to={url} key={q._id}>

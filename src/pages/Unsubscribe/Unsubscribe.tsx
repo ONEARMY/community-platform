@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import { useEffect, useState } from 'react'
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
+import { Route, Routes, useParams } from 'react-router-dom'
 import { useCommonStores } from '../../index'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 import { logger } from 'src/logger'
@@ -45,53 +45,46 @@ const StatusMessage = ({ status }: { status: Status }) => {
   }
 }
 
-const Unsubscribe = observer(
-  ({ unsubscribeToken }: { unsubscribeToken: string }) => {
-    const [status, setStatus] = useState<Status>(Status.LOADING)
-    const { userStore } = useCommonStores().stores
+const Unsubscribe = observer(() => {
+  const { unsubscribeToken } = useParams()
+  const [status, setStatus] = useState<Status>(Status.LOADING)
+  const { userStore } = useCommonStores().stores
 
-    useEffect(() => {
-      const unsubscribeUser = async () => {
-        try {
+  useEffect(() => {
+    const unsubscribeUser = async () => {
+      try {
+        if (unsubscribeToken) {
           await userStore.unsubscribeUser(unsubscribeToken)
           setStatus(Status.SUCCESS)
-        } catch (error) {
-          logger.debug('Error unsubscribing user:', error)
-          setStatus(Status.ERROR)
         }
+      } catch (error) {
+        logger.debug('Error unsubscribing user:', error)
+        setStatus(Status.ERROR)
       }
+    }
 
-      unsubscribeUser()
-    }, [])
+    unsubscribeUser()
+  }, [])
 
-    return (
-      <Flex
-        sx={{ flexDirection: 'column', maxWidth: '400px', textAlign: 'center' }}
-        mx="auto"
-        mt={15}
-        data-cy="unsubscribe"
-      >
-        <Card p={3} bg={'softblue'} sx={{}} mb={3}>
-          <Heading>Unsubscribe </Heading>
-        </Card>
-        <StatusMessage status={status} />
-      </Flex>
-    )
-  },
-)
+  return (
+    <Flex
+      sx={{ flexDirection: 'column', maxWidth: '400px', textAlign: 'center' }}
+      mx="auto"
+      mt={15}
+      data-cy="unsubscribe"
+    >
+      <Card p={3} bg={'softblue'} sx={{}} mb={3}>
+        <Heading>Unsubscribe </Heading>
+      </Card>
+      <StatusMessage status={status} />
+    </Flex>
+  )
+})
 
 const UnsubscribeRoute = () => (
-  <Router>
-    <Switch>
-      <Route
-        exact
-        path="/unsubscribe/:unsubscribeToken"
-        component={(props) => (
-          <Unsubscribe unsubscribeToken={props.match.params.unsubscribeToken} />
-        )}
-      ></Route>
-    </Switch>
-  </Router>
+  <Routes>
+    <Route path=":unsubscribeToken" element={<Unsubscribe />}></Route>
+  </Routes>
 )
 
 export default UnsubscribeRoute

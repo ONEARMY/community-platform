@@ -66,7 +66,10 @@ describe('Impact', () => {
       const machineField = await screen.queryByText('13 machines built')
       expect(machineField).toBe(null)
 
-      await IMPACT_YEARS.forEach(async (year) => await screen.findByText(year))
+      for (const year of IMPACT_YEARS) {
+        await screen.findByText(year)
+      }
+
       await screen.findAllByText(missing.user.label)
       await screen.findAllByText(invisible.user.label)
     })

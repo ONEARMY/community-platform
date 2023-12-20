@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import { Text } from 'theme-ui'
 import { Button, Tooltip } from '../'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export interface IProps {
   hasUserVotedUseful: boolean
@@ -16,7 +16,7 @@ export interface IProps {
 
 export const UsefulStatsButton = (props: IProps) => {
   const theme: any = useTheme()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [votedUsefulCount, setVotedUsefulCount] = useState<number>()
   const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>()
@@ -44,7 +44,7 @@ export const UsefulStatsButton = (props: IProps) => {
         data-tip={props.isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={props.isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         onClick={() =>
-          props.isLoggedIn ? handleUsefulClick() : history.push('/sign-in')
+          props.isLoggedIn ? handleUsefulClick() : navigate('/sign-in')
         }
         disabled={disabled}
         sx={{

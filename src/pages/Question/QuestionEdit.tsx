@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
-import type { RouteComponentProps } from 'react-router'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { toJS } from 'mobx'
 import type { IQuestion } from 'src/models'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
+import { useNavigate, useParams } from 'react-router-dom'
 
-type IProps = RouteComponentProps<{ slug: string }>
-
-export const QuestionEdit = (props: IProps) => {
+export const QuestionEdit = () => {
+  const { slug } = useParams()
+  const navigate = useNavigate()
   const store = useQuestionStore()
   const [isLoading, setIsLoading] = useState(true)
   const [initialValues, setInitialValues] = useState<Partial<IQuestion.Item>>(
@@ -17,31 +17,32 @@ export const QuestionEdit = (props: IProps) => {
   )
 
   useEffect(() => {
-    const { slug } = props.match.params
     const fetchQuestion = async () => {
       logger.debug(`fetchQuestion`, slug)
 
-      const questionDoc = await store.fetchQuestionBySlug(slug)
-      logger.debug(`fetchQuestion.questionDoc`, questionDoc)
+      if (slug) {
+        const questionDoc = await store.fetchQuestionBySlug(slug)
+        logger.debug(`fetchQuestion.questionDoc`, questionDoc)
 
-      if (questionDoc === null) {
-        props.history.push(`/questions`)
+        if (questionDoc === null) {
+          navigate('/questions')
+        }
+
+        if (
+          questionDoc?._createdBy !== store.activeUser?.userName &&
+          !store.activeUser?.userRoles?.includes('admin')
+        ) {
+          navigate(`/questions/${slug}`)
+          return
+        }
+
+        setInitialValues(toJS(questionDoc || {}))
       }
-
-      if (
-        questionDoc?._createdBy !== store.activeUser?.userName &&
-        !store.activeUser?.userRoles?.includes('admin')
-      ) {
-        props.history.push(`/question/${slug}`)
-        return
-      }
-
-      setInitialValues(toJS(questionDoc || {}))
       setIsLoading(false)
     }
 
     fetchQuestion()
-  }, [])
+  }, [slug])
 
   return (
     <>
@@ -52,8 +53,7 @@ export const QuestionEdit = (props: IProps) => {
           data-testid="question-create-form"
           parentType="edit"
           formValues={initialValues}
-          {...props}
-        ></QuestionForm>
+        />
       )}
     </>
   )

@@ -1,11 +1,6 @@
 import { observer } from 'mobx-react'
 import { useEffect, useMemo, useState } from 'react'
-import {
-  Route,
-  BrowserRouter as Router,
-  Switch,
-  useLocation,
-} from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { functions } from 'src/utils/firebase'
@@ -60,11 +55,9 @@ const Patreon = observer(() => {
 })
 
 const PatreonRoute = () => (
-  <Router>
-    <Switch>
-      <Route exact path="/patreon" component={() => <Patreon />}></Route>
-    </Switch>
-  </Router>
+  <Routes>
+    <Route path="/patreon" element={<Patreon />}></Route>
+  </Routes>
 )
 
 export default PatreonRoute

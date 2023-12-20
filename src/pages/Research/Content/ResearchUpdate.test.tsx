@@ -6,6 +6,12 @@ import { faker } from '@faker-js/faker'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import {
+  Route,
+  RouterProvider,
+  createMemoryRouter,
+  createRoutesFromElements,
+} from 'react-router-dom'
 const Theme = testingThemeStyles
 
 const mockUser = FactoryUser({ country: '' })
@@ -69,16 +75,30 @@ describe('ResearchUpdate', () => {
 })
 
 const getWrapper = (update) => {
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route
+        path="/research/test/edit"
+        element={
+          <ResearchUpdate
+            update={update}
+            updateIndex={1}
+            slug={'slug'}
+            comments={[]}
+            isEditable={false}
+            showComments={false}
+          />
+        }
+      />,
+    ),
+    {
+      initialEntries: ['/research/test/edit'],
+    },
+  )
+
   return render(
     <ThemeProvider theme={Theme}>
-      <ResearchUpdate
-        update={update}
-        updateIndex={1}
-        slug={'slug'}
-        comments={[]}
-        isEditable={false}
-        showComments={false}
-      />
+      <RouterProvider router={router} />
     </ThemeProvider>,
   )
 }

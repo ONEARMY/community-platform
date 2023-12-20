@@ -13,7 +13,7 @@ import type { IResearch } from 'src/models/research.models'
 import { ResearchComments } from './ResearchComments/ResearchComments'
 import styled from '@emotion/styled'
 import type { IComment } from 'src/models'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { useCommonStores } from 'src/index'
@@ -41,7 +41,7 @@ const ResearchUpdate = ({
   showComments,
 }: IProps) => {
   const researchStore = useResearchStore()
-  const history = useHistory()
+  const navigate = useNavigate()
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
   const formattedCreateDatestamp = format(
@@ -60,7 +60,7 @@ const ResearchUpdate = ({
   }
 
   const redirectToSignIn = async () => {
-    history.push('/sign-in')
+    navigate('/sign-in')
   }
 
   return (

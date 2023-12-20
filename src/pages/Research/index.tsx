@@ -1,4 +1,3 @@
-import { Route } from 'react-router'
 import { MODULE } from 'src/modules'
 import {
   ResearchStore,
@@ -13,7 +12,7 @@ import ResearchRoutes from './research.routes'
 const ResearchModuleContainer = () => {
   return (
     <ResearchStoreContext.Provider value={new ResearchStore()}>
-      <Route component={ResearchRoutes} />
+      <ResearchRoutes />
     </ResearchStoreContext.Provider>
   )
 }

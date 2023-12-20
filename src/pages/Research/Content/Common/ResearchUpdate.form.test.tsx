@@ -4,7 +4,7 @@ import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 
 import { ThemeProvider } from '@emotion/react'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter } from 'react-router-dom'
 import { ResearchUpdateForm } from './ResearchUpdate.form'
 
 const Theme = testingThemeStyles

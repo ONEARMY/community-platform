@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
 import { SiteFooter } from 'oa-components'
+import { useLocation } from 'react-router-dom'
 
 const isFooterVisible = (path) => {
   return (
@@ -9,17 +9,14 @@ const isFooterVisible = (path) => {
 }
 
 const GlobalSiteFooter = () => {
-  const history = useHistory()
+  const location = useLocation()
   const [showFooter, setShowFooter] = useState(
     isFooterVisible(window.location.pathname),
   )
 
   useEffect(
-    () =>
-      history.listen((location) => {
-        setShowFooter(isFooterVisible(location?.pathname))
-      }),
-    [history],
+    () => setShowFooter(isFooterVisible(location?.pathname)),
+    [location],
   )
 
   return showFooter ? <SiteFooter /> : null

@@ -1,8 +1,12 @@
-import { act, render } from '@testing-library/react'
+import { act, render, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@emotion/react'
 import { Provider } from 'mobx-react'
-import { MemoryRouter } from 'react-router'
-import { Route } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   FactoryResearchItem,
@@ -285,18 +289,30 @@ describe('Research Article', () => {
       }),
     })
     // Act
-    let wrapper
+    const wrapper = getWrapper()
+
     await act(async () => {
-      wrapper = getWrapper()
+      await new Promise((r) => setTimeout(r, 200))
       wrapper.getByText('View 2 Comments').click()
     })
 
     // Assert
-    expect(wrapper.getByText('First test comment')).toBeInTheDocument()
+    await waitFor(async () => {
+      expect(wrapper.getByText('First test comment')).toBeInTheDocument()
+    })
   })
 })
 
 const getWrapper = () => {
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route path="/research/:slug" key={1} element={<ResearchArticle />} />,
+    ),
+    {
+      initialEntries: ['/research/article'],
+    },
+  )
+
   return render(
     <Provider
       userStore={{
@@ -304,14 +320,7 @@ const getWrapper = () => {
       }}
     >
       <ThemeProvider theme={Theme}>
-        <MemoryRouter initialEntries={['/research/article']}>
-          <Route
-            path="/research/:slug"
-            exact
-            key={1}
-            component={ResearchArticle}
-          />
-        </MemoryRouter>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,
   )

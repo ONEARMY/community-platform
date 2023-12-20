@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
 import { Analytics } from 'src/common/Analytics'
 import { NotFoundPage } from './NotFound/NotFound'
 import { ScrollToTop } from '../common/ScrollToTop'
@@ -20,7 +20,7 @@ import { SeoTagsUpdateComponent } from 'src/utils/seo'
 import { ExternalLink, Button } from 'oa-components'
 import { QuestionModuleContainer } from './Question'
 
-export const Routes = () => {
+export const Pages = () => {
   //   any,
   //   {
   //     singlePageMode: boolean
@@ -55,14 +55,13 @@ export const Routes = () => {
         <Suspense
           fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}
         >
-          <Switch>
+          <Routes>
             {menuItems.map((page) => (
               <Route
-                exact={page.exact}
-                path={page.path}
+                path={page.exact ? page.path : `${page.path}/*`}
                 key={page.path}
-                render={() => (
-                  <React.Fragment>
+                element={
+                  <>
                     <SeoTagsUpdateComponent title={page.title} />
                     <Main
                       data-cy="main-layout-container"
@@ -72,30 +71,27 @@ export const Routes = () => {
                     >
                       <>{page.component}</>
                     </Main>
-                  </React.Fragment>
-                )}
+                  </>
+                }
               />
             ))}
             {isModuleSupported(MODULE.QUESTION) ? (
               <Route
-                path={'/question'}
-                key="question"
-                exact={false}
-                render={() => (
-                  <React.Fragment>
+                path="/questions/*"
+                key="questions"
+                element={
+                  <>
                     <SeoTagsUpdateComponent title="Question" />
                     <Main data-cy="main-layout-container" style={{ flex: 1 }}>
                       <QuestionModuleContainer />
                     </Main>
-                  </React.Fragment>
-                )}
+                  </>
+                }
               />
             ) : null}
-            <Route component={NotFoundPage} />
-          </Switch>
-          <Switch>
-            <Route exact path="/" render={() => <Redirect to="/academy" />} />
-          </Switch>
+            <Route index element={<Navigate to="/academy" />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
         </Suspense>
 
         <GlobalSiteFooter />

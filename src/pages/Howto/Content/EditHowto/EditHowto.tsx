@@ -1,93 +1,68 @@
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
+import React, { useEffect, useState } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
-import { Redirect } from 'react-router'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { inject } from 'mobx-react'
+import { Navigate, useParams } from 'react-router-dom'
 import { toJS } from 'mobx'
-import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
 import { Text } from 'theme-ui'
 import type { IUser } from 'src/models/user.models'
 import { isAllowedToEditContent } from 'src/utils/helpers'
+import { useCommonStores } from 'src/index'
+import { HowtoForm } from '../Common/Howto.form'
 import { Loader } from 'oa-components'
-import { logger } from 'src/logger'
 
 interface IState {
   formValues: IHowtoDB
-  formSaved: boolean
   isLoading: boolean
-  _toDocsList: boolean
-  showSubmitModal?: boolean
   loggedInUser?: IUser | undefined
 }
-type IProps = RouteComponentProps<any>
-interface IInjectedProps extends IProps {
-  howtoStore: HowtoStore
-}
 
-@inject('howtoStore')
-class EditHowto extends React.Component<IProps, IState> {
-  constructor(props: any) {
-    super(props)
-    this.state = {
-      formValues: {} as IHowtoDB,
-      formSaved: false,
-      _toDocsList: false,
-      isLoading: true,
-      loggedInUser: undefined,
-    }
-  }
-  /* eslint-disable @typescript-eslint/naming-convention */
-  public async UNSAFE_componentWillMount() {
-    const loggedInUser = this.injected.howtoStore.activeUser
-    if (this.injected.howtoStore.activeHowto) {
-      this.setState({
-        formValues: toJS(this.injected.howtoStore.activeHowto) as IHowtoDB,
-        isLoading: false,
-        loggedInUser: loggedInUser ? loggedInUser : undefined,
-      })
-    } else {
-      const slug = this.props.match.params.slug
-      const doc = await this.injected.howtoStore.setActiveHowtoBySlug(slug)
-      this.setState({
-        formValues: doc as IHowtoDB,
-        isLoading: false,
-        loggedInUser: loggedInUser ? loggedInUser : undefined,
-      })
-    }
-  }
+const EditHowto = () => {
+  const { slug } = useParams()
+  const { howtoStore } = useCommonStores().stores
+  const [{ formValues, isLoading, loggedInUser }, setState] = useState<IState>({
+    formValues: {} as IHowtoDB,
+    isLoading: true,
+    loggedInUser: undefined,
+  })
 
-  get injected() {
-    return this.props as IInjectedProps
-  }
-  get store() {
-    return this.injected.howtoStore
-  }
-
-  public render() {
-    logger.debug('edit', this.state)
-    const { formValues, isLoading, loggedInUser } = this.state
-    if (formValues && !isLoading) {
-      if (loggedInUser && isAllowedToEditContent(formValues, loggedInUser)) {
-        return (
-          <HowtoForm
-            formValues={formValues}
-            parentType="edit"
-            {...this.props}
-          />
-        )
+  useEffect(() => {
+    const loggedInUser = howtoStore.activeUser
+    const init = async () => {
+      if (howtoStore.activeHowto) {
+        setState({
+          formValues: toJS(howtoStore.activeHowto) as IHowtoDB,
+          isLoading: false,
+          loggedInUser: loggedInUser ? loggedInUser : undefined,
+        })
       } else {
-        return <Redirect to={'/how-to/' + formValues.slug} />
+        const doc = await howtoStore.setActiveHowtoBySlug(slug)
+        setState({
+          formValues: doc as IHowtoDB,
+          isLoading: false,
+          loggedInUser: loggedInUser ? (loggedInUser as IUser) : undefined,
+        })
       }
-    } else {
-      return isLoading ? (
-        <Loader />
-      ) : (
-        <Text mt="50px" sx={{ width: '100%', textAlign: 'center' }}>
-          How-to not found
-        </Text>
-      )
     }
+
+    init()
+  }, [])
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (!formValues) {
+    return (
+      <Text mt="50px" sx={{ width: '100%', textAlign: 'center' }}>
+        How-to not found
+      </Text>
+    )
+  }
+
+  if (loggedInUser && isAllowedToEditContent(formValues, loggedInUser)) {
+    return <HowtoForm formValues={formValues} parentType="edit" />
+  } else {
+    return <Navigate to={'/how-to/' + formValues.slug} />
   }
 }
+
 export default EditHowto

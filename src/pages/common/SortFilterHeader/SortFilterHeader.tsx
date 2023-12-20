@@ -1,5 +1,5 @@
-import { useHistory } from 'react-router'
-import type { RouteComponentProps } from 'react-router'
+import { useNavigate } from 'react-router-dom'
+import type { NavigateFunction } from 'react-router-dom'
 import { Flex, Input } from 'theme-ui'
 import { useState } from 'react'
 import { Select } from 'oa-components'
@@ -17,7 +17,7 @@ const updateQueryParams = (
   url: string,
   key: string,
   val: string,
-  history: RouteComponentProps['history'],
+  navigate: NavigateFunction,
 ) => {
   const newUrl = new URL(url)
   const urlParams = new URLSearchParams(newUrl.search)
@@ -30,10 +30,7 @@ const updateQueryParams = (
 
   const { pathname, search } = newUrl
 
-  history.push({
-    pathname,
-    search,
-  })
+  navigate({ pathname, search })
 }
 
 const getQueryParam = (
@@ -55,7 +52,7 @@ export const SortFilterHeader = ({
   type,
   store: currentStore,
 }: SortFilterHeaderProps) => {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const { searchValue, activeSorter, availableItemSortingOption } = currentStore
 
@@ -119,7 +116,7 @@ export const SortFilterHeader = ({
               window.location.href,
               'category',
               category ? category.label : '',
-              history,
+              navigate,
             )
             currentStore.updateSelectedCategory(category ? category.label : '')
           }}
@@ -159,7 +156,7 @@ export const SortFilterHeader = ({
                 window.location.href,
                 'author',
                 author ? author.value : '',
-                history,
+                navigate,
               )
               currentStore.updateSelectedAuthor(author?.value ?? null)
             }}
@@ -175,7 +172,7 @@ export const SortFilterHeader = ({
           placeholder={`Search for a ${capitalizeFirstLetter(type)}`}
           onChange={(evt) => {
             const value = evt.target.value
-            updateQueryParams(window.location.href, 'search', value, history)
+            updateQueryParams(window.location.href, 'search', value, navigate)
             currentStore.updateSearchValue(value)
           }}
         />

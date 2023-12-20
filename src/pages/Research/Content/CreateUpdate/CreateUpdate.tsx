@@ -1,7 +1,6 @@
+import React from 'react'
 import { observer } from 'mobx-react'
-import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
-import { Redirect } from 'react-router'
+import { Navigate, useParams } from 'react-router-dom'
 import { Loader } from 'oa-components'
 import { Text } from 'theme-ui'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -9,14 +8,13 @@ import { isAllowedToEditContent } from 'src/utils/helpers'
 import { ResearchUpdateForm } from '../Common/ResearchUpdate.form'
 import TEMPLATE from './Template'
 
-type IProps = RouteComponentProps<{ slug: string }>
-
-const CreateUpdate = observer((props: IProps) => {
+const CreateUpdate = observer(() => {
+  const { slug } = useParams()
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const store = useResearchStore()
 
   React.useEffect(() => {
-    ;(async () => {
+    const init = async () => {
       let loggedInUser = store.activeUser
       if (!loggedInUser) {
         // TODO - handle the case where user is still loading
@@ -28,18 +26,20 @@ const CreateUpdate = observer((props: IProps) => {
         )
       }
       if (!store.activeResearchItem) {
-        await store.setActiveResearchItemBySlug(props.match.params.slug)
+        await store.setActiveResearchItemBySlug(slug)
       }
       setIsLoading(false)
-    })()
-  }, [store, props.match.params.slug])
+    }
+    init()
+  }, [slug])
 
   if (isLoading) {
     return <Loader />
   }
   if (!store.activeUser) {
-    return <Redirect to={'/research/' + props.match.params.slug} />
+    return <Navigate to={'/research/' + slug} />
   }
+
   if (
     store.activeResearchItem &&
     isAllowedToEditContent(store.activeResearchItem, store.activeUser)
@@ -48,7 +48,6 @@ const CreateUpdate = observer((props: IProps) => {
       <ResearchUpdateForm
         formValues={TEMPLATE.INITIAL_VALUES}
         parentType="create"
-        {...props}
       />
     )
   } else {

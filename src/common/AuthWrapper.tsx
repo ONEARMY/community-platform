@@ -28,7 +28,7 @@ export class AuthWrapper extends React.Component<IProps> {
       ) : (
         children
       )
-    return isAuthorized === true ? childElements : fallback || null
+    return isAuthorized === true ? childElements : fallback || <></>
   }
 }
 

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import type { RouteComponentProps } from 'react-router'
 import { Form } from 'react-final-form'
 import type { FormApi } from 'final-form'
 import styled from '@emotion/styled'
@@ -48,7 +47,7 @@ interface IState {
   fileEditMode?: boolean
   showInvalidFileWarning: boolean
 }
-interface IProps extends RouteComponentProps<any> {
+interface IProps {
   formValues: any
   parentType: ParentType
 }

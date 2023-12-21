@@ -1,4 +1,3 @@
-import { format } from 'date-fns'
 import {
   Button,
   FollowButton,
@@ -22,7 +21,7 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { buildStatisticsLabel } from 'src/utils/helpers'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
+import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
 interface IProps {
   research: IResearch.ItemDB
@@ -55,18 +54,6 @@ const ResearchDescription = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const navigate = useNavigate()
 
-  const dateLastUpdateText = (research: IResearch.ItemDB): string => {
-    const contentModifiedDate = format(
-      new Date(research._contentModifiedTimestamp || research._modified),
-      'DD-MM-YYYY',
-    )
-    const creationDate = format(new Date(research._created), 'DD-MM-YYYY')
-    if (contentModifiedDate !== creationDate) {
-      return `Last update on ${contentModifiedDate}`
-    } else {
-      return ''
-    }
-  }
   let didInit = false
   const store = useResearchStore()
   const [viewCount, setViewCount] = useState<number | undefined>(0)
@@ -207,27 +194,16 @@ const ResearchDescription = ({
           </Flex>
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
-              <Flex sx={{ flexDirection: 'column' }}>
-                <UserNameTag
-                  userName={research._createdBy}
-                  countryCode={research.creatorCountry}
-                  created={research._created}
-                  action="Started"
-                />
-                <Text
-                  variant="auxiliary"
-                  sx={{
-                    color: 'lightgrey',
-                    '&!important': {
-                      color: 'lightgrey',
-                    },
-                  }}
-                  mt={1}
-                  mb={2}
-                >
-                  {dateLastUpdateText(research)}
-                </Text>
-              </Flex>
+              <ContentAuthorTimestamp
+                userName={research._createdBy}
+                countryCode={research.creatorCountry}
+                created={research._created}
+                modified={
+                  research._contentModifiedTimestamp || research._modified
+                }
+                action="Started"
+              />
+
               {props.contributors && props?.contributors.length ? (
                 <Flex
                   mt={1}

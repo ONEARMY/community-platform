@@ -79,7 +79,7 @@ describe('[How To]', () => {
         cy.step('How-to has basic info')
         cy.get('[data-cy=how-to-basis]').then(($summary) => {
           expect($summary).to.contain('howto_creator', 'Author')
-          expect($summary).to.contain('Last edit on', 'Edit')
+          expect($summary).to.contain('Last update on', 'Edit')
           expect($summary).to.contain('Make an interlocking brick', 'Title')
           expect($summary).to.contain(
             'show you how to make a brick using the injection machine',

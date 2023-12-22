@@ -209,14 +209,6 @@ export class DiscussionStore extends ModuleStore {
     commentId: string,
   ) {
     return comments.map((comment) => {
-      // eslint-disable-next-line no-console
-      console.log({
-        matchesCommentAuthor:
-          comment._creatorId === user._id || hasAdminRights(user),
-
-        commentId: comment._id,
-        commentIdToEdit: commentId,
-      })
       if (
         (comment._creatorId === user._id || hasAdminRights(user)) &&
         comment._id == commentId

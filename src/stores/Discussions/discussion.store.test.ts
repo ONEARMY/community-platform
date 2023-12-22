@@ -246,23 +246,4 @@ describe('discussion.store', () => {
       expect(setFn).not.toHaveBeenCalled()
     })
   })
-
-  describe('formatComments', () => {
-    it('get formatteded comments from IDiscussionComment[] type to UserCommentType[]', async () => {
-      const { store, discussionItem } = await factory([
-        FactoryDiscussion({
-          comments: [FactoryComment({ text: 'New comment' })],
-        }),
-      ])
-
-      // Act
-      const formatedComments = store.formatComments({}, discussionItem.comments)
-
-      // Assert
-      expect(formatedComments.count).toBe(1)
-      expect(formatedComments.comments[0].isUserVerified).toBeDefined()
-      expect(formatedComments.comments[0].isEditable).toBeDefined()
-      expect(formatedComments.comments[0].showReplies).toBeFalsy()
-    })
-  })
 })

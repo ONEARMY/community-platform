@@ -3,11 +3,7 @@ import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
 import { logger } from 'src/logger'
 import { ModuleStore } from '../common/module.store'
-import {
-  hasAdminRights,
-  isAllowedToEditContent,
-  randomID,
-} from 'src/utils/helpers'
+import { hasAdminRights, randomID } from 'src/utils/helpers'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -15,9 +11,8 @@ import type {
   IDiscussion,
   IDiscussionComment,
 } from 'src/models/discussion.models'
-import type { IUserPPDB, UserComment } from 'src/models'
+import type { IUserPPDB } from 'src/models'
 import type { RootStore } from '..'
-import { changeUserReferenceToPlainText } from '../common/mentions'
 
 const COLLECTION_NAME = 'discussions'
 
@@ -35,33 +30,6 @@ export class DiscussionStore extends ModuleStore {
           .getWhere('sourceId', '==', sourceId),
       )[0] || null
     )
-  }
-
-  public formatComments(
-    item: any,
-    comments: IDiscussionComment[],
-  ): { comments: UserComment[]; count: number } {
-    const commentCount = comments.length
-
-    const formatedComments = comments.map((comment: IDiscussionComment) => {
-      return {
-        ...comment,
-        text: changeUserReferenceToPlainText(comment.text),
-        isUserVerified:
-          !!this.aggregationsStore.aggregations.users_verified?.[
-            comment.creatorName
-          ],
-        isEditable:
-          [
-            this.userStore.activeUser?._id,
-            this.userStore.activeUser?.userName,
-          ].includes(comment._creatorId) ||
-          isAllowedToEditContent(item, this.userStore.activeUser || undefined),
-        showReplies: false,
-      }
-    })
-
-    return { comments: formatedComments, count: commentCount }
   }
 
   public async uploadDiscussion(

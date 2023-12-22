@@ -39,6 +39,7 @@ describe('[Settings]', () => {
   }
   const setWorkspaceMapPin = (mapPin: IMapPin) => {
     cy.step('Update Workspace Map section')
+    cy.get('[data-cy=add-a-map-pin]').click()
     cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
     cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
     cy.get('[data-cy="osm-geocoding-results"]')
@@ -55,6 +56,7 @@ describe('[Settings]', () => {
 
   const setMemberMapPin = (mapPin: IMapPin) => {
     cy.step('Update Member section')
+    cy.get('[data-cy=add-a-map-pin]').click()
     cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
     cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
     cy.get('[data-cy="osm-geocoding-results"]')

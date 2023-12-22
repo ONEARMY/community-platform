@@ -56,7 +56,7 @@ function createComponentFileFromTemplate(templateName: string) {
 
 writeFileSync(
   resolve(__dirname, '../src/index.ts'),
-  `export { ${componentName} } from './${componentName}/${componentName}'`,
+  `export { ${componentName} } from './${componentName}/${componentName}'\n`,
   {
     encoding: 'utf-8',
     flag: 'a+',

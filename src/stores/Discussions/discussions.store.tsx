@@ -70,7 +70,7 @@ export class DiscussionStore extends ModuleStore {
         if (!currentDiscussion) {
           throw new Error('Discussion not found')
         }
-        
+
         const newComment: IDiscussionComment = {
           _id: randomID(),
           _created: new Date().toISOString(),

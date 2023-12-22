@@ -112,6 +112,39 @@ describe('discussion.store', () => {
     })
   })
 
+  describe('editComent', () => {
+    it('edits a comment', async () => {
+      const { store, discussionItem, setFn } = await factory([
+        FactoryDiscussion({
+          comments: [
+            FactoryComment({
+              _id: 'fake-comment-id',
+              _creatorId: 'fake-user',
+              text: 'New comment',
+            }),
+          ],
+        }),
+      ])
+
+      //Act
+      await store.editComment(
+        discussionItem,
+        'fake-comment-id',
+        'Edited comment',
+      )
+
+      const [newDiscussion] = setFn.mock.calls[0]
+
+      // Assert
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(newDiscussion.comments).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ text: 'Edited comment' }),
+        ]),
+      )
+    })
+  })
+
   describe('deleteComment', () => {
     it('removes a comment', async () => {
       const { store, setFn } = await factory()

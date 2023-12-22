@@ -126,19 +126,20 @@ export class DiscussionStore extends ModuleStore {
     commentId: string,
   ) {
     return comments.map((comment) => {
+      // eslint-disable-next-line no-console
+      console.log({
+        matchesCommentAuthor:
+          comment._creatorId === user._id || hasAdminRights(user),
+
+        commentId: comment._id,
+        commentIdToEdit: commentId,
+      })
       if (
         (comment._creatorId === user._id || hasAdminRights(user)) &&
         comment._id == commentId
       ) {
         comment.text = newCommentText
         comment._edited = new Date().toISOString()
-      } else if (comment.replies && comment.replies.length) {
-        comment.replies = this.findAndUpdateComment(
-          user,
-          comment.replies,
-          newCommentText,
-          commentId,
-        )
       }
       return comment
     })
@@ -147,8 +148,8 @@ export class DiscussionStore extends ModuleStore {
   @action
   public async editComment(
     discussion: IDiscussion,
-    text: string,
     commentId: string,
+    text: string,
   ): Promise<IDiscussion | undefined> {
     try {
       const user = this.activeUser
@@ -178,19 +179,6 @@ export class DiscussionStore extends ModuleStore {
     }
   }
 
-  private findAndDeleteComment(
-    user: IUserPPDB,
-    comments: IDiscussionComment[],
-    commentId: string,
-  ) {
-    return comments.filter((comment) => {
-      return !(
-        (comment._creatorId === user._id || hasAdminRights(user)) &&
-        comment._id === commentId
-      )
-    })
-  }
-
   @action
   public async deleteComment(
     discussion: IDiscussion,
@@ -207,7 +195,7 @@ export class DiscussionStore extends ModuleStore {
         const currentDiscussion = toJS(await dbRef.get())
 
         if (currentDiscussion) {
-          currentDiscussion.comments = this.findAndDeleteComment(
+          currentDiscussion.comments = this._findAndDeleteComment(
             user,
             currentDiscussion.comments,
             commentId,
@@ -229,6 +217,19 @@ export class DiscussionStore extends ModuleStore {
     await dbRef.set({ ...cloneDeep(discussion) })
 
     return toJS(dbRef.get())
+  }
+
+  private _findAndDeleteComment(
+    user: IUserPPDB,
+    comments: IDiscussionComment[],
+    commentId: string,
+  ) {
+    return comments.filter((comment) => {
+      return !(
+        (comment._creatorId === user._id || hasAdminRights(user)) &&
+        comment._id === commentId
+      )
+    })
   }
 }
 

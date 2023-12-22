@@ -77,11 +77,11 @@ export const HowToComments = ({ comments }: IProps) => {
       data-cy="howto-comments"
     >
       <Flex
-        mb={4}
         sx={{
-          width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
-          flexDirection: 'column',
           alignItems: 'stretch',
+          flexDirection: 'column',
+          marginBottom: [2, 2, 4],
+          width: ['100%', '100%', `90%`, `${(2 / 3) * 100}%`],
         }}
       >
         <Card sx={{ gap: 2, padding: 3 }}>

@@ -20,7 +20,7 @@ import {
   isAllowedToEditContent,
 } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
-import { Box, Flex } from 'theme-ui'
+import { Box, Card, Flex } from 'theme-ui'
 
 import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
@@ -247,35 +247,41 @@ const ResearchArticle = observer(() => {
             />
           ))}
       </Box>
+
       <Box
         sx={{
-          paddingLeft: [null, '12%', '12%'],
+          paddingLeft: [null, null, '12%'],
           mb: 16,
         }}
       >
-        {researchAuthor && (
-          <ArticleCallToAction
-            author={researchAuthor}
-            contributors={contributors}
-          >
-            {item.moderation === 'accepted' && (
-              <UsefulStatsButton
+        <Card sx={{ paddingBottom: 3, paddingTop: 2 }}>
+          {researchAuthor && (
+            <ArticleCallToAction
+              author={researchAuthor}
+              contributors={contributors}
+            >
+              {item.moderation === 'accepted' && (
+                <UsefulStatsButton
+                  isLoggedIn={!!loggedInUser}
+                  votedUsefulCount={researchStore.votedUsefulCount}
+                  hasUserVotedUseful={
+                    researchStore.userVotedActiveResearchUseful
+                  }
+                  onUsefulClick={() =>
+                    onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
+                  }
+                />
+              )}
+              <FollowButton
                 isLoggedIn={!!loggedInUser}
-                votedUsefulCount={researchStore.votedUsefulCount}
-                hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
-                onUsefulClick={() =>
-                  onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
-                }
-              />
-            )}
-            <FollowButton
-              isLoggedIn={!!loggedInUser}
-              hasUserSubscribed={researchStore.userHasSubscribed}
-              onFollowClick={() => onFollowClick(item.slug)}
-            ></FollowButton>
-          </ArticleCallToAction>
-        )}
+                hasUserSubscribed={researchStore.userHasSubscribed}
+                onFollowClick={() => onFollowClick(item.slug)}
+              ></FollowButton>
+            </ArticleCallToAction>
+          )}
+        </Card>
       </Box>
+
       {isEditable && (
         <Flex my={4}>
           <Link to={`/research/${item.slug}/new-update`}>

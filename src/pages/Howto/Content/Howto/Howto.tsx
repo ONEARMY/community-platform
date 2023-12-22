@@ -6,6 +6,7 @@ import {
   Button,
   Loader,
   UsefulStatsButton,
+  UserEngagementWrapper,
 } from 'oa-components'
 import { trackEvent } from 'src/common/Analytics'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
@@ -128,14 +129,7 @@ export const Howto = observer(() => {
           <Step step={step} key={index} stepindex={index} />
         ))}
       </Box>
-      <Box
-        sx={{
-          mt: 10,
-          mb: 6,
-          mx: 'auto',
-          width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
-        }}
-      >
+      <UserEngagementWrapper>
         <ArticleCallToAction
           author={{
             userName: howto._createdBy,
@@ -181,8 +175,8 @@ export const Howto = observer(() => {
             />
           )}
         </ArticleCallToAction>
-      </Box>
-      <HowToComments comments={activeHowToComments} />
+        <HowToComments comments={activeHowToComments} />
+      </UserEngagementWrapper>
     </>
   )
 })

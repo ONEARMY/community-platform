@@ -54,14 +54,14 @@ const factory = async (
 }
 
 describe('discussion.store', () => {
-  describe('fetchDiscussion', () => {
+  describe('fetchDiscussionBySourceId', () => {
     it('fetches a discussion by sourceId', async () => {
       const fakeSourceId = faker.internet.password()
       const { store, getWhereFn } = await factory([
         FactoryDiscussion({ sourceId: fakeSourceId }),
       ])
 
-      await store.fetchDiscussion(fakeSourceId)
+      await store.fetchDiscussionBySourceId(fakeSourceId)
 
       expect(getWhereFn).toHaveBeenCalledTimes(1)
       expect(getWhereFn).toHaveBeenCalledWith('sourceId', '==', fakeSourceId)
@@ -71,7 +71,7 @@ describe('discussion.store', () => {
       const { store, getWhereFn } = await factory()
 
       getWhereFn.mockReturnValueOnce([])
-      const res = await store.fetchDiscussion('fake-source-id')
+      const res = await store.fetchDiscussionBySourceId('fake-source-id')
 
       expect(getWhereFn).toHaveBeenCalledTimes(1)
       expect(res).toBeNull()

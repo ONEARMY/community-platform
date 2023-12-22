@@ -7,7 +7,7 @@ import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
 import { userStats } from 'src/common/hooks/userStats'
 import UserCreatedDocuments from './UserCreatedDocuments'
-import type { UserCreatedDocs } from '.'
+import type { UserCreatedDocs } from '../types'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 
 interface IProps {

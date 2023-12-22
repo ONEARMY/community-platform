@@ -17,5 +17,4 @@ export * from './question.models'
 export * from './discussion.models'
 export interface UserComment extends IComment {
   isEditable: boolean
-  showReplies: boolean
 }

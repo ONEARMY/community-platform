@@ -21,7 +21,9 @@ const AcademyPage = lazy(
 const MapsPage = lazy(
   () => import(/* webpackChunkName: "Maps" */ './Maps/Maps'),
 )
-const User = lazy(() => import(/* webpackChunkName: "User" */ './User/User'))
+const User = lazy(
+  () => import(/* webpackChunkName: "User" */ './User/user.routes'),
+)
 
 const SignUpMessagePage = lazy(
   () =>

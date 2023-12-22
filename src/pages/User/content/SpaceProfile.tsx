@@ -37,7 +37,7 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 
-import type { UserCreatedDocs } from '.'
+import type { UserCreatedDocs } from '../types'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 
 interface IProps {

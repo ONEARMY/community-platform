@@ -9,13 +9,13 @@ import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 import type { IUserPP } from 'src/models'
 import { logger } from '../../../logger'
+import type { UserCreatedDocs } from '../types'
 
-export interface UserCreatedDocs {
-  howtos: any
-  research: any
-}
-
-export const UserPage = observer(() => {
+/**
+ * High level wrapper which loads state, then determines
+ * whether to render a MemberProfile or SpaceProfile.
+ */
+export const UserProfile = observer(() => {
   const { id } = useParams()
   const { userStore, aggregationsStore } = useCommonStores().stores
   const [user, setUser] = useState<IUserPP | undefined>()

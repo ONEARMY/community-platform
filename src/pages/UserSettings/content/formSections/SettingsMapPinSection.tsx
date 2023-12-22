@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
-import { Button, FieldTextarea, MapWithDraggablePin } from 'oa-components'
+import { Button, FieldTextarea, MapWithPin } from 'oa-components'
+import MapPinPreviewImage from 'src/assets/images/settings/map-pin-preview.png'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { MAX_PIN_LENGTH } from 'src/pages/UserSettings/constants'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
@@ -23,13 +24,15 @@ interface IProps {
   children: React.ReactNode | React.ReactNode[]
 }
 
-export const MemberMapPinSection = observer(
+export const SettingsMapPinSection = observer(
   ({ children, toggleLocationDropdown }: IProps) => {
     const { userStore } = useCommonStores().stores
     const [state, setState] = useState<IState>({
-      showAddressEdit: true,
+      showAddressEdit: false,
       hasMapPin: false,
     })
+
+    const { addPinTitle, yourPinTitle } = headings.map
 
     useEffect(() => {
       setState((state) => ({
@@ -41,17 +44,42 @@ export const MemberMapPinSection = observer(
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading as="h2" variant="small" id="your-map-pin">
-            {headings.map.title}
+          <Heading variant="small" id="your-map-pin">
+            {state.hasMapPin && !state.showAddressEdit
+              ? addPinTitle
+              : yourPinTitle}
           </Heading>
         </Flex>
 
         {children}
 
         <Box>
-          <Text mt={4} mb={4} sx={{ display: 'block' }}>
-            {headings.map.description}
-          </Text>
+          {!state.hasMapPin && (
+            <Flex
+              sx={{
+                flexDirection: ['column', 'row'],
+                justifyContent: 'space-between',
+              }}
+            >
+              <Text
+                sx={{
+                  display: 'block',
+                  flex: 2,
+                  marginTop: 4,
+                  marginBottom: 4,
+                }}
+              >
+                {headings.map.description}
+              </Text>
+              <Box sx={{ flex: 1 }}>
+                <img
+                  style={{ width: '100%' }}
+                  src={MapPinPreviewImage}
+                  alt="Map pin preview"
+                />
+              </Box>
+            </Flex>
+          )}
 
           {!state.hasMapPin && (
             <>
@@ -62,6 +90,7 @@ export const MemberMapPinSection = observer(
                   setState((state) => ({
                     ...state,
                     hasMapPin: !state.hasMapPin,
+                    showAddressEdit: true,
                   }))
                 }}
               >
@@ -78,7 +107,64 @@ export const MemberMapPinSection = observer(
             </>
           )}
 
-          {state.hasMapPin && (
+          {state.hasMapPin && !state.showAddressEdit && (
+            <>
+              <Text mt={4} mb={2} sx={{ display: 'block', flex: '2' }}>
+                {headings.map.existingPinLabel}
+              </Text>
+              <Field
+                disabled={true}
+                mb={4}
+                data-cy="pin-description"
+                name="mapPinDescription"
+                component={FieldTextarea}
+                maxLength={MAX_PIN_LENGTH}
+                style={{ height: 'inherit' }}
+                rows="1"
+                showCharacterCount
+                validate={required}
+                validateFields={[]}
+                value={userStore.user?.mapPinDescription}
+              />
+
+              <MapWithPin
+                position={
+                  userStore.user?.location?.latlng || { lat: 0, lng: 0 }
+                }
+                draggable={false}
+              />
+
+              <Button
+                mr={2}
+                data-cy="edit-map-pin"
+                onClick={() => {
+                  setState((state) => ({
+                    ...state,
+                    showAddressEdit: true,
+                  }))
+                }}
+              >
+                {buttons.editPin}
+              </Button>
+
+              <Button
+                data-cy="remove-a-member-map-pin"
+                mt={4}
+                variant="outline"
+                onClick={() => {
+                  toggleLocationDropdown()
+                  setState((state) => ({
+                    ...state,
+                    hasMapPin: false,
+                  }))
+                }}
+              >
+                {buttons.removePin}
+              </Button>
+            </>
+          )}
+
+          {state.hasMapPin && state.showAddressEdit && (
             <>
               <Text mb={2} mt={4} sx={{ fontSize: 2, display: 'block' }}>
                 {fields.mapPinDescription.title}
@@ -129,8 +215,9 @@ export const MemberMapPinSection = observer(
                           </Text>
                         )}
 
-                        <MapWithDraggablePin
+                        <MapWithPin
                           position={location.latlng}
+                          draggable={true}
                           updatePosition={(newPosition) => {
                             props.input.onChange({
                               latlng: newPosition,

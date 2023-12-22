@@ -67,6 +67,10 @@ export class DiscussionStore extends ModuleStore {
 
         const currentDiscussion = toJS(await dbRef.get())
 
+        if (!currentDiscussion) {
+          throw new Error('Discussion not found')
+        }
+        
         const newComment: IDiscussionComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
@@ -75,10 +79,6 @@ export class DiscussionStore extends ModuleStore {
           creatorCountry: getUserCountry(user),
           text: comment,
           parentCommentId: commentId,
-        }
-
-        if (!currentDiscussion) {
-          throw new Error('Discussion not found')
         }
 
         currentDiscussion.comments.push(newComment)

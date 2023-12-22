@@ -34,7 +34,7 @@ export class DiscussionStore extends ModuleStore {
 
   public async uploadDiscussion(
     sourceId: string,
-    sourceType: string,
+    sourceType: IDiscussion['sourceType'],
   ): Promise<IDiscussion | undefined> {
     const newDiscussion: IDiscussion = {
       _id: randomID(),

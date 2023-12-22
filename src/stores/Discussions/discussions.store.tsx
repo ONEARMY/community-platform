@@ -27,12 +27,14 @@ export class DiscussionStore extends ModuleStore {
     makeObservable(this)
   }
 
-  public async fetchDiscussion(sourceId: string): Promise<IDiscussion> {
-    return toJS(
-      await this.db
-        .collection<IDiscussion>(COLLECTION_NAME)
-        .getWhere('sourceId', '==', sourceId),
-    )[0]
+  public async fetchDiscussion(sourceId: string): Promise<IDiscussion | null> {
+    return (
+      toJS(
+        await this.db
+          .collection<IDiscussion>(COLLECTION_NAME)
+          .getWhere('sourceId', '==', sourceId),
+      )[0] || null
+    )
   }
 
   public formatComments(
@@ -119,32 +121,6 @@ export class DiscussionStore extends ModuleStore {
     }
   }
 
-  private findAndUpdateComment(
-    user: IUserPPDB,
-    comments: IDiscussionComment[],
-    newCommentText: string,
-    commentId: string,
-  ) {
-    return comments.map((comment) => {
-      // eslint-disable-next-line no-console
-      console.log({
-        matchesCommentAuthor:
-          comment._creatorId === user._id || hasAdminRights(user),
-
-        commentId: comment._id,
-        commentIdToEdit: commentId,
-      })
-      if (
-        (comment._creatorId === user._id || hasAdminRights(user)) &&
-        comment._id == commentId
-      ) {
-        comment.text = newCommentText
-        comment._edited = new Date().toISOString()
-      }
-      return comment
-    })
-  }
-
   @action
   public async editComment(
     discussion: IDiscussion,
@@ -163,7 +139,15 @@ export class DiscussionStore extends ModuleStore {
         const currentDiscussion = toJS(await dbRef.get())
 
         if (currentDiscussion) {
-          currentDiscussion.comments = this.findAndUpdateComment(
+          const targetComment = currentDiscussion.comments.find(
+            (comment) => comment._id === commentId,
+          )
+
+          if (targetComment?._creatorId !== user._id) {
+            throw new Error('Comment not editable by user')
+          }
+
+          currentDiscussion.comments = this._findAndUpdateComment(
             user,
             currentDiscussion.comments,
             text,
@@ -195,6 +179,14 @@ export class DiscussionStore extends ModuleStore {
         const currentDiscussion = toJS(await dbRef.get())
 
         if (currentDiscussion) {
+          const targetComment = currentDiscussion.comments.find(
+            (comment) => comment._id === commentId,
+          )
+
+          if (targetComment?._creatorId !== user._id) {
+            throw new Error('Comment not editable by user')
+          }
+
           currentDiscussion.comments = this._findAndDeleteComment(
             user,
             currentDiscussion.comments,
@@ -208,6 +200,32 @@ export class DiscussionStore extends ModuleStore {
       logger.error(err)
       throw new Error(err?.message)
     }
+  }
+
+  private _findAndUpdateComment(
+    user: IUserPPDB,
+    comments: IDiscussionComment[],
+    newCommentText: string,
+    commentId: string,
+  ) {
+    return comments.map((comment) => {
+      // eslint-disable-next-line no-console
+      console.log({
+        matchesCommentAuthor:
+          comment._creatorId === user._id || hasAdminRights(user),
+
+        commentId: comment._id,
+        commentIdToEdit: commentId,
+      })
+      if (
+        (comment._creatorId === user._id || hasAdminRights(user)) &&
+        comment._id == commentId
+      ) {
+        comment.text = newCommentText
+        comment._edited = new Date().toISOString()
+      }
+      return comment
+    })
   }
 
   private async _updateDiscussion(

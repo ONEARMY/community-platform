@@ -5,6 +5,7 @@ import type { RootStore } from '..'
 import { FactoryUser } from 'src/test/factories/User'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryComment } from 'src/test/factories/Comment'
+import { faker } from '@faker-js/faker'
 
 const factory = async (
   discussions: IDiscussion[] = [FactoryDiscussion({})],
@@ -53,6 +54,29 @@ const factory = async (
 }
 
 describe('discussion.store', () => {
+  describe('fetchDiscussion', () => {
+    it('fetches a discussion by sourceId', async () => {
+      const fakeSourceId = faker.internet.password()
+      const { store, getWhereFn } = await factory([
+        FactoryDiscussion({ sourceId: fakeSourceId }),
+      ])
+
+      await store.fetchDiscussion(fakeSourceId)
+
+      expect(getWhereFn).toHaveBeenCalledTimes(1)
+      expect(getWhereFn).toHaveBeenCalledWith('sourceId', '==', fakeSourceId)
+    })
+
+    it('handles empty response', async () => {
+      const { store, getWhereFn } = await factory()
+
+      getWhereFn.mockReturnValueOnce([])
+      const res = await store.fetchDiscussion('fake-source-id')
+
+      expect(getWhereFn).toHaveBeenCalledTimes(1)
+      expect(res).toBeNull()
+    })
+  })
   describe('uploadDiscussion', () => {
     it('creates a new discussion with sourceId and sourceType provided', async () => {
       const { store, discussionItem, setFn } = await factory()
@@ -113,7 +137,7 @@ describe('discussion.store', () => {
   })
 
   describe('editComent', () => {
-    it('edits a comment', async () => {
+    it('allows author to make changes comment', async () => {
       const { store, discussionItem, setFn } = await factory([
         FactoryDiscussion({
           comments: [
@@ -143,28 +167,68 @@ describe('discussion.store', () => {
         ]),
       )
     })
+
+    it('throws an error for a different user', async () => {
+      const { store, discussionItem, setFn } = await factory([
+        FactoryDiscussion({
+          comments: [
+            FactoryComment({
+              _id: 'fake-comment-id',
+              _creatorId: 'another-user-id',
+              text: 'New comment',
+            }),
+          ],
+        }),
+      ])
+
+      //Act
+      await expect(
+        store.editComment(discussionItem, 'fake-comment-id', 'Edited comment'),
+      ).rejects.toThrowError()
+
+      // Assert
+      expect(setFn).not.toHaveBeenCalled()
+    })
   })
 
   describe('deleteComment', () => {
-    it('removes a comment', async () => {
-      const { store, setFn } = await factory()
+    it('allows author to remove a comment', async () => {
+      const comment = FactoryComment({
+        _creatorId: 'fake-user',
+        text: 'New comment',
+      })
+      const { store, setFn, discussionItem } = await factory([
+        FactoryDiscussion({ comments: [comment] }),
+      ])
 
       //Act
-      const comment = FactoryComment({ text: 'New comment' })
-
-      const discussion = FactoryDiscussion({ comments: [comment] })
-
-      await store.uploadDiscussion(discussion.sourceId, discussion.sourceType)
-
-      const [newDiscussion] = setFn.mock.calls[0]
-
-      await store.deleteComment(newDiscussion, comment._id)
-
-      const [newDiscussionWithoutComment] = setFn.mock.calls[1]
+      await store.deleteComment(discussionItem, comment._id)
 
       // Asert
-      expect(setFn).toHaveBeenCalledTimes(2)
-      expect(newDiscussionWithoutComment.comments).toHaveLength(0)
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
+    })
+
+    it('throws an error for a different user', async () => {
+      const { store, discussionItem, setFn } = await factory([
+        FactoryDiscussion({
+          comments: [
+            FactoryComment({
+              _id: 'fake-comment-id',
+              _creatorId: 'another-user-id',
+              text: 'New comment',
+            }),
+          ],
+        }),
+      ])
+
+      //Act
+      await expect(
+        store.deleteComment(discussionItem, 'fake-comment-id'),
+      ).rejects.toThrowError()
+
+      // Assert
+      expect(setFn).not.toHaveBeenCalled()
     })
   })
 

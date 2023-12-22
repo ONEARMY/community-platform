@@ -56,7 +56,7 @@ export class DiscussionStore extends ModuleStore {
             this.userStore.activeUser?._id,
             this.userStore.activeUser?.userName,
           ].includes(comment._creatorId) ||
-          isAllowedToEditContent(item, this.userStore.activeUser),
+          isAllowedToEditContent(item, this.userStore.activeUser || undefined),
         showReplies: false,
       }
     })
@@ -109,11 +109,13 @@ export class DiscussionStore extends ModuleStore {
           parentCommentId: commentId,
         }
 
-        if (currentDiscussion) {
-          currentDiscussion.comments.push(newComment)
-
-          return this._updateDiscussion(dbRef, currentDiscussion)
+        if (!currentDiscussion) {
+          throw new Error('Discussion not found')
         }
+
+        currentDiscussion.comments.push(newComment)
+
+        return this._updateDiscussion(dbRef, currentDiscussion)
       }
     } catch (err) {
       logger.error(err)

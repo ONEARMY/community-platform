@@ -77,6 +77,7 @@ describe('discussion.store', () => {
       expect(res).toBeNull()
     })
   })
+
   describe('uploadDiscussion', () => {
     it('creates a new discussion with sourceId and sourceType provided', async () => {
       const { store, discussionItem, setFn } = await factory()
@@ -95,7 +96,7 @@ describe('discussion.store', () => {
 
   describe('addComment', () => {
     it('adds a new comment', async () => {
-      const { store, discussionItem, setFn } = await factory()
+      const { store, discussionItem, setFn, getFn } = await factory()
 
       //Act
       await store.addComment(discussionItem, 'New comment')
@@ -103,6 +104,7 @@ describe('discussion.store', () => {
       // Assert
       const [newDiscussion] = setFn.mock.calls[0]
 
+      expect(getFn).toHaveBeenCalled()
       expect(setFn).toHaveBeenCalledTimes(1)
       expect(newDiscussion.comments[0]).toEqual(
         expect.objectContaining({ text: 'New comment' }),
@@ -133,6 +135,19 @@ describe('discussion.store', () => {
           expect.objectContaining({ text: 'New reply' }),
         ]),
       )
+    })
+
+    it('handles error fetching discussion', async () => {
+      const { store, discussionItem, setFn, getFn } = await factory()
+
+      getFn.mockReturnValue(null)
+      //Act
+      await expect(
+        store.addComment(discussionItem, 'New comment'),
+      ).rejects.toThrowError('Discussion not found')
+
+      // Assert
+      expect(setFn).not.toHaveBeenCalled()
     })
   })
 
@@ -233,7 +248,7 @@ describe('discussion.store', () => {
   })
 
   describe('formatComments', () => {
-    it('get formated comments from IComment[] type to UserCommentType[]', async () => {
+    it('get formatteded comments from IDiscussionComment[] type to UserCommentType[]', async () => {
       const { store, discussionItem } = await factory([
         FactoryDiscussion({
           comments: [FactoryComment({ text: 'New comment' })],

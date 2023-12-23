@@ -13,7 +13,12 @@ import { faker } from '@faker-js/faker'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
+import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
+import {
+  FactoryDiscussion,
+  FactoryDiscussionComment,
+} from 'src/test/factories/Discussion'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
@@ -90,10 +95,14 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
 const mockQuestionStore = new mockQuestionStoreClass()
 
 jest.mock('src/stores/Question/question.store')
+jest.mock('src/stores/Discussions/discussions.store')
 
 describe('question.routes', () => {
   beforeEach(() => {
     ;(useQuestionStore as jest.Mock).mockReturnValue(mockQuestionStore)
+    ;(useDiscussionStore as jest.Mock).mockReturnValue({
+      fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue(null),
+    })
   })
 
   afterEach(() => {
@@ -262,10 +271,23 @@ describe('question.routes', () => {
       let wrapper
       const question = FactoryQuestionItem()
       const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+      const discussionComment = FactoryDiscussionComment({
+        text: faker.lorem.words(2),
+      })
+      const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
+        FactoryDiscussion({
+          sourceId: question._id,
+          sourceType: 'question',
+          comments: [discussionComment],
+        }),
+      )
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
+      })
+      useDiscussionStore.mockReturnValue({
+        fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
       })
 
       await act(async () => {
@@ -282,6 +304,14 @@ describe('question.routes', () => {
           ),
         ).toBeInTheDocument()
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
+
+        // Loads comments
+        expect(mockfetchOrCreateDiscussionBySource).toBeCalledWith(
+          question._id,
+          'question',
+        )
+
+        expect(wrapper.getByText(discussionComment.text)).toBeInTheDocument()
       })
     })
 

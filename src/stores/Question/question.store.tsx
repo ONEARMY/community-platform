@@ -149,5 +149,5 @@ export class QuestionStore extends ModuleStore {
  * The context will be populated with the QuestionStore in the module index
  * (avoids cyclic deps and ensure shared module ready)
  */
-export const QuestionStoreContext = createContext<QuestionStore>(null as any)
+export const QuestionStoreContext = createContext<QuestionStore>('boo' as any)
 export const useQuestionStore = () => useContext(QuestionStoreContext)

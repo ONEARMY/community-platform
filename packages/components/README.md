@@ -33,5 +33,6 @@ will generate the following items:
 src/
   MyNewComponentName/
     MyNewComponentName.tsx # Component
+    MyNewComponentName.test.tsx # Storybook documentation
     MyNewComponentName.stories.tsx # Storybook documentation
 ```

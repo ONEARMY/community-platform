@@ -4,10 +4,10 @@ import type { {{ComponentName}}Props } from './{{ComponentName}}'
 
 describe('{{ComponentName}}', () => {
   it('validates the component behaviour', () => {
-    const { getByTestId } = render(
+    const { getByText } = render(
       <Default {...(Default.args as {{ComponentName}}Props)} />,
     )
 
-    expect(false).toBe(true);
+    expect(getByText('{{ComponentName}}')).toBeInTheDocument();
   })
 })

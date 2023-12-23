@@ -41,18 +41,6 @@ const SignUpPage = lazy(
 const SignInPage = lazy(
   () => import(/* webpackChunkName: "SignIn" */ './SignIn/SignIn'),
 )
-const ForgotPasswordPage = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "ForgotPassword" */ './Password/ForgotPassword'
-    ),
-)
-const ForgotPasswordMessagePage = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "ForgotPasswordMessage" */ './Password/ForgotPasswordMessage'
-    ),
-)
 const PrivacyPolicy = lazy(
   () => import(/* webpackChunkName: "privacy" */ './policy/PrivacyPolicy'),
 )
@@ -168,23 +156,6 @@ const resendsignupmessage = {
   description: '',
 }
 
-const forgotpassword = {
-  moduleName: MODULE.USER,
-  path: '/forgot-password',
-  exact: true,
-  component: <ForgotPasswordPage />,
-  title: 'Forgot Password',
-  description: '',
-}
-
-const forgotpasswordmessage = {
-  moduleName: MODULE.USER,
-  path: '/forgot-password-message',
-  exact: true,
-  component: <ForgotPasswordMessagePage />,
-  title: 'Forgot Password Message',
-  description: '',
-}
 const privacyPolicy = {
   moduleName: MODULE.CORE,
   path: '/privacy',
@@ -234,8 +205,6 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   signupmessage,
   resendsignupmessage,
   signin,
-  forgotpassword,
-  forgotpasswordmessage,
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
   unsubscribe,
   QuestionModule,

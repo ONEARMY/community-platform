@@ -3,8 +3,10 @@ import type { IDiscussion } from 'src/models'
 import { DiscussionStore } from './discussions.store'
 import type { RootStore } from '..'
 import { FactoryUser } from 'src/test/factories/User'
-import { FactoryDiscussion } from 'src/test/factories/Discussion'
-import { FactoryComment } from 'src/test/factories/Comment'
+import {
+  FactoryDiscussion,
+  FactoryDiscussionComment,
+} from 'src/test/factories/Discussion'
 import { faker } from '@faker-js/faker'
 
 const factory = async (
@@ -115,7 +117,7 @@ describe('discussion.store', () => {
     it('adds a reply to a comment', async () => {
       const { store, discussionItem, setFn } = await factory([
         FactoryDiscussion({
-          comments: [FactoryComment({ text: 'New comment' })],
+          comments: [FactoryDiscussionComment({ text: 'New comment' })],
         }),
       ])
 
@@ -156,7 +158,7 @@ describe('discussion.store', () => {
       const { store, discussionItem, setFn } = await factory([
         FactoryDiscussion({
           comments: [
-            FactoryComment({
+            FactoryDiscussionComment({
               _id: 'fake-comment-id',
               _creatorId: 'fake-user',
               text: 'New comment',
@@ -187,7 +189,7 @@ describe('discussion.store', () => {
       const { store, discussionItem, setFn } = await factory([
         FactoryDiscussion({
           comments: [
-            FactoryComment({
+            FactoryDiscussionComment({
               _id: 'fake-comment-id',
               _creatorId: 'another-user-id',
               text: 'New comment',
@@ -208,7 +210,7 @@ describe('discussion.store', () => {
 
   describe('deleteComment', () => {
     it('allows author to remove a comment', async () => {
-      const comment = FactoryComment({
+      const comment = FactoryDiscussionComment({
         _creatorId: 'fake-user',
         text: 'New comment',
       })
@@ -228,7 +230,7 @@ describe('discussion.store', () => {
       const { store, discussionItem, setFn } = await factory([
         FactoryDiscussion({
           comments: [
-            FactoryComment({
+            FactoryDiscussionComment({
               _id: 'fake-comment-id',
               _creatorId: 'another-user-id',
               text: 'New comment',

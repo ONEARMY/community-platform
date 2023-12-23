@@ -1,7 +1,7 @@
 import type { IComment } from './comment.model'
 
 export type IDiscussionComment = IComment & {
-  parentCommentId?: string
+  parentCommentId: string | null
 }
 
 export type IDiscussion = {

@@ -22,7 +22,9 @@ export class DiscussionStore extends ModuleStore {
     makeObservable(this)
   }
 
-  public async fetchDiscussion(sourceId: string): Promise<IDiscussion | null> {
+  public async fetchDiscussionBySourceId(
+    sourceId: string,
+  ): Promise<IDiscussion | null> {
     return (
       toJS(
         await this.db
@@ -78,7 +80,7 @@ export class DiscussionStore extends ModuleStore {
           creatorName: user.userName,
           creatorCountry: getUserCountry(user),
           text: comment,
-          parentCommentId: commentId,
+          parentCommentId: commentId || null,
         }
 
         currentDiscussion.comments.push(newComment)

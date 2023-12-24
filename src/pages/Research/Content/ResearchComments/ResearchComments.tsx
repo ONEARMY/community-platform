@@ -23,6 +23,8 @@ const BoxMain = styled(Box)`
   padding-right: 20px;
   padding-top: 20px;
   margin-top: 20px;
+  transition: background-color 120ms ease-out;
+  border-top: 1px solid #111;
 `
 
 export const getResearchCommentId = (s: string) =>

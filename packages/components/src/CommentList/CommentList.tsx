@@ -4,7 +4,7 @@ import { Button, CommentItem } from '../'
 import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 const MAX_COMMENTS = 5
 
-type CommentListProps = {
+export type CommentListProps = {
   comments: Comment[]
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
@@ -62,6 +62,7 @@ export const CommentList = ({
         comments.slice(0, shownComments).map((comment: Comment) => (
           <Box
             key={comment._id}
+            data-testid="CommentList: item"
             sx={{
               marginBottom: 4,
               border: `${

@@ -1,23 +1,19 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
-import type { UserStore } from 'src/stores/User/user.store'
-import { inject, observer } from 'mobx-react'
-import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
+import { observer } from 'mobx-react'
 import { NavLink } from 'react-router-dom'
-// TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
-const theme = preciousPlasticTheme.styles
+
+import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { AuthWrapper } from '../../../../../common/AuthWrapper'
+import { useCommonStores } from 'src/index'
+
+// TODO: Remove direct usage of Theme
+const theme = preciousPlasticTheme.styles
 
 interface IProps {
   username: string
-}
-
-interface IProps {}
-
-interface IInjectedProps extends IProps {
-  userStore: UserStore
 }
 
 const ModalContainer = styled(Box)`
@@ -73,56 +69,45 @@ const LogoutButton = styled.button`
   }
 `
 
-@inject('userStore')
-@observer
-export class ProfileModal extends React.Component<IProps> {
-  // eslint-disable-next-line
-  constructor(props: IProps) {
-    super(props)
+export const ProfileModal = observer((props: IProps) => {
+  const { userStore } = useCommonStores().stores
+
+  const logout = () => {
+    userStore.logout()
   }
 
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
-  logout() {
-    this.injected.userStore.logout()
-  }
-
-  render() {
-    const { username } = this.props
-    return (
-      <ModalContainer data-cy="user-menu-list">
-        <ModalContainerInner>
-          <Flex>
-            <ModalLink
-              to={'/u/' + username}
-              data-cy="menu-Profile"
-              className={({ isActive }) => (isActive ? 'current' : '')}
-            >
-              Profile
-            </ModalLink>
-          </Flex>
-          {COMMUNITY_PAGES_PROFILE.map((page) => (
-            <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
-              <Flex>
-                <ModalLink
-                  to={page.path}
-                  data-cy={`menu-${page.title}`}
-                  className={({ isActive }) => (isActive ? 'current' : '')}
-                >
-                  {page.title}
-                </ModalLink>
-              </Flex>
-            </AuthWrapper>
-          ))}
-          <Flex>
-            <LogoutButton onClick={() => this.logout()} data-cy="menu-Logout">
-              Log out
-            </LogoutButton>
-          </Flex>
-        </ModalContainerInner>
-      </ModalContainer>
-    )
-  }
-}
+  const { username } = props
+  return (
+    <ModalContainer data-cy="user-menu-list">
+      <ModalContainerInner>
+        <Flex>
+          <ModalLink
+            to={'/u/' + username}
+            data-cy="menu-Profile"
+            className={({ isActive }) => (isActive ? 'current' : '')}
+          >
+            Profile
+          </ModalLink>
+        </Flex>
+        {COMMUNITY_PAGES_PROFILE.map((page) => (
+          <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+            <Flex>
+              <ModalLink
+                to={page.path}
+                data-cy={`menu-${page.title}`}
+                className={({ isActive }) => (isActive ? 'current' : '')}
+              >
+                {page.title}
+              </ModalLink>
+            </Flex>
+          </AuthWrapper>
+        ))}
+        <Flex>
+          <LogoutButton onClick={() => logout()} data-cy="menu-Logout">
+            Log out
+          </LogoutButton>
+        </Flex>
+      </ModalContainerInner>
+    </ModalContainer>
+  )
+})

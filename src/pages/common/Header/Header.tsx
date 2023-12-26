@@ -1,27 +1,22 @@
+import React from 'react'
 import { motion } from 'framer-motion'
-import { inject, observer } from 'mobx-react'
-import { Component } from 'react'
+import { observer } from 'mobx-react'
 import HamburgerMenu from 'react-hamburger-menu'
-import { isModuleSupported, MODULE } from 'src/modules'
+import { Flex, Text } from 'theme-ui'
+import { useTheme, withTheme } from '@emotion/react'
+
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
+import { isModuleSupported, MODULE } from 'src/modules'
 import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
 import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
-import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import type { ThemeWithName } from 'oa-themes'
-import { Flex, Text } from 'theme-ui'
-
-import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
-import type { UserNotificationsStore } from 'src/stores/User/notifications.store'
 import { getFormattedNotifications } from './getFormattedNotifications'
-import { useTheme, withTheme } from '@emotion/react'
+import { useCommonStores } from 'src/index'
 
-interface IInjectedProps {
-  mobileMenuStore: MobileMenuStore
-  userNotificationsStore: UserNotificationsStore
-}
+import type { ThemeWithName } from 'oa-themes'
 
 const MobileNotificationsWrapper = ({ children }) => {
   const theme = useTheme()
@@ -78,143 +73,128 @@ const AnimationContainer = (props: any) => {
   )
 }
 
-@inject('mobileMenuStore')
-@inject('userNotificationsStore')
-@observer
-export class Header extends Component {
-  // eslint-disable-next-line
-  constructor(props: any) {
-    super(props)
-  }
+const Header = observer(({ theme }: { theme: ThemeWithName }) => {
+  const { mobileMenuStore, userNotificationsStore } = useCommonStores().stores
+  const user = userNotificationsStore.user
+  const notifications = getFormattedNotifications(
+    userNotificationsStore.getUnreadNotifications(),
+  )
+  const areThereNotifications = Boolean(notifications.length)
+  const isLoggedInUser = !!user
 
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
-  render() {
-    const { theme } = this.props as { theme: ThemeWithName }
-    const menu = this.injected.mobileMenuStore
-    const user = this.injected.userNotificationsStore.user
-    const notifications = getFormattedNotifications(
-      this.injected.userNotificationsStore.getUnreadNotifications(),
-    )
-    const areThereNotifications = Boolean(notifications.length)
-    const isLoggedInUser = !!user
-
-    return (
-      <>
+  return (
+    <>
+      <Flex
+        data-cy="header"
+        bg="white"
+        pl={[4, 4, 0]}
+        pr={[4, 4, 0]}
+        sx={{
+          zIndex: theme.zIndex.header,
+          position: 'relative',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          minHeight: [null, null, 80],
+        }}
+      >
+        <Flex>
+          <Flex>
+            <Logo />
+          </Flex>
+          {isLoggedInUser && (user.userRoles || []).includes('beta-tester') && (
+            <Flex
+              className="user-beta-icon"
+              ml={4}
+              sx={{ alignItems: 'center' }}
+            >
+              <Text
+                sx={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  fontSize: '1.4rem',
+                  borderRadius: '4px',
+                  padding: '2px 6px',
+                  backgroundColor: 'lightgrey',
+                }}
+              >
+                BETA
+              </Text>
+            </Flex>
+          )}
+        </Flex>
+        {isLoggedInUser && (
+          <MobileNotificationsWrapper>
+            <NotificationsIcon
+              onCLick={() => mobileMenuStore.toggleMobileNotifications()}
+              isMobileMenuActive={mobileMenuStore.showMobileNotifications}
+              areThereNotifications={areThereNotifications}
+            />
+          </MobileNotificationsWrapper>
+        )}
         <Flex
-          data-cy="header"
-          bg="white"
-          pl={[4, 4, 0]}
-          pr={[4, 4, 0]}
+          className="menu-desktop"
+          px={2}
           sx={{
-            zIndex: theme.zIndex.header,
             position: 'relative',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            minHeight: [null, null, 80],
+            display: ['none', 'none', 'flex'],
           }}
         >
-          <Flex>
-            <Flex>
-              <Logo isMobile={true} />
-            </Flex>
-            {isLoggedInUser && (user.userRoles || []).includes('beta-tester') && (
-              <Flex
-                className="user-beta-icon"
-                ml={4}
-                sx={{ alignItems: 'center' }}
-              >
-                <Text
-                  sx={{
-                    color: 'white',
-                    fontWeight: 'bold',
-                    fontSize: '1.4rem',
-                    borderRadius: '4px',
-                    padding: '2px 6px',
-                    backgroundColor: 'lightgrey',
-                  }}
-                >
-                  BETA
-                </Text>
-              </Flex>
-            )}
-          </Flex>
+          <MenuDesktop />
           {isLoggedInUser && (
-            <MobileNotificationsWrapper>
-              <NotificationsIcon
-                onCLick={() => menu.toggleMobileNotifications()}
-                isMobileMenuActive={menu.showMobileNotifications}
-                areThereNotifications={areThereNotifications}
-              />
-            </MobileNotificationsWrapper>
-          )}
-          <Flex
-            className="menu-desktop"
-            px={2}
-            sx={{
-              position: 'relative',
-              display: ['none', 'none', 'flex'],
-            }}
-          >
-            <MenuDesktop />
-            {isLoggedInUser && (
-              <>
-                <NotificationsDesktop
-                  notifications={notifications}
-                  markAllRead={() =>
-                    this.injected.userNotificationsStore.markAllNotificationsRead()
-                  }
-                  markAllNotified={() =>
-                    this.injected.userNotificationsStore.markAllNotificationsNotified()
-                  }
-                />
-              </>
-            )}
-            {isModuleSupported(MODULE.USER) && <Profile isMobile={false} />}
-          </Flex>
-          <MobileMenuWrapper className="menu-mobile">
-            <Flex pl={5}>
-              <HamburgerMenu
-                isOpen={menu.showMobilePanel || false}
-                menuClicked={() => menu.toggleMobilePanel()}
-                width={18}
-                height={15}
-                strokeWidth={1}
-                rotate={0}
-                color="black"
-                borderRadius={0}
-                animationDuration={0.3}
-              />
-            </Flex>
-          </MobileMenuWrapper>
-        </Flex>
-        {menu.showMobilePanel && (
-          <AnimationContainer key={'mobilePanelContainer'}>
-            <MobileMenuWrapper>
-              <MenuMobilePanel />
-            </MobileMenuWrapper>
-          </AnimationContainer>
-        )}
-        {menu.showMobileNotifications && (
-          <AnimationContainer key={'mobileNotificationsContainer'}>
-            <MobileMenuWrapper>
-              <NotificationsMobile
+            <>
+              <NotificationsDesktop
                 notifications={notifications}
                 markAllRead={() =>
-                  this.injected.userNotificationsStore.markAllNotificationsRead()
+                  userNotificationsStore.markAllNotificationsRead()
                 }
                 markAllNotified={() =>
-                  this.injected.userNotificationsStore.markAllNotificationsNotified()
+                  userNotificationsStore.markAllNotificationsNotified()
                 }
               />
-            </MobileMenuWrapper>
-          </AnimationContainer>
-        )}
-      </>
-    )
-  }
-}
+            </>
+          )}
+          {isModuleSupported(MODULE.USER) && <Profile isMobile={false} />}
+        </Flex>
+        <MobileMenuWrapper className="menu-mobile">
+          <Flex pl={5}>
+            <HamburgerMenu
+              isOpen={mobileMenuStore.showMobilePanel || false}
+              menuClicked={() => mobileMenuStore.toggleMobilePanel()}
+              width={18}
+              height={15}
+              strokeWidth={1}
+              rotate={0}
+              color="black"
+              borderRadius={0}
+              animationDuration={0.3}
+            />
+          </Flex>
+        </MobileMenuWrapper>
+      </Flex>
+      {mobileMenuStore.showMobilePanel && (
+        <AnimationContainer key={'mobilePanelContainer'}>
+          <MobileMenuWrapper>
+            <MenuMobilePanel />
+          </MobileMenuWrapper>
+        </AnimationContainer>
+      )}
+      {mobileMenuStore.showMobileNotifications && (
+        <AnimationContainer key={'mobileNotificationsContainer'}>
+          <MobileMenuWrapper>
+            <NotificationsMobile
+              notifications={notifications}
+              markAllRead={() =>
+                userNotificationsStore.markAllNotificationsRead()
+              }
+              markAllNotified={() =>
+                userNotificationsStore.markAllNotificationsNotified()
+              }
+            />
+          </MobileMenuWrapper>
+        </AnimationContainer>
+      )}
+    </>
+  )
+})
 
 export default withTheme(Header)

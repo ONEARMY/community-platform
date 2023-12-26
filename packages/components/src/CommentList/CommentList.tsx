@@ -48,7 +48,7 @@ export const CommentList = ({
       setMoreComments(Math.floor(i / MAX_COMMENTS) + 1)
       scrollIntoRelevantComment(highlightedCommentId)
     }
-  }, [highlightedCommentId])
+  }, [highlightedCommentId, comments])
 
   return (
     <Box

@@ -52,7 +52,7 @@ export const CommentItem = (props: CommentItemProps) => {
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight)
     }
-  }, [text])
+  }, [textRef])
 
   const showMore = () => {
     setShowMore(!isShowMore)

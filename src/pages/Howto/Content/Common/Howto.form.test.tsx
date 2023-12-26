@@ -51,7 +51,7 @@ describe('Howto form', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(formValues, 'edit', {})
+        wrapper = await Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -66,7 +66,7 @@ describe('Howto form', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(formValues, 'edit', {})
+        wrapper = await Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -88,7 +88,7 @@ describe('Howto form', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(formValues, 'edit', {})
+        wrapper = await Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -111,7 +111,7 @@ describe('Howto form', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(formValues, 'edit', {})
+        wrapper = await Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -131,7 +131,7 @@ describe('Howto form', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(formValues, 'edit', {})
+        wrapper = await Wrapper(formValues, 'edit', {})
 
         // clear files
         const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
@@ -157,7 +157,7 @@ describe('Howto form', () => {
   })
 })
 
-const getWrapper = async (formValues, parentType, navProps) => {
+const Wrapper = async (formValues, parentType, navProps) => {
   return render(
     <Provider {...useCommonStores().stores}>
       <ThemeProvider theme={Theme}>

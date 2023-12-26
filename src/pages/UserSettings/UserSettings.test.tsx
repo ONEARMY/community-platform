@@ -63,7 +63,7 @@ describe('UserSettings', () => {
     mockUser = FactoryUser()
 
     // Act
-    const wrapper = await getWrapper(mockUser)
+    const wrapper = await Wrapper(mockUser)
 
     // Assert
     expect(wrapper.getByText('Edit profile'))
@@ -74,7 +74,7 @@ describe('UserSettings', () => {
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(mockUser)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(1)
   })
@@ -84,7 +84,7 @@ describe('UserSettings', () => {
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(mockUser)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
@@ -94,7 +94,7 @@ describe('UserSettings', () => {
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(mockUser)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
@@ -104,7 +104,7 @@ describe('UserSettings', () => {
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(mockUser)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
@@ -114,7 +114,7 @@ describe('UserSettings', () => {
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(mockUser)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
@@ -124,7 +124,7 @@ describe('UserSettings', () => {
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(mockUser)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
@@ -141,7 +141,7 @@ describe('UserSettings', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(mockUser)
+        wrapper = await Wrapper(mockUser)
       })
       expect(wrapper.getByText('Moderator comment')).toBeInTheDocument()
     })
@@ -157,7 +157,7 @@ describe('UserSettings', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(mockUser)
+        wrapper = await Wrapper(mockUser)
       })
 
       expect(() => wrapper.getByText('Moderator comment')).toThrow()
@@ -165,7 +165,7 @@ describe('UserSettings', () => {
   })
 })
 
-const getWrapper = async (user) => {
+const Wrapper = async (user) => {
   const isAdmin = user.userRoles?.includes('admin')
 
   return render(

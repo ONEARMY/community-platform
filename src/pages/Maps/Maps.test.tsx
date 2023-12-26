@@ -71,7 +71,7 @@ describe('Maps', () => {
       },
     })
 
-    await getWrapper()
+    await Wrapper()
 
     expect(global.navigator.geolocation.getCurrentPosition).toBeCalled()
   })
@@ -99,7 +99,7 @@ describe('Maps', () => {
     let wrapper
 
     await act(async () => {
-      wrapper = await getWrapper('/map#abc')
+      wrapper = await Wrapper('/map#abc')
     })
 
     await waitFor(async () => {
@@ -109,7 +109,7 @@ describe('Maps', () => {
   })
 })
 
-const getWrapper = async (path = '/map') => {
+const Wrapper = async (path = '/map') => {
   const router = createMemoryRouter(
     createRoutesFromElements(<Route path="/map" element={<Maps />} />),
     {

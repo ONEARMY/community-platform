@@ -64,7 +64,7 @@ const Unsubscribe = observer(() => {
     }
 
     unsubscribeUser()
-  }, [])
+  })
 
   return (
     <Flex

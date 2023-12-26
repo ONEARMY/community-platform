@@ -29,12 +29,6 @@ const SignUpMessagePage = lazy(
   () =>
     import(/* webpackChunkName: "SignUpMessage" */ './SignUp/SignUpMessage'),
 )
-const ResendSignUpMessagePage = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "ResendSignUpMessage" */ './SignUp/ResendSignUpMessage'
-    ),
-)
 const SignUpPage = lazy(
   () => import(/* webpackChunkName: "SignUp" */ './SignUp/SignUp'),
 )
@@ -147,15 +141,6 @@ const signupmessage = {
   description: '',
 }
 
-const resendsignupmessage = {
-  moduleName: MODULE.USER,
-  path: '/resend-sign-up-message',
-  exact: true,
-  component: <ResendSignUpMessagePage />,
-  title: 'Resend Sign Up Message',
-  description: '',
-}
-
 const privacyPolicy = {
   moduleName: MODULE.CORE,
   path: '/privacy',
@@ -203,7 +188,6 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   user,
   signup,
   signupmessage,
-  resendsignupmessage,
   signin,
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
   unsubscribe,

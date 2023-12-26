@@ -22,7 +22,7 @@ import UserCreatedDocuments from './UserCreatedDocuments'
 import { useCommonStores } from 'src/index'
 import UserContactAndLinks from './UserContactAndLinks'
 import { ProfileType } from 'src/modules/profile/types'
-import { userStats } from 'src/common/hooks/userStats'
+import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
 import { Impact } from '../impact/Impact'
 import { heading } from '../impact/labels'
 import { UserContactForm } from 'src/pages/User/contact'
@@ -169,7 +169,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   } = user
 
   const coverImage = getCoverImages(user)
-  const stats = userStats(user.userName)
+  const stats = useMemberStatistics(user.userName)
 
   const userLinks = links.filter(
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),

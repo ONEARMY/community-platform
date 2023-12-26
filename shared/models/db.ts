@@ -23,6 +23,7 @@ export const generateDBEndpoints = (DB_PREFIX = '') => ({
   questions: `${DB_PREFIX}questions_rev20230926`,
   questionCategories: `${DB_PREFIX}question_categories_rev20231130`,
   user_integrations: `${DB_PREFIX}user_integrations`,
+  discussions: `${DB_PREFIX}discussions_rev20231022`,
 })
 
 /**

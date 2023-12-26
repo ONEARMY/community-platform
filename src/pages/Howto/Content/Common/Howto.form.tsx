@@ -35,7 +35,6 @@ import {
 } from '.'
 
 import type { IHowtoFormInput } from 'src/models/howto.models'
-import type { UploadedFile } from 'src/pages/common/UploadedFile/UploadedFile'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 export type ParentType = 'create' | 'edit'
 
@@ -62,7 +61,6 @@ const FormContainer = styled.form`
 @inject('howtoStore')
 @observer
 export class HowtoForm extends React.PureComponent<IProps, IState> {
-  uploadRefs: { [key: string]: UploadedFile | null } = {}
   formContainerRef = React.createRef<HTMLElement>()
   public checkFilesValid = (formValues: IHowtoFormInput) => {
     if (

@@ -5,10 +5,12 @@ import {
   QuestionStore,
   QuestionStoreContext,
 } from 'src/stores/Question/question.store'
+import { useCommonStores } from '../../index'
 
 export const QuestionModuleContainer = () => {
+  const rootStore = useCommonStores()
   return (
-    <QuestionStoreContext.Provider value={new QuestionStore()}>
+    <QuestionStoreContext.Provider value={new QuestionStore(rootStore)}>
       <QuestionRoutes />
     </QuestionStoreContext.Provider>
   )

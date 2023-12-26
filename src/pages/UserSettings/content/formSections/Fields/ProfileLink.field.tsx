@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { useState } from 'react'
 import { Button, ConfirmModal, FieldInput } from 'oa-components'
 import { Box, Flex, Grid } from 'theme-ui'
 import { Field } from 'react-final-form'
@@ -42,26 +42,26 @@ interface IState {
   linkType?: string
 }
 
-export class ProfileLinkField extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-    this.state = {
-      showDeleteModal: false,
-      _toDocsList: false,
-      linkType: this.props.initialType ? this.props.initialType : '',
-    }
+export const ProfileLinkField = (props: IProps) => {
+  const { index, name, isDeleteEnabled } = props
+  const { message, text } = buttons.deleteLink
+  const [state, setState] = useState<IState>({
+    showDeleteModal: false,
+    _toDocsList: false,
+    linkType: props.initialType ? props.initialType : '',
+  })
+
+  const toggleDeleteModal = () => {
+    setState((state) => ({ ...state, showDeleteModal: !state.showDeleteModal }))
   }
 
-  toggleDeleteModal() {
-    this.setState({ showDeleteModal: !this.state.showDeleteModal })
-  }
-  confirmDelete() {
-    this.toggleDeleteModal()
-    this.props.onDelete()
+  const confirmDelete = () => {
+    toggleDeleteModal()
+    props.onDelete()
   }
 
-  public validateDependingOnType(e) {
-    switch (this.state.linkType) {
+  const validateDependingOnType = (e) => {
+    switch (state.linkType) {
       case 'email':
         return validateEmail(e)
       case 'forum':
@@ -77,88 +77,85 @@ export class ProfileLinkField extends Component<IProps, IState> {
     }
   }
 
-  render() {
-    const { index, name, isDeleteEnabled } = this.props
-    const { message, text } = buttons.deleteLink
+  const DeleteButton = (props) => (
+    <Button
+      data-cy={`delete-link-${index}`}
+      icon={'delete'}
+      variant={'outline'}
+      showIconOnly={true}
+      onClick={() => toggleDeleteModal()}
+      ml={2}
+      {...props}
+    >
+      {text}
+    </Button>
+  )
 
-    const DeleteButton = (props) => (
-      <Button
-        data-cy={`delete-link-${index}`}
-        icon={'delete'}
-        variant={'outline'}
-        showIconOnly={true}
-        onClick={() => this.toggleDeleteModal()}
-        ml={2}
-        {...props}
-      >
-        {text}
-      </Button>
-    )
-
-    return (
-      <Flex my={[2]} sx={{ flexDirection: ['column', 'column', 'row'] }}>
-        <Grid mb={[1, 1, 0]} gap={0} sx={{ width: ['100%', '100%', '210px'] }}>
-          <Box
-            sx={{
-              mr: 2,
-            }}
-          >
-            <Field
-              data-cy={`select-link-${index}`}
-              name={`${name}.label`}
-              options={COM_TYPE_MOCKS}
-              component={SelectField}
-              onCustomChange={(linkType: string) => this.setState({ linkType })}
-              placeholder={buttons.link.type}
-              validate={required}
-              validateFields={[]}
-              style={{ width: '100%', height: '40px' }}
-            />
-          </Box>
-          {isDeleteEnabled ? (
-            <DeleteButton
-              sx={{
-                display: ['block', 'block', 'none'],
-              }}
-              ml={'2px'}
-            />
-          ) : null}
-        </Grid>
-        <Grid
-          mb={[1, 1, 0]}
-          gap={0}
-          columns={['auto', 'auto', 'auto']}
-          sx={{ width: '100%' }}
+  return (
+    <Flex my={[2]} sx={{ flexDirection: ['column', 'column', 'row'] }}>
+      <Grid mb={[1, 1, 0]} gap={0} sx={{ width: ['100%', '100%', '210px'] }}>
+        <Box
+          sx={{
+            mr: 2,
+          }}
         >
           <Field
-            data-cy={`input-link-${index}`}
-            name={`${name}.url`}
-            validate={(value) => this.validateDependingOnType(value)}
+            data-cy={`select-link-${index}`}
+            name={`${name}.label`}
+            options={COM_TYPE_MOCKS}
+            component={SelectField}
+            onCustomChange={(linkType: string) =>
+              setState((state) => ({ ...state, linkType }))
+            }
+            placeholder={buttons.link.type}
+            validate={required}
             validateFields={[]}
-            component={FieldInput}
-            placeholder={fields.links.placeholder}
-            format={(v) => formatLink(v, this.state.linkType)}
-            formatOnBlur={true}
-            style={{ width: '100%', height: '40px', marginBottom: '0px' }}
+            style={{ width: '100%', height: '40px' }}
           />
-        </Grid>
+        </Box>
         {isDeleteEnabled ? (
           <DeleteButton
             sx={{
-              display: ['none', 'none', 'block'],
+              display: ['block', 'block', 'none'],
             }}
+            ml={'2px'}
           />
         ) : null}
-        {
-          <ConfirmModal
-            isOpen={!!this.state.showDeleteModal}
-            message={message}
-            confirmButtonText={text}
-            handleCancel={() => this.toggleDeleteModal()}
-            handleConfirm={() => this.confirmDelete()}
-          />
-        }
-      </Flex>
-    )
-  }
+      </Grid>
+      <Grid
+        mb={[1, 1, 0]}
+        gap={0}
+        columns={['auto', 'auto', 'auto']}
+        sx={{ width: '100%' }}
+      >
+        <Field
+          data-cy={`input-link-${index}`}
+          name={`${name}.url`}
+          validate={(value) => validateDependingOnType(value)}
+          validateFields={[]}
+          component={FieldInput}
+          placeholder={fields.links.placeholder}
+          format={(v) => formatLink(v, state.linkType)}
+          formatOnBlur={true}
+          style={{ width: '100%', height: '40px', marginBottom: '0px' }}
+        />
+      </Grid>
+      {isDeleteEnabled ? (
+        <DeleteButton
+          sx={{
+            display: ['none', 'none', 'block'],
+          }}
+        />
+      ) : null}
+      {
+        <ConfirmModal
+          isOpen={!!state.showDeleteModal}
+          message={message}
+          confirmButtonText={text}
+          handleCancel={() => toggleDeleteModal()}
+          handleConfirm={() => confirmDelete()}
+        />
+      }
+    </Flex>
+  )
 }

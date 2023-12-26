@@ -74,7 +74,7 @@ const Unsubscribe = observer(() => {
       data-cy="unsubscribe"
     >
       <Card p={3} bg={'softblue'} sx={{}} mb={3}>
-        <Heading>Unsubscribe </Heading>
+        <Heading>Unsubscribe</Heading>
       </Card>
       <StatusMessage status={status} />
     </Flex>

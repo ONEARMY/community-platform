@@ -5,7 +5,7 @@ import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { MemberBadge, UserStatistics, Username } from 'oa-components'
 import UserContactAndLinks from './UserContactAndLinks'
-import { userStats } from 'src/common/hooks/userStats'
+import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
 import UserCreatedDocuments from './UserCreatedDocuments'
 import type { UserCreatedDocs } from '../types'
 import { AuthWrapper } from 'src/common/AuthWrapper'
@@ -20,7 +20,7 @@ export const MemberProfile = ({ user, docs }: IProps) => {
     (linkItem) => !['discord', 'forum'].includes(linkItem.label),
   )
 
-  const stats = userStats(user.userName)
+  const stats = useMemberStatistics(user.userName)
 
   const userCountryCode =
     user.location?.countryCode || user.country?.toLowerCase() || undefined

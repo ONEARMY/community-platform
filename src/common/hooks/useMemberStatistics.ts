@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useCommonStores } from '../../index'
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 
-export const userStats = (userId: string) => {
+export const useMemberStatistics = (userId: string) => {
   const { aggregationsStore } = useCommonStores().stores
   const [totalUseful, setTotalUseful] = useState<number>(0)
   const [verified, setVerified] = useState<boolean>(false)

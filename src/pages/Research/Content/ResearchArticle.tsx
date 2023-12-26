@@ -9,7 +9,7 @@ import {
 } from 'oa-components'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { trackEvent } from 'src/common/Analytics'
-import { useContributorsData } from 'src/common/hooks/contributorsData'
+import { useContributorsData } from 'src/common/hooks/getContributorsData'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import type { IComment, IResearch, UserComment, IUser } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'

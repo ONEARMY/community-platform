@@ -25,7 +25,7 @@ export const useContributorsData = (collaborators: string[]) => {
       }
     }
     fetchContributorsData()
-  }, [collaborators])
+  }, [collaborators, userStore])
 
   return contributors
 }

@@ -74,6 +74,7 @@ export const OsmGeocoding = ({
   }
 
   const showResultsListing = !!results.length && showResults && !showLoader
+
   const dcb = useDebouncedCallback(
     (search: string) => getGeocoding(search),
     debounceMs,
@@ -83,7 +84,7 @@ export const OsmGeocoding = ({
     if (queryLocationService) {
       dcb(searchValue)
     }
-  }, [searchValue, queryLocationService])
+  }, [searchValue, queryLocationService, dcb])
 
   return (
     <div

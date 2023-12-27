@@ -252,6 +252,7 @@ export class ResearchStore extends ModuleStore {
           'research_useful',
           this.activeResearchItem._createdBy,
           '/research/' + this.activeResearchItem.slug,
+          this.activeResearchItem.title,
         )
         for (
           let i = 0;
@@ -262,6 +263,7 @@ export class ResearchStore extends ModuleStore {
             'research_useful',
             this.activeResearchItem.collaborators[i],
             '/research/' + this.activeResearchItem.slug,
+            this.activeResearchItem.title,
           )
         }
       }
@@ -436,6 +438,7 @@ export class ResearchStore extends ModuleStore {
           'new_comment_research',
           newItem._createdBy,
           '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
+          newItem.title,
         )
 
         newItem.collaborators.map((username) => {
@@ -443,6 +446,7 @@ export class ResearchStore extends ModuleStore {
             'new_comment_research',
             username,
             '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
+            newItem.title,
           )
         })
 
@@ -1073,6 +1077,7 @@ export class ResearchStore extends ModuleStore {
           'research_mention',
           mention.username,
           `/research/${researchItem.slug}#${mention.location}`,
+          researchItem.title,
         )
       }
     })
@@ -1098,6 +1103,7 @@ export class ResearchStore extends ModuleStore {
           'research_update',
           subscriber,
           `/research/${researchItem.slug}`,
+          researchItem.title,
         ),
       )
     }

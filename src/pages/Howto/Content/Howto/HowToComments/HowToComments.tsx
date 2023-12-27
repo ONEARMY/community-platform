@@ -25,6 +25,7 @@ export const HowToComments = ({ comments }: IProps) => {
           'new_comment',
           howto._createdBy,
           '/how-to/' + howto.slug,
+          howto.title,
         )
       }
 

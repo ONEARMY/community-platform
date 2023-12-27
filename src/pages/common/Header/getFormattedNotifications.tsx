@@ -17,22 +17,23 @@ export const getFormattedNotificationMessage = (
     case 'new_comment':
       return (
         <Box>
-          New comment from
+          New comment on your
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          by
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          on your how-to
-          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
         </Box>
       )
     case 'howto_mention':
       return (
         <Box>
+          You were mentioned in a
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
+          by
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          mentioned you in this how-to
-          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
         </Box>
       )
     case 'howto_useful':
@@ -42,24 +43,24 @@ export const getFormattedNotificationMessage = (
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          found
-          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
+          found your
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
           useful
         </Box>
       )
     case 'howto_approved':
       return (
         <Box>
-          Yay, your how-to
-          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
+          Yay, your
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
           has been approved
         </Box>
       )
     case 'howto_needs_updates':
       return (
         <Box>
-          Your how-to
-          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
+          Your
+          <InternalLink to={relevantUrl}>how-to</InternalLink>
           needs some updates before we can approve it
         </Box>
       )

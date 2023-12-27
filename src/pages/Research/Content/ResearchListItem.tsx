@@ -120,6 +120,28 @@ const ResearchListItem = ({ item }: IProps) => {
                   >
                     {getItemDate(item, 'long')}
                   </Text>
+                  {item.researchStatus && (
+                    <Text
+                      sx={{
+                        display: 'inline-block',
+                        verticalAlign: 'middle',
+                        color: 'black',
+                        fontSize: 1,
+                        background:
+                          item.researchStatus === 'In progress'
+                            ? 'accent.base'
+                            : item.researchStatus === 'Complete'
+                            ? 'betaGreen'
+                            : 'lightgrey',
+                        padding: 1,
+                        borderRadius: 1,
+                        borderBottomRightRadius: 1,
+                        ml: 4,
+                      }}
+                    >
+                      {item.researchStatus}
+                    </Text>
+                  )}
                 </Flex>
                 {/* Show these on mobile, hide on tablet & above. */}
                 <Box

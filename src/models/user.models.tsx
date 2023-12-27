@@ -116,7 +116,7 @@ export interface INotification {
   // email contains the id of the doc in the emails collection if the notification was included in
   // an email or 'failed' if an email with this notification was attempted and encountered an error
   email?: string
-  title: string
+  title?: string
 }
 
 export type INotificationSettings = {

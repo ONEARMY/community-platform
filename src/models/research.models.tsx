@@ -22,6 +22,8 @@ type ResearchDocumentLockInformation = {
 
 type ResearchDocumentLock = ResearchDocumentLockInformation | null
 
+export type ResearchStatus = 'In progress' | 'Complete' | 'Archived'
+
 type UserIdList = UserId[]
 
 export namespace IResearch {
@@ -49,6 +51,7 @@ export namespace IResearch {
     comments?: IComment[]
     collaborators?: string[]
     status: 'draft' | 'published'
+    researchStatus?: ResearchStatus
     locked?: ResearchDocumentLock
   }
 
@@ -61,6 +64,7 @@ export namespace IResearch {
     creatorCountry?: string
     collaborators: string
     previousSlugs?: string[]
+    researchStatus?: ResearchStatus
   }
 
   /** Research items synced from the database will contain additional metadata */

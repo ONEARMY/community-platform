@@ -8,6 +8,7 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
+import { RootStore } from '..'
 
 jest.mock('../../utils/helpers', () => ({
   // Preserve the original implementation of other helpers
@@ -154,11 +155,13 @@ describe('research.store', () => {
           'new_comment_research',
           researchItem._createdBy,
           `/research/${researchItem.slug}#update_0`,
+          researchItem.title,
         )
         expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
           'new_comment_research',
           'a-contributor',
           `/research/${researchItem.slug}#update_0`,
+          researchItem.title,
         )
       })
 
@@ -486,6 +489,7 @@ describe('research.store', () => {
           'research_mention',
           'username',
           `/research/${researchItem.slug}#update-0-comment:${newResearchItem.updates[0].comments[0]._id}`,
+          researchItem.title,
         )
       })
     })
@@ -661,6 +665,7 @@ describe('research.store', () => {
           'research_mention',
           'username',
           `/research/${researchItem.slug}#description`,
+          researchItem.title,
         )
       })
 
@@ -861,6 +866,7 @@ describe('research.store', () => {
         'research_update',
         'subscriber',
         `/research/${researchItem.slug}`,
+        researchItem.title,
       )
     })
 

@@ -44,6 +44,7 @@ describe('triggerNotification', () => {
       'howto_mention',
       'example',
       'https://example.com',
+      'example',
     )
     // Expect
     const [newUser] = store.db.update.mock.calls[0]
@@ -65,6 +66,7 @@ describe('triggerNotification', () => {
         'howto_mention',
         'non-existent-user',
         'https://example.com',
+        'example',
       ),
     ).rejects.toThrow('User not found')
   })

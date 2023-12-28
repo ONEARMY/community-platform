@@ -19,10 +19,13 @@ export const QuestionPage = () => {
       if (slug) {
         const question: any = await store.fetchQuestionBySlug(slug)
         store.activeQuestionItem = question || null
-        setQuestion(question || null)
 
-        if (store.activeUser) {
-          setIsEditable(isAllowedToEditContent(question, store.activeUser))
+        if (isLoading) {
+          setQuestion(question || null)
+
+          if (store.activeUser) {
+            setIsEditable(isAllowedToEditContent(question, store.activeUser))
+          }
         }
       }
 
@@ -30,7 +33,11 @@ export const QuestionPage = () => {
     }
 
     fetchQuestions()
-  }, [isLoading, question])
+
+    return () => {
+      setIsLoading(false)
+    }
+  }, [slug])
 
   const onUsefulClick = async () => {
     if (!store.activeUser?.userName) {

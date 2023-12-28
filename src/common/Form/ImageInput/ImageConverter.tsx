@@ -1,6 +1,7 @@
-import * as React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Flex } from 'theme-ui'
 import imageCompression from 'browser-image-compression'
+
 import type { IConvertedFileMeta } from 'src/types'
 
 interface IProps {
@@ -20,80 +21,73 @@ const imageSizes = {
   high: 1920,
 }
 
-export class ImageConverter extends React.Component<IProps, IState> {
-  public static defaultProps: Partial<IProps>
-
-  constructor(props: IProps) {
-    super(props)
-    this.state = {
-      compressionOptions: {
-        maxWidthOrHeight: imageSizes.normal,
-        initialQuality: 0.75,
-      },
-    } as IState
+const _generateFileMeta = (c: File) => {
+  const meta: IConvertedFileMeta = {
+    name: addTimestampToFileName(c.name),
+    photoData: c,
+    objectUrl: URL.createObjectURL(c),
+    type: c.type,
   }
+  return meta
+}
 
-  async componentDidMount() {
-    // call on mount to trigger initial conversion when converter created
-    await this.compressFiles(this.props.file)
-  }
+export const ImageConverter = (props: IProps) => {
+  const [state, setState] = useState<IState>({
+    compressionOptions: {
+      maxWidthOrHeight: imageSizes.normal,
+      initialQuality: 0.75,
+    },
+  })
+  const { convertedFile } = state
 
-  componentWillUnmount() {
-    // Revoke the object URL to free up memory
-    if (this.state.convertedFile) {
-      URL.revokeObjectURL(this.state.convertedFile.objectUrl)
+  useEffect(() => {
+    compressFiles(props.file)
+
+    return () => {
+      if (state.convertedFile) {
+        URL.revokeObjectURL(state.convertedFile.objectUrl)
+      }
     }
-  }
+  }, [])
 
-  async compressFiles(file: File) {
-    const { compressionOptions } = this.state
+  const compressFiles = async (file: File) => {
+    const { compressionOptions } = state
 
     // by default compress takes an array and gives back an array. We only want to handle a single image
     const conversion: File = await imageCompression(file, compressionOptions)
-    const convertedMeta = this._generateFileMeta(conversion)
-    this.setState({
+    const convertedMeta = _generateFileMeta(conversion)
+    setState((state) => ({
+      ...state,
       convertedFile: convertedMeta,
-    })
-    this.props.onImgConverted(convertedMeta)
+    }))
+    props.onImgConverted(convertedMeta)
   }
 
-  render() {
-    const { convertedFile } = this.state
-
-    if (!convertedFile) {
-      return null
-    }
-
-    return (
-      <Flex
-        style={{
-          backgroundImage: `url(${convertedFile.objectUrl})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '100%',
-          height: '100%',
-        }}
-        sx={{
-          border: '1px solid ',
-          borderColor: 'offwhite',
-          borderRadius: 1,
-        }}
-        id="preview"
-        onClick={() => this.props.onImgClicked(convertedFile)}
-      />
-    )
+  if (!convertedFile) {
+    return null
   }
-  private _generateFileMeta(c: File) {
-    const meta: IConvertedFileMeta = {
-      name: addTimestampToFileName(c.name),
-      photoData: c,
-      objectUrl: URL.createObjectURL(c),
-      type: c.type,
-    }
-    return meta
-  }
+
+  return (
+    <Flex
+      style={{
+        backgroundImage: `url(${convertedFile.objectUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '100%',
+        height: '100%',
+      }}
+      sx={{
+        border: '1px solid ',
+        borderColor: 'offwhite',
+        borderRadius: 1,
+      }}
+      id="preview"
+      onClick={() => props.onImgClicked(convertedFile)}
+    />
+  )
 }
+
 ImageConverter.defaultProps = {
   onImgClicked: () => null,
 }

@@ -87,6 +87,7 @@ describe('[Research]', () => {
         (docs) => {
           cy.log('queryDocs', docs)
           expect(docs.length).to.equal(1)
+          cy.log(JSON.stringify(docs[0]))
           cy.wrap(null)
             .then(() => docs[0])
             .should('eqResearch', expected)
@@ -187,6 +188,7 @@ describe('[Research]', () => {
         (docs) => {
           cy.log('queryDocs', docs)
           expect(docs.length).to.equal(1)
+          cy.log(JSON.stringify(docs[0]))
           cy.wrap(null)
             .then(() => docs[0])
             .should('eqResearch', expected)

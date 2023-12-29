@@ -1,16 +1,14 @@
 import { useState } from 'react'
 import styled from '@emotion/styled'
-import { Button, CommentList, CreateComment } from 'oa-components'
+import { Button, DiscussionContainer } from 'oa-components'
 import { trackEvent } from 'src/common/Analytics'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
+import { useResearchStore } from 'src/stores/Research/research.store'
 import { Box, Flex } from 'theme-ui'
 
-import { useCommonStores } from '../../../../'
-import { MAX_COMMENT_LENGTH } from '../../../../constants'
-import { useResearchStore } from '../../../../stores/Research/research.store'
-
-import type { UserComment } from 'src/models'
-import type { IResearch } from 'src/models/research.models'
+import type { IResearch, UserComment } from 'src/models'
 
 interface IProps {
   comments: UserComment[]
@@ -30,87 +28,59 @@ const BoxMain = styled(Box)`
 export const getResearchCommentId = (s: string) =>
   s.replace(/#update-\d+-comment:/, '')
 
-export const ResearchComments = ({
-  comments,
-  update,
-  showComments,
-}: IProps) => {
+export const ResearchComments = (props: IProps) => {
+  const { comments, update, showComments } = props
   const [comment, setComment] = useState('')
-  const [, setLoading] = useState(false)
   const researchStore = useResearchStore()
   const [viewComments, setViewComments] = useState(!!showComments)
   const { stores } = useCommonStores()
 
+  const category = 'Comments'
+  const highlightedCommentId = getResearchCommentId(window.location.hash)
+  const label = researchStore.activeResearchItem?.title
+  const isLoggedIn = !!stores.userStore.activeUser
+
   const onSubmit = async (comment: string) => {
     try {
-      setLoading(true)
       await researchStore.addComment(comment, update as IResearch.Update)
-      setLoading(false)
       setComment('')
 
-      trackEvent({
-        category: 'Comments',
-        action: 'Submitted',
-        label: researchStore.activeResearchItem?.title,
-      })
-      logger.debug(
-        {
-          category: 'Comments',
-          action: 'Submitted',
-          label: researchStore.activeResearchItem?.title,
-        },
-        'comment submitted',
-      )
+      const action = 'Submitted'
+      trackEvent({ action, category, label })
+      logger.debug({ action, category, label }, 'comment submitted')
     } catch (err) {
-      // Error: Comment could not be posted
       logger.error(`Failed to set comment`, { err })
     }
   }
 
   const handleEditRequest = async () => {
-    trackEvent({
-      category: 'Comments',
-      action: 'Edit existing comment',
-      label: researchStore.activeResearchItem?.title,
-    })
+    const action = 'Edit existing comment'
+    trackEvent({ action, category, label })
   }
 
   const handleDelete = async (_id: string) => {
     await researchStore.deleteComment(_id, update as IResearch.Update)
-    trackEvent({
-      category: 'Comments',
-      action: 'Deleted',
-      label: researchStore.activeResearchItem?.title,
-    })
-    logger.debug(
-      {
-        category: 'Comments',
-        action: 'Deleted',
-        label: researchStore.activeResearchItem?.title,
-      },
-      'comment deleted',
-    )
+
+    const action = 'Deleted'
+    trackEvent({ category, action, label })
+    logger.debug({ action, category, label }, 'comment deleted')
   }
 
   const handleEdit = async (_id: string, comment: string) => {
-    trackEvent({
-      category: 'Comments',
-      action: 'Update',
-      label: researchStore.activeResearchItem?.title,
-    })
-    logger.debug(
-      {
-        category: 'Comments',
-        action: 'Update',
-        label: researchStore.activeResearchItem?.title,
-      },
-      'comment edited',
-    )
     await researchStore.editComment(_id, comment, update)
+
+    const action = 'Update'
+    trackEvent({ action, category, label })
+    logger.debug({ action, category, label }, 'comment edited')
   }
 
   const onButtonClick = () => {
     setViewComments(!viewComments)
+  }
+
+  const onMoreComments = () => {
+    const action = 'Show more'
+    trackEvent({ action, category, label })
   }
 
   const setButtonText = () => {
@@ -153,29 +123,26 @@ export const ResearchComments = ({
       </Button>
       {viewComments && (
         <Flex
-          mt={5}
-          sx={{ flexDirection: 'column', alignItems: 'end' }}
-          marginTop="15px"
           data-cy="update-comments"
+          sx={{
+            alignItems: 'stretch',
+            flexDirection: 'column',
+            marginTop: 5,
+          }}
         >
-          <CommentList
-            articleTitle={researchStore.activeResearchItem?.title}
+          <DiscussionContainer
+            comment={comment}
             comments={comments}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
             handleEditRequest={handleEditRequest}
-            highlightedCommentId={getResearchCommentId(window.location.hash)}
-            trackEvent={trackEvent}
+            highlightedCommentId={highlightedCommentId}
+            isLoggedIn={isLoggedIn}
+            maxLength={MAX_COMMENT_LENGTH}
+            onChange={setComment}
+            onMoreComments={onMoreComments}
+            onSubmit={onSubmit}
           />
-          <Box sx={{ width: '100%' }}>
-            <CreateComment
-              maxLength={MAX_COMMENT_LENGTH}
-              comment={comment}
-              onChange={setComment}
-              onSubmit={onSubmit}
-              isLoggedIn={!!stores.userStore.activeUser}
-            />
-          </Box>
         </Flex>
       )}
     </BoxMain>

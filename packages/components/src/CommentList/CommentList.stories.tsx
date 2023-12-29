@@ -31,12 +31,7 @@ export const WithNestedComments: StoryFn<typeof CommentList> = () => {
   // TODO: This is a temporary solution to get nested comments to pass type check
   const comments: any = [
     fakeComment({
-      replies: [
-        fakeComment({
-          replies: [fakeComment(), fakeComment(), fakeComment()],
-        }),
-        fakeComment(),
-      ],
+      replies: [fakeComment(), fakeComment()],
     }),
     fakeComment(),
     fakeComment(),

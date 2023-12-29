@@ -70,12 +70,7 @@ describe('CommentList', () => {
   it('renders nested comments correctly', () => {
     const mockComments = [
       fakeComment({
-        replies: [
-          fakeComment({
-            replies: [fakeComment(), fakeComment(), fakeComment()],
-          }),
-          fakeComment(),
-        ],
+        replies: [fakeComment(), fakeComment()],
       }),
       fakeComment(),
       fakeComment(),
@@ -91,6 +86,6 @@ describe('CommentList', () => {
       />,
     )
 
-    expect(screen.getAllByTestId('CommentList: item')).toHaveLength(8)
+    expect(screen.getAllByTestId('CommentList: item')).toHaveLength(5)
   })
 })

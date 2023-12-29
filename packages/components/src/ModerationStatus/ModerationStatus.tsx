@@ -3,7 +3,7 @@ import { Text } from 'theme-ui'
 
 export interface Props {
   status: string
-  contentType: 'event' | 'howto' | 'research'
+  contentType: 'event' | 'howto' | 'research' | 'question'
   sx?: ThemeUIStyleObject
 }
 

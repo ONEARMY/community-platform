@@ -1,5 +1,5 @@
+import { createFakeComments, fakeComment } from '../utils'
 import { CommentList } from './CommentList'
-import { createFakeComments, fakeComment } from './createFakeComments'
 
 import type { Meta, StoryFn } from '@storybook/react'
 
@@ -11,20 +11,20 @@ export default {
 export const Default: StoryFn<typeof CommentList> = () => (
   <CommentList
     comments={createFakeComments(2)}
-    articleTitle="Test article"
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    onMoreComments={() => null}
   />
 )
 
 export const Expandable: StoryFn<typeof CommentList> = () => (
   <CommentList
     comments={createFakeComments(20)}
-    articleTitle="Test article"
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    onMoreComments={() => null}
   />
 )
 
@@ -41,10 +41,10 @@ export const WithNestedComments: StoryFn<typeof CommentList> = () => {
   return (
     <CommentList
       comments={comments}
-      articleTitle="Test article"
       handleDelete={() => Promise.resolve()}
       handleEditRequest={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
+      onMoreComments={() => Promise.resolve()}
     />
   )
 }
@@ -57,9 +57,9 @@ export const Highlighted: StoryFn<typeof CommentList> = () => (
     highlightedCommentId={
       highlightedCommentList[highlightedCommentList.length - 2]._id
     }
-    articleTitle="Test article"
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    onMoreComments={() => null}
   />
 )

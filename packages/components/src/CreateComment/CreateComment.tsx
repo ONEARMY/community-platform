@@ -3,8 +3,6 @@ import { Box, Button, Flex, Text, Textarea } from 'theme-ui'
 
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 
-import type { ThemeUIStyleObject } from 'theme-ui'
-
 export interface Props {
   maxLength: number
   isLoggedIn: boolean
@@ -12,20 +10,19 @@ export interface Props {
   onChange: (value: string) => void
   comment: string
   userProfileType?: string
-  sx?: ThemeUIStyleObject
 }
 
 export const CreateComment = (props: Props) => {
-  const { comment, maxLength, isLoggedIn } = props
+  const { comment, isLoggedIn, maxLength, onSubmit } = props
   const userProfileType = props.userProfileType || 'member'
-  const { onSubmit } = props
+
   const onChange = (newValue: string) => {
     props.onChange && props?.onChange(newValue)
   }
 
   return (
-    <>
-      <Flex sx={{ marginBottom: 5 }} data-target="create-comment-container">
+    <Flex sx={{ flexDirection: 'column', gap: 3 }}>
+      <Flex data-target="create-comment-container">
         <Box sx={{ lineHeight: 0, marginTop: 2 }}>
           <MemberBadge profileType={userProfileType} useLowDetailVersion />
         </Box>
@@ -98,18 +95,18 @@ export const CreateComment = (props: Props) => {
           )}
         </Box>
       </Flex>
-      <Button
-        data-cy="comment-submit"
-        disabled={!comment.trim() || !isLoggedIn}
-        variant="primary"
-        onClick={() => onSubmit(comment)}
-        mt={3}
-        sx={{
-          float: 'right',
-        }}
-      >
-        Leave a comment
-      </Button>
-    </>
+
+      <Flex sx={{ alignSelf: 'flex-end' }}>
+        <Button
+          data-cy="comment-submit"
+          disabled={!comment.trim() || !isLoggedIn}
+          variant="primary"
+          onClick={() => onSubmit(comment)}
+          sx={{ marginTop: 3 }}
+        >
+          Leave a comment
+        </Button>
+      </Flex>
+    </Flex>
   )
 }

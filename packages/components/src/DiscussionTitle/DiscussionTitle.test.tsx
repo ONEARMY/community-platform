@@ -1,10 +1,10 @@
 import { render } from '../tests/utils'
+import { COMMENTS, NO_COMMENTS, ONE_COMMENT } from './DiscussionTitle'
 import {
+  MultipleComments,
   NoComments,
   OneComment,
-  MultipleComments,
 } from './DiscussionTitle.stories'
-import { NO_COMMENTS, ONE_COMMENT, COMMENTS } from './DiscussionTitle'
 
 import type { IProps } from './DiscussionTitle'
 

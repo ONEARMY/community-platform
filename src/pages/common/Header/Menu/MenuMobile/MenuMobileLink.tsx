@@ -1,20 +1,16 @@
-import * as React from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 import { NavLink } from 'react-router-dom'
+
 import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { observer, inject } from 'mobx-react'
-import type { MobileMenuStore } from 'src/stores/MobileMenu/mobilemenu.store'
+import { MobileMenuContext } from '../../MobileMenuContext'
 
 interface IProps {
   path: string
   content: string
   style?: React.CSSProperties
   onClick?: () => void
-}
-
-interface IInjectedProps extends IProps {
-  mobileMenuStore: MobileMenuStore
 }
 
 const PanelItem = styled(Box)`
@@ -51,40 +47,26 @@ const MenuLink = styled(NavLink)`
   }
 `
 
-@inject('mobileMenuStore')
-@observer
-export class MenuMobileLink extends React.Component<IProps> {
-  // eslint-disable-next-line
-  constructor(props: IProps) {
-    super(props)
-  }
+const MenuMobileLink = (props: IProps) => {
+  const mobileMenuContext = React.useContext(MobileMenuContext)
 
-  get injected() {
-    return this.props as IInjectedProps
-  }
-
-  render() {
-    const menu = this.injected.mobileMenuStore
-    return (
-      <>
-        <PanelItem data-cy="mobile-menu-item">
-          <MenuLink
-            to={this.props.path}
-            onClick={() => {
-              menu.toggleMobilePanel()
-              if (this.props.onClick) {
-                this.props.onClick()
-              }
-            }}
-            style={this.props.style}
-            className={({ isActive }) => (isActive ? 'current' : '')}
-          >
-            <span>{this.props.content}</span>
-          </MenuLink>
-        </PanelItem>
-      </>
-    )
-  }
+  return (
+    <PanelItem data-cy="mobile-menu-item">
+      <MenuLink
+        to={props.path}
+        onClick={() => {
+          mobileMenuContext.setIsVisible(false)
+          if (props.onClick) {
+            props.onClick()
+          }
+        }}
+        style={props.style}
+        className={({ isActive }) => (isActive ? 'current' : '')}
+      >
+        <span>{props.content}</span>
+      </MenuLink>
+    </PanelItem>
+  )
 }
 
 export default MenuMobileLink

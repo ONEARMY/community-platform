@@ -5,7 +5,7 @@ import type { IQuestion } from 'src/models'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Heading, Text, Flex } from 'theme-ui'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
+import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
 export const QuestionPage = () => {
   const { slug } = useParams()
@@ -19,10 +19,13 @@ export const QuestionPage = () => {
       if (slug) {
         const question: any = await store.fetchQuestionBySlug(slug)
         store.activeQuestionItem = question || null
-        setQuestion(question || null)
 
-        if (store.activeUser) {
-          setIsEditable(isAllowedToEditContent(question, store.activeUser))
+        if (isLoading) {
+          setQuestion(question || null)
+
+          if (store.activeUser) {
+            setIsEditable(isAllowedToEditContent(question, store.activeUser))
+          }
         }
       }
 
@@ -30,7 +33,11 @@ export const QuestionPage = () => {
     }
 
     fetchQuestions()
-  }, [isLoading, question])
+
+    return () => {
+      setIsLoading(false)
+    }
+  }, [slug])
 
   const onUsefulClick = async () => {
     if (!store.activeUser?.userName) {
@@ -65,14 +72,13 @@ export const QuestionPage = () => {
             sx={{ top: 0, position: 'absolute', right: 0 }}
           />
 
-          <Box mt={3} mb={2}>
-            <UserNameTag
-              userName={question._createdBy}
-              countryCode={question.creatorCountry}
-              created={question._created}
-              action="Asked"
-            />
-          </Box>
+          <ContentAuthorTimestamp
+            userName={question._createdBy}
+            countryCode={question.creatorCountry}
+            created={question._created}
+            modified={question._contentModifiedTimestamp || question._modified}
+            action="Asked"
+          />
 
           <Box mt={3} mb={2}>
             <Heading mb={1}>{question.title}</Heading>

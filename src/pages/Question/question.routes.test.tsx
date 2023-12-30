@@ -20,6 +20,7 @@ import { faker } from '@faker-js/faker'
 import { questionRouteElements } from './question.routes'
 
 const Theme = testingThemeStyles
+let mockActiveUser = FactoryUser()
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -27,7 +28,9 @@ jest.mock('src/index', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
-      userStore: {},
+      userStore: {
+        user: mockActiveUser,
+      },
       aggregationsStore: {
         aggregations: {
           users_totalUseful: {
@@ -99,7 +102,7 @@ describe('question.routes', () => {
     it('renders a loading state', async () => {
       let wrapper
       await act(async () => {
-        wrapper = renderFn('/questions').wrapper
+        wrapper = (await renderFn('/questions')).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -113,10 +116,11 @@ describe('question.routes', () => {
       ;(useQuestionStore as any).mockReturnValue({
         ...mockQuestionStore,
         fetchQuestions: jest.fn().mockResolvedValue([]),
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
-        wrapper = renderFn('/questions').wrapper
+        wrapper = (await renderFn('/questions')).wrapper
       })
 
       await waitFor(async () => {
@@ -147,10 +151,11 @@ describe('question.routes', () => {
             _id: '123',
           },
         ]),
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
-        wrapper = renderFn('/questions').wrapper
+        wrapper = (await renderFn('/questions')).wrapper
       })
 
       await waitFor(async () => {
@@ -178,10 +183,11 @@ describe('question.routes', () => {
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
         upsertQuestion: mockUpsertQuestion,
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
-        const render = renderFn('/questions/create')
+        const render = await renderFn('/questions/create')
         wrapper = render.wrapper
       })
 
@@ -218,6 +224,7 @@ describe('question.routes', () => {
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
         upsertQuestion: mockUpsertQuestion,
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
@@ -255,10 +262,11 @@ describe('question.routes', () => {
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
-        wrapper = renderFn(`/questions/${question.slug}`).wrapper
+        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -276,15 +284,17 @@ describe('question.routes', () => {
 
     it('does not show Edit call to action', async () => {
       let wrapper
+      mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem()
       const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
-        wrapper = renderFn(`/questions/${question.slug}`, FactoryUser()).wrapper
+        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -296,19 +306,20 @@ describe('question.routes', () => {
 
     it('shows Edit call to action', async () => {
       let wrapper
-      const activeUser = FactoryUser({})
+      mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem({
-        _createdBy: activeUser.userName,
+        _createdBy: mockActiveUser.userName,
       })
+
       const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
-        activeUser,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
-        wrapper = renderFn(`/questions/${question.slug}`, FactoryUser()).wrapper
+        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -324,7 +335,7 @@ describe('question.routes', () => {
     it('renders the question edit page', async () => {
       let wrapper
       await act(async () => {
-        wrapper = renderFn('/questions/slug/edit').wrapper
+        wrapper = (await renderFn('/questions/slug/edit')).wrapper
       })
 
       await waitFor(async () => {
@@ -334,6 +345,11 @@ describe('question.routes', () => {
 
     it('allows admin access', async () => {
       let wrapper
+
+      mockActiveUser = FactoryUser({
+        userName: 'not-author',
+        userRoles: ['admin'],
+      })
 
       const questionItem = FactoryQuestionItem({
         slug: 'slug',
@@ -346,16 +362,13 @@ describe('question.routes', () => {
 
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
-        activeUser: FactoryUser({
-          userName: 'not-author',
-          userRoles: ['admin'],
-        }),
         fetchQuestionBySlug: jest.fn().mockResolvedValue(questionItem),
         upsertQuestion: mockUpsertQuestion,
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
-        const res = renderFn('/questions/slug/edit', FactoryUser())
+        const res = await renderFn('/questions/slug/edit')
         wrapper = res.wrapper
       })
 
@@ -391,20 +404,21 @@ describe('question.routes', () => {
 
     it('redirects non-author', async () => {
       let wrapper
+      mockActiveUser = FactoryUser({ userName: 'not-author' })
 
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
-        activeUser: FactoryUser({ userName: 'not-author' }),
         fetchQuestionBySlug: jest.fn().mockResolvedValue(
           FactoryQuestionItem({
             slug: 'slug',
             _createdBy: 'author',
           }),
         ),
+        activeUser: mockActiveUser,
       })
 
       await act(async () => {
-        const res = renderFn('/questions/slug/edit', FactoryUser())
+        const res = await renderFn('/questions/slug/edit')
         wrapper = res.wrapper
       })
 
@@ -416,8 +430,7 @@ describe('question.routes', () => {
   })
 })
 
-const renderFn = (url, fnUser?) => {
-  const localUser = fnUser || FactoryUser()
+const renderFn = async (url) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route path="/questions">{questionRouteElements}</Route>,
@@ -430,7 +443,7 @@ const renderFn = (url, fnUser?) => {
   return {
     wrapper: render(
       <Provider
-        userStore={{ user: localUser }}
+        userStore={{ user: mockActiveUser }}
         questionStore={{ foo: 'bar' }}
         tagsStore={{ setTagsCategory: jest.fn() }}
       >

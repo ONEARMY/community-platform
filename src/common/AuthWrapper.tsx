@@ -1,36 +1,32 @@
-import * as React from 'react'
-import { inject, observer } from 'mobx-react'
-import type { UserStore } from 'src/stores/User/user.store'
+import React from 'react'
+import { observer } from 'mobx-react'
 import type { UserRole } from 'src/models/user.models'
 import { SITE, DEV_SITE_ROLE } from 'src/config/config'
+import { useCommonStores } from 'src/index'
 
 /*
     Simple wrapper to only render a component if the user is logged in (plus optional user role required)
     Optionally provide a fallback component to render if not satisfied
 */
-
 interface IProps {
-  userStore?: UserStore
   roleRequired?: UserRole | UserRole[]
   fallback?: React.ReactNode
   children: React.ReactNode
 }
 
-@inject('userStore')
-@observer
-export class AuthWrapper extends React.Component<IProps> {
-  render() {
-    const { userStore, roleRequired, children, fallback } = this.props
-    const isAuthorized = isUserAuthorized(userStore?.user, roleRequired)
-    const childElements =
-      roleRequired === 'beta-tester' ? (
-        <div className="beta-tester-feature">{children}</div>
-      ) : (
-        children
-      )
-    return isAuthorized === true ? childElements : fallback || <></>
-  }
-}
+export const AuthWrapper = observer((props: IProps) => {
+  const { userStore } = useCommonStores().stores
+  const isAuthorized = isUserAuthorized(userStore?.user, props.roleRequired)
+
+  const childElements =
+    props.roleRequired === 'beta-tester' ? (
+      <div className="beta-tester-feature">{props.children}</div>
+    ) : (
+      props.children
+    )
+
+  return <>{isAuthorized ? childElements : props.fallback || <></>}</>
+})
 
 const isUserAuthorized = (user, roleRequired) => {
   const userRoles = user?.userRoles || []

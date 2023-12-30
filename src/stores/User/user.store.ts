@@ -97,56 +97,8 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  public getUserNotifications() {
-    return (
-      this.user?.notifications
-        ?.filter((notification) => !notification.read)
-        .sort(
-          (a, b) =>
-            new Date(b._created).getTime() - new Date(a._created).getTime(),
-        ) || []
-    )
-  }
-
-  public async login(provider: string, email: string, password: string) {
-    switch (provider) {
-      // eslint-disable-next-line
-      default:
-        return auth.signInWithEmailAndPassword(email, password)
-    }
-  }
-
-  // handle user sign in, when firebase authenticates want to also fetch user document from the database
-  public async userSignedIn(
-    user: IFirebaseUser | null,
-    newUserCreated = false,
-  ) {
-    if (user) {
-      logger.debug('user signed in', user)
-      // legacy user formats did not save names so get profile via email - this option be removed in later version
-      // (assumes migration strategy and check)
-      const userMeta = await this.getUserProfile(user.uid)
-
-      if (userMeta) {
-        this.updateActiveUser(userMeta)
-        logger.debug('userMeta', userMeta)
-
-        // Update last active for user
-        await this.db
-          .collection<IUserPP>(COLLECTION_NAME)
-          .doc(userMeta._id)
-          .set({ ...userMeta, _lastActive: new Date().toISOString() })
-      } else {
-        await this._createUserProfile('sign-in')
-        // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
-        if (!newUserCreated) {
-          return this.userSignedIn(user, true)
-        }
-        // throw new Error(
-        //   `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
-        // )
-      }
-    }
+  public async login(email: string, password: string) {
+    return auth.signInWithEmailAndPassword(email, password)
   }
 
   public async getUserByUsername(username: string) {
@@ -171,7 +123,10 @@ export class UserStore extends ModuleStore {
     }
 
     if (lookup.length > 1) {
-      logger.warn('Multiple user records fetched', lookup)
+      logger.warn(
+        'Multiple user records fetched',
+        lookup && lookup.map((u) => ({ _id: u._id })),
+      )
       return lookup.filter((user) => user._id !== user._authID)[0]
     }
 
@@ -239,7 +194,7 @@ export class UserStore extends ModuleStore {
     trigger: string,
     adminEditableUserId?: string,
   ) {
-    this.setUpdateStatus('Start')
+    this._setUpdateStatus('Start')
     const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(values._id)
     const id = dbRef.id
 
@@ -284,7 +239,7 @@ export class UserStore extends ModuleStore {
       .set(updatedUserProfile)
 
     if (!adminEditableUserId) {
-      this.updateActiveUser(updatedUserProfile)
+      this._updateActiveUser(updatedUserProfile)
     }
 
     // Update user map pin
@@ -293,7 +248,7 @@ export class UserStore extends ModuleStore {
     if (values.location) {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
-    this.setUpdateStatus('Complete')
+    this._setUpdateStatus('Complete')
   }
 
   @action
@@ -339,7 +294,7 @@ export class UserStore extends ModuleStore {
       .doc(this.activeUser._id)
       .get('server')
 
-    this.updateActiveUser(user)
+    this._updateActiveUser(user)
   }
 
   public async sendEmailVerification() {
@@ -430,6 +385,39 @@ export class UserStore extends ModuleStore {
     }
   }
 
+  // handle user sign in, when firebase authenticates want to also fetch user document from the database
+  private async _userSignedIn(
+    user: IFirebaseUser | null,
+    newUserCreated = false,
+  ) {
+    if (user) {
+      logger.debug('user signed in', user)
+      // legacy user formats did not save names so get profile via email - this option be removed in later version
+      // (assumes migration strategy and check)
+      const userMeta = await this.getUserProfile(user.uid)
+
+      if (userMeta) {
+        this._updateActiveUser(userMeta)
+        logger.debug('userMeta', userMeta)
+
+        // Update last active for user
+        await this.db
+          .collection<IUserPP>(COLLECTION_NAME)
+          .doc(userMeta._id)
+          .set({ ...userMeta, _lastActive: new Date().toISOString() })
+      } else {
+        await this._createUserProfile('sign-in')
+        // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
+        if (!newUserCreated) {
+          return this._userSignedIn(user, true)
+        }
+        // throw new Error(
+        //   `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
+        // )
+      }
+    }
+  }
+
   private async _createUserProfile(trigger: string) {
     const authUser = auth.currentUser as firebase.default.User
     const displayName = authUser.displayName as string
@@ -475,14 +463,14 @@ export class UserStore extends ModuleStore {
     this.authUnsubscribe = auth.onAuthStateChanged((authUser) => {
       this.authUser = authUser
       if (authUser) {
-        this.userSignedIn(authUser)
+        this._userSignedIn(authUser)
         // send verification email if not verified and after first sign-up only
         if (!authUser.emailVerified && checkEmailVerification) {
           this.sendEmailVerification()
         }
       } else {
         // Explicitly update user to null when logged out
-        this.updateActiveUser(null)
+        this._updateActiveUser(null)
       }
     })
   }
@@ -496,6 +484,16 @@ export class UserStore extends ModuleStore {
    * This exists for testing purposes only.
    */
   public _testSetUser(user: IUserPPDB) {
+    this.user = user
+  }
+
+  @action
+  private _setUpdateStatus(update: keyof IUserUpdateStatus) {
+    this.updateStatus[update] = true
+  }
+
+  @action
+  private _updateActiveUser(user?: IUserPPDB | null) {
     this.user = user
   }
 }

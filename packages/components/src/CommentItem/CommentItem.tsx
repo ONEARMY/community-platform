@@ -1,11 +1,14 @@
 import { createRef, useEffect, useState } from 'react'
 import { Box, Flex, Text } from 'theme-ui'
+
 import { Button } from '../Button/Button'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 import { EditComment } from '../EditComment/EditComment'
 import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
+
+const SHORT_COMMENT = 129
 
 export interface CommentItemProps {
   text: string
@@ -48,11 +51,14 @@ export const CommentItem = (props: CommentItemProps) => {
     isEditable,
   } = props
 
+  const date = formatDate(_edited || _created)
+  const maxHeight = isShowMore ? 'max-content' : '128px'
+
   useEffect(() => {
     if (textRef.current) {
       setTextHeight(textRef.current.scrollHeight)
     }
-  }, [text])
+  }, [textRef])
 
   const showMore = () => {
     setShowMore(!isShowMore)
@@ -68,52 +74,84 @@ export const CommentItem = (props: CommentItemProps) => {
   return (
     <Box id={`comment:${_id}`} data-cy="comment">
       <Flex
-        p="3"
-        bg={'white'}
+        bg="white"
         sx={{
-          width: '100%',
+          borderRadius: 1,
           flexDirection: 'column',
-          borderRadius: '5px',
+          padding: 3,
         }}
       >
-        <Flex sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <Username
-            user={{
-              userName: creatorName,
-              countryCode: creatorCountry,
-            }}
-            isVerified={!!isUserVerified}
-          />
-          <Flex sx={{ alignItems: 'center' }}>
-            <>
-              {_edited && (
-                <Text sx={{ fontSize: 0, color: 'grey' }} mr={2}>
-                  (Edited)
-                </Text>
-              )}
-              <Text sx={{ fontSize: 1 }}>
-                {formatDate(_edited || _created)}
-              </Text>
-            </>
+        <Flex
+          sx={{
+            alignItems: 'stretch',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <Flex sx={{ alignItems: 'baseline', gap: 2 }}>
+            <Username
+              user={{
+                userName: creatorName,
+                countryCode: creatorCountry,
+              }}
+              isVerified={!!isUserVerified}
+            />
+            {_edited && (
+              <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
+            )}
+            <Text sx={{ fontSize: 1 }}>{date}</Text>
           </Flex>
+
+          {isEditable && (
+            <Flex
+              sx={{
+                flexGrow: 1,
+                gap: 2,
+                justifyContent: ['flex-start', 'flex-start', 'flex-end'],
+                opacity: 0.5,
+                width: ['100%', 'auto'],
+                ':hover': { opacity: 1 },
+              }}
+            >
+              <Button
+                data-cy="CommentItem: edit button"
+                variant="outline"
+                small={true}
+                icon="edit"
+                onClick={() => onEditRequest(_id)}
+              >
+                edit
+              </Button>
+              <Button
+                data-cy="CommentItem: delete button"
+                variant={'outline'}
+                small={true}
+                icon="delete"
+                onClick={() => setShowDeleteModal(true)}
+              >
+                delete
+              </Button>
+            </Flex>
+          )}
         </Flex>
         <Text
           data-cy="comment-text"
           mt={2}
           mb={2}
           sx={{
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            overflow: 'hidden',
-            maxHeight: isShowMore ? 'max-content' : '128px',
             fontFamily: 'body',
             lineHeight: 1.3,
+            maxHeight,
+            overflow: 'hidden',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
           }}
           ref={textRef}
         >
           <LinkifyText>{text}</LinkifyText>
         </Text>
-        {textHeight > 129 && (
+        {textHeight > SHORT_COMMENT && (
           <a
             onClick={showMore}
             style={{
@@ -125,31 +163,6 @@ export const CommentItem = (props: CommentItemProps) => {
             {isShowMore ? 'Show less' : 'Show more'}
           </a>
         )}
-        <Flex ml="auto">
-          {isEditable && (
-            <>
-              <Button
-                data-cy="CommentItem: edit button"
-                variant={'outline'}
-                small={true}
-                icon={'edit'}
-                onClick={() => onEditRequest(_id)}
-              >
-                edit
-              </Button>
-              <Button
-                data-cy="CommentItem: delete button"
-                variant={'outline'}
-                small={true}
-                icon="delete"
-                onClick={() => setShowDeleteModal(true)}
-                ml={2}
-              >
-                delete
-              </Button>
-            </>
-          )}
-        </Flex>
 
         <Modal width={600} isOpen={showEditModal}>
           <EditComment

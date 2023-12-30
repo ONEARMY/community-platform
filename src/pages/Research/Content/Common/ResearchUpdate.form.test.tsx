@@ -20,6 +20,7 @@ jest.mock('src/stores/Research/research.store', () => {
         Complete: false,
       },
       isTitleThatReusesSlug: jest.fn(),
+      unlockResearchUpdate: jest.fn(),
     }),
   }
 })

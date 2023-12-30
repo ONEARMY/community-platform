@@ -1,24 +1,11 @@
 import type { StoryFn, Meta } from '@storybook/react'
 import { CommentList } from './CommentList'
-import { faker } from '@faker-js/faker'
+import { createComments } from './createComments'
 
 export default {
   title: 'Components/CommentList',
   component: CommentList,
 } as Meta<typeof CommentList>
-
-const createComments = (numberOfComments = 2, commentOverloads = {}) =>
-  [...Array(numberOfComments).keys()].slice(0).map(() => ({
-    _created: faker.date.past().toString(),
-    creatorCountry: faker.address.countryCode().toLowerCase(),
-    _creatorId: faker.internet.userName(),
-    _id: faker.database.mongodbObjectId(),
-    creatorName: faker.internet.userName(),
-    isUserVerified: faker.datatype.boolean(),
-    text: faker.lorem.text(),
-    isEditable: faker.datatype.boolean(),
-    ...commentOverloads,
-  }))
 
 export const Default: StoryFn<typeof CommentList> = () => (
   <CommentList

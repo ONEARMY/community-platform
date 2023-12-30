@@ -73,17 +73,6 @@ export class UserStore extends ModuleStore {
     }
   }
 
-  public getUserNotifications() {
-    return (
-      this.user?.notifications
-        ?.filter((notification) => !notification.read)
-        .sort(
-          (a, b) =>
-            new Date(b._created).getTime() - new Date(a._created).getTime(),
-        ) || []
-    )
-  }
-
   public async login(email: string, password: string) {
     return auth.signInWithEmailAndPassword(email, password)
   }

@@ -2,10 +2,9 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 import { NavLink } from 'react-router-dom'
-import { observer } from 'mobx-react'
 
 import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { useCommonStores } from 'src/index'
+import { MobileMenuContext } from '../../MobileMenuContext'
 
 interface IProps {
   path: string
@@ -48,15 +47,15 @@ const MenuLink = styled(NavLink)`
   }
 `
 
-const MenuMobileLink = observer((props: IProps) => {
-  const { mobileMenuStore } = useCommonStores().stores
+const MenuMobileLink = (props: IProps) => {
+  const mobileMenuContext = React.useContext(MobileMenuContext)
 
   return (
     <PanelItem data-cy="mobile-menu-item">
       <MenuLink
         to={props.path}
         onClick={() => {
-          mobileMenuStore.toggleMobilePanel()
+          mobileMenuContext.setIsVisible(false)
           if (props.onClick) {
             props.onClick()
           }
@@ -68,6 +67,6 @@ const MenuMobileLink = observer((props: IProps) => {
       </MenuLink>
     </PanelItem>
   )
-})
+}
 
 export default MenuMobileLink

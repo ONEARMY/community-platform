@@ -17,6 +17,7 @@ import { getFormattedNotifications } from './getFormattedNotifications'
 import { useCommonStores } from 'src/index'
 
 import type { ThemeWithName } from 'oa-themes'
+import { MobileMenuContext } from './MobileMenuContext'
 
 const MobileNotificationsWrapper = ({ children }) => {
   const theme = useTheme()
@@ -74,7 +75,7 @@ const AnimationContainer = (props: any) => {
 }
 
 const Header = observer(({ theme }: { theme: ThemeWithName }) => {
-  const { mobileMenuStore, userNotificationsStore } = useCommonStores().stores
+  const { userNotificationsStore } = useCommonStores().stores
   const user = userNotificationsStore.user
   const notifications = getFormattedNotifications(
     userNotificationsStore.getUnreadNotifications(),
@@ -83,9 +84,15 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
     React.useState(false)
   const areThereNotifications = Boolean(notifications.length)
   const isLoggedInUser = !!user
+  const [isVisible, setIsVisible] = React.useState(false)
 
   return (
-    <>
+    <MobileMenuContext.Provider
+      value={{
+        isVisible,
+        setIsVisible,
+      }}
+    >
       <Flex
         data-cy="header"
         bg="white"
@@ -162,8 +169,8 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         <MobileMenuWrapper className="menu-mobile">
           <Flex pl={5}>
             <HamburgerMenu
-              isOpen={mobileMenuStore.showMobilePanel || false}
-              menuClicked={() => mobileMenuStore.toggleMobilePanel()}
+              isOpen={isVisible}
+              menuClicked={() => setIsVisible(!isVisible)}
               width={18}
               height={15}
               strokeWidth={1}
@@ -175,7 +182,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
           </Flex>
         </MobileMenuWrapper>
       </Flex>
-      {mobileMenuStore.showMobilePanel && (
+      {isVisible && (
         <AnimationContainer key={'mobilePanelContainer'}>
           <MobileMenuWrapper>
             <MenuMobilePanel />
@@ -197,7 +204,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
           </MobileMenuWrapper>
         </AnimationContainer>
       )}
-    </>
+    </MobileMenuContext.Provider>
   )
 })
 

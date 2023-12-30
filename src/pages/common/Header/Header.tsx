@@ -79,6 +79,8 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
   const notifications = getFormattedNotifications(
     userNotificationsStore.getUnreadNotifications(),
   )
+  const [showMobileNotifications, setShowMobileNotifications] =
+    React.useState(false)
   const areThereNotifications = Boolean(notifications.length)
   const isLoggedInUser = !!user
 
@@ -125,8 +127,10 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         {isLoggedInUser && (
           <MobileNotificationsWrapper>
             <NotificationsIcon
-              onCLick={() => mobileMenuStore.toggleMobileNotifications()}
-              isMobileMenuActive={mobileMenuStore.showMobileNotifications}
+              onCLick={() =>
+                setShowMobileNotifications(!showMobileNotifications)
+              }
+              isMobileMenuActive={showMobileNotifications}
               areThereNotifications={areThereNotifications}
             />
           </MobileNotificationsWrapper>
@@ -178,7 +182,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
           </MobileMenuWrapper>
         </AnimationContainer>
       )}
-      {mobileMenuStore.showMobileNotifications && (
+      {showMobileNotifications && (
         <AnimationContainer key={'mobileNotificationsContainer'}>
           <MobileMenuWrapper>
             <NotificationsMobile

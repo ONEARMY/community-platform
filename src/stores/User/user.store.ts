@@ -84,12 +84,8 @@ export class UserStore extends ModuleStore {
     )
   }
 
-  public async login(provider: string, email: string, password: string) {
-    switch (provider) {
-      // eslint-disable-next-line
-      default:
-        return auth.signInWithEmailAndPassword(email, password)
-    }
+  public async login(email: string, password: string) {
+    return auth.signInWithEmailAndPassword(email, password)
   }
 
   public async getUserByUsername(username: string) {
@@ -408,7 +404,6 @@ export class UserStore extends ModuleStore {
       }
     }
   }
-
 
   private async _createUserProfile(trigger: string) {
     const authUser = auth.currentUser as firebase.default.User

@@ -59,9 +59,8 @@ const SignInPage = observer((props: IProps) => {
 
   const onLoginSubmit = async (v: IFormValues) => {
     setState((state) => ({ ...state, disabled: true }))
-    const provider = (authProvider as IAuthProvider).provider
     try {
-      await userStore!.login(provider, v.email, v.password)
+      await userStore!.login(v.email, v.password)
       navigate(-1)
     } catch (error) {
       const friendlyErrorMessage = getFriendlyMessage(error.code)

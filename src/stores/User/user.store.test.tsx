@@ -3,6 +3,8 @@ import { FactoryUser } from 'src/test/factories/User'
 import { UserStore } from './user.store'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import { EmailNotificationFrequency } from 'oa-shared'
+import { auth } from '../../utils/firebase'
+import { faker } from '@faker-js/faker'
 
 jest.mock('../../utils/firebase', () => ({
   auth: {
@@ -18,6 +20,7 @@ jest.mock('../../utils/firebase', () => ({
       uid: 'testUid',
     },
     onAuthStateChanged: jest.fn(),
+    signInWithEmailAndPassword: jest.fn(),
   },
 }))
 
@@ -26,6 +29,20 @@ describe('userStore', () => {
 
   beforeEach(() => {
     store = new UserStore({} as any)
+  })
+
+  describe('login', () => {
+    it('hands off to firebase auth', async () => {
+      const userName = faker.internet.userName()
+      const password = faker.internet.password()
+
+      await store.login(userName, password)
+
+      expect(auth.signInWithEmailAndPassword).toHaveBeenCalledWith(
+        userName,
+        password,
+      )
+    })
   })
 
   describe('getUserProfile', () => {

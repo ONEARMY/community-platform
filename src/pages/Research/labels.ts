@@ -41,7 +41,7 @@ export const overview: ILabels = {
     title: 'Which categories fit your research?',
   },
   collaborators: {
-    placeholder: 'A comma separated list of usernames.',
+    placeholder: 'Select collaborators or start typing to find them',
     title: 'Who have you been collaborating on this Research with?',
   },
   description: {

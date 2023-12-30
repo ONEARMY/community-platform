@@ -170,6 +170,7 @@ export const Select = (props: Props) => {
       options={options}
       onChange={(v) => props.onChange && props.onChange(v)}
       value={props.value}
+      onInputChange={props.onInputChange}
     />
   )
 }

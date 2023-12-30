@@ -591,7 +591,7 @@ export class ResearchStore extends ModuleStore {
     const user = this.activeUser as IUser
     const updates = (await dbRef.get())?.updates || [] // save old updates when editing
     const collaborators = Array.isArray(values?.collaborators)
-      ? values.collaborators
+      ? values.collaborators.map((opt) => opt.value)
       : (values.collaborators || '')
           .split(',')
           .map((s) => s.trim())

@@ -34,6 +34,7 @@ import {
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
 import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
+import { UserNameSelect } from '../../../common/UserNameSelect/UserNameSelect'
 
 import type { IResearch } from 'src/models/research.models'
 import { usePrompt } from 'src/common/hooks/usePrompt'
@@ -314,8 +315,9 @@ const ResearchForm = observer((props: IProps) => {
                               </ResearchFormLabel>
                               <Field
                                 name="collaborators"
-                                component={FieldInput}
+                                component={UserNameSelect}
                                 placeholder={collaborators.placeholder}
+                                defaultOptions={[]}
                               />
                             </Flex>
                           </Flex>

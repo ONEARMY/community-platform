@@ -66,7 +66,7 @@ export const UserNameSelect = observer(
               }))
             : []
         }
-        onChange={input.onChange}
+        onChange={(v) => input.onChange(v.map((user) => user.value))}
         onInputChange={setInputValue}
         isClearable={true}
         isMulti={true}

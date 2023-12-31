@@ -21,35 +21,19 @@ const AcademyPage = lazy(
 const MapsPage = lazy(
   () => import(/* webpackChunkName: "Maps" */ './Maps/Maps'),
 )
-const User = lazy(() => import(/* webpackChunkName: "User" */ './User/User'))
+const User = lazy(
+  () => import(/* webpackChunkName: "User" */ './User/user.routes'),
+)
 
 const SignUpMessagePage = lazy(
   () =>
     import(/* webpackChunkName: "SignUpMessage" */ './SignUp/SignUpMessage'),
-)
-const ResendSignUpMessagePage = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "ResendSignUpMessage" */ './SignUp/ResendSignUpMessage'
-    ),
 )
 const SignUpPage = lazy(
   () => import(/* webpackChunkName: "SignUp" */ './SignUp/SignUp'),
 )
 const SignInPage = lazy(
   () => import(/* webpackChunkName: "SignIn" */ './SignIn/SignIn'),
-)
-const ForgotPasswordPage = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "ForgotPassword" */ './Password/ForgotPassword'
-    ),
-)
-const ForgotPasswordMessagePage = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "ForgotPasswordMessage" */ './Password/ForgotPasswordMessage'
-    ),
 )
 const PrivacyPolicy = lazy(
   () => import(/* webpackChunkName: "privacy" */ './policy/PrivacyPolicy'),
@@ -157,32 +141,6 @@ const signupmessage = {
   description: '',
 }
 
-const resendsignupmessage = {
-  moduleName: MODULE.USER,
-  path: '/resend-sign-up-message',
-  exact: true,
-  component: <ResendSignUpMessagePage />,
-  title: 'Resend Sign Up Message',
-  description: '',
-}
-
-const forgotpassword = {
-  moduleName: MODULE.USER,
-  path: '/forgot-password',
-  exact: true,
-  component: <ForgotPasswordPage />,
-  title: 'Forgot Password',
-  description: '',
-}
-
-const forgotpasswordmessage = {
-  moduleName: MODULE.USER,
-  path: '/forgot-password-message',
-  exact: true,
-  component: <ForgotPasswordMessagePage />,
-  title: 'Forgot Password Message',
-  description: '',
-}
 const privacyPolicy = {
   moduleName: MODULE.CORE,
   path: '/privacy',
@@ -230,10 +188,7 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   user,
   signup,
   signupmessage,
-  resendsignupmessage,
   signin,
-  forgotpassword,
-  forgotpasswordmessage,
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
   unsubscribe,
   QuestionModule,

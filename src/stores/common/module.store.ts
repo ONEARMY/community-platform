@@ -1,6 +1,5 @@
 import isUrl from 'is-url'
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { includesAll } from 'src/utils/filters'
 import { stripSpecialCharacters } from 'src/utils/helpers'
@@ -56,9 +55,11 @@ export class ModuleStore {
     return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
   // this can be subscribed to in individual stores
-  constructor(private rootStore?: RootStore, private basePath?: IDBEndpoint) {
-    if (!rootStore) {
-      this.rootStore = useCommonStores()
+  constructor(private rootStore: RootStore, private basePath?: IDBEndpoint) {
+    this.rootStore = rootStore
+
+    if (!this.rootStore) {
+      throw new Error('Root store is required')
     }
   }
 

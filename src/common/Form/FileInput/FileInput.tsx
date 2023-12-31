@@ -7,6 +7,7 @@ import { DashboardModal } from '@uppy/react'
 import { Button, DownloadStaticFile } from 'oa-components'
 import { UPPY_CONFIG } from './UppyConfig'
 import { Flex } from 'theme-ui'
+import { useEffect, useState } from 'react'
 
 interface IUppyFiles {
   [key: string]: UppyFile
@@ -18,95 +19,85 @@ interface IProps {
 interface IState {
   open: boolean
 }
-export class FileInput extends React.Component<IProps, IState> {
-  private uppy = new Uppy({
-    ...UPPY_CONFIG,
-    onBeforeUpload: () => this.uploadTriggered(),
-  })
-  constructor(props: IProps) {
-    super(props)
-    this.state = { open: false }
-  }
+export const FileInput = (props: IProps) => {
+  const [state, setState] = useState<IState>({ open: false })
+  const [uppy] = useState(
+    () => new Uppy({ ...UPPY_CONFIG, onBeforeUpload: () => uploadTriggered() }),
+  )
 
-  componentWillUnmount() {
-    this.uppy.close()
-  }
-  get files() {
-    const files = this.uppy.getState().files as IUppyFiles
+  useEffect(() => {
+    return () => {
+      uppy.close()
+    }
+  }, [])
+
+  const files = () => {
+    const files = uppy.getState().files as IUppyFiles
     return files
   }
-  get filesArray() {
-    return Object.values(this.files).map((meta) => meta.data) as File[]
+  const filesArray = () => {
+    return Object.values(files()).map((meta) => meta.data) as File[]
   }
 
   // when upload button clicked just want to clise modal and reflect files
-  uploadTriggered() {
-    this.toggleModal()
-    return this.files
+  const uploadTriggered = () => {
+    toggleModal()
+    return files()
   }
 
-  toggleModal() {
-    this.setState({
-      open: !this.state.open,
-    })
-    this.triggerCallback()
+  const toggleModal = () => {
+    setState((state) => ({ open: !state.open }))
+    triggerCallback()
   }
   // reflect changes to current files whenever modal open or closed
-  triggerCallback() {
-    if (this.props.onFilesChange) {
-      this.props.onFilesChange(this.filesArray)
+  const triggerCallback = () => {
+    if (props.onFilesChange) {
+      props.onFilesChange(filesArray())
     }
   }
-  // TODO - split into own component
-  renderFilePreview(file: File) {
-    return <div key={file.name}>{file.name}</div>
-  }
 
-  render() {
-    const showFileList = this.filesArray.length > 0
-    return (
-      <>
-        <Flex sx={{ flexDirection: 'column', justifyContent: 'center' }}>
-          {showFileList ? (
-            <>
-              <Button
-                onClick={() => this.toggleModal()}
-                icon="upload"
-                variant="outline"
-                mb={1}
-                data-cy={this.props['data-cy']}
-              >
-                Add Files
-              </Button>
-              {this.filesArray.map((file) => (
-                <DownloadStaticFile
-                  key={file.name}
-                  file={file}
-                  allowDownload={false}
-                />
-              ))}
-            </>
-          ) : (
-            <Button
-              icon="upload"
-              onClick={() => this.toggleModal()}
-              type="button"
-              variant="outline"
-              data-cy={this.props['data-cy']}
-            >
-              Upload Files
-            </Button>
-          )}
-          <DashboardModal
-            proudlyDisplayPoweredByUppy={false}
-            uppy={this.uppy}
-            open={this.state.open}
-            data-cy="uppy-dashboard"
-            closeModalOnClickOutside
-            onRequestClose={() => this.toggleModal()}
-          />
-        </Flex>
-      </>
-    )
-  }
+  const showFileList = filesArray().length > 0
+
+  return (
+    <Flex sx={{ flexDirection: 'column', justifyContent: 'center' }}>
+      {showFileList ? (
+        <>
+          <Button
+            onClick={() => toggleModal()}
+            icon="upload"
+            variant="outline"
+            mb={1}
+            data-cy={props['data-cy']}
+          >
+            Add Files
+          </Button>
+          {filesArray().map((file) => (
+            <DownloadStaticFile
+              key={file.name}
+              file={file}
+              allowDownload={false}
+            />
+          ))}
+        </>
+      ) : (
+        <Button
+          icon="upload"
+          onClick={() => toggleModal()}
+          type="button"
+          variant="outline"
+          data-cy={props['data-cy']}
+        >
+          Upload Files
+        </Button>
+      )}
+      <DashboardModal
+        proudlyDisplayPoweredByUppy={false}
+        uppy={uppy}
+        open={state.open}
+        data-cy="uppy-dashboard"
+        closeModalOnClickOutside
+        onRequestClose={() => toggleModal()}
+      />
+    </Flex>
+  )
 }

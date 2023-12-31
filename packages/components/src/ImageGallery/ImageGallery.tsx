@@ -63,11 +63,11 @@ export const ImageGallery = (props: ImageGalleryProps) => {
 
   useEffect(() => {
     const images = (props.images || []).filter((img) => img !== null)
-    setState({
+    setState((state) => ({
       ...state,
       activeImageIndex: 0,
       images: images,
-    })
+    }))
 
     // Initializes the Photoswipe lightbox to use the provided images
     lightbox.current = new PhotoSwipeLightbox({
@@ -103,7 +103,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
       lightbox.current?.destroy()
       lightbox.current = undefined
     }
-  }, [props.images])
+  }, [props.images, props.photoSwipeOptions])
 
   const setActive = (imageIndex: number) => {
     setState({

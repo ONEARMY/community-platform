@@ -31,7 +31,7 @@ export const NotificationList = (props: Props) => {
   const sx = props.sx || {}
   useEffect(() => {
     notifications.length && markAllNotified && markAllNotified()
-  }, [])
+  }, [notifications, markAllNotified])
 
   return (
     <Card sx={{ padding: 2, maxHeight: 310, overflowY: 'auto', ...sx }}>

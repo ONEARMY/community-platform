@@ -1,49 +1,43 @@
-import * as React from 'react'
-import { observer, inject } from 'mobx-react'
+import React, { useEffect, useState } from 'react'
+import { observer } from 'mobx-react'
 import { Heading, Text, Box, Flex } from 'theme-ui'
 import { Field } from 'react-final-form'
 import { Button, FieldTextarea, MapWithDraggablePin } from 'oa-components'
 
 import { FlexSectionContainer } from './elements'
-import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { required } from 'src/utils/validators'
 import { randomIntFromInterval } from 'src/utils/helpers'
 import { MAX_PIN_LENGTH } from 'src/pages/UserSettings/constants'
 import { buttons, headings, fields } from 'src/pages/UserSettings/labels'
+import { useCommonStores } from 'src/index'
 
 import type { ILocation } from 'src/models/common.models'
-import type { UserStore } from 'src/stores/User/user.store'
 
 interface IState {
   showAddressEdit: boolean
   hasMapPin: boolean
 }
 
-@inject('mapsStore', 'userStore')
-@observer
-export class MemberMapPinSection extends React.Component<any, IState> {
-  pinFilters = MAP_GROUPINGS
-  constructor(props) {
-    super(props)
-    this.state = {
+interface IProps {
+  toggleLocationDropdown: () => void
+  children: React.ReactNode | React.ReactNode[]
+}
+
+export const MemberMapPinSection = observer(
+  ({ children, toggleLocationDropdown }: IProps) => {
+    const { userStore } = useCommonStores().stores
+    const [state, setState] = useState<IState>({
       showAddressEdit: true,
       hasMapPin: false,
-    }
-  }
-
-  get injected() {
-    return this.props as {
-      userStore: UserStore
-    }
-  }
-
-  componentDidMount() {
-    this.setState({
-      hasMapPin: !!this.injected.userStore.user?.location?.latlng,
     })
-  }
 
-  render() {
+    useEffect(() => {
+      setState((state) => ({
+        ...state,
+        hasMapPin: !!userStore.user?.location?.latlng,
+      }))
+    }, [])
+
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
@@ -52,20 +46,23 @@ export class MemberMapPinSection extends React.Component<any, IState> {
           </Heading>
         </Flex>
 
-        {this.props.children}
+        {children}
 
         <Box>
           <Text mt={4} mb={4} sx={{ display: 'block' }}>
             {headings.map.description}
           </Text>
 
-          {!this.state.hasMapPin && (
+          {!state.hasMapPin && (
             <>
               <Button
                 data-cy="add-a-map-pin"
                 onClick={() => {
-                  this.props.toggleLocationDropdown()
-                  this.setState({ hasMapPin: !this.state.hasMapPin })
+                  toggleLocationDropdown()
+                  setState((state) => ({
+                    ...state,
+                    hasMapPin: !state.hasMapPin,
+                  }))
                 }}
               >
                 {buttons.map}
@@ -81,7 +78,7 @@ export class MemberMapPinSection extends React.Component<any, IState> {
             </>
           )}
 
-          {this.state.hasMapPin && (
+          {state.hasMapPin && (
             <>
               <Text mb={2} mt={4} sx={{ fontSize: 2, display: 'block' }}>
                 {fields.mapPinDescription.title}
@@ -146,10 +143,11 @@ export class MemberMapPinSection extends React.Component<any, IState> {
                           mt={4}
                           variant="outline"
                           onClick={() => {
-                            this.props.toggleLocationDropdown()
-                            this.setState({
+                            toggleLocationDropdown()
+                            setState((state) => ({
+                              ...state,
                               hasMapPin: false,
-                            })
+                            }))
                             props.input.onChange({
                               latlng: null,
                             })
@@ -167,5 +165,5 @@ export class MemberMapPinSection extends React.Component<any, IState> {
         </Box>
       </FlexSectionContainer>
     )
-  }
-}
+  },
+)

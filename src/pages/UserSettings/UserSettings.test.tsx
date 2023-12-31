@@ -13,6 +13,7 @@ const Theme = testingThemeStyles
 let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
 const mockGetPin = jest.fn()
 const mockUpdateUserBadge = jest.fn()
+let mockUser = FactoryUser({})
 
 jest.mock('src/index', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -22,6 +23,11 @@ jest.mock('src/index', () => ({
       userStore: {
         getUserProfile: mockGetUserProfile,
         updateUserBadge: mockUpdateUserBadge,
+        getUserEmail: jest.fn(),
+        user: mockUser,
+        updateStatus: {
+          Complete: false,
+        },
       },
       aggregationsStore: {
         aggregations: {
@@ -54,78 +60,78 @@ describe('UserSettings', () => {
   })
 
   it('displays user settings', async () => {
-    const user = FactoryUser()
+    mockUser = FactoryUser()
 
     // Act
-    const wrapper = await getWrapper(user)
+    const wrapper = await Wrapper(mockUser)
 
     // Assert
     expect(wrapper.getByText('Edit profile'))
   })
 
   it('displays one photo for member', async () => {
-    const user = FactoryUser({ profileType: 'member' })
+    mockUser = FactoryUser({ profileType: 'member' })
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(user)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(1)
   })
 
   it('displays four photos for collection point', async () => {
-    const user = FactoryUser({ profileType: 'collection-point' })
+    mockUser = FactoryUser({ profileType: 'collection-point' })
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(user)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
 
   it('displays four photos for community builder', async () => {
-    const user = FactoryUser({ profileType: 'community-builder' })
+    mockUser = FactoryUser({ profileType: 'community-builder' })
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(user)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
 
   it('displays four photos for machine builder', async () => {
-    const user = FactoryUser({ profileType: 'machine-builder' })
+    mockUser = FactoryUser({ profileType: 'machine-builder' })
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(user)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
 
   it('displays four photos for space', async () => {
-    const user = FactoryUser({ profileType: 'space' })
+    mockUser = FactoryUser({ profileType: 'space' })
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(user)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
 
   it('displays four photos for workspace', async () => {
-    const user = FactoryUser({ profileType: 'workspace' })
+    mockUser = FactoryUser({ profileType: 'workspace' })
     // Act
     let wrapper
     await act(async () => {
-      wrapper = await getWrapper(user)
+      wrapper = await Wrapper(mockUser)
     })
     expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
   })
 
   describe('map pin', () => {
     it('displays moderation comments to user', async () => {
-      const user = FactoryUser({ profileType: 'workspace' })
+      mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
           moderation: 'improvements-needed',
@@ -135,13 +141,13 @@ describe('UserSettings', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(user)
+        wrapper = await Wrapper(mockUser)
       })
       expect(wrapper.getByText('Moderator comment')).toBeInTheDocument()
     })
 
     it('does not show moderation comments for approved pin', async () => {
-      const user = FactoryUser({ profileType: 'workspace' })
+      mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
           moderation: 'accepted',
@@ -151,7 +157,7 @@ describe('UserSettings', () => {
       // Act
       let wrapper
       await act(async () => {
-        wrapper = await getWrapper(user)
+        wrapper = await Wrapper(mockUser)
       })
 
       expect(() => wrapper.getByText('Moderator comment')).toThrow()
@@ -159,7 +165,7 @@ describe('UserSettings', () => {
   })
 })
 
-const getWrapper = async (user) => {
+const Wrapper = async (user) => {
   const isAdmin = user.userRoles?.includes('admin')
 
   return render(

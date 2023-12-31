@@ -1,4 +1,3 @@
-import { format } from 'date-fns'
 import React, { useState, useEffect, Fragment } from 'react'
 import type { IHowtoDB } from 'src/models/howto.models'
 import {
@@ -47,7 +46,7 @@ import {
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { UserNameTag } from 'src/pages/common/UserNameTag/UserNameTag'
+import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }
@@ -134,19 +133,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     } catch (err) {
       logger.error(err)
       // at least log the error
-    }
-  }
-
-  const dateContentModifiedText = (howto: IHowtoDB): string => {
-    const contentModifiedDate = format(
-      new Date(howto._contentModifiedTimestamp || howto._modified),
-      'DD-MM-YYYY',
-    )
-    const creationDate = format(new Date(howto._created), 'DD-MM-YYYY')
-    if (contentModifiedDate !== creationDate) {
-      return `Last edit on ${contentModifiedDate}`
-    } else {
-      return ''
     }
   }
 
@@ -249,27 +235,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
               <Flex sx={{ flexDirection: 'column' }}>
-                <UserNameTag
+                <ContentAuthorTimestamp
                   userName={howto._createdBy}
                   countryCode={howto.creatorCountry}
                   created={howto._created}
+                  modified={howto._contentModifiedTimestamp || howto._modified}
                   action="Published"
                 />
-
-                <Text
-                  variant="auxiliary"
-                  sx={{
-                    color: 'lightgrey',
-                    '&!important': {
-                      color: 'lightgrey',
-                    },
-                  }}
-                  mt={1}
-                  mb={2}
-                >
-                  {dateContentModifiedText(howto)}
-                </Text>
-
                 <Heading mt={2} mb={1}>
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {capitalizeFirstLetter(howto.title)}

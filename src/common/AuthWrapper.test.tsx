@@ -3,19 +3,25 @@ import { AuthWrapper } from './AuthWrapper' // adjust this import according to y
 import { FactoryUser } from 'src/test/factories/User'
 import type { UserStore } from 'src/stores/User/user.store'
 
+const mockUser = FactoryUser({
+  userRoles: ['admin'],
+})
+
+jest.mock('src/index', () => ({
+  __esModule: true,
+  useCommonStores: () => ({
+    stores: {
+      userStore: {
+        user: mockUser,
+      } as UserStore,
+    },
+  }),
+}))
+
 describe('AuthWrapper', () => {
   it('renders child components when user is authorized with role array', () => {
     const { getByText } = render(
-      <AuthWrapper
-        userStore={
-          {
-            user: FactoryUser({
-              userRoles: ['admin'],
-            }),
-          } as UserStore
-        }
-        roleRequired={['admin']}
-      >
+      <AuthWrapper roleRequired={['admin']}>
         <div>Test Content</div>
       </AuthWrapper>,
     )
@@ -24,16 +30,7 @@ describe('AuthWrapper', () => {
 
   it('renders child components when user is authorized with role string', () => {
     const { getByText } = render(
-      <AuthWrapper
-        userStore={
-          {
-            user: FactoryUser({
-              userRoles: ['admin'],
-            }),
-          } as UserStore
-        }
-        roleRequired={'admin'}
-      >
+      <AuthWrapper roleRequired={'admin'}>
         <div>Test Content</div>
       </AuthWrapper>,
     )
@@ -42,16 +39,7 @@ describe('AuthWrapper', () => {
 
   it('renders child components when user exists but no roles specified', () => {
     const { getByText } = render(
-      <AuthWrapper
-        userStore={
-          {
-            user: FactoryUser({
-              userRoles: ['admin'],
-            }),
-          } as UserStore
-        }
-        roleRequired={[]}
-      >
+      <AuthWrapper roleRequired={[]}>
         <div>Test Content</div>
       </AuthWrapper>,
     )
@@ -61,13 +49,6 @@ describe('AuthWrapper', () => {
   it('renders fallback when user is not authorized', () => {
     const { getByText } = render(
       <AuthWrapper
-        userStore={
-          {
-            user: FactoryUser({
-              userRoles: ['admin'],
-            }),
-          } as UserStore
-        }
         roleRequired="super-admin"
         fallback={<div>Fallback Content</div>}
       >

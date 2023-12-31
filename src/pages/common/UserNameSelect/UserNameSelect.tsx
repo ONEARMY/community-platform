@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { uniq } from 'lodash'
 import { useCommonStores } from 'src/index'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
@@ -37,14 +38,14 @@ export const UserNameSelect = observer(
       } else {
         const usersStartingWithInput: IUserPP[] =
           await userStore.getUsersStartingWith(inputVal, 20)
-        const selectOptions = usersStartingWithInput
-          .map((user) => user.userName)
-          .filter((user) => user && user.startsWith(inputVal))
-          .map((user) => ({
-            value: user,
-            label: user,
-          }))
-        setOptions(selectOptions)
+        const uniqueUsernames: string[] = uniq(
+          usersStartingWithInput.map((user) => user.userName),
+        )
+        const selectOptions = uniqueUsernames.map((user) => ({
+          value: user,
+          label: user,
+        }))
+        setOptions(uniq(selectOptions))
       }
     }
 

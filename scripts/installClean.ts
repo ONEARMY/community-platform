@@ -2,7 +2,7 @@ import { spawnSync } from 'child_process'
 import globby from 'globby'
 import path from 'path'
 import fs from 'fs'
-import rimraf from 'rimraf'
+import { rimrafSync } from 'rimraf'
 
 const REPO_SRC = path.resolve(__dirname, '../')
 
@@ -35,13 +35,5 @@ async function installClean() {
 installClean()
 
 async function deleteFolder(folderPath: string) {
-  return new Promise<void>((resolve, reject) => {
-    rimraf(folderPath, { disableGlob: true }, (err) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve()
-      }
-    })
-  })
+  return await rimrafSync(folderPath, { glob: false })
 }

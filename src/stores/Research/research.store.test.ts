@@ -781,11 +781,10 @@ describe('research.store', () => {
 
   describe('Subscribe', () => {
     it('adds subscriber to the research article', async () => {
-      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
-        {
+      const { store, researchItem, updateFn } =
+        await factoryResearchItemFormInput({
           subscribers: ['existing-subscriber'],
-        },
-      )
+        })
 
       // Act
       await store.addSubscriberToResearchArticle(
@@ -794,37 +793,23 @@ describe('research.store', () => {
       )
 
       // Assert
-      expect(setFn).toHaveBeenCalledTimes(1)
-      const [newResearchItem] = setFn.mock.calls[0]
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = updateFn.mock.calls[0]
       expect(newResearchItem).toEqual(
         expect.objectContaining({
-          subscribers: ['an-interested-user', 'existing-subscriber'],
+          subscribers: expect.arrayContaining([
+            'an-interested-user',
+            'existing-subscriber',
+          ]),
         }),
       )
     })
 
-    it('does not add a duplicate subscriber to the research article', async () => {
-      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
-        {
-          subscribers: ['a-very-interested-user'],
-        },
-      )
-
-      // Act
-      await store.addSubscriberToResearchArticle(
-        researchItem._id,
-        'a-very-interested-user',
-      )
-
-      expect(setFn).not.toBeCalled()
-    })
-
     it('removes subscriber from the research article', async () => {
-      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
-        {
+      const { store, researchItem, updateFn } =
+        await factoryResearchItemFormInput({
           subscribers: ['long-term-subscriber', 'remove-me'],
-        },
-      )
+        })
 
       // Act
       await store.removeSubscriberFromResearchArticle(
@@ -833,8 +818,8 @@ describe('research.store', () => {
       )
 
       // Assert
-      expect(setFn).toHaveBeenCalledTimes(1)
-      const [newResearchItem] = setFn.mock.calls[0]
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = updateFn.mock.calls[0]
       expect(newResearchItem).toEqual(
         expect.objectContaining({
           subscribers: ['long-term-subscriber'],

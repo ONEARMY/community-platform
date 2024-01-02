@@ -1,6 +1,13 @@
+import type {
+  DBDoc,
+  IComment,
+  IModerable,
+  ISelectedTags,
+  ISharedFeatures,
+  UserMention,
+} from '.'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
-import type { DBDoc, IComment, IModerable, ISelectedTags, UserMention } from '.'
 import type { IResearchCategory } from './researchCategories.model'
 
 /**
@@ -36,7 +43,6 @@ export namespace IResearch {
     collaborators: string[]
     subscribers?: UserIdList
     locked?: ResearchDocumentLock
-    votesUseful?: UserIdList
   } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */
@@ -55,7 +61,7 @@ export namespace IResearch {
     locked?: ResearchDocumentLock
   }
 
-  export interface FormInput extends IModerable {
+  export interface FormInput extends IModerable, ISharedFeatures {
     title: string
     description: string
     researchCategory?: IResearchCategory

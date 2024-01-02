@@ -29,7 +29,13 @@ type ResearchDocumentLockInformation = {
 
 type ResearchDocumentLock = ResearchDocumentLockInformation | null
 
-export type ResearchStatus = 'In progress' | 'Complete' | 'Archived'
+export const researchStatusOptions = [
+  'In progress',
+  'Complete',
+  'Archived',
+] as const
+
+export type ResearchStatus = typeof researchStatusOptions[number]
 
 type UserIdList = UserId[]
 

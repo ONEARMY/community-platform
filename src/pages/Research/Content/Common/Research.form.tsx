@@ -36,6 +36,8 @@ import {
 import { buttons, headings, overview } from '../../labels'
 import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
 
+import type { RouteComponentProps } from 'react-router'
+import { researchStatusOptions } from 'src/models/research.models'
 import type { IResearch } from 'src/models/research.models'
 import { SelectField } from 'src/common/Form/Select.field'
 
@@ -70,6 +72,11 @@ const calculatedFields = createDecorator({
     slug: (title) => stripSpecialCharacters(title).toLowerCase(),
   },
 })
+
+const statusOptions = researchStatusOptions.map((status) => ({
+  label: status,
+  value: status,
+}))
 
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
@@ -330,19 +337,15 @@ const ResearchForm = observer((props: IProps) => {
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel>
                                 {researchStatus.title}
+                                {' *'}
                               </ResearchFormLabel>
                               <Field
                                 name="researchStatus"
                                 component={SelectField}
                                 placeholder={researchStatus.placeholder}
-                                options={[
-                                  {
-                                    label: 'In progress',
-                                    value: 'In progress',
-                                  },
-                                  { label: 'Complete', value: 'Complete' },
-                                  { label: 'Archived', value: 'Archived' },
-                                ]}
+                                options={statusOptions}
+                                validate={composeValidators(required)}
+                                defaultValue={'In progress'}
                               />
                             </Flex>
                           </Flex>

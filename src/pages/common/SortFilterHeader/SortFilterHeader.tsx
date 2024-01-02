@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'oa-components'
+<<<<<<< HEAD
+=======
+import { researchStatusOptions } from 'src/models'
+import type { ResearchStatus } from 'src/models'
+
+>>>>>>> 8bae0d151 (feat: add research status filter)
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
@@ -39,6 +45,12 @@ const getQueryParam = (
   const Url = new URL(url)
   const params = new URLSearchParams(Url.search)
   return params.get(key) ?? defaultValue
+}
+
+const isResearchStore = (
+  obj: ResearchStore | HowtoStore,
+): obj is ResearchStore => {
+  return (obj as ResearchStore).updateSelectedStatus !== undefined
 }
 
 interface SortFilterHeaderProps {
@@ -86,6 +98,15 @@ export const SortFilterHeader = ({
 
   const urlSelectedAuthor = getQueryParam(window.location.href, 'author', null)
   if (urlSelectedAuthor) currentStore.updateSelectedAuthor(urlSelectedAuthor)
+
+  const statusOptions = researchStatusOptions.map((status) => ({
+    label: status,
+    value: status,
+  }))
+
+  const urlSelectedStatus = getQueryParam(window.location.href, 'status', null)
+  if (urlSelectedStatus && isResearchStore(currentStore))
+    currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
 
   const _inputStyle = {
     width: ['100%', '100%', '200px'],
@@ -162,6 +183,34 @@ export const SortFilterHeader = ({
           />
         </FieldContainer>
       </Flex>
+      {isResearchStore(currentStore) && (
+        <Flex sx={_inputStyle}>
+          <FieldContainer>
+            <Select
+              options={statusOptions}
+              placeholder="Filter by status"
+              value={
+                (currentStore as ResearchStore).selectedStatus
+                  ? {
+                      label: currentStore.selectedStatus,
+                      value: currentStore.selectedStatus,
+                    }
+                  : null
+              }
+              onChange={(status) => {
+                updateQueryParams(
+                  window.location.href,
+                  'status',
+                  status ? status.value : '',
+                  history,
+                )
+                currentStore.updateSelectedStatus(status?.value ?? null)
+              }}
+              isClearable={true}
+            />
+          </FieldContainer>
+        </Flex>
+      )}
       <Flex sx={_inputStyle}>
         <Input
           variant="inputOutline"

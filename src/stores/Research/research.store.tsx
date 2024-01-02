@@ -10,6 +10,11 @@ import {
 } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+<<<<<<< HEAD
+=======
+import type { IComment, IUser, ResearchStatus } from 'src/models'
+import type { IConvertedFileMeta } from 'src/types'
+>>>>>>> 8bae0d151 (feat: add research status filter)
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
@@ -57,6 +62,9 @@ export class ResearchStore extends ModuleStore {
 
   @observable
   public selectedAuthor: string
+
+  @observable
+  public selectedStatus: string
 
   @observable
   public searchValue: string
@@ -123,13 +131,20 @@ export class ResearchStore extends ModuleStore {
     this.selectedAuthor = author
   }
 
+  public updateSelectedStatus(status: ResearchStatus) {
+    this.selectedStatus = status
+  }
+
   @computed get filteredResearches() {
     const researches = this.filterSorterDecorator.filterByCategory(
       this.allResearchItems,
       this.selectedCategory,
     )
 
-    let validResearches = filterModerableItems(researches, this.activeUser)
+    let validResearches = filterModerableItems(
+      researches,
+      this.activeUser || undefined,
+    )
 
     validResearches = validResearches.filter((research) => {
       return research.researchStatus !== 'Archived'
@@ -145,10 +160,15 @@ export class ResearchStore extends ModuleStore {
       this.selectedAuthor,
     )
 
+    validResearches = this.filterSorterDecorator.filterByStatus(
+      validResearches,
+      this.selectedStatus as ResearchStatus,
+    )
+
     return this.filterSorterDecorator.sort(
       this.activeSorter,
       validResearches,
-      this.activeUser,
+      this.activeUser || undefined,
     )
   }
 
@@ -301,7 +321,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public async moderateResearch(research: IResearch.ItemDB) {
-    if (!hasAdminRights(toJS(this.activeUser))) {
+    if (!hasAdminRights(toJS(this.activeUser || undefined))) {
       return false
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
@@ -309,7 +329,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public needsModeration(research: IResearch.ItemDB) {
-    return needsModeration(research, toJS(this.activeUser))
+    return needsModeration(research, toJS(this.activeUser || undefined))
   }
 
   public updateSearchValue(query: string) {

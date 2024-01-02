@@ -5,15 +5,15 @@ title: Start Contributing
 
 ## What is my role?
 
-By default we consider everyone that submits a Pull request (PR) to be a contributor. People that contribute regularly and want to get more involved can become maintainers to help new contributors. People here for the long term are core maintainers and work on the core of the platform. Here is an overview of the roles
+By default we consider everyone that submits a pull request (PR) to be a contributor. People that contribute regularly and want to get more involved can become maintainers to help new contributors. People here for the long term are core maintainers and work on the core of the platform. Here is an overview of the roles
 
 | Role                  | Payment       | Requirements                                      | Tasks                                                                                                      |
 | --------------------- | ------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **🤙 Contributor**    | Bounty System | Submit a PR                                       | Resolves issues by submitting Pull Requests                                                                |
+| **🤙 Contributor**    | Bounty System | Submit a PR                                       | Resolves issues by submitting pull requests                                                                |
 | **⚡️ Maintainer**    | Bounty System | Minimum 3 merged PR's + chat with core maintainer | Review basic PR's, help contributors & improve documentation                                                |
-| **💻 Core Maintainer** | Hourly scale  | Minimum 3 months maintainer                       | Review complex PR's, Improve code quality, Devops, optimisations, Security, general updates & Documentation |
+| **🔧 Core Maintainer** | Hourly scale  | Minimum 3 months maintainer                       | Review complex PR's, improve code quality, devops, optimisations, security, general updates & documentation |
 
-### 🤙 Items Contributors do:
+### 🤙 Things that Contributors do:
 
 #### Pick up issues
 
@@ -23,7 +23,7 @@ By default we consider everyone that submits a Pull request (PR) to be a contrib
 4. Read our [contribution guidelines](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md).
 5. Bonus: Add [tests](/Testing/end-to-end).
 
-### ⚡️ Items Maintainers do:
+### ⚡️ Things that Maintainers do:
 
 #### Review incoming code from Contributors
 
@@ -36,9 +36,9 @@ By default we consider everyone that submits a Pull request (PR) to be a contrib
 7. If there is a [bounty](/Contributing/bounties) label on the PR you can get it for reviewing.
 8. Bonus: Ask for integrating tests.
 
-### 💻 Items Core Maintainers do:
+### 🔧 Things that Core Maintainers do:
 
-#### Review complex PRs & Release Changes
+#### Review complex PRs & release changes
 
 There is a workflow for deploying code changes from development to production environments. It ensures proper review, testing, and versioning before reaching production sites.
 
@@ -68,7 +68,7 @@ Each role gets paid a bit differently. Contributors and maintainers get paid acc
 
 ## Onboarding checklist
 
-| Tasks                                                                                                                                                      | 🤙 Contributor | ⚡️ Maintainer |  💻 Core Maintainer |
+| Tasks                                                                                                                                                      | 🤙 Contributor | ⚡️ Maintainer |  🔧 Core Maintainer |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ----------------- |
 | Invite to [Discord](https://discord.gg/gJ7Yyk4) #development                                                                                               | ☑️             | ☑️             | ☑️                |
 | Send link to [bounty](/Contributing/bounties) system                                                                                                       | ☑️             | ☑️             | ☑️                |

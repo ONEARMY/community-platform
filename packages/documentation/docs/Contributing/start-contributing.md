@@ -7,10 +7,10 @@ title: Start Contributing
 
 By default we consider everyone that submits a pull request (PR) to be a contributor. People that contribute regularly and want to get more involved can become maintainers to help new contributors. People here for the long term are core maintainers and work on the core of the platform. Here is an overview of the roles
 
-| Role                  | Payment       | Requirements                                      | Tasks                                                                                                      |
-| --------------------- | ------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **🤙 Contributor**    | Bounty System | Submit a PR                                       | Resolves issues by submitting pull requests                                                                |
-| **⚡️ Maintainer**    | Bounty System | Minimum 3 merged PR's + chat with core maintainer | Review basic PR's, help contributors & improve documentation                                                |
+| Role                   | Payment       | Requirements                                      | Tasks                                                                                                       |
+| ---------------------- | ------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **🤙 Contributor**     | Bounty System | Submit a PR                                       | Resolves issues by submitting pull requests                                                                 |
+| **⚡️ Maintainer**     | Bounty System | Minimum 3 merged PR's + chat with core maintainer | Review basic PR's, help contributors & improve documentation                                                |
 | **🔧 Core Maintainer** | Hourly scale  | Minimum 3 months maintainer                       | Review complex PR's, improve code quality, devops, optimisations, security, general updates & documentation |
 
 ### 🤙 Things that Contributors do:
@@ -68,15 +68,15 @@ Each role gets paid a bit differently. Contributors and maintainers get paid acc
 
 ## Onboarding checklist
 
-| Tasks                                                                                                                                                      | 🤙 Contributor | ⚡️ Maintainer |  🔧 Core Maintainer |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ----------------- |
-| Invite to [Discord](https://discord.gg/gJ7Yyk4) #development                                                                                               | ☑️             | ☑️             | ☑️                |
-| Send link to [bounty](/Contributing/bounties) system                                                                                                       | ☑️             | ☑️             | ☑️                |
-| Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                         |                | ☑️             | ☑️                |
-| Add maintainer status using [All contributors ](#recognising-contributors)                                                                                 |                | ☑️             | ☑️                |
-| Get on a video call                                                                                                                                        |                | ☑️             | ☑️                |
-| Explain hourly rate vs bounty system                                                                                                                       |                | ☑️             | ☑️                |
-| Add GitHub [core maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                    |                |                | ☑️                |
-| Add core-maintainer status using [All contributors ](#recognising-contributors)                                                                            |                |                | ☑️                |
-| Invite to Google Analytics                                                                                                                                 |                |                | ☑️                |
-| Invite to **Firebase** projects: Precious Plastic PROD, Precious Plastic DEV, Project Kamp PROD, Project Kamp DEV, Fixing Fashion PROD, Fixing Fashion DEV |                |                | ☑️                |
+| Tasks                                                                                                                                                      | 🤙 Contributor | ⚡️ Maintainer | 🔧 Core Maintainer |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------ |
+| Invite to [Discord](https://discord.gg/gJ7Yyk4) #development                                                                                               | ☑️             | ☑️             | ☑️                 |
+| Send link to [bounty](/Contributing/bounties) system                                                                                                       | ☑️             | ☑️             | ☑️                 |
+| Add GitHub [maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                         |                | ☑️             | ☑️                 |
+| Add maintainer status using [All contributors ](#recognising-contributors)                                                                                 |                | ☑️             | ☑️                 |
+| Get on a video call                                                                                                                                        |                | ☑️             | ☑️                 |
+| Explain hourly rate vs bounty system                                                                                                                       |                | ☑️             | ☑️                 |
+| Add GitHub [core maintainer permissions](https://github.com/ONEARMY/community-platform/settings/access)                                                    |                |                | ☑️                 |
+| Add core-maintainer status using [All contributors ](#recognising-contributors)                                                                            |                |                | ☑️                 |
+| Invite to Google Analytics                                                                                                                                 |                |                | ☑️                 |
+| Invite to **Firebase** projects: Precious Plastic PROD, Precious Plastic DEV, Project Kamp PROD, Project Kamp DEV, Fixing Fashion PROD, Fixing Fashion DEV |                |                | ☑️                 |

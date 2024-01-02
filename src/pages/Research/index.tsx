@@ -5,13 +5,15 @@ import {
 } from 'src/stores/Research/research.store'
 import type { IPageMeta } from '../PageList'
 import ResearchRoutes from './research.routes'
+import { useCommonStores } from '../../index'
 
 /**
  * Wraps the research module routing elements with the research module provider
  */
 const ResearchModuleContainer = () => {
+  const rootStore = useCommonStores()
   return (
-    <ResearchStoreContext.Provider value={new ResearchStore()}>
+    <ResearchStoreContext.Provider value={new ResearchStore(rootStore)}>
       <ResearchRoutes />
     </ResearchStoreContext.Provider>
   )

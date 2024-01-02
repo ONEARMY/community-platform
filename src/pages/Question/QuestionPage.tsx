@@ -1,4 +1,9 @@
-import { Loader, ModerationStatus, UsefulStatsButton } from 'oa-components'
+import {
+  Loader,
+  ModerationStatus,
+  UsefulStatsButton,
+  FollowButton,
+} from 'oa-components'
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import type { IQuestion } from 'src/models'
@@ -13,24 +18,38 @@ export const QuestionPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [question, setQuestion] = useState<IQuestion.Item | undefined>()
   const [isEditable, setIsEditable] = useState(false)
+  const [hasUserSubscribed, setHasUserSubscribed] = useState(false)
 
   useEffect(() => {
     const fetchQuestions = async () => {
       if (slug) {
-        const question: any = await store.fetchQuestionBySlug(slug)
-        store.activeQuestionItem = question || null
-        setQuestion(question || null)
+        const foundQuestion: any = await store.fetchQuestionBySlug(slug)
+        store.activeQuestionItem = foundQuestion || null
 
-        if (store.activeUser) {
-          setIsEditable(isAllowedToEditContent(question, store.activeUser))
+        if (isLoading) {
+          setQuestion(foundQuestion || null)
+
+          if (store.activeUser) {
+            setIsEditable(
+              isAllowedToEditContent(foundQuestion, store.activeUser),
+            )
+          }
         }
+
+        setHasUserSubscribed(
+          foundQuestion?.subscribers?.includes(store.activeUser?.userName),
+        )
       }
 
       setIsLoading(false)
     }
 
     fetchQuestions()
-  }, [isLoading, question])
+
+    return () => {
+      setIsLoading(false)
+    }
+  }, [slug])
 
   const onUsefulClick = async () => {
     if (!store.activeUser?.userName) {
@@ -45,18 +64,35 @@ export const QuestionPage = () => {
     }
   }
 
+  const isLoggedIn = store.activeUser ? true : false
+  const onFollowClick = () => {
+    if (question) {
+      store.toggleSubscriberStatusByUserName(
+        question._id,
+        store.activeUser?.userName,
+      )
+      setHasUserSubscribed(!hasUserSubscribed)
+    }
+    return null
+  }
+
   return (
     <Box sx={{ p: 7 }}>
       {isLoading ? (
         <Loader />
       ) : question ? (
         <Card sx={{ mt: 4, p: 4, position: 'relative' }}>
-          <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
+          <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
             <UsefulStatsButton
               votedUsefulCount={store.votedUsefulCount}
               hasUserVotedUseful={store.userVotedActiveQuestionUseful}
               isLoggedIn={store.activeUser ? true : false}
               onUsefulClick={onUsefulClick}
+            />
+            <FollowButton
+              hasUserSubscribed={hasUserSubscribed}
+              isLoggedIn={isLoggedIn ? true : false}
+              onFollowClick={onFollowClick}
             />
           </Flex>
           <ModerationStatus

@@ -1,13 +1,16 @@
 import { Button, Loader, ModerationStatus } from 'oa-components'
 import { useEffect, useState } from 'react'
-import { useQuestionStore } from 'src/stores/Question/question.store'
 import { Link } from 'react-router-dom'
 import { Card, Flex, Heading } from 'theme-ui'
+
+import { useQuestionStore } from 'src/stores/Question/question.store'
+
+import type { IQuestion } from 'src/models'
 
 export const QuestionListing = () => {
   const store = useQuestionStore()
   const [isLoading, setIsLoading] = useState(true)
-  const [questionList, setQuestionList] = useState([])
+  const [questionList, setQuestionList] = useState<IQuestion.Item[]>([])
 
   useEffect(() => {
     const fetchQuestions = async () => {

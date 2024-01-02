@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
 import { Box, Flex, Image } from 'theme-ui'
 import { Button } from 'oa-components'
@@ -87,11 +87,6 @@ interface IProps {
   multiple?: boolean
   dataTestId?: string
 }
-const defaultProps: IProps = {
-  dataTestId: 'image-input',
-  onFilesChange: () => null,
-  multiple: false,
-}
 
 interface IState {
   convertedFiles: IConvertedFileMeta[]
@@ -101,151 +96,151 @@ interface IState {
   openLightbox?: boolean
 }
 
-export class ImageInput extends React.Component<IProps, IState> {
-  static defaultProps = defaultProps
-  private fileInputRef = React.createRef<HTMLInputElement>()
-
-  public handleFileUpload = (filesToUpload: Array<File>) => {
-    this.setState({ inputFiles: filesToUpload })
-  }
-
-  constructor(props: IProps) {
-    super(props)
-    this.state = {
-      inputFiles: [],
-      convertedFiles: [],
-      presentFiles: this._getPresentFiles(props.value),
+/**
+ * As input can be both array or single object and either uploaded or converted meta,
+ * require extra function to separate out to handle preview of previously uploaded
+ */
+const _getPresentFiles = (
+  value: IProps['value'] = [],
+): IState['presentFiles'] => {
+  const valArray = Array.isArray(value) ? value : [value]
+  return valArray.filter((value) => {
+    if (Object.prototype.hasOwnProperty.call(value, 'downloadUrl')) {
+      return value as IUploadedFileMeta
     }
+    if (Object.prototype.hasOwnProperty.call(value, 'objectUrl')) {
+      return value as File
+    }
+  })
+}
+
+const _setSrc = (file): string => {
+  if (file === undefined) return ''
+  if (file.downloadUrl as IUploadedFileMeta) {
+    return file.downloadUrl
+  }
+  if (file.photoData as File) {
+    return URL.createObjectURL(file.photoData)
+  }
+  return ''
+}
+
+export const ImageInput = (props: IProps) => {
+  const { dataTestId, multiple } = props
+  const [state, setState] = useState<IState>({
+    inputFiles: [],
+    convertedFiles: [],
+    presentFiles: _getPresentFiles(props.value),
+  })
+  const { presentFiles } = state
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
+
+  const handleFileUpload = (filesToUpload: Array<File>) => {
+    setState((state) => ({ ...state, inputFiles: filesToUpload }))
   }
 
-  get inputFiles() {
-    const filesRef = this.fileInputRef.current as HTMLInputElement
-    const files = filesRef.files
-    return files ? Array.from(files) : []
-  }
-
-  public handleConvertedFileChange(file: IConvertedFileMeta, index: number) {
-    const { convertedFiles } = this.state
+  const handleConvertedFileChange = (
+    file: IConvertedFileMeta,
+    index: number,
+  ) => {
+    const { convertedFiles } = state
     convertedFiles[index] = file
-    this.setState({
+    setState((state) => ({
+      ...state,
       convertedFiles,
-    })
-    const value = this.props.multiple ? convertedFiles : convertedFiles[0]
-    this.props.onFilesChange(value)
+    }))
+    const value = props.multiple ? convertedFiles : convertedFiles[0]
+    props.onFilesChange(value)
   }
 
-  public handleImageDelete(event: Event) {
+  const handleImageDelete = (event: Event) => {
     // TODO - handle case where a server image is deleted (remove from server)
     event.stopPropagation()
-    this.setState({
+    setState({
       inputFiles: [],
       convertedFiles: [],
       presentFiles: [],
     })
-    this.props.onFilesChange(null)
+    props.onFilesChange(null)
   }
 
-  componentDidUpdate(previousProps): void {
+  useEffect(() => {
     if (
-      JSON.stringify(this.props.value) !== JSON.stringify(previousProps.value)
+      JSON.stringify(props.value) !== JSON.stringify(prevPropsValue.current)
     ) {
-      this.setState({
-        presentFiles: this._getPresentFiles(this.props.value),
-      })
+      setState((state) => ({
+        ...state,
+        presentFiles: _getPresentFiles(props.value),
+      }))
     }
-  }
 
-  render() {
-    const { inputFiles, presentFiles } = this.state
-    const { dataTestId, multiple } = this.props
+    prevPropsValue.current = props.value
+  }, [props])
 
-    const hasImages = presentFiles.length > 0 || inputFiles.length > 0
-    const showUploadedImg = presentFiles.length > 0
-    const src = this._setSrc(presentFiles[0])
+  const hasImages = presentFiles.length > 0 || state.inputFiles.length > 0
+  const showUploadedImg = presentFiles.length > 0
+  const src = _setSrc(presentFiles[0])
 
-    return (
-      <Box p={0} sx={{ height: '100%' }}>
-        <Dropzone
-          accept="image/*"
-          multiple={multiple}
-          onDrop={this.handleFileUpload}
-        >
-          {({ getRootProps, getInputProps, rootRef }) => (
-            <ImageInputWrapper
-              ref={rootRef}
-              className={'image-input__wrapper'}
-              hasUploadedImg={showUploadedImg}
-              {...getRootProps()}
-            >
-              <input data-testid={dataTestId} {...getInputProps()} />
+  return (
+    <Box p={0} sx={{ height: '100%' }}>
+      <Dropzone accept="image/*" multiple={multiple} onDrop={handleFileUpload}>
+        {({ getRootProps, getInputProps, rootRef }) => (
+          <ImageInputWrapper
+            ref={rootRef}
+            className={'image-input__wrapper'}
+            hasUploadedImg={showUploadedImg}
+            {...getRootProps()}
+          >
+            <input
+              ref={fileInputRef}
+              data-testid={dataTestId}
+              {...getInputProps()}
+            />
 
-              {showUploadedImg && <Image src={src} />}
+            {showUploadedImg && <Image src={src} />}
 
-              {!showUploadedImg &&
-                inputFiles.map((file, index) => {
-                  return (
-                    <ImageConverter
-                      key={file.name}
-                      file={file}
-                      onImgConverted={(meta) =>
-                        this.handleConvertedFileChange(meta, index)
-                      }
-                    />
-                  )
-                })}
-              {!hasImages && (
-                <Button small variant="outline" icon="image">
-                  Upload Image
+            {!showUploadedImg &&
+              state.inputFiles.map((file, index) => {
+                return (
+                  <ImageConverter
+                    key={file.name}
+                    file={file}
+                    onImgConverted={(meta) =>
+                      handleConvertedFileChange(meta, index)
+                    }
+                  />
+                )
+              })}
+            {!hasImages && (
+              <Button small variant="outline" icon="image">
+                Upload Image
+              </Button>
+            )}
+
+            {hasImages && (
+              <UploadImageOverlay>
+                <Button
+                  data-cy="delete-image"
+                  data-testid="delete-image"
+                  small
+                  variant="secondary"
+                  icon="delete"
+                  onClick={(event) => handleImageDelete(event)}
+                >
+                  Delete
                 </Button>
-              )}
+              </UploadImageOverlay>
+            )}
+          </ImageInputWrapper>
+        )}
+      </Dropzone>
+    </Box>
+  )
+}
 
-              {hasImages && (
-                <UploadImageOverlay>
-                  <Button
-                    data-cy="delete-image"
-                    data-testid="delete-image"
-                    small
-                    variant="secondary"
-                    icon="delete"
-                    onClick={(event) => this.handleImageDelete(event)}
-                  >
-                    Delete
-                  </Button>
-                </UploadImageOverlay>
-              )}
-            </ImageInputWrapper>
-          )}
-        </Dropzone>
-      </Box>
-    )
-  }
-
-  /**
-   * As input can be both array or single object and either uploaded or converted meta,
-   * require extra function to separate out to handle preview of previously uploaded
-   */
-  private _getPresentFiles(
-    value: IProps['value'] = [],
-  ): IState['presentFiles'] {
-    const valArray = Array.isArray(value) ? value : [value]
-    return valArray.filter((value) => {
-      if (Object.prototype.hasOwnProperty.call(value, 'downloadUrl')) {
-        return value as IUploadedFileMeta
-      }
-      if (Object.prototype.hasOwnProperty.call(value, 'objectUrl')) {
-        return value as File
-      }
-    })
-  }
-
-  private _setSrc(file): string {
-    if (file === undefined) return ''
-    if (file.downloadUrl as IUploadedFileMeta) {
-      return file.downloadUrl
-    }
-    if (file.photoData as File) {
-      return URL.createObjectURL(file.photoData)
-    }
-    return ''
-  }
+ImageInput.defaultProps = {
+  dataTestId: 'image-input',
+  onFilesChange: () => null,
+  multiple: false,
 }

@@ -1,9 +1,8 @@
 import React from 'react'
 import { Button } from 'oa-components'
-import { observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 
-import { useCommonStores } from 'src/index'
+import { MobileMenuContext } from '../../MobileMenuContext'
 
 interface IProps {
   link: string
@@ -17,13 +16,13 @@ interface IProps {
   sx?: any
 }
 
-const ProfileButtonItem = observer((props: IProps) => {
-  const { mobileMenuStore } = useCommonStores().stores
+const ProfileButtonItem = (props: IProps) => {
+  const mobileMenuContext = React.useContext(MobileMenuContext)
 
   return (
     <Link to={props.link} style={{ minWidth: 'auto' }}>
       <Button
-        onClick={() => props.isMobile && mobileMenuStore.toggleMobilePanel()}
+        onClick={() => props.isMobile && mobileMenuContext.setIsVisible(false)}
         variant={props.variant}
         {...(props.isMobile ? { large: true } : {})}
         data-cy={props.text.toLowerCase()}
@@ -38,6 +37,6 @@ const ProfileButtonItem = observer((props: IProps) => {
       </Button>
     </Link>
   )
-})
+}
 
 export default ProfileButtonItem

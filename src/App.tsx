@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { observer, Provider } from 'mobx-react'
 import { ThemeProvider, Global } from '@emotion/react'
 import { GlobalStyles } from 'oa-components'
@@ -18,24 +18,17 @@ export const useCommonStores = () =>
 export const dbContext = React.createContext({ db: rootStore.dbV2 })
 export const useDB = () => React.useContext(dbContext)
 
-@observer
-export class App extends Component {
-  render() {
-    return (
-      <>
-        <Provider {...rootStore.stores}>
-          <ThemeProvider
-            theme={rootStore.stores.themeStore.currentTheme.styles}
-          >
-            <>
-              <ErrorBoundary>
-                <Pages />
-              </ErrorBoundary>
-              <Global styles={GlobalStyles} />
-            </>
-          </ThemeProvider>
-        </Provider>
-      </>
-    )
-  }
-}
+export const App = observer(() => {
+  return (
+    <Provider {...rootStore.stores}>
+      <ThemeProvider theme={rootStore.stores.themeStore.currentTheme.styles}>
+        <>
+          <ErrorBoundary>
+            <Pages />
+          </ErrorBoundary>
+          <Global styles={GlobalStyles} />
+        </>
+      </ThemeProvider>
+    </Provider>
+  )
+})

@@ -134,6 +134,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="http://ignasplace.com"><img src="https://avatars.githubusercontent.com/u/76262712?v=4?s=60" width="60px;" alt="Ignas"/><br /><sub><b>Ignas</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=IgnasPlace" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mariojsnunes"><img src="https://avatars.githubusercontent.com/u/8073622?v=4?s=60" width="60px;" alt="Mário Nunes"/><br /><sub><b>Mário Nunes</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=mariojsnunes" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/oktomus"><img src="https://avatars.githubusercontent.com/u/4656466?v=4?s=60" width="60px;" alt="Kevin Masson"/><br /><sub><b>Kevin Masson</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=oktomus" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.darigovresearch.com/"><img src="https://avatars.githubusercontent.com/u/30328618?v=4?s=60" width="60px;" alt="Darigov Research"/><br /><sub><b>Darigov Research</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=darigovresearch" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>

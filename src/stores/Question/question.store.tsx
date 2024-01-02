@@ -12,6 +12,7 @@ import {
   formatLowerNoSpecial,
   randomID,
 } from 'src/utils/helpers'
+import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 
 const COLLECTION_NAME = 'questions'
 
@@ -113,6 +114,15 @@ export class QuestionStore extends ModuleStore {
       : creatorCountry
       ? creatorCountry
       : ''
+  }
+
+  public async toggleSubscriberStatusByUserName(docId, userName) {
+    return toggleDocSubscriberStatusByUserName(
+      this.db,
+      COLLECTION_NAME,
+      docId,
+      userName,
+    )
   }
 
   private async _getQuestionItemBySlug(

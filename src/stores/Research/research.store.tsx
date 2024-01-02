@@ -33,6 +33,7 @@ import {
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 
 const COLLECTION_NAME = 'research'
 
@@ -193,19 +194,7 @@ export class ResearchStore extends ModuleStore {
     docId: string,
     userId: string,
   ): Promise<void> {
-    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
-
-    const researchData = await toJS(dbRef.get('server'))
-    if (researchData && !(researchData?.subscribers || []).includes(userId)) {
-      const updatedItem = await this._updateResearchItem(dbRef, {
-        ...researchData,
-        subscribers: [userId].concat(researchData?.subscribers || []),
-      })
-
-      if (updatedItem) {
-        this.setActiveResearchItemBySlug(updatedItem.slug)
-      }
-    }
+    await this._toggleSubscriber(docId, userId)
 
     return
   }
@@ -214,22 +203,7 @@ export class ResearchStore extends ModuleStore {
     docId: string,
     userId: string,
   ): Promise<void> {
-    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
-
-    const researchData = await toJS(dbRef.get('server'))
-    if (researchData) {
-      const updatedItem = await this._updateResearchItem(dbRef, {
-        ...researchData,
-        subscribers: (researchData?.subscribers || []).filter(
-          (id) => id !== userId,
-        ),
-      })
-
-      if (updatedItem) {
-        this.setActiveResearchItemBySlug(updatedItem.slug)
-      }
-    }
-
+    await this._toggleSubscriber(docId, userId)
     return
   }
 
@@ -1125,6 +1099,21 @@ export class ResearchStore extends ModuleStore {
     }
 
     return undefined
+  }
+
+  private async _toggleSubscriber(docId, userId) {
+    const updatedItem = await toggleDocSubscriberStatusByUserName(
+      this.db,
+      COLLECTION_NAME,
+      docId,
+      userId,
+    )
+
+    if (updatedItem) {
+      this.setActiveResearchItemBySlug(updatedItem.slug)
+    }
+
+    return updatedItem
   }
 }
 

@@ -143,7 +143,7 @@ export class ResearchStore extends ModuleStore {
 
     let validResearches = filterModerableItems(
       researches,
-      this.activeUser || undefined,
+      this.activeUser as IUser,
     )
 
     validResearches = validResearches.filter((research) => {
@@ -168,7 +168,7 @@ export class ResearchStore extends ModuleStore {
     return this.filterSorterDecorator.sort(
       this.activeSorter,
       validResearches,
-      this.activeUser || undefined,
+      this.activeUser as IUser,
     )
   }
 
@@ -321,7 +321,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public async moderateResearch(research: IResearch.ItemDB) {
-    if (!hasAdminRights(toJS(this.activeUser || undefined))) {
+    if (!hasAdminRights(toJS(this.activeUser as IUser))) {
       return false
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
@@ -329,7 +329,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public needsModeration(research: IResearch.ItemDB) {
-    return needsModeration(research, toJS(this.activeUser || undefined))
+    return needsModeration(research, toJS(this.activeUser as IUser))
   }
 
   public updateSearchValue(query: string) {

@@ -31,7 +31,7 @@ type ResearchDocumentLock = ResearchDocumentLockInformation | null
 
 export const researchStatusOptions = [
   'In progress',
-  'Complete',
+  'Completed',
   'Archived',
 ] as const
 

@@ -195,25 +195,34 @@ const ResearchDescription = ({
               )}
             </Flex>
             {research.researchStatus && (
-              <Text
+              <Flex
                 sx={{
-                  display: 'inline-block',
-                  verticalAlign: 'middle',
-                  color: 'black',
-                  fontSize: 3,
+                  marginBottom: 'auto',
+                  minWidth: '100px',
+                  borderRadius: 1,
+                  borderBottomRightRadius: 1,
+                  height: '44px',
                   background:
                     research.researchStatus === 'In progress'
                       ? 'accent.base'
-                      : research.researchStatus === 'Complete'
+                      : research.researchStatus === 'Completed'
                       ? 'betaGreen'
                       : 'lightgrey',
-                  padding: 2,
-                  borderRadius: 1,
-                  borderBottomRightRadius: 1,
                 }}
               >
-                {research.researchStatus}
-              </Text>
+                <Text
+                  sx={{
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: [2, 2, 3],
+                    padding: 2,
+                    margin: 'auto',
+                  }}
+                >
+                  {research.researchStatus}
+                </Text>
+              </Flex>
             )}
           </Flex>
           <Box mt={3} mb={2}>

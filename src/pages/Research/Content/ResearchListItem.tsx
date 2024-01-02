@@ -30,7 +30,22 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
   return (
-    <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
+    <Card
+      data-cy="ResearchListItem"
+      data-id={item._id}
+      mb={3}
+      sx={{
+        borderColor: [
+          item.researchStatus === 'In progress'
+            ? 'accent.base'
+            : item.researchStatus === 'Completed'
+            ? 'betaGreen'
+            : 'lightgrey',
+          'black',
+          'black',
+        ],
+      }}
+    >
       <Flex sx={{ width: '100%', position: 'relative' }}>
         <Link
           to={`/research/${encodeURIComponent(item.slug)}`}
@@ -65,15 +80,42 @@ const ResearchListItem = ({ item }: IProps) => {
                 alignItems: 'flex-start',
               }}
             >
-              <Heading
-                color={'black'}
-                mb={2}
-                sx={{
-                  fontSize: [3, 3, 4],
-                }}
-              >
-                {item.title}
-              </Heading>
+              <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
+                <Heading
+                  color={'black'}
+                  mb={2}
+                  sx={{
+                    fontSize: [3, 3, 4],
+                  }}
+                >
+                  {item.title}
+                </Heading>
+                {item.researchStatus && (
+                  <Text
+                    sx={{
+                      display: ['inline-block', 'none', 'none'],
+                      verticalAlign: 'middle',
+                      color: 'black',
+                      fontSize: 1,
+                      background:
+                        item.researchStatus === 'In progress'
+                          ? 'accent.base'
+                          : item.researchStatus === 'Completed'
+                          ? 'betaGreen'
+                          : 'lightgrey',
+                      padding: 1,
+                      borderRadius: 1,
+                      borderBottomRightRadius: 1,
+                      marginLeft: 4,
+                      marginBottom: 'auto',
+                      whiteSpace: 'nowrap',
+                      minWidth: '75px',
+                    }}
+                  >
+                    {item.researchStatus}
+                  </Text>
+                )}
+              </Flex>
               <Flex
                 sx={{
                   width: '100%',
@@ -123,20 +165,21 @@ const ResearchListItem = ({ item }: IProps) => {
                   {item.researchStatus && (
                     <Text
                       sx={{
-                        display: 'inline-block',
+                        display: ['none', 'inline-block', 'inline-block'],
                         verticalAlign: 'middle',
                         color: 'black',
                         fontSize: 1,
                         background:
                           item.researchStatus === 'In progress'
                             ? 'accent.base'
-                            : item.researchStatus === 'Complete'
+                            : item.researchStatus === 'Completed'
                             ? 'betaGreen'
                             : 'lightgrey',
                         padding: 1,
                         borderRadius: 1,
                         borderBottomRightRadius: 1,
-                        ml: 4,
+                        marginLeft: 4,
+                        whiteSpace: 'nowrap',
                       }}
                     >
                       {item.researchStatus}

@@ -194,36 +194,34 @@ const ResearchDescription = ({
                 </Fragment>
               )}
             </Flex>
-            {research.researchStatus && (
-              <Flex
+            <Flex
+              sx={{
+                marginBottom: 'auto',
+                minWidth: '100px',
+                borderRadius: 1,
+                borderBottomRightRadius: 1,
+                height: '44px',
+                background:
+                  research.researchStatus === 'Archived'
+                    ? 'lightgrey'
+                    : research.researchStatus === 'Completed'
+                    ? 'betaGreen'
+                    : 'accent.base',
+              }}
+            >
+              <Text
                 sx={{
-                  marginBottom: 'auto',
-                  minWidth: '100px',
-                  borderRadius: 1,
-                  borderBottomRightRadius: 1,
-                  height: '44px',
-                  background:
-                    research.researchStatus === 'In progress'
-                      ? 'accent.base'
-                      : research.researchStatus === 'Completed'
-                      ? 'betaGreen'
-                      : 'lightgrey',
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  color: 'black',
+                  fontSize: [2, 2, 3],
+                  padding: 2,
+                  margin: 'auto',
                 }}
               >
-                <Text
-                  sx={{
-                    display: 'inline-block',
-                    verticalAlign: 'middle',
-                    color: 'black',
-                    fontSize: [2, 2, 3],
-                    padding: 2,
-                    margin: 'auto',
-                  }}
-                >
-                  {research.researchStatus}
-                </Text>
-              </Flex>
-            )}
+                {research.researchStatus || 'In progress'}
+              </Text>
+            </Flex>
           </Flex>
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>

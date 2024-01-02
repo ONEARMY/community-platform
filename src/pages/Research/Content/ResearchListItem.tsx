@@ -29,21 +29,23 @@ const ResearchListItem = ({ item }: IProps) => {
     alignItems: 'center',
     fontSize: [1, 2, 2],
   }
+
+  const status = item.researchStatus || 'In progress'
+
+  const statusColour =
+    status === 'Archived'
+      ? 'lightgrey'
+      : status === 'Completed'
+      ? 'betaGreen'
+      : 'accent.base'
+
   return (
     <Card
       data-cy="ResearchListItem"
       data-id={item._id}
       mb={3}
       sx={{
-        borderColor: [
-          item.researchStatus === 'In progress'
-            ? 'accent.base'
-            : item.researchStatus === 'Completed'
-            ? 'betaGreen'
-            : 'lightgrey',
-          'black',
-          'black',
-        ],
+        borderColor: [statusColour, 'black', 'black'],
       }}
     >
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -90,31 +92,24 @@ const ResearchListItem = ({ item }: IProps) => {
                 >
                   {item.title}
                 </Heading>
-                {item.researchStatus && (
-                  <Text
-                    sx={{
-                      display: ['inline-block', 'none', 'none'],
-                      verticalAlign: 'middle',
-                      color: 'black',
-                      fontSize: 1,
-                      background:
-                        item.researchStatus === 'In progress'
-                          ? 'accent.base'
-                          : item.researchStatus === 'Completed'
-                          ? 'betaGreen'
-                          : 'lightgrey',
-                      padding: 1,
-                      borderRadius: 1,
-                      borderBottomRightRadius: 1,
-                      marginLeft: 4,
-                      marginBottom: 'auto',
-                      whiteSpace: 'nowrap',
-                      minWidth: '75px',
-                    }}
-                  >
-                    {item.researchStatus}
-                  </Text>
-                )}
+                <Text
+                  sx={{
+                    display: ['inline-block', 'none', 'none'],
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: 1,
+                    background: statusColour,
+                    padding: 1,
+                    borderRadius: 1,
+                    borderBottomRightRadius: 1,
+                    marginLeft: 4,
+                    marginBottom: 'auto',
+                    whiteSpace: 'nowrap',
+                    minWidth: '75px',
+                  }}
+                >
+                  {status}
+                </Text>
               </Flex>
               <Flex
                 sx={{
@@ -162,29 +157,22 @@ const ResearchListItem = ({ item }: IProps) => {
                   >
                     {getItemDate(item, 'long')}
                   </Text>
-                  {item.researchStatus && (
-                    <Text
-                      sx={{
-                        display: ['none', 'inline-block', 'inline-block'],
-                        verticalAlign: 'middle',
-                        color: 'black',
-                        fontSize: 1,
-                        background:
-                          item.researchStatus === 'In progress'
-                            ? 'accent.base'
-                            : item.researchStatus === 'Completed'
-                            ? 'betaGreen'
-                            : 'lightgrey',
-                        padding: 1,
-                        borderRadius: 1,
-                        borderBottomRightRadius: 1,
-                        marginLeft: 4,
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {item.researchStatus}
-                    </Text>
-                  )}
+                  <Text
+                    sx={{
+                      display: ['none', 'inline-block', 'inline-block'],
+                      verticalAlign: 'middle',
+                      color: 'black',
+                      fontSize: 1,
+                      background: statusColour,
+                      padding: 1,
+                      borderRadius: 1,
+                      borderBottomRightRadius: 1,
+                      marginLeft: 4,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {status}
+                  </Text>
                 </Flex>
                 {/* Show these on mobile, hide on tablet & above. */}
                 <Box

@@ -29,7 +29,7 @@ export const FileInput = (props: IProps) => {
     return () => {
       uppy.close()
     }
-  }, [])
+  })
 
   const files = () => {
     const files = uppy.getState().files as IUppyFiles

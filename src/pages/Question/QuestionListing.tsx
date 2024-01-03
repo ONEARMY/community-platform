@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Card, Flex, Heading } from 'theme-ui'
 
 import { useQuestionStore } from 'src/stores/Question/question.store'
+import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 import type { IQuestion } from 'src/models'
 
@@ -64,6 +65,12 @@ export const QuestionListing = () => {
                 status={q.moderation}
                 contentType="question"
                 sx={{ top: 0, position: 'absolute', right: 0 }}
+              />
+              <UserNameTag
+                userName={q._createdBy}
+                countryCode={q.creatorCountry}
+                created={q._created}
+                action="Asked"
               />
             </Card>
           )

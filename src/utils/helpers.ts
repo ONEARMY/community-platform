@@ -167,7 +167,9 @@ export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {
   }
 }
 
-export const calculateTotalComments = (item: IResearch.ItemDB | IItem) => {
+export const calculateTotalComments = (
+  item: IResearch.ItemDB | IItem,
+): number => {
   if (item.updates) {
     const commentOnUpdates = item.updates.reduce((totalComments, update) => {
       const updateCommentsLength =
@@ -177,9 +179,9 @@ export const calculateTotalComments = (item: IResearch.ItemDB | IItem) => {
       return totalComments + updateCommentsLength
     }, 0)
 
-    return commentOnUpdates ? String(commentOnUpdates) : '0'
+    return commentOnUpdates ? commentOnUpdates : 0
   } else {
-    return '0'
+    return 0
   }
 }
 

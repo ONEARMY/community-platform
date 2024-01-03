@@ -15,8 +15,8 @@ describe('transformImpactData', () => {
     const expected = {
       revenue: {
         id: 'revenue',
+        icon: 'revenue',
         description,
-        emoji: '&#x1f4b8',
         label: 'revenue',
         prefix: '$',
         value: 75000,

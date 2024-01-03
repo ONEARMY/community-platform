@@ -1,4 +1,5 @@
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
+import { uniqBy } from 'lodash'
 import { logger } from '../../logger'
 import { auth, EmailAuthProvider } from '../../utils/firebase'
 import { getLocationData } from '../../utils/getLocationData'
@@ -62,7 +63,11 @@ export class UserStore extends ModuleStore {
     const users: IUserPP[] = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('userName', '>=', prefix, limit)
-    return users.filter((user) => user.userName?.startsWith(prefix))
+    const uniqueUsers: IUserPP[] = uniqBy(
+      users.filter((user) => user.userName?.startsWith(prefix)),
+      (user) => user.userName,
+    )
+    return uniqueUsers
   }
 
   @action

@@ -1,4 +1,5 @@
 import { Flex, Text } from 'theme-ui'
+
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
 import { Tooltip } from '..'

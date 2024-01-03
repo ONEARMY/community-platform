@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { Field } from 'react-final-form'
 import { Button, Modal } from 'oa-components'
-import { Text, Flex } from 'theme-ui'
-
 import { SelectField } from 'src/common/Form/Select.field'
 import { required } from 'src/utils/validators'
+import { Flex, Text } from 'theme-ui'
 
 const WEEK_DAYS = [
   {

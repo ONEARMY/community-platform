@@ -1,8 +1,8 @@
 import { format } from 'date-fns'
-import { Text, Flex } from 'theme-ui'
 import { Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
+import { Flex, Text } from 'theme-ui'
 
 interface UserNameTagProps {
   userName: string

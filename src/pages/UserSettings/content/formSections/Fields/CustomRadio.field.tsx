@@ -1,6 +1,8 @@
 import React from 'react'
+import { Box, Flex, Image, Input, Label, Text } from 'theme-ui'
+
 import { HiddenInput } from '../elements'
-import { Label, Image, Flex, Box, Text, Input } from 'theme-ui'
+
 import type { FieldRenderProps } from 'react-final-form'
 
 interface IProps {

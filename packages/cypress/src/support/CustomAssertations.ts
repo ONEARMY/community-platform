@@ -1,8 +1,8 @@
 import chaiSubset from 'chai-subset'
+
 import type { IHowto, IHowtoStep } from '../../../../src/models/howto.models'
 import type { IResearchDB } from '../../../../src/models/research.models'
 import type { IUserPPDB } from '../../../../src/models/user_pp.models'
-
 import type { ProfileTypeLabel } from '../../../../src/modules/profile/types'
 
 declare global {

@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+
 import type { IMessage } from 'src/models'
 
 export const FactoryMessage = (

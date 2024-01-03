@@ -1,23 +1,24 @@
 import React, { useCallback, useEffect } from 'react'
-import debounce from 'debounce'
-import { observer } from 'mobx-react'
-import { toJS } from 'mobx'
 import { Map, TileLayer } from 'react-leaflet'
 import { useNavigate } from 'react-router-dom'
-
+import debounce from 'debounce'
+import { toJS } from 'mobx'
+import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/index'
-import 'leaflet/dist/leaflet.css'
-import './index.css'
+
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'
 
-import type {
-  IMapPin,
-  ILatLng,
-  IBoundingBox,
-  IMapGrouping,
-} from 'src/models/maps.models'
 import type { LatLngExpression } from 'leaflet'
+import type {
+  IBoundingBox,
+  ILatLng,
+  IMapGrouping,
+  IMapPin,
+} from 'src/models/maps.models'
+
+import 'leaflet/dist/leaflet.css'
+import './index.css'
 
 interface IProps {
   pins: Array<IMapPin>

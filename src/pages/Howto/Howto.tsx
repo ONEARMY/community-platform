@@ -1,8 +1,9 @@
-import React, { Suspense, lazy } from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
+
 import { AuthRoute } from '../common/AuthRoute'
-import { HowtoList } from './Content/HowtoList/HowtoList'
 import { Howto } from './Content/Howto/Howto'
+import { HowtoList } from './Content/HowtoList/HowtoList'
 
 // lazy load editor pages
 const CreateHowto = lazy(

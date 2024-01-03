@@ -1,5 +1,4 @@
 import { Icon } from 'oa-components'
-
 import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
 
 import type { availableGlyphs } from 'oa-components'

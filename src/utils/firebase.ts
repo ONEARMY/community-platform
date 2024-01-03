@@ -1,9 +1,11 @@
-import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
 import 'firebase/functions'
 import 'firebase/database'
+
+import firebase from 'firebase/app'
+
 import { FIREBASE_CONFIG, SITE } from '../config/config'
 import { logger } from '../logger'
 // initialise with config settings, additional firestore config to support future changes

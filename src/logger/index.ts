@@ -1,5 +1,6 @@
-import { getConfigurationOption } from '../config/config'
 import { Logger } from 'tslog'
+
+import { getConfigurationOption } from '../config/config'
 
 const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
 const logTransport = getConfigurationOption('REACT_APP_LOG_TRANSPORT', 'none')

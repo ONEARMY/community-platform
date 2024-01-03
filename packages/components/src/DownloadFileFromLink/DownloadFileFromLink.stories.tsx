@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { DownloadFileFromLink } from './DownloadFileFromLink'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/DownloadFileFromLink',

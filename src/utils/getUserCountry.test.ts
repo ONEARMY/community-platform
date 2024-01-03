@@ -1,5 +1,6 @@
-import type { IUser } from 'src/models'
 import { getUserCountry } from './getUserCountry'
+
+import type { IUser } from 'src/models'
 
 const user: IUser = {
   _authID: '1',

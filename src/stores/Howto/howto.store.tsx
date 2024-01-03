@@ -8,14 +8,6 @@ import {
 } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type { IComment, UserMention, IUser } from 'src/models'
-import type {
-  IHowToStepFormInput,
-  IHowto,
-  IHowtoDB,
-  IHowtoFormInput,
-} from 'src/models/howto.models'
-import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
@@ -23,19 +15,29 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import {
-  changeMentionToUserReference,
-  changeUserReferenceToPlainText,
-} from '../common/mentions'
-import { ModuleStore } from '../common/module.store'
-import type { RootStore } from '../index'
-import type { IUploadedFileMeta } from '../storage'
+
 import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
+import {
+  changeMentionToUserReference,
+  changeUserReferenceToPlainText,
+} from '../common/mentions'
+import { ModuleStore } from '../common/module.store'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+
+import type { IComment, IUser, UserMention } from 'src/models'
+import type {
+  IHowto,
+  IHowtoDB,
+  IHowtoFormInput,
+  IHowToStepFormInput,
+} from 'src/models/howto.models'
+import type { IConvertedFileMeta } from 'src/types'
+import type { RootStore } from '../index'
+import type { IUploadedFileMeta } from '../storage'
 
 const COLLECTION_NAME = 'howtos'
 

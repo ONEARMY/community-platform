@@ -1,9 +1,11 @@
 import { fireEvent } from '@testing-library/react'
 import { vi } from 'vitest'
+
 import { render } from '../tests/utils'
 import { CommentList } from './CommentList'
-import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 import { createFakeComments, fakeComment } from './createFakeComments'
+
+import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 
 const mockHandleEdit = vi.fn()
 const mockHandleEditRequest = vi.fn()

@@ -1,12 +1,14 @@
 jest.mock('../common/module.store')
-import { FactoryUser } from 'src/test/factories/User'
-import { UserStore } from './user.store'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import { EmailNotificationFrequency } from 'oa-shared'
-import { auth } from '../../utils/firebase'
 import { faker } from '@faker-js/faker'
+import { EmailNotificationFrequency } from 'oa-shared'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
+import { FactoryUser } from 'src/test/factories/User'
+
+import { auth } from '../../utils/firebase'
+import { UserStore } from './user.store'
+
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
 jest.mock('../../utils/firebase', () => ({
   auth: {

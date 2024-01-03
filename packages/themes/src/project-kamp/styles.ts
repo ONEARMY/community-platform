@@ -1,9 +1,11 @@
-import logo from '../../assets/images/themes/project-kamp/project-kamp-header.png'
-import type { ThemeWithName } from '../types'
-import { getButtons } from '../common/button'
-import { baseTheme } from '../common'
-import memberBadgeLowDetail from '../../assets/images/themes/project-kamp/avatar_member_sm.svg'
 import memberBadgeHighDetail from '../../assets/images/themes/project-kamp/avatar_member_lg.svg'
+import memberBadgeLowDetail from '../../assets/images/themes/project-kamp/avatar_member_sm.svg'
+import logo from '../../assets/images/themes/project-kamp/project-kamp-header.png'
+import { baseTheme } from '../common'
+import { getButtons } from '../common/button'
+
+import type { ThemeWithName } from '../types'
+
 export type { ButtonVariants } from '../common/button'
 
 // use enum to specify list of possible colors for typing

@@ -1,17 +1,17 @@
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
-import { DatabaseV2 } from './databaseV2'
+import { DiscussionStore } from './Discussions/discussions.store'
 import { HowtoStore } from './Howto/howto.store'
 import { MapsStore } from './Maps/maps.store'
 import { MessageStore } from './Message/message.store'
+import { QuestionStore } from './Question/question.store'
+import { QuestionCategoriesStore } from './QuestionCategories/questionCategories.store'
 import { ResearchCategoriesStore } from './ResearchCategories/researchCategories.store'
 import { TagsStore } from './Tags/tags.store'
 import { ThemeStore } from './Theme/theme.store'
 import { UserNotificationsStore } from './User/notifications.store'
-import { QuestionStore } from './Question/question.store'
 import { UserStore } from './User/user.store'
-import { QuestionCategoriesStore } from './QuestionCategories/questionCategories.store'
-import { DiscussionStore } from './Discussions/discussions.store'
+import { DatabaseV2 } from './databaseV2'
 
 export class RootStore {
   dbV2 = new DatabaseV2()

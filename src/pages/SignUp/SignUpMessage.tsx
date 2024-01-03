@@ -1,6 +1,6 @@
-import { Card, Flex, Heading, Text } from 'theme-ui'
-import { Button, ExternalLink } from 'oa-components'
 import { Link } from 'react-router-dom'
+import { Button, ExternalLink } from 'oa-components'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 
 const SignUpMessagePage = () => (
   <Flex

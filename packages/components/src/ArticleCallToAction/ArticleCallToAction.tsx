@@ -1,7 +1,9 @@
 import { useTheme } from '@emotion/react'
 import { Card, Flex, Heading, Text } from 'theme-ui'
-import type { User } from '../types/common'
+
 import { Username } from '../'
+
+import type { User } from '../types/common'
 
 export interface Props {
   author: User & { isVerified: boolean }

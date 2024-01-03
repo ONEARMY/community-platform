@@ -1,10 +1,10 @@
 import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
+import { useCommonStores } from 'src/index'
 import { Flex, Text } from 'theme-ui'
 
-import { useCommonStores } from 'src/index'
-import { invisible, missing } from './labels'
 import { IMPACT_REPORT_LINKS } from './constants'
+import { invisible, missing } from './labels'
 
 import type { IImpactYear, IImpactYearFieldList, IUserPP } from 'src/models'
 

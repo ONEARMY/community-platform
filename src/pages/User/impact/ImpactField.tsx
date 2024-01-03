@@ -1,7 +1,7 @@
+import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
+import { numberWithCommas } from 'src/utils/helpers'
 import { Box, Text } from 'theme-ui'
 
-import { numberWithCommas } from 'src/utils/helpers'
-import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
 import { ImpactIcon } from './ImpactIcon'
 
 import type { IImpactDataField } from 'src/models'

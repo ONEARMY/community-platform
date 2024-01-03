@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import type { IHowtoDB } from 'src/models/howto.models'
 import { Navigate, useParams } from 'react-router-dom'
 import { toJS } from 'mobx'
-import { Text } from 'theme-ui'
-import type { IUser } from 'src/models/user.models'
-import { isAllowedToEditContent } from 'src/utils/helpers'
-import { useCommonStores } from 'src/index'
-import { HowtoForm } from '../Common/Howto.form'
 import { Loader } from 'oa-components'
+import { useCommonStores } from 'src/index'
+import { isAllowedToEditContent } from 'src/utils/helpers'
+import { Text } from 'theme-ui'
+
+import { HowtoForm } from '../Common/Howto.form'
+
+import type { IHowtoDB } from 'src/models/howto.models'
+import type { IUser } from 'src/models/user.models'
 
 interface IState {
   formValues: IHowtoDB

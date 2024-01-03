@@ -1,7 +1,8 @@
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import type { IUser } from 'src/models/user.models'
 import { ProfileType } from 'src/modules/profile/types'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
+
+import type { IUser } from 'src/models/user.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
 // when using the user settings page a base user will already exist
 // pass an empty object with IUser interface for purpose of future typings

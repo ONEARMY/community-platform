@@ -1,21 +1,23 @@
-import { act, render, waitFor } from '@testing-library/react'
-import { ThemeProvider } from '@emotion/react'
-import { Provider } from 'mobx-react'
 import {
   createMemoryRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from 'react-router-dom'
+import { ThemeProvider } from '@emotion/react'
+import { act, render, waitFor } from '@testing-library/react'
+import { Provider } from 'mobx-react'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
-import ResearchArticle from './ResearchArticle'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { FactoryComment } from 'src/test/factories/Comment'
+
+import ResearchArticle from './ResearchArticle'
+
 const Theme = testingThemeStyles
 
 const activeUser = FactoryUser({

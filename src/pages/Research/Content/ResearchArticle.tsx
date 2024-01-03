@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
@@ -7,25 +8,26 @@ import {
   Loader,
   UsefulStatsButton,
 } from 'oa-components'
-import { Link, useLocation, useParams } from 'react-router-dom'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import type { IComment, IResearch, UserComment, IUser } from 'src/models'
+import { useCommonStores } from 'src/index'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import {
+  getPublicUpdates,
   isAllowedToDeleteContent,
   isAllowedToEditContent,
-  getPublicUpdates,
 } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
+
+import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
-import { researchCommentUrlPattern } from './helper'
-import { useCommonStores } from 'src/index'
+
+import type { IComment, IResearch, IUser, UserComment } from 'src/models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
 

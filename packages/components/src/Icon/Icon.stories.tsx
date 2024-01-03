@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
-import { Icon, glyphs } from './Icon'
+import { glyphs, Icon } from './Icon'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/Icon',

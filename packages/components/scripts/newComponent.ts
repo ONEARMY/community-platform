@@ -6,8 +6,8 @@
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from 'fs'
-import { resolve } from 'path'
 import * as Mustache from 'mustache'
+import { resolve } from 'path'
 
 const [inputName] = process.argv.slice(2)
 

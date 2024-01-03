@@ -1,6 +1,7 @@
 import React from 'react'
-import { Box } from 'theme-ui'
 import { ExternalLink as Link } from 'oa-components'
+import { Box } from 'theme-ui'
+
 import { MobileMenuContext } from '../../MobileMenuContext'
 
 interface IProps {

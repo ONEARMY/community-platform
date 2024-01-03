@@ -1,6 +1,8 @@
-import type { StoryFn, Meta } from '@storybook/react'
-import { Tooltip } from './Tooltip'
 import { Button } from 'theme-ui'
+
+import { Tooltip } from './Tooltip'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/Tooltip',

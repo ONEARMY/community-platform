@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Text, Flex, Label } from 'theme-ui'
 import { Button, FieldInput } from 'oa-components'
-
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { useCommonStores } from 'src/index'
+import { buttons, fields } from 'src/pages/UserSettings/labels'
+import { Flex, Label, Text } from 'theme-ui'
 
 interface IFormValues {
   password?: string

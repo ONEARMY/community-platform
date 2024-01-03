@@ -1,7 +1,7 @@
-import { Icon } from 'oa-components'
 import * as React from 'react'
-import { Flex, Heading, Text } from 'theme-ui'
 import { Link } from 'react-router-dom'
+import { Icon } from 'oa-components'
+import { Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
   type: 'event' | 'how-to' | 'research'

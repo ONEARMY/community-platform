@@ -1,13 +1,12 @@
 import React, { useEffect, useRef } from 'react'
-import L from 'leaflet'
 import { Popup as LeafletPopup } from 'react-leaflet'
+import L from 'leaflet'
 import { MapMemberCard } from 'oa-components'
-
-import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { useCommonStores } from 'src/index'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
-import type { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
 import type { Map } from 'react-leaflet'
+import type { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
 
 import './popup.css'
 

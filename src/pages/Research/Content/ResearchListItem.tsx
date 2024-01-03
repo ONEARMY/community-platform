@@ -1,14 +1,16 @@
-import { format } from 'date-fns'
-import { Icon, ModerationStatus, Username, Tooltip } from 'oa-components'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Link } from 'react-router-dom'
+import { format } from 'date-fns'
+import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import type { IResearch } from 'src/models/research.models'
-import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
-import { Card, Image, Flex, Grid, Heading, Text, Box } from 'theme-ui'
-import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { useCommonStores } from 'src/index'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
+import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
+
+import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
+
+import type { IResearch } from 'src/models/research.models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   item: IResearch.ItemDB & {

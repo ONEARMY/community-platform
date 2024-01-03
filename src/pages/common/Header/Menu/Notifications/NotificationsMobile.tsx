@@ -1,12 +1,13 @@
 import { NotificationList } from 'oa-components'
 // TODO: Remove direct usage of Theme
 import { preciousPlasticTheme } from 'oa-themes'
+
 const theme = preciousPlasticTheme.styles
+import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 
-import styled from '@emotion/styled'
-
 import type { UserNotificationList } from 'oa-components'
+
 const PanelContainer = styled(Box)`
   width: 100%;
   position: absolute;

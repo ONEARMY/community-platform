@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
-
+import { guidance } from 'src/pages/Howto/labels'
 import { HowtoProvider } from 'src/test/components'
 import { FactoryCategory } from 'src/test/factories/Category'
-import { guidance } from 'src/pages/Howto/labels'
+
 import { HowtoFieldFiles } from '.'
 
 describe('HowtoFieldFiles', () => {

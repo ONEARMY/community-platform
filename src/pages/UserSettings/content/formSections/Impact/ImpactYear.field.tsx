@@ -1,6 +1,6 @@
 import { Button } from 'oa-components'
-
 import { buttons } from 'src/pages/UserSettings/labels'
+
 import { ImpactQuestionField } from './ImpactQuestion.field'
 import { impactQuestions } from './impactQuestions'
 

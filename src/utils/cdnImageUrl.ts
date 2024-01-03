@@ -1,4 +1,4 @@
-import { FIREBASE_CONFIG, CDN_URL } from 'src/config/config'
+import { CDN_URL, FIREBASE_CONFIG } from 'src/config/config'
 
 type ResizeArgs = {
   width?: number

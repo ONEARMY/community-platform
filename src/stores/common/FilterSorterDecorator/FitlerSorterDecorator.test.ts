@@ -1,9 +1,11 @@
+import { FactoryUser } from 'src/test/factories/User'
+
 import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from './FilterSorterDecorator'
+
 import type { IItem } from './FilterSorterDecorator'
-import { FactoryUser } from 'src/test/factories/User'
 
 describe('FilterSorterDecorator', () => {
   let decorator: FilterSorterDecorator<IItem>

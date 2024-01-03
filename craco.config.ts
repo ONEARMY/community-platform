@@ -1,5 +1,6 @@
-import type { WebpackConfigOverride, JestConfigOverride } from '@craco/types'
 import { DefinePlugin, ProvidePlugin } from 'webpack'
+
+import type { JestConfigOverride, WebpackConfigOverride } from '@craco/types'
 import type { RuleSetRule } from 'webpack'
 
 /**

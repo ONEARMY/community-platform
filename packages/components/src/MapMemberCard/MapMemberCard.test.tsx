@@ -1,7 +1,6 @@
 import { render } from '../tests/utils'
-
-import { Default, ModerationComments } from './MapMemberCard.stories'
 import { MapMemberCard } from './MapMemberCard'
+import { Default, ModerationComments } from './MapMemberCard.stories'
 
 describe('MapMemberCard', () => {
   it('includes description if it exists', () => {

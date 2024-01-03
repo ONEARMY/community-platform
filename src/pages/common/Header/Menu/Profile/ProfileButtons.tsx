@@ -1,5 +1,7 @@
 import { Box, Flex } from 'theme-ui'
+
 import ProfileButtonItem from './ProfileButtonItem'
+
 import './profile.css'
 
 interface IProps {

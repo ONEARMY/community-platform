@@ -1,7 +1,7 @@
 import { Field } from 'react-final-form'
-
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { COMPARISONS } from 'src/utils/comparisons'
+
 import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'
 

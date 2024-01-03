@@ -1,11 +1,14 @@
-import 'photoswipe/style.css'
 import { useEffect, useRef, useState } from 'react'
-import PhotoSwipeLightbox from 'photoswipe/lightbox'
-import type { PhotoSwipeOptions } from 'photoswipe/lightbox'
-import { Icon } from '../Icon/Icon'
-import type { CardProps } from 'theme-ui'
-import { Box, Flex, Image as ThemeImage } from 'theme-ui'
 import styled from '@emotion/styled'
+import PhotoSwipeLightbox from 'photoswipe/lightbox'
+import { Box, Flex, Image as ThemeImage } from 'theme-ui'
+
+import { Icon } from '../Icon/Icon'
+
+import type { PhotoSwipeOptions } from 'photoswipe/lightbox'
+import type { CardProps } from 'theme-ui'
+
+import 'photoswipe/style.css'
 
 export interface IImageGalleryItem {
   downloadUrl: string

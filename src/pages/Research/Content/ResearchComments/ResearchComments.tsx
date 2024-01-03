@@ -1,16 +1,17 @@
-import { Button, CommentList, CreateComment } from 'oa-components'
 import { useState } from 'react'
-import { MAX_COMMENT_LENGTH } from '../../../../constants'
-import { useCommonStores } from '../../../../'
+import styled from '@emotion/styled'
+import { Button, CommentList, CreateComment } from 'oa-components'
+import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
-import { useResearchStore } from '../../../../stores/Research/research.store'
 import { Box, Flex } from 'theme-ui'
 
-import styled from '@emotion/styled'
+import { useCommonStores } from '../../../../'
+import { MAX_COMMENT_LENGTH } from '../../../../constants'
+import { useResearchStore } from '../../../../stores/Research/research.store'
 
 import type { UserComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
-import { trackEvent } from 'src/common/Analytics'
+
 interface IProps {
   comments: UserComment[]
   update: IResearch.UpdateDB

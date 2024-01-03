@@ -1,11 +1,10 @@
 import { faker } from '@faker-js/faker'
 
+import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
+import { missing } from '../../../../src/pages/User/impact/labels'
+import { contact } from '../../../../src/pages/User/labels'
 import { users } from '../data'
 import { UserMenuItem } from '../support/commands'
-import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
-import { contact } from '../../../../src/pages/User/labels'
-
-import { missing } from '../../../../src/pages/User/impact/labels'
 
 const { admin, subscriber } = users
 const betaTester = users['beta-tester']

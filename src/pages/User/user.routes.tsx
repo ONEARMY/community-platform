@@ -1,8 +1,9 @@
 import { Route, Routes, useParams } from 'react-router-dom'
-import { UserProfile } from './content/UserProfile'
-import { NotFoundPage } from '../NotFound/NotFound'
+
 import { AuthRoute } from '../common/AuthRoute'
+import { NotFoundPage } from '../NotFound/NotFound'
 import { SettingsPage } from '../UserSettings/SettingsPage'
+import { UserProfile } from './content/UserProfile'
 
 const userRouteElements = (id) => (
   <>

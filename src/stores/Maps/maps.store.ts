@@ -1,27 +1,29 @@
-import { observable, action, makeObservable } from 'mobx'
-import type {
-  IMapPin,
-  IMapGrouping,
-  IMapPinWithDetail,
-  IMapPinDetail,
-  IBoundingBox,
-  IMapPinType,
-} from 'src/models/maps.models'
-import type { IDBEndpoint, IModerationStatus } from 'src/models/common.models'
-import type { RootStore } from '../index'
-import type { Subscription } from 'rxjs'
-import { ModuleStore } from '../common/module.store'
-import { getUserAvatar } from '../User/user.store'
-import { MAP_GROUPINGS } from './maps.groupings'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import type { IUploadedFileMeta } from '../storage'
+import { action, makeObservable, observable } from 'mobx'
+import { logger } from 'src/logger'
 import {
   hasAdminRights,
-  needsModeration,
   isAllowedToPin,
+  needsModeration,
 } from 'src/utils/helpers'
-import { logger } from 'src/logger'
+
+import { ModuleStore } from '../common/module.store'
+import { getUserAvatar } from '../User/user.store'
 import { filterMapPinsByType } from './filter'
+import { MAP_GROUPINGS } from './maps.groupings'
+
+import type { Subscription } from 'rxjs'
+import type { IDBEndpoint, IModerationStatus } from 'src/models/common.models'
+import type {
+  IBoundingBox,
+  IMapGrouping,
+  IMapPin,
+  IMapPinDetail,
+  IMapPinType,
+  IMapPinWithDetail,
+} from 'src/models/maps.models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { RootStore } from '../index'
+import type { IUploadedFileMeta } from '../storage'
 
 type IFilterToRemove = IMapPinType | undefined
 

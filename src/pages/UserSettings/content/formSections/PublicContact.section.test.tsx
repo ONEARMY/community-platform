@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
-
-import { SettingsProvider } from 'src/test/components'
 import { PublicContactSection } from 'src/pages/UserSettings/content/formSections/PublicContact.section'
+import { SettingsProvider } from 'src/test/components'
 
 describe('PublicContact', () => {
   it('renders unchecked when isContactableByPublic is false', async () => {

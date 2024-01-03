@@ -1,12 +1,12 @@
-import { Heading, Box, Text, Flex, Grid, Paragraph } from 'theme-ui'
-import { Button, ExternalLink } from 'oa-components'
 import { Field } from 'react-final-form'
 import { useTheme } from '@emotion/react'
-
-import { FlexSectionContainer } from './elements'
+import { Button, ExternalLink } from 'oa-components'
 import { getSupportedProfileTypes } from 'src/modules/profile'
+import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
+import { Box, Flex, Grid, Heading, Paragraph, Text } from 'theme-ui'
+
 import { CustomRadioField } from './Fields/CustomRadio.field'
-import { buttons, headings, fields } from 'src/pages/UserSettings/labels'
+import { FlexSectionContainer } from './elements'
 
 import type { ProfileTypeLabel } from 'src/modules/profile/types'
 

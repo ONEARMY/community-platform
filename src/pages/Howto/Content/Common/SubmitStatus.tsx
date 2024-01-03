@@ -1,11 +1,11 @@
 import React from 'react'
-import { observer } from 'mobx-react'
-import { Heading, Flex, Box, Text } from 'theme-ui'
-import { Icon, Button, Modal } from 'oa-components'
 import { useNavigate } from 'react-router-dom'
-
-import { headings, buttons } from '../../labels'
+import { observer } from 'mobx-react'
+import { Button, Icon, Modal } from 'oa-components'
 import { useCommonStores } from 'src/index'
+import { Box, Flex, Heading, Text } from 'theme-ui'
+
+import { buttons, headings } from '../../labels'
 
 interface IProps {
   onClose: () => void

@@ -1,10 +1,12 @@
 import * as React from 'react'
-import { PATREON_CLIENT_ID } from 'src/config/config'
-import type { IUserPP } from 'src/models'
-import { Heading, Flex, Image, Text, Box } from 'theme-ui'
 import { Button } from 'oa-components'
-import { FlexSectionContainer } from './elements'
+import { PATREON_CLIENT_ID } from 'src/config/config'
 import { useCommonStores } from 'src/index'
+import { Box, Flex, Heading, Image, Text } from 'theme-ui'
+
+import { FlexSectionContainer } from './elements'
+
+import type { IUserPP } from 'src/models'
 
 const HEADING = '❤️ Become a Supporter'
 const SUBHEADING =

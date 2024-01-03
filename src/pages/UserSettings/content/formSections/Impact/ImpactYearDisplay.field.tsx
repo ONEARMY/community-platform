@@ -1,9 +1,8 @@
-import { Box, Flex, Text } from 'theme-ui'
-import { Button, Icon } from 'oa-components'
 import { observer } from 'mobx-react'
-
-import { buttons, missingData } from 'src/pages/UserSettings/labels'
+import { Button, Icon } from 'oa-components'
 import { ImpactField } from 'src/pages/User/impact/ImpactField'
+import { buttons, missingData } from 'src/pages/UserSettings/labels'
+import { Box, Flex, Text } from 'theme-ui'
 
 import type { IImpactYearFieldList } from 'src/models'
 

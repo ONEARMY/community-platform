@@ -1,4 +1,4 @@
-import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from './constants'
+import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants'
 
 import type { ILabels } from 'src/common/Form/types'
 

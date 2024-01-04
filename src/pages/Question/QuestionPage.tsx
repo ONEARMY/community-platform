@@ -6,6 +6,7 @@ import {
   ModerationStatus,
   UsefulStatsButton,
 } from 'oa-components'
+import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
@@ -46,13 +47,20 @@ export const QuestionPage = () => {
           foundQuestion?.subscribers?.includes(store.activeUser?.userName),
         )
         if (foundQuestion && discussionStore) {
-          const discussion =
-            await discussionStore.fetchOrCreateDiscussionBySource(
-              foundQuestion._id,
-              'question',
-            )
-          if (discussion) {
-            setComments(discussion.comments)
+          try {
+            const discussion =
+              await discussionStore.fetchOrCreateDiscussionBySource(
+                foundQuestion._id,
+                'question',
+              )
+            if (discussion) {
+              setComments(discussion.comments)
+            }
+          } catch (err) {
+            logger.error('Failed to fetch discussion', {
+              err,
+              questionId: foundQuestion._id,
+            })
           }
         }
       }

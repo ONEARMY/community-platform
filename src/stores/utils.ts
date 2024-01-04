@@ -1,9 +1,9 @@
-import { HowtoStore } from './Howto/howto.store'
-import { ResearchStore } from './Research/research.store'
+import type { HowtoStore } from './Howto/howto.store'
+import type { ResearchStore } from './Research/research.store'
 
-export function storeHasAuthorFunctionality(
+export const storeHasAuthorFunctionality = (
   store: any,
-): store is HowtoStore | ResearchStore {
+): store is HowtoStore | ResearchStore => {
   return (
     store &&
     typeof store.selectedAuthor !== 'undefined' &&

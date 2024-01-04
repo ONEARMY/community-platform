@@ -40,7 +40,7 @@ export const QuestionListing = observer(() => {
       </Flex>
       {isFetching ? (
         <Loader />
-      ) : filteredQuestions.length ? (
+      ) : filteredQuestions && filteredQuestions.length ? (
         filteredQuestions
           .filter((q: any) => q.moderation && q.moderation === 'accepted')
           .map((q: any, idx) => {

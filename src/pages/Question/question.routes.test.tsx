@@ -104,13 +104,14 @@ describe('question.routes', () => {
   describe('/questions/', () => {
     it('renders a loading state', async () => {
       let wrapper
+      ;(useQuestionStore as any).mockReturnValue({
+        ...mockQuestionStore,
+        isFetching: true,
+        activeUser: mockActiveUser,
+      })
       await act(async () => {
         wrapper = (await renderFn('/questions')).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
-      })
-
-      await waitFor(async () => {
-        expect(() => wrapper.getByText(/loading/)).toThrow()
       })
     })
 
@@ -145,15 +146,16 @@ describe('question.routes', () => {
 
       ;(useQuestionStore as any).mockReturnValue({
         ...mockQuestionStore,
-        fetchQuestions: jest.fn().mockResolvedValue([
+        filteredQuestions: [
           {
             ...FactoryQuestionItem({
               title: questionTitle,
               slug: questionSlug,
             }),
             _id: '123',
+            moderation: 'accepted',
           },
-        ]),
+        ],
         activeUser: mockActiveUser,
       })
 

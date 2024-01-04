@@ -7,6 +7,7 @@ import {
   FollowButton,
   Loader,
   UsefulStatsButton,
+  UserEngagementWrapper,
 } from 'oa-components'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
@@ -20,7 +21,7 @@ import {
   isAllowedToEditContent,
 } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
-import { Box, Card, Flex } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 
 import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
@@ -229,7 +230,7 @@ const ResearchArticle = observer(() => {
             .length || 0
         }
       />
-      <Box my={16}>
+      <Box sx={{ marginTop: 8, marginBottom: 4 }}>
         {item &&
           getPublicUpdates(item).map((update, index) => (
             <ResearchUpdate
@@ -248,13 +249,12 @@ const ResearchArticle = observer(() => {
           ))}
       </Box>
 
-      <Box
-        sx={{
-          paddingLeft: [null, null, '12%'],
-          mb: 16,
-        }}
-      >
-        <Card sx={{ paddingBottom: 3, paddingTop: 2 }}>
+      <UserEngagementWrapper>
+        <Box
+          sx={{
+            marginBottom: [6, 6, 12],
+          }}
+        >
           {researchAuthor && (
             <ArticleCallToAction
               author={researchAuthor}
@@ -279,8 +279,8 @@ const ResearchArticle = observer(() => {
               ></FollowButton>
             </ArticleCallToAction>
           )}
-        </Card>
-      </Box>
+        </Box>
+      </UserEngagementWrapper>
 
       {isEditable && (
         <Flex my={4}>

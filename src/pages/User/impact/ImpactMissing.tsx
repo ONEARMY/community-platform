@@ -30,11 +30,10 @@ const isAllInvisible = (fields, visibleFields) => {
 }
 
 const isPageOwnerCheck = (activeUser, user) => {
-  if (activeUser && user && toJS(activeUser).userName === user.userName) {
-    return true
-  }
+  const usersPresent = activeUser && user
+  const usersTheSame = toJS(activeUser)?.userName === user?.userName
 
-  return false
+  return usersPresent && usersTheSame ? true : false
 }
 
 export const ImpactMissing = observer((props: Props) => {

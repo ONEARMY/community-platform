@@ -172,6 +172,20 @@ export const SortFilterHeader = ({
             const value = evt.target.value
             updateQueryParams(window.location.href, 'search', value, navigate)
             currentStore.updateSearchValue(value)
+            if (
+              value.length > 0 &&
+              currentStore.activeSorter !== ItemSortingOption.MostRelevant
+            ) {
+              currentStore.updateActiveSorter(ItemSortingOption.MostRelevant)
+              setSortState({ label: 'Most Relevant', value: 'MostRelevant' })
+            }
+
+            if (value.length === 0 || !value) {
+              currentStore.updateActiveSorter(
+                currentStore.availableItemSortingOption[0],
+              )
+              setSortState(defaultSortingOption)
+            }
           }}
         />
       </Flex>

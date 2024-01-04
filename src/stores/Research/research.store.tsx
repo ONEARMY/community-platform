@@ -93,6 +93,7 @@ export class ResearchStore extends ModuleStore {
       ItemSortingOption.MostUseful,
       ItemSortingOption.Comments,
       ItemSortingOption.Updates,
+      ItemSortingOption.MostRelevant,
     ]
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {

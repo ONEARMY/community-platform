@@ -81,7 +81,7 @@ describe('[Profile]', () => {
       cy.visit(`/u/${userProfiletype.userName}`)
       cy.get('[data-cy=ImpactTab]').click()
       cy.get('[data-cy=ImpactPanel]').should('exist')
-      cy.contains(missing.owner.label)
+      cy.contains(missing.user.label)
       cy.contains('2021')
       cy.contains('3 full time employees')
     })

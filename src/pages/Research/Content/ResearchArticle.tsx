@@ -194,7 +194,6 @@ const ResearchArticle = observer(() => {
     return <NotFoundPage />
   }
 
-<<<<<<< HEAD
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <ResearchDescription
@@ -245,59 +244,6 @@ const ResearchArticle = observer(() => {
         }}
       >
         {researchAuthor && (
-=======
-    return (
-      <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
-        <ResearchDescription
-          research={item}
-          key={item._id}
-          votedUsefulCount={researchStore.votedUsefulCount}
-          loggedInUser={loggedInUser || undefined}
-          isEditable={isEditable}
-          isDeletable={isDeletable}
-          needsModeration={researchStore.needsModeration(item)}
-          hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
-          hasUserSubscribed={researchStore.userHasSubscribed}
-          moderateResearch={moderateResearch}
-          onUsefulClick={() =>
-            onUsefulClick(item._id, item.slug, 'ResearchDescription')
-          }
-          onFollowClick={() => {
-            onFollowClick(item.slug)
-          }}
-          contributors={contributors}
-          subscribersCount={researchStore.subscribersCount}
-          commentsCount={researchStore.commentsCount}
-          updatesCount={
-            item.updates?.filter((u) => u.status !== 'draft' && !u._deleted)
-              .length || 0
-          }
-        />
-        <Box my={16}>
-          {item &&
-            getPublicUpdates(item).map((update, index) => (
-              <ResearchUpdate
-                update={update}
-                key={update._id}
-                updateIndex={index}
-                isEditable={isEditable}
-                slug={item.slug}
-                comments={transformToUserComment(
-                  researchStore.formatResearchCommentList(update.comments),
-                  loggedInUser || undefined,
-                  item,
-                )}
-                showComments={areCommentVisible(index)}
-              />
-            ))}
-        </Box>
-        <Box
-          sx={{
-            paddingLeft: [null, '12%', '12%'],
-            mb: 16,
-          }}
-        >
->>>>>>> 8bae0d151 (feat: add research status filter)
           <ArticleCallToAction
             author={researchAuthor}
             contributors={contributors}

@@ -10,11 +10,8 @@ import {
 } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-<<<<<<< HEAD
-=======
 import type { IComment, IUser, ResearchStatus } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
->>>>>>> 8bae0d151 (feat: add research status filter)
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,

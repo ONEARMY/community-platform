@@ -1,12 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'oa-components'
-<<<<<<< HEAD
-=======
 import { researchStatusOptions } from 'src/models'
 import type { ResearchStatus } from 'src/models'
 
->>>>>>> 8bae0d151 (feat: add research status filter)
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'

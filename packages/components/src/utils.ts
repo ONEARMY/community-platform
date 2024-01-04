@@ -1,5 +1,6 @@
-import type { CommentWithReplies } from './CommentList'
 import { faker } from '@faker-js/faker'
+
+import type { CommentWithReplies } from './CommentList/CommentList'
 
 export const fakeComment = (
   commentOverloads: Partial<CommentWithReplies> = {},

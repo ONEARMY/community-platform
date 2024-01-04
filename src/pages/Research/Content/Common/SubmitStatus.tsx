@@ -1,9 +1,8 @@
-import { observer } from 'mobx-react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Flex, Text, Heading } from 'theme-ui'
+import { observer } from 'mobx-react'
 import { Button, Icon, Modal } from 'oa-components'
-
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { Box, Flex, Heading, Text } from 'theme-ui'
 
 interface IProps {
   onClose: () => void

@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
-import { Box, Flex, Image } from 'theme-ui'
-import { Button } from 'oa-components'
-import { ImageConverter } from './ImageConverter'
 import Dropzone from 'react-dropzone'
-import type { IUploadedFileMeta } from '../../../stores/storage'
+import { Button } from 'oa-components'
+import { Box, Flex, Image } from 'theme-ui'
+
+import { ImageConverter } from './ImageConverter'
+
 import type { IConvertedFileMeta } from 'src/types'
+import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
+import type { IUploadedFileMeta } from '../../../stores/storage'
 
 interface ITitleProps {
   hasUploadedImg: boolean

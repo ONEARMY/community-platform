@@ -1,8 +1,7 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { Box, Label } from 'theme-ui'
-
 import { contact } from 'src/pages/User/labels'
+import { Box, Label } from 'theme-ui'
 
 export const UserContactFieldName = () => {
   const { title, placeholder } = contact.name

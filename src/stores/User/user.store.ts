@@ -1,25 +1,25 @@
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
+import { EmailNotificationFrequency } from 'oa-shared'
+
 import { logger } from '../../logger'
 import { auth, EmailAuthProvider } from '../../utils/firebase'
 import { getLocationData } from '../../utils/getLocationData'
 import { formatLowerNoSpecial } from '../../utils/helpers'
-
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
 import type {
   IBadgeUpdate,
+  IImpactYear,
+  IImpactYearFieldList,
   INotificationUpdate,
   IUser,
   IUserBadges,
-  IImpactYearFieldList,
-  IImpactYear,
 } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
-import type { RootStore } from '..'
 import type { IConvertedFileMeta } from '../../types'
-import { EmailNotificationFrequency } from 'oa-shared'
+import type { RootStore } from '..'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */

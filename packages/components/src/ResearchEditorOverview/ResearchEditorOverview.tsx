@@ -1,8 +1,10 @@
-import { Card, Heading, Box, Text } from 'theme-ui'
-import type { ThemeUIStyleObject } from 'theme-ui'
-import { InternalLink } from '../InternalLink/InternalLink'
-import { Button } from '../Button/Button'
+import { Box, Card, Heading, Text } from 'theme-ui'
 import { boolean, object, string } from 'yup'
+
+import { Button } from '../Button/Button'
+import { InternalLink } from '../InternalLink/InternalLink'
+
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export type ResearchEditorOverviewUpdate = {
   isActive: boolean

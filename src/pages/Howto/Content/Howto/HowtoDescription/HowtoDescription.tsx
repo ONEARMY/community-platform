@@ -1,52 +1,54 @@
-import React, { useState, useEffect, Fragment } from 'react'
-import type { IHowtoDB } from 'src/models/howto.models'
-import {
-  Card,
-  Heading,
-  Text,
-  Box,
-  Flex,
-  Image,
-  AspectImage,
-  Divider,
-  Alert,
-} from 'theme-ui'
-import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
-import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import React, { Fragment, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
-  ModerationStatus,
-  LinkifyText,
-  UsefulStatsButton,
   CategoryTag,
-  DownloadStaticFile,
-  DownloadFileFromLink,
   ConfirmModal,
   ContentStatistics,
+  DownloadFileFromLink,
+  DownloadStaticFile,
+  LinkifyText,
+  ModerationStatus,
+  UsefulStatsButton,
 } from 'oa-components'
-import type { IUser } from 'src/models/user.models'
-import {
-  isAllowedToEditContent,
-  isAllowedToDeleteContent,
-  capitalizeFirstLetter,
-  buildStatisticsLabel,
-} from 'src/utils/helpers'
-import { Link, useNavigate } from 'react-router-dom'
-import { useCommonStores } from 'src/index'
-import {
-  retrieveHowtoDownloadCooldown,
-  isHowtoDownloadCooldownExpired,
-  addHowtoDownloadCooldown,
-  updateHowtoDownloadCooldown,
-} from './downloadCooldown'
-import {
-  retrieveSessionStorageArray,
-  addIDToSessionStorageArray,
-} from 'src/utils/sessionStorage'
+import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
+import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import {
+  buildStatisticsLabel,
+  capitalizeFirstLetter,
+  isAllowedToDeleteContent,
+  isAllowedToEditContent,
+} from 'src/utils/helpers'
+import {
+  addIDToSessionStorageArray,
+  retrieveSessionStorageArray,
+} from 'src/utils/sessionStorage'
+import {
+  Alert,
+  AspectImage,
+  Box,
+  Card,
+  Divider,
+  Flex,
+  Heading,
+  Image,
+  Text,
+} from 'theme-ui'
+
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+import {
+  addHowtoDownloadCooldown,
+  isHowtoDownloadCooldownExpired,
+  retrieveHowtoDownloadCooldown,
+  updateHowtoDownloadCooldown,
+} from './downloadCooldown'
+
+import type { IHowtoDB } from 'src/models/howto.models'
+import type { IUser } from 'src/models/user.models'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }

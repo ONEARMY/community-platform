@@ -1,10 +1,11 @@
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { QuestionListing } from './QuestionListing'
-import { QuestionPage } from './QuestionPage'
+
 import { AuthRoute } from '../common/AuthRoute'
 import { QuestionCreate } from './QuestionCreate'
 import { QuestionEdit } from './QuestionEdit'
+import { QuestionListing } from './QuestionListing'
+import { QuestionPage } from './QuestionPage'
 
 export const questionRouteElements = (
   <>

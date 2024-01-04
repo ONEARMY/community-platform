@@ -1,8 +1,9 @@
 import styled from '@emotion/styled'
 import { Tab as MuiTab } from '@mui/base/Tab'
-import { TabsList } from '@mui/base/TabsList'
 import { TabPanel as MuiTabPanel } from '@mui/base/TabPanel'
 import { Tabs } from '@mui/base/Tabs'
+import { TabsList } from '@mui/base/TabsList'
+
 import type { PlatformTheme } from 'oa-themes/dist'
 
 export { Tabs, TabsList }

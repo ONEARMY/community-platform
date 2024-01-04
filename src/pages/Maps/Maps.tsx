@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
 import { useLocation } from 'react-router-dom'
-import { Box } from 'theme-ui'
-
-import { MapView, Controls } from './Content'
-import { logger } from '../../logger'
-import { GetLocation } from './utils/geolocation'
-import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
-import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
+import { observer } from 'mobx-react'
 import { MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT } from 'src/config/config'
 import { useCommonStores } from 'src/index'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import { Box } from 'theme-ui'
+
+import { logger } from '../../logger'
+import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
+import { GetLocation } from './utils/geolocation'
+import { Controls, MapView } from './Content'
 
 import type { Map } from 'react-leaflet'
 import type { ILatLng } from 'src/models/maps.models'

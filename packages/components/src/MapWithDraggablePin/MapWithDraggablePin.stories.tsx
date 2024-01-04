@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { MapWithDraggablePin } from './MapWithDraggablePin'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/MapWithDraggablePin',

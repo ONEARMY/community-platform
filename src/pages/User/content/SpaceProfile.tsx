@@ -1,33 +1,13 @@
-import type {
-  IUserPP,
-  IMAchineBuilderXp,
-  IOpeningHours,
-  PlasticTypeLabel,
-} from 'src/models/userPreciousPlastic.models'
-
-import { Box, Container, Flex, Heading, Image, Paragraph } from 'theme-ui'
-
 import {
+  ImageGallery,
   MemberBadge,
   Tab,
-  TabsList,
-  Tabs,
   TabPanel,
+  Tabs,
+  TabsList,
   Username,
   UserStatistics,
-  ImageGallery,
 } from 'oa-components'
-
-import UserCreatedDocuments from './UserCreatedDocuments'
-import { useCommonStores } from 'src/index'
-import UserContactAndLinks from './UserContactAndLinks'
-import { ProfileType } from 'src/modules/profile/types'
-import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
-import { Impact } from '../impact/Impact'
-import { heading } from '../impact/labels'
-import { UserContactForm } from 'src/pages/User/contact'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
 import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
@@ -36,9 +16,26 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
-
-import type { UserCreatedDocs } from '../types'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
+import { useCommonStores } from 'src/index'
+import { ProfileType } from 'src/modules/profile/types'
+import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { Box, Container, Flex, Heading, Image, Paragraph } from 'theme-ui'
+
+import { Impact } from '../impact/Impact'
+import { heading } from '../impact/labels'
+import UserContactAndLinks from './UserContactAndLinks'
+import UserCreatedDocuments from './UserCreatedDocuments'
+
+import type {
+  IMAchineBuilderXp,
+  IOpeningHours,
+  IUserPP,
+  PlasticTypeLabel,
+} from 'src/models/userPreciousPlastic.models'
+import type { UserCreatedDocs } from '../types'
 
 interface IProps {
   user: IUserPP

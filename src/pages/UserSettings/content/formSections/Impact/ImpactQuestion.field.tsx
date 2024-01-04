@@ -1,6 +1,6 @@
-import { Box, Flex, Label, Text } from 'theme-ui'
-import { FieldInput, Icon } from 'oa-components'
 import { Field } from 'react-final-form'
+import { FieldInput, Icon } from 'oa-components'
+import { Box, Flex, Label, Text } from 'theme-ui'
 
 import type { IImpactQuestion } from './impactQuestions'
 

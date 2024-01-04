@@ -1,4 +1,5 @@
 import Dockerode from 'dockerode'
+
 import { IMAGE_NAME } from './common'
 import { PATHS } from './paths'
 import { prepare } from './prepare'

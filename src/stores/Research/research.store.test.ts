@@ -7,6 +7,7 @@ import {
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
+
 import { ResearchStore } from './research.store'
 
 jest.mock('../../utils/helpers', () => ({

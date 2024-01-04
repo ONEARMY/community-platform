@@ -1,5 +1,6 @@
-import type { StoryObj, StoryFn, Meta } from '@storybook/react'
 import { MemberBadge } from './MemberBadge'
+
+import type { Meta, StoryFn, StoryObj } from '@storybook/react'
 
 export default {
   /* 👇 The title prop is optional.

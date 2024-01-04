@@ -1,6 +1,7 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { glyphs } from '../Icon/Icon'
 import { Button } from './Button'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   /* 👇 The title prop is optional.

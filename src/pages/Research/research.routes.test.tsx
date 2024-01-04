@@ -1,23 +1,24 @@
-import { Suspense } from 'react'
 import '@testing-library/jest-dom'
-import { cleanup, render, waitFor, act } from '@testing-library/react'
-import { ThemeProvider } from '@emotion/react'
-import { Provider } from 'mobx-react'
+
+import { Suspense } from 'react'
 import {
-  Route,
-  RouterProvider,
   createMemoryRouter,
   createRoutesFromElements,
+  Route,
+  RouterProvider,
 } from 'react-router-dom'
-
+import { ThemeProvider } from '@emotion/react'
+import { act, cleanup, render, waitFor } from '@testing-library/react'
+import { Provider } from 'mobx-react'
+import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
-import { researchRouteElements } from './research.routes'
-import { useResearchStore } from 'src/stores/Research/research.store'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+
+import { researchRouteElements } from './research.routes'
 
 import type { ResearchStore } from 'src/stores/Research/research.store'
 

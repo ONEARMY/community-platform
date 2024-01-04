@@ -1,7 +1,9 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { Text } from 'theme-ui'
+
 import { Icon } from '..'
 import { ExternalLink } from './ExternalLink'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   /* 👇 The title prop is optional.

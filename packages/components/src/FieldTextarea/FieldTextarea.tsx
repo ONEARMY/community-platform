@@ -1,7 +1,9 @@
 import { useState } from 'react'
-import type { FieldRenderProps } from 'react-final-form'
-import { Textarea, Text } from 'theme-ui'
+import { Text, Textarea } from 'theme-ui'
+
 import { CharacterCount } from '../CharacterCount/CharacterCount'
+
+import type { FieldRenderProps } from 'react-final-form'
 
 type FieldProps = FieldRenderProps<any, any> & { children?: React.ReactNode }
 export interface Props extends FieldProps {

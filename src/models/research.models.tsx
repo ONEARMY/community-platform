@@ -1,6 +1,6 @@
-import type { DBDoc, IComment, IModerable, ISelectedTags, UserMention } from '.'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
+import type { DBDoc, IComment, IModerable, ISelectedTags, UserMention } from '.'
 import type { IResearchCategory } from './researchCategories.model'
 
 /**

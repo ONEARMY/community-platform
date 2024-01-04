@@ -1,7 +1,7 @@
-import type { StoryObj, StoryFn, Meta } from '@storybook/react'
+import HeaderHowtoIcon from '../../../../src/assets/images/header-section/howto-header-icon.svg'
 import { ElWithBeforeIcon } from './ElWithBeforeIcon'
 
-import HeaderHowtoIcon from '../../../../src/assets/images/header-section/howto-header-icon.svg'
+import type { Meta, StoryFn, StoryObj } from '@storybook/react'
 
 export default {
   title: 'Components/ElWithBeforeIcon',

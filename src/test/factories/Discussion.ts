@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker'
-import type { IDiscussion, IDiscussionComment } from 'src/models'
+
 import { FactoryComment } from './Comment'
+
+import type { IDiscussion, IDiscussionComment } from 'src/models'
 
 export const FactoryDiscussion = (
   discussionOverloads: Partial<IDiscussion> = {},

@@ -1,9 +1,11 @@
 import { faker } from '@faker-js/faker'
+
 import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
-import { headings, guidance } from '../../../../../src/pages/Howto/labels'
+import { guidance, headings } from '../../../../../src/pages/Howto/labels'
+
 const creatorEmail = 'howto_creator@test.com'
 const creatorPassword = 'test1234'
 

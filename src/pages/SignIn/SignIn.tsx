@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import { observer } from 'mobx-react'
+import { Field, Form } from 'react-final-form'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { Form, Field } from 'react-final-form'
-import { getFriendlyMessage } from 'oa-shared'
-import { Card, Flex, Heading, Text, Label, Box } from 'theme-ui'
+import { observer } from 'mobx-react'
 import { Button, FieldInput, TextNotification } from 'oa-components'
-
-import { required } from 'src/utils/validators'
+import { getFriendlyMessage } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/index'
+import { required } from 'src/utils/validators'
+import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
 
 import type { TextNotificationProps } from 'oa-components'
 

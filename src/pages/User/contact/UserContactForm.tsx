@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
-import { Box, Flex, Heading } from 'theme-ui'
-import { Button } from 'oa-components'
 import { observer } from 'mobx-react'
-
+import { Button } from 'oa-components'
 import { useCommonStores } from 'src/index'
 import { contact } from 'src/pages/User/labels'
+import { Box, Flex, Heading } from 'theme-ui'
+
 import {
   UserContactError,
   UserContactFieldEmail,

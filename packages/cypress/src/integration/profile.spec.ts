@@ -1,11 +1,10 @@
 import { faker } from '@faker-js/faker'
 
+import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
+import { missing } from '../../../../src/pages/User/impact/labels'
+import { contact } from '../../../../src/pages/User/labels'
 import { users } from '../data'
 import { UserMenuItem } from '../support/commands'
-import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
-import { contact } from '../../../../src/pages/User/labels'
-
-import { missing } from '../../../../src/pages/User/impact/labels'
 
 const { admin, subscriber } = users
 const betaTester = users['beta-tester']
@@ -82,7 +81,7 @@ describe('[Profile]', () => {
       cy.visit(`/u/${userProfiletype.userName}`)
       cy.get('[data-cy=ImpactTab]').click()
       cy.get('[data-cy=ImpactPanel]').should('exist')
-      cy.contains(missing.owner.label)
+      cy.contains(missing.user.label)
       cy.contains('2021')
       cy.contains('3 full time employees')
     })

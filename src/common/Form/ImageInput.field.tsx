@@ -1,7 +1,9 @@
 import * as React from 'react'
 import { Text } from 'theme-ui'
+
 import { ImageInput } from './ImageInput/ImageInput'
 import { FieldContainer } from './FieldContainer'
+
 import type { FieldProps } from './types'
 
 // Assign correct typing so that ImageInput props can also be passed down to child

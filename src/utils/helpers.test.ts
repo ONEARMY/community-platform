@@ -1,5 +1,6 @@
-import type { IModerable, IResearch } from 'src/models'
-import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
+import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
+import { FactoryUser } from 'src/test/factories/User'
+
 import {
   arrayToJson,
   calculateTotalComments,
@@ -13,8 +14,9 @@ import {
   numberWithCommas,
   stripSpecialCharacters,
 } from './helpers'
-import { FactoryUser } from 'src/test/factories/User'
-import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
+
+import type { IModerable, IResearch } from 'src/models'
+import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {

@@ -1,10 +1,12 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { Flex, Text } from 'theme-ui'
-import type { IUser } from 'src/models/user.models'
-import ResearchForm from 'src/pages/Research/Content/Common/Research.form'
-import TEMPLATE from './Template'
 import { useCommonStores } from 'src/index'
+import ResearchForm from 'src/pages/Research/Content/Common/Research.form'
+import { Flex, Text } from 'theme-ui'
+
+import TEMPLATE from './Template'
+
+import type { IUser } from 'src/models/user.models'
 
 const CreateResearch = observer(() => {
   const { userStore } = useCommonStores().stores

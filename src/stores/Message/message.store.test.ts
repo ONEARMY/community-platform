@@ -1,5 +1,6 @@
 jest.mock('../common/module.store')
 import { FactoryMessage } from 'src/test/factories/Message'
+
 import { MessageStore } from './message.store'
 
 const factory = () => {

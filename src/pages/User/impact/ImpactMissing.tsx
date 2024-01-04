@@ -1,10 +1,11 @@
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
+import { useCommonStores } from 'src/index'
 import { Flex, Text } from 'theme-ui'
 
-import { useCommonStores } from 'src/index'
-import { invisible, missing } from './labels'
 import { IMPACT_REPORT_LINKS } from './constants'
+import { invisible, missing } from './labels'
 
 import type { IImpactYear, IImpactYearFieldList, IUserPP } from 'src/models'
 
@@ -28,13 +29,20 @@ const isAllInvisible = (fields, visibleFields) => {
   return false
 }
 
+const isPageOwnerCheck = (activeUser, user) => {
+  const usersPresent = activeUser && user
+  const usersTheSame = toJS(activeUser)?.userName === user?.userName
+
+  return usersPresent && usersTheSame ? true : false
+}
+
 export const ImpactMissing = observer((props: Props) => {
   const { fields, user, visibleFields, year } = props
   const { userStore } = useCommonStores().stores
 
   const labelSet = isAllInvisible(fields, visibleFields) ? invisible : missing
 
-  const isPageOwner = userStore.activeUser && user
+  const isPageOwner = isPageOwnerCheck(userStore.activeUser, user)
 
   const userButton = `${year} ${labelSet.user.link}`
   const label = isPageOwner ? labelSet.owner.label : labelSet.user.label

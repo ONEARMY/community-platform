@@ -1,7 +1,9 @@
-import { observable, action, makeObservable, computed } from 'mobx'
-import type { IResearchCategory } from 'src/models/researchCategories.model'
+import { action, computed, makeObservable, observable } from 'mobx'
 import { arrayToJson } from 'src/utils/helpers'
+
 import { ModuleStore } from '../common/module.store'
+
+import type { IResearchCategory } from 'src/models/researchCategories.model'
 import type { RootStore } from '..'
 
 export class ResearchCategoriesStore extends ModuleStore {

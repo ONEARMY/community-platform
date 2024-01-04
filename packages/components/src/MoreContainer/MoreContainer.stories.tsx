@@ -1,6 +1,8 @@
-import type { StoryFn, Meta } from '@storybook/react'
+import { Flex, Heading } from 'theme-ui'
+
 import { MoreContainer } from './MoreContainer'
-import { Heading, Flex } from 'theme-ui'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/MoreContainer',

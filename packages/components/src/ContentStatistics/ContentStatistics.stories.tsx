@@ -1,6 +1,8 @@
 import { faker } from '@faker-js/faker'
-import type { StoryFn, Meta } from '@storybook/react'
+
 import { ContentStatistics } from './ContentStatistics'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/ContentStatistics',

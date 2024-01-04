@@ -3,8 +3,8 @@ import { Flex, Text } from 'theme-ui'
 
 import { buttons, headings, intro } from '../../labels'
 import {
-  HowtoCategoryGuidance,
   FormFieldWrapper,
+  HowtoCategoryGuidance,
   HowtoFieldFileLink,
   HowtoFieldFileUpload,
 } from '.'

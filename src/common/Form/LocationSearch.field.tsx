@@ -1,7 +1,9 @@
-import type { FieldProps } from './types'
 import { OsmGeocoding } from 'oa-components'
 import { logger } from 'src/logger'
 import { getLocationData } from 'src/utils/getLocationData'
+
+import type { FieldProps } from './types'
+
 interface IExtendedFieldProps extends FieldProps {
   // add additional onChange style method to respond more directly to value changes
   // without need for react-final-form listener

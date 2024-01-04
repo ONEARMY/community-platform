@@ -1,4 +1,5 @@
 import { act } from '@testing-library/react'
+
 import { render } from '../tests/utils'
 import { Default } from './TabbedContent.stories'
 

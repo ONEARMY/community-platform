@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import Foco from 'react-foco'
 import { observer } from 'mobx-react'
-import { Box, Flex } from 'theme-ui'
 import { MemberBadge } from 'oa-components'
-
+import { useCommonStores } from 'src/index'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
-import ProfileButtons from './ProfileButtons'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { useCommonStores } from 'src/index'
+import { Box, Flex } from 'theme-ui'
+
+import ProfileButtons from './ProfileButtons'
 
 import './profile.css'
 

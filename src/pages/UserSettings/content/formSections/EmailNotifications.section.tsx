@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { Heading, Box, Text } from 'theme-ui'
+import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
 import { EmailNotificationFrequency } from 'oa-shared'
-import { Field } from 'react-final-form'
+import { fields } from 'src/pages/UserSettings/labels'
+import { Box, Heading, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from './elements'
-import { fields } from 'src/pages/UserSettings/labels'
 
 import type { INotificationSettings } from 'src/models/user.models'
 

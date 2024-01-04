@@ -1,8 +1,10 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { Text, Flex } from 'theme-ui'
-import { SettingsPage } from './SettingsPage'
 import { useCommonStores } from 'src/index'
+import { Flex, Text } from 'theme-ui'
+
+import { SettingsPage } from './SettingsPage'
+
 import type { IUser } from 'src/models/user.models'
 
 const Settings = observer(() => {

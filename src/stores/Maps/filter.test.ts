@@ -1,5 +1,6 @@
-import type { IMapPin } from 'src/models'
 import { filterMapPinsByType } from './filter'
+
+import type { IMapPin } from 'src/models'
 
 describe('filterMapPinsByType', () => {
   it('excludes deleted items', () => {

@@ -1,5 +1,7 @@
 import isUrl from 'is-url'
+
 import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
+
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 

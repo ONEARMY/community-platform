@@ -1,6 +1,7 @@
-import { Flex, Text } from 'theme-ui'
-import { FieldTextarea, Button } from '../'
 import { Field, Form } from 'react-final-form'
+import { Flex, Text } from 'theme-ui'
+
+import { Button, FieldTextarea } from '../'
 
 type EditCommentProps = {
   comment: string

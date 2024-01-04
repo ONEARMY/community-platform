@@ -1,6 +1,7 @@
 // re-imports and re-exports
 import type { DBEndpoint } from '../stores/databaseV2/endpoints'
 import type { DBDoc as DBDocImport } from '../stores/databaseV2/types'
+
 export type DBDoc = DBDocImport
 export { DB_ENDPOINTS } from '../stores/databaseV2/endpoints'
 export type IDBEndpoint = DBEndpoint

@@ -1,9 +1,10 @@
-import { Box, Card, Text, Flex, Heading } from 'theme-ui'
-import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
-import type { IHowtoStep } from 'src/models/howto.models'
-import { capitalizeFirstLetter } from 'src/utils/helpers'
 import styled from '@emotion/styled'
+import { ImageGallery, LinkifyText, VideoPlayer } from 'oa-components'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { capitalizeFirstLetter } from 'src/utils/helpers'
+import { Box, Card, Flex, Heading, Text } from 'theme-ui'
+
+import type { IHowtoStep } from 'src/models/howto.models'
 
 interface IProps {
   step: IHowtoStep

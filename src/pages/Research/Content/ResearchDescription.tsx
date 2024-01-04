@@ -1,27 +1,29 @@
+import { Fragment, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
+  ConfirmModal,
+  ContentStatistics,
   FollowButton,
   LinkifyText,
   ModerationStatus,
   UsefulStatsButton,
   Username,
-  ConfirmModal,
-  ContentStatistics,
 } from 'oa-components'
-import { useEffect, useState, Fragment } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import type { IResearch } from 'src/models/research.models'
-import type { IUser } from 'src/models/user.models'
+import { trackEvent } from 'src/common/Analytics'
+import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { buildStatisticsLabel } from 'src/utils/helpers'
 import {
   addIDToSessionStorageArray,
   retrieveSessionStorageArray,
 } from 'src/utils/sessionStorage'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
-import { trackEvent } from 'src/common/Analytics'
-import { logger } from 'src/logger'
-import { buildStatisticsLabel } from 'src/utils/helpers'
+
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+
+import type { IResearch } from 'src/models/research.models'
+import type { IUser } from 'src/models/user.models'
 
 interface IProps {
   research: IResearch.ItemDB

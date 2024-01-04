@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+
 import type { IResearch, IResearchDB } from 'src/models'
 
 type ResearchCalculatedFields = {

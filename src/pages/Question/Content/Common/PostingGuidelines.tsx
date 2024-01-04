@@ -1,5 +1,5 @@
-import { Card, Text, Flex, Heading } from 'theme-ui'
 import { ExternalLink } from 'oa-components'
+import { Card, Flex, Heading, Text } from 'theme-ui'
 
 export const PostingGuidelines = () => (
   <Card>

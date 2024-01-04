@@ -1,6 +1,8 @@
-import errorImage from '../../assets/images/404error.png'
-import { Flex, Image, Text } from 'theme-ui'
 import { Link } from 'react-router-dom'
+import { Flex, Image, Text } from 'theme-ui'
+
+import errorImage from '../../assets/images/404error.png'
+
 import type { FC } from 'react'
 
 export const NotFoundPage: FC = () => (

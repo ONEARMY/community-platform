@@ -1,8 +1,10 @@
-import { Text, Flex } from 'theme-ui'
-import type { availableGlyphs } from '..'
-import { Icon } from '..'
 import { useState } from 'react'
+import { Flex, Text } from 'theme-ui'
+
 import { Button } from '../Button/Button'
+import { Icon } from '..'
+
+import type { availableGlyphs } from '..'
 
 export interface IProps {
   statistics: {

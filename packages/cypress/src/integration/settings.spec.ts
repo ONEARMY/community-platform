@@ -1,7 +1,7 @@
-import { DbCollectionName } from '../utils/TestUtils'
-import { UserMenuItem } from '../support/commands'
-import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { form } from '../../../../src/pages/UserSettings/labels'
+import { SingaporeStubResponse } from '../fixtures/searchResults'
+import { UserMenuItem } from '../support/commands'
+import { DbCollectionName } from '../utils/TestUtils'
 
 import type { IUser } from '../../../../src/models/user.models'
 

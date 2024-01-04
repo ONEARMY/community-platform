@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { CategoryTag } from './CategoryTag'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/CategoryTag',

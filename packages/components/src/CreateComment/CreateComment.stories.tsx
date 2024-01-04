@@ -1,6 +1,8 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { useState } from 'react'
+
 import { CreateComment } from './CreateComment'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/CreateComment',

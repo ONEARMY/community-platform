@@ -1,8 +1,8 @@
-import { Flex, Image, Text, Box } from 'theme-ui'
+import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { VERSION } from 'src/config/config'
-import { Link } from 'react-router-dom'
 import { useCommonStores } from 'src/index'
+import { Box, Flex, Image, Text } from 'theme-ui'
 
 const Logo = observer(() => {
   const { themeStore } = useCommonStores().stores

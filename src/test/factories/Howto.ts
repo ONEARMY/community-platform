@@ -1,5 +1,6 @@
-import type { IHowtoDB, IHowtoStep } from 'src/models'
 import { faker } from '@faker-js/faker'
+
+import type { IHowtoDB, IHowtoStep } from 'src/models'
 
 export const FactoryHowto = (
   howtoOverloads: Partial<IHowtoDB> = {},

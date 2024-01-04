@@ -1,14 +1,16 @@
 import { fireEvent } from '@testing-library/react'
 import { vi } from 'vitest'
+
 import { render } from '../tests/utils'
+import { createFakeComments, fakeComment } from '../utils'
 import { CommentList } from './CommentList'
+
 import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
-import { createFakeComments, fakeComment } from './createFakeComments'
 
 const mockHandleEdit = vi.fn()
 const mockHandleEditRequest = vi.fn()
 const mockHandleDelete = vi.fn()
-const mockTrackEvent = vi.fn()
+const mockOnMoreComments = vi.fn()
 
 describe('CommentList', () => {
   it('renders the correct number of comments initially', () => {
@@ -19,7 +21,7 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
-        trackEvent={mockTrackEvent}
+        onMoreComments={mockOnMoreComments}
       />,
     )
     expect(screen.getAllByTestId('CommentList: item')).toHaveLength(
@@ -35,16 +37,12 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
-        trackEvent={mockTrackEvent}
+        onMoreComments={mockOnMoreComments}
       />,
     )
     fireEvent.click(screen.getByText('show more comments'))
     expect(screen.getAllByTestId('CommentList: item').length).toBeGreaterThan(5)
-    expect(mockTrackEvent).toHaveBeenCalledWith({
-      category: 'Comments',
-      action: 'Show more',
-      label: undefined, // Replace with expected article title if available
-    })
+    expect(mockOnMoreComments).toHaveBeenCalled()
   })
 
   it('highlights the correct comment when highlightedCommentId is provided', () => {
@@ -59,7 +57,7 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
-        trackEvent={mockTrackEvent}
+        onMoreComments={mockOnMoreComments}
       />,
     )
     expect(screen.getAllByTestId('CommentList: item')[1]).toHaveStyle(
@@ -82,7 +80,7 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
-        trackEvent={mockTrackEvent}
+        onMoreComments={mockOnMoreComments}
       />,
     )
 

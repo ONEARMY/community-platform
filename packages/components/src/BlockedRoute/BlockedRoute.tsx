@@ -1,4 +1,5 @@
-import { Flex, Box, Text } from 'theme-ui'
+import { Box, Flex, Text } from 'theme-ui'
+
 import { Button } from '../Button/Button'
 import { InternalLink } from '../InternalLink/InternalLink'
 

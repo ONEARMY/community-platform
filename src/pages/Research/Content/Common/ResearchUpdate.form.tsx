@@ -1,22 +1,21 @@
 import * as React from 'react'
+import { Field, Form } from 'react-final-form'
+import styled from '@emotion/styled'
 import arrayMutators from 'final-form-arrays'
 import { observer } from 'mobx-react'
-import { Field, Form } from 'react-final-form'
-import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
-import styled from '@emotion/styled'
 import {
   Button,
-  FieldInput,
-  FieldTextarea,
-  ElWithBeforeIcon,
-  ResearchEditorOverview,
   ConfirmModal,
   DownloadStaticFile,
+  ElWithBeforeIcon,
+  FieldInput,
+  FieldTextarea,
+  ResearchEditorOverview,
 } from 'oa-components'
-
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { FileInputField } from 'src/common/Form/FileInput.field'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
+import { usePrompt } from 'src/common/hooks/usePrompt'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
@@ -28,19 +27,20 @@ import {
   setAllowDraftSaveTrue,
   validateTitle,
 } from 'src/utils/validators'
-import { UpdateSubmitStatus } from './SubmitStatus'
+import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
+
+import { MAX_LINK_LENGTH } from '../../../constants'
 import {
+  RESEARCH_MAX_LENGTH,
   RESEARCH_TITLE_MAX_LENGTH,
   RESEARCH_TITLE_MIN_LENGTH,
-  RESEARCH_MAX_LENGTH,
 } from '../../constants'
-import { MAX_LINK_LENGTH } from '../../../constants'
 import { buttons, errors, headings, update } from '../../labels'
 import { ResearchErrors } from './ResearchErrors'
+import { UpdateSubmitStatus } from './SubmitStatus'
 
-import type { IResearch } from 'src/models/research.models'
 import type { ResearchEditorOverviewUpdate } from 'oa-components'
-import { usePrompt } from 'src/common/hooks/usePrompt'
+import type { IResearch } from 'src/models/research.models'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;

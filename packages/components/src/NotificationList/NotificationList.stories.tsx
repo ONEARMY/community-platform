@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker'
-import type { StoryFn, Meta } from '@storybook/react'
+
 import { InternalLink } from '../InternalLink/InternalLink'
 import { NotificationList } from './NotificationList'
+
+import type { Meta, StoryFn } from '@storybook/react'
 import type { UserNotificationList } from './NotificationList'
 
 export default {

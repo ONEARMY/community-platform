@@ -1,6 +1,7 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { ImageGallery } from './ImageGallery'
-import type { ImageGalleryProps, IImageGalleryItem } from './ImageGallery'
+
+import type { Meta, StoryFn } from '@storybook/react'
+import type { IImageGalleryItem, ImageGalleryProps } from './ImageGallery'
 
 const imageUrls = [
   {

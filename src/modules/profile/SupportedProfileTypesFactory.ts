@@ -1,11 +1,11 @@
-import LogoCollectionVerified from 'src/assets/icons/map-collection-verified.svg'
 import LogoCollection from 'src/assets/icons/map-collection.svg'
-import LogoCommunityVerified from 'src/assets/icons/map-community-verified.svg'
+import LogoCollectionVerified from 'src/assets/icons/map-collection-verified.svg'
 import LogoCommunity from 'src/assets/icons/map-community.svg'
-import LogoMachineVerified from 'src/assets/icons/map-machine-verified.svg'
+import LogoCommunityVerified from 'src/assets/icons/map-community-verified.svg'
 import LogoMachine from 'src/assets/icons/map-machine.svg'
-import LogoWorkspaceVerified from 'src/assets/icons/map-workspace-verified.svg'
+import LogoMachineVerified from 'src/assets/icons/map-machine-verified.svg'
 import LogoWorkspace from 'src/assets/icons/map-workspace.svg'
+import LogoWorkspaceVerified from 'src/assets/icons/map-workspace-verified.svg'
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
@@ -16,6 +16,7 @@ import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_s
 import PreciousPlasticMember from 'src/assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import ProjectKampMember from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
 import ProjectKampSpace from 'src/assets/images/themes/project-kamp/avatar_space_sm.svg'
+
 import type { PlatformTheme } from 'oa-themes'
 import type { IProfileType } from './types'
 

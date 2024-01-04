@@ -1,6 +1,8 @@
-import * as React from 'react'
-import { render, screen, fireEvent, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
+
+import * as React from 'react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+
 import { PatreonIntegration } from './PatreonIntegration' // Adjust the import path accordingly
 
 jest.mock('src/index', () => ({

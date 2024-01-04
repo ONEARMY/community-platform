@@ -1,9 +1,11 @@
-import { useTheme } from '@emotion/react'
 import { useEffect, useState } from 'react'
-import type { ThemeUIStyleObject } from 'theme-ui'
-import { Text } from 'theme-ui'
-import { Button, Tooltip } from '../'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from '@emotion/react'
+import { Text } from 'theme-ui'
+
+import { Button, Tooltip } from '../'
+
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   hasUserVotedUseful: boolean

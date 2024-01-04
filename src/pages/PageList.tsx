@@ -1,9 +1,11 @@
 import { lazy } from 'react'
-import type { CSSObject } from 'theme-ui'
-import type { UserRole } from 'src/models/user.models'
-import { ResearchModule } from './Research'
-import { QuestionModule } from './Question'
 import { MODULE } from 'src/modules'
+
+import { QuestionModule } from './Question'
+import { ResearchModule } from './Research'
+
+import type { UserRole } from 'src/models/user.models'
+import type { CSSObject } from 'theme-ui'
 /**
  * Import all pages for use in lazy loading
  * NOTE - requires default export in page class (https://reactjs.org/docs/code-splitting.html#named-exports)

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import ReactGA from 'react-ga4'
-import { GA_TRACKING_ID } from 'src/config/config'
 import { useLocation } from 'react-router-dom'
+import { GA_TRACKING_ID } from 'src/config/config'
 
 export const GoogleAnalytics = () => {
   const location = useLocation()

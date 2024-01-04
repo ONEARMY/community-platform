@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
-import { UserNameTag } from '../UserNameTag/UserNameTag'
 import { Box, Text } from 'theme-ui'
+
+import { UserNameTag } from '../UserNameTag/UserNameTag'
 
 interface ContentAuthorTimestampProps {
   userName: string

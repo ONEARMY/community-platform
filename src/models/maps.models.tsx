@@ -1,6 +1,6 @@
+import type { ProfileTypeLabel } from '../modules/profile/types'
 import type { IModerationStatus } from './common.models'
 import type { WorkspaceType } from './userPreciousPlastic.models'
-import type { ProfileTypeLabel } from '../modules/profile/types'
 
 /**
  * Map pins keep minimal information required for pin display.

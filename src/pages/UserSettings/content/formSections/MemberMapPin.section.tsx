@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
-import { Heading, Text, Box, Flex } from 'theme-ui'
 import { Field } from 'react-final-form'
+import { observer } from 'mobx-react'
 import { Button, FieldTextarea, MapWithDraggablePin } from 'oa-components'
+import { useCommonStores } from 'src/index'
+import { MAX_PIN_LENGTH } from 'src/pages/UserSettings/constants'
+import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
+import { randomIntFromInterval } from 'src/utils/helpers'
+import { required } from 'src/utils/validators'
+import { Box, Flex, Heading, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from './elements'
-import { required } from 'src/utils/validators'
-import { randomIntFromInterval } from 'src/utils/helpers'
-import { MAX_PIN_LENGTH } from 'src/pages/UserSettings/constants'
-import { buttons, headings, fields } from 'src/pages/UserSettings/labels'
-import { useCommonStores } from 'src/index'
 
 import type { ILocation } from 'src/models/common.models'
 

@@ -6,10 +6,10 @@ import { stripSpecialCharacters } from 'src/utils/helpers'
 
 import { Storage } from '../storage'
 
-import type { ISelectedTags } from 'src/models/tags.model'
 import type { IDBEndpoint, ILocation } from 'src/models/common.models'
-import type { RootStore } from '../index'
+import type { ISelectedTags } from 'src/models/tags.model'
 import type { IConvertedFileMeta } from '../../types'
+import type { RootStore } from '../index'
 import type { IUploadedFileMeta } from '../storage'
 /**
  * The module store is used to share methods and data between other stores, including

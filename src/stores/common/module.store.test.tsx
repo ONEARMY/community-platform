@@ -1,6 +1,6 @@
-import { ModuleStore } from './module.store'
-import { RootStore } from '../index'
 import { DatabaseV2 } from '../databaseV2'
+import { RootStore } from '../index'
+import { ModuleStore } from './module.store'
 
 // Mocked to prevent App initialisation from useCommonStores dependency
 jest.mock('react-dom')

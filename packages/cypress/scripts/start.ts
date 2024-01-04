@@ -1,8 +1,10 @@
 #!/usr/bin/env ts-node
+import { spawn, spawnSync } from 'child_process'
+
 import PATHS from './paths'
 
-import { spawnSync, spawn } from 'child_process'
 const e2eEnv = require('dotenv').config()
+
 import fs from 'fs-extra'
 import waitOn from 'wait-on'
 

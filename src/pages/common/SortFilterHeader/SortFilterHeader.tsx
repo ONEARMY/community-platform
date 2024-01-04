@@ -1,17 +1,15 @@
-import { useNavigate } from 'react-router-dom'
-import type { NavigateFunction } from 'react-router-dom'
-import { Flex, Input } from 'theme-ui'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Select } from 'oa-components'
-
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
+import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
+import { Flex, Input } from 'theme-ui'
 
+import type { NavigateFunction } from 'react-router-dom'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
-
-import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
-import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 const updateQueryParams = (
   url: string,

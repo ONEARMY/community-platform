@@ -1,23 +1,23 @@
 import React from 'react'
+import HamburgerMenu from 'react-hamburger-menu'
+import { useTheme, withTheme } from '@emotion/react'
 import { motion } from 'framer-motion'
 import { observer } from 'mobx-react'
-import HamburgerMenu from 'react-hamburger-menu'
-import { Flex, Text } from 'theme-ui'
-import { useTheme, withTheme } from '@emotion/react'
-
+import { useCommonStores } from 'src/index'
+import { isModuleSupported, MODULE } from 'src/modules'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
-import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import { isModuleSupported, MODULE } from 'src/modules'
 import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
 import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
+import { Flex, Text } from 'theme-ui'
+
 import { getFormattedNotifications } from './getFormattedNotifications'
-import { useCommonStores } from 'src/index'
+import { MobileMenuContext } from './MobileMenuContext'
 
 import type { ThemeWithName } from 'oa-themes'
-import { MobileMenuContext } from './MobileMenuContext'
 
 const MobileNotificationsWrapper = ({ children }) => {
   const theme = useTheme()

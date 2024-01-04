@@ -1,6 +1,8 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { useState } from 'react'
+
 import { TextNotification } from './TextNotification'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/TextNotification',

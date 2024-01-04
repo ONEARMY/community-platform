@@ -1,15 +1,17 @@
-import { Provider } from 'mobx-react'
-import { render, act, waitFor } from '@testing-library/react'
 import {
-  Route,
   createMemoryRouter,
   createRoutesFromElements,
+  Route,
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
-import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import Maps from './Maps'
+import { act, render, waitFor } from '@testing-library/react'
+import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/index'
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+
+import Maps from './Maps'
+
 const Theme = testingThemeStyles
 
 const mockMapStore = {

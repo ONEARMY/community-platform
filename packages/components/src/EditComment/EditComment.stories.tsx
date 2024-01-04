@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { EditComment } from './EditComment'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/EditComment',

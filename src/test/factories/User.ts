@@ -1,6 +1,7 @@
-import type { IUserPPDB } from 'src/models'
 import { faker } from '@faker-js/faker'
 import { ProfileType } from 'src/modules/profile/types'
+
+import type { IUserPPDB } from 'src/models'
 
 export const FactoryUser = (
   userOverloads: Partial<IUserPPDB> = {},

@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import { Button, ConfirmModal, FieldInput } from 'oa-components'
-import { Box, Flex, Grid } from 'theme-ui'
 import { Field } from 'react-final-form'
-
+import { Button, ConfirmModal, FieldInput } from 'oa-components'
 import { SelectField } from 'src/common/Form/Select.field'
+import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { formatLink } from 'src/utils/formatters'
 import { required, validateEmail, validateUrl } from 'src/utils/validators'
-import { buttons, fields } from 'src/pages/UserSettings/labels'
+import { Box, Flex, Grid } from 'theme-ui'
 
 const COM_TYPE_MOCKS = [
   {

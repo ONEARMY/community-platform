@@ -1,6 +1,7 @@
 import { render } from '../tests/utils'
-import type { DownloadFileFromLinkProps } from './DownloadFileFromLink'
 import { Default } from './DownloadFileFromLink.stories'
+
+import type { DownloadFileFromLinkProps } from './DownloadFileFromLink'
 
 describe('DownloadFiles', () => {
   it('validates the component behaviour', () => {

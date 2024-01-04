@@ -11,8 +11,10 @@ import {
   ResearchEditorOverview,
 } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
+import { researchStatusOptions } from 'src/models/research.models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
@@ -36,10 +38,7 @@ import {
 import { buttons, headings, overview } from '../../labels'
 import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
 
-import type { RouteComponentProps } from 'react-router'
-import { researchStatusOptions } from 'src/models/research.models'
 import type { IResearch } from 'src/models/research.models'
-import { SelectField } from 'src/common/Form/Select.field'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'

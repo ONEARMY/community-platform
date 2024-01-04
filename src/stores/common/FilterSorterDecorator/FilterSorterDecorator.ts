@@ -1,13 +1,13 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
 import { calculateTotalComments } from 'src/utils/helpers'
+
 import type {
   IComment,
   IModerationStatus,
   IUser,
   ResearchStatus,
 } from 'src/models'
-
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {

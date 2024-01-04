@@ -1,16 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'oa-components'
-import { researchStatusOptions } from 'src/models'
-import type { ResearchStatus } from 'src/models'
-
 import { FieldContainer } from 'src/common/Form/FieldContainer'
+import { researchStatusOptions } from 'src/models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
 import { Flex, Input } from 'theme-ui'
 
 import type { NavigateFunction } from 'react-router-dom'
+import type { ResearchStatus } from 'src/models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 

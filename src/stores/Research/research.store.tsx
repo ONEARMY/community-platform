@@ -142,7 +142,10 @@ export class ResearchStore extends ModuleStore {
     )
 
     validResearches = validResearches.filter((research) => {
-      return research.researchStatus !== 'Archived'
+      return (
+        research.researchStatus !== 'Archived' ||
+        this.selectedStatus === 'Archived'
+      )
     })
 
     validResearches = this.filterSorterDecorator.search(

@@ -89,7 +89,7 @@ export class FilterSorterDecorator<T extends IItem> {
   public filterByStatus(listItems: T[] = [], status: ResearchStatus): T[] {
     return status
       ? listItems.filter((obj) => {
-          return obj.researchStatus === status
+          return (obj.researchStatus || 'In progress') === status
         })
       : listItems
   }

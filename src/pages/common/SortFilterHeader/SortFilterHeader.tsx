@@ -198,7 +198,7 @@ export const SortFilterHeader = ({
                   window.location.href,
                   'status',
                   status ? status.value : '',
-                  history,
+                  navigate,
                 )
                 currentStore.updateSelectedStatus(status?.value ?? null)
               }}

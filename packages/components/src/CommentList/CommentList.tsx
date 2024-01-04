@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex } from 'theme-ui'
+
 import { Button, CommentItem } from '../'
+
 import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
+
 const MAX_COMMENTS = 5
 
 export type CommentWithReplies = Comment & { replies?: Comment[] }

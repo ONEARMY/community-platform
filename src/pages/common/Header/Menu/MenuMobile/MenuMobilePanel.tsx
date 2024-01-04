@@ -1,11 +1,10 @@
 import React from 'react'
-import { Box, Flex } from 'theme-ui'
-
-import { getAvailablePageList } from 'src/pages/PageList'
-import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
+import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
+import { getAvailablePageList } from 'src/pages/PageList'
+import { Box, Flex } from 'theme-ui'
 
 const MenuMobilePanel = () => {
   return (

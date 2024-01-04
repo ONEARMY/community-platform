@@ -1,5 +1,6 @@
-import { transformHowtoErrors } from '.'
 import { intro, steps } from 'src/pages/Howto/labels'
+
+import { transformHowtoErrors } from '.'
 
 describe('transformHowtoErrors', () => {
   describe('introErrors', () => {

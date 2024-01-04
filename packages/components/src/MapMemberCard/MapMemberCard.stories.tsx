@@ -1,6 +1,8 @@
-import type { Meta } from '@storybook/react'
-import { MapMemberCard } from './MapMemberCard'
 import { faker } from '@faker-js/faker'
+
+import { MapMemberCard } from './MapMemberCard'
+
+import type { Meta } from '@storybook/react'
 
 export default {
   title: 'Components/MapMemberCard',

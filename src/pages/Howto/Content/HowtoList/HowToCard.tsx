@@ -1,17 +1,18 @@
+import { Link as RouterLink } from 'react-router-dom'
 import {
   CategoryTag,
   Icon,
   ModerationStatus,
-  Username,
   Tooltip,
+  Username,
 } from 'oa-components'
-import { Link as RouterLink } from 'react-router-dom'
-import { useCommonStores } from 'src/index'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import type { IHowtoDB } from 'src/models/howto.models'
+import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
-import { Card, Flex, Heading, Text, Box, Image } from 'theme-ui'
+import { Box, Card, Flex, Heading, Image, Text } from 'theme-ui'
+
+import type { IHowtoDB } from 'src/models/howto.models'
 
 interface IProps {
   howto: IHowtoDB & { taglist: any }

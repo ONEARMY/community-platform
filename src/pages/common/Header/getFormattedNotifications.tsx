@@ -1,7 +1,8 @@
-import type { UserNotificationList } from 'oa-components'
 import { InternalLink } from 'oa-components'
-import type { INotification } from 'src/models'
 import { Box } from 'theme-ui'
+
+import type { UserNotificationList } from 'oa-components'
+import type { INotification } from 'src/models'
 
 export const getFormattedNotificationMessage = (
   notification: INotification,

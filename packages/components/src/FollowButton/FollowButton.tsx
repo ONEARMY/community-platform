@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import type { ThemeUIStyleObject } from 'theme-ui'
-import { Button, Tooltip } from '..'
 import { useNavigate } from 'react-router-dom'
+
+import { Button, Tooltip } from '..'
+
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   hasUserSubscribed: boolean

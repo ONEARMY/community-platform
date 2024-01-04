@@ -1,16 +1,18 @@
 jest.mock('../../stores/common/module.store')
 
-import { render, waitFor } from '@testing-library/react'
-import Unsubscribe from './Unsubscribe'
-import { ThemeProvider } from '@emotion/react'
-import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import {
-  Route,
-  RouterProvider,
   createMemoryRouter,
   createRoutesFromElements,
+  Route,
+  RouterProvider,
 } from 'react-router-dom'
+import { ThemeProvider } from '@emotion/react'
+import { render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
+import { testingThemeStyles } from 'src/test/utils/themeUtils'
+
+import Unsubscribe from './Unsubscribe'
+
 const Theme = testingThemeStyles
 
 const mockUnsubscribeUser = jest.fn()

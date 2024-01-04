@@ -1,13 +1,15 @@
 jest.mock('../common/module.store')
-import type { IDiscussion } from 'src/models'
-import { DiscussionStore } from './discussions.store'
-import type { RootStore } from '..'
-import { FactoryUser } from 'src/test/factories/User'
+import { faker } from '@faker-js/faker'
 import {
   FactoryDiscussion,
   FactoryDiscussionComment,
 } from 'src/test/factories/Discussion'
-import { faker } from '@faker-js/faker'
+import { FactoryUser } from 'src/test/factories/User'
+
+import { DiscussionStore } from './discussions.store'
+
+import type { IDiscussion } from 'src/models'
+import type { RootStore } from '..'
 
 const factory = async (
   discussions: IDiscussion[] = [FactoryDiscussion({})],

@@ -1,14 +1,16 @@
 import React, { useEffect, useRef } from 'react'
-import { observer } from 'mobx-react'
 import { Link, useLocation } from 'react-router-dom'
-import { Button, MoreContainer, Loader } from 'oa-components'
-import { Heading, Flex, Box } from 'theme-ui'
-import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
+import { observer } from 'mobx-react'
+import { Button, Loader, MoreContainer } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import HowToCard from './HowToCard'
-import type { IHowto } from 'src/models'
-import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
 import { useCommonStores } from 'src/index'
+import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
+import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
+import { Box, Flex, Heading } from 'theme-ui'
+
+import HowToCard from './HowToCard'
+
+import type { IHowto } from 'src/models'
 
 export const HowtoList = observer(() => {
   const { howtoStore, themeStore, tagsStore, userStore } =

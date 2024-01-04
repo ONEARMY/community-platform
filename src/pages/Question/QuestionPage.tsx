@@ -1,16 +1,18 @@
+import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import {
+  FollowButton,
   Loader,
   ModerationStatus,
   UsefulStatsButton,
-  FollowButton,
 } from 'oa-components'
-import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import type { IQuestion } from 'src/models'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
-import { Box, Button, Card, Heading, Text, Flex } from 'theme-ui'
+import { Box, Button, Card, Flex, Heading, Text } from 'theme-ui'
+
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+
+import type { IQuestion } from 'src/models'
 
 export const QuestionPage = () => {
   const { slug } = useParams()

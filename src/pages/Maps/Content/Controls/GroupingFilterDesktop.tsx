@@ -1,6 +1,6 @@
 import React from 'react'
-import { Box } from 'theme-ui'
 import { Select } from 'oa-components'
+import { Box } from 'theme-ui'
 
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 

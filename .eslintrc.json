@@ -5,6 +5,8 @@
     "@typescript-eslint",
     "prettier",
     "unicorn",
+    "import",
+    "simple-import-sort",
     "sort-class-members",
     "jest"
   ],
@@ -45,6 +47,7 @@
         "ignore": ["^src/", "^oa-([a-z]+)/", "^oa-components", "^oa-themes"]
       }
     ],
+    "import/newline-after-import": "error",
     "import/no-named-as-default": "off",
     "max-classes-per-file": "error",
     "no-useless-escape": "error",
@@ -57,6 +60,36 @@
     // as of v17 no longer required
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          // Side effect imports that probably shouldn't be there anyway.
+          ["^\\u0000"],
+          // Packages `react` related packages come first.
+          ["^react", "^@?\\w"],
+          // Internal packages.
+          ["^(@|components)(/.*|$)"],
+          // Relative imports. Put same-folder imports and `.` last.
+          [
+            "^\\.\\.(?!/?$)",
+            "^\\.\\./?$",
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$"
+          ],
+          // Type imports seperated out.
+          [
+            "^node:.*\\u0000$",
+            "^@?\\w.*\\u0000$",
+            "^[^.].*\\u0000$",
+            "^\\..*\\u0000$"
+          ],
+          // Style imports.
+          ["^.+\\.?(css)$"]
+        ]
+      }
+    ],
     "@typescript-eslint/ban-types": [
       "error",
       {

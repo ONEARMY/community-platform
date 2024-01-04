@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/naming-convention*/
 import type {
-  ISODateString,
-  ILocation,
-  DBDoc,
-  IModerationStatus,
-} from './common.models'
-import type {
-  UserRole,
   EmailNotificationFrequency,
   NotificationType,
   PatreonUser,
+  UserRole,
 } from 'oa-shared'
+import type {
+  DBDoc,
+  ILocation,
+  IModerationStatus,
+  ISODateString,
+} from './common.models'
+
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'

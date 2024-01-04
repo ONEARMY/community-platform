@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { FieldTextarea } from './FieldTextarea'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/FieldTextarea',

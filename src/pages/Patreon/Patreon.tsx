@@ -1,10 +1,10 @@
-import { observer } from 'mobx-react'
 import { useEffect, useMemo, useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
+import { observer } from 'mobx-react'
 import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { functions } from 'src/utils/firebase'
-import { Text, Flex } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 const Patreon = observer(() => {
   const [error, setError] = useState<boolean>(false)

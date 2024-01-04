@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker'
+
 import {
-  RESEARCH_TITLE_MIN_LENGTH,
   RESEARCH_MAX_LENGTH,
+  RESEARCH_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Research/constants'
 
 const researcherEmail = 'research_creator@test.com'

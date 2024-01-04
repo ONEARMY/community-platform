@@ -1,7 +1,8 @@
-import { render } from '@testing-library/react'
-import { ScrollToTop } from './ScrollToTop'
-import { useLocation } from 'react-router-dom'
 import { act } from 'react-dom/test-utils'
+import { useLocation } from 'react-router-dom'
+import { render } from '@testing-library/react'
+
+import { ScrollToTop } from './ScrollToTop'
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

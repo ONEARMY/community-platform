@@ -1,5 +1,6 @@
-import type { Meta } from '@storybook/react'
 import { Username } from './Username'
+
+import type { Meta } from '@storybook/react'
 
 export default {
   title: 'Components/Username',

@@ -1,4 +1,5 @@
-import { Box, Card, Text, Image, AspectRatio, Alert } from 'theme-ui'
+import { Alert, AspectRatio, Box, Card, Image, Text } from 'theme-ui'
+
 import { Username } from '../Username/Username'
 
 export interface Props {

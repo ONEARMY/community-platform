@@ -1,10 +1,11 @@
 import React from 'react'
+import { Global, ThemeProvider } from '@emotion/react'
 import { observer, Provider } from 'mobx-react'
-import { ThemeProvider, Global } from '@emotion/react'
 import { GlobalStyles } from 'oa-components'
-import { RootStore } from './stores'
+
 import ErrorBoundary from './common/Error/ErrorBoundary'
 import { Pages } from './pages'
+import { RootStore } from './stores'
 
 const rootStore = new RootStore()
 

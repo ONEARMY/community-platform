@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
+import { useCommonStores } from 'src/index'
 
 import { FieldContainer } from '../Form/FieldContainer'
-import { useCommonStores } from 'src/index'
 
 import type { FieldRenderProps } from 'react-final-form'
 import type { ISelectedTags, ITag, TagCategory } from 'src/models/tags.model'

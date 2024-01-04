@@ -1,8 +1,18 @@
-import { ElWithBeforeIcon, Button, FieldInput } from 'oa-components'
-import { Form, Field } from 'react-final-form'
-import { Box, Card, Flex, Heading, Label } from 'theme-ui'
+import { Field, Form } from 'react-final-form'
+import { useNavigate } from 'react-router-dom'
+import { Button, ElWithBeforeIcon, FieldInput } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { logger } from 'src/logger'
+import {
+  QUESTION_MAX_DESCRIPTION_LENGTH,
+  QUESTION_MAX_TITLE_LENGTH,
+  QUESTION_MIN_TITLE_LENGTH,
+} from 'src/pages/Question/constants'
 import { PostingGuidelines } from 'src/pages/Question/Content/Common'
+import * as LABELS from 'src/pages/Question/labels'
+import { useQuestionStore } from 'src/stores/Question/question.store'
+import { COMPARISONS } from 'src/utils/comparisons'
 import {
   composeValidators,
   draftValidationWrapper,
@@ -11,21 +21,11 @@ import {
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,
 } from 'src/utils/validators'
-import { useQuestionStore } from 'src/stores/Question/question.store'
-import { logger } from 'src/logger'
-import {
-  QUESTION_MAX_DESCRIPTION_LENGTH,
-  QUESTION_MAX_TITLE_LENGTH,
-  QUESTION_MIN_TITLE_LENGTH,
-} from 'src/pages/Question/constants'
+import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 
-import * as LABELS from 'src/pages/Question/labels'
-
-import { useNavigate } from 'react-router-dom'
-import type { IQuestion } from 'src/models'
-import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
-import { COMPARISONS } from 'src/utils/comparisons'
 import { CategoriesSelect } from '../../../Howto/Category/CategoriesSelect'
+
+import type { IQuestion } from 'src/models'
 
 interface IProps {
   'data-testid'?: string

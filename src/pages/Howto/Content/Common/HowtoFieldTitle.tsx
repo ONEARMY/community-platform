@@ -1,10 +1,10 @@
+import { useState } from 'react'
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { Text, Card } from 'theme-ui'
-import { useState } from 'react'
-
 import { COMPARISONS } from 'src/utils/comparisons'
 import { composeValidators, minValue, required } from 'src/utils/validators'
+import { Card, Text } from 'theme-ui'
+
 import { HOWTO_TITLE_MAX_LENGTH, HOWTO_TITLE_MIN_LENGTH } from '../../constants'
 import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'

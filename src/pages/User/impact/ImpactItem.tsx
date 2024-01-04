@@ -3,7 +3,7 @@ import { Box, Heading } from 'theme-ui'
 import { ImpactField } from './ImpactField'
 import { ImpactMissing } from './ImpactMissing'
 
-import type { IImpactYearFieldList, IImpactYear, IUserPP } from 'src/models'
+import type { IImpactYear, IImpactYearFieldList, IUserPP } from 'src/models'
 
 interface Props {
   year: IImpactYear

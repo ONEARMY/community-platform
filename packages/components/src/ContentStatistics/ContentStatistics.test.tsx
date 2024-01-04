@@ -1,5 +1,6 @@
 import { render } from '../tests/utils'
 import { Default } from './ContentStatistics.stories'
+
 import type { IProps } from './ContentStatistics'
 
 describe('ContentStatistics', () => {

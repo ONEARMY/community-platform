@@ -1,15 +1,17 @@
-import { render, act } from '@testing-library/react'
-import { ThemeProvider } from '@emotion/react'
-import { Provider } from 'mobx-react'
 import {
-  RouterProvider,
   createMemoryRouter,
   createRoutesFromElements,
   Route,
+  RouterProvider,
 } from 'react-router-dom'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
+import { ThemeProvider } from '@emotion/react'
+import { act, render } from '@testing-library/react'
+import { Provider } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
+import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
+
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+
 const Theme = preciousPlasticTheme.styles
 
 const howto = FactoryHowto()

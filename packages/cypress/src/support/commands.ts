@@ -1,7 +1,10 @@
 import 'cypress-file-upload'
-import type { firebase } from './db/firebase'
-import { TestDB, Auth } from './db/firebase'
+
 import { deleteDB } from 'idb'
+
+import { Auth, TestDB } from './db/firebase'
+
+import type { firebase } from './db/firebase'
 
 export enum UserMenuItem {
   Profile = 'Profile',

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
-
 import { useCommonStores } from 'src/index'
 import { FactoryUser } from 'src/test/factories/User'
+
 import { UserContactForm } from '.'
 
 jest.mock('src/index', () => {

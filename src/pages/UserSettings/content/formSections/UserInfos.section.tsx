@@ -1,26 +1,25 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
-import { Heading, Flex, Box, Text, Alert } from 'theme-ui'
+import { FieldArray } from 'react-final-form-arrays'
 import { countries } from 'countries-list'
 import { Button, FieldInput } from 'oa-components'
-import { FieldArray } from 'react-final-form-arrays'
-
-import { ProfileLinkField } from './Fields/ProfileLink.field'
-import { FlexSectionContainer } from './elements'
-import { required } from 'src/utils/validators'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { ProfileType } from 'src/modules/profile/types'
 import { SelectField } from 'src/common/Form/Select.field'
-
+import { ProfileType } from 'src/modules/profile/types'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
+import { required } from 'src/utils/validators'
+import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import type { IUser } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import {
   GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
   MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH,
 } from '../../constants'
+import { ProfileLinkField } from './Fields/ProfileLink.field'
+import { FlexSectionContainer } from './elements'
+
+import type { IUser } from 'src/models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   formValues: IUserPP

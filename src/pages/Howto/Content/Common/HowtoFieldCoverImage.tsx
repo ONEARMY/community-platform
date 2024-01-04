@@ -1,9 +1,8 @@
 import { Field } from 'react-final-form'
-import { Box, Text } from 'theme-ui'
-
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { draftValidationWrapper, required } from 'src/utils/validators'
+import { Box, Text } from 'theme-ui'
 
 import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'

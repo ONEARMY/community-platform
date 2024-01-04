@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
-
-import { SettingsProvider } from 'src/test/components'
 import { SettingsErrors } from 'src/pages/UserSettings/content/formSections/SettingsErrors'
+import { SettingsProvider } from 'src/test/components'
 
 describe('SettingsErrors', () => {
   it('renders component when visible and has errors', async () => {

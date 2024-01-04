@@ -1,10 +1,11 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 import { Navigate, useParams } from 'react-router-dom'
+import { observer } from 'mobx-react'
 import { Loader } from 'oa-components'
-import { Text } from 'theme-ui'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
+import { Text } from 'theme-ui'
+
 import { ResearchUpdateForm } from '../Common/ResearchUpdate.form'
 import TEMPLATE from './Template'
 

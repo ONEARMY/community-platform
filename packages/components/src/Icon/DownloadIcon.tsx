@@ -1,4 +1,5 @@
 import * as React from 'react'
+
 import SvgDownloadIcon from '../../assets/icons/icon-download.svg'
 
 export const DownloadIcon = () => (

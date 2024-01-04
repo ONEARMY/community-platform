@@ -1,23 +1,24 @@
 import React, { Suspense } from 'react'
-import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { Button, ExternalLink } from 'oa-components'
+import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
 import { Analytics } from 'src/common/Analytics'
-import { NotFoundPage } from './NotFound/NotFound'
-import { ScrollToTop } from '../common/ScrollToTop'
-import Header from './common/Header/Header'
+import { getSupportedModules, isModuleSupported, MODULE } from 'src/modules'
+import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import Main from 'src/pages/common/Layout/Main'
+import { SeoTagsUpdateComponent } from 'src/utils/seo'
+import { Box, Flex } from 'theme-ui'
+
+import { ScrollToTop } from '../common/ScrollToTop'
+import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
+import Header from './common/Header/Header'
+import { NotFoundPage } from './NotFound/NotFound'
 import {
   COMMUNITY_PAGES_PROFILE,
+  getAvailablePageList,
   NO_HEADER_PAGES,
   POLICY_PAGES,
-  getAvailablePageList,
 } from './PageList'
-import { Flex, Box } from 'theme-ui'
-import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
-import { MODULE, getSupportedModules, isModuleSupported } from 'src/modules'
-import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
-import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
-import { SeoTagsUpdateComponent } from 'src/utils/seo'
-import { ExternalLink, Button } from 'oa-components'
 import { QuestionModuleContainer } from './Question'
 
 export const Pages = () => {

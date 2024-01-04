@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
-
 import { ResearchProvider } from 'src/test/components'
+
 import { ResearchErrors } from '.'
 
 describe('ResearchErrors', () => {

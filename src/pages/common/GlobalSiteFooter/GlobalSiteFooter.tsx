@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { SiteFooter } from 'oa-components'
 import { useLocation } from 'react-router-dom'
+import { SiteFooter } from 'oa-components'
 
 const isFooterVisible = (path) => {
   return (

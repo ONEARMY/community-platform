@@ -1,11 +1,12 @@
-import { Icon } from '../Icon/Icon'
 import { Box, Card, Flex } from 'theme-ui'
-import { InternalLink } from '../InternalLink/InternalLink'
-import { ExternalLink } from '../ExternalLink/ExternalLink'
-import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'
-import ResearchIcon from '../../assets/icons/icon-research.svg'
+
 import HowToCountIcon from '../../assets/icons/icon-how-to.svg'
+import ResearchIcon from '../../assets/icons/icon-research.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
+import { ElWithBeforeIcon } from '../ElWithBeforeIcon/ElWithBeforeIcon'
+import { ExternalLink } from '../ExternalLink/ExternalLink'
+import { Icon } from '../Icon/Icon'
+import { InternalLink } from '../InternalLink/InternalLink'
 
 export interface UserStatisticsProps {
   userName: string

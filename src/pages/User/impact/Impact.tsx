@@ -1,7 +1,7 @@
 import { Flex } from 'theme-ui'
 
-import { ImpactItem } from './ImpactItem'
 import { IMPACT_YEARS } from './constants'
+import { ImpactItem } from './ImpactItem'
 
 import type { IUserImpact, IUserPP } from 'src/models'
 

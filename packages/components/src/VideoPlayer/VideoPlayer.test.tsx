@@ -1,6 +1,7 @@
 import { render } from '../tests/utils'
-import type { Props } from './VideoPlayer'
 import { Youtube } from './VideoPlayer.stories'
+
+import type { Props } from './VideoPlayer'
 
 describe('VideoPlayer', () => {
   it('uses lazy load mechanism', () => {

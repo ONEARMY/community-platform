@@ -1,8 +1,9 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
+import { calculateTotalComments } from 'src/utils/helpers'
+
 import type { IComment, IModerationStatus, IUser } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
-import { calculateTotalComments } from 'src/utils/helpers'
 
 export interface IItem {
   _modified: string

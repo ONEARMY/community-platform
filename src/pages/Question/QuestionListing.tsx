@@ -1,9 +1,9 @@
-import { Button, Loader, ModerationStatus } from 'oa-components'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Button, Loader, ModerationStatus } from 'oa-components'
+import { useQuestionStore } from 'src/stores/Question/question.store'
 import { Card, Flex, Heading } from 'theme-ui'
 
-import { useQuestionStore } from 'src/stores/Question/question.store'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 import type { IQuestion } from 'src/models'

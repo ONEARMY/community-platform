@@ -1,5 +1,4 @@
 jest.mock('../common/module.store')
-import type { IHowtoDB, IUser } from 'src/models'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryHowto,
@@ -7,8 +6,11 @@ import {
   FactoryHowtoStep,
 } from 'src/test/factories/Howto'
 import { FactoryUser } from 'src/test/factories/User'
-import type { RootStore } from '..'
+
 import { HowtoStore } from './howto.store'
+
+import type { IHowtoDB, IUser } from 'src/models'
+import type { RootStore } from '..'
 
 const factory = async (
   howTos: IHowtoDB[] = [FactoryHowto({})],

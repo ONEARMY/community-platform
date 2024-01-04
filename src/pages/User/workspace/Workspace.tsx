@@ -1,15 +1,13 @@
-import { getSupportedProfileTypes } from 'src/modules/profile'
-import { ProfileType } from 'src/modules/profile/types'
-
+// assets profileType
+import MemberBadge from 'src/assets/images/badges/pt-member.svg'
 // Highlights
 import CollectionHighlight from 'src/assets/images/highlights/highlight-collection-point.svg'
 import LocalCommunityHighlight from 'src/assets/images/highlights/highlight-local-community.svg'
 import MachineHighlight from 'src/assets/images/highlights/highlight-machine-shop.svg'
-import WorkspaceHighlight from 'src/assets/images/highlights/highlight-workspace.svg'
 import MemberHighlight from 'src/assets/images/highlights/highlight-member.svg'
-
-// assets profileType
-import MemberBadge from 'src/assets/images/badges/pt-member.svg'
+import WorkspaceHighlight from 'src/assets/images/highlights/highlight-workspace.svg'
+import { getSupportedProfileTypes } from 'src/modules/profile'
+import { ProfileType } from 'src/modules/profile/types'
 
 import type { PlatformTheme } from 'oa-themes'
 

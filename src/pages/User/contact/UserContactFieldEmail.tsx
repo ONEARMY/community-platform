@@ -1,13 +1,12 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-import { Box, Label } from 'theme-ui'
-
+import { contact } from 'src/pages/User/labels'
 import {
   composeValidators,
   required,
   validateEmail,
 } from 'src/utils/validators'
-import { contact } from 'src/pages/User/labels'
+import { Box, Label } from 'theme-ui'
 
 interface Props {
   email: string | null

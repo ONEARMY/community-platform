@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import { HowtoProvider } from 'src/test/components'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
 
 import { HowtoFieldTitle } from '.'
 
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ParentType } from './Howto.form'
 
 jest.mock('src/stores/Howto/howto.store')

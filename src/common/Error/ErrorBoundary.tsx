@@ -1,9 +1,11 @@
-import * as Sentry from '@sentry/react'
 import { Component } from 'react'
-import type { ReactNode } from 'react'
+import * as Sentry from '@sentry/react'
 import { SITE } from 'src/config/config'
+
 import { ChunkLoadErrorHandler } from './handlers/ChunkLoadError'
 import { isReloaded } from './handlers/Reloader'
+
+import type { ReactNode } from 'react'
 
 interface IProps {
   children: ReactNode

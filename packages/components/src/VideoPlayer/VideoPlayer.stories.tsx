@@ -1,5 +1,6 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
 import { VideoPlayer } from './VideoPlayer'
+
+import type { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
   title: 'Components/VideoPlayer',

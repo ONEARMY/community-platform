@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
-import { preciousPlasticTheme, GlobalFonts } from 'oa-themes'
+import { GlobalFonts, preciousPlasticTheme } from 'oa-themes'
+
 const theme = preciousPlasticTheme.styles
 
 export const GlobalStyles = css`

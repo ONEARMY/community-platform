@@ -1,13 +1,15 @@
 import Dexie from 'dexie'
-import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
+
 import { logger } from '../../../logger'
 import { DB_ENDPOINTS } from '../endpoints'
+import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
+
+import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type {
   AbstractDatabaseClient,
   DBQueryOptions,
   DBQueryWhereOptions,
 } from '../types'
-import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 
 /**
  * Update the cache number either when making changes to db architecture

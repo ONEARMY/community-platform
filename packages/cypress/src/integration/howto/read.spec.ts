@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid'
+
 import { MOCK_DATA } from '../../data'
 
 describe('[How To]', () => {

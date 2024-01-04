@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Flex } from 'theme-ui'
 import imageCompression from 'browser-image-compression'
+import { Flex } from 'theme-ui'
 
 import type { IConvertedFileMeta } from 'src/types'
 

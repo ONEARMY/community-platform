@@ -1,6 +1,6 @@
+import { Theme as fixingFashionTheme } from './fixing-fashion'
 import { Theme as preciousPlasticTheme } from './precious-plastic'
 import { Theme as projectKampTheme } from './project-kamp'
-import { Theme as fixingFashionTheme } from './fixing-fashion'
 
 export { preciousPlasticTheme, projectKampTheme, fixingFashionTheme }
 

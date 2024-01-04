@@ -1,19 +1,18 @@
 import * as React from 'react'
-import { Flex, Heading, Box, Text } from 'theme-ui'
 import { Field } from 'react-final-form'
-
-import { FlexSectionContainer } from './elements'
-import { CustomRadioField } from './Fields/CustomRadio.field'
-import { required } from 'src/utils/validators'
-import { fields } from 'src/pages/UserSettings/labels'
-
-import type { IWorkspaceType } from 'src/models'
-
 import Extrusion from 'src/assets/images/workspace-focus/extrusion.png'
 import Injection from 'src/assets/images/workspace-focus/injection.png'
 import Mix from 'src/assets/images/workspace-focus/mix.png'
 import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.png'
 import Shredder from 'src/assets/images/workspace-focus/shredder.png'
+import { fields } from 'src/pages/UserSettings/labels'
+import { required } from 'src/utils/validators'
+import { Box, Flex, Heading, Text } from 'theme-ui'
+
+import { CustomRadioField } from './Fields/CustomRadio.field'
+import { FlexSectionContainer } from './elements'
+
+import type { IWorkspaceType } from 'src/models'
 
 const WORKSPACE_TYPES: IWorkspaceType[] = [
   {

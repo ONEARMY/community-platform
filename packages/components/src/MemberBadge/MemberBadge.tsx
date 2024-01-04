@@ -1,7 +1,9 @@
-import type { ImageProps } from 'theme-ui'
-import { Image } from 'theme-ui'
 import { useTheme } from '@emotion/react'
+import { Image } from 'theme-ui'
+
 import badge from '../../assets/icons/icon-star-active.svg'
+
+import type { ImageProps } from 'theme-ui'
 
 export interface Props extends ImageProps {
   size?: number

@@ -1,7 +1,8 @@
 jest.mock('../common/module.store')
 import { FactoryQuestionItem } from 'src/test/factories/Question'
-import { QuestionStore } from './question.store'
 import { FactoryUser } from 'src/test/factories/User'
+
+import { QuestionStore } from './question.store'
 
 const factory = async () => {
   const store = new QuestionStore()

@@ -1,14 +1,15 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useTheme } from '@emotion/react'
 import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
-import { Link } from 'react-router-dom'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { Box, Flex, Heading } from 'theme-ui'
-import ResearchListItem from './ResearchListItem'
-import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
-import { AuthWrapper } from 'src/common/AuthWrapper'
+
 import { RESEARCH_EDITOR_ROLES } from '../constants'
+import ResearchListItem from './ResearchListItem'
 
 const ResearchList = observer(() => {
   const store = useResearchStore()

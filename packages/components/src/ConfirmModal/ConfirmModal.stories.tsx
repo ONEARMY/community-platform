@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { ConfirmModal } from './ConfirmModal'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/ConfirmModal',

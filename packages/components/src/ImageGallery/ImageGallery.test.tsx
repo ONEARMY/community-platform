@@ -1,13 +1,15 @@
-import { render } from '../tests/utils'
 import { findByRole as globalFindByRole, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
+
+import { render } from '../tests/utils'
+import { ImageGallery } from './ImageGallery'
 import {
   Default,
   NoThumbnails,
   ShowNextPrevButtons,
   testImages,
 } from './ImageGallery.stories'
-import { ImageGallery } from './ImageGallery'
+
 import type { ImageGalleryProps } from './ImageGallery'
 
 describe('ImageGallery', () => {

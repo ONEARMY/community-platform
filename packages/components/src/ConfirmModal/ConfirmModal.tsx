@@ -1,4 +1,5 @@
 import { Box, Flex, Text } from 'theme-ui'
+
 import { Button, Modal } from '..'
 
 export interface Props {

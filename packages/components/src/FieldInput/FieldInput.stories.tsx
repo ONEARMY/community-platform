@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { FieldInput } from './FieldInput'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/FieldInput',

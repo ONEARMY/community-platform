@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { Heading, Box, Switch, Text } from 'theme-ui'
-import { observer } from 'mobx-react'
 import { Field } from 'react-final-form'
+import { observer } from 'mobx-react'
+import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
+import { fields } from 'src/pages/UserSettings/labels'
+import { Box, Heading, Switch, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from './elements'
-import { fields } from 'src/pages/UserSettings/labels'
-import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 import type { IUser } from 'src/models'
 

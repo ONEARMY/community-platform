@@ -1,13 +1,14 @@
-import type { MarkerCluster } from 'leaflet'
 import L from 'leaflet'
-import './sprites.css'
-import type { IMapPin } from 'src/models/maps.models'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
-import Workspace from 'src/pages/User/workspace/Workspace'
-import type { PlatformTheme } from 'oa-themes'
-
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
 import { logger } from 'src/logger'
+import Workspace from 'src/pages/User/workspace/Workspace'
+
+import type { MarkerCluster } from 'leaflet'
+import type { PlatformTheme } from 'oa-themes'
+import type { IMapPin } from 'src/models/maps.models'
+
+import './sprites.css'
 
 /**
  * Generate custom cluster icon, including style formatting, size, image etc.

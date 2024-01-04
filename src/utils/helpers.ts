@@ -1,11 +1,12 @@
 import { isObservableObject, toJS } from 'mobx'
+
 import type { IResearch } from 'src/models'
 import type { DBDoc, IModerable } from 'src/models/common.models'
 import type { IMapPin } from 'src/models/maps.models'
 import type { IUser } from 'src/models/user.models'
 import type {
-  IItem,
   AuthorOption,
+  IItem,
 } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi

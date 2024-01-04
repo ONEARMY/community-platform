@@ -1,11 +1,11 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
-
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   draftValidationWrapper,
   validateUrlAcceptEmpty,
 } from 'src/utils/validators'
+
 import { MAX_LINK_LENGTH } from '../../constants'
 import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'

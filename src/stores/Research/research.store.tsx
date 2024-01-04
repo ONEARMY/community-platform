@@ -194,6 +194,8 @@ export class ResearchStore extends ModuleStore {
         activeResearchItem.description = changeUserReferenceToPlainText(
           activeResearchItem.description,
         )
+        activeResearchItem.researchStatus =
+          activeResearchItem.researchStatus || 'In progress'
         activeResearchItem.updates = activeResearchItem.updates?.map(
           (update) => {
             update.description = changeUserReferenceToPlainText(

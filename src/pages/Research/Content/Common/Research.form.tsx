@@ -80,6 +80,9 @@ const statusOptions = researchStatusOptions.map((status) => ({
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
   const { create, update } = buttons.draft
+
+  formValues.researchStatus = formValues.researchStatus || 'In progress'
+
   const {
     categories,
     collaborators,
@@ -344,7 +347,6 @@ const ResearchForm = observer((props: IProps) => {
                                 placeholder={researchStatus.placeholder}
                                 options={statusOptions}
                                 validate={composeValidators(required)}
-                                defaultValue={'In progress'}
                               />
                             </Flex>
                           </Flex>

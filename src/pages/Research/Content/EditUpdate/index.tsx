@@ -71,11 +71,13 @@ const EditUpdate = observer((props: IProps) => {
   }, [slug, update, props.updateId])
 
   useEffect(() => {
-    if (
-      !state.loggedInUser ||
-      !isAllowedToEditContent(store.activeResearchItem!, state.loggedInUser)
-    ) {
-      navigate('/research/' + store.activeResearchItem!.slug)
+    if (store.activeResearchItem) {
+      if (
+        !state.loggedInUser ||
+        !isAllowedToEditContent(store.activeResearchItem, state.loggedInUser)
+      ) {
+        navigate('/research/' + store.activeResearchItem.slug)
+      }
     }
   }, [state.loggedInUser, store.activeResearchItem])
 

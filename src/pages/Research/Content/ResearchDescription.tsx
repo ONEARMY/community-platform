@@ -199,7 +199,6 @@ const ResearchDescription = ({
                 marginBottom: 'auto',
                 minWidth: '100px',
                 borderRadius: 1,
-                borderBottomRightRadius: 1,
                 height: '44px',
                 background:
                   research.researchStatus === 'Archived'

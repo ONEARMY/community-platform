@@ -94,7 +94,6 @@ const ResearchListItem = ({ item }: IProps) => {
                     background: statusColour,
                     padding: 1,
                     borderRadius: 1,
-                    borderBottomRightRadius: 1,
                     marginLeft: 4,
                     marginBottom: 'auto',
                     whiteSpace: 'nowrap',

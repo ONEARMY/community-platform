@@ -218,6 +218,7 @@ const ResearchDescription = ({
                   padding: 2,
                   margin: 'auto',
                 }}
+                data-cy="research-status"
               >
                 {research.researchStatus || 'In progress'}
               </Text>

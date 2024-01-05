@@ -343,6 +343,7 @@ const ResearchForm = observer((props: IProps) => {
                               </ResearchFormLabel>
                               <Field
                                 name="researchStatus"
+                                data-cy="research-status"
                                 component={SelectField}
                                 placeholder={researchStatus.placeholder}
                                 options={statusOptions}

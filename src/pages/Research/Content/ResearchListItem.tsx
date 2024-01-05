@@ -100,6 +100,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     whiteSpace: 'nowrap',
                     minWidth: '75px',
                   }}
+                  data-cy="ItemResearchStatus"
                 >
                   {status}
                 </Text>

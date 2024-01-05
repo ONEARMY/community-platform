@@ -20,20 +20,29 @@ const COLLECTION_NAME = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
   constructor(rootStore: RootStore) {
-    super(rootStore)
+    super(rootStore, COLLECTION_NAME)
     makeObservable(this)
+    super.init()
   }
 
-  public async fetchDiscussionBySourceId(
+  @action
+  public async fetchOrCreateDiscussionBySource(
     sourceId: string,
+    sourceType: IDiscussion['sourceType'],
   ): Promise<IDiscussion | null> {
-    return (
+    const foundDiscussion =
       toJS(
         await this.db
           .collection<IDiscussion>(COLLECTION_NAME)
           .getWhere('sourceId', '==', sourceId),
       )[0] || null
-    )
+
+    if (foundDiscussion) {
+      return foundDiscussion
+    }
+
+    // Create a new discussion
+    return (await this.uploadDiscussion(sourceId, sourceType)) || null
   }
 
   public async uploadDiscussion(
@@ -217,6 +226,11 @@ export class DiscussionStore extends ModuleStore {
   }
 }
 
+/**
+ * Export an empty context object to be shared with components
+ * The context will be populated with the DiscussionStore in the module index
+ * (avoids cyclic deps and ensure shared module ready)
+ */
 export const DiscussionStoreContext = createContext<DiscussionStore>(
   null as any,
 )

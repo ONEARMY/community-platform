@@ -9,12 +9,8 @@ interface IProps {
 
 export const QuestionComments = ({ comments }: IProps) => {
   return (
-    <>
-      {
-        <Box mt={5}>
-          <CommentList comments={comments} />
-        </Box>
-      }
-    </>
+    <Box mt={5}>
+      <CommentList comments={comments} />
+    </Box>
   )
 }

@@ -40,14 +40,7 @@ const ResearchListItem = ({ item }: IProps) => {
       : 'accent.base'
 
   return (
-    <Card
-      data-cy="ResearchListItem"
-      data-id={item._id}
-      mb={3}
-      sx={{
-        borderColor: [statusColour, 'black', 'black'],
-      }}
-    >
+    <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
         <Link
           to={`/research/${encodeURIComponent(item.slug)}`}

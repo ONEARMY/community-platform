@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import imageCompression from 'browser-image-compression'
+import { useEffect, useState } from 'react'
 import { Flex } from 'theme-ui'
 
 import type { IConvertedFileMeta } from 'src/types'
@@ -10,15 +9,8 @@ interface IProps {
   onImgClicked: (meta: IConvertedFileMeta) => void
 }
 interface IState {
-  compressionOptions: Parameters<typeof imageCompression>[1]
   convertedFile?: IConvertedFileMeta
   openLightbox?: boolean
-}
-
-const imageSizes = {
-  low: 640,
-  normal: 1280,
-  high: 1920,
 }
 
 const _generateFileMeta = (c: File) => {
@@ -32,12 +24,7 @@ const _generateFileMeta = (c: File) => {
 }
 
 export const ImageConverter = (props: IProps) => {
-  const [state, setState] = useState<IState>({
-    compressionOptions: {
-      maxWidthOrHeight: imageSizes.normal,
-      initialQuality: 0.75,
-    },
-  })
+  const [state, setState] = useState<IState>({})
   const { convertedFile } = state
 
   useEffect(() => {
@@ -51,11 +38,8 @@ export const ImageConverter = (props: IProps) => {
   }, [])
 
   const compressFiles = async (file: File) => {
-    const { compressionOptions } = state
-
     // by default compress takes an array and gives back an array. We only want to handle a single image
-    const conversion: File = await imageCompression(file, compressionOptions)
-    const convertedMeta = _generateFileMeta(conversion)
+    const convertedMeta = _generateFileMeta(file)
     setState((state) => ({
       ...state,
       convertedFile: convertedMeta,

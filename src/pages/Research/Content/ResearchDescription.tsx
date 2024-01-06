@@ -13,7 +13,7 @@ import {
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { buildStatisticsLabel } from 'src/utils/helpers'
+import { buildStatisticsLabel, researchStatusColour } from 'src/utils/helpers'
 import {
   addIDToSessionStorageArray,
   retrieveSessionStorageArray,
@@ -200,12 +200,7 @@ const ResearchDescription = ({
                 minWidth: '100px',
                 borderRadius: 1,
                 height: '44px',
-                background:
-                  research.researchStatus === 'Archived'
-                    ? 'lightgrey'
-                    : research.researchStatus === 'Completed'
-                    ? 'betaGreen'
-                    : 'accent.base',
+                background: researchStatusColour(research.researchStatus),
               }}
             >
               <Text

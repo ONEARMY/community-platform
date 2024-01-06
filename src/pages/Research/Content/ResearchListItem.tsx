@@ -4,7 +4,11 @@ import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
+import {
+  calculateTotalComments,
+  getPublicUpdates,
+  researchStatusColour,
+} from 'src/utils/helpers'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
@@ -31,13 +35,6 @@ const ResearchListItem = ({ item }: IProps) => {
   }
 
   const status = item.researchStatus || 'In progress'
-
-  const statusColour =
-    status === 'Archived'
-      ? 'lightgrey'
-      : status === 'Completed'
-      ? 'betaGreen'
-      : 'accent.base'
 
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
@@ -91,7 +88,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     verticalAlign: 'middle',
                     color: 'black',
                     fontSize: 1,
-                    background: statusColour,
+                    background: researchStatusColour(status),
                     padding: 1,
                     borderRadius: 1,
                     marginLeft: 4,
@@ -156,7 +153,7 @@ const ResearchListItem = ({ item }: IProps) => {
                       verticalAlign: 'middle',
                       color: 'black',
                       fontSize: 1,
-                      background: statusColour,
+                      background: researchStatusColour(status),
                       padding: 1,
                       borderRadius: 1,
                       borderBottomRightRadius: 1,

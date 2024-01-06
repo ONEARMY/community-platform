@@ -22,7 +22,15 @@ import { useCommonStores } from 'src/index'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { Box, Container, Flex, Heading, Image, Paragraph } from 'theme-ui'
+import {
+  AspectRatio,
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Image,
+  Paragraph,
+} from 'theme-ui'
 
 import { Impact } from '../impact/Impact'
 import { heading } from '../impact/labels'
@@ -191,11 +199,27 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       data-cy="SpaceProfile"
     >
       <Box sx={{ lineHeight: 0 }}>
-        <ImageGallery
-          images={formatImagesForGallery(coverImage)}
-          hideThumbnails={true}
-          showNextPrevButton={true}
-        />
+        {coverImage.length ? (
+          <ImageGallery
+            images={formatImagesForGallery(coverImage)}
+            hideThumbnails={true}
+            showNextPrevButton={true}
+          />
+        ) : (
+          <AspectRatio ratio={24 / 3}>
+            <Flex
+              sx={{
+                width: '100%',
+                height: '100%',
+                background: '#ddd',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              No images available.
+            </Flex>
+          </AspectRatio>
+        )}
       </Box>
       <Flex
         sx={{

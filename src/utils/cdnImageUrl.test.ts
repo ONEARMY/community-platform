@@ -5,6 +5,21 @@ describe('cdnImageUrl', () => {
     jest.resetModules()
   })
 
+
+  it('should return well formed URL if trailing slash included', () => {
+    // Mocking empty CDN_URL
+    jest.doMock('src/config/config', () => ({
+      FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
+      CDN_URL: 'https://cdn-url.com/',
+    }))
+
+    const { cdnImageUrl } = require('src/utils/cdnImageUrl')
+    const originalUrl =
+      'https://firebasestorage.googleapis.com/v0/b/some-bucket/image.jpg'
+
+    expect(cdnImageUrl(originalUrl)).toBe('https://cdn-url.com/image.jpg')
+  })
+
   it('should return the original URL if CDN_URL or FIREBASE_CONFIG.storageBucket is not set', () => {
     // Mocking empty CDN_URL
     jest.doMock('src/config/config', () => ({

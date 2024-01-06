@@ -12,7 +12,7 @@ export const cdnImageUrl = (url: string, resizeArgs?: ResizeArgs) => {
   return (
     url.replace(
       `https://firebasestorage.googleapis.com/v0/b/${FIREBASE_CONFIG.storageBucket}`,
-      CDN_URL,
+      CDN_URL.replace(/\/$/, ''),
     ) + formatResizeArgsForUrl(resizeArgs, url)
   )
 }

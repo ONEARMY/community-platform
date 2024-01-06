@@ -57,8 +57,6 @@ export class QuestionStore extends ModuleStore {
       ItemSortingOption.Newest,
       ItemSortingOption.MostUseful,
       ItemSortingOption.Comments,
-      ItemSortingOption.LeastComments,
-      ItemSortingOption.LatestComments,
     ]
 
     this.allDocs$.subscribe((docs: IQuestionDB[]) => {

@@ -31,8 +31,6 @@ export enum ItemSortingOption {
   Newest = 'Newest',
   MostUseful = 'MostUseful',
   Comments = 'MostComments',
-  LeastComments = 'LeastComments',
-  LatestComments = 'LatestComments',
   Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
@@ -143,29 +141,6 @@ export class FilterSorterDecorator<T extends IItem> {
     })
   }
 
-  private sortByLeastComments(listItems: T[]) {
-    return this.sortByComments(listItems).reverse()
-  }
-
-  private sortByLatestComments(listItems: T[]) {
-    return [...listItems].sort((a, b) => {
-      if (!a.comments || a.comments.length === 0) {
-        return 1
-      } else if (!b.comments || b.comments.length === 0) {
-        return -1
-      }
-
-      const latestCommentA = a.comments.sort((a, b) =>
-        a._created < b._created ? 1 : -1,
-      )[0]
-      const latestCommentB = b.comments.sort((a, b) =>
-        a._created < b._created ? 1 : -1,
-      )[0]
-
-      return latestCommentA._created < latestCommentB._created ? 1 : -1
-    })
-  }
-
   private sortByModerationStatus(listItems: T[], user?: IUser) {
     const isCreatedByUser = (item: T) =>
       user && item._createdBy === user.userName
@@ -224,14 +199,6 @@ export class FilterSorterDecorator<T extends IItem> {
 
         case ItemSortingOption.Comments:
           validItems = this.sortByComments(validItems)
-          break
-
-        case ItemSortingOption.LeastComments:
-          validItems = this.sortByLeastComments(validItems)
-          break
-
-        case ItemSortingOption.LatestComments:
-          validItems = this.sortByLatestComments(validItems)
           break
 
         case ItemSortingOption.Updates:

@@ -1,31 +1,36 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
+  DiscussionContainer,
   FollowButton,
   Loader,
   ModerationStatus,
   UsefulStatsButton,
 } from 'oa-components'
+import { trackEvent } from 'src/common/Analytics'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
+import { discussionsService } from 'src/services/discussions.service'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
-import { QuestionComments } from './QuestionComments'
 
-import type { IDiscussionComment, IQuestion } from 'src/models'
+import type { IDiscussion, IQuestion } from 'src/models'
 
 export const QuestionPage = () => {
   const { slug } = useParams()
   const store = useQuestionStore()
-  const discussionStore = useDiscussionStore()
   const [isLoading, setIsLoading] = useState(true)
   const [question, setQuestion] = useState<IQuestion.Item | undefined>()
   const [isEditable, setIsEditable] = useState(false)
   const [hasUserSubscribed, setHasUserSubscribed] = useState(false)
-  const [comments, setComments] = useState<IDiscussionComment[]>([])
+  const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
+  const [comment, setComment] = useState('')
+  const highlightedCommentId = window.location.hash.replace('#comment:', '')
+  const category = 'Comments'
+  const label = store.activeQuestionItem?.title
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -46,15 +51,15 @@ export const QuestionPage = () => {
         setHasUserSubscribed(
           foundQuestion?.subscribers?.includes(store.activeUser?.userName),
         )
-        if (foundQuestion && discussionStore) {
+        if (foundQuestion) {
           try {
             const discussion =
-              await discussionStore.fetchOrCreateDiscussionBySource(
+              await discussionsService.fetchOrCreateDiscussionBySource(
                 foundQuestion._id,
                 'question',
               )
             if (discussion) {
-              setComments(discussion.comments)
+              setDiscussion(discussion)
             }
           } catch (err) {
             logger.error('Failed to fetch discussion', {
@@ -97,6 +102,66 @@ export const QuestionPage = () => {
       setHasUserSubscribed(!hasUserSubscribed)
     }
     return null
+  }
+
+  const onSubmit = async (comment: string) => {
+    try {
+      // const question = store.activeQuestionItem
+      const updatedDiscussion = await discussionsService.addComment(
+        discussion!,
+        comment,
+        store.activeUser!,
+      )
+      // if (question) {
+      //   await stores.userNotificationsStore.triggerNotification(
+      //     'new_comment',
+      //     question._createdBy,
+      //     '/how-to/' + question.slug,
+      //   )
+      // }
+
+      setComment('')
+      if (updatedDiscussion) {
+        setDiscussion(updatedDiscussion)
+      }
+
+      const action = 'Submitted'
+      trackEvent({ action, category, label })
+      logger.debug({ action, category, label }, 'comment submitted')
+    } catch (err) {
+      logger.error('Failed to submit comment', { err })
+    }
+  }
+
+  const handleEditRequest = async () => {
+    const action = 'Edit existing comment'
+    trackEvent({ action, category, label })
+  }
+
+  const handleDelete = async (_id: string) => {
+    await discussionsService.deleteComment(discussion!, _id, store.activeUser!)
+
+    const action = 'Deleted'
+    trackEvent({ action, category, label })
+    logger.debug({ action, category, label }, 'comment deleted')
+  }
+
+  const handleEdit = async (_id: string, comment: string) => {
+    await discussionsService.editComment(
+      discussion!,
+      _id,
+      comment,
+      store.activeUser!,
+    )
+
+    const action = 'Update'
+    trackEvent({ action, category, label })
+    logger.debug({ action, category, label }, 'comment edited')
+  }
+
+  const onMoreComments = () => {
+    const action = 'Show more'
+    trackEvent({ action, category, label })
   }
 
   return (
@@ -148,7 +213,19 @@ export const QuestionPage = () => {
               )}
             </Box>
           </Card>
-          <QuestionComments comments={comments} />
+          <DiscussionContainer
+            comments={discussion!.comments as any}
+            handleEdit={handleEdit}
+            handleEditRequest={handleEditRequest}
+            handleDelete={handleDelete}
+            highlightedCommentId={highlightedCommentId}
+            maxLength={MAX_COMMENT_LENGTH}
+            comment={comment}
+            onChange={setComment}
+            onMoreComments={onMoreComments}
+            onSubmit={onSubmit}
+            isLoggedIn={isLoggedIn}
+          />
         </>
       ) : null}
     </Box>

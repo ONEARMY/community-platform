@@ -5,9 +5,40 @@ describe('cdnImageUrl', () => {
     jest.resetModules()
   })
 
+  it('should ignore invalid URL', () => {
+    // Mocking empty CDN_URL
+    jest.doMock('src/config/config', () => ({
+      getConfigurationOption: jest.fn(),
+      FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
+      CDN_URL: 'xsmasa.masas--',
+    }))
+
+    const { cdnImageUrl } = require('src/utils/cdnImageUrl')
+    const originalUrl =
+      'https://firebasestorage.googleapis.com/v0/b/some-bucket/image.jpg'
+
+    expect(cdnImageUrl(originalUrl)).toBe(originalUrl)
+  })
+
+  it('should return well formed URL if input is poorly formatted', () => {
+    // Mocking empty CDN_URL
+    jest.doMock('src/config/config', () => ({
+      getConfigurationOption: jest.fn(),
+      FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
+      CDN_URL: ' https://cdn-url.com/ ',
+    }))
+
+    const { cdnImageUrl } = require('src/utils/cdnImageUrl')
+    const originalUrl =
+      'https://firebasestorage.googleapis.com/v0/b/some-bucket/image.jpg'
+
+    expect(cdnImageUrl(originalUrl)).toBe('https://cdn-url.com/image.jpg')
+  })
+
   it('should return the original URL if CDN_URL or FIREBASE_CONFIG.storageBucket is not set', () => {
     // Mocking empty CDN_URL
     jest.doMock('src/config/config', () => ({
+      getConfigurationOption: jest.fn(),
       FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
       CDN_URL: '',
     }))
@@ -21,6 +52,7 @@ describe('cdnImageUrl', () => {
 
   it('should replace the Firebase storage URL with CDN_URL', () => {
     jest.mock('src/config/config', () => ({
+      getConfigurationOption: jest.fn(),
       FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
       CDN_URL: 'https://cdn-url.com',
     }))
@@ -36,6 +68,7 @@ describe('cdnImageUrl', () => {
 
   it('should handle resize params and existing query params', () => {
     jest.mock('src/config/config', () => ({
+      getConfigurationOption: jest.fn(),
       FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
       CDN_URL: 'https://cdn-url.com',
     }))
@@ -54,6 +87,7 @@ describe('cdnImageUrl', () => {
 
   it('should handle resize params', () => {
     jest.mock('src/config/config', () => ({
+      getConfigurationOption: jest.fn(),
       FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
       CDN_URL: 'https://cdn-url.com',
     }))
@@ -72,6 +106,7 @@ describe('cdnImageUrl', () => {
 
   it('should not modify a non-Firebase URL', () => {
     jest.mock('src/config/config', () => ({
+      getConfigurationOption: jest.fn(),
       FIREBASE_CONFIG: { storageBucket: 'some-bucket' },
       CDN_URL: 'https://cdn-url.com',
     }))

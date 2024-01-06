@@ -159,6 +159,18 @@ describe('FilterSorterDecorator', () => {
     expect(sortedItems[1].title).toBe(mockItems[0].title)
   })
 
+  test('sort by least comments', () => {
+    const sortedItems = decorator.sort(ItemSortingOption.LeastComments, mockItems)
+    expect(sortedItems[0].title).toBe(mockItems[0].title)
+    expect(sortedItems[1].title).toBe(mockItems[1].title)
+  })
+
+  test("sort by latest comments", () => {
+    const sortedItems = decorator.sort(ItemSortingOption.LatestComments, mockItems)
+    expect(sortedItems[0].title).toBe(mockItems[1].title)
+    expect(sortedItems[1].title).toBe(mockItems[0].title)
+  })
+
   test('sort by total_downloads', () => {
     const sortedItems = decorator.sort(
       ItemSortingOption.TotalDownloads,

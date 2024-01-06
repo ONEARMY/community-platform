@@ -5,7 +5,6 @@ describe('cdnImageUrl', () => {
     jest.resetModules()
   })
 
-
   it('should return well formed URL if trailing slash included', () => {
     // Mocking empty CDN_URL
     jest.doMock('src/config/config', () => ({

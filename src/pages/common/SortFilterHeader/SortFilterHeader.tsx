@@ -4,7 +4,6 @@ import { Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
-import { storeHasAuthorFunctionality } from 'src/stores/utils'
 import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
 import { Flex, Input } from 'theme-ui'
 
@@ -87,7 +86,7 @@ export const SortFilterHeader = ({
       : (currentStore as QuestionStore).filteredQuestions
 
   const urlSelectedAuthor = getQueryParam(window.location.href, 'author', null)
-  if (urlSelectedAuthor && storeHasAuthorFunctionality(currentStore))
+  if (urlSelectedAuthor && 'updateSelectedAuthor' in currentStore)
     currentStore.updateSelectedAuthor(urlSelectedAuthor)
 
   const _inputStyle = {
@@ -139,7 +138,7 @@ export const SortFilterHeader = ({
           />
         </FieldContainer>
       </Flex>
-      {storeHasAuthorFunctionality(currentStore) && (
+      {'selectedAuthor' in currentStore && (
         <Flex sx={_inputStyle}>
           <FieldContainer>
             <Select

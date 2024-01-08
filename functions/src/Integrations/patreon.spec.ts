@@ -67,7 +67,7 @@ const mockPatreronUserFactory = (
 
 describe('isSupporter', () => {
   it('should return true for an active supporter of a onearmy tier', () => {
-    const patreonUser = mockPatreronUserFactory('active_patron', ['6369370'])
+    const patreonUser = mockPatreronUserFactory('active_patron', ['6369320'])
     expect(isSupporter(patreonUser)).toBe(true)
   })
 

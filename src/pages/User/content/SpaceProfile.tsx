@@ -184,7 +184,9 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
     location?.countryCode || country?.toLowerCase() || undefined
 
   const { stores } = useCommonStores()
-  const showContactForm = isContactableByPublic && !!stores.userStore.activeUser
+  const activeUser = stores.userStore.activeUser
+  const showContactForm = isContactableByPublic && !!activeUser
+  const showImpact = user.displayName === activeUser?.displayName
 
   return (
     <Container
@@ -276,7 +278,9 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabsList>
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
-              {impact && (
+              {showImpact ? (
+                <Tab data-cy="ImpactTab">{heading}</Tab>
+              ) : (
                 <AuthWrapper roleRequired={'beta-tester'}>
                   <Tab data-cy="ImpactTab">{heading}</Tab>
                 </AuthWrapper>
@@ -337,7 +341,11 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabPanel>
               <UserCreatedDocuments docs={docs} />
             </TabPanel>
-            {impact && (
+            {showImpact ? (
+              <TabPanel>
+                <Impact impact={impact} user={user} />
+              </TabPanel>
+            ) : (
               <AuthWrapper roleRequired={'beta-tester'}>
                 <TabPanel>
                   <Impact impact={impact} user={user} />

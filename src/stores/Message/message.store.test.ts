@@ -1,11 +1,16 @@
 jest.mock('../common/module.store')
 import { FactoryMessage } from 'src/test/factories/Message'
+import { FactoryUser } from 'src/test/factories/User'
 
 import { MessageStore } from './message.store'
 
-const factory = () => {
+const factory = (user?) => {
   /* eslint-disable @typescript-eslint/ban-ts-comment */
   const store = new MessageStore()
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.activeUser = user || FactoryUser()
 
   // @ts-ignore
   store.db.set.mockImplementation((newValue) => {
@@ -36,6 +41,17 @@ describe('message.store', () => {
     }).rejects.toThrowError('Too many messages')
   })
 
+  it('should throw error if user is blocked from messaging', async () => {
+    const blockedUser = FactoryUser({ isBlockedFromMessaging: true })
+    const { getWhereFn, store } = factory(blockedUser)
+
+    getWhereFn.mockResolvedValueOnce([])
+
+    expect(async () => {
+      await store.upload(FactoryMessage())
+    }).rejects.toThrowError('Blocked from messaging')
+  })
+
   it('should upload a new message', async () => {
     const { store, getWhereFn, setFn } = factory()
     const msg = FactoryMessage()
@@ -50,7 +66,7 @@ describe('message.store', () => {
     })
   })
 
-  it('should return an error when updating a message failsgst', async () => {
+  it('should return an error when updating a message fails', async () => {
     const { store, getWhereFn, setFn } = factory()
     const msg = FactoryMessage()
 

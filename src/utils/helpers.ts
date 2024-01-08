@@ -168,6 +168,13 @@ export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {
   }
 }
 
+export const isUserBlockedFromMessaging = (user: IUser | null | undefined) => {
+  if (!user) {
+    return null
+  }
+  return user.isBlockedFromMessaging ? true : false
+}
+
 export const calculateTotalUpdateComments = (
   item: IResearch.ItemDB | IItem,
 ): number => {

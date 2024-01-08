@@ -55,6 +55,7 @@ export interface IUser {
   // Used to generate an encrypted unsubscribe url in emails
   unsubscribeToken?: string
   impact?: IUserImpact
+  isBlockedFromMessaging?: boolean
   isContactableByPublic?: boolean
   patreon?: PatreonUser | null
 }

@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react'
 import { action, makeObservable } from 'mobx'
 import { logger } from 'src/logger'
+import { isUserBlockedFromMessaging } from 'src/utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
 
@@ -24,6 +25,14 @@ export class MessageStore extends ModuleStore {
       logger.error('Too many messages sent', values)
 
       const error = new Error('Too many messages sent')
+      return Promise.reject(error)
+    }
+
+    const isUserBlocked = isUserBlockedFromMessaging(this.activeUser)
+    if (isUserBlocked) {
+      logger.error('User blocked from messaging', values)
+
+      const error = new Error('Blocked from messaging')
       return Promise.reject(error)
     }
 

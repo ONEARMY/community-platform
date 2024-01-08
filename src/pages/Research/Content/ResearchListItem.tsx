@@ -4,7 +4,10 @@ import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
+import {
+  calculateTotalUpdateComments,
+  getPublicUpdates,
+} from 'src/utils/helpers'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
@@ -133,7 +136,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                    {calculateTotalComments(item)}
+                    {calculateTotalUpdateComments(item)}
                     <Icon glyph="comment" ml={1} />
                   </Text>
                   <Text
@@ -172,7 +175,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 color="black"
                 sx={_commonStatisticStyle}
               >
-                {calculateTotalComments(item)}
+                {calculateTotalUpdateComments(item)}
                 <Icon glyph="comment" ml={1} />
               </Text>
               <Tooltip />

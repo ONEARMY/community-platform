@@ -1,3 +1,4 @@
+import { addDays } from 'date-fns'
 import { FactoryUser } from 'src/test/factories/User'
 
 import {
@@ -121,6 +122,81 @@ describe('FilterSorterDecorator', () => {
     },
   ]
 
+  // Helper function to create items with default values
+  const getItems = (rules: any) => {
+    const items: IItem[] = []
+    for (let i = 0; i < rules.length; i++) {
+      items.push({
+        title: rules[i].title || `Item ${i}`,
+        _modified: rules[i]._modified || '2022-01-01',
+        _contentModifiedTimestamp:
+          rules[i]._contentModifiedTimestamp || '2022-01-01',
+        _created: rules[i]._created || '2022-01-01',
+        _createdBy: rules[i]._createdBy || `user${i}`,
+        moderation: rules[i].moderation || 'accepted',
+        votedUsefulBy: rules[i].votedUsefulBy || undefined,
+        total_downloads: rules[i].total_downloads || 0,
+        collaborators: rules[i].collaborators || undefined,
+        category: rules[i].category
+          ? {
+              _id: rules[1].category._id || '5jxuTdvzSBuCtqcH36MV',
+              _created:
+                rules[1].category._created || '2022-12-24T07:50:55.226Z',
+              _modified:
+                rules[1].category._modified || '2022-12-24T07:50:55.226Z',
+              _contentModifiedTimestamp:
+                rules[1].category._contentModifiedTimestamp ||
+                '2022-12-24T07:50:55.226Z',
+              _deleted: rules[1].category._deleted || false,
+              label: rules[1].category.label || `Category ${i}`,
+            }
+          : undefined,
+        researchCategory: rules[i].researchCategory
+          ? {
+              _id: rules[1].researchCategory._id || '5jxuTdvzSBuCtqcH36MV',
+              _created:
+                rules[1].researchCategory._created ||
+                '2022-12-24T07:50:55.226Z',
+              _modified:
+                rules[1].researchCategory._modified ||
+                '2022-12-24T07:50:55.226Z',
+              _contentModifiedTimestamp:
+                rules[1].researchCategory._contentModifiedTimestamp ||
+                '2022-12-24T07:50:55.226Z',
+              _deleted: rules[1].researchCategory._deleted || false,
+              label:
+                rules[1].researchCategory.label || `Research Category ${i}`,
+            }
+          : undefined,
+        updates: rules[i].updates
+          ? rules[i].updates.map((update: any) => ({
+              status: update.status || 'published',
+              _deleted: update._deleted || false,
+              comments: update.comments
+                ? update.comments.map((comment: any, i: number) => ({
+                    _id: comment._id || `${i}`,
+                    _created: comment._created || '2022-01-01',
+                    _creatorId: comment._creatorId || `user${i}`,
+                    creatorName: comment.creatorName || 'John',
+                    text: comment.text || `Comment ${i}`,
+                  }))
+                : undefined,
+            }))
+          : undefined,
+        comments: rules[i].comments
+          ? rules[i].comments.map((comment: any, i: number) => ({
+              _id: comment._id || `${i}`,
+              _created: comment._created || '2022-01-01',
+              _creatorId: comment._creatorId || `user${i}`,
+              creatorName: comment.creatorName || 'John',
+              text: comment.text || `Comment ${i}`,
+            }))
+          : undefined,
+      })
+    }
+    return items
+  }
+
   beforeEach(() => {
     decorator = new FilterSorterDecorator()
   })
@@ -160,15 +236,220 @@ describe('FilterSorterDecorator', () => {
   })
 
   test('sort by least comments', () => {
-    const sortedItems = decorator.sort(ItemSortingOption.LeastComments, mockItems)
+    const sortedItems = decorator.sort(
+      ItemSortingOption.LeastComments,
+      mockItems,
+    )
     expect(sortedItems[0].title).toBe(mockItems[0].title)
     expect(sortedItems[1].title).toBe(mockItems[1].title)
   })
 
-  test("sort by latest comments", () => {
-    const sortedItems = decorator.sort(ItemSortingOption.LatestComments, mockItems)
+  test('sort by least comments (under comments)', () => {
+    const items = getItems([
+      { comments: [{}, {}, {}] },
+      { comments: [{}, {}, {}, {}, {}, {}, {}] },
+      { comments: [{}, {}, {}, {}, {}] },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LeastComments, items)
+    expect(sortedItems[0].comments!.length).toBe(3)
+    expect(sortedItems[1].comments!.length).toBe(5)
+    expect(sortedItems[2].comments!.length).toBe(7)
+  })
+
+  test('sort by least comments (under updates)', () => {
+    const items = getItems([
+      { title: '1', updates: [{ comments: [{}, {}] }, { comments: [{}] }] },
+      {
+        title: '2',
+        updates: [
+          { comments: [{}, {}] },
+          { comments: [{}, {}, {}, {}] },
+          { comments: [{}] },
+        ],
+      },
+      {
+        title: '3',
+        updates: [
+          { comments: [{}] },
+          { comments: [{}] },
+          { comments: [{}] },
+          { comments: [{}] },
+          { comments: [{}] },
+        ],
+      },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LeastComments, items)
+    expect(sortedItems[0].title).toBe('1')
+    expect(sortedItems[1].title).toBe('3')
+    expect(sortedItems[2].title).toBe('2')
+  })
+
+  test('sort by least comments 15 items', () => {
+    const items = getItems([
+      { title: '1', comments: [{}, {}, {}, {}, {}] },
+      { title: '2', comments: [{}, {}] },
+      { title: '3', comments: [] },
+      { title: '4', comments: [{}, {}, {}, {}, {}, {}] },
+      { title: '5', comments: [{}, {}, {}, {}] },
+      { title: '6', comments: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}] },
+      { title: '7', comments: [{}, {}, {}] },
+      {
+        title: '8',
+        comments: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      },
+      {
+        title: '9',
+        comments: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      },
+      { title: '10', comments: [{}, {}, {}, {}, {}, {}, {}] },
+      { title: '11', comments: [{}, {}, {}, {}, {}] },
+      {
+        title: '12',
+        comments: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+      },
+      { title: '13', comments: [{}] },
+      { title: '14', comments: [{}] },
+      { title: '15', comments: [{}, {}] },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LeastComments, items)
+    expect(sortedItems[0].title).toBe('3')
+    expect(sortedItems[1].title).toBe('13')
+    expect(sortedItems[2].title).toBe('14')
+    expect(sortedItems[3].title).toBe('2')
+    expect(sortedItems[4].title).toBe('15')
+    expect(sortedItems[5].title).toBe('7')
+    expect(sortedItems[6].title).toBe('5')
+    expect(sortedItems[7].title).toBe('1')
+    expect(sortedItems[8].title).toBe('11')
+    expect(sortedItems[9].title).toBe('4')
+    expect(sortedItems[10].title).toBe('10')
+    expect(sortedItems[11].title).toBe('6')
+    expect(sortedItems[12].title).toBe('8')
+    expect(sortedItems[13].title).toBe('12')
+    expect(sortedItems[14].title).toBe('9')
+  })
+
+  test('sort by least comments same number of comments (under comments)', () => {
+    const items = getItems([
+      { title: '1', comments: [{}, {}] },
+      { title: '2', comments: [{}, {}] },
+      { title: '3', comments: [{}] },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LeastComments, items)
+    expect(sortedItems[0].title).toBe('3')
+    expect(sortedItems[1].title).toBe('1')
+    expect(sortedItems[2].title).toBe('2')
+  })
+
+  test('sort by least comments same number of comments (under updates)', () => {
+    const items = getItems([
+      { title: '1', updates: [{ comments: [{}, {}] }] },
+      { title: '2', updates: [{ comments: [{}, {}] }] },
+      { title: '3', updates: [{ comments: [{}] }, {}, {}] },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LeastComments, items)
+    expect(sortedItems[0].title).toBe('3')
+    expect(sortedItems[1].title).toBe('1')
+    expect(sortedItems[2].title).toBe('2')
+  })
+
+  test('sort by least comments (one comments one updates)', () => {
+    const items = getItems([
+      { title: '1', comments: [{}, {}, {}, {}] },
+      { title: '2', updates: [{ comments: [{}, {}] }, { comments: [{}] }] },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LeastComments, items)
+    expect(sortedItems[0].title).toBe('2')
+    expect(sortedItems[1].title).toBe('1')
+  })
+
+  test('sort by latest comments', () => {
+    const sortedItems = decorator.sort(
+      ItemSortingOption.LatestComments,
+      mockItems,
+    )
     expect(sortedItems[0].title).toBe(mockItems[1].title)
     expect(sortedItems[1].title).toBe(mockItems[0].title)
+  })
+
+  test('sort by latest comments (under comments)', () => {
+    const items = getItems([
+      {
+        title: '1',
+        comments: [{ _created: addDays(new Date(), -1).toISOString() }],
+      },
+      {
+        title: '2',
+        comments: [
+          { _created: addDays(new Date(), -6).toISOString() },
+          { _created: addDays(new Date(), -5).toISOString() },
+          { _created: addDays(new Date(), -5).toISOString() },
+          { _created: addDays(new Date(), -2).toISOString() },
+        ],
+      },
+      {
+        title: '3',
+        comments: [
+          { _created: addDays(new Date(), -12).toISOString() },
+          { _created: addDays(new Date(), -10).toISOString() },
+          { _created: addDays(new Date(), 0).toISOString() },
+        ],
+      },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LatestComments, items)
+    expect(sortedItems[0].title).toBe('3')
+    expect(sortedItems[1].title).toBe('1')
+    expect(sortedItems[2].title).toBe('2')
+  })
+
+  test('sort by latest comments same number of comments (under updates)', () => {
+    const items = getItems([
+      {
+        title: '1',
+        updates: [
+          {
+            comments: [
+              { _created: addDays(new Date(), -3).toISOString() },
+              { _created: addDays(new Date(), 0).toISOString() },
+            ],
+          },
+        ],
+      },
+      {
+        title: '2',
+        updates: [
+          {
+            comments: [
+              { _created: addDays(new Date(), 0).toISOString() },
+              { _created: addDays(new Date(), -6).toISOString() },
+            ],
+          },
+        ],
+      },
+      { title: '3', updates: [] },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LatestComments, items)
+    expect(sortedItems[0].title).toBe('1')
+    expect(sortedItems[1].title).toBe('2')
+    expect(sortedItems[2].title).toBe('3')
+  })
+
+  test('sort by latest comments (one comments one updates)', () => {
+    const items = getItems([
+      {
+        title: '1',
+        comments: [{ _created: addDays(new Date(), -3).toISOString() }],
+      },
+      {
+        title: '2',
+        updates: [
+          { comments: [{ _created: addDays(new Date(), 0).toISOString() }] },
+        ],
+      },
+    ])
+    const sortedItems = decorator.sort(ItemSortingOption.LatestComments, items)
+    expect(sortedItems[0].title).toBe('2')
+    expect(sortedItems[1].title).toBe('1')
   })
 
   test('sort by total_downloads', () => {

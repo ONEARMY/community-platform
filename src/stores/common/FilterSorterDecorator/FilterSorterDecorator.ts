@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
-import { calculateTotalComments } from 'src/utils/helpers'
+import { calculateTotalUpdateComments } from 'src/utils/helpers'
 
 import type { IComment, IModerationStatus, IUser } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
@@ -137,8 +137,10 @@ export class FilterSorterDecorator<T extends IItem> {
 
   private sortByComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
-      const totalCommentsA = a.comments?.length || calculateTotalComments(a)
-      const totalCommentsB = b.comments?.length || calculateTotalComments(b)
+      const totalCommentsA =
+        a.comments?.length || calculateTotalUpdateComments(a)
+      const totalCommentsB =
+        b.comments?.length || calculateTotalUpdateComments(b)
 
       if (totalCommentsA === totalCommentsB) {
         return 0
@@ -149,56 +151,51 @@ export class FilterSorterDecorator<T extends IItem> {
   }
 
   private sortByLeastComments(listItems: T[]) {
-    return this.sortByComments(listItems).reverse()
+    return [...listItems].sort((a, b) => {
+      const totalCommentsA =
+        a.comments?.length || calculateTotalUpdateComments(a)
+      const totalCommentsB =
+        b.comments?.length || calculateTotalUpdateComments(b)
+
+      if (totalCommentsA === totalCommentsB) {
+        return 0
+      }
+      return totalCommentsA > totalCommentsB ? 1 : -1
+    })
   }
 
   private sortByLatestComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
-      if (a.comments && b.comments) {
-        if (a.comments.length === 0 && b.comments.length === 0) {
-          return 0
-        } else if (a.comments.length === 0) {
-          return 1
-        } else if (b.comments.length === 0) {
-          return -1
-        }
+      const latestCommentA = this.getLatestComment(a)
+      const latestCommentB = this.getLatestComment(b)
 
-        const latestCommentA = a.comments.sort((a, b) =>
-          a._created < b._created ? 1 : -1,
-        )[0]
-        const latestCommentB = b.comments.sort((a, b) =>
-          a._created < b._created ? 1 : -1,
-        )[0]
-        return latestCommentA._created < latestCommentB._created ? 1 : -1
-      } else if (a.updates && b.updates) {
-        const commentsA = a.updates
-          .map((update) => update.comments ?? [])
-          .flat()
-        const commentsB = b.updates
-          .map((update) => update.comments ?? [])
-          .flat()
+      if (!latestCommentA && !latestCommentB) {
+        return 0
+      } else if (!latestCommentA) {
+        return 1
+      } else if (!latestCommentB) {
+        return -1
+      }
 
-        if (commentsA.length === 0 && commentsB.length === 0) {
-          return 0
-        } else if (commentsA.length === 0) {
-          return 1
-        } else if (commentsB.length === 0) {
-          return -1
-        }
-
-        const latestCommentA = commentsA.sort((a, b) =>
-          a._created < b._created ? 1 : -1,
-        )[0]
-        const latestCommentB = commentsB.sort((a, b) =>
-          a._created < b._created ? 1 : -1,
-        )[0]
-
-        return latestCommentA._created < latestCommentB._created ? 1 : -1
-      } else {
-        // This is weird, but we can't compare comments and updates
+      if (latestCommentA._created === latestCommentB._created) {
         return 0
       }
+
+      return latestCommentA._created < latestCommentB._created ? 1 : -1
     })
+  }
+
+  private getLatestComment(item) {
+    if (item.comments && item.comments.length > 0) {
+      return item.comments.sort((a, b) => (a._created < b._created ? 1 : -1))[0]
+    } else if (item.updates && calculateTotalUpdateComments(item) > 0) {
+      const comments = item.updates
+        .map((update) => update.comments ?? [])
+        .flat()
+      return comments.sort((a, b) => (a._created < b._created ? 1 : -1))[0]
+    } else {
+      return null
+    }
   }
 
   private sortByModerationStatus(listItems: T[], user?: IUser) {

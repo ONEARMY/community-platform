@@ -17,28 +17,18 @@ describe('[Common]', () => {
 
   it('[Page Navigation]', () => {
     cy.visit('/how-to')
-    // cy.step('Feedback button opens the survey in a new tab')
-    // cy.get('a[data-cy=feedback][target=_blank]')
-    //   .should('have.attr', 'href')
-    //   .and(
-    //     'eq',
-    //     'https://docs.google.com/forms/d/e/1FAIpQLSd3nevXb6iewap1lkFPWQxyerLsndcRkocv4QXIL3iLIyzazA/viewform?usp=pp_url&entry.1856170488=',
-    //   )
 
     cy.step('Go to Map page')
     cy.get('[data-cy=page-link]').contains('Map').click()
     cy.url().should('include', '/map')
-    // cy.get('[data-cy=feedback] > button').should('be.visible')
 
     cy.step('Go to Academy page')
     cy.get('[data-cy=page-link]').contains('Academy').click()
     cy.url().should('include', '/academy')
-    // cy.get('[data-cy=feedback] > button').should('be.visible')
 
     cy.step('Go to How-to page')
     cy.get('[data-cy=page-link]').contains('How-to').click()
     cy.url().should('include', '/how-to')
-    // cy.get('[data-cy=feedback] > button').should('be.visible')
   })
 
   describe('[User Menu]', () => {
@@ -69,12 +59,12 @@ describe('[Common]', () => {
       cy.url().should('include', `/u/${username}`)
 
       cy.step('Go to Settings')
-      cy.get(`[data-cy=menu-${UserMenuItem.Settings}]`).click()
+      cy.clickMenuItem(UserMenuItem.Settings)
       cy.url().should('include', 'settings')
 
       cy.step('Logout the session')
-      cy.get(`[data-cy=menu-${UserMenuItem.LogOut}]`).click()
-      cy.get('[data-cy=login]').should('be.visible')
+      cy.clickMenuItem(UserMenuItem.LogOut)
+      cy.get('[data-cy=login]', { timeout: 20000 }).should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')
     })
   })

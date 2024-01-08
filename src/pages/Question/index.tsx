@@ -1,5 +1,9 @@
 import { MODULE } from 'src/modules'
 import {
+  DiscussionStore,
+  DiscussionStoreContext,
+} from 'src/stores/Discussions/discussions.store'
+import {
   QuestionStore,
   QuestionStoreContext,
 } from 'src/stores/Question/question.store'
@@ -13,7 +17,9 @@ export const QuestionModuleContainer = () => {
   const rootStore = useCommonStores()
   return (
     <QuestionStoreContext.Provider value={new QuestionStore(rootStore)}>
-      <QuestionRoutes />
+      <DiscussionStoreContext.Provider value={new DiscussionStore(rootStore)}>
+        <QuestionRoutes />
+      </DiscussionStoreContext.Provider>
     </QuestionStoreContext.Provider>
   )
 }

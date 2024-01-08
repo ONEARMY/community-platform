@@ -34,6 +34,7 @@ export enum ItemSortingOption {
   Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
+  MostRelevant = 'MostRelevant',
 }
 
 export interface AuthorOption {
@@ -128,6 +129,10 @@ export class FilterSorterDecorator<T extends IItem> {
     return this.sortByProperty(listItems, 'updates')
   }
 
+  private sortByMostRelevant(listItems: T[]) {
+    return listItems
+  }
+
   private sortByComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
       const totalCommentsA = a.comments?.length || calculateTotalComments(a)
@@ -213,6 +218,10 @@ export class FilterSorterDecorator<T extends IItem> {
           validItems = this.sortRandomly(validItems)
           break
 
+        case ItemSortingOption.MostRelevant:
+          validItems = this.sortByMostRelevant(validItems)
+          break
+
         default:
           break
       }
@@ -238,11 +247,14 @@ export class FilterSorterDecorator<T extends IItem> {
   public search(listItem: T[], searchValue: string): any {
     if (searchValue) {
       const fuse = new Fuse(listItem, {
+        includeScore: true,
         keys: this.SEARCH_WEIGHTS,
       })
 
-      // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
-      return fuse.search(searchValue).map((v) => v.item)
+      return fuse
+        .search(searchValue)
+        .sort((a, b) => (a.score || 0) - (b.score || 0))
+        .map((v) => v.item)
     } else {
       return listItem
     }

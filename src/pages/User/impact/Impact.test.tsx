@@ -12,7 +12,7 @@ jest.mock('src/index', () => {
     useCommonStores: () => ({
       stores: {
         userStore: {
-          activeUser: jest.fn(),
+          activeUser: { userName: 'activeUser' },
         },
       },
     }),
@@ -93,7 +93,7 @@ describe('Impact', () => {
           },
         ],
       }
-      const user = FactoryUser({ impact })
+      const user = FactoryUser({ impact, userName: 'activeUser' })
 
       render(
         <Provider {...useCommonStores().stores}>

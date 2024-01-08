@@ -168,7 +168,7 @@ export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {
   }
 }
 
-export const calculateTotalComments = (
+export const calculateTotalUpdateComments = (
   item: IResearch.ItemDB | IItem,
 ): number => {
   if (item.updates) {

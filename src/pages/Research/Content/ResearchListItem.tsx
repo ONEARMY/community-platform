@@ -5,7 +5,7 @@ import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
-  calculateTotalComments,
+  calculateTotalUpdateComments,
   getPublicUpdates,
   researchStatusColour,
 } from 'src/utils/helpers'
@@ -195,7 +195,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                    {calculateTotalComments(item)}
+                    {calculateTotalUpdateComments(item)}
                     <Icon glyph="comment" ml={1} />
                   </Text>
                   <Text
@@ -240,7 +240,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 color="black"
                 sx={_commonStatisticStyle}
               >
-                {calculateTotalComments(item)}
+                {calculateTotalUpdateComments(item)}
                 <Icon glyph="comment" ml={1} />
               </Text>
               <Tooltip />

@@ -58,7 +58,10 @@ export interface IBoundingBox {
   bottomRight: ILatLng
 }
 
-export type IPinGrouping = 'individual' | 'place'
+export enum IPinGrouping {
+  INDIVIDUAL = 'individual',
+  PLACE = 'place',
+}
 
 export interface IMapGrouping {
   _count?: number

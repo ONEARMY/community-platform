@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   calculateTotalComments,
@@ -282,7 +282,8 @@ const getUpdateText = (item: IResearch.ItemDB) => {
   return item.updates?.length
     ? String(
         item.updates.filter(
-          (update) => update.status !== 'draft' && !update._deleted,
+          (update) =>
+            update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
         ).length,
       )
     : '0'

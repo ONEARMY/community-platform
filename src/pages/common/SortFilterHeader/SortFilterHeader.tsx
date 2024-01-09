@@ -95,11 +95,6 @@ export const SortFilterHeader = ({
   const urlSelectedAuthor = getQueryParam(window.location.href, 'author', null)
   if (urlSelectedAuthor) currentStore.updateSelectedAuthor(urlSelectedAuthor)
 
-  const statusOptions = researchStatusOptions.map((status) => ({
-    label: status,
-    value: status,
-  }))
-
   const urlSelectedStatus = getQueryParam(window.location.href, 'status', null)
   if (urlSelectedStatus && isResearchStore(currentStore))
     currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
@@ -183,7 +178,7 @@ export const SortFilterHeader = ({
         <Flex sx={_inputStyle}>
           <FieldContainer>
             <Select
-              options={statusOptions}
+              options={researchStatusOptions}
               placeholder="Filter by status"
               value={
                 (currentStore as ResearchStore).selectedStatus

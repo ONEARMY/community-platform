@@ -29,13 +29,20 @@ type ResearchDocumentLockInformation = {
 
 type ResearchDocumentLock = ResearchDocumentLockInformation | null
 
-export const researchStatusOptions = [
-  'In progress',
-  'Completed',
-  'Archived',
-] as const
+export enum ResearchStatus {
+  IN_PROGRESS = 'In progress',
+  COMPLETED = 'Completed',
+  ARCHIVED = 'Archived',
+}
 
-export type ResearchStatus = typeof researchStatusOptions[number]
+export const researchStatusOptions = (
+  Object.keys(ResearchStatus) as (keyof typeof ResearchStatus)[]
+).map((status) => {
+  return {
+    label: ResearchStatus[status],
+    value: ResearchStatus[status],
+  }
+})
 
 type UserIdList = UserId[]
 

@@ -3,6 +3,7 @@ import { ThemeProvider } from '@emotion/react'
 import { act, fireEvent, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/index'
+import { TagCategory } from 'src/models'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 
@@ -32,7 +33,7 @@ jest.mock('src/index', () => {
         tagsStore: {
           categoryTags: [
             {
-              categories: ['how-to'],
+              categories: [TagCategory.HOW_TO],
               label: 'test tag 1',
               image: 'test img',
             },

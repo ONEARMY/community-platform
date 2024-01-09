@@ -2,7 +2,6 @@ import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/index'
-import { TagCategory } from 'src/models'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 
 jest.mock('src/index', () => {

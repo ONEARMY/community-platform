@@ -13,7 +13,7 @@ import { faker } from '@faker-js/faker'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
-import { IModerationStatus, TagCategory } from 'src/models'
+import { IModerationStatus } from 'src/models'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import {

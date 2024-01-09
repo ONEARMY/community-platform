@@ -16,8 +16,6 @@ const BETA_DISCLAIMER =
 export const SUCCESS_MESSAGE = 'Successfully linked Patreon account!'
 export const SUPPORTER_MESSAGE =
   'Thanks for supporting us! :) Update your data if you changed your Patreon tiers or remove the connection below.'
-export const BECOME_A_SUPPORTER_MESSAGE =
-  'Thanks for connecting your account! It looks like you are not an active supporter of this project. If you become a supporter in the future, click the button below to update your data.'
 
 export const CONNECT_BUTTON_TEXT = 'Connect To Patreon'
 export const UPDATE_BUTTON_TEXT = 'Update Patreon Data'
@@ -120,7 +118,15 @@ export const PatreonIntegration = (props: { user: IUserPP }) => {
             </Flex>
           ) : (
             <Flex sx={{ flexDirection: 'column' }}>
-              <Text mt={4}>{BECOME_A_SUPPORTER_MESSAGE}</Text>
+              <Text mt={4}>
+                Thanks for connecting your account! It looks like you are not an
+                active supporter of this project. You can support us{' '}
+                <a href={ONE_ARMY_PATREON_URL} target="_blank" rel="noreferrer">
+                  here
+                </a>
+                . If you become a supporter in the future, click the button
+                below to update your data.
+              </Text>
             </Flex>
           )}
         </Box>

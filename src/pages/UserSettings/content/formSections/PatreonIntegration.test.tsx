@@ -3,7 +3,6 @@ import '@testing-library/jest-dom'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 
 import {
-  BECOME_A_SUPPORTER_MESSAGE,
   CONNECT_BUTTON_TEXT,
   HEADING,
   ONE_ARMY_PATREON_URL,
@@ -152,7 +151,13 @@ describe('PatreonIntegration', () => {
     })
 
     it('displays become a supporter message', () => {
-      expect(screen.getByText(BECOME_A_SUPPORTER_MESSAGE)).toBeInTheDocument()
+      expect(
+        screen.getByText((t) =>
+          t.includes(
+            'It looks like you are not an active supporter of this project.',
+          ),
+        ),
+      ).toBeInTheDocument()
     })
   })
 })

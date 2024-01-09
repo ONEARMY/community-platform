@@ -20,6 +20,7 @@ describe('[Research]', () => {
     title: 'Create research article test',
     slug: 'create-research-article-test',
     previousSlugs: ['create-research-article-test'],
+    status: 'In progress',
   }
 
   describe('[Create research article]', () => {
@@ -161,6 +162,8 @@ describe('[Research]', () => {
         'create-research-article-test',
         'create-research-article-test-edited',
       ]
+      expected.status = 'Completed'
+
       cy.visit(researchUrl)
       cy.login(researcherEmail, researcherPassword)
       cy.step('Go to Edit mode')
@@ -175,6 +178,10 @@ describe('[Research]', () => {
         .type(expected.description)
         .blur({ force: true })
 
+      cy.step('Update the status')
+      cy.get('[data-cy=research-status]').click()
+      cy.get('[id^="react-select-"]').contains(expected.status).click()
+
       cy.get('[data-cy=submit]').click()
 
       cy.step('Open the updated research article')
@@ -184,6 +191,7 @@ describe('[Research]', () => {
         .url()
         .should('include', `${researchUrl}-edited`)
       cy.get('[data-cy=research-basis]').contains(expected.title)
+      cy.get('[data-cy=research-status]').contains(expected.status)
 
       cy.queryDocuments('research', 'title', '==', expected.title).then(
         (docs) => {

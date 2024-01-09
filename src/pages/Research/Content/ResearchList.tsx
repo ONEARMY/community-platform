@@ -68,7 +68,9 @@ const ResearchList = observer(() => {
             />
           )
         })}
-      {!isFetching && filteredResearches?.length === 0 && 'No research to show'}
+      {!isFetching && filteredResearches?.length === 0 && (
+        <Box sx={{ marginBottom: 5 }}>No research to show</Box>
+      )}
       <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
         <Box mb={[3, 3, 0]}>
           <Link to={store.activeUser ? '/research/create' : '/sign-up'}>

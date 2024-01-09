@@ -31,7 +31,7 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
-import type { IComment, IUser } from 'src/models'
+import type { IComment, IUser, ResearchStatus } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -57,6 +57,9 @@ export class ResearchStore extends ModuleStore {
 
   @observable
   public selectedAuthor: string
+
+  @observable
+  public selectedStatus: string
 
   @observable
   public searchValue: string
@@ -124,13 +127,27 @@ export class ResearchStore extends ModuleStore {
     this.selectedAuthor = author
   }
 
+  public updateSelectedStatus(status: ResearchStatus) {
+    this.selectedStatus = status
+  }
+
   @computed get filteredResearches() {
     const researches = this.filterSorterDecorator.filterByCategory(
       this.allResearchItems,
       this.selectedCategory,
     )
 
-    let validResearches = filterModerableItems(researches, this.activeUser)
+    let validResearches = filterModerableItems(
+      researches,
+      this.activeUser as IUser,
+    )
+
+    validResearches = validResearches.filter((research) => {
+      return (
+        research.researchStatus !== 'Archived' ||
+        this.selectedStatus === 'Archived'
+      )
+    })
 
     validResearches = this.filterSorterDecorator.search(
       validResearches,
@@ -142,10 +159,15 @@ export class ResearchStore extends ModuleStore {
       this.selectedAuthor,
     )
 
+    validResearches = this.filterSorterDecorator.filterByStatus(
+      validResearches,
+      this.selectedStatus as ResearchStatus,
+    )
+
     return this.filterSorterDecorator.sort(
       this.activeSorter,
       validResearches,
-      this.activeUser,
+      this.activeUser as IUser,
     )
   }
 
@@ -176,6 +198,8 @@ export class ResearchStore extends ModuleStore {
         activeResearchItem.description = changeUserReferenceToPlainText(
           activeResearchItem.description,
         )
+        activeResearchItem.researchStatus =
+          activeResearchItem.researchStatus || 'In progress'
         activeResearchItem.updates = activeResearchItem.updates?.map(
           (update) => {
             update.description = changeUserReferenceToPlainText(
@@ -298,7 +322,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public async moderateResearch(research: IResearch.ItemDB) {
-    if (!hasAdminRights(toJS(this.activeUser))) {
+    if (!hasAdminRights(toJS(this.activeUser as IUser))) {
       return false
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
@@ -306,7 +330,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public needsModeration(research: IResearch.ItemDB) {
-    return needsModeration(research, toJS(this.activeUser))
+    return needsModeration(research, toJS(this.activeUser as IUser))
   }
 
   public updateSearchValue(query: string) {

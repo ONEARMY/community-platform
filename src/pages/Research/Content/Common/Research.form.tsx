@@ -72,11 +72,6 @@ const calculatedFields = createDecorator({
   },
 })
 
-const statusOptions = researchStatusOptions.map((status) => ({
-  label: status,
-  value: status,
-}))
-
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
   const { create, update } = buttons.draft
@@ -345,7 +340,7 @@ const ResearchForm = observer((props: IProps) => {
                                 data-cy="research-status"
                                 component={SelectField}
                                 placeholder={researchStatus.placeholder}
-                                options={statusOptions}
+                                options={researchStatusOptions}
                                 validate={composeValidators(required)}
                               />
                             </Flex>

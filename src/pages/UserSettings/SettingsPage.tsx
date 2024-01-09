@@ -297,11 +297,7 @@ export const SettingsPage = observer((props: IProps) => {
                     )}
                   </Flex>
 
-                  {!isMember && (
-                    <AuthWrapper roleRequired={'beta-tester'}>
-                      <ImpactSection />
-                    </AuthWrapper>
-                  )}
+                  {!isMember && <ImpactSection />}
 
                   <EmailNotificationsSection
                     notificationSettings={values.notification_settings}

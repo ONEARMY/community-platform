@@ -78,18 +78,21 @@ export interface IUserBadges {
   supporter?: boolean
 }
 
+export enum ExternalLinkLabel {
+  EMAIL = 'email',
+  WEBSITE = 'website',
+  DISCORD = 'discord',
+  BAZAR = 'bazar',
+  FORUM = 'forum',
+  SOCIAL_MEDIA = 'social media',
+  FACEBOOK = 'facebook',
+  INSTAGRAM = 'instagram',
+}
+
 interface IExternalLink {
   key: string
   url: string
-  label:
-    | 'email'
-    | 'website'
-    | 'discord'
-    | 'bazar'
-    | 'forum'
-    | 'social media'
-    | 'facebook'
-    | 'instagram'
+  label: ExternalLinkLabel
 }
 
 /**

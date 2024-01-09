@@ -19,6 +19,7 @@ import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
 import { useCommonStores } from 'src/index'
+import { ExternalLinkLabel } from 'src/models'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
@@ -177,7 +178,10 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   const stats = useMemberStatistics(user.userName)
 
   const userLinks = links.filter(
-    (linkItem) => !['discord', 'forum'].includes(linkItem.label),
+    (linkItem) =>
+      ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
+        linkItem.label,
+      ),
   )
 
   const userCountryCode =

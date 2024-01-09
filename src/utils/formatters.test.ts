@@ -1,3 +1,5 @@
+import { ExternalLinkLabel } from 'src/models'
+
 import { formatLink } from './formatters'
 
 describe('formatLink', () => {
@@ -6,10 +8,10 @@ describe('formatLink', () => {
   })
 
   describe.each([
-    ['forum', 'https://example.com'],
-    ['website', 'https://example.com'],
-    ['social media', 'https://example.com'],
-    ['bazar', 'https://example.com'],
+    [ExternalLinkLabel.FORUM, 'https://example.com'],
+    [ExternalLinkLabel.WEBSITE, 'https://example.com'],
+    [ExternalLinkLabel.SOCIAL_MEDIA, 'https://example.com'],
+    [ExternalLinkLabel.BAZAR, 'https://example.com'],
     [undefined, 'example.com'],
   ])('adds protocal to an external link', (scene, expectation) => {
     it(`${scene}`, () => {

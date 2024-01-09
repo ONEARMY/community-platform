@@ -13,7 +13,7 @@ import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
@@ -229,8 +229,9 @@ const ResearchArticle = observer(() => {
         subscribersCount={researchStore.subscribersCount}
         commentsCount={researchStore.commentsCount}
         updatesCount={
-          item.updates?.filter((u) => u.status !== 'draft' && !u._deleted)
-            .length || 0
+          item.updates?.filter(
+            (u) => u.status !== ResearchUpdateStatus.DRAFT && !u._deleted,
+          ).length || 0
         }
       />
       <Box sx={{ marginTop: 8, marginBottom: 4 }}>

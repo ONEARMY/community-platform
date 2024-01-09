@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
 
 import type { IResearch, IResearchDB } from 'src/models'
 
@@ -21,7 +21,7 @@ export const FactoryResearchItemUpdate = (
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
   _contentModifiedTimestamp: faker.date.past().toString(),
-  status: faker.helpers.arrayElement(['draft', 'published']),
+  status: faker.helpers.arrayElement(Object.values(ResearchUpdateStatus)),
   ...researchItemUpdateOverloads,
 })
 

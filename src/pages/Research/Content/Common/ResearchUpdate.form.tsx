@@ -16,7 +16,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { FileInputField } from 'src/common/Form/FileInput.field'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
@@ -82,7 +82,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   const [showInvalidFileWarning, setInvalidFileWarning] =
     React.useState<boolean>(false)
   const [isDraft, setIsDraft] = React.useState<boolean>(
-    formValues.status === 'draft',
+    formValues.status === ResearchUpdateStatus.DRAFT,
   )
   const [fileEditMode, setFileEditMode] = React.useState(false)
 
@@ -130,7 +130,9 @@ export const ResearchUpdateForm = observer((props: IProps) => {
           ].filter(Boolean),
         ),
       ),
-      status: isDraft ? 'draft' : 'published',
+      status: isDraft
+        ? ResearchUpdateStatus.DRAFT
+        : ResearchUpdateStatus.PUBLISHED,
     })
   }
 
@@ -577,7 +579,7 @@ const getResearchUpdates = (
       ? {
           isActive: false,
           title: researchTitle,
-          status: 'draft',
+          status: ResearchUpdateStatus.DRAFT,
           slug: null,
         }
       : null,

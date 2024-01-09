@@ -1,4 +1,4 @@
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
 import { FactoryUser } from 'src/test/factories/User'
 
 import {
@@ -29,7 +29,7 @@ describe('FilterSorterDecorator', () => {
       },
       updates: [
         {
-          status: 'published',
+          status: ResearchUpdateStatus.PUBLISHED,
           comments: [
             {
               _id: '1',
@@ -48,7 +48,7 @@ describe('FilterSorterDecorator', () => {
           ],
         },
         {
-          status: 'published',
+          status: ResearchUpdateStatus.PUBLISHED,
           comments: [
             {
               _id: '3',
@@ -81,7 +81,7 @@ describe('FilterSorterDecorator', () => {
       },
       updates: [
         {
-          status: 'published',
+          status: ResearchUpdateStatus.PUBLISHED,
           comments: [
             {
               _id: '4',
@@ -93,7 +93,7 @@ describe('FilterSorterDecorator', () => {
           ],
         },
         {
-          status: 'published',
+          status: ResearchUpdateStatus.PUBLISHED,
           comments: [
             {
               _id: '5',
@@ -263,7 +263,7 @@ describe('FilterSorterDecorator', () => {
 
     it('sort items created by user2 at the start of the list if they have moderation', () => {
       expect(sortedItems[0]._createdBy).toEqual('user2')
-      expect(sortedItems[0].moderation).toEqual('draft')
+      expect(sortedItems[0].moderation).toEqual(IModerationStatus.DRAFT)
       expect(sortedItems[0].title).toEqual('Item 4')
 
       expect(sortedItems[1]._createdBy).toEqual('user2')

@@ -1,4 +1,9 @@
-import { type IModerable, IModerationStatus, type IResearch } from 'src/models'
+import {
+  type IModerable,
+  IModerationStatus,
+  type IResearch,
+  ResearchUpdateStatus,
+} from 'src/models'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -238,7 +243,7 @@ describe('src/utils/helpers', () => {
       const item = {
         updates: Array.from({ length: 3 }).fill(
           FactoryResearchItemUpdate({
-            status: 'published',
+            status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
             comments: [],
           }),
@@ -251,7 +256,7 @@ describe('src/utils/helpers', () => {
       const item = {
         updates: Array.from({ length: 3 }).fill(
           FactoryResearchItemUpdate({
-            status: 'published',
+            status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
             comments: Array.from({ length: 3 }),
           }),
@@ -265,19 +270,19 @@ describe('src/utils/helpers', () => {
         updates: Array.from({ length: 2 })
           .fill(
             FactoryResearchItemUpdate({
-              status: 'published',
+              status: ResearchUpdateStatus.PUBLISHED,
               _deleted: false,
               comments: Array.from({ length: 2 }),
             }),
           )
           .concat([
             FactoryResearchItemUpdate({
-              status: 'published',
+              status: ResearchUpdateStatus.PUBLISHED,
               _deleted: true,
               comments: Array.from({ length: 3 }),
             }),
             FactoryResearchItemUpdate({
-              status: 'draft',
+              status: ResearchUpdateStatus.DRAFT,
               _deleted: false,
               comments: Array.from({ length: 6 }),
             }),

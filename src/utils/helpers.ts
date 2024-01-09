@@ -1,5 +1,5 @@
 import { isObservableObject, toJS } from 'mobx'
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
 
 import type { DBDoc, IModerable, IResearch, ResearchStatus } from 'src/models'
 import type { IMapPin } from 'src/models/maps.models'
@@ -181,7 +181,9 @@ export const calculateTotalUpdateComments = (
   if (item.updates) {
     const commentOnUpdates = item.updates.reduce((totalComments, update) => {
       const updateCommentsLength =
-        !update._deleted && update.status !== 'draft' && update.comments
+        !update._deleted &&
+        update.status !== ResearchUpdateStatus.DRAFT &&
+        update.comments
           ? update.comments.length
           : 0
       return totalComments + updateCommentsLength
@@ -196,7 +198,8 @@ export const calculateTotalUpdateComments = (
 export const getPublicUpdates = (item: IResearch.ItemDB) => {
   if (item.updates) {
     return item.updates.filter(
-      (update) => update.status !== 'draft' && !update._deleted,
+      (update) =>
+        update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
     )
   } else {
     return []

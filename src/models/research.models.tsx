@@ -29,6 +29,11 @@ type ResearchDocumentLockInformation = {
 
 type ResearchDocumentLock = ResearchDocumentLockInformation | null
 
+export enum ResearchUpdateStatus {
+  DRAFT = 'draft',
+  PUBLISHED = 'published',
+}
+
 export enum ResearchStatus {
   IN_PROGRESS = 'In progress',
   COMPLETED = 'Completed',
@@ -69,7 +74,7 @@ export namespace IResearch {
     videoUrl?: string
     comments?: IComment[]
     collaborators?: string[]
-    status: 'draft' | 'published'
+    status: ResearchUpdateStatus
     researchStatus?: ResearchStatus
     locked?: ResearchDocumentLock
   }

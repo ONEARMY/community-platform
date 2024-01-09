@@ -15,6 +15,7 @@ import {
   IModerationStatus,
   type IUser,
   type ResearchStatus,
+  ResearchUpdateStatus,
 } from 'src/models'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
@@ -887,7 +888,9 @@ export class ResearchStore extends ModuleStore {
   get updatesCount(): number {
     return this.activeResearchItem?.updates?.length
       ? this.activeResearchItem?.updates.filter(
-          (update) => update.status !== 'draft' && update._deleted !== true,
+          (update) =>
+            update.status !== ResearchUpdateStatus.DRAFT &&
+            update._deleted !== true,
         ).length
       : 0
   }

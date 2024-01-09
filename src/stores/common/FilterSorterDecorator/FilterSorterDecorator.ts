@@ -3,7 +3,12 @@ import { action, observable } from 'mobx'
 import { IModerationStatus } from 'src/models'
 import { calculateTotalUpdateComments } from 'src/utils/helpers'
 
-import type { IComment, IUser, ResearchStatus } from 'src/models'
+import type {
+  IComment,
+  IUser,
+  ResearchStatus,
+  ResearchUpdateStatus,
+} from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
@@ -19,7 +24,7 @@ export interface IItem {
   updates?: {
     _deleted?: boolean
     comments?: IComment[]
-    status: 'draft' | 'published'
+    status: ResearchUpdateStatus
   }[]
   moderation?: IModerationStatus
   collaborators?: string[]

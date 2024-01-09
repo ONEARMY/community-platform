@@ -1,10 +1,13 @@
-import type { IResearch } from 'src/models/research.models'
+import {
+  type IResearch,
+  ResearchUpdateStatus,
+} from 'src/models/research.models'
 
 const INITIAL_VALUES: IResearch.Update = {
   title: '',
   description: '',
   images: [],
-  status: 'published',
+  status: ResearchUpdateStatus.PUBLISHED,
 }
 
 export default {

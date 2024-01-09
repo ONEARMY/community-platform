@@ -1,7 +1,7 @@
 import { IMockAuthUser, MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 import type { IHowtoDB, IUserDB } from '../../models'
 import { setDoc, updateDoc } from '../../Firebase/firestoreDB'
-import { IModerationStatus } from '../../../../src/models'
+import { IModerationStatus, DifficultyLevel } from '../../../../src/models'
 
 /**
  * Populate additional mock howtos alongside production data for ease of testing
@@ -33,7 +33,7 @@ export function getMockHowto(
       downloadUrl: `https://platform.onearmy.earth/images/One-Army-Star-Logo.svg`,
     } as any,
     description: `You can edit this howto by logging in as:\n\n${loginInfo}`,
-    difficulty_level: 'Easy',
+    difficulty_level: DifficultyLevel.EASY,
     files: [],
     mentions: [],
     slug: _id,

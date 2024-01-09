@@ -2,6 +2,7 @@ import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 import type { IUserDB } from '../../models'
 import { firebaseAuth } from '../../Firebase/auth'
 import { setDoc } from '../../Firebase/firestoreDB'
+import { IModerationStatus } from '../../../../src/models'
 
 /**
  * Create auth users to allow sign-in on firebase emulators
@@ -42,7 +43,7 @@ export async function seedUsersCreate() {
       _deleted: false,
       displayName: user.label,
       userName: uid,
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
       notifications: [],
       userRoles: roles,
       links: [],

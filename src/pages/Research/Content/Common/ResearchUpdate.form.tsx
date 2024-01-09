@@ -16,6 +16,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { FileInputField } from 'src/common/Form/FileInput.field'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
+import { IModerationStatus } from 'src/models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
@@ -165,7 +166,9 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   )
 
   const draftButtonText =
-    formValues.moderation !== 'draft' ? draft.create : draft.update
+    formValues.moderation !== IModerationStatus.DRAFT
+      ? draft.create
+      : draft.update
   const isEdit = parentType === 'edit'
   const publishButtonText = isEdit ? 'Save' : 'Add update'
   const pageTitle = headings.update[parentType]

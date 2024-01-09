@@ -12,6 +12,7 @@ import {
 } from './createSubmissionEmails'
 import { PP_SIGNOFF } from './constants'
 import * as utils from './utils'
+import { IModerationStatus } from '../../../src/models'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -56,7 +57,7 @@ describe('Create howto submission emails', () => {
   })
 
   it('Creates an email for a submitted howto', async () => {
-    const howto = getMockHowto('user_1', 'awaiting-moderation')
+    const howto = getMockHowto('user_1', IModerationStatus.AWAITING_MODERATION)
     await createHowtoSubmissionEmail(howto)
 
     // Only one submitted howto email should have been created
@@ -81,7 +82,7 @@ describe('Create howto submission emails', () => {
   })
 
   it('Does not create email for draft how tos', async () => {
-    const howto = getMockHowto('user_1', 'draft')
+    const howto = getMockHowto('user_1', IModerationStatus.DRAFT)
     await createHowtoSubmissionEmail(howto)
 
     // No new emails should have been created
@@ -112,7 +113,7 @@ describe('Create map pin submission emails', () => {
   it('Creates an email for a submitted map pin', async () => {
     const mapPin = {
       _id: 'user_1',
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
     }
     await createMapPinSubmissionEmail(mapPin as IMapPin)
 

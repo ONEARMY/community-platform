@@ -10,6 +10,12 @@ import {
 } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import {
+  type IComment,
+  IModerationStatus,
+  type IUser,
+  type ResearchStatus,
+} from 'src/models'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
@@ -31,7 +37,6 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
-import type { IComment, IUser, ResearchStatus } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -622,7 +627,9 @@ export class ResearchStore extends ModuleStore {
         collaborators,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         _deleted: false,
-        moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
+        moderation: values.moderation
+          ? values.moderation
+          : IModerationStatus.ACCEPTED, // No moderation needed for researches for now
         updates,
         creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||

@@ -1,5 +1,6 @@
 import { action, makeObservable, observable } from 'mobx'
 import { logger } from 'src/logger'
+import { IModerationStatus } from 'src/models'
 import {
   hasAdminRights,
   isAllowedToPin,
@@ -12,7 +13,7 @@ import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
 import type { Subscription } from 'rxjs'
-import type { IDBEndpoint, IModerationStatus } from 'src/models/common.models'
+import type { IDBEndpoint } from 'src/models'
 import type {
   IBoundingBox,
   IMapGrouping,
@@ -62,9 +63,10 @@ export class MapsStore extends ModuleStore {
     pins = pins
       .filter((p) => {
         const isDeleted = p._deleted || false
-        const isPinAccepted = p.moderation === 'accepted'
+        const isPinAccepted = p.moderation === IModerationStatus.ACCEPTED
         const wasCreatedByUser = activeUser && p._id === activeUser.userName
-        const isAdminAndAccepted = isAdmin && p.moderation !== 'rejected'
+        const isAdminAndAccepted =
+          isAdmin && p.moderation !== IModerationStatus.REJECTED
 
         return (
           p.type &&
@@ -166,7 +168,10 @@ export class MapsStore extends ModuleStore {
     return needsModeration(pin, this.activeUser)
   }
   public canSeePin(pin: IMapPin) {
-    return pin.moderation === 'accepted' || isAllowedToPin(pin, this.activeUser)
+    return (
+      pin.moderation === IModerationStatus.ACCEPTED ||
+      isAllowedToPin(pin, this.activeUser)
+    )
   }
 
   public async setUserPin(user: IUserPP) {
@@ -179,15 +184,16 @@ export class MapsStore extends ModuleStore {
 
     // Member pins do not require moderation.
     if (type === 'member') {
-      moderation = 'accepted'
+      moderation = IModerationStatus.ACCEPTED
     }
 
     // Require re-moderation for non-member pins if pin type changes or if pin was not previously accepted.
     if (
       type !== 'member' &&
-      (existingModeration !== 'accepted' || existingPinType !== type)
+      (existingModeration !== IModerationStatus.ACCEPTED ||
+        existingPinType !== type)
     ) {
-      moderation = 'awaiting-moderation'
+      moderation = IModerationStatus.AWAITING_MODERATION
     }
 
     const pin: IMapPin = {

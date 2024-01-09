@@ -2,6 +2,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
+import { IModerationStatus } from 'src/models'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image, Text } from 'theme-ui'
@@ -25,7 +26,7 @@ export const HowToCard = (props: IProps) => {
       sx={{ borderRadius: 2, position: 'relative', height: '100%' }}
     >
       <Box>
-        {howto.moderation !== 'accepted' && (
+        {howto.moderation !== IModerationStatus.ACCEPTED && (
           <>
             <ModerationStatus
               status={howto.moderation}

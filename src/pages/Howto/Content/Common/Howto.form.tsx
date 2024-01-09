@@ -9,6 +9,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
+import { IModerationStatus } from 'src/models'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
   setAllowDraftSaveFalse,
@@ -94,8 +95,8 @@ export const HowtoForm = observer((props: IProps) => {
     }
     setState((state) => ({ ...state, showSubmitModal: true }))
     formValues.moderation = formValues.allowDraftSave
-      ? 'draft'
-      : 'awaiting-moderation'
+      ? IModerationStatus.DRAFT
+      : IModerationStatus.AWAITING_MODERATION
     logger.debug('submitting form', formValues)
     await howtoStore.uploadHowTo(formValues)
     form.reset(formValues)

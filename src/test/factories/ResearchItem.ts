@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { IModerationStatus } from 'src/models'
 
 import type { IResearch, IResearchDB } from 'src/models'
 
@@ -39,10 +40,10 @@ export const FactoryResearchItem = (
   updates: [FactoryResearchItemUpdate()],
   tags: {},
   moderation: faker.helpers.arrayElement([
-    'draft',
-    'awaiting-moderation',
-    'rejected',
-    'accepted',
+    IModerationStatus.DRAFT,
+    IModerationStatus.AWAITING_MODERATION,
+    IModerationStatus.REJECTED,
+    IModerationStatus.ACCEPTED,
   ]),
   mentions: [],
   previousSlugs: [],
@@ -63,10 +64,10 @@ export const FactoryResearchItemFormInput = (
   slug: faker.lorem.slug(),
   tags: {},
   moderation: faker.helpers.arrayElement([
-    'draft',
-    'awaiting-moderation',
-    'rejected',
-    'accepted',
+    IModerationStatus.DRAFT,
+    IModerationStatus.AWAITING_MODERATION,
+    IModerationStatus.REJECTED,
+    IModerationStatus.ACCEPTED,
   ]),
   collaborators: '',
   ...researchItemOverloads,

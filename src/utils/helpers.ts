@@ -1,7 +1,7 @@
 import { isObservableObject, toJS } from 'mobx'
+import { IModerationStatus } from 'src/models'
 
-import type { IResearch, ResearchStatus } from 'src/models'
-import type { DBDoc, IModerable } from 'src/models/common.models'
+import type { DBDoc, IModerable, IResearch, ResearchStatus } from 'src/models'
 import type { IMapPin } from 'src/models/maps.models'
 import type { IUser } from 'src/models/user.models'
 import type {
@@ -58,12 +58,12 @@ export const filterModerableItems = <T>(
   user?: IUser,
 ): T[] =>
   items.filter((item) => {
-    const isItemAccepted = item.moderation === 'accepted'
+    const isItemAccepted = item.moderation === IModerationStatus.ACCEPTED
     const wasCreatedByUser = user && item._createdBy === user.userName
     const isAdminAndAccepted =
       hasAdminRights(user) &&
-      item.moderation !== 'draft' &&
-      item.moderation !== 'rejected'
+      item.moderation !== IModerationStatus.DRAFT &&
+      item.moderation !== IModerationStatus.REJECTED
 
     return isItemAccepted || wasCreatedByUser || isAdminAndAccepted
   })
@@ -113,7 +113,7 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
   if (!hasAdminRights(user)) {
     return false
   }
-  return doc.moderation !== 'accepted'
+  return doc.moderation !== IModerationStatus.ACCEPTED
 }
 
 export const isAllowedToEditContent = (

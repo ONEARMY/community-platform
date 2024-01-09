@@ -8,6 +8,7 @@ import {
 } from 'firebase/auth'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency } from 'oa-shared'
+import { IModerationStatus } from 'src/models'
 
 import { logger } from '../../logger'
 import { auth, EmailAuthProvider } from '../../utils/firebase'
@@ -134,9 +135,11 @@ export class UserStore extends ModuleStore {
       .getWhere('collaborators', 'array-contains', userID)
     const researchCombined = [...research, ...researchCollaborated]
 
-    const howtosFiltered = howtos.filter((doc) => doc.moderation === 'accepted')
+    const howtosFiltered = howtos.filter(
+      (doc) => doc.moderation === IModerationStatus.ACCEPTED,
+    )
     const researchFiltered = researchCombined.filter(
-      (doc) => doc.moderation === 'accepted',
+      (doc) => doc.moderation === IModerationStatus.ACCEPTED,
     )
 
     return {
@@ -425,7 +428,7 @@ export class UserStore extends ModuleStore {
     const user: IUser = {
       coverImages: [],
       links: [],
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
       verified: false,
       _authID: authUser.uid,
       displayName,

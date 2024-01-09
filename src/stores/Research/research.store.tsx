@@ -798,7 +798,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   /**
-   * Increments the download count of files in reasearch update
+   * Increments the download count of files in research update
    *
    * @param updateId
    */

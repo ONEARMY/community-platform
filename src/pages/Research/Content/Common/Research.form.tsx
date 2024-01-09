@@ -11,8 +11,10 @@ import {
   ResearchEditorOverview,
 } from 'oa-components'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
+import { researchStatusOptions } from 'src/models/research.models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
@@ -70,10 +72,26 @@ const calculatedFields = createDecorator({
   },
 })
 
+const statusOptions = researchStatusOptions.map((status) => ({
+  label: status,
+  value: status,
+}))
+
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
   const { create, update } = buttons.draft
-  const { categories, collaborators, description, tags, title } = overview
+
+  formValues.researchStatus = formValues.researchStatus || 'In progress'
+
+  const {
+    categories,
+    collaborators,
+    description,
+    tags,
+    title,
+    researchStatus,
+  } = overview
+
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
     formSaved: false,
@@ -316,6 +334,20 @@ const ResearchForm = observer((props: IProps) => {
                                 name="collaborators"
                                 component={FieldInput}
                                 placeholder={collaborators.placeholder}
+                              />
+                            </Flex>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <ResearchFormLabel>
+                                {researchStatus.title}
+                                {' *'}
+                              </ResearchFormLabel>
+                              <Field
+                                name="researchStatus"
+                                data-cy="research-status"
+                                component={SelectField}
+                                placeholder={researchStatus.placeholder}
+                                options={statusOptions}
+                                validate={composeValidators(required)}
                               />
                             </Flex>
                           </Flex>

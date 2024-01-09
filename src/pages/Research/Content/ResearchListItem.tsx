@@ -3,7 +3,11 @@ import { format } from 'date-fns'
 import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
-import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
+import {
+  IModerationStatus,
+  ResearchStatus,
+  ResearchUpdateStatus,
+} from 'src/models'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   calculateTotalComments,
@@ -35,7 +39,7 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
 
-  const status = item.researchStatus || 'In progress'
+  const status = item.researchStatus || ResearchStatus.IN_PROGRESS
 
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>

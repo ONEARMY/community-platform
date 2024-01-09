@@ -14,7 +14,7 @@ import {
   type IComment,
   IModerationStatus,
   type IUser,
-  type ResearchStatus,
+  ResearchStatus,
   ResearchUpdateStatus,
 } from 'src/models'
 import { getUserCountry } from 'src/utils/getUserCountry'
@@ -205,7 +205,7 @@ export class ResearchStore extends ModuleStore {
           activeResearchItem.description,
         )
         activeResearchItem.researchStatus =
-          activeResearchItem.researchStatus || 'In progress'
+          activeResearchItem.researchStatus || ResearchStatus.IN_PROGRESS
         activeResearchItem.updates = activeResearchItem.updates?.map(
           (update) => {
             update.description = changeUserReferenceToPlainText(

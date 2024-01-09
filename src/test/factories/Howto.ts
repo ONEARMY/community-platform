@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker'
-
-import type { IHowtoDB, IHowtoStep } from 'src/models'
+import { type IHowtoDB, type IHowtoStep, IModerationStatus } from 'src/models'
 
 export const FactoryHowto = (
   howtoOverloads: Partial<IHowtoDB> = {},
@@ -16,10 +15,10 @@ export const FactoryHowto = (
   time: '< 1 hour',
   slug: faker.lorem.slug(),
   moderation: faker.helpers.arrayElement([
-    'draft',
-    'awaiting-moderation',
-    'rejected',
-    'accepted',
+    IModerationStatus.DRAFT,
+    IModerationStatus.AWAITING_MODERATION,
+    IModerationStatus.REJECTED,
+    IModerationStatus.ACCEPTED,
   ]),
   title: faker.lorem.words(4),
   description: faker.lorem.paragraph(),
@@ -85,7 +84,7 @@ export const FactoryHowtoDraft = (
   _modified: faker.date.past().toString(),
   files: [],
   slug: 'quick-draft',
-  moderation: 'draft',
+  moderation: IModerationStatus.DRAFT,
   mentions: [],
   title: 'Quick draft',
   steps: [],

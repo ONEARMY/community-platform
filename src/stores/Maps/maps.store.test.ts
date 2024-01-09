@@ -1,4 +1,6 @@
 jest.mock('../common/module.store')
+import { IModerationStatus } from 'src/models'
+
 import { MapsStore } from './maps.store'
 
 describe('maps.store', () => {
@@ -27,7 +29,7 @@ describe('maps.store', () => {
       // Assert
       expect(store.db.set).toHaveBeenCalledWith(
         expect.objectContaining({
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       )
     })
@@ -47,7 +49,7 @@ describe('maps.store', () => {
       // Assert
       expect(store.db.set).toHaveBeenCalledWith(
         expect.objectContaining({
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       )
     })
@@ -87,7 +89,7 @@ describe('maps.store', () => {
       // Assert
       expect(store.db.set).toHaveBeenCalledWith(
         expect.objectContaining({
-          moderation: 'awaiting-moderation',
+          moderation: IModerationStatus.AWAITING_MODERATION,
         }),
       )
     })
@@ -96,7 +98,7 @@ describe('maps.store', () => {
       // Arrange
       store.db.get = jest.fn().mockResolvedValue({
         profileType: 'member',
-        moderation: 'accepted',
+        moderation: IModerationStatus.ACCEPTED,
       })
 
       // Act
@@ -113,7 +115,7 @@ describe('maps.store', () => {
       // Assert
       expect(store.db.set).toHaveBeenCalledWith(
         expect.objectContaining({
-          moderation: 'awaiting-moderation',
+          moderation: IModerationStatus.AWAITING_MODERATION,
         }),
       )
     })
@@ -122,7 +124,7 @@ describe('maps.store', () => {
       // Arrange
       store.db.get = jest.fn().mockResolvedValue({
         profileType: 'workspace',
-        moderation: 'rejected',
+        moderation: IModerationStatus.REJECTED,
       })
 
       // Act
@@ -139,7 +141,7 @@ describe('maps.store', () => {
       // Assert
       expect(store.db.set).toHaveBeenCalledWith(
         expect.objectContaining({
-          moderation: 'awaiting-moderation',
+          moderation: IModerationStatus.AWAITING_MODERATION,
         }),
       )
     })
@@ -148,7 +150,7 @@ describe('maps.store', () => {
       // Arrange
       store.db.get = jest.fn().mockResolvedValue({
         type: 'workspace',
-        moderation: 'accepted',
+        moderation: IModerationStatus.ACCEPTED,
       })
 
       // Act
@@ -165,7 +167,7 @@ describe('maps.store', () => {
       // Assert
       expect(store.db.set).toHaveBeenCalledWith(
         expect.objectContaining({
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       )
     })

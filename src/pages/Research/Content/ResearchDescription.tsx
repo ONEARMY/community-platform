@@ -12,6 +12,7 @@ import {
 } from 'oa-components'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
+import { IModerationStatus } from 'src/models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { buildStatisticsLabel, researchStatusColour } from 'src/utils/helpers'
 import {
@@ -128,7 +129,7 @@ const ResearchDescription = ({
           )}
           <Flex sx={{ justifyContent: 'space-between' }}>
             <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-              {research.moderation === 'accepted' && (
+              {research.moderation === IModerationStatus.ACCEPTED && (
                 <UsefulStatsButton
                   votedUsefulCount={votedUsefulCount}
                   hasUserVotedUseful={props.hasUserVotedUseful}
@@ -143,7 +144,8 @@ const ResearchDescription = ({
               ></FollowButton>
               {/* Check if research should be moderated */}
               {props.needsModeration &&
-                research.moderation === 'awaiting-moderation' && (
+                research.moderation ===
+                  IModerationStatus.AWAITING_MODERATION && (
                   <Flex sx={{ justifyContent: 'space-between' }}>
                     <Button
                       data-cy={'accept'}
@@ -270,7 +272,7 @@ const ResearchDescription = ({
             </Text>
           </Box>
         </Flex>
-        {research.moderation !== 'accepted' && (
+        {research.moderation !== IModerationStatus.ACCEPTED && (
           <ModerationStatus
             status={research.moderation}
             contentType="research"

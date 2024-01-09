@@ -3,6 +3,7 @@ import { Popup as LeafletPopup } from 'react-leaflet'
 import L from 'leaflet'
 import { MapMemberCard } from 'oa-components'
 import { useCommonStores } from 'src/index'
+import { IModerationStatus } from 'src/models'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
 import type { Map } from 'react-leaflet'
@@ -58,7 +59,8 @@ export const Popup = (props: IProps) => {
           loading={!activePin.detail}
           imageUrl={activePin.detail?.heroImageUrl}
           comments={
-            activePin.comments && activePin.moderation === 'improvements-needed'
+            activePin.comments &&
+            activePin.moderation === IModerationStatus.IMPROVEMENTS_NEEDED
               ? activePin.comments
               : null
           }

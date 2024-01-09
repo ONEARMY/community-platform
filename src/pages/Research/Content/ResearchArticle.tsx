@@ -12,6 +12,7 @@ import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
+import { IModerationStatus } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
@@ -71,7 +72,9 @@ const ResearchArticle = observer(() => {
   const moderateResearch = async (accepted: boolean) => {
     const item = researchStore.activeResearchItem
     if (item) {
-      item.moderation = accepted ? 'accepted' : 'rejected'
+      item.moderation = accepted
+        ? IModerationStatus.ACCEPTED
+        : IModerationStatus.REJECTED
       await researchStore.moderateResearch(item)
     }
   }
@@ -248,7 +251,7 @@ const ResearchArticle = observer(() => {
             author={researchAuthor}
             contributors={contributors}
           >
-            {item.moderation === 'accepted' && (
+            {item.moderation === IModerationStatus.ACCEPTED && (
               <UsefulStatsButton
                 isLoggedIn={!!loggedInUser}
                 votedUsefulCount={researchStore.votedUsefulCount}

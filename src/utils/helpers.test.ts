@@ -1,3 +1,4 @@
+import { type IModerable, IModerationStatus, type IResearch } from 'src/models'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -15,7 +16,6 @@ import {
   stripSpecialCharacters,
 } from './helpers'
 
-import type { IModerable, IResearch } from 'src/models'
 import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 describe('src/utils/helpers', () => {
@@ -39,15 +39,15 @@ describe('src/utils/helpers', () => {
 
   describe('filterModerableItems Function', () => {
     const items = [
-      { moderation: 'accepted', _createdBy: 'user1' },
-      { moderation: 'draft', _createdBy: 'user2' },
-      { moderation: 'rejected', _createdBy: 'user3' },
+      { moderation: IModerationStatus.ACCEPTED, _createdBy: 'user1' },
+      { moderation: IModerationStatus.DRAFT, _createdBy: 'user2' },
+      { moderation: IModerationStatus.REJECTED, _createdBy: 'user3' },
     ] as IModerable[]
 
     it('should filter out items that are accepted', () => {
       const result = filterModerableItems(items)
       expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe('accepted')
+      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
     })
 
     it('should include items created by the user', () => {
@@ -56,7 +56,7 @@ describe('src/utils/helpers', () => {
         FactoryUser({ _id: 'user1', userRoles: ['admin'] }),
       )
       expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe('accepted')
+      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
     })
 
     it('should only include non-draft and non-rejected items for admin user', () => {
@@ -68,7 +68,7 @@ describe('src/utils/helpers', () => {
         }),
       )
       expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe('accepted')
+      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
     })
   })
 
@@ -100,19 +100,23 @@ describe('src/utils/helpers', () => {
 
   describe('needsModeration', () => {
     it('should return false when user does not have admin rights', () => {
-      const doc = { moderation: 'awaiting-moderation' } as IModerable
+      const doc = {
+        moderation: IModerationStatus.AWAITING_MODERATION,
+      } as IModerable
       expect(needsModeration(doc, FactoryUser({ userRoles: [] }))).toBe(false)
     })
 
     it('should return false when doc is already accepted', () => {
-      const doc = { moderation: 'accepted' } as IModerable
+      const doc = { moderation: IModerationStatus.ACCEPTED } as IModerable
       expect(needsModeration(doc, FactoryUser({ userRoles: ['admin'] }))).toBe(
         false,
       )
     })
 
     it('should return true when doc is not accepted and user has admin rights', () => {
-      const doc = { moderation: 'awaiting-moderation' } as IModerable
+      const doc = {
+        moderation: IModerationStatus.AWAITING_MODERATION,
+      } as IModerable
       expect(needsModeration(doc, FactoryUser({ userRoles: ['admin'] }))).toBe(
         true,
       )

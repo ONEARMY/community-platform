@@ -1,12 +1,12 @@
-import { getUserCountry } from './getUserCountry'
+import { IModerationStatus, type IUser } from 'src/models'
 
-import type { IUser } from 'src/models'
+import { getUserCountry } from './getUserCountry'
 
 const user: IUser = {
   _authID: '1',
   userName: 'testUser',
   displayName: 'test user',
-  moderation: 'accepted',
+  moderation: IModerationStatus.ACCEPTED,
 
   verified: true,
   coverImages: [],

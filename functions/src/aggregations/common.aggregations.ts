@@ -4,6 +4,7 @@ import { DB_ENDPOINTS, IDBEndpoint } from '../models'
 import { db } from '../Firebase/firestoreDB'
 import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
 import { FieldValue } from 'firebase-admin/firestore'
+import { IModerationStatus } from '../../../src/models'
 
 type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference
@@ -131,7 +132,7 @@ export class AggregationHandler {
       const howtos = await db
         .collection(DB_ENDPOINTS.howtos)
         .where('votedUsefulBy', '!=', [])
-        .where('moderation', '==', 'accepted')
+        .where('moderation', '==', IModerationStatus.ACCEPTED)
         .get()
 
       logger.info(`${targetAggregation} Howtos - ${howtos.docs.length}`)
@@ -147,7 +148,7 @@ export class AggregationHandler {
       const research = await db
         .collection(DB_ENDPOINTS.research)
         .where('votedUsefulBy', '!=', [])
-        .where('moderation', '==', 'accepted')
+        .where('moderation', '==', IModerationStatus.ACCEPTED)
         .get()
 
       logger.info(
@@ -244,7 +245,7 @@ export class AggregationHandler {
       .collection(DB_ENDPOINTS.howtos)
       .where('_createdBy', '==', id)
       .where('votedUsefulBy', '!=', [])
-      .where('moderation', '==', 'accepted')
+      .where('moderation', '==', IModerationStatus.ACCEPTED)
       .get()
 
     let totalUseful = 0
@@ -263,7 +264,7 @@ export class AggregationHandler {
       .collection(DB_ENDPOINTS.research)
       .where('_createdBy', '==', id)
       .where('votedUsefulBy', '!=', [])
-      .where('moderation', '==', 'accepted')
+      .where('moderation', '==', IModerationStatus.ACCEPTED)
       .get()
 
     if (!createdResearch.empty) {
@@ -278,7 +279,7 @@ export class AggregationHandler {
       .collection(DB_ENDPOINTS.research)
       .where('collaborators', 'array-contains', id)
       .where('votedUsefulBy', '!=', [])
-      .where('moderation', '==', 'accepted')
+      .where('moderation', '==', IModerationStatus.ACCEPTED)
       .get()
 
     if (!collaboratedResearch.empty) {

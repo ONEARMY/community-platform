@@ -12,12 +12,13 @@ export type IDBEndpoint = DBEndpoint
 export type ISODateString = string
 
 // Types for moderation status
-export type IModerationStatus =
-  | 'draft'
-  | 'awaiting-moderation'
-  | 'improvements-needed'
-  | 'rejected'
-  | 'accepted'
+export enum IModerationStatus {
+  DRAFT = 'draft',
+  AWAITING_MODERATION = 'awaiting-moderation',
+  IMPROVEMENTS_NEEDED = 'improvements-needed',
+  REJECTED = 'rejected',
+  ACCEPTED = 'accepted',
+}
 
 export interface IModeration {
   moderation: IModerationStatus

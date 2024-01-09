@@ -3,6 +3,7 @@ import * as admin from 'firebase-admin'
 const firebaseTest = require('firebase-functions-test')()
 import { DB_ENDPOINTS } from '../../models'
 import { generateSitemap } from './sitemapGenerate'
+import { IModerationStatus } from '../../../../src/models'
 
 const testDocs = [
   // Should include accepted howtos and research
@@ -10,21 +11,21 @@ const testDocs = [
     endpoint: DB_ENDPOINTS.howtos,
     expectIncluded: true,
     slug: 'howto-mod-accepted',
-    moderation: 'accepted',
+    moderation: IModerationStatus.ACCEPTED,
     _modified: '2022-06-20T23:28:24.653Z',
   },
   {
     endpoint: DB_ENDPOINTS.research,
     expectIncluded: true,
     slug: 'research-mod-accepted',
-    moderation: 'accepted',
+    moderation: IModerationStatus.ACCEPTED,
     _modified: '2022-06-20T23:28:24.653Z',
   },
   {
     endpoint: DB_ENDPOINTS.research,
     expectIncluded: true,
     slug: 'research-mod-awaiting',
-    moderation: 'accepted',
+    moderation: IModerationStatus.ACCEPTED,
     _modified: '2022-06-20T23:28:24.653Z',
   },
   // Should omit any not accepted or not howto/research
@@ -32,7 +33,7 @@ const testDocs = [
     endpoint: DB_ENDPOINTS.howtos,
     expectIncluded: false,
     slug: 'howto-mod-awaiting',
-    moderation: 'awaiting-moderation',
+    moderation: IModerationStatus.AWAITING_MODERATION,
     _modified: '2022-06-20T23:28:24.653Z',
   },
 ]

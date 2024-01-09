@@ -14,6 +14,7 @@ import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.
 import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
+import { IModerationStatus } from 'src/models'
 import { researchStatusOptions } from 'src/models/research.models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -94,7 +95,7 @@ const ResearchForm = observer((props: IProps) => {
     showSubmitModal: false,
   })
   const [submissionHandler, setSubmissionHandler] = React.useState({
-    draft: formValues.moderation === 'draft',
+    draft: formValues.moderation === IModerationStatus.DRAFT,
     shouldSubmit: false,
   })
 
@@ -126,7 +127,9 @@ const ResearchForm = observer((props: IProps) => {
   }, [submissionHandler])
 
   const onSubmit = async (formValues: IResearch.FormInput) => {
-    formValues.moderation = submissionHandler.draft ? 'draft' : 'accepted' // No moderation for researches for now
+    formValues.moderation = submissionHandler.draft
+      ? IModerationStatus.DRAFT
+      : IModerationStatus.ACCEPTED // No moderation for researches for now
     await store.uploadResearch(formValues)
   }
 
@@ -150,7 +153,8 @@ const ResearchForm = observer((props: IProps) => {
     !store.updateUploadStatus.Complete && state.dirty,
   )
 
-  const draftButtonText = formValues.moderation !== 'draft' ? create : update
+  const draftButtonText =
+    formValues.moderation !== IModerationStatus.DRAFT ? create : update
   const pageTitle = headings.overview[parentType]
 
   return (

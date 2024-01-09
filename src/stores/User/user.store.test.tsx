@@ -1,6 +1,7 @@
 jest.mock('../common/module.store')
 import { faker } from '@faker-js/faker'
 import { EmailNotificationFrequency } from 'oa-shared'
+import { IModerationStatus } from 'src/models'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
@@ -189,18 +190,21 @@ describe('userStore', () => {
     it('returns documents created and collaborated on by the user, with accepted moderation status', async () => {
       // Mock database calls
       store.db.getWhere.mockReturnValueOnce([
-        FactoryHowto({ _createdBy: 'testUserID', moderation: 'accepted' }),
+        FactoryHowto({
+          _createdBy: 'testUserID',
+          moderation: IModerationStatus.ACCEPTED,
+        }),
       ])
       store.db.getWhere.mockReturnValueOnce([
         FactoryResearchItem({
           _createdBy: 'testUserID',
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       ])
       store.db.getWhere.mockReturnValueOnce([
         FactoryResearchItem({
           collaborators: ['testUserID'],
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       ])
 
@@ -212,17 +216,17 @@ describe('userStore', () => {
         howtos: [
           expect.objectContaining({
             _createdBy: 'testUserID',
-            moderation: 'accepted',
+            moderation: IModerationStatus.ACCEPTED,
           }),
         ],
         research: [
           expect.objectContaining({
             _createdBy: 'testUserID',
-            moderation: 'accepted',
+            moderation: IModerationStatus.ACCEPTED,
           }),
           expect.objectContaining({
             collaborators: ['testUserID'],
-            moderation: 'accepted',
+            moderation: IModerationStatus.ACCEPTED,
           }),
         ],
       })
@@ -244,16 +248,25 @@ describe('userStore', () => {
     it('filters out documents with moderation status other than "accepted"', async () => {
       // Mock database calls to include documents with different moderation statuses
       store.db.getWhere.mockReturnValueOnce([
-        FactoryHowto({ _createdBy: 'testUserID', moderation: 'draft' }),
-        FactoryHowto({ _createdBy: 'testUserID', moderation: 'rejected' }),
-        FactoryHowto({ _createdBy: 'testUserID', moderation: 'accepted' }),
+        FactoryHowto({
+          _createdBy: 'testUserID',
+          moderation: IModerationStatus.DRAFT,
+        }),
+        FactoryHowto({
+          _createdBy: 'testUserID',
+          moderation: IModerationStatus.REJECTED,
+        }),
+        FactoryHowto({
+          _createdBy: 'testUserID',
+          moderation: IModerationStatus.ACCEPTED,
+        }),
       ])
       store.db.getWhere.mockReturnValueOnce([
-        FactoryResearchItem({ moderation: 'draft' }),
-        FactoryResearchItem({ moderation: 'accepted' }),
+        FactoryResearchItem({ moderation: IModerationStatus.DRAFT }),
+        FactoryResearchItem({ moderation: IModerationStatus.ACCEPTED }),
       ])
       store.db.getWhere.mockReturnValueOnce([
-        FactoryResearchItem({ moderation: 'draft' }),
+        FactoryResearchItem({ moderation: IModerationStatus.DRAFT }),
       ])
 
       // Act
@@ -395,7 +408,7 @@ describe('userStore', () => {
       expect(store.db.set).toHaveBeenCalledWith({
         coverImages: [],
         links: [],
-        moderation: 'awaiting-moderation',
+        moderation: IModerationStatus.AWAITING_MODERATION,
         verified: false,
         _authID: 'testUid',
         displayName: 'testDisplayName',

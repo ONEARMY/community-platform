@@ -3,6 +3,7 @@ import { format } from 'date-fns'
 import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
+import { IModerationStatus } from 'src/models'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   calculateTotalComments,
@@ -232,7 +233,7 @@ const ResearchListItem = ({ item }: IProps) => {
               <Tooltip />
             </Box>
           </Grid>
-          {item.moderation !== 'accepted' && (
+          {item.moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
               status={item.moderation}
               contentType="research"

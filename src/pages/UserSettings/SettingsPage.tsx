@@ -8,6 +8,7 @@ import { Button, TextNotification } from 'oa-components'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
+import { type IMapPin, IModerationStatus } from 'src/models'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { ProfileType } from 'src/modules/profile/types'
 import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
@@ -30,7 +31,6 @@ import { ProfileGuidelines } from './content/PostingGuidelines'
 import { buttons, headings } from './labels'
 import INITIAL_VALUES from './Template'
 
-import type { IMapPin } from 'src/models'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
 interface IProps {
@@ -50,7 +50,8 @@ interface IState {
 
 const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
   const { mapPin } = props
-  return mapPin?.comments && mapPin.moderation == 'improvements-needed' ? (
+  return mapPin?.comments &&
+    mapPin.moderation == IModerationStatus.IMPROVEMENTS_NEEDED ? (
     <Alert variant="info" sx={{ mt: 3, fontSize: 2, textAlign: 'left' }}>
       <Box>
         This map pin has been marked as requiring further changes. Specifically

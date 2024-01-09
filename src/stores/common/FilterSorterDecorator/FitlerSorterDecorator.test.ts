@@ -1,3 +1,4 @@
+import { IModerationStatus } from 'src/models'
 import { FactoryUser } from 'src/test/factories/User'
 
 import {
@@ -16,7 +17,7 @@ describe('FilterSorterDecorator', () => {
       _contentModifiedTimestamp: '2022-01-01',
       _created: '2022-01-01',
       _createdBy: 'user3',
-      moderation: 'accepted',
+      moderation: IModerationStatus.ACCEPTED,
       votedUsefulBy: ['user1', 'user2'],
       category: {
         _contentModifiedTimestamp: '2022-12-24T07:50:55.226Z',
@@ -67,7 +68,7 @@ describe('FilterSorterDecorator', () => {
       _contentModifiedTimestamp: '2022-02-01',
       _created: '2022-02-01',
       _createdBy: 'user1',
-      moderation: 'accepted',
+      moderation: IModerationStatus.ACCEPTED,
       votedUsefulBy: ['user3'],
       total_downloads: 10,
       researchCategory: {
@@ -218,7 +219,7 @@ describe('FilterSorterDecorator', () => {
         _createdBy: 'user2',
         title: 'Item 3',
         _created: '2022-10-10',
-        moderation: 'accepted',
+        moderation: IModerationStatus.ACCEPTED,
       },
       {
         _modified: '2022-10-10',
@@ -226,7 +227,7 @@ describe('FilterSorterDecorator', () => {
         _createdBy: 'user2',
         title: 'Item 4',
         _created: '2022-10-10',
-        moderation: 'draft',
+        moderation: IModerationStatus.DRAFT,
       },
       {
         _modified: '2022-01-01',
@@ -234,7 +235,7 @@ describe('FilterSorterDecorator', () => {
         _createdBy: 'user2',
         title: 'Item 5',
         _created: '2022-01-01',
-        moderation: 'rejected',
+        moderation: IModerationStatus.REJECTED,
       },
       {
         _modified: '2022-01-01',
@@ -242,7 +243,7 @@ describe('FilterSorterDecorator', () => {
         _createdBy: 'user2',
         title: 'Item 6',
         _created: '2022-01-01',
-        moderation: 'awaiting-moderation',
+        moderation: IModerationStatus.AWAITING_MODERATION,
       },
       {
         _modified: '2022-01-01',
@@ -250,7 +251,7 @@ describe('FilterSorterDecorator', () => {
         _createdBy: 'user3',
         title: 'Item 7',
         _created: '2022-01-01',
-        moderation: 'accepted',
+        moderation: IModerationStatus.ACCEPTED,
       },
     ])
 
@@ -266,11 +267,13 @@ describe('FilterSorterDecorator', () => {
       expect(sortedItems[0].title).toEqual('Item 4')
 
       expect(sortedItems[1]._createdBy).toEqual('user2')
-      expect(sortedItems[1].moderation).toEqual('rejected')
+      expect(sortedItems[1].moderation).toEqual(IModerationStatus.REJECTED)
       expect(sortedItems[1].title).toEqual('Item 5')
 
       expect(sortedItems[2]._createdBy).toEqual('user2')
-      expect(sortedItems[2].moderation).toEqual('awaiting-moderation')
+      expect(sortedItems[2].moderation).toEqual(
+        IModerationStatus.AWAITING_MODERATION,
+      )
       expect(sortedItems[2].title).toEqual('Item 6')
     })
   })

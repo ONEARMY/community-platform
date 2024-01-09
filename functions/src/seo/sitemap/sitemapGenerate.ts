@@ -9,6 +9,7 @@ import { uploadLocalFileToStorage } from '../../Firebase/storage'
 import { getCollection } from '../../Firebase/firestoreDB'
 import { IDBEndpoint } from '../../models'
 import axios from 'axios'
+import { IModerationStatus } from '../../../../src/models'
 
 /*************************************************************************
  * Main Methods
@@ -119,7 +120,7 @@ interface IEndpointDBMapping {
 const endpointDbDefaults: IEndpointDBMapping = {
   slugField: 'slug',
   lastModField: '_modified',
-  docFilterFn: (doc: any) => doc.moderation === 'accepted',
+  docFilterFn: (doc: any) => doc.moderation === IModerationStatus.ACCEPTED,
 }
 
 /** Default values to apply when generating sitemap items **/

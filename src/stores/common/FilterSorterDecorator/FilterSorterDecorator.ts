@@ -1,13 +1,9 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
+import { IModerationStatus } from 'src/models'
 import { calculateTotalComments } from 'src/utils/helpers'
 
-import type {
-  IComment,
-  IModerationStatus,
-  IUser,
-  ResearchStatus,
-} from 'src/models'
+import type { IComment, IUser, ResearchStatus } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
@@ -164,9 +160,9 @@ export class FilterSorterDecorator<T extends IItem> {
     const isCreatedByUser = (item: T) =>
       user && item._createdBy === user.userName
     const isModerationMatch = (item: T) =>
-      item.moderation === 'draft' ||
-      item.moderation === 'awaiting-moderation' ||
-      item.moderation === 'rejected'
+      item.moderation === IModerationStatus.DRAFT ||
+      item.moderation === IModerationStatus.AWAITING_MODERATION ||
+      item.moderation === IModerationStatus.REJECTED
 
     return [...listItems].sort((a, b) => {
       const aMatchesCondition = isCreatedByUser(a) && isModerationMatch(a)

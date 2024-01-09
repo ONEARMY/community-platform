@@ -16,6 +16,7 @@ import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
+import { IModerationStatus } from 'src/models'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   buildStatisticsLabel,
@@ -173,7 +174,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           )}
           <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
             {props.votedUsefulCount !== undefined &&
-              howto.moderation === 'accepted' && (
+              howto.moderation === IModerationStatus.ACCEPTED && (
                 <Box>
                   <UsefulStatsButton
                     votedUsefulCount={props.votedUsefulCount}
@@ -215,7 +216,8 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               </Fragment>
             )}
           </Flex>
-          {howto.moderatorFeedback && howto.moderation !== 'accepted' ? (
+          {howto.moderatorFeedback &&
+          howto.moderation !== IModerationStatus.ACCEPTED ? (
             <Alert
               variant="info"
               sx={{
@@ -355,7 +357,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               alt="how-to cover"
             />
           )}
-          {howto.moderation !== 'accepted' && (
+          {howto.moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
               status={howto.moderation}
               contentType="howto"

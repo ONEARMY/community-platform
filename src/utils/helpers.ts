@@ -1,7 +1,11 @@
 import { isObservableObject, toJS } from 'mobx'
-import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
+import {
+  IModerationStatus,
+  ResearchStatus,
+  ResearchUpdateStatus,
+} from 'src/models'
 
-import type { DBDoc, IModerable, IResearch, ResearchStatus } from 'src/models'
+import type { DBDoc, IModerable, IResearch } from 'src/models'
 import type { IMapPin } from 'src/models/maps.models'
 import type { IUser } from 'src/models/user.models'
 import type {
@@ -250,11 +254,11 @@ export const buildStatisticsLabel = ({
 }
 
 export const researchStatusColour = (
-  researchStatus: ResearchStatus | undefined,
+  researchStatus: ResearchStatus,
 ): string => {
-  return researchStatus === 'Archived'
+  return researchStatus === ResearchStatus.ARCHIVED
     ? 'lightgrey'
-    : researchStatus === 'Completed'
+    : researchStatus === ResearchStatus.COMPLETED
     ? 'betaGreen'
     : 'accent.base'
 }

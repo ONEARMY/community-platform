@@ -1,5 +1,10 @@
 import { faker } from '@faker-js/faker'
-import { type IHowtoDB, type IHowtoStep, IModerationStatus } from 'src/models'
+import {
+  DifficultyLevel,
+  type IHowtoDB,
+  type IHowtoStep,
+  IModerationStatus,
+} from 'src/models'
 
 export const FactoryHowto = (
   howtoOverloads: Partial<IHowtoDB> = {},
@@ -7,10 +12,10 @@ export const FactoryHowto = (
   files: [],
   fileLink: '',
   difficulty_level: faker.helpers.arrayElement([
-    'Easy',
-    'Medium',
-    'Hard',
-    'Very Hard',
+    DifficultyLevel.EASY,
+    DifficultyLevel.MEDIUM,
+    DifficultyLevel.HARD,
+    DifficultyLevel.VERY_HARD,
   ]),
   time: '< 1 hour',
   slug: faker.lorem.slug(),

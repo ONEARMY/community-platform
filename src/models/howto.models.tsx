@@ -10,6 +10,13 @@ import type {
 } from './common.models'
 import type { ISelectedTags } from './tags.model'
 
+export enum DifficultyLevel {
+  EASY = 'Easy',
+  MEDIUM = 'Medium',
+  HARD = 'Hard',
+  VERY_HARD = 'Very Hard',
+}
+
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields
 // Additionally convert from local filemeta to uploaded filemeta
@@ -57,7 +64,7 @@ export interface IHowtoFormInput extends IModerable, ISharedFeatures {
   // Added to be able to recover on edit by admin
   creatorCountry?: string
   description?: string
-  difficulty_level?: 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
+  difficulty_level?: DifficultyLevel
   files?: Array<IUploadedFileMeta | File | null>
   fileLink?: string
   mentions?: UserMention[]

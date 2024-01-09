@@ -1,4 +1,5 @@
 import { ProfileLink } from 'oa-components'
+import { ExternalLinkLabel } from 'src/models'
 import { Box } from 'theme-ui'
 
 export const UserContactAndLinks = ({ links }) =>
@@ -11,8 +12,8 @@ export const UserContactAndLinks = ({ links }) =>
           key={i}
           sx={{ mt: 2 }}
           icon={link.label
-            .replace('social media', 'social-media')
-            .replace('email', 'email-outline')}
+            .replace(ExternalLinkLabel.SOCIAL_MEDIA, 'social-media')
+            .replace(ExternalLinkLabel.EMAIL, 'email-outline')}
         />
       ))}
     </Box>

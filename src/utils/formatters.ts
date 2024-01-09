@@ -1,3 +1,5 @@
+import { ExternalLinkLabel } from 'src/models'
+
 import { ensureExternalUrl } from './validators'
 
 // TODO - we might want to add more formatting for cases where,
@@ -8,7 +10,14 @@ export const formatLink = (
 ) => {
   const link = unformattedLinkString
 
-  if (['forum', 'website', 'social media', 'bazar'].includes(linkType || '')) {
+  if (
+    [
+      ExternalLinkLabel.FORUM,
+      ExternalLinkLabel.WEBSITE,
+      ExternalLinkLabel.SOCIAL_MEDIA,
+      ExternalLinkLabel.BAZAR,
+    ].includes(linkType)
+  ) {
     return ensureExternalUrl(link)
   }
 

@@ -308,7 +308,7 @@ export const SettingsPage = observer((props: IProps) => {
                     />
                   )}
                   <AuthWrapper roleRequired={'beta-tester'}>
-                    <PatreonIntegration />
+                    <PatreonIntegration user={user} />
                   </AuthWrapper>
                 </form>
                 <AccountSettingsSection />

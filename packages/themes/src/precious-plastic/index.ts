@@ -1,5 +1,3 @@
-import { ExternalLinkLabel } from 'oa-shared'
-
 import logo from '../../assets/images/precious-plastic-logo-official.svg'
 import badge from '../../assets/images/themes/precious-plastic/avatar_member_sm.svg'
 import { styles } from './styles'
@@ -18,7 +16,7 @@ export const Theme: PlatformTheme = {
   externalLinks: [
     {
       url: 'https://bazar.preciousplastic.com/',
-      label: ExternalLinkLabel.BAZAR,
+      label: 'bazar',
     },
     {
       url: 'https://preciousplastic.com/',

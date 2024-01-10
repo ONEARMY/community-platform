@@ -14,9 +14,9 @@ export const Tag = (props: Props) => {
   return (
     <Text
       sx={{
-        ...sx,
         fontSize: 1,
         color: 'blue',
+        ...sx,
         '::before': {
           content: '"#"',
         },

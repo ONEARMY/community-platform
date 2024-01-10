@@ -1,6 +1,13 @@
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
-import type { DBDoc, IComment, IModerable, ISelectedTags, UserMention } from '.'
+import type {
+  DBDoc,
+  IComment,
+  IModerable,
+  ISelectedTags,
+  ISharedFeatures,
+  UserMention,
+} from '.'
 import type { IResearchCategory } from './researchCategories.model'
 
 /**
@@ -22,6 +29,14 @@ type ResearchDocumentLockInformation = {
 
 type ResearchDocumentLock = ResearchDocumentLockInformation | null
 
+export const researchStatusOptions = [
+  'In progress',
+  'Completed',
+  'Archived',
+] as const
+
+export type ResearchStatus = typeof researchStatusOptions[number]
+
 type UserIdList = UserId[]
 
 export namespace IResearch {
@@ -34,7 +49,6 @@ export namespace IResearch {
     collaborators: string[]
     subscribers?: UserIdList
     locked?: ResearchDocumentLock
-    votesUseful?: UserIdList
   } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */
@@ -49,10 +63,11 @@ export namespace IResearch {
     comments?: IComment[]
     collaborators?: string[]
     status: 'draft' | 'published'
+    researchStatus?: ResearchStatus
     locked?: ResearchDocumentLock
   }
 
-  export interface FormInput extends IModerable {
+  export interface FormInput extends IModerable, ISharedFeatures {
     title: string
     description: string
     researchCategory?: IResearchCategory
@@ -61,6 +76,7 @@ export namespace IResearch {
     creatorCountry?: string
     collaborators: string
     previousSlugs?: string[]
+    researchStatus?: ResearchStatus
   }
 
   /** Research items synced from the database will contain additional metadata */

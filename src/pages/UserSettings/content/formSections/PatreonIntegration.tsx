@@ -8,24 +8,24 @@ import { FlexSectionContainer } from './elements'
 
 import type { IUserPP } from 'src/models'
 
-const HEADING = '❤️ Become a Supporter'
+export const HEADING = '❤️ Become a Supporter'
 const SUBHEADING =
   'Support us on Patreon to get a badge here on the platform and special insights and voting rights on decisions.'
 const BETA_DISCLAIMER =
   'This feature is still in beta and we will continue to roll out more features for supporters.'
-const SUCCESS_MESSAGE = 'Successfully linked Patreon account!'
-const SUPPORTER_MESSAGE =
+export const SUCCESS_MESSAGE = 'Successfully linked Patreon account!'
+export const SUPPORTER_MESSAGE =
   'Thanks for supporting us! :) Update your data if you changed your Patreon tiers or remove the connection below.'
 
-const CONNECT_BUTTON_TEXT = 'Connect To Patreon'
-const UPDATE_BUTTON_TEXT = 'Update Patreon Data'
-const REMOVE_BUTTON_TEXT = 'Remove Connection'
+export const CONNECT_BUTTON_TEXT = 'Connect To Patreon'
+export const UPDATE_BUTTON_TEXT = 'Update Patreon Data'
+export const REMOVE_BUTTON_TEXT = 'Remove Connection'
 
-export const PatreonIntegration = () => {
+export const ONE_ARMY_PATREON_URL = 'https://www.patreon.com/one_army'
+
+export const PatreonIntegration = (props: { user: IUserPP }) => {
   const { userStore } = useCommonStores().stores
-  const [user, setUser] = React.useState<IUserPP | undefined>(
-    userStore.user ?? undefined,
-  )
+  const [user, setUser] = React.useState<IUserPP>(props.user)
 
   const removePatreonConnection = () => {
     if (!user) {
@@ -82,7 +82,7 @@ export const PatreonIntegration = () => {
             />
             <Text>{SUCCESS_MESSAGE}</Text>
           </Flex>
-          {user.patreon.membership && (
+          {user.badges?.supporter && user.patreon.membership ? (
             <Flex sx={{ flexDirection: 'column' }}>
               <Text mt={4}>{SUPPORTER_MESSAGE}</Text>
               {user.patreon.membership.tiers.map(({ id, attributes }) => (
@@ -116,17 +116,25 @@ export const PatreonIntegration = () => {
                 </Flex>
               ))}
             </Flex>
+          ) : (
+            <Flex sx={{ flexDirection: 'column' }}>
+              <Text mt={4}>
+                Thanks for connecting your account! It looks like you are not an
+                active supporter of this project. You can support us{' '}
+                <a href={ONE_ARMY_PATREON_URL} target="_blank" rel="noreferrer">
+                  here
+                </a>
+                . If you become a supporter in the future, click the button
+                below to update your data.
+              </Text>
+            </Flex>
           )}
         </Box>
       ) : (
         <Text mt={4} mb={4} sx={{ display: 'block', whiteSpace: 'pre-line' }}>
           How it works: <br />
           1.{' '}
-          <a
-            href="https://www.patreon.com/one_army"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href={ONE_ARMY_PATREON_URL} target="_blank" rel="noreferrer">
             Support us
           </a>{' '}
           on Patreon <br />

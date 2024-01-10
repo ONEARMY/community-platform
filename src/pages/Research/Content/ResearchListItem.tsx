@@ -4,7 +4,11 @@ import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
+import {
+  calculateTotalComments,
+  getPublicUpdates,
+  researchStatusColour,
+} from 'src/utils/helpers'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
@@ -29,6 +33,9 @@ const ResearchListItem = ({ item }: IProps) => {
     alignItems: 'center',
     fontSize: [1, 2, 2],
   }
+
+  const status = item.researchStatus || 'In progress'
+
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -65,15 +72,35 @@ const ResearchListItem = ({ item }: IProps) => {
                 alignItems: 'flex-start',
               }}
             >
-              <Heading
-                color={'black'}
-                mb={2}
-                sx={{
-                  fontSize: [3, 3, 4],
-                }}
-              >
-                {item.title}
-              </Heading>
+              <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
+                <Heading
+                  color={'black'}
+                  mb={2}
+                  sx={{
+                    fontSize: [3, 3, 4],
+                  }}
+                >
+                  {item.title}
+                </Heading>
+                <Text
+                  sx={{
+                    display: ['inline-block', 'none', 'none'],
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: 1,
+                    background: researchStatusColour(status),
+                    padding: 1,
+                    borderRadius: 1,
+                    marginLeft: 4,
+                    marginBottom: 'auto',
+                    whiteSpace: 'nowrap',
+                    minWidth: '75px',
+                  }}
+                  data-cy="ItemResearchStatus"
+                >
+                  {status}
+                </Text>
+              </Flex>
               <Flex
                 sx={{
                   width: '100%',
@@ -119,6 +146,22 @@ const ResearchListItem = ({ item }: IProps) => {
                     }}
                   >
                     {getItemDate(item, 'long')}
+                  </Text>
+                  <Text
+                    sx={{
+                      display: ['none', 'inline-block', 'inline-block'],
+                      verticalAlign: 'middle',
+                      color: 'black',
+                      fontSize: 1,
+                      background: researchStatusColour(status),
+                      padding: 1,
+                      borderRadius: 1,
+                      borderBottomRightRadius: 1,
+                      marginLeft: 4,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {status}
                   </Text>
                 </Flex>
                 {/* Show these on mobile, hide on tablet & above. */}

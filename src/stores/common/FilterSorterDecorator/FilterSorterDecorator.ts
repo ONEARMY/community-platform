@@ -2,7 +2,12 @@ import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
 import { calculateTotalComments } from 'src/utils/helpers'
 
-import type { IComment, IModerationStatus, IUser } from 'src/models'
+import type {
+  IComment,
+  IModerationStatus,
+  IUser,
+  ResearchStatus,
+} from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {
@@ -14,6 +19,7 @@ export interface IItem {
   votedUsefulBy?: string[]
   category?: ICategory
   researchCategory?: ICategory
+  researchStatus?: ResearchStatus
   updates?: {
     _deleted?: boolean
     comments?: IComment[]
@@ -77,6 +83,14 @@ export class FilterSorterDecorator<T extends IItem> {
             obj._createdBy === author ||
             (obj.collaborators && obj.collaborators.includes(author))
           )
+        })
+      : listItems
+  }
+
+  public filterByStatus(listItems: T[] = [], status: ResearchStatus): T[] {
+    return status
+      ? listItems.filter((obj) => {
+          return (obj.researchStatus || 'In progress') === status
         })
       : listItems
   }

@@ -5,11 +5,11 @@ import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
 import { ElWithBeforeIcon } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
-import { IModerationStatus } from 'src/models'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
   setAllowDraftSaveFalse,

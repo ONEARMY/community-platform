@@ -1,6 +1,5 @@
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
-import { EmailNotificationFrequency } from 'oa-shared'
-import { IModerationStatus } from 'src/models'
+import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 
 import { logger } from '../../logger'
 import { auth, EmailAuthProvider } from '../../utils/firebase'

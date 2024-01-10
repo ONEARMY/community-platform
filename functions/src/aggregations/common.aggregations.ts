@@ -4,7 +4,7 @@ import { DB_ENDPOINTS, IDBEndpoint } from '../models'
 import { db } from '../Firebase/firestoreDB'
 import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
 import { FieldValue } from 'firebase-admin/firestore'
-import { IModerationStatus } from '../../../src/models'
+import { IModerationStatus } from 'oa-shared'
 
 type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference

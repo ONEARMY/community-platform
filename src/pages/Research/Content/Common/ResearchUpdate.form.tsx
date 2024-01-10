@@ -12,11 +12,11 @@ import {
   FieldTextarea,
   ResearchEditorOverview,
 } from 'oa-components'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { FileInputField } from 'src/common/Form/FileInput.field'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
-import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {

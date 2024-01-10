@@ -1,3 +1,4 @@
+import type { TagCategory } from 'oa-shared'
 import type { DBDoc } from './common.models'
 
 // when tags are saved in things like how-tos, it is done so as a json object which
@@ -18,11 +19,4 @@ export interface ITag extends DBDoc {
   categories: TagCategory[]
   label: string
   image: string
-}
-
-export enum TagCategory {
-  HOW_TO = 'how-to',
-  EVENT = 'event',
-  PROFILE_EXPERTISE = 'profile-expertise',
-  QUESTION = 'question',
 }

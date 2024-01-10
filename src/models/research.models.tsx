@@ -1,3 +1,6 @@
+import { ResearchStatus } from 'oa-shared'
+
+import type { ResearchUpdateStatus } from 'oa-shared'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 import type {
@@ -28,17 +31,6 @@ type ResearchDocumentLockInformation = {
 }
 
 type ResearchDocumentLock = ResearchDocumentLockInformation | null
-
-export enum ResearchUpdateStatus {
-  DRAFT = 'draft',
-  PUBLISHED = 'published',
-}
-
-export enum ResearchStatus {
-  IN_PROGRESS = 'In progress',
-  COMPLETED = 'Completed',
-  ARCHIVED = 'Archived',
-}
 
 export const researchStatusOptions = (
   Object.keys(ResearchStatus) as (keyof typeof ResearchStatus)[]

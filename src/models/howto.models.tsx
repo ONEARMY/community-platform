@@ -1,3 +1,4 @@
+import type { DifficultyLevel } from 'oa-shared'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 import type { IComment } from './'
@@ -9,13 +10,6 @@ import type {
   UserMention,
 } from './common.models'
 import type { ISelectedTags } from './tags.model'
-
-export enum DifficultyLevel {
-  EASY = 'Easy',
-  MEDIUM = 'Medium',
-  HARD = 'Hard',
-  VERY_HARD = 'Very Hard',
-}
 
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields

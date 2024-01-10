@@ -8,15 +8,13 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { logger } from 'src/logger'
 import {
-  type IComment,
   IModerationStatus,
-  type IUser,
   ResearchStatus,
   ResearchUpdateStatus,
-} from 'src/models'
+} from 'oa-shared'
+import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
@@ -38,6 +36,7 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
+import type { IComment, IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
 import type { DocReference } from '../databaseV2/DocReference'

@@ -1,7 +1,7 @@
 import { IMockAuthUser, MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 import type { IHowtoDB, IUserDB } from '../../models'
 import { setDoc, updateDoc } from '../../Firebase/firestoreDB'
-import { IModerationStatus, DifficultyLevel } from '../../../../src/models'
+import { IModerationStatus, DifficultyLevel } from 'oa-shared'
 
 /**
  * Populate additional mock howtos alongside production data for ease of testing

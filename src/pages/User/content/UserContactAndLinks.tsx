@@ -1,5 +1,5 @@
 import { ProfileLink } from 'oa-components'
-import { ExternalLinkLabel } from 'src/models'
+import { ExternalLinkLabel } from 'oa-shared'
 import { Box } from 'theme-ui'
 
 export const UserContactAndLinks = ({ links }) =>

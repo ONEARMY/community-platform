@@ -3,7 +3,7 @@ import {
   IModerationStatus,
   ResearchStatus,
   ResearchUpdateStatus,
-} from 'src/models'
+} from 'oa-shared'
 
 import type { DBDoc, IModerable, IResearch } from 'src/models'
 import type { IMapPin } from 'src/models/maps.models'

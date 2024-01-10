@@ -1,8 +1,8 @@
 import L from 'leaflet'
+import { IModerationStatus } from 'oa-shared'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
 import { logger } from 'src/logger'
-import { IModerationStatus } from 'src/models'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
 import type { MarkerCluster } from 'leaflet'

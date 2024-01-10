@@ -1,5 +1,5 @@
 jest.mock('../common/module.store')
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus } from 'oa-shared'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 

@@ -17,7 +17,7 @@ import {
   handleModerationUpdate,
 } from './createModerationEmails'
 import { PP_SIGNOFF } from './constants'
-import { IModerationStatus } from '../../../src/models'
+import { IModerationStatus } from 'oa-shared'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {

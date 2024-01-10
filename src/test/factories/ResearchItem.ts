@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 
 import type { IResearch, IResearchDB } from 'src/models'
 

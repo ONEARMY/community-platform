@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention*/
 import type {
   EmailNotificationFrequency,
+  ExternalLinkLabel,
+  IModerationStatus,
   NotificationType,
   PatreonUser,
   UserRole,
 } from 'oa-shared'
-import type {
-  DBDoc,
-  ILocation,
-  IModerationStatus,
-  ISODateString,
-} from './common.models'
+import type { DBDoc, ILocation, ISODateString } from './common.models'
 
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
@@ -76,17 +73,6 @@ export type IImpactYear = 2019 | 2020 | 2021 | 2022 | 2023
 export interface IUserBadges {
   verified?: boolean
   supporter?: boolean
-}
-
-export enum ExternalLinkLabel {
-  EMAIL = 'email',
-  WEBSITE = 'website',
-  DISCORD = 'discord',
-  BAZAR = 'bazar',
-  FORUM = 'forum',
-  SOCIAL_MEDIA = 'social media',
-  FACEBOOK = 'facebook',
-  INSTAGRAM = 'instagram',
 }
 
 interface IExternalLink {

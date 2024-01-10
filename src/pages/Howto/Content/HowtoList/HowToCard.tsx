@@ -6,9 +6,9 @@ import {
   Tooltip,
   Username,
 } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
-import { IModerationStatus } from 'src/models'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image, Text } from 'theme-ui'

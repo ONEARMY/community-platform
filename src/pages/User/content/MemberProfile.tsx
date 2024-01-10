@@ -1,8 +1,8 @@
 import { MemberBadge, Username, UserStatistics } from 'oa-components'
+import { ExternalLinkLabel } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
-import { ExternalLinkLabel } from 'src/models'
 import { Box, Card, Flex, Heading, Image, Paragraph } from 'theme-ui'
 
 import UserContactAndLinks from './UserContactAndLinks'

@@ -1,10 +1,10 @@
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router-dom'
 import { Button, ElWithBeforeIcon, FieldInput } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { logger } from 'src/logger'
-import { IModerationStatus, type IQuestion } from 'src/models'
 import {
   QUESTION_MAX_DESCRIPTION_LENGTH,
   QUESTION_MAX_TITLE_LENGTH,
@@ -25,6 +25,8 @@ import {
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 
 import { CategoriesSelect } from '../../../Howto/Category/CategoriesSelect'
+
+import type { IQuestion } from 'src/models'
 
 interface IProps {
   'data-testid'?: string

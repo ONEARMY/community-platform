@@ -186,7 +186,7 @@ export const SortFilterHeader = ({
               options={statusOptions}
               placeholder="Filter by status"
               value={
-                (currentStore as ResearchStore).selectedStatus
+                currentStore.selectedStatus
                   ? {
                       label: currentStore.selectedStatus,
                       value: currentStore.selectedStatus,

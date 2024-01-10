@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
-import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
+import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
 import {
   IModerationStatus,
   ResearchStatus,
@@ -24,7 +24,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 interface IProps {
   item: IResearch.ItemDB & {
     votedUsefulCount: number
-  }
+  } & { taglist: any }
 }
 
 const ResearchListItem = ({ item }: IProps) => {
@@ -78,15 +78,33 @@ const ResearchListItem = ({ item }: IProps) => {
               }}
             >
               <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
-                <Heading
-                  color={'black'}
-                  mb={2}
-                  sx={{
-                    fontSize: [3, 3, 4],
-                  }}
-                >
-                  {item.title}
-                </Heading>
+                <Flex>
+                  <Heading
+                    color={'black'}
+                    mb={2}
+                    sx={{
+                      fontSize: [3, 3, 4],
+                    }}
+                  >
+                    {item.title}
+                  </Heading>
+                  <Flex
+                    sx={{
+                      display: ['none', 'inline-block', 'inline-block'],
+                      marginLeft: 4,
+                      marginTop: '3px',
+                    }}
+                  >
+                    {item.taglist &&
+                      item.taglist.map((tag, idx) => (
+                        <Tag
+                          key={idx}
+                          tag={tag}
+                          sx={{ marginRight: 1, fontSize: 2 }}
+                        />
+                      ))}
+                  </Flex>
+                </Flex>
                 <Text
                   sx={{
                     display: ['inline-block', 'none', 'none'],
@@ -196,7 +214,14 @@ const ResearchListItem = ({ item }: IProps) => {
                   </Text>
                 </Box>
               </Flex>
+              <Flex sx={{ marginTop: 1, display: ['flex', 'none', 'none'] }}>
+                {item.taglist &&
+                  item.taglist.map((tag, idx) => (
+                    <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
+                  ))}
+              </Flex>
             </Flex>
+
             {/* Hide these on mobile, show on tablet & above. */}
             <Box
               sx={{

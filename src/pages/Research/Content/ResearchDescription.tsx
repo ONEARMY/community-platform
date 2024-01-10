@@ -7,6 +7,7 @@ import {
   FollowButton,
   LinkifyText,
   ModerationStatus,
+  Tag,
   UsefulStatsButton,
   Username,
 } from 'oa-components'
@@ -27,7 +28,7 @@ import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 
 interface IProps {
-  research: IResearch.ItemDB
+  research: IResearch.ItemDB & { taglist: any }
   isEditable: boolean
   isDeletable: boolean
   loggedInUser: IUser | undefined
@@ -270,6 +271,12 @@ const ResearchDescription = ({
             <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
+            <Flex mt={4}>
+              {research.taglist &&
+                research.taglist.map((tag, idx) => (
+                  <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
+                ))}
+            </Flex>
           </Box>
         </Flex>
         {research.moderation !== IModerationStatus.ACCEPTED && (

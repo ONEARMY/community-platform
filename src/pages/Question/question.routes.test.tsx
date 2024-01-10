@@ -519,7 +519,7 @@ const renderFn = async (url) => {
       <Provider
         userStore={{ user: mockActiveUser }}
         questionStore={{ foo: 'bar' }}
-        tagsStore={{ setTagsCategory: jest.fn() }}
+        tagsStore={{}}
       >
         <ThemeProvider theme={Theme}>
           <RouterProvider router={router} />

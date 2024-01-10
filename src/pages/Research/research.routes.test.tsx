@@ -43,9 +43,7 @@ jest.mock('src/index', () => ({
       researchCategoriesStore: {
         allResearchCategories: [],
       },
-      tagsStore: {
-        setTagsCategory: jest.fn(),
-      },
+      tagsStore: {},
     },
   }),
 }))
@@ -536,10 +534,7 @@ const renderFn = (url: string) => {
   return {
     wrapper: render(
       <Suspense fallback={<></>}>
-        <Provider
-          userStore={{ user: mockActiveUser }}
-          tagsStore={{ setTagsCategory: jest.fn() }}
-        >
+        <Provider userStore={{ user: mockActiveUser }} tagsStore={{}}>
           <ThemeProvider theme={Theme}>
             <RouterProvider router={router} />
           </ThemeProvider>

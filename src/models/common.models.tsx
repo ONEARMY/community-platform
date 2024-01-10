@@ -1,4 +1,5 @@
 // re-imports and re-exports
+import type { IModerationStatus } from 'oa-shared'
 import type { DBEndpoint } from '../stores/databaseV2/endpoints'
 import type { DBDoc as DBDocImport } from '../stores/databaseV2/types'
 

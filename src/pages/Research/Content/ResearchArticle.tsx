@@ -197,7 +197,7 @@ const ResearchArticle = observer(() => {
   const { allTagsByKey } = tagsStore
   const research = {
     ...item,
-    taglist:
+    tagList:
       item.tags &&
       Object.keys(item.tags)
         .map((t) => allTagsByKey[t])

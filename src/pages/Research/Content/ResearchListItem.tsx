@@ -13,13 +13,14 @@ import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 
+import type { ITag } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   item: IResearch.ItemDB & {
     votedUsefulCount: number
-  } & { taglist: any }
+  } & { tagList?: ITag[] }
 }
 
 const ResearchListItem = ({ item }: IProps) => {
@@ -90,8 +91,8 @@ const ResearchListItem = ({ item }: IProps) => {
                       marginTop: '3px',
                     }}
                   >
-                    {item.taglist &&
-                      item.taglist.map((tag, idx) => (
+                    {item.tagList &&
+                      item.tagList.map((tag, idx) => (
                         <Tag
                           key={idx}
                           tag={tag}
@@ -210,8 +211,8 @@ const ResearchListItem = ({ item }: IProps) => {
                 </Box>
               </Flex>
               <Flex sx={{ marginTop: 1, display: ['flex', 'none', 'none'] }}>
-                {item.taglist &&
-                  item.taglist.map((tag, idx) => (
+                {item.tagList &&
+                  item.tagList.map((tag, idx) => (
                     <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
                   ))}
               </Flex>

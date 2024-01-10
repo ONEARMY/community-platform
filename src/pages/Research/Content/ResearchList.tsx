@@ -26,7 +26,7 @@ const ResearchList = observer(() => {
   const taggedResearches = filteredResearches.map(
     (research: IResearch.ItemDB) => ({
       ...research,
-      taglist:
+      tagList:
         research.tags &&
         Object.keys(research.tags)
           .map((key) => allTagsByKey[key])

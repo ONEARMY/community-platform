@@ -6,10 +6,11 @@ import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image, Text } from 'theme-ui'
 
+import type { ITag } from 'src/models'
 import type { IHowtoDB } from 'src/models/howto.models'
 
 interface IProps {
-  howto: IHowtoDB & { taglist: any }
+  howto: IHowtoDB & { tagList?: ITag[] }
   votedUsefulCount: number
 }
 
@@ -91,8 +92,8 @@ export const HowToCard = (props: IProps) => {
           </Flex>
           <Flex mt={5}>
             <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
-              {howto.taglist &&
-                howto.taglist.map((tag, idx) => (
+              {howto.tagList &&
+                howto.tagList.map((tag, idx) => (
                   <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
                 ))}
             </Flex>

@@ -23,11 +23,12 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
+import type { ITag } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 
 interface IProps {
-  research: IResearch.ItemDB & { taglist: any }
+  research: IResearch.ItemDB & { tagList?: ITag[] }
   isEditable: boolean
   isDeletable: boolean
   loggedInUser: IUser | undefined
@@ -270,8 +271,8 @@ const ResearchDescription = ({
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
             <Flex mt={4}>
-              {research.taglist &&
-                research.taglist.map((tag, idx) => (
+              {research.tagList &&
+                research.tagList.map((tag, idx) => (
                   <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
                 ))}
             </Flex>

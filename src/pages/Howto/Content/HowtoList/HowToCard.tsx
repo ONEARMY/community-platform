@@ -1,11 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom'
-import {
-  CategoryTag,
-  Icon,
-  ModerationStatus,
-  Tooltip,
-  Username,
-} from 'oa-components'
+import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
@@ -100,7 +94,7 @@ export const HowToCard = (props: IProps) => {
             <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
               {howto.taglist &&
                 howto.taglist.map((tag, idx) => (
-                  <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+                  <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
                 ))}
             </Flex>
             {votedUsefulCount > 0 && (

@@ -9,7 +9,7 @@ export interface Props {
   sx?: ThemeUIStyleObject | undefined
 }
 
-export const CategoryTag = (props: Props) => {
+export const Tag = (props: Props) => {
   const { tag, sx } = props
   return (
     <Text

@@ -4,6 +4,7 @@ import { useTheme } from '@emotion/react'
 import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { useCommonStores } from 'src/index'
 import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { Box, Flex, Heading } from 'theme-ui'
@@ -11,11 +12,28 @@ import { Box, Flex, Heading } from 'theme-ui'
 import { RESEARCH_EDITOR_ROLES } from '../constants'
 import ResearchListItem from './ResearchListItem'
 
+import type { IResearch } from 'src/models'
+
 const ResearchList = observer(() => {
   const store = useResearchStore()
+  const { tagsStore } = useCommonStores().stores
   const theme = useTheme()
 
   const { filteredResearches, isFetching } = store
+
+  const { allTagsByKey } = tagsStore
+
+  const taggedResearches = filteredResearches.map(
+    (research: IResearch.ItemDB) => ({
+      ...research,
+      taglist:
+        research.tags &&
+        Object.keys(research.tags)
+          .map((key) => allTagsByKey[key])
+          .filter(Boolean),
+    }),
+  )
+
   return (
     <>
       <Flex my={[18, 26]}>
@@ -55,8 +73,8 @@ const ResearchList = observer(() => {
       </Flex>
       {isFetching && <Loader />}
       {!isFetching &&
-        filteredResearches?.length !== 0 &&
-        filteredResearches.map((item) => {
+        taggedResearches?.length !== 0 &&
+        taggedResearches.map((item) => {
           const votedUsefulCount = (item.votedUsefulBy || []).length
           return (
             <ResearchListItem

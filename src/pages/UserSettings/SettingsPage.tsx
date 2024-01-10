@@ -13,6 +13,7 @@ import { isModuleSupported, MODULE } from 'src/modules'
 import { ProfileType } from 'src/modules/profile/types'
 import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
+
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { EmailNotificationsSection } from './content/formSections/EmailNotifications.section'

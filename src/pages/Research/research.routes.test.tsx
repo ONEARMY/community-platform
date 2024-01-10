@@ -10,6 +10,7 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { act, cleanup, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
+import { UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   FactoryResearchItem,
@@ -78,7 +79,7 @@ class MockResearchStoreClass implements Partial<ResearchStore> {
     return {
       name: 'Jaasper',
       userName: 'jasper',
-      userRoles: ['admin'],
+      userRoles: [UserRole.ADMIN],
     } as any
   }
   get filteredResearches() {
@@ -172,7 +173,7 @@ describe('research.routes', () => {
     it('accepts a logged in user with required role [research_creator]', async () => {
       let wrapper
       await act(async () => {
-        mockActiveUser.userRoles = ['research_creator']
+        mockActiveUser.userRoles = [UserRole.RESEARCH_CREATOR]
 
         wrapper = renderFn('/research/create').wrapper
       })
@@ -190,7 +191,7 @@ describe('research.routes', () => {
     it('accepts a logged in user with required role [research_creator]', async () => {
       let wrapper
       await act(async () => {
-        mockActiveUser.userRoles = ['research_editor']
+        mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
         wrapper = renderFn('/research/create').wrapper
       })
@@ -225,7 +226,7 @@ describe('research.routes', () => {
       let wrapper
       await act(async () => {
         mockActiveUser.userName = 'Jaasper'
-        mockActiveUser.userRoles = ['research_editor']
+        mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
         wrapper = renderFn('/research/an-example/edit').wrapper
       })
@@ -236,7 +237,7 @@ describe('research.routes', () => {
     })
 
     it('rejects a logged in user with required role but not author of document', async () => {
-      mockActiveUser.userRoles = ['research_editor']
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({
@@ -258,7 +259,7 @@ describe('research.routes', () => {
     })
 
     it('blocks a valid editor when document is locked by another user', async () => {
-      mockActiveUser.userRoles = ['research_editor']
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
@@ -287,7 +288,7 @@ describe('research.routes', () => {
     })
 
     it('accepts a user when document is mark locked by them', async () => {
-      mockActiveUser.userRoles = ['research_editor']
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
@@ -312,7 +313,7 @@ describe('research.routes', () => {
     })
 
     it('accepts a user with required role and contributor acccess', async () => {
-      mockActiveUser.userRoles = ['research_editor']
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
@@ -352,7 +353,7 @@ describe('research.routes', () => {
     it('accepts a logged in user with required role', async () => {
       let wrapper
       await act(async () => {
-        mockActiveUser.userRoles = ['research_editor']
+        mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
         wrapper = renderFn('/research/an-example/new-update').wrapper
       })
@@ -380,7 +381,7 @@ describe('research.routes', () => {
     })
 
     it('accept logged in author present', async () => {
-      mockActiveUser.userRoles = ['research_editor']
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
@@ -411,7 +412,7 @@ describe('research.routes', () => {
 
     it('blocks valid author when document is locked', async () => {
       // Arrange
-      mockActiveUser.userRoles = ['research_editor']
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
@@ -445,7 +446,7 @@ describe('research.routes', () => {
     })
 
     it('accepts a user when document is mark locked by them', async () => {
-      mockActiveUser.userRoles = ['research_editor']
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
       ;(useResearchStore as jest.Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
@@ -491,7 +492,7 @@ describe('research.routes', () => {
     })
 
     it('accept logged in user who is collaborator', async () => {
-      mockActiveUser.userRoles = ['research_editor']
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
       // Arrange
       ;(useResearchStore as jest.Mock).mockReturnValue({

@@ -13,6 +13,7 @@ import {
 import { PP_SIGNOFF } from './constants'
 import * as utils from './utils'
 import { IModerationStatus } from 'oa-shared'
+import { UserRole } from 'oa-shared/models'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {

@@ -13,7 +13,7 @@ import { faker } from '@faker-js/faker'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, UserRole } from 'oa-shared'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import {
@@ -422,7 +422,7 @@ describe('question.routes', () => {
 
       mockActiveUser = FactoryUser({
         userName: 'not-author',
-        userRoles: ['admin'],
+        userRoles: [UserRole.ADMIN],
       })
 
       const questionItem = FactoryQuestionItem({

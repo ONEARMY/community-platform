@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-export type UserRole =
-  | 'super-admin'
-  | 'subscriber'
-  | 'admin'
-  | 'beta-tester'
-  | 'research_editor'
-  | 'research_creator'
+export enum UserRole {
+  SUPER_ADMIN = 'super-admin',
+  SUBSCRIBER = 'subscriber',
+  ADMIN = 'admin',
+  BETA_TESTER = 'beta-tester',
+  RESEARCH_EDITOR = 'research_editor',
+  RESEARCH_CREATOR = 'research_creator',
+}
 
 export enum ExternalLinkLabel {
   EMAIL = 'email',

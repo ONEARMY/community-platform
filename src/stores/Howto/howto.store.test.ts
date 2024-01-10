@@ -1,4 +1,5 @@
 jest.mock('../common/module.store')
+import { UserRole } from 'oa-shared'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryHowto,
@@ -445,7 +446,9 @@ describe('howto.store', () => {
             comments: [comment],
           }),
         ]
-        const { store, setFn } = await factory(howtos, { userRoles: ['admin'] })
+        const { store, setFn } = await factory(howtos, {
+          userRoles: [UserRole.ADMIN],
+        })
 
         // Act
         await store.editComment(comment._id, 'New text')
@@ -533,7 +536,9 @@ describe('howto.store', () => {
             comments: [comment],
           }),
         ]
-        const { store, setFn } = await factory(howtos, { userRoles: ['admin'] })
+        const { store, setFn } = await factory(howtos, {
+          userRoles: [UserRole.ADMIN],
+        })
 
         // Act
         await store.deleteComment(comment._id)

@@ -7,7 +7,7 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { ResearchUpdateStatus } from 'oa-shared'
+import { ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
@@ -22,7 +22,7 @@ import ResearchArticle from './ResearchArticle'
 const Theme = testingThemeStyles
 
 const activeUser = FactoryUser({
-  userRoles: ['beta-tester'],
+  userRoles: [UserRole.BETA_TESTER],
 })
 
 const mockUser = FactoryUser({ country: 'AF' })

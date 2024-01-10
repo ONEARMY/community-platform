@@ -1,4 +1,4 @@
-import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
+import { IModerationStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -55,7 +55,7 @@ describe('src/utils/helpers', () => {
     it('should include items created by the user', () => {
       const result = filterModerableItems(
         items,
-        FactoryUser({ _id: 'user1', userRoles: ['admin'] }),
+        FactoryUser({ _id: 'user1', userRoles: [UserRole.ADMIN] }),
       )
       expect(result).toHaveLength(1)
       expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
@@ -66,7 +66,7 @@ describe('src/utils/helpers', () => {
         items,
         FactoryUser({
           userName: 'admin',
-          userRoles: ['admin'],
+          userRoles: [UserRole.ADMIN],
         }),
       )
       expect(result).toHaveLength(1)
@@ -85,17 +85,17 @@ describe('src/utils/helpers', () => {
     })
 
     it('should return false when user does not have admin or super-admin roles', () => {
-      const user = FactoryUser({ userRoles: ['beta-tester'] })
+      const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
       expect(hasAdminRights(user)).toBe(false)
     })
 
     it('should return true when user has admin role', () => {
-      const user = FactoryUser({ userRoles: ['admin'] })
+      const user = FactoryUser({ userRoles: [UserRole.ADMIN] })
       expect(hasAdminRights(user)).toBe(true)
     })
 
     it('should return true when user has super-admin role', () => {
-      const user = FactoryUser({ userRoles: ['super-admin'] })
+      const user = FactoryUser({ userRoles: [UserRole.SUPER_ADMIN] })
       expect(hasAdminRights(user)).toBe(true)
     })
   })
@@ -110,18 +110,18 @@ describe('src/utils/helpers', () => {
 
     it('should return false when doc is already accepted', () => {
       const doc = { moderation: IModerationStatus.ACCEPTED } as IModerable
-      expect(needsModeration(doc, FactoryUser({ userRoles: ['admin'] }))).toBe(
-        false,
-      )
+      expect(
+        needsModeration(doc, FactoryUser({ userRoles: [UserRole.ADMIN] })),
+      ).toBe(false)
     })
 
     it('should return true when doc is not accepted and user has admin rights', () => {
       const doc = {
         moderation: IModerationStatus.AWAITING_MODERATION,
       } as IModerable
-      expect(needsModeration(doc, FactoryUser({ userRoles: ['admin'] }))).toBe(
-        true,
-      )
+      expect(
+        needsModeration(doc, FactoryUser({ userRoles: [UserRole.ADMIN] })),
+      ).toBe(true)
     })
   })
 
@@ -147,7 +147,10 @@ describe('src/utils/helpers', () => {
     })
 
     it('should return true when user has admin role', () => {
-      const user = FactoryUser({ userName: 'testUser', userRoles: ['admin'] })
+      const user = FactoryUser({
+        userName: 'testUser',
+        userRoles: [UserRole.ADMIN],
+      })
       const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
       expect(isAllowedToEditContent(doc, user)).toBe(true)
     })
@@ -155,7 +158,7 @@ describe('src/utils/helpers', () => {
     it('should return true when user has super-admin role', () => {
       const user = FactoryUser({
         userName: 'testUser',
-        userRoles: ['super-admin'],
+        userRoles: [UserRole.SUPER_ADMIN],
       })
       const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
       expect(isAllowedToEditContent(doc, user)).toBe(true)
@@ -181,7 +184,7 @@ describe('src/utils/helpers', () => {
           pin,
           FactoryUser({
             userName: 'testUser',
-            userRoles: ['admin'],
+            userRoles: [UserRole.ADMIN],
           }),
         ),
       ).toBe(true)

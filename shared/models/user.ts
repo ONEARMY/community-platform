@@ -7,6 +7,17 @@ export type UserRole =
   | 'research_editor'
   | 'research_creator'
 
+export enum ExternalLinkLabel {
+  EMAIL = 'email',
+  WEBSITE = 'website',
+  DISCORD = 'discord',
+  BAZAR = 'bazar',
+  FORUM = 'forum',
+  SOCIAL_MEDIA = 'social media',
+  FACEBOOK = 'facebook',
+  INSTAGRAM = 'instagram',
+}
+
 // See https://docs.patreon.com/?javascript#user-v2
 export interface PatreonUserAttributes {
   about: string

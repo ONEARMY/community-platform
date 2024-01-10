@@ -1,10 +1,7 @@
 import { faker } from '@faker-js/faker'
-import {
-  DifficultyLevel,
-  type IHowtoDB,
-  type IHowtoStep,
-  IModerationStatus,
-} from 'src/models'
+import { DifficultyLevel, IModerationStatus } from 'oa-shared'
+
+import type { IHowtoDB, IHowtoStep } from 'src/models'
 
 export const FactoryHowto = (
   howtoOverloads: Partial<IHowtoDB> = {},

@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom'
 import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import { useCommonStores } from 'src/index'
 import {
   IModerationStatus,
   ResearchStatus,
   ResearchUpdateStatus,
-} from 'src/models'
+} from 'oa-shared'
+import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
 import {

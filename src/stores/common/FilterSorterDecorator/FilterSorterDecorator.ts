@@ -1,14 +1,10 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus } from 'oa-shared'
 import { calculateTotalUpdateComments } from 'src/utils/helpers'
 
-import type {
-  IComment,
-  IUser,
-  ResearchStatus,
-  ResearchUpdateStatus,
-} from 'src/models'
+import type { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
+import type { IComment, IUser } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
 
 export interface IItem {

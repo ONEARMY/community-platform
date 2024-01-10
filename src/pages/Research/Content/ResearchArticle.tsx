@@ -9,11 +9,11 @@ import {
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
-import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {

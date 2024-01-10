@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx'
+import { IModerationStatus } from 'oa-shared'
 import { logger } from 'src/logger'
-import { IModerationStatus } from 'src/models'
 import {
   hasAdminRights,
   isAllowedToPin,

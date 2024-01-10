@@ -8,10 +8,10 @@ import {
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
-import { IModerationStatus, type IUser, type UserComment } from 'src/models'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box } from 'theme-ui'
@@ -19,6 +19,8 @@ import { Box } from 'theme-ui'
 import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
 import Step from './Step/Step'
+
+import type { IUser, UserComment } from 'src/models'
 
 export const Howto = observer(() => {
   const { slug } = useParams()

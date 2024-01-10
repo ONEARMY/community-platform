@@ -1,4 +1,4 @@
-import { DifficultyLevel } from 'src/models'
+import { DifficultyLevel } from 'oa-shared'
 import { v4 as uuid } from 'uuid'
 
 import { MOCK_DATA } from '../../data'

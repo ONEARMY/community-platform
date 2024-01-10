@@ -1,4 +1,4 @@
-import { IModerationStatus, ResearchUpdateStatus } from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 
 import {

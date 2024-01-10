@@ -8,6 +8,7 @@ import {
   Username,
   UserStatistics,
 } from 'oa-components'
+import { ExternalLinkLabel } from 'oa-shared'
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
 import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
@@ -18,7 +19,6 @@ import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
 import { useCommonStores } from 'src/index'
-import { ExternalLinkLabel } from 'src/models'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'

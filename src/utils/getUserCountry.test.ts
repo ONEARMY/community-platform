@@ -1,6 +1,8 @@
-import { IModerationStatus, type IUser } from 'src/models'
+import { IModerationStatus } from 'oa-shared'
 
 import { getUserCountry } from './getUserCountry'
+
+import type { IUser } from 'src/models'
 
 const user: IUser = {
   _authID: '1',

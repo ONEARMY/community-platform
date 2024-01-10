@@ -1,9 +1,4 @@
-import {
-  type IModerable,
-  IModerationStatus,
-  type IResearch,
-  ResearchUpdateStatus,
-} from 'src/models'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -22,6 +17,7 @@ import {
   stripSpecialCharacters,
 } from './helpers'
 
+import type { IModerable, IResearch } from 'src/models'
 import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 describe('src/utils/helpers', () => {

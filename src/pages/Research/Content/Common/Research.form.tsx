@@ -10,11 +10,11 @@ import {
   FieldTextarea,
   ResearchEditorOverview,
 } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
-import { IModerationStatus } from 'src/models'
 import { researchStatusOptions } from 'src/models/research.models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { useResearchStore } from 'src/stores/Research/research.store'

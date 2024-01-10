@@ -8,8 +8,8 @@ import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/Filte
 import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
 import { Flex, Input } from 'theme-ui'
 
+import type { ResearchStatus } from 'oa-shared'
 import type { NavigateFunction } from 'react-router-dom'
-import type { ResearchStatus } from 'src/models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { QuestionStore } from 'src/stores/Question/question.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'

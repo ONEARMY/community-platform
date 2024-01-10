@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus } from 'oa-shared'
 import { ProfileType } from 'src/modules/profile/types'
 
 import type { IUserPPDB } from 'src/models'

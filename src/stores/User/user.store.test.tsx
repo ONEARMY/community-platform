@@ -1,8 +1,7 @@
 jest.mock('../common/module.store')
 import { faker } from '@faker-js/faker'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { EmailNotificationFrequency } from 'oa-shared'
-import { IModerationStatus } from 'src/models'
+import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'

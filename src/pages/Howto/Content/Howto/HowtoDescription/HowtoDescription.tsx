@@ -11,12 +11,12 @@ import {
   Tag,
   UsefulStatsButton,
 } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
-import { IModerationStatus } from 'src/models'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
   buildStatisticsLabel,

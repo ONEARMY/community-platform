@@ -1,5 +1,5 @@
 import { Button } from 'oa-components'
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus } from 'oa-shared'
 import { Flex, Text } from 'theme-ui'
 
 import { buttons } from '../../labels'

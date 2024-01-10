@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin'
 const firebaseTest = require('firebase-functions-test')()
 import { DB_ENDPOINTS } from '../../models'
 import { generateSitemap } from './sitemapGenerate'
-import { IModerationStatus } from '../../../../src/models'
+import { IModerationStatus } from 'oa-shared'
 
 const testDocs = [
   // Should include accepted howtos and research

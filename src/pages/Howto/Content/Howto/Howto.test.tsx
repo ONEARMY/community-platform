@@ -47,7 +47,7 @@ jest.mock('src/index', () => ({
   }),
 }))
 
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus } from 'oa-shared'
 
 import { Howto } from './Howto'
 

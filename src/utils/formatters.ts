@@ -1,4 +1,4 @@
-import { ExternalLinkLabel } from 'src/models'
+import { ExternalLinkLabel } from 'oa-shared'
 
 import { ensureExternalUrl } from './validators'
 

@@ -1,3 +1,4 @@
+import type { TagCategory } from 'oa-shared'
 import type { DBDoc } from './common.models'
 
 // when tags are saved in things like how-tos, it is done so as a json object which

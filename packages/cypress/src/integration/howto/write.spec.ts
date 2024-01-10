@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { DifficultyLevel } from 'src/models'
+import { DifficultyLevel } from 'oa-shared'
 
 import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,

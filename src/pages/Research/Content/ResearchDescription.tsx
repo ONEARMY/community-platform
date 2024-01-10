@@ -11,9 +11,9 @@ import {
   UsefulStatsButton,
   Username,
 } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
-import { IModerationStatus } from 'src/models'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { buildStatisticsLabel, researchStatusColour } from 'src/utils/helpers'
 import {

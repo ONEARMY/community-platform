@@ -1,4 +1,4 @@
-import { DifficultyLevel } from 'src/models'
+import { DifficultyLevel } from 'oa-shared'
 
 const makeEntry = (value: string, label?: string) => {
   return { value, label: label || value }

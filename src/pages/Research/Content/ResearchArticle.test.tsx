@@ -7,7 +7,7 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { ResearchUpdateStatus } from 'src/models'
+import { ResearchUpdateStatus } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {

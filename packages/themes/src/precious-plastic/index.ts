@@ -1,6 +1,7 @@
+import { ExternalLinkLabel } from 'oa-shared'
+
 import logo from '../../assets/images/precious-plastic-logo-official.svg'
 import badge from '../../assets/images/themes/precious-plastic/avatar_member_sm.svg'
-import { ExternalLinkLabel } from './../../../../src/models/user.models'
 import { styles } from './styles'
 
 import type { PlatformTheme } from '../types'

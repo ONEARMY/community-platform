@@ -1,5 +1,5 @@
 jest.mock('../common/module.store')
-import { IModerationStatus } from 'src/models'
+import { IModerationStatus } from 'oa-shared'
 
 import { MapsStore } from './maps.store'
 

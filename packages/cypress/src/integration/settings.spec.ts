@@ -1,11 +1,11 @@
-import {
-  ExternalLinkLabel,
-  type IUser,
-} from '../../../../src/models/user.models'
+import { ExternalLinkLabel } from 'oa-shared'
+
 import { form } from '../../../../src/pages/UserSettings/labels'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commands'
 import { DbCollectionName } from '../utils/TestUtils'
+
+import type { IUser } from '../../../../src/models/user.models'
 
 interface Info {
   username: string

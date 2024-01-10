@@ -15,14 +15,9 @@ export interface IProps extends Partial<FieldRenderProps<any, any>> {
   onChange: (val: ISelectedTags) => void
   styleVariant?: 'selector' | 'filter'
   placeholder?: string
-  relevantTagsItems?: ICollectionWithTags[]
 }
 interface IState {
   selectedTags: string[]
-}
-
-interface ICollectionWithTags {
-  tags?: ISelectedTags
 }
 
 const TagsSelect = (props: IProps) => {

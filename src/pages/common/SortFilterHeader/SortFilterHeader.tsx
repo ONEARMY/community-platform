@@ -223,7 +223,7 @@ export const SortFilterHeader = ({
             ) {
               currentStore.updateActiveSorter(ItemSortingOption.MostRelevant)
               setSortState({
-                label: ItemSortingOption.MostRelevant,
+                label: 'Most Relevant',
                 value: ItemSortingOption.MostRelevant,
               })
             }

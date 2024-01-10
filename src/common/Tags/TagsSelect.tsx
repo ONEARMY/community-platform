@@ -6,14 +6,13 @@ import { useCommonStores } from 'src/index'
 import { FieldContainer } from '../Form/FieldContainer'
 
 import type { FieldRenderProps } from 'react-final-form'
-import type { ISelectedTags, ITag, TagCategory } from 'src/models/tags.model'
+import type { ISelectedTags, ITag } from 'src/models/tags.model'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {
   isForm?: boolean
   value?: ISelectedTags
   onChange: (val: ISelectedTags) => void
-  category?: TagCategory | undefined
   styleVariant?: 'selector' | 'filter'
   placeholder?: string
   relevantTagsItems?: ICollectionWithTags[]
@@ -28,7 +27,7 @@ interface ICollectionWithTags {
 
 const TagsSelect = (props: IProps) => {
   const { tagsStore } = useCommonStores().stores
-  let { categoryTags } = tagsStore
+  const { allTags } = tagsStore
   const [state, setState] = useState<IState>({ selectedTags: [] })
 
   // if we initialise with a value we want to update the state to reflect the selected tags
@@ -38,7 +37,6 @@ const TagsSelect = (props: IProps) => {
     const selectedTags = Object.keys(propsVal)
     setState({ selectedTags })
     props.onChange(propsVal)
-    tagsStore.setTagsCategory(props.category)
   }, [])
 
   // emit values as {[tagKey]:true} object to be picked up by field
@@ -50,8 +48,8 @@ const TagsSelect = (props: IProps) => {
 
   // as react-select can't keep track of which object key corresponds to the selected
   // value include manual lookup so that value can also be passed from props
-  const _getSelected = (categoryTags: ITag[]) => {
-    return categoryTags?.filter((tag) => state.selectedTags.includes(tag._id))
+  const _getSelected = (allTags: ITag[]) => {
+    return allTags?.filter((tag) => state.selectedTags.includes(tag._id))
   }
 
   // whilst we deal with arrays of selected tag ids in the component we want to store as a json map
@@ -63,40 +61,18 @@ const TagsSelect = (props: IProps) => {
     return selectedJson
   }
 
-  // we want to display only those tags that return results, meaning they are used by how-tos, events, etc
-  const _getTagCounts = (items: ICollectionWithTags[]) => {
-    const tagCounts: { [key: string]: number } = {}
-
-    items.map(
-      (item) =>
-        item.tags &&
-        Object.keys(item.tags).forEach(
-          (tag) => (tagCounts[tag] = (tagCounts[tag] || 0) + 1),
-        ),
-    )
-
-    return tagCounts
-  }
-
-  if (props.relevantTagsItems) {
-    const tagCounts = _getTagCounts(props.relevantTagsItems)
-    categoryTags = categoryTags.filter((tag) =>
-      Object.keys(tagCounts).includes(tag._id),
-    )
-  }
-
   return (
     <FieldContainer
       // provide a data attribute that can be used to see if tags populated
-      data-cy={categoryTags?.length > 0 ? 'tag-select' : 'tag-select-empty'}
+      data-cy={allTags?.length > 0 ? 'tag-select' : 'tag-select-empty'}
     >
       <Select
         variant={props.isForm ? 'form' : undefined}
-        options={categoryTags}
+        options={allTags}
         placeholder={props.placeholder}
         isClearable={true}
         isMulti={true}
-        value={_getSelected(categoryTags)}
+        value={_getSelected(allTags)}
         getOptionLabel={(tag: ITag) => tag.label}
         getOptionValue={(tag: ITag) => tag._id}
         onChange={(values) => onSelectedTagsChanged(values as ITag[])}
@@ -117,7 +93,6 @@ TagsSelect.defaultProps = {
   },
   meta: {},
   value: {},
-  category: undefined,
   styleVariant: 'selector',
   placeholder: 'Select tags (max 4)',
 }

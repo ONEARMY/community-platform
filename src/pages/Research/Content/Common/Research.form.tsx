@@ -322,7 +322,6 @@ const ResearchForm = observer((props: IProps) => {
                               <Field
                                 name="tags"
                                 component={TagsSelectField}
-                                category="research"
                                 isEqual={COMPARISONS.tags}
                               />
                             </Flex>

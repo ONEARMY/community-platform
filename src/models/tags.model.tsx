@@ -15,9 +15,6 @@ when building tag uploader it should enforce reasonable max size image (say 500p
 */
 
 export interface ITag extends DBDoc {
-  categories: TagCategory[]
   label: string
   image: string
 }
-
-export type TagCategory = 'how-to' | 'event' | 'profile-expertise' | 'question'

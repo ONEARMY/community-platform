@@ -12,6 +12,7 @@ import {
 } from './createSubmissionEmails'
 import { PP_SIGNOFF } from './constants'
 import { IModerationStatus } from 'oa-shared'
+import { UserRole } from 'oa-shared/models'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -158,7 +159,7 @@ describe('Message emails', () => {
       userFactory('user_1', {
         displayName: 'User 1',
         userName: 'user_1',
-        userRoles: ['beta-tester'],
+        userRoles: [UserRole.BETA_TESTER],
         isContactableByPublic: true,
       }),
     ])

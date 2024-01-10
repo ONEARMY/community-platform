@@ -3,6 +3,7 @@ import {
   IModerationStatus,
   ResearchStatus,
   ResearchUpdateStatus,
+  UserRole,
 } from 'oa-shared'
 
 import type { DBDoc, IModerable, IResearch } from 'src/models'
@@ -106,7 +107,7 @@ export const hasAdminRights = (user?: IUser) => {
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
-  if (roles.includes('admin') || roles.includes('super-admin')) {
+  if (roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)) {
     return true
   } else {
     return false
@@ -158,8 +159,8 @@ export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
   return (
-    roles.includes('admin') ||
-    roles.includes('super-admin') ||
+    roles.includes(UserRole.ADMIN) ||
+    roles.includes(UserRole.SUPER_ADMIN) ||
     doc._createdBy! === user.userName
   )
 }

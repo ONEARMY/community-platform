@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toJS } from 'mobx'
 import { Loader } from 'oa-components'
+import { UserRole } from 'oa-shared'
 import { logger } from 'src/logger'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 import { useQuestionStore } from 'src/stores/Question/question.store'
@@ -31,7 +32,7 @@ export const QuestionEdit = () => {
 
         if (
           questionDoc?._createdBy !== store.activeUser?.userName &&
-          !store.activeUser?.userRoles?.includes('admin')
+          !store.activeUser?.userRoles?.includes(UserRole.ADMIN)
         ) {
           navigate(`/questions/${slug}`)
           return

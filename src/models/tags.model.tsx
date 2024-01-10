@@ -1,4 +1,3 @@
-import type { TagCategory } from 'oa-shared'
 import type { DBDoc } from './common.models'
 
 // when tags are saved in things like how-tos, it is done so as a json object which
@@ -16,7 +15,6 @@ when building tag uploader it should enforce reasonable max size image (say 500p
 */
 
 export interface ITag extends DBDoc {
-  categories: TagCategory[]
   label: string
   image: string
 }

@@ -100,7 +100,7 @@ export const Howto = observer(() => {
   const { allTagsByKey } = tagsStore
   const howto = {
     ...activeHowto,
-    taglist:
+    tagList:
       activeHowto.tags &&
       Object.keys(activeHowto.tags)
         .map((t) => allTagsByKey[t])

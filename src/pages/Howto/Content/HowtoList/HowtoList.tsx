@@ -61,7 +61,7 @@ export const HowtoList = observer(() => {
 
   const howtoItems = filteredHowtos.map((howto: IHowto) => ({
     ...howto,
-    taglist:
+    tagList:
       howto.tags &&
       Object.keys(howto.tags)
         .map((key) => allTagsByKey[key])

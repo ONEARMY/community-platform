@@ -11,7 +11,6 @@ export const HowtoFieldTags = () => {
       <Field
         name="tags"
         component={TagsSelectField}
-        category="how-to"
         isEqual={COMPARISONS.tags}
       />
     </FormFieldWrapper>

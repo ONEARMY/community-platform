@@ -186,7 +186,7 @@ export const SortFilterHeader = ({
               options={statusOptions}
               placeholder="Filter by status"
               value={
-                (currentStore as ResearchStore).selectedStatus
+                currentStore.selectedStatus
                   ? {
                       label: currentStore.selectedStatus,
                       value: currentStore.selectedStatus,
@@ -222,7 +222,10 @@ export const SortFilterHeader = ({
               currentStore.activeSorter !== ItemSortingOption.MostRelevant
             ) {
               currentStore.updateActiveSorter(ItemSortingOption.MostRelevant)
-              setSortState({ label: 'Most Relevant', value: 'MostRelevant' })
+              setSortState({
+                label: 'Most Relevant',
+                value: ItemSortingOption.MostRelevant,
+              })
             }
 
             if (value.length === 0 || !value) {

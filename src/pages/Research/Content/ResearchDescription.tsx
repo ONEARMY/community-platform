@@ -7,6 +7,7 @@ import {
   FollowButton,
   LinkifyText,
   ModerationStatus,
+  Tag,
   UsefulStatsButton,
   Username,
 } from 'oa-components'
@@ -22,11 +23,12 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
+import type { ITag } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 
 interface IProps {
-  research: IResearch.ItemDB
+  research: IResearch.ItemDB & { tagList?: ITag[] }
   isEditable: boolean
   isDeletable: boolean
   loggedInUser: IUser | undefined
@@ -268,6 +270,12 @@ const ResearchDescription = ({
             <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
+            <Flex mt={4}>
+              {research.tagList &&
+                research.tagList.map((tag, idx) => (
+                  <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
+                ))}
+            </Flex>
           </Box>
         </Flex>
         {research.moderation !== 'accepted' && (

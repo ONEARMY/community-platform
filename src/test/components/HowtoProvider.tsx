@@ -24,14 +24,12 @@ jest.mock('src/index', () => {
           uploadHowTo: jest.fn(),
         },
         tagsStore: {
-          categoryTags: [
+          allTags: [
             {
-              categories: ['how-to'],
               label: 'test tag 1',
               image: 'test img',
             },
           ],
-          setTagsCategory: jest.fn(),
         },
       },
     }),

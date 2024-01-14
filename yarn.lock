@@ -27299,6 +27299,7 @@ __metadata:
     cypress: 12.17.2
     cypress-file-upload: 5.0.8
     dotenv: ^10.0.0
+    firebase: 9.23.0
     fs-extra: ^10.0.0
     oa-shared: "workspace:*"
     ts-node: ^10.2.1

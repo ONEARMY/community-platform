@@ -1,32 +1,33 @@
 jest.mock('../common/module.store')
 import { faker } from '@faker-js/faker'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
-import { auth } from '../../utils/firebase'
 import { UserStore } from './user.store'
 
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
-jest.mock('../../utils/firebase', () => ({
-  auth: {
-    createUserWithEmailAndPassword: () =>
-      Promise.resolve({
-        user: {
-          updateProfile: jest.fn(),
-          photoUrl: 'testPhotoUrl',
-        },
-      }),
-    currentUser: {
-      displayName: 'testDisplayName',
-      uid: 'testUid',
-    },
-    onAuthStateChanged: jest.fn(),
+jest.mock('firebase/auth', () => {
+  const auth = jest.requireActual('firebase/auth')
+  return {
+    ...auth,
+    getAuth: () => ({
+      ...auth,
+      currentUser: {
+        displayName: 'testDisplayName',
+        uid: 'testUid',
+      },
+    }),
+    createUserWithEmailAndPassword: jest.fn(),
     signInWithEmailAndPassword: jest.fn(),
-  },
-}))
+    onAuthStateChanged: jest.fn(),
+    signOut: jest.fn(),
+    updateProfile: jest.fn(),
+  }
+})
 
 describe('userStore', () => {
   let store
@@ -42,7 +43,8 @@ describe('userStore', () => {
 
       await store.login(userName, password)
 
-      expect(auth.signInWithEmailAndPassword).toHaveBeenCalledWith(
+      expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
+        expect.anything(),
         userName,
         password,
       )

@@ -1,10 +1,10 @@
-import 'firebase/firestore'
-import 'firebase/auth'
-import 'firebase/storage'
-import 'firebase/functions'
-import 'firebase/database'
+import 'firebase/compat/firestore'
+import 'firebase/compat/auth'
+import 'firebase/compat/storage'
+import 'firebase/compat/functions'
+import 'firebase/compat/database'
 
-import firebase from 'firebase/app'
+import firebase from 'firebase/compat/app'
 
 import { FIREBASE_CONFIG, SITE } from '../config/config'
 import { logger } from '../logger'

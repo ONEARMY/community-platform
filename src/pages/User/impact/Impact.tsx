@@ -6,11 +6,13 @@ import { ImpactItem } from './ImpactItem'
 import type { IUserImpact, IUserPP } from 'src/models'
 
 interface Props {
-  impact: IUserImpact
+  impact: IUserImpact | undefined
   user: IUserPP | undefined
 }
 
-export const Impact = ({ impact, user }: Props) => {
+export const Impact = (props: Props) => {
+  const impact = props.impact || []
+
   const renderByYear = IMPACT_YEARS.map((year, index) => {
     const foundYear = impact
       ? Object.keys(impact).find((key) => Number(key) === year)
@@ -21,7 +23,7 @@ export const Impact = ({ impact, user }: Props) => {
         fields={foundYear && impact && impact[foundYear]}
         year={year}
         key={index}
-        user={user}
+        user={props.user}
       />
     )
   })

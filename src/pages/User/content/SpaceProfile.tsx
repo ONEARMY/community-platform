@@ -285,9 +285,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                   <Tab data-cy="ImpactTab">{heading}</Tab>
                 </AuthWrapper>
               )}
-              <AuthWrapper roleRequired={'beta-tester'}>
-                {showContactForm && <Tab data-cy="contact-tab">Contact</Tab>}
-              </AuthWrapper>
+              {showContactForm && <Tab data-cy="contact-tab">Contact</Tab>}
             </TabsList>
             <TabPanel>
               <Box sx={{ mt: 3 }}>
@@ -352,11 +350,9 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 </TabPanel>
               </AuthWrapper>
             )}
-            <AuthWrapper roleRequired={'beta-tester'}>
-              <TabPanel>
-                <UserContactForm user={user} />
-              </TabPanel>
-            </AuthWrapper>
+            <TabPanel>
+              <UserContactForm user={user} />
+            </TabPanel>
           </Tabs>
         </Box>
       </Flex>

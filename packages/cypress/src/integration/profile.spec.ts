@@ -6,7 +6,6 @@ import { users } from '../data'
 import { UserMenuItem } from '../support/commands'
 
 const { admin, subscriber } = users
-const betaTester = users['beta-tester']
 const eventReader = users.event_reader
 const machine = users.settings_machine_new
 const userProfiletype = users.settings_workplace_new
@@ -49,7 +48,7 @@ describe('[Profile]', () => {
     })
 
     it('[Can contact profiles with contact opt-in]', () => {
-      cy.login(betaTester.email, betaTester.password)
+      cy.login(subscriber.email, subscriber.password)
 
       const message = faker.lorem
         .sentences(50)

@@ -19981,9 +19981,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-tools@npm:12.7.0":
-  version: 12.7.0
-  resolution: "firebase-tools@npm:12.7.0"
+"firebase-tools@npm:^13.0.2":
+  version: 13.0.2
+  resolution: "firebase-tools@npm:13.0.2"
   dependencies:
     "@google-cloud/pubsub": ^3.0.1
     abort-controller: ^3.0.0
@@ -20027,7 +20027,6 @@ __metadata:
     portfinder: ^1.0.32
     progress: ^2.0.3
     proxy-agent: ^6.3.0
-    request: ^2.87.0
     retry: ^0.13.1
     rimraf: ^3.0.0
     semver: ^7.5.2
@@ -20047,7 +20046,7 @@ __metadata:
     ws: ^7.2.3
   bin:
     firebase: lib/bin/firebase.js
-  checksum: f861f3f10b7e3162769e527fc959f8665ae2b3d6bb192d15a6b1542158c3eefb2386ad0c59c13bb1a08018d2baeb87ac7e15b9fc2ae6d1772fc98e5ec79f54ee
+  checksum: 9c2eb74e0e549e6085d4d19ea79a67d9bcc7c194648bef7e71c5266adbf3d83a0abeafaf93dfd91a69501b2936638d456dfeeb03943211d93c9a245cf46b42e6
   languageName: node
   linkType: hard
 
@@ -20582,7 +20581,7 @@ __metadata:
     firebase-admin: 11.4.1
     firebase-functions: 4.1.1
     firebase-functions-test: ^3.0.0
-    firebase-tools: 12.7.0
+    firebase-tools: ^13.0.2
     fs-extra: ^9.0.1
     google-auth-library: ^6.1.1
     googleapis: ^61.0.0
@@ -31766,7 +31765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"request@npm:^2.87.0, request@npm:^2.88.2":
+"request@npm:^2.88.2":
   version: 2.88.2
   resolution: "request@npm:2.88.2"
   dependencies:
@@ -32491,7 +32490,7 @@ __metadata:
     "@firebase/rules-unit-testing": ^2.0.7
     dotenv: ^16.3.1
     firebase: ^9.21.0
-    firebase-tools: 12.7.0
+    firebase-tools: ^13.0.2
     vitest: ^0.31.0
   languageName: unknown
   linkType: soft

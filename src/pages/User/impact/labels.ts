@@ -14,8 +14,7 @@ export const invisible = {
 
 export const missing = {
   user: {
-    label:
-      "Looks like they haven't shared their Impact Data yet. Until they do you can have a pick of the global impact report! :)",
+    label: "Looks like they haven't shared their Impact Data yet.",
     link: 'Impact Report',
   },
   owner: {
@@ -23,3 +22,6 @@ export const missing = {
     link: 'Enter impact data',
   },
 }
+
+export const reportYearLabel =
+  'Until they do you can have a pick of the global impact report! :)'

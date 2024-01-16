@@ -200,6 +200,7 @@ describe('howto.store', () => {
         'howto_mention',
         'commentauthor',
         `/how-to/${howToItem.slug}#comment:${howToItem.comments![0]._id}`,
+        howToItem.title,
       )
     })
 
@@ -251,6 +252,7 @@ describe('howto.store', () => {
         'howto_mention',
         'commentauthor',
         `/how-to/${howToItem.slug}#comment:${howToItem.comments![0]._id}`,
+        howToItem.title,
       )
     })
 

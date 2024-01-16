@@ -196,6 +196,7 @@ export class HowtoStore extends ModuleStore {
           'howto_useful',
           this.activeHowto._createdBy,
           '/how-to/' + this.activeHowto.slug,
+          this.activeHowto.title,
         )
       }
     })
@@ -397,6 +398,7 @@ export class HowtoStore extends ModuleStore {
           'howto_mention',
           mention.username,
           `/how-to/${howToItem.slug}#${mention.location}`,
+          howToItem.title,
         )
       }
     })

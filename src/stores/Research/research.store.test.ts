@@ -8,6 +8,7 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
+import { RootStore } from '..'
 import { ResearchStore } from './research.store'
 
 jest.mock('../../utils/helpers', () => ({
@@ -35,7 +36,7 @@ const factory = async (
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
-  const store = new ResearchStore()
+  const store = new ResearchStore(RootStore)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -155,11 +156,13 @@ describe('research.store', () => {
           'new_comment_research',
           researchItem._createdBy,
           `/research/${researchItem.slug}#update_0`,
+          researchItem.title,
         )
         expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
           'new_comment_research',
           'a-contributor',
           `/research/${researchItem.slug}#update_0`,
+          researchItem.title,
         )
       })
 
@@ -487,6 +490,7 @@ describe('research.store', () => {
           'research_mention',
           'username',
           `/research/${researchItem.slug}#update-0-comment:${newResearchItem.updates[0].comments[0]._id}`,
+          researchItem.title,
         )
       })
     })
@@ -662,6 +666,7 @@ describe('research.store', () => {
           'research_mention',
           'username',
           `/research/${researchItem.slug}#description`,
+          researchItem.title,
         )
       })
 
@@ -847,6 +852,7 @@ describe('research.store', () => {
         'research_update',
         'subscriber',
         `/research/${researchItem.slug}`,
+        researchItem.title,
       )
     })
 

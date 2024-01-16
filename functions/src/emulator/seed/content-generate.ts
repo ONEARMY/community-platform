@@ -73,6 +73,7 @@ async function setMockNotifications(user: IMockAuthUser) {
           displayName: 'Demo User',
           userId: 'demo_user',
         },
+        title: 'Demo Title',
       },
     ],
     notification_settings: {

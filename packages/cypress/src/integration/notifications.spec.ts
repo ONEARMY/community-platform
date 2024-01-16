@@ -85,7 +85,7 @@ describe('[Notifications]', () => {
       (docs) => {
         expect(docs.length).to.be.greaterThan(0)
         const [user] = docs
-        const notifications = user['notifications']
+        const notifications = user['notifications'] || []
 
         expect(notifications.length).to.be.greaterThan(0)
 

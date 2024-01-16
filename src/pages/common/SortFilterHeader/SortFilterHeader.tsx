@@ -90,23 +90,14 @@ export const SortFilterHeader = ({
     type == 'how-to'
       ? (currentStore as HowtoStore).filteredHowtos
       : type == 'research'
-        ? (currentStore as ResearchStore).filteredResearches
-        : (currentStore as QuestionStore).filteredQuestions
+      ? (currentStore as ResearchStore).filteredResearches
+      : (currentStore as QuestionStore).filteredQuestions
 
   const authorsOptions = getAuthorOptions(items)
 
   const urlSelectedAuthor = getQueryParam(window.location.href, 'author', null)
   if (urlSelectedAuthor && 'updateSelectedAuthor' in currentStore)
     currentStore.updateSelectedAuthor(urlSelectedAuthor)
-
-  const statusOptions = researchStatusOptions.map((status) => ({
-    label: status,
-    value: status,
-  }))
-
-  const urlSelectedStatus = getQueryParam(window.location.href, 'status', null)
-  if (urlSelectedStatus && isResearchStore(currentStore))
-    currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
 
   const statusOptions = researchStatusOptions.map((status) => ({
     label: status,

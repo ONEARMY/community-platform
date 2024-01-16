@@ -6,6 +6,7 @@ import { Button, ExternalLink, FieldInput } from 'oa-components'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/index'
+import { logger } from 'src/logger'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import {
   composeValidators,
@@ -72,9 +73,10 @@ const SignUpPage = observer(() => {
         }))
       }
     } catch (error) {
+      logger.error(`Error signing up`, { errorCode: error.code, displayName })
       setState((prev) => ({
         ...prev,
-        errorMsg: error.message,
+        errorMsg: FRIENDLY_MESSAGES[error.code] || error.message,
         disabled: false,
       }))
     }

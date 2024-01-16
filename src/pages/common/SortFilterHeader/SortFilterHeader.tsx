@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
+import { researchStatusOptions } from 'src/models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
 import { Flex, Input } from 'theme-ui'
 
 import type { NavigateFunction } from 'react-router-dom'
+import type { ResearchStatus } from 'src/models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { QuestionStore } from 'src/stores/Question/question.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
@@ -40,6 +42,12 @@ const getQueryParam = (
   const Url = new URL(url)
   const params = new URLSearchParams(Url.search)
   return params.get(key) ?? defaultValue
+}
+
+const isResearchStore = (
+  obj: ResearchStore | HowtoStore | QuestionStore,
+): obj is ResearchStore => {
+  return (obj as ResearchStore).updateSelectedStatus !== undefined
 }
 
 interface SortFilterHeaderProps {
@@ -82,12 +90,23 @@ export const SortFilterHeader = ({
     type == 'how-to'
       ? (currentStore as HowtoStore).filteredHowtos
       : type == 'research'
-      ? (currentStore as ResearchStore).filteredResearches
-      : (currentStore as QuestionStore).filteredQuestions
+        ? (currentStore as ResearchStore).filteredResearches
+        : (currentStore as QuestionStore).filteredQuestions
+
+  const authorsOptions = getAuthorOptions(items)
 
   const urlSelectedAuthor = getQueryParam(window.location.href, 'author', null)
   if (urlSelectedAuthor && 'updateSelectedAuthor' in currentStore)
     currentStore.updateSelectedAuthor(urlSelectedAuthor)
+
+  const statusOptions = researchStatusOptions.map((status) => ({
+    label: status,
+    value: status,
+  }))
+
+  const urlSelectedStatus = getQueryParam(window.location.href, 'status', null)
+  if (urlSelectedStatus && isResearchStore(currentStore))
+    currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
 
   const _inputStyle = {
     width: ['100%', '100%', '200px'],
@@ -142,7 +161,7 @@ export const SortFilterHeader = ({
         <Flex sx={_inputStyle}>
           <FieldContainer>
             <Select
-              options={getAuthorOptions(items)}
+              options={authorsOptions}
               placeholder="Filter by author"
               value={
                 currentStore.selectedAuthor
@@ -166,6 +185,34 @@ export const SortFilterHeader = ({
           </FieldContainer>
         </Flex>
       )}
+      {isResearchStore(currentStore) && (
+        <Flex sx={_inputStyle}>
+          <FieldContainer>
+            <Select
+              options={statusOptions}
+              placeholder="Filter by status"
+              value={
+                currentStore.selectedStatus
+                  ? {
+                      label: currentStore.selectedStatus,
+                      value: currentStore.selectedStatus,
+                    }
+                  : null
+              }
+              onChange={(status) => {
+                updateQueryParams(
+                  window.location.href,
+                  'status',
+                  status ? status.value : '',
+                  navigate,
+                )
+                currentStore.updateSelectedStatus(status?.value ?? null)
+              }}
+              isClearable={true}
+            />
+          </FieldContainer>
+        </Flex>
+      )}
       <Flex sx={_inputStyle}>
         <Input
           variant="inputOutline"
@@ -181,7 +228,10 @@ export const SortFilterHeader = ({
               currentStore.activeSorter !== ItemSortingOption.MostRelevant
             ) {
               currentStore.updateActiveSorter(ItemSortingOption.MostRelevant)
-              setSortState({ label: 'Most Relevant', value: 'MostRelevant' })
+              setSortState({
+                label: 'Most Relevant',
+                value: ItemSortingOption.MostRelevant,
+              })
             }
 
             if (value.length === 0 || !value) {

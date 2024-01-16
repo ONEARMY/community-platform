@@ -7,13 +7,14 @@ import {
   FollowButton,
   LinkifyText,
   ModerationStatus,
+  Tag,
   UsefulStatsButton,
   Username,
 } from 'oa-components'
 import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { buildStatisticsLabel } from 'src/utils/helpers'
+import { buildStatisticsLabel, researchStatusColour } from 'src/utils/helpers'
 import {
   addIDToSessionStorageArray,
   retrieveSessionStorageArray,
@@ -22,11 +23,12 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 
+import type { ITag } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 
 interface IProps {
-  research: IResearch.ItemDB
+  research: IResearch.ItemDB & { tagList?: ITag[] }
   isEditable: boolean
   isDeletable: boolean
   loggedInUser: IUser | undefined
@@ -126,73 +128,97 @@ const ResearchDescription = ({
               </Text>
             </Fragment>
           )}
-
-          <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-            {research.moderation === 'accepted' && (
-              <UsefulStatsButton
-                votedUsefulCount={votedUsefulCount}
-                hasUserVotedUseful={props.hasUserVotedUseful}
-                isLoggedIn={props.loggedInUser ? true : false}
-                onUsefulClick={props.onUsefulClick}
-              />
-            )}
-            <FollowButton
-              hasUserSubscribed={props.hasUserSubscribed}
-              isLoggedIn={props.loggedInUser ? true : false}
-              onFollowClick={props.onFollowClick}
-            ></FollowButton>
-            {/* Check if research should be moderated */}
-            {props.needsModeration &&
-              research.moderation === 'awaiting-moderation' && (
-                <Flex sx={{ justifyContent: 'space-between' }}>
-                  <Button
-                    data-cy={'accept'}
-                    variant={'primary'}
-                    icon="check"
-                    mr={1}
-                    onClick={() => props.moderateResearch(true)}
-                  />
-                  <Button
-                    data-cy="reject-research"
-                    variant={'outline'}
-                    icon="delete"
-                    onClick={() => props.moderateResearch(false)}
-                  />
-                </Flex>
-              )}
-            {/* Show edit button for the creator of the research OR a super-admin */}
-            {isEditable && (
-              <Link to={'/research/' + research.slug + '/edit'}>
-                <Button variant={'primary'} data-cy={'edit'}>
-                  Edit
-                </Button>
-              </Link>
-            )}
-
-            {isDeletable && (
-              <Fragment>
-                <Button
-                  data-cy="Research: delete button"
-                  variant={'secondary'}
-                  icon="delete"
-                  disabled={research._deleted}
-                  onClick={() => setShowDeleteModal(true)}
-                >
-                  Delete
-                </Button>
-
-                <ConfirmModal
-                  key={research._id}
-                  isOpen={showDeleteModal}
-                  message="Are you sure you want to delete this Research?"
-                  confirmButtonText="Delete"
-                  handleCancel={() => setShowDeleteModal(false)}
-                  handleConfirm={() =>
-                    handleDelete && handleDelete(research._id)
-                  }
+          <Flex sx={{ justifyContent: 'space-between' }}>
+            <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
+              {research.moderation === 'accepted' && (
+                <UsefulStatsButton
+                  votedUsefulCount={votedUsefulCount}
+                  hasUserVotedUseful={props.hasUserVotedUseful}
+                  isLoggedIn={props.loggedInUser ? true : false}
+                  onUsefulClick={props.onUsefulClick}
                 />
-              </Fragment>
-            )}
+              )}
+              <FollowButton
+                hasUserSubscribed={props.hasUserSubscribed}
+                isLoggedIn={props.loggedInUser ? true : false}
+                onFollowClick={props.onFollowClick}
+              ></FollowButton>
+              {/* Check if research should be moderated */}
+              {props.needsModeration &&
+                research.moderation === 'awaiting-moderation' && (
+                  <Flex sx={{ justifyContent: 'space-between' }}>
+                    <Button
+                      data-cy={'accept'}
+                      variant={'primary'}
+                      icon="check"
+                      mr={1}
+                      onClick={() => props.moderateResearch(true)}
+                    />
+                    <Button
+                      data-cy="reject-research"
+                      variant={'outline'}
+                      icon="delete"
+                      onClick={() => props.moderateResearch(false)}
+                    />
+                  </Flex>
+                )}
+              {/* Show edit button for the creator of the research OR a super-admin */}
+              {isEditable && (
+                <Link to={'/research/' + research.slug + '/edit'}>
+                  <Button variant={'primary'} data-cy={'edit'}>
+                    Edit
+                  </Button>
+                </Link>
+              )}
+
+              {isDeletable && (
+                <Fragment>
+                  <Button
+                    data-cy="Research: delete button"
+                    variant={'secondary'}
+                    icon="delete"
+                    disabled={research._deleted}
+                    onClick={() => setShowDeleteModal(true)}
+                  >
+                    Delete
+                  </Button>
+
+                  <ConfirmModal
+                    key={research._id}
+                    isOpen={showDeleteModal}
+                    message="Are you sure you want to delete this Research?"
+                    confirmButtonText="Delete"
+                    handleCancel={() => setShowDeleteModal(false)}
+                    handleConfirm={() =>
+                      handleDelete && handleDelete(research._id)
+                    }
+                  />
+                </Fragment>
+              )}
+            </Flex>
+            <Flex
+              sx={{
+                marginBottom: 'auto',
+                minWidth: '100px',
+                borderRadius: 1,
+                height: '44px',
+                background: researchStatusColour(research.researchStatus),
+              }}
+            >
+              <Text
+                sx={{
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  color: 'black',
+                  fontSize: [2, 2, 3],
+                  padding: 2,
+                  margin: 'auto',
+                }}
+                data-cy="research-status"
+              >
+                {research.researchStatus || 'In progress'}
+              </Text>
+            </Flex>
           </Flex>
           <Box mt={3} mb={2}>
             <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
@@ -244,6 +270,12 @@ const ResearchDescription = ({
             <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
+            <Flex mt={4}>
+              {research.tagList &&
+                research.tagList.map((tag, idx) => (
+                  <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
+                ))}
+            </Flex>
           </Box>
         </Flex>
         {research.moderation !== 'accepted' && (

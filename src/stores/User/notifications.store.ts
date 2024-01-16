@@ -59,6 +59,7 @@ export class UserNotificationsStore extends ModuleStore {
     type: NotificationType,
     username: string,
     relevantUrl: string,
+    title: string,
   ) {
     try {
       const triggeredBy = this.user
@@ -82,6 +83,7 @@ export class UserNotificationsStore extends ModuleStore {
           type,
           read: false,
           notified: false,
+          title: title,
         }
 
         const lookup = await this.db

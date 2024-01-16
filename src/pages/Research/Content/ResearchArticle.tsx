@@ -63,7 +63,7 @@ const ResearchArticle = observer(() => {
   const { slug } = useParams()
   const location = useLocation()
   const researchStore = useResearchStore()
-  const { aggregationsStore } = useCommonStores().stores
+  const { aggregationsStore, tagsStore } = useCommonStores().stores
   const [isLoading, setIsLoading] = React.useState(true)
   const item = researchStore.activeResearchItem
   const loggedInUser = researchStore.activeUser
@@ -194,10 +194,20 @@ const ResearchArticle = observer(() => {
     return <NotFoundPage />
   }
 
+  const { allTagsByKey } = tagsStore
+  const research = {
+    ...item,
+    tagList:
+      item.tags &&
+      Object.keys(item.tags)
+        .map((t) => allTagsByKey[t])
+        .filter(Boolean),
+  }
+
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <ResearchDescription
-        research={item}
+        research={research}
         key={item._id}
         votedUsefulCount={researchStore.votedUsefulCount}
         loggedInUser={loggedInUser as IUser}

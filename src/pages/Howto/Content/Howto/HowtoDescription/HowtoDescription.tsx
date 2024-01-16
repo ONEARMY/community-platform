@@ -2,13 +2,13 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
-  CategoryTag,
   ConfirmModal,
   ContentStatistics,
   DownloadFileFromLink,
   DownloadStaticFile,
   LinkifyText,
   ModerationStatus,
+  Tag,
   UsefulStatsButton,
 } from 'oa-components'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
@@ -47,11 +47,12 @@ import {
   updateHowtoDownloadCooldown,
 } from './downloadCooldown'
 
+import type { ITag } from 'src/models'
 import type { IHowtoDB } from 'src/models/howto.models'
 import type { IUser } from 'src/models/user.models'
 
 interface IProps {
-  howto: IHowtoDB & { taglist: any }
+  howto: IHowtoDB & { tagList?: ITag[] }
   loggedInUser: IUser | undefined
   needsModeration: boolean
   commentsCount: number
@@ -280,9 +281,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Flex>
           </Flex>
           <Flex mt={4}>
-            {howto.taglist &&
-              howto.taglist.map((tag, idx) => (
-                <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+            {howto.tagList &&
+              howto.tagList.map((tag, idx) => (
+                <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
               ))}
           </Flex>
           {((howto.files && howto.files.length > 0) || howto.fileLink) && (

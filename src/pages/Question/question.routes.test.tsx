@@ -51,14 +51,12 @@ jest.mock('src/index', () => ({
       },
       howtoStore: {},
       tagsStore: {
-        categoryTags: [
+        allTags: [
           {
-            categories: ['question'],
             label: 'test tag 1',
             image: 'test img',
           },
         ],
-        setTagsCategory: jest.fn(),
       },
       questionCategoriesStore: {
         allQuestionCategories: [],

@@ -13,6 +13,7 @@ export const getFormattedNotificationMessage = (
     userId: '',
   }
   const relevantUrl = notification.relevantUrl || ''
+  const relevantTitle = notification.title || ''
   switch (notification.type) {
     case 'new_comment':
       return (
@@ -87,20 +88,19 @@ export const getFormattedNotificationMessage = (
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          found your
-          <InternalLink to={relevantUrl}>research</InternalLink>
+          found
+          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
           useful
         </Box>
       )
     case 'research_mention':
       return (
         <Box>
-          You were mentioned in a
-          <InternalLink to={relevantUrl}>research article</InternalLink>
-          by
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
+          mentioned you in this research
+          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
         </Box>
       )
     case 'research_update':
@@ -109,36 +109,36 @@ export const getFormattedNotificationMessage = (
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          posted an update to this
-          <InternalLink to={relevantUrl}>research</InternalLink>
+          posted an update to this research
+          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
           you follow
         </Box>
       )
     case 'research_approved':
       return (
         <Box>
-          Yay, your
-          <InternalLink to={relevantUrl}>research</InternalLink>
+          Yay, your research
+          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
           has been approved
         </Box>
       )
     case 'research_needs_updates':
       return (
         <Box>
-          Your
-          <InternalLink to={relevantUrl}>research</InternalLink>
+          Your research
+          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
           needs some updates before we can approve it
         </Box>
       )
     case 'new_comment_research':
       return (
         <Box>
-          New comment on your
-          <InternalLink to={relevantUrl}>research</InternalLink>
-          by
+          New comment from
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
+          on your research
+          <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
         </Box>
       )
     default:

@@ -15,8 +15,6 @@ version: 2.1
 orbs:
   # for use with cimg image, to install web browsers
   browser-tools: circleci/browser-tools@1.4.5
-  # used to enable slack integration (required api key set in environment)
-  slack: circleci/slack@4.12.5
   # used to track coverage
   codecov: codecov/codecov@3.2.5
 
@@ -94,56 +92,6 @@ aliases:
       branches:
         only:
           - ci/circle-ci-release
-
-  - &slack_custom_success_message
-    custom: |
-      {
-        "blocks": [
-          {
-            "type": "header",
-            "text": {
-              "type": "plain_text",
-              "text": "Deploy Success :tada:",
-              "emoji": true
-            }
-          },
-          {
-            "type": "section",
-            "fields": [
-              {
-                "type": "mrkdwn",
-                "text": "*Job*: ${CIRCLE_JOB}"
-              },
-              {
-                "type": "mrkdwn",
-                "text": "*When*: $(date +'%m/%d/%Y %T')"
-              },
-              {
-                "type": "mrkdwn",
-                "text": "*Tag*: $CIRCLE_TAG"
-              }
-            ],
-            "accessory": {
-              "type": "image",
-              "image_url": "https://yt3.ggpht.com/ytc/AAUvwni_34CcLQsIhNo1d1A2zUK0pNPzipCV9oM1gvkNNw=s900-c-k-c0x00ffffff-no-rj",
-              "alt_text": "CircleCI logo"
-            }
-          },
-          {
-            "type": "actions",
-            "elements": [
-              {
-                "type": "button",
-                "text": {
-                  "type": "plain_text",
-                  "text": "Build Logs"
-                },
-                "url": "${CIRCLE_BUILD_URL}"
-              }
-            ]
-          }
-        ]
-      }
 
 ######################################################################################################
 #  Commands - Reusable collections of steps
@@ -366,9 +314,6 @@ jobs:
       DEPLOY_ALIAS:
         type: string
         default: 'default'
-      NOTIFY_SLACK:
-        type: boolean
-        default: true
     steps:
       - setup_repo
       - attach_workspace:
@@ -377,16 +322,6 @@ jobs:
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
-      - when:
-          condition: << parameters.NOTIFY_SLACK >>
-          steps:
-            - slack/notify:
-                event: fail
-                mentions: '@channel'
-                template: basic_fail_1
-            - slack/notify:
-                event: pass
-                <<: *slack_custom_success_message
 
   # Run cypress e2e tests on chrome
   test_e2e:
@@ -545,9 +480,7 @@ workflows:
             - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: 'default'
-          NOTIFY_SLACK: true
           context:
-            - circle-ci-slack-context
             - circle-ci-patreon-context
             - community-platform-dev
       - deploy:
@@ -556,9 +489,7 @@ workflows:
             - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: project-kamp-development
-          NOTIFY_SLACK: true
           context:
-            - circle-ci-slack-context
             - circle-ci-patreon-context
             - project-kamp-dev
       - deploy:
@@ -567,9 +498,7 @@ workflows:
             - test_e2e
           <<: *filter_only_master
           DEPLOY_ALIAS: fixing-fashion-dev
-          NOTIFY_SLACK: true
           context:
-            - circle-ci-slack-context
             - circle-ci-patreon-context
             - fixing-fashion-dev
       #---------------------- Development Instances Build and Deploy ----------------------
@@ -590,9 +519,7 @@ workflows:
             - 'Build Production Release'
           <<: *filter_only_production
           DEPLOY_ALIAS: fixing-fashion-prod
-          NOTIFY_SLACK: true
           context:
-            - circle-ci-slack-context
             - circle-ci-patreon-context
             - fixing-fashion-prod
       - deploy:
@@ -601,9 +528,7 @@ workflows:
             - 'Build Production Release'
           <<: *filter_only_production
           DEPLOY_ALIAS: 'production'
-          NOTIFY_SLACK: true
           context:
-            - circle-ci-slack-context
             - circle-ci-patreon-context
             - community-platform-production
       - deploy:
@@ -612,8 +537,6 @@ workflows:
             - 'Build Production Release'
           <<: *filter_only_production
           DEPLOY_ALIAS: project-kamp-production
-          NOTIFY_SLACK: true
           context:
-            - circle-ci-slack-context
             - circle-ci-patreon-context
             - project-kamp-production

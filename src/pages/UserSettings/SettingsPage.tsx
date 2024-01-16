@@ -4,8 +4,7 @@ import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { Button, TextNotification } from 'oa-components'
-import { AuthWrapper } from 'src/common/AuthWrapper'
+import { Button, Loader, TextNotification } from 'oa-components'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
@@ -297,11 +296,7 @@ export const SettingsPage = observer((props: IProps) => {
                     )}
                   </Flex>
 
-                  {!isMember && (
-                    <AuthWrapper roleRequired={'beta-tester'}>
-                      <ImpactSection />
-                    </AuthWrapper>
-                  )}
+                  {!isMember && <ImpactSection />}
 
                   <EmailNotificationsSection
                     notificationSettings={values.notification_settings}
@@ -311,9 +306,7 @@ export const SettingsPage = observer((props: IProps) => {
                       isContactableByPublic={values.isContactableByPublic}
                     />
                   )}
-                  <AuthWrapper roleRequired={'beta-tester'}>
-                    <PatreonIntegration />
-                  </AuthWrapper>
+                  <PatreonIntegration user={user} />
                 </form>
                 <AccountSettingsSection />
               </Box>
@@ -396,5 +389,7 @@ export const SettingsPage = observer((props: IProps) => {
         )
       }}
     />
-  ) : null
+  ) : (
+    <Loader />
+  )
 })

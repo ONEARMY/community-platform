@@ -1,21 +1,26 @@
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
-import { Icon, ModerationStatus, Tooltip, Username } from 'oa-components'
+import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
+import {
+  calculateTotalComments,
+  getPublicUpdates,
+  researchStatusColour,
+} from 'src/utils/helpers'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 
+import type { ITag } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   item: IResearch.ItemDB & {
     votedUsefulCount: number
-  }
+  } & { tagList?: ITag[] }
 }
 
 const ResearchListItem = ({ item }: IProps) => {
@@ -29,6 +34,9 @@ const ResearchListItem = ({ item }: IProps) => {
     alignItems: 'center',
     fontSize: [1, 2, 2],
   }
+
+  const status = item.researchStatus || 'In progress'
+
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -65,15 +73,53 @@ const ResearchListItem = ({ item }: IProps) => {
                 alignItems: 'flex-start',
               }}
             >
-              <Heading
-                color={'black'}
-                mb={2}
-                sx={{
-                  fontSize: [3, 3, 4],
-                }}
-              >
-                {item.title}
-              </Heading>
+              <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
+                <Flex>
+                  <Heading
+                    color={'black'}
+                    mb={2}
+                    sx={{
+                      fontSize: [3, 3, 4],
+                    }}
+                  >
+                    {item.title}
+                  </Heading>
+                  <Flex
+                    sx={{
+                      display: ['none', 'inline-block', 'inline-block'],
+                      marginLeft: 4,
+                      marginTop: '3px',
+                    }}
+                  >
+                    {item.tagList &&
+                      item.tagList.map((tag, idx) => (
+                        <Tag
+                          key={idx}
+                          tag={tag}
+                          sx={{ marginRight: 1, fontSize: 2 }}
+                        />
+                      ))}
+                  </Flex>
+                </Flex>
+                <Text
+                  sx={{
+                    display: ['inline-block', 'none', 'none'],
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: 1,
+                    background: researchStatusColour(status),
+                    padding: 1,
+                    borderRadius: 1,
+                    marginLeft: 4,
+                    marginBottom: 'auto',
+                    whiteSpace: 'nowrap',
+                    minWidth: '75px',
+                  }}
+                  data-cy="ItemResearchStatus"
+                >
+                  {status}
+                </Text>
+              </Flex>
               <Flex
                 sx={{
                   width: '100%',
@@ -120,6 +166,22 @@ const ResearchListItem = ({ item }: IProps) => {
                   >
                     {getItemDate(item, 'long')}
                   </Text>
+                  <Text
+                    sx={{
+                      display: ['none', 'inline-block', 'inline-block'],
+                      verticalAlign: 'middle',
+                      color: 'black',
+                      fontSize: 1,
+                      background: researchStatusColour(status),
+                      padding: 1,
+                      borderRadius: 1,
+                      borderBottomRightRadius: 1,
+                      marginLeft: 4,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {status}
+                  </Text>
                 </Flex>
                 {/* Show these on mobile, hide on tablet & above. */}
                 <Box
@@ -147,6 +209,12 @@ const ResearchListItem = ({ item }: IProps) => {
                     {getItemDate(item, 'short')}
                   </Text>
                 </Box>
+              </Flex>
+              <Flex sx={{ marginTop: 1, display: ['flex', 'none', 'none'] }}>
+                {item.tagList &&
+                  item.tagList.map((tag, idx) => (
+                    <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
+                  ))}
               </Flex>
             </Flex>
             {/* Hide these on mobile, show on tablet & above. */}

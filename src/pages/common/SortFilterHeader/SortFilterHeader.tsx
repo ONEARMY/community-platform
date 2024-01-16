@@ -108,6 +108,15 @@ export const SortFilterHeader = ({
   if (urlSelectedStatus && isResearchStore(currentStore))
     currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
 
+  const statusOptions = researchStatusOptions.map((status) => ({
+    label: status,
+    value: status,
+  }))
+
+  const urlSelectedStatus = getQueryParam(window.location.href, 'status', null)
+  if (urlSelectedStatus && isResearchStore(currentStore))
+    currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
+
   const _inputStyle = {
     width: ['100%', '100%', '200px'],
     mr: [0, 0, 2],

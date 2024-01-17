@@ -7,6 +7,7 @@ import {
   FollowButton,
   Loader,
   UsefulStatsButton,
+  UserEngagementWrapper,
 } from 'oa-components'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
@@ -229,7 +230,7 @@ const ResearchArticle = observer(() => {
             .length || 0
         }
       />
-      <Box my={16}>
+      <Box sx={{ marginTop: 8, marginBottom: 4 }}>
         {item &&
           getPublicUpdates(item).map((update, index) => (
             <ResearchUpdate
@@ -247,35 +248,40 @@ const ResearchArticle = observer(() => {
             />
           ))}
       </Box>
-      <Box
-        sx={{
-          paddingLeft: [null, '12%', '12%'],
-          mb: 16,
-        }}
-      >
-        {researchAuthor && (
-          <ArticleCallToAction
-            author={researchAuthor}
-            contributors={contributors}
-          >
-            {item.moderation === 'accepted' && (
-              <UsefulStatsButton
+
+      <UserEngagementWrapper>
+        <Box
+          sx={{
+            marginBottom: [6, 6, 12],
+          }}
+        >
+          {researchAuthor && (
+            <ArticleCallToAction
+              author={researchAuthor}
+              contributors={contributors}
+            >
+              {item.moderation === 'accepted' && (
+                <UsefulStatsButton
+                  isLoggedIn={!!loggedInUser}
+                  votedUsefulCount={researchStore.votedUsefulCount}
+                  hasUserVotedUseful={
+                    researchStore.userVotedActiveResearchUseful
+                  }
+                  onUsefulClick={() =>
+                    onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
+                  }
+                />
+              )}
+              <FollowButton
                 isLoggedIn={!!loggedInUser}
-                votedUsefulCount={researchStore.votedUsefulCount}
-                hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
-                onUsefulClick={() =>
-                  onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
-                }
-              />
-            )}
-            <FollowButton
-              isLoggedIn={!!loggedInUser}
-              hasUserSubscribed={researchStore.userHasSubscribed}
-              onFollowClick={() => onFollowClick(item.slug)}
-            ></FollowButton>
-          </ArticleCallToAction>
-        )}
-      </Box>
+                hasUserSubscribed={researchStore.userHasSubscribed}
+                onFollowClick={() => onFollowClick(item.slug)}
+              ></FollowButton>
+            </ArticleCallToAction>
+          )}
+        </Box>
+      </UserEngagementWrapper>
+
       {isEditable && (
         <Flex my={4}>
           <Link to={`/research/${item.slug}/new-update`}>

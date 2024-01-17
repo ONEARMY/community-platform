@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
-import { calculateTotalComments } from 'src/utils/helpers'
+import { calculateTotalUpdateComments } from 'src/utils/helpers'
 
 import type {
   IComment,
@@ -37,6 +37,8 @@ export enum ItemSortingOption {
   Newest = 'Newest',
   MostUseful = 'MostUseful',
   Comments = 'MostComments',
+  LeastComments = 'LeastComments',
+  LatestComments = 'LatestComments',
   Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
@@ -149,8 +151,10 @@ export class FilterSorterDecorator<T extends IItem> {
 
   private sortByComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
-      const totalCommentsA = a.comments?.length || calculateTotalComments(a)
-      const totalCommentsB = b.comments?.length || calculateTotalComments(b)
+      const totalCommentsA =
+        a.comments?.length || calculateTotalUpdateComments(a)
+      const totalCommentsB =
+        b.comments?.length || calculateTotalUpdateComments(b)
 
       if (totalCommentsA === totalCommentsB) {
         return 0
@@ -158,6 +162,54 @@ export class FilterSorterDecorator<T extends IItem> {
 
       return totalCommentsA < totalCommentsB ? 1 : -1
     })
+  }
+
+  private sortByLeastComments(listItems: T[]) {
+    return [...listItems].sort((a, b) => {
+      const totalCommentsA =
+        a.comments?.length || calculateTotalUpdateComments(a)
+      const totalCommentsB =
+        b.comments?.length || calculateTotalUpdateComments(b)
+
+      if (totalCommentsA === totalCommentsB) {
+        return 0
+      }
+      return totalCommentsA > totalCommentsB ? 1 : -1
+    })
+  }
+
+  private sortByLatestComments(listItems: T[]) {
+    return [...listItems].sort((a, b) => {
+      const latestCommentA = this.getLatestComment(a)
+      const latestCommentB = this.getLatestComment(b)
+
+      if (!latestCommentA && !latestCommentB) {
+        return 0
+      } else if (!latestCommentA) {
+        return 1
+      } else if (!latestCommentB) {
+        return -1
+      }
+
+      if (latestCommentA._created === latestCommentB._created) {
+        return 0
+      }
+
+      return latestCommentA._created < latestCommentB._created ? 1 : -1
+    })
+  }
+
+  private getLatestComment(item) {
+    if (item.comments && item.comments.length > 0) {
+      return item.comments.sort((a, b) => (a._created < b._created ? 1 : -1))[0]
+    } else if (item.updates && calculateTotalUpdateComments(item) > 0) {
+      const comments = item.updates
+        .map((update) => update.comments ?? [])
+        .flat()
+      return comments.sort((a, b) => (a._created < b._created ? 1 : -1))[0]
+    } else {
+      return null
+    }
   }
 
   private sortByModerationStatus(listItems: T[], user?: IUser) {
@@ -218,6 +270,14 @@ export class FilterSorterDecorator<T extends IItem> {
 
         case ItemSortingOption.Comments:
           validItems = this.sortByComments(validItems)
+          break
+
+        case ItemSortingOption.LeastComments:
+          validItems = this.sortByLeastComments(validItems)
+          break
+
+        case ItemSortingOption.LatestComments:
+          validItems = this.sortByLatestComments(validItems)
           break
 
         case ItemSortingOption.Updates:

@@ -10876,10 +10876,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.8.0":
-  version: 20.8.0
-  resolution: "@types/node@npm:20.8.0"
-  checksum: ebad6342d54238a24bf980d7750117a5d67749c9b72cbb7a974a1e932c39034aa3a810d669e007e8a5071782a253aa069a187b614407a382403c9826e837c849
+"@types/node@npm:^20.11.0":
+  version: 20.11.5
+  resolution: "@types/node@npm:20.11.5"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: a542727de1334ae20a3ca034b0ecf4b464a57ca01efc4f9cf43bd9ab93896125ab3c2de060ecd8f6ae23b86c6bf3463f681b643e69c032c6a662d376c98a6092
   languageName: node
   linkType: hard
 
@@ -20164,7 +20166,7 @@ __metadata:
     "@types/dateformat": ^3.0.1
     "@types/fs-extra": ^9.0.2
     "@types/jest": ^29.2.0
-    "@types/node": ^20.8.0
+    "@types/node": ^20.11.0
     "@types/request": ^2.48.5
     "@types/uuid": ^9.0.0
     "@types/webpack": ^5.28.0
@@ -27606,7 +27608,7 @@ __metadata:
     "@types/browser-image-compression": ^1.0.9
     "@types/flux-standard-action": 1.1.0
     "@types/jest": ^27.4.1
-    "@types/node": ^20.8.0
+    "@types/node": ^20.11.0
     "@types/pubsub-js": ^1.5.18
     "@types/react": 17.0.2
     "@types/react-dom": 17.0.2

@@ -134,7 +134,7 @@
     "@types/browser-image-compression": "^1.0.9",
     "@types/flux-standard-action": "1.1.0",
     "@types/jest": "^27.4.1",
-    "@types/node": "^20.8.0",
+    "@types/node": "^20.11.0",
     "@types/pubsub-js": "^1.5.18",
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",

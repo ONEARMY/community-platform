@@ -3,7 +3,7 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import {
   arrayToJson,
-  calculateTotalComments,
+  calculateTotalUpdateComments,
   capitalizeFirstLetter,
   filterModerableItems,
   formatLowerNoSpecial,
@@ -210,7 +210,7 @@ describe('src/utils/helpers', () => {
   describe('calculateTotalComments Function', () => {
     it('should return 0 when item has no updates', () => {
       const item = { item: {} } as any
-      expect(calculateTotalComments(item)).toBe(0)
+      expect(calculateTotalUpdateComments(item)).toBe(0)
     })
 
     it('should return 0 when updates have no comments', () => {
@@ -223,7 +223,7 @@ describe('src/utils/helpers', () => {
           }),
         ),
       } as IResearch.ItemDB | IItem
-      expect(calculateTotalComments(item)).toBe(0)
+      expect(calculateTotalUpdateComments(item)).toBe(0)
     })
 
     it('should return the correct amount of comments', () => {
@@ -236,7 +236,7 @@ describe('src/utils/helpers', () => {
           }),
         ),
       } as IResearch.ItemDB | IItem
-      expect(calculateTotalComments(item)).toBe(9)
+      expect(calculateTotalUpdateComments(item)).toBe(9)
     })
 
     it('should ignore deleted and draft updates', () => {
@@ -262,7 +262,7 @@ describe('src/utils/helpers', () => {
             }),
           ]),
       } as IResearch.ItemDB | IItem
-      expect(calculateTotalComments(item)).toBe(4)
+      expect(calculateTotalUpdateComments(item)).toBe(4)
     })
   })
 

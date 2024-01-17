@@ -224,7 +224,9 @@ jobs:
       - run:
           name: Test Functions
           # Run functions emulator test command with additional flags to ensure CI receives correct exit code
-          command: cd functions && ./node_modules/.bin/firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated "yarn jest . --forceExit --detectOpenHandles --coverage"
+          command: cd functions && ./node_modules/.bin/firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated "yarn jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit"
+      - store_artifacts:
+          path: functions/reports
       - persist_to_workspace:
           root: .
           paths:

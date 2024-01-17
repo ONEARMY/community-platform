@@ -11,6 +11,7 @@ import { Flex, Input } from 'theme-ui'
 import type { NavigateFunction } from 'react-router-dom'
 import type { ResearchStatus } from 'src/models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import type { QuestionStore } from 'src/stores/Question/question.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
 const updateQueryParams = (
@@ -44,14 +45,14 @@ const getQueryParam = (
 }
 
 const isResearchStore = (
-  obj: ResearchStore | HowtoStore,
+  obj: ResearchStore | HowtoStore | QuestionStore,
 ): obj is ResearchStore => {
   return (obj as ResearchStore).updateSelectedStatus !== undefined
 }
 
 interface SortFilterHeaderProps {
-  store: HowtoStore | ResearchStore
-  type: 'how-to' | 'research'
+  store: HowtoStore | ResearchStore | QuestionStore
+  type: 'how-to' | 'research' | 'question'
 }
 
 export const SortFilterHeader = ({
@@ -88,12 +89,15 @@ export const SortFilterHeader = ({
   const items =
     type == 'how-to'
       ? (currentStore as HowtoStore).filteredHowtos
-      : (currentStore as ResearchStore).filteredResearches
+      : type == 'research'
+      ? (currentStore as ResearchStore).filteredResearches
+      : (currentStore as QuestionStore).filteredQuestions
 
   const authorsOptions = getAuthorOptions(items)
 
   const urlSelectedAuthor = getQueryParam(window.location.href, 'author', null)
-  if (urlSelectedAuthor) currentStore.updateSelectedAuthor(urlSelectedAuthor)
+  if (urlSelectedAuthor && 'updateSelectedAuthor' in currentStore)
+    currentStore.updateSelectedAuthor(urlSelectedAuthor)
 
   const statusOptions = researchStatusOptions.map((status) => ({
     label: status,
@@ -153,32 +157,34 @@ export const SortFilterHeader = ({
           />
         </FieldContainer>
       </Flex>
-      <Flex sx={_inputStyle}>
-        <FieldContainer>
-          <Select
-            options={authorsOptions}
-            placeholder="Filter by author"
-            value={
-              currentStore.selectedAuthor
-                ? {
-                    label: currentStore.selectedAuthor,
-                    value: currentStore.selectedAuthor,
-                  }
-                : null
-            }
-            onChange={(author) => {
-              updateQueryParams(
-                window.location.href,
-                'author',
-                author ? author.value : '',
-                navigate,
-              )
-              currentStore.updateSelectedAuthor(author?.value ?? null)
-            }}
-            isClearable={true}
-          />
-        </FieldContainer>
-      </Flex>
+      {'selectedAuthor' in currentStore && (
+        <Flex sx={_inputStyle}>
+          <FieldContainer>
+            <Select
+              options={authorsOptions}
+              placeholder="Filter by author"
+              value={
+                currentStore.selectedAuthor
+                  ? {
+                      label: currentStore.selectedAuthor,
+                      value: currentStore.selectedAuthor,
+                    }
+                  : null
+              }
+              onChange={(author) => {
+                updateQueryParams(
+                  window.location.href,
+                  'author',
+                  author ? author.value : '',
+                  navigate,
+                )
+                currentStore.updateSelectedAuthor(author?.value ?? null)
+              }}
+              isClearable={true}
+            />
+          </FieldContainer>
+        </Flex>
+      )}
       {isResearchStore(currentStore) && (
         <Flex sx={_inputStyle}>
           <FieldContainer>

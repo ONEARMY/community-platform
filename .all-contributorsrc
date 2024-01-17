@@ -580,6 +580,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Shamauk",
+      "name": "Zachary Doucet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21955868?v=4",
+      "profile": "http://cs.mcgill.ca/~zdouce",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

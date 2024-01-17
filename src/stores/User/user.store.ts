@@ -1,3 +1,11 @@
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency } from 'oa-shared'
 
@@ -8,6 +16,7 @@ import { formatLowerNoSpecial } from '../../utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { Storage } from '../storage'
 
+import type { User } from 'firebase/auth'
 import type {
   IBadgeUpdate,
   IImpactYear,
@@ -32,7 +41,7 @@ export class UserStore extends ModuleStore {
   public user: IUserPPDB | null | undefined
 
   @observable
-  public authUser: firebase.default.User | null
+  public authUser: User | null // TODO: Fix type
 
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
@@ -59,12 +68,12 @@ export class UserStore extends ModuleStore {
   ) {
     // stop auto detect of login as will pick up with incomplete information during registration
     this._unsubscribeFromAuthStateChanges()
-    const authReq = await auth.createUserWithEmailAndPassword(email, password)
+    await createUserWithEmailAndPassword(auth, email, password)
     // once registered populate auth profile displayname with the chosen username
-    if (authReq.user) {
-      await authReq.user.updateProfile({
+    if (auth?.currentUser) {
+      await updateProfile(auth.currentUser, {
         displayName,
-        photoURL: authReq.user.photoURL,
+        photoURL: auth.currentUser.photoURL,
       })
       // populate db user profile and resume auth listener
       await this._createUserProfile('registration')
@@ -74,7 +83,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async login(email: string, password: string) {
-    return auth.signInWithEmailAndPassword(email, password)
+    return signInWithEmailAndPassword(auth, email, password)
   }
 
   public async getUserByUsername(username: string) {
@@ -274,8 +283,9 @@ export class UserStore extends ModuleStore {
   }
 
   public async sendEmailVerification() {
-    if (this.authUser) {
-      return this.authUser.sendEmailVerification()
+    logger.info('sendEmailVerification', { authCurrentUser: auth.currentUser })
+    if (auth.currentUser) {
+      return sendEmailVerification(auth.currentUser)
     }
   }
 
@@ -306,7 +316,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async sendPasswordResetEmail(email: string) {
-    return auth.sendPasswordResetEmail(email)
+    return sendPasswordResetEmail(auth, email)
   }
 
   public async logout() {
@@ -436,7 +446,7 @@ export class UserStore extends ModuleStore {
   // strange implementation return the unsubscribe object on subscription, so stored
   // to authUnsubscribe variable for use later
   private _listenToAuthStateChanges(checkEmailVerification = false) {
-    this.authUnsubscribe = auth.onAuthStateChanged((authUser) => {
+    this.authUnsubscribe = onAuthStateChanged(auth, (authUser) => {
       this.authUser = authUser
       if (authUser) {
         this._userSignedIn(authUser)

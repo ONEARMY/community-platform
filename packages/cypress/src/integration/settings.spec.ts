@@ -502,6 +502,7 @@ describe('[Settings]', () => {
       },
       mapPinDescription: 'Informative workshop on machines every week',
       machineBuilderXp: ['electronics', 'welding'],
+      isContableByPublic: false,
     }
 
     it('[Edit a new profile]', () => {
@@ -538,6 +539,10 @@ describe('[Settings]', () => {
         searchKeyword: 'singapo',
         locationName: expected.location.value,
       })
+
+      cy.step('Opts out of public contact')
+      cy.get('[data-cy=isContactableByPublic').should('be.checked')
+      cy.get('[data-cy=isContactableByPublic').click({ force: true })
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('not.exist')

@@ -16,7 +16,6 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
 import { useCommonStores } from 'src/index'
 import { ProfileType } from 'src/modules/profile/types'
@@ -186,7 +185,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   const { stores } = useCommonStores()
   const activeUser = stores.userStore.activeUser
   const showContactForm = isContactableByPublic && !!activeUser
-  const showImpact = user.displayName === activeUser?.displayName
 
   return (
     <Container
@@ -278,13 +276,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabsList>
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
-              {showImpact ? (
-                <Tab data-cy="ImpactTab">{heading}</Tab>
-              ) : (
-                <AuthWrapper roleRequired={'beta-tester'}>
-                  <Tab data-cy="ImpactTab">{heading}</Tab>
-                </AuthWrapper>
-              )}
+              <Tab data-cy="ImpactTab">{heading}</Tab>
               {showContactForm && <Tab data-cy="contact-tab">Contact</Tab>}
             </TabsList>
             <TabPanel>
@@ -339,17 +331,9 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabPanel>
               <UserCreatedDocuments docs={docs} />
             </TabPanel>
-            {showImpact ? (
-              <TabPanel>
-                <Impact impact={impact} user={user} />
-              </TabPanel>
-            ) : (
-              <AuthWrapper roleRequired={'beta-tester'}>
-                <TabPanel>
-                  <Impact impact={impact} user={user} />
-                </TabPanel>
-              </AuthWrapper>
-            )}
+            <TabPanel>
+              <Impact impact={impact} user={user} />
+            </TabPanel>
             <TabPanel>
               <UserContactForm user={user} />
             </TabPanel>

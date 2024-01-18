@@ -16,7 +16,10 @@ interface Props {
 export const PublicContactSection = observer(
   ({ isContactableByPublic }: Props) => {
     const { description, placeholder, title } = fields.publicContentPreference
-    const isChecked = isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE
+    const isChecked =
+      typeof isContactableByPublic === 'boolean'
+        ? isContactableByPublic
+        : DEFAULT_PUBLIC_CONTACT_PREFERENCE
     const name = 'isContactableByPublic'
 
     return (

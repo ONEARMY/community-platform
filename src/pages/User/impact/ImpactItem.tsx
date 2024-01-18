@@ -37,7 +37,7 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
         ) : (
           <ImpactMissing
             fields={fields}
-            user={user}
+            owner={user}
             visibleFields={visibleFields}
             year={year}
           />

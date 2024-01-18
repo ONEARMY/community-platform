@@ -7,6 +7,7 @@ import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
+import { updateDiscussionMetadata } from './discussionEvents'
 
 import type { IUserPPDB } from 'src/models'
 import type {
@@ -208,6 +209,8 @@ export class DiscussionStore extends ModuleStore {
     discussion: IDiscussion,
   ) {
     await dbRef.set({ ...cloneDeep(discussion) })
+
+    updateDiscussionMetadata(this.db, discussion)
 
     return toJS(dbRef.get())
   }

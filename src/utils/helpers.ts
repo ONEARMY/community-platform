@@ -172,7 +172,7 @@ export const isUserBlockedFromMessaging = (user: IUser | null | undefined) => {
   if (!user) {
     return null
   }
-  return user.isBlockedFromMessaging ? true : false
+  return user.isBlockedFromMessaging
 }
 
 export const calculateTotalUpdateComments = (

@@ -48,7 +48,8 @@ export const ImpactYearSection = observer(({ year }: Props) => {
     setSubmitResults(null)
     try {
       const fields = transformImpactInputs(values)
-      await userStore.updateUserImpact(fields, year)
+      const userId = userStore.user?._id || ''
+      await userStore.updateUserImpact(fields, year, userId)
       setSubmitResults({ type: 'success', message: form.saveSuccess })
       setIsEditMode(false)
       setImpact(fields)

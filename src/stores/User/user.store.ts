@@ -240,15 +240,19 @@ export class UserStore extends ModuleStore {
   public async updateUserImpact(
     fields: IImpactYearFieldList,
     year: IImpactYear,
+    userId: string,
   ) {
-    if (!this.user) {
-      throw new Error('User not found')
+    if (this.user?._id !== userId) {
+      throw new Error('User and user ID mismatch')
     }
 
     await this.db
       .collection(COLLECTION_NAME)
-      .doc(this.user._id)
-      .update({ [`impact.${year}`]: fields })
+      .doc(userId)
+      .update({
+        _id: userId,
+        [`impact.${year}`]: fields,
+      })
   }
 
   public async unsubscribeUser(unsubscribeToken: string) {

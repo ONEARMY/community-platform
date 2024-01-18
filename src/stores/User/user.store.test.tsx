@@ -301,9 +301,13 @@ describe('userStore', () => {
     it('throws an error if user undefined', async () => {
       // Act
       expect(async () => {
-        await store.updateUserImpact('testUserId', {
-          impact: { total: 100, totalPreciousPlastic: 100 },
-        })
+        await store.updateUserImpact(
+          {
+            impact: { total: 100, totalPreciousPlastic: 100 },
+          },
+          '2024',
+          'testUserId',
+        )
       }).rejects.toThrow()
     })
 
@@ -316,6 +320,7 @@ describe('userStore', () => {
       await store.updateUserImpact(
         { impact: { total: 100, totalPreciousPlastic: 100 } },
         impactYear,
+        'testUserId',
       )
 
       // Assert

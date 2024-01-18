@@ -24,4 +24,4 @@ export const missing = {
 }
 
 export const reportYearLabel =
-  'Until they do you can have a pick of the global impact report! :)'
+  'In the meantime, check out the global report! :)'

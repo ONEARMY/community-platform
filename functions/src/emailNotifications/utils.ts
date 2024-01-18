@@ -86,7 +86,7 @@ export const isUserAllowedToMessage = async (uid) => {
   return true
 }
 
-export const isValidEmailCreationRequest = async ({
+export const isValidMessageRequest = async ({
   email,
   toUserName,
 }: IMessageDB) => {
@@ -98,8 +98,8 @@ export const isValidEmailCreationRequest = async ({
     await isBelowMessageLimit(email)
     await isReceiverContactable(toUserName)
     return true
-  } catch {
-    return Promise.reject(false)
+  } catch (error) {
+    throw error
   }
 }
 

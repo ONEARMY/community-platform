@@ -8,11 +8,11 @@ import {
   getReceiverMessageEmail,
   getSenderMessageEmail,
 } from './templates'
-import { getUserAndEmail, isValidEmailCreationRequest } from './utils'
+import { getUserAndEmail, isValidMessageRequest } from './utils'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 
 export async function createMessageEmails(message: IMessageDB) {
-  const isValid = await isValidEmailCreationRequest(message)
+  const isValid = await isValidMessageRequest(message)
   if (!isValid) {
     return
   }

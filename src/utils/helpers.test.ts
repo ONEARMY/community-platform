@@ -10,6 +10,7 @@ import {
   hasAdminRights,
   isAllowedToEditContent,
   isAllowedToPin,
+  isUserBlockedFromMessaging,
   needsModeration,
   numberWithCommas,
   stripSpecialCharacters,
@@ -204,6 +205,22 @@ describe('src/utils/helpers', () => {
           }),
         ),
       ).toBe(false)
+    })
+  })
+
+  describe('isUserBlockedFromMessaging', () => {
+    it('should return true when a user is blocked', () => {
+      const user = FactoryUser({ isBlockedFromMessaging: true })
+      expect(isUserBlockedFromMessaging(user)).toBe(true)
+    })
+
+    it("should return null when a user isn't present", () => {
+      expect(isUserBlockedFromMessaging(null)).toBe(null)
+    })
+
+    it("should return true when a user isn't blocked", () => {
+      const user = FactoryUser({ isBlockedFromMessaging: false })
+      expect(isUserBlockedFromMessaging(user)).toBe(false)
     })
   })
 

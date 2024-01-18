@@ -11,14 +11,12 @@ import {
   createMessageEmails,
 } from './createSubmissionEmails'
 import { PP_SIGNOFF } from './constants'
+import * as utils from './utils'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
     getUser: () => ({
       email: 'test@test.com',
-    }),
-    getUserByEmail: () => ({
-      email: 'jeffery@gmail.com',
     }),
   },
 }))
@@ -142,38 +140,52 @@ describe('Create map pin submission emails', () => {
 
 describe('Message emails', () => {
   const db = FirebaseEmulatedTest.admin.firestore()
+  const message = {
+    _id: '234dfsb',
+    email: 'jeffery@gmail.com',
+    text: 'Hi, can we be friends please?',
+    toUserName: 'user_1',
+    isSent: false,
+  }
+  const user = userFactory('user_1', {
+    displayName: 'User 1',
+    userName: 'user_1',
+    userRoles: ['beta-tester'],
+    isContactableByPublic: true,
+  })
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     await FirebaseEmulatedTest.clearFirestoreDB()
+    await FirebaseEmulatedTest.seedFirestoreDB('users', [user])
+    await FirebaseEmulatedTest.seedFirestoreDB('messages')
     await FirebaseEmulatedTest.seedFirestoreDB('emails')
   })
 
-  afterAll(async () => {
+  afterEach(async () => {
     await FirebaseEmulatedTest.clearFirestoreDB()
   })
 
   it('Creates emails to the sender and receiver', async () => {
-    await FirebaseEmulatedTest.seedFirestoreDB('users', [
-      userFactory('user_1', {
-        displayName: 'User 1',
-        userName: 'user_1',
-        userRoles: ['beta-tester'],
-        isContactableByPublic: true,
-      }),
-    ])
-    await FirebaseEmulatedTest.seedFirestoreDB('messages')
-
-    const message = {
-      _id: '234dfsb',
-      email: 'jeffery@gmail.com',
-      text: 'Hi, can we be friends please?',
-      toUserName: 'user_1',
-      isSent: false,
-    }
+    jest.spyOn(utils, 'isValidEmailCreationRequest').mockResolvedValue(true)
+    jest
+      .spyOn(utils, 'getUserAndEmail')
+      .mockResolvedValue({ toUserEmail: 'jeffery@email', toUser: user })
 
     await createMessageEmails(message as IMessageDB)
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
 
     expect(countSnapshot.data().count).toEqual(2)
+  })
+
+  it("doesn't  create emails if checks fail", async () => {
+    jest.spyOn(utils, 'isValidEmailCreationRequest').mockResolvedValue(false)
+    jest
+      .spyOn(utils, 'getUserAndEmail')
+      .mockResolvedValue({ toUserEmail: 'jeffery@email', toUser: user })
+
+    await createMessageEmails(message as IMessageDB)
+    const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
+
+    expect(countSnapshot.data().count).toEqual(0)
   })
 })

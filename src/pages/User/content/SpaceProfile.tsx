@@ -22,6 +22,7 @@ import { useCommonStores } from 'src/index'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { isUserContactable } from 'src/utils/helpers'
 import {
   AspectRatio,
   Box,
@@ -166,7 +167,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
     country,
     displayName,
     impact,
-    isContactableByPublic,
     links,
     location,
     profileType,
@@ -188,7 +188,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
 
   const { stores } = useCommonStores()
   const activeUser = stores.userStore.activeUser
-  const showContactForm = isContactableByPublic && !!activeUser
+  const showContactForm = isUserContactable(user) && !!activeUser
 
   return (
     <Container

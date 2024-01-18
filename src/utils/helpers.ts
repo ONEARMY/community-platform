@@ -5,6 +5,7 @@ import {
   ResearchUpdateStatus,
   UserRole,
 } from 'oa-shared'
+import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 import type { DBDoc, IModerable, IResearch } from 'src/models'
 import type { IMapPin } from 'src/models/maps.models'
@@ -178,6 +179,12 @@ export const isUserBlockedFromMessaging = (user: IUser | null | undefined) => {
     return null
   }
   return user.isBlockedFromMessaging ? true : false
+}
+
+export const isUserContactable = (user: IUser) => {
+  return typeof user.isContactableByPublic === 'boolean'
+    ? user.isContactableByPublic
+    : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 
 export const calculateTotalUpdateComments = (

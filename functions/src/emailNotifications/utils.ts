@@ -11,6 +11,7 @@ import {
   PP_SIGNOFF,
 } from './constants'
 
+import type { UserRecord } from 'firebase-admin/auth'
 import type { NotificationType } from 'oa-shared'
 import type { IMessageDB, INotification, IUserDB } from '../models'
 
@@ -22,6 +23,7 @@ export const errors = {
   PROFILE_NOT_CONTACTABLE:
     'Emailing of new message blocked: Profile not contactable',
   USER_BLOCKED: 'Emailing of new message blocked: User blocked from messaging',
+  USER_EMAIL_NOT_VERIFIED: 'Email address for user not verfied',
 }
 const EMAIL_ADDRESS_SEND_LIMIT = 100
 
@@ -99,6 +101,13 @@ export const isUserAllowedToMessage = async (uid) => {
   return true
 }
 
+export const isUserEmailVerified = async ({ emailVerified }: UserRecord) => {
+  if (!emailVerified) {
+    throw new Error(errors.USER_EMAIL_NOT_VERIFIED)
+  }
+  return true
+}
+
 export const isValidMessageRequest = async ({
   email,
   toUserName,
@@ -107,6 +116,7 @@ export const isValidMessageRequest = async ({
 
   try {
     isSameEmail(userDoc, email)
+    await isUserEmailVerified(userDoc)
     await isUserAllowedToMessage(userDoc.uid)
     await isBelowMessageLimit(email)
     await isReceiverContactable(toUserName)

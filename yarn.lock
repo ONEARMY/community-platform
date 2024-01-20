@@ -16881,10 +16881,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dexie@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "dexie@npm:2.0.4"
-  checksum: faf0d7774e5fb2d90d772c8544e12c5aec38cc6384c67e8de8b7e78b38150c59909384357d59fabcfb552f4566e1a4032146bdcc15b60b70bc9f4634181b9cef
+"dexie@npm:^3.2.4":
+  version: 3.2.4
+  resolution: "dexie@npm:3.2.4"
+  checksum: 4e5294a954118b6862c864b8c3970904a1733daebcd919488624520696411e2e81ed1bceeac3634c5c15a21e37ce4b8502ed41c4edfbc5ba3f5925c34d56497b
   languageName: node
   linkType: hard
 
@@ -27632,7 +27632,7 @@ __metadata:
     cspell: ^6.1.0
     date-fns: ^1.30.1
     debounce: ^1.2.0
-    dexie: ^2.0.4
+    dexie: ^3.2.4
     dotenv: ^10.0.0
     env-cmd: ^10.1.0
     eslint: ^8.50.0

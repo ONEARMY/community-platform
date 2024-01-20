@@ -110,7 +110,6 @@
     "react-leaflet-markercluster": "^2.0.0-rc3",
     "react-router": "^6.20.1",
     "react-router-dom": "^6.20.1",
-    "react-router-hash-link": "^2.4.3",
     "react-scripts": "5.0.1",
     "react-virtualized": "9.22.5",
     "rxjs": "^6.6.3",

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { HashLink as Link } from 'react-router-hash-link'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { Button, Modal, OsmGeocoding } from 'oa-components'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'

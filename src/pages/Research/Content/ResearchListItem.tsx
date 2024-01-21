@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
 import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { formatDate } from 'src/utils/date'
 import {
   calculateTotalUpdateComments,
   getPublicUpdates,
@@ -287,11 +287,10 @@ const getItemThumbnail = (researchItem: IResearch.ItemDB): string => {
 }
 
 const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
-  const contentModifiedDate = format(
+  const contentModifiedDate = formatDate(
     new Date(item._contentModifiedTimestamp || item._modified),
-    'DD-MM-YYYY',
   )
-  const creationDate = format(new Date(item._created), 'DD-MM-YYYY')
+  const creationDate = formatDate(new Date(item._created))
 
   if (contentModifiedDate !== creationDate) {
     return variant === 'long'

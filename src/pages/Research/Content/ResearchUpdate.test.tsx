@@ -7,10 +7,10 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
 import { render } from '@testing-library/react'
-import { format } from 'date-fns'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { formatDate } from 'src/utils/date'
 
 import ResearchUpdate from './ResearchUpdate'
 
@@ -54,7 +54,7 @@ describe('ResearchUpdate', () => {
 
     // Assert
     expect(() =>
-      wrapper.getAllByText(`edited ${format(modified, 'DD-MM-YYYY')}`),
+      wrapper.getAllByText(`edited ${formatDate(modified)}`),
     ).toThrow()
   })
 
@@ -71,7 +71,7 @@ describe('ResearchUpdate', () => {
 
     // Assert
     expect(() =>
-      wrapper.getAllByText(`edited ${format(modified, 'DD-MM-YYYY')}`),
+      wrapper.getAllByText(`edited ${formatDate(modified)}`),
     ).not.toThrow()
   })
 })

@@ -118,6 +118,11 @@ export const QuestionPage = () => {
                 isLoggedIn={isLoggedIn ? true : false}
                 onFollowClick={onFollowClick}
               />
+              {isEditable && (
+                <Link to={'/questions/' + question.slug + '/edit'}>
+                  <Button variant={'primary'}>Edit</Button>
+                </Link>
+              )}
             </Flex>
             <ModerationStatus
               status={question.moderation}
@@ -140,12 +145,6 @@ export const QuestionPage = () => {
               <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
                 {question.description}
               </Text>
-
-              {isEditable && (
-                <Link to={'/questions/' + question.slug + '/edit'}>
-                  <Button variant={'primary'}>Edit</Button>
-                </Link>
-              )}
             </Box>
           </Card>
           <QuestionComments comments={comments} />

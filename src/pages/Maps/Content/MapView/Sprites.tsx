@@ -1,4 +1,5 @@
 import L from 'leaflet'
+import { IModerationStatus } from 'oa-shared'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
 import { logger } from 'src/logger'
@@ -37,7 +38,7 @@ export const createClusterIcon = () => {
 
 export const createMarkerIcon = (pin: IMapPin, currentTheme: PlatformTheme) => {
   const icon =
-    pin.moderation === 'accepted'
+    pin.moderation === IModerationStatus.ACCEPTED
       ? Workspace.findWorkspaceBadge(pin.type, true, pin.verified, currentTheme)
       : AwaitingModerationHighlight
   if (!pin.type) {

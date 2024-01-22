@@ -1,5 +1,5 @@
+import type { IModerationStatus, IPinGrouping } from 'oa-shared'
 import type { ProfileTypeLabel } from '../modules/profile/types'
-import type { IModerationStatus } from './common.models'
 import type { WorkspaceType } from './userPreciousPlastic.models'
 
 /**
@@ -57,8 +57,6 @@ export interface IBoundingBox {
   topLeft: ILatLng
   bottomRight: ILatLng
 }
-
-export type IPinGrouping = 'individual' | 'place'
 
 export interface IMapGrouping {
   _count?: number

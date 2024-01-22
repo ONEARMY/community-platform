@@ -9,6 +9,7 @@ import * as submissionEmails from './createSubmissionEmails'
 import * as supporterBadgeEmails from './supporterBadgeEmails'
 import * as verifiedBadgeEmails from './verifiedBadgeEmails'
 import { MEMORY_LIMIT_512_MB } from '../consts'
+import { UserRole } from 'oa-shared/models'
 
 exports.sendDaily = functions
   .runWith({ memory: MEMORY_LIMIT_512_MB })
@@ -61,7 +62,11 @@ exports.sendOnce = functions
 
     if (user) {
       const { userRoles } = user.docs[0].data() as IUserDB
-      if (userRoles?.some((role) => ['admin', 'super-admin'].includes(role))) {
+      if (
+        userRoles?.some((role) =>
+          [UserRole.ADMIN, UserRole.SUPER_ADMIN].includes(role),
+        )
+      ) {
         try {
           await createNotificationEmails()
           return 'OK'

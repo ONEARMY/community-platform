@@ -1,6 +1,7 @@
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router-dom'
 import { Button, ElWithBeforeIcon, FieldInput } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { logger } from 'src/logger'
@@ -37,11 +38,11 @@ export const QuestionForm = (props: IProps) => {
   const navigate = useNavigate()
   const store = useQuestionStore()
   const publishButtonText =
-    props.formValues?.moderation === 'draft'
+    props.formValues?.moderation === IModerationStatus.DRAFT
       ? LABELS.buttons.create
       : LABELS.buttons[props.parentType]
   const draftButtonText =
-    props.formValues?.moderation === 'draft'
+    props.formValues?.moderation === IModerationStatus.DRAFT
       ? LABELS.buttons.draft.update
       : LABELS.buttons.draft.create
 
@@ -51,7 +52,9 @@ export const QuestionForm = (props: IProps) => {
     <Form
       data-testid={props['data-testid']}
       onSubmit={async (formValues: Partial<IQuestion.FormInput>) => {
-        formValues.moderation = formValues.allowDraftSave ? 'draft' : 'accepted'
+        formValues.moderation = formValues.allowDraftSave
+          ? IModerationStatus.DRAFT
+          : IModerationStatus.ACCEPTED
         try {
           const newDocument = await store.upsertQuestion(
             formValues as IQuestion.FormInput,

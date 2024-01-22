@@ -1,3 +1,5 @@
+import { IModerationStatus } from 'oa-shared'
+
 import { getUserCountry } from './getUserCountry'
 
 import type { IUser } from 'src/models'
@@ -6,7 +8,7 @@ const user: IUser = {
   _authID: '1',
   userName: 'testUser',
   displayName: 'test user',
-  moderation: 'accepted',
+  moderation: IModerationStatus.ACCEPTED,
 
   verified: true,
   coverImages: [],

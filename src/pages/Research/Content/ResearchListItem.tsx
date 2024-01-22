@@ -1,5 +1,10 @@
 import { Link } from 'react-router-dom'
 import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
+import {
+  IModerationStatus,
+  ResearchStatus,
+  ResearchUpdateStatus,
+} from 'oa-shared'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
@@ -35,7 +40,7 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
 
-  const status = item.researchStatus || 'In progress'
+  const status = item.researchStatus || ResearchStatus.IN_PROGRESS
 
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
@@ -257,7 +262,7 @@ const ResearchListItem = ({ item }: IProps) => {
               <Tooltip />
             </Box>
           </Grid>
-          {item.moderation !== 'accepted' && (
+          {item.moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
               status={item.moderation}
               contentType="research"
@@ -305,7 +310,8 @@ const getUpdateText = (item: IResearch.ItemDB) => {
   return item.updates?.length
     ? String(
         item.updates.filter(
-          (update) => update.status !== 'draft' && !update._deleted,
+          (update) =>
+            update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
         ).length,
       )
     : '0'

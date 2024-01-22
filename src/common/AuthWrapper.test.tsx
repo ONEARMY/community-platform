@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react'
+import { UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 
 import { AuthWrapper } from './AuthWrapper' // adjust this import according to your file structure
@@ -6,7 +7,7 @@ import { AuthWrapper } from './AuthWrapper' // adjust this import according to y
 import type { UserStore } from 'src/stores/User/user.store'
 
 const mockUser = FactoryUser({
-  userRoles: ['admin'],
+  userRoles: [UserRole.ADMIN],
 })
 
 jest.mock('src/index', () => ({

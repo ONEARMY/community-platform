@@ -4,7 +4,7 @@ import { MODULE } from 'src/modules'
 import { QuestionModule } from './Question'
 import { ResearchModule } from './Research'
 
-import type { UserRole } from 'src/models/user.models'
+import type { UserRole } from 'oa-shared'
 import type { CSSObject } from 'theme-ui'
 /**
  * Import all pages for use in lazy loading

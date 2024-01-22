@@ -1,16 +1,12 @@
-/* eslint-disable @typescript-eslint/naming-convention*/
 import type {
   EmailNotificationFrequency,
+  ExternalLinkLabel,
+  IModerationStatus,
   NotificationType,
   PatreonUser,
   UserRole,
 } from 'oa-shared'
-import type {
-  DBDoc,
-  ILocation,
-  IModerationStatus,
-  ISODateString,
-} from './common.models'
+import type { DBDoc, ILocation, ISODateString } from './common.models'
 
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
@@ -82,15 +78,7 @@ export interface IUserBadges {
 interface IExternalLink {
   key: string
   url: string
-  label:
-    | 'email'
-    | 'website'
-    | 'discord'
-    | 'bazar'
-    | 'forum'
-    | 'social media'
-    | 'facebook'
-    | 'instagram'
+  label: ExternalLinkLabel
 }
 
 /**

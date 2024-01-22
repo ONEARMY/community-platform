@@ -2,6 +2,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { act, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
+import { IModerationStatus, UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/index'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
@@ -136,7 +137,7 @@ describe('UserSettings', () => {
       mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
-          moderation: 'improvements-needed',
+          moderation: IModerationStatus.IMPROVEMENTS_NEEDED,
           comments: 'Moderator comment',
         }),
       )
@@ -152,7 +153,7 @@ describe('UserSettings', () => {
       mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
           comments: 'Moderator comment',
         }),
       )
@@ -168,7 +169,7 @@ describe('UserSettings', () => {
 })
 
 const Wrapper = async (user) => {
-  const isAdmin = user.userRoles?.includes('admin')
+  const isAdmin = user.userRoles?.includes(UserRole.ADMIN)
 
   return render(
     <Provider

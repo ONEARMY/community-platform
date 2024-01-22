@@ -47,6 +47,8 @@ jest.mock('src/index', () => ({
   }),
 }))
 
+import { IModerationStatus } from 'oa-shared'
+
 import { Howto } from './Howto'
 
 const factory = async (howtoStore?: Partial<HowtoStore>) => {
@@ -73,7 +75,7 @@ describe('Howto', () => {
       let wrapper
 
       await act(async () => {
-        howto.moderation = 'awaiting-moderation'
+        howto.moderation = IModerationStatus.AWAITING_MODERATION
         howto.moderatorFeedback = 'Moderation comments'
 
         wrapper = await factory()
@@ -85,7 +87,7 @@ describe('Howto', () => {
     it('hides feedback when how-to is accepted', async () => {
       let wrapper
       await act(async () => {
-        howto.moderation = 'accepted'
+        howto.moderation = IModerationStatus.ACCEPTED
         howto.moderatorFeedback = 'Moderation comments'
         wrapper = await factory()
       })
@@ -100,7 +102,7 @@ describe('Howto', () => {
       howto._id = 'testid'
       howto._createdBy = 'HowtoAuthor'
       howto.steps = [FactoryHowtoStep({})]
-      howto.moderation = 'accepted'
+      howto.moderation = IModerationStatus.ACCEPTED
 
       wrapper = await factory()
     })

@@ -1,6 +1,7 @@
 import { CONFIG } from '../config/config'
 import * as functions from 'firebase-functions'
 import * as request from 'request'
+import { IModerationStatus } from 'oa-shared'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
@@ -16,7 +17,7 @@ export const notifyNewPin = functions
     const type = info.type
     const moderation = info.moderation
 
-    if (moderation !== 'awaiting-moderation') return
+    if (moderation !== IModerationStatus.AWAITING_MODERATION) return
 
     request.post(
       SLACK_WEBHOOK_URL,

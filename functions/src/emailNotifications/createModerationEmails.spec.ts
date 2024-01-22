@@ -17,6 +17,7 @@ import {
   handleModerationUpdate,
 } from './createModerationEmails'
 import { PP_SIGNOFF } from './constants'
+import { IModerationStatus } from 'oa-shared'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -64,7 +65,7 @@ describe('Create howto moderation emails', () => {
     const howtoApproved = getMockHowto('user_1')
     const howtoAwaitingModeration = {
       ...howtoApproved,
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoAwaitingModeration,
@@ -101,10 +102,10 @@ describe('Create howto moderation emails', () => {
   })
 
   it('Creates an email for a howto awaiting moderation', async () => {
-    const howtoRejected = getMockHowto('user_1', 'rejected')
+    const howtoRejected = getMockHowto('user_1', IModerationStatus.REJECTED)
     const howtoAwaitingModeration = {
       ...howtoRejected,
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoRejected,
@@ -143,11 +144,11 @@ describe('Create howto moderation emails', () => {
   it('Creates an email for a rejected howto', async () => {
     const howtoAwaitingModeration = getMockHowto(
       'user_1',
-      'awaiting-moderation',
+      IModerationStatus.AWAITING_MODERATION,
     )
     const howtoRejected = {
       ...howtoAwaitingModeration,
-      moderation: 'rejected',
+      moderation: IModerationStatus.REJECTED,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoAwaitingModeration,
@@ -189,12 +190,12 @@ describe('Create howto moderation emails', () => {
   it('Creates an email for a howto that needs improvements', async () => {
     const howtoAwaitingModeration = getMockHowto(
       'user_1',
-      'awaiting-moderation',
+      IModerationStatus.AWAITING_MODERATION,
     )
     const MOCK_HOW_TO_MODERATION_COMMENT = 'Mock how to moderation comment'
     const howtoNeedsImprovements = {
       ...howtoAwaitingModeration,
-      moderation: 'improvements-needed',
+      moderation: IModerationStatus.IMPROVEMENTS_NEEDED,
       moderatorFeedback: MOCK_HOW_TO_MODERATION_COMMENT,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
@@ -240,7 +241,7 @@ describe('Create howto moderation emails', () => {
     const howtoApproved = getMockHowto('user_1')
     const howtoDraft = {
       ...howtoApproved,
-      moderation: 'draft',
+      moderation: IModerationStatus.DRAFT,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       howtoApproved,
@@ -279,11 +280,11 @@ describe('Create map pin moderation emails', () => {
   it('Creates an email for an accepted map pin', async () => {
     const mapPinApproved = {
       _id: 'user_1',
-      moderation: 'accepted',
+      moderation: IModerationStatus.ACCEPTED,
     }
     const mapPinAwaitingModeration = {
       _id: 'user_1',
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       mapPinAwaitingModeration,
@@ -320,11 +321,11 @@ describe('Create map pin moderation emails', () => {
   it('Creates an email for a map pin awaiting moderation', async () => {
     const mapPinRejected = {
       _id: 'user_1',
-      moderation: 'rejected',
+      moderation: IModerationStatus.REJECTED,
     }
     const mapPinAwaitingModeration = {
       _id: 'user_1',
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       mapPinRejected,
@@ -359,11 +360,11 @@ describe('Create map pin moderation emails', () => {
   it('Creates an email for a rejected map pin', async () => {
     const mapPinAwaitingModeration = {
       _id: 'user_1',
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
     }
     const mapPinRejected = {
       _id: 'user_1',
-      moderation: 'rejected',
+      moderation: IModerationStatus.REJECTED,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       mapPinAwaitingModeration,
@@ -403,12 +404,12 @@ describe('Create map pin moderation emails', () => {
   it('Creates an email for a needs improvements map pin', async () => {
     const mapPinAwaitingModeration = {
       _id: 'user_1',
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
     }
     const MOCK_MAP_PIN_MODERATION_COMMENT = 'Mock map pin moderation comment'
     const mapPinNeedsImprovements = {
       _id: 'user_1',
-      moderation: 'improvements-needed',
+      moderation: IModerationStatus.IMPROVEMENTS_NEEDED,
       moderatorFeedback: MOCK_MAP_PIN_MODERATION_COMMENT,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
@@ -450,11 +451,11 @@ describe('Create map pin moderation emails', () => {
   it('Does not create an email for non-approved map pins', async () => {
     const mapPinDraft = {
       _id: 'user_1',
-      moderation: 'draft',
+      moderation: IModerationStatus.DRAFT,
     }
     const mapPinAwaitingModeration = {
       _id: 'user_1',
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
     }
     const change = FirebaseEmulatedTest.mockFirestoreChangeObject(
       mapPinAwaitingModeration,

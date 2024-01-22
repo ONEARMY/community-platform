@@ -4,7 +4,8 @@ import { Image } from 'theme-ui'
 
 import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpecialistWorkspaceTypeToWorkspace'
 
-import type { IMapGrouping, IPinGrouping, WorkspaceType } from 'src/models'
+import type { IPinGrouping } from 'oa-shared'
+import type { IMapGrouping, WorkspaceType } from 'src/models'
 import type { ProfileTypeLabel } from 'src/modules/profile/types'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
 

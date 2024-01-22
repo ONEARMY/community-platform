@@ -1,3 +1,6 @@
+import { ResearchStatus } from 'oa-shared'
+
+import type { ResearchUpdateStatus } from 'oa-shared'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 import type {
@@ -29,13 +32,14 @@ type ResearchDocumentLockInformation = {
 
 type ResearchDocumentLock = ResearchDocumentLockInformation | null
 
-export const researchStatusOptions = [
-  'In progress',
-  'Completed',
-  'Archived',
-] as const
-
-export type ResearchStatus = typeof researchStatusOptions[number]
+export const researchStatusOptions = (
+  Object.keys(ResearchStatus) as (keyof typeof ResearchStatus)[]
+).map((status) => {
+  return {
+    label: ResearchStatus[status],
+    value: ResearchStatus[status],
+  }
+})
 
 type UserIdList = UserId[]
 
@@ -62,7 +66,7 @@ export namespace IResearch {
     videoUrl?: string
     comments?: IComment[]
     collaborators?: string[]
-    status: 'draft' | 'published'
+    status: ResearchUpdateStatus
     researchStatus?: ResearchStatus
     locked?: ResearchDocumentLock
   }

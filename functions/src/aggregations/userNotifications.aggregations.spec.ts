@@ -15,7 +15,7 @@ const userFactory = (_id: string, user: Partial<IUserDB> = {}): IUserDB => ({
   _authID: _id,
   notifications: [],
   notification_settings: {
-    emailFrequency: 'weekly' as any,
+    emailFrequency: EmailNotificationFrequency.WEEKLY,
     enabled: {} as any,
   },
   ...(user as IUserDB),

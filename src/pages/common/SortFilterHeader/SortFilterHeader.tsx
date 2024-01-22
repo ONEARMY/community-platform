@@ -8,8 +8,8 @@ import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/Filte
 import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
 import { Flex, Input } from 'theme-ui'
 
+import type { ResearchStatus } from 'oa-shared'
 import type { NavigateFunction } from 'react-router-dom'
-import type { ResearchStatus } from 'src/models'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { QuestionStore } from 'src/stores/Question/question.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
@@ -99,11 +99,6 @@ export const SortFilterHeader = ({
   if (urlSelectedAuthor && 'updateSelectedAuthor' in currentStore)
     currentStore.updateSelectedAuthor(urlSelectedAuthor)
 
-  const statusOptions = researchStatusOptions.map((status) => ({
-    label: status,
-    value: status,
-  }))
-
   const urlSelectedStatus = getQueryParam(window.location.href, 'status', null)
   if (urlSelectedStatus && isResearchStore(currentStore))
     currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
@@ -189,7 +184,7 @@ export const SortFilterHeader = ({
         <Flex sx={_inputStyle}>
           <FieldContainer>
             <Select
-              options={statusOptions}
+              options={researchStatusOptions}
               placeholder="Filter by status"
               value={
                 currentStore.selectedStatus

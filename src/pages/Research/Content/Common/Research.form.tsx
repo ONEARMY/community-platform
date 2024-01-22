@@ -31,6 +31,7 @@ import {
 } from 'src/utils/validators'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 
+import { UserNameSelect } from '../../../common/UserNameSelect/UserNameSelect'
 import {
   RESEARCH_MAX_LENGTH,
   RESEARCH_TITLE_MAX_LENGTH,
@@ -330,8 +331,9 @@ const ResearchForm = observer((props: IProps) => {
                               </ResearchFormLabel>
                               <Field
                                 name="collaborators"
-                                component={FieldInput}
+                                component={UserNameSelect}
                                 placeholder={collaborators.placeholder}
+                                defaultOptions={[]}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>

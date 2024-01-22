@@ -152,7 +152,7 @@ describe('Message emails', () => {
   const user = userFactory('user_1', {
     displayName: 'User 1',
     userName: 'user_1',
-    userRoles: ['beta-tester'],
+    userRoles: [UserRole.BETA_TESTER],
     isContactableByPublic: true,
   })
 

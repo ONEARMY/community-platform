@@ -311,6 +311,8 @@ describe('userStore', () => {
 
   describe('updateUserImpact', () => {
     it('throws an error if user undefined', async () => {
+      store.activeUser = null
+
       // Act
       expect(async () => {
         await store.updateUserImpact('testUserId', {
@@ -320,7 +322,7 @@ describe('userStore', () => {
     })
 
     it('updates the user impact in the database', async () => {
-      store.user = FactoryUser({
+      store.activeUser = FactoryUser({
         _id: 'testUserId',
       })
       const impactYear = faker.datatype.number({ min: 2019, max: 2023 })

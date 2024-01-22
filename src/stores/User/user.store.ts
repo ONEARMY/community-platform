@@ -243,14 +243,18 @@ export class UserStore extends ModuleStore {
     fields: IImpactYearFieldList,
     year: IImpactYear,
   ) {
-    if (!this.user) {
+    const user = this.activeUser
+
+    if (!user) {
       throw new Error('User not found')
     }
 
     await this.db
       .collection(COLLECTION_NAME)
-      .doc(this.user._id)
+      .doc(user._id)
       .update({ [`impact.${year}`]: fields })
+
+    await this.refreshActiveUserDetails()
   }
 
   public async unsubscribeUser(unsubscribeToken: string) {

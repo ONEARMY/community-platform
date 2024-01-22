@@ -137,6 +137,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://www.darigovresearch.com/"><img src="https://avatars.githubusercontent.com/u/30328618?v=4?s=60" width="60px;" alt="Darigov Research"/><br /><sub><b>Darigov Research</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=darigovresearch" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://cs.mcgill.ca/~zdouce"><img src="https://avatars.githubusercontent.com/u/21955868?v=4?s=60" width="60px;" alt="Zachary Doucet"/><br /><sub><b>Zachary Doucet</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Shamauk" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/viracoding"><img src="https://avatars.githubusercontent.com/u/20618068?v=4?s=60" width="60px;" alt="viracoding"/><br /><sub><b>viracoding</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=viracoding" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

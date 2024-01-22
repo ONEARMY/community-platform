@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
-import { useCommonStores } from 'src/index'
+import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
+import { useCommonStores } from 'src/index'
+
 import { loadUserNameOptions } from './LoadUserNameOptions'
+
 import type { IOption } from './LoadUserNameOptions'
 
 interface IProps {

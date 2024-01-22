@@ -9,6 +9,7 @@ import {
 import { uniqBy } from 'lodash'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
+
 import { logger } from '../../logger'
 import { auth, EmailAuthProvider } from '../../utils/firebase'
 import { getLocationData } from '../../utils/getLocationData'

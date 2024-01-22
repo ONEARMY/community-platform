@@ -31,6 +31,7 @@ import {
 } from 'src/utils/validators'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 
+import { UserNameSelect } from '../../../common/UserNameSelect/UserNameSelect'
 import {
   RESEARCH_MAX_LENGTH,
   RESEARCH_TITLE_MAX_LENGTH,
@@ -38,7 +39,6 @@ import {
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
 import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
-import { UserNameSelect } from '../../../common/UserNameSelect/UserNameSelect'
 
 import type { IResearch } from 'src/models/research.models'
 

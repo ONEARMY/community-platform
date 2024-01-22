@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from 'firebase/auth'
+import { uniqBy } from 'lodash'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 
@@ -58,6 +59,34 @@ export class UserStore extends ModuleStore {
   // redirect calls for verifiedUsers to the aggregation store list
   @computed get verifiedUsers(): { [user_id: string]: boolean } {
     return this.aggregationsStore.aggregations.users_verified || {}
+  }
+
+  @action
+  public getAllUsers() {
+    return this.allDocs$
+  }
+
+  @action
+  public async getUsersStartingWith(prefix: string, limit?: number) {
+    // getWhere with the '>=' operator will return every userName that is lexicographically greater than prefix, so adding filter to avoid getting not relvant userNames
+    const users: IUserPP[] = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .getWhere('userName', '>=', prefix, limit)
+    const uniqueUsers: IUserPP[] = uniqBy(
+      users.filter((user) => user.userName?.startsWith(prefix)),
+      (user) => user.userName,
+    )
+    return uniqueUsers
+  }
+
+  @action
+  private updateActiveUser(user?: IUserPPDB | null) {
+    this.user = user
+  }
+
+  @action
+  public setUpdateStatus(update: keyof IUserUpdateStatus) {
+    this.updateStatus[update] = true
   }
 
   // when registering a new user create firebase auth profile as well as database user profile

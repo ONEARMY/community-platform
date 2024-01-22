@@ -30,6 +30,7 @@ import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
 import { MdLock } from '@react-icons/all-files/md/MdLock'
 import { MdMail } from '@react-icons/all-files/md/MdMail'
 import { MdMailOutline } from '@react-icons/all-files/md/MdMailOutline'
+import { MdMenu } from '@react-icons/all-files/md/MdMenu'
 import { MdMoreVert } from '@react-icons/all-files/md/MdMoreVert'
 import { MdNotifications } from '@react-icons/all-files/md/MdNotifications'
 import { MdTurnedIn } from '@react-icons/all-files/md/MdTurnedIn'
@@ -94,6 +95,7 @@ export const glyphs: IGlyphs = {
   lock: <MdLock />,
   machine: iconMap.machine,
   'mail-outline': <MdMailOutline />,
+  menu: <MdMenu />,
   'more-vert': <MdMoreVert />,
   notifications: <MdNotifications />,
   pdf: <GoFilePdf />,

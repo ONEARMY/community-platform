@@ -36,6 +36,7 @@ export type availableGlyphs =
   | 'lock'
   | 'machine'
   | 'mail-outline'
+  | 'menu'
   | 'more-vert'
   | 'notifications'
   | 'pdf'

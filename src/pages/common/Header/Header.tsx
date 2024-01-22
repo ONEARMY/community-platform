@@ -1,8 +1,8 @@
 import React from 'react'
-import HamburgerMenu from 'react-hamburger-menu'
 import { useTheme, withTheme } from '@emotion/react'
 import { motion } from 'framer-motion'
 import { observer } from 'mobx-react'
+import { Button } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/index'
 import { isModuleSupported, MODULE } from 'src/modules'
@@ -170,16 +170,22 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         </Flex>
         <MobileMenuWrapper className="menu-mobile">
           <Flex pl={5}>
-            <HamburgerMenu
-              isOpen={isVisible}
-              menuClicked={() => setIsVisible(!isVisible)}
-              width={18}
-              height={15}
-              strokeWidth={1}
-              rotate={0}
-              color="black"
-              borderRadius={0}
-              animationDuration={0.3}
+            <Button
+              showIconOnly={true}
+              icon={isVisible ? 'close' : 'menu'}
+              onClick={() => setIsVisible(!isVisible)}
+              large={true}
+              mr={-3}
+              sx={{
+                bg: 'white',
+                borderWidth: '0px',
+                '&:hover': {
+                  bg: 'white',
+                },
+                '&:active': {
+                  bg: 'white',
+                },
+              }}
             />
           </Flex>
         </MobileMenuWrapper>

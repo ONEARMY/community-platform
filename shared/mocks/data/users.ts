@@ -232,7 +232,6 @@ export const users = {
     profileType: null,
     coverImages: [],
     isExpert: null,
-    isContactableByPublic: true,
   },
   settings_member_new: {
     isV4Member: null,
@@ -334,6 +333,7 @@ export const users = {
         },
       ],
     },
+    isContactableByPublic: false,
   },
   mapview_testing_rejected: {
     openingHours: [],

@@ -9,12 +9,14 @@ export interface Props {
   onSubmit: (value: string) => void
   onChange: (value: string) => void
   comment: string
+  placeholder?: string
   userProfileType?: string
 }
 
 export const CreateComment = (props: Props) => {
   const { comment, isLoggedIn, maxLength, onSubmit } = props
   const userProfileType = props.userProfileType || 'member'
+  const placeholder = props.placeholder || 'Leave your questions or feedback...'
 
   const onChange = (newValue: string) => {
     props.onChange && props?.onChange(newValue)
@@ -52,8 +54,9 @@ export const CreateComment = (props: Props) => {
                 onChange={(event) => {
                   onChange && onChange(event.target.value)
                 }}
+                aria-label="Comment"
                 data-cy="comments-form"
-                placeholder="Leave your questions or feedback..."
+                placeholder={placeholder}
                 sx={{
                   background: 'none',
                   resize: 'vertical',

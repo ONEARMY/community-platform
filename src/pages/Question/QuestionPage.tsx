@@ -15,7 +15,7 @@ import { Box, Button, Card, Flex, Heading, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { QuestionComments } from './QuestionComments'
 
-import type { IDiscussionComment, IQuestion } from 'src/models'
+import type { IDiscussionComment, IQuestion, IUserPPDB } from 'src/models'
 
 export const QuestionPage = () => {
   const { slug } = useParams()
@@ -23,6 +23,9 @@ export const QuestionPage = () => {
   const discussionStore = useDiscussionStore()
   const [isLoading, setIsLoading] = useState(true)
   const [question, setQuestion] = useState<IQuestion.Item | undefined>()
+  const [discussion, setDiscussion] = useState<IDiscussion.Item | undefined>(
+    undefined,
+  )
   const [isEditable, setIsEditable] = useState(false)
   const [hasUserSubscribed, setHasUserSubscribed] = useState(false)
   const [comments, setComments] = useState<IDiscussionComment[]>([])
@@ -36,6 +39,11 @@ export const QuestionPage = () => {
         if (isLoading) {
           setQuestion(foundQuestion || null)
 
+          logger.info(
+            'Setting isEditable',
+            isAllowedToEditContent(foundQuestion),
+            store.activeUser,
+          )
           if (store.activeUser) {
             setIsEditable(
               isAllowedToEditContent(foundQuestion, store.activeUser),
@@ -54,7 +62,10 @@ export const QuestionPage = () => {
                 'question',
               )
             if (discussion) {
-              setComments(discussion.comments)
+              setDiscussion(discussion)
+              setComments(
+                transformToUserComments(discussion.comments, store.activeUser),
+              )
             }
           } catch (err) {
             logger.error('Failed to fetch discussion', {
@@ -147,9 +158,44 @@ export const QuestionPage = () => {
               </Text>
             </Box>
           </Card>
-          <QuestionComments comments={comments} />
+          {question._id && (
+            <QuestionComments
+              questionDocId={question._id}
+              comments={comments}
+              activeUser={store.activeUser}
+              commentsUpdated={setComments}
+              onSubmit={async (comment: string) => {
+                if (!comment) {
+                  return
+                }
+
+                // Trigger update without waiting
+                const res = await discussionStore.addComment(
+                  discussion,
+                  comment,
+                )
+
+                setDiscussion(res)
+                setComments(
+                  transformToUserComments(
+                    res?.comments || [],
+                    store.activeUser,
+                  ),
+                )
+              }}
+            />
+          )}
         </>
       ) : null}
     </Box>
   )
 }
+
+const transformToUserComments = (
+  comments: IDiscussionComment[],
+  loggedInUser: IUserPPDB | null | undefined,
+) =>
+  comments.map((c) => ({
+    ...c,
+    isEditable: c._creatorId === loggedInUser?._id,
+  }))

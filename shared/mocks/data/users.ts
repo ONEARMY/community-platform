@@ -1,3 +1,4 @@
+import { UserRole } from 'oa-shared'
 /**
  * If you want to be able to log with any of the users below
  * you will need to manually create them within
@@ -39,7 +40,7 @@ export const users = {
     _modified: '2022-01-30T18:51:57.719Z',
     displayName: 'demo_beta_tester',
     userName: 'demo_beta_tester',
-    userRoles: ['beta-tester'],
+    userRoles: [UserRole.BETA_TESTER],
     links: [],
     email: 'demo_beta_tester@example.com',
     password: 'demo_beta_tester',
@@ -55,7 +56,7 @@ export const users = {
     _modified: '2022-01-30T18:51:57.719Z',
     displayName: 'demo_admin',
     userName: 'demo_admin',
-    userRoles: ['admin'],
+    userRoles: [UserRole.ADMIN],
     links: [],
     email: 'demo_admin@example.com',
     password: 'demo_admin',
@@ -115,7 +116,7 @@ export const users = {
     _authID: 'oydwApNvguWQoBOpFVOzQ2yJEOF2',
     _created: '2019-08-15T00:00:00.000Z',
     displayName: 'event_reader',
-    userRoles: ['beta-tester'],
+    userRoles: [UserRole.BETA_TESTER],
   },
   howto_creator: {
     _deleted: false,
@@ -160,7 +161,7 @@ export const users = {
     _created: '2020-01-07T15:46:00.297Z',
     displayName: 'research_creator',
     _id: 'research_creator',
-    userRoles: ['research_creator'],
+    userRoles: [UserRole.RESEARCH_CREATOR],
   },
   research_editor: {
     _id: 'research_editor',
@@ -172,7 +173,7 @@ export const users = {
     _authID: 'cNksr9jiL8cGvwU88gHFNvfz4SK2',
     displayName: 'research_editor',
     _created: '2020-01-07T12:12:41.566Z',
-    userRoles: ['research_editor'],
+    userRoles: [UserRole.RESEARCH_EDITOR],
   },
   research_reader: {
     verified: false,
@@ -231,7 +232,6 @@ export const users = {
     profileType: null,
     coverImages: [],
     isExpert: null,
-    isContactableByPublic: true,
   },
   settings_member_new: {
     isV4Member: null,
@@ -303,7 +303,7 @@ export const users = {
     collectedPlasticTypes: null,
     email: 'settings_workplace_new@test.com',
     password: 'test1234',
-    userRoles: ['beta-tester'],
+    userRoles: [UserRole.BETA_TESTER],
     impact: {
       2022: [
         {
@@ -333,6 +333,7 @@ export const users = {
         },
       ],
     },
+    isContactableByPublic: false,
   },
   mapview_testing_rejected: {
     openingHours: [],

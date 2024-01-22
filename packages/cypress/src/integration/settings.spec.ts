@@ -1,3 +1,5 @@
+import { ExternalLinkLabel } from 'oa-shared'
+
 import { form } from '../../../../src/pages/UserSettings/labels'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commands'
@@ -121,11 +123,11 @@ describe('[Settings]', () => {
       isContactableByPublic: true,
       links: [
         {
-          label: 'email',
+          label: ExternalLinkLabel.EMAIL,
           url: `${freshSettings.userName}@test.com`,
         },
         {
-          label: 'website',
+          label: ExternalLinkLabel.WEBSITE,
           url: `http://www.${freshSettings.userName}.com`,
         },
       ],
@@ -165,12 +167,12 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        label: 'email',
+        label: ExternalLinkLabel.EMAIL,
         url: `${freshSettings.userName}@test.com`,
       })
       addContactLink({
         index: 1,
-        label: 'website',
+        label: ExternalLinkLabel.WEBSITE,
         url: `http://www.${freshSettings.userName}.com`,
       })
 
@@ -249,7 +251,7 @@ describe('[Settings]', () => {
       ],
       links: [
         {
-          label: 'email',
+          label: ExternalLinkLabel.EMAIL,
           url: `${freshSettings.userName}@test.com`,
         },
       ],
@@ -301,7 +303,7 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        label: 'email',
+        label: ExternalLinkLabel.EMAIL,
         url: `${freshSettings.userName}@test.com`,
       })
 
@@ -347,7 +349,7 @@ describe('[Settings]', () => {
         ],
         links: [
           {
-            label: 'email',
+            label: ExternalLinkLabel.EMAIL,
             url: `${freshSettings.userName}@test.com`,
           },
         ],
@@ -387,7 +389,7 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        label: 'email',
+        label: ExternalLinkLabel.EMAIL,
         url: `${freshSettings.userName}@test.com`,
       })
 
@@ -426,7 +428,7 @@ describe('[Settings]', () => {
 
       addContactLink({
         index: 1,
-        label: 'social media',
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
         url: 'https://social.network',
       })
 
@@ -485,7 +487,7 @@ describe('[Settings]', () => {
       ],
       links: [
         {
-          label: 'bazar',
+          label: ExternalLinkLabel.BAZAR,
           url: 'http://settings_machine_bazarlink.com',
         },
       ],
@@ -500,6 +502,7 @@ describe('[Settings]', () => {
       },
       mapPinDescription: 'Informative workshop on machines every week',
       machineBuilderXp: ['electronics', 'welding'],
+      isContableByPublic: false,
     }
 
     it('[Edit a new profile]', () => {
@@ -526,7 +529,7 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        label: 'bazar',
+        label: ExternalLinkLabel.BAZAR,
         url: `http://settings_machine_bazarlink.com`,
       })
 
@@ -536,6 +539,10 @@ describe('[Settings]', () => {
         searchKeyword: 'singapo',
         locationName: expected.location.value,
       })
+
+      cy.step('Opts out of public contact')
+      cy.get('[data-cy=isContactableByPublic').should('be.checked')
+      cy.get('[data-cy=isContactableByPublic').click({ force: true })
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('not.exist')
@@ -608,7 +615,11 @@ describe('[Settings]', () => {
 
       cy.step('Update Contact Links')
       expected.links.forEach((link, index) =>
-        addContactLink({ index, label: 'website', url: link.url }),
+        addContactLink({
+          index,
+          label: ExternalLinkLabel.WEBSITE,
+          url: link.url,
+        }),
       )
 
       cy.interceptAddressSearchFetch(SingaporeStubResponse)
@@ -762,12 +773,12 @@ describe('[Settings]', () => {
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
-        label: 'social media',
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
         url: `http://www.facebook.com/${freshSettings.userName}`,
       })
       addContactLink({
         index: 1,
-        label: 'social media',
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
         url: `http://www.twitter.com/${freshSettings.userName}`,
       })
 

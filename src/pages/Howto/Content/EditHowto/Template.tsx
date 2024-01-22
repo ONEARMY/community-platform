@@ -1,3 +1,5 @@
+import { DifficultyLevel } from 'oa-shared'
+
 import type { IHowtoFormInput } from 'src/models/howto.models'
 
 // initialise fields which contain nested objects (and steps to have 3 placeholders)
@@ -30,7 +32,7 @@ const TESTING_VALUES: Partial<IHowtoFormInput> = {
   title: `Test-${new Date().toString()}`,
   description: 'example description',
   time: '1-2 weeks',
-  difficulty_level: 'Hard',
+  difficulty_level: DifficultyLevel.HARD,
   files: [],
   steps: [
     {

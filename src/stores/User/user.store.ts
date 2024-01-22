@@ -6,8 +6,9 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from 'firebase/auth'
+import { uniqBy } from 'lodash'
 import { action, computed, makeObservable, observable, toJS } from 'mobx'
-import { EmailNotificationFrequency } from 'oa-shared'
+import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 
 import { logger } from '../../logger'
 import { auth, EmailAuthProvider } from '../../utils/firebase'
@@ -58,6 +59,34 @@ export class UserStore extends ModuleStore {
   // redirect calls for verifiedUsers to the aggregation store list
   @computed get verifiedUsers(): { [user_id: string]: boolean } {
     return this.aggregationsStore.aggregations.users_verified || {}
+  }
+
+  @action
+  public getAllUsers() {
+    return this.allDocs$
+  }
+
+  @action
+  public async getUsersStartingWith(prefix: string, limit?: number) {
+    // getWhere with the '>=' operator will return every userName that is lexicographically greater than prefix, so adding filter to avoid getting not relvant userNames
+    const users: IUserPP[] = await this.db
+      .collection<IUserPP>(COLLECTION_NAME)
+      .getWhere('userName', '>=', prefix, limit)
+    const uniqueUsers: IUserPP[] = uniqBy(
+      users.filter((user) => user.userName?.startsWith(prefix)),
+      (user) => user.userName,
+    )
+    return uniqueUsers
+  }
+
+  @action
+  private updateActiveUser(user?: IUserPPDB | null) {
+    this.user = user
+  }
+
+  @action
+  public setUpdateStatus(update: keyof IUserUpdateStatus) {
+    this.updateStatus[update] = true
   }
 
   // when registering a new user create firebase auth profile as well as database user profile
@@ -134,9 +163,11 @@ export class UserStore extends ModuleStore {
       .getWhere('collaborators', 'array-contains', userID)
     const researchCombined = [...research, ...researchCollaborated]
 
-    const howtosFiltered = howtos.filter((doc) => doc.moderation === 'accepted')
+    const howtosFiltered = howtos.filter(
+      (doc) => doc.moderation === IModerationStatus.ACCEPTED,
+    )
     const researchFiltered = researchCombined.filter(
-      (doc) => doc.moderation === 'accepted',
+      (doc) => doc.moderation === IModerationStatus.ACCEPTED,
     )
 
     return {
@@ -241,14 +272,18 @@ export class UserStore extends ModuleStore {
     fields: IImpactYearFieldList,
     year: IImpactYear,
   ) {
-    if (!this.user) {
+    const user = this.activeUser
+
+    if (!user) {
       throw new Error('User not found')
     }
 
     await this.db
       .collection(COLLECTION_NAME)
-      .doc(this.user._id)
+      .doc(user._id)
       .update({ [`impact.${year}`]: fields })
+
+    await this.refreshActiveUserDetails()
   }
 
   public async unsubscribeUser(unsubscribeToken: string) {
@@ -425,7 +460,7 @@ export class UserStore extends ModuleStore {
     const user: IUser = {
       coverImages: [],
       links: [],
-      moderation: 'awaiting-moderation',
+      moderation: IModerationStatus.AWAITING_MODERATION,
       verified: false,
       _authID: authUser.uid,
       displayName,

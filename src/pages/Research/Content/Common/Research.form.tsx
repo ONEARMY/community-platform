@@ -10,6 +10,7 @@ import {
   FieldTextarea,
   ResearchEditorOverview,
 } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
@@ -30,6 +31,7 @@ import {
 } from 'src/utils/validators'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 
+import { UserNameSelect } from '../../../common/UserNameSelect/UserNameSelect'
 import {
   RESEARCH_MAX_LENGTH,
   RESEARCH_TITLE_MAX_LENGTH,
@@ -72,11 +74,6 @@ const calculatedFields = createDecorator({
   },
 })
 
-const statusOptions = researchStatusOptions.map((status) => ({
-  label: status,
-  value: status,
-}))
-
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
   const { create, update } = buttons.draft
@@ -99,7 +96,7 @@ const ResearchForm = observer((props: IProps) => {
     showSubmitModal: false,
   })
   const [submissionHandler, setSubmissionHandler] = React.useState({
-    draft: formValues.moderation === 'draft',
+    draft: formValues.moderation === IModerationStatus.DRAFT,
     shouldSubmit: false,
   })
 
@@ -131,7 +128,9 @@ const ResearchForm = observer((props: IProps) => {
   }, [submissionHandler])
 
   const onSubmit = async (formValues: IResearch.FormInput) => {
-    formValues.moderation = submissionHandler.draft ? 'draft' : 'accepted' // No moderation for researches for now
+    formValues.moderation = submissionHandler.draft
+      ? IModerationStatus.DRAFT
+      : IModerationStatus.ACCEPTED // No moderation for researches for now
     await store.uploadResearch(formValues)
   }
 
@@ -155,7 +154,8 @@ const ResearchForm = observer((props: IProps) => {
     !store.updateUploadStatus.Complete && state.dirty,
   )
 
-  const draftButtonText = formValues.moderation !== 'draft' ? create : update
+  const draftButtonText =
+    formValues.moderation !== IModerationStatus.DRAFT ? create : update
   const pageTitle = headings.overview[parentType]
 
   return (
@@ -331,8 +331,9 @@ const ResearchForm = observer((props: IProps) => {
                               </ResearchFormLabel>
                               <Field
                                 name="collaborators"
-                                component={FieldInput}
+                                component={UserNameSelect}
                                 placeholder={collaborators.placeholder}
+                                defaultOptions={[]}
                               />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
@@ -345,7 +346,7 @@ const ResearchForm = observer((props: IProps) => {
                                 data-cy="research-status"
                                 component={SelectField}
                                 placeholder={researchStatus.placeholder}
-                                options={statusOptions}
+                                options={researchStatusOptions}
                                 validate={composeValidators(required)}
                               />
                             </Flex>

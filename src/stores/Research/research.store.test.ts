@@ -1,5 +1,6 @@
 jest.mock('../common/module.store')
 import { isObservable, observable, toJS } from 'mobx'
+import { UserRole } from 'oa-shared'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryResearchItem,
@@ -279,7 +280,7 @@ describe('research.store', () => {
           },
           FactoryUser({
             _id: 'test-user',
-            userRoles: ['admin'],
+            userRoles: [UserRole.ADMIN],
           }),
         )
 
@@ -386,7 +387,7 @@ describe('research.store', () => {
           },
           FactoryUser({
             _id: 'test-user',
-            userRoles: ['admin'],
+            userRoles: [UserRole.ADMIN],
           }),
         )
 

@@ -9,6 +9,7 @@ import {
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
@@ -72,7 +73,9 @@ const ResearchArticle = observer(() => {
   const moderateResearch = async (accepted: boolean) => {
     const item = researchStore.activeResearchItem
     if (item) {
-      item.moderation = accepted ? 'accepted' : 'rejected'
+      item.moderation = accepted
+        ? IModerationStatus.ACCEPTED
+        : IModerationStatus.REJECTED
       await researchStore.moderateResearch(item)
     }
   }
@@ -226,8 +229,9 @@ const ResearchArticle = observer(() => {
         subscribersCount={researchStore.subscribersCount}
         commentsCount={researchStore.commentsCount}
         updatesCount={
-          item.updates?.filter((u) => u.status !== 'draft' && !u._deleted)
-            .length || 0
+          item.updates?.filter(
+            (u) => u.status !== ResearchUpdateStatus.DRAFT && !u._deleted,
+          ).length || 0
         }
       />
       <Box sx={{ marginTop: 8, marginBottom: 4 }}>
@@ -260,7 +264,7 @@ const ResearchArticle = observer(() => {
               author={researchAuthor}
               contributors={contributors}
             >
-              {item.moderation === 'accepted' && (
+              {item.moderation === IModerationStatus.ACCEPTED && (
                 <UsefulStatsButton
                   isLoggedIn={!!loggedInUser}
                   votedUsefulCount={researchStore.votedUsefulCount}

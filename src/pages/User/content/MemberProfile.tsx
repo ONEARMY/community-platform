@@ -1,4 +1,5 @@
 import { MemberBadge, Username, UserStatistics } from 'oa-components'
+import { ExternalLinkLabel } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
@@ -20,7 +21,10 @@ interface IProps {
 
 export const MemberProfile = ({ user, docs }: IProps) => {
   const userLinks = (user?.links || []).filter(
-    (linkItem) => !['discord', 'forum'].includes(linkItem.label),
+    (linkItem) =>
+      ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
+        linkItem.label,
+      ),
   )
 
   const stats = useMemberStatistics(user.userName)

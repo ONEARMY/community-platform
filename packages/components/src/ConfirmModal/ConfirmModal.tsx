@@ -25,6 +25,7 @@ export const ConfirmModal = (props: Props) => {
           </Flex>
           <Flex px={1}>
             <Button
+              aria-label={`Confirm ${confirmButtonText} action`}
               data-cy="Confirm.modal: Confirm"
               variant={'outline'}
               onClick={() => props?.handleConfirm()}

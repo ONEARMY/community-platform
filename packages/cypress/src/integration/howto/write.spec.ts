@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { DifficultyLevel } from 'oa-shared'
 
 import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
@@ -15,7 +16,6 @@ describe('[How To]', () => {
   })
   type Category = 'brainstorm' | 'exhibition' | 'product'
   type Duration = '<1 week' | '1-2 weeks' | '3-4 weeks'
-  type Difficulty = 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
 
   const selectCategory = (category: Category) => {
     cy.selectTag(category, '[data-cy=category-select]')
@@ -23,7 +23,7 @@ describe('[How To]', () => {
   const selectTimeDuration = (duration: Duration) => {
     cy.selectTag(duration, '[data-cy=time-select]')
   }
-  const selectDifficultLevel = (difficultLevel: Difficulty) => {
+  const selectDifficultLevel = (difficultLevel: DifficultyLevel) => {
     cy.selectTag(difficultLevel, '[data-cy=difficulty-select]')
   }
 
@@ -109,7 +109,7 @@ describe('[How To]', () => {
       _deleted: false,
       category: 'Moulds',
       description: 'After creating, the how-to will be deleted',
-      difficulty_level: 'Medium',
+      difficulty_level: DifficultyLevel.MEDIUM,
       time: '1-2 weeks',
       title: 'Create a how-to test',
       slug: 'create-a-how-to-test',
@@ -261,7 +261,7 @@ describe('[How To]', () => {
       cy.contains(categoryGuidanceFiles).should('exist')
 
       selectTimeDuration(time as Duration)
-      selectDifficultLevel(difficulty_level as Difficulty)
+      selectDifficultLevel(difficulty_level)
 
       checkWhitespaceTrim('intro-description')
 
@@ -363,7 +363,7 @@ describe('[How To]', () => {
       _deleted: false,
       category: 'exhibition',
       description: 'After editing, all changes are reverted',
-      difficulty_level: 'Hard',
+      difficulty_level: DifficultyLevel.HARD,
       files: [],
       fileLink: 'http://google.com/',
       total_downloads: 10,
@@ -493,7 +493,7 @@ describe('[How To]', () => {
       cy.selectTag('howto_testing')
       selectCategory(expected.category as Category)
       selectTimeDuration(expected.time as Duration)
-      selectDifficultLevel(expected.difficulty_level as Difficulty)
+      selectDifficultLevel(expected.difficulty_level)
       cy.get('[data-cy=intro-description]').clear().type(expected.description)
 
       cy.step('Update a new cover for the intro')

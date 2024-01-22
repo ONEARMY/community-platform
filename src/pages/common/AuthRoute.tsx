@@ -3,7 +3,7 @@ import { observer } from 'mobx-react'
 import { BlockedRoute } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 
-import type { UserRole } from 'src/models/user.models'
+import type { UserRole } from 'oa-shared'
 
 /*
     This provides a <AuthRoute /> component that can be used in place of <Route /> components

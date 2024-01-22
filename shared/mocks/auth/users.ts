@@ -1,4 +1,4 @@
-import type { UserRole } from '../../models'
+import { UserRole } from 'oa-shared'
 
 export interface IMockAuthUser {
   uid: string
@@ -24,34 +24,34 @@ export const MOCK_AUTH_USERS: IMockUsers = {
     label: 'Beta-Tester',
     email: 'demo_beta_tester@example.com',
     password: 'demo_beta_tester',
-    roles: ['beta-tester'],
+    roles: [UserRole.BETA_TESTER],
   },
   admin: {
     uid: 'demo_admin',
     label: 'Admin',
     email: 'demo_admin@example.com',
     password: 'demo_admin',
-    roles: ['admin'],
+    roles: [UserRole.ADMIN],
   },
   'super-admin': {
     uid: 'demo_super_admin',
     label: 'Super-Admin',
     email: 'demo_super_admin@example.com',
     password: 'demo_super_admin',
-    roles: ['super-admin'],
+    roles: [UserRole.SUPER_ADMIN],
   },
   research_creator: {
     uid: 'research_creator',
     label: 'Research-Creator',
     email: 'research_creator@test.com',
     password: 'research_creator',
-    roles: ['beta-tester'],
+    roles: [UserRole.RESEARCH_CREATOR],
   },
   research_editor: {
     uid: 'research_editor',
     label: 'Research-Editor',
     email: 'research_editor@test.com',
     password: 'research_editor',
-    roles: ['beta-tester'],
+    roles: [UserRole.RESEARCH_EDITOR],
   },
 }

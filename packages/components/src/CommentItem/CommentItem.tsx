@@ -180,7 +180,10 @@ export const CommentItem = (props: CommentItemProps) => {
           message="Are you sure you want to delete this comment?"
           confirmButtonText="Delete"
           handleCancel={() => setShowDeleteModal(false)}
-          handleConfirm={() => handleDelete && handleDelete(_id)}
+          handleConfirm={() => {
+            handleDelete && handleDelete(_id)
+            setShowDeleteModal(false)
+          }}
         />
       </Flex>
     </Box>

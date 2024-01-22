@@ -2,6 +2,7 @@ import { CONFIG } from '../config/config'
 import * as functions from 'firebase-functions'
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import { IMapPin } from '../models'
+import { IModerationStatus } from 'oa-shared'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
@@ -14,8 +15,10 @@ export const notifyPinAccepted = functions
   .onUpdate(async (change, context) => {
     const info = (change.after.data() as IMapPin) || null
     const prevInfo = (change.before.data() as IMapPin) || null
-    const previouslyAccepted = prevInfo?.moderation === 'accepted'
-    const shouldNotify = info.moderation === 'accepted' && !previouslyAccepted
+    const previouslyAccepted =
+      prevInfo?.moderation === IModerationStatus.ACCEPTED
+    const shouldNotify =
+      info.moderation === IModerationStatus.ACCEPTED && !previouslyAccepted
     if (!shouldNotify) {
       return null
     }
@@ -34,8 +37,10 @@ export const notifyHowToAccepted = functions
   .onUpdate(async (change, context) => {
     const info = change.after.exists ? change.after.data() : null
     const prevInfo = change.before.exists ? change.before.data() : null
-    const previouslyAccepted = prevInfo?.moderation === 'accepted'
-    const shouldNotify = info.moderation === 'accepted' && !previouslyAccepted
+    const previouslyAccepted =
+      prevInfo?.moderation === IModerationStatus.ACCEPTED
+    const shouldNotify =
+      info.moderation === IModerationStatus.ACCEPTED && !previouslyAccepted
     if (!shouldNotify) {
       return null
     }

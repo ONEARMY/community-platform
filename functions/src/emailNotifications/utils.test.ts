@@ -10,7 +10,7 @@ import {
   isReceiverContactable,
   isSameEmail,
   isUserAllowedToMessage,
-  isValidEmailCreationRequest,
+  isValidMessageRequest,
 } from './utils'
 
 import type { IUserDB } from '../models'
@@ -115,7 +115,7 @@ describe('isUserAllowedToMessage', () => {
   })
 })
 
-describe('isValidEmailCreationRequest', () => {
+describe('isValidMessageRequest', () => {
   it('returns true when all checks pass', async () => {
     const messageInput = {
       _id: '234dfsb',
@@ -135,8 +135,6 @@ describe('isValidEmailCreationRequest', () => {
     jest.spyOn(utils, 'isBelowMessageLimit').mockResolvedValue(true)
     jest.spyOn(utils, 'isReceiverContactable').mockResolvedValue(true)
 
-    await expect(isValidEmailCreationRequest(messageInput)).resolves.toEqual(
-      true,
-    )
+    await expect(isValidMessageRequest(messageInput)).resolves.toEqual(true)
   })
 })

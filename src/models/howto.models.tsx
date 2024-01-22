@@ -1,3 +1,4 @@
+import type { DifficultyLevel } from 'oa-shared'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 import type { IComment } from './'
@@ -57,7 +58,7 @@ export interface IHowtoFormInput extends IModerable, ISharedFeatures {
   // Added to be able to recover on edit by admin
   creatorCountry?: string
   description?: string
-  difficulty_level?: 'Easy' | 'Medium' | 'Hard' | 'Very Hard'
+  difficulty_level?: DifficultyLevel
   files?: Array<IUploadedFileMeta | File | null>
   fileLink?: string
   mentions?: UserMention[]

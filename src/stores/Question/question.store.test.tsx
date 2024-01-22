@@ -1,4 +1,5 @@
 jest.mock('../common/module.store')
+import { IModerationStatus } from 'oa-shared'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -122,12 +123,12 @@ describe('question.store', () => {
         FactoryQuestionItem({
           slug: 'question-draft',
           _createdBy: 'author',
-          moderation: 'draft',
+          moderation: IModerationStatus.DRAFT,
         }),
         FactoryQuestionItem({
           slug: 'question-published',
           _createdBy: 'author',
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       ])
 
@@ -137,7 +138,7 @@ describe('question.store', () => {
       expect(res[0]).toMatchObject({
         slug: 'question-published',
         _createdBy: 'author',
-        moderation: 'accepted',
+        moderation: IModerationStatus.ACCEPTED,
       })
     })
   })

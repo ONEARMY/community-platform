@@ -53,34 +53,42 @@ export const QuestionListing = observer(() => {
                 py={3}
                 sx={{ position: 'relative' }}
               >
-                <Link to={url} key={q._id}>
-                  <Heading
-                    as="span"
-                    mb={2}
-                    sx={{
-                      color: 'black',
-                      fontSize: [3, 3, 4],
-                    }}
-                  >
-                    {q.title}
-                  </Heading>
-                </Link>
-                <ModerationStatus
-                  status={q.moderation}
-                  contentType="question"
-                  sx={{ top: 0, position: 'absolute', right: 0 }}
-                />
-                <UserNameTag
-                  userName={q._createdBy}
-                  countryCode={q.creatorCountry}
-                  created={q._created}
-                  action="Asked"
-                />
+                <Flex sx={{ flexDirection: 'column' }}>
+                  <Link to={url} key={q._id}>
+                    <Flex sx={{ width: '100%' }}>
+                      <Heading
+                        as="span"
+                        mb={2}
+                        sx={{
+                          color: 'black',
+                          fontSize: [3, 3, 4],
+                        }}
+                      >
+                        {q.title}
+                      </Heading>
+                    </Flex>
+                  </Link>
+                  <Flex>
+                    <ModerationStatus
+                      status={q.moderation}
+                      contentType="question"
+                      sx={{ top: 0, position: 'absolute', right: 0 }}
+                    />
+                    <UserNameTag
+                      userName={q._createdBy}
+                      countryCode={q.creatorCountry}
+                      created={q._created}
+                      action="Asked"
+                    />
+                  </Flex>
+                </Flex>
               </Card>
             )
           })
       ) : (
-        <Heading>No questions yet</Heading>
+        <Heading sx={{ marginTop: 4 }}>
+          No questions have been asked yet
+        </Heading>
       )}
     </>
   )

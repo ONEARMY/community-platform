@@ -1,5 +1,4 @@
 import React from 'react'
-import HamburgerMenu from 'react-hamburger-menu'
 import { useTheme, withTheme } from '@emotion/react'
 import { motion } from 'framer-motion'
 import { observer } from 'mobx-react'
@@ -12,7 +11,7 @@ import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications
 import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import { Flex, Text } from 'theme-ui'
+import { Flex, MenuButton, Text } from 'theme-ui'
 
 import { getFormattedNotifications } from './getFormattedNotifications'
 import { MobileMenuContext } from './MobileMenuContext'
@@ -168,16 +167,9 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         </Flex>
         <MobileMenuWrapper className="menu-mobile">
           <Flex pl={5}>
-            <HamburgerMenu
-              isOpen={isVisible}
-              menuClicked={() => setIsVisible(!isVisible)}
-              width={18}
-              height={15}
-              strokeWidth={1}
-              rotate={0}
-              color="black"
-              borderRadius={0}
-              animationDuration={0.3}
+            <MenuButton
+              onClick={() => setIsVisible(!isVisible)}
+              aria-label="Toggle Menu"
             />
           </Flex>
         </MobileMenuWrapper>

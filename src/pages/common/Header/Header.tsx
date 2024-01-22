@@ -172,7 +172,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
               showIconOnly={true}
               icon={isVisible ? 'close' : 'menu'}
               onClick={() => setIsVisible(!isVisible)}
-              small={true}
+              large={true}
               sx={{
                 bg: 'white',
                 borderWidth: '0px',

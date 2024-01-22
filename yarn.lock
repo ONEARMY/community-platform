@@ -10993,15 +10993,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-hamburger-menu@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@types/react-hamburger-menu@npm:0.0.3"
-  dependencies:
-    "@types/react": "*"
-  checksum: fa9842c641b26a56e6e892e7b93e64c47077907862ba3a3d865d681c0e6743fb273e862a72222f3cd330950c1612b165c909ceb79f1b56beea91b286e20f7c75
-  languageName: node
-  linkType: hard
-
 "@types/react-leaflet-markercluster@npm:^2.0.0":
   version: 2.0.1
   resolution: "@types/react-leaflet-markercluster@npm:2.0.1"
@@ -27606,7 +27597,6 @@ __metadata:
     "@types/pubsub-js": ^1.5.18
     "@types/react": 17.0.2
     "@types/react-dom": 17.0.2
-    "@types/react-hamburger-menu": ^0.0.3
     "@types/react-leaflet": ^1.1.6
     "@types/react-leaflet-markercluster": ^2.0.0
     "@types/react-router-dom": 5.3.3
@@ -27672,7 +27662,6 @@ __metadata:
     react-final-form-arrays: ^3.1.3
     react-foco: ^1.3.1
     react-ga4: ^1.4.1
-    react-hamburger-menu: ^1.1.1
     react-leaflet: ^2.5.0
     react-leaflet-markercluster: ^2.0.0-rc3
     react-router: ^6.20.1
@@ -30361,16 +30350,6 @@ __metadata:
   version: 1.4.1
   resolution: "react-ga4@npm:1.4.1"
   checksum: 4c33ecb47dfc26c241a6af8e2b08b29b6c059f40e456e93d1c2b65c995edce18f32d9777295774ec992d968d7c5efdd105eb62398972d85ff2e2b6dad8646a26
-  languageName: node
-  linkType: hard
-
-"react-hamburger-menu@npm:^1.1.1":
-  version: 1.2.1
-  resolution: "react-hamburger-menu@npm:1.2.1"
-  peerDependencies:
-    prop-types: ">=15.5.7"
-    react: ">=15.3.0"
-  checksum: 94495292cfcea588192d835d2e3909b4732ecd0216020cc388e68b102ac97771252aae77479cc9dd680dadaa5b9636e9fc599590069d3e04a101fbfbdfdc5365
   languageName: node
   linkType: hard
 

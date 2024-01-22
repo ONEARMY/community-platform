@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { DifficultyLevel, IModerationStatus } from 'oa-shared'
 
 import type { IHowtoDB, IHowtoStep } from 'src/models'
 
@@ -8,18 +9,18 @@ export const FactoryHowto = (
   files: [],
   fileLink: '',
   difficulty_level: faker.helpers.arrayElement([
-    'Easy',
-    'Medium',
-    'Hard',
-    'Very Hard',
+    DifficultyLevel.EASY,
+    DifficultyLevel.MEDIUM,
+    DifficultyLevel.HARD,
+    DifficultyLevel.VERY_HARD,
   ]),
   time: '< 1 hour',
   slug: faker.lorem.slug(),
   moderation: faker.helpers.arrayElement([
-    'draft',
-    'awaiting-moderation',
-    'rejected',
-    'accepted',
+    IModerationStatus.DRAFT,
+    IModerationStatus.AWAITING_MODERATION,
+    IModerationStatus.REJECTED,
+    IModerationStatus.ACCEPTED,
   ]),
   title: faker.lorem.words(4),
   description: faker.lorem.paragraph(),
@@ -85,7 +86,7 @@ export const FactoryHowtoDraft = (
   _modified: faker.date.past().toString(),
   files: [],
   slug: 'quick-draft',
-  moderation: 'draft',
+  moderation: IModerationStatus.DRAFT,
   mentions: [],
   title: 'Quick draft',
   steps: [],

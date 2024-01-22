@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { IModerationStatus } from 'oa-shared'
 import { ProfileType } from 'src/modules/profile/types'
 
 import type { IMapPin } from 'src/models'
@@ -18,10 +19,10 @@ export const FactoryMapPin = (
   ]),
   verified: faker.datatype.boolean(),
   moderation: faker.helpers.arrayElement([
-    'draft',
-    'awaiting-moderation',
-    'rejected',
-    'accepted',
+    IModerationStatus.DRAFT,
+    IModerationStatus.AWAITING_MODERATION,
+    IModerationStatus.REJECTED,
+    IModerationStatus.ACCEPTED,
   ]),
   location: {
     lng: parseFloat(faker.address.longitude()),

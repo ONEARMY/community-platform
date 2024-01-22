@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
-import { format } from 'date-fns'
 import {
   Button,
   DownloadFileFromLink,
@@ -13,6 +12,7 @@ import {
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/index'
 import { useResearchStore } from 'src/stores/Research/research.store'
+import { formatDate } from 'src/utils/date'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
@@ -46,14 +46,8 @@ const ResearchUpdate = ({
   const navigate = useNavigate()
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
-  const formattedCreateDatestamp = format(
-    new Date(update._created),
-    'DD-MM-YYYY',
-  )
-  const formattedModifiedDatestamp = format(
-    new Date(update._modified),
-    'DD-MM-YYYY',
-  )
+  const formattedCreateDatestamp = formatDate(new Date(update._created))
+  const formattedModifiedDatestamp = formatDate(new Date(update._modified))
 
   const contributors = useContributorsData(update.collaborators || [])
 

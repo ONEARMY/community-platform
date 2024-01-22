@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 
 import type { IResearch, IResearchDB } from 'src/models'
 
@@ -20,7 +21,7 @@ export const FactoryResearchItemUpdate = (
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
   _contentModifiedTimestamp: faker.date.past().toString(),
-  status: faker.helpers.arrayElement(['draft', 'published']),
+  status: faker.helpers.arrayElement(Object.values(ResearchUpdateStatus)),
   ...researchItemUpdateOverloads,
 })
 
@@ -39,10 +40,10 @@ export const FactoryResearchItem = (
   updates: [FactoryResearchItemUpdate()],
   tags: {},
   moderation: faker.helpers.arrayElement([
-    'draft',
-    'awaiting-moderation',
-    'rejected',
-    'accepted',
+    IModerationStatus.DRAFT,
+    IModerationStatus.AWAITING_MODERATION,
+    IModerationStatus.REJECTED,
+    IModerationStatus.ACCEPTED,
   ]),
   mentions: [],
   previousSlugs: [],
@@ -63,10 +64,10 @@ export const FactoryResearchItemFormInput = (
   slug: faker.lorem.slug(),
   tags: {},
   moderation: faker.helpers.arrayElement([
-    'draft',
-    'awaiting-moderation',
-    'rejected',
-    'accepted',
+    IModerationStatus.DRAFT,
+    IModerationStatus.AWAITING_MODERATION,
+    IModerationStatus.REJECTED,
+    IModerationStatus.ACCEPTED,
   ]),
   collaborators: '',
   ...researchItemOverloads,

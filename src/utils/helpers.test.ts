@@ -1,3 +1,4 @@
+import { IModerationStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -40,24 +41,24 @@ describe('src/utils/helpers', () => {
 
   describe('filterModerableItems Function', () => {
     const items = [
-      { moderation: 'accepted', _createdBy: 'user1' },
-      { moderation: 'draft', _createdBy: 'user2' },
-      { moderation: 'rejected', _createdBy: 'user3' },
+      { moderation: IModerationStatus.ACCEPTED, _createdBy: 'user1' },
+      { moderation: IModerationStatus.DRAFT, _createdBy: 'user2' },
+      { moderation: IModerationStatus.REJECTED, _createdBy: 'user3' },
     ] as IModerable[]
 
     it('should filter out items that are accepted', () => {
       const result = filterModerableItems(items)
       expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe('accepted')
+      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
     })
 
     it('should include items created by the user', () => {
       const result = filterModerableItems(
         items,
-        FactoryUser({ _id: 'user1', userRoles: ['admin'] }),
+        FactoryUser({ _id: 'user1', userRoles: [UserRole.ADMIN] }),
       )
       expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe('accepted')
+      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
     })
 
     it('should only include non-draft and non-rejected items for admin user', () => {
@@ -65,11 +66,11 @@ describe('src/utils/helpers', () => {
         items,
         FactoryUser({
           userName: 'admin',
-          userRoles: ['admin'],
+          userRoles: [UserRole.ADMIN],
         }),
       )
       expect(result).toHaveLength(1)
-      expect((result[0] as any).moderation).toBe('accepted')
+      expect((result[0] as any).moderation).toBe(IModerationStatus.ACCEPTED)
     })
   })
 
@@ -84,39 +85,43 @@ describe('src/utils/helpers', () => {
     })
 
     it('should return false when user does not have admin or super-admin roles', () => {
-      const user = FactoryUser({ userRoles: ['beta-tester'] })
+      const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
       expect(hasAdminRights(user)).toBe(false)
     })
 
     it('should return true when user has admin role', () => {
-      const user = FactoryUser({ userRoles: ['admin'] })
+      const user = FactoryUser({ userRoles: [UserRole.ADMIN] })
       expect(hasAdminRights(user)).toBe(true)
     })
 
     it('should return true when user has super-admin role', () => {
-      const user = FactoryUser({ userRoles: ['super-admin'] })
+      const user = FactoryUser({ userRoles: [UserRole.SUPER_ADMIN] })
       expect(hasAdminRights(user)).toBe(true)
     })
   })
 
   describe('needsModeration', () => {
     it('should return false when user does not have admin rights', () => {
-      const doc = { moderation: 'awaiting-moderation' } as IModerable
+      const doc = {
+        moderation: IModerationStatus.AWAITING_MODERATION,
+      } as IModerable
       expect(needsModeration(doc, FactoryUser({ userRoles: [] }))).toBe(false)
     })
 
     it('should return false when doc is already accepted', () => {
-      const doc = { moderation: 'accepted' } as IModerable
-      expect(needsModeration(doc, FactoryUser({ userRoles: ['admin'] }))).toBe(
-        false,
-      )
+      const doc = { moderation: IModerationStatus.ACCEPTED } as IModerable
+      expect(
+        needsModeration(doc, FactoryUser({ userRoles: [UserRole.ADMIN] })),
+      ).toBe(false)
     })
 
     it('should return true when doc is not accepted and user has admin rights', () => {
-      const doc = { moderation: 'awaiting-moderation' } as IModerable
-      expect(needsModeration(doc, FactoryUser({ userRoles: ['admin'] }))).toBe(
-        true,
-      )
+      const doc = {
+        moderation: IModerationStatus.AWAITING_MODERATION,
+      } as IModerable
+      expect(
+        needsModeration(doc, FactoryUser({ userRoles: [UserRole.ADMIN] })),
+      ).toBe(true)
     })
   })
 
@@ -142,7 +147,10 @@ describe('src/utils/helpers', () => {
     })
 
     it('should return true when user has admin role', () => {
-      const user = FactoryUser({ userName: 'testUser', userRoles: ['admin'] })
+      const user = FactoryUser({
+        userName: 'testUser',
+        userRoles: [UserRole.ADMIN],
+      })
       const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
       expect(isAllowedToEditContent(doc, user)).toBe(true)
     })
@@ -150,7 +158,7 @@ describe('src/utils/helpers', () => {
     it('should return true when user has super-admin role', () => {
       const user = FactoryUser({
         userName: 'testUser',
-        userRoles: ['super-admin'],
+        userRoles: [UserRole.SUPER_ADMIN],
       })
       const doc = { _createdBy: 'anotherUser', collaborators: [] } as any
       expect(isAllowedToEditContent(doc, user)).toBe(true)
@@ -176,7 +184,7 @@ describe('src/utils/helpers', () => {
           pin,
           FactoryUser({
             userName: 'testUser',
-            userRoles: ['admin'],
+            userRoles: [UserRole.ADMIN],
           }),
         ),
       ).toBe(true)
@@ -234,7 +242,7 @@ describe('src/utils/helpers', () => {
       const item = {
         updates: Array.from({ length: 3 }).fill(
           FactoryResearchItemUpdate({
-            status: 'published',
+            status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
             comments: [],
           }),
@@ -247,7 +255,7 @@ describe('src/utils/helpers', () => {
       const item = {
         updates: Array.from({ length: 3 }).fill(
           FactoryResearchItemUpdate({
-            status: 'published',
+            status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
             comments: Array.from({ length: 3 }),
           }),
@@ -261,19 +269,19 @@ describe('src/utils/helpers', () => {
         updates: Array.from({ length: 2 })
           .fill(
             FactoryResearchItemUpdate({
-              status: 'published',
+              status: ResearchUpdateStatus.PUBLISHED,
               _deleted: false,
               comments: Array.from({ length: 2 }),
             }),
           )
           .concat([
             FactoryResearchItemUpdate({
-              status: 'published',
+              status: ResearchUpdateStatus.PUBLISHED,
               _deleted: true,
               comments: Array.from({ length: 3 }),
             }),
             FactoryResearchItemUpdate({
-              status: 'draft',
+              status: ResearchUpdateStatus.DRAFT,
               _deleted: false,
               comments: Array.from({ length: 6 }),
             }),

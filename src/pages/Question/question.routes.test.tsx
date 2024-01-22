@@ -13,6 +13,7 @@ import { faker } from '@faker-js/faker'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
+import { IModerationStatus, UserRole } from 'oa-shared'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import {
@@ -221,7 +222,7 @@ describe('question.routes', () => {
         description: 'Question description',
         tags: {},
         allowDraftSave: false,
-        moderation: 'accepted',
+        moderation: IModerationStatus.ACCEPTED,
       })
 
       expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
@@ -259,7 +260,7 @@ describe('question.routes', () => {
         title: 'Question title',
         tags: {},
         allowDraftSave: true,
-        moderation: 'draft',
+        moderation: IModerationStatus.DRAFT,
       })
 
       expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
@@ -421,7 +422,7 @@ describe('question.routes', () => {
 
       mockActiveUser = FactoryUser({
         userName: 'not-author',
-        userRoles: ['admin'],
+        userRoles: [UserRole.ADMIN],
       })
 
       const questionItem = FactoryQuestionItem({
@@ -518,7 +519,7 @@ const renderFn = async (url) => {
       <Provider
         userStore={{ user: mockActiveUser }}
         questionStore={{ foo: 'bar' }}
-        tagsStore={{ setTagsCategory: jest.fn() }}
+        tagsStore={{}}
       >
         <ThemeProvider theme={Theme}>
           <RouterProvider router={router} />

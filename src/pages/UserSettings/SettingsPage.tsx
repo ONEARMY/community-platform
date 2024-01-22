@@ -5,6 +5,7 @@ import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, Loader, TextNotification } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
@@ -50,7 +51,8 @@ interface IState {
 
 const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
   const { mapPin } = props
-  return mapPin?.comments && mapPin.moderation == 'improvements-needed' ? (
+  return mapPin?.comments &&
+    mapPin.moderation == IModerationStatus.IMPROVEMENTS_NEEDED ? (
     <Alert variant="info" sx={{ mt: 3, fontSize: 2, textAlign: 'left' }}>
       <Box>
         This map pin has been marked as requiring further changes. Specifically
@@ -111,6 +113,12 @@ export const SettingsPage = observer((props: IProps) => {
         })),
         openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
       }
+
+      // remove as updated by sub-form
+      if (formValues.impact) {
+        delete formValues.impact
+      }
+
       setState({
         formValues,
         notification: { message: '', icon: '', show: false },

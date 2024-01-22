@@ -1,7 +1,7 @@
-import { format } from 'date-fns'
 import { Username } from 'oa-components'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
+import { formatDate } from 'src/utils/date'
 import { Flex, Text } from 'theme-ui'
 
 interface UserNameTagProps {
@@ -19,7 +19,7 @@ export const UserNameTag = ({
 }: UserNameTagProps) => {
   const { aggregationsStore } = useCommonStores().stores
 
-  const dateText = `| ${action} on ${format(new Date(created), 'DD-MM-YYYY')}`
+  const dateText = `| ${action} on ${formatDate(new Date(created))}`
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ alignItems: 'center' }}>

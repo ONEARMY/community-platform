@@ -1,6 +1,7 @@
 import { IMockAuthUser, MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 import type { IHowtoDB, IUserDB } from '../../models'
 import { setDoc, updateDoc } from '../../Firebase/firestoreDB'
+import { IModerationStatus, DifficultyLevel } from 'oa-shared'
 
 /**
  * Populate additional mock howtos alongside production data for ease of testing
@@ -17,7 +18,7 @@ export async function seedContentGenerate() {
 
 export function getMockHowto(
   uid: string,
-  moderation: IHowtoDB['moderation'] = 'accepted',
+  moderation: IHowtoDB['moderation'] = IModerationStatus.ACCEPTED,
 ) {
   const _id = `00_${uid}_howto`
   const loginInfo = `username : ${uid}@example.com\npassword : ${uid}`
@@ -32,7 +33,7 @@ export function getMockHowto(
       downloadUrl: `https://platform.onearmy.earth/images/One-Army-Star-Logo.svg`,
     } as any,
     description: `You can edit this howto by logging in as:\n\n${loginInfo}`,
-    difficulty_level: 'Easy',
+    difficulty_level: DifficultyLevel.EASY,
     files: [],
     mentions: [],
     slug: _id,

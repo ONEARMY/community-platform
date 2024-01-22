@@ -1,3 +1,4 @@
+import { IPinGrouping } from 'oa-shared'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
@@ -6,66 +7,66 @@ import type { IMapGrouping } from 'src/models/maps.models'
 // grouping used (icons will be generated from type in method below)
 const GROUPINGS: IMapGrouping[] = [
   {
-    grouping: 'place',
+    grouping: IPinGrouping.PLACE,
     displayName: 'Extrusion',
     type: 'workspace',
     subType: 'extrusion',
     icon: '',
   },
   {
-    grouping: 'place',
+    grouping: IPinGrouping.PLACE,
     displayName: 'Injection',
     type: 'workspace',
     subType: 'injection',
     icon: '',
   },
   {
-    grouping: 'place',
+    grouping: IPinGrouping.PLACE,
     displayName: 'Shredder',
     type: 'workspace',
     subType: 'shredder',
     icon: '',
   },
   {
-    grouping: 'place',
+    grouping: IPinGrouping.PLACE,
     displayName: 'Sheetpress',
     type: 'workspace',
     subType: 'sheetpress',
     icon: '',
   },
   {
-    grouping: 'place',
+    grouping: IPinGrouping.PLACE,
     displayName: 'Mix',
     type: 'workspace',
     subType: 'mix',
     icon: '',
   },
   {
-    grouping: 'individual',
+    grouping: IPinGrouping.INDIVIDUAL,
     displayName: 'Collection Point',
     type: 'collection-point',
     icon: '',
   },
   {
-    grouping: 'individual',
+    grouping: IPinGrouping.INDIVIDUAL,
     displayName: 'Machine Shop',
     type: 'machine-builder',
     icon: '',
   },
   {
-    grouping: 'individual',
+    grouping: IPinGrouping.INDIVIDUAL,
     displayName: 'Community Point',
     type: 'community-builder',
     icon: '',
   },
   {
-    grouping: 'individual',
+    grouping: IPinGrouping.INDIVIDUAL,
     displayName: 'Want to get started',
     type: 'member',
     icon: '',
   },
   {
-    grouping: 'individual',
+    grouping: IPinGrouping.INDIVIDUAL,
     displayName: 'Space',
     type: 'space',
     icon: '',

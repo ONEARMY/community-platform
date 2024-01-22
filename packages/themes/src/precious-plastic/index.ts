@@ -16,7 +16,7 @@ export const Theme: PlatformTheme = {
   externalLinks: [
     {
       url: 'https://bazar.preciousplastic.com/',
-      label: 'Bazar',
+      label: 'bazar',
     },
     {
       url: 'https://preciousplastic.com/',

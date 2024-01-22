@@ -1,9 +1,14 @@
 import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
 import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
+import {
+  IModerationStatus,
+  ResearchStatus,
+  ResearchUpdateStatus,
+} from 'oa-shared'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { formatDate } from 'src/utils/date'
 import {
   calculateTotalUpdateComments,
   getPublicUpdates,
@@ -35,7 +40,7 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
 
-  const status = item.researchStatus || 'In progress'
+  const status = item.researchStatus || ResearchStatus.IN_PROGRESS
 
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
@@ -257,7 +262,7 @@ const ResearchListItem = ({ item }: IProps) => {
               <Tooltip />
             </Box>
           </Grid>
-          {item.moderation !== 'accepted' && (
+          {item.moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
               status={item.moderation}
               contentType="research"
@@ -287,11 +292,10 @@ const getItemThumbnail = (researchItem: IResearch.ItemDB): string => {
 }
 
 const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
-  const contentModifiedDate = format(
+  const contentModifiedDate = formatDate(
     new Date(item._contentModifiedTimestamp || item._modified),
-    'DD-MM-YYYY',
   )
-  const creationDate = format(new Date(item._created), 'DD-MM-YYYY')
+  const creationDate = formatDate(new Date(item._created))
 
   if (contentModifiedDate !== creationDate) {
     return variant === 'long'
@@ -306,7 +310,8 @@ const getUpdateText = (item: IResearch.ItemDB) => {
   return item.updates?.length
     ? String(
         item.updates.filter(
-          (update) => update.status !== 'draft' && !update._deleted,
+          (update) =>
+            update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
         ).length,
       )
     : '0'

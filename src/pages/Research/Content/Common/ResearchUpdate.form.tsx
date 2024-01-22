@@ -12,6 +12,7 @@ import {
   FieldTextarea,
   ResearchEditorOverview,
 } from 'oa-components'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { FileInputField } from 'src/common/Form/FileInput.field'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
@@ -81,7 +82,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   const [showInvalidFileWarning, setInvalidFileWarning] =
     React.useState<boolean>(false)
   const [isDraft, setIsDraft] = React.useState<boolean>(
-    formValues.status === 'draft',
+    formValues.status === ResearchUpdateStatus.DRAFT,
   )
   const [fileEditMode, setFileEditMode] = React.useState(false)
 
@@ -129,7 +130,9 @@ export const ResearchUpdateForm = observer((props: IProps) => {
           ].filter(Boolean),
         ),
       ),
-      status: isDraft ? 'draft' : 'published',
+      status: isDraft
+        ? ResearchUpdateStatus.DRAFT
+        : ResearchUpdateStatus.PUBLISHED,
     })
   }
 
@@ -165,7 +168,9 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   )
 
   const draftButtonText =
-    formValues.moderation !== 'draft' ? draft.create : draft.update
+    formValues.moderation !== IModerationStatus.DRAFT
+      ? draft.create
+      : draft.update
   const isEdit = parentType === 'edit'
   const publishButtonText = isEdit ? 'Save' : 'Add update'
   const pageTitle = headings.update[parentType]
@@ -574,7 +579,7 @@ const getResearchUpdates = (
       ? {
           isActive: false,
           title: researchTitle,
-          status: 'draft',
+          status: ResearchUpdateStatus.DRAFT,
           slug: null,
         }
       : null,

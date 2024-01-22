@@ -8,6 +8,11 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
+import {
+  IModerationStatus,
+  ResearchStatus,
+  ResearchUpdateStatus,
+} from 'oa-shared'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
@@ -31,7 +36,7 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
-import type { IComment, IUser, ResearchStatus } from 'src/models'
+import type { IComment, IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -199,7 +204,7 @@ export class ResearchStore extends ModuleStore {
           activeResearchItem.description,
         )
         activeResearchItem.researchStatus =
-          activeResearchItem.researchStatus || 'In progress'
+          activeResearchItem.researchStatus || ResearchStatus.IN_PROGRESS
         activeResearchItem.updates = activeResearchItem.updates?.map(
           (update) => {
             update.description = changeUserReferenceToPlainText(
@@ -622,7 +627,9 @@ export class ResearchStore extends ModuleStore {
         collaborators,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         _deleted: false,
-        moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
+        moderation: values.moderation
+          ? values.moderation
+          : IModerationStatus.ACCEPTED, // No moderation needed for researches for now
         updates,
         creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||
@@ -790,7 +797,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   /**
-   * Increments the download count of files in reasearch update
+   * Increments the download count of files in research update
    *
    * @param updateId
    */
@@ -880,7 +887,9 @@ export class ResearchStore extends ModuleStore {
   get updatesCount(): number {
     return this.activeResearchItem?.updates?.length
       ? this.activeResearchItem?.updates.filter(
-          (update) => update.status !== 'draft' && update._deleted !== true,
+          (update) =>
+            update.status !== ResearchUpdateStatus.DRAFT &&
+            update._deleted !== true,
         ).length
       : 0
   }

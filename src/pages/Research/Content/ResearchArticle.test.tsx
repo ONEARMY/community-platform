@@ -7,6 +7,7 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
+import { ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
@@ -21,7 +22,7 @@ import ResearchArticle from './ResearchArticle'
 const Theme = testingThemeStyles
 
 const activeUser = FactoryUser({
-  userRoles: ['beta-tester'],
+  userRoles: [UserRole.BETA_TESTER],
 })
 
 const mockUser = FactoryUser({ country: 'AF' })
@@ -62,7 +63,7 @@ describe('Research Article', () => {
         collaborators: undefined,
         updates: [
           FactoryResearchItemUpdate({
-            status: 'published',
+            status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
           }),
         ],
@@ -188,19 +189,19 @@ describe('Research Article', () => {
                 'third-example-username',
                 'fourth-example-username',
               ],
-              status: 'published',
+              status: ResearchUpdateStatus.PUBLISHED,
               _deleted: false,
             }),
             FactoryResearchItemUpdate({
               title: 'Research Update #2',
               collaborators: null!,
-              status: 'published',
+              status: ResearchUpdateStatus.PUBLISHED,
               _deleted: false,
             }),
             FactoryResearchItemUpdate({
               title: 'Research Update #3',
               collaborators: undefined,
-              status: 'published',
+              status: ResearchUpdateStatus.PUBLISHED,
               _deleted: false,
             }),
           ],
@@ -233,12 +234,12 @@ describe('Research Article', () => {
         updates: [
           FactoryResearchItemUpdate({
             title: 'Research Update #1',
-            status: 'published',
+            status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
           }),
           FactoryResearchItemUpdate({
             title: 'Research Update #2',
-            status: 'draft',
+            status: ResearchUpdateStatus.DRAFT,
             _deleted: false,
           }),
         ],
@@ -267,17 +268,17 @@ describe('Research Article', () => {
         updates: [
           FactoryResearchItemUpdate({
             title: 'Research Update #1',
-            status: 'published',
+            status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
           }),
           FactoryResearchItemUpdate({
             title: 'Research Update #2',
-            status: 'draft',
+            status: ResearchUpdateStatus.DRAFT,
             _deleted: false,
           }),
           FactoryResearchItemUpdate({
             title: 'Research Update #3',
-            status: 'published',
+            status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
             comments: [
               FactoryComment({

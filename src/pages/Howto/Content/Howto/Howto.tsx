@@ -8,6 +8,7 @@ import {
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { useCommonStores } from 'src/index'
@@ -164,7 +165,7 @@ export const Howto = observer(() => {
           >
             Leave a comment
           </Button>
-          {howto.moderation === 'accepted' && (
+          {howto.moderation === IModerationStatus.ACCEPTED && (
             <UsefulStatsButton
               votedUsefulCount={howtoStore.votedUsefulCount}
               hasUserVotedUseful={hasUserVotedUseful}

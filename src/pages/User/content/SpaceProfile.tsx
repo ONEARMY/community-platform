@@ -8,6 +8,7 @@ import {
   Username,
   UserStatistics,
 } from 'oa-components'
+import { ExternalLinkLabel } from 'oa-shared'
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
 import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
@@ -176,7 +177,10 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   const stats = useMemberStatistics(user.userName)
 
   const userLinks = links.filter(
-    (linkItem) => !['discord', 'forum'].includes(linkItem.label),
+    (linkItem) =>
+      ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
+        linkItem.label,
+      ),
   )
 
   const userCountryCode =

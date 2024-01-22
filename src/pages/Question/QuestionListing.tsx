@@ -86,7 +86,9 @@ export const QuestionListing = observer(() => {
             )
           })
       ) : (
-        <Heading>No questions yet</Heading>
+        <Heading sx={{ marginTop: 4 }}>
+          No questions have been asked yet
+        </Heading>
       )}
     </>
   )

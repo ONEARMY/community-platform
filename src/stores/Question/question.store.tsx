@@ -72,9 +72,8 @@ export class QuestionStore extends ModuleStore {
           this.activeSorter,
           activeItems,
         )
-        if (docs.length) {
-          this.isFetching = false
-        }
+
+        this.isFetching = false
       })
     })
   }

@@ -113,6 +113,12 @@ export const SettingsPage = observer((props: IProps) => {
         })),
         openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
       }
+
+      // remove as updated by sub-form
+      if (formValues.impact) {
+        delete formValues.impact
+      }
+
       setState({
         formValues,
         notification: { message: '', icon: '', show: false },

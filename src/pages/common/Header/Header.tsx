@@ -2,6 +2,7 @@ import React from 'react'
 import { useTheme, withTheme } from '@emotion/react'
 import { motion } from 'framer-motion'
 import { observer } from 'mobx-react'
+import { Button } from 'oa-components'
 import { useCommonStores } from 'src/index'
 import { isModuleSupported, MODULE } from 'src/modules'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
@@ -11,7 +12,7 @@ import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications
 import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import { Flex, MenuButton, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import { getFormattedNotifications } from './getFormattedNotifications'
 import { MobileMenuContext } from './MobileMenuContext'
@@ -167,9 +168,21 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         </Flex>
         <MobileMenuWrapper className="menu-mobile">
           <Flex pl={5}>
-            <MenuButton
+            <Button
+              showIconOnly={true}
+              icon={isVisible ? 'close' : 'menu'}
               onClick={() => setIsVisible(!isVisible)}
-              aria-label="Toggle Menu"
+              small={true}
+              sx={{
+                bg: 'white',
+                borderWidth: '0px',
+                '&:hover': {
+                  bg: 'white',
+                },
+                '&:active': {
+                  bg: 'white',
+                },
+              }}
             />
           </Flex>
         </MobileMenuWrapper>

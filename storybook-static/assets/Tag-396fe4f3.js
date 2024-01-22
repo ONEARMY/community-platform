@@ -1,2 +1,0 @@
-import{a as o}from"./jsx-runtime-913be41c.js";import{b as l}from"./theme-ui-components.esm-85fd2ce8.js";const t=e=>{const{tag:a,sx:r}=e;return o(l,{sx:{fontSize:1,color:"blue",...r,"::before":{content:'"#"'}},children:a.label})};try{t.displayName="Tag",t.__docgenInfo={description:"",displayName:"Tag",props:{tag:{defaultValue:null,description:"",name:"tag",required:!0,type:{name:"{ label: string; }"}},sx:{defaultValue:null,description:"",name:"sx",required:!1,type:{name:"ThemeUIStyleObject"}}}}}catch{}export{t as T};
-//# sourceMappingURL=Tag-396fe4f3.js.map

@@ -182,8 +182,12 @@ export const isUserBlockedFromMessaging = (user: IUser | null | undefined) => {
 }
 
 export const isUserContactable = (user: IUser) => {
-  return typeof user.isContactableByPublic === 'boolean'
-    ? user.isContactableByPublic
+  return isContactable(user.isContactableByPublic)
+}
+
+export const isContactable = (preference: boolean | undefined) => {
+  return typeof preference === 'boolean'
+    ? preference
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 

@@ -11,6 +11,7 @@ import {
   hasAdminRights,
   isAllowedToEditContent,
   isAllowedToPin,
+  isContactable,
   isUserBlockedFromMessaging,
   isUserContactable,
   needsModeration,
@@ -247,6 +248,21 @@ describe('src/utils/helpers', () => {
     it("should return false when a user isn't contactable", () => {
       const user = FactoryUser({ isContactableByPublic: false })
       expect(isUserContactable(user)).toBe(false)
+    })
+  })
+
+  describe('isContactable', () => {
+    it('should default to true when field undefined', () => {
+      expect(isContactable(undefined)).toBe(true)
+    })
+
+    it('should return true when given true', () => {
+      const user = FactoryUser({ isContactableByPublic: true })
+      expect(isContactable(user)).toBe(true)
+    })
+
+    it('should return false when given false', () => {
+      expect(isContactable(false)).toBe(false)
     })
   })
 

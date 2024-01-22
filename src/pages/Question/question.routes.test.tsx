@@ -140,7 +140,9 @@ describe('question.routes', () => {
           wrapper.getByText(/Ask your questions and help others out/),
         ).toBeInTheDocument()
 
-        expect(wrapper.getByText(/No questions yet/)).toBeInTheDocument()
+        expect(
+          wrapper.getByText(/No questions have been asked yet/),
+        ).toBeInTheDocument()
         expect(
           wrapper.getByRole('link', { name: 'Ask a question' }),
         ).toHaveAttribute('href', '/questions/create')

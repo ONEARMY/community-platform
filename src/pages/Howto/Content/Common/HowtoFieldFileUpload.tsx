@@ -1,7 +1,7 @@
 import { Field } from 'react-final-form'
+import { FileInputField } from 'src/common/Form/FileInput.field'
 import { Text } from 'theme-ui'
 
-import { FileInputField } from 'src/common/Form/FileInput.field'
 import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'
 

@@ -1,3 +1,5 @@
+import { createContext, useContext } from 'react'
+import { cloneDeep } from 'lodash'
 import {
   action,
   computed,
@@ -6,12 +8,13 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import { cloneDeep } from 'lodash'
-import { createContext, useContext } from 'react'
+import {
+  IModerationStatus,
+  ResearchStatus,
+  ResearchUpdateStatus,
+} from 'oa-shared'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import type { IComment, IUser } from 'src/models'
-import type { IConvertedFileMeta } from 'src/types'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
@@ -20,19 +23,24 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
-import type { IResearch, IResearchDB } from '../../models/research.models'
+
+import {
+  FilterSorterDecorator,
+  ItemSortingOption,
+} from '../common/FilterSorterDecorator/FilterSorterDecorator'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
 } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
-import type { RootStore } from '../index'
-import type { DocReference } from '../databaseV2/DocReference'
-import {
-  FilterSorterDecorator,
-  ItemSortingOption,
-} from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+
+import type { IComment, IUser } from 'src/models'
+import type { IConvertedFileMeta } from 'src/types'
+import type { IResearch, IResearchDB } from '../../models/research.models'
+import type { DocReference } from '../databaseV2/DocReference'
+import type { RootStore } from '../index'
 
 const COLLECTION_NAME = 'research'
 
@@ -54,6 +62,9 @@ export class ResearchStore extends ModuleStore {
 
   @observable
   public selectedAuthor: string
+
+  @observable
+  public selectedStatus: string
 
   @observable
   public searchValue: string
@@ -90,6 +101,7 @@ export class ResearchStore extends ModuleStore {
       ItemSortingOption.MostUseful,
       ItemSortingOption.Comments,
       ItemSortingOption.Updates,
+      ItemSortingOption.MostRelevant,
     ]
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
@@ -120,13 +132,27 @@ export class ResearchStore extends ModuleStore {
     this.selectedAuthor = author
   }
 
+  public updateSelectedStatus(status: ResearchStatus) {
+    this.selectedStatus = status
+  }
+
   @computed get filteredResearches() {
     const researches = this.filterSorterDecorator.filterByCategory(
       this.allResearchItems,
       this.selectedCategory,
     )
 
-    let validResearches = filterModerableItems(researches, this.activeUser)
+    let validResearches = filterModerableItems(
+      researches,
+      this.activeUser || undefined,
+    )
+
+    validResearches = validResearches.filter((research) => {
+      return (
+        research.researchStatus !== 'Archived' ||
+        this.selectedStatus === 'Archived'
+      )
+    })
 
     validResearches = this.filterSorterDecorator.search(
       validResearches,
@@ -138,10 +164,15 @@ export class ResearchStore extends ModuleStore {
       this.selectedAuthor,
     )
 
+    validResearches = this.filterSorterDecorator.filterByStatus(
+      validResearches,
+      this.selectedStatus as ResearchStatus,
+    )
+
     return this.filterSorterDecorator.sort(
       this.activeSorter,
       validResearches,
-      this.activeUser,
+      this.activeUser || undefined,
     )
   }
 
@@ -172,6 +203,8 @@ export class ResearchStore extends ModuleStore {
         activeResearchItem.description = changeUserReferenceToPlainText(
           activeResearchItem.description,
         )
+        activeResearchItem.researchStatus =
+          activeResearchItem.researchStatus || ResearchStatus.IN_PROGRESS
         activeResearchItem.updates = activeResearchItem.updates?.map(
           (update) => {
             update.description = changeUserReferenceToPlainText(
@@ -193,19 +226,7 @@ export class ResearchStore extends ModuleStore {
     docId: string,
     userId: string,
   ): Promise<void> {
-    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
-
-    const researchData = await toJS(dbRef.get('server'))
-    if (researchData && !(researchData?.subscribers || []).includes(userId)) {
-      const updatedItem = await this._updateResearchItem(dbRef, {
-        ...researchData,
-        subscribers: [userId].concat(researchData?.subscribers || []),
-      })
-
-      if (updatedItem) {
-        this.setActiveResearchItemBySlug(updatedItem.slug)
-      }
-    }
+    await this._toggleSubscriber(docId, userId)
 
     return
   }
@@ -214,22 +235,7 @@ export class ResearchStore extends ModuleStore {
     docId: string,
     userId: string,
   ): Promise<void> {
-    const dbRef = this.db.collection<IResearch.Item>(COLLECTION_NAME).doc(docId)
-
-    const researchData = await toJS(dbRef.get('server'))
-    if (researchData) {
-      const updatedItem = await this._updateResearchItem(dbRef, {
-        ...researchData,
-        subscribers: (researchData?.subscribers || []).filter(
-          (id) => id !== userId,
-        ),
-      })
-
-      if (updatedItem) {
-        this.setActiveResearchItemBySlug(updatedItem.slug)
-      }
-    }
-
+    await this._toggleSubscriber(docId, userId)
     return
   }
 
@@ -252,6 +258,7 @@ export class ResearchStore extends ModuleStore {
           'research_useful',
           this.activeResearchItem._createdBy,
           '/research/' + this.activeResearchItem.slug,
+          this.activeResearchItem.title,
         )
         for (
           let i = 0;
@@ -262,6 +269,7 @@ export class ResearchStore extends ModuleStore {
             'research_useful',
             this.activeResearchItem.collaborators[i],
             '/research/' + this.activeResearchItem.slug,
+            this.activeResearchItem.title,
           )
         }
       }
@@ -321,7 +329,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public async moderateResearch(research: IResearch.ItemDB) {
-    if (!hasAdminRights(toJS(this.activeUser))) {
+    if (!this.activeUser || !hasAdminRights(toJS(this.activeUser))) {
       return false
     }
     const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
@@ -329,7 +337,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   public needsModeration(research: IResearch.ItemDB) {
-    return needsModeration(research, toJS(this.activeUser))
+    return needsModeration(research, toJS(this.activeUser || undefined))
   }
 
   public updateSearchValue(query: string) {
@@ -436,6 +444,7 @@ export class ResearchStore extends ModuleStore {
           'new_comment_research',
           newItem._createdBy,
           '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
+          newItem.title,
         )
 
         newItem.collaborators.map((username) => {
@@ -443,6 +452,7 @@ export class ResearchStore extends ModuleStore {
             'new_comment_research',
             username,
             '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
+            newItem.title,
           )
         })
 
@@ -617,7 +627,9 @@ export class ResearchStore extends ModuleStore {
         collaborators,
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         _deleted: false,
-        moderation: values.moderation ? values.moderation : 'accepted', // No moderation needed for researches for now
+        moderation: values.moderation
+          ? values.moderation
+          : IModerationStatus.ACCEPTED, // No moderation needed for researches for now
         updates,
         creatorCountry:
           (values._createdBy && values._createdBy === user.userName) ||
@@ -785,7 +797,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   /**
-   * Increments the download count of files in reasearch update
+   * Increments the download count of files in research update
    *
    * @param updateId
    */
@@ -875,7 +887,9 @@ export class ResearchStore extends ModuleStore {
   get updatesCount(): number {
     return this.activeResearchItem?.updates?.length
       ? this.activeResearchItem?.updates.filter(
-          (update) => update.status !== 'draft' && update._deleted !== true,
+          (update) =>
+            update.status !== ResearchUpdateStatus.DRAFT &&
+            update._deleted !== true,
         ).length
       : 0
   }
@@ -1073,6 +1087,7 @@ export class ResearchStore extends ModuleStore {
           'research_mention',
           mention.username,
           `/research/${researchItem.slug}#${mention.location}`,
+          researchItem.title,
         )
       }
     })
@@ -1098,6 +1113,7 @@ export class ResearchStore extends ModuleStore {
           'research_update',
           subscriber,
           `/research/${researchItem.slug}`,
+          researchItem.title,
         ),
       )
     }
@@ -1125,6 +1141,21 @@ export class ResearchStore extends ModuleStore {
     }
 
     return undefined
+  }
+
+  private async _toggleSubscriber(docId, userId) {
+    const updatedItem = await toggleDocSubscriberStatusByUserName(
+      this.db,
+      COLLECTION_NAME,
+      docId,
+      userId,
+    )
+
+    if (updatedItem) {
+      this.setActiveResearchItemBySlug(updatedItem.slug)
+    }
+
+    return updatedItem
   }
 }
 

@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { ProfileLink } from './ProfileLink'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/ProfileLink',

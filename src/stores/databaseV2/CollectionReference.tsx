@@ -1,13 +1,15 @@
+import { Observable } from 'rxjs'
+
+import { logger } from '../../logger'
+import { DocReference } from './DocReference'
+
+import type { Observer } from 'rxjs'
 import type {
   DBClients,
   DBDoc,
   DBQueryWhereOperator,
   DBQueryWhereValue,
 } from './types'
-import type { Observer } from 'rxjs'
-import { Observable } from 'rxjs'
-import { DocReference } from './DocReference'
-import { logger } from '../../logger'
 
 export class CollectionReference<T> {
   constructor(private endpoint: string, private clients: DBClients) {}

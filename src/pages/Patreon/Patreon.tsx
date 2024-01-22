@@ -1,19 +1,14 @@
-import { observer } from 'mobx-react'
-import { useEffect, useMemo, useState } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { functions } from 'src/utils/firebase'
-import { Text, Flex } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
-const Patreon = observer(() => {
+const Patreon = () => {
   const [error, setError] = useState<boolean>(false)
-  const { search } = useLocation()
-
-  const patreonCode = useMemo(() => {
-    const query = new URLSearchParams(search)
-    return query.get('code')
-  }, [search])
+  const [searchParams] = useSearchParams()
+  const patreonCode = searchParams.get('code')
 
   const triggerAuth = async (patreonCode: string) => {
     try {
@@ -52,12 +47,6 @@ const Patreon = observer(() => {
   ) : (
     <Loader />
   )
-})
+}
 
-const PatreonRoute = () => (
-  <Routes>
-    <Route path="/patreon" element={<Patreon />}></Route>
-  </Routes>
-)
-
-export default PatreonRoute
+export default Patreon

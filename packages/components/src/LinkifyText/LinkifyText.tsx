@@ -1,7 +1,9 @@
+import 'linkify-plugin-mention'
+
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import Linkify from 'linkify-react'
-import 'linkify-plugin-mention'
+
 import { ExternalLink, InternalLink } from '..'
 
 export interface Props {

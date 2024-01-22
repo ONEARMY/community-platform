@@ -1,55 +1,59 @@
-import React, { useState, useEffect, Fragment } from 'react'
-import type { IHowtoDB } from 'src/models/howto.models'
-import {
-  Card,
-  Heading,
-  Text,
-  Box,
-  Flex,
-  Image,
-  AspectImage,
-  Divider,
-  Alert,
-} from 'theme-ui'
-import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
-import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import React, { Fragment, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
-  ModerationStatus,
-  LinkifyText,
-  UsefulStatsButton,
-  CategoryTag,
-  DownloadStaticFile,
-  DownloadFileFromLink,
   ConfirmModal,
   ContentStatistics,
+  DownloadFileFromLink,
+  DownloadStaticFile,
+  LinkifyText,
+  ModerationStatus,
+  Tag,
+  UsefulStatsButton,
 } from 'oa-components'
-import type { IUser } from 'src/models/user.models'
-import {
-  isAllowedToEditContent,
-  isAllowedToDeleteContent,
-  capitalizeFirstLetter,
-  buildStatisticsLabel,
-} from 'src/utils/helpers'
-import { Link, useNavigate } from 'react-router-dom'
-import { useCommonStores } from 'src/index'
-import {
-  retrieveHowtoDownloadCooldown,
-  isHowtoDownloadCooldownExpired,
-  addHowtoDownloadCooldown,
-  updateHowtoDownloadCooldown,
-} from './downloadCooldown'
-import {
-  retrieveSessionStorageArray,
-  addIDToSessionStorageArray,
-} from 'src/utils/sessionStorage'
+import { IModerationStatus } from 'oa-shared'
+import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
+import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
+import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import {
+  buildStatisticsLabel,
+  capitalizeFirstLetter,
+  isAllowedToDeleteContent,
+  isAllowedToEditContent,
+} from 'src/utils/helpers'
+import {
+  addIDToSessionStorageArray,
+  retrieveSessionStorageArray,
+} from 'src/utils/sessionStorage'
+import {
+  Alert,
+  AspectImage,
+  Box,
+  Card,
+  Divider,
+  Flex,
+  Heading,
+  Image,
+  Text,
+} from 'theme-ui'
+
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+import {
+  addHowtoDownloadCooldown,
+  isHowtoDownloadCooldownExpired,
+  retrieveHowtoDownloadCooldown,
+  updateHowtoDownloadCooldown,
+} from './downloadCooldown'
+
+import type { ITag } from 'src/models'
+import type { IHowtoDB } from 'src/models/howto.models'
+import type { IUser } from 'src/models/user.models'
 
 interface IProps {
-  howto: IHowtoDB & { taglist: any }
+  howto: IHowtoDB & { tagList?: ITag[] }
   loggedInUser: IUser | undefined
   needsModeration: boolean
   commentsCount: number
@@ -171,7 +175,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           )}
           <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
             {props.votedUsefulCount !== undefined &&
-              howto.moderation === 'accepted' && (
+              howto.moderation === IModerationStatus.ACCEPTED && (
                 <Box>
                   <UsefulStatsButton
                     votedUsefulCount={props.votedUsefulCount}
@@ -213,7 +217,8 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               </Fragment>
             )}
           </Flex>
-          {howto.moderatorFeedback && howto.moderation !== 'accepted' ? (
+          {howto.moderatorFeedback &&
+          howto.moderation !== IModerationStatus.ACCEPTED ? (
             <Alert
               variant="info"
               sx={{
@@ -278,9 +283,9 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Flex>
           </Flex>
           <Flex mt={4}>
-            {howto.taglist &&
-              howto.taglist.map((tag, idx) => (
-                <CategoryTag key={idx} tag={tag} sx={{ mr: 1 }} />
+            {howto.tagList &&
+              howto.tagList.map((tag, idx) => (
+                <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
               ))}
           </Flex>
           {((howto.files && howto.files.length > 0) || howto.fileLink) && (
@@ -353,7 +358,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               alt="how-to cover"
             />
           )}
-          {howto.moderation !== 'accepted' && (
+          {howto.moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
               status={howto.moderation}
               contentType="howto"

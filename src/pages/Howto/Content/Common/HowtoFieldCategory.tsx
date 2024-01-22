@@ -1,5 +1,4 @@
 import { Field } from 'react-final-form'
-
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import {
   FormFieldWrapper,

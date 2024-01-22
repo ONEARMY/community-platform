@@ -1,8 +1,9 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import type { UserRole } from 'src/models/user.models'
-import { SITE, DEV_SITE_ROLE } from 'src/config/config'
+import { DEV_SITE_ROLE, SITE } from 'src/config/config'
 import { useCommonStores } from 'src/index'
+
+import type { UserRole } from 'oa-shared'
 
 /*
     Simple wrapper to only render a component if the user is logged in (plus optional user role required)

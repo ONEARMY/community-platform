@@ -1,13 +1,15 @@
-import type { MarkerCluster } from 'leaflet'
 import L from 'leaflet'
-import './sprites.css'
-import type { IMapPin } from 'src/models/maps.models'
+import { IModerationStatus } from 'oa-shared'
 import clusterIcon from 'src/assets/icons/map-cluster.svg'
-import Workspace from 'src/pages/User/workspace/Workspace'
-import type { PlatformTheme } from 'oa-themes'
-
 import AwaitingModerationHighlight from 'src/assets/icons/map-unpproved-pin.svg'
 import { logger } from 'src/logger'
+import Workspace from 'src/pages/User/workspace/Workspace'
+
+import type { MarkerCluster } from 'leaflet'
+import type { PlatformTheme } from 'oa-themes'
+import type { IMapPin } from 'src/models/maps.models'
+
+import './sprites.css'
 
 /**
  * Generate custom cluster icon, including style formatting, size, image etc.
@@ -36,7 +38,7 @@ export const createClusterIcon = () => {
 
 export const createMarkerIcon = (pin: IMapPin, currentTheme: PlatformTheme) => {
   const icon =
-    pin.moderation === 'accepted'
+    pin.moderation === IModerationStatus.ACCEPTED
       ? Workspace.findWorkspaceBadge(pin.type, true, pin.verified, currentTheme)
       : AwaitingModerationHighlight
   if (!pin.type) {

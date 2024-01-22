@@ -1,7 +1,9 @@
 jest.mock('../common/module.store')
+import { IModerationStatus } from 'oa-shared'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
-import { QuestionStore } from './question.store'
 import { FactoryUser } from 'src/test/factories/User'
+
+import { QuestionStore } from './question.store'
 
 const factory = async () => {
   const store = new QuestionStore()
@@ -18,6 +20,12 @@ const factory = async () => {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
+  store.db.update.mockImplementation((newValue) => {
+    return newValue
+  })
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   store.db.getWhere.mockImplementation(async () => {})
 
   return {
@@ -28,6 +36,9 @@ const factory = async () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     getWhereFn: store.db.getWhere,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    updateFn: store.db.update,
   }
 }
 
@@ -112,12 +123,12 @@ describe('question.store', () => {
         FactoryQuestionItem({
           slug: 'question-draft',
           _createdBy: 'author',
-          moderation: 'draft',
+          moderation: IModerationStatus.DRAFT,
         }),
         FactoryQuestionItem({
           slug: 'question-published',
           _createdBy: 'author',
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       ])
 
@@ -127,7 +138,7 @@ describe('question.store', () => {
       expect(res[0]).toMatchObject({
         slug: 'question-published',
         _createdBy: 'author',
-        moderation: 'accepted',
+        moderation: IModerationStatus.ACCEPTED,
       })
     })
   })
@@ -156,6 +167,26 @@ describe('question.store', () => {
 
       expect(getWhereFn.mock.calls[0]).toEqual(['slug', '==', newQuestion.slug])
       expect(questionDoc).toStrictEqual(newQuestion)
+    })
+  })
+
+  describe('toggleSubscriberStatusByUserName', () => {
+    it('adds user to subscribers list', async () => {
+      const { store, updateFn } = await factory()
+      const newQuestion = FactoryQuestionItem({
+        title: 'Question title',
+        subscribers: [],
+      })
+
+      // Act
+      await store.toggleSubscriberStatusByUserName(newQuestion._id, 'user1')
+
+      expect(updateFn).toBeCalledWith(
+        expect.objectContaining({
+          _id: newQuestion._id,
+          subscribers: ['user1'],
+        }),
+      )
     })
   })
 })

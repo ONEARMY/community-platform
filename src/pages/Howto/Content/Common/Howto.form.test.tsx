@@ -1,11 +1,12 @@
-import { act, fireEvent, render } from '@testing-library/react'
-import { Provider } from 'mobx-react'
-import { HowtoForm } from './Howto.form'
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { act, fireEvent, render } from '@testing-library/react'
+import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/index'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+
+import { HowtoForm } from './Howto.form'
 
 const Theme = testingThemeStyles
 
@@ -29,14 +30,12 @@ jest.mock('src/index', () => {
           uploadHowTo: jest.fn(),
         },
         tagsStore: {
-          categoryTags: [
+          allTags: [
             {
-              categories: ['how-to'],
               label: 'test tag 1',
               image: 'test img',
             },
           ],
-          setTagsCategory: jest.fn(),
         },
       },
     }),

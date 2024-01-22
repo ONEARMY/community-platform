@@ -1,45 +1,47 @@
 /** @jsxImportSource theme-ui */
 import styled from '@emotion/styled'
-import type { VerticalAlignProps, SpaceProps } from 'styled-system'
-import { verticalAlign, space } from 'styled-system'
-import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
-import { MdAdd } from '@react-icons/all-files/md/MdAdd'
-import { MdCheck } from '@react-icons/all-files/md/MdCheck'
-import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
-import { MdArrowDownward } from '@react-icons/all-files/md/MdArrowDownward'
-import { MdArrowUpward } from '@react-icons/all-files/md/MdArrowUpward'
-import { MdKeyboardArrowDown } from '@react-icons/all-files/md/MdKeyboardArrowDown'
-import { MdMailOutline } from '@react-icons/all-files/md/MdMailOutline'
-import { MdNotifications } from '@react-icons/all-files/md/MdNotifications'
-import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
-import { MdLock } from '@react-icons/all-files/md/MdLock'
-import { MdClose } from '@react-icons/all-files/md/MdClose'
-import { MdMoreVert } from '@react-icons/all-files/md/MdMoreVert'
-import { MdTurnedIn } from '@react-icons/all-files/md/MdTurnedIn'
-import { MdEdit } from '@react-icons/all-files/md/MdEdit'
-import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
-import { MdList } from '@react-icons/all-files/md/MdList'
-import { MdImage } from '@react-icons/all-files/md/MdImage'
-import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
-import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
-import { MdMail } from '@react-icons/all-files/md/MdMail'
-import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
-import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
-import { GoTrashcan } from '@react-icons/all-files/go/GoTrashcan'
-import { GoLinkExternal } from '@react-icons/all-files/go/GoLinkExternal'
-import { AiFillThunderbolt } from '@react-icons/all-files/ai/AiFillThunderbolt'
-import { FaSignal } from '@react-icons/all-files/fa/FaSignal'
-import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
-import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
-import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
-import { RiFilter2Fill } from '@react-icons/all-files/ri/RiFilter2Fill'
 import { IconContext } from '@react-icons/all-files'
-import { iconMap } from './svgs'
-import { DownloadIcon } from './DownloadIcon'
-import { ExternalUrl } from './ExternalUrl'
-import type { IGlyphs } from './types'
+import { AiFillThunderbolt } from '@react-icons/all-files/ai/AiFillThunderbolt'
 import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
 import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
+import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
+import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
+import { FaSignal } from '@react-icons/all-files/fa/FaSignal'
+import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
+import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
+import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
+import { GoLinkExternal } from '@react-icons/all-files/go/GoLinkExternal'
+import { GoTrashcan } from '@react-icons/all-files/go/GoTrashcan'
+import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
+import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
+import { MdAdd } from '@react-icons/all-files/md/MdAdd'
+import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
+import { MdArrowDownward } from '@react-icons/all-files/md/MdArrowDownward'
+import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
+import { MdArrowUpward } from '@react-icons/all-files/md/MdArrowUpward'
+import { MdCheck } from '@react-icons/all-files/md/MdCheck'
+import { MdClose } from '@react-icons/all-files/md/MdClose'
+import { MdEdit } from '@react-icons/all-files/md/MdEdit'
+import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
+import { MdImage } from '@react-icons/all-files/md/MdImage'
+import { MdKeyboardArrowDown } from '@react-icons/all-files/md/MdKeyboardArrowDown'
+import { MdList } from '@react-icons/all-files/md/MdList'
+import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
+import { MdLock } from '@react-icons/all-files/md/MdLock'
+import { MdMail } from '@react-icons/all-files/md/MdMail'
+import { MdMailOutline } from '@react-icons/all-files/md/MdMailOutline'
+import { MdMoreVert } from '@react-icons/all-files/md/MdMoreVert'
+import { MdNotifications } from '@react-icons/all-files/md/MdNotifications'
+import { MdTurnedIn } from '@react-icons/all-files/md/MdTurnedIn'
+import { RiFilter2Fill } from '@react-icons/all-files/ri/RiFilter2Fill'
+import { space, verticalAlign } from 'styled-system'
+
+import { DownloadIcon } from './DownloadIcon'
+import { ExternalUrl } from './ExternalUrl'
+import { iconMap } from './svgs'
+
+import type { SpaceProps, VerticalAlignProps } from 'styled-system'
+import type { IGlyphs } from './types'
 
 interface IGlyphProps {
   glyph: keyof IGlyphs
@@ -47,68 +49,73 @@ interface IGlyphProps {
 
 export interface IProps {
   glyph: keyof IGlyphs
+  color?: string
   size?: number | string
   marginRight?: string
-  color?: string
   opacity?: string
   onClick?: () => void
 }
 
 export const glyphs: IGlyphs = {
-  download: <MdFileDownload />,
-  'download-cloud': <DownloadIcon />,
-  'external-url': <ExternalUrl />,
-  upload: <GoCloudUpload />,
+  'account-circle': <MdAccountCircle />,
   add: <MdAdd />,
-  check: <MdCheck />,
   'arrow-back': <MdArrowBack />,
+  'arrow-down': <MdKeyboardArrowDown />,
   'arrow-forward': <MdArrowForward />,
   'arrow-full-down': <MdArrowDownward />,
   'arrow-full-up': <MdArrowUpward />,
-  'arrow-down': <MdKeyboardArrowDown />,
-  'mail-outline': <MdMailOutline />,
-  notifications: <MdNotifications />,
-  'account-circle': <MdAccountCircle />,
-  lock: <MdLock />,
-  close: <MdClose />,
-  delete: <GoTrashcan />,
-  'more-vert': <MdMoreVert />,
+  bazar: iconMap.bazar,
   comment: iconMap.comment,
-  'turned-in': <MdTurnedIn />,
-  edit: <MdEdit />,
-  time: <MdAccessTime />,
-  step: <MdList />,
-  difficulty: <FaSignal />,
-  image: <MdImage />,
-  pdf: <GoFilePdf />,
-  loading: iconMap.loading,
-  'location-on': <MdLocationOn />,
-  'external-link': <GoLinkExternal />,
-  facebook: <FaFacebookF />,
-  instagram: <FaInstagram />,
-  slack: <FaSlack />,
-  email: <MdMail />,
+  check: <MdCheck />,
+  'chevron-down': <FaChevronDown />,
   'chevron-left': iconMap.chevronLeft,
   'chevron-right': iconMap.chevronRight,
-  'chevron-down': <FaChevronDown />,
   'chevron-up': <FaChevronUp />,
+  close: <MdClose />,
+  delete: <GoTrashcan />,
+  difficulty: <FaSignal />,
+  discord: iconMap.discord,
+  download: <MdFileDownload />,
+  'download-cloud': <DownloadIcon />,
+  edit: <MdEdit />,
+  email: <MdMail />,
+  employee: iconMap.employee,
+  'email-outline': iconMap.emailOutline,
+  'external-link': <GoLinkExternal />,
+  'external-url': <ExternalUrl />,
+  facebook: <FaFacebookF />,
+  filter: <RiFilter2Fill />,
+  'flag-unknown': iconMap.flagUnknown,
+  hide: iconMap.hide,
+  image: <MdImage />,
+  instagram: <FaInstagram />,
+  loading: iconMap.loading,
+  'location-on': <MdLocationOn />,
+  lock: <MdLock />,
+  machine: iconMap.machine,
+  'mail-outline': <MdMailOutline />,
+  'more-vert': <MdMoreVert />,
+  notifications: <MdNotifications />,
+  pdf: <GoFilePdf />,
+  plastic: iconMap.plastic,
+  revenue: iconMap.revenue,
+  slack: <FaSlack />,
   star: iconMap.star,
   'star-active': iconMap.starActive,
-  verified: iconMap.verified,
-  useful: iconMap.useful,
+  step: <MdList />,
   thunderbolt: <AiFillThunderbolt />,
-  filter: <RiFilter2Fill />,
-  view: iconMap.view,
-  supporter: iconMap.supporter,
-  'flag-unknown': iconMap.flagUnknown,
+  time: <MdAccessTime />,
+  'turned-in': <MdTurnedIn />,
   'social-media': iconMap.socialMedia,
-  website: iconMap.website,
-  bazar: iconMap.bazar,
-  'email-outline': iconMap.emailOutline,
-  discord: iconMap.discord,
-  update: iconMap.update,
+  supporter: iconMap.supporter,
   show: iconMap.show,
-  hide: iconMap.hide,
+  update: iconMap.update,
+  upload: <GoCloudUpload />,
+  useful: iconMap.useful,
+  verified: iconMap.verified,
+  view: iconMap.view,
+  volunteer: iconMap.volunteer,
+  website: iconMap.website,
 }
 
 export type Props = IProps & VerticalAlignProps & SpaceProps

@@ -1,17 +1,19 @@
-import { format } from 'date-fns'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
-import { render } from '@testing-library/react'
-import ResearchUpdate from './ResearchUpdate'
 import { faker } from '@faker-js/faker'
+import { render } from '@testing-library/react'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import {
-  Route,
-  RouterProvider,
-  createMemoryRouter,
-  createRoutesFromElements,
-} from 'react-router-dom'
+import { formatDate } from 'src/utils/date'
+
+import ResearchUpdate from './ResearchUpdate'
+
 const Theme = testingThemeStyles
 
 const mockUser = FactoryUser({ country: '' })
@@ -52,7 +54,7 @@ describe('ResearchUpdate', () => {
 
     // Assert
     expect(() =>
-      wrapper.getAllByText(`edited ${format(modified, 'DD-MM-YYYY')}`),
+      wrapper.getAllByText(`edited ${formatDate(modified)}`),
     ).toThrow()
   })
 
@@ -69,7 +71,7 @@ describe('ResearchUpdate', () => {
 
     // Assert
     expect(() =>
-      wrapper.getAllByText(`edited ${format(modified, 'DD-MM-YYYY')}`),
+      wrapper.getAllByText(`edited ${formatDate(modified)}`),
     ).not.toThrow()
   })
 })

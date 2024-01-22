@@ -1,20 +1,22 @@
 import Dexie from 'dexie'
-import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
+
 import { logger } from '../../../logger'
 import { DB_ENDPOINTS } from '../endpoints'
+import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
+
+import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type {
   AbstractDatabaseClient,
   DBQueryOptions,
   DBQueryWhereOptions,
 } from '../types'
-import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
 
 /**
  * Update the cache number either when making changes to db architecture
  * or busting cache on db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
-const DB_CACHE_NUMBER = 20231222
+const DB_CACHE_NUMBER = 20231224
 const CACHE_DB_NAME = 'OneArmyCache'
 const db = new Dexie(CACHE_DB_NAME)
 
@@ -186,6 +188,7 @@ const SCHEMA_BASE: IDexieSchema = {
   emails: `${DEFAULT_SCHEMA}`,
   questions: `${DEFAULT_SCHEMA}`,
   questionCategories: `${DEFAULT_SCHEMA}`,
+  discussions: `${DEFAULT_SCHEMA},sourceId`,
 }
 
 // Ensure dexie also handles any prefixed database schema

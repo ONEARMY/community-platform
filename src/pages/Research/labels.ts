@@ -1,4 +1,4 @@
-import { RESEARCH_TITLE_MAX_LENGTH, RESEARCH_MAX_LENGTH } from './constants'
+import { RESEARCH_MAX_LENGTH, RESEARCH_TITLE_MAX_LENGTH } from './constants'
 
 import type { ILabels } from 'src/common/Form/types'
 
@@ -47,6 +47,10 @@ export const overview: ILabels = {
   description: {
     placeholder: `Introduction to your research question. Mention what you want to do, whats the goal and what challenges you see etc (max ${RESEARCH_MAX_LENGTH} characters)`,
     title: 'What are you trying to find out?',
+  },
+  researchStatus: {
+    placeholder: 'Select status',
+    title: 'What is the status of your research?',
   },
   tags: {
     title: 'Select tags',

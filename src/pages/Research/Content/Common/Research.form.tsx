@@ -1,43 +1,46 @@
 import * as React from 'react'
+import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
-import { Field, Form } from 'react-final-form'
-import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import {
   Button,
+  ElWithBeforeIcon,
   FieldInput,
   FieldTextarea,
-  ElWithBeforeIcon,
   ResearchEditorOverview,
 } from 'oa-components'
-
+import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { usePrompt } from 'src/common/hooks/usePrompt'
+import { researchStatusOptions } from 'src/models/research.models'
+import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
   composeValidators,
+  draftValidationWrapper,
   minValue,
   required,
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,
   validateTitle,
-  draftValidationWrapper,
 } from 'src/utils/validators'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { Box, Card, Flex, Heading, Label } from 'theme-ui'
+
 import {
+  RESEARCH_MAX_LENGTH,
   RESEARCH_TITLE_MAX_LENGTH,
   RESEARCH_TITLE_MIN_LENGTH,
-  RESEARCH_MAX_LENGTH,
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
 import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
 import { UserNameSelect } from '../../../common/UserNameSelect/UserNameSelect'
 
 import type { IResearch } from 'src/models/research.models'
-import { usePrompt } from 'src/common/hooks/usePrompt'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -74,7 +77,18 @@ const calculatedFields = createDecorator({
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
   const { create, update } = buttons.draft
-  const { categories, collaborators, description, tags, title } = overview
+
+  formValues.researchStatus = formValues.researchStatus || 'In progress'
+
+  const {
+    categories,
+    collaborators,
+    description,
+    tags,
+    title,
+    researchStatus,
+  } = overview
+
   const store = useResearchStore()
   const [state, setState] = React.useState<IState>({
     formSaved: false,
@@ -82,7 +96,7 @@ const ResearchForm = observer((props: IProps) => {
     showSubmitModal: false,
   })
   const [submissionHandler, setSubmissionHandler] = React.useState({
-    draft: formValues.moderation === 'draft',
+    draft: formValues.moderation === IModerationStatus.DRAFT,
     shouldSubmit: false,
   })
 
@@ -114,7 +128,9 @@ const ResearchForm = observer((props: IProps) => {
   }, [submissionHandler])
 
   const onSubmit = async (formValues: IResearch.FormInput) => {
-    formValues.moderation = submissionHandler.draft ? 'draft' : 'accepted' // No moderation for researches for now
+    formValues.moderation = submissionHandler.draft
+      ? IModerationStatus.DRAFT
+      : IModerationStatus.ACCEPTED // No moderation for researches for now
     await store.uploadResearch(formValues)
   }
 
@@ -138,7 +154,8 @@ const ResearchForm = observer((props: IProps) => {
     !store.updateUploadStatus.Complete && state.dirty,
   )
 
-  const draftButtonText = formValues.moderation !== 'draft' ? create : update
+  const draftButtonText =
+    formValues.moderation !== IModerationStatus.DRAFT ? create : update
   const pageTitle = headings.overview[parentType]
 
   return (
@@ -305,7 +322,6 @@ const ResearchForm = observer((props: IProps) => {
                               <Field
                                 name="tags"
                                 component={TagsSelectField}
-                                category="research"
                                 isEqual={COMPARISONS.tags}
                               />
                             </Flex>
@@ -318,6 +334,20 @@ const ResearchForm = observer((props: IProps) => {
                                 component={UserNameSelect}
                                 placeholder={collaborators.placeholder}
                                 defaultOptions={[]}
+                              />
+                            </Flex>
+                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
+                              <ResearchFormLabel>
+                                {researchStatus.title}
+                                {' *'}
+                              </ResearchFormLabel>
+                              <Field
+                                name="researchStatus"
+                                data-cy="research-status"
+                                component={SelectField}
+                                placeholder={researchStatus.placeholder}
+                                options={researchStatusOptions}
+                                validate={composeValidators(required)}
                               />
                             </Flex>
                           </Flex>

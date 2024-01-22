@@ -1,6 +1,6 @@
 export interface IImpactQuestion {
   id: string
-  emoji: string
+  icon: string
   description: string
   label: string
   isVisible: boolean
@@ -12,7 +12,7 @@ export interface IImpactQuestion {
 export const impactQuestions: IImpactQuestion[] = [
   {
     id: 'plastic',
-    emoji: '&#x1f52b',
+    icon: 'plastic',
     description:
       'How many KGs of plastic recycled have you recycled in that year?',
     label: 'plastic recycled',
@@ -21,7 +21,7 @@ export const impactQuestions: IImpactQuestion[] = [
   },
   {
     id: 'revenue',
-    emoji: '&#x1f4b8',
+    icon: 'revenue',
     description:
       'What was your revenue (in $)? By revenue we mean all money coming in.',
     label: 'revenue',
@@ -30,21 +30,21 @@ export const impactQuestions: IImpactQuestion[] = [
   },
   {
     id: 'employees',
-    emoji: '&#x1f46f',
+    icon: 'employee',
     description: 'How many people did your project employ (you included)?',
     label: 'full time employees',
     isVisible: true,
   },
   {
     id: 'volunteers',
-    emoji: '&#x1f3c5',
+    icon: 'volunteer',
     description: 'How many volunteers did you work with?',
     label: 'volunteers',
     isVisible: true,
   },
   {
     id: 'machines',
-    emoji: '&#x2699;&#xfe0f;',
+    icon: 'machine',
     description: 'How many machines did you build?',
     label: 'machines built',
     isVisible: true,

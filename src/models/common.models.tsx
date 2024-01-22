@@ -1,6 +1,8 @@
 // re-imports and re-exports
+import type { IModerationStatus } from 'oa-shared'
 import type { DBEndpoint } from '../stores/databaseV2/endpoints'
 import type { DBDoc as DBDocImport } from '../stores/databaseV2/types'
+
 export type DBDoc = DBDocImport
 export { DB_ENDPOINTS } from '../stores/databaseV2/endpoints'
 export type IDBEndpoint = DBEndpoint
@@ -9,14 +11,6 @@ export type IDBEndpoint = DBEndpoint
 // i.e. new Date().toISOString() => 2011-10-05T14:48:00.000Z
 // This is more consistent than others and allows better querying
 export type ISODateString = string
-
-// Types for moderation status
-export type IModerationStatus =
-  | 'draft'
-  | 'awaiting-moderation'
-  | 'improvements-needed'
-  | 'rejected'
-  | 'accepted'
 
 export interface IModeration {
   moderation: IModerationStatus

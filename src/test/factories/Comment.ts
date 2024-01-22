@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+
 import type { IComment } from 'src/models'
 
 export const FactoryComment = (

@@ -1,8 +1,11 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
-import type { IComment, IModerationStatus, IUser } from 'src/models'
+import { IModerationStatus } from 'oa-shared'
+import { calculateTotalUpdateComments } from 'src/utils/helpers'
+
+import type { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
+import type { IComment, IUser } from 'src/models'
 import type { ICategory } from 'src/models/categories.model'
-import { calculateTotalComments } from 'src/utils/helpers'
 
 export interface IItem {
   _modified: string
@@ -13,10 +16,11 @@ export interface IItem {
   votedUsefulBy?: string[]
   category?: ICategory
   researchCategory?: ICategory
+  researchStatus?: ResearchStatus
   updates?: {
     _deleted?: boolean
     comments?: IComment[]
-    status: 'draft' | 'published'
+    status: ResearchUpdateStatus
   }[]
   moderation?: IModerationStatus
   collaborators?: string[]
@@ -30,9 +34,12 @@ export enum ItemSortingOption {
   Newest = 'Newest',
   MostUseful = 'MostUseful',
   Comments = 'MostComments',
+  LeastComments = 'LeastComments',
+  LatestComments = 'LatestComments',
   Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
+  MostRelevant = 'MostRelevant',
 }
 
 export interface AuthorOption {
@@ -75,6 +82,14 @@ export class FilterSorterDecorator<T extends IItem> {
             obj._createdBy === author ||
             (obj.collaborators && obj.collaborators.includes(author))
           )
+        })
+      : listItems
+  }
+
+  public filterByStatus(listItems: T[] = [], status: ResearchStatus): T[] {
+    return status
+      ? listItems.filter((obj) => {
+          return (obj.researchStatus || 'In progress') === status
         })
       : listItems
   }
@@ -127,10 +142,16 @@ export class FilterSorterDecorator<T extends IItem> {
     return this.sortByProperty(listItems, 'updates')
   }
 
+  private sortByMostRelevant(listItems: T[]) {
+    return listItems
+  }
+
   private sortByComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
-      const totalCommentsA = a.comments?.length || calculateTotalComments(a)
-      const totalCommentsB = b.comments?.length || calculateTotalComments(b)
+      const totalCommentsA =
+        a.comments?.length || calculateTotalUpdateComments(a)
+      const totalCommentsB =
+        b.comments?.length || calculateTotalUpdateComments(b)
 
       if (totalCommentsA === totalCommentsB) {
         return 0
@@ -140,13 +161,61 @@ export class FilterSorterDecorator<T extends IItem> {
     })
   }
 
+  private sortByLeastComments(listItems: T[]) {
+    return [...listItems].sort((a, b) => {
+      const totalCommentsA =
+        a.comments?.length || calculateTotalUpdateComments(a)
+      const totalCommentsB =
+        b.comments?.length || calculateTotalUpdateComments(b)
+
+      if (totalCommentsA === totalCommentsB) {
+        return 0
+      }
+      return totalCommentsA > totalCommentsB ? 1 : -1
+    })
+  }
+
+  private sortByLatestComments(listItems: T[]) {
+    return [...listItems].sort((a, b) => {
+      const latestCommentA = this.getLatestComment(a)
+      const latestCommentB = this.getLatestComment(b)
+
+      if (!latestCommentA && !latestCommentB) {
+        return 0
+      } else if (!latestCommentA) {
+        return 1
+      } else if (!latestCommentB) {
+        return -1
+      }
+
+      if (latestCommentA._created === latestCommentB._created) {
+        return 0
+      }
+
+      return latestCommentA._created < latestCommentB._created ? 1 : -1
+    })
+  }
+
+  private getLatestComment(item) {
+    if (item.comments && item.comments.length > 0) {
+      return item.comments.sort((a, b) => (a._created < b._created ? 1 : -1))[0]
+    } else if (item.updates && calculateTotalUpdateComments(item) > 0) {
+      const comments = item.updates
+        .map((update) => update.comments ?? [])
+        .flat()
+      return comments.sort((a, b) => (a._created < b._created ? 1 : -1))[0]
+    } else {
+      return null
+    }
+  }
+
   private sortByModerationStatus(listItems: T[], user?: IUser) {
     const isCreatedByUser = (item: T) =>
       user && item._createdBy === user.userName
     const isModerationMatch = (item: T) =>
-      item.moderation === 'draft' ||
-      item.moderation === 'awaiting-moderation' ||
-      item.moderation === 'rejected'
+      item.moderation === IModerationStatus.DRAFT ||
+      item.moderation === IModerationStatus.AWAITING_MODERATION ||
+      item.moderation === IModerationStatus.REJECTED
 
     return [...listItems].sort((a, b) => {
       const aMatchesCondition = isCreatedByUser(a) && isModerationMatch(a)
@@ -200,6 +269,14 @@ export class FilterSorterDecorator<T extends IItem> {
           validItems = this.sortByComments(validItems)
           break
 
+        case ItemSortingOption.LeastComments:
+          validItems = this.sortByLeastComments(validItems)
+          break
+
+        case ItemSortingOption.LatestComments:
+          validItems = this.sortByLatestComments(validItems)
+          break
+
         case ItemSortingOption.Updates:
           validItems = this.sortByUpdates(validItems)
           break
@@ -210,6 +287,10 @@ export class FilterSorterDecorator<T extends IItem> {
 
         case ItemSortingOption.Random:
           validItems = this.sortRandomly(validItems)
+          break
+
+        case ItemSortingOption.MostRelevant:
+          validItems = this.sortByMostRelevant(validItems)
           break
 
         default:
@@ -237,11 +318,14 @@ export class FilterSorterDecorator<T extends IItem> {
   public search(listItem: T[], searchValue: string): any {
     if (searchValue) {
       const fuse = new Fuse(listItem, {
+        includeScore: true,
         keys: this.SEARCH_WEIGHTS,
       })
 
-      // Currently Fuse returns objects containing the search items, hence the need to map. https://github.com/krisk/Fuse/issues/532
-      return fuse.search(searchValue).map((v) => v.item)
+      return fuse
+        .search(searchValue)
+        .sort((a, b) => (a.score || 0) - (b.score || 0))
+        .map((v) => v.item)
     } else {
       return listItem
     }

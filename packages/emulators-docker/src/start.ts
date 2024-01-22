@@ -1,7 +1,9 @@
-import Dockerode from 'dockerode'
 import boxen from 'boxen'
-import logUpdate from 'log-update'
+import Dockerode from 'dockerode'
 import { existsSync, readdirSync } from 'fs-extra'
+import logUpdate from 'log-update'
+import { resolve } from 'path'
+
 import {
   CONTAINER_NAME,
   getFirebasePortMapping,
@@ -9,7 +11,6 @@ import {
   TAG_NAME,
 } from './common'
 import { PATHS } from './paths'
-import { resolve } from 'path'
 
 const docker = new Dockerode()
 

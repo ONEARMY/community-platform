@@ -1,8 +1,8 @@
 import { Field } from 'react-final-form'
 import { FieldTextarea } from 'oa-components'
-
-import { draftValidationWrapper, required } from 'src/utils/validators'
 import { COMPARISONS } from 'src/utils/comparisons'
+import { draftValidationWrapper, required } from 'src/utils/validators'
+
 import { HOWTO_MAX_LENGTH } from '../../constants'
 import { intro } from '../../labels'
 import { FormFieldWrapper } from '.'

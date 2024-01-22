@@ -1,4 +1,10 @@
-import dateFns from 'date-fns'
+import {
+  startOfToday,
+  startOfTomorrow,
+  startOfWeek,
+  startOfYesterday,
+} from 'date-fns'
+
 import type { ISODateString } from 'src/models/common.models'
 /*
     Manual implementation of filters commonly used through the app
@@ -53,13 +59,13 @@ const _formatDate = (date: dateType): Date => {
 const _datestringToDate = (str: RelativeDateString) => {
   switch (str) {
     case 'yesterday':
-      return dateFns.startOfYesterday()
+      return startOfYesterday()
     case 'tomorrow':
-      return dateFns.startOfTomorrow()
+      return startOfTomorrow()
     case 'thisweek':
-      return dateFns.startOfWeek(new Date())
+      return startOfWeek(new Date())
     case 'today':
-      return dateFns.startOfToday()
+      return startOfToday()
   }
 }
 

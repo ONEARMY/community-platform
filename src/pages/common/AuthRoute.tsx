@@ -1,8 +1,9 @@
 import { Navigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import type { UserRole } from 'src/models/user.models'
 import { BlockedRoute } from 'oa-components'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+
+import type { UserRole } from 'oa-shared'
 
 /*
     This provides a <AuthRoute /> component that can be used in place of <Route /> components

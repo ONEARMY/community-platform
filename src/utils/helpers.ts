@@ -1,11 +1,18 @@
 import { isObservableObject, toJS } from 'mobx'
-import type { IResearch } from 'src/models'
-import type { DBDoc, IModerable } from 'src/models/common.models'
+import {
+  IModerationStatus,
+  ResearchStatus,
+  ResearchUpdateStatus,
+  UserRole,
+} from 'oa-shared'
+import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
+
+import type { DBDoc, IModerable, IResearch } from 'src/models'
 import type { IMapPin } from 'src/models/maps.models'
 import type { IUser } from 'src/models/user.models'
 import type {
-  IItem,
   AuthorOption,
+  IItem,
 } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
@@ -57,12 +64,12 @@ export const filterModerableItems = <T>(
   user?: IUser,
 ): T[] =>
   items.filter((item) => {
-    const isItemAccepted = item.moderation === 'accepted'
+    const isItemAccepted = item.moderation === IModerationStatus.ACCEPTED
     const wasCreatedByUser = user && item._createdBy === user.userName
     const isAdminAndAccepted =
       hasAdminRights(user) &&
-      item.moderation !== 'draft' &&
-      item.moderation !== 'rejected'
+      item.moderation !== IModerationStatus.DRAFT &&
+      item.moderation !== IModerationStatus.REJECTED
 
     return isItemAccepted || wasCreatedByUser || isAdminAndAccepted
   })
@@ -101,7 +108,7 @@ export const hasAdminRights = (user?: IUser) => {
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
-  if (roles.includes('admin') || roles.includes('super-admin')) {
+  if (roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)) {
     return true
   } else {
     return false
@@ -112,7 +119,7 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
   if (!hasAdminRights(user)) {
     return false
   }
-  return doc.moderation !== 'accepted'
+  return doc.moderation !== IModerationStatus.ACCEPTED
 }
 
 export const isAllowedToEditContent = (
@@ -153,8 +160,8 @@ export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
   return (
-    roles.includes('admin') ||
-    roles.includes('super-admin') ||
+    roles.includes(UserRole.ADMIN) ||
+    roles.includes(UserRole.SUPER_ADMIN) ||
     doc._createdBy! === user.userName
   )
 }
@@ -167,26 +174,48 @@ export const isAllowedToPin = (pin: IMapPin, user?: IUser) => {
   }
 }
 
-export const calculateTotalComments = (item: IResearch.ItemDB | IItem) => {
+export const isUserBlockedFromMessaging = (user: IUser | null | undefined) => {
+  if (!user) {
+    return null
+  }
+  return user.isBlockedFromMessaging
+}
+
+export const isUserContactable = (user: IUser) => {
+  return isContactable(user.isContactableByPublic)
+}
+
+export const isContactable = (preference: boolean | undefined) => {
+  return typeof preference === 'boolean'
+    ? preference
+    : DEFAULT_PUBLIC_CONTACT_PREFERENCE
+}
+
+export const calculateTotalUpdateComments = (
+  item: IResearch.ItemDB | IItem,
+): number => {
   if (item.updates) {
     const commentOnUpdates = item.updates.reduce((totalComments, update) => {
       const updateCommentsLength =
-        !update._deleted && update.status !== 'draft' && update.comments
+        !update._deleted &&
+        update.status !== ResearchUpdateStatus.DRAFT &&
+        update.comments
           ? update.comments.length
           : 0
       return totalComments + updateCommentsLength
     }, 0)
 
-    return commentOnUpdates ? String(commentOnUpdates) : '0'
+    return commentOnUpdates ? commentOnUpdates : 0
   } else {
-    return '0'
+    return 0
   }
 }
 
 export const getPublicUpdates = (item: IResearch.ItemDB) => {
   if (item.updates) {
     return item.updates.filter(
-      (update) => update.status !== 'draft' && !update._deleted,
+      (update) =>
+        update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
     )
   } else {
     return []
@@ -234,4 +263,14 @@ export const buildStatisticsLabel = ({
   }
 
   return `${stat || 0} ${statUnit}s`
+}
+
+export const researchStatusColour = (
+  researchStatus: ResearchStatus,
+): string => {
+  return researchStatus === ResearchStatus.ARCHIVED
+    ? 'lightgrey'
+    : researchStatus === ResearchStatus.COMPLETED
+    ? 'betaGreen'
+    : 'accent.base'
 }

@@ -1,13 +1,16 @@
 import * as React from 'react'
-import '@uppy/core/dist/style.css'
-import '@uppy/dashboard/dist/style.css'
-import type { UppyFile } from '@uppy/core'
+import { useEffect, useState } from 'react'
 import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
 import { Button, DownloadStaticFile } from 'oa-components'
-import { UPPY_CONFIG } from './UppyConfig'
 import { Flex } from 'theme-ui'
-import { useEffect, useState } from 'react'
+
+import { UPPY_CONFIG } from './UppyConfig'
+
+import type { UppyFile } from '@uppy/core'
+
+import '@uppy/core/dist/style.css'
+import '@uppy/dashboard/dist/style.css'
 
 interface IUppyFiles {
   [key: string]: UppyFile

@@ -1,9 +1,9 @@
-import { SITE, VERSION, DEV_SITE_ROLE } from 'src/config/config'
-import type { UserRole } from 'src/models'
-import { Flex, Box, Text } from 'theme-ui'
-import { Select } from 'oa-components'
 import { observer } from 'mobx-react-lite'
+import { Select } from 'oa-components'
+import { UserRole } from 'oa-shared'
+import { DEV_SITE_ROLE, SITE, VERSION } from 'src/config/config'
 import { useCommonStores } from 'src/index'
+import { Box, Flex, Text } from 'theme-ui'
 
 /**
  * A simple header component that reminds developers that they are working on a dev
@@ -106,8 +106,8 @@ const devSites = [
 // dev site users can use either a default user profile or mock another admin role
 const siteRoles: { value: UserRole | null; label: string }[] = [
   { value: null, label: 'User' },
-  { value: 'beta-tester', label: 'Beta Tester' },
-  { value: 'admin', label: 'Admin' },
+  { value: UserRole.BETA_TESTER, label: 'Beta Tester' },
+  { value: UserRole.ADMIN, label: 'Admin' },
   // { value: 'super-admin', label: 'Super Admin' },
 ]
 

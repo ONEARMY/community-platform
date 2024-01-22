@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { Button, Modal, OsmGeocoding } from 'oa-components'
-import { Flex, Box } from 'theme-ui'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
+import { useCommonStores } from 'src/index'
+import { logger } from 'src/logger'
+import { Box, Flex } from 'theme-ui'
+
 import { GroupingFilterDesktop } from './GroupingFilterDesktop'
 import { GroupingFilterMobile } from './GroupingFilterMobile'
-import { HashLink as Link } from 'react-router-hash-link'
-import { logger } from 'src/logger'
-import { useCommonStores } from 'src/index'
-import { useNavigate } from 'react-router-dom'
+
 import type { FilterGroup } from './transformAvailableFiltersToGroups'
 
 interface IProps {

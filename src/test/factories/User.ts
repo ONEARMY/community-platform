@@ -1,6 +1,8 @@
-import type { IUserPPDB } from 'src/models'
 import { faker } from '@faker-js/faker'
+import { IModerationStatus } from 'oa-shared'
 import { ProfileType } from 'src/modules/profile/types'
+
+import type { IUserPPDB } from 'src/models'
 
 export const FactoryUser = (
   userOverloads: Partial<IUserPPDB> = {},
@@ -17,10 +19,10 @@ export const FactoryUser = (
   verified: faker.datatype.boolean(),
   links: [],
   moderation: faker.helpers.arrayElement([
-    'draft',
-    'awaiting-moderation',
-    'rejected',
-    'accepted',
+    IModerationStatus.DRAFT,
+    IModerationStatus.AWAITING_MODERATION,
+    IModerationStatus.REJECTED,
+    IModerationStatus.ACCEPTED,
   ]),
   country: faker.address.countryCode(),
   notifications: [],

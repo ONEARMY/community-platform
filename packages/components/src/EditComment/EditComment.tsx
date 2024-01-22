@@ -1,6 +1,7 @@
-import { Flex, Text } from 'theme-ui'
-import { FieldTextarea, Button } from '../'
 import { Field, Form } from 'react-final-form'
+import { Flex, Label } from 'theme-ui'
+
+import { Button, FieldTextarea } from '../'
 
 type EditCommentProps = {
   comment: string
@@ -27,9 +28,13 @@ export const EditComment = (props: EditCommentProps) => {
           p={2}
           onSubmit={handleSubmit}
         >
-          <Text as="label" sx={{ marginBottom: '6px', fontSize: 3 }}>
+          <Label
+            as="label"
+            htmlFor="comment"
+            sx={{ marginBottom: '6px', fontSize: 3 }}
+          >
             Edit comment
-          </Text>
+          </Label>
           <Field name="comment" id="comment" component={FieldTextarea} />
           <Flex mt={4} ml="auto">
             <Button
@@ -42,6 +47,7 @@ export const EditComment = (props: EditCommentProps) => {
             </Button>
             <Button
               type={'submit'}
+              aria-label="Save changes"
               small
               onClick={() => {
                 props?.handleSubmit(values.comment)

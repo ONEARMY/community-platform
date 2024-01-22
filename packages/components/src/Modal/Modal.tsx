@@ -6,8 +6,8 @@ export interface Props {
   onDidDismiss?: () => void
 }
 
-import styled from '@emotion/styled'
 import { Portal } from 'react-portal'
+import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 
 export const Modal = (props: Props) => {

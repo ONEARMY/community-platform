@@ -1,10 +1,13 @@
 import { MemberBadge } from 'oa-components'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
-import type { IMapGrouping, IPinGrouping, WorkspaceType } from 'src/models'
+import { Image } from 'theme-ui'
+
+import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpecialistWorkspaceTypeToWorkspace'
+
+import type { IPinGrouping } from 'oa-shared'
+import type { IMapGrouping, WorkspaceType } from 'src/models'
 import type { ProfileTypeLabel } from 'src/modules/profile/types'
 import type { MapsStore } from 'src/stores/Maps/maps.store'
-import { Image } from 'theme-ui'
-import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpecialistWorkspaceTypeToWorkspace'
 
 const ICON_SIZE = 30
 

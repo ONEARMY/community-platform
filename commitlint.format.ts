@@ -1,4 +1,4 @@
-import type { Formatter, FormattableReport } from '@commitlint/types'
+import type { FormattableReport, Formatter } from '@commitlint/types'
 
 // Custom formatter for commitlint message
 export const formatter: Formatter = function (report, options) {

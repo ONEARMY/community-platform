@@ -1,25 +1,29 @@
 import { Flex } from 'theme-ui'
 
-import { ImpactItem } from './ImpactItem'
 import { IMPACT_YEARS } from './constants'
+import { ImpactItem } from './ImpactItem'
 
 import type { IUserImpact, IUserPP } from 'src/models'
 
 interface Props {
-  impact: IUserImpact
+  impact: IUserImpact | undefined
   user: IUserPP | undefined
 }
 
-export const Impact = ({ impact, user }: Props) => {
+export const Impact = (props: Props) => {
+  const impact = props.impact || []
+
   const renderByYear = IMPACT_YEARS.map((year, index) => {
-    const foundYear = Object.keys(impact).find((key) => Number(key) === year)
+    const foundYear = impact
+      ? Object.keys(impact).find((key) => Number(key) === year)
+      : undefined
 
     return (
       <ImpactItem
-        fields={foundYear && impact[foundYear]}
+        fields={foundYear && impact && impact[foundYear]}
         year={year}
         key={index}
-        user={user}
+        user={props.user}
       />
     )
   })

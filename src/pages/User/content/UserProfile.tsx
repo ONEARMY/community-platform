@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Loader } from 'oa-components'
-import { Text } from 'theme-ui'
 import { observer } from 'mobx-react-lite'
+import { Loader } from 'oa-components'
 import { useCommonStores } from 'src/index'
 import { ProfileType } from 'src/modules/profile/types'
+import { Text } from 'theme-ui'
+
+import { logger } from '../../../logger'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
+
 import type { IUserPP } from 'src/models'
-import { logger } from '../../../logger'
 import type { UserCreatedDocs } from '../types'
 
 /**

@@ -1,6 +1,8 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { useState } from 'react'
+
 import { CreateComment } from './CreateComment'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/CreateComment',
@@ -48,6 +50,22 @@ Donec dapibus leo quis sagittis fringilla. Phasellus ut imperdiet sapien. Nullam
   return (
     <CreateComment
       comment={comment}
+      onChange={setComment}
+      onSubmit={() => null}
+      userProfileType="member"
+      maxLength={12300}
+      isLoggedIn={true}
+    />
+  )
+}
+
+export const WithCustomPlaceholder: StoryFn<typeof CreateComment> = () => {
+  const [comment, setComment] = useState('')
+
+  return (
+    <CreateComment
+      comment={comment}
+      placeholder="Custom placeholder"
       onChange={setComment}
       onSubmit={() => null}
       userProfileType="member"

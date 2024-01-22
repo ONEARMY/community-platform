@@ -1,12 +1,15 @@
-import firebase from 'firebase/app'
-export { default as firebase } from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-import 'firebase/storage'
-import 'firebase/functions'
-import 'firebase/database'
-import { MOCK_DATA } from '../../data/index'
+import firebase from 'firebase/compat/app'
+
+export { default as firebase } from 'firebase/compat/app'
+import 'firebase/compat/auth'
+import 'firebase/compat/firestore'
+import 'firebase/compat/storage'
+import 'firebase/compat/functions'
+import 'firebase/compat/database'
+
 import { DB_ENDPOINTS } from 'oa-shared/models'
+
+import { MOCK_DATA } from '../../data/index'
 
 const fbConfig = {
   apiKey: 'AIzaSyDAxS_7M780mI3_tlwnAvpbaqRsQPlmp64',

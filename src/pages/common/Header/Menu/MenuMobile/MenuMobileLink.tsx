@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
 import { NavLink } from 'react-router-dom'
-
+import styled from '@emotion/styled'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
+import { Box } from 'theme-ui'
+
 import { MobileMenuContext } from '../../MobileMenuContext'
 
 interface IProps {

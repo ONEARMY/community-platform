@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
-import type { ThemeUIStyleObject } from 'theme-ui'
-import { Button, Tooltip } from '..'
 import { useNavigate } from 'react-router-dom'
+
+import { Button, Tooltip } from '..'
+
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps {
   hasUserSubscribed: boolean
@@ -11,30 +12,24 @@ export interface IProps {
 }
 
 export const FollowButton = (props: IProps) => {
+  const { hasUserSubscribed, isLoggedIn, onFollowClick, sx } = props
   const navigate = useNavigate()
-  const [hasUserSubscribed, setHasUserSubscribed] = useState<boolean>()
-
-  useEffect(
-    () => setHasUserSubscribed(props.hasUserSubscribed),
-    [props.hasUserSubscribed],
-  )
 
   return (
     <>
       <Button
-        data-testid={props.isLoggedIn ? 'follow-button' : 'follow-redirect'}
-        data-cy={props.isLoggedIn ? 'follow-button' : 'follow-redirect'}
-        data-tip={props.isLoggedIn ? '' : 'Login to follow'}
+        data-testid={isLoggedIn ? 'follow-button' : 'follow-redirect'}
+        data-cy={isLoggedIn ? 'follow-button' : 'follow-redirect'}
+        data-tip={isLoggedIn ? '' : 'Login to follow'}
         icon="thunderbolt"
         variant="outline"
         iconColor={hasUserSubscribed ? 'subscribed' : 'notSubscribed'}
         sx={{
           fontSize: 2,
           py: 0,
+          ...sx,
         }}
-        onClick={() =>
-          props.isLoggedIn ? props.onFollowClick() : navigate('/sign-in')
-        }
+        onClick={() => (isLoggedIn ? onFollowClick() : navigate('/sign-in'))}
       >
         {hasUserSubscribed ? 'Following' : 'Follow'}
       </Button>

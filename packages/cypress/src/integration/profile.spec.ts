@@ -1,14 +1,12 @@
 import { faker } from '@faker-js/faker'
 
+import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
+import { missing } from '../../../../src/pages/User/impact/labels'
+import { contact } from '../../../../src/pages/User/labels'
 import { users } from '../data'
 import { UserMenuItem } from '../support/commands'
-import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
-import { contact } from '../../../../src/pages/User/labels'
-
-import { missing } from '../../../../src/pages/User/impact/labels'
 
 const { admin, subscriber } = users
-const betaTester = users['beta-tester']
 const eventReader = users.event_reader
 const machine = users.settings_machine_new
 const userProfiletype = users.settings_workplace_new
@@ -25,6 +23,10 @@ describe('[Profile]', () => {
       cy.get('[data-cy=userDisplayName]').contains(eventReader.userName)
       cy.get('[data-testid=howto-stat]').contains('1')
       cy.get('[data-testid=research-stat]').contains('1')
+
+      cy.step("Can't see contact tab for workspaces")
+      cy.visit(`/u/${machine.userName}`)
+      cy.contains('[data-cy=contact-tab]').should('not.exist')
     })
   })
 
@@ -50,13 +52,13 @@ describe('[Profile]', () => {
       cy.get('[data-cy=BlockedRoute]').should('exist')
     })
 
-    it('[Can contact profiles with contact opt-in]', () => {
-      cy.login(betaTester.email, betaTester.password)
-
+    it('[Can contact profiles by default]', () => {
       const message = faker.lorem
         .sentences(50)
         .slice(0, MESSAGE_MAX_CHARACTERS)
         .trim()
+
+      cy.login(subscriber.email, subscriber.password)
 
       cy.step('Go to Profile')
       cy.visit(`/u/${machine.userName}`)
@@ -73,16 +75,20 @@ describe('[Profile]', () => {
       cy.step('Submit form')
       cy.get('[data-cy=contact-submit]').click()
       cy.contains(contact.successMessage).should('exist')
+
+      cy.step("Can't contact pages who opt-out")
+      cy.visit(`/u/${userProfiletype.userName}`)
+      cy.contains('[data-cy=contact-tab]').should('not.exist')
     })
 
     it('[Can see impact data for workspaces]', () => {
-      cy.login(betaTester.email, betaTester.password)
+      cy.login(subscriber.email, subscriber.password)
 
       cy.step('Can go to impact data')
       cy.visit(`/u/${userProfiletype.userName}`)
       cy.get('[data-cy=ImpactTab]').click()
       cy.get('[data-cy=ImpactPanel]').should('exist')
-      cy.contains(missing.owner.label)
+      cy.contains(missing.user.label)
       cy.contains('2021')
       cy.contains('3 full time employees')
     })

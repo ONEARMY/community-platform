@@ -1,12 +1,14 @@
 import ReactSelect from 'react-select'
-import type {
-  OptionsOrGroups,
-  StylesConfig,
-  Props as ReactSelectProps,
-} from 'react-select'
 import { useTheme } from '@emotion/react'
+
 import { DropdownIndicator } from './DropdownIndicator'
 import { Option } from './Option'
+
+import type {
+  OptionsOrGroups,
+  Props as ReactSelectProps,
+  StylesConfig,
+} from 'react-select'
 
 export interface Props extends ReactSelectProps {
   options: OptionsOrGroups<any, any>

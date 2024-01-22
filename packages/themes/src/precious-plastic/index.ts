@@ -1,7 +1,8 @@
 import logo from '../../assets/images/precious-plastic-logo-official.svg'
 import badge from '../../assets/images/themes/precious-plastic/avatar_member_sm.svg'
-import type { PlatformTheme } from '../types'
 import { styles } from './styles'
+
+import type { PlatformTheme } from '../types'
 
 export const Theme: PlatformTheme = {
   id: 'precious-plastic',
@@ -15,7 +16,7 @@ export const Theme: PlatformTheme = {
   externalLinks: [
     {
       url: 'https://bazar.preciousplastic.com/',
-      label: 'Bazar',
+      label: 'bazar',
     },
     {
       url: 'https://preciousplastic.com/',

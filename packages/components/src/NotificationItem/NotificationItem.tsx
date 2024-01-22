@@ -1,8 +1,11 @@
 import { ThemeProvider } from '@emotion/react'
-import { Flex, Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
+
 import { Icon } from '../Icon/Icon'
-import type { availableGlyphs } from '../Icon/types'
+
 import type { NotificationType } from 'oa-shared'
+import type { availableGlyphs } from '../Icon/types'
+
 export interface UserNotificationItem {
   type: NotificationType
   children: React.ReactNode

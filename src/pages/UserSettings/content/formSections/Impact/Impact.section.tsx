@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Heading, Box, Button, Image, Text } from 'theme-ui'
-
 import IconArrowDown from 'src/assets/icons/icon-arrow-down.svg'
 import IconArrowUp from 'src/assets/icons/icon-arrow-up.svg'
-import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { IMPACT_YEARS } from 'src/pages/User/impact/constants'
+import { buttons, fields } from 'src/pages/UserSettings/labels'
+import { Box, Button, Heading, Image, Text } from 'theme-ui'
+
 import { FlexSectionContainer } from '../elements'
 import { ImpactYearSection } from './ImpactYear.section'
 

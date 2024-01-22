@@ -1,33 +1,14 @@
-import type {
-  IUserPP,
-  IMAchineBuilderXp,
-  IOpeningHours,
-  PlasticTypeLabel,
-} from 'src/models/userPreciousPlastic.models'
-
-import { Box, Container, Flex, Heading, Image, Paragraph } from 'theme-ui'
-
 import {
+  ImageGallery,
   MemberBadge,
   Tab,
-  TabsList,
-  Tabs,
   TabPanel,
+  Tabs,
+  TabsList,
   Username,
   UserStatistics,
-  ImageGallery,
 } from 'oa-components'
-
-import UserCreatedDocuments from './UserCreatedDocuments'
-import { useCommonStores } from 'src/index'
-import UserContactAndLinks from './UserContactAndLinks'
-import { ProfileType } from 'src/modules/profile/types'
-import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
-import { Impact } from '../impact/Impact'
-import { heading } from '../impact/labels'
-import { UserContactForm } from 'src/pages/User/contact'
-import { AuthWrapper } from 'src/common/AuthWrapper'
-
+import { ExternalLinkLabel } from 'oa-shared'
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
 import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
@@ -36,9 +17,34 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
-
-import type { UserCreatedDocs } from '../types'
+import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
+import { useCommonStores } from 'src/index'
+import { ProfileType } from 'src/modules/profile/types'
+import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { isUserContactable } from 'src/utils/helpers'
+import {
+  AspectRatio,
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Image,
+  Paragraph,
+} from 'theme-ui'
+
+import { Impact } from '../impact/Impact'
+import { heading } from '../impact/labels'
+import UserContactAndLinks from './UserContactAndLinks'
+import UserCreatedDocuments from './UserCreatedDocuments'
+
+import type {
+  IMAchineBuilderXp,
+  IOpeningHours,
+  IUserPP,
+  PlasticTypeLabel,
+} from 'src/models/userPreciousPlastic.models'
+import type { UserCreatedDocs } from '../types'
 
 interface IProps {
   user: IUserPP
@@ -161,7 +167,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
     country,
     displayName,
     impact,
-    isContactableByPublic,
     links,
     location,
     profileType,
@@ -172,14 +177,18 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   const stats = useMemberStatistics(user.userName)
 
   const userLinks = links.filter(
-    (linkItem) => !['discord', 'forum'].includes(linkItem.label),
+    (linkItem) =>
+      ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
+        linkItem.label,
+      ),
   )
 
   const userCountryCode =
     location?.countryCode || country?.toLowerCase() || undefined
 
   const { stores } = useCommonStores()
-  const showContactForm = isContactableByPublic && !!stores.userStore.activeUser
+  const activeUser = stores.userStore.activeUser
+  const showContactForm = isUserContactable(user) && !!activeUser
 
   return (
     <Container
@@ -194,11 +203,27 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       data-cy="SpaceProfile"
     >
       <Box sx={{ lineHeight: 0 }}>
-        <ImageGallery
-          images={formatImagesForGallery(coverImage)}
-          hideThumbnails={true}
-          showNextPrevButton={true}
-        />
+        {coverImage.length ? (
+          <ImageGallery
+            images={formatImagesForGallery(coverImage)}
+            hideThumbnails={true}
+            showNextPrevButton={true}
+          />
+        ) : (
+          <AspectRatio ratio={24 / 3}>
+            <Flex
+              sx={{
+                width: '100%',
+                height: '100%',
+                background: '#ddd',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              No images available.
+            </Flex>
+          </AspectRatio>
+        )}
       </Box>
       <Flex
         sx={{
@@ -255,14 +280,8 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabsList>
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
-              {impact && (
-                <AuthWrapper roleRequired={'beta-tester'}>
-                  <Tab data-cy="ImpactTab">{heading}</Tab>
-                </AuthWrapper>
-              )}
-              <AuthWrapper roleRequired={'beta-tester'}>
-                {showContactForm && <Tab data-cy="contact-tab">Contact</Tab>}
-              </AuthWrapper>
+              <Tab data-cy="ImpactTab">{heading}</Tab>
+              {showContactForm && <Tab data-cy="contact-tab">Contact</Tab>}
             </TabsList>
             <TabPanel>
               <Box sx={{ mt: 3 }}>
@@ -316,18 +335,12 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabPanel>
               <UserCreatedDocuments docs={docs} />
             </TabPanel>
-            {impact && (
-              <AuthWrapper roleRequired={'beta-tester'}>
-                <TabPanel>
-                  <Impact impact={impact} user={user} />
-                </TabPanel>
-              </AuthWrapper>
-            )}
-            <AuthWrapper roleRequired={'beta-tester'}>
-              <TabPanel>
-                <UserContactForm user={user} />
-              </TabPanel>
-            </AuthWrapper>
+            <TabPanel>
+              <Impact impact={impact} user={user} />
+            </TabPanel>
+            <TabPanel>
+              <UserContactForm user={user} />
+            </TabPanel>
           </Tabs>
         </Box>
       </Flex>

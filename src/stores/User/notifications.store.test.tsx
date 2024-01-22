@@ -1,7 +1,7 @@
 jest.mock('../common/module.store')
 import { FactoryNotification } from 'src/test/factories/Notification'
-
 import { FactoryUser } from 'src/test/factories/User'
+
 import { MockDBStore } from '../common/__mocks__/module.store'
 import { UserNotificationsStore } from './notifications.store'
 
@@ -44,6 +44,7 @@ describe('triggerNotification', () => {
       'howto_mention',
       'example',
       'https://example.com',
+      'example',
     )
     // Expect
     const [newUser] = store.db.update.mock.calls[0]
@@ -65,6 +66,7 @@ describe('triggerNotification', () => {
         'howto_mention',
         'non-existent-user',
         'https://example.com',
+        'example',
       ),
     ).rejects.toThrow('User not found')
   })

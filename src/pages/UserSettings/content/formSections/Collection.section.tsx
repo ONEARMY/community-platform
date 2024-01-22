@@ -1,23 +1,22 @@
 import * as React from 'react'
 import { FieldArray } from 'react-final-form-arrays'
-import { Flex, Heading, Box, Text, Grid } from 'theme-ui'
 import { Button } from 'oa-components'
-
-import { CustomCheckbox } from './Fields/CustomCheckbox.field'
-import { FlexSectionContainer } from './elements'
-import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
-import { headings, fields } from 'src/pages/UserSettings/labels'
-
-import Pet from 'src/assets/images/plastic-types/pet.svg'
-import PP from 'src/assets/images/plastic-types/pp.svg'
-import PS from 'src/assets/images/plastic-types/ps.svg'
 import Hdpe from 'src/assets/images/plastic-types/hdpe.svg'
 import Ldpe from 'src/assets/images/plastic-types/ldpe.svg'
 import Other from 'src/assets/images/plastic-types/other.svg'
+import Pet from 'src/assets/images/plastic-types/pet.svg'
+import PP from 'src/assets/images/plastic-types/pp.svg'
+import PS from 'src/assets/images/plastic-types/ps.svg'
 import Pvc from 'src/assets/images/plastic-types/pvc.svg'
+import { fields, headings } from 'src/pages/UserSettings/labels'
+import { Box, Flex, Grid, Heading, Text } from 'theme-ui'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import { CustomCheckbox } from './Fields/CustomCheckbox.field'
+import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
+import { FlexSectionContainer } from './elements'
+
 import type { IPlasticType } from 'src/models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
 interface IProps {
   formValues: IUserPP

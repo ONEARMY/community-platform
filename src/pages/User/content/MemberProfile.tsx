@@ -1,14 +1,18 @@
-import 'src/assets/css/slick.min.css'
+import { MemberBadge, Username, UserStatistics } from 'oa-components'
+import { ExternalLinkLabel } from 'oa-shared'
+import DefaultMemberImage from 'src/assets/images/default_member.svg'
+import { AuthWrapper } from 'src/common/AuthWrapper'
+import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
+import { Box, Card, Flex, Heading, Image, Paragraph } from 'theme-ui'
+
+import UserContactAndLinks from './UserContactAndLinks'
+import UserCreatedDocuments from './UserCreatedDocuments'
+
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
-import { Box, Image, Flex, Heading, Card, Paragraph } from 'theme-ui'
-import DefaultMemberImage from 'src/assets/images/default_member.svg'
-import { MemberBadge, UserStatistics, Username } from 'oa-components'
-import UserContactAndLinks from './UserContactAndLinks'
-import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
-import UserCreatedDocuments from './UserCreatedDocuments'
 import type { UserCreatedDocs } from '../types'
-import { AuthWrapper } from 'src/common/AuthWrapper'
+
+import 'src/assets/css/slick.min.css'
 
 interface IProps {
   user: IUserPP
@@ -17,7 +21,10 @@ interface IProps {
 
 export const MemberProfile = ({ user, docs }: IProps) => {
   const userLinks = (user?.links || []).filter(
-    (linkItem) => !['discord', 'forum'].includes(linkItem.label),
+    (linkItem) =>
+      ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
+        linkItem.label,
+      ),
   )
 
   const stats = useMemberStatistics(user.userName)

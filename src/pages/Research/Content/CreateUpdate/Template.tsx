@@ -1,10 +1,12 @@
+import { ResearchUpdateStatus } from 'oa-shared'
+
 import type { IResearch } from 'src/models/research.models'
 
 const INITIAL_VALUES: IResearch.Update = {
   title: '',
   description: '',
   images: [],
-  status: 'published',
+  status: ResearchUpdateStatus.PUBLISHED,
 }
 
 export default {

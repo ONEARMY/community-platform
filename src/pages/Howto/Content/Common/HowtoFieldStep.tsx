@@ -1,21 +1,21 @@
 import React, { useState } from 'react'
 import { Field } from 'react-final-form'
-import { Heading, Card, Flex, Text, Label } from 'theme-ui'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
 import styled from '@emotion/styled'
-
-import {
-  draftValidationWrapper,
-  required,
-  minValue,
-  composeValidators,
-} from 'src/utils/validators'
+import { Button, FieldInput, FieldTextarea, Modal } from 'oa-components'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
-  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
-  HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
+  composeValidators,
+  draftValidationWrapper,
+  minValue,
+  required,
+} from 'src/utils/validators'
+import { Card, Flex, Heading, Label, Text } from 'theme-ui'
+
+import {
   HOWTO_MIN_REQUIRED_STEPS,
+  HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
+  HOWTO_STEP_DESCRIPTION_MIN_LENGTH,
   HOWTO_TITLE_MAX_LENGTH,
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../constants'

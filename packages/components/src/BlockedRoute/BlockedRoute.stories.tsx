@@ -1,6 +1,8 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react'
-import { BlockedRoute } from './BlockedRoute'
 import { faker } from '@faker-js/faker'
+
+import { BlockedRoute } from './BlockedRoute'
+
+import type { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
   title: 'Components/BlockedRoute',

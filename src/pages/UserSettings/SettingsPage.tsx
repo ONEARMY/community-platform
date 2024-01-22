@@ -1,38 +1,38 @@
 import React, { useEffect, useState } from 'react'
-import { Alert, Card, Flex, Heading, Box, Text } from 'theme-ui'
-import { Button, TextNotification } from 'oa-components'
-import { toJS } from 'mobx'
-import { observer } from 'mobx-react'
+import { Form } from 'react-final-form'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
-import { Form } from 'react-final-form'
+import { toJS } from 'mobx'
+import { observer } from 'mobx-react'
+import { Button, Loader, TextNotification } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
+import { useCommonStores } from 'src/index'
+import { logger } from 'src/logger'
+import { isModuleSupported, MODULE } from 'src/modules'
+import { ProfileType } from 'src/modules/profile/types'
+import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
-import { AuthWrapper } from 'src/common/AuthWrapper'
-import { UserInfosSection } from './content/formSections/UserInfos.section'
-import { FocusSection } from './content/formSections/Focus.section'
-import { ExpertiseSection } from './content/formSections/Expertise.section'
-import { WorkspaceSection } from './content/formSections/Workspace.section'
-import { CollectionSection } from './content/formSections/Collection.section'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
+import { CollectionSection } from './content/formSections/Collection.section'
 import { EmailNotificationsSection } from './content/formSections/EmailNotifications.section'
-import { SettingsErrors } from './content/formSections/SettingsErrors'
-import { ProfileGuidelines } from './content/PostingGuidelines'
-import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
-import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
-import { PublicContactSection } from './content/formSections/PublicContact.section'
+import { ExpertiseSection } from './content/formSections/Expertise.section'
+import { FocusSection } from './content/formSections/Focus.section'
 import { ImpactSection } from './content/formSections/Impact/Impact.section'
+import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
+import { PatreonIntegration } from './content/formSections/PatreonIntegration'
+import { PublicContactSection } from './content/formSections/PublicContact.section'
+import { SettingsErrors } from './content/formSections/SettingsErrors'
+import { UserInfosSection } from './content/formSections/UserInfos.section'
+import { WorkspaceSection } from './content/formSections/Workspace.section'
+import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
+import { ProfileGuidelines } from './content/PostingGuidelines'
 import { buttons, headings } from './labels'
 import INITIAL_VALUES from './Template'
-import { isModuleSupported, MODULE } from 'src/modules'
-import { logger } from 'src/logger'
-import { ProfileType } from 'src/modules/profile/types'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { PatreonIntegration } from './content/formSections/PatreonIntegration'
-import { useCommonStores } from 'src/index'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IMapPin } from 'src/models'
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
 interface IProps {
   /** user ID for lookup when editing another user as admin */
@@ -51,7 +51,8 @@ interface IState {
 
 const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
   const { mapPin } = props
-  return mapPin?.comments && mapPin.moderation == 'improvements-needed' ? (
+  return mapPin?.comments &&
+    mapPin.moderation == IModerationStatus.IMPROVEMENTS_NEEDED ? (
     <Alert variant="info" sx={{ mt: 3, fontSize: 2, textAlign: 'left' }}>
       <Box>
         This map pin has been marked as requiring further changes. Specifically
@@ -112,6 +113,12 @@ export const SettingsPage = observer((props: IProps) => {
         })),
         openingHours: openingHours!.length > 0 ? openingHours : [{} as any],
       }
+
+      // remove as updated by sub-form
+      if (formValues.impact) {
+        delete formValues.impact
+      }
+
       setState({
         formValues,
         notification: { message: '', icon: '', show: false },
@@ -297,11 +304,7 @@ export const SettingsPage = observer((props: IProps) => {
                     )}
                   </Flex>
 
-                  {!isMember && (
-                    <AuthWrapper roleRequired={'beta-tester'}>
-                      <ImpactSection />
-                    </AuthWrapper>
-                  )}
+                  {!isMember && <ImpactSection />}
 
                   <EmailNotificationsSection
                     notificationSettings={values.notification_settings}
@@ -311,9 +314,7 @@ export const SettingsPage = observer((props: IProps) => {
                       isContactableByPublic={values.isContactableByPublic}
                     />
                   )}
-                  <AuthWrapper roleRequired={'beta-tester'}>
-                    <PatreonIntegration user={user} />
-                  </AuthWrapper>
+                  <PatreonIntegration user={user} />
                 </form>
                 <AccountSettingsSection />
               </Box>
@@ -396,5 +397,7 @@ export const SettingsPage = observer((props: IProps) => {
         )
       }}
     />
-  ) : null
+  ) : (
+    <Loader />
+  )
 })

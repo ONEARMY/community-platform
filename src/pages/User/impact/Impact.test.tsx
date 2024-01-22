@@ -1,18 +1,18 @@
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-
 import { useCommonStores } from 'src/index'
 import { FactoryUser } from 'src/test/factories/User'
-import { invisible, missing } from './labels'
+
 import { IMPACT_YEARS } from './constants'
 import { Impact } from './Impact'
+import { invisible, missing } from './labels'
 
 jest.mock('src/index', () => {
   return {
     useCommonStores: () => ({
       stores: {
         userStore: {
-          activeUser: jest.fn(),
+          activeUser: { userName: 'activeUser' },
         },
       },
     }),
@@ -93,7 +93,7 @@ describe('Impact', () => {
           },
         ],
       }
-      const user = FactoryUser({ impact })
+      const user = FactoryUser({ impact, userName: 'activeUser' })
 
       render(
         <Provider {...useCommonStores().stores}>

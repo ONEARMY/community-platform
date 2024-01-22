@@ -571,6 +571,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "darigovresearch",
+      "name": "Darigov Research",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30328618?v=4",
+      "profile": "https://www.darigovresearch.com/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Shamauk",
+      "name": "Zachary Doucet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21955868?v=4",
+      "profile": "http://cs.mcgill.ca/~zdouce",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

@@ -1,5 +1,5 @@
-import { UserMenuItem } from '../support/commands'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
+import { UserMenuItem } from '../support/commands'
 
 describe('[Notification Banner]', () => {
   beforeEach(() => {

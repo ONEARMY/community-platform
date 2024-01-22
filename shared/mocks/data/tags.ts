@@ -1,7 +1,6 @@
 export const tags = {
   '36hWyk3OckrLSH1ehdIE': {
     _createdBy: 'tag_creator',
-    categories: ['how-to'],
     _modified: '2012-10-27T01:47:57.948Z',
     _created: '2012-08-02T07:27:04.609Z',
     _id: '36hWyk3OckrLSH1ehdIE',
@@ -17,7 +16,6 @@ export const tags = {
     image: '',
     _deleted: false,
     _createdBy: 'tag_creator',
-    categories: ['event'],
   },
   EOVeOZaKKw1UJkDIf3c3: {
     _modified: '2018-02-02T03:18:16.937Z',
@@ -27,11 +25,9 @@ export const tags = {
     image: '',
     _deleted: false,
     _createdBy: 'tag_creator',
-    categories: ['how-to'],
   },
   KP3McutTpuEWz06G5EY1: {
     _createdBy: 'tag_creator',
-    categories: ['event'],
     _modified: '2019-05-25T06:26:54.068Z',
     _created: '2014-01-30T01:24:05.344Z',
     _id: 'KP3McutTpuEWz06G5EY1',
@@ -42,7 +38,6 @@ export const tags = {
   P1ytOfdDQoN1tULWYIN9: {
     _deleted: false,
     _createdBy: 'tag_creator',
-    categories: ['how-to'],
     _modified: '2018-05-19T04:57:18.471Z',
     _created: '2017-10-29T07:29:17.905Z',
     _id: 'P1ytOfdDQoN1tULWYIN9',
@@ -54,7 +49,6 @@ export const tags = {
     image: '',
     _deleted: false,
     _createdBy: 'tag_creator',
-    categories: ['how-to'],
     _modified: '2019-04-15T18:51:56.479Z',
     _created: '2018-11-29T12:56:47.901Z',
     _id: 'PNtr9asrGucgt7JKdRpc',
@@ -66,7 +60,6 @@ export const tags = {
     image: '',
     _deleted: false,
     _createdBy: 'tag_creator',
-    categories: ['how-to'],
     _modified: '2017-10-27T07:01:42.612Z',
   },
   dibcwRYbQVzfQfmSkg5x: {
@@ -75,13 +68,11 @@ export const tags = {
     image: '',
     _deleted: false,
     _createdBy: 'tag_creator',
-    categories: ['event'],
     _modified: '2018-02-09T17:07:11.943Z',
     _created: '2012-05-17T17:08:03.110Z',
   },
   g2rhzzwstNhU62CUs9ak: {
     _createdBy: 'tag_creator',
-    categories: ['how-to'],
     _modified: '2019-05-12T08:42:09.539Z',
     _created: '2016-03-26T21:06:51.974Z',
     _id: 'g2rhzzwstNhU62CUs9ak',
@@ -91,7 +82,6 @@ export const tags = {
   },
   nSyOlKXPaBgWMsnCFPrc: {
     _createdBy: 'tag_creator',
-    categories: ['event'],
     _modified: '2019-03-17T18:52:50.469Z',
     _created: '2018-09-12T19:13:01.768Z',
     _id: 'nSyOlKXPaBgWMsnCFPrc',
@@ -101,7 +91,6 @@ export const tags = {
   },
   q1mMA0Xz3K5oix4r6grC: {
     _createdBy: 'tag_creator',
-    categories: ['event'],
     _modified: '2017-01-19T07:07:12.730Z',
     _created: '2015-02-23T23:04:03.609Z',
     _id: 'q1mMA0Xz3K5oix4r6grC',

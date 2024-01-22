@@ -1,4 +1,6 @@
+import { DifficultyLevel } from 'oa-shared'
 import { v4 as uuid } from 'uuid'
+
 import { MOCK_DATA } from '../../data'
 
 describe('[How To]', () => {
@@ -86,7 +88,7 @@ describe('[How To]', () => {
             'Description',
           )
           expect($summary).to.contain('3-4 weeks', 'Duration')
-          expect($summary).to.contain('Hard', 'Difficulty')
+          expect($summary).to.contain(DifficultyLevel.HARD, 'Difficulty')
           expect($summary).to.contain('product', 'Tag')
           expect($summary).to.contain('injection', 'Tag')
           expect($summary).to.contain('moul', 'Tag')

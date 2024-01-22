@@ -1,10 +1,12 @@
-import type { ThemeWithName } from '../types'
 import logo from '../../assets/images/themes/fixing-fashion/fixing-fashion-header.png'
-import { getButtons } from '../common/button'
 import { baseTheme } from '../common'
+import { getButtons } from '../common/button'
+
+import type { ThemeWithName } from '../types'
+
 export type { ButtonVariants } from '../common/button'
-import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'
 import memberBadgeHighDetail from '../../assets/images/themes/fixing-fashion/avatar_member_lg.svg' // use enum to specify list of possible colors for typing
+import memberBadgeLowDetail from '../../assets/images/themes/fixing-fashion/avatar_member_sm.svg'
 import spaceBadge from '../../assets/images/themes/fixing-fashion/avatar_space_lg.svg'
 
 export const colors = {

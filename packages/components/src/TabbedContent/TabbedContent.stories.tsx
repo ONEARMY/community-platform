@@ -1,6 +1,8 @@
-import type { Meta, StoryFn } from '@storybook/react'
-import { Tabs, TabsList, Tab, TabPanel } from './TabbedContent'
 import { faker } from '@faker-js/faker'
+
+import { Tab, TabPanel, Tabs, TabsList } from './TabbedContent'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/TabbedContent',

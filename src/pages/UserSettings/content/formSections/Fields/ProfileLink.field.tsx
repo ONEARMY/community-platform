@@ -1,29 +1,29 @@
 import React, { useState } from 'react'
-import { Button, ConfirmModal, FieldInput } from 'oa-components'
-import { Box, Flex, Grid } from 'theme-ui'
 import { Field } from 'react-final-form'
-
+import { Button, ConfirmModal, FieldInput } from 'oa-components'
+import { ExternalLinkLabel } from 'oa-shared'
 import { SelectField } from 'src/common/Form/Select.field'
+import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { formatLink } from 'src/utils/formatters'
 import { required, validateEmail, validateUrl } from 'src/utils/validators'
-import { buttons, fields } from 'src/pages/UserSettings/labels'
+import { Box, Flex, Grid } from 'theme-ui'
 
 const COM_TYPE_MOCKS = [
   {
-    value: 'website',
-    label: 'website',
+    value: ExternalLinkLabel.WEBSITE,
+    label: ExternalLinkLabel.WEBSITE,
   },
   {
-    value: 'social media',
-    label: 'social media',
+    value: ExternalLinkLabel.SOCIAL_MEDIA,
+    label: ExternalLinkLabel.SOCIAL_MEDIA,
   },
   {
-    value: 'bazar',
-    label: 'bazar',
+    value: ExternalLinkLabel.BAZAR,
+    label: ExternalLinkLabel.BAZAR,
   },
   {
-    value: 'email',
-    label: 'email',
+    value: ExternalLinkLabel.EMAIL,
+    label: ExternalLinkLabel.EMAIL,
   },
 ]
 
@@ -62,15 +62,15 @@ export const ProfileLinkField = (props: IProps) => {
 
   const validateDependingOnType = (e) => {
     switch (state.linkType) {
-      case 'email':
+      case ExternalLinkLabel.EMAIL:
         return validateEmail(e)
-      case 'forum':
+      case ExternalLinkLabel.FORUM:
         return validateUrl(e)
-      case 'website':
+      case ExternalLinkLabel.WEBSITE:
         return validateUrl(e)
-      case 'social media':
+      case ExternalLinkLabel.SOCIAL_MEDIA:
         return validateUrl(e)
-      case 'bazar':
+      case ExternalLinkLabel.BAZAR:
         return validateUrl(e)
       default:
         return required(e)

@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { Heading, Box, Switch, Text } from 'theme-ui'
-import { observer } from 'mobx-react'
 import { Field } from 'react-final-form'
+import { observer } from 'mobx-react'
+import { fields } from 'src/pages/UserSettings/labels'
+import { isContactable } from 'src/utils/helpers'
+import { Box, Heading, Switch, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from './elements'
-import { fields } from 'src/pages/UserSettings/labels'
-import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 import type { IUser } from 'src/models'
 
@@ -16,7 +16,7 @@ interface Props {
 export const PublicContactSection = observer(
   ({ isContactableByPublic }: Props) => {
     const { description, placeholder, title } = fields.publicContentPreference
-    const isChecked = isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE
+    const isChecked = isContactable(isContactableByPublic)
     const name = 'isContactableByPublic'
 
     return (

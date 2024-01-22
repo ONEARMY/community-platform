@@ -1,7 +1,8 @@
 require('dotenv').config()
+
 import * as testing from '@firebase/rules-unit-testing'
+import { doc, getDoc, setDoc, setLogLevel } from 'firebase/firestore'
 import { readFileSync } from 'fs'
-import { setLogLevel, doc, getDoc, setDoc } from 'firebase/firestore'
 
 const { initializeTestEnvironment, assertFails, assertSucceeds } = testing
 const rules = readFileSync('../../firestore.rules', { encoding: 'utf-8' })

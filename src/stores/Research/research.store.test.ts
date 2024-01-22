@@ -1,5 +1,6 @@
 jest.mock('../common/module.store')
 import { isObservable, observable, toJS } from 'mobx'
+import { UserRole } from 'oa-shared'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryResearchItem,
@@ -7,6 +8,8 @@ import {
   FactoryResearchItemUpdate,
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
+
+import { RootStore } from '..'
 import { ResearchStore } from './research.store'
 
 jest.mock('../../utils/helpers', () => ({
@@ -34,7 +37,7 @@ const factory = async (
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
-  const store = new ResearchStore()
+  const store = new ResearchStore(RootStore)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -154,11 +157,13 @@ describe('research.store', () => {
           'new_comment_research',
           researchItem._createdBy,
           `/research/${researchItem.slug}#update_0`,
+          researchItem.title,
         )
         expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
           'new_comment_research',
           'a-contributor',
           `/research/${researchItem.slug}#update_0`,
+          researchItem.title,
         )
       })
 
@@ -275,7 +280,7 @@ describe('research.store', () => {
           },
           FactoryUser({
             _id: 'test-user',
-            userRoles: ['admin'],
+            userRoles: [UserRole.ADMIN],
           }),
         )
 
@@ -382,7 +387,7 @@ describe('research.store', () => {
           },
           FactoryUser({
             _id: 'test-user',
-            userRoles: ['admin'],
+            userRoles: [UserRole.ADMIN],
           }),
         )
 
@@ -486,6 +491,7 @@ describe('research.store', () => {
           'research_mention',
           'username',
           `/research/${researchItem.slug}#update-0-comment:${newResearchItem.updates[0].comments[0]._id}`,
+          researchItem.title,
         )
       })
     })
@@ -661,6 +667,7 @@ describe('research.store', () => {
           'research_mention',
           'username',
           `/research/${researchItem.slug}#description`,
+          researchItem.title,
         )
       })
 
@@ -781,11 +788,10 @@ describe('research.store', () => {
 
   describe('Subscribe', () => {
     it('adds subscriber to the research article', async () => {
-      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
-        {
+      const { store, researchItem, updateFn } =
+        await factoryResearchItemFormInput({
           subscribers: ['existing-subscriber'],
-        },
-      )
+        })
 
       // Act
       await store.addSubscriberToResearchArticle(
@@ -794,37 +800,23 @@ describe('research.store', () => {
       )
 
       // Assert
-      expect(setFn).toHaveBeenCalledTimes(1)
-      const [newResearchItem] = setFn.mock.calls[0]
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = updateFn.mock.calls[0]
       expect(newResearchItem).toEqual(
         expect.objectContaining({
-          subscribers: ['an-interested-user', 'existing-subscriber'],
+          subscribers: expect.arrayContaining([
+            'an-interested-user',
+            'existing-subscriber',
+          ]),
         }),
       )
     })
 
-    it('does not add a duplicate subscriber to the research article', async () => {
-      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
-        {
-          subscribers: ['a-very-interested-user'],
-        },
-      )
-
-      // Act
-      await store.addSubscriberToResearchArticle(
-        researchItem._id,
-        'a-very-interested-user',
-      )
-
-      expect(setFn).not.toBeCalled()
-    })
-
     it('removes subscriber from the research article', async () => {
-      const { store, researchItem, setFn } = await factoryResearchItemFormInput(
-        {
+      const { store, researchItem, updateFn } =
+        await factoryResearchItemFormInput({
           subscribers: ['long-term-subscriber', 'remove-me'],
-        },
-      )
+        })
 
       // Act
       await store.removeSubscriberFromResearchArticle(
@@ -833,8 +825,8 @@ describe('research.store', () => {
       )
 
       // Assert
-      expect(setFn).toHaveBeenCalledTimes(1)
-      const [newResearchItem] = setFn.mock.calls[0]
+      expect(updateFn).toHaveBeenCalledTimes(1)
+      const [newResearchItem] = updateFn.mock.calls[0]
       expect(newResearchItem).toEqual(
         expect.objectContaining({
           subscribers: ['long-term-subscriber'],
@@ -861,6 +853,7 @@ describe('research.store', () => {
         'research_update',
         'subscriber',
         `/research/${researchItem.slug}`,
+        researchItem.title,
       )
     })
 

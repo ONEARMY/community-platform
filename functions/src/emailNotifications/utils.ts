@@ -1,4 +1,3 @@
-import type { NotificationType } from 'oa-shared'
 import { CONFIG } from '../config/config'
 import {
   PP_PROJECT_IMAGE,
@@ -12,6 +11,17 @@ import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IMessageDB, INotification, IUserDB } from '../models'
 
+import type { NotificationType } from 'oa-shared'
+
+export const errors = {
+  MESSAGE_LIMIT:
+    'Emailing of new message blocked: User exceeded email message count',
+  NO_ATTACHED_USER:
+    'Emailing of new message blocked: Email address not attached to user record',
+  PROFILE_NOT_CONTACTABLE:
+    'Emailing of new message blocked: Profile not contactable',
+  USER_BLOCKED: 'Emailing of new message blocked: User blocked from messaging',
+}
 const EMAIL_ADDRESS_SEND_LIMIT = 100
 
 export const getUserEmail = async (uid: string): Promise<string | null> => {
@@ -42,33 +52,55 @@ export const getUserAndEmail = async (userName: string) => {
   return { toUser, toUserEmail }
 }
 
-export const isValidEmailCreationRequest = async ({
-  email,
-  toUserName,
-}: IMessageDB) => {
-  const user = await firebaseAuth.getUserByEmail(email)
-  if (user.email !== email) {
-    throw new Error(
-      `Emailing of new message blocked: Email address not attached to user record`,
-    )
-  }
-
+export const isBelowMessageLimit = async (email) => {
   const { docs } = await db
     .collection(DB_ENDPOINTS.messages)
     .where('email', '==', email)
     .get()
   if (docs.length >= EMAIL_ADDRESS_SEND_LIMIT) {
-    throw new Error(
-      `Emailing of new message blocked: User exceeded email message count`,
-    )
+    throw new Error(errors.MESSAGE_LIMIT)
   }
-
-  const { toUser } = await getUserAndEmail(toUserName)
-  if (!toUser.isContactableByPublic) {
-    throw new Error(`Emailing of new message blocked: Profile not contactable`)
-  }
-
   return true
+}
+
+export const isReceiverContactable = async (userName) => {
+  const { toUser } = await getUserAndEmail(userName)
+  if (!toUser.isContactableByPublic) {
+    throw new Error(errors.PROFILE_NOT_CONTACTABLE)
+  }
+  return true
+}
+
+export const isSameEmail = (userDoc, email) => {
+  if (userDoc.email !== email) {
+    throw new Error(errors.NO_ATTACHED_USER)
+  }
+  return true
+}
+
+export const isUserAllowedToMessage = async (uid) => {
+  const { toUser } = await getUserAndEmail(uid)
+  if (toUser.isBlockedFromMessaging) {
+    throw new Error(errors.USER_BLOCKED)
+  }
+  return true
+}
+
+export const isValidMessageRequest = async ({
+  email,
+  toUserName,
+}: IMessageDB) => {
+  const userDoc = await firebaseAuth.getUserByEmail(email)
+
+  try {
+    isSameEmail(userDoc, email)
+    await isUserAllowedToMessage(userDoc.uid)
+    await isBelowMessageLimit(email)
+    await isReceiverContactable(toUserName)
+    return true
+  } catch (error) {
+    throw error
+  }
 }
 
 export const SITE_URL = CONFIG.deployment.site_url

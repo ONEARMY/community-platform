@@ -1,16 +1,13 @@
-/* eslint-disable @typescript-eslint/naming-convention*/
 import type {
-  ISODateString,
-  ILocation,
-  DBDoc,
-  IModerationStatus,
-} from './common.models'
-import type {
-  UserRole,
   EmailNotificationFrequency,
+  ExternalLinkLabel,
+  IModerationStatus,
   NotificationType,
   PatreonUser,
+  UserRole,
 } from 'oa-shared'
+import type { DBDoc, ILocation, ISODateString } from './common.models'
+
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
@@ -54,6 +51,7 @@ export interface IUser {
   // Used to generate an encrypted unsubscribe url in emails
   unsubscribeToken?: string
   impact?: IUserImpact
+  isBlockedFromMessaging?: boolean
   isContactableByPublic?: boolean
   patreon?: PatreonUser | null
 }
@@ -70,7 +68,7 @@ export interface IImpactDataField {
 
 export type IImpactYearFieldList = IImpactDataField[]
 
-export type IImpactYear = 2019 | 2021 | 2022 | 2023
+export type IImpactYear = 2019 | 2020 | 2021 | 2022 | 2023
 
 export interface IUserBadges {
   verified?: boolean
@@ -80,15 +78,7 @@ export interface IUserBadges {
 interface IExternalLink {
   key: string
   url: string
-  label:
-    | 'email'
-    | 'website'
-    | 'discord'
-    | 'bazar'
-    | 'forum'
-    | 'social media'
-    | 'facebook'
-    | 'instagram'
+  label: ExternalLinkLabel
 }
 
 /**
@@ -116,6 +106,7 @@ export interface INotification {
   // email contains the id of the doc in the emails collection if the notification was included in
   // an email or 'failed' if an email with this notification was attempted and encountered an error
   email?: string
+  title?: string
 }
 
 export type INotificationSettings = {

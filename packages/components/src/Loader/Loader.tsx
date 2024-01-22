@@ -1,6 +1,6 @@
-import { Flex, Image, Text } from 'theme-ui'
-import styled from '@emotion/styled'
 import { keyframes, useTheme } from '@emotion/react'
+import styled from '@emotion/styled'
+import { Flex, Image, Text } from 'theme-ui'
 
 const rotate = keyframes`
   from {

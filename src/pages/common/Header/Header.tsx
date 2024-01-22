@@ -1,23 +1,24 @@
 import React from 'react'
+import HamburgerMenu from 'react-hamburger-menu'
+import { useTheme, withTheme } from '@emotion/react'
 import { motion } from 'framer-motion'
 import { observer } from 'mobx-react'
-import HamburgerMenu from 'react-hamburger-menu'
-import { Flex, Text } from 'theme-ui'
-import { useTheme, withTheme } from '@emotion/react'
-
+import { UserRole } from 'oa-shared'
+import { useCommonStores } from 'src/index'
+import { isModuleSupported, MODULE } from 'src/modules'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
 import MenuDesktop from 'src/pages/common/Header/Menu/MenuDesktop'
 import MenuMobilePanel from 'src/pages/common/Header/Menu/MenuMobile/MenuMobilePanel'
-import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import { isModuleSupported, MODULE } from 'src/modules'
 import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications/NotificationsDesktop'
 import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
+import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
+import { Flex, Text } from 'theme-ui'
+
 import { getFormattedNotifications } from './getFormattedNotifications'
-import { useCommonStores } from 'src/index'
+import { MobileMenuContext } from './MobileMenuContext'
 
 import type { ThemeWithName } from 'oa-themes'
-import { MobileMenuContext } from './MobileMenuContext'
 
 const MobileNotificationsWrapper = ({ children }) => {
   const theme = useTheme()
@@ -110,26 +111,27 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
           <Flex>
             <Logo />
           </Flex>
-          {isLoggedInUser && (user.userRoles || []).includes('beta-tester') && (
-            <Flex
-              className="user-beta-icon"
-              ml={4}
-              sx={{ alignItems: 'center' }}
-            >
-              <Text
-                sx={{
-                  color: 'white',
-                  fontWeight: 'bold',
-                  fontSize: '1.4rem',
-                  borderRadius: '4px',
-                  padding: '2px 6px',
-                  backgroundColor: 'lightgrey',
-                }}
+          {isLoggedInUser &&
+            (user.userRoles || []).includes(UserRole.BETA_TESTER) && (
+              <Flex
+                className="user-beta-icon"
+                ml={4}
+                sx={{ alignItems: 'center' }}
               >
-                BETA
-              </Text>
-            </Flex>
-          )}
+                <Text
+                  sx={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                    fontSize: '1.4rem',
+                    borderRadius: '4px',
+                    padding: '2px 6px',
+                    backgroundColor: 'lightgrey',
+                  }}
+                >
+                  BETA
+                </Text>
+              </Flex>
+            )}
         </Flex>
         {isLoggedInUser && (
           <MobileNotificationsWrapper>

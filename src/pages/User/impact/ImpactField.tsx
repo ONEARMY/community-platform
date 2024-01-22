@@ -1,8 +1,8 @@
+import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
+import { numberWithCommas } from 'src/utils/helpers'
 import { Box, Text } from 'theme-ui'
 
-import { numberWithCommas } from 'src/utils/helpers'
-import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
-import { ImpactEmoji } from './ImpactEmoji'
+import { ImpactIcon } from './ImpactIcon'
 
 import type { IImpactDataField } from 'src/models'
 
@@ -31,7 +31,7 @@ export const ImpactField = ({ field }: Props) => {
   return (
     <Box sx={sx}>
       <Text variant="label">
-        <ImpactEmoji id={id} /> {text}
+        <ImpactIcon id={id} /> {text}
       </Text>
     </Box>
   )

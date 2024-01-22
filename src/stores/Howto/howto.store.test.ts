@@ -1,5 +1,5 @@
 jest.mock('../common/module.store')
-import type { IHowtoDB, IUser } from 'src/models'
+import { UserRole } from 'oa-shared'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryHowto,
@@ -7,8 +7,11 @@ import {
   FactoryHowtoStep,
 } from 'src/test/factories/Howto'
 import { FactoryUser } from 'src/test/factories/User'
-import type { RootStore } from '..'
+
 import { HowtoStore } from './howto.store'
+
+import type { IHowtoDB, IUser } from 'src/models'
+import type { RootStore } from '..'
 
 const factory = async (
   howTos: IHowtoDB[] = [FactoryHowto({})],
@@ -198,6 +201,7 @@ describe('howto.store', () => {
         'howto_mention',
         'commentauthor',
         `/how-to/${howToItem.slug}#comment:${howToItem.comments![0]._id}`,
+        howToItem.title,
       )
     })
 
@@ -249,6 +253,7 @@ describe('howto.store', () => {
         'howto_mention',
         'commentauthor',
         `/how-to/${howToItem.slug}#comment:${howToItem.comments![0]._id}`,
+        howToItem.title,
       )
     })
 
@@ -441,7 +446,9 @@ describe('howto.store', () => {
             comments: [comment],
           }),
         ]
-        const { store, setFn } = await factory(howtos, { userRoles: ['admin'] })
+        const { store, setFn } = await factory(howtos, {
+          userRoles: [UserRole.ADMIN],
+        })
 
         // Act
         await store.editComment(comment._id, 'New text')
@@ -529,7 +536,9 @@ describe('howto.store', () => {
             comments: [comment],
           }),
         ]
-        const { store, setFn } = await factory(howtos, { userRoles: ['admin'] })
+        const { store, setFn } = await factory(howtos, {
+          userRoles: [UserRole.ADMIN],
+        })
 
         // Act
         await store.deleteComment(comment._id)

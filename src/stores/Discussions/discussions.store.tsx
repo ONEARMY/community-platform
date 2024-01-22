@@ -1,37 +1,48 @@
-import { action, makeObservable, toJS } from 'mobx'
 import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
-import { logger } from 'src/logger'
-import { ModuleStore } from '../common/module.store'
-import { hasAdminRights, randomID } from 'src/utils/helpers'
-import { getUserCountry } from 'src/utils/getUserCountry'
+import { action, makeObservable, toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
-import type { DocReference } from '../databaseV2/DocReference'
+import { logger } from 'src/logger'
+import { getUserCountry } from 'src/utils/getUserCountry'
+import { hasAdminRights, randomID } from 'src/utils/helpers'
+
+import { ModuleStore } from '../common/module.store'
+
+import type { IUserPPDB } from 'src/models'
 import type {
   IDiscussion,
   IDiscussionComment,
 } from 'src/models/discussion.models'
-import type { IUserPPDB } from 'src/models'
 import type { RootStore } from '..'
+import type { DocReference } from '../databaseV2/DocReference'
 
 const COLLECTION_NAME = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
   constructor(rootStore: RootStore) {
-    super(rootStore)
+    super(rootStore, COLLECTION_NAME)
     makeObservable(this)
+    super.init()
   }
 
-  public async fetchDiscussionBySourceId(
+  @action
+  public async fetchOrCreateDiscussionBySource(
     sourceId: string,
+    sourceType: IDiscussion['sourceType'],
   ): Promise<IDiscussion | null> {
-    return (
+    const foundDiscussion =
       toJS(
         await this.db
           .collection<IDiscussion>(COLLECTION_NAME)
           .getWhere('sourceId', '==', sourceId),
       )[0] || null
-    )
+
+    if (foundDiscussion) {
+      return foundDiscussion
+    }
+
+    // Create a new discussion
+    return (await this.uploadDiscussion(sourceId, sourceType)) || null
   }
 
   public async uploadDiscussion(
@@ -215,6 +226,11 @@ export class DiscussionStore extends ModuleStore {
   }
 }
 
+/**
+ * Export an empty context object to be shared with components
+ * The context will be populated with the DiscussionStore in the module index
+ * (avoids cyclic deps and ensure shared module ready)
+ */
 export const DiscussionStoreContext = createContext<DiscussionStore>(
   null as any,
 )

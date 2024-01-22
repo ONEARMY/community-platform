@@ -1,6 +1,7 @@
-import { format } from 'date-fns'
-import { UserNameTag } from '../UserNameTag/UserNameTag'
+import { formatDate } from 'src/utils/date'
 import { Box, Text } from 'theme-ui'
+
+import { UserNameTag } from '../UserNameTag/UserNameTag'
 
 interface ContentAuthorTimestampProps {
   userName: string
@@ -17,8 +18,8 @@ export const ContentAuthorTimestamp = ({
   modified,
   action,
 }: ContentAuthorTimestampProps) => {
-  const contentModifiedDate = format(new Date(modified), 'DD-MM-YYYY')
-  const creationDate = format(new Date(created), 'DD-MM-YYYY')
+  const contentModifiedDate = formatDate(new Date(modified))
+  const creationDate = formatDate(new Date(created))
   const modifiedDateText =
     contentModifiedDate !== creationDate
       ? `Last update on ${contentModifiedDate}`

@@ -1,41 +1,87 @@
-import { Loader, ModerationStatus, UsefulStatsButton } from 'oa-components'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import type { IQuestion } from 'src/models'
+import {
+  FollowButton,
+  Loader,
+  ModerationStatus,
+  UsefulStatsButton,
+} from 'oa-components'
+import { logger } from 'src/logger'
+import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
-import { Box, Button, Card, Heading, Text, Flex } from 'theme-ui'
+import { Box, Button, Card, Flex, Heading, Text } from 'theme-ui'
+
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+import { QuestionComments } from './QuestionComments'
+
+import type { IDiscussionComment, IQuestion, IUserPPDB } from 'src/models'
 
 export const QuestionPage = () => {
   const { slug } = useParams()
   const store = useQuestionStore()
+  const discussionStore = useDiscussionStore()
   const [isLoading, setIsLoading] = useState(true)
   const [question, setQuestion] = useState<IQuestion.Item | undefined>()
+  const [discussion, setDiscussion] = useState<IDiscussion.Item | undefined>(
+    undefined,
+  )
   const [isEditable, setIsEditable] = useState(false)
+  const [hasUserSubscribed, setHasUserSubscribed] = useState(false)
+  const [comments, setComments] = useState<IDiscussionComment[]>([])
 
   useEffect(() => {
     const fetchQuestions = async () => {
       if (slug) {
-        const question: any = await store.fetchQuestionBySlug(slug)
-        store.activeQuestionItem = question || null
+        const foundQuestion: any = await store.fetchQuestionBySlug(slug)
+        store.activeQuestionItem = foundQuestion || null
 
         if (isLoading) {
-          setQuestion(question || null)
+          setQuestion(foundQuestion || null)
 
+          logger.info(
+            'Setting isEditable',
+            isAllowedToEditContent(foundQuestion),
+            store.activeUser,
+          )
           if (store.activeUser) {
-            setIsEditable(isAllowedToEditContent(question, store.activeUser))
+            setIsEditable(
+              isAllowedToEditContent(foundQuestion, store.activeUser),
+            )
+          }
+        }
+
+        setHasUserSubscribed(
+          foundQuestion?.subscribers?.includes(store.activeUser?.userName),
+        )
+        if (foundQuestion && discussionStore) {
+          try {
+            const discussion =
+              await discussionStore.fetchOrCreateDiscussionBySource(
+                foundQuestion._id,
+                'question',
+              )
+            if (discussion) {
+              setDiscussion(discussion)
+              setComments(
+                transformToUserComments(discussion.comments, store.activeUser),
+              )
+            }
+          } catch (err) {
+            logger.error('Failed to fetch discussion', {
+              err,
+              questionId: foundQuestion._id,
+            })
           }
         }
       }
 
       setIsLoading(false)
     }
-
     fetchQuestions()
 
     return () => {
-      setIsLoading(false)
+      setIsLoading(true)
     }
   }, [slug])
 
@@ -52,48 +98,104 @@ export const QuestionPage = () => {
     }
   }
 
+  const isLoggedIn = store.activeUser ? true : false
+  const onFollowClick = () => {
+    if (question) {
+      store.toggleSubscriberStatusByUserName(
+        question._id,
+        store.activeUser?.userName,
+      )
+      setHasUserSubscribed(!hasUserSubscribed)
+    }
+    return null
+  }
+
   return (
     <Box sx={{ p: 7 }}>
       {isLoading ? (
         <Loader />
       ) : question ? (
-        <Card sx={{ mt: 4, p: 4, position: 'relative' }}>
-          <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-            <UsefulStatsButton
-              votedUsefulCount={store.votedUsefulCount}
-              hasUserVotedUseful={store.userVotedActiveQuestionUseful}
-              isLoggedIn={store.activeUser ? true : false}
-              onUsefulClick={onUsefulClick}
+        <>
+          <Card sx={{ mt: 4, p: 4, position: 'relative' }}>
+            <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
+              <UsefulStatsButton
+                votedUsefulCount={store.votedUsefulCount}
+                hasUserVotedUseful={store.userVotedActiveQuestionUseful}
+                isLoggedIn={store.activeUser ? true : false}
+                onUsefulClick={onUsefulClick}
+              />
+              <FollowButton
+                hasUserSubscribed={hasUserSubscribed}
+                isLoggedIn={isLoggedIn ? true : false}
+                onFollowClick={onFollowClick}
+              />
+              {isEditable && (
+                <Link to={'/questions/' + question.slug + '/edit'}>
+                  <Button variant={'primary'}>Edit</Button>
+                </Link>
+              )}
+            </Flex>
+            <ModerationStatus
+              status={question.moderation}
+              contentType="question"
+              sx={{ top: 0, position: 'absolute', right: 0 }}
             />
-          </Flex>
-          <ModerationStatus
-            status={question.moderation}
-            contentType="question"
-            sx={{ top: 0, position: 'absolute', right: 0 }}
-          />
 
-          <ContentAuthorTimestamp
-            userName={question._createdBy}
-            countryCode={question.creatorCountry}
-            created={question._created}
-            modified={question._contentModifiedTimestamp || question._modified}
-            action="Asked"
-          />
+            <ContentAuthorTimestamp
+              userName={question._createdBy}
+              countryCode={question.creatorCountry}
+              created={question._created}
+              modified={
+                question._contentModifiedTimestamp || question._modified
+              }
+              action="Asked"
+            />
 
-          <Box mt={3} mb={2}>
-            <Heading mb={1}>{question.title}</Heading>
-            <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
-              {question.description}
-            </Text>
+            <Box mt={3} mb={2}>
+              <Heading mb={1}>{question.title}</Heading>
+              <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+                {question.description}
+              </Text>
+            </Box>
+          </Card>
+          {question._id && (
+            <QuestionComments
+              questionDocId={question._id}
+              comments={comments}
+              activeUser={store.activeUser}
+              commentsUpdated={setComments}
+              onSubmit={async (comment: string) => {
+                if (!comment) {
+                  return
+                }
 
-            {isEditable && (
-              <Link to={'/questions/' + question.slug + '/edit'}>
-                <Button variant={'primary'}>Edit</Button>
-              </Link>
-            )}
-          </Box>
-        </Card>
+                // Trigger update without waiting
+                const res = await discussionStore.addComment(
+                  discussion,
+                  comment,
+                )
+
+                setDiscussion(res)
+                setComments(
+                  transformToUserComments(
+                    res?.comments || [],
+                    store.activeUser,
+                  ),
+                )
+              }}
+            />
+          )}
+        </>
       ) : null}
     </Box>
   )
 }
+
+const transformToUserComments = (
+  comments: IDiscussionComment[],
+  loggedInUser: IUserPPDB | null | undefined,
+) =>
+  comments.map((c) => ({
+    ...c,
+    isEditable: c._creatorId === loggedInUser?._id,
+  }))

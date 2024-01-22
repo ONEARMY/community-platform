@@ -1,17 +1,18 @@
-import { useNavigate } from 'react-router-dom'
-import type { NavigateFunction } from 'react-router-dom'
-import { Flex, Input } from 'theme-ui'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Select } from 'oa-components'
-
 import { FieldContainer } from 'src/common/Form/FieldContainer'
+import { researchStatusOptions } from 'src/models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
-
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import type { ResearchStore } from 'src/stores/Research/research.store'
-
-import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
 import { ItemSortingOption } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
+import { capitalizeFirstLetter, getAuthorOptions } from 'src/utils/helpers'
+import { Flex, Input } from 'theme-ui'
+
+import type { ResearchStatus } from 'oa-shared'
+import type { NavigateFunction } from 'react-router-dom'
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import type { QuestionStore } from 'src/stores/Question/question.store'
+import type { ResearchStore } from 'src/stores/Research/research.store'
 
 const updateQueryParams = (
   url: string,
@@ -43,9 +44,15 @@ const getQueryParam = (
   return params.get(key) ?? defaultValue
 }
 
+const isResearchStore = (
+  obj: ResearchStore | HowtoStore | QuestionStore,
+): obj is ResearchStore => {
+  return (obj as ResearchStore).updateSelectedStatus !== undefined
+}
+
 interface SortFilterHeaderProps {
-  store: HowtoStore | ResearchStore
-  type: 'how-to' | 'research'
+  store: HowtoStore | ResearchStore | QuestionStore
+  type: 'how-to' | 'research' | 'question'
 }
 
 export const SortFilterHeader = ({
@@ -82,12 +89,19 @@ export const SortFilterHeader = ({
   const items =
     type == 'how-to'
       ? (currentStore as HowtoStore).filteredHowtos
-      : (currentStore as ResearchStore).filteredResearches
+      : type == 'research'
+      ? (currentStore as ResearchStore).filteredResearches
+      : (currentStore as QuestionStore).filteredQuestions
 
   const authorsOptions = getAuthorOptions(items)
 
   const urlSelectedAuthor = getQueryParam(window.location.href, 'author', null)
-  if (urlSelectedAuthor) currentStore.updateSelectedAuthor(urlSelectedAuthor)
+  if (urlSelectedAuthor && 'updateSelectedAuthor' in currentStore)
+    currentStore.updateSelectedAuthor(urlSelectedAuthor)
+
+  const urlSelectedStatus = getQueryParam(window.location.href, 'status', null)
+  if (urlSelectedStatus && isResearchStore(currentStore))
+    currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
 
   const _inputStyle = {
     width: ['100%', '100%', '200px'],
@@ -138,32 +152,62 @@ export const SortFilterHeader = ({
           />
         </FieldContainer>
       </Flex>
-      <Flex sx={_inputStyle}>
-        <FieldContainer>
-          <Select
-            options={authorsOptions}
-            placeholder="Filter by author"
-            value={
-              currentStore.selectedAuthor
-                ? {
-                    label: currentStore.selectedAuthor,
-                    value: currentStore.selectedAuthor,
-                  }
-                : null
-            }
-            onChange={(author) => {
-              updateQueryParams(
-                window.location.href,
-                'author',
-                author ? author.value : '',
-                navigate,
-              )
-              currentStore.updateSelectedAuthor(author?.value ?? null)
-            }}
-            isClearable={true}
-          />
-        </FieldContainer>
-      </Flex>
+      {'selectedAuthor' in currentStore && (
+        <Flex sx={_inputStyle}>
+          <FieldContainer>
+            <Select
+              options={authorsOptions}
+              placeholder="Filter by author"
+              value={
+                currentStore.selectedAuthor
+                  ? {
+                      label: currentStore.selectedAuthor,
+                      value: currentStore.selectedAuthor,
+                    }
+                  : null
+              }
+              onChange={(author) => {
+                updateQueryParams(
+                  window.location.href,
+                  'author',
+                  author ? author.value : '',
+                  navigate,
+                )
+                currentStore.updateSelectedAuthor(author?.value ?? null)
+              }}
+              isClearable={true}
+            />
+          </FieldContainer>
+        </Flex>
+      )}
+      {isResearchStore(currentStore) && (
+        <Flex sx={_inputStyle}>
+          <FieldContainer>
+            <Select
+              options={researchStatusOptions}
+              placeholder="Filter by status"
+              value={
+                currentStore.selectedStatus
+                  ? {
+                      label: currentStore.selectedStatus,
+                      value: currentStore.selectedStatus,
+                    }
+                  : null
+              }
+              onChange={(status) => {
+                updateQueryParams(
+                  window.location.href,
+                  'status',
+                  status ? status.value : '',
+                  navigate,
+                )
+                currentStore.updateSelectedStatus(status?.value ?? null)
+              }}
+              isClearable={true}
+            />
+          </FieldContainer>
+        </Flex>
+      )}
       <Flex sx={_inputStyle}>
         <Input
           variant="inputOutline"
@@ -174,6 +218,23 @@ export const SortFilterHeader = ({
             const value = evt.target.value
             updateQueryParams(window.location.href, 'search', value, navigate)
             currentStore.updateSearchValue(value)
+            if (
+              value.length > 0 &&
+              currentStore.activeSorter !== ItemSortingOption.MostRelevant
+            ) {
+              currentStore.updateActiveSorter(ItemSortingOption.MostRelevant)
+              setSortState({
+                label: 'Most Relevant',
+                value: ItemSortingOption.MostRelevant,
+              })
+            }
+
+            if (value.length === 0 || !value) {
+              currentStore.updateActiveSorter(
+                currentStore.availableItemSortingOption[0],
+              )
+              setSortState(defaultSortingOption)
+            }
           }}
         />
       </Flex>

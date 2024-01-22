@@ -1,4 +1,5 @@
-import { FIREBASE_CONFIG, CDN_URL } from 'src/config/config'
+import { CDN_URL, FIREBASE_CONFIG } from 'src/config/config'
+import { logger } from 'src/logger'
 
 type ResizeArgs = {
   width?: number
@@ -9,10 +10,19 @@ export const cdnImageUrl = (url: string, resizeArgs?: ResizeArgs) => {
     return url
   }
 
+  const sanitizedCdnUrl = CDN_URL.trim().replace(/\/$/, '')
+
+  try {
+    new URL(sanitizedCdnUrl)
+  } catch (e) {
+    logger.warn('Invalid CDN_URL', e)
+    return url
+  }
+
   return (
     url.replace(
       `https://firebasestorage.googleapis.com/v0/b/${FIREBASE_CONFIG.storageBucket}`,
-      CDN_URL,
+      sanitizedCdnUrl,
     ) + formatResizeArgsForUrl(resizeArgs, url)
   )
 }

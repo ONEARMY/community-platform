@@ -1,18 +1,18 @@
-import type {
-  INotification,
-  INotificationUpdate,
-  NotificationType,
-} from 'src/models/user.models'
 import { action, makeObservable, toJS } from 'mobx'
+import { logger } from 'src/logger'
 import { randomID } from 'src/utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
 // eslint-disable-next-line import/namespace
 import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
-import type { RootStore } from '..'
+import type {
+  INotification,
+  INotificationUpdate,
+  NotificationType,
+} from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
-import { logger } from 'src/logger'
+import type { RootStore } from '..'
 
 // const COLLECTION_NAME = 'user_notifications'
 
@@ -59,6 +59,7 @@ export class UserNotificationsStore extends ModuleStore {
     type: NotificationType,
     username: string,
     relevantUrl: string,
+    title: string,
   ) {
     try {
       const triggeredBy = this.user
@@ -82,6 +83,7 @@ export class UserNotificationsStore extends ModuleStore {
           type,
           read: false,
           notified: false,
+          title: title,
         }
 
         const lookup = await this.db

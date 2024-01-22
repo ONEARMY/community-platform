@@ -1,6 +1,6 @@
+import { Field } from 'react-final-form'
 import styled from '@emotion/styled'
 import { Card, Flex } from 'theme-ui'
-import { Field } from 'react-final-form'
 
 export const Label = (props) => (
   <Flex

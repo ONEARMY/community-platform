@@ -7,11 +7,12 @@ const randomKey = Math.random().toString()
 // here to make easier to change in the future
 export const FRIENDLY_MESSAGES = {
   '': '',
+  'auth/argument-error': 'Please provide a valid email',
+  'auth/email-already-in-use': 'The email address is already in use',
+  'auth/invalid-email': `That email address doesn't quite look right`,
   'auth/user-not-found': 'No account found, typo maybe?',
   'auth/wrong-password': 'Password does not match the user account',
-  'auth/argument-error': 'Please provide a valid email',
   'reset email sent': 'Reset email sent, check your inbox/spam',
-  'auth/invalid-email': `That email address doesn't quite look right`,
   'profile saved': 'Profile Saved',
   'sign-up username taken': 'Woops sorry, that Username is already taken',
   [randomKey]: randomKey,

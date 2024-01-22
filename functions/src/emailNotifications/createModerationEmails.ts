@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions'
 import { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import { IHowtoDB, IMapPin, IModerable } from '../../../src/models'
+import { IModerationStatus } from 'oa-shared'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import * as templates from './templates'
@@ -25,23 +26,23 @@ export async function handleModerationUpdate<T extends IModerable>(
 export async function createHowtoModerationEmail(howto: IHowtoDB) {
   const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
 
-  if (howto.moderation === 'accepted') {
+  if (howto.moderation === IModerationStatus.ACCEPTED) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getHowToApprovalEmail(toUser, howto),
     })
-  } else if (howto.moderation === 'awaiting-moderation') {
+  } else if (howto.moderation === IModerationStatus.AWAITING_MODERATION) {
     // If a how to is resumbitted, send another submission confirmation email.
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getHowToSubmissionEmail(toUser, howto),
     })
-  } else if (howto.moderation === 'rejected') {
+  } else if (howto.moderation === IModerationStatus.REJECTED) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getHowToRejectedEmail(toUser, howto),
     })
-  } else if (howto.moderation === 'improvements-needed') {
+  } else if (howto.moderation === IModerationStatus.IMPROVEMENTS_NEEDED) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getHowToNeedsImprovementsEmail(toUser, howto),
@@ -52,23 +53,23 @@ export async function createHowtoModerationEmail(howto: IHowtoDB) {
 export async function createMapPinModerationEmail(mapPin: IMapPin) {
   const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
 
-  if (mapPin.moderation === 'accepted') {
+  if (mapPin.moderation === IModerationStatus.ACCEPTED) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getMapPinApprovalEmail(toUser, mapPin),
     })
-  } else if (mapPin.moderation === 'awaiting-moderation') {
+  } else if (mapPin.moderation === IModerationStatus.AWAITING_MODERATION) {
     // If a pin is resumbitted, send another submission confirmation email.
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getMapPinSubmissionEmail(toUser, mapPin),
     })
-  } else if (mapPin.moderation === 'rejected') {
+  } else if (mapPin.moderation === IModerationStatus.REJECTED) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getMapPinRejectedEmail(toUser),
     })
-  } else if (mapPin.moderation === 'improvements-needed') {
+  } else if (mapPin.moderation === IModerationStatus.IMPROVEMENTS_NEEDED) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: templates.getMapPinNeedsImprovementsEmail(toUser, mapPin),

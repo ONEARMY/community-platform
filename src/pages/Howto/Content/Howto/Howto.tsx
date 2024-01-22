@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
   Button,
   Loader,
   UsefulStatsButton,
+  UserEngagementWrapper,
 } from 'oa-components'
-import { Navigate, useParams } from 'react-router-dom'
-import { Box } from 'theme-ui'
-import { HowToComments } from './HowToComments/HowToComments'
-import HowtoDescription from './HowtoDescription/HowtoDescription'
-import { isAllowedToEditContent } from 'src/utils/helpers'
-import { seoTagsUpdate } from 'src/utils/seo'
-import Step from './Step/Step'
+import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import type { IUser, UserComment } from 'src/models'
 import { useCommonStores } from 'src/index'
+import { isAllowedToEditContent } from 'src/utils/helpers'
+import { seoTagsUpdate } from 'src/utils/seo'
+import { Box } from 'theme-ui'
+
+import { HowToComments } from './HowToComments/HowToComments'
+import HowtoDescription from './HowtoDescription/HowtoDescription'
+import Step from './Step/Step'
+
+import type { IUser, UserComment } from 'src/models'
 
 export const Howto = observer(() => {
   const { slug } = useParams()
@@ -98,7 +102,7 @@ export const Howto = observer(() => {
   const { allTagsByKey } = tagsStore
   const howto = {
     ...activeHowto,
-    taglist:
+    tagList:
       activeHowto.tags &&
       Object.keys(activeHowto.tags)
         .map((t) => allTagsByKey[t])
@@ -126,14 +130,7 @@ export const Howto = observer(() => {
           <Step step={step} key={index} stepindex={index} />
         ))}
       </Box>
-      <Box
-        sx={{
-          mt: 10,
-          mb: 6,
-          mx: 'auto',
-          width: [`100%`, `${(4 / 5) * 100}%`, `${(2 / 3) * 100}%`],
-        }}
-      >
+      <UserEngagementWrapper>
         <ArticleCallToAction
           author={{
             userName: howto._createdBy,
@@ -168,7 +165,7 @@ export const Howto = observer(() => {
           >
             Leave a comment
           </Button>
-          {howto.moderation === 'accepted' && (
+          {howto.moderation === IModerationStatus.ACCEPTED && (
             <UsefulStatsButton
               votedUsefulCount={howtoStore.votedUsefulCount}
               hasUserVotedUseful={hasUserVotedUseful}
@@ -179,8 +176,8 @@ export const Howto = observer(() => {
             />
           )}
         </ArticleCallToAction>
-      </Box>
-      <HowToComments comments={activeHowToComments} />
+        <HowToComments comments={activeHowToComments} />
+      </UserEngagementWrapper>
     </>
   )
 })

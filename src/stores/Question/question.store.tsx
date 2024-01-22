@@ -1,11 +1,6 @@
-import { action, computed, makeObservable, observable } from 'mobx'
 import { createContext, useContext } from 'react'
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import { logger } from 'src/logger'
-import type { IQuestion, IQuestionDB } from '../../models/question.models'
-import { ModuleStore } from '../common/module.store'
-import type { RootStore } from '../index'
-import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
-import type { IUser } from 'src/models'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
@@ -13,19 +8,87 @@ import {
   randomID,
 } from 'src/utils/helpers'
 
+import {
+  FilterSorterDecorator,
+  ItemSortingOption,
+} from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { ModuleStore } from '../common/module.store'
+import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
+import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+
+import type { IUser } from 'src/models'
+import type { IQuestion, IQuestionDB } from '../../models/question.models'
+import type { RootStore } from '../index'
+
 const COLLECTION_NAME = 'questions'
 
 export class QuestionStore extends ModuleStore {
   @observable
-  public allQuestionItems: IQuestion.Item[] = []
+  public allQuestionItems: IQuestionDB[] = []
 
   @observable
-  public activeQuestionItem: IQuestion.Item | undefined
+  public activeQuestionItem: IQuestionDB | undefined
+
+  @observable
+  public selectedCategory: string
+
+  @observable
+  public searchValue: string
+
+  @observable
+  public activeSorter: ItemSortingOption
+
+  public availableItemSortingOption: ItemSortingOption[]
+
+  @observable
+  private filterSorterDecorator: FilterSorterDecorator<IQuestionDB>
+
+  @observable
+  isFetching = true
 
   constructor(rootStore: RootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
+
+    this.selectedCategory = ''
+    this.searchValue = ''
+    this.availableItemSortingOption = [
+      ItemSortingOption.Newest,
+      ItemSortingOption.MostUseful,
+      ItemSortingOption.Comments,
+    ]
+
+    this.allDocs$.subscribe((docs: IQuestionDB[]) => {
+      logger.debug('docs', docs)
+      const activeItems = [...docs].filter((doc) => {
+        return !doc._deleted
+      })
+
+      runInAction(() => {
+        this.activeSorter = ItemSortingOption.Newest
+        this.filterSorterDecorator = new FilterSorterDecorator()
+        this.allQuestionItems = this.filterSorterDecorator.sort(
+          this.activeSorter,
+          activeItems,
+        )
+
+        this.isFetching = false
+      })
+    })
+  }
+
+  public updateActiveSorter(sorter: ItemSortingOption) {
+    this.activeSorter = sorter
+  }
+
+  public updateSearchValue(query: string) {
+    this.searchValue = query
+  }
+
+  @action
+  public updateSelectedCategory(category: string) {
+    this.selectedCategory = category
   }
 
   @action
@@ -45,6 +108,17 @@ export class QuestionStore extends ModuleStore {
     return (this.activeQuestionItem?.votedUsefulBy || []).includes(
       this.activeUser.userName,
     )
+  }
+
+  @computed get filteredQuestions() {
+    let questions = this.filterSorterDecorator.filterByCategory(
+      this.allQuestionItems,
+      this.selectedCategory,
+    )
+
+    questions = this.filterSorterDecorator.search(questions, this.searchValue)
+
+    return this.filterSorterDecorator.sort(this.activeSorter, questions)
   }
 
   public async toggleUsefulByUser(
@@ -99,7 +173,10 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .getWhere('_deleted', '!=', 'true')
 
-    const validQuestions = filterModerableItems(questions, this.activeUser)
+    const validQuestions = filterModerableItems(
+      questions,
+      this.activeUser as IUser,
+    )
     logger.debug(`fetchQuestions:`, { validQuestions })
     return validQuestions
   }
@@ -113,6 +190,15 @@ export class QuestionStore extends ModuleStore {
       : creatorCountry
       ? creatorCountry
       : ''
+  }
+
+  public async toggleSubscriberStatusByUserName(docId, userName) {
+    return toggleDocSubscriberStatusByUserName(
+      this.db,
+      COLLECTION_NAME,
+      docId,
+      userName,
+    )
   }
 
   private async _getQuestionItemBySlug(

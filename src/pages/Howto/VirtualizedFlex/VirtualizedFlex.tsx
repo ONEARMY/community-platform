@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Box } from 'theme-ui'
-import type { ListRowProps } from 'react-virtualized'
 import {
+  CellMeasurer,
+  CellMeasurerCache,
   List,
   WindowScroller,
-  CellMeasurerCache,
-  CellMeasurer,
 } from 'react-virtualized'
+import { Box, Flex } from 'theme-ui'
+
+import type { ListRowProps } from 'react-virtualized'
 
 interface IProps {
   data: any[]

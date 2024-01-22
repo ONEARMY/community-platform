@@ -1,19 +1,31 @@
-import { format } from 'date-fns'
-import { Icon, ModerationStatus, Username, Tooltip } from 'oa-components'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import { Link } from 'react-router-dom'
+import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
+import {
+  IModerationStatus,
+  ResearchStatus,
+  ResearchUpdateStatus,
+} from 'oa-shared'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import type { IResearch } from 'src/models/research.models'
-import { calculateTotalComments, getPublicUpdates } from 'src/utils/helpers'
-import { Card, Image, Flex, Grid, Heading, Text, Box } from 'theme-ui'
-import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { useCommonStores } from 'src/index'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { formatDate } from 'src/utils/date'
+import {
+  calculateTotalUpdateComments,
+  getPublicUpdates,
+  researchStatusColour,
+} from 'src/utils/helpers'
+import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
+
+import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
+
+import type { ITag } from 'src/models'
+import type { IResearch } from 'src/models/research.models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   item: IResearch.ItemDB & {
     votedUsefulCount: number
-  }
+  } & { tagList?: ITag[] }
 }
 
 const ResearchListItem = ({ item }: IProps) => {
@@ -27,6 +39,9 @@ const ResearchListItem = ({ item }: IProps) => {
     alignItems: 'center',
     fontSize: [1, 2, 2],
   }
+
+  const status = item.researchStatus || ResearchStatus.IN_PROGRESS
+
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
@@ -63,15 +78,53 @@ const ResearchListItem = ({ item }: IProps) => {
                 alignItems: 'flex-start',
               }}
             >
-              <Heading
-                color={'black'}
-                mb={2}
-                sx={{
-                  fontSize: [3, 3, 4],
-                }}
-              >
-                {item.title}
-              </Heading>
+              <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
+                <Flex>
+                  <Heading
+                    color={'black'}
+                    mb={2}
+                    sx={{
+                      fontSize: [3, 3, 4],
+                    }}
+                  >
+                    {item.title}
+                  </Heading>
+                  <Flex
+                    sx={{
+                      display: ['none', 'inline-block', 'inline-block'],
+                      marginLeft: 4,
+                      marginTop: '3px',
+                    }}
+                  >
+                    {item.tagList &&
+                      item.tagList.map((tag, idx) => (
+                        <Tag
+                          key={idx}
+                          tag={tag}
+                          sx={{ marginRight: 1, fontSize: 2 }}
+                        />
+                      ))}
+                  </Flex>
+                </Flex>
+                <Text
+                  sx={{
+                    display: ['inline-block', 'none', 'none'],
+                    verticalAlign: 'middle',
+                    color: 'black',
+                    fontSize: 1,
+                    background: researchStatusColour(status),
+                    padding: 1,
+                    borderRadius: 1,
+                    marginLeft: 4,
+                    marginBottom: 'auto',
+                    whiteSpace: 'nowrap',
+                    minWidth: '75px',
+                  }}
+                  data-cy="ItemResearchStatus"
+                >
+                  {status}
+                </Text>
+              </Flex>
               <Flex
                 sx={{
                   width: '100%',
@@ -118,6 +171,22 @@ const ResearchListItem = ({ item }: IProps) => {
                   >
                     {getItemDate(item, 'long')}
                   </Text>
+                  <Text
+                    sx={{
+                      display: ['none', 'inline-block', 'inline-block'],
+                      verticalAlign: 'middle',
+                      color: 'black',
+                      fontSize: 1,
+                      background: researchStatusColour(status),
+                      padding: 1,
+                      borderRadius: 1,
+                      borderBottomRightRadius: 1,
+                      marginLeft: 4,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {status}
+                  </Text>
                 </Flex>
                 {/* Show these on mobile, hide on tablet & above. */}
                 <Box
@@ -131,7 +200,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                    {calculateTotalComments(item)}
+                    {calculateTotalUpdateComments(item)}
                     <Icon glyph="comment" ml={1} />
                   </Text>
                   <Text
@@ -145,6 +214,12 @@ const ResearchListItem = ({ item }: IProps) => {
                     {getItemDate(item, 'short')}
                   </Text>
                 </Box>
+              </Flex>
+              <Flex sx={{ marginTop: 1, display: ['flex', 'none', 'none'] }}>
+                {item.tagList &&
+                  item.tagList.map((tag, idx) => (
+                    <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
+                  ))}
               </Flex>
             </Flex>
             {/* Hide these on mobile, show on tablet & above. */}
@@ -170,7 +245,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 color="black"
                 sx={_commonStatisticStyle}
               >
-                {calculateTotalComments(item)}
+                {calculateTotalUpdateComments(item)}
                 <Icon glyph="comment" ml={1} />
               </Text>
               <Tooltip />
@@ -187,7 +262,7 @@ const ResearchListItem = ({ item }: IProps) => {
               <Tooltip />
             </Box>
           </Grid>
-          {item.moderation !== 'accepted' && (
+          {item.moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
               status={item.moderation}
               contentType="research"
@@ -217,11 +292,10 @@ const getItemThumbnail = (researchItem: IResearch.ItemDB): string => {
 }
 
 const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
-  const contentModifiedDate = format(
+  const contentModifiedDate = formatDate(
     new Date(item._contentModifiedTimestamp || item._modified),
-    'DD-MM-YYYY',
   )
-  const creationDate = format(new Date(item._created), 'DD-MM-YYYY')
+  const creationDate = formatDate(new Date(item._created))
 
   if (contentModifiedDate !== creationDate) {
     return variant === 'long'
@@ -236,7 +310,8 @@ const getUpdateText = (item: IResearch.ItemDB) => {
   return item.updates?.length
     ? String(
         item.updates.filter(
-          (update) => update.status !== 'draft' && !update._deleted,
+          (update) =>
+            update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
         ).length,
       )
     : '0'

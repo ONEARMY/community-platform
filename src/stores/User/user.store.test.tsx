@@ -1,30 +1,33 @@
 jest.mock('../common/module.store')
-import { FactoryUser } from 'src/test/factories/User'
-import { UserStore } from './user.store'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import { EmailNotificationFrequency } from 'oa-shared'
-import { auth } from '../../utils/firebase'
 import { faker } from '@faker-js/faker'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
+import { FactoryUser } from 'src/test/factories/User'
 
-jest.mock('../../utils/firebase', () => ({
-  auth: {
-    createUserWithEmailAndPassword: () =>
-      Promise.resolve({
-        user: {
-          updateProfile: jest.fn(),
-          photoUrl: 'testPhotoUrl',
-        },
-      }),
-    currentUser: {
-      displayName: 'testDisplayName',
-      uid: 'testUid',
-    },
-    onAuthStateChanged: jest.fn(),
+import { UserStore } from './user.store'
+
+import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+
+jest.mock('firebase/auth', () => {
+  const auth = jest.requireActual('firebase/auth')
+  return {
+    ...auth,
+    getAuth: () => ({
+      ...auth,
+      currentUser: {
+        displayName: 'testDisplayName',
+        uid: 'testUid',
+      },
+    }),
+    createUserWithEmailAndPassword: jest.fn(),
     signInWithEmailAndPassword: jest.fn(),
-  },
-}))
+    onAuthStateChanged: jest.fn(),
+    signOut: jest.fn(),
+    updateProfile: jest.fn(),
+  }
+})
 
 describe('userStore', () => {
   let store
@@ -40,7 +43,8 @@ describe('userStore', () => {
 
       await store.login(userName, password)
 
-      expect(auth.signInWithEmailAndPassword).toHaveBeenCalledWith(
+      expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
+        expect.anything(),
         userName,
         password,
       )
@@ -187,18 +191,21 @@ describe('userStore', () => {
     it('returns documents created and collaborated on by the user, with accepted moderation status', async () => {
       // Mock database calls
       store.db.getWhere.mockReturnValueOnce([
-        FactoryHowto({ _createdBy: 'testUserID', moderation: 'accepted' }),
+        FactoryHowto({
+          _createdBy: 'testUserID',
+          moderation: IModerationStatus.ACCEPTED,
+        }),
       ])
       store.db.getWhere.mockReturnValueOnce([
         FactoryResearchItem({
           _createdBy: 'testUserID',
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       ])
       store.db.getWhere.mockReturnValueOnce([
         FactoryResearchItem({
           collaborators: ['testUserID'],
-          moderation: 'accepted',
+          moderation: IModerationStatus.ACCEPTED,
         }),
       ])
 
@@ -210,17 +217,17 @@ describe('userStore', () => {
         howtos: [
           expect.objectContaining({
             _createdBy: 'testUserID',
-            moderation: 'accepted',
+            moderation: IModerationStatus.ACCEPTED,
           }),
         ],
         research: [
           expect.objectContaining({
             _createdBy: 'testUserID',
-            moderation: 'accepted',
+            moderation: IModerationStatus.ACCEPTED,
           }),
           expect.objectContaining({
             collaborators: ['testUserID'],
-            moderation: 'accepted',
+            moderation: IModerationStatus.ACCEPTED,
           }),
         ],
       })
@@ -242,16 +249,25 @@ describe('userStore', () => {
     it('filters out documents with moderation status other than "accepted"', async () => {
       // Mock database calls to include documents with different moderation statuses
       store.db.getWhere.mockReturnValueOnce([
-        FactoryHowto({ _createdBy: 'testUserID', moderation: 'draft' }),
-        FactoryHowto({ _createdBy: 'testUserID', moderation: 'rejected' }),
-        FactoryHowto({ _createdBy: 'testUserID', moderation: 'accepted' }),
+        FactoryHowto({
+          _createdBy: 'testUserID',
+          moderation: IModerationStatus.DRAFT,
+        }),
+        FactoryHowto({
+          _createdBy: 'testUserID',
+          moderation: IModerationStatus.REJECTED,
+        }),
+        FactoryHowto({
+          _createdBy: 'testUserID',
+          moderation: IModerationStatus.ACCEPTED,
+        }),
       ])
       store.db.getWhere.mockReturnValueOnce([
-        FactoryResearchItem({ moderation: 'draft' }),
-        FactoryResearchItem({ moderation: 'accepted' }),
+        FactoryResearchItem({ moderation: IModerationStatus.DRAFT }),
+        FactoryResearchItem({ moderation: IModerationStatus.ACCEPTED }),
       ])
       store.db.getWhere.mockReturnValueOnce([
-        FactoryResearchItem({ moderation: 'draft' }),
+        FactoryResearchItem({ moderation: IModerationStatus.DRAFT }),
       ])
 
       // Act
@@ -295,6 +311,8 @@ describe('userStore', () => {
 
   describe('updateUserImpact', () => {
     it('throws an error if user undefined', async () => {
+      store.activeUser = null
+
       // Act
       expect(async () => {
         await store.updateUserImpact('testUserId', {
@@ -304,7 +322,7 @@ describe('userStore', () => {
     })
 
     it('updates the user impact in the database', async () => {
-      store.user = FactoryUser({
+      store.activeUser = FactoryUser({
         _id: 'testUserId',
       })
       const impactYear = faker.datatype.number({ min: 2019, max: 2023 })
@@ -393,7 +411,7 @@ describe('userStore', () => {
       expect(store.db.set).toHaveBeenCalledWith({
         coverImages: [],
         links: [],
-        moderation: 'awaiting-moderation',
+        moderation: IModerationStatus.AWAITING_MODERATION,
         verified: false,
         _authID: 'testUid',
         displayName: 'testDisplayName',

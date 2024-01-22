@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { SiteFooter } from './SiteFooter'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   /* 👇 The title prop is optional.

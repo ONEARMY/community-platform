@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
@@ -6,26 +7,29 @@ import {
   FollowButton,
   Loader,
   UsefulStatsButton,
+  UserEngagementWrapper,
 } from 'oa-components'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import type { IComment, IResearch, UserComment, IUser } from 'src/models'
+import { useCommonStores } from 'src/index'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import {
+  getPublicUpdates,
   isAllowedToDeleteContent,
   isAllowedToEditContent,
-  getPublicUpdates,
 } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
+
+import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
-import { researchCommentUrlPattern } from './helper'
-import { useCommonStores } from 'src/index'
+
+import type { IComment, IResearch, IUser, UserComment } from 'src/models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
 
@@ -61,7 +65,7 @@ const ResearchArticle = observer(() => {
   const { slug } = useParams()
   const location = useLocation()
   const researchStore = useResearchStore()
-  const { aggregationsStore } = useCommonStores().stores
+  const { aggregationsStore, tagsStore } = useCommonStores().stores
   const [isLoading, setIsLoading] = React.useState(true)
   const item = researchStore.activeResearchItem
   const loggedInUser = researchStore.activeUser
@@ -69,7 +73,9 @@ const ResearchArticle = observer(() => {
   const moderateResearch = async (accepted: boolean) => {
     const item = researchStore.activeResearchItem
     if (item) {
-      item.moderation = accepted ? 'accepted' : 'rejected'
+      item.moderation = accepted
+        ? IModerationStatus.ACCEPTED
+        : IModerationStatus.REJECTED
       await researchStore.moderateResearch(item)
     }
   }
@@ -192,10 +198,20 @@ const ResearchArticle = observer(() => {
     return <NotFoundPage />
   }
 
+  const { allTagsByKey } = tagsStore
+  const research = {
+    ...item,
+    tagList:
+      item.tags &&
+      Object.keys(item.tags)
+        .map((t) => allTagsByKey[t])
+        .filter(Boolean),
+  }
+
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       <ResearchDescription
-        research={item}
+        research={research}
         key={item._id}
         votedUsefulCount={researchStore.votedUsefulCount}
         loggedInUser={loggedInUser as IUser}
@@ -213,11 +229,12 @@ const ResearchArticle = observer(() => {
         subscribersCount={researchStore.subscribersCount}
         commentsCount={researchStore.commentsCount}
         updatesCount={
-          item.updates?.filter((u) => u.status !== 'draft' && !u._deleted)
-            .length || 0
+          item.updates?.filter(
+            (u) => u.status !== ResearchUpdateStatus.DRAFT && !u._deleted,
+          ).length || 0
         }
       />
-      <Box my={16}>
+      <Box sx={{ marginTop: 8, marginBottom: 4 }}>
         {item &&
           getPublicUpdates(item).map((update, index) => (
             <ResearchUpdate
@@ -235,35 +252,40 @@ const ResearchArticle = observer(() => {
             />
           ))}
       </Box>
-      <Box
-        sx={{
-          paddingLeft: [null, '12%', '12%'],
-          mb: 16,
-        }}
-      >
-        {researchAuthor && (
-          <ArticleCallToAction
-            author={researchAuthor}
-            contributors={contributors}
-          >
-            {item.moderation === 'accepted' && (
-              <UsefulStatsButton
+
+      <UserEngagementWrapper>
+        <Box
+          sx={{
+            marginBottom: [6, 6, 12],
+          }}
+        >
+          {researchAuthor && (
+            <ArticleCallToAction
+              author={researchAuthor}
+              contributors={contributors}
+            >
+              {item.moderation === IModerationStatus.ACCEPTED && (
+                <UsefulStatsButton
+                  isLoggedIn={!!loggedInUser}
+                  votedUsefulCount={researchStore.votedUsefulCount}
+                  hasUserVotedUseful={
+                    researchStore.userVotedActiveResearchUseful
+                  }
+                  onUsefulClick={() =>
+                    onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
+                  }
+                />
+              )}
+              <FollowButton
                 isLoggedIn={!!loggedInUser}
-                votedUsefulCount={researchStore.votedUsefulCount}
-                hasUserVotedUseful={researchStore.userVotedActiveResearchUseful}
-                onUsefulClick={() =>
-                  onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
-                }
-              />
-            )}
-            <FollowButton
-              isLoggedIn={!!loggedInUser}
-              hasUserSubscribed={researchStore.userHasSubscribed}
-              onFollowClick={() => onFollowClick(item.slug)}
-            ></FollowButton>
-          </ArticleCallToAction>
-        )}
-      </Box>
+                hasUserSubscribed={researchStore.userHasSubscribed}
+                onFollowClick={() => onFollowClick(item.slug)}
+              ></FollowButton>
+            </ArticleCallToAction>
+          )}
+        </Box>
+      </UserEngagementWrapper>
+
       {isEditable && (
         <Flex my={4}>
           <Link to={`/research/${item.slug}/new-update`}>

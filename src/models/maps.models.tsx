@@ -1,6 +1,6 @@
-import type { IModerationStatus } from './common.models'
-import type { WorkspaceType } from './userPreciousPlastic.models'
+import type { IModerationStatus, IPinGrouping } from 'oa-shared'
 import type { ProfileTypeLabel } from '../modules/profile/types'
+import type { WorkspaceType } from './userPreciousPlastic.models'
 
 /**
  * Map pins keep minimal information required for pin display.
@@ -57,8 +57,6 @@ export interface IBoundingBox {
   topLeft: ILatLng
   bottomRight: ILatLng
 }
-
-export type IPinGrouping = 'individual' | 'place'
 
 export interface IMapGrouping {
   _count?: number

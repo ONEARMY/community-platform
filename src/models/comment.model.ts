@@ -1,7 +1,8 @@
 /**
+ * @deprecated To be replaced by IDiscussionComment
+ *
  * Comments are currently used as documents nested
  * underneath Howtos and Research items
- *
  * - Howto: Available at howto.comments
  * - ResearchItem: Available under researchItem.updates.comments
  */

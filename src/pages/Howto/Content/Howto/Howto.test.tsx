@@ -1,15 +1,17 @@
-import { render, act } from '@testing-library/react'
-import { ThemeProvider } from '@emotion/react'
-import { Provider } from 'mobx-react'
 import {
-  RouterProvider,
   createMemoryRouter,
   createRoutesFromElements,
   Route,
+  RouterProvider,
 } from 'react-router-dom'
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
+import { ThemeProvider } from '@emotion/react'
+import { act, render } from '@testing-library/react'
+import { Provider } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
+import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
+
+import type { HowtoStore } from 'src/stores/Howto/howto.store'
+
 const Theme = preciousPlasticTheme.styles
 
 const howto = FactoryHowto()
@@ -45,6 +47,8 @@ jest.mock('src/index', () => ({
   }),
 }))
 
+import { IModerationStatus } from 'oa-shared'
+
 import { Howto } from './Howto'
 
 const factory = async (howtoStore?: Partial<HowtoStore>) => {
@@ -71,7 +75,7 @@ describe('Howto', () => {
       let wrapper
 
       await act(async () => {
-        howto.moderation = 'awaiting-moderation'
+        howto.moderation = IModerationStatus.AWAITING_MODERATION
         howto.moderatorFeedback = 'Moderation comments'
 
         wrapper = await factory()
@@ -83,7 +87,7 @@ describe('Howto', () => {
     it('hides feedback when how-to is accepted', async () => {
       let wrapper
       await act(async () => {
-        howto.moderation = 'accepted'
+        howto.moderation = IModerationStatus.ACCEPTED
         howto.moderatorFeedback = 'Moderation comments'
         wrapper = await factory()
       })
@@ -98,7 +102,7 @@ describe('Howto', () => {
       howto._id = 'testid'
       howto._createdBy = 'HowtoAuthor'
       howto.steps = [FactoryHowtoStep({})]
-      howto.moderation = 'accepted'
+      howto.moderation = IModerationStatus.ACCEPTED
 
       wrapper = await factory()
     })

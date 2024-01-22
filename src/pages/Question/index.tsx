@@ -1,17 +1,25 @@
 import { MODULE } from 'src/modules'
-import type { IPageMeta } from '../PageList'
-import QuestionRoutes from './question.routes'
+import {
+  DiscussionStore,
+  DiscussionStoreContext,
+} from 'src/stores/Discussions/discussions.store'
 import {
   QuestionStore,
   QuestionStoreContext,
 } from 'src/stores/Question/question.store'
+
 import { useCommonStores } from '../../index'
+import QuestionRoutes from './question.routes'
+
+import type { IPageMeta } from '../PageList'
 
 export const QuestionModuleContainer = () => {
   const rootStore = useCommonStores()
   return (
     <QuestionStoreContext.Provider value={new QuestionStore(rootStore)}>
-      <QuestionRoutes />
+      <DiscussionStoreContext.Provider value={new DiscussionStore(rootStore)}>
+        <QuestionRoutes />
+      </DiscussionStoreContext.Provider>
     </QuestionStoreContext.Provider>
   )
 }

@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions'
 import { IHowtoDB, IMapPin, IMessageDB } from '../../../src/models'
+import { IModerationStatus } from 'oa-shared'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import {
@@ -8,11 +9,11 @@ import {
   getReceiverMessageEmail,
   getSenderMessageEmail,
 } from './templates'
-import { getUserAndEmail, isValidEmailCreationRequest } from './utils'
+import { getUserAndEmail, isValidMessageRequest } from './utils'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 
 export async function createMessageEmails(message: IMessageDB) {
-  const isValid = await isValidEmailCreationRequest(message)
+  const isValid = await isValidMessageRequest(message)
   if (!isValid) {
     return
   }
@@ -40,7 +41,7 @@ export async function createMessageEmails(message: IMessageDB) {
 export async function createHowtoSubmissionEmail(howto: IHowtoDB) {
   const { toUser, toUserEmail } = await getUserAndEmail(howto._createdBy)
 
-  if (howto.moderation === 'awaiting-moderation') {
+  if (howto.moderation === IModerationStatus.AWAITING_MODERATION) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: getHowToSubmissionEmail(toUser, howto),
@@ -51,7 +52,7 @@ export async function createHowtoSubmissionEmail(howto: IHowtoDB) {
 export async function createMapPinSubmissionEmail(mapPin: IMapPin) {
   const { toUser, toUserEmail } = await getUserAndEmail(mapPin._id)
 
-  if (mapPin.moderation === 'awaiting-moderation') {
+  if (mapPin.moderation === IModerationStatus.AWAITING_MODERATION) {
     await db.collection(DB_ENDPOINTS.emails).add({
       to: toUserEmail,
       message: getMapPinSubmissionEmail(toUser, mapPin),

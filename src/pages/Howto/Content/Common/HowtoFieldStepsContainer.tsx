@@ -1,9 +1,9 @@
 import { FieldArray } from 'react-final-form-arrays'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from 'oa-components'
-import { Heading, Flex, Box, Text } from 'theme-ui'
-import { motion, AnimatePresence } from 'framer-motion'
-
 import { COMPARISONS } from 'src/utils/comparisons'
+import { Box, Flex, Heading, Text } from 'theme-ui'
+
 import { buttons, steps } from '../../labels'
 import { HowtoFieldStep } from '.'
 

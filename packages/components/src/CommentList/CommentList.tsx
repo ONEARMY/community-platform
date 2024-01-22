@@ -1,34 +1,40 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex } from 'theme-ui'
+
 import { Button, CommentItem } from '../'
+
 import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
+
+export type CommentWithReplies = Comment & { replies?: Comment[] }
+
 const MAX_COMMENTS = 5
 
-export type CommentListProps = {
-  comments: Comment[]
+export interface IProps {
+  comments: CommentWithReplies[]
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
-  articleTitle?: string
-  trackEvent?: (options: {
-    action: string
-    category: string
-    label?: string
-  }) => void
+  onMoreComments: () => void
 }
 
-export const CommentList = ({
-  articleTitle,
-  comments,
-  handleEditRequest,
-  handleDelete,
-  highlightedCommentId,
-  handleEdit,
-  trackEvent,
-}: CommentListProps) => {
+export const CommentList = (props: IProps) => {
+  const {
+    comments,
+    handleEditRequest,
+    handleDelete,
+    highlightedCommentId,
+    handleEdit,
+    onMoreComments,
+  } = props
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
+
+  const handleMoreComments = () => {
+    onMoreComments()
+    setMoreComments(moreComments + 1)
+  }
+
   const scrollIntoRelevantComment = (commentId: string) => {
     setTimeout(() => {
       // the delay is needed, otherwise the scroll is not happening in Firefox
@@ -59,7 +65,7 @@ export const CommentList = ({
       }}
     >
       {comments &&
-        comments.slice(0, shownComments).map((comment: Comment) => (
+        comments.slice(0, shownComments).map((comment) => (
           <Box
             key={comment._id}
             data-testid="CommentList: item"
@@ -81,6 +87,17 @@ export const CommentList = ({
               handleDelete={handleDelete}
               handleEdit={handleEdit}
             />
+            {comment.replies ? (
+              <Box sx={{ pt: 4, pl: 4 }}>
+                <CommentList
+                  comments={comment.replies}
+                  handleEditRequest={handleEditRequest}
+                  handleDelete={handleDelete}
+                  handleEdit={handleEdit}
+                  onMoreComments={handleMoreComments}
+                />
+              </Box>
+            ) : null}
           </Box>
         ))}
       {comments && comments.length > shownComments && (
@@ -90,15 +107,7 @@ export const CommentList = ({
               margin: '0 auto',
             }}
             variant="outline"
-            onClick={() => {
-              trackEvent &&
-                trackEvent({
-                  category: 'Comments',
-                  action: 'Show more',
-                  label: articleTitle,
-                })
-              return setMoreComments(moreComments + 1)
-            }}
+            onClick={handleMoreComments}
           >
             show more comments
           </Button>

@@ -1,8 +1,9 @@
-import type { UserStore } from '../../User/user.store'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
 } from './'
+
+import type { UserStore } from '../../User/user.store'
 
 describe('changeMentionToUserReference', () => {
   const mockUserStore = {

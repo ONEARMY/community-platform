@@ -1,5 +1,6 @@
 import { render } from '../tests/utils'
-import { Twitter, Facebook, Youtube, Instagram } from './ProfileLink.stories'
+import { Facebook, Instagram, Twitter, Youtube } from './ProfileLink.stories'
+
 import type { Props } from './ProfileLink'
 
 describe('ProfileLink', () => {

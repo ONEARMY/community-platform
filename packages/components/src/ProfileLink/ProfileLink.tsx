@@ -1,7 +1,9 @@
 import { Box, Flex } from 'theme-ui'
-import type { ThemeUICSSObject } from 'theme-ui'
+
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
+
+import type { ThemeUICSSObject } from 'theme-ui'
 import type { IGlyphs } from '../Icon/types'
 
 export interface Props {

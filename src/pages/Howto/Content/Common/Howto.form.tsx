@@ -3,20 +3,21 @@ import { Form } from 'react-final-form'
 import styled from '@emotion/styled'
 import arrayMutators from 'final-form-arrays'
 import createDecorator from 'final-form-calculate'
-import { ElWithBeforeIcon } from 'oa-components'
-import { Heading, Card, Flex, Box } from 'theme-ui'
 import { observer } from 'mobx-react'
-
-import { useCommonStores } from 'src/index'
+import { ElWithBeforeIcon } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
+import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,
 } from 'src/utils/validators'
-import { intro, headings } from '../../labels'
+import { Box, Card, Flex, Heading } from 'theme-ui'
+
+import { headings, intro } from '../../labels'
 import {
   HowtoButtonDraft,
   HowtoButtonPublish,
@@ -36,6 +37,7 @@ import {
 
 import type { FormApi } from 'final-form'
 import type { IHowtoFormInput } from 'src/models/howto.models'
+
 export type ParentType = 'create' | 'edit'
 
 interface IState {
@@ -93,8 +95,8 @@ export const HowtoForm = observer((props: IProps) => {
     }
     setState((state) => ({ ...state, showSubmitModal: true }))
     formValues.moderation = formValues.allowDraftSave
-      ? 'draft'
-      : 'awaiting-moderation'
+      ? IModerationStatus.DRAFT
+      : IModerationStatus.AWAITING_MODERATION
     logger.debug('submitting form', formValues)
     await howtoStore.uploadHowTo(formValues)
     form.reset(formValues)

@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
-import { Form, Field } from 'react-final-form'
+import { Field, Form } from 'react-final-form'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import { Navigate, useNavigate, Link } from 'react-router-dom'
-import { string, object, ref, bool } from 'yup'
-import { FRIENDLY_MESSAGES } from 'oa-shared'
-import { Card, Flex, Heading, Text, Label } from 'theme-ui'
 import { Button, ExternalLink, FieldInput } from 'oa-components'
-
+import { FRIENDLY_MESSAGES } from 'oa-shared'
+import { PasswordField } from 'src/common/Form/PasswordField'
+import { useCommonStores } from 'src/index'
+import { logger } from 'src/logger'
+import { formatLowerNoSpecial } from 'src/utils/helpers'
 import {
   composeValidators,
   noSpecialCharacters,
   required,
 } from 'src/utils/validators'
-import { formatLowerNoSpecial } from 'src/utils/helpers'
-import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/index'
+import { Card, Flex, Heading, Label, Text } from 'theme-ui'
+import { bool, object, ref, string } from 'yup'
 
 const validationSchema = object({
   displayName: string().min(2, 'Too short').required('Required'),
@@ -73,9 +73,10 @@ const SignUpPage = observer(() => {
         }))
       }
     } catch (error) {
+      logger.error(`Error signing up`, { errorCode: error.code, displayName })
       setState((prev) => ({
         ...prev,
-        errorMsg: error.message,
+        errorMsg: FRIENDLY_MESSAGES[error.code] || error.message,
         disabled: false,
       }))
     }

@@ -1,13 +1,15 @@
 jest.mock('../common/module.store')
-import type { IDiscussion } from 'src/models'
-import { DiscussionStore } from './discussions.store'
-import type { RootStore } from '..'
-import { FactoryUser } from 'src/test/factories/User'
+import { faker } from '@faker-js/faker'
 import {
   FactoryDiscussion,
   FactoryDiscussionComment,
 } from 'src/test/factories/Discussion'
-import { faker } from '@faker-js/faker'
+import { FactoryUser } from 'src/test/factories/User'
+
+import { DiscussionStore } from './discussions.store'
+
+import type { IDiscussion } from 'src/models'
+import type { RootStore } from '..'
 
 const factory = async (
   discussions: IDiscussion[] = [FactoryDiscussion({})],
@@ -56,27 +58,34 @@ const factory = async (
 }
 
 describe('discussion.store', () => {
-  describe('fetchDiscussionBySourceId', () => {
+  describe('fetchOrCreateDiscussionBySource', () => {
     it('fetches a discussion by sourceId', async () => {
       const fakeSourceId = faker.internet.password()
       const { store, getWhereFn } = await factory([
         FactoryDiscussion({ sourceId: fakeSourceId }),
       ])
 
-      await store.fetchDiscussionBySourceId(fakeSourceId)
+      await store.fetchOrCreateDiscussionBySource(fakeSourceId, 'question')
 
       expect(getWhereFn).toHaveBeenCalledTimes(1)
       expect(getWhereFn).toHaveBeenCalledWith('sourceId', '==', fakeSourceId)
     })
 
-    it('handles empty response', async () => {
-      const { store, getWhereFn } = await factory()
+    it('creates a discussion if one does not exist', async () => {
+      const { store, getWhereFn, setFn } = await factory()
 
       getWhereFn.mockReturnValueOnce([])
-      const res = await store.fetchDiscussionBySourceId('fake-source-id')
+
+      await store.fetchOrCreateDiscussionBySource('fake-source-id', 'question')
 
       expect(getWhereFn).toHaveBeenCalledTimes(1)
-      expect(res).toBeNull()
+
+      expect(setFn).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sourceId: 'fake-source-id',
+          sourceType: 'question',
+        }),
+      )
     })
   })
 

@@ -1,3 +1,5 @@
+import { DifficultyLevel } from 'oa-shared'
+
 const makeEntry = (value: string, label?: string) => {
   return { value, label: label || value }
 }
@@ -12,9 +14,6 @@ export const TIME_OPTIONS = [
   makeEntry('1+ months'),
 ]
 
-export const DIFFICULTY_OPTIONS = [
-  makeEntry('Easy'),
-  makeEntry('Medium'),
-  makeEntry('Hard'),
-  makeEntry('Very Hard'),
-]
+export const DIFFICULTY_OPTIONS = Object.values(DifficultyLevel).map((d) => {
+  return makeEntry(d)
+})

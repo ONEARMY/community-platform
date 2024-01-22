@@ -1,5 +1,6 @@
-import type { ComponentStory, Meta } from '@storybook/react'
 import { UserStatistics } from './UserStatistics'
+
+import type { ComponentStory, Meta } from '@storybook/react'
 
 export default {
   title: 'Components/UserStatistics',

@@ -168,7 +168,7 @@ describe('Message emails', () => {
   })
 
   it('Creates emails to the sender and receiver', async () => {
-    jest.spyOn(utils, 'isValidEmailCreationRequest').mockResolvedValue(true)
+    jest.spyOn(utils, 'isValidMessageRequest').mockResolvedValue(true)
     jest
       .spyOn(utils, 'getUserAndEmail')
       .mockResolvedValue({ toUserEmail: 'jeffery@email', toUser: user })
@@ -179,13 +179,18 @@ describe('Message emails', () => {
     expect(countSnapshot.data().count).toEqual(2)
   })
 
-  it("doesn't  create emails if checks fail", async () => {
-    jest.spyOn(utils, 'isValidEmailCreationRequest').mockResolvedValue(false)
+  it("Doesn't create emails if checks fail", async () => {
+    jest.spyOn(utils, 'isValidMessageRequest').mockImplementation(() => {
+      throw new Error()
+    })
     jest
       .spyOn(utils, 'getUserAndEmail')
       .mockResolvedValue({ toUserEmail: 'jeffery@email', toUser: user })
 
-    await createMessageEmails(message as IMessageDB)
+    await expect(() => {
+      createMessageEmails(message as IMessageDB)
+    }).rejects
+
     const countSnapshot = await db.collection(DB_ENDPOINTS.emails).count().get()
 
     expect(countSnapshot.data().count).toEqual(0)

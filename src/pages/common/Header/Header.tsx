@@ -175,6 +175,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
               icon={isVisible ? 'close' : 'menu'}
               onClick={() => setIsVisible(!isVisible)}
               large={true}
+              mr={-3}
               sx={{
                 bg: 'white',
                 borderWidth: '0px',

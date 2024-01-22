@@ -74,6 +74,7 @@ export const SortFilterHeader = ({
       value: label,
     }))
     .filter((option) => option.value !== activeSorter)
+    .filter((option) => option.value !== ItemSortingOption.MostRelevant)
 
   const defaultSortingOption =
     Array.isArray(allSortingOptions) && allSortingOptions.length > 0
@@ -222,18 +223,22 @@ export const SortFilterHeader = ({
               value.length > 0 &&
               currentStore.activeSorter !== ItemSortingOption.MostRelevant
             ) {
+              currentStore.updatePreSearchSorter()
               currentStore.updateActiveSorter(ItemSortingOption.MostRelevant)
               setSortState({
                 label: 'Most Relevant',
                 value: ItemSortingOption.MostRelevant,
               })
             }
-
             if (value.length === 0 || !value) {
-              currentStore.updateActiveSorter(
-                currentStore.availableItemSortingOption[0],
-              )
-              setSortState(defaultSortingOption)
+              currentStore.updateActiveSorter(currentStore.preSearchSorter)
+              setSortState({
+                label: currentStore.activeSorter.replace(
+                  /([a-z])([A-Z])/g,
+                  '$1 $2',
+                ),
+                value: currentStore.activeSorter,
+              })
             }
           }}
         />

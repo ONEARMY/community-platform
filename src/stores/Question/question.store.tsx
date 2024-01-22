@@ -38,6 +38,9 @@ export class QuestionStore extends ModuleStore {
   @observable
   public activeSorter: ItemSortingOption
 
+  @observable
+  public preSearchSorter: ItemSortingOption
+
   public availableItemSortingOption: ItemSortingOption[]
 
   @observable
@@ -80,6 +83,10 @@ export class QuestionStore extends ModuleStore {
 
   public updateActiveSorter(sorter: ItemSortingOption) {
     this.activeSorter = sorter
+  }
+
+  public updatePreSearchSorter() {
+    this.preSearchSorter = this.activeSorter
   }
 
   public updateSearchValue(query: string) {

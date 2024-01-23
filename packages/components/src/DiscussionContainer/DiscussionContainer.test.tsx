@@ -4,11 +4,9 @@ import { fireEvent } from '@testing-library/react'
 import { render } from '../tests/utils'
 import { Default, WithReplies } from './DiscussionContainer.stories'
 
-import type { IProps } from './DiscussionContainer'
-
 describe('DiscussionContainer', () => {
   it('validates the component behaviour', () => {
-    const { getByText } = render(<Default {...(Default.args as IProps)} />)
+    const { getByText } = render(<Default.render />)
 
     expect(getByText('3 Comments')).toBeInTheDocument()
     expect(getByText('Leave a comment')).toBeInTheDocument()
@@ -17,7 +15,7 @@ describe('DiscussionContainer', () => {
   })
 
   it('allows replying to a comment', async () => {
-    const screen = render(<WithReplies {...(WithReplies.args as IProps)} />)
+    const screen = render(<WithReplies.render />)
 
     const replyButton = screen.getAllByText('reply')[0]
     expect(replyButton).toBeInTheDocument()
@@ -55,7 +53,7 @@ describe('DiscussionContainer', () => {
   })
 
   it('does not show the reply form more than once', async () => {
-    const screen = render(<WithReplies {...(WithReplies.args as IProps)} />)
+    const screen = render(<WithReplies.render />)
 
     const replyButton = screen.getAllByText('reply')[0]
     expect(replyButton).toBeInTheDocument()
@@ -75,6 +73,20 @@ describe('DiscussionContainer', () => {
       expect(screen.getAllByText('Send your reply')).toHaveLength(1)
     })
   })
+
+  // it('allows replying to a comment', async () => {
+  //   const props = WithReplies.args as IProps
+  //   const screen = render(<WithReplies {...props} />)
+
+  //   const replyButton = screen.getAllByText('reply')[0]
+  //   expect(replyButton).toBeInTheDocument()
+
+  //   // Show reply form
+  //   await act(async () => {
+  //     await fireEvent.click(replyButton)
+  //     expect(screen.getAllByText('Send your reply')).toHaveLength(1)
+  //   })
+  // })
 
   it.todo(
     'adding a reply to a comment does not affect the primary create comment form',

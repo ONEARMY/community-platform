@@ -53,7 +53,14 @@ export const DiscussionContainer = (props: IProps) => {
           }
 
           return (
-            <Box sx={{ py: 2 }}>
+            <Box
+              sx={{
+                background: 'softblue',
+                borderRadius: 2,
+                padding: 3,
+                mt: 3,
+              }}
+            >
               <CreateComment
                 maxLength={maxLength}
                 comment={comment}

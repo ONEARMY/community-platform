@@ -2,7 +2,6 @@ import { act } from 'react-dom/test-utils'
 import { fireEvent } from '@testing-library/react'
 
 import { render } from '../tests/utils'
-import { fakeComment } from '../utils'
 import { Default, WithReplies } from './DiscussionContainer.stories'
 
 import type { IProps } from './DiscussionContainer'
@@ -26,14 +25,14 @@ describe('DiscussionContainer', () => {
     // Show reply form
     await act(async () => {
       await fireEvent.click(replyButton)
-      expect(screen.getAllByText('Reply form')).toHaveLength(1)
+      expect(screen.getAllByText('Send your reply')).toHaveLength(1)
     })
 
     // Hide reply form
     await act(async () => {
       await fireEvent.click(replyButton)
       expect(() => {
-        screen.getAllByText('Reply form')
+        screen.getAllByText('Send your reply')
       }).toThrow()
     })
 
@@ -43,19 +42,19 @@ describe('DiscussionContainer', () => {
     // Show reply form
     await act(async () => {
       await fireEvent.click(SecondReplyButton)
-      expect(screen.getAllByText('Reply form')).toHaveLength(1)
+      expect(screen.getAllByText('Send your reply')).toHaveLength(1)
     })
 
     // Hide reply form
     await act(async () => {
       await fireEvent.click(SecondReplyButton)
       expect(() => {
-        screen.getAllByText('Reply form')
+        screen.getAllByText('Send your reply')
       }).toThrow()
     })
   })
 
-  it('does show the reply form more than once', async () => {
+  it('does not show the reply form more than once', async () => {
     const screen = render(<WithReplies {...(WithReplies.args as IProps)} />)
 
     const replyButton = screen.getAllByText('reply')[0]
@@ -64,7 +63,7 @@ describe('DiscussionContainer', () => {
     // Show first reply form
     await act(async () => {
       await fireEvent.click(replyButton)
-      expect(screen.getAllByText('Reply form')).toHaveLength(1)
+      expect(screen.getAllByText('Send your reply')).toHaveLength(1)
     })
 
     const SecondReplyButton = screen.getAllByText('reply')[2]
@@ -73,7 +72,12 @@ describe('DiscussionContainer', () => {
     // Show second reply form
     await act(async () => {
       await fireEvent.click(SecondReplyButton)
-      expect(screen.getAllByText('Reply form')).toHaveLength(1)
+      expect(screen.getAllByText('Send your reply')).toHaveLength(1)
     })
   })
+
+  it.todo(
+    'adding a reply to a comment does not affect the primary create comment form',
+    async () => {},
+  )
 })

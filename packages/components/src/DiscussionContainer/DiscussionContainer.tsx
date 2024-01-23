@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Flex } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 
 import { CommentList, CreateComment, DiscussionTitle } from '../'
 
@@ -53,16 +53,16 @@ export const DiscussionContainer = (props: IProps) => {
           }
 
           return (
-            <>
-              <span>Reply form</span>
+            <Box sx={{ py: 2 }}>
               <CreateComment
                 maxLength={maxLength}
                 comment={comment}
                 onChange={onChange}
                 onSubmit={onSubmit}
+                buttonLabel="Send your reply"
                 isLoggedIn={isLoggedIn}
               />
-            </>
+            </Box>
           )
         }}
         comments={comments}

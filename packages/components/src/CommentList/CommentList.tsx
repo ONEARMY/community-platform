@@ -10,12 +10,15 @@ export type CommentWithReplies = Comment & { replies?: Comment[] }
 const MAX_COMMENTS = 5
 
 export interface IProps {
+  supportReplies?: boolean
   comments: CommentWithReplies[]
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
   onMoreComments: () => void
+  setCommentBeingRepliedTo?: (commentId: string | null) => void
+  replyForm?: (commentId: string) => JSX.Element
 }
 
 export const CommentList = (props: IProps) => {
@@ -26,7 +29,13 @@ export const CommentList = (props: IProps) => {
     highlightedCommentId,
     handleEdit,
     onMoreComments,
+    replyForm,
+    supportReplies: _supportReplies,
+    setCommentBeingRepliedTo,
   } = props
+
+  const supportReplies = !!_supportReplies
+
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
 
@@ -81,20 +90,30 @@ export const CommentList = (props: IProps) => {
           >
             <CommentItem
               {...comment}
+              supportReplies={supportReplies}
+              handleCommentReply={(commentId) => {
+                if (!setCommentBeingRepliedTo) return
+
+                setCommentBeingRepliedTo(commentId)
+              }}
               isUserVerified={!!comment.isUserVerified}
               isEditable={!!comment.isEditable}
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
             />
+            {replyForm && replyForm(comment._id)}
             {comment.replies ? (
               <Box sx={{ pt: 4, pl: 4 }}>
                 <CommentList
                   comments={comment.replies}
+                  supportReplies={props.supportReplies}
                   handleEditRequest={handleEditRequest}
                   handleDelete={handleDelete}
                   handleEdit={handleEdit}
                   onMoreComments={handleMoreComments}
+                  replyForm={replyForm}
+                  setCommentBeingRepliedTo={setCommentBeingRepliedTo}
                 />
               </Box>
             ) : null}

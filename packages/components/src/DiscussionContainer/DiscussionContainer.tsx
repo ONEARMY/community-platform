@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Flex } from 'theme-ui'
 
 import { CommentList, CreateComment, DiscussionTitle } from '../'
@@ -16,6 +17,7 @@ export interface IProps {
   onMoreComments: () => void
   onSubmit: (comment: string) => void
   isLoggedIn: boolean
+  supportReplies?: boolean
 }
 
 export const DiscussionContainer = (props: IProps) => {
@@ -31,19 +33,51 @@ export const DiscussionContainer = (props: IProps) => {
     onMoreComments,
     onSubmit,
     isLoggedIn,
+    supportReplies: _supportReplies,
   } = props
+
+  const [commentBeingRepliedTo, setCommentBeingRepliedTo] = useState<
+    null | string
+  >(null)
+  const supportReplies = _supportReplies ?? false
 
   return (
     <>
       <DiscussionTitle length={comments.length} />
 
       <CommentList
+        supportReplies={supportReplies}
+        replyForm={(commentId) => {
+          if (commentId !== commentBeingRepliedTo) {
+            return <></>
+          }
+
+          return (
+            <>
+              <span>Reply form</span>
+              <CreateComment
+                maxLength={maxLength}
+                comment={comment}
+                onChange={onChange}
+                onSubmit={onSubmit}
+                isLoggedIn={isLoggedIn}
+              />
+            </>
+          )
+        }}
         comments={comments}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         handleEditRequest={handleEditRequest}
         highlightedCommentId={highlightedCommentId}
         onMoreComments={onMoreComments}
+        setCommentBeingRepliedTo={(commentId) => {
+          if (commentId === commentBeingRepliedTo) {
+            setCommentBeingRepliedTo(null)
+            return
+          }
+          setCommentBeingRepliedTo(commentId)
+        }}
       />
 
       <Flex

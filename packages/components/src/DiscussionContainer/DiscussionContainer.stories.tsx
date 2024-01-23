@@ -84,3 +84,27 @@ export const Expandable: StoryFn<typeof DiscussionContainer> = () => {
     />
   )
 }
+
+export const WithReplies: StoryFn<typeof DiscussionContainer> = () => {
+  const [comment, setComment] = useState<string>('')
+
+  const fakeComments = createFakeComments(3)
+
+  fakeComments[0].replies = createFakeComments(2)
+
+  return (
+    <DiscussionContainer
+      supportReplies={true}
+      comments={fakeComments}
+      handleDelete={() => Promise.resolve()}
+      handleEditRequest={() => Promise.resolve()}
+      handleEdit={() => Promise.resolve()}
+      maxLength={1000}
+      comment={comment}
+      onChange={setComment}
+      onMoreComments={() => null}
+      onSubmit={() => null}
+      isLoggedIn={true}
+    />
+  )
+}

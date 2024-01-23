@@ -49,6 +49,29 @@ export const WithNestedComments: StoryFn<typeof CommentList> = () => {
   )
 }
 
+export const WithNestedCommentsAndReplies: StoryFn<typeof CommentList> = () => {
+  // TODO: This is a temporary solution to get nested comments to pass type check
+  const comments: any = [
+    fakeComment({
+      replies: [fakeComment(), fakeComment()],
+    }),
+    fakeComment(),
+    fakeComment(),
+  ]
+
+  return (
+    <CommentList
+      supportReplies={true}
+      comments={comments}
+      handleDelete={() => Promise.resolve()}
+      handleEditRequest={() => Promise.resolve()}
+      handleEdit={() => Promise.resolve()}
+      onMoreComments={() => Promise.resolve()}
+      replyForm={(commentId) => <>Reply to {commentId}</>}
+    />
+  )
+}
+
 const highlightedCommentList = createFakeComments(20, { isEditable: false })
 
 export const Highlighted: StoryFn<typeof CommentList> = () => (

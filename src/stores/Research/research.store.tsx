@@ -104,7 +104,7 @@ export class ResearchStore extends ModuleStore {
       ItemSortingOption.MostUseful,
       ItemSortingOption.Comments,
       ItemSortingOption.Updates,
-      ItemSortingOption.MostRelevant,
+      ItemSortingOption.SearchResults,
     ]
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {

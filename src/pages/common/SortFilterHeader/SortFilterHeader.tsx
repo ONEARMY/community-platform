@@ -74,7 +74,7 @@ export const SortFilterHeader = ({
       value: label,
     }))
     .filter((option) => option.value !== activeSorter)
-    .filter((option) => option.value !== ItemSortingOption.MostRelevant)
+    .filter((option) => option.value !== ItemSortingOption.SearchResults)
 
   const defaultSortingOption =
     Array.isArray(allSortingOptions) && allSortingOptions.length > 0
@@ -226,25 +226,21 @@ export const SortFilterHeader = ({
             currentStore.updateSearchValue(value)
             if (
               value.length > 0 &&
-              currentStore.activeSorter !== ItemSortingOption.MostRelevant
+              currentStore.activeSorter !== ItemSortingOption.SearchResults
             ) {
               currentStore.updatePreSearchSorter()
-              currentStore.updateActiveSorter(ItemSortingOption.MostRelevant)
-              setSortState({
-                label: 'Most Relevant',
-                value: ItemSortingOption.MostRelevant,
-              })
+              currentStore.updateActiveSorter(ItemSortingOption.SearchResults)
             }
             if (value.length === 0 || !value) {
               currentStore.updateActiveSorter(currentStore.preSearchSorter)
-              setSortState({
-                label: currentStore.activeSorter.replace(
-                  /([a-z])([A-Z])/g,
-                  '$1 $2',
-                ),
-                value: currentStore.activeSorter,
-              })
             }
+            setSortState({
+              label: currentStore.activeSorter.replace(
+                /([a-z])([A-Z])/g,
+                '$1 $2',
+              ),
+              value: currentStore.activeSorter,
+            })
           }}
         />
       </Flex>

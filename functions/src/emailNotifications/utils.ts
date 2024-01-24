@@ -79,8 +79,17 @@ export const isSameEmail = (userDoc, email) => {
 }
 
 export const isUserAllowedToMessage = async (uid) => {
-  const { toUser } = await getUserAndEmail(uid)
-  if (toUser.isBlockedFromMessaging) {
+  const { docs } = await db
+    .collection(DB_ENDPOINTS.users)
+    .where('_authID', '==', uid)
+    .limit(1)
+    .get()
+
+  if (!docs[0]) {
+    throw new Error(`Cannot get user ${uid}`)
+  }
+
+  if (docs[0].data().isBlockedFromMessaging) {
     throw new Error(errors.USER_BLOCKED)
   }
   return true

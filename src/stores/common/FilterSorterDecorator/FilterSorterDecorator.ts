@@ -324,6 +324,7 @@ export class FilterSorterDecorator<T extends IItem> {
 
       return fuse
         .search(searchValue)
+        .filter((r) => (r.score || 1) <= 0.8)
         .sort((a, b) => (a.score || 0) - (b.score || 0))
         .map((v) => v.item)
     } else {

@@ -104,6 +104,11 @@ export const SortFilterHeader = ({
   if (urlSelectedStatus && isResearchStore(currentStore))
     currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
 
+  const urlSearchTerm = getQueryParam(window.location.href, 'search', null)
+  if (urlSearchTerm) {
+    currentStore.updateActiveSorter(ItemSortingOption.SearchResults)
+  }
+
   const _inputStyle = {
     width: ['100%', '100%', '200px'],
     mr: [0, 0, 2],

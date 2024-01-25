@@ -74,6 +74,7 @@ export const SortFilterHeader = ({
       value: label,
     }))
     .filter((option) => option.value !== activeSorter)
+    .filter((option) => option.value !== ItemSortingOption.SearchResults)
 
   const defaultSortingOption =
     Array.isArray(allSortingOptions) && allSortingOptions.length > 0
@@ -102,6 +103,11 @@ export const SortFilterHeader = ({
   const urlSelectedStatus = getQueryParam(window.location.href, 'status', null)
   if (urlSelectedStatus && isResearchStore(currentStore))
     currentStore.updateSelectedStatus(urlSelectedStatus as ResearchStatus)
+
+  const urlSearchTerm = getQueryParam(window.location.href, 'search', null)
+  if (urlSearchTerm) {
+    currentStore.updateActiveSorter(ItemSortingOption.SearchResults)
+  }
 
   const _inputStyle = {
     width: ['100%', '100%', '200px'],
@@ -220,21 +226,21 @@ export const SortFilterHeader = ({
             currentStore.updateSearchValue(value)
             if (
               value.length > 0 &&
-              currentStore.activeSorter !== ItemSortingOption.MostRelevant
+              currentStore.activeSorter !== ItemSortingOption.SearchResults
             ) {
-              currentStore.updateActiveSorter(ItemSortingOption.MostRelevant)
-              setSortState({
-                label: 'Most Relevant',
-                value: ItemSortingOption.MostRelevant,
-              })
+              currentStore.updatePreSearchSorter()
+              currentStore.updateActiveSorter(ItemSortingOption.SearchResults)
             }
-
             if (value.length === 0 || !value) {
-              currentStore.updateActiveSorter(
-                currentStore.availableItemSortingOption[0],
-              )
-              setSortState(defaultSortingOption)
+              currentStore.updateActiveSorter(currentStore.preSearchSorter)
             }
+            setSortState({
+              label: currentStore.activeSorter.replace(
+                /([a-z])([A-Z])/g,
+                '$1 $2',
+              ),
+              value: currentStore.activeSorter,
+            })
           }}
         />
       </Flex>

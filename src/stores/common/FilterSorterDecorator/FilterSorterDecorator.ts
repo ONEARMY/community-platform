@@ -39,7 +39,7 @@ export enum ItemSortingOption {
   Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
   Random = 'Random',
-  MostRelevant = 'MostRelevant',
+  SearchResults = 'SearchResults',
 }
 
 export interface AuthorOption {
@@ -142,7 +142,7 @@ export class FilterSorterDecorator<T extends IItem> {
     return this.sortByProperty(listItems, 'updates')
   }
 
-  private sortByMostRelevant(listItems: T[]) {
+  private sortBySearchRanking(listItems: T[]) {
     return listItems
   }
 
@@ -289,8 +289,8 @@ export class FilterSorterDecorator<T extends IItem> {
           validItems = this.sortRandomly(validItems)
           break
 
-        case ItemSortingOption.MostRelevant:
-          validItems = this.sortByMostRelevant(validItems)
+        case ItemSortingOption.SearchResults:
+          validItems = this.sortBySearchRanking(validItems)
           break
 
         default:
@@ -324,6 +324,7 @@ export class FilterSorterDecorator<T extends IItem> {
 
       return fuse
         .search(searchValue)
+        .filter((r) => (r.score || 1) <= 0.8)
         .sort((a, b) => (a.score || 0) - (b.score || 0))
         .map((v) => v.item)
     } else {

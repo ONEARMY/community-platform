@@ -12,6 +12,12 @@ const factory = (user?) => {
   // @ts-ignore
   store.activeUser = user || FactoryUser()
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.userStore = {
+    getUserEmailIsVerified: () => jest.fn().mockResolvedValue(true),
+  }
+
   // @ts-ignore
   store.db.set.mockImplementation((newValue) => {
     return newValue
@@ -52,6 +58,20 @@ describe('message.store', () => {
     }).rejects.toThrowError('Blocked from messaging')
   })
 
+  it('should throw error if user email is not verified', async () => {
+    const unverifiedUser = FactoryUser()
+    const { getWhereFn, store } = factory(unverifiedUser)
+
+    getWhereFn.mockResolvedValue([])
+    store.userStore.getUserEmailIsVerified = jest
+      .fn()
+      .mockRejectedValue(new Error('Not verified'))
+
+    expect(async () => {
+      await store.upload(FactoryMessage())
+    }).rejects.toThrowError(new Error('Not verified'))
+  })
+
   it('should upload a new message', async () => {
     const { store, getWhereFn, setFn } = factory()
     const msg = FactoryMessage()
@@ -59,7 +79,6 @@ describe('message.store', () => {
     getWhereFn.mockResolvedValueOnce([])
 
     await store.upload(msg)
-
     expect(setFn).toHaveBeenCalledWith({
       ...msg,
       isSent: false,
@@ -74,7 +93,6 @@ describe('message.store', () => {
     setFn.mockRejectedValueOnce(new Error('Error'))
 
     const res = await store.upload(msg)
-
     expect(res).toEqual(new Error('Error'))
   })
 })

@@ -34,6 +34,16 @@ export class MessageStore extends ModuleStore {
       return Promise.reject(error)
     }
 
+    const isUserEmailVerified = await this.userStore.getUserEmailIsVerified()
+    if (!isUserEmailVerified) {
+      logger.error('User email not verified', values)
+
+      const error = new Error(
+        'Your email address is not verified, please do that before trying again.',
+      )
+      return Promise.reject(error)
+    }
+
     try {
       return await this.db
         .collection<IMessage>(COLLECTION_NAME)

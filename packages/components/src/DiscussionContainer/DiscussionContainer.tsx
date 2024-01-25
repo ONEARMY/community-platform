@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Box, Flex } from 'theme-ui'
 
 import { CommentList, CreateComment, DiscussionTitle } from '../'
+import { transformToTree } from './transformToStructuredComments'
 
 import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 
@@ -42,6 +43,10 @@ export const DiscussionContainer = (props: IProps) => {
     null | string
   >(null)
   const supportReplies = _supportReplies ?? false
+  const structuredComments = useMemo(
+    () => transformToTree(comments),
+    [comments],
+  )
 
   return (
     <>
@@ -79,7 +84,7 @@ export const DiscussionContainer = (props: IProps) => {
             </Box>
           )
         }}
-        comments={comments}
+        comments={structuredComments}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         handleEditRequest={handleEditRequest}

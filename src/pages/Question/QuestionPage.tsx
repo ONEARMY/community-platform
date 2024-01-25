@@ -111,7 +111,7 @@ export const QuestionPage = () => {
   }
 
   return (
-    <Box sx={{ p: 7 }}>
+    <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
       {isLoading ? (
         <Loader />
       ) : question ? (

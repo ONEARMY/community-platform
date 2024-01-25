@@ -17,12 +17,25 @@ import type { IUserDB } from '../models'
 import type { UserRecord } from 'firebase-admin/auth'
 
 const messageDocs = []
+let isBlockedFromMessaging = false
+
 jest.mock('../Firebase/firestoreDB', () => ({
   db: {
     collection: () => ({
       where: () => ({
         get: () => ({
           docs: messageDocs,
+        }),
+        limit: () => ({
+          get: () => ({
+            docs: [
+              {
+                data: () => {
+                  return { isBlockedFromMessaging }
+                },
+              },
+            ],
+          }),
         }),
       }),
     }),
@@ -95,19 +108,11 @@ describe('isSameEmail', () => {
 
 describe('isUserAllowedToMessage', () => {
   it("returns true when user isn't blocked from messaging", async () => {
-    jest.spyOn(utils, 'getUserAndEmail').mockResolvedValue({
-      toUser: { isBlockedFromMessaging: false } as IUserDB,
-      toUserEmail: 'anything@email.com',
-    })
-
     await expect(isUserAllowedToMessage('userName')).resolves.toEqual(true)
   })
 
   it('errors when user is blocked from messaging', async () => {
-    jest.spyOn(utils, 'getUserAndEmail').mockResolvedValue({
-      toUser: { isBlockedFromMessaging: true } as IUserDB,
-      toUserEmail: 'anything@email.com',
-    })
+    isBlockedFromMessaging = true
 
     await expect(isUserAllowedToMessage('userName')).rejects.toThrowError(
       errors.USER_BLOCKED,

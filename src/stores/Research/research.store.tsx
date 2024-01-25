@@ -72,6 +72,9 @@ export class ResearchStore extends ModuleStore {
   @observable
   public activeSorter: ItemSortingOption
 
+  @observable
+  public preSearchSorter: ItemSortingOption
+
   public availableItemSortingOption: ItemSortingOption[]
 
   @observable
@@ -101,7 +104,7 @@ export class ResearchStore extends ModuleStore {
       ItemSortingOption.MostUseful,
       ItemSortingOption.Comments,
       ItemSortingOption.Updates,
-      ItemSortingOption.MostRelevant,
+      ItemSortingOption.SearchResults,
     ]
 
     this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
@@ -126,6 +129,10 @@ export class ResearchStore extends ModuleStore {
 
   public updateActiveSorter(sorter: ItemSortingOption) {
     this.activeSorter = sorter
+  }
+
+  public updatePreSearchSorter() {
+    this.preSearchSorter = this.activeSorter
   }
 
   public updateSelectedAuthor(author: IUser['userName']) {

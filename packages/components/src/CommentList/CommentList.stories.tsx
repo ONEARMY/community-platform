@@ -67,7 +67,6 @@ export const WithNestedCommentsAndReplies: StoryFn<typeof CommentList> = () => {
       handleEditRequest={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
       onMoreComments={() => Promise.resolve()}
-      replyForm={(commentId) => <>Reply to {commentId}</>}
     />
   )
 }

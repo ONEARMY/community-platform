@@ -6,6 +6,7 @@ import {
   ModerationStatus,
   UsefulStatsButton,
 } from 'oa-components'
+import { transformToUserComments } from 'src/common/transFormToUserComments'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
@@ -15,7 +16,7 @@ import { Box, Button, Card, Flex, Heading, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { QuestionComments } from './QuestionComments'
 
-import type { IDiscussionComment, IQuestion, IUserPPDB } from 'src/models'
+import type { IDiscussionComment, IQuestion } from 'src/models'
 
 export const QuestionPage = () => {
   const { slug } = useParams()
@@ -190,12 +191,3 @@ export const QuestionPage = () => {
     </Box>
   )
 }
-
-const transformToUserComments = (
-  comments: IDiscussionComment[],
-  loggedInUser: IUserPPDB | null | undefined,
-) =>
-  comments.map((c) => ({
-    ...c,
-    isEditable: c._creatorId === loggedInUser?._id,
-  }))

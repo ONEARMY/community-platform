@@ -16,6 +16,7 @@ export interface IProps {
   onChange: (comment: string) => void
   onMoreComments: () => void
   onSubmit: (comment: string) => void
+  onSubmitReply?: (_id: string, comment: string) => Promise<void>
   isLoggedIn: boolean
   supportReplies?: boolean
 }
@@ -27,6 +28,7 @@ export const DiscussionContainer = (props: IProps) => {
     handleDelete,
     handleEdit,
     handleEditRequest,
+    onSubmitReply,
     highlightedCommentId,
     maxLength,
     onChange,
@@ -65,7 +67,12 @@ export const DiscussionContainer = (props: IProps) => {
                 maxLength={maxLength}
                 comment={comment}
                 onChange={onChange}
-                onSubmit={onSubmit}
+                onSubmit={() => {
+                  if (commentId && onSubmitReply) {
+                    onSubmitReply(commentId, comment)
+                  }
+                  setCommentBeingRepliedTo(null)
+                }}
                 buttonLabel="Send your reply"
                 isLoggedIn={isLoggedIn}
               />

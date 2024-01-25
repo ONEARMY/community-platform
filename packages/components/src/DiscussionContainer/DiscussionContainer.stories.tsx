@@ -118,6 +118,7 @@ export const WithReplies: Story = {
         onMoreComments={() => null}
         onSubmit={() => null}
         isLoggedIn={true}
+        handleSubmitReply={() => alert('reply')}
       />
     )
   },

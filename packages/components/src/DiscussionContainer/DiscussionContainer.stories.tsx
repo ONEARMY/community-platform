@@ -118,7 +118,9 @@ export const WithReplies: Story = {
         onMoreComments={() => null}
         onSubmit={() => null}
         isLoggedIn={true}
-        handleSubmitReply={() => alert('reply')}
+        onSubmitReply={async (commentId, comment) =>
+          alert(`reply to commentId: ${commentId} with comment: ${comment}`)
+        }
       />
     )
   },

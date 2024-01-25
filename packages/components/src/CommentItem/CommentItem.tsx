@@ -11,7 +11,6 @@ import { Username } from '../Username/Username'
 const SHORT_COMMENT = 129
 
 export interface CommentItemProps {
-  supportReplies: boolean
   text: string
   isUserVerified?: boolean
   isEditable: boolean
@@ -20,6 +19,7 @@ export interface CommentItemProps {
   _id: string
   _edited?: string
   _created?: string
+  supportReplies?: boolean
   handleCommentReply?: (commentId: string | null) => void
   handleEdit?: (commentId: string, newCommentText: string) => void
   handleDelete?: (commentId: string) => Promise<void>

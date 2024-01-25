@@ -1,4 +1,4 @@
-import { act, fireEvent } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { vi } from 'vitest'
 
 import { render } from '../tests/utils'

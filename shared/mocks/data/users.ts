@@ -1,4 +1,4 @@
-import { UserRole } from 'oa-shared'
+import { UserRole } from '../../models'
 /**
  * If you want to be able to log with any of the users below
  * you will need to manually create them within

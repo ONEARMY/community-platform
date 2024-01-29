@@ -1,4 +1,4 @@
-import { UserRole } from 'oa-shared'
+import { UserRole } from '../../models'
 
 export interface IMockAuthUser {
   uid: string

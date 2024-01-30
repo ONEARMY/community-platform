@@ -61,6 +61,7 @@ export const WithNestedCommentsAndReplies: StoryFn<typeof CommentList> = () => {
     <CommentList
       supportReplies={true}
       comments={comments}
+      setCommentBeingRepliedTo={() => {}}
       handleDelete={() => Promise.resolve()}
       handleEditRequest={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
@@ -88,6 +89,7 @@ export const WithNestedCommentsAndRepliesMaxDepthTwo: StoryFn<
       currentDepth={0}
       maxDepth={2}
       comments={comments}
+      setCommentBeingRepliedTo={() => {}}
       handleDelete={() => Promise.resolve()}
       handleEditRequest={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}

@@ -32,13 +32,13 @@ export const CommentList = (props: IProps) => {
     handleEdit,
     onMoreComments,
     replyForm,
-    supportReplies: _supportReplies,
     setCommentBeingRepliedTo,
+    supportReplies = false,
     maxDepth = 9999,
     currentDepth = 0,
   } = props
 
-  const supportReplies = !!_supportReplies
+  const hasRepliesEnabled = supportReplies && currentDepth < maxDepth
 
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
@@ -56,6 +56,11 @@ export const CommentList = (props: IProps) => {
         ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 0)
   }
+
+  const handleCommentReply =
+    hasRepliesEnabled && setCommentBeingRepliedTo
+      ? setCommentBeingRepliedTo
+      : undefined
 
   useEffect(() => {
     if (!highlightedCommentId) return
@@ -94,12 +99,7 @@ export const CommentList = (props: IProps) => {
           >
             <CommentItem
               {...comment}
-              supportReplies={supportReplies && currentDepth < maxDepth}
-              handleCommentReply={(commentId) => {
-                if (!setCommentBeingRepliedTo) return
-
-                setCommentBeingRepliedTo(commentId)
-              }}
+              handleCommentReply={handleCommentReply}
               isUserVerified={!!comment.isUserVerified}
               isEditable={!!comment.isEditable}
               handleEditRequest={handleEditRequest}
@@ -113,7 +113,7 @@ export const CommentList = (props: IProps) => {
                   currentDepth={currentDepth + 1}
                   maxDepth={maxDepth}
                   comments={comment.replies}
-                  supportReplies={props.supportReplies}
+                  supportReplies={hasRepliesEnabled}
                   handleEditRequest={handleEditRequest}
                   handleDelete={handleDelete}
                   handleEdit={handleEdit}

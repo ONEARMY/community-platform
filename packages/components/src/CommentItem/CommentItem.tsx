@@ -19,10 +19,9 @@ export interface CommentItemProps {
   _id: string
   _edited?: string
   _created?: string
-  supportReplies?: boolean
   handleCommentReply?: (commentId: string | null) => void
-  handleEdit?: (commentId: string, newCommentText: string) => void
   handleDelete?: (commentId: string) => Promise<void>
+  handleEdit?: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
 }
 
@@ -52,7 +51,6 @@ export const CommentItem = (props: CommentItemProps) => {
     handleEdit,
     isEditable,
     handleCommentReply,
-    supportReplies,
   } = props
 
   const date = formatDate(_edited || _created)
@@ -139,7 +137,7 @@ export const CommentItem = (props: CommentItemProps) => {
                 </Button>
               </>
             )}
-            {supportReplies ? (
+            {typeof handleCommentReply === 'function' ? (
               <Button
                 data-cy="CommentItem: reply button"
                 variant="outline"

@@ -104,6 +104,8 @@ describe('CommentList', () => {
         maxDepth={2}
         supportReplies={true}
         comments={mockComments}
+        replyForm={() => <></>}
+        setCommentBeingRepliedTo={() => {}}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}

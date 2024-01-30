@@ -19,6 +19,8 @@ export interface IProps {
   onMoreComments: () => void
   setCommentBeingRepliedTo?: (commentId: string | null) => void
   replyForm?: (commentId: string) => JSX.Element
+  currentDepth?: number
+  maxDepth?: number
 }
 
 export const CommentList = (props: IProps) => {
@@ -32,6 +34,8 @@ export const CommentList = (props: IProps) => {
     replyForm,
     supportReplies: _supportReplies,
     setCommentBeingRepliedTo,
+    maxDepth = 9999,
+    currentDepth = 0,
   } = props
 
   const supportReplies = !!_supportReplies
@@ -90,7 +94,7 @@ export const CommentList = (props: IProps) => {
           >
             <CommentItem
               {...comment}
-              supportReplies={supportReplies}
+              supportReplies={supportReplies && currentDepth < maxDepth}
               handleCommentReply={(commentId) => {
                 if (!setCommentBeingRepliedTo) return
 
@@ -106,6 +110,8 @@ export const CommentList = (props: IProps) => {
             {comment.replies ? (
               <Box sx={{ pt: 4, pl: 4 }}>
                 <CommentList
+                  currentDepth={currentDepth + 1}
+                  maxDepth={maxDepth}
                   comments={comment.replies}
                   supportReplies={props.supportReplies}
                   handleEditRequest={handleEditRequest}

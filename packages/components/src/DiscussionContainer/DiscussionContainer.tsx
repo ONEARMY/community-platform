@@ -53,6 +53,8 @@ export const DiscussionContainer = (props: IProps) => {
       <DiscussionTitle length={comments.length} />
 
       <CommentList
+        currentDepth={0}
+        maxDepth={2}
         supportReplies={supportReplies}
         replyForm={(commentId) => {
           if (commentId !== commentBeingRepliedTo) {

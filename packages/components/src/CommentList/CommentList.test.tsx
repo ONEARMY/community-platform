@@ -86,4 +86,31 @@ describe('CommentList', () => {
 
     expect(screen.getAllByTestId('CommentList: item')).toHaveLength(5)
   })
+
+  it('does not show reply once max depth is reached', () => {
+    const mockComments = [
+      fakeComment({
+        replies: [
+          fakeComment({
+            replies: [fakeComment()],
+          }),
+        ],
+      }),
+    ]
+
+    const screen = render(
+      <CommentList
+        currentDepth={0}
+        maxDepth={2}
+        supportReplies={true}
+        comments={mockComments}
+        handleEdit={mockHandleEdit}
+        handleEditRequest={mockHandleEditRequest}
+        handleDelete={mockHandleDelete}
+        onMoreComments={mockOnMoreComments}
+      />,
+    )
+
+    expect(screen.getAllByText('reply')).toHaveLength(2)
+  })
 })

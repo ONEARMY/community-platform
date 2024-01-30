@@ -14,7 +14,8 @@
     "dev": "tsc --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "new-component": "ts-node scripts/newComponent.ts",
-    "test": "vitest --coverage"
+    "test": "vitest",
+    "test-ci": "vitest --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",

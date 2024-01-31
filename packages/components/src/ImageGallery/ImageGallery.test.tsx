@@ -1,7 +1,4 @@
-import {
-  findByRole as globalFindByRole,
-  waitFor
-} from '@testing-library/react'
+import { findByRole as globalFindByRole, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
 
 import { render } from '../tests/utils'

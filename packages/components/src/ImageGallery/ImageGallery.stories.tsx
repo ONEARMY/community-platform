@@ -66,3 +66,16 @@ export const ShowNextPrevButtons: StoryFn<typeof ImageGallery> = (
     />
   )
 }
+
+export const DoNotShowNextPrevButtons: StoryFn<typeof ImageGallery> = (
+  props: Omit<ImageGalleryProps, 'images'>,
+) => {
+  return (
+    <ImageGallery
+      images={[testImages[0]]}
+      {...props}
+      hideThumbnails
+      showNextPrevButton={true}
+    />
+  )
+}

@@ -207,7 +207,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
           <ImageGallery
             images={formatImagesForGallery(coverImage)}
             hideThumbnails={true}
-            showNextPrevButton={true}
+            showNextPrevButton={coverImage?.length > 1 || false}
           />
         ) : (
           <AspectRatio ratio={24 / 3}>

@@ -184,8 +184,6 @@ describe('ImageGallery', () => {
       />,
     )
 
-    // const nextBtn = getByRole('button', { name: 'Next image' })
-    // const previousBtn = getByRole('button', { name: 'Previous image' })
     const nextBtn = queryByRole('button', { name: 'Next image' })
     const previousBtn = queryByRole('button', { name: 'Previous image' })
 

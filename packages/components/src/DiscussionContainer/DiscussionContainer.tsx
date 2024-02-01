@@ -78,6 +78,13 @@ export const DiscussionContainer = (props: IProps) => {
     )
   }
 
+  const handleSetCommentBeingRepliedTo = (commentId: string | null): void => {
+    if (commentId === commentBeingRepliedTo) {
+      return setCommentBeingRepliedTo(null)
+    }
+    setCommentBeingRepliedTo(commentId)
+  }
+
   return (
     <>
       <DiscussionTitle length={comments.length} />
@@ -93,12 +100,7 @@ export const DiscussionContainer = (props: IProps) => {
         handleEditRequest={handleEditRequest}
         highlightedCommentId={highlightedCommentId}
         onMoreComments={onMoreComments}
-        setCommentBeingRepliedTo={(commentId) => {
-          if (commentId === commentBeingRepliedTo) {
-            return setCommentBeingRepliedTo(null)
-          }
-          setCommentBeingRepliedTo(commentId)
-        }}
+        setCommentBeingRepliedTo={handleSetCommentBeingRepliedTo}
       />
 
       <Flex

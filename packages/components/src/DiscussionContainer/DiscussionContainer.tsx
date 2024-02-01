@@ -47,6 +47,37 @@ export const DiscussionContainer = (props: IProps) => {
     [comments],
   )
 
+  const reployForm = (commentId: string) => {
+    if (commentId !== commentBeingRepliedTo) {
+      return <></>
+    }
+
+    return (
+      <Box
+        sx={{
+          background: 'softblue',
+          borderRadius: 2,
+          padding: 3,
+          mt: 3,
+        }}
+      >
+        <CreateComment
+          maxLength={maxLength}
+          comment={comment}
+          onChange={onChange}
+          onSubmit={() => {
+            if (commentId && onSubmitReply) {
+              onSubmitReply(commentId, comment)
+            }
+            setCommentBeingRepliedTo(null)
+          }}
+          buttonLabel="Send your reply"
+          isLoggedIn={isLoggedIn}
+        />
+      </Box>
+    )
+  }
+
   return (
     <>
       <DiscussionTitle length={comments.length} />
@@ -55,36 +86,7 @@ export const DiscussionContainer = (props: IProps) => {
         currentDepth={0}
         maxDepth={1}
         supportReplies={supportReplies}
-        replyForm={(commentId) => {
-          if (commentId !== commentBeingRepliedTo) {
-            return <></>
-          }
-
-          return (
-            <Box
-              sx={{
-                background: 'softblue',
-                borderRadius: 2,
-                padding: 3,
-                mt: 3,
-              }}
-            >
-              <CreateComment
-                maxLength={maxLength}
-                comment={comment}
-                onChange={onChange}
-                onSubmit={() => {
-                  if (commentId && onSubmitReply) {
-                    onSubmitReply(commentId, comment)
-                  }
-                  setCommentBeingRepliedTo(null)
-                }}
-                buttonLabel="Send your reply"
-                isLoggedIn={isLoggedIn}
-              />
-            </Box>
-          )
-        }}
+        replyForm={reployForm}
         comments={structuredComments}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
@@ -93,8 +95,7 @@ export const DiscussionContainer = (props: IProps) => {
         onMoreComments={onMoreComments}
         setCommentBeingRepliedTo={(commentId) => {
           if (commentId === commentBeingRepliedTo) {
-            setCommentBeingRepliedTo(null)
-            return
+            return setCommentBeingRepliedTo(null)
           }
           setCommentBeingRepliedTo(commentId)
         }}

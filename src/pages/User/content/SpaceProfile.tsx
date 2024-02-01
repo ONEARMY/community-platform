@@ -290,6 +290,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                     flexDirection: ['column', 'column', 'row'],
                     justifyContent: 'space-between',
                     alignItems: 'flex-start',
+                    gap: [0, 0, 6],
                   }}
                 >
                   <Box

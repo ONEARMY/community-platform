@@ -127,7 +127,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
   const activeImage = images[activeImageIndex]
   const imageNumber = images.length
   const showThumbnails = !props.hideThumbnails && images.length >= 1
-  const showNextPrevButton = !!props.showNextPrevButton
+  const showNextPrevButton = !!props.showNextPrevButton && images.length > 1
 
   return activeImage ? (
     <Flex sx={{ flexDirection: 'column' }}>

@@ -36,13 +36,12 @@ export const DiscussionContainer = (props: IProps) => {
     onMoreComments,
     onSubmit,
     isLoggedIn,
-    supportReplies: _supportReplies,
+    supportReplies = false,
   } = props
 
   const [commentBeingRepliedTo, setCommentBeingRepliedTo] = useState<
     null | string
   >(null)
-  const supportReplies = _supportReplies ?? false
   const structuredComments = useMemo(
     () => transformToTree(comments),
     [comments],

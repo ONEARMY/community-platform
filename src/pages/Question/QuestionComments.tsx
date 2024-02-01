@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { DiscussionContainer } from 'oa-components'
-import { transformToUserComments } from 'src/common/transFormToUserComments'
+import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'

@@ -6,7 +6,7 @@ import {
   ModerationStatus,
   UsefulStatsButton,
 } from 'oa-components'
-import { transformToUserComments } from 'src/common/transFormToUserComments'
+import { transformToUserComments } from 'src/common/transformToUserComments'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'

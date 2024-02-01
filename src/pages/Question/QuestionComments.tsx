@@ -65,6 +65,21 @@ export const QuestionComments = ({
     }
   }
 
+  const handleSubmitReply = async (commentId: string, reply) => {
+    logger.info({ commentId, reply }, 'reply submitted')
+    if (discussionObject) {
+      const updatedObj = await store.addComment(
+        discussionObject,
+        reply,
+        commentId,
+      )
+      commentsUpdated &&
+        commentsUpdated(
+          transformToUserComments(updatedObj?.comments || [], activeUser),
+        )
+    }
+  }
+
   return (
     <Card
       sx={{
@@ -86,20 +101,7 @@ export const QuestionComments = ({
           onSubmit(comment)
           setComment('')
         }}
-        onSubmitReply={async (commentId: string, reply) => {
-          logger.info({ commentId, reply }, 'reply submitted')
-          if (discussionObject) {
-            const updatedObj = await store.addComment(
-              discussionObject,
-              reply,
-              commentId,
-            )
-            commentsUpdated &&
-              commentsUpdated(
-                transformToUserComments(updatedObj?.comments || [], activeUser),
-              )
-          }
-        }}
+        onSubmitReply={handleSubmitReply}
         isLoggedIn={!!activeUser}
       />
     </Card>

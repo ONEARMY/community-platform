@@ -309,6 +309,20 @@ describe('userStore', () => {
     })
   })
 
+  describe('getUserEmailIsVerified', () => {
+    it('fetches correct property off authUser', async () => {
+      // Act
+      const emailVerified = faker.datatype.boolean()
+      store.authUser = {
+        emailVerified,
+      }
+      const res = await store.getUserEmailIsVerified()
+
+      // Assert
+      expect(res).toEqual(emailVerified)
+    })
+  })
+
   describe('updateUserImpact', () => {
     it('throws an error if user undefined', async () => {
       store.activeUser = null

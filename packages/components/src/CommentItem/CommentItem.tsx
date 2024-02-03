@@ -19,8 +19,9 @@ export interface CommentItemProps {
   _id: string
   _edited?: string
   _created?: string
-  handleEdit?: (commentId: string, newCommentText: string) => void
+  handleCommentReply?: (commentId: string | null) => void
   handleDelete?: (commentId: string) => Promise<void>
+  handleEdit?: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
 }
 
@@ -49,6 +50,7 @@ export const CommentItem = (props: CommentItemProps) => {
     handleDelete,
     handleEdit,
     isEditable,
+    handleCommentReply,
   } = props
 
   const date = formatDate(_edited || _created)
@@ -103,37 +105,52 @@ export const CommentItem = (props: CommentItemProps) => {
             <Text sx={{ fontSize: 1 }}>{date}</Text>
           </Flex>
 
-          {isEditable && (
-            <Flex
-              sx={{
-                flexGrow: 1,
-                gap: 2,
-                justifyContent: ['flex-start', 'flex-start', 'flex-end'],
-                opacity: 0.5,
-                width: ['100%', 'auto'],
-                ':hover': { opacity: 1 },
-              }}
-            >
+          <Flex
+            sx={{
+              flexGrow: 1,
+              gap: 2,
+              justifyContent: ['flex-start', 'flex-start', 'flex-end'],
+              opacity: 0.5,
+              width: ['100%', 'auto'],
+              ':hover': { opacity: 1 },
+            }}
+          >
+            {isEditable && (
+              <>
+                <Button
+                  data-cy="CommentItem: edit button"
+                  variant="outline"
+                  small={true}
+                  icon="edit"
+                  onClick={() => onEditRequest(_id)}
+                >
+                  edit
+                </Button>
+                <Button
+                  data-cy="CommentItem: delete button"
+                  variant={'outline'}
+                  small={true}
+                  icon="delete"
+                  onClick={() => setShowDeleteModal(true)}
+                >
+                  delete
+                </Button>
+              </>
+            )}
+            {typeof handleCommentReply === 'function' ? (
               <Button
-                data-cy="CommentItem: edit button"
+                data-cy="CommentItem: reply button"
                 variant="outline"
                 small={true}
-                icon="edit"
-                onClick={() => onEditRequest(_id)}
+                icon="comment"
+                onClick={() => {
+                  handleCommentReply && handleCommentReply(_id)
+                }}
               >
-                edit
+                reply
               </Button>
-              <Button
-                data-cy="CommentItem: delete button"
-                variant={'outline'}
-                small={true}
-                icon="delete"
-                onClick={() => setShowDeleteModal(true)}
-              >
-                delete
-              </Button>
-            </Flex>
-          )}
+            ) : null}
+          </Flex>
         </Flex>
         <Text
           data-cy="comment-text"

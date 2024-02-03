@@ -11,12 +11,14 @@ export interface Props {
   comment: string
   placeholder?: string
   userProfileType?: string
+  buttonLabel?: string
 }
 
 export const CreateComment = (props: Props) => {
   const { comment, isLoggedIn, maxLength, onSubmit } = props
   const userProfileType = props.userProfileType || 'member'
   const placeholder = props.placeholder || 'Leave your questions or feedback...'
+  const buttonLabel = props.buttonLabel ?? 'Leave a comment'
 
   const onChange = (newValue: string) => {
     props.onChange && props?.onChange(newValue)
@@ -107,7 +109,7 @@ export const CreateComment = (props: Props) => {
           onClick={() => onSubmit(comment)}
           sx={{ marginTop: 3 }}
         >
-          Leave a comment
+          {buttonLabel}
         </Button>
       </Flex>
     </Flex>

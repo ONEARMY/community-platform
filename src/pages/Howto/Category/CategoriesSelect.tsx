@@ -1,24 +1,31 @@
+import { useMemo } from 'react'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
 import { useCommonStores } from 'src/index'
 
 import { FieldContainer } from '../../../common/Form/FieldContainer'
 
-import type { ICategory } from 'src/models/categories.model'
-
+/**
+ * @deprecated in favor of CategoriesSelectV2
+ */
 export const CategoriesSelect = observer(
   ({ value, onChange, placeholder, isForm, type }) => {
-    let categories: ICategory[] = []
-    if (type === 'howto') {
-      const { categoriesStore } = useCommonStores().stores
-      categories = categoriesStore.allCategories
-    } else if (type === 'research') {
-      const { researchCategoriesStore } = useCommonStores().stores
-      categories = researchCategoriesStore.allResearchCategories
-    } else if (type === 'question') {
-      const { questionCategoriesStore } = useCommonStores().stores
-      categories = questionCategoriesStore.allQuestionCategories
-    }
+    const {
+      categoriesStore,
+      researchCategoriesStore,
+      questionCategoriesStore,
+    } = useCommonStores().stores
+
+    const categories = useMemo(() => {
+      if (type === 'howto') {
+        return categoriesStore.allCategories
+      } else if (type === 'research') {
+        return researchCategoriesStore.allResearchCategories
+      } else if (type === 'question') {
+        return questionCategoriesStore.allQuestionCategories
+      }
+      return []
+    }, [type])
 
     const selectOptions = categories
       .map((category) => ({

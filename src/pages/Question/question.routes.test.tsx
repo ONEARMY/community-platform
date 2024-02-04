@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 jest.mock('../../stores/common/module.store')
 
 import '@testing-library/jest-dom'
@@ -25,6 +26,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 
 import { questionRouteElements } from './question.routes'
+import { questionService } from './question.service'
 
 import type { QuestionStore } from 'src/stores/Question/question.store'
 
@@ -91,10 +93,30 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   fetchQuestionBySlug = jest.fn()
 }
 
+jest.mock('./question.service', () => ({
+  questionService: {
+    search: jest.fn(),
+    getQuestionCategories: jest.fn(),
+  },
+}))
+
+const mockQuestionService: typeof questionService = {
+  getQuestionCategories: jest.fn(() => {
+    return new Promise((resolve) => {
+      resolve([])
+    })
+  }),
+  search: jest.fn(() => {
+    return new Promise((resolve) => {
+      resolve({ items: [], total: 0 })
+    })
+  }),
+}
 const mockQuestionStore = new mockQuestionStoreClass()
 
 jest.mock('src/stores/Question/question.store')
 jest.mock('src/stores/Discussions/discussions.store')
+jest.mock('src/pages/Question/question.service')
 
 describe('question.routes', () => {
   beforeEach(() => {
@@ -112,11 +134,12 @@ describe('question.routes', () => {
   describe('/questions/', () => {
     it('renders a loading state', async () => {
       let wrapper
-      ;(useQuestionStore as any).mockReturnValue({
-        ...mockQuestionStore,
-        isFetching: true,
-        activeUser: mockActiveUser,
+      mockQuestionService.search = jest.fn(() => {
+        return new Promise((resolve) => {
+          setTimeout(() => resolve({ items: [], total: 0 }), 4000)
+        })
       })
+
       await act(async () => {
         wrapper = (await renderFn('/questions')).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
@@ -125,11 +148,6 @@ describe('question.routes', () => {
 
     it('renders an empty state', async () => {
       let wrapper
-      ;(useQuestionStore as any).mockReturnValue({
-        ...mockQuestionStore,
-        fetchQuestions: jest.fn().mockResolvedValue([]),
-        activeUser: mockActiveUser,
-      })
 
       await act(async () => {
         wrapper = (await renderFn('/questions')).wrapper
@@ -154,19 +172,22 @@ describe('question.routes', () => {
       const questionTitle = faker.lorem.words(3)
       const questionSlug = faker.lorem.slug()
 
-      ;(useQuestionStore as any).mockReturnValue({
-        ...mockQuestionStore,
-        filteredQuestions: [
-          {
-            ...FactoryQuestionItem({
-              title: questionTitle,
-              slug: questionSlug,
-            }),
-            _id: '123',
-            moderation: 'accepted',
-          },
-        ],
-        activeUser: mockActiveUser,
+      questionService.search = jest.fn(() => {
+        return new Promise((resolve) => {
+          resolve({
+            items: [
+              {
+                ...FactoryQuestionItem({
+                  title: questionTitle,
+                  slug: questionSlug,
+                }),
+                _id: '123',
+                ref: {} as any,
+              },
+            ],
+            total: 1,
+          })
+        })
       })
 
       await act(async () => {

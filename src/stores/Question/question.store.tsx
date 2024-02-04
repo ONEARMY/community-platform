@@ -7,6 +7,7 @@ import {
   formatLowerNoSpecial,
   randomID,
 } from 'src/utils/helpers'
+import { getKeywords } from 'src/utils/searchHelper'
 
 import {
   FilterSorterDecorator,
@@ -163,12 +164,14 @@ export class QuestionStore extends ModuleStore {
 
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
+    const keywords = getKeywords(values.title + ' ' + values.description)
 
     await dbRef.set({
       ...(values as any),
       creatorCountry,
       _createdBy: values._createdBy ?? this.activeUser?.userName,
       slug,
+      keywords: Array.from(keywords),
     })
     logger.debug(`upsertQuestion.set`, { dbRef })
 

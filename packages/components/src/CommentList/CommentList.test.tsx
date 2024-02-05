@@ -84,7 +84,7 @@ describe('CommentList', () => {
       />,
     )
 
-    expect(screen.getAllByTestId('CommentList: item')).toHaveLength(5)
+    expect(screen.getAllByTestId('CommentList: item')).toHaveLength(3)
   })
 
   it('does not show reply once max depth is reached', () => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex } from 'theme-ui'
 
-import { Button, CommentItem } from '../'
+import { Button, CommentContainer } from '../'
 
 import type { IComment } from '..'
 
@@ -14,37 +14,33 @@ export interface IProps {
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
-  onMoreComments: () => void
+  onMoreComments?: () => void
   setCommentBeingRepliedTo?: (commentId: string | null) => void
   replyForm?: (commentId: string) => JSX.Element
   currentDepth?: number
   maxDepth?: number
+  canHaveReplies?: boolean
 }
 
 export const CommentList = (props: IProps) => {
   const {
     comments,
-    handleEditRequest,
-    handleDelete,
     highlightedCommentId,
-    handleEdit,
-    onMoreComments,
-    replyForm,
     setCommentBeingRepliedTo,
+    replyForm,
+    handleEdit,
+    handleDelete,
+    handleEditRequest,
     supportReplies = false,
     maxDepth = 9999,
     currentDepth = 0,
+    onMoreComments,
   } = props
 
   const hasRepliesEnabled = supportReplies && currentDepth < maxDepth
 
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
-
-  const handleMoreComments = () => {
-    onMoreComments()
-    setMoreComments(moreComments + 1)
-  }
 
   const scrollIntoRelevantComment = (commentId: string) => {
     setTimeout(() => {
@@ -54,6 +50,12 @@ export const CommentList = (props: IProps) => {
         ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 0)
   }
+
+  const handleMoreComments = () => {
+    onMoreComments && onMoreComments()
+    setMoreComments(moreComments + 1)
+  }
+
 
   const handleCommentReply =
     hasRepliesEnabled && setCommentBeingRepliedTo
@@ -95,34 +97,19 @@ export const CommentList = (props: IProps) => {
               borderRadius: 1,
             }}
           >
-            <CommentItem
-              {...comment}
+            <CommentContainer
+              comment={comment}
               handleCommentReply={handleCommentReply}
-              isUserVerified={!!comment.isUserVerified}
-              isEditable={!!comment.isEditable}
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
+              supportReplies={supportReplies}
+              replyForm={replyForm && replyForm(comment._id)}
             />
-            {replyForm && replyForm(comment._id)}
-            {comment.replies ? (
-              <Box sx={{ pt: 4, pl: 4 }}>
-                <CommentList
-                  currentDepth={currentDepth + 1}
-                  maxDepth={maxDepth}
-                  comments={comment.replies}
-                  supportReplies={hasRepliesEnabled}
-                  handleEditRequest={handleEditRequest}
-                  handleDelete={handleDelete}
-                  handleEdit={handleEdit}
-                  onMoreComments={handleMoreComments}
-                  replyForm={replyForm}
-                  setCommentBeingRepliedTo={setCommentBeingRepliedTo}
-                />
-              </Box>
-            ) : null}
+
           </Box>
         ))}
+
       {comments && comments.length > shownComments && (
         <Flex>
           <Button

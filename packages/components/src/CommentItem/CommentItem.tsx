@@ -8,17 +8,12 @@ import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
 
+import type { IComment } from './types'
+
 const SHORT_COMMENT = 129
 
 export interface CommentItemProps {
-  text: string
-  isUserVerified?: boolean
-  isEditable: boolean
-  creatorCountry?: string | null
-  creatorName: string
-  _id: string
-  _edited?: string
-  _created?: string
+  comment: IComment
   handleCommentReply?: (commentId: string | null) => void
   handleDelete?: (commentId: string) => Promise<void>
   handleEdit?: (commentId: string, newCommentText: string) => void
@@ -38,20 +33,17 @@ export const CommentItem = (props: CommentItemProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
-  const {
-    creatorCountry,
-    creatorName,
-    isUserVerified,
-    _id,
-    _edited,
-    _created,
+  const { comment, handleCommentReply, handleEditRequest, handleDelete, handleEdit } = props
+  const { 
     text,
-    handleEditRequest,
-    handleDelete,
-    handleEdit,
-    isEditable,
-    handleCommentReply,
-  } = props
+    _edited, 
+    _created, 
+    creatorName, 
+    creatorCountry, 
+    isUserVerified, 
+    isEditable, 
+    _id
+  } = comment
 
   const date = formatDate(_edited || _created)
   const maxHeight = isShowMore ? 'max-content' : '128px'
@@ -76,11 +68,8 @@ export const CommentItem = (props: CommentItemProps) => {
   return (
     <Box id={`comment:${_id}`} data-cy="comment">
       <Flex
-        bg="white"
         sx={{
-          borderRadius: 1,
           flexDirection: 'column',
-          padding: 3,
         }}
       >
         <Flex

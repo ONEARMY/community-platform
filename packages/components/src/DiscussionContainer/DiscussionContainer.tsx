@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react'
 import { Box, Flex } from 'theme-ui'
 
-import { CommentList, CreateComment, DiscussionTitle } from '../'
+import { CommentList, CreateComment, DiscussionTitle } from '..'
 import { transformToTree } from './transformToStructuredComments'
 
 import type { IComment } from '..'
 
 export interface IProps {
+  canHaveReplies?: boolean
   comment: string
   comments: IComment[]
   handleEdit: (_id: string, comment: string) => Promise<void>
@@ -47,7 +48,7 @@ export const DiscussionContainer = (props: IProps) => {
     [comments],
   )
 
-  const reployForm = (commentId: string) => {
+  const replyForm = (commentId: string) => {
     if (commentId !== commentBeingRepliedTo) {
       return <></>
     }
@@ -93,7 +94,7 @@ export const DiscussionContainer = (props: IProps) => {
         currentDepth={0}
         maxDepth={1}
         supportReplies={supportReplies}
-        replyForm={reployForm}
+        replyForm={replyForm}
         comments={structuredComments}
         handleDelete={handleDelete}
         handleEdit={handleEdit}

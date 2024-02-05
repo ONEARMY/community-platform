@@ -33,7 +33,9 @@ export const WithNestedComments: StoryFn<typeof CommentList> = () => {
     fakeComment({
       replies: [fakeComment(), fakeComment()],
     }),
-    fakeComment(),
+    fakeComment({
+      replies: [fakeComment()],
+    }),
     fakeComment(),
   ]
 

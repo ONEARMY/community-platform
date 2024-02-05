@@ -1,6 +1,7 @@
 export { ArticleCallToAction } from './ArticleCallToAction/ArticleCallToAction'
 export { Button } from './Button/Button'
 export { ButtonShowReplies } from './ButtonShowReplies/ButtonShowReplies'
+export { CommentContainer } from './CommentContainer/CommentContainer'
 export { CommentItem } from './CommentItem/CommentItem'
 export { CommentList } from './CommentList/CommentList'
 export { ConfirmModal } from './ConfirmModal/ConfirmModal'

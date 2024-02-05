@@ -86,7 +86,6 @@ export const HowToComments = ({ comments }: IProps) => {
       >
         <Card sx={{ gap: 2, padding: 3 }}>
           <DiscussionContainer
-            canHaveReplies={false}
             comments={comments}
             handleEdit={handleEdit}
             handleEditRequest={handleEditRequest}

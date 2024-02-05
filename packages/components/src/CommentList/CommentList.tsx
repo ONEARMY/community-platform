@@ -56,7 +56,6 @@ export const CommentList = (props: IProps) => {
     setMoreComments(moreComments + 1)
   }
 
-
   const handleCommentReply =
     hasRepliesEnabled && setCommentBeingRepliedTo
       ? setCommentBeingRepliedTo
@@ -104,9 +103,8 @@ export const CommentList = (props: IProps) => {
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               supportReplies={supportReplies}
-              replyForm={replyForm && replyForm(comment._id)}
+              replyForm={replyForm}
             />
-
           </Box>
         ))}
 

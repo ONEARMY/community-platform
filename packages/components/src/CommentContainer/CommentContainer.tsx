@@ -25,7 +25,7 @@ export const CommentContainer = (props: Props) => {
     supportReplies,
     replyForm,
   } = props
-  const { creatorName, replies } = comment
+  const { _id, creatorName, replies } = comment
 
   const repliesButton = () => {
     return (
@@ -78,13 +78,13 @@ export const CommentContainer = (props: Props) => {
             }}
           >
             <CommentList
-              comments={comment.replies || []}
+              comments={replies || []}
               handleEditRequest={() => Promise.resolve()}
               handleDelete={() => Promise.resolve()}
               handleEdit={() => Promise.resolve()}
               supportReplies={false}
             />
-            {replyForm()}
+            {replyForm(_id)}
             {supportReplies && isShowReplies && repliesButton()}
           </Flex>
         </Flex>

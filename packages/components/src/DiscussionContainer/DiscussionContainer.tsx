@@ -7,20 +7,19 @@ import { transformToTree } from './transformToStructuredComments'
 import type { IComment } from '..'
 
 export interface IProps {
-  canHaveReplies?: boolean
   comment: string
   comments: IComment[]
+  handleDelete: (_id: string) => Promise<void>
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
-  handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
+  isLoggedIn: boolean
   maxLength: number
   onChange: (comment: string) => void
   onMoreComments: () => void
   onSubmit: (comment: string) => void
-  onSubmitReply?: (_id: string, comment: string) => Promise<void>
-  isLoggedIn: boolean
   supportReplies?: boolean
+  onSubmitReply: (_id: string, comment: string) => Promise<void>
 }
 
 export const DiscussionContainer = (props: IProps) => {

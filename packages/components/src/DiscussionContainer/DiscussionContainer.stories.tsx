@@ -21,15 +21,16 @@ export const Default: Story = {
   render: () => {
     return (
       <DiscussionContainer
+        comment={''}
         comments={fakeComments}
         handleDelete={() => Promise.resolve()}
         handleEditRequest={() => Promise.resolve()}
         handleEdit={() => Promise.resolve()}
         maxLength={1000}
-        comment={''}
         onChange={() => null}
         onMoreComments={() => null}
         onSubmit={() => null}
+        onSubmitReply={() => Promise.resolve()}
         isLoggedIn={false}
       />
     )
@@ -49,6 +50,7 @@ export const NoComments: Story = {
         onChange={() => null}
         onMoreComments={() => null}
         onSubmit={() => null}
+        onSubmitReply={() => Promise.resolve()}
         isLoggedIn={false}
       />
     )
@@ -70,6 +72,7 @@ export const LoggedIn: Story = {
         onChange={setComment}
         onMoreComments={() => null}
         onSubmit={() => null}
+        onSubmitReply={() => Promise.resolve()}
         isLoggedIn={true}
       />
     )
@@ -91,6 +94,7 @@ export const Expandable: Story = {
         onChange={setComment}
         onMoreComments={() => null}
         onSubmit={() => null}
+        onSubmitReply={() => Promise.resolve()}
         isLoggedIn={true}
       />
     )
@@ -102,7 +106,6 @@ export const WithReplies: Story = {
     const [comment, setComment] = useState<string>('')
 
     const fakeComments = createFakeComments(3)
-
     fakeComments[0].replies = createFakeComments(2)
 
     return (

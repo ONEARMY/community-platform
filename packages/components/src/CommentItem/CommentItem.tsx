@@ -33,16 +33,22 @@ export const CommentItem = (props: CommentItemProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
-  const { comment, handleCommentReply, handleEditRequest, handleDelete, handleEdit } = props
-  const { 
+  const {
+    comment,
+    handleCommentReply,
+    handleDelete,
+    handleEditRequest,
+    handleEdit,
+  } = props
+  const {
     text,
-    _edited, 
-    _created, 
-    creatorName, 
-    creatorCountry, 
-    isUserVerified, 
-    isEditable, 
-    _id
+    creatorName,
+    creatorCountry,
+    isUserVerified,
+    isEditable,
+    _created,
+    _edited,
+    _id,
   } = comment
 
   const date = formatDate(_edited || _created)

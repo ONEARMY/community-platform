@@ -14,30 +14,27 @@ export interface IProps {
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
+  isLoggedIn: boolean
+  maxLength: number
   onMoreComments?: () => void
+  onSubmitReply?: (_id: string, reply: string) => Promise<void>
   setCommentBeingRepliedTo?: (commentId: string | null) => void
-  replyForm?: (commentId: string) => JSX.Element
-  currentDepth?: number
-  maxDepth?: number
-  canHaveReplies?: boolean
 }
 
 export const CommentList = (props: IProps) => {
   const {
     comments,
-    highlightedCommentId,
-    setCommentBeingRepliedTo,
-    replyForm,
-    handleEdit,
     handleDelete,
+    handleEdit,
     handleEditRequest,
-    supportReplies = false,
-    maxDepth = 9999,
-    currentDepth = 0,
+    highlightedCommentId,
+    isLoggedIn,
+    maxLength,
     onMoreComments,
+    onSubmitReply,
+    setCommentBeingRepliedTo,
+    supportReplies = false,
   } = props
-
-  const hasRepliesEnabled = supportReplies && currentDepth < maxDepth
 
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
@@ -57,7 +54,7 @@ export const CommentList = (props: IProps) => {
   }
 
   const handleCommentReply =
-    hasRepliesEnabled && setCommentBeingRepliedTo
+    supportReplies && setCommentBeingRepliedTo
       ? setCommentBeingRepliedTo
       : undefined
 
@@ -102,8 +99,10 @@ export const CommentList = (props: IProps) => {
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
+              isLoggedIn={isLoggedIn}
+              maxLength={maxLength}
+              onSubmitReply={onSubmitReply}
               supportReplies={supportReplies}
-              replyForm={replyForm}
             />
           </Box>
         ))}

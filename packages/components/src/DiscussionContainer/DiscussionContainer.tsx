@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Box, Flex } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { CommentList, CreateComment, DiscussionTitle } from '..'
 import { transformToTree } from './transformToStructuredComments'
@@ -18,8 +18,8 @@ export interface IProps {
   onChange: (comment: string) => void
   onMoreComments: () => void
   onSubmit: (comment: string) => void
+  onSubmitReply: (_id: string, reply: string) => Promise<void>
   supportReplies?: boolean
-  onSubmitReply: (_id: string, comment: string) => Promise<void>
 }
 
 export const DiscussionContainer = (props: IProps) => {
@@ -47,37 +47,6 @@ export const DiscussionContainer = (props: IProps) => {
     [comments],
   )
 
-  const replyForm = (commentId: string) => {
-    if (commentId !== commentBeingRepliedTo) {
-      return <></>
-    }
-
-    return (
-      <Box
-        sx={{
-          background: 'softblue',
-          borderRadius: 2,
-          padding: 3,
-          mt: 3,
-        }}
-      >
-        <CreateComment
-          maxLength={maxLength}
-          comment={comment}
-          onChange={onChange}
-          onSubmit={() => {
-            if (commentId && onSubmitReply) {
-              onSubmitReply(commentId, comment)
-            }
-            setCommentBeingRepliedTo(null)
-          }}
-          buttonLabel="Send your reply"
-          isLoggedIn={isLoggedIn}
-        />
-      </Box>
-    )
-  }
-
   const handleSetCommentBeingRepliedTo = (commentId: string | null): void => {
     if (commentId === commentBeingRepliedTo) {
       return setCommentBeingRepliedTo(null)
@@ -90,16 +59,16 @@ export const DiscussionContainer = (props: IProps) => {
       <DiscussionTitle length={comments.length} />
 
       <CommentList
-        currentDepth={0}
-        maxDepth={1}
         supportReplies={supportReplies}
-        replyForm={replyForm}
         comments={structuredComments}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         handleEditRequest={handleEditRequest}
         highlightedCommentId={highlightedCommentId}
+        isLoggedIn={isLoggedIn}
+        maxLength={maxLength}
         onMoreComments={onMoreComments}
+        onSubmitReply={onSubmitReply}
         setCommentBeingRepliedTo={handleSetCommentBeingRepliedTo}
       />
 

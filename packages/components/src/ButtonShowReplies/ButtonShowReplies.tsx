@@ -14,9 +14,10 @@ export const ButtonShowReplies = (props: Props) => {
 
   const length = replies && replies.length ? replies.length : 0
   const icon = isShowReplies ? 'arrow-full-up' : 'arrow-full-down'
-  const text = `${length} ${
-    length === 1 ? 'reply' : 'replies'
-  } to ${creatorName}`
+
+  const text = length
+    ? `${length} ${length === 1 ? 'reply' : 'replies'}`
+    : `Reply`
 
   return (
     <Button
@@ -26,7 +27,7 @@ export const ButtonShowReplies = (props: Props) => {
       variant="outline"
       small
     >
-      {text}
+      {`${text} to ${creatorName}`}
     </Button>
   )
 }

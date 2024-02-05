@@ -14,7 +14,6 @@ const SHORT_COMMENT = 129
 
 export interface CommentItemProps {
   comment: IComment
-  handleCommentReply?: (commentId: string | null) => void
   handleDelete?: (commentId: string) => Promise<void>
   handleEdit?: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
@@ -33,13 +32,7 @@ export const CommentItem = (props: CommentItemProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
-  const {
-    comment,
-    handleCommentReply,
-    handleDelete,
-    handleEditRequest,
-    handleEdit,
-  } = props
+  const { comment, handleDelete, handleEditRequest, handleEdit } = props
   const {
     text,
     creatorName,
@@ -132,19 +125,6 @@ export const CommentItem = (props: CommentItemProps) => {
                 </Button>
               </>
             )}
-            {typeof handleCommentReply === 'function' ? (
-              <Button
-                data-cy="CommentItem: reply button"
-                variant="outline"
-                small={true}
-                icon="comment"
-                onClick={() => {
-                  handleCommentReply && handleCommentReply(_id)
-                }}
-              >
-                reply
-              </Button>
-            ) : null}
           </Flex>
         </Flex>
         <Text

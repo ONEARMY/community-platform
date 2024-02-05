@@ -1,18 +1,26 @@
 import { useState } from 'react'
 import { Box, Flex } from 'theme-ui'
 
-import { ButtonShowReplies, CommentItem, CommentList, Icon } from '..'
+import {
+  ButtonShowReplies,
+  CommentItem,
+  CommentList,
+  CreateReply,
+  Icon,
+} from '..'
 
 import type { IComment } from '..'
 
 export interface Props {
   comment: IComment
   handleCommentReply?: (commentId: string | null) => void
-  handleDelete: (commentId: string) => Promise<void>
-  handleEdit: (commentId: string, newCommentText: string) => void
-  handleEditRequest: (commentId: string) => Promise<void>
+  handleDelete: (_id: string) => Promise<void>
+  handleEdit: (_id: string, comment: string) => Promise<void>
+  handleEditRequest: () => Promise<void>
+  isLoggedIn: boolean
+  onSubmitReply?: (_id: string, reply: string) => Promise<void>
+  maxLength: number
   supportReplies: boolean
-  replyForm: any
 }
 
 export const CommentContainer = (props: Props) => {
@@ -23,9 +31,19 @@ export const CommentContainer = (props: Props) => {
     handleEditRequest,
     handleEdit,
     supportReplies,
-    replyForm,
+    isLoggedIn,
+    maxLength,
+    onSubmitReply,
   } = props
   const { _id, creatorName, replies } = comment
+
+  const replyArrow = () => {
+    return (
+      <Box sx={{ paddingTop: 4 }}>
+        <Icon glyph="arrow-curved-bottom-right" />
+      </Box>
+    )
+  }
 
   const repliesButton = () => {
     return (
@@ -36,6 +54,19 @@ export const CommentContainer = (props: Props) => {
         setIsShowReplies={() => setIsShowReplies(!isShowReplies)}
       />
     )
+  }
+
+  const createReply = () => {
+    if (onSubmitReply) {
+      return (
+        <CreateReply
+          commentId={_id}
+          isLoggedIn={isLoggedIn}
+          maxLength={maxLength}
+          onSubmit={onSubmitReply}
+        />
+      )
+    }
   }
 
   return (
@@ -55,20 +86,14 @@ export const CommentContainer = (props: Props) => {
 
       {supportReplies && !isShowReplies && repliesButton()}
 
-      {supportReplies && replies && isShowReplies ? (
+      {supportReplies && isShowReplies ? (
         <Flex
           sx={{
             alignItems: 'stretch',
             flexDirection: 'row',
           }}
         >
-          <Box
-            sx={{
-              paddingTop: 4,
-            }}
-          >
-            <Icon glyph="arrow-curved-bottom-right" />
-          </Box>
+          {replies && replyArrow()}
 
           <Flex
             sx={{
@@ -79,13 +104,17 @@ export const CommentContainer = (props: Props) => {
           >
             <CommentList
               comments={replies || []}
-              handleEditRequest={() => Promise.resolve()}
-              handleDelete={() => Promise.resolve()}
-              handleEdit={() => Promise.resolve()}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+              handleEditRequest={handleEditRequest}
+              isLoggedIn={isLoggedIn}
+              maxLength={maxLength}
               supportReplies={false}
             />
-            {replyForm(_id)}
-            {supportReplies && isShowReplies && repliesButton()}
+
+            {createReply()}
+
+            {repliesButton()}
           </Flex>
         </Flex>
       ) : null}

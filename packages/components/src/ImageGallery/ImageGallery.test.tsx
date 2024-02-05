@@ -5,6 +5,7 @@ import { render } from '../tests/utils'
 import { ImageGallery } from './ImageGallery'
 import {
   Default,
+  DoNotShowNextPrevButtons,
   NoThumbnails,
   ShowNextPrevButtons,
   testImages,
@@ -174,5 +175,19 @@ describe('ImageGallery', () => {
 
     expect(nextBtn).toBeInTheDocument()
     expect(previousBtn).toBeInTheDocument()
+  })
+
+  it('does not support show next/previous buttons because only one image', async () => {
+    const { queryByRole } = render(
+      <DoNotShowNextPrevButtons
+        {...(DoNotShowNextPrevButtons.args as ImageGalleryProps)}
+      />,
+    )
+
+    const nextBtn = queryByRole('button', { name: 'Next image' })
+    const previousBtn = queryByRole('button', { name: 'Previous image' })
+
+    expect(nextBtn).not.toBeInTheDocument()
+    expect(previousBtn).not.toBeInTheDocument()
   })
 })

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { DiscussionContainer } from 'oa-components'
+import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
@@ -64,6 +65,21 @@ export const QuestionComments = ({
     }
   }
 
+  const handleSubmitReply = async (commentId: string, reply) => {
+    logger.info({ commentId, reply }, 'reply submitted')
+    if (discussionObject) {
+      const updatedObj = await store.addComment(
+        discussionObject,
+        reply,
+        commentId,
+      )
+      commentsUpdated &&
+        commentsUpdated(
+          transformToUserComments(updatedObj?.comments || [], activeUser),
+        )
+    }
+  }
+
   return (
     <Card
       sx={{
@@ -72,6 +88,7 @@ export const QuestionComments = ({
       }}
     >
       <DiscussionContainer
+        supportReplies={true}
         comments={comments as any}
         maxLength={MAX_COMMENT_LENGTH}
         comment={comment}
@@ -84,17 +101,9 @@ export const QuestionComments = ({
           onSubmit(comment)
           setComment('')
         }}
+        onSubmitReply={handleSubmitReply}
         isLoggedIn={!!activeUser}
       />
     </Card>
   )
 }
-
-const transformToUserComments = (
-  comments: IDiscussionComment[],
-  loggedInUser: IUserPPDB | null | undefined,
-) =>
-  comments.map((c) => ({
-    ...c,
-    isEditable: c._creatorId === loggedInUser?._id,
-  }))

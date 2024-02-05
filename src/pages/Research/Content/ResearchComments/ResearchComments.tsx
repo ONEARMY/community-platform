@@ -133,6 +133,7 @@ export const ResearchComments = (props: IProps) => {
           }}
         >
           <DiscussionContainer
+            canHaveReplies={false}
             comment={comment}
             comments={comments}
             handleEdit={handleEdit}

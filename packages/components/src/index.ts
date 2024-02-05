@@ -50,6 +50,7 @@ export { Tab, TabsList, TabPanel, Tabs } from './TabbedContent/TabbedContent'
 export { DiscussionContainer } from './DiscussionContainer/DiscussionContainer'
 export { DiscussionTitle } from './DiscussionTitle/DiscussionTitle'
 export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWrapper'
+export { IconCountWithTooltip } from './IconCountWithTooltip/IconCountWithTooltip'
 
 export type { availableGlyphs, IGlyphs } from './Icon/types'
 export type { IComment } from './CommentItem/types'

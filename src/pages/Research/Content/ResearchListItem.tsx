@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom'
-import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
+import {
+  Icon,
+  IconCountWithTooltip,
+  ModerationStatus,
+  Tag,
+  Username,
+} from 'oa-components'
 import {
   IModerationStatus,
   ResearchStatus,
@@ -32,7 +38,7 @@ const ResearchListItem = ({ item }: IProps) => {
   const { aggregationsStore } = useCommonStores().stores
   const collaborators = item['collaborators'] || []
   const usefulDisplayCount =
-    item.votedUsefulCount > 0 ? item.votedUsefulCount : '0'
+    item.votedUsefulCount > 0 ? item.votedUsefulCount : 0
 
   const _commonStatisticStyle = {
     display: 'flex',
@@ -230,36 +236,22 @@ const ResearchListItem = ({ item }: IProps) => {
                 justifyContent: 'space-around',
               }}
             >
-              <Text
-                data-tip="How useful is it"
-                color="black"
-                sx={_commonStatisticStyle}
-              >
-                {usefulDisplayCount}
-                <Icon glyph="star-active" ml={1} />
-              </Text>
-              <Tooltip />
+              <IconCountWithTooltip
+                count={usefulDisplayCount}
+                icon="star-active"
+                text="How useful is it"
+              />
+              <IconCountWithTooltip
+                count={calculateTotalUpdateComments(item)}
+                icon="comment"
+                text="Total comments"
+              />
 
-              <Text
-                data-tip="Total comments"
-                color="black"
-                sx={_commonStatisticStyle}
-              >
-                {calculateTotalUpdateComments(item)}
-                <Icon glyph="comment" ml={1} />
-              </Text>
-              <Tooltip />
-
-              <Text
-                color="black"
-                sx={_commonStatisticStyle}
-                data-tip="Amount of updates"
-                data-cy="ItemUpdateText"
-              >
-                {getUpdateText(item)}
-                <Icon glyph="update" ml={1} />
-              </Text>
-              <Tooltip />
+              <IconCountWithTooltip
+                count={getUpdateCount(item)}
+                icon="update"
+                text="Amount of updates"
+              />
             </Box>
           </Grid>
           {item.moderation !== IModerationStatus.ACCEPTED && (
@@ -306,15 +298,13 @@ const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
   }
 }
 
-const getUpdateText = (item: IResearch.ItemDB) => {
+const getUpdateCount = (item: IResearch.ItemDB) => {
   return item.updates?.length
-    ? String(
-        item.updates.filter(
-          (update) =>
-            update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
-        ).length,
-      )
-    : '0'
+    ? item.updates.filter(
+        (update) =>
+          update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
+      ).length
+    : 0
 }
 
 export default ResearchListItem

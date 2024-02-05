@@ -1,7 +1,9 @@
-import type { availableGlyphs } from '../index'
-
-import { Icon, Tooltip } from '../index'
 import { Text } from 'theme-ui'
+
+import { Icon } from '../Icon/Icon'
+import { Tooltip } from '../Tooltip/Tooltip'
+
+import type { availableGlyphs } from '../Icon/types'
 
 export interface IconCountWithTooltipProps {
   count: number
@@ -16,6 +18,7 @@ export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
       data-tip={text}
       color="black"
       sx={{
+        display: 'flex',
         position: 'relative',
         alignItems: 'center',
         fontSize: [1, 2, 2],

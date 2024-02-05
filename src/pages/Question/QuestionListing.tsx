@@ -1,19 +1,18 @@
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import { Button, Icon, Loader, ModerationStatus, Tooltip } from 'oa-components'
+import {
+  Button,
+  IconCountWithTooltip,
+  Loader,
+  ModerationStatus,
+} from 'oa-components'
 import { useQuestionStore } from 'src/stores/Question/question.store'
-import { Box, Card, Flex, Grid, Heading, Text } from 'theme-ui'
+import { Box, Card, Flex, Grid, Heading } from 'theme-ui'
 
 import { SortFilterHeader } from '../common/SortFilterHeader/SortFilterHeader'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 
 import type { IQuestionDB } from 'src/models'
-
-const _commonStatisticStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  fontSize: [1, 2, 2],
-}
 
 export const QuestionListing = observer(() => {
   const store = useQuestionStore()
@@ -100,25 +99,17 @@ export const QuestionListing = observer(() => {
                       justifyContent: 'space-around',
                     }}
                   >
-                    <Text
-                      data-tip="How useful is it"
-                      color="black"
-                      sx={_commonStatisticStyle}
-                    >
-                      {(q.votedUsefulBy || []).length}
-                      <Icon glyph="star-active" ml={1} />
-                    </Text>
-                    <Tooltip />
+                    <IconCountWithTooltip
+                      count={(q.votedUsefulBy || []).length}
+                      icon="star-active"
+                      text="How useful is it"
+                    />
 
-                    <Text
-                      data-tip="Total comments"
-                      color="black"
-                      sx={_commonStatisticStyle}
-                    >
-                      {(q as any).commentCount || 0}
-                      <Icon glyph="comment" ml={1} />
-                    </Text>
-                    <Tooltip />
+                    <IconCountWithTooltip
+                      count={(q as any).commentCount || 0}
+                      icon="comment"
+                      text="Total comments"
+                    />
                   </Box>
                 </Grid>
               </Card>

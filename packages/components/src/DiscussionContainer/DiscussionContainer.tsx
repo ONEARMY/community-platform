@@ -4,11 +4,11 @@ import { Box, Flex } from 'theme-ui'
 import { CommentList, CreateComment, DiscussionTitle } from '../'
 import { transformToTree } from './transformToStructuredComments'
 
-import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
+import type { IComment } from '..'
 
 export interface IProps {
   comment: string
-  comments: Comment[]
+  comments: IComment[]
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>

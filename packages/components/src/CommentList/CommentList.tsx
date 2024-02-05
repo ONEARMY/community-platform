@@ -3,15 +3,13 @@ import { Box, Flex } from 'theme-ui'
 
 import { Button, CommentItem } from '../'
 
-import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
-
-export type CommentWithReplies = Comment & { replies?: Comment[] }
+import type { IComment } from '..'
 
 const MAX_COMMENTS = 5
 
 export interface IProps {
   supportReplies?: boolean
-  comments: CommentWithReplies[]
+  comments: IComment[]
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   handleDelete: (_id: string) => Promise<void>

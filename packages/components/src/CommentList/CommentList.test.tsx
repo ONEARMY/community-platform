@@ -5,7 +5,7 @@ import { render } from '../tests/utils'
 import { createFakeComments, fakeComment } from '../utils'
 import { CommentList } from './CommentList'
 
-import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
+import type { IComment } from '..'
 
 const mockHandleEdit = vi.fn()
 const mockHandleEditRequest = vi.fn()
@@ -14,7 +14,7 @@ const mockOnMoreComments = vi.fn()
 
 describe('CommentList', () => {
   it('renders the correct number of comments initially', () => {
-    const mockComments: Comment[] = createFakeComments(2)
+    const mockComments: IComment[] = createFakeComments(2)
     const screen = render(
       <CommentList
         comments={mockComments}
@@ -30,7 +30,7 @@ describe('CommentList', () => {
   })
 
   it('loads more comments when show more button is clicked', () => {
-    const mockComments: Comment[] = createFakeComments(20)
+    const mockComments: IComment[] = createFakeComments(20)
     const screen = render(
       <CommentList
         comments={mockComments}
@@ -46,7 +46,7 @@ describe('CommentList', () => {
   })
 
   it('highlights the correct comment when highlightedCommentId is provided', () => {
-    const mockComments: Comment[] = createFakeComments(10)
+    const mockComments: IComment[] = createFakeComments(10)
     const highComm = mockComments[1]
     const highlightedCommentId = highComm._id // Replace with an actual ID from mockComments
     highComm.text = 'Highlighted comment text'

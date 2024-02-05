@@ -49,6 +49,7 @@ export { DiscussionTitle } from './DiscussionTitle/DiscussionTitle'
 export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWrapper'
 
 export type { availableGlyphs, IGlyphs } from './Icon/types'
+export type { IComment } from './CommentItem/types'
 export type { IImageGalleryItem } from './ImageGallery/ImageGallery'
 export type { ResearchEditorOverviewUpdate } from './ResearchEditorOverview/ResearchEditorOverview'
 export type { Props as TextNotificationProps } from './TextNotification/TextNotification'

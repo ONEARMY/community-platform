@@ -15,7 +15,9 @@ describe('CommentContainer', () => {
     const mockComment = fakeComment({ replies: [mockReply] })
     const screen = render(
       <CommentContainer
-        canHaveReplies={true}
+        supportReplies={true}
+        maxLength={100}
+        isLoggedIn={true}
         comment={mockComment}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}

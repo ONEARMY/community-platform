@@ -4,7 +4,7 @@ import { CommentContainer } from './CommentContainer'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/CommentContainer',
+  title: 'Components/CommentList/CommentContainer',
   component: CommentContainer,
 } as Meta<typeof CommentContainer>
 
@@ -13,11 +13,13 @@ export const Default: StoryFn<typeof CommentContainer> = () => {
 
   return (
     <CommentContainer
-      canHaveReplies={false}
+      supportReplies={false}
       comment={comment}
       handleDelete={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
       handleEditRequest={() => Promise.resolve()}
+      isLoggedIn={true}
+      maxLength={100}
     />
   )
 }
@@ -28,26 +30,30 @@ export const WithReplies: StoryFn<typeof CommentContainer> = () => {
 
   return (
     <CommentContainer
-      canHaveReplies={true}
+      supportReplies={true}
       comment={comment}
       handleDelete={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
       handleEditRequest={() => Promise.resolve()}
+      isLoggedIn={true}
+      maxLength={100}
     />
   )
 }
 
 export const WithLotsReplies: StoryFn<typeof CommentContainer> = () => {
-  const replies = Array(15).fill(fakeComment())
+  const replies = Array(15).fill(0).map(fakeComment)
   const comment = fakeComment({ replies })
 
   return (
     <CommentContainer
-      canHaveReplies={true}
+      supportReplies={true}
       comment={comment}
       handleDelete={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
       handleEditRequest={() => Promise.resolve()}
+      isLoggedIn={true}
+      maxLength={100}
     />
   )
 }

@@ -31,12 +31,12 @@ describe('ButtonShowReplies', () => {
   it('renders the word reply when expected', () => {
     const { getByText } = render(<OneReply {...(OneReply.args as Props)} />)
 
-    expect(getByText('1 reply', { exact: false })).toBeInTheDocument()
+    expect(getByText('1 reply to Zelda')).toBeInTheDocument()
   })
 
   it('renders the number zero when expected', () => {
     const { getByText } = render(<NoReplies {...(NoReplies.args as Props)} />)
 
-    expect(getByText('0 replies', { exact: false })).toBeInTheDocument()
+    expect(getByText('Reply to Link')).toBeInTheDocument()
   })
 })

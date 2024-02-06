@@ -10,9 +10,9 @@ const MAX_COMMENTS = 5
 export interface IProps {
   supportReplies?: boolean
   comments: IComment[]
+  handleDelete: (_id: string) => Promise<void>
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
-  handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
   isLoggedIn: boolean
   maxLength: number
@@ -32,7 +32,6 @@ export const CommentList = (props: IProps) => {
     maxLength,
     onMoreComments,
     onSubmitReply,
-    setCommentBeingRepliedTo,
     supportReplies = false,
   } = props
 
@@ -52,11 +51,6 @@ export const CommentList = (props: IProps) => {
     onMoreComments && onMoreComments()
     setMoreComments(moreComments + 1)
   }
-
-  const handleCommentReply =
-    supportReplies && setCommentBeingRepliedTo
-      ? setCommentBeingRepliedTo
-      : undefined
 
   useEffect(() => {
     if (!highlightedCommentId) return
@@ -95,7 +89,6 @@ export const CommentList = (props: IProps) => {
           >
             <CommentContainer
               comment={comment}
-              handleCommentReply={handleCommentReply}
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}
               handleEdit={handleEdit}

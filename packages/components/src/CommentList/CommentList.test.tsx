@@ -3,9 +3,8 @@ import { vi } from 'vitest'
 
 import { render } from '../tests/utils'
 import { createFakeComments, fakeComment } from '../utils'
+import { type IComment } from '..'
 import { CommentList } from './CommentList'
-
-import type { IComment } from '..'
 
 const mockHandleEdit = vi.fn()
 const mockHandleEditRequest = vi.fn()
@@ -21,6 +20,8 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
+        isLoggedIn={false}
+        maxLength={1000}
         onMoreComments={mockOnMoreComments}
       />,
     )
@@ -37,6 +38,8 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
+        isLoggedIn={false}
+        maxLength={1000}
         onMoreComments={mockOnMoreComments}
       />,
     )
@@ -57,6 +60,8 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
+        isLoggedIn={false}
+        maxLength={1000}
         onMoreComments={mockOnMoreComments}
       />,
     )
@@ -80,7 +85,10 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
+        isLoggedIn={false}
+        maxLength={720}
         onMoreComments={mockOnMoreComments}
+        supportReplies={true}
       />,
     )
 
@@ -88,31 +96,27 @@ describe('CommentList', () => {
   })
 
   it('does not show reply once max depth is reached', () => {
-    const mockComments = [
-      fakeComment({
-        replies: [
-          fakeComment({
-            replies: [fakeComment()],
-          }),
-        ],
-      }),
-    ]
+    const inVisibleReply = fakeComment()
+    const visibleReply = fakeComment({ replies: [inVisibleReply] })
+    const comment = fakeComment({ replies: [visibleReply] })
 
-    const screen = render(
+    const { getAllByText, getByText } = render(
       <CommentList
-        currentDepth={0}
-        maxDepth={2}
-        supportReplies={true}
-        comments={mockComments}
-        replyForm={() => <></>}
-        setCommentBeingRepliedTo={() => {}}
+        comments={[comment]}
+        handleDelete={mockHandleDelete}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
-        handleDelete={mockHandleDelete}
         onMoreComments={mockOnMoreComments}
+        isLoggedIn={false}
+        maxLength={800}
+        supportReplies={true}
       />,
     )
 
-    expect(screen.getAllByText('reply')).toHaveLength(2)
+    fireEvent.click(getByText(`1 reply to ${comment.creatorName}`))
+
+    expect(() =>
+      getAllByText(`1 reply to ${visibleReply.creatorName}`),
+    ).toThrow()
   })
 })

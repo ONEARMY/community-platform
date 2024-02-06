@@ -88,6 +88,7 @@ export const QuestionComments = ({
       }}
     >
       <DiscussionContainer
+        supportReplies={true}
         comments={comments as any}
         maxLength={MAX_COMMENT_LENGTH}
         comment={comment}

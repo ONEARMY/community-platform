@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Alert, Flex } from 'theme-ui'
+
+import { useCommonStores } from '../..'
 
 /**
  * A simple notification banner component that reminds users to fill profile details

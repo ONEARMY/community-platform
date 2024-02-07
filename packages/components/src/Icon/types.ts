@@ -1,6 +1,7 @@
 export type availableGlyphs =
   | 'account-circle'
   | 'add'
+  | 'arrow-curved-bottom-right'
   | 'arrow-back'
   | 'arrow-down'
   | 'arrow-forward'

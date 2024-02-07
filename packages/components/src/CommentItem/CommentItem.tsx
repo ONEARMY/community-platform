@@ -8,18 +8,12 @@ import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
 
+import type { IComment } from './types'
+
 const SHORT_COMMENT = 129
 
 export interface CommentItemProps {
-  text: string
-  isUserVerified?: boolean
-  isEditable: boolean
-  creatorCountry?: string | null
-  creatorName: string
-  _id: string
-  _edited?: string
-  _created?: string
-  handleCommentReply?: (commentId: string | null) => void
+  comment: IComment
   handleDelete?: (commentId: string) => Promise<void>
   handleEdit?: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
@@ -38,20 +32,17 @@ export const CommentItem = (props: CommentItemProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
+  const { comment, handleDelete, handleEditRequest, handleEdit } = props
   const {
-    creatorCountry,
-    creatorName,
-    isUserVerified,
-    _id,
-    _edited,
-    _created,
     text,
-    handleEditRequest,
-    handleDelete,
-    handleEdit,
+    creatorName,
+    creatorCountry,
+    isUserVerified,
     isEditable,
-    handleCommentReply,
-  } = props
+    _created,
+    _edited,
+    _id,
+  } = comment
 
   const date = formatDate(_edited || _created)
   const maxHeight = isShowMore ? 'max-content' : '128px'
@@ -76,11 +67,8 @@ export const CommentItem = (props: CommentItemProps) => {
   return (
     <Box id={`comment:${_id}`} data-cy="comment">
       <Flex
-        bg="white"
         sx={{
-          borderRadius: 1,
           flexDirection: 'column',
-          padding: 3,
         }}
       >
         <Flex
@@ -137,19 +125,6 @@ export const CommentItem = (props: CommentItemProps) => {
                 </Button>
               </>
             )}
-            {typeof handleCommentReply === 'function' ? (
-              <Button
-                data-cy="CommentItem: reply button"
-                variant="outline"
-                small={true}
-                icon="comment"
-                onClick={() => {
-                  handleCommentReply && handleCommentReply(_id)
-                }}
-              >
-                reply
-              </Button>
-            ) : null}
           </Flex>
         </Flex>
         <Text

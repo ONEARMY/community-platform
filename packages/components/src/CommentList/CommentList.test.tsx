@@ -3,9 +3,8 @@ import { vi } from 'vitest'
 
 import { render } from '../tests/utils'
 import { createFakeComments, fakeComment } from '../utils'
+import { type IComment } from '..'
 import { CommentList } from './CommentList'
-
-import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
 
 const mockHandleEdit = vi.fn()
 const mockHandleEditRequest = vi.fn()
@@ -14,13 +13,15 @@ const mockOnMoreComments = vi.fn()
 
 describe('CommentList', () => {
   it('renders the correct number of comments initially', () => {
-    const mockComments: Comment[] = createFakeComments(2)
+    const mockComments: IComment[] = createFakeComments(2)
     const screen = render(
       <CommentList
         comments={mockComments}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
+        isLoggedIn={false}
+        maxLength={1000}
         onMoreComments={mockOnMoreComments}
       />,
     )
@@ -30,13 +31,15 @@ describe('CommentList', () => {
   })
 
   it('loads more comments when show more button is clicked', () => {
-    const mockComments: Comment[] = createFakeComments(20)
+    const mockComments: IComment[] = createFakeComments(20)
     const screen = render(
       <CommentList
         comments={mockComments}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
+        isLoggedIn={false}
+        maxLength={1000}
         onMoreComments={mockOnMoreComments}
       />,
     )
@@ -46,7 +49,7 @@ describe('CommentList', () => {
   })
 
   it('highlights the correct comment when highlightedCommentId is provided', () => {
-    const mockComments: Comment[] = createFakeComments(10)
+    const mockComments: IComment[] = createFakeComments(10)
     const highComm = mockComments[1]
     const highlightedCommentId = highComm._id // Replace with an actual ID from mockComments
     highComm.text = 'Highlighted comment text'
@@ -57,6 +60,8 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
+        isLoggedIn={false}
+        maxLength={1000}
         onMoreComments={mockOnMoreComments}
       />,
     )
@@ -80,39 +85,38 @@ describe('CommentList', () => {
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
         handleDelete={mockHandleDelete}
+        isLoggedIn={false}
+        maxLength={720}
         onMoreComments={mockOnMoreComments}
+        supportReplies={true}
       />,
     )
 
-    expect(screen.getAllByTestId('CommentList: item')).toHaveLength(5)
+    expect(screen.getAllByTestId('CommentList: item')).toHaveLength(3)
   })
 
   it('does not show reply once max depth is reached', () => {
-    const mockComments = [
-      fakeComment({
-        replies: [
-          fakeComment({
-            replies: [fakeComment()],
-          }),
-        ],
-      }),
-    ]
+    const inVisibleReply = fakeComment()
+    const visibleReply = fakeComment({ replies: [inVisibleReply] })
+    const comment = fakeComment({ replies: [visibleReply] })
 
-    const screen = render(
+    const { getAllByText, getByText } = render(
       <CommentList
-        currentDepth={0}
-        maxDepth={2}
-        supportReplies={true}
-        comments={mockComments}
-        replyForm={() => <></>}
-        setCommentBeingRepliedTo={() => {}}
+        comments={[comment]}
+        handleDelete={mockHandleDelete}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
-        handleDelete={mockHandleDelete}
         onMoreComments={mockOnMoreComments}
+        isLoggedIn={false}
+        maxLength={800}
+        supportReplies={true}
       />,
     )
 
-    expect(screen.getAllByText('reply')).toHaveLength(2)
+    fireEvent.click(getByText(`1 reply to ${comment.creatorName}`))
+
+    expect(() =>
+      getAllByText(`1 reply to ${visibleReply.creatorName}`),
+    ).toThrow()
   })
 })

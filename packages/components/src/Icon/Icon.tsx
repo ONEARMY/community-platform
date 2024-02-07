@@ -16,9 +16,7 @@ import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
 import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
 import { MdAdd } from '@react-icons/all-files/md/MdAdd'
 import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
-import { MdArrowDownward } from '@react-icons/all-files/md/MdArrowDownward'
 import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
-import { MdArrowUpward } from '@react-icons/all-files/md/MdArrowUpward'
 import { MdCheck } from '@react-icons/all-files/md/MdCheck'
 import { MdClose } from '@react-icons/all-files/md/MdClose'
 import { MdEdit } from '@react-icons/all-files/md/MdEdit'
@@ -61,10 +59,11 @@ export const glyphs: IGlyphs = {
   'account-circle': <MdAccountCircle />,
   add: <MdAdd />,
   'arrow-back': <MdArrowBack />,
+  'arrow-curved-bottom-right': iconMap.arrowCurvedBottomRight,
   'arrow-down': <MdKeyboardArrowDown />,
   'arrow-forward': <MdArrowForward />,
-  'arrow-full-down': <MdArrowDownward />,
-  'arrow-full-up': <MdArrowUpward />,
+  'arrow-full-down': iconMap.arrowFullDown,
+  'arrow-full-up': iconMap.arrowFullUp,
   bazar: iconMap.bazar,
   comment: iconMap.comment,
   check: <MdCheck />,

@@ -14,6 +14,8 @@ export const Default: StoryFn<typeof CommentList> = () => (
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    isLoggedIn={true}
+    maxLength={1000}
     onMoreComments={() => null}
   />
 )
@@ -24,6 +26,8 @@ export const Expandable: StoryFn<typeof CommentList> = () => (
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    isLoggedIn={true}
+    maxLength={1000}
     onMoreComments={() => null}
   />
 )
@@ -33,27 +37,9 @@ export const WithNestedComments: StoryFn<typeof CommentList> = () => {
     fakeComment({
       replies: [fakeComment(), fakeComment()],
     }),
-    fakeComment(),
-    fakeComment(),
-  ]
-
-  return (
-    <CommentList
-      comments={comments}
-      handleDelete={() => Promise.resolve()}
-      handleEditRequest={() => Promise.resolve()}
-      handleEdit={() => Promise.resolve()}
-      onMoreComments={() => Promise.resolve()}
-    />
-  )
-}
-
-export const WithNestedCommentsAndReplies: StoryFn<typeof CommentList> = () => {
-  const comments = [
     fakeComment({
-      replies: [fakeComment(), fakeComment()],
+      replies: [fakeComment()],
     }),
-    fakeComment(),
     fakeComment(),
   ]
 
@@ -61,39 +47,13 @@ export const WithNestedCommentsAndReplies: StoryFn<typeof CommentList> = () => {
     <CommentList
       supportReplies={true}
       comments={comments}
-      setCommentBeingRepliedTo={() => {}}
       handleDelete={() => Promise.resolve()}
       handleEditRequest={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
+      isLoggedIn={true}
+      maxLength={1000}
       onMoreComments={() => Promise.resolve()}
-    />
-  )
-}
-
-export const WithNestedCommentsAndRepliesMaxDepthTwo: StoryFn<
-  typeof CommentList
-> = () => {
-  const comments = [
-    fakeComment({
-      replies: [
-        fakeComment({
-          replies: [fakeComment()],
-        }),
-      ],
-    }),
-  ]
-
-  return (
-    <CommentList
-      supportReplies={true}
-      currentDepth={0}
-      maxDepth={2}
-      comments={comments}
-      setCommentBeingRepliedTo={() => {}}
-      handleDelete={() => Promise.resolve()}
-      handleEditRequest={() => Promise.resolve()}
-      handleEdit={() => Promise.resolve()}
-      onMoreComments={() => Promise.resolve()}
+      onSubmitReply={() => Promise.resolve()}
     />
   )
 }
@@ -109,6 +69,8 @@ export const Highlighted: StoryFn<typeof CommentList> = () => (
     handleDelete={() => Promise.resolve()}
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
+    isLoggedIn={true}
+    maxLength={1000}
     onMoreComments={() => null}
   />
 )

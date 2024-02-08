@@ -123,6 +123,11 @@ export class QuestionStore extends ModuleStore {
     )
   }
 
+  @computed
+  get subscriberCount(): number {
+    return (this.activeQuestionItem?.subscribers || []).length
+  }
+
   @computed get filteredQuestions() {
     let questions = this.filterSorterDecorator.filterByCategory(
       this.allQuestionItems,

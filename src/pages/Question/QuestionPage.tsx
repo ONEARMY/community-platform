@@ -165,7 +165,7 @@ export const QuestionPage = () => {
                 {
                   icon: 'thunderbolt',
                   label: buildStatisticsLabel({
-                    stat: question?.subscribers?.length || 0,
+                    stat: store.subscriberCount,
                     statUnit: 'following',
                     usePlural: false,
                   }),

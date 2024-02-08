@@ -128,6 +128,14 @@ export class QuestionStore extends ModuleStore {
     return (this.activeQuestionItem?.subscribers || []).length
   }
 
+  @computed
+  get userHasSubscribed(): boolean {
+    if (!this.activeUser) return false
+    return (this.activeQuestionItem?.subscribers || []).includes(
+      this.activeUser.userName,
+    )
+  }
+
   @computed get filteredQuestions() {
     let questions = this.filterSorterDecorator.filterByCategory(
       this.allQuestionItems,
@@ -211,12 +219,18 @@ export class QuestionStore extends ModuleStore {
   }
 
   public async toggleSubscriberStatusByUserName(docId, userName) {
-    return toggleDocSubscriberStatusByUserName(
+    const updatedQuestion = await toggleDocSubscriberStatusByUserName(
       this.db,
       COLLECTION_NAME,
       docId,
       userName,
     )
+
+    if (updatedQuestion) {
+      this.activeQuestionItem = updatedQuestion
+    }
+
+    return updatedQuestion
   }
 
   private async _getQuestionItemBySlug(

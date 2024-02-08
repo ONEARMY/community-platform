@@ -311,6 +311,12 @@ describe('question.routes', () => {
             new RegExp(`^${question.description.split(' ')[0]}`),
           ),
         ).toBeInTheDocument()
+
+        // Content statistics
+        expect(wrapper.getByText(`0 views`)).toBeInTheDocument()
+        expect(wrapper.getByText(`0 following`)).toBeInTheDocument()
+        expect(wrapper.getByText(`1 comment`)).toBeInTheDocument()
+
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
       })
     })

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
+  ContentStatistics,
   FollowButton,
   Loader,
   ModerationStatus,
@@ -10,8 +11,8 @@ import { transformToUserComments } from 'src/common/transformToUserComments'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
-import { isAllowedToEditContent } from 'src/utils/helpers'
-import { Box, Button, Card, Flex, Heading, Text } from 'theme-ui'
+import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
+import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { QuestionComments } from './QuestionComments'
@@ -117,47 +118,92 @@ export const QuestionPage = () => {
         <Loader />
       ) : question ? (
         <>
-          <Card sx={{ mt: 4, p: 4, position: 'relative' }}>
-            <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
-              <UsefulStatsButton
-                votedUsefulCount={store.votedUsefulCount}
-                hasUserVotedUseful={store.userVotedActiveQuestionUseful}
-                isLoggedIn={store.activeUser ? true : false}
-                onUsefulClick={onUsefulClick}
+          <Card sx={{ position: 'relative', mt: 4 }}>
+            <Box sx={{ p: 4 }}>
+              <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
+                <UsefulStatsButton
+                  votedUsefulCount={store.votedUsefulCount}
+                  hasUserVotedUseful={store.userVotedActiveQuestionUseful}
+                  isLoggedIn={store.activeUser ? true : false}
+                  onUsefulClick={onUsefulClick}
+                />
+                <FollowButton
+                  hasUserSubscribed={hasUserSubscribed}
+                  isLoggedIn={isLoggedIn ? true : false}
+                  onFollowClick={onFollowClick}
+                />
+                {isEditable && (
+                  <Link to={'/questions/' + question.slug + '/edit'}>
+                    <Button variant={'primary'}>Edit</Button>
+                  </Link>
+                )}
+              </Flex>
+              <ModerationStatus
+                status={question.moderation}
+                contentType="question"
+                sx={{ top: 0, position: 'absolute', right: 0 }}
               />
-              <FollowButton
-                hasUserSubscribed={hasUserSubscribed}
-                isLoggedIn={isLoggedIn ? true : false}
-                onFollowClick={onFollowClick}
+
+              <ContentAuthorTimestamp
+                userName={question._createdBy}
+                countryCode={question.creatorCountry}
+                created={question._created}
+                modified={
+                  question._contentModifiedTimestamp || question._modified
+                }
+                action="Asked"
               />
-              {isEditable && (
-                <Link to={'/questions/' + question.slug + '/edit'}>
-                  <Button variant={'primary'}>Edit</Button>
-                </Link>
-              )}
-            </Flex>
-            <ModerationStatus
-              status={question.moderation}
-              contentType="question"
-              sx={{ top: 0, position: 'absolute', right: 0 }}
-            />
 
-            <ContentAuthorTimestamp
-              userName={question._createdBy}
-              countryCode={question.creatorCountry}
-              created={question._created}
-              modified={
-                question._contentModifiedTimestamp || question._modified
-              }
-              action="Asked"
-            />
-
-            <Box mt={3} mb={2}>
-              <Heading mb={1}>{question.title}</Heading>
-              <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
-                {question.description}
-              </Text>
+              <Box mt={3} mb={2}>
+                <Heading mb={1}>{question.title}</Heading>
+                <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+                  {question.description}
+                </Text>
+              </Box>
             </Box>
+
+            <Divider
+              sx={{
+                m: 0,
+                border: '.5px solid black',
+              }}
+            />
+            <ContentStatistics
+              statistics={[
+                {
+                  icon: 'view',
+                  label: buildStatisticsLabel({
+                    stat: question.total_views || 0,
+                    statUnit: 'view',
+                    usePlural: true,
+                  }),
+                },
+                {
+                  icon: 'thunderbolt',
+                  label: buildStatisticsLabel({
+                    stat: question?.subscribers?.length || 0,
+                    statUnit: 'following',
+                    usePlural: false,
+                  }),
+                },
+                {
+                  icon: 'star',
+                  label: buildStatisticsLabel({
+                    stat: store.votedUsefulCount,
+                    statUnit: 'useful',
+                    usePlural: false,
+                  }),
+                },
+                {
+                  icon: 'comment',
+                  label: buildStatisticsLabel({
+                    stat: comments.length,
+                    statUnit: 'comment',
+                    usePlural: true,
+                  }),
+                },
+              ]}
+            />
           </Card>
           {question._id && (
             <QuestionComments

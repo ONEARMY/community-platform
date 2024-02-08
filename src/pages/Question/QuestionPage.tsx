@@ -75,7 +75,7 @@ export const QuestionPage = () => {
     // Trigger update without waiting
     const questionId = store.activeQuestionItem?._id
     if (questionId && activeUser) {
-      store.toggleUsefulByUser(questionId, activeUser.userName)
+      await store.toggleUsefulByUser(questionId, activeUser.userName)
       setQuestion(store.activeQuestionItem)
     }
   }

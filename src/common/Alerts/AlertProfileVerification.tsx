@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
+import { ExternalLink } from 'oa-components'
 import { Alert, Flex, Text } from 'theme-ui'
 
 import { useCommonStores } from '../..'
@@ -27,16 +28,17 @@ export const AlertProfileVerification = observer(() => {
     }
   }
 
+  const isVerificationSuccessful = verificationState === 'sent'
   const isVerificationPending = verificationState === 'pending'
   const alertLabel = isVerificationPending
     ? '✉️ Click here to receive an email to confirm your account.'
-    : 'Verification email sent. Please check your inbox.'
+    : "Sorry, we couldn't send an email. Please try again later."
 
   return (
     <Flex data-cy="verificationBanner" style={{ zIndex: 3001 }}>
       <Alert
         onClick={handleOnClick}
-        variant={isVerificationPending ? 'failure' : 'success'}
+        variant={isVerificationSuccessful ? 'success' : 'failure'}
         sx={{
           borderRadius: 0,
           alignItems: 'center',
@@ -44,17 +46,38 @@ export const AlertProfileVerification = observer(() => {
           justifyContent: 'center',
         }}
       >
-        <Text
-          sx={{
-            textAlign: 'center',
-            fontSize: 2,
-            fontWeight: 'normal',
-            textDecoration: isVerificationPending ? 'underline' : 'none',
-            cursor: isVerificationPending ? 'pointer' : 'default',
-          }}
-        >
-          {alertLabel}
-        </Text>
+        {isVerificationSuccessful && (
+          <Text
+            sx={{
+              textAlign: 'center',
+              fontSize: 2,
+              fontWeight: 'normal',
+            }}
+          >
+            Verification email sent. Please check your inbox and spam folder.
+            (Let us{' '}
+            <ExternalLink
+              sx={{ textDecoration: 'underline', color: 'grey' }}
+              href="mailto:platform@onearmy.earth"
+            >
+              know
+            </ExternalLink>{' '}
+            if you didnt get it)
+          </Text>
+        )}
+        {!isVerificationSuccessful && (
+          <Text
+            sx={{
+              textAlign: 'center',
+              fontSize: 2,
+              fontWeight: 'normal',
+              textDecoration: isVerificationPending ? 'underline' : 'none',
+              cursor: isVerificationPending ? 'pointer' : 'default',
+            }}
+          >
+            {alertLabel}
+          </Text>
+        )}
       </Alert>
     </Flex>
   )

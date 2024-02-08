@@ -17,7 +17,7 @@ export const toggleDocSubscriberStatusByUserName = async (
     return null
   }
 
-  const doc = await dbRef.get()
+  const doc = await dbRef.get('server')
 
   let subscribers = doc?.subscribers || []
 
@@ -29,5 +29,5 @@ export const toggleDocSubscriberStatusByUserName = async (
 
   dbRef.update({ _id: docId, subscribers } as any)
 
-  return await dbRef.get()
+  return await dbRef.get('server')
 }

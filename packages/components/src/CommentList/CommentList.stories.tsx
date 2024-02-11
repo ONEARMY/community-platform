@@ -71,6 +71,8 @@ export const WithNestedCommentsAndReplies: StoryFn<typeof CommentList> = () => {
     <CommentList
       supportReplies={true}
       comments={comments}
+      isLoggedIn={true}
+      maxLength={800}
       setCommentBeingRepliedTo={() => {}}
       handleDelete={() => Promise.resolve()}
       handleEditRequest={() => Promise.resolve()}
@@ -96,8 +98,8 @@ export const WithNestedCommentsAndRepliesMaxDepthTwo: StoryFn<
   return (
     <CommentList
       supportReplies={true}
-      currentDepth={0}
-      maxDepth={2}
+      isLoggedIn={true}
+      maxLength={800}
       comments={comments}
       setCommentBeingRepliedTo={() => {}}
       handleDelete={() => Promise.resolve()}

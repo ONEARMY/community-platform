@@ -119,4 +119,33 @@ describe('CommentList', () => {
       getAllByText(`1 reply to ${visibleReply.creatorName}`),
     ).toThrow()
   })
+
+  it('does not show reply once max depth is reached', () => {
+    const mockComments = [
+      fakeComment({
+        replies: [
+          fakeComment({
+            replies: [fakeComment()],
+          }),
+        ],
+      }),
+    ]
+
+    const screen = render(
+      <CommentList
+        currentDepth={0}
+        maxDepth={2}
+        supportReplies={true}
+        comments={mockComments}
+        replyForm={() => <></>}
+        setCommentBeingRepliedTo={() => {}}
+        handleEdit={mockHandleEdit}
+        handleEditRequest={mockHandleEditRequest}
+        handleDelete={mockHandleDelete}
+        onMoreComments={mockOnMoreComments}
+      />,
+    )
+
+    expect(screen.getAllByText('reply')).toHaveLength(2)
+  })
 })

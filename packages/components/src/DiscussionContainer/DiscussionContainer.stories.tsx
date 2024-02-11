@@ -21,16 +21,26 @@ export const Default: Story = {
   render: () => {
     return (
       <DiscussionContainer
+<<<<<<< HEAD
         comment={''}
+=======
+>>>>>>> production
         comments={fakeComments}
         handleDelete={() => Promise.resolve()}
         handleEditRequest={() => Promise.resolve()}
         handleEdit={() => Promise.resolve()}
         maxLength={1000}
+<<<<<<< HEAD
         onChange={() => null}
         onMoreComments={() => null}
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
+=======
+        comment={''}
+        onChange={() => null}
+        onMoreComments={() => null}
+        onSubmit={() => null}
+>>>>>>> production
         isLoggedIn={false}
       />
     )
@@ -50,7 +60,10 @@ export const NoComments: Story = {
         onChange={() => null}
         onMoreComments={() => null}
         onSubmit={() => null}
+<<<<<<< HEAD
         onSubmitReply={() => Promise.resolve()}
+=======
+>>>>>>> production
         isLoggedIn={false}
       />
     )
@@ -72,7 +85,10 @@ export const LoggedIn: Story = {
         onChange={setComment}
         onMoreComments={() => null}
         onSubmit={() => null}
+<<<<<<< HEAD
         onSubmitReply={() => Promise.resolve()}
+=======
+>>>>>>> production
         isLoggedIn={true}
       />
     )
@@ -94,7 +110,10 @@ export const Expandable: Story = {
         onChange={setComment}
         onMoreComments={() => null}
         onSubmit={() => null}
+<<<<<<< HEAD
         onSubmitReply={() => Promise.resolve()}
+=======
+>>>>>>> production
         isLoggedIn={true}
       />
     )
@@ -106,6 +125,10 @@ export const WithReplies: Story = {
     const [comment, setComment] = useState<string>('')
 
     const fakeComments = createFakeComments(3)
+<<<<<<< HEAD
+=======
+
+>>>>>>> production
     fakeComments[0].replies = createFakeComments(2)
 
     return (

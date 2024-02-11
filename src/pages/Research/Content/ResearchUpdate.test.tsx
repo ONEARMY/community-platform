@@ -31,7 +31,7 @@ jest.mock('src/index', () => {
   }
 })
 
-jest.mock('./ResearchComments/ResearchComments', () => ({
+jest.mock('./ResearchComments', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   ResearchComments: () => <>Mocked Research Comments</>,

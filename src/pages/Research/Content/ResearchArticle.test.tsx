@@ -223,6 +223,55 @@ describe('Research Article', () => {
       expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
       expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
     })
+
+    it('shows comments', async () => {
+      // Arrange
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        formatResearchCommentList: jest.fn().mockImplementation((c) => {
+          return c
+        }),
+        activeResearchItem: FactoryResearchItem({
+          updates: [
+            FactoryResearchItemUpdate({
+              title: 'Research Update #1',
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: false,
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #2',
+              status: ResearchUpdateStatus.DRAFT,
+              _deleted: false,
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #3',
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: false,
+              comments: [
+                FactoryComment({
+                  text: 'First test comment',
+                }),
+                FactoryComment({
+                  text: 'Second test comment',
+                }),
+              ],
+            }),
+          ],
+        }),
+      })
+      // Act
+      const wrapper = getWrapper()
+
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 200))
+        wrapper.getByText('View 2 Comments').click()
+      })
+
+      // Assert
+      await waitFor(async () => {
+        expect(wrapper.getByText('First test comment')).toBeInTheDocument()
+      })
+    })
   })
 
   it('shows only published updates', async () => {
@@ -255,55 +304,6 @@ describe('Research Article', () => {
     // Assert
     expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
     expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
-  })
-
-  it('shows comments for a research update', async () => {
-    // Arrange
-    ;(useResearchStore as jest.Mock).mockReturnValue({
-      ...mockResearchStore,
-      formatResearchCommentList: jest.fn().mockImplementation((c) => {
-        return c
-      }),
-      activeResearchItem: FactoryResearchItem({
-        updates: [
-          FactoryResearchItemUpdate({
-            title: 'Research Update #1',
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-          }),
-          FactoryResearchItemUpdate({
-            title: 'Research Update #2',
-            status: ResearchUpdateStatus.DRAFT,
-            _deleted: false,
-          }),
-          FactoryResearchItemUpdate({
-            title: 'Research Update #3',
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-            comments: [
-              FactoryComment({
-                text: 'First test comment',
-              }),
-              FactoryComment({
-                text: 'Second test comment',
-              }),
-            ],
-          }),
-        ],
-      }),
-    })
-    // Act
-    const wrapper = getWrapper()
-
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 200))
-      wrapper.getByText('View 2 Comments').click()
-    })
-
-    // Assert
-    await waitFor(async () => {
-      expect(wrapper.getByText('First test comment')).toBeInTheDocument()
-    })
   })
 })
 

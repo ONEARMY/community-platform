@@ -12,7 +12,6 @@ describe('DiscussionContainer', () => {
     expect(getByText('Leave a comment')).toBeInTheDocument()
 
     expect(() => getByText('reply')).toThrow()
-<<<<<<< HEAD
   })
 
   it('allows replying to a comment', async () => {
@@ -59,8 +58,6 @@ describe('DiscussionContainer', () => {
         screen.getAllByText('Send your reply')
       }).toThrow()
     })
-=======
->>>>>>> production
   })
 
   it('allows replying to a comment', async () => {

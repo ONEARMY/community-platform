@@ -27254,6 +27254,7 @@ __metadata:
     react-dom: ^17.0.2
     react-flag-icon-css: ^1.0.25
     react-icons: ^4.3.1
+    react-image-crop: ^11.0.5
     react-player: ^2.12.0
     react-portal: ^4.2.2
     react-router: 6.20.1
@@ -30375,6 +30376,15 @@ __metadata:
   peerDependencies:
     react: "*"
   checksum: ed3cbdc5fc0c4d7d2debf78fdc8c4c80aeacf85a506a9a3c11b1d5922de393ac0a6542012b7fb81761e9280c54d0f26827d50a92b54ec8f0c8e52364d89970b5
+  languageName: node
+  linkType: hard
+
+"react-image-crop@npm:^11.0.5":
+  version: 11.0.5
+  resolution: "react-image-crop@npm:11.0.5"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 451a340de3493d1a27e4beeb8a6a1421bd4429cf545aaf8e1e0f0f01f07a5f8da90da3002b3905f363efaef3c2f4a2aa45dd921e914afd65ec3228bfcf087fa7
   languageName: node
   linkType: hard
 

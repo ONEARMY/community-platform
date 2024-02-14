@@ -11,7 +11,6 @@ import {
   isSameEmail,
   isUserAllowedToMessage,
   isValidMessageRequest,
-  isUserEmailVerified,
 } from './utils'
 
 import type { IUserDB } from '../models'
@@ -130,25 +129,6 @@ describe('isUserAllowedToMessage', () => {
   })
 })
 
-describe('isUserEmailVerified', () => {
-  it('returns true when user email address has been verified', async () => {
-    const user = {
-      emailVerified: true,
-    } as UserRecord
-
-    await expect(isUserEmailVerified(user)).resolves.toEqual(true)
-  })
-
-  it('returns false when user email address has been verified', async () => {
-    const user = {
-      emailVerified: false,
-    } as UserRecord
-    await expect(isUserEmailVerified(user)).rejects.toThrowError(
-      errors.USER_EMAIL_NOT_VERIFIED,
-    )
-  })
-})
-
 describe('isValidMessageRequest', () => {
   it('returns true when all checks pass', async () => {
     const messageInput = {
@@ -165,7 +145,6 @@ describe('isValidMessageRequest', () => {
     } as UserRecord)
 
     jest.spyOn(utils, 'isSameEmail').mockReturnValue(true)
-    jest.spyOn(utils, 'isUserEmailVerified').mockResolvedValue(true)
     jest.spyOn(utils, 'isUserAllowedToMessage').mockResolvedValue(true)
     jest.spyOn(utils, 'isBelowMessageLimit').mockResolvedValue(true)
     jest.spyOn(utils, 'isReceiverContactable').mockResolvedValue(true)

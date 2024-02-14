@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { ExternalLink } from 'oa-components'
+import { ExternalLink, Icon } from 'oa-components'
 import { Alert, Flex, Text } from 'theme-ui'
 
 import { useCommonStores } from '../..'
@@ -31,8 +31,11 @@ export const AlertProfileVerification = observer(() => {
   const isVerificationSuccessful = verificationState === 'sent'
   const isVerificationPending = verificationState === 'pending'
   const alertLabel = isVerificationPending
-    ? '✉️ Click here to receive an email to confirm your account.'
+    ? 'Click here to receive an email to confirm your account.'
     : "Sorry, we couldn't send an email. Please try again later."
+  const successLabelMessage =
+    'Verification email sent. Please check your inbox and spam folder. '
+  const successLabelLinkText = "Let us know if you didn't get it."
 
   return (
     <Flex data-cy="verificationBanner" style={{ zIndex: 3001 }}>
@@ -54,15 +57,13 @@ export const AlertProfileVerification = observer(() => {
               fontWeight: 'normal',
             }}
           >
-            Verification email sent. Please check your inbox and spam folder.
-            (Let us{' '}
+            {successLabelMessage}
             <ExternalLink
               sx={{ textDecoration: 'underline', color: 'grey' }}
-              href="mailto:platform@onearmy.earth"
+              href="mailto:platform@onearmy.earth?subject=Email%20confirmation%20failed%20community-platform"
             >
-              know
-            </ExternalLink>{' '}
-            if you didnt get it)
+              {successLabelLinkText}
+            </ExternalLink>
           </Text>
         )}
         {!isVerificationSuccessful && (
@@ -75,6 +76,9 @@ export const AlertProfileVerification = observer(() => {
               cursor: isVerificationPending ? 'pointer' : 'default',
             }}
           >
+            {isVerificationPending && (
+              <Icon glyph="email" mr={1} verticalAlign={'text-top'} />
+            )}
             {alertLabel}
           </Text>
         )}

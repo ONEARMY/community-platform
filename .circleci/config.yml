@@ -52,10 +52,8 @@ aliases:
     run:
       name: Install Packages
       # Install packages
-      # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
       command: |
         yarn install --immutable
-        yarn install --immutable --immutable-cache
         if [ ! -f /home/circleci/.yarn/install-state.gz ]; then echo "install-state not created" && exit 1; fi
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
@@ -137,7 +135,7 @@ commands:
       - run:
           # Use version of firebase-tools already installed in functions workspace to deploy
           name: Deploy to Firebase
-          command: ./functions/node_modules/.bin/firebase deploy --debug -P << parameters.alias >> --non-interactive
+          command: npx firebase-tools@12.7.0 deploy --debug -P << parameters.alias >> --non-interactive
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 

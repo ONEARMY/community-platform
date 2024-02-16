@@ -28,17 +28,29 @@ export const Tab = styled(MuiTab)`
   }
 
   &:first-of-type {
-    margin-left: 15px;
+    margin-left: 0;
+    position: relative;
   }
 
   &.Mui-selected {
     background-color: ${(p) => (p.theme as Theme)?.colors.background};
     text-decoration: none;
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 100%;
+      height: ${(p) => (p.theme as Theme)?.space?.[3]}px;
+      width: ${(p) => (p.theme as Theme)?.space?.[3]}px;
+      background-color: ${(p) => (p.theme as Theme)?.colors.background};
+    }
   }
 `
 
 export const TabPanel = styled(MuiTabPanel)`
   background-color: ${(p) => (p.theme as Theme)?.colors.background};
-  border-radius: ${(p) => (p.theme as Theme)?.space?.[3]}px;
+  border-radius: ${(p) => (p.theme as Theme)?.space?.[2]}px;
   padding: ${(p) => (p.theme as Theme)?.space?.[3]}px;
 `

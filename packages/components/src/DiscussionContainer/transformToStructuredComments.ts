@@ -1,6 +1,6 @@
-import type { CommentWithReplies } from '../CommentList/CommentList'
+import type { IComment } from '../CommentItem/types'
 
-type CommentWithRepliesParent = CommentWithReplies & {
+type CommentWithRepliesParent = IComment & {
   parentCommentId?: string
 }
 

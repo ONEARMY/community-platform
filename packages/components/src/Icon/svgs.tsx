@@ -1,9 +1,12 @@
+import arrowCurvedBottomRightSVG from '../../assets/icons/arrow-curved-bottom-right.svg'
 import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
 import chevronRightSVG from '../../assets/icons/chevron-right.svg'
 import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
+import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg'
+import arrowFullUpSVG from '../../assets/icons/icon-arrow-up.svg'
 import bazarSVG from '../../assets/icons/icon-bazar.svg'
 import commentSVG from '../../assets/icons/icon-comment.svg'
 import discordSVG from '../../assets/icons/icon-discord.svg'
@@ -28,6 +31,11 @@ const imgStyle = {
 }
 
 export const iconMap = {
+  arrowCurvedBottomRight: (
+    <img alt="icon" style={imgStyle} src={arrowCurvedBottomRightSVG} />
+  ),
+  arrowFullDown: <img alt="icon" style={imgStyle} src={arrowFullDownSVG} />,
+  arrowFullUp: <img alt="icon" style={imgStyle} src={arrowFullUpSVG} />,
   bazar: <img alt="icon" style={imgStyle} src={bazarSVG} />,
   chevronLeft: <img alt="icon" style={imgStyle} src={chevronLeftSVG} />,
   chevronRight: <img alt="icon" style={imgStyle} src={chevronRightSVG} />,

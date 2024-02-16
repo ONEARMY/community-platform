@@ -1,24 +1,24 @@
 import { useMemo, useState } from 'react'
-import { Box, Flex } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
-import { CommentList, CreateComment, DiscussionTitle } from '../'
+import { CommentList, CreateComment, DiscussionTitle } from '..'
 import { transformToTree } from './transformToStructuredComments'
 
-import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
+import type { IComment } from '..'
 
 export interface IProps {
   comment: string
-  comments: Comment[]
+  comments: IComment[]
+  handleDelete: (_id: string) => Promise<void>
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
-  handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
+  isLoggedIn: boolean
   maxLength: number
   onChange: (comment: string) => void
   onMoreComments: () => void
   onSubmit: (comment: string) => void
-  onSubmitReply?: (_id: string, comment: string) => Promise<void>
-  isLoggedIn: boolean
+  onSubmitReply: (_id: string, reply: string) => Promise<void>
   supportReplies?: boolean
 }
 
@@ -47,37 +47,6 @@ export const DiscussionContainer = (props: IProps) => {
     [comments],
   )
 
-  const reployForm = (commentId: string) => {
-    if (commentId !== commentBeingRepliedTo) {
-      return <></>
-    }
-
-    return (
-      <Box
-        sx={{
-          background: 'softblue',
-          borderRadius: 2,
-          padding: 3,
-          mt: 3,
-        }}
-      >
-        <CreateComment
-          maxLength={maxLength}
-          comment={comment}
-          onChange={onChange}
-          onSubmit={() => {
-            if (commentId && onSubmitReply) {
-              onSubmitReply(commentId, comment)
-            }
-            setCommentBeingRepliedTo(null)
-          }}
-          buttonLabel="Send your reply"
-          isLoggedIn={isLoggedIn}
-        />
-      </Box>
-    )
-  }
-
   const handleSetCommentBeingRepliedTo = (commentId: string | null): void => {
     if (commentId === commentBeingRepliedTo) {
       return setCommentBeingRepliedTo(null)
@@ -90,16 +59,16 @@ export const DiscussionContainer = (props: IProps) => {
       <DiscussionTitle length={comments.length} />
 
       <CommentList
-        currentDepth={0}
-        maxDepth={1}
         supportReplies={supportReplies}
-        replyForm={reployForm}
         comments={structuredComments}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         handleEditRequest={handleEditRequest}
         highlightedCommentId={highlightedCommentId}
+        isLoggedIn={isLoggedIn}
+        maxLength={maxLength}
         onMoreComments={onMoreComments}
+        onSubmitReply={onSubmitReply}
         setCommentBeingRepliedTo={handleSetCommentBeingRepliedTo}
       />
 

@@ -1,10 +1,8 @@
 import { faker } from '@faker-js/faker'
 
-import type { CommentWithReplies } from './CommentList/CommentList'
+import type { IComment } from '.'
 
-export const fakeComment = (
-  commentOverloads: Partial<CommentWithReplies> = {},
-) => ({
+export const fakeComment = (commentOverloads: Partial<IComment> = {}) => ({
   _created: faker.date.past().toString(),
   creatorCountry: faker.address.countryCode().toLowerCase(),
   _creatorId: faker.internet.userName(),
@@ -19,7 +17,7 @@ export const fakeComment = (
 export const createFakeComments = (
   numberOfComments = 2,
   commentOverloads = {},
-): CommentWithReplies[] =>
+): IComment[] =>
   [...Array(numberOfComments).keys()].slice(0).map(() =>
     fakeComment({
       ...commentOverloads,

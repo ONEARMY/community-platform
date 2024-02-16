@@ -1,52 +1,42 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex } from 'theme-ui'
 
-import { Button, CommentItem } from '../'
+import { Button, CommentContainer } from '../'
 
-import type { CommentItemProps as Comment } from '../CommentItem/CommentItem'
-
-export type CommentWithReplies = Comment & { replies?: Comment[] }
+import type { IComment } from '..'
 
 const MAX_COMMENTS = 5
 
 export interface IProps {
   supportReplies?: boolean
-  comments: CommentWithReplies[]
+  comments: IComment[]
+  handleDelete: (_id: string) => Promise<void>
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
-  handleDelete: (_id: string) => Promise<void>
   highlightedCommentId?: string
-  onMoreComments: () => void
+  isLoggedIn: boolean
+  maxLength: number
+  onMoreComments?: () => void
+  onSubmitReply?: (_id: string, reply: string) => Promise<void>
   setCommentBeingRepliedTo?: (commentId: string | null) => void
-  replyForm?: (commentId: string) => JSX.Element
-  currentDepth?: number
-  maxDepth?: number
 }
 
 export const CommentList = (props: IProps) => {
   const {
     comments,
-    handleEditRequest,
     handleDelete,
-    highlightedCommentId,
     handleEdit,
+    handleEditRequest,
+    highlightedCommentId,
+    isLoggedIn,
+    maxLength,
     onMoreComments,
-    replyForm,
-    setCommentBeingRepliedTo,
+    onSubmitReply,
     supportReplies = false,
-    maxDepth = 9999,
-    currentDepth = 0,
   } = props
-
-  const hasRepliesEnabled = supportReplies && currentDepth < maxDepth
 
   const [moreComments, setMoreComments] = useState(1)
   const shownComments = moreComments * MAX_COMMENTS
-
-  const handleMoreComments = () => {
-    onMoreComments()
-    setMoreComments(moreComments + 1)
-  }
 
   const scrollIntoRelevantComment = (commentId: string) => {
     setTimeout(() => {
@@ -57,10 +47,10 @@ export const CommentList = (props: IProps) => {
     }, 0)
   }
 
-  const handleCommentReply =
-    hasRepliesEnabled && setCommentBeingRepliedTo
-      ? setCommentBeingRepliedTo
-      : undefined
+  const handleMoreComments = () => {
+    onMoreComments && onMoreComments()
+    setMoreComments(moreComments + 1)
+  }
 
   useEffect(() => {
     if (!highlightedCommentId) return
@@ -97,34 +87,19 @@ export const CommentList = (props: IProps) => {
               borderRadius: 1,
             }}
           >
-            <CommentItem
-              {...comment}
-              handleCommentReply={handleCommentReply}
-              isUserVerified={!!comment.isUserVerified}
-              isEditable={!!comment.isEditable}
+            <CommentContainer
+              comment={comment}
               handleEditRequest={handleEditRequest}
               handleDelete={handleDelete}
               handleEdit={handleEdit}
+              isLoggedIn={isLoggedIn}
+              maxLength={maxLength}
+              onSubmitReply={onSubmitReply}
+              supportReplies={supportReplies}
             />
-            {replyForm && replyForm(comment._id)}
-            {comment.replies ? (
-              <Box sx={{ pt: 4, pl: 4 }}>
-                <CommentList
-                  currentDepth={currentDepth + 1}
-                  maxDepth={maxDepth}
-                  comments={comment.replies}
-                  supportReplies={hasRepliesEnabled}
-                  handleEditRequest={handleEditRequest}
-                  handleDelete={handleDelete}
-                  handleEdit={handleEdit}
-                  onMoreComments={handleMoreComments}
-                  replyForm={replyForm}
-                  setCommentBeingRepliedTo={setCommentBeingRepliedTo}
-                />
-              </Box>
-            ) : null}
           </Box>
         ))}
+
       {comments && comments.length > shownComments && (
         <Flex>
           <Button

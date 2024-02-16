@@ -268,7 +268,6 @@ const SignUpPage = observer(() => {
                           width: '100%',
                           justifyContent: 'center',
                           border: 'none',
-                          fontSize: '1.2rem',
                         }}
                         variant={'primary'}
                         disabled={disabled}

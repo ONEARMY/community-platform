@@ -16,7 +16,7 @@ import { formatDate } from 'src/utils/date'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
-import { ResearchComments } from './ResearchComments/ResearchComments'
+import { ResearchComments } from './ResearchComments'
 
 import type { IComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'

@@ -1,5 +1,6 @@
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
+import { DatabaseV2 } from './databaseV2/DatabaseV2'
 import { DiscussionStore } from './Discussions/discussions.store'
 import { HowtoStore } from './Howto/howto.store'
 import { MapsStore } from './Maps/maps.store'
@@ -11,7 +12,6 @@ import { TagsStore } from './Tags/tags.store'
 import { ThemeStore } from './Theme/theme.store'
 import { UserNotificationsStore } from './User/notifications.store'
 import { UserStore } from './User/user.store'
-import { DatabaseV2 } from './databaseV2'
 
 export interface IRootStore {
   dbV2: DatabaseV2

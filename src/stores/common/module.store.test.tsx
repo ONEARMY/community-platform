@@ -1,4 +1,4 @@
-import { DatabaseV2 } from '../databaseV2'
+import { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import { RootStore } from '../RootStore'
 import { ModuleStore } from './module.store'
 

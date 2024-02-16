@@ -2,7 +2,11 @@ import type { CollectionReference } from './CollectionReference'
 import type { DBEndpoint } from './endpoints'
 import type { DBClients } from './types'
 
-export abstract class AbstractDatabase {
+interface IAbstractDatabase {
+  collection<T>(endpoint: DBEndpoint): CollectionReference<T>
+}
+
+export abstract class AbstractDatabase implements IAbstractDatabase {
   private _clients: DBClients
 
   /**

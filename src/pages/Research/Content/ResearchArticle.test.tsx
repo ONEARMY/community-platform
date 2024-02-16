@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { faker } from '@faker-js/faker'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { ResearchUpdateStatus, UserRole } from 'oa-shared'
@@ -16,6 +17,7 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { formatDate } from 'src/utils/date'
 
 import ResearchArticle from './ResearchArticle'
 
@@ -270,6 +272,68 @@ describe('Research Article', () => {
       // Assert
       await waitFor(async () => {
         expect(wrapper.getByText('First test comment')).toBeInTheDocument()
+      })
+    })
+
+    it('does not show edit timestamp, when create displays the same value', async () => {
+      const created = faker.date.past()
+      const modified = new Date(created)
+      modified.setHours(15)
+      const update = FactoryResearchItemUpdate({
+        _created: created.toString(),
+        _modified: modified.toString(),
+        title: 'A title',
+        description: 'A description',
+      })
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        formatResearchCommentList: jest.fn().mockImplementation((c) => {
+          return c
+        }),
+        activeResearchItem: FactoryResearchItem({
+          updates: [update],
+        }),
+      })
+
+      // Act
+      const wrapper = getWrapper()
+
+      // Assert
+      await waitFor(async () => {
+        expect(() =>
+          wrapper.getAllByText(`edited ${formatDate(modified)}`),
+        ).toThrow()
+      })
+    })
+
+    it('does show both created and edit timestamp, when different', async () => {
+      const modified = faker.date.future()
+      const update = FactoryResearchItemUpdate({
+        _created: faker.date.past().toString(),
+        status: ResearchUpdateStatus.PUBLISHED,
+        _modified: modified.toString(),
+        title: 'A title',
+        description: 'A description',
+        _deleted: false,
+      })
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        formatResearchCommentList: jest.fn().mockImplementation((c) => {
+          return c
+        }),
+        activeResearchItem: FactoryResearchItem({
+          updates: [update],
+        }),
+      })
+
+      // Act
+      const wrapper = getWrapper()
+
+      // Assert
+      await waitFor(async () => {
+        expect(() =>
+          wrapper.getAllByText(`edited ${formatDate(modified)}`),
+        ).not.toThrow()
       })
     })
   })

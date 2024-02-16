@@ -18,7 +18,7 @@ import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 import type { IUser } from 'src/models'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
-import type { RootStore } from '../index'
+import type { IRootStore } from '../RootStore'
 
 const COLLECTION_NAME = 'questions'
 
@@ -49,7 +49,7 @@ export class QuestionStore extends ModuleStore {
   @observable
   isFetching = true
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()

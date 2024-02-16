@@ -40,7 +40,7 @@ import type { IComment, IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
 import type { DocReference } from '../databaseV2/DocReference'
-import type { RootStore } from '../index'
+import type { IRootStore } from '../RootStore'
 
 const COLLECTION_NAME = 'research'
 
@@ -90,7 +90,7 @@ export class ResearchStore extends ModuleStore {
 
   isFetching = true
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()

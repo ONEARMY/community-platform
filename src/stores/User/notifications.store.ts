@@ -12,12 +12,12 @@ import type {
   NotificationType,
 } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
-import type { RootStore } from '..'
+import type { IRootStore } from '../RootStore'
 
 // const COLLECTION_NAME = 'user_notifications'
 
 export class UserNotificationsStore extends ModuleStore {
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore)
     makeObservable(this)
   }

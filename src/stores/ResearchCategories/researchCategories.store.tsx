@@ -4,7 +4,7 @@ import { arrayToJson } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 
 import type { IResearchCategory } from 'src/models/researchCategories.model'
-import type { RootStore } from '..'
+import type { IRootStore } from '../RootStore'
 
 export class ResearchCategoriesStore extends ModuleStore {
   @observable
@@ -12,7 +12,7 @@ export class ResearchCategoriesStore extends ModuleStore {
   @observable
   public allResearchCategoriesByKey: { [key: string]: IResearchCategory } = {}
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore, 'researchCategories')
     // call init immediately for tags so they are available to all pages
     super.init()

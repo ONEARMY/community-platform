@@ -36,7 +36,7 @@ import type {
   IHowToStepFormInput,
 } from 'src/models/howto.models'
 import type { IConvertedFileMeta } from 'src/types'
-import type { RootStore } from '../index'
+import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
 const COLLECTION_NAME = 'howtos'
@@ -75,7 +75,7 @@ export class HowtoStore extends ModuleStore {
   @observable
   private filterSorterDecorator: FilterSorterDecorator<IHowtoDB>
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)

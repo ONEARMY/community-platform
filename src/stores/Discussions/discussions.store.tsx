@@ -14,13 +14,13 @@ import type {
   IDiscussion,
   IDiscussionComment,
 } from 'src/models/discussion.models'
-import type { RootStore } from '..'
 import type { DocReference } from '../databaseV2/DocReference'
+import type { IRootStore } from '../RootStore'
 
 const COLLECTION_NAME = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()

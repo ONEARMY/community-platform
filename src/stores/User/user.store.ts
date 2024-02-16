@@ -29,7 +29,7 @@ import type {
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { IConvertedFileMeta } from '../../types'
-import type { RootStore } from '..'
+import type { IRootStore } from '../RootStore'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
@@ -47,7 +47,7 @@ export class UserStore extends ModuleStore {
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()

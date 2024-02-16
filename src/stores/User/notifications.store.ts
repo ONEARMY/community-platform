@@ -14,8 +14,6 @@ import type {
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IRootStore } from '../RootStore'
 
-// const COLLECTION_NAME = 'user_notifications'
-
 export class UserNotificationsStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore)

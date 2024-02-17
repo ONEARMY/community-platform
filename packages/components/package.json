@@ -15,7 +15,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "new-component": "ts-node scripts/newComponent.ts",
     "test": "vitest",
-    "test-ci": "vitest --coverage"
+    "test-ci": "vitest --coverage --reporter=junit --outputFile.junit=./reports/output.xml"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",

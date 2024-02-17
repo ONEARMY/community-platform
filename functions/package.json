@@ -14,6 +14,7 @@
     "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "shell": "yarn build && firebase functions:shell",
     "test": "firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated 'jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",
+    "test-ci": "./node_modules/.bin/firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated 'yarn jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",
     "test:watch": "firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --ui --project demo-community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'",
     "serve:email-templates": "node ./src/emailNotifications/development/server.mjs"
   },

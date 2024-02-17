@@ -1,5 +1,5 @@
-import { DatabaseV2 } from '../databaseV2'
-import { RootStore } from '../index'
+import { DatabaseV2 } from '../databaseV2/DatabaseV2'
+import { RootStore } from '../RootStore'
 import { ModuleStore } from './module.store'
 
 // Mocked to prevent App initialisation from useCommonStores dependency
@@ -9,7 +9,7 @@ jest.mock('src/stores/databaseV2/clients/dexie')
 // Mocked to prevent circular dependency through useCommonStores
 jest.mock('src/index')
 // Mocked to mock out RootStore
-jest.mock('src/stores/index')
+jest.mock('src/stores/RootStore')
 
 const collectionMock = jest.fn()
 class MockDB extends DatabaseV2 {

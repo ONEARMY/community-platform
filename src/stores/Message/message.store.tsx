@@ -6,13 +6,13 @@ import { isUserBlockedFromMessaging } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 
 import type { IMessage, IMessageInput } from 'src/models'
-import type { RootStore } from '../index'
+import type { IRootStore } from '../RootStore'
 
 const COLLECTION_NAME = 'messages'
 const EMAIL_ADDRESS_SEND_LIMIT = 100
 
 export class MessageStore extends ModuleStore {
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()

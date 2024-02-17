@@ -1,7 +1,7 @@
 import { toJS } from 'mobx'
 
 import type { IVotedUsefulUpdate } from 'src/models'
-import type { DatabaseV2 } from '../databaseV2'
+import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
 export const toggleDocUsefulByUser = async (

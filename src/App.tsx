@@ -4,8 +4,8 @@ import { observer, Provider } from 'mobx-react'
 import { GlobalStyles } from 'oa-components'
 
 import ErrorBoundary from './common/Error/ErrorBoundary'
+import { RootStore } from './stores/RootStore'
 import { Pages } from './pages'
-import { RootStore } from './stores'
 
 const rootStore = new RootStore()
 

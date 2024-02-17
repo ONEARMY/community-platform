@@ -9,12 +9,12 @@ import { FactoryUser } from 'src/test/factories/User'
 import { DiscussionStore } from './discussions.store'
 
 import type { IDiscussion } from 'src/models'
-import type { RootStore } from '..'
+import type { IRootStore } from '../RootStore'
 
 const factory = async (
   discussions: IDiscussion[] = [FactoryDiscussion({})],
 ) => {
-  const store = new DiscussionStore({} as RootStore)
+  const store = new DiscussionStore({} as IRootStore)
 
   const discussionItem = discussions[0]
 

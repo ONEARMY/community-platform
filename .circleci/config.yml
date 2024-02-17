@@ -257,6 +257,10 @@ jobs:
           path: packages/components/coverage
       - codecov/upload
       - store_artifacts:
+          path: packages/components/reports
+      - store_test_results:
+          path: packages/components/reports
+      - store_artifacts:
           path: reports
       - store_test_results:
           path: reports

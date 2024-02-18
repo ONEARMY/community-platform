@@ -1,5 +1,22 @@
+import { initializeApp } from 'firebase/app'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+  writeBatch,
+} from 'firebase/firestore'
 import { Observable } from 'rxjs'
-import { firestore } from 'src/utils/firebase'
+import { FIREBASE_CONFIG, SITE } from 'src/config/config'
+import { logger } from 'src/logger'
 
 import { getQueryOptions } from '../utils/getQueryOptions'
 
@@ -7,48 +24,74 @@ import type { Observer } from 'rxjs'
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type { AbstractDatabaseClient, DBQueryOptions } from '../types'
 
-const db = firestore
-
 export class FirestoreClient implements AbstractDatabaseClient {
+  private _db
+  constructor() {
+    const firebaseApp = initializeApp(FIREBASE_CONFIG)
+    this._db = getFirestore(firebaseApp)
+
+    logger.debug(`FirestoreClient`, {
+      FIREBASE_CONFIG,
+      SITE,
+      db: this._db,
+    })
+    // TODO
+    // if (SITE === 'emulated_site') {
+    //   this._db.useEmulator('localhost', 4003)
+    // }
+  }
   /************************************************************************
    *  Main Methods - taken from abstract class
    ***********************************************************************/
   async getDoc<T>(endpoint: IDBEndpoint, docId: string) {
-    const doc = await db.collection(endpoint).doc(docId).get()
-    return doc.exists ? (doc.data() as T & DBDoc) : undefined
+    logger.debug('FirestoreClient.getDoc', docId)
+    const document = await getDoc(doc(this._db, endpoint, docId))
+    return document.exists() ? (document.data() as T & DBDoc) : undefined
   }
 
-  async setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
-    return db.doc(`${endpoint}/${doc._id}`).set(doc)
+  async setDoc(endpoint: IDBEndpoint, documentObj: DBDoc) {
+    return setDoc(doc(this._db, endpoint, documentObj._id), documentObj)
   }
 
-  async updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
-    const { _id, ...updateValues } = doc
-    return db.doc(`${endpoint}/${_id}`).update(updateValues)
+  async updateDoc(endpoint: IDBEndpoint, documentObj: DBDoc) {
+    const { _id, ...updateValues } = documentObj
+
+    return updateDoc(doc(this._db, endpoint, _id), updateValues)
   }
 
+  /**
+   * TODO:
+   * @param endpoint
+   * @param docs
+   */
   async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
-    const batch = db.batch()
+    const batch = writeBatch(this._db)
     docs.forEach((d) => {
-      const ref = db.collection(endpoint).doc(d._id)
+      const ref = doc(this._db, endpoint, d._id)
       batch.set(ref, d)
     })
   }
 
   // get a collection with optional value to query _modified field
   async getCollection<T>(endpoint: IDBEndpoint) {
-    const snapshot = await db.collection(endpoint).get()
+    logger.debug(`FirestoreClient.getCollection`, endpoint)
+    const snapshot = await getDocs(collection(this._db, endpoint))
     return snapshot.empty ? [] : snapshot.docs.map((d) => d.data() as T & DBDoc)
   }
 
   async queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
-    const ref = this._generateQueryRef(endpoint, queryOpts)
-    const data = await ref.get()
+    logger.debug(`FirestoreClient.queryCollection`, endpoint, queryOpts)
+    const queryRef = this._generateQueryRef(endpoint, queryOpts)
+    const data = await getDocs(queryRef)
+    logger.debug(`FirestoreClient.queryCollection.data`, endpoint, {
+      data,
+    })
+
     return data.empty ? [] : data.docs.map((doc) => doc.data() as T)
   }
 
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
-    return db.collection(endpoint).doc(docId).delete()
+    return deleteDoc(doc(this._db, endpoint, docId))
   }
 
   /************************************************************************
@@ -56,10 +99,19 @@ export class FirestoreClient implements AbstractDatabaseClient {
    ***********************************************************************/
 
   streamCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
-    const ref = this._generateQueryRef(endpoint, queryOpts)
+    const queryRef = this._generateQueryRef(endpoint, queryOpts)
+    logger.debug(`FirestoreClient.streamCollection`, endpoint, {
+      queryOpts,
+      queryRef,
+    })
     const observer: Observable<T[]> = Observable.create(
       async (obs: Observer<T[]>) => {
-        ref.onSnapshot((snap) => {
+        onSnapshot(queryRef, (snap) => {
+          logger.debug(
+            `FirestoreClient.streamCollection.onSnapshot`,
+            endpoint,
+            snap.docs,
+          )
           const docs = snap.docs.map((d) => d.data() as T)
           obs.next(docs)
         })
@@ -68,10 +120,11 @@ export class FirestoreClient implements AbstractDatabaseClient {
     return observer
   }
   streamDoc<T>(endpoint: IDBEndpoint) {
-    const ref = db.doc(endpoint)
+    logger.debug(`FirestoreClient.streamDoc`, endpoint)
+    const ref = doc(this._db, endpoint)
     const observer: Observable<T> = Observable.create(
       async (obs: Observer<T>) => {
-        ref.onSnapshot((snap) => {
+        onSnapshot(ref, (snap) => {
           obs.next(snap.data() as T)
         })
       },
@@ -79,23 +132,20 @@ export class FirestoreClient implements AbstractDatabaseClient {
     return observer
   }
 
-  // create a blank doc to generate an id
-  generateFirestoreDocID(endpoint: IDBEndpoint) {
-    return db.collection(endpoint).doc().id
-  }
-
   // mapping to generate firebase query from standard db queryOpts
   private _generateQueryRef(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
-    const query = getQueryOptions(queryOpts)
-    const { limit, orderBy, order, where } = query
-    const baseRef = db.collection(endpoint)
-    const limitRef = limit ? baseRef.limit(limit) : baseRef
+    const queryOptions = getQueryOptions(queryOpts)
+    const collectionRef = collection(this._db, endpoint)
+    // TODO: const limitRef = query.limit ? baseRef.limit(query.limit) : baseRef
     // if using where query ignore orderBy parameters to avoid need for composite indexes
-    if (where) {
-      const { field, operator, value } = where
-      return limitRef.where(field, operator, value)
-    } else {
-      return limitRef.orderBy(orderBy!, order!)
+    if (queryOptions.where) {
+      const { field, operator, value } = queryOptions.where
+      return query(collectionRef, where(field, operator, value)) // TODO: limitRef.where(field, operator, value)
     }
+
+    return query(
+      collectionRef,
+      orderBy(queryOptions.orderBy!, queryOptions.order!),
+    )
   }
 }

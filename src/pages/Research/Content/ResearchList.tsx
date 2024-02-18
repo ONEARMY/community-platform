@@ -62,8 +62,8 @@ const ResearchList = observer(() => {
         <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
           <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
             <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
-              <Link to={store.activeUser ? '/research/create' : '/sign-up'}>
-                <Button variant={'primary'} data-cy="create">
+              <Link to={store.activeUser ? '/research/create' : '/sign-up'} data-cy="create">
+                <Button variant={'primary'}>
                   Add Research
                 </Button>
               </Link>

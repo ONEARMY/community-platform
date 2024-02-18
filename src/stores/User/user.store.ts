@@ -115,11 +115,11 @@ export class UserStore extends ModuleStore {
     return signInWithEmailAndPassword(auth, email, password)
   }
 
-  public async getUserByUsername(username: string) {
+  public async getUserByUsername(username: string): Promise<IUserPPDB | null> {
     const [user] = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('_id', '==', username)
-    return user
+    return user || null
   }
 
   // TODO

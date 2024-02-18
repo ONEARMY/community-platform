@@ -1,8 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { ExternalLink } from 'oa-components'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { DISCORD_INVITE_URL } from 'src/constants'
-import { useCommonStores } from 'src/index'
 import { fields, headings } from 'src/pages/UserSettings/labels'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 

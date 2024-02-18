@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { DEV_SITE_ROLE, SITE } from 'src/config/config'
-import { useCommonStores } from 'src/index'
 
 import type { UserRole } from 'oa-shared'
 

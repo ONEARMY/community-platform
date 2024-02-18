@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getUserCountry } from 'src/utils/getUserCountry'
 
-import { useCommonStores } from '../..'
+import { useCommonStores } from './useCommonStores'
 
 import type { Collaborator } from '../../models/common.models'
 

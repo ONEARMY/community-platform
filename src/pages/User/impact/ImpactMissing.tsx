@@ -1,7 +1,7 @@
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { Button, ExternalLink } from 'oa-components'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex, Text } from 'theme-ui'
 
 import { IMPACT_REPORT_LINKS } from './constants'

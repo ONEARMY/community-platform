@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'mobx-react'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import ResearchForm from 'src/pages/Research/Content/Common/Research.form'
 import { Flex, Text } from 'theme-ui'
 

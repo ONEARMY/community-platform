@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { Card, Flex, Heading, Text } from 'theme-ui'
-
-import { useCommonStores } from '../../index'
 
 enum Status {
   LOADING,

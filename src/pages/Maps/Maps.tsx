@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT } from 'src/config/config'
-import { useCommonStores } from 'src/index'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { Box } from 'theme-ui'
 

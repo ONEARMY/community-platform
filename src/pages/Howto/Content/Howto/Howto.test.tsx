@@ -25,7 +25,7 @@ const mockHowtoStore = () => ({
   removeActiveHowto: jest.fn(),
 })
 
-jest.mock('src/index', () => ({
+jest.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

@@ -60,11 +60,6 @@ export class FirestoreClient implements AbstractDatabaseClient {
     return updateDoc(doc(this._db, endpoint, _id), updateValues)
   }
 
-  /**
-   * TODO:
-   * @param endpoint
-   * @param docs
-   */
   async setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     const batch = writeBatch(this._db)
     docs.forEach((d) => {

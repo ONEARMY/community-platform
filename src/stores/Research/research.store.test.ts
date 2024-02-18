@@ -9,7 +9,7 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
-import { RootStore } from '..'
+import { RootStore } from '../RootStore'
 import { ResearchStore } from './research.store'
 
 jest.mock('../../utils/helpers', () => ({

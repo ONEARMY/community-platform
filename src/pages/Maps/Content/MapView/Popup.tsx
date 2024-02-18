@@ -3,7 +3,7 @@ import { Popup as LeafletPopup } from 'react-leaflet'
 import L from 'leaflet'
 import { MapMemberCard } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
 import type { Map } from 'react-leaflet'

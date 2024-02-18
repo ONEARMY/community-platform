@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { FieldContainer } from '../../../common/Form/FieldContainer'
 

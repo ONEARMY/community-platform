@@ -5,7 +5,7 @@ import { getFrameSrc } from './Academy'
 // being instantiated as part of the loading process
 // This is a code smell, which needs to be resolved but
 // is out of scope for the current task.
-jest.mock('src/index', () => {
+jest.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: jest.fn(),
   }

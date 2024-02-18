@@ -70,7 +70,7 @@ const mockPatreonNotSupporter = {
 
 const mockRemovePatreonConnection = jest.fn()
 
-jest.mock('src/index', () => ({
+jest.mock('src/common/hooks/useCommonStores', () => ({
   useCommonStores: () => ({
     stores: {
       userStore: {

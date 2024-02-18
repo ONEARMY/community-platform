@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getUserCountry } from 'src/utils/getUserCountry'
 
-import { useCommonStores } from '../..'
+import { useCommonStores } from './useCommonStores'
 
 import type { Collaborator } from '../../models/common.models'
 
@@ -16,10 +16,11 @@ export const useContributorsData = (collaborators: string[]) => {
         const contributorsData = await Promise.all(
           collaborators.map(async (c) => {
             const user = await userStore.getUserByUsername(c)
+
             return {
               userName: c,
               isVerified: false,
-              countryCode: getUserCountry(user),
+              countryCode: user ? getUserCountry(user) : '',
             }
           }),
         )

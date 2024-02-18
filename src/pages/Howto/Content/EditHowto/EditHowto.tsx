@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { toJS } from 'mobx'
 import { Loader } from 'oa-components'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Text } from 'theme-ui'
 

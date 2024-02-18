@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useCommonStores } from '../../index'
+import { useCommonStores } from './useCommonStores'
 
 import type { AggregationsStore } from 'src/stores/Aggregations/aggregations.store'
 

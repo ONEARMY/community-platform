@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { Box, Flex } from 'theme-ui'
 

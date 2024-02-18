@@ -5,8 +5,8 @@ import {
   ResearchStatus,
   ResearchUpdateStatus,
 } from 'oa-shared'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import { useCommonStores } from 'src/index'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
 import {

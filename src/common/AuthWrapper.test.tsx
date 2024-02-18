@@ -10,7 +10,7 @@ const mockUser = FactoryUser({
   userRoles: [UserRole.ADMIN],
 })
 
-jest.mock('src/index', () => ({
+jest.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {

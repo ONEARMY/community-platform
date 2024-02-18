@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Form } from 'react-final-form'
 import { Button, FieldInput } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { buttons, fields } from 'src/pages/UserSettings/labels'
 import { Flex, Label, Text } from 'theme-ui'
 

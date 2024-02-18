@@ -10,7 +10,7 @@ import {
   VideoPlayer,
 } from 'oa-components'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { formatDate } from 'src/utils/date'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'

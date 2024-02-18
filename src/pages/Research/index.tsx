@@ -1,10 +1,10 @@
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { MODULE } from 'src/modules'
 import {
   ResearchStore,
   ResearchStoreContext,
 } from 'src/stores/Research/research.store'
 
-import { useCommonStores } from '../../index'
 import ResearchRoutes from './research.routes'
 
 import type { IPageMeta } from '../PageList'

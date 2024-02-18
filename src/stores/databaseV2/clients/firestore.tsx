@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -35,10 +36,10 @@ export class FirestoreClient implements AbstractDatabaseClient {
       SITE,
       db: this._db,
     })
-    // TODO
-    // if (SITE === 'emulated_site') {
-    //   this._db.useEmulator('localhost', 4003)
-    // }
+
+    if (SITE === 'emulated_site') {
+      this._db.useEmulator('localhost', 4003)
+    }
   }
   /************************************************************************
    *  Main Methods - taken from abstract class
@@ -136,16 +137,25 @@ export class FirestoreClient implements AbstractDatabaseClient {
   private _generateQueryRef(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     const queryOptions = getQueryOptions(queryOpts)
     const collectionRef = collection(this._db, endpoint)
-    // TODO: const limitRef = query.limit ? baseRef.limit(query.limit) : baseRef
+
+    const limitConstraint = queryOptions.limit
+      ? limit(queryOptions.limit)
+      : limit(1000)
+
     // if using where query ignore orderBy parameters to avoid need for composite indexes
     if (queryOptions.where) {
       const { field, operator, value } = queryOptions.where
-      return query(collectionRef, where(field, operator, value)) // TODO: limitRef.where(field, operator, value)
+      return query(
+        collectionRef,
+        where(field, operator, value),
+        limitConstraint,
+      )
     }
 
     return query(
       collectionRef,
       orderBy(queryOptions.orderBy!, queryOptions.order!),
+      limitConstraint,
     )
   }
 }

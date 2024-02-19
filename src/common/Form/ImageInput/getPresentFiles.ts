@@ -5,7 +5,7 @@
 
 import type { IConvertedFileMeta } from 'src/types'
 import type { IUploadedFileMeta } from '../../../stores/storage'
-import type { IMultipleInputValue, IValue } from './ImageInput'
+import type { IMultipleInputValue, IValue } from './types'
 
 type Value = IValue | undefined
 

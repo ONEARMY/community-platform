@@ -10,16 +10,13 @@ import { ImageInputWrapper } from './ImageInputWrapper'
 import { setSrc } from './setSrc'
 
 import type { IConvertedFileMeta } from 'src/types'
-import type { IUploadedFileMeta } from '../../../stores/storage'
+import type { IInputValue, IMultipleInputValue, IValue } from './types'
 
 /*
     This component takes multiple image using filepicker and resized clientside
     Note, typings not available for client-compress so find full options here:
     https://github.com/davejm/client-compress
 */
-export type IInputValue = IUploadedFileMeta | IConvertedFileMeta
-export type IMultipleInputValue = IInputValue[]
-export type IValue = IInputValue | IMultipleInputValue
 type IFileMeta = IConvertedFileMeta[] | IConvertedFileMeta | null
 
 interface IProps {

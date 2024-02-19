@@ -10,47 +10,42 @@ import type { FieldProps } from './types'
 // Note, partial as default onChange function provided
 type IImageInputProps = Partial<React.ComponentProps<typeof ImageInput>>
 
-interface IExtendedFieldProps extends FieldProps, IImageInputProps {
-  // add additional onChange style method to respond more directly to value changes
-  // without need for react-final-form listener
-  customChange?: (value) => void
-}
+interface IProps extends FieldProps, IImageInputProps {}
 
-export const ImageInputField = ({
-  input,
-  meta,
-  'data-cy': dataCy,
-  dataTestId,
-  customChange,
-  ...rest
-}: IExtendedFieldProps) => (
-  <>
-    <FieldContainer
-      style={{
-        height: '100%',
-        width: '100%',
-        overflow: 'hidden',
-      }}
-      invalid={meta.touched && meta.error}
-      data-cy={dataCy}
-    >
-      <ImageInput
-        {...rest}
-        dataTestId={dataTestId}
-        value={input.value}
-        // as validation happens on blur also want to artificially trigger when values change
-        // (no native blur event)
-        onFilesChange={(value) => {
-          input.onChange(value)
-          if (customChange) {
-            customChange(value)
-          }
-          input.onBlur()
+export const ImageInputField = (props: IProps) => {
+  const { input, meta, 'data-cy': dataCy, dataTestId, ...rest } = props
+
+  // as validation happens on blur also want to artificially trigger when values change
+  // (no native blur event)
+  const onFilesChange = (value) => {
+    input.onChange(value)
+    input.onBlur()
+  }
+
+  return (
+    <>
+      <FieldContainer
+        style={{
+          height: '100%',
+          width: '100%',
+          overflow: 'hidden',
         }}
-      />
-    </FieldContainer>
-    {meta.error && meta.touched && (
-      <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>{meta.error}</Text>
-    )}
-  </>
-)
+        invalid={meta.touched && meta.error}
+        data-cy={dataCy}
+      >
+        {meta.error && meta.touched && (
+          <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
+            {meta.error}
+          </Text>
+        )}
+
+        <ImageInput
+          {...rest}
+          dataTestId={dataTestId}
+          value={input.value}
+          onFilesChange={onFilesChange}
+        />
+      </FieldContainer>
+    </>
+  )
+}

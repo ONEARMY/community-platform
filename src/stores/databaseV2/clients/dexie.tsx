@@ -2,7 +2,7 @@ import Dexie from 'dexie'
 
 import { logger } from '../../../logger'
 import { DB_ENDPOINTS } from '../endpoints'
-import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
+import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type {
@@ -74,7 +74,7 @@ export class DexieClient implements AbstractDatabaseClient {
     queryOpts: DBQueryOptions,
   ): Promise<(T & DBDoc)[]> {
     return new Promise((resolve, reject) => {
-      const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
+      const query = getQueryOptions(queryOpts)
       const { limit, orderBy, order, where } = query
       // all queries sent with a common list of conditions
       const table = this._db.table<T>(endpoint)

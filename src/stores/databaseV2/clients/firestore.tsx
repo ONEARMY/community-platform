@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs'
 import { firestore } from 'src/utils/firebase'
 
-import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
+import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { Observer } from 'rxjs'
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
@@ -86,7 +86,7 @@ export class FirestoreClient implements AbstractDatabaseClient {
 
   // mapping to generate firebase query from standard db queryOpts
   private _generateQueryRef(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
-    const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
+    const query = getQueryOptions(queryOpts)
     const { limit, orderBy, order, where } = query
     const baseRef = db.collection(endpoint)
     const limitRef = limit ? baseRef.limit(limit) : baseRef

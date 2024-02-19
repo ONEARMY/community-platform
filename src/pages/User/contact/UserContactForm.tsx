@@ -12,6 +12,7 @@ import {
   UserContactFieldEmail,
   UserContactFieldMessage,
   UserContactFieldName,
+  UserContactNotLoggedIn,
 } from './'
 
 import type { IUser } from 'src/models'
@@ -25,12 +26,18 @@ type SubmitResults = { type: 'success' | 'error'; message: string }
 export const UserContactForm = observer(({ user }: Props) => {
   if (!isUserContactable(user)) return null
 
+  const { stores } = useCommonStores()
+  const { userStore } = stores
+
+  if (!userStore.activeUser)
+    return <UserContactNotLoggedIn userName={user.userName} />
+
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
   const [email, setEmail] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchUserEmail = async () => {
-      return await stores.userStore.getUserEmail()
+      return await userStore.getUserEmail()
     }
     fetchUserEmail().then((newEmail) => setEmail(newEmail))
   }, [email])
@@ -38,7 +45,6 @@ export const UserContactForm = observer(({ user }: Props) => {
   const { button, title, successMessage } = contact
   const buttonName = 'contact-submit'
   const formId = 'contact-form'
-  const { stores } = useCommonStores()
 
   const onSubmit = async (formValues, form) => {
     setSubmitResults(null)

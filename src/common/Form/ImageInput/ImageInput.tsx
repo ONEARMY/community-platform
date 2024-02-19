@@ -4,8 +4,10 @@ import { Button } from 'oa-components'
 import { Box, Image } from 'theme-ui'
 
 import { DeleteImage } from './DeleteImage'
+import { getPresentFiles } from './getPresentFiles'
 import { ImageConverterList } from './ImageConverterList'
 import { ImageInputWrapper } from './ImageInputWrapper'
+import { setSrc } from './setSrc'
 
 import type { IConvertedFileMeta } from 'src/types'
 import type { IUploadedFileMeta } from '../../../stores/storage'
@@ -16,54 +18,18 @@ import type { IUploadedFileMeta } from '../../../stores/storage'
     https://github.com/davejm/client-compress
 */
 // Input can either come from uploaded or local converted meta
-type IInputValue = IUploadedFileMeta | File
-type IMultipleInputValue = IInputValue[]
+export type IInputValue = IUploadedFileMeta | IConvertedFileMeta
+export type IMultipleInputValue = IInputValue[]
+export type IValue = IInputValue | IMultipleInputValue
 
 interface IProps {
-  // if multiple sends array, otherwise single object (or null on delete)
   onFilesChange: (
     fileMeta: IConvertedFileMeta[] | IConvertedFileMeta | null,
   ) => void
-  // TODO - add preview method for case when multiple images uploaded (if being used)
-  value?: IInputValue | IMultipleInputValue
+  value?: IValue
   hasText?: boolean
   multiple?: boolean
   dataTestId?: string
-}
-
-interface IState {
-  presentFiles: IMultipleInputValue
-  lightboxImg?: IConvertedFileMeta
-  openLightbox?: boolean
-}
-
-/**
- * As input can be both array or single object and either uploaded or converted meta,
- * require extra function to separate out to handle preview of previously uploaded
- */
-const _getPresentFiles = (
-  value: IProps['value'] = [],
-): IState['presentFiles'] => {
-  const valArray = Array.isArray(value) ? value : [value]
-  return valArray.filter((value) => {
-    if (Object.prototype.hasOwnProperty.call(value, 'downloadUrl')) {
-      return value as IUploadedFileMeta
-    }
-    if (Object.prototype.hasOwnProperty.call(value, 'objectUrl')) {
-      return value as File
-    }
-  })
-}
-
-const _setSrc = (file): string => {
-  if (file === undefined) return ''
-  if (file.downloadUrl as IUploadedFileMeta) {
-    return file.downloadUrl
-  }
-  if (file.photoData as File) {
-    return URL.createObjectURL(file.photoData)
-  }
-  return ''
 }
 
 export const ImageInput = (props: IProps) => {
@@ -74,7 +40,7 @@ export const ImageInput = (props: IProps) => {
   const [inputFiles, setInputFiles] = useState<File[]>([])
   const [convertedFiles, setConvertedFiles] = useState<IConvertedFileMeta[]>([])
   const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(
-    _getPresentFiles(value),
+    getPresentFiles(value),
   )
 
   const onDrop = (inputFiles) => {
@@ -105,7 +71,7 @@ export const ImageInput = (props: IProps) => {
     if (
       JSON.stringify(props.value) !== JSON.stringify(prevPropsValue.current)
     ) {
-      setPresentFiles(_getPresentFiles(props.value))
+      setPresentFiles(getPresentFiles(props.value))
     }
 
     prevPropsValue.current = props.value
@@ -113,7 +79,7 @@ export const ImageInput = (props: IProps) => {
 
   const hasImages = presentFiles.length > 0 || inputFiles.length > 0
   const showUploadedImg = presentFiles.length > 0
-  const src = _setSrc(presentFiles[0])
+  const src = setSrc(presentFiles[0])
 
   return (
     <Box p={0} sx={{ height: '100%' }}>

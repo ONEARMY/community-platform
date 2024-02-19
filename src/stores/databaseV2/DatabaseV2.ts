@@ -1,7 +1,7 @@
 import { SITE } from '../../config/config'
-import { DexieClient } from './clients/dexie'
-import { FirestoreClient } from './clients/firestore'
-import { RealtimeDBClient } from './clients/rtdb'
+import { DexieClient } from './clients/DexieClient'
+import { FirestoreClient } from './clients/FirestoreClient'
+import { RealtimeDatabaseClient } from './clients/RealtimeDatabaseClient'
 import { CollectionReference } from './CollectionReference'
 import { DB_ENDPOINTS } from './endpoints'
 
@@ -47,7 +47,7 @@ export class DatabaseV2 {
     const serverDB = new FirestoreClient()
     const cacheDB = useBrowserCacheDb ? serverDB : new DexieClient()
     const serverCacheDB =
-      SITE === 'emulated_site' ? serverDB : new RealtimeDBClient()
+      SITE === 'emulated_site' ? serverDB : new RealtimeDatabaseClient()
     return { cacheDB, serverDB, serverCacheDB }
   }
 }

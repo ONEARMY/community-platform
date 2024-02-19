@@ -7,8 +7,9 @@ import type { IConvertedFileMeta } from 'src/types'
 import type { IUploadedFileMeta } from '../../../stores/storage'
 import type { IMultipleInputValue, IValue } from './ImageInput'
 
+type Value = IValue | undefined
 
-export const getPresentFiles = (value: IValue | undefined): IMultipleInputValue => {
+export const getPresentFiles = (value: Value): IMultipleInputValue => {
   if (!value) return []
 
   const valArray = Array.isArray(value) ? value : [value]

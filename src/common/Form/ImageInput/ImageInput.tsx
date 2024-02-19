@@ -17,15 +17,13 @@ import type { IUploadedFileMeta } from '../../../stores/storage'
     Note, typings not available for client-compress so find full options here:
     https://github.com/davejm/client-compress
 */
-// Input can either come from uploaded or local converted meta
 export type IInputValue = IUploadedFileMeta | IConvertedFileMeta
 export type IMultipleInputValue = IInputValue[]
 export type IValue = IInputValue | IMultipleInputValue
+type IFileMeta = IConvertedFileMeta[] | IConvertedFileMeta | null
 
 interface IProps {
-  onFilesChange: (
-    fileMeta: IConvertedFileMeta[] | IConvertedFileMeta | null,
-  ) => void
+  onFilesChange: (fileMeta: IFileMeta) => void
   value?: IValue
   hasText?: boolean
   multiple?: boolean
@@ -36,7 +34,7 @@ export const ImageInput = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
 
-  const { dataTestId, multiple, value } = props
+  const { dataTestId, multiple, onFilesChange, value } = props
   const [inputFiles, setInputFiles] = useState<File[]>([])
   const [convertedFiles, setConvertedFiles] = useState<IConvertedFileMeta[]>([])
   const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(
@@ -51,11 +49,9 @@ export const ImageInput = (props: IProps) => {
     const nextFiles = convertedFiles.map((file, i) => {
       return i === index ? newFile : file
     })
-
     setConvertedFiles(nextFiles)
-
-    const value = props.multiple ? convertedFiles : convertedFiles[0]
-    props.onFilesChange(value)
+    const value = multiple ? convertedFiles : convertedFiles[0]
+    onFilesChange(value)
   }
 
   const handleImageDelete = (event: Event) => {
@@ -64,17 +60,15 @@ export const ImageInput = (props: IProps) => {
     setInputFiles([])
     setConvertedFiles([])
     setPresentFiles([])
-    props.onFilesChange(null)
+    onFilesChange(null)
   }
 
   useEffect(() => {
-    if (
-      JSON.stringify(props.value) !== JSON.stringify(prevPropsValue.current)
-    ) {
-      setPresentFiles(getPresentFiles(props.value))
+    if (JSON.stringify(value) !== JSON.stringify(prevPropsValue.current)) {
+      setPresentFiles(getPresentFiles(value))
     }
 
-    prevPropsValue.current = props.value
+    prevPropsValue.current = value
   }, [props])
 
   const hasImages = presentFiles.length > 0 || inputFiles.length > 0

@@ -32,9 +32,7 @@ interface IProps {
 }
 
 interface IState {
-  convertedFiles: IConvertedFileMeta[]
   presentFiles: IMultipleInputValue
-  inputFiles: File[]
   lightboxImg?: IConvertedFileMeta
   openLightbox?: boolean
 }
@@ -69,30 +67,27 @@ const _setSrc = (file): string => {
 }
 
 export const ImageInput = (props: IProps) => {
-  const { dataTestId, multiple } = props
-  const [state, setState] = useState<IState>({
-    inputFiles: [],
-    convertedFiles: [],
-    presentFiles: _getPresentFiles(props.value),
-  })
-  const { presentFiles } = state
   const fileInputRef = useRef<HTMLInputElement>(null)
   const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
 
-  const handleFileUpload = (filesToUpload: Array<File>) => {
-    setState((state) => ({ ...state, inputFiles: filesToUpload }))
+  const { dataTestId, multiple, value } = props
+  const [inputFiles, setInputFiles] = useState<File[]>([])
+  const [convertedFiles, setConvertedFiles] = useState<IConvertedFileMeta[]>([])
+  const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(
+    _getPresentFiles(value),
+  )
+
+  const onDrop = (inputFiles) => {
+    setInputFiles(inputFiles)
   }
 
-  const handleConvertedFileChange = (
-    file: IConvertedFileMeta,
-    index: number,
-  ) => {
-    const { convertedFiles } = state
-    convertedFiles[index] = file
-    setState((state) => ({
-      ...state,
-      convertedFiles,
-    }))
+  const handleConvertedFileChange = (newFile, index) => {
+    const nextFiles = convertedFiles.map((file, i) => {
+      return i === index ? newFile : file
+    })
+
+    setConvertedFiles(nextFiles)
+
     const value = props.multiple ? convertedFiles : convertedFiles[0]
     props.onFilesChange(value)
   }
@@ -100,11 +95,9 @@ export const ImageInput = (props: IProps) => {
   const handleImageDelete = (event: Event) => {
     // TODO - handle case where a server image is deleted (remove from server)
     event.stopPropagation()
-    setState({
-      inputFiles: [],
-      convertedFiles: [],
-      presentFiles: [],
-    })
+    setInputFiles([])
+    setConvertedFiles([])
+    setPresentFiles([])
     props.onFilesChange(null)
   }
 
@@ -112,22 +105,19 @@ export const ImageInput = (props: IProps) => {
     if (
       JSON.stringify(props.value) !== JSON.stringify(prevPropsValue.current)
     ) {
-      setState((state) => ({
-        ...state,
-        presentFiles: _getPresentFiles(props.value),
-      }))
+      setPresentFiles(_getPresentFiles(props.value))
     }
 
     prevPropsValue.current = props.value
   }, [props])
 
-  const hasImages = presentFiles.length > 0 || state.inputFiles.length > 0
+  const hasImages = presentFiles.length > 0 || inputFiles.length > 0
   const showUploadedImg = presentFiles.length > 0
   const src = _setSrc(presentFiles[0])
 
   return (
     <Box p={0} sx={{ height: '100%' }}>
-      <Dropzone accept="image/*" multiple={multiple} onDrop={handleFileUpload}>
+      <Dropzone accept="image/*" multiple={multiple} onDrop={onDrop}>
         {({ getRootProps, getInputProps, rootRef }) => (
           <ImageInputWrapper
             ref={rootRef}
@@ -144,7 +134,7 @@ export const ImageInput = (props: IProps) => {
 
             {!showUploadedImg && (
               <ImageConverterList
-                inputFiles={state.inputFiles}
+                inputFiles={inputFiles}
                 handleConvertedFileChange={handleConvertedFileChange}
               />
             )}

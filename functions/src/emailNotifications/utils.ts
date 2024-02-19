@@ -65,7 +65,10 @@ export const isBelowMessageLimit = async (email) => {
 
 export const isReceiverContactable = async (userName) => {
   const { toUser } = await getUserAndEmail(userName)
-  if (!toUser.isContactableByPublic) {
+  if (
+    typeof toUser.isContactableByPublic === 'boolean' &&
+    !toUser.isContactableByPublic
+  ) {
     throw new Error(errors.PROFILE_NOT_CONTACTABLE)
   }
   return true

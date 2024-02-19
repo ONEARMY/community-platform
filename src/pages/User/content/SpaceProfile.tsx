@@ -275,7 +275,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
               <Tab data-cy="ImpactTab">{heading}</Tab>
-              <Tab data-cy="contact-tab">Contact</Tab>
+              <Tab data-cy="contact-tab">Contacts & Links</Tab>
             </TabsList>
             <TabPanel>
               <Box sx={{ mt: 3 }}>
@@ -305,8 +305,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                     {profileType === ProfileType.MACHINE_BUILDER &&
                       user.machineBuilderXp &&
                       renderMachineBuilderXp(user.machineBuilderXp)}
-
-                    <UserContactAndLinks links={userLinks} />
                   </Box>
                   <Box
                     sx={{
@@ -334,7 +332,10 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               <Impact impact={impact} user={user} />
             </TabPanel>
             <TabPanel>
-              <UserContactForm user={user} />
+              <Box>
+                <UserContactForm user={user} />
+                <UserContactAndLinks links={userLinks} />
+              </Box>
             </TabPanel>
           </Tabs>
         </Box>

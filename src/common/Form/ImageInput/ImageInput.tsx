@@ -1,73 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone'
 import { Button } from 'oa-components'
-import { Box, Flex, Image } from 'theme-ui'
+import { Box, Image } from 'theme-ui'
 
-import { ImageConverter } from './ImageConverter'
+import { DeleteImage } from './DeleteImage'
+import { ImageConverterList } from './ImageConverterList'
+import { ImageInputWrapper } from './ImageInputWrapper'
 
 import type { IConvertedFileMeta } from 'src/types'
-import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
 import type { IUploadedFileMeta } from '../../../stores/storage'
-
-interface ITitleProps {
-  hasUploadedImg: boolean
-}
-
-const alignCenterWrapperStyles: ThemeUIStyleObject = {
-  height: '100%',
-  width: '100%',
-  overflow: 'hidden',
-  justifyContent: 'center',
-  alignItems: 'center',
-}
-
-// any export to fix: https://github.com/microsoft/TypeScript/issues/37597
-const ImageInputWrapper = React.forwardRef<HTMLElement, BoxProps & ITitleProps>(
-  (props, ref): JSX.Element => {
-    const { hasUploadedImg, ...rest } = props
-    return (
-      <Flex
-        ref={ref}
-        sx={{
-          ...alignCenterWrapperStyles,
-          position: 'relative',
-          borderColor: 'background',
-          borderStyle: hasUploadedImg ? 'none' : 'dashed',
-          borderRadius: 1,
-          backgroundColor: 'white',
-        }}
-        {...rest}
-      >
-        {props.children}
-      </Flex>
-    )
-  },
-)
-
-ImageInputWrapper.displayName = 'ImageInputWrapper'
-
-const UploadImageOverlay = (props: BoxProps): JSX.Element => (
-  <Flex
-    sx={{
-      ...alignCenterWrapperStyles,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.2)',
-      opacity: 0,
-      visibility: 'hidden',
-      transition: 'opacity 300ms ease-in',
-      borderRadius: 1,
-      '.image-input__wrapper:hover &': {
-        visibility: 'visible',
-        opacity: 1,
-      },
-    }}
-  >
-    {props.children}
-  </Flex>
-)
 
 /*
     This component takes multiple image using filepicker and resized clientside
@@ -190,30 +131,24 @@ export const ImageInput = (props: IProps) => {
         {({ getRootProps, getInputProps, rootRef }) => (
           <ImageInputWrapper
             ref={rootRef}
-            className={'image-input__wrapper'}
             hasUploadedImg={showUploadedImg}
             {...getRootProps()}
           >
             <input
               ref={fileInputRef}
-              data-testid={dataTestId}
+              data-testid={dataTestId || 'image-input'}
               {...getInputProps()}
             />
 
             {showUploadedImg && <Image src={src} />}
 
-            {!showUploadedImg &&
-              state.inputFiles.map((file, index) => {
-                return (
-                  <ImageConverter
-                    key={file.name}
-                    file={file}
-                    onImgConverted={(meta) =>
-                      handleConvertedFileChange(meta, index)
-                    }
-                  />
-                )
-              })}
+            {!showUploadedImg && (
+              <ImageConverterList
+                inputFiles={state.inputFiles}
+                handleConvertedFileChange={handleConvertedFileChange}
+              />
+            )}
+
             {!hasImages && (
               <Button small variant="outline" icon="image">
                 Upload Image
@@ -221,28 +156,11 @@ export const ImageInput = (props: IProps) => {
             )}
 
             {hasImages && (
-              <UploadImageOverlay>
-                <Button
-                  data-cy="delete-image"
-                  data-testid="delete-image"
-                  small
-                  variant="secondary"
-                  icon="delete"
-                  onClick={(event) => handleImageDelete(event)}
-                >
-                  Delete
-                </Button>
-              </UploadImageOverlay>
+              <DeleteImage onClick={(event) => handleImageDelete(event)} />
             )}
           </ImageInputWrapper>
         )}
       </Dropzone>
     </Box>
   )
-}
-
-ImageInput.defaultProps = {
-  dataTestId: 'image-input',
-  onFilesChange: () => null,
-  multiple: false,
 }

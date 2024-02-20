@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { ExternalLink, Icon } from 'oa-components'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Alert, Flex, Text } from 'theme-ui'
-
-import { useCommonStores } from '../..'
 
 type VerificationEmailState = 'pending' | 'error' | 'sent'
 

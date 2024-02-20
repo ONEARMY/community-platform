@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
-import { useCommonStores } from '../..'
 import { AlertIncompleteProfile } from './AlertIncompleteProfile'
 import { AlertProfileVerification } from './AlertProfileVerification'
 

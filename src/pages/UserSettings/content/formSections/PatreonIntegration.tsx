@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Button } from 'oa-components'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { PATREON_CLIENT_ID } from 'src/config/config'
-import { useCommonStores } from 'src/index'
 import { Box, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from './elements'

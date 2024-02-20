@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import debounce from 'debounce'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'

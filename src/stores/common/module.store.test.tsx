@@ -7,7 +7,7 @@ jest.mock('react-dom')
 // Mocked to prevent indexedDB API not found error message
 jest.mock('src/stores/databaseV2/clients/dexie')
 // Mocked to prevent circular dependency through useCommonStores
-jest.mock('src/index')
+jest.mock('src/common/hooks/useCommonStores')
 // Mocked to mock out RootStore
 jest.mock('src/stores/RootStore')
 

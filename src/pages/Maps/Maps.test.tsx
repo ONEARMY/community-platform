@@ -7,7 +7,7 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 
 import Maps from './Maps'
@@ -28,7 +28,7 @@ const mockMapStore = {
   filteredPins: [],
 }
 
-jest.mock('src/index', () => ({
+jest.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

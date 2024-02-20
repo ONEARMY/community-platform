@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { DiscussionContainer } from 'oa-components'
 import { trackEvent } from 'src/common/Analytics'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { Card, Flex } from 'theme-ui'
 

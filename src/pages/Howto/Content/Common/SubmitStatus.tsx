@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { Button, Icon, Modal } from 'oa-components'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
 import { buttons, headings } from '../../labels'

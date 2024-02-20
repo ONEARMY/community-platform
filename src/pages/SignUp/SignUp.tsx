@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import { Button, ExternalLink, FieldInput } from 'oa-components'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import {

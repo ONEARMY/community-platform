@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { VERSION } from 'src/config/config'
-import { useCommonStores } from 'src/index'
 import { Box, Flex, Image, Text } from 'theme-ui'
 
 const Logo = observer(() => {

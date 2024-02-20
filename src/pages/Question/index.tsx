@@ -8,7 +8,7 @@ import {
   QuestionStoreContext,
 } from 'src/stores/Question/question.store'
 
-import { useCommonStores } from '../../index'
+import { useCommonStores } from '../../common/hooks/useCommonStores'
 import QuestionRoutes from './question.routes'
 
 import type { IPageMeta } from '../PageList'

@@ -200,6 +200,19 @@ export class ResearchStore extends ModuleStore {
   public async setActiveResearchItemBySlug(slug?: string) {
     logger.debug(`setActiveResearchItemBySlug:`, { slug })
     let activeResearchItem: IResearchDB | undefined = undefined
+    const discussionStore = this.discussionStore
+
+    const enrichResearchUpdate = async (update: IResearch.UpdateDB) => {
+      update.description = changeUserReferenceToPlainText(update.description)
+
+      // Fetch comments for each update
+      const discussion = await discussionStore.fetchOrCreateDiscussionBySource(
+        update._id,
+        'researchUpdate',
+      )
+      update.comments = discussion ? discussion.comments : []
+      return update
+    }
 
     if (slug) {
       activeResearchItem = await this._getResearchItemBySlug(slug)
@@ -212,13 +225,8 @@ export class ResearchStore extends ModuleStore {
         )
         activeResearchItem.researchStatus =
           activeResearchItem.researchStatus || ResearchStatus.IN_PROGRESS
-        activeResearchItem.updates = activeResearchItem.updates?.map(
-          (update) => {
-            update.description = changeUserReferenceToPlainText(
-              update.description,
-            )
-            return update
-          },
+        activeResearchItem.updates = await Promise.all(
+          activeResearchItem.updates?.map(enrichResearchUpdate),
         )
       }
     }

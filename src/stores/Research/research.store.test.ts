@@ -84,6 +84,14 @@ const factory = async (
     triggerNotification: jest.fn(),
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.discussionStore = {
+    fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue({
+      comments: [],
+    }),
+  }
+
   await store.setActiveResearchItemBySlug('fish')
 
   return {
@@ -103,6 +111,29 @@ const factory = async (
 
 describe('research.store', () => {
   describe('Comments', () => {
+    describe('fetchingCommments', () => {
+      it('always returns an empty list', async () => {
+        // Arrange
+        // fetching a research item with comments
+        const { store } = await factoryResearchItem();
+        // Act
+        // Assert
+        const mockDiscussionFetch = store.discussionStore.fetchOrCreateDiscussionBySource;
+        expect(mockDiscussionFetch).toBeCalledTimes(store.activeResearchItem?.updates.length || 0)
+        expect(mockDiscussionFetch.mock.calls[0]).toEqual([expect.any(String), 'researchUpdate'])
+        expect(store.activeResearchItem.updates[0].comments).toEqual([])
+      });
+
+      it('queries Discussions for comments', async () => {
+        // Arrange
+        // fetching a research item with comments
+        const { store } = await factoryResearchItem();
+        // Act
+        // Assert
+        expect(store.activeResearchItem.updates[0].comments).toEqual([])
+      });
+    })
+
     describe('addComment', () => {
       it('does not pass observable to set', async () => {
         const { store, researchItem, setFn } = await factoryResearchItem({
@@ -125,8 +156,10 @@ describe('research.store', () => {
         const [newResearchItem] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
         expect(isObservable(newResearchItem.updates[0].collaborators)).toBe(
+
           false,
         )
+        expect(store.discussionStore.addComment).toBeCalled()
       })
 
       it('adds new comment to update', async () => {
@@ -147,7 +180,7 @@ describe('research.store', () => {
             text: 'fish',
           }),
         )
-        expect(newResearchItem.updates[1].comments).toBeUndefined()
+        expect(newResearchItem.updates[1].comments).toEqual([])
 
         // Notifies research author
         expect(
@@ -165,6 +198,8 @@ describe('research.store', () => {
           `/research/${researchItem.slug}#update_0`,
           researchItem.title,
         )
+        expect(store.discussionStore.addComment).toBeCalled()
+
       })
 
       it('adds @mention to comment text', async () => {
@@ -184,7 +219,7 @@ describe('research.store', () => {
             text: 'My favourite user has to be @@{userId:username}',
           }),
         )
-        expect(newResearchItem.updates[1].comments).toBeUndefined()
+        expect(newResearchItem.updates[1].comments).toEqual([])
         expect(newResearchItem.mentions).toEqual(
           expect.arrayContaining([
             {
@@ -193,6 +228,7 @@ describe('research.store', () => {
             },
           ]),
         )
+        expect(store.discussionStore.addComment).toBeCalled()
       })
 
       it('preserves @mention within Research description', async () => {
@@ -207,6 +243,7 @@ describe('research.store', () => {
         expect(setFn).toHaveBeenCalledTimes(1)
         const [newResearchItem] = setFn.mock.calls[0]
         expect(newResearchItem.description).toBe('@@{userId:username}')
+        expect(store.discussionStore.addComment).toBeCalled()
       })
 
       it('preserves @mention within an Update description', async () => {
@@ -233,6 +270,7 @@ describe('research.store', () => {
         expect(newResearchItem.updates[0].description).toBe(
           '@@{userId:username}',
         )
+        expect(store.discussionStore.addComment).toBeCalled()
       })
     })
 
@@ -260,6 +298,7 @@ describe('research.store', () => {
         const [newResearchItem] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
         expect(newResearchItem.updates[0].comments).toHaveLength(0)
+        expect(store.discussionStore.deleteComment).toBeCalled()
       })
 
       it('admin removes another users comment', async () => {
@@ -291,6 +330,7 @@ describe('research.store', () => {
         const [newResearchItem] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
         expect(newResearchItem.updates[0].comments).toHaveLength(0)
+        expect(store.discussionStore.deleteComment).toBeCalled()
       })
 
       it('preserves @mention within Research description', async () => {
@@ -315,6 +355,7 @@ describe('research.store', () => {
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
         expect(newResearchItem.description).toBe('@@{userId:username}')
+        expect(store.discussionStore.deleteComment).toBeCalled()
       })
 
       it('preserves @mention within an Update description', async () => {
@@ -341,6 +382,7 @@ describe('research.store', () => {
         expect(newResearchItem.updates[0].description).toBe(
           '@@{userId:username}',
         )
+        expect(store.discussionStore.deleteComment).toBeCalled()
       })
     })
 
@@ -370,6 +412,7 @@ describe('research.store', () => {
         expect(newResearchItem.updates[0].comments[0].text).toBe(
           'My favourite comment',
         )
+        expect(store.discussionStore.editComment).toBeCalled()
       })
 
       it('admin updates another users comment', async () => {
@@ -403,6 +446,7 @@ describe('research.store', () => {
         expect(newResearchItem.updates[0].comments[0].text).toBe(
           'My favourite comment',
         )
+        expect(store.discussionStore.editComment).toBeCalled()
       })
 
       it('preserves @mention within Research description', async () => {
@@ -429,6 +473,7 @@ describe('research.store', () => {
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
         expect(newResearchItem.description).toBe('@@{userId:username}')
+        expect(store.discussionStore.editComment).toBeCalled()
       })
 
       it('preserves @mention within an Update description', async () => {
@@ -457,6 +502,7 @@ describe('research.store', () => {
         expect(newResearchItem.updates[0].description).toBe(
           '@@{userId:username}',
         )
+        expect(store.discussionStore.editComment).toBeCalled()
       })
 
       it('triggers a notification when editing an comment to add @mention', async () => {
@@ -493,6 +539,7 @@ describe('research.store', () => {
           `/research/${researchItem.slug}#update-0-comment:${newResearchItem.updates[0].comments[0]._id}`,
           researchItem.title,
         )
+        expect(store.discussionStore.editComment).toBeCalled()
       })
     })
   })

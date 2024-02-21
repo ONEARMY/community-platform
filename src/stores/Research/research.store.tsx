@@ -398,13 +398,15 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async addComment(
-    text: string,
-    update: IResearch.Update | IResearch.UpdateDB,
-  ) {
+  public async addComment(text: string, update: IResearch.UpdateDB) {
     const user = this.activeUser
     const researchItem = this.activeResearchItem
     const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
+    const discussion =
+      await this.discussionStore.fetchOrCreateDiscussionBySource(
+        update._id,
+        'researchUpdate',
+      )
     if (researchItem && comment && user) {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
@@ -454,6 +456,10 @@ export class ResearchStore extends ModuleStore {
 
         await this._updateResearchItem(dbRef, newItem)
 
+        if (discussion) {
+          await this.discussionStore.addComment(discussion, comment)
+        }
+
         // Notify author and contributors
         await this.userNotificationsStore.triggerNotification(
           'new_comment_discussion',
@@ -489,6 +495,20 @@ export class ResearchStore extends ModuleStore {
     try {
       const item = this.activeResearchItem
       const user = this.activeUser
+
+      if (commentId && item && user && update?._id) {
+        const discussion =
+          await this.discussionStore.fetchOrCreateDiscussionBySource(
+            update._id,
+            'researchUpdate',
+          )
+
+        if (discussion) {
+          await this.discussionStore.deleteComment(discussion, commentId)
+          // TODO: Update root comment count
+        }
+      }
+
       if (commentId && item && user && update.comments) {
         const dbRef = this.db
           .collection<IResearch.Item>(COLLECTION_NAME)
@@ -550,18 +570,21 @@ export class ResearchStore extends ModuleStore {
     try {
       const item = this.activeResearchItem
       const user = this.activeUser
-      if (commentId && item && user && update.comments) {
+
+      if (commentId && item && user) {
+        const discussion =
+          await this.discussionStore.fetchOrCreateDiscussionBySource(
+            update._id,
+            'researchUpdate',
+          )
+        if (discussion) {
+          await this.discussionStore.editComment(discussion, commentId, newText)
+        }
         const dbRef = this.db
           .collection<IResearch.Item>(COLLECTION_NAME)
           .doc(item._id)
         const id = dbRef.id
 
-        const pastComments = toJS(update.comments)
-        const commentIndex = pastComments.findIndex(
-          (comment) =>
-            (comment._creatorId === user._id || hasAdminRights(user)) &&
-            comment._id === commentId,
-        )
         const updateWithMeta = { ...update }
         if (update.images.length > 0) {
           const imgMeta = await this.uploadCollectionBatch(
@@ -571,33 +594,19 @@ export class ResearchStore extends ModuleStore {
           )
           const newImg = imgMeta.map((img) => ({ ...img }))
           updateWithMeta.images = newImg
-        } else updateWithMeta.images = []
+        } else {
+          updateWithMeta.images = []
+        }
 
-        if (commentIndex !== -1) {
-          pastComments[commentIndex].text = newText
-            .slice(0, MAX_COMMENT_LENGTH)
-            .trim()
-          pastComments[commentIndex]._edited = new Date().toISOString()
-          updateWithMeta.comments = pastComments
+        const newItem = {
+          ...toJS(item),
+          updates: [...toJS(item.updates)],
+        }
 
-          const existingUpdateIndex = item.updates.findIndex(
-            (upd) => upd._id === (update as IResearch.UpdateDB)._id,
-          )
+        const updatedItem = await this._updateResearchItem(dbRef, newItem)
 
-          const newItem = {
-            ...toJS(item),
-            updates: [...toJS(item.updates)],
-          }
-
-          newItem.updates[existingUpdateIndex] = {
-            ...(updateWithMeta as IResearch.UpdateDB),
-          }
-
-          const updatedItem = await this._updateResearchItem(dbRef, newItem)
-
-          if (updatedItem) {
-            this.setActiveResearchItemBySlug(updatedItem.slug)
-          }
+        if (updatedItem) {
+          this.setActiveResearchItemBySlug(updatedItem.slug)
         }
       }
     } catch (err) {

@@ -210,7 +210,9 @@ export class ResearchStore extends ModuleStore {
         update._id,
         'researchUpdate',
       )
-      update.comments = discussion ? discussion.comments : []
+      update.comments = discussion
+        ? (update.comments || []).concat(discussion.comments)
+        : []
       return update
     }
 
@@ -411,54 +413,22 @@ export class ResearchStore extends ModuleStore {
       const dbRef = this.db
         .collection<IResearch.Item>(COLLECTION_NAME)
         .doc(researchItem._id)
-      const id = dbRef.id
 
       try {
-        const userCountry = getUserCountry(user)
-        const newComment: IComment = {
-          _id: randomID(),
-          _created: new Date().toISOString(),
-          _creatorId: user._id,
-          creatorName: user.userName,
-          creatorCountry: userCountry,
-          text: comment,
-        }
-
-        const updateWithMeta = { ...update }
-        if (update.images.length > 0) {
-          const imgMeta = await this.uploadCollectionBatch(
-            update.images.filter((img) => !!img) as IConvertedFileMeta[],
-            COLLECTION_NAME,
-            id,
-          )
-          const newImg = imgMeta.map((img) => ({ ...img }))
-          updateWithMeta.images = newImg
-        } else {
-          updateWithMeta.images = []
-        }
-
-        updateWithMeta.comments = updateWithMeta.comments
-          ? [...toJS(updateWithMeta.comments), newComment]
-          : [newComment]
-
         const existingUpdateIndex = researchItem.updates.findIndex(
           (upd) => upd._id === (update as IResearch.UpdateDB)._id,
         )
 
-        const newItem = {
-          ...toJS(researchItem),
-          updates: [...toJS(researchItem.updates)],
-        }
-
-        newItem.updates[existingUpdateIndex] = {
-          ...(updateWithMeta as IResearch.UpdateDB),
-        }
-
-        await this._updateResearchItem(dbRef, newItem)
-
         if (discussion) {
           await this.discussionStore.addComment(discussion, comment)
         }
+
+        const newItem: IResearchDB = {
+          ...toJS(researchItem),
+          totalCommentCount: (researchItem.totalCommentCount || 0) + 1,
+        }
+
+        await this._updateResearchItem(dbRef, newItem)
 
         // Notify author and contributors
         await this.userNotificationsStore.triggerNotification(
@@ -542,9 +512,12 @@ export class ResearchStore extends ModuleStore {
           (upd) => upd._id === (update as IResearch.UpdateDB)._id,
         )
 
-        const newItem = {
+        const newItem: IResearchDB = {
           ...toJS(item),
-          updates: [...toJS(item.updates)],
+          totalCommentCount: Math.max(
+            item.totalCommentCount ? item.totalCommentCount - 1 : 0,
+            0,
+          ),
         }
 
         newItem.updates[existingUpdateIndex] = {
@@ -598,8 +571,11 @@ export class ResearchStore extends ModuleStore {
           updateWithMeta.images = []
         }
 
-        const newItem = {
+        const newItem: IResearchDB = {
           ...toJS(item),
+          totalCommentCount: !item.totalCommentCount
+            ? 1
+            : item.totalCommentCount,
           updates: [...toJS(item.updates)],
         }
 
@@ -891,20 +867,28 @@ export class ResearchStore extends ModuleStore {
 
   @computed
   get commentsCount(): number {
+    if (!this.activeResearchItem) {
+      return 0
+    }
+
+    let commentCount = 0
+
+    if (this.activeResearchItem?.totalCommentCount) {
+      commentCount = this.activeResearchItem.totalCommentCount
+    }
+
     if (this.activeResearchItem?.updates) {
-      const commentOnUpdates = this.activeResearchItem?.updates.reduce(
+      const commentCountFromUpdates = this.activeResearchItem?.updates.reduce(
         (totalComments, update) => {
-          const updateCommentsLength = update.comments
-            ? update.comments.length
-            : 0
+          const updateCommentsLength = update.comments?.length ?? 0
           return totalComments + updateCommentsLength
         },
         0,
       )
-      return commentOnUpdates ? commentOnUpdates : 0
-    } else {
-      return 0
+      commentCount += commentCountFromUpdates
     }
+
+    return Math.max(commentCount, 0)
   }
 
   @computed

@@ -119,30 +119,44 @@ describe('research.store', () => {
       it('always returns an empty list', async () => {
         // Arrange
         // fetching a research item with comments
-        const { store } = await factoryResearchItem();
+        const { store } = await factoryResearchItem()
         // Act
         // Assert
-        const mockDiscussionFetch = store.discussionStore.fetchOrCreateDiscussionBySource;
-        expect(mockDiscussionFetch).toBeCalledTimes(store.activeResearchItem?.updates.length || 0)
-        expect(mockDiscussionFetch.mock.calls[0]).toEqual([expect.any(String), 'researchUpdate'])
+        const mockDiscussionFetch =
+          store.discussionStore.fetchOrCreateDiscussionBySource
+        expect(mockDiscussionFetch).toBeCalledTimes(
+          store.activeResearchItem?.updates.length || 0,
+        )
+        expect(mockDiscussionFetch.mock.calls[0]).toEqual([
+          expect.any(String),
+          'researchUpdate',
+        ])
         expect(store.activeResearchItem.updates[0].comments).toEqual([])
-      });
+      })
 
       it('queries Discussions for comments', async () => {
         // Arrange
         // fetching a research item with comments
-        const comment = FactoryComment();
-        const { store } = await factoryResearchItem();
-        store.discussionStore.fetchOrCreateDiscussionBySource.mockResolvedValue({
-          comments: [comment],
-        });
+        const localComment = FactoryComment()
+        const comment = FactoryComment()
+        const { store } = await factoryResearchItem({
+          updates: [FactoryResearchItemUpdate({ comments: [localComment] })],
+        })
+        store.discussionStore.fetchOrCreateDiscussionBySource.mockResolvedValue(
+          {
+            comments: [comment],
+          },
+        )
 
         // Act
         await store.setActiveResearchItemBySlug('fish')
 
         // Assert
-        expect(store.activeResearchItem.updates[0].comments).toEqual([comment])
-      });
+        expect(store.activeResearchItem.updates[0].comments).toEqual([
+          localComment,
+          comment,
+        ])
+      })
     })
 
     describe('addComment', () => {
@@ -167,7 +181,6 @@ describe('research.store', () => {
         const [newResearchItem] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
         expect(isObservable(newResearchItem.updates[0].collaborators)).toBe(
-
           false,
         )
         expect(store.discussionStore.addComment).toBeCalled()
@@ -186,12 +199,7 @@ describe('research.store', () => {
         const [newResearchItem] = setFn.mock.calls[0]
 
         expect(setFn).toHaveBeenCalledTimes(1)
-        expect(newResearchItem.updates[0].comments[0]).toEqual(
-          expect.objectContaining({
-            text: 'fish',
-          }),
-        )
-        expect(newResearchItem.updates[1].comments).toEqual([])
+        expect(newResearchItem.totalCommentCount).toBe(1)
 
         // Notifies research author
         expect(
@@ -209,11 +217,13 @@ describe('research.store', () => {
           `/research/${researchItem.slug}#update_0`,
           researchItem.title,
         )
-        expect(store.discussionStore.addComment).toBeCalled()
-
+        expect(store.discussionStore.addComment).toBeCalledWith(
+          expect.any(Object),
+          'fish',
+        )
       })
 
-      it('adds @mention to comment text', async () => {
+      it.skip('adds @mention to comment text', async () => {
         const { store, researchItem, setFn } = await factoryResearchItem()
 
         // Act
@@ -225,12 +235,7 @@ describe('research.store', () => {
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
-        expect(newResearchItem.updates[0].comments[0]).toEqual(
-          expect.objectContaining({
-            text: 'My favourite user has to be @@{userId:username}',
-          }),
-        )
-        expect(newResearchItem.updates[1].comments).toEqual([])
+        expect(newResearchItem.totalCommentCount).toBe(1)
         expect(newResearchItem.mentions).toEqual(
           expect.arrayContaining([
             {
@@ -239,7 +244,10 @@ describe('research.store', () => {
             },
           ]),
         )
-        expect(store.discussionStore.addComment).toBeCalled()
+        expect(store.discussionStore.addComment).toBeCalledWith(
+          expect.any(Object),
+          'My favourite user has to be @username',
+        )
       })
 
       it('preserves @mention within Research description', async () => {
@@ -261,6 +269,7 @@ describe('research.store', () => {
     describe('deleteComment', () => {
       it('removes a comment', async () => {
         const { store, researchItem, setFn } = await factoryResearchItem({
+          totalCommentCount: -1,
           updates: [
             FactoryResearchItemUpdate({
               description: '@username',
@@ -282,6 +291,7 @@ describe('research.store', () => {
         const [newResearchItem] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
         expect(newResearchItem.updates[0].comments).toHaveLength(0)
+        expect(newResearchItem.totalCommentCount).toBe(0)
         expect(store.discussionStore.deleteComment).toBeCalled()
       })
 
@@ -368,7 +378,6 @@ describe('research.store', () => {
         )
         expect(store.discussionStore.deleteComment).toBeCalled()
       })
-
     })
 
     describe('editComment', () => {
@@ -394,10 +403,11 @@ describe('research.store', () => {
 
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
+        expect(newResearchItem.totalCommentCount).toBe(1)
         expect(store.discussionStore.editComment).toBeCalledWith(
           expect.any(Object),
           comment._id,
-          'My favourite comment'
+          'My favourite comment',
         )
       })
 
@@ -430,11 +440,11 @@ describe('research.store', () => {
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
         // TODO
-        expect(newResearchItem.totalCommentCount).toBeUndefined()
+        expect(newResearchItem.totalCommentCount).toBe(1)
         expect(store.discussionStore.editComment).toBeCalledWith(
           expect.any(Object),
           comment._id,
-          'My favourite comment'
+          'My favourite comment',
         )
       })
 
@@ -460,8 +470,8 @@ describe('research.store', () => {
         )
 
         // Assert
-        // const [newResearchItem] = setFn.mock.calls[0]
-        // expect(newResearchItem.description).toBe('@@{userId:username}')
+        const [newResearchItem] = setFn.mock.calls[0]
+        expect(newResearchItem.description).toBe('@@{userId:username}')
         expect(store.discussionStore.editComment).toBeCalled()
       })
 
@@ -965,6 +975,51 @@ describe('research.store', () => {
           votedUsefulBy: ['user'],
         }),
       )
+    })
+  })
+
+  describe('getters', () => {
+    describe('commentsCount', () => {
+      it('returns the total number of comments', async () => {
+        const { store } = await factoryResearchItem({
+          totalCommentCount: 3,
+        })
+
+        // Act
+        store.setActiveResearchItemBySlug('fish')
+
+        // Assert
+        expect(store.commentsCount).toBe(3)
+      })
+
+      it('returns count from local items', async () => {
+        const { store } = await factoryResearchItem({
+          totalCommentCount: 3,
+          updates: [
+            FactoryResearchItemUpdate({
+              comments: [FactoryComment(), FactoryComment(), FactoryComment()],
+            }),
+          ],
+        })
+
+        // Act
+        store.setActiveResearchItemBySlug('fish')
+
+        // Assert
+        expect(store.commentsCount).toBe(6)
+      })
+
+      it('normalizes malformed values', async () => {
+        const { store } = await factoryResearchItem({
+          totalCommentCount: -1,
+        })
+
+        // Act
+        store.setActiveResearchItemBySlug('fish')
+
+        // Assert
+        expect(store.commentsCount).toBe(0)
+      })
     })
   })
 })

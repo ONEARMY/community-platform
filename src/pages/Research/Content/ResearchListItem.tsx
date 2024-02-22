@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Icon, ModerationStatus, Tag, Tooltip, Username } from 'oa-components'
 import {
   IModerationStatus,
@@ -30,6 +30,7 @@ interface IProps {
 
 const ResearchListItem = ({ item }: IProps) => {
   const { aggregationsStore } = useCommonStores().stores
+  const navigate = useNavigate();
   const collaborators = item['collaborators'] || []
   const usefulDisplayCount =
     item.votedUsefulCount > 0 ? item.votedUsefulCount : '0'
@@ -40,16 +41,20 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
 
+  const redirect = () => navigate(`/research/${encodeURIComponent(item.slug)}`)
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()
+
   const status = item.researchStatus || ResearchStatus.IN_PROGRESS
 
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
       <Flex sx={{ width: '100%', position: 'relative' }}>
-        <Link
-          to={`/research/${encodeURIComponent(item.slug)}`}
+        <div
+          onClick={redirect}
           key={item._id}
-          style={{ width: '100%' }}
-        >
+          style={{ width: '100%', cursor: 'pointer' }}
+          >
           <Grid px={3} py={3} columns={[1, '60px 2fr 1fr']} gap="40px">
             <Box
               sx={{
@@ -133,6 +138,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 }}
               >
                 <Flex sx={{ alignItems: 'center' }}>
+                  <div onClick={handleClick}>
                   <Username
                     user={{
                       userName: item._createdBy,
@@ -143,6 +149,7 @@ const ResearchListItem = ({ item }: IProps) => {
                       aggregationsStore,
                     )}
                   />
+                  </div>
                   {Boolean(collaborators.length) && (
                     <Text
                       ml={4}
@@ -273,7 +280,7 @@ const ResearchListItem = ({ item }: IProps) => {
               }}
             />
           )}
-        </Link>
+        </div>
       </Flex>
     </Card>
   )

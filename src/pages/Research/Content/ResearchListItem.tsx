@@ -30,7 +30,7 @@ interface IProps {
 
 const ResearchListItem = ({ item }: IProps) => {
   const { aggregationsStore } = useCommonStores().stores
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const collaborators = item['collaborators'] || []
   const usefulDisplayCount =
     item.votedUsefulCount > 0 ? item.votedUsefulCount : '0'
@@ -54,7 +54,7 @@ const ResearchListItem = ({ item }: IProps) => {
           onClick={redirect}
           key={item._id}
           style={{ width: '100%', cursor: 'pointer' }}
-          >
+        >
           <Grid px={3} py={3} columns={[1, '60px 2fr 1fr']} gap="40px">
             <Box
               sx={{
@@ -139,16 +139,16 @@ const ResearchListItem = ({ item }: IProps) => {
               >
                 <Flex sx={{ alignItems: 'center' }}>
                   <div onClick={handleClick}>
-                  <Username
-                    user={{
-                      userName: item._createdBy,
-                      countryCode: item.creatorCountry,
-                    }}
-                    isVerified={isUserVerifiedWithStore(
-                      item._createdBy,
-                      aggregationsStore,
-                    )}
-                  />
+                    <Username
+                      user={{
+                        userName: item._createdBy,
+                        countryCode: item.creatorCountry,
+                      }}
+                      isVerified={isUserVerifiedWithStore(
+                        item._createdBy,
+                        aggregationsStore,
+                      )}
+                    />
                   </div>
                   {Boolean(collaborators.length) && (
                     <Text

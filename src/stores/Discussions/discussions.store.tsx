@@ -127,7 +127,8 @@ export class DiscussionStore extends ModuleStore {
             (comment) => comment._id === commentId,
           )
 
-          if (targetComment?._creatorId !== user._id) {
+          if (targetComment?._creatorId !== user._id && !hasAdminRights(user)) {
+            logger.error('Comment not editable by user', { user })
             throw new Error('Comment not editable by user')
           }
 
@@ -167,7 +168,8 @@ export class DiscussionStore extends ModuleStore {
             (comment) => comment._id === commentId,
           )
 
-          if (targetComment?._creatorId !== user._id) {
+          if (targetComment?._creatorId !== user._id && !hasAdminRights(user)) {
+            logger.error('Comment can not be deleted by user', { user })
             throw new Error('Comment not editable by user')
           }
 

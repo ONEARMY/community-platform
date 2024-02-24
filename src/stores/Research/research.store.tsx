@@ -36,7 +36,7 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
-import type { IComment, IUser } from 'src/models'
+import type { IComment, IUser, UserMention } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -419,12 +419,27 @@ export class ResearchStore extends ModuleStore {
           (upd) => upd._id === (update as IResearch.UpdateDB)._id,
         )
 
-        if (discussion) {
-          await this.discussionStore.addComment(discussion, comment)
+        if (!discussion) {
+          throw new Error('Discussion not found')
         }
-
+        const discussionObj = await this.discussionStore.addComment(
+          discussion,
+          comment,
+        )
+        // TODO: This is too brittle, ideally we should extend discussionStore.addComment
+        // to return the discussionObject and newly created commentObj
+        const newComment = discussionObj?.comments.find(
+          (c) => c.text === comment,
+        )
+        const { users } = await this.addUserReference(comment)
         const newItem: IResearchDB = {
           ...toJS(researchItem),
+          mentions: users
+            .map((userName) => ({
+              username: userName,
+              location: `update-${existingUpdateIndex}-comment:${newComment?._id}`,
+            }))
+            .concat(researchItem.mentions || []),
           totalCommentCount: (researchItem.totalCommentCount || 0) + 1,
         }
 
@@ -483,45 +498,12 @@ export class ResearchStore extends ModuleStore {
         const dbRef = this.db
           .collection<IResearch.Item>(COLLECTION_NAME)
           .doc(item._id)
-        const id = dbRef.id
-
-        const newComments = toJS(update.comments).filter(
-          (comment) =>
-            !(
-              (comment._creatorId === user._id || hasAdminRights(user)) &&
-              comment._id === commentId
-            ),
-        )
-
-        const updateWithMeta = { ...update }
-        if (update.images.length > 0) {
-          const imgMeta = await this.uploadCollectionBatch(
-            update.images.filter((img) => !!img) as IConvertedFileMeta[],
-            COLLECTION_NAME,
-            id,
-          )
-          const newImg = imgMeta.map((img) => ({ ...img }))
-          updateWithMeta.images = newImg
-        } else {
-          updateWithMeta.images = []
-        }
-
-        updateWithMeta.comments = newComments
-
-        const existingUpdateIndex = item.updates.findIndex(
-          (upd) => upd._id === (update as IResearch.UpdateDB)._id,
-        )
-
         const newItem: IResearchDB = {
           ...toJS(item),
           totalCommentCount: Math.max(
             item.totalCommentCount ? item.totalCommentCount - 1 : 0,
             0,
           ),
-        }
-
-        newItem.updates[existingUpdateIndex] = {
-          ...(updateWithMeta as IResearch.UpdateDB),
         }
 
         const updatedItem = await this._updateResearchItem(dbRef, newItem)
@@ -994,9 +976,10 @@ export class ResearchStore extends ModuleStore {
    */
   private async _updateResearchItem(
     dbRef: DocReference<IResearch.Item>,
-    researchItem: IResearch.Item,
+    researchDoc: IResearch.Item,
     setLastEditTimestamp = false,
   ) {
+    const researchItem = cloneDeep(researchDoc)
     const { text: researchDescription, users } = await this.addUserReference(
       researchItem.description,
     )
@@ -1006,7 +989,9 @@ export class ResearchStore extends ModuleStore {
 
     const previousVersion = toJS(await dbRef.get('server'))
 
-    const mentions: any = []
+    const mentions: UserMention[] = researchItem.mentions
+      ? cloneDeep(researchItem.mentions)
+      : []
 
     await Promise.all(
       researchItem.updates.map(async (up, idx) => {
@@ -1055,17 +1040,13 @@ export class ResearchStore extends ModuleStore {
       })
     })
 
-    if (researchItem.previousSlugs === undefined) {
-      researchItem.previousSlugs = []
-    }
-
-    if (!researchItem.previousSlugs.includes(researchItem.slug)) {
-      researchItem.previousSlugs.push(researchItem.slug)
-    }
-
     await dbRef.set(
       {
         ...cloneDeep(researchItem),
+        previousSlugs: getPreviousSlugs(
+          researchItem.slug,
+          researchItem.previousSlugs,
+        ),
         mentions,
         description: researchDescription,
       },
@@ -1202,3 +1183,16 @@ const getInitialResearchUploadStatus = (): IResearchUploadStatus => ({
  */
 export const ResearchStoreContext = createContext<ResearchStore>(null as any)
 export const useResearchStore = () => useContext(ResearchStoreContext)
+
+const getPreviousSlugs = (
+  slug: string,
+  previousSlugs = [] as string[],
+): string[] => {
+  const newSlugList = cloneDeep(previousSlugs)
+
+  if (previousSlugs.includes(slug)) {
+    return newSlugList
+  }
+
+  return [...newSlugList, slug]
+}

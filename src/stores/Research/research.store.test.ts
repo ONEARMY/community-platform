@@ -12,6 +12,8 @@ import { FactoryUser } from 'src/test/factories/User'
 import { RootStore } from '../RootStore'
 import { ResearchStore } from './research.store'
 
+import type { IDiscussion } from 'src/models'
+
 jest.mock('../../utils/helpers', () => ({
   // Preserve the original implementation of other helpers
   ...jest.requireActual('../../utils/helpers'),
@@ -91,7 +93,18 @@ const factory = async (
     fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue({
       comments: [],
     }),
-    addComment: jest.fn(),
+    addComment: jest
+      .fn()
+      .mockImplementation((_discussionObjec: IDiscussion, text: string) => {
+        return {
+          comments: [
+            FactoryComment({
+              _id: 'random-id',
+              text,
+            }),
+          ],
+        }
+      }),
     editComment: jest.fn(),
     deleteComment: jest.fn(),
   }
@@ -223,7 +236,7 @@ describe('research.store', () => {
         )
       })
 
-      it.skip('adds @mention to comment text', async () => {
+      it('adds @mention to comment text', async () => {
         const { store, researchItem, setFn } = await factoryResearchItem()
 
         // Act
@@ -290,9 +303,11 @@ describe('research.store', () => {
         // Assert
         const [newResearchItem] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
-        expect(newResearchItem.updates[0].comments).toHaveLength(0)
         expect(newResearchItem.totalCommentCount).toBe(0)
-        expect(store.discussionStore.deleteComment).toBeCalled()
+        expect(store.discussionStore.deleteComment).toBeCalledWith(
+          expect.any(Object),
+          'commentId',
+        )
       })
 
       it('admin removes another users comment', async () => {
@@ -321,10 +336,11 @@ describe('research.store', () => {
         await store.deleteComment('commentId', researchItem.updates[0])
 
         // Assert
-        const [newResearchItem] = setFn.mock.calls[0]
         expect(setFn).toHaveBeenCalledTimes(1)
-        expect(newResearchItem.updates[0].comments).toHaveLength(0)
-        expect(store.discussionStore.deleteComment).toBeCalled()
+        expect(store.discussionStore.deleteComment).toBeCalledWith(
+          expect.any(Object),
+          'commentId',
+        )
       })
 
       it('preserves @mention within Research description', async () => {

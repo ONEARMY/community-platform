@@ -7,6 +7,7 @@ import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
+import { checkUserNameUnique } from 'src/utils/checkUserNameUnique'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import {
   composeValidators,
@@ -15,16 +16,6 @@ import {
 } from 'src/utils/validators'
 import { Card, Flex, Heading, Label, Text } from 'theme-ui'
 import { bool, object, ref, string } from 'yup'
-
-const validationSchema = object({
-  displayName: string().min(2, 'Too short').required('Required'),
-  email: string().email('Invalid email').required('Required'),
-  password: string().required('Password is required'),
-  'confirm-password': string()
-    .oneOf([ref('password'), ''], 'Your new password does not match')
-    .required('Password confirm is required'),
-  consent: bool().oneOf([true], 'Consent is required'),
-})
 
 interface IFormValues {
   email: string
@@ -52,17 +43,27 @@ const SignUpPage = observer(() => {
     },
   })
 
-  const checkUserNameUnique = async (userName: string) => {
-    const user = await userStore!.getUserProfile(userName)
-    return user && !user._deleted ? false : true
-  }
+  const validationSchema = object({
+    displayName: string()
+      .min(2, 'Too short')
+      .required('Required')
+      .test('is-unique', 'Already taken. Try a different one.', (value) => {
+        return checkUserNameUnique(userStore, value)
+      }),
+    email: string().email('Invalid email').required('Required'),
+    password: string().required('Password is required'),
+    'confirm-password': string()
+      .oneOf([ref('password'), ''], 'Your new password does not match')
+      .required('Password confirm is required'),
+    consent: bool().oneOf([true], 'Consent is required'),
+  })
 
   const onSignupSubmit = async (v: IFormValues) => {
     const { email, password, displayName } = v
     const userName = formatLowerNoSpecial(displayName as string)
 
     try {
-      if (await checkUserNameUnique(userName)) {
+      if (await checkUserNameUnique(userStore, userName)) {
         await userStore!.registerNewUser(email, password, displayName)
         navigate('/sign-up-message')
       } else {

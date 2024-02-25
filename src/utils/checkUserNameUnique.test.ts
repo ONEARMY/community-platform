@@ -1,4 +1,3 @@
-jest.mock('../common/module.store')
 import { UserStore } from '../stores/User/user.store'
 import { checkUserNameUnique } from './checkUserNameUnique'
 

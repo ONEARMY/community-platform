@@ -97,6 +97,12 @@ export const getDay = (d: Date) => {
   return `${d.getDate()}`
 }
 
+/**
+ * Checks if the user has admin rights based on their roles.
+ *
+ * @param {IUser} [user] - The user for whom to check admin rights.
+ * @returns {boolean}
+ */
 export const hasAdminRights = (user?: IUser) => {
   if (!user) {
     return false
@@ -122,6 +128,14 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
   return doc.moderation !== IModerationStatus.ACCEPTED
 }
 
+/**
+ * Checks if the user is allowed to edit the content.
+ *
+ * @param {IEditableDoc & { collaborators?: string[] }} doc - The document to be edited.
+ * @param {IUser} [user] - The user attempting to edit the document.
+ *
+ * @returns {boolean}
+ */
 export const isAllowedToEditContent = (
   doc: IEditableDoc & { collaborators?: string[] },
   user?: IUser,
@@ -147,6 +161,13 @@ export const isAllowedToEditContent = (
   }
 }
 
+/**
+ * Checks if the user is allowed to delete the content.
+ *
+ * @param {IEditableDoc} doc - The document to be deleted.
+ * @param {IUser} [user] - The user attempting to delete the document.
+ * @returns {boolean} True if the user is allowed to delete, false otherwise.
+ */
 export const isAllowedToDeleteContent = (doc: IEditableDoc, user?: IUser) => {
   if (!user) {
     return false

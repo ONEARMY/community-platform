@@ -2,6 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { DEV_SITE_ROLE, SITE } from 'src/config/config'
+import { isTestEnvironment } from 'src/utils/isTestEnvironment'
 
 import type { UserRole } from 'oa-shared'
 
@@ -42,10 +43,7 @@ const isUserAuthorized = (user, roleRequired) => {
     : [roleRequired]
 
   // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
-  if (
-    process.env.NODE_ENV !== 'test' &&
-    (SITE === 'dev_site' || SITE === 'preview')
-  ) {
+  if (!isTestEnvironment && (SITE === 'dev_site' || SITE === 'preview')) {
     if (DEV_SITE_ROLE) {
       return rolesRequired.includes(DEV_SITE_ROLE)
     }

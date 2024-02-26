@@ -275,7 +275,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
               <Tab data-cy="ImpactTab">{heading}</Tab>
-              <Tab data-cy="contact-tab">Contacts & Links</Tab>
+              <Tab data-cy="contact-tab">Contact</Tab>
             </TabsList>
             <TabPanel>
               <Box sx={{ mt: 3 }}>

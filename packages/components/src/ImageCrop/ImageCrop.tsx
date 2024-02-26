@@ -1,38 +1,17 @@
 // An edited version of https://codesandbox.io/p/sandbox/react-image-crop-demo-with-react-hooks-y831o
 
 import React, { useRef, useState } from 'react'
-import ReactCrop, { centerCrop, makeAspectCrop } from 'react-image-crop'
+import ReactCrop from 'react-image-crop'
 import { Box, Flex, Text } from 'theme-ui'
 
 import { Button, Loader } from '../'
 import { canvasPreview } from './canvasPreview'
+import { centerAspectCrop } from './centerAspectCrop'
 import { useDebounceEffect } from './useDebounceEffect'
 
 import type { Crop, PixelCrop } from 'react-image-crop'
 
 import 'react-image-crop/dist/ReactCrop.css'
-
-// This is to demonstate how to make and center a % aspect crop
-// which is a bit trickier so we use some helper functions.
-function centerAspectCrop(
-  mediaWidth: number,
-  mediaHeight: number,
-  aspect: number,
-) {
-  return centerCrop(
-    makeAspectCrop(
-      {
-        unit: '%',
-        width: 90,
-      },
-      aspect,
-      mediaWidth,
-      mediaHeight,
-    ),
-    mediaWidth,
-    mediaHeight,
-  )
-}
 
 export interface Props {
   aspect: number

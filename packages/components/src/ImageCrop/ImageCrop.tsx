@@ -22,6 +22,7 @@ export interface Props {
   title: string
 }
 
+const IMAGE_QUALITY = 90
 const SCALE = 1
 
 export const ImageCrop = (props: Props) => {
@@ -77,10 +78,9 @@ export const ImageCrop = (props: Props) => {
       offscreen.width,
       offscreen.height,
     )
-    // You might want { type: "image/jpeg", quality: <0 to 1> } to
-    // reduce image size
     const blob = await offscreen.convertToBlob({
-      type: 'image/png',
+      type: "image/jpeg", 
+      quality: IMAGE_QUALITY,
     })
 
     if (blobUrlRef.current) {
@@ -100,7 +100,6 @@ export const ImageCrop = (props: Props) => {
         imgRef.current &&
         previewCanvasRef.current
       ) {
-        // We use canvasPreview as it's much faster than imgPreview.
         canvasPreview(
           imgRef.current,
           previewCanvasRef.current,

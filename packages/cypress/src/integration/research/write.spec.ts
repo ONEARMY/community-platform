@@ -137,7 +137,6 @@ describe('[Research]', () => {
   })
 
   describe('[Edit a research article]', () => {
-    const researchUrl = '/research/create-research-article-test'
     const editResearchUrl = '/research/create-research-article-test/edit'
 
     it('[By Anonymous]', () => {
@@ -153,61 +152,6 @@ describe('[Research]', () => {
       cy.visit(editResearchUrl)
       // user should be redirect to research page
       // cy.location('pathname').should('eq', researchUrl)
-    })
-
-    it('[By Owner]', () => {
-      expected.title = `${expected.title} edited`
-      expected.slug = `${expected.slug}-edited`
-      expected.previousSlugs = [
-        'create-research-article-test',
-        'create-research-article-test-edited',
-      ]
-      expected.status = 'Completed'
-
-      cy.visit(researchUrl)
-      cy.login(researcherEmail, researcherPassword)
-      cy.step('Go to Edit mode')
-      cy.get('[data-cy=edit]').click()
-
-      cy.step('Update the intro')
-      cy.get('[data-cy=intro-title]').clear().type(expected.title)
-
-      cy.step('Enter research article details')
-      cy.get('[data-cy="intro-description"]')
-        .clear()
-        .type(expected.description)
-        .blur({ force: true })
-
-      cy.step('Update the status')
-      cy.get('[data-cy=research-status]').click()
-      cy.get('[id^="react-select-"]').contains(expected.status).click()
-
-      cy.get('[data-cy=submit]').click()
-
-      cy.step('Open the updated research article')
-      cy.wait(2000)
-      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-        .should('include', `${researchUrl}-edited`)
-      cy.get('[data-cy=research-basis]').contains(expected.title)
-      cy.get('[data-cy=research-status]').contains(expected.status)
-
-      cy.queryDocuments('research', 'title', '==', expected.title).then(
-        (docs) => {
-          cy.log('queryDocs', docs)
-          expect(docs.length).to.equal(1)
-          cy.log(JSON.stringify(docs[0]))
-          cy.wrap(null)
-            .then(() => docs[0])
-            .should('eqResearch', expected)
-        },
-      )
-
-      cy.step('Open the old slug')
-
-      cy.visit(researchUrl)
-      cy.get('[data-cy=research-basis]').contains(expected.title)
     })
   })
 

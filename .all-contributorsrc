@@ -616,6 +616,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dcustodio",
+      "name": "David Custódio",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2907004?v=4",
+      "profile": "https://github.com/dcustodio",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

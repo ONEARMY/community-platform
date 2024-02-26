@@ -5,7 +5,7 @@ import { ModuleStore } from './module.store'
 // Mocked to prevent App initialisation from useCommonStores dependency
 jest.mock('react-dom')
 // Mocked to prevent indexedDB API not found error message
-jest.mock('src/stores/databaseV2/clients/dexie')
+jest.mock('src/stores/databaseV2/clients/DexieClient')
 // Mocked to prevent circular dependency through useCommonStores
 jest.mock('src/common/hooks/useCommonStores')
 // Mocked to mock out RootStore

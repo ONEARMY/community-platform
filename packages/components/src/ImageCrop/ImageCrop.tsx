@@ -79,7 +79,7 @@ export const ImageCrop = (props: Props) => {
       offscreen.height,
     )
     const blob = await offscreen.convertToBlob({
-      type: "image/jpeg", 
+      type: 'image/jpeg',
       quality: IMAGE_QUALITY,
     })
 

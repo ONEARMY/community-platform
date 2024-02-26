@@ -17,14 +17,16 @@ describe('ImageCrop', () => {
         title="Select crop"
       />,
     )
-    const cropContainer = screen.getByTestId("cropImage")
+    const cropContainer = screen.getByTestId('cropImage')
     await fireEvent.drag(cropContainer, {
-      delta: {x: 100, y: 0},
+      delta: { x: 100, y: 0 },
     })
 
     const submit = screen.getByText('Upload image', { exact: false })
     fireEvent.click(submit)
 
-    expect(screen.getByText('Uploading image', { exact: false })).toBeInTheDocument()
+    expect(
+      screen.getByText('Uploading image', { exact: false }),
+    ).toBeInTheDocument()
   })
 })

@@ -138,17 +138,18 @@ export const ImageCrop = (props: Props) => {
         {!isLoading && !!imgSrc && (
           <Flex sx={{ flex: 1, justifyContent: 'center' }}>
             <ReactCrop
+              aspect={aspect}
               crop={crop}
+              minHeight={100}
               onChange={(_, percentCrop) => setCrop(percentCrop)}
               onComplete={(c) => setCompletedCrop(c)}
-              aspect={aspect}
-              minHeight={100}
             >
               <img
-                ref={imgRef}
                 alt="Crop me"
-                src={imgSrc}
+                data-testid="cropImage"
                 onLoad={onImageLoad}
+                ref={imgRef}
+                src={imgSrc}
               />
             </ReactCrop>
           </Flex>

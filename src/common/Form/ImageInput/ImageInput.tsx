@@ -42,13 +42,13 @@ export const ImageInput = (props: IProps) => {
     setInputFiles(inputFiles)
   }
 
-  const handleConvertedFileChange = (newFile, index) => {
-    const nextFiles = convertedFiles.map((file, i) => {
-      return i === index ? newFile : file
-    })
-    setConvertedFiles(nextFiles)
-    const value = multiple ? convertedFiles : convertedFiles[0]
-    onFilesChange(value)
+  const handleConvertedFileChange = (newFile: IConvertedFileMeta, index) => {
+    const nextFiles = convertedFiles
+    nextFiles[index] = newFile
+    setConvertedFiles(convertedFiles)
+
+    const value = props.multiple ? convertedFiles : convertedFiles[0]
+    props.onFilesChange(value)
   }
 
   const handleImageDelete = (event: Event) => {

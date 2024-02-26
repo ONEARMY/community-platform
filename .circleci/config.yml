@@ -475,7 +475,7 @@ workflows:
             - e2e-tests
           matrix:
             parameters:
-              CI_NODE: [1, 2, 3, 4]
+              CI_NODE: [1, 2]
               CI_BROWSER: ['chrome']
           filters:
             branches:

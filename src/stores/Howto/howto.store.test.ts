@@ -351,6 +351,15 @@ describe('howto.store', () => {
             },
           ]),
         )
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toHaveBeenCalledTimes(2)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'new_comment_discussion',
+          newHowto._createdBy,
+          '/how-to/' + newHowto.slug,
+          newHowto.title,
+        )
       })
 
       it('preserves @mentions in description', async () => {

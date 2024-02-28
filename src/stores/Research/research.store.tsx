@@ -448,7 +448,7 @@ export class ResearchStore extends ModuleStore {
 
         // Notify author and contributors
         await this.userNotificationsStore.triggerNotification(
-          'new_comment_research',
+          'new_comment_discussion',
           newItem._createdBy,
           '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
           newItem.title,
@@ -456,7 +456,7 @@ export class ResearchStore extends ModuleStore {
 
         newItem.collaborators.map((username) => {
           this.userNotificationsStore.triggerNotification(
-            'new_comment_research',
+            'new_comment_discussion',
             username,
             '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
             newItem.title,

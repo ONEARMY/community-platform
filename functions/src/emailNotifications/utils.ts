@@ -1,17 +1,18 @@
 import { CONFIG } from '../config/config'
-import {
-  PP_PROJECT_IMAGE,
-  PK_PROJECT_IMAGE,
-  PP_PROJECT_NAME,
-  PK_PROJECT_NAME,
-  PP_SIGNOFF,
-  PK_SIGNOFF,
-} from './constants'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IMessageDB, INotification, IUserDB } from '../models'
+import { DB_ENDPOINTS } from '../models'
+import {
+  PK_PROJECT_IMAGE,
+  PK_PROJECT_NAME,
+  PK_SIGNOFF,
+  PP_PROJECT_IMAGE,
+  PP_PROJECT_NAME,
+  PP_SIGNOFF,
+} from './constants'
 
 import type { NotificationType } from 'oa-shared'
+import type { IMessageDB, INotification, IUserDB } from '../models'
 
 export const errors = {
   MESSAGE_LIMIT:

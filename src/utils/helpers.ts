@@ -5,6 +5,7 @@ import {
   ResearchUpdateStatus,
   UserRole,
 } from 'oa-shared'
+import { getConfigurationOption } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
 import type { DBDoc, IModerable, IResearch } from 'src/models'
@@ -241,6 +242,14 @@ export const getPublicUpdates = (item: IResearch.ItemDB) => {
   } else {
     return []
   }
+}
+
+export const getProjectEmail = (subject: string) => {
+  const site = getConfigurationOption(
+    'REACT_APP_PLATFORM_THEME',
+    'precious-plastic',
+  )
+  return `mailto:platform@onearmy.earth?subject=${subject}%20${site}`
 }
 
 // ensure docs passed to edit check contain _createdBy field

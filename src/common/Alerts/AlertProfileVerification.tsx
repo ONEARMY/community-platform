@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { ExternalLink, Icon } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { getProjectEmail } from 'src/utils/helpers'
 import { Alert, Flex, Text } from 'theme-ui'
 
 type VerificationEmailState = 'pending' | 'error' | 'sent'
@@ -59,7 +60,7 @@ export const AlertProfileVerification = observer(() => {
             {successLabelMessage}
             <ExternalLink
               sx={{ textDecoration: 'underline', color: 'grey' }}
-              href="mailto:platform@onearmy.earth?subject=Email%20confirmation%20failed%20community-platform"
+              href={getProjectEmail('Email%20confirmation%20failed')}
             >
               {successLabelLinkText}
             </ExternalLink>

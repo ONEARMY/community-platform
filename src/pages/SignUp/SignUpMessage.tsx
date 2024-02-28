@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Button, ExternalLink } from 'oa-components'
+import { getProjectEmail } from 'src/utils/helpers'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 const SignUpMessagePage = () => (
@@ -35,7 +36,7 @@ const SignUpMessagePage = () => (
               Didn't receive the email?{' '}
               <ExternalLink
                 sx={{ textDecoration: 'underline', color: 'grey' }}
-                href="mailto:hello@onearmy.earth?subject=Email%20confirmation%20failed%20community-platform"
+                href={getProjectEmail('Email%20confirmation%20failed')}
               >
                 Let us know
               </ExternalLink>

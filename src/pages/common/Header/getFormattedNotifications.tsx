@@ -15,6 +15,7 @@ export const getFormattedNotificationMessage = (
   const relevantUrl = notification.relevantUrl || ''
   const relevantTitle = notification.title || ''
   switch (notification.type) {
+    // legacy format, should use new_comment_discussion
     case 'new_comment':
       return (
         <Box>
@@ -130,6 +131,7 @@ export const getFormattedNotificationMessage = (
           needs some updates before we can approve it
         </Box>
       )
+    // legacy format, should use new_comment_discussion
     case 'new_comment_research':
       return (
         <Box>

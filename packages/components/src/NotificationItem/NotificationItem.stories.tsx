@@ -17,6 +17,7 @@ export const Default: StoryFn<typeof NotificationItem> = () => (
 
 export const Comment: StoryFn<typeof NotificationItem> = () => (
   <NotificationItem type="new_comment">
+    (Legacy)
     {faker.lorem.sentence()}
   </NotificationItem>
 )
@@ -29,6 +30,7 @@ export const CommentDiscussion: StoryFn<typeof NotificationItem> = () => (
 
 export const CommentResearch: StoryFn<typeof NotificationItem> = () => (
   <NotificationItem type="new_comment_research">
+    (Legacy)
     {faker.lorem.sentence()}
   </NotificationItem>
 )

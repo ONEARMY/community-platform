@@ -17,12 +17,10 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { isUserContactable } from 'src/utils/helpers'
 import {
   AspectRatio,
   Box,
@@ -186,10 +184,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   const userCountryCode =
     location?.countryCode || country?.toLowerCase() || undefined
 
-  const { stores } = useCommonStores()
-  const activeUser = stores.userStore.activeUser
-  const showContactForm = isUserContactable(user) && !!activeUser
-
   return (
     <Container
       mt={4}
@@ -281,7 +275,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
               <Tab data-cy="ImpactTab">{heading}</Tab>
-              {showContactForm && <Tab data-cy="contact-tab">Contact</Tab>}
+              <Tab data-cy="contact-tab">Contact</Tab>
             </TabsList>
             <TabPanel>
               <Box sx={{ mt: 3 }}>
@@ -311,8 +305,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                     {profileType === ProfileType.MACHINE_BUILDER &&
                       user.machineBuilderXp &&
                       renderMachineBuilderXp(user.machineBuilderXp)}
-
-                    <UserContactAndLinks links={userLinks} />
                   </Box>
                   <Box
                     sx={{
@@ -340,7 +332,10 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               <Impact impact={impact} user={user} />
             </TabPanel>
             <TabPanel>
-              <UserContactForm user={user} />
+              <Box>
+                <UserContactForm user={user} />
+                <UserContactAndLinks links={userLinks} />
+              </Box>
             </TabPanel>
           </Tabs>
         </Box>

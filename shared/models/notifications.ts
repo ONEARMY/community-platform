@@ -14,6 +14,7 @@ export const NotificationTypes = [
   'map_pin_approved',
   'map_pin_needs_updates',
   'new_comment_research',
+  'new_comment_discussion',
   'research_useful',
   'research_mention',
   'research_update',

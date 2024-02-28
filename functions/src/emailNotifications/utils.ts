@@ -203,13 +203,10 @@ const getResourceLink = (
 
 const getCommentListItem = (notification: INotification) => `
 <p>
-    New comment on your ${getResourceLink(
-      notification.type,
-      notification.relevantUrl,
-    )} by ${getUserLink(
-  notification.triggeredBy.displayName,
-  notification.triggeredBy.userId,
-)}
+  New comment by ${getUserLink(
+    notification.triggeredBy.displayName,
+    notification.triggeredBy.userId,
+  )} on <a href='${SITE_URL}${notification.relevantUrl}'>${notification.title}</a>
 </p>`
 
 const getMentionListItem = (notification: INotification) => `
@@ -266,7 +263,9 @@ const getModerationRejectedListItem = (notification: INotification) => `
 </p>`
 
 const isCommentNotification = (notification: INotification) =>
-  ['new_comment_research', 'new_comment'].includes(notification.type)
+  ['new_comment_research', 'new_comment', 'new_comment_discussion'].includes(
+    notification.type,
+  )
 
 const isMentionNotification = (notification: INotification) =>
   ['research_mention', 'howto_mention'].includes(notification.type)

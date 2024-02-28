@@ -21,6 +21,12 @@ export const Comment: StoryFn<typeof NotificationItem> = () => (
   </NotificationItem>
 )
 
+export const CommentDiscussion: StoryFn<typeof NotificationItem> = () => (
+  <NotificationItem type="new_comment_discussion">
+    {faker.lorem.sentence()}
+  </NotificationItem>
+)
+
 export const CommentResearch: StoryFn<typeof NotificationItem> = () => (
   <NotificationItem type="new_comment_research">
     {faker.lorem.sentence()}

@@ -141,9 +141,15 @@ export const getFormattedNotificationMessage = (
           <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
         </Box>
       )
+    case 'new_comment_discussion':
+      return (
+        <Box>
+          New comment from <strong> {triggeredBy.displayName} </strong>
+          on <InternalLink to={relevantUrl}> {relevantTitle}</InternalLink>
+        </Box>
+      )
     default:
       return <></>
-      break
   }
 }
 

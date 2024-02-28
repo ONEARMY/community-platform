@@ -1,7 +1,10 @@
-import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { DB_ENDPOINTS, IUserDB, INotification } from '../models'
-import { createNotificationEmails } from './createNotificationEmails'
 import { EmailNotificationFrequency } from 'oa-shared'
+
+import { DB_ENDPOINTS } from '../models'
+import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
+import { createNotificationEmails } from './createNotificationEmails'
+
+import type { INotification, IUserDB } from '../models'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -35,7 +38,7 @@ const notificationFactory = (
     userId: '',
   },
   relevantUrl: '',
-  type: 'new_comment',
+  type: 'new_comment_discussion',
   read: false,
   notified: false,
   ...notification,
@@ -69,7 +72,8 @@ describe('create email test', () => {
           userId: 'user_2',
         },
         relevantUrl: '/test',
-        type: 'new_comment_research',
+        title: 'Test research',
+        type: 'new_comment_discussion',
       }),
       notificationFactory('user_1', 'notification_3', {
         triggeredBy: {
@@ -96,7 +100,8 @@ describe('create email test', () => {
           userId: 'user_1',
         },
         relevantUrl: '/test',
-        type: 'new_comment',
+        title: 'Test how-to',
+        type: 'new_comment_discussion',
       }),
       notificationFactory('user_2', 'notification_2', {
         triggeredBy: {
@@ -104,7 +109,8 @@ describe('create email test', () => {
           userId: 'user_3',
         },
         relevantUrl: '/test',
-        type: 'new_comment_research',
+        title: 'Test research',
+        type: 'new_comment_discussion',
       }),
       notificationFactory('user_2', 'notification_3', {
         triggeredBy: {
@@ -131,7 +137,8 @@ describe('create email test', () => {
           userId: 'user_1',
         },
         relevantUrl: '/test',
-        type: 'new_comment',
+        title: 'Test how-to',
+        type: 'new_comment_discussion',
       }),
     ]
 

@@ -39,6 +39,15 @@ const notifications = [
     ),
   },
   {
+    type: 'new_comment_discussion',
+    children: (
+      <>
+        (Legacy) {faker.lorem.words(4)}{' '}
+        <InternalLink to="/">{faker.lorem.words(2)}</InternalLink>
+      </>
+    ),
+  },
+  {
     type: 'new_comment_research',
     children: (
       <>

@@ -329,6 +329,11 @@ export class UserStore extends ModuleStore {
     return user.email as string
   }
 
+  public async getUserEmailIsVerified() {
+    if (!this.authUser) return
+    return this.authUser.emailVerified
+  }
+
   public async changeUserPassword(oldPassword: string, newPassword: string) {
     // *** TODO - (see code in change pw component and move here)
     const user = this.authUser as firebase.default.User

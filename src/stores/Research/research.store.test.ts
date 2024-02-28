@@ -154,13 +154,13 @@ describe('research.store', () => {
           store.userNotificationsStore.triggerNotification,
         ).toHaveBeenCalledTimes(2)
         expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
-          'new_comment_research',
+          'new_comment_discussion',
           researchItem._createdBy,
           `/research/${researchItem.slug}#update_0`,
           researchItem.title,
         )
         expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
-          'new_comment_research',
+          'new_comment_discussion',
           'a-contributor',
           `/research/${researchItem.slug}#update_0`,
           researchItem.title,

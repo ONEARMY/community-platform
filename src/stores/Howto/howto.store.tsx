@@ -323,6 +323,7 @@ export class HowtoStore extends ModuleStore {
           comments: [...toJS(howto.comments || []), newComment],
         })
 
+        await this.addCommentNotification(howto)
         await this.setActiveHowtoBySlug(updated?.slug || '')
       }
     } catch (err) {
@@ -603,6 +604,15 @@ export class HowtoStore extends ModuleStore {
       logger.error('error', error)
       throw new Error(error.message)
     }
+  }
+
+  private async addCommentNotification(howto: IHowto) {
+    await this.userNotificationsStore.triggerNotification(
+      'new_comment_discussion',
+      howto._createdBy,
+      '/how-to/' + howto.slug,
+      howto.title,
+    )
   }
 
   private async findMentionsInComments(rawComments: IComment[] | undefined) {

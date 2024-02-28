@@ -23,17 +23,7 @@ export const HowToComments = ({ comments }: IProps) => {
 
   const onSubmit = async (comment: string) => {
     try {
-      const howto = stores.howtoStore.activeHowto
       await stores.howtoStore.addComment(comment)
-      if (howto) {
-        await stores.userNotificationsStore.triggerNotification(
-          'new_comment',
-          howto._createdBy,
-          '/how-to/' + howto.slug,
-          howto.title,
-        )
-      }
-
       setComment('')
 
       const action = 'Submitted'

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Button } from 'oa-components'
+import { getProjectEmail } from 'src/utils/helpers'
 import { Box, Text } from 'theme-ui'
 
 import { attemptReload, isReloaded } from './Reloader'
@@ -38,10 +39,8 @@ export const ChunkLoadErrorHandler = () => {
           <Text mt={4} sx={{ fontSize: 0.75 }}>
             If it doesn't work you might need to try another browser.
             <br></br>Or send us a{' '}
-            <a href="mailto:platform@onearmy.earth?subject=Platform%20Bugs">
-              mail
-            </a>
-            , happy to help :)
+            <a href={getProjectEmail('Platform%20Bugs')}>mail</a>, happy to help
+            :)
           </Text>
         </>
       )}

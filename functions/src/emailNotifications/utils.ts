@@ -207,7 +207,9 @@ const getCommentListItem = (notification: INotification) => `
   New comment by ${getUserLink(
     notification.triggeredBy.displayName,
     notification.triggeredBy.userId,
-  )} on <a href='${SITE_URL}${notification.relevantUrl}'>${notification.title}</a>
+  )} on <a href='${SITE_URL}${notification.relevantUrl}'>${
+  notification.title
+}</a>
 </p>`
 
 const getMentionListItem = (notification: INotification) => `

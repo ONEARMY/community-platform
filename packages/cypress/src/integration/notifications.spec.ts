@@ -122,7 +122,9 @@ describe('[Notifications]', () => {
           (n) => n['type'] === 'new_comment_discussion',
         )
 
-        expect(filtedNotifications[1]['type']).to.equal('new_comment_discussion')
+        expect(filtedNotifications[1]['type']).to.equal(
+          'new_comment_discussion',
+        )
         expect(filtedNotifications[1]['relevantUrl']).to.equal(
           '/research/qwerty#update_0',
         )

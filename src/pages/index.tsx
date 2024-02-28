@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Button, ExternalLink } from 'oa-components'
-import { AlertIncompleteProfile } from 'src/common/AlertIncompleteProfile'
+import { Alerts } from 'src/common/Alerts/Alerts'
 import { Analytics } from 'src/common/Analytics'
 import { getSupportedModules, isModuleSupported, MODULE } from 'src/modules'
 import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
@@ -51,7 +51,7 @@ export const Pages = () => {
 
         {/* TODO - add better loading fallback */}
         <DevSiteHeader />
-        <AlertIncompleteProfile />
+        <Alerts />
         <Header />
         <Suspense
           fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}

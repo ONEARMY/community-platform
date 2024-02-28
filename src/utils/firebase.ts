@@ -1,4 +1,3 @@
-import 'firebase/compat/firestore'
 import 'firebase/compat/auth'
 import 'firebase/compat/storage'
 import 'firebase/compat/functions'
@@ -16,7 +15,6 @@ firebase.initializeApp(FIREBASE_CONFIG)
 const firebaseApp = initializeApp(FIREBASE_CONFIG)
 
 // export firebase endpoints to be accessed by other functions
-const firestore = firebase.firestore()
 const rtdb = firebase.database()
 const storage = firebase.storage()
 const auth = getAuth(firebaseApp)
@@ -24,8 +22,6 @@ const functions = firebase.functions()
 
 // use emulators when running on localhost:4000
 if (SITE === 'emulated_site') {
-  logger.debug(`Connecting to emulated services:`)
-  firestore.useEmulator('localhost', 4003)
   logger.debug(`Connecting rtdb on port `, 4006)
   rtdb.useEmulator('localhost', 4006)
   logger.debug(`Connecting storage on port `, 4007)
@@ -36,7 +32,7 @@ if (SITE === 'emulated_site') {
   functions.useEmulator('localhost', 4002)
 }
 
-export { firestore, rtdb, storage, auth, functions }
+export { rtdb, storage, auth, functions }
 
 export const EmailAuthProvider = firebase.auth.EmailAuthProvider
 

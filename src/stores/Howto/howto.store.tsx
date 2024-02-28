@@ -147,7 +147,7 @@ export class HowtoStore extends ModuleStore {
   @action
   public async setActiveHowtoBySlug(slug?: string) {
     // clear any cached data and then load the new howto
-    logger.debug(`setActiveHowtoBySlug:`, { slug })
+    logger.debug(`HowtoStore.setActiveHowtoBySlug:`, { slug })
     let activeHowto: IHowtoDB | null = null
 
     if (slug) {

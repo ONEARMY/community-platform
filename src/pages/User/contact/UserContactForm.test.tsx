@@ -15,6 +15,7 @@ jest.mock('src/common/hooks/useCommonStores', () => {
         },
         userStore: {
           getUserEmail: () => jest.fn().mockReturnValue('Bob@email.com'),
+          activeUser: () => jest.fn().mockReturnValue(true),
         },
       },
     }),
@@ -45,7 +46,7 @@ describe('UserContactForm', () => {
     await screen.findByText('All sent')
   })
 
-  it('renders nothing with user not contactable', async () => {
+  it('renders nothing if not profile is not contactable', async () => {
     const uncontactable = FactoryUser({ isContactableByPublic: false })
 
     const { container } = render(

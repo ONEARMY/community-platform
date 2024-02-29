@@ -6,14 +6,15 @@ export enum EmailNotificationFrequency {
 }
 
 export const NotificationTypes = [
-  'new_comment',
+  'new_comment', // legacy format, should use new_comment_discussion
   'howto_useful',
   'howto_mention',
   'howto_approved',
   'howto_needs_updates',
   'map_pin_approved',
   'map_pin_needs_updates',
-  'new_comment_research',
+  'new_comment_discussion',
+  'new_comment_research', // legacy format, should use new_comment_discussion
   'research_useful',
   'research_mention',
   'research_update',

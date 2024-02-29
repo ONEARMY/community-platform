@@ -1,3 +1,5 @@
+import { fireEvent } from '@testing-library/react'
+
 import { render } from '../tests/utils'
 import { Default, LoggedIn } from './CreateReply.stories'
 
@@ -20,5 +22,22 @@ describe('CreateReply', () => {
     })
 
     expect(textarea).toBeInTheDocument()
+  })
+
+  it('clears the field after sucessful submission', () => {
+    const screen = render(<LoggedIn {...(LoggedIn.args as Props)} />)
+
+    const emptyTextArea = screen.getByPlaceholderText('Leave your question', {
+      exact: false,
+    })
+    fireEvent.change(emptyTextArea, { target: { value: '123' } })
+    const withText = screen.getByText('123', {
+      exact: false,
+    })
+    expect(withText).toBeInTheDocument()
+
+    const submitButton = screen.getByText('Leave a reply')
+    fireEvent.click(submitButton)
+    expect(emptyTextArea).toBeInTheDocument()
   })
 })

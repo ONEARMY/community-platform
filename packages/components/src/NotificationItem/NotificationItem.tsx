@@ -35,14 +35,13 @@ export const NotificationItem = (props: UserNotificationItem) => {
   const { type } = props
   return (
     <Flex
-      bg={'white'}
+      bg="white"
       data-cy="notification"
       sx={{
         flexDirection: 'column',
-        width: '100%',
         fontSize: '12px',
-        marginBottom: '10px',
-        paddingBottom: '10px',
+        marginBottom: 2,
+        paddingBottom: 2,
         borderBottom: '1px solid #c7c7c7',
         fontFamily: 'Inter, sans-serif',
       }}
@@ -52,18 +51,18 @@ export const NotificationItem = (props: UserNotificationItem) => {
           styles: {
             a: {
               textDecoration: 'underline',
-              padding: '0 .25em',
               color: '#61646b',
               display: 'inline',
+              '&:hover': {
+                textDecoration: 'none',
+              },
             },
           },
         }}
       >
-        <Flex style={{ textAlign: 'left', color: 'black' }}>
-          <Box sx={{ opacity: 0.6 }}>
-            <Icon glyph={getIconByType(type)} size={15} mr={3} />
-          </Box>
-          {props.children}
+        <Flex sx={{ gap: 1, flexDirection: 'row' }}>
+          <Icon glyph={getIconByType(type)} size={15} />
+          <Box sx={{ textAlign: 'left' }}>{props.children}</Box>
         </Flex>
       </ThemeProvider>
     </Flex>

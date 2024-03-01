@@ -12,6 +12,7 @@ import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
@@ -79,6 +80,11 @@ export class QuestionStore extends ModuleStore {
         this.isFetching = false
       })
     })
+  }
+
+  public async incrementViewCount(documentId: string) {
+    await incrementDocViewCount(this.db, COLLECTION_NAME, documentId)
+    throw new Error('Method not implemented.')
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {

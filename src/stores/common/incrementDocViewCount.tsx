@@ -1,7 +1,7 @@
 import { toJS } from 'mobx'
 import { logger } from 'src/logger'
 
-import type { IHowto } from 'src/models'
+import type { IHowto, IQuestion } from 'src/models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
@@ -10,7 +10,9 @@ export const incrementDocViewCount = async (
   collectionName: DBEndpoint,
   docId,
 ) => {
-  const dbRef = db.collection<IHowto>(collectionName).doc(docId)
+  const dbRef = db
+    .collection<IHowto | IQuestion.Item>(collectionName)
+    .doc(docId)
   const docData = await toJS(dbRef.get('server'))
 
   if (!docData) {

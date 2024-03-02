@@ -1,9 +1,11 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  updateEmail,
   updateProfile,
 } from 'firebase/auth'
 import { uniqBy } from 'lodash'
@@ -346,13 +348,16 @@ export class UserStore extends ModuleStore {
   }
 
   public async changeUserEmail(password: string, newEmail: string) {
+    if (!this.authUser) return
+
     const user = this.authUser as firebase.default.User
     const credentials = EmailAuthProvider.credential(
       user.email as string,
       password,
     )
-    await user.reauthenticateWithCredential(credentials)
-    return user.updateEmail(newEmail)
+    await reauthenticateWithCredential(user, credentials)
+    await updateEmail(user, newEmail)
+    return this.sendEmailVerification()
   }
 
   public async sendPasswordResetEmail(email: string) {

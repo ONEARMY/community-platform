@@ -26,6 +26,7 @@ export const buttons = {
   save: 'Save profile',
   success: 'Profile saved successfully',
   submit: 'Submit',
+  submitNewEmail: 'Save new email address',
 }
 
 export const fields: ILabels = {
@@ -127,6 +128,7 @@ export const form = {
 
 export const headings = {
   accountSettings: 'Account settings',
+  changeEmail: 'Change Email',
   collection: 'Collection',
   createProfile: 'Create profile',
   editProfile: 'Edit profile',

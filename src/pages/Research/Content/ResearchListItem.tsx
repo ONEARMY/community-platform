@@ -249,6 +249,7 @@ const ResearchListItem = ({ item }: IProps) => {
 
               <IconCountWithTooltip
                 count={getUpdateCount(item)}
+                dataCy="ItemUpdateText"
                 icon="update"
                 text="Amount of updates"
               />

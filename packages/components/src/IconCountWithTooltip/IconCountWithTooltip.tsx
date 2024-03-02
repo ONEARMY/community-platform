@@ -7,26 +7,30 @@ import type { availableGlyphs } from '../Icon/types'
 
 export interface IconCountWithTooltipProps {
   count: number
+  dataCy?: string
   icon: availableGlyphs
   text: string
 }
 
 export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
-  const { count, icon, text } = props
+  const { count, dataCy, icon, text } = props
   return (
-    <Text
-      data-tip={text}
-      color="black"
-      sx={{
-        display: 'flex',
-        position: 'relative',
-        alignItems: 'center',
-        fontSize: [1, 2, 2],
-      }}
-    >
-      {count}
+    <>
+      <Text
+        data-cy={dataCy}
+        data-tip={text}
+        color="black"
+        sx={{
+          display: 'flex',
+          position: 'relative',
+          alignItems: 'center',
+          fontSize: [1, 2, 2],
+        }}
+      >
+        {count}
+      </Text>
       <Icon glyph={icon} ml={1} />
       <Tooltip />
-    </Text>
+    </>
   )
 }

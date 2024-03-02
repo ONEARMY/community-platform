@@ -27,6 +27,7 @@ export const buttons = {
   success: 'Profile saved successfully',
   submit: 'Submit',
   submitNewEmail: 'Save new email address',
+  submitNewPassword: 'Save new password',
 }
 
 export const fields: ILabels = {
@@ -111,7 +112,7 @@ export const fields: ILabels = {
       "Regardless of your email notifications setting, do you want people to be able to contact you? We'll email you their message whenever they do.",
     placeholder: 'I want people to be able to contact me',
   },
-  repeatPassword: {
+  repeatNewPassword: {
     title: 'Repeat new password',
   },
   workspaceType: {
@@ -129,6 +130,7 @@ export const form = {
 export const headings = {
   accountSettings: 'Account settings',
   changeEmail: 'Change Email',
+  changePassword: 'Change Password',
   collection: 'Collection',
   createProfile: 'Create profile',
   editProfile: 'Edit profile',

@@ -65,7 +65,7 @@ export const ChangePasswordForm = () => {
                 sx={{ flexDirection: 'column', gap: 1 }}
               >
                 <Heading variant="small">{headings.changePassword}</Heading>
-                
+
                 <FormFieldWrapper
                   text={fields.oldPassword.title}
                   htmlFor="oldPassword"

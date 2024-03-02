@@ -275,6 +275,7 @@ describe('question.routes', () => {
       const question = FactoryQuestionItem()
       const activeUser = FactoryUser({})
       const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+      const mockIncrementViewCount = jest.fn()
       const discussionComment = FactoryDiscussionComment({
         text: faker.lorem.words(2),
       })
@@ -290,6 +291,7 @@ describe('question.routes', () => {
         activeUser,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
+        incrementViewCount: mockIncrementViewCount,
       })
       useDiscussionStore.mockReturnValue({
         fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
@@ -318,6 +320,7 @@ describe('question.routes', () => {
         expect(wrapper.getByText(`1 comment`)).toBeInTheDocument()
 
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
+        expect(mockIncrementViewCount).toBeCalledWith(question._id)
       })
     })
 

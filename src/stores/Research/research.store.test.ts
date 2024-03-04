@@ -86,7 +86,6 @@ const factory = async (
     triggerNotification: jest.fn(),
   }
 
-  // TODO: Switch to generic jest mock
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.discussionStore = {

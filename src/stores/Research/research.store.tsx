@@ -440,7 +440,6 @@ export class ResearchStore extends ModuleStore {
           ...toJS(researchItem),
         }
 
-        // await this._updateResearchItem(dbRef, newItem)
         await dbRef.update({
           mentions: users
             .map((userName) => ({
@@ -496,11 +495,8 @@ export class ResearchStore extends ModuleStore {
 
         if (discussion) {
           await this.discussionStore.deleteComment(discussion, commentId)
-          // TODO: Update root comment count
         }
-      }
 
-      if (commentId && item && user && update.comments) {
         const dbRef = this.db
           .collection<IResearch.Item>(COLLECTION_NAME)
           .doc(item._id)

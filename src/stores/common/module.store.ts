@@ -100,6 +100,10 @@ export class ModuleStore {
     return this.rootStore!.stores.userNotificationsStore
   }
 
+  get discussionStore() {
+    return this.rootStore!.stores.discussionStore
+  }
+
   /****************************************************************************
    *            Database Management Methods
    * **************************************************************************/

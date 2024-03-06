@@ -11,7 +11,7 @@ export type IDiscussionComment = IComment & {
 export type IDiscussion = {
   _id: string
   sourceId: string
-  sourceType: 'question'
+  sourceType: 'question' | 'researchUpdate'
   comments: IDiscussionComment[]
 }
 

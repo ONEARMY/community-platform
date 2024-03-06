@@ -86,6 +86,7 @@ export namespace IResearch {
   /** Research items synced from the database will contain additional metadata */
   // Use of Omit to override the 'updates' type to UpdateDB
   export type ItemDB = Omit<Item, 'updates'> & {
+    totalCommentCount: number
     updates: UpdateDB[]
   } & DBDoc
 

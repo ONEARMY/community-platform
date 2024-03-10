@@ -214,7 +214,7 @@ const ResearchArticle = observer(() => {
       <Breadcrumbs
         steps={[
           {
-            text: 'Researche',
+            text: 'Research',
             link: '/research',
           },
           item.researchCategory

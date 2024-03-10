@@ -28,8 +28,8 @@ export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
         }}
       >
         {count}
-        <Icon glyph={icon} ml={1} />
       </Text>
+      <Icon glyph={icon} ml={1} />
       <Tooltip />
     </>
   )

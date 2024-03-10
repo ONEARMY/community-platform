@@ -117,7 +117,7 @@ export const Howto = observer(() => {
       <Breadcrumbs
         steps={[
           {
-            text: "How To's",
+            text: 'How To',
             link: '/how-to',
           },
           howto.category

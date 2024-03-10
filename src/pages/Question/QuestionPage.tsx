@@ -124,7 +124,7 @@ export const QuestionPage = () => {
           <Breadcrumbs
             steps={[
               {
-                text: 'Questions',
+                text: 'Question',
                 link: '/questions',
               },
               question.questionCategory

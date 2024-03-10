@@ -19,7 +19,14 @@ const calculateBreadcrumbsLength = (steps: Array<step>) => {
 
 const Chevron = () => {
   return (
-    <Text sx={{ fontFamily: 'monospace', fontSize: 20, color: 'dimgray' }}>
+    <Text
+      sx={{
+        fontFamily: 'monospace',
+        fontSize: 20,
+        color: 'dimgray',
+        marginRight: '10px',
+      }}
+    >
       {'>'}
     </Text>
   )
@@ -28,7 +35,7 @@ const Chevron = () => {
 export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
   const total_length = calculateBreadcrumbsLength(steps)
   return (
-    <ul style={{ margin: 20, padding: 0 }}>
+    <ul style={{ marginLeft: 0, marginTop: 30, marginBottom: 20, padding: 0 }}>
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1
         const isExtreme = isLast || index == 0

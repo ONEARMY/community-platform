@@ -17,7 +17,7 @@ export const BreadcrumbItem = ({
   isLast,
   collapse,
 }: BreadcrumbItemProps) => (
-  <li style={{ display: 'inline', margin: '0px 10px 0px 10px' }}>
+  <li style={{ display: 'inline', marginRight: '10px' }}>
     {!isLast ? (
       collapse ? (
         <BreadcrumbsTooltip text={text}>

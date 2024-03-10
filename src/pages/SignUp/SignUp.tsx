@@ -47,9 +47,13 @@ const SignUpPage = observer(() => {
     displayName: string()
       .min(2, 'Too short')
       .required('Required')
-      .test('is-unique', 'Already taken. Try a different one.', (value) => {
-        return checkUserNameUnique(userStore, value)
-      }),
+      .test(
+        'is-unique',
+        FRIENDLY_MESSAGES['sign-up username taken'],
+        (value) => {
+          return checkUserNameUnique(userStore, value)
+        },
+      ),
     email: string().email('Invalid email').required('Required'),
     password: string().required('Password is required'),
     'confirm-password': string()

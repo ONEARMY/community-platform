@@ -1,20 +1,28 @@
-import { UserStore } from '../stores/User/user.store'
 import { checkUserNameUnique } from './checkUserNameUnique'
 
-describe('checkUserNameUnique', async () => {
-  let store
+import type { UserStore } from '../stores/User/user.store'
 
-  beforeEach(() => {
-    store = new UserStore({} as any)
+describe('checkUserNameUnique', () => {
+  const mock = jest.fn().mockImplementation(() => {
+    return {
+      getUserProfile: () => jest.fn(),
+    }
+  })
+  const store = new mock() as UserStore
+
+  it('user does not exist', async () => {
+    jest.spyOn(store, 'getUserProfile').mockResolvedValue(undefined)
+
+    const check = await checkUserNameUnique(store, 'testUser')
+
+    expect(check).toBe(true)
   })
 
-  it('user does not exist', () => {
-    expect(checkUserNameUnique(store, 'testUser')).toBe(true)
-  })
+  it('user does exist', async () => {
+    jest.spyOn(store, 'getUserProfile').mockResolvedValue({})
 
-  await store.registerNewUser('newuser@example.com', 'password', 'testUser')
+    const check = await checkUserNameUnique(store, 'testUser')
 
-  it('user does exist', () => {
-    expect(checkUserNameUnique(store, 'testUser')).toBe(false)
+    expect(check).toBe(false)
   })
 })

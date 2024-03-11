@@ -23,6 +23,7 @@ type ILink = IUser['links'][0] & { index: number }
 
 describe('[Settings]', () => {
   beforeEach(() => {
+    localStorage.setItem('platformTheme', 'precious-plastic')
     cy.visit('/sign-in')
   })
   const selectFocus = (focus: string) => {

@@ -82,6 +82,8 @@ describe('[Profile]', () => {
     })
 
     it('[Can see impact data for workspaces]', () => {
+      localStorage.setItem('platformTheme', 'precious-plastic')
+
       cy.login(subscriber.email, subscriber.password)
 
       cy.step('Can go to impact data')

@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import {
+  Category,
   Icon,
   IconCountWithTooltip,
   ModerationStatus,
-  Tag,
+  Tooltip,
   Username,
 } from 'oa-components'
 import {
@@ -102,14 +103,12 @@ const ResearchListItem = ({ item }: IProps) => {
                       marginTop: '3px',
                     }}
                   >
-                    {item.tagList &&
-                      item.tagList.map((tag, idx) => (
-                        <Tag
-                          key={idx}
-                          tag={tag}
-                          sx={{ marginRight: 1, fontSize: 2 }}
-                        />
-                      ))}
+                    {item.researchCategory && (
+                      <Category
+                        category={item.researchCategory}
+                        sx={{ marginRight: 1, fontSize: 2 }}
+                      />
+                    )}
                   </Flex>
                 </Flex>
                 <Text
@@ -222,10 +221,9 @@ const ResearchListItem = ({ item }: IProps) => {
                 </Box>
               </Flex>
               <Flex sx={{ marginTop: 1, display: ['flex', 'none', 'none'] }}>
-                {item.tagList &&
-                  item.tagList.map((tag, idx) => (
-                    <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
-                  ))}
+                {item.researchCategory && (
+                  <Category category={item.researchCategory} sx={{ mr: 1 }} />
+                )}
               </Flex>
             </Flex>
             {/* Hide these on mobile, show on tablet & above. */}

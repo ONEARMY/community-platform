@@ -18,6 +18,7 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
+import { isPreciousPlastic } from 'src/config/config'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
@@ -274,7 +275,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabsList>
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
-              <Tab data-cy="ImpactTab">{heading}</Tab>
+              {isPreciousPlastic() && <Tab data-cy="ImpactTab">{heading}</Tab>}
               <Tab data-cy="contact-tab">Contact</Tab>
             </TabsList>
             <TabPanel>
@@ -328,9 +329,11 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabPanel>
               <UserCreatedDocuments docs={docs} />
             </TabPanel>
-            <TabPanel>
-              <Impact impact={impact} user={user} />
-            </TabPanel>
+            {isPreciousPlastic() && (
+              <TabPanel>
+                <Impact impact={impact} user={user} />
+              </TabPanel>
+            )}
             <TabPanel>
               <Box>
                 <UserContactForm user={user} />

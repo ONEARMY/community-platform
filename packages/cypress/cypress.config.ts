@@ -5,7 +5,7 @@ export default defineConfig({
   watchForFileChanges: true,
   chromeWebSecurity: false,
   // "Disable video records to improve test execution as it's not worth",
-  video: false,
+  video: true,
   reporter: 'junit',
   reporterOptions: {
     mochaFile: 'coverage/out-[hash].xml',

@@ -17,7 +17,11 @@ const RotatingLogo = styled(Image)`
   padding: 1rem;
 `
 
-export const Loader = () => {
+export interface Props {
+  label?: string
+}
+
+export const Loader = ({ label }: Props) => {
   const theme = useTheme() as any
   const logo = theme.logo || null
 
@@ -31,7 +35,9 @@ export const Loader = () => {
             sx={{ width: [75, 75, 100] }}
           />
         )}
-        <Text sx={{ width: '100%', textAlign: 'center' }}>loading...</Text>
+        <Text sx={{ width: '100%', textAlign: 'center' }}>
+          {label || 'loading...'}
+        </Text>
       </Flex>
     </>
   )

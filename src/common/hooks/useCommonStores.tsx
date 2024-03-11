@@ -6,7 +6,7 @@ import type { IRootStore } from '../../stores/RootStore'
 
 const rootStore = new RootStore()
 
-const rootStoreContext = React.createContext<IRootStore>(rootStore)
+export const rootStoreContext = React.createContext<IRootStore>(rootStore)
 
 /**
  * Additional store and db exports for use in modern context consumers

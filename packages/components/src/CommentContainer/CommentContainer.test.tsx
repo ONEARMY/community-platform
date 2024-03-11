@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { act, fireEvent } from '@testing-library/react'
 import { vi } from 'vitest'
 
@@ -11,8 +12,10 @@ const mockHandleDelete = vi.fn()
 
 describe('CommentContainer', () => {
   it('renders the correct number of comments initially', async () => {
-    const mockReply = fakeComment()
+    const text = faker.lorem.paragraph()
+    const mockReply = fakeComment({ text })
     const mockComment = fakeComment({ replies: [mockReply] })
+
     const screen = render(
       <CommentContainer
         supportReplies={true}
@@ -26,9 +29,8 @@ describe('CommentContainer', () => {
     )
 
     await act(async () => {
-      fireEvent.click(screen.getByText('reply', { exact: false }))
+      await fireEvent.click(screen.getByText('reply', { exact: false }))
     })
-
-    expect(screen.getByText(mockReply.text)).toBeVisible()
+    expect(screen.getByText(text)).toBeVisible()
   })
 })

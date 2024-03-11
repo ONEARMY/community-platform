@@ -5,7 +5,7 @@ import type { AbstractDatabaseClient } from '../types'
 
 const db = rtdb
 
-export class RealtimeDBClient implements AbstractDatabaseClient {
+export class RealtimeDatabaseClient implements AbstractDatabaseClient {
   /************************************************************************
    *  Main Methods - taken from abstract class
    ***********************************************************************/

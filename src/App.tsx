@@ -1,17 +1,18 @@
-import React from 'react'
 import { Global, ThemeProvider } from '@emotion/react'
-import { observer, Provider } from 'mobx-react'
+import { observer } from 'mobx-react'
 import { GlobalStyles } from 'oa-components'
 
 import ErrorBoundary from './common/Error/ErrorBoundary'
-import { RootStore } from './stores/RootStore'
+import {
+  rootStoreContext,
+  useCommonStores,
+} from './common/hooks/useCommonStores'
 import { Pages } from './pages'
 
-const rootStore = new RootStore()
-
 export const App = observer(() => {
+  const rootStore = useCommonStores()
   return (
-    <Provider {...rootStore.stores}>
+    <rootStoreContext.Provider value={rootStore}>
       <ThemeProvider theme={rootStore.stores.themeStore.currentTheme.styles}>
         <>
           <ErrorBoundary>
@@ -20,6 +21,6 @@ export const App = observer(() => {
           <Global styles={GlobalStyles} />
         </>
       </ThemeProvider>
-    </Provider>
+    </rootStoreContext.Provider>
   )
 })

@@ -4,7 +4,7 @@ import { Flex, Text } from 'theme-ui'
 import { Button } from '../Button/Button'
 import { Icon } from '..'
 
-import type { availableGlyphs } from '..'
+import type { availableGlyphs } from '../Icon/types'
 
 export interface IProps {
   statistics: {

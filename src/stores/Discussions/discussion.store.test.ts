@@ -13,6 +13,7 @@ import type { IRootStore } from '../RootStore'
 
 const factory = async (
   discussions: IDiscussion[] = [FactoryDiscussion({})],
+  activeUser: IUserPPDB = FactoryUser(),
 ) => {
   const store = new DiscussionStore({} as IRootStore)
 
@@ -24,7 +25,7 @@ const factory = async (
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  store.setActiveUser(FactoryUser({ _id: 'fake-user' }))
+  store.setActiveUser(activeUser)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -37,9 +38,13 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userStore = {
-    activeUser: {
-      _id: 'fake-user',
-    },
+    activeUser: activeUser,
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.userNotificationsStore = {
+    triggerNotification: jest.fn(),
   }
 
   return {
@@ -121,6 +126,14 @@ describe('discussion.store', () => {
         expect.objectContaining({ text: 'New comment' }),
       )
       expect(newDiscussion.comments[1]).toBeUndefined()
+      expect(
+        store.userNotificationsStore.triggerNotification,
+      ).toHaveBeenCalledWith(
+        'new_comment_discussion',
+        undefined, // concern of another store
+        `/questions/undefined#comment:${discussionItem.comments[0]._id}`,
+        undefined, // concern of another store
+      )
     })
 
     it('adds a reply to a comment', async () => {
@@ -146,6 +159,14 @@ describe('discussion.store', () => {
           expect.objectContaining({ text: 'New reply' }),
         ]),
       )
+      expect(
+        store.userNotificationsStore.triggerNotification,
+      ).toHaveBeenCalledWith(
+        'new_comment_discussion',
+        discussionItem.comments[0].creatorName,
+        `/questions/undefined#comment:${discussionItem.comments[1]._id}`,
+        undefined, // concern of another store
+      )
     })
 
     it('handles error fetching discussion', async () => {
@@ -164,17 +185,59 @@ describe('discussion.store', () => {
 
   describe('editComent', () => {
     it('allows author to make changes comment', async () => {
-      const { store, discussionItem, setFn } = await factory([
-        FactoryDiscussion({
-          comments: [
-            FactoryDiscussionComment({
-              _id: 'fake-comment-id',
-              _creatorId: 'fake-user',
-              text: 'New comment',
-            }),
-          ],
+      const { store, discussionItem, setFn } = await factory(
+        [
+          FactoryDiscussion({
+            comments: [
+              FactoryDiscussionComment({
+                _id: 'fake-comment-id',
+                _creatorId: 'fake-user',
+                text: 'New comment',
+              }),
+            ],
+          }),
+        ],
+        FactoryUser({
+          _id: 'fake-user',
         }),
-      ])
+      )
+
+      //Act
+      await store.editComment(
+        discussionItem,
+        'fake-comment-id',
+        'Edited comment',
+      )
+
+      const [newDiscussion] = setFn.mock.calls[0]
+
+      // Assert
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(newDiscussion.comments).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ text: 'Edited comment' }),
+        ]),
+      )
+    })
+
+    it('allows admin to make changes comment', async () => {
+      const { store, discussionItem, setFn } = await factory(
+        [
+          FactoryDiscussion({
+            comments: [
+              FactoryDiscussionComment({
+                _id: 'fake-comment-id',
+                _creatorId: 'fake-user',
+                text: 'New comment',
+              }),
+            ],
+          }),
+        ],
+        FactoryUser({
+          _id: 'admin-user',
+          userRoles: ['admin'] as any,
+        }),
+      )
 
       //Act
       await store.editComment(
@@ -223,9 +286,31 @@ describe('discussion.store', () => {
         _creatorId: 'fake-user',
         text: 'New comment',
       })
-      const { store, setFn, discussionItem } = await factory([
-        FactoryDiscussion({ comments: [comment] }),
-      ])
+      const { store, setFn, discussionItem } = await factory(
+        [FactoryDiscussion({ comments: [comment] })],
+        FactoryUser({ _id: 'fake-user' }),
+      )
+
+      //Act
+      await store.deleteComment(discussionItem, comment._id)
+
+      // Asert
+      expect(setFn).toHaveBeenCalledTimes(1)
+      expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
+    })
+
+    it('allows admin to remove a comment', async () => {
+      const comment = FactoryDiscussionComment({
+        _creatorId: 'not-admin-user',
+        text: 'New comment',
+      })
+      const { store, setFn, discussionItem } = await factory(
+        [FactoryDiscussion({ comments: [comment] })],
+        FactoryUser({
+          _id: 'admin-user',
+          userRoles: ['admin'] as any,
+        }),
+      )
 
       //Act
       await store.deleteComment(discussionItem, comment._id)

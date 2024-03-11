@@ -1,125 +1,145 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Form } from 'react-final-form'
-import { Button, FieldInput } from 'oa-components'
+import { Button, FieldInput, Icon } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { buttons, fields } from 'src/pages/UserSettings/labels'
-import { Flex, Label, Text } from 'theme-ui'
+import { FormFieldWrapper } from 'src/pages/Howto/Content/Common'
+import { UserContactError } from 'src/pages/User/contact/UserContactError'
+import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
+import { Flex, Heading, Text } from 'theme-ui'
+
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
 interface IFormValues {
-  oldPassword?: string
-  newPassword?: string
-  repeatPassword?: string
-}
-interface IState {
-  errorMsg?: string
-  msg?: string
-  showChangePasswordForm?: boolean
-  formValues: IFormValues
+  oldPassword: string
+  newPassword: string
+  repeatNewPassword: string
 }
 
 export const ChangePasswordForm = () => {
-  const { userStore } = useCommonStores().stores
-  const [state, setState] = useState<IState>({ formValues: {} })
-  const _labelStyle = { fontSize: 2, mb: 2 }
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
-  const submit = async (values: IFormValues) => {
+  const { userStore } = useCommonStores().stores
+  const formId = 'changePassword'
+  const glyph = isExpanded ? 'arrow-full-up' : 'arrow-full-down'
+
+  const onSubmit = async (values: IFormValues) => {
     const { oldPassword, newPassword } = values
-    if (oldPassword && newPassword) {
-      try {
-        await userStore.changeUserPassword(oldPassword, newPassword)
-        setState({
-          msg: 'Password changed',
-          formValues: {},
-          errorMsg: undefined,
-          showChangePasswordForm: false,
-        })
-      } catch (error) {
-        setState({ errorMsg: error.message, formValues: {} })
-      }
+
+    try {
+      await userStore.changeUserPassword(oldPassword, newPassword)
+      setSubmitResults({
+        type: 'success',
+        message: `Password changed.`,
+      })
+      setIsExpanded(false)
+    } catch (error) {
+      setSubmitResults({ type: 'error', message: error.message })
     }
   }
 
   return (
-    <>
-      <Button
-        my={3}
-        mr={2}
-        variant={'secondary'}
-        onClick={() =>
-          setState((state) => ({
-            ...state,
-            showChangePasswordForm: !state.showChangePasswordForm,
-          }))
-        }
-      >
-        {buttons.changePassword}
-      </Button>
-      {state.showChangePasswordForm && (
+    <Flex
+      data-cy="changePasswordContainer"
+      sx={{ flexDirection: 'column', gap: 2 }}
+    >
+      <UserContactError submitResults={submitResults} />
+
+      {isExpanded && (
         <Form
-          onSubmit={(values) => submit(values as IFormValues)}
-          initialValues={state.formValues}
-          render={({ submitting, values, handleSubmit }) => {
-            const { oldPassword, newPassword, repeatPassword } = values
+          onSubmit={onSubmit}
+          id={formId}
+          render={({ handleSubmit, submitting, values }) => {
+            const { oldPassword, newPassword, repeatNewPassword } = values
             const disabled =
               submitting ||
               !oldPassword ||
               !newPassword ||
-              repeatPassword !== newPassword ||
+              repeatNewPassword !== newPassword ||
               oldPassword === newPassword
-            return (
-              <form onSubmit={handleSubmit}>
-                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                  <Label htmlFor="oldPassword" sx={_labelStyle}>
-                    {fields.oldPassword.title} :
-                  </Label>
-                  <PasswordField
-                    name="oldPassword"
-                    component={FieldInput}
-                    placeholder="Old password"
-                    autocomplete="off"
-                    required
-                  />
-                </Flex>
-                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                  <Label htmlFor="newPassword" sx={_labelStyle}>
-                    {fields.newPassword.title} :
-                  </Label>
-                  <PasswordField
-                    name="newPassword"
-                    component={FieldInput}
-                    placeholder="New password"
-                    autocomplete="off"
-                    required
-                  />
-                </Flex>
-                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                  <Label htmlFor="repeatPassword" sx={_labelStyle}>
-                    {fields.repeatPassword.title} :
-                  </Label>
-                  <PasswordField
-                    name="repeatPassword"
-                    component={FieldInput}
-                    placeholder="Repeat new password"
-                    autocomplete="off"
-                    required
-                  />
-                </Flex>
-                <Button
-                  type="submit"
-                  disabled={disabled}
-                  variant={disabled ? 'primary' : 'primary'}
-                >
-                  {buttons.submit}
-                </Button>
 
-                <Text color="error">{state.errorMsg}</Text>
-              </form>
+            return (
+              <Flex
+                data-cy="changePasswordForm"
+                sx={{ flexDirection: 'column', gap: 1 }}
+              >
+                <Heading variant="small">{headings.changePassword}</Heading>
+
+                <FormFieldWrapper
+                  text={fields.oldPassword.title}
+                  htmlFor="oldPassword"
+                  required
+                >
+                  <PasswordField
+                    autoComplete="off"
+                    component={FieldInput}
+                    data-cy="oldPassword"
+                    name="oldPassword"
+                    placeholder={fields.oldPassword.placeholder}
+                    required
+                  />
+                </FormFieldWrapper>
+
+                <FormFieldWrapper
+                  text={fields.newPassword.title}
+                  htmlFor="newPassword"
+                  required
+                >
+                  <PasswordField
+                    autoComplete="off"
+                    component={FieldInput}
+                    data-cy="newPassword"
+                    name="newPassword"
+                    required
+                  />
+                </FormFieldWrapper>
+
+                <FormFieldWrapper
+                  text={fields.repeatNewPassword.title}
+                  htmlFor="repeatNewPassword"
+                  required
+                >
+                  <PasswordField
+                    autoComplete="off"
+                    component={FieldInput}
+                    data-cy="repeatNewPassword"
+                    name="repeatNewPassword"
+                    required
+                  />
+                </FormFieldWrapper>
+
+                <Button
+                  data-cy="changePasswordSubmit"
+                  disabled={disabled}
+                  form={formId}
+                  onClick={handleSubmit}
+                  type="submit"
+                  sx={{
+                    alignSelf: 'flex-start',
+                  }}
+                >
+                  {buttons.submitNewPassword}
+                </Button>
+              </Flex>
             )
           }}
         />
       )}
-      <Text>{state.msg}</Text>
-    </>
+
+      <Button
+        data-cy="changePasswordButton"
+        onClick={() => setIsExpanded(!isExpanded)}
+        variant="secondary"
+        sx={{
+          alignSelf: 'flex-start',
+        }}
+      >
+        <Flex sx={{ gap: 2 }}>
+          <Text>{buttons.changePassword}</Text>
+          <Icon glyph={glyph} />
+        </Flex>
+      </Button>
+    </Flex>
   )
 }

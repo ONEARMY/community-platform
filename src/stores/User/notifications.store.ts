@@ -6,11 +6,8 @@ import { ModuleStore } from '../common/module.store'
 // eslint-disable-next-line import/namespace
 import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
-import type {
-  INotification,
-  INotificationUpdate,
-  NotificationType,
-} from 'src/models/user.models'
+import type { NotificationType } from 'oa-shared'
+import type { INotification, INotificationUpdate } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IRootStore } from '../RootStore'
 

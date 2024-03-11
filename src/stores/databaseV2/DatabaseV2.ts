@@ -1,7 +1,9 @@
+import { isTestEnvironment } from 'src/utils/isTestEnvironment'
+
 import { SITE } from '../../config/config'
-import { DexieClient } from './clients/dexie'
-import { FirestoreClient } from './clients/firestore'
-import { RealtimeDBClient } from './clients/rtdb'
+import { DexieClient } from './clients/DexieClient'
+import { FirestoreClient } from './clients/FirestoreClient'
+import { RealtimeDatabaseClient } from './clients/RealtimeDatabaseClient'
 import { CollectionReference } from './CollectionReference'
 import { DB_ENDPOINTS } from './endpoints'
 
@@ -15,14 +17,14 @@ export class DatabaseV2 {
   private _clients: DBClients
 
   constructor() {
-    this.clients = this._getDefaultClients()
+    const useBrowserCacheDb =
+      !window.location.search.includes('no-cache') || !isTestEnvironment
+
+    this._clients = this._getDefaultClients(useBrowserCacheDb)
   }
 
   public get clients() {
     return this._clients
-  }
-  public set clients(clients) {
-    this._clients = clients
   }
 
   /**
@@ -40,14 +42,13 @@ export class DatabaseV2 {
    * By default 3 databases are provided (cache, server, server-cache)
    * Additionally, a 'no-idb' search param can be provided to disable
    * cache-db entirely (triggered from dexie if not supported)
+   * @param useBrowserCacheDb - whether to use Dexie (indexdb)
    */
-  private _getDefaultClients(): DBClients {
+  private _getDefaultClients(useBrowserCacheDb: boolean): DBClients {
     const serverDB = new FirestoreClient()
-    const cacheDB = window.location.search.includes('no-cache')
-      ? serverDB
-      : new DexieClient()
+    const cacheDB = useBrowserCacheDb ? serverDB : new DexieClient()
     const serverCacheDB =
-      SITE === 'emulated_site' ? serverDB : new RealtimeDBClient()
+      SITE === 'emulated_site' ? serverDB : new RealtimeDatabaseClient()
     return { cacheDB, serverDB, serverCacheDB }
   }
 }

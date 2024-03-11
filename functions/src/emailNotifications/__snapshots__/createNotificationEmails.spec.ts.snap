@@ -81,21 +81,23 @@ exports[`create email test Creates email from pending notifications monthly 1`] 
               </div>
 
               <p>
-                New comment on your
-                <a href="https://community.preciousplastic.com/test">how-to</a>
-                by
+                New comment by
                 <a href="https://community.preciousplastic.com/u/user_1"
                   >User 1</a
                 >
+                on
+                <a href="https://community.preciousplastic.com/test"
+                  >Test how-to</a
+                >
               </p>
               <p>
-                New comment on your
-                <a href="https://community.preciousplastic.com/test"
-                  >research</a
-                >
-                by
+                New comment by
                 <a href="https://community.preciousplastic.com/u/user_3"
                   >User 3</a
+                >
+                on
+                <a href="https://community.preciousplastic.com/test"
+                  >Test research</a
                 >
               </p>
               <p>
@@ -234,13 +236,13 @@ exports[`create email test Creates email from pending notifications weekly 1`] =
               </p>
 
               <p>
-                New comment on your
-                <a href="https://community.preciousplastic.com/test"
-                  >research</a
-                >
-                by
+                New comment by
                 <a href="https://community.preciousplastic.com/u/user_2"
                   >User 2</a
+                >
+                on
+                <a href="https://community.preciousplastic.com/test"
+                  >Test research</a
                 >
               </p>
               <p>

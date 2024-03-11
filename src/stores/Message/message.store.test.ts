@@ -71,7 +71,6 @@ describe('message.store', () => {
     const msg = FactoryMessage()
 
     getWhereFn.mockResolvedValueOnce([])
-
     setFn.mockRejectedValueOnce(new Error('Error'))
 
     const res = await store.upload(msg)

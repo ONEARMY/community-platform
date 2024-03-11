@@ -65,7 +65,7 @@ async function setMockNotifications(user: IMockAuthUser) {
   const update: Partial<IUserDB> = {
     notifications: [
       {
-        type: 'new_comment',
+        type: 'new_comment_discussion',
         notified: false,
         read: false,
         _created: new Date().toISOString(),
@@ -74,6 +74,7 @@ async function setMockNotifications(user: IMockAuthUser) {
           displayName: 'Demo User',
           userId: 'demo_user',
         },
+        relevantUrl: '/testing-demo',
         title: 'Demo Title',
       },
     ],
@@ -87,6 +88,7 @@ async function setMockNotifications(user: IMockAuthUser) {
         howto_needs_updates: true,
         map_pin_approved: true,
         map_pin_needs_updates: true,
+        new_comment_discussion: true,
         new_comment_research: true,
         research_useful: true,
         research_mention: true,

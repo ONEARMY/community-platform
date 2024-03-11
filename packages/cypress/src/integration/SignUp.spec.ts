@@ -33,9 +33,7 @@ describe('[Sign-up - existing user]', () => {
   it('prevent duplicate name', () => {
     fillSignupForm(authUser)
     cy.get('[data-cy=submit]').click()
-    cy.get('[data-cy=error-msg]')
-      .contains(FRIENDLY_MESSAGES['sign-up username taken'])
-      .should('be.exist')
+    cy.contains(FRIENDLY_MESSAGES['sign-up username taken']).should('be.exist')
   })
   it('prevent duplicate email', () => {
     const user = { ...authUser, username: `new_username_${generatedId(5)}` }

@@ -152,10 +152,13 @@ const SignUpPage = observer(() => {
                         </Link>
                       </Text>
                     </Flex>
+                    <Text color={'red'} data-cy="error-msg">
+                      {state.errorMsg}
+                    </Text>
                     <Flex
                       mb={3}
                       sx={{
-                        width: ['100%', '100%'],
+                        width: rowWidth,
                         flexDirection: 'column',
                       }}
                     >
@@ -256,19 +259,12 @@ const SignUpPage = observer(() => {
                         </Text>
                       </Label>
                     </Flex>
-                    <Text color={'red'} data-cy="error-msg">
-                      {state.errorMsg}
-                    </Text>
 
                     <Flex>
                       <Button
                         large
+                        sx={{ width: '100%', justifyContent: 'center' }}
                         data-cy="submit"
-                        sx={{
-                          width: '100%',
-                          justifyContent: 'center',
-                          border: 'none',
-                        }}
                         variant={'primary'}
                         disabled={disabled}
                         type="submit"

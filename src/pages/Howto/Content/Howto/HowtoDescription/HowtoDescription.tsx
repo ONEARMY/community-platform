@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
+  Category,
   ConfirmModal,
   ContentStatistics,
   DownloadFileFromLink,
@@ -247,7 +248,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                   modified={howto._contentModifiedTimestamp || howto._modified}
                   action="Published"
                 />
-                <Heading mt={2} mb={1}>
+                {howto.category && (
+                  <Category
+                    category={howto.category}
+                    sx={{ fontSize: 2, mt: 2 }}
+                  />
+                )}
+                <Heading mt={howto.category ? 1 : 2} mb={1}>
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {capitalizeFirstLetter(howto.title)}
                 </Heading>

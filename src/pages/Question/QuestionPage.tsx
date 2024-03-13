@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
+  Category,
   ContentStatistics,
   FollowButton,
   Loader,
@@ -157,6 +158,12 @@ export const QuestionPage = () => {
               />
 
               <Box mt={3} mb={2}>
+                {question.category && (
+                  <Category
+                    category={question.category}
+                    sx={{ fontSize: 2, my: 2 }}
+                  />
+                )}
                 <Heading mb={1}>{question.title}</Heading>
                 <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
                   {question.description}

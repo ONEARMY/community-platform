@@ -98,15 +98,15 @@ export const HowToCard = (props: IProps) => {
             </Flex>
           </Flex>
           <Flex mt={5}>
-            <Flex sx={{ flex: 1, flexWrap: 'wrap' }}>
-              {howto.category && (
-                <Category category={howto.category} sx={{ mr: 1 }} />
-              )}
-            </Flex>
+            {howto.category && (
+              <Category
+                category={howto.category}
+                sx={{ mr: 1, display: 'inline' }}
+              />
+            )}
             {votedUsefulCount > 0 && (
               <Flex
-                ml={1}
-                sx={{ alignItems: 'center' }}
+                sx={{ alignItems: 'center', ml: 'auto' }}
                 data-tip="How useful is it"
               >
                 <Icon glyph="star-active" marginRight="4px" />

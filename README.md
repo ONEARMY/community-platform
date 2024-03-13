@@ -143,6 +143,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dariusmihut"><img src="https://avatars.githubusercontent.com/u/7417010?v=4?s=60" width="60px;" alt="dariusmihut"/><br /><sub><b>dariusmihut</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=dariusmihut" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dcustodio"><img src="https://avatars.githubusercontent.com/u/2907004?v=4?s=60" width="60px;" alt="David Custódio"/><br /><sub><b>David Custódio</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=dcustodio" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.eliasjorgensen.se"><img src="https://avatars.githubusercontent.com/u/63782477?v=4?s=60" width="60px;" alt="Elias Jörgensen"/><br /><sub><b>Elias Jörgensen</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=saile515" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.jagan-chary.com"><img src="https://avatars.githubusercontent.com/u/26999371?v=4?s=60" width="60px;" alt="devChary"/><br /><sub><b>devChary</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=devChary" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

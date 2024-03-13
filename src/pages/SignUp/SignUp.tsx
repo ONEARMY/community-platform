@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
@@ -29,6 +29,8 @@ interface IState {
   errorMsg?: string
   disabled?: boolean
 }
+
+const rowWidth = ['100%', '100%', `100%`]
 
 const SignUpPage = observer(() => {
   const navigate = useNavigate()
@@ -137,25 +139,44 @@ const SignUpPage = observer(() => {
                       width: '100%',
                     }}
                   >
-                    <Heading variant="small" py={4} sx={{ width: '100%' }}>
+                    <Heading variant="small" py={2} sx={{ width: '100%' }}>
                       Create an account
                     </Heading>
+                    <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
+                      <Text color={'grey'} sx={{ fontSize: 1 }}>
+                        Already have an account ?
+                        <Link
+                          to="/sign-in"
+                          style={{
+                            color: '#98cc98',
+                            textDecoration: 'underline',
+                          }}
+                        >
+                          {' '}
+                          Sign-in here
+                        </Link>
+                      </Text>
+                    </Flex>
+                    <Text color={'red'} data-cy="error-msg">
+                      {state.errorMsg}
+                    </Text>
                     <Flex
                       mb={3}
                       sx={{
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        width: rowWidth,
                         flexDirection: 'column',
                       }}
                     >
-                      <Label htmlFor="displayName">
-                        Username. Think carefully. You can't change this*
-                      </Label>
+                      <Label htmlFor="displayName">Username</Label>
+                      <Text color={'grey'} mt={1} mb={1} sx={{ fontSize: 1 }}>
+                        Think carefully. You can't change this.
+                      </Text>
                       <Field
                         data-cy="username"
                         name="displayName"
                         type="userName"
                         component={FieldInput}
-                        placeholder="Pick a unique name"
+                        placeholder="youruniqueusername"
                         validate={composeValidators(
                           required,
                           noSpecialCharacters,
@@ -166,18 +187,19 @@ const SignUpPage = observer(() => {
                       mb={3}
                       sx={{
                         flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        width: rowWidth,
                       }}
                     >
-                      <Label htmlFor="email">
-                        Email, personal or workspace*
-                      </Label>
+                      <Label htmlFor="email">Email</Label>
+                      <Text color={'grey'} mt={1} mb={1} sx={{ fontSize: 1 }}>
+                        It can be personal or work email.
+                      </Text>
                       <Field
                         data-cy="email"
                         name="email"
                         type="email"
                         component={FieldInput}
-                        placeholder="hey@jack.com"
+                        placeholder="yourname@domain.com"
                         validate={required}
                       />
                     </Flex>
@@ -185,10 +207,10 @@ const SignUpPage = observer(() => {
                       mb={3}
                       sx={{
                         flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        width: rowWidth,
                       }}
                     >
-                      <Label htmlFor="password">Password*</Label>
+                      <Label htmlFor="password">Password</Label>
                       <PasswordField
                         data-cy="password"
                         name="password"
@@ -200,12 +222,10 @@ const SignUpPage = observer(() => {
                       mb={3}
                       sx={{
                         flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        width: rowWidth,
                       }}
                     >
-                      <Label htmlFor="confirm-password">
-                        Confirm Password*
-                      </Label>
+                      <Label htmlFor="confirm-password">Confirm Password</Label>
                       <PasswordField
                         data-cy="confirm-password"
                         name="confirm-password"
@@ -213,12 +233,14 @@ const SignUpPage = observer(() => {
                         validate={required}
                       />
                     </Flex>
-                    <Flex
-                      mb={3}
-                      mt={2}
-                      sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
-                    >
-                      <Label>
+                    <Flex mb={3} mt={2} sx={{ width: rowWidth }}>
+                      <Label
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '6px',
+                        }}
+                      >
                         <Field
                           data-cy="consent"
                           name="consent"
@@ -242,21 +264,12 @@ const SignUpPage = observer(() => {
                         </Text>
                       </Label>
                     </Flex>
-                    <Text color={'red'} data-cy="error-msg">
-                      {state.errorMsg}
-                    </Text>
-                    <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
-                      <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
-                        Already have an account ?
-                        <Link to="/sign-in"> Sign-in here</Link>
-                      </Text>
-                    </Flex>
 
                     <Flex>
                       <Button
                         large
-                        data-cy="submit"
                         sx={{ width: '100%', justifyContent: 'center' }}
+                        data-cy="submit"
                         variant={'primary'}
                         disabled={disabled}
                         type="submit"

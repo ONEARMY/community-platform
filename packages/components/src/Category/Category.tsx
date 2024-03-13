@@ -1,4 +1,4 @@
-import { Flex,Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
 

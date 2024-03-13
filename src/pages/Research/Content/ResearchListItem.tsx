@@ -4,7 +4,6 @@ import {
   Icon,
   IconCountWithTooltip,
   ModerationStatus,
-  Tooltip,
   Username,
 } from 'oa-components'
 import {

@@ -137,7 +137,7 @@ commands:
       - run:
           # Use version of firebase-tools already installed in functions workspace to deploy
           name: Deploy to Firebase
-          command: ./functions/node_modules/.bin/firebase deploy --debug -P << parameters.alias >> --non-interactive
+          command: npx firebase-tools@12.7.0 deploy --debug -P << parameters.alias >> --non-interactive
           environment:
             GOOGLE_APPLICATION_CREDENTIALS: service_account.json
 
@@ -204,6 +204,7 @@ jobs:
     resource_class: large
     environment:
       CYPRESS_INSTALL_BINARY: 0
+      JEST_JUNIT_OUTPUT_DIR: ./reports
     steps:
       - setup_repo
       - attach_workspace:
@@ -224,11 +225,14 @@ jobs:
       - run:
           name: Test Functions
           # Run functions emulator test command with additional flags to ensure CI receives correct exit code
-          command: cd functions && ./node_modules/.bin/firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated "yarn jest . --forceExit --detectOpenHandles --coverage"
+          command: cd functions && yarn test-ci
       - persist_to_workspace:
           root: .
           paths:
             - functions/coverage
+            - functions/reports
+      - store_test_results:
+          path: functions/reports
 
   test_functions_upload_coverage:
     docker: *docker
@@ -256,6 +260,10 @@ jobs:
       - store_artifacts:
           path: packages/components/coverage
       - codecov/upload
+      - store_artifacts:
+          path: packages/components/reports
+      - store_test_results:
+          path: packages/components/reports
       - store_artifacts:
           path: reports
       - store_test_results:
@@ -308,7 +316,7 @@ jobs:
           command: yarn storybook:build
   deploy:
     docker: *docker
-    resource_class: small
+    resource_class: medium+
     parameters:
       # optional environment variables to set during build process
       DEPLOY_ALIAS:
@@ -326,6 +334,7 @@ jobs:
   # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker
+    resource_class: medium+
     # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
     parallelism: 1
     parameters:
@@ -361,7 +370,7 @@ jobs:
           path: ./packages/cypress/src/screenshots/
   release:
     docker: *docker
-    resource_class: small
+    resource_class: medium+
     steps:
       - setup_repo
       - attach_workspace:

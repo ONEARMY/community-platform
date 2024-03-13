@@ -14,6 +14,11 @@ export const CreateReply = (props: Props) => {
   const [reply, setReply] = useState<string>('')
   const { commentId, isLoggedIn, maxLength, onSubmit } = props
 
+  const handleSubmit = async () => {
+    await onSubmit(commentId, reply)
+    setReply('')
+  }
+
   return (
     <Box
       sx={{
@@ -27,7 +32,7 @@ export const CreateReply = (props: Props) => {
         maxLength={maxLength}
         comment={reply}
         onChange={(text) => setReply(text)}
-        onSubmit={() => onSubmit(commentId, reply)}
+        onSubmit={handleSubmit}
         isLoggedIn={isLoggedIn}
         buttonLabel="Leave a reply"
       />

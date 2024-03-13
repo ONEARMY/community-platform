@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { loadUserNameOptions } from './LoadUserNameOptions'
 

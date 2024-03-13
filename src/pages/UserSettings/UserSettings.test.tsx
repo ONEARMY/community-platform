@@ -3,7 +3,7 @@ import { ThemeProvider } from '@emotion/react'
 import { act, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { IModerationStatus, UserRole } from 'oa-shared'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
@@ -18,7 +18,7 @@ const mockGetPin = jest.fn()
 const mockUpdateUserBadge = jest.fn()
 let mockUser = FactoryUser({})
 
-jest.mock('src/index', () => ({
+jest.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

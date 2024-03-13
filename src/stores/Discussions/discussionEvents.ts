@@ -1,10 +1,10 @@
 import { logger } from 'src/logger'
 
 import type { IDiscussion } from 'src/models'
-import type { DatabaseV2 } from '../databaseV2'
+import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
-type DiscussionEndpoints = Extract<
+export type DiscussionEndpoints = Extract<
   DBEndpoint,
   'howtos' | 'research' | 'questions'
 >
@@ -37,7 +37,9 @@ export const updateDiscussionMetadata = (
     .update({ commentCount, latestCommentDate })
 }
 
-const getCollectionName = (sourceType: string): DiscussionEndpoints | null => {
+export const getCollectionName = (
+  sourceType: string,
+): DiscussionEndpoints | null => {
   switch (sourceType) {
     case 'question':
       return 'questions'

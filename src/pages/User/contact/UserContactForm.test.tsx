@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
 
 import { UserContactForm } from '.'
 
-jest.mock('src/index', () => {
+jest.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -15,6 +15,7 @@ jest.mock('src/index', () => {
         },
         userStore: {
           getUserEmail: () => jest.fn().mockReturnValue('Bob@email.com'),
+          activeUser: () => jest.fn().mockReturnValue(true),
         },
       },
     }),
@@ -45,7 +46,7 @@ describe('UserContactForm', () => {
     await screen.findByText('All sent')
   })
 
-  it('renders nothing with user not contactable', async () => {
+  it('renders nothing if not profile is not contactable', async () => {
     const uncontactable = FactoryUser({ isContactableByPublic: false })
 
     const { container } = render(

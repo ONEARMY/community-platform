@@ -1,8 +1,8 @@
 import { action, makeAutoObservable, observable } from 'mobx'
 
 import type { Subscription } from 'rxjs'
-import type { RootStore } from '..'
-import type { DatabaseV2 } from '../databaseV2'
+import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
+import type { IRootStore } from '../RootStore'
 
 /**
  * List of existing aggregation docs
@@ -36,7 +36,7 @@ export class AggregationsStore {
     [aggregationId: string]: NodeJS.Timeout
   } = {}
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     this.db = rootStore.dbV2
     makeAutoObservable(this, { aggregations: observable })
   }

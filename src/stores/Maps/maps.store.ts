@@ -23,7 +23,7 @@ import type {
   IMapPinWithDetail,
 } from 'src/models/maps.models'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import type { RootStore } from '../index'
+import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
 type IFilterToRemove = IMapPinType | undefined
@@ -40,7 +40,7 @@ export class MapsStore extends ModuleStore {
   @observable
   public filteredPins: Array<IMapPin> = []
   // eslint-disable-next-line
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore)
     makeObservable(this)
   }

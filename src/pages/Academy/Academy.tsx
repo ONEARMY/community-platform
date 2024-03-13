@@ -1,6 +1,6 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed'
 
 export const getFrameSrc = (base, path): string =>

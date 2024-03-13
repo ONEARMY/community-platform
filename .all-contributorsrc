@@ -616,6 +616,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dcustodio",
+      "name": "David Custódio",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2907004?v=4",
+      "profile": "https://github.com/dcustodio",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "saile515",
+      "name": "Elias Jörgensen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63782477?v=4",
+      "profile": "https://www.eliasjorgensen.se",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

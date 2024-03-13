@@ -76,6 +76,15 @@ describe('isReceiverContactable', () => {
     await expect(isReceiverContactable('uid')).resolves.toEqual(true)
   })
 
+  it("returns true when contactable value isn't specified", async () => {
+    jest.spyOn(utils, 'getUserAndEmail').mockResolvedValue({
+      toUser: {} as IUserDB,
+      toUserEmail: 'anything@email.com',
+    })
+
+    await expect(isReceiverContactable('uid')).resolves.toEqual(true)
+  })
+
   it("errors when user isn't contactable", async () => {
     jest.spyOn(utils, 'getUserAndEmail').mockResolvedValue({
       toUser: { isContactableByPublic: false } as IUserDB,

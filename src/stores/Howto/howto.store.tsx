@@ -36,7 +36,7 @@ import type {
   IHowToStepFormInput,
 } from 'src/models/howto.models'
 import type { IConvertedFileMeta } from 'src/types'
-import type { RootStore } from '../index'
+import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
 const COLLECTION_NAME = 'howtos'
@@ -75,7 +75,7 @@ export class HowtoStore extends ModuleStore {
   @observable
   private filterSorterDecorator: FilterSorterDecorator<IHowtoDB>
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
@@ -147,7 +147,7 @@ export class HowtoStore extends ModuleStore {
   @action
   public async setActiveHowtoBySlug(slug?: string) {
     // clear any cached data and then load the new howto
-    logger.debug(`setActiveHowtoBySlug:`, { slug })
+    logger.debug(`HowtoStore.setActiveHowtoBySlug:`, { slug })
     let activeHowto: IHowtoDB | null = null
 
     if (slug) {
@@ -323,6 +323,7 @@ export class HowtoStore extends ModuleStore {
           comments: [...toJS(howto.comments || []), newComment],
         })
 
+        await this.addCommentNotification(howto)
         await this.setActiveHowtoBySlug(updated?.slug || '')
       }
     } catch (err) {
@@ -603,6 +604,15 @@ export class HowtoStore extends ModuleStore {
       logger.error('error', error)
       throw new Error(error.message)
     }
+  }
+
+  private async addCommentNotification(howto: IHowto) {
+    await this.userNotificationsStore.triggerNotification(
+      'new_comment_discussion',
+      howto._createdBy,
+      '/how-to/' + howto.slug,
+      howto.title,
+    )
   }
 
   private async findMentionsInComments(rawComments: IComment[] | undefined) {

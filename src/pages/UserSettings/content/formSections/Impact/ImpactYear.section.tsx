@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { observer } from 'mobx-react'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { UserContactError } from 'src/pages/User/contact'
 import { form } from 'src/pages/UserSettings/labels'
 import { Box, Heading } from 'theme-ui'

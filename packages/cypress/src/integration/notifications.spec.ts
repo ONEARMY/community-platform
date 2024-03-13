@@ -90,10 +90,10 @@ describe('[Notifications]', () => {
         expect(notifications.length).to.be.greaterThan(0)
 
         const notification = notifications.find(
-          (n) => n['type'] === 'new_comment',
+          (n) => n['type'] === 'new_comment_discussion',
         )
 
-        expect(notification['type']).to.equal('new_comment')
+        expect(notification['type']).to.equal('new_comment_discussion')
         expect(notification['relevantUrl']).to.equal('/how-to/testing-testing')
         expect(notification['read']).to.equal(false)
         expect(notification['triggeredBy']['displayName']).to.equal(
@@ -118,16 +118,18 @@ describe('[Notifications]', () => {
         const [user] = docs
         const notifications = user['notifications']
         expect(notifications.length).to.greaterThan(0)
-        const notification = notifications.find(
-          (n) => n['type'] === 'new_comment_research',
+        const filtedNotifications = notifications.filter(
+          (n) => n['type'] === 'new_comment_discussion',
         )
 
-        expect(notification['type']).to.equal('new_comment_research')
-        expect(notification['relevantUrl']).to.equal(
+        expect(filtedNotifications[1]['type']).to.equal(
+          'new_comment_discussion',
+        )
+        expect(filtedNotifications[1]['relevantUrl']).to.equal(
           '/research/qwerty#update_0',
         )
-        expect(notification['read']).to.equal(false)
-        expect(notification['triggeredBy']['displayName']).to.equal(
+        expect(filtedNotifications[1]['read']).to.equal(false)
+        expect(filtedNotifications[1]['triggeredBy']['displayName']).to.equal(
           'howto_reader',
         )
       },

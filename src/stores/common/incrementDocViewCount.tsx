@@ -1,7 +1,8 @@
 import { toJS } from 'mobx'
+import { logger } from 'src/logger'
 
-import type { IHowto } from 'src/models'
-import type { DatabaseV2 } from '../databaseV2'
+import type { IHowto, IQuestion } from 'src/models'
+import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
 export const incrementDocViewCount = async (
@@ -9,8 +10,18 @@ export const incrementDocViewCount = async (
   collectionName: DBEndpoint,
   docId,
 ) => {
-  const dbRef = db.collection<IHowto>(collectionName).doc(docId)
+  const dbRef = db
+    .collection<IHowto | IQuestion.Item>(collectionName)
+    .doc(docId)
   const docData = await toJS(dbRef.get('server'))
+
+  if (!docData) {
+    logger.error('Failed to load document data', {
+      db,
+    })
+    return
+  }
+
   const newTotalViews = (docData!.total_views || 0) + 1
 
   if (docData) {

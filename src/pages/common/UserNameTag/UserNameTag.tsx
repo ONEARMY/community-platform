@@ -1,6 +1,6 @@
 import { Username } from 'oa-components'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import { useCommonStores } from 'src/index'
 import { formatDate } from 'src/utils/date'
 import { Flex, Text } from 'theme-ui'
 

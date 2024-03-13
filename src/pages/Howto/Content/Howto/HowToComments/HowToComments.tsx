@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { DiscussionContainer } from 'oa-components'
 import { trackEvent } from 'src/common/Analytics'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
-import { useCommonStores } from 'src/index'
 import { logger } from 'src/logger'
 import { Card, Flex } from 'theme-ui'
 
@@ -23,17 +23,7 @@ export const HowToComments = ({ comments }: IProps) => {
 
   const onSubmit = async (comment: string) => {
     try {
-      const howto = stores.howtoStore.activeHowto
       await stores.howtoStore.addComment(comment)
-      if (howto) {
-        await stores.userNotificationsStore.triggerNotification(
-          'new_comment',
-          howto._createdBy,
-          '/how-to/' + howto.slug,
-          howto.title,
-        )
-      }
-
       setComment('')
 
       const action = 'Submitted'

@@ -31,6 +31,7 @@ export class CollectionReference<T> {
    * This is triggered with the full set of documents (existing + update)
    */
   stream(onUpdate: (value: (T & DBDoc)[]) => void) {
+    logger.debug('CollectionReference.stream')
     const totals: any = {}
     const { cacheDB, serverDB, serverCacheDB } = this.clients
     const endpoint = this.endpoint
@@ -117,6 +118,13 @@ export class CollectionReference<T> {
     limit?: number,
   ) {
     const { serverDB, cacheDB } = this.clients
+    logger.debug('CollectionReference.getWhere', {
+      field,
+      operator,
+      value,
+      serverDB,
+      serverDBQueryCollection: serverDB.queryCollection,
+    })
     let docs = await serverDB.queryCollection<T>(this.endpoint, {
       where: { field, operator, value },
       limit,

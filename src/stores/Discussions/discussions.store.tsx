@@ -7,20 +7,21 @@ import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
-import { updateDiscussionMetadata } from './discussionEvents'
+import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
 import type { IUserPPDB } from 'src/models'
 import type {
   IDiscussion,
   IDiscussionComment,
+  IDiscussionSourceModelOptions,
 } from 'src/models/discussion.models'
-import type { RootStore } from '..'
 import type { DocReference } from '../databaseV2/DocReference'
+import type { IRootStore } from '../RootStore'
 
 const COLLECTION_NAME = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
@@ -97,6 +98,8 @@ export class DiscussionStore extends ModuleStore {
 
         currentDiscussion.comments.push(newComment)
 
+        await this._addNotification(newComment, currentDiscussion)
+
         return this._updateDiscussion(dbRef, currentDiscussion)
       }
     } catch (err) {
@@ -127,7 +130,8 @@ export class DiscussionStore extends ModuleStore {
             (comment) => comment._id === commentId,
           )
 
-          if (targetComment?._creatorId !== user._id) {
+          if (targetComment?._creatorId !== user._id && !hasAdminRights(user)) {
+            logger.error('Comment not editable by user', { user })
             throw new Error('Comment not editable by user')
           }
 
@@ -167,7 +171,8 @@ export class DiscussionStore extends ModuleStore {
             (comment) => comment._id === commentId,
           )
 
-          if (targetComment?._creatorId !== user._id) {
+          if (targetComment?._creatorId !== user._id && !hasAdminRights(user)) {
+            logger.error('Comment can not be deleted by user', { user })
             throw new Error('Comment not editable by user')
           }
 
@@ -183,6 +188,39 @@ export class DiscussionStore extends ModuleStore {
     } catch (err) {
       logger.error(err)
       throw new Error(err?.message)
+    }
+  }
+
+  private async _addNotification(
+    comment: IDiscussionComment,
+    discussion: IDiscussion,
+  ) {
+    const collectionName = getCollectionName(discussion.sourceType)
+    if (!collectionName) {
+      return logger.trace(
+        `Unable to find collection. Discussion notification not sent. sourceType: ${discussion.sourceType}`,
+      )
+    }
+
+    const dbRef = this.db
+      .collection<IDiscussionSourceModelOptions>(collectionName)
+      .doc(discussion.sourceId)
+    const parentContent = toJS(await dbRef.get())
+    const parentComment = discussion.comments.find(
+      ({ _id }) => _id === comment.parentCommentId,
+    )
+
+    if (parentContent) {
+      const username = !parentComment
+        ? parentContent._createdBy
+        : parentComment.creatorName
+
+      return this.userNotificationsStore.triggerNotification(
+        'new_comment_discussion',
+        username,
+        `/${collectionName}/${parentContent.slug}#comment:${comment._id}`,
+        parentContent.title,
+      )
     }
   }
 

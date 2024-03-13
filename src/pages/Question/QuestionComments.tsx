@@ -29,6 +29,8 @@ export const QuestionComments = ({
   )
   const store = useDiscussionStore()
 
+  const highlightedCommentId = window.location.hash.replace('#comment:', '')
+
   useEffect(() => {
     const loadDiscussion = async () => {
       const obj = await store.fetchOrCreateDiscussionBySource(
@@ -97,6 +99,7 @@ export const QuestionComments = ({
         handleEdit={handleEdit}
         handleEditRequest={handleEditRequest}
         handleDelete={handleDelete}
+        highlightedCommentId={highlightedCommentId}
         onSubmit={() => {
           onSubmit(comment)
           setComment('')

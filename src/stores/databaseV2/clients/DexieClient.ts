@@ -2,7 +2,7 @@ import Dexie from 'dexie'
 
 import { logger } from '../../../logger'
 import { DB_ENDPOINTS } from '../endpoints'
-import { DB_QUERY_DEFAULTS } from '../utils/db.utils'
+import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type {
@@ -13,15 +13,17 @@ import type {
 
 /**
  * Update the cache number either when making changes to db architecture
- * or busting cache on db. This is used as the Dexie version number, see:
+ * or busting cache on this._db. This is used as the Dexie version number, see:
  * https://dexie.org/docs/Tutorial/Design#database-versioning
  */
 const DB_CACHE_NUMBER = 20231224
 const CACHE_DB_NAME = 'OneArmyCache'
-const db = new Dexie(CACHE_DB_NAME)
 
 export class DexieClient implements AbstractDatabaseClient {
+  private _db: Dexie
   constructor() {
+    this._db = new Dexie(CACHE_DB_NAME)
+    this._dbInit(DB_CACHE_NUMBER, DEXIE_SCHEMA)
     this._init()
   }
 
@@ -30,24 +32,24 @@ export class DexieClient implements AbstractDatabaseClient {
    ***********************************************************************/
   getDoc<T>(endpoint: IDBEndpoint, docId: string) {
     logger.debug('dexie.getDoc', { endpoint, docId })
-    return db.table<T & DBDoc>(endpoint).get(docId)
+    return this._db.table<T & DBDoc>(endpoint).get(docId)
   }
   setDoc(endpoint: IDBEndpoint, doc: DBDoc) {
     logger.debug('dexie.setDoc', { endpoint, doc })
-    return db.table(endpoint).put(doc)
+    return this._db.table(endpoint).put(doc)
   }
   updateDoc(endpoint: IDBEndpoint, doc: DBDoc) {
     const { _id, ...updateValues } = doc
     logger.debug('dexie.updateValues', updateValues)
-    return db.table(endpoint).update(_id, updateValues)
+    return this._db.table(endpoint).update(_id, updateValues)
   }
   setBulkDocs(endpoint: IDBEndpoint, docs: DBDoc[]) {
     logger.debug('dexie.setBulkDocs', { endpoint, docs })
-    return db.table(endpoint).bulkPut(docs)
+    return this._db.table(endpoint).bulkPut(docs)
   }
   getCollection<T>(endpoint: IDBEndpoint) {
     logger.debug('dexie.getCollection', { endpoint })
-    return db.table<T & DBDoc>(endpoint).toArray()
+    return this._db.table<T & DBDoc>(endpoint).toArray()
   }
   queryCollection<T>(endpoint: IDBEndpoint, queryOpts: DBQueryOptions) {
     logger.debug('dexie.queryCollection', { endpoint, queryOpts })
@@ -56,14 +58,14 @@ export class DexieClient implements AbstractDatabaseClient {
 
   deleteDoc(endpoint: IDBEndpoint, docId: string) {
     logger.debug('dexie.deleteDoc', { endpoint, docId })
-    return db.table(endpoint).delete(docId)
+    return this._db.table(endpoint).delete(docId)
   }
 
   /************************************************************************
    *  Additional Methods - specific only to dexie
    ***********************************************************************/
   getLatestDoc<T>(endpoint: IDBEndpoint) {
-    return db.table<T & DBDoc>(endpoint).orderBy('_modified').last()
+    return this._db.table<T & DBDoc>(endpoint).orderBy('_modified').last()
   }
 
   // mapping to generate firebase query from standard db queryOpts
@@ -72,10 +74,10 @@ export class DexieClient implements AbstractDatabaseClient {
     queryOpts: DBQueryOptions,
   ): Promise<(T & DBDoc)[]> {
     return new Promise((resolve, reject) => {
-      const query = { ...DB_QUERY_DEFAULTS, ...queryOpts }
+      const query = getQueryOptions(queryOpts)
       const { limit, orderBy, order, where } = query
       // all queries sent with a common list of conditions
-      const table = db.table<T>(endpoint)
+      const table = this._db.table<T>(endpoint)
       const filtered = where
         ? this._generateQueryWhereRef(table, where)
         : table.toCollection()
@@ -123,10 +125,9 @@ export class DexieClient implements AbstractDatabaseClient {
 
   private _init() {
     const { location } = window
-    this._dbInit(DB_CACHE_NUMBER, DEXIE_SCHEMA)
     // test open db, catch errors for upgrade version not defined or
     // idb not supported
-    db.open().catch(async (err) => {
+    this._db.open().catch(async (err) => {
       // logger.error('Failed to open DB', err.inner)
       // NOTE - invalid state error suggests dexie not supported, so
       // try reloading with cachedb disabled (see db index for implementation)
@@ -156,7 +157,11 @@ export class DexieClient implements AbstractDatabaseClient {
    * of cache-busting
    */
   private _dbInit(version: number, schema: { [key: string]: string | null }) {
-    db.version(version).stores(schema)
+    try {
+      this._db.version(version).stores(schema)
+    } catch (err) {
+      logger.error('Failed to initialise DB', err)
+    }
   }
 }
 /************************************************************************

@@ -1,13 +1,13 @@
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
 
 const mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
 const mockUpdateUserBadge = jest.fn()
 
-jest.mock('src/index', () => ({
+jest.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {

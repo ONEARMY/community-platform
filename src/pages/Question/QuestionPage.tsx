@@ -69,6 +69,8 @@ export const QuestionPage = () => {
                 transformToUserComments(discussion.comments, store.activeUser),
               )
             }
+
+            store.incrementViewCount(foundQuestion._id)
           } catch (err) {
             logger.error('Failed to fetch discussion', {
               err,

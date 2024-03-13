@@ -11,13 +11,13 @@ import { FactoryUser } from 'src/test/factories/User'
 import { HowtoStore } from './howto.store'
 
 import type { IHowtoDB, IUser } from 'src/models'
-import type { RootStore } from '..'
+import type { IRootStore } from '../RootStore'
 
 const factory = async (
   howTos: IHowtoDB[] = [FactoryHowto({})],
   userOverloads?: Partial<IUser>,
 ) => {
-  const store = new HowtoStore({} as RootStore)
+  const store = new HowtoStore({} as IRootStore)
 
   const howToItem = howTos[0]
 
@@ -350,6 +350,15 @@ describe('howto.store', () => {
               location: 'comment:' + newHowto.comments[0]._id,
             },
           ]),
+        )
+        expect(
+          store.userNotificationsStore.triggerNotification,
+        ).toHaveBeenCalledTimes(2)
+        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
+          'new_comment_discussion',
+          newHowto._createdBy,
+          '/how-to/' + newHowto.slug,
+          newHowto.title,
         )
       })
 

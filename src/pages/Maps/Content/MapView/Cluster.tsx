@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Marker } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 

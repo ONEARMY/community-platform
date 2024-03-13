@@ -1,17 +1,18 @@
 import { CONFIG } from '../config/config'
-import {
-  PP_PROJECT_IMAGE,
-  PK_PROJECT_IMAGE,
-  PP_PROJECT_NAME,
-  PK_PROJECT_NAME,
-  PP_SIGNOFF,
-  PK_SIGNOFF,
-} from './constants'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IMessageDB, INotification, IUserDB } from '../models'
+import { DB_ENDPOINTS } from '../models'
+import {
+  PK_PROJECT_IMAGE,
+  PK_PROJECT_NAME,
+  PK_SIGNOFF,
+  PP_PROJECT_IMAGE,
+  PP_PROJECT_NAME,
+  PP_SIGNOFF,
+} from './constants'
 
 import type { NotificationType } from 'oa-shared'
+import type { IMessageDB, INotification, IUserDB } from '../models'
 
 export const errors = {
   MESSAGE_LIMIT:
@@ -65,7 +66,10 @@ export const isBelowMessageLimit = async (email) => {
 
 export const isReceiverContactable = async (userName) => {
   const { toUser } = await getUserAndEmail(userName)
-  if (!toUser.isContactableByPublic) {
+  if (
+    typeof toUser.isContactableByPublic === 'boolean' &&
+    !toUser.isContactableByPublic
+  ) {
     throw new Error(errors.PROFILE_NOT_CONTACTABLE)
   }
   return true
@@ -200,13 +204,12 @@ const getResourceLink = (
 
 const getCommentListItem = (notification: INotification) => `
 <p>
-    New comment on your ${getResourceLink(
-      notification.type,
-      notification.relevantUrl,
-    )} by ${getUserLink(
-  notification.triggeredBy.displayName,
-  notification.triggeredBy.userId,
-)}
+  New comment by ${getUserLink(
+    notification.triggeredBy.displayName,
+    notification.triggeredBy.userId,
+  )} on <a href='${SITE_URL}${notification.relevantUrl}'>${
+  notification.title
+}</a>
 </p>`
 
 const getMentionListItem = (notification: INotification) => `
@@ -263,7 +266,9 @@ const getModerationRejectedListItem = (notification: INotification) => `
 </p>`
 
 const isCommentNotification = (notification: INotification) =>
-  ['new_comment_research', 'new_comment'].includes(notification.type)
+  ['new_comment_research', 'new_comment', 'new_comment_discussion'].includes(
+    notification.type,
+  )
 
 const isMentionNotification = (notification: INotification) =>
   ['research_mention', 'howto_mention'].includes(notification.type)

@@ -9,7 +9,7 @@ import { Storage } from '../storage'
 import type { IDBEndpoint, ILocation } from 'src/models/common.models'
 import type { ISelectedTags } from 'src/models/tags.model'
 import type { IConvertedFileMeta } from '../../types'
-import type { RootStore } from '../index'
+import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 /**
  * The module store is used to share methods and data between other stores, including
@@ -55,7 +55,7 @@ export class ModuleStore {
     return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
   // this can be subscribed to in individual stores
-  constructor(private rootStore: RootStore, private basePath?: IDBEndpoint) {
+  constructor(private rootStore: IRootStore, private basePath?: IDBEndpoint) {
     this.rootStore = rootStore
 
     if (!this.rootStore) {
@@ -98,6 +98,10 @@ export class ModuleStore {
   }
   get userNotificationsStore() {
     return this.rootStore!.stores.userNotificationsStore
+  }
+
+  get discussionStore() {
+    return this.rootStore!.stores.discussionStore
   }
 
   /****************************************************************************

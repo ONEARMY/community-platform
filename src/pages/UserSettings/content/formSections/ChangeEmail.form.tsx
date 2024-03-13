@@ -1,123 +1,141 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Button, FieldInput } from 'oa-components'
+import { Button, FieldInput, Icon } from 'oa-components'
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/index'
-import { buttons, fields } from 'src/pages/UserSettings/labels'
-import { Flex, Label, Text } from 'theme-ui'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { FormFieldWrapper } from 'src/pages/Howto/Content/Common'
+import { UserContactError } from 'src/pages/User/contact/UserContactError'
+import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
+import { Flex, Heading, Text } from 'theme-ui'
+
+import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
 interface IFormValues {
-  password?: string
-  newEmail?: string
+  password: string
+  newEmail: string
 }
-interface IState {
-  errorMsg?: string
-  msg?: string
-  showChangeEmailForm?: boolean
-  formValues: IFormValues
-  email?: string
-}
+
 export const ChangeEmailForm = () => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
+  const [currentEmail, setCurrentEmail] = useState<string | null>(null)
+
   const { userStore } = useCommonStores().stores
-  const [state, setState] = useState<IState>({ formValues: {} })
-  const _labelStyle = { fontSize: 2, mb: 2 }
+  const formId = 'changeEmail'
+  const glyph = isExpanded ? 'arrow-full-up' : 'arrow-full-down'
 
   useEffect(() => {
     getUserEmail()
   }, [])
 
-  const submit = async (values: IFormValues) => {
+  const onSubmit = async (values: IFormValues) => {
     const { password, newEmail } = values
-    if (password && newEmail) {
-      try {
-        await userStore.changeUserEmail(password, newEmail)
-        setState({
-          msg: 'Email changed',
-          formValues: {},
-          errorMsg: undefined,
-          showChangeEmailForm: false,
-        })
-        getUserEmail()
-      } catch (error) {
-        setState({ errorMsg: error.message, formValues: {} })
-      }
+    try {
+      await userStore.changeUserEmail(password, newEmail)
+      setSubmitResults({
+        type: 'success',
+        message: `Email changed to ${newEmail}. You've been sent two emails now(!) One to your old email address to check this was you and the other to your new address to verify it.`,
+      })
+      setIsExpanded(false)
+      getUserEmail()
+    } catch (error) {
+      setSubmitResults({ type: 'error', message: error.message })
     }
   }
 
   const getUserEmail = async () => {
     const email = await userStore.getUserEmail()
-    setState((state) => ({ ...state, email: email }))
+    setCurrentEmail(email)
   }
 
   return (
-    <>
-      <Button
-        my={3}
-        mr={2}
-        variant={'secondary'}
-        onClick={() =>
-          setState((state) => ({
-            ...state,
-            showChangeEmailForm: !state.showChangeEmailForm,
-          }))
-        }
-      >
-        {buttons.changeEmail}
-      </Button>
-      {state.showChangeEmailForm && (
+    <Flex
+      data-cy="changeEmailContainer"
+      sx={{ flexDirection: 'column', gap: 2 }}
+    >
+      <UserContactError submitResults={submitResults} />
+
+      {isExpanded && currentEmail && (
         <Form
-          onSubmit={(values) => submit(values as IFormValues)}
-          initialValues={state.formValues}
-          render={({ submitting, values, handleSubmit }) => {
+          onSubmit={onSubmit}
+          id={formId}
+          render={({ handleSubmit, submitting, values }) => {
             const { password, newEmail } = values
             const disabled =
-              submitting || !password || !newEmail || newEmail === state.email
+              submitting || !password || !newEmail || newEmail === currentEmail
+
             return (
-              <form onSubmit={handleSubmit}>
-                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                  <Text>
-                    {fields.email.title}: {state.email}
-                  </Text>
-                </Flex>
-                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                  <Label htmlFor="newEmail" sx={_labelStyle}>
-                    {fields.newEmail.title} :
-                  </Label>
+              <Flex
+                data-cy="changeEmailForm"
+                sx={{ flexDirection: 'column', gap: 2 }}
+              >
+                <Heading variant="small">{headings.changeEmail}</Heading>
+
+                <Text sx={{ fontSize: 1 }}>
+                  {fields.email.title}: <strong>{currentEmail}</strong>
+                </Text>
+
+                <FormFieldWrapper
+                  text={fields.newEmail.title}
+                  htmlFor="newEmail"
+                  required
+                >
                   <Field
-                    name="newEmail"
+                    autoComplete="off"
                     component={FieldInput}
+                    data-cy="newEmail"
+                    name="newEmail"
                     placeholder={fields.newEmail.placeholder}
                     type="email"
-                    autocomplete="off"
                     required
                   />
-                </Flex>
-                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                  <Label htmlFor="oldPassword" sx={_labelStyle}>
-                    {fields.password.title} :
-                  </Label>
-                  <PasswordField
-                    name="password"
-                    component={FieldInput}
-                    type="password"
-                    autocomplete="off"
-                    required
-                  />
-                </Flex>
-                <Button
-                  type="submit"
-                  disabled={disabled}
-                  variant={disabled ? 'primary' : 'primary'}
+                </FormFieldWrapper>
+
+                <FormFieldWrapper
+                  text={fields.password.title}
+                  htmlFor="password"
+                  required
                 >
-                  {buttons.submit}
+                  <PasswordField
+                    autoComplete="off"
+                    component={FieldInput}
+                    data-cy="password"
+                    name="password"
+                    required
+                  />
+                </FormFieldWrapper>
+
+                <Button
+                  data-cy="changeEmailSubmit"
+                  disabled={disabled}
+                  form={formId}
+                  onClick={handleSubmit}
+                  type="submit"
+                  sx={{
+                    alignSelf: 'flex-start',
+                  }}
+                >
+                  {buttons.submitNewEmail}
                 </Button>
-                <Text color="error">{state.errorMsg}</Text>
-              </form>
+              </Flex>
             )
           }}
         />
       )}
-      <Text>{state.msg}</Text>
-    </>
+
+      <Button
+        data-cy="changeEmailButton"
+        onClick={() => setIsExpanded(!isExpanded)}
+        variant="secondary"
+        sx={{
+          alignSelf: 'flex-start',
+        }}
+      >
+        <Flex sx={{ gap: 2 }}>
+          <Text>{buttons.changeEmail}</Text>
+          <Icon glyph={glyph} />
+        </Flex>
+      </Button>
+    </Flex>
   )
 }

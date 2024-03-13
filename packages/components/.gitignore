@@ -2,3 +2,4 @@ node_modules
 storybook-static
 dist
 coverage
+reports

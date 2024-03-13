@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 import { Button, FieldInput, TextNotification } from 'oa-components'
 import { getFriendlyMessage } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { required } from 'src/utils/validators'
 import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
 

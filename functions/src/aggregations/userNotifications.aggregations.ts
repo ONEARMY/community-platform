@@ -1,11 +1,48 @@
 import * as functions from 'firebase-functions'
-import { DB_ENDPOINTS, IUserDB } from '../models'
+import { DB_ENDPOINTS, INotification, IUserDB } from '../models'
 import { handleDBAggregations, VALUE_MODIFIERS } from './common.aggregations'
-import type { IAggregation } from './common.aggregations'
+import type { IAggregation, IDBChange } from './common.aggregations'
 import { EmailNotificationFrequency } from 'oa-shared'
 
 interface INotificationAggregation extends IAggregation {
   sourceFields: (keyof IUserDB)[]
+}
+
+const getPendingNotifications = (notifications: INotification[]) => {
+  return notifications.filter((n) => !n.notified && !n.read && !n.email)
+}
+
+const shouldSendNotifications = (
+  emailFrequency: EmailNotificationFrequency,
+  pendingNotifications: INotification[],
+) => {
+  return (
+    emailFrequency &&
+    emailFrequency !== EmailNotificationFrequency.NEVER &&
+    pendingNotifications.length > 0
+  )
+}
+
+export const processNotifications = (dbChange: IDBChange) => {
+  const user = dbChange.after.data() as IUserDB
+  const emailFrequency = user.notification_settings?.emailFrequency || null
+  const pending = getPendingNotifications(user.notifications || [])
+
+  // remove user from list if they do not have emails enabled or no pending notifications
+  if (!shouldSendNotifications(emailFrequency, pending)) {
+    return {
+      [user._id]: VALUE_MODIFIERS.delete(),
+    }
+  }
+
+  // return list of pending notifications alongside metadata
+  return {
+    [user._id]: {
+      _authID: user._authID,
+      emailFrequency,
+      notifications: pending,
+    },
+  }
 }
 
 const UserNotificationAggregation: INotificationAggregation =
@@ -16,28 +53,7 @@ const UserNotificationAggregation: INotificationAggregation =
     changeType: 'updated',
     targetCollection: 'user_notifications',
     targetDocId: 'emails_pending',
-    process: ({ dbChange }) => {
-      const user: IUserDB = dbChange.after.data() as any
-      const { _id, _authID, notification_settings, notifications } = user
-      const emailFrequency = notification_settings?.emailFrequency || null
-      const pending = (notifications || []).filter(
-        (n) => !n.notified && !n.read && !n.email,
-      )
-      // remove user from list if they do not have emails enabled or no pending notifications
-      if (
-        !emailFrequency ||
-        emailFrequency === EmailNotificationFrequency.NEVER ||
-        pending.length === 0
-      ) {
-        return {
-          [_id]: VALUE_MODIFIERS.delete(),
-        }
-      }
-      // return list of pending notifications alongside metadata
-      return {
-        [_id]: { _authID, emailFrequency, notifications: pending },
-      }
-    },
+    process: ({ dbChange }) => processNotifications(dbChange),
   }
 
 /** Watch changes to all user docs and apply aggregations */

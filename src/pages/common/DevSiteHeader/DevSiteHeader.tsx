@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite'
 import { Select } from 'oa-components'
 import { UserRole } from 'oa-shared'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { DEV_SITE_ROLE, SITE, VERSION } from 'src/config/config'
-import { useCommonStores } from 'src/index'
 import { Box, Flex, Text } from 'theme-ui'
 
 /**

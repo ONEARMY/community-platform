@@ -12,13 +12,14 @@ import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 import type { IUser } from 'src/models'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
-import type { RootStore } from '../index'
+import type { IRootStore } from '../RootStore'
 
 const COLLECTION_NAME = 'questions'
 
@@ -49,7 +50,7 @@ export class QuestionStore extends ModuleStore {
   @observable
   isFetching = true
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
     super.init()
@@ -79,6 +80,11 @@ export class QuestionStore extends ModuleStore {
         this.isFetching = false
       })
     })
+  }
+
+  public async incrementViewCount(documentId: string) {
+    await incrementDocViewCount(this.db, COLLECTION_NAME, documentId)
+    throw new Error('Method not implemented.')
   }
 
   public updateActiveSorter(sorter: ItemSortingOption) {

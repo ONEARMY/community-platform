@@ -1,9 +1,12 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  updateEmail,
+  updatePassword,
   updateProfile,
 } from 'firebase/auth'
 import { uniqBy } from 'lodash'
@@ -29,7 +32,7 @@ import type {
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { IConvertedFileMeta } from '../../types'
-import type { RootStore } from '..'
+import type { IRootStore } from '../RootStore'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
 */
@@ -47,7 +50,7 @@ export class UserStore extends ModuleStore {
   @observable
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
-  constructor(rootStore: RootStore) {
+  constructor(rootStore: IRootStore) {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()
@@ -115,11 +118,11 @@ export class UserStore extends ModuleStore {
     return signInWithEmailAndPassword(auth, email, password)
   }
 
-  public async getUserByUsername(username: string) {
+  public async getUserByUsername(username: string): Promise<IUserPPDB | null> {
     const [user] = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('_id', '==', username)
-    return user
+    return user || null
   }
 
   // TODO
@@ -329,25 +332,34 @@ export class UserStore extends ModuleStore {
     return user.email as string
   }
 
+  public async getUserEmailIsVerified() {
+    if (!this.authUser) return
+    return this.authUser.emailVerified
+  }
+
   public async changeUserPassword(oldPassword: string, newPassword: string) {
-    // *** TODO - (see code in change pw component and move here)
+    if (!this.authUser) return
+
     const user = this.authUser as firebase.default.User
     const credentials = EmailAuthProvider.credential(
       user.email as string,
       oldPassword,
     )
-    await user.reauthenticateWithCredential(credentials)
-    return user.updatePassword(newPassword)
+    await reauthenticateWithCredential(user, credentials)
+    return updatePassword(user, newPassword)
   }
 
   public async changeUserEmail(password: string, newEmail: string) {
+    if (!this.authUser) return
+
     const user = this.authUser as firebase.default.User
     const credentials = EmailAuthProvider.credential(
       user.email as string,
       password,
     )
-    await user.reauthenticateWithCredential(credentials)
-    return user.updateEmail(newEmail)
+    await reauthenticateWithCredential(user, credentials)
+    await updateEmail(user, newEmail)
+    return this.sendEmailVerification()
   }
 
   public async sendPasswordResetEmail(email: string) {

@@ -15,7 +15,7 @@ import { IModerationStatus } from 'oa-shared'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
-import { useCommonStores } from 'src/index'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {

@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { faker } from '@faker-js/faker'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { ResearchUpdateStatus, UserRole } from 'oa-shared'
@@ -16,6 +17,7 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { formatDate } from 'src/utils/date'
 
 import ResearchArticle from './ResearchArticle'
 
@@ -27,7 +29,7 @@ const activeUser = FactoryUser({
 
 const mockUser = FactoryUser({ country: 'AF' })
 
-jest.mock('src/index', () => ({
+jest.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
@@ -223,6 +225,117 @@ describe('Research Article', () => {
       expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
       expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
     })
+
+    it('shows comments', async () => {
+      // Arrange
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        formatResearchCommentList: jest.fn().mockImplementation((c) => {
+          return c
+        }),
+        activeResearchItem: FactoryResearchItem({
+          updates: [
+            FactoryResearchItemUpdate({
+              title: 'Research Update #1',
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: false,
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #2',
+              status: ResearchUpdateStatus.DRAFT,
+              _deleted: false,
+            }),
+            FactoryResearchItemUpdate({
+              title: 'Research Update #3',
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: false,
+              comments: [
+                FactoryComment({
+                  text: 'First test comment',
+                }),
+                FactoryComment({
+                  text: 'Second test comment',
+                }),
+              ],
+            }),
+          ],
+        }),
+      })
+      // Act
+      const wrapper = getWrapper()
+
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 200))
+        wrapper.getByText('View 2 Comments').click()
+      })
+
+      // Assert
+      await waitFor(async () => {
+        expect(wrapper.getByText('First test comment')).toBeInTheDocument()
+      })
+    })
+
+    it('does not show edit timestamp, when create displays the same value', async () => {
+      const created = faker.date.past()
+      const modified = new Date(created)
+      modified.setHours(15)
+      const update = FactoryResearchItemUpdate({
+        _created: created.toString(),
+        _modified: modified.toString(),
+        title: 'A title',
+        description: 'A description',
+      })
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        formatResearchCommentList: jest.fn().mockImplementation((c) => {
+          return c
+        }),
+        activeResearchItem: FactoryResearchItem({
+          updates: [update],
+        }),
+      })
+
+      // Act
+      const wrapper = getWrapper()
+
+      // Assert
+      await waitFor(async () => {
+        expect(() =>
+          wrapper.getAllByText(`edited ${formatDate(modified)}`),
+        ).toThrow()
+      })
+    })
+
+    it('does show both created and edit timestamp, when different', async () => {
+      const modified = faker.date.future()
+      const update = FactoryResearchItemUpdate({
+        _created: faker.date.past().toString(),
+        status: ResearchUpdateStatus.PUBLISHED,
+        _modified: modified.toString(),
+        title: 'A title',
+        description: 'A description',
+        _deleted: false,
+      })
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        formatResearchCommentList: jest.fn().mockImplementation((c) => {
+          return c
+        }),
+        activeResearchItem: FactoryResearchItem({
+          updates: [update],
+        }),
+      })
+
+      // Act
+      const wrapper = getWrapper()
+
+      // Assert
+      await waitFor(async () => {
+        expect(() =>
+          wrapper.getAllByText(`edited ${formatDate(modified)}`),
+        ).not.toThrow()
+      })
+    })
   })
 
   it('shows only published updates', async () => {
@@ -255,55 +368,6 @@ describe('Research Article', () => {
     // Assert
     expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
     expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
-  })
-
-  it('shows comments for a research update', async () => {
-    // Arrange
-    ;(useResearchStore as jest.Mock).mockReturnValue({
-      ...mockResearchStore,
-      formatResearchCommentList: jest.fn().mockImplementation((c) => {
-        return c
-      }),
-      activeResearchItem: FactoryResearchItem({
-        updates: [
-          FactoryResearchItemUpdate({
-            title: 'Research Update #1',
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-          }),
-          FactoryResearchItemUpdate({
-            title: 'Research Update #2',
-            status: ResearchUpdateStatus.DRAFT,
-            _deleted: false,
-          }),
-          FactoryResearchItemUpdate({
-            title: 'Research Update #3',
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-            comments: [
-              FactoryComment({
-                text: 'First test comment',
-              }),
-              FactoryComment({
-                text: 'Second test comment',
-              }),
-            ],
-          }),
-        ],
-      }),
-    })
-    // Act
-    const wrapper = getWrapper()
-
-    await act(async () => {
-      await new Promise((r) => setTimeout(r, 200))
-      wrapper.getByText('View 2 Comments').click()
-    })
-
-    // Assert
-    await waitFor(async () => {
-      expect(wrapper.getByText('First test comment')).toBeInTheDocument()
-    })
   })
 })
 

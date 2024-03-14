@@ -30,16 +30,6 @@ export const HowToCard = (props: IProps) => {
       data-cy-howto-slug={howto.slug}
       sx={{ borderRadius: 2, display: 'flex', flexDirection: 'column' }}
     >
-      {howto.moderation !== IModerationStatus.ACCEPTED && (
-        <>
-          <ModerationStatus
-            status={howto.moderation}
-            contentType="howto"
-            sx={{ top: '62%', position: 'absolute', right: 0 }}
-          />
-        </>
-      )}
-
       <RouterLink
         key={howto._id}
         to={`/how-to/${encodeURIComponent(howto.slug)}`}
@@ -69,6 +59,11 @@ export const HowToCard = (props: IProps) => {
           padding: 2,
         }}
       >
+        {howto.moderation !== IModerationStatus.ACCEPTED && (
+          <Flex sx={{ alignSelf: 'flex-end', marginTop: -10, marginBottom: 2 }}>
+            <ModerationStatus status={howto.moderation} contentType="howto" />
+          </Flex>
+        )}
         <Flex sx={{ gap: 1, flexDirection: 'column' }}>
           <Heading variant="small" color={'black'}>
             <RouterLink

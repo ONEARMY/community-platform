@@ -68,3 +68,12 @@ export const WithCharacterCounts: StoryFn<typeof FieldTextarea> = () => (
     })}
   </>
 )
+
+export const CustomRowHeight: StoryFn<typeof FieldTextarea> = () => (
+  <FieldTextarea
+    input={{} as any}
+    placeholder="Text area input"
+    meta={{}}
+    rows={10}
+  />
+)

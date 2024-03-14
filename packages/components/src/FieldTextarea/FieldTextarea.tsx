@@ -13,6 +13,7 @@ export interface Props extends FieldProps {
   showCharacterCount?: boolean
   'data-cy'?: string
   customOnBlur?: (event: any) => void
+  rows?: number
 }
 
 type InputModifiers = {
@@ -43,6 +44,7 @@ export const FieldTextarea = ({
   minLength = 0,
   maxLength,
   showCharacterCount,
+  rows,
   ...rest
 }: Props) => {
   const [curLength, setLength] = useState<number>(input?.value?.length ?? 0)
@@ -54,6 +56,10 @@ export const FieldTextarea = ({
         minLength={minLength}
         maxLength={maxLength}
         variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
+        rows={rows ? rows : 5}
+        sx={{
+          resize: rest?.style?.resize ? rest.style.resize : 'vertical',
+        }}
         {...input}
         {...rest}
         onBlur={(e) => {

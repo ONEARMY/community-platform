@@ -7,9 +7,7 @@ import { logger } from 'src/logger'
 import { PostingGuidelines } from 'src/pages/Question/Content/Common'
 import * as LABELS from 'src/pages/Question/labels'
 import { useQuestionStore } from 'src/stores/Question/question.store'
-import {
-  setAllowDraftSaveFalse,
-} from 'src/utils/validators'
+import { setAllowDraftSaveFalse } from 'src/utils/validators'
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
 import {

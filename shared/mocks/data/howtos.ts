@@ -2502,6 +2502,9 @@ export const howtos = {
     tags: {
       g2rhzzwstNhU62CUs9ak: true,
     },
+    category: {
+      label: 'product',
+    },
     title: 'Make glass-like beams',
     _modified: '2019-09-18T21:53:33.211Z',
     _created: '2019-09-18T14:49:54.311Z',

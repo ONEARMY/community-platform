@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import {
   Button,
+  Category,
   IconCountWithTooltip,
   Loader,
   ModerationStatus,
@@ -65,10 +66,18 @@ export const QuestionListing = observer(() => {
                 <Grid columns={[1, '3fr 1fr']} gap="40px">
                   <Box sx={{ flexDirection: 'column' }}>
                     <Link to={url} key={q._id}>
-                      <Flex sx={{ width: '100%' }}>
+                      <Flex
+                        sx={{
+                          width: '100%',
+
+                          flexDirection: ['column', 'row'],
+                          gap: [0, 3],
+                          mb: [1, 0],
+                        }}
+                      >
                         <Heading
                           as="span"
-                          mb={2}
+                          mb={1}
                           sx={{
                             color: 'black',
                             fontSize: [3, 3, 4],
@@ -76,6 +85,12 @@ export const QuestionListing = observer(() => {
                         >
                           {q.title}
                         </Heading>
+                        {q.category && (
+                          <Category
+                            category={q.category}
+                            sx={{ fontSize: 2 }}
+                          />
+                        )}
                       </Flex>
                     </Link>
                     <Flex>

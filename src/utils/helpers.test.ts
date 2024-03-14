@@ -267,7 +267,7 @@ describe('src/utils/helpers', () => {
     })
   })
 
-  describe('calculateTotalComments Function', () => {
+  describe('getResearchTotalCommentCount Function', () => {
     it('should return 0 when item has no updates', () => {
       const item = { item: {} } as any
       expect(getResearchTotalCommentCount(item)).toBe(0)
@@ -280,6 +280,34 @@ describe('src/utils/helpers', () => {
             status: ResearchUpdateStatus.PUBLISHED,
             _deleted: false,
             comments: [],
+          }),
+        ),
+      } as IResearch.ItemDB | IItem
+      expect(getResearchTotalCommentCount(item)).toBe(0)
+    })
+
+    it('should use totalCommentCount if present', () => {
+      const item = {
+        totalCommentCount: 5,
+        updates: Array.from({ length: 3 }).fill(
+          FactoryResearchItemUpdate({
+            status: ResearchUpdateStatus.PUBLISHED,
+            _deleted: false,
+            comments: Array.from({ length: 3 }),
+          }),
+        ),
+      } as IResearch.ItemDB | IItem
+      expect(getResearchTotalCommentCount(item)).toBe(5)
+    })
+
+    it('should use totalCommentCount when 0', () => {
+      const item = {
+        totalCommentCount: 0,
+        updates: Array.from({ length: 3 }).fill(
+          FactoryResearchItemUpdate({
+            status: ResearchUpdateStatus.PUBLISHED,
+            _deleted: false,
+            comments: Array.from({ length: 3 }),
           }),
         ),
       } as IResearch.ItemDB | IItem

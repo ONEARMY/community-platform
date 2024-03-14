@@ -26,6 +26,7 @@ export interface IItem {
   collaborators?: string[]
   total_downloads?: number
   comments?: IComment[]
+  totalCommentCount?: number
 }
 
 export enum ItemSortingOption {

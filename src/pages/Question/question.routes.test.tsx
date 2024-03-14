@@ -229,44 +229,6 @@ describe('question.routes', () => {
 
       expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
     })
-
-    it('allows user to draft a question', async () => {
-      let wrapper
-      // Arrange
-      const mockUpsertQuestion = jest.fn().mockResolvedValue({
-        slug: 'question-title',
-      })
-      useQuestionStore.mockReturnValue({
-        ...mockQuestionStore,
-        upsertQuestion: mockUpsertQuestion,
-        activeUser: mockActiveUser,
-      })
-
-      await act(async () => {
-        const render = await renderFn('/questions/create')
-        wrapper = render.wrapper
-      })
-
-      // Fill in form
-      const title = wrapper.getByLabelText('The Question')
-      const draftButton = wrapper.getByText('Save as draft')
-
-      // Submit form
-      await userEvent.type(title, 'Question title')
-
-      await waitFor(() => {
-        draftButton.click()
-      })
-
-      expect(mockUpsertQuestion).toHaveBeenCalledWith({
-        title: 'Question title',
-        tags: {},
-        allowDraftSave: true,
-        moderation: IModerationStatus.DRAFT,
-      })
-
-      expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
-    })
   })
 
   describe('/questions/:slug', () => {

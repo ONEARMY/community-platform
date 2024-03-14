@@ -1,29 +1,23 @@
-import { Field, Form } from 'react-final-form'
+import { Form } from 'react-final-form'
 import { useNavigate } from 'react-router-dom'
-import { Button, ElWithBeforeIcon, FieldInput } from 'oa-components'
+import { Button, ElWithBeforeIcon } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { logger } from 'src/logger'
-import {
-  QUESTION_MAX_DESCRIPTION_LENGTH,
-  QUESTION_MAX_TITLE_LENGTH,
-  QUESTION_MIN_TITLE_LENGTH,
-} from 'src/pages/Question/constants'
 import { PostingGuidelines } from 'src/pages/Question/Content/Common'
 import * as LABELS from 'src/pages/Question/labels'
 import { useQuestionStore } from 'src/stores/Question/question.store'
-import { COMPARISONS } from 'src/utils/comparisons'
 import {
-  composeValidators,
-  draftValidationWrapper,
-  minValue,
-  required,
   setAllowDraftSaveFalse,
 } from 'src/utils/validators'
-import { Box, Card, Flex, Heading, Label } from 'theme-ui'
+import { Box, Card, Flex, Heading } from 'theme-ui'
 
-import { CategoriesSelect } from '../../../Howto/Category/CategoriesSelect'
+import {
+  QuestionCategoryField,
+  QuestionDescriptionField,
+  QuestionTagsField,
+  QuestionTitleField,
+} from './FormFields'
 
 import type { IQuestion } from 'src/models'
 
@@ -88,74 +82,11 @@ export const QuestionForm = (props: IProps) => {
               <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
                 <PostingGuidelines />
               </Box>
-              <Card mt={3} p={4} sx={{ overflow: 'visible' }}>
-                <Box mb={3}>
-                  <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>
-                    {LABELS.overview.question.title}
-                  </Label>
-                  <Field
-                    name="title"
-                    id="title"
-                    validate={composeValidators(
-                      required,
-                      minValue(QUESTION_MIN_TITLE_LENGTH),
-                    )}
-                    component={FieldInput}
-                    placeholder={LABELS.overview.question.placeholder}
-                    minLength={QUESTION_MIN_TITLE_LENGTH}
-                    maxLength={QUESTION_MAX_TITLE_LENGTH}
-                    showCharacterCount
-                  />
-                </Box>
-
-                <Box mb={3}>
-                  <Label htmlFor="description" sx={{ fontSize: 2, mb: 2 }}>
-                    {LABELS.overview.description.title}
-                  </Label>
-                  <Field
-                    name="description"
-                    id="description"
-                    label="Information"
-                    validate={(value, allValues) =>
-                      draftValidationWrapper(value, allValues, required)
-                    }
-                    component={FieldInput}
-                    placeholder={LABELS.overview.description.title}
-                    maxLength={QUESTION_MAX_DESCRIPTION_LENGTH}
-                    showCharacterCount
-                  />
-                </Box>
-
-                <Box mb={3}>
-                  <Label htmlFor="categories" sx={{ fontSize: 2, mb: 2 }}>
-                    Which categories fit your question?
-                  </Label>
-                  <Field
-                    name="questionCategory"
-                    render={({ input, ...rest }) => (
-                      <CategoriesSelect
-                        {...rest}
-                        isForm={true}
-                        onChange={input.onChange}
-                        value={input.value}
-                        placeholder="Select category"
-                        type="question"
-                      />
-                    )}
-                  />
-                </Box>
-
-                <Box sx={{ flexDirection: 'column' }} mb={3}>
-                  <Label htmlFor="tags" sx={{ fontSize: 2, mb: 2 }}>
-                    {LABELS.overview.tags.title}
-                  </Label>
-                  <Field
-                    name="tags"
-                    component={TagsSelectField}
-                    category="question"
-                    isEqual={COMPARISONS.tags}
-                  />
-                </Box>
+              <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
+                <QuestionTitleField />
+                <QuestionDescriptionField />
+                <QuestionCategoryField />
+                <QuestionTagsField />
               </Card>
             </Box>
           </Flex>

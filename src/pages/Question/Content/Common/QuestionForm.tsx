@@ -20,7 +20,6 @@ import {
   minValue,
   required,
   setAllowDraftSaveFalse,
-  setAllowDraftSaveTrue,
 } from 'src/utils/validators'
 import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 
@@ -41,10 +40,6 @@ export const QuestionForm = (props: IProps) => {
     props.formValues?.moderation === IModerationStatus.DRAFT
       ? LABELS.buttons.create
       : LABELS.buttons[props.parentType]
-  const draftButtonText =
-    props.formValues?.moderation === IModerationStatus.DRAFT
-      ? LABELS.buttons.draft.update
-      : LABELS.buttons.draft.create
 
   const headingText = LABELS.headings[props.parentType]
 
@@ -66,7 +61,7 @@ export const QuestionForm = (props: IProps) => {
           logger.error(e)
         }
       }}
-      mutators={{ setAllowDraftSaveFalse, setAllowDraftSaveTrue }}
+      mutators={{ setAllowDraftSaveFalse }}
       initialValues={props.formValues}
       render={({ submitting, handleSubmit, form }) => (
         <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
@@ -183,22 +178,6 @@ export const QuestionForm = (props: IProps) => {
               <Box sx={{ display: ['none', 'none', 'block'] }}>
                 <PostingGuidelines />
               </Box>
-
-              <Button
-                data-cy={'draft'}
-                data-testid="draft"
-                mt={[0, 0, 3]}
-                variant="secondary"
-                type="submit"
-                disabled={submitting}
-                onClick={(event) => {
-                  form.mutators.setAllowDraftSaveTrue()
-                  handleSubmit(event)
-                }}
-                sx={{ width: '100%', display: 'block' }}
-              >
-                <span>{draftButtonText}</span>
-              </Button>
               <Button
                 large
                 data-cy={'submit'}

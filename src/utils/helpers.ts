@@ -213,7 +213,7 @@ export const isContactable = (preference: boolean | undefined) => {
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 
-export const calculateTotalUpdateComments = (
+export const getResearchTotalCommentCount = (
   item: IResearch.ItemDB | IItem,
 ): number => {
   if (item.updates) {

@@ -164,7 +164,7 @@ describe('discussion.store', () => {
       ).toHaveBeenCalledWith(
         'new_comment_discussion',
         discussionItem.comments[0].creatorName,
-        `/questions/undefined#comment:${discussionItem.comments[1]._id}`,
+        `/questions/undefined#comment:${discussionItem.comments[0]._id}`,
         undefined, // concern of another store
       )
     })

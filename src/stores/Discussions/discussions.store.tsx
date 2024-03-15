@@ -215,10 +215,12 @@ export class DiscussionStore extends ModuleStore {
         ? parentContent._createdBy
         : parentComment.creatorName
 
+      const _id = !parentComment ? comment._id : parentComment._id
+
       return this.userNotificationsStore.triggerNotification(
         'new_comment_discussion',
         username,
-        `/${collectionName}/${parentContent.slug}#comment:${comment._id}`,
+        `/${collectionName}/${parentContent.slug}#comment:${_id}`,
         parentContent.title,
       )
     }

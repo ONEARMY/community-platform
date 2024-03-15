@@ -1,54 +1,55 @@
 import { useEffect, useState } from 'react'
-import { DiscussionContainer } from 'oa-components'
+import { DiscussionContainer, Loader } from 'oa-components'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { Card } from 'theme-ui'
 
-import type { IDiscussion, IDiscussionComment, IUserPPDB } from 'src/models'
+import type { IDiscussion } from 'src/models'
 
 interface IProps {
   questionDocId: string
-  comments: IDiscussionComment[]
-  activeUser?: IUserPPDB | null
-  onSubmit: (comment: string) => void
-  commentsUpdated: (comments: IDiscussionComment[]) => void
+  setTotalCommentsCount: (number) => void
 }
 
-export const QuestionComments = ({
-  questionDocId,
-  comments,
-  activeUser,
-  onSubmit,
-  commentsUpdated,
-}: IProps) => {
+export const QuestionComments = (props: IProps) => {
   const [comment, setComment] = useState('')
-  const [discussionObject, setDiscussionObject] = useState<IDiscussion | null>(
-    null,
-  )
-  const store = useDiscussionStore()
+  const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const { questionDocId, setTotalCommentsCount } = props
 
+  const store = useDiscussionStore()
   const highlightedCommentId = window.location.hash.replace('#comment:', '')
+
+  const transformComments = (discussion) => {
+    const comments = transformToUserComments(
+      discussion.comments,
+      store.activeUser,
+    )
+    setTotalCommentsCount(comments.length)
+    return setDiscussion({ ...discussion, comments })
+  }
 
   useEffect(() => {
     const loadDiscussion = async () => {
-      const obj = await store.fetchOrCreateDiscussionBySource(
+      const discussion = await store.fetchOrCreateDiscussionBySource(
         questionDocId,
         'question',
       )
-      if (!obj) {
+      if (!discussion) {
         return
       }
-      setDiscussionObject(obj)
+      transformComments(discussion)
+      setIsLoading(false)
     }
     loadDiscussion()
   }, [questionDocId])
 
   const handleEdit = async (_id: string, comment: string) => {
     logger.info({ _id, comment }, 'question comment edited')
-    if (discussionObject) {
-      store.editComment(discussionObject, _id, comment)
+    if (discussion) {
+      store.editComment(discussion, _id, comment)
     }
   }
 
@@ -58,27 +59,32 @@ export const QuestionComments = ({
 
   const handleDelete = async (_id: string) => {
     logger.debug({ _id }, 'question comment deleted')
-    if (discussionObject) {
-      const updatedObj = await store.deleteComment(discussionObject, _id)
-      commentsUpdated &&
-        commentsUpdated(
-          transformToUserComments(updatedObj?.comments || [], activeUser),
-        )
+    if (discussion) {
+      await store.deleteComment(discussion, _id)
+    }
+  }
+
+  const onSubmit = async (comment: string) => {
+    if (!comment) {
+      return
+    }
+
+    if (discussion) {
+      const updatedDiscussion = await store.addComment(discussion, comment)
+      transformComments(updatedDiscussion)
+      setComment('')
     }
   }
 
   const handleSubmitReply = async (commentId: string, reply) => {
     logger.info({ commentId, reply }, 'reply submitted')
-    if (discussionObject) {
-      const updatedObj = await store.addComment(
-        discussionObject,
+    if (discussion) {
+      const updatedDiscussion = await store.addComment(
+        discussion,
         reply,
         commentId,
       )
-      commentsUpdated &&
-        commentsUpdated(
-          transformToUserComments(updatedObj?.comments || [], activeUser),
-        )
+      transformComments(updatedDiscussion)
     }
   }
 
@@ -89,24 +95,25 @@ export const QuestionComments = ({
         padding: 4,
       }}
     >
-      <DiscussionContainer
-        supportReplies={true}
-        comments={comments as any}
-        maxLength={MAX_COMMENT_LENGTH}
-        comment={comment}
-        onChange={setComment}
-        onMoreComments={() => {}}
-        handleEdit={handleEdit}
-        handleEditRequest={handleEditRequest}
-        handleDelete={handleDelete}
-        highlightedCommentId={highlightedCommentId}
-        onSubmit={() => {
-          onSubmit(comment)
-          setComment('')
-        }}
-        onSubmitReply={handleSubmitReply}
-        isLoggedIn={!!activeUser}
-      />
+      {isLoading ? (
+        <Loader />
+      ) : discussion ? (
+        <DiscussionContainer
+          supportReplies={true}
+          comments={discussion.comments as any}
+          maxLength={MAX_COMMENT_LENGTH}
+          comment={comment}
+          onChange={setComment}
+          onMoreComments={() => {}}
+          handleEdit={handleEdit}
+          handleEditRequest={handleEditRequest}
+          handleDelete={handleDelete}
+          highlightedCommentId={highlightedCommentId}
+          onSubmit={onSubmit}
+          onSubmitReply={handleSubmitReply}
+          isLoggedIn={!!store.activeUser}
+        />
+      ) : null}
     </Card>
   )
 }

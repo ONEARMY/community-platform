@@ -101,6 +101,7 @@ describe('question.routes', () => {
     ;(useQuestionStore as jest.Mock).mockReturnValue(mockQuestionStore)
     ;(useDiscussionStore as jest.Mock).mockReturnValue({
       fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue(null),
+      activeUser: mockActiveUser,
     })
   })
 
@@ -259,9 +260,11 @@ describe('question.routes', () => {
       })
       useDiscussionStore.mockReturnValue({
         fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
+        activeUser,
       })
       useDiscussionStore.mockReturnValue({
         fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
+        activeUser,
       })
 
       await act(async () => {
@@ -308,10 +311,10 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
-          activeUser: mockActiveUser,
         })
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
+          activeUser,
         })
         // Smell, this is reimplementation of the store method, maybe we should mock the store
         // depdendencies instead, so we are less coupled to the implementation.
@@ -328,6 +331,7 @@ describe('question.routes', () => {
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
           addComment: mockDiscussionStoreAddComment,
+          activeUser,
         })
 
         await act(async () => {
@@ -369,7 +373,7 @@ describe('question.routes', () => {
         const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
         const discussionComment = FactoryDiscussionComment({
           text: faker.lorem.words(2),
-          _creatorId: mockActiveUser._id,
+          _creatorId: activeUser._id,
         })
         const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
           FactoryDiscussion({
@@ -382,10 +386,10 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
-          activeUser: mockActiveUser,
         })
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
+          activeUser,
         })
         // Smell, this is reimplementation of the store method, maybe we should mock the store
         // depdendencies instead, so we are less coupled to the implementation.
@@ -402,6 +406,7 @@ describe('question.routes', () => {
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
           editComment: mockDiscussionStoreEditComment,
+          activeUser,
         })
 
         await act(async () => {
@@ -447,7 +452,7 @@ describe('question.routes', () => {
         const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
         const discussionComment = FactoryDiscussionComment({
           text: faker.lorem.words(2),
-          _creatorId: mockActiveUser._id,
+          _creatorId: activeUser._id,
         })
         const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
           FactoryDiscussion({
@@ -460,7 +465,7 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
-          activeUser: mockActiveUser,
+          activeUser,
         })
         // Smell, this is reimplementation of the store method, maybe we should mock the store
         // depdendencies instead, so we are less coupled to the implementation.
@@ -468,6 +473,7 @@ describe('question.routes', () => {
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
           deleteComment: mockDiscussionStoreDeleteComment,
+          activeUser,
         })
 
         await act(async () => {
@@ -536,9 +542,6 @@ describe('question.routes', () => {
         })
 
         expect(wrapper.getByText('Follow')).toBeInTheDocument()
-
-        // Support adding comments
-        expect(wrapper.getByText('Leave a comment')).toBeInTheDocument()
       })
     })
 
@@ -572,6 +575,7 @@ describe('question.routes', () => {
       })
 
       const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,

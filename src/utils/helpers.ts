@@ -139,7 +139,7 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
  */
 export const isAllowedToEditContent = (
   doc: IEditableDoc & { collaborators?: string[] },
-  user?: IUser,
+  user?: IUser | null | undefined,
 ) => {
   if (!user) {
     return false

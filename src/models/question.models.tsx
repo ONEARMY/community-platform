@@ -22,7 +22,7 @@ export namespace IQuestion {
     title: string
     description: string
     tags: ISelectedTags
-    category?: IQuestionCategory
+    questionCategory?: IQuestionCategory
     slug: string
     previousSlugs?: string[]
     creatorCountry?: string

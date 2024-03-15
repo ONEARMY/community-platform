@@ -19,7 +19,7 @@ import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { QuestionComments } from './QuestionComments'
 
-import type { IDiscussionComment, IQuestion } from 'src/models'
+import type { IDiscussion, IDiscussionComment, IQuestion } from 'src/models'
 
 export const QuestionPage = () => {
   const { slug } = useParams()
@@ -27,7 +27,7 @@ export const QuestionPage = () => {
   const discussionStore = useDiscussionStore()
   const [isLoading, setIsLoading] = useState(true)
   const [question, setQuestion] = useState<IQuestion.Item | undefined>()
-  const [discussion, setDiscussion] = useState<IDiscussion.Item | undefined>(
+  const [discussion, setDiscussion] = useState<IDiscussion | undefined>(
     undefined,
   )
   const [isEditable, setIsEditable] = useState(false)
@@ -122,8 +122,8 @@ export const QuestionPage = () => {
         <Loader />
       ) : question ? (
         <>
-          <Card sx={{ position: 'relative', mt: 4 }}>
-            <Box sx={{ p: 4 }}>
+          <Card sx={{ position: 'relative', marginTop: 4 }}>
+            <Flex sx={{ flexDirection: 'column', padding: 4, gap: 2 }}>
               <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
                 <UsefulStatsButton
                   votedUsefulCount={store.votedUsefulCount}
@@ -142,6 +142,7 @@ export const QuestionPage = () => {
                   </Link>
                 )}
               </Flex>
+
               <ModerationStatus
                 status={question.moderation}
                 contentType="question"
@@ -158,21 +159,19 @@ export const QuestionPage = () => {
                 action="Asked"
               />
 
-              <Box mt={3} mb={2}>
-                {question.category && (
-                  <Category
-                    category={question.category}
-                    sx={{ fontSize: 2, my: 2 }}
-                  />
+              <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+                {question.questionCategory && (
+                  <Category category={question.questionCategory} />
                 )}
-                <Heading mb={1}>{question.title}</Heading>
+                <Heading>{question.title}</Heading>
+
                 <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
                   {question.description}
                 </Text>
-              </Box>
-            </Box>
 
                 {question.tags && <TagList tags={question.tags} />}
+              </Flex>
+            </Flex>
 
             <Divider
               sx={{

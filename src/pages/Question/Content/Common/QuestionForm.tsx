@@ -1,8 +1,10 @@
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router-dom'
+import styled from '@emotion/styled'
 import { Button, ElWithBeforeIcon, FieldInput } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { logger } from 'src/logger'
 import {
@@ -27,6 +29,13 @@ import { Box, Card, Flex, Heading, Label } from 'theme-ui'
 import { CategoriesSelect } from '../../../Howto/Category/CategoriesSelect'
 
 import type { IQuestion } from 'src/models'
+
+const ImageInputFieldWrapper = styled.div`
+  width: 150px;
+  height: 100px;
+  margin-right: 10px;
+  margin-bottom: 6px;
+`
 
 interface IProps {
   'data-testid'?: string
@@ -55,6 +64,7 @@ export const QuestionForm = (props: IProps) => {
         formValues.moderation = formValues.allowDraftSave
           ? IModerationStatus.DRAFT
           : IModerationStatus.ACCEPTED
+
         try {
           const newDocument = await store.upsertQuestion(
             formValues as IQuestion.FormInput,
@@ -68,160 +78,190 @@ export const QuestionForm = (props: IProps) => {
       }}
       mutators={{ setAllowDraftSaveFalse, setAllowDraftSaveTrue }}
       initialValues={props.formValues}
-      render={({ submitting, handleSubmit, form }) => (
-        <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-          <Flex
-            bg="inherit"
-            px={2}
-            sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
-            mt={4}
-          >
-            <Box
-              as="form"
-              id="questionForm"
-              sx={{ width: '100%' }}
-              onSubmit={handleSubmit}
+      render={({ submitting, handleSubmit, form, values }) => {
+        const numberOfImageInputsAvailable = values?.images
+  ? Math.min(values.images.reduce((count, image) => image ? count + 1 : count, 1), 4)
+  : 1;
+        return (
+          <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+            <Flex
+              bg="inherit"
+              px={2}
+              sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+              mt={4}
             >
-              <Card sx={{ backgroundColor: 'softblue' }}>
-                <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
-                  <Heading>{headingText}</Heading>
-                  <Box ml="15px">
-                    <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
+              <Box
+                as="form"
+                id="questionForm"
+                sx={{ width: '100%' }}
+                onSubmit={handleSubmit}
+              >
+                <Card sx={{ backgroundColor: 'softblue' }}>
+                  <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
+                    <Heading>{headingText}</Heading>
+                    <Box ml="15px">
+                      <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
+                    </Box>
+                  </Flex>
+                </Card>
+                <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
+                  <PostingGuidelines />
+                </Box>
+                <Card mt={3} p={4} sx={{ overflow: 'visible' }}>
+                  <Box mb={3}>
+                    <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>
+                      {LABELS.overview.question.title}
+                    </Label>
+                    <Field
+                      name="title"
+                      id="title"
+                      validate={composeValidators(
+                        required,
+                        minValue(QUESTION_MIN_TITLE_LENGTH),
+                      )}
+                      component={FieldInput}
+                      placeholder={LABELS.overview.question.placeholder}
+                      minLength={QUESTION_MIN_TITLE_LENGTH}
+                      maxLength={QUESTION_MAX_TITLE_LENGTH}
+                      showCharacterCount
+                    />
                   </Box>
-                </Flex>
-              </Card>
-              <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
-                <PostingGuidelines />
+
+                  <Box mb={3}>
+                    <Label htmlFor="description" sx={{ fontSize: 2, mb: 2 }}>
+                      {LABELS.overview.description.title}
+                    </Label>
+                    <Field
+                      name="description"
+                      id="description"
+                      label="Information"
+                      validate={(value, allValues) =>
+                        draftValidationWrapper(value, allValues, required)
+                      }
+                      component={FieldInput}
+                      placeholder={LABELS.overview.description.title}
+                      maxLength={QUESTION_MAX_DESCRIPTION_LENGTH}
+                      showCharacterCount
+                    />
+                  </Box>
+
+                  <Label htmlFor={`images`} sx={{ mb: 2 }}>
+                    {LABELS.overview.images.title}
+                  </Label>
+                  <Flex
+                    sx={{
+                      flexDirection: ['column', 'row'],
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                    }}
+                    mb={3}
+                  >
+                    {[...Array(numberOfImageInputsAvailable)].map((_, i) => (
+                      <ImageInputFieldWrapper
+                        key={`image-${i}`}
+                        data-cy={`image-${i}`}
+                      >
+                        <Field
+                          hasText={false}
+                          name={`images[${i}]`}
+                          component={ImageInputField}
+                          isEqual={COMPARISONS.image}
+                        />
+                      </ImageInputFieldWrapper>
+                    ))}
+                  </Flex>
+                  <Box mb={3}>
+                    <Label htmlFor="categories" sx={{ fontSize: 2, mb: 2 }}>
+                      Which categories fit your question?
+                    </Label>
+                    <Field
+                      name="questionCategory"
+                      render={({ input, ...rest }) => (
+                        <CategoriesSelect
+                          {...rest}
+                          isForm={true}
+                          onChange={input.onChange}
+                          value={input.value}
+                          placeholder="Select category"
+                          type="question"
+                        />
+                      )}
+                    />
+                  </Box>
+
+                  <Box sx={{ flexDirection: 'column' }} mb={3}>
+                    <Label htmlFor="tags" sx={{ fontSize: 2, mb: 2 }}>
+                      {LABELS.overview.tags.title}
+                    </Label>
+                    <Field
+                      name="tags"
+                      component={TagsSelectField}
+                      category="question"
+                      isEqual={COMPARISONS.tags}
+                    />
+                  </Box>
+                </Card>
               </Box>
-              <Card mt={3} p={4} sx={{ overflow: 'visible' }}>
-                <Box mb={3}>
-                  <Label htmlFor="title" sx={{ fontSize: 2, mb: 2 }}>
-                    {LABELS.overview.question.title}
-                  </Label>
-                  <Field
-                    name="title"
-                    id="title"
-                    validate={composeValidators(
-                      required,
-                      minValue(QUESTION_MIN_TITLE_LENGTH),
-                    )}
-                    component={FieldInput}
-                    placeholder={LABELS.overview.question.placeholder}
-                    minLength={QUESTION_MIN_TITLE_LENGTH}
-                    maxLength={QUESTION_MAX_TITLE_LENGTH}
-                    showCharacterCount
-                  />
-                </Box>
-
-                <Box mb={3}>
-                  <Label htmlFor="description" sx={{ fontSize: 2, mb: 2 }}>
-                    {LABELS.overview.description.title}
-                  </Label>
-                  <Field
-                    name="description"
-                    id="description"
-                    label="Information"
-                    validate={(value, allValues) =>
-                      draftValidationWrapper(value, allValues, required)
-                    }
-                    component={FieldInput}
-                    placeholder={LABELS.overview.description.title}
-                    maxLength={QUESTION_MAX_DESCRIPTION_LENGTH}
-                    showCharacterCount
-                  />
-                </Box>
-
-                <Box mb={3}>
-                  <Label htmlFor="categories" sx={{ fontSize: 2, mb: 2 }}>
-                    Which categories fit your question?
-                  </Label>
-                  <Field
-                    name="questionCategory"
-                    render={({ input, ...rest }) => (
-                      <CategoriesSelect
-                        {...rest}
-                        isForm={true}
-                        onChange={input.onChange}
-                        value={input.value}
-                        placeholder="Select category"
-                        type="question"
-                      />
-                    )}
-                  />
-                </Box>
-
-                <Box sx={{ flexDirection: 'column' }} mb={3}>
-                  <Label htmlFor="tags" sx={{ fontSize: 2, mb: 2 }}>
-                    {LABELS.overview.tags.title}
-                  </Label>
-                  <Field
-                    name="tags"
-                    component={TagsSelectField}
-                    category="question"
-                    isEqual={COMPARISONS.tags}
-                  />
-                </Box>
-              </Card>
-            </Box>
-          </Flex>
-          <Flex
-            sx={{
-              flexDirection: 'column',
-              width: ['100%', '100%', `${100 / 3}%`],
-              height: '100%',
-            }}
-            bg="inherit"
-            px={2}
-            mt={[0, 0, 4]}
-          >
-            <Box
+            </Flex>
+            <Flex
               sx={{
-                top: 3,
-                maxWidth: ['inherit', 'inherit', '400px'],
+                flexDirection: 'column',
+                width: ['100%', '100%', `${100 / 3}%`],
+                height: '100%',
               }}
+              bg="inherit"
+              px={2}
+              mt={[0, 0, 4]}
             >
-              <Box sx={{ display: ['none', 'none', 'block'] }}>
-                <PostingGuidelines />
-              </Box>
-
-              <Button
-                data-cy={'draft'}
-                data-testid="draft"
-                mt={[0, 0, 3]}
-                variant="secondary"
-                type="submit"
-                disabled={submitting}
-                onClick={(event) => {
-                  form.mutators.setAllowDraftSaveTrue()
-                  handleSubmit(event)
-                }}
-                sx={{ width: '100%', display: 'block' }}
-              >
-                <span>{draftButtonText}</span>
-              </Button>
-              <Button
-                large
-                data-cy={'submit'}
-                mt={3}
-                variant="primary"
-                type="submit"
-                disabled={submitting}
-                onClick={(event) => {
-                  form.mutators.setAllowDraftSaveFalse()
-                  handleSubmit(event)
-                }}
+              <Box
                 sx={{
-                  width: '100%',
-                  mb: ['40px', '40px', 0],
-                  display: 'block',
+                  top: 3,
+                  maxWidth: ['inherit', 'inherit', '400px'],
                 }}
               >
-                {publishButtonText}
-              </Button>
-            </Box>
+                <Box sx={{ display: ['none', 'none', 'block'] }}>
+                  <PostingGuidelines />
+                </Box>
+
+                <Button
+                  data-cy={'draft'}
+                  data-testid="draft"
+                  mt={[0, 0, 3]}
+                  variant="secondary"
+                  type="submit"
+                  disabled={submitting}
+                  onClick={(event) => {
+                    form.mutators.setAllowDraftSaveTrue()
+                    handleSubmit(event)
+                  }}
+                  sx={{ width: '100%', display: 'block' }}
+                >
+                  <span>{draftButtonText}</span>
+                </Button>
+                <Button
+                  large
+                  data-cy={'submit'}
+                  mt={3}
+                  variant="primary"
+                  type="submit"
+                  disabled={submitting}
+                  onClick={(event) => {
+                    form.mutators.setAllowDraftSaveFalse()
+                    handleSubmit(event)
+                  }}
+                  sx={{
+                    width: '100%',
+                    mb: ['40px', '40px', 0],
+                    display: 'block',
+                  }}
+                >
+                  {publishButtonText}
+                </Button>
+              </Box>
+            </Flex>
           </Flex>
-        </Flex>
-      )}
+        )
+      }}
     />
   )
 }

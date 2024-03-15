@@ -24,4 +24,7 @@ export const overview: ILabels = {
   tags: {
     title: 'Select tags',
   },
+  images: {
+    title: 'Upload image(s) for this question',
+  },
 }

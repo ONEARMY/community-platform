@@ -18,6 +18,7 @@ import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscrib
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 import type { IUser } from 'src/models'
+import type { IConvertedFileMeta } from 'src/types'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
 import type { IRootStore } from '../RootStore'
 
@@ -156,7 +157,7 @@ export class QuestionStore extends ModuleStore {
     const dbRef = this.db
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
-
+    const id = dbRef.id
     // Check for existing document
     let slug = formatLowerNoSpecial(values.title)
     const searchQuery = await this.db
@@ -167,6 +168,18 @@ export class QuestionStore extends ModuleStore {
       slug += `-${randomID()}`
     }
 
+    // Check for images
+    const updateWithMeta = {...values}
+    if (values.images.length > 0) {
+      const imgMeta = await this.uploadCollectionBatch(
+        values.images.filter((img) => !!img) as IConvertedFileMeta[],
+        COLLECTION_NAME,
+        id,
+      )
+      updateWithMeta.images = imgMeta
+      logger.debug('upload images ok')
+    }
+    
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
 
@@ -175,6 +188,7 @@ export class QuestionStore extends ModuleStore {
       creatorCountry,
       _createdBy: values._createdBy ?? this.activeUser?.userName,
       slug,
+      images: updateWithMeta.images,
     })
     logger.debug(`upsertQuestion.set`, { dbRef })
 

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import {
   ContentStatistics,
   FollowButton,
+  ImageGallery,
   Loader,
   ModerationStatus,
   UsefulStatsButton,
@@ -11,6 +12,7 @@ import { transformToUserComments } from 'src/common/transformToUserComments'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
@@ -161,6 +163,10 @@ export const QuestionPage = () => {
                 <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
                   {question.description}
                 </Text>
+                <ImageGallery
+                  images={formatImagesForGallery(question.images)}
+                  allowPortrait={true}
+                />
               </Box>
             </Box>
 

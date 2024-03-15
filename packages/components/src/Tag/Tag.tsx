@@ -2,10 +2,12 @@ import { Text } from 'theme-ui'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
 
+export interface ITag {
+  label: string
+}
+
 export interface Props {
-  tag: {
-    label: string
-  }
+  tag: ITag
   sx?: ThemeUIStyleObject | undefined
 }
 

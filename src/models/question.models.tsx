@@ -15,14 +15,15 @@ export namespace IQuestion {
     _createdBy: string
     _deleted: boolean
     subscribers?: UserIdList
-  } & Omit<FormInput, 'collaborators'> &
+  } & DBDoc &
+    Omit<FormInput, 'collaborators'> &
     ISharedFeatures
 
   export interface FormInput extends IModerable {
     title: string
     description: string
     tags: ISelectedTags
-    category?: IQuestionCategory
+    questionCategory?: IQuestionCategory
     slug: string
     previousSlugs?: string[]
     creatorCountry?: string

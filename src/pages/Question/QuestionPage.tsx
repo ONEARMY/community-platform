@@ -8,6 +8,7 @@ import {
   ModerationStatus,
   UsefulStatsButton,
 } from 'oa-components'
+import { TagList } from 'src/common/Tags/TagsList'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
@@ -170,6 +171,8 @@ export const QuestionPage = () => {
                 </Text>
               </Box>
             </Box>
+
+                {question.tags && <TagList tags={question.tags} />}
 
             <Divider
               sx={{

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   Category,
   ContentStatistics,
@@ -26,6 +26,7 @@ export const QuestionPage = () => {
   const [hasUserSubscribed, setHasUserSubscribed] = useState<boolean>(false)
 
   const { slug } = useParams()
+  const navigate = useNavigate()
   const store = useQuestionStore()
   const activeUser = store.activeUser
 
@@ -34,7 +35,16 @@ export const QuestionPage = () => {
       const foundQuestion: IQuestion.Item | null =
         await store.fetchQuestionBySlug(slug || '')
 
-      if (!foundQuestion) { return }
+      if (!foundQuestion) {
+        const path = {
+          pathname: `/question/`,
+          search:
+            '?search=' +
+            (slug || '').replace(/-/gi, ' ') +
+            '&source=question-not-found',
+        }
+        return navigate(path)
+      }
 
       store.activeQuestionItem = foundQuestion
       store.incrementViewCount(foundQuestion._id)
@@ -43,7 +53,9 @@ export const QuestionPage = () => {
       if (
         activeUser?.userName &&
         foundQuestion.subscribers?.includes(activeUser?.userName)
-      ) { setHasUserSubscribed(true) }
+      ) {
+        setHasUserSubscribed(true)
+      }
 
       setIsLoading(false)
     }

@@ -17,6 +17,7 @@ export interface CommentItemProps {
   handleDelete?: (commentId: string) => Promise<void>
   handleEdit?: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
+  isReply: boolean
 }
 
 const formatDate = (d: string | undefined): string => {
@@ -32,7 +33,8 @@ export const CommentItem = (props: CommentItemProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
-  const { comment, handleDelete, handleEditRequest, handleEdit } = props
+  const { comment, handleDelete, handleEditRequest, handleEdit, isReply } =
+    props
   const {
     text,
     creatorName,
@@ -158,6 +160,7 @@ export const CommentItem = (props: CommentItemProps) => {
 
         <Modal width={600} isOpen={showEditModal}>
           <EditComment
+            isReply={isReply}
             comment={text}
             handleSubmit={(commentText) => {
               handleEdit && handleEdit(_id, commentText)

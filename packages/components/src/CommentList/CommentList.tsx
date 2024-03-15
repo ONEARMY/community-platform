@@ -16,6 +16,7 @@ export interface IProps {
   highlightedCommentId?: string
   isLoggedIn: boolean
   maxLength: number
+  isReplies: boolean
   onMoreComments?: () => void
   onSubmitReply?: (_id: string, reply: string) => Promise<void>
   setCommentBeingRepliedTo?: (commentId: string | null) => void
@@ -29,6 +30,7 @@ export const CommentList = (props: IProps) => {
     handleEditRequest,
     highlightedCommentId,
     isLoggedIn,
+    isReplies,
     maxLength,
     onMoreComments,
     onSubmitReply,
@@ -93,6 +95,7 @@ export const CommentList = (props: IProps) => {
               handleDelete={handleDelete}
               handleEdit={handleEdit}
               isLoggedIn={isLoggedIn}
+              isReplies={isReplies}
               maxLength={maxLength}
               onSubmitReply={onSubmitReply}
               supportReplies={supportReplies}

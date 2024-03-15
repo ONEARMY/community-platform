@@ -207,8 +207,10 @@ describe('question.routes', () => {
       })
 
       // Fill in form
-      const title = wrapper.getByLabelText('The Question')
-      const description = wrapper.getByLabelText('Give some more information')
+      const title = wrapper.getByLabelText('The Question', { exact: false })
+      const description = wrapper.getByLabelText('Description', {
+        exact: false,
+      })
       const submitButton = wrapper.getByText('Publish')
 
       // Submit form
@@ -637,8 +639,10 @@ describe('question.routes', () => {
         expect(() => wrapper.getByText('Draft')).toThrow()
       })
       // Fill in form
-      const title = wrapper.getByLabelText('The Question')
-      const description = wrapper.getByLabelText('Give some more information')
+      const title = wrapper.getByLabelText('The Question', { exact: false })
+      const description = wrapper.getByLabelText('Description', {
+        exact: false,
+      })
       const submitButton = wrapper.getByText('Update')
 
       // Submit form

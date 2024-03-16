@@ -14,7 +14,7 @@ import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
-import { QuestionComments } from './QuestionComments'
+import { QuestionDiscussion } from './QuestionDiscussion'
 
 import type { IQuestion } from 'src/models'
 
@@ -190,7 +190,7 @@ export const QuestionPage = () => {
             />
           </Card>
           {question._id && (
-            <QuestionComments
+            <QuestionDiscussion
               questionDocId={question._id}
               setTotalCommentsCount={setTotalCommentsCount}
             />

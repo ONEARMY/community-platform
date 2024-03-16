@@ -13,7 +13,7 @@ interface IProps {
   setTotalCommentsCount: (number) => void
 }
 
-export const QuestionComments = (props: IProps) => {
+export const QuestionDiscussion = (props: IProps) => {
   const [comment, setComment] = useState('')
   const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -71,8 +71,10 @@ export const QuestionComments = (props: IProps) => {
 
     if (discussion) {
       const updatedDiscussion = await store.addComment(discussion, comment)
-      transformComments(updatedDiscussion)
-      setComment('')
+      if (updatedDiscussion) {
+        transformComments(updatedDiscussion)
+        setComment('')
+      }
     }
   }
 
@@ -84,7 +86,9 @@ export const QuestionComments = (props: IProps) => {
         reply,
         commentId,
       )
-      transformComments(updatedDiscussion)
+      if (updatedDiscussion) {
+        transformComments(updatedDiscussion)
+      }
     }
   }
 

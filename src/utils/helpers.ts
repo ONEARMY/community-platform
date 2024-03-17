@@ -213,9 +213,13 @@ export const isContactable = (preference: boolean | undefined) => {
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 
-export const calculateTotalUpdateComments = (
+export const getResearchTotalCommentCount = (
   item: IResearch.ItemDB | IItem,
 ): number => {
+  if (Object.hasOwnProperty.call(item, 'totalCommentCount')) {
+    return item.totalCommentCount
+  }
+
   if (item.updates) {
     const commentOnUpdates = item.updates.reduce((totalComments, update) => {
       const updateCommentsLength =

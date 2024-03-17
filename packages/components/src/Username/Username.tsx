@@ -2,6 +2,7 @@ import { Flex, Image, Text } from 'theme-ui'
 
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
 import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
+import SupporterBadgeIcon from '../../assets/icons/supporter.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
@@ -11,6 +12,7 @@ import type { User } from '../'
 
 export interface Props {
   isVerified: boolean
+  isSupporter: boolean
   user: User
   sx?: ThemeUIStyleObject
 }
@@ -78,11 +80,18 @@ export const Username = (props: Props) => {
           )}
         </Flex>
         <Text>{props.user.userName}</Text>
-        {props.isVerified && (
+        {(props.isVerified || (props.isVerified && props.isSupporter)) && (
           <Image
             src={VerifiedBadgeIcon}
             sx={{ ml: 1, height: 16, width: 16 }}
             data-testid="Username: verified badge"
+          />
+        )}
+        {(props.isSupporter && !props.isVerified) && (
+          <Image
+          src={SupporterBadgeIcon}
+          sx={{ ml: 1, height: 16, width: 16 }}
+          data-testid="Username: supporter badge"
           />
         )}
       </Flex>

@@ -112,13 +112,18 @@ export class QuestionStore extends ModuleStore {
 
   @computed
   get votedUsefulCount(): number {
-    return (this.activeQuestionItem?.votedUsefulBy || []).length
+    if (!this.activeQuestionItem || !this.activeQuestionItem.votedUsefulBy) {
+      return 0
+    }
+    return this.activeQuestionItem?.votedUsefulBy.length
   }
 
   @computed
   get userVotedActiveQuestionUseful(): boolean {
-    if (!this.activeUser) return false
-    return (this.activeQuestionItem?.votedUsefulBy || []).includes(
+    if (!this.activeUser || !this.activeQuestionItem?.votedUsefulBy)
+      return false
+
+    return this.activeQuestionItem.votedUsefulBy.includes(
       this.activeUser.userName,
     )
   }
@@ -151,14 +156,16 @@ export class QuestionStore extends ModuleStore {
     docId: string,
     userName: string,
   ): Promise<void> {
-    const updatedItem = (await toggleDocUsefulByUser(
+    const updatedItem = await toggleDocUsefulByUser(
       this.db,
       COLLECTION_NAME,
       docId,
       userName,
-    )) as IQuestionDB
+    )
 
-    this.activeQuestionItem = updatedItem
+    if (updatedItem) {
+      this.activeQuestionItem = updatedItem as IQuestionDB
+    }
 
     return
   }
@@ -228,9 +235,8 @@ export class QuestionStore extends ModuleStore {
 
     if (updatedQuestion) {
       this.activeQuestionItem = updatedQuestion
+      return updatedQuestion
     }
-
-    return updatedQuestion
   }
 
   private async _getQuestionItemBySlug(

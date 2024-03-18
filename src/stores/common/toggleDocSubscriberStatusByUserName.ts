@@ -1,3 +1,4 @@
+import { toJS } from 'mobx'
 import { logger } from 'src/logger'
 
 import type { IQuestion } from 'src/models'
@@ -7,27 +8,26 @@ import type { DBEndpoint } from '../databaseV2/endpoints'
 export const toggleDocSubscriberStatusByUserName = async (
   db: DatabaseV2,
   collectionName: DBEndpoint,
-  docId: string,
+  _id: string,
   userName: string,
 ) => {
-  const dbRef = db.collection<IQuestion.Item>(collectionName).doc(docId)
+  const dbRef = db.collection<IQuestion.Item>(collectionName).doc(_id)
 
   if (!dbRef) {
-    logger.warn('Unable to find document', { docId })
+    logger.warn('Unable to find document', { _id })
     return null
   }
 
-  const doc = await dbRef.get('server')
+  const docData = await toJS(dbRef.get('server'))
 
-  let subscribers = doc?.subscribers || []
-
-  if (doc?.subscribers?.includes(userName)) {
+  let subscribers = docData?.subscribers || []
+  if (docData?.subscribers?.includes(userName)) {
     subscribers = subscribers.filter((s) => s !== userName)
   } else {
     subscribers.push(userName)
   }
 
-  dbRef.update({ _id: docId, subscribers } as any)
+  await dbRef.update({ _id, subscribers })
 
-  return await dbRef.get('server')
+  return await dbRef.get()
 }

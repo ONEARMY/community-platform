@@ -23,9 +23,9 @@ export const impactQuestions: IImpactQuestion[] = [
     id: 'revenue',
     icon: 'revenue',
     description:
-      'What was your revenue (in $)? By revenue we mean all money coming in.',
+      'What was your revenue (in USD)? By revenue we mean all money coming in.',
     label: 'revenue',
-    prefix: '$',
+    prefix: 'USD',
     isVisible: true,
   },
   {

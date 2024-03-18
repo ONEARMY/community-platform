@@ -1,4 +1,8 @@
-import { transformImpactData, transformImpactInputs } from './utils'
+import {
+  sortImpactYearDisplayFields,
+  transformImpactData,
+  transformImpactInputs,
+} from './utils'
 
 describe('transformImpactData', () => {
   it('returns data structured as field inputs', () => {
@@ -49,5 +53,30 @@ describe('transformImpactInputs', () => {
       },
     ]
     expect(transformImpactInputs(inputFields)).toEqual(expected)
+  })
+})
+
+describe('sortImpactYearDisplayFields', () => {
+  it('sorts impact data in the same order as impact questions', () => {
+    const fields = [
+      {
+        id: 'machines',
+        value: 15,
+        isVisible: true,
+      },
+      {
+        id: 'revenue',
+        value: 2000,
+        isVisible: true,
+      },
+      { id: 'plastic', value: 30000, isVisible: true },
+    ]
+
+    const expected = [
+      { id: 'plastic', value: 30000, isVisible: true },
+      { id: 'revenue', value: 2000, isVisible: true },
+      { id: 'machines', value: 15, isVisible: true },
+    ]
+    expect(sortImpactYearDisplayFields(fields)).toEqual(expected)
   })
 })

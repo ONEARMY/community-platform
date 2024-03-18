@@ -18,6 +18,7 @@ import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   getPublicUpdates,
+  getResearchTotalCommentCount,
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
@@ -227,7 +228,7 @@ const ResearchArticle = observer(() => {
         onFollowClick={() => onFollowClick(item.slug)}
         contributors={contributors}
         subscribersCount={researchStore.subscribersCount}
-        commentsCount={researchStore.commentsCount}
+        commentsCount={getResearchTotalCommentCount(item)}
         updatesCount={
           item.updates?.filter(
             (u) => u.status !== ResearchUpdateStatus.DRAFT && !u._deleted,

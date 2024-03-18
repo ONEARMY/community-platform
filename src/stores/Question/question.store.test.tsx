@@ -5,6 +5,20 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { QuestionStore } from './question.store'
 
+const mockToggleDocSubscriber = jest.fn()
+jest.mock('../common/toggleDocSubscriberStatusByUserName', () => {
+  return {
+    __esModule: true,
+    toggleDocSubscriberStatusByUserName: () => mockToggleDocSubscriber(),
+  }
+})
+
+const mockToggleDocUsefulByUser = jest.fn()
+jest.mock('../common/toggleDocUsefulByUser', () => ({
+  __esModule: true,
+  toggleDocUsefulByUser: () => mockToggleDocUsefulByUser(),
+}))
+
 const factory = async () => {
   const store = new QuestionStore()
 
@@ -171,22 +185,24 @@ describe('question.store', () => {
   })
 
   describe('toggleSubscriberStatusByUserName', () => {
-    it('adds user to subscribers list', async () => {
-      const { store, updateFn } = await factory()
-      const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-        subscribers: [],
-      })
+    it('calls the toggle subscriber function', async () => {
+      const { store } = await factory()
+      store.activeQuestionItem = FactoryQuestionItem()
 
-      // Act
-      await store.toggleSubscriberStatusByUserName(newQuestion._id, 'user1')
+      await store.toggleSubscriberStatusByUserName()
 
-      expect(updateFn).toBeCalledWith(
-        expect.objectContaining({
-          _id: newQuestion._id,
-          subscribers: ['user1'],
-        }),
-      )
+      expect(mockToggleDocSubscriber).toHaveBeenCalled()
+    })
+  })
+
+  describe('toggleUsefulByUser', () => {
+    it('calls the toogle voted for function', async () => {
+      const { store } = await factory()
+      store.activeQuestionItem = FactoryQuestionItem()
+
+      await store.toggleUsefulByUser()
+
+      expect(mockToggleDocUsefulByUser).toHaveBeenCalled()
     })
   })
 })

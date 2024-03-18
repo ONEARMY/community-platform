@@ -91,6 +91,7 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   fetchQuestionBySlug = jest.fn()
   votedUsefulCount = 0
   subscriberCount = 0
+  userCanEditQuestion = true
 }
 
 const mockQuestionStore = new mockQuestionStoreClass()
@@ -520,6 +521,7 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser: user,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
+          userHasSubscribed: true,
         })
 
         await act(async () => {
@@ -548,7 +550,7 @@ describe('question.routes', () => {
       })
     })
 
-    it('does not show Edit call to action', async () => {
+    it('does not show edit call to action', async () => {
       let wrapper
       mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem()
@@ -557,6 +559,7 @@ describe('question.routes', () => {
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
+        userCanEditQuestion: false,
       })
 
       await act(async () => {
@@ -570,7 +573,7 @@ describe('question.routes', () => {
       })
     })
 
-    it('shows Edit call to action', async () => {
+    it('shows edit call to action', async () => {
       let wrapper
       mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem({

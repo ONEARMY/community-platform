@@ -10,7 +10,7 @@ import {
 } from 'oa-components'
 import { TagList } from 'src/common/Tags/TagsList'
 import { useQuestionStore } from 'src/stores/Question/question.store'
-import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
+import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -21,9 +21,7 @@ import type { IQuestion } from 'src/models'
 export const QuestionPage = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [question, setQuestion] = useState<IQuestion.Item | undefined>()
-  const [isEditable, setIsEditable] = useState(false)
   const [totalCommentsCount, setTotalCommentsCount] = useState(0)
-  const [hasUserSubscribed, setHasUserSubscribed] = useState<boolean>(false)
 
   const { slug } = useParams()
   const navigate = useNavigate()
@@ -48,15 +46,8 @@ export const QuestionPage = () => {
 
       store.activeQuestionItem = foundQuestion
       store.incrementViewCount(foundQuestion._id)
-      setQuestion(foundQuestion)
-      setIsEditable(isAllowedToEditContent(foundQuestion, activeUser))
-      if (
-        activeUser?.userName &&
-        foundQuestion.subscribers?.includes(activeUser?.userName)
-      ) {
-        setHasUserSubscribed(true)
-      }
 
+      setQuestion(foundQuestion)
       setIsLoading(false)
     }
 
@@ -65,27 +56,16 @@ export const QuestionPage = () => {
     return () => {
       setIsLoading(true)
     }
-  }, [slug])
+  }, [])
 
   const onUsefulClick = async () => {
-    if (activeUser?.userName) {
-      return null
-    }
-
-    // Trigger update without waiting
-    const questionId = store.activeQuestionItem?._id
-    if (questionId && activeUser) {
-      store.toggleUsefulByUser(questionId, activeUser.userName)
-      setQuestion(store.activeQuestionItem)
-    }
+    const updatedQuestion = await store.toggleUsefulByUser()
+    setQuestion(updatedQuestion)
   }
 
-  const onFollowClick = () => {
-    if (question) {
-      store.toggleSubscriberStatusByUserName(question._id, activeUser?.userName)
-      setHasUserSubscribed(!hasUserSubscribed)
-    }
-    return null
+  const onFollowClick = async () => {
+    const updatedQuestion = await store.toggleSubscriberStatusByUserName()
+    setQuestion(updatedQuestion)
   }
 
   return (
@@ -104,11 +84,11 @@ export const QuestionPage = () => {
                   onUsefulClick={onUsefulClick}
                 />
                 <FollowButton
-                  hasUserSubscribed={hasUserSubscribed}
+                  hasUserSubscribed={store.userHasSubscribed}
                   isLoggedIn={!!activeUser}
                   onFollowClick={onFollowClick}
                 />
-                {isEditable && (
+                {store.userCanEditQuestion && (
                   <Link to={'/questions/' + question.slug + '/edit'}>
                     <Button variant={'primary'}>Edit</Button>
                   </Link>
@@ -165,7 +145,7 @@ export const QuestionPage = () => {
                 {
                   icon: 'thunderbolt',
                   label: buildStatisticsLabel({
-                    stat: question?.subscribers?.length || 0,
+                    stat: store.subscriberCount,
                     statUnit: 'following',
                     usePlural: false,
                   }),

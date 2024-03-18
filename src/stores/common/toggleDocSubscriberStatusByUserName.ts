@@ -1,33 +1,29 @@
-import { logger } from 'src/logger'
+import { toJS } from 'mobx'
 
-import type { IQuestion } from 'src/models'
+import type { IQuestion, IResearch } from 'src/models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
 export const toggleDocSubscriberStatusByUserName = async (
   db: DatabaseV2,
   collectionName: DBEndpoint,
-  docId: string,
+  _id: string,
   userName: string,
 ) => {
-  const dbRef = db.collection<IQuestion.Item>(collectionName).doc(docId)
+  const dbRef = db
+    .collection<IQuestion.Item | IResearch.Item>(collectionName)
+    .doc(_id)
+  const docData = await toJS(dbRef.get('server'))
 
-  if (!dbRef) {
-    logger.warn('Unable to find document', { docId })
-    return null
-  }
+  if (!docData) return
 
-  const doc = await dbRef.get()
+  const subscribers = !(docData?.subscribers || []).includes(userName)
+    ? [userName].concat(docData?.subscribers || [])
+    : (docData?.subscribers || []).filter((uName) => uName !== userName)
 
-  let subscribers = doc?.subscribers || []
+  const subscribersUpdated = { _id, subscribers }
 
-  if (doc?.subscribers?.includes(userName)) {
-    subscribers = subscribers.filter((s) => s !== userName)
-  } else {
-    subscribers.push(userName)
-  }
-
-  dbRef.update({ _id: docId, subscribers } as any)
+  await dbRef.update(subscribersUpdated)
 
   return await dbRef.get()
 }

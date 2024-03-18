@@ -89,6 +89,9 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   upsertQuestion = jest.fn()
   fetchQuestions = jest.fn().mockResolvedValue([])
   fetchQuestionBySlug = jest.fn()
+  votedUsefulCount = 0
+  subscriberCount = 0
+  userCanEditQuestion = true
 }
 
 const mockQuestionStore = new mockQuestionStoreClass()
@@ -284,6 +287,7 @@ describe('question.routes', () => {
         // Content statistics
         expect(wrapper.getByText(`0 views`)).toBeInTheDocument()
         expect(wrapper.getByText(`0 following`)).toBeInTheDocument()
+        expect(wrapper.getByText(`0 useful`)).toBeInTheDocument()
         expect(wrapper.getByText(`1 comment`)).toBeInTheDocument()
 
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
@@ -517,6 +521,7 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser: user,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
+          userHasSubscribed: true,
         })
 
         await act(async () => {
@@ -545,7 +550,7 @@ describe('question.routes', () => {
       })
     })
 
-    it('does not show Edit call to action', async () => {
+    it('does not show edit call to action', async () => {
       let wrapper
       mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem()
@@ -554,6 +559,7 @@ describe('question.routes', () => {
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
+        userCanEditQuestion: false,
       })
 
       await act(async () => {
@@ -567,7 +573,7 @@ describe('question.routes', () => {
       })
     })
 
-    it('shows Edit call to action', async () => {
+    it('shows edit call to action', async () => {
       let wrapper
       mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem({

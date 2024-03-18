@@ -9,6 +9,7 @@ export interface Props {
   comments: string | null
   user: {
     isVerified: boolean
+    isSupporter: boolean
     username: string
     country: string | null
   }
@@ -64,6 +65,7 @@ export const MapMemberCard = (props: Props) => {
               <div>
                 <Username
                   isVerified={!!user.isVerified}
+                  isSupporter={!!user.isSupporter}
                   user={{
                     userName: user.username,
                     countryCode: user.country,

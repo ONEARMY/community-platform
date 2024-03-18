@@ -24,6 +24,7 @@ export const QuestionPage = () => {
   const [isEditable, setIsEditable] = useState(false)
   const [totalCommentsCount, setTotalCommentsCount] = useState(0)
   const [hasUserSubscribed, setHasUserSubscribed] = useState<boolean>(false)
+  const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>(false)
 
   const { slug } = useParams()
   const navigate = useNavigate()
@@ -56,7 +57,7 @@ export const QuestionPage = () => {
       ) {
         setHasUserSubscribed(true)
       }
-
+      setHasUserVotedUseful(store.userVotedActiveQuestionUseful)
       setIsLoading(false)
     }
 
@@ -68,24 +69,20 @@ export const QuestionPage = () => {
   }, [slug])
 
   const onUsefulClick = async () => {
-    if (activeUser?.userName) {
-      return null
-    }
-
-    // Trigger update without waiting
-    const questionId = store.activeQuestionItem?._id
-    if (questionId && activeUser) {
-      await store.toggleUsefulByUser(questionId, activeUser.userName)
-      setQuestion(store.activeQuestionItem)
+    if (question && activeUser) {
+      await store.toggleUsefulByUser(question._id, activeUser?.userName)
+      setHasUserVotedUseful(store.userVotedActiveQuestionUseful)
     }
   }
 
-  const onFollowClick = () => {
+  const onFollowClick = async () => {
     if (question) {
-      store.toggleSubscriberStatusByUserName(question._id, activeUser?.userName)
+      await store.toggleSubscriberStatusByUserName(
+        question._id,
+        activeUser?.userName,
+      )
       setHasUserSubscribed(!hasUserSubscribed)
     }
-    return null
   }
 
   return (
@@ -99,7 +96,7 @@ export const QuestionPage = () => {
               <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
                 <UsefulStatsButton
                   votedUsefulCount={store.votedUsefulCount}
-                  hasUserVotedUseful={store.userVotedActiveQuestionUseful}
+                  hasUserVotedUseful={hasUserVotedUseful}
                   isLoggedIn={!!activeUser}
                   onUsefulClick={onUsefulClick}
                 />

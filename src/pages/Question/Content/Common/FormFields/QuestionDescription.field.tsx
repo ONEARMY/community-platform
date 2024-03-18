@@ -12,6 +12,7 @@ export const QuestionDescriptionField = () => {
   return (
     <FormFieldWrapper htmlFor={name} text={title} required>
       <Field
+        data-cy={`field-${name}`}
         component={FieldTextarea}
         id={name}
         name={name}

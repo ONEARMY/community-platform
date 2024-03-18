@@ -1,3 +1,4 @@
+import { sortImpactYearDisplayFields } from 'src/pages/UserSettings/content/formSections/Impact/utils'
 import { Box, Heading } from 'theme-ui'
 
 import { ImpactField } from './ImpactField'
@@ -24,7 +25,8 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
     padding: 2,
   }
 
-  const visibleFields = fields?.filter((field) => field.isVisible)
+  const sortedFields = sortImpactYearDisplayFields(fields)
+  const visibleFields = sortedFields?.filter((field) => field.isVisible)
 
   return (
     <Box sx={outterBox} cy-data="ImpactItem">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   Category,
   ContentStatistics,
@@ -9,82 +9,58 @@ import {
   UsefulStatsButton,
 } from 'oa-components'
 import { TagList } from 'src/common/Tags/TagsList'
-import { transformToUserComments } from 'src/common/transformToUserComments'
-import { logger } from 'src/logger'
-import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
-import { QuestionComments } from './QuestionComments'
+import { QuestionDiscussion } from './QuestionDiscussion'
 
-import type { IDiscussion, IDiscussionComment, IQuestion } from 'src/models'
+import type { IQuestion } from 'src/models'
 
 export const QuestionPage = () => {
-  const { slug } = useParams()
-  const store = useQuestionStore()
-  const discussionStore = useDiscussionStore()
   const [isLoading, setIsLoading] = useState(true)
   const [question, setQuestion] = useState<IQuestion.Item | undefined>()
-  const [discussion, setDiscussion] = useState<IDiscussion | undefined>(
-    undefined,
-  )
   const [isEditable, setIsEditable] = useState(false)
-  const [hasUserSubscribed, setHasUserSubscribed] = useState(false)
-  const [comments, setComments] = useState<IDiscussionComment[]>([])
+  const [totalCommentsCount, setTotalCommentsCount] = useState(0)
+  const [hasUserSubscribed, setHasUserSubscribed] = useState<boolean>(false)
+
+  const { slug } = useParams()
+  const navigate = useNavigate()
+  const store = useQuestionStore()
+  const activeUser = store.activeUser
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      if (slug) {
-        const foundQuestion: any = await store.fetchQuestionBySlug(slug)
-        store.activeQuestionItem = foundQuestion || null
+    const fetchQuestion = async () => {
+      const foundQuestion: IQuestion.Item | null =
+        await store.fetchQuestionBySlug(slug || '')
 
-        if (isLoading) {
-          setQuestion(foundQuestion || null)
-
-          logger.info(
-            'Setting isEditable',
-            isAllowedToEditContent(foundQuestion),
-            store.activeUser,
-          )
-          if (store.activeUser) {
-            setIsEditable(
-              isAllowedToEditContent(foundQuestion, store.activeUser),
-            )
-          }
+      if (!foundQuestion) {
+        const path = {
+          pathname: `/question/`,
+          search:
+            '?search=' +
+            (slug || '').replace(/-/gi, ' ') +
+            '&source=question-not-found',
         }
+        return navigate(path)
+      }
 
-        setHasUserSubscribed(
-          foundQuestion?.subscribers?.includes(store.activeUser?.userName),
-        )
-        if (foundQuestion && discussionStore) {
-          try {
-            const discussion =
-              await discussionStore.fetchOrCreateDiscussionBySource(
-                foundQuestion._id,
-                'question',
-              )
-            if (discussion) {
-              setDiscussion(discussion)
-              setComments(
-                transformToUserComments(discussion.comments, store.activeUser),
-              )
-            }
-
-            store.incrementViewCount(foundQuestion._id)
-          } catch (err) {
-            logger.error('Failed to fetch discussion', {
-              err,
-              questionId: foundQuestion._id,
-            })
-          }
-        }
+      store.activeQuestionItem = foundQuestion
+      store.incrementViewCount(foundQuestion._id)
+      setQuestion(foundQuestion)
+      setIsEditable(isAllowedToEditContent(foundQuestion, activeUser))
+      if (
+        activeUser?.userName &&
+        foundQuestion.subscribers?.includes(activeUser?.userName)
+      ) {
+        setHasUserSubscribed(true)
       }
 
       setIsLoading(false)
     }
-    fetchQuestions()
+
+    fetchQuestion()
 
     return () => {
       setIsLoading(true)
@@ -92,25 +68,21 @@ export const QuestionPage = () => {
   }, [slug])
 
   const onUsefulClick = async () => {
-    if (!store.activeUser?.userName) {
+    if (activeUser?.userName) {
       return null
     }
 
     // Trigger update without waiting
     const questionId = store.activeQuestionItem?._id
-    if (questionId) {
-      store.toggleUsefulByUser(questionId, store.activeUser?.userName)
+    if (questionId && activeUser) {
+      store.toggleUsefulByUser(questionId, activeUser.userName)
       setQuestion(store.activeQuestionItem)
     }
   }
 
-  const isLoggedIn = store.activeUser ? true : false
   const onFollowClick = () => {
     if (question) {
-      store.toggleSubscriberStatusByUserName(
-        question._id,
-        store.activeUser?.userName,
-      )
+      store.toggleSubscriberStatusByUserName(question._id, activeUser?.userName)
       setHasUserSubscribed(!hasUserSubscribed)
     }
     return null
@@ -128,12 +100,12 @@ export const QuestionPage = () => {
                 <UsefulStatsButton
                   votedUsefulCount={store.votedUsefulCount}
                   hasUserVotedUseful={store.userVotedActiveQuestionUseful}
-                  isLoggedIn={store.activeUser ? true : false}
+                  isLoggedIn={!!activeUser}
                   onUsefulClick={onUsefulClick}
                 />
                 <FollowButton
                   hasUserSubscribed={hasUserSubscribed}
-                  isLoggedIn={isLoggedIn ? true : false}
+                  isLoggedIn={!!activeUser}
                   onFollowClick={onFollowClick}
                 />
                 {isEditable && (
@@ -179,6 +151,7 @@ export const QuestionPage = () => {
                 border: '.5px solid black',
               }}
             />
+
             <ContentStatistics
               statistics={[
                 {
@@ -208,7 +181,7 @@ export const QuestionPage = () => {
                 {
                   icon: 'comment',
                   label: buildStatisticsLabel({
-                    stat: comments.length,
+                    stat: totalCommentsCount,
                     statUnit: 'comment',
                     usePlural: true,
                   }),
@@ -217,30 +190,9 @@ export const QuestionPage = () => {
             />
           </Card>
           {question._id && (
-            <QuestionComments
+            <QuestionDiscussion
               questionDocId={question._id}
-              comments={comments}
-              activeUser={store.activeUser}
-              commentsUpdated={setComments}
-              onSubmit={async (comment: string) => {
-                if (!comment) {
-                  return
-                }
-
-                // Trigger update without waiting
-                const res = await discussionStore.addComment(
-                  discussion,
-                  comment,
-                )
-
-                setDiscussion(res)
-                setComments(
-                  transformToUserComments(
-                    res?.comments || [],
-                    store.activeUser,
-                  ),
-                )
-              }}
+              setTotalCommentsCount={setTotalCommentsCount}
             />
           )}
         </>

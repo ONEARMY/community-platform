@@ -1,8 +1,9 @@
-import { Text } from 'theme-ui'
+import { Box } from 'theme-ui'
 
+import chevronRightSVG from '../../../assets/icons/icon-chevron-right.svg'
 import { BreadcrumbItem } from './BreadcrumbsItem'
 
-const MAX_LENGTH = 38
+const BREADCRUMBS_ITEM_LABEL_MAX_LENGTH = 38
 
 type step = { text: string; link?: string } | null
 interface BreadcrumbsProps {
@@ -19,23 +20,19 @@ const calculateBreadcrumbsLength = (steps: Array<step>) => {
 
 const Chevron = () => {
   return (
-    <Text
-      sx={{
-        fontFamily: 'monospace',
-        fontSize: 20,
-        color: 'dimgray',
-        marginRight: '10px',
-      }}
-    >
-      {'>'}
-    </Text>
+    <img
+      alt="chevron"
+      height="20px"
+      style={{ marginRight: '10px' }}
+      src={chevronRightSVG}
+    />
   )
 }
 
 export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
   const total_length = calculateBreadcrumbsLength(steps)
   return (
-    <ul style={{ marginLeft: 0, marginTop: 30, marginBottom: 20, padding: 0 }}>
+    <Box style={{ marginLeft: 0, marginTop: 30, marginBottom: 20, padding: 0 }}>
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1
         const isExtreme = isLast || index == 0
@@ -47,13 +44,13 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
                 text={step.text}
                 link={step.link}
                 isLast={isLast}
-                collapse={total_length > MAX_LENGTH && !isExtreme}
+                collapse={total_length > BREADCRUMBS_ITEM_LABEL_MAX_LENGTH && !isExtreme}
               />
               {!isLast && <Chevron />}
             </>
           )
         )
       })}
-    </ul>
+    </Box>
   )
 }

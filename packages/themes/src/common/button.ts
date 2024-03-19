@@ -87,10 +87,12 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
   },
   breadcrumb: {
     ...BASE_BUTTON,
-    padding: '3px',
+    padding: '1',
     border: '1px solid transparent',
     backgroundColor: 'transparent',
-    height: null,
+    height: 'auto',
+    color: 'dimgray',
+    fontSize: 15,
     '&:hover': {
       backgroundColor: colors.softblue,
       border: '1px solid ' + colors.lightgrey,

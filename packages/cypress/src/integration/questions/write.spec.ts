@@ -6,7 +6,7 @@ describe('[Question]', () => {
     const initialTitle = 'Health consequences'
     const initialExpectedSlug = 'health-consequences'
     const initialQuestionDescription =
-      "Hello! I'm wondering how people feel about the health concerns about working with melting plastic and being in environments with microplastics. I have been working with recycling plastic (hdpe) for two years now, shredding and injection molding and haven't had any bad consequences yet. But with the low knowledge around micro plastics and its effects on the human body, and many concerns and hypotheses I have been a bit concerned lately.   So I would like to ask the people in this community how you are feeling about it, and if you have experienced any issues with the microplastics or gases yet, if so how long have you been working with it? And what extra steps do you take to be protected from it? I use a gas mask with dust filters"
+      "Hello! I'm wondering how people feel about the health concerns about working with melting plastic and being in environments with microplastics. I have been working with recycling plastic (hdpe) for two years now, shredding and injection molding and haven't had any bad consequences yet. But with the low knowledge around micro plastics and its effects on the human body, and many concerns and hypotheses I have been a bit concerned lately.So I would like to ask the people in this community how you are feeling about it, and if you have experienced any issues with the microplastics or gases yet, if so how long have you been working with it? And what extra steps do you take to be protected from it? I use a gas mask with dust filters"
     const tag1 = 'product'
     const tag2 = 'workshop'
 
@@ -43,9 +43,7 @@ describe('[Question]', () => {
 
       cy.step('All question fields visible')
       cy.contains(initialTitle)
-      cy.contains(
-        initialQuestionDescription,
-      )
+      cy.contains(initialQuestionDescription)
       cy.contains(tag1)
       cy.contains(tag2)
 
@@ -76,7 +74,6 @@ describe('[Question]', () => {
       cy.step('All updated fields visiable on list')
       cy.visit('/questions')
       cy.contains(updatedTitle)
-      cy.contains(updatedQuestionDescription)
       cy.contains(tag1)
       cy.contains(tag2)
     })

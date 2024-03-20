@@ -21,6 +21,7 @@ export const ButtonShowReplies = (props: Props) => {
 
   return (
     <Button
+      data-cy={`show-replies`}
       icon={icon}
       onClick={setIsShowReplies}
       sx={{ alignSelf: 'flex-start' }}

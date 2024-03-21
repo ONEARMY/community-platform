@@ -1,0 +1,151 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "votedUsefulBy",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "collaborators",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "votedUsefulBy",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "votedUsefulBy",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "votedUsefulBy",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "votedUsefulBy",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "votedUsefulBy",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "commentCount",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "commentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "latestCommentDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "questionCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "__name__",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

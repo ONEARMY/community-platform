@@ -2,6 +2,7 @@ import 'firebase/compat/auth'
 import 'firebase/compat/storage'
 import 'firebase/compat/functions'
 import 'firebase/compat/database'
+import 'firebase/compat/firestore'
 
 import { initializeApp } from 'firebase/app'
 import { connectAuthEmulator, getAuth } from 'firebase/auth'
@@ -19,6 +20,7 @@ const rtdb = firebase.database()
 const storage = firebase.storage()
 const auth = getAuth(firebaseApp)
 const functions = firebase.functions()
+const firestore = firebase.firestore()
 
 // use emulators when running on localhost:4000
 if (SITE === 'emulated_site') {
@@ -32,7 +34,7 @@ if (SITE === 'emulated_site') {
   functions.useEmulator('localhost', 4002)
 }
 
-export { rtdb, storage, auth, functions }
+export { rtdb, storage, auth, functions, firestore }
 
 export const EmailAuthProvider = firebase.auth.EmailAuthProvider
 

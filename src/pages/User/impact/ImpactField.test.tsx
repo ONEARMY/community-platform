@@ -38,4 +38,16 @@ describe('ImpactField', () => {
 
     expect(container.innerHTML).toBe('')
   })
+
+  it("render positive number even if it's a negative number", async () => {
+    const field = {
+      id: 'plastic',
+      value: -3,
+      isVisible: true,
+    }
+
+    render(<ImpactField field={field} />)
+
+    await screen.findByText('3 Kg of plastic recycled')
+  });
 })

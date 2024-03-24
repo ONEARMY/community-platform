@@ -26,7 +26,7 @@ export const ImpactField = ({ field }: Props) => {
   const prefix = impactQuestion?.prefix || ''
   const suffix = impactQuestion?.suffix || ''
   const label = impactQuestion.label
-  const text = `${prefix} ${numberWithCommas(value)} ${suffix} ${label}`
+  const text = `${prefix} ${numberWithCommas(Math.abs(value))} ${suffix} ${label}`
 
   return (
     <Box sx={sx}>

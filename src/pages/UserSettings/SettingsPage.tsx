@@ -4,7 +4,7 @@ import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { Button, Loader, TextNotification } from 'oa-components'
+import { Button, ExternalLink, Loader, TextNotification } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -21,13 +21,12 @@ import { EmailNotificationsSection } from './content/formSections/EmailNotificat
 import { ExpertiseSection } from './content/formSections/Expertise.section'
 import { FocusSection } from './content/formSections/Focus.section'
 import { ImpactSection } from './content/formSections/Impact/Impact.section'
-import { MemberMapPinSection } from './content/formSections/MemberMapPin.section'
 import { PatreonIntegration } from './content/formSections/PatreonIntegration'
 import { PublicContactSection } from './content/formSections/PublicContact.section'
 import { SettingsErrors } from './content/formSections/SettingsErrors'
+import { SettingsMapPinSection } from './content/formSections/SettingsMapPinSection'
 import { UserInfosSection } from './content/formSections/UserInfos.section'
 import { WorkspaceSection } from './content/formSections/Workspace.section'
-import { WorkspaceMapPinSection } from './content/formSections/WorkspaceMapPin.section'
 import { ProfileGuidelines } from './content/PostingGuidelines'
 import { buttons, headings } from './labels'
 import INITIAL_VALUES from './Template'
@@ -63,6 +62,24 @@ const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
       </Box>
     </Alert>
   ) : null
+}
+
+const WorskapceMapPinRequiredStars = () => {
+  const { description } = headings.workspace
+  const { themeStore } = useCommonStores().stores
+
+  return (
+    <Alert sx={{ fontSize: 2, textAlign: 'left', my: 2 }} variant="failure">
+      <Box>
+        <ExternalLink
+          href={themeStore?.currentTheme.styles.communityProgramURL}
+          sx={{ textDecoration: 'underline', color: 'currentcolor' }}
+        >
+          {description}
+        </ExternalLink>
+      </Box>
+    </Alert>
+  )
 }
 
 export const SettingsPage = observer((props: IProps) => {
@@ -291,17 +308,20 @@ export const SettingsPage = observer((props: IProps) => {
                     />
 
                     {!isMember && isModuleSupported(MODULE.MAP) && (
-                      <WorkspaceMapPinSection>
-                        <MapPinModerationComments mapPin={userMapPin} />
-                      </WorkspaceMapPinSection>
-                    )}
-
-                    {isMember && isModuleSupported(MODULE.MAP) && (
-                      <MemberMapPinSection
+                      <SettingsMapPinSection
                         toggleLocationDropdown={toggleLocationDropdown}
                       >
                         <MapPinModerationComments mapPin={userMapPin} />
-                      </MemberMapPinSection>
+                        <WorskapceMapPinRequiredStars />
+                      </SettingsMapPinSection>
+                    )}
+
+                    {isMember && isModuleSupported(MODULE.MAP) && (
+                      <SettingsMapPinSection
+                        toggleLocationDropdown={toggleLocationDropdown}
+                      >
+                        <MapPinModerationComments mapPin={userMapPin} />
+                      </SettingsMapPinSection>
                     )}
                   </Flex>
 

@@ -90,7 +90,9 @@ export const QuestionPage = () => {
                 />
                 {store.userCanEditQuestion && (
                   <Link to={'/questions/' + question.slug + '/edit'}>
-                    <Button variant={'primary'}>Edit</Button>
+                    <Button variant={'primary'} data-cy="edit">
+                      Edit
+                    </Button>
                   </Link>
                 )}
               </Flex>
@@ -115,13 +117,19 @@ export const QuestionPage = () => {
                 {question.questionCategory && (
                   <Category category={question.questionCategory} />
                 )}
-                <Heading>{question.title}</Heading>
+                <Heading data-cy="question-title">{question.title}</Heading>
 
-                <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+                <Text
+                  variant="paragraph"
+                  data-cy="question-description"
+                  sx={{ whiteSpace: 'pre-line' }}
+                >
                   {question.description}
                 </Text>
 
-                {question.tags && <TagList tags={question.tags} />}
+                {question.tags && (
+                  <TagList data-cy="question-tags" tags={question.tags} />
+                )}
               </Flex>
             </Flex>
 

@@ -15,6 +15,7 @@ export const QuestionTitleField = () => {
   return (
     <FormFieldWrapper htmlFor={name} text={title} required>
       <Field
+        data-cy={`field-${name}`}
         name={name}
         id={name}
         validate={composeValidators(

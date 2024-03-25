@@ -1,9 +1,9 @@
-import { howtos } from '../../data'
+import { MOCK_DATA } from '../../data'
 
 describe('[How To]', () => {
   describe('[SEO Metadata]', () => {
     const { slug, title, description, cover_image } =
-      howtos.cmMzzlQP00fCckYIeL2e
+      MOCK_DATA.howtos.cmMzzlQP00fCckYIeL2e
     it('[Populates title and description tags]', () => {
       cy.visit(`/how-to/${slug}`)
       // General

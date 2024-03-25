@@ -9,8 +9,9 @@ export const QuestionTagsField = () => {
   const name = 'tags'
 
   return (
-    <FormFieldWrapper htmlFor={name} text={title} required>
+    <FormFieldWrapper htmlFor={name} text={title}>
       <Field
+        data-cy={`field-${name}`}
         name={name}
         id={name}
         component={TagsSelectField}

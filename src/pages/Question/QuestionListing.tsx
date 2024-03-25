@@ -107,7 +107,9 @@ export const QuestionListing = () => {
       >
         <QuestionFilterHeader />
         <Link to="/questions/create">
-          <Button variant="primary">{listing.create}</Button>
+          <Button data-cy="create" variant="primary">
+            {listing.create}
+          </Button>
         </Link>
       </Flex>
 
@@ -121,6 +123,7 @@ export const QuestionListing = () => {
           const url = `/questions/${encodeURIComponent(question.slug)}`
           return (
             <Card
+              data-cy="question-list-item"
               key={question._id}
               mb={3}
               px={3}

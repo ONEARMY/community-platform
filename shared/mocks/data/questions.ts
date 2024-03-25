@@ -1,0 +1,36 @@
+export const questions = {
+  '3s7Fyn6Jf8ryANJM6Jf6': {
+    _created: '2024-03-14T10:57:20.113Z',
+    _createdBy: 'demo_user',
+    _deleted: false,
+    _id: '3s7Fyn6Jf8ryANJM6Jf6',
+    _modified: '2024-03-15T15:14:25.029Z',
+    commentCount: 3,
+    creatorCountry: '',
+    description: 'test info',
+    keywords: ['test', 'question', 'info'],
+    latestCommentDate: '15 March 2024 at 15:14:24 UTC',
+    moderation: 'accepted',
+    questionCategory: {
+      _created: '2024-01-10T09:00:00.000Z',
+      _deleted: false,
+      _id: 'test',
+      _modified: '2024-01-10T09:00:00.000Z',
+      label: 'test category',
+    },
+    slug: 'the-first-test-question',
+    tags: {
+      KP3McutTpuEWz06G5EY1: true,
+      Wk6RnHHFfKSiI71BlM8r: true,
+    },
+    title: 'The first test question',
+    total_views: 3,
+    votedUsefulBy: [
+      'demo_user',
+      'notification_triggerer',
+      'settings_workplace_new',
+      'mapview_testing_rejected',
+    ],
+    subscribers: ['demo_user', 'benfurber'],
+  },
+}

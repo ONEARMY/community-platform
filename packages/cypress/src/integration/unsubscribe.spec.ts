@@ -1,8 +1,8 @@
-import { users } from '../data'
+import { MOCK_DATA } from '../data'
 import { DbCollectionName } from '../utils/TestUtils'
 
 context('unsubscribe', () => {
-  const betaTester = users['beta-tester']
+  const betaTester = MOCK_DATA.users['beta-tester']
 
   beforeEach(() => {
     cy.visit(`/unsubscribe/${betaTester.unsubscribeToken}`)

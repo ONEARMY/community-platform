@@ -8,7 +8,7 @@ export const QuestionCategoryField = () => {
   const name = 'questionCategory'
 
   return (
-    <FormFieldWrapper htmlFor={name} text={title} required>
+    <FormFieldWrapper htmlFor={name} text={title}>
       <Field
         name={name}
         id={name}

@@ -26,7 +26,7 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dateformat": "^3.0.3",
-    "express": "^4.17.1",
+    "express": "^4.19.2",
     "firebase-admin": "11.4.1",
     "firebase-functions": "4.1.1",
     "firebase-tools": "12.7.0",

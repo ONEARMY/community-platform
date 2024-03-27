@@ -20,8 +20,10 @@ import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscrib
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 import type { IUser } from 'src/models'
+import type { IConvertedFileMeta } from 'src/types'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
 import type { IRootStore } from '../RootStore'
+import type { IUploadedFileMeta } from '../storage'
 
 const COLLECTION_NAME = 'questions'
 
@@ -178,12 +180,17 @@ export class QuestionStore extends ModuleStore {
     const creatorCountry = this.getCreatorCountry(user, values)
     const keywords = getKeywords(values.title + ' ' + values.description)
 
+    const images = values.images
+      ? await this.loadImages(values.images, dbRef.id)
+      : null
+
     await dbRef.set({
       ...(values as any),
       creatorCountry,
       _createdBy: values._createdBy ?? this.activeUser?.userName,
       slug,
       keywords: keywords,
+      images: images,
     })
     logger.debug(`upsertQuestion.set`, { dbRef })
 
@@ -232,6 +239,22 @@ export class QuestionStore extends ModuleStore {
     if (updatedQuestion) {
       this.activeQuestionItem = updatedQuestion
       return updatedQuestion
+    }
+  }
+
+  private async loadImages(
+    images: Array<IUploadedFileMeta | IConvertedFileMeta | File | null>,
+    id: string,
+  ) {
+    if (images?.length > 0) {
+      const imgMeta = await this.uploadCollectionBatch(
+        images.filter((img) => !!img) as IConvertedFileMeta[],
+        COLLECTION_NAME,
+        id,
+      )
+      images = imgMeta
+      logger.debug('upload images ok')
+      return images
     }
   }
 

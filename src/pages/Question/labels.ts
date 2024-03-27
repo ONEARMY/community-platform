@@ -29,6 +29,9 @@ export const fields: ILabels = {
     title: 'The Question',
     placeholder: 'So what do you need to know?',
   },
+  images: {
+    title: 'Upload image(s) for this question',
+  },
 }
 
 export const listing = {

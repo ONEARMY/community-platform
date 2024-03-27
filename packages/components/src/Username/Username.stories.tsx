@@ -14,6 +14,7 @@ export const Verified = {
       countryCode: 'pt',
     },
     isVerified: true,
+    isSupporter: false,
   },
 }
 
@@ -24,7 +25,30 @@ export const Unverified = {
       userName: 'a-username',
     },
     isVerified: false,
+    isSupporter: false,
   },
+}
+
+export const VerifiedSupporter = {
+  args: {
+    user: {
+      countryCode: 'pt',
+      userName: 'a-username',
+    },
+    isVerified: true,
+    isSupporter: true,
+  }
+}
+
+export const UnverifiedSupporter = {
+  args: {
+    user: {
+      countryCode: 'pt',
+      userName: 'a-username',
+    },
+    isVerified: false,
+    isSupporter: true,
+  }
 }
 
 export const WithoutFlag = {
@@ -33,6 +57,7 @@ export const WithoutFlag = {
       userName: 'a-username',
     },
     isVerified: false,
+    isSupporter: false,
   },
 }
 
@@ -43,6 +68,7 @@ export const InvalidCountryCode = {
       countryCode: 'zz',
     },
     isVerified: false,
+    isSupporter: false,
   },
 }
 
@@ -55,5 +81,6 @@ export const InlineStyles = {
       outline: '10px solid red',
     },
     isVerified: false,
+    isSupporter: false,
   },
 }

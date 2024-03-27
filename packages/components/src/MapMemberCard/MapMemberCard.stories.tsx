@@ -16,6 +16,7 @@ export const Default = {
     user: {
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
+      isSupporter: faker.datatype.boolean(),
       country: faker.address.countryCode('alpha-2'),
     },
     heading: `${faker.lorem.word()}`,
@@ -32,6 +33,7 @@ export const LoadingState = {
     user: {
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
+      isSupporter: faker.datatype.boolean(),
       country: faker.address.countryCode('alpha-2'),
     },
     heading: `${faker.lorem.word()}`,
@@ -47,6 +49,7 @@ export const ModerationComments = {
     user: {
       username: faker.internet.userName(),
       isVerified: faker.datatype.boolean(),
+      isSupporter: faker.datatype.boolean(),
       country: faker.address.countryCode('alpha-2'),
     },
     heading: `${faker.lorem.word()}`,

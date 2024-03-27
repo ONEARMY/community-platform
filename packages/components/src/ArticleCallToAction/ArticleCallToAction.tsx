@@ -6,9 +6,9 @@ import { Username } from '../'
 import type { User } from '../types/common'
 
 export interface Props {
-  author: User & { isVerified: boolean }
+  author: User & { isVerified: boolean } & { isSupporter: boolean }
   children: React.ReactNode
-  contributors?: (User & { isVerified: boolean })[]
+  contributors?: (User & { isVerified: boolean } & { isSupporter: boolean })[]
 }
 
 export const ArticleCallToAction = (props: Props) => {
@@ -24,6 +24,7 @@ export const ArticleCallToAction = (props: Props) => {
         Made by
         <Username
           isVerified={props.author.isVerified}
+          isSupporter={props.author.isSupporter}
           user={props.author}
           sx={{ ml: 1 }}
         />
@@ -40,6 +41,7 @@ export const ArticleCallToAction = (props: Props) => {
               key={key}
               user={contributor}
               isVerified={contributor.isVerified}
+              isSupporter={contributor.isSupporter}
               sx={{
                 mr: 1,
               }}

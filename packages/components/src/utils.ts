@@ -9,6 +9,7 @@ export const fakeComment = (commentOverloads: Partial<IComment> = {}) => ({
   _id: faker.database.mongodbObjectId(),
   creatorName: faker.internet.userName(),
   isUserVerified: faker.datatype.boolean(),
+  isUserSupporter: faker.datatype.boolean(),
   text: faker.lorem.text(),
   isEditable: faker.datatype.boolean(),
   ...commentOverloads,

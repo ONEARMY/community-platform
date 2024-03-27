@@ -40,6 +40,7 @@ export const CommentItem = (props: CommentItemProps) => {
     creatorName,
     creatorCountry,
     isUserVerified,
+    isUserSupporter,
     isEditable,
     _created,
     _edited,
@@ -88,6 +89,7 @@ export const CommentItem = (props: CommentItemProps) => {
                 countryCode: creatorCountry,
               }}
               isVerified={!!isUserVerified}
+              isSupporter={!!isUserSupporter}
             />
             {_edited && (
               <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>

@@ -1,6 +1,7 @@
 export interface IComment {
   text: string
   isUserVerified?: boolean
+  isUserSupporter?: boolean
   isEditable: boolean
   creatorCountry?: string | null
   creatorName: string

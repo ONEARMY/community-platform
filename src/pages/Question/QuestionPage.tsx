@@ -4,12 +4,14 @@ import {
   Category,
   ContentStatistics,
   FollowButton,
+  ImageGallery,
   Loader,
   ModerationStatus,
   UsefulStatsButton,
 } from 'oa-components'
 import { TagList } from 'src/common/Tags/TagsList'
 import { useQuestionStore } from 'src/stores/Question/question.store'
+import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
@@ -126,6 +128,13 @@ export const QuestionPage = () => {
                 >
                   {question.description}
                 </Text>
+
+                {question.images && (
+                  <ImageGallery
+                    images={formatImagesForGallery(question.images)}
+                    allowPortrait={true}
+                  />
+                )}
 
                 {question.tags && (
                   <TagList data-cy="question-tags" tags={question.tags} />

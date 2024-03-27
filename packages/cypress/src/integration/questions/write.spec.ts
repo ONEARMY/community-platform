@@ -30,6 +30,14 @@ describe('[Question]', () => {
         delay: 0,
       })
 
+      cy.step('Add images')
+      cy.get('[data-cy=image-upload-0]')
+        .find(':file')
+        .attachFile('images/howto-step-pic1.jpg')
+      cy.get('[data-cy=image-upload-1]')
+        .find(':file')
+        .attachFile('images/howto-step-pic2.jpg')
+
       // To do - Set categories so this can then be selected here.
 
       cy.selectTag(tag1, '[data-cy="tag-select"]')
@@ -60,6 +68,11 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-description]')
         .clear()
         .type(updatedQuestionDescription, { delay: 0 })
+
+      cy.step('Update images by removing one')
+      cy.get('[data-cy=image-upload-0]')
+        .get('[data-cy=delete-image]:first')
+        .click({ force: true })
 
       cy.step('Submit updated question')
       cy.get('[data-cy=submit]')

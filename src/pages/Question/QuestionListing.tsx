@@ -1,20 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import {
-  Button,
-  Category,
-  IconCountWithTooltip,
-  Loader,
-  ModerationStatus,
-} from 'oa-components'
+import { Button, Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
-import { Box, Card, Flex, Grid, Heading } from 'theme-ui'
+import { Flex, Heading } from 'theme-ui'
 
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { ITEMS_PER_PAGE } from './constants'
 import { headings, listing } from './labels'
 import { QuestionFilterHeader } from './QuestionFilterHeader'
+import { QuestionListItem } from './QuestionListItem'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
@@ -119,84 +113,9 @@ export const QuestionListing = () => {
 
       {questions &&
         questions.length > 0 &&
-        questions.map((question) => {
-          const url = `/questions/${encodeURIComponent(question.slug)}`
-          return (
-            <Card
-              data-cy="question-list-item"
-              key={question._id}
-              mb={3}
-              px={3}
-              py={3}
-              sx={{ position: 'relative' }}
-            >
-              <Grid columns={[1, '3fr 1fr']} gap="40px">
-                <Box sx={{ flexDirection: 'column' }}>
-                  <Link to={url} key={question._id}>
-                    <Flex
-                      sx={{
-                        width: '100%',
-
-                        flexDirection: ['column', 'row'],
-                        gap: [0, 3],
-                        mb: [1, 0],
-                      }}
-                    >
-                      <Heading
-                        as="span"
-                        mb={1}
-                        sx={{
-                          color: 'black',
-                          fontSize: [3, 3, 4],
-                        }}
-                      >
-                        {question.title}
-                      </Heading>
-                      {question.questionCategory && (
-                        <Category
-                          category={question.questionCategory}
-                          sx={{ fontSize: 2 }}
-                        />
-                      )}
-                    </Flex>
-                  </Link>
-                  <Flex>
-                    <ModerationStatus
-                      status={question.moderation}
-                      contentType="question"
-                      sx={{ top: 0, position: 'absolute', right: 0 }}
-                    />
-                    <UserNameTag
-                      userName={question._createdBy}
-                      countryCode={question.creatorCountry}
-                      created={question._created}
-                      action="Asked"
-                    />
-                  </Flex>
-                </Box>
-                <Box
-                  sx={{
-                    display: ['none', 'flex', 'flex'],
-                    alignItems: 'center',
-                    justifyContent: 'space-around',
-                  }}
-                >
-                  <IconCountWithTooltip
-                    count={(question.votedUsefulBy || []).length}
-                    icon="star-active"
-                    text={listing.usefulness}
-                  />
-
-                  <IconCountWithTooltip
-                    count={(question as any).commentCount || 0}
-                    icon="comment"
-                    text={listing.totalComments}
-                  />
-                </Box>
-              </Grid>
-            </Card>
-          )
-        })}
+        questions.map((question, index) => (
+          <QuestionListItem key={index} question={question} query={q} />
+        ))}
 
       {!isFetching &&
         questions &&

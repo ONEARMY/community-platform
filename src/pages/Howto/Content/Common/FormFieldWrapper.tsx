@@ -16,7 +16,14 @@ interface IProps {
 }
 
 export const FormFieldWrapper = (props: IProps) => {
-  const { children, htmlFor, required, text, flexDirection = 'column', flexWrap = 'nowrap' } = props
+  const {
+    children,
+    htmlFor,
+    required,
+    text,
+    flexDirection = 'column',
+    flexWrap = 'nowrap',
+  } = props
 
   const heading = required ? `${text} *` : text
 

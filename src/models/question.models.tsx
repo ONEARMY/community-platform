@@ -1,5 +1,5 @@
-import type { IUploadedFileMeta } from 'src/stores/storage'
-import type { IConvertedFileMeta } from 'src/types'
+import type { IUploadedFileMeta } from '../stores/storage'
+import type { IConvertedFileMeta } from '../types'
 import type { DBDoc, IModerable, ISelectedTags, ISharedFeatures } from '.'
 import type { IQuestionCategory } from './questionCategories.model'
 

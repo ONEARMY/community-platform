@@ -22,8 +22,8 @@ export const QuestionImagesField = (props: IProps) => {
       <FormFieldWrapper
         htmlFor="images"
         text={fields.images.title}
-        flexDirection='row'
-        flexWrap='wrap'
+        flexDirection="row"
+        flexWrap="wrap"
       >
         {[...Array(props.inputsAvailable)].map((_, i) => (
           <ImageInputFieldWrapper

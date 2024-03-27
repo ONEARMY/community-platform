@@ -39,6 +39,10 @@ export enum ItemSortingOption {
   LatestComments = 'LatestComments',
   Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
+  MostRelevant = 'MostRelevant',
+  /**
+   * @deprecated This won't be supported with direct firebase queries
+   */
   Random = 'Random',
   SearchResults = 'SearchResults',
 }

@@ -24,7 +24,7 @@ export const SingaporeReverseStubResponse = {
   osm_id: 733562800,
   lat: '1.3572387983345497',
   lon: '103.81937941431262',
-  display_name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+  display_name: 'Drongo Trail, Bishan, Central, Singapore , 578774, Singapore',
   address: {
     road: 'Drongo Trail',
     suburb: 'Bishan',

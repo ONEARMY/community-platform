@@ -26,14 +26,15 @@ interface IProps {
 }
 
 export const QuestionForm = (props: IProps) => {
+  const { parentType } = props
   const navigate = useNavigate()
   const store = useQuestionStore()
   const publishButtonText =
     props.formValues?.moderation === IModerationStatus.DRAFT
       ? LABELS.buttons.create
-      : LABELS.buttons[props.parentType]
+      : LABELS.buttons[parentType]
 
-  const headingText = LABELS.headings[props.parentType]
+  const headingText = LABELS.headings[parentType]
 
   return (
     <Form
@@ -70,7 +71,10 @@ export const QuestionForm = (props: IProps) => {
               onSubmit={handleSubmit}
             >
               <Card sx={{ backgroundColor: 'softblue' }}>
-                <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
+                <Flex
+                  data-cy={`question-${parentType}-title`}
+                  sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}
+                >
                   <Heading>{headingText}</Heading>
                   <Box ml="15px">
                     <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />

@@ -139,10 +139,6 @@
         {
           "fieldPath": "_created",
           "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "__name__",
-          "order": "DESCENDING"
         }
       ]
     }

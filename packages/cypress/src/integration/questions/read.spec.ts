@@ -13,7 +13,11 @@ describe('[Questions]', () => {
         cy.contains(questions[index].subscribers.length)
         cy.contains(questions[index].commentCount)
       })
-      // To-do filtering and searching tests
+
+      cy.get('[data-cy=questions-search-box]').type('filtering')
+      cy.contains('This is a test mock for the filtering question')
+
+      // To-do: filtering tests
     })
   })
 

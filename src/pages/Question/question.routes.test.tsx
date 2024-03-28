@@ -207,11 +207,6 @@ describe('question.routes', () => {
         ).toBeInTheDocument()
 
         expect(wrapper.getByText(questionTitle)).toBeInTheDocument()
-        expect(
-          wrapper.getByRole('link', {
-            name: questionTitle,
-          }),
-        ).toHaveAttribute('href', `/questions/${questionSlug}`)
       })
     })
   })

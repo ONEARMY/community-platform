@@ -1,11 +1,30 @@
+import { useEffect, useState } from 'react'
 import { Field } from 'react-final-form'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import { CategoriesSelectV2 } from 'src/pages/common/Category/CategoriesSelectV2'
 import { FormFieldWrapper } from 'src/pages/Howto/Content/Common'
 import { fields } from 'src/pages/Question/labels'
+import { questionService } from 'src/pages/Question/question.service'
+
+import type { SelectValue } from 'src/pages/common/Category/CategoriesSelectV2'
 
 export const QuestionCategoryField = () => {
+  const [categories, setCategories] = useState<SelectValue[]>([])
+
   const { placeholder, title } = fields.category
   const name = 'questionCategory'
+
+  useEffect(() => {
+    const initCategories = async () => {
+      const categories = await questionService.getQuestionCategories()
+      const selectOptions = categories.map((category) => ({
+        value: category,
+        label: category.label,
+      }))
+      setCategories(selectOptions)
+    }
+
+    initCategories()
+  }, categories)
 
   return (
     <FormFieldWrapper htmlFor={name} text={title}>
@@ -13,13 +32,13 @@ export const QuestionCategoryField = () => {
         name={name}
         id={name}
         render={({ input, ...rest }) => (
-          <CategoriesSelect
+          <CategoriesSelectV2
             {...rest}
+            categories={categories || []}
             isForm={true}
             onChange={input.onChange}
             value={input.value}
-            placeholder={placeholder}
-            type="question"
+            placeholder={placeholder as string}
           />
         )}
       />

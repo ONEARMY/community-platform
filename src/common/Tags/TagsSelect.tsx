@@ -8,6 +8,8 @@ import { FieldContainer } from '../Form/FieldContainer'
 import type { FieldRenderProps } from 'react-final-form'
 import type { ISelectedTags, ITag } from 'src/models/tags.model'
 
+import './tagsselect.css'
+
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {
   isForm?: boolean
@@ -24,6 +26,7 @@ const TagsSelect = (props: IProps) => {
   const { tagsStore } = useCommonStores().stores
   const { allTags } = tagsStore
   const [state, setState] = useState<IState>({ selectedTags: [] })
+  const [error, setError] = useState<string | null>(null)
 
   // if we initialise with a value we want to update the state to reflect the selected tags
   // we repeat this additionally for input in case it is being used as input component for react-final-form field
@@ -56,22 +59,38 @@ const TagsSelect = (props: IProps) => {
     return selectedJson
   }
 
+  const handleTagsChange = (values: any) => {
+    if (values.length > 4) {
+      setError('No more than four tags are allowed')
+    } else {
+      setError(null)
+      onSelectedTagsChanged(values as ITag[])
+    }
+  }
+
   return (
     <FieldContainer
       // provide a data attribute that can be used to see if tags populated
       data-cy={allTags?.length > 0 ? 'tag-select' : 'tag-select-empty'}
     >
-      <Select
-        variant={props.isForm ? 'form' : undefined}
-        options={allTags}
-        placeholder={props.placeholder}
-        isClearable={true}
-        isMulti={true}
-        value={_getSelected(allTags)}
-        getOptionLabel={(tag: ITag) => tag.label}
-        getOptionValue={(tag: ITag) => tag._id}
-        onChange={(values) => onSelectedTagsChanged(values as ITag[])}
-      />
+      <div id="tagselect-wrapper">
+        <Select
+          variant={props.isForm ? 'form' : undefined}
+          options={allTags}
+          placeholder={props.placeholder}
+          isClearable={true}
+          isMulti={true}
+          value={_getSelected(allTags)}
+          getOptionLabel={(tag: ITag) => tag.label}
+          getOptionValue={(tag: ITag) => tag._id}
+          onChange={handleTagsChange}
+        />
+        {error && (
+          <span id="errortext" style={{ color: 'red' }}>
+            {error}
+          </span>
+        )}
+      </div>
     </FieldContainer>
   )
 }

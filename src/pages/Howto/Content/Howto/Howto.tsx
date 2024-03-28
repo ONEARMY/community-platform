@@ -23,8 +23,7 @@ import type { IUser } from 'src/models'
 
 export const Howto = observer(() => {
   const { slug } = useParams()
-  const { howtoStore, userStore, aggregationsStore, tagsStore } =
-    useCommonStores().stores
+  const { howtoStore, userStore, aggregationsStore } = useCommonStores().stores
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0)
 
@@ -88,16 +87,7 @@ export const Howto = observer(() => {
     )
   }
 
-  const { allTagsByKey } = tagsStore
-  const howto = {
-    ...activeHowto,
-    tagList:
-      activeHowto.tags &&
-      Object.keys(activeHowto.tags)
-        .map((t) => allTagsByKey[t])
-        .filter(Boolean),
-  }
-
+  const howto = activeHowto
   const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
   const isVerified = aggregationsStore.isVerified(howto._createdBy)
 

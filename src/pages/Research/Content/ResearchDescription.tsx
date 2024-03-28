@@ -8,12 +8,12 @@ import {
   FollowButton,
   LinkifyText,
   ModerationStatus,
-  Tag,
   UsefulStatsButton,
   Username,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
+import { TagList } from 'src/common/Tags/TagsList'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { buildStatisticsLabel } from 'src/utils/helpers'
@@ -266,10 +266,7 @@ const ResearchDescription = ({
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
             <Flex mt={4}>
-              {research.tagList &&
-                research.tagList.map((tag, idx) => (
-                  <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
-                ))}
+              <TagList tags={research.tags} />
             </Flex>
           </Box>
         </Flex>

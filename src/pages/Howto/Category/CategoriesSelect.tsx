@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { questionService } from 'src/pages/Question/question.service'
 
 import { FieldContainer } from '../../../common/Form/FieldContainer'
 
@@ -11,15 +13,27 @@ import type { ICategory } from 'src/models/categories.model'
  */
 export const CategoriesSelect = observer(
   ({ value, onChange, placeholder, isForm, type }) => {
+    const [categories, setCategories] = useState<ICategory[]>([])
+
     const { categoriesStore, researchCategoriesStore } =
       useCommonStores().stores
 
-    let categories: ICategory[] = []
-    if (type === 'howto') {
-      categories = categoriesStore.allCategories
-    } else if (type === 'research') {
-      categories = researchCategoriesStore.allResearchCategories
-    }
+    useEffect(() => {
+      const initCategories = async () => {
+        if (type === 'howto') {
+          const categories = categoriesStore.allCategories
+          setCategories(categories)
+        } else if (type === 'question') {
+          const categories = await questionService.getQuestionCategories()
+          setCategories(categories)
+        } else if (type === 'research') {
+          const categories = researchCategoriesStore.allResearchCategories
+          setCategories(categories)
+        }
+      }
+
+      initCategories()
+    }, [])
 
     const selectOptions = categories
       .map((category) => ({

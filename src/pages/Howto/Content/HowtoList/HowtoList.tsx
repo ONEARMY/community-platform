@@ -12,8 +12,7 @@ import HowToCard from './HowToCard'
 import type { IHowto } from 'src/models'
 
 export const HowtoList = observer(() => {
-  const { howtoStore, themeStore, tagsStore, userStore } =
-    useCommonStores().stores
+  const { howtoStore, themeStore, userStore } = useCommonStores().stores
   const previousSearch = useRef<string>('')
   const location = useLocation()
 
@@ -56,15 +55,9 @@ export const HowtoList = observer(() => {
   const { filteredHowtos, selectedCategory, searchValue, referrerSource } =
     howtoStore
   const theme = themeStore?.currentTheme
-  const { allTagsByKey } = tagsStore
 
   const howtoItems = filteredHowtos.map((howto: IHowto) => ({
     ...howto,
-    tagList:
-      howto.tags &&
-      Object.keys(howto.tags)
-        .map((key) => allTagsByKey[key])
-        .filter(Boolean),
   }))
 
   return (

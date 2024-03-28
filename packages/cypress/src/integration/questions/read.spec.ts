@@ -37,6 +37,9 @@ describe('[Questions]', () => {
       cy.contains(`${question.votedUsefulBy.length} useful`)
       cy.contains(`${questionDiscussion.comments.length} comments`)
 
+      cy.step('Links in description are clickable')
+      cy.contains('a', 'https://www.onearmy.earth/')
+
       cy.step('Logged in users can complete actions')
       cy.login('howto_creator@test.com', 'test1234')
       cy.visit(`/questions/${question.slug}`) // Page doesn't reload after login

@@ -5,6 +5,7 @@ import {
   ContentStatistics,
   FollowButton,
   ImageGallery,
+  LinkifyText,
   Loader,
   ModerationStatus,
   UsefulStatsButton,
@@ -126,7 +127,7 @@ export const QuestionPage = () => {
                   data-cy="question-description"
                   sx={{ whiteSpace: 'pre-line' }}
                 >
-                  {question.description}
+                  <LinkifyText>{question.description}</LinkifyText>
                 </Text>
 
                 {question.images && (

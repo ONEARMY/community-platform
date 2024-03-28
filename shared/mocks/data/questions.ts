@@ -7,7 +7,7 @@ export const questions = {
     _modified: '2024-03-15T15:14:25.029Z',
     commentCount: 3,
     creatorCountry: '',
-    description: 'test info',
+    description: 'test info with a link to https://www.onearmy.earth/',
     keywords: ['test', 'question', 'info'],
     latestCommentDate: '15 March 2024 at 15:14:24 UTC',
     moderation: 'accepted',

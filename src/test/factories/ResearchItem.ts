@@ -16,7 +16,7 @@ export const FactoryResearchItemUpdate = (
   files: [],
   fileLink: faker.internet.url(),
   downloadCount: 0,
-  _id: faker.datatype.uuid(),
+  _id: faker.string.uuid(),
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
@@ -28,7 +28,7 @@ export const FactoryResearchItemUpdate = (
 export const FactoryResearchItem = (
   researchItemOverloads: Partial<IResearchDB & ResearchCalculatedFields> = {},
 ): IResearchDB & ResearchCalculatedFields => ({
-  _id: faker.datatype.uuid(),
+  _id: faker.string.uuid(),
   _createdBy: faker.internet.userName(),
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
@@ -47,17 +47,18 @@ export const FactoryResearchItem = (
   ]),
   mentions: [],
   previousSlugs: [],
-  total_views: faker.datatype.number(),
+  total_views: faker.number.int(),
   collaborators: [],
   subscribers: [],
   userHasSubscribed: faker.datatype.boolean(),
+  totalCommentCount: 0,
   ...researchItemOverloads,
 })
 
 export const FactoryResearchItemFormInput = (
   researchItemOverloads: Partial<IResearch.FormInput> = {},
 ): IResearch.FormInput => ({
-  _id: faker.datatype.uuid(),
+  _id: faker.string.uuid(),
   _createdBy: faker.internet.userName(),
   description: faker.lorem.paragraphs(),
   title: faker.lorem.words(),

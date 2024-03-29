@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   Category,
@@ -13,7 +13,7 @@ import {
 import { TagList } from 'src/common/Tags/TagsList'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
-import { buildStatisticsLabel } from 'src/utils/helpers'
+import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -61,6 +61,12 @@ export const QuestionPage = () => {
     }
   }, [])
 
+  const canEdit = useMemo(() => {
+    if (store.activeQuestionItem && store.activeUser) {
+      return isAllowedToEditContent(store.activeQuestionItem, store.activeUser)
+    }
+  }, [store.activeQuestionItem, store.activeUser])
+
   const onUsefulClick = async () => {
     const updatedQuestion = await store.toggleUsefulByUser()
     setQuestion(updatedQuestion)
@@ -91,7 +97,7 @@ export const QuestionPage = () => {
                   isLoggedIn={!!activeUser}
                   onFollowClick={onFollowClick}
                 />
-                {store.userCanEditQuestion && (
+                {canEdit && (
                   <Link to={'/questions/' + question.slug + '/edit'}>
                     <Button variant={'primary'} data-cy="edit">
                       Edit

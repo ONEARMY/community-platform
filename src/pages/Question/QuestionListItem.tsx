@@ -1,14 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { Category, IconCountWithTooltip, ModerationStatus } from 'oa-components'
 import { Highlighter } from 'src/common/Highlighter'
-import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { Box, Card, Flex, Heading, Image } from 'theme-ui'
+import { Box, Card, Flex, Heading } from 'theme-ui'
 
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
 
 import type { IQuestion } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
   question: IQuestion.Item
@@ -21,7 +19,6 @@ export const QuestionListItem = ({ question, query }: IProps) => {
     _createdBy,
     creatorCountry,
     description,
-    images,
     moderation,
     questionCategory,
     slug,
@@ -52,103 +49,83 @@ export const QuestionListItem = ({ question, query }: IProps) => {
           marginBottom: 3,
         }}
       >
-        <Flex>
-          {images && images.length > 0 && (
-            <Flex sx={{ maxWidth: '100px', maxHeight: '120px' }}>
-              <Image
-                style={{
-                  objectFit: 'cover',
-                  width: '100%',
-                  height: '100%',
+        <Flex
+          sx={{
+            flex: 1,
+            justifyContent: 'space-between',
+          }}
+        >
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              gap: 1,
+              padding: 3,
+            }}
+          >
+            <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
+              {moderation !== 'accepted' && (
+                <Box>
+                  <ModerationStatus
+                    status={moderation}
+                    contentType="question"
+                  />
+                </Box>
+              )}
+
+              <Heading
+                as="span"
+                sx={{
+                  color: 'black',
+                  fontSize: [3, 3, 4],
+                  marginBottom: 1,
                 }}
-                loading="lazy"
-                src={cdnImageUrl(
-                  (images?.[0] as IUploadedFileMeta)?.downloadUrl,
-                  { width: 125 },
-                )}
-                crossOrigin=""
+              >
+                <Highlighter
+                  searchWords={searchWords}
+                  textToHighlight={title}
+                />
+              </Heading>
+
+              {questionCategory && (
+                <Category category={questionCategory} sx={{ fontSize: 2 }} />
+              )}
+            </Flex>
+
+            <Flex>
+              <UserNameTag
+                userName={_createdBy}
+                countryCode={creatorCountry}
+                created={_created}
+                action="Asked"
               />
             </Flex>
-          )}
+          </Flex>
 
           <Flex
             sx={{
+              display: ['none', 'flex', 'flex'],
+              justifyContent: 'flex-end',
+              alignItems: 'center',
               flex: 1,
-              justifyContent: 'space-between',
+              gap: 12,
+              paddingX: 12,
             }}
           >
-            <Flex
-              sx={{
-                flexDirection: 'column',
-                gap: 1,
-                padding: 3,
-              }}
-            >
-              <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
-                {moderation !== 'accepted' && (
-                  <Box>
-                    <ModerationStatus
-                      status={moderation}
-                      contentType="question"
-                    />
-                  </Box>
-                )}
+            <Box>
+              <IconCountWithTooltip
+                count={(votedUsefulBy || []).length}
+                icon="star-active"
+                text={listing.usefulness}
+              />
+            </Box>
 
-                <Heading
-                  as="span"
-                  sx={{
-                    color: 'black',
-                    fontSize: [3, 3, 4],
-                    marginBottom: 1,
-                  }}
-                >
-                  <Highlighter
-                    searchWords={searchWords}
-                    textToHighlight={title}
-                  />
-                </Heading>
-
-                {questionCategory && (
-                  <Category category={questionCategory} sx={{ fontSize: 2 }} />
-                )}
-              </Flex>
-
-              <Flex>
-                <UserNameTag
-                  userName={_createdBy}
-                  countryCode={creatorCountry}
-                  created={_created}
-                  action="Asked"
-                />
-              </Flex>
-            </Flex>
-
-            <Flex
-              sx={{
-                display: ['none', 'flex', 'flex'],
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                flex: 1,
-                gap: 12,
-                paddingX: 12,
-              }}
-            >
-              <Box>
-                <IconCountWithTooltip
-                  count={(votedUsefulBy || []).length}
-                  icon="star-active"
-                  text={listing.usefulness}
-                />
-              </Box>
-
-              <Box>
-                <IconCountWithTooltip
-                  count={(question as any).commentCount || 0}
-                  icon="comment"
-                  text={listing.totalComments}
-                />
-              </Box>
-            </Flex>
+            <Box>
+              <IconCountWithTooltip
+                count={(question as any).commentCount || 0}
+                icon="comment"
+                text={listing.totalComments}
+              />
+            </Box>
           </Flex>
         </Flex>
 

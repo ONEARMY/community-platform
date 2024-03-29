@@ -3,11 +3,11 @@ import { useSearchParams } from 'react-router-dom'
 import debounce from 'debounce'
 import { Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
+import { questionService } from 'src/pages/Question/question.service'
 import { Flex, Input } from 'theme-ui'
 
 import { CategoriesSelectV2 } from '../common/Category/CategoriesSelectV2'
 import { listing } from './labels'
-import { questionService } from './question.service'
 import { QuestionSortOptions } from './QuestionSortOptions'
 
 import type { SelectValue } from '../common/Category/CategoriesSelectV2'

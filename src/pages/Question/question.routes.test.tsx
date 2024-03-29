@@ -15,6 +15,7 @@ import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
 import { IModerationStatus, UserRole } from 'oa-shared'
+import { questionService } from 'src/pages/Question/question.service'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import {
@@ -26,7 +27,6 @@ import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 
 import { questionRouteElements } from './question.routes'
-import { questionService } from './question.service'
 
 import type { QuestionStore } from 'src/stores/Question/question.store'
 
@@ -96,13 +96,6 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   userCanEditQuestion = true
 }
 
-jest.mock('./question.service', () => ({
-  questionService: {
-    search: jest.fn(),
-    getQuestionCategories: jest.fn(),
-  },
-}))
-
 const mockQuestionService: typeof questionService = {
   getQuestionCategories: jest.fn(() => {
     return new Promise((resolve) => {
@@ -128,6 +121,7 @@ describe('question.routes', () => {
       fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue(null),
       activeUser: mockActiveUser,
     })
+    questionService.getQuestionCategories = jest.fn().mockResolvedValue([])
   })
 
   afterEach(() => {

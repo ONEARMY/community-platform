@@ -23,6 +23,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
+import { getKeywords } from 'src/utils/searchHelper'
 
 import {
   FilterSorterDecorator,
@@ -588,6 +589,7 @@ export class ResearchStore extends ModuleStore {
         mentions: [],
         ...values,
         collaborators,
+
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         _deleted: false,
         moderation: values.moderation
@@ -1007,6 +1009,10 @@ export class ResearchStore extends ModuleStore {
       })
     })
 
+    const keywords = getKeywords(
+      researchItem.title + ' ' + researchItem.description,
+    )
+
     await dbRef.set(
       {
         ...cloneDeep(researchItem),
@@ -1016,6 +1022,7 @@ export class ResearchStore extends ModuleStore {
         ),
         mentions,
         description: researchDescription,
+        keywords,
       },
       {
         set_last_edit_timestamp: setLastEditTimestamp,

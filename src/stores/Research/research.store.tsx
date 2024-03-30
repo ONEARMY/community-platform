@@ -697,7 +697,8 @@ export class ResearchStore extends ModuleStore {
           }
         }
 
-        //
+        newItem.totalUpdates = newItem.updates.length
+
         logger.debug(
           'old and new modified:',
           (update as IResearch.UpdateDB)._modified,

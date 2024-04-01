@@ -1012,6 +1012,7 @@ export class ResearchStore extends ModuleStore {
     const keywords = getKeywords(
       researchItem.title + ' ' + researchItem.description,
     )
+    keywords.push(researchItem._createdBy)
 
     await dbRef.set(
       {

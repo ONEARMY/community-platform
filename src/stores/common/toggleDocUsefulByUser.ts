@@ -21,7 +21,11 @@ export const toggleDocUsefulByUser = async (
     ? [userName].concat(docData?.votedUsefulBy || [])
     : (docData?.votedUsefulBy || []).filter((uName) => uName !== userName)
 
-  const votedUsefulUpdate = { _id, votedUsefulBy }
+  const votedUsefulUpdate = {
+    _id,
+    votedUsefulBy,
+    totalUsefulVotes: votedUsefulBy.length,
+  }
 
   await dbRef.update(votedUsefulUpdate)
 

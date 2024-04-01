@@ -179,6 +179,9 @@ export class QuestionStore extends ModuleStore {
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
     const keywords = getKeywords(values.title + ' ' + values.description)
+    if (values._createdBy) {
+      keywords.push(values._createdBy)
+    }
 
     const images = values.images
       ? await this.loadImages(values.images, dbRef.id)

@@ -5336,6 +5336,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^8.4.1":
+  version: 8.4.1
+  resolution: "@faker-js/faker@npm:8.4.1"
+  checksum: d802d531f8929562715adc279cfec763c9a4bc596ec67b0ce43fd0ae61b285d2b0eec6f1f4aa852452a63721a842fe7e81926dce7bd92acca94b01e2a1f55f5a
+  languageName: node
+  linkType: hard
+
 "@fal-works/esbuild-plugin-global-externals@npm:^2.1.2":
   version: 2.1.2
   resolution: "@fal-works/esbuild-plugin-global-externals@npm:2.1.2"
@@ -27591,7 +27598,7 @@ __metadata:
     "@craco/types": ^7.0.0
     "@emotion/react": ^11.10.6
     "@emotion/styled": ^11.8.1
-    "@faker-js/faker": ^7.6.0
+    "@faker-js/faker": ^8.4.1
     "@semantic-release/changelog": ^6.0.1
     "@semantic-release/git": ^10.0.1
     "@sentry/react": ^6.15.0

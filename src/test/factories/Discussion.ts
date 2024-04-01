@@ -7,9 +7,9 @@ import type { IDiscussion, IDiscussionComment } from 'src/models'
 export const FactoryDiscussion = (
   discussionOverloads: Partial<IDiscussion> = {},
 ): IDiscussion => ({
-  _id: faker.datatype.uuid(),
+  _id: faker.string.uuid(),
   comments: [],
-  sourceId: faker.datatype.uuid(),
+  sourceId: faker.string.uuid(),
   sourceType: 'question',
   ...discussionOverloads,
 })

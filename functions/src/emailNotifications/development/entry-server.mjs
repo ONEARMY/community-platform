@@ -14,7 +14,7 @@ export function render(url) {
   if (availableTemplates.includes(template)) {
     const html = getEmailHtml(template, {
       user: {
-        displayName: faker.name.fullName(),
+        displayName: faker.person.fullName(),
       },
       site: {
         name: PP_PROJECT_NAME,

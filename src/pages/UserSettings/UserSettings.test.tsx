@@ -66,7 +66,10 @@ describe('UserSettings', () => {
     mockUser = FactoryUser()
 
     // Act
-    const wrapper = await Wrapper(mockUser)
+    let wrapper
+    await act(async () => {
+      wrapper = await Wrapper(mockUser)
+    })
 
     // Assert
     expect(wrapper.getByText('Edit profile'))

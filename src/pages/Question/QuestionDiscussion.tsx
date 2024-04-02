@@ -47,7 +47,7 @@ export const QuestionDiscussion = (props: IProps) => {
   }, [questionDocId])
 
   const handleEdit = async (_id: string, comment: string) => {
-    logger.info({ _id, comment }, 'question comment edited')
+    logger.debug({ _id, comment }, 'question comment edited')
     if (discussion) {
       store.editComment(discussion, _id, comment)
     }

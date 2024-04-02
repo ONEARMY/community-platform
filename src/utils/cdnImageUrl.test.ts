@@ -1,3 +1,5 @@
+import { logger } from 'src/logger'
+
 const STORAGE_BUCKET = 'some-bucket'
 
 describe('cdnImageUrl', () => {
@@ -6,6 +8,15 @@ describe('cdnImageUrl', () => {
   })
 
   it('should ignore invalid URL', () => {
+    jest.doMock('src/logger', () => ({
+      logger: {
+        warn: jest.fn(),
+      },
+    }))
+
+    //  Supress warning for this test since we are purposely testing for an invalid URL with an Expect
+    const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(jest.fn())
+
     // Mocking empty CDN_URL
     jest.doMock('src/config/config', () => ({
       getConfigurationOption: jest.fn(),
@@ -18,6 +29,7 @@ describe('cdnImageUrl', () => {
       'https://firebasestorage.googleapis.com/v0/b/some-bucket/image.jpg'
 
     expect(cdnImageUrl(originalUrl)).toBe(originalUrl)
+    warnSpy.mockRestore()
   })
 
   it('should return well formed URL if input is poorly formatted', () => {

@@ -6,6 +6,7 @@ import { FactoryHowto } from 'src/test/factories/Howto'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
+import { logger } from '../../logger'
 import { UserStore } from './user.store'
 
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
@@ -111,6 +112,10 @@ describe('userStore', () => {
     })
 
     it('returns a single user object when 2 exist', async () => {
+      // Suppress warning for this test since the original function logs a warning if two users are found.
+      // However, this is covered by an Expect in the test, removing the need for console logging during testing.
+      const warnSpy = jest.spyOn(logger, 'warn').mockImplementation(jest.fn())
+
       // Lookup1
       store.db.getWhere.mockReturnValueOnce([
         FactoryUser({
@@ -149,6 +154,8 @@ describe('userStore', () => {
         links: expect.any(Array),
         notifications: expect.any(Array),
       })
+
+      warnSpy.mockRestore()
     })
 
     it('falls back to auth property for lookup when no user found', async () => {

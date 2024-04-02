@@ -84,7 +84,7 @@ const EditResearch = observer(() => {
   }
 
   if (formValues.locked && formValues.locked.by !== loggedInUser?.userName) {
-    logger.info('Research is locked', formValues.locked)
+    logger.debug('Research is locked', formValues.locked)
     return (
       <BlockedRoute>
         The research description is currently being edited by another editor.

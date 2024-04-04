@@ -255,7 +255,7 @@ export class UserStore extends ModuleStore {
     await this.db
       .collection(COLLECTION_NAME)
       .doc(updatedUserProfile._id)
-      .set(updatedUserProfile)
+      .update(updatedUserProfile)
 
     if (!adminEditableUserId) {
       this._updateActiveUser(updatedUserProfile)
@@ -437,7 +437,7 @@ export class UserStore extends ModuleStore {
         await this.db
           .collection<IUserPP>(COLLECTION_NAME)
           .doc(userMeta._id)
-          .set({ ...userMeta, _lastActive: new Date().toISOString() })
+          .update({ ...userMeta, _lastActive: new Date().toISOString() })
       } else {
         await this._createUserProfile('sign-in')
         // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)

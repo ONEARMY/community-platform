@@ -403,7 +403,7 @@ describe('userStore', () => {
       )
 
       // Assert
-      expect(store.db.set).toHaveBeenCalledWith(
+      expect(store.db.update).toHaveBeenCalledWith(
         expect.not.objectContaining({
           workspaceType: 'extrusion',
         }),

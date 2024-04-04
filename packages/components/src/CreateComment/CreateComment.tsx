@@ -6,6 +6,7 @@ import { MemberBadge } from '../MemberBadge/MemberBadge'
 export interface Props {
   maxLength: number
   isLoggedIn: boolean
+  isLoading?: boolean
   onSubmit: (value: string) => void
   onChange: (value: string) => void
   comment: string
@@ -15,7 +16,7 @@ export interface Props {
 }
 
 export const CreateComment = (props: Props) => {
-  const { comment, isLoggedIn, maxLength, onSubmit } = props
+  const { comment, isLoggedIn, maxLength, onSubmit, isLoading } = props
   const userProfileType = props.userProfileType || 'member'
   const placeholder = props.placeholder || 'Leave your questions or feedback...'
   const buttonLabel = props.buttonLabel ?? 'Leave a comment'
@@ -104,12 +105,16 @@ export const CreateComment = (props: Props) => {
       <Flex sx={{ alignSelf: 'flex-end' }}>
         <Button
           data-cy="comment-submit"
-          disabled={!comment.trim() || !isLoggedIn}
+          disabled={!comment.trim() || !isLoggedIn || isLoading}
           variant="primary"
-          onClick={() => onSubmit(comment)}
+          onClick={() => {
+            if (!isLoading) {
+              onSubmit(comment)
+            }
+          }}
           sx={{ marginTop: 3 }}
         >
-          {buttonLabel}
+          {isLoading ? 'Loading...' : buttonLabel}
         </Button>
       </Flex>
     </Flex>

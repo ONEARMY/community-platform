@@ -12,11 +12,14 @@ export interface Props {
 
 export const CreateReply = (props: Props) => {
   const [reply, setReply] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const { commentId, isLoggedIn, maxLength, onSubmit } = props
 
   const handleSubmit = async () => {
+    setIsLoading(true)
     await onSubmit(commentId, reply)
     setReply('')
+    setIsLoading(false)
   }
 
   return (
@@ -34,6 +37,7 @@ export const CreateReply = (props: Props) => {
         onChange={(text) => setReply(text)}
         onSubmit={handleSubmit}
         isLoggedIn={isLoggedIn}
+        isLoading={isLoading}
         buttonLabel="Leave a reply"
       />
     </Box>

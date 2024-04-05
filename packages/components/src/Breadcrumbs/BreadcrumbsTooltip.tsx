@@ -32,6 +32,8 @@ export const BreadcrumbsTooltip = ({
             backgroundColor: '#e2edf7',
             border: '1px solid #ababac',
             fontSize: '15px',
+            whiteSpace: 'nowrap',
+            zIndex: 1000
           }}
         >
           {text}

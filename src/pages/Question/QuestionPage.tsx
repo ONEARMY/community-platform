@@ -10,8 +10,8 @@ import {
   ModerationStatus,
   UsefulStatsButton,
 } from 'oa-components'
-import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { TagList } from 'src/common/Tags/TagsList'
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'

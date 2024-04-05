@@ -408,7 +408,7 @@ export class ResearchStore extends ModuleStore {
   public async addComment(
     text: string,
     update: IResearch.UpdateDB,
-    parentCommentId?: string,
+    parentCommentId: string | null,
   ) {
     const user = this.activeUser
     const researchItem = this.activeResearchItem

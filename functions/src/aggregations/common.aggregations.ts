@@ -8,7 +8,7 @@ import { IModerationStatus } from 'oa-shared'
 
 type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference
-export type IDBChange = Change<firestore.QueryDocumentSnapshot>
+type IDBChange = Change<firestore.QueryDocumentSnapshot>
 
 export const VALUE_MODIFIERS = {
   delete: () => FieldValue.delete(),

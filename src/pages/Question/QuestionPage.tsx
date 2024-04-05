@@ -77,7 +77,7 @@ export const QuestionPage = () => {
       {isLoading ? (
         <Loader />
       ) : question ? (
-        <>  
+        <>
           <Breadcrumbs content={question} variant="question" />
           <Card sx={{ position: 'relative', marginTop: 4 }}>
             <Flex sx={{ flexDirection: 'column', padding: 4, gap: 2 }}>

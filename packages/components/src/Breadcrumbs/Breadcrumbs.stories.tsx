@@ -14,11 +14,11 @@ export const Default: StoryFn<typeof Breadcrumbs> = () => (
         link: '/questions',
       },
       {
-        text: "Category",
-        link: '/questions?category=Category'
+        text: 'Category',
+        link: '/questions?category=Category',
       },
       {
-        text: "Are we real?",
+        text: 'Are we real?',
       },
     ]}
   />
@@ -32,11 +32,11 @@ export const Shortened: StoryFn<typeof Breadcrumbs> = () => (
         link: '/questions',
       },
       {
-        text: "Very Long Category",
-        link: '/questions?category=Very Long Category'
+        text: 'Very Long Category',
+        link: '/questions?category=Very Long Category',
       },
       {
-        text: "Are we real?",
+        text: 'Are we real?',
       },
     ]}
   />
@@ -50,7 +50,7 @@ export const NoCategory: StoryFn<typeof Breadcrumbs> = () => (
         link: '/questions',
       },
       {
-        text: "Are we real?",
+        text: 'Are we real?',
       },
     ]}
   />

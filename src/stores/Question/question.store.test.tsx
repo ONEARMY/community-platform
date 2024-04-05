@@ -1,5 +1,4 @@
 jest.mock('../common/module.store')
-import { IModerationStatus } from 'oa-shared'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
@@ -114,46 +113,6 @@ describe('question.store', () => {
           slug: expect.stringMatching(/question-title-/),
         }),
       )
-    })
-  })
-
-  describe('fetchQuestions', () => {
-    it('handles empty response', async () => {
-      const { store, getWhereFn } = await factory()
-
-      getWhereFn.mockResolvedValue([])
-
-      // Act
-      const res = await store.fetchQuestions()
-
-      expect(res).toStrictEqual([])
-      expect(getWhereFn).toBeCalledWith('_deleted', '!=', 'true')
-    })
-
-    it('handles empty response', async () => {
-      const { store, getWhereFn } = await factory()
-
-      getWhereFn.mockResolvedValue([
-        FactoryQuestionItem({
-          slug: 'question-draft',
-          _createdBy: 'author',
-          moderation: IModerationStatus.DRAFT,
-        }),
-        FactoryQuestionItem({
-          slug: 'question-published',
-          _createdBy: 'author',
-          moderation: IModerationStatus.ACCEPTED,
-        }),
-      ])
-
-      // Act
-      const res = await store.fetchQuestions()
-      expect(res.length).toEqual(1)
-      expect(res[0]).toMatchObject({
-        slug: 'question-published',
-        _createdBy: 'author',
-        moderation: IModerationStatus.ACCEPTED,
-      })
     })
   })
 

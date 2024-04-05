@@ -1,19 +1,14 @@
 import { createContext, useContext } from 'react'
-import { action, computed, makeObservable, observable, runInAction } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
-  filterModerableItems,
   formatLowerNoSpecial,
   isAllowedToEditContent,
   randomID,
 } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
-import {
-  FilterSorterDecorator,
-  ItemSortingOption,
-} from '../common/FilterSorterDecorator/FilterSorterDecorator'
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
@@ -29,82 +24,15 @@ const COLLECTION_NAME = 'questions'
 
 export class QuestionStore extends ModuleStore {
   @observable
-  public allQuestionItems: IQuestionDB[] = []
-
-  @observable
   public activeQuestionItem: IQuestionDB | undefined
-
-  @observable
-  public selectedCategory: string
-
-  @observable
-  public searchValue: string
-
-  @observable
-  public activeSorter: ItemSortingOption
-
-  @observable
-  public preSearchSorter: ItemSortingOption
-
-  public availableItemSortingOption: ItemSortingOption[]
-
-  @observable
-  private filterSorterDecorator: FilterSorterDecorator<IQuestionDB>
-
-  @observable
-  isFetching = true
 
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-    super.init()
-
-    this.selectedCategory = ''
-    this.searchValue = ''
-    this.availableItemSortingOption = [
-      ItemSortingOption.Newest,
-      ItemSortingOption.MostUseful,
-      ItemSortingOption.Comments,
-    ]
-
-    this.allDocs$.subscribe((docs: IQuestionDB[]) => {
-      logger.debug('docs', docs)
-      const activeItems = [...docs].filter((doc) => {
-        return !doc._deleted
-      })
-
-      runInAction(() => {
-        this.activeSorter = ItemSortingOption.Newest
-        this.filterSorterDecorator = new FilterSorterDecorator()
-        this.allQuestionItems = this.filterSorterDecorator.sort(
-          this.activeSorter,
-          activeItems,
-        )
-
-        this.isFetching = false
-      })
-    })
   }
 
   public async incrementViewCount(documentId: string) {
     await incrementDocViewCount(this.db, COLLECTION_NAME, documentId)
-  }
-
-  public updateActiveSorter(sorter: ItemSortingOption) {
-    this.activeSorter = sorter
-  }
-
-  public updatePreSearchSorter() {
-    this.preSearchSorter = this.activeSorter
-  }
-
-  public updateSearchValue(query: string) {
-    this.searchValue = query
-  }
-
-  @action
-  public updateSelectedCategory(category: string) {
-    this.selectedCategory = category
   }
 
   @action
@@ -149,17 +77,6 @@ export class QuestionStore extends ModuleStore {
     )
   }
 
-  @computed get filteredQuestions() {
-    let questions = this.filterSorterDecorator.filterByCategory(
-      this.allQuestionItems,
-      this.selectedCategory,
-    )
-
-    questions = this.filterSorterDecorator.search(questions, this.searchValue)
-
-    return this.filterSorterDecorator.sort(this.activeSorter, questions)
-  }
-
   public async upsertQuestion(values: IQuestion.FormInput) {
     logger.debug(`upsertQuestion:`, { values, activeUser: this.activeUser })
     const dbRef = this.db
@@ -179,6 +96,9 @@ export class QuestionStore extends ModuleStore {
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
     const keywords = getKeywords(values.title + ' ' + values.description)
+    if (values._createdBy) {
+      keywords.push(values._createdBy)
+    }
 
     const images = values.images
       ? await this.loadImages(values.images, dbRef.id)
@@ -195,19 +115,6 @@ export class QuestionStore extends ModuleStore {
     logger.debug(`upsertQuestion.set`, { dbRef })
 
     return dbRef.get() || null
-  }
-
-  public async fetchQuestions() {
-    const questions = await this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
-      .getWhere('_deleted', '!=', 'true')
-
-    const validQuestions = filterModerableItems(
-      questions,
-      this.activeUser as IUser,
-    )
-    logger.debug(`fetchQuestions:`, { validQuestions })
-    return validQuestions
   }
 
   public async toggleSubscriberStatusByUserName() {

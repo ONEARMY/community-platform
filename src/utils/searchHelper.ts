@@ -1,7 +1,15 @@
 import { stopwords } from './stopwords'
 
 export const getKeywords = (text: string) => {
-  const words = text.toLowerCase().split(' ') // lowercase so comparisons are accurate
+  const words = text
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[^\w\s]/gi, '')
+    .toLowerCase()
+    .trim()
+    .split(' ') // normalize and lowercase
   const filteredWords = words.filter((word) => !stopwords.has(word)) // filter stopwords
-  return Array.from(new Set(filteredWords)) // avoid duplicates
+  const uniqueWords = new Set(filteredWords) // avoid duplicates
+  uniqueWords.delete('') // remove empty space
+  return Array.from(uniqueWords) // return as an array
 }

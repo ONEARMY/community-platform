@@ -1,56 +1,76 @@
-import { Box } from 'theme-ui'
+import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
 
-import chevronRightSVG from '../../../assets/icons/icon-chevron-right.svg'
-import { BreadcrumbItem } from './BreadcrumbsItem'
-
-const BREADCRUMBS_ITEM_LABEL_MAX_LENGTH = 38
+import type { IHowto,IQuestion, IResearch } from 'src/models'
 
 type step = { text: string; link?: string } | null
+
 interface BreadcrumbsProps {
-  steps: Array<step>
+  steps?: Array<step>
+  content?: IResearch.ItemDB | IQuestion.Item | IHowto
+  variant?: 'research' | 'question' | 'howto'
 }
 
-const calculateBreadcrumbsLength = (steps: Array<step>) => {
-  const titles_length = steps.reduce((accumulator, step) => {
-    return accumulator + (step ? step.text.length : 0)
-  }, 0)
-  const chevrons_length = (steps.length - 1) * 3
-  return titles_length + chevrons_length
+const generateSteps = (
+  content: IResearch.ItemDB | IQuestion.Item | IHowto | undefined,
+  variant: 'research' | 'question' | 'howto' | undefined,
+) => {
+  let steps: Array<step> = []
+  if (variant == 'research') {
+    const item = content as IResearch.ItemDB
+    steps = [
+      {
+        text: 'Research',
+        link: '/research',
+      },
+      item.researchCategory
+        ? {
+            text: item.researchCategory.label,
+            link: `/research?category=${item.researchCategory.label}`,
+          }
+        : null,
+      {
+        text: item.title,
+      },
+    ]
+  } else if (variant == 'question') {
+    const item = content as IQuestion.Item
+    steps = [
+      {
+        text: 'Question',
+        link: '/questions',
+      },
+      item.questionCategory
+        ? {
+            text: item.questionCategory.label,
+            link: `/questions?category=${item.questionCategory.label}`,
+          }
+        : null,
+      {
+        text: item.title,
+      },
+    ]
+  } else if (variant == 'howto') {
+    const item = content as IHowto
+    steps = [
+      {
+        text: 'How To',
+        link: '/how-to',
+      },
+      item.category
+        ? {
+            text: item.category.label,
+            link: `/how-to?category=${item.category.label}`,
+          }
+        : null,
+      {
+        text: item.title,
+      },
+    ]
+  }
+  return steps
 }
 
-const Chevron = () => {
-  return (
-    <img
-      alt="chevron"
-      height="20px"
-      style={{ marginRight: '10px' }}
-      src={chevronRightSVG}
-    />
-  )
-}
-
-export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
-  const total_length = calculateBreadcrumbsLength(steps)
-  return (
-    <Box style={{ marginLeft: 0, marginTop: 30, marginBottom: 20, padding: 0 }}>
-      {steps.map((step, index) => {
-        const isLast = index === steps.length - 1
-        const isExtreme = isLast || index == 0
-        return (
-          step && (
-            <>
-              <BreadcrumbItem
-                key={index}
-                text={step.text}
-                link={step.link}
-                isLast={isLast}
-                collapse={total_length > BREADCRUMBS_ITEM_LABEL_MAX_LENGTH && !isExtreme}
-              />
-              {!isLast && <Chevron />}
-            </>
-          )
-        )
-      })}
-    </Box>
-  )
+export const Breadcrumbs = ({ steps, content, variant }: BreadcrumbsProps) => {
+  const breadcrumbsSteps = steps ?? generateSteps(content, variant)
+  return <BreadcrumbsComponent steps={breadcrumbsSteps} />
 }

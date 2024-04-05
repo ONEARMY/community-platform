@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
-  Breadcrumbs,
   ContentStatistics,
   FollowButton,
   Loader,
   ModerationStatus,
-  UsefulStatsButton} from 'oa-components'
+  UsefulStatsButton,
+} from 'oa-components'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { logger } from 'src/logger'
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'
@@ -120,23 +121,7 @@ export const QuestionPage = () => {
         <Loader />
       ) : question ? (
         <>
-          <Breadcrumbs
-            steps={[
-              {
-                text: 'Question',
-                link: '/questions',
-              },
-              question.questionCategory
-                ? {
-                    text: question.questionCategory.label,
-                    link: `/questions?category=${question.questionCategory.label}`,
-                  }
-                : null,
-              {
-                text: question.title,
-              },
-            ]}
-          />
+          <Breadcrumbs content={question} variant="question" />
           <Card sx={{ position: 'relative', mt: 4 }}>
             <Box sx={{ p: 4 }}>
               <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>

@@ -8,6 +8,7 @@ import { Button, Loader, TextNotification } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { isPreciousPlastic } from 'src/config/config'
 import { logger } from 'src/logger'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { ProfileType } from 'src/modules/profile/types'
@@ -304,7 +305,7 @@ export const SettingsPage = observer((props: IProps) => {
                     )}
                   </Flex>
 
-                  {!isMember && <ImpactSection />}
+                  {!isMember && isPreciousPlastic() && <ImpactSection />}
 
                   <EmailNotificationsSection
                     notificationSettings={values.notification_settings}

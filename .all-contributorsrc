@@ -625,6 +625,42 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "saile515",
+      "name": "Elias Jörgensen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/63782477?v=4",
+      "profile": "https://www.eliasjorgensen.se",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "devChary",
+      "name": "devChary",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26999371?v=4",
+      "profile": "http://www.jagan-chary.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "paposeco",
+      "name": "Fabi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13892562?v=4",
+      "profile": "https://github.com/paposeco",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Robert-LC",
+      "name": "Robert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72999492?v=4",
+      "profile": "https://github.com/Robert-LC",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

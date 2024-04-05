@@ -1,3 +1,5 @@
+import type { IUploadedFileMeta } from '../stores/storage'
+import type { IConvertedFileMeta } from '../types'
 import type { DBDoc, IModerable, ISelectedTags, ISharedFeatures } from '.'
 import type { IQuestionCategory } from './questionCategories.model'
 
@@ -15,7 +17,8 @@ export namespace IQuestion {
     _createdBy: string
     _deleted: boolean
     subscribers?: UserIdList
-  } & Omit<FormInput, 'collaborators'> &
+  } & DBDoc &
+    FormInput &
     ISharedFeatures
 
   export interface FormInput extends IModerable {
@@ -27,5 +30,6 @@ export namespace IQuestion {
     previousSlugs?: string[]
     creatorCountry?: string
     allowDraftSave?: boolean
+    images?: Array<IUploadedFileMeta | IConvertedFileMeta | null>
   }
 }

@@ -66,6 +66,7 @@ export const DiscussionContainer = (props: IProps) => {
         handleEditRequest={handleEditRequest}
         highlightedCommentId={highlightedCommentId}
         isLoggedIn={isLoggedIn}
+        isReplies={false}
         maxLength={maxLength}
         onMoreComments={onMoreComments}
         onSubmitReply={onSubmitReply}

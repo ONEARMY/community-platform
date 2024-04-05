@@ -7,7 +7,7 @@ import type { IMapPin } from 'src/models'
 export const FactoryMapPin = (
   userOverloads: Partial<IMapPin> = {},
 ): IMapPin => ({
-  _id: faker.datatype.uuid(),
+  _id: faker.string.uuid(),
   _deleted: faker.datatype.boolean(),
   type: faker.helpers.arrayElement(Object.values(ProfileType)),
   subType: faker.helpers.arrayElement([
@@ -25,8 +25,8 @@ export const FactoryMapPin = (
     IModerationStatus.ACCEPTED,
   ]),
   location: {
-    lng: parseFloat(faker.address.longitude()),
-    lat: parseFloat(faker.address.latitude()),
+    lng: faker.location.longitude(),
+    lat: faker.location.latitude(),
   },
   ...userOverloads,
 })

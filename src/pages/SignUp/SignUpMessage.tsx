@@ -28,8 +28,8 @@ const SignUpMessagePage = () => (
           </Heading>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Text>
-              We'll sent you an email very soon to verify your email. In the
-              mean time...
+              We'll send you an email very soon to verify your email address. In
+              the meantime, please...
             </Text>
           </Flex>
         </Flex>

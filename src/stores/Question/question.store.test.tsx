@@ -1,9 +1,22 @@
 jest.mock('../common/module.store')
-import { IModerationStatus } from 'oa-shared'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
 import { QuestionStore } from './question.store'
+
+const mockToggleDocSubscriber = jest.fn()
+jest.mock('../common/toggleDocSubscriberStatusByUserName', () => {
+  return {
+    __esModule: true,
+    toggleDocSubscriberStatusByUserName: () => mockToggleDocSubscriber(),
+  }
+})
+
+const mockToggleDocUsefulByUser = jest.fn()
+jest.mock('../common/toggleDocUsefulByUser', () => ({
+  __esModule: true,
+  toggleDocUsefulByUser: () => mockToggleDocUsefulByUser(),
+}))
 
 const factory = async () => {
   const store = new QuestionStore()
@@ -103,46 +116,6 @@ describe('question.store', () => {
     })
   })
 
-  describe('fetchQuestions', () => {
-    it('handles empty response', async () => {
-      const { store, getWhereFn } = await factory()
-
-      getWhereFn.mockResolvedValue([])
-
-      // Act
-      const res = await store.fetchQuestions()
-
-      expect(res).toStrictEqual([])
-      expect(getWhereFn).toBeCalledWith('_deleted', '!=', 'true')
-    })
-
-    it('handles empty response', async () => {
-      const { store, getWhereFn } = await factory()
-
-      getWhereFn.mockResolvedValue([
-        FactoryQuestionItem({
-          slug: 'question-draft',
-          _createdBy: 'author',
-          moderation: IModerationStatus.DRAFT,
-        }),
-        FactoryQuestionItem({
-          slug: 'question-published',
-          _createdBy: 'author',
-          moderation: IModerationStatus.ACCEPTED,
-        }),
-      ])
-
-      // Act
-      const res = await store.fetchQuestions()
-      expect(res.length).toEqual(1)
-      expect(res[0]).toMatchObject({
-        slug: 'question-published',
-        _createdBy: 'author',
-        moderation: IModerationStatus.ACCEPTED,
-      })
-    })
-  })
-
   describe('fetchQuestionBySlug', () => {
     it('handles empty query response', async () => {
       const { store } = await factory()
@@ -171,22 +144,24 @@ describe('question.store', () => {
   })
 
   describe('toggleSubscriberStatusByUserName', () => {
-    it('adds user to subscribers list', async () => {
-      const { store, updateFn } = await factory()
-      const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-        subscribers: [],
-      })
+    it('calls the toggle subscriber function', async () => {
+      const { store } = await factory()
+      store.activeQuestionItem = FactoryQuestionItem()
 
-      // Act
-      await store.toggleSubscriberStatusByUserName(newQuestion._id, 'user1')
+      await store.toggleSubscriberStatusByUserName()
 
-      expect(updateFn).toBeCalledWith(
-        expect.objectContaining({
-          _id: newQuestion._id,
-          subscribers: ['user1'],
-        }),
-      )
+      expect(mockToggleDocSubscriber).toHaveBeenCalled()
+    })
+  })
+
+  describe('toggleUsefulByUser', () => {
+    it('calls the toogle voted for function', async () => {
+      const { store } = await factory()
+      store.activeQuestionItem = FactoryQuestionItem()
+
+      await store.toggleUsefulByUser()
+
+      expect(mockToggleDocUsefulByUser).toHaveBeenCalled()
     })
   })
 })

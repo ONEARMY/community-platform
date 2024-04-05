@@ -10,16 +10,25 @@ interface IProps {
   children: React.ReactNode
   htmlFor?: string
   required?: boolean
+  flexDirection?: 'column' | 'row' | 'row-reverse' | 'column-reverse'
+  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
   text: string
 }
 
 export const FormFieldWrapper = (props: IProps) => {
-  const { children, htmlFor, required, text } = props
+  const {
+    children,
+    htmlFor,
+    required,
+    text,
+    flexDirection = 'column',
+    flexWrap = 'nowrap',
+  } = props
 
   const heading = required ? `${text} *` : text
 
   return (
-    <Flex sx={{ flexDirection: 'column' }} mb={3}>
+    <Flex sx={{ flexDirection, flexWrap }} mb={3}>
       <Label sx={_labelStyle} htmlFor={htmlFor}>
         {heading}
       </Label>

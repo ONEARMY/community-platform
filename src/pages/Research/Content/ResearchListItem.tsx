@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import {
+  Category,
   Icon,
   IconCountWithTooltip,
   ModerationStatus,
-  Tag,
   Username,
 } from 'oa-components'
 import {
@@ -16,8 +16,8 @@ import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
 import {
-  calculateTotalUpdateComments,
   getPublicUpdates,
+  getResearchTotalCommentCount,
   researchStatusColour,
 } from 'src/utils/helpers'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
@@ -84,33 +84,29 @@ const ResearchListItem = ({ item }: IProps) => {
                 alignItems: 'flex-start',
               }}
             >
-              <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
-                <Flex>
+              <Flex
+                sx={{
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  mb: [1, 0],
+                }}
+              >
+                <Flex sx={{ flexDirection: ['column', 'row'], gap: [0, 3] }}>
                   <Heading
                     color={'black'}
-                    mb={2}
+                    mb={1}
                     sx={{
                       fontSize: [3, 3, 4],
                     }}
                   >
                     {item.title}
                   </Heading>
-                  <Flex
-                    sx={{
-                      display: ['none', 'inline-block', 'inline-block'],
-                      marginLeft: 4,
-                      marginTop: '3px',
-                    }}
-                  >
-                    {item.tagList &&
-                      item.tagList.map((tag, idx) => (
-                        <Tag
-                          key={idx}
-                          tag={tag}
-                          sx={{ marginRight: 1, fontSize: 2 }}
-                        />
-                      ))}
-                  </Flex>
+                  {item.researchCategory && (
+                    <Category
+                      category={item.researchCategory}
+                      sx={{ fontSize: 2, mt: [0, '3px'] }}
+                    />
+                  )}
                 </Flex>
                 <Text
                   sx={{
@@ -206,7 +202,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                    {calculateTotalUpdateComments(item)}
+                    {getResearchTotalCommentCount(item)}
                     <Icon glyph="comment" ml={1} />
                   </Text>
                   <Text
@@ -220,12 +216,6 @@ const ResearchListItem = ({ item }: IProps) => {
                     {getItemDate(item, 'short')}
                   </Text>
                 </Box>
-              </Flex>
-              <Flex sx={{ marginTop: 1, display: ['flex', 'none', 'none'] }}>
-                {item.tagList &&
-                  item.tagList.map((tag, idx) => (
-                    <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
-                  ))}
               </Flex>
             </Flex>
             {/* Hide these on mobile, show on tablet & above. */}
@@ -242,7 +232,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 text="How useful is it"
               />
               <IconCountWithTooltip
-                count={calculateTotalUpdateComments(item)}
+                count={getResearchTotalCommentCount(item)}
                 icon="comment"
                 text="Total comments"
               />

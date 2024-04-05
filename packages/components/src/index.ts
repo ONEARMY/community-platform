@@ -1,6 +1,7 @@
 export { ArticleCallToAction } from './ArticleCallToAction/ArticleCallToAction'
 export { Button } from './Button/Button'
 export { ButtonShowReplies } from './ButtonShowReplies/ButtonShowReplies'
+export { Category } from './Category/Category'
 export { CommentContainer } from './CommentContainer/CommentContainer'
 export { CommentItem } from './CommentItem/CommentItem'
 export { CommentList } from './CommentList/CommentList'
@@ -38,6 +39,7 @@ export { ResearchEditorOverview } from './ResearchEditorOverview/ResearchEditorO
 export { Select } from './Select/Select'
 export { SiteFooter } from './SiteFooter/SiteFooter'
 export { Tag } from './Tag/Tag'
+export { TagList } from './TagList/TagList'
 export { TextNotification } from './TextNotification/TextNotification'
 export { Tooltip } from './Tooltip/Tooltip'
 export { UsefulStatsButton } from './UsefulStatsButton/UsefulStatsButton'
@@ -54,6 +56,7 @@ export { IconCountWithTooltip } from './IconCountWithTooltip/IconCountWithToolti
 
 export type { availableGlyphs, IGlyphs } from './Icon/types'
 export type { IComment } from './CommentItem/types'
+export type { ITag } from './Tag/Tag'
 export type { IImageGalleryItem } from './ImageGallery/ImageGallery'
 export type { ResearchEditorOverviewUpdate } from './ResearchEditorOverview/ResearchEditorOverview'
 export type { Props as TextNotificationProps } from './TextNotification/TextNotification'

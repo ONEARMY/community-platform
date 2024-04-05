@@ -15,6 +15,7 @@ export const Default: StoryFn<typeof CommentList> = () => (
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
     isLoggedIn={true}
+    isReplies={false}
     maxLength={1000}
     onMoreComments={() => null}
   />
@@ -27,6 +28,7 @@ export const Expandable: StoryFn<typeof CommentList> = () => (
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
     isLoggedIn={true}
+    isReplies={false}
     maxLength={1000}
     onMoreComments={() => null}
   />
@@ -51,6 +53,7 @@ export const WithNestedComments: StoryFn<typeof CommentList> = () => {
       handleEditRequest={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
       isLoggedIn={true}
+      isReplies={false}
       maxLength={1000}
       onMoreComments={() => Promise.resolve()}
       onSubmitReply={() => Promise.resolve()}
@@ -72,6 +75,7 @@ export const WithNestedCommentsAndReplies: StoryFn<typeof CommentList> = () => {
       supportReplies={true}
       comments={comments}
       isLoggedIn={true}
+      isReplies={false}
       maxLength={800}
       setCommentBeingRepliedTo={() => {}}
       handleDelete={() => Promise.resolve()}
@@ -99,6 +103,7 @@ export const WithNestedCommentsAndRepliesMaxDepthTwo: StoryFn<
     <CommentList
       supportReplies={true}
       isLoggedIn={true}
+      isReplies={false}
       maxLength={800}
       comments={comments}
       setCommentBeingRepliedTo={() => {}}
@@ -122,6 +127,7 @@ export const Highlighted: StoryFn<typeof CommentList> = () => (
     handleEditRequest={() => Promise.resolve()}
     handleEdit={() => Promise.resolve()}
     isLoggedIn={true}
+    isReplies={false}
     maxLength={1000}
     onMoreComments={() => null}
   />

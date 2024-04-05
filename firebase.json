@@ -1,7 +1,12 @@
 {
+  "$schema": "./node_modules/firebase-tools/schema/firebase-config.json",
   "hosting": {
     "public": "build",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "/api",
@@ -86,7 +91,9 @@
     ]
   },
   "functions": {
-    "predeploy": ["yarn workspace functions build"],
+    "predeploy": [
+      "yarn workspace functions build"
+    ],
     "source": "functions/dist",
     "runtime": "nodejs20"
   },
@@ -122,5 +129,8 @@
   },
   "extensions": {
     "firestore-send-email": "firebase/firestore-send-email@0.1.27"
+  },
+  "firestore": {
+    "indexes": "./firestore.indexes.json"
   }
 }

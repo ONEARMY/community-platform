@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
+  Category,
   ConfirmModal,
   ContentStatistics,
   FollowButton,
@@ -266,7 +267,13 @@ const ResearchDescription = ({
               ) : null}
             </Flex>
 
-            <Heading mt={2} mb={1}>
+            {research.researchCategory && (
+              <Category
+                category={research.researchCategory}
+                sx={{ fontSize: 2, mt: 2 }}
+              />
+            )}
+            <Heading mt={research.researchCategory ? 1 : 2} mb={1}>
               {research.title}
             </Heading>
             <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>

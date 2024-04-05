@@ -7,15 +7,15 @@ import type { IUserPPDB } from 'src/models'
 export const FactoryUser = (
   userOverloads: Partial<IUserPPDB> = {},
 ): IUserPPDB => ({
-  _id: faker.datatype.uuid(),
+  _id: faker.string.uuid(),
   _created: faker.date.past().toString(),
   _modified: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
   _contentModifiedTimestamp: faker.date.past().toString(),
-  _authID: faker.datatype.uuid(),
+  _authID: faker.string.uuid(),
   profileType: faker.helpers.arrayElement(Object.values(ProfileType)),
   userName: faker.internet.userName(),
-  displayName: faker.name.fullName(),
+  displayName: faker.person.fullName(),
   verified: faker.datatype.boolean(),
   links: [],
   moderation: faker.helpers.arrayElement([
@@ -24,7 +24,7 @@ export const FactoryUser = (
     IModerationStatus.REJECTED,
     IModerationStatus.ACCEPTED,
   ]),
-  country: faker.address.countryCode(),
+  country: faker.location.countryCode(),
   notifications: [],
   coverImages: [] as any[],
   ...userOverloads,

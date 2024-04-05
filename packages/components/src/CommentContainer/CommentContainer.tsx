@@ -18,6 +18,7 @@ export interface Props {
   handleEdit: (_id: string, comment: string) => Promise<void>
   handleEditRequest: () => Promise<void>
   isLoggedIn: boolean
+  isReplies?: boolean
   onSubmitReply?: (_id: string, reply: string) => Promise<void>
   maxLength: number
   supportReplies: boolean
@@ -32,6 +33,7 @@ export const CommentContainer = (props: Props) => {
     handleEdit,
     supportReplies,
     isLoggedIn,
+    isReplies,
     maxLength,
     onSubmitReply,
   } = props
@@ -82,6 +84,7 @@ export const CommentContainer = (props: Props) => {
         handleEditRequest={handleEditRequest}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
+        isReply={isReplies ? true : false}
       />
 
       {supportReplies && !isShowReplies && repliesButton()}
@@ -108,6 +111,7 @@ export const CommentContainer = (props: Props) => {
               handleEdit={handleEdit}
               handleEditRequest={handleEditRequest}
               isLoggedIn={isLoggedIn}
+              isReplies={true}
               maxLength={maxLength}
               supportReplies={false}
             />

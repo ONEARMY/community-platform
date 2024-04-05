@@ -50,3 +50,18 @@ export const transformImpactInputs = (
 
   return fields
 }
+
+export const sortImpactYearDisplayFields = (
+  fields: IImpactYearFieldList | undefined,
+): IImpactYearFieldList => {
+  const sortedFields = [] as IImpactYearFieldList
+  if (!fields) {
+    return sortedFields
+  }
+
+  impactQuestions.forEach((question) => {
+    const answer = fields.find((element) => element.id === question.id)
+    answer !== undefined ? sortedFields.push(answer) : null
+  })
+  return sortedFields
+}

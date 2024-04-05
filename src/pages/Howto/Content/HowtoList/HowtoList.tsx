@@ -5,8 +5,7 @@ import { Button, Loader, MoreContainer } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
-import { VirtualizedFlex } from 'src/pages/Howto/VirtualizedFlex/VirtualizedFlex'
-import { Box, Flex, Heading } from 'theme-ui'
+import { Box, Flex, Grid, Heading } from 'theme-ui'
 
 import HowToCard from './HowToCard'
 
@@ -147,22 +146,20 @@ export const HowtoList = observer(() => {
             </Heading>
           </Flex>
         )}
-        <Flex
-          my={4}
-          mx={-4}
-          sx={{ justifyContent: 'center' }}
+        <Grid
+          columns={[1, 2, 2, 3]}
           data-cy="howtolist-flex-container"
+          gap={4}
+          sx={{ paddingTop: 1 }}
         >
-          <VirtualizedFlex
-            data={howtoItems}
-            renderItem={(howto: any) => (
-              <HowToCard
-                howto={howto}
-                votedUsefulCount={(howto.votedUsefulBy || []).length}
-              />
-            )}
-          />
-        </Flex>
+          {howtoItems.map((howto: any, index) => (
+            <HowToCard
+              howto={howto}
+              votedUsefulCount={(howto.votedUsefulBy || []).length}
+              key={index}
+            />
+          ))}
+        </Grid>
         <Flex sx={{ justifyContent: 'center' }} mt={20}>
           <Link to={'#'} style={{ visibility: 'hidden' }}>
             <Button variant={'secondary'} data-cy="more-how-tos">

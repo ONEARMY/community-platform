@@ -59,3 +59,4 @@ export type { ResearchEditorOverviewUpdate } from './ResearchEditorOverview/Rese
 export type { Props as TextNotificationProps } from './TextNotification/TextNotification'
 export type { User } from './types/common'
 export type { UserNotificationList } from './NotificationList/NotificationList'
+export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs'

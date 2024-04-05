@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
+  Breadcrumbs,
   Button,
   FollowButton,
   Loader,
@@ -14,7 +15,6 @@ import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
-import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {

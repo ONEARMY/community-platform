@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
+  Breadcrumbs,
   ContentStatistics,
   FollowButton,
   Loader,
   ModerationStatus,
-  UsefulStatsButton,
-} from 'oa-components'
+  UsefulStatsButton} from 'oa-components'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { logger } from 'src/logger'
-import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { buildStatisticsLabel, isAllowedToEditContent } from 'src/utils/helpers'

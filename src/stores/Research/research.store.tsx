@@ -217,6 +217,13 @@ export class ResearchStore extends ModuleStore {
       enrichedResearchUpdated.comments = discussion
         ? (update.comments || []).concat(discussion.comments)
         : []
+
+      // Remove duplicate comments based on _id proprety
+      enrichedResearchUpdated.comments = [
+        ...new Map(
+          enrichedResearchUpdated.comments.map((item) => [item._id, item]),
+        ).values(),
+      ]
       return enrichedResearchUpdated
     }
 

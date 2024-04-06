@@ -81,11 +81,6 @@ export class UserStore extends ModuleStore {
   }
 
   @action
-  private updateActiveUser(user?: IUserPPDB | null) {
-    this.user = user
-  }
-
-  @action
   public setUpdateStatus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
   }

@@ -54,8 +54,10 @@ export const numberWithCommas = (number: number) => {
 
 // Take a string and capitalises the first letter
 // hello world => Hello world
-export const capitalizeFirstLetter = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1)
+export const capitalizeFirstLetter = (str: string) => {
+  if (!str || typeof str !== 'string') return ''
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
 
 /** Show only items which are either accepted, the user has created, or an admin can see
  * HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside

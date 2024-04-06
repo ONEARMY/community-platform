@@ -369,46 +369,20 @@ export class UserStore extends ModuleStore {
     this.aggregationsStore.updateAggregation('users_totalUseful')
   }
 
-
-        await dbRef.update(notificationUpdate)
-      }
-    } catch (err) {
-      logger.error(err)
-      throw new Error(err)
-    }
-  }
-
   // handle user sign in, when firebase authenticates want to also fetch user document from the database
-  private async _userSignedIn(
-    user: IFirebaseUser | null,
-    newUserCreated = false,
-  ) {
-    if (user) {
-      logger.debug('user signed in', user)
-      // legacy user formats did not save names so get profile via email - this option be removed in later version
-      // (assumes migration strategy and check)
-      const userMeta = await this.getUserProfile(user.uid)
+  private async _userSignedIn(user: IFirebaseUser | null) {
+    if (!user) return null
 
-      if (userMeta) {
-        this._updateActiveUser(userMeta)
-        logger.debug('userMeta', userMeta)
+    // legacy user formats did not save names so get profile via email - this option be removed in later version
+    // (assumes migration strategy and check)
+    const userMeta = await this.getUserProfile(user.uid)
+    if (!userMeta) return
 
-        // Update last active for user
-        await this.db
-          .collection<IUserPP>(COLLECTION_NAME)
-          .doc(userMeta._id)
-          .update({ ...userMeta, _lastActive: new Date().toISOString() })
-      } else {
-        await this._createUserProfile('sign-in')
-        // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
-        if (!newUserCreated) {
-          return this._userSignedIn(user, true)
-        }
-        // throw new Error(
-        //   `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
-        // )
-      }
-    }
+    this._updateActiveUser(userMeta)
+    logger.debug('user signed in', user)
+
+    await this._updateUserRequest(userMeta._id, {})
+    return userMeta
   }
 
   private async _createUserProfile(trigger: string) {

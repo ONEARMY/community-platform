@@ -71,7 +71,7 @@ export const HowToCard = (props: IProps) => {
               to={`/how-to/${encodeURIComponent(howto.slug)}`}
               style={{ width: '100%', color: 'black' }}
             >
-              {capitalizeFirstLetter(howto.title)}
+              {capitalizeFirstLetter(howto.title || '')}
             </RouterLink>
           </Heading>
 

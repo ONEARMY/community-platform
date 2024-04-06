@@ -37,6 +37,8 @@ The user store listens to login events through the firebase api and exposes logg
 
 export const COLLECTION_NAME = 'users'
 
+type PartialUser = Partial<IUserPPDB>
+
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.default.Unsubscribe
   @observable
@@ -173,25 +175,14 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserBadge(userId: string, badges: IUserBadges) {
-    const dbRef = this.db.collection<IBadgeUpdate>(COLLECTION_NAME).doc(userId)
-
-    const badgeUpdate = {
-      _id: userId,
-      badges,
-    }
-
-    await dbRef.update(badgeUpdate)
+    await this._updateUserRequest(userId, { badges })
   }
 
   public async removePatreonConnection(userId: string) {
-    await Promise.all([
-      this.updateUserBadge(userId, {
-        supporter: false,
-      }),
-      this.db.collection(COLLECTION_NAME).doc(userId).update({
-        patreon: null,
-      }),
-    ])
+    await this._updateUserRequest(userId, {
+      badges: { supporter: false },
+      patreon: null,
+    })
     await this.refreshActiveUserDetails()
   }
 
@@ -202,13 +193,16 @@ export class UserStore extends ModuleStore {
    * (default is current logged in user)
    */
   public async updateUserProfile(
-    values: Partial<IUserPP> & { _id: string },
+    values: PartialUser,
     trigger: string,
     adminEditableUserId?: string,
   ) {
+    if (!values._id) {
+      logger.debug('No User ID provided')
+      throw new Error('No User ID provided')
+    }
+
     this._setUpdateStatus('Start')
-    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(values._id)
-    const id = dbRef.id
 
     // If admin updating another user assume full user passed as values, otherwise merge updates with current user.
     // Include a shallow merge of update with existing user, deserialising mobx observables (caused issue previously)
@@ -229,7 +223,7 @@ export class UserStore extends ModuleStore {
       const processedImages = await this.uploadCollectionBatch(
         values.coverImages as IConvertedFileMeta[],
         COLLECTION_NAME,
-        id,
+        values._id,
       )
       updatedUserProfile.coverImages = processedImages
     }
@@ -245,10 +239,7 @@ export class UserStore extends ModuleStore {
     }
 
     // update on db and update locally (if targeting self as user)
-    await this.db
-      .collection(COLLECTION_NAME)
-      .doc(updatedUserProfile._id)
-      .update(updatedUserProfile)
+    await this._updateUserRequest(updatedUserProfile._id, updatedUserProfile)
 
     if (!adminEditableUserId) {
       this._updateActiveUser(updatedUserProfile)
@@ -261,6 +252,7 @@ export class UserStore extends ModuleStore {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this._setUpdateStatus('Complete')
+    await this.refreshActiveUserDetails()
   }
 
   @action
@@ -274,11 +266,7 @@ export class UserStore extends ModuleStore {
       throw new Error('User not found')
     }
 
-    await this.db
-      .collection(COLLECTION_NAME)
-      .doc(user._id)
-      .update({ [`impact.${year}`]: fields })
-
+    await this._updateUserRequest(user._id, { [`impact.${year}`]: fields })
     await this.refreshActiveUserDetails()
   }
 
@@ -291,15 +279,11 @@ export class UserStore extends ModuleStore {
       throw new Error('User not found')
     }
 
-    await this.db
-      .collection(COLLECTION_NAME)
-      .doc(user._id)
-      .update({
-        _id: user._id,
-        notification_settings: {
-          emailFrequency: EmailNotificationFrequency.NEVER,
-        },
-      })
+    await this._updateUserRequest(user._id, {
+      notification_settings: {
+        emailFrequency: EmailNotificationFrequency.NEVER,
+      },
+    })
   }
 
   public async refreshActiveUserDetails() {
@@ -482,6 +466,18 @@ export class UserStore extends ModuleStore {
         this._updateActiveUser(null)
       }
     })
+  }
+
+  private async _updateUserRequest(userId: string, updateFields: PartialUser) {
+    const _lastActive = new Date().toISOString()
+
+    return await this.db
+      .collection<PartialUser>(COLLECTION_NAME)
+      .doc(userId)
+      .update({
+        _lastActive,
+        ...updateFields,
+      })
   }
 
   private _unsubscribeFromAuthStateChanges() {

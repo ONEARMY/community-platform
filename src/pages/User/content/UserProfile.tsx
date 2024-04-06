@@ -33,13 +33,7 @@ export const UserProfile = observer(() => {
       const fetchUserData = async () => {
         try {
           const userData = await userStore.getUserProfile(userId)
-          setUser(
-            userData
-              ? {
-                  ...userData,
-                }
-              : null,
-          )
+          userData && setUser(userData)
         } catch (error) {
           logger.error('Error getting user profile', error)
         }
@@ -48,8 +42,7 @@ export const UserProfile = observer(() => {
       const fetchUserDocs = async () => {
         try {
           const docs = await userStore.getUserCreatedDocs(userId)
-
-          await setUserCreatedDocs(docs || null)
+          setUserCreatedDocs(docs)
           setIsLoading(false)
         } catch (error) {
           logger.error('Error getting user created docs', error)

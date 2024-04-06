@@ -217,6 +217,13 @@ export class ResearchStore extends ModuleStore {
       enrichedResearchUpdated.comments = discussion
         ? (update.comments || []).concat(discussion.comments)
         : []
+
+      // Remove duplicate comments based on _id proprety
+      enrichedResearchUpdated.comments = [
+        ...new Map(
+          enrichedResearchUpdated.comments.map((item) => [item._id, item]),
+        ).values(),
+      ]
       return enrichedResearchUpdated
     }
 
@@ -405,7 +412,11 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async addComment(text: string, update: IResearch.UpdateDB) {
+  public async addComment(
+    text: string,
+    update: IResearch.UpdateDB,
+    parentCommentId: string | null,
+  ) {
     const user = this.activeUser
     const researchItem = this.activeResearchItem
     const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
@@ -430,6 +441,7 @@ export class ResearchStore extends ModuleStore {
         const discussionObj = await this.discussionStore.addComment(
           discussion,
           comment,
+          parentCommentId,
         )
         // TODO: This is too brittle, ideally we should extend discussionStore.addComment
         // to return the discussionObject and newly created commentObj

@@ -55,6 +55,23 @@ export const ResearchComments = (props: IProps) => {
     }
   }
 
+  const handleSubmitReply = async (parentCommentId: string, reply: string) => {
+    try {
+      await researchStore.addComment(
+        reply,
+        update as IResearch.Update,
+        parentCommentId,
+      )
+      setComment('')
+
+      const action = 'Submitted reply'
+      trackEvent({ action, category, label })
+      logger.debug({ action, category, label }, 'reply submitted')
+    } catch (err) {
+      logger.error(`Failed to set reply`, { err })
+    }
+  }
+
   const handleEditRequest = async () => {
     const action = 'Edit existing comment'
     trackEvent({ action, category, label })
@@ -133,6 +150,7 @@ export const ResearchComments = (props: IProps) => {
           }}
         >
           <DiscussionContainer
+            supportReplies={true}
             comment={comment}
             comments={comments}
             handleEdit={handleEdit}
@@ -144,6 +162,7 @@ export const ResearchComments = (props: IProps) => {
             onChange={setComment}
             onMoreComments={onMoreComments}
             onSubmit={onSubmit}
+            onSubmitReply={handleSubmitReply}
           />
         </Flex>
       )}

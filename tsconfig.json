@@ -27,7 +27,8 @@
     "declaration": true,
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
-    "useUnknownInCatchVariables": false
+    "useUnknownInCatchVariables": false,
+    "downlevelIteration": true
   },
   "include": ["src/**/*", "types"],
   "exclude": [

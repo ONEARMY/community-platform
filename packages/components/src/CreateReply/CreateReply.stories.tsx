@@ -28,3 +28,16 @@ export const LoggedIn: StoryFn<typeof CreateReply> = () => {
     />
   )
 }
+
+export const LoggedInWithError: StoryFn<typeof CreateReply> = () => {
+  return (
+    <CreateReply
+      commentId={'23543bh'}
+      isLoggedIn={true}
+      maxLength={1000}
+      onSubmit={async () => {
+        return Promise.reject(new Error('Error!'))
+      }}
+    />
+  )
+}

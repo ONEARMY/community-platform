@@ -1,7 +1,7 @@
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 
 import { render } from '../tests/utils'
-import { Default, LoggedIn } from './CreateReply.stories'
+import { Default, LoggedIn, LoggedInWithError } from './CreateReply.stories'
 
 import type { Props } from './CreateReply'
 
@@ -39,5 +39,30 @@ describe('CreateReply', () => {
     const submitButton = screen.getByText('Leave a reply')
     fireEvent.click(submitButton)
     expect(emptyTextArea).toBeInTheDocument()
+  })
+
+  it('handles an error in the onSubmit prop', async () => {
+    const screen = render(
+      <LoggedInWithError {...(LoggedInWithError.args as Props)} />,
+    )
+
+    const emptyTextArea = screen.getByPlaceholderText('Leave your question', {
+      exact: false,
+    })
+    fireEvent.change(emptyTextArea, {
+      target: { value: 'A commment for this field' },
+    })
+
+    const submitButton = screen.getByText('Leave a reply')
+
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Unable to leave a comment at this time. Please try again later.',
+        ),
+      ).toBeInTheDocument()
+    })
   })
 })

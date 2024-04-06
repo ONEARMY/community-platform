@@ -22,10 +22,8 @@ import { Storage } from '../storage'
 
 import type { User } from 'firebase/auth'
 import type {
-  IBadgeUpdate,
   IImpactYear,
   IImpactYearFieldList,
-  INotificationUpdate,
   IUser,
   IUserBadges,
 } from 'src/models/user.models'
@@ -392,23 +390,6 @@ export class UserStore extends ModuleStore {
     this.aggregationsStore.updateAggregation('users_totalUseful')
   }
 
-  @action
-  public async deleteNotification(id: string) {
-    try {
-      const user = this.activeUser
-      if (id && user && user.notifications) {
-        const notifications = toJS(user.notifications).filter(
-          (notification) => !(notification._id === id),
-        )
-
-        const dbRef = this.db
-          .collection<INotificationUpdate>(COLLECTION_NAME)
-          .doc(user._id)
-
-        const notificationUpdate = {
-          _id: user._id,
-          notifications,
-        }
 
         await dbRef.update(notificationUpdate)
       }

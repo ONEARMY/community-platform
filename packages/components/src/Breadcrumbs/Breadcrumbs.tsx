@@ -21,7 +21,14 @@ const calculateBreadcrumbsLength = (steps: Array<step>) => {
 export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
   const total_length = calculateBreadcrumbsLength(steps)
   return (
-    <Box style={{ marginLeft: 0, marginTop: 30, marginBottom: 20, padding: 0 }}>
+    <Box
+      sx={{
+        marginLeft: 2,
+        marginTop: [2, 4],
+        marginBottom: [2, 4],
+        padding: 0,
+      }}
+    >
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1
         const isExtreme = isLast || index == 0
@@ -41,6 +48,7 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
                 <Icon
                   glyph={'chevron-right'}
                   color={'black'}
+                  verticalAlign={'text-top'}
                   marginRight={'10px'}
                 />
               )}

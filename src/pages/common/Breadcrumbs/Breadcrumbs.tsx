@@ -42,7 +42,7 @@ const generateSteps = (
       item.questionCategory
         ? {
             text: item.questionCategory.label,
-            link: `/questions?category=${item.questionCategory.label}`,
+            link: `/questions?category=${item.questionCategory._id}`,
           }
         : null,
       {

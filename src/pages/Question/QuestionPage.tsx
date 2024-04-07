@@ -79,7 +79,7 @@ export const QuestionPage = () => {
       ) : question ? (
         <>
           <Breadcrumbs content={question} variant="question" />
-          <Card sx={{ position: 'relative', marginTop: 4 }}>
+          <Card sx={{ position: 'relative' }}>
             <Flex sx={{ flexDirection: 'column', padding: 4, gap: 2 }}>
               <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
                 <UsefulStatsButton

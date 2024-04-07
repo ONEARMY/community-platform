@@ -96,7 +96,7 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
     '&:hover': {
       backgroundColor: colors.softblue,
       border: '1px solid ' + colors.lightgrey,
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
   },
 })

@@ -1,18 +1,20 @@
 import { toJS } from 'mobx'
 
-import type { IVotedUsefulUpdate } from 'src/models'
+import type { IQuestion, IResearch } from 'src/models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
 export const toggleDocUsefulByUser = async (
   db: DatabaseV2,
   collectionName: DBEndpoint,
-  docId: string,
+  _id: string,
   userName: string,
 ) => {
-  const dbRef = db.collection<IVotedUsefulUpdate>(collectionName).doc(docId)
-
+  const dbRef = db
+    .collection<IQuestion.Item | IResearch.Item>(collectionName)
+    .doc(_id)
   const docData = await toJS(dbRef.get('server'))
+
   if (!docData) return
 
   const votedUsefulBy = !(docData?.votedUsefulBy || []).includes(userName)
@@ -20,8 +22,9 @@ export const toggleDocUsefulByUser = async (
     : (docData?.votedUsefulBy || []).filter((uName) => uName !== userName)
 
   const votedUsefulUpdate = {
-    _id: docId,
-    votedUsefulBy: votedUsefulBy,
+    _id,
+    votedUsefulBy,
+    totalUsefulVotes: votedUsefulBy.length,
   }
 
   await dbRef.update(votedUsefulUpdate)

@@ -10,6 +10,8 @@ import { useQuestionStore } from 'src/stores/Question/question.store'
 import { setAllowDraftSaveFalse } from 'src/utils/validators'
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
+import { QUESTION_MAX_IMAGES } from '../../constants'
+import { QuestionImagesField } from './FormFields/QuestionImage.field'
 import {
   QuestionCategoryField,
   QuestionDescriptionField,
@@ -26,14 +28,15 @@ interface IProps {
 }
 
 export const QuestionForm = (props: IProps) => {
+  const { parentType } = props
   const navigate = useNavigate()
   const store = useQuestionStore()
   const publishButtonText =
     props.formValues?.moderation === IModerationStatus.DRAFT
       ? LABELS.buttons.create
-      : LABELS.buttons[props.parentType]
+      : LABELS.buttons[parentType]
 
-  const headingText = LABELS.headings[props.parentType]
+  const headingText = LABELS.headings[parentType]
 
   return (
     <Form
@@ -55,81 +58,92 @@ export const QuestionForm = (props: IProps) => {
       }}
       mutators={{ setAllowDraftSaveFalse }}
       initialValues={props.formValues}
-      render={({ submitting, handleSubmit, form }) => (
-        <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-          <Flex
-            bg="inherit"
-            px={2}
-            sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
-            mt={4}
-          >
-            <Box
-              as="form"
-              id="questionForm"
-              sx={{ width: '100%' }}
-              onSubmit={handleSubmit}
+      render={({ submitting, handleSubmit, form, values }) => {
+        const numberOfImageInputsAvailable = values?.images
+          ? Math.min(values.images.length + 1, QUESTION_MAX_IMAGES)
+          : 1
+        return (
+          <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+            <Flex
+              bg="inherit"
+              px={2}
+              sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
+              mt={4}
             >
-              <Card sx={{ backgroundColor: 'softblue' }}>
-                <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
-                  <Heading>{headingText}</Heading>
-                  <Box ml="15px">
-                    <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
-                  </Box>
-                </Flex>
-              </Card>
-              <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
-                <PostingGuidelines />
+              <Box
+                as="form"
+                id="questionForm"
+                sx={{ width: '100%' }}
+                onSubmit={handleSubmit}
+              >
+                <Card sx={{ backgroundColor: 'softblue' }}>
+                  <Flex
+                    data-cy={`question-${parentType}-title`}
+                    sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}
+                  >
+                    <Heading>{headingText}</Heading>
+                    <Box ml="15px">
+                      <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
+                    </Box>
+                  </Flex>
+                </Card>
+                <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
+                  <PostingGuidelines />
+                </Box>
+                <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
+                  <QuestionTitleField />
+                  <QuestionDescriptionField />
+                  <QuestionImagesField
+                    inputsAvailable={numberOfImageInputsAvailable}
+                  />
+                  <QuestionCategoryField />
+                  <QuestionTagsField />
+                </Card>
               </Box>
-              <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
-                <QuestionTitleField />
-                <QuestionDescriptionField />
-                <QuestionCategoryField />
-                <QuestionTagsField />
-              </Card>
-            </Box>
-          </Flex>
-          <Flex
-            sx={{
-              flexDirection: 'column',
-              width: ['100%', '100%', `${100 / 3}%`],
-              height: '100%',
-            }}
-            bg="inherit"
-            px={2}
-            mt={[0, 0, 4]}
-          >
-            <Box
+            </Flex>
+            <Flex
               sx={{
-                top: 3,
-                maxWidth: ['inherit', 'inherit', '400px'],
+                flexDirection: 'column',
+                width: ['100%', '100%', `${100 / 3}%`],
+                height: '100%',
               }}
+              bg="inherit"
+              px={2}
+              mt={[0, 0, 4]}
             >
-              <Box sx={{ display: ['none', 'none', 'block'] }}>
-                <PostingGuidelines />
-              </Box>
-              <Button
-                large
-                data-cy={'submit'}
-                mt={3}
-                variant="primary"
-                type="submit"
-                disabled={submitting}
-                onClick={(event) => {
-                  form.mutators.setAllowDraftSaveFalse()
-                  handleSubmit(event)
-                }}
+              <Box
                 sx={{
-                  width: '100%',
-                  mb: ['40px', '40px', 0],
-                  display: 'block',
+                  top: 3,
+                  maxWidth: ['inherit', 'inherit', '400px'],
                 }}
               >
-                {publishButtonText}
-              </Button>
-            </Box>
+                <Box sx={{ display: ['none', 'none', 'block'] }}>
+                  <PostingGuidelines />
+                </Box>
+                <Button
+                  large
+                  data-cy={'submit'}
+                  mt={3}
+                  variant="primary"
+                  type="submit"
+                  disabled={submitting}
+                  onClick={(event) => {
+                    form.mutators.setAllowDraftSaveFalse()
+                    handleSubmit(event)
+                  }}
+                  sx={{
+                    width: '100%',
+                    mb: ['40px', '40px', 0],
+                    display: 'block',
+                  }}
+                >
+                  {publishButtonText}
+                </Button>
+              </Box>
+            </Flex>
           </Flex>
-        </Flex>
-      )}
+        )
+      }}
     />
   )
 }

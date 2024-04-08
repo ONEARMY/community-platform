@@ -3,13 +3,13 @@ import { faker } from '@faker-js/faker'
 import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
 import { missing } from '../../../../src/pages/User/impact/labels'
 import { contact } from '../../../../src/pages/User/labels'
-import { users } from '../data'
+import { MOCK_DATA } from '../data'
 import { UserMenuItem } from '../support/commands'
 
-const { admin, subscriber } = users
-const eventReader = users.event_reader
-const machine = users.settings_machine_new
-const userProfiletype = users.settings_workplace_new
+const { admin, subscriber } = MOCK_DATA.users
+const eventReader = MOCK_DATA.users.event_reader
+const machine = MOCK_DATA.users.settings_machine_new
+const userProfiletype = MOCK_DATA.users.settings_workplace_new
 
 describe('[Profile]', () => {
   beforeEach(() => {

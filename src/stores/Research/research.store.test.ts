@@ -185,7 +185,7 @@ describe('research.store', () => {
         )
 
         // Act
-        await store.addComment('fish', researchItem.updates[0])
+        await store.addComment('fish', researchItem.updates[0], null)
 
         // Assert
         const [newResearchItem] = updateFn.mock.calls[0]
@@ -212,6 +212,7 @@ describe('research.store', () => {
         expect(store.discussionStore.addComment).toBeCalledWith(
           expect.any(Object),
           'fish',
+          null,
         )
       })
 
@@ -223,6 +224,7 @@ describe('research.store', () => {
         await store.addComment(
           'My favourite user has to be @username',
           researchItem.updates[0],
+          null,
         )
 
         // Assert
@@ -241,6 +243,7 @@ describe('research.store', () => {
         expect(store.discussionStore.addComment).toBeCalledWith(
           expect.any(Object),
           'My favourite user has to be @username',
+          null,
         )
       })
     })

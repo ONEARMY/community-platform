@@ -139,7 +139,7 @@ export const needsModeration = (doc: IModerable, user?: IUser) => {
  */
 export const isAllowedToEditContent = (
   doc: IEditableDoc & { collaborators?: string[] },
-  user?: IUser,
+  user?: IUser | null | undefined,
 ) => {
   if (!user) {
     return false
@@ -213,9 +213,13 @@ export const isContactable = (preference: boolean | undefined) => {
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 
-export const calculateTotalUpdateComments = (
+export const getResearchTotalCommentCount = (
   item: IResearch.ItemDB | IItem,
 ): number => {
+  if (Object.hasOwnProperty.call(item, 'totalCommentCount')) {
+    return item.totalCommentCount
+  }
+
   if (item.updates) {
     const commentOnUpdates = item.updates.reduce((totalComments, update) => {
       const updateCommentsLength =

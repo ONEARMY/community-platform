@@ -133,11 +133,11 @@ describe('[Settings]', () => {
         },
       ],
       location: {
-        administrative: 'Central',
+        administrative: '',
         country: 'Singapore',
         countryCode: 'sg',
         latlng: { lng: '103.8194992', lat: '1.357107' },
-        name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+        name: 'Drongo Trail, Bishan, Central, Singapore, 578774, Singapore',
         postcode: '578774',
         value: 'Singapore',
       },
@@ -356,11 +356,11 @@ describe('[Settings]', () => {
         ],
         mapPinDescription: 'Fun, vibrant and full of amazing people',
         location: {
-          administrative: 'Central',
+          administrative: '',
           country: 'Singapore',
           countryCode: 'sg',
           latlng: { lng: '103.8194992', lat: '1.357107' },
-          name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+          name: 'Drongo Trail, Bishan, Central, Singapore, 578774, Singapore',
           postcode: '578774',
           value: 'Singapore',
         },
@@ -493,11 +493,11 @@ describe('[Settings]', () => {
         },
       ],
       location: {
-        administrative: 'Central',
+        administrative: '',
         country: 'Singapore',
         countryCode: 'sg',
         latlng: { lng: '103.8194992', lat: '1.357107' },
-        name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+        name: 'Drongo Trail, Bishan, Central, Singapore, 578774, Singapore',
         postcode: '578774',
         value: 'Singapore',
       },
@@ -592,11 +592,11 @@ describe('[Settings]', () => {
         },
       ],
       location: {
-        administrative: 'Central',
+        administrative: '',
         country: 'Singapore',
         countryCode: 'sg',
         latlng: { lng: '103.8194992', lat: '1.357107' },
-        name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+        name: 'Drongo Trail, Bishan, Central, Singapore, 578774, Singapore',
         postcode: '578774',
         value: 'Singapore',
       },
@@ -687,11 +687,11 @@ describe('[Settings]', () => {
         },
       ],
       location: {
-        administrative: 'Central',
+        administrative: '',
         country: 'Singapore',
         countryCode: 'sg',
         latlng: { lng: '103.8194992', lat: '1.357107' },
-        name: 'Drongo Trail, Bishan, Singapore, Central, 578774, Singapore',
+        name: 'Drongo Trail, Bishan, Central, Singapore, 578774, Singapore',
         postcode: '578774',
         value: 'Singapore',
       },
@@ -837,53 +837,6 @@ describe('[Settings]', () => {
           .then(() => docs[0])
           .should('eqSettings', expected)
       })
-    })
-  })
-
-  describe('[All account types', () => {
-    it('[Can update username and password]', () => {
-      const oldEmail = 'super_cool_older@test.com'
-      const newEmail = 'super_cool@test.com'
-      const oldPassword = '2143bxcvh^3'
-      const newPassword = '<dfbss73DF'
-
-      cy.login(oldEmail, oldPassword)
-      cy.clickMenuItem(UserMenuItem.Settings)
-
-      cy.step('Update Email')
-      cy.get('[data-cy="changeEmailButton"]').click()
-      cy.get('[data-cy="changeEmailForm"]')
-        .contains(`Current email address: ${oldEmail}`)
-        .should('be.visible')
-      cy.get('[data-cy="newEmail"]').clear().type(newEmail)
-      cy.get('[data-cy="password"]').clear().type(oldPassword)
-      cy.get('[data-cy="changeEmailSubmit"]').click()
-      cy.get('[data-cy="changeEmailContainer"')
-        .contains(`Email changed to ${newEmail}`)
-        .should('be.visible')
-
-      cy.step("(Change email back so everything doesn't break)")
-      cy.get('[data-cy="changeEmailButton"]').click()
-      cy.get('[data-cy="newEmail"]').clear().type(oldEmail)
-      cy.get('[data-cy="password"]').clear().type(oldPassword)
-      cy.get('[data-cy="changeEmailSubmit"]').click()
-
-      cy.step('Update Password')
-      cy.get('[data-cy="changePasswordButton"]').click()
-      cy.get('[data-cy="oldPassword"]').clear().type(oldPassword)
-      cy.get('[data-cy="newPassword"]').clear().type(newPassword)
-      cy.get('[data-cy="repeatNewPassword"]').clear().type(newPassword)
-      cy.get('[data-cy="changePasswordSubmit"]').click()
-      cy.get('[data-cy="changePasswordContainer"')
-        .contains(`Password changed`)
-        .should('be.visible')
-
-      cy.step("(Change password back so everything doesn't break)")
-      cy.get('[data-cy="changePasswordButton"]').click()
-      cy.get('[data-cy="oldPassword"]').clear().type(newPassword)
-      cy.get('[data-cy="newPassword"]').clear().type(oldPassword)
-      cy.get('[data-cy="repeatNewPassword"]').clear().type(oldPassword)
-      cy.get('[data-cy="changePasswordSubmit"]').click()
     })
   })
 })

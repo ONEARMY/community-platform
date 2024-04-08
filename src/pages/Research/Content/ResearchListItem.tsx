@@ -16,8 +16,8 @@ import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
 import {
-  calculateTotalUpdateComments,
   getPublicUpdates,
+  getResearchTotalCommentCount,
   researchStatusColour,
 } from 'src/utils/helpers'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
@@ -202,7 +202,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                    {calculateTotalUpdateComments(item)}
+                    {getResearchTotalCommentCount(item)}
                     <Icon glyph="comment" ml={1} />
                   </Text>
                   <Text
@@ -232,7 +232,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 text="How useful is it"
               />
               <IconCountWithTooltip
-                count={calculateTotalUpdateComments(item)}
+                count={getResearchTotalCommentCount(item)}
                 icon="comment"
                 text="Total comments"
               />

@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js'
 import { action, observable } from 'mobx'
 import { IModerationStatus } from 'oa-shared'
-import { calculateTotalUpdateComments } from 'src/utils/helpers'
+import { getResearchTotalCommentCount } from 'src/utils/helpers'
 
 import type { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
 import type { IComment, IUser } from 'src/models'
@@ -26,6 +26,7 @@ export interface IItem {
   collaborators?: string[]
   total_downloads?: number
   comments?: IComment[]
+  totalCommentCount?: number
 }
 
 export enum ItemSortingOption {
@@ -38,6 +39,10 @@ export enum ItemSortingOption {
   LatestComments = 'LatestComments',
   Updates = 'MostUpdates',
   TotalDownloads = 'TotalDownloads',
+  MostRelevant = 'MostRelevant',
+  /**
+   * @deprecated This won't be supported with direct firebase queries
+   */
   Random = 'Random',
   SearchResults = 'SearchResults',
 }
@@ -149,9 +154,9 @@ export class FilterSorterDecorator<T extends IItem> {
   private sortByComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
       const totalCommentsA =
-        a.comments?.length || calculateTotalUpdateComments(a)
+        a.comments?.length || getResearchTotalCommentCount(a)
       const totalCommentsB =
-        b.comments?.length || calculateTotalUpdateComments(b)
+        b.comments?.length || getResearchTotalCommentCount(b)
 
       if (totalCommentsA === totalCommentsB) {
         return 0
@@ -164,9 +169,9 @@ export class FilterSorterDecorator<T extends IItem> {
   private sortByLeastComments(listItems: T[]) {
     return [...listItems].sort((a, b) => {
       const totalCommentsA =
-        a.comments?.length || calculateTotalUpdateComments(a)
+        a.comments?.length || getResearchTotalCommentCount(a)
       const totalCommentsB =
-        b.comments?.length || calculateTotalUpdateComments(b)
+        b.comments?.length || getResearchTotalCommentCount(b)
 
       if (totalCommentsA === totalCommentsB) {
         return 0
@@ -199,7 +204,7 @@ export class FilterSorterDecorator<T extends IItem> {
   private getLatestComment(item) {
     if (item.comments && item.comments.length > 0) {
       return item.comments.sort((a, b) => (a._created < b._created ? 1 : -1))[0]
-    } else if (item.updates && calculateTotalUpdateComments(item) > 0) {
+    } else if (item.updates && getResearchTotalCommentCount(item) > 0) {
       const comments = item.updates
         .map((update) => update.comments ?? [])
         .flat()

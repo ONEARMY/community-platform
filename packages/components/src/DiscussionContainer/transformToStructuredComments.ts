@@ -14,6 +14,11 @@ export const transformToTree = (comments: CommentWithRepliesParent[]) => {
 
     if (comment.parentCommentId) {
       const parentComment = commentsById[comment.parentCommentId]
+
+      if (!parentComment) {
+        continue
+      }
+
       if (!parentComment.replies) {
         parentComment.replies = []
       }

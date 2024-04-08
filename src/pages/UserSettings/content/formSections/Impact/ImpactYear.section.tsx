@@ -8,7 +8,11 @@ import { Box, Heading } from 'theme-ui'
 
 import { ImpactYearField } from './ImpactYear.field'
 import { ImpactYearDisplayField } from './ImpactYearDisplay.field'
-import { transformImpactData, transformImpactInputs } from './utils'
+import {
+  sortImpactYearDisplayFields,
+  transformImpactData,
+  transformImpactInputs,
+} from './utils'
 
 import type { IImpactYear, IImpactYearFieldList } from 'src/models'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
@@ -31,6 +35,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
         setImpact(impact[year])
       }
     }
+
     fetchImpact()
   }, [])
 
@@ -48,10 +53,11 @@ export const ImpactYearSection = observer(({ year }: Props) => {
     setSubmitResults(null)
     try {
       const fields = transformImpactInputs(values)
+      const sortedFields = sortImpactYearDisplayFields(fields)
       await userStore.updateUserImpact(fields, year)
       setSubmitResults({ type: 'success', message: form.saveSuccess })
       setIsEditMode(false)
-      setImpact(fields)
+      setImpact(sortedFields)
     } catch (error) {
       setSubmitResults({ type: 'error', message: error.message })
     }
@@ -77,7 +83,9 @@ export const ImpactYearSection = observer(({ year }: Props) => {
             />
           ) : (
             <ImpactYearDisplayField
-              fields={transformImpactInputs(values)}
+              fields={sortImpactYearDisplayFields(
+                transformImpactInputs(values),
+              )}
               formId={formId}
               setIsEditMode={setIsEditMode}
             />

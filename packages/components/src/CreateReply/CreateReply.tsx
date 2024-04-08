@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box } from 'theme-ui'
+import { Alert, Box } from 'theme-ui'
 
 import { CreateComment } from '..'
 
@@ -12,11 +12,21 @@ export interface Props {
 
 export const CreateReply = (props: Props) => {
   const [reply, setReply] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isError, setIsError] = useState<boolean>(false)
   const { commentId, isLoggedIn, maxLength, onSubmit } = props
 
   const handleSubmit = async () => {
-    await onSubmit(commentId, reply)
-    setReply('')
+    setIsLoading(true)
+    try {
+      await onSubmit(commentId, reply)
+      setReply('')
+      setIsLoading(false)
+    } catch (error) {
+      // Swallow the error for now
+      setIsLoading(false)
+      setIsError(true)
+    }
   }
 
   return (
@@ -34,8 +44,14 @@ export const CreateReply = (props: Props) => {
         onChange={(text) => setReply(text)}
         onSubmit={handleSubmit}
         isLoggedIn={isLoggedIn}
+        isLoading={isLoading}
         buttonLabel="Leave a reply"
       />
+      {isError ? (
+        <Alert variant="failure" sx={{ mt: 3 }}>
+          Unable to leave a comment at this time. Please try again later.
+        </Alert>
+      ) : null}
     </Box>
   )
 }

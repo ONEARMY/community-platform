@@ -9,6 +9,7 @@ export const buttons = {
 export const headings = {
   create: 'Ask your question to the community',
   edit: 'Edit your question to the community',
+  list: 'Ask your questions and help others out',
 }
 
 export const fields: ILabels = {
@@ -28,4 +29,18 @@ export const fields: ILabels = {
     title: 'The Question',
     placeholder: 'So what do you need to know?',
   },
+  images: {
+    title: 'Upload image(s) for this question',
+  },
+}
+
+export const listing = {
+  create: 'Ask a question',
+  noQuestions: 'No questions have been asked yet',
+  usefulness: 'How useful is it',
+  totalComments: 'Total comments',
+  filterCategory: 'Filter by category',
+  search: 'Search for a question',
+  sort: 'Sort by',
+  loadMore: 'Load More',
 }

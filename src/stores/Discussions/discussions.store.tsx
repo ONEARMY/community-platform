@@ -92,6 +92,8 @@ export class DiscussionStore extends ModuleStore {
           _creatorId: user._id,
           creatorName: user.userName,
           creatorCountry: getUserCountry(user),
+          isUserVerified: !!user.badges?.verified,
+          isUserSupporter: !!user.badges?.supporter,
           text: comment,
           parentCommentId: commentId || null,
         }

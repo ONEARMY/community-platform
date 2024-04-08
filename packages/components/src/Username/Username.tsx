@@ -87,11 +87,11 @@ export const Username = (props: Props) => {
             data-testid="Username: verified badge"
           />
         )}
-        {(props.isSupporter && !props.isVerified) && (
+        {props.isSupporter && !props.isVerified && (
           <Image
-          src={SupporterBadgeIcon}
-          sx={{ ml: 1, height: 16, width: 16 }}
-          data-testid="Username: supporter badge"
+            src={SupporterBadgeIcon}
+            sx={{ ml: 1, height: 16, width: 16 }}
+            data-testid="Username: supporter badge"
           />
         )}
       </Flex>

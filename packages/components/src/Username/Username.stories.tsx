@@ -37,7 +37,7 @@ export const VerifiedSupporter = {
     },
     isVerified: true,
     isSupporter: true,
-  }
+  },
 }
 
 export const UnverifiedSupporter = {
@@ -48,7 +48,7 @@ export const UnverifiedSupporter = {
     },
     isVerified: false,
     isSupporter: true,
-  }
+  },
 }
 
 export const WithoutFlag = {

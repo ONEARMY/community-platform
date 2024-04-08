@@ -1,6 +1,12 @@
 import { render } from '../tests/utils'
 import { Username } from './Username'
-import { InvalidCountryCode, UnverifiedSupporter, Verified, VerifiedSupporter, WithoutFlag } from './Username.stories'
+import {
+  InvalidCountryCode,
+  UnverifiedSupporter,
+  Verified,
+  VerifiedSupporter,
+  WithoutFlag,
+} from './Username.stories'
 
 describe('Username', () => {
   it('shows an unknown flag for empty value', () => {
@@ -15,7 +21,7 @@ describe('Username', () => {
     expect(getByTestId('Username: unknown flag')).toBeInTheDocument()
   })
 
-  it('shows a verified badge when the user is verified', () =>{
+  it('shows a verified badge when the user is verified', () => {
     const { getByTestId } = render(<Username {...Verified.args} />)
     expect(getByTestId('Username: verified badge')).toBeInTheDocument()
   })

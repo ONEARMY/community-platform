@@ -3,17 +3,16 @@ import { Form } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { contact } from 'src/pages/User/labels'
-import { isUserContactable } from 'src/utils/helpers'
-import { Box, Flex, Heading } from 'theme-ui'
-
 import {
   UserContactError,
   UserContactFieldEmail,
   UserContactFieldMessage,
   UserContactFieldName,
   UserContactNotLoggedIn,
-} from './'
+} from 'src/pages/User/contact'
+import { contact } from 'src/pages/User/labels'
+import { isUserContactable } from 'src/utils/helpers'
+import { Box, Flex, Heading } from 'theme-ui'
 
 import type { IUser } from 'src/models'
 

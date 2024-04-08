@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
+import { FormFieldWrapper } from 'src/pages/Howto/Content/Common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { composeValidators, minValue, required } from 'src/utils/validators'
 import { Card, Text } from 'theme-ui'
 
 import { HOWTO_TITLE_MAX_LENGTH, HOWTO_TITLE_MIN_LENGTH } from '../../constants'
 import { intro } from '../../labels'
-import { FormFieldWrapper } from '.'
 
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 

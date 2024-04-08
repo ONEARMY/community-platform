@@ -11,7 +11,7 @@ import {
 import { useCommonStores } from '../../common/hooks/useCommonStores'
 import QuestionRoutes from './question.routes'
 
-import type { IPageMeta } from '../PageList'
+import type { IPageMeta } from 'src/pages/PageList'
 
 export const QuestionModuleContainer = () => {
   const rootStore = useCommonStores()

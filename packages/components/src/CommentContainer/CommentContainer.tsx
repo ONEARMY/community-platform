@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import { Box, Flex } from 'theme-ui'
 
-import {
-  ButtonShowReplies,
-  CommentItem,
-  CommentList,
-  CreateReply,
-  Icon,
-} from '..'
+import { ButtonShowReplies } from '../ButtonShowReplies/ButtonShowReplies'
+import { CommentItem } from '../CommentItem/CommentItem'
+import { CommentList } from '../CommentList/CommentList'
+import { CreateReply } from '../CreateReply/CreateReply'
+import { Icon } from '../Icon/Icon'
 
-import type { IComment } from '..'
+import type { IComment } from '../CommentItem/types'
 
 export interface Props {
   comment: IComment

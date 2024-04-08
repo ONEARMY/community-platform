@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { IComment } from '.'
+import type { IComment } from './CommentItem/types'
 
 export const fakeComment = (commentOverloads: Partial<IComment> = {}) => ({
   _created: faker.date.past().toString(),

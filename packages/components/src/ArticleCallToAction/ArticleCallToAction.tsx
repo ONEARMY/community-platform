@@ -1,7 +1,7 @@
 import { useTheme } from '@emotion/react'
 import { Flex, Heading, Text } from 'theme-ui'
 
-import { Username } from '../'
+import { Username } from '../Username/Username'
 
 import type { User } from '../types/common'
 

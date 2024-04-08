@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex } from 'theme-ui'
 
-import { Button, CommentContainer } from '../'
+import { Button } from '../Button/Button'
+import { CommentContainer } from '../CommentContainer/CommentContainer'
 
-import type { IComment } from '..'
+import type { IComment } from '../CommentItem/types'
 
 const MAX_COMMENTS = 5
 

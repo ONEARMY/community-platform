@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useTheme } from '@emotion/react'
 import { Text } from 'theme-ui'
 
-import { Button, Tooltip } from '../'
+import { Button } from '../Button/Button'
+import { Tooltip } from '../Tooltip/Tooltip'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
 

@@ -87,9 +87,9 @@ export const CommentItem = (props: CommentItemProps) => {
               user={{
                 userName: creatorName,
                 countryCode: creatorCountry,
+                isVerified: !!isUserVerified,
+                isSupporter: !!isUserSupporter,
               }}
-              isVerified={!!isUserVerified}
-              isSupporter={!!isUserSupporter}
             />
             {_edited && (
               <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>

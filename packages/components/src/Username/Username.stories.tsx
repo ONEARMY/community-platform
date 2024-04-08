@@ -12,9 +12,9 @@ export const Verified = {
     user: {
       userName: 'a-username',
       countryCode: 'pt',
+      isSupporter: false,
+      isVerified: true,
     },
-    isVerified: true,
-    isSupporter: false,
   },
 }
 
@@ -23,9 +23,9 @@ export const Unverified = {
     user: {
       countryCode: 'pt',
       userName: 'a-username',
+      isVerified: false,
+      isSupporter: false,
     },
-    isVerified: false,
-    isSupporter: false,
   },
 }
 
@@ -34,9 +34,9 @@ export const VerifiedSupporter = {
     user: {
       countryCode: 'pt',
       userName: 'a-username',
+      isVerified: true,
+      isSupporter: true,
     },
-    isVerified: true,
-    isSupporter: true,
   },
 }
 
@@ -45,9 +45,9 @@ export const UnverifiedSupporter = {
     user: {
       countryCode: 'pt',
       userName: 'a-username',
+      isVerified: false,
+      isSupporter: true,
     },
-    isVerified: false,
-    isSupporter: true,
   },
 }
 
@@ -56,8 +56,6 @@ export const WithoutFlag = {
     user: {
       userName: 'a-username',
     },
-    isVerified: false,
-    isSupporter: false,
   },
 }
 
@@ -67,8 +65,6 @@ export const InvalidCountryCode = {
       userName: 'a-username',
       countryCode: 'zz',
     },
-    isVerified: false,
-    isSupporter: false,
   },
 }
 
@@ -80,7 +76,5 @@ export const InlineStyles = {
     sx: {
       outline: '10px solid red',
     },
-    isVerified: false,
-    isSupporter: false,
   },
 }

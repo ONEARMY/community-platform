@@ -1,2 +1,0 @@
-import{y as e}from"./index-a7768622.js";const r=(t={})=>({_created:e.date.past().toString(),creatorCountry:e.address.countryCode().toLowerCase(),_creatorId:e.internet.userName(),_id:e.database.mongodbObjectId(),creatorName:e.internet.userName(),isUserVerified:e.datatype.boolean(),text:e.lorem.text(),isEditable:e.datatype.boolean(),...t}),s=(t=2,a={})=>[...Array(t).keys()].slice(0).map(()=>r({...a}));export{s as c,r as f};
-//# sourceMappingURL=utils-1b1bed3d.js.map

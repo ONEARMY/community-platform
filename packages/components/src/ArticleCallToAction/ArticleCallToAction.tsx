@@ -3,7 +3,7 @@ import { Flex, Heading, Text } from 'theme-ui'
 
 import { Username } from '../Username/Username'
 
-import type { User } from '..'
+import type { User } from '../types/common'
 
 export interface IProps {
   author: User

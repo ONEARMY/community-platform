@@ -8,7 +8,7 @@ import { InternalLink } from '../InternalLink/InternalLink'
 import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
-import type { User } from '../'
+import type { User } from '../types/common'
 
 export interface IProps {
   user: User

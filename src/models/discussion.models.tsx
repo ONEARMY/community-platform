@@ -1,4 +1,5 @@
-import type { IComment, IQuestion } from '.'
+import type { IComment } from './comment.model'
+import type { IQuestion } from './question.models'
 
 /**
  * Extends IComment with parentCommentId

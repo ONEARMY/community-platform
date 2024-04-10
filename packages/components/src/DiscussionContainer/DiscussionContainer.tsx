@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react'
 import { Flex } from 'theme-ui'
 
-import { CommentList, CreateComment, DiscussionTitle } from '..'
+import { CommentList } from '../CommentList/CommentList'
+import { CreateComment } from '../CreateComment/CreateComment'
+import { DiscussionTitle } from '../DiscussionTitle/DiscussionTitle'
 import { transformToTree } from './transformToStructuredComments'
 
-import type { IComment } from '..'
+import type { IComment } from '../CommentItem/types'
 
 export interface IProps {
   comment: string

@@ -1,8 +1,8 @@
 import type { DifficultyLevel } from 'oa-shared'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
-import type { IComment } from './'
 import type { ICategory } from './categories.model'
+import type { IComment } from './comment.model'
 import type {
   DBDoc,
   IModerable,

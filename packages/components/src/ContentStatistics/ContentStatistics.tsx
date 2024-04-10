@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
-import { Icon } from '..'
+import { Icon } from '../Icon/Icon'
 
 import type { availableGlyphs } from '../Icon/types'
 

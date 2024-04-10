@@ -257,11 +257,7 @@ const ResearchDescription = ({
                     </Text>
                   </Flex>
                   {props.contributors.map((contributor, key) => (
-                    <Username
-                      key={key}
-                      user={contributor}
-                      isVerified={contributor.isVerified}
-                    />
+                    <Username key={key} user={contributor} />
                   ))}
                 </Flex>
               ) : null}

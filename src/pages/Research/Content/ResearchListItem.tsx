@@ -46,6 +46,8 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
 
+  const isVerified = isUserVerifiedWithStore(item._createdBy, aggregationsStore)
+
   const status = item.researchStatus || ResearchStatus.IN_PROGRESS
 
   return (
@@ -139,11 +141,8 @@ const ResearchListItem = ({ item }: IProps) => {
                     user={{
                       userName: item._createdBy,
                       countryCode: item.creatorCountry,
+                      isVerified,
                     }}
-                    isVerified={isUserVerifiedWithStore(
-                      item._createdBy,
-                      aggregationsStore,
-                    )}
                   />
                   {Boolean(collaborators.length) && (
                     <Text

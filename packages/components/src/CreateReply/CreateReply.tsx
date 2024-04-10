@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Alert, Box } from 'theme-ui'
 
-import { CreateComment } from '..'
+import { CreateComment } from '../CreateComment/CreateComment'
 
 export interface Props {
   commentId: string

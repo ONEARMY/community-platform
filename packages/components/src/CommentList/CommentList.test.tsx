@@ -3,8 +3,9 @@ import { vi } from 'vitest'
 
 import { render } from '../tests/utils'
 import { createFakeComments, fakeComment } from '../utils'
-import { type IComment } from '..'
 import { CommentList } from './CommentList'
+
+import type { IComment } from '../CommentItem/types'
 
 const mockHandleEdit = vi.fn()
 const mockHandleEditRequest = vi.fn()

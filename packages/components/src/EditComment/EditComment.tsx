@@ -1,7 +1,8 @@
 import { Field, Form } from 'react-final-form'
 import { Flex, Label } from 'theme-ui'
 
-import { Button, FieldTextarea } from '../'
+import { Button } from '../Button/Button'
+import { FieldTextarea } from '../FieldTextarea/FieldTextarea'
 
 export interface IProps {
   comment: string

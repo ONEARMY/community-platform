@@ -22,6 +22,7 @@ import { isPreciousPlastic } from 'src/config/config'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   AspectRatio,
   Box,
@@ -161,16 +162,8 @@ const getCoverImages = (user: IUserPP) => {
 }
 
 export const SpaceProfile = ({ user, docs }: IProps) => {
-  const {
-    about,
-    country,
-    displayName,
-    impact,
-    links,
-    location,
-    profileType,
-    userName,
-  } = user
+  const { about, displayName, impact, links, location, profileType, userName } =
+    user
 
   const coverImage = getCoverImages(user)
   const stats = useMemberStatistics(user.userName)
@@ -181,9 +174,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
         linkItem.label,
       ),
   )
-
-  const userCountryCode =
-    location?.countryCode || country?.toLowerCase() || undefined
 
   return (
     <Container
@@ -255,10 +245,9 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <Box>
               <Username
                 user={{
-                  userName,
-                  countryCode: userCountryCode,
+                  ...user,
+                  countryCode: getUserCountry(user),
                 }}
-                isVerified={stats.verified}
               />
               <Heading
                 color={'black'}

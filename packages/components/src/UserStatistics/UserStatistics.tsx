@@ -12,7 +12,7 @@ export interface UserStatisticsProps {
   userName: string
   country?: string
   isVerified: boolean
-  isSupporter: boolean
+  isSupporter?: boolean
   howtoCount: number
   usefulCount: number
   researchCount: number
@@ -46,19 +46,6 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           </Flex>
         )}
 
-        {hasLocation ? (
-          <InternalLink
-            to={'/map/#' + props.userName}
-            sx={{ color: 'black' }}
-            data-testid="location-link"
-          >
-            <Flex>
-              <Icon glyph="location-on" size={22} />
-              <Box ml={1}>{props.country || 'View on Map'}</Box>
-            </Flex>
-          </InternalLink>
-        ) : null}
-
         {props?.isSupporter ? (
           <Flex data-testid="supporter-stat">
             <Icon glyph={'supporter'} size={22} />
@@ -72,6 +59,19 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               </ExternalLink>
             </Box>
           </Flex>
+        ) : null}
+
+        {hasLocation ? (
+          <InternalLink
+            to={'/map/#' + props.userName}
+            sx={{ color: 'black' }}
+            data-testid="location-link"
+          >
+            <Flex>
+              <Icon glyph="location-on" size={22} />
+              <Box ml={1}>{props.country || 'View on Map'}</Box>
+            </Flex>
+          </InternalLink>
         ) : null}
 
         {props.usefulCount ? (

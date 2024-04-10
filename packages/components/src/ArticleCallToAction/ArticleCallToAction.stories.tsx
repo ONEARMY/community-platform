@@ -52,6 +52,7 @@ export const ArticleCallToActionSingleContributor: StoryFn<
         countryCode: faker.address.countryCode(),
         userName: faker.internet.userName(),
         isVerified: faker.datatype.boolean(),
+        isSupporter: faker.datatype.boolean(),
       },
     ]}
   >
@@ -63,6 +64,7 @@ const makeFakeUser = () => ({
   countryCode: faker.address.countryCode(),
   userName: faker.internet.userName(),
   isVerified: faker.datatype.boolean(),
+  isSupporter: faker.datatype.boolean(),
 })
 
 export const ArticleCallToActionMultipleContributors: StoryFn<

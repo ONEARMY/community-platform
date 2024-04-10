@@ -7,6 +7,7 @@ import type { IQuestion } from './question.models'
  */
 export type IDiscussionComment = IComment & {
   parentCommentId: string | null
+  isUserSupporter?: boolean
 }
 
 export type IDiscussion = {

@@ -288,7 +288,7 @@ export const buildStatisticsLabel = ({
   statUnit,
   usePlural,
 }: {
-  stat: number
+  stat: number | undefined
   statUnit: string
   usePlural: boolean
 }): string => {
@@ -296,7 +296,7 @@ export const buildStatisticsLabel = ({
     return `${stat} ${statUnit}`
   }
 
-  return `${stat || 0} ${statUnit}s`
+  return `${typeof stat === 'number' ? stat : 0} ${statUnit}s`
 }
 
 export const researchStatusColour = (

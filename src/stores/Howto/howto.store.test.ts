@@ -630,15 +630,15 @@ describe('howto.store', () => {
 
   describe('incrementViews', () => {
     it('increments views by one', async () => {
-      const { store, howToItem, getFn, setFn } = await factory()
+      const howtoDoc = FactoryHowto({ total_views: 18 })
+      const { store, howToItem, updateFn } = await factory([howtoDoc])
 
-      const views = howToItem.total_views!
       // Act
-      await store.incrementViewCount(howToItem._id)
+      await store.incrementViewCount(howToItem)
+      const updatedTotalViews = 19
 
-      expect(getFn).toHaveBeenCalledWith('server')
-      expect(setFn).toHaveBeenCalledWith(
-        expect.objectContaining({ total_views: views + 1 }),
+      expect(updateFn).toHaveBeenCalledWith(
+        expect.objectContaining({ total_views: updatedTotalViews }),
         expect.anything(),
       )
     })

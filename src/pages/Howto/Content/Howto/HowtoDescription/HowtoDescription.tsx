@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
@@ -25,10 +25,7 @@ import {
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
-import {
-  addIDToSessionStorageArray,
-  retrieveSessionStorageArray,
-} from 'src/utils/sessionStorage'
+import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -61,8 +58,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
-  let didInit = false
-  const [viewCount, setViewCount] = useState<number>(0)
   const { stores } = useCommonStores()
 
   const incrementDownloadCount = async () => {
@@ -70,22 +65,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       howto._id,
     )
     setFileDownloadCount(updatedDownloadCount!)
-  }
-
-  const incrementViewCount = async () => {
-    const sessionStorageArray = retrieveSessionStorageArray('howto')
-
-    if (!sessionStorageArray.includes(howto._id)) {
-      const updatedViewCount = await stores.howtoStore.incrementViewCount(
-        howto._id,
-      )
-      if (updatedViewCount) {
-        setViewCount(updatedViewCount)
-      }
-      addIDToSessionStorageArray('howto', howto._id)
-    } else {
-      setViewCount(howto.total_views || 0)
-    }
   }
 
   const redirectToSignIn = async () => {
@@ -132,10 +111,11 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   useEffect(() => {
-    if (!didInit) {
-      didInit = true
-      incrementViewCount()
-    }
+    incrementViewCount({
+      document: howto,
+      documentType: 'howto',
+      store: stores.howtoStore,
+    })
   }, [howto._id])
 
   return (
@@ -398,7 +378,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           {
             icon: 'view',
             label: buildStatisticsLabel({
-              stat: viewCount,
+              stat: howto.total_views,
               statUnit: 'view',
               usePlural: true,
             }),

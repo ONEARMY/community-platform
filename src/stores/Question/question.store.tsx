@@ -17,10 +17,11 @@ import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 import type { IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
+import type { DBEndpoint } from '../databaseV2/endpoints'
 import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
-const COLLECTION_NAME = 'questions'
+const COLLECTION_NAME = 'questions' as DBEndpoint
 
 export class QuestionStore extends ModuleStore {
   @observable
@@ -31,8 +32,12 @@ export class QuestionStore extends ModuleStore {
     makeObservable(this)
   }
 
-  public async incrementViewCount(documentId: string) {
-    await incrementDocViewCount(this.db, COLLECTION_NAME, documentId)
+  public async incrementViewCount(question: Partial<IQuestionDB>) {
+    await incrementDocViewCount({
+      collection: COLLECTION_NAME,
+      db: this.db,
+      doc: question,
+    })
   }
 
   @action

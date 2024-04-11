@@ -266,8 +266,12 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  public async incrementViewCount(howToID: string) {
-    return await incrementDocViewCount(this.db, COLLECTION_NAME, howToID)
+  public async incrementViewCount(howTo: Partial<IHowtoDB>) {
+    return await incrementDocViewCount({
+      collection: COLLECTION_NAME,
+      db: this.db,
+      doc: howTo,
+    })
   }
 
   public updateSearchValue(query: string) {

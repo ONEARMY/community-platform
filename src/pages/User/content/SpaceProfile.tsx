@@ -18,9 +18,11 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
+import { isPreciousPlastic } from 'src/config/config'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
+import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   AspectRatio,
   Box,
@@ -160,16 +162,8 @@ const getCoverImages = (user: IUserPP) => {
 }
 
 export const SpaceProfile = ({ user, docs }: IProps) => {
-  const {
-    about,
-    country,
-    displayName,
-    impact,
-    links,
-    location,
-    profileType,
-    userName,
-  } = user
+  const { about, displayName, impact, links, location, profileType, userName } =
+    user
 
   const coverImage = getCoverImages(user)
   const stats = useMemberStatistics(user.userName)
@@ -180,9 +174,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
         linkItem.label,
       ),
   )
-
-  const userCountryCode =
-    location?.countryCode || country?.toLowerCase() || undefined
 
   return (
     <Container
@@ -254,10 +245,9 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <Box>
               <Username
                 user={{
-                  userName,
-                  countryCode: userCountryCode,
+                  ...user,
+                  countryCode: getUserCountry(user),
                 }}
-                isVerified={stats.verified}
               />
               <Heading
                 color={'black'}
@@ -274,7 +264,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabsList>
               <Tab>Profile</Tab>
               <Tab>Contributions</Tab>
-              <Tab data-cy="ImpactTab">{heading}</Tab>
+              {isPreciousPlastic() && <Tab data-cy="ImpactTab">{heading}</Tab>}
               <Tab data-cy="contact-tab">Contact</Tab>
             </TabsList>
             <TabPanel>
@@ -328,9 +318,11 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
             <TabPanel>
               <UserCreatedDocuments docs={docs} />
             </TabPanel>
-            <TabPanel>
-              <Impact impact={impact} user={user} />
-            </TabPanel>
+            {isPreciousPlastic() && (
+              <TabPanel>
+                <Impact impact={impact} user={user} />
+              </TabPanel>
+            )}
             <TabPanel>
               <Box>
                 <UserContactForm user={user} />

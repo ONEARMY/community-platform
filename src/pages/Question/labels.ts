@@ -7,21 +7,40 @@ export const buttons = {
 }
 
 export const headings = {
-  create: 'Ask your question',
-  edit: 'Edit your question',
+  create: 'Ask your question to the community',
+  edit: 'Edit your question to the community',
+  list: 'Ask your questions and help others out',
 }
 
-export const overview: ILabels = {
-  question: {
-    placeholder: 'How come … does not work?',
-    title: 'The Question',
+export const fields: ILabels = {
+  category: {
+    placeholder: 'Start typing to find the perfect category...',
+    title: 'Which category fits your question?',
   },
   description: {
     placeholder:
-      'Introduce to your research question. Mention what you want to do, whats the goal what challenges you see, etc',
-    title: 'Give some more information',
+      'What information will help the community understand what you need help with?',
+    title: 'Description',
   },
   tags: {
     title: 'Select tags',
   },
+  title: {
+    title: 'The Question',
+    placeholder: 'So what do you need to know?',
+  },
+  images: {
+    title: 'Upload image(s) for this question',
+  },
+}
+
+export const listing = {
+  create: 'Ask a question',
+  noQuestions: 'No questions have been asked yet',
+  usefulness: 'How useful is it',
+  totalComments: 'Total comments',
+  filterCategory: 'Filter by category',
+  search: 'Search for a question',
+  sort: 'Sort by',
+  loadMore: 'Load More',
 }

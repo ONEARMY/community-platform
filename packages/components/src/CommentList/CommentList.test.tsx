@@ -3,8 +3,9 @@ import { vi } from 'vitest'
 
 import { render } from '../tests/utils'
 import { createFakeComments, fakeComment } from '../utils'
-import { type IComment } from '..'
 import { CommentList } from './CommentList'
+
+import type { IComment } from '../CommentItem/types'
 
 const mockHandleEdit = vi.fn()
 const mockHandleEditRequest = vi.fn()
@@ -16,6 +17,7 @@ describe('CommentList', () => {
     const mockComments: IComment[] = createFakeComments(2)
     const screen = render(
       <CommentList
+        isReplies={false}
         comments={mockComments}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
@@ -34,6 +36,7 @@ describe('CommentList', () => {
     const mockComments: IComment[] = createFakeComments(20)
     const screen = render(
       <CommentList
+        isReplies={false}
         comments={mockComments}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
@@ -55,6 +58,7 @@ describe('CommentList', () => {
     highComm.text = 'Highlighted comment text'
     const screen = render(
       <CommentList
+        isReplies={false}
         comments={mockComments}
         highlightedCommentId={highlightedCommentId}
         handleEdit={mockHandleEdit}
@@ -81,6 +85,7 @@ describe('CommentList', () => {
 
     const screen = render(
       <CommentList
+        isReplies={false}
         comments={mockComments}
         handleEdit={mockHandleEdit}
         handleEditRequest={mockHandleEditRequest}
@@ -102,6 +107,7 @@ describe('CommentList', () => {
 
     const { getAllByText, getByText } = render(
       <CommentList
+        isReplies={false}
         comments={[comment]}
         handleDelete={mockHandleDelete}
         handleEdit={mockHandleEdit}
@@ -127,6 +133,7 @@ describe('CommentList', () => {
 
     const { getAllByText, getByText } = render(
       <CommentList
+        isReplies={true}
         comments={[comment]}
         handleDelete={mockHandleDelete}
         handleEdit={mockHandleEdit}

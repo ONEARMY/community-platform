@@ -8,6 +8,13 @@ export type DiscussionEndpoints = Extract<
   DBEndpoint,
   'howtos' | 'research' | 'questions'
 >
+const calculateLastestCommentDate = (comments) => {
+  return new Date(
+    Math.max(
+      ...comments.map((comment) => new Date(comment._created).valueOf()),
+    ),
+  )
+}
 
 export const updateDiscussionMetadata = (
   db: DatabaseV2,
@@ -23,18 +30,18 @@ export const updateDiscussionMetadata = (
   }
 
   const commentCount = discussion.comments.length
-  const latestCommentDate = new Date(
-    Math.max(
-      ...discussion.comments.map((comment) =>
-        new Date(comment._created).valueOf(),
-      ),
-    ),
-  )
+  const latestCommentDate =
+    commentCount > 0
+      ? calculateLastestCommentDate(discussion.comments)
+      : undefined
 
   return db
     .collection(collectionName)
     .doc(discussion.sourceId)
-    .update({ commentCount, latestCommentDate })
+    .update({
+      commentCount,
+      ...(latestCommentDate ? { latestCommentDate } : {}),
+    })
 }
 
 export const getCollectionName = (

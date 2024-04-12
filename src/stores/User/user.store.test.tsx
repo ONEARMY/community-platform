@@ -339,7 +339,7 @@ describe('userStore', () => {
       store.activeUser = FactoryUser({
         _id: 'testUserId',
       })
-      const impactYear = faker.datatype.number({ min: 2019, max: 2023 })
+      const impactYear = faker.number.int({ min: 2019, max: 2023 })
       // Act
       await store.updateUserImpact(
         { impact: { total: 100, totalPreciousPlastic: 100 } },

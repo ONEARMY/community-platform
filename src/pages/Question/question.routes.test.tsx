@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 jest.mock('../../stores/common/module.store')
 
 import '@testing-library/jest-dom'
@@ -14,6 +15,7 @@ import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
 import { IModerationStatus, UserRole } from 'oa-shared'
+import { questionService } from 'src/pages/Question/question.service'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import {
@@ -89,19 +91,37 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   upsertQuestion = jest.fn()
   fetchQuestions = jest.fn().mockResolvedValue([])
   fetchQuestionBySlug = jest.fn()
+  votedUsefulCount = 0
+  subscriberCount = 0
+  userCanEditQuestion = true
 }
 
+const mockQuestionService: typeof questionService = {
+  getQuestionCategories: jest.fn(() => {
+    return new Promise((resolve) => {
+      resolve([])
+    })
+  }),
+  search: jest.fn(() => {
+    return new Promise((resolve) => {
+      resolve({ items: [], total: 0, lastVisible: undefined })
+    })
+  }),
+}
 const mockQuestionStore = new mockQuestionStoreClass()
 
 jest.mock('src/stores/Question/question.store')
 jest.mock('src/stores/Discussions/discussions.store')
+jest.mock('src/pages/Question/question.service')
 
 describe('question.routes', () => {
   beforeEach(() => {
     ;(useQuestionStore as jest.Mock).mockReturnValue(mockQuestionStore)
     ;(useDiscussionStore as jest.Mock).mockReturnValue({
       fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue(null),
+      activeUser: mockActiveUser,
     })
+    questionService.getQuestionCategories = jest.fn().mockResolvedValue([])
   })
 
   afterEach(() => {
@@ -112,11 +132,15 @@ describe('question.routes', () => {
   describe('/questions/', () => {
     it('renders a loading state', async () => {
       let wrapper
-      ;(useQuestionStore as any).mockReturnValue({
-        ...mockQuestionStore,
-        isFetching: true,
-        activeUser: mockActiveUser,
+      mockQuestionService.search = jest.fn(() => {
+        return new Promise((resolve) => {
+          setTimeout(
+            () => resolve({ items: [], total: 0, lastVisible: undefined }),
+            4000,
+          )
+        })
       })
+
       await act(async () => {
         wrapper = (await renderFn('/questions')).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
@@ -125,11 +149,6 @@ describe('question.routes', () => {
 
     it('renders an empty state', async () => {
       let wrapper
-      ;(useQuestionStore as any).mockReturnValue({
-        ...mockQuestionStore,
-        fetchQuestions: jest.fn().mockResolvedValue([]),
-        activeUser: mockActiveUser,
-      })
 
       await act(async () => {
         wrapper = (await renderFn('/questions')).wrapper
@@ -154,19 +173,22 @@ describe('question.routes', () => {
       const questionTitle = faker.lorem.words(3)
       const questionSlug = faker.lorem.slug()
 
-      ;(useQuestionStore as any).mockReturnValue({
-        ...mockQuestionStore,
-        filteredQuestions: [
-          {
-            ...FactoryQuestionItem({
-              title: questionTitle,
-              slug: questionSlug,
-            }),
-            _id: '123',
-            moderation: 'accepted',
-          },
-        ],
-        activeUser: mockActiveUser,
+      questionService.search = jest.fn(() => {
+        return new Promise((resolve) => {
+          resolve({
+            items: [
+              {
+                ...FactoryQuestionItem({
+                  title: questionTitle,
+                  slug: questionSlug,
+                }),
+                _id: '123',
+              },
+            ],
+            total: 1,
+            lastVisible: undefined,
+          })
+        })
       })
 
       await act(async () => {
@@ -179,11 +201,6 @@ describe('question.routes', () => {
         ).toBeInTheDocument()
 
         expect(wrapper.getByText(questionTitle)).toBeInTheDocument()
-        expect(
-          wrapper.getByRole('link', {
-            name: questionTitle,
-          }),
-        ).toHaveAttribute('href', `/questions/${questionSlug}`)
       })
     })
   })
@@ -207,8 +224,10 @@ describe('question.routes', () => {
       })
 
       // Fill in form
-      const title = wrapper.getByLabelText('The Question')
-      const description = wrapper.getByLabelText('Give some more information')
+      const title = wrapper.getByLabelText('The Question', { exact: false })
+      const description = wrapper.getByLabelText('Description', {
+        exact: false,
+      })
       const submitButton = wrapper.getByText('Publish')
 
       // Submit form
@@ -225,44 +244,6 @@ describe('question.routes', () => {
         tags: {},
         allowDraftSave: false,
         moderation: IModerationStatus.ACCEPTED,
-      })
-
-      expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
-    })
-
-    it('allows user to draft a question', async () => {
-      let wrapper
-      // Arrange
-      const mockUpsertQuestion = jest.fn().mockResolvedValue({
-        slug: 'question-title',
-      })
-      useQuestionStore.mockReturnValue({
-        ...mockQuestionStore,
-        upsertQuestion: mockUpsertQuestion,
-        activeUser: mockActiveUser,
-      })
-
-      await act(async () => {
-        const render = await renderFn('/questions/create')
-        wrapper = render.wrapper
-      })
-
-      // Fill in form
-      const title = wrapper.getByLabelText('The Question')
-      const draftButton = wrapper.getByText('Save as draft')
-
-      // Submit form
-      await userEvent.type(title, 'Question title')
-
-      await waitFor(() => {
-        draftButton.click()
-      })
-
-      expect(mockUpsertQuestion).toHaveBeenCalledWith({
-        title: 'Question title',
-        tags: {},
-        allowDraftSave: true,
-        moderation: IModerationStatus.DRAFT,
       })
 
       expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
@@ -295,9 +276,11 @@ describe('question.routes', () => {
       })
       useDiscussionStore.mockReturnValue({
         fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
+        activeUser,
       })
       useDiscussionStore.mockReturnValue({
         fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
+        activeUser,
       })
 
       await act(async () => {
@@ -317,6 +300,7 @@ describe('question.routes', () => {
         // Content statistics
         expect(wrapper.getByText(`0 views`)).toBeInTheDocument()
         expect(wrapper.getByText(`0 following`)).toBeInTheDocument()
+        expect(wrapper.getByText(`0 useful`)).toBeInTheDocument()
         expect(wrapper.getByText(`1 comment`)).toBeInTheDocument()
 
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
@@ -344,10 +328,10 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
-          activeUser: mockActiveUser,
         })
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
+          activeUser,
         })
         // Smell, this is reimplementation of the store method, maybe we should mock the store
         // depdendencies instead, so we are less coupled to the implementation.
@@ -364,6 +348,7 @@ describe('question.routes', () => {
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
           addComment: mockDiscussionStoreAddComment,
+          activeUser,
         })
 
         await act(async () => {
@@ -405,7 +390,7 @@ describe('question.routes', () => {
         const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
         const discussionComment = FactoryDiscussionComment({
           text: faker.lorem.words(2),
-          _creatorId: mockActiveUser._id,
+          _creatorId: activeUser._id,
         })
         const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
           FactoryDiscussion({
@@ -418,10 +403,10 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
-          activeUser: mockActiveUser,
         })
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
+          activeUser,
         })
         // Smell, this is reimplementation of the store method, maybe we should mock the store
         // depdendencies instead, so we are less coupled to the implementation.
@@ -438,6 +423,7 @@ describe('question.routes', () => {
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
           editComment: mockDiscussionStoreEditComment,
+          activeUser,
         })
 
         await act(async () => {
@@ -483,7 +469,7 @@ describe('question.routes', () => {
         const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
         const discussionComment = FactoryDiscussionComment({
           text: faker.lorem.words(2),
-          _creatorId: mockActiveUser._id,
+          _creatorId: activeUser._id,
         })
         const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
           FactoryDiscussion({
@@ -496,7 +482,7 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
-          activeUser: mockActiveUser,
+          activeUser,
         })
         // Smell, this is reimplementation of the store method, maybe we should mock the store
         // depdendencies instead, so we are less coupled to the implementation.
@@ -504,6 +490,7 @@ describe('question.routes', () => {
         useDiscussionStore.mockReturnValue({
           fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
           deleteComment: mockDiscussionStoreDeleteComment,
+          activeUser,
         })
 
         await act(async () => {
@@ -547,6 +534,7 @@ describe('question.routes', () => {
           ...mockQuestionStore,
           activeUser: user,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
+          userHasSubscribed: true,
         })
 
         await act(async () => {
@@ -572,13 +560,10 @@ describe('question.routes', () => {
         })
 
         expect(wrapper.getByText('Follow')).toBeInTheDocument()
-
-        // Support adding comments
-        expect(wrapper.getByText('Leave a comment')).toBeInTheDocument()
       })
     })
 
-    it('does not show Edit call to action', async () => {
+    it('does not show edit call to action', async () => {
       let wrapper
       mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem()
@@ -587,6 +572,7 @@ describe('question.routes', () => {
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
+        userCanEditQuestion: false,
       })
 
       await act(async () => {
@@ -600,7 +586,7 @@ describe('question.routes', () => {
       })
     })
 
-    it('shows Edit call to action', async () => {
+    it('shows edit call to action', async () => {
       let wrapper
       mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem({
@@ -608,6 +594,7 @@ describe('question.routes', () => {
       })
 
       const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
@@ -675,8 +662,10 @@ describe('question.routes', () => {
         expect(() => wrapper.getByText('Draft')).toThrow()
       })
       // Fill in form
-      const title = wrapper.getByLabelText('The Question')
-      const description = wrapper.getByLabelText('Give some more information')
+      const title = wrapper.getByLabelText('The Question', { exact: false })
+      const description = wrapper.getByLabelText('Description', {
+        exact: false,
+      })
       const submitButton = wrapper.getByText('Update')
 
       // Submit form

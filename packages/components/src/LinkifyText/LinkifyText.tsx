@@ -4,7 +4,8 @@ import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import Linkify from 'linkify-react'
 
-import { ExternalLink, InternalLink } from '..'
+import { ExternalLink } from '../ExternalLink/ExternalLink'
+import { InternalLink } from '../InternalLink/InternalLink'
 
 export interface Props {
   children?: React.ReactNode

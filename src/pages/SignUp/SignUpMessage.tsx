@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Button, ExternalLink } from 'oa-components'
-import { getProjectEmail } from 'src/utils/helpers'
+import { Button } from 'oa-components'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 const SignUpMessagePage = () => (
@@ -29,18 +28,8 @@ const SignUpMessagePage = () => (
           </Heading>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Text>
-              We sent you an email with all the details to complete your
-              profile.
-            </Text>
-            <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
-              Didn't receive the email?{' '}
-              <ExternalLink
-                sx={{ textDecoration: 'underline', color: 'grey' }}
-                href={getProjectEmail('Email%20confirmation%20failed')}
-              >
-                Let us know
-              </ExternalLink>
-              .
+              We'll send you an email very soon to verify your email address. In
+              the meantime, please...
             </Text>
           </Flex>
         </Flex>

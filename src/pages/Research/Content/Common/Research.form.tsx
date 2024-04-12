@@ -17,6 +17,11 @@ import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
 import { researchStatusOptions } from 'src/models/research.models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import {
+  PostingGuidelines,
+  ResearchErrors,
+  ResearchSubmitStatus,
+} from 'src/pages/Research/Content/Common'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { stripSpecialCharacters } from 'src/utils/helpers'
@@ -38,7 +43,6 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
-import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
 
 import type { IResearch } from 'src/models/research.models'
 

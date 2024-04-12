@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { Flex, Text } from 'theme-ui'
 
-import { ExternalLink, Icon, Tooltip } from '..'
+import { ExternalLink } from '../ExternalLink/ExternalLink'
+import { Icon } from '../Icon/Icon'
+import { Tooltip } from '../Tooltip/Tooltip'
 
-import type { availableGlyphs } from '..'
+import type { availableGlyphs } from '../Icon/types'
 
 export interface IProps {
   file: {

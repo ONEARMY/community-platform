@@ -1,5 +1,6 @@
 import { Field } from 'react-final-form'
 import { FieldInput } from 'oa-components'
+import { FormFieldWrapper } from 'src/pages/Howto/Content/Common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import {
   draftValidationWrapper,
@@ -8,7 +9,6 @@ import {
 
 import { MAX_LINK_LENGTH } from '../../constants'
 import { intro } from '../../labels'
-import { FormFieldWrapper } from '.'
 
 export const HowtoFieldFileLink = () => {
   const { description, title } = intro.fileLink

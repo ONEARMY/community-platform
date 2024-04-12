@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
@@ -7,6 +7,7 @@ import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
+import { checkUserNameUnique } from 'src/utils/checkUserNameUnique'
 import { formatLowerNoSpecial } from 'src/utils/helpers'
 import {
   composeValidators,
@@ -15,16 +16,6 @@ import {
 } from 'src/utils/validators'
 import { Card, Flex, Heading, Label, Text } from 'theme-ui'
 import { bool, object, ref, string } from 'yup'
-
-const validationSchema = object({
-  displayName: string().min(2, 'Too short').required('Required'),
-  email: string().email('Invalid email').required('Required'),
-  password: string().required('Password is required'),
-  'confirm-password': string()
-    .oneOf([ref('password'), ''], 'Your new password does not match')
-    .required('Password confirm is required'),
-  consent: bool().oneOf([true], 'Consent is required'),
-})
 
 interface IFormValues {
   email: string
@@ -39,6 +30,8 @@ interface IState {
   disabled?: boolean
 }
 
+const rowWidth = ['100%', '100%', `100%`]
+
 const SignUpPage = observer(() => {
   const navigate = useNavigate()
   const { userStore } = useCommonStores().stores
@@ -52,17 +45,31 @@ const SignUpPage = observer(() => {
     },
   })
 
-  const checkUserNameUnique = async (userName: string) => {
-    const user = await userStore!.getUserProfile(userName)
-    return user && !user._deleted ? false : true
-  }
+  const validationSchema = object({
+    displayName: string()
+      .min(2, 'Too short')
+      .required('Required')
+      .test(
+        'is-unique',
+        FRIENDLY_MESSAGES['sign-up username taken'],
+        (value) => {
+          return checkUserNameUnique(userStore, value)
+        },
+      ),
+    email: string().email('Invalid email').required('Required'),
+    password: string().required('Password is required'),
+    'confirm-password': string()
+      .oneOf([ref('password'), ''], 'Your new password does not match')
+      .required('Password confirm is required'),
+    consent: bool().oneOf([true], 'Consent is required'),
+  })
 
   const onSignupSubmit = async (v: IFormValues) => {
     const { email, password, displayName } = v
     const userName = formatLowerNoSpecial(displayName as string)
 
     try {
-      if (await checkUserNameUnique(userName)) {
+      if (await checkUserNameUnique(userStore, userName)) {
         await userStore!.registerNewUser(email, password, displayName)
         navigate('/sign-up-message')
       } else {
@@ -132,25 +139,44 @@ const SignUpPage = observer(() => {
                       width: '100%',
                     }}
                   >
-                    <Heading variant="small" py={4} sx={{ width: '100%' }}>
+                    <Heading variant="small" py={2} sx={{ width: '100%' }}>
                       Create an account
                     </Heading>
+                    <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
+                      <Text color={'grey'} sx={{ fontSize: 1 }}>
+                        Already have an account ?
+                        <Link
+                          to="/sign-in"
+                          style={{
+                            color: '#98cc98',
+                            textDecoration: 'underline',
+                          }}
+                        >
+                          {' '}
+                          Sign-in here
+                        </Link>
+                      </Text>
+                    </Flex>
+                    <Text color={'red'} data-cy="error-msg">
+                      {state.errorMsg}
+                    </Text>
                     <Flex
                       mb={3}
                       sx={{
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        width: rowWidth,
                         flexDirection: 'column',
                       }}
                     >
-                      <Label htmlFor="displayName">
-                        Username. Think carefully. You can't change this*
-                      </Label>
+                      <Label htmlFor="displayName">Username</Label>
+                      <Text color={'grey'} mt={1} mb={1} sx={{ fontSize: 1 }}>
+                        Think carefully. You can't change this.
+                      </Text>
                       <Field
                         data-cy="username"
                         name="displayName"
                         type="userName"
                         component={FieldInput}
-                        placeholder="Pick a unique name"
+                        placeholder="youruniqueusername"
                         validate={composeValidators(
                           required,
                           noSpecialCharacters,
@@ -161,18 +187,19 @@ const SignUpPage = observer(() => {
                       mb={3}
                       sx={{
                         flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        width: rowWidth,
                       }}
                     >
-                      <Label htmlFor="email">
-                        Email, personal or workspace*
-                      </Label>
+                      <Label htmlFor="email">Email</Label>
+                      <Text color={'grey'} mt={1} mb={1} sx={{ fontSize: 1 }}>
+                        It can be personal or work email.
+                      </Text>
                       <Field
                         data-cy="email"
                         name="email"
                         type="email"
                         component={FieldInput}
-                        placeholder="hey@jack.com"
+                        placeholder="yourname@domain.com"
                         validate={required}
                       />
                     </Flex>
@@ -180,10 +207,10 @@ const SignUpPage = observer(() => {
                       mb={3}
                       sx={{
                         flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        width: rowWidth,
                       }}
                     >
-                      <Label htmlFor="password">Password*</Label>
+                      <Label htmlFor="password">Password</Label>
                       <PasswordField
                         data-cy="password"
                         name="password"
@@ -195,12 +222,10 @@ const SignUpPage = observer(() => {
                       mb={3}
                       sx={{
                         flexDirection: 'column',
-                        width: ['100%', '100%', `${(2 / 3) * 100}%`],
+                        width: rowWidth,
                       }}
                     >
-                      <Label htmlFor="confirm-password">
-                        Confirm Password*
-                      </Label>
+                      <Label htmlFor="confirm-password">Confirm Password</Label>
                       <PasswordField
                         data-cy="confirm-password"
                         name="confirm-password"
@@ -208,12 +233,14 @@ const SignUpPage = observer(() => {
                         validate={required}
                       />
                     </Flex>
-                    <Flex
-                      mb={3}
-                      mt={2}
-                      sx={{ width: ['100%', '100%', `${(2 / 3) * 100}%`] }}
-                    >
-                      <Label>
+                    <Flex mb={3} mt={2} sx={{ width: rowWidth }}>
+                      <Label
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '6px',
+                        }}
+                      >
                         <Field
                           data-cy="consent"
                           name="consent"
@@ -237,21 +264,12 @@ const SignUpPage = observer(() => {
                         </Text>
                       </Label>
                     </Flex>
-                    <Text color={'red'} data-cy="error-msg">
-                      {state.errorMsg}
-                    </Text>
-                    <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
-                      <Text color={'grey'} mt={2} sx={{ fontSize: 1 }}>
-                        Already have an account ?
-                        <Link to="/sign-in"> Sign-in here</Link>
-                      </Text>
-                    </Flex>
 
                     <Flex>
                       <Button
                         large
-                        data-cy="submit"
                         sx={{ width: '100%', justifyContent: 'center' }}
+                        data-cy="submit"
                         variant={'primary'}
                         disabled={disabled}
                         type="submit"

@@ -1,17 +1,13 @@
 import { ResearchStatus } from 'oa-shared'
 
 import type { ResearchUpdateStatus } from 'oa-shared'
+import type { DBDoc } from '../stores/databaseV2/types'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
-import type {
-  DBDoc,
-  IComment,
-  IModerable,
-  ISelectedTags,
-  ISharedFeatures,
-  UserMention,
-} from '.'
+import type { IComment } from './comment.model'
+import type { IModerable, ISharedFeatures, UserMention } from './common.models'
 import type { IResearchCategory } from './researchCategories.model'
+import type { ISelectedTags } from './tags.model'
 
 /**
  * Research retrieved from the database also include metadata such as _id, _created and _modified
@@ -53,6 +49,9 @@ export namespace IResearch {
     collaborators: string[]
     subscribers?: UserIdList
     locked?: ResearchDocumentLock
+    totalUpdates?: number
+    totalUsefulVotes?: number
+    keywords?: string[]
   } & Omit<FormInput, 'collaborators'>
 
   /** A research item update */

@@ -13,15 +13,30 @@ describe('[How To]', () => {
     const howtoSlug = 'make-glass-like-beams'
     const howtoUrl = `/how-to/${howtoSlug}`
     const coverFileRegex = /howto-beams-glass-0-3.jpg/
+
     beforeEach(() => {
       cy.visit('/how-to')
     })
+
     it('[By Everyone]', () => {
       cy.step('More How-tos button is hidden')
       cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
       cy.step('All how-tos are shown')
+      cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
 
+      cy.step('Select a category')
+      cy.get('[data-cy=category-select]')
+      cy.selectTag('product', '[data-cy=category-select]')
+      cy.get('[data-cy=card]').its('length').should('be.eq', 4)
+
+      cy.step('Type and select a category')
+      cy.selectTag('injection', '[data-cy=category-select]')
+      cy.get('[data-cy=card]').its('length').should('be.eq', 2)
+
+      cy.step('Remove all category filter')
+      cy.get('.data-cy__clear-indicator').click()
+      cy.get('.data-cy__multi-value__label').should('not.exist')
       cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
 
       cy.step('How-to cards has basic info')
@@ -29,7 +44,7 @@ describe('[How To]', () => {
         cy.contains('Make glass-like beams').should('be.exist')
         cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
         cy.contains('howto_creator').should('be.exist')
-        cy.contains('extrusion').should('be.exist')
+        cy.contains('product').should('be.exist')
         cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
       })
 
@@ -42,27 +57,6 @@ describe('[How To]', () => {
       cy.login('howto_reader@test.com', 'test1234')
       cy.step('Create button is available')
       cy.get('[data-cy=create]').click().url()
-    })
-  })
-
-  describe('[Filter by Category]', () => {
-    beforeEach(() => {
-      cy.visit('/how-to')
-    })
-    it('[By Everyone]', () => {
-      cy.step('Select a category')
-      cy.selectTag('product', '[data-cy="category-select"]')
-      cy.get('[data-cy=card]').its('length').should('be.eq', 3)
-
-      cy.step('Type and select a category')
-      cy.selectTag('injection', '[data-cy="category-select"]')
-
-      cy.get('[data-cy=card]').its('length').should('be.eq', 2)
-
-      cy.step('Remove all category filter')
-      cy.get('.data-cy__clear-indicator').click()
-      cy.get('.data-cy__multi-value__label').should('not.exist')
-      cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
     })
   })
 

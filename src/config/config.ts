@@ -159,7 +159,7 @@ export const VERSION = _c('REACT_APP_PROJECT_VERSION', '')
 export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID')
 export const PATREON_CLIENT_ID = _c('REACT_APP_PATREON_CLIENT_ID')
 
-const isPreciousPlastic = (): boolean => {
+export const isPreciousPlastic = (): boolean => {
   return (
     (_c('REACT_APP_PLATFORM_THEME') ||
       localStorage.getItem('platformTheme')) === 'precious-plastic'

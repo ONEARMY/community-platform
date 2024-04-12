@@ -67,8 +67,8 @@ export const Popup = (props: IProps) => {
           description={activePin.detail?.shortDescription}
           user={{
             isVerified: !!activePin.detail?.verifiedBadge,
-            username: activePin.detail?.name,
-            country: activePin.detail?.country,
+            userName: activePin.detail?.name,
+            countryCode: activePin.detail?.country?.toLowerCase(),
           }}
           heading={getHeading(activePin)}
           isEditable={!!mapsStore.needsModeration(activePin)}

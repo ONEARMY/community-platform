@@ -2,3 +2,5 @@ build
 .firebase
 storybook-static
 dist
+firestore.indexes.json
+firebase.json

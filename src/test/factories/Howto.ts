@@ -26,13 +26,13 @@ export const FactoryHowto = (
   description: faker.lorem.paragraph(),
   category: {
     label: 'howto',
-    _id: faker.datatype.uuid(),
+    _id: faker.string.uuid(),
     _modified: faker.date.past().toString(),
     _created: faker.date.past().toString(),
     _deleted: faker.datatype.boolean(),
     _contentModifiedTimestamp: faker.date.past().toString(),
   },
-  _id: faker.datatype.uuid(),
+  _id: faker.string.uuid(),
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),
@@ -50,8 +50,8 @@ export const FactoryHowto = (
     updated: '',
     size: 0,
   },
-  total_views: faker.datatype.number(),
-  total_downloads: faker.datatype.number(),
+  total_views: faker.number.int(),
+  total_downloads: faker.number.int(),
   votedUsefulBy: [],
   ...howtoOverloads,
 })
@@ -78,7 +78,7 @@ export const FactoryHowtoStep = (
 export const FactoryHowtoDraft = (
   howtoOverloads: Partial<IHowtoDB> = {},
 ): IHowtoDB => ({
-  _id: faker.datatype.uuid(),
+  _id: faker.string.uuid(),
   _contentModifiedTimestamp: faker.date.past().toString(),
   _created: faker.date.past().toString(),
   _createdBy: faker.internet.userName(),

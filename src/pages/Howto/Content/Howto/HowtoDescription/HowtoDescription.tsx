@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
+  Category,
   ConfirmModal,
   ContentStatistics,
   DownloadFileFromLink,
@@ -28,17 +29,7 @@ import {
   addIDToSessionStorageArray,
   retrieveSessionStorageArray,
 } from 'src/utils/sessionStorage'
-import {
-  Alert,
-  AspectImage,
-  Box,
-  Card,
-  Divider,
-  Flex,
-  Heading,
-  Image,
-  Text,
-} from 'theme-ui'
+import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import {
@@ -247,7 +238,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                   modified={howto._contentModifiedTimestamp || howto._modified}
                   action="Published"
                 />
-                <Heading mt={2} mb={1}>
+                {howto.category && (
+                  <Category
+                    category={howto.category}
+                    sx={{ fontSize: 2, mt: 2 }}
+                  />
+                )}
+                <Heading mt={howto.category ? 1 : 2} mb={1}>
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {capitalizeFirstLetter(howto.title)}
                 </Heading>
@@ -342,22 +339,45 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             position: 'relative',
           }}
         >
-          {howto.cover_image && (
-            <AspectImage
-              loading="lazy"
-              ratio={12 / 9}
+          <Box
+            sx={{
+              overflow: 'hidden',
+            }}
+          >
+            <Box
               sx={{
-                objectFit: 'cover',
                 width: '100%',
-                height: '100%',
+                height: '0',
+                pb: '75%',
               }}
-              src={cdnImageUrl(howto.cover_image.downloadUrl, {
-                width: 780,
-              })}
-              crossOrigin=""
-              alt="how-to cover"
-            />
-          )}
+            ></Box>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '0',
+                bottom: '0',
+                left: '0',
+                right: '0',
+              }}
+            >
+              {howto.cover_image && (
+                // 3407 - AspectImage creates divs that can mess up page layout,
+                // so using Image here instead and recreating the div layout
+                // that was created by AspectImage
+                <Image
+                  loading="lazy"
+                  src={cdnImageUrl(howto.cover_image.downloadUrl)}
+                  sx={{
+                    objectFit: 'cover',
+                    height: '100%',
+                    width: '100%',
+                  }}
+                  crossOrigin=""
+                  alt="how-to cover"
+                />
+              )}
+            </Box>
+          </Box>
           {howto.moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
               status={howto.moderation}

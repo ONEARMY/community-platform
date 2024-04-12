@@ -11,7 +11,7 @@ export const FactoryNotification = (
   notified: faker.datatype.boolean(),
   read: faker.datatype.boolean(),
   triggeredBy: {
-    displayName: faker.name.fullName(),
+    displayName: faker.person.fullName(),
     userId: faker.internet.userName(),
   },
   type: faker.helpers.arrayElement(NotificationTypes),

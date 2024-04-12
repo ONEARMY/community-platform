@@ -1,16 +1,18 @@
 import { Field, Form } from 'react-final-form'
 import { Flex, Label } from 'theme-ui'
 
-import { Button, FieldTextarea } from '../'
+import { Button } from '../Button/Button'
+import { FieldTextarea } from '../FieldTextarea/FieldTextarea'
 
-type EditCommentProps = {
+export interface IProps {
   comment: string
   handleCancel: () => void
   handleSubmit: (commentText: string) => void
+  isReply: boolean
 }
 
-export const EditComment = (props: EditCommentProps) => {
-  const { comment } = props
+export const EditComment = (props: IProps) => {
+  const { comment, isReply } = props
   return (
     <Form
       onSubmit={() => {
@@ -33,7 +35,7 @@ export const EditComment = (props: EditCommentProps) => {
             htmlFor="comment"
             sx={{ marginBottom: '6px', fontSize: 3 }}
           >
-            Edit comment
+            Edit {isReply ? 'Reply' : 'Comment'}
           </Label>
           <Field name="comment" id="comment" component={FieldTextarea} />
           <Flex mt={4} ml="auto">
@@ -53,7 +55,7 @@ export const EditComment = (props: EditCommentProps) => {
                 props?.handleSubmit(values.comment)
               }}
             >
-              Edit
+              Save
             </Button>
           </Flex>
         </Flex>

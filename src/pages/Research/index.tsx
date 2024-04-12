@@ -7,7 +7,7 @@ import {
 
 import ResearchRoutes from './research.routes'
 
-import type { IPageMeta } from '../PageList'
+import type { IPageMeta } from 'src/pages/PageList'
 
 /**
  * Wraps the research module routing elements with the research module provider

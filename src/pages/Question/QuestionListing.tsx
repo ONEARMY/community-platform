@@ -1,22 +1,81 @@
-import { Link } from 'react-router-dom'
-import { observer } from 'mobx-react'
-import {
-  Button,
-  IconCountWithTooltip,
-  Loader,
-  ModerationStatus,
-} from 'oa-components'
-import { useQuestionStore } from 'src/stores/Question/question.store'
-import { Box, Card, Flex, Grid, Heading } from 'theme-ui'
+import { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { Button, Loader } from 'oa-components'
+import { logger } from 'src/logger'
+import { questionService } from 'src/pages/Question/question.service'
+import { Flex, Heading } from 'theme-ui'
 
-import { SortFilterHeader } from '../common/SortFilterHeader/SortFilterHeader'
-import { UserNameTag } from '../common/UserNameTag/UserNameTag'
+import { ITEMS_PER_PAGE } from './constants'
+import { headings, listing } from './labels'
+import { QuestionFilterHeader } from './QuestionFilterHeader'
+import { QuestionListItem } from './QuestionListItem'
+import { QuestionSortOptions } from './QuestionSortOptions'
 
-import type { IQuestionDB } from 'src/models'
+import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
+import type { IQuestion } from 'src/models'
 
-export const QuestionListing = observer(() => {
-  const store = useQuestionStore()
-  const { filteredQuestions, isFetching } = store
+export const QuestionListing = () => {
+  const [isFetching, setIsFetching] = useState<boolean>(true)
+  const [questions, setQuestions] = useState<IQuestion.Item[]>([])
+  const [total, setTotal] = useState<number>(0)
+  const [lastVisible, setLastVisible] = useState<
+    QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
+  >(undefined)
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const q = searchParams.get('q') || ''
+  const category = searchParams.get('category') || ''
+  const sort = searchParams.get('sort') as QuestionSortOptions
+
+  useEffect(() => {
+    if (!sort) {
+      // ensure sort is set
+      const params = new URLSearchParams(searchParams.toString())
+
+      if (q) {
+        params.set('sort', QuestionSortOptions.MostRelevant)
+      } else {
+        params.set('sort', QuestionSortOptions.Newest)
+      }
+      setSearchParams(params)
+    } else {
+      // search only when sort is set (avoids duplicate requests)
+      fetchQuestions()
+    }
+  }, [q, category, sort])
+
+  const fetchQuestions = async (
+    skipFrom?: QueryDocumentSnapshot<DocumentData, DocumentData>,
+  ) => {
+    setIsFetching(true)
+
+    try {
+      const searchWords = q ? q.toLocaleLowerCase().split(' ') : []
+
+      const result = await questionService.search(
+        searchWords,
+        category,
+        sort,
+        skipFrom,
+        ITEMS_PER_PAGE,
+      )
+
+      if (skipFrom) {
+        // if skipFrom is set, means we are requesting another page that should be appended
+        setQuestions((questions) => [...questions, ...result.items])
+      } else {
+        setQuestions(result.items)
+      }
+
+      setLastVisible(result.lastVisible)
+
+      setTotal(result.total)
+    } catch (error) {
+      logger.error('error fetching questions', error)
+    }
+
+    setIsFetching(false)
+  }
 
   return (
     <>
@@ -29,7 +88,7 @@ export const QuestionListing = observer(() => {
             fontSize: 5,
           }}
         >
-          Ask your questions and help others out
+          {headings.list}
         </Heading>
       </Flex>
       <Flex
@@ -40,86 +99,40 @@ export const QuestionListing = observer(() => {
           flexDirection: ['column', 'column', 'row'],
         }}
       >
-        <SortFilterHeader store={store} type="question" />
-        <Link to={'/questions/create'}>
-          <Button variant={'primary'}>Ask a question</Button>
+        <QuestionFilterHeader />
+        <Link to="/questions/create">
+          <Button data-cy="create" variant="primary">
+            {listing.create}
+          </Button>
         </Link>
       </Flex>
-      {isFetching ? (
-        <Loader />
-      ) : filteredQuestions && filteredQuestions.length ? (
-        filteredQuestions
-          .filter(
-            (q: IQuestionDB) => q.moderation && q.moderation === 'accepted',
-          )
-          .map((q: IQuestionDB, idx) => {
-            const url = `/questions/${encodeURIComponent(q.slug)}`
-            return (
-              <Card
-                key={idx}
-                mb={3}
-                px={3}
-                py={3}
-                sx={{ position: 'relative' }}
-              >
-                <Grid columns={[1, '3fr 1fr']} gap="40px">
-                  <Box sx={{ flexDirection: 'column' }}>
-                    <Link to={url} key={q._id}>
-                      <Flex sx={{ width: '100%' }}>
-                        <Heading
-                          as="span"
-                          mb={2}
-                          sx={{
-                            color: 'black',
-                            fontSize: [3, 3, 4],
-                          }}
-                        >
-                          {q.title}
-                        </Heading>
-                      </Flex>
-                    </Link>
-                    <Flex>
-                      <ModerationStatus
-                        status={q.moderation}
-                        contentType="question"
-                        sx={{ top: 0, position: 'absolute', right: 0 }}
-                      />
-                      <UserNameTag
-                        userName={q._createdBy}
-                        countryCode={q.creatorCountry}
-                        created={q._created}
-                        action="Asked"
-                      />
-                    </Flex>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: ['none', 'flex', 'flex'],
-                      alignItems: 'center',
-                      justifyContent: 'space-around',
-                    }}
-                  >
-                    <IconCountWithTooltip
-                      count={(q.votedUsefulBy || []).length}
-                      icon="star-active"
-                      text="How useful is it"
-                    />
 
-                    <IconCountWithTooltip
-                      count={(q as any).commentCount || 0}
-                      icon="comment"
-                      text="Total comments"
-                    />
-                  </Box>
-                </Grid>
-              </Card>
-            )
-          })
-      ) : (
-        <Heading sx={{ marginTop: 4 }}>
-          No questions have been asked yet
-        </Heading>
+      {questions?.length === 0 && !isFetching && (
+        <Heading sx={{ marginTop: 4 }}>{listing.noQuestions}</Heading>
       )}
+
+      {questions &&
+        questions.length > 0 &&
+        questions.map((question, index) => (
+          <QuestionListItem key={index} question={question} query={q} />
+        ))}
+
+      {!isFetching &&
+        questions &&
+        questions.length > 0 &&
+        questions.length < total && (
+          <Flex
+            sx={{
+              justifyContent: 'center',
+            }}
+          >
+            <Button onClick={() => fetchQuestions(lastVisible)}>
+              {listing.loadMore}
+            </Button>
+          </Flex>
+        )}
+
+      {isFetching && <Loader />}
     </>
   )
-})
+}

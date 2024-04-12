@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { action, makeObservable } from 'mobx'
+import { action } from 'mobx'
 import { logger } from 'src/logger'
 import { isUserBlockedFromMessaging } from 'src/utils/helpers'
 
@@ -14,8 +14,6 @@ const EMAIL_ADDRESS_SEND_LIMIT = 100
 export class MessageStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
-    makeObservable(this)
-    super.init()
   }
 
   @action

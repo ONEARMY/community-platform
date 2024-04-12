@@ -19,9 +19,9 @@ export const getFormattedNotificationMessage = (
     case 'new_comment':
       return (
         <Box>
-          New comment on your
+          {'New comment on your '}
           <InternalLink to={relevantUrl}>how-to</InternalLink>
-          by
+          {' by '}
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
@@ -30,9 +30,9 @@ export const getFormattedNotificationMessage = (
     case 'howto_mention':
       return (
         <Box>
-          You were mentioned in a
+          {'You were mentioned in a '}
           <InternalLink to={relevantUrl}>how-to</InternalLink>
-          by
+          {' by '}
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
@@ -41,57 +41,57 @@ export const getFormattedNotificationMessage = (
     case 'howto_useful':
       return (
         <Box>
-          Yay,
+          {'Yay, '}
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          found your
+          {' found your '}
           <InternalLink to={relevantUrl}>how-to</InternalLink>
-          useful
+          {' useful'}
         </Box>
       )
     case 'howto_approved':
       return (
         <Box>
-          Yay, your
+          {'Yay, your '}
           <InternalLink to={relevantUrl}>how-to</InternalLink>
-          has been approved
+          {' has been approved'}
         </Box>
       )
     case 'howto_needs_updates':
       return (
         <Box>
-          Your
+          {'Your '}
           <InternalLink to={relevantUrl}>how-to</InternalLink>
-          needs some updates before we can approve it
+          {' needs some updates before we can approve it'}
         </Box>
       )
     case 'map_pin_approved':
       return (
         <Box>
-          Yay, your
+          {'Yay, your '}
           <InternalLink to={relevantUrl}>map pin</InternalLink>
-          has been approved
+          {' has been approved'}
         </Box>
       )
     case 'map_pin_needs_updates':
       return (
         <Box>
-          Your
+          {'Your '}
           <InternalLink to={relevantUrl}>map pin</InternalLink>
-          needs some updates before we can approve it
+          {' needs some updates before we can approve it'}
         </Box>
       )
     case 'research_useful':
       return (
         <Box>
-          Yay,
+          {'Yay, '}
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          found
+          {' found '}
           <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
-          useful
+          {' useful'}
         </Box>
       )
     case 'research_mention':
@@ -100,7 +100,7 @@ export const getFormattedNotificationMessage = (
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          mentioned you in this research
+          {' mentioned you in this research '}
           <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
         </Box>
       )
@@ -110,44 +110,48 @@ export const getFormattedNotificationMessage = (
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          posted an update to this research
+          {' posted an update to this research '}
           <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
-          you follow
+          {' you follow'}
         </Box>
       )
     case 'research_approved':
       return (
         <Box>
-          Yay, your research
+          {'Yay, your research '}
           <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
-          has been approved
+          {' has been approved'}
         </Box>
       )
     case 'research_needs_updates':
       return (
         <Box>
-          Your research
+          {'Your research '}
           <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
-          needs some updates before we can approve it
+          {' needs some updates before we can approve it'}
         </Box>
       )
     // legacy format, should use new_comment_discussion
     case 'new_comment_research':
       return (
         <Box>
-          New comment from
+          {'New comment from '}
           <InternalLink to={'/u/' + triggeredBy.userId}>
             {triggeredBy.displayName}
           </InternalLink>
-          on your research
+          {' on your research '}
           <InternalLink to={relevantUrl}>{relevantTitle}</InternalLink>
         </Box>
       )
     case 'new_comment_discussion':
       return (
         <Box>
-          New comment from <strong> {triggeredBy.displayName} </strong>
-          on <InternalLink to={relevantUrl}> {relevantTitle}</InternalLink>
+          {'New comment from '}
+          <InternalLink to={'/u/' + triggeredBy.userId}>
+            {triggeredBy.displayName}
+          </InternalLink>
+          {' on '}
+          <InternalLink to={relevantUrl}> {relevantTitle}</InternalLink>
         </Box>
       )
     default:

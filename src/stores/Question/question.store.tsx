@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { action, computed, makeObservable, observable } from 'mobx'
+import { action, computed } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
@@ -23,12 +23,10 @@ import type { IUploadedFileMeta } from '../storage'
 const COLLECTION_NAME = 'questions'
 
 export class QuestionStore extends ModuleStore {
-  @observable
   public activeQuestionItem: IQuestionDB | undefined
 
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
-    makeObservable(this)
   }
 
   public async incrementViewCount(documentId: string) {

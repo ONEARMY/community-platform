@@ -51,6 +51,20 @@ export class ModuleStore {
     return currentOtherMatches.length > 0 || previousOtherMatches.length > 0
   }
 
+  public setPreviousSlugs = (
+    doc: ICollectionWithPreviousSlugs,
+    slug: string,
+  ): string[] => {
+    const { previousSlugs } = doc
+    if (!previousSlugs) return [slug]
+
+    if (slug && previousSlugs.includes(slug)) {
+      return previousSlugs
+    }
+
+    return [...previousSlugs, slug]
+  }
+
   public setSlug = async (doc): Promise<string> => {
     const { slug, title, _id } = doc
 
@@ -208,4 +222,8 @@ interface ICollectionWithTags {
 }
 interface ICollectionWithLocation {
   location: ILocation
+}
+
+interface ICollectionWithPreviousSlugs {
+  previousSlugs?: string[]
 }

@@ -62,6 +62,45 @@ describe('module.store', () => {
     })
   })
 
+  describe('setPreviousSlugs', () => {
+    it('returns an array with the slug when list is undefined', () => {
+      const slug = 'whatever'
+      const doc = {
+        previousSlugs: undefined,
+      }
+
+      const previousSlugs = store.setPreviousSlugs(doc, slug)
+      const expectation = [slug]
+
+      expect(previousSlugs).toEqual(expectation)
+    })
+
+    it('returns an array with the slug in when a list is provided', () => {
+      const slug = 'whatever'
+      const previousSlugs = ['old-thing', 'another-one']
+      const doc = {
+        previousSlugs,
+      }
+
+      const newPreviousSlugs = store.setPreviousSlugs(doc, slug)
+      const expectation = [...previousSlugs, slug]
+
+      expect(newPreviousSlugs).toEqual(expectation)
+    })
+
+    it('returns an array with the slug when in the list already', () => {
+      const slug = 'old-thing'
+      const previousSlugs = ['old-thing', 'another-one']
+      const doc = {
+        previousSlugs,
+      }
+
+      const newPreviousSlugs = store.setPreviousSlugs(doc, slug)
+
+      expect(newPreviousSlugs).toEqual(previousSlugs)
+    })
+  })
+
   describe('setSlug', () => {
     it('throws an error if an empty document is provided', async () => {
       expect(async () => await store.setSlug({})).rejects.toThrow()

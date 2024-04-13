@@ -90,7 +90,7 @@ describe('[How To]', () => {
             .to.have.attr('src')
             .match(coverFileRegex)
           expect($summary.find('[data-cy=file-download-counter]')).to.contain(
-            '1,234',
+            '1,234 downloads',
           )
         })
 

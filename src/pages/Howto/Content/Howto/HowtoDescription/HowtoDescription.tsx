@@ -5,6 +5,7 @@ import {
   Category,
   ConfirmModal,
   ContentStatistics,
+  DownloadCounter,
   DownloadFileFromLink,
   DownloadStaticFile,
   LinkifyText,
@@ -24,7 +25,6 @@ import {
   capitalizeFirstLetter,
   isAllowedToDeleteContent,
   isAllowedToEditContent,
-  numberWithCommas,
 } from 'src/utils/helpers'
 import {
   addIDToSessionStorageArray,
@@ -318,19 +318,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                         />
                       ),
                   )}
-              {typeof fileDownloadCount === 'number' && (
-                <Text
-                  data-cy="file-download-counter"
-                  sx={{
-                    fontSize: 1,
-                    color: 'grey',
-                    paddingLeft: 1,
-                  }}
-                >
-                  {numberWithCommas(fileDownloadCount)}
-                  {fileDownloadCount !== 1 ? ' downloads' : ' download'}
-                </Text>
-              )}
+              <DownloadCounter total={fileDownloadCount} />
             </Flex>
           )}
         </Flex>

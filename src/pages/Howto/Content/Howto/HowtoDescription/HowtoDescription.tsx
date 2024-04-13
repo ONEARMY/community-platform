@@ -24,6 +24,7 @@ import {
   capitalizeFirstLetter,
   isAllowedToDeleteContent,
   isAllowedToEditContent,
+  numberWithCommas,
 } from 'src/utils/helpers'
 import {
   addIDToSessionStorageArray,
@@ -326,7 +327,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                     paddingLeft: 1,
                   }}
                 >
-                  {fileDownloadCount}
+                  {numberWithCommas(fileDownloadCount)}
                   {fileDownloadCount !== 1 ? ' downloads' : ' download'}
                 </Text>
               )}

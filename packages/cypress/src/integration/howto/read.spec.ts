@@ -89,6 +89,9 @@ describe('[How To]', () => {
           expect($summary.find('img[alt="how-to cover"]'))
             .to.have.attr('src')
             .match(coverFileRegex)
+          expect($summary.find('[data-cy=file-download-counter]')).to.contain(
+            '1,234',
+          )
         })
 
         cy.step('Download file button should redirect to sign in')

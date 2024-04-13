@@ -83,7 +83,7 @@ export class QuestionStore extends ModuleStore {
       .doc(values?._id)
 
     const slug = await this.setSlug(values)
-
+    const previousSlugs = this.setPreviousSlugs(values, slug)
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
     const keywords = getKeywords(values.title + ' ' + values.description)
@@ -102,6 +102,7 @@ export class QuestionStore extends ModuleStore {
       slug,
       keywords: keywords,
       images: images,
+      previousSlugs,
     })
     logger.debug(`upsertQuestion.set`, { dbRef })
 

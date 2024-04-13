@@ -61,4 +61,56 @@ describe('module.store', () => {
       expect(isReusedSlug).toBeTruthy()
     })
   })
+
+  describe('setSlug', () => {
+    it('throws an error if an empty document is provided', async () => {
+      expect(async () => await store.setSlug({})).rejects.toThrow()
+    })
+
+    it('returns a slug based on the title', async () => {
+      givenMatches([])
+
+      const doc = {
+        title: 'Words with Gaps',
+        slug: 'old-slug',
+      }
+      const expectedSlug = 'words-with-gaps'
+
+      const newSlug = await store.setSlug(doc)
+
+      expect(newSlug).toEqual(expectedSlug)
+    })
+
+    it('returns the slug without checks if already the same as set', async () => {
+      givenMatches([])
+      const spy = jest.spyOn(store, 'isTitleThatReusesSlug')
+
+      const slug = 'same-slug'
+      const doc = {
+        _id: 'hdfg8721',
+        title: 'Same Slug',
+        slug,
+      }
+
+      const newSlug = await store.setSlug(doc)
+
+      expect(newSlug).toEqual(slug)
+      expect(spy.mock.calls.length).toBe(0)
+    })
+
+    it('adds a random id if the simple slug is taken already', async () => {
+      givenMatches([{ _id: 'another-identifier' }])
+
+      const doc = {
+        _id: 'agfh412',
+        title: 'Slug Taken',
+        slug: 'old-slug',
+      }
+
+      const newSlug = await store.setSlug(doc)
+
+      expect(newSlug).not.toEqual('slug-taken')
+      expect(newSlug).toContain('slug-taken-')
+    })
+  })
 })

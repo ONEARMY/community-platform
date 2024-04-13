@@ -2,7 +2,7 @@ import isUrl from 'is-url'
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { logger } from 'src/logger'
 import { includesAll } from 'src/utils/filters'
-import { stripSpecialCharacters } from 'src/utils/helpers'
+import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 
 import { Storage } from '../storage'
 
@@ -31,7 +31,7 @@ export class ModuleStore {
    *            Data Validation Methods
    * **************************************************************************/
   public isTitleThatReusesSlug = async (title: string, originalId?: string) => {
-    const slug = stripSpecialCharacters(title).toLowerCase()
+    const slug = this._createSlug(title)
 
     // check for previous titles
     const previousMatches = await this.db
@@ -51,9 +51,32 @@ export class ModuleStore {
     return currentOtherMatches.length > 0 || previousOtherMatches.length > 0
   }
 
+  public setSlug = async (doc): Promise<string> => {
+    const { slug, title, _id } = doc
+
+    if (!doc || !title) throw Error('Document not slug-able')
+
+    const newSlug = this._createSlug(title)
+    if (newSlug === slug) return slug
+
+    const isSlugTaken = await this.isTitleThatReusesSlug(title, _id)
+
+    if (isSlugTaken) {
+      const slugWithRandomId = `${newSlug}-${randomID().toLocaleLowerCase()}`
+      return slugWithRandomId
+    }
+
+    return newSlug
+  }
+
   public validateUrl = async (value: any) => {
     return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
+
+  private _createSlug = (title: string) => {
+    return formatLowerNoSpecial(title)
+  }
+
   // this can be subscribed to in individual stores
   constructor(private rootStore: IRootStore, private basePath?: IDBEndpoint) {
     this.rootStore = rootStore

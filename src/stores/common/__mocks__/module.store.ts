@@ -31,6 +31,9 @@ export class ModuleStore {
   }
 
   public isTitleThatReusesSlug() {}
+  public setSlug(doc) {
+    return doc.slug
+  }
 }
 
 export type IMockDB = typeof ModuleStore.prototype.db

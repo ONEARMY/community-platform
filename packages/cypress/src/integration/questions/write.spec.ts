@@ -65,9 +65,6 @@ describe('[Question]', () => {
         .url()
         .should('include', `/questions/${initialExpectedSlug}/edit`)
 
-      cy.step('Update title field')
-      cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur()
-
       cy.step('Add title description')
       cy.get('[data-cy=field-description]')
         .clear()
@@ -78,15 +75,21 @@ describe('[Question]', () => {
         .get('[data-cy=delete-image]:first')
         .click({ force: true })
 
-      cy.step('Submit updated question')
+      cy.step('Updated question details shown')
+      cy.get('[data-cy=submit]')
+        .click()
+        .url()
+        .should('include', `/questions/${initialExpectedSlug}`)
+      cy.contains(updatedQuestionDescription)
+
+      cy.step('Updating the title changes the slug')
+      cy.get('[data-cy=edit]').click()
+      cy.get('[data-cy=field-title]').clear().type(updatedTitle).blur()
       cy.get('[data-cy=submit]')
         .click()
         .url()
         .should('include', `/questions/${updatedExpectedSlug}`)
-
-      cy.step('All updated fields visible on page')
       cy.contains(updatedTitle)
-      cy.contains(updatedQuestionDescription)
 
       cy.step('All updated fields visiable on list')
       cy.visit('/questions')

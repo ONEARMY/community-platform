@@ -2,11 +2,7 @@ import { createContext, useContext } from 'react'
 import { action, computed } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import {
-  formatLowerNoSpecial,
-  isAllowedToEditContent,
-  randomID,
-} from 'src/utils/helpers'
+import { isAllowedToEditContent } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
@@ -86,15 +82,7 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
 
-    // Check for existing document
-    let slug = formatLowerNoSpecial(values.title)
-    const searchQuery = await this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
-      .getWhere('slug', '==', slug)
-
-    if (searchQuery && searchQuery.length) {
-      slug += `-${randomID()}`
-    }
+    const slug = await this.setSlug(values)
 
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)

@@ -73,47 +73,6 @@ describe('question.store', () => {
         }),
       )
     })
-
-    it('generates a slug', async () => {
-      const { store, setFn } = await factory()
-      const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-      })
-
-      // Act
-      await store.upsertQuestion(newQuestion)
-
-      expect(setFn).toBeCalledWith(
-        expect.objectContaining({
-          title: newQuestion.title,
-          slug: 'question-title',
-        }),
-      )
-    })
-
-    it('generates a unique slug', async () => {
-      const { store, setFn, getWhereFn } = await factory()
-
-      const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-      })
-
-      getWhereFn.mockResolvedValue([
-        FactoryQuestionItem({
-          slug: 'question-title',
-        }),
-      ])
-
-      // Act
-      await store.upsertQuestion(newQuestion)
-
-      expect(setFn).toBeCalledWith(
-        expect.objectContaining({
-          title: newQuestion.title,
-          slug: expect.stringMatching(/question-title-/),
-        }),
-      )
-    })
   })
 
   describe('fetchQuestionBySlug', () => {

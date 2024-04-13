@@ -570,16 +570,9 @@ export class ResearchStore extends ModuleStore {
           .filter(Boolean)
 
     try {
-      // populate DB
-      // define research
       const userCountry = getUserCountry(user)
-
       const slug = await this.setSlug(values)
-
-      const previousSlugs: string[] = values.previousSlugs || []
-      if (!previousSlugs.includes(slug)) {
-        previousSlugs.push(slug)
-      }
+      const previousSlugs = this.setPreviousSlugs(values, slug)
 
       const researchItem: IResearch.Item = {
         mentions: [],

@@ -77,19 +77,19 @@ export class QuestionStore extends ModuleStore {
   }
 
   public async upsertQuestion(values: IQuestion.FormInput) {
-    logger.debug(`upsertQuestion:`, { values, activeUser: this.activeUser })
+    logger.info(`upsertQuestion:`, { values, activeUser: this.activeUser })
     const dbRef = this.db
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
 
     const slug = await this.setSlug(values)
     const previousSlugs = this.setPreviousSlugs(values, slug)
+    const _createdBy = values._createdBy ?? this.activeUser?.userName
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
+    
     const keywords = getKeywords(values.title + ' ' + values.description)
-    if (values._createdBy) {
-      keywords.push(values._createdBy)
-    }
+    if (_createdBy) { keywords.push(_createdBy) }
 
     const images = values.images
       ? await this.loadImages(values.images, dbRef.id)
@@ -98,13 +98,13 @@ export class QuestionStore extends ModuleStore {
     await dbRef.set({
       ...(values as any),
       creatorCountry,
-      _createdBy: values._createdBy ?? this.activeUser?.userName,
+      _createdBy,
       slug,
-      keywords: keywords,
-      images: images,
       previousSlugs,
+      keywords,
+      images,
     })
-    logger.debug(`upsertQuestion.set`, { dbRef })
+    logger.info(`upsertQuestion.set`, { dbRef })
 
     return dbRef.get() || null
   }

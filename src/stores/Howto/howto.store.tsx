@@ -367,10 +367,7 @@ export class HowtoStore extends ModuleStore {
     )
 
     mentions.push(...commentMentions, ...stepMentions)
-    const previousSlugs = howToItem.previousSlugs ?? []
-    if (!previousSlugs.includes(howToItem.slug)) {
-      previousSlugs.push(howToItem.slug)
-    }
+    const previousSlugs = this.setPreviousSlugs(howToItem, howToItem.slug)
 
     await dbRef.set(
       {
@@ -562,11 +559,7 @@ export class HowtoStore extends ModuleStore {
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
       const slug = await this.setSlug(values)
-
-      const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
-      if (!previousSlugs.includes(slug)) {
-        previousSlugs.push(slug)
-      }
+      const previousSlugs = this.setPreviousSlugs(values, slug)
       const total_downloads = values['total_downloads'] ?? 0
 
       const keywords = getKeywords(values.title + ' ' + values.description)

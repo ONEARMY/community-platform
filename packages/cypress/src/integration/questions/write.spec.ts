@@ -91,6 +91,10 @@ describe('[Question]', () => {
         .should('include', `/questions/${updatedExpectedSlug}`)
       cy.contains(updatedTitle)
 
+      cy.step('Can access the question with the previous slug')
+      cy.visit(`/questions/${initialExpectedSlug}`)
+      cy.contains(updatedTitle)
+
       cy.step('All updated fields visiable on list')
       cy.visit('/questions')
       cy.contains(updatedTitle)

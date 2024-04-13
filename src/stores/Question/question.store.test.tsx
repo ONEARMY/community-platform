@@ -100,6 +100,21 @@ describe('question.store', () => {
       expect(getWhereFn.mock.calls[0]).toEqual(['slug', '==', newQuestion.slug])
       expect(questionDoc).toStrictEqual(newQuestion)
     })
+
+    it('returns a valid response when a previous slug', async () => {
+      const { store, getWhereFn } = await factory()
+      const newQuestion = FactoryQuestionItem({
+        title: 'Question title',
+        previousSlugs: ['old-slug'],
+      })
+
+      getWhereFn.mockResolvedValue([newQuestion])
+
+      // Act
+      const questionDoc = await store.fetchQuestionBySlug('old-slug')
+
+      expect(questionDoc).toStrictEqual(newQuestion)
+    })
   })
 
   describe('incrementViews', () => {

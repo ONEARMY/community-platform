@@ -87,9 +87,11 @@ export class QuestionStore extends ModuleStore {
     const _createdBy = values._createdBy ?? this.activeUser?.userName
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
-    
+
     const keywords = getKeywords(values.title + ' ' + values.description)
-    if (_createdBy) { keywords.push(_createdBy) }
+    if (_createdBy) {
+      keywords.push(_createdBy)
+    }
 
     const images = values.images
       ? await this.loadImages(values.images, dbRef.id)
@@ -177,10 +179,18 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
 
-    logger.debug(`_getQuestionItemBySlug.collection`, { collection })
-
+    logger.info(`_getQuestionItemBySlug.collection`, { collection })
     if (collection && collection.length) {
       return collection[0]
+    }
+
+    const previousSlugs = await this.db
+      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .getWhere('previousSlugs', 'array-contains', slug)
+
+    logger.info(`_getQuestionItemBySlug.collection`, { previousSlugs })
+    if (previousSlugs && previousSlugs.length) {
+      return previousSlugs[0]
     }
 
     return null

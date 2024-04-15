@@ -1,42 +1,27 @@
-import { toJS } from 'mobx'
-import { logger } from 'src/logger'
-
-import type { IHowto, IQuestion } from 'src/models'
+import type { IHowto, IQuestion, IResearch } from 'src/models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
-export const incrementDocViewCount = async (
-  db: DatabaseV2,
-  collectionName: DBEndpoint,
-  docId,
-) => {
-  const dbRef = db
-    .collection<IHowto | IQuestion.Item>(collectionName)
-    .doc(docId)
-  const docData = await toJS(dbRef.get('server'))
+type ICollection = Partial<IHowto | IQuestion.Item | IResearch.Item>
 
-  if (!docData) {
-    logger.error('Failed to load document data', {
-      db,
-    })
-    return
-  }
+interface IProps {
+  collection: DBEndpoint
+  db: DatabaseV2
+  doc: ICollection
+}
 
-  const newTotalViews = (docData!.total_views || 0) + 1
+export const incrementDocViewCount = async ({
+  collection,
+  db,
+  doc,
+}: IProps) => {
+  const { _id, total_views } = doc
+  const dbRef = db.collection<ICollection>(collection).doc(_id)
 
-  if (docData) {
-    const updatedDoc = {
-      ...docData,
-      total_views: newTotalViews,
-    }
+  const incrementedViews = (total_views || 0) + 1
 
-    await dbRef.set(
-      {
-        ...updatedDoc,
-      },
-      { keep_modified_timestamp: true },
-    )
-
-    return updatedDoc.total_views
-  }
+  await dbRef.update(
+    { total_views: incrementedViews },
+    { keep_modified_timestamp: true },
+  )
 }

@@ -29,6 +29,7 @@ import {
   FilterSorterDecorator,
   ItemSortingOption,
 } from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
@@ -307,26 +308,12 @@ export class ResearchStore extends ModuleStore {
     return
   }
 
-  public async incrementViewCount(id: string) {
-    const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
-    const researchData = await toJS(dbRef.get('server'))
-    const totalViews = researchData?.total_views || 0
-
-    if (researchData) {
-      const updatedResearch: IResearchDB = {
-        ...researchData,
-        total_views: totalViews! + 1,
-      }
-
-      await dbRef.set(
-        {
-          ...updatedResearch,
-        },
-        { keep_modified_timestamp: true },
-      )
-
-      return updatedResearch.total_views
-    }
+  public async incrementViewCount(researchItem: Partial<IResearch.ItemDB>) {
+    return await incrementDocViewCount({
+      collection: COLLECTION_NAME,
+      db: this.db,
+      doc: researchItem,
+    })
   }
 
   @action

@@ -82,6 +82,7 @@ export const QuestionPage = () => {
         <Loader />
       ) : question ? (
         <>
+        {document.title = question.title}
           <Card sx={{ position: 'relative', marginTop: 4 }}>
             <Flex sx={{ flexDirection: 'column', padding: 4, gap: 2 }}>
               <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>

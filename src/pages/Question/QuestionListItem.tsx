@@ -37,7 +37,6 @@ export const QuestionListItem = ({ question, query }: IProps) => {
         e.stopPropagation()
         e.preventDefault()
         navigate(url)
-        document.title = title;
       }}
       data-href={url}
       tabIndex={0}

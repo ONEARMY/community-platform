@@ -54,6 +54,7 @@ export class DiscussionStore extends ModuleStore {
       sourceId,
       sourceType,
       comments: [],
+      contributorIds: [],
     }
 
     const dbRef = await this.db
@@ -97,6 +98,10 @@ export class DiscussionStore extends ModuleStore {
         }
 
         currentDiscussion.comments.push(newComment)
+        currentDiscussion.contributorIds = this._addContributorId(
+          currentDiscussion,
+          newComment,
+        )
 
         await this._addNotification(newComment, currentDiscussion)
 
@@ -181,6 +186,11 @@ export class DiscussionStore extends ModuleStore {
             currentDiscussion.comments,
             commentId,
           )
+          
+          currentDiscussion.contributorIds = this._removeContributorId(
+            discussion,
+            targetComment?._creatorId,
+          )
 
           return this._updateDiscussion(dbRef, currentDiscussion)
         }
@@ -253,6 +263,24 @@ export class DiscussionStore extends ModuleStore {
     updateDiscussionMetadata(this.db, discussion)
 
     return toJS(dbRef.get())
+  }
+
+  private _addContributorId({ contributorIds }, comment) {
+    const isIdAlreadyPresent = !contributorIds.find(
+      (id) => id === comment._creatorId,
+    )
+    if (!isIdAlreadyPresent) return contributorIds
+
+    return [...contributorIds, comment._creatorId]
+  }
+
+  private _removeContributorId({ comments, contributorIds }, _creatorId) {
+    const isOtherUserCommentPresent = !comments.find(
+      (comment) => comment._creatorId === _creatorId,
+    )
+    if (isOtherUserCommentPresent) return contributorIds
+
+    return contributorIds.filter((id) => id !== _creatorId)
   }
 
   private _findAndDeleteComment(

@@ -15,6 +15,7 @@ export type IDiscussion = {
   sourceId: string
   sourceType: 'question' | 'researchUpdate'
   comments: IDiscussionComment[]
+  contributorIds: string[]
 }
 
 export type IDiscussionSourceModelOptions = IQuestion.Item

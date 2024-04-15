@@ -24,6 +24,9 @@ export interface IHowto extends IHowtoFormInput {
   total_downloads?: number
   mentions: UserMention[]
   previousSlugs: string[]
+  totalComments?: number
+  totalUsefulVotes?: number
+  keywords?: string[]
 }
 
 /**

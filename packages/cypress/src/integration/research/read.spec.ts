@@ -39,6 +39,9 @@ describe('[Research]', () => {
           SKIP_TIMEOUT,
         ).click()
         cy.url().should('include', researchArticleUrl)
+        cy.get('[data-cy=file-download-counter]')
+          .contains('2,555 downloads')
+          .should('be.exist')
       })
     })
   })

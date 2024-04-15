@@ -154,6 +154,9 @@ describe('discussion.store', () => {
 
       // Assert
       expect(setFn).toHaveBeenCalledTimes(1)
+      expect(newDiscussion.contributorIds).toEqual(
+        expect.arrayContaining([newDiscussion.comments[1]._creatorId]),
+      )
       expect(newDiscussion.comments).toEqual(
         expect.arrayContaining([
           expect.objectContaining({ text: 'New reply' }),
@@ -296,6 +299,9 @@ describe('discussion.store', () => {
 
       // Asert
       expect(setFn).toHaveBeenCalledTimes(1)
+      expect(discussionItem.contributorIds).not.toEqual(
+        expect.arrayContaining([comment._creatorId]),
+      )
       expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
     })
 

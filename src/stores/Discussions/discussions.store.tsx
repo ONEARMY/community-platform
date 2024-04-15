@@ -186,7 +186,7 @@ export class DiscussionStore extends ModuleStore {
             currentDiscussion.comments,
             commentId,
           )
-          
+
           currentDiscussion.contributorIds = this._removeContributorId(
             discussion,
             targetComment?._creatorId,

@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
-import { action, makeObservable, toJS } from 'mobx'
+import { action, toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
@@ -23,8 +23,6 @@ const COLLECTION_NAME = 'discussions'
 export class DiscussionStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
-    makeObservable(this)
-    super.init()
   }
 
   @action
@@ -92,6 +90,8 @@ export class DiscussionStore extends ModuleStore {
           _creatorId: user._id,
           creatorName: user.userName,
           creatorCountry: getUserCountry(user),
+          isUserVerified: !!user.badges?.verified,
+          isUserSupporter: !!user.badges?.supporter,
           text: comment,
           parentCommentId: commentId || null,
         }

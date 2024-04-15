@@ -24,6 +24,11 @@ export const HowToCard = (props: IProps) => {
   const { aggregationsStore } = useCommonStores().stores
   const { howto, votedUsefulCount } = props
 
+  const isVerified: boolean = isUserVerifiedWithStore(
+    howto._createdBy,
+    aggregationsStore,
+  )
+
   return (
     <Card
       data-cy="card"
@@ -80,11 +85,8 @@ export const HowToCard = (props: IProps) => {
               user={{
                 userName: howto._createdBy,
                 countryCode: howto.creatorCountry,
+                isVerified,
               }}
-              isVerified={isUserVerifiedWithStore(
-                howto._createdBy,
-                aggregationsStore,
-              )}
             />
           </Box>
         </Flex>

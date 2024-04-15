@@ -1,22 +1,19 @@
+import { keyframes } from '@emotion/react'
 import { Alert, AspectRatio, Box, Card, Image, Text } from 'theme-ui'
 
 import { Username } from '../Username/Username'
+
+import type { User } from '../types/common'
 
 export interface Props {
   loading?: boolean
   imageUrl: string
   description: string
   comments: string | null
-  user: {
-    isVerified: boolean
-    username: string
-    country: string | null
-  }
+  user: User
   heading: string
   isEditable: boolean
 }
-
-import { keyframes } from '@emotion/react'
 
 const wave = keyframes`
   from {
@@ -29,6 +26,7 @@ const wave = keyframes`
 
 export const MapMemberCard = (props: Props) => {
   const { imageUrl, description, user, heading, comments } = props
+
   return (
     <Card sx={{ maxWidth: '230px' }} data-cy="MapMemberCard">
       <Box>
@@ -62,13 +60,7 @@ export const MapMemberCard = (props: Props) => {
                 {heading}
               </Text>
               <div>
-                <Username
-                  isVerified={!!user.isVerified}
-                  user={{
-                    userName: user.username,
-                    countryCode: user.country,
-                  }}
-                />
+                <Username user={user} />
               </div>
               <Text
                 mb={2}

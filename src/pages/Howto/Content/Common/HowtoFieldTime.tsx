@@ -1,11 +1,11 @@
 import { Field } from 'react-final-form'
 import { SelectField } from 'src/common/Form/Select.field'
+import { FormFieldWrapper } from 'src/pages/Howto/Content/Common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { draftValidationWrapper, required } from 'src/utils/validators'
 
 import { intro } from '../../labels'
 import { TIME_OPTIONS } from './FormSettings'
-import { FormFieldWrapper } from '.'
 
 export const HowtoFieldTime = () => {
   const { placeholder, title } = intro.time

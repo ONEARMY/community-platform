@@ -15,6 +15,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
+import { getKeywords } from 'src/utils/searchHelper'
 
 import {
   FilterSorterDecorator,
@@ -89,7 +90,7 @@ export class HowtoStore extends ModuleStore {
       })
 
       runInAction(() => {
-        this.activeSorter = ItemSortingOption.Random
+        this.activeSorter = ItemSortingOption.Newest
         this.filterSorterDecorator = new FilterSorterDecorator()
         this.allHowtos = this.filterSorterDecorator.sort(
           this.activeSorter,
@@ -107,7 +108,6 @@ export class HowtoStore extends ModuleStore {
       ItemSortingOption.LatestUpdated,
       ItemSortingOption.TotalDownloads,
       ItemSortingOption.Comments,
-      ItemSortingOption.Random,
       ItemSortingOption.SearchResults,
     ]
   }
@@ -318,9 +318,11 @@ export class HowtoStore extends ModuleStore {
         logger.debug('addComment.newComment', { newComment })
 
         // Update and refresh the active howto
+        const updatedComments = [...toJS(howto.comments || []), newComment]
         const updated = await this.updateHowtoItem({
           ...toJS(howto),
-          comments: [...toJS(howto.comments || []), newComment],
+          comments: updatedComments,
+          totalComments: updatedComments.length,
         })
 
         await this.addCommentNotification(howto)
@@ -372,6 +374,7 @@ export class HowtoStore extends ModuleStore {
         previousSlugs,
         description,
         comments,
+        totalComments: comments?.length || 0,
         mentions,
         steps,
       },
@@ -483,15 +486,18 @@ export class HowtoStore extends ModuleStore {
       const user = this.activeUser
       if (id && howto && user && howto.comments) {
         // Refresh the active howto with the updated item
+
+        const updatedComments = toJS(howto.comments).filter(
+          (comment) =>
+            !(
+              (comment._creatorId === user._id || hasAdminRights(user)) &&
+              comment._id === id
+            ),
+        )
         await this.updateHowtoItem({
           ...toJS(howto),
-          comments: toJS(howto.comments).filter(
-            (comment) =>
-              !(
-                (comment._creatorId === user._id || hasAdminRights(user)) &&
-                comment._id === id
-              ),
-          ),
+          comments: updatedComments,
+          totalComments: updatedComments.length,
         })
 
         await this.setActiveHowtoBySlug(howto.slug)
@@ -569,11 +575,15 @@ export class HowtoStore extends ModuleStore {
       }
       const total_downloads = values['total_downloads'] ?? 0
 
+      const keywords = getKeywords(values.title + ' ' + values.description)
+      keywords.push(_createdBy)
+
       const howTo: IHowto = {
         ...(existingDoc || {}),
         _id,
         _createdBy,
         comments,
+        totalComments: comments.length,
         creatorCountry,
         _deleted: false,
         description,
@@ -585,6 +595,7 @@ export class HowtoStore extends ModuleStore {
         slug,
         steps,
         title,
+        keywords,
         ...(files ? { total_downloads } : {}),
         ...(category ? { category } : {}),
         ...(cover_image ? { cover_image } : {}),

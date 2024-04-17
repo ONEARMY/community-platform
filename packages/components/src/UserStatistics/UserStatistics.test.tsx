@@ -41,7 +41,7 @@ describe('UserStatistics', () => {
     )
     const researchLink = getByTestId('research-link')
 
-    expect(researchLink.getAttribute('href')).toBe('/research?author=Test User')
+    expect(researchLink.getAttribute('href')).toBe('/research?q=Test User')
   })
 
   it('renders supporter icon when isSupporter is true', () => {

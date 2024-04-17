@@ -96,7 +96,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
         {props.researchCount ? (
           <InternalLink
-            to={'/research?author=' + props.userName}
+            to={'/research?q=' + props.userName}
             sx={{ color: 'black' }}
             data-testid="research-link"
           >

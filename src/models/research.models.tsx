@@ -45,17 +45,18 @@ export namespace IResearch {
     updates: Update[]
     mentions?: UserMention[]
     _createdBy: string
-    _deleted: boolean
     collaborators: string[]
     subscribers?: UserIdList
     locked?: ResearchDocumentLock
     totalUpdates?: number
     totalUsefulVotes?: number
+    totalCommentCount?: number
     keywords?: string[]
-  } & Omit<FormInput, 'collaborators'>
+  } & Omit<FormInput, 'collaborators'> &
+    DBDoc
 
   /** A research item update */
-  export interface Update {
+  export type Update = {
     title: string
     description: string
     images: Array<IUploadedFileMeta | IConvertedFileMeta | File | null>
@@ -68,7 +69,8 @@ export namespace IResearch {
     status: ResearchUpdateStatus
     researchStatus?: ResearchStatus
     locked?: ResearchDocumentLock
-  }
+    _id: string
+  } & DBDoc
 
   export interface FormInput extends IModerable, ISharedFeatures {
     title: string

@@ -9,7 +9,6 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
-import { RootStore } from '../RootStore'
 import { ResearchStore } from './research.store'
 
 import type { IDiscussion } from 'src/models'
@@ -39,7 +38,7 @@ const factory = async (
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
-  const store = new ResearchStore(RootStore)
+  const store = new ResearchStore()
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

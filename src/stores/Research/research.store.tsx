@@ -18,7 +18,6 @@ import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   filterModerableItems,
-  formatLowerNoSpecial,
   hasAdminRights,
   needsModeration,
   randomID,
@@ -571,24 +570,16 @@ export class ResearchStore extends ModuleStore {
           .filter(Boolean)
 
     try {
-      // populate DB
-      // define research
       const userCountry = getUserCountry(user)
-
-      // create previousSlugs based on available slug or title
-      const previousSlugs: string[] = []
-      if (values.slug) {
-        previousSlugs.push(values.slug)
-      } else if (values.title) {
-        const titleToSlug = formatLowerNoSpecial(values.title)
-        previousSlugs.push(titleToSlug)
-      }
+      const slug = await this.setSlug(values)
+      const previousSlugs = this.setPreviousSlugs(values, slug)
 
       const researchItem: IResearch.Item = {
         mentions: [],
         ...values,
+        slug,
+        previousSlugs,
         collaborators,
-
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         _deleted: false,
         moderation: values.moderation

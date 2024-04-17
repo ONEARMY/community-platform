@@ -367,10 +367,7 @@ export class HowtoStore extends ModuleStore {
     )
 
     mentions.push(...commentMentions, ...stepMentions)
-    const previousSlugs = howToItem.previousSlugs ?? []
-    if (!previousSlugs.includes(howToItem.slug)) {
-      previousSlugs.push(howToItem.slug)
-    }
+    const previousSlugs = this.setPreviousSlugs(howToItem, howToItem.slug)
 
     await dbRef.set(
       {
@@ -547,10 +544,6 @@ export class HowtoStore extends ModuleStore {
       )
       this.updateUploadStatus('Files')
 
-      // populate DB
-
-      let { slug } = values
-
       const {
         category,
         description,
@@ -565,18 +558,8 @@ export class HowtoStore extends ModuleStore {
       const creatorCountry = this.getCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
-
-      const previousSlug =
-        existingDoc && existingDoc.slug ? existingDoc.slug : undefined
-      // check for duplicate only if updated title/slug
-      if (previousSlug != slug) {
-        const titleReusesSlug = await this.isTitleThatReusesSlug(title, _id)
-        slug = titleReusesSlug ? slug + '-' + this.generateUniqueID(5) : slug
-      }
-      const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
-      if (!previousSlugs.includes(slug)) {
-        previousSlugs.push(slug)
-      }
+      const slug = await this.setSlug(values)
+      const previousSlugs = this.setPreviousSlugs(values, slug)
       const total_downloads = values['total_downloads'] ?? 0
 
       const keywords = getKeywords(values.title + ' ' + values.description)
@@ -694,16 +677,6 @@ export class HowtoStore extends ModuleStore {
       : creatorCountry
       ? creatorCountry
       : ''
-  }
-
-  // generate a numeric unique ID
-  private generateUniqueID(length: number) {
-    const chars = '0123456789'
-    let autoId = ''
-    for (let i = 0; i < length; i++) {
-      autoId += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    return autoId
   }
 
   private async uploadCoverImage(

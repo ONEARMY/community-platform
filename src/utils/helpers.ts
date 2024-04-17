@@ -217,7 +217,7 @@ export const getResearchTotalCommentCount = (
   item: IResearch.ItemDB | IItem,
 ): number => {
   if (Object.hasOwnProperty.call(item, 'totalCommentCount')) {
-    return item.totalCommentCount
+    return item.totalCommentCount || 0
   }
 
   if (item.updates) {
@@ -237,7 +237,7 @@ export const getResearchTotalCommentCount = (
   }
 }
 
-export const getPublicUpdates = (item: IResearch.ItemDB) => {
+export const getPublicUpdates = (item: IResearch.Item) => {
   if (item.updates) {
     return item.updates.filter(
       (update) =>

@@ -15,30 +15,22 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
-import {
-  getPublicUpdates,
-  getResearchTotalCommentCount,
-  researchStatusColour,
-} from 'src/utils/helpers'
+import { getPublicUpdates, researchStatusColour } from 'src/utils/helpers'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 
-import type { ITag } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
 interface IProps {
-  item: IResearch.ItemDB & {
-    votedUsefulCount: number
-  } & { tagList?: ITag[] }
+  item: IResearch.Item
 }
 
 const ResearchListItem = ({ item }: IProps) => {
   const { aggregationsStore } = useCommonStores().stores
   const collaborators = item['collaborators'] || []
-  const usefulDisplayCount =
-    item.votedUsefulCount > 0 ? item.votedUsefulCount : 0
+  const usefulDisplayCount = item.totalUsefulVotes ?? 0
 
   const _commonStatisticStyle = {
     display: 'flex',
@@ -201,7 +193,7 @@ const ResearchListItem = ({ item }: IProps) => {
                     <Icon glyph="star-active" ml={1} />
                   </Text>
                   <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                    {getResearchTotalCommentCount(item)}
+                    {item.totalCommentCount}
                     <Icon glyph="comment" ml={1} />
                   </Text>
                   <Text
@@ -231,7 +223,7 @@ const ResearchListItem = ({ item }: IProps) => {
                 text="How useful is it"
               />
               <IconCountWithTooltip
-                count={getResearchTotalCommentCount(item)}
+                count={item.totalCommentCount || 0}
                 icon="comment"
                 text="Total comments"
               />
@@ -261,7 +253,7 @@ const ResearchListItem = ({ item }: IProps) => {
   )
 }
 
-const getItemThumbnail = (researchItem: IResearch.ItemDB): string => {
+const getItemThumbnail = (researchItem: IResearch.Item): string => {
   if (researchItem.updates?.length) {
     const latestImage = getPublicUpdates(researchItem)
       ?.map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
@@ -273,10 +265,8 @@ const getItemThumbnail = (researchItem: IResearch.ItemDB): string => {
   }
 }
 
-const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
-  const contentModifiedDate = formatDate(
-    new Date(item._contentModifiedTimestamp || item._modified),
-  )
+const getItemDate = (item: IResearch.Item, variant: string): string => {
+  const contentModifiedDate = formatDate(new Date(item._modified))
   const creationDate = formatDate(new Date(item._created))
 
   if (contentModifiedDate !== creationDate) {
@@ -288,7 +278,7 @@ const getItemDate = (item: IResearch.ItemDB, variant: string): string => {
   }
 }
 
-const getUpdateCount = (item: IResearch.ItemDB) => {
+const getUpdateCount = (item: IResearch.Item) => {
   return item.updates?.length
     ? item.updates.filter(
         (update) =>

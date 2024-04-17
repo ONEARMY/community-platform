@@ -59,17 +59,19 @@ describe('Research Article', () => {
 
   it('displays content statistics', async () => {
     // Arrange
+    const activeResearchItem = FactoryResearchItem({
+      collaborators: undefined,
+      updates: [
+        FactoryResearchItemUpdate({
+          status: ResearchUpdateStatus.PUBLISHED,
+          _deleted: false,
+        }),
+      ],
+    })
+
     ;(useResearchStore as jest.Mock).mockReturnValue({
       ...mockResearchStore,
-      activeResearchItem: FactoryResearchItem({
-        collaborators: undefined,
-        updates: [
-          FactoryResearchItemUpdate({
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-          }),
-        ],
-      }),
+      activeResearchItem,
     })
 
     // Act
@@ -79,7 +81,9 @@ describe('Research Article', () => {
     })
 
     // Assert
-    expect(wrapper.getByText('0 views')).toBeInTheDocument()
+    expect(
+      wrapper.getByText(`${activeResearchItem.total_views} views`),
+    ).toBeInTheDocument()
     expect(wrapper.getByText('0 following')).toBeInTheDocument()
     expect(wrapper.getByText('0 useful')).toBeInTheDocument()
     expect(wrapper.getByText('0 comments')).toBeInTheDocument()

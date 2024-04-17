@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import {
   Button,
+  DownloadCounter,
   DownloadFileFromLink,
   DownloadStaticFile,
   ImageGallery,
@@ -200,19 +201,7 @@ const ResearchUpdate = ({
                           />
                         ),
                     )}
-                {update.downloadCount > 0 && (
-                  <Text
-                    data-cy="file-download-counter"
-                    sx={{
-                      fontSize: 1,
-                      color: 'grey',
-                      paddingLeft: 1,
-                    }}
-                  >
-                    {update.downloadCount}
-                    {update.downloadCount !== 1 ? ' downloads' : ' download'}
-                  </Text>
-                )}
+                <DownloadCounter total={update.downloadCount} />
               </Flex>
             )}
             <ResearchComments

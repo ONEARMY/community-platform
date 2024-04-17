@@ -698,15 +698,14 @@ describe('research.store', () => {
 
   describe('incrementViews', () => {
     it('increments views by one', async () => {
-      const { store, researchItem, getFn, setFn } = await factoryResearchItem()
+      const { store, researchItem, updateFn } = await factoryResearchItem()
 
-      const views = researchItem.total_views!
       // Act
-      await store.incrementViewCount(researchItem._id)
+      await store.incrementViewCount(researchItem)
+      const updatedTotalViews = researchItem.total_views + 1
 
-      expect(getFn).toHaveBeenCalledWith('server')
-      expect(setFn).toHaveBeenCalledWith(
-        expect.objectContaining({ total_views: views + 1 }),
+      expect(updateFn).toHaveBeenCalledWith(
+        expect.objectContaining({ total_views: updatedTotalViews }),
         expect.anything(),
       )
     })

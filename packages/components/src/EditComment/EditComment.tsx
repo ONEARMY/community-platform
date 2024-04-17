@@ -37,7 +37,12 @@ export const EditComment = (props: IProps) => {
           >
             Edit {isReply ? 'Reply' : 'Comment'}
           </Label>
-          <Field name="comment" id="comment" component={FieldTextarea} />
+          <Field
+            component={FieldTextarea}
+            data-cy="edit-comment"
+            id="comment"
+            name="comment"
+          />
           <Flex mt={4} ml="auto">
             <Button
               small
@@ -48,6 +53,7 @@ export const EditComment = (props: IProps) => {
               Cancel
             </Button>
             <Button
+              data-cy="edit-comment-submit"
               type={'submit'}
               aria-label="Save changes"
               small

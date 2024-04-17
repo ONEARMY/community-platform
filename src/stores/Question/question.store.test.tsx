@@ -143,6 +143,30 @@ describe('question.store', () => {
     })
   })
 
+  describe('incrementViews', () => {
+    it('increments views by one', async () => {
+      const { store, updateFn } = await factory()
+
+      const question = FactoryQuestionItem({
+        title: 'Question title',
+        _createdBy: undefined,
+        total_views: 56,
+      })
+
+      // Act
+      await store.upsertQuestion(question)
+
+      // Act
+      await store.incrementViewCount(question)
+      const updatedTotalViews = 57
+
+      expect(updateFn).toHaveBeenCalledWith(
+        expect.objectContaining({ total_views: updatedTotalViews }),
+        expect.anything(),
+      )
+    })
+  })
+
   describe('toggleSubscriberStatusByUserName', () => {
     it('calls the toggle subscriber function', async () => {
       const { store } = await factory()

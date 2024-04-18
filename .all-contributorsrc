@@ -679,6 +679,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "EdwardAndress",
+      "name": "Edward Andress",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7963978?v=4",
+      "profile": "https://github.com/EdwardAndress",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

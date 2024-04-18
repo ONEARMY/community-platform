@@ -213,69 +213,6 @@ async function updateUserCommentsInfo({
     }
   }
   console.log('Successfully updated', count, 'howTo comments!')
-
-  // 2. update Research comments
-  count = 0
-  const researchQuerySnapshot = await db.collection(DB_ENDPOINTS.research).get()
-
-  if (researchQuerySnapshot) {
-    for (const doc of researchQuerySnapshot.docs) {
-      const research = doc.data() as IResearchDB
-      if (
-        research.updates &&
-        research.updates.some(
-          (update) =>
-            update.comments &&
-            update.comments.some(
-              (comment) => comment.creatorName === originalUserName,
-            ),
-        )
-      ) {
-        let toUpdateCount = 0
-        const updatedResearchUpdates = research.updates.map((update) => {
-          if (
-            !update.comments ||
-            !update.comments.some(
-              (comment) => comment.creatorName === originalUserName,
-            )
-          )
-            return update
-
-          const updatedComments = update.comments.map((comment) => {
-            if (comment.creatorName !== originalUserName) return comment
-
-            const updatedComment = {
-              ...comment,
-            }
-            if (newUserName) {
-              updatedComment.creatorName = newUserName
-            }
-            if (country) {
-              updatedComment.creatorCountry = country
-            }
-
-            toUpdateCount += 1
-            return updatedComment
-          })
-
-          return {
-            ...update,
-            comments: updatedComments,
-          }
-        })
-
-        try {
-          await doc.ref.update({
-            updates: updatedResearchUpdates,
-          })
-          count += toUpdateCount
-        } catch (error) {
-          console.error('Error updating research comment: ', error)
-        }
-      }
-    }
-  }
-  console.log('Successfully updated', count, 'research comments!')
 }
 
 async function deleteMapPin(_id: string) {

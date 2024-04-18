@@ -1,13 +1,13 @@
 import { Button, DownloadStaticFile } from 'oa-components'
-import { Flex, Text } from 'theme-ui'
-
-import { buttons, headings, intro } from '../../labels'
 import {
   FormFieldWrapper,
   HowtoCategoryGuidance,
   HowtoFieldFileLink,
   HowtoFieldFileUpload,
-} from '.'
+} from 'src/pages/Howto/Content/Common'
+import { Flex, Text } from 'theme-ui'
+
+import { buttons, headings, intro } from '../../labels'
 
 import type { ICategory } from 'src/models/categories.model'
 import type { IHowtoFormInput } from 'src/models/howto.models'

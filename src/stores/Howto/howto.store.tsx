@@ -15,6 +15,7 @@ import {
   needsModeration,
   randomID,
 } from 'src/utils/helpers'
+import { getKeywords } from 'src/utils/searchHelper'
 
 import {
   FilterSorterDecorator,
@@ -89,7 +90,7 @@ export class HowtoStore extends ModuleStore {
       })
 
       runInAction(() => {
-        this.activeSorter = ItemSortingOption.Random
+        this.activeSorter = ItemSortingOption.Newest
         this.filterSorterDecorator = new FilterSorterDecorator()
         this.allHowtos = this.filterSorterDecorator.sort(
           this.activeSorter,
@@ -107,7 +108,6 @@ export class HowtoStore extends ModuleStore {
       ItemSortingOption.LatestUpdated,
       ItemSortingOption.TotalDownloads,
       ItemSortingOption.Comments,
-      ItemSortingOption.Random,
       ItemSortingOption.SearchResults,
     ]
   }
@@ -266,8 +266,12 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  public async incrementViewCount(howToID: string) {
-    return await incrementDocViewCount(this.db, COLLECTION_NAME, howToID)
+  public async incrementViewCount(howTo: Partial<IHowtoDB>) {
+    return await incrementDocViewCount({
+      collection: COLLECTION_NAME,
+      db: this.db,
+      doc: howTo,
+    })
   }
 
   public updateSearchValue(query: string) {
@@ -318,9 +322,11 @@ export class HowtoStore extends ModuleStore {
         logger.debug('addComment.newComment', { newComment })
 
         // Update and refresh the active howto
+        const updatedComments = [...toJS(howto.comments || []), newComment]
         const updated = await this.updateHowtoItem({
           ...toJS(howto),
-          comments: [...toJS(howto.comments || []), newComment],
+          comments: updatedComments,
+          totalComments: updatedComments.length,
         })
 
         await this.addCommentNotification(howto)
@@ -361,10 +367,7 @@ export class HowtoStore extends ModuleStore {
     )
 
     mentions.push(...commentMentions, ...stepMentions)
-    const previousSlugs = howToItem.previousSlugs ?? []
-    if (!previousSlugs.includes(howToItem.slug)) {
-      previousSlugs.push(howToItem.slug)
-    }
+    const previousSlugs = this.setPreviousSlugs(howToItem, howToItem.slug)
 
     await dbRef.set(
       {
@@ -372,6 +375,7 @@ export class HowtoStore extends ModuleStore {
         previousSlugs,
         description,
         comments,
+        totalComments: comments?.length || 0,
         mentions,
         steps,
       },
@@ -483,15 +487,18 @@ export class HowtoStore extends ModuleStore {
       const user = this.activeUser
       if (id && howto && user && howto.comments) {
         // Refresh the active howto with the updated item
+
+        const updatedComments = toJS(howto.comments).filter(
+          (comment) =>
+            !(
+              (comment._creatorId === user._id || hasAdminRights(user)) &&
+              comment._id === id
+            ),
+        )
         await this.updateHowtoItem({
           ...toJS(howto),
-          comments: toJS(howto.comments).filter(
-            (comment) =>
-              !(
-                (comment._creatorId === user._id || hasAdminRights(user)) &&
-                comment._id === id
-              ),
-          ),
+          comments: updatedComments,
+          totalComments: updatedComments.length,
         })
 
         await this.setActiveHowtoBySlug(howto.slug)
@@ -537,10 +544,6 @@ export class HowtoStore extends ModuleStore {
       )
       this.updateUploadStatus('Files')
 
-      // populate DB
-
-      let { slug } = values
-
       const {
         category,
         description,
@@ -555,25 +558,19 @@ export class HowtoStore extends ModuleStore {
       const creatorCountry = this.getCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
-
-      const previousSlug =
-        existingDoc && existingDoc.slug ? existingDoc.slug : undefined
-      // check for duplicate only if updated title/slug
-      if (previousSlug != slug) {
-        const titleReusesSlug = await this.isTitleThatReusesSlug(title, _id)
-        slug = titleReusesSlug ? slug + '-' + this.generateUniqueID(5) : slug
-      }
-      const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
-      if (!previousSlugs.includes(slug)) {
-        previousSlugs.push(slug)
-      }
+      const slug = await this.setSlug(values)
+      const previousSlugs = this.setPreviousSlugs(values, slug)
       const total_downloads = values['total_downloads'] ?? 0
+
+      const keywords = getKeywords(values.title + ' ' + values.description)
+      keywords.push(_createdBy)
 
       const howTo: IHowto = {
         ...(existingDoc || {}),
         _id,
         _createdBy,
         comments,
+        totalComments: comments.length,
         creatorCountry,
         _deleted: false,
         description,
@@ -585,6 +582,7 @@ export class HowtoStore extends ModuleStore {
         slug,
         steps,
         title,
+        keywords,
         ...(files ? { total_downloads } : {}),
         ...(category ? { category } : {}),
         ...(cover_image ? { cover_image } : {}),
@@ -679,16 +677,6 @@ export class HowtoStore extends ModuleStore {
       : creatorCountry
       ? creatorCountry
       : ''
-  }
-
-  // generate a numeric unique ID
-  private generateUniqueID(length: number) {
-    const chars = '0123456789'
-    let autoId = ''
-    for (let i = 0; i < length; i++) {
-      autoId += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    return autoId
   }
 
   private async uploadCoverImage(

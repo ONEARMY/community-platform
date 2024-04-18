@@ -8,3 +8,4 @@ export const RESEARCH_EDITOR_ROLES: UserRole[] = [
   UserRole.RESEARCH_EDITOR,
   UserRole.RESEARCH_CREATOR,
 ]
+export const ITEMS_PER_PAGE = 20

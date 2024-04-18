@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
-import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
 import {
   Button,
@@ -17,9 +16,13 @@ import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
 import { researchStatusOptions } from 'src/models/research.models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
+import {
+  PostingGuidelines,
+  ResearchErrors,
+  ResearchSubmitStatus,
+} from 'src/pages/Research/Content/Common'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
   composeValidators,
   draftValidationWrapper,
@@ -38,7 +41,6 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
-import { PostingGuidelines, ResearchErrors, ResearchSubmitStatus } from './'
 
 import type { IResearch } from 'src/models/research.models'
 
@@ -65,14 +67,6 @@ const beforeUnload = (e) => {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
-
-// automatically generate the slug when the title changes
-const calculatedFields = createDecorator({
-  field: 'title',
-  updates: {
-    slug: (title) => stripSpecialCharacters(title).toLowerCase(),
-  },
-})
 
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
@@ -181,7 +175,7 @@ const ResearchForm = observer((props: IProps) => {
           ...arrayMutators,
         }}
         validateOnBlur
-        decorators={[calculatedFields, unloadDecorator]}
+        decorators={[unloadDecorator]}
         render={({
           dirty,
           errors,

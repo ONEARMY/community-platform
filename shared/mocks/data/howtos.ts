@@ -2854,6 +2854,7 @@ export const howtos = {
         text: 'A generated comment',
       },
     ],
+    total_downloads: 1234,
   },
   zVVjXc34gKhUNIcgLEXg: {
     _created: '2022-01-06T14:50:38.830Z',

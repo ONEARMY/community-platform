@@ -110,7 +110,10 @@ export const Howto = observer(() => {
   }
 
   const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
-
+  const isVerified = isUserVerifiedWithStore(
+    howto._createdBy,
+    aggregationsStore,
+  )
   return (
     <>
       <HowtoDescription
@@ -135,10 +138,7 @@ export const Howto = observer(() => {
           author={{
             userName: howto._createdBy,
             countryCode: howto.creatorCountry,
-            isVerified: isUserVerifiedWithStore(
-              howto._createdBy,
-              aggregationsStore,
-            ),
+            isVerified,
           }}
         >
           <Button

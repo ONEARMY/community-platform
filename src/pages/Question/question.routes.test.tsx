@@ -304,7 +304,7 @@ describe('question.routes', () => {
         expect(wrapper.getByText(`1 comment`)).toBeInTheDocument()
 
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
-        expect(mockIncrementViewCount).toBeCalledWith(question._id)
+        expect(mockIncrementViewCount).toBeCalledWith(question)
       })
     })
 

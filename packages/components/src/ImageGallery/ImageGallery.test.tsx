@@ -6,6 +6,7 @@ import { ImageGallery } from './ImageGallery'
 import {
   Default,
   DoNotShowNextPrevButtons,
+  HideThumbnailForSingleImage,
   NoThumbnails,
   ShowNextPrevButtons,
   testImages,
@@ -151,6 +152,18 @@ describe('ImageGallery', () => {
     image = await globalFindByRole(group, 'img', { hidden: false })
     expect(image).toBeInTheDocument()
     expect(image?.getAttribute('src')).toEqual(testImages[0].downloadUrl)
+  })
+
+  it('hides thumbnail for single image', async () => {
+    const { getAllByTestId } = render(
+      <HideThumbnailForSingleImage
+        {...(HideThumbnailForSingleImage.args as ImageGalleryProps)}
+      />,
+    )
+
+    expect(() => {
+      getAllByTestId('thumbnail')
+    }).toThrow()
   })
 
   it('supports no thumbnail option', async () => {

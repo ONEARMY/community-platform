@@ -47,17 +47,21 @@ const SignUpPage = observer(() => {
 
   const validationSchema = object({
     displayName: string()
-      .min(2, 'Too short')
+      .min(2, 'Username must be at least 2 characters')
       .required('Required')
       .test(
         'is-unique',
-        FRIENDLY_MESSAGES['sign-up username taken'],
+        FRIENDLY_MESSAGES['sign-up/username-taken'],
         (value) => {
           return checkUserNameUnique(userStore, value)
         },
       ),
-    email: string().email('Invalid email').required('Required'),
-    password: string().required('Password is required'),
+    email: string()
+      .email(FRIENDLY_MESSAGES['auth/invalid-email'])
+      .required('Required'),
+    password: string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Password is required'),
     'confirm-password': string()
       .oneOf([ref('password'), ''], 'Your new password does not match')
       .required('Password confirm is required'),
@@ -75,7 +79,7 @@ const SignUpPage = observer(() => {
       } else {
         setState((prev) => ({
           ...prev,
-          errorMsg: FRIENDLY_MESSAGES['sign-up username taken'],
+          errorMsg: FRIENDLY_MESSAGES['sign-up/username-taken'],
           disabled: false,
         }))
       }

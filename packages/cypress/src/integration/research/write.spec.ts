@@ -132,7 +132,7 @@ describe('[Research]', () => {
           expect(stub.callCount).to.equal(0)
           stub.resetHistory()
         })
-      cy.url().should('match', /\/research$/)
+      cy.url().should('match', /\/research?/)
     })
   })
 

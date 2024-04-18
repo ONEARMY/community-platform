@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Field, Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
-import createDecorator from 'final-form-calculate'
 import { observer } from 'mobx-react'
 import {
   Button,
@@ -24,7 +23,6 @@ import {
 } from 'src/pages/Research/Content/Common'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { COMPARISONS } from 'src/utils/comparisons'
-import { stripSpecialCharacters } from 'src/utils/helpers'
 import {
   composeValidators,
   draftValidationWrapper,
@@ -69,14 +67,6 @@ const beforeUnload = (e) => {
   e.preventDefault()
   e.returnValue = CONFIRM_DIALOG_MSG
 }
-
-// automatically generate the slug when the title changes
-const calculatedFields = createDecorator({
-  field: 'title',
-  updates: {
-    slug: (title) => stripSpecialCharacters(title).toLowerCase(),
-  },
-})
 
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
@@ -185,7 +175,7 @@ const ResearchForm = observer((props: IProps) => {
           ...arrayMutators,
         }}
         validateOnBlur
-        decorators={[calculatedFields, unloadDecorator]}
+        decorators={[unloadDecorator]}
         render={({
           dirty,
           errors,

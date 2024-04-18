@@ -23,7 +23,7 @@ import type { IComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 
 interface IProps {
-  update: IResearch.UpdateDB
+  update: IResearch.Update
   updateIndex: number
   isEditable: boolean
   slug: string

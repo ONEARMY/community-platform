@@ -1,14 +1,11 @@
 import * as functions from 'firebase-functions'
+
 import { db } from '../Firebase/firestoreDB'
-import {
-  DB_ENDPOINTS,
-  IDBDocChange,
-  IHowtoDB,
-  IResearchDB,
-  IUserDB,
-} from '../models'
+import { DB_ENDPOINTS } from '../models'
 import { backupUser } from './backupUser'
-import { del } from 'request'
+import { updateDiscussionComments } from './updateDiscussionComments'
+
+import type { IDBDocChange, IHowtoDB, IResearchDB, IUserDB } from '../models'
 
 /*********************************************************************
  * Side-effects to be carried out on various user updates, namely:
@@ -22,22 +19,28 @@ export const handleUserUpdates = functions
   .firestore.document(`${DB_ENDPOINTS.users}/{id}`)
   .onUpdate(async (change, context) => {
     await backupUser(change)
-    await processHowToUpdates(change)
+    await updateDocuments(change)
   })
 
-async function processHowToUpdates(change: IDBDocChange) {
-  const info = (change.after.exists ? change.after.data() : {}) as IUserDB
-  const prevInfo = (change.before.exists ? change.before.data() : {}) as IUserDB
-  // optional chaining (.?.) incase does not exists
+const isUserCountryDifferent = (prevInfo, info) => {
   const prevCountryCode = prevInfo.location?.countryCode
   const newCountryCode = info.location?.countryCode
   const prevCountry = prevInfo.country
   const newCountry = info.country
+
+  return prevCountryCode !== newCountryCode || prevCountry !== newCountry
+}
+
+async function updateDocuments(change: IDBDocChange) {
+  const info = (change.after.exists ? change.after.data() : {}) as IUserDB
+  const prevInfo = (change.before.exists ? change.before.data() : {}) as IUserDB
+
+  const newCountryCode = info.location?.countryCode
+  const newCountry = info.country
   const prevDeleted = prevInfo._deleted || false
   const deleted = info._deleted || false
 
-  const didChangeCountry =
-    prevCountryCode !== newCountryCode || prevCountry !== newCountry
+  const didChangeCountry = isUserCountryDifferent(prevInfo, info)
   if (didChangeCountry) {
     // Update country flag in user's created howTos
     const country = newCountryCode ? newCountryCode : newCountry.toLowerCase()
@@ -56,6 +59,8 @@ async function processHowToUpdates(change: IDBDocChange) {
       originalUserName: prevInfo.userName,
     })
   }
+
+  await updateDiscussionComments(prevInfo, info)
 
   const didDelete = prevDeleted !== deleted && deleted
   if (didDelete) {

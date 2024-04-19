@@ -1,18 +1,20 @@
 import { useTheme } from '@emotion/react'
 import { Flex, Heading, Text } from 'theme-ui'
 
-import { Username } from '../'
+import { Username } from '../Username/Username'
 
 import type { User } from '../types/common'
 
-export interface Props {
-  author: User & { isVerified: boolean }
+export interface IProps {
+  author: User
   children: React.ReactNode
-  contributors?: (User & { isVerified: boolean })[]
+  contributors?: User[]
 }
 
-export const ArticleCallToAction = (props: Props) => {
+export const ArticleCallToAction = (props: IProps) => {
+  const { author, children, contributors } = props
   const theme = useTheme() as any
+
   return (
     <Flex
       sx={{
@@ -22,24 +24,19 @@ export const ArticleCallToAction = (props: Props) => {
     >
       <Text variant="body" sx={{ fontSize: 2 }}>
         Made by
-        <Username
-          isVerified={props.author.isVerified}
-          user={props.author}
-          sx={{ ml: 1 }}
-        />
+        <Username user={author} sx={{ ml: 1 }} />
       </Text>
-      {props.contributors && props?.contributors.length ? (
+      {contributors && contributors.length ? (
         <Text
           data-testid="ArticleCallToAction: contributors"
           variant="quiet"
           sx={{ display: 'block', mt: 2, textAlign: 'center', fontSize: 2 }}
         >
           With contributions from:{' '}
-          {props.contributors.map((contributor, key) => (
+          {contributors.map((contributor, key) => (
             <Username
               key={key}
               user={contributor}
-              isVerified={contributor.isVerified}
               sx={{
                 mr: 1,
               }}
@@ -56,7 +53,7 @@ export const ArticleCallToAction = (props: Props) => {
           },
         }}
       >
-        {props.children}
+        {children}
       </Flex>
     </Flex>
   )

@@ -1,17 +1,13 @@
 import { ResearchStatus } from 'oa-shared'
 
 import type { ResearchUpdateStatus } from 'oa-shared'
+import type { DBDoc } from '../stores/databaseV2/types'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
-import type {
-  DBDoc,
-  IComment,
-  IModerable,
-  ISelectedTags,
-  ISharedFeatures,
-  UserMention,
-} from '.'
+import type { IComment } from './comment.model'
+import type { IModerable, ISharedFeatures, UserMention } from './common.models'
 import type { IResearchCategory } from './researchCategories.model'
+import type { ISelectedTags } from './tags.model'
 
 /**
  * Research retrieved from the database also include metadata such as _id, _created and _modified
@@ -49,17 +45,18 @@ export namespace IResearch {
     updates: Update[]
     mentions?: UserMention[]
     _createdBy: string
-    _deleted: boolean
     collaborators: string[]
     subscribers?: UserIdList
     locked?: ResearchDocumentLock
     totalUpdates?: number
     totalUsefulVotes?: number
+    totalCommentCount?: number
     keywords?: string[]
-  } & Omit<FormInput, 'collaborators'>
+  } & Omit<FormInput, 'collaborators'> &
+    DBDoc
 
   /** A research item update */
-  export interface Update {
+  export type Update = {
     title: string
     description: string
     images: Array<IUploadedFileMeta | IConvertedFileMeta | File | null>
@@ -72,7 +69,8 @@ export namespace IResearch {
     status: ResearchUpdateStatus
     researchStatus?: ResearchStatus
     locked?: ResearchDocumentLock
-  }
+    _id: string
+  } & DBDoc
 
   export interface FormInput extends IModerable, ISharedFeatures {
     title: string

@@ -1,10 +1,11 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
   Category,
   ConfirmModal,
   ContentStatistics,
+  DownloadCounter,
   DownloadFileFromLink,
   DownloadStaticFile,
   LinkifyText,
@@ -25,21 +26,8 @@ import {
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
-import {
-  addIDToSessionStorageArray,
-  retrieveSessionStorageArray,
-} from 'src/utils/sessionStorage'
-import {
-  Alert,
-  AspectImage,
-  Box,
-  Card,
-  Divider,
-  Flex,
-  Heading,
-  Image,
-  Text,
-} from 'theme-ui'
+import { incrementViewCount } from 'src/utils/incrementViewCount'
+import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import {
@@ -71,8 +59,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(
     howto.total_downloads,
   )
-  let didInit = false
-  const [viewCount, setViewCount] = useState<number>(0)
   const { stores } = useCommonStores()
 
   const incrementDownloadCount = async () => {
@@ -80,22 +66,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       howto._id,
     )
     setFileDownloadCount(updatedDownloadCount!)
-  }
-
-  const incrementViewCount = async () => {
-    const sessionStorageArray = retrieveSessionStorageArray('howto')
-
-    if (!sessionStorageArray.includes(howto._id)) {
-      const updatedViewCount = await stores.howtoStore.incrementViewCount(
-        howto._id,
-      )
-      if (updatedViewCount) {
-        setViewCount(updatedViewCount)
-      }
-      addIDToSessionStorageArray('howto', howto._id)
-    } else {
-      setViewCount(howto.total_views || 0)
-    }
   }
 
   const redirectToSignIn = async () => {
@@ -142,10 +112,11 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }
 
   useEffect(() => {
-    if (!didInit) {
-      didInit = true
-      incrementViewCount()
-    }
+    incrementViewCount({
+      document: howto,
+      documentType: 'howto',
+      store: stores.howtoStore,
+    })
   }, [howto._id])
 
   return (
@@ -327,19 +298,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                         />
                       ),
                   )}
-              {typeof fileDownloadCount === 'number' && (
-                <Text
-                  data-cy="file-download-counter"
-                  sx={{
-                    fontSize: 1,
-                    color: 'grey',
-                    paddingLeft: 1,
-                  }}
-                >
-                  {fileDownloadCount}
-                  {fileDownloadCount !== 1 ? ' downloads' : ' download'}
-                </Text>
-              )}
+              <DownloadCounter total={fileDownloadCount} />
             </Flex>
           )}
         </Flex>
@@ -349,22 +308,45 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             position: 'relative',
           }}
         >
-          {howto.cover_image && (
-            <AspectImage
-              loading="lazy"
-              ratio={12 / 9}
+          <Box
+            sx={{
+              overflow: 'hidden',
+            }}
+          >
+            <Box
               sx={{
-                objectFit: 'cover',
                 width: '100%',
-                height: '100%',
+                height: '0',
+                pb: '75%',
               }}
-              src={cdnImageUrl(howto.cover_image.downloadUrl, {
-                width: 780,
-              })}
-              crossOrigin=""
-              alt="how-to cover"
-            />
-          )}
+            ></Box>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '0',
+                bottom: '0',
+                left: '0',
+                right: '0',
+              }}
+            >
+              {howto.cover_image && (
+                // 3407 - AspectImage creates divs that can mess up page layout,
+                // so using Image here instead and recreating the div layout
+                // that was created by AspectImage
+                <Image
+                  loading="lazy"
+                  src={cdnImageUrl(howto.cover_image.downloadUrl)}
+                  sx={{
+                    objectFit: 'cover',
+                    height: '100%',
+                    width: '100%',
+                  }}
+                  crossOrigin=""
+                  alt="how-to cover"
+                />
+              )}
+            </Box>
+          </Box>
           {howto.moderation !== IModerationStatus.ACCEPTED && (
             <ModerationStatus
               status={howto.moderation}
@@ -385,7 +367,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           {
             icon: 'view',
             label: buildStatisticsLabel({
-              stat: viewCount,
+              stat: howto.total_views,
               statUnit: 'view',
               usePlural: true,
             }),

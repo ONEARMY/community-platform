@@ -40,6 +40,7 @@ export const CommentItem = (props: CommentItemProps) => {
     creatorName,
     creatorCountry,
     isUserVerified,
+    isUserSupporter,
     isEditable,
     _created,
     _edited,
@@ -86,8 +87,9 @@ export const CommentItem = (props: CommentItemProps) => {
               user={{
                 userName: creatorName,
                 countryCode: creatorCountry,
+                isVerified: !!isUserVerified,
+                isSupporter: !!isUserSupporter,
               }}
-              isVerified={!!isUserVerified}
             />
             {_edited && (
               <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
@@ -160,13 +162,13 @@ export const CommentItem = (props: CommentItemProps) => {
 
         <Modal width={600} isOpen={showEditModal}>
           <EditComment
-            isReply={isReply}
             comment={text}
             handleSubmit={(commentText) => {
               handleEdit && handleEdit(_id, commentText)
               setShowEditModal(false)
             }}
             handleCancel={() => setShowEditModal(false)}
+            isReply={isReply}
           />
         </Modal>
 

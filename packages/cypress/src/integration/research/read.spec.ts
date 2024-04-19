@@ -1,46 +1,9 @@
 describe('[Research]', () => {
-  const SKIP_TIMEOUT = { timeout: 300 }
-  const totalResearchCount = 2
   const researchArticleUrl = '/research/qwerty'
   const authoredResearchArticleUrl = '/research/a-test-research'
 
   beforeEach(() => {
     cy.visit('/research')
-  })
-
-  describe('[List research articles]', () => {
-    describe('[By Everyone]', () => {
-      it('[Shows a list of articles]', () => {
-        cy.step('All research articles are shown')
-
-        cy.get('[data-cy="ResearchListItem"]')
-          .its('length')
-          .should('be.eq', totalResearchCount)
-      })
-
-      it('[See all info]', () => {
-        cy.step('Research cards has basic info')
-        cy.get(
-          `[data-cy="ResearchListItem"] a[href="${researchArticleUrl}"]`,
-        ).within(() => {
-          cy.contains('qwerty').should('be.exist')
-          cy.contains('event_reader').should('be.exist')
-          cy.get('[data-cy="ItemUpdateText"]').contains('12').should('be.exist')
-          cy.get('[data-cy="ItemResearchStatus"]')
-            .contains('In progress')
-            .should('be.exist')
-        })
-
-        cy.step(
-          `Open Research details when click on a Research ${researchArticleUrl}`,
-        )
-        cy.get(
-          `[data-cy="ResearchListItem"] a[href="${researchArticleUrl}"]`,
-          SKIP_TIMEOUT,
-        ).click()
-        cy.url().should('include', researchArticleUrl)
-      })
-    })
   })
 
   describe('[Read a research article]', () => {

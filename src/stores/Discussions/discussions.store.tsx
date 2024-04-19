@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
-import { action, makeObservable, toJS } from 'mobx'
+import { action, toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
@@ -23,8 +23,6 @@ const COLLECTION_NAME = 'discussions'
 export class DiscussionStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
-    makeObservable(this)
-    super.init()
   }
 
   @action
@@ -56,6 +54,7 @@ export class DiscussionStore extends ModuleStore {
       sourceId,
       sourceType,
       comments: [],
+      contributorIds: [],
     }
 
     const dbRef = await this.db
@@ -92,11 +91,17 @@ export class DiscussionStore extends ModuleStore {
           _creatorId: user._id,
           creatorName: user.userName,
           creatorCountry: getUserCountry(user),
+          isUserVerified: !!user.badges?.verified,
+          isUserSupporter: !!user.badges?.supporter,
           text: comment,
           parentCommentId: commentId || null,
         }
 
         currentDiscussion.comments.push(newComment)
+        currentDiscussion.contributorIds = this._addContributorId(
+          currentDiscussion,
+          newComment,
+        )
 
         await this._addNotification(newComment, currentDiscussion)
 
@@ -182,6 +187,11 @@ export class DiscussionStore extends ModuleStore {
             commentId,
           )
 
+          currentDiscussion.contributorIds = this._removeContributorId(
+            discussion,
+            targetComment?._creatorId,
+          )
+
           return this._updateDiscussion(dbRef, currentDiscussion)
         }
       }
@@ -253,6 +263,24 @@ export class DiscussionStore extends ModuleStore {
     updateDiscussionMetadata(this.db, discussion)
 
     return toJS(dbRef.get())
+  }
+
+  private _addContributorId({ contributorIds }, comment) {
+    const isIdAlreadyPresent = !contributorIds.find(
+      (id) => id === comment._creatorId,
+    )
+    if (!isIdAlreadyPresent) return contributorIds
+
+    return [...contributorIds, comment._creatorId]
+  }
+
+  private _removeContributorId({ comments, contributorIds }, _creatorId) {
+    const isOtherUserCommentPresent = !comments.find(
+      (comment) => comment._creatorId === _creatorId,
+    )
+    if (isOtherUserCommentPresent) return contributorIds
+
+    return contributorIds.filter((id) => id !== _creatorId)
   }
 
   private _findAndDeleteComment(

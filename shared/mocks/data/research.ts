@@ -46,6 +46,20 @@ export const research = {
             text: 'A generated comment',
           },
         ],
+        files: [
+          {
+            timeCreated: '2019-05-10T20:49:42.878Z',
+            name: 'art final 2.skp',
+            fullPath: 'uploads/howtosV1/me5Bq0wq5FdoJUY8gELN/art final 2.skp',
+            type: '',
+            updated: '2019-05-10T20:49:42.878Z',
+            size: 647225,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2Fme5Bq0wq5FdoJUY8gELN%2Fart%20final%202.skp?alt=media&token=f4ebe379-2038-4ac0-9e6f-68c379174908',
+            contentType: 'application/octet-stream',
+          },
+        ],
+        downloadCount: 2555,
       },
       {
         _created: '2022-03-27T22:10:11.271Z',

@@ -14,7 +14,7 @@ export const FRIENDLY_MESSAGES = {
   'auth/wrong-password': 'Password does not match the user account',
   'reset email sent': 'Reset email sent, check your inbox/spam',
   'profile saved': 'Profile Saved',
-  'sign-up username taken': 'Woops sorry, that Username is already taken',
+  'sign-up/username-taken': 'Woops sorry, that Username is already taken',
   [randomKey]: randomKey,
 }
 

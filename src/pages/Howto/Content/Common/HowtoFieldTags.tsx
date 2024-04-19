@@ -1,9 +1,9 @@
 import { Field } from 'react-final-form'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { FormFieldWrapper } from 'src/pages/Howto/Content/Common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 
 import { intro } from '../../labels'
-import { FormFieldWrapper } from '.'
 
 export const HowtoFieldTags = () => {
   return (

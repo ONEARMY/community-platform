@@ -12,17 +12,14 @@ import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image } from 'theme-ui'
 
-import type { ITag } from 'src/models'
-import type { IHowtoDB } from 'src/models/howto.models'
+import type { IHowto } from 'src/models/howto.models'
 
 interface IProps {
-  howto: IHowtoDB & { tagList?: ITag[] }
-  votedUsefulCount: number
+  howto: IHowto
 }
 
-export const HowToCard = (props: IProps) => {
+export const HowToCard = ({ howto }: IProps) => {
   const { aggregationsStore } = useCommonStores().stores
-  const { howto, votedUsefulCount } = props
 
   const isVerified: boolean = isUserVerifiedWithStore(
     howto._createdBy,
@@ -94,14 +91,17 @@ export const HowToCard = (props: IProps) => {
         <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
           <Box>{howto.category && <Category category={howto.category} />}</Box>
 
-          <Box>
-            {votedUsefulCount > 0 && (
-              <IconCountWithTooltip
-                count={votedUsefulCount}
-                icon="star-active"
-                text="How useful is it"
-              />
-            )}
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <IconCountWithTooltip
+              count={howto.totalComments || 0}
+              icon="comment"
+              text="Comments"
+            />
+            <IconCountWithTooltip
+              count={howto.totalUsefulVotes || 0}
+              icon="star-active"
+              text="How useful is it"
+            />
           </Box>
         </Flex>
       </Flex>

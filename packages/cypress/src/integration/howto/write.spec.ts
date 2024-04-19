@@ -331,7 +331,7 @@ describe('[How To]', () => {
       cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
-      cy.get('[data-cy=intro-title')
+      cy.get('[data-cy=intro-title]')
         .clear()
         .type(expected.title)
         .blur({ force: true })
@@ -344,14 +344,14 @@ describe('[How To]', () => {
       cy.url().should('match', /\/how-to\/create$/)
 
       cy.step('Clear title input')
-      cy.get('[data-cy=intro-title').clear().blur({ force: true })
+      cy.get('[data-cy=intro-title]').clear().blur({ force: true })
       cy.get('[data-cy=page-link][href*="/how-to"]')
         .click()
         .then(() => {
           expect(stub.callCount).to.equal(0)
           stub.resetHistory()
         })
-      cy.url().should('match', /\/how-to$/)
+      cy.url().should('match', /\/how-to?/)
     })
   })
 

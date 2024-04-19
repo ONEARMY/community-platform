@@ -1,8 +1,5 @@
 describe('[How To Commenting]', () => {
   const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
-  beforeEach(() => {
-    cy.visit('/how-to')
-  })
 
   describe('[By Everyone]', () => {
     it('[Comment requires login]', () => {
@@ -15,23 +12,23 @@ describe('[How To Commenting]', () => {
 
   describe('[By Authenticated]', () => {
     it('[Edit button is unavailable to non-resource owners]', () => {
-      cy.login('howto_reader@test.com', 'test1234')
       cy.visit(specificHowtoUrl)
+      cy.login('howto_reader@test.com', 'test1234')
       cy.get('[data-cy=edit]').should('not.exist')
     })
 
     describe('[Commenting]', () => {
       it('[Logged in user cannot edit a comment by another user]', () => {
-        cy.login('howto_reader@test.com', 'test1234')
         cy.visit(specificHowtoUrl)
+        cy.login('howto_reader@test.com', 'test1234')
         cy.get('[data-cy="howto-comments"]').should('exist')
         cy.get('[data-cy="CommentItem: edit button"]').should('not.exist')
       })
 
       it('[Logged in user can add a comment]', () => {
         const commentText = 'A short string intended to test commenting'
-        cy.login('howto_reader@test.com', 'test1234')
         cy.visit(specificHowtoUrl)
+        cy.login('howto_reader@test.com', 'test1234')
 
         cy.get(`[data-cy="comments-login-prompt"]`).should('not.exist')
 
@@ -45,16 +42,16 @@ describe('[How To Commenting]', () => {
       })
 
       it('[Logged in user can edit the comment they have added]', () => {
-        cy.login('howto_reader@test.com', 'test1234')
         cy.visit(specificHowtoUrl)
+        cy.login('howto_reader@test.com', 'test1234')
 
         cy.get('[data-cy="CommentItem: edit button"]').should('exist')
       })
 
       it('[Allows comment author to delete]', () => {
         const commentText = 'A short string intended to test commenting'
-        cy.login('howto_reader@test.com', 'test1234')
         cy.visit(specificHowtoUrl)
+        cy.login('howto_reader@test.com', 'test1234')
 
         cy.get(`[data-cy="comments-login-prompt"]`).should('not.exist')
 

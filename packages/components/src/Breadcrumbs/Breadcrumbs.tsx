@@ -1,4 +1,4 @@
-import { Box, Flex } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 import { BreadcrumbItem } from './BreadcrumbsItem'

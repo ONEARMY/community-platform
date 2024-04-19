@@ -25,7 +25,6 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
           step && (
             <>
               <BreadcrumbItem
-                key={index}
                 text={step.text}
                 link={step.link}
                 isLast={isLast}
@@ -35,6 +34,7 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
                   glyph={'chevron-right'}
                   color={'black'}
                   marginRight={'10px'}
+                  data-testid="breadcrumbsChevron"
                 />
               )}
             </>

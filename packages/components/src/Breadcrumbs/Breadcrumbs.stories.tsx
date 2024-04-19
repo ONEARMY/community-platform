@@ -1,5 +1,6 @@
-import type { StoryFn, Meta } from '@storybook/react'
 import { Breadcrumbs } from './Breadcrumbs'
+
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/Breadcrumbs',
@@ -16,24 +17,6 @@ export const Default: StoryFn<typeof Breadcrumbs> = () => (
       {
         text: 'Category',
         link: '/questions?category=Category',
-      },
-      {
-        text: 'Are we real?',
-      },
-    ]}
-  />
-)
-
-export const Shortened: StoryFn<typeof Breadcrumbs> = () => (
-  <Breadcrumbs
-    steps={[
-      {
-        text: 'Question',
-        link: '/questions',
-      },
-      {
-        text: 'Very Long Category',
-        link: '/questions?category=Very Long Category',
       },
       {
         text: 'Are we real?',

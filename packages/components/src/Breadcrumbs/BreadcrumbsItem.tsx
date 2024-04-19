@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { Button } from '../Button/Button'
 import { Box, Text } from 'theme-ui'
+
+import { Button } from '../Button/Button'
 
 interface BreadcrumbButtonProps {
   text: string
@@ -24,7 +25,10 @@ const BreadcrumbButton = ({ text, link }: BreadcrumbButtonProps) => {
 }
 
 export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
-  <Box style={{ display: 'inline', marginRight: '10px' }}>
+  <Box
+    style={{ display: 'inline', marginRight: '10px' }}
+    data-testid="breadcrumbsItem"
+  >
     {!isLast ? (
       <BreadcrumbButton link={link} text={text} />
     ) : (

@@ -111,7 +111,10 @@ export const Howto = observer(() => {
   }
 
   const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
-
+  const isVerified = isUserVerifiedWithStore(
+    howto._createdBy,
+    aggregationsStore,
+  )
   return (
     <>
       <Breadcrumbs content={howto} variant="howto" />
@@ -137,10 +140,7 @@ export const Howto = observer(() => {
           author={{
             userName: howto._createdBy,
             countryCode: howto.creatorCountry,
-            isVerified: isUserVerifiedWithStore(
-              howto._createdBy,
-              aggregationsStore,
-            ),
+            isVerified,
           }}
         >
           <Button

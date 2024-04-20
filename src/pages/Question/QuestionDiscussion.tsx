@@ -47,10 +47,11 @@ export const QuestionDiscussion = (props: IProps) => {
   }, [questionDocId])
 
   const handleEdit = async (_id: string, comment: string) => {
+    if (!discussion) return
+
+    const updatedDiscussion = await store.editComment(discussion, _id, comment)
     logger.info({ _id, comment }, 'question comment edited')
-    if (discussion) {
-      store.editComment(discussion, _id, comment)
-    }
+    updatedDiscussion && transformComments(updatedDiscussion)
   }
 
   const handleEditRequest = async () => {
@@ -58,38 +59,36 @@ export const QuestionDiscussion = (props: IProps) => {
   }
 
   const handleDelete = async (_id: string) => {
-    logger.debug({ _id }, 'question comment deleted')
     if (discussion) {
-      await store.deleteComment(discussion, _id)
+      const updatedDiscussion = await store.deleteComment(discussion, _id)
+      logger.info({ _id }, 'question comment deleted')
+      updatedDiscussion && transformComments(updatedDiscussion)
     }
   }
 
   const onSubmit = async (comment: string) => {
-    if (!comment) {
+    if (!comment || !discussion) {
       return
     }
 
-    if (discussion) {
-      const updatedDiscussion = await store.addComment(discussion, comment)
-      if (updatedDiscussion) {
-        transformComments(updatedDiscussion)
-        setComment('')
-      }
+    const updatedDiscussion = await store.addComment(discussion, comment)
+    if (updatedDiscussion) {
+      transformComments(updatedDiscussion)
+      setComment('')
     }
   }
 
   const handleSubmitReply = async (commentId: string, reply) => {
+    if (!discussion) return
+
+    const updatedDiscussion = await store.addComment(
+      discussion,
+      reply,
+      commentId,
+    )
     logger.info({ commentId, reply }, 'reply submitted')
-    if (discussion) {
-      const updatedDiscussion = await store.addComment(
-        discussion,
-        reply,
-        commentId,
-      )
-      if (updatedDiscussion) {
-        transformComments(updatedDiscussion)
-      }
-    }
+
+    updatedDiscussion && transformComments(updatedDiscussion)
   }
 
   return (

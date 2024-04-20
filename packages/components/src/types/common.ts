@@ -1,4 +1,6 @@
 export type User = {
-  countryCode?: string | null
   userName: string
+  countryCode?: string | null
+  isSupporter?: boolean
+  isVerified?: boolean
 }

@@ -87,3 +87,15 @@ export const update: ILabels = {
     placeholder: 'https://youtube.com/watch?v=',
   },
 }
+
+export const listing = {
+  create: 'Add Research',
+  noItems: 'No research to show',
+  heading: 'Help out with Research & Development',
+  filterCategory: 'Filter by category',
+  author: 'Filter by author',
+  status: 'Filter by status',
+  search: 'Search for a question',
+  sort: 'Sort by',
+  loadMore: 'Load More',
+}

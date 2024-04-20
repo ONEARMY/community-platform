@@ -3,6 +3,7 @@ import { ExternalLinkLabel } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
+import { getUserCountry } from 'src/utils/getUserCountry'
 import { Box, Card, Flex, Heading, Image, Paragraph } from 'theme-ui'
 
 import UserContactAndLinks from './UserContactAndLinks'
@@ -28,9 +29,6 @@ export const MemberProfile = ({ user, docs }: IProps) => {
   )
 
   const stats = useMemberStatistics(user.userName)
-
-  const userCountryCode =
-    user.location?.countryCode || user.country?.toLowerCase() || undefined
 
   const memberPictureSource =
     user.coverImages && user.coverImages[0]
@@ -122,9 +120,9 @@ export const MemberProfile = ({ user, docs }: IProps) => {
               <Username
                 user={{
                   userName: user.userName,
-                  countryCode: userCountryCode,
+                  countryCode: getUserCountry(user),
+                  isVerified: stats.verified,
                 }}
-                isVerified={stats.verified}
               />
             </Flex>
             <Box sx={{ flexDirection: 'column' }} mb={3}>

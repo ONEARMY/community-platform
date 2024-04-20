@@ -17,10 +17,7 @@ import { trackEvent } from 'src/common/Analytics'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import { buildStatisticsLabel, researchStatusColour } from 'src/utils/helpers'
-import {
-  addIDToSessionStorageArray,
-  retrieveSessionStorageArray,
-} from 'src/utils/sessionStorage'
+import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -60,21 +57,7 @@ const ResearchDescription = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const navigate = useNavigate()
 
-  let didInit = false
   const store = useResearchStore()
-  const [viewCount, setViewCount] = useState<number | undefined>(0)
-
-  const incrementViewCount = async () => {
-    const sessionStorageArray = retrieveSessionStorageArray('research')
-
-    if (!sessionStorageArray.includes(research._id)) {
-      const updatedViewCount = await store.incrementViewCount(research._id)
-      setViewCount(updatedViewCount)
-      addIDToSessionStorageArray('research', research._id)
-    } else {
-      setViewCount(research.total_views)
-    }
-  }
 
   const handleDelete = async (_id: string) => {
     try {
@@ -101,10 +84,11 @@ const ResearchDescription = ({
   }
 
   useEffect(() => {
-    if (!didInit) {
-      didInit = true
-      incrementViewCount()
-    }
+    incrementViewCount({
+      store,
+      document: research,
+      documentType: 'research',
+    })
   }, [research._id])
 
   return (
@@ -257,11 +241,7 @@ const ResearchDescription = ({
                     </Text>
                   </Flex>
                   {props.contributors.map((contributor, key) => (
-                    <Username
-                      key={key}
-                      user={contributor}
-                      isVerified={contributor.isVerified}
-                    />
+                    <Username key={key} user={contributor} />
                   ))}
                 </Flex>
               ) : null}
@@ -310,7 +290,7 @@ const ResearchDescription = ({
           {
             icon: 'view',
             label: buildStatisticsLabel({
-              stat: viewCount || 0,
+              stat: research.total_views,
               statUnit: 'view',
               usePlural: true,
             }),

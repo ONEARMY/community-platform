@@ -1,9 +1,11 @@
 const admin = require('firebase-admin')
 
 const test = require('firebase-functions-test')()
+
+import { v4 as uuid } from 'uuid'
+
 import { DB_ENDPOINTS } from '../models'
 import { handleUserUpdates } from './index'
-import { v4 as uuid } from 'uuid'
 
 describe('userUpdates', () => {
   let db
@@ -22,7 +24,7 @@ describe('userUpdates', () => {
     )
   }
 
-  describe('processHowToUpdates', () => {
+  describe('updateDocuments', () => {
     it('updates howto when user country has changed', async () => {
       // Arrange
       const userId = uuid()

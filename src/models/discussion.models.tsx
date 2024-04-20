@@ -1,4 +1,5 @@
-import type { IComment, IQuestion } from '.'
+import type { IComment } from './comment.model'
+import type { IQuestion } from './question.models'
 
 /**
  * Extends IComment with parentCommentId
@@ -6,6 +7,7 @@ import type { IComment, IQuestion } from '.'
  */
 export type IDiscussionComment = IComment & {
   parentCommentId: string | null
+  isUserSupporter?: boolean
 }
 
 export type IDiscussion = {
@@ -13,6 +15,7 @@ export type IDiscussion = {
   sourceId: string
   sourceType: 'question' | 'researchUpdate'
   comments: IDiscussionComment[]
+  contributorIds: string[]
 }
 
 export type IDiscussionSourceModelOptions = IQuestion.Item

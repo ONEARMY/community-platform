@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 
-import { Button, Tooltip } from '..'
+import { Button } from '../Button/Button'
+import { Tooltip } from '../Tooltip/Tooltip'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
 

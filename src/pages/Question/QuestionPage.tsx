@@ -15,6 +15,7 @@ import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
+import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -49,7 +50,11 @@ export const QuestionPage = () => {
       }
 
       store.activeQuestionItem = foundQuestion
-      store.incrementViewCount(foundQuestion._id)
+      incrementViewCount({
+        document: foundQuestion,
+        documentType: 'question',
+        store,
+      })
 
       setQuestion(foundQuestion)
       setIsLoading(false)
@@ -159,7 +164,7 @@ export const QuestionPage = () => {
                 {
                   icon: 'view',
                   label: buildStatisticsLabel({
-                    stat: question.total_views || 0,
+                    stat: question.total_views,
                     statUnit: 'view',
                     usePlural: true,
                   }),

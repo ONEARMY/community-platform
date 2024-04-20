@@ -9,6 +9,7 @@ export const FactoryDiscussion = (
 ): IDiscussion => ({
   _id: faker.string.uuid(),
   comments: [],
+  contributorIds: [],
   sourceId: faker.string.uuid(),
   sourceType: 'question',
   ...discussionOverloads,

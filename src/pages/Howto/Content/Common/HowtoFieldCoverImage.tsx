@@ -1,11 +1,11 @@
 import { Field } from 'react-final-form'
 import { ImageInputField } from 'src/common/Form/ImageInput.field'
+import { FormFieldWrapper } from 'src/pages/Howto/Content/Common/FormFieldWrapper'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { draftValidationWrapper, required } from 'src/utils/validators'
 import { Box, Text } from 'theme-ui'
 
 import { intro } from '../../labels'
-import { FormFieldWrapper } from '.'
 
 export const HowtoFieldCoverImage = () => {
   const { description, title } = intro.cover_image

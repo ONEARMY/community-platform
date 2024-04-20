@@ -1,9 +1,9 @@
 import { Field } from 'react-final-form'
 import { FileInputField } from 'src/common/Form/FileInput.field'
+import { FormFieldWrapper } from 'src/pages/Howto/Content/Common/FormFieldWrapper'
 import { Text } from 'theme-ui'
 
 import { intro } from '../../labels'
-import { FormFieldWrapper } from '.'
 
 export const HowtoFieldFileUpload = () => {
   const { description, title } = intro.files

@@ -9,7 +9,6 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 
-import { RootStore } from '../RootStore'
 import { ResearchStore } from './research.store'
 
 import type { IDiscussion } from 'src/models'
@@ -39,7 +38,7 @@ const factory = async (
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
-  const store = new ResearchStore(RootStore)
+  const store = new ResearchStore()
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -185,7 +184,7 @@ describe('research.store', () => {
         )
 
         // Act
-        await store.addComment('fish', researchItem.updates[0])
+        await store.addComment('fish', researchItem.updates[0], null)
 
         // Assert
         const [newResearchItem] = updateFn.mock.calls[0]
@@ -212,6 +211,7 @@ describe('research.store', () => {
         expect(store.discussionStore.addComment).toBeCalledWith(
           expect.any(Object),
           'fish',
+          null,
         )
       })
 
@@ -223,6 +223,7 @@ describe('research.store', () => {
         await store.addComment(
           'My favourite user has to be @username',
           researchItem.updates[0],
+          null,
         )
 
         // Assert
@@ -241,6 +242,7 @@ describe('research.store', () => {
         expect(store.discussionStore.addComment).toBeCalledWith(
           expect.any(Object),
           'My favourite user has to be @username',
+          null,
         )
       })
     })
@@ -695,15 +697,14 @@ describe('research.store', () => {
 
   describe('incrementViews', () => {
     it('increments views by one', async () => {
-      const { store, researchItem, getFn, setFn } = await factoryResearchItem()
+      const { store, researchItem, updateFn } = await factoryResearchItem()
 
-      const views = researchItem.total_views!
       // Act
-      await store.incrementViewCount(researchItem._id)
+      await store.incrementViewCount(researchItem)
+      const updatedTotalViews = researchItem.total_views + 1
 
-      expect(getFn).toHaveBeenCalledWith('server')
-      expect(setFn).toHaveBeenCalledWith(
-        expect.objectContaining({ total_views: views + 1 }),
+      expect(updateFn).toHaveBeenCalledWith(
+        expect.objectContaining({ total_views: updatedTotalViews }),
         expect.anything(),
       )
     })

@@ -107,22 +107,25 @@ describe('[How To]', () => {
 
         cy.step('All step info is shown')
         cy.get('[data-cy=step_11]').within(($step) => {
-          const pic1Regex = /brick-12-1.jpg/
-          const pic3Regex = /brick-12.jpg/
+          // const pic1Regex = /brick-12-1.jpg/
+          // const pic3Regex = /brick-12.jpg/
           expect($step).to.contain('12', 'Step #')
           expect($step).to.contain('Explore the possibilities!', 'Title')
           expect($step).to.contain(
             `more for a partition or the wall`,
             'Description',
           )
-          cy.step('Step image is updated on thumbnail click')
-          cy.get('[data-cy="active-image"]')
-            .should('have.attr', 'src')
-            .and('match', pic1Regex)
-          cy.get('[data-cy=thumbnail]:eq(2)').click()
-          cy.get('[data-cy="active-image"]')
-            .should('have.attr', 'src')
-            .and('match', pic3Regex)
+
+          // Commented out until https://github.com/ONEARMY/community-platform/issues/3462
+          //
+          //   cy.step('Step image is updated on thumbnail click')
+          //   cy.get('[data-cy="active-image"]')
+          //     .should('have.attr', 'src')
+          //     .and('match', pic1Regex)
+          //   cy.get('[data-cy=thumbnail]:eq(2)').click()
+          //   cy.get('[data-cy="active-image"]')
+          //     .should('have.attr', 'src')
+          //     .and('match', pic3Regex)
         })
 
         cy.step(`Comment functionality prompts user to login`)

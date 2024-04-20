@@ -32,7 +32,7 @@ describe('UserStatistics', () => {
     )
     const howtoLink = getByTestId('howto-link')
 
-    expect(howtoLink.getAttribute('href')).toBe('/how-to?author=Test User')
+    expect(howtoLink.getAttribute('href')).toBe('/how-to?q=Test User')
   })
 
   it('renders research link when on research stats', () => {

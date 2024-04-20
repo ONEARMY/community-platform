@@ -15,7 +15,10 @@ describe('[Question]', () => {
     const updatedExpectedSlug = 'health-consequences-v2'
     const updatedQuestionDescription = `${initialQuestionDescription} and super awesome goggles`
 
-    it('[By Authenticated]', () => {
+    // TODO - Test disabled pending fix to how test runner manages firestore indexes required for operation
+    // https://github.com/ONEARMY/community-platform/pull/3461
+    // eslint-disable-next-line mocha/no-skipped-tests
+    it.skip('[By Authenticated]', () => {
       cy.visit('/questions')
       cy.login(creatorEmail, creatorPassword)
 

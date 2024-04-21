@@ -32,7 +32,7 @@ const MapsPage = observer(() => {
   })
 
   useEffect(() => {
-    retrieveMapPins()
+    mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
     mapsStore.retrievePinFilters()
 
     const showPin = async () => {
@@ -45,7 +45,6 @@ const MapsPage = observer(() => {
     showPin()
 
     return () => {
-      mapsStore.removeSubscriptions()
       mapsStore.setActivePin(undefined)
     }
   }, [])
@@ -78,8 +77,6 @@ const MapsPage = observer(() => {
     }
   }
 
-  const retrieveMapPins = () =>
-    mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
   const setCenter = (latlng: ILatLng) => {
     setState((state) => ({
       ...state,

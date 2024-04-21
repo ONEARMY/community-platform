@@ -54,7 +54,7 @@ export type DBQueryWhereOperator =
   | '=='
   | '!='
   | 'array-contains'
-export type DBQueryWhereValue = string | number
+export type DBQueryWhereValue = string | number | boolean
 
 /**
  * @remarks

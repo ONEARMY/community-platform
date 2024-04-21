@@ -81,7 +81,7 @@ describe('research.search', () => {
     expect(mockOrderBy).toHaveBeenLastCalledWith('_created', 'desc')
   })
 
-  it('should call orderBy when sorting is not MostRelevant', async () => {
+  it('should filter by research status', async () => {
     // act
     exportedForTesting.createQueries(
       ['test'],

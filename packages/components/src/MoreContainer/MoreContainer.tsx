@@ -14,7 +14,6 @@ export const MoreContainer = (props: BoxProps) => {
   const MoreModalContainer = styled(Box)`
     position: relative;
     max-width: 780px;
-    z-index: 1;
     &:after {
       content: '';
       background-image: url(${WhiteBubble0});

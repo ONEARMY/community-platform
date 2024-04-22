@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
+import { useLocation } from 'react-router-dom'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
@@ -15,6 +16,7 @@ import { ProfileType } from 'src/modules/profile/types'
 import { Alert, Box, Card, Flex, Heading, Text } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
+import { IMPACT_YEARS } from '../User/impact/constants'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { CollectionSection } from './content/formSections/Collection.section'
 import { EmailNotificationsSection } from './content/formSections/EmailNotifications.section'
@@ -68,6 +70,11 @@ const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
 export const SettingsPage = observer((props: IProps) => {
   const { mapsStore, userStore } = useCommonStores().stores
   const [state, setState] = useState<IState>({} as any)
+
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const paramValue = queryParams.get('section')
+  const [targetImpactYear, setTargetImpactYear] = useState<number | null>(null)
 
   const toggleLocationDropdown = () => {
     setState((prevState) => ({
@@ -189,6 +196,18 @@ export const SettingsPage = observer((props: IProps) => {
     return errors
   }
 
+  useEffect(() => {
+    if (paramValue && paramValue.includes('impact.')) {
+      const impactYear = Number(paramValue.slice(7))
+      const impactYearsConstants: number[] = IMPACT_YEARS.map((elem) =>
+        Number(elem),
+      )
+      if (impactYearsConstants.includes(impactYear)) {
+        setTargetImpactYear(impactYear)
+      }
+    }
+  }, [paramValue])
+
   const { formValues, user, userMapPin } = state
 
   return user ? (
@@ -305,7 +324,9 @@ export const SettingsPage = observer((props: IProps) => {
                     )}
                   </Flex>
 
-                  {!isMember && isPreciousPlastic() && <ImpactSection />}
+                  {!isMember && isPreciousPlastic() && (
+                    <ImpactSection targetYear={targetImpactYear} />
+                  )}
 
                   <EmailNotificationsSection
                     notificationSettings={values.notification_settings}

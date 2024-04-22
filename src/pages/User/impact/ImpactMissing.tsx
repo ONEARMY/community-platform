@@ -60,7 +60,7 @@ export const ImpactMissing = observer((props: Props) => {
         </>
       )}
       {isPageOwner && (
-        <a href="/settings">
+        <a href={`/settings?section=impact.${year}`}>
           <Button>{labelSet.owner.link}</Button>
         </a>
       )}

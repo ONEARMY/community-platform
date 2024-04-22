@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Form } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -19,14 +19,17 @@ import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
 interface Props {
   year: IImpactYear
+  target: number | null
 }
 
-export const ImpactYearSection = observer(({ year }: Props) => {
+export const ImpactYearSection = observer(({ year, target }: Props) => {
   const [impact, setImpact] = useState<IImpactYearFieldList | undefined>(
     undefined,
   )
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
+
+  const impactDivRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const fetchImpact = () => {
@@ -63,13 +66,25 @@ export const ImpactYearSection = observer(({ year }: Props) => {
     }
   }
 
+  useEffect(() => {
+    const scrollToElement = () => {
+      const divRef = impactDivRef.current
+      if (divRef !== null) {
+        divRef.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+    if (target === year) {
+      scrollToElement()
+    }
+  }, [target])
+
   return (
     <Box sx={sx}>
       <a id="impact"></a>
-      <Heading variant="small">{year}</Heading>
-
+      <Heading variant="small" ref={impactDivRef}>
+        {year}
+      </Heading>
       <UserContactError submitResults={submitResults} />
-
       <Form
         id={formId}
         initialValues={impact ? transformImpactData(impact) : undefined}

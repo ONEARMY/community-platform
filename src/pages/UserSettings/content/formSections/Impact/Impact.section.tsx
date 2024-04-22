@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import IconArrowDown from 'src/assets/icons/icon-arrow-down.svg'
 import IconArrowUp from 'src/assets/icons/icon-arrow-up.svg'
 import { IMPACT_YEARS } from 'src/pages/User/impact/constants'
@@ -8,8 +8,13 @@ import { Box, Button, Heading, Image, Text } from 'theme-ui'
 import { FlexSectionContainer } from '../elements'
 import { ImpactYearSection } from './ImpactYear.section'
 
-export const ImpactSection = () => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+interface Props {
+  targetYear: number | null
+}
+
+export const ImpactSection = ({ targetYear }: Props) => {
+  const targetExists = !targetYear ? false : true
+  const [isExpanded, setIsExpanded] = useState<boolean>(targetExists)
   const { description, title } = fields.impact
   const { expandClose, expandOpen } = buttons.impact
 
@@ -25,7 +30,9 @@ export const ImpactSection = () => {
       {isExpanded && (
         <Box>
           {IMPACT_YEARS.map((year) => {
-            return <ImpactYearSection year={year} key={year} />
+            return (
+              <ImpactYearSection year={year} key={year} target={targetYear} />
+            )
           })}
         </Box>
       )}

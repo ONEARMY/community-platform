@@ -17,6 +17,7 @@ import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'
+import { isBot } from 'src/utils/isBot'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
@@ -85,6 +86,11 @@ export class ResearchStore extends ModuleStore {
       enrichedResearchUpdated.description = changeUserReferenceToPlainText(
         update.description,
       )
+
+      // Do not load discussions if is a bot
+      if (isBot()) {
+        return enrichedResearchUpdated
+      }
 
       // Fetch comments for each update
       const discussion = await discussionStore.fetchOrCreateDiscussionBySource(

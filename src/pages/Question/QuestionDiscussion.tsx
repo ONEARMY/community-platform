@@ -4,6 +4,7 @@ import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
+import { isBot } from 'src/utils/isBot'
 import { Card } from 'theme-ui'
 
 import type { IDiscussion } from 'src/models'
@@ -33,6 +34,10 @@ export const QuestionDiscussion = (props: IProps) => {
 
   useEffect(() => {
     const loadDiscussion = async () => {
+      if (isBot()) {
+        return
+      }
+
       const discussion = await store.fetchOrCreateDiscussionBySource(
         questionDocId,
         'question',

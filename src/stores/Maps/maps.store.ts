@@ -99,11 +99,10 @@ export class MapsStore extends ModuleStore {
     }
 
     // TODO: the client-side filtering done at `processDBMapPins` should be here
-    const pins = await this.db
-      .collection<IMapPin>(COLLECTION_NAME)
-      .getWhere('_deleted', '!=', true)
-
-    this.processDBMapPins(pins, filterToRemove)
+    this.db.collection<IMapPin>(COLLECTION_NAME).stream((update) => {
+      const pins = update.filter((v) => !v._deleted)
+      this.processDBMapPins(pins, filterToRemove)
+    })
   }
 
   @action

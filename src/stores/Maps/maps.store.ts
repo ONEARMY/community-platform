@@ -99,10 +99,17 @@ export class MapsStore extends ModuleStore {
     }
 
     // TODO: the client-side filtering done at `processDBMapPins` should be here
-    this.db.collection<IMapPin>(COLLECTION_NAME).stream((update) => {
-      const pins = update.filter((v) => !v._deleted)
-      this.processDBMapPins(pins, filterToRemove)
-    })
+    let updateCount = 0
+    const subscription = this.db
+      .collection<IMapPin>(COLLECTION_NAME)
+      .stream((update) => {
+        updateCount++
+        this.processDBMapPins(update, filterToRemove)
+        // hack - unsubscribe after receiving max 2 updates (1 cache + 1 server)
+        if (updateCount >= 2) {
+          subscription.unsubscribe()
+        }
+      })
   }
 
   @action

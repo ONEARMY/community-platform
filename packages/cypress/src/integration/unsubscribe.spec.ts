@@ -13,7 +13,7 @@ context('unsubscribe', () => {
   })
 
   it('should unsubscribe user', () => {
-    cy.wait(5000)
+    cy.contains('You have been unsubscribed.')
     cy.queryDocuments(
       DbCollectionName.users,
       'userName',

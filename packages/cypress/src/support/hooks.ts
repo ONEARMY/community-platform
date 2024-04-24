@@ -1,4 +1,5 @@
 import { TestDB } from './db/firebase'
+import { generateAlphaNumeric } from '../utils/TestUtils'
 
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
@@ -11,7 +12,7 @@ import { TestDB } from './db/firebase'
  */
 before(() => {
   if (!Cypress.env('DB_PREFIX')) {
-    Cypress.env('DB_PREFIX', `${collectionPrefix()}_`)
+    Cypress.env('DB_PREFIX', `${generateAlphaNumeric(5)}_`)
   }
 
   // Add error handlers
@@ -81,14 +82,3 @@ after(() => {
   // remove service workers at end of test set
 })
 
-function collectionPrefix() {
-  const length = 5
-  let result = ''
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  return result
-}

@@ -1,5 +1,5 @@
-import { TestDB } from './db/firebase'
 import { generateAlphaNumeric } from '../utils/TestUtils'
+import { TestDB } from './db/firebase'
 
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
@@ -81,4 +81,3 @@ after(() => {
   })
   // remove service workers at end of test set
 })
-

@@ -38,7 +38,10 @@ describe('[Sign-up - existing user]', () => {
     cy.contains(FRIENDLY_MESSAGES['sign-up/username-taken']).should('be.exist')
   })
   it('prevent duplicate email', () => {
-    const user = { ...authUser, username: `new_username_${generateAlphaNumeric(5)}` }
+    const user = {
+      ...authUser,
+      username: `new_username_${generateAlphaNumeric(5)}`,
+    }
     fillSignupForm(user)
     cy.get('[data-cy=submit]').click()
     cy.get('[data-cy=error-msg]')

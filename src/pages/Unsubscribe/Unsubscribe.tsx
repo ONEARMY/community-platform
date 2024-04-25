@@ -31,7 +31,7 @@ const StatusMessage = ({ status }: { status: Status }) => {
     case Status.SUCCESS:
       return (
         <Text>
-          You have been unsubscribed. You can {loginLink} to change your email
+          You have been unsubscribe. You can {loginLink} to change your email
           settings.
         </Text>
       )

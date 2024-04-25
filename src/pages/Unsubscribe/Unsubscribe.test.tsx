@@ -50,7 +50,7 @@ describe('Unsubscribe', () => {
     await waitFor(() => {
       expect(mockUnsubscribeUser).toHaveBeenCalledWith('def')
       expect(
-        wrapper.getByText((t) => t.includes('You have been unsubscibed')),
+        wrapper.getByText((t) => t.includes('You have been unsubscribed')),
       ).toBeInTheDocument()
     })
   })

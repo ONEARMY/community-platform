@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { filterMapPinsByType } from 'src/stores/Maps/filter'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { Box } from 'theme-ui'
 
@@ -21,7 +22,7 @@ const MapsPage = observer(() => {
   const location = useLocation()
   const [mapPins, setMapPins] = useState<IMapPin[]>([])
   const { mapsStore } = useCommonStores().stores
-  const activePinFilters = MAP_GROUPINGS
+  const [activePinFilters, setActivePinFilters] = useState<string[]>([])
 
   const [state, setState] = useState<{
     center: ILatLng
@@ -35,8 +36,6 @@ const MapsPage = observer(() => {
 
   const fetchMapPins = async () => {
     const pins = await mapPinService.getMapPins()
-    // eslint-disable-next-line no-console
-    console.log({ pins })
     setMapPins(pins)
   }
 
@@ -44,7 +43,6 @@ const MapsPage = observer(() => {
     fetchMapPins()
 
     // mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
-    
 
     const showPin = async () => {
       await showPinFromURL()
@@ -113,18 +111,20 @@ const MapsPage = observer(() => {
     // TODO - handle pin not found
   }
 
-  console.log({availableFilters: availableFilters()})
   return (
     // the calculation for the height is kind of hacky for now, will set properly on final mockups
     <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
       <Controls
         availableFilters={availableFilters()}
         onLocationChange={(latlng) => setCenter(latlng)}
+        onFilterChange={(selected) => {
+          setActivePinFilters(selected)
+        }}
       />
       <MapView
         mapRef={mapRef}
-        pins={mapPins}
-        filters={activePinFilters}
+        pins={filterMapPinsByType(mapPins, activePinFilters)}
+        filters={MAP_GROUPINGS}
         onBoundingBoxChange={(boundingBox) =>
           mapsStore.setMapBoundingBox(boundingBox)
         }

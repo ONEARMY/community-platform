@@ -1,5 +1,7 @@
+const API_BASE_URL = 'https://experiment-0424-sze2iv2xoq-lm.a.run.app';
+
 const getMapPins = () => {
-    return fetch('https://experiment-0424-sze2iv2xoq-lm.a.run.app/map-pins')
+    return fetch(API_BASE_URL + '/map-pins')
         .then(response => response.json());
 }
 

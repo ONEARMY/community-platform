@@ -17,6 +17,7 @@ export const QuestionDiscussion = (props: IProps) => {
   const [comment, setComment] = useState('')
   const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState('') // State to track error messages
   const { questionDocId, setTotalCommentsCount } = props
 
   const store = useDiscussionStore()
@@ -28,7 +29,7 @@ export const QuestionDiscussion = (props: IProps) => {
       store.activeUser,
     )
     setTotalCommentsCount(comments.length)
-    return setDiscussion({ ...discussion, comments })
+    setDiscussion({ ...discussion, comments })
   }
 
   useEffect(() => {
@@ -47,8 +48,16 @@ export const QuestionDiscussion = (props: IProps) => {
   }, [questionDocId])
 
   const handleEdit = async (_id: string, comment: string) => {
-    if (!discussion) return
+    if (comment.trim().length == 0 || comment.length == 0) {
+      setErrorMessage('Comment cannot be blank space')
+      return
+    }
 
+    if (!discussion) {
+      return
+    }
+
+    setErrorMessage('')
     const updatedDiscussion = await store.editComment(discussion, _id, comment)
     logger.info({ _id, comment }, 'question comment edited')
     updatedDiscussion && transformComments(updatedDiscussion)
@@ -56,6 +65,7 @@ export const QuestionDiscussion = (props: IProps) => {
 
   const handleEditRequest = async () => {
     logger.debug('Edit existing comment')
+    return Promise.resolve()
   }
 
   const handleDelete = async (_id: string) => {
@@ -67,7 +77,12 @@ export const QuestionDiscussion = (props: IProps) => {
   }
 
   const onSubmit = async (comment: string) => {
-    if (!comment || !discussion) {
+    if (comment.trim() === '') {
+      setErrorMessage('Comment cannot be blank')
+      return
+    }
+
+    if (!discussion) {
       return
     }
 
@@ -75,11 +90,19 @@ export const QuestionDiscussion = (props: IProps) => {
     if (updatedDiscussion) {
       transformComments(updatedDiscussion)
       setComment('')
+      setErrorMessage('')
     }
   }
 
   const handleSubmitReply = async (commentId: string, reply) => {
-    if (!discussion) return
+    if (reply.trim() === '') {
+      setErrorMessage('Comment cannot be blank')
+      return
+    }
+
+    if (!discussion) {
+      return
+    }
 
     const updatedDiscussion = await store.addComment(
       discussion,
@@ -100,23 +123,29 @@ export const QuestionDiscussion = (props: IProps) => {
     >
       {isLoading ? (
         <Loader />
-      ) : discussion ? (
-        <DiscussionContainer
-          supportReplies={true}
-          comments={discussion.comments as any}
-          maxLength={MAX_COMMENT_LENGTH}
-          comment={comment}
-          onChange={setComment}
-          onMoreComments={() => {}}
-          handleEdit={handleEdit}
-          handleEditRequest={handleEditRequest}
-          handleDelete={handleDelete}
-          highlightedCommentId={highlightedCommentId}
-          onSubmit={onSubmit}
-          onSubmitReply={handleSubmitReply}
-          isLoggedIn={!!store.activeUser}
-        />
-      ) : null}
+      ) : (
+        <>
+          {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+          
+          {discussion ? (
+            <DiscussionContainer
+              supportReplies={true}
+              comments={discussion.comments as any}
+              maxLength={MAX_COMMENT_LENGTH}
+              comment={comment}
+              onChange={setComment}
+              onMoreComments={() => {}}
+              handleEdit={handleEdit}
+              handleEditRequest={handleEditRequest}
+              handleDelete={handleDelete}
+              highlightedCommentId={highlightedCommentId}
+              onSubmit={onSubmit}
+              onSubmitReply={handleSubmitReply}
+              isLoggedIn={!!store.activeUser}
+            />
+          ) : null}
+        </>
+      )}
     </Card>
   )
 }

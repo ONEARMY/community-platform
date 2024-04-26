@@ -77,7 +77,7 @@ export const QuestionDiscussion = (props: IProps) => {
   }
 
   const onSubmit = async (comment: string) => {
-    if (comment.trim() === '') {
+    if (comment.trim() === '' || comment.length == 0) {
       setErrorMessage('Comment cannot be blank')
       return
     }
@@ -94,8 +94,8 @@ export const QuestionDiscussion = (props: IProps) => {
     }
   }
 
-  const handleSubmitReply = async (commentId: string, reply) => {
-    if (reply.trim() === '') {
+  const handleSubmitReply = async (commentId: string, reply: string) => {
+    if (reply.trim() === '' || reply.length == 0) {
       setErrorMessage('Comment cannot be blank')
       return
     }

@@ -21,8 +21,9 @@ const MapsPage = observer(() => {
   const mapRef = React.useRef<Map>(null)
   const location = useLocation()
   const [mapPins, setMapPins] = useState<IMapPin[]>([])
-  const { mapsStore } = useCommonStores().stores
+  const { mapsStore, userStore } = useCommonStores().stores
   const [activePinFilters, setActivePinFilters] = useState<string[]>([])
+  const user = userStore.activeUser
 
   const [state, setState] = useState<{
     center: ILatLng
@@ -34,13 +35,30 @@ const MapsPage = observer(() => {
     firstLoad: true,
   })
 
-  const fetchMapPins = async () => {
-    const pins = await mapPinService.getMapPins()
+  const fetchMapPins = async (userName) => {
+    const pins = await mapPinService.getMapPins(userName)
     setMapPins(pins)
   }
 
+  const fetchMapPinByUserId = async (userName: string, isLoggedIn: boolean) => {
+    const userMapPin = await mapPinService.getMapPinByUserId(
+      userName,
+      isLoggedIn,
+    )
+
+    if (userMapPin) {
+      setMapPins([...mapPins, userMapPin])
+    }
+  }
+
   useEffect(() => {
-    fetchMapPins()
+    if (user?._id) {
+      fetchMapPinByUserId(user?._id, !!user?._id)
+    }
+  }, [user])
+
+  useEffect(() => {
+    fetchMapPins(user?._id)
 
     // mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
 

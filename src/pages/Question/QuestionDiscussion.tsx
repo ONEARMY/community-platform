@@ -29,7 +29,7 @@ export const QuestionDiscussion = (props: IProps) => {
       store.activeUser,
     )
     setTotalCommentsCount(comments.length)
-    setDiscussion({ ...discussion, comments })
+    return setDiscussion({ ...discussion, comments })
   }
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export const QuestionDiscussion = (props: IProps) => {
       return
     }
 
-    if (!discussion) {
+    if (!comment || !discussion) {
       return
     }
 
@@ -94,7 +94,7 @@ export const QuestionDiscussion = (props: IProps) => {
     }
   }
 
-  const handleSubmitReply = async (commentId: string, reply: string) => {
+  const handleSubmitReply = async (commentId: string, reply) => {
     if (reply.trim() === '' || reply.length == 0) {
       setErrorMessage('Comment cannot be blank')
       return

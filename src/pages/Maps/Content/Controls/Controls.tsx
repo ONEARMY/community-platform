@@ -38,7 +38,7 @@ export const Controls = ({
   onFilterChange,
 }: IProps) => {
   const navigate = useNavigate()
-  const { mapsStore, userStore } = useCommonStores().stores
+  const { userStore } = useCommonStores().stores
   const [state, setState] = useState<IState>({
     showFiltersMobile: false,
     filtersSelected: [],
@@ -53,7 +53,6 @@ export const Controls = ({
 
   const onChange = (selected) => {
     onFilterChange && onFilterChange(selected)
-    mapsStore.setActivePinFilters(selected)
     setState((state) => ({ ...state, filtersSelected: selected }))
   }
 
@@ -76,7 +75,6 @@ export const Controls = ({
       }}
       onClick={() => {
         // close any active popup on click
-        mapsStore.setActivePin(undefined)
         navigate('/map')
       }}
     >

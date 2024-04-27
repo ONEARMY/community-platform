@@ -17,6 +17,12 @@ import type { ILatLng, IMapPin } from 'src/models/maps.models'
 
 import './styles.css'
 
+const initialState = {
+  center: { lat: 51.0, lng: 19.0 },
+  zoom: 3,
+  firstLoad: true,
+}
+
 const MapsPage = observer(() => {
   const mapRef = React.useRef<Map>(null)
   const location = useLocation()
@@ -31,18 +37,14 @@ const MapsPage = observer(() => {
     center: ILatLng
     zoom: number
     firstLoad: boolean
-  }>({
-    center: { lat: 51.0, lng: 19.0 },
-    zoom: 3,
-    firstLoad: true,
-  })
+  }>(initialState)
 
   const fetchMapPins = async () => {
     const pins = await mapPinService.getMapPins()
     setMapPins(pins)
   }
 
-  const fetchMapPinByUserId = async (userName: string, isLoggedIn: boolean) => {
+  const appendLoggedInUser = async (userName: string, isLoggedIn: boolean) => {
     const userMapPin = await mapPinService.getMapPinByUserId(
       userName,
       isLoggedIn,
@@ -55,7 +57,7 @@ const MapsPage = observer(() => {
 
   useEffect(() => {
     if (user?._id) {
-      fetchMapPinByUserId(user?._id, !!user?._id)
+      appendLoggedInUser(user?._id, !!user?._id)
     }
   }, [user])
 

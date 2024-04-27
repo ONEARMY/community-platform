@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Map, TileLayer } from 'react-leaflet'
-import { observer } from 'mobx-react'
 
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'
@@ -21,7 +20,7 @@ interface IProps {
   onBlur: () => void
 }
 
-export const MapView = observer((props: IProps) => {
+export const MapView = (props: IProps) => {
   useEffect(() => {
     if (props.mapRef.current) {
       /*return*/ props.mapRef.current.leafletElement.zoomControl?.setPosition(
@@ -57,4 +56,4 @@ export const MapView = observer((props: IProps) => {
       {activePin && <Popup activePin={activePin} map={props.mapRef} />}
     </Map>
   )
-})
+}

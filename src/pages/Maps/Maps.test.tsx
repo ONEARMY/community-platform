@@ -54,7 +54,6 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
           },
         },
       },
-      mapsStore: mockMapStore,
       tagsStore: {},
     },
   }),

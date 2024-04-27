@@ -22,7 +22,7 @@ const MapsPage = observer(() => {
   const location = useLocation()
   const [mapPins, setMapPins] = useState<IMapPin[]>([])
   const [selectedPin, setSelectedPin] = useState<IMapPin | null>(null)
-  const { mapsStore, userStore } = useCommonStores().stores
+  const { userStore } = useCommonStores().stores
   const [activePinFilters, setActivePinFilters] = useState<string[]>([])
   const user = userStore.activeUser
   const navigate = useNavigate()
@@ -67,14 +67,14 @@ const MapsPage = observer(() => {
     const showPin = async () => {
       await showPinFromURL()
 
-      if (!mapsStore.activePin) {
+      if (!selectedPin) {
         promptUserLocation()
       }
     }
     showPin()
 
     return () => {
-      mapsStore.setActivePin(undefined)
+      setSelectedPin(null)
     }
   }, [])
 

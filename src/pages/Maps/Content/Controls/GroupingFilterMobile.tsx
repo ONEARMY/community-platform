@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button } from 'oa-components'
 import crossClose from 'src/assets/icons/cross-close.svg'
 import checkmarkIcon from 'src/assets/icons/icon-checkmark.svg'

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { filterMapPinsByType } from 'src/stores/Maps/filter'
@@ -21,9 +21,11 @@ const MapsPage = observer(() => {
   const mapRef = React.useRef<Map>(null)
   const location = useLocation()
   const [mapPins, setMapPins] = useState<IMapPin[]>([])
+  const [selectedPin, setSelectedPin] = useState<IMapPin | null>(null)
   const { mapsStore, userStore } = useCommonStores().stores
   const [activePinFilters, setActivePinFilters] = useState<string[]>([])
   const user = userStore.activeUser
+  const navigate = useNavigate()
 
   const [state, setState] = useState<{
     center: ILatLng
@@ -46,7 +48,9 @@ const MapsPage = observer(() => {
       isLoggedIn,
     )
 
-    if (userMapPin) {
+    // eslint-disable-next-line no-console
+    console.log('userMapPin', { userMapPin })
+    if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
       setMapPins([...mapPins, userMapPin])
     }
   }
@@ -75,10 +79,6 @@ const MapsPage = observer(() => {
       mapsStore.setActivePin(undefined)
     }
   }, [])
-
-  useEffect(() => {
-    showPinFromURL()
-  }, [location.hash])
 
   const availableFilters = () => {
     return transformAvailableFiltersToGroups(mapPins, [
@@ -113,20 +113,33 @@ const MapsPage = observer(() => {
     }))
   }
 
-  /** Check current hash in case matches a mappin and try to load */
+  /**
+   * Check current hash in case matches a mappin and try to load
+   *
+   **/
   const showPinFromURL = async () => {
     const pinId = location.hash.slice(1)
-    // Only lookup if not already the active pin
-    if (pinId && pinId !== mapsStore.activePin?._id) {
-      const pin = await mapsStore.getPin(pinId)
-      if (pin._deleted) return
-      mapsStore.setActivePin(pin)
+    if (pinId) {
+      getPinByUserId(pinId)
     }
-    // Center on the pin if first load
-    if (state.firstLoad && mapsStore.activePin) {
-      setCenter(mapsStore.activePin.location)
+  }
+
+  const getPinByUserId = async (userId: string) => {
+    navigate(`/map#${userId}`)
+
+    // First check the mapPins to see if the pin is already
+    // partially loaded
+    const preLoadedPin = mapPins.find((pin) => pin._id === userId)
+    if (preLoadedPin) {
+      setCenter(preLoadedPin.location)
+      setSelectedPin(preLoadedPin)
     }
-    // TODO - handle pin not found
+
+    const pin = await mapPinService.getMapPinByUserId(userId, !!user?._id)
+    if (pin) {
+      setCenter(pin.location)
+      setSelectedPin(pin)
+    }
   }
 
   return (
@@ -140,12 +153,19 @@ const MapsPage = observer(() => {
         }}
       />
       <MapView
+        activePin={selectedPin}
         mapRef={mapRef}
         pins={filterMapPinsByType(mapPins, activePinFilters)}
-        filters={MAP_GROUPINGS}
         onBoundingBoxChange={(boundingBox) =>
           mapsStore.setMapBoundingBox(boundingBox)
         }
+        onPinClicked={(pin) => {
+          getPinByUserId(pin._id)
+        }}
+        onBlur={() => {
+          navigate('/map')
+          setSelectedPin(null)
+        }}
         center={state.center}
         zoom={state.zoom}
       />

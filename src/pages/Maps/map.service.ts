@@ -6,7 +6,7 @@ import { DB_ENDPOINTS } from '../../models'
 import type { IMapPin } from '../../models'
 
 // Load map pins base from environment configuration
-const API_BASE_URL = 'https://experiment-0424-sze2iv2xoq-lm.a.run.app'
+const API_BASE_URL = 'http://localhost:8080' // 'https://experiment-0424-sze2iv2xoq-lm.a.run.app'
 
 const getMapPins = async (loggedInUserName) => {
   // TODO: Introduce error handling
@@ -22,12 +22,16 @@ const getMapPins = async (loggedInUserName) => {
 }
 
 const getMapPinByUserId = async (userName: string, isLoggedIn: boolean) => {
-  // eslint-disable-next-line no-console
-  console.log('getMapPinByUserId', { userName, isLoggedIn })
+  if (!isLoggedIn) {
+    const mapPin = await fetch(API_BASE_URL + '/map-pins/' + userName).then(
+      (response) => response.json(),
+    )
+    return mapPin
+  }
+
   const collectionRef = collection(firestore, DB_ENDPOINTS.mappins)
 
-  const userMapPinQuery = query(collectionRef, where('userId', '==', userName))
-  // eslint-disable-next-line no-console
+  const userMapPinQuery = query(collectionRef, where('_id', '==', userName))
 
   const [userMapPin] = (await getDocs(userMapPinQuery)).docs
 

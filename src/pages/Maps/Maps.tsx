@@ -37,8 +37,8 @@ const MapsPage = observer(() => {
     firstLoad: true,
   })
 
-  const fetchMapPins = async (userName) => {
-    const pins = await mapPinService.getMapPins(userName)
+  const fetchMapPins = async () => {
+    const pins = await mapPinService.getMapPins()
     setMapPins(pins)
   }
 
@@ -60,7 +60,7 @@ const MapsPage = observer(() => {
   }, [user])
 
   useEffect(() => {
-    fetchMapPins(user?._id)
+    fetchMapPins()
 
     const showPin = async () => {
       await showPinFromURL()

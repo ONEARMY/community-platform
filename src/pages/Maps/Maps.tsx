@@ -48,8 +48,6 @@ const MapsPage = observer(() => {
       isLoggedIn,
     )
 
-    // eslint-disable-next-line no-console
-    console.log('userMapPin', { userMapPin })
     if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
       setMapPins([...mapPins, userMapPin])
     }

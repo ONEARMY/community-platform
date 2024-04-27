@@ -3,7 +3,6 @@ import { CategoriesStore } from './Categories/categories.store'
 import { DatabaseV2 } from './databaseV2/DatabaseV2'
 import { DiscussionStore } from './Discussions/discussions.store'
 import { HowtoStore } from './Howto/howto.store'
-import { MapsStore } from './Maps/maps.store'
 import { MessageStore } from './Message/message.store'
 import { QuestionStore } from './Question/question.store'
 import { QuestionCategoriesStore } from './QuestionCategories/questionCategories.store'
@@ -26,7 +25,6 @@ export interface IStores {
   categoriesStore: CategoriesStore
   researchCategoriesStore: ResearchCategoriesStore
   researchStore: ResearchStore
-  mapsStore: MapsStore
   messageStore: MessageStore
   themeStore: ThemeStore
   aggregationsStore: AggregationsStore
@@ -59,7 +57,6 @@ const stores = (rootStore: IRootStore) => {
     categoriesStore: new CategoriesStore(rootStore),
     researchCategoriesStore: new ResearchCategoriesStore(rootStore),
     researchStore: new ResearchStore(rootStore),
-    mapsStore: new MapsStore(rootStore),
     messageStore: new MessageStore(rootStore),
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),

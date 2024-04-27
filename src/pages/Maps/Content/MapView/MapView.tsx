@@ -1,13 +1,12 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Map, TileLayer } from 'react-leaflet'
-import debounce from 'debounce'
 import { observer } from 'mobx-react'
 
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'
 
 import type { LatLngExpression } from 'leaflet'
-import type { IBoundingBox, ILatLng, IMapPin } from 'src/models/maps.models'
+import type { ILatLng, IMapPin } from 'src/models/maps.models'
 
 import 'leaflet/dist/leaflet.css'
 import './index.css'
@@ -18,28 +17,11 @@ interface IProps {
   mapRef: React.RefObject<Map>
   pins: Array<IMapPin>
   zoom: number
-  onBoundingBoxChange: (boundingBox: IBoundingBox) => void
   onPinClicked: (pin: IMapPin) => void
   onBlur: () => void
 }
 
 export const MapView = observer((props: IProps) => {
-  // on move end want to calculate current bounding box and notify parent
-  // so that pins can be displayed as required
-  const handleMove = useCallback(
-    debounce(() => {
-      if (props.mapRef.current) {
-        const boundingBox = props.mapRef.current.leafletElement.getBounds()
-        const newBoundingBox: IBoundingBox = {
-          topLeft: boundingBox.getNorthWest(),
-          bottomRight: boundingBox.getSouthEast(),
-        }
-        props.onBoundingBoxChange(newBoundingBox)
-      }
-    }, 1000),
-    [],
-  )
-
   useEffect(() => {
     if (props.mapRef.current) {
       /*return*/ props.mapRef.current.leafletElement.zoomControl?.setPosition(
@@ -63,7 +45,6 @@ export const MapView = observer((props: IProps) => {
       maxZoom={18}
       zoomControl={isViewportGreaterThanTablet}
       style={{ height: '100%', zIndex: 0 }}
-      onmove={handleMove}
       onclick={() => {
         props.onBlur()
       }}

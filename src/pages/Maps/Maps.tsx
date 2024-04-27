@@ -64,8 +64,6 @@ const MapsPage = observer(() => {
   useEffect(() => {
     fetchMapPins(user?._id)
 
-    // mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
-
     const showPin = async () => {
       await showPinFromURL()
 
@@ -156,9 +154,6 @@ const MapsPage = observer(() => {
         activePin={selectedPin}
         mapRef={mapRef}
         pins={filterMapPinsByType(mapPins, activePinFilters)}
-        onBoundingBoxChange={(boundingBox) =>
-          mapsStore.setMapBoundingBox(boundingBox)
-        }
         onPinClicked={(pin) => {
           getPinByUserId(pin._id)
         }}

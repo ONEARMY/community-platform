@@ -1,16 +1,14 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
+import { API_URL } from 'src/config/config'
 import { firestore } from 'src/utils/firebase'
 
 import { DB_ENDPOINTS } from '../../models'
 
 import type { IMapPin } from '../../models'
 
-// Load map pins base from environment configuration
-const API_BASE_URL = 'http://localhost:8080' // 'https://experiment-0424-sze2iv2xoq-lm.a.run.app'
-
 const getMapPins = async (loggedInUserName) => {
   // TODO: Introduce error handling
-  const mapPins = await fetch(API_BASE_URL + '/map-pins').then((response) =>
+  const mapPins = await fetch(API_URL + '/map-pins').then((response) =>
     response.json(),
   )
 
@@ -23,7 +21,7 @@ const getMapPins = async (loggedInUserName) => {
 
 const getMapPinByUserId = async (userName: string, isLoggedIn: boolean) => {
   if (!isLoggedIn) {
-    const mapPin = await fetch(API_BASE_URL + '/map-pins/' + userName).then(
+    const mapPin = await fetch(API_URL + '/map-pins/' + userName).then(
       (response) => response.json(),
     )
     return mapPin

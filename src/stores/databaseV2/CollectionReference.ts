@@ -10,6 +10,7 @@ import type {
   DBQueryWhereOperator,
   DBQueryWhereValue,
 } from './types'
+import type { AbstractDatabaseClientStreamable } from './types/AbstractDatabaseClient'
 
 export class CollectionReference<T> {
   constructor(private endpoint: string, private clients: DBClients) {}
@@ -22,18 +23,31 @@ export class CollectionReference<T> {
     return new DocReference<T>(this.endpoint, docID, this.clients)
   }
 
-  // TODO - allow partial observer instead of onUpdate and add unsubscribe
   /**
-   * Streaming a collection retrieves provides a stream where a collection is
-   * continually emitted, first with documents already cached, and then in realtime
-   * as data is updated on the server.
+   * Sync all documents in a collection to local indexeddb cache
+   * This will attempt to be as efficient as possible, prioritising fetching data from:
+   *
+   * 1. Existing cached docs
+   * 2. Server snapshots (if no cache exists)
+   * 3. Server (querying only docs modified more recently than most recent cached doc)
+   *
+   * NOTE - to use this docs must have an `_modified` property
+   *
    * @param onUpdate - callback function triggered when data is received.
    * This is triggered with the full set of documents (existing + update)
+   * @param options.keepAlive - specify whether to keep sync open for live server
+   * updates (default terminates after retrieval)
    */
-  stream(onUpdate: (value: (T & DBDoc)[]) => void) {
-    logger.debug('CollectionReference.stream')
+  syncLocally(
+    onUpdate: (value: (T & DBDoc)[]) => void,
+    options: { keepAlive: boolean } = { keepAlive: false },
+  ) {
+    logger.debug('CollectionReference.syncStart', this.endpoint)
     const totals: any = {}
-    const { cacheDB, serverDB, serverCacheDB } = this.clients
+    const { cacheDB, serverCacheDB } = this.clients
+    // HACK - typescript not correctly providing type from destructured
+    const serverDB = this.clients.serverDB as AbstractDatabaseClientStreamable
+
     const endpoint = this.endpoint
     const observer: Observable<(T & DBDoc)[]> = Observable.create(
       async (obs: Observer<(T & DBDoc)[]>) => {
@@ -50,27 +64,44 @@ export class CollectionReference<T> {
         }
         // 3. get any newer docs from regular server db, merge with cache and emit
         const latest = await this._getCacheLastModified(endpoint)
-        serverDB.streamCollection!(endpoint, {
-          orderBy: '_modified',
-          order: 'asc',
-          where: {
-            field: '_modified',
-            operator: '>',
-            value: latest,
-          },
-        }).subscribe(async (updates) => {
-          totals.live = updates.length
-          await cacheDB.setBulkDocs(endpoint, updates)
-          const allDocs = await cacheDB.getCollection<T>(endpoint)
-          obs.next(allDocs)
-        })
+        const server$ = serverDB
+          .streamCollection(endpoint, {
+            orderBy: '_modified',
+            order: 'asc',
+            where: {
+              field: '_modified',
+              operator: '>',
+              value: latest,
+            },
+          })
+          .subscribe(async (updates) => {
+            logger.debug(
+              'CollectionReference.syncRes',
+              this.endpoint,
+              updates.length,
+            )
+            if (!options.keepAlive) {
+              server$.unsubscribe()
+              logger.debug('CollectionReference.syncEnd', this.endpoint)
+            }
+            totals.live = updates.length
+            await cacheDB.setBulkDocs(endpoint, updates)
+            const allDocs = await cacheDB.getCollection<T>(endpoint)
+            obs.next(allDocs)
+          })
         // 4. Check for any document deletes, and remove as appropriate
         // Assume archive will have been checked after last updated record sync
         const lastArchive = latest
-        serverDB.streamCollection!(`_archived/${endpoint}/summary`, {
-          order: 'asc',
-          where: { field: '_archived', operator: '>', value: lastArchive },
-        }).subscribe(async (docs) => {
+        const archive$ = serverDB.streamCollection!(
+          `_archived/${endpoint}/summary`,
+          {
+            order: 'asc',
+            where: { field: '_archived', operator: '>', value: lastArchive },
+          },
+        ).subscribe(async (docs) => {
+          if (!options.keepAlive) {
+            archive$.unsubscribe()
+          }
           const archiveIds = docs.map((d) => d._id)
           for (const docId of archiveIds) {
             try {
@@ -118,17 +149,12 @@ export class CollectionReference<T> {
     limit?: number,
   ) {
     const { serverDB, cacheDB } = this.clients
-    logger.debug('CollectionReference.getWhere', {
-      field,
-      operator,
-      value,
-      serverDB,
-      serverDBQueryCollection: serverDB.queryCollection,
-    })
+    logger.debug('CollectionReference.getWhere', { field, operator, value })
     let docs = await serverDB.queryCollection<T>(this.endpoint, {
       where: { field, operator, value },
       limit,
     })
+
     // if not found on live try find on cached (might be offline)
     // use catch as not all endpoints are cached or some might not be indexed
     if (docs.length === 0) {

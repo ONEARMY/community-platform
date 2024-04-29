@@ -105,7 +105,6 @@ export class MapsStore extends ModuleStore {
       },
       { keepAlive: false },
     )
-  }
 
   @action
   public async retrievePinFilters() {

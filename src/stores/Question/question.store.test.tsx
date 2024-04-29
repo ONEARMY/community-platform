@@ -2,8 +2,8 @@ jest.mock('../common/module.store')
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
-import { QuestionStore } from './question.store'
 import { UserStore } from '../../stores/User/user.store'
+import { QuestionStore } from './question.store'
 
 const mockToggleDocSubscriber = jest.fn()
 jest.mock('../common/toggleDocSubscriberStatusByUserName', () => {

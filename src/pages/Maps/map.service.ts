@@ -7,18 +7,18 @@ import { DB_ENDPOINTS } from '../../models'
 import type { IMapPin } from '../../models'
 
 const getMapPins = async () => {
-  const mapPins = await fetch(API_URL + '/map-pins').then((response) =>
-    response.json(),
-  ).catch(() => [])
+  const mapPins = await fetch(API_URL + '/map-pins')
+    .then((response) => response.json())
+    .catch(() => [])
 
   return mapPins
 }
 
 const getMapPinByUserId = async (userName: string, isLoggedIn: boolean) => {
   if (!isLoggedIn) {
-    const mapPin = await fetch(API_URL + '/map-pins/' + userName).then(
-      (response) => response.json(),
-    ).catch(() => null)
+    const mapPin = await fetch(API_URL + '/map-pins/' + userName)
+      .then((response) => response.json())
+      .catch(() => null)
     return mapPin
   }
 

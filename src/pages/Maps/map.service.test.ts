@@ -1,4 +1,4 @@
-import { mapPinService } from "./map.service";
+import { mapPinService } from './map.service'
 
 describe('map.service', () => {
   describe('getMapPins', () => {
@@ -13,7 +13,7 @@ describe('map.service', () => {
 
       // assert
       expect(result).toEqual([{ _id: '1' }])
-    });
+    })
 
     it('handles errors', async () => {
       // prepare
@@ -24,8 +24,8 @@ describe('map.service', () => {
 
       // assert
       expect(result).toEqual([])
-    });
-  });
+    })
+  })
 
   describe('getMapPinByUserId', () => {
     it('fetches map pin by user id', async () => {
@@ -39,7 +39,7 @@ describe('map.service', () => {
 
       // assert
       expect(result).toEqual({ _id: '1' })
-    });
+    })
 
     it('handles errors', async () => {
       // prepare
@@ -50,6 +50,6 @@ describe('map.service', () => {
 
       // assert
       expect(result).toBeNull()
-    });
-  });
-});
+    })
+  })
+})

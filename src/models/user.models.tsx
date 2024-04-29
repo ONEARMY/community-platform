@@ -84,9 +84,10 @@ interface IExternalLink {
 /**
  * Track the ids and moderation status as summary for user stats
  */
-interface IUserStats {
+export interface IUserStats {
   userCreatedHowtos: { [id: string]: IModerationStatus }
   userCreatedResearch: { [id: string]: IModerationStatus }
+  userCreatedQuestions: { [id: string]: IModerationStatus }
 }
 
 export type IUserDB = IUser & DBDoc

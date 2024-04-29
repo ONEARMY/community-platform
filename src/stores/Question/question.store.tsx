@@ -10,6 +10,7 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
+import type { IModerationStatus } from 'oa-shared'
 import type { IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
@@ -97,7 +98,7 @@ export class QuestionStore extends ModuleStore {
       ? await this.loadImages(values.images, dbRef.id)
       : null
 
-    await dbRef.set({
+    const _id = await dbRef.set({
       ...(values as any),
       creatorCountry,
       _createdBy,
@@ -106,6 +107,8 @@ export class QuestionStore extends ModuleStore {
       keywords,
       images,
     })
+
+    await this.addQuestionToUserStats(_id, values.moderation)
     logger.info(`upsertQuestion.set`, { dbRef })
 
     return dbRef.get() || null
@@ -168,6 +171,22 @@ export class QuestionStore extends ModuleStore {
       : creatorCountry
       ? creatorCountry
       : ''
+  }
+
+  private async addQuestionToUserStats(
+    questionId: string,
+    moderationStatus: IModerationStatus,
+  ) {
+    if (this.activeUser) {
+      const activeUserQuestionStats =
+        this.activeUser?.stats?.userCreatedQuestions ?? {}
+      activeUserQuestionStats[questionId] = moderationStatus
+      await this.userStore.updateUserStats(
+        this.activeUser?._id,
+        'userCreatedQuestions',
+        activeUserQuestionStats,
+      )
+    }
   }
 
   private async _getQuestionItemBySlug(

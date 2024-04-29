@@ -73,6 +73,7 @@ export class DocReference<T> {
     logger.debug('DocReference.setDoc', dbDoc)
     await serverDB.setDoc(this.endpoint, dbDoc)
     await cacheDB.setDoc(this.endpoint, dbDoc)
+    return dbDoc._id
   }
 
   /**

@@ -26,6 +26,7 @@ import type {
   IImpactYearFieldList,
   IUser,
   IUserBadges,
+  IUserStats,
 } from 'src/models/user.models'
 import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
@@ -176,6 +177,18 @@ export class UserStore extends ModuleStore {
 
   public async updateUserBadge(userId: string, badges: IUserBadges) {
     await this._updateUserRequest(userId, { badges })
+  }
+
+  public async updateUserStats(
+    userId: string,
+    statsType:
+      | 'userCreatedHowtos'
+      | 'userCreatedResearch'
+      | 'userCreatedQuestions',
+    stats: Partial<IUserStats>,
+  ) {
+    const statsPath = 'stats.' + statsType
+    await this._updateUserRequest(userId, { [statsPath]: stats })
   }
 
   public async removePatreonConnection(userId: string) {

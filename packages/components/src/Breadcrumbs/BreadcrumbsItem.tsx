@@ -26,7 +26,7 @@ const BreadcrumbButton = ({ text, link }: BreadcrumbButtonProps) => {
 
 export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
   <Box
-    style={{ display: 'inline', marginRight: '10px' }}
+    style={{ display: 'inline-flex', marginRight: '10px' }}
     data-testid="breadcrumbsItem"
   >
     {!isLast ? (

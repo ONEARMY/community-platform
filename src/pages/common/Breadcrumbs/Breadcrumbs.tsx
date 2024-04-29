@@ -2,10 +2,10 @@ import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
 
 import type { IHowto, IQuestion, IResearch } from 'src/models'
 
-type step = { text: string; link?: string } | null
+type Step = { text: string; link?: string }
 
 interface BreadcrumbsProps {
-  steps?: Array<step>
+  steps?: Step[]
   content?: IResearch.ItemDB | IQuestion.Item | IHowto
   variant?: 'research' | 'question' | 'howto'
 }
@@ -14,58 +14,43 @@ const generateSteps = (
   content: IResearch.ItemDB | IQuestion.Item | IHowto | undefined,
   variant: 'research' | 'question' | 'howto' | undefined,
 ) => {
-  let steps: Array<step> = []
+  const steps: Step[] = []
   if (variant == 'research') {
     const item = content as IResearch.ItemDB
-    steps = [
-      {
-        text: 'Research',
-        link: '/research',
-      },
-      item.researchCategory
-        ? {
-            text: item.researchCategory.label,
-            link: `/research?category=${item.researchCategory.label}`,
-          }
-        : null,
-      {
-        text: item.title,
-      },
-    ]
+    steps.push({ text: 'Research', link: '/research' })
+
+    if (item.researchCategory) {
+      steps.push({
+        text: item.researchCategory.label,
+        link: `/research?category=${item.researchCategory.label}`,
+      })
+    }
+
+    steps.push({ text: item.title })
   } else if (variant == 'question') {
     const item = content as IQuestion.Item
-    steps = [
-      {
-        text: 'Question',
-        link: '/questions',
-      },
-      item.questionCategory
-        ? {
-            text: item.questionCategory.label,
-            link: `/questions?category=${item.questionCategory._id}`,
-          }
-        : null,
-      {
-        text: item.title,
-      },
-    ]
+    steps.push({ text: 'Question', link: '/questions' })
+
+    if (item.questionCategory) {
+      steps.push({
+        text: item.questionCategory.label,
+        link: `/questions?category=${item.questionCategory.label}`,
+      })
+    }
+
+    steps.push({ text: item.title })
   } else if (variant == 'howto') {
     const item = content as IHowto
-    steps = [
-      {
-        text: 'How To',
-        link: '/how-to',
-      },
-      item.category
-        ? {
-            text: item.category.label,
-            link: `/how-to?category=${item.category.label}`,
-          }
-        : null,
-      {
-        text: item.title,
-      },
-    ]
+    steps.push({ text: 'How To', link: '/how-to' })
+
+    if (item.category) {
+      steps.push({
+        text: item.category.label,
+        link: `/how-to?category=${item.category.label}`,
+      })
+    }
+
+    steps.push({ text: item.title })
   }
   return steps
 }

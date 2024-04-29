@@ -201,7 +201,6 @@ describe('[Settings]', () => {
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
 
       cy.step('Verify if all changes were saved correctly')
@@ -310,7 +309,6 @@ describe('[Settings]', () => {
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
@@ -547,7 +545,6 @@ describe('[Settings]', () => {
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
 
       cy.queryDocuments(
@@ -631,7 +628,6 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
-      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,
@@ -823,7 +819,6 @@ describe('[Settings]', () => {
       })
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.wait(3000)
       cy.get('[data-cy=save]').should('not.be.disabled')
       cy.queryDocuments(
         DbCollectionName.users,

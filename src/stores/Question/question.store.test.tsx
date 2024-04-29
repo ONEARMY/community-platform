@@ -3,6 +3,7 @@ import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
 import { QuestionStore } from './question.store'
+import { UserStore } from '../../stores/User/user.store'
 
 const mockToggleDocSubscriber = jest.fn()
 jest.mock('../common/toggleDocSubscriberStatusByUserName', () => {
@@ -20,6 +21,10 @@ jest.mock('../common/toggleDocUsefulByUser', () => ({
 
 const factory = async () => {
   const store = new QuestionStore()
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  store.userStore = new UserStore()
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

@@ -198,6 +198,7 @@ describe('[How To]', () => {
       const categoryGuidanceFiles = guidance.moulds.files
 
       cy.login(creatorEmail, creatorPassword)
+      cy.get('.css-hiash-Box').should('not.exist')
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
       cy.contains('Create a How-To').should('exist')
@@ -326,6 +327,10 @@ describe('[How To]', () => {
       cy.on('window:confirm', stub)
 
       cy.login(creatorEmail, creatorPassword)
+<<<<<<< HEAD
+=======
+      cy.get('.css-hiash-Box').should('not.exist')
+>>>>>>> 68c60783 (fix: add wait load before click on create)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title]')

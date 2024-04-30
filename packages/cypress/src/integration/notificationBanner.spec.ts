@@ -49,7 +49,6 @@ describe('[Notification Banner]', () => {
       cy.selectTag('email', `[data-cy=select-link-0]`)
       cy.get(`[data-cy=input-link-0]`).clear().type('test@test.com')
       cy.get('[data-cy=save]').click()
-      cy.wait(3000)
       cy.get('[data-cy=notificationBanner]').should('not.exist')
     })
   })

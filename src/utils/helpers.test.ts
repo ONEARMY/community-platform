@@ -42,6 +42,10 @@ describe('src/utils/helpers', () => {
     expect(capitalizeFirstLetter('hello world')).toBe('Hello world')
   })
 
+  it('capitalizeFirstLetter should return an empty string when a wrong type provided', () => {
+    expect(capitalizeFirstLetter(undefined)).toBe('')
+  })
+
   describe('filterModerableItems Function', () => {
     const items = [
       { moderation: IModerationStatus.ACCEPTED, _createdBy: 'user1' },

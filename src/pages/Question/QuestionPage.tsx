@@ -14,7 +14,6 @@ import { TagList } from 'src/common/Tags/TagsList'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
-import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
@@ -49,13 +48,10 @@ export const QuestionPage = () => {
       }
 
       store.activeQuestionItem = foundQuestion
-      incrementViewCount({
-        document: foundQuestion,
-        documentType: 'question',
-        store,
-      })
+      store.incrementViewCount(foundQuestion._id)
 
       setQuestion(foundQuestion)
+      document.title = foundQuestion.title
       setIsLoading(false)
     }
 
@@ -82,7 +78,6 @@ export const QuestionPage = () => {
         <Loader />
       ) : question ? (
         <>
-        {document.title = question.title}
           <Card sx={{ position: 'relative', marginTop: 4 }}>
             <Flex sx={{ flexDirection: 'column', padding: 4, gap: 2 }}>
               <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
@@ -161,7 +156,7 @@ export const QuestionPage = () => {
                 {
                   icon: 'view',
                   label: buildStatisticsLabel({
-                    stat: question.total_views,
+                    stat: question.total_views || 0,
                     statUnit: 'view',
                     usePlural: true,
                   }),

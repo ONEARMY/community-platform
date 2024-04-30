@@ -28,6 +28,7 @@ export const QuestionListing = () => {
   const sort = searchParams.get('sort') as QuestionSortOptions
 
   useEffect(() => {
+    document.title = 'Questions'
     if (!sort) {
       // ensure sort is set
       const params = new URLSearchParams(searchParams.toString())

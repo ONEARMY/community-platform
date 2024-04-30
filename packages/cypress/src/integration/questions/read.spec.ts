@@ -32,7 +32,7 @@ describe('[Questions]', () => {
 
       cy.step('Can visit question')
       cy.visit(`/questions/${question.slug}`)
-      cy.title().should('eq', question.title);
+      cy.title().should('eq', question.title)
 
       cy.step('All metadata visible')
       cy.contains(`${question.subscribers.length} following`)

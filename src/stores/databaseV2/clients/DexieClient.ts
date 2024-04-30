@@ -183,7 +183,7 @@ const DEFAULT_SCHEMA = '_id,_modified'
 const SCHEMA_BASE: IDexieSchema = {
   howtos: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs`,
   mappins: DEFAULT_SCHEMA,
-  messages: `${DEFAULT_SCHEMA}`,
+  messages: `${DEFAULT_SCHEMA},email`,
   tags: DEFAULT_SCHEMA,
   categories: DEFAULT_SCHEMA,
   researchCategories: DEFAULT_SCHEMA,

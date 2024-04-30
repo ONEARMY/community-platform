@@ -1,9 +1,8 @@
 #!/usr/bin/env ts-node
 import { spawn, spawnSync } from 'child_process'
 
-import PATHS from './paths'
-
 import { generateAlphaNumeric } from '../src/utils/TestUtils'
+import PATHS from './paths'
 
 const e2eEnv = require('dotenv').config()
 
@@ -136,4 +135,3 @@ async function startAppServer() {
   const timeout = 5 * 60 * 1000
   await waitOn({ resources: ['http-get://127.0.0.1:3456'], timeout })
 }
-

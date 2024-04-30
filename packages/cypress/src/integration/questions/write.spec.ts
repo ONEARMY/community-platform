@@ -23,7 +23,7 @@ describe('[Question]', () => {
       cy.login(creatorEmail, creatorPassword)
 
       cy.step('Go to create page')
-      cy.get('.css-hiash-Box').should('not.exist')
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=question-create-title]')
 

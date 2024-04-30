@@ -1,6 +1,6 @@
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 
-import { generatedId } from '../utils/TestUtils'
+import { generateAlphaNumeric } from '../utils/TestUtils'
 
 // existing user already created in auth system
 const authUser = {
@@ -10,14 +10,16 @@ const authUser = {
   confirmPassword: 'test1234',
 }
 const newUser = {
-  username: `CI_${generatedId(5)}`.toLocaleLowerCase(),
-  email: `CI_${generatedId(5)}@test.com`.toLocaleLowerCase(),
+  username: `CI_${generateAlphaNumeric(5)}`.toLocaleLowerCase(),
+  email: `CI_${generateAlphaNumeric(5)}@test.com`.toLocaleLowerCase(),
   password: 'test1234',
   confirmPassword: 'test1234',
 }
 
 beforeEach(() => {
   cy.visit('/sign-up')
+  cy.log('clearing user from auth')
+  cy.deleteCurrentUser()
 })
 
 const fillSignupForm = (form: typeof authUser) => {
@@ -33,10 +35,13 @@ describe('[Sign-up - existing user]', () => {
   it('prevent duplicate name', () => {
     fillSignupForm(authUser)
     cy.get('[data-cy=submit]').click()
-    cy.contains(FRIENDLY_MESSAGES['sign-up username taken']).should('be.exist')
+    cy.contains(FRIENDLY_MESSAGES['sign-up/username-taken']).should('be.exist')
   })
   it('prevent duplicate email', () => {
-    const user = { ...authUser, username: `new_username_${generatedId(5)}` }
+    const user = {
+      ...authUser,
+      username: `new_username_${generateAlphaNumeric(5)}`,
+    }
     fillSignupForm(user)
     cy.get('[data-cy=submit]').click()
     cy.get('[data-cy=error-msg]')
@@ -47,23 +52,41 @@ describe('[Sign-up - existing user]', () => {
 
 describe('[Sign-up - new user]', () => {
   it('create new account', () => {
+    cy.step('Username is too short')
+    cy.get('[data-cy=username]').clear().type('a')
+    cy.get('[data-cy=consent]').uncheck().check()
+    cy.contains('Username must be at least 2 characters').should('be.exist')
+
+    cy.step('Email is invalid')
+    cy.get('[data-cy=email]').clear().type('a')
+    cy.get('[data-cy=consent]').uncheck().check()
+    cy.contains(FRIENDLY_MESSAGES['auth/invalid-email']).should('be.exist')
+
+    cy.step('Password is too short')
+    cy.get('[data-cy=password]').clear().type('a')
+    cy.get('[data-cy=consent]').uncheck().check()
+    cy.contains('Password must be at least 6 characters').should('be.exist')
+
+    cy.step('Password confirmation does not match')
+    cy.get('[data-cy=password]').clear().type('a')
+    cy.get('[data-cy=confirm-password]').clear().type('b')
+    cy.get('[data-cy=consent]').uncheck().check()
+    cy.contains('Your new password does not match').should('be.exist')
+
+    cy.step('Using valid inputs')
     fillSignupForm(newUser)
     cy.get('[data-cy=submit]').click()
     cy.url().should('include', 'sign-up-message')
     cy.get('div').contains('Sign up successful').should('be.visible')
     cy.get('[data-cy=user-menu]')
   })
+
   it('sign in as new user', () => {
     cy.get('[data-cy=login]').click()
     cy.get('[data-cy=email]').type(newUser.email)
     cy.get('[data-cy=password]').type(newUser.password)
     cy.get('[data-cy=submit]').click()
     cy.get('[data-cy=user-menu]')
-  })
-
-  after(() => {
-    cy.log('clearing user from auth')
-    cy.deleteCurrentUser()
   })
 })
 

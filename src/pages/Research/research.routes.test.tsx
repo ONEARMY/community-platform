@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { faker } from '@faker-js/faker'
 import { act, cleanup, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { UserRole } from 'oa-shared'
@@ -20,11 +21,14 @@ import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 
 import { researchRouteElements } from './research.routes'
+import { researchService } from './research.service'
 
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
 const Theme = testingThemeStyles
 const mockActiveUser = FactoryUser()
+
+jest.mock('src/pages/Research/research.service')
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -101,6 +105,28 @@ describe('research.routes', () => {
   describe('/research/', () => {
     it('renders the research listing', async () => {
       let wrapper
+
+      const researchTitle = faker.lorem.words(3)
+      const researchSlug = faker.lorem.slug()
+
+      researchService.search = jest.fn(() => {
+        return new Promise((resolve) => {
+          resolve({
+            items: [
+              {
+                ...FactoryResearchItem({
+                  title: researchTitle,
+                  slug: researchSlug,
+                }),
+                _id: '123',
+              },
+            ],
+            total: 1,
+            lastVisible: undefined,
+          })
+        })
+      })
+
       await act(async () => {
         wrapper = renderFn('/research').wrapper
       })

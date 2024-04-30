@@ -12,7 +12,7 @@ import type { IResearch, UserComment } from 'src/models'
 
 interface IProps {
   comments: UserComment[]
-  update: IResearch.UpdateDB
+  update: IResearch.Update
   updateIndex: number
   showComments?: boolean
 }

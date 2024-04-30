@@ -53,6 +53,10 @@ export const discussions = {
         text: '<3',
       },
     ],
+    contributorIds: [
+      'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
+      'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
+    ],
     sourceId: '3s7Fyn6Jf8ryANJM6Jf6',
     sourceType: 'question',
   },

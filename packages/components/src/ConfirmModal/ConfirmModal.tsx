@@ -1,6 +1,7 @@
 import { Box, Flex, Text } from 'theme-ui'
 
-import { Button, Modal } from '..'
+import { Button } from '../Button/Button'
+import { Modal } from '../Modal/Modal'
 
 export interface Props {
   message: string

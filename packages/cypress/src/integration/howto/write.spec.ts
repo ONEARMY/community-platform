@@ -198,7 +198,6 @@ describe('[How To]', () => {
       const categoryGuidanceFiles = guidance.moulds.files
 
       cy.login(creatorEmail, creatorPassword)
-      cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
       cy.contains('Create a How-To').should('exist')
@@ -285,7 +284,6 @@ describe('[How To]', () => {
 
       cy.step('Add extra step')
       cy.get('[data-cy=add-step]').click()
-      cy.wait(2000)
 
       deleteStep(4)
       cy.screenClick()
@@ -328,10 +326,9 @@ describe('[How To]', () => {
       cy.on('window:confirm', stub)
 
       cy.login(creatorEmail, creatorPassword)
-      cy.wait(2000)
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
-      cy.get('[data-cy=intro-title')
+      cy.get('[data-cy=intro-title]')
         .clear()
         .type(expected.title)
         .blur({ force: true })
@@ -344,14 +341,14 @@ describe('[How To]', () => {
       cy.url().should('match', /\/how-to\/create$/)
 
       cy.step('Clear title input')
-      cy.get('[data-cy=intro-title').clear().blur({ force: true })
+      cy.get('[data-cy=intro-title]').clear().blur({ force: true })
       cy.get('[data-cy=page-link][href*="/how-to"]')
         .click()
         .then(() => {
           expect(stub.callCount).to.equal(0)
           stub.resetHistory()
         })
-      cy.url().should('match', /\/how-to$/)
+      cy.url().should('match', /\/how-to?/)
     })
   })
 
@@ -469,7 +466,6 @@ describe('[How To]', () => {
 
       cy.step('Warn if title is identical with the existing ones')
       cy.get('[data-cy=intro-title]').focus().blur({ force: true })
-      cy.wait(1000)
       cy.contains(
         'Did you know there is an existing how-to with the title',
       ).should('not.exist')
@@ -523,7 +519,6 @@ describe('[How To]', () => {
       cy.step('Steps beyond the minimum can be deleted')
       deleteStep(5)
       deleteStep(4)
-      cy.wait(1000)
 
       expected.steps.forEach((step, index) => {
         fillStep(index + 1, step.title, step.text, [

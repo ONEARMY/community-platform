@@ -1,111 +1,100 @@
-import React, { useEffect, useRef } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { Button, Loader, MoreContainer } from 'oa-components'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { SortFilterHeader } from 'src/pages/common/SortFilterHeader/SortFilterHeader'
+import { logger } from 'src/logger'
 import { Box, Flex, Grid, Heading } from 'theme-ui'
 
+import { ITEMS_PER_PAGE } from '../../constants'
+import { howtoService, HowtosSearchParams } from '../../howto.service'
+import { listing } from '../../labels'
 import HowToCard from './HowToCard'
+import { HowtoFilterHeader } from './HowtoFilterHeader'
 
+import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { IHowto } from 'src/models'
+import type { HowtoSortOptions } from './HowtoSortOptions'
 
 export const HowtoList = observer(() => {
-  const { howtoStore, themeStore, tagsStore, userStore } =
-    useCommonStores().stores
-  const previousSearch = useRef<string>('')
-  const location = useLocation()
+  const { themeStore, userStore } = useCommonStores().stores
+  const theme = themeStore.currentTheme
+  const [isFetching, setIsFetching] = useState<boolean>(true)
+  const [howtos, setHowtos] = useState<IHowto[]>([])
+  const [total, setTotal] = useState<number>(0)
+  const [lastVisible, setLastVisible] = useState<
+    QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
+  >(undefined)
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const q = searchParams.get(HowtosSearchParams.q) || ''
+  const category = searchParams.get(HowtosSearchParams.category) || ''
+  const sort = searchParams.get(HowtosSearchParams.sort) as HowtoSortOptions
 
   useEffect(() => {
-    if (!new RegExp(/source=how-to-not-found/).test(window.location.search)) {
-      howtoStore.updateReferrerSource('')
+    if (!sort) {
+      // ensure sort is set
+      const params = new URLSearchParams(searchParams.toString())
+
+      if (q) {
+        params.set(HowtosSearchParams.sort, 'MostRelevant')
+      } else {
+        params.set(HowtosSearchParams.sort, 'Newest')
+      }
+      setSearchParams(params)
+    } else {
+      // search only when sort is set (avoids duplicate requests)
+      fetchHowtos()
+    }
+  }, [q, category, sort])
+
+  const fetchHowtos = async (
+    skipFrom?: QueryDocumentSnapshot<DocumentData, DocumentData>,
+  ) => {
+    setIsFetching(true)
+
+    try {
+      const searchWords = q ? q.toLocaleLowerCase().split(' ') : []
+
+      const result = await howtoService.search(
+        searchWords,
+        category,
+        sort,
+        userStore.activeUser || undefined,
+        skipFrom,
+        ITEMS_PER_PAGE,
+      )
+
+      if (skipFrom) {
+        // if skipFrom is set, means we are requesting another page that should be appended
+        setHowtos((howtos) => [...howtos, ...result.items])
+      } else {
+        setHowtos(result.items)
+      }
+
+      setLastVisible(result.lastVisible)
+
+      setTotal(result.total)
+    } catch (error) {
+      logger.error('error fetching howtos', error)
     }
 
-    syncUrlWithStorage()
-
-    return () => {
-      howtoStore.updateSearchValue('')
-      howtoStore.updateSelectedCategory('')
-    }
-  }, [])
-
-  useEffect(() => {
-    if (location.search !== previousSearch.current) {
-      syncUrlWithStorage()
-    }
-  }, [location.search])
-
-  const syncUrlWithStorage = () => {
-    previousSearch.current = location.search
-
-    const searchParams = new URLSearchParams(location?.search ?? '')
-
-    const categoryQuery = searchParams.get('category')?.toString() ?? ''
-    howtoStore.updateSelectedCategory(categoryQuery)
-
-    const searchQuery = searchParams.get('search')?.toString() ?? ''
-    howtoStore.updateSearchValue(searchQuery)
-
-    const referrerSource = searchParams.get('source')?.toString()
-    if (referrerSource) {
-      howtoStore.updateReferrerSource(referrerSource)
-    }
+    setIsFetching(false)
   }
-
-  const { filteredHowtos, selectedCategory, searchValue, referrerSource } =
-    howtoStore
-  const theme = themeStore?.currentTheme
-  const { allTagsByKey } = tagsStore
-
-  const howtoItems = filteredHowtos.map((howto: IHowto) => ({
-    ...howto,
-    tagList:
-      howto.tags &&
-      Object.keys(howto.tags)
-        .map((key) => allTagsByKey[key])
-        .filter(Boolean),
-  }))
 
   return (
     <Box>
       <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
-        {referrerSource ? (
-          <Box sx={{ width: '100%' }}>
-            <Heading
-              sx={{
-                marginX: 'auto',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                fontSize: 5,
-              }}
-              mt={20}
-            >
-              The page you were looking for was moved or doesn't exist.
-            </Heading>
-            <Heading
-              sx={{
-                textAlign: 'center',
-                fontSize: 1,
-              }}
-              mt={3}
-              mb={10}
-            >
-              Search all of our how-to's below
-            </Heading>
-          </Box>
-        ) : (
-          <Heading
-            sx={{
-              marginX: 'auto',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: 5,
-            }}
-          >
-            {theme && theme.howtoHeading}
-          </Heading>
-        )}
+        <Heading
+          sx={{
+            marginX: 'auto',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: 5,
+          }}
+        >
+          {theme && theme.howtoHeading}
+        </Heading>
       </Flex>
       <Flex
         sx={{
@@ -114,7 +103,7 @@ export const HowtoList = observer(() => {
           flexDirection: ['column', 'column', 'row'],
         }}
       >
-        <SortFilterHeader store={howtoStore} type="how-to" />
+        <HowtoFilterHeader />
         <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
           <Link to={userStore!.user ? '/how-to/create' : '/sign-up'}>
             <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
@@ -123,67 +112,46 @@ export const HowtoList = observer(() => {
                 variant={'primary'}
                 data-cy="create"
               >
-                Create a How-to
+                {listing.create}
               </Button>
             </Box>
           </Link>
         </Flex>
       </Flex>
-      <React.Fragment>
-        {howtoItems.length === 0 && (
-          <Flex>
-            <Heading
-              sx={{
-                width: '100%',
-                textAlign: 'center',
-              }}
-            >
-              {searchValue.length === 0 && selectedCategory.length === 0 ? (
-                <Loader />
-              ) : (
-                'No how-tos to show'
-              )}
-            </Heading>
-          </Flex>
-        )}
-        <Grid
-          columns={[1, 2, 2, 3]}
-          data-cy="howtolist-flex-container"
-          gap={4}
-          sx={{ paddingTop: 1 }}
+
+      <Grid
+        columns={[1, 2, 2, 3]}
+        data-cy="howtolist-flex-container"
+        gap={4}
+        sx={{ paddingTop: 1, marginBottom: 3 }}
+      >
+        {howtos &&
+          howtos.length > 0 &&
+          howtos.map((howto, index) => <HowToCard key={index} howto={howto} />)}
+      </Grid>
+
+      {!isFetching && howtos && howtos.length > 0 && howtos.length < total && (
+        <Flex
+          sx={{
+            justifyContent: 'center',
+          }}
         >
-          {howtoItems.map((howto: any, index) => (
-            <HowToCard
-              howto={howto}
-              votedUsefulCount={(howto.votedUsefulBy || []).length}
-              key={index}
-            />
-          ))}
-        </Grid>
-        <Flex sx={{ justifyContent: 'center' }} mt={20}>
-          <Link to={'#'} style={{ visibility: 'hidden' }}>
-            <Button variant={'secondary'} data-cy="more-how-tos">
-              More how-tos
-            </Button>
-          </Link>
+          <Button onClick={() => fetchHowtos(lastVisible)}>
+            {listing.loadMore}
+          </Button>
         </Flex>
-        <MoreContainer m={'0 auto'} pt={60} pb={90}>
-          <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
-            <Heading sx={{ textAlign: 'center' }}>
-              Inspire the {theme.siteName} world.
-              <br />
-              Share your how-to!
-            </Heading>
-            <AuthWrapper>
-              <Link to={'/how-to/create'}>
-                <Button variant="primary" mt={30}>
-                  Create a how-to
-                </Button>
-              </Link>
-            </AuthWrapper>
-          </Flex>
-        </MoreContainer>
-      </React.Fragment>
+      )}
+      {isFetching && <Loader />}
+
+      <MoreContainer m={'0 auto'} pt={60} pb={90}>
+        <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
+          <Heading sx={{ textAlign: 'center' }}>
+            Inspire the {theme.siteName} world.
+            <br />
+            Share your how-to!
+          </Heading>
+        </Flex>
+      </MoreContainer>
     </Box>
   )
 })

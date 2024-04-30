@@ -22,10 +22,8 @@ import { Storage } from '../storage'
 
 import type { User } from 'firebase/auth'
 import type {
-  IBadgeUpdate,
   IImpactYear,
   IImpactYearFieldList,
-  INotificationUpdate,
   IUser,
   IUserBadges,
 } from 'src/models/user.models'
@@ -38,6 +36,8 @@ The user store listens to login events through the firebase api and exposes logg
 */
 
 export const COLLECTION_NAME = 'users'
+
+type PartialUser = Partial<IUserPPDB>
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.default.Unsubscribe
@@ -80,11 +80,6 @@ export class UserStore extends ModuleStore {
       (user) => user.userName,
     )
     return uniqueUsers
-  }
-
-  @action
-  private updateActiveUser(user?: IUserPPDB | null) {
-    this.user = user
   }
 
   @action
@@ -180,25 +175,14 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserBadge(userId: string, badges: IUserBadges) {
-    const dbRef = this.db.collection<IBadgeUpdate>(COLLECTION_NAME).doc(userId)
-
-    const badgeUpdate = {
-      _id: userId,
-      badges,
-    }
-
-    await dbRef.update(badgeUpdate)
+    await this._updateUserRequest(userId, { badges })
   }
 
   public async removePatreonConnection(userId: string) {
-    await Promise.all([
-      this.updateUserBadge(userId, {
-        supporter: false,
-      }),
-      this.db.collection(COLLECTION_NAME).doc(userId).update({
-        patreon: null,
-      }),
-    ])
+    await this._updateUserRequest(userId, {
+      badges: { supporter: false },
+      patreon: null,
+    })
     await this.refreshActiveUserDetails()
   }
 
@@ -209,13 +193,16 @@ export class UserStore extends ModuleStore {
    * (default is current logged in user)
    */
   public async updateUserProfile(
-    values: Partial<IUserPP> & { _id: string },
+    values: PartialUser,
     trigger: string,
     adminEditableUserId?: string,
   ) {
+    if (!values._id) {
+      logger.debug('No User ID provided')
+      throw new Error('No User ID provided')
+    }
+
     this._setUpdateStatus('Start')
-    const dbRef = this.db.collection<IUserPP>(COLLECTION_NAME).doc(values._id)
-    const id = dbRef.id
 
     // If admin updating another user assume full user passed as values, otherwise merge updates with current user.
     // Include a shallow merge of update with existing user, deserialising mobx observables (caused issue previously)
@@ -236,7 +223,7 @@ export class UserStore extends ModuleStore {
       const processedImages = await this.uploadCollectionBatch(
         values.coverImages as IConvertedFileMeta[],
         COLLECTION_NAME,
-        id,
+        values._id,
       )
       updatedUserProfile.coverImages = processedImages
     }
@@ -252,10 +239,7 @@ export class UserStore extends ModuleStore {
     }
 
     // update on db and update locally (if targeting self as user)
-    await this.db
-      .collection(COLLECTION_NAME)
-      .doc(updatedUserProfile._id)
-      .set(updatedUserProfile)
+    await this._updateUserRequest(updatedUserProfile._id, updatedUserProfile)
 
     if (!adminEditableUserId) {
       this._updateActiveUser(updatedUserProfile)
@@ -268,6 +252,7 @@ export class UserStore extends ModuleStore {
       await this.mapsStore.setUserPin(updatedUserProfile)
     }
     this._setUpdateStatus('Complete')
+    await this.refreshActiveUserDetails()
   }
 
   @action
@@ -281,11 +266,7 @@ export class UserStore extends ModuleStore {
       throw new Error('User not found')
     }
 
-    await this.db
-      .collection(COLLECTION_NAME)
-      .doc(user._id)
-      .update({ [`impact.${year}`]: fields })
-
+    await this._updateUserRequest(user._id, { [`impact.${year}`]: fields })
     await this.refreshActiveUserDetails()
   }
 
@@ -298,15 +279,11 @@ export class UserStore extends ModuleStore {
       throw new Error('User not found')
     }
 
-    await this.db
-      .collection(COLLECTION_NAME)
-      .doc(user._id)
-      .update({
-        _id: user._id,
-        notification_settings: {
-          emailFrequency: EmailNotificationFrequency.NEVER,
-        },
-      })
+    await this._updateUserRequest(user._id, {
+      notification_settings: {
+        emailFrequency: EmailNotificationFrequency.NEVER,
+      },
+    })
   }
 
   public async refreshActiveUserDetails() {
@@ -392,63 +369,20 @@ export class UserStore extends ModuleStore {
     this.aggregationsStore.updateAggregation('users_totalUseful')
   }
 
-  @action
-  public async deleteNotification(id: string) {
-    try {
-      const user = this.activeUser
-      if (id && user && user.notifications) {
-        const notifications = toJS(user.notifications).filter(
-          (notification) => !(notification._id === id),
-        )
-
-        const dbRef = this.db
-          .collection<INotificationUpdate>(COLLECTION_NAME)
-          .doc(user._id)
-
-        const notificationUpdate = {
-          _id: user._id,
-          notifications,
-        }
-
-        await dbRef.update(notificationUpdate)
-      }
-    } catch (err) {
-      logger.error(err)
-      throw new Error(err)
-    }
-  }
-
   // handle user sign in, when firebase authenticates want to also fetch user document from the database
-  private async _userSignedIn(
-    user: IFirebaseUser | null,
-    newUserCreated = false,
-  ) {
-    if (user) {
-      logger.debug('user signed in', user)
-      // legacy user formats did not save names so get profile via email - this option be removed in later version
-      // (assumes migration strategy and check)
-      const userMeta = await this.getUserProfile(user.uid)
+  private async _userSignedIn(user: IFirebaseUser | null) {
+    if (!user) return null
 
-      if (userMeta) {
-        this._updateActiveUser(userMeta)
-        logger.debug('userMeta', userMeta)
+    // legacy user formats did not save names so get profile via email - this option be removed in later version
+    // (assumes migration strategy and check)
+    const userMeta = await this.getUserProfile(user.uid)
+    if (!userMeta) return
 
-        // Update last active for user
-        await this.db
-          .collection<IUserPP>(COLLECTION_NAME)
-          .doc(userMeta._id)
-          .set({ ...userMeta, _lastActive: new Date().toISOString() })
-      } else {
-        await this._createUserProfile('sign-in')
-        // now that a profile has been created, run this function again (use `newUserCreated` to avoid inf. loop in case not create not working correctly)
-        if (!newUserCreated) {
-          return this._userSignedIn(user, true)
-        }
-        // throw new Error(
-        //   `could not find user profile [${user.uid} - ${user.email} - ${user.metadata}]`,
-        // )
-      }
-    }
+    this._updateActiveUser(userMeta)
+    logger.debug('user signed in', user)
+
+    await this._updateUserRequest(userMeta._id, {})
+    return userMeta
   }
 
   private async _createUserProfile(trigger: string) {
@@ -506,6 +440,18 @@ export class UserStore extends ModuleStore {
         this._updateActiveUser(null)
       }
     })
+  }
+
+  private async _updateUserRequest(userId: string, updateFields: PartialUser) {
+    const _lastActive = new Date().toISOString()
+
+    return await this.db
+      .collection<PartialUser>(COLLECTION_NAME)
+      .doc(userId)
+      .update({
+        _lastActive,
+        ...updateFields,
+      })
   }
 
   private _unsubscribeFromAuthStateChanges() {

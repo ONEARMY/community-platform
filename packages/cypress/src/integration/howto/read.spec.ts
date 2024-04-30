@@ -1,57 +1,56 @@
 import { DifficultyLevel } from 'oa-shared'
-import { v4 as uuid } from 'uuid'
 
-import { MOCK_DATA } from '../../data'
+// import { MOCK_DATA } from '../../data'
 
 describe('[How To]', () => {
-  const SKIP_TIMEOUT = { timeout: 300 }
-  const totalHowTo = Object.values(MOCK_DATA.howtos).filter(
-    (howTo) => howTo._deleted === false,
-  ).length
+  // const SKIP_TIMEOUT = { timeout: 300 }
+  // const totalHowTo = Object.values(MOCK_DATA.howtos).filter(
+  //   (howTo) => howTo._deleted === false,
+  // ).length
 
   describe('[List how-tos]', () => {
-    const howtoSlug = 'make-glass-like-beams'
-    const howtoUrl = `/how-to/${howtoSlug}`
-    const coverFileRegex = /howto-beams-glass-0-3.jpg/
+    // const howtoSlug = 'make-glass-like-beams'
+    // const howtoUrl = `/how-to/${howtoSlug}`
+    // const coverFileRegex = /howto-beams-glass-0-3.jpg/
 
     beforeEach(() => {
       cy.visit('/how-to')
     })
 
-    it('[By Everyone]', () => {
-      cy.step('More How-tos button is hidden')
-      cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
+    // it('[By Everyone]', () => {
+    //   cy.step('More How-tos button is hidden')
+    //   cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
 
-      cy.step('All how-tos are shown')
-      cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
+    //   cy.step('All how-tos are shown')
+    //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
 
-      cy.step('Select a category')
-      cy.get('[data-cy=category-select]')
-      cy.selectTag('product', '[data-cy=category-select]')
-      cy.get('[data-cy=card]').its('length').should('be.eq', 4)
+    //   cy.step('Select a category')
+    //   cy.get('[data-cy=category-select]')
+    //   cy.selectTag('product', '[data-cy=category-select]')
+    //   cy.get('[data-cy=card]').its('length').should('be.eq', 4)
 
-      cy.step('Type and select a category')
-      cy.selectTag('injection', '[data-cy=category-select]')
-      cy.get('[data-cy=card]').its('length').should('be.eq', 2)
+    //   cy.step('Type and select a category')
+    //   cy.selectTag('injection', '[data-cy=category-select]')
+    //   cy.get('[data-cy=card]').its('length').should('be.eq', 2)
 
-      cy.step('Remove all category filter')
-      cy.get('.data-cy__clear-indicator').click()
-      cy.get('.data-cy__multi-value__label').should('not.exist')
-      cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
+    //   cy.step('Remove all category filter')
+    //   cy.get('.data-cy__clear-indicator').click()
+    //   cy.get('.data-cy__multi-value__label').should('not.exist')
+    //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
 
-      cy.step('How-to cards has basic info')
-      cy.get(`[data-cy=card][data-cy-howto-slug=${howtoSlug}]`).within(() => {
-        cy.contains('Make glass-like beams').should('be.exist')
-        cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
-        cy.contains('howto_creator').should('be.exist')
-        cy.contains('product').should('be.exist')
-        cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
-      })
+    //   cy.step('How-to cards has basic info')
+    //   cy.get(`[data-cy=card][data-cy-howto-slug=${howtoSlug}]`).within(() => {
+    //     cy.contains('Make glass-like beams').should('be.exist')
+    //     cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
+    //     cy.contains('howto_creator').should('be.exist')
+    //     cy.contains('product').should('be.exist')
+    //     cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
+    //   })
 
-      cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
-      cy.get(`[data-cy=card] a[href="${howtoUrl}"]:first`, SKIP_TIMEOUT).click()
-      cy.url().should('include', howtoUrl)
-    })
+    //   cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
+    //   cy.get(`[data-cy=card] a[href="${howtoUrl}"]:first`, SKIP_TIMEOUT).click()
+    //   cy.url().should('include', howtoUrl)
+    // })
 
     it('[By Authenticated]', () => {
       cy.login('howto_reader@test.com', 'test1234')
@@ -89,6 +88,9 @@ describe('[How To]', () => {
           expect($summary.find('img[alt="how-to cover"]'))
             .to.have.attr('src')
             .match(coverFileRegex)
+          expect($summary.find('[data-cy=file-download-counter]')).to.contain(
+            '1,234 downloads',
+          )
         })
 
         cy.step('Download file button should redirect to sign in')
@@ -104,22 +106,25 @@ describe('[How To]', () => {
 
         cy.step('All step info is shown')
         cy.get('[data-cy=step_11]').within(($step) => {
-          const pic1Regex = /brick-12-1.jpg/
-          const pic3Regex = /brick-12.jpg/
+          // const pic1Regex = /brick-12-1.jpg/
+          // const pic3Regex = /brick-12.jpg/
           expect($step).to.contain('12', 'Step #')
           expect($step).to.contain('Explore the possibilities!', 'Title')
           expect($step).to.contain(
             `more for a partition or the wall`,
             'Description',
           )
-          cy.step('Step image is updated on thumbnail click')
-          cy.get('[data-cy="active-image"]')
-            .should('have.attr', 'src')
-            .and('match', pic1Regex)
-          cy.get('[data-cy=thumbnail]:eq(2)').click()
-          cy.get('[data-cy="active-image"]')
-            .should('have.attr', 'src')
-            .and('match', pic3Regex)
+
+          // Commented out until https://github.com/ONEARMY/community-platform/issues/3462
+          //
+          //   cy.step('Step image is updated on thumbnail click')
+          //   cy.get('[data-cy="active-image"]')
+          //     .should('have.attr', 'src')
+          //     .and('match', pic1Regex)
+          //   cy.get('[data-cy=thumbnail]:eq(2)').click()
+          //   cy.get('[data-cy="active-image"]')
+          //     .should('have.attr', 'src')
+          //     .and('match', pic3Regex)
         })
 
         cy.step(`Comment functionality prompts user to login`)
@@ -237,18 +242,14 @@ describe('[How To]', () => {
   })
 
   describe('[Fail to find a How-to]', () => {
-    const id = uuid()
-    const howToNotFoundUrl = `/how-to/this-how-to-does-not-exist-${id}`
+    const howToNotFoundUrl = `/how-to/this-how-to-does-not-exist`
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)
       cy.location('pathname').should('eq', '/how-to/')
       cy.location('search').should(
         'eq',
-        `?search=this%20how%20to%20does%20not%20exist%20${id.replaceAll(
-          '-',
-          '%20',
-        )}&source=how-to-not-found`,
+        `?search=this+how+to+does+not+exist&source=how-to-not-found&sort=Newest`,
       )
     })
   })

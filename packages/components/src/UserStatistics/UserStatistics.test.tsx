@@ -32,7 +32,7 @@ describe('UserStatistics', () => {
     )
     const howtoLink = getByTestId('howto-link')
 
-    expect(howtoLink.getAttribute('href')).toBe('/how-to?author=Test User')
+    expect(howtoLink.getAttribute('href')).toBe('/how-to?q=Test User')
   })
 
   it('renders research link when on research stats', () => {
@@ -41,7 +41,7 @@ describe('UserStatistics', () => {
     )
     const researchLink = getByTestId('research-link')
 
-    expect(researchLink.getAttribute('href')).toBe('/research?author=Test User')
+    expect(researchLink.getAttribute('href')).toBe('/research?q=Test User')
   })
 
   it('renders supporter icon when isSupporter is true', () => {

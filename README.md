@@ -148,6 +148,10 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Robert-LC"><img src="https://avatars.githubusercontent.com/u/72999492?v=4?s=60" width="60px;" alt="Robert"/><br /><sub><b>Robert</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Robert-LC" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/phlapjack"><img src="https://avatars.githubusercontent.com/u/1590042?v=4?s=60" width="60px;" alt="Phillip Atkinson"/><br /><sub><b>Phillip Atkinson</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=phlapjack" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://agw.lv/"><img src="https://avatars.githubusercontent.com/u/6299387?v=4?s=60" width="60px;" alt="Andris"/><br /><sub><b>Andris</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=exabyssus" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/EdwardAndress"><img src="https://avatars.githubusercontent.com/u/7963978?v=4?s=60" width="60px;" alt="Edward Andress"/><br /><sub><b>Edward Andress</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=EdwardAndress" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/tuliobluz"><img src="https://avatars.githubusercontent.com/u/21323883?v=4?s=60" width="60px;" alt="Túlio Luz"/><br /><sub><b>Túlio Luz</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=tuliobluz" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

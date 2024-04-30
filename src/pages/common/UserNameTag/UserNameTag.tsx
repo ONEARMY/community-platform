@@ -20,6 +20,8 @@ export const UserNameTag = ({
   const { aggregationsStore } = useCommonStores().stores
 
   const dateText = `| ${action} on ${formatDate(new Date(created))}`
+  const isVerified = isUserVerifiedWithStore(userName, aggregationsStore)
+
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <Flex sx={{ alignItems: 'center' }}>
@@ -28,8 +30,8 @@ export const UserNameTag = ({
             user={{
               userName: userName,
               countryCode: countryCode,
+              isVerified,
             }}
-            isVerified={isUserVerifiedWithStore(userName, aggregationsStore)}
           />
           <Text
             variant="auxiliary"

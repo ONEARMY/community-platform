@@ -1,7 +1,8 @@
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
-import type { DBDoc, IModerable, ISelectedTags, ISharedFeatures } from '.'
+import type { DBDoc, IModerable, ISharedFeatures } from './common.models'
 import type { IQuestionCategory } from './questionCategories.model'
+import type { ISelectedTags } from './tags.model'
 
 /**
  * Question retrieved from the database also include metadata such as _id, _created and _modified

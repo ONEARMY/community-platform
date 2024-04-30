@@ -1,12 +1,8 @@
 import { createContext, useContext } from 'react'
-import { action, computed, makeObservable, observable } from 'mobx'
+import { action, computed } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import {
-  formatLowerNoSpecial,
-  isAllowedToEditContent,
-  randomID,
-} from 'src/utils/helpers'
+import { isAllowedToEditContent } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
@@ -17,22 +13,25 @@ import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 import type { IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
+import type { DBEndpoint } from '../databaseV2/endpoints'
 import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
-const COLLECTION_NAME = 'questions'
+const COLLECTION_NAME = 'questions' as DBEndpoint
 
 export class QuestionStore extends ModuleStore {
-  @observable
   public activeQuestionItem: IQuestionDB | undefined
 
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
-    makeObservable(this)
   }
 
-  public async incrementViewCount(documentId: string) {
-    await incrementDocViewCount(this.db, COLLECTION_NAME, documentId)
+  public async incrementViewCount(question: Partial<IQuestionDB>) {
+    await incrementDocViewCount({
+      collection: COLLECTION_NAME,
+      db: this.db,
+      doc: question,
+    })
   }
 
   @action
@@ -78,26 +77,20 @@ export class QuestionStore extends ModuleStore {
   }
 
   public async upsertQuestion(values: IQuestion.FormInput) {
-    logger.debug(`upsertQuestion:`, { values, activeUser: this.activeUser })
+    logger.info(`upsertQuestion:`, { values, activeUser: this.activeUser })
     const dbRef = this.db
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
 
-    // Check for existing document
-    let slug = formatLowerNoSpecial(values.title)
-    const searchQuery = await this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
-      .getWhere('slug', '==', slug)
-
-    if (searchQuery && searchQuery.length) {
-      slug += `-${randomID()}`
-    }
-
+    const slug = await this.setSlug(values)
+    const previousSlugs = this.setPreviousSlugs(values, slug)
+    const _createdBy = values._createdBy ?? this.activeUser?.userName
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
+
     const keywords = getKeywords(values.title + ' ' + values.description)
-    if (values._createdBy) {
-      keywords.push(values._createdBy)
+    if (_createdBy) {
+      keywords.push(_createdBy)
     }
 
     const images = values.images
@@ -107,12 +100,13 @@ export class QuestionStore extends ModuleStore {
     await dbRef.set({
       ...(values as any),
       creatorCountry,
-      _createdBy: values._createdBy ?? this.activeUser?.userName,
+      _createdBy,
       slug,
-      keywords: keywords,
-      images: images,
+      previousSlugs,
+      keywords,
+      images,
     })
-    logger.debug(`upsertQuestion.set`, { dbRef })
+    logger.info(`upsertQuestion.set`, { dbRef })
 
     return dbRef.get() || null
   }
@@ -185,10 +179,18 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
 
-    logger.debug(`_getQuestionItemBySlug.collection`, { collection })
-
+    logger.info(`_getQuestionItemBySlug.collection`, { collection })
     if (collection && collection.length) {
       return collection[0]
+    }
+
+    const previousSlugs = await this.db
+      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .getWhere('previousSlugs', 'array-contains', slug)
+
+    logger.info(`_getQuestionItemBySlug.collection`, { previousSlugs })
+    if (previousSlugs && previousSlugs.length) {
+      return previousSlugs[0]
     }
 
     return null

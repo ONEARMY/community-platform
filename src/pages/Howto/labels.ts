@@ -159,3 +159,14 @@ export const steps: ILabels = {
     placeholder: 'https://youtube.com/watch?v=',
   },
 }
+
+export const listing = {
+  create: 'Create a How-To',
+  empty: 'No how-tos to show',
+  usefulness: 'How useful it is',
+  totalComments: 'Total comments',
+  filterCategory: 'Filter by category',
+  search: 'Search for a how-to',
+  sort: 'Sort by',
+  loadMore: 'Load More',
+}

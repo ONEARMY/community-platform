@@ -2,15 +2,15 @@ import { Flex, Image, Text } from 'theme-ui'
 
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
 import VerifiedBadgeIcon from '../../assets/icons/icon-verified-badge.svg'
+import SupporterBadgeIcon from '../../assets/icons/supporter.svg'
 import { FlagIconHowTos } from '../FlagIcon/FlagIcon'
 import { InternalLink } from '../InternalLink/InternalLink'
 import { twoCharacterCountryCodes } from './TwoCharacterCountryCodes'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
-import type { User } from '../'
+import type { User } from '../types/common'
 
-export interface Props {
-  isVerified: boolean
+export interface IProps {
   user: User
   sx?: ThemeUIStyleObject
 }
@@ -18,11 +18,13 @@ export interface Props {
 const isValidCountryCode = (str: string) =>
   str && twoCharacterCountryCodes.has(str.toUpperCase())
 
-export const Username = (props: Props) => {
+export const Username = ({ user, sx }: IProps) => {
+  const { countryCode, userName, isSupporter, isVerified } = user
+
   return (
     <InternalLink
       data-cy="Username"
-      to={`/u/${props.user.userName}`}
+      to={`/u/${userName}`}
       sx={{
         border: '1px solid transparent',
         display: 'inline-flex',
@@ -44,7 +46,7 @@ export const Username = (props: Props) => {
           background: 'softblue',
           color: 'bluetag',
         },
-        ...(props.sx || {}),
+        ...(sx || {}),
       }}
     >
       <Flex
@@ -55,10 +57,9 @@ export const Username = (props: Props) => {
         }}
       >
         <Flex mr={1} sx={{ display: 'inline-flex' }}>
-          {props.user.countryCode &&
-          isValidCountryCode(props.user.countryCode) ? (
+          {countryCode && isValidCountryCode(countryCode) ? (
             <Flex data-testid="Username: known flag">
-              <FlagIconHowTos code={props.user.countryCode.toLowerCase()} />
+              <FlagIconHowTos code={countryCode.toLowerCase()} />
             </Flex>
           ) : (
             <Flex
@@ -77,12 +78,19 @@ export const Username = (props: Props) => {
             ></Flex>
           )}
         </Flex>
-        <Text>{props.user.userName}</Text>
-        {props.isVerified && (
+        <Text>{userName}</Text>
+        {isVerified && (
           <Image
             src={VerifiedBadgeIcon}
             sx={{ ml: 1, height: 16, width: 16 }}
             data-testid="Username: verified badge"
+          />
+        )}
+        {isSupporter && !isVerified && (
+          <Image
+            src={SupporterBadgeIcon}
+            sx={{ ml: 1, height: 16, width: 16 }}
+            data-testid="Username: supporter badge"
           />
         )}
       </Flex>

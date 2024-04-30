@@ -103,6 +103,7 @@ describe('Howto', () => {
       howto._createdBy = 'HowtoAuthor'
       howto.steps = [FactoryHowtoStep({})]
       howto.moderation = IModerationStatus.ACCEPTED
+      howto.total_views = 0
 
       wrapper = await factory()
     })

@@ -1,7 +1,8 @@
 import { Field, Form } from 'react-final-form'
 import { Flex, Label } from 'theme-ui'
 
-import { Button, FieldTextarea } from '../'
+import { Button } from '../Button/Button'
+import { FieldTextarea } from '../FieldTextarea/FieldTextarea'
 
 export interface IProps {
   comment: string
@@ -36,7 +37,12 @@ export const EditComment = (props: IProps) => {
           >
             Edit {isReply ? 'Reply' : 'Comment'}
           </Label>
-          <Field name="comment" id="comment" component={FieldTextarea} />
+          <Field
+            component={FieldTextarea}
+            data-cy="edit-comment"
+            id="comment"
+            name="comment"
+          />
           <Flex mt={4} ml="auto">
             <Button
               small
@@ -47,6 +53,7 @@ export const EditComment = (props: IProps) => {
               Cancel
             </Button>
             <Button
+              data-cy="edit-comment-submit"
               type={'submit'}
               aria-label="Save changes"
               small

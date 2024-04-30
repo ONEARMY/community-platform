@@ -11,10 +11,6 @@ import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/consta
 import type { DBDoc, IModerable, IResearch } from 'src/models'
 import type { IMapPin } from 'src/models/maps.models'
 import type { IUser } from 'src/models/user.models'
-import type {
-  AuthorOption,
-  IItem,
-} from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi
 
@@ -117,11 +113,7 @@ export const hasAdminRights = (user?: IUser) => {
   const roles =
     user.userRoles && Array.isArray(user.userRoles) ? user.userRoles : []
 
-  if (roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)) {
-    return true
-  } else {
-    return false
-  }
+  return roles.includes(UserRole.ADMIN) || roles.includes(UserRole.SUPER_ADMIN)
 }
 
 export const needsModeration = (doc: IModerable, user?: IUser) => {
@@ -216,10 +208,10 @@ export const isContactable = (preference: boolean | undefined) => {
 }
 
 export const getResearchTotalCommentCount = (
-  item: IResearch.ItemDB | IItem,
+  item: IResearch.ItemDB,
 ): number => {
   if (Object.hasOwnProperty.call(item, 'totalCommentCount')) {
-    return item.totalCommentCount
+    return item.totalCommentCount || 0
   }
 
   if (item.updates) {
@@ -239,7 +231,7 @@ export const getResearchTotalCommentCount = (
   }
 }
 
-export const getPublicUpdates = (item: IResearch.ItemDB) => {
+export const getPublicUpdates = (item: IResearch.Item) => {
   if (item.updates) {
     return item.updates.filter(
       (update) =>
@@ -266,31 +258,12 @@ export interface IEditableDoc extends DBDoc {
 export const randomIntFromInterval = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min)
 
-export const getAuthorOptions = (items: IItem[]): AuthorOption[] => {
-  if (!items?.length) return []
-
-  return Array.from(
-    new Set<string>(
-      items.flatMap((item: IItem) => [
-        item._createdBy,
-        ...(item.collaborators || []),
-      ]),
-    ),
-  )
-    .filter(Boolean)
-    .sort()
-    .map((author) => ({
-      label: author,
-      value: author,
-    }))
-}
-
 export const buildStatisticsLabel = ({
   stat,
   statUnit,
   usePlural,
 }: {
-  stat: number
+  stat: number | undefined
   statUnit: string
   usePlural: boolean
 }): string => {
@@ -298,7 +271,7 @@ export const buildStatisticsLabel = ({
     return `${stat} ${statUnit}`
   }
 
-  return `${stat || 0} ${statUnit}s`
+  return `${typeof stat === 'number' ? stat : 0} ${statUnit}s`
 }
 
 export const researchStatusColour = (

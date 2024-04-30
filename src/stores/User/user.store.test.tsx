@@ -8,8 +8,6 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { UserStore } from './user.store'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-
 jest.mock('firebase/auth', () => {
   const auth = jest.requireActual('firebase/auth')
   return {
@@ -282,13 +280,11 @@ describe('userStore', () => {
   describe('updateUserBadge', () => {
     it('updates the user badges in the database', async () => {
       // Act
-
       await store.updateUserBadge('testUserId', { badge1: true, badge2: false })
 
       // Assert
       expect(store.db.update).toHaveBeenCalledWith(
         expect.objectContaining({
-          _id: 'testUserId',
           badges: { badge1: true, badge2: false },
         }),
       )
@@ -386,6 +382,21 @@ describe('userStore', () => {
     })
   })
 
+  describe('removePatreonConnection', () => {
+    it('clears patreon/badges', async () => {
+      // Act
+      await store.removePatreonConnection('testUserId')
+
+      // Assert
+      expect(store.db.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          badges: { supporter: false },
+          patreon: null,
+        }),
+      )
+    })
+  })
+
   describe('updateUserProfile', () => {
     it('update user profile with type of member, previously was workspace', async () => {
       const userProfile = FactoryUser({
@@ -396,18 +407,28 @@ describe('userStore', () => {
       })
       // Act
       await store.updateUserProfile(
-        FactoryUser({
+        {
           ...userProfile,
           profileType: 'member',
-        }) as Partial<IUserPP>,
+        },
+        'test',
       )
 
       // Assert
-      expect(store.db.set).toHaveBeenCalledWith(
+      expect(store.db.update).toHaveBeenCalledWith(
         expect.not.objectContaining({
           workspaceType: 'extrusion',
         }),
       )
+    })
+
+    it('throws an error is no user id is provided', async () => {
+      const values = {}
+      const trigger = 'test'
+
+      expect(async () => {
+        await store.updateUserProfile(values, trigger)
+      }).rejects.toThrow('No User ID provided')
     })
   })
 

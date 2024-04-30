@@ -2,7 +2,7 @@ import isUrl from 'is-url'
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { logger } from 'src/logger'
 import { includesAll } from 'src/utils/filters'
-import { stripSpecialCharacters } from 'src/utils/helpers'
+import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 
 import { Storage } from '../storage'
 
@@ -31,7 +31,7 @@ export class ModuleStore {
    *            Data Validation Methods
    * **************************************************************************/
   public isTitleThatReusesSlug = async (title: string, originalId?: string) => {
-    const slug = stripSpecialCharacters(title).toLowerCase()
+    const slug = this._createSlug(title)
 
     // check for previous titles
     const previousMatches = await this.db
@@ -51,9 +51,46 @@ export class ModuleStore {
     return currentOtherMatches.length > 0 || previousOtherMatches.length > 0
   }
 
+  public setPreviousSlugs = (
+    doc: ICollectionWithPreviousSlugs,
+    slug: string,
+  ): string[] => {
+    const { previousSlugs } = doc
+    if (!previousSlugs) return [slug]
+
+    if (slug && previousSlugs.includes(slug)) {
+      return previousSlugs
+    }
+
+    return [...previousSlugs, slug]
+  }
+
+  public setSlug = async (doc): Promise<string> => {
+    const { slug, title, _id } = doc
+
+    if (!doc || !title) throw Error('Document not slug-able')
+
+    const newSlug = this._createSlug(title)
+    if (newSlug === slug) return slug
+
+    const isSlugTaken = await this.isTitleThatReusesSlug(title, _id)
+
+    if (isSlugTaken) {
+      const slugWithRandomId = `${newSlug}-${randomID().toLocaleLowerCase()}`
+      return slugWithRandomId
+    }
+
+    return newSlug
+  }
+
   public validateUrl = async (value: any) => {
     return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
+
+  private _createSlug = (title: string) => {
+    return formatLowerNoSpecial(title)
+  }
+
   // this can be subscribed to in individual stores
   constructor(private rootStore: IRootStore, private basePath?: IDBEndpoint) {
     this.rootStore = rootStore
@@ -71,7 +108,7 @@ export class ModuleStore {
   init() {
     if (!this.isInitialized) {
       if (this.basePath) {
-        this._subscribeToCollection(this.basePath)
+        this.syncAndEmitDocs(this.basePath)
         this.isInitialized = true
       }
     }
@@ -166,15 +203,18 @@ export class ModuleStore {
     })
     return Promise.all(promises)
   }
-  // efficiently checks the cache first and emits any subsequent updates
-  private _subscribeToCollection(endpoint: IDBEndpoint) {
+  /** Sync all server docs locally and stream output changes */
+  private syncAndEmitDocs(endpoint: IDBEndpoint) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = this.db
       .collection(endpoint)
-      .stream((data) => {
-        this.allDocs$.next(data)
-      })
+      .syncLocally(
+        (data) => {
+          this.allDocs$.next(data)
+        },
+        { keepAlive: false },
+      )
   }
 }
 
@@ -185,4 +225,8 @@ interface ICollectionWithTags {
 }
 interface ICollectionWithLocation {
   location: ILocation
+}
+
+interface ICollectionWithPreviousSlugs {
+  previousSlugs?: string[]
 }

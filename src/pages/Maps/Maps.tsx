@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -78,7 +78,7 @@ const MapsPage = observer(() => {
     }
   }, [])
 
-  const availableFilters = () => {
+  const availableFilters = useMemo(() => {
     return transformAvailableFiltersToGroups(mapPins, [
       {
         grouping: 'verified-filter',
@@ -87,7 +87,7 @@ const MapsPage = observer(() => {
       },
       ...MAP_GROUPINGS,
     ])
-  }
+  }, [mapPins])
 
   const promptUserLocation = async () => {
     try {

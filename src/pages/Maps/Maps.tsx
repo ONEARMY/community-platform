@@ -41,14 +41,15 @@ const MapsPage = observer(() => {
 
   const fetchMapPins = async () => {
     const pins = await mapPinService.getMapPins()
-    setMapPins(pins)
+    setMapPins([...mapPins, ...pins])
   }
 
-  const appendLoggedInUser = async (userName: string, isLoggedIn: boolean) => {
-    const userMapPin = await mapPinService.getMapPinByUserId(
-      userName,
-      isLoggedIn,
-    )
+  const appendLoggedInUser = async (userName: string = '') => {
+    if (!userName) {
+      return
+    }
+
+    const userMapPin = await mapPinService.getMapPinSelf(userName)
 
     if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
       setMapPins([...mapPins, userMapPin])
@@ -56,9 +57,7 @@ const MapsPage = observer(() => {
   }
 
   useEffect(() => {
-    if (user?._id) {
-      appendLoggedInUser(user?._id, !!user?._id)
-    }
+    appendLoggedInUser(user?._id)
   }, [user])
 
   useEffect(() => {
@@ -133,7 +132,7 @@ const MapsPage = observer(() => {
       setSelectedPin(preLoadedPin)
     }
 
-    const pin = await mapPinService.getMapPinByUserId(userId, !!user?._id)
+    const pin = await mapPinService.getMapPinByUserId(userId)
     if (pin) {
       setCenter(pin.location)
       setSelectedPin(pin)

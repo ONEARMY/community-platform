@@ -15,25 +15,22 @@ const getMapPins = async () => {
   return mapPins
 }
 
-const getMapPinByUserId = async (userName: string, isLoggedIn: boolean) => {
-  if (!isLoggedIn) {
-    try {
-      const response = await fetch(API_URL + '/map-pins/' + userName);
-      const mapPin = await response.json();
+const getMapPinByUserId = async (userName: string) => {
+  try {
+    const response = await fetch(API_URL + '/map-pins/' + userName)
+    const mapPin = await response.json()
 
-      return mapPin;
-    } catch (error) {
-      logger.error('Failed to fetch map pins', error);
-      return null;
-    }
+    return mapPin
+  } catch (error) {
+    logger.error('Failed to fetch map pins', error)
+    return null
   }
+}
 
-  // TODO: For logged in users when fetching their own
-  // pin we want to fetch directly from firestore and bypass
-  // the moderation status.
+const getMapPinSelf = async (userId: string) => {
   const collectionRef = collection(firestore, DB_ENDPOINTS.mappins)
 
-  const userMapPinQuery = query(collectionRef, where('_id', '==', userName))
+  const userMapPinQuery = query(collectionRef, where('_id', '==', userId))
 
   const [userMapPin] = (await getDocs(userMapPinQuery)).docs
 
@@ -47,4 +44,5 @@ const getMapPinByUserId = async (userName: string, isLoggedIn: boolean) => {
 export const mapPinService = {
   getMapPins,
   getMapPinByUserId,
+  getMapPinSelf,
 }

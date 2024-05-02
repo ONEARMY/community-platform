@@ -23,7 +23,7 @@ export class QuestionStore extends ModuleStore {
   public activeQuestionItem: IQuestionDB | undefined
 
   constructor(rootStore: IRootStore) {
-    super(rootStore, COLLECTION_NAME)
+    super(rootStore)
   }
 
   public async incrementViewCount(question: Partial<IQuestionDB>) {

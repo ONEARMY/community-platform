@@ -13,7 +13,7 @@ const EMAIL_ADDRESS_SEND_LIMIT = 100
 
 export class MessageStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
-    super(rootStore, COLLECTION_NAME)
+    super(rootStore)
   }
 
   @action

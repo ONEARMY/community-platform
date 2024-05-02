@@ -22,7 +22,7 @@ const COLLECTION_NAME = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
-    super(rootStore, COLLECTION_NAME)
+    super(rootStore)
   }
 
   @action

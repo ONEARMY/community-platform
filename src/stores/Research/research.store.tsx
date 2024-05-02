@@ -57,7 +57,7 @@ export class ResearchStore extends ModuleStore {
   isFetching = true
 
   constructor(rootStore: IRootStore) {
-    super(rootStore, COLLECTION_NAME)
+    super(rootStore)
     makeObservable(this)
   }
 

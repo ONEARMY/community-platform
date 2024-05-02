@@ -118,7 +118,7 @@ const MapsPage = observer(() => {
   const showPinFromURL = async () => {
     const pinId = location.hash.slice(1)
     if (pinId) {
-      getPinByUserId(pinId)
+      await getPinByUserId(pinId)
     }
   }
 

@@ -140,11 +140,15 @@ const MapsPage = observer(() => {
     }
   }
 
+  const visibleMapPins = useMemo(() => {
+    return filterMapPinsByType(mapPins, activePinFilters)
+  }, [mapPins, activePinFilters])
+
   return (
     // the calculation for the height is kind of hacky for now, will set properly on final mockups
     <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
       <Controls
-        availableFilters={availableFilters()}
+        availableFilters={availableFilters}
         onLocationChange={(latlng) => setCenter(latlng)}
         onFilterChange={(selected) => {
           setActivePinFilters(selected)
@@ -153,7 +157,7 @@ const MapsPage = observer(() => {
       <MapView
         activePin={selectedPin}
         mapRef={mapRef}
-        pins={filterMapPinsByType(mapPins, activePinFilters)}
+        pins={visibleMapPins}
         onPinClicked={(pin) => {
           getPinByUserId(pin._id)
         }}

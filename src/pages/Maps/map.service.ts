@@ -1,5 +1,6 @@
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { API_URL } from 'src/config/config'
+import { logger } from 'src/logger'
 import { firestore } from 'src/utils/firebase'
 
 import { DB_ENDPOINTS } from '../../models'
@@ -16,10 +17,15 @@ const getMapPins = async () => {
 
 const getMapPinByUserId = async (userName: string, isLoggedIn: boolean) => {
   if (!isLoggedIn) {
-    const mapPin = await fetch(API_URL + '/map-pins/' + userName)
-      .then((response) => response.json())
-      .catch(() => null)
-    return mapPin
+    try {
+      const response = await fetch(API_URL + '/map-pins/' + userName);
+      const mapPin = await response.json();
+
+      return mapPin;
+    } catch (error) {
+      logger.error('Failed to fetch map pins', error);
+      return null;
+    }
   }
 
   // TODO: For logged in users when fetching their own

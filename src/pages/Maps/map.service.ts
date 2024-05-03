@@ -8,11 +8,14 @@ import { DB_ENDPOINTS } from '../../models'
 import type { IMapPin } from '../../models'
 
 const getMapPins = async () => {
-  const mapPins = await fetch(API_URL + '/map-pins')
-    .then((response) => response.json())
-    .catch(() => [])
+  try {
+    const response = await fetch(API_URL + '/map-pins')
+    const mapPins = await response.json()
 
-  return mapPins
+    return mapPins
+  } catch (error) {
+    return []
+  }
 }
 
 const getMapPinByUserId = async (userName: string) => {
@@ -29,10 +32,14 @@ const getMapPinByUserId = async (userName: string) => {
 
 const getMapPinSelf = async (userId: string) => {
   const collectionRef = collection(firestore, DB_ENDPOINTS.mappins)
-
   const userMapPinQuery = query(collectionRef, where('_id', '==', userId))
+  const queryResults = await getDocs(userMapPinQuery)
 
-  const [userMapPin] = (await getDocs(userMapPinQuery)).docs
+  if (!queryResults?.docs) {
+    return null
+  }
+
+  const [userMapPin] = queryResults.docs
 
   if (!userMapPin) {
     return null

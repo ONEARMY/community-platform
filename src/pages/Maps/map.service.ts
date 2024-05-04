@@ -21,6 +21,7 @@ const getMapPins = async () => {
 
     return mapPins
   } catch (error) {
+    logger.error('Failed to fetch map pins', { error })
     return []
   }
 }
@@ -32,7 +33,7 @@ const getMapPinByUserId = async (userName: string) => {
 
     return mapPin
   } catch (error) {
-    logger.error('Failed to fetch map pins', error)
+    logger.error('Failed to fetch map pin by user id', { userName, error })
     return null
   }
 }
@@ -43,12 +44,14 @@ const getMapPinSelf = async (userId: string) => {
   const queryResults = await getDocs(userMapPinQuery)
 
   if (!queryResults?.docs) {
+    logger.error('Invalid or empty response from query', { userId })
     return null
   }
 
   const [userMapPin] = queryResults.docs
 
   if (!userMapPin) {
+    logger.error('No map pin found for user', { userId })
     return null
   }
 

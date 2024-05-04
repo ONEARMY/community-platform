@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  DownloadCounter,
-  DownloadFileFromLink,
-  DownloadStaticFile,
-} from 'oa-components'
+import { DownloadCounter, DownloadStaticFile } from 'oa-components'
+import { DownloadWithDonationAsk } from 'src/common/DownloadWithDonationAsk'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
 
@@ -58,10 +55,10 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
   return (
     <Flex className="file-container" mt={3} sx={{ flexDirection: 'column' }}>
       {fileLink && (
-        <DownloadFileFromLink
+        <DownloadWithDonationAsk
           handleClick={handleDownloadClick}
           link={fileLink}
-          redirectToSignIn={!loggedInUser ? redirectToSignIn : undefined}
+          isLoggedIn={!!loggedInUser}
         />
       )}
       {files &&
@@ -75,7 +72,9 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
                   file={file}
                   key={file ? file.name : `file-${index}`}
                   handleClick={handleDownloadClick}
-                  redirectToSignIn={!loggedInUser ? redirectToSignIn : undefined}
+                  redirectToSignIn={
+                    !loggedInUser ? redirectToSignIn : undefined
+                  }
                 />
               ),
           )}

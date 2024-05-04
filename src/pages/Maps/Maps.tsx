@@ -49,19 +49,19 @@ const MapsPage = observer(() => {
     setMapPins([...mapPins, ...pins])
   }
 
-  const appendLoggedInUser = async (userName: string = '') => {
-    if (!userName) {
-      return
-    }
-
-    const userMapPin = await mapPinService.getMapPinSelf(userName)
-
-    if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
-      setMapPins([...mapPins, userMapPin])
-    }
-  }
-
   useEffect(() => {
+    const appendLoggedInUser = async (userName: string = '') => {
+      if (!userName) {
+        return
+      }
+
+      const userMapPin = await mapPinService.getMapPinSelf(userName)
+
+      if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
+        setMapPins([...mapPins, userMapPin])
+      }
+    }
+
     appendLoggedInUser(user?._id)
   }, [user])
 

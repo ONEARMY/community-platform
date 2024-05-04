@@ -53,7 +53,7 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
     }
   }
 
-  if ((howto.files && howto.files.length > 0) && howto.fileLink) return null
+  if (howto.files && howto.files.length > 0 && howto.fileLink) return null
 
   return (
     <Flex className="file-container" mt={3} sx={{ flexDirection: 'column' }}>

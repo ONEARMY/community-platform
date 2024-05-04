@@ -1,3 +1,4 @@
+import { createContext } from 'react'
 import { collection, getDocs, query, where } from 'firebase/firestore'
 import { API_URL } from 'src/config/config'
 import { logger } from 'src/logger'
@@ -6,6 +7,12 @@ import { firestore } from 'src/utils/firebase'
 import { DB_ENDPOINTS } from '../../models'
 
 import type { IMapPin } from '../../models'
+
+export interface IMapPinService {
+  getMapPins: () => Promise<IMapPin[]>
+  getMapPinByUserId: (userName: string) => Promise<IMapPin | null>
+  getMapPinSelf: (userId: string) => Promise<IMapPin | null>
+}
 
 const getMapPins = async () => {
   try {
@@ -48,7 +55,9 @@ const getMapPinSelf = async (userId: string) => {
   return userMapPin.data() as IMapPin
 }
 
-export const mapPinService = {
+export const MapPinServiceContext = createContext<IMapPinService | null>(null)
+
+export const mapPinService: IMapPinService = {
   getMapPins,
   getMapPinByUserId,
   getMapPinSelf,

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -10,7 +10,7 @@ import { logger } from '../../logger'
 import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
 import { GetLocation } from './utils/geolocation'
 import { Controls, MapView } from './Content'
-import { mapPinService } from './map.service'
+import { MapPinServiceContext } from './map.service'
 
 import type { Map } from 'react-leaflet'
 import type { ILatLng, IMapPin } from 'src/models/maps.models'
@@ -32,12 +32,17 @@ const MapsPage = observer(() => {
   const [activePinFilters, setActivePinFilters] = useState<string[]>([])
   const user = userStore.activeUser
   const navigate = useNavigate()
+  const mapPinService = useContext(MapPinServiceContext)
 
   const [state, setState] = useState<{
     center: ILatLng
     zoom: number
     firstLoad: boolean
   }>(initialState)
+
+  if (!mapPinService) {
+    return null
+  }
 
   const fetchMapPins = async () => {
     const pins = await mapPinService.getMapPins()
@@ -117,6 +122,7 @@ const MapsPage = observer(() => {
   const showPinFromURL = async () => {
     const pinId = location.hash.slice(1)
     if (pinId) {
+      logger.info(`Fetching map pin by user id: ${pinId}`)
       await getPinByUserId(pinId)
     }
   }
@@ -134,8 +140,11 @@ const MapsPage = observer(() => {
 
     const pin = await mapPinService.getMapPinByUserId(userId)
     if (pin) {
+      logger.info(`Fetched map pin by user id`, { userId })
       setCenter(pin.location)
       setSelectedPin(pin)
+    } else {
+      logger.error(`Failed to fetch map pin by user id`, { userId, pin })
     }
   }
 

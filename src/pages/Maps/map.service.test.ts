@@ -9,7 +9,7 @@ const mockQuery = jest.fn()
 const mockCollection = jest.fn()
 
 const mockQuerySnapshot = {
-  docs: [{ data: () => { } }],
+  docs: [{ data: () => {} }],
 }
 
 const mockGetDocs = jest.fn().mockResolvedValue(mockQuerySnapshot)

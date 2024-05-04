@@ -7,26 +7,18 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
+import { IModerationStatus } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { FactoryMapPin } from 'src/test/factories/MapPin'
+import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 
+import { MapPinServiceContext } from './map.service'
 import Maps from './Maps'
 
-const Theme = testingThemeStyles
+import type { IMapPinService } from './map.service'
 
-const mockMapStore = {
-  activePin: null,
-  getPin: jest.fn(),
-  retrieveMapPins: jest.fn(),
-  retrievePinFilters: jest.fn(),
-  removeSubscriptions: jest.fn(),
-  setActivePin: jest.fn(),
-  getPinsNumberByFilterType: jest.fn(),
-  canSeePin: jest.fn(),
-  needsModeration: jest.fn(),
-  setMapBoundingBox: jest.fn(),
-  filteredPins: [],
-}
+const Theme = testingThemeStyles
 
 jest.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -60,10 +52,6 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
 }))
 
 describe('Maps', () => {
-  beforeEach(() => {
-    jest.resetAllMocks()
-  })
-
   it('prompts on load for user current position', async () => {
     Object.defineProperty(global.navigator, 'geolocation', {
       writable: true,
@@ -72,40 +60,23 @@ describe('Maps', () => {
       },
     })
 
-    await Wrapper()
+    await act(async () => {
+      await Wrapper()
+    })
 
     expect(global.navigator.geolocation.getCurrentPosition).toBeCalled()
   })
 
   it('loads individual map card', async () => {
-    mockMapStore.getPin.mockResolvedValue({
-      _id: 'abc',
-      title: 'title',
-      description: 'description',
-      detail: {
-        shortDescription: 'description',
-      },
-      location: {
-        lat: 1,
-        lng: 2,
-      },
-      tags: [],
-    })
-    mockMapStore.setActivePin.mockImplementation((v) => {
-      mockMapStore.activePin = v
-    })
-    mockMapStore.canSeePin.mockReturnValue(true)
-    mockMapStore.needsModeration.mockReturnValue(true)
-
-    let wrapper
+    let wrapper: any
 
     await act(async () => {
       wrapper = await Wrapper('/map#abc')
     })
 
     await waitFor(async () => {
-      expect(mockMapStore.setActivePin).toBeCalled()
-      expect(wrapper.getByText('description')).toBeInTheDocument()
+      expect(wrapper.mockMapPinService.getMapPinByUserId).toBeCalledWith('abc')
+      expect(wrapper.renderResult.getByText('description')).toBeInTheDocument()
     })
   })
 })
@@ -118,11 +89,32 @@ const Wrapper = async (path = '/map') => {
     },
   )
 
-  return render(
-    <Provider {...useCommonStores().stores}>
-      <ThemeProvider theme={Theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </Provider>,
-  )
+  const mockMapPinService: IMapPinService = {
+    getMapPinByUserId: jest.fn().mockResolvedValue({
+      ...FactoryUser({
+        moderation: IModerationStatus.ACCEPTED,
+      }),
+      ...FactoryMapPin(),
+      detail: {
+        shortDescription: 'description',
+      },
+    }),
+    getMapPinSelf: jest.fn().mockResolvedValue({}),
+    getMapPins: jest.fn().mockImplementation(() => {
+      return Promise.resolve([])
+    }),
+  }
+
+  return {
+    mockMapPinService,
+    renderResult: render(
+      <Provider {...useCommonStores().stores}>
+        <ThemeProvider theme={Theme}>
+          <MapPinServiceContext.Provider value={mockMapPinService}>
+            <RouterProvider router={router} />
+          </MapPinServiceContext.Provider>
+        </ThemeProvider>
+      </Provider>,
+    ),
+  }
 }

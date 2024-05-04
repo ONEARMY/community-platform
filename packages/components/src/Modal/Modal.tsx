@@ -1,17 +1,20 @@
+import { Portal } from 'react-portal'
+import styled from '@emotion/styled'
+import { Box } from 'theme-ui'
+
+import type { ThemeUIStyleObject } from 'theme-ui'
+
 export interface Props {
   isOpen: boolean
   children?: React.ReactNode
   width?: number
   height?: number
   onDidDismiss?: () => void
+  sx?: ThemeUIStyleObject | undefined
 }
 
-import { Portal } from 'react-portal'
-import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
-
 export const Modal = (props: Props) => {
-  const { children, width, height, isOpen } = props
+  const { children, width, height, isOpen, sx } = props
 
   const dismiss = () => {
     if (props.onDidDismiss) {
@@ -52,7 +55,7 @@ export const Modal = (props: Props) => {
       {isOpen && (
         <Portal>
           <ModalBackdrop onClick={() => dismiss()} />
-          <ModalContent sx={{ height, width }}>{children}</ModalContent>
+          <ModalContent sx={{ height, width, ...sx }}>{children}</ModalContent>
         </Portal>
       )}
     </>

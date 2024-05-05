@@ -1,10 +1,9 @@
 import '@testing-library/jest-dom'
 
-import { MOCKS } from 'oa-shared'
+import { UserRole } from 'oa-shared/models'
+import { FactoryUser } from 'src/test/factories/User'
 
 import { exportedForTesting } from './howto.service'
-
-import type { IUser } from 'src/models'
 
 const mockWhere = jest.fn()
 const mockOrderBy = jest.fn()
@@ -129,7 +128,9 @@ describe('howtos.search', () => {
       ['test'],
       '',
       'Newest',
-      MOCKS.data.users.admin as unknown as IUser,
+      FactoryUser({
+        userRoles: [UserRole.ADMIN],
+      }),
       undefined,
     )
 

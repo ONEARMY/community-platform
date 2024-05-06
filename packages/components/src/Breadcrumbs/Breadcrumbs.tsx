@@ -22,7 +22,11 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1
         return (
+<<<<<<< HEAD
           <Box key={index}>
+=======
+          <Box>
+>>>>>>> 7047c1cd6b8c64cdd6c47dcd2b8a48124d317e07
             <BreadcrumbItem text={step.text} link={step.link} isLast={isLast} />
             {!isLast && (
               <Icon

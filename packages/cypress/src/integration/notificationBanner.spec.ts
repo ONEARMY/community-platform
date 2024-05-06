@@ -1,6 +1,5 @@
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commands'
-import { signUpNewUser } from '../utils/TestUtils'
 
 describe('[Notification Banner]', () => {
   beforeEach(() => {
@@ -17,7 +16,7 @@ describe('[Notification Banner]', () => {
     it('[Banners visible for user with blank profile]', () => {
       cy.interceptAddressSearchFetch(SingaporeStubResponse)
 
-      signUpNewUser()
+      cy.signUpNewUser()
       cy.get('[data-cy=emailNotVerifiedBanner]').should('exist')
       cy.get('[data-cy=incompleteProfileBanner]').click()
 

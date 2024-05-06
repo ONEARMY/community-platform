@@ -1,10 +1,8 @@
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 
 import {
-  fillSignupForm,
   generateAlphaNumeric,
   generateNewUserDetails,
-  signUpNewUser,
 } from '../utils/TestUtils'
 
 // existing user already created in auth system
@@ -46,7 +44,7 @@ describe('[User sign-up]', () => {
       cy.contains('Your new password does not match').should('be.exist')
 
       cy.step('Using valid inputs')
-      signUpNewUser()
+      cy.signUpNewUser()
       cy.get('div').contains('Sign up successful').should('be.visible')
       cy.get('[data-cy=user-menu]')
     })
@@ -54,7 +52,8 @@ describe('[User sign-up]', () => {
 
   describe('[Cannot duplicate existing user]', () => {
     it('Prevents duplicate name', () => {
-      fillSignupForm(authUser)
+      const { username, email, password } = authUser
+      cy.fillSignupForm(username, email, password)
       cy.get('[data-cy=submit]').click()
       cy.contains(FRIENDLY_MESSAGES['sign-up/username-taken']).should(
         'be.exist',
@@ -62,11 +61,11 @@ describe('[User sign-up]', () => {
     })
 
     it('Prevents duplicate email', () => {
-      const user = {
+      const { username, email, password } = {
         ...authUser,
         username: `new_username_${generateAlphaNumeric(5)}`,
       }
-      fillSignupForm(user)
+      cy.fillSignupForm(username, email, password)
       cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=error-msg]')
         .contains(FRIENDLY_MESSAGES['auth/email-already-in-use'])
@@ -78,7 +77,7 @@ describe('[User sign-up]', () => {
     it('Updates username and password', () => {
       const user = generateNewUserDetails()
       const { email, username, password } = user
-      signUpNewUser(user)
+      cy.signUpNewUser(user)
 
       const newEmail = `${username}-super_cool@test.com`
       const newPassword = '<dfbss73DF'

@@ -50,4 +50,5 @@ You will need to set up a CircleCI context for each target environment. This con
 - `REACT_APP_CDN_URL` - `https://cdn-url.com` - this is the URL to the CDN where the assets are stored. This is used to load the assets from the CDN instead of the local server. It should **not** include a trailing slash.
 - `REACT_APP_PLATFORM_PROFILES` - comma separated list of available profiles. Use `ProfileType` from modules/profile/index for guidance here. For example: `member,workspace`
 - `REACT_APP_SUPPORTED_MODULES` – comma separated list of available modules. See `/src/modules/index.ts` for the definitions.
+- `REACT_APP_API_URL` – 'https://api-url.com' - this is the URL to the API service. It should **not** include a trailing slash.
 - `SITE_NAME`

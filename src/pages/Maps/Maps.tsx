@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT } from 'src/config/config'
+import { filterMapPinsByType } from 'src/stores/Maps/filter'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 import { Box } from 'theme-ui'
 
@@ -10,51 +10,80 @@ import { logger } from '../../logger'
 import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
 import { GetLocation } from './utils/geolocation'
 import { Controls, MapView } from './Content'
+import { MapPinServiceContext } from './map.service'
 
 import type { Map } from 'react-leaflet'
-import type { ILatLng } from 'src/models/maps.models'
+import type { ILatLng, IMapPin } from 'src/models/maps.models'
 
 import './styles.css'
+
+const initialState = {
+  center: { lat: 51.0, lng: 19.0 },
+  zoom: 3,
+  firstLoad: true,
+}
 
 const MapsPage = observer(() => {
   const mapRef = React.useRef<Map>(null)
   const location = useLocation()
-  const { mapsStore } = useCommonStores().stores
+  const [mapPins, setMapPins] = useState<IMapPin[]>([])
+  const [selectedPin, setSelectedPin] = useState<IMapPin | null>(null)
+  const { userStore } = useCommonStores().stores
+  const [activePinFilters, setActivePinFilters] = useState<string[]>([])
+  const user = userStore.activeUser
+  const navigate = useNavigate()
+  const mapPinService = useContext(MapPinServiceContext)
 
   const [state, setState] = useState<{
     center: ILatLng
     zoom: number
     firstLoad: boolean
-  }>({
-    center: { lat: 51.0, lng: 19.0 },
-    zoom: 3,
-    firstLoad: true,
-  })
+  }>(initialState)
+
+  if (!mapPinService) {
+    return null
+  }
+
+  const fetchMapPins = async () => {
+    const pins = await mapPinService.getMapPins()
+    setMapPins([...mapPins, ...pins])
+  }
 
   useEffect(() => {
-    mapsStore.retrieveMapPins(MAP_PROFILE_TYPE_HIDDEN_BY_DEFAULT)
-    mapsStore.retrievePinFilters()
+    const appendLoggedInUser = async (userName: string = '') => {
+      if (!userName) {
+        return
+      }
+
+      const userMapPin = await mapPinService.getMapPinSelf(userName)
+
+      if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
+        setMapPins([...mapPins, userMapPin])
+      }
+    }
+
+    appendLoggedInUser(user?._id)
+  }, [user])
+
+  useEffect(() => {
+    fetchMapPins()
 
     const showPin = async () => {
       await showPinFromURL()
 
-      if (!mapsStore.activePin) {
+      if (!selectedPin) {
         promptUserLocation()
       }
     }
     showPin()
 
     return () => {
-      mapsStore.setActivePin(undefined)
+      setSelectedPin(null)
     }
   }, [])
 
-  useEffect(() => {
-    showPinFromURL()
-  }, [location.hash])
-
-  const availableFilters = () => {
-    return transformAvailableFiltersToGroups(mapsStore, [
+  const availableFilters = useMemo(() => {
+    return transformAvailableFiltersToGroups(mapPins, [
       {
         grouping: 'verified-filter',
         displayName: 'Verified',
@@ -62,7 +91,7 @@ const MapsPage = observer(() => {
       },
       ...MAP_GROUPINGS,
     ])
-  }
+  }, [mapPins])
 
   const promptUserLocation = async () => {
     try {
@@ -86,37 +115,64 @@ const MapsPage = observer(() => {
     }))
   }
 
-  /** Check current hash in case matches a mappin and try to load */
+  /**
+   * Check current hash in case matches a mappin and try to load
+   *
+   **/
   const showPinFromURL = async () => {
     const pinId = location.hash.slice(1)
-    // Only lookup if not already the active pin
-    if (pinId && pinId !== mapsStore.activePin?._id) {
-      const pin = await mapsStore.getPin(pinId)
-      if (pin._deleted) return
-      mapsStore.setActivePin(pin)
+    if (pinId) {
+      logger.info(`Fetching map pin by user id: ${pinId}`)
+      await getPinByUserId(pinId)
     }
-    // Center on the pin if first load
-    if (state.firstLoad && mapsStore.activePin) {
-      setCenter(mapsStore.activePin.location)
-    }
-    // TODO - handle pin not found
   }
 
-  const { filteredPins, activePinFilters } = mapsStore
+  const getPinByUserId = async (userId: string) => {
+    navigate(`/map#${userId}`)
+
+    // First check the mapPins to see if the pin is already
+    // partially loaded
+    const preLoadedPin = mapPins.find((pin) => pin._id === userId)
+    if (preLoadedPin) {
+      setCenter(preLoadedPin.location)
+      setSelectedPin(preLoadedPin)
+    }
+
+    const pin = await mapPinService.getMapPinByUserId(userId)
+    if (pin) {
+      logger.info(`Fetched map pin by user id`, { userId })
+      setCenter(pin.location)
+      setSelectedPin(pin)
+    } else {
+      logger.error(`Failed to fetch map pin by user id`, { userId, pin })
+    }
+  }
+
+  const visibleMapPins = useMemo(() => {
+    return filterMapPinsByType(mapPins, activePinFilters)
+  }, [mapPins, activePinFilters])
+
   return (
     // the calculation for the height is kind of hacky for now, will set properly on final mockups
     <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
       <Controls
-        availableFilters={availableFilters()}
+        availableFilters={availableFilters}
         onLocationChange={(latlng) => setCenter(latlng)}
+        onFilterChange={(selected) => {
+          setActivePinFilters(selected)
+        }}
       />
       <MapView
+        activePin={selectedPin}
         mapRef={mapRef}
-        pins={filteredPins}
-        filters={activePinFilters}
-        onBoundingBoxChange={(boundingBox) =>
-          mapsStore.setMapBoundingBox(boundingBox)
-        }
+        pins={visibleMapPins}
+        onPinClicked={(pin) => {
+          getPinByUserId(pin._id)
+        }}
+        onBlur={() => {
+          navigate('/map')
+          setSelectedPin(null)
+        }}
         center={state.center}
         zoom={state.zoom}
       />

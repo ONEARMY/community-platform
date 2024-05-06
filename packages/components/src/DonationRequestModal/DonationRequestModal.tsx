@@ -16,6 +16,7 @@ export const DonationRequestModal = (props: IProps) => {
     props
 
   const sx = {
+    // There's some reinventing of the response wheel here...
     minWidth: ['90%', '90%', '750px', '1050px'],
     border: '0 !important',
     padding: '0 !important',

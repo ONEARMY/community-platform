@@ -12,6 +12,7 @@ import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box } from 'theme-ui'
@@ -116,6 +117,7 @@ export const Howto = observer(() => {
   )
   return (
     <>
+      <Breadcrumbs content={howto} variant="howto" />
       <HowtoDescription
         howto={howto}
         key={activeHowto._id}

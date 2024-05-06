@@ -14,6 +14,7 @@ import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
@@ -211,6 +212,7 @@ const ResearchArticle = observer(() => {
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
+      <Breadcrumbs content={item} variant="research" />
       <ResearchDescription
         research={research}
         key={item._id}

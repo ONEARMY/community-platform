@@ -21,12 +21,12 @@ export enum DbCollectionName {
 }
 
 export const fillSignupForm = (user) => {
-  const { username, email, password, confirmPassword } = user
+  const { username, email, password } = user
 
   cy.get('[data-cy=username]').clear().type(username)
   cy.get('[data-cy=email]').clear().type(email)
   cy.get('[data-cy=password]').clear().type(password)
-  cy.get('[data-cy=confirm-password]').clear().type(confirmPassword)
+  cy.get('[data-cy=confirm-password]').clear().type(password)
   cy.get('[data-cy=consent]').check()
 }
 
@@ -45,6 +45,5 @@ export const generateNewUserDetails = () => {
     username: `CI_${generateAlphaNumeric(5)}`.toLocaleLowerCase(),
     email: `CI_${generateAlphaNumeric(5)}@test.com`.toLocaleLowerCase(),
     password: 'test1234',
-    confirmPassword: 'test1234',
   }
 }

@@ -79,10 +79,7 @@ Cypress.Commands.add('deleteIDB', (name: string) => {
 Cypress.Commands.add('setSessionStorage', (key: string, value: string) => {
   cy.wrap(`setSessionStorage - ${key}:${value}`).then(() => {
     cy.window().its('sessionStorage').invoke('setItem', key, value)
-    cy.window()
-      .its('sessionStorage')
-      .invoke('getItem', key)
-      .should('eq', value)
+    cy.window().its('sessionStorage').invoke('getItem', key).should('eq', value)
   })
 })
 

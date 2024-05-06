@@ -1,4 +1,3 @@
-
 export enum UserMenuItem {
   Profile = 'Profile',
   Settings = 'Settings',
@@ -38,10 +37,10 @@ declare global {
  */
 
 Cypress.Commands.add('toggleUserMenuOn', () => {
-    Cypress.log({ displayName: 'OPEN_USER_MENU' })
-    cy.get('[data-cy=user-menu]').should('be.exist')
-    cy.get('[data-cy=user-menu]').click()
-  })
+  Cypress.log({ displayName: 'OPEN_USER_MENU' })
+  cy.get('[data-cy=user-menu]').should('be.exist')
+  cy.get('[data-cy=user-menu]').click()
+})
 
 Cypress.Commands.add('toggleUserMenuOff', () => {
   Cypress.log({ displayName: 'CLOSE_USER_MENU' })

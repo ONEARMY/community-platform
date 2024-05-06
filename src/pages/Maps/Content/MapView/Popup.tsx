@@ -3,7 +3,6 @@ import { Popup as LeafletPopup } from 'react-leaflet'
 import L from 'leaflet'
 import { MapMemberCard } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
 import type { Map } from 'react-leaflet'
@@ -17,7 +16,6 @@ interface IProps {
 }
 
 export const Popup = (props: IProps) => {
-  const { mapsStore } = useCommonStores().stores
   const leafletRef = useRef<LeafletPopup>(null)
   const activePin = props.activePin as IMapPinWithDetail
 
@@ -71,7 +69,9 @@ export const Popup = (props: IProps) => {
             countryCode: activePin.detail?.country?.toLowerCase(),
           }}
           heading={getHeading(activePin)}
-          isEditable={!!mapsStore.needsModeration(activePin)}
+          // TODO: Remove `isEditable` prop from component
+          // this functionality is now available via Retool
+          isEditable={false}
         />
       </LeafletPopup>
     )

@@ -1,17 +1,17 @@
 import { MemberBadge } from 'oa-components'
 import VerifiedBadgeIcon from 'src/assets/icons/icon-verified-badge.svg'
+import { filterMapPinsByType } from 'src/stores/Maps/filter'
 import { Image } from 'theme-ui'
 
 import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpecialistWorkspaceTypeToWorkspace'
 
 import type { IPinGrouping } from 'oa-shared'
-import type { IMapGrouping, WorkspaceType } from 'src/models'
+import type { IMapGrouping, IMapPin, WorkspaceType } from 'src/models'
 import type { ProfileTypeLabel } from 'src/modules/profile/types'
-import type { MapsStore } from 'src/stores/Maps/maps.store'
 
 const ICON_SIZE = 30
 
-const asOptions = (mapStore, items: Array<IMapGrouping>): FilterGroupOption[] =>
+const asOptions = (mapPins, items: Array<IMapGrouping>): FilterGroupOption[] =>
   (items || [])
     .filter((item) => {
       return !item.hidden
@@ -29,7 +29,7 @@ const asOptions = (mapStore, items: Array<IMapGrouping>): FilterGroupOption[] =>
       return {
         label: item.displayName,
         value,
-        number: mapStore.getPinsNumberByFilterType(filterType),
+        number: filterMapPinsByType(mapPins, filterType).length,
         imageElement:
           (item.type as string) === 'verified' ? (
             <Image src={VerifiedBadgeIcon} width={ICON_SIZE} />
@@ -41,7 +41,7 @@ const asOptions = (mapStore, items: Array<IMapGrouping>): FilterGroupOption[] =>
           ),
       }
     })
-    .filter(({ number }) => !!number)
+    .filter(({ number }) => !!number) //LADEBUG
 
 type FilterGroupOption = {
   label: string
@@ -62,7 +62,7 @@ type FilterItem = {
 }
 
 export const transformAvailableFiltersToGroups = (
-  mapStore: MapsStore,
+  mapPinList: IMapPin[],
   availableFilters: FilterItem[],
 ): FilterGroup[] => {
   const reducedItems = availableFilters.reduce((accumulator, current) => {
@@ -83,7 +83,7 @@ export const transformAvailableFiltersToGroups = (
 
     return {
       label,
-      options: asOptions(mapStore, reducedItems[item]),
+      options: asOptions(mapPinList, reducedItems[item]),
     }
   })
 }

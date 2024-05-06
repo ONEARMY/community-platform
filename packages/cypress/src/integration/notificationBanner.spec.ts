@@ -17,7 +17,7 @@ describe('[Notification Banner]', () => {
       cy.interceptAddressSearchFetch(SingaporeStubResponse)
 
       cy.signUpNewUser()
-      cy.get('[data-cy=emailNotVerifiedBanner]').should('exist')
+      cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
       cy.get('[data-cy=incompleteProfileBanner]').click()
 
       cy.step('Go to User Settings')
@@ -41,10 +41,12 @@ describe('[Notification Banner]', () => {
       cy.selectTag('email', `[data-cy=select-link-0]`)
       cy.get(`[data-cy=input-link-0]`).clear().type('test@test.com')
       cy.get('[data-cy=save]').click()
+      cy.get('[data-cy="TextNotification: success"]')
 
       cy.step('Banner no longer visible')
-      cy.get('[data-cy=notificationBanner]').should('not.exist')
-      cy.get('[data-cy=emailNotVerifiedBanner]').should('exist')
+      cy.visit('/')
+      cy.get('[data-cy=incompleteProfileBanner]').should('not.exist')
+      cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
     })
   })
 })

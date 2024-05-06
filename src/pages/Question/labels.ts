@@ -37,7 +37,7 @@ export const fields: ILabels = {
 export const listing = {
   create: 'Ask a question',
   noQuestions: 'No questions have been asked yet',
-  usefulness: 'How useful is it',
+  usefulness: 'How useful it is',
   totalComments: 'Total comments',
   filterCategory: 'Filter by category',
   search: 'Search for a question',

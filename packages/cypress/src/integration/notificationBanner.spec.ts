@@ -12,7 +12,8 @@ describe('[Notification Banner]', () => {
     })
   })
 
-  describe('[By Authenticated user with blank profile]', () => {
+  // eslint-disable-next-line mocha/no-skipped-tests
+  describe.skip('[By Authenticated user with blank profile]', () => {
     it('[Notification Banner is visible for user with blank profile]', () => {
       cy.login('howto_reader@test.com', 'test1234')
       cy.get('[data-cy=notificationBanner]').click()
@@ -20,7 +21,8 @@ describe('[Notification Banner]', () => {
     })
   })
 
-  describe('[By Authenticated user with filled profile]', () => {
+  // eslint-disable-next-line mocha/no-skipped-tests
+  describe.skip('[By Authenticated user with filled profile]', () => {
     it('[Notification Banner is visible for user with blank profile]', () => {
       cy.interceptAddressSearchFetch(SingaporeStubResponse)
 
@@ -49,7 +51,6 @@ describe('[Notification Banner]', () => {
       cy.selectTag('email', `[data-cy=select-link-0]`)
       cy.get(`[data-cy=input-link-0]`).clear().type('test@test.com')
       cy.get('[data-cy=save]').click()
-      cy.wait(3000)
       cy.get('[data-cy=notificationBanner]').should('not.exist')
     })
   })

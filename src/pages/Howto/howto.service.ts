@@ -4,11 +4,13 @@ import {
   getCountFromServer,
   getDocs,
   limit,
+  or,
   orderBy,
   query,
   startAfter,
   where,
 } from 'firebase/firestore'
+import { hasAdminRights } from 'src/utils/helpers'
 
 import { DB_ENDPOINTS } from '../../models'
 import { firestore } from '../../utils/firebase'
@@ -19,23 +21,21 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { ResearchStatus } from 'oa-shared'
-import type { IResearch } from '../../models'
+import type { IHowto, IUser, IUserPPDB } from '../../models'
 import type { ICategory } from '../../models/categories.model'
-import type { ResearchSortOption } from './ResearchSortOptions'
+import type { HowtoSortOptions } from './Content/HowtoList/HowtoSortOptions'
 
-export enum ResearchSearchParams {
+export enum HowtosSearchParams {
   category = 'category',
   q = 'q',
   sort = 'sort',
-  status = 'status',
 }
 
 const search = async (
   words: string[],
   category: string,
-  sort: ResearchSortOption,
-  status: ResearchStatus | null,
+  sort: HowtoSortOptions,
+  currentUser?: IUserPPDB,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
@@ -43,7 +43,7 @@ const search = async (
     words,
     category,
     sort,
-    status,
+    currentUser,
     snapshot,
     take,
   )
@@ -54,23 +54,40 @@ const search = async (
     : undefined
 
   const items = documentSnapshots.docs
-    ? documentSnapshots.docs.map((x) => x.data() as IResearch.Item)
+    ? documentSnapshots.docs.map((x) => x.data() as IHowto)
     : []
   const total = (await getCountFromServer(countQuery)).data().count
 
   return { items, total, lastVisible }
 }
 
+const moderationFilters = (currentUser?: IUser) => {
+  const filters = [where('moderation', '==', 'accepted')]
+
+  if (currentUser) {
+    filters.push(where('_createdBy', '==', currentUser.userName))
+
+    if (hasAdminRights(currentUser)) {
+      filters.push(where('moderation', '==', 'awaiting-moderation'))
+      filters.push(where('moderation', '==', 'improvements-needed'))
+    }
+  }
+
+  return or(...filters)
+}
+
 const createQueries = (
   words: string[],
   category: string,
-  sort: ResearchSortOption,
-  status: ResearchStatus | null,
+  sort: HowtoSortOptions,
+  currentUser?: IUser,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.research)
-  let filters: QueryFilterConstraint[] = [and(where('_deleted', '!=', true))]
+  const collectionRef = collection(firestore, DB_ENDPOINTS.howtos)
+  let filters: QueryFilterConstraint[] = [
+    and(where('_deleted', '!=', true), moderationFilters(currentUser)),
+  ]
   let constraints: QueryNonFilterConstraint[] = []
 
   if (words?.length > 0) {
@@ -78,11 +95,7 @@ const createQueries = (
   }
 
   if (category) {
-    filters = [...filters, where('researchCategory._id', '==', category)]
-  }
-
-  if (status) {
-    filters = [...filters, where('researchStatus', '==', status)]
+    filters = [...filters, and(where('category._id', '==', category))]
   }
 
   if (sort) {
@@ -109,32 +122,32 @@ const createQueries = (
   return { countQuery, itemsQuery }
 }
 
-const getResearchCategories = async () => {
-  const collectionRef = collection(firestore, DB_ENDPOINTS.researchCategories)
+const getHowtoCategories = async () => {
+  const collectionRef = collection(firestore, DB_ENDPOINTS.categories)
 
   return (await getDocs(query(collectionRef))).docs.map(
     (x) => x.data() as ICategory,
   )
 }
 
-const getSort = (sort: ResearchSortOption) => {
+const getSort = (sort: HowtoSortOptions) => {
   switch (sort) {
     case 'MostComments':
-      return orderBy('totalCommentCount', 'desc')
-    case 'MostUpdates':
-      return orderBy('totalUpdates', 'desc')
+      return orderBy('totalComments', 'desc')
     case 'MostUseful':
       return orderBy('totalUsefulVotes', 'desc')
     case 'Newest':
       return orderBy('_created', 'desc')
+    case 'MostDownloads':
+      return orderBy('total_downloads', 'desc')
     case 'LatestUpdated':
       return orderBy('_modified', 'desc')
   }
 }
 
-export const researchService = {
+export const howtoService = {
   search,
-  getResearchCategories,
+  getHowtoCategories,
 }
 
 export const exportedForTesting = {

@@ -4,7 +4,10 @@
  * API items.  On a detail page for a single item, the summary will be
  * shown followed by the remarks section (if any).
  */
-export type { AbstractDatabaseClient } from './DBClient'
+export type {
+  AbstractDatabaseClient,
+  AbstractDatabaseClientStreamable,
+} from './DBClient'
 
 /**
  * The `DBClients` consists of separate databases for use online and offline.
@@ -18,7 +21,7 @@ export type { AbstractDatabaseClient } from './DBClient'
  */
 export interface DBClients {
   cacheDB: AbstractDatabaseClient
-  serverDB: AbstractDatabaseClient
+  serverDB: AbstractDatabaseClientStreamable
   serverCacheDB: AbstractDatabaseClient
 }
 
@@ -54,7 +57,7 @@ export type DBQueryWhereOperator =
   | '=='
   | '!='
   | 'array-contains'
-export type DBQueryWhereValue = string | number
+export type DBQueryWhereValue = string | number | boolean
 
 /**
  * @remarks

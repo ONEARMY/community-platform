@@ -4,7 +4,7 @@ export enum Page {
   SETTINGS = '/settings',
 }
 
-export const generatedId = (length: number) => {
+export const generateAlphaNumeric = (length: number) => {
   let result = ''
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'

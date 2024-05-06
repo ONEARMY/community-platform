@@ -92,6 +92,7 @@ const ResearchList = observer(() => {
     <>
       <Flex my={[18, 26]}>
         <Heading
+          as="h1"
           sx={{
             width: '100%',
             textAlign: 'center',

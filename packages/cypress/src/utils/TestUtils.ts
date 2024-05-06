@@ -19,3 +19,32 @@ export enum DbCollectionName {
   users = 'users',
   howtos = 'howtos',
 }
+
+export const fillSignupForm = (user) => {
+  const { username, email, password, confirmPassword } = user
+
+  cy.get('[data-cy=username]').clear().type(username)
+  cy.get('[data-cy=email]').clear().type(email)
+  cy.get('[data-cy=password]').clear().type(password)
+  cy.get('[data-cy=confirm-password]').clear().type(confirmPassword)
+  cy.get('[data-cy=consent]').check()
+}
+
+export const signUpNewUser = (newUser?) => {
+  const user = newUser || generateNewUserDetails()
+
+  cy.step(`Sign up new user - ${user.username}`)
+  cy.visit('/sign-up')
+  fillSignupForm(user)
+  cy.get('[data-cy=submit]').click()
+  cy.url().should('include', 'sign-up-message')
+}
+
+export const generateNewUserDetails = () => {
+  return {
+    username: `CI_${generateAlphaNumeric(5)}`.toLocaleLowerCase(),
+    email: `CI_${generateAlphaNumeric(5)}@test.com`.toLocaleLowerCase(),
+    password: 'test1234',
+    confirmPassword: 'test1234',
+  }
+}

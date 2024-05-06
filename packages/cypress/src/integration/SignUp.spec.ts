@@ -1,6 +1,6 @@
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 
-import { generatedId } from '../utils/TestUtils'
+import { generateAlphaNumeric } from '../utils/TestUtils'
 
 // existing user already created in auth system
 const authUser = {
@@ -10,14 +10,16 @@ const authUser = {
   confirmPassword: 'test1234',
 }
 const newUser = {
-  username: `CI_${generatedId(5)}`.toLocaleLowerCase(),
-  email: `CI_${generatedId(5)}@test.com`.toLocaleLowerCase(),
+  username: `CI_${generateAlphaNumeric(5)}`.toLocaleLowerCase(),
+  email: `CI_${generateAlphaNumeric(5)}@test.com`.toLocaleLowerCase(),
   password: 'test1234',
   confirmPassword: 'test1234',
 }
 
 beforeEach(() => {
   cy.visit('/sign-up')
+  cy.log('clearing user from auth')
+  cy.deleteCurrentUser()
 })
 
 const fillSignupForm = (form: typeof authUser) => {
@@ -36,7 +38,10 @@ describe('[Sign-up - existing user]', () => {
     cy.contains(FRIENDLY_MESSAGES['sign-up/username-taken']).should('be.exist')
   })
   it('prevent duplicate email', () => {
-    const user = { ...authUser, username: `new_username_${generatedId(5)}` }
+    const user = {
+      ...authUser,
+      username: `new_username_${generateAlphaNumeric(5)}`,
+    }
     fillSignupForm(user)
     cy.get('[data-cy=submit]').click()
     cy.get('[data-cy=error-msg]')
@@ -82,11 +87,6 @@ describe('[Sign-up - new user]', () => {
     cy.get('[data-cy=password]').type(newUser.password)
     cy.get('[data-cy=submit]').click()
     cy.get('[data-cy=user-menu]')
-  })
-
-  after(() => {
-    cy.log('clearing user from auth')
-    cy.deleteCurrentUser()
   })
 })
 

@@ -22,13 +22,10 @@ const researchStatusOptions = [
   })),
 ]
 
-const researchSortOptions = Array.from(
-  ResearchSortOptions,
-  ([value, label]) => ({
-    label: label,
-    value: value,
-  }),
-)
+const sortOptions = Array.from(ResearchSortOptions, ([value, label]) => ({
+  label: label,
+  value: value,
+}))
 
 export const ResearchFilterHeader = () => {
   const [categories, setCategories] = useState<SelectValue[]>([])
@@ -117,9 +114,11 @@ export const ResearchFilterHeader = () => {
       <Flex sx={_inputStyle}>
         <FieldContainer>
           <Select
-            options={researchSortOptions}
+            options={sortOptions.filter(
+              (x) => !(x.value === 'MostRelevant' && !q), // Do not show MostRelevant unless there is a search query
+            )}
             placeholder={listing.sort}
-            value={{ label: sort, value: sort }}
+            value={{ label: ResearchSortOptions.get(sort) ?? '', value: sort }}
             onChange={(sortBy) =>
               updateFilter(ResearchSearchParams.sort, sortBy.value)
             }

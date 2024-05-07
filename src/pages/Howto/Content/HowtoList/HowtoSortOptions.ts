@@ -1,4 +1,4 @@
-export type HowtoSortOptions =
+export type HowtoSortOption =
   | 'MostRelevant'
   | 'Newest'
   | 'MostUseful'
@@ -6,10 +6,10 @@ export type HowtoSortOptions =
   | 'MostDownloads'
   | 'MostComments'
 
-export const HowtosSortOptions = new Map<HowtoSortOptions, string>()
-HowtosSortOptions.set('MostRelevant', 'Most Relevant')
-HowtosSortOptions.set('Newest', 'Newest')
-HowtosSortOptions.set('MostComments', 'Most Comments')
-HowtosSortOptions.set('LatestUpdated', 'Latest Updated')
-HowtosSortOptions.set('MostUseful', 'Most Useful')
-HowtosSortOptions.set('MostDownloads', 'Most Downloads')
+export const HowtoSortOptions = new Map<HowtoSortOption, string>()
+HowtoSortOptions.set('MostRelevant', 'Most Relevant')
+HowtoSortOptions.set('Newest', 'Newest')
+HowtoSortOptions.set('MostComments', 'Most Comments')
+HowtoSortOptions.set('LatestUpdated', 'Latest Updated')
+HowtoSortOptions.set('MostUseful', 'Most Useful')
+HowtoSortOptions.set('MostDownloads', 'Most Downloads')

@@ -20,9 +20,7 @@ export const EditComment = (props: IProps) => {
   })
 
   const required = (value: string) =>
-    value && value.trim()
-      ? undefined
-      : 'Comment cannot be blank'
+    value && value.trim() ? undefined : 'Comment cannot be blank'
 
   const handleFormSubmit = (comment: string) => {
     if (comment.trim()) {

@@ -15,6 +15,7 @@ import Header from './common/Header/Header'
 import { NotFoundPage } from './NotFound/NotFound'
 import {
   COMMUNITY_PAGES_PROFILE,
+  donationThankYou,
   getAvailablePageList,
   NO_HEADER_PAGES,
   POLICY_PAGES,
@@ -91,6 +92,10 @@ export const Pages = () => {
               />
             ) : null}
             <Route index element={<Navigate to="/academy" />} />
+            <Route
+              path={donationThankYou.path}
+              element={donationThankYou.component}
+            />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>

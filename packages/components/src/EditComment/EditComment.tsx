@@ -20,11 +20,25 @@ export const EditComment = (props: IProps) => {
   })
 
   const required = (value: string) =>
-    value && value.trim() ? undefined : 'Comment cannot be blank'
+    value?.trim() ? undefined : 'Comment cannot be blank'
 
   const handleFormSubmit = (comment: string) => {
-    if (comment.trim()) {
+    if (comment?.trim()) {
       props?.handleSubmit(comment)
+    }
+  }
+
+  const validateEditedComment = async (values: any) => {
+    try {
+      await validationSchema.validate(values, { abortEarly: false })
+    } catch (err: any) {
+      return err.inner.reduce(
+        (acc: any, error: any) => ({
+          ...acc,
+          [error.path]: error.message,
+        }),
+        {},
+      )
     }
   }
 
@@ -36,19 +50,7 @@ export const EditComment = (props: IProps) => {
       initialValues={{
         comment,
       }}
-      validate={async (values: any) => {
-        try {
-          await validationSchema.validate(values, { abortEarly: false })
-        } catch (err: any) {
-          return err.inner.reduce(
-            (acc: any, error: any) => ({
-              ...acc,
-              [error.path]: error.message,
-            }),
-            {},
-          )
-        }
-      }}
+      validate={validateEditedComment}
       render={({ invalid, handleSubmit, values }) => {
         const disabled = invalid
         return (

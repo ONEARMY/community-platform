@@ -174,48 +174,49 @@ describe('UserSettings', () => {
     const scrollIntoViewMock = jest.fn()
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock
 
-    it('expands and scrolls to impact section if a search query is provided with a valid year', async () => {
+    it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', async () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
 
-      const searchQuery = '?section=impact.2022'
+      const impactHash = '#impact_2022'
       const { expandClose } = buttons.impact
 
       let wrapper
       await act(async () => {
-        wrapper = await Wrapper(mockUser, searchQuery)
+        wrapper = await Wrapper(mockUser, impactHash)
       })
 
       expect(wrapper.getByText(expandClose)).toBeInTheDocument()
       expect(scrollIntoViewMock).toBeCalled()
     })
-    it('does not expand impact section if year is invalid', async () => {
+    it('does not expand impact section if hash syntax is not correct', async () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
-      const searchQuery = '?section=impact.2018'
+
+      const impactHash = '#impact2019'
       const { expandOpen } = buttons.impact
 
       let wrapper
       await act(async () => {
-        wrapper = await Wrapper(mockUser, searchQuery)
+        wrapper = await Wrapper(mockUser, impactHash)
       })
 
       expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
       expect(scrollIntoViewMock).not.toBeCalled()
     })
 
-    it('does not expand impact section if search query is null', async () => {
+    it('does not expand impact section if no impact hash is provided', async () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
-      const searchQuery = ''
+      const impactHash = ''
       const { expandOpen } = buttons.impact
 
       let wrapper
       await act(async () => {
-        wrapper = await Wrapper(mockUser, searchQuery)
+        wrapper = await Wrapper(mockUser, impactHash)
       })
 
       expect(wrapper.getByText(expandOpen)).toBeInTheDocument()

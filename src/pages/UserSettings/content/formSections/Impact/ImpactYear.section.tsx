@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Form } from 'react-final-form'
+import { useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { UserContactError } from 'src/pages/User/contact'
@@ -19,10 +20,9 @@ import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
 interface Props {
   year: IImpactYear
-  target: number | null
 }
 
-export const ImpactYearSection = observer(({ year, target }: Props) => {
+export const ImpactYearSection = observer(({ year }: Props) => {
   const [impact, setImpact] = useState<IImpactYearFieldList | undefined>(
     undefined,
   )
@@ -30,6 +30,8 @@ export const ImpactYearSection = observer(({ year, target }: Props) => {
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
   const impactDivRef = useRef<HTMLInputElement>(null)
+
+  const { hash } = useLocation()
 
   useEffect(() => {
     const fetchImpact = () => {
@@ -73,15 +75,18 @@ export const ImpactYearSection = observer(({ year, target }: Props) => {
         divRef.scrollIntoView({ behavior: 'smooth' })
       }
     }
-    if (target === year) {
+    if (hash === `#impact_${year}`) {
       scrollToElement()
     }
-  }, [target])
+  }, [hash])
 
   return (
     <Box sx={sx}>
-      <a id="impact"></a>
-      <Heading variant="small" ref={impactDivRef}>
+      <Heading
+        variant="small"
+        ref={impactDivRef}
+        id={`/settings#impact_${year}`}
+      >
         {year}
       </Heading>
       <UserContactError submitResults={submitResults} />

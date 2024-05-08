@@ -143,7 +143,7 @@ export const users = {
   howto_reader: {
     verified: false,
     _modified: '2020-01-07T19:54:49.860Z',
-    _authID: '0gudFgaoNufqGFFtrONLSYw3xny2',
+    _authID: 'adwaPfF3NhWqkyZ71hBWh0AHLzJ3',
     _created: '2020-01-07T19:54:49.860Z',
     displayName: 'howto_reader',
     _id: 'howto_reader',

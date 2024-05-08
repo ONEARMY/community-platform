@@ -18,7 +18,7 @@ export const AlertIncompleteProfile = observer(() => {
   if (isProfileFilled) return null
   return (
     <Link to="/settings">
-      <Flex data-cy="notificationBanner" style={{ zIndex: 3001 }}>
+      <Flex data-cy="incompleteProfileBanner">
         <Alert
           variant="failure"
           sx={{

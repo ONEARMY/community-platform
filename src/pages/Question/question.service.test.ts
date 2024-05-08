@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom'
 
 import { exportedForTesting } from './question.service'
-import { QuestionSortOptions } from './QuestionSortOptions'
 
 const mockWhere = jest.fn()
 const mockOrderBy = jest.fn()
@@ -39,11 +38,7 @@ describe('question.search', () => {
     const words = ['test', 'text']
 
     // act
-    exportedForTesting.createQueries(
-      words,
-      '',
-      QuestionSortOptions.MostRelevant,
-    )
+    exportedForTesting.createQueries(words, '', 'MostRelevant')
 
     // assert
     expect(mockWhere).toHaveBeenCalledWith(
@@ -58,11 +53,7 @@ describe('question.search', () => {
     const category = 'cat1'
 
     // act
-    exportedForTesting.createQueries(
-      [],
-      category,
-      QuestionSortOptions.MostRelevant,
-    )
+    exportedForTesting.createQueries([], category, 'MostRelevant')
 
     // assert
     expect(mockWhere).toHaveBeenCalledWith(
@@ -74,11 +65,7 @@ describe('question.search', () => {
 
   it('should not call orderBy if sorting by most relevant', async () => {
     // act
-    exportedForTesting.createQueries(
-      ['test'],
-      '',
-      QuestionSortOptions.MostRelevant,
-    )
+    exportedForTesting.createQueries(['test'], '', 'MostRelevant')
 
     // assert
     expect(mockOrderBy).toHaveBeenCalledTimes(0)
@@ -86,7 +73,7 @@ describe('question.search', () => {
 
   it('should call orderBy when sorting is not MostRelevant', async () => {
     // act
-    exportedForTesting.createQueries(['test'], '', QuestionSortOptions.Newest)
+    exportedForTesting.createQueries(['test'], '', 'Newest')
 
     // assert
     expect(mockOrderBy).toHaveBeenLastCalledWith('_created', 'desc')
@@ -97,13 +84,7 @@ describe('question.search', () => {
     const take = 12
 
     // act
-    exportedForTesting.createQueries(
-      ['test'],
-      '',
-      QuestionSortOptions.Newest,
-      undefined,
-      take,
-    )
+    exportedForTesting.createQueries(['test'], '', 'Newest', undefined, take)
 
     // assert
     expect(mockLimit).toHaveBeenLastCalledWith(take)

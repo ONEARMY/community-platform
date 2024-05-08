@@ -14,7 +14,7 @@ import { HowtoFilterHeader } from './HowtoFilterHeader'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { IHowto } from 'src/models'
-import type { HowtoSortOptions } from './HowtoSortOptions'
+import type { HowtoSortOption } from './HowtoSortOptions'
 
 export const HowtoList = observer(() => {
   const { themeStore, userStore } = useCommonStores().stores
@@ -29,7 +29,7 @@ export const HowtoList = observer(() => {
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get(HowtosSearchParams.q) || ''
   const category = searchParams.get(HowtosSearchParams.category) || ''
-  const sort = searchParams.get(HowtosSearchParams.sort) as HowtoSortOptions
+  const sort = searchParams.get(HowtosSearchParams.sort) as HowtoSortOption
 
   useEffect(() => {
     if (!sort) {

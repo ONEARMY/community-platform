@@ -198,6 +198,7 @@ describe('[How To]', () => {
       const categoryGuidanceFiles = guidance.moulds.files
 
       cy.login(creatorEmail, creatorPassword)
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
       cy.contains('Create a How-To').should('exist')
@@ -326,6 +327,7 @@ describe('[How To]', () => {
       cy.on('window:confirm', stub)
 
       cy.login(creatorEmail, creatorPassword)
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title]')

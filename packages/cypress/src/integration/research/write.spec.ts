@@ -27,6 +27,7 @@ describe('[Research]', () => {
     it('[By Authenticated]', () => {
       cy.login(researcherEmail, researcherPassword)
       cy.step('Create the research article')
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
       cy.step('Warn if title is identical to an existing one')
       cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
@@ -108,6 +109,7 @@ describe('[Research]', () => {
 
       cy.login(researcherEmail, researcherPassword)
       cy.step('Access the create research article')
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title')
         .clear()

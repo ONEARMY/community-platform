@@ -23,7 +23,7 @@ import type {
 } from 'firebase/firestore'
 import type { IHowto, IUser, IUserPPDB } from '../../models'
 import type { ICategory } from '../../models/categories.model'
-import type { HowtoSortOptions } from './Content/HowtoList/HowtoSortOptions'
+import type { HowtoSortOption } from './Content/HowtoList/HowtoSortOptions'
 
 export enum HowtosSearchParams {
   category = 'category',
@@ -34,7 +34,7 @@ export enum HowtosSearchParams {
 const search = async (
   words: string[],
   category: string,
-  sort: HowtoSortOptions,
+  sort: HowtoSortOption,
   currentUser?: IUserPPDB,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
@@ -79,7 +79,7 @@ const moderationFilters = (currentUser?: IUser) => {
 const createQueries = (
   words: string[],
   category: string,
-  sort: HowtoSortOptions,
+  sort: HowtoSortOption,
   currentUser?: IUser,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
@@ -130,7 +130,7 @@ const getHowtoCategories = async () => {
   )
 }
 
-const getSort = (sort: HowtoSortOptions) => {
+const getSort = (sort: HowtoSortOption) => {
   switch (sort) {
     case 'MostComments':
       return orderBy('totalComments', 'desc')

@@ -15,6 +15,7 @@ import type { FilterGroup } from './transformAvailableFiltersToGroups'
 interface IProps {
   availableFilters: FilterGroup[]
   onLocationChange: (latlng: { lat: number; lng: number }) => void
+  onFilterChange: (filters: string[]) => void
 }
 interface IState {
   showFiltersMobile: boolean
@@ -31,9 +32,13 @@ const MapFlexBar = styled(Flex)`
   transform: translateX(-50%);
 `
 
-export const Controls = ({ availableFilters, onLocationChange }: IProps) => {
+export const Controls = ({
+  availableFilters,
+  onLocationChange,
+  onFilterChange,
+}: IProps) => {
   const navigate = useNavigate()
-  const { mapsStore, userStore } = useCommonStores().stores
+  const { userStore } = useCommonStores().stores
   const [state, setState] = useState<IState>({
     showFiltersMobile: false,
     filtersSelected: [],
@@ -47,7 +52,7 @@ export const Controls = ({ availableFilters, onLocationChange }: IProps) => {
   }
 
   const onChange = (selected) => {
-    mapsStore.setActivePinFilters(selected)
+    onFilterChange && onFilterChange(selected)
     setState((state) => ({ ...state, filtersSelected: selected }))
   }
 
@@ -70,7 +75,6 @@ export const Controls = ({ availableFilters, onLocationChange }: IProps) => {
       }}
       onClick={() => {
         // close any active popup on click
-        mapsStore.setActivePin(undefined)
         navigate('/map')
       }}
     >

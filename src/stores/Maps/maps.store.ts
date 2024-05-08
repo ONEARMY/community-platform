@@ -163,6 +163,7 @@ export class MapsStore extends ModuleStore {
   public needsModeration(pin: IMapPin) {
     return needsModeration(pin, this.activeUser)
   }
+
   public canSeePin(pin: IMapPin) {
     return (
       pin.moderation === IModerationStatus.ACCEPTED ||

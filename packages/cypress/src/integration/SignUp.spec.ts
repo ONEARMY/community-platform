@@ -1,8 +1,6 @@
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 
-import {
-  generateNewUserDetails,
-} from '../utils/TestUtils'
+import { generateNewUserDetails } from '../utils/TestUtils'
 
 describe('[User sign-up]', () => {
   beforeEach(() => {

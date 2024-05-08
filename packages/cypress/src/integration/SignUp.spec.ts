@@ -17,7 +17,6 @@ describe('[User sign-up]', () => {
   beforeEach(() => {
     cy.visit('/sign-up')
     cy.log('clearing user from auth')
-    cy.deleteCurrentUser()
   })
 
   describe('[New user]', () => {

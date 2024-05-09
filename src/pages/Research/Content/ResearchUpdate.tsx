@@ -17,9 +17,8 @@ import { formatDate } from 'src/utils/date'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
-import { ResearchComments } from './ResearchComments'
+import { ResearchUpdateDiscussion } from './ResearchUpdateDiscussion'
 
-import type { IComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 
 interface IProps {
@@ -27,7 +26,6 @@ interface IProps {
   updateIndex: number
   isEditable: boolean
   slug: string
-  comments: IComment[]
   showComments: boolean
 }
 
@@ -40,7 +38,6 @@ const ResearchUpdate = ({
   updateIndex,
   isEditable,
   slug,
-  comments,
   showComments,
 }: IProps) => {
   const researchStore = useResearchStore()
@@ -208,12 +205,7 @@ const ResearchUpdate = ({
                 <DownloadCounter total={update.downloadCount} />
               </Flex>
             )}
-            <ResearchComments
-              update={update}
-              comments={comments as any}
-              updateIndex={updateIndex}
-              showComments={showComments}
-            />
+            <ResearchUpdateDiscussion update={update} showComments={showComments} />
           </Card>
         </Flex>
       </Flex>

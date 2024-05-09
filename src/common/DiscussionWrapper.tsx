@@ -3,9 +3,9 @@ import { DiscussionContainer, Loader } from 'oa-components'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
-import { Card } from 'theme-ui'
 
 import { useCommonStores } from './hooks/useCommonStores'
+import { HideDiscussionContainer } from './HideDiscussionContainer'
 
 import type { IDiscussion } from 'src/models'
 
@@ -13,13 +13,22 @@ interface IProps {
   sourceType: IDiscussion['sourceType']
   sourceId: string
   setTotalCommentsCount: (number) => void
+  canHideComments?: boolean
+  showComments?: boolean
 }
 
 export const DiscussionWrapper = (props: IProps) => {
+  const {
+    canHideComments,
+    sourceType,
+    setTotalCommentsCount,
+    sourceId,
+    showComments,
+  } = props
+
   const [comment, setComment] = useState('')
   const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const { sourceType, setTotalCommentsCount, sourceId } = props
 
   const { discussionStore } = useCommonStores().stores
   const highlightedCommentId = window.location.hash.replace('#comment:', '')
@@ -103,32 +112,36 @@ export const DiscussionWrapper = (props: IProps) => {
     updatedDiscussion && transformComments(updatedDiscussion)
   }
 
+  const discussionProps = {
+    supportReplies: true,
+    comments: discussion && (discussion.comments as any),
+    maxLength: MAX_COMMENT_LENGTH,
+    comment,
+    onChange: setComment,
+    onMoreComments: () => {},
+    handleEdit,
+    handleEditRequest,
+    handleDelete,
+    highlightedCommentId,
+    onSubmit,
+    onSubmitReply: handleSubmitReply,
+    isLoggedIn: !!discussionStore.activeUser,
+  }
+
   return (
-    <Card
-      sx={{
-        marginTop: 5,
-        padding: 4,
-      }}
-    >
-      {isLoading ? (
-        <Loader />
-      ) : discussion ? (
-        <DiscussionContainer
-          supportReplies={true}
-          comments={discussion.comments as any}
-          maxLength={MAX_COMMENT_LENGTH}
-          comment={comment}
-          onChange={setComment}
-          onMoreComments={() => {}}
-          handleEdit={handleEdit}
-          handleEditRequest={handleEditRequest}
-          handleDelete={handleDelete}
-          highlightedCommentId={highlightedCommentId}
-          onSubmit={onSubmit}
-          onSubmitReply={handleSubmitReply}
-          isLoggedIn={!!discussionStore.activeUser}
-        />
-      ) : null}
-    </Card>
+    <>
+      {isLoading && <Loader />}
+      {discussion && canHideComments && (
+        <HideDiscussionContainer
+          commentCount={discussion.comments.length}
+          showComments={showComments}
+        >
+          <DiscussionContainer {...discussionProps} />
+        </HideDiscussionContainer>
+      )}
+      {discussion && !canHideComments && (
+        <DiscussionContainer {...discussionProps} />
+      )}
+    </>
   )
 }

@@ -29,7 +29,7 @@ import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
-import type { IComment, IResearch, IUser, UserComment } from 'src/models'
+import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
 const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
@@ -46,20 +46,6 @@ const areCommentVisible = (updateIndex) => {
   }
 
   return showComments
-}
-
-const transformToUserComment = (
-  comments: IComment[],
-  loggedInUser: IUser | undefined,
-  item: IResearch.ItemDB,
-): UserComment[] => {
-  if (!comments) return []
-  return comments.map((c) => ({
-    ...c,
-    isEditable:
-      c.creatorName === loggedInUser?.userName ||
-      isAllowedToEditContent(item, loggedInUser),
-  }))
 }
 
 const ResearchArticle = observer(() => {
@@ -245,11 +231,6 @@ const ResearchArticle = observer(() => {
               updateIndex={index}
               isEditable={isEditable}
               slug={item.slug}
-              comments={transformToUserComment(
-                researchStore.formatResearchCommentList(update.comments),
-                loggedInUser as IUser,
-                item,
-              )}
               showComments={areCommentVisible(index)}
             />
           ))}

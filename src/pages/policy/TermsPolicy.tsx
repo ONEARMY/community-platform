@@ -4,8 +4,8 @@ import { ExternalLink } from 'oa-components'
 const TermsPolicy = () => {
   return (
     <>
-      <h2>Terms &amp; Conditions</h2>
-      <h3>Updated 20th January 2020</h3>
+      <h1>Terms &amp; Conditions</h1>
+      <h2>Updated 20th January 2020</h2>
       <p>
         By using the platform, these terms will automatically platformly to you
         – you should make sure therefore that you read them carefully before

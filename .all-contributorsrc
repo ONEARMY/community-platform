@@ -697,6 +697,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "codisart",
+      "name": "Louis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1767237?v=4",
+      "profile": "https://github.com/codisart",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

@@ -306,7 +306,7 @@ export class ResearchStore extends ModuleStore {
               location: `update-${existingUpdateIndex}-comment:${newComment?._id}`,
             }))
             .concat(researchItem.mentions || []),
-          totalCommentCount: (researchItem.totalCommentCount || 0) + 1,
+          totalCommentCount: this.commentsCount + 1,
         } as any)
 
         // Notify author and contributors
@@ -361,10 +361,7 @@ export class ResearchStore extends ModuleStore {
           .doc(item._id)
 
         await dbRef.update({
-          totalCommentCount: Math.max(
-            item.totalCommentCount ? item.totalCommentCount - 1 : 0,
-            0,
-          ),
+            totalCommentCount: Math.max(this.commentsCount - 1, 0),
         } as any)
 
         if (item) {
@@ -395,15 +392,6 @@ export class ResearchStore extends ModuleStore {
         if (discussion) {
           await this.discussionStore.editComment(discussion, commentId, newText)
         }
-        const dbRef = this.db
-          .collection<IResearch.Item>(COLLECTION_NAME)
-          .doc(item._id)
-
-        dbRef.update({
-          totalCommentCount: !item.totalCommentCount
-            ? 1
-            : item.totalCommentCount,
-        } as any)
 
         this.setActiveResearchItemBySlug(item.slug)
       }
@@ -683,39 +671,31 @@ export class ResearchStore extends ModuleStore {
 
   @computed
   get commentsCount(): number {
-    if (!this.activeResearchItem) {
+    if (!this.activeResearchItem || !this.activeResearchItem?.updates) {
       return 0
     }
 
-    let commentCount = 0
-
-    if (this.activeResearchItem?.totalCommentCount) {
-      commentCount = this.activeResearchItem.totalCommentCount
-    }
-
-    if (this.activeResearchItem?.updates) {
-      const commentCountFromUpdates = this.activeResearchItem?.updates.reduce(
-        (totalComments, update) => {
-          const updateCommentsLength = update.comments?.length ?? 0
-          return totalComments + updateCommentsLength
-        },
-        0,
-      )
-      commentCount += commentCountFromUpdates
-    }
-
+    const commentCount = this.activeResearchItem.updates.reduce(
+      (totalComments, update) => {
+        const updateCommentsLength = update.comments?.length ?? 0
+        return totalComments + updateCommentsLength
+      },
+      0,
+    )
     return Math.max(commentCount, 0)
   }
 
   @computed
   get updatesCount(): number {
-    return this.activeResearchItem?.updates?.length
-      ? this.activeResearchItem?.updates.filter(
-          (update) =>
-            update.status !== ResearchUpdateStatus.DRAFT &&
-            update._deleted !== true,
-        ).length
-      : 0
+    if (!this.activeResearchItem?.updates) {
+      return 0
+    }
+
+    return this.activeResearchItem.updates.filter(
+      (update) =>
+        update.status !== ResearchUpdateStatus.DRAFT &&
+        update._deleted !== true,
+    ).length
   }
 
   @action

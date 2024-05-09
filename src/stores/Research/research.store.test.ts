@@ -1,6 +1,6 @@
 jest.mock('../common/module.store')
 import { toJS } from 'mobx'
-import { UserRole } from 'oa-shared'
+import { ResearchUpdateStatus,UserRole } from 'oa-shared'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryResearchItem,
@@ -856,46 +856,76 @@ describe('research.store', () => {
 
   describe('getters', () => {
     describe('commentsCount', () => {
-      it('returns the total number of comments', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: 3,
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.commentsCount).toBe(3)
-      })
-
-      it('returns count from local items', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: 3,
-          updates: [
-            FactoryResearchItemUpdate({
-              comments: [FactoryComment(), FactoryComment(), FactoryComment()],
-            }),
-          ],
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.commentsCount).toBe(6)
-      })
-
-      it('normalizes malformed values', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: -1,
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
+      it('should return 0 when item has no updates', () => {
+        const { store } = await factoryResearchItem({})
 
         // Assert
         expect(store.commentsCount).toBe(0)
       })
+
+      it('should return 0 when item has no updates even if denormalized count is set', () => {
+        const { store } = await factoryResearchItem({
+          totalCommentCount: 3,
+        })
+
+        // Assert
+        expect(store.commentsCount).toBe(0)
+      })
+
+      it('should return the correct amount of comments from the updates', () => {
+        const { store } = await factoryResearchItem({
+          totalCommentCount: 2,
+          updates: Array.from({ length: 3 }).fill(
+            FactoryResearchItemUpdate({
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: false,
+              comments: [FactoryComment(), FactoryComment(), FactoryComment()],
+            }),
+          ),
+        })
+
+        // Act
+        store.setActiveResearchItemBySlug('fish')
+
+        // Assert
+        expect(store.commentsCount).toBe(9)
+      })
+
+      it('should ignore deleted and draft updates', () => {
+        const { store } = await factoryResearchItem({
+          totalCommentCount: 2,
+          updates: [
+            FactoryResearchItemUpdate({
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: false,
+              comments:  [FactoryComment(), FactoryComment()],
+            }),
+            FactoryResearchItemUpdate({
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: false,
+              comments:  [FactoryComment(), FactoryComment()],
+            }),
+            // Deleted Update should not count
+            FactoryResearchItemUpdate({
+              status: ResearchUpdateStatus.PUBLISHED,
+              _deleted: true,
+              comments:  [FactoryComment(), FactoryComment()],
+            }),
+            // Draft Update should not count
+            FactoryResearchItemUpdate({
+              status: ResearchUpdateStatus.DRAFT,
+              _deleted: false,
+              comments:  [FactoryComment(), FactoryComment()],
+            }),
+          ],
+        })
+        // Act
+        store.setActiveResearchItemBySlug('fish')
+
+        // Assert
+        expect(store.commentsCount).toBe(4)
+      })
+
     })
   })
 })

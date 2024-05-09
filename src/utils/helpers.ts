@@ -207,30 +207,6 @@ export const isContactable = (preference: boolean | undefined) => {
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 
-export const getResearchTotalCommentCount = (
-  item: IResearch.ItemDB,
-): number => {
-  if (Object.hasOwnProperty.call(item, 'totalCommentCount')) {
-    return item.totalCommentCount || 0
-  }
-
-  if (item.updates) {
-    const commentOnUpdates = item.updates.reduce((totalComments, update) => {
-      const updateCommentsLength =
-        !update._deleted &&
-        update.status !== ResearchUpdateStatus.DRAFT &&
-        update.comments
-          ? update.comments.length
-          : 0
-      return totalComments + updateCommentsLength
-    }, 0)
-
-    return commentOnUpdates ? commentOnUpdates : 0
-  } else {
-    return 0
-  }
-}
-
 export const getPublicUpdates = (item: IResearch.Item) => {
   if (item.updates) {
     return item.updates.filter(

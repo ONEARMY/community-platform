@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Form } from 'react-final-form'
+import { useLocation } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { UserContactError } from 'src/pages/User/contact'
@@ -27,6 +28,10 @@ export const ImpactYearSection = observer(({ year }: Props) => {
   )
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
+
+  const impactDivRef = useRef<HTMLInputElement>(null)
+
+  const { hash } = useLocation()
 
   useEffect(() => {
     const fetchImpact = () => {
@@ -63,13 +68,28 @@ export const ImpactYearSection = observer(({ year }: Props) => {
     }
   }
 
+  useEffect(() => {
+    const scrollToElement = () => {
+      const divRef = impactDivRef.current
+      if (divRef !== null) {
+        divRef.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+    if (hash === `#impact_${year}`) {
+      scrollToElement()
+    }
+  }, [hash])
+
   return (
     <Box sx={sx}>
-      <a id="impact"></a>
-      <Heading variant="small">{year}</Heading>
-
+      <Heading
+        variant="small"
+        ref={impactDivRef}
+        id={`/settings#impact_${year}`}
+      >
+        {year}
+      </Heading>
       <UserContactError submitResults={submitResults} />
-
       <Form
         id={formId}
         initialValues={impact ? transformImpactData(impact) : undefined}

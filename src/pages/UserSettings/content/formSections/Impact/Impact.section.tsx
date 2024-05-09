@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import IconArrowDown from 'src/assets/icons/icon-arrow-down.svg'
 import IconArrowUp from 'src/assets/icons/icon-arrow-up.svg'
 import { IMPACT_YEARS } from 'src/pages/User/impact/constants'
@@ -9,12 +10,26 @@ import { FlexSectionContainer } from '../elements'
 import { ImpactYearSection } from './ImpactYear.section'
 
 export const ImpactSection = () => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false)
+  const [isExpanded, setIsExpanded] = useState<boolean>()
   const { description, title } = fields.impact
   const { expandClose, expandOpen } = buttons.impact
 
   const buttonLabel = isExpanded ? expandClose : expandOpen
   const buttonIcon = isExpanded ? IconArrowUp : IconArrowDown
+
+  const { hash } = useLocation()
+
+  useEffect(() => {
+    if (hash.includes('#impact_')) {
+      const impactyear = Number(hash.slice(8))
+      const impactYearsConstants: number[] = IMPACT_YEARS.map((elem) =>
+        Number(elem),
+      )
+      if (impactYearsConstants.includes(impactyear)) {
+        setIsExpanded(true)
+      }
+    }
+  }, [hash])
 
   return (
     <FlexSectionContainer>

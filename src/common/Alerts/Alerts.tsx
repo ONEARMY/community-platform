@@ -10,7 +10,10 @@ export const Alerts = observer(() => {
 
   if (!authUser) return null
 
-  if (!authUser.emailVerified) return <AlertProfileVerification />
-
-  return <AlertIncompleteProfile />
+  return (
+    <>
+      <AlertProfileVerification />
+      <AlertIncompleteProfile />
+    </>
+  )
 })

@@ -12,7 +12,6 @@ import {
 
 import { DB_ENDPOINTS } from '../../models'
 import { firestore } from '../../utils/firebase'
-import { QuestionSortOptions } from './QuestionSortOptions'
 
 import type {
   DocumentData,
@@ -22,11 +21,18 @@ import type {
 } from 'firebase/firestore'
 import type { IQuestion } from '../../models'
 import type { ICategory } from '../../models/categories.model'
+import type { QuestionSortOption } from './QuestionSortOptions'
+
+export enum QuestionSearchParams {
+  category = 'category',
+  q = 'q',
+  sort = 'sort',
+}
 
 const search = async (
   words: string[],
   category: string,
-  sort: QuestionSortOptions,
+  sort: QuestionSortOption,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
@@ -54,7 +60,7 @@ const search = async (
 const createQueries = (
   words: string[],
   category: string,
-  sort: QuestionSortOptions,
+  sort: QuestionSortOption,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
@@ -102,17 +108,17 @@ const getQuestionCategories = async () => {
   )
 }
 
-const getSort = (sort: QuestionSortOptions) => {
+const getSort = (sort: QuestionSortOption) => {
   switch (sort) {
-    case QuestionSortOptions.Comments:
+    case 'Comments':
       return orderBy('commentCount', 'desc')
-    case QuestionSortOptions.LeastComments:
+    case 'LeastComments':
       return orderBy('commentCount', 'asc')
-    case QuestionSortOptions.Newest:
+    case 'Newest':
       return orderBy('_created', 'desc')
-    case QuestionSortOptions.LatestComments:
+    case 'LatestComments':
       return orderBy('latestCommentDate', 'desc')
-    case QuestionSortOptions.LatestUpdated:
+    case 'LatestUpdated':
       return orderBy('_modified', 'desc')
   }
 }

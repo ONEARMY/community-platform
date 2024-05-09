@@ -9,10 +9,10 @@ import { ITEMS_PER_PAGE } from './constants'
 import { headings, listing } from './labels'
 import { QuestionFilterHeader } from './QuestionFilterHeader'
 import { QuestionListItem } from './QuestionListItem'
-import { QuestionSortOptions } from './QuestionSortOptions'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { IQuestion } from 'src/models'
+import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListing = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
@@ -25,7 +25,7 @@ export const QuestionListing = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
   const category = searchParams.get('category') || ''
-  const sort = searchParams.get('sort') as QuestionSortOptions
+  const sort = searchParams.get('sort') as QuestionSortOption
 
   useEffect(() => {
     document.title = 'Questions'
@@ -34,9 +34,9 @@ export const QuestionListing = () => {
       const params = new URLSearchParams(searchParams.toString())
 
       if (q) {
-        params.set('sort', QuestionSortOptions.MostRelevant)
+        params.set('sort', 'MostRelevant')
       } else {
-        params.set('sort', QuestionSortOptions.Newest)
+        params.set('sort', 'Newest')
       }
       setSearchParams(params)
     } else {

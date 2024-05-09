@@ -25,6 +25,7 @@ export const _supportedConfigurationOptions = [
   'REACT_APP_PLATFORM_PROFILES',
   'REACT_APP_CDN_URL',
   'REACT_APP_PATREON_CLIENT_ID',
+  'REACT_APP_API_URL',
 ] as const
 
 export type ConfigurationOption = typeof _supportedConfigurationOptions[number]

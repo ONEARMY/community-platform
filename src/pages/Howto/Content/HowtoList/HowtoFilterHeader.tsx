@@ -8,14 +8,10 @@ import { Flex, Input } from 'theme-ui'
 import { CategoriesSelectV2 } from '../../../common/Category/CategoriesSelectV2'
 import { howtoService, HowtosSearchParams } from '../../howto.service'
 import { listing } from '../../labels'
-import { HowtosSortOptions } from './HowtoSortOptions'
+import { HowtoSortOptions } from './HowtoSortOptions'
 
 import type { SelectValue } from '../../../common/Category/CategoriesSelectV2'
-
-const sortOptions = Array.from(HowtosSortOptions, ([value, label]) => ({
-  label: label,
-  value: value,
-}))
+import type { HowtoSortOption } from './HowtoSortOptions'
 
 export const HowtoFilterHeader = () => {
   const [categories, setCategories] = useState<SelectValue[]>([])
@@ -24,7 +20,7 @@ export const HowtoFilterHeader = () => {
   const categoryParam = searchParams.get(HowtosSearchParams.category)
   const category = categories?.find((x) => x.value === categoryParam) ?? null
   const q = searchParams.get(HowtosSearchParams.q)
-  const sort = searchParams.get(HowtosSearchParams.sort)
+  const sort = searchParams.get(HowtosSearchParams.sort) as HowtoSortOption
 
   const _inputStyle = {
     width: ['100%', '100%', '200px'],
@@ -100,9 +96,12 @@ export const HowtoFilterHeader = () => {
       <Flex sx={_inputStyle}>
         <FieldContainer>
           <Select
-            options={sortOptions}
+            options={HowtoSortOptions.toArray(!!q)}
             placeholder={listing.sort}
-            value={{ label: sort, value: sort }}
+            value={{
+              label: HowtoSortOptions.get(sort),
+              value: sort,
+            }}
             onChange={(sortBy) =>
               updateFilter(HowtosSearchParams.sort, sortBy.value)
             }

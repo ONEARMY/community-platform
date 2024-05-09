@@ -38,7 +38,7 @@ export const AlertProfileVerification = observer(() => {
   const successLabelLinkText = "Let us know if you didn't get it."
 
   return (
-    <Flex data-cy="verificationBanner" style={{ zIndex: 3001 }}>
+    <Flex data-cy="emailNotVerifiedBanner">
       <Alert
         onClick={handleOnClick}
         variant={isVerificationSuccessful ? 'success' : 'failure'}

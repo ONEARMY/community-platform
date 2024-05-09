@@ -1,6 +1,7 @@
 #!/usr/bin/env ts-node
 import { spawn, spawnSync } from 'child_process'
 
+import { generateAlphaNumeric } from '../src/utils/TestUtils'
 import PATHS from './paths'
 
 const e2eEnv = require('dotenv').config()
@@ -53,7 +54,7 @@ function runTests() {
   const CYPRESS_ENV = `DUMMY_VAR=1`
   // use workflow ID so that jobs running in parallel can be assigned to same cypress build
   // cypress will use this to split tests between parallel runs
-  const buildId = e.CIRCLE_WORKFLOW_ID || randomString(8)
+  const buildId = e.CIRCLE_WORKFLOW_ID || generateAlphaNumeric(8)
 
   // main testing command, depending on whether running on ci machine or interactive local
   // call with path to bin as to ensure locally installed used
@@ -133,15 +134,4 @@ async function startAppServer() {
   // give up if not reponsive after 5 minutes (assume uncaught error somewhere)
   const timeout = 5 * 60 * 1000
   await waitOn({ resources: ['http-get://127.0.0.1:3456'], timeout })
-}
-
-function randomString(length) {
-  let result = ''
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-  return result
 }

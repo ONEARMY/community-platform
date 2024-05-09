@@ -99,11 +99,12 @@ export class MapsStore extends ModuleStore {
     }
 
     // TODO: the client-side filtering done at `processDBMapPins` should be here
-    const pins = await this.db
-      .collection<IMapPin>(COLLECTION_NAME)
-      .getWhere('_deleted', '!=', true)
-
-    this.processDBMapPins(pins, filterToRemove)
+    this.db.collection<IMapPin>(COLLECTION_NAME).syncLocally(
+      (update) => {
+        this.processDBMapPins(update, filterToRemove)
+      },
+      { keepAlive: false },
+    )
   }
 
   @action
@@ -162,6 +163,7 @@ export class MapsStore extends ModuleStore {
   public needsModeration(pin: IMapPin) {
     return needsModeration(pin, this.activeUser)
   }
+
   public canSeePin(pin: IMapPin) {
     return (
       pin.moderation === IModerationStatus.ACCEPTED ||

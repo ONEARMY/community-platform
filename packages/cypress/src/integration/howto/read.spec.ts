@@ -13,10 +13,6 @@ describe('[How To]', () => {
     // const howtoUrl = `/how-to/${howtoSlug}`
     // const coverFileRegex = /howto-beams-glass-0-3.jpg/
 
-    beforeEach(() => {
-      cy.visit('/how-to')
-    })
-
     // it('[By Everyone]', () => {
     //   cy.step('More How-tos button is hidden')
     //   cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
@@ -53,8 +49,10 @@ describe('[How To]', () => {
     // })
 
     it('[By Authenticated]', () => {
-      cy.login('howto_reader@test.com', 'test1234')
+      cy.signUpNewUser()
+
       cy.step('Create button is available')
+      cy.visit('/how-to')
       cy.get('[data-cy=create]').click().url()
     })
   })
@@ -62,9 +60,11 @@ describe('[How To]', () => {
   describe('[Read a How-to]', () => {
     const specificHowtoUrl = '/how-to/make-an-interlocking-brick'
     const coverFileRegex = /brick-12-1.jpg/
+
     beforeEach(() => {
       cy.visit('/how-to')
     })
+
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
         cy.visit(specificHowtoUrl)
@@ -146,7 +146,7 @@ describe('[How To]', () => {
 
     describe('[By Authenticated]', () => {
       it('[Allows opening of attachments]', () => {
-        cy.login('howto_reader@test.com', 'test1234')
+        cy.signUpNewUser()
         cy.visit(specificHowtoUrl)
 
         cy.step('Attachments are opened in new tabs')

@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 import { MODULE } from 'src/modules'
 
+import { mapPinService, MapPinServiceContext } from './Maps/map.service'
 import { QuestionModule } from './Question'
 import { ResearchModule } from './Research'
 
@@ -104,7 +105,11 @@ const academy = {
 const maps = {
   moduleName: MODULE.MAP,
   path: '/map',
-  component: <MapsPage />,
+  component: (
+    <MapPinServiceContext.Provider value={mapPinService}>
+      <MapsPage />
+    </MapPinServiceContext.Provider>
+  ),
   title: 'Map',
   description: 'Welcome to the Map',
   customStyles: {

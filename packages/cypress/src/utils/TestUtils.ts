@@ -4,7 +4,7 @@ export enum Page {
   SETTINGS = '/settings',
 }
 
-export const generatedId = (length: number) => {
+export const generateAlphaNumeric = (length: number) => {
   let result = ''
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -18,4 +18,12 @@ export const generatedId = (length: number) => {
 export enum DbCollectionName {
   users = 'users',
   howtos = 'howtos',
+}
+
+export const generateNewUserDetails = () => {
+  return {
+    username: `CI_${generateAlphaNumeric(5)}`.toLocaleLowerCase(),
+    email: `CI_${generateAlphaNumeric(5)}@test.com`.toLocaleLowerCase(),
+    password: 'test1234',
+  }
 }

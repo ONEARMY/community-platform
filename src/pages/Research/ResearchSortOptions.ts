@@ -6,10 +6,25 @@ export type ResearchSortOption =
   | 'MostUseful'
   | 'MostUpdates'
 
-export const ResearchSortOptions = new Map<ResearchSortOption, string>()
-ResearchSortOptions.set('MostRelevant', 'Most Relevant')
-ResearchSortOptions.set('Newest', 'Newest')
-ResearchSortOptions.set('MostComments', 'Most Comments')
-ResearchSortOptions.set('LatestUpdated', 'Latest Updated')
-ResearchSortOptions.set('MostUseful', 'Most Useful')
-ResearchSortOptions.set('MostUpdates', 'Most Updates')
+const BaseOptions = new Map<ResearchSortOption, string>()
+BaseOptions.set('Newest', 'Newest')
+BaseOptions.set('MostComments', 'Most Comments')
+BaseOptions.set('LatestUpdated', 'Latest Updated')
+BaseOptions.set('MostUseful', 'Most Useful')
+BaseOptions.set('MostUpdates', 'Most Updates')
+
+const QueryParamOptions = new Map<ResearchSortOption, string>(BaseOptions)
+QueryParamOptions.set('MostRelevant', 'Most Relevant')
+
+const toArray = (hasQueryParam: boolean) => {
+  const options = hasQueryParam ? QueryParamOptions : BaseOptions
+  return Array.from(options, ([value, label]) => ({
+    label: label,
+    value: value,
+  }))
+}
+
+export const ResearchSortOptions = {
+  get: (key: ResearchSortOption) => QueryParamOptions.get(key) ?? '',
+  toArray,
+}

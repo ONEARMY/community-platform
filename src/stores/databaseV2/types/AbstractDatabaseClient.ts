@@ -17,12 +17,16 @@ export interface AbstractDatabaseClient {
     queryOpts: DBQueryOptions,
   ): Promise<(T & DBDoc)[]>
 
-  streamCollection?<T>(
+  deleteDoc(endpoint: string, docId: string): Promise<void>
+}
+
+// Some clients support document streaming (e.g. firebase does, indexedDB does not)
+export interface AbstractDatabaseClientStreamable
+  extends AbstractDatabaseClient {
+  streamCollection<T>(
     endpoint: string,
     queryOpts?: DBQueryOptions,
   ): Observable<(T & DBDoc)[]>
 
-  streamDoc?<T>(endpoint: string): Observable<T & DBDoc>
-
-  deleteDoc(endpoint: string, docId: string): Promise<void>
+  streamDoc<T>(endpoint: string): Observable<T & DBDoc>
 }

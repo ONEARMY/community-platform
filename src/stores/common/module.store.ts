@@ -108,7 +108,7 @@ export class ModuleStore {
   init() {
     if (!this.isInitialized) {
       if (this.basePath) {
-        this._subscribeToCollection(this.basePath)
+        this.syncAndEmitDocs(this.basePath)
         this.isInitialized = true
       }
     }
@@ -203,15 +203,18 @@ export class ModuleStore {
     })
     return Promise.all(promises)
   }
-  // efficiently checks the cache first and emits any subsequent updates
-  private _subscribeToCollection(endpoint: IDBEndpoint) {
+  /** Sync all server docs locally and stream output changes */
+  private syncAndEmitDocs(endpoint: IDBEndpoint) {
     this.allDocs$.next([])
     this.activeCollectionSubscription.unsubscribe()
     this.activeCollectionSubscription = this.db
       .collection(endpoint)
-      .stream((data) => {
-        this.allDocs$.next(data)
-      })
+      .syncLocally(
+        (data) => {
+          this.allDocs$.next(data)
+        },
+        { keepAlive: false },
+      )
   }
 }
 

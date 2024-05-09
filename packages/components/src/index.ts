@@ -1,4 +1,5 @@
 export { ArticleCallToAction } from './ArticleCallToAction/ArticleCallToAction'
+export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs'
 export { Button } from './Button/Button'
 export { ButtonShowReplies } from './ButtonShowReplies/ButtonShowReplies'
 export { Category } from './Category/Category'

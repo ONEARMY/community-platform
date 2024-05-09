@@ -26,8 +26,8 @@ describe('[Research]', () => {
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
       cy.login(researcherEmail, researcherPassword)
-      cy.wait(2000)
       cy.step('Create the research article')
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
       cy.step('Warn if title is identical to an existing one')
       cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
@@ -52,7 +52,6 @@ describe('[Research]', () => {
 
       cy.step('Draft is saved without description')
       cy.get('[data-cy=draft]').click()
-      cy.wait(2000)
 
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
         .click()
@@ -109,8 +108,8 @@ describe('[Research]', () => {
       cy.on('window:confirm', stub)
 
       cy.login(researcherEmail, researcherPassword)
-      cy.wait(2000)
       cy.step('Access the create research article')
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title')
         .clear()
@@ -132,7 +131,7 @@ describe('[Research]', () => {
           expect(stub.callCount).to.equal(0)
           stub.resetHistory()
         })
-      cy.url().should('match', /\/research$/)
+      cy.url().should('match', /\/research?/)
     })
   })
 
@@ -189,7 +188,6 @@ describe('[Research]', () => {
       cy.get('[data-cy=submit]').click()
 
       cy.step('Open the research update')
-      cy.wait(2000)
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
         .click()
         .url()

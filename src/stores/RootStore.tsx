@@ -7,6 +7,7 @@ import { MapsStore } from './Maps/maps.store'
 import { MessageStore } from './Message/message.store'
 import { QuestionStore } from './Question/question.store'
 import { QuestionCategoriesStore } from './QuestionCategories/questionCategories.store'
+import { ResearchStore } from './Research/research.store'
 import { ResearchCategoriesStore } from './ResearchCategories/researchCategories.store'
 import { TagsStore } from './Tags/tags.store'
 import { ThemeStore } from './Theme/theme.store'
@@ -24,6 +25,7 @@ export interface IStores {
   tagsStore: TagsStore
   categoriesStore: CategoriesStore
   researchCategoriesStore: ResearchCategoriesStore
+  researchStore: ResearchStore
   mapsStore: MapsStore
   messageStore: MessageStore
   themeStore: ThemeStore
@@ -56,6 +58,7 @@ const stores = (rootStore: IRootStore) => {
     tagsStore: new TagsStore(rootStore),
     categoriesStore: new CategoriesStore(rootStore),
     researchCategoriesStore: new ResearchCategoriesStore(rootStore),
+    researchStore: new ResearchStore(rootStore),
     mapsStore: new MapsStore(rootStore),
     messageStore: new MessageStore(rootStore),
     themeStore: new ThemeStore(),

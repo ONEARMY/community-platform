@@ -162,13 +162,13 @@ export const CommentItem = (props: CommentItemProps) => {
 
         <Modal width={600} isOpen={showEditModal}>
           <EditComment
-            isReply={isReply}
             comment={text}
             handleSubmit={(commentText) => {
               handleEdit && handleEdit(_id, commentText)
               setShowEditModal(false)
             }}
             handleCancel={() => setShowEditModal(false)}
+            isReply={isReply}
           />
         </Modal>
 

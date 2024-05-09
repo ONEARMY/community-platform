@@ -290,7 +290,9 @@ describe('question.routes', () => {
 
       await waitFor(async () => {
         expect(() => wrapper.getByText(/loading/)).toThrow()
-        expect(wrapper.getByText(question.title)).toBeInTheDocument()
+        expect(wrapper.queryByTestId('question-title')).toHaveTextContent(
+          question.title,
+        )
         expect(
           wrapper.getByText(
             new RegExp(`^${question.description.split(' ')[0]}`),
@@ -304,7 +306,7 @@ describe('question.routes', () => {
         expect(wrapper.getByText(`1 comment`)).toBeInTheDocument()
 
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
-        expect(mockIncrementViewCount).toBeCalledWith(question._id)
+        expect(mockIncrementViewCount).toBeCalledWith(question)
       })
     })
 

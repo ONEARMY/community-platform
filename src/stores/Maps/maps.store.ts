@@ -12,7 +12,6 @@ import { getUserAvatar } from '../User/user.store'
 import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
-import type { Subscription } from 'rxjs'
 import type { IDBEndpoint } from 'src/models'
 import type {
   IBoundingBox,
@@ -30,7 +29,6 @@ type IFilterToRemove = IMapPinType | undefined
 
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
-  mapPins$: Subscription
   @observable
   public activePinFilters: Array<IMapGrouping> = []
   @observable
@@ -94,21 +92,19 @@ export class MapsStore extends ModuleStore {
   @action
   public async retrieveMapPins(filterToRemove: IFilterToRemove = undefined) {
     // TODO: make the function accept a bounding box to reduce load from DB
-    /*
-       TODO: unaccepted pins should be filtered in DB, before reaching the client
-             It would need to modifiy:
-              - stream in stores/databaseV2/clients/firestore.tsx
-              - streamCollection in stores/databaseV2/clients/firestore.tsx
-             to support where clause.
-    */
-    this.mapPins$ = this.db
-      .collection<IMapPin>(COLLECTION_NAME)
-      .stream((pins) => {
-        // TODO - make more efficient by tracking only new pins received and updating
-        if (pins.length !== this.mapPins.length) {
-          this.processDBMapPins(pins, filterToRemove)
-        }
-      })
+
+    if (this.mapPins?.length > 0) {
+      // we already fetched pins
+      return
+    }
+
+    // TODO: the client-side filtering done at `processDBMapPins` should be here
+    this.db.collection<IMapPin>(COLLECTION_NAME).syncLocally(
+      (update) => {
+        this.processDBMapPins(update, filterToRemove)
+      },
+      { keepAlive: false },
+    )
   }
 
   @action
@@ -167,6 +163,7 @@ export class MapsStore extends ModuleStore {
   public needsModeration(pin: IMapPin) {
     return needsModeration(pin, this.activeUser)
   }
+
   public canSeePin(pin: IMapPin) {
     return (
       pin.moderation === IModerationStatus.ACCEPTED ||
@@ -210,12 +207,6 @@ export class MapsStore extends ModuleStore {
     }
     logger.debug('setting user pin', pin)
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).set(pin)
-  }
-
-  public removeSubscriptions() {
-    if (this.mapPins$) {
-      this.mapPins$.unsubscribe()
-    }
   }
 
   // return subset of profile info used when displaying map pins

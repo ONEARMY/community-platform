@@ -83,7 +83,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
         {props.howtoCount ? (
           <InternalLink
-            to={'/how-to?author=' + props.userName}
+            to={'/how-to?q=' + props.userName}
             sx={{ color: 'black' }}
             data-testid="howto-link"
           >
@@ -96,7 +96,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
 
         {props.researchCount ? (
           <InternalLink
-            to={'/research?author=' + props.userName}
+            to={'/research?q=' + props.userName}
             sx={{ color: 'black' }}
             data-testid="research-link"
           >

@@ -16,19 +16,10 @@ import {
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import {
-  filterModerableItems,
-  formatLowerNoSpecial,
-  hasAdminRights,
-  needsModeration,
-  randomID,
-} from 'src/utils/helpers'
+import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
-import {
-  FilterSorterDecorator,
-  ItemSortingOption,
-} from '../common/FilterSorterDecorator/FilterSorterDecorator'
+import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
@@ -53,33 +44,7 @@ export class ResearchStore extends ModuleStore {
   public activeResearch: IResearchDB | undefined
 
   @observable
-  public allResearchItems: IResearch.ItemDB[] = []
-
-  @observable
   public activeResearchItem: IResearch.ItemDB | undefined
-
-  @observable
-  public selectedCategory: string
-
-  @observable
-  public selectedAuthor: string
-
-  @observable
-  public selectedStatus: string
-
-  @observable
-  public searchValue: string
-
-  @observable
-  public activeSorter: ItemSortingOption
-
-  @observable
-  public preSearchSorter: ItemSortingOption
-
-  public availableItemSortingOption: ItemSortingOption[]
-
-  @observable
-  private filterSorterDecorator: FilterSorterDecorator<IResearch.ItemDB>
 
   @observable
   public researchUploadStatus: IResearchUploadStatus =
@@ -94,94 +59,6 @@ export class ResearchStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-    super.init()
-
-    this.selectedCategory = ''
-    this.selectedAuthor = ''
-    this.searchValue = ''
-    this.availableItemSortingOption = [
-      ItemSortingOption.Newest,
-      ItemSortingOption.LatestUpdated,
-      ItemSortingOption.MostUseful,
-      ItemSortingOption.Comments,
-      ItemSortingOption.Updates,
-      ItemSortingOption.SearchResults,
-    ]
-
-    this.allDocs$.subscribe((docs: IResearch.ItemDB[]) => {
-      logger.debug('docs', docs)
-      const activeItems = [...docs].filter((doc) => {
-        return !doc._deleted
-      })
-
-      runInAction(() => {
-        this.activeSorter = ItemSortingOption.LatestUpdated
-        this.filterSorterDecorator = new FilterSorterDecorator()
-        this.allResearchItems = this.filterSorterDecorator.sort(
-          this.activeSorter,
-          activeItems,
-        )
-        if (docs.length) {
-          this.isFetching = false
-        }
-      })
-    })
-  }
-
-  public updateActiveSorter(sorter: ItemSortingOption) {
-    this.activeSorter = sorter
-  }
-
-  public updatePreSearchSorter() {
-    this.preSearchSorter = this.activeSorter
-  }
-
-  public updateSelectedAuthor(author: IUser['userName']) {
-    this.selectedAuthor = author
-  }
-
-  public updateSelectedStatus(status: ResearchStatus) {
-    this.selectedStatus = status
-  }
-
-  @computed get filteredResearches() {
-    const researches = this.filterSorterDecorator.filterByCategory(
-      this.allResearchItems,
-      this.selectedCategory,
-    )
-
-    let validResearches = filterModerableItems(
-      researches,
-      this.activeUser || undefined,
-    )
-
-    validResearches = validResearches.filter((research) => {
-      return (
-        research.researchStatus !== 'Archived' ||
-        this.selectedStatus === 'Archived'
-      )
-    })
-
-    validResearches = this.filterSorterDecorator.search(
-      validResearches,
-      this.searchValue,
-    )
-
-    validResearches = this.filterSorterDecorator.filterByAuthor(
-      validResearches,
-      this.selectedAuthor,
-    )
-
-    validResearches = this.filterSorterDecorator.filterByStatus(
-      validResearches,
-      this.selectedStatus as ResearchStatus,
-    )
-
-    return this.filterSorterDecorator.sort(
-      this.activeSorter,
-      validResearches,
-      this.activeUser || undefined,
-    )
   }
 
   public formatResearchCommentList(comments: IComment[] = []): IComment[] {
@@ -307,26 +184,12 @@ export class ResearchStore extends ModuleStore {
     return
   }
 
-  public async incrementViewCount(id: string) {
-    const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
-    const researchData = await toJS(dbRef.get('server'))
-    const totalViews = researchData?.total_views || 0
-
-    if (researchData) {
-      const updatedResearch: IResearchDB = {
-        ...researchData,
-        total_views: totalViews! + 1,
-      }
-
-      await dbRef.set(
-        {
-          ...updatedResearch,
-        },
-        { keep_modified_timestamp: true },
-      )
-
-      return updatedResearch.total_views
-    }
+  public async incrementViewCount(researchItem: Partial<IResearch.ItemDB>) {
+    return await incrementDocViewCount({
+      collection: COLLECTION_NAME,
+      db: this.db,
+      doc: researchItem,
+    })
   }
 
   @action
@@ -342,14 +205,6 @@ export class ResearchStore extends ModuleStore {
           ...researchData,
           _deleted: true,
         })
-
-        if (this.activeResearchItem !== undefined) {
-          this.allResearchItems = this.allResearchItems.filter(
-            (researchItem) => {
-              return researchItem._id !== researchData._id
-            },
-          )
-        }
       }
     } catch (err) {
       logger.error(err)
@@ -367,10 +222,6 @@ export class ResearchStore extends ModuleStore {
 
   public needsModeration(research: IResearch.ItemDB) {
     return needsModeration(research, toJS(this.activeUser || undefined))
-  }
-
-  public updateSearchValue(query: string) {
-    this.searchValue = query
   }
 
   @action
@@ -391,11 +242,6 @@ export class ResearchStore extends ModuleStore {
   @action
   public resetUpdateUploadStatus() {
     this.updateUploadStatus = getInitialUpdateUploadStatus()
-  }
-
-  @action
-  public updateSelectedCategory(category: string) {
-    this.selectedCategory = category
   }
 
   private async addUserReference(str: string): Promise<{
@@ -584,24 +430,16 @@ export class ResearchStore extends ModuleStore {
           .filter(Boolean)
 
     try {
-      // populate DB
-      // define research
       const userCountry = getUserCountry(user)
-
-      // create previousSlugs based on available slug or title
-      const previousSlugs: string[] = []
-      if (values.slug) {
-        previousSlugs.push(values.slug)
-      } else if (values.title) {
-        const titleToSlug = formatLowerNoSpecial(values.title)
-        previousSlugs.push(titleToSlug)
-      }
+      const slug = await this.setSlug(values)
+      const previousSlugs = this.setPreviousSlugs(values, slug)
 
       const researchItem: IResearch.Item = {
         mentions: [],
         ...values,
+        slug,
+        previousSlugs,
         collaborators,
-
         _createdBy: values._createdBy ? values._createdBy : user.userName,
         _deleted: false,
         moderation: values.moderation
@@ -1121,7 +959,7 @@ export class ResearchStore extends ModuleStore {
 
   // Get mentions from comments
   private async _getMentionsFromComments(
-    updateId: string,
+    updateId: string | number,
     comments: IComment[] = [],
   ): Promise<UserMention[]> {
     const mentions: UserMention[] = []

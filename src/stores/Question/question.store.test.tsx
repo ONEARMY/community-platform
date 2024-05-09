@@ -73,47 +73,6 @@ describe('question.store', () => {
         }),
       )
     })
-
-    it('generates a slug', async () => {
-      const { store, setFn } = await factory()
-      const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-      })
-
-      // Act
-      await store.upsertQuestion(newQuestion)
-
-      expect(setFn).toBeCalledWith(
-        expect.objectContaining({
-          title: newQuestion.title,
-          slug: 'question-title',
-        }),
-      )
-    })
-
-    it('generates a unique slug', async () => {
-      const { store, setFn, getWhereFn } = await factory()
-
-      const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-      })
-
-      getWhereFn.mockResolvedValue([
-        FactoryQuestionItem({
-          slug: 'question-title',
-        }),
-      ])
-
-      // Act
-      await store.upsertQuestion(newQuestion)
-
-      expect(setFn).toBeCalledWith(
-        expect.objectContaining({
-          title: newQuestion.title,
-          slug: expect.stringMatching(/question-title-/),
-        }),
-      )
-    })
   })
 
   describe('fetchQuestionBySlug', () => {
@@ -140,6 +99,45 @@ describe('question.store', () => {
 
       expect(getWhereFn.mock.calls[0]).toEqual(['slug', '==', newQuestion.slug])
       expect(questionDoc).toStrictEqual(newQuestion)
+    })
+
+    it('returns a valid response when a previous slug', async () => {
+      const { store, getWhereFn } = await factory()
+      const newQuestion = FactoryQuestionItem({
+        title: 'Question title',
+        previousSlugs: ['old-slug'],
+      })
+
+      getWhereFn.mockResolvedValue([newQuestion])
+
+      // Act
+      const questionDoc = await store.fetchQuestionBySlug('old-slug')
+
+      expect(questionDoc).toStrictEqual(newQuestion)
+    })
+  })
+
+  describe('incrementViews', () => {
+    it('increments views by one', async () => {
+      const { store, updateFn } = await factory()
+
+      const question = FactoryQuestionItem({
+        title: 'Question title',
+        _createdBy: undefined,
+        total_views: 56,
+      })
+
+      // Act
+      await store.upsertQuestion(question)
+
+      // Act
+      await store.incrementViewCount(question)
+      const updatedTotalViews = 57
+
+      expect(updateFn).toHaveBeenCalledWith(
+        expect.objectContaining({ total_views: updatedTotalViews }),
+        expect.anything(),
+      )
     })
   })
 

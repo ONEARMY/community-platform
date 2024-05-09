@@ -9,18 +9,9 @@ import {
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import {
-  filterModerableItems,
-  hasAdminRights,
-  needsModeration,
-  randomID,
-} from 'src/utils/helpers'
+import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
-import {
-  FilterSorterDecorator,
-  ItemSortingOption,
-} from '../common/FilterSorterDecorator/FilterSorterDecorator'
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
 import {
   changeMentionToUserReference,
@@ -48,80 +39,13 @@ export class HowtoStore extends ModuleStore {
   public activeHowto: IHowtoDB | null
 
   @observable
-  public allHowtos: IHowtoDB[]
-
-  @observable
-  public selectedCategory: string
-
-  @observable
-  public selectedAuthor: string
-
-  @observable
-  public searchValue: string
-
-  @observable
-  public activeSorter: ItemSortingOption
-
-  @observable
-  public preSearchSorter: ItemSortingOption
-
-  @observable
-  public referrerSource: string
-
-  @observable
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
-
-  public availableItemSortingOption: ItemSortingOption[]
-
-  @observable
-  private filterSorterDecorator: FilterSorterDecorator<IHowtoDB>
 
   constructor(rootStore: IRootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-    super.init()
-
-    this.allDocs$.subscribe((docs: IHowtoDB[]) => {
-      logger.debug('docs', docs)
-      const activeItems = [...docs].filter((doc) => {
-        return !doc._deleted
-      })
-
-      runInAction(() => {
-        this.activeSorter = ItemSortingOption.Newest
-        this.filterSorterDecorator = new FilterSorterDecorator()
-        this.allHowtos = this.filterSorterDecorator.sort(
-          this.activeSorter,
-          activeItems,
-        )
-      })
-    })
-    this.selectedCategory = ''
-    this.selectedAuthor = ''
-    this.searchValue = ''
-    this.referrerSource = ''
-    this.availableItemSortingOption = [
-      ItemSortingOption.Newest,
-      ItemSortingOption.MostUseful,
-      ItemSortingOption.LatestUpdated,
-      ItemSortingOption.TotalDownloads,
-      ItemSortingOption.Comments,
-      ItemSortingOption.SearchResults,
-    ]
-  }
-
-  public updateActiveSorter(sorter: ItemSortingOption) {
-    this.activeSorter = sorter
-  }
-
-  public updatePreSearchSorter() {
-    this.preSearchSorter = this.activeSorter
-  }
-
-  public updateSelectedAuthor(author: IUser['userName']) {
-    this.selectedAuthor = author
   }
 
   public getActiveHowToComments(): IComment[] {
@@ -219,31 +143,6 @@ export class HowtoStore extends ModuleStore {
     this.uploadStatus = getInitialUploadStatus()
   }
 
-  @computed get filteredHowtos() {
-    const howtos = this.filterSorterDecorator.filterByCategory(
-      this.allHowtos,
-      this.selectedCategory,
-    )
-    // HACK - ARH - 2019/12/11 filter unaccepted howtos, should be done serverside
-    let validHowtos = filterModerableItems(howtos, this.activeUser)
-
-    validHowtos = this.filterSorterDecorator.search(
-      validHowtos,
-      this.searchValue,
-    )
-
-    validHowtos = this.filterSorterDecorator.filterByAuthor(
-      validHowtos,
-      this.selectedAuthor,
-    )
-
-    return this.filterSorterDecorator.sort(
-      this.activeSorter,
-      validHowtos,
-      this.activeUser,
-    )
-  }
-
   public async incrementDownloadCount(howToID: string) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToID)
     const howToData = await toJS(dbRef.get('server'))
@@ -266,21 +165,12 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  public async incrementViewCount(howToID: string) {
-    return await incrementDocViewCount(this.db, COLLECTION_NAME, howToID)
-  }
-
-  public updateSearchValue(query: string) {
-    this.searchValue = query
-  }
-
-  public updateReferrerSource(source: string) {
-    this.referrerSource = source
-  }
-
-  @action
-  public updateSelectedCategory(category: string) {
-    this.selectedCategory = category
+  public async incrementViewCount(howTo: Partial<IHowtoDB>) {
+    return await incrementDocViewCount({
+      collection: COLLECTION_NAME,
+      db: this.db,
+      doc: howTo,
+    })
   }
 
   public needsModeration(howto: IHowto) {
@@ -363,10 +253,7 @@ export class HowtoStore extends ModuleStore {
     )
 
     mentions.push(...commentMentions, ...stepMentions)
-    const previousSlugs = howToItem.previousSlugs ?? []
-    if (!previousSlugs.includes(howToItem.slug)) {
-      previousSlugs.push(howToItem.slug)
-    }
+    const previousSlugs = this.setPreviousSlugs(howToItem, howToItem.slug)
 
     await dbRef.set(
       {
@@ -466,12 +353,6 @@ export class HowtoStore extends ModuleStore {
           ...howToData,
           _deleted: true,
         })
-
-        if (this.allHowtos && this.activeHowto !== null) {
-          this.allHowtos = this.allHowtos.filter((howto) => {
-            return howToData._id !== howto._id
-          })
-        }
       }
     } catch (err) {
       logger.error(err)
@@ -543,10 +424,6 @@ export class HowtoStore extends ModuleStore {
       )
       this.updateUploadStatus('Files')
 
-      // populate DB
-
-      let { slug } = values
-
       const {
         category,
         description,
@@ -561,18 +438,8 @@ export class HowtoStore extends ModuleStore {
       const creatorCountry = this.getCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
       const mentions = (values as IHowtoDB)?.mentions ?? []
-
-      const previousSlug =
-        existingDoc && existingDoc.slug ? existingDoc.slug : undefined
-      // check for duplicate only if updated title/slug
-      if (previousSlug != slug) {
-        const titleReusesSlug = await this.isTitleThatReusesSlug(title, _id)
-        slug = titleReusesSlug ? slug + '-' + this.generateUniqueID(5) : slug
-      }
-      const previousSlugs = (values as IHowtoDB).previousSlugs ?? []
-      if (!previousSlugs.includes(slug)) {
-        previousSlugs.push(slug)
-      }
+      const slug = await this.setSlug(values)
+      const previousSlugs = this.setPreviousSlugs(values, slug)
       const total_downloads = values['total_downloads'] ?? 0
 
       const keywords = getKeywords(values.title + ' ' + values.description)
@@ -690,16 +557,6 @@ export class HowtoStore extends ModuleStore {
       : creatorCountry
       ? creatorCountry
       : ''
-  }
-
-  // generate a numeric unique ID
-  private generateUniqueID(length: number) {
-    const chars = '0123456789'
-    let autoId = ''
-    for (let i = 0; i < length; i++) {
-      autoId += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    return autoId
   }
 
   private async uploadCoverImage(

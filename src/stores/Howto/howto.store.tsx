@@ -19,6 +19,7 @@ import {
 import { ModuleStore } from '../common/module.store'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
+import type { IUploadStatus } from 'src/common/Form/SubmitStatusModal'
 import type { IUser, UserMention } from 'src/models'
 import type {
   IHowto,
@@ -452,7 +453,7 @@ export class HowtoStore extends ModuleStore {
   }
 }
 
-interface IHowToUploadStatus {
+interface IHowToUploadStatus extends IUploadStatus {
   Start: boolean
   Cover: boolean
   Files: boolean

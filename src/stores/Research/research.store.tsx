@@ -24,6 +24,7 @@ import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscrib
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 import { setCollaboratorPermission } from './researchEvents'
 
+import type { IUploadStatus } from 'src/common/Form/SubmitStatusModal'
 import type { IUser, UserMention } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
@@ -751,13 +752,13 @@ export class ResearchStore extends ModuleStore {
   }
 }
 
-interface IResearchUploadStatus {
+export interface IResearchUploadStatus extends IUploadStatus {
   Start: boolean
   Database: boolean
   Complete: boolean
 }
 
-export interface IUpdateUploadStatus {
+export interface IUpdateUploadStatus extends IUploadStatus {
   Start: boolean
   Images: boolean
   Files: boolean

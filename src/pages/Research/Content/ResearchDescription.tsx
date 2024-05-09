@@ -254,6 +254,7 @@ const ResearchDescription = ({
               />
             )}
             <Heading
+              as="h1"
               mt={research.researchCategory ? 1 : 2}
               mb={1}
               data-testid="research-title"

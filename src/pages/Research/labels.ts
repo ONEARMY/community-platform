@@ -95,7 +95,7 @@ export const listing = {
   filterCategory: 'Filter by category',
   author: 'Filter by author',
   status: 'Filter by status',
-  search: 'Search for a question',
+  search: 'Search for research items',
   sort: 'Sort by',
   loadMore: 'Load More',
 }

@@ -73,7 +73,9 @@ const ResearchUpdate = ({
         <Flex mx={[0, 0, 2]} sx={{ width: '100%', flex: 1 }} mb={[3, 3, 0]}>
           <FlexStepNumber sx={{ height: 'fit-content' }}>
             <Card py={3} px={4} sx={{ width: '100%', textAlign: 'center' }}>
-              <Heading mb={0}>{updateIndex + 1}</Heading>
+              <Heading as="p" mb={0}>
+                {updateIndex + 1}
+              </Heading>
             </Card>
           </FlexStepNumber>
         </Flex>
@@ -98,7 +100,9 @@ const ResearchUpdate = ({
                     </Box>
                   ) : null}
 
-                  <Heading sx={{ mb: 2 }}>{update.title}</Heading>
+                  <Heading as="h2" sx={{ mb: 2 }}>
+                    {update.title}
+                  </Heading>
                 </Box>
 
                 <Flex

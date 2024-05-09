@@ -4,7 +4,9 @@ import { Card, Flex, Heading, Text } from 'theme-ui'
 export const PostingGuidelines = () => (
   <Card>
     <Flex sx={{ flexDirection: 'column' }} p={4}>
-      <Heading mb={2}>How does it work?</Heading>
+      <Heading as="h2" mb={2}>
+        How does it work?
+      </Heading>
       <Text mb={1} variant="auxiliary">
         1. Choose a topic you want to research{' '}
         <span role="img" aria-label="raised-hand">

@@ -120,7 +120,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }, [howto._id])
 
   return (
-    <Card sx={{ mt: 4 }}>
+    <Card>
       <Flex
         data-cy="how-to-basis"
         data-id={howto._id}

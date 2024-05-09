@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
-import { act, render, waitFor } from '@testing-library/react'
+import { act, render, waitFor, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -372,6 +372,80 @@ describe('Research Article', () => {
     // Assert
     expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
     expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
+  })
+
+  describe('Breadcrumbs', () => {
+    it('displays breadcrumbs with category', async () => {
+      // Arrange
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        activeResearchItem: FactoryResearchItem({
+          title: 'Innovative Study',
+          researchCategory: {
+            label: 'Science',
+            _id: faker.string.uuid(),
+            _modified: faker.date.past().toString(),
+            _created: faker.date.past().toString(),
+            _deleted: faker.datatype.boolean(),
+            _contentModifiedTimestamp: faker.date.past().toString(),
+          },
+        }),
+      })
+
+      // Act
+      let wrapper
+      await act(async () => {
+        wrapper = getWrapper()
+      })
+
+      // Assert: Check the breadcrumb items and chevrons
+      const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
+      expect(breadcrumbItems).toHaveLength(3)
+      expect(breadcrumbItems[0]).toHaveTextContent('Research')
+      expect(breadcrumbItems[1]).toHaveTextContent('Science')
+      expect(breadcrumbItems[2]).toHaveTextContent('Innovative Study')
+
+      // Assert: Check that the first two breadcrumb items contain links
+      const firstLink = within(breadcrumbItems[0]).getByRole('link')
+      const secondLink = within(breadcrumbItems[1]).getByRole('link')
+      expect(firstLink).toBeInTheDocument()
+      expect(secondLink).toBeInTheDocument()
+
+      // Assert: Check for the correct number of chevrons
+      const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
+      expect(chevrons).toHaveLength(2)
+    })
+
+    it('displays breadcrumbs without category', async () => {
+      // Arrange
+      ;(useResearchStore as jest.Mock).mockReturnValue({
+        ...mockResearchStore,
+        activeResearchItem: FactoryResearchItem({
+          title: 'Innovative Study',
+          researchCategory: undefined, // No category provided
+        }),
+      })
+
+      // Act
+      let wrapper
+      await act(async () => {
+        wrapper = getWrapper()
+      })
+
+      // Assert: Check the breadcrumb items and chevrons
+      const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
+      expect(breadcrumbItems).toHaveLength(2)
+      expect(breadcrumbItems[0]).toHaveTextContent('Research')
+      expect(breadcrumbItems[1]).toHaveTextContent('Innovative Study')
+
+      // Assert: Check that the first breadcrumb item contains a link
+      const firstLink = within(breadcrumbItems[0]).getByRole('link')
+      expect(firstLink).toBeInTheDocument()
+
+      // Assert: Check for the correct number of chevrons
+      const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
+      expect(chevrons).toHaveLength(1)
+    })
   })
 })
 

@@ -11,6 +11,7 @@ import {
   UsefulStatsButton,
 } from 'oa-components'
 import { TagList } from 'src/common/Tags/TagsList'
+import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
@@ -82,7 +83,8 @@ export const QuestionPage = () => {
         <Loader />
       ) : question ? (
         <>
-          <Card sx={{ position: 'relative', marginTop: 4 }}>
+          <Breadcrumbs content={question} variant="question" />
+          <Card sx={{ position: 'relative' }}>
             <Flex sx={{ flexDirection: 'column', padding: 4, gap: 2 }}>
               <Flex sx={{ flexWrap: 'wrap', gap: 2 }}>
                 <UsefulStatsButton
@@ -125,7 +127,9 @@ export const QuestionPage = () => {
                 {question.questionCategory && (
                   <Category category={question.questionCategory} />
                 )}
-                <Heading data-cy="question-title">{question.title}</Heading>
+                <Heading data-cy="question-title" data-testid="question-title">
+                  {question.title}
+                </Heading>
 
                 <Text
                   variant="paragraph"

@@ -292,7 +292,12 @@ const ResearchArticle = observer(() => {
       {isEditable && (
         <Flex my={4}>
           <Link to={`/research/${item.slug}/new-update`}>
-            <Button large ml={2} mb={[3, 3, 0]}>
+            <Button
+              large
+              ml={2}
+              mb={[3, 3, 0]}
+              data-cy="addResearchUpdateButton"
+            >
               Add update
             </Button>
           </Link>

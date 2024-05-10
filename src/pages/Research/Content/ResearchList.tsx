@@ -5,6 +5,7 @@ import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { isPreciousPlastic } from 'src/config/config'
 import { logger } from 'src/logger'
 import { Box, Flex, Heading } from 'theme-ui'
 
@@ -116,13 +117,21 @@ const ResearchList = observer(() => {
 
         <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
           <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
-            <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+            {isPreciousPlastic() ? (
               <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
                 <Button variant={'primary'} data-cy="create">
                   {listing.create}
                 </Button>
               </Link>
-            </AuthWrapper>
+            ) : (
+              <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+                <Link to={'/research/create'}>
+                  <Button variant={'primary'} data-cy="create">
+                    {listing.create}
+                  </Button>
+                </Link>
+              </AuthWrapper>
+            )}
           </Box>
         </Flex>
       </Flex>

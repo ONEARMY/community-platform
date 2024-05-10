@@ -81,6 +81,7 @@ export const QuestionListing = () => {
     <>
       <Flex my={[18, 26]}>
         <Heading
+          as="h1"
           sx={{
             width: '100%',
             textAlign: 'center',
@@ -108,7 +109,9 @@ export const QuestionListing = () => {
       </Flex>
 
       {questions?.length === 0 && !isFetching && (
-        <Heading sx={{ marginTop: 4 }}>{listing.noQuestions}</Heading>
+        <Heading as="h1" sx={{ marginTop: 4 }}>
+          {listing.noQuestions}
+        </Heading>
       )}
 
       {questions &&

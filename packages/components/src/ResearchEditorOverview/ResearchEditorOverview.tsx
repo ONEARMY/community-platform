@@ -39,7 +39,7 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
   } = props
   return (
     <Card sx={{ p: 4, ...sx }}>
-      <Heading as="h3" mb={3} variant="small">
+      <Heading as="h2" mb={3} variant="small">
         Research overview
       </Heading>
       {updates?.length ? (

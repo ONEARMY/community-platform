@@ -162,6 +162,6 @@ export class UserNotificationsStore extends ModuleStore {
       notifications,
     }
 
-    await dbRef.update(notificationUpdate)
+    await dbRef.update(notificationUpdate, { keep_modified_timestamp: true })
   }
 }

@@ -4,6 +4,7 @@ import {
   RESEARCH_MAX_LENGTH,
   RESEARCH_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Research/constants'
+import { setIsPreciousPlastic } from '../../utils/TestUtils'
 
 const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'

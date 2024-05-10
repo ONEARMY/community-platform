@@ -22,7 +22,7 @@ const generateSteps = (
     if (item.researchCategory) {
       steps.push({
         text: item.researchCategory.label,
-        link: `/research?category=${item.researchCategory.label}`,
+        link: `/research?category=${item.researchCategory._id}`,
       })
     }
 
@@ -34,7 +34,7 @@ const generateSteps = (
     if (item.questionCategory) {
       steps.push({
         text: item.questionCategory.label,
-        link: `/questions?category=${item.questionCategory.label}`,
+        link: `/questions?category=${item.questionCategory._id}`,
       })
     }
 
@@ -46,7 +46,7 @@ const generateSteps = (
     if (item.category) {
       steps.push({
         text: item.category.label,
-        link: `/how-to?category=${item.category.label}`,
+        link: `/how-to?category=${item.category._id}`,
       })
     }
 

@@ -61,7 +61,7 @@ export class UserStore extends ModuleStore {
   }
   // redirect calls for verifiedUsers to the aggregation store list
   @computed get verifiedUsers(): { [user_id: string]: boolean } {
-    return this.aggregationsStore.aggregations.users_verified || {}
+    return this.aggregationsStore.users_verified || {}
   }
 
   @action
@@ -365,8 +365,7 @@ export class UserStore extends ModuleStore {
 
   @action
   public async loadUserAggregations() {
-    this.aggregationsStore.updateAggregation('users_verified')
-    this.aggregationsStore.updateAggregation('users_totalUseful')
+    this.aggregationsStore.updateVerifiedUsers()
   }
 
   // handle user sign in, when firebase authenticates want to also fetch user document from the database

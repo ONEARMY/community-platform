@@ -7,7 +7,6 @@ import {
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image } from 'theme-ui'
@@ -21,10 +20,7 @@ interface IProps {
 export const HowToCard = ({ howto }: IProps) => {
   const { aggregationsStore } = useCommonStores().stores
 
-  const isVerified: boolean = isUserVerifiedWithStore(
-    howto._createdBy,
-    aggregationsStore,
-  )
+  const isVerified = aggregationsStore.isVerified(howto._createdBy)
 
   return (
     <Card

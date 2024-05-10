@@ -19,6 +19,16 @@ jest.mock('../../utils/helpers', () => ({
   randomID: () => 'random-id',
 }))
 
+const mockGetDoc = jest.fn()
+const mockIncrement = jest.fn()
+jest.mock('firebase/firestore', () => ({
+  collection: jest.fn(),
+  query: jest.fn(),
+  doc: jest.fn(),
+  getDoc: (doc) => mockGetDoc(doc),
+  increment: (value) => mockIncrement(value),
+}))
+
 const factoryResearchItem = async (researchItemOverloads: any = {}, ...rest) =>
   factory(FactoryResearchItem, researchItemOverloads, ...rest)
 
@@ -808,49 +818,6 @@ describe('research.store', () => {
 
       // Assert
       expect(store.userHasSubscribed).toBe(false)
-    })
-  })
-
-  describe('Useful', () => {
-    it('marks a research item as useful', async () => {
-      const { store, researchItem, updateFn } =
-        await factoryResearchItemFormInput({
-          votedUsefulBy: ['existing-user'],
-        })
-
-      // Act
-      await store.toggleUsefulByUser(researchItem._id, 'an-interested-user')
-
-      // Assert
-      expect(updateFn).toHaveBeenCalledTimes(1)
-      const [newResearchItem] = updateFn.mock.calls[0]
-      expect(newResearchItem).toEqual(
-        expect.objectContaining({
-          votedUsefulBy: expect.arrayContaining([
-            'existing-user',
-            'an-interested-user',
-          ]),
-        }),
-      )
-    })
-
-    it('removes vote from a research item', async () => {
-      const { store, researchItem, updateFn } =
-        await factoryResearchItemFormInput({
-          votedUsefulBy: ['uninterested-user', 'user'],
-        })
-
-      // Act
-      await store.toggleUsefulByUser(researchItem._id, 'uninterested-user')
-
-      // Assert
-      expect(updateFn).toHaveBeenCalledTimes(1)
-      const [newResearchItem] = updateFn.mock.calls[0]
-      expect(newResearchItem).toEqual(
-        expect.objectContaining({
-          votedUsefulBy: ['user'],
-        }),
-      )
     })
   })
 

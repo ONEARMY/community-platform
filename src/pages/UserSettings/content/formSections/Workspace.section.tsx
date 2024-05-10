@@ -58,7 +58,9 @@ export const WorkspaceSection = () => {
       render={({ input, meta }) => (
         <FlexSectionContainer>
           <Flex sx={{ justifyContent: 'space-between' }}>
-            <Heading variant="small">{title}</Heading>
+            <Heading as="h2" variant="small">
+              {title}
+            </Heading>
           </Flex>
           <Box>
             <Text mt={4} mb={4}>

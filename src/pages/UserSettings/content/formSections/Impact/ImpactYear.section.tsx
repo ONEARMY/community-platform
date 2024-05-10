@@ -83,6 +83,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
   return (
     <Box sx={sx}>
       <Heading
+        as="h3"
         variant="small"
         ref={impactDivRef}
         id={`/settings#impact_${year}`}

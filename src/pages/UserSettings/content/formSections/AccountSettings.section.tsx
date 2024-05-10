@@ -20,7 +20,7 @@ export const AccountSettingsSection = observer(() => {
           gap: 2,
         }}
       >
-        <Heading>{headings.accountSettings}</Heading>
+        <Heading as="h2">{headings.accountSettings}</Heading>
         <ChangeEmailForm />
         <ChangePasswordForm />
         <Text variant="body">

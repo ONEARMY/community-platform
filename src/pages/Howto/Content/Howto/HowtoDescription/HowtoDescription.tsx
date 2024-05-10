@@ -202,7 +202,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                   textAlign: 'left',
                 }}
               >
-                <Heading variant="small" mb={2}>
+                <Heading as="p" variant="small" mb={2}>
                   Moderator Feedback
                 </Heading>
                 <Text sx={{ fontSize: 2 }}>{howto.moderatorFeedback}</Text>
@@ -225,7 +225,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                     sx={{ fontSize: 2, mt: 2 }}
                   />
                 )}
-                <Heading mt={howto.category ? 1 : 2} mb={1}>
+                <Heading as="h1" mt={howto.category ? 1 : 2} mb={1}>
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {capitalizeFirstLetter(howto.title)}
                 </Heading>

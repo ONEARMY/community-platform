@@ -46,7 +46,7 @@ export const HowtoFieldStepsContainer = () => {
       {({ fields }) => (
         <>
           <Box paddingTop={5}>
-            <Heading>{steps.heading.title}</Heading>
+            <Heading as="h2">{steps.heading.title}</Heading>
             <Text
               sx={{ fontSize: 2 }}
               dangerouslySetInnerHTML={{

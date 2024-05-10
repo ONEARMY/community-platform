@@ -101,7 +101,7 @@ export const HowtoFieldStep = (props: IProps) => {
     <Card data-cy={`step_${index}`} mt={5} key={index}>
       <Flex p={3} sx={{ flexDirection: 'column' }}>
         <Flex p={0}>
-          <Heading variant="small" sx={{ flex: 1 }} mb={3}>
+          <Heading as="h3" variant="small" sx={{ flex: 1 }} mb={3}>
             {heading.title} {index + 1} {!isAboveMinimumStep && '*'}
           </Heading>
           {index >= 1 && (

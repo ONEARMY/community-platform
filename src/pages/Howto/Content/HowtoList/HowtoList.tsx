@@ -86,6 +86,7 @@ export const HowtoList = observer(() => {
     <Box>
       <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
         <Heading
+          as="h1"
           sx={{
             marginX: 'auto',
             textAlign: 'center',
@@ -145,7 +146,7 @@ export const HowtoList = observer(() => {
 
       <MoreContainer m={'0 auto'} pt={60} pb={90}>
         <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
-          <Heading sx={{ textAlign: 'center' }}>
+          <Heading as="p" sx={{ textAlign: 'center' }}>
             Inspire the {theme.siteName} world.
             <br />
             Share your how-to!

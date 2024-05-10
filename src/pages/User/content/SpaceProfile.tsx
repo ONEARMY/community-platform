@@ -250,6 +250,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 }}
               />
               <Heading
+                as="h1"
                 color={'black'}
                 mb={3}
                 style={{ wordBreak: 'break-word' }}

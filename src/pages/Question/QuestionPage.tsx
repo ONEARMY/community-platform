@@ -127,7 +127,11 @@ export const QuestionPage = () => {
                 {question.questionCategory && (
                   <Category category={question.questionCategory} />
                 )}
-                <Heading data-cy="question-title" data-testid="question-title">
+                <Heading
+                  as="h1"
+                  data-cy="question-title"
+                  data-testid="question-title"
+                >
                   {question.title}
                 </Heading>
 

@@ -28,7 +28,9 @@ const Step = (props: IProps) => {
         <Flex mx={[0, 0, 2]} sx={{ flex: 1, width: '100%' }} mb={[3, 3, 0]}>
           <FlexStepNumber sx={{ justifyContent: 'center', width: '100%' }}>
             <Card sx={{ width: '100%', textAlign: 'center' }} py={3} px={4}>
-              <Heading mb={0}>{stepindex + 1}</Heading>
+              <Heading as="p" mb={0}>
+                {stepindex + 1}
+              </Heading>
             </Card>
           </FlexStepNumber>
         </Flex>
@@ -54,7 +56,7 @@ const Step = (props: IProps) => {
                   flexDirection: 'column',
                 }}
               >
-                <Heading mb={0}>
+                <Heading as="h2" mb={0}>
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {step.title && capitalizeFirstLetter(step.title)}
                 </Heading>

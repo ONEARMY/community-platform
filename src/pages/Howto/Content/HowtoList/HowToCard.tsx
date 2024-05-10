@@ -67,7 +67,7 @@ export const HowToCard = ({ howto }: IProps) => {
           </Flex>
         )}
         <Flex sx={{ gap: 1, flexDirection: 'column' }}>
-          <Heading variant="small" color={'black'}>
+          <Heading as="h2" variant="small" color={'black'}>
             <RouterLink
               key={howto._id}
               to={`/how-to/${encodeURIComponent(howto.slug)}`}

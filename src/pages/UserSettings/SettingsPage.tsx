@@ -245,7 +245,7 @@ export const SettingsPage = observer((props: IProps) => {
                       }}
                     >
                       <Flex px={3} py={2}>
-                        <Heading>{heading}</Heading>
+                        <Heading as="h1">{heading}</Heading>
                       </Flex>
                     </Card>
                     <Box

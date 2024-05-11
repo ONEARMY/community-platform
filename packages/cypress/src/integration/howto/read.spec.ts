@@ -164,7 +164,7 @@ describe('[How To]', () => {
     })
 
     describe('[By beta-tester]', () => {
-      it('[For PP - Presents the donation request before opening of attachments]', () => {
+      it('[Presents the donation request before opening of attachments]', () => {
         cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
         cy.visit('how-to/set-up-devsite-to-help-coding')
 

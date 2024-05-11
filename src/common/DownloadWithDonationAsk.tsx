@@ -5,7 +5,6 @@ import {
   DownloadButton,
   DownloadFileFromLink,
 } from 'oa-components'
-import { isPreciousPlastic } from 'src/config/config'
 
 import { AuthWrapper } from './AuthWrapper'
 
@@ -19,8 +18,8 @@ export interface IProps {
 
 /*
   An edited version of the oa-component DownloadFileFromLink.
-  Once the donation ask is on all download links and not just for PP, 
-  some of this logic can/should move to the component library.
+  Once the donation ask is on all download links, some of this logic
+  can/should move to the component library.
 */
 export const DownloadWithDonationAsk = (props: IProps) => {
   const { handleClick, isLoggedIn, link } = props
@@ -45,30 +44,24 @@ export const DownloadWithDonationAsk = (props: IProps) => {
 
   return (
     <>
-      {isPreciousPlastic() ? (
-        <>
-          <DonationRequestModal
-            body="All of the content here is free. Your donation supports this library of Open Source recycling knowledge. Making it possible for everyone in the world to use it and start recycling."
-            callback={callback}
-            iframeSrc="http://localhost:3000/donation-thank-you"
-            imageURL="https://images.unsplash.com/photo-1520222984843-df35ebc0f24d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9"
-            isOpen={isModalOpen}
-            link={link}
-            onDidDismiss={() => toggleIsModalOpen()}
-          />
+      <DonationRequestModal
+        body="All of the content here is free. Your donation supports this library of Open Source recycling knowledge. Making it possible for everyone in the world to use it and start recycling."
+        callback={callback}
+        iframeSrc="http://localhost:3000/donation-thank-you"
+        imageURL="https://images.unsplash.com/photo-1520222984843-df35ebc0f24d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9"
+        isOpen={isModalOpen}
+        link={link}
+        onDidDismiss={() => toggleIsModalOpen()}
+      />
 
-          <AuthWrapper
-            roleRequired={'beta-tester' as UserRole}
-            fallback={
-              <DownloadFileFromLink handleClick={handleClick} link={link} />
-            }
-          >
-            <DownloadButton onClick={toggleIsModalOpen} isLoggedIn />
-          </AuthWrapper>
-        </>
-      ) : (
-        <DownloadFileFromLink handleClick={handleClick} link={link} />
-      )}
+      <AuthWrapper
+        roleRequired={'beta-tester' as UserRole}
+        fallback={
+          <DownloadFileFromLink handleClick={handleClick} link={link} />
+        }
+      >
+        <DownloadButton onClick={toggleIsModalOpen} isLoggedIn />
+      </AuthWrapper>
     </>
   )
 }

@@ -2,28 +2,23 @@ import { fireEvent, render } from '@testing-library/react'
 import { UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 
+import { useCommonStores } from './hooks/useCommonStores'
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
-
-import type { UserStore } from 'src/stores/User/user.store'
-
-const mockUser = FactoryUser({
-  userRoles: [UserRole.BETA_TESTER],
-})
-jest.mock('src/common/hooks/useCommonStores', () => ({
-  __esModule: true,
-  useCommonStores: () => ({
-    stores: {
-      userStore: {
-        user: mockUser,
-      } as UserStore,
-    },
-  }),
-}))
 
 const mockedUsedNavigate = jest.fn()
 jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
+
+jest.mock('src/common/hooks/useCommonStores', () => ({
+  __esModule: true,
+  useCommonStores: jest.fn(),
+}))
+const userToMock = (user) => {
+  return useCommonStores.mockImplementation(() => ({
+    stores: { userStore: { user } },
+  }))
+}
 
 describe('DownloadFileFromLink', () => {
   it('when logged out, requires users to login', () => {
@@ -42,8 +37,10 @@ describe('DownloadFileFromLink', () => {
   })
 
   it('when logged in, opens the link via handleClick', () => {
-    const handleClick = jest.fn()
+    const user = FactoryUser()
+    userToMock(user)
 
+    const handleClick = jest.fn()
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
         handleClick={handleClick}
@@ -58,8 +55,10 @@ describe('DownloadFileFromLink', () => {
     expect(handleClick).toHaveBeenCalled()
   })
 
-  it('when a PP beta-tester, opens the donation modal', () => {
-    localStorage.setItem('platformTheme', 'precious-plastic')
+  it('when a beta-tester, opens the donation modal', () => {
+    const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
+    userToMock(user)
+
     const handleClick = jest.fn()
 
     const { getAllByTestId } = render(

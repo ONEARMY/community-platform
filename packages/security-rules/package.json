@@ -10,9 +10,7 @@
     "vitest": "^0.31.0"
   },
   "scripts": {
-    "test:watch": "vitest . --watch",
     "test": "vitest run .",
-    "test-with-emulator": "firebase emulators:exec --only firestore 'yarn test'",
-    "test-with-emulator:watch": "firebase emulators:exec --only firestore 'yarn test:watch'"
+    "test-with-emulator": "firebase emulators:exec --only firestore 'yarn test'"
   }
 }

@@ -6252,14 +6252,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firebase/rules-unit-testing@npm:^2.0.7":
-  version: 2.0.7
-  resolution: "@firebase/rules-unit-testing@npm:2.0.7"
+"@firebase/rules-unit-testing@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "@firebase/rules-unit-testing@npm:3.0.2"
   dependencies:
+    "@types/node-fetch": 2.6.4
     node-fetch: 2.6.7
   peerDependencies:
-    firebase: ^9.0.0
-  checksum: 73f08072b6f6a88618d740ec804127ba3c6be58779ff404c00016994e134278310754555bfb50f33a1be818c25c070c0b22eee1d218d291a397dd02754d2adf6
+    firebase: ^10.0.0
+  checksum: 0f78672be1306c68079c0d3c2c4f1994cc9d462a23ab394e207eb47f5d033e11c530f1a61fb380d61df6ac7905beff812ec86f9feb3458e05085ef2e9837622c
   languageName: node
   linkType: hard
 
@@ -11362,7 +11363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:^2.6.4":
+"@types/node-fetch@npm:2.6.4, @types/node-fetch@npm:^2.6.4":
   version: 2.6.4
   resolution: "@types/node-fetch@npm:2.6.4"
   dependencies:
@@ -32801,7 +32802,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "security-rules@workspace:packages/security-rules"
   dependencies:
-    "@firebase/rules-unit-testing": ^2.0.7
+    "@firebase/rules-unit-testing": ^3.0.2
     dotenv: ^16.3.1
     firebase: 10.6.0
     firebase-tools: 12.7.0

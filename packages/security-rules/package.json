@@ -3,7 +3,7 @@
   "packageManager": "yarn@3.4.1",
   "private": true,
   "devDependencies": {
-    "@firebase/rules-unit-testing": "^2.0.7",
+    "@firebase/rules-unit-testing": "^3.0.2",
     "dotenv": "^16.3.1",
     "firebase": "10.6.0",
     "firebase-tools": "12.7.0",

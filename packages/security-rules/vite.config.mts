@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    reporters: ['default','verbose'],
     coverage: {
       provider: 'c8',
       reporter: ['text', 'json', 'html'],

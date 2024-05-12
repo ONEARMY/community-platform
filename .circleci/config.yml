@@ -82,11 +82,11 @@ aliases:
       branches:
         only:
           - production
-  - &filter_only_master
+  - &filter_only_default_branch
     filters:
       branches:
         only:
-          - master
+          - main
   - &filter_only_ci_test
     filters:
       branches:
@@ -169,7 +169,7 @@ jobs:
       - run:
           name: Linting commits
           command: |
-            commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
+            commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} main) --verbose
   lint:
     docker: *docker
     resource_class: medium+
@@ -487,7 +487,7 @@ workflows:
           name: 'Deploy: dev.onearmy.world'
           requires:
             - test_e2e
-          <<: *filter_only_master
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'default'
           context:
             - circle-ci-patreon-context
@@ -496,7 +496,7 @@ workflows:
           name: 'Deploy: dev.community.projectkamp.com'
           requires:
             - test_e2e
-          <<: *filter_only_master
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: project-kamp-development
           context:
             - circle-ci-patreon-context
@@ -505,7 +505,7 @@ workflows:
           name: 'Deploy: dev.community.fixing.fashion'
           requires:
             - test_e2e
-          <<: *filter_only_master
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: fixing-fashion-dev
           context:
             - circle-ci-patreon-context

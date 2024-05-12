@@ -510,6 +510,13 @@ workflows:
           context:
             - circle-ci-patreon-context
             - fixing-fashion-dev
+      - approve:
+          type: approval
+          name: 'Approve Production deployment'
+          requires:
+            - 'Deploy: dev.onearmy.world'
+            - 'Deploy: dev.community.fixing.fashion'
+            - 'Deploy: dev.community.projectkamp.com'
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
           name: Release new version to GitHub

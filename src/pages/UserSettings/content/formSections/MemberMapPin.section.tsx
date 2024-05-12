@@ -41,7 +41,7 @@ export const MemberMapPinSection = observer(
     return (
       <FlexSectionContainer>
         <Flex sx={{ justifyContent: 'space-between' }}>
-          <Heading variant="small" id="your-map-pin">
+          <Heading as="h2" variant="small" id="your-map-pin">
             {headings.map.title}
           </Heading>
         </Flex>

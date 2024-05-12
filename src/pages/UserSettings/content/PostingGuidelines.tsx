@@ -9,7 +9,9 @@ export const ProfileGuidelines = () => {
   return (
     <Card>
       <Flex sx={{ flexDirection: 'column' }} p={4}>
-        <Heading mb={2}>Profile tips</Heading>
+        <Heading as="h2" mb={2}>
+          Profile tips
+        </Heading>
         <Text variant="auxiliary" mb={1}>
           1. Have a look at our{' '}
           <ExternalLink href={theme.profileGuidelinesURL}>

@@ -38,7 +38,9 @@ export const EmailNotificationsSection = observer((props: IProps) => {
   )
   return (
     <FlexSectionContainer>
-      <Heading variant="small">{title}</Heading>
+      <Heading as="h2" variant="small">
+        {title}
+      </Heading>
       <Text mt={4} mb={4} sx={{ display: 'block' }}>
         {`${description}:`}
       </Text>

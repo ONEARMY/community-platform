@@ -11,6 +11,10 @@ service cloud.firestore {
       return request.auth.uid == request.resource.id
     }
 
+    match /v3_users/{userId} {
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
     match /{collectionId}/{document=**} {
       allow get: if collectionId != 'user_integrations' || userIntegrationsRead()
       // Do not allow users to list all user integrations.

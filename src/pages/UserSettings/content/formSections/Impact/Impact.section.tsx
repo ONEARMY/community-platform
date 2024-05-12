@@ -33,7 +33,9 @@ export const ImpactSection = () => {
 
   return (
     <FlexSectionContainer>
-      <Heading dangerouslySetInnerHTML={{ __html: title }} variant="small" />
+      <Heading as="h2" variant="small">
+        {title}
+      </Heading>
       <Text mt={4} mb={4}>
         {description}
       </Text>

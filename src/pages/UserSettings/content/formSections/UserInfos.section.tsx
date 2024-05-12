@@ -116,7 +116,9 @@ export const UserInfosSection = (props: IProps) => {
   return (
     <FlexSectionContainer>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading variant="small">{headings.infos}</Heading>
+        <Heading as="h2" variant="small">
+          {headings.infos}
+        </Heading>
       </Flex>
       <Box>
         <Flex sx={{ flexWrap: 'wrap' }}>

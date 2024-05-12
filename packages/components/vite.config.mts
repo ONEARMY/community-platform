@@ -9,7 +9,7 @@ export default defineConfig({
     globals: true,
     setupFiles: './src/tests/setup.ts',
     coverage: {
-      provider: 'c8',
+      provider: 'v8',
       reporter: ['text', 'json', 'html'],
     },
   },

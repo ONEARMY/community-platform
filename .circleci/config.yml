@@ -86,7 +86,7 @@ aliases:
     filters:
       branches:
         only:
-          - main
+          - master
   - &filter_only_ci_test
     filters:
       branches:
@@ -169,7 +169,7 @@ jobs:
       - run:
           name: Linting commits
           command: |
-            commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} main) --verbose
+            commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   lint:
     docker: *docker
     resource_class: medium+
@@ -520,20 +520,19 @@ workflows:
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
           name: Release new version to GitHub
-          <<: *filter_only_production
           context:
             - release-context
+          requires:
+            - "Approve Production deployment"
       - build:
           name: Build Production Release
           context: build-context
           requires:
             - 'Release new version to GitHub'
-          <<: *filter_only_production
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
             - 'Build Production Release'
-          <<: *filter_only_production
           DEPLOY_ALIAS: fixing-fashion-prod
           context:
             - circle-ci-patreon-context
@@ -542,7 +541,6 @@ workflows:
           name: 'Deploy: community.preciousplastic.com'
           requires:
             - 'Build Production Release'
-          <<: *filter_only_production
           DEPLOY_ALIAS: 'production'
           context:
             - circle-ci-patreon-context
@@ -551,7 +549,6 @@ workflows:
           name: 'Deploy: community.projectkamp.com'
           requires:
             - 'Build Production Release'
-          <<: *filter_only_production
           DEPLOY_ALIAS: project-kamp-production
           context:
             - circle-ci-patreon-context

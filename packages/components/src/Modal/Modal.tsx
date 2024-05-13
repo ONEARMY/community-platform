@@ -38,8 +38,8 @@ export const Modal = (props: Props) => {
     flex-direction: column;
     justify-content: space-between;
     width: ${width || 300}px;
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
     position: fixed;
     left: 50%;
     top: 50%;
@@ -47,7 +47,7 @@ export const Modal = (props: Props) => {
     background: white;
     border: 2px solid black;
     border-radius: 10px;
-    z-index: 5000;
+    z-index: 4001;
   `
 
   return (

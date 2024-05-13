@@ -50,7 +50,15 @@ export const DonationRequest = (props: IProps) => {
   }, [])
 
   return (
-    <Card data-cy="DonationRequest" data-testid="DonationRequest">
+    <Card
+      sx={{
+        overflowY: 'scroll',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      }}
+      data-cy="DonationRequest"
+      data-testid="DonationRequest"
+    >
       <script
         src="https://donorbox.org/widget.js"
         data-paypalexpress="false"
@@ -84,6 +92,7 @@ export const DonationRequest = (props: IProps) => {
             borderLeft: [0, 0, '2px solid'],
             minHeight: '650px',
             width: ['100%', '100%', '350px', '400px'],
+            paddingX: [2, 4, 0],
           }}
         >
           <iframe

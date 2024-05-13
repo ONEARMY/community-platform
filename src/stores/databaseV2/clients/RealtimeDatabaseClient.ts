@@ -1,9 +1,9 @@
-import { rtdb } from 'src/utils/firebase'
+import { database } from 'src/utils/firebase'
 
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type { AbstractDatabaseClient } from '../types'
 
-const db = rtdb
+const db = database
 
 export class RealtimeDatabaseClient implements AbstractDatabaseClient {
   /************************************************************************

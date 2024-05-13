@@ -21,12 +21,13 @@ import { logger } from 'src/logger'
 
 import { getQueryOptions } from '../utils/getQueryOptions'
 
+import type { Firestore } from 'firebase/firestore'
 import type { Observer } from 'rxjs'
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type { AbstractDatabaseClient, DBQueryOptions } from '../types'
 
 export class FirestoreClient implements AbstractDatabaseClient {
-  private _db
+  private _db: Firestore
   constructor() {
     const firebaseApp = initializeApp(FIREBASE_CONFIG)
     this._db = getFirestore(firebaseApp)

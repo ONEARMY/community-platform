@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import {
   collection,
+  connectFirestoreEmulator,
   deleteDoc,
   doc,
   getDoc,
@@ -39,7 +40,7 @@ export class FirestoreClient implements AbstractDatabaseClient {
     })
 
     if (SITE === 'emulated_site') {
-      this._db.useEmulator('localhost', 4003)
+      connectFirestoreEmulator(this._db, 'localhost', 4003)
     }
   }
   /************************************************************************

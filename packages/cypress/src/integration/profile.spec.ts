@@ -5,6 +5,7 @@ import { missing } from '../../../../src/pages/User/impact/labels'
 import { contact } from '../../../../src/pages/User/labels'
 import { MOCK_DATA } from '../data'
 import { UserMenuItem } from '../support/commands'
+import { setIsPreciousPlastic } from '../utils/TestUtils'
 
 const { admin, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
@@ -82,7 +83,7 @@ describe('[Profile]', () => {
     })
 
     it('[Can see impact data for workspaces]', () => {
-      localStorage.setItem('platformTheme', 'precious-plastic')
+      setIsPreciousPlastic()
 
       cy.login(subscriber.email, subscriber.password)
 

@@ -12,7 +12,7 @@ export const LoggedOut: StoryFn<typeof UsefulStatsButton> = () => (
     isLoggedIn={false}
     votedUsefulCount={0}
     hasUserVotedUseful={false}
-    onUsefulClick={() => null}
+    onUsefulClick={() => new Promise(() => {})}
   />
 )
 
@@ -21,7 +21,7 @@ export const LoggedOutWithCount: StoryFn<typeof UsefulStatsButton> = () => (
     isLoggedIn={false}
     hasUserVotedUseful={false}
     votedUsefulCount={99}
-    onUsefulClick={() => null}
+    onUsefulClick={() => new Promise(() => {})}
   />
 )
 
@@ -30,7 +30,7 @@ export const LoggedInWithCount: StoryFn<typeof UsefulStatsButton> = () => (
     votedUsefulCount={99}
     hasUserVotedUseful={false}
     isLoggedIn={true}
-    onUsefulClick={() => null}
+    onUsefulClick={() => new Promise(() => {})}
   />
 )
 
@@ -39,6 +39,6 @@ export const CurrentUserHasVoted: StoryFn<typeof UsefulStatsButton> = () => (
     votedUsefulCount={99}
     hasUserVotedUseful={true}
     isLoggedIn={true}
-    onUsefulClick={() => null}
+    onUsefulClick={() => new Promise(() => {})}
   />
 )

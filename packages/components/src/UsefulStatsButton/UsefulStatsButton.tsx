@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '@emotion/react'
 import { Text } from 'theme-ui'
@@ -12,32 +12,23 @@ export interface IProps {
   hasUserVotedUseful: boolean
   votedUsefulCount: number | undefined
   isLoggedIn: boolean
-  onUsefulClick: () => void
+  onUsefulClick: () => Promise<void>
   sx?: ThemeUIStyleObject
-  disabled?: boolean
 }
 
 export const UsefulStatsButton = (props: IProps) => {
   const theme: any = useTheme()
   const navigate = useNavigate()
 
-  const [votedUsefulCount, setVotedUsefulCount] = useState<number>()
-  const [hasUserVotedUseful, setHasUserVotedUseful] = useState<boolean>()
   const [disabled, setDisabled] = useState<boolean>()
 
-  useEffect(
-    () => setHasUserVotedUseful(props.hasUserVotedUseful),
-    [props.hasUserVotedUseful],
-  )
-  useEffect(
-    () => setVotedUsefulCount(props.votedUsefulCount || 0),
-    [props.votedUsefulCount],
-  )
-  useEffect(() => setDisabled(props.disabled), [props.disabled])
-
-  const handleUsefulClick = () => {
+  const handleUsefulClick = async () => {
     setDisabled(true)
-    props.onUsefulClick()
+    try {
+      await props.onUsefulClick()
+    } catch (err) {
+      // do nothing
+    }
     setDisabled(false)
   }
 
@@ -59,7 +50,7 @@ export const UsefulStatsButton = (props: IProps) => {
           },
           ...props.sx,
         }}
-        icon={hasUserVotedUseful ? 'star' : 'star-active'}
+        icon={props.hasUserVotedUseful ? 'star' : 'star-active'}
       >
         <Text
           pr={2}
@@ -68,7 +59,7 @@ export const UsefulStatsButton = (props: IProps) => {
             display: 'inline-block',
           }}
         >
-          {votedUsefulCount}
+          {props.votedUsefulCount}
         </Text>
         <Text
           pl={2}
@@ -78,7 +69,7 @@ export const UsefulStatsButton = (props: IProps) => {
             borderLeft: `1px solid ${theme.colors.black}`,
           }}
         >
-          {hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
+          {props.hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
         </Text>
       </Button>
       <Tooltip />

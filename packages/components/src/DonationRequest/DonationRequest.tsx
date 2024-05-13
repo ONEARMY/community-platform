@@ -66,11 +66,11 @@ export const DonationRequest = (props: IProps) => {
 
       <Flex
         sx={{
-          flexDirection: ['column', 'column', 'row'],
+          flexDirection: ['column', 'row'],
         }}
       >
         <Flex sx={{ flexDirection: 'column', flex: 1 }}>
-          <Flex sx={{ display: ['none', 'none', 'inline'] }}>
+          <Flex sx={{ display: ['none', 'inline'] }}>
             <AspectImage
               loading="lazy"
               ratio={16 / 7}
@@ -91,8 +91,7 @@ export const DonationRequest = (props: IProps) => {
           sx={{
             borderLeft: [0, 0, '2px solid'],
             minHeight: '650px',
-            width: ['100%', '100%', '350px', '400px'],
-            paddingX: [2, 4, 0],
+            width: ['100%', '350px', '400px'],
           }}
         >
           <iframe

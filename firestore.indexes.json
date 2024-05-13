@@ -339,6 +339,54 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_created",
           "order": "DESCENDING"
         },
@@ -350,6 +398,1112 @@
     },
     {
       "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalCommentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUpdates",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalCommentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUpdates",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalCommentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUpdates",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalCommentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUpdates",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalCommentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUpdates",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalCommentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUpdates",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalCommentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUpdates",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "total_downloads",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalComments",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "votedUsefulBy",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "total_downloads",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalComments",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
       "queryScope": "COLLECTION",
       "fields": [
         {
@@ -359,972 +1513,6 @@
         {
           "fieldPath": "votedUsefulBy",
           "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "collaborators",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "votedUsefulBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalCommentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalCommentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalCommentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUpdates",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUsefulVotes",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "totalCommentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "totalUpdates",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "totalUsefulVotes",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "votedUsefulBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalCommentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUpdates",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalCommentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUpdates",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUsefulVotes",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalCommentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUpdates",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUsefulVotes",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "totalCommentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "totalUpdates",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "totalUsefulVotes",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalComments",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "total_downloads",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUsefulVotes",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalComments",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "votedUsefulBy",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "total_downloads",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalUsefulVotes",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "votedUsefulBy",
-          "order": "ASCENDING"
         }
       ]
     },
@@ -1396,28 +1584,6 @@
         },
         {
           "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalComments",
           "order": "DESCENDING"
         },
         {
@@ -1461,6 +1627,28 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "totalComments",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "totalUsefulVotes",
           "order": "DESCENDING"
         },
@@ -1598,32 +1786,6 @@
         },
         {
           "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "totalComments",
           "order": "DESCENDING"
         },
         {
@@ -1675,28 +1837,6 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "totalUsefulVotes",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
           "fieldPath": "totalComments",
           "order": "DESCENDING"
         },
@@ -1719,7 +1859,55 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "total_downloads",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalComments",
           "order": "DESCENDING"
         },
         {
@@ -1841,7 +2029,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "totalComments",
+          "fieldPath": "total_downloads",
           "order": "DESCENDING"
         },
         {
@@ -1867,7 +2055,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "total_downloads",
+          "fieldPath": "totalComments",
           "order": "DESCENDING"
         },
         {
@@ -1977,7 +2165,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "totalComments",
+          "fieldPath": "total_downloads",
           "order": "DESCENDING"
         },
         {
@@ -1999,7 +2187,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "total_downloads",
+          "fieldPath": "totalComments",
           "order": "DESCENDING"
         },
         {
@@ -2089,7 +2277,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "totalComments",
+          "fieldPath": "total_downloads",
           "order": "DESCENDING"
         },
         {
@@ -2107,7 +2295,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "total_downloads",
+          "fieldPath": "totalComments",
           "order": "DESCENDING"
         },
         {

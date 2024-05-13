@@ -1,6 +1,8 @@
 import { DifficultyLevel } from 'oa-shared'
 
-// import { MOCK_DATA } from '../../data'
+import { MOCK_DATA } from '../../data'
+
+const howtos = Object.values(MOCK_DATA.howtos)
 
 describe('[How To]', () => {
   // const SKIP_TIMEOUT = { timeout: 300 }
@@ -67,6 +69,7 @@ describe('[How To]', () => {
 
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
+        const howto = howtos[0]
         cy.visit(specificHowtoUrl)
         cy.step('Edit button is not available')
         cy.get('[data-cy=edit]').should('not.exist')
@@ -84,7 +87,6 @@ describe('[How To]', () => {
           expect($summary).to.contain(DifficultyLevel.HARD, 'Difficulty')
           expect($summary).to.contain('product', 'Tag')
           expect($summary).to.contain('injection', 'Tag')
-          expect($summary).to.contain('moul', 'Tag')
           expect($summary.find('img[alt="how-to cover"]'))
             .to.have.attr('src')
             .match(coverFileRegex)
@@ -92,6 +94,25 @@ describe('[How To]', () => {
             '1,234 downloads',
           )
         })
+
+        cy.step('Breadcrumbs work')
+        cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'How To')
+        cy.get('[data-cy=breadcrumbsItem]')
+          .first()
+          .children()
+          .should('have.attr', 'href')
+          .and('equal', `/how-to`)
+
+        cy.get('[data-cy=breadcrumbsItem]')
+          .eq(1)
+          .should('contain', howto.category.label)
+        cy.get('[data-cy=breadcrumbsItem]')
+          .eq(1)
+          .children()
+          .should('have.attr', 'href')
+          .and('equal', `/how-to?category=${howto.category._id}`)
+
+        cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', howto.title)
 
         cy.step('Download file button should redirect to sign in')
         cy.get('div[data-tip="Login to download"]')

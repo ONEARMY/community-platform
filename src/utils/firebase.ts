@@ -32,6 +32,8 @@ if (SITE === 'emulated_site') {
   connectAuthEmulator(auth, 'http://localhost:4005')
   logger.debug(`Connecting functions on port `, 4002)
   functions.useEmulator('localhost', 4002)
+  logger.debug(`Connecting firestore on port `, 4003)
+  firestore.useEmulator('localhost', 4003)
 }
 
 export { rtdb, storage, auth, functions, firestore }

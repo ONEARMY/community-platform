@@ -26,8 +26,8 @@ describe('EditComment', () => {
       <EditComment
         isReply={true}
         comment="Test comment"
-        handleCancel= {mockOnCancel}
-        handleSubmit= {mockOnSubmit}
+        handleCancel={mockOnCancel}
+        handleSubmit={mockOnSubmit}
       />,
     )
     expect(screen.getByText('Save')).not.toBeDisabled()
@@ -38,8 +38,8 @@ describe('EditComment', () => {
       <EditComment
         isReply={true}
         comment="Test comment"
-        handleCancel= {mockOnCancel}
-        handleSubmit= {mockOnSubmit}
+        handleCancel={mockOnCancel}
+        handleSubmit={mockOnSubmit}
       />,
     )
     const button = screen.getByText('Save')
@@ -52,8 +52,8 @@ describe('EditComment', () => {
       <EditComment
         isReply={true}
         comment=""
-        handleCancel= {mockOnCancel}
-        handleSubmit= {mockOnSubmit}
+        handleCancel={mockOnCancel}
+        handleSubmit={mockOnSubmit}
       />,
     )
     expect(screen.getByText('Save')).toBeDisabled()
@@ -63,12 +63,12 @@ describe('EditComment', () => {
       <EditComment
         isReply={true}
         comment=""
-        handleCancel= {mockOnCancel}
-        handleSubmit= {mockOnSubmit}
+        handleCancel={mockOnCancel}
+        handleSubmit={mockOnSubmit}
       />,
     )
     const inputComment = screen.getByLabelText('Edit Comment')
-    inputComment.blur();
+    inputComment.blur()
     expect(screen.getByText('Comment cannot be blank')).toBeInTheDocument()
   })
 })

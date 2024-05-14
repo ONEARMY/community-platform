@@ -61,7 +61,8 @@ service cloud.firestore {
 
     match /user_integrations/{document=**} {
       allow get: if userIntegrationsRead()
-      // Do not allow users to list all user integrations.
+
+    // Do not allow users to list all user integrations.
       allow list: if false
       allow write: if userIntegrationsWrite()
     }

@@ -19,7 +19,7 @@ const firebaseApp = initializeApp(FIREBASE_CONFIG)
 const functions = firebase.functions()
 const firestore = firebase.firestore()
 const auth = getAuth(firebaseApp)
-const database = firebase.database()
+const realTimeDatabase = firebase.database()
 const storage = firebase.storage()
 
 // use emulators when running on localhost:4000
@@ -33,14 +33,14 @@ if (SITE === 'emulated_site') {
   logger.debug('Connecting auth on port ', 4005)
   connectAuthEmulator(auth, 'http://localhost:4005')
 
-  logger.debug('Connecting database on port ', 4006)
-  database.useEmulator('localhost', 4006)
+  logger.debug('Connecting realTimeDatabase on port ', 4006)
+  realTimeDatabase.useEmulator('localhost', 4006)
 
   logger.debug('Connecting storage on port ', 4007)
   storage.useEmulator('localhost', 4007)
 }
 
-export { database, storage, auth, functions, firestore }
+export { realTimeDatabase, storage, auth, functions, firestore }
 
 export const EmailAuthProvider = firebase.auth.EmailAuthProvider
 

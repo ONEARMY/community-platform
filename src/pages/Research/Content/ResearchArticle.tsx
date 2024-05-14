@@ -82,7 +82,7 @@ const ResearchArticle = observer(() => {
     }
   }
 
-  const onUsefulClick = (
+  const onUsefulClick = async (
     researchId: string,
     researchSlug: string,
     eventCategory = 'Research',
@@ -92,7 +92,7 @@ const ResearchArticle = observer(() => {
     }
 
     // Trigger update without waiting
-    researchStore.toggleUsefulByUser(researchId, loggedInUser?.userName)
+    await researchStore.toggleUsefulByUser(researchId, loggedInUser?.userName)
     const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
     trackEvent({
       category: eventCategory,
@@ -274,8 +274,12 @@ const ResearchArticle = observer(() => {
                   hasUserVotedUseful={
                     researchStore.userVotedActiveResearchUseful
                   }
-                  onUsefulClick={() =>
-                    onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
+                  onUsefulClick={async () =>
+                    await onUsefulClick(
+                      item._id,
+                      item.slug,
+                      'ArticleCallToAction',
+                    )
                   }
                 />
               )}

@@ -39,10 +39,10 @@ export const Howto = observer(() => {
   ) => {
     const loggedInUser = howtoStore.activeUser
     if (!loggedInUser?.userName) {
-      return null
+      return
     }
 
-    howtoStore.toggleUsefulByUser(howtoId, loggedInUser?.userName)
+    await howtoStore.toggleUsefulByUser(howtoId, loggedInUser?.userName)
     const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
 
     trackEvent({
@@ -126,8 +126,8 @@ export const Howto = observer(() => {
         commentsCount={howtoStore.commentsCount}
         votedUsefulCount={howtoStore.votedUsefulCount}
         hasUserVotedUseful={hasUserVotedUseful}
-        onUsefulClick={() =>
-          onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
+        onUsefulClick={async () =>
+          await onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
         }
       />
       <Box mt={9}>
@@ -172,9 +172,13 @@ export const Howto = observer(() => {
               votedUsefulCount={howtoStore.votedUsefulCount}
               hasUserVotedUseful={hasUserVotedUseful}
               isLoggedIn={!!loggedInUser}
-              onUsefulClick={() => {
-                onUsefulClick(howto._id, howto.slug, 'ArticleCallToAction')
-              }}
+              onUsefulClick={async () =>
+                await onUsefulClick(
+                  howto._id,
+                  howto.slug,
+                  'ArticleCallToAction',
+                )
+              }
             />
           )}
         </ArticleCallToAction>

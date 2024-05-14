@@ -49,7 +49,7 @@ interface IProps {
   votedUsefulCount?: number
   verified?: boolean
   hasUserVotedUseful: boolean
-  onUsefulClick: () => void
+  onUsefulClick: () => Promise<void>
 }
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {

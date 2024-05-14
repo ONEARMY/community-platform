@@ -54,7 +54,7 @@ describe('EditComment', () => {
         comment=""
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
-      />,
+      />
     )
     expect(screen.getByText('Save')).toBeDisabled()
   })

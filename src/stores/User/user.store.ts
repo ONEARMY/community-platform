@@ -98,14 +98,29 @@ export class UserStore extends ModuleStore {
     await createUserWithEmailAndPassword(auth, email, password)
     // once registered populate auth profile displayname with the chosen username
     if (auth?.currentUser) {
-      await updateProfile(auth.currentUser, {
-        displayName,
-        photoURL: auth.currentUser.photoURL,
-      })
+      await this.safeUpdateProfile(auth.currentUser, displayName)
       // populate db user profile and resume auth listener
       await this._createUserProfile('registration')
       // when checking auth state change also send confirmation email
       this._listenToAuthStateChanges(true)
+    }
+  }
+
+  private async safeUpdateProfile(currentUser: User, displayName: string) {
+    // It should be possible to pass photoURL as null to updateProfile
+    // but the emulator counts this as an error:
+    //   auth/invalid-json-payload-received.-/photourl-must-be-string
+    //
+    // source: https://github.com/firebase/firebase-tools/issues/6424
+    if (currentUser.photoURL === null) {
+      await updateProfile(currentUser, {
+        displayName,
+      })
+    } else {
+      await updateProfile(currentUser, {
+        displayName,
+        photoURL: currentUser.photoURL,
+      })
     }
   }
 

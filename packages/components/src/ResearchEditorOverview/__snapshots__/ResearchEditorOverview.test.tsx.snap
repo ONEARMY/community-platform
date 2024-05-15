@@ -5,11 +5,11 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
   <div
     class="css-vnzk4a-Box"
   >
-    <h3
+    <h2
       class="css-1fqez35-Box"
     >
       Research overview
-    </h3>
+    </h2>
     <button
       class="css-3hb35i-Box"
       data-cy="create-update"
@@ -50,11 +50,11 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
   <div
     class="css-vnzk4a-Box"
   >
-    <h3
+    <h2
       class="css-1fqez35-Box"
     >
       Research overview
-    </h3>
+    </h2>
     <button
       class="css-3hb35i-Box"
       data-cy="create-update"
@@ -95,11 +95,11 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
   <div
     class="css-vnzk4a-Box"
   >
-    <h3
+    <h2
       class="css-1fqez35-Box"
     >
       Research overview
-    </h3>
+    </h2>
     <ul
       class="css-47e4wa-Box"
     >

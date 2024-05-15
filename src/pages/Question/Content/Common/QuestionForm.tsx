@@ -81,7 +81,7 @@ export const QuestionForm = (props: IProps) => {
                     data-cy={`question-${parentType}-title`}
                     sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}
                   >
-                    <Heading>{headingText}</Heading>
+                    <Heading as="h1">{headingText}</Heading>
                     <Box ml="15px">
                       <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
                     </Box>

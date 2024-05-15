@@ -11,11 +11,86 @@ service cloud.firestore {
       return request.auth.uid == request.resource.id
     }
 
-    match /{collectionId}/{document=**} {
-      allow get: if collectionId != 'user_integrations' || userIntegrationsRead()
-      // Do not allow users to list all user integrations.
-      allow list: if collectionId != 'user_integrations'
-      allow write: if collectionId != 'emails' && (collectionId != 'user_integrations' || userIntegrationsWrite())
+    function isPublicReadable() {
+      return true;
+    }
+
+    function isPublicWritable() {
+      return true;
+    }
+
+    match /aggregations_rev20220126/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /discussions_rev20231022/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /emails/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if false;
+    }
+
+    match /question_categories_rev20231130/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /questions_rev20230926/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /research_categories_rev20221224/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /research_rev20201020/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /templates/{document=**} {
+      allow read: if false
+      allow write: if false
+    }
+
+    match /user_integrations/{document=**} {
+      allow get: if userIntegrationsRead()
+
+    // Do not allow users to list all user integrations.
+      allow list: if false
+      allow write: if userIntegrationsWrite()
+    }
+
+    match /user_notifications_rev20221209/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /v3_howtos/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /v3_mappins/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /v3_tags/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /v3_users/{userId} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+      allow delete: if request.auth != null && request.auth.uid == userId;
     }
   }
 }

@@ -5,7 +5,8 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
-import { act, render } from '@testing-library/react'
+import { faker } from '@faker-js/faker'
+import { act, render, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
@@ -32,13 +33,9 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
     stores: {
       userStore: {},
       aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        isVerified: jest.fn((userId) => userId === 'HowtoAuthor'),
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       howtoStore: mockHowtoStore(),
@@ -168,6 +165,66 @@ describe('Howto', () => {
 
       expect(() => {
         wrapper.getAllByText('2 steps')
+      }).not.toThrow()
+    })
+  })
+
+  describe('Breadcrumbs', () => {
+    it('displays breadcrumbs with category', async () => {
+      let wrapper
+      await act(async () => {
+        howto.title = 'DIY Recycling Machine'
+        howto.category = {
+          label: 'DIY',
+          _id: faker.string.uuid(),
+          _modified: faker.date.past().toString(),
+          _created: faker.date.past().toString(),
+          _deleted: faker.datatype.boolean(),
+          _contentModifiedTimestamp: faker.date.past().toString(),
+        }
+        wrapper = await factory()
+      })
+
+      expect(() => {
+        const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
+        expect(breadcrumbItems).toHaveLength(3)
+        expect(breadcrumbItems[0]).toHaveTextContent('How To')
+        expect(breadcrumbItems[1]).toHaveTextContent('DIY')
+        expect(breadcrumbItems[2]).toHaveTextContent('DIY Recycling Machine')
+
+        // Assert: Check that the first two breadcrumb items contain links
+        const firstLink = within(breadcrumbItems[0]).getByRole('link')
+        const secondLink = within(breadcrumbItems[1]).getByRole('link')
+        expect(firstLink).toBeInTheDocument()
+        expect(secondLink).toBeInTheDocument()
+
+        // Assert: Check for the correct number of chevrons
+        const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
+        expect(chevrons).toHaveLength(2)
+      }).not.toThrow()
+    })
+
+    it('displays breadcrumbs without category', async () => {
+      let wrapper
+      await act(async () => {
+        howto.title = 'DIY Recycling Machine'
+        howto.category = undefined
+        wrapper = await factory()
+      })
+
+      expect(() => {
+        const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
+        expect(breadcrumbItems).toHaveLength(2)
+        expect(breadcrumbItems[0]).toHaveTextContent('How To')
+        expect(breadcrumbItems[1]).toHaveTextContent('DIY Recycling Machine')
+
+        // Assert: Check that the first breadcrumb item contains a link
+        const firstLink = within(breadcrumbItems[0]).getByRole('link')
+        expect(firstLink).toBeInTheDocument()
+
+        // Assert: Check for the correct number of chevrons
+        const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
+        expect(chevrons).toHaveLength(1)
       }).not.toThrow()
     })
   })

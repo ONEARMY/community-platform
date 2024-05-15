@@ -31,6 +31,7 @@ const factory = async (
   // @ts-ignore
   store.aggregationsStore = {
     aggregations: {
+      isVerified: jest.fn((userId) => userId === 'fake-user'),
       users_verified: ['fake-user'],
     },
   }

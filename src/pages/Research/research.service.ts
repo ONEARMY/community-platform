@@ -9,6 +9,7 @@ import {
   startAfter,
   where,
 } from 'firebase/firestore'
+import { IModerationStatus } from 'oa-shared'
 
 import { DB_ENDPOINTS } from '../../models'
 import { firestore } from '../../utils/firebase'
@@ -39,7 +40,7 @@ const search = async (
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
-  const { itemsQuery, countQuery } = createQueries(
+  const { itemsQuery, countQuery } = createSearchQuery(
     words,
     category,
     sort,
@@ -61,7 +62,7 @@ const search = async (
   return { items, total, lastVisible }
 }
 
-const createQueries = (
+const createSearchQuery = (
   words: string[],
   category: string,
   sort: ResearchSortOption,
@@ -70,7 +71,12 @@ const createQueries = (
   take: number = 10,
 ) => {
   const collectionRef = collection(firestore, DB_ENDPOINTS.research)
-  let filters: QueryFilterConstraint[] = [and(where('_deleted', '!=', true))]
+  let filters: QueryFilterConstraint[] = [
+    and(
+      where('_deleted', '!=', true),
+      where('moderation', '==', IModerationStatus.ACCEPTED),
+    ),
+  ]
   let constraints: QueryNonFilterConstraint[] = []
 
   if (words?.length > 0) {
@@ -132,11 +138,45 @@ const getSort = (sort: ResearchSortOption) => {
   }
 }
 
+const createDraftQuery = (userId: string) => {
+  const collectionRef = collection(firestore, DB_ENDPOINTS.research)
+  const filters = and(
+    where('_createdBy', '==', userId),
+    where('moderation', 'in', [
+      IModerationStatus.AWAITING_MODERATION,
+      IModerationStatus.DRAFT,
+      IModerationStatus.IMPROVEMENTS_NEEDED,
+      IModerationStatus.REJECTED,
+    ]),
+    where('_deleted', '!=', true),
+  )
+
+  const countQuery = query(collectionRef, filters)
+  const itemsQuery = query(collectionRef, filters, orderBy('_modified', 'desc'))
+
+  return { countQuery, itemsQuery }
+}
+
+const getDraftCount = async (userId: string) => {
+  const { countQuery } = createDraftQuery(userId)
+
+  return (await getCountFromServer(countQuery)).data().count
+}
+
+const getDrafts = async (userId: string) => {
+  const { itemsQuery } = createDraftQuery(userId)
+  const docs = await getDocs(itemsQuery)
+
+  return docs.docs ? docs.docs.map((x) => x.data() as IResearch.Item) : []
+}
+
 export const researchService = {
   search,
   getResearchCategories,
+  getDrafts,
+  getDraftCount,
 }
 
 export const exportedForTesting = {
-  createQueries,
+  createSearchQuery,
 }

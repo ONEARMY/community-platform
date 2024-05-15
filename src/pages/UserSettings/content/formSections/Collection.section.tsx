@@ -30,7 +30,9 @@ export const CollectionSection = (props: IProps) => {
   return (
     <FlexSectionContainer>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading variant="small">{headings.collection}</Heading>
+        <Heading as="h2" variant="small">
+          {headings.collection}
+        </Heading>
       </Flex>
       <Box>
         <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>

@@ -131,7 +131,6 @@ export class QuestionStore extends ModuleStore {
     if (!this.activeQuestionItem || !this.activeUser) return
 
     const updatedQuestion = await toggleDocUsefulByUser(
-      this.db,
       COLLECTION_NAME,
       this.activeQuestionItem._id,
       this.activeUser.userName,

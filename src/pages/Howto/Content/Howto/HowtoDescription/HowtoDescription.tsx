@@ -49,7 +49,7 @@ interface IProps {
   votedUsefulCount?: number
   verified?: boolean
   hasUserVotedUseful: boolean
-  onUsefulClick: () => void
+  onUsefulClick: () => Promise<void>
 }
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
@@ -120,7 +120,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   }, [howto._id])
 
   return (
-    <Card sx={{ mt: 4 }}>
+    <Card>
       <Flex
         data-cy="how-to-basis"
         data-id={howto._id}
@@ -202,7 +202,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                   textAlign: 'left',
                 }}
               >
-                <Heading variant="small" mb={2}>
+                <Heading as="p" variant="small" mb={2}>
                   Moderator Feedback
                 </Heading>
                 <Text sx={{ fontSize: 2 }}>{howto.moderatorFeedback}</Text>
@@ -225,7 +225,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                     sx={{ fontSize: 2, mt: 2 }}
                   />
                 )}
-                <Heading mt={howto.category ? 1 : 2} mb={1}>
+                <Heading as="h1" mt={howto.category ? 1 : 2} mb={1}>
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {capitalizeFirstLetter(howto.title)}
                 </Heading>

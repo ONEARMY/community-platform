@@ -166,7 +166,7 @@ export const listing = {
   usefulness: 'How useful it is',
   totalComments: 'Total comments',
   filterCategory: 'Filter by category',
-  search: 'Search for a how-to',
+  search: 'Search for how-tos',
   sort: 'Sort by',
   loadMore: 'Load More',
 }

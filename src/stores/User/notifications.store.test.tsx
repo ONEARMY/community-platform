@@ -36,21 +36,25 @@ describe('triggerNotification', () => {
 
   it('adds a new notification to user', async () => {
     const store = new MockNotificationsStore()
+    const userName = 'exampleUser'
     store.db.getWhere.mockReturnValue([
-      FactoryUser({ _id: 'example', userName: 'example' }),
+      FactoryUser({ _id: 'exampleId', userName }),
     ])
     // Act
     await store.triggerNotification(
       'howto_mention',
-      'example',
+      userName,
       'https://example.com',
-      'example',
+      'exampleTitle',
     )
     // Expect
     const [newUser] = store.db.update.mock.calls[0]
 
-    expect(store.db.doc).toBeCalledWith('example')
+    expect(store.db.doc).toBeCalledWith(userName)
     expect(store.db.update).toBeCalledTimes(1)
+    expect(store.db.update).toHaveBeenCalledWith(expect.objectContaining({}), {
+      keep_modified_timestamp: true,
+    })
     expect(newUser.notifications).toHaveLength(1)
     expect(newUser.notifications[0]).toEqual(
       expect.objectContaining({

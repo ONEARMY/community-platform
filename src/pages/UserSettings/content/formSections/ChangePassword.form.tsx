@@ -64,7 +64,9 @@ export const ChangePasswordForm = () => {
                 data-cy="changePasswordForm"
                 sx={{ flexDirection: 'column', gap: 1 }}
               >
-                <Heading variant="small">{headings.changePassword}</Heading>
+                <Heading as="h3" variant="small">
+                  {headings.changePassword}
+                </Heading>
 
                 <FormFieldWrapper
                   text={fields.oldPassword.title}

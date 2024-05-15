@@ -43,13 +43,9 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         user: mockActiveUser,
       },
       aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        isVerified: jest.fn(),
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       howtoStore: {},
@@ -290,7 +286,9 @@ describe('question.routes', () => {
 
       await waitFor(async () => {
         expect(() => wrapper.getByText(/loading/)).toThrow()
-        expect(wrapper.getByText(question.title)).toBeInTheDocument()
+        expect(wrapper.queryByTestId('question-title')).toHaveTextContent(
+          question.title,
+        )
         expect(
           wrapper.getByText(
             new RegExp(`^${question.description.split(' ')[0]}`),

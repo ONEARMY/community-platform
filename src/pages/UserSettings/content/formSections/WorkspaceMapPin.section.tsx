@@ -25,7 +25,7 @@ export const WorkspaceMapPinSection = observer((props: IProps) => {
   return (
     <FlexSectionContainer>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading variant="small" id="your-map-pin">
+        <Heading as="h2" variant="small" id="your-map-pin">
           {title}
         </Heading>
       </Flex>

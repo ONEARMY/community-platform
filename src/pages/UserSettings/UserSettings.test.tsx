@@ -34,13 +34,9 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         },
       },
       aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        isVerified: jest.fn(),
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       themeStore: {

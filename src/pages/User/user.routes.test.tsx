@@ -26,16 +26,9 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         getUserCreatedDocs: jest.fn(),
       },
       aggregationsStore: {
-        updateAggregation: jest.fn(),
-        stopAggregationUpdates: jest.fn(),
-        getAggregationValue: jest.fn(),
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        updateVerifiedUsers: jest.fn(),
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       themeStore: {

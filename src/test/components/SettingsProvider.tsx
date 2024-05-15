@@ -16,13 +16,8 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         updateUserBadge: mockUpdateUserBadge,
       },
       aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       themeStore: {

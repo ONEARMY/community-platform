@@ -1,48 +1,50 @@
-import { useCallback, useContext, useEffect } from 'react'
-import { UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom'
+import { useCallback, useEffect, useRef } from 'react'
+import { useBeforeUnload, useBlocker } from 'react-router-dom'
 
-const useConfirm = (confirmExit: () => boolean, when: boolean) => {
-  const { navigator } = useContext(NavigationContext)
+// You can abstract `useBlocker` to use the browser's `window.confirm` dialog to
+// determine whether or not the user should navigate within the current origin.
+// `useBlocker` can also be used in conjunction with `useBeforeUnload` to
+// prevent navigation away from the current origin.
+//
+// IMPORTANT: There are edge cases with this behavior in which React Router
+// cannot reliably access the correct location in the history stack. In such
+// cases the user may attempt to stay on the page but the app navigates anyway,
+// or the app may stay on the correct page but the browser's history stack gets
+// out of whack. You should test your own implementation thoroughly to make sure
+// the tradeoffs are right for your users.
+
+export const usePrompt = (message: string, when: boolean) => {
+  const blocker = useBlocker(
+    useCallback(() => {
+      // eslint-disable-next-line no-alert
+      return !window.confirm(message)
+    }, [message]),
+  )
+  const prevState = useRef(blocker.state)
 
   useEffect(() => {
-    if (!when) {
-      return
+    if (blocker.state === 'blocked') {
+      blocker.reset()
     }
-
-    const push = navigator.push
-
-    navigator.push = (...args: Parameters<typeof push>) => {
-      const result = confirmExit()
-      if (result !== false) {
-        push(...args)
-      }
-    }
+    prevState.current = blocker.state
 
     return () => {
-      navigator.push = push
-    }
-  }, [navigator, confirmExit, when])
-}
-
-export const usePrompt = (message: string, when = true) => {
-  useEffect(() => {
-    if (when) {
-      window.onbeforeunload = () => {
-        return message
+      if (blocker && blocker.reset) {
+        blocker.reset()
       }
-    } else {
-      window.onbeforeunload = null
     }
+  }, [blocker])
 
-    return () => {
-      window.onbeforeunload = null
-    }
-  }, [message, when])
-
-  const confirmExit = useCallback(() => {
-    // eslint-disable-next-line no-alert
-    return window.confirm(message)
-  }, [message])
-
-  useConfirm(confirmExit, when)
+  useBeforeUnload(
+    useCallback(
+      (event) => {
+        if (when) {
+          event.preventDefault()
+          event.returnValue = message
+        }
+      },
+      [message, when],
+    ),
+    { capture: true },
+  )
 }

@@ -1,5 +1,10 @@
 import { act } from 'react-dom/test-utils'
-import { MemoryRouter } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { fireEvent, render } from '@testing-library/react'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
@@ -84,15 +89,24 @@ describe('Research update form', () => {
 })
 
 const getWrapper = async (formValues, parentType, navProps) => {
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route
+        path="/research/:slug/update"
+        element={
+          <ResearchUpdateForm
+            formValues={formValues}
+            parentType={parentType}
+            {...navProps}
+          />
+        }
+      />,
+    ),
+    { initialEntries: ['/research/:slug/update'] },
+  )
   return render(
     <ThemeProvider theme={Theme}>
-      <MemoryRouter initialEntries={['/research/:slug/update']}>
-        <ResearchUpdateForm
-          formValues={formValues}
-          parentType={parentType}
-          {...navProps}
-        />
-      </MemoryRouter>
+      <RouterProvider router={router} />
     </ThemeProvider>,
   )
 }

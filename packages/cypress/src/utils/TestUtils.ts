@@ -27,3 +27,7 @@ export const generateNewUserDetails = () => {
     password: 'test1234',
   }
 }
+
+export const setIsPreciousPlastic = () => {
+  return localStorage.setItem('platformTheme', 'precious-plastic')
+}

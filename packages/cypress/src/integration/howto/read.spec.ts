@@ -163,6 +163,25 @@ describe('[How To]', () => {
       })
     })
 
+    describe('[By beta-tester]', () => {
+      it('[Presents the donation request before opening of attachments]', () => {
+        cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
+        cy.visit('how-to/set-up-devsite-to-help-coding')
+
+        cy.step('Shows modal')
+        cy.get('[data-cy=downloadButton]').click()
+        cy.get('[data-cy=DonationRequest]').should('be.visible')
+        cy.get('[data-cy=DonationRequest]').contains('Support our work')
+
+        cy.step('Can skip to download')
+        cy.get('[data-cy=DonationRequestSkip]').should(
+          'have.attr',
+          'target',
+          '_blank',
+        )
+      })
+    })
+
     describe('[By Owner]', () => {
       beforeEach(() => {
         cy.visit(specificHowtoUrl)

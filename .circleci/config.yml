@@ -196,7 +196,7 @@ jobs:
           at: '.'
       - run:
           name: Test Security Rules
-          command: yarn workspace security-rules test-with-emulator
+          command: yarn workspace security-rules test
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility

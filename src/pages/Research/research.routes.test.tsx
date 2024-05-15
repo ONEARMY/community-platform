@@ -42,7 +42,10 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         user: mockActiveUser,
       },
       aggregationsStore: {
-        aggregations: {},
+        isVerified: jest.fn(),
+        users_verified: {
+          HowtoAuthor: true,
+        },
       },
       researchCategoriesStore: {
         allResearchCategories: [],

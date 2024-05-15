@@ -28,7 +28,7 @@ export const Default: StoryFn<typeof UserEngagementWrapper> = () => (
             votedUsefulCount={28}
             hasUserVotedUseful={false}
             isLoggedIn={false}
-            onUsefulClick={() => null}
+            onUsefulClick={() => new Promise(() => {})}
           />
         </ArticleCallToAction>
       </Box>

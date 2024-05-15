@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { isPreciousPlastic } from 'src/config/config'
 
 import { AuthRoute } from '../common/AuthRoute'
 import { RESEARCH_EDITOR_ROLES } from './constants'
@@ -35,13 +36,15 @@ const getRandomInt = (max) => {
   return Math.floor(Math.random() * max)
 }
 
+const roles = isPreciousPlastic() ? [] : RESEARCH_EDITOR_ROLES
+
 export const researchRouteElements = (
   <>
     <Route index element={<ResearchList />} />
     <Route
       path="create"
       element={
-        <AuthRoute roleRequired={RESEARCH_EDITOR_ROLES}>
+        <AuthRoute roleRequired={roles}>
           <CreateResearch />
         </AuthRoute>
       }
@@ -49,7 +52,7 @@ export const researchRouteElements = (
     <Route
       path=":slug/new-update"
       element={
-        <AuthRoute roleRequired={RESEARCH_EDITOR_ROLES}>
+        <AuthRoute roleRequired={roles}>
           <CreateUpdate />
         </AuthRoute>
       }
@@ -57,7 +60,7 @@ export const researchRouteElements = (
     <Route
       path=":slug/edit"
       element={
-        <AuthRoute roleRequired={RESEARCH_EDITOR_ROLES}>
+        <AuthRoute roleRequired={roles}>
           <ResearchItemEditor />
         </AuthRoute>
       }
@@ -65,7 +68,7 @@ export const researchRouteElements = (
     <Route
       path=":slug/edit-update/:update"
       element={
-        <AuthRoute roleRequired={RESEARCH_EDITOR_ROLES}>
+        <AuthRoute roleRequired={roles}>
           <UpdateItemEditor />
         </AuthRoute>
       }

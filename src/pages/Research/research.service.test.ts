@@ -40,7 +40,7 @@ describe('research.search', () => {
     const words = ['test', 'text']
 
     // act
-    exportedForTesting.createQueries(words, '', 'MostRelevant', null)
+    exportedForTesting.createSearchQuery(words, '', 'MostRelevant', null)
 
     // assert
     expect(mockWhere).toHaveBeenCalledWith(
@@ -55,7 +55,7 @@ describe('research.search', () => {
     const category = 'cat1'
 
     // act
-    exportedForTesting.createQueries([], category, 'MostRelevant', null)
+    exportedForTesting.createSearchQuery([], category, 'MostRelevant', null)
 
     // assert
     expect(mockWhere).toHaveBeenCalledWith(
@@ -67,7 +67,7 @@ describe('research.search', () => {
 
   it('should not call orderBy if sorting by most relevant', async () => {
     // act
-    exportedForTesting.createQueries(['test'], '', 'MostRelevant', null)
+    exportedForTesting.createSearchQuery(['test'], '', 'MostRelevant', null)
 
     // assert
     expect(mockOrderBy).toHaveBeenCalledTimes(0)
@@ -75,7 +75,7 @@ describe('research.search', () => {
 
   it('should call orderBy when sorting is not MostRelevant', async () => {
     // act
-    exportedForTesting.createQueries(['test'], '', 'Newest', null)
+    exportedForTesting.createSearchQuery(['test'], '', 'Newest', null)
 
     // assert
     expect(mockOrderBy).toHaveBeenLastCalledWith('_created', 'desc')
@@ -83,7 +83,7 @@ describe('research.search', () => {
 
   it('should filter by research status', async () => {
     // act
-    exportedForTesting.createQueries(
+    exportedForTesting.createSearchQuery(
       ['test'],
       '',
       'Newest',
@@ -103,7 +103,7 @@ describe('research.search', () => {
     const take = 12
 
     // act
-    exportedForTesting.createQueries(
+    exportedForTesting.createSearchQuery(
       ['test'],
       '',
       'Newest',

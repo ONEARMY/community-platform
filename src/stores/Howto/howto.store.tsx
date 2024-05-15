@@ -54,10 +54,9 @@ export class HowtoStore extends ModuleStore {
           return {
             ...comment,
             text: changeUserReferenceToPlainText(comment.text),
-            isUserVerified:
-              !!this.aggregationsStore.aggregations.users_verified?.[
-                comment.creatorName
-              ],
+            isUserVerified: !!this.aggregationsStore.isVerified(
+              comment.creatorName,
+            ),
           }
         })
       : []
@@ -114,7 +113,6 @@ export class HowtoStore extends ModuleStore {
     userName: string,
   ): Promise<void> {
     const updatedItem = (await toggleDocUsefulByUser(
-      this.db,
       COLLECTION_NAME,
       docId,
       userName,

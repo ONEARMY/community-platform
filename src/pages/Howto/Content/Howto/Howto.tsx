@@ -11,7 +11,6 @@ import {
 import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
@@ -39,10 +38,10 @@ export const Howto = observer(() => {
   ) => {
     const loggedInUser = howtoStore.activeUser
     if (!loggedInUser?.userName) {
-      return null
+      return
     }
 
-    howtoStore.toggleUsefulByUser(howtoId, loggedInUser?.userName)
+    await howtoStore.toggleUsefulByUser(howtoId, loggedInUser?.userName)
     const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
 
     trackEvent({
@@ -111,10 +110,8 @@ export const Howto = observer(() => {
   }
 
   const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
-  const isVerified = isUserVerifiedWithStore(
-    howto._createdBy,
-    aggregationsStore,
-  )
+  const isVerified = aggregationsStore.isVerified(howto._createdBy)
+
   return (
     <>
       <Breadcrumbs content={howto} variant="howto" />
@@ -126,8 +123,8 @@ export const Howto = observer(() => {
         commentsCount={howtoStore.commentsCount}
         votedUsefulCount={howtoStore.votedUsefulCount}
         hasUserVotedUseful={hasUserVotedUseful}
-        onUsefulClick={() =>
-          onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
+        onUsefulClick={async () =>
+          await onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
         }
       />
       <Box mt={9}>
@@ -172,9 +169,13 @@ export const Howto = observer(() => {
               votedUsefulCount={howtoStore.votedUsefulCount}
               hasUserVotedUseful={hasUserVotedUseful}
               isLoggedIn={!!loggedInUser}
-              onUsefulClick={() => {
-                onUsefulClick(howto._id, howto.slug, 'ArticleCallToAction')
-              }}
+              onUsefulClick={async () =>
+                await onUsefulClick(
+                  howto._id,
+                  howto.slug,
+                  'ArticleCallToAction',
+                )
+              }
             />
           )}
         </ArticleCallToAction>

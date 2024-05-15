@@ -5,110 +5,12 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "questions_rev20230926",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "commentCount",
+          "fieldPath": "_createdBy",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "commentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "latestCommentDate",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "questions_rev20230926",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "commentCount",
+          "fieldPath": "moderation",
           "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "commentCount",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "latestCommentDate",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "questions_rev20230926",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "_created",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "questions_rev20230926",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "questions_rev20230926",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "_modified",
@@ -129,6 +31,72 @@
           "arrayConfig": "CONTAINS"
         },
         {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "commentCount",
           "order": "ASCENDING"
         },
@@ -147,6 +115,10 @@
           "arrayConfig": "CONTAINS"
         },
         {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "commentCount",
           "order": "DESCENDING"
         },
@@ -163,6 +135,10 @@
         {
           "fieldPath": "keywords",
           "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
         },
         {
           "fieldPath": "latestCommentDate",
@@ -181,6 +157,10 @@
         {
           "fieldPath": "keywords",
           "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
         },
         {
           "fieldPath": "questionCategory._id",
@@ -205,6 +185,10 @@
           "arrayConfig": "CONTAINS"
         },
         {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "questionCategory._id",
           "order": "ASCENDING"
         },
@@ -221,6 +205,10 @@
         {
           "fieldPath": "keywords",
           "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
         },
         {
           "fieldPath": "questionCategory._id",
@@ -245,6 +233,10 @@
           "arrayConfig": "CONTAINS"
         },
         {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "questionCategory._id",
           "order": "ASCENDING"
         },
@@ -267,6 +259,10 @@
           "arrayConfig": "CONTAINS"
         },
         {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "questionCategory._id",
           "order": "ASCENDING"
         },
@@ -287,6 +283,10 @@
         {
           "fieldPath": "keywords",
           "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
         },
         {
           "fieldPath": "questionCategory._id",
@@ -307,11 +307,15 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "questionCategory._id",
+          "fieldPath": "moderation",
           "order": "ASCENDING"
         },
         {
           "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
           "order": "DESCENDING"
         }
       ]
@@ -321,11 +325,175 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "commentCount",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "commentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "latestCommentDate",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "questionCategory._id",
           "order": "ASCENDING"
         },
         {
           "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "questionCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_modified",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "questionCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "commentCount",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "questionCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "commentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "questions_rev20230926",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "questionCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "latestCommentDate",
           "order": "DESCENDING"
         },
         {

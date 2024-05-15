@@ -4,6 +4,8 @@ import { observer } from 'mobx-react'
 import { Button, Loader, MoreContainer } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
+import DraftButton from 'src/pages/common/Drafts/DraftButton'
+import useDrafts from 'src/pages/common/Drafts/useDrafts'
 import { Box, Flex, Grid, Heading } from 'theme-ui'
 
 import { ITEMS_PER_PAGE } from '../../constants'
@@ -25,6 +27,11 @@ export const HowtoList = observer(() => {
   const [lastVisible, setLastVisible] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
   >(undefined)
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
+    useDrafts<IHowto>({
+      getDraftCount: howtoService.getDraftCount,
+      getDrafts: howtoService.getDrafts,
+    })
 
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get(HowtosSearchParams.q) || ''
@@ -104,8 +111,16 @@ export const HowtoList = observer(() => {
           flexDirection: ['column', 'column', 'row'],
         }}
       >
-        <HowtoFilterHeader />
-        <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
+        {!showDrafts ? <HowtoFilterHeader /> : <div></div>}
+
+        <Flex sx={{ gap: 2, justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
+          {userStore?.user && (
+            <DraftButton
+              showDrafts={showDrafts}
+              draftCount={draftCount}
+              handleShowDrafts={handleShowDrafts}
+            />
+          )}
           <Link to={userStore!.user ? '/how-to/create' : '/sign-up'}>
             <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
               <Button
@@ -126,23 +141,38 @@ export const HowtoList = observer(() => {
         gap={4}
         sx={{ paddingTop: 1, marginBottom: 3 }}
       >
-        {howtos &&
-          howtos.length > 0 &&
-          howtos.map((howto, index) => <HowToCard key={index} howto={howto} />)}
+        {showDrafts ? (
+          drafts.map((item) => {
+            return <HowToCard key={item._id} howto={item} />
+          })
+        ) : (
+          <>
+            {howtos &&
+              howtos.length > 0 &&
+              howtos.map((howto, index) => (
+                <HowToCard key={index} howto={howto} />
+              ))}
+          </>
+        )}
       </Grid>
 
-      {!isFetching && howtos && howtos.length > 0 && howtos.length < total && (
-        <Flex
-          sx={{
-            justifyContent: 'center',
-          }}
-        >
-          <Button onClick={() => fetchHowtos(lastVisible)}>
-            {listing.loadMore}
-          </Button>
-        </Flex>
-      )}
-      {isFetching && <Loader />}
+      {!isFetching &&
+        !showDrafts &&
+        howtos &&
+        howtos.length > 0 &&
+        howtos.length < total && (
+          <Flex
+            sx={{
+              justifyContent: 'center',
+            }}
+          >
+            <Button onClick={() => fetchHowtos(lastVisible)}>
+              {listing.loadMore}
+            </Button>
+          </Flex>
+        )}
+
+      {(isFetching || isFetchingDrafts) && <Loader />}
 
       <MoreContainer m={'0 auto'} pt={60} pb={90}>
         <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>

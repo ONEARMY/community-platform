@@ -19,7 +19,7 @@ export const REQUEST_BUTTON_DOWNLOAD = 'Download Now!'
 
 export const DonationRequest = (props: IProps) => {
   const { body, callback, iframeSrc, imageURL, link } = props
-  const [buttonLabel, setButtonLabel] = useState<string>(REQUEST_BUTTON_SKIP)
+  const [isStartDownload, setIsStartDownload] = useState<boolean>(false)
   const iframeArgs = {
     allowpaymentrequest: 'allowpaymentrequest',
     allow: 'payment',
@@ -38,7 +38,7 @@ export const DonationRequest = (props: IProps) => {
 
     switch (event.data) {
       case 'CAN_START_FILE_DOWNLOAD':
-        setButtonLabel(REQUEST_BUTTON_DOWNLOAD)
+        setIsStartDownload(true)
         window.open(link)
         break
     }
@@ -89,8 +89,8 @@ export const DonationRequest = (props: IProps) => {
 
         <Flex
           sx={{
-            borderLeft: [0, 0, '2px solid'],
-            minHeight: '650px',
+            borderLeft: [0, '2px solid'],
+            minHeight: [isStartDownload ? '400px' : '650px', '650px'],
             width: ['100%', '350px', '400px'],
           }}
         >
@@ -106,16 +106,27 @@ export const DonationRequest = (props: IProps) => {
         sx={{
           backgroundColor: 'offwhite',
           borderTop: '2px solid',
+          flexDirection: ['column', 'row'],
           padding: 2,
+          gap: 2,
           justifyContent: 'flex-end',
+          alignItems: 'center',
         }}
       >
+        {isStartDownload && (
+          <Text as="p" sx={{ color: 'grey', textAlign: 'center' }}>
+            Download hasn't started yet? Tap the button
+          </Text>
+        )}
+
         <ExternalLink
           href={link}
           onClick={callback}
           data-cy="DonationRequestSkip"
         >
-          <Button>{buttonLabel}</Button>
+          <Button>
+            {isStartDownload ? REQUEST_BUTTON_DOWNLOAD : REQUEST_BUTTON_SKIP}
+          </Button>
         </ExternalLink>
       </Flex>
     </Card>

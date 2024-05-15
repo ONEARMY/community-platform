@@ -71,7 +71,7 @@ export const EditComment = (props: IProps) => {
             </Label>
             <Field
               component={FieldTextarea}
-              data-cy="edit-comment"
+              data-cy="comment"
               id="comment"
               validate={required}
               name="comment"

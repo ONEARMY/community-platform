@@ -54,9 +54,9 @@ describe('EditComment', () => {
         comment=""
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
-      />
+      />,
     )
-    expect(screen.getByText('Save')).toBeDisabled()
+    expect(screen.getByTestId('edit-comment-submit')).toBeDisabled()
   })
   it('should dispaly error message when the comment is empty', () => {
     const screen = render(
@@ -67,7 +67,7 @@ describe('EditComment', () => {
         handleSubmit={mockOnSubmit}
       />,
     )
-    const inputComment = screen.getByLabelText('Edit Comment')
+    const inputComment = screen.getByTestId("edit-comment")
     inputComment.blur()
     expect(screen.getByText('Comment cannot be blank')).toBeInTheDocument()
   })

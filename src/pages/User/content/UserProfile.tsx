@@ -19,7 +19,7 @@ import type { UserCreatedDocs } from '../types'
  */
 export const UserProfile = observer(() => {
   const { id } = useParams()
-  const { userStore, aggregationsStore } = useCommonStores().stores
+  const { userStore } = useCommonStores().stores
   const [user, setUser] = useState<IUserPP | undefined>()
   const [userCreatedDocs, setUserCreatedDocs] = useState<
     UserCreatedDocs | undefined
@@ -52,14 +52,6 @@ export const UserProfile = observer(() => {
       fetchUserDocs()
     }
   }, [id])
-
-  // Ensure aggregations up-to-date when using any child pages and unsubscribe when leaving
-  useEffect(() => {
-    aggregationsStore.updateAggregation('users_totalUseful')
-    return () => {
-      aggregationsStore.stopAggregationUpdates('users_totalUseful')
-    }
-  })
 
   if (isLoading) {
     return <Loader />

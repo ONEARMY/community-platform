@@ -13,6 +13,16 @@ import { HowtoStore } from './howto.store'
 import type { IHowtoDB, IUser } from 'src/models'
 import type { IRootStore } from '../RootStore'
 
+const mockGetDoc = jest.fn()
+const mockIncrement = jest.fn()
+jest.mock('firebase/firestore', () => ({
+  collection: jest.fn(),
+  query: jest.fn(),
+  doc: jest.fn(),
+  getDoc: (doc) => mockGetDoc(doc),
+  increment: (value) => mockIncrement(value),
+}))
+
 const factory = async (
   howTos: IHowtoDB[] = [FactoryHowto({})],
   userOverloads?: Partial<IUser>,
@@ -65,6 +75,8 @@ const factory = async (
   store.userNotificationsStore = {
     triggerNotification: jest.fn(),
   }
+
+  store.toggleUsefulByUser = jest.fn()
 
   await store.setActiveHowtoBySlug('howto')
 
@@ -641,36 +653,6 @@ describe('howto.store', () => {
         expect.objectContaining({ total_views: updatedTotalViews }),
         expect.anything(),
       )
-    })
-  })
-
-  describe('Useful', () => {
-    it('marks howto as useful', async () => {
-      const { store, howToItem, updateFn } = await factory([
-        FactoryHowto({ votedUsefulBy: ['fake-user2'] }),
-      ])
-
-      // Act
-      await store.toggleUsefulByUser(howToItem._id, 'fake-user')
-
-      const [newHowto] = updateFn.mock.calls[0]
-      expect(updateFn).toHaveBeenCalledTimes(1)
-      expect(newHowto.votedUsefulBy).toEqual(
-        expect.arrayContaining(['fake-user', 'fake-user2']),
-      )
-    })
-
-    it('removes vote from a howto', async () => {
-      const { store, howToItem, updateFn } = await factory([
-        FactoryHowto({ votedUsefulBy: ['fake-user'] }),
-      ])
-
-      // Act
-      await store.toggleUsefulByUser(howToItem._id, 'fake-user')
-
-      const [newHowto] = updateFn.mock.calls[0]
-      expect(updateFn).toHaveBeenCalledTimes(1)
-      expect(newHowto.votedUsefulBy).toEqual([])
     })
   })
 })

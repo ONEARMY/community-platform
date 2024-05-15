@@ -67,7 +67,7 @@ describe('EditComment', () => {
         handleSubmit={mockOnSubmit}
       />,
     )
-    const inputComment = screen.getByTestId("edit-comment")
+    const inputComment = screen.getByTestId('edit-comment')
     inputComment.blur()
     expect(screen.getByText('Comment cannot be blank')).toBeInTheDocument()
   })

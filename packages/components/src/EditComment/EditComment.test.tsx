@@ -24,7 +24,7 @@ describe('EditComment', () => {
   it('enables save button when comment is not empty', () => {
     const screen = render(
       <EditComment
-        isReply={true}
+        isReply={false}
         comment="Test comment"
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
@@ -36,7 +36,7 @@ describe('EditComment', () => {
   it('calls onSubmit when the submit button is clicked', () => {
     const screen = render(
       <EditComment
-        isReply={true}
+        isReply={false}
         comment="Test comment"
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
@@ -46,28 +46,27 @@ describe('EditComment', () => {
     fireEvent.click(button)
     expect(mockOnSubmit).toHaveBeenCalledWith('Test comment')
   })
-
   it('disables save button when comment is empty', () => {
     const screen = render(
       <EditComment
-        isReply={true}
+        isReply={false}
         comment=""
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
       />,
     )
-    expect(screen.getByTestId('edit-comment-submit')).toBeDisabled()
+    expect(screen.getByText('Save')).toBeDisabled()
   })
   it('should dispaly error message when the comment is empty', () => {
     const screen = render(
       <EditComment
-        isReply={true}
+        isReply={false}
         comment=""
         handleCancel={mockOnCancel}
         handleSubmit={mockOnSubmit}
       />,
     )
-    const inputComment = screen.getByTestId('edit-comment')
+    const inputComment = screen.getByLabelText('Edit Comment')
     inputComment.blur()
     expect(screen.getByText('Comment cannot be blank')).toBeInTheDocument()
   })

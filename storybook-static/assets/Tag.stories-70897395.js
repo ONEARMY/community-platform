@@ -1,4 +1,0 @@
-import{a as s}from"./jsx-runtime-913be41c.js";import{T as e}from"./Tag-8d5370f1.js";import"./index-2506bfc3.js";import"./theme-ui-components.esm-784287e5.js";import"./emotion-react.browser.esm-ac7fc07b.js";import"./emotion-element-6a883da9.browser.esm-becb4ad2.js";import"./emotion-use-insertion-effect-with-fallbacks.browser.esm-11801e73.js";import"./hoist-non-react-statics.cjs-dd442a32.js";import"./theme-ui-css.esm-a1197288.js";const f={title:"Components/Tag",component:e},o=()=>s(e,{tag:{label:"Label"}});var r,t,a;o.parameters={...o.parameters,docs:{...(r=o.parameters)==null?void 0:r.docs,source:{originalSource:`() => <Tag tag={{
-  label: 'Label'
-}} />`,...(a=(t=o.parameters)==null?void 0:t.docs)==null?void 0:a.source}}};const T=["Default"];export{o as Default,T as __namedExportsOrder,f as default};
-//# sourceMappingURL=Tag.stories-70897395.js.map

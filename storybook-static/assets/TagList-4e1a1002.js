@@ -1,0 +1,2 @@
+import{a as r}from"./jsx-runtime-913be41c.js";import{T as o}from"./Tag-1f6633c7.js";import{F as i}from"./theme-ui-components.esm-600c41e5.js";const e=({tags:a})=>r(i,{sx:{gap:1},children:a.map((t,s)=>r(o,{tag:t},s))});try{e.displayName="TagList",e.__docgenInfo={description:"",displayName:"TagList",props:{tags:{defaultValue:null,description:"",name:"tags",required:!0,type:{name:"ITag[]"}}}}}catch{}export{e as T};
+//# sourceMappingURL=TagList-4e1a1002.js.map

@@ -1,0 +1,2 @@
+import{a as r}from"./jsx-runtime-913be41c.js";import{H as i}from"./theme-ui-components.esm-600c41e5.js";const n="Start the discussion",o="1 Comment",a="Comments",e=({length:t})=>{const s=(()=>t===0?n:t===1?o:`${t} ${a}`)();return r(i,{as:"h3",sx:{marginBottom:2},children:s})};try{e.displayName="DiscussionTitle",e.__docgenInfo={description:"",displayName:"DiscussionTitle",props:{length:{defaultValue:null,description:"",name:"length",required:!0,type:{name:"number"}}}}}catch{}export{e as D};
+//# sourceMappingURL=DiscussionTitle-75757833.js.map

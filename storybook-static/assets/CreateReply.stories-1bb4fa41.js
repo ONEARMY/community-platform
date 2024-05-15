@@ -1,0 +1,10 @@
+import{a as m}from"./jsx-runtime-913be41c.js";import{C as t}from"./CreateReply-4cdf9d85.js";import"./index-2506bfc3.js";import"./CreateComment-e25e73ac.js";import"./index-54304c9c.js";import"./index-0dfb046a.js";import"./index-150eb7c2.js";import"./MemberBadge-fbf89a79.js";import"./icon-star-active-309631d9.js";import"./emotion-element-6a883da9.browser.esm-becb4ad2.js";import"./emotion-use-insertion-effect-with-fallbacks.browser.esm-11801e73.js";import"./theme-ui-components.esm-600c41e5.js";import"./emotion-react.browser.esm-ac7fc07b.js";import"./hoist-non-react-statics.cjs-dd442a32.js";import"./theme-ui-css.esm-a1197288.js";const _={title:"Components/CreateReply",component:t},e=()=>m(t,{commentId:"23543bh",isLoggedIn:!1,maxLength:75,onSubmit:()=>Promise.resolve()}),r=()=>m(t,{commentId:"23543bh",isLoggedIn:!0,maxLength:1e3,onSubmit:()=>Promise.resolve()}),o=()=>m(t,{commentId:"23543bh",isLoggedIn:!0,maxLength:1e3,onSubmit:async()=>Promise.reject(new Error("Error!"))});var n,s,a;e.parameters={...e.parameters,docs:{...(n=e.parameters)==null?void 0:n.docs,source:{originalSource:`() => {
+  return <CreateReply commentId={'23543bh'} isLoggedIn={false} maxLength={75} onSubmit={() => Promise.resolve()} />;
+}`,...(a=(s=e.parameters)==null?void 0:s.docs)==null?void 0:a.source}}};var i,p,c;r.parameters={...r.parameters,docs:{...(i=r.parameters)==null?void 0:i.docs,source:{originalSource:`() => {
+  return <CreateReply commentId={'23543bh'} isLoggedIn={true} maxLength={1000} onSubmit={() => Promise.resolve()} />;
+}`,...(c=(p=r.parameters)==null?void 0:p.docs)==null?void 0:c.source}}};var u,g,d;o.parameters={...o.parameters,docs:{...(u=o.parameters)==null?void 0:u.docs,source:{originalSource:`() => {
+  return <CreateReply commentId={'23543bh'} isLoggedIn={true} maxLength={1000} onSubmit={async () => {
+    return Promise.reject(new Error('Error!'));
+  }} />;
+}`,...(d=(g=o.parameters)==null?void 0:g.docs)==null?void 0:d.source}}};const w=["Default","LoggedIn","LoggedInWithError"];export{e as Default,r as LoggedIn,o as LoggedInWithError,w as __namedExportsOrder,_ as default};
+//# sourceMappingURL=CreateReply.stories-1bb4fa41.js.map

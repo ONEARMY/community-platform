@@ -12,7 +12,6 @@ import {
   ResearchUpdateStatus,
 } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
 import { getPublicUpdates, researchStatusColour } from 'src/utils/helpers'
@@ -38,8 +37,7 @@ const ResearchListItem = ({ item }: IProps) => {
     fontSize: [1, 2, 2],
   }
 
-  const isVerified = isUserVerifiedWithStore(item._createdBy, aggregationsStore)
-
+  const isVerified = aggregationsStore.isVerified(item._createdBy)
   const status = item.researchStatus || ResearchStatus.IN_PROGRESS
 
   return (

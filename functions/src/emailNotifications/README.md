@@ -12,9 +12,9 @@ Users can choose if they would like to receive these emails, and if so, at what 
 
 ## Notification Email Process
 
-Based on the user's `notifications` and `notification_settings`, the [user notifications aggregation](../aggregations/userNotifications.aggregations.ts) creates a `pending_emails` collection to store any notifications for users that are not yet `notified` or `read`. This aggregation is refreshed any time the `users` collection is updated.
+Based on the user's `notifications` and `notification_settings`, the [user notifications aggregation](../aggregations/userNotifications.aggregations.ts) creates a `emails_pending` collection to store any notifications for users that are not yet `notified` or `read`. This aggregation is refreshed any time the `users` collection is updated.
 
-The function [createNotificationEmails](./createNotificationEmails.ts) in this directory reads from the `pending_emails` collection and writes to the `emails` collection. The `emails` collection is set up with the [trigger email extension](https://firebase.google.com/docs/extensions/official/firestore-send-email) to send emails to users via [Brevo](https://www.brevo.com/) (formerly Sendinblue).
+The function [createNotificationEmails](./createNotificationEmails.ts) in this directory reads from the `emails_pending` collection and writes to the `emails` collection. The `emails` collection is set up with the [trigger email extension](https://firebase.google.com/docs/extensions/official/firestore-send-email) to send emails to users via [Brevo](https://www.brevo.com/) (formerly Sendinblue).
 
 The object written to the `emails` collection must be in the format
 
@@ -32,7 +32,7 @@ The function [getNotificationEmailTemplate](./getNotificationEmailTemplate.ts) d
 
 Once emails are successfully written to the `emails` collection database, we add an `emailed` field to the notification, which contains the `_id` of the email object in the `emails` collection. If an error occurs in the email function, we populate this field with the string `'failed'`.
 
-Once a notification has been sent as an email, we exclude it from the `pending_emails` aggregation (we're not spammers 🙂).
+Once a notification has been sent as an email, we exclude it from the `emails_pending` aggregation (we're not spammers 🙂).
 
 ## Technical Implementation
 

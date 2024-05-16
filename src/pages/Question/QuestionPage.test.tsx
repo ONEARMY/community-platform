@@ -9,7 +9,6 @@ import { faker } from '@faker-js/faker'
 import { act, render, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { UserRole } from 'oa-shared'
-import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
@@ -25,6 +24,10 @@ const activeUser = FactoryUser({
 })
 
 const mockUser = FactoryUser()
+const mockQuestionItem = FactoryQuestionItem({
+  slug: 'testSlug',
+})
+const mockDiscussionItem = FactoryDiscussion()
 
 jest.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -39,6 +42,12 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         users_verified: {},
       },
       tagsStore: {},
+      discussionStore: {
+        fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue({
+          mockDiscussionItem,
+        }),
+        activeUser: mockUser,
+      },
     },
   }),
 }))
@@ -47,10 +56,6 @@ jest.mock('src/stores/Question/question.store')
 jest.mock('src/stores/Discussions/discussions.store')
 
 describe('Questions', () => {
-  const mockQuestionItem = FactoryQuestionItem({
-    slug: 'testSlug',
-  })
-
   let mockQuestionStore
 
   beforeEach(() => {
@@ -66,15 +71,6 @@ describe('Questions', () => {
       toggleUsefulByUser: jest.fn(),
     }
     ;(useQuestionStore as jest.Mock).mockReturnValue(mockQuestionStore)
-    ;(useDiscussionStore as jest.Mock).mockReturnValue({
-      fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue(
-        FactoryDiscussion({
-          sourceId: mockQuestionItem._id,
-          sourceType: 'question',
-        }),
-      ),
-      activeUser: mockUser,
-    })
   })
 
   afterEach(() => {

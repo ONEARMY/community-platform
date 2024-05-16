@@ -125,7 +125,9 @@ export const DiscussionWrapper = (props: IProps) => {
     highlightedCommentId,
     onSubmit,
     onSubmitReply: handleSubmitReply,
-    isLoggedIn: !!discussionStore.activeUser,
+    isLoggedIn: discussionStore?.activeUser
+      ? !!discussionStore.activeUser
+      : false,
   }
 
   return (

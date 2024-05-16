@@ -13,6 +13,8 @@ export const ResearchUpdateDiscussion = (props: IProps) => {
   const { update, research, showComments } = props
   const [, setTotalCommentsCount] = useState<number>(0)
 
+  if (!research) return null
+
   return (
     <DiscussionWrapper
       sourceType="researchUpdate"

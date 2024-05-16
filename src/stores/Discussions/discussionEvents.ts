@@ -1,3 +1,5 @@
+/* eslint-disable no-case-declarations */
+import { toJS } from 'mobx'
 import { logger } from 'src/logger'
 
 import type { IDiscussion } from 'src/models'
@@ -8,6 +10,9 @@ export type DiscussionEndpoints = Extract<
   DBEndpoint,
   'howtos' | 'research' | 'questions'
 >
+
+export type CommentsTotalEvent = 'add' | 'delete' | 'neutral'
+
 const calculateLastestCommentDate = (comments) => {
   return new Date(
     Math.max(
@@ -16,32 +21,55 @@ const calculateLastestCommentDate = (comments) => {
   )
 }
 
-export const updateDiscussionMetadata = (
+export const updateDiscussionMetadata = async (
   db: DatabaseV2,
   discussion: IDiscussion,
+  commentsTotalEvent: CommentsTotalEvent,
 ) => {
-  const collectionName = getCollectionName(discussion.sourceType)
+  const { comments, primaryContentId, sourceId, sourceType } = discussion
+  const collectionName = getCollectionName(sourceType)
 
   if (!collectionName) {
-    logger.trace(
-      `Unable to find collection. Discussion metadata was not updated. sourceType: ${discussion.sourceType}`,
+    return logger.trace(
+      `Unable to find collection. Discussion metadata was not updated. sourceType: ${sourceType}`,
     )
-    return
   }
 
-  const commentCount = discussion.comments.length
+  const commentCount = comments.length
   const latestCommentDate =
-    commentCount > 0
-      ? calculateLastestCommentDate(discussion.comments)
-      : undefined
+    commentCount > 0 ? calculateLastestCommentDate(comments) : undefined
 
-  return db
-    .collection(collectionName)
-    .doc(discussion.sourceId)
-    .update({
-      commentCount,
-      ...(latestCommentDate ? { latestCommentDate } : {}),
-    })
+  switch (collectionName) {
+    case 'research':
+      const researchRef = db.collection(collectionName).doc(primaryContentId)
+
+      const research = toJS(await researchRef.get())
+
+      // This approach is open to error but is better than making lots of DBs
+      // reads to get the all the counts of all discussions for a research
+      // item.
+      const countChange = {
+        add: commentCount + 1,
+        delete: commentCount - 1,
+        neutral: commentCount,
+      }
+
+      if (research) {
+        researchRef.update({
+          commentCount: countChange[commentsTotalEvent],
+          ...(latestCommentDate ? { latestCommentDate } : {}),
+        })
+      }
+      return
+    default:
+      return db
+        .collection(collectionName)
+        .doc(sourceId)
+        .update({
+          commentCount,
+          ...(latestCommentDate ? { latestCommentDate } : {}),
+        })
+  }
 }
 
 export const getCollectionName = (

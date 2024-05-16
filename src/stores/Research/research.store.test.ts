@@ -522,49 +522,4 @@ describe('research.store', () => {
       expect(store.userHasSubscribed).toBe(false)
     })
   })
-
-  describe('getters', () => {
-    describe('commentsCount', () => {
-      it('returns the total number of comments', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: 3,
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.commentsCount).toBe(3)
-      })
-
-      it('returns count from local items', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: 3,
-          updates: [
-            FactoryResearchItemUpdate({
-              comments: [FactoryComment(), FactoryComment(), FactoryComment()],
-            }),
-          ],
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.commentsCount).toBe(6)
-      })
-
-      it('normalizes malformed values', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: -1,
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.commentsCount).toBe(0)
-      })
-    })
-  })
 })

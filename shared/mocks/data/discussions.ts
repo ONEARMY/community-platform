@@ -65,6 +65,13 @@ export const discussions = {
     _deleted: false,
     _id: 'jj97weruogbewr',
     _modified: '2022-03-27T22:10:12.271Z',
+    contributorIds: [
+      'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
+      'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
+    ],
+    sourceId: 'ERO3RibAuvz7Wt12LfTb',
+    sourceType: 'researchUpdate',
+    primaryContentId: '0up6oJCPP3M9bDYx34Et',
     comments: [
       {
         _created: '2022-03-27T22:10:12.271Z',
@@ -77,11 +84,5 @@ export const discussions = {
         text: 'Interesting research so far, have you thought about experimenting with putting it in the bath?',
       },
     ],
-    contributorIds: [
-      'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
-      'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
-    ],
-    sourceId: 'ERO3RibAuvz7Wt12LfTb',
-    sourceType: 'researchUpdate',
   },
 }

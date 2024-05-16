@@ -80,7 +80,7 @@ export const getCollectionName = (
       return 'questions'
     case 'howto':
       return 'howtos'
-    case 'research':
+    case 'researchUpdate':
       return 'research'
     default:
       return null

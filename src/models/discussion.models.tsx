@@ -13,10 +13,11 @@ export type IDiscussionComment = IComment & {
 
 export type IDiscussion = {
   _id: string
-  sourceId: string
-  sourceType: 'question' | 'researchUpdate'
   comments: IDiscussionComment[]
   contributorIds: string[]
+  primaryContentId?: string
+  sourceId: string
+  sourceType: 'question' | 'researchUpdate'
 }
 
 export type IDiscussionSourceModelOptions = IQuestion.Item

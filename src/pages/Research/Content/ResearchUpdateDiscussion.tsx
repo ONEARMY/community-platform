@@ -5,11 +5,12 @@ import type { IResearch } from 'src/models'
 
 interface IProps {
   update: IResearch.Update
+  research: IResearch.Item | undefined
   showComments?: boolean
 }
 
 export const ResearchUpdateDiscussion = (props: IProps) => {
-  const { update, showComments } = props
+  const { update, research, showComments } = props
   const [, setTotalCommentsCount] = useState<number>(0)
 
   return (
@@ -18,6 +19,7 @@ export const ResearchUpdateDiscussion = (props: IProps) => {
       sourceId={update._id}
       setTotalCommentsCount={setTotalCommentsCount}
       showComments={showComments}
+      primaryContentId={research._id}
       canHideComments
     />
   )

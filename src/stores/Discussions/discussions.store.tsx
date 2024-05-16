@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
 import { action, toJS } from 'mobx'
@@ -9,7 +10,7 @@ import { hasAdminRights, randomID } from 'src/utils/helpers'
 import { ModuleStore } from '../common/module.store'
 import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
-import type { IUserPPDB } from 'src/models'
+import type { IResearch, IUserPPDB } from 'src/models'
 import type {
   IDiscussion,
   IDiscussionComment,
@@ -30,6 +31,7 @@ export class DiscussionStore extends ModuleStore {
   public async fetchOrCreateDiscussionBySource(
     sourceId: string,
     sourceType: IDiscussion['sourceType'],
+    primaryContentId?: string,
   ): Promise<IDiscussion | null> {
     const foundDiscussion =
       toJS(
@@ -43,17 +45,22 @@ export class DiscussionStore extends ModuleStore {
     }
 
     // Create a new discussion
-    return (await this.uploadDiscussion(sourceId, sourceType)) || null
+    return (
+      (await this.uploadDiscussion(sourceId, sourceType, primaryContentId)) ||
+      null
+    )
   }
 
   public async uploadDiscussion(
     sourceId: string,
     sourceType: IDiscussion['sourceType'],
+    primaryContentId?: string,
   ): Promise<IDiscussion | undefined> {
     const newDiscussion: IDiscussion = {
       _id: randomID(),
       sourceId,
       sourceType,
+      primaryContentId: primaryContentId || sourceId,
       comments: [],
       contributorIds: [],
     }
@@ -104,7 +111,7 @@ export class DiscussionStore extends ModuleStore {
           newComment,
         )
 
-        await this._addNotification(newComment, currentDiscussion)
+        await this._addNotifications(newComment, currentDiscussion)
 
         return this._updateDiscussion(dbRef, currentDiscussion, 'add')
       }
@@ -202,7 +209,7 @@ export class DiscussionStore extends ModuleStore {
     }
   }
 
-  private async _addNotification(
+  private async _addNotifications(
     comment: IDiscussionComment,
     discussion: IDiscussion,
   ) {
@@ -212,28 +219,66 @@ export class DiscussionStore extends ModuleStore {
         `Unable to find collection. Discussion notification not sent. sourceType: ${discussion.sourceType}`,
       )
     }
-
-    const dbRef = this.db
-      .collection<IDiscussionSourceModelOptions>(collectionName)
-      .doc(discussion.sourceId)
-    const parentContent = toJS(await dbRef.get())
     const parentComment = discussion.comments.find(
       ({ _id }) => _id === comment.parentCommentId,
     )
+    const commentId = parentComment ? parentComment._id : comment._id
 
-    if (parentContent) {
-      const username = !parentComment
-        ? parentContent._createdBy
-        : parentComment.creatorName
+    switch (collectionName) {
+      case 'research':
+        const researchRef = this.db
+          .collection<IResearch.Item>(collectionName)
+          .doc(discussion.primaryContentId)
 
-      const _id = !parentComment ? comment._id : parentComment._id
+        const research = toJS(await researchRef.get())
 
-      return this.userNotificationsStore.triggerNotification(
-        'new_comment_discussion',
-        username,
-        `/${collectionName}/${parentContent.slug}#comment:${_id}`,
-        parentContent.title,
-      )
+        if (research) {
+          const updateIndex = research.updates.findIndex(
+            ({ _id }) => _id == discussion.sourceId,
+          )
+          const update = research.updates[updateIndex]
+
+          const username = parentComment
+            ? parentComment.creatorName
+            : research._createdBy
+
+          await this.userNotificationsStore.triggerNotification(
+            'new_comment_discussion',
+            username,
+            '/research/' + research.slug + '#update_' + updateIndex,
+            research.title,
+          )
+
+          if (update && update.collaborators) {
+            await update.collaborators.map((collaborator) => {
+              this.userNotificationsStore.triggerNotification(
+                'new_comment_discussion',
+                collaborator,
+                `/research/${research.slug}#update_${updateIndex}-comment:${commentId}`,
+                research.title,
+              )
+            })
+          }
+        }
+        return
+      default:
+        const dbRef = this.db
+          .collection<IDiscussionSourceModelOptions>(collectionName)
+          .doc(discussion.sourceId)
+        const parentContent = toJS(await dbRef.get())
+
+        if (parentContent) {
+          const username = parentComment
+            ? parentComment.creatorName
+            : parentContent._createdBy
+
+          return this.userNotificationsStore.triggerNotification(
+            'new_comment_discussion',
+            username,
+            `/${collectionName}/${parentContent.slug}#comment:${commentId}`,
+            parentContent.title,
+          )
+        }
     }
   }
 

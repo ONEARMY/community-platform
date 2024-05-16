@@ -44,10 +44,10 @@ const ResearchUpdate = ({
   const navigate = useNavigate()
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
+  const contributors = useContributorsData(update.collaborators || [])
   const formattedCreateDatestamp = formatDate(new Date(update._created))
   const formattedModifiedDatestamp = formatDate(new Date(update._modified))
-
-  const contributors = useContributorsData(update.collaborators || [])
+  const research = researchStore.activeResearchItem
 
   const handleDownloadClick = async () => {
     researchStore.incrementDownloadCount(update._id)
@@ -205,7 +205,11 @@ const ResearchUpdate = ({
                 <DownloadCounter total={update.downloadCount} />
               </Flex>
             )}
-            <ResearchUpdateDiscussion update={update} showComments={showComments} />
+            <ResearchUpdateDiscussion
+              update={update}
+              research={research}
+              showComments={showComments}
+            />
           </Card>
         </Flex>
       </Flex>

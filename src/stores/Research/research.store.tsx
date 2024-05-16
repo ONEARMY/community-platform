@@ -8,10 +8,7 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import {
-  IModerationStatus,
-  ResearchStatus,
-} from 'oa-shared'
+import { IModerationStatus, ResearchStatus } from 'oa-shared'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'

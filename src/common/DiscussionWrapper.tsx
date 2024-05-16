@@ -3,11 +3,14 @@ import { DiscussionContainer, Loader } from 'oa-components'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import { Text } from 'theme-ui'
 
 import { useCommonStores } from './hooks/useCommonStores'
 import { HideDiscussionContainer } from './HideDiscussionContainer'
 
 import type { IDiscussion } from 'src/models'
+
+const DISCUSSION_NOT_FOUND = 'Discussion not found :('
 
 interface IProps {
   sourceType: IDiscussion['sourceType']
@@ -15,11 +18,13 @@ interface IProps {
   setTotalCommentsCount: (number) => void
   canHideComments?: boolean
   showComments?: boolean
+  primaryContentId?: string | undefined
 }
 
 export const DiscussionWrapper = (props: IProps) => {
   const {
     canHideComments,
+    primaryContentId,
     sourceType,
     setTotalCommentsCount,
     sourceId,
@@ -47,6 +52,7 @@ export const DiscussionWrapper = (props: IProps) => {
       const discussion = await discussionStore.fetchOrCreateDiscussionBySource(
         sourceId,
         sourceType,
+        primaryContentId,
       )
       if (!discussion) {
         return
@@ -133,6 +139,7 @@ export const DiscussionWrapper = (props: IProps) => {
   return (
     <>
       {isLoading && <Loader />}
+      {!isLoading && !discussion && <Text>{DISCUSSION_NOT_FOUND}</Text>}
       {discussion && canHideComments && (
         <HideDiscussionContainer
           commentCount={discussion.comments.length}

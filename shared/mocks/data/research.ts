@@ -22,6 +22,7 @@ export const research = {
         _id: 'ERO3RibAuvz7Wt12LfTb',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
+        collaborators: ['demo_user'],
         images: [
           {
             contentType: 'image/jpeg',

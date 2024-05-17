@@ -52,7 +52,7 @@ export const discussions = {
       {
         _created: '2023-02-15T02:45:15.500Z',
         _creatorId: 'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
-        _id: 'BtzUAB2SoU9CroyeYLgZ',
+        _id: 'fBtzUAB23royeYLgZ',
         creatorCountry: 'uk',
         creatorName: 'benfurber',
         parentCommentId: 'ZAB2SoUZtzUyeYLg9Cro',
@@ -75,11 +75,11 @@ export const discussions = {
     comments: [
       {
         _created: '2022-03-27T22:10:12.271Z',
-        _creatorId: 'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
+        _creatorId: 'demo_admin',
         _edited: '2022-03-27T22:10:12.271Z',
-        _id: 'ZAB2SoUZtzUyeYLg9Cro',
+        _id: 'fZA234tzUyeYLg9Cro',
         creatorCountry: 'af',
-        creatorName: 'howto_creator',
+        creatorName: 'demo_admin',
         parentCommentId: null,
         text: 'Interesting research so far, have you thought about experimenting with putting it in the bath?',
       },

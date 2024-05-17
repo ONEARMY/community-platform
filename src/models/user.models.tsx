@@ -87,6 +87,7 @@ interface IExternalLink {
 interface IUserStats {
   userCreatedHowtos: { [id: string]: IModerationStatus }
   userCreatedResearch: { [id: string]: IModerationStatus }
+  userCreatedQuestions: { [id: string]: IModerationStatus }
 }
 
 export type IUserDB = IUser & DBDoc

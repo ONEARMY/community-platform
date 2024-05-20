@@ -55,7 +55,9 @@ export const HideDiscussionContainer = ({
         onClick={onButtonClick}
         backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
         className={viewComments ? 'viewComments' : ''}
-        data-cy={`ResearchComments: button ${!viewComments && 'open-comments'}`}
+        data-cy={`HideDiscussionContainer: button ${
+          !viewComments && 'open-comments'
+        }`}
       >
         <>{setButtonText()}</>
       </Button>

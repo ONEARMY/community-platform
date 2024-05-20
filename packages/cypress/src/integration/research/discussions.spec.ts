@@ -28,7 +28,7 @@ describe('[Research.Discussions]', () => {
     const updatedReply = "I hadn't thought about that. Really good point."
 
     cy.step('Can create their own comment')
-    cy.get('[data-cy="ResearchComments: button open-comments"]')
+    cy.get('[data-cy="HideDiscussionContainer: button open-comments"]')
       .first()
       .contains('View 1 comment')
       .click()

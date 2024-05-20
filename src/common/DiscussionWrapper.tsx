@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { DiscussionContainer, Loader } from 'oa-components'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { Text } from 'theme-ui'
 
-import { useCommonStores } from './hooks/useCommonStores'
 import { HideDiscussionContainer } from './HideDiscussionContainer'
 
 import type { IDiscussion } from 'src/models'

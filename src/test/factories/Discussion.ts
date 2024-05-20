@@ -12,6 +12,7 @@ export const FactoryDiscussion = (
   comments,
   contributorIds: [],
   sourceId: faker.string.uuid(),
+  primaryContentId: faker.string.uuid(),
   sourceType: 'question',
   ...discussionOverloads,
 })

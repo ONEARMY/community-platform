@@ -15,7 +15,7 @@ export type IDiscussion = {
   _id: string
   comments: IDiscussionComment[]
   contributorIds: string[]
-  primaryContentId?: string
+  primaryContentId?: string | undefined
   sourceId: string
   sourceType: 'question' | 'researchUpdate'
 }

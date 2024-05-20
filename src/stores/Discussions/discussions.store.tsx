@@ -31,7 +31,7 @@ export class DiscussionStore extends ModuleStore {
   public async fetchOrCreateDiscussionBySource(
     sourceId: string,
     sourceType: IDiscussion['sourceType'],
-    primaryContentId?: string,
+    primaryContentId: IDiscussion['primaryContentId'],
   ): Promise<IDiscussion | null> {
     const foundDiscussion =
       toJS(
@@ -54,7 +54,7 @@ export class DiscussionStore extends ModuleStore {
   public async uploadDiscussion(
     sourceId: string,
     sourceType: IDiscussion['sourceType'],
-    primaryContentId?: string,
+    primaryContentId: IDiscussion['primaryContentId'],
   ): Promise<IDiscussion | undefined> {
     const newDiscussion: IDiscussion = {
       _id: randomID(),
@@ -306,8 +306,7 @@ export class DiscussionStore extends ModuleStore {
     commentsTotalEvent: CommentsTotalEvent,
   ) {
     await dbRef.set({ ...cloneDeep(discussion) })
-
-    updateDiscussionMetadata(this.db, discussion, commentsTotalEvent)
+    await updateDiscussionMetadata(this.db, discussion, commentsTotalEvent)
 
     return toJS(dbRef.get())
   }

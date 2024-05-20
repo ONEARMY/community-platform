@@ -11,6 +11,7 @@ import { HideDiscussionContainer } from './HideDiscussionContainer'
 import type { IDiscussion } from 'src/models'
 
 const DISCUSSION_NOT_FOUND = 'Discussion not found :('
+const LOADING_LABEL = 'Loading the awesome discussion'
 
 interface IProps {
   sourceType: IDiscussion['sourceType']
@@ -39,25 +40,30 @@ export const DiscussionWrapper = (props: IProps) => {
   const highlightedCommentId = window.location.hash.replace('#comment:', '')
 
   const transformComments = (discussion) => {
+    if (!discussion) return
+
     const comments = transformToUserComments(
       discussion.comments,
       discussionStore.activeUser,
     )
     setTotalCommentsCount(comments.length)
+
     return setDiscussion({ ...discussion, comments })
   }
 
   useEffect(() => {
     const loadDiscussion = async () => {
-      const discussion = await discussionStore.fetchOrCreateDiscussionBySource(
-        sourceId,
-        sourceType,
-        primaryContentId,
-      )
-      if (!discussion) {
-        return
+      try {
+        const discussion =
+          await discussionStore.fetchOrCreateDiscussionBySource(
+            sourceId,
+            sourceType,
+            primaryContentId,
+          )
+        transformComments(discussion)
+      } catch (error) {
+        logger.debug(error)
       }
-      transformComments(discussion)
       setIsLoading(false)
     }
     loadDiscussion()
@@ -72,7 +78,10 @@ export const DiscussionWrapper = (props: IProps) => {
       comment,
     )
     logger.info({ _id, comment }, `${sourceType} comment edited`)
-    updatedDiscussion && transformComments(updatedDiscussion)
+
+    if (updatedDiscussion) {
+      transformComments(updatedDiscussion)
+    }
   }
 
   const handleEditRequest = async () => {
@@ -80,27 +89,29 @@ export const DiscussionWrapper = (props: IProps) => {
   }
 
   const handleDelete = async (_id: string) => {
-    if (discussion) {
-      const updatedDiscussion = await discussionStore.deleteComment(
-        discussion,
-        _id,
-      )
-      logger.info({ _id }, `${sourceType} comment deleted`)
-      updatedDiscussion && transformComments(updatedDiscussion)
+    if (!discussion) return
+
+    const updatedDiscussion = await discussionStore.deleteComment(
+      discussion,
+      _id,
+    )
+    logger.info({ _id }, `${sourceType} comment deleted`)
+
+    if (updatedDiscussion) {
+      transformComments(updatedDiscussion)
     }
   }
 
   const onSubmit = async (comment: string) => {
-    if (!comment || !discussion) {
-      return
-    }
+    if (!comment || !discussion) return
 
     const updatedDiscussion = await discussionStore.addComment(
       discussion,
       comment,
     )
+    transformComments(updatedDiscussion)
+
     if (updatedDiscussion) {
-      transformComments(updatedDiscussion)
       setComment('')
     }
   }
@@ -115,7 +126,9 @@ export const DiscussionWrapper = (props: IProps) => {
     )
     logger.info({ commentId, reply }, `${sourceType} reply submitted`)
 
-    updatedDiscussion && transformComments(updatedDiscussion)
+    if (updatedDiscussion) {
+      transformComments(updatedDiscussion)
+    }
   }
 
   const discussionProps = {
@@ -138,7 +151,7 @@ export const DiscussionWrapper = (props: IProps) => {
 
   return (
     <>
-      {isLoading && <Loader />}
+      {isLoading && <Loader label={LOADING_LABEL} />}
       {!isLoading && !discussion && <Text>{DISCUSSION_NOT_FOUND}</Text>}
       {discussion && canHideComments && (
         <HideDiscussionContainer

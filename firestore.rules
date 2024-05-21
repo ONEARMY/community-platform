@@ -82,6 +82,11 @@ service cloud.firestore {
       allow write: if isPublicWritable();
     }
 
+    match /v3_categories/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
     match /v3_tags/{document=**} {
       allow read: if isPublicReadable();
       allow write: if isPublicWritable();

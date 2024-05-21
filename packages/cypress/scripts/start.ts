@@ -10,7 +10,7 @@ import PATHS from './paths'
 const e2eEnv = dotenv.config()
 
 const isCi = process.argv.includes('ci')
-const useProductionBuild = process.argv.includes('prod')
+const isProduction = process.argv.includes('prod')
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', (err) => {
@@ -60,7 +60,7 @@ async function startAppServer() {
   let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 yarn start`
 
   // for production will instead serve from production build folder
-  if (useProductionBuild) {
+  if (isProduction) {
     // create local build if not running on ci (which will have build already generated)
     if (!isCi) {
       // specify CI=false to prevent throwing lint warnings as errors

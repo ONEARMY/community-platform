@@ -41,6 +41,27 @@ describe('[Questions]', () => {
       cy.step('Links in description are clickable')
       cy.contains('a', 'https://www.onearmy.earth/')
 
+      cy.step('Breadcrumbs work')
+      cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'Question')
+      cy.get('[data-cy=breadcrumbsItem]')
+        .first()
+        .children()
+        .should('have.attr', 'href')
+        .and('equal', `/questions`)
+
+      cy.get('[data-cy=breadcrumbsItem]')
+        .eq(1)
+        .should('contain', question.questionCategory.label)
+      cy.get('[data-cy=breadcrumbsItem]')
+        .eq(1)
+        .children()
+        .should('have.attr', 'href')
+        .and('equal', `/questions?category=${question.questionCategory._id}`)
+
+      cy.get('[data-cy=breadcrumbsItem]')
+        .eq(2)
+        .should('contain', question.title)
+
       cy.step('Logged in users can complete actions')
       cy.login('howto_creator@test.com', 'test1234')
       cy.visit(`/questions/${question.slug}`) // Page doesn't reload after login

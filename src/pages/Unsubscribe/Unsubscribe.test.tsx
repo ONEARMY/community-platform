@@ -28,13 +28,9 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         unsubscribeUser: mockUnsubscribeUser,
       },
       aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        isVerified: jest.fn(),
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       howtoStore: {},

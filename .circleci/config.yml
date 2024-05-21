@@ -77,11 +77,6 @@ aliases:
         ls -a ~/project
         du -a /home | sort -n -r | head -n 500
 
-  - &filter_only_production
-    filters:
-      branches:
-        only:
-          - production
   - &filter_only_default_branch
     filters:
       branches:
@@ -388,25 +383,13 @@ workflows:
     jobs:
       - spellcheck:
           name: Check documentation spelling
-          filters:
-            branches:
-              ignore:
-                - production
       - lint-commits:
           name: Lint commits
-          filters:
-            branches:
-              ignore:
-                - production
       - lint:
           name: Lint code
           requires:
             - 'Check documentation spelling'
             - 'Lint commits'
-          filters:
-            branches:
-              ignore:
-                - production
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
@@ -418,51 +401,27 @@ workflows:
           name: 'Unit tests'
           requires:
             - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - test_circular_dependency:
           name: 'Circular dependency test'
           requires:
             - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - storybook:
           name: Build Storybook
           requires:
             - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - test_security_rules:
           name: Test Security Rules
           requires:
             - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - test_functions:
           name: 'Cloud Function tests'
           requires:
             - 'Lint code'
           context: build-context
-          filters:
-            branches:
-              ignore:
-                - production
       - test_functions_upload_coverage:
           name: 'Upload Cloud Function coverage'
           requires:
             - 'Cloud Function tests'
-          filters:
-            branches:
-              ignore:
-                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -478,10 +437,6 @@ workflows:
             parameters:
               CI_NODE: [1, 2, 3, 4]
               CI_BROWSER: ['chrome']
-          filters:
-            branches:
-              ignore:
-                - production
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy:
           name: 'Deploy: dev.onearmy.world'

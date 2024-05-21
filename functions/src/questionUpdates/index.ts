@@ -32,7 +32,6 @@ export const handleQuestionDelete = functions
   })
 
 async function updateDocument(docSnapshot: firestore.QueryDocumentSnapshot) {
-  console.log(docSnapshot.exists)
   const question = docSnapshot.data() as IQuestionDB
   const question_id = question._id
 

@@ -1,6 +1,6 @@
-/* global module, console */
+/* global console */
 
-module.exports = function (on) {
+export function setupNodeEvents(on: Cypress.PluginEvents) {
   /**
    * Log console to terminal
    * https://github.com/cypress-io/cypress/issues/3199

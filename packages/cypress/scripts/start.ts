@@ -1,12 +1,13 @@
 #!/usr/bin/env ts-node
 import { spawn, spawnSync } from 'child_process'
+import * as dotenv from 'dotenv'
 import fs from 'fs-extra'
 import waitOn from 'wait-on'
 
 import { generateAlphaNumeric } from '../src/utils/TestUtils'
 import PATHS from './paths'
 
-const e2eEnv = require('dotenv').config()
+const e2eEnv = dotenv.config()
 
 const isCi = process.argv.includes('ci')
 const useProductionBuild = process.argv.includes('prod')

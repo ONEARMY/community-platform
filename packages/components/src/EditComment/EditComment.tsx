@@ -72,6 +72,7 @@ export const EditComment = (props: IProps) => {
             <Field
               component={FieldTextarea}
               data-cy="comment"
+              data-testid="comment-input"
               id="comment"
               validate={required}
               name="comment"
@@ -87,6 +88,7 @@ export const EditComment = (props: IProps) => {
               </Button>
               <Button
                 data-cy="edit-comment-submit"
+                data-testid="edit-comment-submit"
                 type={'submit'}
                 aria-label="Save changes"
                 small

@@ -1,4 +1,4 @@
-import { fireEvent } from '@testing-library/react'
+import { act, fireEvent } from '@testing-library/react'
 import { vi } from 'vitest'
 
 import { render } from '../tests/utils'
@@ -55,9 +55,9 @@ describe('EditComment', () => {
         handleSubmit={mockOnSubmit}
       />,
     )
-    expect(screen.getByText('Save')).toBeDisabled()
+    expect(screen.getByTestId('edit-comment-submit')).toBeDisabled()
   })
-  it('should dispaly error message when the comment is empty', () => {
+  it('should dispaly error message when the comment is empty', async () => {
     const screen = render(
       <EditComment
         isReply={false}
@@ -66,8 +66,13 @@ describe('EditComment', () => {
         handleSubmit={mockOnSubmit}
       />,
     )
-    const inputComment = screen.getByLabelText('Edit Comment')
-    inputComment.blur()
-    expect(screen.getByText('Comment cannot be blank')).toBeInTheDocument()
+
+    await act(async () => {
+      const commentInput = screen.getByLabelText('Edit Comment')
+      fireEvent.change(commentInput, { target: { value: '' } })
+      fireEvent.blur(commentInput)
+    })
+
+    expect(screen.container.innerHTML).toMatch('Comment cannot be blank')
   })
 })

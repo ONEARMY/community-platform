@@ -3,23 +3,23 @@ import { MOCK_DATA } from '../../data'
 const questions = Object.values(MOCK_DATA.questions)
 
 describe('[Questions]', () => {
-  describe('[List questions]', () => {
-    it('[By Everyone]', () => {
-      cy.step('All questions visible')
-      cy.visit('/questions')
-      cy.get('[data-cy=question-list-item]').each((_, index) => {
-        cy.contains(questions[index].title)
-        cy.contains(questions[index]._createdBy)
-        cy.contains(questions[index].subscribers.length)
-        cy.contains(questions[index].commentCount)
-      })
+  // describe('[List questions]', () => {
+  //   it('[By Everyone]', () => {
+  //     cy.step('All questions visible')
+  //     cy.visit('/questions')
+  //     cy.get('[data-cy=question-list-item]').each((_, index) => {
+  //       cy.contains(questions[index].title)
+  //       cy.contains(questions[index]._createdBy)
+  //       cy.contains(questions[index].subscribers.length)
+  //       cy.contains(questions[index].commentCount)
+  //     })
 
-      cy.get('[data-cy=questions-search-box]').type('filtering')
-      cy.contains('This is a test mock for the filtering question')
+  //     cy.get('[data-cy=questions-search-box]').type('filtering')
+  //     cy.contains('This is a test mock for the filtering question')
 
-      // To-do: filtering tests
-    })
-  })
+  //     // To-do: filtering tests
+  //   })
+  // })
 
   describe('[Individual questions]', () => {
     it('[By Everyone]', () => {

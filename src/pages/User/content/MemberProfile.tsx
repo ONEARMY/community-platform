@@ -124,6 +124,7 @@ export const MemberProfile = ({ user, docs }: IProps) => {
             </Flex>
             <Box sx={{ flexDirection: 'column' }} mb={3}>
               <Heading
+                as="h1"
                 color={'black'}
                 style={{ wordWrap: 'break-word' }}
                 data-cy="userDisplayName"

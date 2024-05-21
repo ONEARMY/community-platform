@@ -26,11 +26,13 @@ describe('[Research]', () => {
 
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
-      cy.login(researcherEmail, researcherPassword)
       cy.step('Create the research article')
+      cy.login(researcherEmail, researcherPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
+
       cy.step('Warn if title is identical to an existing one')
+      cy.contains('Start your Research')
       cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',
@@ -235,6 +237,7 @@ describe('[Research]', () => {
       cy.step('Go to add update')
       cy.get('[data-cy=edit]').click()
       cy.get('[data-cy=create-update]').click()
+      cy.contains('New update')
 
       cy.step('Cannot be published when empty')
       cy.get('[data-cy=submit]').click()

@@ -14,6 +14,13 @@ export const research = {
     tags: {
       h1wCs0o9j60lkw3AYPB1: true,
     },
+    researchCategory: {
+      _modified: '2012-10-27T01:47:57.948Z',
+      _created: '2012-08-02T07:27:04.609Z',
+      _id: 'ehdI345E36hWyk3Ockr',
+      label: 'Best',
+      _deleted: false,
+    },
     title: 'qwerty',
     updates: [
       {

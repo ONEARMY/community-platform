@@ -86,6 +86,9 @@ export const QuestionListing = () => {
     setIsFetching(false)
   }
 
+  const showLoadMore =
+    !isFetching && questions && questions.length > 0 && questions.length < total
+
   return (
     <>
       <Flex my={[18, 26]}>
@@ -145,20 +148,17 @@ export const QuestionListing = () => {
               <QuestionListItem key={index} question={question} query={q} />
             ))}
 
-          {!isFetching &&
-            questions &&
-            questions.length > 0 &&
-            questions.length < total && (
-              <Flex
-                sx={{
-                  justifyContent: 'center',
-                }}
-              >
-                <Button onClick={() => fetchQuestions(lastVisible)}>
-                  {listing.loadMore}
-                </Button>
-              </Flex>
-            )}
+          {showLoadMore && (
+            <Flex
+              sx={{
+                justifyContent: 'center',
+              }}
+            >
+              <Button onClick={() => fetchQuestions(lastVisible)}>
+                {listing.loadMore}
+              </Button>
+            </Flex>
+          )}
         </>
       )}
 

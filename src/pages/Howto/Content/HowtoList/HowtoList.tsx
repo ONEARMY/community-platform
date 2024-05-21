@@ -89,6 +89,13 @@ export const HowtoList = observer(() => {
     setIsFetching(false)
   }
 
+  const showLoadMore =
+    !isFetching &&
+    !showDrafts &&
+    howtos &&
+    howtos.length > 0 &&
+    howtos.length < total
+
   return (
     <Box>
       <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
@@ -156,21 +163,17 @@ export const HowtoList = observer(() => {
         )}
       </Grid>
 
-      {!isFetching &&
-        !showDrafts &&
-        howtos &&
-        howtos.length > 0 &&
-        howtos.length < total && (
-          <Flex
-            sx={{
-              justifyContent: 'center',
-            }}
-          >
-            <Button onClick={() => fetchHowtos(lastVisible)}>
-              {listing.loadMore}
-            </Button>
-          </Flex>
-        )}
+      {showLoadMore && (
+        <Flex
+          sx={{
+            justifyContent: 'center',
+          }}
+        >
+          <Button onClick={() => fetchHowtos(lastVisible)}>
+            {listing.loadMore}
+          </Button>
+        </Flex>
+      )}
 
       {(isFetching || isFetchingDrafts) && <Loader />}
 

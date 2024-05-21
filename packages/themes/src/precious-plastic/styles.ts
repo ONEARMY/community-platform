@@ -29,7 +29,7 @@ export const styles: ThemeWithName = {
   name: 'Precious Plastic',
   logo: logo,
   profileGuidelinesURL:
-    'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
+    'https://community.preciousplastic.com/academy/guides/platform',
   communityProgramURL:
     'https://community.preciousplastic.com/academy/guides/community-program',
   ...baseTheme,

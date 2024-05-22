@@ -35,7 +35,8 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         getUserByUsername: jest.fn().mockResolvedValue(mockUser),
       },
       aggregationsStore: {
-        aggregations: {},
+        isVerified: jest.fn(),
+        users_verified: {},
       },
       tagsStore: {},
     },

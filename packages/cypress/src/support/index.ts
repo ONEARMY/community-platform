@@ -15,3 +15,4 @@
 import './hooks'
 import './commands'
 import './CustomAssertations'
+import './rules'

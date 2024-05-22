@@ -13,7 +13,6 @@ import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -82,7 +81,7 @@ const ResearchArticle = observer(() => {
     }
   }
 
-  const onUsefulClick = (
+  const onUsefulClick = async (
     researchId: string,
     researchSlug: string,
     eventCategory = 'Research',
@@ -92,7 +91,7 @@ const ResearchArticle = observer(() => {
     }
 
     // Trigger update without waiting
-    researchStore.toggleUsefulByUser(researchId, loggedInUser?.userName)
+    await researchStore.toggleUsefulByUser(researchId, loggedInUser?.userName)
     const hasUserVotedUseful = researchStore.userVotedActiveResearchUseful
     trackEvent({
       category: eventCategory,
@@ -188,7 +187,7 @@ const ResearchArticle = observer(() => {
     ? {
         userName: item._createdBy,
         countryCode: item.creatorCountry,
-        isVerified: isUserVerifiedWithStore(item._createdBy, aggregationsStore),
+        isVerified: aggregationsStore.isVerified(item._createdBy),
       }
     : undefined
 
@@ -274,8 +273,12 @@ const ResearchArticle = observer(() => {
                   hasUserVotedUseful={
                     researchStore.userVotedActiveResearchUseful
                   }
-                  onUsefulClick={() =>
-                    onUsefulClick(item._id, item.slug, 'ArticleCallToAction')
+                  onUsefulClick={async () =>
+                    await onUsefulClick(
+                      item._id,
+                      item.slug,
+                      'ArticleCallToAction',
+                    )
                   }
                 />
               )}
@@ -292,7 +295,12 @@ const ResearchArticle = observer(() => {
       {isEditable && (
         <Flex my={4}>
           <Link to={`/research/${item.slug}/new-update`}>
-            <Button large ml={2} mb={[3, 3, 0]}>
+            <Button
+              large
+              ml={2}
+              mb={[3, 3, 0]}
+              data-cy="addResearchUpdateButton"
+            >
               Add update
             </Button>
           </Link>

@@ -54,6 +54,7 @@ export interface IUser {
   isBlockedFromMessaging?: boolean
   isContactableByPublic?: boolean
   patreon?: PatreonUser | null
+  totalUseful?: number
 }
 
 export interface IUserImpact {

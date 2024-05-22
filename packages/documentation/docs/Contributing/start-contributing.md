@@ -46,9 +46,8 @@ The steps are as follows:
 
 - The PR is merged into the `master` branch.
 - `master` branch triggers an automated build and deployment to development environments.
-- A Release PR is automatically raised to merge `master` into the `production` branch.
-- Manual approval is required by a maintainer, then merge Release PR into `production`.
-- After merge, an automated build, versioning, and deployment to production sites.
+- Manual approval is required by a maintainer in CircleCI
+- After approval, an automated build, versioning, and deployment to production sites.
 
 # Rewards:
 

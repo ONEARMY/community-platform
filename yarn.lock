@@ -4201,22 +4201,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cypress/webpack-preprocessor@npm:^5.16.1":
-  version: 5.17.0
-  resolution: "@cypress/webpack-preprocessor@npm:5.17.0"
-  dependencies:
-    bluebird: 3.7.1
-    debug: ^4.3.4
-    lodash: ^4.17.20
-  peerDependencies:
-    "@babel/core": ^7.0.1
-    "@babel/preset-env": ^7.0.0
-    babel-loader: ^8.0.2 || ^9
-    webpack: ^4 || ^5
-  checksum: 44ecf11564f5498a15289f21f27f9e89feb19e9da3701f909ef85ba650e26c5430f4e8f6f5fdfc521cb82117b4ca6642cc35e7916fb836eab1bc8209ef8e656c
-  languageName: node
-  linkType: hard
-
 "@cypress/xvfb@npm:^1.2.4":
   version: 1.2.4
   resolution: "@cypress/xvfb@npm:1.2.4"
@@ -13802,13 +13786,6 @@ __metadata:
   version: 2.0.2
   resolution: "blob-util@npm:2.0.2"
   checksum: d543e6b92e4ca715ca33c78e89a07a2290d43e5b2bc897d7ec588c5c7bbf59df93e45225ac0c9258aa6ce4320358990f99c9288f1c48280f8ec5d7a2e088d19b
-  languageName: node
-  linkType: hard
-
-"bluebird@npm:3.7.1":
-  version: 3.7.1
-  resolution: "bluebird@npm:3.7.1"
-  checksum: 58c295399e109925149977ebcb40e42fd109d3e458899e71441bc7e5e0867bbd796fdd20278b425fa29f13377fe335fbfc2a6e68e5ca1da03b1c3afdc439d097
   languageName: node
   linkType: hard
 
@@ -27293,7 +27270,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "oa-cypress@workspace:packages/cypress"
   dependencies:
-    "@cypress/webpack-preprocessor": ^5.16.1
     "@faker-js/faker": ^7.6.0
     "@types/fs-extra": ^9.0.13
     "@types/wait-on": ^5.3.1

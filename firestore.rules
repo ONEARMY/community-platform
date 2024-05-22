@@ -61,7 +61,8 @@ service cloud.firestore {
 
     match /user_integrations/{document=**} {
       allow get: if userIntegrationsRead()
-      // Do not allow users to list all user integrations.
+
+    // Do not allow users to list all user integrations.
       allow list: if false
       allow write: if userIntegrationsWrite()
     }
@@ -77,6 +78,11 @@ service cloud.firestore {
     }
 
     match /v3_mappins/{document=**} {
+      allow read: if isPublicReadable();
+      allow write: if isPublicWritable();
+    }
+
+    match /v3_categories/{document=**} {
       allow read: if isPublicReadable();
       allow write: if isPublicWritable();
     }

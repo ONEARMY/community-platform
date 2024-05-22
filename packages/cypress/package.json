@@ -12,7 +12,6 @@
     "oa-shared": "workspace:*"
   },
   "devDependencies": {
-    "@cypress/webpack-preprocessor": "^5.16.1",
     "@types/fs-extra": "^9.0.13",
     "@types/wait-on": "^5.3.1",
     "cross-env": "^7.0.3",

@@ -20,7 +20,7 @@ export const ArticleCallToActionCommentAndUseful: StoryFn<
       isLoggedIn={false}
       hasUserVotedUseful={false}
       votedUsefulCount={0}
-      onUsefulClick={function (): void {
+      onUsefulClick={function (): Promise<void> {
         throw new Error('Function not implemented.')
       }}
     />
@@ -35,7 +35,7 @@ export const ArticleCallToActionUseful: StoryFn<
       isLoggedIn={false}
       hasUserVotedUseful={false}
       votedUsefulCount={0}
-      onUsefulClick={function (): void {
+      onUsefulClick={function (): Promise<void> {
         throw new Error('Function not implemented.')
       }}
     />

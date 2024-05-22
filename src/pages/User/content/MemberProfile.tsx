@@ -2,7 +2,6 @@ import { MemberBadge, Username, UserStatistics } from 'oa-components'
 import { ExternalLinkLabel } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
-import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { Box, Card, Flex, Heading, Image, Paragraph } from 'theme-ui'
 
@@ -27,8 +26,6 @@ export const MemberProfile = ({ user, docs }: IProps) => {
         linkItem.label,
       ),
   )
-
-  const stats = useMemberStatistics(user.userName)
 
   const memberPictureSource =
     user.coverImages && user.coverImages[0]
@@ -99,11 +96,11 @@ export const MemberProfile = ({ user, docs }: IProps) => {
             <UserStatistics
               userName={user.userName}
               country={user.location?.country}
-              isVerified={stats.verified}
+              isVerified={user.verified}
               isSupporter={!!user.badges?.supporter}
               howtoCount={docs?.howtos.length || 0}
               researchCount={docs?.research.length || 0}
-              usefulCount={stats.totalUseful}
+              usefulCount={user.totalUseful || 0}
             />
           </Box>
           <Flex
@@ -121,12 +118,13 @@ export const MemberProfile = ({ user, docs }: IProps) => {
                 user={{
                   userName: user.userName,
                   countryCode: getUserCountry(user),
-                  isVerified: stats.verified,
+                  isVerified: user.verified,
                 }}
               />
             </Flex>
             <Box sx={{ flexDirection: 'column' }} mb={3}>
               <Heading
+                as="h1"
                 color={'black'}
                 style={{ wordWrap: 'break-word' }}
                 data-cy="userDisplayName"

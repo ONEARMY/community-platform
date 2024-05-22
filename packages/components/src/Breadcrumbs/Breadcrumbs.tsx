@@ -12,9 +12,9 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
   return (
     <Flex
       sx={{
-        marginLeft: 2,
-        marginTop: [2, 4],
-        marginBottom: [2, 4],
+        marginLeft: -1,
+        marginTop: [2, 2, 7],
+        marginBottom: 2,
         padding: 0,
         alignItems: 'center',
       }}
@@ -28,7 +28,7 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
               <Icon
                 glyph={'chevron-right'}
                 color={'black'}
-                marginRight={'10px'}
+                marginRight={'8px'}
                 data-testid="breadcrumbsChevron"
               />
             )}

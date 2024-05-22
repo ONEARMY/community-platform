@@ -8,14 +8,16 @@ import type { IQuestion } from './question.models'
 export type IDiscussionComment = IComment & {
   parentCommentId: string | null
   isUserSupporter?: boolean
+  isEditable?: boolean
 }
 
 export type IDiscussion = {
   _id: string
-  sourceId: string
-  sourceType: 'question' | 'researchUpdate'
   comments: IDiscussionComment[]
   contributorIds: string[]
+  primaryContentId?: string | undefined
+  sourceId: string
+  sourceType: 'question' | 'researchUpdate'
 }
 
 export type IDiscussionSourceModelOptions = IQuestion.Item

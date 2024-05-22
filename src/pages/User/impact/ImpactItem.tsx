@@ -31,7 +31,9 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
   return (
     <Box sx={outterBox} cy-data="ImpactItem">
       <Box sx={innerBox}>
-        <Heading variant="small">{year}</Heading>
+        <Heading as="h3" variant="small">
+          {year}
+        </Heading>
         {visibleFields && visibleFields.length > 0 ? (
           visibleFields.map((field, index) => {
             return <ImpactField field={field} key={index} />

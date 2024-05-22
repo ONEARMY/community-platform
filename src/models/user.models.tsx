@@ -54,6 +54,7 @@ export interface IUser {
   isBlockedFromMessaging?: boolean
   isContactableByPublic?: boolean
   patreon?: PatreonUser | null
+  totalUseful?: number
 }
 
 export interface IUserImpact {
@@ -87,6 +88,7 @@ interface IExternalLink {
 interface IUserStats {
   userCreatedHowtos: { [id: string]: IModerationStatus }
   userCreatedResearch: { [id: string]: IModerationStatus }
+  userCreatedQuestions: { [id: string]: IModerationStatus }
   userCreatedComments: { [id: string]: string | null }
 }
 

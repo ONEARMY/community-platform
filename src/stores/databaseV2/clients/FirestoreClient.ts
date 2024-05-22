@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app'
 import {
   collection,
+  connectFirestoreEmulator,
   deleteDoc,
   doc,
   getDoc,
@@ -21,12 +22,13 @@ import { logger } from 'src/logger'
 
 import { getQueryOptions } from '../utils/getQueryOptions'
 
+import type { Firestore } from 'firebase/firestore'
 import type { Observer } from 'rxjs'
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type { AbstractDatabaseClient, DBQueryOptions } from '../types'
 
 export class FirestoreClient implements AbstractDatabaseClient {
-  private _db
+  private _db: Firestore
   constructor() {
     const firebaseApp = initializeApp(FIREBASE_CONFIG)
     this._db = getFirestore(firebaseApp)
@@ -38,7 +40,7 @@ export class FirestoreClient implements AbstractDatabaseClient {
     })
 
     if (SITE === 'emulated_site') {
-      this._db.useEmulator('localhost', 4003)
+      connectFirestoreEmulator(this._db, 'localhost', 4003)
     }
   }
   /************************************************************************

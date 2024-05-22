@@ -12,20 +12,23 @@ describe('[How To Commenting]', () => {
 
   describe('[By Authenticated]', () => {
     it('[Commenting]', () => {
+      const commentText = 'A short string intended to test commenting'
       cy.signUpNewUser()
+
       cy.visit(specificHowtoUrl)
 
       cy.step("Cannot edit others' comments")
       cy.get('[data-cy="howto-comments"]').should('exist')
       cy.get('[data-cy="CommentItem: edit button"]').should('not.exist')
 
-      const commentText = 'A short string intended to test commenting'
-
       cy.step('Can add comment')
+      cy.contains('1 Comment')
       cy.get(`[data-cy="comments-login-prompt"]`).should('not.exist')
       cy.get(`[data-cy="comments-form"]`).should('be.exist')
       cy.get('[data-cy="comments-form"]').type(commentText)
       cy.get('[data-cy="comment-submit"]').click()
+      cy.wait(1000)
+      cy.contains('2 Comments')
       cy.get('[data-cy="comment-text"]').should('contain.text', commentText)
 
       cy.step('Can edit comment')

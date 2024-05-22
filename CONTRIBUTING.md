@@ -16,7 +16,6 @@ If you think something is missing, consider sending us a PR.
 - [Commit style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide)
 - [Deployments](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployments)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--joining-the-team)
-- [Resources](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--resources)
 - [Why haven't you used ...](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 
 ## 👐 &nbsp; Code of Conduct

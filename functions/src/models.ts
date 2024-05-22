@@ -18,6 +18,7 @@ export type {
   IPendingEmails,
   IResearchDB,
   IUserDB,
+  IQuestionDB,
 } from '../../src/models'
 
 import { dbEndpointSubcollections, generateDBEndpoints } from 'oa-shared'

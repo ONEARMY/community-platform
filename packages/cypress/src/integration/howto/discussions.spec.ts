@@ -1,3 +1,6 @@
+// This is basically an identical set of steps to the discussion tests for
+// questions and research. Any changes here should be replicated there.
+
 import { MOCK_DATA } from '../../data'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 

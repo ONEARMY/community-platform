@@ -707,6 +707,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "V24039",
+      "name": "Venu G Soganadgi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52736045?v=4",
+      "profile": "https://venugsportfolio.netlify.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

@@ -2,7 +2,6 @@ import type { DifficultyLevel } from 'oa-shared'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 import type { ICategory } from './categories.model'
-import type { IComment } from './comment.model'
 import type {
   DBDoc,
   IModerable,
@@ -19,12 +18,9 @@ export interface IHowto extends IHowtoFormInput {
   _deleted: boolean
   cover_image?: IUploadedFileMeta
   fileLink?: string
-  // Comments were added in V2, old howto's may not have the property
-  comments?: IComment[]
   total_downloads?: number
   mentions: UserMention[]
   previousSlugs: string[]
-  totalComments?: number
   totalUsefulVotes?: number
   keywords?: string[]
 }

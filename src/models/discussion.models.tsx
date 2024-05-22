@@ -1,19 +1,23 @@
-import type { IComment } from './comment.model'
 import type { IQuestion } from './question.models'
 
-/**
- * Extends IComment with parentCommentId
- * to support nested comments
- */
-export type IDiscussionComment = IComment & {
+export type IComment = {
+  _id: string
+  _created: string
+  _creatorId: string
+  _deleted?: boolean
+  _edited?: string
+  creatorName: string
   parentCommentId: string | null
-  isUserSupporter?: boolean
+  text: string
+  creatorCountry?: string | null
   isEditable?: boolean
+  isUserSupporter?: boolean
+  isUserVerified?: boolean
 }
 
 export type IDiscussion = {
   _id: string
-  comments: IDiscussionComment[]
+  comments: IComment[]
   contributorIds: string[]
   primaryContentId?: string | undefined
   sourceId: string

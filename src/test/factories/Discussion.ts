@@ -6,11 +6,13 @@ import type { IDiscussion, IDiscussionComment } from 'src/models'
 
 export const FactoryDiscussion = (
   discussionOverloads: Partial<IDiscussion> = {},
+  comments: IDiscussionComment[] = [],
 ): IDiscussion => ({
   _id: faker.string.uuid(),
-  comments: [],
+  comments,
   contributorIds: [],
   sourceId: faker.string.uuid(),
+  primaryContentId: faker.string.uuid(),
   sourceType: 'question',
   ...discussionOverloads,
 })

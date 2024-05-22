@@ -4,6 +4,12 @@ export const discussions = {
     _deleted: false,
     _id: '06fjiZWeyxxMkE0brp6n',
     _modified: '2022-02-10T20:22:15.500Z',
+    contributorIds: [
+      'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
+      'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
+    ],
+    sourceId: '3s7Fyn6Jf8ryANJM6Jf6',
+    sourceType: 'question',
     comments: [
       {
         _created: '2022-02-10T20:22:15.500Z',
@@ -46,18 +52,37 @@ export const discussions = {
       {
         _created: '2023-02-15T02:45:15.500Z',
         _creatorId: 'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
-        _id: 'BtzUAB2SoU9CroyeYLgZ',
+        _id: 'fBtzUAB23royeYLgZ',
         creatorCountry: 'uk',
         creatorName: 'benfurber',
         parentCommentId: 'ZAB2SoUZtzUyeYLg9Cro',
         text: '<3',
       },
     ],
+  },
+  jj97weruogbewr: {
+    _created: '2022-03-27T22:10:11.271Z',
+    _deleted: false,
+    _id: 'jj97weruogbewr',
+    _modified: '2022-03-27T22:10:12.271Z',
     contributorIds: [
       'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
       'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
     ],
-    sourceId: '3s7Fyn6Jf8ryANJM6Jf6',
-    sourceType: 'question',
+    sourceId: 'ERO3RibAuvz7Wt12LfTb',
+    sourceType: 'researchUpdate',
+    primaryContentId: '0up6oJCPP3M9bDYx34Et',
+    comments: [
+      {
+        _created: '2022-03-27T22:10:12.271Z',
+        _creatorId: 'demo_admin',
+        _edited: '2022-03-27T22:10:12.271Z',
+        _id: 'fZA234tzUyeYLg9Cro',
+        creatorCountry: 'af',
+        creatorName: 'demo_admin',
+        parentCommentId: null,
+        text: 'Interesting research so far, have you thought about experimenting with putting it in the bath?',
+      },
+    ],
   },
 }

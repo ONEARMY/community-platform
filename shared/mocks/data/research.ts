@@ -29,6 +29,7 @@ export const research = {
         _id: 'ERO3RibAuvz7Wt12LfTb',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
+        collaborators: ['demo_user'],
         images: [
           {
             contentType: 'image/jpeg',
@@ -44,15 +45,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
         files: [
           {
             timeCreated: '2019-05-10T20:49:42.878Z',
@@ -71,7 +63,29 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
+        _id: 'random-id-8888',
+        _modified: '2022-03-27T22:10:11.271Z',
+        description: 'qwerty',
+        images: [
+          {
+            contentType: 'image/jpeg',
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Fresearch%2F0up6oJCPP3M9bDYx34Et%2F1426018318_414579695-17fcd6de5f7.jpg?alt=media&token=9f18315b-a1ad-410b-b31c-2161fb1d7142',
+            fullPath:
+              'uploads/research/0up6oJCPP3M9bDYx34Et/1426018318_414579695-17fcd6de5f7.jpg',
+            name: '1426018318_414579695-17fcd6de5f7.jpg',
+            size: 109985,
+            timeCreated: '2022-03-27T22:10:10.106Z',
+            type: 'image/jpeg',
+            updated: '2022-03-27T22:10:10.106Z',
+          },
+        ],
+        title: 'qwerty',
+      },
+      {
+        _created: '2022-03-27T22:10:11.271Z',
+        _deleted: false,
+        _id: 'random-id-7856',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [
@@ -102,7 +116,7 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
+        _id: 'random-id-324',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [
@@ -133,7 +147,7 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
+        _id: '213hrandom-id',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [
@@ -164,7 +178,29 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
+        _id: 'g5yn69random-id',
+        _modified: '2022-03-27T22:10:11.271Z',
+        description: 'qwerty',
+        images: [
+          {
+            contentType: 'image/jpeg',
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Fresearch%2F0up6oJCPP3M9bDYx34Et%2F1426018318_414579695-17fcd6de5f7.jpg?alt=media&token=9f18315b-a1ad-410b-b31c-2161fb1d7142',
+            fullPath:
+              'uploads/research/0up6oJCPP3M9bDYx34Et/1426018318_414579695-17fcd6de5f7.jpg',
+            name: '1426018318_414579695-17fcd6de5f7.jpg',
+            size: 109985,
+            timeCreated: '2022-03-27T22:10:10.106Z',
+            type: 'image/jpeg',
+            updated: '2022-03-27T22:10:10.106Z',
+          },
+        ],
+        title: 'qwerty',
+      },
+      {
+        _created: '2022-03-27T22:10:11.271Z',
+        _deleted: false,
+        _id: 'random-45768-id',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [
@@ -195,7 +231,7 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
+        _id: 'random-cvbx786cvbxid',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [
@@ -226,7 +262,7 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
+        _id: 'random-id-123sdf',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [
@@ -257,7 +293,7 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
+        _id: 'fffrandofam-id',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [
@@ -288,7 +324,7 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
+        _id: 'randomaef346-id',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [
@@ -319,69 +355,7 @@ export const research = {
       {
         _created: '2022-03-27T22:10:11.271Z',
         _deleted: false,
-        _id: 'random-id',
-        _modified: '2022-03-27T22:10:11.271Z',
-        description: 'qwerty',
-        images: [
-          {
-            contentType: 'image/jpeg',
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Fresearch%2F0up6oJCPP3M9bDYx34Et%2F1426018318_414579695-17fcd6de5f7.jpg?alt=media&token=9f18315b-a1ad-410b-b31c-2161fb1d7142',
-            fullPath:
-              'uploads/research/0up6oJCPP3M9bDYx34Et/1426018318_414579695-17fcd6de5f7.jpg',
-            name: '1426018318_414579695-17fcd6de5f7.jpg',
-            size: 109985,
-            timeCreated: '2022-03-27T22:10:10.106Z',
-            type: 'image/jpeg',
-            updated: '2022-03-27T22:10:10.106Z',
-          },
-        ],
-        title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
-      },
-      {
-        _created: '2022-03-27T22:10:11.271Z',
-        _deleted: false,
-        _id: 'random-id',
-        _modified: '2022-03-27T22:10:11.271Z',
-        description: 'qwerty',
-        images: [
-          {
-            contentType: 'image/jpeg',
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/precious-plastics-v4-dev.appspot.com/o/uploads%2Fresearch%2F0up6oJCPP3M9bDYx34Et%2F1426018318_414579695-17fcd6de5f7.jpg?alt=media&token=9f18315b-a1ad-410b-b31c-2161fb1d7142',
-            fullPath:
-              'uploads/research/0up6oJCPP3M9bDYx34Et/1426018318_414579695-17fcd6de5f7.jpg',
-            name: '1426018318_414579695-17fcd6de5f7.jpg',
-            size: 109985,
-            timeCreated: '2022-03-27T22:10:10.106Z',
-            type: 'image/jpeg',
-            updated: '2022-03-27T22:10:10.106Z',
-          },
-        ],
-        title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
-      },
-      {
-        _created: '2022-03-27T22:10:11.271Z',
-        _deleted: false,
-        _id: 'random-id',
+        _id: 'random-23456',
         _modified: '2022-03-27T22:10:11.271Z',
         description: 'qwerty',
         images: [

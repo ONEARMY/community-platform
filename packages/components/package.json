@@ -15,7 +15,8 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "new-component": "ts-node scripts/newComponent.ts",
     "test": "vitest",
-    "test-ci": "vitest --coverage --reporter=junit --outputFile.junit=./reports/output.xml"
+    "test-ci": "vitest --coverage --reporter=junit --outputFile.junit=./reports/output.xml",
+    "chromatic": "npx chromatic -b=build:sb"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -23,6 +24,7 @@
     "@faker-js/faker": "^7.6.0",
     "@mui/base": "^5.0.0-beta.18",
     "@react-icons/all-files": "^4.1.0",
+    "chromatic": "^11.4.0",
     "date-fns": "^2.29.3",
     "linkify-plugin-mention": "^4.0.2",
     "linkify-react": "^4.0.2",

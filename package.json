@@ -43,6 +43,7 @@
     "test:madge": "npx madge --circular --extensions ts,tsx ./ --exclude src/stores",
     "storybook": "yarn workspace oa-components start",
     "storybook:build": "yarn build:themes && yarn workspace oa-components build:sb",
+    "storybook:chromatic": "yarn workspace oa-components chromatic",
     "docs": "yarn workspace oa-docs start",
     "install:clean": "yarn workspace oa-scripts install:clean",
     "postinstall": "husky install",

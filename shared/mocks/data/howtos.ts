@@ -1,7 +1,7 @@
 export const howtos = {
   gPpPDEvfNT9a6w5FWzaj: {
     moderation: 'accepted',
-    id: 'gPpPDEvfNT9a6w5FWzaj',
+    _id: 'gPpPDEvfNT9a6w5FWzaj',
     _createdBy: 'howto_creator',
     tags: {
       '36hWyk3OckrLSH1ehdIE': true,

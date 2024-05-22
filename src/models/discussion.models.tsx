@@ -21,7 +21,7 @@ export type IDiscussion = {
   contributorIds: string[]
   primaryContentId?: string | undefined
   sourceId: string
-  sourceType: 'question' | 'researchUpdate'
+  sourceType: 'howto' | 'question' | 'researchUpdate'
 }
 
 export type IDiscussionSourceModelOptions = IQuestion.Item

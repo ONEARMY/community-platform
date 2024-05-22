@@ -2,6 +2,7 @@ import { dailyTasks } from './scheduled/tasks'
 
 import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'
+import * as QuestionUpdates from './questionUpdates'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more information
@@ -15,6 +16,10 @@ exports.aggregations = require('./aggregations')
 exports.database = require('./database')
 
 exports.userUpdates = UserUpdates.handleUserUpdates
+
+exports.questionCreate = QuestionUpdates.handleQuestionCreate
+exports.questionUpdate = QuestionUpdates.handleQuestionUpdate
+exports.questionDelete = QuestionUpdates.handleQuestionDelete
 // CC Note, 2020-04-40
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail

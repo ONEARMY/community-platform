@@ -2,6 +2,7 @@ import { dailyTasks } from './scheduled/tasks'
 
 import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'
+import * as DiscussionUpdates from './discussionUpdates'
 import * as QuestionUpdates from './questionUpdates'
 
 // the following endpoints are exposed for use by various triggers
@@ -16,6 +17,8 @@ exports.aggregations = require('./aggregations')
 exports.database = require('./database')
 
 exports.userUpdates = UserUpdates.handleUserUpdates
+
+exports.discussionUpdates = DiscussionUpdates.handleDiscussionUpdate
 
 exports.questionCreate = QuestionUpdates.handleQuestionCreate
 exports.questionUpdate = QuestionUpdates.handleQuestionUpdate

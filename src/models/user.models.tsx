@@ -89,6 +89,7 @@ interface IUserStats {
   userCreatedHowtos: { [id: string]: IModerationStatus }
   userCreatedResearch: { [id: string]: IModerationStatus }
   userCreatedQuestions: { [id: string]: IModerationStatus }
+  userCreatedComments: { [id: string]: string | null }
 }
 
 export type IUserDB = IUser & DBDoc

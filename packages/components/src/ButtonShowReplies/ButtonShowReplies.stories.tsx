@@ -61,3 +61,16 @@ export const NoReplies: StoryFn<typeof ButtonShowReplies> = () => {
     />
   )
 }
+
+export const NoCreatorName: StoryFn<typeof ButtonShowReplies> = () => {
+  const replies = createFakeComments(1)
+
+  return (
+    <ButtonShowReplies
+      creatorName={null}
+      isShowReplies={false}
+      replies={replies}
+      setIsShowReplies={mockSetIsShowReplies}
+    />
+  )
+}

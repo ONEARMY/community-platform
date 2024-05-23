@@ -6,9 +6,9 @@ import { generateNewUserDetails } from '../../utils/TestUtils'
 
 const howtos = Object.values(MOCK_DATA.howtos)
 
-const howto = howtos[0]
+const item = howtos[0]
 const howtoDiscussion = Object.values(MOCK_DATA.discussions).find(
-  ({ sourceId }) => sourceId === howto._id,
+  ({ sourceId }) => sourceId === item._id,
 )
 
 describe('[Howto.Discussions]', () => {
@@ -16,7 +16,7 @@ describe('[Howto.Discussions]', () => {
     const firstComment = howtoDiscussion.comments[0]
 
     cy.signUpNewUser()
-    cy.visit(`/how-to/${howto.slug}#comment:${firstComment._id}`)
+    cy.visit(`/how-to/${item.slug}#comment:${firstComment._id}`)
     cy.get('[data-cy="comment"]').should('have.length.gte', 2)
     cy.get('[data-cy="comment"]')
       .first()
@@ -34,7 +34,7 @@ describe('[Howto.Discussions]', () => {
 
     const visitor = generateNewUserDetails()
     cy.signUpNewUser(visitor)
-    cy.visit(`/how-to/${howto.slug}`)
+    cy.visit(`/how-to/${item.slug}`)
 
     cy.step('Can add comment')
     cy.get('[data-cy=comments-form]:last').type(newComment)
@@ -61,6 +61,12 @@ describe('[Howto.Discussions]', () => {
     cy.get('[data-cy=comment-submit]:first').click()
     cy.contains(`${howtoDiscussion.comments.length + 1} comments`)
     cy.contains(newReply)
+    cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
+      const [howto] = docs
+      expect(howto.totalComments).to.eq(howtoDiscussion.comments.length + 1)
+      // Updated to the just added comment iso datetime
+      expect(howto.latestCommentDate).to.not.eq(item.latestCommentDate)
+    })
 
     cy.step('Can edit their reply')
     cy.get('[data-cy="CommentItem: edit button"]:first').click()
@@ -74,19 +80,24 @@ describe('[Howto.Discussions]', () => {
     cy.get('[data-cy="Confirm.modal: Confirm"]:first').click()
     cy.contains(updatedNewReply).should('not.exist')
     cy.contains(`${howtoDiscussion.comments.length} comments`)
+    cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
+      const [howto] = docs
+      expect(howto.totalComments).to.eq(howtoDiscussion.comments.length)
+      expect(howto.latestCommentDate).to.eq(item.latestCommentDate)
+    })
 
     // Putting these at the end to avoid having to put a wait in the test
     cy.step('Comment generated notification for question author')
-    cy.queryDocuments('users', 'userName', '==', howto._createdBy).then(
+    cy.queryDocuments('users', 'userName', '==', item._createdBy).then(
       (docs) => {
         const [user] = docs
         const discussionNotification = user.notifications.find(
           ({ type }) => type === 'new_comment_discussion',
         )
         expect(discussionNotification.relevantUrl).to.include(
-          `/how-to/${howto.slug}#comment:`,
+          `/how-to/${item.slug}#comment:`,
         ),
-          expect(discussionNotification.title).to.eq(howto.title),
+          expect(discussionNotification.title).to.eq(item.title),
           expect(discussionNotification.triggeredBy.userId).to.eq(
             visitor.username,
           )
@@ -101,9 +112,9 @@ describe('[Howto.Discussions]', () => {
           ({ type }) => type === 'new_comment_discussion',
         )
         expect(discussionNotification.relevantUrl).to.include(
-          `/how-to/${howto.slug}#comment:`,
+          `/how-to/${item.slug}#comment:`,
         ),
-          expect(discussionNotification.title).to.eq(howto.title),
+          expect(discussionNotification.title).to.eq(item.title),
           expect(discussionNotification.triggeredBy.userId).to.eq(
             visitor.username,
           )

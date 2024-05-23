@@ -19,8 +19,10 @@ export interface IHowto extends IHowtoFormInput {
   cover_image?: IUploadedFileMeta
   fileLink?: string
   total_downloads?: number
+  latestCommentDate?: string | undefined
   mentions: UserMention[]
   previousSlugs: string[]
+  totalComments: number
   totalUsefulVotes?: number
   keywords?: string[]
 }
@@ -56,6 +58,8 @@ export interface IHowtoFormInput extends IModerable, ISharedFeatures {
   cover_image?: IUploadedFileMeta | IConvertedFileMeta
   // Added to be able to recover on edit by admin
   creatorCountry?: string
+  totalComments?: number
+  latestCommentDate?: string
   description?: string
   difficulty_level?: DifficultyLevel
   files?: Array<IUploadedFileMeta | File | null>

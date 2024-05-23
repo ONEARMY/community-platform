@@ -311,11 +311,13 @@ export class HowtoStore extends ModuleStore {
         tags,
         time,
         title,
+        latestCommentDate,
       } = values
       const _id = id
       const _createdBy = values._createdBy ? values._createdBy : user.userName
       const creatorCountry = this.getCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
+      const totalComments = values.totalComments ? values.totalComments : 0
       const mentions = (values as IHowtoDB)?.mentions ?? []
       const slug = await this.setSlug(values)
       const previousSlugs = this.setPreviousSlugs(values, slug)
@@ -329,6 +331,7 @@ export class HowtoStore extends ModuleStore {
         _id,
         _createdBy,
         creatorCountry,
+        totalComments,
         _deleted: false,
         description,
         fileLink,
@@ -340,6 +343,7 @@ export class HowtoStore extends ModuleStore {
         steps,
         title,
         keywords,
+        ...(latestCommentDate ? { latestCommentDate } : {}),
         ...(files ? { total_downloads } : {}),
         ...(category ? { category } : {}),
         ...(cover_image ? { cover_image } : {}),

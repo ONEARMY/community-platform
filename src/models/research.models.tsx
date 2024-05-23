@@ -49,7 +49,7 @@ export namespace IResearch {
     locked?: ResearchDocumentLock
     totalUpdates?: number
     totalUsefulVotes?: number
-    totalCommentCount?: number
+    totalCommentCount: number
     keywords?: string[]
   } & Omit<FormInput, 'collaborators'> &
     DBDoc

@@ -7,6 +7,8 @@ export const howtos = {
       '36hWyk3OckrLSH1ehdIE': true,
       Wk6RnHHFfKSiI71BlM8r: true,
     },
+    totalComments: 3,
+    latestCommentDate: '2022-03-30T22:10:12.271Z',
     category: {
       label: 'Moulds',
       _deleted: false,
@@ -335,15 +337,6 @@ export const howtos = {
         downloadUrl:
           'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2Fme5Bq0wq5FdoJUY8gELN%2Fart%20final%202.skp?alt=media&token=f4ebe379-2038-4ac0-9e6f-68c379174908',
         contentType: 'application/octet-stream',
-      },
-    ],
-    comments: [
-      {
-        _id: 'abc123',
-        _created: '2019-09-18T14:49:54.311Z',
-        _creatorId: 'abc',
-        creatorName: 'abc',
-        text: 'A generated comment',
       },
     ],
     total_downloads: 1234,
@@ -2868,7 +2861,7 @@ export const howtos = {
     _deleted: false,
     _id: 'zVVjXc34gKhUNIcgLEXg',
     _modified: '2022-01-06T14:50:38.830Z',
-    comments: [],
+    totalComments: 0,
     cover_image: {
       contentType: 'image/jpeg',
       downloadUrl:
@@ -2911,7 +2904,6 @@ export const howtos = {
     _deleted: true,
     _id: 'zVVjXc34gKhIBVcgLEXg',
     _modified: '2022-01-06T14:50:38.830Z',
-    comments: [],
     cover_image: {
       contentType: 'image/jpeg',
       downloadUrl:
@@ -2946,5 +2938,6 @@ export const howtos = {
     ],
     time: '< 1 hour',
     title: 'Deleted how to',
+    totalComments: 0,
   },
 }

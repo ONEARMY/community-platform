@@ -3,7 +3,7 @@ import { Button } from '../Button/Button'
 import type { IComment } from '../CommentItem/types'
 
 export interface Props {
-  creatorName: string
+  creatorName: string | null
   isShowReplies: boolean
   replies: IComment[]
   setIsShowReplies: () => void
@@ -28,7 +28,7 @@ export const ButtonShowReplies = (props: Props) => {
       variant="outline"
       small
     >
-      {`${text} to ${creatorName}`}
+      {text} {creatorName && ` to ${creatorName}`}
     </Button>
   )
 }

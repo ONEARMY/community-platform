@@ -14,6 +14,8 @@ export const research = {
     tags: {
       h1wCs0o9j60lkw3AYPB1: true,
     },
+    totalCommentCount: 1,
+    latestCommentDate: '2022-03-27T22:10:12.271Z',
     researchCategory: {
       _modified: '2012-10-27T01:47:57.948Z',
       _created: '2012-08-02T07:27:04.609Z',
@@ -103,15 +105,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
       {
         _created: '2022-03-27T22:10:11.271Z',
@@ -134,15 +127,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
       {
         _created: '2022-03-27T22:10:11.271Z',
@@ -165,15 +149,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
       {
         _created: '2022-03-27T22:10:11.271Z',
@@ -218,15 +193,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
       {
         _created: '2022-03-27T22:10:11.271Z',
@@ -249,15 +215,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
       {
         _created: '2022-03-27T22:10:11.271Z',
@@ -280,15 +237,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
       {
         _created: '2022-03-27T22:10:11.271Z',
@@ -311,15 +259,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
       {
         _created: '2022-03-27T22:10:11.271Z',
@@ -342,15 +281,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
       {
         _created: '2022-03-27T22:10:11.271Z',
@@ -373,15 +303,6 @@ export const research = {
           },
         ],
         title: 'qwerty',
-        comments: [
-          {
-            _id: 'abc123',
-            _created: '2019-09-18T14:49:54.311Z',
-            _creatorId: 'abc',
-            creatorName: 'abc',
-            text: 'A generated comment',
-          },
-        ],
       },
     ],
   },

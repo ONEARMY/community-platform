@@ -13,12 +13,12 @@ export type DiscussionEndpoints = Extract<
 
 export type CommentsTotalEvent = 'add' | 'delete' | 'neutral'
 
-const calculateLastestCommentDate = (comments) => {
+const calculateLastestCommentDate = (comments): string => {
   return new Date(
     Math.max(
       ...comments.map((comment) => new Date(comment._created).valueOf()),
     ),
-  )
+  ).toISOString()
 }
 
 export const updateDiscussionMetadata = async (
@@ -45,22 +45,30 @@ export const updateDiscussionMetadata = async (
 
       const research = toJS(await researchRef.get())
 
-      // This approach is open to error but is better than making lots of DBs
-      // reads to get the all the counts of all discussions for a research
-      // item.
-      const countChange = {
-        add: commentCount + 1,
-        delete: commentCount - 1,
-        neutral: commentCount,
-      }
-
       if (research) {
+        // This approach is open to error but is better than making lots of DBs
+        // reads to get the all the counts of all discussions for a research
+        // item.
+        const countChange = {
+          add: research.totalCommentCount + 1,
+          delete: research.totalCommentCount - 1,
+          neutral: research.totalCommentCount,
+        }
+
         researchRef.update({
-          commentCount: countChange[commentsTotalEvent],
+          totalCommentCount: countChange[commentsTotalEvent],
           ...(latestCommentDate ? { latestCommentDate } : {}),
         })
       }
       return
+    case 'howtos':
+      return db
+        .collection(collectionName)
+        .doc(sourceId)
+        .update({
+          totalComments: commentCount,
+          ...(latestCommentDate ? { latestCommentDate } : {}),
+        })
     default:
       return db
         .collection(collectionName)

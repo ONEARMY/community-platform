@@ -5,7 +5,7 @@ import { DB_ENDPOINTS } from '../models'
 import { backupUser } from './backupUser'
 import { updateDiscussionComments } from './updateDiscussionComments'
 
-import type { IDBDocChange, IHowtoDB, IResearchDB, IUserDB } from '../models'
+import type { IDBDocChange, IUserDB } from '../models'
 
 /*********************************************************************
  * Side-effects to be carried out on various user updates, namely:
@@ -45,19 +45,6 @@ async function updateDocuments(change: IDBDocChange) {
     // Update country flag in user's created howTos
     const country = newCountryCode ? newCountryCode : newCountry.toLowerCase()
     await updatePostsCountry(info._id, country)
-  }
-
-  const didChangeUserName = prevInfo.userName !== info.userName
-  if (didChangeCountry || didChangeUserName) {
-    await updateUserCommentsInfo({
-      country: didChangeCountry
-        ? newCountryCode
-          ? newCountryCode
-          : newCountry.toLowerCase()
-        : undefined,
-      newUserName: didChangeUserName ? info.userName : undefined,
-      originalUserName: prevInfo.userName,
-    })
   }
 
   await updateDiscussionComments(prevInfo, info)
@@ -153,71 +140,6 @@ async function updatePostsCountry(userId: string, country: IUserDB['country']) {
   console.log('Successfully updated', updatedQuestionCount, 'questions!')
 
   return false
-}
-
-/**
- * Updates either `userName` or `country` in any comments made by the user on any HowTo or research
- */
-async function updateUserCommentsInfo({
-  originalUserName,
-  newUserName,
-  country,
-}: {
-  originalUserName: string
-  newUserName?: string
-  country?: string
-}) {
-  console.log('Updating comments by user', originalUserName)
-  if (country) {
-    console.log('with new country', country)
-  }
-  if (newUserName) {
-    console.log('with new userName', newUserName)
-  }
-
-  // 1. Update howTo comments
-  let count = 0
-  const howToQuerySnapshot = await db.collection(DB_ENDPOINTS.howtos).get()
-
-  if (howToQuerySnapshot) {
-    for (const doc of howToQuerySnapshot.docs) {
-      const howto = doc.data() as IHowtoDB
-      if (
-        howto.comments &&
-        howto.comments.some(
-          (comment) => comment.creatorName === originalUserName,
-        )
-      ) {
-        let toUpdateCount = 0
-        const updatedComments = howto.comments.map((comment) => {
-          if (comment.creatorName !== originalUserName) return comment
-
-          const updatedComment = {
-            ...comment,
-          }
-          if (newUserName) {
-            updatedComment.creatorName = newUserName
-          }
-          if (country) {
-            updatedComment.creatorCountry = country
-          }
-
-          toUpdateCount += 1
-          return updatedComment
-        })
-
-        try {
-          await doc.ref.update({
-            comments: updatedComments,
-          })
-          count += toUpdateCount
-        } catch (error) {
-          console.error('Error updating howTo comment: ', error)
-        }
-      }
-    }
-  }
-  console.log('Successfully updated', count, 'howTo comments!')
 }
 
 async function deleteMapPin(_id: string) {

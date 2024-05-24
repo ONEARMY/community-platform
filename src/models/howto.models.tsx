@@ -2,7 +2,6 @@ import type { DifficultyLevel } from 'oa-shared'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 import type { ICategory } from './categories.model'
-import type { IComment } from './comment.model'
 import type {
   DBDoc,
   IModerable,
@@ -19,12 +18,11 @@ export interface IHowto extends IHowtoFormInput {
   _deleted: boolean
   cover_image?: IUploadedFileMeta
   fileLink?: string
-  // Comments were added in V2, old howto's may not have the property
-  comments?: IComment[]
   total_downloads?: number
+  latestCommentDate?: string | undefined
   mentions: UserMention[]
   previousSlugs: string[]
-  totalComments?: number
+  totalComments: number
   totalUsefulVotes?: number
   keywords?: string[]
 }
@@ -60,6 +58,8 @@ export interface IHowtoFormInput extends IModerable, ISharedFeatures {
   cover_image?: IUploadedFileMeta | IConvertedFileMeta
   // Added to be able to recover on edit by admin
   creatorCountry?: string
+  totalComments?: number
+  latestCommentDate?: string
   description?: string
   difficulty_level?: DifficultyLevel
   files?: Array<IUploadedFileMeta | File | null>

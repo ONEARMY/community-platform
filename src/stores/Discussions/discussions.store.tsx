@@ -12,8 +12,8 @@ import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
 import type { IResearch, IUserPPDB } from 'src/models'
 import type {
+  IComment,
   IDiscussion,
-  IDiscussionComment,
   IDiscussionSourceModelOptions,
 } from 'src/models/discussion.models'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -93,7 +93,7 @@ export class DiscussionStore extends ModuleStore {
           throw new Error('Discussion not found')
         }
 
-        const newComment: IDiscussionComment = {
+        const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
           _creatorId: user._id,
@@ -209,10 +209,7 @@ export class DiscussionStore extends ModuleStore {
     }
   }
 
-  private async _addNotifications(
-    comment: IDiscussionComment,
-    discussion: IDiscussion,
-  ) {
+  private async _addNotifications(comment: IComment, discussion: IDiscussion) {
     const collectionName = getCollectionName(discussion.sourceType)
     if (!collectionName) {
       return logger.trace(
@@ -266,6 +263,8 @@ export class DiscussionStore extends ModuleStore {
           .collection<IDiscussionSourceModelOptions>(collectionName)
           .doc(discussion.sourceId)
         const parentContent = toJS(await dbRef.get())
+        const parentPath =
+          collectionName === 'howtos' ? 'how-to' : collectionName
 
         if (parentContent) {
           const username = parentComment
@@ -275,7 +274,7 @@ export class DiscussionStore extends ModuleStore {
           return this.userNotificationsStore.triggerNotification(
             'new_comment_discussion',
             username,
-            `/${collectionName}/${parentContent.slug}#comment:${commentId}`,
+            `/${parentPath}/${parentContent.slug}#comment:${commentId}`,
             parentContent.title,
           )
         }
@@ -284,7 +283,7 @@ export class DiscussionStore extends ModuleStore {
 
   private _findAndUpdateComment(
     user: IUserPPDB,
-    comments: IDiscussionComment[],
+    comments: IComment[],
     newCommentText: string,
     commentId: string,
   ) {
@@ -331,7 +330,7 @@ export class DiscussionStore extends ModuleStore {
 
   private _findAndDeleteComment(
     user: IUserPPDB,
-    comments: IDiscussionComment[],
+    comments: IComment[],
     commentId: string,
   ) {
     return comments.filter((comment) => {

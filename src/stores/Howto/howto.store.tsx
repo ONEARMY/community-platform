@@ -6,10 +6,9 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'
+import { needsModeration } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
@@ -20,7 +19,7 @@ import {
 import { ModuleStore } from '../common/module.store'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
-import type { IComment, IUser, UserMention } from 'src/models'
+import type { IUser, UserMention } from 'src/models'
 import type {
   IHowto,
   IHowtoDB,
@@ -46,20 +45,6 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this)
-  }
-
-  public getActiveHowToComments(): IComment[] {
-    return this.activeHowto?.comments
-      ? this.activeHowto?.comments.map((comment: IComment) => {
-          return {
-            ...comment,
-            text: changeUserReferenceToPlainText(comment.text),
-            isUserVerified: !!this.aggregationsStore.isVerified(
-              comment.creatorName,
-            ),
-          }
-        })
-      : []
   }
 
   @action
@@ -189,40 +174,6 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  @action
-  public async addComment(text: string) {
-    try {
-      const user = this.activeUser
-      const howto = this.activeHowto
-      if (user && howto && text) {
-        const newComment: IComment = {
-          _id: randomID(),
-          _created: new Date().toISOString(),
-          _creatorId: user._id,
-          creatorName: user.userName,
-          creatorCountry: getUserCountry(user),
-          text: text.slice(0, MAX_COMMENT_LENGTH).trim(),
-        }
-        logger.debug('addComment.newComment', { newComment })
-
-        // Update and refresh the active howto
-        const updatedComments = [...toJS(howto.comments || []), newComment]
-        const updated = await this.updateHowtoItem({
-          ...toJS(howto),
-          comments: updatedComments,
-          totalComments: updatedComments.length,
-        })
-
-        await this.addCommentNotification(howto)
-        await this.setActiveHowtoBySlug(updated?.slug || '')
-      }
-    } catch (err) {
-      logger.info({ err })
-      logger.error(err)
-      throw new Error(err)
-    }
-  }
-
   private async updateHowtoItem(
     howToItem: IHowto,
     setLastEditTimestamp = false,
@@ -243,14 +194,11 @@ export class HowtoStore extends ModuleStore {
       location: 'description',
     }))
 
-    const { comments, commentMentions } = await this.findMentionsInComments(
-      howToItem.comments,
-    )
     const { steps, stepMentions } = await this.findMentionsInSteps(
       howToItem.steps,
     )
 
-    mentions.push(...commentMentions, ...stepMentions)
+    mentions.push(...stepMentions)
     const previousSlugs = this.setPreviousSlugs(howToItem, howToItem.slug)
 
     await dbRef.set(
@@ -258,8 +206,6 @@ export class HowtoStore extends ModuleStore {
         ...howToItem,
         previousSlugs,
         description,
-        comments,
-        totalComments: comments?.length || 0,
         mentions,
         steps,
       },
@@ -274,7 +220,6 @@ export class HowtoStore extends ModuleStore {
     // Location: Where in the document does the mention exist?
     // - Introduction
     // - Steps
-    // - Comments
     const previousMentionsList = howToItem.mentions || []
     logger.debug(`Mentions:`, {
       before: previousMentionsList,
@@ -304,37 +249,6 @@ export class HowtoStore extends ModuleStore {
   }
 
   @action
-  public async editComment(id: string, newText: string) {
-    try {
-      const howto = this.activeHowto
-      const user = this.activeUser
-      if (id && howto && user && howto.comments) {
-        const comments = toJS(howto.comments)
-        const commentIndex = comments.findIndex(
-          (comment) =>
-            (comment._creatorId === user._id || hasAdminRights(user)) &&
-            comment._id === id,
-        )
-        if (commentIndex !== -1) {
-          comments[commentIndex].text = newText
-            .slice(0, MAX_COMMENT_LENGTH)
-            .trim()
-          comments[commentIndex]._edited = new Date().toISOString()
-
-          // Refresh the active howto
-          this.activeHowto = await this.updateHowtoItem({
-            ...toJS(howto),
-            comments,
-          })
-        }
-      }
-    } catch (err) {
-      logger.error(err)
-      throw new Error(err)
-    }
-  }
-
-  @action
   public async deleteHowTo(id: string) {
     try {
       const user = this.activeUser
@@ -358,35 +272,6 @@ export class HowtoStore extends ModuleStore {
     }
   }
 
-  @action
-  public async deleteComment(id: string) {
-    try {
-      const howto = this.activeHowto
-      const user = this.activeUser
-      if (id && howto && user && howto.comments) {
-        // Refresh the active howto with the updated item
-
-        const updatedComments = toJS(howto.comments).filter(
-          (comment) =>
-            !(
-              (comment._creatorId === user._id || hasAdminRights(user)) &&
-              comment._id === id
-            ),
-        )
-        await this.updateHowtoItem({
-          ...toJS(howto),
-          comments: updatedComments,
-          totalComments: updatedComments.length,
-        })
-
-        await this.setActiveHowtoBySlug(howto.slug)
-      }
-    } catch (err) {
-      logger.error(err)
-      throw new Error(err)
-    }
-  }
-
   // upload a new or update an existing how-to
   public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
     logger.debug('uploading howto', { values })
@@ -397,12 +282,8 @@ export class HowtoStore extends ModuleStore {
       .doc((values as IHowtoDB)._id)
     const id = dbRef.id
 
-    // keep comments if doc existed previously
     const existingDoc = await dbRef.get()
     logger.debug('uploadHowto.existingDoc', { existingDoc })
-
-    const comments =
-      existingDoc && existingDoc.comments ? existingDoc.comments : []
 
     const user = this.activeUser as IUser
     try {
@@ -430,11 +311,13 @@ export class HowtoStore extends ModuleStore {
         tags,
         time,
         title,
+        latestCommentDate,
       } = values
       const _id = id
       const _createdBy = values._createdBy ? values._createdBy : user.userName
       const creatorCountry = this.getCreatorCountry(user, values)
       const fileLink = values.fileLink ?? ''
+      const totalComments = values.totalComments ? values.totalComments : 0
       const mentions = (values as IHowtoDB)?.mentions ?? []
       const slug = await this.setSlug(values)
       const previousSlugs = this.setPreviousSlugs(values, slug)
@@ -447,9 +330,8 @@ export class HowtoStore extends ModuleStore {
         ...(existingDoc || {}),
         _id,
         _createdBy,
-        comments,
-        totalComments: comments.length,
         creatorCountry,
+        totalComments,
         _deleted: false,
         description,
         fileLink,
@@ -461,6 +343,7 @@ export class HowtoStore extends ModuleStore {
         steps,
         title,
         keywords,
+        ...(latestCommentDate ? { latestCommentDate } : {}),
         ...(files ? { total_downloads } : {}),
         ...(category ? { category } : {}),
         ...(cover_image ? { cover_image } : {}),
@@ -489,38 +372,6 @@ export class HowtoStore extends ModuleStore {
       '/how-to/' + howto.slug,
       howto.title,
     )
-  }
-
-  private async findMentionsInComments(rawComments: IComment[] | undefined) {
-    const commentMentions: UserMention[] = []
-
-    if (rawComments === undefined) {
-      return {
-        comments: [],
-        commentMentions,
-      }
-    }
-
-    const comments = await Promise.all(
-      [...toJS(rawComments || [])].map(async (comment) => {
-        const { text, users } = await this.addUserReference(comment.text)
-        comment.text = text
-
-        users.forEach((username) => {
-          commentMentions.push({
-            username,
-            location: `comment:${comment._id}`,
-          })
-        })
-
-        return comment
-      }),
-    )
-
-    return {
-      comments,
-      commentMentions,
-    }
   }
 
   private async findMentionsInSteps(steps: IHowToStepFormInput[]) {
@@ -598,11 +449,6 @@ export class HowtoStore extends ModuleStore {
   @computed
   get votedUsefulCount(): number {
     return (this.activeHowto?.votedUsefulBy || []).length
-  }
-
-  @computed
-  get commentsCount(): number {
-    return (this.activeHowto?.comments || []).length
   }
 }
 

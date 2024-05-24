@@ -176,5 +176,18 @@ describe('Research Helpers', () => {
       // assert
       expect(show).toEqual(true)
     })
+
+    it('should show when draft and current user is a collaborator', async () => {
+      // prepare
+      const authorId = 'author'
+      const item = { collaborators: [authorId] } as IResearch.Item
+      const update = { status: ResearchUpdateStatus.DRAFT } as IResearch.Update
+
+      // act
+      const show = researchUpdateStatusFilter(item, update, authorId)
+
+      // assert
+      expect(show).toEqual(true)
+    })
   })
 })

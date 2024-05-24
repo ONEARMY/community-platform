@@ -31,11 +31,16 @@ export const researchUpdateStatusFilter = (
   update: IResearch.Update,
   currentUserId?: string,
 ) => {
-  return (
-    (item._createdBy === currentUserId ||
-      update.status !== ResearchUpdateStatus.DRAFT) &&
-    !update._deleted
-  )
+  const isCollaborator =
+    currentUserId &&
+    item.collaborators &&
+    item.collaborators.includes(currentUserId)
+
+  const isAuthor = item._createdBy === currentUserId
+  const isUpdateDraft = update.status === ResearchUpdateStatus.DRAFT
+  const isUpdateDeleted = update._deleted
+
+  return (isAuthor || isCollaborator || !isUpdateDraft) && !isUpdateDeleted
 }
 
 export const getPublicUpdates = (

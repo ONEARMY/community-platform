@@ -11,34 +11,46 @@ export const updateDiscussionComments = async (
 ) => {
   if (!hasKeyDetailsChanged(prevUser, user)) return
 
-  let updatedCommentCount = 0
-
-  const { _id, badges, location } = user
-  const userDetails = {
-    creatorCountry: location?.countryCode || '',
-    isUserVerified: !!badges?.verified,
-    isUserSupporter: !!badges?.supporter,
-  }
-
   const snapshot = await db
     .collection(DB_ENDPOINTS.discussions)
-    .where('contributorIds', 'array-contains', _id)
+    .where('contributorIds', 'array-contains', user._id)
     .get()
 
-  for (const doc of snapshot.docs) {
-    const discussion = doc.data() as IDiscussion
+  if (!snapshot.empty) {
+    const { _id, badges, coverImages, location } = user
+    const creatorImage = setCreatorImage(coverImages)
 
-    const comments = discussion.comments.map((comment) => {
-      if (comment._creatorId !== _id) return comment
+    const userDetails = {
+      creatorCountry: location?.countryCode || '',
+      ...(creatorImage ? { creatorImage } : {}),
+      isUserVerified: !!badges?.verified,
+      isUserSupporter: !!badges?.supporter,
+    }
 
-      updatedCommentCount++
-      return {
-        ...comment,
-        ...userDetails,
-      }
-    })
+    let updatedCommentCount = 0
 
-    await doc.ref.update({ comments })
+    for (const doc of snapshot.docs) {
+      const discussion = doc.data() as IDiscussion
+
+      const comments = discussion.comments.map((comment) => {
+        if (comment._creatorId !== _id) return comment
+
+        updatedCommentCount++
+        return {
+          ...comment,
+          ...userDetails,
+        }
+      })
+
+      await doc.ref.update({ comments })
+    }
+    return console.log(`Updated ${updatedCommentCount} discussion comments`)
   }
-  console.log(`Updated ${updatedCommentCount} discussion comments`)
+}
+
+const setCreatorImage = (coverImages) => {
+  if (coverImages && coverImages[0] && coverImages[0].downloadUrl) {
+    return coverImages[0].downloadUrl
+  }
+  return undefined
 }

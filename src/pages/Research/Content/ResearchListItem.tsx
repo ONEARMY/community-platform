@@ -14,10 +14,10 @@ import {
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
-import { getPublicUpdates, researchStatusColour } from 'src/utils/helpers'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
+import { getPublicUpdates, researchStatusColour } from '../researchHelpers'
 
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'

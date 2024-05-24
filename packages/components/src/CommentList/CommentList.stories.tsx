@@ -40,7 +40,15 @@ export const WithNestedComments: StoryFn<typeof CommentList> = () => {
       replies: [fakeComment(), fakeComment()],
     }),
     fakeComment({
-      replies: [fakeComment()],
+      creatorImage:
+        'https://oacpppprod-1fa0a.kxcdn.com/o/uploads%2Fhowtos%2FsEHCqVHlBmMRG8TG0CGN%2FToasteOvenMod-18cd7fc9c38.jpg?alt=media&token=1dd11c48-151a-49cc-9287-443f96a10840',
+
+      replies: [
+        fakeComment({
+          creatorImage:
+            'https://avatars.githubusercontent.com/u/16688508?s=80&u=7332d9d2a953c33179b428d2ee804bfc80a06f5d&v=4',
+        }),
+      ],
     }),
     fakeComment(),
   ]

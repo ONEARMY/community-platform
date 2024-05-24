@@ -57,7 +57,7 @@ export const DiscussionContainer = (props: IProps) => {
   }
 
   return (
-    <>
+    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
       <DiscussionTitle length={comments.length} />
 
       <CommentList
@@ -92,6 +92,6 @@ export const DiscussionContainer = (props: IProps) => {
           isLoggedIn={isLoggedIn}
         />
       </Flex>
-    </>
+    </Flex>
   )
 }

@@ -52,7 +52,12 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
 
   const replyArrow = () => {
     return (
-      <Box sx={{ paddingTop: 4 }}>
+      <Box
+        sx={{
+          paddingTop: 1,
+          paddingRight: 2,
+        }}
+      >
         <Icon glyph="arrow-curved-bottom-right" />
       </Box>
     )
@@ -87,7 +92,7 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
       sx={{
         backgroundColor: 'white',
         borderRadius: 1,
-        padding: 3,
+        padding: isReplies ? 0 : 2,
       }}
     >
       <CommentItem
@@ -182,11 +187,10 @@ export const CommentList = (props: IPropsCommentList) => {
   }, [highlightedCommentId, comments])
 
   return (
-    <Box
-      mb={4}
+    <Flex
       sx={{
-        width: '100%',
-        display: 'block',
+        gap: 2,
+        flexDirection: 'column',
       }}
     >
       {comments &&
@@ -195,7 +199,6 @@ export const CommentList = (props: IPropsCommentList) => {
             key={comment._id}
             data-testid="CommentList: item"
             sx={{
-              marginBottom: 4,
               border: `${
                 highlightedCommentId === comment._id
                   ? '2px dashed black'
@@ -231,6 +234,6 @@ export const CommentList = (props: IPropsCommentList) => {
           </Button>
         </Flex>
       )}
-    </Box>
+    </Flex>
   )
 }

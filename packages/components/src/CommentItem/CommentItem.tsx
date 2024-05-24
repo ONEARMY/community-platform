@@ -1,5 +1,5 @@
 import { createRef, useEffect, useState } from 'react'
-import { Box, Flex, Text } from 'theme-ui'
+import { Avatar, Box, Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
@@ -39,6 +39,7 @@ export const CommentItem = (props: CommentItemProps) => {
     text,
     creatorName,
     creatorCountry,
+    creatorImage,
     isUserVerified,
     isUserSupporter,
     isEditable,
@@ -46,6 +47,13 @@ export const CommentItem = (props: CommentItemProps) => {
     _edited,
     _id,
   } = comment
+
+  const user = {
+    userName: creatorName,
+    countryCode: creatorCountry,
+    isVerified: !!isUserVerified,
+    isSupporter: !!isUserSupporter,
+  }
 
   const date = formatDate(_edited || _created)
   const maxHeight = isShowMore ? 'max-content' : '128px'
@@ -68,47 +76,64 @@ export const CommentItem = (props: CommentItemProps) => {
   }
 
   return (
-    <Box id={`comment:${_id}`} data-cy="comment">
-      <Flex
-        sx={{
-          flexDirection: 'column',
-        }}
-      >
-        <Flex
-          sx={{
-            alignItems: 'stretch',
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'flex-start',
-          }}
-        >
-          <Flex sx={{ alignItems: 'baseline', gap: 2 }}>
-            <Username
-              user={{
-                userName: creatorName,
-                countryCode: creatorCountry,
-                isVerified: !!isUserVerified,
-                isSupporter: !!isUserSupporter,
+    <Flex
+      id={`comment:${_id}`}
+      data-cy="comment"
+      sx={{ flexDirection: 'column' }}
+    >
+      <Flex sx={{ gap: 2 }}>
+        {creatorImage && (
+          <Box>
+            <Avatar
+              src={creatorImage}
+              sx={{
+                objectFit: 'cover',
+                width: ['30px', '50px'],
+                height: ['30px', '50px'],
               }}
             />
-            {_edited && (
-              <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
-            )}
-            <Text sx={{ fontSize: 1 }}>{date}</Text>
-          </Flex>
+          </Box>
+        )}
 
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            flex: 1,
+          }}
+        >
           <Flex
             sx={{
-              flexGrow: 1,
+              alignItems: 'stretch',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start',
+              flexDirection: ['column', 'row'],
               gap: 2,
-              justifyContent: ['flex-start', 'flex-start', 'flex-end'],
-              opacity: 0.5,
-              width: ['100%', 'auto'],
-              ':hover': { opacity: 1 },
             }}
           >
+            <Flex
+              sx={{
+                alignItems: 'baseline',
+                gap: 2,
+                flexDirection: 'row',
+              }}
+            >
+              <Username user={user} />
+              {_edited && (
+                <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
+              )}
+              <Text sx={{ fontSize: 1 }}>{date}</Text>
+            </Flex>
+
             {isEditable && (
-              <>
+              <Flex
+                sx={{
+                  flexGrow: 1,
+                  gap: 2,
+                  justifyContent: ['flex-start', 'flex-end'],
+                  opacity: 0.5,
+                  ':hover': { opacity: 1 },
+                }}
+              >
                 <Button
                   data-cy="CommentItem: edit button"
                   variant="outline"
@@ -127,62 +152,60 @@ export const CommentItem = (props: CommentItemProps) => {
                 >
                   delete
                 </Button>
-              </>
+              </Flex>
             )}
           </Flex>
-        </Flex>
-        <Text
-          data-cy="comment-text"
-          mt={2}
-          mb={2}
-          sx={{
-            fontFamily: 'body',
-            lineHeight: 1.3,
-            maxHeight,
-            overflow: 'hidden',
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-          }}
-          ref={textRef}
-        >
-          <LinkifyText>{text}</LinkifyText>
-        </Text>
-        {textHeight > SHORT_COMMENT && (
-          <a
-            onClick={showMore}
-            style={{
-              color: 'gray',
-              cursor: 'pointer',
-              fontSize: '14px',
+          <Text
+            data-cy="comment-text"
+            sx={{
+              fontFamily: 'body',
+              lineHeight: 1.3,
+              maxHeight,
+              overflow: 'hidden',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+              marginY: 2,
             }}
+            ref={textRef}
           >
-            {isShowMore ? 'Show less' : 'Show more'}
-          </a>
-        )}
-
-        <Modal width={600} isOpen={showEditModal}>
-          <EditComment
-            comment={text}
-            handleSubmit={(commentText) => {
-              handleEdit && handleEdit(_id, commentText)
-              setShowEditModal(false)
-            }}
-            handleCancel={() => setShowEditModal(false)}
-            isReply={isReply}
-          />
-        </Modal>
-
-        <ConfirmModal
-          isOpen={showDeleteModal}
-          message="Are you sure you want to delete this comment?"
-          confirmButtonText="Delete"
-          handleCancel={() => setShowDeleteModal(false)}
-          handleConfirm={() => {
-            handleDelete && handleDelete(_id)
-            setShowDeleteModal(false)
-          }}
-        />
+            <LinkifyText>{text}</LinkifyText>
+          </Text>
+          {textHeight > SHORT_COMMENT && (
+            <a
+              onClick={showMore}
+              style={{
+                color: 'gray',
+                cursor: 'pointer',
+              }}
+            >
+              {isShowMore ? 'Show less' : 'Show more'}
+            </a>
+          )}
+        </Flex>
       </Flex>
-    </Box>
+
+      <Modal width={600} isOpen={showEditModal}>
+        <EditComment
+          comment={text}
+          handleSubmit={(commentText) => {
+            handleEdit && handleEdit(_id, commentText)
+            setShowEditModal(false)
+          }}
+          handleCancel={() => setShowEditModal(false)}
+          isReply={isReply}
+        />
+      </Modal>
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        message="Are you sure you want to delete this comment?"
+        confirmButtonText="Delete"
+        handleCancel={() => setShowDeleteModal(false)}
+        handleConfirm={() => {
+          handleDelete && handleDelete(_id)
+          setShowDeleteModal(false)
+        }}
+      />
+    </Flex>
   )
 }

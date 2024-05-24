@@ -1,33 +1,37 @@
-import { toJS } from 'mobx'
+import { doc, getDoc, increment, updateDoc } from 'firebase/firestore'
+import { firestore } from 'src/utils/firebase'
 
-import type { IQuestion, IResearch } from 'src/models'
-import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
-import type { DBEndpoint } from '../databaseV2/endpoints'
+import { DB_ENDPOINTS, type DBEndpoint } from '../databaseV2/endpoints'
 
 export const toggleDocUsefulByUser = async (
-  db: DatabaseV2,
   collectionName: DBEndpoint,
   _id: string,
   userName: string,
 ) => {
-  const dbRef = db
-    .collection<IQuestion.Item | IResearch.Item>(collectionName)
-    .doc(_id)
-  const docData = await toJS(dbRef.get('server'))
+  const dbRef = doc(firestore, DB_ENDPOINTS[collectionName], _id)
+  const docData = (await getDoc(dbRef))?.data()
 
   if (!docData) return
 
-  const votedUsefulBy = !(docData?.votedUsefulBy || []).includes(userName)
-    ? [userName].concat(docData?.votedUsefulBy || [])
-    : (docData?.votedUsefulBy || []).filter((uName) => uName !== userName)
+  const exists = (docData.votedUsefulBy || []).includes(userName)
 
-  const votedUsefulUpdate = {
+  const votedUsefulBy = exists
+    ? (docData?.votedUsefulBy || []).filter((uName) => uName !== userName)
+    : [userName].concat(docData?.votedUsefulBy || [])
+
+  // update collection doc
+  await updateDoc(dbRef, {
     _id,
     votedUsefulBy,
     totalUsefulVotes: votedUsefulBy.length,
-  }
+  })
 
-  await dbRef.update(votedUsefulUpdate)
+  // update user total
+  const userRef = doc(firestore, DB_ENDPOINTS.users, userName)
+  await updateDoc(userRef, {
+    // Note: If the field does not exist or if the current field value is not a numeric value, the operation sets the field to the given value.
+    totalUseful: increment(exists ? -1 : 1),
+  })
 
-  return await dbRef.get()
+  return (await getDoc(dbRef)).data()
 }

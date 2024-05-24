@@ -9,10 +9,10 @@ import {
   startAfter,
   where,
 } from 'firebase/firestore'
+import { IModerationStatus } from 'oa-shared'
 
 import { DB_ENDPOINTS } from '../../models'
 import { firestore } from '../../utils/firebase'
-import { QuestionSortOptions } from './QuestionSortOptions'
 
 import type {
   DocumentData,
@@ -22,11 +22,18 @@ import type {
 } from 'firebase/firestore'
 import type { IQuestion } from '../../models'
 import type { ICategory } from '../../models/categories.model'
+import type { QuestionSortOption } from './QuestionSortOptions'
+
+export enum QuestionSearchParams {
+  category = 'category',
+  q = 'q',
+  sort = 'sort',
+}
 
 const search = async (
   words: string[],
   category: string,
-  sort: QuestionSortOptions,
+  sort: QuestionSortOption,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
@@ -54,12 +61,17 @@ const search = async (
 const createQueries = (
   words: string[],
   category: string,
-  sort: QuestionSortOptions,
+  sort: QuestionSortOption,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
   const collectionRef = collection(firestore, DB_ENDPOINTS.questions)
-  let filters: QueryFilterConstraint[] = []
+  let filters: QueryFilterConstraint[] = [
+    and(
+      where('_deleted', '!=', true),
+      where('moderation', '==', IModerationStatus.ACCEPTED),
+    ),
+  ]
   let constraints: QueryNonFilterConstraint[] = []
 
   if (words?.length > 0) {
@@ -102,17 +114,49 @@ const getQuestionCategories = async () => {
   )
 }
 
-const getSort = (sort: QuestionSortOptions) => {
+const createDraftQuery = (userId: string) => {
+  const collectionRef = collection(firestore, DB_ENDPOINTS.questions)
+  const filters = and(
+    where('_createdBy', '==', userId),
+    where('moderation', 'in', [
+      IModerationStatus.AWAITING_MODERATION,
+      IModerationStatus.DRAFT,
+      IModerationStatus.IMPROVEMENTS_NEEDED,
+      IModerationStatus.REJECTED,
+    ]),
+    where('_deleted', '!=', true),
+  )
+
+  const countQuery = query(collectionRef, filters)
+  const itemsQuery = query(collectionRef, filters, orderBy('_modified', 'desc'))
+
+  return { countQuery, itemsQuery }
+}
+
+const getDraftCount = async (userId: string) => {
+  const { countQuery } = createDraftQuery(userId)
+
+  return (await getCountFromServer(countQuery)).data().count
+}
+
+const getDrafts = async (userId: string) => {
+  const { itemsQuery } = createDraftQuery(userId)
+  const docs = await getDocs(itemsQuery)
+
+  return docs.docs ? docs.docs.map((x) => x.data() as IQuestion.Item) : []
+}
+
+const getSort = (sort: QuestionSortOption) => {
   switch (sort) {
-    case QuestionSortOptions.Comments:
+    case 'Comments':
       return orderBy('commentCount', 'desc')
-    case QuestionSortOptions.LeastComments:
+    case 'LeastComments':
       return orderBy('commentCount', 'asc')
-    case QuestionSortOptions.Newest:
+    case 'Newest':
       return orderBy('_created', 'desc')
-    case QuestionSortOptions.LatestComments:
+    case 'LatestComments':
       return orderBy('latestCommentDate', 'desc')
-    case QuestionSortOptions.LatestUpdated:
+    case 'LatestUpdated':
       return orderBy('_modified', 'desc')
   }
 }
@@ -120,6 +164,8 @@ const getSort = (sort: QuestionSortOptions) => {
 export const questionService = {
   search,
   getQuestionCategories,
+  getDraftCount,
+  getDrafts,
 }
 
 export const exportedForTesting = {

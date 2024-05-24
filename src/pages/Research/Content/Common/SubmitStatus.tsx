@@ -14,9 +14,9 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
   const uploadStatus = store.researchUploadStatus
 
   return (
-    <Modal isOpen={!!uploadStatus.Start}>
+    <Modal isOpen={uploadStatus.Start}>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading variant="small" sx={{ textAlign: 'center' }}>
+        <Heading as="p" variant="small" sx={{ textAlign: 'center' }}>
           Uploading Research
         </Heading>
         <Icon
@@ -61,9 +61,9 @@ export const UpdateSubmitStatus = observer((props: IProps) => {
   const uploadStatus = store.updateUploadStatus
 
   return (
-    <Modal isOpen={!!uploadStatus.Start}>
+    <Modal isOpen={uploadStatus.Start}>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading variant="small" sx={{ textAlign: 'center' }}>
+        <Heading as="p" variant="small" sx={{ textAlign: 'center' }}>
           Uploading Update
         </Heading>
         <Icon

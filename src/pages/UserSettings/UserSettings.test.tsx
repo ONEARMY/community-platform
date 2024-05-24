@@ -4,6 +4,7 @@ import { act, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { IModerationStatus, UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { buttons } from 'src/pages/UserSettings/labels'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
@@ -33,13 +34,9 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         },
       },
       aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        isVerified: jest.fn(),
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       themeStore: {
@@ -66,7 +63,10 @@ describe('UserSettings', () => {
     mockUser = FactoryUser()
 
     // Act
-    const wrapper = await Wrapper(mockUser)
+    let wrapper
+    await act(async () => {
+      wrapper = await Wrapper(mockUser)
+    })
 
     // Assert
     expect(wrapper.getByText('Edit profile'))
@@ -166,11 +166,67 @@ describe('UserSettings', () => {
       expect(() => wrapper.getByText('Moderator comment')).toThrow()
     })
   })
+  describe('impact section scroll into view', () => {
+    const scrollIntoViewMock = jest.fn()
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock
+
+    it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', async () => {
+      mockUser = FactoryUser({
+        profileType: 'workspace',
+      })
+
+      const impactHash = '#impact_2022'
+      const { expandClose } = buttons.impact
+
+      let wrapper
+      await act(async () => {
+        wrapper = await Wrapper(mockUser, impactHash)
+      })
+
+      expect(wrapper.getByText(expandClose)).toBeInTheDocument()
+      expect(scrollIntoViewMock).toBeCalled()
+    })
+    it('does not expand impact section if hash syntax is not correct', async () => {
+      mockUser = FactoryUser({
+        profileType: 'workspace',
+      })
+
+      const impactHash = '#impact2019'
+      const { expandOpen } = buttons.impact
+
+      let wrapper
+      await act(async () => {
+        wrapper = await Wrapper(mockUser, impactHash)
+      })
+
+      expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
+      expect(scrollIntoViewMock).not.toBeCalled()
+    })
+
+    it('does not expand impact section if no impact hash is provided', async () => {
+      mockUser = FactoryUser({
+        profileType: 'workspace',
+      })
+      const impactHash = ''
+      const { expandOpen } = buttons.impact
+
+      let wrapper
+      await act(async () => {
+        wrapper = await Wrapper(mockUser, impactHash)
+      })
+
+      expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
+      expect(scrollIntoViewMock).not.toBeCalled()
+    })
+  })
 })
 
-const Wrapper = async (user) => {
+const Wrapper = async (user, routerInitialEntry?) => {
   const isAdmin = user.userRoles?.includes(UserRole.ADMIN)
-
+  if (routerInitialEntry !== undefined) {
+    // impact section is only displayed if isPreciousPlastic() is true
+    window.localStorage.setItem('platformTheme', 'precious-plastic')
+  }
   return render(
     <Provider
       {...useCommonStores().stores}
@@ -182,7 +238,9 @@ const Wrapper = async (user) => {
       }}
     >
       <ThemeProvider theme={Theme}>
-        <MemoryRouter>
+        <MemoryRouter
+          initialEntries={[routerInitialEntry ? routerInitialEntry : '']}
+        >
           <SettingsPage adminEditableUserId={isAdmin ? user._id : null} />
         </MemoryRouter>
       </ThemeProvider>

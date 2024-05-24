@@ -1,4 +1,4 @@
-import { DB_ENDPOINTS, IUserDB } from '../models'
+import { IUserDB } from '../models'
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
 import type { INotification } from '../../../src/models'
 import { EmailNotificationFrequency } from 'oa-shared'
@@ -48,7 +48,7 @@ describe('User Notifications Aggregation', () => {
         userWithNotifications,
         'users',
         'user_1',
-      ),
+      ).after.data(),
     )
     expect(data).toEqual({
       user_1: { _authID, emailFrequency, notifications },
@@ -62,7 +62,7 @@ describe('User Notifications Aggregation', () => {
         userWithReadNotifications,
         'users',
         'user_1',
-      ),
+      ).after.data(),
     )
     expect(data).toEqual({ user_1: FieldValue.delete() })
   })
@@ -74,7 +74,7 @@ describe('User Notifications Aggregation', () => {
         userWithNeverEmailFrequency,
         'users',
         'user_1',
-      ),
+      ).after.data(),
     )
     expect(data).toEqual({ user_1: FieldValue.delete() })
   })

@@ -1,11 +1,23 @@
+import { firestore } from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import { DB_ENDPOINTS, INotification, IUserDB } from '../models'
-import { handleDBAggregations, VALUE_MODIFIERS } from './common.aggregations'
-import type { IAggregation, IDBChange } from './common.aggregations'
 import { EmailNotificationFrequency } from 'oa-shared'
+import { FieldValue } from 'firebase-admin/firestore'
+import { db } from '../Firebase/firestoreDB'
 
-interface INotificationAggregation extends IAggregation {
-  sourceFields: (keyof IUserDB)[]
+const VALUE_MODIFIERS = {
+  delete: () => FieldValue.delete(),
+  increment: (value: number) => FieldValue.increment(value),
+}
+
+type PendingEmailUpdate = {
+  [x: string]:
+    | firestore.FieldValue
+    | {
+        _authID: string
+        emailFrequency: EmailNotificationFrequency
+        notifications: INotification[]
+      }
 }
 
 const getPendingNotifications = (notifications: INotification[]) => {
@@ -23,8 +35,7 @@ const shouldSendNotifications = (
   )
 }
 
-export const processNotifications = (dbChange: IDBChange) => {
-  const user = dbChange.after.data() as IUserDB
+export const processNotifications = (user: IUserDB): PendingEmailUpdate => {
   const emailFrequency = user.notification_settings?.emailFrequency || null
   const pending = getPendingNotifications(user.notifications || [])
 
@@ -45,21 +56,29 @@ export const processNotifications = (dbChange: IDBChange) => {
   }
 }
 
-const UserNotificationAggregation: INotificationAggregation =
-  // When a user's list of notifications changes reflect to aggregation
-  {
-    sourceCollection: 'users',
-    sourceFields: ['notifications', 'notification_settings'],
-    changeType: 'updated',
-    targetCollection: 'user_notifications',
-    targetDocId: 'emails_pending',
-    process: ({ dbChange }) => processNotifications(dbChange),
-  }
+const hasNotificationChanges = (beforeUser: IUserDB, user: IUserDB) => {
+  return (
+    JSON.stringify(beforeUser.notification_settings) !==
+      JSON.stringify(user.notification_settings) ||
+    JSON.stringify(beforeUser.notifications) !==
+      JSON.stringify(user.notifications)
+  )
+}
 
-/** Watch changes to all user docs and apply aggregations */
+/** Watch changes to all user docs and updates user_notifications */
 exports.default = functions
   .runWith({ memory: '512MB' })
   .firestore.document(`${DB_ENDPOINTS.users}/{id}`)
-  .onUpdate((change) => {
-    return handleDBAggregations(change, [UserNotificationAggregation])
+  .onUpdate(async ({ before, after }) => {
+    const beforeUser = before.data() as IUserDB
+    const user = after.data() as IUserDB
+
+    // ensures user_notifications are only updated if necessary
+    if (!hasNotificationChanges(beforeUser, user)) {
+      return
+    }
+
+    const update = processNotifications(user)
+
+    db.collection('user_notifications').doc('emails_pending').update(update)
   })

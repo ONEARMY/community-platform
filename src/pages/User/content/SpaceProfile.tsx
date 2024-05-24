@@ -17,7 +17,6 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
-import { useMemberStatistics } from 'src/common/hooks/useMemberStatistics'
 import { isPreciousPlastic } from 'src/config/config'
 import { ProfileType } from 'src/modules/profile/types'
 import { UserContactForm } from 'src/pages/User/contact'
@@ -166,7 +165,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
     user
 
   const coverImage = getCoverImages(user)
-  const stats = useMemberStatistics(user.userName)
 
   const userLinks = links.filter(
     (linkItem) =>
@@ -250,6 +248,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 }}
               />
               <Heading
+                as="h1"
                 color={'black'}
                 mb={3}
                 style={{ wordBreak: 'break-word' }}
@@ -305,10 +304,10 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                     <UserStatistics
                       userName={userName}
                       country={location?.country}
-                      isVerified={stats.verified}
+                      isVerified={user.verified}
                       isSupporter={!!user.badges?.supporter}
                       howtoCount={docs?.howtos.length || 0}
-                      usefulCount={stats.totalUseful}
+                      usefulCount={user.totalUseful || 0}
                       researchCount={docs?.research.length || 0}
                     />
                   </Box>

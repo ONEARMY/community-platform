@@ -5,7 +5,10 @@ import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { isPreciousPlastic } from 'src/config/config'
 import { logger } from 'src/logger'
+import DraftButton from 'src/pages/common/Drafts/DraftButton'
+import useDrafts from 'src/pages/common/Drafts/useDrafts'
 import { Box, Flex, Heading } from 'theme-ui'
 
 import { ITEMS_PER_PAGE, RESEARCH_EDITOR_ROLES } from '../constants'
@@ -24,6 +27,11 @@ const ResearchList = observer(() => {
   const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [researchItems, setResearchItems] = useState<IResearch.Item[]>([])
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
+    useDrafts<IResearch.Item>({
+      getDraftCount: researchService.getDraftCount,
+      getDrafts: researchService.getDrafts,
+    })
   const [total, setTotal] = useState<number>(0)
   const [lastVisible, setLastVisible] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
@@ -92,6 +100,7 @@ const ResearchList = observer(() => {
     <>
       <Flex my={[18, 26]}>
         <Heading
+          as="h1"
           sx={{
             width: '100%',
             textAlign: 'center',
@@ -111,55 +120,68 @@ const ResearchList = observer(() => {
           mb: 3,
         }}
       >
-        <ResearchFilterHeader />
+        {!showDrafts ? <ResearchFilterHeader /> : <div></div>}
 
-        <Flex sx={{ justifyContent: ['flex-end', 'flex-end', 'auto'] }}>
-          <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
+        <Flex sx={{ gap: 2 }} mb={[3, 3, 0]}>
+          <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+            <DraftButton
+              showDrafts={showDrafts}
+              draftCount={draftCount}
+              handleShowDrafts={handleShowDrafts}
+            />
+          </AuthWrapper>
+          {isPreciousPlastic() ? (
+            <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
+              <Button variant="primary" data-cy="create">
+                {listing.create}
+              </Button>
+            </Link>
+          ) : (
             <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
-              <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
-                <Button variant={'primary'} data-cy="create">
+              <Link to="/research/create">
+                <Button variant="primary" data-cy="create">
                   {listing.create}
                 </Button>
               </Link>
             </AuthWrapper>
-          </Box>
+          )}
         </Flex>
       </Flex>
 
-      {researchItems &&
-        researchItems.length !== 0 &&
-        researchItems.map((item) => {
+      {showDrafts ? (
+        drafts.map((item) => {
           return <ResearchListItem key={item._id} item={item} />
-        })}
+        })
+      ) : (
+        <>
+          {researchItems &&
+            researchItems.length !== 0 &&
+            researchItems.map((item) => {
+              return <ResearchListItem key={item._id} item={item} />
+            })}
 
-      {!isFetching && researchItems?.length === 0 && (
-        <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
+          {!isFetching && researchItems?.length === 0 && (
+            <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
+          )}
+
+          {!isFetching &&
+            researchItems &&
+            researchItems.length > 0 &&
+            researchItems.length < total && (
+              <Flex
+                sx={{
+                  justifyContent: 'center',
+                }}
+              >
+                <Button onClick={() => fetchResearchItems(lastVisible)}>
+                  {listing.loadMore}
+                </Button>
+              </Flex>
+            )}
+        </>
       )}
 
-      {!isFetching &&
-        researchItems &&
-        researchItems.length > 0 &&
-        researchItems.length < total && (
-          <Flex
-            sx={{
-              justifyContent: 'center',
-            }}
-          >
-            <Button onClick={() => fetchResearchItems(lastVisible)}>
-              {listing.loadMore}
-            </Button>
-          </Flex>
-        )}
-
-      {isFetching && <Loader />}
-
-      <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
-        <Box mb={[3, 3, 0]}>
-          <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
-            <Button variant={'primary'}>{listing.create}</Button>
-          </Link>
-        </Box>
-      </AuthWrapper>
+      {(isFetching || isFetchingDrafts) && <Loader />}
     </>
   )
 })

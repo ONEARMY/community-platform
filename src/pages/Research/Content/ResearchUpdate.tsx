@@ -17,9 +17,8 @@ import { formatDate } from 'src/utils/date'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
-import { ResearchComments } from './ResearchComments'
+import { ResearchUpdateDiscussion } from './ResearchUpdateDiscussion'
 
-import type { IComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 
 interface IProps {
@@ -27,7 +26,6 @@ interface IProps {
   updateIndex: number
   isEditable: boolean
   slug: string
-  comments: IComment[]
   showComments: boolean
 }
 
@@ -40,17 +38,16 @@ const ResearchUpdate = ({
   updateIndex,
   isEditable,
   slug,
-  comments,
   showComments,
 }: IProps) => {
   const researchStore = useResearchStore()
   const navigate = useNavigate()
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
+  const contributors = useContributorsData(update.collaborators || [])
   const formattedCreateDatestamp = formatDate(new Date(update._created))
   const formattedModifiedDatestamp = formatDate(new Date(update._modified))
-
-  const contributors = useContributorsData(update.collaborators || [])
+  const research = researchStore.activeResearchItem
 
   const handleDownloadClick = async () => {
     researchStore.incrementDownloadCount(update._id)
@@ -73,7 +70,9 @@ const ResearchUpdate = ({
         <Flex mx={[0, 0, 2]} sx={{ width: '100%', flex: 1 }} mb={[3, 3, 0]}>
           <FlexStepNumber sx={{ height: 'fit-content' }}>
             <Card py={3} px={4} sx={{ width: '100%', textAlign: 'center' }}>
-              <Heading mb={0}>{updateIndex + 1}</Heading>
+              <Heading as="p" mb={0}>
+                {updateIndex + 1}
+              </Heading>
             </Card>
           </FlexStepNumber>
         </Flex>
@@ -98,7 +97,9 @@ const ResearchUpdate = ({
                     </Box>
                   ) : null}
 
-                  <Heading sx={{ mb: 2 }}>{update.title}</Heading>
+                  <Heading as="h2" sx={{ mb: 2 }}>
+                    {update.title}
+                  </Heading>
                 </Box>
 
                 <Flex
@@ -204,10 +205,9 @@ const ResearchUpdate = ({
                 <DownloadCounter total={update.downloadCount} />
               </Flex>
             )}
-            <ResearchComments
+            <ResearchUpdateDiscussion
               update={update}
-              comments={comments as any}
-              updateIndex={updateIndex}
+              research={research}
               showComments={showComments}
             />
           </Card>

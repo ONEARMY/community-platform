@@ -89,30 +89,6 @@ export class CollectionReference<T> {
             const allDocs = await cacheDB.getCollection<T>(endpoint)
             obs.next(allDocs)
           })
-        // 4. Check for any document deletes, and remove as appropriate
-        // Assume archive will have been checked after last updated record sync
-        const lastArchive = latest
-        const archive$ = serverDB.streamCollection!(
-          `_archived/${endpoint}/summary`,
-          {
-            order: 'asc',
-            where: { field: '_archived', operator: '>', value: lastArchive },
-          },
-        ).subscribe(async (docs) => {
-          if (!options.keepAlive) {
-            archive$.unsubscribe()
-          }
-          const archiveIds = docs.map((d) => d._id)
-          for (const docId of archiveIds) {
-            try {
-              cacheDB.deleteDoc(endpoint, docId)
-            } catch (error) {
-              // might already be deleted so ignore error
-            }
-          }
-          const allDocs = await cacheDB.getCollection<T>(endpoint)
-          obs.next(allDocs)
-        })
       },
     )
     const subscription = observer.subscribe((value) => onUpdate(value))

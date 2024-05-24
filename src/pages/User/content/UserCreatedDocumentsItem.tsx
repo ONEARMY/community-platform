@@ -38,6 +38,7 @@ const UserDocumentItem = ({ type, item }: IProps) => {
           }}
         >
           <Heading
+            as="p"
             color={'black'}
             sx={{
               fontSize: ['12px', '12px', '16px'],

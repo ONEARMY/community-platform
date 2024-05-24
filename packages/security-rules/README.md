@@ -17,4 +17,4 @@ Create a `.env` file in the root of this project which contains:
 PROJECT_ID=<firebase-project-id>
 ```
 
-Run the tests against the project rules using `yarn test-with-emulator`
+Run the tests against the project rules using `yarn test`

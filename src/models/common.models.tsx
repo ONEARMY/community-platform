@@ -61,3 +61,5 @@ export type IVotedUsefulUpdate = {
 export type IModerationUpdate = {
   _id: string
 } & IModeration
+
+export type FetchState = 'idle' | 'fetching' | 'completed'

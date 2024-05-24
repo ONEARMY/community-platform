@@ -1,15 +1,16 @@
 #!/usr/bin/env ts-node
 import { spawn, spawnSync } from 'child_process'
-
-import PATHS from './paths'
-
-const e2eEnv = require('dotenv').config()
-
+import * as dotenv from 'dotenv'
 import fs from 'fs-extra'
 import waitOn from 'wait-on'
 
+import { generateAlphaNumeric } from '../src/utils/TestUtils'
+import PATHS from './paths'
+
+const e2eEnv = dotenv.config()
+
 const isCi = process.argv.includes('ci')
-const useProductionBuild = process.argv.includes('prod')
+const isProduction = process.argv.includes('prod')
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', (err) => {
@@ -30,12 +31,6 @@ process.on('unhandledRejection', (err) => {
  * Possibly could be done with a Cypress.task or similar
  * Temp cli function to wipe hanging db: `firebase use ci; firebase firestore:delete --all-collections`
  */
-async function main() {
-  // copy endpoints for use in testing
-  fs.copyFileSync(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
-  await startAppServer()
-  runTests()
-}
 main()
   .then(() => process.exit(0))
   .catch((err) => {
@@ -43,38 +38,11 @@ main()
     process.exit(1)
   })
 
-function runTests() {
-  console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
-  const e = process.env
-  const { CYPRESS_KEY } = e2eEnv.parsed
-  const CI_BROWSER = e.CI_BROWSER || 'chrome'
-  const CI_GROUP = e.CI_GROUP || '1x-chrome'
-  // not currently used, but can pass variables accessed by Cypress.env()
-  const CYPRESS_ENV = `DUMMY_VAR=1`
-  // use workflow ID so that jobs running in parallel can be assigned to same cypress build
-  // cypress will use this to split tests between parallel runs
-  const buildId = e.CIRCLE_WORKFLOW_ID || randomString(8)
-
-  // main testing command, depending on whether running on ci machine or interactive local
-  // call with path to bin as to ensure locally installed used
-  const { CY_BIN, CROSSENV_BIN } = PATHS
-
-  const testCMD = isCi
-    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
-    : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`
-
-  console.log(`Running cypress with cmd: ${testCMD}`)
-
-  const spawn = spawnSync(`${CROSSENV_BIN} FORCE_COLOR=1 ${testCMD}`, {
-    shell: true,
-    stdio: ['inherit', 'inherit', 'pipe'],
-    cwd: PATHS.WORKSPACE_DIR,
-  })
-  console.log('testing complete with exit code', spawn.status)
-  if (spawn.status === 1) {
-    console.error('error', spawn.stderr.toString())
-  }
-  process.exit(spawn.status)
+async function main() {
+  // copy endpoints for use in testing
+  fs.copyFileSync(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
+  await startAppServer()
+  runTests()
 }
 
 /** We need to ensure the platform is up and running before starting tests
@@ -92,7 +60,7 @@ async function startAppServer() {
   let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 yarn start`
 
   // for production will instead serve from production build folder
-  if (useProductionBuild) {
+  if (isProduction) {
     // create local build if not running on ci (which will have build already generated)
     if (!isCi) {
       // specify CI=false to prevent throwing lint warnings as errors
@@ -135,13 +103,36 @@ async function startAppServer() {
   await waitOn({ resources: ['http-get://127.0.0.1:3456'], timeout })
 }
 
-function randomString(length) {
-  let result = ''
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const charactersLength = characters.length
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+function runTests() {
+  console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
+  const e = process.env
+  const { CYPRESS_KEY } = e2eEnv.parsed
+  const CI_BROWSER = e.CI_BROWSER || 'chrome'
+  const CI_GROUP = e.CI_GROUP || '1x-chrome'
+  // not currently used, but can pass variables accessed by Cypress.env()
+  const CYPRESS_ENV = `DUMMY_VAR=1`
+  // use workflow ID so that jobs running in parallel can be assigned to same cypress build
+  // cypress will use this to split tests between parallel runs
+  const buildId = e.CIRCLE_WORKFLOW_ID || generateAlphaNumeric(8)
+
+  // main testing command, depending on whether running on ci machine or interactive local
+  // call with path to bin as to ensure locally installed used
+  const { CY_BIN, CROSSENV_BIN } = PATHS
+
+  const testCMD = isCi
+    ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
+    : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`
+
+  console.log(`Running cypress with cmd: ${testCMD}`)
+
+  const spawn = spawnSync(`${CROSSENV_BIN} FORCE_COLOR=1 ${testCMD}`, {
+    shell: true,
+    stdio: ['inherit', 'inherit', 'pipe'],
+    cwd: PATHS.WORKSPACE_DIR,
+  })
+  console.log('testing complete with exit code', spawn.status)
+  if (spawn.status === 1) {
+    console.error('error', spawn.stderr.toString())
   }
-  return result
+  process.exit(spawn.status)
 }

@@ -10,6 +10,7 @@ import {
   startAfter,
   where,
 } from 'firebase/firestore'
+import { IModerationStatus } from 'oa-shared'
 import { hasAdminRights } from 'src/utils/helpers'
 
 import { DB_ENDPOINTS } from '../../models'
@@ -23,7 +24,7 @@ import type {
 } from 'firebase/firestore'
 import type { IHowto, IUser, IUserPPDB } from '../../models'
 import type { ICategory } from '../../models/categories.model'
-import type { HowtoSortOptions } from './Content/HowtoList/HowtoSortOptions'
+import type { HowtoSortOption } from './Content/HowtoList/HowtoSortOptions'
 
 export enum HowtosSearchParams {
   category = 'category',
@@ -34,7 +35,7 @@ export enum HowtosSearchParams {
 const search = async (
   words: string[],
   category: string,
-  sort: HowtoSortOptions,
+  sort: HowtoSortOption,
   currentUser?: IUserPPDB,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
@@ -62,14 +63,16 @@ const search = async (
 }
 
 const moderationFilters = (currentUser?: IUser) => {
-  const filters = [where('moderation', '==', 'accepted')]
+  const filters = [where('moderation', '==', IModerationStatus.ACCEPTED)]
 
   if (currentUser) {
-    filters.push(where('_createdBy', '==', currentUser.userName))
-
     if (hasAdminRights(currentUser)) {
-      filters.push(where('moderation', '==', 'awaiting-moderation'))
-      filters.push(where('moderation', '==', 'improvements-needed'))
+      filters.push(
+        where('moderation', '==', IModerationStatus.AWAITING_MODERATION),
+      )
+      filters.push(
+        where('moderation', '==', IModerationStatus.IMPROVEMENTS_NEEDED),
+      )
     }
   }
 
@@ -79,7 +82,7 @@ const moderationFilters = (currentUser?: IUser) => {
 const createQueries = (
   words: string[],
   category: string,
-  sort: HowtoSortOptions,
+  sort: HowtoSortOption,
   currentUser?: IUser,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
@@ -130,7 +133,39 @@ const getHowtoCategories = async () => {
   )
 }
 
-const getSort = (sort: HowtoSortOptions) => {
+const createDraftQuery = (userId: string) => {
+  const collectionRef = collection(firestore, DB_ENDPOINTS.howtos)
+  const filters = and(
+    where('_createdBy', '==', userId),
+    where('moderation', 'in', [
+      IModerationStatus.AWAITING_MODERATION,
+      IModerationStatus.DRAFT,
+      IModerationStatus.IMPROVEMENTS_NEEDED,
+      IModerationStatus.REJECTED,
+    ]),
+    where('_deleted', '!=', true),
+  )
+
+  const countQuery = query(collectionRef, filters)
+  const itemsQuery = query(collectionRef, filters, orderBy('_modified', 'desc'))
+
+  return { countQuery, itemsQuery }
+}
+
+const getDraftCount = async (userId: string) => {
+  const { countQuery } = createDraftQuery(userId)
+
+  return (await getCountFromServer(countQuery)).data().count
+}
+
+const getDrafts = async (userId: string) => {
+  const { itemsQuery } = createDraftQuery(userId)
+  const docs = await getDocs(itemsQuery)
+
+  return docs.docs ? docs.docs.map((x) => x.data() as IHowto) : []
+}
+
+const getSort = (sort: HowtoSortOption) => {
   switch (sort) {
     case 'MostComments':
       return orderBy('totalComments', 'desc')
@@ -148,6 +183,8 @@ const getSort = (sort: HowtoSortOptions) => {
 export const howtoService = {
   search,
   getHowtoCategories,
+  getDraftCount,
+  getDrafts,
 }
 
 export const exportedForTesting = {

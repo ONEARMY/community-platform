@@ -77,12 +77,7 @@ aliases:
         ls -a ~/project
         du -a /home | sort -n -r | head -n 500
 
-  - &filter_only_production
-    filters:
-      branches:
-        only:
-          - production
-  - &filter_only_master
+  - &filter_only_default_branch
     filters:
       branches:
         only:
@@ -196,7 +191,7 @@ jobs:
           at: '.'
       - run:
           name: Test Security Rules
-          command: yarn workspace security-rules test-with-emulator
+          command: yarn workspace security-rules test
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility
@@ -388,25 +383,13 @@ workflows:
     jobs:
       - spellcheck:
           name: Check documentation spelling
-          filters:
-            branches:
-              ignore:
-                - production
       - lint-commits:
           name: Lint commits
-          filters:
-            branches:
-              ignore:
-                - production
       - lint:
           name: Lint code
           requires:
             - 'Check documentation spelling'
             - 'Lint commits'
-          filters:
-            branches:
-              ignore:
-                - production
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
@@ -418,51 +401,27 @@ workflows:
           name: 'Unit tests'
           requires:
             - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - test_circular_dependency:
           name: 'Circular dependency test'
           requires:
             - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - storybook:
           name: Build Storybook
           requires:
             - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - test_security_rules:
           name: Test Security Rules
           requires:
             - 'Lint code'
-          filters:
-            branches:
-              ignore:
-                - production
       - test_functions:
           name: 'Cloud Function tests'
           requires:
             - 'Lint code'
           context: build-context
-          filters:
-            branches:
-              ignore:
-                - production
       - test_functions_upload_coverage:
           name: 'Upload Cloud Function coverage'
           requires:
             - 'Cloud Function tests'
-          filters:
-            branches:
-              ignore:
-                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
@@ -478,16 +437,12 @@ workflows:
             parameters:
               CI_NODE: [1, 2, 3, 4]
               CI_BROWSER: ['chrome']
-          filters:
-            branches:
-              ignore:
-                - production
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy:
           name: 'Deploy: dev.onearmy.world'
           requires:
             - test_e2e
-          <<: *filter_only_master
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'default'
           context:
             - circle-ci-patreon-context
@@ -496,7 +451,7 @@ workflows:
           name: 'Deploy: dev.community.projectkamp.com'
           requires:
             - test_e2e
-          <<: *filter_only_master
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: project-kamp-development
           context:
             - circle-ci-patreon-context
@@ -505,28 +460,34 @@ workflows:
           name: 'Deploy: dev.community.fixing.fashion'
           requires:
             - test_e2e
-          <<: *filter_only_master
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: fixing-fashion-dev
           context:
             - circle-ci-patreon-context
             - fixing-fashion-dev
+      - approve:
+          type: approval
+          name: 'Approve Production deployment'
+          requires:
+            - 'Deploy: dev.onearmy.world'
+            - 'Deploy: dev.community.fixing.fashion'
+            - 'Deploy: dev.community.projectkamp.com'
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
           name: Release new version to GitHub
-          <<: *filter_only_production
           context:
             - release-context
+          requires:
+            - "Approve Production deployment"
       - build:
           name: Build Production Release
           context: build-context
           requires:
             - 'Release new version to GitHub'
-          <<: *filter_only_production
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
             - 'Build Production Release'
-          <<: *filter_only_production
           DEPLOY_ALIAS: fixing-fashion-prod
           context:
             - circle-ci-patreon-context
@@ -535,7 +496,6 @@ workflows:
           name: 'Deploy: community.preciousplastic.com'
           requires:
             - 'Build Production Release'
-          <<: *filter_only_production
           DEPLOY_ALIAS: 'production'
           context:
             - circle-ci-patreon-context
@@ -544,7 +504,6 @@ workflows:
           name: 'Deploy: community.projectkamp.com'
           requires:
             - 'Build Production Release'
-          <<: *filter_only_production
           DEPLOY_ALIAS: project-kamp-production
           context:
             - circle-ci-patreon-context

@@ -32,7 +32,7 @@ Troubleshooting:
 
 ## Community Platform Maintainers
 
-We deploy to our instances directly from the `master` and `production` branches of the git repository.
+We deploy to our instances directly from the default branch of the git repository.
 
 You will need to set up a CircleCI context for each target environment. This context should contain the following variables:
 

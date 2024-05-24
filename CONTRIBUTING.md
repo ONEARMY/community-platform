@@ -9,14 +9,13 @@ If you think something is missing, consider sending us a PR.
 - [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--code-of-conduct)
 - [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--getting-started)
 - [Issue Tracking and Management](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
-- [Development Bounties](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--dev-bounties)
+- [Development Bounties](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--development-bounties)
 - [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure)
 - [Branch structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--branch-structure)
 - [Javascript style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--javascript-style-guide)
 - [Commit style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide)
-- [Deployment](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployment)
+- [Deployments](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployments)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--joining-the-team)
-- [Resources](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--resources)
 - [Why haven't you used ...](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 
 ## 👐 &nbsp; Code of Conduct
@@ -80,14 +79,14 @@ We have a small bounty system as a way of saying thanks to developers for contri
 
 ## 🌳 &nbsp; Branch Structure
 
-We have two main branches linked to production and development sites, you should always start with the `master` branch as this contains the most up-to-date code, and will be where pull requests are added for review. The `production` branch contains the live production site, PRs are automatically raised that will merge changes in from `master`. Maintainers are responsible for merging these PRs.
+We have a single main branch which is linked to production and development sites, you should always start with the `master` branch as this contains the most up-to-date code, and will be where pull requests are added for review. Once a branch is merged into `master` it will be deployed to the development environment. The maintainers will then approve for deployment to the production environment.
 
 We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the `19-home-page` branch (where 19 refers to the issue number describing what needs to be done). These branches are ephemeral, and will be removed after merging into `master`, followed by closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer's responsibility to create the branch, manage the pull request, reviews and ask for additional support when needed.
 
 ## 🚀 &nbsp; Deployment(s)
 
 The `master` branch is our current development leading branch, and will auto-deploy to the
-development environment. The `production` branch deploys to the production environment.
+development environment, after a manual approval step this branch will be deployed to our production environments.
 
 |                  | Development                                                            | Production                                                             |
 | ---------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |

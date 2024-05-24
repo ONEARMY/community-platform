@@ -42,7 +42,10 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         user: mockActiveUser,
       },
       aggregationsStore: {
-        aggregations: {},
+        isVerified: jest.fn(),
+        users_verified: {
+          HowtoAuthor: true,
+        },
       },
       researchCategoriesStore: {
         allResearchCategories: [],
@@ -155,9 +158,9 @@ describe('research.routes', () => {
           expect(
             mockResearchStore.setActiveResearchItemBySlug,
           ).toHaveBeenCalledWith('research-slug')
-          expect(
-            wrapper.getByText(/Research article title/),
-          ).toBeInTheDocument()
+          expect(wrapper.queryByTestId('research-title')).toHaveTextContent(
+            'Research article title',
+          )
         },
         {
           timeout: 2000,

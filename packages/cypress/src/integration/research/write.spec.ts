@@ -4,6 +4,7 @@ import {
   RESEARCH_MAX_LENGTH,
   RESEARCH_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Research/constants'
+import { setIsPreciousPlastic } from '../../utils/TestUtils'
 
 const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'
@@ -25,10 +26,13 @@ describe('[Research]', () => {
 
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
-      cy.login(researcherEmail, researcherPassword)
       cy.step('Create the research article')
+      cy.login(researcherEmail, researcherPassword)
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
+
       cy.step('Warn if title is identical to an existing one')
+      cy.contains('Start your Research')
       cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',
@@ -101,6 +105,73 @@ describe('[Research]', () => {
       cy.get('div').contains('role required to access this page')
     })
 
+    it('[Any PP user]', () => {
+      const title = 'PP plastic stuff'
+      const expectSlug = 'pp-plastic-stuff'
+      const description = 'Bespoke research topic'
+
+      const updateTitle = 'First wonderful update'
+      const updateDescription =
+        'Update. One. Ready to start with the observations.'
+      const updateVideoUrl = 'https://www.youtube.com/watch?v=U3mrj84p3cM'
+
+      setIsPreciousPlastic()
+      cy.logout()
+      cy.signUpNewUser()
+
+      cy.step('Can access create form')
+      cy.visit('/research')
+      cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('[data-cy=create]').should('exist')
+
+      cy.step('Enter research article details')
+      cy.visit('/research/create')
+      cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
+
+      cy.get('[data-cy=intro-description]')
+        .clear({ force: true })
+        .type(description)
+
+      cy.get('[data-cy=submit]').click()
+
+      cy.step('Publishes as expected')
+      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
+        .click()
+        .url()
+        .should('include', `/research/${expectSlug}`)
+
+      cy.contains(title).should('exist')
+      cy.contains(description).should('exist')
+
+      cy.step('Can add update')
+      cy.get('[data-cy=addResearchUpdateButton]').click()
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type(updateTitle)
+        .blur({ force: true })
+
+      cy.get('[data-cy=intro-description]')
+        .clear()
+        .type(updateDescription)
+        .blur({ force: true })
+
+      cy.get('[data-cy=videoUrl]')
+        .clear()
+        .type(updateVideoUrl)
+        .blur({ force: true })
+
+      cy.step('Update is published')
+      cy.get('[data-cy=submit]').click()
+
+      cy.step('Open the research update')
+      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
+        .click()
+        .url()
+
+      cy.contains(updateTitle).should('exist')
+      cy.contains(updateDescription).should('exist')
+    })
+
     it('[Warning on leaving page]', () => {
       const stub = cy.stub()
       stub.returns(false)
@@ -108,6 +179,7 @@ describe('[Research]', () => {
 
       cy.login(researcherEmail, researcherPassword)
       cy.step('Access the create research article')
+      cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title')
         .clear()
@@ -165,6 +237,7 @@ describe('[Research]', () => {
       cy.step('Go to add update')
       cy.get('[data-cy=edit]').click()
       cy.get('[data-cy=create-update]').click()
+      cy.contains('New update')
 
       cy.step('Cannot be published when empty')
       cy.get('[data-cy=submit]').click()

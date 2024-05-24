@@ -41,7 +41,9 @@ export const ExpertiseSection = (props: IProps) => {
   return (
     <FlexSectionContainer>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading variant="small">{headings.expertise}</Heading>
+        <Heading as="h2" variant="small">
+          {headings.expertise}
+        </Heading>
       </Flex>
       <Box>
         <Text mt={4} mb={4}>

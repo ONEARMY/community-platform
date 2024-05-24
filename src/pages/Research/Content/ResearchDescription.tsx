@@ -39,7 +39,7 @@ interface IProps {
   commentsCount: number
   updatesCount: number
   moderateResearch: (accepted: boolean) => void
-  onUsefulClick: () => void
+  onUsefulClick: () => Promise<void>
   onFollowClick: () => void
   contributors?: { userName: string; isVerified: boolean }[]
 }
@@ -253,7 +253,12 @@ const ResearchDescription = ({
                 sx={{ fontSize: 2, mt: 2 }}
               />
             )}
-            <Heading mt={research.researchCategory ? 1 : 2} mb={1}>
+            <Heading
+              as="h1"
+              mt={research.researchCategory ? 1 : 2}
+              mb={1}
+              data-testid="research-title"
+            >
               {research.title}
             </Heading>
             <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>

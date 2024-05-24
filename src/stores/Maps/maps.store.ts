@@ -73,7 +73,7 @@ export class MapsStore extends ModuleStore {
         )
       })
       .map((p) => {
-        return { ...p, verified: this.userStore.verifiedUsers[p._id] === true }
+        return { ...p, verified: this.aggregationsStore.isVerified(p._id) }
       })
     this.mapPins = pins
 

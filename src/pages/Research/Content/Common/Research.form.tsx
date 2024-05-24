@@ -207,7 +207,7 @@ const ResearchForm = observer((props: IProps) => {
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Card sx={{ backgroundColor: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
-                        <Heading>
+                        <Heading as="h1">
                           <span>{pageTitle}</span>{' '}
                         </Heading>
                         <Box ml="15px">

@@ -6,10 +6,11 @@ export type IComment = {
   _creatorId: string
   _deleted?: boolean
   _edited?: string
-  creatorName: string
   parentCommentId: string | null
   text: string
+  creatorName: string
   creatorCountry?: string | null
+  creatorImage?: string | null
   isEditable?: boolean
   isUserSupporter?: boolean
   isUserVerified?: boolean

@@ -1,6 +1,7 @@
 import { spawn } from 'child_process'
 import * as path from 'path'
 import webpack from 'webpack'
+import { Watching } from 'webpack'
 import * as os from 'os'
 import * as fs from 'fs-extra'
 import webpackConfig from '../webpack.config'
@@ -32,9 +33,7 @@ function main() {
 main()
 
 /** Programmatically run webpack in watch mode */
-async function compileAndWatchFunctions(): Promise<
-  webpack.Compiler['watching']
-> {
+async function compileAndWatchFunctions(): Promise<Watching> {
   // CLI: webpack --watch
   const compiler = webpack(webpackConfig)
   // Start a build in watch mode
@@ -73,7 +72,7 @@ async function compileAndWatchFunctions(): Promise<
  * The reason we need both is because google expects authenticated users to access various 3rd party apis before
  * code execution, e.g. https://github.com/firebase/firebase-tools/issues/1683 and https://github.com/firebase/firebase-tools/issues/1708
  */
-function startEmulator(functionsCompiler: webpack.Compiler['watching']) {
+function startEmulator(functionsCompiler: Watching) {
   // call firebase bin directly in case not installed globally
   const FIREBASE_BIN = path.resolve(__dirname, '../node_modules/.bin/firebase')
   // the name of the project that generated service account credentials has access to

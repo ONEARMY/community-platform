@@ -43,6 +43,10 @@ async function compileAndWatchFunctions(): Promise<Watching> {
       poll: undefined,
     },
     (err, stats) => {
+      if (stats === undefined) {
+        console.log('[Compile Error] stats undefined')
+        process.exit(1)
+      }
       if (stats.hasErrors()) {
         const info = stats.toJson()
         console.log('[Compile Error]', info.errors)

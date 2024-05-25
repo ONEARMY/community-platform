@@ -101,7 +101,7 @@ function startEmulator(functionsCompiler: Watching) {
     shell: true,
     stdio: ['inherit', 'inherit', 'inherit'],
     env,
-  })
+  } as any)
   // listen for close and kill functions compiler if error thrown
   child.on('close', (code) => {
     if (code === 1) {

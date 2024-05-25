@@ -161,4 +161,4 @@ There may also be some cases where methods want to be tested against production 
 
 There currently isn't a single automated way to do this, however you can see an example of the manual steps involved in the `test_functions` step of the [CircleCI pipeline](https://github.com/ONEARMY/community-platform/blob/feat/aggregation-tests/.circleci/config.yml#L244-L245)
 
-Alternatively developers can follow the steps in [Firebase Emulators Docker](./firebase-emulators-docker.md) to run the docker emulators locally and manually invoke functions
+Alternatively developers can follow the steps in [Firebase Emulators Docker](./firebase-emulator.md) to run the docker emulators locally and manually invoke functions

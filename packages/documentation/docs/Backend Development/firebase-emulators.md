@@ -11,6 +11,18 @@ To run emulators locally you will need (as described in: https://firebase.google
 - [Firebase CLI](https://firebase.google.com/docs/cli) version 8.14.0 or higher
 - [Java](https://openjdk.java.net/install/) version 1.8 or higher
 
+# Setup
+
+There are some limitations to the emulator. Currently, it cannot use extensions, therefore you must manually delete the `extensions` section from the `firebase.json` while you want to run the emulator.
+
+```
+Error: Errors while reading 'extensions' in 'firebase.json'
+- No params file found for firestore-send-email
+[Emulator Error]
+Functions compiler terminated
+yarn workspace functions start exited with code 0
+```
+
 ## Getting Started
 
 ```

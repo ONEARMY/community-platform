@@ -1,0 +1,17 @@
+{
+  "name": "uploads/users/normal_jim/alien-18fb609ca55.png",
+  "bucket": "default-bucket",
+  "metageneration": 1,
+  "generation": 1716746079955,
+  "contentType": "image/png",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": ["1f10f645-0c4a-49f5-a403-788c79ca1a11"],
+  "etag": "QuHyL/3IorFXBB9KNp1lt/CLKPA",
+  "customMetadata": {},
+  "timeCreated": "2024-05-26T17:54:39.955Z",
+  "updated": "2024-05-26T17:54:39.955Z",
+  "size": 314851,
+  "md5Hash": "ZAINcN7FvvpmzTrSLZnl9A==",
+  "crc32c": "1701022809"
+}

@@ -6,12 +6,9 @@
     "hoistingLimits": "workspaces"
   },
   "scripts": {
-    "start": "ts-node scripts/start.ts",
-    "serve:live": "yarn copyDevConfig && yarn serve",
+    "watch": "./node_modules/.bin/webpack --watch",
     "lint": "tslint --project tsconfig.json",
     "build": "./node_modules/.bin/webpack",
-    "watch": "./node_modules/.bin/webpack --watch",
-    "copyDevConfig": "firebase functions:config:get > .runtimeconfig.json",
     "shell": "yarn build && firebase functions:shell",
     "test": "firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated 'jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",
     "test-ci": "./node_modules/.bin/firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated 'yarn jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",

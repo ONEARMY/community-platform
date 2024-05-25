@@ -42,4 +42,4 @@ Any existing data may be replaced and lost during restore operations
 :::
 
 Alternatively the backup could be loaded into the emulator and data queried from there as required.  
-See the [Firebase Emulators](./firebase-emulators-docker.md) for more information
+See the [Firebase Emulator](./firebase-emulator.md) for more information

@@ -1,0 +1,19 @@
+# TODO: update to a more new version
+version: "2.1"
+services:
+
+  emulator:
+    build:
+      context: ./
+      dockerfile: ./functions/Dockerfile.emulator
+    ports:
+    - 4001-4008:4001-4008
+    volumes:
+    - ./functions:/app/functions
+    - ./functions/data/emulator/:/app/seed
+    # TODO: make logs easily viewable on the host machine.
+    # - ./logs/ui-debug.log:/app/ui-debug.log
+    # - ./logs/firestore-debug.log:/app/firestore-debug.log
+    # - ./logs/database-debug.log:/app/database-debug.log
+    # - ./logs/pubsub-debug.log:/app/pubsub-debug.log
+    # - ./logs/firebase-debug.log:/app/firebase-debug.log

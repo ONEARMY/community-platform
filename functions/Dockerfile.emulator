@@ -37,7 +37,9 @@ RUN \
   apt-get -y install nano && \
   apt-get clean
 
-# TODO: someone else can figure out a good way to install the Firebase CLI.
+# In this codebase, we prefer to use yarn over npm
+# but I couldn't get yarn global install working.
+# This works but feel free to make a change.
 RUN npm install -g firebase-tools
 
 # Doing setup saves time when running the container.

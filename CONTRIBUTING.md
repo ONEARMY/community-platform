@@ -48,7 +48,7 @@ This project and everyone participating in it is governed by the [Code of Conduc
 
 There are two options.
 
-#### Option 1
+#### Cloud based backend
 
 This option is simple but only starts the frontend. The backend services are hosted on the internet (https://precious-plastics-v4-dev.firebaseapp.com) and may be accessed by many developers.
 
@@ -68,9 +68,9 @@ In this case:
 
 - frontend: http://localhost:3000
 
-#### Option 2
+#### Emulator based backend
 
-This option is slightly more complicated but allows you to run the frontend and backend system locally (except sending emails.)
+This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.)
 
 This setup is:
 

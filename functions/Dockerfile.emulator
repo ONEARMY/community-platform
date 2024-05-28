@@ -7,14 +7,21 @@
 # Optionally, initial data can be setup by mounting `/app/seed`.
 #
 # COMMANDS (used from the root directory of the project):
+#
+#   BUILD
 #   docker build -f ./functions/Dockerfile.emulator -t emulator .
+#
+#   RUN
 #   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#
+#   EXPORT
+#   docker exec -it <conatiner_name> /app/export.sh
 #
 # HOW TO DEBUG THE CONTAINER WHILE IT IS RUNNING:
 #   1) Open a new terminal.
 #   2) Run `docker ps` command.
 #   3) Find the name for the container.
-#   4) Run `docker exec -it <name> bash` command.
+#   4) Run `docker exec -it <conatiner_name> bash` command.
 #
 # TECHNICAL NOTES:
 #   Due to Docker, the Firebase emulators should run on 0.0.0.0

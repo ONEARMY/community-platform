@@ -31,8 +31,6 @@
 
 FROM node:20.9.0-bullseye-slim
 
-ENV SHOULD_REGULARLY_EXPORT_DATA='false'
-
 WORKDIR /app
 
 RUN \

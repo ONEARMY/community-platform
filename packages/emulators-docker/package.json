@@ -11,7 +11,7 @@
     "boxen": "^5.1.2",
     "dockerode": "^3.3.5",
     "fs-extra": "^10.0.1",
-    "functions": "workspace:*",
+    "functions": "1.0.1",
     "globby": "^11.0.2",
     "log-update": "^4.0.0"
   },

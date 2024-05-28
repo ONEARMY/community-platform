@@ -2,7 +2,6 @@ import 'cypress-file-upload'
 
 import { deleteDB } from 'idb'
 
-import { generateNewUserDetails } from '../utils/TestUtils'
 import { Auth, TestDB } from './db/firebase'
 
 import type { firebase } from './db/firebase'
@@ -24,14 +23,6 @@ declare global {
       logout(checkUI?: boolean): Chainable<void>
 
       deleteCurrentUser(): Promise<void>
-
-      fillSignupForm(
-        username: string,
-        email: string,
-        password: string,
-      ): Chainable<void>
-
-      signUpNewUser(user?)
 
       queryDocuments(
         collectionName: string,
@@ -100,29 +91,7 @@ Cypress.Commands.add('clearServiceWorkers', () => {
         }
       })
       cy.log('user', Auth.currentUser)
-    },
-  )
-
-  Cypress.Commands.add(
-    'fillSignupForm',
-    (username: string, email: string, password: string) => {
-      cy.log('Fill in sign-up form')
-      cy.visit('/sign-up')
-      cy.get('[data-cy=username]').clear().type(username)
-      cy.get('[data-cy=email]').clear().type(email)
-      cy.get('[data-cy=password]').clear().type(password)
-      cy.get('[data-cy=confirm-password]').clear().type(password)
-      cy.get('[data-cy=consent]').check()
-    },
-  )
-
-  Cypress.Commands.add('signUpNewUser', (user?) => {
-    cy.log('Generate new user details')
-    const { username, email, password } = user || generateNewUserDetails()
-
-    cy.fillSignupForm(username, email, password)
-    cy.get('[data-cy=submit]').click()
-    cy.url().should('include', 'sign-up-message')
+    })
   })
 
   Cypress.Commands.add('logout', (checkUI = true) => {

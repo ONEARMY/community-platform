@@ -2,9 +2,9 @@ import { ExternalLinkLabel } from 'oa-shared'
 
 import { form } from '../../../../src/pages/UserSettings/labels'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
-import { DbCollectionName, setIsPreciousPlastic } from '../utils/TestUtils'
 import * as settingsData from '../fixtures/settings'
 import { UserMenuItem } from '../support/commandsUi'
+import { DbCollectionName, setIsPreciousPlastic } from '../utils/TestUtils'
 
 import type { IUser } from '../../../../src/models/user.models'
 

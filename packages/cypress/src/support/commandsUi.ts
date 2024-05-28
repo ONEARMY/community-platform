@@ -4,9 +4,19 @@ export enum UserMenuItem {
   LogOut = 'Logout',
 }
 
+import { generateNewUserDetails } from '../utils/TestUtils'
+
 declare global {
   namespace Cypress {
     interface Chainable {
+      fillSignupForm(
+        username: string,
+        email: string,
+        password: string,
+      ): Chainable<void>
+
+      signUpNewUser(user?)
+
       toggleUserMenuOn(): Chainable<void>
       toggleUserMenuOff(): Chainable<void>
 
@@ -35,6 +45,28 @@ declare global {
  * @remark - async code should be wrapped in a Cypress.promise block to allow the resolved promise to be
  * used in chained results
  */
+
+Cypress.Commands.add(
+  'fillSignupForm',
+  (username: string, email: string, password: string) => {
+    cy.log('Fill in sign-up form')
+    cy.visit('/sign-up')
+    cy.get('[data-cy=username]').clear().type(username)
+    cy.get('[data-cy=email]').clear().type(email)
+    cy.get('[data-cy=password]').clear().type(password)
+    cy.get('[data-cy=confirm-password]').clear().type(password)
+    cy.get('[data-cy=consent]').check()
+  },
+)
+
+Cypress.Commands.add('signUpNewUser', (user?) => {
+  cy.log('Generate new user details')
+  const { username, email, password } = user || generateNewUserDetails()
+
+  cy.fillSignupForm(username, email, password)
+  cy.get('[data-cy=submit]').click()
+  cy.url().should('include', 'sign-up-message')
+})
 
 Cypress.Commands.add('toggleUserMenuOn', () => {
   Cypress.log({ displayName: 'OPEN_USER_MENU' })

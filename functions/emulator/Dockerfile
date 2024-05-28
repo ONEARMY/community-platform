@@ -54,6 +54,7 @@ RUN \
   # https://firebase.google.com/docs/emulator-suite/install_and_configure
   apt-get -y install openjdk-11-jre-headless && \
   # For debugging
+  apt-get -y install curl && \
   apt-get -y install nano && \
   apt-get clean
 

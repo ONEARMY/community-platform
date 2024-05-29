@@ -19,7 +19,7 @@ const HowToSubmitStatus = observer((props: IProps) => {
   return (
     <Modal isOpen={!!uploadStatus.Start}>
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Heading variant="small" sx={{ textAlign: 'center' }}>
+        <Heading as="p" variant="small" sx={{ textAlign: 'center' }}>
           {headings.uploading}
         </Heading>
         <Icon glyph="close" onClick={() => props.onClose()} />

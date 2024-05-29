@@ -19,20 +19,36 @@ import {
   QuestionTitleField,
 } from './FormFields'
 
+import type { MainFormAction } from 'src/common/Form/types'
 import type { IQuestion } from 'src/models'
 
 interface IProps {
   'data-testid'?: string
   formValues?: any
-  parentType: 'create' | 'edit'
+  parentType: MainFormAction
 }
 
 export const QuestionForm = (props: IProps) => {
-  const { parentType } = props
+  const { formValues, parentType } = props
+
   const navigate = useNavigate()
   const store = useQuestionStore()
+
+  const onSubmit = async (formValues: Partial<IQuestion.FormInput>) => {
+    try {
+      const newDocument = await store.upsertQuestion(
+        formValues as IQuestion.FormInput,
+      )
+      if (newDocument) {
+        navigate('/questions/' + newDocument.slug)
+      }
+    } catch (e) {
+      logger.error(e)
+    }
+  }
+
   const publishButtonText =
-    props.formValues?.moderation === IModerationStatus.DRAFT
+    formValues?.moderation === IModerationStatus.DRAFT
       ? LABELS.buttons.create
       : LABELS.buttons[parentType]
 
@@ -41,23 +57,9 @@ export const QuestionForm = (props: IProps) => {
   return (
     <Form
       data-testid={props['data-testid']}
-      onSubmit={async (formValues: Partial<IQuestion.FormInput>) => {
-        formValues.moderation = formValues.allowDraftSave
-          ? IModerationStatus.DRAFT
-          : IModerationStatus.ACCEPTED
-        try {
-          const newDocument = await store.upsertQuestion(
-            formValues as IQuestion.FormInput,
-          )
-          if (newDocument) {
-            navigate('/questions/' + newDocument.slug)
-          }
-        } catch (e) {
-          logger.error(e)
-        }
-      }}
+      onSubmit={onSubmit}
       mutators={{ setAllowDraftSaveFalse }}
-      initialValues={props.formValues}
+      initialValues={formValues}
       render={({ submitting, handleSubmit, form, values }) => {
         const numberOfImageInputsAvailable = values?.images
           ? Math.min(values.images.length + 1, QUESTION_MAX_IMAGES)
@@ -81,7 +83,7 @@ export const QuestionForm = (props: IProps) => {
                     data-cy={`question-${parentType}-title`}
                     sx={{ alignItems: 'center', paddingX: 3, paddingY: 2 }}
                   >
-                    <Heading>{headingText}</Heading>
+                    <Heading as="h1">{headingText}</Heading>
                     <Box ml="15px">
                       <ElWithBeforeIcon icon={IconHeaderHowto} size={20} />
                     </Box>
@@ -91,7 +93,10 @@ export const QuestionForm = (props: IProps) => {
                   <PostingGuidelines />
                 </Box>
                 <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
-                  <QuestionTitleField />
+                  <QuestionTitleField
+                    formValues={formValues}
+                    parentType={parentType}
+                  />
                   <QuestionDescriptionField />
                   <QuestionImagesField
                     inputsAvailable={numberOfImageInputsAvailable}

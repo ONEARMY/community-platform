@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Button, Loader } from 'oa-components'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
 import { Flex, Heading } from 'theme-ui'
 
+import DraftButton from '../common/Drafts/DraftButton'
+import useDrafts from '../common/Drafts/useDrafts'
 import { ITEMS_PER_PAGE } from './constants'
 import { headings, listing } from './labels'
 import { QuestionFilterHeader } from './QuestionFilterHeader'
@@ -21,6 +24,12 @@ export const QuestionListing = () => {
   const [lastVisible, setLastVisible] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
   >(undefined)
+  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
+    useDrafts<IQuestion.Item>({
+      getDraftCount: questionService.getDraftCount,
+      getDrafts: questionService.getDrafts,
+    })
+  const { userStore } = useCommonStores().stores
 
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
@@ -77,10 +86,14 @@ export const QuestionListing = () => {
     setIsFetching(false)
   }
 
+  const showLoadMore =
+    !isFetching && questions && questions.length > 0 && questions.length < total
+
   return (
     <>
       <Flex my={[18, 26]}>
         <Heading
+          as="h1"
           sx={{
             width: '100%',
             textAlign: 'center',
@@ -99,40 +112,57 @@ export const QuestionListing = () => {
           flexDirection: ['column', 'column', 'row'],
         }}
       >
-        <QuestionFilterHeader />
-        <Link to="/questions/create">
-          <Button data-cy="create" variant="primary">
-            {listing.create}
-          </Button>
-        </Link>
+        {!showDrafts ? <QuestionFilterHeader /> : <div></div>}
+
+        <Flex sx={{ gap: 2 }}>
+          {userStore.user && (
+            <DraftButton
+              showDrafts={showDrafts}
+              draftCount={draftCount}
+              handleShowDrafts={handleShowDrafts}
+            />
+          )}
+          <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
+            <Button data-cy="create" variant="primary">
+              {listing.create}
+            </Button>
+          </Link>
+        </Flex>
       </Flex>
 
       {questions?.length === 0 && !isFetching && (
-        <Heading sx={{ marginTop: 4 }}>{listing.noQuestions}</Heading>
+        <Heading as="h1" sx={{ marginTop: 4 }}>
+          {listing.noQuestions}
+        </Heading>
       )}
 
-      {questions &&
-        questions.length > 0 &&
-        questions.map((question, index) => (
-          <QuestionListItem key={index} question={question} query={q} />
-        ))}
+      {showDrafts ? (
+        drafts.map((item) => {
+          return <QuestionListItem key={item._id} question={item} query={q} />
+        })
+      ) : (
+        <>
+          {questions &&
+            questions.length > 0 &&
+            questions.map((question, index) => (
+              <QuestionListItem key={index} question={question} query={q} />
+            ))}
 
-      {!isFetching &&
-        questions &&
-        questions.length > 0 &&
-        questions.length < total && (
-          <Flex
-            sx={{
-              justifyContent: 'center',
-            }}
-          >
-            <Button onClick={() => fetchQuestions(lastVisible)}>
-              {listing.loadMore}
-            </Button>
-          </Flex>
-        )}
+          {showLoadMore && (
+            <Flex
+              sx={{
+                justifyContent: 'center',
+              }}
+            >
+              <Button onClick={() => fetchQuestions(lastVisible)}>
+                {listing.loadMore}
+              </Button>
+            </Flex>
+          )}
+        </>
+      )}
 
-      {isFetching && <Loader />}
+      {(isFetching || isFetchingDrafts) && <Loader />}
     </>
   )
 }

@@ -107,10 +107,16 @@ export class UserNotificationsStore extends ModuleStore {
       const user = this.user
       if (user) {
         const notifications = toJS(user.notifications)
-        notifications?.forEach((notification) => (notification.notified = true))
 
-        await this._updateUserNotifications(user, notifications)
-        await this.userStore.refreshActiveUserDetails()
+        // update only if it has unnotified notifications
+        if (notifications?.some((notification) => !notification.notified)) {
+          for (const notification of notifications) {
+            notification.notified = true
+          }
+
+          await this._updateUserNotifications(user, notifications)
+          await this.userStore.refreshActiveUserDetails()
+        }
       }
     } catch (err) {
       logger.error(err)
@@ -162,6 +168,6 @@ export class UserNotificationsStore extends ModuleStore {
       notifications,
     }
 
-    await dbRef.update(notificationUpdate)
+    await dbRef.update(notificationUpdate, { keep_modified_timestamp: true })
   }
 }

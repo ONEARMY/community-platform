@@ -10,7 +10,7 @@ import { act, render, waitFor, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { FactoryComment } from 'src/test/factories/Comment'
+import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
@@ -28,6 +28,7 @@ const activeUser = FactoryUser({
 })
 
 const mockUser = FactoryUser({ country: 'AF' })
+const mockDiscussionItem = FactoryDiscussion()
 
 jest.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -38,9 +39,16 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         getUserByUsername: jest.fn().mockResolvedValue(mockUser),
       },
       aggregationsStore: {
-        aggregations: {},
+        isVerified: jest.fn(),
+        users_verified: {},
       },
       tagsStore: {},
+      discussionStore: {
+        fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue({
+          mockDiscussionItem,
+        }),
+        activeUser: mockUser,
+      },
     },
   }),
 }))
@@ -228,55 +236,6 @@ describe('Research Article', () => {
       expect(wrapper.queryByText('fourth-example-username')).toBeNull()
       expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
       expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
-    })
-
-    it('shows comments', async () => {
-      // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
-        ...mockResearchStore,
-        formatResearchCommentList: jest.fn().mockImplementation((c) => {
-          return c
-        }),
-        activeResearchItem: FactoryResearchItem({
-          updates: [
-            FactoryResearchItemUpdate({
-              title: 'Research Update #1',
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #2',
-              status: ResearchUpdateStatus.DRAFT,
-              _deleted: false,
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #3',
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-              comments: [
-                FactoryComment({
-                  text: 'First test comment',
-                }),
-                FactoryComment({
-                  text: 'Second test comment',
-                }),
-              ],
-            }),
-          ],
-        }),
-      })
-      // Act
-      const wrapper = getWrapper()
-
-      await act(async () => {
-        await new Promise((r) => setTimeout(r, 200))
-        wrapper.getByText('View 2 Comments').click()
-      })
-
-      // Assert
-      await waitFor(async () => {
-        expect(wrapper.getByText('First test comment')).toBeInTheDocument()
-      })
     })
 
     it('does not show edit timestamp, when create displays the same value', async () => {

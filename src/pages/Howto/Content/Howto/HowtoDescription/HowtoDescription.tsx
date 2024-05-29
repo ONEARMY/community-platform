@@ -5,9 +5,6 @@ import {
   Category,
   ConfirmModal,
   ContentStatistics,
-  DownloadCounter,
-  DownloadFileFromLink,
-  DownloadStaticFile,
   LinkifyText,
   ModerationStatus,
   Tag,
@@ -30,12 +27,7 @@ import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
-import {
-  addHowtoDownloadCooldown,
-  isHowtoDownloadCooldownExpired,
-  retrieveHowtoDownloadCooldown,
-  updateHowtoDownloadCooldown,
-} from './downloadCooldown'
+import { HowtoDownloads } from '../HowtoDownloads/HowtoDownloads'
 
 import type { ITag } from 'src/models'
 import type { IHowtoDB } from 'src/models/howto.models'
@@ -49,43 +41,14 @@ interface IProps {
   votedUsefulCount?: number
   verified?: boolean
   hasUserVotedUseful: boolean
-  onUsefulClick: () => void
+  onUsefulClick: () => Promise<void>
 }
 
 const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const navigate = useNavigate()
 
-  const [fileDownloadCount, setFileDownloadCount] = useState(
-    howto.total_downloads,
-  )
   const { stores } = useCommonStores()
-
-  const incrementDownloadCount = async () => {
-    const updatedDownloadCount = await stores.howtoStore.incrementDownloadCount(
-      howto._id,
-    )
-    setFileDownloadCount(updatedDownloadCount!)
-  }
-
-  const redirectToSignIn = async () => {
-    navigate('/sign-in')
-  }
-
-  const handleDownloadClick = async () => {
-    const howtoDownloadCooldown = retrieveHowtoDownloadCooldown(howto._id)
-
-    if (
-      howtoDownloadCooldown &&
-      isHowtoDownloadCooldownExpired(howtoDownloadCooldown)
-    ) {
-      updateHowtoDownloadCooldown(howto._id)
-      incrementDownloadCount()
-    } else if (!howtoDownloadCooldown) {
-      addHowtoDownloadCooldown(howto._id)
-      incrementDownloadCount()
-    }
-  }
 
   const handleDelete = async (_id: string) => {
     try {
@@ -202,7 +165,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                   textAlign: 'left',
                 }}
               >
-                <Heading variant="small" mb={2}>
+                <Heading as="p" variant="small" mb={2}>
                   Moderator Feedback
                 </Heading>
                 <Text sx={{ fontSize: 2 }}>{howto.moderatorFeedback}</Text>
@@ -225,7 +188,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                     sx={{ fontSize: 2, mt: 2 }}
                   />
                 )}
-                <Heading mt={howto.category ? 1 : 2} mb={1}>
+                <Heading as="h1" mt={howto.category ? 1 : 2} mb={1}>
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {capitalizeFirstLetter(howto.title)}
                 </Heading>
@@ -266,41 +229,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                 <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
               ))}
           </Flex>
-          {((howto.files && howto.files.length > 0) || howto.fileLink) && (
-            <Flex
-              className="file-container"
-              mt={3}
-              sx={{ flexDirection: 'column' }}
-            >
-              {howto.fileLink && (
-                <DownloadFileFromLink
-                  handleClick={handleDownloadClick}
-                  link={howto.fileLink}
-                  redirectToSignIn={
-                    !loggedInUser ? redirectToSignIn : undefined
-                  }
-                />
-              )}
-              {howto.files &&
-                howto.files
-                  .filter(Boolean)
-                  .map(
-                    (file, index) =>
-                      file && (
-                        <DownloadStaticFile
-                          allowDownload
-                          file={file}
-                          key={file ? file.name : `file-${index}`}
-                          handleClick={handleDownloadClick}
-                          redirectToSignIn={
-                            !loggedInUser ? redirectToSignIn : undefined
-                          }
-                        />
-                      ),
-                  )}
-              <DownloadCounter total={fileDownloadCount} />
-            </Flex>
-          )}
+          <HowtoDownloads howto={howto} loggedInUser={loggedInUser} />
         </Flex>
         <Box
           sx={{

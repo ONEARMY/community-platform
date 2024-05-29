@@ -27,7 +27,9 @@ const ProfileTypes = () => {
       render={(props) => (
         <FlexSectionContainer>
           <Flex sx={{ justifyContent: 'space-between' }}>
-            <Heading variant="small">{headings.focus}</Heading>
+            <Heading as="h2" variant="small">
+              {headings.focus}
+            </Heading>
           </Flex>
           <Box>
             <Paragraph my={4}>{title}</Paragraph>

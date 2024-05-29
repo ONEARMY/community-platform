@@ -4,7 +4,6 @@ import type { ResearchUpdateStatus } from 'oa-shared'
 import type { DBDoc } from '../stores/databaseV2/types'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
-import type { IComment } from './comment.model'
 import type { IModerable, ISharedFeatures, UserMention } from './common.models'
 import type { IResearchCategory } from './researchCategories.model'
 import type { ISelectedTags } from './tags.model'
@@ -50,7 +49,7 @@ export namespace IResearch {
     locked?: ResearchDocumentLock
     totalUpdates?: number
     totalUsefulVotes?: number
-    totalCommentCount?: number
+    totalCommentCount: number
     keywords?: string[]
   } & Omit<FormInput, 'collaborators'> &
     DBDoc
@@ -64,7 +63,6 @@ export namespace IResearch {
     fileLink: string
     downloadCount: number
     videoUrl?: string
-    comments?: IComment[]
     collaborators?: string[]
     status: ResearchUpdateStatus
     researchStatus?: ResearchStatus

@@ -3,7 +3,7 @@ import { ExternalLinkLabel } from 'oa-shared'
 import { form } from '../../../../src/pages/UserSettings/labels'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import { UserMenuItem } from '../support/commands'
-import { DbCollectionName } from '../utils/TestUtils'
+import { DbCollectionName, setIsPreciousPlastic } from '../utils/TestUtils'
 
 import type { IUser } from '../../../../src/models/user.models'
 
@@ -23,7 +23,7 @@ type ILink = IUser['links'][0] & { index: number }
 
 describe('[Settings]', () => {
   beforeEach(() => {
-    localStorage.setItem('platformTheme', 'precious-plastic')
+    setIsPreciousPlastic()
     cy.visit('/sign-in')
   })
   const selectFocus = (focus: string) => {
@@ -366,7 +366,7 @@ describe('[Settings]', () => {
       cy.login('settings_member_new@test.com', 'test1234')
 
       cy.step('Go to User Settings for Precious Plastic')
-      localStorage.setItem('platformTheme', 'precious-plastic')
+      setIsPreciousPlastic()
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
       cy.get('[data-cy=pin-description]').should('not.exist')

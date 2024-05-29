@@ -1,4 +1,346 @@
 export const howtos = {
+  gPpPDEvfNT9a6w5FWzaj: {
+    moderation: 'accepted',
+    _id: 'gPpPDEvfNT9a6w5FWzaj',
+    _createdBy: 'howto_creator',
+    tags: {
+      '36hWyk3OckrLSH1ehdIE': true,
+      Wk6RnHHFfKSiI71BlM8r: true,
+    },
+    totalComments: 3,
+    latestCommentDate: '2022-03-30T22:10:12.271Z',
+    category: {
+      label: 'Moulds',
+      _deleted: false,
+      _modified: '2019-04-15T18:51:56.479Z',
+      _created: '2018-11-29T12:56:47.901Z',
+      _id: 'gPpPDEvfNT9a6w5FWzaj',
+    },
+    title: 'Make an interlocking brick',
+    steps: [
+      {
+        images: [
+          {
+            name: 'howto-bope brick-1.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T14:58:36.794Z',
+            size: 68108,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-1.jpg?alt=media&token=22dc0615-0351-430b-951c-6b2b29cd21c6',
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T14:58:36.794Z',
+          },
+        ],
+        text: 'What you need: Injection machine, mould making tools\nThis is our workspace in Chiangmai. :)\n',
+        _animationKey: 'unique1',
+        title: 'Get ready',
+      },
+      {
+        title: 'Idea and first drawing',
+        images: [],
+        videoUrl: 'https://www.youtube.com/watch?v=Os7dREQ00l4&t=5s',
+        text: 'We wanted to develop a product that can have many functions. So we decided to figure out a shape that can be adapted or compliment one another to get a variety of uses. Finally we decided to draw a curved shape. The idea of this shape is to be attached to each other like a Lego. You can use this design as a plant pot or connect it as a partition and build a wall. Why not check out this super cool video?',
+        _animationKey: 'unique2',
+      },
+      {
+        title: 'Make the 3D drawing',
+        images: [
+          {
+            timeCreated: '2019-09-27T14:58:41.378Z',
+            name: 'Bope-brick-5.jpg',
+            fullPath: 'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/Bope-brick-5.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T14:58:41.378Z',
+            size: 24501,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2FBope-brick-5.jpg?alt=media&token=b29153ce-58fd-4c28-ac87-82f0b2f7c54c',
+            contentType: 'image/jpeg',
+          },
+        ],
+        text: 'First of all, we would like to tell you that our mould design is highly detailed and takes a lot of time to craft. The mould should be made from aluminum with CNC machine. To be easy for you all, please download our mould design above.',
+        _animationKey: 'unique3',
+      },
+      {
+        title: 'Machining the mould',
+        images: [
+          {
+            updated: '2019-09-27T15:03:54.693Z',
+            size: 40819,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-6.jpg?alt=media&token=927d98a5-dd72-4c5b-9e93-254a8cbe171f',
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T15:03:54.693Z',
+            name: 'howto-bope brick-6.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-6.jpg',
+            type: 'image/jpeg',
+          },
+        ],
+        text: 'Using the Sketchup file above to make the mould. We used the CNC Machine from a local manufacturer in Chiangmai. ',
+        _animationKey: 'uniqueka2bi',
+      },
+      {
+        images: [
+          {
+            timeCreated: '2019-09-30T18:27:55.916Z',
+            name: 'howto-bope brick-5.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-5.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-30T18:27:55.916Z',
+            size: 50797,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-5.jpg?alt=media&token=b9f3509f-95e0-4194-9269-03123c213f23',
+            contentType: 'image/jpeg',
+          },
+        ],
+        text: 'Tools you need for injecting:\nWrench\nBolt x 8 pieces\nNut x 8 pieces\nBolt & Nut for locking x 1 set\nElectric drill\nCutter\n',
+        _animationKey: 'unique78rhhe',
+        title: 'Prepare for injecting',
+      },
+      {
+        title: 'Prepare your material',
+        images: [
+          {
+            timeCreated: '2019-09-27T15:09:04.403Z',
+            name: 'howto-bope brick-6-1.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-6-1.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:09:04.403Z',
+            size: 64685,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-6-1.jpg?alt=media&token=82b888b7-318a-4d45-8ed3-09921bf40318',
+            contentType: 'image/jpeg',
+          },
+          {
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T15:09:04.285Z',
+            name: 'howto-bope brick-6-2.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-6-2.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:09:04.285Z',
+            size: 40710,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-6-2.jpg?alt=media&token=6206e3a9-45bd-4c54-b318-65b6f21f318e',
+          },
+        ],
+        text: 'Prepare your shredded plastic. For this product we use PP. For one brick you will need around 300 gram.',
+        _animationKey: 'uniquene1n1n',
+      },
+      {
+        title: 'Injection time!',
+        images: [
+          {
+            timeCreated: '2019-09-27T15:26:06.422Z',
+            name: 'howto-bope brick-7.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-7.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:26:06.422Z',
+            size: 50893,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-7.jpg?alt=media&token=8f53302f-9b84-4165-be01-0391b389402c',
+            contentType: 'image/jpeg',
+          },
+        ],
+        text: 'Turn on the Injection machine (180°C) and wait for it to heat up.\nWhen the temperature is ready, you can put the shredded PP into the Machine.',
+        _animationKey: 'uniqued5ty3b',
+      },
+      {
+        images: [
+          {
+            name: 'howto-bope brick-8-1.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-8-1.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:26:07.425Z',
+            size: 39148,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-8-1.jpg?alt=media&token=09e210e7-7eea-407f-baed-60659ff4bea9',
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T15:26:07.425Z',
+          },
+          {
+            updated: '2019-09-27T15:26:07.625Z',
+            size: 36499,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-8-2.jpg?alt=media&token=39581e77-fed4-4057-b2c4-1c67e49d9227',
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T15:26:07.625Z',
+            name: 'howto-bope brick-8-2.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-8-2.jpg',
+            type: 'image/jpeg',
+          },
+        ],
+        text: 'While waiting for the plastic to melt, you can assemble the mould.',
+        _animationKey: 'uniquepvy07n',
+        title: 'Prepare the mould',
+      },
+      {
+        title: 'Press',
+        images: [
+          {
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-9.jpg?alt=media&token=c0656e84-8d60-471b-870c-2e717f3cd3f5',
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T15:26:08.631Z',
+            name: 'howto-bope brick-9.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-9.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:26:08.631Z',
+            size: 50169,
+          },
+        ],
+        text: 'When both your machine and the mould are ready, connect the mould to the injection machine. Then press it!',
+        _animationKey: 'unique2c1sc',
+      },
+      {
+        title: 'Detach the mould',
+        images: [
+          {
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T15:37:32.105Z',
+            name: 'howto-bope brick-10-1.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-10-1.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:37:32.105Z',
+            size: 37459,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-10-1.jpg?alt=media&token=392eda7d-e9bb-49c7-9a67-97bf66de9660',
+          },
+          {
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T15:37:31.983Z',
+            name: 'howto-bope brick-10-2.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-10-2.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:37:31.983Z',
+            size: 40222,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-10-2.jpg?alt=media&token=4780854e-e16f-4e32-a8ee-9c05569d14b6',
+          },
+        ],
+        text: 'Wait for the moudl to cool down. Then detach and carefully open the mould to take  out your freshly baked recycled plastic brick!\nRemove the injection channel with a little scissor or knife',
+        _animationKey: 'uniquel628bd',
+      },
+      {
+        text: 'Last finishes.',
+        _animationKey: 'uniquezxjv8b',
+        title: 'Finish the product',
+        images: [
+          {
+            name: 'howto-bope brick-11.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-11.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:37:33.174Z',
+            size: 46316,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-11.jpg?alt=media&token=26ccf130-fe79-4289-afaa-8d904e5ad552',
+            contentType: 'image/jpeg',
+            timeCreated: '2019-09-27T15:37:33.174Z',
+          },
+        ],
+      },
+      {
+        title: 'Explore the possibilities!',
+        images: [
+          {
+            timeCreated: '2019-09-27T15:37:34.393Z',
+            name: 'howto-bope brick-12-1.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-12-1.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:37:34.393Z',
+            size: 44524,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12-1.jpg?alt=media&token=82bec6d6-ebf3-4ab8-b67f-559679584f59',
+            contentType: 'image/jpeg',
+          },
+          {
+            timeCreated: '2019-09-27T15:37:34.427Z',
+            name: 'howto-bope brick-12-2.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-12-2.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:37:34.427Z',
+            size: 55918,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12-2.jpg?alt=media&token=8bb8fe5e-4fef-4e58-8e59-7d7313c5f233',
+            contentType: 'image/jpeg',
+          },
+          {
+            timeCreated: '2019-09-27T15:37:34.455Z',
+            name: 'howto-bope brick-12.jpg',
+            fullPath:
+              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-12.jpg',
+            type: 'image/jpeg',
+            updated: '2019-09-27T15:37:34.455Z',
+            size: 48284,
+            downloadUrl:
+              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12.jpg?alt=media&token=566100f6-bb8e-497f-beef-8184d901e033',
+            contentType: 'image/jpeg',
+          },
+        ],
+        text: 'You can use  this for Flower Pots. Or You can make more & more for a partition or the wall. ',
+        _animationKey: 'uniquec9kbu',
+      },
+    ],
+    _modified: '2019-09-30T18:27:57.570Z',
+    _created: '2019-10-01T20:49:43.452Z',
+    slug: 'make-an-interlocking-brick',
+    previousSlugs: ['make-an-interlocking-brick'],
+    _deleted: false,
+    time: '3-4 weeks',
+    description:
+      "Here we'll show you how to make a brick using the injection machine and the mould we designed in Chiangmai, Thailand. A beautiful, functional model. \n(BOPE)",
+    cover_image: {
+      timeCreated: '2019-09-27T16:48:37.586Z',
+      name: 'howto-bope brick-12-1.jpg',
+      fullPath:
+        'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-12-1.jpg',
+      type: 'image/jpeg',
+      updated: '2019-09-27T16:48:37.586Z',
+      size: 49488,
+      downloadUrl:
+        'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12-1.jpg?alt=media&token=457a344a-571c-4eb7-8b59-63bdd769eb36',
+      contentType: 'image/jpeg',
+    },
+    difficulty_level: 'Hard',
+    files: [
+      {
+        size: 384323,
+        downloadUrl:
+          'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2Fme5Bq0wq5FdoJUY8gELN%2Fart%20final%201.skp?alt=media&token=26fb5316-1951-490b-a41f-3e4262f73cdd',
+        contentType: 'application/octet-stream',
+        timeCreated: '2019-05-10T20:49:42.964Z',
+        name: 'art final 1.skp',
+        fullPath: 'uploads/howtosV1/me5Bq0wq5FdoJUY8gELN/art final 1.skp',
+        type: '',
+        updated: '2019-05-10T20:49:42.964Z',
+      },
+      {
+        timeCreated: '2019-05-10T20:49:42.878Z',
+        name: 'art final 2.skp',
+        fullPath: 'uploads/howtosV1/me5Bq0wq5FdoJUY8gELN/art final 2.skp',
+        type: '',
+        updated: '2019-05-10T20:49:42.878Z',
+        size: 647225,
+        downloadUrl:
+          'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2Fme5Bq0wq5FdoJUY8gELN%2Fart%20final%202.skp?alt=media&token=f4ebe379-2038-4ac0-9e6f-68c379174908',
+        contentType: 'application/octet-stream',
+      },
+    ],
+    total_downloads: 1234,
+  },
   '0EwdD1IMrwXcOncqVwOl': {
     slug: 'set-up-devsite-to-help-coding',
     previousSlugs: ['set-up-devsite-to-help-coding'],
@@ -2513,356 +2855,13 @@ export const howtos = {
     _deleted: false,
     time: '< 1 week',
   },
-  gPpPDEvfNT9a6w5FWzaj: {
-    moderation: 'accepted',
-    id: 'me5Bq0wq5FdoJUY8gELN',
-    _createdBy: 'howto_creator',
-    tags: {
-      '36hWyk3OckrLSH1ehdIE': true,
-      Wk6RnHHFfKSiI71BlM8r: true,
-    },
-    title: 'Make an interlocking brick',
-    steps: [
-      {
-        images: [
-          {
-            name: 'howto-bope brick-1.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T14:58:36.794Z',
-            size: 68108,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-1.jpg?alt=media&token=22dc0615-0351-430b-951c-6b2b29cd21c6',
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T14:58:36.794Z',
-          },
-        ],
-        text: 'What you need: Injection machine, mould making tools\nThis is our workspace in Chiangmai. :)\n',
-        _animationKey: 'unique1',
-        title: 'Get ready',
-      },
-      {
-        title: 'Idea and first drawing',
-        images: [],
-        videoUrl: 'https://www.youtube.com/watch?v=Os7dREQ00l4&t=5s',
-        text: 'We wanted to develop a product that can have many functions. So we decided to figure out a shape that can be adapted or compliment one another to get a variety of uses. Finally we decided to draw a curved shape. The idea of this shape is to be attached to each other like a Lego. You can use this design as a plant pot or connect it as a partition and build a wall. Why not check out this super cool video?',
-        _animationKey: 'unique2',
-      },
-      {
-        title: 'Make the 3D drawing',
-        images: [
-          {
-            timeCreated: '2019-09-27T14:58:41.378Z',
-            name: 'Bope-brick-5.jpg',
-            fullPath: 'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/Bope-brick-5.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T14:58:41.378Z',
-            size: 24501,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2FBope-brick-5.jpg?alt=media&token=b29153ce-58fd-4c28-ac87-82f0b2f7c54c',
-            contentType: 'image/jpeg',
-          },
-        ],
-        text: 'First of all, we would like to tell you that our mould design is highly detailed and takes a lot of time to craft. The mould should be made from aluminum with CNC machine. To be easy for you all, please download our mould design above.',
-        _animationKey: 'unique3',
-      },
-      {
-        title: 'Machining the mould',
-        images: [
-          {
-            updated: '2019-09-27T15:03:54.693Z',
-            size: 40819,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-6.jpg?alt=media&token=927d98a5-dd72-4c5b-9e93-254a8cbe171f',
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T15:03:54.693Z',
-            name: 'howto-bope brick-6.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-6.jpg',
-            type: 'image/jpeg',
-          },
-        ],
-        text: 'Using the Sketchup file above to make the mould. We used the CNC Machine from a local manufacturer in Chiangmai. ',
-        _animationKey: 'uniqueka2bi',
-      },
-      {
-        images: [
-          {
-            timeCreated: '2019-09-30T18:27:55.916Z',
-            name: 'howto-bope brick-5.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-5.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-30T18:27:55.916Z',
-            size: 50797,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-5.jpg?alt=media&token=b9f3509f-95e0-4194-9269-03123c213f23',
-            contentType: 'image/jpeg',
-          },
-        ],
-        text: 'Tools you need for injecting:\nWrench\nBolt x 8 pieces\nNut x 8 pieces\nBolt & Nut for locking x 1 set\nElectric drill\nCutter\n',
-        _animationKey: 'unique78rhhe',
-        title: 'Prepare for injecting',
-      },
-      {
-        title: 'Prepare your material',
-        images: [
-          {
-            timeCreated: '2019-09-27T15:09:04.403Z',
-            name: 'howto-bope brick-6-1.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-6-1.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:09:04.403Z',
-            size: 64685,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-6-1.jpg?alt=media&token=82b888b7-318a-4d45-8ed3-09921bf40318',
-            contentType: 'image/jpeg',
-          },
-          {
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T15:09:04.285Z',
-            name: 'howto-bope brick-6-2.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-6-2.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:09:04.285Z',
-            size: 40710,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-6-2.jpg?alt=media&token=6206e3a9-45bd-4c54-b318-65b6f21f318e',
-          },
-        ],
-        text: 'Prepare your shredded plastic. For this product we use PP. For one brick you will need around 300 gram.',
-        _animationKey: 'uniquene1n1n',
-      },
-      {
-        title: 'Injection time!',
-        images: [
-          {
-            timeCreated: '2019-09-27T15:26:06.422Z',
-            name: 'howto-bope brick-7.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-7.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:26:06.422Z',
-            size: 50893,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-7.jpg?alt=media&token=8f53302f-9b84-4165-be01-0391b389402c',
-            contentType: 'image/jpeg',
-          },
-        ],
-        text: 'Turn on the Injection machine (180°C) and wait for it to heat up.\nWhen the temperature is ready, you can put the shredded PP into the Machine.',
-        _animationKey: 'uniqued5ty3b',
-      },
-      {
-        images: [
-          {
-            name: 'howto-bope brick-8-1.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-8-1.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:26:07.425Z',
-            size: 39148,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-8-1.jpg?alt=media&token=09e210e7-7eea-407f-baed-60659ff4bea9',
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T15:26:07.425Z',
-          },
-          {
-            updated: '2019-09-27T15:26:07.625Z',
-            size: 36499,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-8-2.jpg?alt=media&token=39581e77-fed4-4057-b2c4-1c67e49d9227',
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T15:26:07.625Z',
-            name: 'howto-bope brick-8-2.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-8-2.jpg',
-            type: 'image/jpeg',
-          },
-        ],
-        text: 'While waiting for the plastic to melt, you can assemble the mould.',
-        _animationKey: 'uniquepvy07n',
-        title: 'Prepare the mould',
-      },
-      {
-        title: 'Press',
-        images: [
-          {
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-9.jpg?alt=media&token=c0656e84-8d60-471b-870c-2e717f3cd3f5',
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T15:26:08.631Z',
-            name: 'howto-bope brick-9.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-9.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:26:08.631Z',
-            size: 50169,
-          },
-        ],
-        text: 'When both your machine and the mould are ready, connect the mould to the injection machine. Then press it!',
-        _animationKey: 'unique2c1sc',
-      },
-      {
-        title: 'Detach the mould',
-        images: [
-          {
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T15:37:32.105Z',
-            name: 'howto-bope brick-10-1.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-10-1.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:37:32.105Z',
-            size: 37459,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-10-1.jpg?alt=media&token=392eda7d-e9bb-49c7-9a67-97bf66de9660',
-          },
-          {
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T15:37:31.983Z',
-            name: 'howto-bope brick-10-2.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-10-2.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:37:31.983Z',
-            size: 40222,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-10-2.jpg?alt=media&token=4780854e-e16f-4e32-a8ee-9c05569d14b6',
-          },
-        ],
-        text: 'Wait for the moudl to cool down. Then detach and carefully open the mould to take  out your freshly baked recycled plastic brick!\nRemove the injection channel with a little scissor or knife',
-        _animationKey: 'uniquel628bd',
-      },
-      {
-        text: 'Last finishes.',
-        _animationKey: 'uniquezxjv8b',
-        title: 'Finish the product',
-        images: [
-          {
-            name: 'howto-bope brick-11.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-11.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:37:33.174Z',
-            size: 46316,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-11.jpg?alt=media&token=26ccf130-fe79-4289-afaa-8d904e5ad552',
-            contentType: 'image/jpeg',
-            timeCreated: '2019-09-27T15:37:33.174Z',
-          },
-        ],
-      },
-      {
-        title: 'Explore the possibilities!',
-        images: [
-          {
-            timeCreated: '2019-09-27T15:37:34.393Z',
-            name: 'howto-bope brick-12-1.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-12-1.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:37:34.393Z',
-            size: 44524,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12-1.jpg?alt=media&token=82bec6d6-ebf3-4ab8-b67f-559679584f59',
-            contentType: 'image/jpeg',
-          },
-          {
-            timeCreated: '2019-09-27T15:37:34.427Z',
-            name: 'howto-bope brick-12-2.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-12-2.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:37:34.427Z',
-            size: 55918,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12-2.jpg?alt=media&token=8bb8fe5e-4fef-4e58-8e59-7d7313c5f233',
-            contentType: 'image/jpeg',
-          },
-          {
-            timeCreated: '2019-09-27T15:37:34.455Z',
-            name: 'howto-bope brick-12.jpg',
-            fullPath:
-              'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-12.jpg',
-            type: 'image/jpeg',
-            updated: '2019-09-27T15:37:34.455Z',
-            size: 48284,
-            downloadUrl:
-              'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12.jpg?alt=media&token=566100f6-bb8e-497f-beef-8184d901e033',
-            contentType: 'image/jpeg',
-          },
-        ],
-        text: 'You can use  this for Flower Pots. Or You can make more & more for a partition or the wall. ',
-        _animationKey: 'uniquec9kbu',
-      },
-    ],
-    _modified: '2019-09-30T18:27:57.570Z',
-    _created: '2019-10-01T20:49:43.452Z',
-    slug: 'make-an-interlocking-brick',
-    previousSlugs: ['make-an-interlocking-brick'],
-    _deleted: false,
-    time: '3-4 weeks',
-    description:
-      "Here we'll show you how to make a brick using the injection machine and the mould we designed in Chiangmai, Thailand. A beautiful, functional model. \n(BOPE)",
-    cover_image: {
-      timeCreated: '2019-09-27T16:48:37.586Z',
-      name: 'howto-bope brick-12-1.jpg',
-      fullPath:
-        'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-12-1.jpg',
-      type: 'image/jpeg',
-      updated: '2019-09-27T16:48:37.586Z',
-      size: 49488,
-      downloadUrl:
-        'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-12-1.jpg?alt=media&token=457a344a-571c-4eb7-8b59-63bdd769eb36',
-      contentType: 'image/jpeg',
-    },
-    _id: 'gPpPDEvfNT9a6w5FWzaj',
-    difficulty_level: 'Hard',
-    files: [
-      {
-        size: 384323,
-        downloadUrl:
-          'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2Fme5Bq0wq5FdoJUY8gELN%2Fart%20final%201.skp?alt=media&token=26fb5316-1951-490b-a41f-3e4262f73cdd',
-        contentType: 'application/octet-stream',
-        timeCreated: '2019-05-10T20:49:42.964Z',
-        name: 'art final 1.skp',
-        fullPath: 'uploads/howtosV1/me5Bq0wq5FdoJUY8gELN/art final 1.skp',
-        type: '',
-        updated: '2019-05-10T20:49:42.964Z',
-      },
-      {
-        timeCreated: '2019-05-10T20:49:42.878Z',
-        name: 'art final 2.skp',
-        fullPath: 'uploads/howtosV1/me5Bq0wq5FdoJUY8gELN/art final 2.skp',
-        type: '',
-        updated: '2019-05-10T20:49:42.878Z',
-        size: 647225,
-        downloadUrl:
-          'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2FhowtosV1%2Fme5Bq0wq5FdoJUY8gELN%2Fart%20final%202.skp?alt=media&token=f4ebe379-2038-4ac0-9e6f-68c379174908',
-        contentType: 'application/octet-stream',
-      },
-    ],
-    comments: [
-      {
-        _id: 'abc123',
-        _created: '2019-09-18T14:49:54.311Z',
-        _creatorId: 'abc',
-        creatorName: 'abc',
-        text: 'A generated comment',
-      },
-    ],
-    total_downloads: 1234,
-  },
   zVVjXc34gKhUNIcgLEXg: {
     _created: '2022-01-06T14:50:38.830Z',
     _createdBy: 'event_reader',
     _deleted: false,
     _id: 'zVVjXc34gKhUNIcgLEXg',
     _modified: '2022-01-06T14:50:38.830Z',
-    comments: [],
+    totalComments: 0,
     cover_image: {
       contentType: 'image/jpeg',
       downloadUrl:
@@ -2905,7 +2904,6 @@ export const howtos = {
     _deleted: true,
     _id: 'zVVjXc34gKhIBVcgLEXg',
     _modified: '2022-01-06T14:50:38.830Z',
-    comments: [],
     cover_image: {
       contentType: 'image/jpeg',
       downloadUrl:
@@ -2940,5 +2938,6 @@ export const howtos = {
     ],
     time: '< 1 hour',
     title: 'Deleted how to',
+    totalComments: 0,
   },
 }

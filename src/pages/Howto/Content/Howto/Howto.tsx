@@ -11,23 +11,22 @@ import {
 import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box } from 'theme-ui'
 
-import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
+import { HowtoDiscussion } from './HowToDiscussion/HowToDiscussion'
 import Step from './Step/Step'
 
-import type { IUser, UserComment } from 'src/models'
+import type { IUser } from 'src/models'
 
 export const Howto = observer(() => {
   const { slug } = useParams()
   const { howtoStore, userStore, aggregationsStore, tagsStore } =
     useCommonStores().stores
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0)
 
   const loggedInUser = userStore.activeUser
   const { activeHowto } = howtoStore
@@ -39,10 +38,10 @@ export const Howto = observer(() => {
   ) => {
     const loggedInUser = howtoStore.activeUser
     if (!loggedInUser?.userName) {
-      return null
+      return
     }
 
-    howtoStore.toggleUsefulByUser(howtoId, loggedInUser?.userName)
+    await howtoStore.toggleUsefulByUser(howtoId, loggedInUser?.userName)
     const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
 
     trackEvent({
@@ -89,17 +88,6 @@ export const Howto = observer(() => {
     )
   }
 
-  const activeHowToComments: UserComment[] = howtoStore
-    .getActiveHowToComments()
-    .map(
-      (c): UserComment => ({
-        ...c,
-        isEditable:
-          [loggedInUser?._id, loggedInUser?.userName].includes(c._creatorId) ||
-          isAllowedToEditContent(activeHowto, loggedInUser as IUser),
-      }),
-    )
-
   const { allTagsByKey } = tagsStore
   const howto = {
     ...activeHowto,
@@ -111,10 +99,8 @@ export const Howto = observer(() => {
   }
 
   const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
-  const isVerified = isUserVerifiedWithStore(
-    howto._createdBy,
-    aggregationsStore,
-  )
+  const isVerified = aggregationsStore.isVerified(howto._createdBy)
+
   return (
     <>
       <Breadcrumbs content={howto} variant="howto" />
@@ -123,11 +109,11 @@ export const Howto = observer(() => {
         key={activeHowto._id}
         needsModeration={howtoStore.needsModeration(activeHowto)}
         loggedInUser={loggedInUser as IUser}
-        commentsCount={howtoStore.commentsCount}
+        commentsCount={totalCommentsCount}
         votedUsefulCount={howtoStore.votedUsefulCount}
         hasUserVotedUseful={hasUserVotedUseful}
-        onUsefulClick={() =>
-          onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
+        onUsefulClick={async () =>
+          await onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
         }
       />
       <Box mt={9}>
@@ -172,13 +158,20 @@ export const Howto = observer(() => {
               votedUsefulCount={howtoStore.votedUsefulCount}
               hasUserVotedUseful={hasUserVotedUseful}
               isLoggedIn={!!loggedInUser}
-              onUsefulClick={() => {
-                onUsefulClick(howto._id, howto.slug, 'ArticleCallToAction')
-              }}
+              onUsefulClick={async () =>
+                await onUsefulClick(
+                  howto._id,
+                  howto.slug,
+                  'ArticleCallToAction',
+                )
+              }
             />
           )}
         </ArticleCallToAction>
-        <HowToComments comments={activeHowToComments} />
+        <HowtoDiscussion
+          howtoDocId={howto._id}
+          setTotalCommentsCount={setTotalCommentsCount}
+        />
       </UserEngagementWrapper>
     </>
   )

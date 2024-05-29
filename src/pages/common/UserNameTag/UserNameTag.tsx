@@ -1,6 +1,5 @@
 import { Username } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isUserVerifiedWithStore } from 'src/common/isUserVerified'
 import { formatDate } from 'src/utils/date'
 import { Flex, Text } from 'theme-ui'
 
@@ -20,7 +19,7 @@ export const UserNameTag = ({
   const { aggregationsStore } = useCommonStores().stores
 
   const dateText = `| ${action} on ${formatDate(new Date(created))}`
-  const isVerified = isUserVerifiedWithStore(userName, aggregationsStore)
+  const isVerified = aggregationsStore.isVerified(userName)
 
   return (
     <Flex sx={{ flexDirection: 'column' }}>

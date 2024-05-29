@@ -2,7 +2,7 @@ import { ExternalLink } from 'oa-components'
 
 const PrivacyPolicy = () => (
   <>
-    <h2>Privacy Policy</h2>
+    <h1>Privacy Policy</h1>
     <p>
       Stichting One Army built the OneArmy Community Platform as an Open Source
       web app. This SERVICE is provided by Stichting One Army at no cost and is

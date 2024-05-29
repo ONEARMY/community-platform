@@ -154,17 +154,15 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         >
           <MenuDesktop />
           {isLoggedInUser && (
-            <>
-              <NotificationsDesktop
-                notifications={notifications}
-                markAllRead={() =>
-                  userNotificationsStore.markAllNotificationsRead()
-                }
-                markAllNotified={() =>
-                  userNotificationsStore.markAllNotificationsNotified()
-                }
-              />
-            </>
+            <NotificationsDesktop
+              notifications={notifications}
+              markAllRead={() =>
+                userNotificationsStore.markAllNotificationsRead()
+              }
+              markAllNotified={() =>
+                userNotificationsStore.markAllNotificationsNotified()
+              }
+            />
           )}
           {isModuleSupported(MODULE.USER) && <Profile isMobile={false} />}
         </Flex>

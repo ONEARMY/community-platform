@@ -61,7 +61,9 @@ export const PatreonIntegration = (props: { user: IUserPP }) => {
 
   return (
     <FlexSectionContainer>
-      <Heading variant="small">{HEADING}</Heading>
+      <Heading as="h2" variant="small">
+        {HEADING}
+      </Heading>
       <Text mt={4}>{SUBHEADING}</Text>
       <Text mt={4}>{BETA_DISCLAIMER}</Text>
       {user.patreon ? (

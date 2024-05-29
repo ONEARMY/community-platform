@@ -27,7 +27,7 @@ Future
 
 ## How to build and deploy
 
-The functions are integrated into the ci pipeline for master and production branches.
+The functions are integrated into the ci pipeline for the default branch.
 Simply make a PR and once approved the function will be deployed
 
 ## Testing locally

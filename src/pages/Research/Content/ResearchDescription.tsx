@@ -39,7 +39,7 @@ interface IProps {
   commentsCount: number
   updatesCount: number
   moderateResearch: (accepted: boolean) => void
-  onUsefulClick: () => void
+  onUsefulClick: () => Promise<void>
   onFollowClick: () => void
   contributors?: { userName: string; isVerified: boolean }[]
 }

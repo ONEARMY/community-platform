@@ -42,6 +42,20 @@ describe('community platform', () => {
     })
   })
 
+  describe('templates', () => {
+    it('does not allow READ', async () => {
+      await assertFails(getDoc(doc(unauthedDb, 'templates/bar')))
+    })
+
+    it('does not allow WRITE', async () => {
+      await assertFails(
+        setDoc(doc(unauthedDb, 'templates/bar'), {
+          email: '',
+        }),
+      )
+    })
+  })
+
   describe('user_integrations', () => {
     beforeAll(async () => {
       // Set a doc for the authed user.
@@ -84,6 +98,37 @@ describe('community platform', () => {
           newIntegration: 'newIntegration',
         }),
       )
+    })
+  })
+
+  // Publicly accessible collections.
+  const publicCollections = [
+    'aggregations_rev20220126',
+    'discussions_rev20231022',
+    'question_categories_rev20231130',
+    'questions_rev20230926',
+    'research_categories_rev20221224',
+    'research_rev20201020',
+    'user_notifications_rev20221209',
+    'v3_howtos',
+    'v3_mappins',
+    'v3_tags',
+    'v3_users',
+  ]
+
+  publicCollections.forEach((collection) => {
+    describe(`${collection}`, () => {
+      it(`${collection} allows READ`, async () => {
+        await assertSucceeds(getDoc(doc(unauthedDb, collection, 'bar')))
+      })
+
+      it(`${collection} allows WRITE`, async () => {
+        await assertSucceeds(
+          setDoc(doc(unauthedDb, collection, 'bar'), {
+            email: '',
+          }),
+        )
+      })
     })
   })
 })

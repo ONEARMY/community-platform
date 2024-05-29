@@ -159,6 +159,7 @@ export const HowtoForm = observer((props: IProps) => {
                     <Card sx={{ bg: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
                         <Heading
+                          as="h1"
                           dangerouslySetInnerHTML={{ __html: headingText }}
                         />
                         <Box ml="15px">
@@ -177,7 +178,7 @@ export const HowtoForm = observer((props: IProps) => {
                         sx={{ flexWrap: 'wrap', flexDirection: 'column' }}
                       >
                         {/* Left Side */}
-                        <Heading variant="small" mb={3}>
+                        <Heading as="h2" variant="small" mb={3}>
                           {heading.title}
                         </Heading>
                         <Flex

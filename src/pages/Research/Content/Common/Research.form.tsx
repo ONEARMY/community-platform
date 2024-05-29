@@ -42,6 +42,7 @@ import {
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
 
+import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
 
 const CONFIRM_DIALOG_MSG =
@@ -54,7 +55,7 @@ interface IState {
 interface IProps {
   'data-testid'?: string
   formValues: any
-  parentType: 'create' | 'edit'
+  parentType: MainFormAction
 }
 
 const ResearchFormLabel = ({ children, ...props }) => (

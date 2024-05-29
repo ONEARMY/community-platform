@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 jest.mock('../../stores/common/module.store')
+jest.mock('src/utils/validators')
 
 import '@testing-library/jest-dom'
 
@@ -14,7 +15,7 @@ import { faker } from '@faker-js/faker'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
-import { IModerationStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { questionService } from 'src/pages/Question/question.service'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
@@ -226,19 +227,17 @@ describe('question.routes', () => {
       const submitButton = wrapper.getByText('Publish')
 
       // Submit form
-      await userEvent.type(title, 'Question title')
-      await userEvent.type(description, 'Question description')
+      await userEvent.type(title, 'Can you build a house out of plastic?')
+      await userEvent.type(description, "So I've got all this plastic...")
 
       await waitFor(() => {
         submitButton.click()
       })
 
       expect(mockUpsertQuestion).toHaveBeenCalledWith({
-        title: 'Question title',
-        description: 'Question description',
+        title: 'Can you build a house out of plastic?',
+        description: "So I've got all this plastic...",
         tags: {},
-        allowDraftSave: false,
-        moderation: IModerationStatus.ACCEPTED,
       })
 
       expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')

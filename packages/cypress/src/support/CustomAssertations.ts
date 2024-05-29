@@ -45,6 +45,7 @@ const eqHowto = (chaiObj) => {
       title,
       tags,
       previousSlugs,
+      moderation,
     } = expected
     expect(subject, 'Basic info').to.containSubset({
       _createdBy,
@@ -58,6 +59,8 @@ const eqHowto = (chaiObj) => {
       previousSlugs,
     })
     expect(subject.category.label, 'Category').to.eq(category)
+
+    expect(subject.moderation).to.equal(moderation)
 
     // We want to validate that uploaded filename matches that originally specified
     // by the user. The filename will include a timestamp to avoid collisions with

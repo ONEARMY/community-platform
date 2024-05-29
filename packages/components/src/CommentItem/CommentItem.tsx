@@ -12,12 +12,13 @@ import type { IComment } from './types'
 
 const SHORT_COMMENT = 129
 
-export interface CommentItemProps {
+export interface IProps {
   comment: IComment
   handleDelete?: (commentId: string) => Promise<void>
   handleEdit?: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
   isReply: boolean
+  showAvatar: boolean
 }
 
 const formatDate = (d: string | undefined): string => {
@@ -27,14 +28,20 @@ const formatDate = (d: string | undefined): string => {
   return new Date(d).toLocaleDateString('en-GB').replace(/\//g, '-')
 }
 
-export const CommentItem = (props: CommentItemProps) => {
+export const CommentItem = (props: IProps) => {
   const textRef = createRef<any>()
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
-  const { comment, handleDelete, handleEditRequest, handleEdit, isReply } =
-    props
+  const {
+    comment,
+    handleDelete,
+    handleEditRequest,
+    handleEdit,
+    isReply,
+    showAvatar,
+  } = props
   const {
     text,
     creatorName,
@@ -82,8 +89,8 @@ export const CommentItem = (props: CommentItemProps) => {
       sx={{ flexDirection: 'column' }}
     >
       <Flex sx={{ gap: 2 }}>
-        {creatorImage && (
-          <Box>
+        {creatorImage && showAvatar && (
+          <Box data-cy="commentAvatar" data-testid="commentAvatar">
             <Avatar
               src={creatorImage}
               sx={{

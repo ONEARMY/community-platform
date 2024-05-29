@@ -20,7 +20,6 @@ const howto = FactoryHowto()
 const mockHowtoStore = () => ({
   setActiveHowtoBySlug: jest.fn(),
   activeHowto: howto,
-  getActiveHowToComments: jest.fn().mockReturnValue([]),
   needsModeration: jest.fn().mockReturnValue(false),
   incrementViewCount: jest.fn(),
   removeActiveHowto: jest.fn(),

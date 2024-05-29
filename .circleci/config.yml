@@ -100,6 +100,7 @@ commands:
       - checkout
       - *restore_yarn_cache
       - *install_packages
+      - *save_yarn_cache
   inject_instance_configuration:
     steps:
       - run:

@@ -9,7 +9,7 @@ export const questions = {
     creatorCountry: '',
     description: 'test info with a link to https://www.onearmy.earth/',
     keywords: ['test', 'question', 'info'],
-    latestCommentDate: '15 March 2024 at 15:14:24 UTC',
+    latestCommentDate: '2023-02-15T02:45:15.500Z',
     moderation: 'accepted',
     questionCategory: {
       _created: '2024-01-10T09:00:00.000Z',

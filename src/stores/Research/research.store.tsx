@@ -8,12 +8,7 @@ import {
   runInAction,
   toJS,
 } from 'mobx'
-import {
-  IModerationStatus,
-  ResearchStatus,
-  ResearchUpdateStatus,
-} from 'oa-shared'
-import { MAX_COMMENT_LENGTH } from 'src/constants'
+import { IModerationStatus, ResearchStatus } from 'oa-shared'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, needsModeration, randomID } from 'src/utils/helpers'
@@ -28,7 +23,7 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
-import type { IComment, IUser, UserMention } from 'src/models'
+import type { IUser, UserMention } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -61,45 +56,16 @@ export class ResearchStore extends ModuleStore {
     makeObservable(this)
   }
 
-  public formatResearchCommentList(comments: IComment[] = []): IComment[] {
-    return comments.map((comment: IComment) => {
-      return {
-        ...comment,
-        text: changeUserReferenceToPlainText(comment.text),
-        isUserVerified: !!this.aggregationsStore.isVerified(
-          comment.creatorName,
-        ),
-      }
-    })
-  }
-
   @action
   public async setActiveResearchItemBySlug(slug?: string) {
     logger.debug(`setActiveResearchItemBySlug:`, { slug })
     let activeResearchItem: IResearchDB | undefined = undefined
-    const discussionStore = this.discussionStore
 
     const enrichResearchUpdate = async (update: IResearch.UpdateDB) => {
       const enrichedResearchUpdated = cloneDeep(update)
       enrichedResearchUpdated.description = changeUserReferenceToPlainText(
         update.description,
       )
-
-      // Fetch comments for each update
-      const discussion = await discussionStore.fetchOrCreateDiscussionBySource(
-        enrichedResearchUpdated._id,
-        'researchUpdate',
-      )
-      enrichedResearchUpdated.comments = discussion
-        ? (update.comments || []).concat(discussion.comments)
-        : []
-
-      // Remove duplicate comments based on _id proprety
-      enrichedResearchUpdated.comments = [
-        ...new Map(
-          enrichedResearchUpdated.comments.map((item) => [item._id, item]),
-        ).values(),
-      ]
       return enrichedResearchUpdated
     }
 
@@ -256,161 +222,6 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async addComment(
-    text: string,
-    update: IResearch.UpdateDB,
-    parentCommentId: string | null,
-  ) {
-    const user = this.activeUser
-    const researchItem = this.activeResearchItem
-    const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
-    const discussion =
-      await this.discussionStore.fetchOrCreateDiscussionBySource(
-        update._id,
-        'researchUpdate',
-      )
-    if (researchItem && comment && user) {
-      const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
-        .doc(researchItem._id)
-
-      try {
-        const existingUpdateIndex = researchItem.updates.findIndex(
-          (upd) => upd._id === (update as IResearch.UpdateDB)._id,
-        )
-
-        if (!discussion) {
-          throw new Error('Discussion not found')
-        }
-        const discussionObj = await this.discussionStore.addComment(
-          discussion,
-          comment,
-          parentCommentId,
-        )
-        // TODO: This is too brittle, ideally we should extend discussionStore.addComment
-        // to return the discussionObject and newly created commentObj
-        const newComment = discussionObj?.comments.find(
-          (c) => c.text === comment,
-        )
-        const { users } = await this.addUserReference(comment)
-        const newItem: IResearchDB = {
-          ...toJS(researchItem),
-        }
-
-        await dbRef.update({
-          mentions: users
-            .map((userName) => ({
-              username: userName,
-              location: `update-${existingUpdateIndex}-comment:${newComment?._id}`,
-            }))
-            .concat(researchItem.mentions || []),
-          totalCommentCount: (researchItem.totalCommentCount || 0) + 1,
-        } as any)
-
-        // Notify author and contributors
-        await this.userNotificationsStore.triggerNotification(
-          'new_comment_discussion',
-          newItem._createdBy,
-          '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
-          newItem.title,
-        )
-
-        newItem.collaborators.map((username) => {
-          this.userNotificationsStore.triggerNotification(
-            'new_comment_discussion',
-            username,
-            '/research/' + newItem.slug + '#update_' + existingUpdateIndex,
-            newItem.title,
-          )
-        })
-
-        const createdItem = (await dbRef.get()) as IResearch.ItemDB
-        if (createdItem) {
-          this.setActiveResearchItemBySlug(createdItem.slug)
-        }
-      } catch (error) {
-        logger.error(error)
-        throw new Error(error?.message)
-      }
-    }
-  }
-
-  public async deleteComment(
-    commentId: string,
-    update: IResearch.Update | IResearch.UpdateDB,
-  ) {
-    try {
-      const item = this.activeResearchItem
-      const user = this.activeUser
-
-      if (commentId && item && user && update?._id) {
-        const discussion =
-          await this.discussionStore.fetchOrCreateDiscussionBySource(
-            update._id,
-            'researchUpdate',
-          )
-
-        if (discussion) {
-          await this.discussionStore.deleteComment(discussion, commentId)
-        }
-
-        const dbRef = this.db
-          .collection<IResearch.Item>(COLLECTION_NAME)
-          .doc(item._id)
-
-        await dbRef.update({
-          totalCommentCount: Math.max(
-            item.totalCommentCount ? item.totalCommentCount - 1 : 0,
-            0,
-          ),
-        } as any)
-
-        if (item) {
-          this.setActiveResearchItemBySlug(item.slug)
-        }
-      }
-    } catch (err) {
-      logger.error(err)
-      throw new Error(err)
-    }
-  }
-
-  public async editComment(
-    commentId: string,
-    newText: string,
-    update: IResearch.Update | IResearch.UpdateDB,
-  ) {
-    try {
-      const item = this.activeResearchItem
-      const user = this.activeUser
-
-      if (commentId && item && user) {
-        const discussion =
-          await this.discussionStore.fetchOrCreateDiscussionBySource(
-            update._id,
-            'researchUpdate',
-          )
-        if (discussion) {
-          await this.discussionStore.editComment(discussion, commentId, newText)
-        }
-        const dbRef = this.db
-          .collection<IResearch.Item>(COLLECTION_NAME)
-          .doc(item._id)
-
-        dbRef.update({
-          totalCommentCount: !item.totalCommentCount
-            ? 1
-            : item.totalCommentCount,
-        } as any)
-
-        this.setActiveResearchItemBySlug(item.slug)
-      }
-    } catch (err) {
-      logger.error(err)
-      throw new Error(err)
-    }
-  }
-
   public async uploadResearch(values: IResearch.FormInput) {
     logger.debug('uploading research')
     this.updateResearchUploadStatus('Start')
@@ -451,6 +262,7 @@ export class ResearchStore extends ModuleStore {
             : values.creatorCountry
             ? values.creatorCountry
             : '',
+        totalCommentCount: 0,
       }
       logger.debug('populating database', researchItem)
       // set the database document
@@ -537,7 +349,6 @@ export class ResearchStore extends ModuleStore {
             _modified: new Date().toISOString(),
             _contentModifiedTimestamp: new Date().toISOString(),
             _deleted: false,
-            comments: [],
           })
         } else {
           // editing update
@@ -679,43 +490,6 @@ export class ResearchStore extends ModuleStore {
     return (this.activeResearchItem?.subscribers || []).length
   }
 
-  @computed
-  get commentsCount(): number {
-    if (!this.activeResearchItem) {
-      return 0
-    }
-
-    let commentCount = 0
-
-    if (this.activeResearchItem?.totalCommentCount) {
-      commentCount = this.activeResearchItem.totalCommentCount
-    }
-
-    if (this.activeResearchItem?.updates) {
-      const commentCountFromUpdates = this.activeResearchItem?.updates.reduce(
-        (totalComments, update) => {
-          const updateCommentsLength = update.comments?.length ?? 0
-          return totalComments + updateCommentsLength
-        },
-        0,
-      )
-      commentCount += commentCountFromUpdates
-    }
-
-    return Math.max(commentCount, 0)
-  }
-
-  @computed
-  get updatesCount(): number {
-    return this.activeResearchItem?.updates?.length
-      ? this.activeResearchItem?.updates.filter(
-          (update) =>
-            update.status !== ResearchUpdateStatus.DRAFT &&
-            update._deleted !== true,
-        ).length
-      : 0
-  }
-
   @action
   public async lockResearchItem(username: string) {
     const item = this.activeResearchItem
@@ -736,6 +510,7 @@ export class ResearchStore extends ModuleStore {
       })
     }
   }
+
   @action
   public async unlockResearchItem() {
     const item = this.activeResearchItem
@@ -753,6 +528,7 @@ export class ResearchStore extends ModuleStore {
       })
     }
   }
+
   @action
   public async lockResearchUpdate(username: string, updateId: string) {
     const item = this.activeResearchItem
@@ -778,6 +554,7 @@ export class ResearchStore extends ModuleStore {
       })
     }
   }
+
   @action
   public async unlockResearchUpdate(updateId: string) {
     const item = this.activeResearchItem
@@ -839,15 +616,6 @@ export class ResearchStore extends ModuleStore {
         })
 
         researchItem.updates[idx].description = newDescription
-
-        if (researchItem.updates[idx]) {
-          mentions.concat(
-            await this._getMentionsFromComments(
-              idx,
-              researchItem.updates[idx].comments,
-            ),
-          )
-        }
       }),
     )
     ;(users || []).map((username) => {
@@ -953,28 +721,6 @@ export class ResearchStore extends ModuleStore {
     }
 
     return undefined
-  }
-
-  // Get mentions from comments
-  private async _getMentionsFromComments(
-    updateId: string | number,
-    comments: IComment[] = [],
-  ): Promise<UserMention[]> {
-    const mentions: UserMention[] = []
-    await Promise.all(
-      (comments || ([] as IComment[])).map(async (comment) => {
-        const { users } = await this.addUserReference(comment.text)
-
-        users.map((username) => {
-          mentions.push({
-            username,
-            location: `update-${updateId}-comment:${comment._id}`,
-          })
-        })
-      }),
-    )
-
-    return mentions
   }
 
   private async _toggleSubscriber(docId, userId) {

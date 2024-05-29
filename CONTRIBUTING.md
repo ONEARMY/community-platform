@@ -9,14 +9,13 @@ If you think something is missing, consider sending us a PR.
 - [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--code-of-conduct)
 - [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--getting-started)
 - [Issue Tracking and Management](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
-- [Development Bounties](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--dev-bounties)
+- [Development Bounties](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--development-bounties)
 - [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure)
 - [Branch structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--branch-structure)
 - [Javascript style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--javascript-style-guide)
 - [Commit style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide)
-- [Deployment](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployment)
+- [Deployments](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployments)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--joining-the-team)
-- [Resources](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--resources)
 - [Why haven't you used ...](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 
 ## 👐 &nbsp; Code of Conduct

@@ -32,6 +32,7 @@ export const Loader = ({ label }: Props) => {
           <RotatingLogo
             loading="lazy"
             data-cy="loader"
+            data-testid="loader"
             src={logo}
             sx={{ width: [75, 75, 100] }}
           />

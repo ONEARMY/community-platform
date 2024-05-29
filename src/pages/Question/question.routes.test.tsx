@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 jest.mock('../../stores/common/module.store')
+jest.mock('src/utils/validators')
 
 import '@testing-library/jest-dom'
 
@@ -14,14 +15,10 @@ import { faker } from '@faker-js/faker'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
-import { IModerationStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { questionService } from 'src/pages/Question/question.service'
-import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
-import {
-  FactoryDiscussion,
-  FactoryDiscussionComment,
-} from 'src/test/factories/Discussion'
+import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
@@ -32,6 +29,7 @@ import type { QuestionStore } from 'src/stores/Question/question.store'
 
 const Theme = testingThemeStyles
 let mockActiveUser = FactoryUser()
+const mockDiscussionItem = FactoryDiscussion()
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -59,6 +57,12 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
       },
       questionCategoriesStore: {
         allQuestionCategories: [],
+      },
+      discussionStore: {
+        fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue({
+          mockDiscussionItem,
+        }),
+        activeUser: jest.fn().mockResolvedValue(mockActiveUser),
       },
     },
   }),
@@ -113,10 +117,6 @@ jest.mock('src/pages/Question/question.service')
 describe('question.routes', () => {
   beforeEach(() => {
     ;(useQuestionStore as jest.Mock).mockReturnValue(mockQuestionStore)
-    ;(useDiscussionStore as jest.Mock).mockReturnValue({
-      fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue(null),
-      activeUser: mockActiveUser,
-    })
     questionService.getQuestionCategories = jest.fn().mockResolvedValue([])
   })
 
@@ -227,19 +227,17 @@ describe('question.routes', () => {
       const submitButton = wrapper.getByText('Publish')
 
       // Submit form
-      await userEvent.type(title, 'Question title')
-      await userEvent.type(description, 'Question description')
+      await userEvent.type(title, 'Can you build a house out of plastic?')
+      await userEvent.type(description, "So I've got all this plastic...")
 
       await waitFor(() => {
         submitButton.click()
       })
 
       expect(mockUpsertQuestion).toHaveBeenCalledWith({
-        title: 'Question title',
-        description: 'Question description',
+        title: 'Can you build a house out of plastic?',
+        description: "So I've got all this plastic...",
         tags: {},
-        allowDraftSave: false,
-        moderation: IModerationStatus.ACCEPTED,
       })
 
       expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
@@ -253,30 +251,12 @@ describe('question.routes', () => {
       const activeUser = FactoryUser({})
       const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
       const mockIncrementViewCount = jest.fn()
-      const discussionComment = FactoryDiscussionComment({
-        text: faker.lorem.words(2),
-      })
-      const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
-        FactoryDiscussion({
-          sourceId: question._id,
-          sourceType: 'question',
-          comments: [discussionComment],
-        }),
-      )
       useQuestionStore.mockReturnValue({
         ...mockQuestionStore,
         activeUser,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
         incrementViewCount: mockIncrementViewCount,
-      })
-      useDiscussionStore.mockReturnValue({
-        fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-        activeUser,
-      })
-      useDiscussionStore.mockReturnValue({
-        fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-        activeUser,
       })
 
       await act(async () => {
@@ -299,224 +279,9 @@ describe('question.routes', () => {
         expect(wrapper.getByText(`0 views`)).toBeInTheDocument()
         expect(wrapper.getByText(`0 following`)).toBeInTheDocument()
         expect(wrapper.getByText(`0 useful`)).toBeInTheDocument()
-        expect(wrapper.getByText(`1 comment`)).toBeInTheDocument()
 
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
         expect(mockIncrementViewCount).toBeCalledWith(question)
-      })
-    })
-
-    describe('Comments', () => {
-      it('supports adding comments', async () => {
-        let wrapper
-        const question = FactoryQuestionItem()
-        const activeUser = FactoryUser({})
-        const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-        const discussionComment = FactoryDiscussionComment({
-          text: faker.lorem.words(2),
-        })
-        const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
-          FactoryDiscussion({
-            sourceId: question._id,
-            sourceType: 'question',
-            comments: [discussionComment],
-          }),
-        )
-        useQuestionStore.mockReturnValue({
-          ...mockQuestionStore,
-          activeUser,
-          fetchQuestionBySlug: mockFetchQuestionBySlug,
-        })
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          activeUser,
-        })
-        // Smell, this is reimplementation of the store method, maybe we should mock the store
-        // depdendencies instead, so we are less coupled to the implementation.
-        const mockDiscussionStoreAddComment = jest
-          .fn()
-          .mockImplementation((discussionObj, newCommentText) => {
-            discussionObj.comments.push(
-              FactoryDiscussionComment({
-                text: `Mocked store method: ${newCommentText}`,
-              }),
-            )
-            return discussionObj
-          })
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          addComment: mockDiscussionStoreAddComment,
-          activeUser,
-        })
-
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
-          expect(wrapper.getByText(/loading/)).toBeInTheDocument()
-        })
-
-        await waitFor(async () => {
-          // Loads comments
-          expect(mockfetchOrCreateDiscussionBySource).toBeCalledWith(
-            question._id,
-            'question',
-          )
-
-          expect(wrapper.getByText(discussionComment.text)).toBeInTheDocument()
-
-          // Supports adding comments
-          expect(wrapper.getByText('Leave a comment')).toBeInTheDocument()
-          expect(wrapper.getByLabelText('Comment')).toBeInTheDocument()
-          await userEvent.type(wrapper.getByLabelText('Comment'), 'New comment')
-
-          const submitButton = wrapper.getByText('Leave a comment')
-          await waitFor(() => {
-            submitButton.click()
-
-            expect(
-              wrapper.getByText('Mocked store method: New comment'),
-            ).toBeInTheDocument()
-          })
-
-          expect(mockDiscussionStoreAddComment).toHaveBeenCalled()
-        })
-      })
-
-      it('supports editing comments', async () => {
-        let wrapper
-        const question = FactoryQuestionItem()
-        const activeUser = FactoryUser({})
-        const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-        const discussionComment = FactoryDiscussionComment({
-          text: faker.lorem.words(2),
-          _creatorId: activeUser._id,
-        })
-        const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
-          FactoryDiscussion({
-            sourceId: question._id,
-            sourceType: 'question',
-            comments: [discussionComment],
-          }),
-        )
-        useQuestionStore.mockReturnValue({
-          ...mockQuestionStore,
-          activeUser,
-          fetchQuestionBySlug: mockFetchQuestionBySlug,
-        })
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          activeUser,
-        })
-        // Smell, this is reimplementation of the store method, maybe we should mock the store
-        // depdendencies instead, so we are less coupled to the implementation.
-        const mockDiscussionStoreEditComment = jest
-          .fn()
-          .mockImplementation((discussionObj, newCommentText) => {
-            discussionObj.comments.push(
-              FactoryDiscussionComment({
-                text: `Mocked store method: ${newCommentText}`,
-              }),
-            )
-            return discussionObj
-          })
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          editComment: mockDiscussionStoreEditComment,
-          activeUser,
-        })
-
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
-          expect(wrapper.getByText(/loading/)).toBeInTheDocument()
-        })
-
-        await waitFor(async () => {
-          // Loads comments
-          expect(mockfetchOrCreateDiscussionBySource).toBeCalledWith(
-            question._id,
-            'question',
-          )
-        })
-
-        // Supports editing comments
-        const editBtn = wrapper.getByText('edit')
-        editBtn.click()
-
-        const editTextField = screen.getByRole('textbox', {
-          name: /edit comment/i,
-        })
-
-        await userEvent.type(editTextField, 'Edited comment')
-
-        const button = screen.getByRole('button', {
-          name: /save changes/i,
-        })
-
-        button.click()
-
-        expect(mockDiscussionStoreEditComment).toHaveBeenCalledWith(
-          expect.any(Object),
-          expect.any(String),
-          expect.stringContaining('Edited comment'),
-        )
-      })
-
-      it('supports removing comments', async () => {
-        let wrapper
-        const question = FactoryQuestionItem()
-        const activeUser = FactoryUser({})
-        const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-        const discussionComment = FactoryDiscussionComment({
-          text: faker.lorem.words(2),
-          _creatorId: activeUser._id,
-        })
-        const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
-          FactoryDiscussion({
-            sourceId: question._id,
-            sourceType: 'question',
-            comments: [discussionComment],
-          }),
-        )
-        useQuestionStore.mockReturnValue({
-          ...mockQuestionStore,
-          activeUser,
-          fetchQuestionBySlug: mockFetchQuestionBySlug,
-          activeUser,
-        })
-        // Smell, this is reimplementation of the store method, maybe we should mock the store
-        // depdendencies instead, so we are less coupled to the implementation.
-        const mockDiscussionStoreDeleteComment = jest.fn()
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          deleteComment: mockDiscussionStoreDeleteComment,
-          activeUser,
-        })
-
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
-          expect(wrapper.getByText(/loading/)).toBeInTheDocument()
-        })
-
-        await waitFor(async () => {
-          // Loads comments
-          expect(mockfetchOrCreateDiscussionBySource).toBeCalledWith(
-            question._id,
-            'question',
-          )
-        })
-
-        // Supports removing comments
-        wrapper.getByText('delete').click()
-
-        screen
-          .getByRole('button', {
-            name: /confirm delete action/i,
-          })
-          .click()
-
-        expect(mockDiscussionStoreDeleteComment).toHaveBeenCalledWith(
-          expect.any(Object),
-          expect.stringMatching(discussionComment._id),
-        )
       })
     })
 

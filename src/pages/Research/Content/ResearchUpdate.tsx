@@ -17,9 +17,8 @@ import { formatDate } from 'src/utils/date'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
-import { ResearchComments } from './ResearchComments'
+import { ResearchUpdateDiscussion } from './ResearchUpdateDiscussion'
 
-import type { IComment } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
 
 interface IProps {
@@ -27,7 +26,6 @@ interface IProps {
   updateIndex: number
   isEditable: boolean
   slug: string
-  comments: IComment[]
   showComments: boolean
 }
 
@@ -40,17 +38,16 @@ const ResearchUpdate = ({
   updateIndex,
   isEditable,
   slug,
-  comments,
   showComments,
 }: IProps) => {
   const researchStore = useResearchStore()
   const navigate = useNavigate()
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
+  const contributors = useContributorsData(update.collaborators || [])
   const formattedCreateDatestamp = formatDate(new Date(update._created))
   const formattedModifiedDatestamp = formatDate(new Date(update._modified))
-
-  const contributors = useContributorsData(update.collaborators || [])
+  const research = researchStore.activeResearchItem
 
   const handleDownloadClick = async () => {
     researchStore.incrementDownloadCount(update._id)
@@ -208,10 +205,9 @@ const ResearchUpdate = ({
                 <DownloadCounter total={update.downloadCount} />
               </Flex>
             )}
-            <ResearchComments
+            <ResearchUpdateDiscussion
               update={update}
-              comments={comments as any}
-              updateIndex={updateIndex}
+              research={research}
               showComments={showComments}
             />
           </Card>

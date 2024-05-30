@@ -93,7 +93,7 @@ export const CommentItem = (props: IProps) => {
       <Flex sx={{ gap: 2 }}>
         {_deleted && (
           <Box sx={{ marginBottom: 2 }}>
-            <Text sx={{ color: 'grey' }}>{DELETED_COMMENT}</Text>
+            <Text sx={{ color: 'grey' }}>[{DELETED_COMMENT}]</Text>
           </Box>
         )}
 

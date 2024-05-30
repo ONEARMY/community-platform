@@ -57,6 +57,7 @@ export const QuestionPage = () => {
       })
 
       setQuestion(foundQuestion)
+      setTotalCommentsCount(foundQuestion.commentCount || totalCommentsCount)
       setIsLoading(false)
     }
 

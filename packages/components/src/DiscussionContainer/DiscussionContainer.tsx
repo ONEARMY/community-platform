@@ -60,7 +60,7 @@ export const DiscussionContainer = (props: IProps) => {
 
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-      <DiscussionTitle length={comments.length} />
+      <DiscussionTitle comments={comments} />
 
       <CommentList
         supportReplies={supportReplies}

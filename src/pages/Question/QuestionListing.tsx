@@ -6,8 +6,6 @@ import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
 import { Flex, Heading } from 'theme-ui'
 
-import DraftButton from '../common/Drafts/DraftButton'
-import useDrafts from '../common/Drafts/useDrafts'
 import { ITEMS_PER_PAGE } from './constants'
 import { headings, listing } from './labels'
 import { QuestionFilterHeader } from './QuestionFilterHeader'
@@ -24,11 +22,6 @@ export const QuestionListing = () => {
   const [lastVisible, setLastVisible] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
   >(undefined)
-  const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
-    useDrafts<IQuestion.Item>({
-      getDraftCount: questionService.getDraftCount,
-      getDrafts: questionService.getDrafts,
-    })
   const { userStore } = useCommonStores().stores
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -112,16 +105,9 @@ export const QuestionListing = () => {
           flexDirection: ['column', 'column', 'row'],
         }}
       >
-        {!showDrafts ? <QuestionFilterHeader /> : <div></div>}
+        <QuestionFilterHeader />
 
         <Flex sx={{ gap: 2 }}>
-          {userStore.user && (
-            <DraftButton
-              showDrafts={showDrafts}
-              draftCount={draftCount}
-              handleShowDrafts={handleShowDrafts}
-            />
-          )}
           <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
             <Button data-cy="create" variant="primary">
               {listing.create}
@@ -136,33 +122,25 @@ export const QuestionListing = () => {
         </Heading>
       )}
 
-      {showDrafts ? (
-        drafts.map((item) => {
-          return <QuestionListItem key={item._id} question={item} query={q} />
-        })
-      ) : (
-        <>
-          {questions &&
-            questions.length > 0 &&
-            questions.map((question, index) => (
-              <QuestionListItem key={index} question={question} query={q} />
-            ))}
+      {questions &&
+        questions.length > 0 &&
+        questions.map((question, index) => (
+          <QuestionListItem key={index} question={question} query={q} />
+        ))}
 
-          {showLoadMore && (
-            <Flex
-              sx={{
-                justifyContent: 'center',
-              }}
-            >
-              <Button onClick={() => fetchQuestions(lastVisible)}>
-                {listing.loadMore}
-              </Button>
-            </Flex>
-          )}
-        </>
+      {showLoadMore && (
+        <Flex
+          sx={{
+            justifyContent: 'center',
+          }}
+        >
+          <Button onClick={() => fetchQuestions(lastVisible)}>
+            {listing.loadMore}
+          </Button>
+        </Flex>
       )}
 
-      {(isFetching || isFetchingDrafts) && <Loader />}
+      {isFetching && <Loader />}
     </>
   )
 }

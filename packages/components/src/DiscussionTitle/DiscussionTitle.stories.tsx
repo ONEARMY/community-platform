@@ -1,6 +1,7 @@
 import { DiscussionTitle } from './DiscussionTitle'
 
 import type { Meta, StoryFn } from '@storybook/react'
+import type { IComment } from '../CommentItem/types'
 
 export default {
   title: 'Components/DiscussionTitle',
@@ -8,13 +9,16 @@ export default {
 } as Meta<typeof DiscussionTitle>
 
 export const NoComments: StoryFn<typeof DiscussionTitle> = () => (
-  <DiscussionTitle length={0} />
+  <DiscussionTitle comments={[]} />
 )
 
-export const OneComment: StoryFn<typeof DiscussionTitle> = () => (
-  <DiscussionTitle length={1} />
-)
+export const OneComment: StoryFn<typeof DiscussionTitle> = () => {
+  const comment = {} as IComment
 
-export const MultipleComments: StoryFn<typeof DiscussionTitle> = () => (
-  <DiscussionTitle length={45} />
-)
+  return <DiscussionTitle comments={[comment]} />
+}
+
+export const MultipleComments: StoryFn<typeof DiscussionTitle> = () => {
+  const comment = {} as IComment
+  return <DiscussionTitle comments={[comment, comment, comment]} />
+}

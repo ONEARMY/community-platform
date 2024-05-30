@@ -10,6 +10,7 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
+import type { IModerationStatus } from 'oa-shared/models'
 import type { IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
@@ -82,11 +83,21 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
 
+    const isTitleAlreadyInUse = await !this.isTitleThatReusesSlug(
+      values.title,
+      values?._id,
+    )
+    if (isTitleAlreadyInUse) {
+      throw new Error('Question title already in use.')
+    }
+
     const slug = await this.setSlug(values)
     const previousSlugs = this.setPreviousSlugs(values, slug)
     const _createdBy = values._createdBy ?? this.activeUser?.userName
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
+    const moderation =
+      values.moderation || ('accepted' as IModerationStatus.ACCEPTED)
 
     const keywords = getKeywords(values.title + ' ' + values.description)
     if (_createdBy) {
@@ -105,6 +116,7 @@ export class QuestionStore extends ModuleStore {
       previousSlugs,
       keywords,
       images,
+      moderation,
     })
     logger.info(`upsertQuestion.set`, { dbRef })
 

@@ -94,9 +94,11 @@ export const HowtoForm = observer((props: IProps) => {
       return
     }
     setState((state) => ({ ...state, showSubmitModal: true }))
-    formValues.moderation = formValues.allowDraftSave
-      ? IModerationStatus.DRAFT
-      : IModerationStatus.AWAITING_MODERATION
+    if (formValues.moderation !== IModerationStatus.ACCEPTED) {
+      formValues.moderation = formValues.allowDraftSave
+        ? IModerationStatus.DRAFT
+        : IModerationStatus.AWAITING_MODERATION
+    }
     logger.debug('submitting form', formValues)
     await howtoStore.uploadHowTo(formValues)
     form.reset(formValues)

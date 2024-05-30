@@ -16,7 +16,7 @@ describe('[Research]', () => {
         cy.visit(researchArticleUrl)
       })
 
-      it('[Visible to everyone', () => {
+      it('[Visible to everyone]', () => {
         const article = research[0]
         cy.step('Delete button should not be visible')
         cy.get('[data-cy="Research: delete button"]').should('not.exist')

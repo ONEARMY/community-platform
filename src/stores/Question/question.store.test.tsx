@@ -20,6 +20,7 @@ jest.mock('../common/toggleDocUsefulByUser', () => ({
 
 const factory = async () => {
   const store = new QuestionStore()
+  store.isTitleThatReusesSlug = jest.fn().mockResolvedValue(false)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -60,7 +61,7 @@ describe('question.store', () => {
     it('assigns _createdBy', async () => {
       const { store, setFn } = await factory()
       const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
+        title: 'So what is plastic?',
         _createdBy: undefined,
       })
 
@@ -79,7 +80,7 @@ describe('question.store', () => {
     it('handles empty query response', async () => {
       const { store } = await factory()
       const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
+        title: 'How do you survive living in a tent?',
       })
 
       // Act
@@ -104,14 +105,14 @@ describe('question.store', () => {
     it('returns a valid response when a previous slug', async () => {
       const { store, getWhereFn } = await factory()
       const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-        previousSlugs: ['old-slug'],
+        title: 'Can I run a shredder at home?',
+        previousSlugs: ['shredder-at-home'],
       })
 
       getWhereFn.mockResolvedValue([newQuestion])
 
       // Act
-      const questionDoc = await store.fetchQuestionBySlug('old-slug')
+      const questionDoc = await store.fetchQuestionBySlug('shredder-at-home')
 
       expect(questionDoc).toStrictEqual(newQuestion)
     })
@@ -122,7 +123,7 @@ describe('question.store', () => {
       const { store, updateFn } = await factory()
 
       const question = FactoryQuestionItem({
-        title: 'Question title',
+        title: 'which trees to cut down',
         _createdBy: undefined,
         total_views: 56,
       })

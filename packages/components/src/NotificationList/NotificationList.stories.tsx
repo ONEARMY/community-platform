@@ -4,7 +4,7 @@ import { InternalLink } from '../InternalLink/InternalLink'
 import { NotificationList } from './NotificationList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { UserNotificationList } from './NotificationList'
+import type { UserNotificationItem } from '../NotificationItem/NotificationItem'
 
 export default {
   title: 'Components/NotificationList',
@@ -74,10 +74,14 @@ const notifications = [
       </>
     ),
   },
-] as UserNotificationList
+] as UserNotificationItem[]
 
 export const Default: StoryFn<typeof NotificationList> = () => (
-  <NotificationList notifications={notifications} />
+  <NotificationList
+    notifications={notifications}
+    markAllNotified={() => {}}
+    markAllRead={() => {}}
+  />
 )
 
 export const LongList: StoryFn<typeof NotificationList> = () => (
@@ -88,9 +92,15 @@ export const LongList: StoryFn<typeof NotificationList> = () => (
       ...notifications,
       ...notifications,
     ]}
+    markAllNotified={() => {}}
+    markAllRead={() => {}}
   />
 )
 
 export const Empty: StoryFn<typeof NotificationList> = () => (
-  <NotificationList notifications={[]} />
+  <NotificationList
+    notifications={[]}
+    markAllNotified={() => {}}
+    markAllRead={() => {}}
+  />
 )

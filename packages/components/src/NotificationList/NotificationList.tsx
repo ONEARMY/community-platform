@@ -5,15 +5,14 @@ import { Box, Card, Text } from 'theme-ui'
 import { Button } from '../Button/Button'
 import { NotificationItem } from '../NotificationItem/NotificationItem'
 
+import type { ThemeUIStyleObject } from 'theme-ui'
 import type { UserNotificationItem } from '../NotificationItem/NotificationItem'
 
-export type UserNotificationList = UserNotificationItem[]
-
 export interface Props {
-  notifications: UserNotificationList
-  sx?: any
-  markAllRead?: () => void
-  markAllNotified?: () => void
+  notifications: UserNotificationItem[]
+  markAllRead: () => void
+  markAllNotified: () => void
+  sx?: ThemeUIStyleObject
 }
 
 const ModalItem = styled(Box)`
@@ -30,8 +29,10 @@ export const NotificationList = (props: Props) => {
   const { notifications, markAllRead, markAllNotified } = props
   const sx = props.sx || {}
   useEffect(() => {
-    notifications.length && markAllNotified && markAllNotified()
-  }, [notifications, markAllNotified])
+    if (notifications.length) {
+      markAllNotified()
+    }
+  }, [])
 
   return (
     <Card sx={{ padding: 2, maxHeight: 310, overflowY: 'auto', ...sx }}>
@@ -39,10 +40,7 @@ export const NotificationList = (props: Props) => {
         <>
           <ModalItem style={{ textAlign: 'center' }}>Notifications</ModalItem>
           {notifications.map((notification, idx) => (
-            <NotificationItem
-              key={idx}
-              {...(notification as any)}
-            ></NotificationItem>
+            <NotificationItem key={idx} {...(notification as any)} />
           ))}
           <Button
             style={{

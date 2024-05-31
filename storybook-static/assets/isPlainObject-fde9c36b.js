@@ -1,2 +1,0 @@
-import{_ as a,v as c,a as n}from"./identity-0adaf7d3.js";var i=a,s=c,b=n,p="[object Object]",j=Function.prototype,f=Object.prototype,e=j.toString,u=f.hasOwnProperty,l=e.call(Object);function O(r){if(!b(r)||i(r)!=p)return!1;var o=s(r);if(o===null)return!0;var t=u.call(o,"constructor")&&o.constructor;return typeof t=="function"&&t instanceof t&&e.call(t)==l}var v=O;export{v as i};
-//# sourceMappingURL=isPlainObject-fde9c36b.js.map

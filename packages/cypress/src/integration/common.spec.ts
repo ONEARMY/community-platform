@@ -1,4 +1,4 @@
-import { UserMenuItem } from '../support/commands'
+import { UserMenuItem } from '../support/commandsUi'
 
 describe('[Common]', () => {
   it('[Default Page]', () => {

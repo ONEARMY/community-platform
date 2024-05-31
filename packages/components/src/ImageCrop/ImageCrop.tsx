@@ -39,7 +39,6 @@ export const ImageCrop = (props: Props) => {
 
   function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
     const { width, height } = e.currentTarget
-    console.log(e)
     setCrop(centerAspectCrop(width, height, aspect))
   }
 

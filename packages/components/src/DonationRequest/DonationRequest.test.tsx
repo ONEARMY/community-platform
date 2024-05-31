@@ -1,7 +1,9 @@
+import '@testing-library/jest-dom/vitest'
+
 import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { render } from '../tests/utils'
+import { render } from '../test/utils'
 import { DonationRequest, REQUEST_BUTTON_SKIP } from './DonationRequest'
 
 describe('DonationRequest', () => {

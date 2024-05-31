@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 
 import { describe, expect, it } from 'vitest'
 
-import { render } from '../tests/utils'
+import { render } from '../test/utils'
 import { MapMemberCard } from './MapMemberCard'
 import { Default, ModerationComments } from './MapMemberCard.stories'
 

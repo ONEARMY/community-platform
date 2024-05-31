@@ -1,7 +1,9 @@
+import '@testing-library/jest-dom/vitest'
+
 import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { render } from '../tests/utils'
+import { render } from '../test/utils'
 import { createFakeComments, fakeComment } from '../utils'
 import { CommentList } from './CommentList'
 

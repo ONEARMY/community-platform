@@ -17,8 +17,7 @@ const vitestConfig: VitestUserConfigInterface = {
       provider: 'v8',
       reporter: ['text'],
     },
-    reporters: ['junit'],
-    include: ['./src/**/*.{test}.?(c|m)[jt]s?(x)'],
+    include: ['./src/**/*.test.?(c|m)[jt]s?(x)'],
     logHeapUsage: true,
   },
 }

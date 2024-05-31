@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { render } from '../tests/utils'
+import { render } from '../test/utils'
 import { Default } from './ContentStatistics.stories'
 
 import type { IProps } from './ContentStatistics'

@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 
 import { describe, expect, it } from 'vitest'
 
-import { render } from '../tests/utils'
+import { render } from '../test/utils'
 import { Username } from './Username'
 import {
   InvalidCountryCode,

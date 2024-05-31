@@ -3,7 +3,7 @@ import '@testing-library/jest-dom'
 import { act } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { render } from '../tests/utils'
+import { render } from '../test/utils'
 import { Default } from './TabbedContent.stories'
 
 describe('TabbedContent', () => {

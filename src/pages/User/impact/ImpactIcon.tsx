@@ -14,5 +14,5 @@ export const ImpactIcon = ({ id }: Props) => {
 
   const glyph = question.icon
 
-  return <Icon glyph={glyph} />
+  return <Icon glyph={glyph as any} />
 }

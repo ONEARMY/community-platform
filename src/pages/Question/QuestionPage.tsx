@@ -145,7 +145,7 @@ export const QuestionPage = () => {
 
                 {question.images && (
                   <ImageGallery
-                    images={formatImagesForGallery(question.images)}
+                    images={formatImagesForGallery(question.images) as any}
                     allowPortrait={true}
                   />
                 )}

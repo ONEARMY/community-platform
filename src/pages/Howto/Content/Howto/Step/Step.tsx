@@ -81,7 +81,9 @@ const Step = (props: IProps) => {
                 {step.videoUrl ? (
                   <VideoPlayer videoUrl={step.videoUrl} />
                 ) : step.images ? (
-                  <ImageGallery images={formatImagesForGallery(step.images)} />
+                  <ImageGallery
+                    images={formatImagesForGallery(step.images) as any}
+                  />
                 ) : null}
               </Box>
             </Flex>

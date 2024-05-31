@@ -18,7 +18,9 @@ interface IState {
   errorMsg?: string
   disabled?: boolean
   authProvider?: IAuthProvider
-  notificationProps?: Pick<TextNotification.Props, 'isVisible' | 'variant'> & {
+  notificationProps?: {
+    isVisible: boolean
+    variant: string
     text: string
   }
 }

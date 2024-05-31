@@ -188,7 +188,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       <Box sx={{ lineHeight: 0 }}>
         {coverImage.length ? (
           <ImageGallery
-            images={formatImagesForGallery(coverImage)}
+            images={formatImagesForGallery(coverImage) as any}
             hideThumbnails={true}
             showNextPrevButton={true}
           />

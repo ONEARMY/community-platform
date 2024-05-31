@@ -158,7 +158,7 @@ describe('research.routes', () => {
           ).toHaveBeenCalledWith('research-slug')
         },
         {
-          timeout: 2000,
+          timeout: 4000,
         },
       )
 

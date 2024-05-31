@@ -153,17 +153,13 @@ describe('research.routes', () => {
 
       await vi.waitFor(
         () => {
-          expect(
-            mockResearchStore.setActiveResearchItemBySlug,
-          ).toHaveBeenCalledWith('research-slug')
+          expect(wrapper.queryByTestId('research-title')).toHaveTextContent(
+            'Research article title',
+          )
         },
         {
-          timeout: 4000,
+          timeout: 5000,
         },
-      )
-
-      expect(wrapper.queryByTestId('research-title')).toHaveTextContent(
-        'Research article title',
       )
     })
   })

@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 import { Suspense } from 'react'
 import {
@@ -156,13 +156,14 @@ describe('research.routes', () => {
           expect(
             mockResearchStore.setActiveResearchItemBySlug,
           ).toHaveBeenCalledWith('research-slug')
-          expect(wrapper.queryByTestId('research-title')).toHaveTextContent(
-            'Research article title',
-          )
         },
         {
           timeout: 2000,
         },
+      )
+
+      expect(wrapper.queryByTestId('research-title')).toHaveTextContent(
+        'Research article title',
       )
     })
   })

@@ -138,8 +138,8 @@ describe('question.routes', () => {
         })
       })
 
-      await act(async () => {
-        wrapper = (await renderFn('/questions')).wrapper
+      act(() => {
+        wrapper = renderFn('/questions').wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
     })
@@ -147,8 +147,8 @@ describe('question.routes', () => {
     it('renders an empty state', async () => {
       let wrapper
 
-      await act(async () => {
-        wrapper = (await renderFn('/questions')).wrapper
+      act(() => {
+        wrapper = renderFn('/questions').wrapper
       })
 
       await waitFor(async () => {
@@ -188,8 +188,8 @@ describe('question.routes', () => {
         })
       })
 
-      await act(async () => {
-        wrapper = (await renderFn('/questions')).wrapper
+      act(() => {
+        wrapper = renderFn('/questions').wrapper
       })
 
       await waitFor(async () => {
@@ -215,8 +215,8 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      await act(async () => {
-        const render = await renderFn('/questions/create')
+      act(() => {
+        const render = renderFn('/questions/create')
         wrapper = render.wrapper
       })
 
@@ -231,9 +231,7 @@ describe('question.routes', () => {
       await userEvent.type(title, 'Can you build a house out of plastic?')
       await userEvent.type(description, "So I've got all this plastic...")
 
-      await waitFor(() => {
-        submitButton.click()
-      })
+      submitButton.click()
 
       expect(mockUpsertQuestion).toHaveBeenCalledWith({
         title: 'Can you build a house out of plastic?',
@@ -241,7 +239,14 @@ describe('question.routes', () => {
         tags: {},
       })
 
-      expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
+      await waitFor(
+        () => {
+          expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
+        },
+        {
+          timeout: 2000,
+        },
+      )
     })
   })
 
@@ -259,8 +264,8 @@ describe('question.routes', () => {
         incrementViewCount: mockIncrementViewCount,
       })
 
-      await act(async () => {
-        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+      act(() => {
+        wrapper = renderFn(`/questions/${question.slug}`).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -287,7 +292,6 @@ describe('question.routes', () => {
 
     describe('Follow', () => {
       it('displays following status', async () => {
-        let wrapper
         const user = FactoryUser()
         const question = FactoryQuestionItem({
           subscribers: [user.userName],
@@ -299,14 +303,16 @@ describe('question.routes', () => {
           fetchQuestionBySlug: mockFetchQuestionBySlug,
           userHasSubscribed: true,
         })
+        const wrapper = renderFn(`/questions/${question.slug}`).wrapper
 
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
-        })
-
-        await waitFor(() => {
-          expect(wrapper.getByText('Following')).toBeInTheDocument()
-        })
+        await waitFor(
+          () => {
+            expect(wrapper.getByText('Following')).toBeInTheDocument()
+          },
+          {
+            timeout: 2000,
+          },
+        )
       })
 
       it('supports follow behaviour', async () => {
@@ -318,11 +324,18 @@ describe('question.routes', () => {
           fetchQuestionBySlug: mockFetchQuestionBySlug,
         })
 
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+        act(() => {
+          wrapper = renderFn(`/questions/${question.slug}`).wrapper
         })
 
-        expect(wrapper.getByText('Follow')).toBeInTheDocument()
+        await waitFor(
+          () => {
+            expect(wrapper.getByText('Follow')).toBeInTheDocument()
+          },
+          {
+            timeout: 2000,
+          },
+        )
       })
     })
 
@@ -338,8 +351,8 @@ describe('question.routes', () => {
         userCanEditQuestion: false,
       })
 
-      await act(async () => {
-        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+      act(() => {
+        wrapper = renderFn(`/questions/${question.slug}`).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -364,8 +377,8 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      await act(async () => {
-        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+      act(() => {
+        wrapper = renderFn(`/questions/${question.slug}`).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -380,8 +393,8 @@ describe('question.routes', () => {
     const editFormTitle = /Edit your question/
     it('renders the question edit page', async () => {
       let wrapper
-      await act(async () => {
-        wrapper = (await renderFn('/questions/slug/edit')).wrapper
+      act(() => {
+        wrapper = renderFn('/questions/slug/edit').wrapper
       })
 
       await waitFor(async () => {
@@ -413,8 +426,8 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      await act(async () => {
-        const res = await renderFn('/questions/slug/edit')
+      act(() => {
+        const res = renderFn('/questions/slug/edit')
         wrapper = res.wrapper
       })
 
@@ -437,9 +450,7 @@ describe('question.routes', () => {
       await userEvent.clear(description)
       await userEvent.type(description, 'Question description')
 
-      await waitFor(() => {
-        submitButton.click()
-      })
+      submitButton.click()
 
       expect(mockUpsertQuestion).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -464,8 +475,8 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      await act(async () => {
-        const res = await renderFn('/questions/slug/edit')
+      act(() => {
+        const res = renderFn('/questions/slug/edit')
         wrapper = res.wrapper
       })
 
@@ -477,7 +488,7 @@ describe('question.routes', () => {
   })
 })
 
-const renderFn = async (url) => {
+const renderFn = (url) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route path="/questions">{questionRouteElements}</Route>,

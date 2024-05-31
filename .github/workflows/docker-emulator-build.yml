@@ -79,7 +79,7 @@ jobs:
       - name: Install npm dependencies
         run: yarn install --immutable
       - name: Set environment variables
-        run: export REACT_APP_PROJECT_VERSION=${GITHUB_SHA}
+        run: export VITE_APP_PROJECT_VERSION=${GITHUB_SHA}
       - name: Prepare Build
         run: yarn workspace oa-emulators-docker prepare
       # Populate the list of build args generated in the prepare script to local env as multi line string

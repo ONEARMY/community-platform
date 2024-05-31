@@ -106,7 +106,7 @@ commands:
       - run:
           name: Set branch environment
           command: |
-            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export VITE_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Inject target environment configuration
           command: |
@@ -200,7 +200,6 @@ jobs:
     resource_class: large
     environment:
       CYPRESS_INSTALL_BINARY: 0
-      JEST_JUNIT_OUTPUT_DIR: ./reports
     steps:
       - setup_repo
       - attach_workspace:
@@ -249,8 +248,6 @@ jobs:
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
           command: yarn run test:unit && yarn run test:components
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: reports
       - store_artifacts:
           path: coverage
       - store_artifacts:
@@ -288,13 +285,13 @@ jobs:
       - run:
           name: Set branch environment
           command: |
-            echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
-            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export VITE_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
+            echo 'export VITE_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
-            echo REACT_APP_BRANCH=$REACT_APP_BRANCH
-            echo $REACT_APP_PROJECT_VERSION
+            echo VITE_APP_BRANCH=$VITE_APP_BRANCH
+            echo $VITE_APP_PROJECT_VERSION
       - run:
           command: yarn build
       - persist_to_workspace:

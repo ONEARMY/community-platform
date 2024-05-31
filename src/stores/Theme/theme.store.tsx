@@ -20,7 +20,7 @@ export class ThemeStore {
   currentTheme: PlatformTheme =
     themeMap[
       localStorage.getItem('platformTheme') ||
-        getConfigurationOption('REACT_APP_PLATFORM_THEME', 'precious-plastic')
+        getConfigurationOption('VITE_APP_PLATFORM_THEME', 'precious-plastic')
     ]
 
   constructor() {

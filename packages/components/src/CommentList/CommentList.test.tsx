@@ -1,5 +1,5 @@
 import { fireEvent } from '@testing-library/react'
-import { vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import { render } from '../tests/utils'
 import { createFakeComments, fakeComment } from '../utils'

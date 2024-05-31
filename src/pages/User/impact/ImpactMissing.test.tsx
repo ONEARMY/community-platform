@@ -2,11 +2,12 @@ import { render, screen } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, it, vi } from 'vitest'
 
 import { ImpactMissing } from './ImpactMissing'
 import { invisible, missing, reportYearLabel } from './labels'
 
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {

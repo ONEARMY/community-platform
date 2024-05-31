@@ -1,4 +1,6 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
 import { FactoryMessage } from 'src/test/factories/Message'
 import { FactoryUser } from 'src/test/factories/User'
 

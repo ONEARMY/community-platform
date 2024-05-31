@@ -1,5 +1,4 @@
-/* global module */
-module.exports = {
+export default {
   extends: ['@commitlint/config-conventional'],
   /** Add optional custom formatter */
   // Temporarily removed due to unresolved error: https://app.circleci.com/pipelines/github/ONEARMY/community-platform/5891/workflows/59757a07-b416-43be-9a57-eedc1190d5a0/jobs/44654

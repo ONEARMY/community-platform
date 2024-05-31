@@ -1,8 +1,11 @@
+import '@testing-library/jest-dom/vitest'
+
 import { render } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 
 import { TagList } from './TagsList'
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {

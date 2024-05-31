@@ -4,7 +4,7 @@ import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryHowto } from 'src/test/factories/Howto'
 
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -20,8 +20,8 @@ jest.mock('src/common/hooks/useCommonStores', () => {
             Database: false,
             Complete: false,
           },
-          validateTitleForSlug: jest.fn(),
-          uploadHowTo: jest.fn(),
+          validateTitleForSlug: vi.fn(),
+          uploadHowTo: vi.fn(),
         },
         tagsStore: {
           allTags: [
@@ -39,7 +39,7 @@ jest.mock('src/common/hooks/useCommonStores', () => {
 export const HowtoProvider = ({ children }) => {
   const formProps = {
     formValues: FactoryHowto(),
-    onSubmit: jest.fn(),
+    onSubmit: vi.fn(),
     mutators: { ...arrayMutators },
     component: () => children,
   }

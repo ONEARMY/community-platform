@@ -1,4 +1,6 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
 import {
   FactoryHowto,
   FactoryHowtoDraft,
@@ -11,12 +13,12 @@ import { HowtoStore } from './howto.store'
 import type { IHowtoDB, IUser } from 'src/models'
 import type { IRootStore } from '../RootStore'
 
-const mockGetDoc = jest.fn()
-const mockIncrement = jest.fn()
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  query: jest.fn(),
-  doc: jest.fn(),
+const mockGetDoc = vi.fn()
+const mockIncrement = vi.fn()
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  query: vi.fn(),
+  doc: vi.fn(),
   getDoc: (doc) => mockGetDoc(doc),
   increment: (value) => mockIncrement(value),
 }))
@@ -61,7 +63,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userStore = {
-    getUserProfile: jest.fn().mockImplementation((userName) =>
+    getUserProfile: vi.fn().mockImplementation((userName) =>
       FactoryUser({
         _authID: 'userId',
         userName,
@@ -71,10 +73,10 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
+    triggerNotification: vi.fn(),
   }
 
-  store.toggleUsefulByUser = jest.fn()
+  store.toggleUsefulByUser = vi.fn()
 
   await store.setActiveHowtoBySlug('howto')
 

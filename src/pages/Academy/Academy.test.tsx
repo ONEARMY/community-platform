@@ -1,3 +1,5 @@
+import { describe, expect, it, vi } from 'vitest'
+
 import { getFrameSrc } from './Academy'
 
 // Mock out the useCommonStores method
@@ -5,9 +7,9 @@ import { getFrameSrc } from './Academy'
 // being instantiated as part of the loading process
 // This is a code smell, which needs to be resolved but
 // is out of scope for the current task.
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
-    useCommonStores: jest.fn(),
+    useCommonStores: vi.fn(),
   }
 })
 

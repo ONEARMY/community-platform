@@ -1,15 +1,18 @@
-jest.mock('../common/module.store')
 import { faker } from '@faker-js/faker'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { UserStore } from './user.store'
 
-jest.mock('firebase/auth', () => {
-  const auth = jest.requireActual('firebase/auth')
+vi.mock('../common/module.store')
+vi.mock('../Aggragations/aggregations.store')
+
+vi.mock('firebase/auth', async () => {
+  const auth = await vi.importActual('firebase/auth')
   return {
     ...auth,
     getAuth: () => ({
@@ -19,11 +22,11 @@ jest.mock('firebase/auth', () => {
         uid: 'testUid',
       },
     }),
-    createUserWithEmailAndPassword: jest.fn(),
-    signInWithEmailAndPassword: jest.fn(),
-    onAuthStateChanged: jest.fn(),
-    signOut: jest.fn(),
-    updateProfile: jest.fn(),
+    createUserWithEmailAndPassword: vi.fn(),
+    signInWithEmailAndPassword: vi.fn(),
+    onAuthStateChanged: vi.fn(),
+    signOut: vi.fn(),
+    updateProfile: vi.fn(),
   }
 })
 
@@ -434,8 +437,8 @@ describe('userStore', () => {
 
   describe('registerNewUser', () => {
     it('registers a new user', async () => {
-      store.loadUserAggregations = jest.fn()
-      store.authUnsubscribe = jest.fn()
+      store.loadUserAggregations = vi.fn()
+      store.authUnsubscribe = vi.fn()
 
       await store.registerNewUser(
         'newuser@example.com',

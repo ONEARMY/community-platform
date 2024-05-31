@@ -1,4 +1,6 @@
-import { vi } from 'vitest'
+import '@testing-library/jest-dom'
+
+import { describe, expect, it, vi } from 'vitest'
 
 import { render } from '../tests/utils'
 import { DonationRequestModal } from './DonationRequestModal'

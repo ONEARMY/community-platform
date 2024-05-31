@@ -4,10 +4,10 @@ import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
 
-const mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
-const mockUpdateUserBadge = jest.fn()
+const mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
+const mockUpdateUserBadge = vi.fn()
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
@@ -38,7 +38,7 @@ export const SettingsProvider = ({ children }) => {
 
   const formProps = {
     formValues: user,
-    onSubmit: jest.fn(),
+    onSubmit: vi.fn(),
     mutators: { ...arrayMutators },
     component: () => children,
   }

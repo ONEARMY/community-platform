@@ -2,8 +2,8 @@ import { Logger } from 'tslog'
 
 import { getConfigurationOption } from '../config/config'
 
-const logLevel = getConfigurationOption('REACT_APP_LOG_LEVEL', 'info')
-const logTransport = getConfigurationOption('REACT_APP_LOG_TRANSPORT', 'none')
+const logLevel = getConfigurationOption('VITE_APP_LOG_LEVEL', 'info')
+const logTransport = getConfigurationOption('VITE_APP_LOG_TRANSPORT', 'none')
 
 const levelNumberToNameMap = {
   silly: 0,

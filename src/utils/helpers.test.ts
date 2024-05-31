@@ -1,6 +1,7 @@
 import { IModerationStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it } from 'vitest'
 
 import {
   arrayToJson,
@@ -21,7 +22,6 @@ import {
 } from './helpers'
 
 import type { IModerable, IResearch } from 'src/models'
-import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {

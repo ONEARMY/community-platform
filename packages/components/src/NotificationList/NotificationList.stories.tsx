@@ -4,7 +4,7 @@ import { InternalLink } from '../InternalLink/InternalLink'
 import { NotificationList } from './NotificationList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { UserNotificationItem } from '../NotificationItem/NotificationItem'
+import type { UserNotificationItem } from 'oa-shared'
 
 export default {
   title: 'Components/NotificationList',

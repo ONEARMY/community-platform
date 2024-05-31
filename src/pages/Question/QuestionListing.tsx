@@ -62,16 +62,18 @@ export const QuestionListing = () => {
         ITEMS_PER_PAGE,
       )
 
-      if (skipFrom) {
-        // if skipFrom is set, means we are requesting another page that should be appended
-        setQuestions((questions) => [...questions, ...result.items])
-      } else {
-        setQuestions(result.items)
+      if (result) {
+        if (skipFrom) {
+          // if skipFrom is set, means we are requesting another page that should be appended
+          setQuestions((questions) => [...questions, ...result.items])
+        } else {
+          setQuestions(result.items)
+        }
+
+        setLastVisible(result.lastVisible)
+
+        setTotal(result.total)
       }
-
-      setLastVisible(result.lastVisible)
-
-      setTotal(result.total)
     } catch (error) {
       logger.error('error fetching questions', error)
     }

@@ -1,5 +1,7 @@
 import '@testing-library/jest-dom'
 
+import { describe, expect, it } from 'vitest'
+
 import { getKeywords } from './searchHelper'
 
 describe('searchHelper', () => {

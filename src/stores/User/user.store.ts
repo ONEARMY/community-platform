@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from 'firebase/auth'
 import { uniqBy } from 'lodash'
-import { action, computed, makeObservable, observable, toJS } from 'mobx'
+import { action, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 
 import { logger } from '../../logger'
@@ -54,14 +54,6 @@ export class UserStore extends ModuleStore {
     super(rootStore)
     makeObservable(this)
     this._listenToAuthStateChanges()
-    // Update verified users on intial load. use timeout to ensure aggregation store initialised
-    setTimeout(() => {
-      this.loadUserAggregations()
-    }, 50)
-  }
-  // redirect calls for verifiedUsers to the aggregation store list
-  @computed get verifiedUsers(): { [user_id: string]: boolean } {
-    return this.aggregationsStore.users_verified || {}
   }
 
   @action
@@ -376,11 +368,6 @@ export class UserStore extends ModuleStore {
     // TODO - delete user avatar
     // TODO - show deleted notification
     // TODO show notification if invalid credential
-  }
-
-  @action
-  public async loadUserAggregations() {
-    this.aggregationsStore.updateVerifiedUsers()
   }
 
   // handle user sign in, when firebase authenticates want to also fetch user document from the database

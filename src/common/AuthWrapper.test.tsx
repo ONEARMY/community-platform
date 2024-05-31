@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react'
 import { UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it, vi } from 'vitest'
 
 import { AuthWrapper } from './AuthWrapper' // adjust this import according to your file structure
 
@@ -10,7 +11,7 @@ const mockUser = FactoryUser({
   userRoles: [UserRole.ADMIN],
 })
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {

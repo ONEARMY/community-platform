@@ -1,5 +1,8 @@
+import '@testing-library/jest-dom'
+
 import { act } from 'react-dom/test-utils'
 import { fireEvent } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
 
 import { render } from '../tests/utils'
 import { Default, WithReplies } from './DiscussionContainer.stories'

@@ -1,9 +1,6 @@
-import { getSupportedProfileTypes } from './index'
-import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
+import { describe, expect, it } from 'vitest'
 
-describe('getSupportedProfileTypes', () => {
-  expect(typeof getSupportedProfileTypes).toBe('function')
-})
+import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
 
 describe('SupportedProfileTypesFactory', () => {
   it('handles malformed input with default items', () => {
@@ -13,37 +10,41 @@ describe('SupportedProfileTypesFactory', () => {
     expect(profiles).toEqual(
       expect.arrayContaining([
         {
-          cleanImageSrc: 'avatar_member_sm.svg',
-          cleanImageVerifiedSrc: 'avatar_member_sm.svg',
-          imageSrc: 'avatar_member_sm.svg',
+          cleanImageSrc:
+            '/src/assets/images/themes/precious-plastic/avatar_member_sm.svg',
+          cleanImageVerifiedSrc:
+            '/src/assets/images/themes/precious-plastic/avatar_member_sm.svg',
+          imageSrc:
+            '/src/assets/images/themes/precious-plastic/avatar_member_sm.svg',
           label: 'member',
           textLabel: 'I am a member',
         },
         {
-          cleanImageSrc: 'map-workspace.svg',
-          cleanImageVerifiedSrc: 'map-workspace-verified.svg',
-          imageSrc: 'pt-workspace.svg',
+          cleanImageSrc: '/src/assets/icons/map-workspace.svg',
+          cleanImageVerifiedSrc: '/src/assets/icons/map-workspace-verified.svg',
+          imageSrc: '/src/assets/images/badges/pt-workspace.svg',
           label: 'workspace',
           textLabel: 'I run a workspace',
         },
         {
-          cleanImageSrc: 'map-machine.svg',
-          cleanImageVerifiedSrc: 'map-machine-verified.svg',
-          imageSrc: 'pt-machine-shop.svg',
+          cleanImageSrc: '/src/assets/icons/map-machine.svg',
+          cleanImageVerifiedSrc: '/src/assets/icons/map-machine-verified.svg',
+          imageSrc: '/src/assets/images/badges/pt-machine-shop.svg',
           label: 'machine-builder',
           textLabel: 'I build machines',
         },
         {
-          cleanImageSrc: 'map-community.svg',
-          cleanImageVerifiedSrc: 'map-community-verified.svg',
-          imageSrc: 'pt-local-community.svg',
+          cleanImageSrc: '/src/assets/icons/map-community.svg',
+          cleanImageVerifiedSrc: '/src/assets/icons/map-community-verified.svg',
+          imageSrc: '/src/assets/images/badges/pt-local-community.svg',
           label: 'community-builder',
           textLabel: 'I run a local community',
         },
         {
-          cleanImageSrc: 'map-collection.svg',
-          cleanImageVerifiedSrc: 'map-collection-verified.svg',
-          imageSrc: 'pt-collection-point.svg',
+          cleanImageSrc: '/src/assets/icons/map-collection.svg',
+          cleanImageVerifiedSrc:
+            '/src/assets/icons/map-collection-verified.svg',
+          imageSrc: '/src/assets/images/badges/pt-collection-point.svg',
           label: 'collection-point',
           textLabel: 'I collect & sort plastic',
         },
@@ -57,9 +58,12 @@ describe('SupportedProfileTypesFactory', () => {
     expect(profiles).toEqual(
       expect.arrayContaining([
         {
-          cleanImageSrc: 'avatar_member_sm.svg',
-          cleanImageVerifiedSrc: 'avatar_member_sm.svg',
-          imageSrc: 'avatar_member_sm.svg',
+          cleanImageSrc:
+            '/src/assets/images/themes/precious-plastic/avatar_member_sm.svg',
+          cleanImageVerifiedSrc:
+            '/src/assets/images/themes/precious-plastic/avatar_member_sm.svg',
+          imageSrc:
+            '/src/assets/images/themes/precious-plastic/avatar_member_sm.svg',
           label: 'member',
           textLabel: 'I am a member',
         },

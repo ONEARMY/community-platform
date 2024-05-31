@@ -4,7 +4,7 @@ import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -12,8 +12,8 @@ jest.mock('src/common/hooks/useCommonStores', () => {
           allCategories: [],
         },
         researchStore: {
-          validateTitleForSlug: jest.fn(),
-          uploadHowTo: jest.fn(),
+          validateTitleForSlug: vi.fn(),
+          uploadHowTo: vi.fn(),
         },
         tagsStore: {
           allTags: [
@@ -31,7 +31,7 @@ jest.mock('src/common/hooks/useCommonStores', () => {
 export const ResearchProvider = ({ children }) => {
   const formProps = {
     formValues: FactoryResearchItem(),
-    onSubmit: jest.fn(),
+    onSubmit: vi.fn(),
     mutators: { ...arrayMutators },
     component: () => children,
   }

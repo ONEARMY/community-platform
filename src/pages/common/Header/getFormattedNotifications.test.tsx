@@ -1,7 +1,10 @@
+import '@testing-library/jest-dom/vitest'
+
 import { MemoryRouter } from 'react-router-dom'
 import { render } from '@testing-library/react'
 import { NotificationTypes } from 'oa-shared'
 import { FactoryNotification } from 'src/test/factories/Notification'
+import { describe, expect, it } from 'vitest'
 
 import { getFormattedNotifications } from './getFormattedNotifications'
 

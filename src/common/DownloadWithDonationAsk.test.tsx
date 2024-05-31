@@ -1,18 +1,21 @@
+import '@testing-library/jest-dom/vitest'
+
 import { fireEvent, render } from '@testing-library/react'
 import { UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it, vi } from 'vitest'
 
 import { useCommonStores } from './hooks/useCommonStores'
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 
-const mockedUsedNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
+const mockedUsedNavigate = vi.fn()
+vi.mock('react-router-dom', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
-  useCommonStores: jest.fn(),
+  useCommonStores: vi.fn(),
 }))
 const userToMock = (user) => {
   return useCommonStores.mockImplementation(() => ({
@@ -24,7 +27,7 @@ describe('DownloadFileFromLink', () => {
   it('when logged out, requires users to login', () => {
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
-        handleClick={jest.fn()}
+        handleClick={vi.fn()}
         isLoggedIn={false}
         link="http://youtube.com/"
       />,
@@ -40,7 +43,7 @@ describe('DownloadFileFromLink', () => {
     const user = FactoryUser()
     userToMock(user)
 
-    const handleClick = jest.fn()
+    const handleClick = vi.fn()
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
         handleClick={handleClick}
@@ -59,7 +62,7 @@ describe('DownloadFileFromLink', () => {
     const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
     userToMock(user)
 
-    const handleClick = jest.fn()
+    const handleClick = vi.fn()
 
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk

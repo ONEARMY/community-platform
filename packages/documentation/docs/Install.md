@@ -38,17 +38,17 @@ You will need to set up a CircleCI context for each target environment. This con
 
 - `FIREBASE_TOKEN`
 - `GOOGLE_APPLICATION_CREDENTIALS_JSON`
-- `REACT_APP_BRANCH`
-- `REACT_APP_FIREBASE_API_KEY`
-- `REACT_APP_FIREBASE_AUTH_DOMAIN`
-- `REACT_APP_FIREBASE_DATABASE_URL`
-- `REACT_APP_FIREBASE_MESSAGING_SENDER_ID`
-- `REACT_APP_FIREBASE_PROJECT_ID`
-- `REACT_APP_FIREBASE_STORAGE_BUCKET`
-- `REACT_APP_GA_TRACKING_ID`
-- `REACT_APP_PLATFORM_THEME`
-- `REACT_APP_CDN_URL` - `https://cdn-url.com` - this is the URL to the CDN where the assets are stored. This is used to load the assets from the CDN instead of the local server. It should **not** include a trailing slash.
-- `REACT_APP_PLATFORM_PROFILES` - comma separated list of available profiles. Use `ProfileType` from modules/profile/index for guidance here. For example: `member,workspace`
-- `REACT_APP_SUPPORTED_MODULES` – comma separated list of available modules. See `/src/modules/index.ts` for the definitions.
-- `REACT_APP_API_URL` – 'https://api-url.com' - this is the URL to the API service. It should **not** include a trailing slash.
+- `VITE_APP_BRANCH`
+- `VITE_APP_FIREBASE_API_KEY`
+- `VITE_APP_FIREBASE_AUTH_DOMAIN`
+- `VITE_APP_FIREBASE_DATABASE_URL`
+- `VITE_APP_FIREBASE_MESSAGING_SENDER_ID`
+- `VITE_APP_FIREBASE_PROJECT_ID`
+- `VITE_APP_FIREBASE_STORAGE_BUCKET`
+- `VITE_APP_GA_TRACKING_ID`
+- `VITE_APP_PLATFORM_THEME`
+- `VITE_APP_CDN_URL` - `https://cdn-url.com` - this is the URL to the CDN where the assets are stored. This is used to load the assets from the CDN instead of the local server. It should **not** include a trailing slash.
+- `VITE_APP_PLATFORM_PROFILES` - comma separated list of available profiles. Use `ProfileType` from modules/profile/index for guidance here. For example: `member,workspace`
+- `VITE_APP_SUPPORTED_MODULES` – comma separated list of available modules. See `/src/modules/index.ts` for the definitions.
+- `VITE_APP_API_URL` – 'https://api-url.com' - this is the URL to the API service. It should **not** include a trailing slash.
 - `SITE_NAME`

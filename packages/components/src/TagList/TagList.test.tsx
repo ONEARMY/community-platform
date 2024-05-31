@@ -1,3 +1,7 @@
+import '@testing-library/jest-dom'
+
+import { describe, expect, it } from 'vitest'
+
 import { render } from '../tests/utils'
 import { TagList } from './TagList'
 

@@ -1,7 +1,7 @@
 // An edited version of https://codesandbox.io/p/sandbox/react-image-crop-demo-with-react-hooks-y831o
 
 import React, { useRef, useState } from 'react'
-import ReactCrop from 'react-image-crop'
+import { ReactCrop } from 'react-image-crop'
 import { Box, Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'

@@ -39,7 +39,7 @@
     "serve": "npx serve -s build",
     "test": "yarn workspace oa-cypress start",
     "test:components": "yarn workspace oa-components test-ci",
-    "test:unit": "yarn build:themes && yarn build:components && vitest --logHeapUsage --coverage",
+    "test:unit": "yarn build:themes && yarn build:components && vitest",
     "test:madge": "npx madge --circular --extensions ts,tsx ./ --exclude src/stores",
     "storybook": "yarn workspace oa-components start",
     "storybook:build": "yarn build:themes && yarn workspace oa-components build:sb",

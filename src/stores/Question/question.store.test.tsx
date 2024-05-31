@@ -22,7 +22,7 @@ vi.mock('../common/toggleDocUsefulByUser', () => ({
 
 const factory = async () => {
   const store = new QuestionStore()
-  store.isTitleThatReusesSlug = jest.fn().mockResolvedValue(false)
+  store.isTitleThatReusesSlug = vi.fn().mockResolvedValue(false)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

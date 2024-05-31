@@ -12,9 +12,14 @@ const vitestConfig: VitestUserConfigInterface = {
     setupFiles: './src/test/setup.ts',
     coverage: {
       provider: 'v8',
+      reporter: ['text'],
     },
     reporters: ['junit'],
-    include: ['./src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+    include: ['./src/**/*.{test}.?(c|m)[jt]s?(x)'],
+    logHeapUsage: true,
+    outputFile: {
+      junit: './reports/output.xml',
+    },
   },
 }
 // eslint-disable-next-line import/no-default-export

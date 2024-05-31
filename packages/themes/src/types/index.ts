@@ -33,11 +33,10 @@ type Badge = {
 
 export interface ThemeWithName {
   name: string
-
   logo: string
 
   profileGuidelinesURL: string
-
+  questionsGuidelinesURL?: string
   communityProgramURL: string
 
   alerts: any

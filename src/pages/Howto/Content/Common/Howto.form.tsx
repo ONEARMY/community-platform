@@ -31,8 +31,8 @@ import {
   HowtoFieldTags,
   HowtoFieldTime,
   HowtoFieldTitle,
+  HowtoPostingGuidelines,
   HowToSubmitStatus,
-  PostingGuidelines,
 } from '.'
 
 import type { FormApi } from 'final-form'
@@ -172,7 +172,7 @@ export const HowtoForm = observer((props: IProps) => {
                     <Box
                       sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
                     >
-                      <PostingGuidelines />
+                      <HowtoPostingGuidelines />
                     </Box>
                     <Card mt={3}>
                       <Flex
@@ -250,7 +250,7 @@ export const HowtoForm = observer((props: IProps) => {
                   }}
                 >
                   <Box sx={{ display: ['none', 'none', 'block'] }}>
-                    <PostingGuidelines />
+                    <HowtoPostingGuidelines />
                   </Box>
 
                   <HowtoButtonDraft

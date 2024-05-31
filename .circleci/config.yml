@@ -326,6 +326,9 @@ jobs:
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
+      # run chromatic
+      - run:
+          command: npm run storybook:chromatic
 
   # Run cypress e2e tests on chrome
   test_e2e:

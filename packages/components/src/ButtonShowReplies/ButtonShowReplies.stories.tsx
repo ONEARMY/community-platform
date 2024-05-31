@@ -70,7 +70,7 @@ export const NoCreatorName: StoryFn<typeof ButtonShowReplies> = () => {
       creatorName={null}
       isShowReplies={false}
       replies={replies}
-      setIsShowReplies={mockSetIsShowReplies}
+      setIsShowReplies={() => null}
     />
   )
 }

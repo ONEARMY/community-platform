@@ -16,7 +16,7 @@ const DELETED_COMMENT = 'The original comment got deleted'
 export interface IProps {
   comment: IComment
   handleDelete?: (commentId: string) => Promise<void>
-  handleEdit?: (commentId: string, newCommentText: string) => void
+  handleEdit: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
   isReply: boolean
   showAvatar: boolean
@@ -66,6 +66,7 @@ export const CommentItem = (props: IProps) => {
 
   const date = formatDate(_edited || _created)
   const maxHeight = isShowMore ? 'max-content' : '128px'
+  const item = isReply ? 'ReplyItem' : 'CommentItem'
 
   useEffect(() => {
     if (textRef.current) {
@@ -85,14 +86,10 @@ export const CommentItem = (props: IProps) => {
   }
 
   return (
-    <Flex
-      id={`comment:${_id}`}
-      data-cy="comment"
-      sx={{ flexDirection: 'column' }}
-    >
+    <Flex id={`comment:${_id}`} data-cy={item} sx={{ flexDirection: 'column' }}>
       <Flex sx={{ gap: 2 }}>
         {_deleted && (
-          <Box sx={{ marginBottom: 2 }}>
+          <Box sx={{ marginBottom: 2 }} data-cy="deletedComment">
             <Text sx={{ color: 'grey' }}>[{DELETED_COMMENT}]</Text>
           </Box>
         )}
@@ -151,7 +148,7 @@ export const CommentItem = (props: IProps) => {
                   }}
                 >
                   <Button
-                    data-cy="CommentItem: edit button"
+                    data-cy={`${item}: edit button`}
                     variant="outline"
                     small={true}
                     icon="edit"
@@ -160,7 +157,7 @@ export const CommentItem = (props: IProps) => {
                     edit
                   </Button>
                   <Button
-                    data-cy="CommentItem: delete button"
+                    data-cy={`${item}: delete button`}
                     variant={'outline'}
                     small={true}
                     icon="delete"
@@ -204,8 +201,8 @@ export const CommentItem = (props: IProps) => {
       <Modal width={600} isOpen={showEditModal}>
         <EditComment
           comment={text}
-          handleSubmit={(commentText) => {
-            handleEdit && handleEdit(_id, commentText)
+          handleSubmit={async (commentText) => {
+            await handleEdit(_id, commentText)
             setShowEditModal(false)
           }}
           handleCancel={() => setShowEditModal(false)}
@@ -218,8 +215,8 @@ export const CommentItem = (props: IProps) => {
         message="Are you sure you want to delete this comment?"
         confirmButtonText="Delete"
         handleCancel={() => setShowDeleteModal(false)}
-        handleConfirm={() => {
-          handleDelete && handleDelete(_id)
+        handleConfirm={async () => {
+          handleDelete && (await handleDelete(_id))
           setShowDeleteModal(false)
         }}
       />

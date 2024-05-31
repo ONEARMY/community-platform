@@ -17,8 +17,8 @@ describe('[Howto.Discussions]', () => {
 
     cy.signUpNewUser()
     cy.visit(`/how-to/${item.slug}#comment:${firstComment._id}`)
-    cy.get('[data-cy="comment"]').should('have.length.gte', 2)
-    cy.get('[data-cy="comment"]')
+    cy.get('[data-cy="CommentItem"]').should('have.length.gte', 2)
+    cy.get('[data-cy="CommentItem"]')
       .first()
       .scrollIntoView()
       .should('be.inViewport', 10)
@@ -57,8 +57,8 @@ describe('[Howto.Discussions]', () => {
 
     cy.step('Can add reply')
     cy.get('[data-cy=show-replies]:first').click()
-    cy.get('[data-cy=comments-form]:first').type(newReply)
-    cy.get('[data-cy=comment-submit]:first').click()
+    cy.get('[data-cy=reply-form]:first').type(newReply)
+    cy.get('[data-cy=reply-submit]:first').click()
     cy.contains(`${howtoDiscussion.comments.length + 1} comments`)
     cy.contains(newReply)
     cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
@@ -69,14 +69,14 @@ describe('[Howto.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
-    cy.get('[data-cy="CommentItem: edit button"]:first').click()
+    cy.get('[data-cy="ReplyItem: edit button"]:first').click()
     cy.get('[data-cy=edit-comment]').clear().type(updatedNewReply)
     cy.get('[data-cy=edit-comment-submit]').click()
     cy.contains(updatedNewReply)
     cy.contains(newReply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.get('[data-cy="CommentItem: delete button"]:first').click()
+    cy.get('[data-cy="ReplyItem: delete button"]:first').click()
     cy.get('[data-cy="Confirm.modal: Confirm"]:first').click()
     cy.contains(updatedNewReply).should('not.exist')
     cy.contains(`${howtoDiscussion.comments.length} comments`)

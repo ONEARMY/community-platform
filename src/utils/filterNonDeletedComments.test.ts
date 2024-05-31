@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest'
+
 import { filterNonDeletedComments } from './filterNonDeletedComments'
 
 import type { IComment } from 'src/models'

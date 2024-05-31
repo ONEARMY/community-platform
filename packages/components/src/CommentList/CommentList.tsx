@@ -5,6 +5,7 @@ import { Button } from '../Button/Button'
 import { ButtonShowReplies } from '../ButtonShowReplies/ButtonShowReplies'
 import { CommentItem } from '../CommentItem/CommentItem'
 import { CreateReply } from '../CreateReply/CreateReply'
+import { nonDeletedCommentsCount } from '../DiscussionTitle/DiscussionTitle'
 import { Icon } from '../Icon/Icon'
 
 import type { IComment } from '../CommentItem/types'
@@ -89,7 +90,9 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
     }
   }
 
-  if (_deleted && (!replies || replies.length === 0)) return null
+  if (_deleted && (!replies || nonDeletedCommentsCount(replies) === 0)) {
+    return null
+  }
 
   return (
     <Box

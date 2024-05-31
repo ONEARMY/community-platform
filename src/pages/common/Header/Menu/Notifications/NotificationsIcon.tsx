@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import IconNotifications from 'src/assets/icons/icon-notification.svg?react'
-import { Flex } from 'theme-ui'
+import IconNotifications from 'src/assets/icons/icon-notification.svg'
+import { Flex, Image } from 'theme-ui'
 
 const IconWrapper = styled(Flex)`
   display: flex;
@@ -31,7 +31,8 @@ export const NotificationsIcon = ({
           : {}
       }
     >
-      <IconNotifications
+      <Image
+        src={IconNotifications}
         color={areThereNotifications ? 'orange' : '#bfbfbf'}
         height="25px"
         width="25px"

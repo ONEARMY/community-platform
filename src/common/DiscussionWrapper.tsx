@@ -39,7 +39,7 @@ export const DiscussionWrapper = (props: IProps) => {
   const { discussionStore } = useCommonStores().stores
   const highlightedCommentId = window.location.hash.replace('#comment:', '')
 
-  const transformComments = (discussion) => {
+  const transformComments = (discussion: IDiscussion) => {
     if (!discussion) return
 
     const comments = transformToUserComments(
@@ -60,7 +60,10 @@ export const DiscussionWrapper = (props: IProps) => {
             sourceType,
             primaryContentId,
           )
-        transformComments(discussion)
+
+        if (discussion) {
+          transformComments(discussion)
+        }
       } catch (error) {
         logger.debug(error)
       }
@@ -109,7 +112,10 @@ export const DiscussionWrapper = (props: IProps) => {
       discussion,
       comment,
     )
-    transformComments(updatedDiscussion)
+
+    if (updatedDiscussion) {
+      transformComments(updatedDiscussion)
+    }
 
     if (updatedDiscussion) {
       setComment('')

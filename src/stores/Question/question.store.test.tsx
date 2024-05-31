@@ -1,10 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
 
 vi.mock('../common/module.store')
+
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
 import { QuestionStore } from './question.store'
+
+import type { IRootStore } from '../RootStore'
 
 const mockToggleDocSubscriber = vi.fn()
 vi.mock('../common/toggleDocSubscriberStatusByUserName', () => {
@@ -21,7 +24,7 @@ vi.mock('../common/toggleDocUsefulByUser', () => ({
 }))
 
 const factory = async () => {
-  const store = new QuestionStore()
+  const store = new QuestionStore({} as IRootStore)
   store.isTitleThatReusesSlug = vi.fn().mockResolvedValue(false)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment

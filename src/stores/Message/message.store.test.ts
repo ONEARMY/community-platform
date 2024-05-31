@@ -6,9 +6,11 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { MessageStore } from './message.store'
 
+import type { IRootStore } from '../RootStore'
+
 const factory = (user?) => {
   /* eslint-disable @typescript-eslint/ban-ts-comment */
-  const store = new MessageStore()
+  const store = new MessageStore({} as IRootStore)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

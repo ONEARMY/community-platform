@@ -4,6 +4,7 @@ import { logger } from '../../../logger'
 import { DB_ENDPOINTS } from '../endpoints'
 import { getQueryOptions } from '../utils/getQueryOptions'
 
+import type { IndexableType } from 'dexie'
 import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
 import type {
   AbstractDatabaseClient,
@@ -104,13 +105,13 @@ export class DexieClient implements AbstractDatabaseClient {
       case '<':
         return ref.where(field).above(value)
       case '==':
-        return ref.where(field).equals(value)
+        return ref.where(field).equals(value as IndexableType)
       case '!=':
-        return ref.where(field).notEqual(value)
+        return ref.where(field).notEqual(value as IndexableType)
       case '>':
         return ref.where(field).below(value)
       case 'array-contains':
-        return ref.where(field).equals(value)
+        return ref.where(field).equals(value as IndexableType)
       default:
         logger.error('no dexie query mapping for ' + operator)
         throw new Error(

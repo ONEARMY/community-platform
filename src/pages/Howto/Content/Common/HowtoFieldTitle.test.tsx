@@ -15,7 +15,7 @@ describe('HowtoFieldTitle', () => {
     const props = {
       _id: 'random-123',
       parentType: 'create' as ParentType,
-      store: store as HowtoStore,
+      store: store as any as HowtoStore,
     }
 
     render(

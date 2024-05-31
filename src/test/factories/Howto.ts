@@ -53,6 +53,7 @@ export const FactoryHowto = (
   total_views: faker.number.int(),
   total_downloads: faker.number.int(),
   votedUsefulBy: [],
+  totalComments: 0,
   ...howtoOverloads,
 })
 
@@ -93,5 +94,6 @@ export const FactoryHowtoDraft = (
   previousSlugs: [],
   tags: {},
   total_downloads: 0,
+  totalComments: 0,
   ...howtoOverloads,
 })

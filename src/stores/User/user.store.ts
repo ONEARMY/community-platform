@@ -431,7 +431,7 @@ export class UserStore extends ModuleStore {
     this.authUnsubscribe = onAuthStateChanged(auth, (authUser) => {
       this.authUser = authUser
       if (authUser) {
-        this._userSignedIn(authUser)
+        this._userSignedIn(authUser as firebase.default.User)
         // send verification email if not verified and after first sign-up only
         if (!authUser.emailVerified && checkEmailVerification) {
           this.sendEmailVerification()

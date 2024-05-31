@@ -16,5 +16,6 @@ export const FactoryQuestionItem = (
   description: faker.lorem.paragraph(),
   slug: faker.lorem.slug(),
   moderation: 'accepted' as IModerationStatus.ACCEPTED,
+  tags: {},
   ...questionOverloads,
 })

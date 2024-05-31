@@ -1,5 +1,5 @@
 import { MemberBadge, Username, UserStatistics } from 'oa-components'
-import { ExternalLinkLabel } from 'oa-shared'
+import { ExternalLinkLabel, UserRole } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { getUserCountry } from 'src/utils/getUserCountry'
@@ -137,7 +137,7 @@ export const MemberProfile = ({ user, docs }: IProps) => {
           </Flex>
         </Flex>
       </Flex>
-      <AuthWrapper roleRequired={'beta-tester'}>
+      <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
         <UserCreatedDocuments docs={docs} />
       </AuthWrapper>
     </Card>

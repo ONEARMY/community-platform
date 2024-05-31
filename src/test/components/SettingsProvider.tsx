@@ -3,6 +3,7 @@ import arrayMutators from 'final-form-arrays'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
+import { vi } from 'vitest'
 
 const mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
 const mockUpdateUserBadge = vi.fn()

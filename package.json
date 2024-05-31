@@ -23,7 +23,7 @@
     "start:emulated:docker:local": "concurrently --names functions,themes,components,platform,emulators --prefix-colors yellow,cyan,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn start:themes\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start --repo=\"",
     "build:themes": "yarn workspace oa-themes build",
     "build:components": "yarn workspace oa-components build",
-    "build:vite": "tsc && vite",
+    "build:vite": "tsc && vite build",
     "build:post": "yarn workspace oa-scripts post-cra-build",
     "build:inject-config": "yarn build:post",
     "build:shared": "yarn workspace oa-shared build",

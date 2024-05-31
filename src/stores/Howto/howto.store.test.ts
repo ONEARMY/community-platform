@@ -186,7 +186,7 @@ describe('howto.store', () => {
   describe('deleteHowTo', () => {
     it('handles legacy docs without previousSlugs', async () => {
       const howtoDoc = FactoryHowto({})
-      howtoDoc.previousSlugs = undefined
+      howtoDoc.previousSlugs = []
       const { store, howToItem, setFn, getFn } = await factory([howtoDoc])
 
       // Act

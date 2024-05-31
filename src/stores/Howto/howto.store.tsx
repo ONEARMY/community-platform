@@ -157,7 +157,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   public needsModeration(howto: IHowto) {
-    return needsModeration(howto, toJS(this.activeUser))
+    return needsModeration(howto, toJS(this.activeUser) as IUser)
   }
 
   private async addUserReference(msg: string): Promise<{

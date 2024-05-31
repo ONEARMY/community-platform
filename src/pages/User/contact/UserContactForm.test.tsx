@@ -5,7 +5,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
-import { UserContactForm } from '.'
+import { UserContactForm } from './UserContactForm'
 
 vi.mock('src/common/hooks/useCommonStores', () => {
   return {

@@ -149,7 +149,7 @@ export class QuestionStore extends ModuleStore {
     )
 
     if (updatedQuestion) {
-      this.activeQuestionItem = updatedQuestion
+      this.activeQuestionItem = updatedQuestion as IQuestionDB
       return updatedQuestion
     }
   }

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
 vi.mock('../common/module.store')
+
 import { toJS } from 'mobx'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
@@ -13,6 +14,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
 
 import type { IDiscussion } from 'src/models'
+import type { IRootStore } from '../RootStore'
 
 vi.mock('../../utils/helpers', async () => ({
   // Preserve the original implementation of other helpers
@@ -49,7 +51,7 @@ const factory = async (
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
-  const store = new ResearchStore()
+  const store = new ResearchStore({} as IRootStore)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

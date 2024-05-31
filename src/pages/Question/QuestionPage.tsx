@@ -68,7 +68,7 @@ export const QuestionPage = () => {
   }, [])
 
   const onUsefulClick = async () => {
-    const updatedQuestion = await store.toggleUsefulByUser()
+    const updatedQuestion = (await store.toggleUsefulByUser()) as IQuestion.Item
     setQuestion(updatedQuestion)
   }
 

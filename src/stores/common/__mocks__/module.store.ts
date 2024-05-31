@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable max-classes-per-file */
+// eslint-disable-next-line max-classes-per-file
+import { vi } from 'vitest'
+
 export class MockDBStore {
   collection = vi.fn().mockReturnThis()
   doc = vi.fn().mockReturnThis()

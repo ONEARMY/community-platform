@@ -19,7 +19,6 @@ import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { isPreciousPlastic } from 'src/config/config'
 import { ProfileType } from 'src/modules/profile/types'
-import { UserContactForm } from 'src/pages/User/contact'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
@@ -32,6 +31,7 @@ import {
   Paragraph,
 } from 'theme-ui'
 
+import { UserContactForm } from '../contact/UserContactForm'
 import { Impact } from '../impact/Impact'
 import { heading } from '../impact/labels'
 import UserContactAndLinks from './UserContactAndLinks'

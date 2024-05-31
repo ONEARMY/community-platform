@@ -12,7 +12,7 @@ import { getUserAvatar } from '../User/user.store'
 import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
-import type { IDBEndpoint } from 'src/models'
+import type { IDBEndpoint, IUser } from 'src/models'
 import type {
   IBoundingBox,
   IMapGrouping,
@@ -56,7 +56,7 @@ export class MapsStore extends ModuleStore {
     // this filters out. In future should run an upgrade script (easier once deployed)
     // HACK - ARH - 2019/12/09 filter unaccepted pins, should be done serverside
     const activeUser = this.activeUser
-    const isAdmin = hasAdminRights(activeUser)
+    const isAdmin = hasAdminRights(activeUser as IUser)
 
     pins = pins
       .filter((p) => {
@@ -161,13 +161,13 @@ export class MapsStore extends ModuleStore {
   }
 
   public needsModeration(pin: IMapPin) {
-    return needsModeration(pin, this.activeUser)
+    return needsModeration(pin, this.activeUser as IUser)
   }
 
   public canSeePin(pin: IMapPin) {
     return (
       pin.moderation === IModerationStatus.ACCEPTED ||
-      isAllowedToPin(pin, this.activeUser)
+      isAllowedToPin(pin, this.activeUser as IUser)
     )
   }
 

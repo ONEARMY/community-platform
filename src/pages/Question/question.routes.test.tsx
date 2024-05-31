@@ -97,7 +97,7 @@ class mockQuestionStoreClass implements Partial<QuestionStore> {
   userCanEditQuestion = true
 }
 
-const mockQuestionService: typeof questionService = {
+const mockQuestionService = {
   getQuestionCategories: vi.fn(() => {
     return new Promise((resolve) => {
       resolve([])
@@ -209,7 +209,7 @@ describe('question.routes', () => {
       const mockUpsertQuestion = vi.fn().mockResolvedValue({
         slug: 'question-title',
       })
-      useQuestionStore.mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         upsertQuestion: mockUpsertQuestion,
         activeUser: mockActiveUser,
@@ -249,12 +249,11 @@ describe('question.routes', () => {
     it('renders the question single page', async () => {
       let wrapper
       const question = FactoryQuestionItem()
-      const activeUser = FactoryUser({})
       const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
       const mockIncrementViewCount = vi.fn()
-      useQuestionStore.mockReturnValue({
+
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
-        activeUser,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
         incrementViewCount: mockIncrementViewCount,
@@ -294,7 +293,7 @@ describe('question.routes', () => {
           subscribers: [user.userName],
         })
         const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
-        useQuestionStore.mockReturnValue({
+        ;(useQuestionStore as Mock).mockReturnValue({
           ...mockQuestionStore,
           activeUser: user,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
@@ -314,7 +313,7 @@ describe('question.routes', () => {
         let wrapper
         const question = FactoryQuestionItem()
         const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
-        useQuestionStore.mockReturnValue({
+        ;(useQuestionStore as Mock).mockReturnValue({
           ...mockQuestionStore,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
         })
@@ -332,7 +331,7 @@ describe('question.routes', () => {
       mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem()
       const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
-      useQuestionStore.mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
@@ -359,7 +358,7 @@ describe('question.routes', () => {
 
       const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
 
-      useQuestionStore.mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
@@ -407,7 +406,7 @@ describe('question.routes', () => {
         slug: 'question-title',
       })
 
-      useQuestionStore.mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: vi.fn().mockResolvedValue(questionItem),
         upsertQuestion: mockUpsertQuestion,
@@ -454,8 +453,7 @@ describe('question.routes', () => {
     it('redirects non-author', async () => {
       let wrapper
       mockActiveUser = FactoryUser({ userName: 'not-author' })
-
-      useQuestionStore.mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: vi.fn().mockResolvedValue(
           FactoryQuestionItem({

@@ -243,7 +243,7 @@ export class ResearchStore extends ModuleStore {
       const slug = await this.setSlug(values)
       const previousSlugs = this.setPreviousSlugs(values, slug)
 
-      const researchItem: IResearch.Item = {
+      const researchItem: Partial<IResearch.Item> = {
         mentions: [],
         ...values,
         slug,
@@ -585,12 +585,12 @@ export class ResearchStore extends ModuleStore {
    */
   private async _updateResearchItem(
     dbRef: DocReference<IResearch.Item>,
-    researchDoc: IResearch.Item,
+    researchDoc: Partial<IResearch.Item>,
     setLastEditTimestamp = false,
   ) {
     const researchItem = cloneDeep(researchDoc)
     const { text: researchDescription, users } = await this.addUserReference(
-      researchItem.description,
+      researchItem.description || '',
     )
     logger.debug('updateResearchItem', {
       researchItem,
@@ -602,22 +602,24 @@ export class ResearchStore extends ModuleStore {
       ? cloneDeep(researchItem.mentions)
       : []
 
-    await Promise.all(
-      researchItem.updates.map(async (up, idx) => {
-        const { text: newDescription, users } = await this.addUserReference(
-          up.description,
-        )
+    if (researchItem.updates && researchItem.updates.length > 0) {
+      await Promise.all(
+        researchItem.updates.map(async (up, idx) => {
+          const { text: newDescription, users } = await this.addUserReference(
+            up.description,
+          )
 
-        ;(users || []).map((username) => {
-          mentions.push({
-            username,
-            location: `update-${idx}`,
+          ;(users || []).map((username) => {
+            mentions.push({
+              username,
+              location: `update-${idx}`,
+            })
           })
-        })
 
-        researchItem.updates[idx].description = newDescription
-      }),
-    )
+          researchItem.updates![idx].description = newDescription
+        }),
+      )
+    }
     ;(users || []).map((username) => {
       mentions.push({
         username,
@@ -628,19 +630,22 @@ export class ResearchStore extends ModuleStore {
     const keywords = getKeywords(
       researchItem.title + ' ' + researchItem.description,
     )
-    keywords.push(researchItem._createdBy)
+
+    if (researchItem._createdBy) {
+      keywords.push(researchItem._createdBy)
+    }
 
     await dbRef.set(
       {
         ...cloneDeep(researchItem),
         previousSlugs: getPreviousSlugs(
-          researchItem.slug,
+          researchItem.slug!,
           researchItem.previousSlugs,
         ),
         mentions,
         description: researchDescription,
         keywords,
-      },
+      } as IResearch.Item,
       {
         set_last_edit_timestamp: setLastEditTimestamp,
       },
@@ -667,7 +672,7 @@ export class ResearchStore extends ModuleStore {
           'research_mention',
           mention.username,
           `/research/${researchItem.slug}#${mention.location}`,
-          researchItem.title,
+          researchItem.title!,
         )
       }
     })
@@ -681,11 +686,11 @@ export class ResearchStore extends ModuleStore {
       beforeUpdateNumber: previousVersion?.updates
         ? previousVersion?.updates.length
         : 0,
-      afterUpdateNumber: researchItem?.updates.length,
+      afterUpdateNumber: researchItem?.updates!.length,
     })
 
     if (
-      researchItem.updates.length >
+      researchItem.updates!.length >
       (previousVersion?.updates ? previousVersion?.updates.length : 0)
     ) {
       subscribers.forEach((subscriber) =>
@@ -693,7 +698,7 @@ export class ResearchStore extends ModuleStore {
           'research_update',
           subscriber,
           `/research/${researchItem.slug}`,
-          researchItem.title,
+          researchItem.title!,
         ),
       )
     }

@@ -9,8 +9,6 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { required } from 'src/utils/validators'
 import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
 
-import type { TextNotificationProps } from 'oa-components'
-
 interface IFormValues {
   email: string
   password: string
@@ -20,7 +18,7 @@ interface IState {
   errorMsg?: string
   disabled?: boolean
   authProvider?: IAuthProvider
-  notificationProps?: Pick<TextNotificationProps, 'isVisible' | 'variant'> & {
+  notificationProps?: Pick<TextNotification.Props, 'isVisible' | 'variant'> & {
     text: string
   }
 }

@@ -8,6 +8,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { useCommonStores } from './hooks/useCommonStores'
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 
+import type { Mock } from 'vitest'
+
 const mockedUsedNavigate = vi.fn()
 vi.mock('react-router-dom', () => ({
   useNavigate: () => mockedUsedNavigate,
@@ -18,7 +20,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   useCommonStores: vi.fn(),
 }))
 const userToMock = (user) => {
-  return useCommonStores.mockImplementation(() => ({
+  return (useCommonStores as Mock).mockImplementation(() => ({
     stores: { userStore: { user } },
   }))
 }

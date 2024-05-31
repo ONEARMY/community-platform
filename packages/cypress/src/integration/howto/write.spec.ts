@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { DifficultyLevel } from 'oa-shared'
+import { DifficultyLevel, IModerationStatus } from 'oa-shared'
 
 import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
@@ -109,6 +109,7 @@ describe('[How To]', () => {
       _deleted: false,
       category: 'Moulds',
       description: 'After creating, the how-to will be deleted',
+      moderation: IModerationStatus.AWAITING_MODERATION,
       difficulty_level: DifficultyLevel.MEDIUM,
       time: '1-2 weeks',
       title: 'Create a how-to test',
@@ -361,6 +362,7 @@ describe('[How To]', () => {
       _createdBy: 'howto_editor',
       _deleted: false,
       category: 'exhibition',
+      moderation: IModerationStatus.ACCEPTED,
       description: 'After editing, all changes are reverted',
       difficulty_level: DifficultyLevel.HARD,
       files: [],

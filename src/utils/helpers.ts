@@ -233,7 +233,7 @@ export const getPublicUpdates = (item: IResearch.Item) => {
 
 export const getProjectEmail = (subject: string) => {
   const site = getConfigurationOption(
-    'VITE_APP_PLATFORM_THEME',
+    'REACT_APP_PLATFORM_THEME',
     'precious-plastic',
   )
   return `mailto:platform@onearmy.earth?subject=${subject}%20${site}`

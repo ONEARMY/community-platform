@@ -4,7 +4,7 @@ Switch config dependent on use case
 For our use case the production config is stored in environment variables passed from
 CI. You can replace this with your own config or use the same pattern to keep
 api keys secret. Note, create-react-app only passes environment variables prefixed with
-'VITE_APP'. The required info has been encrypted and stored in a circleCI deployment context.
+'REACT_APP'. The required info has been encrypted and stored in a circleCI deployment context.
 
 Dev config is hardcoded - You can find more information about potential security risk here:
 https://javebratt.com/hide-firebase-api/
@@ -17,7 +17,7 @@ import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
 /**
  * Helper function to load configuration property
  * from the global configuration object
- * During the development cycle this will be import.meta.env
+ * During the development cycle this will be process.env
  * when running this application with the output of `yarn build`
  * we will instead load from the global window
  *
@@ -27,9 +27,9 @@ import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
  */
 const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
   const configurationSource = ['development', 'test'].includes(
-    import.meta.env.NODE_ENV,
+    process.env.NODE_ENV || '',
   )
-    ? import.meta.env
+    ? process.env
     : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION
   return configurationSource?.[property] || fallbackValue
 }
@@ -62,14 +62,14 @@ const getSiteVariant = (): siteVariants => {
   }
   if (
     location.host === 'localhost:3456' ||
-    _c('VITE_APP_SITE_VARIANT') === 'test-ci'
+    _c('REACT_APP_SITE_VARIANT') === 'test-ci'
   ) {
     return 'test-ci'
   }
-  if (_c('VITE_APP_SITE_VARIANT') === 'preview') {
+  if (_c('REACT_APP_SITE_VARIANT') === 'preview') {
     return 'preview'
   }
-  switch (_c('VITE_APP_BRANCH')) {
+  switch (_c('REACT_APP_BRANCH')) {
     case 'production':
       return 'production'
     case 'master':
@@ -131,12 +131,12 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
   },
   /** Production/live backend with released frontend */
   production: {
-    apiKey: _c('VITE_APP_FIREBASE_API_KEY'),
-    authDomain: _c('VITE_APP_FIREBASE_AUTH_DOMAIN'),
-    databaseURL: _c('VITE_APP_FIREBASE_DATABASE_URL'),
-    messagingSenderId: _c('VITE_APP_FIREBASE_MESSAGING_SENDER_ID'),
-    projectId: _c('VITE_APP_FIREBASE_PROJECT_ID'),
-    storageBucket: _c('VITE_APP_FIREBASE_STORAGE_BUCKET'),
+    apiKey: _c('REACT_APP_FIREBASE_API_KEY'),
+    authDomain: _c('REACT_APP_FIREBASE_AUTH_DOMAIN'),
+    databaseURL: _c('REACT_APP_FIREBASE_DATABASE_URL'),
+    messagingSenderId: _c('REACT_APP_FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: _c('REACT_APP_FIREBASE_PROJECT_ID'),
+    storageBucket: _c('REACT_APP_FIREBASE_STORAGE_BUCKET'),
   },
 }
 /*********************************************************************************************** /
@@ -148,22 +148,22 @@ export const DEV_SITE_ROLE = devSiteRole
 export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
 export const SENTRY_CONFIG: ISentryConfig = {
   dsn: _c(
-    'VITE_APP_SENTRY_DSN',
+    'REACT_APP_SENTRY_DSN',
     'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
   ),
   environment: siteVariant,
 }
 
-export const CDN_URL = _c('VITE_APP_CDN_URL', '')
-export const VERSION = _c('VITE_APP_PROJECT_VERSION', '')
-export const GA_TRACKING_ID = _c('VITE_APP_GA_TRACKING_ID')
-export const PATREON_CLIENT_ID = _c('VITE_APP_PATREON_CLIENT_ID')
-export const API_URL = _c('VITE_APP_API_URL', '')
+export const CDN_URL = _c('REACT_APP_CDN_URL', '')
+export const VERSION = _c('REACT_APP_PROJECT_VERSION', '')
+export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID')
+export const PATREON_CLIENT_ID = _c('REACT_APP_PATREON_CLIENT_ID')
+export const API_URL = _c('REACT_APP_API_URL', '')
 
 export const isPreciousPlastic = (): boolean => {
   return (
-    (_c('VITE_APP_PLATFORM_THEME') || localStorage.getItem('platformTheme')) ===
-    'precious-plastic'
+    (_c('REACT_APP_PLATFORM_THEME') ||
+      localStorage.getItem('platformTheme')) === 'precious-plastic'
   )
 }
 

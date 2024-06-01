@@ -103,7 +103,7 @@ export default config
  * Take the existing package.json and create a minimal copy without workspace entries
  */
 function rewritePackageJson(json: any) {
-  const workspacePrefixes = ['oa-', 'one-army', 'onearmy', '@oa', '@onearmy']
+  const workspacePrefixes = ['oa-']
   // TODO - could generate actual workspace list from `yarn workspace list --json`
   // remove workspace dependencies
   Object.keys(json.dependencies).forEach((key) => {

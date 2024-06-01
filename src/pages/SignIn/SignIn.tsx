@@ -20,7 +20,7 @@ interface IState {
   authProvider?: IAuthProvider
   notificationProps?: {
     isVisible: boolean
-    variant: string
+    variant: 'failure' | 'success'
     text: string
   }
 }

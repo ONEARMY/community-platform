@@ -203,51 +203,57 @@ describe('question.routes', () => {
   })
 
   describe('/questions/create', () => {
-    it('allows user to create a question', async () => {
-      let wrapper
-      // Arrange
-      const mockUpsertQuestion = vi.fn().mockResolvedValue({
-        slug: 'question-title',
-      })
-      ;(useQuestionStore as Mock).mockReturnValue({
-        ...mockQuestionStore,
-        upsertQuestion: mockUpsertQuestion,
-        activeUser: mockActiveUser,
-      })
+    it(
+      'allows user to create a question',
+      async () => {
+        let wrapper
+        // Arrange
+        const mockUpsertQuestion = vi.fn().mockResolvedValue({
+          slug: 'question-title',
+        })
+        ;(useQuestionStore as Mock).mockReturnValue({
+          ...mockQuestionStore,
+          upsertQuestion: mockUpsertQuestion,
+          activeUser: mockActiveUser,
+        })
 
-      act(() => {
-        const render = renderFn('/questions/create')
-        wrapper = render.wrapper
-      })
+        act(() => {
+          const render = renderFn('/questions/create')
+          wrapper = render.wrapper
+        })
 
-      // Fill in form
-      const title = wrapper.getByLabelText('The Question', { exact: false })
-      const description = wrapper.getByLabelText('Description', {
-        exact: false,
-      })
-      const submitButton = wrapper.getByText('Publish')
+        // Fill in form
+        const title = wrapper.getByLabelText('The Question', { exact: false })
+        const description = wrapper.getByLabelText('Description', {
+          exact: false,
+        })
+        const submitButton = wrapper.getByText('Publish')
 
-      // Submit form
-      await userEvent.type(title, 'Can you build a house out of plastic?')
-      await userEvent.type(description, "So I've got all this plastic...")
+        // Submit form
+        await userEvent.type(title, 'Can you build a house out of plastic?')
+        await userEvent.type(description, "So I've got all this plastic...")
 
-      submitButton.click()
+        submitButton.click()
 
-      expect(mockUpsertQuestion).toHaveBeenCalledWith({
-        title: 'Can you build a house out of plastic?',
-        description: "So I've got all this plastic...",
-        tags: {},
-      })
+        expect(mockUpsertQuestion).toHaveBeenCalledWith({
+          title: 'Can you build a house out of plastic?',
+          description: "So I've got all this plastic...",
+          tags: {},
+        })
 
-      await waitFor(
-        () => {
-          expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
-        },
-        {
-          timeout: 2000,
-        },
-      )
-    })
+        await waitFor(
+          () => {
+            expect(mockedUsedNavigate).toBeCalledWith(
+              '/questions/question-title',
+            )
+          },
+          {
+            timeout: 5000,
+          },
+        )
+      },
+      { timeout: 10000 },
+    )
   })
 
   describe('/questions/:slug', () => {

@@ -106,7 +106,7 @@ commands:
       - run:
           name: Set branch environment
           command: |
-            echo 'export VITE_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Inject target environment configuration
           command: |
@@ -285,13 +285,13 @@ jobs:
       - run:
           name: Set branch environment
           command: |
-            echo 'export VITE_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
-            echo 'export VITE_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
+            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
-            echo VITE_APP_BRANCH=$VITE_APP_BRANCH
-            echo $VITE_APP_PROJECT_VERSION
+            echo REACT_APP_BRANCH=$REACT_APP_BRANCH
+            echo $REACT_APP_PROJECT_VERSION
       - run:
           command: yarn build
       - persist_to_workspace:

@@ -91,7 +91,7 @@ const config: webpack.Configuration = {
     nodeExternals({
       allowlist: [/^oa-/],
     }),
-  ] as webpack.Configuration['externals'],
+  ],
 }
 export default config
 

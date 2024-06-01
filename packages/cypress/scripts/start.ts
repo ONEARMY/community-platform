@@ -54,7 +54,7 @@ async function main() {
 async function startAppServer() {
   const { CROSSENV_BIN, BUILD_SERVE_JSON } = PATHS
   // by default spawns will not respect colours used in stdio, so try to force
-  const crossEnvArgs = `FORCE_COLOR=1 VITE_APP_SITE_VARIANT=test-ci`
+  const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
   let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 yarn start`

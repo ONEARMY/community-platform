@@ -1,13 +1,50 @@
-#!/usr/bin/env ts-node
 import { spawn, spawnSync } from 'child_process'
-import * as dotenv from 'dotenv'
+import { config } from 'dotenv'
 import fs from 'fs-extra'
+import { dirname, resolve } from 'path'
+import { fileURLToPath } from 'url'
 import waitOn from 'wait-on'
 
-import { generateAlphaNumeric } from '../src/utils/TestUtils'
-import PATHS from './paths'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-const e2eEnv = dotenv.config()
+const PLATFORM_ROOT_DIR = resolve(__dirname, '../../../')
+const WORKSPACE_DIR = resolve(__dirname, '../')
+
+const SRC_DB_ENDPOINTS = resolve(
+  PLATFORM_ROOT_DIR,
+  'src/stores/databaseV2/endpoints.ts',
+)
+const WORKSPACE_DB_ENDPOINTS = resolve(
+  WORKSPACE_DIR,
+  'src/support/db/endpoints.ts',
+)
+const CY_BIN = resolve(WORKSPACE_DIR, 'node_modules/.bin/cypress')
+const CROSSENV_BIN = resolve(WORKSPACE_DIR, 'node_modules/.bin/cross-env')
+const BUILD_SERVE_JSON = resolve(PLATFORM_ROOT_DIR, 'build/serve.json')
+
+export const PATHS = {
+  WORKSPACE_DIR,
+  PLATFORM_ROOT_DIR,
+  SRC_DB_ENDPOINTS,
+  WORKSPACE_DB_ENDPOINTS,
+  CY_BIN,
+  CROSSENV_BIN,
+  BUILD_SERVE_JSON,
+}
+
+export const generateAlphaNumeric = (length: number) => {
+  let result = ''
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return result
+}
+
+const e2eEnv = config()
 
 const isCi = process.argv.includes('ci')
 const isProduction = process.argv.includes('prod')
@@ -40,7 +77,7 @@ main()
 
 async function main() {
   // copy endpoints for use in testing
-  fs.copyFileSync(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
+  fs.copyFile(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
   await startAppServer()
   runTests()
 }
@@ -71,7 +108,7 @@ async function startAppServer() {
     }
     // create a rewrites file for handling local server behaviour
     const opts = { rewrites: [{ source: '/**', destination: '/index.html' }] }
-    fs.writeFileSync(BUILD_SERVE_JSON, JSON.stringify(opts))
+    fs.writeFile(BUILD_SERVE_JSON, JSON.stringify(opts))
 
     serverCmd = `npx serve build -l 3456`
   }
@@ -100,7 +137,7 @@ async function startAppServer() {
   // do not end function until server responsive on port 3456
   // give up if not reponsive after 5 minutes (assume uncaught error somewhere)
   const timeout = 5 * 60 * 1000
-  await waitOn({ resources: ['http-get://127.0.0.1:3456'], timeout })
+  await waitOn({ resources: ['http-get://127.0.0.1:3000'], timeout })
 }
 
 function runTests() {

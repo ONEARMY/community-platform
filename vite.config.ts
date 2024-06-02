@@ -1,5 +1,6 @@
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { dirname, resolve } from 'path'
+import { fileURLToPath } from 'url'
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import envCompatible from 'vite-plugin-env-compatible'
@@ -7,6 +8,9 @@ import svgr from 'vite-plugin-svgr'
 import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths'
 
 import type { UserConfig as VitestUserConfigInterface } from 'vitest/config'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const vitestConfig: VitestUserConfigInterface = {
   test: {
@@ -52,6 +56,7 @@ export default defineConfig({
   server: {
     open: '/',
     port: 3000,
+    host: '127.0.0.1',
   },
   resolve: {
     alias: {

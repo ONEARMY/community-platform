@@ -9215,7 +9215,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/wait-on@npm:^5.3.1":
+"@types/wait-on@npm:^5.3.4":
   version: 5.3.4
   resolution: "@types/wait-on@npm:5.3.4"
   dependencies:
@@ -12796,6 +12796,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^9.3.0":
+  version: 9.5.0
+  resolution: "commander@npm:9.5.0"
+  checksum: c7a3e27aa59e913b54a1bafd366b88650bc41d6651f0cbe258d4ff09d43d6a7394232a4dadd0bf518b3e696fdf595db1028a0d82c785b88bd61f8a440cecfade
+  languageName: node
+  linkType: hard
+
 "commander@npm:~2.17.1":
   version: 2.17.1
   resolution: "commander@npm:2.17.1"
@@ -15336,7 +15343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.20.1":
+"esbuild@npm:^0.20.1, esbuild@npm:~0.20.2":
   version: 0.20.2
   resolution: "esbuild@npm:0.20.2"
   dependencies:
@@ -17390,7 +17397,7 @@ __metadata:
     ts-jest: 29.1.4
     ts-loader: ^9.5.1
     ts-node: ^10.9.2
-    typescript: ^5.4.5
+    typescript: ^5.1.6
     uuid: ^9.0.1
     webpack: ^5.91.0
     webpack-cli: ^5.1.4
@@ -17627,7 +17634,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-tsconfig@npm:^4.5.0":
+"get-tsconfig@npm:^4.5.0, get-tsconfig@npm:^4.7.5":
   version: 4.7.5
   resolution: "get-tsconfig@npm:4.7.5"
   dependencies:
@@ -23703,17 +23710,20 @@ __metadata:
   resolution: "oa-cypress@workspace:packages/cypress"
   dependencies:
     "@faker-js/faker": ^7.6.0
-    "@types/fs-extra": ^9.0.13
-    "@types/wait-on": ^5.3.1
+    "@types/fs-extra": ^11.0.4
+    "@types/wait-on": ^5.3.4
     cross-env: ^7.0.3
     cypress: 13.6.6
     cypress-file-upload: 5.0.8
     dotenv: ^10.0.0
     firebase: 10.6.0
-    fs-extra: ^10.0.0
+    fs-extra: ^11.2.0
     oa-shared: "workspace:*"
-    ts-node: ^10.2.1
-    wait-on: ^7.0.1
+    ts-node: ^10.9.2
+    tsx: ^4.11.0
+    typescript: ^5.1.6
+    wait-on: ^7.2.0
+    wait-port: ^1.1.0
   languageName: unknown
   linkType: soft
 
@@ -29901,6 +29911,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tsx@npm:^4.11.0":
+  version: 4.11.0
+  resolution: "tsx@npm:4.11.0"
+  dependencies:
+    esbuild: ~0.20.2
+    fsevents: ~2.3.3
+    get-tsconfig: ^4.7.5
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    tsx: dist/cli.mjs
+  checksum: 677b415cec06f1b0da67877ecf8ac6260cb97a0779f0f4492ad49b750f019bb184016b8502e6c83e50dc2a673106b7d0bb109d799328826c145a0e336d67da2d
+  languageName: node
+  linkType: hard
+
 "tunnel-agent@npm:^0.6.0":
   version: 0.6.0
   resolution: "tunnel-agent@npm:0.6.0"
@@ -30071,7 +30097,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.1.6, typescript@npm:^5.4.5":
+"typescript@npm:^5.1.6":
   version: 5.4.5
   resolution: "typescript@npm:5.4.5"
   bin:
@@ -30081,7 +30107,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.1.6#~builtin<compat/typescript>, typescript@patch:typescript@^5.4.5#~builtin<compat/typescript>":
+"typescript@patch:typescript@^5.1.6#~builtin<compat/typescript>":
   version: 5.4.5
   resolution: "typescript@patch:typescript@npm%3A5.4.5#~builtin<compat/typescript>::version=5.4.5&hash=29ae49"
   bin:
@@ -31224,7 +31250,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wait-on@npm:^7.0.1":
+"wait-on@npm:^7.2.0":
   version: 7.2.0
   resolution: "wait-on@npm:7.2.0"
   dependencies:
@@ -31236,6 +31262,19 @@ __metadata:
   bin:
     wait-on: bin/wait-on
   checksum: 69ec1432bb4479363fdd71f2f3f501a98aa356a562781108a4a89ef8fdf1e3d5fd0c2fd56c4cc5902abbb662065f1f22d4e436a1e6fc9331ce8b575eb023325e
+  languageName: node
+  linkType: hard
+
+"wait-port@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "wait-port@npm:1.1.0"
+  dependencies:
+    chalk: ^4.1.2
+    commander: ^9.3.0
+    debug: ^4.3.4
+  bin:
+    wait-port: bin/wait-port.js
+  checksum: bf7c2cd566449530e2599a00cdf4b5a8a6e8c55d370bcd4045db6eacdc7040fdf3d83ff8773bbb036ac614e0d677ade28724a4d259cd3cc555cf9b4995647bab
   languageName: node
   linkType: hard
 

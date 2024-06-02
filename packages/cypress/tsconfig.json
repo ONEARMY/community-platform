@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "jsx": "react"
   },
-  "include": ["**/*.ts", "cypress.config.ts"]
+  "include": ["**/*.ts"]
 }

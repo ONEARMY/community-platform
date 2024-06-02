@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm scripts/start.ts"
+    "start": "node --loader ts-node/esm scripts/start.mts"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",

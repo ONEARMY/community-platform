@@ -9,5 +9,5 @@
     "resolveJsonModule": true,
     "jsx": "react"
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "scripts/start.mts"]
 }

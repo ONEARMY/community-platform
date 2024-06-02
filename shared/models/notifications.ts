@@ -26,5 +26,5 @@ export type NotificationType = typeof NotificationTypes[number]
 
 export type UserNotificationItem = {
   type: NotificationType
-  // children: React.ReactNode
+  children: React.ReactNode
 }

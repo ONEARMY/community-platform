@@ -25,16 +25,15 @@ import webpack from 'webpack'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 const config: webpack.Configuration = {
-  target: 'node',
   mode: 'production',
   entry: './src/index.ts',
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.json'],
+    extensions: ['.ts', '.js', '.json'],
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(ts|tsx)$/,
         loader: 'ts-loader',
         options: {
           configFile: 'tsconfig.json',
@@ -86,6 +85,7 @@ const config: webpack.Configuration = {
     hints: false,
   },
   devtool: 'inline-source-map',
+  externalsPresets: { node: true },
   externals: [
     // reference other installed workspace packages here
     nodeExternals({

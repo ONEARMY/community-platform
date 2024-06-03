@@ -47,8 +47,7 @@
     "docs": "yarn workspace oa-docs start",
     "install:clean": "yarn workspace oa-scripts install:clean",
     "postinstall": "husky install",
-    "commit": "git-cz",
-    "healthcheck": "node scripts/healthcheck.js"
+    "commit": "git-cz"
   },
   "config": {
     "commitizen": {

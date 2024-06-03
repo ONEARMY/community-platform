@@ -4,7 +4,7 @@ import { MESSAGE_MAX_CHARACTERS } from '../../../../src/pages/User/constants'
 import { missing } from '../../../../src/pages/User/impact/labels'
 import { contact } from '../../../../src/pages/User/labels'
 import { MOCK_DATA } from '../data'
-import { UserMenuItem } from '../support/commands'
+import { UserMenuItem } from '../support/commandsUi'
 import { setIsPreciousPlastic } from '../utils/TestUtils'
 
 const { admin, subscriber } = MOCK_DATA.users

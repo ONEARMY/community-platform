@@ -12332,6 +12332,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chromatic@npm:^11.4.0":
+  version: 11.4.0
+  resolution: "chromatic@npm:11.4.0"
+  peerDependencies:
+    "@chromatic-com/cypress": ^0.*.* || ^1.0.0
+    "@chromatic-com/playwright": ^0.*.* || ^1.0.0
+  peerDependenciesMeta:
+    "@chromatic-com/cypress":
+      optional: true
+    "@chromatic-com/playwright":
+      optional: true
+  bin:
+    chroma: dist/bin.js
+    chromatic: dist/bin.js
+    chromatic-cli: dist/bin.js
+  checksum: 0fc78a06234ff6fb73b70c6106ebc9d45f63755a1afa8a661c2cb970907181b4c9e140e073c14fb6b3f2b1575bbf900d63450a8b777803f70c452d901003f38a
+  languageName: node
+  linkType: hard
+
 "chrome-trace-event@npm:^1.0.2":
   version: 1.0.4
   resolution: "chrome-trace-event@npm:1.0.4"
@@ -23667,6 +23686,7 @@ __metadata:
     "@vitejs/plugin-react": ^4.3.0
     "@vitest/coverage-v8": ^1.6.0
     babel-loader: 8.1.0
+    chromatic: ^11.4.0
     date-fns: ^2.29.3
     eslint: ^8.50.0
     eslint-plugin-import: ^2.28.1

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "install:clean": "ts-node ./installClean.ts",
-    "post-cra-build": "ts-node ./postCraBuild.ts"
+    "post-cra-build": "ts-node ./postBuild.ts"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.10",

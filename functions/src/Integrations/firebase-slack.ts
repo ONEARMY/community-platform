@@ -64,3 +64,38 @@ export const notifyNewHowTo = functions
       },
     )
   })
+
+export const notifyAcceptedQuestion = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document('questions_rev20230926/{id}')
+  .onCreate((snapshot) => {
+    const info = snapshot.data()
+    console.log(info)
+
+    const username = info._createdBy
+    const title = info.title
+    const slug = info.slug
+
+    const moderation = info.moderation
+
+    if (moderation !== IModerationStatus.ACCEPTED) {
+      return
+    }
+
+    request.post(
+      SLACK_WEBHOOK_URL,
+      {
+        json: {
+          text: `❓ ${username} has a new question: ${title}\n Help them out and answer here: ${SITE_URL}/questions/${slug}`,
+        },
+      },
+      (error, response) => {
+        if (error) {
+          console.error(error)
+          return
+        } else {
+          return response
+        }
+      },
+    )
+  })

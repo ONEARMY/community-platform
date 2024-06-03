@@ -121,31 +121,22 @@ Cypress.Commands.add(
       },
     })
     // use a wrap statement to allow chaining onto an async function
-    cy.wrap('logging in')
-      .then(() => {
-        return new Cypress.Promise((resolve, reject) => {
-          Auth.signInWithEmailAndPassword(email, password)
-            .then((res) => resolve(res.user))
-            .catch(reject)
-        })
+    cy.then(async () => {
+      const res = await Auth.signInWithEmailAndPassword(email, password)
+      expect(res.user.email).eq(email)
+      cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
+        if (checkUI) {
+          cy.get('[data-cy=user-menu]').should('be.visible')
+        }
       })
-      // after login ensure the auth user matches expected and user menu visible
-      .its('email')
-      .should('eq', email)
-    cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
-      if (checkUI) {
-        // cy.get('[data-cy=user-menu]').should('be.visible')
-      }
+      cy.log('user', Auth.currentUser)
     })
-    cy.log('user', Auth.currentUser)
   },
 )
 
 Cypress.Commands.add('logout', (checkUI = true) => {
-  cy.wrap('logging out').then(() => {
-    return new Cypress.Promise((resolve) => {
-      Auth.signOut().then(() => resolve())
-    })
+  cy.wrap('logging out').then(async () => {
+    return await Auth.signOut()
   })
   cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
     if (checkUI) {

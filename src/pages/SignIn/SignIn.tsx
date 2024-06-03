@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { Button, FieldInput, TextNotification } from 'oa-components'
 import { getFriendlyMessage } from 'oa-shared'
@@ -94,10 +94,12 @@ const SignInPage = observer((props: IProps) => {
     }
   }
 
-  if (userStore!.user) {
-    // User logged in
-    return <Navigate to={'/'} />
-  }
+  useEffect(() => {
+    if (userStore.authUser) {
+      // User logged in
+      navigate('/')
+    }
+  }, [userStore.authUser])
 
   return (
     <Form

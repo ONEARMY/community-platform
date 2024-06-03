@@ -41,27 +41,31 @@ type PartialUser = Partial<IUserPPDB>
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.default.Unsubscribe
-  @observable
-  public user: IUserPPDB | null | undefined
 
-  @observable
-  public authUser: User | null // TODO: Fix type
-
-  @observable
+  public user: IUserPPDB | null | undefined = null
+  public authUser: User | null = null // TODO: Fix type
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
   constructor(rootStore: IRootStore) {
     super(rootStore)
-    makeObservable(this)
+    makeObservable(this, {
+      authUser: observable,
+      user: observable,
+      updateStatus: observable,
+      getAllUsers: action,
+      getUsersStartingWith: action,
+      setUpdateStatus: action,
+      updateUserImpact: action,
+      _setUpdateStatus: action,
+      _updateActiveUser: action,
+    })
     this._listenToAuthStateChanges()
   }
 
-  @action
   public getAllUsers() {
     return this.allDocs$
   }
 
-  @action
   public async getUsersStartingWith(prefix: string, limit?: number) {
     // getWhere with the '>=' operator will return every userName that is lexicographically greater than prefix, so adding filter to avoid getting not relvant userNames
     const users: IUserPP[] = await this.db
@@ -74,7 +78,6 @@ export class UserStore extends ModuleStore {
     return uniqueUsers
   }
 
-  @action
   public setUpdateStatus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
   }
@@ -262,7 +265,6 @@ export class UserStore extends ModuleStore {
     await this.refreshActiveUserDetails()
   }
 
-  @action
   public async updateUserImpact(
     fields: IImpactYearFieldList,
     year: IImpactYear,
@@ -467,13 +469,11 @@ export class UserStore extends ModuleStore {
     this.user = user
   }
 
-  @action
-  private _setUpdateStatus(update: keyof IUserUpdateStatus) {
+  public _setUpdateStatus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
   }
 
-  @action
-  private _updateActiveUser(user?: IUserPPDB | null) {
+  public _updateActiveUser(user?: IUserPPDB | null) {
     this.user = user
   }
 }

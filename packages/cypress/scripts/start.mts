@@ -137,7 +137,7 @@ async function startAppServer() {
   // do not end function until server responsive on port 3456
   // give up if not reponsive after 5 minutes (assume uncaught error somewhere)
   const timeout = 5 * 60 * 1000
-  await waitOn({ resources: ['http-get://127.0.0.1:3456'], timeout })
+  await waitOn({ resources: ['http-get://localhost:3456'], timeout })
 }
 
 function runTests() {

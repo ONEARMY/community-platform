@@ -9,6 +9,6 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "postBuild.mts"],
   "typeRoots": ["node_modules/@types"]
 }

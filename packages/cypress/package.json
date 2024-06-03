@@ -19,7 +19,6 @@
     "dotenv": "^10.0.0",
     "fs-extra": "^11.2.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.11.0",
     "typescript": "^5.1.6",
     "wait-on": "^7.2.0",
     "wait-port": "^1.1.0"

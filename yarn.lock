@@ -15362,7 +15362,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild@npm:^0.20.1, esbuild@npm:~0.20.2":
+"esbuild@npm:^0.20.1":
   version: 0.20.2
   resolution: "esbuild@npm:0.20.2"
   dependencies:
@@ -17653,7 +17653,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-tsconfig@npm:^4.5.0, get-tsconfig@npm:^4.7.5":
+"get-tsconfig@npm:^4.5.0":
   version: 4.7.5
   resolution: "get-tsconfig@npm:4.7.5"
   dependencies:
@@ -23740,7 +23740,6 @@ __metadata:
     fs-extra: ^11.2.0
     oa-shared: "workspace:*"
     ts-node: ^10.9.2
-    tsx: ^4.11.0
     typescript: ^5.1.6
     wait-on: ^7.2.0
     wait-port: ^1.1.0
@@ -29928,22 +29927,6 @@ __metadata:
   peerDependencies:
     typescript: ">=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta"
   checksum: 1843f4c1b2e0f975e08c4c21caa4af4f7f65a12ac1b81b3b8489366826259323feb3fc7a243123453d2d1a02314205a7634e048d4a8009921da19f99755cdc48
-  languageName: node
-  linkType: hard
-
-"tsx@npm:^4.11.0":
-  version: 4.11.0
-  resolution: "tsx@npm:4.11.0"
-  dependencies:
-    esbuild: ~0.20.2
-    fsevents: ~2.3.3
-    get-tsconfig: ^4.7.5
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    tsx: dist/cli.mjs
-  checksum: 677b415cec06f1b0da67877ecf8ac6260cb97a0779f0f4492ad49b750f019bb184016b8502e6c83e50dc2a673106b7d0bb109d799328826c145a0e336d67da2d
   languageName: node
   linkType: hard
 

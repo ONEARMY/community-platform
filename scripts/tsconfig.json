@@ -7,8 +7,11 @@
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "emitDeclarationOnly": true,
+    "declaration": true
   },
-  "include": ["**/*.ts", "postBuild.mts"],
+  "include": ["**/*.ts"],
   "typeRoots": ["node_modules/@types"]
 }

@@ -4,7 +4,7 @@ import fs from 'fs'
 import fsExtra from 'fs-extra'
 import path from 'path'
 
-import { _supportedConfigurationOptions } from '../src/config/constants'
+import { _supportedConfigurationOptions } from '../src/config/constants.ts'
 
 dotenv.config({ path: path.resolve('../.env'), debug: true })
 

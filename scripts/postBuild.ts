@@ -1,4 +1,4 @@
-import cheerio from 'cheerio'
+import { load } from 'cheerio'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import fsExtra from 'fs-extra'
@@ -10,7 +10,7 @@ dotenv.config({ path: path.resolve('../.env'), debug: true })
 
 const builtHTML = fs.readFileSync('../build/index.html', { encoding: 'utf-8' })
 
-const $ = cheerio.load(builtHTML, { recognizeSelfClosing: true })
+const $ = load(builtHTML, { recognizeSelfClosing: true })
 
 /**
  *  A post build script that is run to:

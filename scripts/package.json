@@ -1,6 +1,7 @@
 {
   "name": "oa-scripts",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "install:clean": "ts-node ./installClean.ts",
     "post-cra-build": "ts-node ./postBuild.ts"

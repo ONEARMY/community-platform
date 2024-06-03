@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv'
 import fs from 'fs-extra'
 import waitOn from 'wait-on'
 
+import { TestDB } from '../src/support/db/firebase'
 import { generateAlphaNumeric } from '../src/utils/TestUtils'
 import PATHS from './paths'
 
@@ -11,6 +12,9 @@ const e2eEnv = dotenv.config()
 
 const isCi = process.argv.includes('ci')
 const isProduction = process.argv.includes('prod')
+const DB_PREFIX = generateAlphaNumeric(5)
+process.env.DB_PREFIX = `${DB_PREFIX}_`
+const CYPRESS_ENV = `DB_PREFIX=${DB_PREFIX}_`
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', (err) => {
@@ -42,6 +46,7 @@ async function main() {
   // copy endpoints for use in testing
   fs.copyFileSync(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
   await startAppServer()
+  await seedDatabase()
   runTests()
 }
 
@@ -103,6 +108,27 @@ async function startAppServer() {
   await waitOn({ resources: ['http-get://127.0.0.1:3456'], timeout })
 }
 
+async function seedDatabase() {
+  console.log('Seeding database');
+  return new Promise<void>((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, 10000);
+
+    console.log()
+    TestDB.seedDB().then(() => {
+      resolve();
+    }).catch((error) => {
+      reject(error);
+    });
+  }).then(() => {
+    console.log('Database seeded successfully');
+  }).catch((error) => {
+    console.error('Database seeding failed:', error);
+    throw error;
+  });
+}
+
 function runTests() {
   console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
   const e = process.env
@@ -110,7 +136,6 @@ function runTests() {
   const CI_BROWSER = e.CI_BROWSER || 'chrome'
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
   // not currently used, but can pass variables accessed by Cypress.env()
-  const CYPRESS_ENV = `DUMMY_VAR=1`
   // use workflow ID so that jobs running in parallel can be assigned to same cypress build
   // cypress will use this to split tests between parallel runs
   const buildId = e.CIRCLE_WORKFLOW_ID || generateAlphaNumeric(8)

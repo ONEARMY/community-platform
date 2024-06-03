@@ -12,6 +12,7 @@ export const fakeComment = (commentOverloads: Partial<IComment> = {}) => ({
   isUserSupporter: faker.datatype.boolean(),
   text: faker.lorem.text(),
   isEditable: faker.datatype.boolean(),
+  creatorImage: faker.datatype.boolean() ? faker.image.avatar() : undefined,
   ...commentOverloads,
 })
 

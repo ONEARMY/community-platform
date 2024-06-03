@@ -18,7 +18,7 @@ export const updateDiscussionComments = async (
 
   if (!snapshot.empty) {
     const { _id, badges, coverImages, location } = user
-    const creatorImage = setCreatorImage(coverImages)
+    const creatorImage = getCreatorImage(coverImages)
 
     const userDetails = {
       creatorCountry: location?.countryCode || '',
@@ -48,7 +48,7 @@ export const updateDiscussionComments = async (
   }
 }
 
-const setCreatorImage = (coverImages) => {
+const getCreatorImage = (coverImages) => {
   if (coverImages && coverImages[0] && coverImages[0].downloadUrl) {
     return coverImages[0].downloadUrl
   }

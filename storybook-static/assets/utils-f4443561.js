@@ -1,0 +1,2 @@
+import{y as e}from"./index-a7768622.js";const r=(a={})=>({_created:e.date.past().toString(),creatorCountry:e.address.countryCode().toLowerCase(),_creatorId:e.internet.userName(),_id:e.database.mongodbObjectId(),creatorName:e.internet.userName(),isUserVerified:e.datatype.boolean(),isUserSupporter:e.datatype.boolean(),text:e.lorem.text(),isEditable:e.datatype.boolean(),creatorImage:e.datatype.boolean()?e.image.avatar():void 0,...a}),s=(a=2,t={})=>[...Array(a).keys()].slice(0).map(()=>r({...t}));export{s as c,r as f};
+//# sourceMappingURL=utils-f4443561.js.map

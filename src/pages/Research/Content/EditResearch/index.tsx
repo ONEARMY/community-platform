@@ -14,7 +14,7 @@ import type { IResearch } from 'src/models/research.models'
 import type { IUser } from 'src/models/user.models'
 
 interface IState {
-  formValues?: IResearch.ItemDB
+  formValues: IResearch.ItemDB | null
   isLoading: boolean
   loggedInUser?: IUser | undefined
 }
@@ -42,7 +42,7 @@ const EditResearch = observer(() => {
           }, 3000),
         )
       }
-      if (store.activeResearchItem! !== undefined) {
+      if (store.activeResearchItem) {
         setState((prevState) => ({
           ...prevState,
           formValues: toJS(store.activeResearchItem) as IResearch.ItemDB,

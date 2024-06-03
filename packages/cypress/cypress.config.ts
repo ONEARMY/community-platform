@@ -25,7 +25,7 @@ export default defineConfig({
   },
   e2e: {
     setupNodeEvents: setupNodeEvents,
-    baseUrl: 'http://127.0.0.1:3000',
+    baseUrl: 'http://127.0.0.1:3456',
     specPattern: 'src/integration/**/*.{js,jsx,ts,tsx}',
     supportFile: 'src/support/index.ts',
   },
@@ -33,9 +33,7 @@ export default defineConfig({
     devServer: {
       bundler: 'vite',
       framework: 'react',
-      viteConfig: {
-        ...viteConfig,
-      },
+      viteConfig: { ...viteConfig },
     },
   },
 })

@@ -15,9 +15,11 @@
   "type": "module",
   "scripts": {
     "start": "concurrently --kill-others --names themes,components,platform --prefix-colors cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform\"",
+    "start-ci": "concurrently --kill-others --names themes,components,platform --prefix-colors cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform-ci\"",
     "start:themes": "yarn workspace oa-themes dev",
     "start:components": "yarn workspace oa-components dev",
     "start:platform": "yarn build:shared && vite",
+    "start:platform-ci": "yarn build:shared && vite --port 3456",
     "start:emulated": "concurrently --kill-others --names functions,themes,components,platform --prefix-colors yellow,cyan,blue,magenta \"yarn workspace functions start\" \"yarn start:themes\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\"",
     "start:emulated:docker": "concurrently --names functions,themes,components,platform,emulators --prefix-colors yellow,cyan,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn start:themes\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start\"",
     "start:emulated:docker:local": "concurrently --names functions,themes,components,platform,emulators --prefix-colors yellow,cyan,blue,magenta,green --kill-others \"yarn workspace functions watch\" \"yarn start:themes\" \"yarn start:components\" \"cross-env PORT=4000 yarn start:platform\" \"yarn workspace oa-emulators-docker start --repo=\"",

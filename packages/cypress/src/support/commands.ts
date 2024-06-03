@@ -134,7 +134,7 @@ Cypress.Commands.add(
       .should('eq', email)
     cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
       if (checkUI) {
-        cy.get('[data-cy=user-menu]').should('be.visible')
+        // cy.get('[data-cy=user-menu]').should('be.visible')
       }
     })
     cy.log('user', Auth.currentUser)

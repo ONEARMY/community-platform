@@ -2,7 +2,7 @@
 
 End-to-end testing is carried out by [Cypress](https://www.cypress.io/), and executed against a dedicated firebase project (different to development and staging).
 
-You will notice the data in test is completely different to what you see when developing. In addition, the testing app starts at the port `localhost:3456` which all tests are run against.
+You will notice the data in test is completely different to what you see when developing. In addition, the testing app starts at the port `localhost:3000` which all tests are run against.
 
 The tests are not comprehensive, but are slowly being built over time - particularly when bugs are noticed. Therefore if you identify a bug, before fixing it is recommended to add a test so that the bug is less likely to resurface in the future.
 

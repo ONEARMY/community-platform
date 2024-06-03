@@ -94,7 +94,7 @@ async function startAppServer() {
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
-  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3456 yarn start`
+  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none PORT=3000 yarn start`
 
   // for production will instead serve from production build folder
   if (isProduction) {
@@ -110,7 +110,7 @@ async function startAppServer() {
     const opts = { rewrites: [{ source: '/**', destination: '/index.html' }] }
     fs.writeFile(BUILD_SERVE_JSON, JSON.stringify(opts))
 
-    serverCmd = `npx serve build -l 3456`
+    serverCmd = `npx serve build -l 3000`
   }
 
   /******************* Run the main commands ******************* */
@@ -134,7 +134,7 @@ async function startAppServer() {
       }, 2000)
     }
   })
-  // do not end function until server responsive on port 3456
+  // do not end function until server responsive on port 3000
   // give up if not reponsive after 5 minutes (assume uncaught error somewhere)
   const timeout = 5 * 60 * 1000
   await waitOn({ resources: ['http-get://127.0.0.1:3000'], timeout })

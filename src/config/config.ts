@@ -61,7 +61,7 @@ const getSiteVariant = (): siteVariants => {
     return 'emulated_site'
   }
   if (
-    location.host === 'localhost:3456' ||
+    location.host === 'localhost:3000' ||
     _c('REACT_APP_SITE_VARIANT') === 'test-ci'
   ) {
     return 'test-ci'

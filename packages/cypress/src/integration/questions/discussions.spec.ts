@@ -91,7 +91,9 @@ describe('[Questions.Discussions]', () => {
       (docs) => {
         const [user] = docs
         const discussionNotification = user.notifications.find(
-          ({ type }) => type === 'new_comment_discussion',
+          ({ type, triggeredBy }) =>
+            type === 'new_comment_discussion' &&
+            triggeredBy.userId === visitor.username,
         )
         expect(discussionNotification.relevantUrl).to.include(
           `/questions/${item.slug}#comment:`,
@@ -108,7 +110,9 @@ describe('[Questions.Discussions]', () => {
       (docs) => {
         const [user] = docs
         const discussionNotification = user.notifications.find(
-          ({ type }) => type === 'new_comment_discussion',
+          ({ type, triggeredBy }) =>
+            type === 'new_comment_discussion' &&
+            triggeredBy.userId === visitor.username,
         )
         expect(discussionNotification.relevantUrl).to.include(
           `/questions/${item.slug}#comment:`,

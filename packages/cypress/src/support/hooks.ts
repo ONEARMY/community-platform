@@ -1,6 +1,3 @@
-import { generateAlphaNumeric } from '../utils/TestUtils'
-import { TestDB } from './db/firebase'
-
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
  * Note, cy also automatically will clear browser caches.

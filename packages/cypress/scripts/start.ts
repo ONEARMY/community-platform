@@ -109,24 +109,28 @@ async function startAppServer() {
 }
 
 async function seedDatabase() {
-  console.log('Seeding database');
+  console.log(`Seeding database prefix ${DB_PREFIX}`)
   return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
-      resolve();
-    }, 10000);
+      resolve()
+    }, 10000)
 
     console.log()
-    TestDB.seedDB().then(() => {
-      resolve();
-    }).catch((error) => {
-      reject(error);
-    });
-  }).then(() => {
-    console.log('Database seeded successfully');
-  }).catch((error) => {
-    console.error('Database seeding failed:', error);
-    throw error;
-  });
+    TestDB.seedDB()
+      .then(() => {
+        resolve()
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+    .then(() => {
+      console.log('Database seeded successfully')
+    })
+    .catch((error) => {
+      console.error('Database seeding failed:', error)
+      throw error
+    })
 }
 
 function runTests() {

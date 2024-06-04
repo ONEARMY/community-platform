@@ -231,7 +231,7 @@ export class UserStore extends ModuleStore {
     // upload any new cover images
     if (values.coverImages) {
       const processedImages = await this.uploadCollectionBatch(
-        values.coverImages as IConvertedFileMeta[],
+        values.coverImages as any as IConvertedFileMeta[],
         COLLECTION_NAME,
         values._id,
       )

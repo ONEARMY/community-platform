@@ -10,7 +10,7 @@ import type {
   IUserDB,
   IDiscussion,
   INotification,
-  IDiscussionComment,
+  IComment,
   IResearchDB,
 } from '../models'
 
@@ -77,7 +77,7 @@ async function updateDocument(
 
 async function sendNotifications(
   discussion: IDiscussion,
-  addedComments: IDiscussionComment[],
+  addedComments: IComment[],
 ) {
   // loop all added comments and send notifications
   for (const comment of addedComments) {

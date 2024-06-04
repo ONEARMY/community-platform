@@ -10,7 +10,7 @@ export type {
   DBDoc,
   IDBEndpoint,
   IDiscussion,
-  IDiscussionComment,
+  IComment,
   IHowtoDB,
   IMapPin,
   IMessageDB,

@@ -93,6 +93,7 @@ export class DiscussionStore extends ModuleStore {
           throw new Error('Discussion not found')
         }
 
+        const creatorImage = this._getUserAvatar(user)
         const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
@@ -103,6 +104,7 @@ export class DiscussionStore extends ModuleStore {
           isUserSupporter: !!user.badges?.supporter,
           text: comment,
           parentCommentId: commentId || null,
+          ...(creatorImage ? { creatorImage } : {}),
         }
 
         currentDiscussion.comments.push(newComment)
@@ -339,6 +341,17 @@ export class DiscussionStore extends ModuleStore {
         comment._id === commentId
       )
     })
+  }
+
+  private _getUserAvatar(user: IUserPPDB) {
+    if (
+      user.coverImages &&
+      user.coverImages[0] &&
+      user.coverImages[0].downloadUrl
+    ) {
+      return user.coverImages[0].downloadUrl
+    }
+    return null
   }
 }
 

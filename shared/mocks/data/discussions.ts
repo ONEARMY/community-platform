@@ -18,6 +18,8 @@ export const discussions = {
         _id: 'ZAB2SoUZtzUyeYLg9Cro',
         creatorCountry: 'af',
         creatorName: 'howto_creator',
+        creatorImage:
+          'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/784.jpg',
         parentCommentId: null,
         text: "i like your logo but I couldn't be conected for a while and I CANNOT tell you that anymore.",
       },

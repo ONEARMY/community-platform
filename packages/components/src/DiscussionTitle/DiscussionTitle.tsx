@@ -22,9 +22,5 @@ export const DiscussionTitle = ({ length }: IProps) => {
 
   const title = setTitle()
 
-  return (
-    <Heading as="h3" sx={{ marginBottom: 2 }}>
-      {title}
-    </Heading>
-  )
+  return <Heading as="h3">{title}</Heading>
 }

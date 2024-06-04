@@ -28,7 +28,7 @@ export const CreateComment = (props: Props) => {
   return (
     <Flex sx={{ flexDirection: 'column', gap: 3 }}>
       <Flex data-target="create-comment-container">
-        <Box sx={{ lineHeight: 0, marginTop: 2 }}>
+        <Box sx={{ lineHeight: 0, marginTop: 2, display: ['none', 'block'] }}>
           <MemberBadge profileType={userProfileType} useLowDetailVersion />
         </Box>
         <Box
@@ -36,7 +36,7 @@ export const CreateComment = (props: Props) => {
             display: 'block',
             background: 'white',
             flexGrow: 1,
-            marginLeft: 5,
+            marginLeft: [2, 5],
             borderRadius: 1,
             position: 'relative',
             '&:before': {
@@ -112,7 +112,7 @@ export const CreateComment = (props: Props) => {
               onSubmit(comment)
             }
           }}
-          sx={{ marginTop: 3 }}
+          sx={{ marginTop: isLoggedIn ? 3 : 0 }}
         >
           {isLoading ? 'Loading...' : buttonLabel}
         </Button>

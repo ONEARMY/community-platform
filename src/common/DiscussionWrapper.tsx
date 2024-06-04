@@ -6,9 +6,10 @@ import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { Text } from 'theme-ui'
 
+import { AuthWrapper } from './AuthWrapper'
 import { HideDiscussionContainer } from './HideDiscussionContainer'
 
-import type { IDiscussion } from 'src/models'
+import type { IDiscussion, UserRole } from 'src/models'
 
 const DISCUSSION_NOT_FOUND = 'Discussion not found :('
 const LOADING_LABEL = 'Loading the awesome discussion'
@@ -164,11 +165,25 @@ export const DiscussionWrapper = (props: IProps) => {
           commentCount={discussion.comments.length}
           showComments={showComments}
         >
-          <DiscussionContainer {...discussionProps} />
+          <AuthWrapper
+            roleRequired={'beta-tester' as UserRole.BETA_TESTER}
+            fallback={
+              <DiscussionContainer {...discussionProps} showAvatar={false} />
+            }
+          >
+            <DiscussionContainer {...discussionProps} showAvatar />
+          </AuthWrapper>
         </HideDiscussionContainer>
       )}
       {discussion && !canHideComments && (
-        <DiscussionContainer {...discussionProps} />
+        <AuthWrapper
+          roleRequired={'beta-tester' as UserRole.BETA_TESTER}
+          fallback={
+            <DiscussionContainer {...discussionProps} showAvatar={false} />
+          }
+        >
+          <DiscussionContainer {...discussionProps} showAvatar />
+        </AuthWrapper>
       )}
     </>
   )

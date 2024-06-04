@@ -10,7 +10,6 @@ import type { DBDoc, ILocation, ISODateString } from './common.models'
 
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
-import type { IConvertedFileMeta } from '../types'
 
 export interface IUserState {
   user?: IUser
@@ -34,7 +33,7 @@ export interface IUser {
   verified: boolean
   badges?: IUserBadges
   // images will be in different formats if they are pending upload vs pulled from db
-  coverImages: IUploadedFileMeta[] | IConvertedFileMeta[]
+  coverImages: IUploadedFileMeta[]
   links: IExternalLink[]
   userRoles?: UserRole[]
   about?: string | null

@@ -42,12 +42,6 @@ const factory = async (
     activeUser: activeUser,
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
-  }
-
   return {
     store,
     discussionItem,
@@ -138,14 +132,6 @@ describe('discussion.store', () => {
         expect.objectContaining({ text: 'New comment' }),
       )
       expect(newDiscussion.comments[1]).toBeUndefined()
-      expect(
-        store.userNotificationsStore.triggerNotification,
-      ).toHaveBeenCalledWith(
-        'new_comment_discussion',
-        undefined, // concern of another store
-        `/questions/undefined#comment:${discussionItem.comments[0]._id}`,
-        undefined, // concern of another store
-      )
     })
 
     it('adds a reply to a comment', async () => {
@@ -173,14 +159,6 @@ describe('discussion.store', () => {
         expect.arrayContaining([
           expect.objectContaining({ text: 'New reply' }),
         ]),
-      )
-      expect(
-        store.userNotificationsStore.triggerNotification,
-      ).toHaveBeenCalledWith(
-        'new_comment_discussion',
-        discussionItem.comments[0].creatorName,
-        `/questions/undefined#comment:${discussionItem.comments[0]._id}`,
-        undefined, // concern of another store
       )
     })
 

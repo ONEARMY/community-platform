@@ -21,6 +21,7 @@ export interface IProps {
   onMoreComments: () => void
   onSubmit: (comment: string) => void
   onSubmitReply: (_id: string, reply: string) => Promise<void>
+  showAvatar: boolean
   supportReplies?: boolean
 }
 
@@ -38,6 +39,7 @@ export const DiscussionContainer = (props: IProps) => {
     onMoreComments,
     onSubmit,
     isLoggedIn,
+    showAvatar,
     supportReplies = false,
   } = props
 
@@ -57,7 +59,7 @@ export const DiscussionContainer = (props: IProps) => {
   }
 
   return (
-    <>
+    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
       <DiscussionTitle length={comments.length} />
 
       <CommentList
@@ -73,6 +75,7 @@ export const DiscussionContainer = (props: IProps) => {
         onMoreComments={onMoreComments}
         onSubmitReply={onSubmitReply}
         setCommentBeingRepliedTo={handleSetCommentBeingRepliedTo}
+        showAvatar={showAvatar}
       />
 
       <Flex
@@ -92,6 +95,6 @@ export const DiscussionContainer = (props: IProps) => {
           isLoggedIn={isLoggedIn}
         />
       </Flex>
-    </>
+    </Flex>
   )
 }

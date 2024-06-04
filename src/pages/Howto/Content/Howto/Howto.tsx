@@ -12,21 +12,21 @@ import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
-import { isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box } from 'theme-ui'
 
-import { HowToComments } from './HowToComments/HowToComments'
 import HowtoDescription from './HowtoDescription/HowtoDescription'
+import { HowtoDiscussion } from './HowToDiscussion/HowToDiscussion'
 import Step from './Step/Step'
 
-import type { IUser, UserComment } from 'src/models'
+import type { IUser } from 'src/models'
 
 export const Howto = observer(() => {
   const { slug } = useParams()
   const { howtoStore, userStore, aggregationsStore, tagsStore } =
     useCommonStores().stores
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0)
 
   const loggedInUser = userStore.activeUser
   const { activeHowto } = howtoStore
@@ -88,17 +88,6 @@ export const Howto = observer(() => {
     )
   }
 
-  const activeHowToComments: UserComment[] = howtoStore
-    .getActiveHowToComments()
-    .map(
-      (c): UserComment => ({
-        ...c,
-        isEditable:
-          [loggedInUser?._id, loggedInUser?.userName].includes(c._creatorId) ||
-          isAllowedToEditContent(activeHowto, loggedInUser as IUser),
-      }),
-    )
-
   const { allTagsByKey } = tagsStore
   const howto = {
     ...activeHowto,
@@ -120,7 +109,7 @@ export const Howto = observer(() => {
         key={activeHowto._id}
         needsModeration={howtoStore.needsModeration(activeHowto)}
         loggedInUser={loggedInUser as IUser}
-        commentsCount={howtoStore.commentsCount}
+        commentsCount={totalCommentsCount}
         votedUsefulCount={howtoStore.votedUsefulCount}
         hasUserVotedUseful={hasUserVotedUseful}
         onUsefulClick={async () =>
@@ -179,7 +168,10 @@ export const Howto = observer(() => {
             />
           )}
         </ArticleCallToAction>
-        <HowToComments comments={activeHowToComments} />
+        <HowtoDiscussion
+          howtoDocId={howto._id}
+          setTotalCommentsCount={setTotalCommentsCount}
+        />
       </UserEngagementWrapper>
     </>
   )

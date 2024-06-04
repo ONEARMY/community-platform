@@ -40,3 +40,5 @@ export interface IErrorsListSet {
   labels: ILabels
   title?: string
 }
+
+export type MainFormAction = 'create' | 'edit'

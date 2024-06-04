@@ -23,6 +23,7 @@ export namespace IQuestion {
     ISharedFeatures
 
   export interface FormInput extends IModerable {
+    _id: string
     title: string
     description: string
     tags: ISelectedTags

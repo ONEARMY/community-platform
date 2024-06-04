@@ -100,6 +100,7 @@ commands:
       - checkout
       - *restore_yarn_cache
       - *install_packages
+      - *save_yarn_cache
   inject_instance_configuration:
     steps:
       - run:
@@ -363,6 +364,15 @@ jobs:
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
+  chromatic:
+    docker: *docker
+    resource_class: medium
+    steps:
+      - setup_repo
+      - attach_workspace:
+          at: '.'
+      - run:
+          command: yarn storybook:chromatic
   release:
     docker: *docker
     resource_class: medium+
@@ -437,6 +447,13 @@ workflows:
             parameters:
               CI_NODE: [1, 2, 3, 4]
               CI_BROWSER: ['chrome']
+      - chromatic:
+          name: 'Release storybook to chromatic'
+          requires:
+            - test_e2e
+          context:
+            - e2e-tests
+          <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy:
           name: 'Deploy: dev.onearmy.world'

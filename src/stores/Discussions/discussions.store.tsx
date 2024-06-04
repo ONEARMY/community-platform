@@ -11,11 +11,7 @@ import { ModuleStore } from '../common/module.store'
 import { updateDiscussionMetadata } from './discussionEvents'
 
 import type { IUserPPDB } from 'src/models'
-import type {
-  IComment,
-  IDiscussion,
-  IDiscussionSourceModelOptions,
-} from 'src/models/discussion.models'
+import type { IComment, IDiscussion } from 'src/models/discussion.models'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
 import type { CommentsTotalEvent } from './discussionEvents'

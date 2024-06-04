@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 import { act } from 'react-dom/test-utils'
 import { fireEvent } from '@testing-library/react'

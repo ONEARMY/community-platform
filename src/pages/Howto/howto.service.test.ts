@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 import { UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'

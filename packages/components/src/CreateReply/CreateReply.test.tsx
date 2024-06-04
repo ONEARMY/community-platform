@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 import { fireEvent, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'

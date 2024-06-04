@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 import { ResearchStatus } from 'oa-shared'
 import { describe, expect, it, vi } from 'vitest'

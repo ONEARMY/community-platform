@@ -52,7 +52,7 @@ const howTo = {
   moduleName: MODULE.HOWTO,
   path: '/how-to',
   component: <HowtoPage />,
-  title: 'How-to',
+  title: 'How-tos',
   description: 'Welcome to how-to',
 }
 const settings = {

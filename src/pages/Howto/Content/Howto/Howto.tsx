@@ -56,7 +56,7 @@ export const Howto = observer(() => {
       await howtoStore.setActiveHowtoBySlug(slug)
 
       seoTagsUpdate({
-        title: howtoStore.activeHowto?.title,
+        title: `${howtoStore.activeHowto?.title} - How-to`,
         description: howtoStore.activeHowto?.description,
         imageUrl: howtoStore.activeHowto?.cover_image?.downloadUrl,
       })

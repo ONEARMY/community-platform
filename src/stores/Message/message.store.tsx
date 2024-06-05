@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react'
-import { action } from 'mobx'
 import { logger } from 'src/logger'
 import { isUserBlockedFromMessaging } from 'src/utils/helpers'
 
@@ -16,7 +15,6 @@ export class MessageStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
   }
 
-  @action
   public async upload(values: IMessageInput) {
     const messagesByEmailer = await this.messagesByEmailer(values.email)
     if (messagesByEmailer.length >= EMAIL_ADDRESS_SEND_LIMIT) {

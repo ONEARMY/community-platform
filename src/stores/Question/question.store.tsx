@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { action, computed } from 'mobx'
+import { action, computed, makeObservable } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { isAllowedToEditContent } from 'src/utils/helpers'
@@ -25,6 +25,14 @@ export class QuestionStore extends ModuleStore {
 
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
+    makeObservable(this, {
+      fetchQuestionBySlug: action,
+      votedUsefulCount: computed,
+      userVotedActiveQuestionUseful: computed,
+      subscriberCount: computed,
+      userCanEditQuestion: computed,
+      userHasSubscribed: computed,
+    })
   }
 
   public async incrementViewCount(question: Partial<IQuestionDB>) {
@@ -35,13 +43,11 @@ export class QuestionStore extends ModuleStore {
     })
   }
 
-  @action
   public async fetchQuestionBySlug(slug: string) {
     logger.debug(`fetchQuestionBySlug:`, { slug })
     return await this._getQuestionItemBySlug(slug)
   }
 
-  @computed
   get votedUsefulCount(): number {
     if (!this.activeQuestionItem || !this.activeQuestionItem.votedUsefulBy) {
       return 0
@@ -49,7 +55,6 @@ export class QuestionStore extends ModuleStore {
     return this.activeQuestionItem?.votedUsefulBy.length
   }
 
-  @computed
   get userVotedActiveQuestionUseful(): boolean {
     if (!this.activeUser) return false
     return (this.activeQuestionItem?.votedUsefulBy || []).includes(
@@ -57,18 +62,15 @@ export class QuestionStore extends ModuleStore {
     )
   }
 
-  @computed
   get subscriberCount(): number {
     return (this.activeQuestionItem?.subscribers || []).length
   }
 
-  @computed
   get userCanEditQuestion(): boolean {
     if (!this.activeQuestionItem) return false
     return isAllowedToEditContent(this.activeQuestionItem, this.activeUser)
   }
 
-  @computed
   get userHasSubscribed(): boolean {
     return (
       this.activeQuestionItem?.subscribers?.includes(

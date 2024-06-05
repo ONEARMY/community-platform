@@ -7,6 +7,7 @@ import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
+import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
@@ -40,14 +41,19 @@ export class DiscussionStore extends ModuleStore {
       )[0] || null
 
     if (foundDiscussion) {
-      return foundDiscussion
+      return this._formatDiscussion(foundDiscussion)
     }
 
-    // Create a new discussion
-    return (
-      (await this.uploadDiscussion(sourceId, sourceType, primaryContentId)) ||
-      null
+    const newDiscussion = await this.uploadDiscussion(
+      sourceId,
+      sourceType,
+      primaryContentId,
     )
+    if (newDiscussion) {
+      return this._formatDiscussion(newDiscussion)
+    }
+
+    return null
   }
 
   public async uploadDiscussion(
@@ -295,6 +301,22 @@ export class DiscussionStore extends ModuleStore {
       }
       return comment
     })
+  }
+
+  private _formatCommentList(comments: IComment[] = []): IComment[] {
+    return comments.map((comment: IComment) => {
+      return {
+        ...comment,
+        text: changeUserReferenceToPlainText(comment.text),
+      }
+    })
+  }
+
+  private _formatDiscussion(discussion: IDiscussion): IDiscussion {
+    return {
+      ...discussion,
+      comments: this._formatCommentList(discussion.comments),
+    }
   }
 
   private async _updateDiscussion(

@@ -85,7 +85,7 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
 
-    const isTitleAlreadyInUse = await !this.isTitleThatReusesSlug(
+    const isTitleAlreadyInUse = await this.isTitleThatReusesSlug(
       values.title,
       values?._id,
     )

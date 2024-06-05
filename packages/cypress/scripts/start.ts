@@ -48,6 +48,7 @@ async function main() {
   await startAppServer()
   await seedDatabase()
   runTests()
+  // isCi && deleteDatabase;
 }
 
 /** We need to ensure the platform is up and running before starting tests
@@ -115,7 +116,6 @@ async function seedDatabase() {
       resolve()
     }, 10000)
 
-    console.log()
     TestDB.seedDB()
       .then(() => {
         resolve()
@@ -132,6 +132,29 @@ async function seedDatabase() {
       throw error
     })
 }
+
+// async function deleteDatabase() {
+//   console.log(`Deleting database prefix ${DB_PREFIX}`)
+//   return new Promise<void>((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve()
+//     }, 10000)
+//     TestDB.clearDB()
+//       .then(() => {
+//         resolve()
+//       })
+//       .catch((error) => {
+//         reject(error)
+//       })
+//   })
+//     .then(() => {
+//       console.log('Database seeded successfully')
+//     })
+//     .catch((error) => {
+//       console.error('Database seeding failed:', error)
+//       throw error
+//     })
+// }
 
 function runTests() {
   console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')

@@ -4,7 +4,7 @@
 # does not create the `dist` folder. It should be mounted from
 # the host machine to the container, using the `-v` flag.
 #
-# Optionally, initial data can be setup by mounting `/app/seed`.
+# Optionally, initial data can be setup by mounting `/seed`.
 #
 # COMMANDS
 # We need some files from the root directory of the project,
@@ -15,6 +15,9 @@
 #
 #   RUN
 #   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#
+#   RUN WITH SEED DATA
+#   docker run -v ./functions/data/emulator:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
 #
 #   EXPORT FIREBASE DATA (while the container is running)
 #   docker exec -it <conatiner_name> /app/export.sh
@@ -81,7 +84,7 @@ RUN \
 # This folder needs to exist because otherwise
 # the emulators error if the user did not mount
 # their own folder.
-RUN mkdir ./seed
+RUN mkdir /seed
 
 # These should be the ports specified in firebase.json
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
@@ -90,4 +93,4 @@ CMD \
     firebase emulators:start \
     --project demo-community-platform-emulated \
     --only auth,functions,firestore,pubsub,storage,hosting,database \
-    --import=./seed
+    --import=/seed

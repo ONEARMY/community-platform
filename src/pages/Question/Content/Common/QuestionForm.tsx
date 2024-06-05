@@ -60,7 +60,7 @@ export const QuestionForm = (props: IProps) => {
       onSubmit={onSubmit}
       mutators={{ setAllowDraftSaveFalse }}
       initialValues={formValues}
-      render={({ submitting, handleSubmit, form, values }) => {
+      render={({ submitting, handleSubmit, pristine, valid, values }) => {
         const numberOfImageInputsAvailable = values?.images
           ? Math.min(values.images.length + 1, QUESTION_MAX_IMAGES)
           : 1
@@ -131,11 +131,8 @@ export const QuestionForm = (props: IProps) => {
                   mt={3}
                   variant="primary"
                   type="submit"
-                  disabled={submitting}
-                  onClick={(event) => {
-                    form.mutators.setAllowDraftSaveFalse()
-                    handleSubmit(event)
-                  }}
+                  disabled={submitting || pristine || !valid}
+                  onClick={handleSubmit}
                   sx={{
                     width: '100%',
                     mb: ['40px', '40px', 0],

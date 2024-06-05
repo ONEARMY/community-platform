@@ -33,6 +33,6 @@ export namespace IQuestion {
     previousSlugs?: string[]
     creatorCountry?: string
     allowDraftSave?: boolean
-    images?: Array<IUploadedFileMeta | IConvertedFileMeta | null>
+    images?: (IUploadedFileMeta | IConvertedFileMeta | null)[]
   }
 }

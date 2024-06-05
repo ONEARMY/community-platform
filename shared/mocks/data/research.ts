@@ -321,6 +321,8 @@ export const research = {
       h1wCs0o9j60lkw3AYPB1: true,
     },
     title: 'A test research',
+    updates: [],
+    researchCategory: {},
   },
   '0up6oJCYY3M9bDYx34Et': {
     _created: '2023-02-27T22:08:25.999Z',
@@ -337,5 +339,7 @@ export const research = {
       h1wCs0o9j60lkw3AYPB1: true,
     },
     title: 'A deleted test research',
+    updates: [],
+    researchCategory: {},
   },
 }

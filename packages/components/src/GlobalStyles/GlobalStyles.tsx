@@ -29,32 +29,6 @@ export const GlobalStyles = css`
     background-color: ${theme.colors.betaGreen};
   }
 
-  .slick-prev,
-  .slick-next {
-    position: absolute !important;
-    top: 50%;
-    z-index: ${theme.zIndex.slickArrows};
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
-
-  .slick-next {
-    left: auto;
-    right: 0;
-  }
-
-  .slick-prev {
-    left: 0;
-    right: auto;
-  }
-
-  .slick-track {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: stretch;
-  }
-
   /***** Fix for Algolia search Icon *******/
   .ap-icon-pin {
     display: none;

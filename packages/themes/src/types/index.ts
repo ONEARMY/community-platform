@@ -107,7 +107,6 @@ export interface ThemeWithName {
     behind: number
     level: number
     default: number
-    slickArrows: number
     modalProfile: number
     logoContainer: number
     header: number

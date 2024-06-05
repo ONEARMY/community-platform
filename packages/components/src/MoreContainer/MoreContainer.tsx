@@ -16,7 +16,7 @@ export const MoreContainer = (props: BoxProps) => {
     max-width: 780px;
     &:after {
       content: '';
-      background-image: url(${WhiteBubble0});
+      background-image: url('${WhiteBubble0}');
       width: 100%;
       height: 100%;
       z-index: ${theme.zIndex.behind};
@@ -31,18 +31,18 @@ export const MoreContainer = (props: BoxProps) => {
     }
     @media only screen and (min-width: ${theme.breakpoints[0]}) {
       &:after {
-        background-image: url(${WhiteBubble1});
+        background-image: url('${WhiteBubble1}');
       }
     }
     @media only screen and (min-width: ${theme.breakpoints[1]}) {
       &:after {
-        background-image: url(${WhiteBubble2});
+        background-image: url('${WhiteBubble2}');
       }
     }
 
     @media only screen and (min-width: ${theme.breakpoints[2]}) {
       &:after {
-        background-image: url(${WhiteBubble3});
+        background-image: url('${WhiteBubble3}');
       }
     }
   `

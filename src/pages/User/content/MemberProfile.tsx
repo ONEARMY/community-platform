@@ -12,8 +12,6 @@ import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { UserCreatedDocs } from '../types'
 
-import 'src/assets/css/slick.min.css'
-
 interface IProps {
   user: IUserPP
   docs: UserCreatedDocs | undefined

@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid'
 import { DB_ENDPOINTS } from '../models'
 import { handleDiscussionUpdate } from './index'
 
-import type { IUserDB } from '../models'
+import type { IUserDB, INotification } from '../models'
 
 describe('discussionUpdates', () => {
   let db
@@ -178,298 +178,336 @@ describe('discussionUpdates', () => {
       expect(doc.stats.userCreatedComments).not.toHaveProperty(commentId)
     })
 
-    it('create comment and notify content creator - research', async () => {
-      // Arrange
-      const userId = await createFakeUser({})
-      const researchCreatorUserId = await createFakeUser({})
-      const collaboratorId = await createFakeUser({})
-      const updateId = uuid()
-      const discussionId = uuid()
-      const commentId = uuid()
-      const wrapped = test.wrap(handleDiscussionUpdate)
+    describe('Research', () => {
+      it('create comment and notify content creator - research', async () => {
+        // Arrange
+        const userId = await createFakeUser({})
+        const researchCreatorUserId = await createFakeUser({})
+        const collaboratorId = await createFakeUser({})
+        const updateId = uuid()
+        const discussionId = uuid()
+        const commentId = uuid()
+        const wrapped = test.wrap(handleDiscussionUpdate)
 
-      const researchId = await createFakeResearch({
-        title: 'Fake Research',
-        slug: 'fake-research',
-        _createdBy: researchCreatorUserId,
-        updates: [
-          {
-            _id: updateId,
-            collaborators: [collaboratorId],
+        const researchId = await createFakeResearch({
+          title: 'Fake Research',
+          slug: 'fake-research',
+          _createdBy: researchCreatorUserId,
+          updates: [
+            {
+              _id: updateId,
+              collaborators: [collaboratorId],
+            },
+          ],
+        })
+
+        // Act
+        await wrapped(
+          await test.makeChange(
+            stubbedDiscussionSnapshot(discussionId, {
+              sourceType: 'researchUpdate',
+              primaryContentId: researchId,
+              sourceId: updateId,
+              comments: [],
+            }),
+            stubbedDiscussionSnapshot(discussionId, {
+              sourceType: 'researchUpdate',
+              primaryContentId: researchId,
+              sourceId: updateId,
+              comments: [
+                {
+                  _id: commentId,
+                  _creatorId: userId,
+                  creatorName: userId,
+                  parentCommentId: null,
+                },
+              ],
+            }),
+          ),
+        )
+
+        // Assert
+        const researchCreator = (
+          await db
+            .collection(DB_ENDPOINTS.users)
+            .where('userName', '==', researchCreatorUserId)
+            .get()
+        ).docs[0].data() as IUserDB
+
+        expect(researchCreator.notifications).toHaveLength(1)
+        expect(researchCreator.notifications[0]).toMatchObject({
+          triggeredBy: {
+            displayName: userId,
+            userId: userId,
           },
-        ],
-      })
+          relevantUrl: `/research/fake-research#update_0-comment:${commentId}`,
+          type: 'new_comment_discussion',
+          read: false,
+          notified: false,
+          title: 'Fake Research',
+        } as INotification)
 
-      // Act
-      await wrapped(
-        await test.makeChange(
-          stubbedDiscussionSnapshot(discussionId, {
-            sourceType: 'researchUpdate',
-            primaryContentId: researchId,
-            sourceId: updateId,
-            comments: [],
-          }),
-          stubbedDiscussionSnapshot(discussionId, {
-            sourceType: 'researchUpdate',
-            primaryContentId: researchId,
-            sourceId: updateId,
-            comments: [
-              {
-                _id: commentId,
-                _creatorId: userId,
-                creatorName: userId,
-                parentCommentId: null,
-              },
-            ],
-          }),
-        ),
-      )
+        const researchCollaborator = (
+          await db
+            .collection(DB_ENDPOINTS.users)
+            .where('userName', '==', collaboratorId)
+            .get()
+        ).docs[0].data() as IUserDB
 
-      // Assert
-      const researchCreator = (
-        await db
-          .collection(DB_ENDPOINTS.users)
-          .where('userName', '==', researchCreatorUserId)
-          .get()
-      ).docs[0].data() as IUserDB
-
-      expect(researchCreator.notifications).toHaveLength(1)
-      expect(researchCreator.notifications[0].relevantUrl).toContain(
-        'fake-research',
-      )
-      expect(researchCreator.notifications[0].relevantUrl).toContain(commentId)
-
-      const researchCollaborator = (
-        await db
-          .collection(DB_ENDPOINTS.users)
-          .where('userName', '==', collaboratorId)
-          .get()
-      ).docs[0].data() as IUserDB
-
-      expect(researchCollaborator.notifications).toHaveLength(1)
-      expect(researchCollaborator.notifications[0].relevantUrl).toContain(
-        'fake-research',
-      )
-      expect(researchCollaborator.notifications[0].relevantUrl).toContain(
-        commentId,
-      )
-    })
-
-    it('create nested comment and notify parent comment creator - research', async () => {
-      // Arrange
-      const userId = await createFakeUser({})
-      const parentCommentCreatorUserId = await createFakeUser({})
-      const collaboratorId = await createFakeUser({})
-      const updateId = uuid()
-      const discussionId = uuid()
-      const parentCommentId = uuid()
-      const commentId = uuid()
-      const wrapped = test.wrap(handleDiscussionUpdate)
-
-      const researchId = await createFakeResearch({
-        title: 'Fake Research',
-        slug: 'fake-research',
-        _createdBy: parentCommentCreatorUserId,
-        updates: [
-          {
-            _id: updateId,
-            collaborators: [collaboratorId],
+        expect(researchCollaborator.notifications).toHaveLength(1)
+        expect(researchCollaborator.notifications[0]).toMatchObject({
+          triggeredBy: {
+            displayName: userId,
+            userId: userId,
           },
-        ],
+          relevantUrl: `/research/fake-research#update_0-comment:${commentId}`,
+          type: 'new_comment_discussion',
+          read: false,
+          notified: false,
+          title: 'Fake Research',
+        } as INotification)
       })
 
-      // Act
-      await wrapped(
-        await test.makeChange(
-          stubbedDiscussionSnapshot(discussionId, {
-            sourceType: 'researchUpdate',
-            primaryContentId: researchId,
-            sourceId: updateId,
-            comments: [
-              {
-                _id: parentCommentId,
-                _creatorId: parentCommentCreatorUserId,
-                creatorName: parentCommentCreatorUserId,
-                parentCommentId: null,
-              },
-            ],
-          }),
-          stubbedDiscussionSnapshot(discussionId, {
-            sourceType: 'researchUpdate',
-            primaryContentId: researchId,
-            sourceId: updateId,
-            comments: [
-              {
-                _id: parentCommentId,
-                _creatorId: parentCommentCreatorUserId,
-                creatorName: parentCommentCreatorUserId,
-                parentCommentId: null,
-              },
-              {
-                _id: commentId,
-                _creatorId: userId,
-                creatorName: userId,
-                parentCommentId: parentCommentId,
-              },
-            ],
-          }),
-        ),
-      )
+      it('create nested comment and notify parent comment creator - research', async () => {
+        // Arrange
+        const userId = await createFakeUser({})
+        const parentCommentCreatorUserId = await createFakeUser({})
+        const collaboratorId = await createFakeUser({})
+        const updateId = uuid()
+        const discussionId = uuid()
+        const parentCommentId = uuid()
+        const commentId = uuid()
+        const wrapped = test.wrap(handleDiscussionUpdate)
 
-      // Assert
-      const parentCommentCreator = (
-        await db
-          .collection(DB_ENDPOINTS.users)
-          .where('userName', '==', parentCommentCreatorUserId)
-          .get()
-      ).docs[0].data() as IUserDB
+        const researchId = await createFakeResearch({
+          title: 'Fake Research',
+          slug: 'fake-research',
+          _createdBy: parentCommentCreatorUserId,
+          updates: [
+            {
+              _id: updateId,
+              collaborators: [collaboratorId],
+            },
+          ],
+        })
 
-      expect(parentCommentCreator.notifications).toHaveLength(1)
-      expect(parentCommentCreator.notifications[0].relevantUrl).toContain(
-        'fake-research',
-      )
-      expect(parentCommentCreator.notifications[0].relevantUrl).toContain(
-        commentId,
-      )
+        // Act
+        await wrapped(
+          await test.makeChange(
+            stubbedDiscussionSnapshot(discussionId, {
+              sourceType: 'researchUpdate',
+              primaryContentId: researchId,
+              sourceId: updateId,
+              comments: [
+                {
+                  _id: parentCommentId,
+                  _creatorId: parentCommentCreatorUserId,
+                  creatorName: parentCommentCreatorUserId,
+                  parentCommentId: null,
+                },
+              ],
+            }),
+            stubbedDiscussionSnapshot(discussionId, {
+              sourceType: 'researchUpdate',
+              primaryContentId: researchId,
+              sourceId: updateId,
+              comments: [
+                {
+                  _id: parentCommentId,
+                  _creatorId: parentCommentCreatorUserId,
+                  creatorName: parentCommentCreatorUserId,
+                  parentCommentId: null,
+                },
+                {
+                  _id: commentId,
+                  _creatorId: userId,
+                  creatorName: userId,
+                  parentCommentId: parentCommentId,
+                },
+              ],
+            }),
+          ),
+        )
 
-      const researchCollaborator = (
-        await db
-          .collection(DB_ENDPOINTS.users)
-          .where('userName', '==', collaboratorId)
-          .get()
-      ).docs[0].data() as IUserDB
+        // Assert
+        const parentCommentCreator = (
+          await db
+            .collection(DB_ENDPOINTS.users)
+            .where('userName', '==', parentCommentCreatorUserId)
+            .get()
+        ).docs[0].data() as IUserDB
 
-      expect(researchCollaborator.notifications).toHaveLength(1)
-      expect(researchCollaborator.notifications[0].relevantUrl).toContain(
-        'fake-research',
-      )
-      expect(researchCollaborator.notifications[0].relevantUrl).toContain(
-        commentId,
-      )
+        expect(parentCommentCreator.notifications).toHaveLength(1)
+        expect(parentCommentCreator.notifications[0]).toMatchObject({
+          triggeredBy: {
+            displayName: userId,
+            userId: userId,
+          },
+          relevantUrl: `/research/fake-research#update_0-comment:${commentId}`,
+          type: 'new_comment_discussion',
+          read: false,
+          notified: false,
+          title: 'Fake Research',
+        } as INotification)
+
+        const researchCollaborator = (
+          await db
+            .collection(DB_ENDPOINTS.users)
+            .where('userName', '==', collaboratorId)
+            .get()
+        ).docs[0].data() as IUserDB
+
+        expect(researchCollaborator.notifications).toHaveLength(1)
+        expect(researchCollaborator.notifications[0]).toMatchObject({
+          triggeredBy: {
+            displayName: userId,
+            userId: userId,
+          },
+          relevantUrl: `/research/fake-research#update_0-comment:${commentId}`,
+          type: 'new_comment_discussion',
+          read: false,
+          notified: false,
+          title: 'Fake Research',
+        } as INotification)
+      })
     })
 
-    it('create comment and notify content creator - question', async () => {
-      // Arrange
-      const userId = await createFakeUser({})
-      const questionCreatorUserId = await createFakeUser({})
-      const discussionId = uuid()
-      const commentId = uuid()
-      const wrapped = test.wrap(handleDiscussionUpdate)
+    describe('Question', () => {
+      it('create comment and notify content creator - question', async () => {
+        // Arrange
+        const userId = await createFakeUser({})
+        const questionCreatorUserId = await createFakeUser({})
+        const discussionId = uuid()
+        const commentId = uuid()
+        const wrapped = test.wrap(handleDiscussionUpdate)
 
-      const questionId = await createFakeQuestion({
-        title: 'Fake Question',
-        slug: 'fake-question',
-        _createdBy: questionCreatorUserId,
+        const questionId = await createFakeQuestion({
+          title: 'Fake Question',
+          slug: 'fake-question',
+          _createdBy: questionCreatorUserId,
+        })
+
+        // Act
+        await wrapped(
+          await test.makeChange(
+            stubbedDiscussionSnapshot(discussionId, {
+              sourceType: 'question',
+              primaryContentId: questionId,
+              sourceId: questionId,
+              comments: [],
+            }),
+            stubbedDiscussionSnapshot(discussionId, {
+              sourceType: 'question',
+              primaryContentId: questionId,
+              sourceId: questionId,
+              comments: [
+                {
+                  _id: commentId,
+                  _creatorId: userId,
+                  creatorName: userId,
+                  parentCommentId: null,
+                },
+              ],
+            }),
+          ),
+        )
+
+        // Assert
+        const questionCreator = (
+          await db
+            .collection(DB_ENDPOINTS.users)
+            .where('userName', '==', questionCreatorUserId)
+            .get()
+        ).docs[0].data() as IUserDB
+
+        expect(questionCreator.notifications).toHaveLength(1)
+        expect(questionCreator.notifications[0]).toMatchObject({
+          triggeredBy: {
+            displayName: userId,
+            userId: userId,
+          },
+          relevantUrl: `/questions/fake-question#comment:${commentId}`,
+          type: 'new_comment_discussion',
+          read: false,
+          notified: false,
+          title: 'Fake Question',
+        } as INotification)
       })
 
-      // Act
-      await wrapped(
-        await test.makeChange(
-          stubbedDiscussionSnapshot(discussionId, {
-            sourceType: 'question',
-            primaryContentId: questionId,
-            sourceId: questionId,
-            comments: [],
-          }),
-          stubbedDiscussionSnapshot(discussionId, {
-            sourceType: 'question',
-            primaryContentId: questionId,
-            sourceId: questionId,
-            comments: [
-              {
-                _id: commentId,
-                _creatorId: userId,
-                creatorName: userId,
-                parentCommentId: null,
-              },
-            ],
-          }),
-        ),
-      )
+      it('create nested comment and notify parent comment creator - question', async () => {
+        // Arrange
+        const userId = await createFakeUser({})
+        const parentCommentCreatorUserId = await createFakeUser({})
+        const discussionId = uuid()
+        const parentCommentId = uuid()
+        const commentId = uuid()
+        const wrapped = test.wrap(handleDiscussionUpdate)
 
-      // Assert
-      const questionCreator = (
-        await db
-          .collection(DB_ENDPOINTS.users)
-          .where('userName', '==', questionCreatorUserId)
-          .get()
-      ).docs[0].data() as IUserDB
+        const questionId = await createFakeQuestion({
+          title: 'Fake Question',
+          slug: 'fake-question',
+          _createdBy: parentCommentCreatorUserId,
+        })
 
-      expect(questionCreator.notifications).toHaveLength(1)
-      expect(questionCreator.notifications[0].relevantUrl).toContain(
-        'fake-question',
-      )
-      expect(questionCreator.notifications[0].relevantUrl).toContain(commentId)
-    })
+        // Act
+        await wrapped(
+          await test.makeChange(
+            stubbedDiscussionSnapshot(discussionId, {
+              sourceType: 'question',
+              primaryContentId: questionId,
+              sourceId: questionId,
+              comments: [
+                {
+                  _id: parentCommentId,
+                  _creatorId: parentCommentCreatorUserId,
+                  creatorName: parentCommentCreatorUserId,
+                  parentCommentId: null,
+                },
+              ],
+            }),
+            stubbedDiscussionSnapshot(discussionId, {
+              sourceType: 'question',
+              primaryContentId: questionId,
+              sourceId: questionId,
+              comments: [
+                {
+                  _id: parentCommentId,
+                  _creatorId: parentCommentCreatorUserId,
+                  creatorName: parentCommentCreatorUserId,
+                  parentCommentId: null,
+                },
+                {
+                  _id: commentId,
+                  _creatorId: userId,
+                  creatorName: userId,
+                  parentCommentId: parentCommentId,
+                },
+              ],
+            }),
+          ),
+        )
 
-    it('create nested comment and notify parent comment creator - question', async () => {
-      // Arrange
-      const userId = await createFakeUser({})
-      const parentCommentCreatorUserId = await createFakeUser({})
-      const discussionId = uuid()
-      const parentCommentId = uuid()
-      const commentId = uuid()
-      const wrapped = test.wrap(handleDiscussionUpdate)
+        // Assert
+        const parentCommentCreator = (
+          await db
+            .collection(DB_ENDPOINTS.users)
+            .where('userName', '==', parentCommentCreatorUserId)
+            .get()
+        ).docs[0].data() as IUserDB
 
-      const questionId = await createFakeQuestion({
-        title: 'Fake Question',
-        slug: 'fake-question',
-        _createdBy: parentCommentCreatorUserId,
+        expect(parentCommentCreator.notifications).toHaveLength(1)
+        expect(parentCommentCreator.notifications[0]).toMatchObject({
+          triggeredBy: {
+            displayName: userId,
+            userId: userId,
+          },
+          relevantUrl: `/questions/fake-question#comment:${commentId}`,
+          type: 'new_comment_discussion',
+          read: false,
+          notified: false,
+          title: 'Fake Question',
+        } as INotification)
       })
-
-      // Act
-      await wrapped(
-        await test.makeChange(
-          stubbedDiscussionSnapshot(discussionId, {
-            sourceType: 'question',
-            primaryContentId: questionId,
-            sourceId: questionId,
-            comments: [
-              {
-                _id: parentCommentId,
-                _creatorId: parentCommentCreatorUserId,
-                creatorName: parentCommentCreatorUserId,
-                parentCommentId: null,
-              },
-            ],
-          }),
-          stubbedDiscussionSnapshot(discussionId, {
-            sourceType: 'question',
-            primaryContentId: questionId,
-            sourceId: questionId,
-            comments: [
-              {
-                _id: parentCommentId,
-                _creatorId: parentCommentCreatorUserId,
-                creatorName: parentCommentCreatorUserId,
-                parentCommentId: null,
-              },
-              {
-                _id: commentId,
-                _creatorId: userId,
-                creatorName: userId,
-                parentCommentId: parentCommentId,
-              },
-            ],
-          }),
-        ),
-      )
-
-      // Assert
-      const parentCommentCreator = (
-        await db
-          .collection(DB_ENDPOINTS.users)
-          .where('userName', '==', parentCommentCreatorUserId)
-          .get()
-      ).docs[0].data() as IUserDB
-
-      expect(parentCommentCreator.notifications).toHaveLength(1)
-      expect(parentCommentCreator.notifications[0].relevantUrl).toContain(
-        'fake-question',
-      )
-      expect(parentCommentCreator.notifications[0].relevantUrl).toContain(
-        commentId,
-      )
     })
   })
 })

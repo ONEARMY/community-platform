@@ -69,7 +69,7 @@ export const Username = ({ user, sx }: IProps) => {
             <Flex
               data-testid="Username: unknown flag"
               sx={{
-                backgroundImage: `url(${flagUnknownSVG})`,
+                backgroundImage: `url("${flagUnknownSVG}")`,
                 backgroundSize: 'cover',
                 borderRadius: '3px',
                 height: '14px',

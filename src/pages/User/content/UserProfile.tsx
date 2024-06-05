@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { ProfileType } from 'src/modules/profile/types'
+import { seoTagsUpdate } from 'src/utils/seo'
 import { Text } from 'theme-ui'
 
 import { logger } from '../../../logger'
@@ -33,7 +34,13 @@ export const UserProfile = observer(() => {
       const fetchUserData = async () => {
         try {
           const userData = await userStore.getUserProfile(userId)
-          userData && setUser(userData)
+          if (userData as IUserPP) {
+            setUser(userData)
+
+            seoTagsUpdate({
+              title: `${userData.displayName} - Profile`,
+            })
+          }
         } catch (error) {
           logger.error('Error getting user profile', error)
         }

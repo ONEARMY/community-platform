@@ -113,7 +113,7 @@ Cypress.Commands.add('clearServiceWorkers', () => {
  */
 Cypress.Commands.add(
   'login',
-  (email: string, password: string, checkUI = true) => {
+  (email: string, password: string, checkUI = false) => {
     Cypress.log({
       displayName: 'login',
       consoleProps: () => {

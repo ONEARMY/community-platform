@@ -55,7 +55,7 @@ async function main() {
  */
 async function setupCypressEnv(): Promise<void> {
   if (isCi) {
-    CYPRESS_ENV = `DB_PREFIX=${process.env.DB_PREFIX}_`
+    CYPRESS_ENV = `DB_PREFIX=${process.env.DB_PREFIX}`
   } else {
     const DB_PREFIX = generateAlphaNumeric(5)
     process.env.DB_PREFIX = `${DB_PREFIX}_`

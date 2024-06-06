@@ -357,7 +357,7 @@ jobs:
             - browser-tools/install-firefox
       # call main testing script  
       - run:
-          command: npm run test:ci ci prod
+          command: npm run test ci prod
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>

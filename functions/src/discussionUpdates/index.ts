@@ -114,7 +114,9 @@ async function sendNotifications(
             ? parentComment.creatorName
             : research._createdBy
 
-          const collaborators = (update.collaborators ?? []).concat([recipient])
+          const collaborators = uniq(
+            (update.collaborators ?? []).concat([recipient]),
+          )
 
           for (const collaborator of collaborators) {
             await triggerNotification(

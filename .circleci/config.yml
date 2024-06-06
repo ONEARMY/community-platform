@@ -355,13 +355,16 @@ jobs:
             equal: ['firefox', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
-      # call main testing script
+      # call main testing script  
       - run:
-          command: npm run test ci prod
+          command: npm run test:ci ci prod
           environment:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
+      - run:
+          name: Cleaning DB
+          command: npm run db:teardown
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
   chromatic:

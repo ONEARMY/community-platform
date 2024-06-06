@@ -35,7 +35,7 @@ class FirestoreTestDB {
   }
 
   clearDB = async () => {
-    const endpoints = ensureDBPrefixes(DB_ENDPOINTS, false)
+    const endpoints = ensureDBPrefixes(DB_ENDPOINTS, true)
     const dbDeletes = Object.values(endpoints).map((endpoint) => {
       return this.deleteAll(endpoint)
     })
@@ -75,7 +75,6 @@ class FirestoreTestDB {
     return batch.commit()
   }
   private deleteAll = async (collectionName: string) => {
-    cy.log(`DB Delete: ${collectionName}`)
     const batch = db.batch()
     const col = db.collection(collectionName)
     const docs = (await col.get()) || []

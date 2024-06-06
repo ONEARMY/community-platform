@@ -12,9 +12,8 @@ const e2eEnv = dotenv.config()
 
 const isCi = process.argv.includes('ci')
 const isProduction = process.argv.includes('prod')
-const DB_PREFIX = generateAlphaNumeric(5)
-process.env.DB_PREFIX = `${DB_PREFIX}_`
-const CYPRESS_ENV = `DB_PREFIX=${DB_PREFIX}_`
+
+let CYPRESS_ENV: string
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', (err) => {
@@ -45,10 +44,23 @@ main()
 async function main() {
   // copy endpoints for use in testing
   fs.copyFileSync(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
+  await setupCypressEnv();
   await startAppServer()
   await seedDatabase()
   runTests()
-  // isCi && deleteDatabase;
+}
+
+/**
+ * Sets up the Cypress environment variable with DB prefix
+ */
+async function setupCypressEnv(): Promise<void> {
+  if(isCi) {
+    CYPRESS_ENV = `DB_PREFIX=${process.env.DB_PREFIX}_`
+  } else {
+    const DB_PREFIX = generateAlphaNumeric(5)
+    process.env.DB_PREFIX = `${DB_PREFIX}_`
+    CYPRESS_ENV = `DB_PREFIX=${DB_PREFIX}_`
+  }
 }
 
 /** We need to ensure the platform is up and running before starting tests
@@ -110,7 +122,7 @@ async function startAppServer() {
 }
 
 async function seedDatabase() {
-  console.log(`Seeding database prefix ${DB_PREFIX}`)
+  console.log(`Seeding database prefix ${process.env.DB_PREFIX}`)
   return new Promise<void>((resolve, reject) => {
     setTimeout(() => {
       resolve()
@@ -132,29 +144,6 @@ async function seedDatabase() {
       throw error
     })
 }
-
-// async function deleteDatabase() {
-//   console.log(`Deleting database prefix ${DB_PREFIX}`)
-//   return new Promise<void>((resolve, reject) => {
-//     setTimeout(() => {
-//       resolve()
-//     }, 10000)
-//     TestDB.clearDB()
-//       .then(() => {
-//         resolve()
-//       })
-//       .catch((error) => {
-//         reject(error)
-//       })
-//   })
-//     .then(() => {
-//       console.log('Database seeded successfully')
-//     })
-//     .catch((error) => {
-//       console.error('Database seeding failed:', error)
-//       throw error
-//     })
-// }
 
 function runTests() {
   console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')

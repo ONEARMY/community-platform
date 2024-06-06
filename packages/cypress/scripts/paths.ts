@@ -11,6 +11,10 @@ const WORKSPACE_DB_ENDPOINTS = path.resolve(
   WORKSPACE_DIR,
   'src/support/db/endpoints.ts',
 )
+const DOT_ENV = path.resolve(
+  WORKSPACE_DIR,
+  './.env',
+)
 const CY_BIN = path.resolve(WORKSPACE_DIR, 'node_modules/.bin/cypress')
 const CROSSENV_BIN = path.resolve(WORKSPACE_DIR, 'node_modules/.bin/cross-env')
 const BUILD_SERVE_JSON = path.resolve(PLATFORM_ROOT_DIR, 'build/serve.json')
@@ -23,4 +27,5 @@ export default {
   CY_BIN,
   CROSSENV_BIN,
   BUILD_SERVE_JSON,
+  DOT_ENV,
 }

@@ -1,8 +1,6 @@
 #!/usr/bin/env ts-node
 import * as dotenv from 'dotenv'
 
-import { TestDB } from '../src/support/db/firebase'
-
 dotenv.config()
 
 // Prevent unhandled errors being silently ignored

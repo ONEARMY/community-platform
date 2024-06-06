@@ -44,7 +44,7 @@ main()
 async function main() {
   // copy endpoints for use in testing
   fs.copyFileSync(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
-  await setupCypressEnv();
+  await setupCypressEnv()
   await startAppServer()
   await seedDatabase()
   runTests()
@@ -54,7 +54,7 @@ async function main() {
  * Sets up the Cypress environment variable with DB prefix
  */
 async function setupCypressEnv(): Promise<void> {
-  if(isCi) {
+  if (isCi) {
     CYPRESS_ENV = `DB_PREFIX=${process.env.DB_PREFIX}_`
   } else {
     const DB_PREFIX = generateAlphaNumeric(5)

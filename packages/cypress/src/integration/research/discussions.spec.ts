@@ -91,7 +91,6 @@ describe('[Research.Discussions]', () => {
     cy.queryDocuments('users', 'userName', '==', item._createdBy).then(
       (docs) => {
         const [user] = docs
-        console.log(user.notifications)
         const discussionNotification = user.notifications.find(
           ({ type, triggeredBy }) =>
             type === 'new_comment_discussion' &&

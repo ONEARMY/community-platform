@@ -1,6 +1,8 @@
 #!/usr/bin/env ts-node
 import * as dotenv from 'dotenv'
 
+import { TestDB } from '../src/support/db/firebase'
+
 dotenv.config()
 
 // Prevent unhandled errors being silently ignored
@@ -17,5 +19,20 @@ main()
   })
 
 async function main() {
-  console.log('testeeee', process.env.DB_PREFIX)
+  await deleteDatabase()
+}
+
+async function deleteDatabase() {
+  console.log(`Deleting database prefix ${process.env.DB_PREFIX}`)
+  try {
+    await TestDB.clearDB()
+    console.log('Database deleted successfully')
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+function handleError(error: any) {
+  console.error(error)
+  process.exit(1)
 }

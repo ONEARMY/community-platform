@@ -22,17 +22,12 @@ process.on('unhandledRejection', (err) => {
 })
 /**
  * When running e2e tests with cypress we need to first get the server up and running
- * before launching the test suite. We will seed the DB from within the test suite
+ * before launching the test suite. We will seed the DB from after the start App
  *
  * @argument ci - specify if running in ci (e.g. circleci) to run and record
  * @argument prod - specify to use a production build instead of local development server
  * @example npm run test ci prod
  *
- * TODO: CC - 2021-02-24
- * - DB seeding happens inbetween test suites, but really should happen before/after test
- * scripts start and end (particularly teardown, as it won't be called if tests fail).
- * Possibly could be done with a Cypress.task or similar
- * Temp cli function to wipe hanging db: `firebase use ci; firebase firestore:delete --all-collections`
  */
 main()
   .then(() => process.exit(0))
@@ -54,6 +49,7 @@ async function main() {
  * Sets up the Cypress environment variable with DB prefix
  */
 async function setupCypressEnv(): Promise<void> {
+  // CYPRESS_ENV can pass variables accessed by Cypress.env()
   if (isCi) {
     CYPRESS_ENV = `DB_PREFIX=${process.env.DB_PREFIX}`
   } else {
@@ -121,28 +117,22 @@ async function startAppServer() {
   await waitOn({ resources: ['http-get://127.0.0.1:3456'], timeout })
 }
 
+// the seeddb function returns an array of [db_key, db_data] entries
+// ensure each db_key contains the correct db prefix and is not empty
+// .each(data => {
+//   cy.wrap(data).should(entry => {
+//     expect(entry[0]).contains(Cypress.env('DB_PREFIX'))
+//     expect(entry[1]).length.greaterThan(0)
+//   })
+// })
 async function seedDatabase() {
   console.log(`Seeding database prefix ${process.env.DB_PREFIX}`)
-  return new Promise<void>((resolve, reject) => {
-    setTimeout(() => {
-      resolve()
-    }, 10000)
-
-    TestDB.seedDB()
-      .then(() => {
-        resolve()
-      })
-      .catch((error) => {
-        reject(error)
-      })
-  })
-    .then(() => {
-      console.log('Database seeded successfully')
-    })
-    .catch((error) => {
-      console.error('Database seeding failed:', error)
-      throw error
-    })
+  try {
+    await TestDB.seedDB()
+    console.log('Database seeded successfully')
+  } catch (error) {
+    handleError(error)
+  }
 }
 
 function runTests() {
@@ -151,7 +141,6 @@ function runTests() {
   const { CYPRESS_KEY } = e2eEnv.parsed
   const CI_BROWSER = e.CI_BROWSER || 'chrome'
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
-  // not currently used, but can pass variables accessed by Cypress.env()
   // use workflow ID so that jobs running in parallel can be assigned to same cypress build
   // cypress will use this to split tests between parallel runs
   const buildId = e.CIRCLE_WORKFLOW_ID || generateAlphaNumeric(8)
@@ -176,4 +165,9 @@ function runTests() {
     console.error('error', spawn.stderr.toString())
   }
   process.exit(spawn.status)
+}
+
+function handleError(error: any) {
+  console.error(error)
+  process.exit(1)
 }

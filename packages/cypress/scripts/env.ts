@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import { generateAlphaNumeric } from '../src/utils/TestUtils'
 import PATHS from './paths'
 
-const DB_PREFIX = `DB_PREFIX=${generateAlphaNumeric(5)}_`
+const DB_PREFIX = `DB_PREFIX=${generateAlphaNumeric(5)}`
 
 try {
   fs.appendFile(PATHS.DOT_ENV, '\n' + DB_PREFIX, (err) => {

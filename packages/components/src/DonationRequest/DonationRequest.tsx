@@ -5,13 +5,14 @@ import { Button } from '../Button/Button'
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 
 export interface IProps {
-  body: string
+  body: string | undefined
   callback: () => void
-  iframeSrc: string
-  imageURL: string
+  iframeSrc: string | undefined
+  imageURL: string | undefined
   link: string
 }
 
+const FALLBACK_DONATION_WIDGET = "https://donorbox.org/embed/onearmy?a=b"
 const REQUEST_TITLE = 'Support our work'
 const REQUEST_THANKYOU = 'Thank you for helping to make this possible'
 export const REQUEST_BUTTON_SKIP = 'Skip this time'
@@ -28,7 +29,7 @@ export const DonationRequest = (props: IProps) => {
     frameBorder: '0',
     name: 'donorbox',
     seamless: true,
-    src: iframeSrc,
+    src: iframeSrc || FALLBACK_DONATION_WIDGET,
   }
 
   const handleMessage = (event: MessageEvent) => {
@@ -70,15 +71,16 @@ export const DonationRequest = (props: IProps) => {
         }}
       >
         <Flex sx={{ flexDirection: 'column', flex: 1 }}>
+          {imageURL &&
           <Flex sx={{ display: ['none', 'inline'] }}>
             <AspectImage
               loading="lazy"
-              ratio={16 / 7}
+              ratio={16 / 9}
               src={imageURL}
               alt={REQUEST_TITLE}
               data-testid="donationRequestImage"
             />
-          </Flex>
+          </Flex>}
 
           <Text sx={{ padding: [2, 4, 6] }}>
             <Text as="h1">{REQUEST_TITLE}</Text>

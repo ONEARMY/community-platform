@@ -6,6 +6,7 @@ import {
   DownloadFileFromLink,
 } from 'oa-components'
 
+import { useCommonStores } from './hooks/useCommonStores'
 import { AuthWrapper } from './AuthWrapper'
 
 import type { UserRole } from 'src/models'
@@ -25,6 +26,7 @@ export const DownloadWithDonationAsk = (props: IProps) => {
   const { handleClick, isLoggedIn, link } = props
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const navigate = useNavigate()
+  const { themeStore } = useCommonStores().stores
 
   const toggleIsModalOpen = () => setIsModalOpen(!isModalOpen)
 
@@ -45,10 +47,10 @@ export const DownloadWithDonationAsk = (props: IProps) => {
   return (
     <>
       <DonationRequestModal
-        body="All of the content here is free. Your donation supports this library of Open Source recycling knowledge. Making it possible for everyone in the world to use it and start recycling."
+        body={themeStore?.currentTheme.donations?.body}
         callback={callback}
-        iframeSrc="https://donorbox.org/embed/ppcpdonor?language=en"
-        imageURL="https://images.unsplash.com/photo-1520222984843-df35ebc0f24d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9"
+        iframeSrc={themeStore?.currentTheme.donations?.iframeSrc}
+        imageURL={themeStore?.currentTheme.donations?.imageURL}
         isOpen={isModalOpen}
         link={link}
         onDidDismiss={() => toggleIsModalOpen()}

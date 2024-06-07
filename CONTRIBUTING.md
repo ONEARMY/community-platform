@@ -70,7 +70,7 @@ In this case:
 
 #### Emulator based backend
 
-This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.) This option is experimental, there have been reported issues with Mac OSX, where the system seems to properly run but does not.
+This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.) This option is experimental.
 
 This setup is:
 

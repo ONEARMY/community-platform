@@ -122,6 +122,8 @@ docker cp <name>:/app/dump ./functions/data/
 
 5. Rename the `dump` folder to `emulator`.
 
+6. But note, each folder in the export must be checked into Git. If not, this will cause problems with seeding. By default, Git does not track empty folders, so you must force it to track it by adding a .gitkeep file to the folder.
+
 ## Function development
 
 ### Writing functions code

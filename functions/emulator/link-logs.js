@@ -18,7 +18,7 @@ const files = [
   'firebase-debug.log',
   'firestore-debug.log',
   'pubsub-debug.log',
-  'ui-debug.log'
+  'ui-debug.log',
 ]
 
 // clear the files so the they are also cleared on the host.

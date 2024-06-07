@@ -81,11 +81,16 @@ RUN \
   echo "firebase emulators:export --project demo-community-platform-emulated --force ./dump\n" >> ./export.sh && \
   chmod +x ./export.sh
 
+# This folder needs to exist because otherwise
+# the emulators error if the user did not mount
+# their own folder.
+RUN mkdir /seed
+
 # These should be the ports specified in firebase.json
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
 
 CMD \
-  firebase emulators:start \
-  --project demo-community-platform-emulated \
-  --only auth,functions,firestore,pubsub,storage,hosting,database \
-  --import=/app/functions/data/emulator
+    firebase emulators:start \
+    --project demo-community-platform-emulated \
+    --only auth,functions,firestore,pubsub,storage,hosting,database \
+    --import=/seed

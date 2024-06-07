@@ -11,9 +11,3 @@ services:
     volumes:
     - ./functions:/app/functions
     - ./functions/data/emulator/:/seed
-
-    - ./functions/logs/database-debug.log:/app/database-debug.log
-    - ./functions/logs/firebase-debug.log:/app/firebase-debug.log
-    - ./functions/logs/firestore-debug.log:/app/firestore-debug.log
-    - ./functions/logs/pubsub-debug.log:/app/pubsub-debug.log
-    - ./functions/logs/ui-debug.log:/app/ui-debug.log

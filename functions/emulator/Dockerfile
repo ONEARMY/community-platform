@@ -19,8 +19,9 @@
 #   RUN WITH SEED DATA
 #   docker run -v ./functions/data/emulator:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
 #
-#   EXPORT FIREBASE DATA (while the container is running)
-#   docker exec -it <conatiner_name> /app/export.sh
+#   EXPORT (while the container is running)
+#   docker exec -it <conatiner_name> /app/easy-export.sh
+#   docker cp <conatiner_name>:/app/dump ./whatever
 #
 # HOW TO DEBUG THE CONTAINER WHILE IT IS RUNNING:
 #   1) Open a new terminal.
@@ -70,16 +71,12 @@ RUN \
   firebase setup:emulators:storage && \
   firebase setup:emulators:pubsub
 
-COPY ./firebase.json               ./firebase.json
-COPY ./firebase.storage.rules      ./firebase.storage.rules
-COPY ./firestore.indexes.json      ./firestore.indexes.json
-COPY ./firestore.rules             ./firestore.rules
+COPY ./firebase.json                      ./firebase.json
+COPY ./firebase.storage.rules             ./firebase.storage.rules
+COPY ./firestore.indexes.json             ./firestore.indexes.json
+COPY ./firestore.rules                    ./firestore.rules
 
-# Create script for easy exporting
-RUN \
-  echo "#!/bin/bash\n" >> ./export.sh && \
-  echo "firebase emulators:export --project demo-community-platform-emulated --force ./dump\n" >> ./export.sh && \
-  chmod +x ./export.sh
+COPY ./functions/emulator/easy-export.sh  ./easy-export.sh
 
 # This folder needs to exist because otherwise
 # the emulators error if the user did not mount

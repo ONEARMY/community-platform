@@ -10,6 +10,5 @@ services:
     - 4001-4008:4001-4008
     volumes:
     - ./functions:/app/functions
-    - ./functions/data/emulator/:/seed
-
-    # - ./functions/logs/firestore-debug.log:/app/firestore-debug.log
+    - ./functions/data/emulator:/seed
+    - ./functions/logs:/app/logs

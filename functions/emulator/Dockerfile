@@ -20,7 +20,7 @@
 #   docker run -v ./functions/data/emulator:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
 #
 #   EXPORT (while the container is running)
-#   docker exec -it <conatiner_name> /app/easy-export.sh
+#   docker exec -it <conatiner_name> /app/export.js
 #   docker cp <conatiner_name>:/app/dump ./whatever
 #
 # HOW TO DEBUG THE CONTAINER WHILE IT IS RUNNING:
@@ -71,12 +71,14 @@ RUN \
   firebase setup:emulators:storage && \
   firebase setup:emulators:pubsub
 
-COPY ./firebase.json                      ./firebase.json
-COPY ./firebase.storage.rules             ./firebase.storage.rules
-COPY ./firestore.indexes.json             ./firestore.indexes.json
-COPY ./firestore.rules                    ./firestore.rules
+COPY ./firebase.json                    ./firebase.json
+COPY ./firebase.storage.rules           ./firebase.storage.rules
+COPY ./firestore.indexes.json           ./firestore.indexes.json
+COPY ./firestore.rules                  ./firestore.rules
 
-COPY ./functions/emulator/easy-export.sh  ./easy-export.sh
+COPY ./functions/emulator/export.js     ./export.js
+
+COPY ./functions/emulator/link-logs.js  ./link-logs.js
 
 # This folder needs to exist because otherwise
 # the emulators error if the user did not mount
@@ -86,8 +88,9 @@ RUN mkdir /seed
 # These should be the ports specified in firebase.json
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
 
-# Do firebase emulators:start --help for details
 CMD \
+  ./link-logs.js & \
+  # Do firebase emulators:start --help for details
   firebase emulators:start \
   --project demo-community-platform-emulated \
   --only auth,functions,firestore,pubsub,storage,hosting,database \

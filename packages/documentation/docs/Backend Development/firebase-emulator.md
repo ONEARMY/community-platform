@@ -109,7 +109,7 @@ You can improve the seed data by making changes via the application or Firebase 
 2. Run the export script:
 
 ```
-docker exec -it <name> /app/easy-export.sh
+docker exec -it <name> /app/export.js
 ```
 
 3. Transfer the data from the container to your machine:

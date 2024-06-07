@@ -2,7 +2,8 @@
 
 const { exec } = require('child_process')
 
-const command = 'firebase emulators:export --project demo-community-platform-emulated --force ./dump'
+const command =
+  'firebase emulators:export --project demo-community-platform-emulated --force ./dump'
 
 exec(command, (error, stdout, stderr) => {
   if (error) {

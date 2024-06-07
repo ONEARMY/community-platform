@@ -153,7 +153,9 @@ Read more about [connecting your app to the Cloud Functions Emulator](https://fi
 
 If the emulator throws an error you may want to check generated debug.log files. These will exist in the container in the root `/app` folder.
 
-You can access the file system within the docker container directly using the
+By default, when using the commands above, the log files will sync to `./functions/logs` folder.
+
+But you can access the file system within the docker container directly using the
 [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension for vscode, and running the command to `attach to running container`.
 
 ![](images/emulator-docker-remote.png)
@@ -161,14 +163,14 @@ You can access the file system within the docker container directly using the
 Once running in the container you can open the `/app` folder to view files
 ![](images/emulator-docker-remote-files.png)
 
-Alternatively you can request Docker to execute commands directly on the container, e.g.
+Alternatively while the container is running, you can request Docker to execute commands directly on the container:
 
 ```
 docker exec -it <name> ls
 docker exec -it <name> cat /app/firestore-debug.log
 ```
 
-The `name` can be retrieved by running `docker ps`.
+(The `name` can be retrieved by running `docker ps`.)
 
 ## Troubleshooting
 

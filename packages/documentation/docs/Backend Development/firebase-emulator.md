@@ -172,4 +172,4 @@ The `name` can be retrieved by running `docker ps`.
 
 ## Troubleshooting
 
-See the `Dockerfile.emulator` for some debugging tips.
+See the `/functions/emulator/Dockerfile` for some debugging tips.

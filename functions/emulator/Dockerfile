@@ -11,7 +11,7 @@
 # therefore these commands should be ran from the root directory.
 #
 #   BUILD
-#   docker build -f ./functions/Dockerfile.emulator -t emulator .
+#   docker build -f ./functions/emulator/Dockerfile -t emulator .
 #
 #   RUN
 #   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
@@ -89,6 +89,7 @@ RUN mkdir /seed
 # These should be the ports specified in firebase.json
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
 
+# Do firebase emulators:start --help for details
 CMD \
   firebase emulators:start \
   --project demo-community-platform-emulated \

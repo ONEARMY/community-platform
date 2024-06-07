@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { AspectImage, Card, Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
@@ -12,15 +11,13 @@ export interface IProps {
   link: string
 }
 
-const FALLBACK_DONATION_WIDGET = "https://donorbox.org/embed/onearmy?a=b"
+const FALLBACK_DONATION_WIDGET = 'https://donorbox.org/embed/onearmy?a=b'
 const REQUEST_TITLE = 'Support our work'
 const REQUEST_THANKYOU = 'Thank you for helping to make this possible'
-export const REQUEST_BUTTON_SKIP = 'Skip this time'
-export const REQUEST_BUTTON_DOWNLOAD = 'Download Now!'
+export const BUTTON_LABEL = 'Download'
 
 export const DonationRequest = (props: IProps) => {
   const { body, callback, iframeSrc, imageURL, link } = props
-  const [isStartDownload, setIsStartDownload] = useState<boolean>(false)
   const iframeArgs = {
     allowpaymentrequest: 'allowpaymentrequest',
     allow: 'payment',
@@ -31,24 +28,6 @@ export const DonationRequest = (props: IProps) => {
     seamless: true,
     src: iframeSrc || FALLBACK_DONATION_WIDGET,
   }
-
-  const handleMessage = (event: MessageEvent) => {
-    if (event.origin != window.location.origin) {
-      return
-    }
-
-    switch (event.data) {
-      case 'CAN_START_FILE_DOWNLOAD':
-        setIsStartDownload(true)
-        window.open(link)
-        break
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('message', handleMessage)
-    return () => window.removeEventListener('message', handleMessage)
-  }, [])
 
   return (
     <Card
@@ -71,16 +50,17 @@ export const DonationRequest = (props: IProps) => {
         }}
       >
         <Flex sx={{ flexDirection: 'column', flex: 1 }}>
-          {imageURL &&
-          <Flex sx={{ display: ['none', 'inline'] }}>
-            <AspectImage
-              loading="lazy"
-              ratio={16 / 9}
-              src={imageURL}
-              alt={REQUEST_TITLE}
-              data-testid="donationRequestImage"
-            />
-          </Flex>}
+          {imageURL && (
+            <Flex sx={{ display: ['none', 'inline'] }}>
+              <AspectImage
+                loading="lazy"
+                ratio={16 / 9}
+                src={imageURL}
+                alt={REQUEST_TITLE}
+                data-testid="donationRequestImage"
+              />
+            </Flex>
+          )}
 
           <Text sx={{ padding: [2, 4, 6] }}>
             <Text as="h1">{REQUEST_TITLE}</Text>
@@ -92,7 +72,7 @@ export const DonationRequest = (props: IProps) => {
         <Flex
           sx={{
             borderLeft: [0, '2px solid'],
-            minHeight: [isStartDownload ? '400px' : '650px', '650px'],
+            minHeight: '650px',
             width: ['100%', '350px', '400px'],
           }}
         >
@@ -115,20 +95,12 @@ export const DonationRequest = (props: IProps) => {
           alignItems: 'center',
         }}
       >
-        {isStartDownload && (
-          <Text as="p" sx={{ color: 'grey', textAlign: 'center' }}>
-            Download hasn't started yet? Tap the button
-          </Text>
-        )}
-
         <ExternalLink
           href={link}
           onClick={callback}
           data-cy="DonationRequestSkip"
         >
-          <Button>
-            {isStartDownload ? REQUEST_BUTTON_DOWNLOAD : REQUEST_BUTTON_SKIP}
-          </Button>
+          <Button>{BUTTON_LABEL}</Button>
         </ExternalLink>
       </Flex>
     </Card>

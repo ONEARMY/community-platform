@@ -79,6 +79,8 @@ if (platformTheme) {
       ? 'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.'
       : 'A platform for the Project Kamp community to collaborate around the world. Connect, share and meet each other to figure out how to live more sustainably'
 
+  console.log('setting site description to ' + siteDescription)
+
   $('meta[property="og:description"]').attr('content', siteDescription)
   $('meta[property="twitter:description"]').attr('content', siteDescription)
   $('meta[name="description"]').attr('content', siteDescription)

@@ -15,7 +15,19 @@ const Dashboard = observer(() => {
       </Flex>
     )
   }
-  return <div>placeholder</div>
+
+  const descriptionElement = document.querySelector('meta[name="description"]')
+  const descriptionContent =
+    descriptionElement === null
+      ? 'Not found'
+      : descriptionElement.getAttribute('content')
+  return (
+    <div>
+      <p>This page is a work in progress..</p>
+      <h4>Some SEO data, for your viewing pleasure!</h4>
+      <p>{'meta description: "' + descriptionContent + '"'}</p>
+    </div>
+  )
 })
 
 export default Dashboard

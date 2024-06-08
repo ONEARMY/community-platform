@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import { MODULE } from 'src/modules'
 
 import { mapPinService, MapPinServiceContext } from './Maps/map.service'
+import { AdminModule } from './Admin'
 import { QuestionModule } from './Question'
 import { ResearchModule } from './Research'
 
@@ -214,5 +215,6 @@ export const NO_HEADER_PAGES: IPageMeta[] = [
   ResearchModule, // CC 2021-06-24 - Temporary - make research module accessible to all in production but hide from nav
   unsubscribe,
   QuestionModule,
+  AdminModule,
   patreon,
 ]

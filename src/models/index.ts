@@ -15,6 +15,7 @@ export * from './userPreciousPlastic.models'
 export * from './notifications.models'
 export * from './question.models'
 export * from './discussion.models'
+export * from './discordWebhook.model'
 export interface UserComment extends IComment {
   isEditable: boolean
 }

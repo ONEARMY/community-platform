@@ -4,6 +4,8 @@ import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'
 import * as DiscussionUpdates from './discussionUpdates'
 import * as QuestionUpdates from './questionUpdates'
+import * as HowtoUpdates from './howtoUpdates'
+import * as MapPinUpdates from './mapPinUpdates'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more information
@@ -19,6 +21,8 @@ exports.database = require('./database')
 exports.userUpdates = UserUpdates.handleUserUpdates
 
 exports.discussionUpdates = DiscussionUpdates.handleDiscussionUpdate
+exports.howtoUpdates = HowtoUpdates.howtoUpdate
+exports.mapPinUpdates = MapPinUpdates.mapPinUpdate
 
 exports.questionCreate = QuestionUpdates.handleQuestionCreate
 exports.questionUpdate = QuestionUpdates.handleQuestionUpdate

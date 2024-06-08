@@ -1,0 +1,17 @@
+{
+  "name": "uploads/users/mattia/C0136T01-18ff95b0d62.JPG",
+  "bucket": "default-bucket",
+  "metageneration": 1,
+  "generation": 1717875468516,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": ["a37c334e-f2db-4204-9ebc-69ad8e23a3e5"],
+  "etag": "GGPuK4Ab5bLCctwzLjgUWACbB3I",
+  "customMetadata": {},
+  "timeCreated": "2024-06-08T19:37:48.517Z",
+  "updated": "2024-06-08T19:37:48.517Z",
+  "size": 135719,
+  "md5Hash": "iT+mnoOzQRHOCZQAhhwg+w==",
+  "crc32c": "3393391760"
+}

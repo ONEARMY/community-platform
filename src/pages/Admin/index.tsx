@@ -1,3 +1,4 @@
+import { UserRole } from 'oa-shared'
 import { MODULE } from 'src/modules'
 
 import Routes from './routes'
@@ -18,4 +19,5 @@ export const AdminModule: IPageMeta = {
   component: <ModuleContainer />,
   title: 'Admin',
   description: 'Thanks for your labor!',
+  requiredRole: UserRole.ADMIN,
 }

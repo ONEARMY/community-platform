@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import Foco from 'react-foco'
 import { observer } from 'mobx-react'
 import { MemberBadge } from 'oa-components'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { AdminModule } from 'src/pages/Admin'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
@@ -67,6 +69,15 @@ const Profile = observer((props: IProps) => {
                 content={page.title}
               />
             ))}
+            <AuthWrapper
+              roleRequired={AdminModule.requiredRole}
+              key={AdminModule.path}
+            >
+              <MenuMobileLink
+                path={AdminModule.path}
+                content={AdminModule.title}
+              />
+            </AuthWrapper>
             <MenuMobileLink
               path={window.location.pathname}
               content={'Log out'}

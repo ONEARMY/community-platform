@@ -1,9 +1,9 @@
-import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { AdminModule } from 'src/pages/Admin'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
 import { Box, Flex } from 'theme-ui'
 
@@ -102,6 +102,22 @@ export const ProfileModal = observer((props: IProps) => {
             </Flex>
           </AuthWrapper>
         ))}
+
+        <AuthWrapper
+          roleRequired={AdminModule.requiredRole}
+          key={AdminModule.path}
+        >
+          <Flex>
+            <ModalLink
+              to={AdminModule.path}
+              data-cy={`menu-${AdminModule.title}`}
+              className={({ isActive }) => (isActive ? 'current' : '')}
+            >
+              {AdminModule.title}
+            </ModalLink>
+          </Flex>
+        </AuthWrapper>
+
         <Flex>
           <LogoutButton onClick={() => logout()} data-cy="menu-Logout">
             Log out

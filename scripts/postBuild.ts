@@ -67,7 +67,7 @@ const platformTheme = process.env.REACT_APP_PLATFORM_THEME
 if (platformTheme) {
   console.log(`Applying theme: ${platformTheme}`)
   console.log(
-    `Copying src/assets/images/themes/${platformTheme}/public to build/`,
+    `Copying "src/assets/images/themes/${platformTheme}/public" to "build/"`,
   )
   fsExtra.copySync(
     '../src/assets/images/themes/' + platformTheme + '/public',

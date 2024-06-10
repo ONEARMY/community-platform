@@ -19,7 +19,7 @@ export type {
   IResearchDB,
   IUserDB,
   IQuestionDB,
-  DiscordWebhookPayload
+  DiscordWebhookPayload,
 } from '../../src/models'
 
 import { dbEndpointSubcollections, generateDBEndpoints } from 'oa-shared'

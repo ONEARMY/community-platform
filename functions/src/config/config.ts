@@ -38,6 +38,8 @@ interface IIntergrations {
   slack_webhook: string
   discord_webhook: string
   discord_alert_channel_webhook: string
+  discord_channel_id: string
+  discord_bot_token: string
   patreon_client_id: string
   patreon_client_secret: string
 }

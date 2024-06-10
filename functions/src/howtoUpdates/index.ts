@@ -15,8 +15,7 @@ export const howtoUpdate = functions
 
     if (shouldNotify(currentState, previousState)) {
       const { _createdBy, title, slug } = currentState
-      const content = `📓 Yeah! New How To **${title}** by *${_createdBy}*
-            check it out: <${SITE_URL}/how-to/${slug}>`
+      const content = `📓 Yeah! New How To **${title}** by *${_createdBy}* \n check it out: <${SITE_URL}/how-to/${slug}>`
       await sendDiscordNotification({ content })
     }
   })

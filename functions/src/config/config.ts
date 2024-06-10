@@ -1,4 +1,5 @@
 import { config } from 'firebase-functions'
+import { SITE } from '../../../src/config/config'
 
 /* config variables are attached attached directly to firebase using the cli
    $firebase functions:config:set ...
@@ -7,17 +8,26 @@ import { config } from 'firebase-functions'
 let c = config() as configVars
 // If running emulated or without firebase login provide dummy data instead
 if (Object.keys(c).length === 0) {
-  c = {
-    analytics: {},
-    deployment: {
-      site_url: 'http://localhost:4000',
-    },
-    integrations: {
-      discord_webhook: 'http://simulated-webhook-receiver:30102/discord',
-      slack_webhook: 'http://simulated-webhook-receiver:30102/slack',
-    },
-    service: null,
-  } as any
+  if (SITE === 'emulated_site') {
+    c = {
+      analytics: {},
+      deployment: {
+        site_url: 'http://localhost:4000',
+      },
+      integrations: {
+        discord_webhook: 'http://simulated-webhook-receiver:30102/discord',
+        slack_webhook: 'http://simulated-webhook-receiver:30102/slack',
+      },
+      service: null,
+    } as any
+  } else {
+    c = {
+      analytics: {},
+      deployment: {},
+      integrations: {},
+      service: null,
+    } as any
+  }
 }
 // strip additional character escapes (\\n -> \n)
 if (c.service?.private_key) {

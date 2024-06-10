@@ -50,7 +50,7 @@
 
 //       cy.go('back')
 
-//       cy.get('[data-cy=card]').should('exist')
+//       cy.get('[data-cy=card]').should('be.visible')
 //     })
 //   })
 // })

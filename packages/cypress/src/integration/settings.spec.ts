@@ -235,7 +235,7 @@ describe('[Settings]', () => {
       localStorage.setItem('platformTheme', 'project-kamp')
       cy.clickMenuItem(UserMenuItem.Settings)
       selectFocus(expected.profileType)
-      cy.get('[data-cy=location-dropdown]').should('exist')
+      cy.get('[data-cy=location-dropdown]').should('be.visible')
 
       cy.get('[data-cy="add-a-map-pin"]').click()
 
@@ -262,7 +262,7 @@ describe('[Settings]', () => {
 
       cy.step('Remove a user pin')
       cy.get('[data-cy="remove-a-member-map-pin"]').click()
-      cy.get('[data-cy=location-dropdown]').should('exist')
+      cy.get('[data-cy=location-dropdown]').should('be.visible')
 
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=save]').should('not.be.disabled')

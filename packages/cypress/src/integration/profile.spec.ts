@@ -39,7 +39,7 @@ describe('[Profile]', () => {
       cy.clickMenuItem(UserMenuItem.Profile)
       cy.url().should('include', `/u/${subscriber.userName}`)
       cy.get('[data-cy=spaceProfile]').should('not.exist')
-      cy.get('[data-cy=MemberProfile]').should('exist')
+      cy.get('[data-cy=MemberProfile]').should('be.visible')
       cy.get('.beta-tester-feature').should('not.exist')
     })
 
@@ -50,7 +50,7 @@ describe('[Profile]', () => {
       cy.get('[data-cy="Username"]').should('contain.text', admin.userName)
       cy.get('[data-cy=adminEdit]').should('not.exist')
       cy.visit(`/u/${admin.userName}/edit`)
-      cy.get('[data-cy=BlockedRoute]').should('exist')
+      cy.get('[data-cy=BlockedRoute]').should('be.visible')
     })
 
     it('[Can contact profiles by default]', () => {
@@ -66,7 +66,7 @@ describe('[Profile]', () => {
 
       cy.step('Go to contact tab')
       cy.get('[data-cy=contact-tab]').click()
-      cy.contains(`${contact.title} ${machine.userName}`).should('exist')
+      cy.contains(`${contact.title} ${machine.userName}`).should('be.visible')
 
       cy.step('fill in contact form')
       cy.get('[data-cy=name]').type('Bob')
@@ -75,7 +75,7 @@ describe('[Profile]', () => {
 
       cy.step('Submit form')
       cy.get('[data-cy=contact-submit]').click()
-      cy.contains(contact.successMessage).should('exist')
+      cy.contains(contact.successMessage).should('be.visible')
 
       cy.step("Can't contact pages who opt-out")
       cy.visit(`/u/${userProfiletype.userName}`)
@@ -90,7 +90,7 @@ describe('[Profile]', () => {
       cy.step('Can go to impact data')
       cy.visit(`/u/${userProfiletype.userName}`)
       cy.get('[data-cy=ImpactTab]').click()
-      cy.get('[data-cy=ImpactPanel]').should('exist')
+      cy.get('[data-cy=ImpactPanel]').should('be.visible')
       cy.contains(missing.user.label)
       cy.contains('2021')
       cy.contains('3 full time employees')
@@ -106,7 +106,7 @@ describe('[Profile]', () => {
       cy.clickMenuItem(UserMenuItem.Profile)
       cy.url().should('include', `/u/${userProfiletype.userName}`)
       cy.get('[data-cy=MemberProfile]').should('not.exist')
-      cy.get('[data-cy=SpaceProfile]').should('exist')
+      cy.get('[data-cy=SpaceProfile]').should('be.visible')
     })
   })
 })

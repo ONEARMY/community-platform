@@ -4,7 +4,10 @@ import { CONFIG } from '../config/config'
 
 const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 const DISCORD_CHANNEL_ID = CONFIG.integrations.discord_channel_id
-const DISCORD_BOT_TOKEN = CONFIG.integrations.discord_bot_token
+const DISCORD_BOT_TOKEN = Buffer.from(
+  CONFIG.integrations.discord_bot_token,
+  'base64',
+).toString('ascii')
 
 /**
  * Sends a Discord notification using the provided payload to the configured webhook URL.

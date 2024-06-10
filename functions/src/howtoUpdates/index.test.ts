@@ -87,7 +87,7 @@ describe('howtoUpdates', () => {
 
       // Assert
       const expectedMessageStart = `📓 Yeah! New How To **${howtoTitle}** by *${userId}*`
-      const expectedMessageEnd = `/how-to/${howtoId}`
+      const expectedMessageEnd = `/how-to/${howtoId}>`
       const discordMessages = await getDiscordMessages()
       const containsTestMessage = discordMessages.some((message) => {
         return (

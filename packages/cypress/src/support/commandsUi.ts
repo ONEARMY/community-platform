@@ -70,7 +70,7 @@ Cypress.Commands.add('signUpNewUser', (user?) => {
 
 Cypress.Commands.add('toggleUserMenuOn', () => {
   Cypress.log({ displayName: 'OPEN_USER_MENU' })
-  cy.get('[data-cy=user-menu]').should('be.exist')
+  cy.get('[data-cy=user-menu]').should('be.visible')
   cy.get('[data-cy=user-menu]').click()
 })
 

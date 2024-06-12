@@ -5,12 +5,11 @@ import { Flex } from 'theme-ui'
 
 import { NotificationsIcon } from './NotificationsIcon'
 
-import type { UserNotificationItem } from 'oa-components'
-
+// import type { UserNotificationItem } from 'oa-components'
 import '../Profile/profile.css'
 
 export interface Props {
-  notifications: UserNotificationItem[]
+  notifications: any[]
   markAllRead: () => void
   markAllNotified: () => void
 }

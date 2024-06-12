@@ -4,7 +4,7 @@ import { InternalLink } from '../InternalLink/InternalLink'
 import { NotificationList } from './NotificationList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { UserNotificationItem } from 'oa-shared'
+// import type { UserNotificationItem } from 'oa-shared'
 
 export default {
   title: 'Components/NotificationList',
@@ -74,7 +74,7 @@ const notifications = [
       </>
     ),
   },
-] as UserNotificationItem[]
+]
 
 export const Default: StoryFn<typeof NotificationList> = () => (
   <NotificationList

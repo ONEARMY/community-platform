@@ -6,7 +6,7 @@ const theme = preciousPlasticTheme.styles
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 
-import type { UserNotificationItem } from 'oa-components'
+// import type { UserNotificationItem } from 'oa-components'
 
 const PanelContainer = styled(Box)`
   width: 100%;
@@ -36,7 +36,7 @@ export const PanelItem = styled(Box as any)`
 `
 
 export interface Props {
-  notifications: UserNotificationItem[]
+  notifications: any[]
   markAllRead: () => void
   markAllNotified: () => void
 }

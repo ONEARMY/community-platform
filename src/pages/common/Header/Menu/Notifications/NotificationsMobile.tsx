@@ -6,7 +6,7 @@ const theme = preciousPlasticTheme.styles
 import styled from '@emotion/styled'
 import { Box } from 'theme-ui'
 
-import type { UserNotificationItem } from 'oa-components'
+import type { UserNotificationItem } from 'oa-shared'
 
 const PanelContainer = styled(Box)`
   width: 100%;

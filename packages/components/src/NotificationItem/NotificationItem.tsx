@@ -3,13 +3,8 @@ import { Box, Flex } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 
-import type { NotificationType } from 'oa-shared'
+import type { NotificationType, UserNotificationItem } from 'oa-shared'
 import type { availableGlyphs } from '../Icon/types'
-
-export interface UserNotificationItem {
-  type: NotificationType
-  children: React.ReactNode
-}
 
 function getIconByType(type: NotificationType): availableGlyphs {
   if (['howto_useful', 'research_useful'].includes(type)) return 'useful'

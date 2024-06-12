@@ -11,10 +11,9 @@ interface IProps {
 export const ResearchSubmitStatus = observer((props: IProps) => {
   const navigate = useNavigate()
   const store = useResearchStore()
-  const uploadStatus = store.researchUploadStatus
 
   return (
-    <Modal isOpen={uploadStatus.Start}>
+    <Modal isOpen={store.researchUploadStatus.Start}>
       <Flex sx={{ justifyContent: 'space-between' }}>
         <Heading as="p" variant="small" sx={{ textAlign: 'center' }}>
           Uploading Research
@@ -27,11 +26,11 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
         />
       </Flex>
       <Box margin="15px 0" p={0}>
-        {Object.keys(uploadStatus).map((key) => (
+        {Object.keys(store.researchUploadStatus).map((key) => (
           <Flex p={0} sx={{ alignItems: 'center' }} key={key}>
             <Icon
               marginRight="4px"
-              glyph={uploadStatus[key] ? 'check' : 'loading'}
+              glyph={store.researchUploadStatus[key] ? 'check' : 'loading'}
             />
             <Text>| {key}</Text>
           </Flex>
@@ -39,9 +38,11 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
       </Box>
       {store.activeResearchItem && store.activeResearchItem?.slug ? (
         <Button
-          data-cy={uploadStatus.Complete ? 'view-research' : ''}
-          disabled={!uploadStatus.Complete}
-          variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
+          data-cy={store.researchUploadStatus.Complete ? 'view-research' : ''}
+          disabled={!store.researchUploadStatus.Complete}
+          variant={
+            !store.researchUploadStatus.Complete ? 'disabled' : 'outline'
+          }
           icon="arrow-forward"
           onClick={() => {
             navigate('/research/' + store.activeResearchItem!.slug)

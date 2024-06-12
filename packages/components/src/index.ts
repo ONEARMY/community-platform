@@ -57,4 +57,5 @@ export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWra
 export { IconCountWithTooltip } from './IconCountWithTooltip/IconCountWithTooltip'
 export { DonationRequest } from './DonationRequest/DonationRequest'
 export { DonationRequestModal } from './DonationRequestModal/DonationRequestModal'
-export { UserNotificationItem } from './NotificationItem/NotificationItem'
+// export { IImageGalleryItem } from './ImageGallery/ImageGallery'
+// export { availableGlyphs } from './Icon/types'

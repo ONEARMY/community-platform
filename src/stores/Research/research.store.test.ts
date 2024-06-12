@@ -1,4 +1,7 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
+
 import { toJS } from 'mobx'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
@@ -11,19 +14,20 @@ import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
 
 import type { IDiscussion } from 'src/models'
+import type { IRootStore } from '../RootStore'
 
-jest.mock('../../utils/helpers', () => ({
+vi.mock('../../utils/helpers', async () => ({
   // Preserve the original implementation of other helpers
-  ...jest.requireActual('../../utils/helpers'),
+  ...(await vi.importActual('../../utils/helpers')),
   randomID: () => 'random-id',
 }))
 
-const mockGetDoc = jest.fn()
-const mockIncrement = jest.fn()
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  query: jest.fn(),
-  doc: jest.fn(),
+const mockGetDoc = vi.fn()
+const mockIncrement = vi.fn()
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  query: vi.fn(),
+  doc: vi.fn(),
   getDoc: (doc) => mockGetDoc(doc),
   increment: (value) => mockIncrement(value),
 }))
@@ -47,7 +51,7 @@ const factory = async (
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
-  const store = new ResearchStore()
+  const store = new ResearchStore({} as IRootStore)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -80,7 +84,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userStore = {
-    getUserProfile: jest.fn().mockResolvedValue(
+    getUserProfile: vi.fn().mockResolvedValue(
       FactoryUser({
         _authID: 'userId',
         userName: 'username',
@@ -91,16 +95,16 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
+    triggerNotification: vi.fn(),
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.discussionStore = {
-    fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue({
+    fetchOrCreateDiscussionBySource: vi.fn().mockResolvedValue({
       comments: [],
     }),
-    addComment: jest
+    addComment: vi
       .fn()
       .mockImplementation((_discussionObjec: IDiscussion, text: string) => {
         return {
@@ -112,8 +116,8 @@ const factory = async (
           ],
         }
       }),
-    editComment: jest.fn(),
-    deleteComment: jest.fn(),
+    editComment: vi.fn(),
+    deleteComment: vi.fn(),
   }
 
   await store.setActiveResearchItemBySlug('fish')

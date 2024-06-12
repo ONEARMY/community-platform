@@ -13,6 +13,11 @@ export class AggregationsStore {
 
   constructor(rootStore: IRootStore) {
     this.db = rootStore.dbV2
+
+    // Update verified users on intial load. use timeout to ensure aggregation store initialised
+    setTimeout(() => {
+      this.updateVerifiedUsers()
+    }, 50)
   }
 
   public isVerified(userName: string) {

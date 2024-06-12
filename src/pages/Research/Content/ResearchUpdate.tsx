@@ -165,7 +165,7 @@ const ResearchUpdate = ({
                 <VideoPlayer videoUrl={update.videoUrl} />
               ) : (
                 <ImageGallery
-                  images={formatImagesForGallery(update.images)}
+                  images={formatImagesForGallery(update.images) as any}
                   allowPortrait={true}
                 />
               )}

@@ -1,1 +1,1 @@
-export const isTestEnvironment = process.env.NODE_ENV === 'test'
+export const isTestEnvironment = import.meta.env.NODE_ENV === 'test'

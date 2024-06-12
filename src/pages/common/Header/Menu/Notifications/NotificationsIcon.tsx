@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { ReactComponent as IconNotifications } from 'src/assets/icons/icon-notification.svg'
-import { Flex } from 'theme-ui'
+import IconNotifications from 'src/assets/icons/icon-notification.svg'
+import { Flex, Image } from 'theme-ui'
 
 const IconWrapper = styled(Flex)`
   display: flex;
@@ -11,6 +11,10 @@ const IconWrapper = styled(Flex)`
   padding: 10px;
   cursor: pointer;
 `
+const orangeFilter =
+  'invert(60%) sepia(83%) saturate(928%) hue-rotate(358deg) brightness(100%) contrast(106%)'
+const defaultFilter =
+  'invert(94%) sepia(2%) saturate(0%) hue-rotate(2deg) brightness(85%) contrast(83%);'
 
 export const NotificationsIcon = ({
   onCLick,
@@ -31,8 +35,11 @@ export const NotificationsIcon = ({
           : {}
       }
     >
-      <IconNotifications
-        color={areThereNotifications ? 'orange' : '#bfbfbf'}
+      <Image
+        src={IconNotifications}
+        sx={{
+          filter: areThereNotifications ? orangeFilter : defaultFilter,
+        }}
         height="25px"
         width="25px"
       />

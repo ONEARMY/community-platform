@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom/vitest'
+
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { act, fireEvent, render } from '@testing-library/react'
@@ -5,12 +7,13 @@ import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { describe, expect, it, vi } from 'vitest'
 
 import { HowtoForm } from './Howto.form'
 
 const Theme = testingThemeStyles
 
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -26,8 +29,8 @@ jest.mock('src/common/hooks/useCommonStores', () => {
             Database: false,
             Complete: false,
           },
-          validateTitleForSlug: jest.fn(),
-          uploadHowTo: jest.fn(),
+          validateTitleForSlug: vi.fn(),
+          uploadHowTo: vi.fn(),
         },
         tagsStore: {
           allTags: [
@@ -49,8 +52,8 @@ describe('Howto form', () => {
       const formValues = FactoryHowto()
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -156,7 +159,7 @@ describe('Howto form', () => {
   })
 })
 
-const Wrapper = async (formValues, parentType, navProps) => {
+const Wrapper = (formValues, parentType, navProps) => {
   return render(
     <Provider {...useCommonStores().stores}>
       <ThemeProvider theme={Theme}>

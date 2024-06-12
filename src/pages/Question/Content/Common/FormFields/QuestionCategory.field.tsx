@@ -16,6 +16,10 @@ export const QuestionCategoryField = () => {
   useEffect(() => {
     const initCategories = async () => {
       const categories = await questionService.getQuestionCategories()
+      if (!categories) {
+        return
+      }
+
       const selectOptions = categories.map((category) => ({
         value: category,
         label: category.label,

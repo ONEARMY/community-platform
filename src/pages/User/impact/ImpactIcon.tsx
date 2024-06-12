@@ -1,7 +1,6 @@
 import { Icon } from 'oa-components'
 import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
 
-import type { availableGlyphs } from 'oa-components'
 import type { IImpactDataField } from 'src/models'
 
 interface Props {
@@ -13,7 +12,7 @@ export const ImpactIcon = ({ id }: Props) => {
 
   if (!question || !question.icon) return null
 
-  const glyph = question.icon as availableGlyphs
+  const glyph = question.icon
 
-  return <Icon glyph={glyph} />
+  return <Icon glyph={glyph as any} />
 }

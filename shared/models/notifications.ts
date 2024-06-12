@@ -23,3 +23,8 @@ export const NotificationTypes = [
 ] as const
 
 export type NotificationType = typeof NotificationTypes[number]
+
+export type UserNotificationItem = {
+  type: NotificationType
+  children: React.ReactNode
+}

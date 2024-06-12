@@ -40,7 +40,6 @@ import { buttons, errors, headings, update } from '../../labels'
 import { ResearchErrors } from './ResearchErrors'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
-import type { ResearchEditorOverviewUpdate } from 'oa-components'
 import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
 
@@ -566,7 +565,7 @@ const getResearchUpdates = (
   activeResearchId: string,
   isCreating: boolean,
   researchTitle: string,
-): ResearchEditorOverviewUpdate[] =>
+): any[] =>
   [
     ...updates
       .filter((u) => !u._deleted)

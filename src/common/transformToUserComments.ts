@@ -1,9 +1,9 @@
-import type { IDiscussionComment, IUserPPDB } from 'src/models'
+import type { IComment, IUserPPDB } from 'src/models'
 
 export const transformToUserComments = (
-  comments: IDiscussionComment[],
+  comments: IComment[],
   loggedInUser: IUserPPDB | null | undefined,
-): IDiscussionComment[] =>
+): IComment[] =>
   comments?.map((c) => ({
     ...c,
     isEditable: c._creatorId === loggedInUser?._id,

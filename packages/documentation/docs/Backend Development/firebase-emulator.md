@@ -35,7 +35,7 @@ To make things easier, some Yarn commands were created.
 ### Starting the frontend
 
 ```
-yarn run frontend:watch:for-emulated-backend
+yarn run frontend:for-emulated-backend:watch
 ```
 
 This is similar to `yarn run start` but configures the frontend to connect to the local backend.

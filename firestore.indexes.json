@@ -533,7 +533,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -595,7 +595,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -643,7 +643,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -699,7 +699,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -941,7 +941,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1121,7 +1121,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1169,7 +1169,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1291,7 +1291,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1461,29 +1461,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_created",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1505,6 +1483,28 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_created",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
         }
@@ -1523,7 +1523,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1693,7 +1693,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "ASCENDING"
         }
       ]
@@ -1751,7 +1751,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1879,7 +1879,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1953,7 +1953,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -2171,7 +2171,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -2311,7 +2311,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -2427,7 +2427,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {

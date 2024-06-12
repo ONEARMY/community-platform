@@ -36,7 +36,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',
-      ).should('exist')
+      ).should('be.visible')
 
       cy.step('Warn if title not long enough')
       cy.get('[data-cy=intro-title').clear().type('Q').blur({ force: true })
@@ -50,7 +50,9 @@ describe('[Research]', () => {
 
       cy.step('Cannot be published without description')
       cy.get('[data-cy=submit]').click()
-      cy.contains('Make sure this field is filled correctly').should('exist')
+      cy.contains('Make sure this field is filled correctly').should(
+        'be.visible',
+      )
       cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Draft is saved without description')
@@ -59,7 +61,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
         .click()
         .url()
-      cy.get('[data-cy=moderationstatus-draft]').should('exist')
+      cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
       cy.step('Limit description text to maximum length')
@@ -122,7 +124,7 @@ describe('[Research]', () => {
       cy.step('Can access create form')
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
-      cy.get('[data-cy=create]').should('exist')
+      cy.get('[data-cy=create]').should('be.visible')
 
       cy.step('Enter research article details')
       cy.visit('/research/create')
@@ -140,8 +142,8 @@ describe('[Research]', () => {
         .url()
         .should('include', `/research/${expectSlug}`)
 
-      cy.contains(title).should('exist')
-      cy.contains(description).should('exist')
+      cy.contains(title).should('be.visible')
+      cy.contains(description).should('be.visible')
 
       cy.step('Can add update')
       cy.get('[data-cy=addResearchUpdateButton]').click()
@@ -168,8 +170,8 @@ describe('[Research]', () => {
         .click()
         .url()
 
-      cy.contains(updateTitle).should('exist')
-      cy.contains(updateDescription).should('exist')
+      cy.contains(updateTitle).should('be.visible')
+      cy.contains(updateDescription).should('be.visible')
     })
 
     it('[Warning on leaving page]', () => {
@@ -211,7 +213,7 @@ describe('[Research]', () => {
     it('[By Anonymous]', () => {
       cy.step('Prevent anonymous access to edit research article')
       cy.visit(editResearchUrl)
-      cy.get('[data-cy=BlockedRoute]').should('be.exist')
+      cy.get('[data-cy=BlockedRoute]').should('be.visible')
     })
 
     it('[By Authenticated]', () => {
@@ -241,7 +243,9 @@ describe('[Research]', () => {
 
       cy.step('Cannot be published when empty')
       cy.get('[data-cy=submit]').click()
-      cy.contains('Make sure this field is filled correctly').should('exist')
+      cy.contains('Make sure this field is filled correctly').should(
+        'be.visible',
+      )
       cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Enter update details')
@@ -263,8 +267,8 @@ describe('[Research]', () => {
         .click()
         .url()
 
-      cy.contains(title).should('exist')
-      cy.contains(description).should('exist')
+      cy.contains(title).should('be.visible')
+      cy.contains(description).should('be.visible')
     })
   })
 })

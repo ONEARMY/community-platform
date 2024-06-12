@@ -264,7 +264,9 @@ const getItemThumbnail = (researchItem: IResearch.Item): string => {
 }
 
 const getItemDate = (item: IResearch.Item, variant: string): string => {
-  const contentModifiedDate = formatDate(new Date(item._modified))
+  const contentModifiedDate = formatDate(
+    new Date(item._contentModifiedTimestamp),
+  )
   const creationDate = formatDate(new Date(item._created))
 
   if (contentModifiedDate !== creationDate) {

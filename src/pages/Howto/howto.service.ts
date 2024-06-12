@@ -147,7 +147,11 @@ const createDraftQuery = (userId: string) => {
   )
 
   const countQuery = query(collectionRef, filters)
-  const itemsQuery = query(collectionRef, filters, orderBy('_modified', 'desc'))
+  const itemsQuery = query(
+    collectionRef,
+    filters,
+    orderBy('_contentModifiedTimestamp', 'desc'),
+  )
 
   return { countQuery, itemsQuery }
 }
@@ -176,7 +180,7 @@ const getSort = (sort: HowtoSortOption) => {
     case 'MostDownloads':
       return orderBy('total_downloads', 'desc')
     case 'LatestUpdated':
-      return orderBy('_modified', 'desc')
+      return orderBy('_contentModifiedTimestamp', 'desc')
   }
 }
 

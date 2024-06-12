@@ -11,7 +11,7 @@ describe('[Common]', () => {
     cy.visit(unknownUrl)
     cy.get('[data-test="NotFound: Heading"]')
       .contains(`Nada, page not found 💩`)
-      .should('be.exist')
+      .should('be.visible')
     cy.get('a').contains('home page').should('have.attr', 'href').and('eq', '/')
   })
 

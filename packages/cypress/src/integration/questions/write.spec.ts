@@ -31,7 +31,7 @@ describe('[Question]', () => {
       cy.get('[data-cy=field-title]').type(item.title).blur({ force: true })
       cy.contains(
         'Titles must be unique, please try being more specific',
-      ).should('exist')
+      ).should('be.visible')
 
       cy.step('Add title field')
       cy.get('[data-cy=field-title]').type(initialTitle).blur({ force: true })

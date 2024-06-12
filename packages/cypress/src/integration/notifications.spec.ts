@@ -130,6 +130,6 @@ describe('[Notifications]', () => {
         })
       },
     )
-    cy.get('[data-cy="NotificationList: empty state"]').should('exist')
+    cy.get('[data-cy="NotificationList: empty state"]').should('be.visible')
   })
 })

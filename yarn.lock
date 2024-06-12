@@ -12,6 +12,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@adobe/css-tools@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "@adobe/css-tools@npm:4.4.0"
+  checksum: 1f08fb49bf17fc7f2d1a86d3e739f29ca80063d28168307f1b0a962ef37501c5667271f6771966578897f2e94e43c4770fd802728a6e6495b812da54112d506a
+  languageName: node
+  linkType: hard
+
 "@algolia/autocomplete-core@npm:1.9.3":
   version: 1.9.3
   resolution: "@algolia/autocomplete-core@npm:1.9.3"
@@ -8007,6 +8014,39 @@ __metadata:
     vitest:
       optional: true
   checksum: 95bd94f1f4ba2110eaaa15174207f74d46481f0f168a4d58c30f92a9285f797f9949c166aa8401bcb46e16edbf14a097013204d65801e9d1361892757e525bd6
+  languageName: node
+  linkType: hard
+
+"@testing-library/jest-dom@npm:^6.4.6":
+  version: 6.4.6
+  resolution: "@testing-library/jest-dom@npm:6.4.6"
+  dependencies:
+    "@adobe/css-tools": ^4.4.0
+    "@babel/runtime": ^7.9.2
+    aria-query: ^5.0.0
+    chalk: ^3.0.0
+    css.escape: ^1.5.1
+    dom-accessibility-api: ^0.6.3
+    lodash: ^4.17.21
+    redent: ^3.0.0
+  peerDependencies:
+    "@jest/globals": ">= 28"
+    "@types/bun": "*"
+    "@types/jest": ">= 28"
+    jest: ">= 28"
+    vitest: ">= 0.32"
+  peerDependenciesMeta:
+    "@jest/globals":
+      optional: true
+    "@types/bun":
+      optional: true
+    "@types/jest":
+      optional: true
+    jest:
+      optional: true
+    vitest:
+      optional: true
+  checksum: d70acbfc5d842065292dc1b4113ac2b4c2a2b83f9868e454d7f24d97ee92fddf7852e0e079b6eecaf21154bfe6e9ad03eb32e72f16854f64d7ce1ff42288828b
   languageName: node
   linkType: hard
 
@@ -16953,13 +16993,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"flag-icon-css@npm:^3.2.1":
-  version: 3.5.0
-  resolution: "flag-icon-css@npm:3.5.0"
-  checksum: 316ef0f78511ebcb4ef8b0def075a2b6a569649238573605ac56f60b8fb63cf626cfbb6184689ed2016561612e6d1e3f92f049350b50c3bdfe732d9dd3d51414
-  languageName: node
-  linkType: hard
-
 "flat-cache@npm:^3.0.4":
   version: 3.2.0
   resolution: "flat-cache@npm:3.2.0"
@@ -23679,6 +23712,7 @@ __metadata:
     "@storybook/react": ^7.4.1
     "@storybook/react-vite": ^7.4.1
     "@storybook/theming": ^7.4.1
+    "@testing-library/jest-dom": ^6.4.6
     "@testing-library/react": 12
     "@types/mustache": ^4.1.2
     "@types/react-flag-icon-css": ^1.0.5
@@ -23701,8 +23735,8 @@ __metadata:
     photoswipe: ^5.4.1
     prettier: 2.5.1
     react: ^17.0.2
+    react-country-flag: ^3.1.0
     react-dom: ^17.0.2
-    react-flag-icon-css: ^1.0.25
     react-icons: ^4.3.1
     react-image-crop: ^11.0.5
     react-player: ^2.16.0
@@ -23717,6 +23751,7 @@ __metadata:
     ts-node: ^10.7.0
     typescript: ^5.1.6
     use-debounce: ^8.0.4
+    vite-plugin-svgr: ^4.2.0
     vitest: ^1.6.0
     webpack: 5.76.0
     yup: ^1.3.2
@@ -26265,20 +26300,6 @@ __metadata:
     final-form: ^4.20.0
     react: ^16.8.0 || ^17.0.0
   checksum: f05bcbea51f004895f46d9be43bb0d70ecd10d172c6e6bb1498740a245ae54267789e1f8b9ca2ac77f75b240841d44f20fe698871bf267aa3baf58e7c7be1154
-  languageName: node
-  linkType: hard
-
-"react-flag-icon-css@npm:^1.0.25":
-  version: 1.0.25
-  resolution: "react-flag-icon-css@npm:1.0.25"
-  dependencies:
-    classnames: ^2.2.6
-    flag-icon-css: ^3.2.1
-    prop-types: ^15.6.2
-  peerDependencies:
-    react: ^0.14 || ^15.0 || ^16.0
-    react-dom: ^0.14 || ^15.0 || ^16.0
-  checksum: 6640097417df565ecc209935250483adc8c1cf1e887e0d907e8058cfd4065dc2259567e36e66b2d9cab784af341e41cab3f3c49da7880f17ee2a5fcce1ca257d
   languageName: node
   linkType: hard
 

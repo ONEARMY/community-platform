@@ -1,5 +1,6 @@
 import { getFunctions, httpsCallable } from 'firebase/functions'
-import { SendMessage } from 'oa-shared'
+
+import type { SendMessage } from 'oa-shared'
 
 const functions = getFunctions()
 

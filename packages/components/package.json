@@ -32,6 +32,7 @@
     "linkifyjs": "^4.0.2",
     "oa-themes": "workspace:^",
     "photoswipe": "^5.4.1",
+    "react-country-flag": "^3.1.0",
     "react-flag-icon-css": "^1.0.25",
     "react-icons": "^4.3.1",
     "react-image-crop": "^11.0.5",
@@ -61,6 +62,7 @@
     "@storybook/react": "^7.4.1",
     "@storybook/react-vite": "^7.4.1",
     "@storybook/theming": "^7.4.1",
+    "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "12",
     "@types/mustache": "^4.1.2",
     "@types/react-flag-icon-css": "^1.0.5",
@@ -79,6 +81,7 @@
     "react-dom": "^17.0.2",
     "ts-node": "^10.7.0",
     "typescript": "^5.1.6",
+    "vite-plugin-svgr": "^4.2.0",
     "vitest": "^1.6.0"
   }
 }

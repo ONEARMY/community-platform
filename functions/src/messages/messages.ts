@@ -2,7 +2,8 @@ import * as functions from 'firebase-functions'
 import { DB_ENDPOINTS } from '../models'
 import { firebaseAdmin } from '../Firebase/admin'
 import { createDoc } from '../Utils/doc.utils'
-import { SendMessage } from 'oa-shared'
+
+import type { SendMessage } from 'oa-shared'
 
 const EMAIL_ADDRESS_SEND_LIMIT = 100
 

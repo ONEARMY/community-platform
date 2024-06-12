@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { Button } from 'oa-components'

@@ -1,6 +1,6 @@
 import { defineConfig } from 'cypress'
 
-import viteConfig from '../../vite.config'
+// import viteConfig from '../../vite.config'
 import { setupNodeEvents } from './src/plugins'
 
 export default defineConfig({
@@ -33,7 +33,7 @@ export default defineConfig({
     devServer: {
       bundler: 'vite',
       framework: 'react',
-      viteConfig: { ...viteConfig },
+      // viteConfig: { ...viteConfig },
     },
   },
 })

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Category,
@@ -39,6 +40,7 @@ const ResearchListItem = ({ item }: IProps) => {
 
   const isVerified = aggregationsStore.isVerified(item._createdBy)
   const status = item.researchStatus || ResearchStatus.IN_PROGRESS
+  const modifiedDate = useMemo(() => getItemDate(item, 'long'), [item])
 
   return (
     <Card data-cy="ResearchListItem" data-id={item._id} mb={3}>
@@ -151,17 +153,19 @@ const ResearchListItem = ({ item }: IProps) => {
                     </Text>
                   )}
                   {/* Hide this on mobile, show on tablet & above. */}
-                  <Text
-                    ml={4}
-                    sx={{
-                      display: ['none', 'block'],
-                      fontSize: 1,
-                      color: 'darkGrey',
-                      transform: 'translateY(2px)',
-                    }}
-                  >
-                    {getItemDate(item, 'long')}
-                  </Text>
+                  {modifiedDate && (
+                    <Text
+                      ml={4}
+                      sx={{
+                        display: ['none', 'block'],
+                        fontSize: 1,
+                        color: 'darkGrey',
+                        transform: 'translateY(2px)',
+                      }}
+                    >
+                      {modifiedDate}
+                    </Text>
+                  )}
                   <Text
                     sx={{
                       display: ['none', 'inline-block', 'inline-block'],
@@ -264,17 +268,21 @@ const getItemThumbnail = (researchItem: IResearch.Item): string => {
 }
 
 const getItemDate = (item: IResearch.Item, variant: string): string => {
-  const contentModifiedDate = formatDate(
-    new Date(item._contentModifiedTimestamp),
-  )
-  const creationDate = formatDate(new Date(item._created))
+  try {
+    const contentModifiedDate = formatDate(
+      new Date(item._contentModifiedTimestamp),
+    )
+    const creationDate = formatDate(new Date(item._created))
 
-  if (contentModifiedDate !== creationDate) {
-    return variant === 'long'
-      ? `Updated ${contentModifiedDate}`
-      : contentModifiedDate
-  } else {
-    return variant === 'long' ? `Created ${creationDate}` : creationDate
+    if (contentModifiedDate !== creationDate) {
+      return variant === 'long'
+        ? `Updated ${contentModifiedDate}`
+        : contentModifiedDate
+    } else {
+      return variant === 'long' ? `Created ${creationDate}` : creationDate
+    }
+  } catch (err) {
+    return ''
   }
 }
 

@@ -5,8 +5,8 @@ import { Box, Card, Text } from 'theme-ui'
 import { Button } from '../Button/Button'
 import { NotificationItem } from '../NotificationItem/NotificationItem'
 
+import type { UserNotificationItem } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
-import type { UserNotificationItem } from '../NotificationItem/NotificationItem'
 
 export interface Props {
   notifications: UserNotificationItem[]

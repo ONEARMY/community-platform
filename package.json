@@ -31,7 +31,7 @@
     "build:inject-config": "yarn build:post",
     "build:shared": "yarn workspace oa-shared build",
     "build": "yarn build:themes && yarn build:components && yarn build:shared && yarn build:vite",
-    "lint": "yarn lint:style && yarn lint:code",
+    "lint": "yarn lint:style && yarn lint:code --quiet",
     "lint:commits": " npx commitlint --from=$(git merge-base master HEAD) --verbose",
     "lint:code": "eslint . --ext .js,.jsx,.ts,.tsx src --color",
     "lint:spell": "cspell \"**/*.md\" --config ./.cspell.json",

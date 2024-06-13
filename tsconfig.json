@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2021",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["vite/client"],
     "allowJs": true,
     "baseUrl": ".",
     "skipLibCheck": true,
@@ -22,7 +23,8 @@
       "./node_modules/@types",
       "./types",
       "@testing-library/jest-dom",
-      "../src/themes/types"
+      "../src/themes/types",
+      "./node_modules"
     ],
     "declaration": true,
     "noEmit": true,

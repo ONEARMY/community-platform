@@ -21,7 +21,9 @@ describe('[Questions.Discussions]', () => {
       .first()
       .scrollIntoView()
       .should('be.inViewport', 10)
-    cy.contains(firstComment.text)
+
+    cy.step('Comment mentions are formatted correctly')
+    cy.contains('@demo_user - I like your logo')
   })
 
   it('allows authenticated users to contribute to discussions', () => {

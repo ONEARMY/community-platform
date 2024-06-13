@@ -1,6 +1,5 @@
 import { cdnImageUrl } from './cdnImageUrl'
 
-import type { IImageGalleryItem } from 'oa-components'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { IConvertedFileMeta } from 'src/types'
 
@@ -19,5 +18,5 @@ export const formatImagesForGallery = (
       thumbnailUrl: cdnImageUrl(i.downloadUrl, {
         width: 150,
       }),
-    })) as IImageGalleryItem[]
+    }))
 }

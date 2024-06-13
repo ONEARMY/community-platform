@@ -33,11 +33,10 @@ type Badge = {
 
 export interface ThemeWithName {
   name: string
-
   logo: string
 
   profileGuidelinesURL: string
-
+  questionsGuidelinesURL?: string
   communityProgramURL: string
 
   alerts: any
@@ -107,7 +106,6 @@ export interface ThemeWithName {
     behind: number
     level: number
     default: number
-    slickArrows: number
     modalProfile: number
     logoContainer: number
     header: number

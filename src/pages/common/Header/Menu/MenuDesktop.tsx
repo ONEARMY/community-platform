@@ -27,7 +27,7 @@ const MenuLink = styled(NavLink)`
       bottom: -6px;
       background-color: ${(props) => props.theme.colors.accent.base};
       mask-size: contain;
-      mask-image: url(${MenuCurrent});
+      mask-image: url(\"${MenuCurrent}\");
       mask-repeat: no-repeat;
       z-index: ${(props) => props.theme.zIndex.level};
       left: 50%;

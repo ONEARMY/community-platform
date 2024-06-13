@@ -158,12 +158,8 @@ export const Howto = observer(() => {
               votedUsefulCount={howtoStore.votedUsefulCount}
               hasUserVotedUseful={hasUserVotedUseful}
               isLoggedIn={!!loggedInUser}
-              onUsefulClick={async () =>
-                await onUsefulClick(
-                  howto._id,
-                  howto.slug,
-                  'ArticleCallToAction',
-                )
+              onUsefulClick={() =>
+                onUsefulClick(howto._id, howto.slug, 'ArticleCallToAction')
               }
             />
           )}

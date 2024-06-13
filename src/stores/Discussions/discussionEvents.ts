@@ -2,7 +2,7 @@
 import { toJS } from 'mobx'
 import { logger } from 'src/logger'
 
-import type { IDiscussion } from 'src/models'
+import type { IDiscussion, IResearch } from 'src/models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
@@ -43,7 +43,7 @@ export const updateDiscussionMetadata = async (
     case 'research':
       const researchRef = db.collection(collectionName).doc(primaryContentId)
 
-      const research = toJS(await researchRef.get())
+      const research = toJS(await researchRef.get()) as IResearch.Item
 
       if (research) {
         // This approach is open to error but is better than making lots of DBs

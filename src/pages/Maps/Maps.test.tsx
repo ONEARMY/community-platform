@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom/vitest'
+
 import {
   createMemoryRouter,
   createRoutesFromElements,
@@ -12,6 +14,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { describe, expect, it, vi } from 'vitest'
 
 import { MapPinServiceContext } from './map.service'
 import Maps from './Maps'
@@ -20,17 +23,17 @@ import type { IMapPinService } from './map.service'
 
 const Theme = testingThemeStyles
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserProfile: jest.fn(),
-        updateUserBadge: jest.fn(),
+        getUserProfile: vi.fn(),
+        updateUserBadge: vi.fn(),
       },
       aggregationsStore: {
-        isVerified: jest.fn(),
+        isVerified: vi.fn(),
         users_verified: {
           HowtoAuthor: true,
         },
@@ -52,7 +55,7 @@ describe('Maps', () => {
     Object.defineProperty(global.navigator, 'geolocation', {
       writable: true,
       value: {
-        getCurrentPosition: jest.fn(),
+        getCurrentPosition: vi.fn(),
       },
     })
 
@@ -86,7 +89,7 @@ const Wrapper = async (path = '/map') => {
   )
 
   const mockMapPinService: IMapPinService = {
-    getMapPinByUserId: jest.fn().mockResolvedValue({
+    getMapPinByUserId: vi.fn().mockResolvedValue({
       ...FactoryUser({
         moderation: IModerationStatus.ACCEPTED,
       }),
@@ -95,8 +98,8 @@ const Wrapper = async (path = '/map') => {
         shortDescription: 'description',
       },
     }),
-    getMapPinSelf: jest.fn().mockResolvedValue({}),
-    getMapPins: jest.fn().mockImplementation(() => {
+    getMapPinSelf: vi.fn().mockResolvedValue({}),
+    getMapPins: vi.fn().mockImplementation(() => {
       return Promise.resolve([])
     }),
   }

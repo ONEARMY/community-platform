@@ -55,7 +55,7 @@ describe('[Research]', () => {
       it('[Delete button is visible]', () => {
         cy.step('Delete button should be visible to the author of the article')
 
-        cy.get('[data-cy="Research: delete button"]').should('exist')
+        cy.get('[data-cy="Research: delete button"]').should('be.visible')
       })
     })
 
@@ -75,7 +75,7 @@ describe('[Research]', () => {
       it('[Delete button is visible]', () => {
         cy.step('Delete button should be visible to the author of the article')
 
-        cy.get('[data-cy="Research: delete button"]').should('exist')
+        cy.get('[data-cy="Research: delete button"]').should('be.visible')
       })
     })
   })

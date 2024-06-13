@@ -34,25 +34,31 @@ const COLLECTION_NAME = 'howtos'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
-  @observable
-  public activeHowto: IHowtoDB | null
-
-  @observable
+  public activeHowto: IHowtoDB | null = null
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
   constructor(rootStore: IRootStore) {
     // call constructor on common ModuleStore (with db endpoint), which automatically fetches all docs at
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
-    makeObservable(this)
+    makeObservable(this, {
+      activeHowto: observable,
+      uploadStatus: observable,
+      removeActiveHowto: action,
+      setActiveHowtoBySlug: action,
+      toggleUsefulByUser: action,
+      updateUploadStatus: action,
+      resetUploadStatus: action,
+      deleteHowTo: action,
+      userVotedActiveHowToUseful: computed,
+      votedUsefulCount: computed,
+    })
   }
 
-  @action
   public removeActiveHowto() {
     this.activeHowto = null
   }
 
-  @action
   public async setActiveHowtoBySlug(slug?: string) {
     // clear any cached data and then load the new howto
     logger.debug(`HowtoStore.setActiveHowtoBySlug:`, { slug })
@@ -92,7 +98,6 @@ export class HowtoStore extends ModuleStore {
     return activeHowto
   }
 
-  @action
   public async toggleUsefulByUser(
     docId: string,
     userName: string,
@@ -116,12 +121,10 @@ export class HowtoStore extends ModuleStore {
     })
   }
 
-  @action
   public updateUploadStatus(update: keyof IHowToUploadStatus) {
     this.uploadStatus[update] = true
   }
 
-  @action
   public resetUploadStatus() {
     this.uploadStatus = getInitialUploadStatus()
   }
@@ -157,7 +160,7 @@ export class HowtoStore extends ModuleStore {
   }
 
   public needsModeration(howto: IHowto) {
-    return needsModeration(howto, toJS(this.activeUser))
+    return needsModeration(howto, toJS(this.activeUser) as IUser)
   }
 
   private async addUserReference(msg: string): Promise<{
@@ -248,7 +251,6 @@ export class HowtoStore extends ModuleStore {
     return $doc ? $doc : null
   }
 
-  @action
   public async deleteHowTo(id: string) {
     try {
       const user = this.activeUser
@@ -438,7 +440,6 @@ export class HowtoStore extends ModuleStore {
     return steps
   }
 
-  @computed
   get userVotedActiveHowToUseful(): boolean {
     if (!this.activeUser) return false
     return (this.activeHowto?.votedUsefulBy || []).includes(
@@ -446,7 +447,6 @@ export class HowtoStore extends ModuleStore {
     )
   }
 
-  @computed
   get votedUsefulCount(): number {
     return (this.activeHowto?.votedUsefulBy || []).length
   }

@@ -1,12 +1,13 @@
 /* eslint-disable no-case-declarations */
 import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
-import { action, toJS } from 'mobx'
+import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
+import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { updateDiscussionMetadata } from './discussionEvents'
 
@@ -23,7 +24,6 @@ export class DiscussionStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
   }
 
-  @action
   public async fetchOrCreateDiscussionBySource(
     sourceId: string,
     sourceType: IDiscussion['sourceType'],
@@ -37,14 +37,19 @@ export class DiscussionStore extends ModuleStore {
       )[0] || null
 
     if (foundDiscussion) {
-      return foundDiscussion
+      return this._formatDiscussion(foundDiscussion)
     }
 
-    // Create a new discussion
-    return (
-      (await this.uploadDiscussion(sourceId, sourceType, primaryContentId)) ||
-      null
+    const newDiscussion = await this.uploadDiscussion(
+      sourceId,
+      sourceType,
+      primaryContentId,
     )
+    if (newDiscussion) {
+      return this._formatDiscussion(newDiscussion)
+    }
+
+    return null
   }
 
   public async uploadDiscussion(
@@ -68,7 +73,6 @@ export class DiscussionStore extends ModuleStore {
     return this._updateDiscussion(dbRef, newDiscussion, 'neutral')
   }
 
-  @action
   public async addComment(
     discussion: IDiscussion,
     text: string,
@@ -117,7 +121,6 @@ export class DiscussionStore extends ModuleStore {
     }
   }
 
-  @action
   public async editComment(
     discussion: IDiscussion,
     commentId: string,
@@ -160,7 +163,6 @@ export class DiscussionStore extends ModuleStore {
     }
   }
 
-  @action
   public async deleteComment(
     discussion: IDiscussion,
     commentId: string,
@@ -221,6 +223,22 @@ export class DiscussionStore extends ModuleStore {
       }
       return comment
     })
+  }
+
+  private _formatCommentList(comments: IComment[] = []): IComment[] {
+    return comments.map((comment: IComment) => {
+      return {
+        ...comment,
+        text: changeUserReferenceToPlainText(comment.text),
+      }
+    })
+  }
+
+  private _formatDiscussion(discussion: IDiscussion): IDiscussion {
+    return {
+      ...discussion,
+      comments: this._formatCommentList(discussion.comments),
+    }
   }
 
   private async _updateDiscussion(

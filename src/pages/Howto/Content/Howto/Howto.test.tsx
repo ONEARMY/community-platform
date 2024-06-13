@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom/vitest'
+
 import {
   createMemoryRouter,
   createRoutesFromElements,
@@ -10,6 +12,7 @@ import { act, render, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
+import { describe, expect, it, vi } from 'vitest'
 
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 
@@ -18,21 +21,21 @@ const Theme = preciousPlasticTheme.styles
 const howto = FactoryHowto()
 
 const mockHowtoStore = () => ({
-  setActiveHowtoBySlug: jest.fn(),
+  setActiveHowtoBySlug: vi.fn(),
   activeHowto: howto,
-  needsModeration: jest.fn().mockReturnValue(false),
-  incrementViewCount: jest.fn(),
-  removeActiveHowto: jest.fn(),
+  needsModeration: vi.fn().mockReturnValue(false),
+  incrementViewCount: vi.fn(),
+  removeActiveHowto: vi.fn(),
 })
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {},
       aggregationsStore: {
-        isVerified: jest.fn((userId) => userId === 'HowtoAuthor'),
+        isVerified: vi.fn((userId) => userId === 'HowtoAuthor'),
         users_verified: {
           HowtoAuthor: true,
         },

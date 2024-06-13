@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { guidance } from 'src/pages/Howto/labels'
 import { HowtoProvider } from 'src/test/components'
 import { FactoryCategory } from 'src/test/factories/Category'
+import { describe, expect, it } from 'vitest'
 
 import { HowtoCategoryGuidance } from '.'
 

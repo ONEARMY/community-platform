@@ -21,9 +21,10 @@ export enum DbCollectionName {
 }
 
 export const generateNewUserDetails = () => {
+  const username = `CI_${generateAlphaNumeric(7)}`.toLocaleLowerCase()
   return {
-    username: `CI_${generateAlphaNumeric(5)}`.toLocaleLowerCase(),
-    email: `CI_${generateAlphaNumeric(5)}@test.com`.toLocaleLowerCase(),
+    username,
+    email: `${username}@test.com`.toLocaleLowerCase(),
     password: 'test1234',
   }
 }

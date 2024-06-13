@@ -10,7 +10,7 @@ import {
   updateProfile,
 } from 'firebase/auth'
 import { uniqBy } from 'lodash'
-import { action, computed, makeObservable, observable, toJS } from 'mobx'
+import { action, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 
 import { logger } from '../../logger'
@@ -41,35 +41,31 @@ type PartialUser = Partial<IUserPPDB>
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.default.Unsubscribe
-  @observable
-  public user: IUserPPDB | null | undefined
 
-  @observable
-  public authUser: User | null // TODO: Fix type
-
-  @observable
+  public user: IUserPPDB | null | undefined = null
+  public authUser: User | null = null // TODO: Fix type
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
   constructor(rootStore: IRootStore) {
     super(rootStore)
-    makeObservable(this)
+    makeObservable(this, {
+      authUser: observable,
+      user: observable,
+      updateStatus: observable,
+      getAllUsers: action,
+      getUsersStartingWith: action,
+      setUpdateStatus: action,
+      updateUserImpact: action,
+      _setUpdateStatus: action,
+      _updateActiveUser: action,
+    })
     this._listenToAuthStateChanges()
-    // Update verified users on intial load. use timeout to ensure aggregation store initialised
-    setTimeout(() => {
-      this.loadUserAggregations()
-    }, 50)
-  }
-  // redirect calls for verifiedUsers to the aggregation store list
-  @computed get verifiedUsers(): { [user_id: string]: boolean } {
-    return this.aggregationsStore.users_verified || {}
   }
 
-  @action
   public getAllUsers() {
     return this.allDocs$
   }
 
-  @action
   public async getUsersStartingWith(prefix: string, limit?: number) {
     // getWhere with the '>=' operator will return every userName that is lexicographically greater than prefix, so adding filter to avoid getting not relvant userNames
     const users: IUserPP[] = await this.db
@@ -82,7 +78,6 @@ export class UserStore extends ModuleStore {
     return uniqueUsers
   }
 
-  @action
   public setUpdateStatus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
   }
@@ -236,7 +231,7 @@ export class UserStore extends ModuleStore {
     // upload any new cover images
     if (values.coverImages) {
       const processedImages = await this.uploadCollectionBatch(
-        values.coverImages as IConvertedFileMeta[],
+        values.coverImages as any as IConvertedFileMeta[],
         COLLECTION_NAME,
         values._id,
       )
@@ -270,7 +265,6 @@ export class UserStore extends ModuleStore {
     await this.refreshActiveUserDetails()
   }
 
-  @action
   public async updateUserImpact(
     fields: IImpactYearFieldList,
     year: IImpactYear,
@@ -378,11 +372,6 @@ export class UserStore extends ModuleStore {
     // TODO show notification if invalid credential
   }
 
-  @action
-  public async loadUserAggregations() {
-    this.aggregationsStore.updateVerifiedUsers()
-  }
-
   // handle user sign in, when firebase authenticates want to also fetch user document from the database
   private async _userSignedIn(user: IFirebaseUser | null) {
     if (!user) return null
@@ -444,7 +433,7 @@ export class UserStore extends ModuleStore {
     this.authUnsubscribe = onAuthStateChanged(auth, (authUser) => {
       this.authUser = authUser
       if (authUser) {
-        this._userSignedIn(authUser)
+        this._userSignedIn(authUser as firebase.default.User)
         // send verification email if not verified and after first sign-up only
         if (!authUser.emailVerified && checkEmailVerification) {
           this.sendEmailVerification()
@@ -480,13 +469,11 @@ export class UserStore extends ModuleStore {
     this.user = user
   }
 
-  @action
-  private _setUpdateStatus(update: keyof IUserUpdateStatus) {
+  public _setUpdateStatus(update: keyof IUserUpdateStatus) {
     this.updateStatus[update] = true
   }
 
-  @action
-  private _updateActiveUser(user?: IUserPPDB | null) {
+  public _updateActiveUser(user?: IUserPPDB | null) {
     this.user = user
   }
 }

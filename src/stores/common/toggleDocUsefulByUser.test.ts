@@ -1,11 +1,13 @@
+import { describe, expect, it, vi } from 'vitest'
+
 import { toggleDocUsefulByUser } from './toggleDocUsefulByUser'
 
-const mockDoc = jest.fn()
-const mockGetDoc = jest.fn()
-const mockUpdateDoc = jest.fn()
-const mockIncrement = jest.fn()
+const mockDoc = vi.fn()
+const mockGetDoc = vi.fn()
+const mockUpdateDoc = vi.fn()
+const mockIncrement = vi.fn()
 
-jest.mock('firebase/firestore', () => ({
+vi.mock('firebase/firestore', () => ({
   doc: (db, colName, id) => mockDoc(db, colName, id),
   getDoc: (ref) => mockGetDoc(ref),
   updateDoc: (ref, value) => mockUpdateDoc(ref, value),

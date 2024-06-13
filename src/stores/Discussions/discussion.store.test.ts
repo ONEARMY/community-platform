@@ -1,4 +1,6 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
 import { faker } from '@faker-js/faker'
 import {
   FactoryDiscussion,
@@ -31,7 +33,7 @@ const factory = async (
   // @ts-ignore
   store.aggregationsStore = {
     aggregations: {
-      isVerified: jest.fn((userId) => userId === 'fake-user'),
+      isVerified: vi.fn((userId) => userId === 'fake-user'),
       users_verified: ['fake-user'],
     },
   }
@@ -167,7 +169,7 @@ describe('discussion.store', () => {
 
       getFn.mockReturnValue(null)
       //Act
-      await expect(
+      expect(() =>
         store.addComment(discussionItem, 'New comment'),
       ).rejects.toThrowError('Discussion not found')
 
@@ -264,7 +266,7 @@ describe('discussion.store', () => {
       ])
 
       //Act
-      await expect(
+      expect(() =>
         store.editComment(discussionItem, 'fake-comment-id', 'Edited comment'),
       ).rejects.toThrowError()
 
@@ -330,7 +332,7 @@ describe('discussion.store', () => {
       ])
 
       //Act
-      await expect(
+      expect(() =>
         store.deleteComment(discussionItem, 'fake-comment-id'),
       ).rejects.toThrowError()
 

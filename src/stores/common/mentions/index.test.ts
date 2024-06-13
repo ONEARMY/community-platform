@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
 import {
   changeMentionToUserReference,
   changeUserReferenceToPlainText,
@@ -7,7 +9,7 @@ import type { UserStore } from '../../User/user.store'
 
 describe('changeMentionToUserReference', () => {
   const mockUserStore = {
-    getUserProfile: jest.fn(),
+    getUserProfile: vi.fn(),
   }
 
   beforeEach(() => {

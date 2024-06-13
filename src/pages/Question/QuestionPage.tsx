@@ -68,7 +68,7 @@ export const QuestionPage = () => {
   }, [])
 
   const onUsefulClick = async () => {
-    const updatedQuestion = await store.toggleUsefulByUser()
+    const updatedQuestion = (await store.toggleUsefulByUser()) as IQuestion.Item
     setQuestion(updatedQuestion)
   }
 
@@ -145,7 +145,7 @@ export const QuestionPage = () => {
 
                 {question.images && (
                   <ImageGallery
-                    images={formatImagesForGallery(question.images)}
+                    images={formatImagesForGallery(question.images) as any}
                     allowPortrait={true}
                   />
                 )}

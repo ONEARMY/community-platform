@@ -1,12 +1,16 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
 import { FactoryMessage } from 'src/test/factories/Message'
 import { FactoryUser } from 'src/test/factories/User'
 
 import { MessageStore } from './message.store'
 
+import type { IRootStore } from '../RootStore'
+
 const factory = (user?) => {
   /* eslint-disable @typescript-eslint/ban-ts-comment */
-  const store = new MessageStore()
+  const store = new MessageStore({} as IRootStore)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

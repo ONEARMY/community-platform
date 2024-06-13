@@ -4,7 +4,7 @@ import { Button, ElWithBeforeIcon } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { logger } from 'src/logger'
-import { PostingGuidelines } from 'src/pages/Question/Content/Common'
+import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common'
 import * as LABELS from 'src/pages/Question/labels'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { setAllowDraftSaveFalse } from 'src/utils/validators'
@@ -60,7 +60,7 @@ export const QuestionForm = (props: IProps) => {
       onSubmit={onSubmit}
       mutators={{ setAllowDraftSaveFalse }}
       initialValues={formValues}
-      render={({ submitting, handleSubmit, form, values }) => {
+      render={({ submitting, handleSubmit, pristine, valid, values }) => {
         const numberOfImageInputsAvailable = values?.images
           ? Math.min(values.images.length + 1, QUESTION_MAX_IMAGES)
           : 1
@@ -90,7 +90,7 @@ export const QuestionForm = (props: IProps) => {
                   </Flex>
                 </Card>
                 <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
-                  <PostingGuidelines />
+                  <QuestionPostingGuidelines />
                 </Box>
                 <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
                   <QuestionTitleField
@@ -123,7 +123,7 @@ export const QuestionForm = (props: IProps) => {
                 }}
               >
                 <Box sx={{ display: ['none', 'none', 'block'] }}>
-                  <PostingGuidelines />
+                  <QuestionPostingGuidelines />
                 </Box>
                 <Button
                   large
@@ -131,11 +131,8 @@ export const QuestionForm = (props: IProps) => {
                   mt={3}
                   variant="primary"
                   type="submit"
-                  disabled={submitting}
-                  onClick={(event) => {
-                    form.mutators.setAllowDraftSaveFalse()
-                    handleSubmit(event)
-                  }}
+                  disabled={submitting || pristine || !valid}
+                  onClick={handleSubmit}
                   sx={{
                     width: '100%',
                     mb: ['40px', '40px', 0],

@@ -80,7 +80,7 @@ export class DocReference<T> {
    *
    * @param data - specified update data in any format.
    */
-  async update(data: T, options?: DocMetaOptions) {
+  async update(data: Partial<T>, options?: DocMetaOptions) {
     const { serverDB, cacheDB } = this.clients
     const dbDoc: DBDoc = this._setDocMeta(data, options, true)
     await serverDB.updateDoc(this.endpoint, dbDoc)

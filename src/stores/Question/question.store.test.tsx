@@ -1,26 +1,31 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
+
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
 import { QuestionStore } from './question.store'
 
-const mockToggleDocSubscriber = jest.fn()
-jest.mock('../common/toggleDocSubscriberStatusByUserName', () => {
+import type { IRootStore } from '../RootStore'
+
+const mockToggleDocSubscriber = vi.fn()
+vi.mock('../common/toggleDocSubscriberStatusByUserName', () => {
   return {
     __esModule: true,
     toggleDocSubscriberStatusByUserName: () => mockToggleDocSubscriber(),
   }
 })
 
-const mockToggleDocUsefulByUser = jest.fn()
-jest.mock('../common/toggleDocUsefulByUser', () => ({
+const mockToggleDocUsefulByUser = vi.fn()
+vi.mock('../common/toggleDocUsefulByUser', () => ({
   __esModule: true,
   toggleDocUsefulByUser: () => mockToggleDocUsefulByUser(),
 }))
 
 const factory = async () => {
-  const store = new QuestionStore()
-  store.isTitleThatReusesSlug = jest.fn().mockResolvedValue(false)
+  const store = new QuestionStore({} as IRootStore)
+  store.isTitleThatReusesSlug = vi.fn().mockResolvedValue(false)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

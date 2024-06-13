@@ -54,7 +54,7 @@ export const ImageConverter = (props: IProps) => {
   return (
     <Flex
       style={{
-        backgroundImage: `url(${convertedFile.objectUrl})`,
+        backgroundImage: `url("${convertedFile.objectUrl}")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

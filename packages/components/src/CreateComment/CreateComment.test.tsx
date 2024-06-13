@@ -1,7 +1,9 @@
-import { fireEvent } from '@testing-library/react'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { fireEvent } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
+
+import { render } from '../test/utils'
 import { CreateComment } from './CreateComment'
 import { WithCustomPlaceholder } from './CreateComment.stories'
 

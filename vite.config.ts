@@ -17,6 +17,7 @@ const vitestConfig: VitestUserConfigInterface = {
     environment: 'jsdom',
     globals: true,
     setupFiles: './src/test/setup.ts',
+    teardownTimeout: 15000,
     testTimeout: 10000,
     coverage: {
       provider: 'v8',

@@ -13,8 +13,8 @@ if (Object.keys(c).length === 0) {
       site_url: 'http://localhost:4000',
     },
     integrations: {
-      discord_webhook: 'http://simulated-webhook-receiver:30102',
-      slack_webhook: 'http://simulated-webhook-receiver:30102',
+      discord_webhook: 'http://simulated-webhook-receiver:30102/discord',
+      slack_webhook: 'http://simulated-webhook-receiver:30102/slack',
     },
     service: null,
   } as any

@@ -129,13 +129,13 @@ export const getNotificationEmailHtml = (
     { parser: 'html' },
   )
 
-export const getNotificationEmail = (
+export const getNotificationEmail = async (
   user: IUserDB,
   notifications: INotification[],
   unsubscribeToken: string,
-): Email => {
+): Promise<Email> => {
   return {
-    html: getNotificationEmailHtml(user, notifications, unsubscribeToken),
+    html: await getNotificationEmailHtml(user, notifications, unsubscribeToken),
     subject: `You've missed notifications from ${getProjectName()}`,
   }
 }

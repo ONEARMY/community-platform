@@ -22,6 +22,7 @@ import {
 import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+import { setCollaboratorPermission } from './researchEvents'
 
 import type { IUser, UserMention } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
@@ -229,12 +230,7 @@ export class ResearchStore extends ModuleStore {
       .doc(values._id)
     const user = this.activeUser as IUser
     const updates = (await dbRef.get())?.updates || [] // save old updates when editing
-    const collaborators = Array.isArray(values?.collaborators)
-      ? values.collaborators
-      : (values.collaborators || '')
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean)
+    const collaborators = await this._setCollaborators(values.collaborators)
 
     try {
       const userCountry = getUserCountry(user)
@@ -566,6 +562,28 @@ export class ResearchStore extends ModuleStore {
       })
     }
   }
+
+  private async _setCollaborators(
+    collaborators: IResearch.Item['collaborators'] | string | undefined,
+  ) {
+    if (!collaborators) return []
+
+    const list = Array.isArray(collaborators)
+      ? collaborators
+      : (collaborators || '')
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+
+    await Promise.all(
+      list.map((collaborator) =>
+        setCollaboratorPermission(this.db, collaborator),
+      ),
+    )
+
+    return list
+  }
+
   /**
    * Updates supplied dbRef after
    * converting @mentions to user references

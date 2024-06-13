@@ -4,7 +4,7 @@ import { Button, ElWithBeforeIcon } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { logger } from 'src/logger'
-import { PostingGuidelines } from 'src/pages/Question/Content/Common'
+import { QuestionPostingGuidelines } from 'src/pages/Question/Content/Common'
 import * as LABELS from 'src/pages/Question/labels'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { setAllowDraftSaveFalse } from 'src/utils/validators'
@@ -90,7 +90,7 @@ export const QuestionForm = (props: IProps) => {
                   </Flex>
                 </Card>
                 <Box sx={{ mt: '20px', display: ['block', 'block', 'none'] }}>
-                  <PostingGuidelines />
+                  <QuestionPostingGuidelines />
                 </Box>
                 <Card sx={{ marginTop: 4, padding: 4, overflow: 'visible' }}>
                   <QuestionTitleField
@@ -123,7 +123,7 @@ export const QuestionForm = (props: IProps) => {
                 }}
               >
                 <Box sx={{ display: ['none', 'none', 'block'] }}>
-                  <PostingGuidelines />
+                  <QuestionPostingGuidelines />
                 </Box>
                 <Button
                   large

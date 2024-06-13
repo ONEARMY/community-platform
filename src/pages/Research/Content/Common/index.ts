@@ -1,4 +1,4 @@
-export { PostingGuidelines } from './PostingGuidelines'
+export { ResearchPostingGuidelines } from './ResearchPostingGuidelines'
 export * as ResearchForm from './Research.form'
 export { ResearchErrors } from './ResearchErrors'
 export { ResearchUpdateForm } from './ResearchUpdate.form'

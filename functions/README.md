@@ -4,7 +4,7 @@
 
 This documentation likely requires updating, and the information provided may no longer be fully valid. Please feel free to create a new issue for any specific items identified as conflict/confusing or possibly no longer valid.
 
-Some additional, newer information can also be found in [Firebase Emulators Docs](../packages/documentation/docs/Backend%20Development/firebase-emulators.md)
+Some additional, newer information can also be found in [Firebase Emulators Docs](../packages/documentation/docs/Backend%20Development/firebase-emulator.md)
 
 ---
 

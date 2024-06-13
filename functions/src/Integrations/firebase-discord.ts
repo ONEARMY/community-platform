@@ -60,5 +60,6 @@ const handleResponse = (res: AxiosResponse) => {
 }
 const handleErr = (err: AxiosError) => {
   console.error('error')
+  console.log(err)
   throw err
 }

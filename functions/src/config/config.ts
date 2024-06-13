@@ -1,5 +1,4 @@
 import { config } from 'firebase-functions'
-import { SITE } from '../../../src/config/config'
 
 /* config variables are attached directly to firebase using the cli
    $firebase functions:config:set ...
@@ -8,7 +7,9 @@ import { SITE } from '../../../src/config/config'
 let c = config() as configVars
 // If running emulated or without firebase login provide dummy data instead
 if (Object.keys(c).length === 0) {
-  if (SITE === 'emulated_site') {
+  console.log('config is empty')
+  if (process.env.IS_EMULATED === 'true') {
+    console.log('using emulator config')
     c = {
       analytics: {},
       deployment: {

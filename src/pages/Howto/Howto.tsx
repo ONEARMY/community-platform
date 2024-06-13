@@ -6,16 +6,8 @@ import { Howto } from './Content/Howto/Howto'
 import { HowtoList } from './Content/HowtoList/HowtoList'
 
 // lazy load editor pages
-const CreateHowto = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "CreateHowto" */ './Content/CreateHowto/CreateHowto'
-    ),
-)
-const EditHowto = lazy(
-  () =>
-    import(/* webpackChunkName: "EditHowto" */ './Content/EditHowto/EditHowto'),
-)
+const CreateHowto = lazy(() => import('./Content/CreateHowto/CreateHowto'))
+const EditHowto = lazy(() => import('./Content/EditHowto/EditHowto'))
 
 const HowtoPage = () => {
   return (

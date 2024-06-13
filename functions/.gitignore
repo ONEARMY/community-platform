@@ -17,7 +17,6 @@ lib/
 dist
 
 # Emulator data
-data/emulated
 data/exported
 data/seed/*
 !data/seed/.gitkeep

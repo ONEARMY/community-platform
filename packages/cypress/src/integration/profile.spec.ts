@@ -15,6 +15,10 @@ const userProfiletype = MOCK_DATA.users.settings_workplace_new
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/')
+    cy.intercept('POST', '/sendMessage', {
+      body: { result: null },
+      statusCode: 200,
+    }).as('sendMessage')
   })
 
   describe('[By Anonymous]', () => {

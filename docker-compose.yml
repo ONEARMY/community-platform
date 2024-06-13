@@ -1,0 +1,14 @@
+# TODO: update to a more new version
+version: "2.1"
+services:
+
+  emulator:
+    build:
+      context: ./
+      dockerfile: ./functions/emulator/Dockerfile
+    ports:
+    - 4001-4008:4001-4008
+    volumes:
+    - ./functions:/app/functions
+    - ./functions/data/emulator:/seed
+    - ./functions/logs:/app/logs

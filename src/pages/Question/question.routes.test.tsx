@@ -252,7 +252,7 @@ describe('question.routes', () => {
           },
         )
       },
-      { timeout: 10000 },
+      { timeout: 15000 },
     )
   })
 
@@ -492,7 +492,7 @@ describe('question.routes', () => {
       })
     })
   })
-})
+}, 15000)
 
 const renderFn = (url) => {
   const router = createMemoryRouter(

@@ -1,0 +1,17 @@
+{
+  "name": "uploads/howtos/sSJu2x5kxs6piq2L0U6y/shredder-2-18391b3997d-18fb5fa4b14.jpg",
+  "bucket": "default-bucket",
+  "metageneration": 1,
+  "generation": 1716745089742,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": ["0180dc00-c762-498f-8353-d379d591554f"],
+  "etag": "KjajQC8dFUsg0dzLFUPkJ/wJGI0",
+  "customMetadata": {},
+  "timeCreated": "2024-05-26T17:38:09.742Z",
+  "updated": "2024-05-26T17:38:09.742Z",
+  "size": 54654,
+  "md5Hash": "VVJqkJWfPH+7DH6rUj3fBA==",
+  "crc32c": "1100890625"
+}

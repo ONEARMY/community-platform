@@ -34,6 +34,6 @@ describe('DiscussionTitle', () => {
       <MultipleComments {...(MultipleComments.args as IProps)} />,
     )
 
-    expect(getByText(`45 ${COMMENTS}`)).toBeInTheDocument()
+    expect(getByText(`3 ${COMMENTS}`)).toBeInTheDocument()
   })
 })

@@ -9,5 +9,6 @@ export interface IComment {
   _id: string
   _edited?: string
   _created?: string
+  _deleted?: boolean
   replies?: IComment[]
 }

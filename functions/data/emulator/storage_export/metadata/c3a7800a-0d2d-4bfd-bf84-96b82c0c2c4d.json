@@ -1,0 +1,17 @@
+{
+  "name": "uploads/howtos/UDaRgClKlDljxxFHyKsX/Shredder 2.1.zip",
+  "bucket": "default-bucket",
+  "metageneration": 1,
+  "generation": 1716745626127,
+  "contentType": "application/zip",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": ["7fef5284-b868-4db5-8302-640945ff5b8c"],
+  "etag": "vVtQknzoGw9NWHFqq2GPaUlB8gE",
+  "customMetadata": {},
+  "timeCreated": "2024-05-26T17:47:06.127Z",
+  "updated": "2024-05-26T17:47:06.127Z",
+  "size": 1171353,
+  "md5Hash": "RVrOhVIv05WSlrtqesl2UA==",
+  "crc32c": "3718242995"
+}

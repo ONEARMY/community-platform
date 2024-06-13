@@ -51,6 +51,7 @@ export const EditComment = (props: IProps) => {
         comment,
       }}
       validate={validateEditedComment}
+      data-cy="EditCommentForm"
       render={({ invalid, handleSubmit, values }) => {
         const disabled = invalid
         return (

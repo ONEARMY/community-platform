@@ -1,4 +1,9 @@
-import { MemoryRouter } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { render as testLibReact } from '@testing-library/react'
 import { preciousPlasticTheme } from 'oa-themes'
@@ -11,13 +16,18 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>,
 ) =>
   testLibReact(ui, {
-    wrapper: ({ children }: { children: React.ReactNode }) => (
-      <MemoryRouter>
+    wrapper: ({ children }: { children: React.ReactNode }) => {
+      const router = createMemoryRouter(
+        createRoutesFromElements(<Route index element={children}></Route>),
+      )
+
+      return (
         <ThemeProvider theme={preciousPlasticTheme.styles}>
-          {children}
+          <RouterProvider router={router} />
         </ThemeProvider>
-      </MemoryRouter>
-    ),
+      )
+    },
+
     ...options,
   })
 

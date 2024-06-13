@@ -30,6 +30,8 @@ export const styles: ThemeWithName = {
   logo: logo,
   profileGuidelinesURL:
     'https://community.preciousplastic.com/academy/guides/platform',
+  questionsGuidelinesURL:
+    'https://community.preciousplastic.com/academy/guides/guidelines-questions',
   communityProgramURL:
     'https://community.preciousplastic.com/academy/guides/community-program',
   ...baseTheme,

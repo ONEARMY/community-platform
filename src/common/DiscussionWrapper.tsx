@@ -4,6 +4,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import { nonDeletedCommentsCount } from 'src/utils/nonDeletedCommentsCount'
 import { Text } from 'theme-ui'
 
 import { AuthWrapper } from './AuthWrapper'
@@ -47,7 +48,8 @@ export const DiscussionWrapper = (props: IProps) => {
       discussion.comments,
       discussionStore.activeUser,
     )
-    setTotalCommentsCount(comments.length)
+    const count = nonDeletedCommentsCount(comments)
+    setTotalCommentsCount(count)
 
     return setDiscussion({ ...discussion, comments })
   }

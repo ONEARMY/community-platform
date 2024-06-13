@@ -269,6 +269,6 @@ export const researchStatusColour = (
   return researchStatus === ResearchStatus.ARCHIVED
     ? 'lightgrey'
     : researchStatus === ResearchStatus.COMPLETED
-    ? 'betaGreen'
-    : 'accent.base'
+      ? 'betaGreen'
+      : 'accent.base'
 }

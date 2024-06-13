@@ -141,6 +141,8 @@ describe('question.routes', () => {
       act(() => {
         wrapper = renderFn('/questions')
       })
+
+      expect(wrapper.getByText(/loading/)).toBeInTheDocument()
     })
 
     it('renders an empty state', async () => {
@@ -273,7 +275,6 @@ describe('question.routes', () => {
       })
 
       await waitFor(async () => {
-        // expect(wrapper.getByText(/loading/)).toBeInTheDocument()
         expect(() => wrapper.getByText(/loading/)).toThrow()
         expect(wrapper.queryByTestId('question-title')).toHaveTextContent(
           question.title,
@@ -438,6 +439,7 @@ describe('question.routes', () => {
         expect(screen.getByDisplayValue(questionItem.title)).toBeInTheDocument()
         expect(() => wrapper.getByText('Draft')).toThrow()
       })
+
       // Fill in form
       const title = wrapper.getByLabelText('The Question', { exact: false })
       const description = wrapper.getByLabelText('Description', {

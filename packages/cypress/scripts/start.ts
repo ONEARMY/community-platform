@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv'
 import fs from 'fs-extra'
 import waitOn from 'wait-on'
 
-import { TestDB } from '../src/support/db/firebase'
+//import { TestDB } from '../src/support/db/firebase'
 import { generateAlphaNumeric } from '../src/utils/TestUtils'
 import PATHS from './paths'
 
@@ -41,7 +41,7 @@ async function main() {
   fs.copyFileSync(PATHS.SRC_DB_ENDPOINTS, PATHS.WORKSPACE_DB_ENDPOINTS)
   await setupCypressEnv()
   await startAppServer()
-  await seedDatabase()
+  //await seedDatabase()
   runTests()
 }
 
@@ -125,15 +125,15 @@ async function startAppServer() {
 //     expect(entry[1]).length.greaterThan(0)
 //   })
 // })
-async function seedDatabase() {
-  console.log(`Seeding database prefix ${process.env.DB_PREFIX}`)
-  try {
-    await TestDB.seedDB()
-    console.log('Database seeded successfully')
-  } catch (error) {
-    handleError(error)
-  }
-}
+// async function seedDatabase() {
+//   console.log(`Seeding database prefix ${process.env.DB_PREFIX}`)
+//   try {
+//     await TestDB.seedDB()
+//     console.log('Database seeded successfully')
+//   } catch (error) {
+//     handleError(error)
+//   }
+// }
 
 function runTests() {
   console.log(isCi ? 'Start tests' : 'Opening cypress for manual testing')
@@ -167,7 +167,7 @@ function runTests() {
   process.exit(spawn.status)
 }
 
-function handleError(error: any) {
-  console.error(error)
-  process.exit(1)
-}
+// function handleError(error: any) {
+//   console.error(error)
+//   process.exit(1)
+// }

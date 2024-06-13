@@ -362,9 +362,9 @@ jobs:
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
-      - run:
-          name: Cleaning DB
-          command: npm run db:teardown
+      # - run:
+      #     name: Cleaning DB
+      #     command: npm run db:teardown
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
   chromatic:

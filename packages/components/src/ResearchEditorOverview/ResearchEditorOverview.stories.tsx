@@ -1,13 +1,13 @@
 import { ResearchEditorOverview } from './ResearchEditorOverview'
 
-import type { ComponentMeta, ComponentStory } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/ResearchEditorOverview',
   component: ResearchEditorOverview,
-} as ComponentMeta<typeof ResearchEditorOverview>
+} as Meta<typeof ResearchEditorOverview>
 
-const Template: ComponentStory<typeof ResearchEditorOverview> = (args) => (
+const Template: StoryFn<typeof ResearchEditorOverview> = (args) => (
   <ResearchEditorOverview {...args} />
 )
 

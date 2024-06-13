@@ -114,7 +114,7 @@ const renderPlasticTypes = (plasticTypes: Array<PlasticTypeLabel>) => {
   )
 }
 
-const renderOpeningHours = (openingHours: Array<IOpeningHours>) => (
+const renderOpeningHours = (openingHours: IOpeningHours[]) => (
   <div>
     <h4>We're open on:</h4>
     {openingHours.map((openingObj) => {
@@ -127,7 +127,7 @@ const renderOpeningHours = (openingHours: Array<IOpeningHours>) => (
   </div>
 )
 
-const renderMachineBuilderXp = (machineBuilderXp: Array<IMAchineBuilderXp>) => (
+const renderMachineBuilderXp = (machineBuilderXp: IMAchineBuilderXp[]) => (
   <>
     <h4>We offer the following services:</h4>
     {machineBuilderXp.map((machineExperience, index) => {
@@ -145,7 +145,7 @@ const renderMachineBuilderXp = (machineBuilderXp: Array<IMAchineBuilderXp>) => (
           }}
           key={`machineXp-${index}`}
         >
-          {machineExperience}
+          {machineExperience.label}
         </Box>
       )
     })}

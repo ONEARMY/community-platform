@@ -1,13 +1,13 @@
 import { UserStatistics } from './UserStatistics'
 
-import type { ComponentStory, Meta } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/UserStatistics',
   component: UserStatistics,
 } as Meta<typeof UserStatistics>
 
-const Template: ComponentStory<typeof UserStatistics> = (args) => (
+const Template: StoryFn<typeof UserStatistics> = (args) => (
   <UserStatistics {...args} />
 )
 

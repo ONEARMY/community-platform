@@ -8,8 +8,7 @@
     "import",
     "simple-import-sort",
     "sort-class-members",
-    "vitest",
-    "react-refresh"
+    "vitest"
   ],
   "extends": [
     "eslint:recommended",
@@ -61,7 +60,6 @@
     // as of v17 no longer required
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "react-refresh/only-export-components": "warn",
     "simple-import-sort/imports": [
       "error",
       {

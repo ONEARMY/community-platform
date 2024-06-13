@@ -15174,15 +15174,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react-refresh@npm:^0.4.7":
-  version: 0.4.7
-  resolution: "eslint-plugin-react-refresh@npm:0.4.7"
-  peerDependencies:
-    eslint: ">=7"
-  checksum: b2fe14d4ed158b6380ffd9831a5ebed4c79828ea806536d5db0aa8370f8a3878b198d77fc7da18bfd862cd9eb19ed4472cc9977f727f81679f80dcb48f8a3861
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-react@npm:^7.34.2":
   version: 7.34.2
   resolution: "eslint-plugin-react@npm:7.34.2"
@@ -22886,7 +22877,6 @@ __metadata:
     eslint-plugin-prefer-arrow-functions: ^3.3.2
     eslint-plugin-prettier: ^5.1.3
     eslint-plugin-react: ^7.34.2
-    eslint-plugin-react-refresh: ^0.4.7
     eslint-plugin-simple-import-sort: ^12.1.0
     eslint-plugin-sort-class-members: ^1.20.0
     eslint-plugin-unicorn: ^53.0.0

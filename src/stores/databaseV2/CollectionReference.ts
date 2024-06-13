@@ -13,7 +13,10 @@ import type {
 import type { AbstractDatabaseClientStreamable } from './types/AbstractDatabaseClient'
 
 export class CollectionReference<T> {
-  constructor(private endpoint: string, private clients: DBClients) {}
+  constructor(
+    private endpoint: string,
+    private clients: DBClients,
+  ) {}
 
   /**
    * Provide a reference to a document to perform operations, such as getting or setting data

@@ -72,10 +72,6 @@ export const ImageConverter = (props: IProps) => {
   )
 }
 
-ImageConverter.defaultProps = {
-  onImgClicked: () => null,
-}
-
 /** Insert a base-16 timestamp into a file's name and return it
  */
 export const addTimestampToFileName = (str: string): string => {

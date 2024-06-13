@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
@@ -76,20 +75,4 @@ const TagsSelect = (props: IProps) => {
   )
 }
 
-// use default (non-named) export to save accidentally importing instead of styled component
-
-TagsSelect.defaultProps = {
-  input: {
-    name: 'tagsSelect',
-    onBlur: () => null,
-    onChange: () => null,
-    onFocus: () => null,
-    value: {},
-  },
-  meta: {},
-  value: {},
-  styleVariant: 'selector',
-  placeholder: 'Select tags (max 4)',
-}
-
-export default observer(TagsSelect)
+export default TagsSelect

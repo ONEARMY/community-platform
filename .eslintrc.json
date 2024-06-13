@@ -8,7 +8,8 @@
     "import",
     "simple-import-sort",
     "sort-class-members",
-    "vitest"
+    "vitest",
+    "react-refresh"
   ],
   "extends": [
     "eslint:recommended",
@@ -60,6 +61,7 @@
     // as of v17 no longer required
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
+    "react-refresh/only-export-components": "warn",
     "simple-import-sort/imports": [
       "error",
       {
@@ -142,7 +144,7 @@
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-namespace": "off",
-    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/no-unused-vars": "error",
     "no-restricted-imports": [
       "error",
       {

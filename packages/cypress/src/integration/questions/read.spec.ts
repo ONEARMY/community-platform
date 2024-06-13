@@ -1,6 +1,6 @@
 import { MOCK_DATA } from '../../data'
 
-const questions = Object.values(MOCK_DATA.questions)
+const question = Object.values(MOCK_DATA.questions)[0]
 
 describe('[Questions]', () => {
   // describe('[List questions]', () => {
@@ -23,18 +23,65 @@ describe('[Questions]', () => {
 
   describe('[Individual questions]', () => {
     it('[By Everyone]', () => {
-      const question = questions[0]
+      const {
+        _id,
+        description,
+        images,
+        slug,
+        subscribers,
+        title,
+        votedUsefulBy,
+        questionCategory,
+      } = question
+
       const questionDiscussion = Object.values(MOCK_DATA.discussions).find(
-        (discussion) => discussion.sourceId === question._id,
+        (discussion) => discussion.sourceId === _id,
       )
 
+      const pageTitle = `${title} - Question - Community Platform`
+      const image = images[0].downloadUrl
+
       cy.step('Can visit question')
-      cy.visit(`/questions/${question.slug}`)
+      cy.visit(`/questions/${slug}`)
 
       cy.step('All metadata visible')
       cy.contains(`${question.subscribers.length} following`)
       cy.contains(`${question.votedUsefulBy.length} useful`)
       cy.contains(`${questionDiscussion.comments.length} comments`)
+
+      cy.step('[Populates title, SEO and social tags]')
+      cy.title().should('eq', pageTitle)
+      cy.get('meta[name="description"]').should(
+        'have.attr',
+        'content',
+        description,
+      )
+
+      // OpenGraph (facebook)
+      cy.get('meta[property="og:title"]').should(
+        'have.attr',
+        'content',
+        pageTitle,
+      )
+      cy.get('meta[property="og:description"]').should(
+        'have.attr',
+        'content',
+        description,
+      )
+      cy.get('meta[property="og:image"]').should('have.attr', 'content', image)
+
+      // Twitter
+      cy.get('meta[name="twitter:title"]').should(
+        'have.attr',
+        'content',
+        pageTitle,
+      )
+      cy.get('meta[name="twitter:description"]').should(
+        'have.attr',
+        'content',
+        description,
+      )
+      cy.get('meta[name="twitter:image"]').should('have.attr', 'content', image)
 
       cy.step('Links in description are clickable')
       cy.contains('a', 'https://www.onearmy.earth/')
@@ -49,26 +96,24 @@ describe('[Questions]', () => {
 
       cy.get('[data-cy=breadcrumbsItem]')
         .eq(1)
-        .should('contain', question.questionCategory.label)
+        .should('contain', questionCategory.label)
       cy.get('[data-cy=breadcrumbsItem]')
         .eq(1)
         .children()
         .should('have.attr', 'href')
-        .and('equal', `/questions?category=${question.questionCategory._id}`)
+        .and('equal', `/questions?category=${questionCategory._id}`)
 
-      cy.get('[data-cy=breadcrumbsItem]')
-        .eq(2)
-        .should('contain', question.title)
+      cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', title)
 
       cy.step('Logged in users can complete actions')
       cy.login('howto_creator@test.com', 'test1234')
-      cy.visit(`/questions/${question.slug}`) // Page doesn't reload after login
+      cy.visit(`/questions/${slug}`) // Page doesn't reload after login
 
       cy.get('[data-cy=follow-button]').click()
-      cy.contains(`${question.subscribers.length + 1} following`)
+      cy.contains(`${subscribers.length + 1} following`)
 
       cy.get('[data-cy=vote-useful]').click()
-      cy.contains(`${question.votedUsefulBy.length + 1} useful`)
+      cy.contains(`${votedUsefulBy.length + 1} useful`)
     })
   })
 })

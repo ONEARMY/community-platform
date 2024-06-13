@@ -110,7 +110,7 @@ const ResearchArticle = observer(() => {
           .filter((url: string) => !!url)
           .pop()
         seoTagsUpdate({
-          title: researchItem.title,
+          title: `${researchItem.title} - Research`,
           description: researchItem.description,
           imageUrl: latestImage,
         })

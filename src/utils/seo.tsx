@@ -1,3 +1,5 @@
+import { getConfigurationOption } from 'src/config/config'
+
 export interface ISEOMeta {
   title: string
   faviconUrl: string
@@ -31,10 +33,20 @@ type IPlatformMetaName =
 export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
   const allTags = { ...getDefaultSEOTags(), ...update }
   const { title, description, imageUrl, faviconUrl } = allTags
+
   if (title) {
-    document.title = title
-    setMetaProperty('og:title', title)
-    setMetaName('twitter:title', title)
+    const updatedTitle =
+      title === 'Community Platform'
+        ? title
+        : `${title} - ${getConfigurationOption(
+            'SITE_NAME',
+            'Community Platform',
+          )}`
+
+    document.title = updatedTitle
+
+    setMetaProperty('og:title', updatedTitle)
+    setMetaName('twitter:title', updatedTitle)
   }
   if (description) {
     setMetaName('description', description)

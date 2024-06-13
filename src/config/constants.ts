@@ -26,6 +26,7 @@ export const _supportedConfigurationOptions = [
   'REACT_APP_CDN_URL',
   'REACT_APP_PATREON_CLIENT_ID',
   'REACT_APP_API_URL',
+  'SITE_NAME',
 ] as const
 
 export type ConfigurationOption =

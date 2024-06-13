@@ -5,21 +5,30 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
+import { contact } from '../labels'
 import { UserContactForm } from './UserContactForm'
 
 vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
-        messageStore: {
-          upload: () => vi.fn(),
-        },
         userStore: {
           getUserEmail: () => vi.fn().mockReturnValue('Bob@email.com'),
           activeUser: () => vi.fn().mockReturnValue(true),
         },
       },
     }),
+  }
+})
+
+vi.mock('src/services/message.service', () => {
+  return {
+    messageService: {
+      sendMessage: () =>
+        vi.fn().mockImplementation(() => {
+          return Promise.resolve()
+        }),
+    },
   }
 })
 
@@ -43,8 +52,9 @@ describe('UserContactForm', () => {
       'I need to learn about plastics',
     )
 
-    await user.click(screen.getByTestId('contact-submit'))
-    await screen.findByText('All sent')
+    const submitButton = screen.getByTestId('contact-submit')
+    await user.click(submitButton)
+    await screen.findByText(contact.successMessage)
   })
 
   it('renders nothing if not profile is not contactable', async () => {

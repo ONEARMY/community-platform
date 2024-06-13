@@ -1,6 +1,11 @@
 import '@testing-library/jest-dom/vitest'
 
-import { MemoryRouter } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { act, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
@@ -224,12 +229,24 @@ describe('UserSettings', () => {
   })
 })
 
-const Wrapper = async (user, routerInitialEntry?) => {
+const Wrapper = (user, routerInitialEntry?) => {
   const isAdmin = user.userRoles?.includes(UserRole.ADMIN)
   if (routerInitialEntry !== undefined) {
     // impact section is only displayed if isPreciousPlastic() is true
     window.localStorage.setItem('platformTheme', 'precious-plastic')
   }
+
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route
+        index
+        element={
+          <SettingsPage adminEditableUserId={isAdmin ? user._id : null} />
+        }
+      ></Route>,
+    ),
+    { initialEntries: [routerInitialEntry ? routerInitialEntry : ''] },
+  )
   return render(
     <Provider
       {...useCommonStores().stores}
@@ -241,11 +258,7 @@ const Wrapper = async (user, routerInitialEntry?) => {
       }}
     >
       <ThemeProvider theme={Theme}>
-        <MemoryRouter
-          initialEntries={[routerInitialEntry ? routerInitialEntry : '']}
-        >
-          <SettingsPage adminEditableUserId={isAdmin ? user._id : null} />
-        </MemoryRouter>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,
   )

@@ -1,6 +1,11 @@
 import '@testing-library/jest-dom/vitest'
 
-import { MemoryRouter } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { render } from '@testing-library/react'
 import { NotificationTypes } from 'oa-shared'
 import { FactoryNotification } from 'src/test/factories/Notification'
@@ -14,9 +19,13 @@ describe('getFormattedNotifications', () => {
       const [notification] = getFormattedNotifications([
         FactoryNotification({ type }),
       ])
-      const { container } = render(
-        <MemoryRouter>{notification.children}</MemoryRouter>,
+      const router = createMemoryRouter(
+        createRoutesFromElements(
+          <Route index element={notification.children}></Route>,
+        ),
       )
+
+      const { container } = render(<RouterProvider router={router} />)
       expect(container).not.toBeEmptyDOMElement()
     })
   })

@@ -1,6 +1,11 @@
 import '@testing-library/jest-dom/vitest'
 
-import { MemoryRouter } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { render } from '@testing-library/react'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
@@ -59,15 +64,24 @@ describe('Research update form', () => {
 })
 
 const getWrapper = (formValues, parentType, navProps) => {
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route
+        index
+        element={
+          <ResearchUpdateForm
+            formValues={formValues}
+            parentType={parentType}
+            {...navProps}
+          />
+        }
+      ></Route>,
+    ),
+  )
+
   return render(
     <ThemeProvider theme={Theme}>
-      <MemoryRouter initialEntries={['/research/:slug/update']}>
-        <ResearchUpdateForm
-          formValues={formValues}
-          parentType={parentType}
-          {...navProps}
-        />
-      </MemoryRouter>
+      <RouterProvider router={router} />
     </ThemeProvider>,
   )
 }

@@ -1,6 +1,11 @@
 import '@testing-library/jest-dom/vitest'
 
-import { MemoryRouter } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { act, fireEvent, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
@@ -160,16 +165,25 @@ describe('Howto form', () => {
 })
 
 const Wrapper = (formValues, parentType, navProps) => {
-  return render(
-    <Provider {...useCommonStores().stores}>
-      <ThemeProvider theme={Theme}>
-        <MemoryRouter>
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route
+        index
+        element={
           <HowtoForm
             formValues={formValues}
             parentType={parentType}
             {...navProps}
           />
-        </MemoryRouter>
+        }
+      ></Route>,
+    ),
+  )
+
+  return render(
+    <Provider {...useCommonStores().stores}>
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,
   )

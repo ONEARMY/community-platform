@@ -1,6 +1,10 @@
 import '@testing-library/jest-dom/vitest'
 
-import { MemoryRouter } from 'react-router-dom'
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { act, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
@@ -9,7 +13,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import UserProfileRoutes from './user.routes'
+import { UserRoutes } from './user.routes'
 
 const Theme = testingThemeStyles
 
@@ -100,6 +104,11 @@ describe('User', () => {
 const getWrapper = async (user, url?) => {
   mockGetUserProfile.mockResolvedValue(user)
 
+  const router = createMemoryRouter(createRoutesFromElements(UserRoutes), {
+    initialEntries: [url || `/u/${user.userName}`],
+    basename: '/u',
+  })
+
   return render(
     <Provider
       {...useCommonStores().stores}
@@ -112,12 +121,7 @@ const getWrapper = async (user, url?) => {
       }}
     >
       <ThemeProvider theme={Theme}>
-        <MemoryRouter
-          initialEntries={[url || `/u/${user.userName}`]}
-          basename="/u"
-        >
-          <UserProfileRoutes />
-        </MemoryRouter>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,
   )

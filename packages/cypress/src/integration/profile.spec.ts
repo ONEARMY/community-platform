@@ -15,12 +15,21 @@ const userProfiletype = MOCK_DATA.users.settings_workplace_new
 describe('[Profile]', () => {
   beforeEach(() => {
     cy.visit('/')
+    cy.intercept('POST', '/sendMessage', {
+      body: { result: null },
+      statusCode: 200,
+    }).as('sendMessage')
   })
 
   describe('[By Anonymous]', () => {
     it('[Can view all public profile information]', () => {
       cy.step('Go to Profile')
       cy.visit(`/u/${eventReader.userName}`)
+      cy.title().should(
+        'eq',
+        `${eventReader.displayName} - Profile - Community Platform`,
+      )
+
       cy.get('[data-cy=userDisplayName]').contains(eventReader.userName)
       cy.get('[data-testid=howto-stat]').contains('1')
       cy.get('[data-testid=research-stat]').contains('1')
@@ -34,6 +43,7 @@ describe('[Profile]', () => {
   describe('[By User]', () => {
     it('[User directed to own profile]', () => {
       cy.login(subscriber.email, subscriber.password)
+      cy.visit('/')
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
@@ -98,10 +108,10 @@ describe('[Profile]', () => {
   })
 
   describe('[By User with workspace profile]', () => {
-    beforeEach(() => {
-      cy.login(userProfiletype.email, userProfiletype.password)
-    })
     it('[User directed to own profile]', () => {
+      cy.login(userProfiletype.email, userProfiletype.password)
+      cy.visit('/')
+
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
       cy.url().should('include', `/u/${userProfiletype.userName}`)

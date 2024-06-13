@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import {
   UserContactError,
-  UserContactFieldEmail,
   UserContactFieldMessage,
   UserContactFieldName,
   UserContactNotLoggedIn,
 } from 'src/pages/User/contact'
 import { contact } from 'src/pages/User/labels'
+import { messageService } from 'src/services/message.service'
 import { isUserContactable } from 'src/utils/helpers'
 import { Box, Flex, Heading } from 'theme-ui'
 
@@ -25,21 +25,12 @@ type SubmitResults = { type: 'success' | 'error'; message: string }
 export const UserContactForm = observer(({ user }: Props) => {
   if (!isUserContactable(user)) return null
 
-  const { stores } = useCommonStores()
-  const { userStore } = stores
+  const { userStore } = useCommonStores().stores
 
   if (!userStore.activeUser)
     return <UserContactNotLoggedIn userName={user.userName} />
 
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
-  const [email, setEmail] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchUserEmail = async () => {
-      return await userStore.getUserEmail()
-    }
-    fetchUserEmail().then((newEmail) => setEmail(newEmail))
-  }, [email])
 
   const { button, title, successMessage } = contact
   const buttonName = 'contact-submit'
@@ -47,20 +38,16 @@ export const UserContactForm = observer(({ user }: Props) => {
 
   const onSubmit = async (formValues, form) => {
     setSubmitResults(null)
-    const values = {
-      toUserName: user.userName,
-      text: formValues.message,
-      ...formValues,
-    }
-
-    if (email) {
-      try {
-        await stores.messageStore.upload(values)
-        setSubmitResults({ type: 'success', message: successMessage })
-        form.restart()
-      } catch (error) {
-        setSubmitResults({ type: 'error', message: error.message })
-      }
+    try {
+      await messageService.sendMessage({
+        to: user.userName,
+        message: formValues.message,
+        name: formValues.name,
+      })
+      setSubmitResults({ type: 'success', message: successMessage })
+      form.restart()
+    } catch (error) {
+      setSubmitResults({ type: 'error', message: error.message })
     }
   }
 
@@ -79,7 +66,6 @@ export const UserContactForm = observer(({ user }: Props) => {
               <UserContactError submitResults={submitResults} />
 
               <UserContactFieldName />
-              <UserContactFieldEmail email={email} />
               <UserContactFieldMessage />
 
               <Box>

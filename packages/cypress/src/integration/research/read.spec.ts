@@ -1,23 +1,66 @@
 import { MOCK_DATA } from '../../data'
 
-const research = Object.values(MOCK_DATA.research)
+const article = Object.values(MOCK_DATA.research)[0]
 
 describe('[Research]', () => {
-  const researchArticleUrl = `/research/${research[0].slug}`
-  const authoredResearchArticleUrl = '/research/a-test-research'
+  const { description, updates, researchCategory, slug, title } = article
 
-  beforeEach(() => {
-    cy.visit('/research')
-  })
+  const authoredResearchArticleUrl = '/research/a-test-research'
+  const image = updates[0].images[0].downloadUrl
+  const pageTitle = `${title} - Research - Community Platform`
+  const researchArticleUrl = `/research/${slug}`
 
   describe('[Read a research article]', () => {
     describe('[By Everyone]', () => {
-      beforeEach(() => {
-        cy.visit(researchArticleUrl)
-      })
-
       it('[Visible to everyone]', () => {
-        const article = research[0]
+        cy.step('Can visit research')
+        cy.visit(researchArticleUrl)
+        cy.title().should(
+          'eq',
+          `${article.title} - Research - Community Platform`,
+        )
+        cy.step('[Populates title, SEO and social tags]')
+        cy.title().should('eq', pageTitle)
+        cy.get('meta[name="description"]').should(
+          'have.attr',
+          'content',
+          description,
+        )
+
+        // OpenGraph (facebook)
+        cy.get('meta[property="og:title"]').should(
+          'have.attr',
+          'content',
+          pageTitle,
+        )
+        cy.get('meta[property="og:description"]').should(
+          'have.attr',
+          'content',
+          description,
+        )
+        cy.get('meta[property="og:image"]').should(
+          'have.attr',
+          'content',
+          image,
+        )
+
+        // Twitter
+        cy.get('meta[name="twitter:title"]').should(
+          'have.attr',
+          'content',
+          pageTitle,
+        )
+        cy.get('meta[name="twitter:description"]').should(
+          'have.attr',
+          'content',
+          description,
+        )
+        cy.get('meta[name="twitter:image"]').should(
+          'have.attr',
+          'content',
+          image,
+        )
+
         cy.step('Delete button should not be visible')
         cy.get('[data-cy="Research: delete button"]').should('not.exist')
 
@@ -33,12 +76,12 @@ describe('[Research]', () => {
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
-          .should('contain', article.researchCategory.label)
+          .should('contain', researchCategory.label)
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(1)
           .children()
           .should('have.attr', 'href')
-          .and('equal', `/research?category=${article.researchCategory._id}`)
+          .and('equal', `/research?category=${researchCategory._id}`)
 
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(2)
@@ -59,35 +102,25 @@ describe('[Research]', () => {
       })
     })
 
-    describe('[By Beta-tester]', () => {
-      beforeEach(() => {
-        cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
-        cy.visit(researchArticleUrl)
-      })
-    })
-
     describe('[By Admin]', () => {
-      beforeEach(() => {
-        cy.login('demo_admin@example.com', 'demo_admin')
-        cy.visit(researchArticleUrl)
-      })
+      beforeEach(() => {})
 
       it('[Delete button is visible]', () => {
-        cy.step('Delete button should be visible to the author of the article')
+        cy.login('demo_admin@example.com', 'demo_admin')
+        cy.visit(researchArticleUrl)
 
-        cy.get('[data-cy="Research: delete button"]').should('be.visible')
+        cy.step('Delete button should be visible to the author of the article')
+        cy.get('[data-cy="Research: delete button"]').should('exist')
       })
     })
   })
 
   describe('[Read a soft-deleted Research Article]', () => {
     const deletedResearchUrl = '/research/a-deleted-test-research'
-    beforeEach(() => {
-      cy.visit(deletedResearchUrl)
-    })
 
     describe('[By Everyone]', () => {
       it('[Marked for deletion message]', () => {
+        cy.visit(deletedResearchUrl)
         cy.step(
           'There should be a message stating the research is marked for deletion',
         )

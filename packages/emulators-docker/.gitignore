@@ -1,7 +1,0 @@
-node_modules
-app
-seed_data/*
-# retain latest tar file
-!seed_data/pp-2023-11-09c.tar.gz
-exports
-build.args

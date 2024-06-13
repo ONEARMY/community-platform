@@ -7,6 +7,7 @@ export interface Props {
   maxLength: number
   isLoggedIn: boolean
   isLoading?: boolean
+  isReply?: boolean
   onSubmit: (value: string) => void
   onChange: (value: string) => void
   comment: string
@@ -16,7 +17,7 @@ export interface Props {
 }
 
 export const CreateComment = (props: Props) => {
-  const { comment, isLoggedIn, maxLength, onSubmit, isLoading } = props
+  const { comment, isLoggedIn, isReply, maxLength, onSubmit, isLoading } = props
   const userProfileType = props.userProfileType || 'member'
   const placeholder = props.placeholder || 'Leave your questions or feedback...'
   const buttonLabel = props.buttonLabel ?? 'Leave a comment'
@@ -58,7 +59,7 @@ export const CreateComment = (props: Props) => {
                   onChange && onChange(event.target.value)
                 }}
                 aria-label="Comment"
-                data-cy="comments-form"
+                data-cy={isReply ? 'reply-form' : 'comments-form'}
                 placeholder={placeholder}
                 sx={{
                   background: 'none',
@@ -104,7 +105,7 @@ export const CreateComment = (props: Props) => {
 
       <Flex sx={{ alignSelf: 'flex-end' }}>
         <Button
-          data-cy="comment-submit"
+          data-cy={isReply ? 'reply-submit' : 'comment-submit'}
           disabled={!comment.trim() || !isLoggedIn || isLoading}
           variant="primary"
           onClick={() => {

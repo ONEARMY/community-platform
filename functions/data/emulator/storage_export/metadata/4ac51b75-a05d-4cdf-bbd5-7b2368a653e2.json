@@ -1,0 +1,17 @@
+{
+  "name": "uploads/research/pSkYAfYlfuwupSDl80o2/1.0-18fb607b2e6.jpg",
+  "bucket": "default-bucket",
+  "metageneration": 1,
+  "generation": 1716745912112,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": ["8acd16f0-8232-4287-b251-44d4cd4e7805"],
+  "etag": "NzAxyfe2mKwDHY+U08dv77t/Dv4",
+  "customMetadata": {},
+  "timeCreated": "2024-05-26T17:51:52.112Z",
+  "updated": "2024-05-26T17:51:52.112Z",
+  "size": 141680,
+  "md5Hash": "PkNIqbc99Cbfuowl+LEtpA==",
+  "crc32c": "395316221"
+}

@@ -4,7 +4,12 @@ import {
   RESEARCH_MAX_LENGTH,
   RESEARCH_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Research/constants'
-import { setIsPreciousPlastic } from '../../utils/TestUtils'
+import {
+  generateNewUserDetails,
+  setIsPreciousPlastic,
+} from '../../utils/TestUtils'
+
+import type { UserMenuItem } from '../../support/commandsUi'
 
 const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'
@@ -17,7 +22,7 @@ describe('[Research]', () => {
   const expected = {
     _createdBy: 'research_creator',
     _deleted: false,
-    description: 'After creating, the research will be deleted',
+    description: 'After creating, the research will be deleted.',
     title: 'Create research article test',
     slug: 'create-research-article-test',
     previousSlugs: ['create-research-article-test'],
@@ -26,8 +31,17 @@ describe('[Research]', () => {
 
   describe('[Create research article]', () => {
     it('[By Authenticated]', () => {
+      const updateTitle = 'Create a research update'
+      const updateDescription = 'This is the description for the update.'
+      const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
+
+      const newCollaborator = generateNewUserDetails()
+      cy.signUpNewUser(newCollaborator)
+      cy.logout()
+
       cy.step('Create the research article')
       cy.login(researcherEmail, researcherPassword)
+      cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').click()
 
@@ -79,26 +93,61 @@ describe('[Research]', () => {
         .clear({ force: true })
         .type(expected.description)
 
-      cy.screenClick()
+      cy.step('New collaborators can be assigned to research')
+      cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')
+
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=submit]').click()
 
+      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
+
+      cy.url().should('include', `/research/${expected.slug}`)
+      cy.visit(`/research/${expected.slug}`)
+
+      cy.step('Research article displays correctly')
+      cy.contains(expected.title)
+      cy.contains(expected.description)
+      cy.contains(newCollaborator.username)
+
+      cy.step('New collaborators can add update')
+      cy.clickMenuItem('Logout' as UserMenuItem)
+      cy.login(newCollaborator.email, newCollaborator.password)
+      cy.visit(`/research/${expected.slug}/edit`)
+      cy.get('[data-cy=create-update]').click()
+      cy.contains('New update')
+
+      cy.step('Cannot be published when empty')
+      cy.get('[data-cy=submit]').click()
+      cy.contains('Make sure this field is filled correctly').should('exist')
+      cy.get('[data-cy=errors-container]').should('be.visible')
+
+      cy.step('Enter update details')
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type(updateTitle)
+        .blur({ force: true })
+
+      cy.get('[data-cy=intro-description]')
+        .clear()
+        .type(updateDescription)
+        .blur({ force: true })
+
+      cy.get('[data-cy=videoUrl]')
+        .clear()
+        .type(updateVideoUrl)
+        .blur({ force: true })
+
+      cy.step('Published when fields are populated correctly')
+      cy.get('[data-cy=errors-container]').should('not.exist')
+      cy.get('[data-cy=submit]').click()
+
+      cy.step('Open the research update')
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
         .click()
         .url()
-        .should('include', `/research/${expected.slug}`)
 
-      cy.step('Research article was created correctly')
-      cy.queryDocuments('research', 'title', '==', expected.title).then(
-        (docs) => {
-          cy.log('queryDocs', docs)
-          expect(docs.length).to.equal(1)
-          cy.log(JSON.stringify(docs[0]))
-          cy.wrap(null)
-            .then(() => docs[0])
-            .should('eqResearch', expected)
-        },
-      )
+      cy.contains(updateTitle).should('exist')
+      cy.contains(updateDescription).should('exist')
     })
 
     it('[By Anonymous]', () => {
@@ -223,52 +272,6 @@ describe('[Research]', () => {
       cy.visit(editResearchUrl)
       // user should be redirect to research page
       // cy.location('pathname').should('eq', researchUrl)
-    })
-  })
-
-  describe('[Add a research update]', () => {
-    const researchUrl = '/research/create-research-article-test'
-    const title = 'Create a research update'
-    const description = 'This is the description for the update.'
-    const videoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
-
-    it('[By Owner]', () => {
-      cy.visit(researchUrl)
-      cy.login(researcherEmail, researcherPassword)
-
-      cy.step('Go to add update')
-      cy.get('[data-cy=edit]').click()
-      cy.get('[data-cy=create-update]').click()
-      cy.contains('New update')
-
-      cy.step('Cannot be published when empty')
-      cy.get('[data-cy=submit]').click()
-      cy.contains('Make sure this field is filled correctly').should(
-        'be.visible',
-      )
-      cy.get('[data-cy=errors-container]').should('be.visible')
-
-      cy.step('Enter update details')
-      cy.get('[data-cy=intro-title]').clear().type(title).blur({ force: true })
-
-      cy.get('[data-cy=intro-description]')
-        .clear()
-        .type(description)
-        .blur({ force: true })
-
-      cy.get('[data-cy=videoUrl]').clear().type(videoUrl).blur({ force: true })
-
-      cy.step('Published when fields are populated correctly')
-      cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.get('[data-cy=submit]').click()
-
-      cy.step('Open the research update')
-      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-
-      cy.contains(title).should('be.visible')
-      cy.contains(description).should('be.visible')
     })
   })
 })

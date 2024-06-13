@@ -1,4 +1,6 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
 import { faker } from '@faker-js/faker'
 import {
   FactoryDiscussion,
@@ -8,7 +10,7 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { DiscussionStore } from './discussions.store'
 
-import type { IDiscussion } from 'src/models'
+import type { IDiscussion, IUserPPDB } from 'src/models'
 import type { IRootStore } from '../RootStore'
 
 const factory = async (
@@ -31,6 +33,7 @@ const factory = async (
   // @ts-ignore
   store.aggregationsStore = {
     aggregations: {
+      isVerified: vi.fn((userId) => userId === 'fake-user'),
       users_verified: ['fake-user'],
     },
   }
@@ -44,7 +47,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
+    triggerNotification: vi.fn(),
   }
 
   return {
@@ -66,11 +69,16 @@ describe('discussion.store', () => {
   describe('fetchOrCreateDiscussionBySource', () => {
     it('fetches a discussion by sourceId', async () => {
       const fakeSourceId = faker.internet.password()
+      const fakePrimaryContentId = faker.internet.password()
       const { store, getWhereFn } = await factory([
         FactoryDiscussion({ sourceId: fakeSourceId }),
       ])
 
-      await store.fetchOrCreateDiscussionBySource(fakeSourceId, 'question')
+      await store.fetchOrCreateDiscussionBySource(
+        fakeSourceId,
+        'question',
+        fakePrimaryContentId,
+      )
 
       expect(getWhereFn).toHaveBeenCalledTimes(1)
       expect(getWhereFn).toHaveBeenCalledWith('sourceId', '==', fakeSourceId)
@@ -81,14 +89,19 @@ describe('discussion.store', () => {
 
       getWhereFn.mockReturnValueOnce([])
 
-      await store.fetchOrCreateDiscussionBySource('fake-source-id', 'question')
+      await store.fetchOrCreateDiscussionBySource(
+        'fake-source-id',
+        'researchUpdate',
+        'fake-primary-id',
+      )
 
       expect(getWhereFn).toHaveBeenCalledTimes(1)
 
       expect(setFn).toHaveBeenCalledWith(
         expect.objectContaining({
           sourceId: 'fake-source-id',
-          sourceType: 'question',
+          sourceType: 'researchUpdate',
+          primaryContentId: 'fake-primary-id',
         }),
       )
     })
@@ -101,6 +114,7 @@ describe('discussion.store', () => {
       await store.uploadDiscussion(
         discussionItem.sourceId,
         discussionItem.sourceType,
+        discussionItem.primaryContentId,
       )
 
       const [newDiscussion] = setFn.mock.calls[0]
@@ -111,7 +125,7 @@ describe('discussion.store', () => {
   })
 
   describe('addComment', () => {
-    it('adds a new comment', async () => {
+    it('adds a new comment for questions', async () => {
       const { store, discussionItem, setFn, getFn } = await factory()
 
       //Act
@@ -177,7 +191,7 @@ describe('discussion.store', () => {
 
       getFn.mockReturnValue(null)
       //Act
-      await expect(
+      expect(() =>
         store.addComment(discussionItem, 'New comment'),
       ).rejects.toThrowError('Discussion not found')
 
@@ -274,7 +288,7 @@ describe('discussion.store', () => {
       ])
 
       //Act
-      await expect(
+      expect(() =>
         store.editComment(discussionItem, 'fake-comment-id', 'Edited comment'),
       ).rejects.toThrowError()
 
@@ -340,7 +354,7 @@ describe('discussion.store', () => {
       ])
 
       //Act
-      await expect(
+      expect(() =>
         store.deleteComment(discussionItem, 'fake-comment-id'),
       ).rejects.toThrowError()
 

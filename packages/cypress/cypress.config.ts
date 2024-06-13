@@ -1,10 +1,12 @@
 import { defineConfig } from 'cypress'
 
+import viteConfig from '../../vite.config'
+import { setupNodeEvents } from './src/plugins'
+
 export default defineConfig({
   defaultCommandTimeout: 15000,
   watchForFileChanges: true,
   chromeWebSecurity: false,
-  // "Disable video records to improve test execution as it's not worth",
   video: true,
   reporter: 'junit',
   reporterOptions: {
@@ -22,13 +24,16 @@ export default defineConfig({
     openMode: 0,
   },
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
-      return require('./src/plugins/index.js')(on, config)
-    },
+    setupNodeEvents: setupNodeEvents,
     baseUrl: 'http://localhost:3456',
     specPattern: 'src/integration/**/*.{js,jsx,ts,tsx}',
     supportFile: 'src/support/index.ts',
+  },
+  component: {
+    devServer: {
+      bundler: 'vite',
+      framework: 'react',
+      viteConfig: { ...viteConfig },
+    },
   },
 })

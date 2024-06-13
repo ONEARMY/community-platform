@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Button, Loader } from 'oa-components'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { questionService } from 'src/pages/Question/question.service'
 import { Flex, Heading } from 'theme-ui'
@@ -21,6 +22,7 @@ export const QuestionListing = () => {
   const [lastVisible, setLastVisible] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData> | undefined
   >(undefined)
+  const { userStore } = useCommonStores().stores
 
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') || ''
@@ -60,22 +62,27 @@ export const QuestionListing = () => {
         ITEMS_PER_PAGE,
       )
 
-      if (skipFrom) {
-        // if skipFrom is set, means we are requesting another page that should be appended
-        setQuestions((questions) => [...questions, ...result.items])
-      } else {
-        setQuestions(result.items)
+      if (result) {
+        if (skipFrom) {
+          // if skipFrom is set, means we are requesting another page that should be appended
+          setQuestions((questions) => [...questions, ...result.items])
+        } else {
+          setQuestions(result.items)
+        }
+
+        setLastVisible(result.lastVisible)
+
+        setTotal(result.total)
       }
-
-      setLastVisible(result.lastVisible)
-
-      setTotal(result.total)
     } catch (error) {
       logger.error('error fetching questions', error)
     }
 
     setIsFetching(false)
   }
+
+  const showLoadMore =
+    !isFetching && questions && questions.length > 0 && questions.length < total
 
   return (
     <>
@@ -101,11 +108,14 @@ export const QuestionListing = () => {
         }}
       >
         <QuestionFilterHeader />
-        <Link to="/questions/create">
-          <Button data-cy="create" variant="primary">
-            {listing.create}
-          </Button>
-        </Link>
+
+        <Flex sx={{ gap: 2 }}>
+          <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
+            <Button data-cy="create" variant="primary">
+              {listing.create}
+            </Button>
+          </Link>
+        </Flex>
       </Flex>
 
       {questions?.length === 0 && !isFetching && (
@@ -120,20 +130,17 @@ export const QuestionListing = () => {
           <QuestionListItem key={index} question={question} query={q} />
         ))}
 
-      {!isFetching &&
-        questions &&
-        questions.length > 0 &&
-        questions.length < total && (
-          <Flex
-            sx={{
-              justifyContent: 'center',
-            }}
-          >
-            <Button onClick={() => fetchQuestions(lastVisible)}>
-              {listing.loadMore}
-            </Button>
-          </Flex>
-        )}
+      {showLoadMore && (
+        <Flex
+          sx={{
+            justifyContent: 'center',
+          }}
+        >
+          <Button onClick={() => fetchQuestions(lastVisible)}>
+            {listing.loadMore}
+          </Button>
+        </Flex>
+      )}
 
       {isFetching && <Loader />}
     </>

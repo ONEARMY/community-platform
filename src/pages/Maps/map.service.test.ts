@@ -1,19 +1,20 @@
 import { faker } from '@faker-js/faker'
 import { DB_ENDPOINTS } from 'src/models'
+import { describe, expect, it, vi } from 'vitest'
 
 import { mapPinService } from './map.service'
 
-const mockWhere = jest.fn()
-const mockLimit = jest.fn()
-const mockQuery = jest.fn()
-const mockCollection = jest.fn()
+const mockWhere = vi.fn()
+const mockLimit = vi.fn()
+const mockQuery = vi.fn()
+const mockCollection = vi.fn()
 
 const mockQuerySnapshot = {
   docs: [{ data: () => {} }],
 }
 
-const mockGetDocs = jest.fn().mockResolvedValue(mockQuerySnapshot)
-jest.mock('firebase/firestore', () => ({
+const mockGetDocs = vi.fn().mockResolvedValue(mockQuerySnapshot)
+vi.mock('firebase/firestore', () => ({
   collection: (_firebase, connectionName) => mockCollection(connectionName),
   query: (collectionRef, whereResult) => mockQuery(collectionRef, whereResult),
   where: (path, op, value) => mockWhere(path, op, value),
@@ -25,7 +26,7 @@ describe('map.service', () => {
   describe('getMapPins', () => {
     it('fetches map pins', async () => {
       // prepare
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         json: () => Promise.resolve([{ _id: '1' }]),
       })
 
@@ -38,7 +39,7 @@ describe('map.service', () => {
 
     it('handles errors', async () => {
       // prepare
-      global.fetch = jest.fn().mockRejectedValue('error')
+      global.fetch = vi.fn().mockRejectedValue('error')
 
       // act
       const result = await mapPinService.getMapPins()
@@ -51,7 +52,7 @@ describe('map.service', () => {
   describe('getMapPinByUserId', () => {
     it('fetches map pin by user id', async () => {
       // prepare
-      global.fetch = jest.fn().mockResolvedValue({
+      global.fetch = vi.fn().mockResolvedValue({
         json: () => Promise.resolve({ _id: '1' }),
       })
 
@@ -64,7 +65,7 @@ describe('map.service', () => {
 
     it('handles errors', async () => {
       // prepare
-      global.fetch = jest.fn().mockRejectedValue('error')
+      global.fetch = vi.fn().mockRejectedValue('error')
 
       // act
       const result = await mapPinService.getMapPinByUserId('1')

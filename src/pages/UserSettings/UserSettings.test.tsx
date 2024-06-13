@@ -4,6 +4,8 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom'
+import '@testing-library/jest-dom/vitest'
+
 import { ThemeProvider } from '@emotion/react'
 import { act, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
@@ -13,18 +15,19 @@ import { buttons } from 'src/pages/UserSettings/labels'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { SettingsPage } from './SettingsPage'
 
 const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
-let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
-const mockGetPin = jest.fn()
-const mockUpdateUserBadge = jest.fn()
+let mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
+const mockGetPin = vi.fn()
+const mockUpdateUserBadge = vi.fn()
 let mockUser = FactoryUser({})
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
@@ -32,20 +35,16 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
       userStore: {
         getUserProfile: mockGetUserProfile,
         updateUserBadge: mockUpdateUserBadge,
-        getUserEmail: jest.fn(),
+        getUserEmail: vi.fn(),
         user: mockUser,
         updateStatus: {
           Complete: false,
         },
       },
       aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        isVerified: vi.fn(),
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       themeStore: {
@@ -65,7 +64,7 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
 
 describe('UserSettings', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   it('displays user settings', async () => {
@@ -176,7 +175,7 @@ describe('UserSettings', () => {
     })
   })
   describe('impact section scroll into view', () => {
-    const scrollIntoViewMock = jest.fn()
+    const scrollIntoViewMock = vi.fn()
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock
 
     it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', async () => {
@@ -230,7 +229,7 @@ describe('UserSettings', () => {
   })
 })
 
-const Wrapper = async (user, routerInitialEntry?) => {
+const Wrapper = (user, routerInitialEntry?) => {
   const isAdmin = user.userRoles?.includes(UserRole.ADMIN)
   if (routerInitialEntry !== undefined) {
     // impact section is only displayed if isPreciousPlastic() is true
@@ -254,8 +253,8 @@ const Wrapper = async (user, routerInitialEntry?) => {
       userStore={{
         user,
         updateStatus: { Complete: true },
-        getUserEmail: jest.fn(),
-        getUserProfile: jest.fn().mockResolvedValue(user),
+        getUserEmail: vi.fn(),
+        getUserProfile: vi.fn().mockResolvedValue(user),
       }}
     >
       <ThemeProvider theme={Theme}>

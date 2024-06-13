@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import type { Preview } from '@storybook/react'
+import React from 'react'
 
 import { Global } from '@emotion/react'
 import { GlobalStyles } from '../src/GlobalStyles/GlobalStyles'

@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom/vitest'
+
 import {
   createMemoryRouter,
   createRoutesFromElements,
@@ -10,7 +12,7 @@ import { act, render, waitFor, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { FactoryComment } from 'src/test/factories/Comment'
+import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
@@ -18,8 +20,11 @@ import {
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { formatDate } from 'src/utils/date'
+import { describe, expect, it, vi } from 'vitest'
 
 import ResearchArticle from './ResearchArticle'
+
+import type { Mock } from 'vitest'
 
 const Theme = testingThemeStyles
 
@@ -28,33 +33,41 @@ const activeUser = FactoryUser({
 })
 
 const mockUser = FactoryUser({ country: 'AF' })
+const mockDiscussionItem = FactoryDiscussion()
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserByUsername: jest.fn().mockResolvedValue(mockUser),
+        getUserByUsername: vi.fn().mockResolvedValue(mockUser),
       },
       aggregationsStore: {
-        aggregations: {},
+        isVerified: vi.fn(),
+        users_verified: {},
       },
       tagsStore: {},
+      discussionStore: {
+        fetchOrCreateDiscussionBySource: vi.fn().mockResolvedValue({
+          mockDiscussionItem,
+        }),
+        activeUser: mockUser,
+      },
     },
   }),
 }))
 
-jest.mock('src/stores/Research/research.store')
+vi.mock('src/stores/Research/research.store')
 
 describe('Research Article', () => {
   const mockResearchStore = {
     activeResearchItem: FactoryResearchItem(),
-    setActiveResearchItemBySlug: jest.fn().mockResolvedValue(true),
-    addSubscriberToResearchArticle: jest.fn(),
-    needsModeration: jest.fn(),
-    formatResearchCommentList: jest.fn(),
-    incrementViewCount: jest.fn(),
+    setActiveResearchItemBySlug: vi.fn().mockResolvedValue(true),
+    addSubscriberToResearchArticle: vi.fn(),
+    needsModeration: vi.fn(),
+    formatResearchCommentList: vi.fn(),
+    incrementViewCount: vi.fn(),
   }
 
   it('displays content statistics', async () => {
@@ -69,7 +82,7 @@ describe('Research Article', () => {
       ],
     })
 
-    ;(useResearchStore as jest.Mock).mockReturnValue({
+    ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
       activeResearchItem,
     })
@@ -92,7 +105,7 @@ describe('Research Article', () => {
 
   it('does not display contributors when undefined', async () => {
     // Arrange
-    ;(useResearchStore as jest.Mock).mockReturnValue({
+    ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
       activeResearchItem: FactoryResearchItem({
         collaborators: undefined,
@@ -113,7 +126,7 @@ describe('Research Article', () => {
 
   it('displays contributors', async () => {
     // Arrange
-    ;(useResearchStore as jest.Mock).mockReturnValue({
+    ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
       activeResearchItem: FactoryResearchItem({
         collaborators: ['example-username', 'another-example-username'],
@@ -135,7 +148,7 @@ describe('Research Article', () => {
 
   it('displays "Follow" button for non-subscriber', async () => {
     // Arrange
-    ;(useResearchStore as jest.Mock).mockReturnValue({
+    ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
       activeResearchItem: FactoryResearchItem({
         userHasSubscribed: false,
@@ -161,7 +174,7 @@ describe('Research Article', () => {
   // TODO: Work out how to simulate store subscribe functionality
   // it('displays "Following" button for subscriber', async () => {
   //   // Arrange
-  //   ;(useResearchStore as jest.Mock).mockReturnValue({
+  //   ;(useResearchStore as Mock).mockReturnValue({
   //     ...mockResearchStore,
   //     activeResearchItem: FactoryResearchItem({
   //       subscribers: [activeUser._id],
@@ -184,7 +197,7 @@ describe('Research Article', () => {
   describe('Research Update', () => {
     it('displays contributors', async () => {
       // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeResearchItem: FactoryResearchItem({
           collaborators: ['example-username', 'another-example-username'],
@@ -230,55 +243,6 @@ describe('Research Article', () => {
       expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
     })
 
-    it('shows comments', async () => {
-      // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
-        ...mockResearchStore,
-        formatResearchCommentList: jest.fn().mockImplementation((c) => {
-          return c
-        }),
-        activeResearchItem: FactoryResearchItem({
-          updates: [
-            FactoryResearchItemUpdate({
-              title: 'Research Update #1',
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #2',
-              status: ResearchUpdateStatus.DRAFT,
-              _deleted: false,
-            }),
-            FactoryResearchItemUpdate({
-              title: 'Research Update #3',
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-              comments: [
-                FactoryComment({
-                  text: 'First test comment',
-                }),
-                FactoryComment({
-                  text: 'Second test comment',
-                }),
-              ],
-            }),
-          ],
-        }),
-      })
-      // Act
-      const wrapper = getWrapper()
-
-      await act(async () => {
-        await new Promise((r) => setTimeout(r, 200))
-        wrapper.getByText('View 2 Comments').click()
-      })
-
-      // Assert
-      await waitFor(async () => {
-        expect(wrapper.getByText('First test comment')).toBeInTheDocument()
-      })
-    })
-
     it('does not show edit timestamp, when create displays the same value', async () => {
       const created = faker.date.past()
       const modified = new Date(created)
@@ -289,9 +253,9 @@ describe('Research Article', () => {
         title: 'A title',
         description: 'A description',
       })
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
-        formatResearchCommentList: jest.fn().mockImplementation((c) => {
+        formatResearchCommentList: vi.fn().mockImplementation((c) => {
           return c
         }),
         activeResearchItem: FactoryResearchItem({
@@ -320,9 +284,9 @@ describe('Research Article', () => {
         description: 'A description',
         _deleted: false,
       })
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
-        formatResearchCommentList: jest.fn().mockImplementation((c) => {
+        formatResearchCommentList: vi.fn().mockImplementation((c) => {
           return c
         }),
         activeResearchItem: FactoryResearchItem({
@@ -344,7 +308,7 @@ describe('Research Article', () => {
 
   it('shows only published updates', async () => {
     // Arrange
-    ;(useResearchStore as jest.Mock).mockReturnValue({
+    ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
       activeResearchItem: FactoryResearchItem({
         collaborators: ['example-username', 'another-example-username'],
@@ -377,7 +341,7 @@ describe('Research Article', () => {
   describe('Breadcrumbs', () => {
     it('displays breadcrumbs with category', async () => {
       // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeResearchItem: FactoryResearchItem({
           title: 'Innovative Study',
@@ -418,7 +382,7 @@ describe('Research Article', () => {
 
     it('displays breadcrumbs without category', async () => {
       // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeResearchItem: FactoryResearchItem({
           title: 'Innovative Study',

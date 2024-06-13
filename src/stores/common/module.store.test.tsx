@@ -1,22 +1,24 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
 import { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import { RootStore } from '../RootStore'
 import { ModuleStore } from './module.store'
 
 // Mocked to prevent App initialisation from useCommonStores dependency
-jest.mock('react-dom')
+vi.mock('react-dom')
 // Mocked to prevent indexedDB API not found error message
-jest.mock('src/stores/databaseV2/clients/DexieClient')
+vi.mock('src/stores/databaseV2/clients/DexieClient')
 // Mocked to prevent circular dependency through useCommonStores
-jest.mock('src/common/hooks/useCommonStores')
+vi.mock('src/common/hooks/useCommonStores')
 // Mocked to mock out RootStore
-jest.mock('src/stores/RootStore')
+vi.mock('src/stores/RootStore')
 
-const collectionMock = jest.fn()
+const collectionMock = vi.fn()
 class MockDB extends DatabaseV2 {
   collection = collectionMock
 }
 
-const rootStoreMock = jest.mocked(new RootStore())
+const rootStoreMock = vi.mocked(new RootStore())
 rootStoreMock.dbV2 = new MockDB()
 const store = new ModuleStore(rootStoreMock, 'howtos')
 
@@ -28,7 +30,7 @@ const givenMatches = (matches: { _id: string }[]) => {
 
 describe('module.store', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   describe('isTitleThatReusesSlug', () => {
@@ -122,7 +124,7 @@ describe('module.store', () => {
 
     it('returns the slug without checks if already the same as set', async () => {
       givenMatches([])
-      const spy = jest.spyOn(store, 'isTitleThatReusesSlug')
+      const spy = vi.spyOn(store, 'isTitleThatReusesSlug')
 
       const slug = 'same-slug'
       const doc = {

@@ -1,7 +1,10 @@
-import { IMockAuthUser, MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
-import type { IHowtoDB, IUserDB } from '../../models'
+import { DifficultyLevel, IModerationStatus } from 'oa-shared'
+import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
+
 import { setDoc, updateDoc } from '../../Firebase/firestoreDB'
-import { IModerationStatus, DifficultyLevel } from 'oa-shared'
+
+import type { IMockAuthUser } from 'oa-shared/mocks/auth'
+import type { IHowtoDB, IUserDB } from '../../models'
 
 /**
  * Populate additional mock howtos alongside production data for ease of testing
@@ -41,16 +44,8 @@ export function getMockHowto(
     time: '',
     title: 'Mock Howto',
     moderation,
-    comments: [
-      {
-        _created: new Date().toISOString(),
-        _creatorId: 'demo_user',
-        _id: 'mock_comment',
-        creatorName: 'demo_user',
-        text: 'Mock generated comment',
-      },
-    ],
     previousSlugs: [_id],
+    totalComments: 0,
   }
   return howto
 }

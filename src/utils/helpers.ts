@@ -207,6 +207,9 @@ export const isContactable = (preference: boolean | undefined) => {
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 
+/**
+ * @deprecated This is an old function from when comments existed inside the research updates.
+ */
 export const getResearchTotalCommentCount = (
   item: IResearch.ItemDB,
 ): number => {
@@ -214,21 +217,7 @@ export const getResearchTotalCommentCount = (
     return item.totalCommentCount || 0
   }
 
-  if (item.updates) {
-    const commentOnUpdates = item.updates.reduce((totalComments, update) => {
-      const updateCommentsLength =
-        !update._deleted &&
-        update.status !== ResearchUpdateStatus.DRAFT &&
-        update.comments
-          ? update.comments.length
-          : 0
-      return totalComments + updateCommentsLength
-    }, 0)
-
-    return commentOnUpdates ? commentOnUpdates : 0
-  } else {
-    return 0
-  }
+  return 0
 }
 
 export const getPublicUpdates = (item: IResearch.Item) => {
@@ -275,7 +264,7 @@ export const buildStatisticsLabel = ({
 }
 
 export const researchStatusColour = (
-  researchStatus: ResearchStatus,
+  researchStatus?: ResearchStatus,
 ): string => {
   return researchStatus === ResearchStatus.ARCHIVED
     ? 'lightgrey'

@@ -52,6 +52,13 @@ const Patreon = lazy(
   () => import(/* webpackChunkName: "terms" */ './Patreon/Patreon'),
 )
 
+const DonationThankYou = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "terms" */ './DonationThankYou/DonationThankYou'
+    ),
+)
+
 export const getAvailablePageList = (supportedModules: MODULE[]): IPageMeta[] =>
   COMMUNITY_PAGES.filter((pageItem) =>
     supportedModules.includes(pageItem.moduleName),
@@ -178,6 +185,14 @@ const patreon = {
   path: '/patreon',
   component: <Patreon />,
   title: 'Patreon',
+  description: '',
+}
+
+export const donationThankYou = {
+  moduleName: MODULE.CORE,
+  path: '/donation-thank-you',
+  component: <DonationThankYou />,
+  title: 'Thank You!',
   description: '',
 }
 

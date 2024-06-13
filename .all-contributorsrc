@@ -470,7 +470,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/4391884?v=4",
       "profile": "https://pizzaisdavid.medium.com/",
       "contributions": [
-        "doc"
+        "doc",
+        "code"
       ]
     },
     {
@@ -703,6 +704,24 @@
       "name": "Louis",
       "avatar_url": "https://avatars.githubusercontent.com/u/1767237?v=4",
       "profile": "https://github.com/codisart",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "V24039",
+      "name": "Venu G Soganadgi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52736045?v=4",
+      "profile": "https://venugsportfolio.netlify.app/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Augustindou",
+      "name": "Augustindou",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44368825?v=4",
+      "profile": "https://github.com/Augustindou",
       "contributions": [
         "code"
       ]

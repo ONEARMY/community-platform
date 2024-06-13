@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { HowtoProvider } from 'src/test/components'
+import { describe, it } from 'vitest'
 
 import { HowtoFieldDescription } from '.'
 

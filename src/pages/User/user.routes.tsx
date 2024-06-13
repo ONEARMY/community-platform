@@ -1,4 +1,5 @@
 import { Route, Routes, useParams } from 'react-router-dom'
+import { UserRole } from 'oa-shared'
 
 import { AuthRoute } from '../common/AuthRoute'
 import { NotFoundPage } from '../NotFound/NotFound'
@@ -11,7 +12,7 @@ const userRouteElements = (id) => (
     <Route
       path=":id/edit"
       element={
-        <AuthRoute roleRequired="admin">
+        <AuthRoute roleRequired={UserRole.ADMIN}>
           {' '}
           <SettingsPage adminEditableUserId={id} />{' '}
         </AuthRoute>

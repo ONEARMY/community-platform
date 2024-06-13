@@ -1,5 +1,9 @@
+import { MOCK_DATA } from '../../data'
+
+const research = Object.values(MOCK_DATA.research)
+
 describe('[Research]', () => {
-  const researchArticleUrl = '/research/qwerty'
+  const researchArticleUrl = `/research/${research[0].slug}`
   const authoredResearchArticleUrl = '/research/a-test-research'
 
   beforeEach(() => {
@@ -12,9 +16,33 @@ describe('[Research]', () => {
         cy.visit(researchArticleUrl)
       })
 
-      it('[Delete button should not be visible to everyone', () => {
+      it('[Visible to everyone]', () => {
+        const article = research[0]
         cy.step('Delete button should not be visible')
         cy.get('[data-cy="Research: delete button"]').should('not.exist')
+
+        cy.step('Breadcrumbs work')
+        cy.get('[data-cy=breadcrumbsItem]')
+          .first()
+          .should('contain', 'Research')
+        cy.get('[data-cy=breadcrumbsItem]')
+          .first()
+          .children()
+          .should('have.attr', 'href')
+          .and('equal', `/research`)
+
+        cy.get('[data-cy=breadcrumbsItem]')
+          .eq(1)
+          .should('contain', article.researchCategory.label)
+        cy.get('[data-cy=breadcrumbsItem]')
+          .eq(1)
+          .children()
+          .should('have.attr', 'href')
+          .and('equal', `/research?category=${article.researchCategory._id}`)
+
+        cy.get('[data-cy=breadcrumbsItem]')
+          .eq(2)
+          .should('contain', article.title)
       })
     })
 
@@ -27,7 +55,7 @@ describe('[Research]', () => {
       it('[Delete button is visible]', () => {
         cy.step('Delete button should be visible to the author of the article')
 
-        cy.get('[data-cy="Research: delete button"]').should('exist')
+        cy.get('[data-cy="Research: delete button"]').should('be.visible')
       })
     })
 
@@ -47,7 +75,7 @@ describe('[Research]', () => {
       it('[Delete button is visible]', () => {
         cy.step('Delete button should be visible to the author of the article')
 
-        cy.get('[data-cy="Research: delete button"]').should('exist')
+        cy.get('[data-cy="Research: delete button"]').should('be.visible')
       })
     })
   })

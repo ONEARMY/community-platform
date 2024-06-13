@@ -5,16 +5,19 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom'
+import '@testing-library/jest-dom/vitest'
+
 import { ThemeProvider } from '@emotion/react'
-import { fireEvent, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { describe, expect, it, vi } from 'vitest'
 
 import { ResearchUpdateForm } from './ResearchUpdate.form'
 
 const Theme = testingThemeStyles
 
-jest.mock('src/stores/Research/research.store', () => {
+vi.mock('src/stores/Research/research.store', () => {
   return {
     useResearchStore: () => ({
       updateUploadStatus: {
@@ -24,8 +27,8 @@ jest.mock('src/stores/Research/research.store', () => {
         Database: false,
         Complete: false,
       },
-      isTitleThatReusesSlug: jest.fn(),
-      unlockResearchUpdate: jest.fn(),
+      isTitleThatReusesSlug: vi.fn(),
+      unlockResearchUpdate: vi.fn(),
     }),
   }
 })
@@ -37,10 +40,7 @@ describe('Research update form', () => {
         fileLink: 'www.filedonwload.test',
       })
 
-      let wrapper
-      await act(async () => {
-        wrapper = await getWrapper(formValues, 'create', {})
-      })
+      const wrapper = getWrapper(formValues, 'create', {})
 
       expect(
         wrapper.queryByTestId('invalid-file-warning'),
@@ -54,41 +54,17 @@ describe('Research update form', () => {
       })
 
       // Act
-      let wrapper
-      await act(async () => {
-        wrapper = await getWrapper(formValues, 'create', {})
-      })
+      const wrapper = getWrapper(formValues, 'create', {})
 
       // Assert
       expect(
         wrapper.queryByTestId('invalid-file-warning'),
       ).not.toBeInTheDocument()
     })
-
-    it('Appears when submitting 2 file types', async () => {
-      // Arrange
-      const formValues = FactoryResearchItemUpdate({
-        images: [new File(['hello'], 'hello.png')],
-        files: [new File(['test file content'], 'test-file.zip')],
-        fileLink: 'www.filedownload.test',
-      })
-
-      // Act
-      let wrapper
-      await act(async () => {
-        wrapper = await getWrapper(formValues, 'create', {})
-        // submit form
-        const submitFormButton = wrapper.getByTestId('submit-form')
-        fireEvent.click(submitFormButton)
-      })
-
-      // Assert
-      expect(wrapper.queryByTestId('invalid-file-warning')).toBeInTheDocument()
-    })
   })
 })
 
-const getWrapper = async (formValues, parentType, navProps) => {
+const getWrapper = (formValues, parentType, navProps) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route

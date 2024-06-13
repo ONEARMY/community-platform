@@ -9,6 +9,7 @@ import {
   startAfter,
   where,
 } from 'firebase/firestore'
+import { IModerationStatus } from 'oa-shared'
 
 import { DB_ENDPOINTS } from '../../models'
 import { firestore } from '../../utils/firebase'
@@ -65,7 +66,12 @@ const createQueries = (
   take: number = 10,
 ) => {
   const collectionRef = collection(firestore, DB_ENDPOINTS.questions)
-  let filters: QueryFilterConstraint[] = []
+  let filters: QueryFilterConstraint[] = [
+    and(
+      where('_deleted', '!=', true),
+      where('moderation', '==', IModerationStatus.ACCEPTED),
+    ),
+  ]
   let constraints: QueryNonFilterConstraint[] = []
 
   if (words?.length > 0) {
@@ -108,6 +114,38 @@ const getQuestionCategories = async () => {
   )
 }
 
+const createDraftQuery = (userId: string) => {
+  const collectionRef = collection(firestore, DB_ENDPOINTS.questions)
+  const filters = and(
+    where('_createdBy', '==', userId),
+    where('moderation', 'in', [
+      IModerationStatus.AWAITING_MODERATION,
+      IModerationStatus.DRAFT,
+      IModerationStatus.IMPROVEMENTS_NEEDED,
+      IModerationStatus.REJECTED,
+    ]),
+    where('_deleted', '!=', true),
+  )
+
+  const countQuery = query(collectionRef, filters)
+  const itemsQuery = query(collectionRef, filters, orderBy('_modified', 'desc'))
+
+  return { countQuery, itemsQuery }
+}
+
+const getDraftCount = async (userId: string) => {
+  const { countQuery } = createDraftQuery(userId)
+
+  return (await getCountFromServer(countQuery)).data().count
+}
+
+const getDrafts = async (userId: string) => {
+  const { itemsQuery } = createDraftQuery(userId)
+  const docs = await getDocs(itemsQuery)
+
+  return docs.docs ? docs.docs.map((x) => x.data() as IQuestion.Item) : []
+}
+
 const getSort = (sort: QuestionSortOption) => {
   switch (sort) {
     case 'Comments':
@@ -126,6 +164,8 @@ const getSort = (sort: QuestionSortOption) => {
 export const questionService = {
   search,
   getQuestionCategories,
+  getDraftCount,
+  getDrafts,
 }
 
 export const exportedForTesting = {

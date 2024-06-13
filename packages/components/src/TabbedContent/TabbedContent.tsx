@@ -32,7 +32,7 @@ export const Tab = styled(MuiTab)`
     position: relative;
   }
 
-  &.Mui-selected {
+  &.base--selected {
     background-color: ${(p) => (p.theme as Theme)?.colors.background};
     text-decoration: none;
 

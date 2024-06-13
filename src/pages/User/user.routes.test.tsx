@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom/vitest'
+
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { act, render } from '@testing-library/react'
@@ -5,17 +7,18 @@ import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import UserProfileRoutes from './user.routes'
 
 const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
-let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
-const mockGetPin = jest.fn()
-const mockUpdateUserBadge = jest.fn()
+let mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
+const mockGetPin = vi.fn()
+const mockUpdateUserBadge = vi.fn()
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
@@ -23,19 +26,12 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
       userStore: {
         getUserProfile: mockGetUserProfile,
         updateUserBadge: mockUpdateUserBadge,
-        getUserCreatedDocs: jest.fn(),
+        getUserCreatedDocs: vi.fn(),
       },
       aggregationsStore: {
-        updateAggregation: jest.fn(),
-        stopAggregationUpdates: jest.fn(),
-        getAggregationValue: jest.fn(),
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        updateVerifiedUsers: vi.fn(),
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       themeStore: {
@@ -55,7 +51,7 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
 
 describe('User', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   it('displays user page', async () => {
@@ -110,9 +106,9 @@ const getWrapper = async (user, url?) => {
       userStore={{
         user,
         updateStatus: { Complete: true },
-        getUserEmail: jest.fn(),
-        getUserProfile: jest.fn().mockResolvedValue(user),
-        getUserCreatedDocs: jest.fn(),
+        getUserEmail: vi.fn(),
+        getUserProfile: vi.fn().mockResolvedValue(user),
+        getUserCreatedDocs: vi.fn(),
       }}
     >
       <ThemeProvider theme={Theme}>

@@ -20,7 +20,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
               mb={6}
               sx={{ flexDirection: 'column', flexBasis: '50%' }}
             >
-              <Heading variant="small" mb={1}>
+              <Heading as="h3" variant="small" mb={1}>
                 How-To's
               </Heading>
               {docs?.howtos.map((item) => {
@@ -36,7 +36,7 @@ const UserCreatedDocuments = ({ docs }: IProps) => {
           )}
           {docs?.research.length > 0 && (
             <Flex my={2} sx={{ flexDirection: 'column', flexBasis: '50%' }}>
-              <Heading variant="small" mb={1}>
+              <Heading as="h3" variant="small" mb={1}>
                 Research
               </Heading>
               {docs?.research.map((item) => {

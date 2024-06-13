@@ -1,3 +1,5 @@
+import { describe, it } from 'vitest'
+
 import { logger } from './index'
 
 describe('logger', () => {

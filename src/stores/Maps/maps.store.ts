@@ -12,7 +12,7 @@ import { getUserAvatar } from '../User/user.store'
 import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
-import type { IDBEndpoint } from 'src/models'
+import type { IDBEndpoint, IUser } from 'src/models'
 import type {
   IBoundingBox,
   IMapGrouping,
@@ -29,22 +29,29 @@ type IFilterToRemove = IMapPinType | undefined
 
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
-  @observable
   public activePinFilters: Array<IMapGrouping> = []
-  @observable
   public activePin: IMapPin | IMapPinWithDetail | undefined = undefined
-  @observable
-  private mapPins: Array<IMapPin> = []
-  @observable
+  public mapPins: Array<IMapPin> = []
   public filteredPins: Array<IMapPin> = []
   // eslint-disable-next-line
   constructor(rootStore: IRootStore) {
     super(rootStore)
-    makeObservable(this)
+    makeObservable(this, {
+      activePinFilters: observable,
+      activePin: observable,
+      mapPins: observable,
+      filteredPins: observable,
+      processDBMapPins: action,
+      setMapBoundingBox: action,
+      retrieveMapPins: action,
+      retrievePinFilters: action,
+      setActivePinFilters: action,
+      setActivePin: action,
+      getPinsNumberByFilterType: action,
+    })
   }
 
-  @action
-  private processDBMapPins(
+  public processDBMapPins(
     pins: IMapPin[],
     filterToRemove: IFilterToRemove = undefined,
   ) {
@@ -56,7 +63,7 @@ export class MapsStore extends ModuleStore {
     // this filters out. In future should run an upgrade script (easier once deployed)
     // HACK - ARH - 2019/12/09 filter unaccepted pins, should be done serverside
     const activeUser = this.activeUser
-    const isAdmin = hasAdminRights(activeUser)
+    const isAdmin = hasAdminRights(activeUser as IUser)
 
     pins = pins
       .filter((p) => {
@@ -73,7 +80,7 @@ export class MapsStore extends ModuleStore {
         )
       })
       .map((p) => {
-        return { ...p, verified: this.userStore.verifiedUsers[p._id] === true }
+        return { ...p, verified: this.aggregationsStore.isVerified(p._id) }
       })
     this.mapPins = pins
 
@@ -85,11 +92,10 @@ export class MapsStore extends ModuleStore {
 
   /* eslint-disable @typescript-eslint/no-unused-vars */
   /** TODO CC 2021-05-28 review if still useful to keep */
-  @action
   public setMapBoundingBox(boundingBox: IBoundingBox) {
     // this.recalculatePinCounts(boundingBox)
   }
-  @action
+
   public async retrieveMapPins(filterToRemove: IFilterToRemove = undefined) {
     // TODO: make the function accept a bounding box to reduce load from DB
 
@@ -107,13 +113,11 @@ export class MapsStore extends ModuleStore {
     )
   }
 
-  @action
   public async retrievePinFilters() {
     // TODO: get from database
     this.activePinFilters = MAP_GROUPINGS
   }
 
-  @action
   public async setActivePinFilters(filters: Array<string>) {
     if (filters.length === 0) {
       this.filteredPins = this.mapPins
@@ -130,7 +134,6 @@ export class MapsStore extends ModuleStore {
    * @param pin - map pin meta containing location and id for detail lookup
    * set undefined to remove any active popup
    */
-  @action
   public async setActivePin(pin?: IMapPin | IMapPinWithDetail) {
     // HACK - CC - 2021-07-14 ignore hardcoded pin details, should be retrieved
     // from profile on open instead (needs cleaning from DB)
@@ -161,13 +164,13 @@ export class MapsStore extends ModuleStore {
   }
 
   public needsModeration(pin: IMapPin) {
-    return needsModeration(pin, this.activeUser)
+    return needsModeration(pin, this.activeUser as IUser)
   }
 
   public canSeePin(pin: IMapPin) {
     return (
       pin.moderation === IModerationStatus.ACCEPTED ||
-      isAllowedToPin(pin, this.activeUser)
+      isAllowedToPin(pin, this.activeUser as IUser)
     )
   }
 
@@ -241,7 +244,7 @@ export class MapsStore extends ModuleStore {
       country: u.location?.countryCode || u.country?.toLowerCase() || null,
     }
   }
-  @action
+
   public getPinsNumberByFilterType(filter: Array<string>): number {
     return filterMapPinsByType(this.mapPins, filter).length
   }

@@ -3,11 +3,12 @@ import arrayMutators from 'final-form-arrays'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
+import { vi } from 'vitest'
 
-const mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
-const mockUpdateUserBadge = jest.fn()
+const mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
+const mockUpdateUserBadge = vi.fn()
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
@@ -16,13 +17,8 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         updateUserBadge: mockUpdateUserBadge,
       },
       aggregationsStore: {
-        aggregations: {
-          users_totalUseful: {
-            HowtoAuthor: 0,
-          },
-          users_verified: {
-            HowtoAuthor: true,
-          },
+        users_verified: {
+          HowtoAuthor: true,
         },
       },
       themeStore: {
@@ -43,7 +39,7 @@ export const SettingsProvider = ({ children }) => {
 
   const formProps = {
     formValues: user,
-    onSubmit: jest.fn(),
+    onSubmit: vi.fn(),
     mutators: { ...arrayMutators },
     component: () => children,
   }

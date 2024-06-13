@@ -14,4 +14,6 @@
 // ***********************************************************
 import './hooks'
 import './commands'
+import './commandsUi'
 import './CustomAssertations'
+import './rules'

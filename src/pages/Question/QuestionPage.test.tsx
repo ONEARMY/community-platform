@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom/vitest'
+
 import {
   createMemoryRouter,
   createRoutesFromElements,
@@ -9,14 +11,16 @@ import { faker } from '@faker-js/faker'
 import { act, render, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { UserRole } from 'oa-shared'
-import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { QuestionPage } from './QuestionPage'
+
+import type { Mock } from 'vitest'
 
 const Theme = testingThemeStyles
 
@@ -25,60 +29,58 @@ const activeUser = FactoryUser({
 })
 
 const mockUser = FactoryUser()
+const mockQuestionItem = FactoryQuestionItem({
+  slug: 'testSlug',
+})
+const mockDiscussionItem = FactoryDiscussion()
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        getUserByUsername: jest.fn().mockResolvedValue(mockUser),
+        getUserByUsername: vi.fn().mockResolvedValue(mockUser),
       },
       aggregationsStore: {
-        aggregations: {},
+        isVerified: vi.fn(),
+        users_verified: {},
       },
       tagsStore: {},
+      discussionStore: {
+        fetchOrCreateDiscussionBySource: vi.fn().mockResolvedValue({
+          mockDiscussionItem,
+        }),
+        activeUser: mockUser,
+      },
     },
   }),
 }))
 
-jest.mock('src/stores/Question/question.store')
-jest.mock('src/stores/Discussions/discussions.store')
+vi.mock('src/stores/Question/question.store')
+vi.mock('src/stores/Discussions/discussions.store')
 
 describe('Questions', () => {
-  const mockQuestionItem = FactoryQuestionItem({
-    slug: 'testSlug',
-  })
-
   let mockQuestionStore
 
   beforeEach(() => {
     // Setup a fresh instance of the mock store before each test
     mockQuestionStore = {
       activeQuestionItem: mockQuestionItem,
-      incrementViewCount: jest.fn(),
-      fetchQuestionBySlug: jest.fn(() => {
+      incrementViewCount: vi.fn(),
+      fetchQuestionBySlug: vi.fn(() => {
         return mockQuestionItem
       }),
-      upsertQuestion: jest.fn(),
-      toggleSubscriberStatusByUserName: jest.fn(),
-      toggleUsefulByUser: jest.fn(),
+      upsertQuestion: vi.fn(),
+      toggleSubscriberStatusByUserName: vi.fn(),
+      toggleUsefulByUser: vi.fn(),
     }
-    ;(useQuestionStore as jest.Mock).mockReturnValue(mockQuestionStore)
-    ;(useDiscussionStore as jest.Mock).mockReturnValue({
-      fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue(
-        FactoryDiscussion({
-          sourceId: mockQuestionItem._id,
-          sourceType: 'question',
-        }),
-      ),
-      activeUser: mockUser,
-    })
+    ;(useQuestionStore as Mock).mockReturnValue(mockQuestionStore)
   })
 
   afterEach(() => {
     // Clear all mocks after each test to ensure there's no leakage between tests
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe('Breadcrumbs', () => {
@@ -94,10 +96,10 @@ describe('Questions', () => {
         _deleted: faker.datatype.boolean(),
         _contentModifiedTimestamp: faker.date.past().toString(),
       }
-      ;(useQuestionStore as jest.Mock).mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         activeQuestionItem: mockQuestionItem,
-        fetchQuestionBySlug: jest.fn(() => {
+        fetchQuestionBySlug: vi.fn(() => {
           return mockQuestionItem
         }),
       })
@@ -133,10 +135,10 @@ describe('Questions', () => {
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
       mockQuestionItem.questionCategory = undefined
-      ;(useQuestionStore as jest.Mock).mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         activeQuestionItem: mockQuestionItem,
-        fetchQuestionBySlug: jest.fn(() => {
+        fetchQuestionBySlug: vi.fn(() => {
           return mockQuestionItem
         }),
       })

@@ -17,7 +17,7 @@ const MenuLink = styled(NavLink)`
       opacity: 0.7;
     }
   }
-  &.current {
+  &.active {
     &:after {
       content: '';
       width: 70px;
@@ -27,7 +27,7 @@ const MenuLink = styled(NavLink)`
       bottom: -6px;
       background-color: ${(props) => props.theme.colors.accent.base};
       mask-size: contain;
-      mask-image: url(${MenuCurrent});
+      mask-image: url(\"${MenuCurrent}\");
       mask-repeat: no-repeat;
       z-index: ${(props) => props.theme.zIndex.level};
       left: 50%;
@@ -38,30 +38,24 @@ const MenuLink = styled(NavLink)`
 `
 
 export const MenuDesktop = () => (
-  <>
-    <Flex sx={{ alignItems: 'center', width: '100%' }}>
-      {getAvailablePageList(getSupportedModules()).map((page) => {
-        const link = (
-          <Flex key={page.path}>
-            <MenuLink
-              to={page.path}
-              data-cy="page-link"
-              className={({ isActive }) => (isActive ? 'current' : '')}
-            >
-              <Flex>{page.title}</Flex>
-            </MenuLink>
-          </Flex>
-        )
-        return page.requiredRole ? (
-          <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
-            {link}
-          </AuthWrapper>
-        ) : (
-          link
-        )
-      })}
-    </Flex>
-  </>
+  <Flex sx={{ alignItems: 'center', width: '100%' }}>
+    {getAvailablePageList(getSupportedModules()).map((page) => {
+      const link = (
+        <Flex key={page.path}>
+          <MenuLink to={page.path} data-cy="page-link">
+            <Flex>{page.title}</Flex>
+          </MenuLink>
+        </Flex>
+      )
+      return page.requiredRole ? (
+        <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+          {link}
+        </AuthWrapper>
+      ) : (
+        link
+      )
+    })}
+  </Flex>
 )
 
 export default MenuDesktop

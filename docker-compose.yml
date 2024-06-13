@@ -13,6 +13,7 @@ services:
     - ./functions:/app/functions
     - ./functions/data/emulator:/seed
     - ./functions/logs:/app/logs
+    - ./functions/src/emailNotifications/templates:/templates
 
   simulated-webhook-receiver:
     container_name: simulated-webhook-receiver

@@ -6,6 +6,10 @@
 #
 # Optionally, initial data can be setup by mounting `/seed`.
 #
+# If you want so not get errors due to email missing templates,
+# you also need to mount those. The functions code while in the
+# emulator expects them to be in `/templates`.
+#
 # COMMANDS
 # We need some files from the root directory of the project,
 # therefore these commands should be ran from the root directory.
@@ -18,6 +22,9 @@
 #
 #   RUN WITH SEED DATA
 #   docker run -v ./functions/data/emulator:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#
+#   RUN WITH EMAIL TEMPLATES
+#   docker run -v ./functions/src/emailNotifications/templates:/templates -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
 #
 #   EXPORT (while the container is running)
 #   docker exec -it <conatiner_name> /app/export.js
@@ -88,6 +95,9 @@ RUN mkdir /seed
 
 # These should be the ports specified in firebase.json
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
+
+# Used to tell the code we are in the emulator
+ENV IS_EMULATED=true
 
 CMD \
   ./link-logs.js & \

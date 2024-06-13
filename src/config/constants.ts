@@ -28,4 +28,5 @@ export const _supportedConfigurationOptions = [
   'REACT_APP_API_URL',
 ] as const
 
-export type ConfigurationOption = typeof _supportedConfigurationOptions[number]
+export type ConfigurationOption =
+  (typeof _supportedConfigurationOptions)[number]

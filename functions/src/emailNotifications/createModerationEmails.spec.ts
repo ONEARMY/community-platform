@@ -40,7 +40,7 @@ const userFactory = (_id: string, user: Partial<IUserDB> = {}): IUserDB =>
     _id,
     _authID: _id,
     ...user,
-  } as IUserDB)
+  }) as IUserDB
 
 describe('Create howto moderation emails', () => {
   const db = FirebaseEmulatedTest.admin.firestore()

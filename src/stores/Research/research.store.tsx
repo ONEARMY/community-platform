@@ -254,8 +254,8 @@ export class ResearchStore extends ModuleStore {
           !values._createdBy
             ? userCountry
             : values.creatorCountry
-            ? values.creatorCountry
-            : '',
+              ? values.creatorCountry
+              : '',
         totalCommentCount: 0,
       }
       logger.debug('populating database', researchItem)

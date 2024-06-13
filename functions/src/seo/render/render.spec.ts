@@ -6,7 +6,7 @@ const mockRequest = (userAgent = '') =>
       'user-agent': userAgent,
     },
     path: '',
-  } as any)
+  }) as any
 
 const mockResponse = () => ({
   status: jest.fn().mockReturnThis(), // allow chaining .status().

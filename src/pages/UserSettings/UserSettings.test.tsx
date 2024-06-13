@@ -1,11 +1,11 @@
+import '@testing-library/jest-dom/vitest'
+
 import {
   createMemoryRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from 'react-router-dom'
-import '@testing-library/jest-dom/vitest'
-
 import { ThemeProvider } from '@emotion/react'
 import { act, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'

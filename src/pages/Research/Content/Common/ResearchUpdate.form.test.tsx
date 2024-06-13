@@ -1,12 +1,11 @@
-import { act } from 'react-dom/test-utils'
+import '@testing-library/jest-dom/vitest'
+
 import {
   createMemoryRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from 'react-router-dom'
-import '@testing-library/jest-dom/vitest'
-
 import { ThemeProvider } from '@emotion/react'
 import { render } from '@testing-library/react'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'

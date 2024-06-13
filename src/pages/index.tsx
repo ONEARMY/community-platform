@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { Button, ExternalLink } from 'oa-components'
+import { Alerts } from 'src/common/Alerts/Alerts'
 import { Analytics } from 'src/common/Analytics'
 import { getSupportedModules, isModuleSupported, MODULE } from 'src/modules'
 import Main from 'src/pages/common/Layout/Main'
@@ -15,6 +16,9 @@ import { SeoTagsUpdateComponent } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 
 import { ScrollToTop } from '../common/ScrollToTop'
+import DevSiteHeader from './common/DevSiteHeader/DevSiteHeader'
+import GlobalSiteFooter from './common/GlobalSiteFooter/GlobalSiteFooter'
+import Header from './common/Header/Header'
 import { NotFoundPage } from './NotFound/NotFound'
 import {
   COMMUNITY_PAGES_PROFILE,
@@ -79,6 +83,7 @@ if (isModuleSupported(MODULE.QUESTION)) {
 
 routes.push(
   <Route index element={<Navigate to="/academy" />} />,
+  <Route path={donationThankYou.path} element={donationThankYou.component} />,
   <Route path="*" element={<NotFoundPage />} />,
 )
 

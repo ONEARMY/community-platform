@@ -1,9 +1,9 @@
 import { config } from 'firebase-functions'
 import { SITE } from '../../../src/config/config'
 
-/* config variables are attached attached directly to firebase using the cli
+/* config variables are attached directly to firebase using the cli
    $firebase functions:config:set ...
-   to have additional config passed contact admin who will add it
+   to have additional config passed contact an admin who will add it
 */
 let c = config() as configVars
 // If running emulated or without firebase login provide dummy data instead

@@ -6,7 +6,6 @@ import {
   IUserDB,
 } from '../../../src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
-import { format } from 'prettier'
 import {
   getProjectImageSrc,
   SITE_URL,
@@ -26,8 +25,7 @@ export const getNotificationEmailHtml = (
   notifications: INotification[],
   unsubscribeToken: string,
 ) =>
-  format(
-    `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html>
       <head>
         <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
@@ -125,9 +123,7 @@ export const getNotificationEmailHtml = (
       </tr>
       </table>
       </body>
-    </html>`,
-    { parser: 'html' },
-  )
+    </html>`
 
 export const getNotificationEmail = async (
   user: IUserDB,
@@ -135,7 +131,7 @@ export const getNotificationEmail = async (
   unsubscribeToken: string,
 ): Promise<Email> => {
   return {
-    html: await getNotificationEmailHtml(user, notifications, unsubscribeToken),
+    html: getNotificationEmailHtml(user, notifications, unsubscribeToken),
     subject: `You've missed notifications from ${getProjectName()}`,
   }
 }

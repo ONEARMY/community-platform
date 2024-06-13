@@ -6,7 +6,7 @@ import {
   IUserDB,
 } from '../../../src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
-import prettier from 'prettier'
+import { format } from 'prettier'
 import {
   getProjectImageSrc,
   SITE_URL,
@@ -26,7 +26,7 @@ export const getNotificationEmailHtml = (
   notifications: INotification[],
   unsubscribeToken: string,
 ) =>
-  prettier.format(
+  format(
     `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html>
       <head>

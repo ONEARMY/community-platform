@@ -16,18 +16,11 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import {
-  isAllowedToDeleteContent,
-  isAllowedToEditContent,
-} from 'src/utils/helpers'
+import { isAllowedToDeleteContent, isAllowedToEditContent } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 
-import {
-  getPublicUpdates,
-  getResearchTotalCommentCount,
-  researchUpdateStatusFilter,
-} from '../researchHelpers'
+import { getPublicUpdates, researchUpdateStatusFilter } from '../researchHelpers'
 import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
@@ -218,7 +211,7 @@ const ResearchArticle = observer(() => {
         onFollowClick={() => onFollowClick(item.slug)}
         contributors={contributors}
         subscribersCount={researchStore.subscribersCount}
-        commentsCount={getResearchTotalCommentCount(item)}
+        commentsCount={item.totalCommentCount}
         updatesCount={
           item.updates?.filter((u) =>
             researchUpdateStatusFilter(item, u, researchStore.activeUser?._id),

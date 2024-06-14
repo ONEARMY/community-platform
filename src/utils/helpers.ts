@@ -202,17 +202,6 @@ export const isContactable = (preference: boolean | undefined) => {
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 
-export const getPublicUpdates = (item: IResearch.Item) => {
-  if (item.updates) {
-    return item.updates.filter(
-      (update) =>
-        update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
-    )
-  } else {
-    return []
-  }
-}
-
 export const getProjectEmail = (subject: string) => {
   const site = getConfigurationOption(
     'REACT_APP_PLATFORM_THEME',
@@ -245,12 +234,3 @@ export const buildStatisticsLabel = ({
   return `${typeof stat === 'number' ? stat : 0} ${statUnit}s`
 }
 
-export const researchStatusColour = (
-  researchStatus?: ResearchStatus,
-): string => {
-  return researchStatus === ResearchStatus.ARCHIVED
-    ? 'lightgrey'
-    : researchStatus === ResearchStatus.COMPLETED
-    ? 'betaGreen'
-    : 'accent.base'
-}

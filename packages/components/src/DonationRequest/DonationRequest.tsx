@@ -99,6 +99,7 @@ export const DonationRequest = (props: IProps) => {
           href={link}
           onClick={callback}
           data-cy="DonationRequestSkip"
+          data-testid="DonationRequestSkip"
         >
           <Button>{BUTTON_LABEL}</Button>
         </ExternalLink>

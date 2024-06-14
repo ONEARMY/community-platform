@@ -4,7 +4,7 @@ import { fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { render } from '../test/utils'
-import { BUTTON_LABEL,DonationRequest } from './DonationRequest'
+import { BUTTON_LABEL, DonationRequest } from './DonationRequest'
 
 describe('DonationRequest', () => {
   it('shows the expected content', async () => {

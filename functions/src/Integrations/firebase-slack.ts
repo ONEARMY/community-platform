@@ -7,6 +7,7 @@ const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
 
 const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
+const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 
 export const notifyNewPin = functions
   .runWith({ memory: '512MB' })
@@ -79,7 +80,7 @@ export const notifyAcceptedQuestion = functions
     const slug = info.slug
 
     request.post(
-      SLACK_WEBHOOK_URL,
+      DISCORD_WEBHOOK_URL,
       {
         json: {
           text: `❓ ${username} has a new question: ${title}\n Help them out and answer here: ${SITE_URL}/questions/${slug}`,

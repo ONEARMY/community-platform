@@ -214,13 +214,13 @@ const ResearchArticle = observer(() => {
         commentsCount={item.totalCommentCount}
         updatesCount={
           item.updates?.filter((u) =>
-            researchUpdateStatusFilter(item, u, researchStore.activeUser?._id),
+            researchUpdateStatusFilter(item, u, researchStore.activeUser),
           ).length || 0
         }
       />
       <Box sx={{ marginTop: 8, marginBottom: 4 }}>
         {item &&
-          getPublicUpdates(item, researchStore.activeUser?._id).map(
+          getPublicUpdates(item, researchStore.activeUser).map(
             (update, index) => (
               <ResearchUpdate
                 update={update}

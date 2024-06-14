@@ -1,31 +1,32 @@
-import { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
+import { ResearchStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
 
-import type { IResearch } from 'src/models'
+import type { IResearch, IUserPPDB } from 'src/models'
 
 export const researchUpdateStatusFilter = (
   item: IResearch.Item,
   update: IResearch.Update,
-  currentUserId?: string,
+  currentUser?: IUserPPDB | null,
 ) => {
   const isCollaborator =
-    currentUserId &&
+    currentUser?._id &&
     item.collaborators &&
-    item.collaborators.includes(currentUserId)
+    item.collaborators.includes(currentUser?._id)
 
-  const isAuthor = item._createdBy === currentUserId
+  const isAuthor = item._createdBy === currentUser?._id
+  const isAdmin = currentUser?.userRoles?.includes(UserRole.ADMIN)
   const isUpdateDraft = update.status === ResearchUpdateStatus.DRAFT
   const isUpdateDeleted = update._deleted
 
-  return (isAuthor || isCollaborator || !isUpdateDraft) && !isUpdateDeleted
+  return (isAdmin || isAuthor || isCollaborator || !isUpdateDraft) && !isUpdateDeleted
 }
 
 export const getPublicUpdates = (
   item: IResearch.Item,
-  currentUserId?: string,
+  currentUser?: IUserPPDB | null,
 ) => {
   if (item.updates) {
     return item.updates.filter((update) =>
-      researchUpdateStatusFilter(item, update, currentUserId),
+      researchUpdateStatusFilter(item, update, currentUser),
     )
   } else {
     return []

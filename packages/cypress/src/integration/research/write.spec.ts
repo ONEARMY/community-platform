@@ -278,9 +278,6 @@ describe('[Research]', () => {
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
 
-      const newCollaborator = generateNewUserDetails()
-      cy.signUpNewUser(newCollaborator)
-      cy.logout()
       cy.login(researcherEmail, researcherPassword)
 
       cy.step('Create the research article')
@@ -302,30 +299,25 @@ describe('[Research]', () => {
       cy.step('Research article displays correctly')
       cy.contains(expected.title)
       cy.contains(expected.description)
-      cy.contains(newCollaborator.username)
 
-      cy.get('[data-cy=create-update]').click()
+      cy.get('[data-cy=addResearchUpdateButton]').click()
 
       cy.step('Enter update details')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type(updateTitle)
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title]').clear().type(updateTitle).blur()
 
       cy.get('[data-cy=intro-description]')
         .clear()
         .type(updateDescription)
-        .blur({ force: true })
+        .blur()
 
-      cy.get('[data-cy=videoUrl]')
-        .clear()
-        .type(updateVideoUrl)
-        .blur({ force: true })
+      cy.get('[data-cy=videoUrl]').clear().type(updateVideoUrl).blur()
 
       cy.step('Save as Draft')
       cy.get('[data-cy=draft]').click()
 
       cy.step('Can see Draft after refresh')
+      cy.contains('Uploading Update').should('exist')
+      cy.get('[data-cy="icon-loading"]').should('not.exist')
       cy.visit(`/research/${expected.slug}`)
 
       cy.contains(updateTitle)

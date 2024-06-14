@@ -16,12 +16,14 @@ import { useQuestionStore } from 'src/stores/Question/question.store'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { buildStatisticsLabel } from 'src/utils/helpers'
 import { incrementViewCount } from 'src/utils/incrementViewCount'
+import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { QuestionDiscussion } from './QuestionDiscussion'
 
 import type { IQuestion } from 'src/models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 export const QuestionPage = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -57,7 +59,19 @@ export const QuestionPage = () => {
       })
 
       setQuestion(foundQuestion)
+      setTotalCommentsCount(foundQuestion.commentCount || totalCommentsCount)
       setIsLoading(false)
+
+      const imageUrl =
+        (foundQuestion.images &&
+          (foundQuestion.images[0] as IUploadedFileMeta).downloadUrl) ||
+        undefined
+
+      seoTagsUpdate({
+        title: `${foundQuestion.title} - Question`,
+        description: foundQuestion.description,
+        imageUrl,
+      })
     }
 
     fetchQuestion()
@@ -68,7 +82,7 @@ export const QuestionPage = () => {
   }, [])
 
   const onUsefulClick = async () => {
-    const updatedQuestion = await store.toggleUsefulByUser()
+    const updatedQuestion = (await store.toggleUsefulByUser()) as IQuestion.Item
     setQuestion(updatedQuestion)
   }
 
@@ -145,7 +159,7 @@ export const QuestionPage = () => {
 
                 {question.images && (
                   <ImageGallery
-                    images={formatImagesForGallery(question.images)}
+                    images={formatImagesForGallery(question.images) as any}
                     allowPortrait={true}
                   />
                 )}

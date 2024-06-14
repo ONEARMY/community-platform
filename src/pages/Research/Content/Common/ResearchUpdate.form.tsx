@@ -40,7 +40,7 @@ import { buttons, errors, headings, update } from '../../labels'
 import { ResearchErrors } from './ResearchErrors'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
-import type { ResearchEditorOverviewUpdate } from 'oa-components'
+import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
 
 const ImageInputFieldWrapper = styled.div`
@@ -55,7 +55,7 @@ const CONFIRM_DIALOG_MSG =
 
 interface IProps {
   formValues: any
-  parentType: 'create' | 'edit'
+  parentType: MainFormAction
   redirectUrl?: string
 }
 
@@ -473,10 +473,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   }}
                 >
                   <Button
-                    data-cy={'draft'}
-                    onClick={() => {
-                      trySubmitForm(true)
-                    }}
+                    data-cy="draft"
+                    onClick={() => trySubmitForm(true)}
                     variant="secondary"
                     type="submit"
                     disabled={submitting}
@@ -565,7 +563,7 @@ const getResearchUpdates = (
   activeResearchId: string,
   isCreating: boolean,
   researchTitle: string,
-): ResearchEditorOverviewUpdate[] =>
+): any[] =>
   [
     ...updates
       .filter((u) => !u._deleted)

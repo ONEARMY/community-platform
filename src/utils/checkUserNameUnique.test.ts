@@ -1,17 +1,19 @@
+import { describe, expect, it, vi } from 'vitest'
+
 import { checkUserNameUnique } from './checkUserNameUnique'
 
 import type { UserStore } from '../stores/User/user.store'
 
 describe('checkUserNameUnique', () => {
-  const mock = jest.fn().mockImplementation(() => {
+  const mock = vi.fn().mockImplementation(() => {
     return {
-      getUserProfile: () => jest.fn(),
+      getUserProfile: () => vi.fn(),
     }
   })
   const store = new mock() as UserStore
 
   it('user does not exist', async () => {
-    jest.spyOn(store, 'getUserProfile').mockResolvedValue(undefined)
+    vi.spyOn(store, 'getUserProfile').mockResolvedValue(undefined)
 
     const check = await checkUserNameUnique(store, 'testUser')
 
@@ -19,7 +21,7 @@ describe('checkUserNameUnique', () => {
   })
 
   it('user does exist', async () => {
-    jest.spyOn(store, 'getUserProfile').mockResolvedValue({})
+    vi.spyOn(store, 'getUserProfile').mockResolvedValue({})
 
     const check = await checkUserNameUnique(store, 'testUser')
 

@@ -45,6 +45,7 @@ export const CreateReply = (props: Props) => {
         onSubmit={handleSubmit}
         isLoggedIn={isLoggedIn}
         isLoading={isLoading}
+        isReply
         buttonLabel="Leave a reply"
       />
       {isError ? (

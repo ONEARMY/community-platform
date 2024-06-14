@@ -9,7 +9,21 @@ export const questions = {
     creatorCountry: '',
     description: 'test info with a link to https://www.onearmy.earth/',
     keywords: ['test', 'question', 'info'],
-    latestCommentDate: '15 March 2024 at 15:14:24 UTC',
+    images: [
+      {
+        name: 'howto-bope brick-1.jpg',
+        fullPath:
+          'uploads/v2_howtos/me5Bq0wq5FdoJUY8gELN/howto-bope brick-1.jpg',
+        type: 'image/jpeg',
+        updated: '2019-09-27T14:58:36.794Z',
+        size: 68108,
+        downloadUrl:
+          'https://firebasestorage.googleapis.com/v0/b/onearmyworld.appspot.com/o/uploads%2Fv2_howtos%2Fme5Bq0wq5FdoJUY8gELN%2Fhowto-bope%20brick-1.jpg?alt=media&token=22dc0615-0351-430b-951c-6b2b29cd21c6',
+        contentType: 'image/jpeg',
+        timeCreated: '2019-09-27T14:58:36.794Z',
+      },
+    ],
+    latestCommentDate: '2023-02-15T02:45:15.500Z',
     moderation: 'accepted',
     questionCategory: {
       _created: '2024-01-10T09:00:00.000Z',
@@ -42,6 +56,7 @@ export const questions = {
     commentCount: 3,
     creatorCountry: '',
     description: 'This is a test mock for the filtering question.',
+    images: [],
     keywords: ['filtering', 'info'],
     latestCommentDate: '20 March 2024 at 10:10:10 UTC',
     moderation: 'accepted',
@@ -71,6 +86,7 @@ export const questions = {
     commentCount: 0,
     creatorCountry: '',
     description: "What's the deal with sreenings?",
+    images: [],
     keywords: ['screening', 'question', 'intro'],
     latestCommentDate: '20 March 2024 at 10:10:10 UTC',
     moderation: 'accepted',

@@ -1,35 +1,38 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
+
+import { describe, expect, it, vi } from 'vitest'
 
 import { exportedForTesting } from './question.service'
 
-const mockWhere = jest.fn()
-const mockOrderBy = jest.fn()
-const mockLimit = jest.fn()
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  query: jest.fn(),
-  and: jest.fn(),
+const mockWhere = vi.fn()
+const mockOrderBy = vi.fn()
+const mockLimit = vi.fn()
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  query: vi.fn(),
+  and: vi.fn(),
   where: (path, op, value) => mockWhere(path, op, value),
   limit: (limit) => mockLimit(limit),
   orderBy: (field, direction) => mockOrderBy(field, direction),
 }))
 
-jest.mock('../../stores/databaseV2/endpoints', () => ({
+vi.mock('../../stores/databaseV2/endpoints', () => ({
   DB_ENDPOINTS: {
     questions: 'questions',
     questionCategories: 'questionCategories',
   },
 }))
 
-jest.mock('../../config/config', () => ({
-  getConfigurationOption: jest.fn(),
+vi.mock('../../config/config', () => ({
+  getConfigurationOption: vi.fn(),
   FIREBASE_CONFIG: {
     apiKey: 'AIyChVN',
     databaseURL: 'https://test.firebaseio.com',
     projectId: 'test',
     storageBucket: 'test.appspot.com',
   },
-  localStorage: jest.fn(),
+  localStorage: vi.fn(),
+  SITE: 'unit-tests',
 }))
 
 describe('question.search', () => {

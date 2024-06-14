@@ -1,0 +1,17 @@
+{
+  "name": "uploads/howtos/UDaRgClKlDljxxFHyKsX/3-18fb603025d.jpg",
+  "bucket": "default-bucket",
+  "metageneration": 1,
+  "generation": 1716745626054,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": ["b8b86016-1a38-440f-b76b-969c28b52449"],
+  "etag": "c4zNC9R8rWotfYyI/cu4xunaQwk",
+  "customMetadata": {},
+  "timeCreated": "2024-05-26T17:47:06.054Z",
+  "updated": "2024-05-26T17:47:06.054Z",
+  "size": 69109,
+  "md5Hash": "gt/ZoORMy9hBCYF2faCvIg==",
+  "crc32c": "1141308651"
+}

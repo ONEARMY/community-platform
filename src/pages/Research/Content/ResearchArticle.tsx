@@ -9,7 +9,7 @@ import {
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components'
-import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
+import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -17,19 +17,21 @@ import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
-  getPublicUpdates,
-  getResearchTotalCommentCount,
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 
+import {
+  getPublicUpdates,
+  researchUpdateStatusFilter,
+} from '../researchHelpers'
 import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
-import type { IComment, IResearch, IUser, UserComment } from 'src/models'
+import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
 const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
@@ -46,20 +48,6 @@ const areCommentVisible = (updateIndex) => {
   }
 
   return showComments
-}
-
-const transformToUserComment = (
-  comments: IComment[],
-  loggedInUser: IUser | undefined,
-  item: IResearch.ItemDB,
-): UserComment[] => {
-  if (!comments) return []
-  return comments.map((c) => ({
-    ...c,
-    isEditable:
-      c.creatorName === loggedInUser?.userName ||
-      isAllowedToEditContent(item, loggedInUser),
-  }))
 }
 
 const ResearchArticle = observer(() => {
@@ -124,7 +112,7 @@ const ResearchArticle = observer(() => {
           .filter((url: string) => !!url)
           .pop()
         seoTagsUpdate({
-          title: researchItem.title,
+          title: `${researchItem.title} - Research`,
           description: researchItem.description,
           imageUrl: latestImage,
         })
@@ -229,30 +217,27 @@ const ResearchArticle = observer(() => {
         onFollowClick={() => onFollowClick(item.slug)}
         contributors={contributors}
         subscribersCount={researchStore.subscribersCount}
-        commentsCount={getResearchTotalCommentCount(item)}
+        commentsCount={item.totalCommentCount}
         updatesCount={
-          item.updates?.filter(
-            (u) => u.status !== ResearchUpdateStatus.DRAFT && !u._deleted,
+          item.updates?.filter((u) =>
+            researchUpdateStatusFilter(item, u, researchStore.activeUser),
           ).length || 0
         }
       />
       <Box sx={{ marginTop: 8, marginBottom: 4 }}>
         {item &&
-          getPublicUpdates(item).map((update, index) => (
-            <ResearchUpdate
-              update={update}
-              key={update._id}
-              updateIndex={index}
-              isEditable={isEditable}
-              slug={item.slug}
-              comments={transformToUserComment(
-                researchStore.formatResearchCommentList(update.comments),
-                loggedInUser as IUser,
-                item,
-              )}
-              showComments={areCommentVisible(index)}
-            />
-          ))}
+          getPublicUpdates(item, researchStore.activeUser).map(
+            (update, index) => (
+              <ResearchUpdate
+                update={update}
+                key={update._id}
+                updateIndex={index}
+                isEditable={isEditable}
+                slug={item.slug}
+                showComments={areCommentVisible(index)}
+              />
+            ),
+          )}
       </Box>
 
       <UserEngagementWrapper>
@@ -286,7 +271,7 @@ const ResearchArticle = observer(() => {
                 isLoggedIn={!!loggedInUser}
                 hasUserSubscribed={researchStore.userHasSubscribed}
                 onFollowClick={() => onFollowClick(item.slug)}
-              ></FollowButton>
+              />
             </ArticleCallToAction>
           )}
         </Box>

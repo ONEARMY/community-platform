@@ -9,14 +9,13 @@ If you think something is missing, consider sending us a PR.
 - [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--code-of-conduct)
 - [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--getting-started)
 - [Issue Tracking and Management](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
-- [Development Bounties](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--dev-bounties)
+- [Development Bounties](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--development-bounties)
 - [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure)
 - [Branch structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--branch-structure)
 - [Javascript style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--javascript-style-guide)
 - [Commit style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide)
-- [Deployment](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployment)
+- [Deployments](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployments)
 - [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--joining-the-team)
-- [Resources](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--resources)
 - [Why haven't you used ...](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 
 ## 👐 &nbsp; Code of Conduct
@@ -25,23 +24,62 @@ This project and everyone participating in it is governed by the [Code of Conduc
 
 ## 📟 &nbsp; Getting started
 
-**Prerequisites**
+### Prerequisites
 
 - [Node.js v20](https://nodejs.org/en/download/)
 - [Yarn v3](https://yarnpkg.com/getting-started/install)
 
-With the above tools available, you are ready:
+### One time setup
 
 1. Fork the repository.
 
-2. Clone the project from the fork you have created previously at first step :
-   `git clone https://github.com/`**your-github-user**`/community-platform.git`
+2. Clone the project from the fork you have created previously at first step:
+
+   ```
+   git clone https://github.com/<your-github-username>/community-platform.git
+   ```
 
 3. Install dependencies
-   `yarn`
+   ```
+   yarn install
+   ```
 
-4. Run the dev server
-   `yarn start`
+### Running the web app
+
+There are two options.
+
+#### Cloud based backend
+
+This option is simple but only starts the frontend. The backend services are hosted on the internet (https://precious-plastics-v4-dev.firebaseapp.com) and may be accessed by many developers.
+
+This setup is:
+
+- Good for starting
+- Good for frontend development
+- Bad for backend development
+
+Simply run:
+
+```
+yarn run start
+```
+
+In this case:
+
+- frontend: http://localhost:3000
+
+#### Emulator based backend
+
+This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.) This option is experimental.
+
+This setup is:
+
+- Good for frontend development
+- Good for backend development
+
+See the details at [here](https://docs.platform.onearmy.earth/Backend%20Development/firebase-emulator/).
+
+### Learn more
 
 More information is available in the [developer documentation](https://docs.platform.onearmy.earth/).
 
@@ -80,14 +118,14 @@ We have a small bounty system as a way of saying thanks to developers for contri
 
 ## 🌳 &nbsp; Branch Structure
 
-We have two main branches linked to production and development sites, you should always start with the `master` branch as this contains the most up-to-date code, and will be where pull requests are added for review. The `production` branch contains the live production site, PRs are automatically raised that will merge changes in from `master`. Maintainers are responsible for merging these PRs.
+We have a single main branch which is linked to production and development sites, you should always start with the `master` branch as this contains the most up-to-date code, and will be where pull requests are added for review. Once a branch is merged into `master` it will be deployed to the development environment. The maintainers will then approve for deployment to the production environment.
 
 We use additional branches to define a specific feature or issue group being worked on. An example might be work on the home page, which would be done in the `19-home-page` branch (where 19 refers to the issue number describing what needs to be done). These branches are ephemeral, and will be removed after merging into `master`, followed by closing the issue. Generally it is expected that only 1 developer will be working on a given branch, and it is that developer's responsibility to create the branch, manage the pull request, reviews and ask for additional support when needed.
 
 ## 🚀 &nbsp; Deployment(s)
 
 The `master` branch is our current development leading branch, and will auto-deploy to the
-development environment. The `production` branch deploys to the production environment.
+development environment, after a manual approval step this branch will be deployed to our production environments.
 
 |                  | Development                                                            | Production                                                             |
 | ---------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { Button, FieldInput, TextNotification } from 'oa-components'
 import { getFriendlyMessage } from 'oa-shared'
@@ -8,8 +8,6 @@ import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { required } from 'src/utils/validators'
 import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
-
-import type { TextNotificationProps } from 'oa-components'
 
 interface IFormValues {
   email: string
@@ -20,7 +18,9 @@ interface IState {
   errorMsg?: string
   disabled?: boolean
   authProvider?: IAuthProvider
-  notificationProps?: Pick<TextNotificationProps, 'isVisible' | 'variant'> & {
+  notificationProps?: {
+    isVisible: boolean
+    variant: 'failure' | 'success'
     text: string
   }
 }
@@ -94,10 +94,12 @@ const SignInPage = observer((props: IProps) => {
     }
   }
 
-  if (userStore!.user) {
-    // User logged in
-    return <Navigate to={'/'} />
-  }
+  useEffect(() => {
+    if (userStore.authUser) {
+      // User logged in
+      navigate('/')
+    }
+  }, [userStore.authUser])
 
   return (
     <Form

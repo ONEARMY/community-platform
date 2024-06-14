@@ -4,10 +4,13 @@ describe('[How To]', () => {
   describe('[SEO Metadata]', () => {
     const { slug, title, description, cover_image } =
       MOCK_DATA.howtos.cmMzzlQP00fCckYIeL2e
+
+    const pageTitle = `${title} - How-to - Community Platform`
+
     it('[Populates title and description tags]', () => {
       cy.visit(`/how-to/${slug}`)
       // General
-      cy.title().should('eq', title)
+      cy.title().should('eq', pageTitle)
       cy.get('meta[name="description"]').should(
         'have.attr',
         'content',
@@ -15,7 +18,11 @@ describe('[How To]', () => {
       )
 
       // OpenGraph (facebook)
-      cy.get('meta[property="og:title"]').should('have.attr', 'content', title)
+      cy.get('meta[property="og:title"]').should(
+        'have.attr',
+        'content',
+        pageTitle,
+      )
       cy.get('meta[property="og:description"]').should(
         'have.attr',
         'content',
@@ -28,7 +35,11 @@ describe('[How To]', () => {
       )
 
       // Twitter
-      cy.get('meta[name="twitter:title"]').should('have.attr', 'content', title)
+      cy.get('meta[name="twitter:title"]').should(
+        'have.attr',
+        'content',
+        pageTitle,
+      )
       cy.get('meta[name="twitter:description"]').should(
         'have.attr',
         'content',

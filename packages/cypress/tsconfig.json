@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["es6", "dom"],
+    "target": "es2020",
+    "module": "es2020",
+    "lib": ["ESNext", "dom"],
     "types": ["cypress", "node", "cypress-file-upload"],
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "jsx": "react"
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "scripts/start.mts"]
 }

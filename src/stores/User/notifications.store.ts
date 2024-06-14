@@ -1,4 +1,4 @@
-import { action, makeObservable, toJS } from 'mobx'
+import { action, computed, makeObservable, toJS } from 'mobx'
 import { logger } from 'src/logger'
 import { randomID } from 'src/utils/helpers'
 
@@ -14,7 +14,13 @@ import type { IRootStore } from '../RootStore'
 export class UserNotificationsStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
     super(rootStore)
-    makeObservable(this)
+    makeObservable(this, {
+      user: computed,
+      triggerNotification: action,
+      deleteNotification: action,
+      markAllNotificationsRead: action,
+      markAllNotificationsNotified: action,
+    })
   }
 
   get user() {
@@ -49,7 +55,6 @@ export class UserNotificationsStore extends ModuleStore {
     )
   }
 
-  @action
   public async triggerNotification(
     type: NotificationType,
     username: string,
@@ -101,16 +106,21 @@ export class UserNotificationsStore extends ModuleStore {
     }
   }
 
-  @action
   public async markAllNotificationsNotified() {
     try {
       const user = this.user
       if (user) {
         const notifications = toJS(user.notifications)
-        notifications?.forEach((notification) => (notification.notified = true))
 
-        await this._updateUserNotifications(user, notifications)
-        await this.userStore.refreshActiveUserDetails()
+        // update only if it has unnotified notifications
+        if (notifications?.some((notification) => !notification.notified)) {
+          for (const notification of notifications) {
+            notification.notified = true
+          }
+
+          await this._updateUserNotifications(user, notifications)
+          await this.userStore.refreshActiveUserDetails()
+        }
       }
     } catch (err) {
       logger.error(err)
@@ -118,7 +128,6 @@ export class UserNotificationsStore extends ModuleStore {
     }
   }
 
-  @action
   public async markAllNotificationsRead() {
     try {
       const user = this.user
@@ -135,7 +144,6 @@ export class UserNotificationsStore extends ModuleStore {
     }
   }
 
-  @action
   public async deleteNotification(id: string) {
     try {
       const user = this.user

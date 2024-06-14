@@ -1,4 +1,5 @@
 import { incrementViewCount } from 'src/utils/incrementViewCount'
+import { describe, expect, it, vi } from 'vitest'
 
 describe('incrementViewCount', () => {
   it('calls the store incrementor', async () => {
@@ -8,7 +9,7 @@ describe('incrementViewCount', () => {
     }
 
     const store = {
-      incrementViewCount: jest.fn(),
+      incrementViewCount: vi.fn(),
     } as any
 
     await incrementViewCount({
@@ -27,7 +28,7 @@ describe('incrementViewCount', () => {
     }
 
     const store = {
-      incrementViewCount: jest.fn(),
+      incrementViewCount: vi.fn(),
     } as any
 
     await incrementViewCount({

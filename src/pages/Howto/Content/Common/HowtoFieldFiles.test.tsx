@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { guidance } from 'src/pages/Howto/labels'
 import { HowtoProvider } from 'src/test/components'
 import { FactoryCategory } from 'src/test/factories/Category'
+import { describe, it, vi } from 'vitest'
 
 import { HowtoFieldFiles } from '.'
 
@@ -11,7 +12,7 @@ describe('HowtoFieldFiles', () => {
       category: undefined,
       fileEditMode: true,
       files: [],
-      onClick: jest.fn(),
+      onClick: vi.fn(),
       showInvalidFileWarning: false,
     }
 
@@ -31,7 +32,7 @@ describe('HowtoFieldFiles', () => {
       category: FactoryCategory,
       fileEditMode: true,
       files: [],
-      onClick: jest.fn(),
+      onClick: vi.fn(),
       showInvalidFileWarning: false,
     }
 

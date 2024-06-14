@@ -18,11 +18,13 @@ export namespace IQuestion {
     _createdBy: string
     _deleted: boolean
     subscribers?: UserIdList
+    commentCount?: number
   } & DBDoc &
     FormInput &
     ISharedFeatures
 
   export interface FormInput extends IModerable {
+    _id: string
     title: string
     description: string
     tags: ISelectedTags
@@ -31,6 +33,6 @@ export namespace IQuestion {
     previousSlugs?: string[]
     creatorCountry?: string
     allowDraftSave?: boolean
-    images?: Array<IUploadedFileMeta | IConvertedFileMeta | null>
+    images?: (IUploadedFileMeta | IConvertedFileMeta | null)[]
   }
 }

@@ -1,7 +1,4 @@
-/* eslint-disable max-classes-per-file */
-jest.mock('../../stores/common/module.store')
-
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 import {
   createMemoryRouter,
@@ -14,28 +11,30 @@ import { faker } from '@faker-js/faker'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
-import { IModerationStatus, UserRole } from 'oa-shared'
+import { UserRole } from 'oa-shared'
 import { questionService } from 'src/pages/Question/question.service'
-import { useDiscussionStore } from 'src/stores/Discussions/discussions.store'
 import { useQuestionStore } from 'src/stores/Question/question.store'
-import {
-  FactoryDiscussion,
-  FactoryDiscussionComment,
-} from 'src/test/factories/Discussion'
+import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { questionRouteElements } from './question.routes'
 
 import type { QuestionStore } from 'src/stores/Question/question.store'
+import type { Mock } from 'vitest'
+
+vi.mock('../../stores/common/module.store')
+vi.mock('src/utils/validators')
 
 const Theme = testingThemeStyles
 let mockActiveUser = FactoryUser()
+const mockDiscussionItem = FactoryDiscussion()
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
@@ -43,7 +42,7 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         user: mockActiveUser,
       },
       aggregationsStore: {
-        isVerified: jest.fn(),
+        isVerified: vi.fn(),
         users_verified: {
           HowtoAuthor: true,
         },
@@ -60,45 +59,51 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
       questionCategoriesStore: {
         allQuestionCategories: [],
       },
+      discussionStore: {
+        fetchOrCreateDiscussionBySource: vi.fn().mockResolvedValue({
+          mockDiscussionItem,
+        }),
+        activeUser: vi.fn().mockResolvedValue(mockActiveUser),
+      },
     },
   }),
 }))
 
-const mockedUsedNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...(jest.requireActual('react-router-dom') as any),
+const mockedUsedNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as any),
   useNavigate: () => mockedUsedNavigate,
 }))
 
 class mockQuestionStoreClass implements Partial<QuestionStore> {
-  setActiveQuestionItemBySlug = jest.fn()
-  needsModeration = jest.fn().mockResolvedValue(true)
-  incrementViewCount = jest.fn()
+  setActiveQuestionItemBySlug = vi.fn()
+  needsModeration = vi.fn().mockResolvedValue(true)
+  incrementViewCount = vi.fn()
   activeQuestionItem = FactoryQuestionItem({
     title: 'Question article title',
   })
   QuestionUploadStatus = {} as any
   updateUploadStatus = {} as any
-  formatQuestionCommentList = jest.fn()
-  getActiveQuestionUpdateComments = jest.fn()
-  lockQuestionItem = jest.fn()
-  lockQuestionUpdate = jest.fn()
-  unlockQuestionUpdate = jest.fn()
-  upsertQuestion = jest.fn()
-  fetchQuestions = jest.fn().mockResolvedValue([])
-  fetchQuestionBySlug = jest.fn()
+  formatQuestionCommentList = vi.fn()
+  getActiveQuestionUpdateComments = vi.fn()
+  lockQuestionItem = vi.fn()
+  lockQuestionUpdate = vi.fn()
+  unlockQuestionUpdate = vi.fn()
+  upsertQuestion = vi.fn()
+  fetchQuestions = vi.fn().mockResolvedValue([])
+  fetchQuestionBySlug = vi.fn()
   votedUsefulCount = 0
   subscriberCount = 0
   userCanEditQuestion = true
 }
 
-const mockQuestionService: typeof questionService = {
-  getQuestionCategories: jest.fn(() => {
+const mockQuestionService = {
+  getQuestionCategories: vi.fn(() => {
     return new Promise((resolve) => {
       resolve([])
     })
   }),
-  search: jest.fn(() => {
+  search: vi.fn(() => {
     return new Promise((resolve) => {
       resolve({ items: [], total: 0, lastVisible: undefined })
     })
@@ -106,29 +111,25 @@ const mockQuestionService: typeof questionService = {
 }
 const mockQuestionStore = new mockQuestionStoreClass()
 
-jest.mock('src/stores/Question/question.store')
-jest.mock('src/stores/Discussions/discussions.store')
-jest.mock('src/pages/Question/question.service')
+vi.mock('src/stores/Question/question.store')
+vi.mock('src/stores/Discussions/discussions.store')
+vi.mock('src/pages/Question/question.service')
 
 describe('question.routes', () => {
   beforeEach(() => {
-    ;(useQuestionStore as jest.Mock).mockReturnValue(mockQuestionStore)
-    ;(useDiscussionStore as jest.Mock).mockReturnValue({
-      fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue(null),
-      activeUser: mockActiveUser,
-    })
-    questionService.getQuestionCategories = jest.fn().mockResolvedValue([])
+    ;(useQuestionStore as Mock).mockReturnValue(mockQuestionStore)
+    questionService.getQuestionCategories = vi.fn().mockResolvedValue([])
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     cleanup()
   })
 
   describe('/questions/', () => {
     it('renders a loading state', async () => {
       let wrapper
-      mockQuestionService.search = jest.fn(() => {
+      mockQuestionService.search = vi.fn(() => {
         return new Promise((resolve) => {
           setTimeout(
             () => resolve({ items: [], total: 0, lastVisible: undefined }),
@@ -137,8 +138,8 @@ describe('question.routes', () => {
         })
       })
 
-      await act(async () => {
-        wrapper = (await renderFn('/questions')).wrapper
+      act(() => {
+        wrapper = renderFn('/questions').wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
     })
@@ -146,8 +147,8 @@ describe('question.routes', () => {
     it('renders an empty state', async () => {
       let wrapper
 
-      await act(async () => {
-        wrapper = (await renderFn('/questions')).wrapper
+      act(() => {
+        wrapper = renderFn('/questions').wrapper
       })
 
       await waitFor(async () => {
@@ -169,7 +170,7 @@ describe('question.routes', () => {
       const questionTitle = faker.lorem.words(3)
       const questionSlug = faker.lorem.slug()
 
-      questionService.search = jest.fn(() => {
+      questionService.search = vi.fn(() => {
         return new Promise((resolve) => {
           resolve({
             items: [
@@ -187,8 +188,8 @@ describe('question.routes', () => {
         })
       })
 
-      await act(async () => {
-        wrapper = (await renderFn('/questions')).wrapper
+      act(() => {
+        wrapper = renderFn('/questions').wrapper
       })
 
       await waitFor(async () => {
@@ -202,85 +203,75 @@ describe('question.routes', () => {
   })
 
   describe('/questions/create', () => {
-    it('allows user to create a question', async () => {
-      let wrapper
-      // Arrange
-      const mockUpsertQuestion = jest.fn().mockResolvedValue({
-        slug: 'question-title',
-      })
-      useQuestionStore.mockReturnValue({
-        ...mockQuestionStore,
-        upsertQuestion: mockUpsertQuestion,
-        activeUser: mockActiveUser,
-      })
+    it(
+      'allows user to create a question',
+      async () => {
+        let wrapper
+        // Arrange
+        const mockUpsertQuestion = vi.fn().mockResolvedValue({
+          slug: 'question-title',
+        })
+        ;(useQuestionStore as Mock).mockReturnValue({
+          ...mockQuestionStore,
+          upsertQuestion: mockUpsertQuestion,
+          activeUser: mockActiveUser,
+        })
 
-      await act(async () => {
-        const render = await renderFn('/questions/create')
-        wrapper = render.wrapper
-      })
+        act(() => {
+          const render = renderFn('/questions/create')
+          wrapper = render.wrapper
+        })
 
-      // Fill in form
-      const title = wrapper.getByLabelText('The Question', { exact: false })
-      const description = wrapper.getByLabelText('Description', {
-        exact: false,
-      })
-      const submitButton = wrapper.getByText('Publish')
+        // Fill in form
+        const title = wrapper.getByLabelText('The Question', { exact: false })
+        const description = wrapper.getByLabelText('Description', {
+          exact: false,
+        })
+        const submitButton = wrapper.getByText('Publish')
 
-      // Submit form
-      await userEvent.type(title, 'Question title')
-      await userEvent.type(description, 'Question description')
+        // Submit form
+        await userEvent.type(title, 'Can you build a house out of plastic?')
+        await userEvent.type(description, "So I've got all this plastic...")
 
-      await waitFor(() => {
         submitButton.click()
-      })
 
-      expect(mockUpsertQuestion).toHaveBeenCalledWith({
-        title: 'Question title',
-        description: 'Question description',
-        tags: {},
-        allowDraftSave: false,
-        moderation: IModerationStatus.ACCEPTED,
-      })
+        expect(mockUpsertQuestion).toHaveBeenCalledWith({
+          title: 'Can you build a house out of plastic?',
+          description: "So I've got all this plastic...",
+          tags: {},
+        })
 
-      expect(mockedUsedNavigate).toBeCalledWith('/questions/question-title')
-    })
+        await waitFor(
+          () => {
+            expect(mockedUsedNavigate).toBeCalledWith(
+              '/questions/question-title',
+            )
+          },
+          {
+            timeout: 5000,
+          },
+        )
+      },
+      { timeout: 15000 },
+    )
   })
 
   describe('/questions/:slug', () => {
     it('renders the question single page', async () => {
       let wrapper
       const question = FactoryQuestionItem()
-      const activeUser = FactoryUser({})
-      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-      const mockIncrementViewCount = jest.fn()
-      const discussionComment = FactoryDiscussionComment({
-        text: faker.lorem.words(2),
-      })
-      const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
-        FactoryDiscussion({
-          sourceId: question._id,
-          sourceType: 'question',
-          comments: [discussionComment],
-        }),
-      )
-      useQuestionStore.mockReturnValue({
+      const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
+      const mockIncrementViewCount = vi.fn()
+
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
-        activeUser,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
         incrementViewCount: mockIncrementViewCount,
       })
-      useDiscussionStore.mockReturnValue({
-        fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-        activeUser,
-      })
-      useDiscussionStore.mockReturnValue({
-        fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-        activeUser,
-      })
 
-      await act(async () => {
-        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+      act(() => {
+        wrapper = renderFn(`/questions/${question.slug}`).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -299,265 +290,58 @@ describe('question.routes', () => {
         expect(wrapper.getByText(`0 views`)).toBeInTheDocument()
         expect(wrapper.getByText(`0 following`)).toBeInTheDocument()
         expect(wrapper.getByText(`0 useful`)).toBeInTheDocument()
-        expect(wrapper.getByText(`1 comment`)).toBeInTheDocument()
 
         expect(mockFetchQuestionBySlug).toBeCalledWith(question.slug)
         expect(mockIncrementViewCount).toBeCalledWith(question)
       })
     })
 
-    describe('Comments', () => {
-      it('supports adding comments', async () => {
-        let wrapper
-        const question = FactoryQuestionItem()
-        const activeUser = FactoryUser({})
-        const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-        const discussionComment = FactoryDiscussionComment({
-          text: faker.lorem.words(2),
-        })
-        const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
-          FactoryDiscussion({
-            sourceId: question._id,
-            sourceType: 'question',
-            comments: [discussionComment],
-          }),
-        )
-        useQuestionStore.mockReturnValue({
-          ...mockQuestionStore,
-          activeUser,
-          fetchQuestionBySlug: mockFetchQuestionBySlug,
-        })
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          activeUser,
-        })
-        // Smell, this is reimplementation of the store method, maybe we should mock the store
-        // depdendencies instead, so we are less coupled to the implementation.
-        const mockDiscussionStoreAddComment = jest
-          .fn()
-          .mockImplementation((discussionObj, newCommentText) => {
-            discussionObj.comments.push(
-              FactoryDiscussionComment({
-                text: `Mocked store method: ${newCommentText}`,
-              }),
-            )
-            return discussionObj
-          })
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          addComment: mockDiscussionStoreAddComment,
-          activeUser,
-        })
-
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
-          expect(wrapper.getByText(/loading/)).toBeInTheDocument()
-        })
-
-        await waitFor(async () => {
-          // Loads comments
-          expect(mockfetchOrCreateDiscussionBySource).toBeCalledWith(
-            question._id,
-            'question',
-          )
-
-          expect(wrapper.getByText(discussionComment.text)).toBeInTheDocument()
-
-          // Supports adding comments
-          expect(wrapper.getByText('Leave a comment')).toBeInTheDocument()
-          expect(wrapper.getByLabelText('Comment')).toBeInTheDocument()
-          await userEvent.type(wrapper.getByLabelText('Comment'), 'New comment')
-
-          const submitButton = wrapper.getByText('Leave a comment')
-          await waitFor(() => {
-            submitButton.click()
-
-            expect(
-              wrapper.getByText('Mocked store method: New comment'),
-            ).toBeInTheDocument()
-          })
-
-          expect(mockDiscussionStoreAddComment).toHaveBeenCalled()
-        })
-      })
-
-      it('supports editing comments', async () => {
-        let wrapper
-        const question = FactoryQuestionItem()
-        const activeUser = FactoryUser({})
-        const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-        const discussionComment = FactoryDiscussionComment({
-          text: faker.lorem.words(2),
-          _creatorId: activeUser._id,
-        })
-        const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
-          FactoryDiscussion({
-            sourceId: question._id,
-            sourceType: 'question',
-            comments: [discussionComment],
-          }),
-        )
-        useQuestionStore.mockReturnValue({
-          ...mockQuestionStore,
-          activeUser,
-          fetchQuestionBySlug: mockFetchQuestionBySlug,
-        })
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          activeUser,
-        })
-        // Smell, this is reimplementation of the store method, maybe we should mock the store
-        // depdendencies instead, so we are less coupled to the implementation.
-        const mockDiscussionStoreEditComment = jest
-          .fn()
-          .mockImplementation((discussionObj, newCommentText) => {
-            discussionObj.comments.push(
-              FactoryDiscussionComment({
-                text: `Mocked store method: ${newCommentText}`,
-              }),
-            )
-            return discussionObj
-          })
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          editComment: mockDiscussionStoreEditComment,
-          activeUser,
-        })
-
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
-          expect(wrapper.getByText(/loading/)).toBeInTheDocument()
-        })
-
-        await waitFor(async () => {
-          // Loads comments
-          expect(mockfetchOrCreateDiscussionBySource).toBeCalledWith(
-            question._id,
-            'question',
-          )
-        })
-
-        // Supports editing comments
-        const editBtn = wrapper.getByText('edit')
-        editBtn.click()
-
-        const editTextField = screen.getByRole('textbox', {
-          name: /edit comment/i,
-        })
-
-        await userEvent.type(editTextField, 'Edited comment')
-
-        const button = screen.getByRole('button', {
-          name: /save changes/i,
-        })
-
-        button.click()
-
-        expect(mockDiscussionStoreEditComment).toHaveBeenCalledWith(
-          expect.any(Object),
-          expect.any(String),
-          expect.stringContaining('Edited comment'),
-        )
-      })
-
-      it('supports removing comments', async () => {
-        let wrapper
-        const question = FactoryQuestionItem()
-        const activeUser = FactoryUser({})
-        const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-        const discussionComment = FactoryDiscussionComment({
-          text: faker.lorem.words(2),
-          _creatorId: activeUser._id,
-        })
-        const mockfetchOrCreateDiscussionBySource = jest.fn().mockResolvedValue(
-          FactoryDiscussion({
-            sourceId: question._id,
-            sourceType: 'question',
-            comments: [discussionComment],
-          }),
-        )
-        useQuestionStore.mockReturnValue({
-          ...mockQuestionStore,
-          activeUser,
-          fetchQuestionBySlug: mockFetchQuestionBySlug,
-          activeUser,
-        })
-        // Smell, this is reimplementation of the store method, maybe we should mock the store
-        // depdendencies instead, so we are less coupled to the implementation.
-        const mockDiscussionStoreDeleteComment = jest.fn()
-        useDiscussionStore.mockReturnValue({
-          fetchOrCreateDiscussionBySource: mockfetchOrCreateDiscussionBySource,
-          deleteComment: mockDiscussionStoreDeleteComment,
-          activeUser,
-        })
-
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
-          expect(wrapper.getByText(/loading/)).toBeInTheDocument()
-        })
-
-        await waitFor(async () => {
-          // Loads comments
-          expect(mockfetchOrCreateDiscussionBySource).toBeCalledWith(
-            question._id,
-            'question',
-          )
-        })
-
-        // Supports removing comments
-        wrapper.getByText('delete').click()
-
-        screen
-          .getByRole('button', {
-            name: /confirm delete action/i,
-          })
-          .click()
-
-        expect(mockDiscussionStoreDeleteComment).toHaveBeenCalledWith(
-          expect.any(Object),
-          expect.stringMatching(discussionComment._id),
-        )
-      })
-    })
-
     describe('Follow', () => {
       it('displays following status', async () => {
-        let wrapper
         const user = FactoryUser()
         const question = FactoryQuestionItem({
           subscribers: [user.userName],
         })
-        const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-        useQuestionStore.mockReturnValue({
+        const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
+        ;(useQuestionStore as Mock).mockReturnValue({
           ...mockQuestionStore,
           activeUser: user,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
           userHasSubscribed: true,
         })
+        const wrapper = renderFn(`/questions/${question.slug}`).wrapper
 
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
-        })
-
-        await waitFor(() => {
-          expect(wrapper.getByText('Following')).toBeInTheDocument()
-        })
+        await waitFor(
+          () => {
+            expect(wrapper.getByText('Following')).toBeInTheDocument()
+          },
+          {
+            timeout: 2000,
+          },
+        )
       })
 
       it('supports follow behaviour', async () => {
         let wrapper
         const question = FactoryQuestionItem()
-        const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-        useQuestionStore.mockReturnValue({
+        const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
+        ;(useQuestionStore as Mock).mockReturnValue({
           ...mockQuestionStore,
           fetchQuestionBySlug: mockFetchQuestionBySlug,
         })
 
-        await act(async () => {
-          wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+        act(() => {
+          wrapper = renderFn(`/questions/${question.slug}`).wrapper
         })
 
-        expect(wrapper.getByText('Follow')).toBeInTheDocument()
+        await waitFor(
+          () => {
+            expect(wrapper.getByText('Follow')).toBeInTheDocument()
+          },
+          {
+            timeout: 2000,
+          },
+        )
       })
     })
 
@@ -565,16 +349,16 @@ describe('question.routes', () => {
       let wrapper
       mockActiveUser = FactoryUser()
       const question = FactoryQuestionItem()
-      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
-      useQuestionStore.mockReturnValue({
+      const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
         userCanEditQuestion: false,
       })
 
-      await act(async () => {
-        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+      act(() => {
+        wrapper = renderFn(`/questions/${question.slug}`).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -591,16 +375,16 @@ describe('question.routes', () => {
         _createdBy: mockActiveUser.userName,
       })
 
-      const mockFetchQuestionBySlug = jest.fn().mockResolvedValue(question)
+      const mockFetchQuestionBySlug = vi.fn().mockResolvedValue(question)
 
-      useQuestionStore.mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
         fetchQuestionBySlug: mockFetchQuestionBySlug,
         activeUser: mockActiveUser,
       })
 
-      await act(async () => {
-        wrapper = (await renderFn(`/questions/${question.slug}`)).wrapper
+      act(() => {
+        wrapper = renderFn(`/questions/${question.slug}`).wrapper
         expect(wrapper.getByText(/loading/)).toBeInTheDocument()
       })
 
@@ -615,8 +399,8 @@ describe('question.routes', () => {
     const editFormTitle = /Edit your question/
     it('renders the question edit page', async () => {
       let wrapper
-      await act(async () => {
-        wrapper = (await renderFn('/questions/slug/edit')).wrapper
+      act(() => {
+        wrapper = renderFn('/questions/slug/edit').wrapper
       })
 
       await waitFor(async () => {
@@ -637,19 +421,19 @@ describe('question.routes', () => {
         title: faker.lorem.words(1),
         _createdBy: 'author',
       })
-      const mockUpsertQuestion = jest.fn().mockResolvedValue({
+      const mockUpsertQuestion = vi.fn().mockResolvedValue({
         slug: 'question-title',
       })
 
-      useQuestionStore.mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
-        fetchQuestionBySlug: jest.fn().mockResolvedValue(questionItem),
+        fetchQuestionBySlug: vi.fn().mockResolvedValue(questionItem),
         upsertQuestion: mockUpsertQuestion,
         activeUser: mockActiveUser,
       })
 
-      await act(async () => {
-        const res = await renderFn('/questions/slug/edit')
+      act(() => {
+        const res = renderFn('/questions/slug/edit')
         wrapper = res.wrapper
       })
 
@@ -672,9 +456,7 @@ describe('question.routes', () => {
       await userEvent.clear(description)
       await userEvent.type(description, 'Question description')
 
-      await waitFor(() => {
-        submitButton.click()
-      })
+      submitButton.click()
 
       expect(mockUpsertQuestion).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -688,10 +470,9 @@ describe('question.routes', () => {
     it('redirects non-author', async () => {
       let wrapper
       mockActiveUser = FactoryUser({ userName: 'not-author' })
-
-      useQuestionStore.mockReturnValue({
+      ;(useQuestionStore as Mock).mockReturnValue({
         ...mockQuestionStore,
-        fetchQuestionBySlug: jest.fn().mockResolvedValue(
+        fetchQuestionBySlug: vi.fn().mockResolvedValue(
           FactoryQuestionItem({
             slug: 'slug',
             _createdBy: 'author',
@@ -700,8 +481,8 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      await act(async () => {
-        const res = await renderFn('/questions/slug/edit')
+      act(() => {
+        const res = renderFn('/questions/slug/edit')
         wrapper = res.wrapper
       })
 
@@ -711,9 +492,9 @@ describe('question.routes', () => {
       })
     })
   })
-})
+}, 15000)
 
-const renderFn = async (url) => {
+const renderFn = (url) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route path="/questions">{questionRouteElements}</Route>,

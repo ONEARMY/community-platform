@@ -1,0 +1,72 @@
+{
+  "kind": "identitytoolkit#DownloadAccountResponse",
+  "users": [
+    {
+      "localId": "2djSop7XvY0NEg7QY5rZrm0Wc2N1",
+      "createdAt": "1716744480141",
+      "lastLoginAt": "1716746234545",
+      "displayName": "admin",
+      "passwordHash": "fakeHash:salt=fakeSaltRpTXy52dXY1DgyPT6odF:password=wow_backend_development_is_fun",
+      "salt": "fakeSaltRpTXy52dXY1DgyPT6odF",
+      "passwordUpdatedAt": 1716744766896,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "admin@example.com",
+          "federatedId": "admin@example.com",
+          "rawId": "admin@example.com",
+          "displayName": "admin"
+        }
+      ],
+      "validSince": "1716744766",
+      "email": "admin@example.com",
+      "emailVerified": false,
+      "disabled": false,
+      "lastRefreshAt": "2024-05-26T17:57:14.545Z"
+    },
+    {
+      "localId": "WrCrfu7FS3vJcFswZr1yufwlPtCl",
+      "lastLoginAt": "1716745935132",
+      "emailVerified": false,
+      "email": "precious-plastic@example.com",
+      "salt": "fakeSalt5z1E4omMRGeny2KD9xUb",
+      "passwordHash": "fakeHash:salt=fakeSalt5z1E4omMRGeny2KD9xUb:password=precious-plastic",
+      "passwordUpdatedAt": 1716745327556,
+      "validSince": "1716745327",
+      "createdAt": "1716745327556",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "precious-plastic@example.com",
+          "federatedId": "precious-plastic@example.com",
+          "rawId": "precious-plastic@example.com",
+          "displayName": "precious-plastic"
+        }
+      ],
+      "lastRefreshAt": "2024-05-26T17:52:15.132Z",
+      "displayName": "precious-plastic"
+    },
+    {
+      "localId": "uf0mBGfLKGQwoJ1FWiqH0xQSatKM",
+      "lastLoginAt": "1716746297841",
+      "emailVerified": false,
+      "email": "normal_jim@example.com",
+      "salt": "fakeSalt88tfIY4E8ASJgTGvE3th",
+      "passwordHash": "fakeHash:salt=fakeSalt88tfIY4E8ASJgTGvE3th:password=thanks_emulator_man",
+      "passwordUpdatedAt": 1716746026812,
+      "validSince": "1716746026",
+      "createdAt": "1716746026812",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "normal_jim@example.com",
+          "federatedId": "normal_jim@example.com",
+          "rawId": "normal_jim@example.com",
+          "displayName": "normal_jim"
+        }
+      ],
+      "lastRefreshAt": "2024-05-26T17:58:17.841Z",
+      "displayName": "normal_jim"
+    }
+  ]
+}

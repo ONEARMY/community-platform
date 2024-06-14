@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest'
+
 import { filterMapPinsByType } from './filter'
 
 import type { IMapPin } from 'src/models'

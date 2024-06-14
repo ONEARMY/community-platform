@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
+import { useParams } from 'react-router'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
-import { observer } from 'mobx-react'
 import { Button, Loader, TextNotification } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
@@ -35,11 +35,6 @@ import INITIAL_VALUES from './Template'
 import type { IMapPin } from 'src/models'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
-interface IProps {
-  /** user ID for lookup when editing another user as admin */
-  adminEditableUserId?: string
-}
-
 interface IState {
   formValues: IUserPP
   notification: { message: string; icon: string; show: boolean }
@@ -65,9 +60,10 @@ const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
   ) : null
 }
 
-export const SettingsPage = observer((props: IProps) => {
+export const SettingsPage = () => {
   const { mapsStore, userStore } = useCommonStores().stores
   const [state, setState] = useState<IState>({} as any)
+  const { id } = useParams()
 
   const toggleLocationDropdown = () => {
     setState((prevState) => ({
@@ -87,8 +83,8 @@ export const SettingsPage = observer((props: IProps) => {
     let userMapPin: IMapPin | null = null
 
     const init = async () => {
-      if (props.adminEditableUserId) {
-        user = await userStore.getUserProfile(props.adminEditableUserId)
+      if (id) {
+        user = await userStore.getUserProfile(id)
       }
 
       if (isModuleSupported(MODULE.MAP)) {
@@ -149,12 +145,7 @@ export const SettingsPage = observer((props: IProps) => {
     // Submit, show notification update and return any errors to form
     try {
       logger.debug({ profile: vals }, 'SettingsPage.saveProfile')
-      const { adminEditableUserId } = props
-      await userStore.updateUserProfile(
-        vals,
-        'settings-save-profile',
-        adminEditableUserId,
-      )
+      await userStore.updateUserProfile(vals, 'settings-save-profile', id)
       logger.debug(`before setState`)
       setState((state) => ({
         ...state,
@@ -401,4 +392,4 @@ export const SettingsPage = observer((props: IProps) => {
   ) : (
     <Loader />
   )
-})
+}

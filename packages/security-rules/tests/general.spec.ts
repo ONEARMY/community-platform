@@ -1,4 +1,6 @@
-require('dotenv').config()
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 import * as testing from '@firebase/rules-unit-testing'
 import { doc, getDoc, setDoc, setLogLevel } from 'firebase/firestore'

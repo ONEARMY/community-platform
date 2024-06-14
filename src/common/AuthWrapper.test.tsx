@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react'
 import { UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it, vi } from 'vitest'
 
 import { AuthWrapper } from './AuthWrapper' // adjust this import according to your file structure
 
@@ -10,7 +11,7 @@ const mockUser = FactoryUser({
   userRoles: [UserRole.ADMIN],
 })
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
@@ -24,7 +25,7 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
 describe('AuthWrapper', () => {
   it('renders child components when user is authorized with role array', () => {
     const { getByText } = render(
-      <AuthWrapper roleRequired={['admin']}>
+      <AuthWrapper roleRequired={UserRole.ADMIN}>
         <div>Test Content</div>
       </AuthWrapper>,
     )
@@ -33,7 +34,7 @@ describe('AuthWrapper', () => {
 
   it('renders child components when user is authorized with role string', () => {
     const { getByText } = render(
-      <AuthWrapper roleRequired={'admin'}>
+      <AuthWrapper roleRequired={UserRole.ADMIN}>
         <div>Test Content</div>
       </AuthWrapper>,
     )
@@ -52,7 +53,7 @@ describe('AuthWrapper', () => {
   it('renders fallback when user is not authorized', () => {
     const { getByText } = render(
       <AuthWrapper
-        roleRequired="super-admin"
+        roleRequired={UserRole.SUPER_ADMIN}
         fallback={<div>Fallback Content</div>}
       >
         <div>Test Content</div>

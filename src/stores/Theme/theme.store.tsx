@@ -1,4 +1,4 @@
-import { action, makeAutoObservable } from 'mobx'
+import { action, makeObservable, observable } from 'mobx'
 import {
   fixingFashionTheme,
   preciousPlasticTheme,
@@ -24,12 +24,14 @@ export class ThemeStore {
     ]
 
   constructor() {
-    makeAutoObservable(this)
+    makeObservable(this, {
+      currentTheme: observable,
+      setActiveTheme: action,
+    })
 
     logger.debug(`Current theme:`, this.currentTheme.siteName)
   }
 
-  @action
   public setActiveTheme(themeId: string) {
     if (themeMap[themeId]) {
       this.currentTheme = themeMap[themeId]

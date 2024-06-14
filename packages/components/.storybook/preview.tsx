@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import type { Preview } from '@storybook/react'
+import React from 'react'
 
 import { Global } from '@emotion/react'
 import { GlobalStyles } from '../src/GlobalStyles/GlobalStyles'
@@ -10,7 +11,12 @@ import {
   fixingFashionTheme,
 } from 'oa-themes'
 
-import { MemoryRouter } from 'react-router-dom'
+import {
+  Route,
+  RouterProvider,
+  createMemoryRouter,
+  createRoutesFromElements,
+} from 'react-router-dom'
 
 const themes = {
   pp: preciousPlasticTheme.styles,
@@ -49,16 +55,19 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story, context) => (
-      <>
-        <Global styles={GlobalStyles} />
-        <MemoryRouter>
+    (Story, context) => {
+      const router = createMemoryRouter(
+        createRoutesFromElements(<Route index element={<Story />}></Route>),
+      )
+      return (
+        <>
+          <Global styles={GlobalStyles} />
           <ThemeProvider theme={themes[context.globals.theme]}>
-            <Story />
+            <RouterProvider router={router} />
           </ThemeProvider>
-        </MemoryRouter>
-      </>
-    ),
+        </>
+      )
+    },
   ],
 }
 

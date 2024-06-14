@@ -9,7 +9,7 @@ context('unsubscribe', () => {
   })
 
   it('should render Unsubscribe page', () => {
-    cy.get('[data-cy=unsubscribe]').should('exist')
+    cy.get('[data-cy=unsubscribe]').should('be.visible')
   })
 
   it('should unsubscribe user', () => {

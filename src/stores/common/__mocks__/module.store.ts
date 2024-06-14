@@ -1,12 +1,13 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable max-classes-per-file */
+// eslint-disable-next-line max-classes-per-file
+import { vi } from 'vitest'
+
 export class MockDBStore {
-  collection = jest.fn().mockReturnThis()
-  doc = jest.fn().mockReturnThis()
-  set = jest.fn().mockReturnThis()
-  get = jest.fn().mockReturnThis()
-  getWhere = jest.fn().mockReturnThis()
-  update = jest.fn().mockReturnThis()
+  collection = vi.fn().mockReturnThis()
+  doc = vi.fn().mockReturnThis()
+  set = vi.fn().mockReturnThis()
+  get = vi.fn().mockReturnThis()
+  getWhere = vi.fn().mockReturnThis()
+  update = vi.fn().mockReturnThis()
 }
 
 export class ModuleStore {
@@ -17,7 +18,7 @@ export class ModuleStore {
   db = new MockDBStore()
   activeUser = {}
   allDocs$ = {
-    subscribe: jest.fn(),
+    subscribe: vi.fn(),
   }
 
   constructor() {}

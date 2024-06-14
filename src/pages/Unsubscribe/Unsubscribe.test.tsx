@@ -1,4 +1,4 @@
-jest.mock('../../stores/common/module.store')
+import '@testing-library/jest-dom/vitest'
 
 import {
   createMemoryRouter,
@@ -10,16 +10,19 @@ import { ThemeProvider } from '@emotion/react'
 import { render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { describe, expect, it, vi } from 'vitest'
 
 import Unsubscribe from './Unsubscribe'
 
+vi.mock('../../stores/common/module.store')
+
 const Theme = testingThemeStyles
 
-const mockUnsubscribeUser = jest.fn()
+const mockUnsubscribeUser = vi.fn()
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
@@ -28,7 +31,7 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
         unsubscribeUser: mockUnsubscribeUser,
       },
       aggregationsStore: {
-        isVerified: jest.fn(),
+        isVerified: vi.fn(),
         users_verified: {
           HowtoAuthor: true,
         },

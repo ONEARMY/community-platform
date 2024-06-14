@@ -2,6 +2,9 @@ import { dailyTasks } from './scheduled/tasks'
 
 import * as Admin from './admin'
 import * as UserUpdates from './userUpdates'
+import * as DiscussionUpdates from './discussionUpdates'
+import * as QuestionUpdates from './questionUpdates'
+import * as Messages from './messages/messages'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more information
@@ -15,12 +18,19 @@ exports.aggregations = require('./aggregations')
 exports.database = require('./database')
 
 exports.userUpdates = UserUpdates.handleUserUpdates
+
+exports.discussionUpdates = DiscussionUpdates.handleDiscussionUpdate
+
+exports.questionCreate = QuestionUpdates.handleQuestionCreate
+exports.questionUpdate = QuestionUpdates.handleQuestionUpdate
+exports.questionDelete = QuestionUpdates.handleQuestionDelete
 // CC Note, 2020-04-40
 // folder-based naming conventions should be encourage from now on
 exports.adminGetUserEmail = Admin.getUserEmail
 
 exports.seo = require('./seo')
 
+exports.sendMessage = Messages.sendMessage
 exports.emailNotifications = require('./emailNotifications')
 
 // Only export development api when working locally (with functions emulator)

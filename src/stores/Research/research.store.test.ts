@@ -1,6 +1,8 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
+
 import { toJS } from 'mobx'
-import { UserRole } from 'oa-shared'
 import { FactoryComment } from 'src/test/factories/Comment'
 import {
   FactoryResearchItem,
@@ -12,19 +14,20 @@ import { FactoryUser } from 'src/test/factories/User'
 import { ResearchStore } from './research.store'
 
 import type { IDiscussion } from 'src/models'
+import type { IRootStore } from '../RootStore'
 
-jest.mock('../../utils/helpers', () => ({
+vi.mock('../../utils/helpers', async () => ({
   // Preserve the original implementation of other helpers
-  ...jest.requireActual('../../utils/helpers'),
+  ...(await vi.importActual('../../utils/helpers')),
   randomID: () => 'random-id',
 }))
 
-const mockGetDoc = jest.fn()
-const mockIncrement = jest.fn()
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  query: jest.fn(),
-  doc: jest.fn(),
+const mockGetDoc = vi.fn()
+const mockIncrement = vi.fn()
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  query: vi.fn(),
+  doc: vi.fn(),
   getDoc: (doc) => mockGetDoc(doc),
   increment: (value) => mockIncrement(value),
 }))
@@ -48,7 +51,7 @@ const factory = async (
     updates: [FactoryResearchItemUpdate(), FactoryResearchItemUpdate()],
     ...researchItemOverloads,
   })
-  const store = new ResearchStore()
+  const store = new ResearchStore({} as IRootStore)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -81,7 +84,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userStore = {
-    getUserProfile: jest.fn().mockResolvedValue(
+    getUserProfile: vi.fn().mockResolvedValue(
       FactoryUser({
         _authID: 'userId',
         userName: 'username',
@@ -92,16 +95,16 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
+    triggerNotification: vi.fn(),
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.discussionStore = {
-    fetchOrCreateDiscussionBySource: jest.fn().mockResolvedValue({
+    fetchOrCreateDiscussionBySource: vi.fn().mockResolvedValue({
       comments: [],
     }),
-    addComment: jest
+    addComment: vi
       .fn()
       .mockImplementation((_discussionObjec: IDiscussion, text: string) => {
         return {
@@ -113,8 +116,8 @@ const factory = async (
           ],
         }
       }),
-    editComment: jest.fn(),
-    deleteComment: jest.fn(),
+    editComment: vi.fn(),
+    deleteComment: vi.fn(),
   }
 
   await store.setActiveResearchItemBySlug('fish')
@@ -135,303 +138,6 @@ const factory = async (
 }
 
 describe('research.store', () => {
-  describe('Comments', () => {
-    describe('fetchingCommments', () => {
-      it('always returns an empty list', async () => {
-        // Arrange
-        // fetching a research item with comments
-        const { store } = await factoryResearchItem()
-        // Act
-        // Assert
-        const mockDiscussionFetch =
-          store.discussionStore.fetchOrCreateDiscussionBySource
-        expect(mockDiscussionFetch).toBeCalledTimes(
-          store.activeResearchItem?.updates.length || 0,
-        )
-        expect(mockDiscussionFetch.mock.calls[0]).toEqual([
-          expect.any(String),
-          'researchUpdate',
-        ])
-        expect(store.activeResearchItem.updates[0].comments).toEqual([])
-      })
-
-      it('queries Discussions for comments', async () => {
-        // Arrange
-        // fetching a research item with comments
-        const localComment = FactoryComment()
-        const comment = FactoryComment()
-        const { store } = await factoryResearchItem({
-          updates: [FactoryResearchItemUpdate({ comments: [localComment] })],
-        })
-        store.discussionStore.fetchOrCreateDiscussionBySource.mockResolvedValue(
-          {
-            comments: [comment],
-          },
-        )
-
-        // Act
-        await store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.activeResearchItem.updates[0].comments).toEqual([
-          localComment,
-          comment,
-        ])
-      })
-    })
-
-    describe('addComment', () => {
-      it('adds new comment to update', async () => {
-        const { store, researchItem, setFn, updateFn } =
-          await factoryResearchItem({
-            collaborators: ['a-contributor'],
-            subscribers: ['subscriber'],
-          })
-        store.discussionStore.fetchOrCreateDiscussionBySource.mockResolvedValue(
-          {
-            comments: [FactoryComment()],
-          },
-        )
-
-        // Act
-        await store.addComment('fish', researchItem.updates[0], null)
-
-        // Assert
-        const [newResearchItem] = updateFn.mock.calls[0]
-
-        expect(setFn).not.toBeCalled()
-        expect(newResearchItem.totalCommentCount).toBe(1)
-
-        // Notifies research author
-        expect(
-          store.userNotificationsStore.triggerNotification,
-        ).toHaveBeenCalledTimes(2)
-        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
-          'new_comment_discussion',
-          researchItem._createdBy,
-          `/research/${researchItem.slug}#update_0`,
-          researchItem.title,
-        )
-        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
-          'new_comment_discussion',
-          'a-contributor',
-          `/research/${researchItem.slug}#update_0`,
-          researchItem.title,
-        )
-        expect(store.discussionStore.addComment).toBeCalledWith(
-          expect.any(Object),
-          'fish',
-          null,
-        )
-      })
-
-      it('adds @mention to comment text', async () => {
-        const { store, researchItem, setFn, updateFn } =
-          await factoryResearchItem()
-
-        // Act
-        await store.addComment(
-          'My favourite user has to be @username',
-          researchItem.updates[0],
-          null,
-        )
-
-        // Assert
-        const [newResearchItem] = updateFn.mock.calls[0]
-        expect(updateFn).toHaveBeenCalledTimes(1)
-        expect(setFn).not.toBeCalled()
-        expect(newResearchItem.totalCommentCount).toBe(1)
-        expect(newResearchItem.mentions).toEqual(
-          expect.arrayContaining([
-            {
-              username: 'username',
-              location: 'update-0-comment:random-id',
-            },
-          ]),
-        )
-        expect(store.discussionStore.addComment).toBeCalledWith(
-          expect.any(Object),
-          'My favourite user has to be @username',
-          null,
-        )
-      })
-    })
-
-    describe('deleteComment', () => {
-      it('removes a comment', async () => {
-        const { store, researchItem, setFn, updateFn } =
-          await factoryResearchItem({
-            totalCommentCount: -1,
-            updates: [
-              FactoryResearchItemUpdate({
-                description: '@username',
-                comments: [
-                  FactoryComment({
-                    _id: 'commentId',
-                    _creatorId: 'fake-user',
-                    text: 'text',
-                  }),
-                ],
-              }),
-            ],
-          })
-
-        // Act
-        await store.deleteComment('commentId', researchItem.updates[0])
-
-        // Assert
-        const [newResearchItem] = updateFn.mock.calls[0]
-        expect(updateFn).toHaveBeenCalledTimes(1)
-        expect(setFn).not.toBeCalled()
-        expect(newResearchItem.totalCommentCount).toBe(0)
-        expect(store.discussionStore.deleteComment).toBeCalledWith(
-          expect.any(Object),
-          'commentId',
-        )
-      })
-
-      it('admin removes another users comment', async () => {
-        const { store, researchItem, updateFn } = await factoryResearchItem(
-          {
-            updates: [
-              FactoryResearchItemUpdate({
-                description: '@username',
-                comments: [
-                  FactoryComment({
-                    _id: 'commentId',
-                    _creatorId: 'fake-user',
-                    text: 'text',
-                  }),
-                ],
-              }),
-            ],
-          },
-          FactoryUser({
-            _id: 'test-user',
-            userRoles: [UserRole.ADMIN],
-          }),
-        )
-
-        // Act
-        await store.deleteComment('commentId', researchItem.updates[0])
-
-        // Assert
-        expect(updateFn).toHaveBeenCalledTimes(1)
-        expect(store.discussionStore.deleteComment).toBeCalledWith(
-          expect.any(Object),
-          'commentId',
-        )
-      })
-    })
-
-    describe('editComment', () => {
-      it('updates a comment', async () => {
-        const comment = FactoryComment({
-          _creatorId: 'fake-user',
-        })
-
-        const { store, researchItem, updateFn } = await factoryResearchItem({
-          updates: [
-            FactoryResearchItemUpdate({
-              comments: [comment],
-            }),
-          ],
-        })
-
-        // Act
-        await store.editComment(
-          comment._id,
-          'My favourite comment',
-          researchItem.updates[0],
-        )
-
-        // Assert
-        const [newResearchItem] = updateFn.mock.calls[0]
-        expect(newResearchItem.totalCommentCount).toBe(1)
-        expect(store.discussionStore.editComment).toBeCalledWith(
-          expect.any(Object),
-          comment._id,
-          'My favourite comment',
-        )
-      })
-
-      it('admin updates another users comment', async () => {
-        const comment = FactoryComment({
-          _creatorId: 'fake-user',
-        })
-
-        const { store, researchItem, updateFn } = await factoryResearchItem(
-          {
-            updates: [
-              FactoryResearchItemUpdate({
-                comments: [comment],
-              }),
-            ],
-          },
-          FactoryUser({
-            _id: 'test-user',
-            userRoles: [UserRole.ADMIN],
-          }),
-        )
-
-        // Act
-        await store.editComment(
-          comment._id,
-          'My favourite comment',
-          researchItem.updates[0],
-        )
-
-        // Assert
-        const [newResearchItem] = updateFn.mock.calls[0]
-        expect(newResearchItem.totalCommentCount).toBe(1)
-        expect(store.discussionStore.editComment).toBeCalledWith(
-          expect.any(Object),
-          comment._id,
-          'My favourite comment',
-        )
-      })
-
-      // TODO: Handle notifications or should they be moved to Discussion?
-      it.skip('triggers a notification when editing an comment to add @mention', async () => {
-        const comment = FactoryComment({
-          _creatorId: 'fake-user',
-        })
-        const { store, researchItem, setFn } = await factoryResearchItem({
-          updates: [
-            FactoryResearchItemUpdate({
-              description: 'Some description',
-              comments: [comment],
-            }),
-          ],
-        })
-
-        // Act
-        await store.editComment(
-          comment._id,
-          'My favourite comment @username',
-          researchItem.updates[0],
-        )
-
-        // Assert
-        const [newResearchItem] = setFn.mock.calls[0]
-        expect(store.discussionStore.editComment).toBeCalledWith(
-          expect.any(Object),
-          comment._id,
-          'My favourite comment @username',
-        )
-        expect(
-          store.userNotificationsStore.triggerNotification,
-        ).toBeCalledTimes(1)
-        expect(store.userNotificationsStore.triggerNotification).toBeCalledWith(
-          'research_mention',
-          'username',
-          `/research/${researchItem.slug}#update-0-comment:${newResearchItem.updates[0].comments[0]._id}`,
-          researchItem.title,
-        )
-      })
-    })
-  })
-
   describe('Updates', () => {
     describe('uploadUpdate', () => {
       it('inserts a new update', async () => {
@@ -818,51 +524,6 @@ describe('research.store', () => {
 
       // Assert
       expect(store.userHasSubscribed).toBe(false)
-    })
-  })
-
-  describe('getters', () => {
-    describe('commentsCount', () => {
-      it('returns the total number of comments', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: 3,
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.commentsCount).toBe(3)
-      })
-
-      it('returns count from local items', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: 3,
-          updates: [
-            FactoryResearchItemUpdate({
-              comments: [FactoryComment(), FactoryComment(), FactoryComment()],
-            }),
-          ],
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.commentsCount).toBe(6)
-      })
-
-      it('normalizes malformed values', async () => {
-        const { store } = await factoryResearchItem({
-          totalCommentCount: -1,
-        })
-
-        // Act
-        store.setActiveResearchItemBySlug('fish')
-
-        // Assert
-        expect(store.commentsCount).toBe(0)
-      })
     })
   })
 })

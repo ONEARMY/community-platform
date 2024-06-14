@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
+import { FieldContainer } from 'src/common/Form/FieldContainer'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { loadUserNameOptions } from './LoadUserNameOptions'
@@ -45,15 +46,17 @@ export const UserNameSelect = observer((props: IProps) => {
     : []
 
   return (
-    <Select
-      variant={isForm ? 'form' : undefined}
-      options={options}
-      placeholder={placeholder}
-      value={value}
-      onChange={(v: IOption[]) => input.onChange(v.map((user) => user.value))}
-      onInputChange={setInputValue}
-      isClearable={true}
-      isMulti={true}
-    />
+    <FieldContainer data-cy="UserNameSelect">
+      <Select
+        variant={isForm ? 'form' : undefined}
+        options={options}
+        placeholder={placeholder}
+        value={value}
+        onChange={(v: IOption[]) => input.onChange(v.map((user) => user.value))}
+        onInputChange={setInputValue}
+        isClearable={true}
+        isMulti={true}
+      />
+    </FieldContainer>
   )
 })

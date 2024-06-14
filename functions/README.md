@@ -4,7 +4,7 @@
 
 This documentation likely requires updating, and the information provided may no longer be fully valid. Please feel free to create a new issue for any specific items identified as conflict/confusing or possibly no longer valid.
 
-Some additional, newer information can also be found in [Firebase Emulators Docs](../packages/documentation/docs/Backend%20Development/firebase-emulators.md)
+Some additional, newer information can also be found in [Firebase Emulators Docs](../packages/documentation/docs/Backend%20Development/firebase-emulator.md)
 
 ---
 
@@ -27,7 +27,7 @@ Future
 
 ## How to build and deploy
 
-The functions are integrated into the ci pipeline for master and production branches.
+The functions are integrated into the ci pipeline for the default branch.
 Simply make a PR and once approved the function will be deployed
 
 ## Testing locally

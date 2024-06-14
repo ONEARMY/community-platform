@@ -43,7 +43,7 @@ const EditUpdate = observer((props: IProps) => {
         )
       }
       const updateId = props.updateId ? props.updateId : update
-      if (store.activeResearchItem! !== undefined) {
+      if (store.activeResearchItem) {
         const update = store.activeResearchItem.updates.find(
           (upd) => upd._id === updateId,
         )

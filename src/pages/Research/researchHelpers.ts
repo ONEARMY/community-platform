@@ -17,7 +17,10 @@ export const researchUpdateStatusFilter = (
   const isUpdateDraft = update.status === ResearchUpdateStatus.DRAFT
   const isUpdateDeleted = update._deleted
 
-  return (isAdmin || isAuthor || isCollaborator || !isUpdateDraft) && !isUpdateDeleted
+  return (
+    (isAdmin || isAuthor || isCollaborator || !isUpdateDraft) &&
+    !isUpdateDeleted
+  )
 }
 
 export const getPublicUpdates = (

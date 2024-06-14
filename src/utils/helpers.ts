@@ -233,4 +233,3 @@ export const buildStatisticsLabel = ({
 
   return `${typeof stat === 'number' ? stat : 0} ${statUnit}s`
 }
-

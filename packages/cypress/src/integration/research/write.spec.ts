@@ -290,13 +290,8 @@ describe('[Research]', () => {
 
       cy.step('Enter research article details')
 
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .type(expected.title)
-        .blur()
-      cy.get('[data-cy=intro-description]')
-        .clear()
-        .type(expected.description)
+      cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
+      cy.get('[data-cy=intro-description]').clear().type(expected.description)
       cy.get('[data-cy=submit]').click()
 
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()

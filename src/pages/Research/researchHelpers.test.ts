@@ -106,7 +106,7 @@ describe('Research Helpers', () => {
     it('should show when draft and current user is an Admin', async () => {
       // prepare
       const user = { _id: 'admin', userRoles: [UserRole.ADMIN] } as IUserPPDB
-      const item = { } as IResearch.Item
+      const item = {} as IResearch.Item
       const update = { status: ResearchUpdateStatus.DRAFT } as IResearch.Update
 
       // act

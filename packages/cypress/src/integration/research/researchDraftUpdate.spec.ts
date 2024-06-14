@@ -1,7 +1,4 @@
-import {
-  generateNewUserDetails,
-} from '../../utils/TestUtils'
-
+import { generateNewUserDetails } from '../../utils/TestUtils'
 
 const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'
@@ -35,13 +32,8 @@ describe('[Research]', () => {
 
       cy.step('Enter research article details')
 
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .type(expected.title)
-        .blur()
-      cy.get('[data-cy=intro-description]')
-        .clear()
-        .type(expected.description)
+      cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
+      cy.get('[data-cy=intro-description]').clear().type(expected.description)
       cy.get('[data-cy=submit]').click()
 
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
@@ -56,20 +48,14 @@ describe('[Research]', () => {
       cy.get('[data-cy=addResearchUpdateButton]').click()
 
       cy.step('Enter update details')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type(updateTitle)
-        .blur()
+      cy.get('[data-cy=intro-title]').clear().type(updateTitle).blur()
 
       cy.get('[data-cy=intro-description]')
         .clear()
         .type(updateDescription)
         .blur()
 
-      cy.get('[data-cy=videoUrl]')
-        .clear()
-        .type(updateVideoUrl)
-        .blur()
+      cy.get('[data-cy=videoUrl]').clear().type(updateVideoUrl).blur()
 
       cy.step('Save as Draft')
       cy.get('[data-cy=draft]').click()

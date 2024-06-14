@@ -14,28 +14,22 @@ describe('[How To]', () => {
     // const howtoSlug = 'make-glass-like-beams'
     // const howtoUrl = `/how-to/${howtoSlug}`
     // const coverFileRegex = /howto-beams-glass-0-3.jpg/
-
     // it('[By Everyone]', () => {
     //   cy.step('More How-tos button is hidden')
     //   cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
-
     //   cy.step('All how-tos are shown')
     //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
-
     //   cy.step('Select a category')
     //   cy.get('[data-cy=category-select]')
     //   cy.selectTag('product', '[data-cy=category-select]')
     //   cy.get('[data-cy=card]').its('length').should('be.eq', 4)
-
     //   cy.step('Type and select a category')
     //   cy.selectTag('injection', '[data-cy=category-select]')
     //   cy.get('[data-cy=card]').its('length').should('be.eq', 2)
-
     //   cy.step('Remove all category filter')
     //   cy.get('.data-cy__clear-indicator').click()
     //   cy.get('.data-cy__multi-value__label').should('not.exist')
     //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
-
     //   cy.step('How-to cards has basic info')
     //   cy.get(`[data-cy=card][data-cy-howto-slug=${howtoSlug}]`).within(() => {
     //     cy.contains('Make glass-like beams').should('be.visible')
@@ -44,19 +38,10 @@ describe('[How To]', () => {
     //     cy.contains('product').should('be.visible')
     //     cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
     //   })
-
     //   cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
     //   cy.get(`[data-cy=card] a[href="${howtoUrl}"]:first`, SKIP_TIMEOUT).click()
     //   cy.url().should('include', howtoUrl)
     // })
-
-    it('[By Authenticated]', () => {
-      cy.signUpNewUser()
-
-      cy.step('Create button is available')
-      cy.visit('/how-to')
-      cy.get('[data-cy=create]').click().url()
-    })
   })
 
   describe('[Read a How-to]', () => {
@@ -75,6 +60,7 @@ describe('[How To]', () => {
         cy.get('[data-cy=edit]').should('not.exist')
 
         cy.step('How-to has basic info')
+        cy.title().should('eq', `${howto.title} - How-to - Community Platform`)
         cy.get('[data-cy=how-to-basis]').then(($summary) => {
           expect($summary).to.contain('howto_creator', 'Author')
           expect($summary).to.contain('Last update on', 'Edit')

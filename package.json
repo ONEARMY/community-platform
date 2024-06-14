@@ -22,7 +22,7 @@
     "start:platform:for-emulated-backend": "yarn build:shared && vite --port 4000",
     "start:platform-ci": "yarn build:shared && vite --port 3456",
     "frontend:for-emulated-backend:watch": "concurrently --kill-others --names themes,components,platform --prefix-colors yellow,cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform:for-emulated-backend\"",
-    "backend:emulator:watch": "concurrently --kill-others \"yarn workspace functions watch\" \"docker-compose up --force-recreate --build emulator\"",
+    "backend:emulator:watch": "concurrently --kill-others --names functions-watcher,docker-compose \"yarn workspace functions watch\" \"docker-compose up --force-recreate --build\"",
     "backend:emulator:stop": "docker stop $(docker ps -a -q)",
     "build:themes": "yarn workspace oa-themes build",
     "build:components": "yarn workspace oa-components build",

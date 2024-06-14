@@ -1,6 +1,7 @@
 /* eslint-disable no-case-declarations */
 import { toJS } from 'mobx'
 import { logger } from 'src/logger'
+import { filterNonDeletedComments } from 'src/utils/filterNonDeletedComments'
 
 import type { IDiscussion, IResearch } from 'src/models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
@@ -35,9 +36,13 @@ export const updateDiscussionMetadata = async (
     )
   }
 
-  const commentCount = comments.length
+  const nonDeletedComments = filterNonDeletedComments(comments)
+  const commentCount = nonDeletedComments.length
+
   const latestCommentDate =
-    commentCount > 0 ? calculateLastestCommentDate(comments) : undefined
+    commentCount > 0
+      ? calculateLastestCommentDate(nonDeletedComments)
+      : undefined
 
   switch (collectionName) {
     case 'research':

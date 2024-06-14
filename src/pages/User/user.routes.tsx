@@ -1,4 +1,4 @@
-import { Route, Routes, useParams } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { UserRole } from 'oa-shared'
 
 import { AuthRoute } from '../common/AuthRoute'
@@ -6,15 +6,14 @@ import { NotFoundPage } from '../NotFound/NotFound'
 import { SettingsPage } from '../UserSettings/SettingsPage'
 import { UserProfile } from './content/UserProfile'
 
-const userRouteElements = (id) => (
+export const UserRoutes = (
   <>
     <Route path=":id" element={<UserProfile />} />
     <Route
       path=":id/edit"
       element={
         <AuthRoute roleRequired={UserRole.ADMIN}>
-          {' '}
-          <SettingsPage adminEditableUserId={id} />{' '}
+          <SettingsPage />
         </AuthRoute>
       }
     />
@@ -22,10 +21,6 @@ const userRouteElements = (id) => (
   </>
 )
 
-const UserProfileRoutes = () => {
-  const { id } = useParams()
-
-  return <Routes>{userRouteElements(id)}</Routes>
-}
+const UserProfileRoutes = () => <Routes>{UserRoutes}</Routes>
 
 export default UserProfileRoutes

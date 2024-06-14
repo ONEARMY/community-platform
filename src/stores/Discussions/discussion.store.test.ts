@@ -294,7 +294,7 @@ describe('discussion.store', () => {
       expect(discussionItem.contributorIds).not.toEqual(
         expect.arrayContaining([comment._creatorId]),
       )
-      expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
+      expect(setFn.mock.calls[0][0].comments[0]._deleted).toEqual(true)
     })
 
     it('allows admin to remove a comment', async () => {
@@ -315,7 +315,7 @@ describe('discussion.store', () => {
 
       // Asert
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
+      expect(setFn.mock.calls[0][0].comments[0]._deleted).toEqual(true)
     })
 
     it('throws an error for a different user', async () => {

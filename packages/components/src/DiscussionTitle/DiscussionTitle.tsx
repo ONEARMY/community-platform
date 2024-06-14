@@ -1,23 +1,31 @@
 import { Heading } from 'theme-ui'
 
+import type { IComment } from '../CommentItem/types'
+
 export const NO_COMMENTS = 'Start the discussion'
 export const ONE_COMMENT = '1 Comment'
 export const COMMENTS = 'Comments'
 
 export interface IProps {
-  length: number
+  comments: IComment[]
 }
 
-export const DiscussionTitle = ({ length }: IProps) => {
+export const nonDeletedCommentsCount = (comments: IComment[]) => {
+  return comments.filter(({ _deleted }) => _deleted !== true).length
+}
+
+export const DiscussionTitle = ({ comments }: IProps) => {
+  const commentCount = nonDeletedCommentsCount(comments)
+
   const setTitle = () => {
-    if (length === 0) {
+    if (commentCount === 0) {
       return NO_COMMENTS
     }
-    if (length === 1) {
+    if (commentCount === 1) {
       return ONE_COMMENT
     }
 
-    return `${length} ${COMMENTS}`
+    return `${commentCount} ${COMMENTS}`
   }
 
   const title = setTitle()

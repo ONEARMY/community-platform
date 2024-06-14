@@ -19,17 +19,17 @@ describe('[Research]', () => {
     cy.visit('/research')
   })
 
-  const expected = {
-    _createdBy: 'research_creator',
-    _deleted: false,
-    description: 'After creating, the research will be deleted.',
-    title: 'Create research article test',
-    slug: 'create-research-article-test',
-    previousSlugs: ['create-research-article-test'],
-    status: 'In progress',
-  }
-
   describe('[Create research article]', () => {
+    const expected = {
+      _createdBy: 'research_creator',
+      _deleted: false,
+      description: 'After creating, the research will be deleted.',
+      title: 'Create research article test',
+      slug: 'create-research-article-test',
+      previousSlugs: ['create-research-article-test'],
+      status: 'In progress',
+    }
+
     it('[By Authenticated]', () => {
       const updateTitle = 'Create a research update'
       const updateDescription = 'This is the description for the update.'
@@ -264,14 +264,63 @@ describe('[Research]', () => {
       cy.visit(editResearchUrl)
       cy.get('[data-cy=BlockedRoute]').should('be.visible')
     })
+  })
+
+  describe('[Displays draft updates for Author]', () => {
+    const expected = {
+      description: 'After creating, the research will be deleted.',
+      title: 'Create research article test 2',
+      slug: 'create-research-article-test-2',
+    }
 
     it('[By Authenticated]', () => {
-      cy.step('Prevent non-owner access to edit research article')
+      const updateTitle = 'Create a research update 2'
+      const updateDescription = 'This is the description for the update.'
+      const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
+
+      cy.login(researcherEmail, researcherPassword)
+
+      cy.step('Create the research article')
       cy.visit('/research')
-      cy.login('research_editor@test.com', 'research_editor')
-      cy.visit(editResearchUrl)
-      // user should be redirect to research page
-      // cy.location('pathname').should('eq', researchUrl)
+      cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('[data-cy=create]').click()
+
+      cy.step('Enter research article details')
+
+      cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
+      cy.get('[data-cy=intro-description]').clear().type(expected.description)
+      cy.get('[data-cy=submit]').click()
+
+      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
+
+      cy.url().should('include', `/research/${expected.slug}`)
+      cy.visit(`/research/${expected.slug}`)
+
+      cy.step('Research article displays correctly')
+      cy.contains(expected.title)
+      cy.contains(expected.description)
+
+      cy.get('[data-cy=addResearchUpdateButton]').click()
+
+      cy.step('Enter update details')
+      cy.get('[data-cy=intro-title]').clear().type(updateTitle).blur()
+
+      cy.get('[data-cy=intro-description]')
+        .clear()
+        .type(updateDescription)
+        .blur()
+
+      cy.get('[data-cy=videoUrl]').clear().type(updateVideoUrl).blur()
+
+      cy.step('Save as Draft')
+      cy.get('[data-cy=draft]').click()
+
+      cy.step('Can see Draft after refresh')
+      cy.contains('Uploading Update').should('exist')
+      cy.get('[data-cy="icon-loading"]').should('not.exist')
+      cy.visit(`/research/${expected.slug}`)
+
+      cy.contains(updateTitle)
     })
   })
 })

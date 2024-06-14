@@ -7,7 +7,6 @@ const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
 
 const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
-const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 
 export const notifyNewPin = functions
   .runWith({ memory: '512MB' })
@@ -61,37 +60,6 @@ export const notifyNewHowTo = functions
           return
         } else {
           return res
-        }
-      },
-    )
-  })
-
-export const notifyAcceptedQuestion = functions
-  .runWith({ memory: '512MB' })
-  .firestore.document('questions_rev20230926/{id}')
-  // currently, questions are immediately posted with no review.
-  // if that changes, this code will need to change.
-  .onCreate((snapshot) => {
-    const info = snapshot.data()
-    console.log(info)
-
-    const username = info._createdBy
-    const title = info.title
-    const slug = info.slug
-
-    request.post(
-      DISCORD_WEBHOOK_URL,
-      {
-        json: {
-          text: `❓ ${username} has a new question: ${title}\n Help them out and answer here: ${SITE_URL}/questions/${slug}`,
-        },
-      },
-      (error, response) => {
-        if (error) {
-          console.error(error)
-          return
-        } else {
-          return response
         }
       },
     )

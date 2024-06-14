@@ -8,6 +8,6 @@ exports.notifyPinAccepted = IntegrationsDiscord.notifyPinAccepted
 exports.notifyNewHowTo = IntegrationsSlack.notifyNewHowTo
 exports.notifyHowToAccepted = IntegrationsDiscord.notifyHowToAccepted
 
-exports.notifyAcceptedQuestion = IntegrationsSlack.notifyAcceptedQuestion
+exports.notifyAcceptedQuestion = IntegrationsDiscord.notifyAcceptedQuestion
 
 exports.patreonAuth = IntegrationsPatreon.patreonAuth

@@ -1,3 +1,5 @@
+import { isPreciousPlastic } from 'src/config/config'
+
 import type { IMapPin } from 'src/models/maps.models'
 
 // filter pins to include matched pin type or subtype
@@ -14,10 +16,16 @@ export const filterMapPinsByType = (
     filterList.delete('verified')
   }
 
-  const filterFn =
-    filterList.size === 0
-      ? (p) => !p._deleted
-      : (p) => !p._deleted && filterList.has(p.subType || p.type)
+  return filteredPins.filter((pin) => {
+    if (filterList.size === 0) {
+      // no filter => remove deleted and hide members if precious-plastic
+      if (isPreciousPlastic()) {
+        return !pin._deleted && pin.type !== 'member'
+      }
 
-  return filteredPins.filter(filterFn)
+      return !pin._deleted
+    }
+
+    return !pin._deleted && filterList.has(pin.subType || pin.type)
+  })
 }

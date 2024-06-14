@@ -24,9 +24,9 @@ import type {
 export const handleDiscussionUpdate = functions
   .runWith({ memory: '512MB' })
   .firestore.document(`${DB_ENDPOINTS.discussions}/{id}`)
-  .onUpdate((change, context) => {
+  .onUpdate(async (change, context) => {
     try {
-      return updateDocument(change)
+      await updateDocument(change)
     } catch (error) {
       console.error('Error in handleDiscussionUpdate:', error)
     }

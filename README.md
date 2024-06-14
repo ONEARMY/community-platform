@@ -155,6 +155,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/codisart"><img src="https://avatars.githubusercontent.com/u/1767237?v=4?s=60" width="60px;" alt="Louis"/><br /><sub><b>Louis</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=codisart" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://venugsportfolio.netlify.app/"><img src="https://avatars.githubusercontent.com/u/52736045?v=4?s=60" width="60px;" alt="Venu G Soganadgi"/><br /><sub><b>Venu G Soganadgi</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=V24039" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Augustindou"><img src="https://avatars.githubusercontent.com/u/44368825?v=4?s=60" width="60px;" alt="Augustindou"/><br /><sub><b>Augustindou</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Augustindou" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

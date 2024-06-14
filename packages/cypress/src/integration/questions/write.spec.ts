@@ -1,5 +1,7 @@
-const creatorEmail = 'howto_creator@test.com'
-const creatorPassword = 'test1234'
+import { MOCK_DATA } from '../../data'
+
+const questions = Object.values(MOCK_DATA.questions)
+const item = questions[0]
 
 describe('[Question]', () => {
   describe('[Create a question]', () => {
@@ -19,13 +21,17 @@ describe('[Question]', () => {
     // https://github.com/ONEARMY/community-platform/pull/3461
     // eslint-disable-next-line mocha/no-skipped-tests
     it.skip('[By Authenticated]', () => {
-      cy.visit('/questions')
-      cy.login(creatorEmail, creatorPassword)
+      cy.signUpNewUser()
 
       cy.step('Go to create page')
-      cy.get('[data-cy=loader]').should('not.exist')
-      cy.get('[data-cy=create]').click()
+      cy.visit('/questions/create')
       cy.get('[data-cy=question-create-title]')
+
+      cy.step('Warn if title is identical to an existing one')
+      cy.get('[data-cy=field-title]').type(item.title).blur({ force: true })
+      cy.contains(
+        'Titles must be unique, please try being more specific',
+      ).should('be.visible')
 
       cy.step('Add title field')
       cy.get('[data-cy=field-title]').type(initialTitle).blur({ force: true })

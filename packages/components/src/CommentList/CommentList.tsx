@@ -5,6 +5,7 @@ import { Button } from '../Button/Button'
 import { ButtonShowReplies } from '../ButtonShowReplies/ButtonShowReplies'
 import { CommentItem } from '../CommentItem/CommentItem'
 import { CreateReply } from '../CreateReply/CreateReply'
+import { nonDeletedCommentsCount } from '../DiscussionTitle/DiscussionTitle'
 import { Icon } from '../Icon/Icon'
 
 import type { IComment } from '../CommentItem/types'
@@ -19,6 +20,7 @@ interface IPropsShared {
   isReplies: boolean
   maxLength: number
   onSubmitReply?: (_id: string, reply: string) => Promise<void>
+  showAvatar: boolean
 }
 
 export interface IPropsCommentContainer extends IPropsShared {
@@ -47,12 +49,18 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
     isReplies,
     maxLength,
     onSubmitReply,
+    showAvatar,
   } = props
-  const { _id, creatorName, replies } = comment
+  const { _id, _deleted, creatorName, replies } = comment
 
   const replyArrow = () => {
     return (
-      <Box sx={{ paddingTop: 4 }}>
+      <Box
+        sx={{
+          paddingTop: 1,
+          paddingRight: 2,
+        }}
+      >
         <Icon glyph="arrow-curved-bottom-right" />
       </Box>
     )
@@ -61,7 +69,7 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
   const repliesButton = () => {
     return (
       <ButtonShowReplies
-        creatorName={creatorName}
+        creatorName={!_deleted ? creatorName : null}
         isShowReplies={isShowReplies}
         replies={replies || []}
         setIsShowReplies={() => setIsShowReplies(!isShowReplies)}
@@ -82,12 +90,16 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
     }
   }
 
+  if (_deleted && (!replies || nonDeletedCommentsCount(replies) === 0)) {
+    return null
+  }
+
   return (
     <Box
       sx={{
         backgroundColor: 'white',
         borderRadius: 1,
-        padding: 3,
+        padding: isReplies ? 0 : 2,
       }}
     >
       <CommentItem
@@ -96,6 +108,7 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         isReply={isReplies ? true : false}
+        showAvatar={showAvatar}
       />
 
       {supportReplies && !isShowReplies && repliesButton()}
@@ -125,9 +138,10 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
               isReplies={true}
               maxLength={maxLength}
               supportReplies={false}
+              showAvatar={showAvatar}
             />
 
-            {createReply()}
+            {!_deleted && createReply()}
 
             {repliesButton()}
           </Flex>
@@ -149,6 +163,7 @@ export const CommentList = (props: IPropsCommentList) => {
     maxLength,
     onMoreComments,
     onSubmitReply,
+    showAvatar,
     supportReplies = false,
   } = props
 
@@ -182,11 +197,10 @@ export const CommentList = (props: IPropsCommentList) => {
   }, [highlightedCommentId, comments])
 
   return (
-    <Box
-      mb={4}
+    <Flex
       sx={{
-        width: '100%',
-        display: 'block',
+        gap: 2,
+        flexDirection: 'column',
       }}
     >
       {comments &&
@@ -195,7 +209,6 @@ export const CommentList = (props: IPropsCommentList) => {
             key={comment._id}
             data-testid="CommentList: item"
             sx={{
-              marginBottom: 4,
               border: `${
                 highlightedCommentId === comment._id
                   ? '2px dashed black'
@@ -214,6 +227,7 @@ export const CommentList = (props: IPropsCommentList) => {
               maxLength={maxLength}
               onSubmitReply={onSubmitReply}
               supportReplies={supportReplies}
+              showAvatar={showAvatar}
             />
           </Box>
         ))}
@@ -231,6 +245,6 @@ export const CommentList = (props: IPropsCommentList) => {
           </Button>
         </Flex>
       )}
-    </Box>
+    </Flex>
   )
 }

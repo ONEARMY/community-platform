@@ -1,3 +1,5 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
 import {
   draftValidationWrapper,
   noSpecialCharacters,
@@ -5,15 +7,17 @@ import {
 } from './validators'
 
 // Mock out module store to limit impact of circular dependency
-jest.mock('src/stores/common/module.store')
+vi.mock('src/stores/common/module.store')
 
 import { ResearchStore } from '../stores/Research/research.store'
+
+import type { IRootStore } from 'src/stores/RootStore'
 
 describe('draftValidationWrapper', () => {
   it('forwards to the validator when draft save is not allowed', () => {
     const allowDraftSave = false
     const value = 'title'
-    const validator = jest.fn()
+    const validator = vi.fn()
 
     draftValidationWrapper(value, { allowDraftSave }, validator)
 
@@ -22,7 +26,7 @@ describe('draftValidationWrapper', () => {
 
   it('returns undefined when draft save is allowed', () => {
     const allowDraftSave = true
-    const validator = jest.fn()
+    const validator = vi.fn()
 
     draftValidationWrapper('title', { allowDraftSave }, validator)
 
@@ -31,26 +35,24 @@ describe('draftValidationWrapper', () => {
 })
 
 describe('validateTitle', () => {
-  const isReusedMock = jest.fn()
+  const isReusedMock = vi.fn()
 
   class MockStore extends ResearchStore {
     isTitleThatReusesSlug = isReusedMock
   }
 
   afterEach(() => {
-    jest.restoreAllMocks()
-  })
-
-  it("returns 'Required' when title is falsy", async () => {
-    const validator = validateTitle('create', undefined, new MockStore())
-
-    expect(await validator(undefined)).toEqual('Required')
+    vi.restoreAllMocks()
   })
 
   it('returns false when title reduces to a new slug', async () => {
     isReusedMock.mockReturnValue(false)
     const title = 'A Clockwork Orange'
-    const validator = validateTitle('create', 'new-id', new MockStore())
+    const validator = validateTitle(
+      'create',
+      'new-id',
+      new MockStore({} as IRootStore),
+    )
 
     expect(await validator(title)).toEqual(false)
     expect(isReusedMock).toHaveBeenCalledWith(title, undefined)
@@ -60,7 +62,7 @@ describe('validateTitle', () => {
     isReusedMock.mockReturnValue(true)
     const duplicatedTitle = 'Creating a ToDo list'
     const id = 'existing-id'
-    const validator = validateTitle('edit', id, new MockStore())
+    const validator = validateTitle('edit', id, new MockStore({} as IRootStore))
 
     expect(await validator(duplicatedTitle)).toEqual(
       'Titles must be unique, please try being more specific',

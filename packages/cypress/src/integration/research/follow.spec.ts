@@ -19,7 +19,7 @@ describe('[Research]', () => {
       cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
       cy.get('[data-cy="follow-redirect"]').should('not.exist')
       cy.get('[data-cy="follow-button"]')
-        .should('exist')
+        .should('be.visible')
         .should('contain.text', 'Follow')
 
       cy.step('Should follow on click')

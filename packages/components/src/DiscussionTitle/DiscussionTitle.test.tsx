@@ -1,4 +1,8 @@
-import { render } from '../tests/utils'
+import '@testing-library/jest-dom/vitest'
+
+import { describe, expect, it } from 'vitest'
+
+import { render } from '../test/utils'
 import { COMMENTS, NO_COMMENTS, ONE_COMMENT } from './DiscussionTitle'
 import {
   MultipleComments,
@@ -30,6 +34,6 @@ describe('DiscussionTitle', () => {
       <MultipleComments {...(MultipleComments.args as IProps)} />,
     )
 
-    expect(getByText(`45 ${COMMENTS}`)).toBeInTheDocument()
+    expect(getByText(`3 ${COMMENTS}`)).toBeInTheDocument()
   })
 })

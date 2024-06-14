@@ -59,13 +59,17 @@ export const Username = ({ user, sx }: IProps) => {
         <Flex mr={1} sx={{ display: 'inline-flex' }}>
           {countryCode && isValidCountryCode(countryCode) ? (
             <Flex data-testid="Username: known flag">
-              <FlagIconHowTos code={countryCode.toLowerCase()} />
+              <FlagIconHowTos
+                countryCode={countryCode}
+                svg={true}
+                title={countryCode}
+              />
             </Flex>
           ) : (
             <Flex
               data-testid="Username: unknown flag"
               sx={{
-                backgroundImage: `url(${flagUnknownSVG})`,
+                backgroundImage: `url("${flagUnknownSVG}")`,
                 backgroundSize: 'cover',
                 borderRadius: '3px',
                 height: '14px',

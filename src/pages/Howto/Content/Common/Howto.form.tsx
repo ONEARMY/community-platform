@@ -31,8 +31,8 @@ import {
   HowtoFieldTags,
   HowtoFieldTime,
   HowtoFieldTitle,
+  HowtoPostingGuidelines,
   HowToSubmitStatus,
-  PostingGuidelines,
 } from '.'
 
 import type { FormApi } from 'final-form'
@@ -94,9 +94,11 @@ export const HowtoForm = observer((props: IProps) => {
       return
     }
     setState((state) => ({ ...state, showSubmitModal: true }))
-    formValues.moderation = formValues.allowDraftSave
-      ? IModerationStatus.DRAFT
-      : IModerationStatus.AWAITING_MODERATION
+    if (formValues.moderation !== IModerationStatus.ACCEPTED) {
+      formValues.moderation = formValues.allowDraftSave
+        ? IModerationStatus.DRAFT
+        : IModerationStatus.AWAITING_MODERATION
+    }
     logger.debug('submitting form', formValues)
     await howtoStore.uploadHowTo(formValues)
     form.reset(formValues)
@@ -170,7 +172,7 @@ export const HowtoForm = observer((props: IProps) => {
                     <Box
                       sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
                     >
-                      <PostingGuidelines />
+                      <HowtoPostingGuidelines />
                     </Box>
                     <Card mt={3}>
                       <Flex
@@ -248,7 +250,7 @@ export const HowtoForm = observer((props: IProps) => {
                   }}
                 >
                   <Box sx={{ display: ['none', 'none', 'block'] }}>
-                    <PostingGuidelines />
+                    <HowtoPostingGuidelines />
                   </Box>
 
                   <HowtoButtonDraft

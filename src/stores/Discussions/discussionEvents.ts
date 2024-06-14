@@ -1,8 +1,9 @@
 /* eslint-disable no-case-declarations */
 import { toJS } from 'mobx'
 import { logger } from 'src/logger'
+import { filterNonDeletedComments } from 'src/utils/filterNonDeletedComments'
 
-import type { IDiscussion } from 'src/models'
+import type { IDiscussion, IResearch } from 'src/models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
@@ -35,15 +36,19 @@ export const updateDiscussionMetadata = async (
     )
   }
 
-  const commentCount = comments.length
+  const nonDeletedComments = filterNonDeletedComments(comments)
+  const commentCount = nonDeletedComments.length
+
   const latestCommentDate =
-    commentCount > 0 ? calculateLastestCommentDate(comments) : undefined
+    commentCount > 0
+      ? calculateLastestCommentDate(nonDeletedComments)
+      : undefined
 
   switch (collectionName) {
     case 'research':
       const researchRef = db.collection(collectionName).doc(primaryContentId)
 
-      const research = toJS(await researchRef.get())
+      const research = toJS(await researchRef.get()) as IResearch.Item
 
       if (research) {
         // This approach is open to error but is better than making lots of DBs

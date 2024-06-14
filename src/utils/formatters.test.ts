@@ -1,4 +1,5 @@
 import { ExternalLinkLabel } from 'oa-shared'
+import { describe, expect, it } from 'vitest'
 
 import { formatLink } from './formatters'
 

@@ -1,25 +1,33 @@
-import { MemoryRouter } from 'react-router-dom'
+import '@testing-library/jest-dom/vitest'
+
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { act, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { IModerationStatus, UserRole } from 'oa-shared'
+import { IModerationStatus } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { buttons } from 'src/pages/UserSettings/labels'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { SettingsPage } from './SettingsPage'
 
 const Theme = testingThemeStyles
 
 // eslint-disable-next-line prefer-const
-let mockGetUserProfile = jest.fn().mockResolvedValue(FactoryUser)
-const mockGetPin = jest.fn()
-const mockUpdateUserBadge = jest.fn()
+let mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
+const mockGetPin = vi.fn()
+const mockUpdateUserBadge = vi.fn()
 let mockUser = FactoryUser({})
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
@@ -27,14 +35,14 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
       userStore: {
         getUserProfile: mockGetUserProfile,
         updateUserBadge: mockUpdateUserBadge,
-        getUserEmail: jest.fn(),
+        getUserEmail: vi.fn(),
         user: mockUser,
         updateStatus: {
           Complete: false,
         },
       },
       aggregationsStore: {
-        isVerified: jest.fn(),
+        isVerified: vi.fn(),
         users_verified: {
           HowtoAuthor: true,
         },
@@ -56,7 +64,7 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
 
 describe('UserSettings', () => {
   beforeEach(() => {
-    jest.resetAllMocks()
+    vi.resetAllMocks()
   })
 
   it('displays user settings', async () => {
@@ -167,7 +175,7 @@ describe('UserSettings', () => {
     })
   })
   describe('impact section scroll into view', () => {
-    const scrollIntoViewMock = jest.fn()
+    const scrollIntoViewMock = vi.fn()
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock
 
     it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', async () => {
@@ -222,27 +230,30 @@ describe('UserSettings', () => {
 })
 
 const Wrapper = async (user, routerInitialEntry?) => {
-  const isAdmin = user.userRoles?.includes(UserRole.ADMIN)
   if (routerInitialEntry !== undefined) {
     // impact section is only displayed if isPreciousPlastic() is true
     window.localStorage.setItem('platformTheme', 'precious-plastic')
   }
+
+  const router = createMemoryRouter(
+    createRoutesFromElements(<Route index element={<SettingsPage />} />),
+    {
+      initialEntries: [routerInitialEntry ? routerInitialEntry : ''],
+    },
+  )
+
   return render(
     <Provider
       {...useCommonStores().stores}
       userStore={{
         user,
         updateStatus: { Complete: true },
-        getUserEmail: jest.fn(),
-        getUserProfile: jest.fn().mockResolvedValue(user),
+        getUserEmail: vi.fn(),
+        getUserProfile: vi.fn().mockResolvedValue(user),
       }}
     >
       <ThemeProvider theme={Theme}>
-        <MemoryRouter
-          initialEntries={[routerInitialEntry ? routerInitialEntry : '']}
-        >
-          <SettingsPage adminEditableUserId={isAdmin ? user._id : null} />
-        </MemoryRouter>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,
   )

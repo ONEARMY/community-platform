@@ -6,14 +6,14 @@ const fadeIn = keyframes({
   to: { opacity: 1 },
 })
 
-export interface Props {
+export interface TextNotificationProps {
   children: any
   variant: 'success' | 'failure'
   isVisible: boolean
   onDismiss?: any | null
 }
 
-export const TextNotification = (props: Props) => {
+export const TextNotification = (props: TextNotificationProps) => {
   if (!props.isVisible) {
     return <></>
   }

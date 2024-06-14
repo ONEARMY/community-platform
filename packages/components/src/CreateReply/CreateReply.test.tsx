@@ -1,6 +1,9 @@
-import { fireEvent, waitFor } from '@testing-library/react'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { fireEvent, waitFor } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
+import { render } from '../test/utils'
 import { Default, LoggedIn, LoggedInWithError } from './CreateReply.stories'
 
 import type { Props } from './CreateReply'

@@ -1,7 +1,9 @@
-import { findByRole as globalFindByRole, waitFor } from '@testing-library/react'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { findByRole as globalFindByRole, waitFor } from '@testing-library/react'
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { render } from '../test/utils'
 import { ImageGallery } from './ImageGallery'
 import {
   Default,

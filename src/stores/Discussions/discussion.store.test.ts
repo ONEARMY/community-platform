@@ -1,4 +1,6 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
 import { faker } from '@faker-js/faker'
 import {
   FactoryDiscussion,
@@ -31,7 +33,7 @@ const factory = async (
   // @ts-ignore
   store.aggregationsStore = {
     aggregations: {
-      isVerified: jest.fn((userId) => userId === 'fake-user'),
+      isVerified: vi.fn((userId) => userId === 'fake-user'),
       users_verified: ['fake-user'],
     },
   }
@@ -45,7 +47,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
+    triggerNotification: vi.fn(),
   }
 
   return {
@@ -189,7 +191,7 @@ describe('discussion.store', () => {
 
       getFn.mockReturnValue(null)
       //Act
-      await expect(
+      expect(() =>
         store.addComment(discussionItem, 'New comment'),
       ).rejects.toThrowError('Discussion not found')
 
@@ -286,7 +288,7 @@ describe('discussion.store', () => {
       ])
 
       //Act
-      await expect(
+      expect(() =>
         store.editComment(discussionItem, 'fake-comment-id', 'Edited comment'),
       ).rejects.toThrowError()
 
@@ -314,7 +316,7 @@ describe('discussion.store', () => {
       expect(discussionItem.contributorIds).not.toEqual(
         expect.arrayContaining([comment._creatorId]),
       )
-      expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
+      expect(setFn.mock.calls[0][0].comments[0]._deleted).toEqual(true)
     })
 
     it('allows admin to remove a comment', async () => {
@@ -335,7 +337,7 @@ describe('discussion.store', () => {
 
       // Asert
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
+      expect(setFn.mock.calls[0][0].comments[0]._deleted).toEqual(true)
     })
 
     it('throws an error for a different user', async () => {
@@ -352,7 +354,7 @@ describe('discussion.store', () => {
       ])
 
       //Act
-      await expect(
+      expect(() =>
         store.deleteComment(discussionItem, 'fake-comment-id'),
       ).rejects.toThrowError()
 

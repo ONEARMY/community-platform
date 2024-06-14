@@ -1,4 +1,8 @@
-import { render } from '../tests/utils'
+import '@testing-library/jest-dom/vitest'
+
+import { describe, expect, it } from 'vitest'
+
+import { render } from '../test/utils'
 import { Default, NoCategory } from './Breadcrumbs.stories'
 
 import type { BreadcrumbsProps } from './Breadcrumbs'

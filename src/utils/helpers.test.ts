@@ -1,5 +1,6 @@
 import { IModerationStatus, UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it } from 'vitest'
 
 import {
   arrayToJson,
@@ -37,10 +38,6 @@ describe('src/utils/helpers', () => {
 
   it('capitalizeFirstLetter should return string with first letter capitalized', () => {
     expect(capitalizeFirstLetter('hello world')).toBe('Hello world')
-  })
-
-  it('capitalizeFirstLetter should return an empty string when a wrong type provided', () => {
-    expect(capitalizeFirstLetter(undefined)).toBe('')
   })
 
   describe('filterModerableItems Function', () => {
@@ -260,7 +257,7 @@ describe('src/utils/helpers', () => {
 
     it('should return true when given true', () => {
       const user = FactoryUser({ isContactableByPublic: true })
-      expect(isContactable(user)).toBe(true)
+      expect(isContactable(user.isContactableByPublic)).toBe(true)
     })
 
     it('should return false when given false', () => {

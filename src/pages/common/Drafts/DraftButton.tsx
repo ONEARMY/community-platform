@@ -13,6 +13,10 @@ const DraftButton = ({
   draftCount,
   handleShowDrafts,
 }: DraftButtonProps) => {
+  if (!draftCount) {
+    return <></>
+  }
+
   return (
     <Button
       variant="secondary"

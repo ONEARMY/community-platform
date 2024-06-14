@@ -7,20 +7,24 @@ import type { IResearchCategory } from 'src/models/researchCategories.model'
 import type { IRootStore } from '../RootStore'
 
 export class ResearchCategoriesStore extends ModuleStore {
-  @observable
   public allResearchCategories: IResearchCategory[] = []
-  @observable
   public allResearchCategoriesByKey: { [key: string]: IResearchCategory } = {}
 
   constructor(rootStore: IRootStore) {
     super(rootStore, 'researchCategories')
     // call init immediately for tags so they are available to all pages
     super.init()
-    makeObservable(this)
+    makeObservable(this, {
+      allResearchCategories: observable,
+      allResearchCategoriesByKey: observable,
+      setAllResearchCategories: action,
+      saveResearchCategory: action,
+      deleteResearchCategory: action,
+      researchCategoriesLabels: computed,
+    })
     this.allDocs$.subscribe((docs) => this.setAllResearchCategories(docs))
   }
 
-  @action
   public setAllResearchCategories(docs: IResearchCategory[]) {
     this.allResearchCategories = docs.sort((a, b) =>
       a.label > b.label ? 1 : -1,
@@ -28,7 +32,6 @@ export class ResearchCategoriesStore extends ModuleStore {
     this.allResearchCategoriesByKey = arrayToJson(docs, '_id')
   }
 
-  @action
   public saveResearchCategory(researchCategory: Partial<IResearchCategory>) {
     return this.db
       .collection('researchCategories')
@@ -36,7 +39,6 @@ export class ResearchCategoriesStore extends ModuleStore {
       .set(researchCategory)
   }
 
-  @action
   public deleteResearchCategory(researchCategory: Partial<IResearchCategory>) {
     return this.db
       .collection('researchCategories')
@@ -44,7 +46,7 @@ export class ResearchCategoriesStore extends ModuleStore {
       .delete()
   }
 
-  @computed get researchCategoriesLabels() {
+  get researchCategoriesLabels() {
     return this.allResearchCategories.map(
       (researchCategory) => researchCategory.label,
     )

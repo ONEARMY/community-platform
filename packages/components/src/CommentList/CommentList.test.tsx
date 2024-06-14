@@ -1,7 +1,9 @@
-import { fireEvent } from '@testing-library/react'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { fireEvent } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
+
+import { render } from '../test/utils'
 import { createFakeComments, fakeComment } from '../utils'
 import { CommentList } from './CommentList'
 
@@ -25,6 +27,7 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={1000}
         onMoreComments={mockOnMoreComments}
+        showAvatar
       />,
     )
     expect(screen.getAllByTestId('CommentList: item')).toHaveLength(
@@ -44,6 +47,7 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={1000}
         onMoreComments={mockOnMoreComments}
+        showAvatar
       />,
     )
     fireEvent.click(screen.getByText('show more comments'))
@@ -67,6 +71,7 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={1000}
         onMoreComments={mockOnMoreComments}
+        showAvatar
       />,
     )
     expect(screen.getAllByTestId('CommentList: item')[1]).toHaveStyle(
@@ -94,6 +99,7 @@ describe('CommentList', () => {
         maxLength={720}
         onMoreComments={mockOnMoreComments}
         supportReplies={true}
+        showAvatar
       />,
     )
 
@@ -116,6 +122,7 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={800}
         supportReplies={true}
+        showAvatar
       />,
     )
 
@@ -142,6 +149,7 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={800}
         supportReplies={true}
+        showAvatar
       />,
     )
 

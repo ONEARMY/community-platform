@@ -7,23 +7,25 @@ import type { ITag } from 'src/models/tags.model'
 import type { IRootStore } from '../RootStore'
 
 export class TagsStore extends ModuleStore {
-  @observable
   public allTags: ITag[] = []
-  @observable
   public allTagsByKey: { [key: string]: ITag } = {}
 
   constructor(rootStore: IRootStore) {
     super(rootStore, 'tags')
     // call init immediately for tags so they are available to all pages
     super.init()
-    makeObservable(this)
+    makeObservable(this, {
+      allTags: observable,
+      allTagsByKey: observable,
+      setAllTags: action,
+    })
+
     this.allDocs$.subscribe((docs: ITag[]) => {
       this.setAllTags(docs)
     })
   }
 
-  @action
-  private setAllTags(docs: ITag[]) {
+  public setAllTags(docs: ITag[]) {
     this.allTags = docs.sort((a, b) => (a.label > b.label ? 1 : -1))
     this.allTagsByKey = arrayToJson(docs, '_id')
   }

@@ -1,7 +1,6 @@
 import { InternalLink } from 'oa-components'
 import { Box } from 'theme-ui'
 
-import type { UserNotificationList } from 'oa-components'
 import type { INotification } from 'src/models'
 
 export const getFormattedNotificationMessage = (
@@ -159,9 +158,7 @@ export const getFormattedNotificationMessage = (
   }
 }
 
-export const getFormattedNotifications = (
-  notificationList: INotification[],
-): UserNotificationList =>
+export const getFormattedNotifications = (notificationList: INotification[]) =>
   notificationList.map((notification) => ({
     type: notification.type,
     children: getFormattedNotificationMessage(notification),

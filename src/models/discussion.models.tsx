@@ -1,3 +1,4 @@
+import type { DBDoc } from '../stores/databaseV2/types'
 import type { IQuestion } from './question.models'
 
 export type IComment = {
@@ -6,10 +7,11 @@ export type IComment = {
   _creatorId: string
   _deleted?: boolean
   _edited?: string
-  creatorName: string
   parentCommentId: string | null
   text: string
+  creatorName: string
   creatorCountry?: string | null
+  creatorImage?: string | null
   isEditable?: boolean
   isUserSupporter?: boolean
   isUserVerified?: boolean
@@ -23,5 +25,7 @@ export type IDiscussion = {
   sourceId: string
   sourceType: 'howto' | 'question' | 'researchUpdate'
 }
+
+export type IDiscussionDB = IDiscussion & DBDoc
 
 export type IDiscussionSourceModelOptions = IQuestion.Item

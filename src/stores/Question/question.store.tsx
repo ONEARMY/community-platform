@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { action, computed } from 'mobx'
+import { action, computed, makeObservable } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { isAllowedToEditContent } from 'src/utils/helpers'
@@ -10,6 +10,7 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
+import type { IModerationStatus } from 'oa-shared/models'
 import type { IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
@@ -24,6 +25,14 @@ export class QuestionStore extends ModuleStore {
 
   constructor(rootStore: IRootStore) {
     super(rootStore, COLLECTION_NAME)
+    makeObservable(this, {
+      fetchQuestionBySlug: action,
+      votedUsefulCount: computed,
+      userVotedActiveQuestionUseful: computed,
+      subscriberCount: computed,
+      userCanEditQuestion: computed,
+      userHasSubscribed: computed,
+    })
   }
 
   public async incrementViewCount(question: Partial<IQuestionDB>) {
@@ -34,13 +43,11 @@ export class QuestionStore extends ModuleStore {
     })
   }
 
-  @action
   public async fetchQuestionBySlug(slug: string) {
     logger.debug(`fetchQuestionBySlug:`, { slug })
     return await this._getQuestionItemBySlug(slug)
   }
 
-  @computed
   get votedUsefulCount(): number {
     if (!this.activeQuestionItem || !this.activeQuestionItem.votedUsefulBy) {
       return 0
@@ -48,7 +55,6 @@ export class QuestionStore extends ModuleStore {
     return this.activeQuestionItem?.votedUsefulBy.length
   }
 
-  @computed
   get userVotedActiveQuestionUseful(): boolean {
     if (!this.activeUser) return false
     return (this.activeQuestionItem?.votedUsefulBy || []).includes(
@@ -56,18 +62,15 @@ export class QuestionStore extends ModuleStore {
     )
   }
 
-  @computed
   get subscriberCount(): number {
     return (this.activeQuestionItem?.subscribers || []).length
   }
 
-  @computed
   get userCanEditQuestion(): boolean {
     if (!this.activeQuestionItem) return false
     return isAllowedToEditContent(this.activeQuestionItem, this.activeUser)
   }
 
-  @computed
   get userHasSubscribed(): boolean {
     return (
       this.activeQuestionItem?.subscribers?.includes(
@@ -82,11 +85,21 @@ export class QuestionStore extends ModuleStore {
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
 
+    const isTitleAlreadyInUse = await this.isTitleThatReusesSlug(
+      values.title,
+      values?._id,
+    )
+    if (isTitleAlreadyInUse) {
+      throw new Error('Question title already in use.')
+    }
+
     const slug = await this.setSlug(values)
     const previousSlugs = this.setPreviousSlugs(values, slug)
     const _createdBy = values._createdBy ?? this.activeUser?.userName
     const user = this.activeUser as IUser
     const creatorCountry = this.getCreatorCountry(user, values)
+    const moderation =
+      values.moderation || ('accepted' as IModerationStatus.ACCEPTED)
 
     const keywords = getKeywords(values.title + ' ' + values.description)
     if (_createdBy) {
@@ -105,6 +118,7 @@ export class QuestionStore extends ModuleStore {
       previousSlugs,
       keywords,
       images,
+      moderation,
     })
     logger.info(`upsertQuestion.set`, { dbRef })
 
@@ -137,7 +151,7 @@ export class QuestionStore extends ModuleStore {
     )
 
     if (updatedQuestion) {
-      this.activeQuestionItem = updatedQuestion
+      this.activeQuestionItem = updatedQuestion as IQuestionDB
       return updatedQuestion
     }
   }

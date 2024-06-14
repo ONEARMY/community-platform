@@ -5,34 +5,14 @@ import { isPreciousPlastic } from 'src/config/config'
 import { AuthRoute } from '../common/AuthRoute'
 import { RESEARCH_EDITOR_ROLES } from './constants'
 
-const CreateResearch = lazy(
-  () =>
-    import(/* webpackChunkName: "CreateResearch" */ './Content/CreateResearch'),
-)
-const CreateUpdate = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "CreateResearchUpdate" */ './Content/CreateUpdate/CreateUpdate'
-    ),
-)
-const ResearchItemEditor = lazy(
-  () => import(/* webpackChunkName: "EditResearch" */ './Content/EditResearch'),
-)
-const UpdateItemEditor = lazy(
-  () =>
-    import(/* webpackChunkName: "EditResearchUpdate" */ './Content/EditUpdate'),
-)
-const ResearchArticle = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "ResearchArticle" */ './Content/ResearchArticle'
-    ),
-)
-const ResearchList = lazy(
-  () => import(/* webpackChunkName: "ResearchList" */ './Content/ResearchList'),
-)
+const CreateResearch = lazy(() => import('./Content/CreateResearch'))
+const CreateUpdate = lazy(() => import('./Content/CreateUpdate/CreateUpdate'))
+const ResearchItemEditor = lazy(() => import('./Content/EditResearch'))
+const UpdateItemEditor = lazy(() => import('./Content/EditUpdate'))
+const ResearchArticle = lazy(() => import('./Content/ResearchArticle'))
+const ResearchList = lazy(() => import('./Content/ResearchList'))
 
-const getRandomInt = (max) => {
+const getRandomInt = (max: number) => {
   return Math.floor(Math.random() * max)
 }
 

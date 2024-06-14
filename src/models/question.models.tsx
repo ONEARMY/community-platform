@@ -18,11 +18,13 @@ export namespace IQuestion {
     _createdBy: string
     _deleted: boolean
     subscribers?: UserIdList
+    commentCount?: number
   } & DBDoc &
     FormInput &
     ISharedFeatures
 
   export interface FormInput extends IModerable {
+    _id: string
     title: string
     description: string
     tags: ISelectedTags

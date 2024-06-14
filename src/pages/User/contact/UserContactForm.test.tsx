@@ -3,22 +3,32 @@ import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it, vi } from 'vitest'
 
-import { UserContactForm } from '.'
+import { contact } from '../labels'
+import { UserContactForm } from './UserContactForm'
 
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
-        messageStore: {
-          upload: () => jest.fn(),
-        },
         userStore: {
-          getUserEmail: () => jest.fn().mockReturnValue('Bob@email.com'),
-          activeUser: () => jest.fn().mockReturnValue(true),
+          getUserEmail: () => vi.fn().mockReturnValue('Bob@email.com'),
+          activeUser: () => vi.fn().mockReturnValue(true),
         },
       },
     }),
+  }
+})
+
+vi.mock('src/services/message.service', () => {
+  return {
+    messageService: {
+      sendMessage: () =>
+        vi.fn().mockImplementation(() => {
+          return Promise.resolve()
+        }),
+    },
   }
 })
 
@@ -42,8 +52,9 @@ describe('UserContactForm', () => {
       'I need to learn about plastics',
     )
 
-    await user.click(screen.getByTestId('contact-submit'))
-    await screen.findByText('All sent')
+    const submitButton = screen.getByTestId('contact-submit')
+    await user.click(submitButton)
+    await screen.findByText(contact.successMessage)
   })
 
   it('renders nothing if not profile is not contactable', async () => {

@@ -1,7 +1,9 @@
-import { act, fireEvent } from '@testing-library/react'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { act, fireEvent } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
+
+import { render } from '../test/utils'
 import { EditComment, type IProps } from './EditComment'
 import { Default, EditReply } from './EditComment.stories'
 

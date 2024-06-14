@@ -1,6 +1,8 @@
-import { vi } from 'vitest'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { describe, expect, it, vi } from 'vitest'
+
+import { render } from '../test/utils'
 import { DonationRequestModal } from './DonationRequestModal'
 
 describe('DonationRequestModal', () => {

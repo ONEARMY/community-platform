@@ -125,11 +125,11 @@ export const getNotificationEmailHtml = (
       </body>
     </html>`
 
-export const getNotificationEmail = async (
+export const getNotificationEmail = (
   user: IUserDB,
   notifications: INotification[],
   unsubscribeToken: string,
-): Promise<Email> => {
+): Email => {
   return {
     html: getNotificationEmailHtml(user, notifications, unsubscribeToken),
     subject: `You've missed notifications from ${getProjectName()}`,

@@ -68,6 +68,8 @@ export const notifyNewHowTo = functions
 export const notifyAcceptedQuestion = functions
   .runWith({ memory: '512MB' })
   .firestore.document('questions_rev20230926/{id}')
+  // currently, questions are immediately posted with no review.
+  // if that changes, this code will need to change.
   .onCreate((snapshot) => {
     const info = snapshot.data()
     console.log(info)
@@ -75,12 +77,6 @@ export const notifyAcceptedQuestion = functions
     const username = info._createdBy
     const title = info.title
     const slug = info.slug
-
-    const moderation = info.moderation
-
-    if (moderation !== IModerationStatus.ACCEPTED) {
-      return
-    }
 
     request.post(
       SLACK_WEBHOOK_URL,

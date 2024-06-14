@@ -15,7 +15,7 @@ export const DownloadFileFromLink = (props: DownloadFileFromLinkProps) => {
           href={props.link}
           onClick={() => props.handleClick && props.handleClick()}
         >
-          <DownloadButton isLoggedIn />
+          <DownloadButton isLoggedIn onClick={() => {}} />
         </ExternalLink>
       ) : (
         <DownloadButton

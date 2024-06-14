@@ -3,18 +3,23 @@ import { useNavigate } from 'react-router-dom'
 import {
   DonationRequestModal,
   DownloadButton,
+  DownloadCounter,
   DownloadFileFromLink,
+  DownloadStaticFile,
 } from 'oa-components'
 
 import { useCommonStores } from './hooks/useCommonStores'
 import { AuthWrapper } from './AuthWrapper'
 
 import type { UserRole } from 'src/models'
+import type { IUploadedFileMeta } from 'src/stores/storage'
 
 export interface IProps {
   handleClick: () => Promise<void>
   isLoggedIn: boolean
-  link: string
+  fileDownloadCount: number
+  fileLink: string | undefined
+  files: (IUploadedFileMeta | File | null)[] | undefined
 }
 
 /*
@@ -23,8 +28,9 @@ export interface IProps {
   can/should move to the component library.
 */
 export const DownloadWithDonationAsk = (props: IProps) => {
-  const { handleClick, isLoggedIn, link } = props
+  const { handleClick, isLoggedIn, fileDownloadCount, fileLink, files } = props
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [link, setLink] = useState<string>('')
   const navigate = useNavigate()
   const { themeStore } = useCommonStores().stores
 
@@ -35,14 +41,9 @@ export const DownloadWithDonationAsk = (props: IProps) => {
     toggleIsModalOpen()
   }
 
-  if (!isLoggedIn) {
-    return (
-      <DownloadButton
-        onClick={async () => navigate('/sign-in')}
-        isLoggedIn={false}
-      />
-    )
-  }
+  const filteredFiles: IUploadedFileMeta[] | undefined = files?.filter(
+    (file): file is IUploadedFileMeta => file !== null && 'downloadUrl' in file,
+  )
 
   return (
     <>
@@ -59,11 +60,57 @@ export const DownloadWithDonationAsk = (props: IProps) => {
       <AuthWrapper
         roleRequired={'beta-tester' as UserRole}
         fallback={
-          <DownloadFileFromLink handleClick={handleClick} link={link} />
+          <>
+            {!isLoggedIn && (
+              <DownloadButton
+                onClick={async () => navigate('/sign-in')}
+                isLoggedIn={false}
+              />
+            )}
+
+            {isLoggedIn && fileLink && (
+              <DownloadFileFromLink handleClick={handleClick} link={fileLink} />
+            )}
+            {isLoggedIn &&
+              filteredFiles &&
+              filteredFiles.map((file, index) => (
+                <DownloadStaticFile
+                  allowDownload
+                  file={file}
+                  key={file ? file.name : `file-${index}`}
+                  handleClick={handleClick}
+                  isLoggedIn
+                />
+              ))}
+          </>
         }
       >
-        <DownloadButton onClick={toggleIsModalOpen} isLoggedIn />
+        <>
+          {fileLink && (
+            <DownloadButton
+              onClick={() => {
+                setLink(fileLink)
+                toggleIsModalOpen()
+              }}
+              isLoggedIn
+            />
+          )}
+          {filteredFiles &&
+            filteredFiles.map((file, index) => (
+              <DownloadStaticFile
+                file={file}
+                key={file ? file.name : `file-${index}`}
+                handleClick={() => {
+                  setLink(file.downloadUrl)
+                  toggleIsModalOpen()
+                }}
+                forDonationRequest
+                isLoggedIn
+              />
+            ))}
+        </>
       </AuthWrapper>
+      <DownloadCounter total={fileDownloadCount} />
     </>
   )
 }

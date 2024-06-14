@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Flex, Text } from 'theme-ui'
 
+import { DownloadButton } from '../DownloadButton/DownloadButton'
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
 import { Tooltip } from '../Tooltip/Tooltip'
@@ -13,8 +14,10 @@ export interface IProps {
     size: number
     downloadUrl?: string | undefined
   }
+  forDonationRequest?: boolean
+  isLoggedIn?: boolean
   allowDownload?: boolean
-  handleClick?: () => Promise<void>
+  handleClick?: () => void
   redirectToSignIn?: () => Promise<void>
 }
 
@@ -72,6 +75,8 @@ export const DownloadStaticFile = ({
   allowDownload,
   handleClick,
   redirectToSignIn,
+  forDonationRequest,
+  isLoggedIn,
 }: IProps) => {
   const size = bytesToSize(file.size || 0)
 
@@ -79,9 +84,11 @@ export const DownloadStaticFile = ({
     return null
   }
 
+  const forDownload = allowDownload && file.downloadUrl && !redirectToSignIn
+
   return (
     <>
-      {allowDownload && file.downloadUrl && !redirectToSignIn ? (
+      {forDownload && (
         <ExternalLink
           m={1}
           onClick={() => handleClick && handleClick()}
@@ -91,7 +98,18 @@ export const DownloadStaticFile = ({
         >
           <FileDetails file={file} glyph="download-cloud" size={size} />
         </ExternalLink>
-      ) : (
+      )}
+
+      {forDonationRequest && (
+        <DownloadButton
+          onClick={() => handleClick && handleClick()}
+          isLoggedIn={isLoggedIn}
+          label={`${file.name} (${size})`}
+          glyph="download-cloud"
+        />
+      )}
+
+      {!forDownload && !forDonationRequest && (
         <FileDetails
           file={file}
           glyph="download-cloud"

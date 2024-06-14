@@ -3,12 +3,21 @@ import { Flex, Text } from 'theme-ui'
 import { Icon } from '../Icon/Icon'
 import { Tooltip } from '../Tooltip/Tooltip'
 
+import type { IGlyphs } from '../Icon/types'
+
 export interface IProps {
-  onClick?: () => void
+  onClick: () => void
   isLoggedIn?: boolean
+  label?: string
+  glyph?: keyof IGlyphs
 }
 
-export const DownloadButton = ({ onClick, isLoggedIn }: IProps) => {
+export const DownloadButton = ({
+  glyph,
+  isLoggedIn,
+  label,
+  onClick,
+}: IProps) => {
   return (
     <>
       <Flex
@@ -29,9 +38,9 @@ export const DownloadButton = ({ onClick, isLoggedIn }: IProps) => {
         data-testid="downloadButton"
         data-tip={!isLoggedIn ? 'Login to download' : ''}
       >
-        <Icon size={24} glyph={'external-url'} mr={3} />
+        <Icon size={24} glyph={glyph || 'external-url'} mr={3} />
         <Text sx={{ flex: 1, fontSize: 1, color: 'black' }} mr={3}>
-          Download files
+          {label ? label : 'Download files'}
         </Text>
       </Flex>
       <Tooltip />

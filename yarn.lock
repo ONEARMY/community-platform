@@ -22860,7 +22860,6 @@ __metadata:
     fuse.js: ^6.4.6
     husky: ^9.0.11
     idb: ^8.0.0
-    is-url: ^1.2.4
     leaflet: ^1.5.1
     leaflet.markercluster: ^1.4.1
     lint-staged: ^15.2.7

@@ -99,7 +99,6 @@
     "framer-motion": "^11.2.10",
     "fs-extra": "^10.0.0",
     "fuse.js": "^6.4.6",
-    "is-url": "^1.2.4",
     "leaflet": "^1.5.1",
     "leaflet.markercluster": "^1.4.1",
     "mobx": "6.9.0",

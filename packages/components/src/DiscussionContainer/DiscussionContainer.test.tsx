@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
 import { act } from 'react-dom/test-utils'
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import { render } from '../test/utils'
@@ -17,11 +17,11 @@ describe('DiscussionContainer', () => {
     expect(() => getByText('reply')).toThrow()
   })
 
-  it('allows replying to a comment', () => {
+  it('allows replying to a comment', async () => {
     const screen = render(<WithReplies.render />)
 
     // Show reply form
-    act(() => {
+    await waitFor(() => {
       const replyButton = screen.getAllByText('2 replies to', {
         exact: false,
       })[0]
@@ -38,6 +38,8 @@ describe('DiscussionContainer', () => {
         exact: false,
       })[0]
       fireEvent.click(replyButton)
+    })
+    await waitFor(() => {
       expect(() => {
         screen.getAllByText('Leave a reply')
       }).toThrow()
@@ -51,12 +53,18 @@ describe('DiscussionContainer', () => {
     // Show reply form
     act(() => {
       fireEvent.click(SecondReplyButton)
+    })
+
+    await waitFor(() => {
       expect(screen.getAllByText('Leave a reply')).toHaveLength(1)
     })
 
     // Hide reply form
     act(() => {
       fireEvent.click(SecondReplyButton)
+    })
+
+    await waitFor(() => {
       expect(() => {
         screen.getAllByText('Send your reply')
       }).toThrow()

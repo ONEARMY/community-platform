@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import { render } from '../test/utils'
@@ -60,10 +60,12 @@ describe('CreateReply', () => {
 
     fireEvent.click(submitButton)
 
-    expect(
-      screen.getByText(
-        'Unable to leave a comment at this time. Please try again later.',
-      ),
-    ).toBeInTheDocument()
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Unable to leave a comment at this time. Please try again later.',
+        ),
+      ).toBeInTheDocument()
+    })
   })
 })

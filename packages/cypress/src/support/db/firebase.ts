@@ -7,6 +7,7 @@ import 'firebase/compat/storage'
 import 'firebase/compat/functions'
 import 'firebase/compat/database'
 
+import { indexedDBLocalPersistence, initializeAuth } from 'firebase/auth'
 import { DB_ENDPOINTS } from 'oa-shared/models'
 
 import { MOCK_DATA } from '../../data/index'
@@ -86,7 +87,9 @@ class FirestoreTestDB {
     return batch.commit()
   }
 }
-export const Auth = firebase.auth()
+export const Auth = initializeAuth(firebase.app(), {
+  persistence: indexedDBLocalPersistence,
+})
 export const TestDB = new FirestoreTestDB()
 
 /**

@@ -36,16 +36,16 @@ describe('DiscussionWrapper', () => {
     }
     let wrapper
 
-    await act(async () => {
-      wrapper = await render(
+    act(() => {
+      wrapper = render(
         <Provider>
           <ThemeProvider theme={Theme}>
             <DiscussionWrapper {...discussionProps} />
           </ThemeProvider>
         </Provider>,
       )
-      expect(wrapper.getByTestId('loader')).toBeVisible()
     })
+    expect(wrapper.getByTestId('loader')).toBeVisible()
 
     await waitFor(async () => {
       expect(wrapper.getByText('Start the discussion')).toBeVisible()

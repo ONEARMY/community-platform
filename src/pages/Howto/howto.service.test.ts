@@ -40,7 +40,7 @@ vi.mock('../../config/config', () => ({
 }))
 
 describe('howtos.search', () => {
-  it('searches for text', async () => {
+  it('searches for text', () => {
     // prepare
     const words = ['test', 'text']
 
@@ -61,7 +61,7 @@ describe('howtos.search', () => {
     )
   })
 
-  it('filters by category', async () => {
+  it('filters by category', () => {
     // prepare
     const category = 'cat1'
 
@@ -78,7 +78,7 @@ describe('howtos.search', () => {
     expect(mockWhere).toHaveBeenCalledWith('category._id', '==', category)
   })
 
-  it('should not call orderBy if sorting by most relevant', async () => {
+  it('should not call orderBy if sorting by most relevant', () => {
     // act
     exportedForTesting.createQueries(
       ['test'],
@@ -92,7 +92,7 @@ describe('howtos.search', () => {
     expect(mockOrderBy).toHaveBeenCalledTimes(0)
   })
 
-  it('should call orderBy when sorting is not MostRelevant', async () => {
+  it('should call orderBy when sorting is not MostRelevant', () => {
     // act
     exportedForTesting.createQueries(
       ['test'],

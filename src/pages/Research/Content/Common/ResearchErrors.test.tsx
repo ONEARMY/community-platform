@@ -27,7 +27,7 @@ describe('ResearchErrors', () => {
     await screen.findByText(descriptionTitle, { exact: false })
   })
 
-  it('renders nothing when not visible', async () => {
+  it('renders nothing when not visible', () => {
     const errors = {}
     const labels = {}
 

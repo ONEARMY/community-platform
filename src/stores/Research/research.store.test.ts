@@ -32,10 +32,10 @@ vi.mock('firebase/firestore', () => ({
   increment: (value) => mockIncrement(value),
 }))
 
-const factoryResearchItem = async (researchItemOverloads: any = {}, ...rest) =>
+const factoryResearchItem = (researchItemOverloads: any = {}, ...rest) =>
   factory(FactoryResearchItem, researchItemOverloads, ...rest)
 
-const factoryResearchItemFormInput = async (
+const factoryResearchItemFormInput = (
   researchItemOverloads: any = {},
   ...rest
 ) => factory(FactoryResearchItemFormInput, researchItemOverloads, ...rest)

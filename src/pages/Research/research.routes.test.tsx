@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
-import { act, cleanup, render } from '@testing-library/react'
+import { act, cleanup, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -132,7 +132,7 @@ describe('research.routes', () => {
 
       const wrapper = renderFn('/research')
 
-      await vi.waitFor(
+      await waitFor(
         () =>
           expect(
             wrapper.getByText(/Help out with Research & Development/),
@@ -151,7 +151,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/research-slug')
       })
 
-      await vi.waitFor(
+      await waitFor(
         () => {
           expect(wrapper.queryByTestId('research-title')).toHaveTextContent(
             'Research article title',
@@ -172,7 +172,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/create')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -185,7 +185,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/create')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -200,7 +200,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/create')
       })
 
-      await vi.waitFor(
+      await waitFor(
         () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
@@ -217,7 +217,7 @@ describe('research.routes', () => {
 
         wrapper = renderFn('/research/create')
       })
-      await vi.waitFor(
+      await waitFor(
         () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
@@ -237,7 +237,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -253,7 +253,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
       })
     })
@@ -275,7 +275,7 @@ describe('research.routes', () => {
         renderFn('/research/an-example/edit')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(mockedUsedNavigate).toHaveBeenCalledWith('/research/an-example')
       })
     })
@@ -300,7 +300,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(
             'The research description is currently being edited by another editor.',
@@ -329,7 +329,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText('Edit your Research')).toBeInTheDocument()
       })
     })
@@ -350,7 +350,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
       })
     })
@@ -365,7 +365,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/new-update')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -379,7 +379,7 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/new-update')
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
       })
     })
@@ -392,7 +392,7 @@ describe('research.routes', () => {
         '/research/an-example/edit-update/nested-research-update',
       )
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -424,7 +424,7 @@ describe('research.routes', () => {
         )
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
       })
     })
@@ -455,7 +455,7 @@ describe('research.routes', () => {
         '/research/an-example/edit-update/nested-research-update',
       )
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(
             /This research update is currently being edited by another editor/,
@@ -488,7 +488,7 @@ describe('research.routes', () => {
         '/research/an-example/edit-update/nested-research-update',
       )
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText('Edit your update')).toBeInTheDocument()
       })
     })
@@ -503,7 +503,7 @@ describe('research.routes', () => {
         )
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -535,7 +535,7 @@ describe('research.routes', () => {
         )
       })
 
-      await vi.waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
       })
     })

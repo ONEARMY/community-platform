@@ -43,9 +43,9 @@ describe('SEO', () => {
   beforeAll(async () => {
     db = admin.firestore()
     // Test will only create entries for accepted howtos and research
-    for (const doc of testDocs) {
-      await db.collection(doc.endpoint).add(doc)
-    }
+    await Promise.all(
+      testDocs.map((doc) => db.collection(doc.endpoint).add(doc)),
+    )
   })
   afterAll(firebaseTest.cleanup)
 

@@ -47,7 +47,7 @@ describe('DiscussionWrapper', () => {
     })
     expect(wrapper.getByTestId('loader')).toBeVisible()
 
-    await waitFor(async () => {
+    await waitFor(() => {
       expect(wrapper.getByText('Start the discussion')).toBeVisible()
     })
   })

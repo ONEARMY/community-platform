@@ -29,7 +29,7 @@ describe('DonationRequest', () => {
     expect(iframe).toHaveAttribute('src', iframeSrc)
   })
 
-  it('calls the callback when user skips', async () => {
+  it('calls the callback when user skips', () => {
     const body = 'All of the content here is free.'
     const mockCallback = vi.fn()
 

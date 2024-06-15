@@ -16,7 +16,7 @@ describe('MapMemberCard', () => {
     expect(() => getByTestId('MapMemberCard: moderation comments')).toThrow()
   })
 
-  it('shows moderation comments if they exist', async () => {
+  it('shows moderation comments if they exist', () => {
     const { getByText, getByTestId } = render(
       <MapMemberCard {...ModerationComments.args} />,
     )

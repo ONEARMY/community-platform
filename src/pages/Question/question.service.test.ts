@@ -36,7 +36,7 @@ vi.mock('../../config/config', () => ({
 }))
 
 describe('question.search', () => {
-  it('searches for text', async () => {
+  it('searches for text', () => {
     // prepare
     const words = ['test', 'text']
 
@@ -51,7 +51,7 @@ describe('question.search', () => {
     )
   })
 
-  it('filters by category', async () => {
+  it('filters by category', () => {
     // prepare
     const category = 'cat1'
 
@@ -66,7 +66,7 @@ describe('question.search', () => {
     )
   })
 
-  it('should not call orderBy if sorting by most relevant', async () => {
+  it('should not call orderBy if sorting by most relevant', () => {
     // act
     exportedForTesting.createQueries(['test'], '', 'MostRelevant')
 
@@ -74,7 +74,7 @@ describe('question.search', () => {
     expect(mockOrderBy).toHaveBeenCalledTimes(0)
   })
 
-  it('should call orderBy when sorting is not MostRelevant', async () => {
+  it('should call orderBy when sorting is not MostRelevant', () => {
     // act
     exportedForTesting.createQueries(['test'], '', 'Newest')
 
@@ -82,7 +82,7 @@ describe('question.search', () => {
     expect(mockOrderBy).toHaveBeenLastCalledWith('_created', 'desc')
   })
 
-  it('should limit results', async () => {
+  it('should limit results', () => {
     // prepare
     const take = 12
 

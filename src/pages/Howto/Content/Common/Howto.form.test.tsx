@@ -16,6 +16,9 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { HowtoForm } from './Howto.form'
 
+import type { IHowtoDB } from 'src/models'
+import type { ParentType } from './Howto.form'
+
 const Theme = testingThemeStyles
 
 vi.mock('src/common/hooks/useCommonStores', () => {
@@ -52,7 +55,7 @@ vi.mock('src/common/hooks/useCommonStores', () => {
 
 describe('Howto form', () => {
   describe('Provides user information', () => {
-    it('shows maximum file size', async () => {
+    it('shows maximum file size', () => {
       // Arrange
       const formValues = FactoryHowto()
       // Act
@@ -67,13 +70,13 @@ describe('Howto form', () => {
   })
 
   describe('Invalid file warning', () => {
-    it('Does not appear when submitting only fileLink', async () => {
+    it('Does not appear when submitting only fileLink', () => {
       // Arrange
       const formValues = FactoryHowto({ fileLink: 'www.test.com' })
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -82,7 +85,7 @@ describe('Howto form', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('Does not appear when submitting only files', async () => {
+    it('Does not appear when submitting only files', () => {
       // Arrange
       const formValues = FactoryHowto({
         files: [
@@ -94,8 +97,8 @@ describe('Howto form', () => {
 
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -104,7 +107,7 @@ describe('Howto form', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('Appears when submitting 2 file types', async () => {
+    it('Appears when submitting 2 file types', () => {
       // Arrange
       const formValues = FactoryHowto({
         files: [
@@ -117,15 +120,15 @@ describe('Howto form', () => {
 
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
       })
 
       // Assert
       expect(wrapper.queryByTestId('invalid-file-warning')).toBeInTheDocument()
     })
 
-    it('Does not appear when files are removed and filelink added', async () => {
+    it('Does not appear when files are removed and filelink added', () => {
       // Arrange
       const formValues = FactoryHowto({
         files: [
@@ -164,7 +167,7 @@ describe('Howto form', () => {
   })
 })
 
-const Wrapper = (formValues, parentType, navProps) => {
+const Wrapper = (formValues: IHowtoDB, parentType: ParentType, navProps) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route

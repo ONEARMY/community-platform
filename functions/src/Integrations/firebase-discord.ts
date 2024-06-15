@@ -54,6 +54,29 @@ export const notifyHowToAccepted = functions
       .catch(handleErr)
   })
 
+export const notifyAcceptedQuestion = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document('questions_rev20230926/{id}')
+  // currently, questions are immediately posted with no review.
+  // if that changes, this code will need to be updated.
+  .onCreate(async (snapshot) => {
+    const info = snapshot.data()
+    console.log(info)
+
+    const username = info._createdBy
+    const title = info.title
+    const slug = info.slug
+
+    try {
+      const response = await axios.post(DISCORD_WEBHOOK_URL, {
+        content: `❓ ${username} has a new question: ${title}\nHelp them out and answer here: <${SITE_URL}/questions/${slug}>`,
+      })
+      handleResponse(response)
+    } catch (error) {
+      handleErr(error)
+    }
+  })
+
 const handleResponse = (res: AxiosResponse) => {
   console.log('post success')
   return res

@@ -46,7 +46,7 @@ describe('DiscussionWrapper', () => {
       )
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getByText('Start the discussion')).toBeVisible()
     })
   })

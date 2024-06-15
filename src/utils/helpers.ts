@@ -1,14 +1,9 @@
 import { isObservableObject, toJS } from 'mobx'
-import {
-  IModerationStatus,
-  ResearchStatus,
-  ResearchUpdateStatus,
-  UserRole,
-} from 'oa-shared'
+import { IModerationStatus, UserRole } from 'oa-shared'
 import { getConfigurationOption } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
-import type { DBDoc, IModerable, IResearch } from 'src/models'
+import type { DBDoc, IModerable } from 'src/models'
 import type { IMapPin } from 'src/models/maps.models'
 import type { IUser } from 'src/models/user.models'
 
@@ -207,30 +202,6 @@ export const isContactable = (preference: boolean | undefined) => {
     : DEFAULT_PUBLIC_CONTACT_PREFERENCE
 }
 
-/**
- * @deprecated This is an old function from when comments existed inside the research updates.
- */
-export const getResearchTotalCommentCount = (
-  item: IResearch.ItemDB,
-): number => {
-  if (Object.hasOwnProperty.call(item, 'totalCommentCount')) {
-    return item.totalCommentCount || 0
-  }
-
-  return 0
-}
-
-export const getPublicUpdates = (item: IResearch.Item) => {
-  if (item.updates) {
-    return item.updates.filter(
-      (update) =>
-        update.status !== ResearchUpdateStatus.DRAFT && !update._deleted,
-    )
-  } else {
-    return []
-  }
-}
-
 export const getProjectEmail = (subject: string) => {
   const site = getConfigurationOption(
     'REACT_APP_PLATFORM_THEME',
@@ -261,14 +232,4 @@ export const buildStatisticsLabel = ({
   }
 
   return `${typeof stat === 'number' ? stat : 0} ${statUnit}s`
-}
-
-export const researchStatusColour = (
-  researchStatus?: ResearchStatus,
-): string => {
-  return researchStatus === ResearchStatus.ARCHIVED
-    ? 'lightgrey'
-    : researchStatus === ResearchStatus.COMPLETED
-      ? 'betaGreen'
-      : 'accent.base'
 }

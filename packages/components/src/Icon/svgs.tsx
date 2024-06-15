@@ -45,7 +45,9 @@ export const iconMap = {
   employee: <img alt="icon" style={imgStyle} src={employeeSVG} />,
   flagUnknown: <img alt="alt" style={imgStyle} src={flagUnknownSVG} />,
   hide: <img alt="icon" style={imgStyle} src={eyeCrossedSVG} />,
-  loading: <img alt="icon" style={imgStyle} src={loadingSVG} />,
+  loading: (
+    <img alt="icon" data-cy="icon-loading" style={imgStyle} src={loadingSVG} />
+  ),
   machine: <img alt="icon" style={imgStyle} src={machineSVG} />,
   plastic: <img alt="icon" style={imgStyle} src={plasticSVG} />,
   revenue: <img alt="icon" style={imgStyle} src={revenueSVG} />,

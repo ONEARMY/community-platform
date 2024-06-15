@@ -19,6 +19,10 @@ service cloud.firestore {
       return true;
     }
 
+    function noWriteAccess() {
+      return false;
+    }
+
     match /aggregations_rev20220126/{document=**} {
       allow read: if isPublicReadable();
       allow write: if isPublicWritable();
@@ -36,7 +40,7 @@ service cloud.firestore {
 
     match /question_categories_rev20231130/{document=**} {
       allow read: if isPublicReadable();
-      allow write: if isPublicWritable();
+      allow write: if noWriteAccess();
     }
 
     match /questions_rev20230926/{document=**} {
@@ -46,7 +50,7 @@ service cloud.firestore {
 
     match /research_categories_rev20221224/{document=**} {
       allow read: if isPublicReadable();
-      allow write: if isPublicWritable();
+      allow write: if noWriteAccess();
     }
 
     match /research_rev20201020/{document=**} {
@@ -84,12 +88,12 @@ service cloud.firestore {
 
     match /v3_categories/{document=**} {
       allow read: if isPublicReadable();
-      allow write: if isPublicWritable();
+      allow write: if noWriteAccess();
     }
 
     match /v3_tags/{document=**} {
       allow read: if isPublicReadable();
-      allow write: if isPublicWritable();
+      allow write: if noWriteAccess();
     }
 
     match /v3_users/{userId} {

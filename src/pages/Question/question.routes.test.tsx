@@ -141,7 +141,6 @@ describe('question.routes', () => {
       act(() => {
         wrapper = renderFn('/questions')
       })
-
       expect(wrapper.getByText(/loading/)).toBeInTheDocument()
     })
 
@@ -152,7 +151,7 @@ describe('question.routes', () => {
         wrapper = renderFn('/questions')
       })
 
-      await waitFor(async () => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/Ask your questions and help others out/),
         ).toBeInTheDocument()
@@ -273,6 +272,7 @@ describe('question.routes', () => {
       act(() => {
         wrapper = renderFn(`/questions/${question.slug}`)
       })
+      expect(wrapper.getByText(/loading/)).toBeInTheDocument()
 
       await waitFor(async () => {
         expect(() => wrapper.getByText(/loading/)).toThrow()
@@ -308,7 +308,11 @@ describe('question.routes', () => {
           fetchQuestionBySlug: mockFetchQuestionBySlug,
           userHasSubscribed: true,
         })
-        const wrapper = renderFn(`/questions/${question.slug}`)
+
+        let wrapper
+        act(() => {
+          wrapper = renderFn(`/questions/${question.slug}`)
+        })
 
         await waitFor(
           () => {
@@ -482,7 +486,7 @@ describe('question.routes', () => {
         wrapper = renderFn('/questions/slug/edit')
       })
 
-      await waitFor(async () => {
+      await waitFor(() => {
         expect(() => wrapper.getByText(editFormTitle)).toThrow()
         expect(mockedUsedNavigate).toBeCalledWith('/questions/slug')
       })

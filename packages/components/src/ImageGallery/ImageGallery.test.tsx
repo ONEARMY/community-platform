@@ -156,7 +156,7 @@ describe('ImageGallery', () => {
     expect(image?.getAttribute('src')).toEqual(testImages[0].downloadUrl)
   })
 
-  it('hides thumbnail for single image', async () => {
+  it('hides thumbnail for single image', () => {
     const { getAllByTestId } = render(
       <HideThumbnailForSingleImage
         {...(HideThumbnailForSingleImage.args as ImageGalleryProps)}
@@ -168,7 +168,7 @@ describe('ImageGallery', () => {
     }).toThrow()
   })
 
-  it('supports no thumbnail option', async () => {
+  it('supports no thumbnail option', () => {
     const { getAllByTestId } = render(
       <NoThumbnails {...(NoThumbnails.args as ImageGalleryProps)} />,
     )
@@ -178,7 +178,7 @@ describe('ImageGallery', () => {
     }).toThrow()
   })
 
-  it('supports show next/previous buttons', async () => {
+  it('supports show next/previous buttons', () => {
     const { getByRole } = render(
       <ShowNextPrevButtons
         {...(ShowNextPrevButtons.args as ImageGalleryProps)}
@@ -192,7 +192,7 @@ describe('ImageGallery', () => {
     expect(previousBtn).toBeInTheDocument()
   })
 
-  it('does not support show next/previous buttons because only one image', async () => {
+  it('does not support show next/previous buttons because only one image', () => {
     const { queryByRole } = render(
       <DoNotShowNextPrevButtons
         {...(DoNotShowNextPrevButtons.args as ImageGalleryProps)}

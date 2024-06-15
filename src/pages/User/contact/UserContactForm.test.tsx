@@ -57,7 +57,7 @@ describe('UserContactForm', () => {
     await screen.findByText(contact.successMessage)
   })
 
-  it('renders nothing if not profile is not contactable', async () => {
+  it('renders nothing if not profile is not contactable', () => {
     const uncontactable = FactoryUser({ isContactableByPublic: false })
 
     const { container } = render(

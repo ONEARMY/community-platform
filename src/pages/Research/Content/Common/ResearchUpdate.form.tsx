@@ -473,10 +473,8 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   }}
                 >
                   <Button
-                    data-cy={'draft'}
-                    onClick={() => {
-                      trySubmitForm(true)
-                    }}
+                    data-cy="draft"
+                    onClick={() => trySubmitForm(true)}
                     variant="secondary"
                     type="submit"
                     disabled={submitting}

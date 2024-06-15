@@ -59,7 +59,7 @@ describe('EditComment', () => {
     )
     expect(screen.getByTestId('edit-comment-submit')).toBeDisabled()
   })
-  it('should dispaly error message when the comment is empty', async () => {
+  it('should dispaly error message when the comment is empty', () => {
     const screen = render(
       <EditComment
         isReply={false}
@@ -69,7 +69,7 @@ describe('EditComment', () => {
       />,
     )
 
-    await act(async () => {
+    act(() => {
       const commentInput = screen.getByLabelText('Edit Comment')
       fireEvent.change(commentInput, { target: { value: '' } })
       fireEvent.blur(commentInput)

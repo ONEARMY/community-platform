@@ -70,7 +70,7 @@ describe('Research Article', () => {
     incrementViewCount: vi.fn(),
   }
 
-  it('displays content statistics', async () => {
+  it('displays content statistics', () => {
     // Arrange
     const activeResearchItem = FactoryResearchItem({
       collaborators: undefined,
@@ -89,21 +89,23 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    await act(async () => {
+    act(() => {
       wrapper = getWrapper()
     })
 
     // Assert
-    expect(
-      wrapper.getByText(`${activeResearchItem.total_views} views`),
-    ).toBeInTheDocument()
-    expect(wrapper.getByText('0 following')).toBeInTheDocument()
-    expect(wrapper.getByText('0 useful')).toBeInTheDocument()
-    expect(wrapper.getByText('0 comments')).toBeInTheDocument()
-    expect(wrapper.getByText('1 step')).toBeInTheDocument()
+    waitFor(() => {
+      expect(
+        wrapper.getByText(`${activeResearchItem.total_views} views`),
+      ).toBeInTheDocument()
+      expect(wrapper.getByText('0 following')).toBeInTheDocument()
+      expect(wrapper.getByText('0 useful')).toBeInTheDocument()
+      expect(wrapper.getByText('0 comments')).toBeInTheDocument()
+      expect(wrapper.getByText('1 step')).toBeInTheDocument()
+    })
   })
 
-  it('does not display contributors when undefined', async () => {
+  it('does not display contributors when undefined', () => {
     // Arrange
     ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
@@ -114,7 +116,7 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    await act(async () => {
+    act(() => {
       wrapper = getWrapper()
     })
 
@@ -124,7 +126,7 @@ describe('Research Article', () => {
     }).toThrow()
   })
 
-  it('displays contributors', async () => {
+  it('displays contributors', () => {
     // Arrange
     ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
@@ -135,18 +137,20 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    await act(async () => {
+    act(() => {
       wrapper = getWrapper()
     })
 
     // Assert
-    expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
-    expect(wrapper.getAllByText('example-username')).toHaveLength(2)
-    expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
-    expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(4)
+    waitFor(() => {
+      expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
+      expect(wrapper.getAllByText('example-username')).toHaveLength(2)
+      expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
+      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(4)
+    })
   })
 
-  it('displays "Follow" button for non-subscriber', async () => {
+  it('displays "Follow" button for non-subscriber', () => {
     // Arrange
     ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
@@ -158,21 +162,24 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    await act(async () => {
+    act(() => {
       wrapper = getWrapper()
     })
-    const followButton = wrapper.getAllByTestId('follow-button')[0]
 
-    // Assert
-    expect(followButton).toBeInTheDocument()
-    expect(followButton).toHaveTextContent('Follow')
-    expect(followButton).not.toHaveTextContent('Following')
+    waitFor(() => {
+      const followButton = wrapper.getAllByTestId('follow-button')[0]
+
+      // Assert
+      expect(followButton).toBeInTheDocument()
+      expect(followButton).toHaveTextContent('Follow')
+      expect(followButton).not.toHaveTextContent('Following')
+    })
   })
 
   it.todo('displays "Following" button for subscriber')
 
   // TODO: Work out how to simulate store subscribe functionality
-  // it('displays "Following" button for subscriber', async () => {
+  // it('displays "Following" button for subscriber',  () => {
   //   // Arrange
   //   ;(useResearchStore as Mock).mockReturnValue({
   //     ...mockResearchStore,
@@ -185,7 +192,7 @@ describe('Research Article', () => {
 
   //   // Act
   //   let wrapper
-  //   await act(async () => {
+  //    act( () => {
   //     wrapper = getWrapper()
   //   })
   //   const followButton = wrapper.getAllByTestId('follow-button')[0]
@@ -195,7 +202,7 @@ describe('Research Article', () => {
   // })
 
   describe('Research Update', () => {
-    it('displays contributors', async () => {
+    it('displays contributors', () => {
       // Arrange
       ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
@@ -229,21 +236,23 @@ describe('Research Article', () => {
 
       // wait for Promise to resolve and state to update
       let wrapper
-      await act(async () => {
+      act(() => {
         wrapper = getWrapper()
       })
 
       // Assert
-      expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
-      expect(wrapper.getAllByText('example-username')).toHaveLength(2)
-      expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
-      expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
-      expect(wrapper.queryByText('fourth-example-username')).toBeNull()
-      expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
-      expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
+      waitFor(() => {
+        expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
+        expect(wrapper.getAllByText('example-username')).toHaveLength(2)
+        expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
+        expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
+        expect(wrapper.queryByText('fourth-example-username')).toBeNull()
+        expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
+        expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
+      })
     })
 
-    it('does not show edit timestamp, when create displays the same value', async () => {
+    it('does not show edit timestamp, when create displays the same value', () => {
       const created = faker.date.past()
       const modified = new Date(created)
       modified.setHours(15)
@@ -267,14 +276,14 @@ describe('Research Article', () => {
       const wrapper = getWrapper()
 
       // Assert
-      await waitFor(async () => {
+      waitFor(() => {
         expect(() =>
           wrapper.getAllByText(`edited ${formatDate(modified)}`),
         ).toThrow()
       })
     })
 
-    it('does show both created and edit timestamp, when different', async () => {
+    it('does show both created and edit timestamp, when different', () => {
       const modified = faker.date.future()
       const update = FactoryResearchItemUpdate({
         _created: faker.date.past().toString(),
@@ -298,7 +307,7 @@ describe('Research Article', () => {
       const wrapper = getWrapper()
 
       // Assert
-      await waitFor(async () => {
+      waitFor(() => {
         expect(() =>
           wrapper.getAllByText(`edited ${formatDate(modified)}`),
         ).not.toThrow()
@@ -306,7 +315,7 @@ describe('Research Article', () => {
     })
   })
 
-  it('shows only published updates', async () => {
+  it('shows only published updates', () => {
     // Arrange
     ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
@@ -329,17 +338,19 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    await act(async () => {
+    act(() => {
       wrapper = getWrapper()
     })
 
     // Assert
-    expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
-    expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
+    waitFor(() => {
+      expect(wrapper.getByText('Research Update #1')).toBeInTheDocument()
+      expect(wrapper.queryByText('Research Update #2')).not.toBeInTheDocument()
+    })
   })
 
   describe('Breadcrumbs', () => {
-    it('displays breadcrumbs with category', async () => {
+    it('displays breadcrumbs with category', () => {
       // Arrange
       ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
@@ -358,29 +369,31 @@ describe('Research Article', () => {
 
       // Act
       let wrapper
-      await act(async () => {
+      act(() => {
         wrapper = getWrapper()
       })
 
       // Assert: Check the breadcrumb items and chevrons
-      const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
-      expect(breadcrumbItems).toHaveLength(3)
-      expect(breadcrumbItems[0]).toHaveTextContent('Research')
-      expect(breadcrumbItems[1]).toHaveTextContent('Science')
-      expect(breadcrumbItems[2]).toHaveTextContent('Innovative Study')
+      waitFor(() => {
+        const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
+        expect(breadcrumbItems).toHaveLength(3)
+        expect(breadcrumbItems[0]).toHaveTextContent('Research')
+        expect(breadcrumbItems[1]).toHaveTextContent('Science')
+        expect(breadcrumbItems[2]).toHaveTextContent('Innovative Study')
 
-      // Assert: Check that the first two breadcrumb items contain links
-      const firstLink = within(breadcrumbItems[0]).getByRole('link')
-      const secondLink = within(breadcrumbItems[1]).getByRole('link')
-      expect(firstLink).toBeInTheDocument()
-      expect(secondLink).toBeInTheDocument()
+        // Assert: Check that the first two breadcrumb items contain links
+        const firstLink = within(breadcrumbItems[0]).getByRole('link')
+        const secondLink = within(breadcrumbItems[1]).getByRole('link')
+        expect(firstLink).toBeInTheDocument()
+        expect(secondLink).toBeInTheDocument()
 
-      // Assert: Check for the correct number of chevrons
-      const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
-      expect(chevrons).toHaveLength(2)
+        // Assert: Check for the correct number of chevrons
+        const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
+        expect(chevrons).toHaveLength(2)
+      })
     })
 
-    it('displays breadcrumbs without category', async () => {
+    it('displays breadcrumbs without category', () => {
       // Arrange
       ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
@@ -392,23 +405,25 @@ describe('Research Article', () => {
 
       // Act
       let wrapper
-      await act(async () => {
+      act(() => {
         wrapper = getWrapper()
       })
 
       // Assert: Check the breadcrumb items and chevrons
-      const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
-      expect(breadcrumbItems).toHaveLength(2)
-      expect(breadcrumbItems[0]).toHaveTextContent('Research')
-      expect(breadcrumbItems[1]).toHaveTextContent('Innovative Study')
+      waitFor(() => {
+        const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
+        expect(breadcrumbItems).toHaveLength(2)
+        expect(breadcrumbItems[0]).toHaveTextContent('Research')
+        expect(breadcrumbItems[1]).toHaveTextContent('Innovative Study')
 
-      // Assert: Check that the first breadcrumb item contains a link
-      const firstLink = within(breadcrumbItems[0]).getByRole('link')
-      expect(firstLink).toBeInTheDocument()
+        // Assert: Check that the first breadcrumb item contains a link
+        const firstLink = within(breadcrumbItems[0]).getByRole('link')
+        expect(firstLink).toBeInTheDocument()
 
-      // Assert: Check for the correct number of chevrons
-      const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
-      expect(chevrons).toHaveLength(1)
+        // Assert: Check for the correct number of chevrons
+        const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
+        expect(chevrons).toHaveLength(1)
+      })
     })
   })
 })

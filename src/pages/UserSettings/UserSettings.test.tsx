@@ -7,7 +7,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
-import { act, render } from '@testing-library/react'
+import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { IModerationStatus } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -18,6 +18,8 @@ import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { SettingsPage } from './SettingsPage'
+
+import type { IUserPPDB } from 'src/models'
 
 const Theme = testingThemeStyles
 
@@ -67,81 +69,101 @@ describe('UserSettings', () => {
     vi.resetAllMocks()
   })
 
-  it('displays user settings', async () => {
+  it('displays user settings', () => {
     mockUser = FactoryUser()
 
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await Wrapper(mockUser)
+    act(() => {
+      wrapper = Wrapper(mockUser)
     })
 
     // Assert
-    expect(wrapper.getByText('Edit profile'))
+    waitFor(() => {
+      expect(wrapper.getByText('Edit profile'))
+    })
   })
 
-  it('displays one photo for member', async () => {
+  it('displays one photo for member', () => {
     mockUser = FactoryUser({ profileType: 'member' })
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await Wrapper(mockUser)
+    act(() => {
+      wrapper = Wrapper(mockUser)
     })
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(1)
+
+    waitFor(() => {
+      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(1)
+    })
   })
 
-  it('displays four photos for collection point', async () => {
+  it('displays four photos for collection point', () => {
     mockUser = FactoryUser({ profileType: 'collection-point' })
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await Wrapper(mockUser)
+    act(() => {
+      wrapper = Wrapper(mockUser)
     })
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+
+    waitFor(() => {
+      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+    })
   })
 
-  it('displays four photos for community builder', async () => {
+  it('displays four photos for community builder', () => {
     mockUser = FactoryUser({ profileType: 'community-builder' })
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await Wrapper(mockUser)
+    act(() => {
+      wrapper = Wrapper(mockUser)
     })
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+
+    waitFor(() => {
+      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+    })
   })
 
-  it('displays four photos for machine builder', async () => {
+  it('displays four photos for machine builder', () => {
     mockUser = FactoryUser({ profileType: 'machine-builder' })
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await Wrapper(mockUser)
+    act(() => {
+      wrapper = Wrapper(mockUser)
     })
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+
+    waitFor(() => {
+      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+    })
   })
 
-  it('displays four photos for space', async () => {
+  it('displays four photos for space', () => {
     mockUser = FactoryUser({ profileType: 'space' })
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await Wrapper(mockUser)
+    act(() => {
+      wrapper = Wrapper(mockUser)
     })
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+
+    waitFor(() => {
+      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+    })
   })
 
-  it('displays four photos for workspace', async () => {
+  it('displays four photos for workspace', () => {
     mockUser = FactoryUser({ profileType: 'workspace' })
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await Wrapper(mockUser)
+    act(() => {
+      wrapper = Wrapper(mockUser)
     })
-    expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+
+    waitFor(() => {
+      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
+    })
   })
 
   describe('map pin', () => {
-    it('displays moderation comments to user', async () => {
+    it('displays moderation comments to user', () => {
       mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
@@ -151,13 +173,16 @@ describe('UserSettings', () => {
       )
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(mockUser)
+      act(() => {
+        wrapper = Wrapper(mockUser)
       })
-      expect(wrapper.getByText('Moderator comment')).toBeInTheDocument()
+
+      waitFor(() => {
+        expect(wrapper.getByText('Moderator comment')).toBeInTheDocument()
+      })
     })
 
-    it('does not show moderation comments for approved pin', async () => {
+    it('does not show moderation comments for approved pin', () => {
       mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
@@ -167,8 +192,8 @@ describe('UserSettings', () => {
       )
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(mockUser)
+      act(() => {
+        wrapper = Wrapper(mockUser)
       })
 
       expect(() => wrapper.getByText('Moderator comment')).toThrow()
@@ -178,7 +203,7 @@ describe('UserSettings', () => {
     const scrollIntoViewMock = vi.fn()
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock
 
-    it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', async () => {
+    it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
@@ -187,14 +212,15 @@ describe('UserSettings', () => {
       const { expandClose } = buttons.impact
 
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(mockUser, impactHash)
+      act(() => {
+        wrapper = Wrapper(mockUser, impactHash)
       })
-
-      expect(wrapper.getByText(expandClose)).toBeInTheDocument()
-      expect(scrollIntoViewMock).toBeCalled()
+      waitFor(() => {
+        expect(wrapper.getByText(expandClose)).toBeInTheDocument()
+        expect(scrollIntoViewMock).toBeCalled()
+      })
     })
-    it('does not expand impact section if hash syntax is not correct', async () => {
+    it('does not expand impact section if hash syntax is not correct', () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
@@ -203,15 +229,17 @@ describe('UserSettings', () => {
       const { expandOpen } = buttons.impact
 
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(mockUser, impactHash)
+      act(() => {
+        wrapper = Wrapper(mockUser, impactHash)
       })
 
-      expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
-      expect(scrollIntoViewMock).not.toBeCalled()
+      waitFor(() => {
+        expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
+        expect(scrollIntoViewMock).not.toBeCalled()
+      })
     })
 
-    it('does not expand impact section if no impact hash is provided', async () => {
+    it('does not expand impact section if no impact hash is provided', () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
@@ -219,17 +247,19 @@ describe('UserSettings', () => {
       const { expandOpen } = buttons.impact
 
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(mockUser, impactHash)
+      act(() => {
+        wrapper = Wrapper(mockUser, impactHash)
       })
 
-      expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
-      expect(scrollIntoViewMock).not.toBeCalled()
+      waitFor(() => {
+        expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
+        expect(scrollIntoViewMock).not.toBeCalled()
+      })
     })
   })
 })
 
-const Wrapper = async (user, routerInitialEntry?) => {
+const Wrapper = (user: IUserPPDB, routerInitialEntry?: string) => {
   if (routerInitialEntry !== undefined) {
     // impact section is only displayed if isPreciousPlastic() is true
     window.localStorage.setItem('platformTheme', 'precious-plastic')

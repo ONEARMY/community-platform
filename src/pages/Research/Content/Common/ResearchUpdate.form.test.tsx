@@ -34,7 +34,7 @@ vi.mock('src/stores/Research/research.store', () => {
 
 describe('Research update form', () => {
   describe('Invalid file warning', () => {
-    it('Does not appear when submitting only fileLink', async () => {
+    it('Does not appear when submitting only fileLink', () => {
       const formValues = FactoryResearchItemUpdate({
         fileLink: 'www.filedonwload.test',
       })
@@ -46,7 +46,7 @@ describe('Research update form', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('Does not appear when submitting only files', async () => {
+    it('Does not appear when submitting only files', () => {
       // Arrange
       const formValues = FactoryResearchItemUpdate({
         files: [new File(['test file content'], 'test-file.zip')],

@@ -17,27 +17,27 @@ describe('DiscussionContainer', () => {
     expect(() => getByText('reply')).toThrow()
   })
 
-  it('allows replying to a comment', async () => {
+  it('allows replying to a comment', () => {
     const screen = render(<WithReplies.render />)
 
     // Show reply form
-    await act(async () => {
+    act(() => {
       const replyButton = screen.getAllByText('2 replies to', {
         exact: false,
       })[0]
       expect(replyButton).toBeInTheDocument()
 
-      await fireEvent.click(replyButton)
+      fireEvent.click(replyButton)
 
       expect(screen.getAllByText('Leave a reply')).toHaveLength(1)
     })
 
     // Hide reply form
-    await act(async () => {
+    act(() => {
       const replyButton = screen.getAllByText('2 replies to', {
         exact: false,
       })[0]
-      await fireEvent.click(replyButton)
+      fireEvent.click(replyButton)
       expect(() => {
         screen.getAllByText('Leave a reply')
       }).toThrow()
@@ -49,14 +49,14 @@ describe('DiscussionContainer', () => {
     expect(SecondReplyButton).toBeInTheDocument()
 
     // Show reply form
-    await act(async () => {
-      await fireEvent.click(SecondReplyButton)
+    act(() => {
+      fireEvent.click(SecondReplyButton)
       expect(screen.getAllByText('Leave a reply')).toHaveLength(1)
     })
 
     // Hide reply form
-    await act(async () => {
-      await fireEvent.click(SecondReplyButton)
+    act(() => {
+      fireEvent.click(SecondReplyButton)
       expect(() => {
         screen.getAllByText('Send your reply')
       }).toThrow()

@@ -51,7 +51,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 }))
 
 describe('Maps', () => {
-  it('prompts on load for user current position', async () => {
+  it('prompts on load for user current position', () => {
     Object.defineProperty(global.navigator, 'geolocation', {
       writable: true,
       value: {
@@ -59,28 +59,30 @@ describe('Maps', () => {
       },
     })
 
-    await act(async () => {
-      await Wrapper()
+    act(() => {
+      Wrapper()
     })
 
-    expect(global.navigator.geolocation.getCurrentPosition).toBeCalled()
+    waitFor(() => {
+      expect(global.navigator.geolocation.getCurrentPosition).toBeCalled()
+    })
   })
 
-  it('loads individual map card', async () => {
+  it('loads individual map card', () => {
     let wrapper: any
 
-    await act(async () => {
-      wrapper = await Wrapper('/map#abc')
+    act(() => {
+      wrapper = Wrapper('/map#abc')
     })
 
-    await waitFor(async () => {
+    waitFor(() => {
       expect(wrapper.mockMapPinService.getMapPinByUserId).toBeCalledWith('abc')
       expect(wrapper.renderResult.getByText('description')).toBeInTheDocument()
     })
   })
 })
 
-const Wrapper = async (path = '/map') => {
+const Wrapper = (path = '/map') => {
   const router = createMemoryRouter(
     createRoutesFromElements(<Route path="/map" element={<Maps />} />),
     {

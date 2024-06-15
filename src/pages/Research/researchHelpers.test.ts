@@ -7,7 +7,7 @@ import type { IResearch, IUserPPDB } from 'src/models'
 
 describe('Research Helpers', () => {
   describe('Research Update Status Filter', () => {
-    it('should not show item when deleted', async () => {
+    it('should not show item when deleted', () => {
       // prepare
       const user = { _id: 'author' } as IUserPPDB
       const item = { _createdBy: user._id } as IResearch.Item
@@ -20,7 +20,7 @@ describe('Research Helpers', () => {
       expect(show).toEqual(false)
     })
 
-    it('should not show item when deleted and draft', async () => {
+    it('should not show item when deleted and draft', () => {
       // prepare
       const user = { _id: 'author' } as IUserPPDB
       const item = { _createdBy: user._id } as IResearch.Item
@@ -36,7 +36,7 @@ describe('Research Helpers', () => {
       expect(show).toEqual(false)
     })
 
-    it('should not show when draft and not author', async () => {
+    it('should not show when draft and not author', () => {
       // prepare
       const user = { _id: 'non-author' } as IUserPPDB
       const item = { _createdBy: 'author' } as IResearch.Item
@@ -49,7 +49,7 @@ describe('Research Helpers', () => {
       expect(show).toEqual(false)
     })
 
-    it('should not show when draft and not authenticated', async () => {
+    it('should not show when draft and not authenticated', () => {
       // prepare
       const user = { _id: 'author' } as IUserPPDB
       const item = { _createdBy: user._id } as IResearch.Item
@@ -62,7 +62,7 @@ describe('Research Helpers', () => {
       expect(show).toEqual(false)
     })
 
-    it('should show when not draft and not deleted', async () => {
+    it('should show when not draft and not deleted', () => {
       // prepare
       const user = { _id: 'author' } as IUserPPDB
       const item = { _createdBy: user._id } as IResearch.Item
@@ -77,7 +77,7 @@ describe('Research Helpers', () => {
       expect(show).toEqual(true)
     })
 
-    it('should show when draft and current user is the author', async () => {
+    it('should show when draft and current user is the author', () => {
       // prepare
       const user = { _id: 'author' } as IUserPPDB
       const item = { _createdBy: user._id } as IResearch.Item
@@ -90,7 +90,7 @@ describe('Research Helpers', () => {
       expect(show).toEqual(true)
     })
 
-    it('should show when draft and current user is a collaborator', async () => {
+    it('should show when draft and current user is a collaborator', () => {
       // prepare
       const user = { _id: 'author' } as IUserPPDB
       const item = { collaborators: [user._id] } as IResearch.Item
@@ -103,7 +103,7 @@ describe('Research Helpers', () => {
       expect(show).toEqual(true)
     })
 
-    it('should show when draft and current user is an Admin', async () => {
+    it('should show when draft and current user is an Admin', () => {
       // prepare
       const user = { _id: 'admin', userRoles: [UserRole.ADMIN] } as IUserPPDB
       const item = {} as IResearch.Item

@@ -404,7 +404,7 @@ describe('question.routes', () => {
         wrapper = renderFn('/questions/slug/edit')
       })
 
-      await waitFor(async () => {
+      await waitFor(() => {
         expect(wrapper.getByText(editFormTitle)).toBeInTheDocument()
       })
     })

@@ -1,0 +1,17 @@
+{
+  "name": "uploads/users/matti/C0136T01-1901b4c26c5.JPG",
+  "bucket": "default-bucket",
+  "metageneration": 1,
+  "generation": 1718444904903,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": ["b40a4fe9-2055-47d4-8969-410d7d92c8c8"],
+  "etag": "JJwBvdvzgEvSJu0uWHM8AznFdiQ",
+  "customMetadata": {},
+  "timeCreated": "2024-06-15T09:48:24.903Z",
+  "updated": "2024-06-15T09:48:24.903Z",
+  "size": 135719,
+  "md5Hash": "iT+mnoOzQRHOCZQAhhwg+w==",
+  "crc32c": "3393391760"
+}

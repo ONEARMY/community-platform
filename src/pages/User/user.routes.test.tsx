@@ -58,7 +58,7 @@ describe('User', () => {
     vi.resetAllMocks()
   })
 
-  it('displays user page', () => {
+  it('displays user page', async () => {
     const user = FactoryUser()
 
     // Act
@@ -68,12 +68,12 @@ describe('User', () => {
     })
 
     // Assert
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getByText(user.displayName)).toBeInTheDocument()
     })
   })
 
-  it('displays user not found page', () => {
+  it('displays user not found page', async () => {
     // Act
     let wrapper
     act(() => {
@@ -81,13 +81,13 @@ describe('User', () => {
     })
 
     // Assert
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getByText('User not found')).toBeInTheDocument()
     })
   })
 
   describe('workspace', () => {
-    it('handles workspace with no images', () => {
+    it('handles workspace with no images', async () => {
       const user = FactoryUser({
         profileType: 'workspace',
         coverImages: [],
@@ -100,7 +100,7 @@ describe('User', () => {
       })
 
       // Assert
-      waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText('No images available.')).toBeInTheDocument()
       })
     })

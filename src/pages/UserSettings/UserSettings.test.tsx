@@ -69,7 +69,7 @@ describe('UserSettings', () => {
     vi.resetAllMocks()
   })
 
-  it('displays user settings', () => {
+  it('displays user settings', async () => {
     mockUser = FactoryUser()
 
     // Act
@@ -79,12 +79,12 @@ describe('UserSettings', () => {
     })
 
     // Assert
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getByText('Edit profile'))
     })
   })
 
-  it('displays one photo for member', () => {
+  it('displays one photo for member', async () => {
     mockUser = FactoryUser({ profileType: 'member' })
     // Act
     let wrapper
@@ -92,12 +92,12 @@ describe('UserSettings', () => {
       wrapper = Wrapper(mockUser)
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(1)
     })
   })
 
-  it('displays four photos for collection point', () => {
+  it('displays four photos for collection point', async () => {
     mockUser = FactoryUser({ profileType: 'collection-point' })
     // Act
     let wrapper
@@ -105,12 +105,12 @@ describe('UserSettings', () => {
       wrapper = Wrapper(mockUser)
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
-  it('displays four photos for community builder', () => {
+  it('displays four photos for community builder', async () => {
     mockUser = FactoryUser({ profileType: 'community-builder' })
     // Act
     let wrapper
@@ -118,12 +118,12 @@ describe('UserSettings', () => {
       wrapper = Wrapper(mockUser)
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
-  it('displays four photos for machine builder', () => {
+  it('displays four photos for machine builder', async () => {
     mockUser = FactoryUser({ profileType: 'machine-builder' })
     // Act
     let wrapper
@@ -131,12 +131,12 @@ describe('UserSettings', () => {
       wrapper = Wrapper(mockUser)
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
-  it('displays four photos for space', () => {
+  it('displays four photos for space', async () => {
     mockUser = FactoryUser({ profileType: 'space' })
     // Act
     let wrapper
@@ -144,12 +144,12 @@ describe('UserSettings', () => {
       wrapper = Wrapper(mockUser)
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
-  it('displays four photos for workspace', () => {
+  it('displays four photos for workspace', async () => {
     mockUser = FactoryUser({ profileType: 'workspace' })
     // Act
     let wrapper
@@ -157,13 +157,13 @@ describe('UserSettings', () => {
       wrapper = Wrapper(mockUser)
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
   describe('map pin', () => {
-    it('displays moderation comments to user', () => {
+    it('displays moderation comments to user', async () => {
       mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
@@ -177,7 +177,7 @@ describe('UserSettings', () => {
         wrapper = Wrapper(mockUser)
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText('Moderator comment')).toBeInTheDocument()
       })
     })
@@ -203,7 +203,7 @@ describe('UserSettings', () => {
     const scrollIntoViewMock = vi.fn()
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock
 
-    it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', () => {
+    it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', async () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
@@ -215,12 +215,12 @@ describe('UserSettings', () => {
       act(() => {
         wrapper = Wrapper(mockUser, impactHash)
       })
-      waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText(expandClose)).toBeInTheDocument()
         expect(scrollIntoViewMock).toBeCalled()
       })
     })
-    it('does not expand impact section if hash syntax is not correct', () => {
+    it('does not expand impact section if hash syntax is not correct', async () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
@@ -233,13 +233,13 @@ describe('UserSettings', () => {
         wrapper = Wrapper(mockUser, impactHash)
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
         expect(scrollIntoViewMock).not.toBeCalled()
       })
     })
 
-    it('does not expand impact section if no impact hash is provided', () => {
+    it('does not expand impact section if no impact hash is provided', async () => {
       mockUser = FactoryUser({
         profileType: 'workspace',
       })
@@ -251,7 +251,7 @@ describe('UserSettings', () => {
         wrapper = Wrapper(mockUser, impactHash)
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
         expect(scrollIntoViewMock).not.toBeCalled()
       })

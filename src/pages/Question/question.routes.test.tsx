@@ -144,14 +144,14 @@ describe('question.routes', () => {
       expect(wrapper.getByText(/loading/)).toBeInTheDocument()
     })
 
-    it('renders an empty state', () => {
+    it('renders an empty state', async () => {
       let wrapper
 
       act(() => {
         wrapper = renderFn('/questions')
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/Ask your questions and help others out/),
         ).toBeInTheDocument()
@@ -469,7 +469,7 @@ describe('question.routes', () => {
       )
     })
 
-    it('redirects non-author', () => {
+    it('redirects non-author', async () => {
       let wrapper
       mockActiveUser = FactoryUser({ userName: 'not-author' })
       ;(useQuestionStore as Mock).mockReturnValue({
@@ -487,7 +487,7 @@ describe('question.routes', () => {
         wrapper = renderFn('/questions/slug/edit')
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(() => wrapper.getByText(editFormTitle)).toThrow()
         expect(mockedUsedNavigate).toBeCalledWith('/questions/slug')
       })

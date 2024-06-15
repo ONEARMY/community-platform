@@ -70,7 +70,7 @@ const factory = (howtoStore?: Partial<HowtoStore>) => {
 }
 describe('Howto', () => {
   describe('moderator feedback', () => {
-    it('displays feedback for items which are not accepted', () => {
+    it('displays feedback for items which are not accepted', async () => {
       let wrapper
 
       act(() => {
@@ -80,7 +80,7 @@ describe('Howto', () => {
         wrapper = factory()
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(wrapper.getByText('Moderation comments')).toBeInTheDocument()
       })
     })
@@ -97,7 +97,7 @@ describe('Howto', () => {
     })
   })
 
-  it('displays content statistics', () => {
+  it('displays content statistics', async () => {
     let wrapper
     act(() => {
       howto._id = 'testid'
@@ -109,7 +109,7 @@ describe('Howto', () => {
       wrapper = factory()
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getByText('0 views')).toBeInTheDocument()
       expect(wrapper.getByText('0 useful')).toBeInTheDocument()
       expect(wrapper.getByText('0 comments')).toBeInTheDocument()
@@ -117,7 +117,7 @@ describe('Howto', () => {
     })
   })
 
-  it('shows verified badge', () => {
+  it('shows verified badge', async () => {
     let wrapper
 
     howto._createdBy = 'HowtoAuthor'
@@ -126,12 +126,12 @@ describe('Howto', () => {
       wrapper = factory()
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(() => wrapper.getAllByTestId('Username: verified badge'))
     })
   })
 
-  it('does not show verified badge', () => {
+  it('does not show verified badge', async () => {
     let wrapper
     howto._createdBy = 'NotHowtoAuthor'
 
@@ -145,7 +145,7 @@ describe('Howto', () => {
   })
 
   describe('steps', () => {
-    it('shows 1 step', () => {
+    it('shows 1 step', async () => {
       let wrapper
       act(() => {
         wrapper = factory({
@@ -157,26 +157,26 @@ describe('Howto', () => {
         })
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(() => wrapper.getAllByText('1 step'))
       })
     })
 
-    it('shows 2 steps', () => {
+    it('shows 2 steps', async () => {
       let wrapper
       act(() => {
         howto.steps = [FactoryHowtoStep(), FactoryHowtoStep()]
         wrapper = factory()
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         expect(() => wrapper.getAllByText('2 steps'))
       })
     })
   })
 
   describe('Breadcrumbs', () => {
-    it('displays breadcrumbs with category', () => {
+    it('displays breadcrumbs with category', async () => {
       let wrapper
       act(() => {
         howto.title = 'DIY Recycling Machine'
@@ -191,7 +191,7 @@ describe('Howto', () => {
         wrapper = factory()
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
         expect(breadcrumbItems).toHaveLength(3)
         expect(breadcrumbItems[0]).toHaveTextContent('How To')
@@ -210,7 +210,7 @@ describe('Howto', () => {
       })
     })
 
-    it('displays breadcrumbs without category', () => {
+    it('displays breadcrumbs without category', async () => {
       let wrapper
       act(() => {
         howto.title = 'DIY Recycling Machine'
@@ -218,7 +218,7 @@ describe('Howto', () => {
         wrapper = factory()
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
         expect(breadcrumbItems).toHaveLength(2)
         expect(breadcrumbItems[0]).toHaveTextContent('How To')

@@ -51,7 +51,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 }))
 
 describe('Maps', () => {
-  it('prompts on load for user current position', () => {
+  it('prompts on load for user current position', async () => {
     Object.defineProperty(global.navigator, 'geolocation', {
       writable: true,
       value: {
@@ -63,19 +63,19 @@ describe('Maps', () => {
       Wrapper()
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(global.navigator.geolocation.getCurrentPosition).toBeCalled()
     })
   })
 
-  it('loads individual map card', () => {
+  it('loads individual map card', async () => {
     let wrapper: any
 
     act(() => {
       wrapper = Wrapper('/map#abc')
     })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.mockMapPinService.getMapPinByUserId).toBeCalledWith('abc')
       expect(wrapper.renderResult.getByText('description')).toBeInTheDocument()
     })

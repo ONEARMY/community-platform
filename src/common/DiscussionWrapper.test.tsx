@@ -28,7 +28,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 
 // Happy path well tested in cypress
 describe('DiscussionWrapper', () => {
-  it('initally renders a loading before moving on', () => {
+  it('initally renders a loading before moving on', async () => {
     const discussionProps = {
       sourceType: 'question' as IDiscussion['sourceType'],
       sourceId: '82364tdf',
@@ -47,7 +47,7 @@ describe('DiscussionWrapper', () => {
     })
     expect(wrapper.getByTestId('loader')).toBeVisible()
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(wrapper.getByText('Start the discussion')).toBeVisible()
     })
   })

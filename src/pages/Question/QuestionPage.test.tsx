@@ -84,7 +84,7 @@ describe('Questions', () => {
   })
 
   describe('Breadcrumbs', () => {
-    it('displays breadcrumbs with category', () => {
+    it('displays breadcrumbs with category', async () => {
       // Arrange
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
@@ -111,7 +111,7 @@ describe('Questions', () => {
       })
 
       // Assert: Check the breadcrumb items and chevrons
-      waitFor(() => {
+      await waitFor(() => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
         expect(breadcrumbItems).toHaveLength(3)
         expect(breadcrumbItems[0]).toHaveTextContent('Question')
@@ -132,7 +132,7 @@ describe('Questions', () => {
       })
     })
 
-    it('displays breadcrumbs without category', () => {
+    it('displays breadcrumbs without category', async () => {
       // Arrange
       mockQuestionItem.title =
         'Do you prefer camping near a lake or in a forest?'
@@ -152,7 +152,7 @@ describe('Questions', () => {
       })
 
       // Assert: Check the breadcrumb items and chevrons
-      waitFor(() => {
+      await waitFor(() => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
         expect(breadcrumbItems).toHaveLength(2)
         expect(breadcrumbItems[0]).toHaveTextContent('Question')

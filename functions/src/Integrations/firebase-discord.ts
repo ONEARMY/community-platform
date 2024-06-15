@@ -69,9 +69,7 @@ export const notifyAcceptedQuestion = functions
 
     try {
       const response = await axios.post(DISCORD_WEBHOOK_URL, {
-        json: {
-          text: `❓ ${username} has a new question: ${title}\n Help them out and answer here: ${SITE_URL}/questions/${slug}`,
-        },
+        content: `❓ ${username} has a new question: ${title}\nHelp them out and answer here: <${SITE_URL}/questions/${slug}>`,
       })
       handleResponse(response)
     } catch (error) {

@@ -11,25 +11,30 @@ import type { UserMenuItem } from '../../support/commandsUi'
 const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'
 
-describe('[Research]', () => {
+const generateArticle = () => {
   const title = faker.lorem.words(4)
   const slug = title.toLowerCase().split(' ').join('-')
+
+  return {
+    _createdBy: 'research_creator',
+    _deleted: false,
+    description: 'After creating, the research will be deleted.',
+    title: title,
+    slug: slug,
+    previousSlugs: [slug],
+    status: 'In progress',
+  }
+}
+
+describe('[Research]', () => {
   beforeEach(() => {
     cy.visit('/research')
   })
 
   describe('[Create research article]', () => {
-    const expected = {
-      _createdBy: 'research_creator',
-      _deleted: false,
-      description: 'After creating, the research will be deleted.',
-      title: title,
-      slug: slug,
-      previousSlugs: [slug],
-      status: 'In progress',
-    }
-
     it('[By Authenticated]', () => {
+      const expected = generateArticle()
+
       const updateTitle = faker.lorem.words(5)
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
@@ -75,7 +80,8 @@ describe('[Research]', () => {
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
-      cy.get('[data-cy=intro-description]').clear().type(expected.description)
+      cy.wait(500) // wierd issue where description is cleared during typing below
+      cy.get('[data-cy=intro-description]').type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')

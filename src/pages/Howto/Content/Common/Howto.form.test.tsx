@@ -7,7 +7,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryHowto } from 'src/test/factories/Howto'
@@ -144,20 +144,22 @@ describe('Howto form', () => {
         wrapper = Wrapper(formValues, 'edit', {})
       })
 
-      // clear files
-      const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
-      fireEvent.click(reuploadFilesButton)
+      waitFor(() => {
+        // clear files
+        const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
+        fireEvent.click(reuploadFilesButton)
 
-      // add fileLink
-      const fileLink = wrapper.getByPlaceholderText(
-        'Link to Google Drive, Dropbox, Grabcad etc',
-      )
-      fireEvent.change(fileLink, {
-        target: { value: '<http://www.test.com>' },
+        // add fileLink
+        const fileLink = wrapper.getByPlaceholderText(
+          'Link to Google Drive, Dropbox, Grabcad etc',
+        )
+        fireEvent.change(fileLink, {
+          target: { value: '<http://www.test.com>' },
+        })
+
+        // submit form
+        fireEvent.click(wrapper.getByTestId('submit-form'))
       })
-
-      // submit form
-      fireEvent.click(wrapper.getByTestId('submit-form'))
 
       // Assert
       expect(

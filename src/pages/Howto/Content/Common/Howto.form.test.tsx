@@ -128,7 +128,7 @@ describe('Howto form', () => {
       expect(wrapper.queryByTestId('invalid-file-warning')).toBeInTheDocument()
     })
 
-    it('Does not appear when files are removed and filelink added', () => {
+    it('Does not appear when files are removed and filelink added', async () => {
       // Arrange
       const formValues = FactoryHowto({
         files: [
@@ -144,7 +144,7 @@ describe('Howto form', () => {
         wrapper = Wrapper(formValues, 'edit', {})
       })
 
-      waitFor(() => {
+      await waitFor(() => {
         // clear files
         const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
         fireEvent.click(reuploadFilesButton)

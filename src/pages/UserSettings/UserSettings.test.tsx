@@ -217,7 +217,7 @@ describe('UserSettings', () => {
       })
       await waitFor(() => {
         expect(wrapper.getByText(expandClose)).toBeInTheDocument()
-        expect(scrollIntoViewMock).toBeCalled()
+        expect(scrollIntoViewMock).toHaveBeenCalled()
       })
     })
     it('does not expand impact section if hash syntax is not correct', async () => {

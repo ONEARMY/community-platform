@@ -85,7 +85,7 @@ describe('[How To]', () => {
     cy.step(`Deleting step [${stepNumber}]`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`)
       .find('[data-cy=delete-step]')
-      .click()
+      .click({ force: true })
     cy.get('[data-cy=confirm]').click()
   }
 

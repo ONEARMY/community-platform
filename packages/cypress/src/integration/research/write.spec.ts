@@ -43,6 +43,7 @@ describe('[Research]', () => {
       cy.login(researcherEmail, researcherPassword)
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('a[href="/research/create"]').should('exist')
       cy.get('[data-cy=create]').click()
 
       cy.step('Warn if title is identical to an existing one')
@@ -87,6 +88,7 @@ describe('[Research]', () => {
           faker.lorem.sentences(50).slice(0, RESEARCH_MAX_LENGTH - 1),
         )
         .type('Reach maximum character count')
+        .blur()
       cy.contains(`${RESEARCH_MAX_LENGTH} / ${RESEARCH_MAX_LENGTH}`)
 
       cy.get('[data-cy=intro-description]')
@@ -174,6 +176,7 @@ describe('[Research]', () => {
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').should('be.visible')
+      cy.get('a[href="/research/create"]').should('exist')
 
       cy.step('Enter research article details')
       cy.visit('/research/create')
@@ -231,6 +234,7 @@ describe('[Research]', () => {
       cy.login(researcherEmail, researcherPassword)
       cy.step('Access the create research article')
       cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('a[href="/research/create"]').should('exist')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title')
         .clear()
@@ -283,6 +287,7 @@ describe('[Research]', () => {
       cy.step('Create the research article')
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('a[href="/research/create"]').should('exist')
       cy.get('[data-cy=create]').click()
 
       cy.step('Enter research article details')

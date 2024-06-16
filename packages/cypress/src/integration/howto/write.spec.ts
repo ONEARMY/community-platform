@@ -201,6 +201,7 @@ describe('[How To]', () => {
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
+      cy.get('a[href="/how-to/create"]').should('exist');
       cy.get('[data-cy=create]').click()
       cy.contains('Create a How-To').should('be.visible')
 
@@ -322,6 +323,39 @@ describe('[How To]', () => {
       cy.step('Ask users to login before creating an how-to')
       cy.visit('/how-to/create')
       cy.get('div').contains('Please login to access this page')
+    })
+
+    it('[Warning on leaving page]', () => {
+      const stub = cy.stub()
+      stub.returns(false)
+      cy.on('window:confirm', stub)
+
+      cy.login(creatorEmail, creatorPassword)
+      cy.get('[data-cy=loader]').should('not.exist')
+      cy.step('Access the create-how-to')
+      cy.get('a[href="/how-to/create"]').should('exist');
+      cy.get('[data-cy=create]').click()
+      cy.get('[data-cy=intro-title]')
+        .clear()
+        .type(expected.title)
+        .blur({ force: true })
+      cy.get('[data-cy=page-link][href*="/how-to"]')
+        .click()
+        .then(() => {
+          expect(stub.callCount).to.equal(1)
+          stub.resetHistory()
+        })
+      cy.url().should('match', /\/how-to\/create$/)
+
+      cy.step('Clear title input')
+      cy.get('[data-cy=intro-title]').clear().blur({ force: true })
+      cy.get('[data-cy=page-link][href*="/how-to"]')
+        .click()
+        .then(() => {
+          expect(stub.callCount).to.equal(0)
+          stub.resetHistory()
+        })
+      cy.url().should('match', /\/how-to?/)
     })
   })
 

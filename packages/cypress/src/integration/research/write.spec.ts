@@ -80,7 +80,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
-      cy.wait(500) // wierd issue where description is cleared during typing below
+      cy.wait(500) // wierd issue where description is cleared during typing below (causes first few characters to not be typed, thus failing the test)
       cy.get('[data-cy=intro-description]').type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')

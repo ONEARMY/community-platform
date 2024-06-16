@@ -114,7 +114,7 @@ describe('[How To]', () => {
       time: '1-2 weeks',
       title: 'Create a how-to test',
       slug: 'create-a-how-to-test',
-      previousSlugs: ['create-a-how-to-test'],
+      previousSlugs: ['qwerty', 'create-a-how-to-test'],
       fileLink: 'http://google.com/',
       files: [],
       total_downloads: 0,

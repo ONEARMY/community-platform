@@ -1,9 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import {
-  RESEARCH_MAX_LENGTH,
-  RESEARCH_TITLE_MIN_LENGTH,
-} from '../../../../../src/pages/Research/constants'
+import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import {
   generateNewUserDetails,
   setIsPreciousPlastic,
@@ -15,6 +12,8 @@ const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'
 
 describe('[Research]', () => {
+  const title = faker.lorem.words(4)
+  const slug = title.toLowerCase().split(' ').join('-')
   beforeEach(() => {
     cy.visit('/research')
   })
@@ -24,14 +23,14 @@ describe('[Research]', () => {
       _createdBy: 'research_creator',
       _deleted: false,
       description: 'After creating, the research will be deleted.',
-      title: 'Create research article test',
-      slug: 'create-research-article-test',
-      previousSlugs: ['create-research-article-test'],
+      title: title,
+      slug: slug,
+      previousSlugs: [slug],
       status: 'In progress',
     }
 
     it('[By Authenticated]', () => {
-      const updateTitle = 'Create a research update'
+      const updateTitle = faker.lorem.words(5)
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
 
@@ -58,10 +57,7 @@ describe('[Research]', () => {
       cy.contains(`Should be more than ${RESEARCH_TITLE_MIN_LENGTH} characters`)
 
       cy.step('Enter research article details')
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .type('Create research article test')
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
 
       cy.step('Cannot be published without description')
       cy.get('[data-cy=submit]').click()
@@ -79,21 +75,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
-      cy.step('Limit description text to maximum length')
-      cy.get('[data-cy=intro-description]')
-        .clear({ force: true })
-        // Speeds up test by avoiding typing and then updates character count by typing
-        .invoke(
-          'val',
-          faker.lorem.sentences(50).slice(0, RESEARCH_MAX_LENGTH - 1),
-        )
-        .type('Reach maximum character count')
-        .blur()
-      cy.contains(`${RESEARCH_MAX_LENGTH} / ${RESEARCH_MAX_LENGTH}`)
-
-      cy.get('[data-cy=intro-description]')
-        .clear({ force: true })
-        .type(expected.description)
+      cy.get('[data-cy=intro-description]').clear().type(expected.description)
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')

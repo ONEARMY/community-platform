@@ -40,7 +40,7 @@ describe('ImpactItem', () => {
       </Provider>,
     )
     const plasticItem = await screen.findByText('30,000 Kg of plastic recycled')
-    const revenueItem = await screen.findByText('$ 54,000 revenue')
+    const revenueItem = await screen.findByText('USD 54,000 revenue')
 
     expect(plasticItem.compareDocumentPosition(revenueItem)).toBe(4)
   })

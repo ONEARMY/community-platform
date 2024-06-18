@@ -27,10 +27,6 @@ const Unsubscribe = lazy(() => import('./Unsubscribe/Unsubscribe'))
 
 const Patreon = lazy(() => import('./Patreon/Patreon'))
 
-const DonationThankYou = lazy(
-  () => import('./DonationThankYou/DonationThankYou'),
-)
-
 export const getAvailablePageList = (supportedModules: MODULE[]): IPageMeta[] =>
   COMMUNITY_PAGES.filter((pageItem) =>
     supportedModules.includes(pageItem.moduleName),
@@ -157,14 +153,6 @@ const patreon = {
   path: '/patreon',
   component: <Patreon />,
   title: 'Patreon',
-  description: '',
-}
-
-export const donationThankYou = {
-  moduleName: MODULE.CORE,
-  path: '/donation-thank-you',
-  component: <DonationThankYou />,
-  title: 'Thank You!',
   description: '',
 }
 

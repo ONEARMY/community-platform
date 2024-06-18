@@ -31,7 +31,6 @@
     "google-auth-library": "^9.10.0",
     "handlebars": "^4.7.8",
     "oa-shared": "workspace:*",
-    "request": "^2.88.2",
     "sitemap": "^7.1.1",
     "uuid": "^9.0.1"
   },
@@ -42,7 +41,6 @@
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.8.0",
-    "@types/request": "^2.48.12",
     "@types/uuid": "^9.0.0",
     "@types/webpack": "^5.28.5",
     "@types/webpack-node-externals": "^3.0.4",

@@ -18,19 +18,3 @@ export const Default: StoryFn<typeof DonationRequest> = () => (
     />
   </div>
 )
-
-export const DonationMade: StoryFn<typeof DonationRequest> = () => {
-  window.postMessage('CAN_START_FILE_DOWNLOAD', '*')
-
-  return (
-    <div style={{ maxWidth: '1000px' }}>
-      <DonationRequest
-        body="All of the content here is free. Your donation supports this library of Open Source recycling knowledge. Making it possible for everyone in the world to use it and start recycling."
-        callback={() => {}}
-        iframeSrc="https://community.preciousplastic.com/donation-thank-you"
-        imageURL="https://images.unsplash.com/photo-1520222984843-df35ebc0f24d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9"
-        link="https://bbc.co.uk/"
-      />
-    </div>
-  )
-}

@@ -19,6 +19,7 @@ export interface PlatformTheme {
   siteName: string
   logo: string
   badge: string
+  donations?: Donations
   avatar: string
   howtoHeading: string
   styles: ThemeWithName
@@ -29,6 +30,12 @@ export interface PlatformTheme {
 type Badge = {
   lowDetail: string
   normal: string
+}
+
+type Donations = {
+  body: string
+  iframeSrc: string
+  imageURL: string
 }
 
 export interface ThemeWithName {

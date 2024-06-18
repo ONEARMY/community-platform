@@ -11,7 +11,7 @@ export interface Props {
 }
 
 export const ButtonShowReplies = (props: Props) => {
-  const { isShowReplies, replies, setIsShowReplies } = props
+  const { creatorName, isShowReplies, replies, setIsShowReplies } = props
 
   const count = nonDeletedCommentsCount(replies)
   const icon = isShowReplies ? 'arrow-full-up' : 'arrow-full-down'
@@ -27,8 +27,8 @@ export const ButtonShowReplies = (props: Props) => {
       variant="outline"
       small
     >
-      {/* {text} {creatorName && ` to ${creatorName}`} */}
-      {text}
+      {text} {creatorName && ` to ${creatorName}`}
+      {/* {text} */}
     </Button>
   )
 }

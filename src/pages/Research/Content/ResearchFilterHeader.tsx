@@ -76,7 +76,7 @@ export const ResearchFilterHeader = () => {
       }
 
       if (value.length === 0 || !value) {
-        params.set(ResearchSearchParams.sort, 'Newest')
+        params.set(ResearchSearchParams.sort, 'LatestUpdated')
       }
 
       setSearchParams(params)

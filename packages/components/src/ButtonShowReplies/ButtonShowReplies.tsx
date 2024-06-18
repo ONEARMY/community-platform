@@ -11,7 +11,7 @@ export interface Props {
 }
 
 export const ButtonShowReplies = (props: Props) => {
-  const { creatorName, isShowReplies, replies, setIsShowReplies } = props
+  const { isShowReplies, replies, setIsShowReplies } = props
 
   const count = nonDeletedCommentsCount(replies)
   const icon = isShowReplies ? 'arrow-full-up' : 'arrow-full-down'

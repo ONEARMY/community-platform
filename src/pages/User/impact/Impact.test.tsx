@@ -63,7 +63,7 @@ describe('Impact', () => {
 
       await screen.findByText('45 volunteers')
       await screen.findByText('23,000 Kg of plastic recycled')
-      await screen.findByText('$ 54,000 revenue')
+      await screen.findByText('USD 54,000 revenue')
       const machineField = screen.queryByText('13 machines built')
       expect(machineField).toBe(null)
 

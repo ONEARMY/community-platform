@@ -10,6 +10,8 @@ import { Username } from '../Username/Username'
 
 import type { IComment } from './types'
 
+import default_profile_image from '../../assets/images/default_member.svg'
+
 const SHORT_COMMENT = 129
 const DELETED_COMMENT = 'The original comment got deleted'
 
@@ -101,10 +103,21 @@ export const CommentItem = (props: IProps) => {
               flex: 1,
             }}
           >
-            {creatorImage && showAvatar && (
+            {creatorImage && showAvatar ? (
               <Box data-cy="commentAvatar" data-testid="commentAvatar">
                 <Avatar
                   src={creatorImage}
+                  sx={{
+                    objectFit: 'cover',
+                    width: ['30px', '50px'],
+                    height: ['30px', '50px'],
+                  }}
+                />
+              </Box>
+            ) : (
+              <Box data-cy="commentAvatar" data-testid="commentAvatar">
+                <Avatar
+                  src={default_profile_image}
                   sx={{
                     objectFit: 'cover',
                     width: ['30px', '50px'],

@@ -23,7 +23,7 @@ export const ButtonShowReplies = (props: Props) => {
       data-cy={`show-replies`}
       icon={icon}
       onClick={setIsShowReplies}
-      sx={{ alignSelf: 'flex-start' }}
+      sx={{ alignSelf: 'flex-start', border: 'none' }}
       variant="outline"
       small
     >

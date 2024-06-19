@@ -331,7 +331,7 @@ export class DiscussionStore extends ModuleStore {
     discussion: IDiscussion,
     commentsTotalEvent: CommentsTotalEvent,
   ): Promise<IDiscussionDB | null> {
-    await dbRef.set({ ...structuredClone(discussion) })
+    await dbRef.set({ ...structuredClone(toJS(discussion)) })
     await updateDiscussionMetadata(this.db, discussion, commentsTotalEvent)
     const updatedDiscussion = toJS(await dbRef.get())
 

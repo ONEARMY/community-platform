@@ -67,7 +67,7 @@ export class ResearchStore extends ModuleStore {
     let activeResearchItem: IResearchDB | null = null
 
     const enrichResearchUpdate = async (update: IResearch.UpdateDB) => {
-      const enrichedResearchUpdated = structuredClone(update)
+      const enrichedResearchUpdated = structuredClone(toJS(update))
       enrichedResearchUpdated.description = changeUserReferenceToPlainText(
         update.description,
       )
@@ -594,7 +594,7 @@ export class ResearchStore extends ModuleStore {
     researchDoc: Partial<IResearch.Item>,
     setLastEditTimestamp = false,
   ) {
-    const researchItem = structuredClone(researchDoc)
+    const researchItem = structuredClone(toJS(researchDoc))
     const { text: researchDescription, users } = await this.addUserReference(
       researchItem.description || '',
     )
@@ -605,7 +605,7 @@ export class ResearchStore extends ModuleStore {
     const previousVersion = toJS(await dbRef.get('server'))
 
     const mentions: UserMention[] = researchItem.mentions
-      ? structuredClone(researchItem.mentions)
+      ? structuredClone(toJS(researchItem.mentions))
       : []
 
     if (researchItem.updates && researchItem.updates.length > 0) {
@@ -643,7 +643,7 @@ export class ResearchStore extends ModuleStore {
 
     await dbRef.set(
       {
-        ...structuredClone(researchItem),
+        ...structuredClone(toJS(researchItem)),
         previousSlugs: getPreviousSlugs(
           researchItem.slug!,
           researchItem.previousSlugs,

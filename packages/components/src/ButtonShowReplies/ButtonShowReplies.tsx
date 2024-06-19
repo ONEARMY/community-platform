@@ -28,7 +28,6 @@ export const ButtonShowReplies = (props: Props) => {
       small
     >
       {text} {creatorName && ` to ${creatorName}`}
-      {/* {text} */}
     </Button>
   )
 }

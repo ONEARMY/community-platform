@@ -406,8 +406,8 @@ export class HowtoStore extends ModuleStore {
     return (_createdBy && _createdBy === user.userName) || !_createdBy
       ? userCountry
       : creatorCountry
-      ? creatorCountry
-      : ''
+        ? creatorCountry
+        : ''
   }
 
   private async uploadCoverImage(

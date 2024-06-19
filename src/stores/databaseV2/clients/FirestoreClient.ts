@@ -102,31 +102,27 @@ export class FirestoreClient implements AbstractDatabaseClient {
       queryOpts,
       queryRef,
     })
-    const observer: Observable<T[]> = Observable.create(
-      async (obs: Observer<T[]>) => {
-        onSnapshot(queryRef, (snap) => {
-          logger.debug(
-            `FirestoreClient.streamCollection.onSnapshot`,
-            endpoint,
-            snap.docs,
-          )
-          const docs = snap.docs.map((d) => d.data() as T)
-          obs.next(docs)
-        })
-      },
-    )
+    const observer = new Observable<T[]>((obs) => {
+      onSnapshot(queryRef, (snap) => {
+        logger.debug(
+          `FirestoreClient.streamCollection.onSnapshot`,
+          endpoint,
+          snap.docs,
+        )
+        const docs = snap.docs.map((d) => d.data() as T)
+        obs.next(docs)
+      })
+    })
     return observer
   }
   streamDoc<T>(endpoint: IDBEndpoint) {
     logger.debug(`FirestoreClient.streamDoc`, endpoint)
     const ref = doc(this._db, endpoint)
-    const observer: Observable<T> = Observable.create(
-      async (obs: Observer<T>) => {
-        onSnapshot(ref, (snap) => {
-          obs.next(snap.data() as T)
-        })
-      },
-    )
+    const observer = new Observable<T>((obs: Observer<T>) => {
+      onSnapshot(ref, (snap) => {
+        obs.next(snap.data() as T)
+      })
+    })
     return observer
   }
 

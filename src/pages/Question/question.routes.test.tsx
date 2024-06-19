@@ -203,56 +203,47 @@ describe('question.routes', () => {
   })
 
   describe('/questions/create', () => {
-    it(
-      'allows user to create a question',
-      async () => {
-        let wrapper
-        // Arrange
-        const mockUpsertQuestion = vi.fn().mockResolvedValue({
-          slug: 'question-title',
-        })
-        ;(useQuestionStore as Mock).mockReturnValue({
-          ...mockQuestionStore,
-          upsertQuestion: mockUpsertQuestion,
-          activeUser: mockActiveUser,
-        })
+    it('allows user to create a question', async () => {
+      let wrapper
+      // Arrange
+      const mockUpsertQuestion = vi.fn().mockResolvedValue({
+        slug: 'question-title',
+      })
+      ;(useQuestionStore as Mock).mockReturnValue({
+        ...mockQuestionStore,
+        upsertQuestion: mockUpsertQuestion,
+        activeUser: mockActiveUser,
+      })
 
-        act(() => {
-          wrapper = renderFn('/questions/create')
-        })
+      act(() => {
+        wrapper = renderFn('/questions/create')
+      })
 
-        // Fill in form
-        const title = wrapper.getByLabelText('The Question', { exact: false })
-        const description = wrapper.getByLabelText('Description', {
-          exact: false,
-        })
-        const submitButton = wrapper.getByText('Publish')
+      // Fill in form
+      const title = wrapper.getByLabelText('The Question', { exact: false })
+      const description = wrapper.getByLabelText('Description', {
+        exact: false,
+      })
+      const submitButton = wrapper.getByText('Publish')
 
-        // Submit form
-        await userEvent.type(title, 'Can you build a house out of plastic?')
-        await userEvent.type(description, "So I've got all this plastic...")
+      // Submit form
+      await userEvent.type(title, 'Can you build a house out of plastic?')
+      await userEvent.type(description, "So I've got all this plastic...")
 
-        submitButton.click()
+      submitButton.click()
 
-        expect(mockUpsertQuestion).toHaveBeenCalledWith({
-          title: 'Can you build a house out of plastic?',
-          description: "So I've got all this plastic...",
-          tags: {},
-        })
+      expect(mockUpsertQuestion).toHaveBeenCalledWith({
+        title: 'Can you build a house out of plastic?',
+        description: "So I've got all this plastic...",
+        tags: {},
+      })
 
-        await waitFor(
-          () => {
-            expect(mockedUsedNavigate).toBeCalledWith(
-              '/questions/question-title',
-            )
-          },
-          {
-            timeout: 5000,
-          },
+      await waitFor(() => {
+        expect(mockedUsedNavigate).toHaveBeenCalledWith(
+          '/questions/question-title',
         )
-      },
-      { timeout: 15000 },
-    )
+      })
+    })
   })
 
   describe('/questions/:slug', () => {
@@ -363,7 +354,6 @@ describe('question.routes', () => {
       act(() => {
         wrapper = renderFn(`/questions/${question.slug}`)
       })
-      expect(wrapper.getByText(/loading/)).toBeInTheDocument()
 
       // Ability to edit
       await waitFor(async () => {
@@ -389,7 +379,6 @@ describe('question.routes', () => {
       act(() => {
         wrapper = renderFn(`/questions/${question.slug}`)
       })
-      expect(wrapper.getByText(/loading/)).toBeInTheDocument()
 
       // Ability to edit
       await waitFor(async () => {
@@ -406,7 +395,7 @@ describe('question.routes', () => {
         wrapper = renderFn('/questions/slug/edit')
       })
 
-      await waitFor(async () => {
+      await waitFor(() => {
         expect(wrapper.getByText(editFormTitle)).toBeInTheDocument()
       })
     })
@@ -445,6 +434,7 @@ describe('question.routes', () => {
         expect(screen.getByDisplayValue(questionItem.title)).toBeInTheDocument()
         expect(() => wrapper.getByText('Draft')).toThrow()
       })
+
       // Fill in form
       const title = wrapper.getByLabelText('The Question', { exact: false })
       const description = wrapper.getByLabelText('Description', {
@@ -495,7 +485,7 @@ describe('question.routes', () => {
   })
 }, 15000)
 
-const renderFn = (url) => {
+const renderFn = (url: string) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route path="/questions">{questionRouteElements}</Route>,

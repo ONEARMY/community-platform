@@ -145,7 +145,3 @@ export const Button = (props: BtnProps) => {
     </ThemeUiButton>
   )
 }
-
-Button.defaultProps = {
-  type: 'button',
-}

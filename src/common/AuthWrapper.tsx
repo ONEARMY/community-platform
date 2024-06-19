@@ -5,6 +5,7 @@ import { DEV_SITE_ROLE, SITE } from 'src/config/config'
 import { isTestEnvironment } from 'src/utils/isTestEnvironment'
 
 import type { UserRole } from 'oa-shared'
+import type { IUserPPDB } from 'src/models'
 
 /*
     Simple wrapper to only render a component if the user is logged in (plus optional user role required)
@@ -19,7 +20,6 @@ interface IProps {
 export const AuthWrapper = observer((props: IProps) => {
   const { userStore } = useCommonStores().stores
   const isAuthorized = isUserAuthorized(userStore?.user, props.roleRequired)
-
   const childElements =
     props.roleRequired === 'beta-tester' ? (
       <div className="beta-tester-feature">{props.children}</div>
@@ -30,7 +30,10 @@ export const AuthWrapper = observer((props: IProps) => {
   return <>{isAuthorized ? childElements : props.fallback || <></>}</>
 })
 
-const isUserAuthorized = (user, roleRequired) => {
+const isUserAuthorized = (
+  user?: IUserPPDB | null,
+  roleRequired?: UserRole | UserRole[],
+) => {
   const userRoles = user?.userRoles || []
 
   // If no role required just check if user is logged in

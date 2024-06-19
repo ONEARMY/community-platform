@@ -94,7 +94,10 @@ export class ModuleStore {
   }
 
   // this can be subscribed to in individual stores
-  constructor(private rootStore: IRootStore, private basePath?: IDBEndpoint) {
+  constructor(
+    private rootStore: IRootStore,
+    private basePath?: IDBEndpoint,
+  ) {
     this.rootStore = rootStore
 
     if (!this.rootStore) {

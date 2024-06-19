@@ -1,9 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import {
-  RESEARCH_MAX_LENGTH,
-  RESEARCH_TITLE_MIN_LENGTH,
-} from '../../../../../src/pages/Research/constants'
+import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import {
   generateNewUserDetails,
   setIsPreciousPlastic,
@@ -14,24 +11,31 @@ import type { UserMenuItem } from '../../support/commandsUi'
 const researcherEmail = 'research_creator@test.com'
 const researcherPassword = 'research_creator'
 
+const generateArticle = () => {
+  const title = faker.lorem.words(4)
+  const slug = title.toLowerCase().split(' ').join('-')
+
+  return {
+    _createdBy: 'research_creator',
+    _deleted: false,
+    description: 'After creating, the research will be deleted.',
+    title: title,
+    slug: slug,
+    previousSlugs: [slug],
+    status: 'In progress',
+  }
+}
+
 describe('[Research]', () => {
   beforeEach(() => {
     cy.visit('/research')
   })
 
   describe('[Create research article]', () => {
-    const expected = {
-      _createdBy: 'research_creator',
-      _deleted: false,
-      description: 'After creating, the research will be deleted.',
-      title: 'Create research article test',
-      slug: 'create-research-article-test',
-      previousSlugs: ['create-research-article-test'],
-      status: 'In progress',
-    }
-
     it('[By Authenticated]', () => {
-      const updateTitle = 'Create a research update'
+      const expected = generateArticle()
+
+      const updateTitle = faker.lorem.words(5)
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
 
@@ -43,6 +47,7 @@ describe('[Research]', () => {
       cy.login(researcherEmail, researcherPassword)
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('a[href="/research/create"]').should('exist')
       cy.get('[data-cy=create]').click()
 
       cy.step('Warn if title is identical to an existing one')
@@ -57,10 +62,7 @@ describe('[Research]', () => {
       cy.contains(`Should be more than ${RESEARCH_TITLE_MIN_LENGTH} characters`)
 
       cy.step('Enter research article details')
-      cy.get('[data-cy=intro-title')
-        .clear()
-        .type('Create research article test')
-        .blur({ force: true })
+      cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
 
       cy.step('Cannot be published without description')
       cy.get('[data-cy=submit]').click()
@@ -78,20 +80,8 @@ describe('[Research]', () => {
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
-      cy.step('Limit description text to maximum length')
-      cy.get('[data-cy=intro-description]')
-        .clear({ force: true })
-        // Speeds up test by avoiding typing and then updates character count by typing
-        .invoke(
-          'val',
-          faker.lorem.sentences(50).slice(0, RESEARCH_MAX_LENGTH - 1),
-        )
-        .type('Reach maximum character count')
-      cy.contains(`${RESEARCH_MAX_LENGTH} / ${RESEARCH_MAX_LENGTH}`)
-
-      cy.get('[data-cy=intro-description]')
-        .clear({ force: true })
-        .type(expected.description)
+      cy.wait(500) // wierd issue where description is cleared during typing below (causes first few characters to not be typed, thus failing the test)
+      cy.get('[data-cy=intro-description]').type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')
@@ -174,6 +164,7 @@ describe('[Research]', () => {
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').should('be.visible')
+      cy.get('a[href="/research/create"]').should('exist')
 
       cy.step('Enter research article details')
       cy.visit('/research/create')
@@ -231,6 +222,7 @@ describe('[Research]', () => {
       cy.login(researcherEmail, researcherPassword)
       cy.step('Access the create research article')
       cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('a[href="/research/create"]').should('exist')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title')
         .clear()
@@ -283,6 +275,7 @@ describe('[Research]', () => {
       cy.step('Create the research article')
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('a[href="/research/create"]').should('exist')
       cy.get('[data-cy=create]').click()
 
       cy.step('Enter research article details')

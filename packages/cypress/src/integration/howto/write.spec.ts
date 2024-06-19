@@ -85,7 +85,7 @@ describe('[How To]', () => {
     cy.step(`Deleting step [${stepNumber}]`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`)
       .find('[data-cy=delete-step]')
-      .click()
+      .click({ force: true })
     cy.get('[data-cy=confirm]').click()
   }
 
@@ -114,7 +114,7 @@ describe('[How To]', () => {
       time: '1-2 weeks',
       title: 'Create a how-to test',
       slug: 'create-a-how-to-test',
-      previousSlugs: ['create-a-how-to-test'],
+      previousSlugs: ['qwerty', 'create-a-how-to-test'],
       fileLink: 'http://google.com/',
       files: [],
       total_downloads: 0,
@@ -201,6 +201,7 @@ describe('[How To]', () => {
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
+      cy.get('a[href="/how-to/create"]').should('exist')
       cy.get('[data-cy=create]').click()
       cy.contains('Create a How-To').should('be.visible')
 
@@ -332,6 +333,7 @@ describe('[How To]', () => {
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
+      cy.get('a[href="/how-to/create"]').should('exist')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title]')
         .clear()

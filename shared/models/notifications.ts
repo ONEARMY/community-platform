@@ -22,7 +22,7 @@ export const NotificationTypes = [
   'research_needs_updates',
 ] as const
 
-export type NotificationType = typeof NotificationTypes[number]
+export type NotificationType = (typeof NotificationTypes)[number]
 
 export type UserNotificationItem = {
   type: NotificationType

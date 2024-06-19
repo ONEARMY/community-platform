@@ -130,7 +130,10 @@ describe('research.routes', () => {
         })
       })
 
-      const wrapper = renderFn('/research')
+      let wrapper
+      act(() => {
+        wrapper = renderFn('/research')
+      })
 
       await waitFor(
         () =>
@@ -451,9 +454,12 @@ describe('research.routes', () => {
         }),
       })
 
-      const wrapper = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-      )
+      let wrapper
+      act(() => {
+        wrapper = renderFn(
+          '/research/an-example/edit-update/nested-research-update',
+        )
+      })
 
       await waitFor(() => {
         expect(
@@ -484,9 +490,12 @@ describe('research.routes', () => {
         }),
       })
 
-      const wrapper = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-      )
+      let wrapper
+      act(() => {
+        wrapper = renderFn(
+          '/research/an-example/edit-update/nested-research-update',
+        )
+      })
 
       await waitFor(() => {
         expect(wrapper.getByText('Edit your update')).toBeInTheDocument()

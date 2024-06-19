@@ -13,7 +13,10 @@ import type {
 import type { AbstractDatabaseClientStreamable } from './types/AbstractDatabaseClient'
 
 export class CollectionReference<T> {
-  constructor(private endpoint: string, private clients: DBClients) {}
+  constructor(
+    private endpoint: string,
+    private clients: DBClients,
+  ) {}
 
   /**
    * Provide a reference to a document to perform operations, such as getting or setting data
@@ -49,50 +52,52 @@ export class CollectionReference<T> {
     const serverDB = this.clients.serverDB as AbstractDatabaseClientStreamable
 
     const endpoint = this.endpoint
-    const observer: Observable<(T & DBDoc)[]> = Observable.create(
-      async (obs: Observer<(T & DBDoc)[]>) => {
-        // 1. Emit cached collection
-        const cached = await cacheDB.getCollection<T>(endpoint)
-        totals.cached = cached.length
-        obs.next(cached)
-        if (cached.length === 0) {
-          // 2. If no cache, populate using large query db
-          const serverCache = await serverCacheDB.getCollection<T>(endpoint)
-          totals.serverCache = serverCache.length
-          await cacheDB.setBulkDocs(endpoint, serverCache)
-          obs.next(serverCache)
-        }
-        // 3. get any newer docs from regular server db, merge with cache and emit
-        const latest = await this._getCacheLastModified(endpoint)
-        const server$ = serverDB
-          .streamCollection(endpoint, {
-            orderBy: '_modified',
-            order: 'asc',
-            where: {
-              field: '_modified',
-              operator: '>',
-              value: latest,
-            },
-          })
-          .subscribe(async (updates) => {
-            logger.debug(
-              'CollectionReference.syncRes',
-              this.endpoint,
-              updates.length,
-            )
-            if (!options.keepAlive) {
-              server$.unsubscribe()
-              logger.debug('CollectionReference.syncEnd', this.endpoint)
-            }
-            totals.live = updates.length
-            await cacheDB.setBulkDocs(endpoint, updates)
-            const allDocs = await cacheDB.getCollection<T>(endpoint)
-            obs.next(allDocs)
-          })
-      },
-    )
-    const subscription = observer.subscribe((value) => onUpdate(value))
-    return subscription
+    const syncCollection = async (obs: Observer<(T & DBDoc)[]>) => {
+      // 1. Emit cached collection
+      const cached = await cacheDB.getCollection<T>(endpoint)
+      totals.cached = cached.length
+      obs.next(cached)
+      if (cached.length === 0) {
+        // 2. If no cache, populate using large query db
+        const serverCache = await serverCacheDB.getCollection<T>(endpoint)
+        totals.serverCache = serverCache.length
+        await cacheDB.setBulkDocs(endpoint, serverCache)
+        obs.next(serverCache)
+      }
+      // 3. get any newer docs from regular server db, merge with cache and emit
+      const latest = await this._getCacheLastModified(endpoint)
+      const server$ = serverDB
+        .streamCollection(endpoint, {
+          orderBy: '_modified',
+          order: 'asc',
+          where: {
+            field: '_modified',
+            operator: '>',
+            value: latest,
+          },
+        })
+        .subscribe(async (updates) => {
+          logger.debug(
+            'CollectionReference.syncRes',
+            this.endpoint,
+            updates.length,
+          )
+          if (!options.keepAlive) {
+            server$.unsubscribe()
+            logger.debug('CollectionReference.syncEnd', this.endpoint)
+          }
+          totals.live = updates.length
+          await cacheDB.setBulkDocs(endpoint, updates)
+          const allDocs = await cacheDB.getCollection<T>(endpoint)
+          obs.next(allDocs)
+        })
+    }
+
+    const observer = new Observable<(T & DBDoc)[]>((obs) => {
+      syncCollection(obs).catch((err) => obs.error(err))
+    })
+
+    return observer.subscribe((value) => onUpdate(value))
   }
 
   /**

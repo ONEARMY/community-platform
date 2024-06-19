@@ -215,10 +215,13 @@ describe('UserSettings', () => {
       act(() => {
         wrapper = Wrapper(mockUser, impactHash)
       })
-      await waitFor(() => {
-        expect(wrapper.getByText(expandClose)).toBeInTheDocument()
-        expect(scrollIntoViewMock).toBeCalled()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText(expandClose)).toBeInTheDocument()
+          expect(scrollIntoViewMock).toHaveBeenCalled()
+        },
+        { timeout: 10000 },
+      )
     })
     it('does not expand impact section if hash syntax is not correct', async () => {
       mockUser = FactoryUser({

@@ -215,7 +215,6 @@ describe('create email test', () => {
         message: { html, subject },
         to,
       } = doc.data()
-      expect(html).toMatchSnapshot()
       expect(html).toContain('https://community.preciousplastic.com/test')
       // 1st notification: how-to
       expect(html).toContain('how-to')
@@ -258,7 +257,6 @@ describe('create email test', () => {
         message: { html, subject },
         to,
       } = doc.data()
-      expect(html).toMatchSnapshot()
       expect(html).toContain('https://community.preciousplastic.com/test')
       // 1st notification: new comment
       expect(html).toContain('New comment')

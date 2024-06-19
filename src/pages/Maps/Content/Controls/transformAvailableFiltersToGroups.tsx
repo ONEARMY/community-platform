@@ -21,8 +21,8 @@ const asOptions = (mapPins, items: Array<IMapGrouping>): FilterGroupOption[] =>
         (item.type as string) === 'verified'
           ? ['verified']
           : item.subType
-          ? item.subType.split(' ')
-          : item.type.split(' ')
+            ? item.subType.split(' ')
+            : item.type.split(' ')
 
       const value = item.subType ? item.subType : item.type
 
@@ -65,14 +65,17 @@ export const transformAvailableFiltersToGroups = (
   mapPinList: IMapPin[],
   availableFilters: FilterItem[],
 ): FilterGroup[] => {
-  const reducedItems = availableFilters.reduce((accumulator, current) => {
-    const { grouping } = current
-    if (accumulator[grouping] === undefined) {
-      accumulator[grouping] = []
-    }
-    accumulator[grouping].push(current)
-    return accumulator
-  }, {} as Record<IPinGrouping, Array<IMapGrouping>>)
+  const reducedItems = availableFilters.reduce(
+    (accumulator, current) => {
+      const { grouping } = current
+      if (accumulator[grouping] === undefined) {
+        accumulator[grouping] = []
+      }
+      accumulator[grouping].push(current)
+      return accumulator
+    },
+    {} as Record<IPinGrouping, Array<IMapGrouping>>,
+  )
 
   return Object.keys(reducedItems).map((item) => {
     let label = item === 'place' ? 'All Workspaces' : 'Others'

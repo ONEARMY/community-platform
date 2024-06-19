@@ -7,7 +7,7 @@ const ProfileType = {
   COLLECTION_POINT: 'collection-point',
 } as const
 
-export type ProfileTypeLabel = typeof ProfileType[keyof typeof ProfileType]
+export type ProfileTypeLabel = (typeof ProfileType)[keyof typeof ProfileType]
 
 interface LinkList {
   label: string

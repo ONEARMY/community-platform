@@ -39,9 +39,12 @@ export const getPublicUpdates = (
 export const researchStatusColour = (
   researchStatus?: ResearchStatus,
 ): string => {
-  return researchStatus === ResearchStatus.ARCHIVED
-    ? 'lightgrey'
-    : researchStatus === ResearchStatus.COMPLETED
-    ? 'betaGreen'
-    : 'accent.base'
+  switch (researchStatus) {
+    case ResearchStatus.ARCHIVED:
+      return 'lightgrey'
+    case ResearchStatus.COMPLETED:
+      return 'betaGreen'
+    default:
+      return 'accent.base'
+  }
 }

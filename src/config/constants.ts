@@ -29,4 +29,5 @@ export const _supportedConfigurationOptions = [
   'SITE_NAME',
 ] as const
 
-export type ConfigurationOption = typeof _supportedConfigurationOptions[number]
+export type ConfigurationOption =
+  (typeof _supportedConfigurationOptions)[number]

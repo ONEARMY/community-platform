@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react'
-import { cloneDeep } from 'lodash'
 import {
   action,
   computed,
@@ -68,7 +67,7 @@ export class ResearchStore extends ModuleStore {
     let activeResearchItem: IResearchDB | null = null
 
     const enrichResearchUpdate = async (update: IResearch.UpdateDB) => {
-      const enrichedResearchUpdated = cloneDeep(update)
+      const enrichedResearchUpdated = structuredClone(update)
       enrichedResearchUpdated.description = changeUserReferenceToPlainText(
         update.description,
       )
@@ -440,7 +439,7 @@ export class ResearchStore extends ModuleStore {
 
         const newItem = {
           ...toJS(item),
-          updates: [...toJS(newUpdates)],
+          updates: [...newUpdates.map((update) => toJS(update))],
         }
 
         const updatedItem = await this._updateResearchItem(dbRef, newItem)
@@ -595,7 +594,7 @@ export class ResearchStore extends ModuleStore {
     researchDoc: Partial<IResearch.Item>,
     setLastEditTimestamp = false,
   ) {
-    const researchItem = cloneDeep(researchDoc)
+    const researchItem = structuredClone(researchDoc)
     const { text: researchDescription, users } = await this.addUserReference(
       researchItem.description || '',
     )
@@ -606,7 +605,7 @@ export class ResearchStore extends ModuleStore {
     const previousVersion = toJS(await dbRef.get('server'))
 
     const mentions: UserMention[] = researchItem.mentions
-      ? cloneDeep(researchItem.mentions)
+      ? structuredClone(researchItem.mentions)
       : []
 
     if (researchItem.updates && researchItem.updates.length > 0) {
@@ -644,7 +643,7 @@ export class ResearchStore extends ModuleStore {
 
     await dbRef.set(
       {
-        ...cloneDeep(researchItem),
+        ...structuredClone(researchItem),
         previousSlugs: getPreviousSlugs(
           researchItem.slug!,
           researchItem.previousSlugs,
@@ -791,7 +790,7 @@ const getPreviousSlugs = (
   slug: string,
   previousSlugs = [] as string[],
 ): string[] => {
-  const newSlugList = cloneDeep(previousSlugs)
+  const newSlugList = structuredClone(previousSlugs)
 
   if (previousSlugs.includes(slug)) {
     return newSlugList

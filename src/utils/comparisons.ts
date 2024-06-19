@@ -1,6 +1,8 @@
-import * as _ from 'lodash'
-
 import type { ISelectedTags } from 'src/models/tags.model'
+
+const isEqual = (object1: any, object2: any) => {
+  return JSON.stringify(object1) === JSON.stringify(object2)
+}
 
 /** Functions used to give as callback to the isEqual prop of form fields.
  *  The isEqual callback is used to determine if a field is dirty.
@@ -13,7 +15,7 @@ export const COMPARISONS = {
     return a === b
   },
   tags: (a: ISelectedTags, b: ISelectedTags): boolean => {
-    return _.isEqual(a, b)
+    return isEqual(a, b)
   },
   image: (a, b): boolean => {
     // When there was no image and there still isn't one it's not dirty

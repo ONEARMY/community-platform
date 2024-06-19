@@ -1,6 +1,5 @@
 /* eslint-disable no-case-declarations */
 import { createContext, useContext } from 'react'
-import { cloneDeep } from 'lodash'
 import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
@@ -332,7 +331,7 @@ export class DiscussionStore extends ModuleStore {
     discussion: IDiscussion,
     commentsTotalEvent: CommentsTotalEvent,
   ): Promise<IDiscussionDB | null> {
-    await dbRef.set({ ...cloneDeep(discussion) })
+    await dbRef.set({ ...structuredClone(discussion) })
     await updateDiscussionMetadata(this.db, discussion, commentsTotalEvent)
     const updatedDiscussion = toJS(await dbRef.get())
 

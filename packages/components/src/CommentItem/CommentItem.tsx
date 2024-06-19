@@ -103,29 +103,20 @@ export const CommentItem = (props: IProps) => {
               flex: 1,
             }}
           >
-            {creatorImage && showAvatar ? (
-              <Box data-cy="commentAvatar" data-testid="commentAvatar">
-                <Avatar
-                  src={creatorImage}
-                  sx={{
-                    objectFit: 'cover',
-                    width: ['30px', '50px'],
-                    height: ['30px', '50px'],
-                  }}
-                />
-              </Box>
-            ) : (
-              <Box data-cy="commentAvatar" data-testid="commentAvatar">
-                <Avatar
-                  src={default_profile_image}
-                  sx={{
-                    objectFit: 'cover',
-                    width: ['30px', '50px'],
-                    height: ['30px', '50px'],
-                  }}
-                />
-              </Box>
-            )}
+            <Box data-cy="commentAvatar" data-testid="commentAvatar">
+              <Avatar
+                src={
+                  creatorImage && showAvatar
+                    ? creatorImage
+                    : default_profile_image
+                }
+                sx={{
+                  objectFit: 'cover',
+                  width: ['30px', '50px'],
+                  height: ['30px', '50px'],
+                }}
+              />
+            </Box>
 
             <Flex
               sx={{

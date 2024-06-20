@@ -178,7 +178,7 @@ export const CommentItem = (props: IProps) => {
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-word',
                 marginTop: 1,
-                marginBottom: 2
+                marginBottom: 2,
               }}
               ref={textRef}
             >

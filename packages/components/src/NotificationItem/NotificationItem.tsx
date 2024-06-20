@@ -3,7 +3,7 @@ import { Box, Flex } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 
-import type { NotificationType, UserNotificationItem } from 'oa-shared'
+import type { NotificationType } from 'oa-shared'
 import type { availableGlyphs } from '../Icon/types'
 
 function getIconByType(type: NotificationType): availableGlyphs {
@@ -26,7 +26,7 @@ function getIconByType(type: NotificationType): availableGlyphs {
   return 'comment'
 }
 
-export const NotificationItem = (props: UserNotificationItem) => {
+export const NotificationItem = (props: any) => {
   const { type } = props
   return (
     <Flex

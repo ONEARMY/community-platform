@@ -1,4 +1,4 @@
-import {action, autorun, computed, makeObservable, observable, runInAction} from 'mobx'
+import { action, computed, makeObservable, observable, runInAction } from 'mobx'
 import {
   fixingFashionTheme,
   preciousPlasticTheme,
@@ -22,10 +22,10 @@ export class ThemeStore {
   resizeObserver: ResizeObserver | null = null
 
   currentTheme: PlatformTheme =
-      themeMap[
+    themeMap[
       localStorage.getItem('platformTheme') ||
-      getConfigurationOption('REACT_APP_PLATFORM_THEME', 'precious-plastic')
-          ]
+        getConfigurationOption('REACT_APP_PLATFORM_THEME', 'precious-plastic')
+    ]
 
   setRootRef = (rootRef: HTMLElement) => {
     this.rootRef = rootRef
@@ -57,11 +57,11 @@ export class ThemeStore {
   }
 
   get screenBreakpoint(): 's' | 'm' | 'l' | 'xl' {
-    const {screenDimensions} = this
+    const { screenDimensions } = this
 
     // TOOD: Review breakpoints with team
     if (screenDimensions) {
-      const {width} = screenDimensions
+      const { width } = screenDimensions
 
       switch (true) {
         case width < 512:

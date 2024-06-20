@@ -46,11 +46,11 @@ export const DiscussionContainer = (props: IProps) => {
   } = props
 
   const [commentBeingRepliedTo, setCommentBeingRepliedTo] = useState<
-      null | string
+    null | string
   >(null)
   const structuredComments = useMemo(
-      () => transformToTree(comments),
-      [comments],
+    () => transformToTree(comments),
+    [comments],
   )
 
   const handleSetCommentBeingRepliedTo = (commentId: string | null): void => {
@@ -61,43 +61,43 @@ export const DiscussionContainer = (props: IProps) => {
   }
 
   return (
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <DiscussionTitle comments={comments} />
+    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+      <DiscussionTitle comments={comments} />
 
-        <CommentList
-            supportReplies={supportReplies}
-            comments={structuredComments}
-            handleDelete={handleDelete}
-            handleEdit={handleEdit}
-            handleEditRequest={handleEditRequest}
-            highlightedCommentId={highlightedCommentId}
-            isLoggedIn={isLoggedIn}
-            isReplies={false}
-            maxLength={maxLength}
-            onMoreComments={onMoreComments}
-            onSubmitReply={onSubmitReply}
-            setCommentBeingRepliedTo={handleSetCommentBeingRepliedTo}
-            showAvatar={showAvatar}
+      <CommentList
+        supportReplies={supportReplies}
+        comments={structuredComments}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
+        handleEditRequest={handleEditRequest}
+        highlightedCommentId={highlightedCommentId}
+        isLoggedIn={isLoggedIn}
+        isReplies={false}
+        maxLength={maxLength}
+        onMoreComments={onMoreComments}
+        onSubmitReply={onSubmitReply}
+        setCommentBeingRepliedTo={handleSetCommentBeingRepliedTo}
+        showAvatar={showAvatar}
+      />
+
+      <Flex
+        sx={{
+          alignItems: 'stretch',
+          background: 'softblue',
+          borderRadius: 2,
+          flexDirection: 'column',
+          padding: 3,
+        }}
+      >
+        <CreateComment
+          maxLength={maxLength}
+          comment={comment}
+          onChange={onChange}
+          onSubmit={onSubmit}
+          isMobile={isMobile}
+          isLoggedIn={isLoggedIn}
         />
-
-        <Flex
-            sx={{
-              alignItems: 'stretch',
-              background: 'softblue',
-              borderRadius: 2,
-              flexDirection: 'column',
-              padding: 3,
-            }}
-        >
-          <CreateComment
-              maxLength={maxLength}
-              comment={comment}
-              onChange={onChange}
-              onSubmit={onSubmit}
-              isMobile={isMobile}
-              isLoggedIn={isLoggedIn}
-          />
-        </Flex>
       </Flex>
+    </Flex>
   )
 }

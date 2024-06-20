@@ -8,6 +8,7 @@ import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
 import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
 import { FaSignal } from '@react-icons/all-files/fa/FaSignal'
 import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
+import { FiSend } from '@react-icons/all-files/fi/FiSend'
 import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
 import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
 import { GoLinkExternal } from '@react-icons/all-files/go/GoLinkExternal'
@@ -16,7 +17,6 @@ import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
 import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
 import { MdAdd } from '@react-icons/all-files/md/MdAdd'
 import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
-import { FiSend } from '@react-icons/all-files/fi/FiSend'
 import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
 import { MdCheck } from '@react-icons/all-files/md/MdCheck'
 import { MdClose } from '@react-icons/all-files/md/MdClose'
@@ -109,7 +109,7 @@ export const glyphs: IGlyphs = {
   time: <MdAccessTime />,
   'turned-in': <MdTurnedIn />,
   'social-media': iconMap.socialMedia,
-  'send': <FiSend />,
+  send: <FiSend />,
   supporter: iconMap.supporter,
   show: iconMap.show,
   update: iconMap.update,
@@ -131,12 +131,12 @@ const IconWrapper = styled.div<Props>`
   min-width: ${(props) => (props.size ? `${props.size}px` : '32px')};
   min-height: ${(props) => (props.size ? `${props.size}px` : '32px')};
   position: relative;
-  
+
   svg {
     width: 100%;
     height: 100%;
   }
-  
+
   ${verticalAlign} ${space}
     ${(props) =>
     props.onClick &&
@@ -172,19 +172,19 @@ export const Icon = (props: Props) => {
   }
 
   return (
-      <IconWrapper
-          {...props}
-          sx={{ color: props.color ?? 'inherit', opacity: props.opacity ?? '1' }}
-          size={definedSize}
-          style={{ marginRight }}
+    <IconWrapper
+      {...props}
+      sx={{ color: props.color ?? 'inherit', opacity: props.opacity ?? '1' }}
+      size={definedSize}
+      style={{ marginRight }}
+    >
+      <IconContext.Provider
+        value={{
+          style: { width: definedSize + 'px', height: definedSize + 'px' },
+        }}
       >
-        <IconContext.Provider
-            value={{
-              style: { width: definedSize + 'px', height: definedSize + 'px' },
-            }}
-        >
-          <Glyph glyph={glyph} />
-        </IconContext.Provider>
-      </IconWrapper>
+        <Glyph glyph={glyph} />
+      </IconContext.Provider>
+    </IconWrapper>
   )
 }

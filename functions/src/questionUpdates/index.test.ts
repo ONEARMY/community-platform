@@ -3,7 +3,7 @@ const admin = require('firebase-admin')
 const test = require('firebase-functions-test')()
 
 import { v4 as uuid } from 'uuid'
-
+import { getDiscordMessages } from '../Integrations/firebase-discord'
 import { DB_ENDPOINTS } from '../models'
 import {
   handleQuestionCreate,
@@ -37,6 +37,7 @@ describe('questionUpdates', () => {
       const userId = uuid()
       const questionId = uuid()
       const wrapped = test.wrap(handleQuestionCreate)
+      const questionTitle = 'Are we real?'
 
       // create fake user
       await db.collection(DB_ENDPOINTS.users).add({
@@ -47,6 +48,8 @@ describe('questionUpdates', () => {
       await wrapped(
         stubbedQuestionSnapshot(questionId, {
           _createdBy: userId,
+          title: questionTitle,
+          slug: questionId,
         }),
       )
 
@@ -58,10 +61,22 @@ describe('questionUpdates', () => {
           .get()
       ).docs[0].data() as IUserDB
 
+      // verify the user stats contain the new question
       expect(doc.stats.userCreatedQuestions).toHaveProperty(
         questionId,
         'accepted',
       )
+      // verify a Discord notification was dispached
+      const expectedMessageStart = `❓ ${userId} has a new question: ${questionTitle}`
+      const expectedMessageEnd = `/questions/${questionId}>`
+      const discordMessages = await getDiscordMessages()
+      const containsTestMessage = discordMessages.some((message) => {
+        return (
+          message.content.startsWith(expectedMessageStart) &&
+          message.content.endsWith(expectedMessageEnd)
+        )
+      })
+      expect(containsTestMessage).toBe(true)
     })
 
     it('update question', async () => {

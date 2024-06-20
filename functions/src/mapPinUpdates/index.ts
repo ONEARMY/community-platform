@@ -7,7 +7,10 @@ import { CONFIG } from '../config/config'
 const SITE_URL = CONFIG.deployment.site_url
 
 export const mapPinUpdate = functions
-  .runWith({ memory: '512MB', secrets: ["DISCORD_WEBHOOK_URL", "DISCORD_CHANNEL_ID", "DISCORD_BOT_TOKEN"] })
+  .runWith({
+    memory: '512MB',
+    secrets: ['DISCORD_WEBHOOK_URL', 'DISCORD_CHANNEL_ID', 'DISCORD_BOT_TOKEN'],
+  })
   .firestore.document('v3_mappins/{pinId}')
   .onUpdate(async (change, context) => {
     const currentState = (change.after.data() as IMapPin) || null

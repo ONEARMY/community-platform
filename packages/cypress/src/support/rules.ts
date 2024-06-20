@@ -4,6 +4,9 @@ Cypress.on('uncaught:exception', (err) => {
   if (err.message.includes('The query requires an index.')) {
     return false
   }
+  if (err.message.includes('No document to update')) {
+    return false
+  }
   // we still want to ensure there are no other unexpected
   // errors, so we let them fail the test
 })

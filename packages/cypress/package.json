@@ -1,8 +1,9 @@
 {
   "name": "oa-cypress",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "start": "ts-node scripts/start.ts"
+    "start": "node --loader ts-node/esm scripts/start.mts"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
@@ -12,13 +13,16 @@
     "oa-shared": "workspace:*"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.13",
-    "@types/wait-on": "^5.3.1",
+    "@types/fs-extra": "^11.0.4",
+    "@types/wait-on": "^5.3.4",
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
-    "fs-extra": "^10.0.0",
-    "ts-node": "^10.2.1",
-    "wait-on": "^7.0.1"
+    "eslint-plugin-mocha": "^10.4.3",
+    "fs-extra": "^11.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.1.6",
+    "wait-on": "^7.2.0",
+    "wait-port": "^1.1.0"
   },
   "installConfig": {
     "hoistingLimits": "workspaces"

@@ -1,4 +1,4 @@
-import { vi } from 'vitest'
+import { useState } from 'react'
 
 import { createFakeComments } from '../utils'
 import { ButtonShowReplies } from './ButtonShowReplies'
@@ -6,21 +6,21 @@ import { ButtonShowReplies } from './ButtonShowReplies'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/ShowRepliesButton',
+  title: 'Components/ButtonShowReplies',
   component: ButtonShowReplies,
 } as Meta<typeof ButtonShowReplies>
 
-const mockSetIsShowReplies = vi.fn()
-
 export const Default: StoryFn<typeof ButtonShowReplies> = () => {
+  const [isShowReplies, setIsShowReplies] = useState<boolean>(false)
+
   const replies = createFakeComments(7)
 
   return (
     <ButtonShowReplies
       creatorName="Jeff"
-      isShowReplies={false}
       replies={replies}
-      setIsShowReplies={mockSetIsShowReplies}
+      isShowReplies={isShowReplies}
+      setIsShowReplies={() => setIsShowReplies(!isShowReplies)}
     />
   )
 }
@@ -33,7 +33,7 @@ export const RepliesShowing: StoryFn<typeof ButtonShowReplies> = () => {
       creatorName="Annabeth"
       isShowReplies={true}
       replies={replies}
-      setIsShowReplies={mockSetIsShowReplies}
+      setIsShowReplies={() => null}
     />
   )
 }
@@ -46,7 +46,7 @@ export const OneReply: StoryFn<typeof ButtonShowReplies> = () => {
       creatorName="Zelda"
       isShowReplies={false}
       replies={replies}
-      setIsShowReplies={mockSetIsShowReplies}
+      setIsShowReplies={() => null}
     />
   )
 }
@@ -57,7 +57,20 @@ export const NoReplies: StoryFn<typeof ButtonShowReplies> = () => {
       creatorName="Link"
       isShowReplies={false}
       replies={[]}
-      setIsShowReplies={mockSetIsShowReplies}
+      setIsShowReplies={() => null}
+    />
+  )
+}
+
+export const NoCreatorName: StoryFn<typeof ButtonShowReplies> = () => {
+  const replies = createFakeComments(1)
+
+  return (
+    <ButtonShowReplies
+      creatorName={null}
+      isShowReplies={false}
+      replies={replies}
+      setIsShowReplies={() => null}
     />
   )
 }

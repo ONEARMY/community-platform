@@ -41,7 +41,7 @@ module.exports = {
       label: 'Backend Development',
       items: [
         'Backend Development/BackendOverview',
-        'Backend Development/firebase-emulators-docker',
+        'Backend Development/firebase-emulator',
         'Backend Development/firestore-backup',
         'Backend Development/integrations',
         'Backend Development/tests',

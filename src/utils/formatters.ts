@@ -16,7 +16,7 @@ export const formatLink = (
       ExternalLinkLabel.WEBSITE,
       ExternalLinkLabel.SOCIAL_MEDIA,
       ExternalLinkLabel.BAZAR,
-    ].includes(linkType)
+    ].includes(linkType as ExternalLinkLabel)
   ) {
     return ensureExternalUrl(link)
   }

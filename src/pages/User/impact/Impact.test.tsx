@@ -2,12 +2,13 @@ import { render, screen } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it, vi } from 'vitest'
 
 import { IMPACT_YEARS } from './constants'
 import { Impact } from './Impact'
 import { invisible, missing } from './labels'
 
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -62,8 +63,8 @@ describe('Impact', () => {
 
       await screen.findByText('45 volunteers')
       await screen.findByText('23,000 Kg of plastic recycled')
-      await screen.findByText('$ 54,000 revenue')
-      const machineField = await screen.queryByText('13 machines built')
+      await screen.findByText('USD 54,000 revenue')
+      const machineField = screen.queryByText('13 machines built')
       expect(machineField).toBe(null)
 
       for (const year of IMPACT_YEARS) {

@@ -14,49 +14,34 @@ describe('[How To]', () => {
     // const howtoSlug = 'make-glass-like-beams'
     // const howtoUrl = `/how-to/${howtoSlug}`
     // const coverFileRegex = /howto-beams-glass-0-3.jpg/
-
     // it('[By Everyone]', () => {
     //   cy.step('More How-tos button is hidden')
     //   cy.get('[data-cy=more-how-tos]', SKIP_TIMEOUT).should('be.hidden')
-
     //   cy.step('All how-tos are shown')
     //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
-
     //   cy.step('Select a category')
     //   cy.get('[data-cy=category-select]')
     //   cy.selectTag('product', '[data-cy=category-select]')
     //   cy.get('[data-cy=card]').its('length').should('be.eq', 4)
-
     //   cy.step('Type and select a category')
     //   cy.selectTag('injection', '[data-cy=category-select]')
     //   cy.get('[data-cy=card]').its('length').should('be.eq', 2)
-
     //   cy.step('Remove all category filter')
     //   cy.get('.data-cy__clear-indicator').click()
     //   cy.get('.data-cy__multi-value__label').should('not.exist')
     //   cy.get('[data-cy=card]').its('length').should('be.eq', totalHowTo)
-
     //   cy.step('How-to cards has basic info')
     //   cy.get(`[data-cy=card][data-cy-howto-slug=${howtoSlug}]`).within(() => {
-    //     cy.contains('Make glass-like beams').should('be.exist')
+    //     cy.contains('Make glass-like beams').should('be.visible')
     //     cy.get('img').should('have.attr', 'src').and('match', coverFileRegex)
-    //     cy.contains('howto_creator').should('be.exist')
-    //     cy.contains('product').should('be.exist')
+    //     cy.contains('howto_creator').should('be.visible')
+    //     cy.contains('product').should('be.visible')
     //     cy.get('a').should('have.attr', 'href').and('eq', howtoUrl)
     //   })
-
     //   cy.step(`Open how-to details when click on a how-to ${howtoUrl}`)
     //   cy.get(`[data-cy=card] a[href="${howtoUrl}"]:first`, SKIP_TIMEOUT).click()
     //   cy.url().should('include', howtoUrl)
     // })
-
-    it('[By Authenticated]', () => {
-      cy.signUpNewUser()
-
-      cy.step('Create button is available')
-      cy.visit('/how-to')
-      cy.get('[data-cy=create]').click().url()
-    })
   })
 
   describe('[Read a How-to]', () => {
@@ -75,6 +60,7 @@ describe('[How To]', () => {
         cy.get('[data-cy=edit]').should('not.exist')
 
         cy.step('How-to has basic info')
+        cy.title().should('eq', `${howto.title} - How-to - Community Platform`)
         cy.get('[data-cy=how-to-basis]').then(($summary) => {
           expect($summary).to.contain('howto_creator', 'Author')
           expect($summary).to.contain('Last update on', 'Edit')
@@ -149,14 +135,14 @@ describe('[How To]', () => {
         })
 
         cy.step(`Comment functionality prompts user to login`)
-        cy.get(`[data-cy="comments-login-prompt"]`).should('be.exist')
+        cy.get(`[data-cy="comments-login-prompt"]`).should('be.visible')
 
         cy.step('Video embed exists')
         cy.get('[data-testid="VideoPlayer"]').within(() => {
           cy.get('iframe').should('have.attr', 'src').and('include', 'youtube')
         })
         // This fails in firefox due to cross security, simply check url
-        // .should(iframe => expect(iframe.contents().find('video')).to.exist)
+        // .should(iframe => expect(iframe.contents().find('video')).to.visible)
       })
 
       it('[Delete button should not be visible to everyone', () => {
@@ -212,7 +198,7 @@ describe('[How To]', () => {
       it('[Delete button is visible]', () => {
         cy.step('Delete button should be visible to the author of the how-to')
 
-        cy.get('[data-cy="How-To: delete button"]').should('exist')
+        cy.get('[data-cy="How-To: delete button"]').should('be.visible')
       })
 
       it('[Edit button is visible]', () => {
@@ -233,7 +219,7 @@ describe('[How To]', () => {
       it('[Delete button is visible]', () => {
         cy.step('Delete button should be visible to the author of the article')
 
-        cy.get('[data-cy="How-To: delete button"]').should('exist')
+        cy.get('[data-cy="How-To: delete button"]').should('be.visible')
       })
     })
   })

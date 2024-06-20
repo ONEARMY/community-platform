@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { HowtoProvider } from 'src/test/components'
+import { describe, expect, it } from 'vitest'
 
 import { HowtoErrors } from '.'
 
@@ -37,7 +38,7 @@ describe('HowtoErrors', () => {
     await screen.findByText('Step 2')
   })
 
-  it('renders nothing when not visible', async () => {
+  it('renders nothing when not visible', () => {
     const errors = {
       title: 'Make sure this field is filled correctly',
     }

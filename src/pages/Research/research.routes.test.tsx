@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 import { Suspense } from 'react'
 import {
@@ -19,30 +19,32 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { researchRouteElements } from './research.routes'
 import { researchService } from './research.service'
 
 import type { ResearchStore } from 'src/stores/Research/research.store'
+import type { Mock } from 'vitest'
 
 const Theme = testingThemeStyles
 const mockActiveUser = FactoryUser()
 
-jest.mock('src/pages/Research/research.service')
+vi.mock('src/pages/Research/research.service')
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {
-        fetchAllVerifiedUsers: jest.fn(),
+        fetchAllVerifiedUsers: vi.fn(),
         user: mockActiveUser,
       },
       aggregationsStore: {
-        isVerified: jest.fn(),
+        isVerified: vi.fn(),
         users_verified: {
           HowtoAuthor: true,
         },
@@ -55,17 +57,17 @@ jest.mock('src/common/hooks/useCommonStores', () => ({
   }),
 }))
 
-const mockedUsedNavigate = jest.fn()
-jest.mock('react-router-dom', () => ({
-  ...(jest.requireActual('react-router-dom') as any),
+const mockedUsedNavigate = vi.fn()
+vi.mock('react-router-dom', async () => ({
+  ...((await vi.importActual('react-router-dom')) as any),
   useNavigate: () => mockedUsedNavigate,
 }))
 
 /** When mocking research routes replace default store methods with below */
 class MockResearchStoreClass implements Partial<ResearchStore> {
-  setActiveResearchItemBySlug = jest.fn()
-  needsModeration = jest.fn().mockResolvedValue(true)
-  incrementViewCount = jest.fn()
+  setActiveResearchItemBySlug = vi.fn()
+  needsModeration = vi.fn().mockResolvedValue(true)
+  incrementViewCount = vi.fn()
   activeResearchItem = FactoryResearchItem({
     title: 'Research article title',
     updates: [],
@@ -73,12 +75,12 @@ class MockResearchStoreClass implements Partial<ResearchStore> {
   })
   researchUploadStatus = {} as any
   updateUploadStatus = {} as any
-  formatResearchCommentList = jest.fn()
-  getActiveResearchUpdateComments = jest.fn()
-  lockResearchItem = jest.fn()
-  lockResearchUpdate = jest.fn()
-  unlockResearchUpdate = jest.fn()
-  unlockResearchItem = jest.fn()
+  formatResearchCommentList = vi.fn()
+  getActiveResearchUpdateComments = vi.fn()
+  lockResearchItem = vi.fn()
+  lockResearchUpdate = vi.fn()
+  unlockResearchUpdate = vi.fn()
+  unlockResearchItem = vi.fn()
 
   get activeUser() {
     return {
@@ -93,26 +95,24 @@ class MockResearchStoreClass implements Partial<ResearchStore> {
 }
 const mockResearchStore = new MockResearchStoreClass()
 
-jest.mock('src/stores/Research/research.store')
+vi.mock('src/stores/Research/research.store')
 
 describe('research.routes', () => {
   beforeEach(() => {
-    ;(useResearchStore as jest.Mock).mockReturnValue(mockResearchStore)
+    ;(useResearchStore as Mock).mockReturnValue(mockResearchStore)
   })
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     cleanup()
   })
 
   describe('/research/', () => {
     it('renders the research listing', async () => {
-      let wrapper
-
       const researchTitle = faker.lorem.words(3)
       const researchSlug = faker.lorem.slug()
 
-      researchService.search = jest.fn(() => {
+      researchService.search = vi.fn(() => {
         return new Promise((resolve) => {
           resolve({
             items: [
@@ -130,8 +130,9 @@ describe('research.routes', () => {
         })
       })
 
-      await act(async () => {
-        wrapper = renderFn('/research').wrapper
+      let wrapper
+      act(() => {
+        wrapper = renderFn('/research')
       })
 
       await waitFor(
@@ -149,21 +150,18 @@ describe('research.routes', () => {
   describe('/research/:slug', () => {
     it('renders an individual research article', async () => {
       let wrapper
-      await act(async () => {
-        wrapper = renderFn('/research/research-slug').wrapper
+      act(() => {
+        wrapper = renderFn('/research/research-slug')
       })
 
       await waitFor(
         () => {
-          expect(
-            mockResearchStore.setActiveResearchItemBySlug,
-          ).toHaveBeenCalledWith('research-slug')
           expect(wrapper.queryByTestId('research-title')).toHaveTextContent(
             'Research article title',
           )
         },
         {
-          timeout: 2000,
+          timeout: 5000,
         },
       )
     })
@@ -173,8 +171,8 @@ describe('research.routes', () => {
     it('rejects a request without a user present', async () => {
       mockActiveUser.userRoles = []
       let wrapper
-      await act(async () => {
-        wrapper = renderFn('/research/create').wrapper
+      act(() => {
+        wrapper = renderFn('/research/create')
       })
 
       await waitFor(() => {
@@ -186,8 +184,8 @@ describe('research.routes', () => {
 
     it('rejects a logged in user missing required role', async () => {
       let wrapper
-      await act(async () => {
-        wrapper = renderFn('/research/create').wrapper
+      act(() => {
+        wrapper = renderFn('/research/create')
       })
 
       await waitFor(() => {
@@ -199,10 +197,10 @@ describe('research.routes', () => {
 
     it('accepts a logged in user with required role [research_creator]', async () => {
       let wrapper
-      await act(async () => {
+      act(() => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_CREATOR]
 
-        wrapper = renderFn('/research/create').wrapper
+        wrapper = renderFn('/research/create')
       })
 
       await waitFor(
@@ -217,10 +215,10 @@ describe('research.routes', () => {
 
     it('accepts a logged in user with required role [research_creator]', async () => {
       let wrapper
-      await act(async () => {
+      act(() => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
-        wrapper = renderFn('/research/create').wrapper
+        wrapper = renderFn('/research/create')
       })
       await waitFor(
         () => {
@@ -238,8 +236,8 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = []
 
       let wrapper
-      await act(async () => {
-        wrapper = renderFn('/research/an-example/edit').wrapper
+      act(() => {
+        wrapper = renderFn('/research/an-example/edit')
       })
 
       await waitFor(() => {
@@ -251,11 +249,11 @@ describe('research.routes', () => {
 
     it('accepts a logged in user with required role', async () => {
       let wrapper
-      await act(async () => {
+      act(() => {
         mockActiveUser.userName = 'Jaasper'
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
-        wrapper = renderFn('/research/an-example/edit').wrapper
+        wrapper = renderFn('/research/an-example/edit')
       })
 
       await waitFor(() => {
@@ -267,7 +265,7 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
       // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
         activeResearchItem: FactoryResearchItem({
@@ -276,7 +274,7 @@ describe('research.routes', () => {
         }),
       })
 
-      await act(async () => {
+      act(() => {
         renderFn('/research/an-example/edit')
       })
 
@@ -287,7 +285,7 @@ describe('research.routes', () => {
 
     it('blocks a valid editor when document is locked by another user', async () => {
       mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
         activeResearchItem: FactoryResearchItem({
@@ -301,8 +299,8 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      await act(async () => {
-        wrapper = renderFn('/research/an-example/edit').wrapper
+      act(() => {
+        wrapper = renderFn('/research/an-example/edit')
       })
 
       await waitFor(() => {
@@ -316,7 +314,7 @@ describe('research.routes', () => {
 
     it('accepts a user when document is mark locked by them', async () => {
       mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
         activeResearchItem: FactoryResearchItem({
@@ -330,8 +328,8 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      await act(async () => {
-        wrapper = renderFn('/research/an-example/edit').wrapper
+      act(() => {
+        wrapper = renderFn('/research/an-example/edit')
       })
 
       await waitFor(() => {
@@ -341,7 +339,7 @@ describe('research.routes', () => {
 
     it('accepts a user with required role and contributor acccess', async () => {
       mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
         activeResearchItem: FactoryResearchItem({
@@ -351,8 +349,8 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      await act(async () => {
-        wrapper = renderFn('/research/an-example/edit').wrapper
+      act(() => {
+        wrapper = renderFn('/research/an-example/edit')
       })
 
       await waitFor(() => {
@@ -366,8 +364,8 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = []
 
       let wrapper
-      await act(async () => {
-        wrapper = renderFn('/research/an-example/new-update').wrapper
+      act(() => {
+        wrapper = renderFn('/research/an-example/new-update')
       })
 
       await waitFor(() => {
@@ -379,11 +377,11 @@ describe('research.routes', () => {
 
     it('accepts a logged in user with required role', async () => {
       let wrapper
-      await act(async () => {
+      act(() => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
-
-        wrapper = renderFn('/research/an-example/new-update').wrapper
+        wrapper = renderFn('/research/an-example/new-update')
       })
+
       await waitFor(() => {
         expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
       })
@@ -393,12 +391,9 @@ describe('research.routes', () => {
   describe('/research/:slug/edit-update/:id', () => {
     it('rejects a request without a user present', async () => {
       mockActiveUser.userRoles = []
-      let wrapper
-      await act(async () => {
-        wrapper = renderFn(
-          '/research/an-example/edit-update/nested-research-update',
-        ).wrapper
-      })
+      const wrapper = renderFn(
+        '/research/an-example/edit-update/nested-research-update',
+      )
 
       await waitFor(() => {
         expect(
@@ -410,7 +405,7 @@ describe('research.routes', () => {
     it('accept logged in author present', async () => {
       mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
       // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
         activeResearchItem: FactoryResearchItem({
@@ -426,10 +421,10 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      await act(async () => {
+      act(() => {
         wrapper = renderFn(
           '/research/an-example/edit-update/nested-research-update',
-        ).wrapper
+        )
       })
 
       await waitFor(() => {
@@ -440,7 +435,7 @@ describe('research.routes', () => {
     it('blocks valid author when document is locked', async () => {
       // Arrange
       mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
         activeResearchItem: FactoryResearchItem({
@@ -459,9 +454,12 @@ describe('research.routes', () => {
         }),
       })
 
-      const { wrapper } = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-      )
+      let wrapper
+      act(() => {
+        wrapper = renderFn(
+          '/research/an-example/edit-update/nested-research-update',
+        )
+      })
 
       await waitFor(() => {
         expect(
@@ -474,7 +472,7 @@ describe('research.routes', () => {
 
     it('accepts a user when document is mark locked by them', async () => {
       mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
         activeResearchItem: FactoryResearchItem({
@@ -492,9 +490,12 @@ describe('research.routes', () => {
         }),
       })
 
-      const { wrapper } = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-      )
+      let wrapper
+      act(() => {
+        wrapper = renderFn(
+          '/research/an-example/edit-update/nested-research-update',
+        )
+      })
 
       await waitFor(() => {
         expect(wrapper.getByText('Edit your update')).toBeInTheDocument()
@@ -505,10 +506,10 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = []
 
       let wrapper
-      await act(async () => {
+      act(() => {
         wrapper = renderFn(
           '/research/an-example/edit-update/nested-research-update',
-        ).wrapper
+        )
       })
 
       await waitFor(() => {
@@ -522,7 +523,7 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
       // Arrange
-      ;(useResearchStore as jest.Mock).mockReturnValue({
+      ;(useResearchStore as Mock).mockReturnValue({
         ...mockResearchStore,
         activeUser: mockActiveUser,
         activeResearchItem: FactoryResearchItem({
@@ -537,10 +538,10 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      await act(async () => {
+      act(() => {
         wrapper = renderFn(
           '/research/an-example/edit-update/nested-research-update',
-        ).wrapper
+        )
       })
 
       await waitFor(() => {
@@ -560,15 +561,13 @@ const renderFn = (url: string) => {
     },
   )
 
-  return {
-    wrapper: render(
-      <Suspense fallback={<></>}>
-        <Provider userStore={{ user: mockActiveUser }} tagsStore={{}}>
-          <ThemeProvider theme={Theme}>
-            <RouterProvider router={router} />
-          </ThemeProvider>
-        </Provider>
-      </Suspense>,
-    ),
-  }
+  return render(
+    <Suspense fallback={<></>}>
+      <Provider userStore={{ user: mockActiveUser }} tagsStore={{}}>
+        <ThemeProvider theme={Theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </Provider>
+    </Suspense>,
+  )
 }

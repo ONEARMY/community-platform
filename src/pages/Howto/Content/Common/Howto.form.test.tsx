@@ -1,16 +1,27 @@
-import { MemoryRouter } from 'react-router-dom'
+import '@testing-library/jest-dom/vitest'
+
+import {
+  createMemoryRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryHowto } from 'src/test/factories/Howto'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
+import { describe, expect, it, vi } from 'vitest'
 
 import { HowtoForm } from './Howto.form'
 
+import type { IHowtoDB } from 'src/models'
+import type { ParentType } from './Howto.form'
+
 const Theme = testingThemeStyles
 
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -26,8 +37,8 @@ jest.mock('src/common/hooks/useCommonStores', () => {
             Database: false,
             Complete: false,
           },
-          validateTitleForSlug: jest.fn(),
-          uploadHowTo: jest.fn(),
+          validateTitleForSlug: vi.fn(),
+          uploadHowTo: vi.fn(),
         },
         tagsStore: {
           allTags: [
@@ -44,13 +55,13 @@ jest.mock('src/common/hooks/useCommonStores', () => {
 
 describe('Howto form', () => {
   describe('Provides user information', () => {
-    it('shows maximum file size', async () => {
+    it('shows maximum file size', () => {
       // Arrange
       const formValues = FactoryHowto()
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -59,13 +70,13 @@ describe('Howto form', () => {
   })
 
   describe('Invalid file warning', () => {
-    it('Does not appear when submitting only fileLink', async () => {
+    it('Does not appear when submitting only fileLink', () => {
       // Arrange
       const formValues = FactoryHowto({ fileLink: 'www.test.com' })
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -74,7 +85,7 @@ describe('Howto form', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('Does not appear when submitting only files', async () => {
+    it('Does not appear when submitting only files', () => {
       // Arrange
       const formValues = FactoryHowto({
         files: [
@@ -86,8 +97,8 @@ describe('Howto form', () => {
 
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -96,7 +107,7 @@ describe('Howto form', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('Appears when submitting 2 file types', async () => {
+    it('Appears when submitting 2 file types', () => {
       // Arrange
       const formValues = FactoryHowto({
         files: [
@@ -109,8 +120,8 @@ describe('Howto form', () => {
 
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
       })
 
       // Assert
@@ -129,9 +140,11 @@ describe('Howto form', () => {
 
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await Wrapper(formValues, 'edit', {})
+      act(() => {
+        wrapper = Wrapper(formValues, 'edit', {})
+      })
 
+      await waitFor(() => {
         // clear files
         const reuploadFilesButton = wrapper.getByTestId('re-upload-files')
         fireEvent.click(reuploadFilesButton)
@@ -156,17 +169,26 @@ describe('Howto form', () => {
   })
 })
 
-const Wrapper = async (formValues, parentType, navProps) => {
-  return render(
-    <Provider {...useCommonStores().stores}>
-      <ThemeProvider theme={Theme}>
-        <MemoryRouter>
+const Wrapper = (formValues: IHowtoDB, parentType: ParentType, navProps) => {
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route
+        index
+        element={
           <HowtoForm
             formValues={formValues}
             parentType={parentType}
             {...navProps}
           />
-        </MemoryRouter>
+        }
+      />,
+    ),
+  )
+
+  return render(
+    <Provider {...useCommonStores().stores}>
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </Provider>,
   )

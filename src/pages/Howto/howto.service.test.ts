@@ -1,44 +1,46 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
-import { UserRole } from 'oa-shared/models'
+import { UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it, vi } from 'vitest'
 
 import { exportedForTesting } from './howto.service'
 
-const mockWhere = jest.fn()
-const mockOrderBy = jest.fn()
-const mockLimit = jest.fn()
-const mockOr = jest.fn()
-jest.mock('firebase/firestore', () => ({
-  collection: jest.fn(),
-  query: jest.fn(),
-  and: jest.fn(),
+const mockWhere = vi.fn()
+const mockOrderBy = vi.fn()
+const mockLimit = vi.fn()
+const mockOr = vi.fn()
+vi.mock('firebase/firestore', () => ({
+  collection: vi.fn(),
+  query: vi.fn(),
+  and: vi.fn(),
   where: (path, op, value) => mockWhere(path, op, value),
   limit: (limit) => mockLimit(limit),
   orderBy: (field, direction) => mockOrderBy(field, direction),
   or: (constraints) => mockOr(constraints),
 }))
 
-jest.mock('../../stores/databaseV2/endpoints', () => ({
+vi.mock('../../stores/databaseV2/endpoints', () => ({
   DB_ENDPOINTS: {
     howtos: 'howtos',
     categories: 'categories',
   },
 }))
 
-jest.mock('../../config/config', () => ({
-  getConfigurationOption: jest.fn(),
+vi.mock('../../config/config', () => ({
+  getConfigurationOption: vi.fn(),
   FIREBASE_CONFIG: {
     apiKey: 'AIyChVN',
     databaseURL: 'https://test.firebaseio.com',
     projectId: 'test',
     storageBucket: 'test.appspot.com',
   },
-  localStorage: jest.fn(),
+  localStorage: vi.fn(),
+  SITE: 'unit-tests',
 }))
 
 describe('howtos.search', () => {
-  it('searches for text', async () => {
+  it('searches for text', () => {
     // prepare
     const words = ['test', 'text']
 
@@ -59,7 +61,7 @@ describe('howtos.search', () => {
     )
   })
 
-  it('filters by category', async () => {
+  it('filters by category', () => {
     // prepare
     const category = 'cat1'
 
@@ -76,7 +78,7 @@ describe('howtos.search', () => {
     expect(mockWhere).toHaveBeenCalledWith('category._id', '==', category)
   })
 
-  it('should not call orderBy if sorting by most relevant', async () => {
+  it('should not call orderBy if sorting by most relevant', () => {
     // act
     exportedForTesting.createQueries(
       ['test'],
@@ -90,7 +92,7 @@ describe('howtos.search', () => {
     expect(mockOrderBy).toHaveBeenCalledTimes(0)
   })
 
-  it('should call orderBy when sorting is not MostRelevant', async () => {
+  it('should call orderBy when sorting is not MostRelevant', () => {
     // act
     exportedForTesting.createQueries(
       ['test'],

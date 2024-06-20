@@ -6,7 +6,6 @@ export const baseTheme = {
     behind: -1,
     level: 0,
     default: 1,
-    slickArrows: 100,
     modalProfile: 900,
     logoContainer: 999,
     header: 3000,

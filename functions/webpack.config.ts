@@ -25,16 +25,15 @@ import webpack from 'webpack'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 const config: webpack.Configuration = {
-  target: 'node',
   mode: 'production',
   entry: './src/index.ts',
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.json'],
+    extensions: ['.ts', '.js', '.json'],
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(ts|tsx)$/,
         loader: 'ts-loader',
         options: {
           configFile: 'tsconfig.json',
@@ -86,6 +85,7 @@ const config: webpack.Configuration = {
     hints: false,
   },
   devtool: 'inline-source-map',
+  externalsPresets: { node: true },
   externals: [
     // reference other installed workspace packages here
     nodeExternals({
@@ -103,7 +103,7 @@ export default config
  * Take the existing package.json and create a minimal copy without workspace entries
  */
 function rewritePackageJson(json: any) {
-  const workspacePrefixes = ['oa-', 'one-army', 'onearmy', '@oa', '@onearmy']
+  const workspacePrefixes = ['oa-']
   // TODO - could generate actual workspace list from `yarn workspace list --json`
   // remove workspace dependencies
   Object.keys(json.dependencies).forEach((key) => {

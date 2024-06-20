@@ -1,7 +1,9 @@
-import { act, fireEvent } from '@testing-library/react'
-import { vi } from 'vitest'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { act, fireEvent } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
+
+import { render } from '../test/utils'
 import { EditComment, type IProps } from './EditComment'
 import { Default, EditReply } from './EditComment.stories'
 
@@ -57,7 +59,7 @@ describe('EditComment', () => {
     )
     expect(screen.getByTestId('edit-comment-submit')).toBeDisabled()
   })
-  it('should dispaly error message when the comment is empty', async () => {
+  it('should dispaly error message when the comment is empty', () => {
     const screen = render(
       <EditComment
         isReply={false}
@@ -67,7 +69,7 @@ describe('EditComment', () => {
       />,
     )
 
-    await act(async () => {
+    act(() => {
       const commentInput = screen.getByLabelText('Edit Comment')
       fireEvent.change(commentInput, { target: { value: '' } })
       fireEvent.blur(commentInput)

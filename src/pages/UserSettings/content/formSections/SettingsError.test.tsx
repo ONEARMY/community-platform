@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { SettingsErrors } from 'src/pages/UserSettings/content/formSections/SettingsErrors'
 import { SettingsProvider } from 'src/test/components'
+import { describe, expect, it } from 'vitest'
 
 describe('SettingsErrors', () => {
   it('renders component when visible and has errors', async () => {
@@ -40,7 +41,7 @@ describe('SettingsErrors', () => {
     })
   })
 
-  it('renders nothing when not visible', async () => {
+  it('renders nothing when not visible', () => {
     const errors = {
       title: 'Make sure this field is filled correctly',
     }

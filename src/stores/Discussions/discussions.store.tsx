@@ -1,19 +1,21 @@
 /* eslint-disable no-case-declarations */
 import { createContext, useContext } from 'react'
 import { cloneDeep } from 'lodash'
-import { action, toJS } from 'mobx'
+import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
+import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
 import type { IResearch, IUserPPDB } from 'src/models'
 import type {
+  IComment,
   IDiscussion,
-  IDiscussionComment,
+  IDiscussionDB,
   IDiscussionSourceModelOptions,
 } from 'src/models/discussion.models'
 import type { DocReference } from '../databaseV2/DocReference'
@@ -27,12 +29,11 @@ export class DiscussionStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
   }
 
-  @action
   public async fetchOrCreateDiscussionBySource(
     sourceId: string,
     sourceType: IDiscussion['sourceType'],
     primaryContentId: IDiscussion['primaryContentId'],
-  ): Promise<IDiscussion | null> {
+  ): Promise<IDiscussionDB | null> {
     const foundDiscussion =
       toJS(
         await this.db
@@ -41,21 +42,27 @@ export class DiscussionStore extends ModuleStore {
       )[0] || null
 
     if (foundDiscussion) {
-      return foundDiscussion
+      return this._formatDiscussion(foundDiscussion)
     }
 
-    // Create a new discussion
-    return (
-      (await this.uploadDiscussion(sourceId, sourceType, primaryContentId)) ||
-      null
+    const newDiscussion = await this.uploadDiscussion(
+      sourceId,
+      sourceType,
+      primaryContentId,
     )
+
+    if (newDiscussion) {
+      return this._formatDiscussion(newDiscussion)
+    }
+
+    return null
   }
 
   public async uploadDiscussion(
     sourceId: string,
     sourceType: IDiscussion['sourceType'],
     primaryContentId: IDiscussion['primaryContentId'],
-  ): Promise<IDiscussion | undefined> {
+  ): Promise<IDiscussionDB | null> {
     const newDiscussion: IDiscussion = {
       _id: randomID(),
       sourceId,
@@ -72,12 +79,11 @@ export class DiscussionStore extends ModuleStore {
     return this._updateDiscussion(dbRef, newDiscussion, 'neutral')
   }
 
-  @action
   public async addComment(
     discussion: IDiscussion,
     text: string,
     commentId?: string,
-  ): Promise<IDiscussion | undefined> {
+  ): Promise<IDiscussionDB | null> {
     try {
       const user = this.activeUser
       const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
@@ -93,7 +99,8 @@ export class DiscussionStore extends ModuleStore {
           throw new Error('Discussion not found')
         }
 
-        const newComment: IDiscussionComment = {
+        const creatorImage = this._getUserAvatar(user)
+        const newComment: IComment = {
           _id: randomID(),
           _created: new Date().toISOString(),
           _creatorId: user._id,
@@ -103,6 +110,7 @@ export class DiscussionStore extends ModuleStore {
           isUserSupporter: !!user.badges?.supporter,
           text: comment,
           parentCommentId: commentId || null,
+          ...(creatorImage ? { creatorImage } : {}),
         }
 
         currentDiscussion.comments.push(newComment)
@@ -119,14 +127,15 @@ export class DiscussionStore extends ModuleStore {
       logger.error(err)
       throw new Error(err?.message)
     }
+
+    return null
   }
 
-  @action
   public async editComment(
     discussion: IDiscussion,
     commentId: string,
     text: string,
-  ): Promise<IDiscussion | undefined> {
+  ): Promise<IDiscussionDB | null> {
     try {
       const user = this.activeUser
       const comment = text.slice(0, MAX_COMMENT_LENGTH).trim()
@@ -162,13 +171,14 @@ export class DiscussionStore extends ModuleStore {
       logger.error(err)
       throw new Error(err?.message)
     }
+
+    return null
   }
 
-  @action
   public async deleteComment(
     discussion: IDiscussion,
     commentId: string,
-  ): Promise<IDiscussion | undefined> {
+  ): Promise<IDiscussionDB | null> {
     try {
       const user = this.activeUser
 
@@ -207,12 +217,11 @@ export class DiscussionStore extends ModuleStore {
       logger.error(err)
       throw new Error(err?.message)
     }
+
+    return null
   }
 
-  private async _addNotifications(
-    comment: IDiscussionComment,
-    discussion: IDiscussion,
-  ) {
+  private async _addNotifications(comment: IComment, discussion: IDiscussion) {
     const collectionName = getCollectionName(discussion.sourceType)
     if (!collectionName) {
       return logger.trace(
@@ -266,6 +275,8 @@ export class DiscussionStore extends ModuleStore {
           .collection<IDiscussionSourceModelOptions>(collectionName)
           .doc(discussion.sourceId)
         const parentContent = toJS(await dbRef.get())
+        const parentPath =
+          collectionName === 'howtos' ? 'how-to' : collectionName
 
         if (parentContent) {
           const username = parentComment
@@ -275,7 +286,7 @@ export class DiscussionStore extends ModuleStore {
           return this.userNotificationsStore.triggerNotification(
             'new_comment_discussion',
             username,
-            `/${collectionName}/${parentContent.slug}#comment:${commentId}`,
+            `/${parentPath}/${parentContent.slug}#comment:${commentId}`,
             parentContent.title,
           )
         }
@@ -284,7 +295,7 @@ export class DiscussionStore extends ModuleStore {
 
   private _findAndUpdateComment(
     user: IUserPPDB,
-    comments: IDiscussionComment[],
+    comments: IComment[],
     newCommentText: string,
     commentId: string,
   ) {
@@ -300,15 +311,32 @@ export class DiscussionStore extends ModuleStore {
     })
   }
 
+  private _formatCommentList(comments: IComment[] = []): IComment[] {
+    return comments.map((comment: IComment) => {
+      return {
+        ...comment,
+        text: changeUserReferenceToPlainText(comment.text),
+      }
+    })
+  }
+
+  private _formatDiscussion(discussion: IDiscussionDB): IDiscussionDB {
+    return {
+      ...discussion,
+      comments: this._formatCommentList(discussion.comments),
+    }
+  }
+
   private async _updateDiscussion(
     dbRef: DocReference<IDiscussion>,
     discussion: IDiscussion,
     commentsTotalEvent: CommentsTotalEvent,
-  ) {
+  ): Promise<IDiscussionDB | null> {
     await dbRef.set({ ...cloneDeep(discussion) })
     await updateDiscussionMetadata(this.db, discussion, commentsTotalEvent)
+    const updatedDiscussion = toJS(await dbRef.get())
 
-    return toJS(dbRef.get())
+    return updatedDiscussion ? updatedDiscussion : null
   }
 
   private _addContributorId({ contributorIds }, comment) {
@@ -331,15 +359,29 @@ export class DiscussionStore extends ModuleStore {
 
   private _findAndDeleteComment(
     user: IUserPPDB,
-    comments: IDiscussionComment[],
+    comments: IComment[],
     commentId: string,
   ) {
-    return comments.filter((comment) => {
-      return !(
+    return comments.map((comment) => {
+      if (
         (comment._creatorId === user._id || hasAdminRights(user)) &&
-        comment._id === commentId
-      )
+        comment._id == commentId
+      ) {
+        comment._deleted = true
+      }
+      return comment
     })
+  }
+
+  private _getUserAvatar(user: IUserPPDB) {
+    if (
+      user.coverImages &&
+      user.coverImages[0] &&
+      user.coverImages[0].downloadUrl
+    ) {
+      return user.coverImages[0].downloadUrl
+    }
+    return null
   }
 }
 

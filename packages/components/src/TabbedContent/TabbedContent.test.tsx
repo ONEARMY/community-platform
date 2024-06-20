@@ -1,6 +1,9 @@
-import { act } from '@testing-library/react'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { act } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
+import { render } from '../test/utils'
 import { Default } from './TabbedContent.stories'
 
 describe('TabbedContent', () => {
@@ -12,10 +15,10 @@ describe('TabbedContent', () => {
     expect(() => wrapper.getByText('Tab Panel #2')).toThrow()
   })
 
-  it('basic interaction', async () => {
+  it('basic interaction', () => {
     const wrapper = render(<Default />)
 
-    await act(async () => {
+    act(() => {
       wrapper.getByText('Tab #2').click()
     })
 

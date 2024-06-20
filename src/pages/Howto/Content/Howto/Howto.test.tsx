@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom/vitest'
+
 import {
   createMemoryRouter,
   createRoutesFromElements,
@@ -6,10 +8,11 @@ import {
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
-import { act, render, within } from '@testing-library/react'
+import { act, render, waitFor, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
+import { describe, expect, it, vi } from 'vitest'
 
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 
@@ -18,22 +21,21 @@ const Theme = preciousPlasticTheme.styles
 const howto = FactoryHowto()
 
 const mockHowtoStore = () => ({
-  setActiveHowtoBySlug: jest.fn(),
+  setActiveHowtoBySlug: vi.fn(),
   activeHowto: howto,
-  getActiveHowToComments: jest.fn().mockReturnValue([]),
-  needsModeration: jest.fn().mockReturnValue(false),
-  incrementViewCount: jest.fn(),
-  removeActiveHowto: jest.fn(),
+  needsModeration: vi.fn().mockReturnValue(false),
+  incrementViewCount: vi.fn(),
+  removeActiveHowto: vi.fn(),
 })
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
     stores: {
       userStore: {},
       aggregationsStore: {
-        isVerified: jest.fn((userId) => userId === 'HowtoAuthor'),
+        isVerified: vi.fn((userId) => userId === 'HowtoAuthor'),
         users_verified: {
           HowtoAuthor: true,
         },
@@ -48,7 +50,7 @@ import { IModerationStatus } from 'oa-shared'
 
 import { Howto } from './Howto'
 
-const factory = async (howtoStore?: Partial<HowtoStore>) => {
+const factory = (howtoStore?: Partial<HowtoStore>) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route path="/howto/:slug" key={1} element={<Howto />} />,
@@ -71,22 +73,24 @@ describe('Howto', () => {
     it('displays feedback for items which are not accepted', async () => {
       let wrapper
 
-      await act(async () => {
+      act(() => {
         howto.moderation = IModerationStatus.AWAITING_MODERATION
         howto.moderatorFeedback = 'Moderation comments'
 
-        wrapper = await factory()
+        wrapper = factory()
       })
 
-      expect(wrapper.getByText('Moderation comments')).toBeInTheDocument()
+      await waitFor(() => {
+        expect(wrapper.getByText('Moderation comments')).toBeInTheDocument()
+      })
     })
 
-    it('hides feedback when how-to is accepted', async () => {
+    it('hides feedback when how-to is accepted', () => {
       let wrapper
-      await act(async () => {
+      act(() => {
         howto.moderation = IModerationStatus.ACCEPTED
         howto.moderatorFeedback = 'Moderation comments'
-        wrapper = await factory()
+        wrapper = factory()
       })
 
       expect(() => wrapper.getByText('Moderation comments')).toThrow()
@@ -95,20 +99,22 @@ describe('Howto', () => {
 
   it('displays content statistics', async () => {
     let wrapper
-    await act(async () => {
+    act(() => {
       howto._id = 'testid'
       howto._createdBy = 'HowtoAuthor'
       howto.steps = [FactoryHowtoStep({})]
       howto.moderation = IModerationStatus.ACCEPTED
       howto.total_views = 0
 
-      wrapper = await factory()
+      wrapper = factory()
     })
 
-    expect(wrapper.getByText('0 views')).toBeInTheDocument()
-    expect(wrapper.getByText('0 useful')).toBeInTheDocument()
-    expect(wrapper.getByText('0 comments')).toBeInTheDocument()
-    expect(wrapper.getByText('1 step')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(wrapper.getByText('0 views')).toBeInTheDocument()
+      expect(wrapper.getByText('0 useful')).toBeInTheDocument()
+      expect(wrapper.getByText('0 comments')).toBeInTheDocument()
+      expect(wrapper.getByText('1 step')).toBeInTheDocument()
+    })
   })
 
   it('shows verified badge', async () => {
@@ -116,21 +122,21 @@ describe('Howto', () => {
 
     howto._createdBy = 'HowtoAuthor'
 
-    await act(async () => {
-      wrapper = await factory()
+    act(() => {
+      wrapper = factory()
     })
 
-    expect(() => {
-      wrapper.getAllByTestId('Username: verified badge')
-    }).not.toThrow()
+    await waitFor(() => {
+      expect(() => wrapper.getAllByTestId('Username: verified badge'))
+    })
   })
 
   it('does not show verified badge', async () => {
     let wrapper
     howto._createdBy = 'NotHowtoAuthor'
 
-    await act(async () => {
-      wrapper = await factory()
+    act(() => {
+      wrapper = factory()
     })
 
     expect(() => {
@@ -141,8 +147,8 @@ describe('Howto', () => {
   describe('steps', () => {
     it('shows 1 step', async () => {
       let wrapper
-      await act(async () => {
-        wrapper = await factory({
+      act(() => {
+        wrapper = factory({
           ...mockHowtoStore(),
           activeHowto: FactoryHowto({
             _createdBy: 'HowtoAuthor',
@@ -151,28 +157,28 @@ describe('Howto', () => {
         })
       })
 
-      expect(() => {
-        wrapper.getAllByText('1 step')
-      }).not.toThrow()
+      await waitFor(() => {
+        expect(() => wrapper.getAllByText('1 step'))
+      })
     })
 
     it('shows 2 steps', async () => {
       let wrapper
-      await act(async () => {
+      act(() => {
         howto.steps = [FactoryHowtoStep(), FactoryHowtoStep()]
-        wrapper = await factory()
+        wrapper = factory()
       })
 
-      expect(() => {
-        wrapper.getAllByText('2 steps')
-      }).not.toThrow()
+      await waitFor(() => {
+        expect(() => wrapper.getAllByText('2 steps'))
+      })
     })
   })
 
   describe('Breadcrumbs', () => {
     it('displays breadcrumbs with category', async () => {
       let wrapper
-      await act(async () => {
+      act(() => {
         howto.title = 'DIY Recycling Machine'
         howto.category = {
           label: 'DIY',
@@ -182,10 +188,10 @@ describe('Howto', () => {
           _deleted: faker.datatype.boolean(),
           _contentModifiedTimestamp: faker.date.past().toString(),
         }
-        wrapper = await factory()
+        wrapper = factory()
       })
 
-      expect(() => {
+      await waitFor(() => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
         expect(breadcrumbItems).toHaveLength(3)
         expect(breadcrumbItems[0]).toHaveTextContent('How To')
@@ -201,18 +207,18 @@ describe('Howto', () => {
         // Assert: Check for the correct number of chevrons
         const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
         expect(chevrons).toHaveLength(2)
-      }).not.toThrow()
+      })
     })
 
     it('displays breadcrumbs without category', async () => {
       let wrapper
-      await act(async () => {
+      act(() => {
         howto.title = 'DIY Recycling Machine'
         howto.category = undefined
-        wrapper = await factory()
+        wrapper = factory()
       })
 
-      expect(() => {
+      await waitFor(() => {
         const breadcrumbItems = wrapper.getAllByTestId('breadcrumbsItem')
         expect(breadcrumbItems).toHaveLength(2)
         expect(breadcrumbItems[0]).toHaveTextContent('How To')
@@ -225,7 +231,7 @@ describe('Howto', () => {
         // Assert: Check for the correct number of chevrons
         const chevrons = wrapper.getAllByTestId('breadcrumbsChevron')
         expect(chevrons).toHaveLength(1)
-      }).not.toThrow()
+      })
     })
   })
 })

@@ -54,7 +54,7 @@ export const ImageConverter = (props: IProps) => {
   return (
     <Flex
       style={{
-        backgroundImage: `url(${convertedFile.objectUrl})`,
+        backgroundImage: `url("${convertedFile.objectUrl}")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -70,10 +70,6 @@ export const ImageConverter = (props: IProps) => {
       onClick={() => props.onImgClicked(convertedFile)}
     />
   )
-}
-
-ImageConverter.defaultProps = {
-  onImgClicked: () => null,
 }
 
 /** Insert a base-16 timestamp into a file's name and return it

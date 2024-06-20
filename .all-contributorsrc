@@ -716,6 +716,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Augustindou",
+      "name": "Augustindou",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44368825?v=4",
+      "profile": "https://github.com/Augustindou",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "prashik0202",
+      "name": "Prashik Gamre",
+      "avatar_url": "https://avatars.githubusercontent.com/u/88095936?v=4",
+      "profile": "https://prashikgamre.vercel.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

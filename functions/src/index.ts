@@ -6,6 +6,7 @@ import * as DiscussionUpdates from './discussionUpdates'
 import * as QuestionUpdates from './questionUpdates'
 import * as HowtoUpdates from './howtoUpdates'
 import * as MapPinUpdates from './mapPinUpdates'
+import * as Messages from './messages/messages'
 
 // the following endpoints are exposed for use by various triggers
 // see individual files for more information
@@ -33,6 +34,7 @@ exports.adminGetUserEmail = Admin.getUserEmail
 
 exports.seo = require('./seo')
 
+exports.sendMessage = Messages.sendMessage
 exports.emailNotifications = require('./emailNotifications')
 
 // Only export development api when working locally (with functions emulator)

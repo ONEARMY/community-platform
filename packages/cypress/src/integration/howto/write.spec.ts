@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { DifficultyLevel } from 'oa-shared'
+import { DifficultyLevel, IModerationStatus } from 'oa-shared'
 
 import {
   HOWTO_STEP_DESCRIPTION_MAX_LENGTH,
@@ -85,7 +85,7 @@ describe('[How To]', () => {
     cy.step(`Deleting step [${stepNumber}]`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`)
       .find('[data-cy=delete-step]')
-      .click()
+      .click({ force: true })
     cy.get('[data-cy=confirm]').click()
   }
 
@@ -109,11 +109,12 @@ describe('[How To]', () => {
       _deleted: false,
       category: 'Moulds',
       description: 'After creating, the how-to will be deleted',
+      moderation: IModerationStatus.AWAITING_MODERATION,
       difficulty_level: DifficultyLevel.MEDIUM,
       time: '1-2 weeks',
       title: 'Create a how-to test',
       slug: 'create-a-how-to-test',
-      previousSlugs: ['create-a-how-to-test'],
+      previousSlugs: ['qwerty', 'create-a-how-to-test'],
       fileLink: 'http://google.com/',
       files: [],
       total_downloads: 0,
@@ -200,8 +201,9 @@ describe('[How To]', () => {
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
+      cy.get('a[href="/how-to/create"]').should('exist')
       cy.get('[data-cy=create]').click()
-      cy.contains('Create a How-To').should('exist')
+      cy.contains('Create a How-To').should('be.visible')
 
       cy.step('Warn if title is identical with the existing ones')
       cy.get('[data-cy=intro-title]')
@@ -209,7 +211,7 @@ describe('[How To]', () => {
         .blur({ force: true })
       cy.contains(
         "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
-      ).should('exist')
+      ).should('be.visible')
 
       cy.step('Warn if title is identical with a previously existing one')
       cy.get('[data-cy=intro-title]')
@@ -218,19 +220,21 @@ describe('[How To]', () => {
         .blur({ force: true })
       cy.contains(
         "Did you know there is an existing how-to with the title 'Make glassy beams'? Using a unique title helps readers decide which how-to better meet their needs.",
-      ).should('exist')
+      ).should('be.visible')
 
       cy.step('Warn if title has less than minimum required characters')
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
         `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
-      ).should('exist')
+      ).should('be.visible')
 
       cy.step('Cannot be published yet')
       cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
-      cy.contains(headings.errors).should('exist')
-      cy.contains('Make sure this field is filled correctly').should('exist')
+      cy.contains(headings.errors).should('be.visible')
+      cy.contains('Make sure this field is filled correctly').should(
+        'be.visible',
+      )
 
       cy.step('A basic draft was created')
       cy.get('[data-cy=intro-title]')
@@ -242,7 +246,7 @@ describe('[How To]', () => {
         .click()
         .url()
         .should('include', `/how-to/qwerty`)
-      cy.get('[data-cy=moderationstatus-draft]').should('exist')
+      cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
 
       cy.step('Back to completing the how-to')
       cy.get('[data-cy=edit]').click()
@@ -257,8 +261,8 @@ describe('[How To]', () => {
       cy.contains(categoryGuidanceMain).should('not.exist')
       cy.contains(categoryGuidanceFiles).should('not.exist')
       selectCategory(category as Category)
-      cy.contains(categoryGuidanceMain).should('exist')
-      cy.contains(categoryGuidanceFiles).should('exist')
+      cy.contains(categoryGuidanceMain).should('be.visible')
+      cy.contains(categoryGuidanceFiles).should('be.visible')
 
       selectTimeDuration(time as Duration)
       selectDifficultLevel(difficulty_level)
@@ -305,7 +309,7 @@ describe('[How To]', () => {
       cy.step('Howto was created correctly')
       cy.get('[data-cy=file-download-counter]')
         .contains(total_downloads)
-        .should('exist')
+        .should('be.visible')
       cy.queryDocuments('howtos', 'title', '==', title).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
@@ -329,6 +333,7 @@ describe('[How To]', () => {
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
+      cy.get('a[href="/how-to/create"]').should('exist')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title]')
         .clear()
@@ -361,6 +366,7 @@ describe('[How To]', () => {
       _createdBy: 'howto_editor',
       _deleted: false,
       category: 'exhibition',
+      moderation: IModerationStatus.ACCEPTED,
       description: 'After editing, all changes are reverted',
       difficulty_level: DifficultyLevel.HARD,
       files: [],
@@ -447,7 +453,7 @@ describe('[How To]', () => {
     it('[By Anonymous]', () => {
       cy.step('Prevent anonymous access to edit howto')
       cy.visit(editHowtoUrl)
-      cy.get('[data-cy=BlockedRoute]').should('be.exist')
+      cy.get('[data-cy=BlockedRoute]').should('be.visible')
     })
 
     it('[By Authenticated]', () => {
@@ -476,7 +482,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
       cy.contains(
         `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
-      ).should('exist')
+      ).should('be.visible')
 
       cy.get('[data-cy=intro-title]')
         .clear()
@@ -484,7 +490,7 @@ describe('[How To]', () => {
         .blur({ force: true })
       cy.contains(
         "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
-      ).should('exist')
+      ).should('be.visible')
 
       cy.step('Update the intro')
       cy.get('[data-cy=intro-title]').clear().type(expected.title)
@@ -547,7 +553,7 @@ describe('[How To]', () => {
       cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
       cy.get('[data-cy=file-download-counter]')
         .contains(expected.total_downloads)
-        .should('exist')
+        .should('be.visible')
       cy.queryDocuments('howtos', 'title', '==', 'This is an edit test').then(
         (docs) => {
           cy.log('queryDocs', docs)

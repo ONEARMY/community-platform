@@ -37,7 +37,7 @@ export async function seedDataClean() {
   // setup variables and types for tracking data
   const keptUsers = {}
   const endpointsToCheck = ['mappins', 'howtos', 'research'] as const
-  type ICheckedEndpoint = typeof endpointsToCheck[number]
+  type ICheckedEndpoint = (typeof endpointsToCheck)[number]
   const allDocs: {
     [endpoint in ICheckedEndpoint]: firestore.QuerySnapshot<firestore.DocumentData>
   } = {} as any

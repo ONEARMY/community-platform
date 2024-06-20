@@ -2,10 +2,11 @@ import { render, screen } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it, vi } from 'vitest'
 
 import { ImpactItem } from './ImpactItem'
 
-jest.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
@@ -39,7 +40,7 @@ describe('ImpactItem', () => {
       </Provider>,
     )
     const plasticItem = await screen.findByText('30,000 Kg of plastic recycled')
-    const revenueItem = await screen.findByText('$ 54,000 revenue')
+    const revenueItem = await screen.findByText('USD 54,000 revenue')
 
     expect(plasticItem.compareDocumentPosition(revenueItem)).toBe(4)
   })

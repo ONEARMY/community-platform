@@ -1,6 +1,6 @@
-import { IModerationStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
-import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
+import { IModerationStatus, UserRole } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
+import { describe, expect, it } from 'vitest'
 
 import {
   arrayToJson,
@@ -8,7 +8,6 @@ import {
   filterModerableItems,
   formatLowerNoSpecial,
   getProjectEmail,
-  getResearchTotalCommentCount,
   hasAdminRights,
   isAllowedToEditContent,
   isAllowedToPin,
@@ -20,8 +19,7 @@ import {
   stripSpecialCharacters,
 } from './helpers'
 
-import type { IModerable, IResearch } from 'src/models'
-import type { IItem } from 'src/stores/common/FilterSorterDecorator/FilterSorterDecorator'
+import type { IModerable } from 'src/models'
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {
@@ -40,10 +38,6 @@ describe('src/utils/helpers', () => {
 
   it('capitalizeFirstLetter should return string with first letter capitalized', () => {
     expect(capitalizeFirstLetter('hello world')).toBe('Hello world')
-  })
-
-  it('capitalizeFirstLetter should return an empty string when a wrong type provided', () => {
-    expect(capitalizeFirstLetter(undefined)).toBe('')
   })
 
   describe('filterModerableItems Function', () => {
@@ -263,98 +257,11 @@ describe('src/utils/helpers', () => {
 
     it('should return true when given true', () => {
       const user = FactoryUser({ isContactableByPublic: true })
-      expect(isContactable(user)).toBe(true)
+      expect(isContactable(user.isContactableByPublic)).toBe(true)
     })
 
     it('should return false when given false', () => {
       expect(isContactable(false)).toBe(false)
-    })
-  })
-
-  describe('getResearchTotalCommentCount Function', () => {
-    it('should return 0 when item has no updates', () => {
-      const item = { item: {} } as any
-      expect(getResearchTotalCommentCount(item)).toBe(0)
-    })
-
-    it('should return 0 when updates have no comments', () => {
-      const item = {
-        updates: Array.from({ length: 3 }).fill(
-          FactoryResearchItemUpdate({
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-            comments: [],
-          }),
-        ),
-      } as IResearch.ItemDB | IItem
-      expect(getResearchTotalCommentCount(item)).toBe(0)
-    })
-
-    it('should use totalCommentCount if present', () => {
-      const item = {
-        totalCommentCount: 5,
-        updates: Array.from({ length: 3 }).fill(
-          FactoryResearchItemUpdate({
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-            comments: Array.from({ length: 3 }),
-          }),
-        ),
-      } as IResearch.ItemDB | IItem
-      expect(getResearchTotalCommentCount(item)).toBe(5)
-    })
-
-    it('should use totalCommentCount when 0', () => {
-      const item = {
-        totalCommentCount: 0,
-        updates: Array.from({ length: 3 }).fill(
-          FactoryResearchItemUpdate({
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-            comments: Array.from({ length: 3 }),
-          }),
-        ),
-      } as IResearch.ItemDB | IItem
-      expect(getResearchTotalCommentCount(item)).toBe(0)
-    })
-
-    it('should return the correct amount of comments', () => {
-      const item = {
-        updates: Array.from({ length: 3 }).fill(
-          FactoryResearchItemUpdate({
-            status: ResearchUpdateStatus.PUBLISHED,
-            _deleted: false,
-            comments: Array.from({ length: 3 }),
-          }),
-        ),
-      } as IResearch.ItemDB | IItem
-      expect(getResearchTotalCommentCount(item)).toBe(9)
-    })
-
-    it('should ignore deleted and draft updates', () => {
-      const item = {
-        updates: Array.from({ length: 2 })
-          .fill(
-            FactoryResearchItemUpdate({
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: false,
-              comments: Array.from({ length: 2 }),
-            }),
-          )
-          .concat([
-            FactoryResearchItemUpdate({
-              status: ResearchUpdateStatus.PUBLISHED,
-              _deleted: true,
-              comments: Array.from({ length: 3 }),
-            }),
-            FactoryResearchItemUpdate({
-              status: ResearchUpdateStatus.DRAFT,
-              _deleted: false,
-              comments: Array.from({ length: 6 }),
-            }),
-          ]),
-      } as IResearch.ItemDB | IItem
-      expect(getResearchTotalCommentCount(item)).toBe(4)
     })
   })
 

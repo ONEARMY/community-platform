@@ -1,13 +1,15 @@
-import isUrl from 'is-url'
-
 import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
 
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ResearchStore } from 'src/stores/Research/research.store'
 
-type storeTypes = HowtoStore | ResearchStore
+type storeTypes = HowtoStore | ResearchStore | QuestionStore
+
+import { isUrl } from './urlHelper'
 
 import type { Mutator } from 'final-form'
+import type { MainFormAction } from 'src/common/Form/types'
+import type { QuestionStore } from 'src/stores/Question/question.store'
 /****************************************************************************
  *            General Validation Methods
  * **************************************************************************/
@@ -80,7 +82,8 @@ const isEmail = (email: string) => {
  *  NOTE - return value represents the error, so FALSE actually means valid
  */
 const validateTitle =
-  (parentType, id, store: storeTypes) => async (title?: string) => {
+  (parentType: MainFormAction, id: string, store: storeTypes) =>
+  async (title?: string) => {
     const originalId = parentType === 'edit' ? id : undefined
 
     if (!title) {

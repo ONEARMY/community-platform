@@ -1,9 +1,10 @@
 import { Button } from '../Button/Button'
+import { nonDeletedCommentsCount } from '../DiscussionTitle/DiscussionTitle'
 
 import type { IComment } from '../CommentItem/types'
 
 export interface Props {
-  creatorName: string
+  creatorName: string | null
   isShowReplies: boolean
   replies: IComment[]
   setIsShowReplies: () => void
@@ -12,23 +13,21 @@ export interface Props {
 export const ButtonShowReplies = (props: Props) => {
   const { creatorName, isShowReplies, replies, setIsShowReplies } = props
 
-  const length = replies && replies.length ? replies.length : 0
+  const count = nonDeletedCommentsCount(replies)
   const icon = isShowReplies ? 'arrow-full-up' : 'arrow-full-down'
 
-  const text = length
-    ? `${length} ${length === 1 ? 'reply' : 'replies'}`
-    : `Reply`
+  const text = count ? `${count} ${count === 1 ? 'reply' : 'replies'}` : `Reply`
 
   return (
     <Button
       data-cy={`show-replies`}
       icon={icon}
       onClick={setIsShowReplies}
-      sx={{ alignSelf: 'flex-start' }}
+      sx={{ alignSelf: 'flex-start', border: 'none' }}
       variant="outline"
       small
     >
-      {`${text} to ${creatorName}`}
+      {text} {creatorName && ` to ${creatorName}`}
     </Button>
   )
 }

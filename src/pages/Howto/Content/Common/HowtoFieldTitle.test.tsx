@@ -1,20 +1,21 @@
 import { render, screen } from '@testing-library/react'
 import { HowtoProvider } from 'src/test/components'
+import { describe, it, vi } from 'vitest'
 
 import { HowtoFieldTitle } from '.'
 
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ParentType } from './Howto.form'
 
-jest.mock('src/stores/Howto/howto.store')
-const store = jest.createMockFromModule('src/stores/Howto/howto.store')
+vi.mock('src/stores/Howto/howto.store')
+const store = await vi.importMock('src/stores/Howto/howto.store')
 
 describe('HowtoFieldTitle', () => {
   it('renders', async () => {
     const props = {
       _id: 'random-123',
       parentType: 'create' as ParentType,
-      store: store as HowtoStore,
+      store: store as any as HowtoStore,
     }
 
     render(

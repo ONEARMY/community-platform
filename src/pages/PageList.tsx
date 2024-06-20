@@ -11,53 +11,21 @@ import type { CSSObject } from 'theme-ui'
  * Import all pages for use in lazy loading
  * NOTE - requires default export in page class (https://reactjs.org/docs/code-splitting.html#named-exports)
  */
-const HowtoPage = lazy(
-  () => import(/* webpackChunkName: "Howto" */ './Howto/Howto'),
-)
-const SettingsPage = lazy(
-  () => import(/* webpackChunkName: "Settings" */ './UserSettings'),
-)
+const HowtoPage = lazy(() => import('./Howto/Howto'))
+const SettingsPage = lazy(() => import('./UserSettings'))
 
-const AcademyPage = lazy(
-  () => import(/* webpackChunkName: "Academy" */ './Academy/Academy'),
-)
-const MapsPage = lazy(
-  () => import(/* webpackChunkName: "Maps" */ './Maps/Maps'),
-)
-const User = lazy(
-  () => import(/* webpackChunkName: "User" */ './User/user.routes'),
-)
+const AcademyPage = lazy(() => import('./Academy/Academy'))
+const MapsPage = lazy(() => import('./Maps/Maps'))
+const User = lazy(() => import('./User/user.routes'))
 
-const SignUpMessagePage = lazy(
-  () =>
-    import(/* webpackChunkName: "SignUpMessage" */ './SignUp/SignUpMessage'),
-)
-const SignUpPage = lazy(
-  () => import(/* webpackChunkName: "SignUp" */ './SignUp/SignUp'),
-)
-const SignInPage = lazy(
-  () => import(/* webpackChunkName: "SignIn" */ './SignIn/SignIn'),
-)
-const PrivacyPolicy = lazy(
-  () => import(/* webpackChunkName: "privacy" */ './policy/PrivacyPolicy'),
-)
-const TermsPolicy = lazy(
-  () => import(/* webpackChunkName: "terms" */ './policy/TermsPolicy'),
-)
-const Unsubscribe = lazy(
-  () => import(/* webpackChunkName: "terms" */ './Unsubscribe/Unsubscribe'),
-)
+const SignUpMessagePage = lazy(() => import('./SignUp/SignUpMessage'))
+const SignUpPage = lazy(() => import('./SignUp/SignUp'))
+const SignInPage = lazy(() => import('./SignIn/SignIn'))
+const PrivacyPolicy = lazy(() => import('./policy/PrivacyPolicy'))
+const TermsPolicy = lazy(() => import('./policy/TermsPolicy'))
+const Unsubscribe = lazy(() => import('./Unsubscribe/Unsubscribe'))
 
-const Patreon = lazy(
-  () => import(/* webpackChunkName: "terms" */ './Patreon/Patreon'),
-)
-
-const DonationThankYou = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "terms" */ './DonationThankYou/DonationThankYou'
-    ),
-)
+const Patreon = lazy(() => import('./Patreon/Patreon'))
 
 export const getAvailablePageList = (supportedModules: MODULE[]): IPageMeta[] =>
   COMMUNITY_PAGES.filter((pageItem) =>
@@ -80,7 +48,7 @@ const howTo = {
   moduleName: MODULE.HOWTO,
   path: '/how-to',
   component: <HowtoPage />,
-  title: 'How-to',
+  title: 'How-tos',
   description: 'Welcome to how-to',
 }
 const settings = {
@@ -185,14 +153,6 @@ const patreon = {
   path: '/patreon',
   component: <Patreon />,
   title: 'Patreon',
-  description: '',
-}
-
-export const donationThankYou = {
-  moduleName: MODULE.CORE,
-  path: '/donation-thank-you',
-  component: <DonationThankYou />,
-  title: 'Thank You!',
   description: '',
 }
 

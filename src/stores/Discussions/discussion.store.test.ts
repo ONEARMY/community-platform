@@ -1,4 +1,6 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
 import { faker } from '@faker-js/faker'
 import {
   FactoryDiscussion,
@@ -11,7 +13,7 @@ import { DiscussionStore } from './discussions.store'
 import type { IDiscussion, IUserPPDB } from 'src/models'
 import type { IRootStore } from '../RootStore'
 
-const factory = async (
+const factory = (
   discussions: IDiscussion[] = [FactoryDiscussion({})],
   activeUser: IUserPPDB = FactoryUser(),
 ) => {
@@ -31,7 +33,7 @@ const factory = async (
   // @ts-ignore
   store.aggregationsStore = {
     aggregations: {
-      isVerified: jest.fn((userId) => userId === 'fake-user'),
+      isVerified: vi.fn((userId) => userId === 'fake-user'),
       users_verified: ['fake-user'],
     },
   }
@@ -45,7 +47,7 @@ const factory = async (
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   store.userNotificationsStore = {
-    triggerNotification: jest.fn(),
+    triggerNotification: vi.fn(),
   }
 
   return {
@@ -68,7 +70,7 @@ describe('discussion.store', () => {
     it('fetches a discussion by sourceId', async () => {
       const fakeSourceId = faker.internet.password()
       const fakePrimaryContentId = faker.internet.password()
-      const { store, getWhereFn } = await factory([
+      const { store, getWhereFn } = factory([
         FactoryDiscussion({ sourceId: fakeSourceId }),
       ])
 
@@ -83,7 +85,7 @@ describe('discussion.store', () => {
     })
 
     it('creates a discussion if one does not exist', async () => {
-      const { store, getWhereFn, setFn } = await factory()
+      const { store, getWhereFn, setFn } = factory()
 
       getWhereFn.mockReturnValueOnce([])
 
@@ -107,7 +109,7 @@ describe('discussion.store', () => {
 
   describe('uploadDiscussion', () => {
     it('creates a new discussion with sourceId and sourceType provided', async () => {
-      const { store, discussionItem, setFn } = await factory()
+      const { store, discussionItem, setFn } = factory()
 
       await store.uploadDiscussion(
         discussionItem.sourceId,
@@ -124,7 +126,7 @@ describe('discussion.store', () => {
 
   describe('addComment', () => {
     it('adds a new comment for questions', async () => {
-      const { store, discussionItem, setFn, getFn } = await factory()
+      const { store, discussionItem, setFn, getFn } = factory()
 
       //Act
       await store.addComment(discussionItem, 'New comment')
@@ -149,7 +151,7 @@ describe('discussion.store', () => {
     })
 
     it('adds a reply to a comment', async () => {
-      const { store, discussionItem, setFn } = await factory([
+      const { store, discussionItem, setFn } = factory([
         FactoryDiscussion({
           comments: [FactoryDiscussionComment({ text: 'New comment' })],
         }),
@@ -184,12 +186,12 @@ describe('discussion.store', () => {
       )
     })
 
-    it('handles error fetching discussion', async () => {
-      const { store, discussionItem, setFn, getFn } = await factory()
+    it('handles error fetching discussion', () => {
+      const { store, discussionItem, setFn, getFn } = factory()
 
       getFn.mockReturnValue(null)
       //Act
-      await expect(
+      expect(() =>
         store.addComment(discussionItem, 'New comment'),
       ).rejects.toThrowError('Discussion not found')
 
@@ -200,7 +202,7 @@ describe('discussion.store', () => {
 
   describe('editComent', () => {
     it('allows author to make changes comment', async () => {
-      const { store, discussionItem, setFn } = await factory(
+      const { store, discussionItem, setFn } = factory(
         [
           FactoryDiscussion({
             comments: [
@@ -236,7 +238,7 @@ describe('discussion.store', () => {
     })
 
     it('allows admin to make changes comment', async () => {
-      const { store, discussionItem, setFn } = await factory(
+      const { store, discussionItem, setFn } = factory(
         [
           FactoryDiscussion({
             comments: [
@@ -272,8 +274,8 @@ describe('discussion.store', () => {
       )
     })
 
-    it('throws an error for a different user', async () => {
-      const { store, discussionItem, setFn } = await factory([
+    it('throws an error for a different user', () => {
+      const { store, discussionItem, setFn } = factory([
         FactoryDiscussion({
           comments: [
             FactoryDiscussionComment({
@@ -286,7 +288,7 @@ describe('discussion.store', () => {
       ])
 
       //Act
-      await expect(
+      expect(() =>
         store.editComment(discussionItem, 'fake-comment-id', 'Edited comment'),
       ).rejects.toThrowError()
 
@@ -301,7 +303,7 @@ describe('discussion.store', () => {
         _creatorId: 'fake-user',
         text: 'New comment',
       })
-      const { store, setFn, discussionItem } = await factory(
+      const { store, setFn, discussionItem } = factory(
         [FactoryDiscussion({ comments: [comment] })],
         FactoryUser({ _id: 'fake-user' }),
       )
@@ -314,7 +316,7 @@ describe('discussion.store', () => {
       expect(discussionItem.contributorIds).not.toEqual(
         expect.arrayContaining([comment._creatorId]),
       )
-      expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
+      expect(setFn.mock.calls[0][0].comments[0]._deleted).toEqual(true)
     })
 
     it('allows admin to remove a comment', async () => {
@@ -322,7 +324,7 @@ describe('discussion.store', () => {
         _creatorId: 'not-admin-user',
         text: 'New comment',
       })
-      const { store, setFn, discussionItem } = await factory(
+      const { store, setFn, discussionItem } = factory(
         [FactoryDiscussion({ comments: [comment] })],
         FactoryUser({
           _id: 'admin-user',
@@ -335,11 +337,11 @@ describe('discussion.store', () => {
 
       // Asert
       expect(setFn).toHaveBeenCalledTimes(1)
-      expect(setFn.mock.calls[0][0].comments).toHaveLength(0)
+      expect(setFn.mock.calls[0][0].comments[0]._deleted).toEqual(true)
     })
 
-    it('throws an error for a different user', async () => {
-      const { store, discussionItem, setFn } = await factory([
+    it('throws an error for a different user', () => {
+      const { store, discussionItem, setFn } = factory([
         FactoryDiscussion({
           comments: [
             FactoryDiscussionComment({
@@ -352,7 +354,7 @@ describe('discussion.store', () => {
       ])
 
       //Act
-      await expect(
+      expect(() =>
         store.deleteComment(discussionItem, 'fake-comment-id'),
       ).rejects.toThrowError()
 

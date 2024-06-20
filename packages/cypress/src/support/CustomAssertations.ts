@@ -1,14 +1,16 @@
 import chaiSubset from 'chai-subset'
 
-import type { IHowto, IHowtoStep } from '../../../../src/models/howto.models'
-import type { IResearchDB } from '../../../../src/models/research.models'
-import type { IUserPPDB } from '../../../../src/models/user_pp.models'
+import type {
+  IHowto,
+  IHowtoStep,
+  IResearchDB,
+  IUserPPDB,
+} from '../../../../src/models'
 import type { ProfileTypeLabel } from '../../../../src/modules/profile/types'
 
 declare global {
   namespace Chai {
     interface Assertion {
-      containSubset(expect: any): any
       eqHowtoStep(expect: any, index: number)
     }
   }
@@ -18,14 +20,16 @@ chai.use((chaiObj) => {
   function assertIsInViewport(tolerance = 0) {
     const subject = this._obj
 
-    const bottom = Cypress.$(cy.state('window')).height() + tolerance
-    const width = Cypress.$(cy.state('window')).width() + tolerance
-    const rect = subject[0].getBoundingClientRect()
+    cy.window().then((win) => {
+      const bottom = Cypress.$(win).height() + tolerance
+      const width = Cypress.$(win).width() + tolerance
+      const rect = subject[0].getBoundingClientRect()
 
-    expect(
-      rect.top < bottom && rect.right <= width && rect.left >= 0,
-      'expected #{this} to be in the viewport',
-    ).to.eq(true)
+      expect(
+        rect.top < bottom && rect.right <= width && rect.left >= 0,
+        'expected #{this} to be in the viewport',
+      ).to.eq(true)
+    })
   }
 
   chaiObj.Assertion.addMethod('inViewport', assertIsInViewport)
@@ -45,6 +49,7 @@ const eqHowto = (chaiObj) => {
       title,
       tags,
       previousSlugs,
+      moderation,
     } = expected
     expect(subject, 'Basic info').to.containSubset({
       _createdBy,
@@ -58,6 +63,8 @@ const eqHowto = (chaiObj) => {
       previousSlugs,
     })
     expect(subject.category.label, 'Category').to.eq(category)
+
+    expect(subject.moderation).to.equal(moderation)
 
     // We want to validate that uploaded filename matches that originally specified
     // by the user. The filename will include a timestamp to avoid collisions with
@@ -220,6 +227,7 @@ const eqSettings = (chaiObj) => {
       openingHoursAssert,
       plasticTypeAssert,
     ),
+    space: undefined,
   }
 
   function compare(this: any, expected: any) {

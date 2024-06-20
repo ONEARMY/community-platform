@@ -1,9 +1,12 @@
+import '@testing-library/jest-dom/vitest'
+
 import { fireEvent, render } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
 
 import { HideDiscussionContainer } from './HideDiscussionContainer'
 
 describe('HideDiscussionContainer', () => {
-  it('can be opened/closed', async () => {
+  it('can be opened/closed', () => {
     const { getByText } = render(
       <HideDiscussionContainer commentCount={0}>
         <>Hidden</>

@@ -1,25 +1,31 @@
-jest.mock('../common/module.store')
+import { describe, expect, it, vi } from 'vitest'
+
+vi.mock('../common/module.store')
+
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 
 import { QuestionStore } from './question.store'
 
-const mockToggleDocSubscriber = jest.fn()
-jest.mock('../common/toggleDocSubscriberStatusByUserName', () => {
+import type { IRootStore } from '../RootStore'
+
+const mockToggleDocSubscriber = vi.fn()
+vi.mock('../common/toggleDocSubscriberStatusByUserName', () => {
   return {
     __esModule: true,
     toggleDocSubscriberStatusByUserName: () => mockToggleDocSubscriber(),
   }
 })
 
-const mockToggleDocUsefulByUser = jest.fn()
-jest.mock('../common/toggleDocUsefulByUser', () => ({
+const mockToggleDocUsefulByUser = vi.fn()
+vi.mock('../common/toggleDocUsefulByUser', () => ({
   __esModule: true,
   toggleDocUsefulByUser: () => mockToggleDocUsefulByUser(),
 }))
 
-const factory = async () => {
-  const store = new QuestionStore()
+const factory = () => {
+  const store = new QuestionStore({} as IRootStore)
+  store.isTitleThatReusesSlug = vi.fn().mockResolvedValue(false)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -58,9 +64,9 @@ const factory = async () => {
 describe('question.store', () => {
   describe('upsertQuestion', () => {
     it('assigns _createdBy', async () => {
-      const { store, setFn } = await factory()
+      const { store, setFn } = factory()
       const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
+        title: 'So what is plastic?',
         _createdBy: undefined,
       })
 
@@ -77,9 +83,9 @@ describe('question.store', () => {
 
   describe('fetchQuestionBySlug', () => {
     it('handles empty query response', async () => {
-      const { store } = await factory()
+      const { store } = factory()
       const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
+        title: 'How do you survive living in a tent?',
       })
 
       // Act
@@ -87,7 +93,7 @@ describe('question.store', () => {
     })
 
     it('returns a valid response', async () => {
-      const { store, getWhereFn } = await factory()
+      const { store, getWhereFn } = factory()
       const newQuestion = FactoryQuestionItem({
         title: 'Question title',
       })
@@ -102,16 +108,16 @@ describe('question.store', () => {
     })
 
     it('returns a valid response when a previous slug', async () => {
-      const { store, getWhereFn } = await factory()
+      const { store, getWhereFn } = factory()
       const newQuestion = FactoryQuestionItem({
-        title: 'Question title',
-        previousSlugs: ['old-slug'],
+        title: 'Can I run a shredder at home?',
+        previousSlugs: ['shredder-at-home'],
       })
 
       getWhereFn.mockResolvedValue([newQuestion])
 
       // Act
-      const questionDoc = await store.fetchQuestionBySlug('old-slug')
+      const questionDoc = await store.fetchQuestionBySlug('shredder-at-home')
 
       expect(questionDoc).toStrictEqual(newQuestion)
     })
@@ -119,10 +125,10 @@ describe('question.store', () => {
 
   describe('incrementViews', () => {
     it('increments views by one', async () => {
-      const { store, updateFn } = await factory()
+      const { store, updateFn } = factory()
 
       const question = FactoryQuestionItem({
-        title: 'Question title',
+        title: 'which trees to cut down',
         _createdBy: undefined,
         total_views: 56,
       })
@@ -143,7 +149,7 @@ describe('question.store', () => {
 
   describe('toggleSubscriberStatusByUserName', () => {
     it('calls the toggle subscriber function', async () => {
-      const { store } = await factory()
+      const { store } = factory()
       store.activeQuestionItem = FactoryQuestionItem()
 
       await store.toggleSubscriberStatusByUserName()
@@ -154,7 +160,7 @@ describe('question.store', () => {
 
   describe('toggleUsefulByUser', () => {
     it('calls the toogle voted for function', async () => {
-      const { store } = await factory()
+      const { store } = factory()
       store.activeQuestionItem = FactoryQuestionItem()
 
       await store.toggleUsefulByUser()

@@ -1,4 +1,6 @@
-require('dotenv').config()
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 import * as testing from '@firebase/rules-unit-testing'
 import { doc, getDoc, setDoc, setLogLevel } from 'firebase/firestore'
@@ -105,14 +107,11 @@ describe('community platform', () => {
   const publicCollections = [
     'aggregations_rev20220126',
     'discussions_rev20231022',
-    'question_categories_rev20231130',
     'questions_rev20230926',
-    'research_categories_rev20221224',
     'research_rev20201020',
     'user_notifications_rev20221209',
     'v3_howtos',
     'v3_mappins',
-    'v3_tags',
     'v3_users',
   ]
 
@@ -124,6 +123,29 @@ describe('community platform', () => {
 
       it(`${collection} allows WRITE`, async () => {
         await assertSucceeds(
+          setDoc(doc(unauthedDb, collection, 'bar'), {
+            email: '',
+          }),
+        )
+      })
+    })
+  })
+
+  const readableCollections = [
+    'v3_categories',
+    'v3_tags',
+    'research_categories_rev20221224',
+    'question_categories_rev20231130',
+  ]
+
+  readableCollections.forEach((collection) => {
+    describe(`${collection}`, () => {
+      it(`${collection} allows READ`, async () => {
+        await assertSucceeds(getDoc(doc(unauthedDb, collection, 'bar')))
+      })
+
+      it(`${collection} does not allow WRITE`, async () => {
+        await assertFails(
           setDoc(doc(unauthedDb, collection, 'bar'), {
             email: '',
           }),

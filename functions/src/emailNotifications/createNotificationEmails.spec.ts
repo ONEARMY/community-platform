@@ -215,7 +215,20 @@ describe('create email test', () => {
         message: { html, subject },
         to,
       } = doc.data()
-      expect(html).toMatchSnapshot()
+      expect(html).toContain('https://community.preciousplastic.com/test')
+      // 1st notification: how-to
+      expect(html).toContain('how-to')
+      expect(html).toContain('https://community.preciousplastic.com/u/user_2')
+      // 2nd notification: new comment
+      expect(html).toContain('New comment')
+      expect(html).toContain('Test research')
+      // 3rd notification: mention
+      expect(html).toContain('https://community.preciousplastic.com/u/user_3')
+      expect(html).toContain('mentioned you')
+      // 4th notification: map pin
+      expect(html).toContain('map pin')
+      expect(html).toContain('has been approved')
+      // footer
       expect(subject).toBe(`You've missed notifications from Precious Plastic`)
       expect(to).toBe('test@test.com')
     })
@@ -244,7 +257,19 @@ describe('create email test', () => {
         message: { html, subject },
         to,
       } = doc.data()
-      expect(html).toMatchSnapshot()
+      expect(html).toContain('https://community.preciousplastic.com/test')
+      // 1st notification: new comment
+      expect(html).toContain('New comment')
+      expect(html).toContain('https://community.preciousplastic.com/u/user_1')
+      expect(html).toContain('Test how-to')
+      // 2nd notification: new comment
+      expect(html).toContain('https://community.preciousplastic.com/u/user_3')
+      expect(html).toContain('Test research')
+      // 3rd notification: research update
+      expect(html).toContain('posted an update')
+      // 4th notification: research needs update
+      expect(html).toContain('needs updates')
+      // footer
       expect(subject).toBe(`You've missed notifications from Precious Plastic`)
       expect(to).toBe('test@test.com')
     })

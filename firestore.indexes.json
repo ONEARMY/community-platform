@@ -515,8 +515,12 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
           "fieldPath": "_deleted",
-          "order": "ASCENDING"
+          "order": "DESCENDING"
         }
       ]
     },
@@ -533,7 +537,25 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_deleted",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -595,7 +617,11 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -643,7 +669,11 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -675,36 +705,6 @@
         {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchCategory._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -893,6 +893,32 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_created",
           "order": "DESCENDING"
         },
@@ -921,32 +947,6 @@
         {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "research_rev20201020",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "researchStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -1103,6 +1103,24 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_created",
           "order": "DESCENDING"
         },
@@ -1121,7 +1139,11 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1169,7 +1191,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1265,11 +1287,55 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "researchStatus",
+          "fieldPath": "researchCategory._id",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_created",
+          "fieldPath": "totalCommentCount",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUpdates",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchCategory._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "totalUsefulVotes",
           "order": "DESCENDING"
         },
         {
@@ -1291,7 +1357,29 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "research_rev20201020",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "researchStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_created",
           "order": "DESCENDING"
         },
         {
@@ -1429,6 +1517,24 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_created",
           "order": "DESCENDING"
         },
@@ -1461,7 +1567,11 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1507,28 +1617,6 @@
         {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -1693,8 +1781,30 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
         }
       ]
     },
@@ -1735,28 +1845,6 @@
         {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -1839,6 +1927,28 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "_createdBy",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_created",
           "order": "DESCENDING"
         },
@@ -1879,7 +1989,11 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "_modified",
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_contentModifiedTimestamp",
           "order": "DESCENDING"
         },
         {
@@ -1933,32 +2047,6 @@
         {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "_createdBy",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -2123,6 +2211,32 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "category._id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_created",
           "order": "DESCENDING"
         },
@@ -2151,32 +2265,6 @@
         {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "category._id",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -2271,6 +2359,28 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_created",
           "order": "DESCENDING"
         },
@@ -2295,28 +2405,6 @@
         {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "keywords",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -2395,6 +2483,24 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "_contentModifiedTimestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "_deleted",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "v3_howtos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "moderation",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "_created",
           "order": "DESCENDING"
         },
@@ -2415,24 +2521,6 @@
         {
           "fieldPath": "_deleted",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "moderation",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_modified",
-          "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "DESCENDING"
         }
       ]
     },

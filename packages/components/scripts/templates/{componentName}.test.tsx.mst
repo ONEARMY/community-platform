@@ -1,11 +1,11 @@
-import { render } from '../tests/utils'
+import { render } from '../test/utils'
 import { Default } from './{{ComponentName}}.stories'
-import type { {{ComponentName}}Props } from './{{ComponentName}}'
+import type { IProps } from './{{ComponentName}}'
 
 describe('{{ComponentName}}', () => {
   it('validates the component behaviour', () => {
     const { getByText } = render(
-      <Default {...(Default.args as {{ComponentName}}Props)} />,
+      <Default {...(Default.args as IProps)} />,
     )
 
     expect(getByText('{{ComponentName}}')).toBeInTheDocument();

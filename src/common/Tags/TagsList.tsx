@@ -14,5 +14,5 @@ export const TagList = ({ tags }: IProps) => {
     .filter(Boolean)
     .map((key) => allTagsByKey[key])
 
-  return <TagListUI tags={tagList} />
+  return !!tagList && <TagListUI tags={tagList} />
 }

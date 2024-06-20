@@ -41,6 +41,8 @@ export class ModuleStore {
       (match) => match._id !== originalId,
     ) // exclude current document
 
+    if (previousOtherMatches.length > 0) return true
+
     // check for current titles
     const currentMatches = await this.db
       .collection(this.basePath!)
@@ -48,7 +50,7 @@ export class ModuleStore {
     const currentOtherMatches = currentMatches.filter(
       (match) => match._id !== originalId,
     ) // exclude current document
-    return currentOtherMatches.length > 0 || previousOtherMatches.length > 0
+    return currentOtherMatches.length > 0
   }
 
   public setPreviousSlugs = (
@@ -92,7 +94,10 @@ export class ModuleStore {
   }
 
   // this can be subscribed to in individual stores
-  constructor(private rootStore: IRootStore, private basePath?: IDBEndpoint) {
+  constructor(
+    private rootStore: IRootStore,
+    private basePath?: IDBEndpoint,
+  ) {
     this.rootStore = rootStore
 
     if (!this.rootStore) {

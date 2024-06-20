@@ -1,4 +1,8 @@
-import { render } from '../tests/utils'
+import '@testing-library/jest-dom/vitest'
+
+import { describe, expect, it } from 'vitest'
+
+import { render } from '../test/utils'
 import { MapMemberCard } from './MapMemberCard'
 import { Default, ModerationComments } from './MapMemberCard.stories'
 
@@ -12,7 +16,7 @@ describe('MapMemberCard', () => {
     expect(() => getByTestId('MapMemberCard: moderation comments')).toThrow()
   })
 
-  it('shows moderation comments if they exist', async () => {
+  it('shows moderation comments if they exist', () => {
     const { getByText, getByTestId } = render(
       <MapMemberCard {...ModerationComments.args} />,
     )

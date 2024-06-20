@@ -5,7 +5,7 @@ import type { IResearch } from 'src/models'
 
 interface IProps {
   update: IResearch.Update
-  research: IResearch.Item | undefined
+  research: IResearch.Item | null
   showComments?: boolean
 }
 

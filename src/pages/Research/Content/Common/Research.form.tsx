@@ -17,8 +17,8 @@ import { usePrompt } from 'src/common/hooks/usePrompt'
 import { researchStatusOptions } from 'src/models/research.models'
 import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import {
-  PostingGuidelines,
   ResearchErrors,
+  ResearchPostingGuidelines,
   ResearchSubmitStatus,
 } from 'src/pages/Research/Content/Common'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -42,6 +42,7 @@ import {
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
 
+import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
 
 const CONFIRM_DIALOG_MSG =
@@ -54,7 +55,7 @@ interface IState {
 interface IProps {
   'data-testid'?: string
   formValues: any
-  parentType: 'create' | 'edit'
+  parentType: MainFormAction
 }
 
 const ResearchFormLabel = ({ children, ...props }) => (
@@ -218,7 +219,7 @@ const ResearchForm = observer((props: IProps) => {
                     <Box
                       sx={{ mt: '20px', display: ['block', 'block', 'none'] }}
                     >
-                      <PostingGuidelines />
+                      <ResearchPostingGuidelines />
                     </Box>
                     <Card mt={3} sx={{ overflow: 'visible' }}>
                       <Flex
@@ -369,7 +370,7 @@ const ResearchForm = observer((props: IProps) => {
                   }}
                 >
                   <Box sx={{ display: ['none', 'none', 'block'] }}>
-                    <PostingGuidelines />
+                    <ResearchPostingGuidelines />
                   </Box>
 
                   <Button

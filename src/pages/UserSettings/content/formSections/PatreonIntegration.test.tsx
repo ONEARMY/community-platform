@@ -1,6 +1,7 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom/vitest'
 
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
   CONNECT_BUTTON_TEXT,
@@ -68,9 +69,9 @@ const mockPatreonNotSupporter = {
   },
 } as unknown as IUserPP
 
-const mockRemovePatreonConnection = jest.fn()
+const mockRemovePatreonConnection = vi.fn()
 
-jest.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('src/common/hooks/useCommonStores', () => ({
   useCommonStores: () => ({
     stores: {
       userStore: {
@@ -121,8 +122,8 @@ describe('PatreonIntegration', () => {
       expect(screen.getByText(REMOVE_BUTTON_TEXT)).toBeInTheDocument()
     })
 
-    it('calls removePatreonConnection when "Remove Connection" button is clicked', async () => {
-      await act(async () => {
+    it('calls removePatreonConnection when "Remove Connection" button is clicked', () => {
+      act(() => {
         fireEvent.click(screen.getByText(REMOVE_BUTTON_TEXT))
       })
       expect(mockRemovePatreonConnection).toHaveBeenCalledWith(

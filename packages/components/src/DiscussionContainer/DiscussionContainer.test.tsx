@@ -1,7 +1,10 @@
-import { act } from 'react-dom/test-utils'
-import { fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom/vitest'
 
-import { render } from '../tests/utils'
+import { act } from 'react-dom/test-utils'
+import { fireEvent, waitFor } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
+import { render } from '../test/utils'
 import { Default, WithReplies } from './DiscussionContainer.stories'
 
 describe('DiscussionContainer', () => {
@@ -18,23 +21,25 @@ describe('DiscussionContainer', () => {
     const screen = render(<WithReplies.render />)
 
     // Show reply form
-    await act(async () => {
+    await waitFor(() => {
       const replyButton = screen.getAllByText('2 replies to', {
         exact: false,
       })[0]
       expect(replyButton).toBeInTheDocument()
 
-      await fireEvent.click(replyButton)
+      fireEvent.click(replyButton)
 
       expect(screen.getAllByText('Leave a reply')).toHaveLength(1)
     })
 
     // Hide reply form
-    await act(async () => {
+    act(() => {
       const replyButton = screen.getAllByText('2 replies to', {
         exact: false,
       })[0]
-      await fireEvent.click(replyButton)
+      fireEvent.click(replyButton)
+    })
+    await waitFor(() => {
       expect(() => {
         screen.getAllByText('Leave a reply')
       }).toThrow()
@@ -46,14 +51,20 @@ describe('DiscussionContainer', () => {
     expect(SecondReplyButton).toBeInTheDocument()
 
     // Show reply form
-    await act(async () => {
-      await fireEvent.click(SecondReplyButton)
+    act(() => {
+      fireEvent.click(SecondReplyButton)
+    })
+
+    await waitFor(() => {
       expect(screen.getAllByText('Leave a reply')).toHaveLength(1)
     })
 
     // Hide reply form
-    await act(async () => {
-      await fireEvent.click(SecondReplyButton)
+    act(() => {
+      fireEvent.click(SecondReplyButton)
+    })
+
+    await waitFor(() => {
       expect(() => {
         screen.getAllByText('Send your reply')
       }).toThrow()

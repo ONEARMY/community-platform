@@ -1,16 +1,27 @@
 import { CDN_URL, FIREBASE_CONFIG } from 'src/config/config'
 import { logger } from 'src/logger'
 
+import type { IFirebaseConfig } from 'src/config/types'
+
 type ResizeArgs = {
   width?: number
 }
 
 export const cdnImageUrl = (url: string, resizeArgs?: ResizeArgs) => {
-  if (!CDN_URL || !FIREBASE_CONFIG.storageBucket) {
+  return _cdnImageUrlInternal(CDN_URL, FIREBASE_CONFIG, url, resizeArgs)
+}
+
+export const _cdnImageUrlInternal = (
+  cdnUrl: string,
+  firebaseConfig: Partial<IFirebaseConfig>,
+  url: string,
+  resizeArgs?: ResizeArgs,
+) => {
+  if (!cdnUrl || !firebaseConfig.storageBucket) {
     return url
   }
 
-  const sanitizedCdnUrl = CDN_URL.trim().replace(/\/$/, '')
+  const sanitizedCdnUrl = cdnUrl.trim().replace(/\/$/, '')
 
   try {
     new URL(sanitizedCdnUrl)
@@ -21,7 +32,7 @@ export const cdnImageUrl = (url: string, resizeArgs?: ResizeArgs) => {
 
   return (
     url.replace(
-      `https://firebasestorage.googleapis.com/v0/b/${FIREBASE_CONFIG.storageBucket}`,
+      `https://firebasestorage.googleapis.com/v0/b/${firebaseConfig.storageBucket}`,
       sanitizedCdnUrl,
     ) + formatResizeArgsForUrl(resizeArgs, url)
   )

@@ -11,6 +11,7 @@ export const FactoryComment = (
   _creatorId: faker.internet.userName(),
   creatorName: faker.internet.userName(),
   creatorCountry: '',
+  parentCommentId: faker.string.uuid(),
   text: faker.lorem.paragraph(),
   isUserVerified: faker.datatype.boolean(),
   ...commentOverloads,

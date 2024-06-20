@@ -58,7 +58,6 @@
     "concurrently": "^6.2.0",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
-    "dotenv": "^16.4.5",
     "firebase-functions-test": "^3.0.0",
     "jest": "29.2.2",
     "supertest": "^6.3.3",

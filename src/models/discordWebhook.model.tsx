@@ -1,12 +1,12 @@
 // Base embed footer interface
-export interface EmbedFooter {
+export interface IDiscordEmbedFooter {
   text: string
   icon_url?: string
   proxy_icon_url?: string
 }
 
 // Base embed image interface
-export interface EmbedImage {
+export interface IDiscordEmbedImage {
   url?: string
   proxy_url?: string
   height?: number
@@ -14,7 +14,7 @@ export interface EmbedImage {
 }
 
 // Base embed thumbnail interface
-export interface EmbedThumbnail {
+export interface IDiscordEmbedThumbnail {
   url?: string
   proxy_url?: string
   height?: number
@@ -22,20 +22,20 @@ export interface EmbedThumbnail {
 }
 
 // Base embed video interface
-export interface EmbedVideo {
+export interface IDiscordEmbedVideo {
   url?: string
   height?: number
   width?: number
 }
 
 // Base embed provider interface
-export interface EmbedProvider {
+export interface IDiscordEmbedProvider {
   name?: string
   url?: string
 }
 
 // Base embed author interface
-export interface EmbedAuthor {
+export interface IDiscordEmbedAuthor {
   name?: string
   url?: string
   icon_url?: string
@@ -43,31 +43,31 @@ export interface EmbedAuthor {
 }
 
 // Base embed field interface
-export interface EmbedField {
+export interface IDiscordEmbedField {
   name: string
   value: string
   inline?: boolean
 }
 
 // Embed object interface
-export interface Embed {
+export interface IDiscordEmbed {
   title?: string
   type?: string // Always 'rich' for webhook embeds
   description?: string
   url?: string
   timestamp?: string
   color?: number
-  footer?: EmbedFooter
-  image?: EmbedImage
-  thumbnail?: EmbedThumbnail
-  video?: EmbedVideo
-  provider?: EmbedProvider
-  author?: EmbedAuthor
-  fields?: EmbedField[]
+  footer?: IDiscordEmbedFooter
+  image?: IDiscordEmbedImage
+  thumbnail?: IDiscordEmbedThumbnail
+  video?: IDiscordEmbedVideo
+  provider?: IDiscordEmbedProvider
+  author?: IDiscordEmbedAuthor
+  fields?: IDiscordEmbedField[]
 }
 
 // Allowed mentions interface
-export interface AllowedMentions {
+export interface IDiscordAllowedMentions {
   parse?: ('roles' | 'users' | 'everyone')[]
   roles?: string[]
   users?: string[]
@@ -75,7 +75,7 @@ export interface AllowedMentions {
 }
 
 // Component interface for message components like buttons or dropdowns
-export interface Component {
+export interface IDiscordComponent {
   type: number
   custom_id?: string
   disabled?: boolean
@@ -101,18 +101,18 @@ export interface Component {
   placeholder?: string
   min_values?: number
   max_values?: number
-  components?: Component[]
+  components?: IDiscordComponent[]
 }
 
 // File interface for sending files with the webhook
-export interface File {
+export interface IDiscordFile {
   attachment: string | Buffer // URL or Buffer
   name?: string
   description?: string
 }
 
 // Attachment interface for message attachments
-export interface Attachment {
+export interface IDiscordAttachment {
   id: string
   filename: string
   size: number
@@ -125,26 +125,26 @@ export interface Attachment {
 }
 
 // Applied tags interface for tagging messages
-export interface AppliedTag {
+export interface IDiscordAppliedTag {
   id: string
   name: string
   moderated?: boolean
 }
 
 // Poll interface for creating polls
-export interface PollOption {
+export interface IDiscordPollOption {
   label: string
   value: string
 }
 
-export interface Poll {
+export interface IDiscordPoll {
   title: string
-  options: PollOption[]
+  options: IDiscordPollOption[]
   duration: number // in seconds
 }
 
 // Main webhook payload interface with additional fields
-export interface DiscordWebhookPayload {
+export interface IDiscordWebhookPayload {
   /**
    * The message contents (up to 2000 characters).
    */
@@ -164,11 +164,11 @@ export interface DiscordWebhookPayload {
   /**
    * Embedded rich content.
    */
-  embeds?: Embed[]
+  embeds?: IDiscordEmbed[]
   /**
    * Allowed mentions for the message.
    */
-  allowed_mentions?: AllowedMentions
+  allowed_mentions?: IDiscordAllowedMentions
   /**
    * Message flags, used primarily for suppressing embeds.
    */
@@ -180,11 +180,11 @@ export interface DiscordWebhookPayload {
   /**
    * Components to include with the message (such as buttons or dropdowns).
    */
-  components?: Component[]
+  components?: IDiscordComponent[]
   /**
    * Files to include with the message.
    */
-  files?: File[]
+  files?: IDiscordFile[]
   /**
    * JSON payload to include with the message.
    */
@@ -192,13 +192,13 @@ export interface DiscordWebhookPayload {
   /**
    * Attachments to include with the message.
    */
-  attachments?: Attachment[]
+  attachments?: IDiscordAttachment[]
   /**
    * Tags to apply to the message.
    */
-  applied_tags?: AppliedTag[]
+  applied_tags?: IDiscordAppliedTag[]
   /**
    * Poll to include with the message.
    */
-  poll?: Poll
+  poll?: IDiscordPoll
 }

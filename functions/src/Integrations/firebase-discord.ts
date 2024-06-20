@@ -1,11 +1,10 @@
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import { DiscordWebhookPayload } from '../models'
-import { CONFIG } from '../config/config'
 
-const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
-const DISCORD_CHANNEL_ID = CONFIG.integrations.discord_channel_id
+const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL
+const DISCORD_CHANNEL_ID = process.env.DISCORD_CHANNEL_ID
 const DISCORD_BOT_TOKEN = Buffer.from(
-  CONFIG.integrations.discord_bot_token,
+  process.env.DISCORD_BOT_TOKEN,
   'base64',
 ).toString('ascii')
 

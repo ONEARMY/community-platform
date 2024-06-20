@@ -15,7 +15,7 @@
     "shell": "yarn build && firebase functions:shell",
     "test": "firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated 'jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",
     "test-ci": "./node_modules/.bin/firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --project demo-community-platform-emulated 'yarn jest . --forceExit --detectOpenHandles --coverage --reporters=default --reporters=jest-junit'",
-    "test:watch": "firebase emulators:exec --only functions,firestore,hosting,auth,database,pubsub,storage --ui --project demo-community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'",
+    "test:watch": "firebase emulators:exec --only functions,firestore,hosting,auth,database,storage --ui --project demo-community-platform-emulated 'jest . --watch --forceExit --detectOpenHandles'",
     "serve:email-templates": "node ./src/emailNotifications/development/server.mjs"
   },
   "main": "index.js",
@@ -58,6 +58,7 @@
     "concurrently": "^6.2.0",
     "copy-webpack-plugin": "^11.0.0",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "firebase-functions-test": "^3.0.0",
     "jest": "29.2.2",
     "supertest": "^6.3.3",

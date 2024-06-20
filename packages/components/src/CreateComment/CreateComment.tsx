@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import {Box, Button, Flex, IconButton, Text, Textarea} from 'theme-ui'
+import {Box, Flex, IconButton, Text} from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
+import {TextareaAutosize} from "@mui/base";
 
 export interface Props {
   maxLength: number
@@ -31,30 +32,33 @@ export const CreateComment = (props: Props) => {
   return (
       <Flex sx={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
         <Flex data-target="create-comment-container" sx={{ flex: 1 }}>
-          {!props.isMobile && <Box sx={{ lineHeight: 0, marginTop: 2, display: ['none', 'block'] }}>
-            <MemberBadge profileType={userProfileType} useLowDetailVersion />
-          </Box>}
+          {!props.isMobile &&
+              <MemberBadge size={45} style={{alignSelf: 'flex-start'}} profileType={userProfileType} useLowDetailVersion />
+          }
           <Box
               sx={{
                 display: 'block',
                 background: 'white',
                 flexGrow: 1,
-                marginLeft: [2, 5],
                 borderRadius: 1,
                 position: 'relative',
-                '&:before': {
-                  content: '""',
-                  position: 'absolute',
-                  borderWidth: '1em 1em',
-                  borderStyle: 'solid',
-                  borderColor: 'transparent white transparent transparent',
-                  margin: '1em -2em',
-                },
+                ...(props.isMobile ? {} : {
+                  marginLeft: [2, 5],
+                  '&:before': {
+                    content: '""',
+                    position: 'absolute',
+                    borderWidth: '1em 1em',
+                    borderStyle: 'solid',
+                    borderColor: 'transparent white transparent transparent',
+                    top: '0.5em',
+                    left: '-2em'
+                  }
+                })
               }}
           >
             {isLoggedIn ? (
                 <>
-                  <Textarea
+                  <TextareaAutosize
                       value={comment}
                       maxLength={maxLength}
                       onChange={(event) => {
@@ -63,27 +67,28 @@ export const CreateComment = (props: Props) => {
                       aria-label="Comment"
                       data-cy={isReply ? 'reply-form' : 'comments-form'}
                       placeholder={placeholder}
-                      sx={{
+                      minRows={1}
+                      style={{
+                        width: '100%',
                         background: 'none',
-                        resize: 'vertical',
-                        padding: 3,
-                        '&:focus': {
-                          borderColor: 'transparent',
-                        },
+                        padding: '15px 10px 10px 10px',
+                        resize: 'none',
+                        border: 'none',
+                        outline: 'none'
                       }}
                   />
-                  <Text
-                      sx={{
-                        fontSize: 2,
-                        position: 'absolute',
-                        right: 0,
-                        bottom: -5,
-                        pointerEvents: 'none',
-                        padding: 1,
-                      }}
-                  >
-                    {comment.length}/{maxLength}
-                  </Text>
+                  {/*<Text*/}
+                  {/*    sx={{*/}
+                  {/*      fontSize: 2,*/}
+                  {/*      position: 'absolute',*/}
+                  {/*      right: 0,*/}
+                  {/*      bottom: -5,*/}
+                  {/*      pointerEvents: 'none',*/}
+                  {/*      padding: 1,*/}
+                  {/*    }}*/}
+                  {/*>*/}
+                  {/*  {comment.length}/{maxLength}*/}
+                  {/*</Text>*/}
                 </>
             ) : (
                 <Box sx={{ padding: [3, 4] }}>
@@ -105,23 +110,22 @@ export const CreateComment = (props: Props) => {
           </Box>
         </Flex>
 
-        <Flex>
-          <IconButton
-              data-cy={isReply ? 'reply-submit' : 'comment-submit'}
-              disabled={!comment.trim() || !isLoggedIn || isLoading}
-              variant="primary"
-              onClick={() => {
-                if (!isLoading) {
-                  onSubmit(comment)
-                }
-              }}
-          >
-            {props.isMobile
-                ? <Icon size={30} glyph="send" />
-                : <Text>{isLoading ? 'Loading...' : buttonLabel}</Text>
+        <IconButton
+          data-cy={isReply ? 'reply-submit' : 'comment-submit'}
+          disabled={!comment.trim() || !isLoggedIn || isLoading}
+          variant="primary"
+          sx={{ alignSelf: 'flex-end' }}
+          onClick={() => {
+            if (!isLoading) {
+              onSubmit(comment)
             }
-          </IconButton>
-        </Flex>
+          }}
+        >
+          {props.isMobile
+              ? <Icon size={30} glyph="send" />
+              : <Text>{isLoading ? 'Loading...' : buttonLabel}</Text>
+          }
+        </IconButton>
       </Flex>
   )
 }

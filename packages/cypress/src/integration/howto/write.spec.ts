@@ -201,7 +201,7 @@ describe('[How To]', () => {
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
-      cy.get('a[href="/how-to/create"]').should('exist')
+      cy.get('a[href="/how-to/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
       cy.contains('Create a How-To').should('be.visible')
 
@@ -333,7 +333,7 @@ describe('[How To]', () => {
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
-      cy.get('a[href="/how-to/create"]').should('exist')
+      cy.get('a[href="/how-to/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title]')
         .clear()

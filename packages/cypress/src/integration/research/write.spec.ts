@@ -47,7 +47,7 @@ describe('[Research]', () => {
       cy.login(researcherEmail, researcherPassword)
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
-      cy.get('a[href="/research/create"]').should('exist')
+      cy.get('a[href="/research/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
 
       cy.step('Warn if title is identical to an existing one')
@@ -80,8 +80,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
-      cy.wait(500) // wierd issue where description is cleared during typing below (causes first few characters to not be typed, thus failing the test)
-      cy.get('[data-cy=intro-description]').type(expected.description).blur()
+      cy.get('[data-cy=intro-description]').focus().type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')
@@ -108,7 +107,7 @@ describe('[Research]', () => {
 
       cy.step('Cannot be published when empty')
       cy.get('[data-cy=submit]').click()
-      cy.contains('Make sure this field is filled correctly').should('exist')
+      cy.contains('Make sure this field is filled correctly').should('be.visible')
       cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Enter update details')
@@ -136,8 +135,8 @@ describe('[Research]', () => {
         .click()
         .url()
 
-      cy.contains(updateTitle).should('exist')
-      cy.contains(updateDescription).should('exist')
+      cy.contains(updateTitle).should('be.visible')
+      cy.contains(updateDescription).should('be.visible')
     })
 
     it('[By Anonymous]', () => {
@@ -164,7 +163,7 @@ describe('[Research]', () => {
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy=create]').should('be.visible')
-      cy.get('a[href="/research/create"]').should('exist')
+      cy.get('a[href="/research/create"]').should('be.visible')
 
       cy.step('Enter research article details')
       cy.visit('/research/create')
@@ -222,7 +221,7 @@ describe('[Research]', () => {
       cy.login(researcherEmail, researcherPassword)
       cy.step('Access the create research article')
       cy.get('[data-cy=loader]').should('not.exist')
-      cy.get('a[href="/research/create"]').should('exist')
+      cy.get('a[href="/research/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
       cy.get('[data-cy=intro-title')
         .clear()
@@ -275,7 +274,7 @@ describe('[Research]', () => {
       cy.step('Create the research article')
       cy.visit('/research')
       cy.get('[data-cy=loader]').should('not.exist')
-      cy.get('a[href="/research/create"]').should('exist')
+      cy.get('a[href="/research/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
 
       cy.step('Enter research article details')
@@ -309,7 +308,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=draft]').click()
 
       cy.step('Can see Draft after refresh')
-      cy.contains('Uploading Update').should('exist')
+      cy.contains('Uploading Update').should('be.visible')
       cy.get('[data-cy="icon-loading"]').should('not.exist')
       cy.visit(`/research/${expected.slug}`)
 

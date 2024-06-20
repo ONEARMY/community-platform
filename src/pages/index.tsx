@@ -16,8 +16,10 @@ import {
   POLICY_PAGES,
 } from './PageList'
 import { QuestionModuleContainer } from './Question'
+import {useCommonStores} from "../common/hooks/useCommonStores";
 
 export const Pages = () => {
+  const {stores: {themeStore: {setRootRef}}} = useCommonStores()
   //   any,
   //   {
   //     singlePageMode: boolean
@@ -36,69 +38,70 @@ export const Pages = () => {
   ]
 
   return (
-    <Flex
-      sx={{ height: '100vh', flexDirection: 'column' }}
-      data-cy="page-container"
-    >
-      <BrowserRouter>
-        <Analytics />
-        <ScrollToTop />
-        <Suspense
-          fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}
-        >
-          <Routes>
-            {menuItems.map((page) => (
-              <Route
-                path={page.exact ? page.path : `${page.path}/*`}
-                key={page.path}
-                element={
-                  <>
-                    <SeoTagsUpdateComponent title={page.title} />
-                    <Main
-                      data-cy="main-layout-container"
-                      style={{ flex: 1 }}
-                      customStyles={page.customStyles}
-                      ignoreMaxWidth={page.fullPageWidth}
-                    >
-                      <>{page.component}</>
-                    </Main>
-                  </>
-                }
-              />
-            ))}
-            {isModuleSupported(MODULE.QUESTION) ? (
-              <Route
-                path="/questions/*"
-                key="questions"
-                element={
-                  <>
-                    <SeoTagsUpdateComponent title="Question" />
-                    <Main data-cy="main-layout-container" style={{ flex: 1 }}>
-                      <QuestionModuleContainer />
-                    </Main>
-                  </>
-                }
-              />
-            ) : null}
-            <Route index element={<Navigate to="/academy" />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: '30px',
-          right: '30px',
-          display: ['none', 'none', 'block'],
-        }}
+      <Flex
+          sx={{ height: '100vh', flexDirection: 'column' }}
+          data-cy="page-container"
+          ref={setRootRef}
       >
-        <ExternalLink href="https://discord.gg/gJ7Yyk4" data-cy="feedback">
-          <Button variant="primary" icon="comment">
-            Join our chat
-          </Button>
-        </ExternalLink>
-      </Box>
-    </Flex>
+        <BrowserRouter>
+          <Analytics />
+          <ScrollToTop />
+          <Suspense
+              fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}
+          >
+            <Routes>
+              {menuItems.map((page) => (
+                  <Route
+                      path={page.exact ? page.path : `${page.path}/*`}
+                      key={page.path}
+                      element={
+                        <>
+                          <SeoTagsUpdateComponent title={page.title} />
+                          <Main
+                              data-cy="main-layout-container"
+                              style={{ flex: 1 }}
+                              customStyles={page.customStyles}
+                              ignoreMaxWidth={page.fullPageWidth}
+                          >
+                            <>{page.component}</>
+                          </Main>
+                        </>
+                      }
+                  />
+              ))}
+              {isModuleSupported(MODULE.QUESTION) ? (
+                  <Route
+                      path="/questions/*"
+                      key="questions"
+                      element={
+                        <>
+                          <SeoTagsUpdateComponent title="Question" />
+                          <Main data-cy="main-layout-container" style={{ flex: 1 }}>
+                            <QuestionModuleContainer />
+                          </Main>
+                        </>
+                      }
+                  />
+              ) : null}
+              <Route index element={<Navigate to="/academy" />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+        <Box
+            sx={{
+              position: 'fixed',
+              bottom: '30px',
+              right: '30px',
+              display: ['none', 'none', 'block'],
+            }}
+        >
+          <ExternalLink href="https://discord.gg/gJ7Yyk4" data-cy="feedback">
+            <Button variant="primary" icon="comment">
+              Join our chat
+            </Button>
+          </ExternalLink>
+        </Box>
+      </Flex>
   )
 }

@@ -16,6 +16,7 @@ import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
 import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
 import { MdAdd } from '@react-icons/all-files/md/MdAdd'
 import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
+import { FiSend } from '@react-icons/all-files/fi/FiSend'
 import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
 import { MdCheck } from '@react-icons/all-files/md/MdCheck'
 import { MdClose } from '@react-icons/all-files/md/MdClose'
@@ -108,6 +109,7 @@ export const glyphs: IGlyphs = {
   time: <MdAccessTime />,
   'turned-in': <MdTurnedIn />,
   'social-media': iconMap.socialMedia,
+  'send': <FiSend />,
   supporter: iconMap.supporter,
   show: iconMap.show,
   update: iconMap.update,
@@ -129,6 +131,12 @@ const IconWrapper = styled.div<Props>`
   min-width: ${(props) => (props.size ? `${props.size}px` : '32px')};
   min-height: ${(props) => (props.size ? `${props.size}px` : '32px')};
   position: relative;
+  
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+  
   ${verticalAlign} ${space}
     ${(props) =>
     props.onClick &&
@@ -164,19 +172,19 @@ export const Icon = (props: Props) => {
   }
 
   return (
-    <IconWrapper
-      {...props}
-      sx={{ color: props.color ?? 'inherit', opacity: props.opacity ?? '1' }}
-      size={definedSize}
-      style={{ marginRight }}
-    >
-      <IconContext.Provider
-        value={{
-          style: { width: definedSize + 'px', height: definedSize + 'px' },
-        }}
+      <IconWrapper
+          {...props}
+          sx={{ color: props.color ?? 'inherit', opacity: props.opacity ?? '1' }}
+          size={definedSize}
+          style={{ marginRight }}
       >
-        <Glyph glyph={glyph} />
-      </IconContext.Provider>
-    </IconWrapper>
+        <IconContext.Provider
+            value={{
+              style: { width: definedSize + 'px', height: definedSize + 'px' },
+            }}
+        >
+          <Glyph glyph={glyph} />
+        </IconContext.Provider>
+      </IconWrapper>
   )
 }

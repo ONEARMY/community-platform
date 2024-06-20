@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { DiscussionContainer, Loader } from 'oa-components'
+import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
@@ -24,7 +25,7 @@ interface IProps {
   primaryContentId?: string | undefined
 }
 
-export const DiscussionWrapper = (props: IProps) => {
+export const DiscussionWrapper = observer((props: IProps) => {
   const {
     canHideComments,
     primaryContentId,
@@ -38,15 +39,15 @@ export const DiscussionWrapper = (props: IProps) => {
   const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const { discussionStore } = useCommonStores().stores
+  const { discussionStore, themeStore: {isMobile} } = useCommonStores().stores
   const highlightedCommentId = window.location.hash.replace('#comment:', '')
 
   const transformComments = (discussion: IDiscussion) => {
     if (!discussion) return
 
     const comments = transformToUserComments(
-      discussion.comments,
-      discussionStore.activeUser,
+        discussion.comments,
+        discussionStore.activeUser,
     )
     const count = nonDeletedCommentsCount(comments)
     setTotalCommentsCount(count)
@@ -58,11 +59,11 @@ export const DiscussionWrapper = (props: IProps) => {
     const loadDiscussion = async () => {
       try {
         const discussion =
-          await discussionStore.fetchOrCreateDiscussionBySource(
-            sourceId,
-            sourceType,
-            primaryContentId,
-          )
+            await discussionStore.fetchOrCreateDiscussionBySource(
+                sourceId,
+                sourceType,
+                primaryContentId,
+            )
 
         if (discussion) {
           transformComments(discussion)
@@ -79,9 +80,9 @@ export const DiscussionWrapper = (props: IProps) => {
     if (!discussion) return
 
     const updatedDiscussion = await discussionStore.editComment(
-      discussion,
-      _id,
-      comment,
+        discussion,
+        _id,
+        comment,
     )
     logger.info({ _id, comment }, `${sourceType} comment edited`)
 
@@ -98,8 +99,8 @@ export const DiscussionWrapper = (props: IProps) => {
     if (!discussion) return
 
     const updatedDiscussion = await discussionStore.deleteComment(
-      discussion,
-      _id,
+        discussion,
+        _id,
     )
     logger.info({ _id }, `${sourceType} comment deleted`)
 
@@ -112,8 +113,8 @@ export const DiscussionWrapper = (props: IProps) => {
     if (!comment || !discussion) return
 
     const updatedDiscussion = await discussionStore.addComment(
-      discussion,
-      comment,
+        discussion,
+        comment,
     )
 
     if (updatedDiscussion) {
@@ -129,9 +130,9 @@ export const DiscussionWrapper = (props: IProps) => {
     if (!discussion) return
 
     const updatedDiscussion = await discussionStore.addComment(
-      discussion,
-      reply,
-      commentId,
+        discussion,
+        reply,
+        commentId,
     )
     logger.info({ commentId, reply }, `${sourceType} reply submitted`)
 
@@ -154,39 +155,39 @@ export const DiscussionWrapper = (props: IProps) => {
     onSubmit,
     onSubmitReply: handleSubmitReply,
     isLoggedIn: discussionStore?.activeUser
-      ? !!discussionStore.activeUser
-      : false,
+        ? !!discussionStore.activeUser
+        : false,
   }
 
   return (
-    <>
-      {isLoading && <Loader label={LOADING_LABEL} />}
-      {!isLoading && !discussion && <Text>{DISCUSSION_NOT_FOUND}</Text>}
-      {discussion && canHideComments && (
-        <HideDiscussionContainer
-          commentCount={discussion.comments.length}
-          showComments={showComments}
-        >
-          <AuthWrapper
-            roleRequired={'beta-tester' as UserRole.BETA_TESTER}
-            fallback={
-              <DiscussionContainer {...discussionProps} showAvatar={false} />
-            }
-          >
-            <DiscussionContainer {...discussionProps} showAvatar />
-          </AuthWrapper>
-        </HideDiscussionContainer>
-      )}
-      {discussion && !canHideComments && (
-        <AuthWrapper
-          roleRequired={'beta-tester' as UserRole.BETA_TESTER}
-          fallback={
-            <DiscussionContainer {...discussionProps} showAvatar={false} />
-          }
-        >
-          <DiscussionContainer {...discussionProps} showAvatar />
-        </AuthWrapper>
-      )}
-    </>
+      <>
+        {isLoading && <Loader label={LOADING_LABEL} />}
+        {!isLoading && !discussion && <Text>{DISCUSSION_NOT_FOUND}</Text>}
+        {discussion && canHideComments && (
+            <HideDiscussionContainer
+                commentCount={discussion.comments.length}
+                showComments={showComments}
+            >
+              <AuthWrapper
+                  roleRequired={'beta-tester' as UserRole.BETA_TESTER}
+                  fallback={
+                    <DiscussionContainer {...discussionProps} showAvatar={false} isMobile={isMobile} />
+                  }
+              >
+                <DiscussionContainer {...discussionProps} showAvatar isMobile={isMobile} />
+              </AuthWrapper>
+            </HideDiscussionContainer>
+        )}
+        {discussion && !canHideComments && (
+            <AuthWrapper
+                roleRequired={'beta-tester' as UserRole.BETA_TESTER}
+                fallback={
+                  <DiscussionContainer {...discussionProps} showAvatar={false} isMobile={isMobile} />
+                }
+            >
+              <DiscussionContainer {...discussionProps} showAvatar isMobile={isMobile} />
+            </AuthWrapper>
+        )}
+      </>
   )
-}
+})

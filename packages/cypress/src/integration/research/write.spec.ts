@@ -80,7 +80,10 @@ describe('[Research]', () => {
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
-      cy.get('[data-cy=intro-description]').focus().type(expected.description).blur()
+      cy.get('[data-cy=intro-description]')
+        .focus()
+        .type(expected.description)
+        .blur()
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')
@@ -107,7 +110,9 @@ describe('[Research]', () => {
 
       cy.step('Cannot be published when empty')
       cy.get('[data-cy=submit]').click()
-      cy.contains('Make sure this field is filled correctly').should('be.visible')
+      cy.contains('Make sure this field is filled correctly').should(
+        'be.visible',
+      )
       cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Enter update details')

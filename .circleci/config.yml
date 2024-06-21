@@ -352,6 +352,18 @@ jobs:
             equal: ['firefox', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
+      # Restore Cypress cache
+      - restore_cache:
+        keys:
+          - cypress-cache-{{ checksum "package-lock.json" }}
+          - cypress-cache-
+      # Verify Cypress cache
+      - run: npx cypress verify
+      # Save Cypress cache
+      - save_cache:
+        paths:
+          - ~/.cache/Cypress
+        key: cypress-cache-{{ checksum "package-lock.json" }}
       # call main testing script
       - run:
           command: npm run test ci prod
@@ -361,6 +373,7 @@ jobs:
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
+
   chromatic:
     docker: *docker
     resource_class: medium
@@ -370,6 +383,7 @@ jobs:
           at: '.'
       - run:
           command: yarn storybook:chromatic
+          
   release:
     docker: *docker
     resource_class: medium+

@@ -12,7 +12,6 @@ module.exports = {
       items: [
         'Contributing/guidelines',
         'Contributing/code-of-conduct',
-        'Contributing/troubleshooting',
         //'Contributing/start-contributing',
         //'Contributing/bounties',
         /*{
@@ -99,6 +98,11 @@ module.exports = {
           id: 'Maintainers/onboarding',
         },
       ],
+    },
+    {
+      type: 'doc',
+      label: 'Troubleshooting',
+      id: 'Troubleshooting',
     },
     {
       type: 'link',

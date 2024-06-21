@@ -1,5 +1,5 @@
 ---
-id: troubleshooting
+id: Troubleshooting
 title: Troubleshooting
 ---
 # Troubleshooting

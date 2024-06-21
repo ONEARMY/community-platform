@@ -2,22 +2,23 @@
 module.exports = {
   mainSidebar: [
     {
-      type: 'category',
+      type: 'doc',
       label: 'Getting Started',
-      items: ['Getting Started/setup', 'Getting Started/recommended-tools'],
+      id: 'Getting Started'
     },
     {
       type: 'category',
       label: 'How To Contribute',
       items: [
+        'Contributing/guidelines',
+        'Contributing/code-of-conduct',
         'Contributing/start-contributing',
-        'Contributing/bounties',
         {
           type: 'category',
           label: 'Writing Documentation',
           items: [
-            'Docs Contribution/running-docs-locally',
-            'Docs Contribution/md-style-guide',
+            'Contributing/Docs Contribution/running-docs-locally',
+            'Contributing/Docs Contribution/md-style-guide',
           ],
         },
       ],

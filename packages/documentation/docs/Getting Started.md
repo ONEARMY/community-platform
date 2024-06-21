@@ -10,20 +10,13 @@ title: Local Setup
 1. Download and install [Git](https://git-scm.com/downloads)  
    This will be used to download the repository
 
-2. Download and install [Node](https://nodejs.org/en/download/)  
+2. Download and install [Node v20](https://nodejs.org/en/download/)  
    This will be used to run the local server. It included the `npm` package manager
 
-   :::tip
-   The recommended version of node to use is **node 20** as this is what also runs in the production environment. If running a higher version and experiencing issues please file a bug report.
-
-   You can use tools like  
-   [nodenv](https://github.com/nodenv/nodenv)  
-   [fnm](https://github.com/Schniz/fnm)  
-   [nvm](https://github.com/nvm-sh/nvm)  
-   to run multiple versions of node on the same machine
-   :::
-
 3. [Download and install Yarn](https://yarnpkg.com/getting-started/install) (v3)
+
+4. (Optional) Download and install [Docker](https://docs.docker.com/get-docker/)
+   This will be used for running the emulator if doing local backend development
 
 ## Run locally
 
@@ -45,11 +38,46 @@ Install dependencies
 yarn install
 ```
 
-Run the platform
+   :::tip
+   We recommend using [VSCode](https://code.visualstudio.com/download) along with the following extensions
+
+   Additionally there are a couple extensions that work well with our current technology stack:
+
+   - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to auto-format and enforce code conventions.
+   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) to type-check code
+   :::
+
+### Running the web app
+
+There are two options:
+
+#### Cloud based backend 
+
+This option is simple but only starts the frontend. The backend services are hosted on the internet (https://precious-plastics-v4-dev.firebaseapp.com) and may be accessed by many developers.
+
+This setup is:
+
+- Ideal for starting
+- Ideal for frontend development
+- Not great for backend development
+
+Simply run:
 
 ```
 yarn start
 ```
+
+In this case:
+
+- frontend: http://localhost:3000
+
+#### Emulator based backend (Advanced)
+
+This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.) This option is experimental.
+
+This setup is ideal for full stack development.
+
+See the details [here](/Backend Development/firebase-emulator).
 
 ## Troubleshooting
 

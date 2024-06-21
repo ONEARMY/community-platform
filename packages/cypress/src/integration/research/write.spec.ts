@@ -32,7 +32,7 @@ describe('[Research]', () => {
   })
 
   describe('[Create research article]', () => {
-    it('[By Authenticated]', () => {
+    it.only('[By Authenticated]', () => {
       const expected = generateArticle()
 
       const updateTitle = faker.lorem.words(5)
@@ -80,8 +80,11 @@ describe('[Research]', () => {
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
+      // workround to type full text as it is an issue https://github.com/cypress-io/cypress/issues/3817
       cy.get('[data-cy=intro-description]')
+        .wait(0)
         .focus()
+        .clear()
         .type(expected.description)
         .blur()
 

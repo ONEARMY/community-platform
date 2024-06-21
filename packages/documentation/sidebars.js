@@ -12,6 +12,7 @@ module.exports = {
       items: [
         'Contributing/guidelines',
         'Contributing/code-of-conduct',
+        'Contributing/troubleshooting',
         //'Contributing/start-contributing',
         //'Contributing/bounties',
         /*{

@@ -12,15 +12,16 @@ module.exports = {
       items: [
         'Contributing/guidelines',
         'Contributing/code-of-conduct',
-        'Contributing/start-contributing',
-        {
+        //'Contributing/start-contributing',
+        //'Contributing/bounties',
+        /*{
           type: 'category',
           label: 'Writing Documentation',
           items: [
             'Contributing/Docs Contribution/running-docs-locally',
             'Contributing/Docs Contribution/md-style-guide',
           ],
-        },
+        },*/
       ],
     },
     {

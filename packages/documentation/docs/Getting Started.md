@@ -1,9 +1,14 @@
 ---
 slug: /
-title: Local Setup
+title: Getting Started
 ---
 
 <!-- Use custom top-meta to ensure shows on first page -->
+
+# Getting Started
+Thanks for being here already! You'll find all the information you need to start contributing to the project. Make sure to read them before submitting your contribution.
+
+If you think something is missing, consider sending us a PR.
 
 ## Prerequisites
 
@@ -17,6 +22,15 @@ title: Local Setup
 
 4. (Optional) Download and install [Docker](https://docs.docker.com/get-docker/)
    This will be used for running the emulator if doing local backend development
+
+   :::tip
+   We recommend using [VSCode](https://code.visualstudio.com/download) along with the following extensions
+
+   Additionally there are a couple extensions that work well with our current technology stack:
+
+   - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to auto-format and enforce code conventions.
+   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) to type-check code
+   :::
 
 ## Run locally
 
@@ -37,15 +51,6 @@ Install dependencies
 ```
 yarn install
 ```
-
-   :::tip
-   We recommend using [VSCode](https://code.visualstudio.com/download) along with the following extensions
-
-   Additionally there are a couple extensions that work well with our current technology stack:
-
-   - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to auto-format and enforce code conventions.
-   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) to type-check code
-   :::
 
 ### Running the web app
 

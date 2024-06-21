@@ -4,16 +4,12 @@ title: Guidelines
 ---
 # Contribution Guidelines
 
-Thanks for being here already! You'll find all the information you need to start contributing to the project. Make sure to read them before submitting your contribution.
-
-If you think something is missing, consider sending us a PR.
-
 ## 🍽&nbsp; Summary
 
 - [Getting started](/Getting%20Started)
 - [Code of conduct](#--code-of-conduct)
 - [Issue Tracking and Management](#--issue-tracking-and-management)
-- [Development Bounties](#--development-bounties)
+<!-- [Development Bounties](#--development-bounties)-->
 - [Project structure](#--project-structure)
 - [Branch structure](#--branch-structure)
 - [Javascript style guide](#--javascript-style-guide)
@@ -24,7 +20,7 @@ If you think something is missing, consider sending us a PR.
 
 ## 👐 &nbsp; Code of Conduct
 
-This project and everyone participating in it is governed by the [Code of Conduct](/Conributing/Code of Conduct). By participating, you are expected to uphold this code. Please report unacceptable behaviour to [platform@onearmy.earth](mailto:platform@onearmy.earth).
+This project and everyone participating in it is governed by the [Code of Conduct](/Conributing/Code%20of%20Conduct). By participating, you are expected to uphold this code. Please report unacceptable behaviour to [platform@onearmy.earth](mailto:platform@onearmy.earth).
 
 ## 🐛 &nbsp; Issue Tracking and Management
 
@@ -39,9 +35,9 @@ When you start working on an issue, comment on it or if your are a registered co
 
 It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 
-## 🤑 &nbsp; Development Bounties
+<!--## 🤑 &nbsp; Development Bounties
 
-We have a small bounty system as a way of saying thanks to developers for contributing their time and code. Find out more about it in [Bounties](./BOUNTIES.md)
+We have a small bounty system as a way of saying thanks to developers for contributing their time and code. Find out more about it in [Bounties](./BOUNTIES.md)-->
 
 ## 🏠 &nbsp; Project Structure
 

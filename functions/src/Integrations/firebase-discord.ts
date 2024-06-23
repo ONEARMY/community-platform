@@ -54,7 +54,7 @@ export const notifyHowToAccepted = functions
       .catch(handleErr)
   })
 
-export const notifyAcceptedQuestion = functions
+export const notifyQuestionPublished = functions
   .runWith({ memory: '512MB' })
   .firestore.document('questions_rev20230926/{id}')
   // currently, questions are immediately posted with no review.

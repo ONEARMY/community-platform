@@ -58,10 +58,20 @@ export const notifyResearchUpdatePublished = functions
   .runWith({ memory: '512MB' })
   .firestore.document('research_rev20201020/{id}')
   .onUpdate(async (change) => {
+    if (
+      DISCORD_WEBHOOK_URL === '' ||
+      DISCORD_WEBHOOK_URL === undefined ||
+      DISCORD_WEBHOOK_URL === null
+    ) {
+      console.log('No webhook URL configured')
+      return
+    }
+
     const previousContent = change.before.data() as IResearchDB
     const updatedContent = change.after.data() as IResearchDB
 
     if (previousContent.updates.length >= updatedContent.updates.length) {
+      console.log('There is no new update')
       return
     }
 

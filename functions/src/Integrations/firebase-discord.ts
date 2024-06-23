@@ -9,7 +9,7 @@ const SITE_URL = CONFIG.deployment.site_url
 
 const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 
-export const notifyPinAccepted = functions
+export const notifyPinPublished = functions
   .runWith({ memory: '512MB' })
   .firestore.document('v3_mappins/{pinId}')
   .onUpdate(async (change, context) => {

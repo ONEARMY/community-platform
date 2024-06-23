@@ -3,7 +3,7 @@ import * as IntegrationsDiscord from './firebase-discord'
 import * as IntegrationsPatreon from './patreon'
 
 exports.notifyNewPin = IntegrationsSlack.notifyNewPin
-exports.notifyPinAccepted = IntegrationsDiscord.notifyPinAccepted
+exports.notifyPinPublished = IntegrationsDiscord.notifyPinPublished
 
 exports.notifyNewHowTo = IntegrationsSlack.notifyNewHowTo
 exports.notifyHowToAccepted = IntegrationsDiscord.notifyHowToAccepted

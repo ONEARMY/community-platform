@@ -28,7 +28,7 @@ export const notifyPinAwaitingModeration = functions
       })
   })
 
-export const notifyNewHowTo = functions
+export const notifyHowtoAwaitingModeration = functions
   .runWith({ memory: '512MB' })
   .firestore.document('v3_howtos/{id}')
   .onCreate(async (snapshot) => {

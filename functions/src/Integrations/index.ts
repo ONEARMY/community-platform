@@ -5,8 +5,8 @@ import * as IntegrationsPatreon from './patreon'
 exports.notifyPinAwaitingModeration = IntegrationsSlack.notifyPinAwaitingModeration
 exports.notifyPinPublished = IntegrationsDiscord.notifyPinPublished
 
-exports.notifyNewHowTo = IntegrationsSlack.notifyNewHowTo
-exports.notifyHowToAccepted = IntegrationsDiscord.notifyHowToAccepted
+exports.notifyHowtoAwaitingModeration = IntegrationsSlack.notifyHowtoAwaitingModeration
+exports.notifyHowtoPublished = IntegrationsDiscord.notifyHowtoPublished
 
 exports.notifyQuestionPublished = IntegrationsDiscord.notifyQuestionPublished
 

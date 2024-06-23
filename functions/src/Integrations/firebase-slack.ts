@@ -8,7 +8,7 @@ const SITE_URL = CONFIG.deployment.site_url
 
 const SLACK_WEBHOOK_URL = CONFIG.integrations.slack_webhook
 
-export const notifyNewPin = functions
+export const notifyPinAwaitingModeration = functions
   .runWith({ memory: '512MB' })
   .firestore.document('v3_mappins/{pinId}')
   .onCreate(async (snapshot) => {

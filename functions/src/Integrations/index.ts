@@ -2,7 +2,7 @@ import * as IntegrationsSlack from './firebase-slack'
 import * as IntegrationsDiscord from './firebase-discord'
 import * as IntegrationsPatreon from './patreon'
 
-exports.notifyNewPin = IntegrationsSlack.notifyNewPin
+exports.notifyPinAwaitingModeration = IntegrationsSlack.notifyPinAwaitingModeration
 exports.notifyPinPublished = IntegrationsDiscord.notifyPinPublished
 
 exports.notifyNewHowTo = IntegrationsSlack.notifyNewHowTo

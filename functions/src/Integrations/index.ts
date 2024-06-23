@@ -1,17 +1,15 @@
-import * as IntegrationsSlack from './firebase-slack'
-import * as IntegrationsDiscord from './firebase-discord'
-import * as IntegrationsPatreon from './patreon'
+import * as Slack from './firebase-slack'
+import * as Discord from './firebase-discord'
+import * as Patreon from './patreon'
 
-exports.notifyPinAwaitingModeration =
-  IntegrationsSlack.notifyPinAwaitingModeration
-exports.notifyPinPublished = IntegrationsDiscord.notifyPinPublished
+exports.notifyPinAwaitingModeration = Slack.notifyPinAwaitingModeration
+exports.notifyPinPublished = Discord.notifyPinPublished
 
-exports.notifyHowtoAwaitingModeration =
-  IntegrationsSlack.notifyHowtoAwaitingModeration
-exports.notifyHowtoPublished = IntegrationsDiscord.notifyHowtoPublished
+exports.notifyHowtoAwaitingModeration = Slack.notifyHowtoAwaitingModeration
+exports.notifyHowtoPublished = Discord.notifyHowtoPublished
 
-exports.notifyQuestionPublished = IntegrationsDiscord.notifyQuestionPublished
+exports.notifyQuestionPublished = Discord.notifyQuestionPublished
 
-exports.notifyResearchUpdatePublished = IntegrationsDiscord.notifyResearchUpdatePublished
+exports.notifyResearchUpdatePublished = Discord.notifyResearchUpdatePublished
 
-exports.patreonAuth = IntegrationsPatreon.patreonAuth
+exports.patreonAuth = Patreon.patreonAuth

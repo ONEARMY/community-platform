@@ -81,14 +81,16 @@ export const notifyResearchUpdatePublished = functions
     // so we link to the whole article
     const slug = updatedContent.slug
 
-    await axios
-      .post(DISCORD_WEBHOOK_URL, {
+    try {
+      const response = await axios.post(DISCORD_WEBHOOK_URL, {
         content:
           `📝 New update from ${author} in their research: ${title}\n` +
           `Learn about it here: ${SITE_URL}/research/${slug}`,
       })
-      .then(handleResponse, handleErr)
-      .catch(handleErr)
+      handleResponse(response)
+    } catch (error) {
+      handleErr(error)
+    }
   })
 
 export const notifyQuestionPublished = functions

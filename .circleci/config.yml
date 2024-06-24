@@ -344,30 +344,21 @@ jobs:
       - inject_instance_configuration
       # Restore the browser cache if available
       - restore_cache:
-          keys:
-            - v1-browser-{{ parameters.CI_BROWSER }}-{{ checksum "package-lock.json" }}
-            - v1-browser-{{ parameters.CI_BROWSER }}-
-            - v1-browser-
+        keys:
+          - v1-browser-{{ parameters.CI_BROWSER }}-{{ checksum "package-lock.json" }}
+          - v1-browser-{{ parameters.CI_BROWSER }}-
+          - v1-browser-
       # install testing browsers are required
       - when:
-        condition:
-          equal: ['chrome', << parameters.CI_BROWSER >>]
-        steps:
-          - run:
-              name: Install Chrome
-              command: |
-                if [ ! -f /usr/bin/google-chrome ]; then
-                  browser-tools/install-chrome
-                fi
+          condition:
+            equal: ['chrome', << parameters.CI_BROWSER >>]
+          steps:
+            - browser-tools/install-chrome
       - when:
           condition:
             equal: ['firefox', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
-      - save_cache:
-          key: v1-browser-{{ parameters.CI_BROWSER }}-{{ checksum "package-lock.json" }}
-          paths:
-            - /usr/bin/google-chrome
       # call main testing script
       - run:
           command: npm run test ci prod

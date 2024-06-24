@@ -69,12 +69,12 @@ aliases:
         - /home/circleci/.yarn/install-state.gz
       key: v9-yarn-{{ checksum "yarn.lock" }}
   - &save_cypress_cache:
-      name: Saving browser cache
+    save_cypress_cache:
       paths:
         - ~/.cache/Cypress
       key: cypress-cache-{{ checksum "package-lock.json" }}
   - &restore_cypress_cache:
-      name: Restoring browser cache
+    restore_cypress_cache:
       keys:
         - cypress-cache-{{ checksum "package-lock.json" }}
         - cypress-cache-

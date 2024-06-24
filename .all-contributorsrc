@@ -734,6 +734,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "simontree",
+      "name": "Robert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59532700?v=4",
+      "profile": "https://github.com/simontree",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

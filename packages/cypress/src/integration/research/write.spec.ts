@@ -32,7 +32,7 @@ describe('[Research]', () => {
   })
 
   describe('[Create research article]', () => {
-    it.only('[By Authenticated]', () => {
+    it('[By Authenticated]', () => {
       const expected = generateArticle()
 
       const updateTitle = faker.lorem.words(5)
@@ -120,6 +120,8 @@ describe('[Research]', () => {
 
       cy.step('Enter update details')
       cy.get('[data-cy=intro-title]')
+        .wait(0)
+        .focus()
         .clear()
         .type(updateTitle)
         .blur({ force: true })
@@ -178,6 +180,9 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
 
       cy.get('[data-cy=intro-description]')
+        .wait(0)
+        .focus()
+        .clear()
         .clear({ force: true })
         .type(description)
 
@@ -200,6 +205,8 @@ describe('[Research]', () => {
         .blur({ force: true })
 
       cy.get('[data-cy=intro-description]')
+        .wait(0)
+        .focus()
         .clear()
         .type(updateDescription)
         .blur({ force: true })
@@ -306,6 +313,8 @@ describe('[Research]', () => {
       cy.get('[data-cy=intro-title]').clear().type(updateTitle).blur()
 
       cy.get('[data-cy=intro-description]')
+        .wait(0)
+        .focus()
         .clear()
         .type(updateDescription)
         .blur()

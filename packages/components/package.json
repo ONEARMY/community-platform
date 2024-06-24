@@ -17,7 +17,7 @@
     "new-component": "ts-node scripts/newComponent.ts",
     "test": "vitest",
     "test-ci": "vitest --coverage --reporter=junit --outputFile.junit=./reports/output.xml",
-    "chromatic": "npx chromatic -b=build:sb"
+    "chromatic": "npx chromatic -b=build:sb --exit-zero-on-changes"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

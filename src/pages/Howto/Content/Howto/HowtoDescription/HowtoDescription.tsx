@@ -7,7 +7,6 @@ import {
   ContentStatistics,
   LinkifyText,
   ModerationStatus,
-  Tag,
   UsefulStatsButton,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
@@ -15,6 +14,7 @@ import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { TagList } from 'src/common/Tags/TagsList'
 import { logger } from 'src/logger'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import {
@@ -224,10 +224,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Flex>
           </Flex>
           <Flex mt={4}>
-            {howto.tagList &&
-              howto.tagList.map((tag, idx) => (
-                <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
-              ))}
+            <TagList tags={howto.tags} />
           </Flex>
           <HowtoDownloads howto={howto} loggedInUser={loggedInUser} />
         </Flex>

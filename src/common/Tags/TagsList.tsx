@@ -4,10 +4,12 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import type { ISelectedTags } from 'src/models'
 
 interface IProps {
-  tags: ISelectedTags
+  tags: ISelectedTags | undefined
 }
 
 export const TagList = ({ tags }: IProps) => {
+  if (!tags) return
+
   const { allTagsByKey } = useCommonStores().stores.tagsStore
 
   const tagList = Object.keys(tags)

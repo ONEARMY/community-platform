@@ -68,6 +68,16 @@ aliases:
         - /home/circleci/.yarn/cache
         - /home/circleci/.yarn/install-state.gz
       key: v9-yarn-{{ checksum "yarn.lock" }}
+  - &save_cypress_cache:
+      name: Saving browser cache
+      paths:
+        - ~/.cache/Cypress
+      key: cypress-cache-{{ checksum "package-lock.json" }}
+  - &restore_cypress_cache:
+      name: Restoring browser cache
+      keys:
+        - cypress-cache-{{ checksum "package-lock.json" }}
+        - cypress-cache-
 
   # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
@@ -337,6 +347,8 @@ jobs:
         type: string
     steps:
       - setup_repo
+      - *save_cypress_cache
+      - *restore_cypress_cache
       # retrieve build folder
       - attach_workspace:
           at: '.'
@@ -352,6 +364,8 @@ jobs:
             equal: ['firefox', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
+      # Verify Cypress cache
+      - run: npx cypress verify
       # call main testing script
       - run:
           command: npm run test ci prod
@@ -361,6 +375,7 @@ jobs:
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
+
   chromatic:
     docker: *docker
     resource_class: medium
@@ -370,6 +385,7 @@ jobs:
           at: '.'
       - run:
           command: yarn storybook:chromatic
+
   release:
     docker: *docker
     resource_class: medium+

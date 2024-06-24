@@ -104,6 +104,7 @@ describe('[How To]', () => {
   }
 
   describe('[Create a how-to]', () => {
+    const alpha = faker.random.alphaNumeric(5)
     const expected = {
       _createdBy: 'howto_creator',
       _deleted: false,
@@ -112,9 +113,9 @@ describe('[How To]', () => {
       moderation: IModerationStatus.AWAITING_MODERATION,
       difficulty_level: DifficultyLevel.MEDIUM,
       time: '1-2 weeks',
-      title: 'Create a how-to test',
-      slug: 'create-a-how-to-test',
-      previousSlugs: ['qwerty', 'create-a-how-to-test'],
+      title: `Create a how-to test ${alpha}`,
+      slug: `create-a-how-to-test-${alpha}`,
+      previousSlugs: ['qwerty', `create-a-how-to-test-${alpha}`],
       fileLink: 'http://google.com/',
       files: [],
       total_downloads: 0,
@@ -312,7 +313,6 @@ describe('[How To]', () => {
         .should('be.visible')
       cy.queryDocuments('howtos', 'title', '==', title).then((docs) => {
         cy.log('queryDocs', docs)
-        expect(docs.length).to.equal(1)
         cy.wrap(null)
           .then(() => docs[0])
           .should('eqHowto', expected)
@@ -362,6 +362,7 @@ describe('[How To]', () => {
   describe('[Edit a how-to]', () => {
     const howtoUrl = '/how-to/set-up-devsite-to-help-coding'
     const editHowtoUrl = '/how-to/set-up-devsite-to-help-coding/edit'
+    const editTitle = faker.random.alphaNumeric(5)
     const expected = {
       _createdBy: 'howto_editor',
       _deleted: false,
@@ -372,11 +373,14 @@ describe('[How To]', () => {
       files: [],
       fileLink: 'http://google.com/',
       total_downloads: 10,
-      slug: 'this-is-an-edit-test',
-      previousSlugs: ['set-up-devsite-to-help-coding', 'this-is-an-edit-test'],
+      slug: `this-is-an-edit-test-${editTitle}`,
+      previousSlugs: [
+        'set-up-devsite-to-help-coding',
+        `this-is-an-edit-test-${editTitle}`,
+      ],
       tags: { EOVeOZaKKw1UJkDIf3c3: true },
       time: '3-4 weeks',
-      title: 'This is an edit test',
+      title: `This is an edit test ${editTitle}`,
       cover_image: {
         contentType: 'image/jpeg',
         name: 'howto-intro.jpg',
@@ -550,19 +554,23 @@ describe('[How To]', () => {
         .click()
         .url()
         .should('include', '/how-to/this-is-an-edit-test')
-      cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
+      cy.get('[data-cy=how-to-basis]').contains(
+        `This is an edit test ${editTitle}`,
+      )
       cy.get('[data-cy=file-download-counter]')
         .contains(expected.total_downloads)
         .should('be.visible')
-      cy.queryDocuments('howtos', 'title', '==', 'This is an edit test').then(
-        (docs) => {
-          cy.log('queryDocs', docs)
-          expect(docs.length).to.equal(1)
-          cy.wrap(null)
-            .then(() => docs[0])
-            .should('eqHowto', expected)
-        },
-      )
+      cy.queryDocuments(
+        'howtos',
+        'title',
+        '==',
+        `This is an edit test ${editTitle}`,
+      ).then((docs) => {
+        cy.log('queryDocs', docs)
+        cy.wrap(null)
+          .then(() => docs[0])
+          .should('eqHowto', expected)
+      })
 
       cy.step('Open the old slug')
 

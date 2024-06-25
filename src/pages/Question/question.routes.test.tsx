@@ -139,19 +139,19 @@ describe('question.routes', () => {
       })
 
       act(() => {
-        wrapper = renderFn('/questions').wrapper
-        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+        wrapper = renderFn('/questions')
       })
+      expect(wrapper.getByText(/loading/)).toBeInTheDocument()
     })
 
     it('renders an empty state', async () => {
       let wrapper
 
       act(() => {
-        wrapper = renderFn('/questions').wrapper
+        wrapper = renderFn('/questions')
       })
 
-      await waitFor(async () => {
+      await waitFor(() => {
         expect(
           wrapper.getByText(/Ask your questions and help others out/),
         ).toBeInTheDocument()
@@ -189,7 +189,7 @@ describe('question.routes', () => {
       })
 
       act(() => {
-        wrapper = renderFn('/questions').wrapper
+        wrapper = renderFn('/questions')
       })
 
       await waitFor(async () => {
@@ -203,57 +203,47 @@ describe('question.routes', () => {
   })
 
   describe('/questions/create', () => {
-    it(
-      'allows user to create a question',
-      async () => {
-        let wrapper
-        // Arrange
-        const mockUpsertQuestion = vi.fn().mockResolvedValue({
-          slug: 'question-title',
-        })
-        ;(useQuestionStore as Mock).mockReturnValue({
-          ...mockQuestionStore,
-          upsertQuestion: mockUpsertQuestion,
-          activeUser: mockActiveUser,
-        })
+    it('allows user to create a question', async () => {
+      let wrapper
+      // Arrange
+      const mockUpsertQuestion = vi.fn().mockResolvedValue({
+        slug: 'question-title',
+      })
+      ;(useQuestionStore as Mock).mockReturnValue({
+        ...mockQuestionStore,
+        upsertQuestion: mockUpsertQuestion,
+        activeUser: mockActiveUser,
+      })
 
-        act(() => {
-          const render = renderFn('/questions/create')
-          wrapper = render.wrapper
-        })
+      act(() => {
+        wrapper = renderFn('/questions/create')
+      })
 
-        // Fill in form
-        const title = wrapper.getByLabelText('The Question', { exact: false })
-        const description = wrapper.getByLabelText('Description', {
-          exact: false,
-        })
-        const submitButton = wrapper.getByText('Publish')
+      // Fill in form
+      const title = wrapper.getByLabelText('The Question', { exact: false })
+      const description = wrapper.getByLabelText('Description', {
+        exact: false,
+      })
+      const submitButton = wrapper.getByText('Publish')
 
-        // Submit form
-        await userEvent.type(title, 'Can you build a house out of plastic?')
-        await userEvent.type(description, "So I've got all this plastic...")
+      // Submit form
+      await userEvent.type(title, 'Can you build a house out of plastic?')
+      await userEvent.type(description, "So I've got all this plastic...")
 
-        submitButton.click()
+      submitButton.click()
 
-        expect(mockUpsertQuestion).toHaveBeenCalledWith({
-          title: 'Can you build a house out of plastic?',
-          description: "So I've got all this plastic...",
-          tags: {},
-        })
+      expect(mockUpsertQuestion).toHaveBeenCalledWith({
+        title: 'Can you build a house out of plastic?',
+        description: "So I've got all this plastic...",
+        tags: {},
+      })
 
-        await waitFor(
-          () => {
-            expect(mockedUsedNavigate).toBeCalledWith(
-              '/questions/question-title',
-            )
-          },
-          {
-            timeout: 5000,
-          },
+      await waitFor(() => {
+        expect(mockedUsedNavigate).toHaveBeenCalledWith(
+          '/questions/question-title',
         )
-      },
-      { timeout: 15000 },
-    )
+      })
+    })
   })
 
   describe('/questions/:slug', () => {
@@ -271,9 +261,9 @@ describe('question.routes', () => {
       })
 
       act(() => {
-        wrapper = renderFn(`/questions/${question.slug}`).wrapper
-        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+        wrapper = renderFn(`/questions/${question.slug}`)
       })
+      expect(wrapper.getByText(/loading/)).toBeInTheDocument()
 
       await waitFor(async () => {
         expect(() => wrapper.getByText(/loading/)).toThrow()
@@ -309,7 +299,11 @@ describe('question.routes', () => {
           fetchQuestionBySlug: mockFetchQuestionBySlug,
           userHasSubscribed: true,
         })
-        const wrapper = renderFn(`/questions/${question.slug}`).wrapper
+
+        let wrapper
+        act(() => {
+          wrapper = renderFn(`/questions/${question.slug}`)
+        })
 
         await waitFor(
           () => {
@@ -331,7 +325,7 @@ describe('question.routes', () => {
         })
 
         act(() => {
-          wrapper = renderFn(`/questions/${question.slug}`).wrapper
+          wrapper = renderFn(`/questions/${question.slug}`)
         })
 
         await waitFor(
@@ -358,8 +352,7 @@ describe('question.routes', () => {
       })
 
       act(() => {
-        wrapper = renderFn(`/questions/${question.slug}`).wrapper
-        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+        wrapper = renderFn(`/questions/${question.slug}`)
       })
 
       // Ability to edit
@@ -384,8 +377,7 @@ describe('question.routes', () => {
       })
 
       act(() => {
-        wrapper = renderFn(`/questions/${question.slug}`).wrapper
-        expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+        wrapper = renderFn(`/questions/${question.slug}`)
       })
 
       // Ability to edit
@@ -400,10 +392,10 @@ describe('question.routes', () => {
     it('renders the question edit page', async () => {
       let wrapper
       act(() => {
-        wrapper = renderFn('/questions/slug/edit').wrapper
+        wrapper = renderFn('/questions/slug/edit')
       })
 
-      await waitFor(async () => {
+      await waitFor(() => {
         expect(wrapper.getByText(editFormTitle)).toBeInTheDocument()
       })
     })
@@ -433,8 +425,7 @@ describe('question.routes', () => {
       })
 
       act(() => {
-        const res = renderFn('/questions/slug/edit')
-        wrapper = res.wrapper
+        wrapper = renderFn('/questions/slug/edit')
       })
 
       await waitFor(async () => {
@@ -443,6 +434,7 @@ describe('question.routes', () => {
         expect(screen.getByDisplayValue(questionItem.title)).toBeInTheDocument()
         expect(() => wrapper.getByText('Draft')).toThrow()
       })
+
       // Fill in form
       const title = wrapper.getByLabelText('The Question', { exact: false })
       const description = wrapper.getByLabelText('Description', {
@@ -482,11 +474,10 @@ describe('question.routes', () => {
       })
 
       act(() => {
-        const res = renderFn('/questions/slug/edit')
-        wrapper = res.wrapper
+        wrapper = renderFn('/questions/slug/edit')
       })
 
-      await waitFor(async () => {
+      await waitFor(() => {
         expect(() => wrapper.getByText(editFormTitle)).toThrow()
         expect(mockedUsedNavigate).toBeCalledWith('/questions/slug')
       })
@@ -494,7 +485,7 @@ describe('question.routes', () => {
   })
 }, 15000)
 
-const renderFn = (url) => {
+const renderFn = (url: string) => {
   const router = createMemoryRouter(
     createRoutesFromElements(
       <Route path="/questions">{questionRouteElements}</Route>,
@@ -504,17 +495,15 @@ const renderFn = (url) => {
     },
   )
 
-  return {
-    wrapper: render(
-      <Provider
-        userStore={{ user: mockActiveUser }}
-        questionStore={{ foo: 'bar' }}
-        tagsStore={{}}
-      >
-        <ThemeProvider theme={Theme}>
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </Provider>,
-    ),
-  }
+  return render(
+    <Provider
+      userStore={{ user: mockActiveUser }}
+      questionStore={{ foo: 'bar' }}
+      tagsStore={{}}
+    >
+      <ThemeProvider theme={Theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>,
+  )
 }

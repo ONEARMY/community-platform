@@ -16,7 +16,7 @@ describe('ImpactField', () => {
     await screen.findByText('23,000 Kg of plastic recycled')
   })
 
-  it('renders nothing when field is not set to be visible', async () => {
+  it('renders nothing when field is not set to be visible', () => {
     const field = {
       id: 'plastic',
       value: 3,
@@ -28,7 +28,7 @@ describe('ImpactField', () => {
     expect(container.innerHTML).toBe('')
   })
 
-  it("renders nothing when field isn't found in question data", async () => {
+  it("renders nothing when field isn't found in question data", () => {
     const field = {
       id: 'nothing',
       value: 3,

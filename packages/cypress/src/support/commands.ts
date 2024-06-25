@@ -1,5 +1,6 @@
 import 'cypress-file-upload'
 
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { deleteDB } from 'idb'
 
 import { Auth, TestDB } from './db/firebase'
@@ -90,7 +91,6 @@ Cypress.Commands.add('clearServiceWorkers', () => {
           resolve()
         }
       })
-      cy.log('user', Auth.currentUser)
     })
   })
 
@@ -111,28 +111,16 @@ Cypress.Commands.add('clearServiceWorkers', () => {
 /**
  * Login and logout commands use the sytem interface to log a user in or out
  */
-Cypress.Commands.add(
-  'login',
-  (email: string, password: string, checkUI = false) => {
-    Cypress.log({
-      displayName: 'login',
-      consoleProps: () => {
-        return { email, password }
-      },
-    })
-    // use a wrap statement to allow chaining onto an async function
-    cy.then(async () => {
-      const res = await Auth.signInWithEmailAndPassword(email, password)
-      expect(res.user.email).eq(email)
-      cy.wrap(checkUI ? 'check login ui' : 'skip ui check').then(() => {
-        if (checkUI) {
-          cy.get('[data-cy=user-menu]').should('be.visible')
-        }
-      })
-      cy.log('user', Auth.currentUser)
-    })
-  },
-)
+Cypress.Commands.add('login', async (email: string, password: string) => {
+  const signin = signInWithEmailAndPassword(Auth, email, password).catch(
+    (e) => {
+      cy.log(`User could not sign in programmatically!`)
+      console.error(e)
+    },
+  )
+
+  return signin as any
+})
 
 Cypress.Commands.add('logout', (checkUI = true) => {
   cy.wrap('logging out').then(async () => {

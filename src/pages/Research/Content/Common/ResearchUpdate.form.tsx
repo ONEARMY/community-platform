@@ -1,54 +1,34 @@
 import * as React from 'react'
-import { Field, Form } from 'react-final-form'
+import { Form } from 'react-final-form'
 import styled from '@emotion/styled'
 import arrayMutators from 'final-form-arrays'
 import { observer } from 'mobx-react'
 import {
   Button,
   ConfirmModal,
-  DownloadStaticFile,
   ElWithBeforeIcon,
-  FieldInput,
-  FieldTextarea,
   ResearchEditorOverview,
 } from 'oa-components'
 import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { FileInputField } from 'src/common/Form/FileInput.field'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { COMPARISONS } from 'src/utils/comparisons'
 import {
-  composeValidators,
-  draftValidationWrapper,
-  minValue,
-  required,
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,
-  validateTitle,
 } from 'src/utils/validators'
-import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
+import { Box, Card, Flex, Heading } from 'theme-ui'
 
-import { MAX_LINK_LENGTH } from '../../../constants'
-import {
-  RESEARCH_MAX_LENGTH,
-  RESEARCH_TITLE_MAX_LENGTH,
-  RESEARCH_TITLE_MIN_LENGTH,
-} from '../../constants'
-import { buttons, errors, headings, update } from '../../labels'
+import { buttons, headings, update } from '../../labels'
+import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
+import { FilesFields } from '../CreateResearch/Form/FilesFields'
+import { MediaFields } from '../CreateResearch/Form/MediaFields'
+import { TitleField } from '../CreateResearch/Form/TitleField'
 import { ResearchErrors } from './ResearchErrors'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
 import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
-
-const ImageInputFieldWrapper = styled.div`
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-  margin-bottom: 6px;
-`
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -70,7 +50,6 @@ const beforeUnload = (e) => {
 
 export const ResearchUpdateForm = observer((props: IProps) => {
   const { formValues, parentType, redirectUrl } = props
-  const { description, fileLink, files, images, title, videoUrl } = update
   const { deletion, draft } = buttons
 
   const store = useResearchStore()
@@ -84,7 +63,6 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   const [isDraft, setIsDraft] = React.useState<boolean>(
     formValues.status === ResearchUpdateStatus.DRAFT,
   )
-  const [fileEditMode, setFileEditMode] = React.useState(false)
 
   React.useEffect(() => {
     if (store.updateUploadStatus?.Complete) {
@@ -95,10 +73,10 @@ export const ResearchUpdateForm = observer((props: IProps) => {
   // Managing locked state
   React.useEffect(() => {
     if (store.activeUser)
-      store.lockResearchUpdate(store.activeUser.userName, props.formValues._id)
+      store.lockResearchUpdate(store.activeUser.userName, formValues._id)
 
     return () => {
-      store.unlockResearchUpdate(props.formValues._id)
+      store.unlockResearchUpdate(formValues._id)
     }
   }, [store.activeUser])
 
@@ -211,10 +189,6 @@ export const ResearchUpdateForm = observer((props: IProps) => {
             setFormState({ dirty })
           }
 
-          const numberOfImageInputsAvailable = values?.images
-            ? values.images.length + 1
-            : 4
-
           return (
             <Flex
               mx={-2}
@@ -234,7 +208,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   <Flex sx={{ flexDirection: 'column' }}>
                     <Card sx={{ bg: 'softblue' }}>
                       <Flex px={3} py={2} sx={{ alignItems: 'center' }}>
-                        <Heading as="h1">
+                        <Heading>
                           <span>{pageTitle}</span>{' '}
                         </Heading>
                         <Box ml="15px">
@@ -255,199 +229,17 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                             px={2}
                             sx={{ flexDirection: 'column', flex: [1, 1, 4] }}
                           >
-                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="title" sx={{ mb: 2 }}>
-                                {title.title}
-                              </Label>
-                              <Field
-                                id="title"
-                                name="title"
-                                data-cy="intro-title"
-                                validateFields={[]}
-                                validate={composeValidators(
-                                  required,
-                                  minValue(RESEARCH_TITLE_MIN_LENGTH),
-                                  validateTitle(
-                                    parentType,
-                                    formValues._id,
-                                    store,
-                                  ),
-                                )}
-                                isEqual={COMPARISONS.textInput}
-                                component={FieldInput}
-                                maxLength={RESEARCH_TITLE_MAX_LENGTH}
-                                minLength={RESEARCH_TITLE_MIN_LENGTH}
-                                showCharacterCount
-                                placeholder={title.placeholder}
-                              />
-                            </Flex>
-                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor="description" sx={{ mb: 2 }}>
-                                {description.title}
-                              </Label>
-                              <Field
-                                id="description"
-                                name="description"
-                                data-cy="intro-description"
-                                validate={(value, allValues) =>
-                                  draftValidationWrapper(
-                                    value,
-                                    allValues,
-                                    required,
-                                  )
-                                }
-                                validateFields={[]}
-                                isEqual={COMPARISONS.textInput}
-                                component={FieldTextarea}
-                                style={{
-                                  resize: 'none',
-                                  flex: 1,
-                                  minHeight: '150px',
-                                }}
-                                maxLength={RESEARCH_MAX_LENGTH}
-                                showCharacterCount
-                                placeholder={description.placeholder}
-                              />
-                            </Flex>
-                            <Label htmlFor={`images`} sx={{ mb: 2 }}>
-                              {images.title}
-                            </Label>
-                            <Flex
-                              sx={{
-                                flexDirection: ['column', 'row'],
-                                flexWrap: 'wrap',
-                                alignItems: 'center',
-                              }}
-                              mb={3}
-                            >
-                              {[...Array(numberOfImageInputsAvailable)].map(
-                                (_, i) => (
-                                  <ImageInputFieldWrapper
-                                    key={`image-${i}`}
-                                    data-cy={`image-${i}`}
-                                  >
-                                    <Field
-                                      hasText={false}
-                                      name={`images[${i}]`}
-                                      component={ImageInputField}
-                                      isEqual={COMPARISONS.image}
-                                      validateFields={['videoUrl']}
-                                    />
-                                  </ImageInputFieldWrapper>
-                                ),
-                              )}
-                            </Flex>
-                            <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                              <Label htmlFor={`videoUrl`} sx={{ mb: 2 }}>
-                                {videoUrl.title}
-                              </Label>
-                              <Field
-                                name={`videoUrl`}
-                                data-cy="videoUrl"
-                                component={FieldInput}
-                                placeholder={videoUrl.placeholder}
-                                validate={(url, values) =>
-                                  validateMedia(url, values)
-                                }
-                                validateFields={[]}
-                                isEqual={COMPARISONS.textInput}
-                              />
-                            </Flex>
-                            <Flex sx={{ mb: 2 }}>
-                              {showInvalidFileWarning && (
-                                <Text
-                                  id="invalid-file-warning"
-                                  data-cy="invalid-file-warning"
-                                  data-testid="invalid-file-warning"
-                                  sx={{
-                                    color: 'error',
-                                  }}
-                                >
-                                  {files.error}
-                                </Text>
-                              )}
-                            </Flex>
-                            <Label htmlFor="files" mb={2}>
-                              {files.title}
-                            </Label>
-                            {props.formValues.files?.length > 0 &&
-                            props.parentType === 'edit' &&
-                            !fileEditMode ? (
-                              <Flex
-                                sx={{
-                                  flexDirection: 'column',
-                                  alignItems: 'center',
-                                }}
-                                mb={3}
-                              >
-                                {props.formValues.files.map((file) => (
-                                  <DownloadStaticFile
-                                    allowDownload
-                                    file={file}
-                                    key={file.name}
-                                  />
-                                ))}
-                                <Button
-                                  variant={'outline'}
-                                  icon="delete"
-                                  onClick={() => {
-                                    props.formValues.files = []
-                                    setFileEditMode(true)
-                                  }}
-                                >
-                                  {buttons.files}
-                                </Button>
-                              </Flex>
-                            ) : (
-                              <>
-                                <Flex
-                                  sx={{
-                                    flexDirection: 'column',
-                                  }}
-                                  mb={3}
-                                >
-                                  <Label
-                                    mb={2}
-                                    htmlFor="file-download-link"
-                                    style={{ fontSize: '12px' }}
-                                  >
-                                    {fileLink.title}
-                                  </Label>
-                                  <Field
-                                    id="fileLink"
-                                    name="fileLink"
-                                    data-cy="fileLink"
-                                    component={FieldInput}
-                                    placeholder="Link to Google Drive, Dropbox, Grabcad etc"
-                                    isEqual={COMPARISONS.textInput}
-                                    maxLength={MAX_LINK_LENGTH}
-                                    validateFields={[]}
-                                    mb={2}
-                                  />
-                                </Flex>
-                                <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                                  <Label
-                                    mb={2}
-                                    htmlFor="file-download-link"
-                                    style={{ fontSize: '12px' }}
-                                  >
-                                    {files.title}
-                                  </Label>
-                                  <Field
-                                    hasText={false}
-                                    name={'files'}
-                                    component={FileInputField}
-                                  />
-                                  <Text
-                                    color={'grey'}
-                                    mt={4}
-                                    sx={{ fontSize: 1 }}
-                                  >
-                                    {files.description}
-                                  </Text>
-                                </Flex>
-                              </>
-                            )}
+                            <TitleField
+                              parentType={parentType}
+                              formValues={formValues}
+                            />
+                            <DescriptionField />
+                            <MediaFields values={values} />
+                            <FilesFields
+                              parentType={parentType}
+                              formValues={formValues}
+                              showInvalidFileWarning={showInvalidFileWarning}
+                            />
                           </Flex>
                         </Flex>
                       </Flex>
@@ -584,21 +376,3 @@ const getResearchUpdates = (
         }
       : null,
   ].filter(Boolean)
-
-/**
- * Ensure either url or images included (not both), and any url formatted correctly
- */
-const validateMedia = (videoUrl: string, values: any) => {
-  const { both, empty, invalidUrl } = errors.videoUrl
-  const images = values.images
-
-  if (videoUrl) {
-    if (images && images[0]) {
-      return both
-    }
-    const ytRegex = new RegExp(/(youtu\.be\/|youtube\.com\/watch\?v=)/gi)
-    const urlValid = ytRegex.test(videoUrl)
-    return urlValid ? null : invalidUrl
-  }
-  return images && images[0] ? null : empty
-}

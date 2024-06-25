@@ -9,7 +9,7 @@ import {
   UsefulStatsButton,
   UserEngagementWrapper,
 } from 'oa-components'
-import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
+import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -17,14 +17,16 @@ import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
-  getPublicUpdates,
-  getResearchTotalCommentCount,
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 
+import {
+  getPublicUpdates,
+  researchUpdateStatusFilter,
+} from '../researchHelpers'
 import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
@@ -52,7 +54,7 @@ const ResearchArticle = observer(() => {
   const { slug } = useParams()
   const location = useLocation()
   const researchStore = useResearchStore()
-  const { aggregationsStore, tagsStore } = useCommonStores().stores
+  const { aggregationsStore } = useCommonStores().stores
   const [isLoading, setIsLoading] = React.useState(true)
   const item = researchStore.activeResearchItem
   const loggedInUser = researchStore.activeUser
@@ -185,14 +187,8 @@ const ResearchArticle = observer(() => {
     return <NotFoundPage />
   }
 
-  const { allTagsByKey } = tagsStore
   const research = {
     ...item,
-    tagList:
-      item.tags &&
-      Object.keys(item.tags)
-        .map((t) => allTagsByKey[t])
-        .filter(Boolean),
   }
 
   return (
@@ -215,25 +211,27 @@ const ResearchArticle = observer(() => {
         onFollowClick={() => onFollowClick(item.slug)}
         contributors={contributors}
         subscribersCount={researchStore.subscribersCount}
-        commentsCount={getResearchTotalCommentCount(item)}
+        commentsCount={item.totalCommentCount}
         updatesCount={
-          item.updates?.filter(
-            (u) => u.status !== ResearchUpdateStatus.DRAFT && !u._deleted,
+          item.updates?.filter((u) =>
+            researchUpdateStatusFilter(item, u, researchStore.activeUser),
           ).length || 0
         }
       />
       <Box sx={{ marginTop: 8, marginBottom: 4 }}>
         {item &&
-          getPublicUpdates(item).map((update, index) => (
-            <ResearchUpdate
-              update={update}
-              key={update._id}
-              updateIndex={index}
-              isEditable={isEditable}
-              slug={item.slug}
-              showComments={areCommentVisible(index)}
-            />
-          ))}
+          getPublicUpdates(item, researchStore.activeUser).map(
+            (update, index) => (
+              <ResearchUpdate
+                update={update}
+                key={update._id}
+                updateIndex={index}
+                isEditable={isEditable}
+                slug={item.slug}
+                showComments={areCommentVisible(index)}
+              />
+            ),
+          )}
       </Box>
 
       <UserEngagementWrapper>
@@ -267,7 +265,7 @@ const ResearchArticle = observer(() => {
                 isLoggedIn={!!loggedInUser}
                 hasUserSubscribed={researchStore.userHasSubscribed}
                 onFollowClick={() => onFollowClick(item.slug)}
-              ></FollowButton>
+              />
             </ArticleCallToAction>
           )}
         </Box>

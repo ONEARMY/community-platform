@@ -13,7 +13,7 @@ const supportedProfileTypes = getSupportedProfileTypes().map(
 )
 
 describe('Focus', () => {
-  it('render focus section if more than one activity available', async () => {
+  it('render focus section if more than one activity available', () => {
     const badges = supportedProfileTypes.reduce(
       (a, v) => ({
         ...a,
@@ -36,7 +36,7 @@ describe('Focus', () => {
     expect(screen.queryByText(headings.focus)).toBeInTheDocument()
   })
 
-  it('does not render focus section if less than two activities available', async () => {
+  it('does not render focus section if less than two activities available', () => {
     const badges = {
       [supportedProfileTypes[0]]: {
         lowDetail: '',

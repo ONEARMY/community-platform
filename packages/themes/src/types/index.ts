@@ -7,7 +7,7 @@ const ProfileType = {
   COLLECTION_POINT: 'collection-point',
 } as const
 
-export type ProfileTypeLabel = typeof ProfileType[keyof typeof ProfileType]
+export type ProfileTypeLabel = (typeof ProfileType)[keyof typeof ProfileType]
 
 interface LinkList {
   label: string
@@ -19,6 +19,7 @@ export interface PlatformTheme {
   siteName: string
   logo: string
   badge: string
+  donations?: Donations
   avatar: string
   howtoHeading: string
   styles: ThemeWithName
@@ -29,6 +30,12 @@ export interface PlatformTheme {
 type Badge = {
   lowDetail: string
   normal: string
+}
+
+type Donations = {
+  body: string
+  iframeSrc: string
+  imageURL: string
 }
 
 export interface ThemeWithName {

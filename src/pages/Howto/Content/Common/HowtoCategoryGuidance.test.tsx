@@ -31,7 +31,7 @@ describe('HowtoCategoryGuidance', () => {
     await screen.findByText(filesGuidance, { exact: false })
   })
 
-  it('renders nothing when not visible', async () => {
+  it('renders nothing when not visible', () => {
     const { container } = render(
       <HowtoProvider>
         <HowtoCategoryGuidance category={undefined} type="main" />

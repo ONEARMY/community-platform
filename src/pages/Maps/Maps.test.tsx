@@ -59,28 +59,30 @@ describe('Maps', () => {
       },
     })
 
-    await act(async () => {
-      await Wrapper()
+    act(() => {
+      Wrapper()
     })
 
-    expect(global.navigator.geolocation.getCurrentPosition).toBeCalled()
+    await waitFor(() => {
+      expect(global.navigator.geolocation.getCurrentPosition).toBeCalled()
+    })
   })
 
   it('loads individual map card', async () => {
     let wrapper: any
 
-    await act(async () => {
-      wrapper = await Wrapper('/map#abc')
+    act(() => {
+      wrapper = Wrapper('/map#abc')
     })
 
-    await waitFor(async () => {
+    await waitFor(() => {
       expect(wrapper.mockMapPinService.getMapPinByUserId).toBeCalledWith('abc')
       expect(wrapper.renderResult.getByText('description')).toBeInTheDocument()
     })
   })
 })
 
-const Wrapper = async (path = '/map') => {
+const Wrapper = (path = '/map') => {
   const router = createMemoryRouter(
     createRoutesFromElements(<Route path="/map" element={<Maps />} />),
     {

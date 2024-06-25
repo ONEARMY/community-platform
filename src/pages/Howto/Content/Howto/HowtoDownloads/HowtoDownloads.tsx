@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { DownloadCounter, DownloadStaticFile } from 'oa-components'
 import { DownloadWithDonationAsk } from 'src/common/DownloadWithDonationAsk'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
@@ -23,12 +21,7 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
   const { _id, files, fileLink, total_downloads } = howto
   const [fileDownloadCount, setFileDownloadCount] = useState(total_downloads)
 
-  const navigate = useNavigate()
   const { howtoStore } = useCommonStores().stores
-
-  const redirectToSignIn = async () => {
-    navigate('/sign-in')
-  }
 
   const incrementDownloadCount = async () => {
     const updatedDownloadCount = await howtoStore.incrementDownloadCount(_id)
@@ -54,31 +47,13 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
 
   return (
     <Flex className="file-container" mt={3} sx={{ flexDirection: 'column' }}>
-      {fileLink && (
-        <DownloadWithDonationAsk
-          handleClick={handleDownloadClick}
-          link={fileLink}
-          isLoggedIn={!!loggedInUser}
-        />
-      )}
-      {files &&
-        files
-          .filter(Boolean)
-          .map(
-            (file, index) =>
-              file && (
-                <DownloadStaticFile
-                  allowDownload
-                  file={file}
-                  key={file ? file.name : `file-${index}`}
-                  handleClick={handleDownloadClick}
-                  redirectToSignIn={
-                    !loggedInUser ? redirectToSignIn : undefined
-                  }
-                />
-              ),
-          )}
-      <DownloadCounter total={fileDownloadCount} />
+      <DownloadWithDonationAsk
+        handleClick={handleDownloadClick}
+        fileLink={fileLink}
+        files={files}
+        isLoggedIn={!!loggedInUser}
+        fileDownloadCount={fileDownloadCount || 0}
+      />
     </Flex>
   )
 }

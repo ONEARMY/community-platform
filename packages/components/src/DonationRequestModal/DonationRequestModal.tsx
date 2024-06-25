@@ -2,10 +2,10 @@ import { DonationRequest } from '../DonationRequest/DonationRequest'
 import { Modal } from '../Modal/Modal'
 
 export interface IProps {
-  body: string
+  body: string | undefined
   callback: () => void
-  imageURL: string
-  iframeSrc: string
+  imageURL: string | undefined
+  iframeSrc: string | undefined
   isOpen: boolean
   link: string
   onDidDismiss: () => void

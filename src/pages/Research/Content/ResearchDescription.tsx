@@ -8,19 +8,20 @@ import {
   FollowButton,
   LinkifyText,
   ModerationStatus,
-  Tag,
   UsefulStatsButton,
   Username,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { trackEvent } from 'src/common/Analytics'
+import { TagList } from 'src/common/Tags/TagsList'
 import { logger } from 'src/logger'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { buildStatisticsLabel, researchStatusColour } from 'src/utils/helpers'
+import { buildStatisticsLabel } from 'src/utils/helpers'
 import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
+import { researchStatusColour } from '../researchHelpers'
 
 import type { ITag } from 'src/models'
 import type { IResearch } from 'src/models/research.models'
@@ -265,10 +266,7 @@ const ResearchDescription = ({
               <LinkifyText>{research.description}</LinkifyText>
             </Text>
             <Flex mt={4}>
-              {research.tagList &&
-                research.tagList.map((tag, idx) => (
-                  <Tag key={idx} tag={tag} sx={{ mr: 1 }} />
-                ))}
+              <TagList tags={research.tags} />
             </Flex>
           </Box>
         </Flex>

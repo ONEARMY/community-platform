@@ -208,8 +208,8 @@ const getCommentListItem = (notification: INotification) => `
     notification.triggeredBy.displayName,
     notification.triggeredBy.userId,
   )} on <a href='${SITE_URL}${notification.relevantUrl}'>${
-  notification.title
-}</a>
+    notification.title
+  }</a>
 </p>`
 
 const getMentionListItem = (notification: INotification) => `
@@ -218,9 +218,9 @@ const getMentionListItem = (notification: INotification) => `
     notification.triggeredBy.displayName,
     notification.triggeredBy.userId,
   )} mentioned you in this ${getResourceLink(
-  notification.type,
-  notification.relevantUrl,
-)}
+    notification.type,
+    notification.relevantUrl,
+  )}
 </p>`
 
 const getUsefulListItem = (notification: INotification) => `
@@ -229,9 +229,9 @@ const getUsefulListItem = (notification: INotification) => `
       notification.triggeredBy.displayName,
       notification.triggeredBy.userId,
     )} found your ${getResourceLink(
-  notification.type,
-  notification.relevantUrl,
-)}
+      notification.type,
+      notification.relevantUrl,
+    )}
 useful
 </p>
 `
@@ -242,9 +242,9 @@ const getUpdateListItem = (notification: INotification) => `
       notification.triggeredBy.displayName,
       notification.triggeredBy.userId,
     )} posted an update to this ${getResourceLink(
-  notification.type,
-  notification.relevantUrl,
-)}
+      notification.type,
+      notification.relevantUrl,
+    )}
 you follow
 </p>
 `

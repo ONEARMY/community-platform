@@ -53,7 +53,7 @@ const ResearchList = observer(() => {
       if (q) {
         params.set(ResearchSearchParams.sort, 'MostRelevant')
       } else {
-        params.set(ResearchSearchParams.sort, 'Newest')
+        params.set(ResearchSearchParams.sort, 'LatestUpdated')
       }
       setSearchParams(params)
     } else {

@@ -6,7 +6,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
-import { act, render } from '@testing-library/react'
+import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryUser } from 'src/test/factories/User'
@@ -63,23 +63,27 @@ describe('User', () => {
 
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await getWrapper(user)
+    act(() => {
+      wrapper = getWrapper(user)
     })
 
     // Assert
-    expect(wrapper.getByText(user.displayName)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(wrapper.getByText(user.displayName)).toBeInTheDocument()
+    })
   })
 
   it('displays user not found page', async () => {
     // Act
     let wrapper
-    await act(async () => {
-      wrapper = await getWrapper(null, '/u/does-not-exist')
+    act(() => {
+      wrapper = getWrapper(null, '/u/does-not-exist')
     })
 
     // Assert
-    expect(wrapper.getByText('User not found')).toBeInTheDocument()
+    await waitFor(() => {
+      expect(wrapper.getByText('User not found')).toBeInTheDocument()
+    })
   })
 
   describe('workspace', () => {
@@ -91,17 +95,19 @@ describe('User', () => {
 
       // Act
       let wrapper
-      await act(async () => {
-        wrapper = await getWrapper(user)
+      act(() => {
+        wrapper = getWrapper(user)
       })
 
       // Assert
-      expect(wrapper.getByText('No images available.')).toBeInTheDocument()
+      await waitFor(() => {
+        expect(wrapper.getByText('No images available.')).toBeInTheDocument()
+      })
     })
   })
 })
 
-const getWrapper = async (user, url?) => {
+const getWrapper = (user, url?) => {
   mockGetUserProfile.mockResolvedValue(user)
 
   const router = createMemoryRouter(createRoutesFromElements(UserRoutes), {

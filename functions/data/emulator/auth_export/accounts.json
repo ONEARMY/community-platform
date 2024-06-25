@@ -8,7 +8,7 @@
       "displayName": "admin",
       "passwordHash": "fakeHash:salt=fakeSaltRpTXy52dXY1DgyPT6odF:password=wow_backend_development_is_fun",
       "salt": "fakeSaltRpTXy52dXY1DgyPT6odF",
-      "passwordUpdatedAt": 1716744766896,
+      "passwordUpdatedAt": 1718442318155,
       "providerUserInfo": [
         {
           "providerId": "password",
@@ -18,22 +18,19 @@
           "displayName": "admin"
         }
       ],
-      "validSince": "1716744766",
+      "validSince": "1718442318",
       "email": "admin@example.com",
       "emailVerified": false,
-      "disabled": false,
-      "lastRefreshAt": "2024-05-26T17:57:14.545Z"
+      "disabled": false
     },
     {
       "localId": "WrCrfu7FS3vJcFswZr1yufwlPtCl",
-      "lastLoginAt": "1716745935132",
-      "emailVerified": false,
-      "email": "precious-plastic@example.com",
-      "salt": "fakeSalt5z1E4omMRGeny2KD9xUb",
-      "passwordHash": "fakeHash:salt=fakeSalt5z1E4omMRGeny2KD9xUb:password=precious-plastic",
-      "passwordUpdatedAt": 1716745327556,
-      "validSince": "1716745327",
       "createdAt": "1716745327556",
+      "lastLoginAt": "1718444674786",
+      "displayName": "precious-plastic",
+      "passwordHash": "fakeHash:salt=fakeSalt5z1E4omMRGeny2KD9xUb:password=precious-plastic",
+      "salt": "fakeSalt5z1E4omMRGeny2KD9xUb",
+      "passwordUpdatedAt": 1718442318155,
       "providerUserInfo": [
         {
           "providerId": "password",
@@ -43,19 +40,42 @@
           "displayName": "precious-plastic"
         }
       ],
-      "lastRefreshAt": "2024-05-26T17:52:15.132Z",
-      "displayName": "precious-plastic"
+      "validSince": "1718442318",
+      "email": "precious-plastic@example.com",
+      "emailVerified": false,
+      "disabled": false,
+      "lastRefreshAt": "2024-06-15T09:44:34.786Z"
+    },
+    {
+      "localId": "q6GpQ22mUDlb6uft2RTu62wie3LO",
+      "lastLoginAt": "1718444830815",
+      "emailVerified": false,
+      "email": "mattia@example.com",
+      "salt": "fakeSaltxeGVqpxGrtyWiEsl5Z1A",
+      "passwordHash": "fakeHash:salt=fakeSaltxeGVqpxGrtyWiEsl5Z1A:password=whoop_whoop_123",
+      "passwordUpdatedAt": 1718444830815,
+      "validSince": "1718444830",
+      "createdAt": "1718444830815",
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "email": "mattia@example.com",
+          "federatedId": "mattia@example.com",
+          "rawId": "mattia@example.com",
+          "displayName": "matti"
+        }
+      ],
+      "lastRefreshAt": "2024-06-15T09:47:10.816Z",
+      "displayName": "matti"
     },
     {
       "localId": "uf0mBGfLKGQwoJ1FWiqH0xQSatKM",
-      "lastLoginAt": "1716746297841",
-      "emailVerified": false,
-      "email": "normal_jim@example.com",
-      "salt": "fakeSalt88tfIY4E8ASJgTGvE3th",
-      "passwordHash": "fakeHash:salt=fakeSalt88tfIY4E8ASJgTGvE3th:password=thanks_emulator_man",
-      "passwordUpdatedAt": 1716746026812,
-      "validSince": "1716746026",
       "createdAt": "1716746026812",
+      "lastLoginAt": "1716746297841",
+      "displayName": "normal_jim",
+      "passwordHash": "fakeHash:salt=fakeSalt88tfIY4E8ASJgTGvE3th:password=thanks_emulator_man",
+      "salt": "fakeSalt88tfIY4E8ASJgTGvE3th",
+      "passwordUpdatedAt": 1718442318155,
       "providerUserInfo": [
         {
           "providerId": "password",
@@ -65,8 +85,10 @@
           "displayName": "normal_jim"
         }
       ],
-      "lastRefreshAt": "2024-05-26T17:58:17.841Z",
-      "displayName": "normal_jim"
+      "validSince": "1718442318",
+      "email": "normal_jim@example.com",
+      "emailVerified": false,
+      "disabled": false
     }
   ]
 }

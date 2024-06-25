@@ -23,7 +23,7 @@ vi.mock('../common/toggleDocUsefulByUser', () => ({
   toggleDocUsefulByUser: () => mockToggleDocUsefulByUser(),
 }))
 
-const factory = async () => {
+const factory = () => {
   const store = new QuestionStore({} as IRootStore)
   store.isTitleThatReusesSlug = vi.fn().mockResolvedValue(false)
 
@@ -64,7 +64,7 @@ const factory = async () => {
 describe('question.store', () => {
   describe('upsertQuestion', () => {
     it('assigns _createdBy', async () => {
-      const { store, setFn } = await factory()
+      const { store, setFn } = factory()
       const newQuestion = FactoryQuestionItem({
         title: 'So what is plastic?',
         _createdBy: undefined,
@@ -83,7 +83,7 @@ describe('question.store', () => {
 
   describe('fetchQuestionBySlug', () => {
     it('handles empty query response', async () => {
-      const { store } = await factory()
+      const { store } = factory()
       const newQuestion = FactoryQuestionItem({
         title: 'How do you survive living in a tent?',
       })
@@ -93,7 +93,7 @@ describe('question.store', () => {
     })
 
     it('returns a valid response', async () => {
-      const { store, getWhereFn } = await factory()
+      const { store, getWhereFn } = factory()
       const newQuestion = FactoryQuestionItem({
         title: 'Question title',
       })
@@ -108,7 +108,7 @@ describe('question.store', () => {
     })
 
     it('returns a valid response when a previous slug', async () => {
-      const { store, getWhereFn } = await factory()
+      const { store, getWhereFn } = factory()
       const newQuestion = FactoryQuestionItem({
         title: 'Can I run a shredder at home?',
         previousSlugs: ['shredder-at-home'],
@@ -125,7 +125,7 @@ describe('question.store', () => {
 
   describe('incrementViews', () => {
     it('increments views by one', async () => {
-      const { store, updateFn } = await factory()
+      const { store, updateFn } = factory()
 
       const question = FactoryQuestionItem({
         title: 'which trees to cut down',
@@ -149,7 +149,7 @@ describe('question.store', () => {
 
   describe('toggleSubscriberStatusByUserName', () => {
     it('calls the toggle subscriber function', async () => {
-      const { store } = await factory()
+      const { store } = factory()
       store.activeQuestionItem = FactoryQuestionItem()
 
       await store.toggleSubscriberStatusByUserName()
@@ -160,7 +160,7 @@ describe('question.store', () => {
 
   describe('toggleUsefulByUser', () => {
     it('calls the toogle voted for function', async () => {
-      const { store } = await factory()
+      const { store } = factory()
       store.activeQuestionItem = FactoryQuestionItem()
 
       await store.toggleUsefulByUser()

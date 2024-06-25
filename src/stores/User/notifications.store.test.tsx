@@ -65,7 +65,7 @@ describe('triggerNotification', () => {
     )
   })
 
-  it('throws error when invalid user passed', async () => {
+  it('throws error when invalid user passed', () => {
     // Act
     expect(
       store.triggerNotification(
@@ -93,15 +93,15 @@ describe('notifications.store', () => {
     ]
     store.userStore.user.notifications = FactoryNotificationSample()
   })
-  it('loads user with notifications', async () => {
+  it('loads user with notifications', () => {
     const notifications = store.userStore.user?.notifications
     expect(notifications).toHaveLength(6)
   })
-  it('gets unnotified notifications', async () => {
+  it('gets unnotified notifications', () => {
     const unnotified = store.getUnnotifiedNotifications()
     expect(unnotified).toHaveLength(2)
   })
-  it('gets unread notifications', async () => {
+  it('gets unread notifications', () => {
     const unread = store.getUnreadNotifications()
     expect(unread).toHaveLength(3)
   })

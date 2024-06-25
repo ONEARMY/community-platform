@@ -1,13 +1,13 @@
 import { VideoPlayer } from './VideoPlayer'
 
-import type { ComponentMeta, ComponentStory } from '@storybook/react'
+import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/VideoPlayer',
   component: VideoPlayer,
-} as ComponentMeta<typeof VideoPlayer>
+} as Meta<typeof VideoPlayer>
 
-const Template: ComponentStory<typeof VideoPlayer> = (args) => (
+const Template: StoryFn<typeof VideoPlayer> = (args) => (
   <VideoPlayer {...args} />
 )
 

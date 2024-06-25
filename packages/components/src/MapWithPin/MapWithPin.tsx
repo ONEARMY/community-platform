@@ -2,7 +2,8 @@ import * as React from 'react'
 import { Map, TileLayer, ZoomControl } from 'react-leaflet'
 import { Alert, Box, Flex, Text } from 'theme-ui'
 
-import { Button, OsmGeocoding } from '../'
+import { Button } from '../Button/Button'
+import { OsmGeocoding } from '../OsmGeocoding/OsmGeocoding'
 import { MapPin } from './MapPin'
 
 import type { Result } from '../OsmGeocoding/types'

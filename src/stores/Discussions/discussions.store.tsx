@@ -9,14 +9,13 @@ import { hasAdminRights, randomID } from 'src/utils/helpers'
 
 import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
-import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
+import { updateDiscussionMetadata } from './discussionEvents'
 
-import type { IResearch, IUserPPDB } from 'src/models'
+import type { IUserPPDB } from 'src/models'
 import type {
   IComment,
   IDiscussion,
   IDiscussionDB,
-  IDiscussionSourceModelOptions,
 } from 'src/models/discussion.models'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'

@@ -93,8 +93,9 @@ export class HowtoStore extends ModuleStore {
         })
       }
     }
-
-    this.activeHowto = activeHowto
+    runInAction(() => {
+      this.activeHowto = activeHowto
+    })
     return activeHowto
   }
 

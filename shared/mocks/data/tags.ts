@@ -1,9 +1,9 @@
 export const tags = {
-  '36hWyk3OckrLSH1ehdIE': {
+  g36hWyk3OckrLSH1ehdIE: {
     _createdBy: 'tag_creator',
     _modified: '2012-10-27T01:47:57.948Z',
     _created: '2012-08-02T07:27:04.609Z',
-    _id: '36hWyk3OckrLSH1ehdIE',
+    _id: 'g36hWyk3OckrLSH1ehdIE',
     label: 'product',
     image: '',
     _deleted: false,

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from 'axios'
-import { DiscordWebhookPayload } from '../models'
+import { IDiscordWebhookPayload } from '../models'
 
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL
 const DISCORD_CHANNEL_ID = process.env.DISCORD_CHANNEL_ID
@@ -15,7 +15,7 @@ const DISCORD_BOT_TOKEN = Buffer.from(
  * @returns A promise that resolves when the notification is successfully sent or rejects with an error.
  */
 export const sendDiscordNotification = async (
-  payload: DiscordWebhookPayload,
+  payload: IDiscordWebhookPayload,
 ) => {
   await axios
     .post(DISCORD_WEBHOOK_URL, payload)

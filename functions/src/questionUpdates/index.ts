@@ -6,6 +6,11 @@ import { DB_ENDPOINTS } from '../models'
 
 import type { IUserDB, IQuestionDB } from '../models'
 
+import { sendDiscordNotification } from '../Integrations/firebase-discord'
+import { CONFIG } from '../config/config'
+
+const SITE_URL = CONFIG.deployment.site_url
+
 /*********************************************************************
  * Side-effects to be carried out on various question updates, namely:
  * - update the _createdBy user stats with the question id
@@ -15,6 +20,7 @@ export const handleQuestionCreate = functions
   .firestore.document(`${DB_ENDPOINTS.questions}/{id}`)
   .onCreate(async (docSnapshot, context) => {
     await updateDocument(docSnapshot)
+    await notifyNewQuestion(docSnapshot)
   })
 
 export const handleQuestionUpdate = functions
@@ -65,4 +71,13 @@ async function deleteDocument(docSnapshot: firestore.QueryDocumentSnapshot) {
   await userSnapshot.docs[0].ref.update({
     'stats.userCreatedQuestions': userCreatedQuestions,
   })
+}
+
+async function notifyNewQuestion(docSnapshot: firestore.QueryDocumentSnapshot) {
+  const question = docSnapshot.data() as IQuestionDB
+  const { _createdBy, title, slug } = question
+  if (_createdBy && title && slug) {
+    const content = `❓ ${_createdBy} has a new question: ${title}\nHelp them out and answer here: <${SITE_URL}/questions/${slug}>`
+    await sendDiscordNotification({ content })
+  }
 }

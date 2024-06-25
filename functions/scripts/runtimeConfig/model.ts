@@ -16,7 +16,7 @@ export const runtimeConfigTest: configVars = {
   },
   service: null as any,
   deployment: {
-    site_url: 'http://localhost:4000',
+    site_url: 'http://localhost:3000',
   },
   prerender: {
     api_key: 'fake_prerender_key',

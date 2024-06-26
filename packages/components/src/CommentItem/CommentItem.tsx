@@ -20,7 +20,7 @@ export interface IProps {
   handleEdit: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
   isReply: boolean
-  showAvatar: boolean
+  // showAvatar: boolean
 }
 
 const formatDate = (d: string | undefined): string => {

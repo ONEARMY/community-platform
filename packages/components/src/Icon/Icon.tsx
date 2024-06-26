@@ -166,13 +166,22 @@ export const Icon = (props: Props) => {
   return (
     <IconWrapper
       {...props}
-      sx={{ color: props.color ?? 'inherit', opacity: props.opacity ?? '1' }}
+      sx={{
+        color: props.color ?? 'inherit',
+        opacity: props.opacity ?? '1',
+        '& svg': {
+          fontSize: definedSize,
+        },
+      }}
       size={definedSize}
       style={{ marginRight }}
     >
       <IconContext.Provider
         value={{
-          style: { width: definedSize + 'px', height: definedSize + 'px' },
+          style: {
+            width: definedSize,
+            height: definedSize,
+          },
         }}
       >
         <Glyph glyph={glyph} />

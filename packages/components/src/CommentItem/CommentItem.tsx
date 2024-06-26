@@ -152,6 +152,7 @@ export const CommentItem = (props: IProps) => {
                     variant="outline"
                     small={true}
                     icon="edit"
+                    sx={{ border: 'none' }}
                     onClick={() => onEditRequest(_id)}
                   >
                     edit
@@ -161,6 +162,7 @@ export const CommentItem = (props: IProps) => {
                     variant={'outline'}
                     small={true}
                     icon="delete"
+                    sx={{ border: 'none' }}
                     onClick={() => setShowDeleteModal(true)}
                   >
                     delete

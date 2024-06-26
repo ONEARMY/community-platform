@@ -42,7 +42,7 @@ export const CommentItem = (props: IProps) => {
     handleEditRequest,
     handleEdit,
     isReply,
-    showAvatar,
+    // showAvatar,
   } = props
   const {
     text,

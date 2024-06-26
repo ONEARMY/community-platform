@@ -11,7 +11,7 @@ import type { CheerioAPI } from 'cheerio'
 main()
 
 function main() {
-  dotenv.config({ path: path.resolve('../.env'), debug: true })
+  initializeEnvironmentVariables('../.env')
 
   const builtHTML = fs.readFileSync('../build/index.html', {
     encoding: 'utf-8',
@@ -64,6 +64,10 @@ function main() {
   const output = $.html()
   fs.writeFileSync('../build/index.html', output, { encoding: 'utf-8' })
   console.log('')
+}
+
+function initializeEnvironmentVariables(filepath: string) {
+  dotenv.config({ path: path.resolve(filepath), debug: true })
 }
 
 function setFrontendConfiguration(webpage: CheerioAPI, configuration) {

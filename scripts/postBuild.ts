@@ -15,12 +15,12 @@ function main() {
 
   const $ = loadWebpage('../build/index.html')
 
-  console.log('Step 1) Writing configuration into the global window object...')
+  console.log('Writing configuration into the global window object...')
   const configuration = getWindowVariableObject()
   setFrontendConfiguration($, configuration)
   console.log('')
 
-  console.log('Step 2) Applying theme...')
+  console.log('Applying theme...')
   const platformTheme = process.env.REACT_APP_PLATFORM_THEME
   if (platformTheme) {
     console.log('theme: ' + platformTheme)
@@ -34,7 +34,7 @@ function main() {
   }
   console.log('')
 
-  console.log('Step 3) Making SEO changes...')
+  console.log('Making SEO changes...')
   const siteName = process.env.SITE_NAME || 'Community Platform'
   console.log('site name: ' + siteName)
 
@@ -56,7 +56,7 @@ function main() {
   }
   console.log('')
 
-  console.log('Step 4) Saving...')
+  console.log('Saving...')
   const output = $.html()
   fs.writeFileSync('../build/index.html', output, { encoding: 'utf-8' })
   console.log('')

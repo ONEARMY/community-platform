@@ -15,10 +15,7 @@ function main() {
 
   const $ = loadWebpage('../build/index.html')
 
-  console.log('Writing configuration into the global window object...')
-  const configuration = getWindowVariableObject()
-  setFrontendConfiguration($, configuration)
-  console.log('')
+  setupFrontendConfiguration($)
 
   console.log('Applying theme...')
   const platformTheme = process.env.REACT_APP_PLATFORM_THEME
@@ -73,7 +70,14 @@ function loadWebpage(filepath: string) {
   return load(builtHTML, { recognizeSelfClosing: true })
 }
 
-function setFrontendConfiguration(webpage: CheerioAPI, configuration) {
+function setupFrontendConfiguration(webpage: CheerioAPI) {
+  console.log('Writing configuration into the global window object...')
+  const configuration = getWindowVariableObject()
+  setupScriptTagWithConfiguration(webpage, configuration)
+  console.log('')
+}
+
+function setupScriptTagWithConfiguration(webpage: CheerioAPI, configuration) {
   webpage('script#CommunityPlatform').html(
     'window.__OA_COMMUNITY_PLATFORM_CONFIGURATION=' +
       JSON.stringify(configuration) +

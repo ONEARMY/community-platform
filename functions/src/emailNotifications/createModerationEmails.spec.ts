@@ -9,7 +9,7 @@ import {
   MAP_PIN_NEEDS_IMPROVEMENTS_SUBJECT,
   MAP_PIN_REJECTED_SUBJECT,
   MAP_PIN_SUBMISSION_SUBJECT,
-} from './templates'
+} from './templateHelpers'
 import { getMockHowto } from '../emulator/seed/content-generate'
 import {
   createHowtoModerationEmail,

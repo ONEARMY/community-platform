@@ -36,13 +36,13 @@ import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 
 interface IState {
   formValues: IUserPP
-  notification: { message: string; icon: string; show: boolean }
   showDeleteDialog?: boolean
   showLocationDropdown: boolean
   user?: IUserPP
   userMapPin: IMapPin | null
-  showFormSubmitResult: boolean
 }
+
+type INotification = { message: string; icon: string; show: boolean }
 
 const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
   const { mapPin } = props
@@ -59,7 +59,7 @@ const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
   ) : null
 }
 
-const WorskapceMapPinRequiredStars = () => {
+const WorkspaceMapPinRequiredStars = () => {
   const { description } = headings.workspace
   const { themeStore } = useCommonStores().stores
 
@@ -80,6 +80,12 @@ const WorskapceMapPinRequiredStars = () => {
 export const SettingsPage = () => {
   const { mapsStore, userStore } = useCommonStores().stores
   const [state, setState] = useState<IState>({} as any)
+  const [notification, setNotification] = useState<INotification>({
+    message: '',
+    icon: '',
+    show: false,
+  })
+  const [shouldUpdate, setShouldUpdate] = useState<boolean>(true)
   const { id } = useParams()
 
   const toggleLocationDropdown = () => {
@@ -100,6 +106,7 @@ export const SettingsPage = () => {
     let userMapPin: IMapPin | null = null
 
     const init = async () => {
+      if (!shouldUpdate) return
       if (id) {
         user = await userStore.getUserProfile(id)
       }
@@ -135,54 +142,45 @@ export const SettingsPage = () => {
 
       setState({
         formValues,
-        notification: { message: '', icon: '', show: false },
         user,
         showLocationDropdown: !user?.location?.latlng,
-        showFormSubmitResult: false,
         userMapPin,
       })
+      setShouldUpdate(false)
     }
 
     init()
-  }, [])
+  }, [shouldUpdate])
 
   const saveProfile = async (values: IUserPP) => {
-    // use a copy of values to allow manipulation without re-render
     const vals = { ...values }
-    // remove empty images
     vals.coverImages = (vals.coverImages as any[]).filter((cover) =>
       cover ? true : false,
     )
-    // // Remove undefined vals from obj before sending to firebase
+    // Remove undefined vals from obj before sending to firebase
     Object.keys(vals).forEach((key) => {
       if (vals[key] === undefined) {
         delete vals[key]
       }
     })
-    // Submit, show notification update and return any errors to form
+
     try {
       logger.debug({ profile: vals }, 'SettingsPage.saveProfile')
       await userStore.updateUserProfile(vals, 'settings-save-profile', id)
-      logger.debug(`before setState`)
-      setState((state) => ({
-        ...state,
-        notification: { message: 'Profile Saved', icon: 'check', show: true },
-      }))
-      return {}
+
+      setShouldUpdate(true)
+      return setNotification({
+        message: 'Profile Saved',
+        icon: 'check',
+        show: true,
+      })
     } catch (error) {
       logger.warn({ error, profile: vals }, 'SettingsPage.saveProfile.error')
-      setState((state) => ({
-        ...state,
-        notification: { message: 'Save Failed', icon: 'close', show: true },
-      }))
+      setNotification({ message: 'Save Failed', icon: 'close', show: true })
       return { [FORM_ERROR]: 'Save Failed' }
     }
   }
 
-  /**
-   * Check for additional erros not caught by standard validation
-   * Return any errors as json object
-   */
   const validateForm = (v: IUserPP) => {
     const errors: any = {}
     // must have at least 1 cover (awkard react final form array format)
@@ -198,20 +196,15 @@ export const SettingsPage = () => {
   }
 
   const { formValues, user, userMapPin } = state
+  const formId = 'userProfileForm'
 
   return user ? (
     <Form
-      onSubmit={(v) =>
-        // return any errors (or success) on submit
-        saveProfile(v).then((res) => {
-          return res
-        })
-      }
+      id={formId}
+      onSubmit={saveProfile}
       initialValues={formValues}
-      validate={(v) => validateForm(v)}
-      mutators={{
-        ...arrayMutators,
-      }}
+      validate={validateForm}
+      mutators={{ ...arrayMutators }}
       validateOnBlur
       render={({
         form,
@@ -221,8 +214,8 @@ export const SettingsPage = () => {
         handleSubmit,
         hasValidationErrors,
         valid,
+        invalid,
         errors,
-        ...rest
       }) => {
         const { createProfile, editProfile } = headings
         const heading = user.profileType ? editProfile : createProfile
@@ -264,10 +257,8 @@ export const SettingsPage = () => {
                     >
                       <ProfileGuidelines />
                     </Box>
-                    {/* Note - for fields without fieldwrapper can just render via props method and bind to input */}
                     {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
-                    {/* Specific profile type fields */}
                     {values.profileType === ProfileType.WORKSPACE && (
                       <WorkspaceSection />
                     )}
@@ -290,7 +281,6 @@ export const SettingsPage = () => {
                         }
                       />
                     )}
-                    {/* General fields */}
 
                     <UserInfosSection
                       formValues={values}
@@ -298,20 +288,12 @@ export const SettingsPage = () => {
                       showLocationDropdown={state.showLocationDropdown}
                     />
 
-                    {!isMember && isModuleSupported(MODULE.MAP) && (
+                    {isModuleSupported(MODULE.MAP) && (
                       <SettingsMapPinSection
                         toggleLocationDropdown={toggleLocationDropdown}
                       >
                         <MapPinModerationComments mapPin={userMapPin} />
-                        <WorskapceMapPinRequiredStars />
-                      </SettingsMapPinSection>
-                    )}
-
-                    {isMember && isModuleSupported(MODULE.MAP) && (
-                      <SettingsMapPinSection
-                        toggleLocationDropdown={toggleLocationDropdown}
-                      >
-                        <MapPinModerationComments mapPin={userMapPin} />
+                        {!isMember && <WorkspaceMapPinRequiredStars />}
                       </SettingsMapPinSection>
                     )}
                   </Flex>
@@ -356,36 +338,18 @@ export const SettingsPage = () => {
                 )}
                 <Button
                   large
+                  form={formId}
                   data-cy="save"
                   title={
-                    rest.invalid
-                      ? `Errors: ${Object.keys(errors || {})}`
-                      : 'Submit'
+                    invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'
                   }
-                  onClick={() => {
-                    // workaround for issues described:
-                    // https://github.com/final-form/react-final-form/blob/master/docs/faq.md#how-can-i-trigger-a-submit-from-outside-my-form
-                    const formEl = document.getElementById('userProfileForm')
-                    if (typeof formEl !== 'undefined' && formEl !== null) {
-                      setState((state) => ({
-                        ...state,
-                        showFormSubmitResult: true,
-                      }))
-                      formEl.dispatchEvent(
-                        new Event('submit', {
-                          cancelable: true,
-                          bubbles: true,
-                        }),
-                      )
-                    }
-                  }}
                   mb={3}
                   sx={{ width: '100%', justifyContent: 'center' }}
                   variant={'primary'}
                   type="submit"
                   // disable button when form invalid or during submit.
                   // ensure enabled after submit error
-                  disabled={submitting}
+                  disabled={submitting || (submitFailed && hasValidationErrors)}
                 >
                   {buttons.save}
                 </Button>
@@ -395,9 +359,9 @@ export const SettingsPage = () => {
                   isVisible={submitFailed && hasValidationErrors}
                 />
 
-                {state.showFormSubmitResult && valid && (
+                {valid && notification.message !== '' && (
                   <TextNotification
-                    isVisible={state.showFormSubmitResult}
+                    isVisible={notification.show}
                     variant={valid ? 'success' : 'failure'}
                   >
                     <Text>{buttons.success}</Text>

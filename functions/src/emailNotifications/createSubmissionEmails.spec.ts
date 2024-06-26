@@ -3,7 +3,7 @@ import { DB_ENDPOINTS, IMapPin, IMessageDB, IUserDB } from '../models'
 import {
   HOW_TO_SUBMISSION_SUBJECT,
   MAP_PIN_SUBMISSION_SUBJECT,
-} from './templates'
+} from './templateHelpers'
 import { getMockHowto } from '../emulator/seed/content-generate'
 import {
   createHowtoSubmissionEmail,

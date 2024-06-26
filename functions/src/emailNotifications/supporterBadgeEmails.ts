@@ -5,7 +5,7 @@ import { DB_ENDPOINTS } from 'oa-shared'
 import {
   getUserSupporterBadgeAddedEmail,
   getUserSupporterBadgeRemovedEmail,
-} from './templates'
+} from './templateHelpers'
 import type { IUserDB } from '../models'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'

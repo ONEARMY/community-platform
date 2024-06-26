@@ -109,35 +109,6 @@ export const expectedMember = {
       url: `${freshSettingsMember.userName}@test.com`,
     },
   ],
-}
-
-export const expectedMemberPin = {
-  _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
-  _deleted: false,
-  _id: 'settings_member_new',
-  about: "I'm a very active member",
-  // note - flag-picker returns country code but displays labels,
-  // so tests will only work for countries that code start same as label
-  country: 'AU',
-  profileType: 'member',
-  userName: 'settings_member_new',
-  verified: true,
-  coverImages: [
-    {
-      contentType: 'image/jpeg',
-      fullPath:
-        'uploads/v3_users/settings_member_new/images/profile-cover-1.jpg',
-      name: 'profile-cover-1.jpg',
-      size: 18987,
-      type: 'image/jpeg',
-    },
-  ],
-  links: [
-    {
-      label: ExternalLinkLabel.EMAIL,
-      url: `${freshSettingsMember.userName}@test.com`,
-    },
-  ],
   mapPinDescription: 'Fun, vibrant and full of amazing people',
   location: {
     administrative: '',

@@ -48,7 +48,7 @@ function main() {
     console.log('site description: ' + siteDescription)
 
     $('meta[property="og:description"]').attr('content', siteDescription)
-    $('meta[property="twitter:description"]').attr('content', siteDescription)
+    $('meta[name="twitter:description"]').attr('content', siteDescription)
     $('meta[name="description"]').attr('content', siteDescription)
   }
   console.log('')

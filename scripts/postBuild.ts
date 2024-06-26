@@ -13,11 +13,7 @@ main()
 function main() {
   initializeEnvironmentVariables('../.env')
 
-  const builtHTML = fs.readFileSync('../build/index.html', {
-    encoding: 'utf-8',
-  })
-
-  const $ = load(builtHTML, { recognizeSelfClosing: true })
+  const $ = loadWebpage('../build/index.html')
 
   console.log('Step 1) Writing configuration into the global window object...')
   const configuration = getWindowVariableObject()
@@ -68,6 +64,13 @@ function main() {
 
 function initializeEnvironmentVariables(filepath: string) {
   dotenv.config({ path: path.resolve(filepath), debug: true })
+}
+
+function loadWebpage(filepath: string) {
+  const builtHTML = fs.readFileSync(filepath, {
+    encoding: 'utf-8',
+  })
+  return load(builtHTML, { recognizeSelfClosing: true })
 }
 
 function setFrontendConfiguration(webpage: CheerioAPI, configuration) {

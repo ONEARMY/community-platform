@@ -95,7 +95,7 @@ export const notifyResearchUpdatePublished = functions
       const response = await axios.post(DISCORD_WEBHOOK_URL, {
         content:
           `📝 New update from ${author} in their research: ${title}\n` +
-          `Learn about it here: ${SITE_URL}/research/${slug}`,
+          `Learn about it here: <${SITE_URL}/research/${slug}>`,
       })
       handleResponse(response)
     } catch (error) {

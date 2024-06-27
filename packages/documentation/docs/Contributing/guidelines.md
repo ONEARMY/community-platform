@@ -6,10 +6,9 @@ title: Guidelines
 
 ## 🍽&nbsp; Summary
 
-- [Getting started](/Getting%20Started)
+- [Getting started](/)
 - [Code of conduct](#--code-of-conduct)
 - [Issue Tracking and Management](#--issue-tracking-and-management)
-<!-- [Development Bounties](#--development-bounties)-->
 - [Project structure](#--project-structure)
 - [Branch structure](#--branch-structure)
 - [Javascript style guide](#--javascript-style-guide)

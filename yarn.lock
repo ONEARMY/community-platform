@@ -5466,6 +5466,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polka/url@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@polka/url@npm:0.5.0"
+  checksum: 3f007adf9c271b28992ebff1df6424e75e7d579493c66969356a9b5dada18480583744dbc28a7467371fa10eb794a5e1dc1f3fcd359c0b5685f4f9c6592cd312
+  languageName: node
+  linkType: hard
+
 "@popperjs/core@npm:^2.11.8":
   version: 2.11.8
   resolution: "@popperjs/core@npm:2.11.8"
@@ -22150,6 +22157,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mrmime@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "mrmime@npm:2.0.0"
+  checksum: f6fe11ec667c3d96f1ce5fd41184ed491d5f0a5f4045e82446a471ccda5f84c7f7610dff61d378b73d964f73a320bd7f89788f9e6b9403e32cc4be28ba99f569
+  languageName: node
+  linkType: hard
+
 "ms@npm:2.0.0":
   version: 2.0.0
   resolution: "ms@npm:2.0.0"
@@ -22587,10 +22601,13 @@ __metadata:
     "@docusaurus/core": 2.3.1
     "@docusaurus/preset-classic": 2.3.1
     "@mdx-js/react": ^1.6.22
+    "@polka/url": ^0.5.0
     clsx: ^1.2.1
     env-cmd: ^10.1.0
+    mrmime: ^2.0.0
     react: ^17.0.2
     react-dom: ^17.0.2
+    totalist: ^3.0.1
   languageName: unknown
   linkType: soft
 
@@ -27886,6 +27903,13 @@ __metadata:
   version: 2.0.2
   resolution: "toposort@npm:2.0.2"
   checksum: d64c74b570391c9432873f48e231b439ee56bc49f7cb9780b505cfdf5cb832f808d0bae072515d93834dd6bceca5bb34448b5b4b408335e4d4716eaf68195dcb
+  languageName: node
+  linkType: hard
+
+"totalist@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "totalist@npm:3.0.1"
+  checksum: 5132d562cf88ff93fd710770a92f31dbe67cc19b5c6ccae2efc0da327f0954d211bbfd9456389655d726c624f284b4a23112f56d1da931ca7cfabbe1f45e778a
   languageName: node
   linkType: hard
 

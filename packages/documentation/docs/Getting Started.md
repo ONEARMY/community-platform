@@ -5,7 +5,6 @@ title: Getting Started
 
 <!-- Use custom top-meta to ensure shows on first page -->
 
-# Getting Started
 Thanks for being here already! You'll find all the information you need to start contributing to the project. Make sure to read them before submitting your contribution.
 
 If you think something is missing, consider sending us a PR.

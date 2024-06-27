@@ -7,20 +7,23 @@
     "hoistingLimits": "workspaces"
   },
   "scripts": {
-    "start": "env-cmd -r ../../.env-cmdrc.js -e webpack yarn docusaurus start --port 3001",
-    "build": "env-cmd -r ../../.env-cmdrc.js -e webpack yarn docusaurus build",
+    "start": "docusaurus start --port 3001",
+    "build": "docusaurus build",
+    "serve": "docusaurus serve --port 3001",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
-    "serve": "docusaurus serve",
     "clear": "docusaurus clear"
   },
   "dependencies": {
     "@docusaurus/core": "2.3.1",
     "@docusaurus/preset-classic": "2.3.1",
     "@mdx-js/react": "^1.6.22",
+    "@polka/url": "^0.5.0",
     "clsx": "^1.2.1",
+    "mrmime": "^2.0.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "totalist": "^3.0.1"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0"

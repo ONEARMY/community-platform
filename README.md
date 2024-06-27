@@ -8,9 +8,10 @@
 # 🔗 &nbsp; tl;dr Quick Links
 
 - [Project Website](https://platform.onearmy.earth)
+- [Project Kamp Community Platform (live site)](https://community.projectkamp.com/)
 - [Precious Plastic Community Platform (live site)](http://community.preciousplastic.com/)
+- [Fixing Fashion Community Platform (live site)](https://community.fixing.fashion/)
 - [Developer documentation](https://onearmy.github.io/community-platform/)
-- [Contributing Guide](/CONTRIBUTING.md)
 
 # 🌍 &nbsp; Community Platform
 

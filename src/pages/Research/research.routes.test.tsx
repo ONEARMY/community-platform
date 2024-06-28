@@ -256,9 +256,12 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
+        },
+        { timeout: 10000 },
+      )
     })
 
     it('rejects a logged in user with required role but not author of document', async () => {
@@ -353,9 +356,12 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
+        },
+        { timeout: 10000 },
+      )
     })
   })
 

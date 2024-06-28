@@ -358,8 +358,6 @@ describe('[Settings]', () => {
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=save]').should('not.be.disabled')
 
-      cy.pause()
-
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',

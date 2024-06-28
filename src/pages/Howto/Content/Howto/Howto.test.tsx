@@ -73,7 +73,7 @@ describe('Howto', () => {
     it('displays feedback for items which are not accepted', async () => {
       let wrapper
 
-      act(() => {
+      await act(async () => {
         howto.moderation = IModerationStatus.AWAITING_MODERATION
         howto.moderatorFeedback = 'Moderation comments'
 
@@ -85,9 +85,9 @@ describe('Howto', () => {
       })
     })
 
-    it('hides feedback when how-to is accepted', () => {
+    it('hides feedback when how-to is accepted', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         howto.moderation = IModerationStatus.ACCEPTED
         howto.moderatorFeedback = 'Moderation comments'
         wrapper = factory()
@@ -99,7 +99,7 @@ describe('Howto', () => {
 
   it('displays content statistics', async () => {
     let wrapper
-    act(() => {
+    await act(async () => {
       howto._id = 'testid'
       howto._createdBy = 'HowtoAuthor'
       howto.steps = [FactoryHowtoStep({})]
@@ -122,7 +122,7 @@ describe('Howto', () => {
 
     howto._createdBy = 'HowtoAuthor'
 
-    act(() => {
+    await act(async () => {
       wrapper = factory()
     })
 
@@ -135,7 +135,7 @@ describe('Howto', () => {
     let wrapper
     howto._createdBy = 'NotHowtoAuthor'
 
-    act(() => {
+    await act(async () => {
       wrapper = factory()
     })
 
@@ -147,7 +147,7 @@ describe('Howto', () => {
   describe('steps', () => {
     it('shows 1 step', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = factory({
           ...mockHowtoStore(),
           activeHowto: FactoryHowto({
@@ -164,7 +164,7 @@ describe('Howto', () => {
 
     it('shows 2 steps', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         howto.steps = [FactoryHowtoStep(), FactoryHowtoStep()]
         wrapper = factory()
       })
@@ -178,7 +178,7 @@ describe('Howto', () => {
   describe('Breadcrumbs', () => {
     it('displays breadcrumbs with category', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         howto.title = 'DIY Recycling Machine'
         howto.category = {
           label: 'DIY',
@@ -212,7 +212,7 @@ describe('Howto', () => {
 
     it('displays breadcrumbs without category', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         howto.title = 'DIY Recycling Machine'
         howto.category = undefined
         wrapper = factory()

@@ -74,7 +74,7 @@ describe('UserSettings', () => {
 
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = Wrapper(mockUser)
     })
 
@@ -88,7 +88,7 @@ describe('UserSettings', () => {
     mockUser = FactoryUser({ profileType: 'member' })
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = Wrapper(mockUser)
     })
 
@@ -101,7 +101,7 @@ describe('UserSettings', () => {
     mockUser = FactoryUser({ profileType: 'collection-point' })
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = Wrapper(mockUser)
     })
 
@@ -114,7 +114,7 @@ describe('UserSettings', () => {
     mockUser = FactoryUser({ profileType: 'community-builder' })
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = Wrapper(mockUser)
     })
 
@@ -127,7 +127,7 @@ describe('UserSettings', () => {
     mockUser = FactoryUser({ profileType: 'machine-builder' })
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = Wrapper(mockUser)
     })
 
@@ -140,7 +140,7 @@ describe('UserSettings', () => {
     mockUser = FactoryUser({ profileType: 'space' })
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = Wrapper(mockUser)
     })
 
@@ -153,7 +153,7 @@ describe('UserSettings', () => {
     mockUser = FactoryUser({ profileType: 'workspace' })
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = Wrapper(mockUser)
     })
 
@@ -173,7 +173,7 @@ describe('UserSettings', () => {
       )
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(mockUser)
       })
 
@@ -182,7 +182,7 @@ describe('UserSettings', () => {
       })
     })
 
-    it('does not show moderation comments for approved pin', () => {
+    it('does not show moderation comments for approved pin', async () => {
       mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
@@ -192,7 +192,7 @@ describe('UserSettings', () => {
       )
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(mockUser)
       })
 
@@ -212,7 +212,7 @@ describe('UserSettings', () => {
       const { expandClose } = buttons.impact
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(mockUser, impactHash)
       })
       await waitFor(
@@ -232,7 +232,7 @@ describe('UserSettings', () => {
       const { expandOpen } = buttons.impact
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(mockUser, impactHash)
       })
 
@@ -250,7 +250,7 @@ describe('UserSettings', () => {
       const { expandOpen } = buttons.impact
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(mockUser, impactHash)
       })
 

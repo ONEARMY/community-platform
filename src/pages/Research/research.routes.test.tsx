@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
-import { act, cleanup, render, waitFor } from '@testing-library/react'
+import { act, cleanup, render } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -131,11 +131,11 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research')
       })
 
-      await waitFor(
+      await vi.waitFor(
         () =>
           expect(
             wrapper.getByText(/Help out with Research & Development/),
@@ -150,11 +150,11 @@ describe('research.routes', () => {
   describe('/research/:slug', () => {
     it('renders an individual research article', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research/research-slug')
       })
 
-      await waitFor(
+      await vi.waitFor(
         () => {
           expect(wrapper.queryByTestId('research-title')).toHaveTextContent(
             'Research article title',
@@ -171,11 +171,11 @@ describe('research.routes', () => {
     it('rejects a request without a user present', async () => {
       mockActiveUser.userRoles = []
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research/create')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -184,11 +184,11 @@ describe('research.routes', () => {
 
     it('rejects a logged in user missing required role', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research/create')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -197,13 +197,13 @@ describe('research.routes', () => {
 
     it('accepts a logged in user with required role [research_creator]', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_CREATOR]
 
         wrapper = renderFn('/research/create')
       })
 
-      await waitFor(
+      await vi.waitFor(
         () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
@@ -215,12 +215,12 @@ describe('research.routes', () => {
 
     it('accepts a logged in user with required role [research_creator]', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
         wrapper = renderFn('/research/create')
       })
-      await waitFor(
+      await vi.waitFor(
         () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
@@ -236,11 +236,11 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = []
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -248,15 +248,15 @@ describe('research.routes', () => {
     })
 
     it('accepts a logged in user with required role', async () => {
-      let wrapper
-      act(() => {
-        mockActiveUser.userName = 'Jaasper'
-        mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
+      mockActiveUser.userName = 'Jaasper'
+      mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
 
+      let wrapper
+      await act(async () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
       })
     })
@@ -274,11 +274,11 @@ describe('research.routes', () => {
         }),
       })
 
-      act(() => {
+      await act(async () => {
         renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(mockedUsedNavigate).toHaveBeenCalledWith('/research/an-example')
       })
     })
@@ -299,11 +299,11 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(
           wrapper.getByText(
             'The research description is currently being edited by another editor.',
@@ -328,11 +328,11 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(wrapper.getByText('Edit your Research')).toBeInTheDocument()
       })
     })
@@ -349,11 +349,11 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
       })
     })
@@ -364,11 +364,11 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = []
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/research/an-example/new-update')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -377,12 +377,12 @@ describe('research.routes', () => {
 
     it('accepts a logged in user with required role', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
         wrapper = renderFn('/research/an-example/new-update')
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
       })
     })
@@ -391,11 +391,14 @@ describe('research.routes', () => {
   describe('/research/:slug/edit-update/:id', () => {
     it('rejects a request without a user present', async () => {
       mockActiveUser.userRoles = []
-      const wrapper = renderFn(
-        '/research/an-example/edit-update/nested-research-update',
-      )
+      let wrapper
+      await act(async () => {
+        wrapper = renderFn(
+          '/research/an-example/edit-update/nested-research-update',
+        )
+      })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -421,13 +424,13 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn(
           '/research/an-example/edit-update/nested-research-update',
         )
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
       })
     })
@@ -455,13 +458,13 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn(
           '/research/an-example/edit-update/nested-research-update',
         )
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(
           wrapper.getByText(
             /This research update is currently being edited by another editor/,
@@ -491,13 +494,13 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn(
           '/research/an-example/edit-update/nested-research-update',
         )
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(wrapper.getByText('Edit your update')).toBeInTheDocument()
       })
     })
@@ -506,13 +509,13 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = []
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn(
           '/research/an-example/edit-update/nested-research-update',
         )
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(
           wrapper.getByText(/role required to access this page/),
         ).toBeInTheDocument()
@@ -538,13 +541,13 @@ describe('research.routes', () => {
       })
 
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn(
           '/research/an-example/edit-update/nested-research-update',
         )
       })
 
-      await waitFor(() => {
+      await vi.waitFor(() => {
         expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
       })
     })

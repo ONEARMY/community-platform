@@ -1,6 +1,5 @@
-import { act } from 'react-dom/test-utils'
 import { useLocation } from 'react-router-dom'
-import { render } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { ScrollToTop } from './ScrollToTop'
@@ -13,14 +12,14 @@ vi.mock('react-router-dom', async () => ({
 }))
 
 describe('ScrollToTop', () => {
-  it('should scroll to top when pathname changes', () => {
+  it('should scroll to top when pathname changes', async () => {
     const scrollToSpy = vi.fn()
     global.window.scrollTo = scrollToSpy
     ;(useLocation as Mock).mockImplementation(() => ({
       pathname: '/initial',
     }))
 
-    act(() => {
+    await act(async () => {
       render(<ScrollToTop />)
     })
 
@@ -34,7 +33,7 @@ describe('ScrollToTop', () => {
       pathname: '/changed',
     }))
 
-    act(() => {
+    await act(async () => {
       render(<ScrollToTop />)
     })
 

@@ -106,7 +106,7 @@ describe('Questions', () => {
 
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = getWrapper()
       })
 
@@ -147,7 +147,7 @@ describe('Questions', () => {
 
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = getWrapper()
       })
 

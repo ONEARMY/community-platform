@@ -15,10 +15,10 @@ describe('TabbedContent', () => {
     expect(() => wrapper.getByText('Tab Panel #2')).toThrow()
   })
 
-  it('basic interaction', () => {
+  it('basic interaction', async () => {
     const wrapper = render(<Default />)
 
-    act(() => {
+    await act(async () => {
       wrapper.getByText('Tab #2').click()
     })
 

@@ -55,12 +55,12 @@ vi.mock('src/common/hooks/useCommonStores', () => {
 
 describe('Howto form', () => {
   describe('Provides user information', () => {
-    it('shows maximum file size', () => {
+    it('shows maximum file size', async () => {
       // Arrange
       const formValues = FactoryHowto()
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(formValues, 'edit', {})
       })
 
@@ -70,12 +70,12 @@ describe('Howto form', () => {
   })
 
   describe('Invalid file warning', () => {
-    it('Does not appear when submitting only fileLink', () => {
+    it('Does not appear when submitting only fileLink', async () => {
       // Arrange
       const formValues = FactoryHowto({ fileLink: 'www.test.com' })
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(formValues, 'edit', {})
       })
 
@@ -85,7 +85,7 @@ describe('Howto form', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('Does not appear when submitting only files', () => {
+    it('Does not appear when submitting only files', async () => {
       // Arrange
       const formValues = FactoryHowto({
         files: [
@@ -97,7 +97,7 @@ describe('Howto form', () => {
 
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(formValues, 'edit', {})
       })
 
@@ -107,7 +107,7 @@ describe('Howto form', () => {
       ).not.toBeInTheDocument()
     })
 
-    it('Appears when submitting 2 file types', () => {
+    it('Appears when submitting 2 file types', async () => {
       // Arrange
       const formValues = FactoryHowto({
         files: [
@@ -120,7 +120,7 @@ describe('Howto form', () => {
 
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(formValues, 'edit', {})
       })
 
@@ -140,7 +140,7 @@ describe('Howto form', () => {
 
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(formValues, 'edit', {})
       })
 

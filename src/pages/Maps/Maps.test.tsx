@@ -59,7 +59,7 @@ describe('Maps', () => {
       },
     })
 
-    act(() => {
+    await act(async () => {
       Wrapper()
     })
 
@@ -71,7 +71,7 @@ describe('Maps', () => {
   it('loads individual map card', async () => {
     let wrapper: any
 
-    act(() => {
+    await act(async () => {
       wrapper = Wrapper('/map#abc')
     })
 

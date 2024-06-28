@@ -27,7 +27,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 }))
 
 // Happy path well tested in cypress
-describe('DiscussionWrapper', () => {
+describe('DiscussionWrapper', async () => {
   it('loads the component', async () => {
     const discussionProps = {
       sourceType: 'question' as IDiscussion['sourceType'],
@@ -36,7 +36,7 @@ describe('DiscussionWrapper', () => {
     }
     let wrapper
 
-    act(() => {
+    await act(async () => {
       wrapper = render(
         <Provider>
           <ThemeProvider theme={Theme}>

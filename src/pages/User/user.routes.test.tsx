@@ -63,7 +63,7 @@ describe('User', () => {
 
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = getWrapper(user)
     })
 
@@ -76,7 +76,7 @@ describe('User', () => {
   it('displays user not found page', async () => {
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = getWrapper(null, '/u/does-not-exist')
     })
 
@@ -95,7 +95,7 @@ describe('User', () => {
 
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = getWrapper(user)
       })
 

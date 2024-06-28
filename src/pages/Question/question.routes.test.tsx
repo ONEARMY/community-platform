@@ -138,7 +138,7 @@ describe('question.routes', () => {
         })
       })
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/questions')
       })
       expect(wrapper.getByText(/loading/)).toBeInTheDocument()
@@ -147,7 +147,7 @@ describe('question.routes', () => {
     it('renders an empty state', async () => {
       let wrapper
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/questions')
       })
 
@@ -188,7 +188,7 @@ describe('question.routes', () => {
         })
       })
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/questions')
       })
 
@@ -215,7 +215,7 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/questions/create')
       })
 
@@ -260,7 +260,7 @@ describe('question.routes', () => {
         incrementViewCount: mockIncrementViewCount,
       })
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn(`/questions/${question.slug}`)
       })
       expect(wrapper.getByText(/loading/)).toBeInTheDocument()
@@ -301,7 +301,7 @@ describe('question.routes', () => {
         })
 
         let wrapper
-        act(() => {
+        await act(async () => {
           wrapper = renderFn(`/questions/${question.slug}`)
         })
 
@@ -324,7 +324,7 @@ describe('question.routes', () => {
           fetchQuestionBySlug: mockFetchQuestionBySlug,
         })
 
-        act(() => {
+        await act(async () => {
           wrapper = renderFn(`/questions/${question.slug}`)
         })
 
@@ -351,7 +351,7 @@ describe('question.routes', () => {
         userCanEditQuestion: false,
       })
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn(`/questions/${question.slug}`)
       })
 
@@ -376,7 +376,7 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn(`/questions/${question.slug}`)
       })
 
@@ -391,7 +391,7 @@ describe('question.routes', () => {
     const editFormTitle = /Edit your question/
     it('renders the question edit page', async () => {
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/questions/slug/edit')
       })
 
@@ -424,7 +424,7 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/questions/slug/edit')
       })
 
@@ -473,7 +473,7 @@ describe('question.routes', () => {
         activeUser: mockActiveUser,
       })
 
-      act(() => {
+      await act(async () => {
         wrapper = renderFn('/questions/slug/edit')
       })
 

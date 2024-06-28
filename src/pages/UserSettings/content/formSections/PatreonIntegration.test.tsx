@@ -122,8 +122,8 @@ describe('PatreonIntegration', () => {
       expect(screen.getByText(REMOVE_BUTTON_TEXT)).toBeInTheDocument()
     })
 
-    it('calls removePatreonConnection when "Remove Connection" button is clicked', () => {
-      act(() => {
+    it('calls removePatreonConnection when "Remove Connection" button is clicked', async () => {
+      await act(async () => {
         fireEvent.click(screen.getByText(REMOVE_BUTTON_TEXT))
       })
       expect(mockRemovePatreonConnection).toHaveBeenCalledWith(

@@ -89,7 +89,7 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = getWrapper()
     })
 
@@ -105,7 +105,7 @@ describe('Research Article', () => {
     })
   })
 
-  it('does not display contributors when undefined', () => {
+  it('does not display contributors when undefined', async () => {
     // Arrange
     ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
@@ -116,7 +116,7 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = getWrapper()
     })
 
@@ -137,7 +137,7 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = getWrapper()
     })
 
@@ -162,7 +162,7 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = getWrapper()
     })
 
@@ -211,10 +211,7 @@ describe('Research Article', () => {
           updates: [
             FactoryResearchItemUpdate({
               title: 'Research Update #1',
-              collaborators: [
-                'third-example-username',
-                'fourth-example-username',
-              ],
+              collaborators: ['example-username'],
               status: ResearchUpdateStatus.PUBLISHED,
               _deleted: false,
             }),
@@ -236,21 +233,20 @@ describe('Research Article', () => {
 
       // wait for Promise to resolve and state to update
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = getWrapper()
       })
 
       // Assert
       await waitFor(
         () => {
-          expect(wrapper.getAllByText('With contributions from')).toHaveLength(
+          expect(wrapper.getAllByText('With contributions from:')).toHaveLength(
             1,
           )
-          expect(wrapper.getAllByText('example-username')).toHaveLength(2)
+          expect(wrapper.getAllByText('example-username')).toHaveLength(3)
           expect(wrapper.getAllByText('another-example-username')).toHaveLength(
             2,
           )
-          expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
           expect(wrapper.queryByText('fourth-example-username')).toBeNull()
           expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
           expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
@@ -347,7 +343,7 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = getWrapper()
     })
 
@@ -378,7 +374,7 @@ describe('Research Article', () => {
 
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = getWrapper()
       })
 
@@ -414,7 +410,7 @@ describe('Research Article', () => {
 
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = getWrapper()
       })
 

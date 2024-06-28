@@ -19,9 +19,10 @@ export type SupportedEmailTemplates =
   | 'sender-message'
 
 export function getEmailHtml(emailType: SupportedEmailTemplates, ctx: {}) {
-  const dirPath = path.resolve()
+  let dirPath = path.resolve()
+  dirPath = dirPath.endsWith('/workspace') ? dirPath : `${dirPath}/dist` // needed to make it work for tests
 
-  const availableFiles = fs.readdirSync(path.join(path.resolve(), '/templates'))
+  const availableFiles = fs.readdirSync(path.join(dirPath, '/templates'))
 
   if (!availableFiles.includes(`${emailType}.html`)) {
     throw new Error(`Email template ${emailType} not found`)

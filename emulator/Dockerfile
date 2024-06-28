@@ -15,7 +15,7 @@
 # therefore these commands should be ran from there.
 #
 #   BUILD
-#   docker build -f ./functions/emulator/Dockerfile -t emulator .
+#   docker build -f ./emulator/Dockerfile -t emulator .
 #
 #   RUN
 #   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
@@ -86,9 +86,9 @@ COPY ./firebase.storage.rules           ./firebase.storage.rules
 COPY ./firestore.indexes.json           ./firestore.indexes.json
 COPY ./firestore.rules                  ./firestore.rules
 
-COPY ./functions/emulator/export.js     ./export.js
+COPY ./emulator/export.js               ./export.js
 
-COPY ./functions/emulator/link-logs.js  ./link-logs.js
+COPY ./emulator/link-logs.js            ./link-logs.js
 
 # This folder needs to exist because otherwise
 # the emulators error if the user did not mount

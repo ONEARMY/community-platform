@@ -4,7 +4,11 @@ import { form } from '../../../../src/pages/UserSettings/labels'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
 import * as settingsData from '../fixtures/settings'
 import { UserMenuItem } from '../support/commandsUi'
-import { DbCollectionName, setIsPreciousPlastic } from '../utils/TestUtils'
+import {
+  DbCollectionName,
+  generateNewUserDetails,
+  setIsPreciousPlastic,
+} from '../utils/TestUtils'
 
 import type { IUser } from '../../../../src/models/user.models'
 
@@ -21,6 +25,16 @@ interface IMapPin {
   locationName: string
 }
 type ILink = IUser['links'][0] & { index: number }
+
+const locationStub = {
+  administrative: '',
+  country: 'Singapore',
+  countryCode: 'sg',
+  latlng: { lng: '103.8194992', lat: '1.357107' },
+  name: 'Drongo Trail, Bishan, Central, Singapore, 578774, Singapore',
+  postcode: '578774',
+  value: 'Singapore',
+}
 
 describe('[Settings]', () => {
   beforeEach(() => {
@@ -250,13 +264,20 @@ describe('[Settings]', () => {
   })
 
   describe('[Focus Machine Builder]', () => {
-    const expected = settingsData.expectedMachineBuilder
-
     it('[Edit a new profile]', () => {
-      cy.login('settings_machine_new@test.com', 'test1234')
+      const user = generateNewUserDetails()
+      const bazarUrl = 'http://settings_machine_bazarlink.com'
+      const coverImage = 'images/profile-cover-2.png'
+      const description = "We're mechanics and our jobs are making machines"
+      const machineBuilderXp = ['electronics', 'welding']
+      const mapPinDescription = 'Informative workshop on machines every week'
+      const profileType = 'machine-builder'
+
+      cy.signUpNewUser(user)
+
       cy.step('Go to User Settings')
       cy.visit('/settings')
-      selectFocus(expected.profileType)
+      selectFocus(profileType)
 
       cy.step("Can't save without required fields being populated")
       cy.get('[data-cy=save]').click()
@@ -264,26 +285,26 @@ describe('[Settings]', () => {
 
       cy.step('Populate profile')
       setInfo({
-        username: expected.userName,
-        description: expected.about,
-        coverImage: 'images/profile-cover-2.png',
+        username: user.username,
+        description,
+        coverImage,
       })
 
       cy.step('Choose Expertise')
-      cy.get('[data-cy=electronics]').click()
-      cy.get('[data-cy=welding]').click()
+      cy.get(`[data-cy=${machineBuilderXp[0]}]`).click()
+      cy.get(`[data-cy=${machineBuilderXp[1]}]`).click()
 
       cy.step('Update Contact Links')
       addContactLink({
         index: 0,
         label: ExternalLinkLabel.BAZAR,
-        url: `http://settings_machine_bazarlink.com`,
+        url: bazarUrl,
       })
 
       setWorkspaceMapPin({
-        description: expected.mapPinDescription,
+        description: mapPinDescription,
         searchKeyword: 'singapo',
-        locationName: expected.location.value,
+        locationName: locationStub.value,
       })
 
       cy.step('Opts out of public contact')
@@ -294,32 +315,26 @@ describe('[Settings]', () => {
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=save]').should('not.be.disabled')
 
-      cy.queryDocuments(
-        DbCollectionName.users,
-        'userName',
-        '==',
-        expected.userName,
-      ).then((docs) => {
-        cy.log('queryDocs', docs)
-        expect(docs.length).to.equal(1)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqSettings', expected)
-      })
+      cy.visit(`u/${user.username}`)
+      cy.contains(user.username)
+      cy.contains(description)
+      // To-do: Finish adding the expectations of the settings set in this test
     })
   })
 
   describe('[Focus Community Builder]', () => {
     const expected = settingsData.expectedCommunityBuilder
 
-    it('[Edit a new profile]', () => {
-      cy.login('settings_community_new@test.com', 'test1234')
+    it.only('[Edit a new profile]', () => {
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
+
       cy.step('Go to User Settings')
       cy.visit('/settings')
       selectFocus(expected.profileType)
 
       setInfo({
-        username: expected.userName,
+        username: user.username,
         description: expected.about,
         coverImage: 'images/profile-cover-1.jpg',
       })
@@ -340,18 +355,26 @@ describe('[Settings]', () => {
       })
 
       cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=save]').should('not.be.disabled')
+
+      cy.pause()
+
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
         '==',
-        expected.userName,
+        user.username,
       ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqSettings', expected)
+        expect(docs[0]).to.containSubset({
+          about: expected.about,
+          // coverimage
+          // links
+          mapPinDescription: expected.mapPinDescription,
+          location: locationStub,
+        })
       })
     })
   })

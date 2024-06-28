@@ -325,7 +325,7 @@ describe('[Settings]', () => {
   describe('[Focus Community Builder]', () => {
     const expected = settingsData.expectedCommunityBuilder
 
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
 

@@ -8,7 +8,7 @@ import {
   getMapPinSubmissionEmail,
   getReceiverMessageEmail,
   getSenderMessageEmail,
-} from './templates'
+} from './templateHelpers'
 import { getUserAndEmail, isValidMessageRequest } from './utils'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 

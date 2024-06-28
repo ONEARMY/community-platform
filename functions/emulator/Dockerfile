@@ -57,13 +57,15 @@ WORKDIR /app
 
 RUN \
   apt-get update && \
+  apt-get -y install curl && \
   # For Firebase
   # https://firebase.google.com/docs/emulator-suite/install_and_configure
   apt-get -y install openjdk-11-jre-headless && \
   # For debugging
-  apt-get -y install curl && \
   apt-get -y install nano && \
   apt-get clean
+
+HEALTHCHECK CMD curl --fail http://0.0.0.0:4001 || exit 1
 
 # In this codebase, we prefer to use yarn over npm
 # but I couldn't get yarn global install working.

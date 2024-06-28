@@ -7,6 +7,9 @@ services:
     build:
       context: ./
       dockerfile: ./functions/emulator/Dockerfile
+    depends_on:
+      simulated-webhook-receiver:
+        condition: service_healthy
     ports:
     - 4001-4008:4001-4008
     volumes:

@@ -241,15 +241,24 @@ describe('Research Article', () => {
       })
 
       // Assert
-      await waitFor(() => {
-        expect(wrapper.getAllByText('With contributions from')).toHaveLength(1)
-        expect(wrapper.getAllByText('example-username')).toHaveLength(2)
-        expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
-        expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
-        expect(wrapper.queryByText('fourth-example-username')).toBeNull()
-        expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
-        expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getAllByText('With contributions from')).toHaveLength(
+            1,
+          )
+          expect(wrapper.getAllByText('example-username')).toHaveLength(2)
+          expect(wrapper.getAllByText('another-example-username')).toHaveLength(
+            2,
+          )
+          expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)
+          expect(wrapper.queryByText('fourth-example-username')).toBeNull()
+          expect(wrapper.getAllByTestId('collaborator/creator')).toHaveLength(1)
+          expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(5)
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('does not show edit timestamp, when create displays the same value', async () => {

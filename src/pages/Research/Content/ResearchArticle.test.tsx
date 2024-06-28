@@ -143,7 +143,7 @@ describe('Research Article', () => {
 
     // Assert
     await waitFor(() => {
-      expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
+      expect(wrapper.getAllByText('With contributions from')).toHaveLength(1)
       expect(wrapper.getAllByText('example-username')).toHaveLength(2)
       expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
       expect(wrapper.getAllByTestId('Username: known flag')).toHaveLength(4)
@@ -242,7 +242,7 @@ describe('Research Article', () => {
 
       // Assert
       await waitFor(() => {
-        expect(wrapper.getAllByText('With contributions from:')).toHaveLength(1)
+        expect(wrapper.getAllByText('With contributions from')).toHaveLength(1)
         expect(wrapper.getAllByText('example-username')).toHaveLength(2)
         expect(wrapper.getAllByText('another-example-username')).toHaveLength(2)
         expect(wrapper.getAllByText('third-example-username')).toHaveLength(1)

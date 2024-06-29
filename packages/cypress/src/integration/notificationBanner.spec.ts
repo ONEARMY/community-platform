@@ -7,7 +7,7 @@ describe('[Notification Banner]', () => {
   })
 
   describe('[By unregistered user]', () => {
-    it('[Notification Banner is visible for user with blank profile]', () => {
+    it('[Notification Banner is not visible]', () => {
       cy.get('[data-cy=notificationBanner]').should('not.exist')
     })
   })
@@ -24,7 +24,7 @@ describe('[Notification Banner]', () => {
       cy.clickMenuItem(UserMenuItem.Settings)
 
       cy.step('Update Member section')
-      cy.get('[data-cy="add-a-map-pin"]').click()
+      cy.get('[data-cy="add-a-map-pin"]').click({ force: true })
       cy.get('[data-cy=pin-description]').clear().type('test')
       cy.get('[data-cy="osm-geocoding-input"]').clear().type('singapo')
       cy.get('[data-cy="osm-geocoding-results"]')

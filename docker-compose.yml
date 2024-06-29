@@ -6,15 +6,15 @@ services:
     container_name: backend
     build:
       context: ./
-      dockerfile: ./emulator/Dockerfile
+      dockerfile: ./containerization/Dockerfile
     depends_on:
       simulated-webhook-receiver:
         condition: service_healthy
     ports:
     - 4001-4008:4001-4008
     volumes:
-    - ./emulator/data:/seed
-    - ./emulator/logs:/app/logs
+    - ./containerization/data:/seed
+    - ./containerization/logs:/app/logs
     - ./functions:/app/functions
     - ./functions/src/emailNotifications/templates:/templates
 

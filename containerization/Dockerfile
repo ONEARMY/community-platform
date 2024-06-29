@@ -17,16 +17,16 @@
 # therefore these commands should be ran from there.
 #
 #   BUILD
-#   docker build -f ./emulator/Dockerfile -t emulator .
+#   docker build -f ./containerization/Dockerfile -t backend .
 #
 #   RUN
-#   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it backend
 #
 #   RUN WITH SEED DATA
-#   docker run -v ./emulator/data:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#   docker run -v ./containerization/data:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it backend
 #
 #   RUN WITH EMAIL TEMPLATES
-#   docker run -v ./functions/src/emailNotifications/templates:/templates -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#   docker run -v ./functions/src/emailNotifications/templates:/templates -v ./functions:/app/functions -p 4001-4008:4001-4008 -it backend
 #
 #   EXPORT (while the container is running)
 #   docker exec -it <conatiner_name> /app/export.js
@@ -88,9 +88,9 @@ COPY ./firebase.storage.rules           ./firebase.storage.rules
 COPY ./firestore.indexes.json           ./firestore.indexes.json
 COPY ./firestore.rules                  ./firestore.rules
 
-COPY ./emulator/export.js               ./export.js
+COPY ./containerization/export.js       ./export.js
 
-COPY ./emulator/link-logs.js            ./link-logs.js
+COPY ./containerization/link-logs.js    ./link-logs.js
 
 # This folder needs to exist because otherwise
 # the emulators error if the user did not mount

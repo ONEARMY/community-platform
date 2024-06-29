@@ -4,11 +4,13 @@
 # does not create the `dist` folder. It should be mounted from
 # the host machine to the container, using the `-v` flag.
 #
-# Optionally, initial data can be setup by mounting `/seed`.
+# Optionally, initial data can be setup by mounting the `/seed`
+# folder on the container.
 #
 # If you want to not get errors due to missing email templates,
 # you also need to mount those. The functions code in the
-# emulator expects them to be located at `/templates`.
+# emulator expects them to be located in the `/templates` folder
+# on the container.
 #
 # COMMANDS
 # We need some files from the root directory of the project,
@@ -21,7 +23,7 @@
 #   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
 #
 #   RUN WITH SEED DATA
-#   docker run -v ./functions/data/emulator:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#   docker run -v ./emulator/data:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
 #
 #   RUN WITH EMAIL TEMPLATES
 #   docker run -v ./functions/src/emailNotifications/templates:/templates -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator

@@ -60,5 +60,6 @@ export type availableGlyphs =
   | 'view'
   | 'volunteer'
   | 'website'
+  | 'send'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }

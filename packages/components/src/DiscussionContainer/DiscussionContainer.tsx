@@ -23,6 +23,7 @@ export interface IProps {
   onSubmitReply: (_id: string, reply: string) => Promise<void>
   showAvatar: boolean
   supportReplies?: boolean
+  isMobile?: boolean
 }
 
 export const DiscussionContainer = (props: IProps) => {
@@ -38,6 +39,7 @@ export const DiscussionContainer = (props: IProps) => {
     onChange,
     onMoreComments,
     onSubmit,
+    isMobile,
     isLoggedIn,
     showAvatar,
     supportReplies = false,
@@ -92,6 +94,7 @@ export const DiscussionContainer = (props: IProps) => {
           comment={comment}
           onChange={onChange}
           onSubmit={onSubmit}
+          isMobile={isMobile}
           isLoggedIn={isLoggedIn}
         />
       </Flex>

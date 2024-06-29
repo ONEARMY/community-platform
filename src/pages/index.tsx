@@ -7,6 +7,7 @@ import Main from 'src/pages/common/Layout/Main'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 
+import { useCommonStores } from '../common/hooks/useCommonStores'
 import { ScrollToTop } from '../common/ScrollToTop'
 import { NotFoundPage } from './NotFound/NotFound'
 import {
@@ -18,6 +19,11 @@ import {
 import { QuestionModuleContainer } from './Question'
 
 export const Pages = () => {
+  const {
+    stores: {
+      themeStore: { setRootRef },
+    },
+  } = useCommonStores()
   //   any,
   //   {
   //     singlePageMode: boolean
@@ -39,6 +45,7 @@ export const Pages = () => {
     <Flex
       sx={{ height: '100vh', flexDirection: 'column' }}
       data-cy="page-container"
+      ref={setRootRef}
     >
       <BrowserRouter>
         <Analytics />

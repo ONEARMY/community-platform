@@ -8,6 +8,7 @@ import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
 import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
 import { FaSignal } from '@react-icons/all-files/fa/FaSignal'
 import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
+import { FiSend } from '@react-icons/all-files/fi/FiSend'
 import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
 import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
 import { GoLinkExternal } from '@react-icons/all-files/go/GoLinkExternal'
@@ -108,6 +109,7 @@ export const glyphs: IGlyphs = {
   time: <MdAccessTime />,
   'turned-in': <MdTurnedIn />,
   'social-media': iconMap.socialMedia,
+  send: <FiSend />,
   supporter: iconMap.supporter,
   show: iconMap.show,
   update: iconMap.update,
@@ -129,6 +131,12 @@ const IconWrapper = styled.div<Props>`
   min-width: ${(props) => (props.size ? `${props.size}px` : '32px')};
   min-height: ${(props) => (props.size ? `${props.size}px` : '32px')};
   position: relative;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
   ${verticalAlign} ${space}
     ${(props) =>
     props.onClick &&

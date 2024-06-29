@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import { DiscussionContainer, Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { transformToUserComments } from 'src/common/transformToUserComments'
@@ -24,7 +25,7 @@ interface IProps {
   primaryContentId?: string | undefined
 }
 
-export const DiscussionWrapper = (props: IProps) => {
+export const DiscussionWrapper = observer((props: IProps) => {
   const {
     canHideComments,
     primaryContentId,
@@ -38,7 +39,10 @@ export const DiscussionWrapper = (props: IProps) => {
   const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  const { discussionStore } = useCommonStores().stores
+  const {
+    discussionStore,
+    themeStore: { isMobile },
+  } = useCommonStores().stores
   const highlightedCommentId = window.location.hash.replace('#comment:', '')
 
   const transformComments = (discussion: IDiscussion) => {
@@ -170,10 +174,18 @@ export const DiscussionWrapper = (props: IProps) => {
           <AuthWrapper
             roleRequired={'beta-tester' as UserRole.BETA_TESTER}
             fallback={
-              <DiscussionContainer {...discussionProps} showAvatar={false} />
+              <DiscussionContainer
+                {...discussionProps}
+                showAvatar={false}
+                isMobile={isMobile}
+              />
             }
           >
-            <DiscussionContainer {...discussionProps} showAvatar />
+            <DiscussionContainer
+              {...discussionProps}
+              showAvatar
+              isMobile={isMobile}
+            />
           </AuthWrapper>
         </HideDiscussionContainer>
       )}
@@ -181,12 +193,20 @@ export const DiscussionWrapper = (props: IProps) => {
         <AuthWrapper
           roleRequired={'beta-tester' as UserRole.BETA_TESTER}
           fallback={
-            <DiscussionContainer {...discussionProps} showAvatar={false} />
+            <DiscussionContainer
+              {...discussionProps}
+              showAvatar={false}
+              isMobile={isMobile}
+            />
           }
         >
-          <DiscussionContainer {...discussionProps} showAvatar />
+          <DiscussionContainer
+            {...discussionProps}
+            showAvatar
+            isMobile={isMobile}
+          />
         </AuthWrapper>
       )}
     </>
   )
-}
+})

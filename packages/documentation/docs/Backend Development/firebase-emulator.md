@@ -175,4 +175,4 @@ docker exec -it <container_name> cat /app/firestore-debug.log
 
 ## Troubleshooting
 
-See the `./functions/emulator/Dockerfile` for some debugging tips.
+See the `./containerization/Dockerfile` file for some debugging tips.

@@ -13,9 +13,9 @@ services:
     ports:
     - 4001-4008:4001-4008
     volumes:
+    - ./emulator/data:/seed
     - ./emulator/logs:/app/logs
     - ./functions:/app/functions
-    - ./functions/data/emulator:/seed
     - ./functions/src/emailNotifications/templates:/templates
 
   simulated-webhook-receiver:

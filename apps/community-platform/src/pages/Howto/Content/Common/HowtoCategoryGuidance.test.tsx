@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { guidance } from '../../../../pages/Howto/labels'
 import { HowtoProvider } from '../../../../test/components'
 import { FactoryCategory } from '../../../../test/factories/Category'
-import { HowtoCategoryGuidance } from '.'
+import { HowtoCategoryGuidance } from './HowtoCategoryGuidance'
 
 describe('HowtoCategoryGuidance', () => {
   it('renders expected main content when a category that exists is present', async () => {

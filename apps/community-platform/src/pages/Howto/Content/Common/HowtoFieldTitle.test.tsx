@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, it, vi } from 'vitest'
 
 import { HowtoProvider } from '../../../../test/components'
-import { HowtoFieldTitle } from '.'
+import { HowtoFieldTitle } from './HowtoFieldTitle'
 
 import type { HowtoStore } from '../../../../stores/Howto/howto.store'
 import type { ParentType } from './Howto.form'

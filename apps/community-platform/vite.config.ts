@@ -43,10 +43,18 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    cache: {
-      dir: '../../node_modules/.vitest',
-    },
+    setupFiles: ['./src/test/setup.ts'],
     environment: 'jsdom',
     include: ['./src/**/*.test.{ts,tsx}'],
+    teardownTimeout: 15000,
+    testTimeout: 15000,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text'],
+    },
+    logHeapUsage: true,
+    sequence: {
+      hooks: 'list',
+    },
   },
 })

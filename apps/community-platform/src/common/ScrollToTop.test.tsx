@@ -1,6 +1,5 @@
-import { act } from 'react-dom/test-utils'
 import { useLocation } from 'react-router-dom'
-import { render } from '@testing-library/react'
+import { act, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 import { ScrollToTop } from './ScrollToTop'

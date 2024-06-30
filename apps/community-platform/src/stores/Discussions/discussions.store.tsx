@@ -243,7 +243,7 @@ export class DiscussionStore extends ModuleStore {
 
         if (research) {
           const updateIndex = research.updates.findIndex(
-            ({ _id }) => _id == discussion.sourceId,
+            ({ _id }) => _id === discussion.sourceId,
           )
           const update = research.updates[updateIndex]
 
@@ -259,14 +259,16 @@ export class DiscussionStore extends ModuleStore {
           )
 
           if (update && update.collaborators) {
-            await update.collaborators.map((collaborator) => {
-              this.userNotificationsStore.triggerNotification(
-                'new_comment_discussion',
-                collaborator,
-                `/research/${research.slug}#update_${updateIndex}-comment:${commentId}`,
-                research.title,
-              )
-            })
+            await Promise.all(
+              update.collaborators.map((collaborator) =>
+                this.userNotificationsStore.triggerNotification(
+                  'new_comment_discussion',
+                  collaborator,
+                  `/research/${research.slug}#update_${updateIndex}-comment:${commentId}`,
+                  research.title,
+                ),
+              ),
+            )
           }
         }
         return

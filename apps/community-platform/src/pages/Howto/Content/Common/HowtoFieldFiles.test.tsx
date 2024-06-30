@@ -4,7 +4,7 @@ import { describe, it, vi } from 'vitest'
 import { guidance } from '../../../../pages/Howto/labels'
 import { HowtoProvider } from '../../../../test/components'
 import { FactoryCategory } from '../../../../test/factories/Category'
-import { HowtoFieldFiles } from '.'
+import { HowtoFieldFiles } from './HowtoFieldFiles'
 
 describe('HowtoFieldFiles', () => {
   it('renders with no guidance category provided', async () => {

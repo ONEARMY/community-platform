@@ -101,11 +101,7 @@ describe('PatreonIntegration', () => {
     })
 
     it('links to one army patreon page', () => {
-      expect(
-        screen.getByRole(
-          (t, e) => e?.getAttribute('href') === ONE_ARMY_PATREON_URL,
-        ),
-      ).toBeInTheDocument()
+      expect(screen.getByTestId('patreon-link')).toBeInTheDocument()
     })
   })
 

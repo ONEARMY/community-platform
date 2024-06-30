@@ -6,11 +6,11 @@ import { Box, Card, Flex, Heading } from 'theme-ui'
 
 import IconHeaderHowto from '../../../../assets/images/header-section/howto-header-icon.svg'
 import { logger } from '../../../../logger'
-import { QuestionPostingGuidelines } from '../../../../pages/Question/Content/Common'
-import * as LABELS from '../../../../pages/Question/labels'
 import { useQuestionStore } from '../../../../stores/Question/question.store'
 import { setAllowDraftSaveFalse } from '../../../../utils/validators'
 import { QUESTION_MAX_IMAGES } from '../../constants'
+import { QuestionPostingGuidelines } from '../../Content/Common'
+import * as LABELS from '../../labels'
 import { QuestionImagesField } from './FormFields/QuestionImage.field'
 import {
   QuestionCategoryField,

@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, it } from 'vitest'
 
 import { HowtoProvider } from '../../../../test/components'
-import { FormFieldWrapper } from '.'
+import { FormFieldWrapper } from './FormFieldWrapper'
 
 describe('FormFieldWrapper', () => {
   it('renders the props', async () => {

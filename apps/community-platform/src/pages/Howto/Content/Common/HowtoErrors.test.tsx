@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
 import { HowtoProvider } from '../../../../test/components'
-import { HowtoErrors } from '.'
+import { HowtoErrors } from './HowtoErrors'
 
 describe('HowtoErrors', () => {
   it('renders component when visible and has intro errors', async () => {

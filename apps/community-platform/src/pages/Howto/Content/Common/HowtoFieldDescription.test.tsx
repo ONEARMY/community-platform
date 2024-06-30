@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, it } from 'vitest'
 
 import { HowtoProvider } from '../../../../test/components'
-import { HowtoFieldDescription } from '.'
+import { HowtoFieldDescription } from './HowtoFieldDescription'
 
 describe('HowtoFieldStepsDescription', () => {
   it('renders', async () => {

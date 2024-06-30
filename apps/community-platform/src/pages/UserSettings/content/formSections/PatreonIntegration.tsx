@@ -136,7 +136,12 @@ export const PatreonIntegration = (props: { user: IUserPP }) => {
         <Text mt={4} mb={4} sx={{ display: 'block', whiteSpace: 'pre-line' }}>
           How it works: <br />
           1.{' '}
-          <a href={ONE_ARMY_PATREON_URL} target="_blank" rel="noreferrer">
+          <a
+            href={ONE_ARMY_PATREON_URL}
+            data-testid="patreon-link"
+            target="_blank"
+            rel="noreferrer"
+          >
             Support us
           </a>{' '}
           on Patreon <br />

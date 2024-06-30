@@ -7,7 +7,7 @@ import { getFrameSrc } from './Academy'
 // being instantiated as part of the loading process
 // This is a code smell, which needs to be resolved but
 // is out of scope for the current task.
-vi.mock('src/common/hooks/useCommonStores', () => {
+vi.mock('../../common/hooks/useCommonStores', () => {
   return {
     useCommonStores: vi.fn(),
   }

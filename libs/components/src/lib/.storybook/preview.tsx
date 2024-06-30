@@ -9,7 +9,7 @@ import {
   preciousPlasticTheme,
   projectKampTheme,
   fixingFashionTheme,
-} from 'oa-themes'
+} from '@onearmy.apps/themes'
 
 import {
   Route,

@@ -2,6 +2,7 @@
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import viteTsConfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   root: __dirname,
@@ -17,7 +18,13 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  plugins: [react(), nxViteTsPaths()],
+  plugins: [
+    react(),
+    nxViteTsPaths({}),
+    viteTsConfigPaths({
+      root: '../../',
+    }),
+  ],
 
   // Uncomment this if you are using workers.
   // worker: {
@@ -33,5 +40,13 @@ export default defineConfig({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
+  },
+  test: {
+    globals: true,
+    cache: {
+      dir: '../../node_modules/.vitest',
+    },
+    environment: 'jsdom',
+    include: ['./src/**/*.test.{ts,tsx}'],
   },
 })

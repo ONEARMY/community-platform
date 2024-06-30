@@ -8,9 +8,13 @@ import type { HowtoStore } from '../../../../stores/Howto/howto.store'
 import type { ParentType } from './Howto.form'
 
 vi.mock('../../../../stores/Howto/howto.store')
-const store = await vi.importMock('../../../../stores/Howto/howto.store')
 
 describe('HowtoFieldTitle', () => {
+  let store: HowtoStore
+  beforeAll(async () => {
+    store = await vi.importMock('../../../../stores/Howto/howto.store')
+  })
+
   it('renders', async () => {
     const props = {
       _id: 'random-123',

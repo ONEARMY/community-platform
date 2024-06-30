@@ -8,13 +8,19 @@ import {
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
+import { IModerationStatus } from '@onearmy.apps/shared'
+import { preciousPlasticTheme } from '@onearmy.apps/themes'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { preciousPlasticTheme } from 'oa-themes'
-import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
 import { describe, expect, it, vi } from 'vitest'
 
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
+import {
+  FactoryHowto,
+  FactoryHowtoStep,
+} from '../../../../test/factories/Howto'
+import { Howto } from './Howto'
+
+import type { HowtoStore } from '../../../../stores/Howto/howto.store'
 
 const Theme = preciousPlasticTheme.styles
 
@@ -28,7 +34,7 @@ const mockHowtoStore = () => ({
   removeActiveHowto: vi.fn(),
 })
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('../../../../common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
@@ -45,10 +51,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
     },
   }),
 }))
-
-import { IModerationStatus } from '@onearmy.apps/shared'
-
-import { Howto } from './Howto'
 
 const factory = (howtoStore?: Partial<HowtoStore>) => {
   const router = createMemoryRouter(

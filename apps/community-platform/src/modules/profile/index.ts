@@ -1,7 +1,7 @@
 import { getConfigurationOption } from '../../config/config'
 import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
 
-import type { PlatformTheme } from 'oa-themes'
+import type { PlatformTheme } from '@onearmy.apps/themes'
 
 export const getSupportedProfileTypes = (currentTheme?: PlatformTheme) => {
   const supportedProfileTypes = SupportedProfileTypesFactory(

@@ -50,3 +50,4 @@ functions/firebase-debug.log
 *.tsbuildinfo
 .nx
 libs/dist
+dist/*

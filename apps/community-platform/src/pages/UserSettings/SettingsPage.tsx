@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Form } from 'react-final-form'
 import { useParams } from 'react-router'
-import { Button, Loader, TextNotification } from '@onearmy.apps/components'
+import {
+  Button,
+  ExternalLink,
+  Loader,
+  TextNotification,
+} from '@onearmy.apps/components'
 import { IModerationStatus } from '@onearmy.apps/shared'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'

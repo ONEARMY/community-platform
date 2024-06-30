@@ -1,4 +1,0 @@
----
-id: docs
-title: Documentation
----

@@ -9,14 +9,13 @@ import { hasAdminRights, randomID } from 'src/utils/helpers'
 
 import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
-import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
+import { updateDiscussionMetadata } from './discussionEvents'
 
-import type { IResearch, IUserPPDB } from 'src/models'
+import type { IUserPPDB } from 'src/models'
 import type {
   IComment,
   IDiscussion,
   IDiscussionDB,
-  IDiscussionSourceModelOptions,
 } from 'src/models/discussion.models'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
@@ -119,8 +118,6 @@ export class DiscussionStore extends ModuleStore {
           newComment,
         )
 
-        await this._addNotifications(newComment, currentDiscussion)
-
         return this._updateDiscussion(dbRef, currentDiscussion, 'add')
       }
     } catch (err) {
@@ -219,78 +216,6 @@ export class DiscussionStore extends ModuleStore {
     }
 
     return null
-  }
-
-  private async _addNotifications(comment: IComment, discussion: IDiscussion) {
-    const collectionName = getCollectionName(discussion.sourceType)
-    if (!collectionName) {
-      return logger.trace(
-        `Unable to find collection. Discussion notification not sent. sourceType: ${discussion.sourceType}`,
-      )
-    }
-    const parentComment = discussion.comments.find(
-      ({ _id }) => _id === comment.parentCommentId,
-    )
-    const commentId = parentComment ? parentComment._id : comment._id
-
-    switch (collectionName) {
-      case 'research':
-        const researchRef = this.db
-          .collection<IResearch.Item>(collectionName)
-          .doc(discussion.primaryContentId)
-
-        const research = toJS(await researchRef.get())
-
-        if (research) {
-          const updateIndex = research.updates.findIndex(
-            ({ _id }) => _id == discussion.sourceId,
-          )
-          const update = research.updates[updateIndex]
-
-          const username = parentComment
-            ? parentComment.creatorName
-            : research._createdBy
-
-          await this.userNotificationsStore.triggerNotification(
-            'new_comment_discussion',
-            username,
-            '/research/' + research.slug + '#update_' + updateIndex,
-            research.title,
-          )
-
-          if (update && update.collaborators) {
-            await update.collaborators.map((collaborator) => {
-              this.userNotificationsStore.triggerNotification(
-                'new_comment_discussion',
-                collaborator,
-                `/research/${research.slug}#update_${updateIndex}-comment:${commentId}`,
-                research.title,
-              )
-            })
-          }
-        }
-        return
-      default:
-        const dbRef = this.db
-          .collection<IDiscussionSourceModelOptions>(collectionName)
-          .doc(discussion.sourceId)
-        const parentContent = toJS(await dbRef.get())
-        const parentPath =
-          collectionName === 'howtos' ? 'how-to' : collectionName
-
-        if (parentContent) {
-          const username = parentComment
-            ? parentComment.creatorName
-            : parentContent._createdBy
-
-          return this.userNotificationsStore.triggerNotification(
-            'new_comment_discussion',
-            username,
-            `/${parentPath}/${parentContent.slug}#comment:${commentId}`,
-            parentContent.title,
-          )
-        }
-    }
   }
 
   private _findAndUpdateComment(

@@ -1,11 +1,12 @@
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
 import { vi } from 'vitest'
 
-vi.mock('src/common/hooks/useCommonStores', () => {
+import { useCommonStores } from '../../common/hooks/useCommonStores'
+import { FactoryResearchItem } from '../../test/factories/ResearchItem'
+
+vi.mock('../../common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {

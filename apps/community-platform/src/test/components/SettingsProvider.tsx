@@ -1,14 +1,15 @@
 import { Form } from 'react-final-form'
 import arrayMutators from 'final-form-arrays'
 import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { FactoryUser } from 'src/test/factories/User'
 import { vi } from 'vitest'
+
+import { useCommonStores } from '../../common/hooks/useCommonStores'
+import { FactoryUser } from '../../test/factories/User'
 
 const mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
 const mockUpdateUserBadge = vi.fn()
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('../../common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {

@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom/vitest'
 
 import { UserRole } from '@onearmy.apps/shared'
-import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
+import { FactoryUser } from '../../test/factories/User'
 import { exportedForTesting } from './howto.service'
 
 const mockWhere = vi.fn()

@@ -1,7 +1,7 @@
-import { FactoryNotification } from 'src/test/factories/Notification'
-import { FactoryUser } from 'src/test/factories/User'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { FactoryNotification } from '../../test/factories/Notification'
+import { FactoryUser } from '../../test/factories/User'
 import { MockDBStore } from '../common/__mocks__/module.store'
 import { UserNotificationsStore } from './notifications.store'
 

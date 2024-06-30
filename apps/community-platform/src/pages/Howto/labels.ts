@@ -6,7 +6,7 @@ import {
   HOWTO_TITLE_MIN_LENGTH,
 } from './constants'
 
-import type { ILabels } from 'src/common/Form/types'
+import type { ILabels } from '../../common/Form/types'
 
 export const headings = {
   create: '<span>Create</span> a How-To',

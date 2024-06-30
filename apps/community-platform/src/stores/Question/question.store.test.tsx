@@ -1,13 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('../common/module.store')
-
-import { FactoryQuestionItem } from 'src/test/factories/Question'
-import { FactoryUser } from 'src/test/factories/User'
-
+import { FactoryQuestionItem } from '../../test/factories/Question'
+import { FactoryUser } from '../../test/factories/User'
 import { QuestionStore } from './question.store'
 
 import type { IRootStore } from '../RootStore'
+vi.mock('../common/module.store')
 
 const mockToggleDocSubscriber = vi.fn()
 vi.mock('../common/toggleDocSubscriberStatusByUserName', () => {

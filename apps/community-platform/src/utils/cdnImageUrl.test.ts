@@ -1,9 +1,10 @@
-const STORAGE_BUCKET = 'some-bucket'
 import { beforeEach } from 'node:test'
-import { _cdnImageUrlInternal } from 'src/utils/cdnImageUrl'
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('src/config/config', () => ({
+import { _cdnImageUrlInternal } from '../utils/cdnImageUrl'
+const STORAGE_BUCKET = 'some-bucket'
+
+vi.mock('../../config/config', () => ({
   getConfigurationOption: vi.fn(),
 }))
 

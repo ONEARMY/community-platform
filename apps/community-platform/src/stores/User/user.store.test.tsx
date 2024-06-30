@@ -1,14 +1,14 @@
 import { faker } from '@faker-js/faker'
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import {
   EmailNotificationFrequency,
   IModerationStatus,
 } from '@onearmy.apps/shared'
-import { FactoryHowto } from 'src/test/factories/Howto'
-import { FactoryResearchItem } from 'src/test/factories/ResearchItem'
-import { FactoryUser } from 'src/test/factories/User'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { FactoryHowto } from '../../test/factories/Howto'
+import { FactoryResearchItem } from '../../test/factories/ResearchItem'
+import { FactoryUser } from '../../test/factories/User'
 import { UserStore } from './user.store'
 
 vi.mock('../common/module.store')

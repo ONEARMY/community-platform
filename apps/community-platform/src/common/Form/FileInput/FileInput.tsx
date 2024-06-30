@@ -1,9 +1,9 @@
-import * as React from 'react'
+import React from 'react'
 import { useEffect, useState } from 'react'
+import { Button, DownloadStaticFile } from '@onearmy.apps/components'
 import Compressor from '@uppy/compressor'
 import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
-import { Button, DownloadStaticFile } from '@onearmy.apps/components'
 import { Flex } from 'theme-ui'
 
 import { UPPY_CONFIG } from './UppyConfig'

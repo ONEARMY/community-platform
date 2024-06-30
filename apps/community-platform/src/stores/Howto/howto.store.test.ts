@@ -1,17 +1,17 @@
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('../common/module.store')
 import {
   FactoryHowto,
   FactoryHowtoDraft,
   FactoryHowtoStep,
-} from 'src/test/factories/Howto'
-import { FactoryUser } from 'src/test/factories/User'
-
+} from '../../test/factories/Howto'
+import { FactoryUser } from '../../test/factories/User'
 import { HowtoStore } from './howto.store'
 
-import type { IHowtoDB, IUser } from 'src/models'
+import type { IHowtoDB, IUser } from '../../models'
 import type { IRootStore } from '../RootStore'
+
+vi.mock('../common/module.store')
 
 const mockGetDoc = vi.fn()
 const mockIncrement = vi.fn()

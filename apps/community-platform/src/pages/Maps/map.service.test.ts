@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
-import { DB_ENDPOINTS } from 'src/models'
 import { describe, expect, it, vi } from 'vitest'
 
+import { DB_ENDPOINTS } from '../../models'
 import { mapPinService } from './map.service'
 
 const mockWhere = vi.fn()

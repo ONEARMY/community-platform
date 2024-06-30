@@ -1,17 +1,17 @@
+import { faker } from '@faker-js/faker'
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('../common/module.store')
-import { faker } from '@faker-js/faker'
 import {
   FactoryDiscussion,
   FactoryDiscussionComment,
-} from 'src/test/factories/Discussion'
-import { FactoryUser } from 'src/test/factories/User'
-
+} from '../../test/factories/Discussion'
+import { FactoryUser } from '../../test/factories/User'
 import { DiscussionStore } from './discussions.store'
 
-import type { IDiscussion, IUserPPDB } from 'src/models'
+import type { IDiscussion, IUserPPDB } from '../../models'
 import type { IRootStore } from '../RootStore'
+
+vi.mock('../common/module.store')
 
 const factory = (
   discussions: IDiscussion[] = [FactoryDiscussion({})],

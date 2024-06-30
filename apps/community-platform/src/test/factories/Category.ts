@@ -1,4 +1,4 @@
-import type { ICategory } from 'src/models/categories.model'
+import type { ICategory } from '../../models/categories.model'
 
 export const FactoryCategory: ICategory = {
   label: 'Moulds',

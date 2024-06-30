@@ -1,7 +1,7 @@
 import { IModerationStatus, UserRole } from '@onearmy.apps/shared'
-import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it } from 'vitest'
 
+import { FactoryUser } from '../test/factories/User'
 import {
   arrayToJson,
   capitalizeFirstLetter,
@@ -19,9 +19,9 @@ import {
   stripSpecialCharacters,
 } from './helpers'
 
-import type { IModerable } from 'src/models'
+import type { IModerable } from '../models'
 
-describe('src/utils/helpers', () => {
+describe('utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {
     expect(stripSpecialCharacters('He%llo w@o$rl^d!')).toBe('Hello-world')
   })

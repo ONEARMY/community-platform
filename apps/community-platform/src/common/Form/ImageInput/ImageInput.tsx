@@ -9,7 +9,7 @@ import { ImageConverterList } from './ImageConverterList'
 import { ImageInputWrapper } from './ImageInputWrapper'
 import { setSrc } from './setSrc'
 
-import type { IConvertedFileMeta } from 'src/types'
+import type { IConvertedFileMeta } from '../../../types'
 import type { IInputValue, IMultipleInputValue, IValue } from './types'
 
 /*

@@ -1,6 +1,7 @@
 import { OsmGeocoding } from '@onearmy.apps/components'
-import { logger } from 'src/logger'
-import { getLocationData } from 'src/utils/getLocationData'
+
+import { logger } from '../../logger'
+import { getLocationData } from '../../utils/getLocationData'
 
 import type { FieldProps } from './types'
 
@@ -14,36 +15,34 @@ export const LocationSearchField = ({
   input,
   customChange,
 }: IExtendedFieldProps) => (
-  <>
-    <div style={{ position: 'relative', height: '44px' }}>
-      <div style={{ position: 'absolute', width: '100%' }}>
-        <OsmGeocoding
-          callback={async (data) => {
-            logger.debug(data, 'LocationSearch.field.ReactOsmGeocoding')
-            if (data.lat && data.lon) {
-              // onPositionChanged({
-              // lat: data.lat,
-              // lng: data.lon,
-              // })
-              // setCenter([data.lat, data.lon])
-              // setZoom(15)
+  <div style={{ position: 'relative', height: '44px' }}>
+    <div style={{ position: 'absolute', width: '100%' }}>
+      <OsmGeocoding
+        callback={async (data) => {
+          logger.debug(data, 'LocationSearch.field.ReactOsmGeocoding')
+          if (data.lat && data.lon) {
+            // onPositionChanged({
+            // lat: data.lat,
+            // lng: data.lon,
+            // })
+            // setCenter([data.lat, data.lon])
+            // setZoom(15)
 
-              const location = await getLocationData({
-                lat: data.lat,
-                lng: data.lon,
-              })
+            const location = await getLocationData({
+              lat: data.lat,
+              lng: data.lon,
+            })
 
-              input.onChange(location)
-              if (customChange) {
-                customChange(location)
-              }
-              input.onBlur()
+            input.onChange(location)
+            if (customChange) {
+              customChange(location)
             }
-          }}
-          countrycodes=""
-          acceptLanguage="en"
-        />
-      </div>
+            input.onBlur()
+          }
+        }}
+        countrycodes=""
+        acceptLanguage="en"
+      />
     </div>
-  </>
+  </div>
 )

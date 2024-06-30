@@ -4,7 +4,7 @@ import type {
   IErrorsListSet,
   IStepErrorsList,
   ITopLevelErrorsList,
-} from 'src/common/Form/types'
+} from '../../../../../common/Form/types'
 
 const stepErrors = (stepErrors: IStepErrorsList): IErrorsListSet[] => {
   return stepErrors.map((errors, index) => {

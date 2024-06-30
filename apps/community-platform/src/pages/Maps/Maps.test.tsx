@@ -7,15 +7,15 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { IModerationStatus } from '@onearmy.apps/shared'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { IModerationStatus } from '@onearmy.apps/shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { FactoryMapPin } from 'src/test/factories/MapPin'
-import { FactoryUser } from 'src/test/factories/User'
-import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { describe, expect, it, vi } from 'vitest'
 
+import { useCommonStores } from '../../common/hooks/useCommonStores'
+import { FactoryMapPin } from '../../test/factories/MapPin'
+import { FactoryUser } from '../../test/factories/User'
+import { testingThemeStyles } from '../../test/utils/themeUtils'
 import { MapPinServiceContext } from './map.service'
 import Maps from './Maps'
 
@@ -23,7 +23,7 @@ import type { IMapPinService } from './map.service'
 
 const Theme = testingThemeStyles
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('../../common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

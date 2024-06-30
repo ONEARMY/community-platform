@@ -1,6 +1,6 @@
 import { MAX_PIN_LENGTH } from './constants'
 
-import type { ILabels } from 'src/common/Form/types'
+import type { ILabels } from '../../common/Form/types'
 
 export const buttons = {
   changeEmail: 'Change email',

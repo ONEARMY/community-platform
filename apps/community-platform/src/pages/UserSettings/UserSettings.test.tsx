@@ -7,19 +7,19 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { IModerationStatus } from '@onearmy.apps/shared'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { IModerationStatus } from '@onearmy.apps/shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { buttons } from 'src/pages/UserSettings/labels'
-import { FactoryMapPin } from 'src/test/factories/MapPin'
-import { FactoryUser } from 'src/test/factories/User'
-import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useCommonStores } from '../../common/hooks/useCommonStores'
+import { buttons } from '../../pages/UserSettings/labels'
+import { FactoryMapPin } from '../../test/factories/MapPin'
+import { FactoryUser } from '../../test/factories/User'
+import { testingThemeStyles } from '../../test/utils/themeUtils'
 import { SettingsPage } from './SettingsPage'
 
-import type { IUserPPDB } from 'src/models'
+import type { IUserPPDB } from '../../models'
 
 const Theme = testingThemeStyles
 
@@ -29,7 +29,7 @@ const mockGetPin = vi.fn()
 const mockUpdateUserBadge = vi.fn()
 let mockUser = FactoryUser({})
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('../../common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

@@ -8,16 +8,16 @@ import {
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
+import { UserRole } from '@onearmy.apps/shared'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { UserRole } from '@onearmy.apps/shared'
-import { useQuestionStore } from 'src/stores/Question/question.store'
-import { FactoryDiscussion } from 'src/test/factories/Discussion'
-import { FactoryQuestionItem } from 'src/test/factories/Question'
-import { FactoryUser } from 'src/test/factories/User'
-import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useQuestionStore } from '../../stores/Question/question.store'
+import { FactoryDiscussion } from '../../test/factories/Discussion'
+import { FactoryQuestionItem } from '../../test/factories/Question'
+import { FactoryUser } from '../../test/factories/User'
+import { testingThemeStyles } from '../../test/utils/themeUtils'
 import { QuestionPage } from './QuestionPage'
 
 import type { Mock } from 'vitest'
@@ -34,7 +34,7 @@ const mockQuestionItem = FactoryQuestionItem({
 })
 const mockDiscussionItem = FactoryDiscussion()
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('../../common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
@@ -57,8 +57,8 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   }),
 }))
 
-vi.mock('src/stores/Question/question.store')
-vi.mock('src/stores/Discussions/discussions.store')
+vi.mock('../../stores/Question/question.store')
+vi.mock('../../stores/Discussions/discussions.store')
 
 describe('Questions', () => {
   let mockQuestionStore

@@ -8,25 +8,25 @@ import {
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
+import { UserRole } from '@onearmy.apps/shared'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
-import { UserRole } from '@onearmy.apps/shared'
-import { questionService } from 'src/pages/Question/question.service'
-import { useQuestionStore } from 'src/stores/Question/question.store'
-import { FactoryDiscussion } from 'src/test/factories/Discussion'
-import { FactoryQuestionItem } from 'src/test/factories/Question'
-import { FactoryUser } from 'src/test/factories/User'
-import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { questionService } from '../../pages/Question/question.service'
+import { useQuestionStore } from '../../stores/Question/question.store'
+import { FactoryDiscussion } from '../../test/factories/Discussion'
+import { FactoryQuestionItem } from '../../test/factories/Question'
+import { FactoryUser } from '../../test/factories/User'
+import { testingThemeStyles } from '../../test/utils/themeUtils'
 import { questionRouteElements } from './question.routes'
 
-import type { QuestionStore } from 'src/stores/Question/question.store'
 import type { Mock } from 'vitest'
+import type { QuestionStore } from '../../stores/Question/question.store'
 
 vi.mock('../../stores/common/module.store')
-vi.mock('src/utils/validators')
+vi.mock('../../utils/validators')
 
 const Theme = testingThemeStyles
 let mockActiveUser = FactoryUser()
@@ -34,7 +34,7 @@ const mockDiscussionItem = FactoryDiscussion()
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('../../common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: () => ({
     stores: {
@@ -111,9 +111,9 @@ const mockQuestionService = {
 }
 const mockQuestionStore = new mockQuestionStoreClass()
 
-vi.mock('src/stores/Question/question.store')
-vi.mock('src/stores/Discussions/discussions.store')
-vi.mock('src/pages/Question/question.service')
+vi.mock('../../stores/Question/question.store')
+vi.mock('../../stores/Discussions/discussions.store')
+vi.mock('../../pages/Question/question.service')
 
 describe('question.routes', () => {
   beforeEach(() => {

@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker'
 import { IModerationStatus } from '@onearmy.apps/shared'
-import { ProfileType } from 'src/modules/profile/types'
 
-import type { IMapPin } from 'src/models'
+import { ProfileType } from '../../modules/profile/types'
+
+import type { IMapPin } from '../../models'
 
 export const FactoryMapPin = (
   userOverloads: Partial<IMapPin> = {},

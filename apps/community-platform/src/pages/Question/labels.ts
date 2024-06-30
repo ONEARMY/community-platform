@@ -1,4 +1,4 @@
-import type { ILabels } from 'src/common/Form/types'
+import type { ILabels } from '../../common/Form/types'
 
 export const buttons = {
   create: 'Publish',

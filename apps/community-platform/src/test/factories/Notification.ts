@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { NotificationTypes } from '@onearmy.apps/shared'
 
-import type { INotification } from 'src/models'
+import type { INotification } from '../../models'
 
 export const FactoryNotification = (
   userOverloads: Partial<INotification> = {},

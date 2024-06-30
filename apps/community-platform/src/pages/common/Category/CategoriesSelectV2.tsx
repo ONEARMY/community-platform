@@ -2,7 +2,7 @@ import { Select } from '@onearmy.apps/components'
 
 import { FieldContainer } from '../../../common/Form/FieldContainer'
 
-import type { ICategory } from 'src/models/categories.model'
+import type { ICategory } from '../../../models/categories.model'
 
 export type SelectValue = { label: string; value: string | ICategory }
 

@@ -1,17 +1,16 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
+// Mock out module store to limit impact of circular dependency
+import { ResearchStore } from '../stores/Research/research.store'
 import {
   draftValidationWrapper,
   noSpecialCharacters,
   validateTitle,
 } from './validators'
 
-// Mock out module store to limit impact of circular dependency
-vi.mock('src/stores/common/module.store')
+import type { IRootStore } from '../stores/RootStore'
 
-import { ResearchStore } from '../stores/Research/research.store'
-
-import type { IRootStore } from 'src/stores/RootStore'
+vi.mock('../stores/common/module.store')
 
 describe('draftValidationWrapper', () => {
   it('forwards to the validator when draft save is not allowed', () => {

@@ -8,11 +8,11 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { FactoryUser } from 'src/test/factories/User'
-import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { useCommonStores } from '../../common/hooks/useCommonStores'
+import { FactoryUser } from '../../test/factories/User'
+import { testingThemeStyles } from '../../test/utils/themeUtils'
 import { UserRoutes } from './user.routes'
 
 const Theme = testingThemeStyles
@@ -22,7 +22,7 @@ let mockGetUserProfile = vi.fn().mockResolvedValue(FactoryUser)
 const mockGetPin = vi.fn()
 const mockUpdateUserBadge = vi.fn()
 
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('../../common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({

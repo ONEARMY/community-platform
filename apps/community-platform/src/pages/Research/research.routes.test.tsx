@@ -9,32 +9,32 @@ import {
 } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
+import { UserRole } from '@onearmy.apps/shared'
 import { act, cleanup, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { UserRole } from '@onearmy.apps/shared'
-import { useResearchStore } from 'src/stores/Research/research.store'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+
+import { useResearchStore } from '../../stores/Research/research.store'
 import {
   FactoryResearchItem,
   FactoryResearchItemUpdate,
-} from 'src/test/factories/ResearchItem'
-import { FactoryUser } from 'src/test/factories/User'
-import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-
+} from '../../test/factories/ResearchItem'
+import { FactoryUser } from '../../test/factories/User'
+import { testingThemeStyles } from '../../test/utils/themeUtils'
 import { researchRouteElements } from './research.routes'
 import { researchService } from './research.service'
 
-import type { ResearchStore } from 'src/stores/Research/research.store'
 import type { Mock } from 'vitest'
+import type { ResearchStore } from '../../stores/Research/research.store'
 
 const Theme = testingThemeStyles
 const mockActiveUser = FactoryUser()
 
-vi.mock('src/pages/Research/research.service')
+vi.mock('../../pages/Research/research.service')
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
-vi.mock('src/common/hooks/useCommonStores', () => ({
+vi.mock('../../common/hooks/useCommonStores', () => ({
   // eslint-disable-next-line @typescript-eslint/naming-convention
   __esModule: true,
   useCommonStores: () => ({
@@ -95,7 +95,7 @@ class MockResearchStoreClass implements Partial<ResearchStore> {
 }
 const mockResearchStore = new MockResearchStoreClass()
 
-vi.mock('src/stores/Research/research.store')
+vi.mock('../../stores/Research/research.store')
 
 describe('research.routes', () => {
   beforeEach(() => {
@@ -568,7 +568,7 @@ const renderFn = (url: string) => {
   )
 
   return render(
-    <Suspense fallback={<></>}>
+    <Suspense fallback={null}>
       <Provider userStore={{ user: mockActiveUser }} tagsStore={{}}>
         <ThemeProvider theme={Theme}>
           <RouterProvider router={router} />

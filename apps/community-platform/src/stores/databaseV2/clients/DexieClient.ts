@@ -5,7 +5,7 @@ import { DB_ENDPOINTS } from '../endpoints'
 import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { IndexableType } from 'dexie'
-import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
+import type { DBDoc, IDBEndpoint } from '../../../models/common.models'
 import type {
   AbstractDatabaseClient,
   DBQueryOptions,

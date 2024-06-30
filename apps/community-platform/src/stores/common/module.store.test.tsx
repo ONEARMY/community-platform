@@ -7,11 +7,11 @@ import { ModuleStore } from './module.store'
 // Mocked to prevent App initialisation from useCommonStores dependency
 vi.mock('react-dom')
 // Mocked to prevent indexedDB API not found error message
-vi.mock('src/stores/databaseV2/clients/DexieClient')
+vi.mock('../../stores/databaseV2/clients/DexieClient')
 // Mocked to prevent circular dependency through useCommonStores
-vi.mock('src/common/hooks/useCommonStores')
+vi.mock('../../common/hooks/useCommonStores')
 // Mocked to mock out RootStore
-vi.mock('src/stores/RootStore')
+vi.mock('../../stores/RootStore')
 
 const collectionMock = vi.fn()
 class MockDB extends DatabaseV2 {

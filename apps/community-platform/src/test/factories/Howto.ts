@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { DifficultyLevel, IModerationStatus } from '@onearmy.apps/shared'
 
-import type { IHowtoDB, IHowtoStep } from 'src/models'
+import type { IHowtoDB, IHowtoStep } from '../../models'
 
 export const FactoryHowto = (
   howtoOverloads: Partial<IHowtoDB> = {},

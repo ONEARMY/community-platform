@@ -1,7 +1,7 @@
 import { cdnImageUrl } from './cdnImageUrl'
 
-import type { IUploadedFileMeta } from 'src/stores/storage'
-import type { IConvertedFileMeta } from 'src/types'
+import type { IUploadedFileMeta } from '../stores/storage'
+import type { IConvertedFileMeta } from '../types'
 
 export const formatImagesForGallery = (
   imageList: (IUploadedFileMeta | File | IConvertedFileMeta | null)[],

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Flex } from 'theme-ui'
 
-import type { IConvertedFileMeta } from 'src/types'
+import type { IConvertedFileMeta } from '../../../types'
 
 interface IProps {
   file: File

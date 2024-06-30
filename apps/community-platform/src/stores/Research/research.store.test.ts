@@ -1,20 +1,18 @@
+import { toJS } from 'mobx'
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('../common/module.store')
-
-import { toJS } from 'mobx'
-import { FactoryComment } from 'src/test/factories/Comment'
+import { FactoryComment } from '../../test/factories/Comment'
 import {
   FactoryResearchItem,
   FactoryResearchItemFormInput,
   FactoryResearchItemUpdate,
-} from 'src/test/factories/ResearchItem'
-import { FactoryUser } from 'src/test/factories/User'
-
+} from '../../test/factories/ResearchItem'
+import { FactoryUser } from '../../test/factories/User'
 import { ResearchStore } from './research.store'
 
-import type { IDiscussion } from 'src/models'
+import type { IDiscussion } from '../../models'
 import type { IRootStore } from '../RootStore'
+vi.mock('../common/module.store')
 
 vi.mock('../../utils/helpers', async () => ({
   // Preserve the original implementation of other helpers

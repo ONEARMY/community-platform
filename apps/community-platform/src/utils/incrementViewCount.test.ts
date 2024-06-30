@@ -1,5 +1,6 @@
-import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { describe, expect, it, vi } from 'vitest'
+
+import { incrementViewCount } from '../utils/incrementViewCount'
 
 describe('incrementViewCount', () => {
   it('calls the store incrementor', async () => {

@@ -3,8 +3,8 @@
  * require extra function to separate out to handle preview of previously uploaded
  */
 
-import type { IConvertedFileMeta } from 'src/types'
 import type { IUploadedFileMeta } from '../../../stores/storage'
+import type { IConvertedFileMeta } from '../../../types'
 import type { IMultipleInputValue, IValue } from './types'
 
 type Value = IValue | undefined

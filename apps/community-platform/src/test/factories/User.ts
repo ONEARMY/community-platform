@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker'
 import { IModerationStatus } from '@onearmy.apps/shared'
-import { ProfileType } from 'src/modules/profile/types'
 
-import type { IUserPPDB } from 'src/models'
+import { ProfileType } from '../../modules/profile/types'
+
+import type { IUserPPDB } from '../../models'
 
 export const FactoryUser = (
   userOverloads: Partial<IUserPPDB> = {},

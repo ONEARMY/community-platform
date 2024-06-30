@@ -1,5 +1,5 @@
-import type { IConvertedFileMeta } from 'src/types'
 import type { IUploadedFileMeta } from '../../../stores/storage'
+import type { IConvertedFileMeta } from '../../../types'
 import type { IInputValue } from './types'
 
 export const setSrc = (file: IInputValue): string => {

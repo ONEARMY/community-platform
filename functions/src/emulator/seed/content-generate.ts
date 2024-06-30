@@ -1,4 +1,4 @@
-import { DifficultyLevel, IModerationStatus } from 'oa-shared'
+import { DifficultyLevel, IModerationStatus } from '@onearmy.apps/shared'
 import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 
 import { setDoc, updateDoc } from '../../Firebase/firestoreDB'

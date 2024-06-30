@@ -1,7 +1,7 @@
 import { IUserDB } from '../models'
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
 import type { INotification } from '../../../src/models'
-import { EmailNotificationFrequency } from 'oa-shared'
+import { EmailNotificationFrequency } from '@onearmy.apps/shared'
 import { processNotifications } from './userNotifications.aggregations'
 import { FieldValue } from 'firebase-admin/firestore'
 

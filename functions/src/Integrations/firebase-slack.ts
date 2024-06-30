@@ -1,7 +1,7 @@
 import { CONFIG } from '../config/config'
 import * as functions from 'firebase-functions'
 import axios from 'axios'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus } from '@onearmy.apps/shared'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com

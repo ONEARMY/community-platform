@@ -1,0 +1,28 @@
+import { faker } from '@faker-js/faker'
+
+import { FactoryComment } from './Comment'
+
+import type { IComment, IDiscussion } from '../../models'
+
+export const FactoryDiscussion = (
+  discussionOverloads: Partial<IDiscussion> = {},
+  comments: IComment[] = [],
+): IDiscussion => ({
+  _id: faker.string.uuid(),
+  comments,
+  contributorIds: [],
+  sourceId: faker.string.uuid(),
+  primaryContentId: faker.string.uuid(),
+  sourceType: 'question',
+  ...discussionOverloads,
+})
+
+export const FactoryDiscussionComment = (
+  discussionCommentOverloads: Partial<IComment> = {},
+) => {
+  const { parentCommentId = null, ...overload } = discussionCommentOverloads
+  return {
+    ...FactoryComment(overload),
+    parentCommentId,
+  }
+}

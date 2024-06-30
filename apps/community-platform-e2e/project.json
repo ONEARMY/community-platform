@@ -1,0 +1,10 @@
+{
+  "name": "community-platform-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/community-platform-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["community-platform"],
+  "// targets": "to see all targets run: nx show project community-platform-e2e --web",
+  "targets": {}
+}

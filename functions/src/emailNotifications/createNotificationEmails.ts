@@ -1,4 +1,4 @@
-import { EmailNotificationFrequency } from 'oa-shared'
+import { EmailNotificationFrequency } from '@onearmy.apps/shared'
 import { INotification } from '../../../src/models'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'

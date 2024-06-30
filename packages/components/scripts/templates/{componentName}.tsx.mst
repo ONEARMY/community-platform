@@ -1,5 +1,0 @@
-export interface IProps {}
-
-export const {{ComponentName}} = (props: IProps) => {
-  return <>{{ComponentName}}</>
-}

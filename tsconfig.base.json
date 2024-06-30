@@ -1,0 +1,24 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2022",
+    "module": "esnext",
+    "lib": ["ESNext", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@onearmy.apps/components": ["libs/components/src/index.ts"],
+      "@onearmy.apps/shared": ["libs/shared/src/index.ts"],
+      "@onearmy.apps/themes": ["libs/themes/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

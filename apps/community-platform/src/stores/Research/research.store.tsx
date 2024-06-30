@@ -1,0 +1,809 @@
+import { createContext, useContext } from 'react'
+import { IModerationStatus, ResearchStatus } from '@onearmy.apps/shared'
+import { cloneDeep } from 'lodash'
+import {
+  action,
+  computed,
+  makeObservable,
+  observable,
+  runInAction,
+  toJS,
+} from 'mobx'
+
+import { logger } from '../../logger'
+import { getUserCountry } from '../../utils/getUserCountry'
+import { hasAdminRights, needsModeration, randomID } from '../../utils/helpers'
+import { getKeywords } from '../../utils/searchHelper'
+import { incrementDocViewCount } from '../common/incrementDocViewCount'
+import {
+  changeMentionToUserReference,
+  changeUserReferenceToPlainText,
+} from '../common/mentions'
+import { ModuleStore } from '../common/module.store'
+import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
+import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
+import { setCollaboratorPermission } from './researchEvents'
+
+import type { IUser, UserMention } from '../../models'
+import type {
+  IResearchDB,
+  IResearchFormInput,
+  IResearchItem,
+  IResearchItemDB,
+  IResearchUpdate,
+  IResearchUpdateDB,
+} from '../../models/research.models'
+import type { IConvertedFileMeta } from '../../types'
+import type { DocReference } from '../databaseV2/DocReference'
+import type { IRootStore } from '../RootStore'
+
+const COLLECTION_NAME = 'research'
+
+export class ResearchStore extends ModuleStore {
+  public activeResearchItem: IResearchItemDB | null = null
+  public researchUploadStatus: IResearchUploadStatus =
+    getInitialResearchUploadStatus()
+  public updateUploadStatus: IUpdateUploadStatus =
+    getInitialUpdateUploadStatus()
+
+  constructor(rootStore: IRootStore) {
+    super(rootStore, COLLECTION_NAME)
+    makeObservable(this, {
+      activeResearchItem: observable,
+      researchUploadStatus: observable,
+      updateUploadStatus: observable,
+      setActiveResearchItemBySlug: action,
+      toggleUsefulByUser: action,
+      deleteResearch: action,
+      updateResearchUploadStatus: action,
+      updateUpdateUploadStatus: action,
+      resetResearchUploadStatus: action,
+      resetUpdateUploadStatus: action,
+      lockResearchItem: action,
+      unlockResearchItem: action,
+      lockResearchUpdate: action,
+      unlockResearchUpdate: action,
+      userVotedActiveResearchUseful: computed,
+      userHasSubscribed: computed,
+      votedUsefulCount: computed,
+      subscribersCount: computed,
+    })
+  }
+
+  public async setActiveResearchItemBySlug(slug?: string) {
+    logger.debug(`setActiveResearchItemBySlug:`, { slug })
+    let activeResearchItem: IResearchDB | null = null
+
+    const enrichResearchUpdate = async (update: IResearchUpdateDB) => {
+      const enrichedResearchUpdated = cloneDeep(update)
+      enrichedResearchUpdated.description = changeUserReferenceToPlainText(
+        update.description,
+      )
+      return enrichedResearchUpdated
+    }
+
+    if (slug) {
+      activeResearchItem = await this._getResearchItemBySlug(slug)
+
+      if (activeResearchItem) {
+        activeResearchItem.collaborators =
+          activeResearchItem.collaborators || []
+        activeResearchItem.description = changeUserReferenceToPlainText(
+          activeResearchItem.description,
+        )
+        activeResearchItem.researchStatus =
+          activeResearchItem.researchStatus || ResearchStatus.IN_PROGRESS
+        const researchUpdates = activeResearchItem.updates || []
+        activeResearchItem.updates = await Promise.all(
+          researchUpdates.map(enrichResearchUpdate),
+        )
+      }
+    }
+
+    runInAction(() => {
+      this.activeResearchItem = activeResearchItem
+    })
+    return activeResearchItem
+  }
+
+  public async addSubscriberToResearchArticle(
+    docId: string,
+    userId: string,
+  ): Promise<void> {
+    await this._toggleSubscriber(docId, userId)
+
+    return
+  }
+
+  public async removeSubscriberFromResearchArticle(
+    docId: string,
+    userId: string,
+  ): Promise<void> {
+    await this._toggleSubscriber(docId, userId)
+    return
+  }
+
+  public async toggleUsefulByUser(
+    docId: string,
+    userName: string,
+  ): Promise<void> {
+    const updatedItem = (await toggleDocUsefulByUser(
+      COLLECTION_NAME,
+      docId,
+      userName,
+    )) as IResearchItemDB
+
+    runInAction(() => {
+      this.activeResearchItem = updatedItem
+      if ((updatedItem?.votedUsefulBy || []).includes(userName)) {
+        this.userNotificationsStore.triggerNotification(
+          'research_useful',
+          this.activeResearchItem._createdBy,
+          '/research/' + this.activeResearchItem.slug,
+          this.activeResearchItem.title,
+        )
+        for (
+          let i = 0;
+          i < (this.activeResearchItem.collaborators || []).length;
+          i++
+        ) {
+          this.userNotificationsStore.triggerNotification(
+            'research_useful',
+            this.activeResearchItem.collaborators[i],
+            '/research/' + this.activeResearchItem.slug,
+            this.activeResearchItem.title,
+          )
+        }
+      }
+    })
+
+    return
+  }
+
+  public async incrementViewCount(researchItem: Partial<IResearchItemDB>) {
+    return await incrementDocViewCount({
+      collection: COLLECTION_NAME,
+      db: this.db,
+      doc: researchItem,
+    })
+  }
+
+  public async deleteResearch(id: string) {
+    try {
+      const dbRef = this.db.collection<IResearchDB>(COLLECTION_NAME).doc(id)
+      const researchData = await toJS(dbRef.get('server'))
+
+      const user = this.activeUser
+
+      if (id && researchData && user) {
+        await this._updateResearchItem(dbRef, {
+          ...researchData,
+          _deleted: true,
+        })
+      }
+    } catch (err) {
+      logger.error(err)
+      throw new Error(err)
+    }
+  }
+
+  public async moderateResearch(research: IResearchItemDB) {
+    if (!this.activeUser || !hasAdminRights(toJS(this.activeUser))) {
+      return false
+    }
+    const doc = this.db.collection(COLLECTION_NAME).doc(research._id)
+    return doc.set(toJS(research))
+  }
+
+  public needsModeration(research: IResearchItemDB) {
+    return needsModeration(research, toJS(this.activeUser || undefined))
+  }
+
+  public updateResearchUploadStatus(update: keyof IResearchUploadStatus) {
+    this.researchUploadStatus[update] = true
+  }
+  public updateUpdateUploadStatus(update: keyof IUpdateUploadStatus) {
+    this.updateUploadStatus[update] = true
+  }
+
+  public resetResearchUploadStatus() {
+    this.researchUploadStatus = getInitialResearchUploadStatus()
+  }
+
+  public resetUpdateUploadStatus() {
+    this.updateUploadStatus = getInitialUpdateUploadStatus()
+  }
+
+  private async addUserReference(str: string): Promise<{
+    text: string
+    users: string[]
+  }> {
+    const { text, mentionedUsers: users } = await changeMentionToUserReference(
+      str,
+      this.userStore,
+    )
+    return {
+      text,
+      users,
+    }
+  }
+
+  public async uploadResearch(values: IResearchFormInput) {
+    logger.debug('uploading research')
+    this.updateResearchUploadStatus('Start')
+    // create a reference either to the existing document (if editing) or a new document if creating
+    const dbRef = this.db
+      .collection<IResearchItem>(COLLECTION_NAME)
+      .doc(values._id)
+    const user = this.activeUser as IUser
+    const updates = (await dbRef.get())?.updates || [] // save old updates when editing
+    const collaborators = await this._setCollaborators(values.collaborators)
+
+    try {
+      const userCountry = getUserCountry(user)
+      const slug = await this.setSlug(values)
+      const previousSlugs = this.setPreviousSlugs(values, slug)
+
+      const researchItem: Partial<IResearchItem> = {
+        mentions: [],
+        ...values,
+        slug,
+        previousSlugs,
+        collaborators,
+        _createdBy: values._createdBy ? values._createdBy : user.userName,
+        _deleted: false,
+        moderation: values.moderation
+          ? values.moderation
+          : IModerationStatus.ACCEPTED, // No moderation needed for researches for now
+        updates,
+        creatorCountry:
+          (values._createdBy && values._createdBy === user.userName) ||
+          !values._createdBy
+            ? userCountry
+            : values.creatorCountry
+              ? values.creatorCountry
+              : '',
+        totalCommentCount: 0,
+      }
+      logger.debug('populating database', researchItem)
+      // set the database document
+      const updatedItem = await this._updateResearchItem(
+        dbRef,
+        researchItem,
+        true,
+      )
+      this.updateResearchUploadStatus('Database')
+      logger.debug('post added')
+      if (updatedItem) {
+        this.setActiveResearchItemBySlug(updatedItem.slug)
+      }
+      // complete
+      this.updateResearchUploadStatus('Complete')
+    } catch (error) {
+      logger.debug('error', error)
+      //TODO: Add error handling here :(
+      //throw new Error(error.message)
+    }
+  }
+
+  /**
+   * Uploads new or edits an existing update
+   *
+   * @param update
+   */
+  public async uploadUpdate(update: IResearchUpdate | IResearchUpdateDB) {
+    logger.debug(`uploadUpdate`, { update })
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearchItem>(COLLECTION_NAME)
+        .doc(item._id)
+      const id = dbRef.id
+      this.updateUpdateUploadStatus('Start')
+      try {
+        // upload any pending images, avoid trying to re-upload images previously saved
+        // if cover already uploaded stored as object not array
+        // file and step image re-uploads handled in uploadFile script
+        const updateWithMeta = { ...update }
+        if (update.images.length > 0) {
+          const imgMeta = await this.uploadCollectionBatch(
+            update.images.filter((img) => !!img) as IConvertedFileMeta[],
+            COLLECTION_NAME,
+            id,
+          )
+          updateWithMeta.images = imgMeta
+        }
+        logger.debug('upload images ok')
+        this.updateUpdateUploadStatus('Images')
+
+        if ((update.files && update.files.length) || update.fileLink) {
+          updateWithMeta.downloadCount = 0
+        }
+
+        if (update.files && update.files.length) {
+          const fileMeta = await this.uploadCollectionBatch(
+            update.files as File[],
+            COLLECTION_NAME,
+            id,
+          )
+          updateWithMeta.files = fileMeta
+        }
+        logger.debug('upload files ok')
+        this.updateUpdateUploadStatus('Files')
+
+        // populate DB
+        const existingUpdateIndex = item.updates.findIndex(
+          (upd) => upd._id === (update as IResearchUpdateDB)._id,
+        )
+        const newItem = {
+          ...toJS(item),
+          description: (await this.addUserReference(item.description)).text,
+          updates: [...toJS(item.updates)],
+        }
+        if (existingUpdateIndex === -1) {
+          // new update
+          newItem.updates.push({
+            ...updateWithMeta,
+            // TODO - insert metadata into the new update
+            _id: randomID(),
+            _created: new Date().toISOString(),
+            _modified: new Date().toISOString(),
+            _contentModifiedTimestamp: new Date().toISOString(),
+            _deleted: false,
+          })
+        } else {
+          // editing update
+          newItem.updates[existingUpdateIndex] = {
+            ...(updateWithMeta as IResearchUpdateDB),
+            _modified: new Date().toISOString(),
+          }
+        }
+
+        newItem.totalUpdates = newItem.updates.length
+
+        logger.debug(
+          'old and new modified:',
+          (update as IResearchUpdateDB)._modified,
+          newItem._modified,
+        )
+        logger.debug('created:', newItem._created)
+
+        // set the database document
+        await this._updateResearchItem(dbRef, newItem, true)
+        logger.debug('populate db ok')
+        this.updateUpdateUploadStatus('Database')
+        const createdItem = (await dbRef.get()) as IResearchItemDB
+        runInAction(() => {
+          this.activeResearchItem = createdItem
+        })
+        this.updateUpdateUploadStatus('Complete')
+      } catch (error) {
+        logger.error('error', error)
+      }
+    }
+  }
+
+  public async deleteUpdate(updateId: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearchItem>(COLLECTION_NAME)
+        .doc(item._id)
+      try {
+        // populate DB
+        const existingUpdateIndex = item.updates.findIndex(
+          (upd) => upd._id === updateId,
+        )
+
+        if (existingUpdateIndex === -1) {
+          logger.debug('No update matching id found')
+          return
+        }
+
+        const newItem = {
+          ...toJS(item),
+          updates: [...toJS(item.updates)],
+        }
+
+        // editing update
+        newItem.updates[existingUpdateIndex]._deleted = true
+
+        // set the database document
+        const updatedItem = await this._updateResearchItem(dbRef, newItem, true)
+
+        if (updatedItem) {
+          this.setActiveResearchItemBySlug(updatedItem.slug)
+        }
+
+        return updatedItem
+      } catch (error) {
+        logger.error('error deleting article', error)
+      }
+    }
+  }
+
+  /**
+   * Increments the download count of files in research update
+   *
+   * @param updateId
+   */
+  public async incrementDownloadCount(updateId: string): Promise<number> {
+    try {
+      let downloadCount = 0
+      const item = this.activeResearchItem
+
+      if (item) {
+        const dbRef = this.db
+          .collection<IResearchItem>(COLLECTION_NAME)
+          .doc(item._id)
+
+        const newUpdates = item.updates.map((update) => {
+          if (update._id == updateId) {
+            update.downloadCount += 1
+            downloadCount = update.downloadCount
+          }
+          return update
+        })
+
+        const newItem = {
+          ...toJS(item),
+          updates: [...toJS(newUpdates)],
+        }
+
+        const updatedItem = await this._updateResearchItem(dbRef, newItem)
+
+        if (updatedItem) {
+          this.setActiveResearchItemBySlug(updatedItem.slug)
+        }
+      }
+
+      return downloadCount
+    } catch (err) {
+      logger.error(err)
+      throw new Error(err)
+    }
+  }
+
+  get userVotedActiveResearchUseful(): boolean {
+    if (!this.activeUser) return false
+    return (this.activeResearchItem?.votedUsefulBy || []).includes(
+      this.activeUser.userName,
+    )
+  }
+
+  get userHasSubscribed(): boolean {
+    return (
+      this.activeResearchItem?.subscribers?.includes(
+        this.activeUser?.userName ?? '',
+      ) ?? false
+    )
+  }
+
+  get votedUsefulCount(): number {
+    return (this.activeResearchItem?.votedUsefulBy || []).length
+  }
+
+  get subscribersCount(): number {
+    return (this.activeResearchItem?.subscribers || []).length
+  }
+  public async lockResearchItem(username: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearchItem>(COLLECTION_NAME)
+        .doc(item._id)
+      const newItem = {
+        ...item,
+        locked: {
+          by: username,
+          at: new Date().toISOString(),
+        },
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+
+  public async unlockResearchItem() {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearchItem>(COLLECTION_NAME)
+        .doc(item._id)
+      const newItem = {
+        ...item,
+        locked: null,
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+
+  public async lockResearchUpdate(username: string, updateId: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearchItem>(COLLECTION_NAME)
+        .doc(item._id)
+      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
+      const newItem = {
+        ...item,
+        updates: [...item.updates],
+      }
+
+      if (updateIndex && newItem.updates[updateIndex]) {
+        newItem.updates[updateIndex].locked = {
+          by: username,
+          at: new Date().toISOString(),
+        }
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+
+  public async unlockResearchUpdate(updateId: string) {
+    const item = this.activeResearchItem
+    if (item) {
+      const dbRef = this.db
+        .collection<IResearchItem>(COLLECTION_NAME)
+        .doc(item._id)
+      const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
+      const newItem = {
+        ...item,
+        updates: [...item.updates],
+      }
+
+      if (newItem.updates[updateIndex]) {
+        newItem.updates[updateIndex].locked = null
+      }
+      await this._updateResearchItem(dbRef, newItem)
+      runInAction(() => {
+        this.activeResearchItem = newItem
+      })
+    }
+  }
+
+  private async _setCollaborators(
+    collaborators: IResearchItem['collaborators'] | string | undefined,
+  ) {
+    if (!collaborators) return []
+
+    const list = Array.isArray(collaborators)
+      ? collaborators
+      : (collaborators || '')
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+
+    await Promise.all(
+      list.map((collaborator) =>
+        setCollaboratorPermission(this.db, collaborator),
+      ),
+    )
+
+    return list
+  }
+
+  /**
+   * Updates supplied dbRef after
+   * converting @mentions to user references
+   * on all required properties within researchItem object.
+   *
+   */
+  private async _updateResearchItem(
+    dbRef: DocReference<IResearchItem>,
+    researchDoc: Partial<IResearchItem>,
+    setLastEditTimestamp = false,
+  ) {
+    const researchItem = cloneDeep(researchDoc)
+    const { text: researchDescription, users } = await this.addUserReference(
+      researchItem.description || '',
+    )
+    logger.debug('updateResearchItem', {
+      researchItem,
+    })
+
+    const previousVersion = toJS(await dbRef.get('server'))
+
+    const mentions: UserMention[] = researchItem.mentions
+      ? cloneDeep(researchItem.mentions)
+      : []
+
+    if (researchItem.updates && researchItem.updates.length > 0) {
+      await Promise.all(
+        researchItem.updates.map(async (up, idx) => {
+          const { text: newDescription, users } = await this.addUserReference(
+            up.description,
+          )
+
+          ;(users || []).map((username) => {
+            mentions.push({
+              username,
+              location: `update-${idx}`,
+            })
+          })
+
+          researchItem.updates![idx].description = newDescription
+        }),
+      )
+    }
+
+    for (const username of users || []) {
+      mentions.push({
+        username,
+        location: 'description',
+      })
+    }
+
+    const keywords = getKeywords(
+      researchItem.title + ' ' + researchItem.description,
+    )
+
+    if (researchItem._createdBy) {
+      keywords.push(researchItem._createdBy)
+    }
+
+    await dbRef.set(
+      {
+        ...cloneDeep(researchItem),
+        previousSlugs: getPreviousSlugs(
+          researchItem.slug!,
+          researchItem.previousSlugs,
+        ),
+        mentions,
+        description: researchDescription,
+        keywords,
+      } as IResearchItem,
+      {
+        set_last_edit_timestamp: setLastEditTimestamp,
+      },
+    )
+
+    // Side effects from updating research item
+    // consider moving these out of the store.
+    const previousMentionsList = researchItem.mentions || []
+    logger.debug(`Mentions:`, {
+      before: previousMentionsList,
+      after: mentions,
+    })
+
+    // Previous mentions
+    const previousMentions = previousMentionsList.map(
+      (mention) => `${mention.username}.${mention.location}`,
+    )
+
+    mentions.forEach((mention) => {
+      if (
+        !previousMentions.includes(`${mention.username}.${mention.location}`)
+      ) {
+        this.userNotificationsStore.triggerNotification(
+          'research_mention',
+          mention.username,
+          `/research/${researchItem.slug}#${mention.location}`,
+          researchItem.title!,
+        )
+      }
+    })
+
+    // Notify each subscriber
+    const subscribers = researchItem.subscribers || []
+
+    // Only notify subscribers if there is a new update added
+    logger.debug('Notify each subscriber', {
+      subscribers,
+      beforeUpdateNumber: previousVersion?.updates
+        ? previousVersion?.updates.length
+        : 0,
+      afterUpdateNumber: researchItem?.updates!.length,
+    })
+
+    if (
+      researchItem.updates!.length >
+      (previousVersion?.updates ? previousVersion?.updates.length : 0)
+    ) {
+      subscribers.forEach((subscriber) =>
+        this.userNotificationsStore.triggerNotification(
+          'research_update',
+          subscriber,
+          `/research/${researchItem.slug}`,
+          researchItem.title!,
+        ),
+      )
+    }
+
+    return await dbRef.get()
+  }
+
+  private async _getResearchItemBySlug(
+    slug: string,
+  ): Promise<IResearchDB | null> {
+    const collection = await this.db
+      .collection<IResearchItemDB>(COLLECTION_NAME)
+      .getWhere('slug', '==', slug)
+
+    if (collection && collection.length) {
+      return collection[0]
+    }
+
+    const previousSlugCollection = await this.db
+      .collection<IResearchItemDB>(COLLECTION_NAME)
+      .getWhere('previousSlugs', 'array-contains', slug)
+
+    if (previousSlugCollection && previousSlugCollection.length) {
+      return previousSlugCollection[0]
+    }
+
+    return null
+  }
+
+  private async _toggleSubscriber(docId: string, userId: string) {
+    const updatedItem = await toggleDocSubscriberStatusByUserName(
+      this.db,
+      COLLECTION_NAME,
+      docId,
+      userId,
+    )
+
+    if (updatedItem) {
+      this.setActiveResearchItemBySlug(updatedItem.slug)
+    }
+
+    return updatedItem
+  }
+}
+
+interface IResearchUploadStatus {
+  Start: boolean
+  Database: boolean
+  Complete: boolean
+}
+
+export interface IUpdateUploadStatus {
+  Start: boolean
+  Images: boolean
+  Files: boolean
+  Database: boolean
+  Complete: boolean
+}
+
+const getInitialUpdateUploadStatus = (): IUpdateUploadStatus => ({
+  Start: false,
+  Images: false,
+  Files: false,
+  Database: false,
+  Complete: false,
+})
+
+const getInitialResearchUploadStatus = (): IResearchUploadStatus => ({
+  Start: false,
+  Database: false,
+  Complete: false,
+})
+
+/**
+ * Export an empty context object to be shared with components
+ * The context will be populated with the researchStore in the module index
+ * (avoids cyclic deps and ensure shared module ready)
+ */
+export const ResearchStoreContext = createContext<ResearchStore>(null as any)
+export const useResearchStore = () => useContext(ResearchStoreContext)
+
+const getPreviousSlugs = (
+  slug: string,
+  previousSlugs = [] as string[],
+): string[] => {
+  const newSlugList = cloneDeep(previousSlugs)
+
+  if (previousSlugs.includes(slug)) {
+    return newSlugList
+  }
+
+  return [...newSlugList, slug]
+}

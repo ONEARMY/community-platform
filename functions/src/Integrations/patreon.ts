@@ -5,7 +5,7 @@ import {
   PatreonTierAttributes,
   PatreonUser,
   PatreonUserAttributes,
-} from 'oa-shared'
+} from '@onearmy.apps/shared'
 import { db } from '../Firebase/firestoreDB'
 import { CONFIG } from '../config/config'
 import { IUserDB } from '../models'

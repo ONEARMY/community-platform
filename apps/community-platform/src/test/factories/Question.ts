@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker'
 
 import type { IModerationStatus } from '@onearmy.apps/shared'
-import type { IQuestion } from 'src/models'
+import type { IQuestionItem } from '../../models'
 
 export const FactoryQuestionItem = (
-  questionOverloads: Partial<IQuestion.Item> = {},
-): IQuestion.Item => ({
+  questionOverloads: Partial<IQuestionItem> = {},
+): IQuestionItem => ({
   _id: faker.string.uuid(),
   _created: faker.date.past().toString(),
   _deleted: faker.datatype.boolean(),

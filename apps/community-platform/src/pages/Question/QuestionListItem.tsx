@@ -10,10 +10,10 @@ import { Highlighter } from '../../common/Highlighter'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
 
-import type { IQuestion } from '../../models'
+import type { IQuestionItem } from '../../models'
 
 interface IProps {
-  question: IQuestion.Item
+  question: IQuestionItem
   query?: string
 }
 

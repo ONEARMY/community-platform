@@ -4,11 +4,11 @@ import {
   UserRole,
 } from '@onearmy.apps/shared'
 
-import type { IResearch, IUserPPDB } from 'src/models'
+import type { IResearchItem, IResearchUpdate, IUserPPDB } from '../../models'
 
 export const researchUpdateStatusFilter = (
-  item: IResearch.Item,
-  update: IResearch.Update,
+  item: IResearchItem,
+  update: IResearchUpdate,
   currentUser?: IUserPPDB | null,
 ) => {
   const isCollaborator =
@@ -28,7 +28,7 @@ export const researchUpdateStatusFilter = (
 }
 
 export const getPublicUpdates = (
-  item: IResearch.Item,
+  item: IResearchItem,
   currentUser?: IUserPPDB | null,
 ) => {
   if (item.updates) {

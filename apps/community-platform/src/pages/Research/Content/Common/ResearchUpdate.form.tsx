@@ -10,31 +10,25 @@ import {
 import { IModerationStatus, ResearchUpdateStatus } from '@onearmy.apps/shared'
 import arrayMutators from 'final-form-arrays'
 import { observer } from 'mobx-react'
-import { Box, Card, Flex, Heading, Label, Text } from 'theme-ui'
+import { Box, Card, Flex, Heading } from 'theme-ui'
 
 import IconHeaderHowto from '../../../../assets/images/header-section/howto-header-icon.svg'
-import { FileInputField } from '../../../../common/Form/FileInput.field'
-import { ImageInputField } from '../../../../common/Form/ImageInput.field'
 import { usePrompt } from '../../../../common/hooks/usePrompt'
 import { useResearchStore } from '../../../../stores/Research/research.store'
-import { COMPARISONS } from '../../../../utils/comparisons'
 import {
   setAllowDraftSaveFalse,
   setAllowDraftSaveTrue,
-  validateTitle,
 } from '../../../../utils/validators'
-import { MAX_LINK_LENGTH } from '../../../constants'
-import {
-  RESEARCH_MAX_LENGTH,
-  RESEARCH_TITLE_MAX_LENGTH,
-  RESEARCH_TITLE_MIN_LENGTH,
-} from '../../constants'
-import { buttons, errors, headings, update } from '../../labels'
+import { buttons, headings, update } from '../../labels'
+import { DescriptionField } from '../CreateResearch/Form/DescriptionField'
+import { FilesFields } from '../CreateResearch/Form/FilesFields'
+import { MediaFields } from '../CreateResearch/Form/MediaFields'
+import { TitleField } from '../CreateResearch/Form/TitleField'
 import { ResearchErrors } from './ResearchErrors'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
 import type { MainFormAction } from '../../../../common/Form/types'
-import type { IResearch } from '../../../../models/research.models'
+import type { IResearchUpdate } from '../../../../models/research.models'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -98,7 +92,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     }, 0)
   }
 
-  const onSubmit = (formValues: IResearch.Update) => {
+  const onSubmit = (formValues: IResearchUpdate) => {
     setShowSubmitModal(true)
     if (formValues.fileLink && formValues.files && formValues.files.length > 0)
       return setInvalidFileWarning(true)
@@ -172,7 +166,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
       )}
       <Form
         onSubmit={(v) => {
-          onSubmit(v as IResearch.Update)
+          onSubmit(v as IResearchUpdate)
         }}
         initialValues={formValues}
         mutators={{

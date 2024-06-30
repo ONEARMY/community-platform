@@ -1,6 +1,6 @@
 import { toJS } from 'mobx'
 
-import type { IQuestion, IResearch } from 'src/models'
+import type { IQuestionItem, IResearchItem } from '../../models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
@@ -11,7 +11,7 @@ export const toggleDocSubscriberStatusByUserName = async (
   userName: string,
 ) => {
   const dbRef = db
-    .collection<IQuestion.Item | IResearch.Item>(collectionName)
+    .collection<IQuestionItem | IResearchItem>(collectionName)
     .doc(_id)
   const docData = await toJS(dbRef.get('server'))
 

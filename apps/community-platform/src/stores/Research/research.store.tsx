@@ -25,7 +25,14 @@ import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 import { setCollaboratorPermission } from './researchEvents'
 
 import type { IUser, UserMention } from '../../models'
-import type { IResearch, IResearchDB } from '../../models/research.models'
+import type {
+  IResearchDB,
+  IResearchFormInput,
+  IResearchItem,
+  IResearchItemDB,
+  IResearchUpdate,
+  IResearchUpdateDB,
+} from '../../models/research.models'
 import type { IConvertedFileMeta } from '../../types'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
@@ -33,7 +40,7 @@ import type { IRootStore } from '../RootStore'
 const COLLECTION_NAME = 'research'
 
 export class ResearchStore extends ModuleStore {
-  public activeResearchItem: IResearch.ItemDB | null = null
+  public activeResearchItem: IResearchItemDB | null = null
   public researchUploadStatus: IResearchUploadStatus =
     getInitialResearchUploadStatus()
   public updateUploadStatus: IUpdateUploadStatus =
@@ -67,7 +74,7 @@ export class ResearchStore extends ModuleStore {
     logger.debug(`setActiveResearchItemBySlug:`, { slug })
     let activeResearchItem: IResearchDB | null = null
 
-    const enrichResearchUpdate = async (update: IResearch.UpdateDB) => {
+    const enrichResearchUpdate = async (update: IResearchUpdateDB) => {
       const enrichedResearchUpdated = cloneDeep(update)
       enrichedResearchUpdated.description = changeUserReferenceToPlainText(
         update.description,
@@ -124,7 +131,7 @@ export class ResearchStore extends ModuleStore {
       COLLECTION_NAME,
       docId,
       userName,
-    )) as IResearch.ItemDB
+    )) as IResearchItemDB
 
     runInAction(() => {
       this.activeResearchItem = updatedItem
@@ -153,7 +160,7 @@ export class ResearchStore extends ModuleStore {
     return
   }
 
-  public async incrementViewCount(researchItem: Partial<IResearch.ItemDB>) {
+  public async incrementViewCount(researchItem: Partial<IResearchItemDB>) {
     return await incrementDocViewCount({
       collection: COLLECTION_NAME,
       db: this.db,
@@ -180,7 +187,7 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async moderateResearch(research: IResearch.ItemDB) {
+  public async moderateResearch(research: IResearchItemDB) {
     if (!this.activeUser || !hasAdminRights(toJS(this.activeUser))) {
       return false
     }
@@ -188,7 +195,7 @@ export class ResearchStore extends ModuleStore {
     return doc.set(toJS(research))
   }
 
-  public needsModeration(research: IResearch.ItemDB) {
+  public needsModeration(research: IResearchItemDB) {
     return needsModeration(research, toJS(this.activeUser || undefined))
   }
 
@@ -221,12 +228,12 @@ export class ResearchStore extends ModuleStore {
     }
   }
 
-  public async uploadResearch(values: IResearch.FormInput) {
+  public async uploadResearch(values: IResearchFormInput) {
     logger.debug('uploading research')
     this.updateResearchUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
     const dbRef = this.db
-      .collection<IResearch.Item>(COLLECTION_NAME)
+      .collection<IResearchItem>(COLLECTION_NAME)
       .doc(values._id)
     const user = this.activeUser as IUser
     const updates = (await dbRef.get())?.updates || [] // save old updates when editing
@@ -237,7 +244,7 @@ export class ResearchStore extends ModuleStore {
       const slug = await this.setSlug(values)
       const previousSlugs = this.setPreviousSlugs(values, slug)
 
-      const researchItem: Partial<IResearch.Item> = {
+      const researchItem: Partial<IResearchItem> = {
         mentions: [],
         ...values,
         slug,
@@ -284,12 +291,12 @@ export class ResearchStore extends ModuleStore {
    *
    * @param update
    */
-  public async uploadUpdate(update: IResearch.Update | IResearch.UpdateDB) {
+  public async uploadUpdate(update: IResearchUpdate | IResearchUpdateDB) {
     logger.debug(`uploadUpdate`, { update })
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
+        .collection<IResearchItem>(COLLECTION_NAME)
         .doc(item._id)
       const id = dbRef.id
       this.updateUpdateUploadStatus('Start')
@@ -326,7 +333,7 @@ export class ResearchStore extends ModuleStore {
 
         // populate DB
         const existingUpdateIndex = item.updates.findIndex(
-          (upd) => upd._id === (update as IResearch.UpdateDB)._id,
+          (upd) => upd._id === (update as IResearchUpdateDB)._id,
         )
         const newItem = {
           ...toJS(item),
@@ -347,7 +354,7 @@ export class ResearchStore extends ModuleStore {
         } else {
           // editing update
           newItem.updates[existingUpdateIndex] = {
-            ...(updateWithMeta as IResearch.UpdateDB),
+            ...(updateWithMeta as IResearchUpdateDB),
             _modified: new Date().toISOString(),
           }
         }
@@ -356,7 +363,7 @@ export class ResearchStore extends ModuleStore {
 
         logger.debug(
           'old and new modified:',
-          (update as IResearch.UpdateDB)._modified,
+          (update as IResearchUpdateDB)._modified,
           newItem._modified,
         )
         logger.debug('created:', newItem._created)
@@ -365,7 +372,7 @@ export class ResearchStore extends ModuleStore {
         await this._updateResearchItem(dbRef, newItem, true)
         logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
-        const createdItem = (await dbRef.get()) as IResearch.ItemDB
+        const createdItem = (await dbRef.get()) as IResearchItemDB
         runInAction(() => {
           this.activeResearchItem = createdItem
         })
@@ -380,7 +387,7 @@ export class ResearchStore extends ModuleStore {
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
+        .collection<IResearchItem>(COLLECTION_NAME)
         .doc(item._id)
       try {
         // populate DB
@@ -427,7 +434,7 @@ export class ResearchStore extends ModuleStore {
 
       if (item) {
         const dbRef = this.db
-          .collection<IResearch.Item>(COLLECTION_NAME)
+          .collection<IResearchItem>(COLLECTION_NAME)
           .doc(item._id)
 
         const newUpdates = item.updates.map((update) => {
@@ -483,7 +490,7 @@ export class ResearchStore extends ModuleStore {
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
+        .collection<IResearchItem>(COLLECTION_NAME)
         .doc(item._id)
       const newItem = {
         ...item,
@@ -503,7 +510,7 @@ export class ResearchStore extends ModuleStore {
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
+        .collection<IResearchItem>(COLLECTION_NAME)
         .doc(item._id)
       const newItem = {
         ...item,
@@ -520,7 +527,7 @@ export class ResearchStore extends ModuleStore {
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
+        .collection<IResearchItem>(COLLECTION_NAME)
         .doc(item._id)
       const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
       const newItem = {
@@ -545,7 +552,7 @@ export class ResearchStore extends ModuleStore {
     const item = this.activeResearchItem
     if (item) {
       const dbRef = this.db
-        .collection<IResearch.Item>(COLLECTION_NAME)
+        .collection<IResearchItem>(COLLECTION_NAME)
         .doc(item._id)
       const updateIndex = item.updates.findIndex((upd) => upd._id === updateId)
       const newItem = {
@@ -564,7 +571,7 @@ export class ResearchStore extends ModuleStore {
   }
 
   private async _setCollaborators(
-    collaborators: IResearch.Item['collaborators'] | string | undefined,
+    collaborators: IResearchItem['collaborators'] | string | undefined,
   ) {
     if (!collaborators) return []
 
@@ -591,8 +598,8 @@ export class ResearchStore extends ModuleStore {
    *
    */
   private async _updateResearchItem(
-    dbRef: DocReference<IResearch.Item>,
-    researchDoc: Partial<IResearch.Item>,
+    dbRef: DocReference<IResearchItem>,
+    researchDoc: Partial<IResearchItem>,
     setLastEditTimestamp = false,
   ) {
     const researchItem = cloneDeep(researchDoc)
@@ -627,12 +634,13 @@ export class ResearchStore extends ModuleStore {
         }),
       )
     }
-    ;(users || []).map((username) => {
+
+    for (const username of users || []) {
       mentions.push({
         username,
         location: 'description',
       })
-    })
+    }
 
     const keywords = getKeywords(
       researchItem.title + ' ' + researchItem.description,
@@ -652,7 +660,7 @@ export class ResearchStore extends ModuleStore {
         mentions,
         description: researchDescription,
         keywords,
-      } as IResearch.Item,
+      } as IResearchItem,
       {
         set_last_edit_timestamp: setLastEditTimestamp,
       },
@@ -717,7 +725,7 @@ export class ResearchStore extends ModuleStore {
     slug: string,
   ): Promise<IResearchDB | null> {
     const collection = await this.db
-      .collection<IResearch.ItemDB>(COLLECTION_NAME)
+      .collection<IResearchItemDB>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
 
     if (collection && collection.length) {
@@ -725,7 +733,7 @@ export class ResearchStore extends ModuleStore {
     }
 
     const previousSlugCollection = await this.db
-      .collection<IResearch.ItemDB>(COLLECTION_NAME)
+      .collection<IResearchItemDB>(COLLECTION_NAME)
       .getWhere('previousSlugs', 'array-contains', slug)
 
     if (previousSlugCollection && previousSlugCollection.length) {

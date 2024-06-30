@@ -8,16 +8,14 @@ import { logger } from '../../logger'
 import { QuestionForm } from '../../pages/Question/Content/Common/QuestionForm'
 import { useQuestionStore } from '../../stores/Question/question.store'
 
-import type { IQuestion } from '../../models'
+import type { IQuestionItem } from '../../models'
 
 export const QuestionEdit = () => {
   const { slug } = useParams()
   const navigate = useNavigate()
   const store = useQuestionStore()
   const [isLoading, setIsLoading] = useState(true)
-  const [initialValues, setInitialValues] = useState<Partial<IQuestion.Item>>(
-    {},
-  )
+  const [initialValues, setInitialValues] = useState<Partial<IQuestionItem>>({})
 
   useEffect(() => {
     const fetchQuestion = async () => {

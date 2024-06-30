@@ -1,11 +1,19 @@
 import * as React from 'react'
 import { Field } from 'react-final-form'
-import { Button, DownloadStaticFile, FieldInput } from 'oa-components'
-import { FileInputField } from 'src/common/Form/FileInput.field'
-import { MAX_LINK_LENGTH } from 'src/pages/constants'
-import { buttons, update as updateLabels } from 'src/pages/Research/labels'
-import { COMPARISONS } from 'src/utils/comparisons'
+import {
+  Button,
+  DownloadStaticFile,
+  FieldInput,
+} from '@onearmy.apps/components'
 import { Flex, Label, Text } from 'theme-ui'
+
+import { FileInputField } from '../../../../../common/Form/FileInput.field'
+import { MAX_LINK_LENGTH } from '../../../../../pages/constants'
+import {
+  buttons,
+  update as updateLabels,
+} from '../../../../../pages/Research/labels'
+import { COMPARISONS } from '../../../../../utils/comparisons'
 
 const WarningMessages = ({ show }) => {
   const { error } = updateLabels.files

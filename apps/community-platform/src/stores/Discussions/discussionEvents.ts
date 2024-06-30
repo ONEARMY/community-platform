@@ -4,7 +4,7 @@ import { toJS } from 'mobx'
 import { logger } from '../../logger'
 import { filterNonDeletedComments } from '../../utils/filterNonDeletedComments'
 
-import type { IDiscussion, IResearch } from '../../models'
+import type { IDiscussion, IResearchItem } from '../../models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
@@ -49,7 +49,7 @@ export const updateDiscussionMetadata = async (
     case 'research':
       const researchRef = db.collection(collectionName).doc(primaryContentId)
 
-      const research = toJS(await researchRef.get()) as IResearch.Item
+      const research = toJS(await researchRef.get()) as IResearchItem
 
       if (research) {
         // This approach is open to error but is better than making lots of DBs

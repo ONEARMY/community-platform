@@ -1,3 +1,4 @@
+import { IModerationStatus } from '@onearmy.apps/shared'
 import {
   and,
   collection,
@@ -9,7 +10,6 @@ import {
   startAfter,
   where,
 } from 'firebase/firestore'
-import { IModerationStatus } from '@onearmy.apps/shared'
 
 import { DB_ENDPOINTS } from '../../models'
 import { firestore } from '../../utils/firebase'
@@ -20,7 +20,7 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { IQuestion } from '../../models'
+import type { IQuestionItem } from '../../models'
 import type { ICategory } from '../../models/categories.model'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
@@ -35,7 +35,7 @@ const search = async (
   category: string,
   sort: QuestionSortOption,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  take: number = 10,
+  take = 10,
 ) => {
   const { itemsQuery, countQuery } = createQueries(
     words,
@@ -51,7 +51,7 @@ const search = async (
     : undefined
 
   const items = documentSnapshots.docs
-    ? documentSnapshots.docs.map((x) => x.data() as IQuestion.Item)
+    ? documentSnapshots.docs.map((x) => x.data() as IQuestionItem)
     : []
   const total = (await getCountFromServer(countQuery)).data().count
 
@@ -63,7 +63,7 @@ const createQueries = (
   category: string,
   sort: QuestionSortOption,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
-  take: number = 10,
+  take = 10,
 ) => {
   const collectionRef = collection(firestore, DB_ENDPOINTS.questions)
   let filters: QueryFilterConstraint[] = [
@@ -143,7 +143,7 @@ const getDrafts = async (userId: string) => {
   const { itemsQuery } = createDraftQuery(userId)
   const docs = await getDocs(itemsQuery)
 
-  return docs.docs ? docs.docs.map((x) => x.data() as IQuestion.Item) : []
+  return docs.docs ? docs.docs.map((x) => x.data() as IQuestionItem) : []
 }
 
 const getSort = (sort: QuestionSortOption) => {

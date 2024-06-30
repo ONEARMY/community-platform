@@ -4,7 +4,7 @@ import {
   IMessageDB,
   INotification,
   IUserDB,
-} from '../../../src/models'
+} from '../../../apps/community-platform/src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
 import {
   getProjectImageSrc,

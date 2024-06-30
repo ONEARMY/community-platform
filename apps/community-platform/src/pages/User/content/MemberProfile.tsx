@@ -1,6 +1,6 @@
 import { MemberBadge, Username, UserStatistics } from '@onearmy.apps/components'
 import { ExternalLinkLabel, UserRole } from '@onearmy.apps/shared'
-import { Box, Card, Flex, Heading, Image, Paragraph } from 'theme-ui'
+import { Avatar, Box, Card, Flex, Heading, Paragraph } from 'theme-ui'
 
 import DefaultMemberImage from '../../../assets/images/default_member.svg'
 import { AuthWrapper } from '../../../common/AuthWrapper'

@@ -3,10 +3,10 @@ import {
   retrieveSessionStorageArray,
 } from './sessionStorage'
 
-import type { IHowtoDB, IQuestion, IResearch } from 'src/models'
-import type { IStores } from 'src/stores/RootStore'
+import type { IHowtoDB, IQuestionItem, IResearchItem } from '../models'
+import type { IStores } from '../stores/RootStore'
 
-type IDocument = Partial<IHowtoDB | IQuestion.Item | IResearch.Item>
+type IDocument = Partial<IHowtoDB | IQuestionItem | IResearchItem>
 type IDocumentType = 'howto' | 'question' | 'research'
 
 interface IProps {

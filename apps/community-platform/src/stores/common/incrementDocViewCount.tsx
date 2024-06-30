@@ -1,8 +1,8 @@
-import type { IHowto, IQuestion, IResearch } from 'src/models'
+import type { IHowto, IQuestionItem, IResearchItem } from '../../models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
-type ICollection = Partial<IHowto | IQuestion.Item | IResearch.Item>
+type ICollection = Partial<IHowto | IQuestionItem | IResearchItem>
 
 interface IProps {
   collection: DBEndpoint

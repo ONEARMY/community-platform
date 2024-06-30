@@ -22,12 +22,12 @@ import { seoTagsUpdate } from '../../utils/seo'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { QuestionDiscussion } from './QuestionDiscussion'
 
-import type { IQuestion } from '../../models'
+import type { IQuestionItem } from '../../models'
 import type { IUploadedFileMeta } from '../../stores/storage'
 
 export const QuestionPage = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const [question, setQuestion] = useState<IQuestion.Item | undefined>()
+  const [question, setQuestion] = useState<IQuestionItem | undefined>()
   const [totalCommentsCount, setTotalCommentsCount] = useState(0)
 
   const { slug } = useParams()
@@ -37,7 +37,7 @@ export const QuestionPage = () => {
 
   useEffect(() => {
     const fetchQuestion = async () => {
-      const foundQuestion: IQuestion.Item | null =
+      const foundQuestion: IQuestionItem | null =
         await store.fetchQuestionBySlug(slug || '')
 
       if (!foundQuestion) {
@@ -82,7 +82,7 @@ export const QuestionPage = () => {
   }, [])
 
   const onUsefulClick = async () => {
-    const updatedQuestion = (await store.toggleUsefulByUser()) as IQuestion.Item
+    const updatedQuestion = (await store.toggleUsefulByUser()) as IQuestionItem
     setQuestion(updatedQuestion)
   }
 

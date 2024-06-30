@@ -1,15 +1,19 @@
 import { faker } from '@faker-js/faker'
 import { IModerationStatus, ResearchUpdateStatus } from '@onearmy.apps/shared'
 
-import type { IResearch, IResearchDB } from 'src/models'
+import type {
+  IResearchDB,
+  IResearchFormInput,
+  IResearchUpdateDB,
+} from '../../models'
 
 type ResearchCalculatedFields = {
   userHasSubscribed: boolean
 }
 
 export const FactoryResearchItemUpdate = (
-  researchItemUpdateOverloads: Partial<IResearch.UpdateDB> = {},
-): IResearch.UpdateDB => ({
+  researchItemUpdateOverloads: Partial<IResearchUpdateDB> = {},
+): IResearchUpdateDB => ({
   title: faker.lorem.words(),
   description: faker.lorem.sentences(2),
   images: [],
@@ -56,8 +60,8 @@ export const FactoryResearchItem = (
 })
 
 export const FactoryResearchItemFormInput = (
-  researchItemOverloads: Partial<IResearch.FormInput> = {},
-): IResearch.FormInput => ({
+  researchItemOverloads: Partial<IResearchFormInput> = {},
+): IResearchFormInput => ({
   _id: faker.string.uuid(),
   _createdBy: faker.internet.userName(),
   description: faker.lorem.paragraphs(),

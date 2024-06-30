@@ -14,10 +14,8 @@ export const TagList = ({ tags }: IProps) => {
   return (
     <Flex sx={{ gap: 1 }}>
       {tags
-        .filter((tag) => tag !== undefined)
-        .map((tag, index) => (
-          <Tag key={index} tag={tag} />
-        ))}
+        ?.filter((tag) => tag !== undefined)
+        .map((tag, index) => <Tag key={index} tag={tag} />)}
     </Flex>
   )
 }

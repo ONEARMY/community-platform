@@ -1,10 +1,10 @@
 import { Field } from 'react-final-form'
 import styled from '@emotion/styled'
-import { FieldInput } from 'oa-components'
-import { ImageInputField } from 'src/common/Form/ImageInput.field'
-import { COMPARISONS } from 'src/utils/comparisons'
+import { FieldInput } from '@onearmy.apps/components'
 import { Flex, Label } from 'theme-ui'
 
+import { ImageInputField } from '../../../../../common/Form/ImageInput.field'
+import { COMPARISONS } from '../../../../../utils/comparisons'
 import { errors as errorsLabel, update as updateLabels } from '../../../labels'
 
 const ImageInputFieldWrapper = styled.div`

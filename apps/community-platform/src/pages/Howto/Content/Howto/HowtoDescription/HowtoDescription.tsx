@@ -16,6 +16,7 @@ import DifficultyLevel from '../../../../../assets/icons/icon-difficulty-level.s
 import TimeNeeded from '../../../../../assets/icons/icon-time-needed.svg'
 import { trackEvent } from '../../../../../common/Analytics'
 import { useCommonStores } from '../../../../../common/hooks/useCommonStores'
+import { TagList } from '../../../../../common/Tags/TagsList'
 import { logger } from '../../../../../logger'
 import { cdnImageUrl } from '../../../../../utils/cdnImageUrl'
 import {

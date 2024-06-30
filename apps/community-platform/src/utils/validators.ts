@@ -1,15 +1,14 @@
 import { getSpecialCharacters, stripSpecialCharacters } from './helpers'
-
-import type { HowtoStore } from 'src/stores/Howto/howto.store'
-import type { ResearchStore } from 'src/stores/Research/research.store'
-
-type storeTypes = HowtoStore | ResearchStore | QuestionStore
-
 import { isUrl } from './urlHelper'
 
 import type { Mutator } from 'final-form'
-import type { MainFormAction } from 'src/common/Form/types'
-import type { QuestionStore } from 'src/stores/Question/question.store'
+import type { MainFormAction } from '../common/Form/types'
+import type { HowtoStore } from '../stores/Howto/howto.store'
+import type { QuestionStore } from '../stores/Question/question.store'
+import type { ResearchStore } from '../stores/Research/research.store'
+
+type storeTypes = HowtoStore | ResearchStore | QuestionStore
+
 /****************************************************************************
  *            General Validation Methods
  * **************************************************************************/

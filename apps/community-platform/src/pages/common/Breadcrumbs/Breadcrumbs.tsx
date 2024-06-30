@@ -1,22 +1,22 @@
 import { Breadcrumbs as BreadcrumbsComponent } from '@onearmy.apps/components'
 
-import type { IHowto, IQuestion, IResearch } from 'src/models'
+import type { IHowto, IQuestionItem, IResearchItemDB } from '../../../models'
 
 type Step = { text: string; link?: string }
 
 interface BreadcrumbsProps {
   steps?: Step[]
-  content?: IResearch.ItemDB | IQuestion.Item | IHowto
+  content?: IResearchItemDB | IQuestionItem | IHowto
   variant?: 'research' | 'question' | 'howto'
 }
 
 const generateSteps = (
-  content: IResearch.ItemDB | IQuestion.Item | IHowto | undefined,
+  content: IResearchItemDB | IQuestionItem | IHowto | undefined,
   variant: 'research' | 'question' | 'howto' | undefined,
 ) => {
   const steps: Step[] = []
-  if (variant == 'research') {
-    const item = content as IResearch.ItemDB
+  if (variant === 'research') {
+    const item = content as IResearchItemDB
     steps.push({ text: 'Research', link: '/research' })
 
     if (item.researchCategory) {
@@ -27,8 +27,8 @@ const generateSteps = (
     }
 
     steps.push({ text: item.title })
-  } else if (variant == 'question') {
-    const item = content as IQuestion.Item
+  } else if (variant === 'question') {
+    const item = content as IQuestionItem
     steps.push({ text: 'Question', link: '/questions' })
 
     if (item.questionCategory) {
@@ -39,7 +39,7 @@ const generateSteps = (
     }
 
     steps.push({ text: item.title })
-  } else if (variant == 'howto') {
+  } else if (variant === 'howto') {
     const item = content as IHowto
     steps.push({ text: 'How To', link: '/how-to' })
 

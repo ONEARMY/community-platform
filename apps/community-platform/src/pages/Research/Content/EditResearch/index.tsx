@@ -10,11 +10,10 @@ import ResearchForm from '../../../../pages/Research/Content/Common/Research.for
 import { useResearchStore } from '../../../../stores/Research/research.store'
 import { isAllowedToEditContent } from '../../../../utils/helpers'
 
-import type { IResearch } from '../../../../models/research.models'
-import type { IUser } from '../../../../models/user.models'
+import type { IResearchItemDB, IUser } from '../../../../models'
 
 interface IState {
-  formValues: IResearch.ItemDB | null
+  formValues: IResearchItemDB | null
   isLoading: boolean
   loggedInUser?: IUser | undefined
 }
@@ -45,7 +44,7 @@ const EditResearch = observer(() => {
       if (store.activeResearchItem) {
         setState((prevState) => ({
           ...prevState,
-          formValues: toJS(store.activeResearchItem) as IResearch.ItemDB,
+          formValues: toJS(store.activeResearchItem) as IResearchItemDB,
           isLoading: false,
           loggedInUser: loggedInUser as IUser,
         }))
@@ -53,7 +52,7 @@ const EditResearch = observer(() => {
         const doc = await store.setActiveResearchItemBySlug(slug)
         setState((prevState) => ({
           ...prevState,
-          formValues: doc as IResearch.ItemDB,
+          formValues: doc as IResearchItemDB,
           isLoading: false,
           loggedInUser: loggedInUser as IUser,
         }))

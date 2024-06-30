@@ -19,10 +19,10 @@ import { formatDate } from '../../../utils/date'
 import { formatImagesForGallery } from '../../../utils/formatImageListForGallery'
 import { ResearchUpdateDiscussion } from './ResearchUpdateDiscussion'
 
-import type { IResearch } from '../../../models/research.models'
+import type { IResearchUpdate } from '../../../models'
 
 interface IProps {
-  update: IResearch.Update
+  update: IResearchUpdate
   updateIndex: number
   isEditable: boolean
   slug: string

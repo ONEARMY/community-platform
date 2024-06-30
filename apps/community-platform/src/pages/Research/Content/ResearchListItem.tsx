@@ -20,11 +20,11 @@ import { cdnImageUrl } from '../../../utils/cdnImageUrl'
 import { formatDate } from '../../../utils/date'
 import { getPublicUpdates, researchStatusColour } from '../researchHelpers'
 
-import type { IResearch } from '../../../models/research.models'
+import type { IResearchItem } from '../../../models'
 import type { IUploadedFileMeta } from '../../../stores/storage'
 
 interface IProps {
-  item: IResearch.Item
+  item: IResearchItem
 }
 
 const ResearchListItem = ({ item }: IProps) => {
@@ -255,7 +255,7 @@ const ResearchListItem = ({ item }: IProps) => {
   )
 }
 
-const getItemThumbnail = (researchItem: IResearch.Item): string => {
+const getItemThumbnail = (researchItem: IResearchItem): string => {
   if (researchItem.updates?.length) {
     const latestImage = getPublicUpdates(researchItem)
       ?.map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
@@ -267,7 +267,7 @@ const getItemThumbnail = (researchItem: IResearch.Item): string => {
   }
 }
 
-const getItemDate = (item: IResearch.Item, variant: string): string => {
+const getItemDate = (item: IResearchItem, variant: string): string => {
   try {
     const contentModifiedDate = formatDate(
       new Date(item._contentModifiedTimestamp),
@@ -286,7 +286,7 @@ const getItemDate = (item: IResearch.Item, variant: string): string => {
   }
 }
 
-const getUpdateCount = (item: IResearch.Item) => {
+const getUpdateCount = (item: IResearchItem) => {
   return item.updates?.length
     ? item.updates.filter(
         (update) =>

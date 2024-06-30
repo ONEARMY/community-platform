@@ -47,59 +47,55 @@ const Profile = observer((props: IProps) => {
     )
   }
 
+  if (!user) {
+    return <ProfileButtons isMobile={props.isMobile} />
+  }
+
+  if (props.isMobile) {
+    return (
+      <Box
+        sx={{
+          borderBottom: 'none',
+          borderColor: 'lightgrey',
+          borderTop: '1px solid',
+          mt: 1,
+        }}
+      >
+        <MenuMobileLink path={'/u/' + user.userName} content={'Profile'} />
+        {COMMUNITY_PAGES_PROFILE.map((page) => (
+          <MenuMobileLink
+            path={page.path}
+            key={page.path}
+            content={page.title}
+          />
+        ))}
+        <MenuMobileLink
+          path={window.location.pathname}
+          content={'Log out'}
+          onClick={() => userStore.logout()}
+        />
+      </Box>
+    )
+  }
+
   return (
-    <>
-      {user ? (
-        props.isMobile ? (
-          <Box
-            sx={{
-              borderBottom: 'none',
-              borderColor: 'lightgrey',
-              borderTop: '1px solid',
-              mt: 1,
-            }}
-          >
-            <MenuMobileLink path={'/u/' + user.userName} content={'Profile'} />
-            {COMMUNITY_PAGES_PROFILE.map((page) => (
-              <MenuMobileLink
-                path={page.path}
-                key={page.path}
-                content={page.title}
-              />
-            ))}
-            <MenuMobileLink
-              path={window.location.pathname}
-              content={'Log out'}
-              onClick={() => userStore.logout()}
-            />
-          </Box>
-        ) : (
-          <div
-            data-cy="user-menu"
-            style={{
-              width: '93px',
-            }}
-          >
-            <Flex
-              onClick={() => toggleProfileModal()}
-              ml={1}
-              sx={{ height: '100%' }}
-            >
-              <MemberBadge profileType={user.profileType} />
-            </Flex>
-            <Flex>
-              {state.showProfileModal && (
-                <Foco onClickOutside={() => toggleProfileModal()}>
-                  <ProfileModal username={user.userName} />
-                </Foco>
-              )}
-            </Flex>
-          </div>
-        )
-      ) : (
-        <ProfileButtons isMobile={props.isMobile} />
-      )}
-    </>
+    <div
+      data-cy="user-menu"
+      style={{
+        width: '93px',
+      }}
+    >
+      <Flex onClick={() => toggleProfileModal()} ml={1} sx={{ height: '100%' }}>
+        <MemberBadge profileType={user.profileType} />
+      </Flex>
+      <Flex>
+        {state.showProfileModal && (
+          <Foco onClickOutside={() => toggleProfileModal()}>
+            <ProfileModal username={user.userName} />
+          </Foco>
+        )}
+      </Flex>
+    </div>
   )
 })
 

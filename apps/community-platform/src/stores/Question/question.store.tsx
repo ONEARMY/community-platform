@@ -12,7 +12,11 @@ import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 import type { IModerationStatus } from '@onearmy.apps/shared'
 import type { IUser } from '../../models'
-import type { IQuestion, IQuestionDB } from '../../models/question.models'
+import type {
+  IQuestionDB,
+  IQuestionFormInput,
+  IQuestionItem,
+} from '../../models/question.models'
 import type { IConvertedFileMeta } from '../../types'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 import type { IRootStore } from '../RootStore'
@@ -79,10 +83,10 @@ export class QuestionStore extends ModuleStore {
     )
   }
 
-  public async upsertQuestion(values: IQuestion.FormInput) {
+  public async upsertQuestion(values: IQuestionFormInput) {
     logger.info(`upsertQuestion:`, { values, activeUser: this.activeUser })
     const dbRef = this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .collection<IQuestionItem>(COLLECTION_NAME)
       .doc(values?._id)
 
     const isTitleAlreadyInUse = await this.isTitleThatReusesSlug(
@@ -172,7 +176,7 @@ export class QuestionStore extends ModuleStore {
     }
   }
 
-  private getCreatorCountry(user: IUser, values: IQuestion.FormInput) {
+  private getCreatorCountry(user: IUser, values: IQuestionFormInput) {
     const { creatorCountry, _createdBy } = values
     const userCountry = getUserCountry(user)
 
@@ -189,7 +193,7 @@ export class QuestionStore extends ModuleStore {
     if (this.activeQuestionItem?.slug === slug) return this.activeQuestionItem
 
     const collection = await this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .collection<IQuestionItem>(COLLECTION_NAME)
       .getWhere('slug', '==', slug)
 
     logger.info(`_getQuestionItemBySlug.collection`, { collection })
@@ -198,7 +202,7 @@ export class QuestionStore extends ModuleStore {
     }
 
     const previousSlugs = await this.db
-      .collection<IQuestion.Item>(COLLECTION_NAME)
+      .collection<IQuestionItem>(COLLECTION_NAME)
       .getWhere('previousSlugs', 'array-contains', slug)
 
     logger.info(`_getQuestionItemBySlug.collection`, { previousSlugs })

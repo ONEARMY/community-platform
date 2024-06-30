@@ -11,7 +11,7 @@ import type { ISelectedTags } from './tags.model'
 /**
  * Research retrieved from the database also include metadata such as _id, _created and _modified
  */
-export type IResearchDB = DBDoc & IResearch.ItemDB
+export type IResearchDB = DBDoc & IResearchItemDB
 
 export type IResearchStats = {
   votedUsefulCount: number
@@ -38,56 +38,54 @@ export const researchStatusOptions = (
 
 type UserIdList = UserId[]
 
-export namespace IResearch {
-  /** The main research item, as created by a user */
-  export type Item = {
-    updates: Update[]
-    mentions?: UserMention[]
-    _createdBy: string
-    collaborators: string[]
-    subscribers?: UserIdList
-    locked?: ResearchDocumentLock
-    totalUpdates?: number
-    totalUsefulVotes?: number
-    totalCommentCount: number
-    keywords?: string[]
-  } & Omit<FormInput, 'collaborators'> &
-    DBDoc
+/** The main research item, as created by a user */
+export type IResearchItem = {
+  updates: IResearchUpdate[]
+  mentions?: UserMention[]
+  _createdBy: string
+  collaborators: string[]
+  subscribers?: UserIdList
+  locked?: ResearchDocumentLock
+  totalUpdates?: number
+  totalUsefulVotes?: number
+  totalCommentCount: number
+  keywords?: string[]
+} & Omit<IResearchFormInput, 'collaborators'> &
+  DBDoc
 
-  /** A research item update */
-  export type Update = {
-    title: string
-    description: string
-    images: Array<IUploadedFileMeta | IConvertedFileMeta | File | null>
-    files: Array<IUploadedFileMeta | File | null>
-    fileLink: string
-    downloadCount: number
-    videoUrl?: string
-    collaborators?: string[]
-    status: ResearchUpdateStatus
-    researchStatus?: ResearchStatus
-    locked?: ResearchDocumentLock
-    _id: string
-  } & DBDoc
+/** A research item update */
+export type IResearchUpdate = {
+  title: string
+  description: string
+  images: Array<IUploadedFileMeta | IConvertedFileMeta | File | null>
+  files: Array<IUploadedFileMeta | File | null>
+  fileLink: string
+  downloadCount: number
+  videoUrl?: string
+  collaborators?: string[]
+  status: ResearchUpdateStatus
+  researchStatus?: ResearchStatus
+  locked?: ResearchDocumentLock
+  _id: string
+} & DBDoc
 
-  export interface FormInput extends IModerable, ISharedFeatures {
-    title: string
-    description: string
-    researchCategory?: IResearchCategory
-    slug: string
-    tags: ISelectedTags
-    creatorCountry?: string
-    collaborators: string
-    previousSlugs?: string[]
-    researchStatus?: ResearchStatus
-  }
-
-  /** Research items synced from the database will contain additional metadata */
-  // Use of Omit to override the 'updates' type to UpdateDB
-  export type ItemDB = Omit<Item, 'updates'> & {
-    totalCommentCount: number
-    updates: UpdateDB[]
-  } & DBDoc
-
-  export type UpdateDB = Update & DBDoc
+export interface IResearchFormInput extends IModerable, ISharedFeatures {
+  title: string
+  description: string
+  researchCategory?: IResearchCategory
+  slug: string
+  tags: ISelectedTags
+  creatorCountry?: string
+  collaborators: string
+  previousSlugs?: string[]
+  researchStatus?: ResearchStatus
 }
+
+/** Research items synced from the database will contain additional metadata */
+// Use of Omit to override the 'updates' type to UpdateDB
+export type IResearchItemDB = Omit<IResearchItem, 'updates'> & {
+  totalCommentCount: number
+  updates: IResearchUpdateDB[]
+} & DBDoc
+
+export type IResearchUpdateDB = IResearchUpdate & DBDoc

@@ -1,9 +1,12 @@
 import { Field } from 'react-final-form'
-import { FieldTextarea } from 'oa-components'
-import { COMPARISONS } from 'src/utils/comparisons'
-import { draftValidationWrapper, required } from 'src/utils/validators'
+import { FieldTextarea } from '@onearmy.apps/components'
 import { Flex, Label } from 'theme-ui'
 
+import { COMPARISONS } from '../../../../../utils/comparisons'
+import {
+  draftValidationWrapper,
+  required,
+} from '../../../../../utils/validators'
 import { RESEARCH_MAX_LENGTH } from '../../../constants'
 import { update as updateLabels } from '../../../labels'
 

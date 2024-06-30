@@ -19,16 +19,16 @@ import ResearchListItem from './ResearchListItem'
 
 import type { ResearchStatus } from '@onearmy.apps/shared'
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { IResearch } from '../../../models'
+import type { IResearchItem } from '../../../models'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 const ResearchList = observer(() => {
   const theme = useTheme()
   const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [researchItems, setResearchItems] = useState<IResearch.Item[]>([])
+  const [researchItems, setResearchItems] = useState<IResearchItem[]>([])
   const { draftCount, isFetchingDrafts, drafts, showDrafts, handleShowDrafts } =
-    useDrafts<IResearch.Item>({
+    useDrafts<IResearchItem>({
       getDraftCount: researchService.getDraftCount,
       getDrafts: researchService.getDrafts,
     })

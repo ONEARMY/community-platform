@@ -11,7 +11,7 @@ import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
-import type { IResearch, IUserPPDB } from '../../models'
+import type { IResearchItem, IUserPPDB } from '../../models'
 import type {
   IComment,
   IDiscussion,
@@ -236,7 +236,7 @@ export class DiscussionStore extends ModuleStore {
     switch (collectionName) {
       case 'research':
         const researchRef = this.db
-          .collection<IResearch.Item>(collectionName)
+          .collection<IResearchItem>(collectionName)
           .doc(discussion.primaryContentId)
 
         const research = toJS(await researchRef.get())

@@ -19,12 +19,12 @@ export type {
   IResearchDB,
   IUserDB,
   IQuestionDB,
-} from '../../src/models'
+} from '../../apps/community-platform/src/models'
 
 import {
   dbEndpointSubcollections,
   generateDBEndpoints,
-} from '@onearmy.apps/shared'
+} from '../../libs/shared/src/lib'
 
 export const DB_ENDPOINTS = generateDBEndpoints()
 export const DB_ENDPOINT_SUBCOLLECTIONS = dbEndpointSubcollections

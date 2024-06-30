@@ -1,6 +1,6 @@
-import type { IResearch } from '../../../../models/research.models'
+import type { IResearchFormInput } from '../../../../models'
 
-const INITIAL_VALUES: Partial<IResearch.FormInput> = {
+const INITIAL_VALUES: Partial<IResearchFormInput> = {
   tags: {},
   title: '',
   description: '',

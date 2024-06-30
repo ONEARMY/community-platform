@@ -1,8 +1,8 @@
 import { ResearchUpdateStatus } from '@onearmy.apps/shared'
 
-import type { IResearch } from '../../../../models/research.models'
+import type { IResearchUpdate } from '../../../../models'
 
-const INITIAL_VALUES: Partial<IResearch.Update> = {
+const INITIAL_VALUES: Partial<IResearchUpdate> = {
   title: '',
   description: '',
   images: [],

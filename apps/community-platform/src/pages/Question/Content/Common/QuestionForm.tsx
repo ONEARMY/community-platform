@@ -20,7 +20,7 @@ import {
 } from './FormFields'
 
 import type { MainFormAction } from '../../../../common/Form/types'
-import type { IQuestion } from '../../../../models'
+import type { IQuestionFormInput } from '../../../../models'
 
 interface IProps {
   'data-testid'?: string
@@ -34,10 +34,10 @@ export const QuestionForm = (props: IProps) => {
   const navigate = useNavigate()
   const store = useQuestionStore()
 
-  const onSubmit = async (formValues: Partial<IQuestion.FormInput>) => {
+  const onSubmit = async (formValues: Partial<IQuestionFormInput>) => {
     try {
       const newDocument = await store.upsertQuestion(
-        formValues as IQuestion.FormInput,
+        formValues as IQuestionFormInput,
       )
       if (newDocument) {
         navigate('/questions/' + newDocument.slug)

@@ -12,12 +12,12 @@ import { QuestionFilterHeader } from './QuestionFilterHeader'
 import { QuestionListItem } from './QuestionListItem'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { IQuestion } from '../../models'
+import type { IQuestionItem } from '../../models'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListing = () => {
   const [isFetching, setIsFetching] = useState<boolean>(true)
-  const [questions, setQuestions] = useState<IQuestion.Item[]>([])
+  const [questions, setQuestions] = useState<IQuestionItem[]>([])
   const [total, setTotal] = useState<number>(0)
   const [lastVisible, setLastVisible] = useState<
     QueryDocumentSnapshot<DocumentData, DocumentData> | undefined

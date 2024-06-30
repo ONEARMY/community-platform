@@ -9,9 +9,9 @@ interface IProps {
 }
 
 export const TagList = ({ tags }: IProps) => {
-  if (!tags) return
-
   const { allTagsByKey } = useCommonStores().stores.tagsStore
+
+  if (!tags) return
 
   const tagList = Object.keys(tags)
     .filter(Boolean)

@@ -9,11 +9,11 @@ import { ResearchUpdateForm } from '../../../../pages/Research/Content/Common/Re
 import { useResearchStore } from '../../../../stores/Research/research.store'
 import { isAllowedToEditContent } from '../../../../utils/helpers'
 
-import type { IResearch } from '../../../../models/research.models'
+import type { IResearchUpdateDB } from '../../../../models'
 import type { IUser } from '../../../../models/user.models'
 
 interface IState {
-  formValues: IResearch.UpdateDB
+  formValues: IResearchUpdateDB
   isLoading: boolean
   loggedInUser?: IUser | undefined
 }
@@ -26,7 +26,7 @@ const EditUpdate = observer((props: IProps) => {
   const store = useResearchStore()
   const navigate = useNavigate()
   const [state, setState] = React.useState<IState>({
-    formValues: {} as IResearch.UpdateDB,
+    formValues: {} as IResearchUpdateDB,
     isLoading: !store.activeResearchItem,
     loggedInUser: store.activeUser as IUser,
   })
@@ -50,7 +50,7 @@ const EditUpdate = observer((props: IProps) => {
         )
         setState((prevState) => ({
           ...prevState,
-          formValues: toJS(update) as IResearch.UpdateDB,
+          formValues: toJS(update) as IResearchUpdateDB,
           isLoading: false,
           loggedInUser: loggedInUser as IUser,
         }))
@@ -62,7 +62,7 @@ const EditUpdate = observer((props: IProps) => {
         }
         setState((prevState) => ({
           ...prevState,
-          formValues: update as IResearch.UpdateDB,
+          formValues: update as IResearchUpdateDB,
           isLoading: false,
           loggedInUser: loggedInUser as IUser,
         }))

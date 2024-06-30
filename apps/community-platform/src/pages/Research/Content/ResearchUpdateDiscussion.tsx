@@ -2,11 +2,11 @@ import { useState } from 'react'
 
 import { DiscussionWrapper } from '../../../common/DiscussionWrapper'
 
-import type { IResearch } from '../../../models'
+import type { IResearchItem, IResearchUpdate } from '../../../models'
 
 interface IProps {
-  update: IResearch.Update
-  research: IResearch.Item | null
+  update: IResearchUpdate
+  research: IResearchItem | null
   showComments?: boolean
 }
 

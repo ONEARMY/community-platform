@@ -43,7 +43,7 @@ import {
 import { buttons, headings, overview } from '../../labels'
 
 import type { MainFormAction } from '../../../../common/Form/types'
-import type { IResearch } from '../../../../models/research.models'
+import type { IResearchFormInput } from '../../../../models'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -122,7 +122,7 @@ const ResearchForm = observer((props: IProps) => {
     }
   }, [submissionHandler])
 
-  const onSubmit = async (formValues: IResearch.FormInput) => {
+  const onSubmit = async (formValues: IResearchFormInput) => {
     formValues.moderation = submissionHandler.draft
       ? IModerationStatus.DRAFT
       : IModerationStatus.ACCEPTED // No moderation for researches for now
@@ -167,7 +167,7 @@ const ResearchForm = observer((props: IProps) => {
 
       <Form
         onSubmit={(v) => {
-          onSubmit(v as IResearch.FormInput)
+          onSubmit(v as IResearchFormInput)
         }}
         initialValues={formValues}
         mutators={{

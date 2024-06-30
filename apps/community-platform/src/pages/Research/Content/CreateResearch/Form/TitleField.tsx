@@ -1,15 +1,15 @@
 import { Field } from 'react-final-form'
-import { FieldInput } from 'oa-components'
-import { useResearchStore } from 'src/stores/Research/research.store'
-import { COMPARISONS } from 'src/utils/comparisons'
+import { FieldInput } from '@onearmy.apps/components'
+import { Flex, Label } from 'theme-ui'
+
+import { useResearchStore } from '../../../../../stores/Research/research.store'
+import { COMPARISONS } from '../../../../../utils/comparisons'
 import {
   composeValidators,
   minValue,
   required,
   validateTitle,
-} from 'src/utils/validators'
-import { Flex, Label } from 'theme-ui'
-
+} from '../../../../../utils/validators'
 import {
   RESEARCH_TITLE_MAX_LENGTH,
   RESEARCH_TITLE_MIN_LENGTH,

@@ -15,6 +15,7 @@ import { IModerationStatus } from '@onearmy.apps/shared'
 import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 
 import { trackEvent } from '../../../common/Analytics'
+import { TagList } from '../../../common/Tags/TagsList'
 import { logger } from '../../../logger'
 import { useResearchStore } from '../../../stores/Research/research.store'
 import { buildStatisticsLabel } from '../../../utils/helpers'
@@ -22,12 +23,11 @@ import { incrementViewCount } from '../../../utils/incrementViewCount'
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { researchStatusColour } from '../researchHelpers'
 
-import type { ITag } from '../../../models'
-import type { IResearch } from '../../../models/research.models'
+import type { IResearchItemDB, ITag } from '../../../models'
 import type { IUser } from '../../../models/user.models'
 
 interface IProps {
-  research: IResearch.ItemDB & { tagList?: ITag[] }
+  research: IResearchItemDB & { tagList?: ITag[] }
   isEditable: boolean
   isDeletable: boolean
   loggedInUser: IUser | undefined
@@ -108,11 +108,9 @@ const ResearchDescription = ({
       >
         <Flex px={4} py={4} sx={{ flexDirection: 'column', width: '100%' }}>
           {research._deleted && (
-            <Fragment>
-              <Text color="red" pl={2} mb={2} data-cy="research-deleted">
-                * Marked for deletion
-              </Text>
-            </Fragment>
+            <Text color="red" pl={2} mb={2} data-cy="research-deleted">
+              * Marked for deletion
+            </Text>
           )}
           <Flex sx={{ justifyContent: 'space-between' }}>
             <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>

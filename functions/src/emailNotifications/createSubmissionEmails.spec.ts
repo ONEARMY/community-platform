@@ -12,7 +12,7 @@ import {
 } from './createSubmissionEmails'
 import { PP_SIGNOFF } from './constants'
 import * as utils from './utils'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus } from '@onearmy.apps/shared'
 import { UserRole } from 'oa-shared/models'
 
 jest.mock('../Firebase/auth', () => ({

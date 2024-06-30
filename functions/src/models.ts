@@ -21,7 +21,10 @@ export type {
   IQuestionDB,
 } from '../../src/models'
 
-import { dbEndpointSubcollections, generateDBEndpoints } from 'oa-shared'
+import {
+  dbEndpointSubcollections,
+  generateDBEndpoints,
+} from '@onearmy.apps/shared'
 
 export const DB_ENDPOINTS = generateDBEndpoints()
 export const DB_ENDPOINT_SUBCOLLECTIONS = dbEndpointSubcollections

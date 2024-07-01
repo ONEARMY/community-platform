@@ -1,6 +1,7 @@
 import { createRef, useEffect, useState } from 'react'
 import { Avatar, Box, Flex, Text } from 'theme-ui'
 
+import defaultProfileImage from '../../assets/images/default_member.svg'
 import { Button } from '../Button/Button'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 import { EditComment } from '../EditComment/EditComment'
@@ -19,7 +20,7 @@ export interface IProps {
   handleEdit: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
   isReply: boolean
-  showAvatar: boolean
+  // showAvatar: boolean
 }
 
 const formatDate = (d: string | undefined): string => {
@@ -41,7 +42,7 @@ export const CommentItem = (props: IProps) => {
     handleEditRequest,
     handleEdit,
     isReply,
-    showAvatar,
+    // showAvatar,
   } = props
   const {
     text,
@@ -101,18 +102,16 @@ export const CommentItem = (props: IProps) => {
               flex: 1,
             }}
           >
-            {creatorImage && showAvatar && (
-              <Box data-cy="commentAvatar" data-testid="commentAvatar">
-                <Avatar
-                  src={creatorImage}
-                  sx={{
-                    objectFit: 'cover',
-                    width: ['30px', '50px'],
-                    height: ['30px', '50px'],
-                  }}
-                />
-              </Box>
-            )}
+            <Box data-cy="commentAvatar" data-testid="commentAvatar">
+              <Avatar
+                src={creatorImage ? creatorImage : defaultProfileImage}
+                sx={{
+                  objectFit: 'cover',
+                  width: ['30px', '50px'],
+                  height: ['30px', '50px'],
+                }}
+              />
+            </Box>
 
             <Flex
               sx={{

@@ -65,7 +65,6 @@ afterEach(() => {
  * been added to the database
  */
 after(() => {
-  cy.clearServiceWorkers()
   cy.wrap('Clear DB').then({ timeout: 120000 }, () => {
     return new Cypress.Promise((resolve, reject) => {
       // force resolve in case of server issues (sometimes a bit flaky)

@@ -38,12 +38,14 @@ describe('[Notifications]', () => {
         const notifications = user['notifications']
         expect(notifications.length).to.be.greaterThan(0)
 
-        expect(notifications[0]['type']).to.equal('howto_useful')
-        expect(notifications[0]['relevantUrl']).to.equal(
-          '/how-to/testing-testing',
+        const notification = notifications.find(
+          ({ triggeredBy, type }) =>
+            triggeredBy.userId === visitor.username && type === 'howto_useful',
         )
-        expect(notifications[0]['read']).to.equal(false)
-        expect(notifications[0]['triggeredBy']['displayName']).to.equal(
+        expect(notification['type']).to.equal('howto_useful')
+        expect(notification['relevantUrl']).to.equal('/how-to/testing-testing')
+        expect(notification['read']).to.equal(false)
+        expect(notification['triggeredBy']['displayName']).to.equal(
           visitor.username,
         )
       },
@@ -66,7 +68,7 @@ describe('[Notifications]', () => {
         expect(notifications.length).to.be.greaterThan(0)
 
         const notification = notifications.find(
-          (item) => item['type'] === 'research_useful',
+          ({ triggeredBy }) => triggeredBy.userId === visitor.username,
         )
 
         expect(notification['relevantUrl']).to.equal('/research/qwerty')

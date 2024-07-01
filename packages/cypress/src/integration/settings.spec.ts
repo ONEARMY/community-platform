@@ -325,7 +325,7 @@ describe('[Settings]', () => {
   describe('[Focus Community Builder]', () => {
     const expected = settingsData.expectedCommunityBuilder
 
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
 
@@ -357,8 +357,6 @@ describe('[Settings]', () => {
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('not.exist')
       cy.get('[data-cy=save]').should('not.be.disabled')
-
-      cy.pause()
 
       cy.queryDocuments(
         DbCollectionName.users,

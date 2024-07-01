@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/*global require, console*/
+
 // Continuously copy the log files into a common folder
 // making it easier to export them.
 //

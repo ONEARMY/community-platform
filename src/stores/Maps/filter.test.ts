@@ -33,7 +33,7 @@ describe('filterMapPinsByType', () => {
 
   it('returns only verified pins', () => {
     const mapPins: Partial<IMapPin>[] = [
-      { _deleted: false, type: 'member', verified: true },
+      { _deleted: false, type: 'collection-point', verified: true },
       { _deleted: false, type: 'machine-builder' },
     ]
     expect(

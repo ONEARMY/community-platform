@@ -369,7 +369,7 @@ jobs:
       - attach_workspace:
           at: '.'
       - run:
-          command: yarn storybook:chromatic
+          command: yarn build-storybook
   release:
     docker: *docker
     resource_class: medium+

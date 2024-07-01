@@ -50,6 +50,8 @@ describe('[How To]', () => {
 
     beforeEach(() => {
       cy.visit('/how-to')
+      // Hack to get the tags store to finish populating before the expectations
+      cy.wait(1000)
     })
 
     describe('[By Everyone]', () => {

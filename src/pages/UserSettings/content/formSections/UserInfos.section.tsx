@@ -27,14 +27,16 @@ interface IProps {
   mutators: { [key: string]: (...args: any[]) => any }
 }
 
+interface IPropsCoverImages {
+  isMemberProfile: boolean
+  coverImages: IUser['coverImages']
+}
+
 const { title, description } = fields.coverImages
 export const CoverImages = ({
   isMemberProfile,
   coverImages,
-}: {
-  isMemberProfile: boolean
-  coverImages: IUser['coverImages']
-}) =>
+}: IPropsCoverImages) =>
   isMemberProfile ? (
     <>
       <Text mb={2} mt={7} sx={{ width: '100%', fontSize: 2 }}>
@@ -109,7 +111,8 @@ export const CoverImages = ({
   )
 
 export const UserInfosSection = (props: IProps) => {
-  const { profileType, links, coverImages } = props.formValues
+  const { formValues, showLocationDropdown } = props
+  const { profileType, links, coverImages } = formValues
   const isMemberProfile = profileType === ProfileType.MEMBER
   const { about, country, displayName } = fields
 
@@ -140,7 +143,7 @@ export const UserInfosSection = (props: IProps) => {
             validate={required}
             validateFields={[]}
           />
-          {props.showLocationDropdown && (
+          {showLocationDropdown && (
             <Flex sx={{ flexDirection: 'column', width: '100%' }}>
               <Text my={4} sx={{ fontSize: 2 }}>
                 {country.title}

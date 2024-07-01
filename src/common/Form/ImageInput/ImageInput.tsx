@@ -97,7 +97,7 @@ export const ImageInput = (props: IProps) => {
             )}
 
             {!hasImages && (
-              <Button small variant="outline" icon="image">
+              <Button small variant="outline" icon="image" type="button">
                 Upload Image
               </Button>
             )}

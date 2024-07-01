@@ -2,7 +2,7 @@ import { EmailNotificationFrequency } from 'oa-shared'
 import { INotification } from '../../../src/models'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
-import { getNotificationEmail } from './templates'
+import { getNotificationEmail } from './templateHelpers'
 import { getUserEmail } from './utils'
 import { v4 as uuid } from 'uuid'
 

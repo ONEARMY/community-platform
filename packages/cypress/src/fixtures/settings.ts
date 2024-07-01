@@ -109,35 +109,6 @@ export const expectedMember = {
       url: `${freshSettingsMember.userName}@test.com`,
     },
   ],
-}
-
-export const expectedMemberPin = {
-  _authID: 'pbx4jStD8sNj4OEZTg4AegLTl6E3',
-  _deleted: false,
-  _id: 'settings_member_new',
-  about: "I'm a very active member",
-  // note - flag-picker returns country code but displays labels,
-  // so tests will only work for countries that code start same as label
-  country: 'AU',
-  profileType: 'member',
-  userName: 'settings_member_new',
-  verified: true,
-  coverImages: [
-    {
-      contentType: 'image/jpeg',
-      fullPath:
-        'uploads/v3_users/settings_member_new/images/profile-cover-1.jpg',
-      name: 'profile-cover-1.jpg',
-      size: 18987,
-      type: 'image/jpeg',
-    },
-  ],
-  links: [
-    {
-      label: ExternalLinkLabel.EMAIL,
-      url: `${freshSettingsMember.userName}@test.com`,
-    },
-  ],
   mapPinDescription: 'Fun, vibrant and full of amazing people',
   location: {
     administrative: '',
@@ -148,55 +119,12 @@ export const expectedMemberPin = {
     postcode: '578774',
     value: 'Singapore',
   },
-}
-
-export const expectedMachineBuilder = {
-  _authID: 'wwtBAo7TrkSQ9nAaBN3D93I1sCM2',
-  _deleted: false,
-  _id: 'settings_machine_new',
-  about: "We're mechanics and our jobs are making machines",
-  profileType: 'machine-builder',
-  userName: 'settings_machine_new',
-  verified: true,
-  coverImages: [
-    {
-      contentType: 'image/png',
-      fullPath:
-        'uploads/v3_users/settings_machine_new/images/profile-cover-2.png',
-      name: 'profile-cover-2.png',
-      size: 30658,
-      type: 'image/png',
-    },
-  ],
-  links: [
-    {
-      label: ExternalLinkLabel.BAZAR,
-      url: 'http://settings_machine_bazarlink.com',
-    },
-  ],
-  location: {
-    administrative: '',
-    country: 'Singapore',
-    countryCode: 'sg',
-    latlng: { lng: '103.8194992', lat: '1.357107' },
-    name: 'Drongo Trail, Bishan, Central, Singapore, 578774, Singapore',
-    postcode: '578774',
-    value: 'Singapore',
-  },
-  mapPinDescription: 'Informative workshop on machines every week',
-  machineBuilderXp: ['electronics', 'welding'],
-  isContableByPublic: false,
 }
 
 export const expectedCommunityBuilder = {
-  _authID: 'vWAbQvq21UbvhGldakIy1x4FpeF2',
-  _deleted: false,
-  _id: 'settings_community_new',
   about: 'An enthusiastic community that makes the world greener!',
   mapPinDescription: 'Fun, vibrant and full of amazing people',
   profileType: 'community-builder',
-  userName: 'settings_community_new',
-  verified: true,
   coverImages: [
     {
       contentType: 'image/jpeg',
@@ -209,7 +137,7 @@ export const expectedCommunityBuilder = {
   ],
   links: [
     {
-      label: 'forum',
+      label: 'website',
       url: 'http://www.settings_community_new-forum.org',
     },
   ],

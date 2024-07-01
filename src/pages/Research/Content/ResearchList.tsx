@@ -123,21 +123,28 @@ const ResearchList = observer(() => {
         {!showDrafts ? <ResearchFilterHeader /> : <div></div>}
 
         <Flex sx={{ gap: 2 }} mb={[3, 3, 0]}>
-          <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
-            <DraftButton
-              showDrafts={showDrafts}
-              draftCount={draftCount}
-              handleShowDrafts={handleShowDrafts}
-            />
-          </AuthWrapper>
           {isPreciousPlastic() ? (
-            <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
-              <Button variant="primary" data-cy="create">
-                {listing.create}
-              </Button>
-            </Link>
+            <>
+              {userStore.activeUser && (
+                <DraftButton
+                  showDrafts={showDrafts}
+                  draftCount={draftCount}
+                  handleShowDrafts={handleShowDrafts}
+                />
+              )}
+              <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
+                <Button variant="primary" data-cy="create">
+                  {listing.create}
+                </Button>
+              </Link>
+            </>
           ) : (
             <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+              <DraftButton
+                showDrafts={showDrafts}
+                draftCount={draftCount}
+                handleShowDrafts={handleShowDrafts}
+              />
               <Link to="/research/create">
                 <Button variant="primary" data-cy="create">
                   {listing.create}

@@ -20,8 +20,8 @@ export class TagsStore extends ModuleStore {
       setAllTags: action,
     })
 
-    this.allDocs$.subscribe((docs: ITag[]) => {
-      this.setAllTags(docs)
+    this.allDocs$.subscribe(async (docs: ITag[]) => {
+      await this.setAllTags(docs)
     })
   }
 

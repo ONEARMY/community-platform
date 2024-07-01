@@ -17,9 +17,12 @@ WORKDIR /app
 
 RUN \
   apt-get update && \
+  apt-get -y install curl && \
   # For debugging
   apt-get -y install nano && \
   apt-get clean
+
+HEALTHCHECK CMD curl --fail http://localhost:30102/health || exit 1
 
 COPY ./package.json ./package.json
 RUN yarn install

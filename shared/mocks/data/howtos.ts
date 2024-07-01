@@ -4,7 +4,7 @@ export const howtos = {
     _id: 'gPpPDEvfNT9a6w5FWzaj',
     _createdBy: 'howto_creator',
     tags: {
-      '36hWyk3OckrLSH1ehdIE': true,
+      g36hWyk3OckrLSH1ehdIE: true,
       Wk6RnHHFfKSiI71BlM8r: true,
     },
     totalComments: 3,
@@ -1367,7 +1367,7 @@ export const howtos = {
     moderation: 'accepted',
     _createdBy: 'howto_creator',
     tags: {
-      '36hWyk3OckrLSH1ehdIE': true,
+      g36hWyk3OckrLSH1ehdIE: true,
     },
     category: {
       label: 'product',
@@ -2569,7 +2569,7 @@ export const howtos = {
     id: 'EmJEqraybHdZpkRu6FdB',
     _createdBy: 'howto_creator',
     tags: {
-      '36hWyk3OckrLSH1ehdIE': true,
+      g36hWyk3OckrLSH1ehdIE: true,
       Wk6RnHHFfKSiI71BlM8r: true,
     },
     category: {

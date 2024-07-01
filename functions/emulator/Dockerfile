@@ -6,13 +6,13 @@
 #
 # Optionally, initial data can be setup by mounting `/seed`.
 #
-# If you want so not get errors due to email missing templates,
-# you also need to mount those. The functions code while in the
-# emulator expects them to be in `/templates`.
+# If you want to not get errors due to missing email templates,
+# you also need to mount those. The functions code in the
+# emulator expects them to be located at `/templates`.
 #
 # COMMANDS
 # We need some files from the root directory of the project,
-# therefore these commands should be ran from the root directory.
+# therefore these commands should be ran from there.
 #
 #   BUILD
 #   docker build -f ./functions/emulator/Dockerfile -t emulator .
@@ -57,13 +57,15 @@ WORKDIR /app
 
 RUN \
   apt-get update && \
+  apt-get -y install curl && \
   # For Firebase
   # https://firebase.google.com/docs/emulator-suite/install_and_configure
   apt-get -y install openjdk-11-jre-headless && \
   # For debugging
-  apt-get -y install curl && \
   apt-get -y install nano && \
   apt-get clean
+
+HEALTHCHECK CMD curl --fail http://0.0.0.0:4001 || exit 1
 
 # In this codebase, we prefer to use yarn over npm
 # but I couldn't get yarn global install working.
@@ -96,7 +98,7 @@ RUN mkdir /seed
 # These should be the ports specified in firebase.json
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
 
-# Used to tell the code we are in the emulator
+# Used to tell the functions code we are in the emulator
 ENV IS_EMULATED=true
 
 CMD \

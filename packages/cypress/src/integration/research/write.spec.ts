@@ -80,13 +80,12 @@ describe('[Research]', () => {
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
       cy.get('[data-cy=edit]').click()
 
-      // workround to type full text as it is an issue https://github.com/cypress-io/cypress/issues/3817
-      cy.get('[data-cy=intro-description]')
-        .wait(0)
-        .focus()
-        .clear()
-        .type(expected.description)
-        .blur()
+      /*
+        There is an issue with cypress that can not type some of the start string failing the test
+        https://github.com/cypress-io/cypress/issues/3817 
+      */
+      cy.wait(500)
+      cy.get('[data-cy=intro-description]').type(expected.description).blur()
 
       cy.step('New collaborators can be assigned to research')
       cy.selectTag(newCollaborator.username, '[data-cy=UserNameSelect]')

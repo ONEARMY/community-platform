@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { Button, ExternalLink } from 'oa-components'
 import { Analytics } from 'src/common/Analytics'
 import { getSupportedModules, isModuleSupported, MODULE } from 'src/modules'
 import Main from 'src/pages/common/Layout/Main'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
-import { Box, Flex } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { ScrollToTop } from '../common/ScrollToTop'
+import { StickyButton } from './common/StickyButton'
 import { NotFoundPage } from './NotFound/NotFound'
 import {
   COMMUNITY_PAGES_PROFILE,
@@ -85,20 +85,7 @@ export const Pages = () => {
           </Routes>
         </Suspense>
       </BrowserRouter>
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: '30px',
-          right: '30px',
-          display: ['none', 'none', 'block'],
-        }}
-      >
-        <ExternalLink href="https://discord.gg/gJ7Yyk4" data-cy="feedback">
-          <Button variant="primary" icon="comment">
-            Join our chat
-          </Button>
-        </ExternalLink>
-      </Box>
+      <StickyButton />
     </Flex>
   )
 }

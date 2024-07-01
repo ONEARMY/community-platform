@@ -90,7 +90,7 @@ COPY ./firestore.rules                  ./firestore.rules
 
 COPY ./containerization/export.js       ./export.js
 
-COPY ./containerization/link-logs.js    ./link-logs.js
+COPY ./containerization/link.js         ./link.js
 
 # This folder needs to exist because otherwise
 # the emulators error if the user did not mount
@@ -104,7 +104,7 @@ EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
 ENV IS_EMULATED=true
 
 CMD \
-  ./link-logs.js & \
+  ./link.js & \
   # Do firebase emulators:start --help for details
   firebase emulators:start \
   --project demo-community-platform-emulated \

@@ -3,7 +3,7 @@ import { ImageCrop } from './ImageCrop'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/ImageCrop',
+  title: 'Forms/ImageCrop',
   component: ImageCrop,
 } as Meta<typeof ImageCrop>
 

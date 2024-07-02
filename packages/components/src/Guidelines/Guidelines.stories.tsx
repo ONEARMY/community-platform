@@ -4,7 +4,7 @@ import { Guidelines } from './Guidelines'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Guidelines',
+  title: 'Forms/Guidelines',
   component: Guidelines,
 } as Meta<typeof Guidelines>
 

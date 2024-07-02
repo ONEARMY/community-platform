@@ -3,7 +3,7 @@ import { FieldTextarea } from './FieldTextarea'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/FieldTextarea',
+  title: 'Forms/FieldTextarea',
   component: FieldTextarea,
 } as Meta<typeof FieldTextarea>
 

@@ -290,7 +290,7 @@ describe('[How To]', () => {
 
       cy.step('Add extra step')
       cy.get('[data-cy=add-step]').click()
-      
+
       deleteStep(4)
       cy.screenClick()
 

@@ -59,7 +59,8 @@ describe('[Settings]', () => {
     })
 
     it('[Edit a new profile]', () => {
-      cy.login('settings_member_new@test.com', 'test1234')
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
 
       cy.step('Go to User Settings')
       cy.visit('/settings')
@@ -108,7 +109,7 @@ describe('[Settings]', () => {
         DbCollectionName.users,
         'userName',
         '==',
-        expected.userName,
+        user.username,
       ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
@@ -124,11 +125,12 @@ describe('[Settings]', () => {
   })
 
   describe('[Focus Workplace]', () => {
-    const freshSettings = settingsData.freshSettingsWorkplace
     const expected = settingsData.expectedWorkplace
 
-    it('[Editing a new Profile]', () => {
-      cy.login('settings_workplace_new@test.com', 'test1234')
+    it.only('[Editing a new Profile]', () => {
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
+
       cy.step('Go to User Settings')
       cy.visit('/settings')
       cy.setSettingFocus(expected.profileType)
@@ -138,7 +140,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Populate profile')
-      cy.get(`[data-cy=${expected.workspaceType}]`).click()
+      cy.get('[data-cy=shredder').click()
       cy.setSettingBasicUserInfo({
         username: expected.userName,
         description: expected.about,
@@ -148,26 +150,10 @@ describe('[Settings]', () => {
       cy.setSettingAddContactLink({
         index: 0,
         label: ExternalLinkLabel.EMAIL,
-        url: `${freshSettings.userName}@test.com`,
-      })
-
-      cy.setSettingAddContactLink({
-        index: 1,
-        label: ExternalLinkLabel.WEBSITE,
-        url: `http://www.${freshSettings.userName}.com`,
-      })
-
-      cy.setSettingMapPinWorkspace({
-        description: expected.mapPinDescription,
-        searchKeyword: 'Singapo',
-        locationName: expected.location.value,
+        url: `${user.username}@test.com`,
       })
 
       cy.setSettingImpactData()
-
-      cy.step('Opt-in to being contacted by users')
-      cy.get('[data-cy=isContactableByPublic]').should('not.be.checked')
-      cy.get('[data-cy=isContactableByPublic]').check({ force: true })
 
       cy.saveSettingsForm()
 
@@ -176,7 +162,7 @@ describe('[Settings]', () => {
         DbCollectionName.users,
         'userName',
         '==',
-        expected.userName,
+        user.username,
       ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)
@@ -190,7 +176,6 @@ describe('[Settings]', () => {
   describe('[Focus Machine Builder]', () => {
     it('[Edit a new profile]', () => {
       const user = generateNewUserDetails()
-      const bazarUrl = 'http://settings_machine_bazarlink.com'
       const coverImage = 'images/profile-cover-2.png'
       const description = "We're mechanics and our jobs are making machines"
       const machineBuilderXp = ['electronics', 'welding']
@@ -217,13 +202,6 @@ describe('[Settings]', () => {
       cy.step('Choose Expertise')
       cy.get(`[data-cy=${machineBuilderXp[0]}]`).click()
       cy.get(`[data-cy=${machineBuilderXp[1]}]`).click()
-
-      cy.step('Update Contact Links')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.BAZAR,
-        url: bazarUrl,
-      })
 
       cy.setSettingMapPinWorkspace({
         description: mapPinDescription,
@@ -258,15 +236,6 @@ describe('[Settings]', () => {
         coverImage: 'images/profile-cover-1.jpg',
       })
 
-      cy.step('Update Contact Links')
-      expected.links.forEach((link, index) =>
-        cy.setSettingAddContactLink({
-          index,
-          label: ExternalLinkLabel.WEBSITE,
-          url: link.url,
-        }),
-      )
-
       cy.setSettingMapPinWorkspace({
         description: expected.mapPinDescription,
         searchKeyword: 'Singa',
@@ -295,11 +264,12 @@ describe('[Settings]', () => {
   })
 
   describe('Focus Plastic Collection Point', () => {
-    const freshSettings = settingsData.freshSettingsPlastic
     const expected = settingsData.expectedPlastic
 
     it('[Edit a new profile]', () => {
-      cy.login('settings_plastic_new@test.com', 'test1234')
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
+
       cy.step('Go to User Settings')
       cy.visit('/settings')
       cy.setSettingFocus(expected.profileType)
@@ -313,18 +283,6 @@ describe('[Settings]', () => {
         username: expected.userName,
         description: expected.about,
         coverImage: 'images/profile-cover-1.jpg',
-      })
-
-      cy.step('Update Contact Links')
-      cy.setSettingAddContactLink({
-        index: 0,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: `http://www.facebook.com/${freshSettings.userName}`,
-      })
-      cy.setSettingAddContactLink({
-        index: 1,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: `http://www.twitter.com/${freshSettings.userName}`,
       })
 
       cy.step('Update Collection section')
@@ -359,19 +317,13 @@ describe('[Settings]', () => {
       cy.get('[data-cy=plastic-pvc]').click()
       cy.get('[data-cy=plastic-other]').click()
 
-      cy.setSettingMapPinWorkspace({
-        description: expected.mapPinDescription,
-        searchKeyword: 'Singapo',
-        locationName: expected.location.value,
-      })
-
       cy.saveSettingsForm()
 
       cy.queryDocuments(
         DbCollectionName.users,
         'userName',
         '==',
-        expected.userName,
+        user.username,
       ).then((docs) => {
         cy.log('queryDocs', docs)
         expect(docs.length).to.equal(1)

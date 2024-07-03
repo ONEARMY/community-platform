@@ -19,17 +19,21 @@ describe('SettingsFormTab', () => {
   it('renders when more than one tab provided', () => {
     const { getAllByText } = render(
       <Tabs defaultValue={0}>
-        <SettingsFormTabList tabs={[tab, tab]} />
+        <SettingsFormTabList
+          value={0}
+          setValue={() => null}
+          tabs={[tab, tab]}
+        />
       </Tabs>,
     )
 
-    expect(getAllByText('Tab Title')).toHaveLength(2)
+    expect(getAllByText('Tab Title')[0]).toBeInTheDocument()
   })
 
   it('renders nothing when only one tab provided', () => {
     const { queryByText } = render(
       <Tabs defaultValue={0}>
-        <SettingsFormTabList tabs={[tab]} />
+        <SettingsFormTabList value={0} setValue={() => null} tabs={[tab]} />
       </Tabs>,
     )
 

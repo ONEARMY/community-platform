@@ -13,9 +13,9 @@ describe('SettingsFormWrapper', () => {
     const screen = render(<Default {...(Default.args as IProps)} />)
     expect(screen.getByText('Form Body 1')).toBeInTheDocument()
 
-    const tabThree = screen.getByText('Bad', {
+    const tabThree = screen.getAllByText('Bad', {
       exact: false,
-    })
+    })[0]
 
     await fireEvent.click(tabThree)
 

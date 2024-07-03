@@ -1,4 +1,4 @@
-import { Alert } from 'theme-ui'
+import { Alert, Flex, Text } from 'theme-ui'
 
 import { SettingsFormWrapper } from './SettingsFormWrapper'
 
@@ -15,8 +15,16 @@ export const Default: StoryFn<typeof SettingsFormWrapper> = () => (
       tabs={[
         {
           title: 'Profile',
+          header: (
+            <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+              <Text as="h3">✏️ Complete your profile</Text>
+              <Text>
+                In order to post comments or create content, we'd like you to
+                share something about yourself.
+              </Text>
+            </Flex>
+          ),
           body: <>Form Body 1</>,
-          header: <>header</>,
           glyph: 'thunderbolt',
         },
         {

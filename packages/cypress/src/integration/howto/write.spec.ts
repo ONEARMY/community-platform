@@ -83,9 +83,9 @@ describe('[How To]', () => {
   const deleteStep = (stepNumber: number) => {
     const stepIndex = stepNumber - 1
     cy.step(`Deleting step [${stepNumber}]`)
-    cy.get(`[data-cy=step_${stepIndex}]:visible`)
+    cy.get(`[data-cy=step_${stepIndex}]:visible`, { timeout: 20000 })
       .find('[data-cy=delete-step]')
-      .click({ force: true })
+      .click()
     cy.get('[data-cy=confirm]').click()
   }
 
@@ -290,7 +290,7 @@ describe('[How To]', () => {
 
       cy.step('Add extra step')
       cy.get('[data-cy=add-step]').click()
-
+      
       deleteStep(4)
       cy.screenClick()
 

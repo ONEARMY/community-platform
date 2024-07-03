@@ -4,27 +4,29 @@
 # does not create the `dist` folder. It should be mounted from
 # the host machine to the container, using the `-v` flag.
 #
-# Optionally, initial data can be setup by mounting `/seed`.
+# Optionally, initial data can be setup by mounting the `/seed`
+# folder on the container.
 #
 # If you want to not get errors due to missing email templates,
 # you also need to mount those. The functions code in the
-# emulator expects them to be located at `/templates`.
+# emulator expects them to be located in the `/templates` folder
+# on the container.
 #
 # COMMANDS
 # We need some files from the root directory of the project,
 # therefore these commands should be ran from there.
 #
 #   BUILD
-#   docker build -f ./functions/emulator/Dockerfile -t emulator .
+#   docker build -f ./containerization/Dockerfile -t backend .
 #
 #   RUN
-#   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#   docker run -v ./functions:/app/functions -p 4001-4008:4001-4008 -it backend
 #
 #   RUN WITH SEED DATA
-#   docker run -v ./functions/data/emulator:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#   docker run -v ./containerization/data:/seed -v ./functions:/app/functions -p 4001-4008:4001-4008 -it backend
 #
 #   RUN WITH EMAIL TEMPLATES
-#   docker run -v ./functions/src/emailNotifications/templates:/templates -v ./functions:/app/functions -p 4001-4008:4001-4008 -it emulator
+#   docker run -v ./functions/src/emailNotifications/templates:/templates -v ./functions:/app/functions -p 4001-4008:4001-4008 -it backend
 #
 #   EXPORT (while the container is running)
 #   docker exec -it <conatiner_name> /app/export.js
@@ -86,9 +88,9 @@ COPY ./firebase.storage.rules           ./firebase.storage.rules
 COPY ./firestore.indexes.json           ./firestore.indexes.json
 COPY ./firestore.rules                  ./firestore.rules
 
-COPY ./functions/emulator/export.js     ./export.js
+COPY ./containerization/export.js       ./export.js
 
-COPY ./functions/emulator/link-logs.js  ./link-logs.js
+COPY ./containerization/link.js         ./link.js
 
 # This folder needs to exist because otherwise
 # the emulators error if the user did not mount
@@ -102,7 +104,7 @@ EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
 ENV IS_EMULATED=true
 
 CMD \
-  ./link-logs.js & \
+  ./link.js & \
   # Do firebase emulators:start --help for details
   firebase emulators:start \
   --project demo-community-platform-emulated \

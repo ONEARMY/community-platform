@@ -424,7 +424,6 @@ workflows:
           name: 'Cloud Function tests'
           requires:
             - 'Lint code'
-          context: build-context
       - test_functions_upload_coverage:
           name: 'Upload Cloud Function coverage'
           requires:

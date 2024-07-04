@@ -1,0 +1,31 @@
+import { Field } from 'react-final-form'
+
+import { SelectField } from '../../../../common/Form/Select.field'
+import { FormFieldWrapper } from '../../../../pages/Howto/Content/Common/FormFieldWrapper'
+import { COMPARISONS } from '../../../../utils/comparisons'
+import { draftValidationWrapper, required } from '../../../../utils/validators'
+import { intro } from '../../labels'
+import { TIME_OPTIONS } from './FormSettings'
+
+export const HowtoFieldTime = () => {
+  const { placeholder, title } = intro.time
+  const name = 'time'
+
+  return (
+    <FormFieldWrapper htmlFor={name} text={title} required>
+      <Field
+        id={name}
+        name={name}
+        validate={(values, allValues) =>
+          draftValidationWrapper(values, allValues, required)
+        }
+        validateFields={[]}
+        isEqual={COMPARISONS.textInput}
+        options={TIME_OPTIONS}
+        component={SelectField}
+        data-cy="time-select"
+        placeholder={placeholder}
+      />
+    </FormFieldWrapper>
+  )
+}

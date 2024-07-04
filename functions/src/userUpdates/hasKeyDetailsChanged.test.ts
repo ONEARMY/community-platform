@@ -3,7 +3,7 @@ import {
   hasKeyDetailsChanged,
 } from './hasKeyDetailsChanged'
 
-import type { IUserDB } from '../../../src/models'
+import type { IUserDB } from '../models'
 
 describe('hasKeyDetailsChanged', () => {
   it('returns true when details have changed', () => {

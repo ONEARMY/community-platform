@@ -11,7 +11,7 @@ import {
   PP_SIGNOFF,
 } from './constants'
 
-import type { NotificationType } from 'oa-shared'
+import type { NotificationType } from '@onearmy.apps/shared'
 import type { IMessageDB, INotification, IUserDB } from '../models'
 
 export const errors = {

@@ -1,0 +1,45 @@
+import { ErrorsContainer } from '../../../../common/Form/ErrorsContainer'
+import { fields, form } from '../../../../pages/UserSettings/labels'
+
+import type {
+  IErrorsListSet,
+  ITopLevelErrorsList,
+} from '../../../../common/Form/types'
+
+const flattenErrors = (formErrors) => {
+  const errors = {}
+
+  Object.keys(formErrors).forEach((key) => {
+    if (typeof formErrors[key] !== 'string')
+      return (errors[key] = form.defaultError)
+    errors[key] = formErrors[key]
+  })
+
+  return errors
+}
+
+const createSet = (formErrors: object) => {
+  const errors = flattenErrors(formErrors)
+  const keys = Object.keys(errors).filter((key) => fields[key])
+  const labels = fields
+
+  if (keys.length !== 0) return { errors, keys, labels }
+}
+
+interface IProps {
+  errors: ITopLevelErrorsList | undefined
+  isVisible: boolean
+}
+
+export const SettingsErrors = ({ errors, isVisible }: IProps) => {
+  if (!isVisible || errors === undefined) return null
+
+  const errorsListSet = [createSet(errors)]
+
+  return (
+    <ErrorsContainer
+      errorsListSet={errorsListSet as IErrorsListSet[]}
+      isVisible={isVisible}
+    />
+  )
+}

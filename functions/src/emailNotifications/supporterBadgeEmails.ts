@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
 import { getUserEmail } from './utils'
-import { DB_ENDPOINTS } from 'oa-shared'
+import { DB_ENDPOINTS } from '@onearmy.apps/shared'
 import {
   getUserSupporterBadgeAddedEmail,
   getUserSupporterBadgeRemovedEmail,

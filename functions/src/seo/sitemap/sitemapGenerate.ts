@@ -9,7 +9,7 @@ import { uploadLocalFileToStorage } from '../../Firebase/storage'
 import { getCollection } from '../../Firebase/firestoreDB'
 import { IDBEndpoint } from '../../models'
 import axios from 'axios'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus } from '@onearmy.apps/shared'
 
 /*************************************************************************
  * Main Methods

@@ -1,4 +1,4 @@
-import { DB_ENDPOINTS } from 'oa-shared'
+import { DB_ENDPOINTS } from '@onearmy.apps/shared'
 
 import { db } from '../Firebase/firestoreDB'
 import { hasKeyDetailsChanged } from './hasKeyDetailsChanged'

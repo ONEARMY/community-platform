@@ -48,3 +48,8 @@ functions/firebase-debug.log
 .pnp.*
 
 *.tsbuildinfo
+.nx
+libs/dist
+dist/*
+
+storybook-static

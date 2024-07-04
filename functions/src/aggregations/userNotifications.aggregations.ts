@@ -1,7 +1,7 @@
 import { firestore } from 'firebase-admin'
 import * as functions from 'firebase-functions'
 import { DB_ENDPOINTS, INotification, IUserDB } from '../models'
-import { EmailNotificationFrequency } from 'oa-shared'
+import { EmailNotificationFrequency } from '@onearmy.apps/shared'
 import { FieldValue } from 'firebase-admin/firestore'
 import { db } from '../Firebase/firestoreDB'
 

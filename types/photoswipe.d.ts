@@ -1,7 +1,6 @@
 declare module 'photoswipe/lightbox' {
   import PhotoSwipeLightbox, {
     PhotoSwipeOptions,
-    // eslint-disable-next-line import/no-unresolved
   } from 'photoswipe/dist/types/lightbox/lightbox'
 
   export { PhotoSwipeOptions }

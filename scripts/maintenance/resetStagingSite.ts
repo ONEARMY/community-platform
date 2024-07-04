@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import { spawnSync } from 'child_process'
-import { generateDBEndpoints } from 'oa-shared'
+import { generateDBEndpoints } from '@onearmy.apps/shared'
 
 import type { SpawnSyncOptions } from 'child_process'
 

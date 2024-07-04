@@ -1,4 +1,4 @@
-import { EmailNotificationFrequency } from 'oa-shared'
+import { EmailNotificationFrequency } from '@onearmy.apps/shared'
 
 import { DB_ENDPOINTS } from '../models'
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'

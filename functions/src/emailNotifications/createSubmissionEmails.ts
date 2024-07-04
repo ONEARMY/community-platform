@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions'
 import { IHowtoDB, IMapPin, IMessageDB } from '../../../src/models'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus } from '@onearmy.apps/shared'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import {

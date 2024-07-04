@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions'
 import { QueryDocumentSnapshot } from 'firebase-admin/firestore'
 import { IHowtoDB, IMapPin, IModerable } from '../../../src/models'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus } from '@onearmy.apps/shared'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import * as templates from './templateHelpers'

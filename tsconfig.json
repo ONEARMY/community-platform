@@ -47,5 +47,11 @@
     "src/assets/userReportInit.js",
     "packages/components",
     "packages/themes"
-  ]
+  ],
+  "extends": "./tsconfig.base.json",
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
 }

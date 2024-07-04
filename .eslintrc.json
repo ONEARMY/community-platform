@@ -14,8 +14,6 @@
     "eslint:recommended",
     "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-    "plugin:import/recommended",
-    "plugin:import/typescript",
     "prettier" // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
   ],
   "settings": {
@@ -40,15 +38,6 @@
         "accessorPairPositioning": "getThenSet"
       }
     ],
-    "import/no-duplicates": "error",
-    "import/no-unresolved": [
-      "error",
-      {
-        "ignore": ["^src/", "^oa-([a-z]+)/", "^oa-components", "^oa-themes"]
-      }
-    ],
-    "import/newline-after-import": "error",
-    "import/no-named-as-default": "off",
     "max-classes-per-file": "error",
     "no-useless-escape": "error",
     "react/display-name": "error",
@@ -151,12 +140,12 @@
           {
             "name": "theme-ui",
             "importNames": ["Link"],
-            "message": "Please import 'ExternalLink' from 'oa-components' or 'Link' from 'react-router-dom' instead"
+            "message": "Please import 'ExternalLink' from '@onearmy.apps/components' or 'Link' from 'react-router-dom' instead"
           },
           // Prevent importing components from workspace absolute path (prefer workspace name)
           {
             "name": "packages/components/dist",
-            "message": "Please import from 'oa-components' instead"
+            "message": "Please import from '@onearmy.apps/components' instead"
           }
         ]
       }

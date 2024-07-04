@@ -44,7 +44,7 @@ describe('UserContactForm', () => {
       </Provider>,
     )
 
-    await screen.findByText(`Send a message to ${profileUser.userName}`)
+    await screen.findByText(`Send a message to ${profileUser.displayName}`)
 
     await user.type(screen.getByTestId('name'), 'Bob')
     await user.type(

@@ -28,7 +28,7 @@ export const UserContactForm = observer(({ user }: Props) => {
   const { userStore } = useCommonStores().stores
 
   if (!userStore.activeUser)
-    return <UserContactNotLoggedIn userName={user.userName} />
+    return <UserContactNotLoggedIn displayName={user.displayName} />
 
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
@@ -54,7 +54,7 @@ export const UserContactForm = observer(({ user }: Props) => {
   return (
     <Flex my={2} sx={{ flexDirection: 'column' }}>
       <Heading as="h3" variant="small" my={2}>
-        {`${title} ${user.userName}`}
+        {`${title} ${user.displayName}`}
       </Heading>
       <Form
         onSubmit={onSubmit}

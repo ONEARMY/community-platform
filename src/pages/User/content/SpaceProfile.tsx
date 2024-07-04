@@ -68,24 +68,22 @@ const MobileBadge = ({ children }) => (
 
 const renderPlasticTypes = (plasticTypes: Array<PlasticTypeLabel>) => {
   const renderIcon = (type: string) => {
-    switch (type) {
-      case 'hdpe':
-        return <Image loading="lazy" src={HDPEIcon} />
-      case 'ldpe':
-        return <Image loading="lazy" src={LDPEIcon} />
-      case 'other':
-        return <Image loading="lazy" src={OtherIcon} />
-      case 'pet':
-        return <Image loading="lazy" src={PETIcon} />
-      case 'pp':
-        return <Image loading="lazy" src={PPIcon} />
-      case 'ps':
-        return <Image loading="lazy" src={PSIcon} />
-      case 'pvc':
-        return <Image loading="lazy" src={PVCIcon} />
-      default:
-        return null
+    const iconMap = {
+      hdpe: HDPEIcon,
+      ldpe: LDPEIcon,
+      other: OtherIcon,
+      pet: PETIcon,
+      pp: PPIcon,
+      ps: PSIcon,
+      pvc: PVCIcon,
     }
+
+    const toRender = iconMap[type]
+    return (
+      toRender && (
+        <Image data-cy={`plastic-type-${type}`} loading="lazy" src={toRender} />
+      )
+    )
   }
 
   return (

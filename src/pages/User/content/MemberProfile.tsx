@@ -74,6 +74,7 @@ export const MemberProfile = ({ user, docs }: IProps) => {
           }}
         >
           <Avatar
+            data-cy="profile-avatar"
             loading="lazy"
             src={memberPictureSource}
             sx={{

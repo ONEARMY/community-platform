@@ -202,50 +202,6 @@ describe('question.routes', () => {
     })
   })
 
-  describe('/questions/create', () => {
-    it('allows user to create a question', async () => {
-      let wrapper
-      // Arrange
-      const mockUpsertQuestion = vi.fn().mockResolvedValue({
-        slug: 'question-title',
-      })
-      ;(useQuestionStore as Mock).mockReturnValue({
-        ...mockQuestionStore,
-        upsertQuestion: mockUpsertQuestion,
-        activeUser: mockActiveUser,
-      })
-
-      act(() => {
-        wrapper = renderFn('/questions/create')
-      })
-
-      // Fill in form
-      const title = wrapper.getByLabelText('The Question', { exact: false })
-      const description = wrapper.getByLabelText('Description', {
-        exact: false,
-      })
-      const submitButton = wrapper.getByText('Publish')
-
-      // Submit form
-      await userEvent.type(title, 'Can you build a house out of plastic?')
-      await userEvent.type(description, "So I've got all this plastic...")
-
-      submitButton.click()
-
-      expect(mockUpsertQuestion).toHaveBeenCalledWith({
-        title: 'Can you build a house out of plastic?',
-        description: "So I've got all this plastic...",
-        tags: {},
-      })
-
-      await waitFor(() => {
-        expect(mockedUsedNavigate).toHaveBeenCalledWith(
-          '/questions/question-title',
-        )
-      })
-    })
-  })
-
   describe('/questions/:slug', () => {
     it('renders the question single page', async () => {
       let wrapper

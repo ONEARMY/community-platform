@@ -1,10 +1,35 @@
+import { form } from '../../../../src/pages/UserSettings/labels'
+import { generateNewUserDetails } from '../utils/TestUtils'
+
+import type { IUser } from '../../../../src/models/user.models'
+
 export enum UserMenuItem {
   Profile = 'Profile',
   Settings = 'Settings',
   LogOut = 'Logout',
 }
 
-import { generateNewUserDetails } from '../utils/TestUtils'
+interface IInfo {
+  username: string
+  country?: string
+  description: string
+  coverImage: string
+}
+
+type ILink = Omit<IUser['links'][0] & { index: number }, 'key'>
+
+interface IMapPin {
+  description: string
+  searchKeyword: string
+  locationName: string
+}
+
+interface IOpeningTime {
+  index: number
+  day: string
+  from: string
+  to: string
+}
 
 declare global {
   namespace Cypress {
@@ -14,6 +39,17 @@ declare global {
         email: string,
         password: string,
       ): Chainable<void>
+
+      saveSettingsForm()
+      setSettingAddContactLink(link: ILink)
+      setSettingAddOpeningTime(openingTime: IOpeningTime)
+      setSettingBasicUserInfo(info: IInfo)
+      setSettingDeleteOpeningTime(index: number, confirmed: boolean)
+      setSettingFocus(focus: string)
+      setSettingImpactData()
+      setSettingMapPinMember(pin: IMapPin)
+      setSettingMapPinWorkspace(pin: IMapPin)
+      setSettingPublicContact()
 
       signUpNewUser(user?)
 
@@ -45,6 +81,116 @@ declare global {
  * @remark - async code should be wrapped in a Cypress.promise block to allow the resolved promise to be
  * used in chained results
  */
+
+Cypress.Commands.add('saveSettingsForm', () => {
+  cy.get('[data-cy=save]').click()
+  cy.get('[data-cy=errors-container]').should('not.exist')
+  cy.get('[data-cy=save]').should('not.be.disabled')
+})
+
+Cypress.Commands.add('setSettingAddContactLink', (link: ILink) => {
+  cy.step('Set Contact Link')
+
+  if (link.index > 0) {
+    // click the button to add another set of input fields
+    cy.get('[data-cy=add-link]').click()
+  }
+  // specifies the contact type, such as website or discord
+  cy.selectTag(link.label, `[data-cy=select-link-${link.index}]`)
+  // input the corresponding value
+  cy.get(`[data-cy=input-link-${link.index}]`)
+    .clear()
+    .type(link.url)
+    .blur({ force: true })
+})
+
+Cypress.Commands.add(
+  'setSettingAddOpeningTime',
+  (openingTime: IOpeningTime) => {
+    const selectOption = (selector: string, selectedValue: string) => {
+      cy.selectTag(selectedValue, selector)
+    }
+
+    if (openingTime.index > 0) {
+      cy.get('[data-cy=add-opening-time]').click()
+    }
+    selectOption(
+      `[data-cy=opening-time-day-${openingTime.index}]`,
+      openingTime.day,
+    )
+    selectOption(
+      `[data-cy=opening-time-from-${openingTime.index}]`,
+      openingTime.from,
+    )
+    selectOption(
+      `[data-cy=opening-time-to-${openingTime.index}]`,
+      openingTime.to,
+    )
+  },
+)
+
+Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
+  cy.step('Update Info section')
+  cy.get('[data-cy=username').clear().type(info.username)
+  cy.get('[data-cy=info-description').clear().type(info.description)
+  cy.get('[data-cy=coverImages-0]').find(':file').attachFile(info.coverImage)
+})
+
+Cypress.Commands.add(
+  'setSettingDeleteOpeningTime',
+  (index: number, confirmed: boolean) => {
+    cy.viewport('macbook-13')
+    cy.get(`[data-cy=delete-opening-time-${index}-desk]`).click()
+    if (confirmed) {
+      cy.get('[data-cy=confirm-delete]').click()
+    } else {
+      cy.get('[data-cy=cancel-delete]').click()
+    }
+  },
+)
+
+Cypress.Commands.add('setSettingFocus', (focus: string) => {
+  cy.get(`[data-cy=${focus}]`).click()
+})
+
+Cypress.Commands.add('setSettingMapPinWorkspace', (mapPin: IMapPin) => {
+  cy.setSettingMapPinMember(mapPin)
+  cy.get('[data-cy="osm-geocoding-input"]').should(($input) => {
+    const val = $input.val()
+    expect(val).to.include(mapPin.locationName)
+  })
+})
+
+Cypress.Commands.add('setSettingImpactData', () => {
+  cy.step('Save impact data')
+
+  cy.get('[data-cy="impact-button-expand"]').click()
+  cy.get('[data-cy="impactForm-2022-button-edit"]').click()
+  cy.get('[data-cy="impactForm-2022-field-revenue-value"]')
+    .clear()
+    .type('100000')
+  cy.get('[data-cy="impactForm-2022-field-revenue-isVisible"]').click()
+  cy.get('[data-cy="impactForm-2022-field-machines-value"]').clear()
+  cy.get('[data-cy="impactForm-2022-button-save"]').click()
+  cy.contains(form.saveSuccess)
+})
+
+Cypress.Commands.add('setSettingMapPinMember', (mapPin: IMapPin) => {
+  cy.step('Add pin')
+  cy.get('[data-cy=add-a-map-pin]').click({ force: true })
+  cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
+  cy.get('[data-cy="osm-geocoding-results"]')
+  cy.wait('@fetchAddress').then(() => {
+    cy.get('[data-cy="osm-geocoding-results"]').find('li:eq(0)').click()
+  })
+  cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
+})
+
+Cypress.Commands.add('setSettingPublicContact', () => {
+  cy.step('Opts out of public contact')
+  cy.get('[data-cy=isContactableByPublic').should('be.checked')
+  cy.get('[data-cy=isContactableByPublic').click({ force: true })
+})
 
 Cypress.Commands.add(
   'fillSignupForm',

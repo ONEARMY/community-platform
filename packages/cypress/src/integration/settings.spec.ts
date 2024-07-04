@@ -1,30 +1,11 @@
 import { ExternalLinkLabel } from 'oa-shared'
 
-import { form } from '../../../../src/pages/UserSettings/labels'
 import { SingaporeStubResponse } from '../fixtures/searchResults'
-import * as settingsData from '../fixtures/settings'
 import { UserMenuItem } from '../support/commandsUi'
 import {
-  DbCollectionName,
   generateNewUserDetails,
   setIsPreciousPlastic,
 } from '../utils/TestUtils'
-
-import type { IUser } from '../../../../src/models/user.models'
-
-interface Info {
-  username: string
-  country?: string
-  description: string
-  coverImage: string
-}
-
-interface IMapPin {
-  description: string
-  searchKeyword: string
-  locationName: string
-}
-type ILink = IUser['links'][0] & { index: number }
 
 const locationStub = {
   administrative: '',
@@ -36,6 +17,12 @@ const locationStub = {
   value: 'Singapore',
 }
 
+const mapDetails = (description) => ({
+  description,
+  searchKeyword: 'singapo',
+  locationName: locationStub.value,
+})
+
 describe('[Settings]', () => {
   beforeEach(() => {
     cy.interceptAddressSearchFetch(SingaporeStubResponse)
@@ -43,74 +30,17 @@ describe('[Settings]', () => {
     cy.visit('/sign-in')
   })
 
-  const selectFocus = (focus: string) => {
-    cy.get(`[data-cy=${focus}]`).click()
-  }
-
-  const setInfo = (info: Info) => {
-    cy.step('Update Info section')
-    cy.get('[data-cy=username').clear().type(info.username)
-    cy.get('[data-cy=info-description').clear().type(info.description)
-    cy.get('[data-cy=coverImages-0]').find(':file').attachFile(info.coverImage)
-  }
-
-  const setWorkspaceMapPin = (mapPin: IMapPin) => {
-    setMemberMapPin(mapPin)
-    cy.get('[data-cy="osm-geocoding-input"]').should(($input) => {
-      const val = $input.val()
-      expect(val).to.include(mapPin.locationName)
-    })
-  }
-
-  const setMemberMapPin = (mapPin: IMapPin) => {
-    cy.step('Add pin')
-    cy.get('[data-cy=add-a-map-pin]').click({ force: true })
-    cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
-    cy.get('[data-cy="osm-geocoding-results"]')
-    cy.wait('@fetchAddress').then(() => {
-      cy.get('[data-cy="osm-geocoding-results"]').find('li:eq(0)').click()
-    })
-    cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
-  }
-
-  const addContactLink = (link: Omit<ILink, 'key'>) => {
-    if (link.index > 0) {
-      // click the button to add another set of input fields
-      cy.get('[data-cy=add-link]').click()
-    }
-    // specifies the contact type, such as website or discord
-    cy.selectTag(link.label, `[data-cy=select-link-${link.index}]`)
-    // input the corresponding value
-    cy.get(`[data-cy=input-link-${link.index}]`)
-      .clear()
-      .type(link.url)
-      .blur({ force: true })
-  }
-
   describe('[Focus Member]', () => {
-    const freshSettings = settingsData.freshSettingsMember
-    const expected = settingsData.expectedMember
-
-    it('[Cancel edit profile without confirmation dialog]', () => {
-      cy.login('settings_member_new@test.com', 'test1234')
-      cy.step('Go to User Settings')
-      cy.clickMenuItem(UserMenuItem.Settings)
-      cy.step('Click on How to')
-      cy.on('window:confirm', () => {
-        throw new Error('Confirm dialog should not be called.')
-      })
-      cy.get('[data-cy=page-link]').contains('How-to').click()
-      cy.step('Confirm log should NOT appear')
-    })
-
     it('[Cancel edit profile and get confirmation]', (done) => {
-      cy.login('settings_member_new@test.com', 'test1234')
+      cy.signUpNewUser()
+
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
+
       cy.get('[data-cy=username').clear().type('Wrong user')
-      cy.step('Click on How to')
+
+      cy.step('Confirm shown when attempting to go to another page')
       cy.get('[data-cy=page-link]').contains('How-to').click()
-      cy.step('Confirm log should log')
       cy.on('window:confirm', (text) => {
         expect(text).to.eq(
           'You are leaving this page without saving. Do you want to continue ?',
@@ -120,35 +50,43 @@ describe('[Settings]', () => {
     })
 
     it('[Edit a new profile]', () => {
-      cy.login('settings_member_new@test.com', 'test1234')
+      const country = 'AU'
+      const coverImage = 'profile-cover-1'
+      const displayName = 'settings_member_new'
+      const description = "I'm a very active member"
+      const mapPinDescription = 'Fun, vibrant and full of amazing people'
+      const profileType = 'member'
+      const user = generateNewUserDetails()
+      const url = 'https://social.network'
+
+      cy.signUpNewUser(user)
 
       cy.step('Go to User Settings')
       cy.visit('/settings')
-      selectFocus(expected.profileType)
+      cy.setSettingFocus(profileType)
 
       cy.step("Can't save without required fields being populated")
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Can set the required fields')
-      setInfo({
-        username: expected.userName,
-        country: expected.country,
-        description: expected.about,
-        coverImage: 'images/profile-cover-1.jpg',
+      cy.setSettingBasicUserInfo({
+        username: displayName,
+        country,
+        description,
+        coverImage: `images/${coverImage}.jpg`,
       })
 
-      cy.step('Update Contact Links')
-      addContactLink({
+      cy.setSettingAddContactLink({
         index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url: `${freshSettings.userName}@test.com`,
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
+        url: 'http://something.to.delete/',
       })
 
-      addContactLink({
+      cy.setSettingAddContactLink({
         index: 1,
         label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: 'https://social.network',
+        url,
       })
 
       // Remove first item
@@ -156,354 +94,296 @@ describe('[Settings]', () => {
       cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
       cy.get('[data-cy="Confirm.modal: Confirm"]').trigger('click')
 
-      cy.get('[data-cy=save]').click()
-      cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.get('[data-cy=save]').should('not.be.disabled')
+      cy.saveSettingsForm()
 
-      setMemberMapPin({
-        description: expected.mapPinDescription,
-        searchKeyword: 'Singapo',
-        locationName: expected.location.value,
-      })
+      cy.setSettingMapPinMember(mapDetails(mapPinDescription))
 
-      cy.get('[data-cy=save]').click()
-      cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.get('[data-cy=save]').should('not.be.disabled')
+      cy.saveSettingsForm()
 
-      cy.queryDocuments(
-        DbCollectionName.users,
-        'userName',
-        '==',
-        expected.userName,
-      ).then((docs) => {
-        cy.log('queryDocs', docs)
-        expect(docs.length).to.equal(1)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqSettings', expected)
-      })
-
-      cy.step('Can remove a pin')
-      cy.get('[data-cy="remove-a-member-map-pin"]').click()
-      cy.get('[data-cy=location-dropdown]').should('be.visible')
+      cy.step('Updated settings display on profile')
+      cy.visit(`u/${user.username}`)
+      cy.contains(user.username)
+      cy.contains(displayName)
+      cy.contains(description)
+      cy.get(`[data-cy="MemberBadge-${profileType}"]`)
+      cy.get('[data-cy="profile-avatar"]')
+        .should('have.attr', 'src')
+        .and('include', coverImage)
+      cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
     })
   })
 
   describe('[Focus Workplace]', () => {
-    const freshSettings = settingsData.freshSettingsWorkplace
-    const expected = settingsData.expectedWorkplace
-
     it('[Editing a new Profile]', () => {
-      cy.login('settings_workplace_new@test.com', 'test1234')
-      cy.step('Go to User Settings')
-      cy.visit('/settings')
-      selectFocus(expected.profileType)
-
-      cy.step("Can't save without required fields being populated")
-      cy.get('[data-cy=save]').click()
-      cy.get('[data-cy=errors-container]').should('be.visible')
-
-      cy.step('Populate profile')
-      cy.get(`[data-cy=${expected.workspaceType}]`).click()
-      setInfo({
-        username: expected.userName,
-        description: expected.about,
-        coverImage: 'images/profile-cover-1.jpg',
-      })
-      cy.step('Update Contact Links')
-      addContactLink({
-        index: 0,
-        label: ExternalLinkLabel.EMAIL,
-        url: `${freshSettings.userName}@test.com`,
-      })
-      addContactLink({
-        index: 1,
-        label: ExternalLinkLabel.WEBSITE,
-        url: `http://www.${freshSettings.userName}.com`,
-      })
-
-      setWorkspaceMapPin({
-        description: expected.mapPinDescription,
-        searchKeyword: 'Singapo',
-        locationName: expected.location.value,
-      })
-
-      cy.step('Save impact data')
-      cy.get('[data-cy="impact-button-expand"]').click()
-      cy.get('[data-cy="impactForm-2022-button-edit"]').click()
-      cy.get('[data-cy="impactForm-2022-field-revenue-value"]')
-        .clear()
-        .type('100000')
-      cy.get('[data-cy="impactForm-2022-field-revenue-isVisible"]').click()
-      cy.get('[data-cy="impactForm-2022-field-machines-value"]').clear()
-      cy.get('[data-cy="impactForm-2022-button-save"]').click()
-      cy.contains(form.saveSuccess)
-
-      cy.step('Opt-in to being contacted by users')
-      cy.get('[data-cy=isContactableByPublic]').should('not.be.checked')
-      cy.get('[data-cy=isContactableByPublic]').check({ force: true })
-
-      cy.get('[data-cy=save]').click()
-      cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.get('[data-cy=save]').should('not.be.disabled')
-
-      cy.step('Verify if all changes were saved correctly')
-      cy.queryDocuments(
-        DbCollectionName.users,
-        'userName',
-        '==',
-        expected.userName,
-      ).then((docs) => {
-        cy.log('queryDocs', docs)
-        expect(docs.length).to.equal(1)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqSettings', expected)
-      })
-    })
-  })
-
-  describe('[Focus Machine Builder]', () => {
-    it('[Edit a new profile]', () => {
+      const coverImage = 'profile-cover-1-edited'
+      const displayName = 'settings_workplace_new'
+      const description = 'We have some space to run a workplace'
+      const profileType = 'workspace'
       const user = generateNewUserDetails()
-      const bazarUrl = 'http://settings_machine_bazarlink.com'
-      const coverImage = 'images/profile-cover-2.png'
-      const description = "We're mechanics and our jobs are making machines"
-      const machineBuilderXp = ['electronics', 'welding']
-      const mapPinDescription = 'Informative workshop on machines every week'
-      const profileType = 'machine-builder'
+      const url = 'something@test.com'
 
       cy.signUpNewUser(user)
 
       cy.step('Go to User Settings')
       cy.visit('/settings')
-      selectFocus(profileType)
+      cy.setSettingFocus(profileType)
 
       cy.step("Can't save without required fields being populated")
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Populate profile')
-      setInfo({
-        username: user.username,
+      cy.get('[data-cy=shredder').click()
+      cy.setSettingBasicUserInfo({
+        username: displayName,
         description,
-        coverImage,
+        coverImage: `images/${coverImage}.jpg`,
+      })
+
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.EMAIL,
+        url,
+      })
+
+      cy.setSettingImpactData()
+
+      cy.saveSettingsForm()
+
+      cy.step('Updated settings display on profile')
+      cy.visit(`u/${user.username}`)
+      cy.contains(user.username)
+      cy.contains(displayName)
+      cy.contains(description)
+      cy.get(`[data-cy="MemberBadge-${profileType}"]`)
+      cy.get('[data-cy="active-image"]')
+        .should('have.attr', 'src')
+        .and('include', coverImage)
+
+      cy.step('Updated settings display on contact tab')
+      cy.get('[data-cy="contact-tab"]').click()
+      cy.contains(`Send a message to ${displayName}`)
+      cy.get('[data-cy="profile-link"]').should(
+        'have.attr',
+        'href',
+        `mailto:${url}`,
+      )
+    })
+  })
+
+  describe('[Focus Machine Builder]', () => {
+    it('[Edit a new profile]', () => {
+      const coverImage = 'profile-cover-2-edited'
+      const description = "We're mechanics and our jobs are making machines"
+      const displayName = 'machine_builder_pro'
+      const machineBuilderXp = ['electronics', 'welding']
+      const mapPinDescription = 'Informative workshop on machines every week'
+      const profileType = 'machine-builder'
+      const user = generateNewUserDetails()
+      const url = 'https://shop.com/'
+
+      cy.signUpNewUser(user)
+
+      cy.step('Go to User Settings')
+      cy.visit('/settings')
+      cy.setSettingFocus(profileType)
+
+      cy.step("Can't save without required fields being populated")
+      cy.get('[data-cy=save]').click()
+      cy.get('[data-cy=errors-container]').should('be.visible')
+
+      cy.step('Populate profile')
+      cy.setSettingBasicUserInfo({
+        username: displayName,
+        description,
+        coverImage: `images/${coverImage}.png`,
       })
 
       cy.step('Choose Expertise')
       cy.get(`[data-cy=${machineBuilderXp[0]}]`).click()
       cy.get(`[data-cy=${machineBuilderXp[1]}]`).click()
 
-      cy.step('Update Contact Links')
-      addContactLink({
+      cy.setSettingAddContactLink({
         index: 0,
         label: ExternalLinkLabel.BAZAR,
-        url: bazarUrl,
+        url,
       })
 
-      setWorkspaceMapPin({
-        description: mapPinDescription,
-        searchKeyword: 'singapo',
-        locationName: locationStub.value,
-      })
+      cy.saveSettingsForm()
 
-      cy.step('Opts out of public contact')
-      cy.get('[data-cy=isContactableByPublic').should('be.checked')
-      cy.get('[data-cy=isContactableByPublic').click({ force: true })
+      cy.setSettingMapPinWorkspace(mapDetails(mapPinDescription))
 
-      cy.get('[data-cy=save]').click()
-      cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.get('[data-cy=save]').should('not.be.disabled')
+      cy.setSettingPublicContact()
+      cy.saveSettingsForm()
 
+      cy.step('Updated settings display on main profile tab')
       cy.visit(`u/${user.username}`)
       cy.contains(user.username)
+      cy.contains(displayName)
       cy.contains(description)
-      // To-do: Finish adding the expectations of the settings set in this test
+      cy.get(`[data-cy=MemberBadge-${profileType}]`)
+      cy.get('[data-cy="active-image"]')
+        .should('have.attr', 'src')
+        .and('include', coverImage)
+
+      cy.step('Updated settings display on contact tab')
+      cy.get('[data-cy="contact-tab"]').click()
+      cy.contains(`Send a message to ${displayName}`).should('not.exist')
+      cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
     })
   })
 
   describe('[Focus Community Builder]', () => {
-    const expected = settingsData.expectedCommunityBuilder
-
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
+      const coverImage = 'profile-cover-1-edited'
+      const description =
+        'An enthusiastic community that makes the world greener!'
+      const displayName = 'community_001'
+      const profileType = 'community-builder'
+      const mapPinDescription = 'Fun, vibrant and full of amazing people'
       const user = generateNewUserDetails()
+      const url = 'http://www.settings_community_new-forum.org'
+
       cy.signUpNewUser(user)
 
       cy.step('Go to User Settings')
       cy.visit('/settings')
-      selectFocus(expected.profileType)
+      cy.setSettingFocus(profileType)
 
-      setInfo({
-        username: user.username,
-        description: expected.about,
-        coverImage: 'images/profile-cover-1.jpg',
+      cy.setSettingBasicUserInfo({
+        username: displayName,
+        description,
+        coverImage: `images/${coverImage}.jpg`,
       })
 
-      cy.step('Update Contact Links')
-      expected.links.forEach((link, index) =>
-        addContactLink({
-          index,
-          label: ExternalLinkLabel.WEBSITE,
-          url: link.url,
-        }),
-      )
-
-      setWorkspaceMapPin({
-        description: expected.mapPinDescription,
-        searchKeyword: 'Singa',
-        locationName: expected.location.value,
+      cy.setSettingAddContactLink({
+        index: 0,
+        label: ExternalLinkLabel.SOCIAL_MEDIA,
+        url,
       })
 
-      cy.get('[data-cy=save]').click()
-      cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.get('[data-cy=save]').should('not.be.disabled')
+      cy.saveSettingsForm()
 
-      cy.pause()
+      cy.setSettingMapPinWorkspace(mapDetails(mapPinDescription))
 
-      cy.queryDocuments(
-        DbCollectionName.users,
-        'userName',
-        '==',
-        user.username,
-      ).then((docs) => {
-        cy.log('queryDocs', docs)
-        expect(docs.length).to.equal(1)
-        expect(docs[0]).to.containSubset({
-          about: expected.about,
-          // coverimage
-          // links
-          mapPinDescription: expected.mapPinDescription,
-          location: locationStub,
-        })
-      })
+      cy.saveSettingsForm()
+
+      cy.step('Updated settings display on main profile tab')
+      cy.visit(`u/${user.username}`)
+      cy.contains(user.username)
+      cy.contains(displayName)
+      cy.contains(description)
+      cy.get(`[data-cy=MemberBadge-${profileType}]`)
+      cy.get('[data-cy="active-image"]')
+        .should('have.attr', 'src')
+        .and('include', coverImage)
+
+      cy.step('Updated settings display on contact tab')
+      cy.get('[data-cy="contact-tab"]').click()
+      cy.contains(`Send a message to ${displayName}`)
+      cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
     })
   })
 
   describe('Focus Plastic Collection Point', () => {
-    const freshSettings = settingsData.freshSettingsPlastic
-    const expected = settingsData.expectedPlastic
-
-    interface IOpeningTime {
-      index: number
-      day: string
-      from: string
-      to: string
-    }
-    const selectOption = (selector: string, selectedValue: string) => {
-      cy.selectTag(selectedValue, selector)
-    }
-
-    const addOpeningTime = (openingTime: IOpeningTime) => {
-      if (openingTime.index > 0) {
-        cy.get('[data-cy=add-opening-time]').click()
-      }
-      selectOption(
-        `[data-cy=opening-time-day-${openingTime.index}]`,
-        openingTime.day,
-      )
-      selectOption(
-        `[data-cy=opening-time-from-${openingTime.index}]`,
-        openingTime.from,
-      )
-      selectOption(
-        `[data-cy=opening-time-to-${openingTime.index}]`,
-        openingTime.to,
-      )
-    }
-
-    const deleteOpeningTime = (index: number, confirmed: boolean) => {
-      cy.viewport('macbook-13')
-      cy.get(`[data-cy=delete-opening-time-${index}-desk]`).click()
-      if (confirmed) {
-        cy.get('[data-cy=confirm-delete]').click()
-      } else {
-        cy.get('[data-cy=cancel-delete]').click()
-      }
-    }
-
     it('[Edit a new profile]', () => {
-      cy.login('settings_plastic_new@test.com', 'test1234')
+      const coverImage = 'profile-cover-1'
+      const description =
+        'We accept plastic currencies: Bottle, Nylon Bags, Plastic Lids/Straws'
+      const displayName = 'settings_community_new'
+      const openTimes = [
+        {
+          index: 0,
+          day: 'Monday',
+          from: '09:00 AM',
+          to: '06:00 PM',
+        },
+        {
+          index: 1,
+          day: 'Tuesday',
+          from: '09:00 AM',
+          to: '06:00 PM',
+        },
+        {
+          index: 2,
+          day: 'Wednesday',
+          from: '10:00 AM',
+          to: '08:00 PM',
+        },
+        {
+          index: 3,
+          day: 'Friday',
+          from: '05:00 AM',
+          to: '02:00 PM',
+        },
+      ]
+      const plasticTypes = ['hdpe', 'other']
+      const profileType = 'collection-point'
+      const user = generateNewUserDetails()
+      const url = 'http://www.facebook.com/settings_plastic_new'
+
+      cy.signUpNewUser(user)
+
       cy.step('Go to User Settings')
       cy.visit('/settings')
-      selectFocus(expected.profileType)
+      cy.setSettingFocus(profileType)
 
       cy.step("Can't save without required fields being populated")
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
 
       cy.step('Populate profile')
-      setInfo({
-        username: expected.userName,
-        description: expected.about,
-        coverImage: 'images/profile-cover-1.jpg',
+      cy.setSettingBasicUserInfo({
+        username: displayName,
+        description,
+        coverImage: `images/${coverImage}.jpg`,
       })
 
-      cy.step('Update Contact Links')
-      addContactLink({
+      cy.setSettingAddContactLink({
         index: 0,
         label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: `http://www.facebook.com/${freshSettings.userName}`,
-      })
-      addContactLink({
-        index: 1,
-        label: ExternalLinkLabel.SOCIAL_MEDIA,
-        url: `http://www.twitter.com/${freshSettings.userName}`,
+        url,
       })
 
-      cy.step('Update Collection section')
-      addOpeningTime({
-        index: 0,
-        day: 'Monday',
-        from: '09:00 AM',
-        to: '06:00 PM',
+      cy.step('Update collection specific section')
+      openTimes.forEach((openTime) => {
+        cy.setSettingAddOpeningTime(openTime)
       })
-      addOpeningTime({
-        index: 1,
-        day: 'Tuesday',
-        from: '09:00 AM',
-        to: '06:00 PM',
-      })
-      addOpeningTime({
-        index: 2,
-        day: 'Wednesday',
-        from: '09:00 AM',
-        to: '06:00 PM',
-      })
-      addOpeningTime({
-        index: 3,
-        day: 'Friday',
-        from: '09:00 AM',
-        to: '06:00 PM',
-      })
-      deleteOpeningTime(0, false)
-      deleteOpeningTime(1, true)
+      cy.setSettingDeleteOpeningTime(0, false)
+      cy.setSettingDeleteOpeningTime(1, true)
 
-      cy.get('[data-cy=plastic-hdpe]').click()
-      cy.get('[data-cy=plastic-pvc]').click()
-      cy.get('[data-cy=plastic-other]').click()
+      cy.get(`[data-cy=plastic-${plasticTypes[0]}]`).click()
+      cy.get(`[data-cy=plastic-${plasticTypes[1]}]`).click()
 
-      setWorkspaceMapPin({
-        description: expected.mapPinDescription,
-        searchKeyword: 'Singapo',
-        locationName: expected.location.value,
-      })
+      cy.saveSettingsForm()
 
-      cy.get('[data-cy=save]').click()
-      cy.get('[data-cy=errors-container]').should('not.exist')
-      cy.get('[data-cy=save]').should('not.be.disabled')
+      cy.step('Updated settings display on main profile tab')
+      cy.visit(`u/${user.username}`)
+      cy.contains(user.username)
+      cy.contains(displayName)
+      cy.contains(description)
+      cy.get(`[data-cy=MemberBadge-${profileType}]`)
+      cy.get('[data-cy="active-image"]')
+        .should('have.attr', 'src')
+        .and('include', coverImage)
 
-      cy.queryDocuments(
-        DbCollectionName.users,
-        'userName',
-        '==',
-        expected.userName,
-      ).then((docs) => {
-        cy.log('queryDocs', docs)
-        expect(docs.length).to.equal(1)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqSettings', expected)
-      })
+      cy.step('Updated collection specific section displayed')
+      cy.get(`[data-cy=plastic-type-${plasticTypes[0]}]`)
+      cy.get(`[data-cy=plastic-type-${plasticTypes[1]}]`)
+      cy.contains(
+        `${openTimes[0].day}: ${openTimes[0].from} - ${openTimes[0].to}`,
+      )
+      cy.contains(
+        `${openTimes[2].day}: ${openTimes[2].from} - ${openTimes[2].to}`,
+      )
+      cy.contains(
+        `${openTimes[3].day}: ${openTimes[3].from} - ${openTimes[3].to}`,
+      )
+
+      cy.step('Updated settings display on contact tab')
+      cy.get('[data-cy="contact-tab"]').click()
+      cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
+      cy.contains(`Send a message to ${displayName}`)
     })
   })
 })

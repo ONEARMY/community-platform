@@ -3,15 +3,15 @@ import { Button } from 'oa-components'
 import { Alert, Flex, Text } from 'theme-ui'
 
 interface Props {
-  userName: string
+  displayName: string
 }
 
-export const UserContactNotLoggedIn = ({ userName }: Props) => {
+export const UserContactNotLoggedIn = ({ displayName }: Props) => {
   return (
     <Alert variant="info">
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Text sx={{ textAlign: 'left' }}>
-          {`${userName} would love to hear from you...but you're not logged in!`}
+          {`${displayName} would love to hear from you...but you're not logged in!`}
         </Text>
         <Text sx={{ textAlign: 'left' }}>
           If you were you'd able to send them a message...

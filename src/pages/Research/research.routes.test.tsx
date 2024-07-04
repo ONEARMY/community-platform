@@ -213,7 +213,7 @@ describe('research.routes', () => {
       )
     })
 
-    it('accepts a logged in user with required role [research_creator]', async () => {
+    it('accepts a logged in user with required role [research_editor]', async () => {
       let wrapper
       act(() => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]

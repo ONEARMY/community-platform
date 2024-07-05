@@ -2,7 +2,12 @@ import { useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import { Button, ExternalLink, FieldInput } from 'oa-components'
+import {
+  Button,
+  CelebrationHero,
+  ExternalLink,
+  FieldInput,
+} from 'oa-components'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -123,10 +128,11 @@ const SignUpPage = observer(() => {
               sx={{ width: '100%' }}
               css={{ maxWidth: '620px' }}
               mx={'auto'}
-              mt={20}
+              mt={[5, 10]}
               mb={3}
             >
               <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+                <CelebrationHero />
                 <Card bg={'softblue'}>
                   <Flex px={3} py={2} sx={{ width: '100%' }}>
                     <Heading>Hey, nice to see you here</Heading>

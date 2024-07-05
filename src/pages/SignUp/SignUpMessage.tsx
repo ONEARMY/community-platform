@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Button } from 'oa-components'
+import { Button, CelebrationHero } from 'oa-components'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 const SignUpMessagePage = () => (
@@ -9,10 +9,11 @@ const SignUpMessagePage = () => (
     sx={{ width: '100%' }}
     css={{ maxWidth: '620px' }}
     mx={'auto'}
-    mt={20}
+    mt={[5, 10]}
     mb={3}
   >
     <Flex sx={{ flexDirection: 'column', width: '100%' }}>
+      <CelebrationHero />
       <Card sx={{ backgroundColor: 'softblue', px: 3, py: 2 }}>
         <Heading>Sent</Heading>
       </Card>

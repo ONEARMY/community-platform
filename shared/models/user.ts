@@ -15,8 +15,6 @@ export enum ExternalLinkLabel {
   BAZAR = 'bazar',
   FORUM = 'forum',
   SOCIAL_MEDIA = 'social media',
-  FACEBOOK = 'facebook',
-  INSTAGRAM = 'instagram',
 }
 
 // See https://docs.patreon.com/?javascript#user-v2

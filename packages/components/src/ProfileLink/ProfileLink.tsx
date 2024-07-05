@@ -62,7 +62,12 @@ export const ProfileLink = (props: Props) => {
       <Box>
         <Icon glyph={props.icon} size={22} />
       </Box>
-      <ExternalLink ml={2} color={'black'} href={rewriteUrl(url, label)}>
+      <ExternalLink
+        ml={2}
+        color={'black'}
+        data-cy="profile-link"
+        href={rewriteUrl(url, label)}
+      >
         {getLabelText(label, url)}
       </ExternalLink>
     </Flex>

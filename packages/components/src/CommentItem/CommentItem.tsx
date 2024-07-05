@@ -1,4 +1,5 @@
 import { createRef, useEffect, useState } from 'react'
+import { format, formatDistanceToNow } from 'date-fns'
 import { Avatar, Box, Flex, Text } from 'theme-ui'
 
 import defaultProfileImage from '../../assets/images/default_member.svg'
@@ -8,7 +9,7 @@ import { EditComment } from '../EditComment/EditComment'
 import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
-import { format, formatDistanceToNow } from 'date-fns'
+
 import type { IComment } from './types'
 
 const SHORT_COMMENT = 129
@@ -49,7 +50,7 @@ export const CommentItem = (props: IProps) => {
     handleEditRequest,
     handleEdit,
     isReply,
-    showAvatar = true,
+    showAvatar,
   } = props
   const {
     text,
@@ -94,6 +95,8 @@ export const CommentItem = (props: IProps) => {
     }
   }
 
+  console.log(showAvatar)
+
   return (
     <Flex id={`comment:${_id}`} data-cy={item} sx={{ flexDirection: 'column' }}>
       <Flex sx={{ gap: 2 }}>
@@ -113,7 +116,7 @@ export const CommentItem = (props: IProps) => {
             <Box data-cy="commentAvatar" data-testid="commentAvatar">
               <Avatar
                 src={
-                  creatorImage && showAvatar
+                  creatorImage || showAvatar
                     ? creatorImage
                     : defaultProfileImage
                 }

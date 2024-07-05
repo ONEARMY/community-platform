@@ -7,7 +7,7 @@ import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.png'
 import Shredder from 'src/assets/images/workspace-focus/shredder.png'
 import { fields } from 'src/pages/UserSettings/labels'
 import { required } from 'src/utils/validators'
-import { Box, Flex, Heading, Text } from 'theme-ui'
+import { Box, Flex, Grid, Heading, Text } from 'theme-ui'
 
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { FlexSectionContainer } from './elements'
@@ -66,7 +66,7 @@ export const WorkspaceSection = () => {
             <Text mt={4} mb={4}>
               {description}
             </Text>
-            <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
+            <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
               {WORKSPACE_TYPES.map((workspace, index: number) => (
                 <CustomRadioField
                   data-cy={workspace.label}
@@ -83,7 +83,7 @@ export const WorkspaceSection = () => {
                   subText={workspace.subText}
                 />
               ))}
-            </Flex>
+            </Grid>
             {meta.touched && meta.error && (
               <Text
                 sx={{

@@ -40,6 +40,7 @@ import { ExternalUrl } from './ExternalUrl'
 import { iconMap } from './svgs'
 
 import type { SpaceProps, VerticalAlignProps } from 'styled-system'
+import type { ThemeUIStyleObject } from 'theme-ui'
 import type { IGlyphs } from './types'
 
 interface IGlyphProps {
@@ -53,6 +54,7 @@ export interface IProps {
   marginRight?: string
   opacity?: string
   onClick?: () => void
+  sx?: ThemeUIStyleObject | undefined
 }
 
 export const glyphs: IGlyphs = {
@@ -150,7 +152,7 @@ const Glyph = ({ glyph }: IGlyphProps) => {
 }
 
 export const Icon = (props: Props) => {
-  const { glyph, size, marginRight } = props
+  const { glyph, size, marginRight, sx } = props
 
   const isSizeNumeric = !isNaN(size as any)
 
@@ -172,6 +174,7 @@ export const Icon = (props: Props) => {
         '& svg': {
           fontSize: definedSize,
         },
+        ...sx,
       }}
       size={definedSize}
       style={{ marginRight }}

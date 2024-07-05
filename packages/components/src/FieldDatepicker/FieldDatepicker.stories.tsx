@@ -3,7 +3,7 @@ import { FieldDatepicker } from './FieldDatepicker'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/FieldDatepicker',
+  title: 'Forms/FieldDatepicker',
   component: FieldDatepicker,
 } as Meta<typeof FieldDatepicker>
 

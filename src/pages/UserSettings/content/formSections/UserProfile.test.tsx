@@ -17,7 +17,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { SettingsPage } from './SettingsPage'
+import { UserProfile } from './UserProfile.section'
 
 import type { IUserPPDB } from 'src/models'
 
@@ -67,21 +67,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 describe('UserSettings', () => {
   beforeEach(() => {
     vi.resetAllMocks()
-  })
-
-  it('displays user settings', async () => {
-    mockUser = FactoryUser()
-
-    // Act
-    let wrapper
-    act(() => {
-      wrapper = Wrapper(mockUser)
-    })
-
-    // Assert
-    await waitFor(() => {
-      expect(wrapper.getByText('Edit profile'))
-    })
   })
 
   it('displays one photo for member', async () => {
@@ -269,7 +254,7 @@ const Wrapper = (user: IUserPPDB, routerInitialEntry?: string) => {
   }
 
   const router = createMemoryRouter(
-    createRoutesFromElements(<Route index element={<SettingsPage />} />),
+    createRoutesFromElements(<Route index element={<UserProfile />} />),
     {
       initialEntries: [routerInitialEntry ? routerInitialEntry : ''],
     },

@@ -1,6 +1,8 @@
 import { createRef, useEffect, useState } from 'react'
+import { format, formatDistanceToNow } from 'date-fns'
 import { Avatar, Box, Flex, Text } from 'theme-ui'
 
+import defaultProfileImage from '../../assets/images/default_member.svg'
 import { Button } from '../Button/Button'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 import { EditComment } from '../EditComment/EditComment'
@@ -26,7 +28,14 @@ const formatDate = (d: string | undefined): string => {
   if (!d) {
     return ''
   }
-  return new Date(d).toLocaleDateString('en-GB').replace(/\//g, '-')
+  return format(new Date(d), 'dd MMMM yyyy h:mm a')
+}
+
+const relativeDateFormat = (d: string | undefined): string => {
+  if (!d) {
+    return ''
+  }
+  return formatDistanceToNow(new Date(d), { addSuffix: true })
 }
 
 export const CommentItem = (props: IProps) => {
@@ -65,6 +74,7 @@ export const CommentItem = (props: IProps) => {
   }
 
   const date = formatDate(_edited || _created)
+  const relativeDate = relativeDateFormat(_edited || _created)
   const maxHeight = isShowMore ? 'max-content' : '128px'
   const item = isReply ? 'ReplyItem' : 'CommentItem'
 
@@ -85,6 +95,8 @@ export const CommentItem = (props: IProps) => {
     }
   }
 
+  console.log(showAvatar)
+
   return (
     <Flex id={`comment:${_id}`} data-cy={item} sx={{ flexDirection: 'column' }}>
       <Flex sx={{ gap: 2 }}>
@@ -101,18 +113,20 @@ export const CommentItem = (props: IProps) => {
               flex: 1,
             }}
           >
-            {creatorImage && showAvatar && (
-              <Box data-cy="commentAvatar" data-testid="commentAvatar">
-                <Avatar
-                  src={creatorImage}
-                  sx={{
-                    objectFit: 'cover',
-                    width: ['30px', '50px'],
-                    height: ['30px', '50px'],
-                  }}
-                />
-              </Box>
-            )}
+            <Box data-cy="commentAvatar" data-testid="commentAvatar">
+              <Avatar
+                src={
+                  creatorImage || showAvatar
+                    ? creatorImage
+                    : defaultProfileImage
+                }
+                sx={{
+                  objectFit: 'cover',
+                  width: ['30px', '50px'],
+                  height: ['30px', '50px'],
+                }}
+              />
+            </Box>
 
             <Flex
               sx={{
@@ -134,7 +148,9 @@ export const CommentItem = (props: IProps) => {
                 {_edited && (
                   <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
                 )}
-                <Text sx={{ fontSize: 1 }}>{date}</Text>
+                <Text sx={{ fontSize: 1 }} title={date}>
+                  {relativeDate}
+                </Text>
               </Flex>
 
               {isEditable && (

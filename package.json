@@ -87,7 +87,7 @@
     "@uppy/progress-bar": "^3.1.1",
     "@uppy/react": "^3.3.1",
     "countries-list": "^2.6.1",
-    "date-fns": "^3.3.0",
+    "date-fns": "^3.6.0",
     "debounce": "^1.2.0",
     "dexie": "^3.2.4",
     "dotenv": "^10.0.0",

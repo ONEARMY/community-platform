@@ -1,4 +1,5 @@
 import { createRef, useEffect, useState } from 'react'
+import { format, formatDistanceToNow } from 'date-fns'
 import { Avatar, Box, Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
@@ -7,7 +8,6 @@ import { EditComment } from '../EditComment/EditComment'
 import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
-import { format, formatDistanceToNow } from 'date-fns'
 
 import type { IComment } from './types'
 

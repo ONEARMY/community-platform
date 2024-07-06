@@ -66,6 +66,7 @@ export namespace IResearch {
     downloadCount: number
     videoUrl?: string
     collaborators?: string[]
+    commentCount?: number
     status: ResearchUpdateStatus
     researchStatus?: ResearchStatus
     locked?: ResearchDocumentLock

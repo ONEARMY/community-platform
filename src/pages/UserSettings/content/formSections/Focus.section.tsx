@@ -55,7 +55,7 @@ const ProfileTypes = () => {
             <Flex sx={{ flexWrap: 'wrap', alignItems: 'center' }} mt={4}>
               <Text my={2}>{description}</Text>
               <ExternalLink href={theme.profileGuidelinesURL}>
-                <Button ml={[1, 2, 2]} variant="outline" data-cy="go-to">
+                <Button ml={[1, 2, 2]} variant="outline" type="button">
                   {buttons.guidelines}
                 </Button>
               </ExternalLink>

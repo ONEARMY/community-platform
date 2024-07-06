@@ -96,7 +96,6 @@ export const Button = (props: BtnProps) => {
         'showIconOnly',
         'iconColor',
       ])}
-      type={props.type || 'button'}
       sx={{
         ...props.sx,
         ...getSizeProps(size, !!props.icon),

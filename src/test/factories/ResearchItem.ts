@@ -11,6 +11,7 @@ export const FactoryResearchItemUpdate = (
   researchItemUpdateOverloads: Partial<IResearch.UpdateDB> = {},
 ): IResearch.UpdateDB => ({
   title: faker.lorem.words(),
+  commentCount: 0,
   description: faker.lorem.sentences(2),
   images: [],
   files: [],

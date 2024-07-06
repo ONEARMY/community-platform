@@ -20,7 +20,6 @@ import type {
 } from 'src/models/discussion.models'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
-import type { CommentsTotalEvent } from './discussionEvents'
 
 const COLLECTION_NAME = 'discussions'
 
@@ -76,7 +75,7 @@ export class DiscussionStore extends ModuleStore {
       .collection<IDiscussion>(COLLECTION_NAME)
       .doc(newDiscussion._id)
 
-    return this._updateDiscussion(dbRef, newDiscussion, 'neutral')
+    return this._updateDiscussion(dbRef, newDiscussion)
   }
 
   public async addComment(
@@ -121,7 +120,7 @@ export class DiscussionStore extends ModuleStore {
 
         await this._addNotifications(newComment, currentDiscussion)
 
-        return this._updateDiscussion(dbRef, currentDiscussion, 'add')
+        return this._updateDiscussion(dbRef, currentDiscussion)
       }
     } catch (err) {
       logger.error(err)
@@ -164,7 +163,7 @@ export class DiscussionStore extends ModuleStore {
             commentId,
           )
 
-          return this._updateDiscussion(dbRef, currentDiscussion, 'neutral')
+          return this._updateDiscussion(dbRef, currentDiscussion)
         }
       }
     } catch (err) {
@@ -210,7 +209,7 @@ export class DiscussionStore extends ModuleStore {
             targetComment?._creatorId,
           )
 
-          return this._updateDiscussion(dbRef, currentDiscussion, 'delete')
+          return this._updateDiscussion(dbRef, currentDiscussion)
         }
       }
     } catch (err) {
@@ -330,10 +329,9 @@ export class DiscussionStore extends ModuleStore {
   private async _updateDiscussion(
     dbRef: DocReference<IDiscussion>,
     discussion: IDiscussion,
-    commentsTotalEvent: CommentsTotalEvent,
   ): Promise<IDiscussionDB | null> {
     await dbRef.set({ ...cloneDeep(discussion) })
-    await updateDiscussionMetadata(this.db, discussion, commentsTotalEvent)
+    await updateDiscussionMetadata(this.db, discussion)
     const updatedDiscussion = toJS(await dbRef.get('server'))
 
     return updatedDiscussion ? updatedDiscussion : null

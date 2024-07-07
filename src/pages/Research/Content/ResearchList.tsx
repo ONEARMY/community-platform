@@ -177,7 +177,7 @@ const ResearchList = observer(() => {
           )}
 
           {!isFetching &&
-            researchItems?.length &&
+            !!researchItems?.length &&
             researchItems.length < total && (
               <Flex
                 sx={{

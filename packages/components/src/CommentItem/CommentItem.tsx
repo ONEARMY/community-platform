@@ -8,6 +8,7 @@ import { EditComment } from '../EditComment/EditComment'
 import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
+import defaultProfileImage from '../../assets/images/default_member.svg'
 
 import type { IComment } from './types'
 
@@ -104,16 +105,11 @@ export const CommentItem = (props: IProps) => {
         )}
 
         {!_deleted && (
-          <Flex
-            sx={{
-              flexDirection: 'column',
-              flex: 1,
-            }}
-          >
-            {creatorImage && showAvatar && (
+          <Flex sx={{ gap: 2 }}>
+            {showAvatar && (
               <Box data-cy="commentAvatar" data-testid="commentAvatar">
                 <Avatar
-                  src={creatorImage}
+                  src={creatorImage ?? defaultProfileImage}
                   sx={{
                     objectFit: 'cover',
                     width: ['30px', '50px'],
@@ -122,90 +118,96 @@ export const CommentItem = (props: IProps) => {
                 />
               </Box>
             )}
-
             <Flex
               sx={{
-                alignItems: 'stretch',
-                flexWrap: 'wrap',
-                justifyContent: 'flex-start',
-                flexDirection: ['column', 'row'],
-                gap: 2,
+                flexDirection: 'column',
+                flex: 1,
               }}
             >
               <Flex
                 sx={{
-                  alignItems: 'baseline',
+                  alignItems: 'stretch',
+                  flexWrap: 'wrap',
+                  justifyContent: 'flex-start',
+                  flexDirection: ['column', 'row'],
                   gap: 2,
-                  flexDirection: 'row',
                 }}
               >
-                <Username user={user} />
-                {_edited && (
-                  <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
-                )}
-                <Text sx={{ fontSize: 1 }} title={date}>
-                  {relativeDate}
-                </Text>
-              </Flex>
-
-              {isEditable && (
                 <Flex
                   sx={{
-                    flexGrow: 1,
+                    alignItems: 'baseline',
                     gap: 2,
-                    justifyContent: ['flex-start', 'flex-end'],
-                    opacity: 0.5,
-                    ':hover': { opacity: 1 },
+                    flexDirection: 'row',
                   }}
                 >
-                  <Button
-                    data-cy={`${item}: edit button`}
-                    variant="outline"
-                    small={true}
-                    icon="edit"
-                    onClick={() => onEditRequest(_id)}
-                  >
-                    edit
-                  </Button>
-                  <Button
-                    data-cy={`${item}: delete button`}
-                    variant={'outline'}
-                    small={true}
-                    icon="delete"
-                    onClick={() => setShowDeleteModal(true)}
-                  >
-                    delete
-                  </Button>
+                  <Username user={user} />
+                  {_edited && (
+                    <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
+                  )}
+                  <Text sx={{ fontSize: 1 }} title={date}>
+                    {relativeDate}
+                  </Text>
                 </Flex>
+
+                {isEditable && (
+                  <Flex
+                    sx={{
+                      flexGrow: 1,
+                      gap: 2,
+                      justifyContent: ['flex-start', 'flex-end'],
+                      opacity: 0.5,
+                      ':hover': { opacity: 1 },
+                    }}
+                  >
+                    <Button
+                      data-cy={`${item}: edit button`}
+                      variant="outline"
+                      small={true}
+                      icon="edit"
+                      onClick={() => onEditRequest(_id)}
+                    >
+                      edit
+                    </Button>
+                    <Button
+                      data-cy={`${item}: delete button`}
+                      variant={'outline'}
+                      small={true}
+                      icon="delete"
+                      onClick={() => setShowDeleteModal(true)}
+                    >
+                      delete
+                    </Button>
+                  </Flex>
+                )}
+              </Flex>
+              <Text
+                data-cy="comment-text"
+                sx={{
+                  fontFamily: 'body',
+                  lineHeight: 1.3,
+                  maxHeight,
+                  overflow: 'hidden',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                  marginTop: 1,
+                  marginBottom: 2,
+                }}
+                ref={textRef}
+              >
+                <LinkifyText>{text}</LinkifyText>
+              </Text>
+              {textHeight > SHORT_COMMENT && (
+                <a
+                  onClick={showMore}
+                  style={{
+                    color: 'gray',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {isShowMore ? 'Show less' : 'Show more'}
+                </a>
               )}
             </Flex>
-            <Text
-              data-cy="comment-text"
-              sx={{
-                fontFamily: 'body',
-                lineHeight: 1.3,
-                maxHeight,
-                overflow: 'hidden',
-                whiteSpace: 'pre-wrap',
-                wordBreak: 'break-word',
-                marginTop: 1,
-                marginBottom: 2,
-              }}
-              ref={textRef}
-            >
-              <LinkifyText>{text}</LinkifyText>
-            </Text>
-            {textHeight > SHORT_COMMENT && (
-              <a
-                onClick={showMore}
-                style={{
-                  color: 'gray',
-                  cursor: 'pointer',
-                }}
-              >
-                {isShowMore ? 'Show less' : 'Show more'}
-              </a>
-            )}
           </Flex>
         )}
       </Flex>

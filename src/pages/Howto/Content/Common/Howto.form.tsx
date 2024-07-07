@@ -58,6 +58,7 @@ const FormContainer = styled.form`
 `
 export const HowtoForm = observer((props: IProps) => {
   const { howtoStore } = useCommonStores().stores
+
   const [state, setState] = useState<IState>({
     formSaved: false,
     _toDocsList: false,
@@ -195,7 +196,7 @@ export const HowtoForm = observer((props: IProps) => {
                               store={howtoStore}
                               _id={formValues._id}
                             />
-                            <HowtoFieldCategory category={values.category} />
+                            <HowtoFieldCategory />
                             <HowtoFieldTags />
                             <HowtoFieldTime />
                             <HowtoFieldDifficulty />

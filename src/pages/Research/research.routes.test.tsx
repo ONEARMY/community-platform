@@ -30,7 +30,14 @@ import type { Mock } from 'vitest'
 const Theme = testingThemeStyles
 const mockActiveUser = FactoryUser()
 
-vi.mock('src/pages/Research/research.service')
+vi.mock('src/pages/Research/research.service', () => ({
+  researchService: {
+    search: vi.fn(),
+    getDraftCount: vi.fn(),
+    getDrafts: vi.fn(),
+    getResearchCategories: vi.fn(() => []),
+  },
+}))
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -48,9 +55,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
         users_verified: {
           HowtoAuthor: true,
         },
-      },
-      researchCategoriesStore: {
-        allResearchCategories: [],
       },
       tagsStore: {},
     },

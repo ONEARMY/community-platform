@@ -1,4 +1,4 @@
-import { getEmailHtml, SupportedEmailTemplates } from '.'
+import { getEmailHtml, SupportedEmailTemplates } from './index'
 
 jest.mock('fs', () => ({
   readdirSync: () => ['verified-badge-added.html'],

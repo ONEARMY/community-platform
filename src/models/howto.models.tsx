@@ -2,13 +2,11 @@ import type { DifficultyLevel } from 'oa-shared'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
 import type { ICategory } from './categories.model'
-import type {
-  DBDoc,
-  IModerable,
-  ISharedFeatures,
-  UserMention,
-} from './common.models'
+import type { UserMention } from './common.models'
+import type { DBDoc } from './dbDoc.model'
+import type { IModerable } from './moderation.model'
 import type { ISelectedTags } from './tags.model'
+import type { ISharedFeatures } from './voteUseful.model'
 
 // By default all how-to form input fields come as strings
 // The IHowto interface can imposes the correct formats on fields

@@ -11,9 +11,9 @@ import {
   where,
 } from 'firebase/firestore'
 import { IModerationStatus } from 'oa-shared'
+import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { hasAdminRights } from 'src/utils/helpers'
 
-import { DB_ENDPOINTS } from '../../models'
 import { firestore } from '../../utils/firebase'
 
 import type {

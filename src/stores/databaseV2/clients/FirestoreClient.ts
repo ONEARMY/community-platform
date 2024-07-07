@@ -24,8 +24,9 @@ import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { Firestore } from 'firebase/firestore'
 import type { Observer } from 'rxjs'
-import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
-import type { AbstractDatabaseClient, DBQueryOptions } from '../types'
+import type { IDBEndpoint } from 'src/models/dbEndpoints'
+import type { AbstractDatabaseClient } from '../types'
+import type { DBDoc, DBQueryOptions } from '../types/dbDoc'
 
 export class FirestoreClient implements AbstractDatabaseClient {
   private _db: Firestore

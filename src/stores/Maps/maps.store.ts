@@ -12,7 +12,8 @@ import { getUserAvatar } from '../User/user.store'
 import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
-import type { IDBEndpoint, IUser } from 'src/models'
+import type { IUser } from 'src/models'
+import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type {
   IBoundingBox,
   IMapGrouping,

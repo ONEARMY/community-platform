@@ -1,7 +1,8 @@
 import { realTimeDatabase } from 'src/utils/firebase'
 
-import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
+import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type { AbstractDatabaseClient } from '../types'
+import type { DBDoc } from '../types/dbDoc'
 
 const db = realTimeDatabase
 

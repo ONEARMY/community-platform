@@ -18,22 +18,20 @@ import {
 import { Box, Card, Flex, Heading } from 'theme-ui'
 
 import { headings, intro } from '../../labels'
-import {
-  HowtoButtonDraft,
-  HowtoButtonPublish,
-  HowtoErrors,
-  HowtoFieldCategory,
-  HowtoFieldCoverImage,
-  HowtoFieldDescription,
-  HowtoFieldDifficulty,
-  HowtoFieldFiles,
-  HowtoFieldStepsContainer,
-  HowtoFieldTags,
-  HowtoFieldTime,
-  HowtoFieldTitle,
-  HowtoPostingGuidelines,
-  HowToSubmitStatus,
-} from '.'
+import { HowtoButtonDraft } from './HowtoButtonDraft'
+import { HowtoButtonPublish } from './HowtoButtonPublish'
+import { HowtoErrors } from './HowtoErrors'
+import { HowtoFieldCategory } from './HowtoFieldCategory'
+import { HowtoFieldCoverImage } from './HowtoFieldCoverImage'
+import { HowtoFieldDescription } from './HowtoFieldDescription'
+import { HowtoFieldDifficulty } from './HowtoFieldDifficulty'
+import { HowtoFieldFiles } from './HowtoFieldFiles'
+import { HowtoFieldStepsContainer } from './HowtoFieldStepsContainer'
+import { HowtoFieldTags } from './HowtoFieldTags'
+import { HowtoFieldTime } from './HowtoFieldTime'
+import { HowtoFieldTitle } from './HowtoFieldTitle'
+import { HowtoPostingGuidelines } from './HowtoPostingGuidelines'
+import { HowToSubmitStatus } from './SubmitStatus'
 
 import type { FormApi } from 'final-form'
 import type { IHowtoFormInput } from 'src/models/howto.models'

@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import { FocusSection } from 'src/pages/UserSettings/content/formSections/Focus.section'
 import { headings } from 'src/pages/UserSettings/labels'
-import { SettingsProvider } from 'src/test/components'
+import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
 import { describe, expect, it } from 'vitest'
 
 const supportedProfileTypes = getSupportedProfileTypes().map(
@@ -27,9 +27,9 @@ describe('Focus', () => {
 
     render(
       <ThemeProvider theme={{ badges }}>
-        <SettingsProvider>
+        <SettingsFormProvider>
           <FocusSection />
-        </SettingsProvider>
+        </SettingsFormProvider>
       </ThemeProvider>,
     )
 
@@ -46,9 +46,9 @@ describe('Focus', () => {
 
     render(
       <ThemeProvider theme={{ badges }}>
-        <SettingsProvider>
+        <SettingsFormProvider>
           <FocusSection />
-        </SettingsProvider>
+        </SettingsFormProvider>
       </ThemeProvider>,
     )
 

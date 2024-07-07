@@ -1,17 +1,17 @@
 import { render, screen } from '@testing-library/react'
 import { guidance } from 'src/pages/Howto/labels'
-import { HowtoProvider } from 'src/test/components'
 import { FactoryCategory } from 'src/test/factories/Category'
 import { describe, expect, it } from 'vitest'
 
-import { HowtoCategoryGuidance } from '.'
+import { HowtoCategoryGuidance } from './HowtoCategoryGuidance'
+import { HowtoFormProvider } from './HowtoFormProvider'
 
 describe('HowtoCategoryGuidance', () => {
   it('renders expected main content when a category that exists is present', async () => {
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoCategoryGuidance category={FactoryCategory} type="main" />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     const guidanceFirstLine = guidance.moulds.main.slice(0, 40)
@@ -21,9 +21,9 @@ describe('HowtoCategoryGuidance', () => {
 
   it('renders expected files content when a category that exists is present', async () => {
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoCategoryGuidance category={FactoryCategory} type="files" />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     const filesGuidance = guidance.moulds.files
@@ -33,9 +33,9 @@ describe('HowtoCategoryGuidance', () => {
 
   it('renders nothing when not visible', () => {
     const { container } = render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoCategoryGuidance category={undefined} type="main" />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     expect(container.innerHTML).toBe('')

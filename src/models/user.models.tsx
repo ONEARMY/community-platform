@@ -6,7 +6,8 @@ import type {
   PatreonUser,
   UserRole,
 } from 'oa-shared'
-import type { DBDoc, ILocation, ISODateString } from './common.models'
+import type { ILocation, ISODateString } from './common.models'
+import type { DBDoc } from './dbDoc.model'
 
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'

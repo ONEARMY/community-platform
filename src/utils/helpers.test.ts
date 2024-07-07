@@ -19,7 +19,7 @@ import {
   stripSpecialCharacters,
 } from './helpers'
 
-import type { IModerable } from 'src/models'
+import type { IModerable } from 'src/models/moderation.model'
 
 describe('src/utils/helpers', () => {
   it('stripSpecialCharacters should remove special characters and replace spaces with dashes', () => {

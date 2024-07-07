@@ -7,8 +7,6 @@ import type * as functions from 'firebase-functions'
 // which can resolve at build time, but would not work if deploying direct to firebase functions.
 // Alternative fix would be to put the platform code one level further nested e.g. <root>/platform/src
 export type {
-  DBDoc,
-  IDBEndpoint,
   IDiscussion,
   IHowtoDB,
   IMapPin,
@@ -20,6 +18,9 @@ export type {
   IUserDB,
   IQuestionDB,
 } from '../../src/models'
+
+export type { IDBEndpoint } from '../../src/models/dbEndpoints'
+export type { DBDoc } from '../../src/models/dbDoc.model'
 
 import { dbEndpointSubcollections, generateDBEndpoints } from 'oa-shared'
 

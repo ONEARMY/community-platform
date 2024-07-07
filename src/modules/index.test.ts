@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, it } from 'vitest'
 
-import { getSupportedModules, isModuleSupported, MODULE } from '.'
+import { getSupportedModules, isModuleSupported, MODULE } from './index'
 
 describe('getSupportedModules', () => {
   const defaultModules = import.meta.env.REACT_APP_SUPPORTED_MODULES

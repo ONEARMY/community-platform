@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
-import { HowtoProvider } from 'src/test/components'
 import { describe, expect, it } from 'vitest'
 
-import { HowtoErrors } from '.'
+import { HowtoErrors } from './HowtoErrors'
+import { HowtoFormProvider } from './HowtoFormProvider'
 
 describe('HowtoErrors', () => {
   it('renders component when visible and has intro errors', async () => {
@@ -13,9 +13,9 @@ describe('HowtoErrors', () => {
     }
 
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoErrors isVisible={true} errors={errors} />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText(titleError, { exact: false })
@@ -29,9 +29,9 @@ describe('HowtoErrors', () => {
     }
 
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoErrors isVisible={true} errors={errors} />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText(text, { exact: false })
@@ -44,9 +44,9 @@ describe('HowtoErrors', () => {
     }
 
     const { container } = render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoErrors isVisible={false} errors={errors} />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     expect(container.innerHTML).toBe('')

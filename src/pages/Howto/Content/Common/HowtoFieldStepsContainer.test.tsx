@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react'
-import { HowtoProvider } from 'src/test/components'
 import { describe, it } from 'vitest'
 
-import { HowtoFieldStepsContainer } from '.'
+import { HowtoFieldStepsContainer } from './HowtoFieldStepsContainer'
+import { HowtoFormProvider } from './HowtoFormProvider'
 
 describe('HowtoFieldStepsContainer', () => {
   it('renders', async () => {
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoFieldStepsContainer />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText('Add step')

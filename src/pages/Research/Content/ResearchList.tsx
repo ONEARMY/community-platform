@@ -157,24 +157,27 @@ const ResearchList = observer(() => {
       </Flex>
 
       {showDrafts ? (
-        drafts.map((item) => {
-          return <ResearchListItem key={item._id} item={item} />
-        })
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {drafts.map((item) => {
+            return <ResearchListItem key={item._id} item={item} />
+          })}
+        </ul>
       ) : (
         <>
-          {researchItems &&
-            researchItems.length !== 0 &&
-            researchItems.map((item) => {
-              return <ResearchListItem key={item._id} item={item} />
-            })}
+          {!!researchItems?.length && (
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {researchItems.map((item) => (
+                <ResearchListItem key={item._id} item={item} />
+              ))}
+            </ul>
+          )}
 
           {!isFetching && researchItems?.length === 0 && (
             <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
           )}
 
           {!isFetching &&
-            researchItems &&
-            researchItems.length > 0 &&
+            researchItems?.length &&
             researchItems.length < total && (
               <Flex
                 sx={{

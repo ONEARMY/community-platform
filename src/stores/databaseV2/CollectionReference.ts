@@ -4,13 +4,13 @@ import { logger } from '../../logger'
 import { DocReference } from './DocReference'
 
 import type { Observer } from 'rxjs'
+import type { DBClients } from './types'
+import type { AbstractDatabaseClientStreamable } from './types/AbstractDatabaseClient'
 import type {
-  DBClients,
   DBDoc,
   DBQueryWhereOperator,
   DBQueryWhereValue,
-} from './types'
-import type { AbstractDatabaseClientStreamable } from './types/AbstractDatabaseClient'
+} from './types/dbDoc'
 
 export class CollectionReference<T> {
   constructor(

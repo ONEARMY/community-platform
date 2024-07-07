@@ -1,7 +1,7 @@
 import { intro, steps } from 'src/pages/Howto/labels'
 import { describe, expect, it } from 'vitest'
 
-import { transformHowtoErrors } from '.'
+import { transformHowtoErrors } from './transformHowtoErrors'
 
 describe('transformHowtoErrors', () => {
   describe('introErrors', () => {

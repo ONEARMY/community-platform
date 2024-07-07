@@ -1,7 +1,7 @@
 import { FieldArray } from 'react-final-form-arrays'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from 'oa-components'
-import { HowtoFieldStep } from 'src/pages/Howto/Content/Common/'
+import { HowtoFieldStep } from 'src/pages/Howto/Content/Common/HowtoFieldStep'
 import { COMPARISONS } from 'src/utils/comparisons'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 

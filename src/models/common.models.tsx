@@ -1,25 +1,7 @@
-// re-imports and re-exports
-import type { IModerationStatus } from 'oa-shared'
-import type { DBEndpoint } from '../stores/databaseV2/endpoints'
-import type { DBDoc as DBDocImport } from '../stores/databaseV2/types'
-
-export type DBDoc = DBDocImport
-export { DB_ENDPOINTS } from '../stores/databaseV2/endpoints'
-export type IDBEndpoint = DBEndpoint
-
 // A reminder that dates should be saved in the ISOString format
 // i.e. new Date().toISOString() => 2011-10-05T14:48:00.000Z
 // This is more consistent than others and allows better querying
 export type ISODateString = string
-
-export interface IModeration {
-  moderation: IModerationStatus
-  moderatorFeedback?: string
-}
-export interface IModerable extends IModeration {
-  _createdBy?: string
-  _id?: string
-}
 
 export type UserMention = {
   username: string
@@ -45,21 +27,5 @@ interface ILatLng {
   lat: number
   lng: number
 }
-
-export interface IVotedUseful {
-  votedUsefulBy?: string[]
-}
-export interface ISharedFeatures extends IVotedUseful {
-  total_views?: number
-  previousSlugs?: string[]
-}
-
-export type IVotedUsefulUpdate = {
-  _id: string
-} & IVotedUseful
-
-export type IModerationUpdate = {
-  _id: string
-} & IModeration
 
 export type FetchState = 'idle' | 'fetching' | 'completed'

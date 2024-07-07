@@ -1,5 +1,5 @@
 import type { Observable } from 'rxjs'
-import type { DBDoc, DBQueryOptions } from '.'
+import type { DBDoc, DBQueryOptions } from './dbDoc'
 
 export interface AbstractDatabaseClient {
   getDoc<T>(endpoint: string, docId: string): Promise<(T & DBDoc) | undefined>

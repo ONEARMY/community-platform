@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react'
-import { HowtoProvider } from 'src/test/components'
 import { describe, it } from 'vitest'
 
-import { HowtoFieldDescription } from '.'
+import { HowtoFieldDescription } from './HowtoFieldDescription'
+import { HowtoFormProvider } from './HowtoFormProvider'
 
 describe('HowtoFieldStepsDescription', () => {
   it('renders', async () => {
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoFieldDescription />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText('Short description *')

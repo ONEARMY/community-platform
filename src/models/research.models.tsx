@@ -1,12 +1,14 @@
 import { ResearchStatus } from 'oa-shared'
 
 import type { ResearchUpdateStatus } from 'oa-shared'
-import type { DBDoc } from '../stores/databaseV2/types'
 import type { IUploadedFileMeta } from '../stores/storage'
 import type { IConvertedFileMeta } from '../types'
-import type { IModerable, ISharedFeatures, UserMention } from './common.models'
+import type { UserMention } from './common.models'
+import type { DBDoc } from './dbDoc.model'
+import type { IModerable } from './moderation.model'
 import type { IResearchCategory } from './researchCategories.model'
 import type { ISelectedTags } from './tags.model'
+import type { ISharedFeatures } from './voteUseful.model'
 
 /**
  * Research retrieved from the database also include metadata such as _id, _created and _modified

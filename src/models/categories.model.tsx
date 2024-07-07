@@ -1,4 +1,4 @@
-import type { DBDoc } from './common.models'
+import type { DBDoc } from './dbDoc.model'
 
 export interface ISelectedCategories {
   [key: string]: boolean

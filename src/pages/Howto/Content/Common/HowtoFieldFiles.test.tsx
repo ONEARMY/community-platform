@@ -1,10 +1,39 @@
 import { render, screen } from '@testing-library/react'
 import { guidance } from 'src/pages/Howto/labels'
-import { HowtoProvider } from 'src/test/components'
 import { FactoryCategory } from 'src/test/factories/Category'
 import { describe, it, vi } from 'vitest'
 
-import { HowtoFieldFiles } from '.'
+import { HowtoFieldFiles } from './HowtoFieldFiles'
+import { HowtoFormProvider } from './HowtoFormProvider'
+
+vi.mock('src/common/hooks/useCommonStores', () => {
+  return {
+    useCommonStores: () => ({
+      stores: {
+        howtoStore: {
+          uploadStatus: {
+            Start: false,
+            Cover: false,
+            'Step Images': false,
+            Files: false,
+            Database: false,
+            Complete: false,
+          },
+          validateTitleForSlug: vi.fn(),
+          uploadHowTo: vi.fn(),
+        },
+        tagsStore: {
+          allTags: [
+            {
+              label: 'test tag 1',
+              image: 'test img',
+            },
+          ],
+        },
+      },
+    }),
+  }
+})
 
 describe('HowtoFieldFiles', () => {
   it('renders with no guidance category provided', async () => {
@@ -17,9 +46,9 @@ describe('HowtoFieldFiles', () => {
     }
 
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoFieldFiles {...props} />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText(
@@ -37,9 +66,9 @@ describe('HowtoFieldFiles', () => {
     }
 
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoFieldFiles {...props} />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText(guidance.moulds.files)

@@ -119,9 +119,6 @@ RUN yarn install
 # These should be the ports specified in firebase.json
 EXPOSE 4001 4002 4003 4004 4005 4006 4007 4008
 
-# Used to tell the functions code we are in the emulator
-ENV IS_EMULATED=true
-
 CMD \
   yarn workspace functions watch & \
   # Do firebase emulators:start --help for details

@@ -25,13 +25,6 @@ import type { IResearch } from '../../models'
 import type { ICategory } from '../../models/categories.model'
 import type { ResearchSortOption } from './ResearchSortOptions'
 
-export enum ResearchSearchParams {
-  category = 'category',
-  q = 'q',
-  sort = 'sort',
-  status = 'status',
-}
-
 const search = async (
   words: string[],
   category: string,

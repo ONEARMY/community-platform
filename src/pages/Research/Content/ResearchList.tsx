@@ -164,7 +164,7 @@ const ResearchList = observer(() => {
         </ul>
       ) : (
         <>
-          {!!researchItems?.length && (
+          {researchItems && researchItems.length !== 0 && (
             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {researchItems.map((item) => (
                 <ResearchListItem key={item._id} item={item} />
@@ -177,7 +177,8 @@ const ResearchList = observer(() => {
           )}
 
           {!isFetching &&
-            !!researchItems?.length &&
+            researchItems &&
+            researchItems.length > 0 &&
             researchItems.length < total && (
               <Flex
                 sx={{

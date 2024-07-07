@@ -171,9 +171,11 @@ const ResearchList = observer(() => {
               ))}
             </ul>
           )}
+
           {!isFetching && researchItems?.length === 0 && (
             <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
           )}
+
           {!isFetching &&
             !!researchItems?.length &&
             researchItems.length < total && (

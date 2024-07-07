@@ -9,9 +9,6 @@ vi.mock('src/common/hooks/useCommonStores', () => {
   return {
     useCommonStores: () => ({
       stores: {
-        categoriesStore: {
-          allCategories: [],
-        },
         howtoStore: {
           uploadStatus: {
             Start: false,

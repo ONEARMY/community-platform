@@ -2,13 +2,13 @@ import { createRef, useEffect, useState } from 'react'
 import { format, formatDistanceToNow } from 'date-fns'
 import { Avatar, Box, Flex, Text } from 'theme-ui'
 
+import defaultProfileImage from '../../assets/images/default_member.svg'
 import { Button } from '../Button/Button'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 import { EditComment } from '../EditComment/EditComment'
 import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
 import { Username } from '../Username/Username'
-import defaultProfileImage from '../../assets/images/default_member.svg'
 
 import type { IComment } from './types'
 

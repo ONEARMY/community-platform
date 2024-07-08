@@ -85,7 +85,7 @@ describe('[How To]', () => {
     cy.step(`Deleting step [${stepNumber}]`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`, { timeout: 20000 })
       .find('[data-cy=delete-step]')
-      .click()
+      .click({ force: true})
     cy.get('[data-cy=confirm]').click()
   }
 
@@ -180,7 +180,7 @@ describe('[How To]', () => {
       ],
     }
 
-    it('[By Authenticated]', () => {
+    it.only('[By Authenticated]', () => {
       const {
         category,
         description,

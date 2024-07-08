@@ -180,7 +180,7 @@ describe('[How To]', () => {
       ],
     }
 
-    it.only('[By Authenticated]', () => {
+    it('[By Authenticated]', () => {
       const {
         category,
         description,

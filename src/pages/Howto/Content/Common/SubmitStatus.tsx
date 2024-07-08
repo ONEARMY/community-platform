@@ -22,7 +22,11 @@ const HowToSubmitStatus = observer((props: IProps) => {
         <Heading as="p" variant="small" sx={{ textAlign: 'center' }}>
           {headings.uploading}
         </Heading>
-        <Icon glyph="close" onClick={() => props.onClose()} />
+        <Icon
+          data-cy="close-upload-status"
+          glyph="close"
+          onClick={() => props.onClose()}
+        />
       </Flex>
       <Box margin="15px 0" p={0}>
         {Object.keys(uploadStatus).map((key) => (

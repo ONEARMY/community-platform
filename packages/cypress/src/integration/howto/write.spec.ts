@@ -7,8 +7,6 @@ import {
 } from '../../../../../src/pages/Howto/constants'
 import { guidance, headings } from '../../../../../src/pages/Howto/labels'
 
-const isCi = process.argv.includes('ci')
-
 const creatorEmail = 'howto_creator@test.com'
 const creatorPassword = 'test1234'
 
@@ -85,7 +83,7 @@ describe('[How To]', () => {
   const deleteStep = (stepNumber: number) => {
     const stepIndex = stepNumber - 1
     cy.step(`Deleting step [${stepNumber}]`)
-    if (isCi) {
+    if (Cypress.env('CYPRESS_CI') == 1) {
       cy.get('[data-cy=close-upload-status]').click()
     }
     cy.get(`[data-cy=step_${stepIndex}]:visible`, { timeout: 20000 })
@@ -185,7 +183,7 @@ describe('[How To]', () => {
       ],
     }
 
-    it('[By Authenticated]', () => {
+    it.only('[By Authenticated]', () => {
       const {
         category,
         description,

@@ -147,7 +147,7 @@ function runTests() {
   const CI_BROWSER = e.CI_BROWSER || 'chrome'
   const CI_GROUP = e.CI_GROUP || '1x-chrome'
   // not currently used, but can pass variables accessed by Cypress.env()
-  const CYPRESS_ENV = `DUMMY_VAR=1`
+  const CYPRESS_ENV = isCi ? `CYPRESS_CI=1` : `CYPRESS_CI=0`
   // use workflow ID so that jobs running in parallel can be assigned to same cypress build
   // cypress will use this to split tests between parallel runs
   const buildId = e.CIRCLE_WORKFLOW_ID || generateAlphaNumeric(8)

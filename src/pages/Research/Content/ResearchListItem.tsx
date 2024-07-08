@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
-import styled from '@emotion/styled'
 import {
   Category,
   Icon,
   IconCountWithTooltip,
+  InternalLink,
   ModerationStatus,
   Username,
 } from 'oa-components'
@@ -28,24 +27,6 @@ interface IProps {
   item: IResearch.Item
 }
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  &:focus {
-    outline: none;
-    text-decoration: none;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-  }
-`
-
 const ResearchListItem = ({ item }: IProps) => {
   const { aggregationsStore } = useCommonStores().stores
   const collaborators = item['collaborators'] || []
@@ -63,9 +44,9 @@ const ResearchListItem = ({ item }: IProps) => {
 
   return (
     <Card
+      as={'li'}
       data-cy="ResearchListItem"
       data-id={item._id}
-      as={'li'}
       mb={3}
       style={{ position: 'relative' }}
     >
@@ -119,12 +100,28 @@ const ResearchListItem = ({ item }: IProps) => {
                     fontSize: [3, 3, 4],
                   }}
                 >
-                  <StyledLink
+                  <InternalLink
                     to={`/research/${encodeURIComponent(item.slug)}`}
                     key={item._id}
+                    sx={{
+                      textDecoration: 'none',
+                      color: 'inherit',
+                      '&:focus': {
+                        outline: 'none',
+                        textDecoration: 'none',
+                      },
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                      },
+                    }}
                   >
                     {item.title}
-                  </StyledLink>
+                  </InternalLink>
                 </Heading>
                 {item.researchCategory && (
                   <Category

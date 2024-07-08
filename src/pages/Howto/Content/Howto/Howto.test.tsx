@@ -51,16 +51,12 @@ import { IModerationStatus } from 'oa-shared'
 import { Howto } from './Howto'
 
 const factory = (howtoStore?: Partial<HowtoStore>) => {
-  let router
-
-  act(() => {
-    router = createMemoryRouter(
-      createRoutesFromElements(
-        <Route path="/howto/:slug" key={1} element={<Howto />} />,
-      ),
-      { initialEntries: ['/howto/article'] },
-    )
-  })
+  const router = createMemoryRouter(
+    createRoutesFromElements(
+      <Route path="/howto/:slug" key={1} element={<Howto />} />,
+    ),
+    { initialEntries: ['/howto/article'] },
+  )
 
   return render(
     <Provider howtoStore={howtoStore}>

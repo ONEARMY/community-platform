@@ -28,24 +28,12 @@ interface IProps {
   item: IResearch.Item
 }
 
-const StyledCard = styled(Card)`
-  &:hover,
-  &:focus-within {
-    box-shadow: 0 0 0 0.0625rem;
-  }
-
-  h2 a {
-    &:focus {
-      text-decoration: none;
-    }
-  }
-`
-
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
   &:focus {
     outline: none;
+    text-decoration: none;
   }
 
   &::after {
@@ -74,7 +62,7 @@ const ResearchListItem = ({ item }: IProps) => {
   const modifiedDate = useMemo(() => getItemDate(item, 'long'), [item])
 
   return (
-    <StyledCard
+    <Card
       data-cy="ResearchListItem"
       data-id={item._id}
       as={'li'}
@@ -82,7 +70,13 @@ const ResearchListItem = ({ item }: IProps) => {
       style={{ position: 'relative' }}
     >
       <Flex sx={{ width: '100%', position: 'relative' }}>
-        <Grid px={3} py={3} columns={[1, '60px 2fr 1fr']} gap="40px">
+        <Grid
+          px={3}
+          py={3}
+          columns={[1, '60px 2fr 1fr']}
+          gap="40px"
+          style={{ width: '100%' }}
+        >
           <Box
             sx={{
               display: ['none', 'block'],
@@ -288,7 +282,7 @@ const ResearchListItem = ({ item }: IProps) => {
           />
         )}
       </Flex>
-    </StyledCard>
+    </Card>
   )
 }
 

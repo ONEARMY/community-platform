@@ -51,14 +51,16 @@ import { IModerationStatus } from 'oa-shared'
 import { Howto } from './Howto'
 
 const factory = (howtoStore?: Partial<HowtoStore>) => {
-  const router = createMemoryRouter(
-    createRoutesFromElements(
-      <Route path="/howto/:slug" key={1} element={<Howto />} />,
-    ),
-    {
-      initialEntries: ['/howto/article'],
-    },
-  )
+  let router
+
+  act(() => {
+    router = createMemoryRouter(
+      createRoutesFromElements(
+        <Route path="/howto/:slug" key={1} element={<Howto />} />,
+      ),
+      { initialEntries: ['/howto/article'] },
+    )
+  })
 
   return render(
     <Provider howtoStore={howtoStore}>
@@ -85,11 +87,12 @@ describe('Howto', () => {
       })
     })
 
-    it('hides feedback when how-to is accepted', () => {
+    it('hides feedback when how-to is accepted', async () => {
       let wrapper
-      act(() => {
-        howto.moderation = IModerationStatus.ACCEPTED
-        howto.moderatorFeedback = 'Moderation comments'
+      howto.moderation = IModerationStatus.ACCEPTED
+      howto.moderatorFeedback = 'Moderation comments'
+
+      await act(async () => {
         wrapper = factory()
       })
 
@@ -135,7 +138,7 @@ describe('Howto', () => {
     let wrapper
     howto._createdBy = 'NotHowtoAuthor'
 
-    act(() => {
+    await act(async () => {
       wrapper = factory()
     })
 

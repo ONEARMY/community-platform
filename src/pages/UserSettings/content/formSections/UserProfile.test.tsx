@@ -167,7 +167,7 @@ describe('UserSettings', () => {
       })
     })
 
-    it('does not show moderation comments for approved pin', () => {
+    it('does not show moderation comments for approved pin', async () => {
       mockUser = FactoryUser({ profileType: 'workspace' })
       mockGetPin.mockResolvedValue(
         FactoryMapPin({
@@ -177,7 +177,7 @@ describe('UserSettings', () => {
       )
       // Act
       let wrapper
-      act(() => {
+      await act(async () => {
         wrapper = Wrapper(mockUser)
       })
 

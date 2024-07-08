@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 
-import { act } from 'react-dom/test-utils'
+import { act } from 'react'
 import { fireEvent, waitFor } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 

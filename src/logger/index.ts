@@ -19,7 +19,8 @@ const type = 'pretty'
 
 export const logger = new Logger({
   type,
-  minLevel: levelNumberToNameMap[logLevel],
+  minLevel:
+    process.env.NODE_ENV === 'test' ? 999 : levelNumberToNameMap[logLevel],
   hideLogPositionForProduction: true,
 })
 

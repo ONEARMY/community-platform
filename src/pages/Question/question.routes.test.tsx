@@ -142,6 +142,10 @@ describe('question.routes', () => {
         wrapper = renderFn('/questions')
       })
       expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+
+      await waitFor(() => {
+        expect(() => wrapper.getByText(/loading/)).toThrow()
+      })
     })
 
     it('renders an empty state', async () => {
@@ -404,7 +408,9 @@ describe('question.routes', () => {
       await userEvent.clear(description)
       await userEvent.type(description, 'Question description')
 
-      submitButton.click()
+      act(() => {
+        submitButton.click()
+      })
 
       expect(mockUpsertQuestion).toHaveBeenCalledWith(
         expect.objectContaining({

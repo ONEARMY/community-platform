@@ -120,7 +120,9 @@ export class QuestionStore extends ModuleStore {
       images,
       moderation,
     })
-    logger.info(`upsertQuestion.set`, { dbRef })
+    if (process.env.NODE_ENV !== 'test') {
+      logger.info(`upsertQuestion.set`, { dbRef })
+    }
 
     return dbRef.get() || null
   }

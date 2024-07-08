@@ -370,7 +370,7 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = []
 
       let wrapper
-      act(() => {
+      await act(() => {
         wrapper = renderFn('/research/an-example/new-update')
       })
 
@@ -383,7 +383,7 @@ describe('research.routes', () => {
 
     it('accepts a logged in user with required role', async () => {
       let wrapper
-      act(() => {
+      await act(() => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
         wrapper = renderFn('/research/an-example/new-update')
       })

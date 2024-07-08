@@ -4,14 +4,12 @@ import {
   DonationRequestModal,
   DownloadButton,
   DownloadCounter,
-  DownloadFileFromLink,
   DownloadStaticFile,
 } from 'oa-components'
 
 import { useCommonStores } from './hooks/useCommonStores'
 import { AuthWrapper } from './AuthWrapper'
 
-import type { UserRole } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
 export interface IProps {
@@ -28,7 +26,7 @@ export interface IProps {
   can/should move to the component library.
 */
 export const DownloadWithDonationAsk = (props: IProps) => {
-  const { handleClick, isLoggedIn, fileDownloadCount, fileLink, files } = props
+  const { handleClick, fileDownloadCount, fileLink, files } = props
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [link, setLink] = useState<string>('')
   const navigate = useNavigate()
@@ -58,31 +56,11 @@ export const DownloadWithDonationAsk = (props: IProps) => {
       />
 
       <AuthWrapper
-        roleRequired={'beta-tester' as UserRole}
         fallback={
-          <>
-            {!isLoggedIn && (
-              <DownloadButton
-                onClick={async () => navigate('/sign-in')}
-                isLoggedIn={false}
-              />
-            )}
-
-            {isLoggedIn && fileLink && (
-              <DownloadFileFromLink handleClick={handleClick} link={fileLink} />
-            )}
-            {isLoggedIn &&
-              filteredFiles &&
-              filteredFiles.map((file, index) => (
-                <DownloadStaticFile
-                  allowDownload
-                  file={file}
-                  key={file ? file.name : `file-${index}`}
-                  handleClick={handleClick}
-                  isLoggedIn
-                />
-              ))}
-          </>
+          <DownloadButton
+            onClick={async () => navigate('/sign-in')}
+            isLoggedIn={false}
+          />
         }
       >
         <>

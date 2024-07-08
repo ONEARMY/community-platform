@@ -1,13 +1,10 @@
 import { AggregationsStore } from './Aggregations/aggregations.store'
-import { CategoriesStore } from './Categories/categories.store'
 import { DatabaseV2 } from './databaseV2/DatabaseV2'
 import { DiscussionStore } from './Discussions/discussions.store'
 import { HowtoStore } from './Howto/howto.store'
 import { MapsStore } from './Maps/maps.store'
 import { QuestionStore } from './Question/question.store'
-import { QuestionCategoriesStore } from './QuestionCategories/questionCategories.store'
 import { ResearchStore } from './Research/research.store'
-import { ResearchCategoriesStore } from './ResearchCategories/researchCategories.store'
 import { TagsStore } from './Tags/tags.store'
 import { ThemeStore } from './Theme/theme.store'
 import { UserNotificationsStore } from './User/notifications.store'
@@ -22,15 +19,12 @@ export interface IStores {
   howtoStore: HowtoStore
   userStore: UserStore
   tagsStore: TagsStore
-  categoriesStore: CategoriesStore
-  researchCategoriesStore: ResearchCategoriesStore
   researchStore: ResearchStore
   mapsStore: MapsStore
   themeStore: ThemeStore
   aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore
   questionStore: QuestionStore
-  questionCategoriesStore: QuestionCategoriesStore
   discussionStore: DiscussionStore
 }
 
@@ -54,14 +48,11 @@ const stores = (rootStore: IRootStore) => {
     howtoStore: new HowtoStore(rootStore),
     userStore: new UserStore(rootStore),
     tagsStore: new TagsStore(rootStore),
-    categoriesStore: new CategoriesStore(rootStore),
-    researchCategoriesStore: new ResearchCategoriesStore(rootStore),
     researchStore: new ResearchStore(rootStore),
     mapsStore: new MapsStore(rootStore),
     themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
     questionStore: new QuestionStore(rootStore),
-    questionCategoriesStore: new QuestionCategoriesStore(rootStore),
     discussionStore: new DiscussionStore(rootStore),
   }
   return stores

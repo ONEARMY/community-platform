@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react'
-import { ResearchProvider } from 'src/test/components'
 import { describe, expect, it } from 'vitest'
 
-import { ResearchErrors } from '.'
+import { ResearchErrors } from './ResearchErrors'
 
 describe('ResearchErrors', () => {
   it('renders component when visible and has intro errors', async () => {
@@ -17,11 +16,7 @@ describe('ResearchErrors', () => {
       },
     }
 
-    render(
-      <ResearchProvider>
-        <ResearchErrors isVisible={true} errors={errors} labels={labels} />
-      </ResearchProvider>,
-    )
+    render(<ResearchErrors isVisible={true} errors={errors} labels={labels} />)
 
     await screen.findByText(descriptionError, { exact: false })
     await screen.findByText(descriptionTitle, { exact: false })
@@ -32,9 +27,7 @@ describe('ResearchErrors', () => {
     const labels = {}
 
     const { container } = render(
-      <ResearchProvider>
-        <ResearchErrors isVisible={false} errors={errors} labels={labels} />
-      </ResearchProvider>,
+      <ResearchErrors isVisible={false} errors={errors} labels={labels} />,
     )
 
     expect(container.innerHTML).toBe('')

@@ -15,7 +15,6 @@ import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { usePrompt } from 'src/common/hooks/usePrompt'
 import { researchStatusOptions } from 'src/models/research.models'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import {
   ResearchErrors,
   ResearchPostingGuidelines,
@@ -41,6 +40,7 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
+import ResearchFieldCategory from './ResearchCategorySelect'
 
 import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
@@ -294,21 +294,7 @@ const ResearchForm = observer((props: IProps) => {
                               <ResearchFormLabel>
                                 {categories.title}
                               </ResearchFormLabel>
-                              <Field
-                                name="researchCategory"
-                                render={({ input, ...rest }) => (
-                                  <CategoriesSelect
-                                    {...rest}
-                                    isForm={true}
-                                    onChange={(category) =>
-                                      input.onChange(category)
-                                    }
-                                    value={input.value}
-                                    placeholder={categories.placeholder}
-                                    type="research"
-                                  />
-                                )}
-                              />
+                              <ResearchFieldCategory />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel>

@@ -9,13 +9,13 @@ import { Flex, Text } from 'theme-ui'
 
 import { buttons, headings, intro } from '../../labels'
 
-import type { ICategory } from 'src/models/categories.model'
-import type { IHowtoFormInput } from 'src/models/howto.models'
+// import type { ICategory } from 'src/models/categories.model'
+// import type { IHowtoFormInput } from 'src/models/howto.models'
 
 interface IProps {
-  category: ICategory | undefined
+  category: any | undefined
   fileEditMode: boolean | undefined
-  files: IHowtoFormInput['files']
+  files: any['files']
   onClick: () => void
   showInvalidFileWarning: boolean
 }

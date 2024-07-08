@@ -10,8 +10,8 @@ import {
   where,
 } from 'firebase/firestore'
 import { IModerationStatus } from 'oa-shared'
+import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 
-import { DB_ENDPOINTS } from '../../models'
 import { firestore } from '../../utils/firebase'
 
 import type {
@@ -24,13 +24,6 @@ import type { ResearchStatus } from 'oa-shared'
 import type { IResearch } from '../../models'
 import type { ICategory } from '../../models/categories.model'
 import type { ResearchSortOption } from './ResearchSortOptions'
-
-export enum ResearchSearchParams {
-  category = 'category',
-  q = 'q',
-  sort = 'sort',
-  status = 'status',
-}
 
 const search = async (
   words: string[],

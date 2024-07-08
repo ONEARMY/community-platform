@@ -79,6 +79,11 @@ export const baseTheme = {
       fontSize: 1,
       padding: 2,
     },
+    select: {
+      ...commonStyles.input,
+      border: `2px solid ${commonStyles.colors.black}`,
+      padding: 3,
+    },
   },
   maxContainerWidth: 1280,
   sizes: {

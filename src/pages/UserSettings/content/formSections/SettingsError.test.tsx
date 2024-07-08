@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { SettingsErrors } from 'src/pages/UserSettings/content/formSections/SettingsErrors'
-import { SettingsProvider } from 'src/test/components'
+import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
 import { describe, expect, it } from 'vitest'
 
 describe('SettingsErrors', () => {
@@ -12,9 +12,9 @@ describe('SettingsErrors', () => {
     }
 
     render(
-      <SettingsProvider>
+      <SettingsFormProvider>
         <SettingsErrors isVisible={true} errors={errors} />
-      </SettingsProvider>,
+      </SettingsFormProvider>,
     )
 
     await screen.findByText(error, { exact: false })
@@ -31,9 +31,9 @@ describe('SettingsErrors', () => {
     }
 
     render(
-      <SettingsProvider>
+      <SettingsFormProvider>
         <SettingsErrors isVisible={true} errors={errors} />
-      </SettingsProvider>,
+      </SettingsFormProvider>,
     )
 
     await screen.findByText('Make sure this field is filled correctly', {
@@ -47,9 +47,9 @@ describe('SettingsErrors', () => {
     }
 
     const { container } = render(
-      <SettingsProvider>
+      <SettingsFormProvider>
         <SettingsErrors isVisible={false} errors={errors} />
-      </SettingsProvider>,
+      </SettingsFormProvider>,
     )
 
     expect(container.innerHTML).toBe('')

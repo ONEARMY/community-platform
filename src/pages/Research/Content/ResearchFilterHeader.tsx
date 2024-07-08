@@ -8,8 +8,9 @@ import { Flex, Input } from 'theme-ui'
 
 import { CategoriesSelectV2 } from '../../common/Category/CategoriesSelectV2'
 import { listing } from '../labels'
-import { ResearchSearchParams, researchService } from '../research.service'
+import { researchService } from '../research.service'
 import { ResearchSortOptions } from '../ResearchSortOptions'
+import { ResearchSearchParams } from './ResearchSearchParams'
 
 import type { SelectValue } from '../../common/Category/CategoriesSelectV2'
 import type { ResearchSortOption } from '../ResearchSortOptions'

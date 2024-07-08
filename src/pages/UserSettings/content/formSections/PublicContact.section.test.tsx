@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/vitest'
 
 import { render, screen } from '@testing-library/react'
 import { PublicContactSection } from 'src/pages/UserSettings/content/formSections/PublicContact.section'
-import { SettingsProvider } from 'src/test/components'
+import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
 import { describe, expect, it } from 'vitest'
 
 describe('PublicContact', () => {
@@ -10,9 +10,9 @@ describe('PublicContact', () => {
     const isContactableByPublic = false
 
     render(
-      <SettingsProvider>
+      <SettingsFormProvider>
         <PublicContactSection isContactableByPublic={isContactableByPublic} />
-      </SettingsProvider>,
+      </SettingsFormProvider>,
     )
 
     expect(screen.getByTestId('isContactableByPublic')).not.toBeChecked()
@@ -22,9 +22,9 @@ describe('PublicContact', () => {
     const isContactableByPublic = true
 
     render(
-      <SettingsProvider>
+      <SettingsFormProvider>
         <PublicContactSection isContactableByPublic={isContactableByPublic} />
-      </SettingsProvider>,
+      </SettingsFormProvider>,
     )
 
     expect(screen.getByTestId('isContactableByPublic')).toBeChecked()

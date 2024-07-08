@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
-import { HowtoProvider } from 'src/test/components'
 import { describe, it, vi } from 'vitest'
 
-import { HowtoFieldTitle } from '.'
+import { HowtoFieldTitle } from './HowtoFieldTitle'
+import { HowtoFormProvider } from './HowtoFormProvider'
 
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 import type { ParentType } from './Howto.form'
@@ -19,9 +19,9 @@ describe('HowtoFieldTitle', () => {
     }
 
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <HowtoFieldTitle {...props} />
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText('0 / 50')

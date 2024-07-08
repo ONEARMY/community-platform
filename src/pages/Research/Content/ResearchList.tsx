@@ -13,9 +13,10 @@ import { Box, Flex, Heading } from 'theme-ui'
 
 import { ITEMS_PER_PAGE, RESEARCH_EDITOR_ROLES } from '../constants'
 import { listing } from '../labels'
-import { ResearchSearchParams, researchService } from '../research.service'
+import { researchService } from '../research.service'
 import { ResearchFilterHeader } from './ResearchFilterHeader'
 import ResearchListItem from './ResearchListItem'
+import { ResearchSearchParams } from './ResearchSearchParams'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { ResearchStatus } from 'oa-shared'

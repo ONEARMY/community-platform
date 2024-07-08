@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs'
 import { logger } from 'src/logger'
 
-import type { DBClients, DBDoc } from './types'
+import type { DBClients } from './types'
+import type { DBDoc } from './types/dbDoc'
 
 interface DocMetaOptions {
   keep_modified_timestamp?: boolean

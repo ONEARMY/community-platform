@@ -1,29 +1,24 @@
-import { handleResearchUpdatePublished } from './firebase-discord'
+import {
+  SimpleResearchArticle,
+  handleResearchUpdatePublished,
+} from './firebase-discord'
 
-describe('handleResearchUpdatePublished', () => {
+describe('handle research article update change', () => {
   it('should send message when there is new update', () => {
-    const change = {
-      before: {
-        data: () => {
-          return {
-            updates: [],
-          }
+    const webhookUrl = 'exmaple.com'
+    const previousContent: SimpleResearchArticle = {
+      slug: 'test',
+      updates: [],
+    }
+    const newContent: SimpleResearchArticle = {
+      slug: 'test',
+      updates: [
+        {
+          title: 'test',
+          collaborators: ['Bob'],
         },
-      },
-      after: {
-        data: () => {
-          return {
-            slug: 'test',
-            updates: [
-              {
-                title: 'test',
-                collaborators: ['bob'],
-              },
-            ],
-          }
-        },
-      },
-    } as any
+      ],
+    }
 
     let wasMockSendMessagedCalled = false
     const mockSendMessage = (_: string): Promise<any> => {
@@ -31,39 +26,35 @@ describe('handleResearchUpdatePublished', () => {
       return Promise.resolve()
     }
 
-    handleResearchUpdatePublished('example.com', change, mockSendMessage)
+    handleResearchUpdatePublished(
+      webhookUrl,
+      previousContent,
+      newContent,
+      mockSendMessage,
+    )
     expect(wasMockSendMessagedCalled).toEqual(true)
   })
 
   it('should not send message when there is no new update', () => {
-    const change = {
-      before: {
-        data: () => {
-          return {
-            slug: 'test',
-            updates: [
-              {
-                title: 'test',
-                collaborators: ['bob'],
-              },
-            ],
-          }
+    const webhookUrl = 'exmaple.com'
+    const previousContent: SimpleResearchArticle = {
+      slug: 'test',
+      updates: [
+        {
+          title: 'test',
+          collaborators: ['Bob'],
         },
-      },
-      after: {
-        data: () => {
-          return {
-            slug: 'test',
-            updates: [
-              {
-                title: 'test',
-                collaborators: ['bob'],
-              },
-            ],
-          }
+      ],
+    }
+    const newContent: SimpleResearchArticle = {
+      slug: 'test',
+      updates: [
+        {
+          title: 'test',
+          collaborators: ['Bob'],
         },
-      },
-    } as any
+      ],
+    }
 
     let wasMockSendMessagedCalled = false
     const mockSendMessage = (_: string): Promise<any> => {
@@ -71,7 +62,12 @@ describe('handleResearchUpdatePublished', () => {
       return Promise.resolve()
     }
 
-    handleResearchUpdatePublished('example.com', change, mockSendMessage)
+    handleResearchUpdatePublished(
+      webhookUrl,
+      previousContent,
+      newContent,
+      mockSendMessage,
+    )
     expect(wasMockSendMessagedCalled).toEqual(false)
   })
 })

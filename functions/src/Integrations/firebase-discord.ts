@@ -60,23 +60,32 @@ export const notifyResearchUpdatePublished = functions
   .onUpdate((change) =>
     handleResearchUpdatePublished(
       DISCORD_WEBHOOK_URL,
-      change,
+      change.before.data() as IResearchDB,
+      change.after.data() as IResearchDB,
       sendDiscordMessage,
     ),
   )
 
+export interface SimpleResearchArticle {
+  slug: string
+  updates: SimpleResearchArticleUpdate[]
+}
+
+interface SimpleResearchArticleUpdate {
+  title: string
+  collaborators?: string[]
+}
+
 export async function handleResearchUpdatePublished(
   webhookUrl: string,
-  change: functions.Change<functions.firestore.QueryDocumentSnapshot>,
+  previousContent: SimpleResearchArticle,
+  updatedContent: SimpleResearchArticle,
   sendMessage: (content: string) => Promise<AxiosResponse<any, any>>,
 ): Promise<void> {
   if (webhookUrl === '' || webhookUrl === undefined || webhookUrl === null) {
     console.log('No webhook URL configured')
     return
   }
-
-  const previousContent = change.before.data() as IResearchDB
-  const updatedContent = change.after.data() as IResearchDB
 
   if (previousContent.updates.length >= updatedContent.updates.length) {
     console.log('There is no new update')

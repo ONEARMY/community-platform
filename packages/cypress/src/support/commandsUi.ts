@@ -131,8 +131,8 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   cy.step('Update Info section')
-  cy.get('[data-cy=username').clear().type(info.username)
-  cy.get('[data-cy=info-description').clear().type(info.description)
+  cy.get('[data-cy=username]').clear().type(info.username)
+  cy.get('[data-cy=info-description]').clear().type(info.description)
   cy.get('[data-cy=coverImages-0]').find(':file').attachFile(info.coverImage)
 })
 
@@ -188,8 +188,8 @@ Cypress.Commands.add('setSettingMapPinMember', (mapPin: IMapPin) => {
 
 Cypress.Commands.add('setSettingPublicContact', () => {
   cy.step('Opts out of public contact')
-  cy.get('[data-cy=isContactableByPublic').should('be.checked')
-  cy.get('[data-cy=isContactableByPublic').click({ force: true })
+  cy.get('[data-cy=isContactableByPublic]').should('be.checked')
+  cy.get('[data-cy=isContactableByPublic]').click({ force: true })
 })
 
 Cypress.Commands.add(
@@ -248,7 +248,6 @@ Cypress.Commands.add(
       .click({ force: true })
       .type(tagName, { force: true })
       .get(`${selector} .data-cy__menu-list`)
-      .contains(tagName)
-      .click()
+      .type('enter')
   },
 )

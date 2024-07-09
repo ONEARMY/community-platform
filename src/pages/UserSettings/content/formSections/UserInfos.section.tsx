@@ -186,7 +186,7 @@ export const UserInfosSection = (props: IProps) => {
           />
         </Flex>
         <Box data-cy="UserInfos: links">
-          <Flex sx={{ alignItems: 'center', width: '100%', wrap: 'nowrap' }}>
+          <Flex>
             <Text mb={2} mt={7} sx={{ fontSize: 2 }}>
               {`${fields.links.title} *`}
             </Text>

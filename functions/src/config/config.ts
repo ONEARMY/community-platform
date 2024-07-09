@@ -8,7 +8,7 @@ let c = config() as configVars
 // If running emulated or without firebase login provide dummy data instead
 if (Object.keys(c).length === 0) {
   console.log('config is empty')
-  if (process.env.IS_EMULATED === 'true') {
+  if (process.env.GCLOUD_PROJECT === 'demo-community-platform-emulated') {
     console.log('using emulator config')
     c = {
       analytics: {},

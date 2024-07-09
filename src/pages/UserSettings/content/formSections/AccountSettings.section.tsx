@@ -12,7 +12,7 @@ export const AccountSettingsSection = observer(() => {
   const { description, title } = fields.deleteAccount
 
   return (
-    <Card sx={{ padding: 4, marginTop: 4 }}>
+    <Card sx={{ padding: 4 }}>
       <Flex
         sx={{
           justifyContent: 'space-between',

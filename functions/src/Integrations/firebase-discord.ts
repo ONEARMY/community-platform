@@ -57,51 +57,64 @@ export const notifyHowtoPublished = functions
 export const notifyResearchUpdatePublished = functions
   .runWith({ memory: '512MB' })
   .firestore.document('research_rev20201020/{id}')
-  .onUpdate(async (change) => {
-    if (
-      DISCORD_WEBHOOK_URL === '' ||
-      DISCORD_WEBHOOK_URL === undefined ||
-      DISCORD_WEBHOOK_URL === null
-    ) {
-      console.log('No webhook URL configured')
-      return
-    }
+  .onUpdate((change) =>
+    handleResearchUpdatePublished(
+      DISCORD_WEBHOOK_URL,
+      change,
+      sendDiscordMessage,
+    ),
+  )
 
-    const previousContent = change.before.data() as IResearchDB
-    const updatedContent = change.after.data() as IResearchDB
+export async function handleResearchUpdatePublished(
+  webhookUrl: string,
+  change: functions.Change<functions.firestore.QueryDocumentSnapshot>,
+  sendMessage: (content: string) => Promise<AxiosResponse<any, any>>,
+): Promise<void> {
+  if (webhookUrl === '' || webhookUrl === undefined || webhookUrl === null) {
+    console.log('No webhook URL configured')
+    return
+  }
 
-    if (previousContent.updates.length >= updatedContent.updates.length) {
-      console.log('There is no new update')
-      return
-    }
+  const previousContent = change.before.data() as IResearchDB
+  const updatedContent = change.after.data() as IResearchDB
 
-    const newUpdateIndex = updatedContent.updates.length - 1
-    const newUpdate = updatedContent.updates[newUpdateIndex]
+  if (previousContent.updates.length >= updatedContent.updates.length) {
+    console.log('There is no new update')
+    return
+  }
 
-    // On Research Updates, we actually expect the collaborators to be a single person
-    // but it is a list.
-    // source:
-    // https://github.com/ONEARMY/community-platform/issues/3533#issuecomment-2171799601
-    const collaborators = newUpdate.collaborators || []
-    const author = collaborators[0] || 'unknown'
+  const newUpdateIndex = updatedContent.updates.length - 1
+  const newUpdate = updatedContent.updates[newUpdateIndex]
 
-    const title = newUpdate.title
+  // On Research Updates, we actually expect the collaborators to be a single person
+  // but it is a list.
+  // source:
+  // https://github.com/ONEARMY/community-platform/issues/3533#issuecomment-2171799601
+  const collaborators = newUpdate.collaborators || []
+  const author = collaborators[0] || 'unknown'
 
-    // There is no way to "deep link" to an individual section
-    // so we link to the whole article
-    const slug = updatedContent.slug
+  const title = newUpdate.title
 
-    try {
-      const response = await axios.post(DISCORD_WEBHOOK_URL, {
-        content:
-          `📝 New update from ${author} in their research: ${title}\n` +
-          `Learn about it here: <${SITE_URL}/research/${slug}>`,
-      })
-      handleResponse(response)
-    } catch (error) {
-      handleErr(error)
-    }
+  // There is no way to "deep link" to an individual section
+  // so we link to the whole article.
+  const slug = updatedContent.slug
+
+  try {
+    const response = await sendMessage(
+      `📝 New update from ${author} in their research: ${title}\n` +
+        `Learn about it here: <${SITE_URL}/research/${slug}>`,
+    )
+    handleResponse(response)
+  } catch (error) {
+    handleErr(error)
+  }
+}
+
+function sendDiscordMessage(content: string) {
+  return axios.post(DISCORD_WEBHOOK_URL, {
+    content: content,
   })
+}
 
 export const notifyQuestionPublished = functions
   .runWith({ memory: '512MB' })

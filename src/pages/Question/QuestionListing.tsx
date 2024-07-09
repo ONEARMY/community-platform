@@ -124,11 +124,15 @@ export const QuestionListing = () => {
         </Heading>
       )}
 
-      {questions &&
-        questions.length > 0 &&
-        questions.map((question, index) => (
-          <QuestionListItem key={index} question={question} query={q} />
-        ))}
+      {questions && questions.length > 0 && (
+        <>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {questions.map((question, index) => (
+              <QuestionListItem key={index} question={question} query={q} />
+            ))}
+          </ul>
+        </>
+      )}
 
       {showLoadMore && (
         <Flex

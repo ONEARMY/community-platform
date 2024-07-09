@@ -41,12 +41,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
       mb={3}
       style={{ position: 'relative' }}
     >
-      <Flex
-        sx={{
-          flex: 1,
-          justifyContent: 'space-between',
-        }}
-      >
+      <Flex sx={{ flex: 1 }}>
         <Flex
           sx={{
             flexDirection: 'column',
@@ -115,9 +110,8 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             display: ['none', 'flex', 'flex'],
             justifyContent: 'flex-end',
             alignItems: 'center',
-            flex: 1,
-            gap: 12,
-            paddingX: 12,
+            gap: [3, 6, 12],
+            paddingX: [3, 6, 12],
           }}
         >
           <Box>

@@ -15,7 +15,7 @@ import {
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
-import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
+import { Box, Card, Flex, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 import { researchStatusColour } from '../researchHelpers'
@@ -50,54 +50,57 @@ const ResearchListItem = ({ item }: IProps) => {
       mb={3}
       style={{ position: 'relative' }}
     >
-      <Flex sx={{ width: '100%', position: 'relative' }}>
-        <Grid
-          px={3}
-          py={3}
-          columns={[1, '60px 2fr 1fr']}
-          gap="40px"
-          style={{ width: '100%' }}
-        >
+      <Flex sx={{ flex: 1 }}>
+        <Flex>
           <Box
             sx={{
               display: ['none', 'block'],
+              height: '100%',
+              width: '125px',
             }}
           >
             <Image
               style={{
-                width: `calc(100% + 32px)`,
+                width: '100%',
                 aspectRatio: '1 / 1',
                 objectFit: 'cover',
-                margin: '-15px',
                 verticalAlign: 'top',
-                maxWidth: 'none',
               }}
               loading="lazy"
-              src={cdnImageUrl(getItemThumbnail(item), {
-                width: 125,
-              })}
+              src={cdnImageUrl(getItemThumbnail(item), { width: 125 })}
               crossOrigin=""
             />
           </Box>
+        </Flex>
+        <Flex sx={{ flex: 1 }}>
           <Flex
             sx={{
+              flex: 1,
               flexDirection: 'column',
-              alignItems: 'flex-start',
+              gap: 1,
+              padding: 3,
             }}
           >
             <Flex
               sx={{
                 justifyContent: 'space-between',
                 width: '100%',
-                mb: [1, 0],
+                alignItems: 'baseline',
               }}
             >
-              <Flex sx={{ flexDirection: ['column', 'row'], gap: [0, 3] }}>
+              <Flex
+                sx={{
+                  flexDirection: ['column', 'row'],
+                  gap: [1, 3],
+                  alignItems: 'baseline',
+                }}
+              >
                 <Heading
                   color={'black'}
                   mb={1}
                   sx={{
                     fontSize: [3, 3, 4],
+                    margin: 0,
                   }}
                 >
                   <InternalLink
@@ -151,66 +154,76 @@ const ResearchListItem = ({ item }: IProps) => {
             </Flex>
             <Flex
               sx={{
-                width: '100%',
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}
             >
-              <Flex sx={{ alignItems: 'center' }}>
-                <Username
-                  user={{
-                    userName: item._createdBy,
-                    countryCode: item.creatorCountry,
-                    isVerified,
-                  }}
-                  sx={{ position: 'relative' }}
-                />
-                {Boolean(collaborators.length) && (
-                  <Text
-                    ml={4}
-                    sx={{
-                      display: ['none', 'block'],
-                      fontSize: 1,
-                      color: 'darkGrey',
-                      transform: 'translateY(2px)',
+              <Flex
+                sx={{
+                  alignItems: 'center',
+                  gap: 1,
+                  flexWrap: 'wrap',
+                }}
+              >
+                <Box sx={{ minWidth: 'min-content' }}>
+                  <Username
+                    user={{
+                      userName: item._createdBy,
+                      countryCode: item.creatorCountry,
+                      isVerified,
                     }}
-                  >
-                    {collaborators.length +
-                      (collaborators.length === 1
-                        ? ' contributor'
-                        : ' contributors')}
-                  </Text>
+                    sx={{ position: 'relative' }}
+                  />
+                </Box>
+                {Boolean(collaborators.length) && (
+                  <Box sx={{ minWidth: 'min-content' }}>
+                    <Text
+                      sx={{
+                        color: 'darkGrey',
+                        display: ['none', 'block'],
+                        fontSize: 1,
+                        transform: 'translateY(2px)',
+                      }}
+                    >
+                      {collaborators.length +
+                        (collaborators.length === 1
+                          ? ' contributor'
+                          : ' contributors')}
+                    </Text>
+                  </Box>
                 )}
                 {/* Hide this on mobile, show on tablet & above. */}
                 {modifiedDate && (
+                  <Box sx={{ minWidth: 'min-content' }}>
+                    <Text
+                      sx={{
+                        color: 'darkGrey',
+                        display: ['none', 'block'],
+                        fontSize: 1,
+                        transform: 'translateY(2px)',
+                      }}
+                    >
+                      {modifiedDate}
+                    </Text>
+                  </Box>
+                )}
+                <Box sx={{ minWidth: 'min-content' }}>
                   <Text
-                    ml={4}
                     sx={{
-                      display: ['none', 'block'],
+                      background: researchStatusColour(status),
+                      borderBottomRightRadius: 1,
+                      borderRadius: 1,
+                      color: 'black',
+                      display: ['none', 'inline-block', 'inline-block'],
                       fontSize: 1,
-                      color: 'darkGrey',
-                      transform: 'translateY(2px)',
+                      padding: 1,
+                      verticalAlign: 'middle',
+                      whiteSpace: 'nowrap',
                     }}
                   >
-                    {modifiedDate}
+                    {status}
                   </Text>
-                )}
-                <Text
-                  sx={{
-                    display: ['none', 'inline-block', 'inline-block'],
-                    verticalAlign: 'middle',
-                    color: 'black',
-                    fontSize: 1,
-                    background: researchStatusColour(status),
-                    padding: 1,
-                    borderRadius: 1,
-                    borderBottomRightRadius: 1,
-                    marginLeft: 4,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {status}
-                </Text>
+                </Box>
               </Flex>
               {/* Show these on mobile, hide on tablet & above. */}
               <Box
@@ -241,32 +254,40 @@ const ResearchListItem = ({ item }: IProps) => {
             </Flex>
           </Flex>
           {/* Hide these on mobile, show on tablet & above. */}
-          <Box
+
+          <Flex
             sx={{
               display: ['none', 'flex', 'flex'],
+              justifyContent: 'flex-end',
               alignItems: 'center',
-              justifyContent: 'space-around',
+              gap: [3, 6, 12],
+              paddingX: [3, 6, 12],
             }}
           >
-            <IconCountWithTooltip
-              count={usefulDisplayCount}
-              icon="star-active"
-              text="How useful is it"
-            />
-            <IconCountWithTooltip
-              count={item.totalCommentCount || 0}
-              icon="comment"
-              text="Total comments"
-            />
-
-            <IconCountWithTooltip
-              count={getUpdateCount(item)}
-              dataCy="ItemUpdateText"
-              icon="update"
-              text="Amount of updates"
-            />
-          </Box>
-        </Grid>
+            <Box>
+              <IconCountWithTooltip
+                count={usefulDisplayCount}
+                icon="star-active"
+                text="How useful is it"
+              />
+            </Box>
+            <Box>
+              <IconCountWithTooltip
+                count={item.totalCommentCount || 0}
+                icon="comment"
+                text="Total comments"
+              />
+            </Box>
+            <Box>
+              <IconCountWithTooltip
+                count={getUpdateCount(item)}
+                dataCy="ItemUpdateText"
+                icon="update"
+                text="Amount of updates"
+              />
+            </Box>
+          </Flex>
+        </Flex>
         {item.moderation !== IModerationStatus.ACCEPTED && (
           <ModerationStatus
             status={item.moderation}

@@ -90,7 +90,7 @@ describe('[How To]', () => {
       Sometimes clicking on delete-step is being display the
       Uploading How To modal when it happens cypress will close it
       with the code below
-    */ 
+    */
     cy.get('body').then(($body) => {
       if ($body.text().includes('Uploading How To')) {
         cy.get('[data-cy=close-upload-status]').click()

@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import {
-  Button,
-  CelebrationHero,
-  FieldInput,
-  TextNotification,
-} from 'oa-components'
+import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components'
 import { getFriendlyMessage } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -123,7 +118,7 @@ const SignInPage = observer((props: IProps) => {
                 mb={3}
               >
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                  <CelebrationHero />
+                  <HeroBanner type="celebration" />
                   <Card bg={'softblue'}>
                     <Flex px={3} py={2}>
                       <Heading>Welcome back</Heading>

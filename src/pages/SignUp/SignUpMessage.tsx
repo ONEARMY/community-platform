@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Button, CelebrationHero } from 'oa-components'
+import { Button, HeroBanner } from 'oa-components'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 
 const SignUpMessagePage = () => (
@@ -13,9 +13,9 @@ const SignUpMessagePage = () => (
     mb={3}
   >
     <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-      <CelebrationHero />
+      <HeroBanner type="email" />
       <Card sx={{ backgroundColor: 'softblue', px: 3, py: 2 }}>
-        <Heading>Sent</Heading>
+        <Heading>Yay! You signed up!</Heading>
       </Card>
       <Card mt={3}>
         <Flex
@@ -25,12 +25,12 @@ const SignUpMessagePage = () => (
           sx={{ flexWrap: 'wrap', width: '100%', flexDirection: 'column' }}
         >
           <Heading variant="small" py={4} sx={{ width: '100%' }}>
-            Sign up successful
+            ...Now please verify your account
           </Heading>
           <Flex sx={{ flexDirection: 'column' }} mb={3}>
             <Text>
-              We'll send you an email very soon to verify your email address. In
-              the meantime, please...
+              We've sent you an email. Please find a confirmation link in your
+              mailbox.
             </Text>
           </Flex>
         </Flex>

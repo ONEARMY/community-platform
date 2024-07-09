@@ -248,6 +248,7 @@ Cypress.Commands.add(
       .click({ force: true })
       .type(tagName, { force: true })
       .get(`${selector} .data-cy__menu-list`)
-      .type('{enter}')
+      .contains(tagName)
+      .click()
   },
 )

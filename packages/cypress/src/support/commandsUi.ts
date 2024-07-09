@@ -113,7 +113,9 @@ Cypress.Commands.add(
 
     if (openingTime.index > 0) {
       cy.get('[data-cy=add-opening-time]').click()
-      cy.get(`[data-cy=opening-time-day-${openingTime.index - 1}]`).should('be.visible')
+      cy.get(`[data-cy=opening-time-day-${openingTime.index - 1}]`).should(
+        'be.visible',
+      )
     }
     selectOption(
       `[data-cy=opening-time-day-${openingTime.index}]`,

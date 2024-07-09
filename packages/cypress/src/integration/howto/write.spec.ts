@@ -85,7 +85,7 @@ describe('[How To]', () => {
     cy.step(`Deleting step [${stepNumber}]`)
     cy.get(`[data-cy=step_${stepIndex}]:visible`, { timeout: 20000 })
       .find('[data-cy=delete-step]')
-      .click({ force: true })
+      .click()
     cy.get('[data-cy=confirm]').click()
   }
 
@@ -255,7 +255,7 @@ describe('[How To]', () => {
       checkWhitespaceTrim('intro-title')
 
       cy.step('Fill up the intro')
-      cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
+      cy.get('[data-cy=intro-title]').clear().type(title).blur({ force: true })
       cy.selectTag('howto_testing')
 
       cy.step('Select a category and see further guidance')
@@ -290,7 +290,8 @@ describe('[How To]', () => {
 
       cy.step('Add extra step')
       cy.get('[data-cy=add-step]').click()
-
+      // wait to step 4 being displayed then click deleteStep
+      cy.get(`[data-cy=step_3]:visible`).should('be.visible')
       deleteStep(4)
       cy.screenClick()
 

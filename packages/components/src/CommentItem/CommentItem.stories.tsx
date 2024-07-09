@@ -15,6 +15,19 @@ const handleEdit = () => {
 }
 
 export const Default: StoryFn<typeof CommentItem> = () => {
+  const comment = fakeComment({ creatorImage: undefined })
+
+  return (
+    <CommentItem
+      comment={comment}
+      handleEdit={handleEdit}
+      isReply={false}
+      showAvatar
+    />
+  )
+}
+
+export const DefaultWithAvatar: StoryFn<typeof CommentItem> = () => {
   const comment = fakeComment({ creatorImage: faker.image.avatar() })
 
   return (

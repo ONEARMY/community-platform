@@ -120,6 +120,7 @@ export class QuestionStore extends ModuleStore {
       images,
       moderation,
     })
+
     logger.info(`upsertQuestion.set`, { dbRef })
 
     return dbRef.get() || null

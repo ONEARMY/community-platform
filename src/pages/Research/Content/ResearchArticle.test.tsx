@@ -105,7 +105,7 @@ describe('Research Article', () => {
     })
   })
 
-  it('does not display contributors when undefined', () => {
+  it('does not display contributors when undefined', async () => {
     // Arrange
     ;(useResearchStore as Mock).mockReturnValue({
       ...mockResearchStore,
@@ -116,7 +116,7 @@ describe('Research Article', () => {
 
     // Act
     let wrapper
-    act(() => {
+    await act(async () => {
       wrapper = getWrapper()
     })
 

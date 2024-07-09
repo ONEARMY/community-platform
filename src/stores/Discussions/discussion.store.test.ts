@@ -290,7 +290,7 @@ describe('discussion.store', () => {
       //Act
       expect(() =>
         store.editComment(discussionItem, 'fake-comment-id', 'Edited comment'),
-      ).rejects.toThrowError()
+      ).rejects.toThrowError('Comment not editable by user')
 
       // Assert
       expect(setFn).not.toHaveBeenCalled()
@@ -356,7 +356,7 @@ describe('discussion.store', () => {
       //Act
       expect(() =>
         store.deleteComment(discussionItem, 'fake-comment-id'),
-      ).rejects.toThrowError()
+      ).rejects.toThrowError('Comment not editable by user')
 
       // Assert
       expect(setFn).not.toHaveBeenCalled()

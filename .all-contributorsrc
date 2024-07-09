@@ -744,6 +744,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "kimskovhusandersen",
+      "name": "Kim Skovhus Andersen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5513342?v=4",
+      "profile": "https://github.com/kimskovhusandersen",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

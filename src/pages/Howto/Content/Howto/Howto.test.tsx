@@ -55,9 +55,7 @@ const factory = (howtoStore?: Partial<HowtoStore>) => {
     createRoutesFromElements(
       <Route path="/howto/:slug" key={1} element={<Howto />} />,
     ),
-    {
-      initialEntries: ['/howto/article'],
-    },
+    { initialEntries: ['/howto/article'] },
   )
 
   return render(
@@ -85,11 +83,12 @@ describe('Howto', () => {
       })
     })
 
-    it('hides feedback when how-to is accepted', () => {
+    it('hides feedback when how-to is accepted', async () => {
       let wrapper
-      act(() => {
-        howto.moderation = IModerationStatus.ACCEPTED
-        howto.moderatorFeedback = 'Moderation comments'
+      howto.moderation = IModerationStatus.ACCEPTED
+      howto.moderatorFeedback = 'Moderation comments'
+
+      await act(async () => {
         wrapper = factory()
       })
 
@@ -135,7 +134,7 @@ describe('Howto', () => {
     let wrapper
     howto._createdBy = 'NotHowtoAuthor'
 
-    act(() => {
+    await act(async () => {
       wrapper = factory()
     })
 

@@ -33,7 +33,7 @@ export const buttons = {
 
 export const fields: ILabels = {
   activities: {
-    description: 'Not sure about your focus?',
+    description: 'Choose your main activity. Not sure?',
     error: 'Please select a focus',
     title: 'What is your main activity?',
   },

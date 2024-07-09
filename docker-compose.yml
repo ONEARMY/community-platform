@@ -13,10 +13,7 @@ services:
     ports:
     - 4001-4008:4001-4008
     volumes:
-    - ./containerization/data:/seed
-    - ./containerization/logs:/app/logs
-    - ./functions:/app/functions
-    - ./functions/src/emailNotifications/templates:/templates
+    - ./:/app
 
   simulated-webhook-receiver:
     container_name: simulated-webhook-receiver

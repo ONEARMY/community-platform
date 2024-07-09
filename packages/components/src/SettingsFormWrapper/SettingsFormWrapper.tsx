@@ -7,14 +7,16 @@ import { Flex } from 'theme-ui'
 import { SettingsFormTab } from './SettingsFormTab'
 import { SettingsFormTabList } from './SettingsFormTabList'
 
+import type { ThemeUIStyleObject } from 'theme-ui'
 import type { ITab } from './SettingsFormTab'
 
 export interface IProps {
   tabs: ITab[]
+  sx?: ThemeUIStyleObject | undefined
 }
 
 export const SettingsFormWrapper = (props: IProps) => {
-  const { tabs } = props
+  const { sx, tabs } = props
   const [value, setValue] = useState<number>(0)
 
   const handleChange = (
@@ -25,27 +27,29 @@ export const SettingsFormWrapper = (props: IProps) => {
   }
 
   return (
-    <Tabs value={value} onChange={handleChange}>
-      <Flex
-        sx={{
-          gap: 3,
-          flexDirection: ['column', 'row'],
-        }}
-      >
-        <SettingsFormTabList tabs={tabs} value={value} setValue={setValue} />
-
+    <Flex sx={sx}>
+      <Tabs value={value} onChange={handleChange}>
         <Flex
           sx={{
-            alignContent: 'stretch',
-            flexDirection: 'column',
-            flex: 5,
+            gap: 3,
+            flexDirection: ['column', 'row'],
           }}
         >
-          {tabs.map((tab, index) => {
-            return <SettingsFormTab key={index} value={index} tab={tab} />
-          })}
+          <SettingsFormTabList tabs={tabs} value={value} setValue={setValue} />
+
+          <Flex
+            sx={{
+              alignContent: 'stretch',
+              flexDirection: 'column',
+              flex: 5,
+            }}
+          >
+            {tabs.map((tab, index) => {
+              return <SettingsFormTab key={index} value={index} tab={tab} />
+            })}
+          </Flex>
         </Flex>
-      </Flex>
-    </Tabs>
+      </Tabs>
+    </Flex>
   )
 }

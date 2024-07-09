@@ -83,12 +83,19 @@ describe('[How To]', () => {
   const deleteStep = (stepNumber: number) => {
     const stepIndex = stepNumber - 1
     cy.step(`Deleting step [${stepNumber}]`)
-    if (Cypress.env('CYPRESS_CI') == 1) {
-      cy.get('[data-cy=close-upload-status]').click()
-    }
     cy.get(`[data-cy=step_${stepIndex}]:visible`, { timeout: 20000 })
       .find('[data-cy=delete-step]')
       .click()
+    /*
+      Sometimes clicking on delete-step is being display the
+      Uploading How To modal when it happens cypress will close it
+      with the code below
+    */ 
+    cy.get('body').then(($body) => {
+      if ($body.text().includes('Uploading How To')) {
+        cy.get('[data-cy=close-upload-status]').click()
+      }
+    })
     cy.get('[data-cy=confirm]').click()
   }
 

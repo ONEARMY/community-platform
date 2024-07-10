@@ -50,10 +50,6 @@ const endsWithQuestionMark = () => (value) => {
 const composeValidators =
   (...validators) =>
   async (value) => {
-    // const reduced = await validators.reduce(async (error, validator) => {
-    //   const validatorResponse = await validator(value)
-    //   return validatorResponse ? (error += validatorResponse) + '. ' : error
-    // }, '')
     const allResponse = await Promise.all(
       validators.map((validator) => validator(value)),
     )

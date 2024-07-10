@@ -40,13 +40,30 @@ const minValue = (min: number) => (value) => {
     : undefined
 }
 
+const endsWithQuestionMark = () => (value) => {
+  const index = value.indexOf('?')
+  return index < 0 || index < value.length - 1
+    ? 'Needs to end with a question mark'
+    : undefined
+}
+
 const composeValidators =
   (...validators) =>
-  (value) =>
-    validators.reduce(
-      (error, validator) => error || validator(value),
-      undefined,
+  async (value) => {
+    // const reduced = await validators.reduce(async (error, validator) => {
+    //   const validatorResponse = await validator(value)
+    //   return validatorResponse ? (error += validatorResponse) + '. ' : error
+    // }, '')
+    const allResponse = await Promise.all(
+      validators.map((validator) => validator(value)),
     )
+
+    return allResponse.reduce(
+      (message, value) =>
+        typeof value === 'string' ? (message += value + '. ') : message,
+      '',
+    )
+  }
 
 const validateUrl = (value: any) => {
   if (value) {
@@ -137,4 +154,5 @@ export {
   composeValidators,
   validateTitle,
   noSpecialCharacters,
+  endsWithQuestionMark,
 }

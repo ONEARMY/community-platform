@@ -90,7 +90,7 @@ describe('noSpecialCharacters', () => {
   })
 })
 
-describe.only('endsWithQuestionMark', () => {
+describe('endsWithQuestionMark', () => {
   const errorMessage = 'Needs to end with a question mark'
   it('returns proper message when there are more than one question mark at the end', () => {
     const result = endsWithQuestionMark()
@@ -119,7 +119,7 @@ describe('composeValidators', () => {
       minValue(QUESTION_MIN_TITLE_LENGTH),
       endsWithQuestionMark(),
     )
-    const messages = await composedValidatorsFunc('this is my?')
+    const messages = await composedValidatorsFunc('this is')
     expect(messages).toContain('Needs to end with a question mark')
     expect(messages).toContain(
       `Should be more than ${QUESTION_MIN_TITLE_LENGTH} characters`,

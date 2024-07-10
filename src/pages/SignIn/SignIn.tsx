@@ -48,7 +48,6 @@ const SignInPage = observer((props: IProps) => {
   const navigate = useNavigate()
   const [{ authProvider, notificationProps, errorMsg }, setState] =
     useState<IState>({
-      // if passed form values from props initially populate
       formValues: {
         email: props.preloadValues ? props.preloadValues.email : '',
         password: props.preloadValues ? props.preloadValues.password : '',
@@ -119,124 +118,87 @@ const SignInPage = observer((props: IProps) => {
               >
                 <Flex sx={{ flexDirection: 'column', width: '100%' }}>
                   <HeroBanner type="celebration" />
-                  <Card bg={'softblue'}>
-                    <Flex px={3} py={2}>
-                      <Heading>Welcome back</Heading>
-                    </Flex>
-                  </Card>
-                  <Card mt={3}>
+                  <Card sx={{ borderRadius: 3 }}>
                     <Flex
-                      px={4}
-                      pt={0}
-                      pb={4}
                       sx={{
                         flexWrap: 'wrap',
                         flexDirection: 'column',
+                        padding: 4,
+                        gap: 4,
                         width: '100%',
                       }}
                     >
-                      {/* PauthProvider Provider Select */}
-                      {!authProvider && (
-                        <>
-                          <Text mb={3} mt={3}>
-                            Login with :
-                          </Text>
-                          {Object.values(AUTH_PROVIDERS).map((p) => (
-                            <Button
-                              sx={{ width: '100%' }}
-                              key={p.provider}
-                              mb={2}
-                              variant="outline"
-                              onClick={() =>
-                                setState((state) => ({
-                                  ...state,
-                                  authProvider: p,
-                                }))
-                              }
-                            >
-                              {p.buttonLabel}
-                            </Button>
-                          ))}
-                        </>
-                      )}
-                      {/* Login Form */}
-                      {authProvider && (
-                        <>
-                          <Heading
-                            variant="small"
-                            py={4}
-                            sx={{ width: '100%' }}
+                      <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+                        <Heading>Log in</Heading>
+                        <Text sx={{ fontSize: 1 }} color={'grey'}>
+                          <Link to={'/sign-up'} data-cy="no-account">
+                            Don't have an account? Sign-up here
+                          </Link>
+                        </Text>
+                      </Flex>
+
+                      {notificationProps && notificationProps.text && (
+                        <Box>
+                          <TextNotification
+                            isVisible={notificationProps.isVisible}
+                            variant={notificationProps.variant}
                           >
-                            Log in to your account
-                          </Heading>
-                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                            <Label htmlFor="title">
-                              {authProvider!.inputLabel}
-                            </Label>
-                            <Field
-                              name="email"
-                              type="email"
-                              data-cy="email"
-                              component={FieldInput}
-                              validate={required}
-                            />
-                          </Flex>
-                          <Flex sx={{ flexDirection: 'column' }} mb={3}>
-                            <Label htmlFor="title">Password</Label>
-                            <PasswordField
-                              name="password"
-                              data-cy="password"
-                              component={FieldInput}
-                              validate={required}
-                            />
-                          </Flex>
-                          <Text color="red">{errorMsg}</Text>
-                          <Flex mb={1} sx={{ justifyContent: 'space-between' }}>
-                            <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
-                              <Link to={'/sign-up'} data-cy="no-account">
-                                Don't have an account?
-                              </Link>
-                            </Text>
-                            <Text sx={{ fontSize: 1 }} color={'grey'} mt={2}>
-                              <Link
-                                to="#"
-                                data-cy="lost-password"
-                                onClick={() => resetPasword(values.email)}
-                              >
-                                Lost password?
-                              </Link>
-                            </Text>
-                          </Flex>
-
-                          {notificationProps && (
-                            <Box
-                              sx={{
-                                marginBottom: 3,
-                              }}
-                            >
-                              <TextNotification
-                                isVisible={notificationProps.isVisible}
-                                variant={notificationProps.variant}
-                              >
-                                {getFriendlyMessage(notificationProps?.text)}
-                              </TextNotification>
-                            </Box>
-                          )}
-
-                          <Flex>
-                            <Button
-                              large
-                              data-cy="submit"
-                              sx={{ width: '100%', justifyContent: 'center' }}
-                              variant={'primary'}
-                              disabled={submitting || invalid}
-                              type="submit"
-                            >
-                              Log in
-                            </Button>
-                          </Flex>
-                        </>
+                            {getFriendlyMessage(notificationProps?.text)}
+                          </TextNotification>
+                        </Box>
                       )}
+
+                      {errorMsg && <Text color="red">{errorMsg}</Text>}
+
+                      <Flex sx={{ flexDirection: 'column' }}>
+                        <Label htmlFor="title">
+                          {authProvider!.inputLabel}
+                        </Label>
+                        <Field
+                          name="email"
+                          type="email"
+                          data-cy="email"
+                          component={FieldInput}
+                          validate={required}
+                        />
+                      </Flex>
+                      <Flex sx={{ flexDirection: 'column' }}>
+                        <Label htmlFor="title">Password</Label>
+                        <PasswordField
+                          name="password"
+                          data-cy="password"
+                          component={FieldInput}
+                          validate={required}
+                        />
+                      </Flex>
+                      <Flex sx={{ justifyContent: 'space-between' }}>
+                        <Text sx={{ fontSize: 1 }} color={'grey'}>
+                          <Link
+                            to="#"
+                            data-cy="lost-password"
+                            onClick={() => resetPasword(values.email)}
+                          >
+                            Forgotten password?
+                          </Link>
+                        </Text>
+                      </Flex>
+
+                      <Flex>
+                        <Button
+                          large
+                          data-cy="submit"
+                          sx={{
+                            borderRadius: 3,
+                            width: '100%',
+                            justifyContent: 'center',
+                          }}
+                          variant={'primary'}
+                          disabled={submitting || invalid}
+                          type="submit"
+                        >
+                          Log in
+                        </Button>
+                      </Flex>
                     </Flex>
                   </Card>
                 </Flex>

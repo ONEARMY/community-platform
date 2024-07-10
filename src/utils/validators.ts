@@ -18,7 +18,7 @@ const required = (value: any) =>
   value ? undefined : 'Make sure this field is filled correctly'
 
 const noSpecialCharacters = (value: string) => {
-  const specialCharacters = getSpecialCharacters(value)
+  const specialCharacters = value ? getSpecialCharacters(value) : ''
   return specialCharacters.length > 0
     ? 'Only letters and numbers are allowed'
     : undefined

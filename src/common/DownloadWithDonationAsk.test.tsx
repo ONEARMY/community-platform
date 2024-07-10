@@ -57,8 +57,8 @@ describe('DownloadFileFromLink', () => {
     expect(mockedUsedNavigate).toHaveBeenCalledWith('/sign-in')
   })
 
-  it('when a beta-tester (or any other role), opens the donation modal for fileLink', () => {
-    const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
+  it('when logged in, opens the donation modal for fileLink', () => {
+    const user = FactoryUser()
     userToMock(user)
 
     const handleClick = vi.fn()
@@ -82,10 +82,10 @@ describe('DownloadFileFromLink', () => {
       fileLink,
     )
     expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument()
-    // expect(handleClick).not.toHaveBeenCalled()
+    expect(handleClick).not.toHaveBeenCalled()
   })
 
-  it('when a beta-tester (or any other role), opens the donation modal for files', () => {
+  it('when logged in, opens the donation modal for files', () => {
     const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
     userToMock(user)
 
@@ -116,66 +116,6 @@ describe('DownloadFileFromLink', () => {
       downloadUrl,
     )
     expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument()
-    // expect(handleClick).not.toHaveBeenCalled()
-  })
-
-  it('when a research editor (or any other role), opens the donation modal for fileLink', () => {
-    const user = FactoryUser({ userRoles: [UserRole.RESEARCH_EDITOR] })
-    userToMock(user)
-
-    const handleClick = vi.fn()
-    const fileLink = 'http://youtube.com/'
-
-    const { getAllByTestId } = render(
-      <DownloadWithDonationAsk
-        handleClick={handleClick}
-        isLoggedIn={true}
-        fileDownloadCount={0}
-        fileLink={fileLink}
-        files={[]}
-      />,
-    )
-
-    const downloadButton = getAllByTestId('downloadButton')[0]
-    fireEvent.click(downloadButton)
-
-    expect(getAllByTestId('DonationRequestSkip')[0]).toHaveAttribute(
-      'href',
-      fileLink,
-    )
-    expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument()
-  })
-
-  it('when a subscriber (or any other role), opens the donation modal for files', () => {
-    const user = FactoryUser({ userRoles: [UserRole.SUBSCRIBER] })
-    userToMock(user)
-
-    const downloadUrl = 'http://great-url.com/'
-    const handleClick = vi.fn()
-
-    const { getAllByTestId } = render(
-      <DownloadWithDonationAsk
-        handleClick={handleClick}
-        isLoggedIn={true}
-        fileDownloadCount={0}
-        fileLink={undefined}
-        files={[
-          {
-            downloadUrl,
-            name: 'first-file',
-            size: 435435,
-          } as IUploadedFileMeta,
-        ]}
-      />,
-    )
-
-    const downloadButton = getAllByTestId('downloadButton')[0]
-    fireEvent.click(downloadButton)
-
-    expect(getAllByTestId('DonationRequestSkip')[0]).toHaveAttribute(
-      'href',
-      downloadUrl,
-    )
-    expect(getAllByTestId('DonationRequest')[0]).toBeInTheDocument()
+    expect(handleClick).not.toHaveBeenCalled()
   })
 })

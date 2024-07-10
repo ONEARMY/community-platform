@@ -8,7 +8,6 @@ import {
 } from 'oa-components'
 
 import { useCommonStores } from './hooks/useCommonStores'
-import { AuthWrapper } from './AuthWrapper'
 
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
@@ -26,7 +25,7 @@ export interface IProps {
   can/should move to the component library.
 */
 export const DownloadWithDonationAsk = (props: IProps) => {
-  const { handleClick, fileDownloadCount, fileLink, files } = props
+  const { handleClick, fileDownloadCount, fileLink, files, isLoggedIn } = props
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [link, setLink] = useState<string>('')
   const navigate = useNavigate()
@@ -55,14 +54,13 @@ export const DownloadWithDonationAsk = (props: IProps) => {
         onDidDismiss={() => toggleIsModalOpen()}
       />
 
-      <AuthWrapper
-        fallback={
-          <DownloadButton
-            onClick={async () => navigate('/sign-in')}
-            isLoggedIn={false}
-          />
-        }
-      >
+      {!isLoggedIn && (
+        <DownloadButton
+          onClick={async () => navigate('/sign-in')}
+          isLoggedIn={false}
+        />
+      )}
+      {isLoggedIn && (
         <>
           {fileLink && (
             <DownloadButton
@@ -87,7 +85,7 @@ export const DownloadWithDonationAsk = (props: IProps) => {
               />
             ))}
         </>
-      </AuthWrapper>
+      )}
       <DownloadCounter total={fileDownloadCount} />
     </>
   )

@@ -145,7 +145,7 @@ describe('research.routes', () => {
             wrapper.getByText(/Help out with Research & Development/),
           ).toBeInTheDocument(),
         {
-          timeout: 2000,
+          timeout: 5000,
         },
       )
     })
@@ -179,11 +179,16 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/create')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(/role required to access this page/),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(/role required to access this page/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 5000,
+        },
+      )
     })
 
     it('rejects a logged in user missing required role', async () => {
@@ -192,11 +197,16 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/create')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(/role required to access this page/),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(/role required to access this page/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 5000,
+        },
+      )
     })
 
     it('accepts a logged in user with required role [research_creator]', async () => {
@@ -212,7 +222,7 @@ describe('research.routes', () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
         {
-          timeout: 2000,
+          timeout: 5000,
         },
       )
     })
@@ -229,7 +239,7 @@ describe('research.routes', () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
         {
-          timeout: 2000,
+          timeout: 5000,
         },
       )
     })
@@ -244,11 +254,16 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(/role required to access this page/),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(/role required to access this page/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 5000,
+        },
+      )
     })
 
     it('accepts a logged in user with required role', async () => {

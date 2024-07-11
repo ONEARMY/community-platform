@@ -207,24 +207,19 @@ describe('[How To]', () => {
       cy.contains('Create a How-To').should('be.visible')
 
       cy.step('Warn if title is identical with the existing ones')
-      cy.get('[data-cy=intro-title]')
-        .type('Make glass-like beams')
-        .blur({ force: true })
+      cy.fillIntroTitle('Make glass-like beams')
       cy.contains(
         "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('be.visible')
 
       cy.step('Warn if title is identical with a previously existing one')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('Make glassy beams')
-        .blur({ force: true })
+      cy.fillIntroTitle('Make glassy beams')
       cy.contains(
         "Did you know there is an existing how-to with the title 'Make glassy beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('be.visible')
 
       cy.step('Warn if title has less than minimum required characters')
-      cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
+      cy.fillIntroTitle('qwer')
       cy.contains(
         `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('be.visible')
@@ -238,10 +233,7 @@ describe('[How To]', () => {
       )
 
       cy.step('A basic draft was created')
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('qwerty')
-        .blur({ force: true })
+      cy.fillIntroTitle('qwerty')
       cy.get('[data-cy=draft]').click()
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
@@ -255,7 +247,7 @@ describe('[How To]', () => {
       checkWhitespaceTrim('intro-title')
 
       cy.step('Fill up the intro')
-      cy.get('[data-cy=intro-title').clear().type(title).blur({ force: true })
+      cy.fillIntroTitle(title)
       cy.selectTag('howto_testing')
 
       cy.step('Select a category and see further guidance')
@@ -340,10 +332,7 @@ describe('[How To]', () => {
       cy.step('Access the create-how-to')
       cy.get('a[href="/how-to/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type(expected.title)
-        .blur({ force: true })
+      cy.fillIntroTitle(expected.title)
       cy.get('[data-cy=page-link][href*="/how-to"]').click()
       cy.get('[data-cy="Confirm.modal: Cancel"]').click()
       cy.url().should('match', /\/how-to\/create$/)
@@ -479,21 +468,18 @@ describe('[How To]', () => {
       ).should('not.exist')
 
       cy.step('Warn if title has less than minimum required characters')
-      cy.get('[data-cy=intro-title]').clear().type('qwer').blur({ force: true })
+      cy.fillIntroTitle('qwer')
       cy.contains(
         `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
       ).should('be.visible')
 
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type('Make glass-like beams')
-        .blur({ force: true })
+      cy.fillIntroTitle('Make glass-like beams')
       cy.contains(
         "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
       ).should('be.visible')
 
       cy.step('Update the intro')
-      cy.get('[data-cy=intro-title]').clear().type(expected.title)
+      cy.fillIntroTitle(expected.title)
       cy.selectTag('howto_testing')
       selectCategory(expected.category as Category)
       selectTimeDuration(expected.time as Duration)

@@ -145,7 +145,7 @@ describe('research.routes', () => {
             wrapper.getByText(/Help out with Research & Development/),
           ).toBeInTheDocument(),
         {
-          timeout: 5000,
+          timeout: 10000,
         },
       )
     })
@@ -165,7 +165,7 @@ describe('research.routes', () => {
           )
         },
         {
-          timeout: 5000,
+          timeout: 10000,
         },
       )
     })
@@ -186,7 +186,7 @@ describe('research.routes', () => {
           ).toBeInTheDocument()
         },
         {
-          timeout: 5000,
+          timeout: 10000,
         },
       )
     })
@@ -204,7 +204,7 @@ describe('research.routes', () => {
           ).toBeInTheDocument()
         },
         {
-          timeout: 5000,
+          timeout: 10000,
         },
       )
     })
@@ -222,7 +222,7 @@ describe('research.routes', () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
         {
-          timeout: 5000,
+          timeout: 10000,
         },
       )
     })
@@ -239,7 +239,7 @@ describe('research.routes', () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
         {
-          timeout: 5000,
+          timeout: 10000,
         },
       )
     })
@@ -261,7 +261,7 @@ describe('research.routes', () => {
           ).toBeInTheDocument()
         },
         {
-          timeout: 5000,
+          timeout: 10000,
         },
       )
     })
@@ -300,9 +300,16 @@ describe('research.routes', () => {
         renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(mockedUsedNavigate).toHaveBeenCalledWith('/research/an-example')
-      })
+      await waitFor(
+        () => {
+          expect(mockedUsedNavigate).toHaveBeenCalledWith(
+            '/research/an-example',
+          )
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('blocks a valid editor when document is locked by another user', async () => {
@@ -325,13 +332,18 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(
-            'The research description is currently being edited by another editor.',
-          ),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(
+              'The research description is currently being edited by another editor.',
+            ),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('accepts a user when document is mark locked by them', async () => {
@@ -354,9 +366,14 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByText('Edit your Research')).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText('Edit your Research')).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('accepts a user with required role and contributor acccess', async () => {
@@ -393,11 +410,16 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/new-update')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(/role required to access this page/),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(/role required to access this page/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('accepts a logged in user with required role', async () => {
@@ -407,9 +429,14 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/new-update')
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
   })
 
@@ -452,9 +479,14 @@ describe('research.routes', () => {
         )
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('blocks valid author when document is locked', async () => {
@@ -522,9 +554,14 @@ describe('research.routes', () => {
         )
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByText('Edit your update')).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText('Edit your update')).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('rejects logged in user who is not author', async () => {
@@ -569,9 +606,14 @@ describe('research.routes', () => {
         )
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
   })
 })

@@ -56,7 +56,7 @@ export const DownloadWithDonationAsk = (props: IProps) => {
 
       {!isLoggedIn && (
         <DownloadButton
-          onClick={async () => navigate('/sign-in')}
+          onClick={() => navigate('/sign-in')}
           isLoggedIn={false}
         />
       )}

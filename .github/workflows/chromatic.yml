@@ -7,6 +7,9 @@ on: push
 jobs:
   chromatic:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/components
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -19,5 +22,5 @@ jobs:
       - name: Run Chromatic
         uses: chromaui/action@latest
         with:
-          # ⚠️ Make sure to configure a `CHROMATIC_PROJECT_TOKEN` repository secret
+          workingDir: packages/components
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

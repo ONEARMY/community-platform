@@ -17,6 +17,9 @@ const Config: StorybookConfig = {
   },
   async viteFinal(config) {
     return mergeConfig(config, {
+      plugins: (config.plugins ?? []).filter(
+        (plugin) => plugin && 'name' in plugin && plugin.name !== 'vite:dts',
+      ),
       publicDir: '../public',
     })
   },

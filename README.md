@@ -160,6 +160,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://prashikgamre.vercel.app/"><img src="https://avatars.githubusercontent.com/u/88095936?v=4?s=60" width="60px;" alt="Prashik Gamre"/><br /><sub><b>Prashik Gamre</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=prashik0202" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/simontree"><img src="https://avatars.githubusercontent.com/u/59532700?v=4?s=60" width="60px;" alt="Robert"/><br /><sub><b>Robert</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=simontree" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kimskovhusandersen"><img src="https://avatars.githubusercontent.com/u/5513342?v=4?s=60" width="60px;" alt="Kim Skovhus Andersen"/><br /><sub><b>Kim Skovhus Andersen</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=kimskovhusandersen" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://lucaasrojas-portfolio.vercel.app/"><img src="https://avatars.githubusercontent.com/u/26610409?v=4?s=60" width="60px;" alt="Lucas Rojas"/><br /><sub><b>Lucas Rojas</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=lucaasrojas" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

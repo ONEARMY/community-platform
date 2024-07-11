@@ -8,7 +8,6 @@ import { Button, ExternalLink, TextNotification } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isPreciousPlastic } from 'src/config/config'
 import { logger } from 'src/logger'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { ProfileType } from 'src/modules/profile/types'
@@ -17,8 +16,6 @@ import { v4 as uuid } from 'uuid'
 
 import { buttons, headings } from '../../labels'
 import INITIAL_VALUES from '../../Template'
-import { ImpactSection } from './Impact/Impact.section'
-import { AccountSettingsSection } from './AccountSettings.section'
 import { CollectionSection } from './Collection.section'
 import { FlexSectionContainer } from './elements'
 import { EmailNotificationsSection } from './EmailNotifications.section'
@@ -301,12 +298,6 @@ export const UserProfile = () => {
                   )}
                 </Flex>
 
-                {!isMember && isPreciousPlastic() && (
-                  <FlexSectionContainer>
-                    <ImpactSection />
-                  </FlexSectionContainer>
-                )}
-
                 <EmailNotificationsSection
                   notificationSettings={values.notification_settings}
                 />
@@ -319,8 +310,6 @@ export const UserProfile = () => {
                 )}
                 <PatreonIntegration user={user} />
               </form>
-
-              <AccountSettingsSection />
 
               <Button
                 large

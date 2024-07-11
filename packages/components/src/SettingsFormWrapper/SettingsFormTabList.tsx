@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Tab as BaseTab, tabClasses } from '@mui/base/Tab'
 import { TabsList as BaseTabsList } from '@mui/base/TabsList'
-import { Box, Select } from 'theme-ui'
+import { Flex, Select } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 
@@ -50,9 +50,9 @@ export const SettingsFormTabList = (props: IProps) => {
   `
 
   const TabsList = styled(BaseTabsList)`
+    width: 100%;
     border-radius: inherit;
     display: flex;
-    flex: 2;
     gap: 12px;
     flex-direction: column;
     justify-content: flex-start;
@@ -63,19 +63,19 @@ export const SettingsFormTabList = (props: IProps) => {
 
   return (
     <>
-      <Box sx={{ display: ['none', 'inherit'] }}>
+      <Flex sx={{ display: ['none', 'flex'], flex: 2 }}>
         <TabsList>
           {tabs.map(({ glyph, title }, index) => {
             return (
-              <Tab key={index}>
+              <Tab key={index} data-cy={`tab-${title}`}>
                 <Icon glyph={glyph} /> {title}
               </Tab>
             )
           })}
         </TabsList>
-      </Box>
+      </Flex>
 
-      <Box sx={{ display: ['inherit', 'none'] }}>
+      <Flex sx={{ display: ['flex', 'none'] }}>
         <TabsList>
           <Select
             arrow={
@@ -99,7 +99,7 @@ export const SettingsFormTabList = (props: IProps) => {
             })}
           </Select>
         </TabsList>
-      </Box>
+      </Flex>
     </>
   )
 }

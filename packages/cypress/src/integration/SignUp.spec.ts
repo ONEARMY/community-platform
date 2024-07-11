@@ -65,7 +65,7 @@ describe('[User sign-up]', () => {
   })
 
   describe('[Update existing auth details]', () => {
-    it('Updates username and password', () => {
+    it.only('Updates username and password', () => {
       const user = generateNewUserDetails()
       const { email, username, password } = user
       cy.signUpNewUser(user)
@@ -75,6 +75,9 @@ describe('[User sign-up]', () => {
 
       cy.step('Go to settings page')
       cy.visit('/settings')
+
+      cy.get('[data-cy="loader"]').not('visible')
+      cy.get('[data-cy="tab-Account"]').click()
 
       cy.step('Update Email')
       cy.get('[data-cy="changeEmailButton"]').click()

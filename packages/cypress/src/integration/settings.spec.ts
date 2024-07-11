@@ -54,10 +54,15 @@ describe('[Settings]', () => {
       const user = generateNewUserDetails()
       const url = 'https://social.network'
 
+      cy.step('Incomplete profile banner visible when logged out')
+      cy.get('[data-cy=notificationBanner]').should('not.exist')
+
       cy.signUpNewUser(user)
 
-      cy.step('Go to User Settings')
-      cy.visit('/settings')
+      cy.step('Incomplete profile banner visible')
+      cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
+      cy.get('[data-cy=incompleteProfileBanner]').click()
+
       cy.setSettingFocus(profileType)
 
       cy.step("Can't save without required fields being populated")
@@ -105,6 +110,10 @@ describe('[Settings]', () => {
         .should('have.attr', 'src')
         .and('include', coverImage)
       cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
+
+      cy.step('Incomplete profile banner no longer visible')
+      cy.get('[data-cy=incompleteProfileBanner]').should('not.exist')
+      cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
     })
   })
 
@@ -116,6 +125,13 @@ describe('[Settings]', () => {
       const profileType = 'workspace'
       const user = generateNewUserDetails()
       const url = 'something@test.com'
+      const impactFields = [
+        { name: 'plastic', value: 5 },
+        { name: 'revenue', value: 10003 },
+        { name: 'employees', value: 7 },
+        { name: 'volunteers', value: 28 },
+        { name: 'machines', value: 2, visible: false },
+      ]
 
       cy.signUpNewUser(user)
 
@@ -140,9 +156,6 @@ describe('[Settings]', () => {
         label: ExternalLinkLabel.EMAIL,
         url,
       })
-
-      cy.setSettingImpactData()
-
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')
@@ -163,6 +176,18 @@ describe('[Settings]', () => {
         'href',
         `mailto:${url}`,
       )
+
+      cy.step('Set and display impact data')
+      cy.visit('/settings')
+      cy.setSettingImpactData(2022, impactFields)
+      cy.visit(`u/${user.username}`)
+      cy.get('[data-cy="ImpactTab"]').click()
+
+      // From visibleImpactFields above
+      cy.contains('5 Kg of plastic recycled')
+      cy.contains('USD 10,003 revenue')
+      cy.contains('7 full time employees')
+      cy.contains('28 volunteers')
     })
   })
 

@@ -29,7 +29,10 @@ export const SettingsFormTab = (props: IProps) => {
   }
 
   return (
-    <TabPanel value={value}>
+    <TabPanel
+      value={value}
+      style={{ display: 'flex', flexDirection: 'column', alignSelf: 'stretch' }}
+    >
       {header && (
         <Card sx={{ ...sx, backgroundColor: 'softblue' }}>{header}</Card>
       )}

@@ -7,17 +7,17 @@ import { Flex } from 'theme-ui'
 import { SettingsFormTab } from './SettingsFormTab'
 import { SettingsFormTabList } from './SettingsFormTabList'
 
-import type { ThemeUIStyleObject } from 'theme-ui'
 import type { ITab } from './SettingsFormTab'
 
 export interface IProps {
+  setDefaultTab?: number
   tabs: ITab[]
-  sx?: ThemeUIStyleObject | undefined
+  style?: React.CSSProperties | undefined
 }
 
 export const SettingsFormWrapper = (props: IProps) => {
-  const { sx, tabs } = props
-  const [value, setValue] = useState<number>(0)
+  const { style, setDefaultTab, tabs } = props
+  const [value, setValue] = useState<number>(setDefaultTab || 0)
 
   const handleChange = (
     _: React.SyntheticEvent<Element, Event> | null,
@@ -27,29 +27,30 @@ export const SettingsFormWrapper = (props: IProps) => {
   }
 
   return (
-    <Flex sx={sx}>
-      <Tabs value={value} onChange={handleChange}>
+    <Tabs value={value} onChange={handleChange} style={style}>
+      <Flex
+        sx={{
+          alignContent: 'stretch',
+          alignSelf: 'stretch',
+          justifyContent: 'stretch',
+          flexDirection: ['column', 'row'],
+          gap: 2,
+        }}
+      >
+        <SettingsFormTabList tabs={tabs} value={value} setValue={setValue} />
         <Flex
           sx={{
-            gap: 3,
-            flexDirection: ['column', 'row'],
+            alignContent: 'stretch',
+            justifyContent: 'stretch',
+            flexDirection: 'column',
+            flex: 7,
           }}
         >
-          <SettingsFormTabList tabs={tabs} value={value} setValue={setValue} />
-
-          <Flex
-            sx={{
-              alignContent: 'stretch',
-              flexDirection: 'column',
-              flex: 5,
-            }}
-          >
-            {tabs.map((tab, index) => {
-              return <SettingsFormTab key={index} value={index} tab={tab} />
-            })}
-          </Flex>
+          {tabs.map((tab, index) => {
+            return <SettingsFormTab key={index} value={index} tab={tab} />
+          })}
         </Flex>
-      </Tabs>
-    </Flex>
+      </Flex>
+    </Tabs>
   )
 }

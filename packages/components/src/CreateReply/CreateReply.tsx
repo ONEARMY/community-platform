@@ -33,7 +33,7 @@ export const CreateReply = (props: Props) => {
     <Box
       sx={{
         background: 'softblue',
-        borderRadius: 2,
+        borderRadius: 3,
         marginBottom: 3,
         padding: 3,
       }}

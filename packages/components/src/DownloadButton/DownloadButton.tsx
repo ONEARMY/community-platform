@@ -26,11 +26,11 @@ export const DownloadButton = ({
         sx={{
           background: 'accent.base',
           border: '2px solid black',
+          borderRadius: 3,
           justifyContent: 'space-between',
           alignItems: 'center',
           flexDirection: 'row',
           maxWidth: '300px',
-          borderRadius: 1,
           cursor: 'pointer',
         }}
         onClick={onClick}

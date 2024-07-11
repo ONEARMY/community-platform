@@ -64,7 +64,7 @@ export const ImageConverter = (props: IProps) => {
       sx={{
         border: '1px solid ',
         borderColor: 'offwhite',
-        borderRadius: 1,
+        borderRadius: 3,
       }}
       id="preview"
       onClick={() => props.onImgClicked(convertedFile)}

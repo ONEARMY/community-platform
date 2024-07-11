@@ -38,7 +38,7 @@ export const CreateComment = (props: Props) => {
             background: 'white',
             flexGrow: 1,
             marginLeft: [2, 5],
-            borderRadius: 1,
+            borderRadius: 3,
             position: 'relative',
             '&:before': {
               content: '""',

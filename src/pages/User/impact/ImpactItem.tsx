@@ -20,7 +20,7 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
 
   const innerBox = {
     backgroundColor: 'white',
-    borderRadius: 1,
+    borderRadius: 3,
     height: '100%',
     padding: 2,
   }

@@ -9,7 +9,7 @@ export const Label = (props) => (
       flexDirection: ['row', 'row', 'column'],
       m: '5px',
       p: '10px 0',
-      borderRadius: '5px',
+      borderRadius: 3,
       border: 'background',
       ':hover': {
         backgroundColor: 'background',

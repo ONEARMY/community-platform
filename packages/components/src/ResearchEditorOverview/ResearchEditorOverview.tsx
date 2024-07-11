@@ -61,8 +61,7 @@ export const ResearchEditorOverview = (props: ResearchEditorOverviewProps) => {
                         overflow: 'hidden',
                         background: 'accent.base',
                         padding: 1,
-                        borderRadius: 1,
-                        borderBottomRightRadius: 1,
+                        borderRadius: 3,
                         mr: 1,
                       }}
                     >

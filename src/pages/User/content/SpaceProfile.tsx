@@ -134,7 +134,7 @@ const renderMachineBuilderXp = (machineBuilderXp: IMAchineBuilderXp[]) => (
           sx={{
             backgroundColor: 'background',
             borderColor: 'background',
-            borderRadius: '5px',
+            borderRadius: 3,
             borderStyle: 'solid',
             borderWidth: '1px',
             display: 'inline-block',
@@ -177,7 +177,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       mb={6}
       sx={{
         border: '2px solid black',
-        borderRadius: '10px',
+        borderRadius: 3,
         overflow: 'hidden',
         maxWidth: '1000px',
       }}

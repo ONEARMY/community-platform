@@ -22,6 +22,7 @@ export const GlobalStyles = css`
   }
 
   .beta-tester-feature {
+    border-radius: 12px;
     border: 4px dashed ${theme.colors.betaGreen};
   }
 

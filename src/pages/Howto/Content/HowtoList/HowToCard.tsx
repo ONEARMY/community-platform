@@ -26,7 +26,7 @@ export const HowToCard = ({ howto }: IProps) => {
     <Card
       data-cy="card"
       data-cy-howto-slug={howto.slug}
-      sx={{ borderRadius: 2, display: 'flex', flexDirection: 'column' }}
+      sx={{ display: 'flex', flexDirection: 'column' }}
     >
       <RouterLink
         key={howto._id}

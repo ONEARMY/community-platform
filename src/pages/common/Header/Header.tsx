@@ -123,7 +123,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
                     color: 'white',
                     fontWeight: 'bold',
                     fontSize: '1.4rem',
-                    borderRadius: '4px',
+                    borderRadius: 3,
                     padding: '2px 6px',
                     backgroundColor: 'lightgrey',
                   }}

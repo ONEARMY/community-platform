@@ -46,7 +46,7 @@ export const Modal = (props: Props) => {
     transform: translate(-50%, -50%);
     background: white;
     border: 2px solid black;
-    border-radius: 10px;
+    border-radius: 12px;
     z-index: 4001;
   `
 

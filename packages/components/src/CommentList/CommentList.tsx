@@ -98,7 +98,7 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
     <Box
       sx={{
         backgroundColor: 'white',
-        borderRadius: 1,
+        borderRadius: 3,
         padding: isReplies ? 0 : 2,
       }}
     >
@@ -214,7 +214,7 @@ export const CommentList = (props: IPropsCommentList) => {
                   ? '2px dashed black'
                   : 'none'
               }`,
-              borderRadius: 1,
+              borderRadius: 3,
             }}
           >
             <CommentContainer

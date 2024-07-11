@@ -7,7 +7,7 @@ const BASE_BUTTON = {
   alignItems: 'center',
   position: 'relative',
   transition: '.2s ease-in-out',
-  borderRadius: 1,
+  borderRadius: 3,
   width: 'auto',
   border: '2px solid',
   height: '2.75rem',

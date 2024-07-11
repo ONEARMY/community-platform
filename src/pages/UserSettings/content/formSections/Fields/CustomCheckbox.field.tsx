@@ -62,7 +62,7 @@ export const CustomCheckbox = (props: IProps) => {
       htmlFor={value}
       sx={{
         width: ['inherit', 'inherit', '100%'],
-        borderRadius: 1,
+        borderRadius: 2,
         py: 2,
         border: '1px solid transparent',
         cursor: 'pointer',

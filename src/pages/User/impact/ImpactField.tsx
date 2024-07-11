@@ -18,7 +18,7 @@ export const ImpactField = ({ field }: Props) => {
 
   const sx = {
     backgroundColor: 'background',
-    borderRadius: 1,
+    borderRadius: 3,
     padding: 1,
     mt: 2,
   }

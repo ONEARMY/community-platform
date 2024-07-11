@@ -82,7 +82,7 @@ export const DiscussionContainer = (props: IProps) => {
         sx={{
           alignItems: 'stretch',
           background: 'softblue',
-          borderRadius: 2,
+          borderRadius: 3,
           flexDirection: 'column',
           padding: 3,
         }}

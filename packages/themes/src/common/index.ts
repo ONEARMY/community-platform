@@ -96,7 +96,7 @@ export const baseTheme = {
     primary: {
       background: 'white',
       border: `2px solid ${commonStyles.colors.black}`,
-      borderRadius: 1,
+      borderRadius: 3,
       overflow: 'hidden',
     },
   },

@@ -32,7 +32,7 @@ describe('[User sign-up]', () => {
 
       cy.step('Using valid inputs')
       cy.signUpNewUser()
-      cy.get('div').contains('Sign up successful').should('be.visible')
+      cy.contains('Yay! You signed up!')
       cy.get('[data-cy=user-menu]')
     })
   })

@@ -2,12 +2,7 @@ import { useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import {
-  Button,
-  CelebrationHero,
-  ExternalLink,
-  FieldInput,
-} from 'oa-components'
+import { Button, ExternalLink, FieldInput, HeroBanner } from 'oa-components'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
 import { PasswordField } from 'src/common/Form/PasswordField'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -132,53 +127,44 @@ const SignUpPage = observer(() => {
               mb={3}
             >
               <Flex sx={{ flexDirection: 'column', width: '100%' }}>
-                <CelebrationHero />
-                <Card bg={'softblue'}>
-                  <Flex px={3} py={2} sx={{ width: '100%' }}>
-                    <Heading>Hey, nice to see you here</Heading>
-                  </Flex>
-                </Card>
-                <Card mt={3}>
+                <HeroBanner type="celebration" />
+                <Card sx={{ borderRadius: 3 }}>
                   <Flex
-                    px={4}
-                    pt={0}
-                    pb={4}
                     sx={{
                       flexWrap: 'wrap',
                       flexDirection: 'column',
+                      padding: 4,
+                      gap: 4,
                       width: '100%',
                     }}
                   >
-                    <Heading variant="small" py={2} sx={{ width: '100%' }}>
-                      Create an account
-                    </Heading>
-                    <Flex mb={3} sx={{ justifyContent: 'space-between' }}>
+                    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+                      <Heading>Create an account</Heading>
                       <Text color={'grey'} sx={{ fontSize: 1 }}>
-                        Already have an account ?
                         <Link
                           to="/sign-in"
                           style={{
-                            color: '#98cc98',
                             textDecoration: 'underline',
                           }}
                         >
                           {' '}
-                          Sign-in here
+                          Already have an account? Sign-in here
                         </Link>
                       </Text>
                     </Flex>
-                    <Text color={'red'} data-cy="error-msg">
-                      {state.errorMsg}
-                    </Text>
+                    {state.errorMsg && (
+                      <Text color={'red'} data-cy="error-msg">
+                        {state.errorMsg}
+                      </Text>
+                    )}
                     <Flex
-                      mb={3}
                       sx={{
                         width: rowWidth,
                         flexDirection: 'column',
                       }}
                     >
                       <Label htmlFor="displayName">Username</Label>
-                      <Text color={'grey'} mt={1} mb={1} sx={{ fontSize: 1 }}>
+                      <Text color={'grey'} sx={{ fontSize: 1 }}>
                         Think carefully. You can't change this.
                       </Text>
                       <Field
@@ -194,14 +180,13 @@ const SignUpPage = observer(() => {
                       />
                     </Flex>
                     <Flex
-                      mb={3}
                       sx={{
                         flexDirection: 'column',
                         width: rowWidth,
                       }}
                     >
                       <Label htmlFor="email">Email</Label>
-                      <Text color={'grey'} mt={1} mb={1} sx={{ fontSize: 1 }}>
+                      <Text color={'grey'} sx={{ fontSize: 1 }}>
                         It can be personal or work email.
                       </Text>
                       <Field
@@ -214,7 +199,6 @@ const SignUpPage = observer(() => {
                       />
                     </Flex>
                     <Flex
-                      mb={3}
                       sx={{
                         flexDirection: 'column',
                         width: rowWidth,
@@ -229,7 +213,6 @@ const SignUpPage = observer(() => {
                       />
                     </Flex>
                     <Flex
-                      mb={3}
                       sx={{
                         flexDirection: 'column',
                         width: rowWidth,
@@ -243,12 +226,11 @@ const SignUpPage = observer(() => {
                         validate={required}
                       />
                     </Flex>
-                    <Flex mb={3} mt={2} sx={{ width: rowWidth }}>
+                    <Flex>
                       <Label
                         sx={{
                           display: 'flex',
                           alignItems: 'flex-start',
-                          gap: '6px',
                         }}
                       >
                         <Field
@@ -278,7 +260,11 @@ const SignUpPage = observer(() => {
                     <Flex>
                       <Button
                         large
-                        sx={{ width: '100%', justifyContent: 'center' }}
+                        sx={{
+                          borderRadius: 3,
+                          width: '100%',
+                          justifyContent: 'center',
+                        }}
                         data-cy="submit"
                         variant={'primary'}
                         disabled={disabled}

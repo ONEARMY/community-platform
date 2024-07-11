@@ -52,7 +52,7 @@ describe('[Research]', () => {
 
       cy.step('Warn if title is identical to an existing one')
       cy.contains('Start your Research')
-      cy.get('[data-cy=intro-title]').type('qwerty').blur({ force: true })
+      cy.fillIntroTitle('qwerty')
       cy.contains(
         'Titles must be unique, please try being more specific',
       ).should('be.visible')
@@ -198,10 +198,7 @@ describe('[Research]', () => {
 
       cy.step('Can add update')
       cy.get('[data-cy=addResearchUpdateButton]').click()
-      cy.get('[data-cy=intro-title]')
-        .clear()
-        .type(updateTitle)
-        .blur({ force: true })
+      cy.fillIntroTitle(updateTitle)
 
       cy.get('[data-cy=intro-description]')
         .wait(0)
@@ -296,7 +293,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=addResearchUpdateButton]').click()
 
       cy.step('Enter update details')
-      cy.get('[data-cy=intro-title]').clear().type(updateTitle).blur()
+      cy.fillIntroTitle(updateTitle)
 
       cy.get('[data-cy=intro-description]')
         .wait(0)

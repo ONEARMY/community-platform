@@ -112,6 +112,7 @@ export const HowtoFieldStep = (props: IProps) => {
               icon="arrow-full-up"
               showIconOnly={true}
               sx={{ mx: '5px' }}
+              type="button"
               onClick={() => props.moveStep(index, index - 1)}
             />
           )}
@@ -122,6 +123,7 @@ export const HowtoFieldStep = (props: IProps) => {
             icon="arrow-full-down"
             sx={{ mx: '5px' }}
             showIconOnly={true}
+            type="button"
             onClick={() => props.moveStep(index, index + 1)}
           />
           {isAboveMinimumStep && (
@@ -131,6 +133,7 @@ export const HowtoFieldStep = (props: IProps) => {
               variant={'outline'}
               showIconOnly={true}
               icon="delete"
+              type="button"
               onClick={() => toggleDeleteModal()}
             />
           )}
@@ -150,8 +153,9 @@ export const HowtoFieldStep = (props: IProps) => {
                 <Button
                   data-cy="confirm"
                   data-testid="confirm"
-                  variant={'outline'}
+                  variant="outline"
                   onClick={() => confirmDelete()}
+                  type="button"
                 >
                   {deleteButton.title}
                 </Button>

@@ -39,7 +39,12 @@ const AlreadyAddedFiles = ({ formValues, setFileEditMode }) => {
       {formValues.files.map((file) => (
         <DownloadStaticFile allowDownload file={file} key={file.name} />
       ))}
-      <Button variant={'outline'} icon="delete" onClick={deleteFile}>
+      <Button
+        type="button"
+        variant="outline"
+        icon="delete"
+        onClick={deleteFile}
+      >
         {buttons.files}
       </Button>
     </Flex>

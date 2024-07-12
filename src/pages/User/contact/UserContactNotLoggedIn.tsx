@@ -27,7 +27,9 @@ export const UserContactNotLoggedIn = ({ displayName }: Props) => {
             Login
           </Link>
           <Link to="/sign-up">
-            <Button icon="star">Sign-up now</Button>
+            <Button type="button" icon="star">
+              Sign-up now
+            </Button>
           </Link>
         </Flex>
       </Flex>

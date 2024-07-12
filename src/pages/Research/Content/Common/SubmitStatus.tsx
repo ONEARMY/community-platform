@@ -19,7 +19,7 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
           Uploading Research
         </Heading>
         <Icon
-          glyph={'close'}
+          glyph="close"
           onClick={() => {
             props.onClose()
           }}
@@ -38,6 +38,7 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
       </Box>
       {store.activeResearchItem && store.activeResearchItem?.slug ? (
         <Button
+          type="button"
           data-cy={store.researchUploadStatus.Complete ? 'view-research' : ''}
           disabled={!store.researchUploadStatus.Complete}
           variant={
@@ -86,6 +87,7 @@ export const UpdateSubmitStatus = observer((props: IProps) => {
         ))}
       </Box>
       <Button
+        type="button"
         data-cy={uploadStatus.Complete ? 'view-research' : ''}
         disabled={!uploadStatus.Complete}
         variant={!uploadStatus.Complete ? 'disabled' : 'outline'}

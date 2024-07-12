@@ -275,6 +275,7 @@ const ResearchArticle = observer(() => {
         <Flex my={4}>
           <Link to={`/research/${item.slug}/new-update`}>
             <Button
+              type="button"
               large
               ml={2}
               mb={[3, 3, 0]}

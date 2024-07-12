@@ -54,6 +54,7 @@ export const CollectionSection = (props: IProps) => {
                 />
               ))}
               <Button
+                type="button"
                 data-cy="add-opening-time"
                 my={2}
                 variant="outline"

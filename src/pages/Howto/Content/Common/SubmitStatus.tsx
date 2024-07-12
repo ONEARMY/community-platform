@@ -40,6 +40,7 @@ const HowToSubmitStatus = observer((props: IProps) => {
         ))}
       </Box>
       <Button
+        type="button"
         data-cy={uploadStatus.Complete ? 'view-howto' : ''}
         disabled={!uploadStatus.Complete}
         variant={!uploadStatus.Complete ? 'disabled' : 'outline'}

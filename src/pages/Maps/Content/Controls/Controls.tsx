@@ -114,12 +114,15 @@ export const Controls = ({
             // the map underneath also redirects, so prevent it from doing so
             onClick={(e) => e.stopPropagation()}
           >
-            <Button variant={'primary'}>My pin</Button>
+            <Button type="button" variant="primary">
+              My pin
+            </Button>
           </Link>
         </Box>
       </Flex>
       <Box sx={{ display: ['flex', 'flex', 'none'], mt: '5px', width: '95%' }}>
         <Button
+          type="button"
           sx={{ display: 'block', width: '100%' }}
           variant="secondary"
           onClick={toggleFilterMobileModal}

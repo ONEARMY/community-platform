@@ -181,12 +181,15 @@ export const OpeningHoursPicker = (props: IProps) => {
           placeholder="Select day"
           style={{ marginBottom: 0 }}
         />
-        <Button
-          icon={'delete'}
-          variant={'outline'}
-          sx={{ height: '40px', display: ['block', 'block', 'none'] }}
-          onClick={() => toggleDeleteModal()}
-        />
+        {index > 0 && (
+          <Button
+            type="button"
+            icon="delete"
+            variant="outline"
+            sx={{ height: '40px', display: ['block', 'block', 'none'] }}
+            onClick={() => toggleDeleteModal()}
+          />
+        )}
       </Flex>
       <Flex sx={{ gap: '8px' }}>
         <Field
@@ -212,16 +215,19 @@ export const OpeningHoursPicker = (props: IProps) => {
           style={{ marginBottom: 0 }}
         />
       </Flex>
-      <Button
-        icon={'delete'}
-        variant={'outline'}
-        data-cy={`delete-opening-time-${index}-desk`}
-        sx={{ height: '40px', display: ['none', 'none', 'block'] }}
-        showIconOnly={true}
-        onClick={() => toggleDeleteModal()}
-      >
-        Delete
-      </Button>
+      {index > 0 && (
+        <Button
+          icon="delete"
+          variant="outline"
+          data-cy={`delete-opening-time-${index}-desk`}
+          sx={{ height: '40px', display: ['none', 'none', 'block'] }}
+          showIconOnly={true}
+          onClick={() => toggleDeleteModal()}
+          type="button"
+        >
+          Delete
+        </Button>
+      )}
       <Modal
         onDidDismiss={() => toggleDeleteModal()}
         isOpen={state.showDeleteModal}
@@ -230,8 +236,9 @@ export const OpeningHoursPicker = (props: IProps) => {
         <Flex p={0} mx={-1} sx={{ justifyContent: 'flex-end' }}>
           <Flex px={1}>
             <Button
-              data-cy={'cancel-delete'}
-              variant={'outline'}
+              data-cy="cancel-delete"
+              variant="outline"
+              type="button"
               onClick={() => toggleDeleteModal()}
             >
               Cancel
@@ -239,9 +246,10 @@ export const OpeningHoursPicker = (props: IProps) => {
           </Flex>
           <Flex px={1}>
             <Button
-              data-cy={'confirm-delete'}
-              variant={'outline'}
+              data-cy="confirm-delete"
+              variant="outline"
               onClick={() => confirmDelete()}
+              type="button"
             >
               Delete
             </Button>

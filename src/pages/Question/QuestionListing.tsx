@@ -111,7 +111,7 @@ export const QuestionListing = () => {
 
         <Flex sx={{ gap: 2 }}>
           <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
-            <Button data-cy="create" variant="primary">
+            <Button type="button" data-cy="create" variant="primary">
               {listing.create}
             </Button>
           </Link>
@@ -140,7 +140,7 @@ export const QuestionListing = () => {
             justifyContent: 'center',
           }}
         >
-          <Button onClick={() => fetchQuestions(lastVisible)}>
+          <Button type="button" onClick={() => fetchQuestions(lastVisible)}>
             {listing.loadMore}
           </Button>
         </Flex>

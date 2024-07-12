@@ -1,5 +1,12 @@
 import React, { Suspense } from 'react'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Navigate,
+  Outlet,
+  Route,
+  RouterProvider,
+} from 'react-router-dom'
 import { Analytics } from 'src/common/Analytics'
 import { getSupportedModules, isModuleSupported, MODULE } from 'src/modules'
 import Main from 'src/pages/common/Layout/Main'
@@ -35,57 +42,72 @@ export const Pages = () => {
     ...POLICY_PAGES,
   ]
 
+  const routeElements = [
+    ...menuItems.map((page) => (
+      <Route
+        path={page.exact ? page.path : `${page.path}/*`}
+        key={page.path}
+        element={
+          <>
+            <SeoTagsUpdateComponent title={page.title} />
+            <Main
+              data-cy="main-layout-container"
+              style={{ flex: 1 }}
+              customStyles={page.customStyles}
+              ignoreMaxWidth={page.fullPageWidth}
+            >
+              <>{page.component}</>
+            </Main>
+          </>
+        }
+      />
+    )),
+    <Route key="academy" index element={<Navigate to="/academy" />} />,
+    <Route key="not-found" path="*" element={<NotFoundPage />} />,
+  ]
+  if (isModuleSupported(MODULE.QUESTION)) {
+    routeElements.push(
+      <Route
+        path="/questions/*"
+        key="questions"
+        element={
+          <>
+            <SeoTagsUpdateComponent title="Question" />
+            <Main data-cy="main-layout-container" style={{ flex: 1 }}>
+              <QuestionModuleContainer />
+            </Main>
+          </>
+        }
+      />,
+    )
+  }
+
+  const router = createBrowserRouter(
+    createRoutesFromElements([
+      <Route
+        element={
+          <Suspense
+            fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}
+          >
+            <Analytics />
+            <ScrollToTop />
+            <Outlet />
+            <StickyButton />
+          </Suspense>
+        }
+        key="index"
+      >
+        {routeElements}
+      </Route>,
+    ]),
+  )
+
   return (
     <Flex
       sx={{ height: '100vh', flexDirection: 'column' }}
       data-cy="page-container"
     >
-      <BrowserRouter>
-        <Analytics />
-        <ScrollToTop />
-        <Suspense
-          fallback={<div style={{ minHeight: 'calc(100vh - 175px)' }}></div>}
-        >
-          <Routes>
-            {menuItems.map((page) => (
-              <Route
-                path={page.exact ? page.path : `${page.path}/*`}
-                key={page.path}
-                element={
-                  <>
-                    <SeoTagsUpdateComponent title={page.title} />
-                    <Main
-                      data-cy="main-layout-container"
-                      style={{ flex: 1 }}
-                      customStyles={page.customStyles}
-                      ignoreMaxWidth={page.fullPageWidth}
-                    >
-                      <>{page.component}</>
-                    </Main>
-                  </>
-                }
-              />
-            ))}
-            {isModuleSupported(MODULE.QUESTION) ? (
-              <Route
-                path="/questions/*"
-                key="questions"
-                element={
-                  <>
-                    <SeoTagsUpdateComponent title="Question" />
-                    <Main data-cy="main-layout-container" style={{ flex: 1 }}>
-                      <QuestionModuleContainer />
-                    </Main>
-                  </>
-                }
-              />
-            ) : null}
-            <Route index element={<Navigate to="/academy" />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-      <StickyButton />
+      <RouterProvider router={router} />
     </Flex>
   )
 }

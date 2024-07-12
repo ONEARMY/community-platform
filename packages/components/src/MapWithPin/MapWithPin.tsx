@@ -89,6 +89,7 @@ export const MapWithPin = (props: Props) => {
             />
             {hasUserLocation && (
               <Button
+                type="button"
                 mx={2}
                 onClick={(evt) => {
                   evt.preventDefault()

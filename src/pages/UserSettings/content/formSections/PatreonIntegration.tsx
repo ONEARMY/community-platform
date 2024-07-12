@@ -146,6 +146,7 @@ export const PatreonIntegration = (props: { user: IUserPP }) => {
       )}
       <Flex>
         <Button
+          type="button"
           onClick={patreonRedirect}
           mb={3}
           sx={{ justifyContent: 'center', mr: 3 }}
@@ -155,6 +156,7 @@ export const PatreonIntegration = (props: { user: IUserPP }) => {
         </Button>
         {user.patreon && (
           <Button
+            type="button"
             onClick={removePatreonConnection}
             mb={3}
             sx={{ justifyContent: 'center' }}

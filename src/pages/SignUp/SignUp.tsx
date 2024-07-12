@@ -266,7 +266,7 @@ const SignUpPage = observer(() => {
                           justifyContent: 'center',
                         }}
                         data-cy="submit"
-                        variant={'primary'}
+                        variant="primary"
                         disabled={disabled}
                         type="submit"
                       >

@@ -8,7 +8,7 @@ export const HowtoButtonPublish = (props) => {
   return (
     <Button
       large
-      data-cy={'submit'}
+      data-cy="submit"
       data-testid="submit-form"
       onClick={() => form.mutators.setAllowDraftSaveFalse()}
       mt={3}

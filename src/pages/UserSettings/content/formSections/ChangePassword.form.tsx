@@ -130,6 +130,7 @@ export const ChangePasswordForm = () => {
       )}
 
       <Button
+        type="button"
         data-cy="changePasswordButton"
         onClick={() => setIsExpanded(!isExpanded)}
         variant="secondary"

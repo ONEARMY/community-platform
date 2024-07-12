@@ -122,9 +122,7 @@ export const HowtoForm = observer((props: IProps) => {
         />
       )}
       <Form
-        onSubmit={(formValues, form) => {
-          onSubmit(formValues, form)
-        }}
+        onSubmit={async (formValues, form) => await onSubmit(formValues, form)}
         initialValues={formValues}
         mutators={{
           setAllowDraftSaveTrue,
@@ -134,19 +132,19 @@ export const HowtoForm = observer((props: IProps) => {
         validateOnBlur
         decorators={[calculatedFields]}
         render={({
+          dirty,
           errors,
           form,
           handleSubmit,
           hasValidationErrors,
           submitFailed,
+          submitSucceeded,
           submitting,
           values,
         }) => {
           return (
-            <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
-              <UnsavedChangesDialog
-                uploadComplete={howtoStore.uploadStatus.Complete}
-              />
+            <Flex mx={-2} bg="inherit" sx={{ flexWrap: 'wrap' }}>
+              <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
               <Flex
                 bg="inherit"

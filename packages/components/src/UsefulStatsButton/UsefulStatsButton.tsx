@@ -35,6 +35,7 @@ export const UsefulStatsButton = (props: IProps) => {
   return (
     <>
       <Button
+        type="button"
         data-tip={props.isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={props.isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         onClick={() =>

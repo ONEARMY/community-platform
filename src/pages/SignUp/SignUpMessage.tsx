@@ -24,8 +24,13 @@ const SignUpMessagePage = () => (
             We've sent you an email. Please find a confirmation link in your
             mailbox.
           </Text>
-          <Link to={'/settings'}>
-            <Button variant="primary" data-cy="home" sx={{ borderRadius: 3 }}>
+          <Link to="/settings">
+            <Button
+              type="button"
+              variant="primary"
+              data-cy="home"
+              sx={{ borderRadius: 3 }}
+            >
               Complete your profile
             </Button>
           </Link>

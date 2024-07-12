@@ -47,6 +47,7 @@ export const DeleteImage = ({ onClick }: IProps) => {
         small
         variant="secondary"
         icon="delete"
+        type="button"
         onClick={(event) => onClick(event)}
       >
         Delete

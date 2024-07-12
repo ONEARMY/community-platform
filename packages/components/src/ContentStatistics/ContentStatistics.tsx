@@ -52,7 +52,8 @@ export const ContentStatistics = (props: IProps) => {
           {showStats ? '' : 'More Information'}
         </Text>
         <Button
-          variant={'subtle'}
+          type="button"
+          variant="subtle"
           showIconOnly={true}
           icon={showStats ? 'chevron-up' : 'chevron-down'}
           small={true}

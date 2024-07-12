@@ -20,12 +20,18 @@ export const ConfirmModal = (props: Props) => {
         <Text>{message}</Text>
         <Flex p={2} mx={-1} sx={{ justifyContent: 'flex-end' }}>
           <Flex px={1}>
-            <Button variant={'outline'} onClick={() => props?.handleCancel()}>
+            <Button
+              type="button"
+              variant="outline"
+              data-cy="Confirm.modal: Cancel"
+              onClick={() => props?.handleCancel()}
+            >
               Cancel
             </Button>
           </Flex>
           <Flex px={1}>
             <Button
+              type="button"
               aria-label={`Confirm ${confirmButtonText} action`}
               data-cy="Confirm.modal: Confirm"
               variant={'outline'}

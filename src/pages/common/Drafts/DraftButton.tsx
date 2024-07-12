@@ -19,6 +19,7 @@ const DraftButton = ({
 
   return (
     <Button
+      type="button"
       variant="secondary"
       icon={showDrafts ? 'arrow-back' : undefined}
       data-cy="my-drafts"

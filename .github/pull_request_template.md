@@ -1,7 +1,7 @@
 ## PR Checklist
 
 - [ ] - Commit [messages are descriptive](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide), it will be used in our [Release Notes](https://github.com/ONEARMY/community-platform/releases/)
-- [ ] - Tests for the changes have been added (for bug fixes / features)
+- [ ] - Unit and e2e tests for the changes that have been added (for bug fixes / features)
 
 ## PR Type
 

@@ -25,7 +25,12 @@ const SignUpMessagePage = () => (
             mailbox.
           </Text>
           <Link to="/settings">
-            <Button type="button" variant="primary" data-cy="home" sx={{ borderRadius: 3 }}>
+            <Button
+              type="button"
+              variant="primary"
+              data-cy="home"
+              sx={{ borderRadius: 3 }}
+            >
               Complete your profile
             </Button>
           </Link>

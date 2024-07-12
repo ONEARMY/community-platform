@@ -763,6 +763,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lucaasrojas",
+      "name": "Lucas Rojas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26610409?v=4",
+      "profile": "https://lucaasrojas-portfolio.vercel.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

@@ -335,9 +335,6 @@ describe('[How To]', () => {
     })
 
     it('[Warning on leaving page]', () => {
-      const stub = cy.stub()
-      stub.returns(false)
-
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
@@ -347,22 +344,13 @@ describe('[How To]', () => {
         .clear()
         .type(expected.title)
         .blur({ force: true })
-      cy.get('[data-cy=page-link][href*="/how-to"]')
-        .click()
-        .then(() => {
-          expect(stub.callCount).to.equal(1)
-          stub.resetHistory()
-        })
+      cy.get('[data-cy=page-link][href*="/how-to"]').click()
+      cy.get('[data-cy="Confirm.modal: Cancel"]').click()
       cy.url().should('match', /\/how-to\/create$/)
 
       cy.step('Clear title input')
       cy.get('[data-cy=intro-title]').clear().blur({ force: true })
-      cy.get('[data-cy=page-link][href*="/how-to"]')
-        .click()
-        .then(() => {
-          expect(stub.callCount).to.equal(0)
-          stub.resetHistory()
-        })
+      cy.get('[data-cy=page-link][href*="/how-to"]').click()
       cy.url().should('match', /\/how-to?/)
     })
   })

@@ -23,6 +23,7 @@ export const ConfirmModal = (props: Props) => {
             <Button
               type="button"
               variant="outline"
+              data-cy="Confirm.modal: Cancel"
               onClick={() => props?.handleCancel()}
             >
               Cancel

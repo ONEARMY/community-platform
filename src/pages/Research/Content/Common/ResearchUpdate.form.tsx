@@ -92,13 +92,20 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     }, 0)
   }
 
-  const onSubmit = (formValues: IResearch.Update) => {
+  const onSubmit = async (formValues: IResearch.Update) => {
     setShowSubmitModal(true)
-    if (formValues.fileLink && formValues.files && formValues.files.length > 0)
-      return setInvalidFileWarning(true)
-    else setInvalidFileWarning(false)
 
-    store.uploadUpdate({
+    if (
+      formValues.fileLink &&
+      formValues.files &&
+      formValues.files.length > 0
+    ) {
+      return setInvalidFileWarning(true)
+    }
+
+    setInvalidFileWarning(false)
+
+    await store.uploadUpdate({
       ...formValues,
       collaborators: Array.from(
         new Set(
@@ -159,9 +166,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
         />
       )}
       <Form
-        onSubmit={(v) => {
-          onSubmit(v as IResearch.Update)
-        }}
+        onSubmit={async (v) => await onSubmit(v as IResearch.Update)}
         initialValues={formValues}
         mutators={{
           setAllowDraftSaveFalse,
@@ -175,6 +180,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
           handleSubmit,
           hasValidationErrors,
           errors,
+          submitSucceeded,
           submitting,
           submitFailed,
           values,
@@ -191,10 +197,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
               sx={{ flexWrap: 'wrap' }}
               data-testid="EditResearchUpdate"
             >
-              <UnsavedChangesDialog
-                uploadComplete={store.updateUploadStatus.Complete}
-                message={CONFIRM_DIALOG_MSG}
-              />
+              <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
               <Flex
                 bg="inherit"
                 px={2}

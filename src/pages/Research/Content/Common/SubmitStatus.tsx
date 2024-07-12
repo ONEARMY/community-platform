@@ -19,7 +19,7 @@ export const ResearchSubmitStatus = observer((props: IProps) => {
           Uploading Research
         </Heading>
         <Icon
-          glyph={'close'}
+          glyph="close"
           onClick={() => {
             props.onClose()
           }}

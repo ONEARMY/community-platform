@@ -215,15 +215,17 @@ export const UserProfile = () => {
     user && (
       <Form
         id={formId}
-        onSubmit={saveProfile}
+        onSubmit={async (values) => await saveProfile(values)}
         initialValues={formValues}
         validate={validateForm}
         mutators={{ ...arrayMutators }}
         validateOnBlur
         render={({
+          dirty,
           form,
           submitFailed,
           submitting,
+          submitSucceeded,
           values,
           handleSubmit,
           invalid,
@@ -236,12 +238,7 @@ export const UserProfile = () => {
               bg={'inherit'}
               sx={{ flexDirection: 'column', padding: 4, gap: 4 }}
             >
-              <UnsavedChangesDialog
-                uploadComplete={userStore.updateStatus.Complete}
-                message={
-                  'You are leaving this page without saving. Do you want to continue ?'
-                }
-              />
+              <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
               <>
                 {notification.show && (

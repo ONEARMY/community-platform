@@ -31,7 +31,7 @@ describe('[Settings]', () => {
   })
 
   describe('[Focus Member]', () => {
-    it('[Cancel edit profile and get confirmation]', (done) => {
+    it('[Cancel edit profile and get confirmation]', () => {
       cy.signUpNewUser()
 
       cy.step('Go to User Settings')
@@ -41,12 +41,7 @@ describe('[Settings]', () => {
 
       cy.step('Confirm shown when attempting to go to another page')
       cy.get('[data-cy=page-link]').contains('How-to').click()
-      cy.on('window:confirm', (text) => {
-        expect(text).to.eq(
-          'You are leaving this page without saving. Do you want to continue ?',
-        )
-        done()
-      })
+      cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
     })
 
     it('[Edit a new profile]', () => {
@@ -349,8 +344,8 @@ describe('[Settings]', () => {
       openTimes.forEach((openTime) => {
         cy.setSettingAddOpeningTime(openTime)
       })
-      cy.setSettingDeleteOpeningTime(0, false)
-      cy.setSettingDeleteOpeningTime(1, true)
+      cy.setSettingDeleteOpeningTime(1, false)
+      cy.setSettingDeleteOpeningTime(2, true)
 
       cy.get(`[data-cy=plastic-${plasticTypes[0]}]`).click()
       cy.get(`[data-cy=plastic-${plasticTypes[1]}]`).click()
@@ -374,7 +369,7 @@ describe('[Settings]', () => {
         `${openTimes[0].day}: ${openTimes[0].from} - ${openTimes[0].to}`,
       )
       cy.contains(
-        `${openTimes[2].day}: ${openTimes[2].from} - ${openTimes[2].to}`,
+        `${openTimes[1].day}: ${openTimes[1].from} - ${openTimes[1].to}`,
       )
       cy.contains(
         `${openTimes[3].day}: ${openTimes[3].from} - ${openTimes[3].to}`,

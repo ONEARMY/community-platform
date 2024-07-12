@@ -244,11 +244,8 @@ Cypress.Commands.add(
   'selectTag',
   (tagName: string, selector = '[data-cy=tag-select]') => {
     cy.log('select tag', tagName)
-    cy.get(`${selector} input`)
-      .click({ force: true })
-      .type(tagName, { force: true })
-      .get(`${selector} .data-cy__menu-list`)
-      .contains(tagName)
-      .click()
+    cy.get(`${selector} input`).click({ force: true })
+    cy.get(`${selector} input`).type(tagName, { force: true })
+    cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click()
   },
 )

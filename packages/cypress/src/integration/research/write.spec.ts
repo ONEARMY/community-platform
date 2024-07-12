@@ -230,7 +230,6 @@ describe('[Research]', () => {
     it('[Warning on leaving page]', () => {
       const stub = cy.stub()
       stub.returns(false)
-      cy.on('window:confirm', stub)
 
       cy.login(researcherEmail, researcherPassword)
       cy.step('Access the create research article')

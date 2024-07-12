@@ -13,7 +13,6 @@ import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
-import { usePrompt } from 'src/common/hooks/usePrompt'
 import { researchStatusOptions } from 'src/models/research.models'
 import {
   ResearchErrors,
@@ -44,6 +43,7 @@ import ResearchFieldCategory from './ResearchCategorySelect'
 
 import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -143,12 +143,6 @@ const ResearchForm = observer((props: IProps) => {
     )
   }
 
-  // Block navigating elsewhere when data has been entered into the input
-  usePrompt(
-    CONFIRM_DIALOG_MSG,
-    !store.updateUploadStatus.Complete && state.dirty,
-  )
-
   const draftButtonText =
     formValues.moderation !== IModerationStatus.DRAFT ? create : update
   const pageTitle = headings.overview[parentType]
@@ -192,6 +186,11 @@ const ResearchForm = observer((props: IProps) => {
 
           return (
             <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+              <UnsavedChangesDialog
+                uploadComplete={store.updateUploadStatus.Complete}
+                message={CONFIRM_DIALOG_MSG}
+              />
+
               <Flex
                 bg="inherit"
                 px={2}
@@ -360,7 +359,7 @@ const ResearchForm = observer((props: IProps) => {
                   </Box>
 
                   <Button
-                    data-cy={'draft'}
+                    data-cy="draft"
                     onClick={() => {
                       form.mutators.setAllowDraftSaveTrue()
                       setSubmissionHandler({ shouldSubmit: true, draft: true })
@@ -376,7 +375,7 @@ const ResearchForm = observer((props: IProps) => {
 
                   <Button
                     large
-                    data-cy={'submit'}
+                    data-cy="submit"
                     onClick={() => {
                       form.mutators.setAllowDraftSaveFalse()
                       setSubmissionHandler({

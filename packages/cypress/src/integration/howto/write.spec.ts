@@ -337,7 +337,6 @@ describe('[How To]', () => {
     it('[Warning on leaving page]', () => {
       const stub = cy.stub()
       stub.returns(false)
-      cy.on('window:confirm', stub)
 
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')

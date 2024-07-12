@@ -11,7 +11,6 @@ import {
 } from 'oa-components'
 import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { usePrompt } from 'src/common/hooks/usePrompt'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   setAllowDraftSaveFalse,
@@ -29,6 +28,7 @@ import { UpdateSubmitStatus } from './SubmitStatus'
 
 import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'
@@ -139,12 +139,6 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     [store.updateUploadStatus.Complete, beforeUnload],
   )
 
-  // Block navigating elsewhere when data has been entered into the input
-  usePrompt(
-    CONFIRM_DIALOG_MSG,
-    !store.updateUploadStatus.Complete && formState.dirty,
-  )
-
   const draftButtonText =
     formValues.moderation !== IModerationStatus.DRAFT
       ? draft.create
@@ -197,6 +191,10 @@ export const ResearchUpdateForm = observer((props: IProps) => {
               sx={{ flexWrap: 'wrap' }}
               data-testid="EditResearchUpdate"
             >
+              <UnsavedChangesDialog
+                uploadComplete={store.updateUploadStatus.Complete}
+                message={CONFIRM_DIALOG_MSG}
+              />
               <Flex
                 bg="inherit"
                 px={2}
@@ -265,7 +263,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   }}
                 >
                   <Button
-                    data-cy={'draft'}
+                    data-cy="draft"
                     onClick={() => {
                       trySubmitForm(true)
                     }}
@@ -278,7 +276,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   </Button>
                   {isEdit ? (
                     <Button
-                      data-cy={'delete'}
+                      data-cy="delete"
                       onClick={(evt) => {
                         setShowDeleteModal(true)
                         evt.preventDefault()
@@ -295,7 +293,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     large
                     id="submit-form"
                     data-testid="submit-form"
-                    data-cy={'submit'}
+                    data-cy="submit"
                     onClick={(evt) => {
                       trySubmitForm(false)
                       evt.preventDefault()

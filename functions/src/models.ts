@@ -8,6 +8,7 @@ import type * as functions from 'firebase-functions'
 // Alternative fix would be to put the platform code one level further nested e.g. <root>/platform/src
 export type {
   IDiscussion,
+  IComment,
   IHowtoDB,
   IMapPin,
   IMessageDB,

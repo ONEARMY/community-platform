@@ -127,7 +127,7 @@ export const QuestionForm = (props: IProps) => {
                 </Box>
                 <Button
                   large
-                  data-cy={'submit'}
+                  data-cy="submit"
                   mt={3}
                   variant="primary"
                   type="submit"

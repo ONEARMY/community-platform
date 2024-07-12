@@ -35,7 +35,9 @@ export const ChunkLoadErrorHandler = () => {
           <Text mb={4} sx={{ fontSize: 3 }}>
             The website got some updates
           </Text>
-          <Button onClick={() => attemptReload()}>Load the new site.</Button>
+          <Button type="button" onClick={() => attemptReload()}>
+            Load the new site.
+          </Button>
           <Text mt={4} sx={{ fontSize: 0.75 }}>
             If it doesn't work you might need to try another browser.
             <br></br>Or send us a{' '}

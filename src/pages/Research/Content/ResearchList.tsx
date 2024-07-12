@@ -134,7 +134,7 @@ const ResearchList = observer(() => {
                 />
               )}
               <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
-                <Button variant="primary" data-cy="create">
+                <Button type="button" variant="primary" data-cy="create">
                   {listing.create}
                 </Button>
               </Link>
@@ -147,7 +147,7 @@ const ResearchList = observer(() => {
                 handleShowDrafts={handleShowDrafts}
               />
               <Link to="/research/create">
-                <Button variant="primary" data-cy="create">
+                <Button type="button" variant="primary" data-cy="create">
                   {listing.create}
                 </Button>
               </Link>
@@ -185,7 +185,10 @@ const ResearchList = observer(() => {
                   justifyContent: 'center',
                 }}
               >
-                <Button onClick={() => fetchResearchItems(lastVisible)}>
+                <Button
+                  type="button"
+                  onClick={() => fetchResearchItems(lastVisible)}
+                >
                   {listing.loadMore}
                 </Button>
               </Flex>

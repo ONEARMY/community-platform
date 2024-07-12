@@ -69,6 +69,7 @@ export const FileInput = (props: IProps) => {
       {showFileList ? (
         <>
           <Button
+            type="button"
             onClick={() => toggleModal()}
             icon="upload"
             variant="outline"

@@ -48,6 +48,7 @@ export const ImpactSection = () => {
       )}
       <Box mt={2}>
         <Button
+          type="button"
           data-cy="impact-button-expand"
           onClick={() => setIsExpanded(!isExpanded)}
           variant="secondary"

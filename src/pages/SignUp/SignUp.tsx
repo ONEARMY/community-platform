@@ -280,7 +280,7 @@ const SignUpPage = observer(() => {
                         large
                         sx={{ width: '100%', justifyContent: 'center' }}
                         data-cy="submit"
-                        variant={'primary'}
+                        variant="primary"
                         disabled={disabled}
                         type="submit"
                       >

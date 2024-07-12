@@ -78,8 +78,9 @@ export const HowtoFieldStepsContainer = () => {
           </AnimatePresence>
           <Flex>
             <Button
-              icon={'add'}
-              data-cy={'add-step'}
+              type="button"
+              icon="add"
+              data-cy="add-step"
               mx="auto"
               mt={[10, 10, 20]}
               mb={[5, 5, 20]}

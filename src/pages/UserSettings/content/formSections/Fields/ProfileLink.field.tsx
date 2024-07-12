@@ -79,9 +79,10 @@ export const ProfileLinkField = (props: IProps) => {
 
   const DeleteButton = (props) => (
     <Button
+      type="button"
       data-cy={`delete-link-${index}`}
-      icon={'delete'}
-      variant={'outline'}
+      icon="delete"
+      variant="outline"
       showIconOnly={true}
       onClick={() => toggleDeleteModal()}
       {...props}

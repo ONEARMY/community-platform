@@ -235,9 +235,8 @@ export const CommentList = (props: IPropsCommentList) => {
       {comments && comments.length > shownComments && (
         <Flex>
           <Button
-            sx={{
-              margin: '0 auto',
-            }}
+            type="button"
+            sx={{ margin: '0 auto' }}
             variant="outline"
             onClick={handleMoreComments}
           >

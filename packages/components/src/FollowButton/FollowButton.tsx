@@ -19,6 +19,7 @@ export const FollowButton = (props: IProps) => {
   return (
     <>
       <Button
+        type="button"
         data-testid={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-cy={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-tip={isLoggedIn ? '' : 'Login to follow'}

@@ -42,6 +42,7 @@ export const ImpactYearDisplayField = observer((props: Props) => {
         <Text>{missingData}</Text>
       )}
       <Button
+        type="button"
         data-cy={`${formId}-button-edit`}
         onClick={() => setIsEditMode(true)}
         sx={{ marginTop: 3 }}

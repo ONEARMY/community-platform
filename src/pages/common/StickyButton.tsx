@@ -18,6 +18,7 @@ export const StickyButton = () => {
     >
       <ExternalLink href={href} data-cy="feedback">
         <Button
+          type="button"
           sx={{ display: ['none', 'inherit'] }}
           variant="primary"
           icon="update"
@@ -26,6 +27,7 @@ export const StickyButton = () => {
         </Button>
 
         <Button
+          type="button"
           sx={{ display: ['inherit', 'none'] }}
           variant="primary"
           icon="update"

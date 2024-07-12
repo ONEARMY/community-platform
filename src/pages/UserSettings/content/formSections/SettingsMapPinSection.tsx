@@ -84,6 +84,7 @@ export const SettingsMapPinSection = observer((props: IProps) => {
         {!state.hasMapPin && (
           <>
             <Button
+              type="button"
               data-cy="add-a-map-pin"
               onClick={() => {
                 toggleLocationDropdown()
@@ -134,6 +135,7 @@ export const SettingsMapPinSection = observer((props: IProps) => {
 
             <Button
               mr={2}
+              type="button"
               data-cy="edit-map-pin"
               onClick={() => {
                 setState((state) => ({
@@ -146,6 +148,7 @@ export const SettingsMapPinSection = observer((props: IProps) => {
             </Button>
 
             <Button
+              type="button"
               data-cy="remove-a-member-map-pin"
               mt={4}
               variant="outline"
@@ -224,6 +227,7 @@ export const SettingsMapPinSection = observer((props: IProps) => {
                       />
 
                       <Button
+                        type="button"
                         data-cy="remove-a-member-map-pin"
                         mt={4}
                         variant="outline"

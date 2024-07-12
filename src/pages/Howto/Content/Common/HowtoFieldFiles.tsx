@@ -50,6 +50,7 @@ const DeleteButton = ({ onClick }) => {
       data-testid="re-upload-files"
       variant={'outline'}
       icon="delete"
+      type="button"
       onClick={() => onClick()}
     >
       {buttons.files}

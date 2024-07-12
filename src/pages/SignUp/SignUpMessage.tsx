@@ -36,8 +36,8 @@ const SignUpMessagePage = () => (
         </Flex>
       </Card>
       <Flex mt={3} sx={{ justifyContent: 'flex-start' }}>
-        <Link to={'/settings'}>
-          <Button variant="primary" data-cy="home">
+        <Link to="/settings">
+          <Button type="button" variant="primary" data-cy="home">
             Complete your profile
           </Button>
         </Link>

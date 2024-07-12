@@ -126,6 +126,7 @@ export const ChangeEmailForm = () => {
       )}
 
       <Button
+        type="button"
         data-cy="changeEmailButton"
         onClick={() => setIsExpanded(!isExpanded)}
         variant="secondary"

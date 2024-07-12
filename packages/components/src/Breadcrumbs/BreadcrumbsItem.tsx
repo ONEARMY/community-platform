@@ -17,10 +17,14 @@ interface BreadcrumbItemProps {
 const BreadcrumbButton = ({ text, link }: BreadcrumbButtonProps) => {
   return link ? (
     <Link to={link}>
-      <Button variant="breadcrumb">{text}</Button>
+      <Button type="button" variant="breadcrumb">
+        {text}
+      </Button>
     </Link>
   ) : (
-    <Button variant="breadcrumb">{text}</Button>
+    <Button type="button" variant="breadcrumb">
+      {text}
+    </Button>
   )
 }
 

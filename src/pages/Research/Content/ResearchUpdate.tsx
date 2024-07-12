@@ -138,8 +138,9 @@ const ResearchUpdate = ({
                       to={'/research/' + slug + '/edit-update/' + update._id}
                     >
                       <Button
-                        variant={'primary'}
-                        data-cy={'edit-update'}
+                        type="button"
+                        variant="primary"
+                        data-cy="edit-update"
                         ml="auto"
                         mt={[0, 2, 2]}
                       >

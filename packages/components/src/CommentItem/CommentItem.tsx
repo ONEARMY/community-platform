@@ -160,6 +160,7 @@ export const CommentItem = (props: IProps) => {
                     }}
                   >
                     <Button
+                      type="button"
                       data-cy={`${item}: edit button`}
                       variant="outline"
                       small={true}
@@ -169,6 +170,7 @@ export const CommentItem = (props: IProps) => {
                       edit
                     </Button>
                     <Button
+                      type="button"
                       data-cy={`${item}: delete button`}
                       variant={'outline'}
                       small={true}

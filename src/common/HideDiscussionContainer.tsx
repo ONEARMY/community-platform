@@ -44,6 +44,7 @@ export const HideDiscussionContainer = ({
       }}
     >
       <Button
+        type="button"
         variant="subtle"
         sx={{
           fontSize: '14px',

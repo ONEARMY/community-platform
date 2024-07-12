@@ -148,6 +148,7 @@ const SignInPage = observer((props: IProps) => {
                           </Text>
                           {Object.values(AUTH_PROVIDERS).map((p) => (
                             <Button
+                              type="button"
                               sx={{ width: '100%' }}
                               key={p.provider}
                               mb={2}

@@ -10,17 +10,12 @@ const discussion = Object.values(MOCK_DATA.discussions).find(
   ({ sourceId }) => sourceId === item.updates[0]._id,
 )
 
-const firstComment = discussion.comments[0]
-
 describe('[Research.Discussions]', () => {
+  const firstComment = discussion.comments[0]
   it('can open using deep links', () => {
     const commentUrl = `/research/${item.slug}#update_${item.updates[0]._id}-comment:${firstComment._id}`
     cy.visit(commentUrl)
-    cy.get('[data-cy="CommentItem"]').should('have.length.gte', 1)
-    cy.get('[data-cy="CommentItem"]')
-      .scrollIntoView()
-      .should('be.inViewport', 10)
-    cy.contains(firstComment.text)
+    cy.checkCommentItem(firstComment.text, 1)
   })
 
   it('allows authenticated users to contribute to discussions', () => {

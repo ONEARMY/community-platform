@@ -35,6 +35,7 @@ declare global {
   namespace Cypress {
     interface Chainable {
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>
+      checkCommentItem(firstComment: string, length: number): Chainable<void>
       fillSignupForm(
         username: string,
         email: string,
@@ -255,5 +256,18 @@ Cypress.Commands.add(
     cy.get(`${selector} input`).click({ force: true })
     cy.get(`${selector} input`).type(tagName, { force: true })
     cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click()
+  },
+)
+
+Cypress.Commands.add(
+  'checkCommentItem',
+  (firstComment: string, length: number) => {
+    cy.step('Comment mentions are formatted correctly')
+    cy.get('[data-cy="CommentItem"]').should('have.length.gte', length)
+    cy.get('[data-cy="CommentItem"]')
+      .first()
+      .scrollIntoView()
+      .should('be.inViewport', 10)
+    cy.contains(firstComment)
   },
 )

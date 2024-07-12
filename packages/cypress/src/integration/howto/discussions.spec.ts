@@ -17,12 +17,7 @@ describe('[Howto.Discussions]', () => {
 
     cy.signUpNewUser()
     cy.visit(`/how-to/${item.slug}#comment:${firstComment._id}`)
-    cy.get('[data-cy="CommentItem"]').should('have.length.gte', 2)
-    cy.get('[data-cy="CommentItem"]')
-      .first()
-      .scrollIntoView()
-      .should('be.inViewport', 10)
-    cy.contains(firstComment.text)
+    cy.checkCommentItem(firstComment.text, 2)
   })
 
   it('allows authenticated users to contribute to discussions', () => {

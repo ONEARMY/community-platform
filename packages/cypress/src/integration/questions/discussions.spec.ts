@@ -10,20 +10,14 @@ const item = questions[0]
 const discussion = Object.values(MOCK_DATA.discussions).find(
   ({ sourceId }) => sourceId === item._id,
 )
-const firstComment = discussion.comments[0]
 
 describe('[Questions.Discussions]', () => {
   it('can open using deep links', () => {
+    const firstComment = discussion.comments[0]
+
     cy.signUpNewUser()
     cy.visit(`/questions/${item.slug}#comment:${firstComment._id}`)
-    cy.get('[data-cy="CommentItem"]').should('have.length.gte', 2)
-    cy.get('[data-cy="CommentItem"]')
-      .first()
-      .scrollIntoView()
-      .should('be.inViewport', 10)
-
-    cy.step('Comment mentions are formatted correctly')
-    cy.contains('@demo_user - I like your logo')
+    cy.checkCommentItem('@demo_user - I like your logo', 2)
   })
 
   it('allows authenticated users to contribute to discussions', () => {

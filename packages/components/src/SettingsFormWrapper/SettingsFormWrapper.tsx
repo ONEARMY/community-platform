@@ -1,6 +1,6 @@
 // Used the guide at https://mui.com/base-ui/react-tabs/ as a fundation
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Tabs } from '@mui/base/Tabs'
 import { Flex } from 'theme-ui'
 
@@ -19,11 +19,22 @@ export const SettingsFormWrapper = (props: IProps) => {
   const { style, setDefaultTab, tabs } = props
   const [value, setValue] = useState<number>(setDefaultTab || 0)
 
+  const setHash = (hash: number) => {
+    history.pushState(null, '', `#${hash}`)
+  }
+
+  useEffect(() => {
+    setHash(value)
+  }, [])
+
   const handleChange = (
     _: React.SyntheticEvent<Element, Event> | null,
     value: string | number | null,
   ) => {
-    typeof value === 'number' && setValue(value)
+    if (typeof value === 'number') {
+      setValue(value)
+      setHash(value)
+    }
   }
 
   return (

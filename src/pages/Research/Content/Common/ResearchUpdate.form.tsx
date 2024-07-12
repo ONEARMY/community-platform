@@ -11,6 +11,7 @@ import {
 } from 'oa-components'
 import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   setAllowDraftSaveFalse,
@@ -28,7 +29,6 @@ import { UpdateSubmitStatus } from './SubmitStatus'
 
 import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'

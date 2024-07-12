@@ -1,6 +1,5 @@
 import { memo, useState } from 'react'
 import { FormSpy } from 'react-final-form'
-
 import { useBlocker } from 'react-router'
 import { ConfirmModal } from 'oa-components'
 

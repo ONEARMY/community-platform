@@ -13,6 +13,7 @@ import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { researchStatusOptions } from 'src/models/research.models'
 import {
   ResearchErrors,
@@ -43,7 +44,6 @@ import ResearchFieldCategory from './ResearchCategorySelect'
 
 import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
-import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'

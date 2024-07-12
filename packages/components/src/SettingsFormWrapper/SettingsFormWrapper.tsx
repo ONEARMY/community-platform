@@ -45,7 +45,7 @@ export const SettingsFormWrapper = (props: IProps) => {
           alignSelf: 'stretch',
           justifyContent: 'stretch',
           flexDirection: ['column', 'row'],
-          gap: 2,
+          gap: 4,
         }}
       >
         <SettingsFormTabList tabs={tabs} value={value} setValue={setValue} />

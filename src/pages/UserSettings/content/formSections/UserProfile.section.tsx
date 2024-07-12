@@ -233,7 +233,7 @@ export const UserProfile = () => {
           return (
             <Flex
               bg={'inherit'}
-              sx={{ flexDirection: 'column', padding: 4, gap: 4 }}
+              sx={{ flexDirection: 'column', gap: 2 }}
             >
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
@@ -254,8 +254,8 @@ export const UserProfile = () => {
                 )}
               </>
 
-              <form id="userProfileForm" onSubmit={handleSubmit}>
-                <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+              <form id={formId} onSubmit={handleSubmit}>
+                <Flex sx={{ flexDirection: 'column', gap: 2 }}>
                   {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
                   {values.profileType === ProfileType.WORKSPACE && (

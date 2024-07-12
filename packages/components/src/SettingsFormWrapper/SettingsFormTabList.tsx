@@ -28,13 +28,16 @@ export const SettingsFormTabList = (props: IProps) => {
     display: flex;
     gap: 8px;
     justify-content: flex-start;
+    font-size: 18px;
+    font-family: Varela round;
+    align-items: center;
 
     &:hover {
       background-color: white;
     }
 
     &:focus {
-      outline: 2px solid #666;
+      border: 2px solid #666;
     }
 
     &.${tabClasses.disabled} {
@@ -44,14 +47,13 @@ export const SettingsFormTabList = (props: IProps) => {
 
     &.${tabClasses.selected} {
       color: #1b1b1b;
-      outline: 2px solid #1b1b1b;
+      border: 2px solid #1b1b1b;
       background-color: #e2edf7;
     }
   `
 
   const TabsList = styled(BaseTabsList)`
     width: 100%;
-    border-radius: inherit;
     display: flex;
     gap: 12px;
     flex-direction: column;
@@ -68,7 +70,7 @@ export const SettingsFormTabList = (props: IProps) => {
           {tabs.map(({ glyph, title }, index) => {
             return (
               <Tab key={index} data-cy={`tab-${title}`}>
-                <Icon glyph={glyph} /> {title}
+                <Icon glyph={glyph} size={20} /> {title}
               </Tab>
             )
           })}
@@ -93,7 +95,9 @@ export const SettingsFormTabList = (props: IProps) => {
             {tabs.map(({ title }, index) => {
               return (
                 <option key={index} onClick={() => setValue(index)}>
-                  {title}
+                  <Tab key={index} data-cy={`tab-${title}`}>
+                    {title}
+                  </Tab>
                 </option>
               )
             })}

@@ -231,10 +231,7 @@ export const UserProfile = () => {
           const isMember = values.profileType === ProfileType.MEMBER
 
           return (
-            <Flex
-              bg={'inherit'}
-              sx={{ flexDirection: 'column', gap: 2 }}
-            >
+            <Flex bg={'inherit'} sx={{ flexDirection: 'column', gap: 2 }}>
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
               <>

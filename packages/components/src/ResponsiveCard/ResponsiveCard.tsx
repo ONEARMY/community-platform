@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Heading, Image } from 'theme-ui'
+import { Box, Card, Flex, Heading, Image as ThemeUiImage } from 'theme-ui'
 
 import { Category, type CategoryProps } from '../Category/Category'
 import { IconCountGroup } from '../IconCountGroup/IconCountGroup'
@@ -9,74 +9,71 @@ import type { IconCountGroupProps } from '../IconCountGroup/IconCountGroup'
 import type { ModerationStatusProps } from '../ModerationStatus/ModerationStatus'
 
 export interface ResponsiveCardProps {
-  title: string
-  link: string
-  imageSrc?: string
-  moderationStatus?: string
-  category?: CategoryProps['category']
-  userName?: string
-  creationDate?: string
   additionalContent?: React.ReactNode
-  dataCy: string
-  dataId: string
-  status?: React.ReactNode
-  iconCounts?: IconCountGroupProps['iconCounts']
-  titleAs: 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-  additionalTopRightElements?: React.ReactNode // For elements like status indicators
   additionalFooterContent?: React.ReactNode // For any footer content such as user info or stats
   additionalStyles?: object // For any additional styling needs
+  additionalTopRightElements?: React.ReactNode // For elements like status indicators
+  category?: CategoryProps['category']
+  creationDate?: string
+  dataCy: string
+  dataId: string
+  iconCounts?: IconCountGroupProps['iconCounts']
+  imageAlt?: string
+  imageSrc?: string
+  link: string
   moderationStatusProps?: ModerationStatusProps
+  status?: React.ReactNode
+  title: string
+  titleAs: 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  userName?: string
 }
 
 export const ResponsiveCard = (props: ResponsiveCardProps) => {
   const {
-    imageSrc,
-    title,
-    link,
-    titleAs,
-    additionalTopRightElements,
     additionalFooterContent,
     additionalStyles,
-    iconCounts,
-    status,
-    dataCy,
-    moderationStatusProps,
-    dataId,
+    additionalTopRightElements,
     category,
+    dataCy,
+    dataId,
+    iconCounts,
+    imageAlt,
+    imageSrc,
+    link,
+    moderationStatusProps,
+    status,
+    title,
+    titleAs,
   } = props
+
   return (
     <Card
       as="li"
       data-cy={dataCy}
       data-id={dataId}
       mb={3}
-      style={{ position: 'relative' }}
+      sx={{ position: 'relative' }}
     >
       <Flex sx={{ flex: 1 }}>
         {imageSrc && (
-          <Flex>
-            <Box
-              sx={{
-                display: ['none', 'block'],
-                height: '100%',
-                width: '92px',
-              }}
-            >
-              <Image
-                style={{
-                  width: '100%',
-                  aspectRatio: '1 / 1',
-                  objectFit: 'cover',
-                  verticalAlign: 'top',
-                }}
-                loading="eager"
-                src={imageSrc}
-                crossOrigin=""
-              />
-            </Box>
-          </Flex>
+          <Box
+            data-cy="card-image"
+            sx={{
+              display: ['none', 'block'],
+              width: '92px',
+              height: '92px',
+            }}
+          >
+            <ThemeUiImage
+              sx={{ width: '92px', height: '100%' }}
+              loading="lazy"
+              alt={imageAlt}
+              src={imageSrc}
+              crossOrigin=""
+            />
+          </Box>
         )}
-        <Flex sx={{ flex: 1 }}>
+        <Flex sx={{ flex: 1 }} data-cy="card-content">
           <Flex
             sx={{
               flex: 1,
@@ -87,6 +84,7 @@ export const ResponsiveCard = (props: ResponsiveCardProps) => {
             }}
           >
             <Flex
+              data-cy="card-header"
               sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}
             >
               <Flex
@@ -97,9 +95,7 @@ export const ResponsiveCard = (props: ResponsiveCardProps) => {
                 }}
               >
                 {moderationStatusProps && (
-                  <Box>
-                    <ModerationStatus {...moderationStatusProps} />
-                  </Box>
+                  <ModerationStatus {...moderationStatusProps} />
                 )}
                 <Heading
                   as={titleAs}
@@ -141,6 +137,7 @@ export const ResponsiveCard = (props: ResponsiveCardProps) => {
             </Flex>
 
             <Flex
+              data-cy="card-footer"
               sx={{ alignItems: 'center', justifyContent: 'space-between' }}
             >
               {additionalFooterContent}

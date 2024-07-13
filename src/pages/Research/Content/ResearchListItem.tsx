@@ -7,7 +7,7 @@ import { formatDate } from 'src/utils/date'
 import { Box, Flex, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
-import { researchStatusColour } from '../researchHelpers'
+import { getPublicUpdates,researchStatusColour } from '../researchHelpers'
 
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
@@ -29,15 +29,24 @@ const ResearchListItem = ({ item }: IProps) => {
 
   const isVerified = aggregationsStore.isVerified(item._createdBy)
   const status = item.researchStatus || ResearchStatus.IN_PROGRESS
-  const modifiedDate = useMemo(() => getItemDate(item, 'long'), [item])
+
+  const modifiedDate = useMemo(
+    () => getItemDate(item, 'long'),
+    [item._contentModifiedTimestamp, item._created],
+  )
+  const thumbnailUrl = useMemo(
+    () => cdnImageUrl(getItemThumbnail(item), { width: 92 }),
+    [item.updates, item._created],
+  )
 
   return (
     <ResponsiveCard
-      title={item.title}
-      imageSrc={cdnImageUrl(getItemThumbnail(item), { width: 125 })}
-      link={`/research/${encodeURIComponent(item.slug)}`}
       dataCy="ResearchListItem"
       dataId={item._id}
+      imageSrc={thumbnailUrl}
+      imageAlt={item.title}
+      link={`/research/${encodeURIComponent(item.slug)}`}
+      title={item.title}
       titleAs="h2"
       status={
         <Text
@@ -59,24 +68,6 @@ const ResearchListItem = ({ item }: IProps) => {
           {status}
         </Text>
       }
-      iconCounts={[
-        {
-          count: usefulDisplayCount,
-          icon: 'star-active',
-          text: 'How useful is it',
-        },
-        {
-          count: item.totalCommentCount || 0,
-          icon: 'comment',
-          text: 'Total comments',
-        },
-        {
-          count: getUpdateCount(item),
-          icon: 'update',
-          text: 'Amount of updates',
-          dataCy: 'ItemUpdateText',
-        },
-      ]}
       additionalFooterContent={
         <>
           <Flex
@@ -174,26 +165,44 @@ const ResearchListItem = ({ item }: IProps) => {
           </Box>
         </>
       }
+      iconCounts={[
+        {
+          count: usefulDisplayCount,
+          icon: 'star-active',
+          text: 'How useful is it',
+        },
+        {
+          count: item.totalCommentCount || 0,
+          icon: 'comment',
+          text: 'Total comments',
+        },
+        {
+          count: getUpdateCount(item),
+          icon: 'update',
+          text: 'Amount of updates',
+          dataCy: 'ItemUpdateText',
+        },
+      ]}
     />
   )
 }
 
 const getItemThumbnail = (researchItem: IResearch.Item): string => {
-  const publishedUpdates = researchItem.updates?.filter(
-    (update) =>
-      !update._deleted &&
-      update.status === ResearchUpdateStatus.PUBLISHED &&
-      update.images.length > 0,
-  )
+  if (!researchItem.updates?.length) {
+    return defaultResearchThumbnail
+  }
+    
+  const publicUpdates = getPublicUpdates(researchItem)
+  if (!publicUpdates.length) {
+    return defaultResearchThumbnail
+  }
 
-  const latestPublishedUpdate = publishedUpdates?.sort(
-    (a, b) => new Date(b._created).getTime() - new Date(a._created).getTime(),
-  )?.[0]
+  const latestImage = publicUpdates
+    .map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
+    .filter((url: string) => !!url)
+    .pop()
 
-  return (
-    (latestPublishedUpdate?.images[0] as IUploadedFileMeta)?.downloadUrl ||
-    defaultResearchThumbnail
-  )
+  return latestImage ?? defaultResearchThumbnail
 }
 
 const getItemDate = (item: IResearch.Item, variant: string): string => {

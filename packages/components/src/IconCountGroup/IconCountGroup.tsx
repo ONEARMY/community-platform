@@ -12,6 +12,7 @@ export const IconCountGroup = (props: IconCountGroupProps) => {
   const { iconCounts } = props
   return (
     <Flex
+      data-cy="icon-count-group"
       sx={{
         display: ['none', 'flex', 'flex'],
         justifyContent: 'flex-end',

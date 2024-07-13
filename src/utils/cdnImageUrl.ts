@@ -21,12 +21,18 @@ export const _cdnImageUrlInternal = (
     return url
   }
 
-  const sanitizedCdnUrl = cdnUrl.trim().replace(/\/$/, '')
+  const sanitizedCdnUrl = (() => {
+    const trimmedUrl = cdnUrl.trim().replace(/\/$/, '')
+    try {
+      new URL(trimmedUrl)
+      return trimmedUrl
+    } catch (e) {
+      logger.warn('Invalid CDN_URL', e)
+      return null
+    }
+  })()
 
-  try {
-    new URL(sanitizedCdnUrl)
-  } catch (e) {
-    logger.warn('Invalid CDN_URL', e)
+  if (!sanitizedCdnUrl) {
     return url
   }
 

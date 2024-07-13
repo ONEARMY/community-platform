@@ -1,11 +1,6 @@
-import {
-  Category,
-  IconCountGroup,
-  InternalLink,
-  ModerationStatus,
-} from 'oa-components'
+import { ResponsiveCard } from 'oa-components'
 import { Highlighter } from 'src/common/Highlighter'
-import { Box, Card, Flex, Heading } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
@@ -34,101 +29,44 @@ export const QuestionListItem = ({ question, query }: IProps) => {
   const searchWords = [query || '']
 
   return (
-    <Card
-      as="li"
-      data-cy="question-list-item"
-      data-id={question._id}
-      mb={3}
-      style={{ position: 'relative' }}
-    >
-      <Flex sx={{ flex: 1 }}>
-        <Flex
-          sx={{
-            flex: 1,
-            flexDirection: 'column',
-            gap: 1,
-            padding: 3,
-          }}
-        >
-          <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
-            {moderation && (
-              <Box>
-                <ModerationStatus status={moderation} contentType="question" />
-              </Box>
-            )}
-
-            <Heading
-              as="h2"
-              sx={{
-                color: 'black',
-                fontSize: [3, 3, 4],
-                marginBottom: 1,
-              }}
-            >
-              <InternalLink
-                to={url}
-                sx={{
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  '&:focus': {
-                    outline: 'none',
-                    textDecoration: 'none',
-                  },
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    left: 0,
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                  },
-                }}
-              >
-                <Highlighter
-                  searchWords={searchWords}
-                  textToHighlight={title}
-                />
-              </InternalLink>
-            </Heading>
-
-            {questionCategory && (
-              <Category category={questionCategory} sx={{ fontSize: 2 }} />
-            )}
-          </Flex>
-
-          <Flex>
-            <UserNameTag
-              userName={_createdBy}
-              countryCode={creatorCountry}
-              created={_created}
-              action="Asked"
-            />
-          </Flex>
-        </Flex>
-        <IconCountGroup
-          iconCounts={[
-            {
-              count: (votedUsefulBy || []).length,
-              icon: 'star-active',
-              text: listing.usefulness,
-            },
-            {
-              count: question.commentCount || 0,
-              icon: 'comment',
-              text: listing.totalComments,
-            },
-          ]}
-        />
-      </Flex>
-
-      {query && (
-        <Box sx={{ padding: 3 }}>
-          <Highlighter
-            searchWords={searchWords}
-            textToHighlight={description}
+    <ResponsiveCard
+      dataCy="question-list-item"
+      dataId={question._id}
+      link={url}
+      title={title}
+      titleAs="h2"
+      category={questionCategory}
+      moderationStatusProps={{ status: moderation, contentType: 'question' }}
+      additionalFooterContent={
+        <Flex sx={{ flexDirection: 'column', flex: 1 }}>
+          <UserNameTag
+            userName={_createdBy}
+            countryCode={creatorCountry}
+            created={_created}
+            action="Asked"
           />
-        </Box>
-      )}
-    </Card>
+          {query && (
+            <Box sx={{ padding: 3 }}>
+              <Highlighter
+                searchWords={searchWords}
+                textToHighlight={description}
+              />
+            </Box>
+          )}
+        </Flex>
+      }
+      iconCounts={[
+        {
+          count: (votedUsefulBy || []).length,
+          icon: 'star-active',
+          text: listing.usefulness,
+        },
+        {
+          count: question.commentCount || 0,
+          icon: 'comment',
+          text: listing.totalComments,
+        },
+      ]}
+    />
   )
 }

@@ -1,6 +1,6 @@
 import {
   Category,
-  IconCountWithTooltip,
+  IconCountGroup,
   InternalLink,
   ModerationStatus,
 } from 'oa-components'
@@ -44,13 +44,14 @@ export const QuestionListItem = ({ question, query }: IProps) => {
       <Flex sx={{ flex: 1 }}>
         <Flex
           sx={{
+            flex: 1,
             flexDirection: 'column',
             gap: 1,
             padding: 3,
           }}
         >
           <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
-            {moderation !== 'accepted' && (
+            {moderation && (
               <Box>
                 <ModerationStatus status={moderation} contentType="question" />
               </Box>
@@ -104,32 +105,20 @@ export const QuestionListItem = ({ question, query }: IProps) => {
             />
           </Flex>
         </Flex>
-
-        <Flex
-          sx={{
-            display: ['none', 'flex', 'flex'],
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            gap: [3, 6, 12],
-            paddingX: [3, 6, 12],
-          }}
-        >
-          <Box>
-            <IconCountWithTooltip
-              count={(votedUsefulBy || []).length}
-              icon="star-active"
-              text={listing.usefulness}
-            />
-          </Box>
-
-          <Box>
-            <IconCountWithTooltip
-              count={(question as any).commentCount || 0}
-              icon="comment"
-              text={listing.totalComments}
-            />
-          </Box>
-        </Flex>
+        <IconCountGroup
+          iconCounts={[
+            {
+              count: (votedUsefulBy || []).length,
+              icon: 'star-active',
+              text: listing.usefulness,
+            },
+            {
+              count: question.commentCount || 0,
+              icon: 'comment',
+              text: listing.totalComments,
+            },
+          ]}
+        />
       </Flex>
 
       {query && (

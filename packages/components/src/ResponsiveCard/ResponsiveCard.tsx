@@ -52,7 +52,7 @@ export const ResponsiveCard = (props: ResponsiveCardProps) => {
       data-cy={dataCy}
       data-id={dataId}
       mb={3}
-      sx={{ position: 'relative' }}
+      sx={{ position: 'relative', listStyleType: 'none' }}
     >
       <Flex sx={{ flex: 1 }}>
         {imageSrc && (

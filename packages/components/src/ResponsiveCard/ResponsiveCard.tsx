@@ -53,28 +53,29 @@ export const ResponsiveCard = (props: ResponsiveCardProps) => {
       style={{ position: 'relative' }}
     >
       <Flex sx={{ flex: 1 }}>
-        <Flex>
-          <Box
-            sx={{
-              display: ['none', 'block'],
-              height: '100%',
-              width: '125px',
-            }}
-          >
-            <Image
-              style={{
-                width: '100%',
-                aspectRatio: '1 / 1',
-                objectFit: 'cover',
-                verticalAlign: 'top',
+        {imageSrc && (
+          <Flex>
+            <Box
+              sx={{
+                display: ['none', 'block'],
+                height: '100%',
+                width: '92px',
               }}
-              loading="eager"
-              src={imageSrc}
-              crossOrigin=""
-            />
-          </Box>
-        </Flex>
-
+            >
+              <Image
+                style={{
+                  width: '100%',
+                  aspectRatio: '1 / 1',
+                  objectFit: 'cover',
+                  verticalAlign: 'top',
+                }}
+                loading="eager"
+                src={imageSrc}
+                crossOrigin=""
+              />
+            </Box>
+          </Flex>
+        )}
         <Flex sx={{ flex: 1 }}>
           <Flex
             sx={{

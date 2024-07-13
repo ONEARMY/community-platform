@@ -2,13 +2,13 @@ import { Text } from 'theme-ui'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
 
-export interface Props {
+export interface ModerationStatusProps {
   status: string
   contentType: 'event' | 'howto' | 'research' | 'question'
   sx?: ThemeUIStyleObject
 }
 
-export const ModerationStatus = (props: Props) => {
+export const ModerationStatus = (props: ModerationStatusProps) => {
   const { contentType, sx } = props
   let { status } = props
 

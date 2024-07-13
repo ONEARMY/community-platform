@@ -2,14 +2,14 @@ import { Flex, Text } from 'theme-ui'
 
 import type { ThemeUIStyleObject } from 'theme-ui'
 
-export interface Props {
+export interface CategoryProps {
   category: {
     label: string
   }
   sx?: ThemeUIStyleObject | undefined
 }
 
-export const Category = (props: Props) => {
+export const Category = (props: CategoryProps) => {
   const { category, sx } = props
   return (
     <Flex sx={{ alignItems: 'start' }}>

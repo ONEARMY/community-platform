@@ -1,21 +1,10 @@
 import { useMemo } from 'react'
-import {
-  Category,
-  Icon,
-  IconCountWithTooltip,
-  InternalLink,
-  ModerationStatus,
-  Username,
-} from 'oa-components'
-import {
-  IModerationStatus,
-  ResearchStatus,
-  ResearchUpdateStatus,
-} from 'oa-shared'
+import { Icon, ResponsiveCard, Username } from 'oa-components'
+import { ResearchStatus, ResearchUpdateStatus } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatDate } from 'src/utils/date'
-import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
+import { Box, Flex, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
 import { getPublicUpdates, researchStatusColour } from '../researchHelpers'
@@ -40,259 +29,180 @@ const ResearchListItem = ({ item }: IProps) => {
 
   const isVerified = aggregationsStore.isVerified(item._createdBy)
   const status = item.researchStatus || ResearchStatus.IN_PROGRESS
-  const modifiedDate = useMemo(() => getItemDate(item, 'long'), [item])
+
+  const modifiedDate = useMemo(
+    () => getItemDate(item, 'long'),
+    [item._contentModifiedTimestamp, item._created],
+  )
+  const thumbnailUrl = useMemo(
+    () => cdnImageUrl(getItemThumbnail(item), { width: 92 }),
+    [item.updates, item._created],
+  )
 
   return (
-    <Card
-      as={'li'}
-      data-cy="ResearchListItem"
-      data-id={item._id}
-      mb={3}
-      style={{ position: 'relative' }}
-    >
-      <Flex sx={{ width: '100%', position: 'relative' }}>
-        <Grid
-          px={3}
-          py={3}
-          columns={[1, '60px 2fr 1fr']}
-          gap="40px"
-          style={{ width: '100%' }}
+    <ResponsiveCard
+      dataCy="ResearchListItem"
+      dataId={item._id}
+      imageSrc={thumbnailUrl}
+      imageAlt={item.title}
+      link={`/research/${encodeURIComponent(item.slug)}`}
+      title={item.title}
+      titleAs="h2"
+      status={
+        <Text
+          sx={{
+            display: ['inline-block', 'none', 'none'],
+            verticalAlign: 'middle',
+            color: 'black',
+            fontSize: 1,
+            background: researchStatusColour(status),
+            padding: 1,
+            borderRadius: 1,
+            marginLeft: 4,
+            marginBottom: 'auto',
+            whiteSpace: 'nowrap',
+            minWidth: '75px',
+          }}
+          data-cy="ItemResearchStatus"
         >
-          <Box
-            sx={{
-              display: ['none', 'block'],
-            }}
-          >
-            <Image
-              style={{
-                width: `calc(100% + 32px)`,
-                aspectRatio: '1 / 1',
-                objectFit: 'cover',
-                margin: '-15px',
-                verticalAlign: 'top',
-                maxWidth: 'none',
-              }}
-              loading="lazy"
-              src={cdnImageUrl(getItemThumbnail(item), {
-                width: 125,
-              })}
-              crossOrigin=""
-            />
-          </Box>
+          {status}
+        </Text>
+      }
+      additionalFooterContent={
+        <>
           <Flex
             sx={{
-              flexDirection: 'column',
-              alignItems: 'flex-start',
+              alignItems: 'center',
+              gap: 1,
+              flexWrap: 'wrap',
             }}
           >
-            <Flex
-              sx={{
-                justifyContent: 'space-between',
-                width: '100%',
-                mb: [1, 0],
-              }}
-            >
-              <Flex sx={{ flexDirection: ['column', 'row'], gap: [0, 3] }}>
-                <Heading
-                  color={'black'}
-                  mb={1}
+            <Box sx={{ minWidth: 'min-content' }}>
+              <Username
+                user={{
+                  userName: item._createdBy,
+                  countryCode: item.creatorCountry,
+                  isVerified,
+                }}
+                sx={{ position: 'relative' }}
+              />
+            </Box>
+            {Boolean(collaborators.length) && (
+              <Box sx={{ minWidth: 'min-content' }}>
+                <Text
                   sx={{
-                    fontSize: [3, 3, 4],
+                    color: 'darkGrey',
+                    display: ['none', 'block'],
+                    fontSize: 1,
+                    transform: 'translateY(2px)',
                   }}
                 >
-                  <InternalLink
-                    to={`/research/${encodeURIComponent(item.slug)}`}
-                    key={item._id}
-                    sx={{
-                      textDecoration: 'none',
-                      color: 'inherit',
-                      '&:focus': {
-                        outline: 'none',
-                        textDecoration: 'none',
-                      },
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        left: 0,
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                      },
-                    }}
-                  >
-                    {item.title}
-                  </InternalLink>
-                </Heading>
-                {item.researchCategory && (
-                  <Category
-                    category={item.researchCategory}
-                    sx={{ fontSize: 2, mt: [0, '3px'] }}
-                  />
-                )}
-              </Flex>
+                  {collaborators.length +
+                    (collaborators.length === 1
+                      ? ' contributor'
+                      : ' contributors')}
+                </Text>
+              </Box>
+            )}
+            {/* Hide this on mobile, show on tablet & above. */}
+            {modifiedDate && (
+              <Box sx={{ minWidth: 'min-content' }}>
+                <Text
+                  sx={{
+                    color: 'darkGrey',
+                    display: ['none', 'block'],
+                    fontSize: 1,
+                    transform: 'translateY(2px)',
+                  }}
+                >
+                  {modifiedDate}
+                </Text>
+              </Box>
+            )}
+            <Box sx={{ minWidth: 'min-content' }}>
               <Text
                 sx={{
-                  display: ['inline-block', 'none', 'none'],
-                  verticalAlign: 'middle',
-                  color: 'black',
-                  fontSize: 1,
                   background: researchStatusColour(status),
-                  padding: 1,
+                  borderBottomRightRadius: 1,
                   borderRadius: 1,
-                  marginLeft: 4,
-                  marginBottom: 'auto',
+                  color: 'black',
+                  display: ['none', 'inline-block', 'inline-block'],
+                  fontSize: 1,
+                  padding: 1,
+                  verticalAlign: 'middle',
                   whiteSpace: 'nowrap',
-                  minWidth: '75px',
                 }}
-                data-cy="ItemResearchStatus"
               >
                 {status}
               </Text>
-            </Flex>
-            <Flex
-              sx={{
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Flex sx={{ alignItems: 'center' }}>
-                <Username
-                  user={{
-                    userName: item._createdBy,
-                    countryCode: item.creatorCountry,
-                    isVerified,
-                  }}
-                  sx={{ position: 'relative' }}
-                />
-                {Boolean(collaborators.length) && (
-                  <Text
-                    ml={4}
-                    sx={{
-                      display: ['none', 'block'],
-                      fontSize: 1,
-                      color: 'darkGrey',
-                      transform: 'translateY(2px)',
-                    }}
-                  >
-                    {collaborators.length +
-                      (collaborators.length === 1
-                        ? ' contributor'
-                        : ' contributors')}
-                  </Text>
-                )}
-                {/* Hide this on mobile, show on tablet & above. */}
-                {modifiedDate && (
-                  <Text
-                    ml={4}
-                    sx={{
-                      display: ['none', 'block'],
-                      fontSize: 1,
-                      color: 'darkGrey',
-                      transform: 'translateY(2px)',
-                    }}
-                  >
-                    {modifiedDate}
-                  </Text>
-                )}
-                <Text
-                  sx={{
-                    display: ['none', 'inline-block', 'inline-block'],
-                    verticalAlign: 'middle',
-                    color: 'black',
-                    fontSize: 1,
-                    background: researchStatusColour(status),
-                    padding: 1,
-                    borderRadius: 1,
-                    borderBottomRightRadius: 1,
-                    marginLeft: 4,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {status}
-                </Text>
-              </Flex>
-              {/* Show these on mobile, hide on tablet & above. */}
-              <Box
-                sx={{
-                  display: ['flex', 'none', 'none'],
-                  alignItems: 'center',
-                }}
-              >
-                <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                  {usefulDisplayCount}
-                  <Icon glyph="star-active" ml={1} />
-                </Text>
-                <Text color="black" ml={3} sx={_commonStatisticStyle}>
-                  {item.totalCommentCount}
-                  <Icon glyph="comment" ml={1} />
-                </Text>
-                <Text
-                  ml={3}
-                  sx={{
-                    display: ['block', 'none'],
-                    fontSize: 1,
-                    color: 'darkGrey',
-                  }}
-                >
-                  {getItemDate(item, 'short')}
-                </Text>
-              </Box>
-            </Flex>
+            </Box>
           </Flex>
-          {/* Hide these on mobile, show on tablet & above. */}
+          {/* Show these on mobile, hide on tablet & above. */}
           <Box
             sx={{
-              display: ['none', 'flex', 'flex'],
+              display: ['flex', 'none', 'none'],
               alignItems: 'center',
-              justifyContent: 'space-around',
             }}
           >
-            <IconCountWithTooltip
-              count={usefulDisplayCount}
-              icon="star-active"
-              text="How useful is it"
-            />
-            <IconCountWithTooltip
-              count={item.totalCommentCount || 0}
-              icon="comment"
-              text="Total comments"
-            />
-
-            <IconCountWithTooltip
-              count={getUpdateCount(item)}
-              dataCy="ItemUpdateText"
-              icon="update"
-              text="Amount of updates"
-            />
+            <Text color="black" ml={3} sx={_commonStatisticStyle}>
+              {usefulDisplayCount}
+              <Icon glyph="star-active" ml={1} />
+            </Text>
+            <Text color="black" ml={3} sx={_commonStatisticStyle}>
+              {item.totalCommentCount}
+              <Icon glyph="comment" ml={1} />
+            </Text>
+            <Text
+              ml={3}
+              sx={{
+                display: ['block', 'none'],
+                fontSize: 1,
+                color: 'darkGrey',
+              }}
+            >
+              {getItemDate(item, 'short')}
+            </Text>
           </Box>
-        </Grid>
-        {item.moderation !== IModerationStatus.ACCEPTED && (
-          <ModerationStatus
-            status={item.moderation}
-            contentType="research"
-            sx={{
-              position: 'absolute',
-              bottom: 0,
-              right: 0,
-            }}
-          />
-        )}
-      </Flex>
-    </Card>
+        </>
+      }
+      iconCounts={[
+        {
+          count: usefulDisplayCount,
+          icon: 'star-active',
+          text: 'How useful is it',
+        },
+        {
+          count: item.totalCommentCount || 0,
+          icon: 'comment',
+          text: 'Total comments',
+        },
+        {
+          count: getUpdateCount(item),
+          icon: 'update',
+          text: 'Amount of updates',
+          dataCy: 'ItemUpdateText',
+        },
+      ]}
+    />
   )
 }
 
 const getItemThumbnail = (researchItem: IResearch.Item): string => {
-  if (researchItem.updates?.length) {
-    const latestImage = getPublicUpdates(researchItem)
-      ?.map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
-      .filter((url: string) => !!url)
-      .pop()
-    return latestImage ?? defaultResearchThumbnail
-  } else {
+  if (!researchItem.updates?.length) {
     return defaultResearchThumbnail
   }
+
+  const publicUpdates = getPublicUpdates(researchItem)
+  if (!publicUpdates.length) {
+    return defaultResearchThumbnail
+  }
+
+  const latestImage = publicUpdates
+    .map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
+    .filter((url: string) => !!url)
+    .pop()
+
+  return latestImage ?? defaultResearchThumbnail
 }
 
 const getItemDate = (item: IResearch.Item, variant: string): string => {

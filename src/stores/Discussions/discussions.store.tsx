@@ -93,7 +93,7 @@ export class DiscussionStore extends ModuleStore {
           .collection<IDiscussion>(COLLECTION_NAME)
           .doc(discussion._id)
 
-        const currentDiscussion = toJS(await dbRef.get())
+        const currentDiscussion = toJS(await dbRef.get('server'))
 
         if (!currentDiscussion) {
           throw new Error('Discussion not found')
@@ -145,7 +145,7 @@ export class DiscussionStore extends ModuleStore {
           .collection<IDiscussion>(COLLECTION_NAME)
           .doc(discussion._id)
 
-        const currentDiscussion = toJS(await dbRef.get())
+        const currentDiscussion = toJS(await dbRef.get('server'))
 
         if (currentDiscussion) {
           const targetComment = currentDiscussion.comments.find(
@@ -187,7 +187,7 @@ export class DiscussionStore extends ModuleStore {
           .collection<IDiscussion>(COLLECTION_NAME)
           .doc(discussion._id)
 
-        const currentDiscussion = toJS(await dbRef.get())
+        const currentDiscussion = toJS(await dbRef.get('server'))
 
         if (currentDiscussion) {
           const targetComment = currentDiscussion.comments.find(
@@ -239,7 +239,7 @@ export class DiscussionStore extends ModuleStore {
           .collection<IResearch.Item>(collectionName)
           .doc(discussion.primaryContentId)
 
-        const research = toJS(await researchRef.get())
+        const research = toJS(await researchRef.get('server'))
 
         if (research) {
           const updateIndex = research.updates.findIndex(
@@ -274,7 +274,7 @@ export class DiscussionStore extends ModuleStore {
         const dbRef = this.db
           .collection<IDiscussionSourceModelOptions>(collectionName)
           .doc(discussion.sourceId)
-        const parentContent = toJS(await dbRef.get())
+        const parentContent = toJS(await dbRef.get('server'))
         const parentPath =
           collectionName === 'howtos' ? 'how-to' : collectionName
 
@@ -334,7 +334,7 @@ export class DiscussionStore extends ModuleStore {
   ): Promise<IDiscussionDB | null> {
     await dbRef.set({ ...cloneDeep(discussion) })
     await updateDiscussionMetadata(this.db, discussion, commentsTotalEvent)
-    const updatedDiscussion = toJS(await dbRef.get())
+    const updatedDiscussion = toJS(await dbRef.get('server'))
 
     return updatedDiscussion ? updatedDiscussion : null
   }

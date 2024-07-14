@@ -93,7 +93,7 @@ export class DiscussionStore extends ModuleStore {
           .collection<IDiscussion>(COLLECTION_NAME)
           .doc(discussion._id)
 
-        const currentDiscussion = toJS(await dbRef.get())
+        const currentDiscussion = toJS(await dbRef.get('server'))
 
         if (!currentDiscussion) {
           throw new Error('Discussion not found')

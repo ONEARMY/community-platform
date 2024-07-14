@@ -18,7 +18,7 @@ import { formatDate } from 'src/utils/date'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
-import { getPublicUpdates, researchStatusColour } from '../researchHelpers'
+import { researchStatusColour } from '../researchHelpers'
 
 import type { IResearch } from 'src/models/research.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
@@ -284,15 +284,21 @@ const ResearchListItem = ({ item }: IProps) => {
 }
 
 const getItemThumbnail = (researchItem: IResearch.Item): string => {
-  if (researchItem.updates?.length) {
-    const latestImage = getPublicUpdates(researchItem)
-      ?.map((u) => (u.images?.[0] as IUploadedFileMeta)?.downloadUrl)
-      .filter((url: string) => !!url)
-      .pop()
-    return latestImage ?? defaultResearchThumbnail
-  } else {
-    return defaultResearchThumbnail
-  }
+  const publishedUpdates = researchItem.updates?.filter(
+    (update) =>
+      !update._deleted &&
+      update.status === ResearchUpdateStatus.PUBLISHED &&
+      update.images.length > 0,
+  )
+
+  const latestPublishedUpdate = publishedUpdates?.sort(
+    (a, b) => new Date(b._created).getTime() - new Date(a._created).getTime(),
+  )?.[0]
+
+  return (
+    (latestPublishedUpdate?.images[0] as IUploadedFileMeta)?.downloadUrl ||
+    defaultResearchThumbnail
+  )
 }
 
 const getItemDate = (item: IResearch.Item, variant: string): string => {

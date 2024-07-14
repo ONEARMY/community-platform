@@ -199,12 +199,12 @@ export class ModuleStore {
       file.type,
     )
   }
-  public async uploadCollectionBatch(
+  public uploadCollectionBatch(
     files: (File | IConvertedFileMeta)[],
     collection: string,
     id: string,
   ) {
-    const promises = files.map(async (file) => {
+    const promises = files.map((file) => {
       return this.uploadFileToCollection(file, collection, id)
     })
     return Promise.all(promises)

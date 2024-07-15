@@ -3,7 +3,7 @@ import { ResearchEditorOverview } from './ResearchEditorOverview'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/ResearchEditorOverview',
+  title: 'Layout/ResearchEditorOverview',
   component: ResearchEditorOverview,
 } as Meta<typeof ResearchEditorOverview>
 

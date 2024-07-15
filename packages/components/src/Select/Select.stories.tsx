@@ -5,7 +5,7 @@ import { Select } from './Select'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Select',
+  title: 'Forms/Select',
   component: Select,
 } as Meta<typeof Select>
 

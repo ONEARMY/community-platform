@@ -5,7 +5,7 @@ import { ContentStatistics } from './ContentStatistics'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/ContentStatistics',
+  title: 'Layout/ContentStatistics',
   component: ContentStatistics,
 } as Meta<typeof ContentStatistics>
 

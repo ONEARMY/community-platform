@@ -6,7 +6,7 @@ import { DiscussionContainer } from './DiscussionContainer'
 import type { Meta, StoryObj } from '@storybook/react'
 
 export default {
-  title: 'Components/DiscussionContainer',
+  title: 'Discussions/DiscussionContainer',
   component: DiscussionContainer,
 } as Meta<typeof DiscussionContainer>
 

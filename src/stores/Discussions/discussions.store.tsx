@@ -41,6 +41,7 @@ export class DiscussionStore extends ModuleStore {
       )[0] || null
 
     if (foundDiscussion) {
+      await this._validatePrimaryContentId(foundDiscussion, primaryContentId)
       return this._formatDiscussion(foundDiscussion)
     }
 
@@ -335,6 +336,27 @@ export class DiscussionStore extends ModuleStore {
     const updatedDiscussion = toJS(await dbRef.get('server'))
 
     return updatedDiscussion ? updatedDiscussion : null
+  }
+
+  private async _validatePrimaryContentId(
+    discussion: IDiscussion,
+    primaryContentId: string | undefined,
+  ): Promise<IDiscussion | null> {
+    if (
+      !primaryContentId ||
+      discussion.primaryContentId === primaryContentId ||
+      discussion.sourceType !== 'researchUpdate'
+    )
+      return discussion
+
+    const dbRef = await this.db
+      .collection<IDiscussion>(COLLECTION_NAME)
+      .doc(discussion._id)
+
+    return await this._updateDiscussion(dbRef, {
+      ...discussion,
+      primaryContentId,
+    })
   }
 
   private _addContributorId({ contributorIds }, comment) {

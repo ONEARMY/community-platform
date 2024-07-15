@@ -5,7 +5,7 @@ import { MoreContainer } from './MoreContainer'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/MoreContainer',
+  title: 'Layout/MoreContainer',
   component: MoreContainer,
   parameters: {
     layout: 'padded',

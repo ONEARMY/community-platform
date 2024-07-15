@@ -3,7 +3,7 @@ import { Input } from 'theme-ui'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Input',
+  title: 'Forms/Input',
   component: Input,
 } as Meta<typeof Input>
 

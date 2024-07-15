@@ -3,7 +3,7 @@ import { UserStatistics } from './UserStatistics'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/UserStatistics',
+  title: 'Layout/UserStatistics',
   component: UserStatistics,
 } as Meta<typeof UserStatistics>
 

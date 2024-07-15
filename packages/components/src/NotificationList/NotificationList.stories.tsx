@@ -7,7 +7,7 @@ import type { Meta, StoryFn } from '@storybook/react'
 import type { UserNotificationItem } from 'oa-shared'
 
 export default {
-  title: 'Components/NotificationList',
+  title: 'Layout/NotificationList',
   component: NotificationList,
 } as Meta<typeof NotificationList>
 

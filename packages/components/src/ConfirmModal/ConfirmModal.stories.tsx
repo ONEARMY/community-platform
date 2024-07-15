@@ -3,7 +3,7 @@ import { ConfirmModal } from './ConfirmModal'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/ConfirmModal',
+  title: 'Layout/ConfirmModal',
   component: ConfirmModal,
 } as Meta<typeof ConfirmModal>
 

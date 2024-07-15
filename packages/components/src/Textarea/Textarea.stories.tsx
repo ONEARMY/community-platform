@@ -3,7 +3,7 @@ import { Textarea } from 'theme-ui'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Textarea',
+  title: 'Forms/Textarea',
   component: Textarea,
 } as Meta<typeof Textarea>
 

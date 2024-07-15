@@ -3,7 +3,7 @@ import { Breadcrumbs } from './Breadcrumbs'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Breadcrumbs',
+  title: 'Layout/Breadcrumbs',
   component: Breadcrumbs,
 } as Meta<typeof Breadcrumbs>
 

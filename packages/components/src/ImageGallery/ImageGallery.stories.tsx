@@ -38,7 +38,7 @@ export const testImages: IImageGalleryItem[] = imageUrls.map((elt, i) => {
 })
 
 export default {
-  title: 'Components/ImageGallery',
+  title: 'Layout/ImageGallery',
   component: ImageGallery,
 } as Meta<typeof ImageGallery>
 

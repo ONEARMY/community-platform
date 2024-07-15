@@ -3,7 +3,7 @@ import { Heading } from 'theme-ui'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Heading',
+  title: 'Layout/Heading',
   component: Heading,
 } as Meta<typeof Heading>
 

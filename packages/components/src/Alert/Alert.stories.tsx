@@ -3,7 +3,7 @@ import { Alert } from 'theme-ui'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Alert',
+  title: 'Layout/Alert',
   component: Alert,
 } as Meta<typeof Alert>
 

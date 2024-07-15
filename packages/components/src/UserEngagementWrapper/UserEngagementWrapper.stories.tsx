@@ -6,7 +6,7 @@ import { UserEngagementWrapper } from './UserEngagementWrapper'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/UserEngagementWrapper',
+  title: 'Layout/UserEngagementWrapper',
   component: UserEngagementWrapper,
 } as Meta<typeof UserEngagementWrapper>
 

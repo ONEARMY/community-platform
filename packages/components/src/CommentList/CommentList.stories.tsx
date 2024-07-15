@@ -4,7 +4,7 @@ import { CommentList } from './CommentList'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/CommentList',
+  title: 'Discussions/CommentList',
   component: CommentList,
 } as Meta<typeof CommentList>
 

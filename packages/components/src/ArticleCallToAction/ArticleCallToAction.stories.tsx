@@ -7,7 +7,7 @@ import { ArticleCallToAction } from './ArticleCallToAction'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/ArticleCallToAction',
+  title: 'Layout/ArticleCallToAction',
   component: ArticleCallToAction,
 } as Meta<typeof ArticleCallToAction>
 

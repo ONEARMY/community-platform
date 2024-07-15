@@ -3,7 +3,7 @@ import { HeroBanner } from './HeroBanner'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/HeroBanner',
+  title: 'Layout/HeroBanner',
   component: HeroBanner,
 } as Meta<typeof HeroBanner>
 

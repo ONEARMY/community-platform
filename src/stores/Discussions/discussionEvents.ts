@@ -48,7 +48,7 @@ export const updateDiscussionMetadata = async (
     case 'research':
       const researchRef = db.collection(collectionName).doc(primaryContentId)
 
-      const research = toJS(await researchRef.get()) as IResearch.Item
+      const research = toJS(await researchRef.get('server')) as IResearch.Item
 
       if (research) {
         // This approach is open to error but is better than making lots of DBs

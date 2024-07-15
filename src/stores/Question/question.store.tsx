@@ -123,7 +123,7 @@ export class QuestionStore extends ModuleStore {
 
     logger.info(`upsertQuestion.set`, { dbRef })
 
-    return dbRef.get() || null
+    return dbRef.get('server') || null
   }
 
   public async toggleSubscriberStatusByUserName() {

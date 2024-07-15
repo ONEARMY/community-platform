@@ -97,7 +97,7 @@ export class DocReference<T> {
    */
   async delete() {
     const { serverDB, serverCacheDB } = this.clients
-    const doc = (await this.get()) as any
+    const doc = (await this.get('server')) as any
     await serverDB.setDoc(`_archived/${this.endpoint}/summary`, {
       _archived: new Date().toISOString(),
       _id: this.id,

@@ -34,8 +34,12 @@ interface IOpeningTime {
 declare global {
   namespace Cypress {
     interface Chainable {
+      addLastComment(newComment: string): Chainable<void>
+      addReplytoFirstComment(reply: string): Chainable<void>
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>
       checkCommentItem(firstComment: string, length: number): Chainable<void>
+      deleteLast(element: string)
+      editLast(element: string, updatedNewComment: string): Chainable<void>
       fillSignupForm(
         username: string,
         email: string,
@@ -269,5 +273,39 @@ Cypress.Commands.add(
       .scrollIntoView()
       .should('be.inViewport', 10)
     cy.contains(firstComment)
+  },
+)
+
+Cypress.Commands.add(
+  'addLastComment',
+  (newComment: string) => {
+    cy.get('[data-cy=comments-form]').last().type(newComment)
+    cy.get('[data-cy=comment-submit]').last().click()
+  },
+)
+
+Cypress.Commands.add(
+  'editLast',
+  (element: string, updatedNewComment: string) => {
+    cy.get(`[data-cy="${element}: edit button"]`).last().click()
+    cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
+    cy.get('[data-cy=edit-comment-submit]').click()
+  },
+)
+
+Cypress.Commands.add(
+  'deleteLast',
+  (element: string) => {
+    cy.get(`[data-cy="${element}: delete button"]`).last().click()
+    cy.get('[data-cy="Confirm.modal: Confirm"]').last().click()
+  },
+)
+
+Cypress.Commands.add(
+  'addReplytoFirstComment',
+  (reply: string) => {
+    cy.get('[data-cy=show-replies]').first().click()
+    cy.get('[data-cy=reply-form]').first().type(reply)
+    cy.get('[data-cy=reply-submit]').first().click()
   },
 )

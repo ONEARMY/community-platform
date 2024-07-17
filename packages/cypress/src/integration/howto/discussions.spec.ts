@@ -24,38 +24,32 @@ describe('[Howto.Discussions]', () => {
     const newComment = 'An interesting howto. The answer must be...'
     const updatedNewComment =
       'An interesting howto. The answer must be that when the sky is red, the apocalypse _might_ be on the way.'
-    const newReply = 'Thanks Dave and Ben. What does everyone else think?'
-    const updatedNewReply = 'Anyone else?'
+    const reply = 'Thanks Dave and Ben. What does everyone else think?'
+    const updatedReply = 'Anyone else?'
 
     const visitor = generateNewUserDetails()
     cy.signUpNewUser(visitor)
     cy.visit(`/how-to/${item.slug}`)
 
     cy.step('Can add comment')
-    cy.get('[data-cy=comments-form]:last').type(newComment)
-    cy.get('[data-cy=comment-submit]:last').click()
+    cy.addLastComment(newComment)
     cy.contains(`${howtoDiscussion.comments.length + 1} comments`)
     cy.contains(newComment)
 
     cy.step('Can edit their comment')
-    cy.get('[data-cy="CommentItem: edit button"]:last').click()
-    cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
-    cy.get('[data-cy=edit-comment-submit]').click()
+    cy.editLast('CommentItem', updatedNewComment)
     cy.contains(updatedNewComment)
     cy.contains(newComment).should('not.exist')
 
     cy.step('Can delete their comment')
-    cy.get('[data-cy="CommentItem: delete button"]:last').click()
-    cy.get('[data-cy="Confirm.modal: Confirm"]:last').click()
+    cy.deleteLast('CommentItem')
     cy.contains(updatedNewComment).should('not.exist')
     cy.contains(`${howtoDiscussion.comments.length} comments`)
 
     cy.step('Can add reply')
-    cy.get('[data-cy=show-replies]:first').click()
-    cy.get('[data-cy=reply-form]:first').type(newReply)
-    cy.get('[data-cy=reply-submit]:first').click()
+    cy.addReplytoFirstComment(reply)
     cy.contains(`${howtoDiscussion.comments.length + 1} comments`)
-    cy.contains(newReply)
+    cy.contains(reply)
     cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
       const [howto] = docs
       expect(howto.totalComments).to.eq(howtoDiscussion.comments.length + 1)
@@ -64,16 +58,13 @@ describe('[Howto.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
-    cy.get('[data-cy="ReplyItem: edit button"]:first').click()
-    cy.get('[data-cy=edit-comment]').clear().type(updatedNewReply)
-    cy.get('[data-cy=edit-comment-submit]').click()
-    cy.contains(updatedNewReply)
-    cy.contains(newReply).should('not.exist')
+    cy.editLast('ReplyItem', updatedReply)
+    cy.contains(updatedReply)
+    cy.contains(reply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.get('[data-cy="ReplyItem: delete button"]:first').click()
-    cy.get('[data-cy="Confirm.modal: Confirm"]:first').click()
-    cy.contains(updatedNewReply).should('not.exist')
+    cy.deleteLast('ReplyItem')
+    cy.contains(updatedReply).should('not.exist')
     cy.contains(`${howtoDiscussion.comments.length} comments`)
     cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
       const [howto] = docs

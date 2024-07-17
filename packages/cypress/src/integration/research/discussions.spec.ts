@@ -24,7 +24,7 @@ describe('[Research.Discussions]', () => {
     cy.visit(`/research/${item.slug}`)
 
     const comment = 'An example comment'
-    const updatedComment = "I've updated my comment now"
+    const updatedNewComment = "I've updated my comment now"
     const reply = "An interesting point, I hadn't thought about that."
     const updatedReply = "I hadn't thought about that. Really good point."
     const updateId = item.updates[0]._id
@@ -40,24 +40,16 @@ describe('[Research.Discussions]', () => {
     cy.get('[data-cy="CommentItem"]').last().should('contain', comment)
 
     cy.step('Can edit their own comment')
-    cy.get('[data-cy="CommentItem"]')
-      .last()
-      .get(`[data-cy="CommentItem: edit button"]`)
-      .click()
-    cy.get('[data-cy=edit-comment]').clear().type(updatedComment)
-    cy.get('[data-cy=edit-comment-submit]').click()
-    cy.contains(updatedComment)
+    cy.editLast('CommentItem', updatedNewComment)
+    cy.contains(updatedNewComment)
     cy.contains(comment).should('not.exist')
 
     cy.step('Can delete their own comment')
-    cy.get('[data-cy="CommentItem: delete button"]:first').click()
-    cy.get('[data-cy="Confirm.modal: Confirm"]:first').click()
-    cy.contains(updatedComment).should('not.exist')
+    cy.deleteLast('CommentItem')
+    cy.contains(updatedNewComment).should('not.exist')
 
     cy.step('Can add reply')
-    cy.get('[data-cy=show-replies]:first').click()
-    cy.get('[data-cy=reply-form]:first').type(reply)
-    cy.get('[data-cy=reply-submit]:first').click()
+    cy.addReplytoFirstComment(reply)
     cy.contains(`${discussion.comments.length + 1} Comments`)
     cy.contains(reply)
     cy.queryDocuments('research', '_id', '==', item._id).then((docs) => {
@@ -68,15 +60,12 @@ describe('[Research.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
-    cy.get('[data-cy="ReplyItem: edit button"]:first').click()
-    cy.get('[data-cy=edit-comment]').clear().type(updatedReply)
-    cy.get('[data-cy=edit-comment-submit]').click()
+    cy.editLast('ReplyItem', updatedReply)
     cy.contains(updatedReply)
     cy.contains(reply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.get('[data-cy="ReplyItem: delete button"]:first').click()
-    cy.get('[data-cy="Confirm.modal: Confirm"]:first').click()
+    cy.deleteLast('ReplyItem')
     cy.contains(updatedReply).should('not.exist')
     cy.contains(`1 Comment`)
     cy.queryDocuments('research', '_id', '==', item._id).then((docs) => {

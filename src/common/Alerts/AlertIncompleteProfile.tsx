@@ -22,7 +22,6 @@ export const AlertIncompleteProfile = observer(() => {
         <Alert
           variant="failure"
           sx={{
-            borderRadius: 0,
             alignItems: 'center',
             flex: '1',
             justifyContent: 'center',

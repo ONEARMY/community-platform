@@ -23,7 +23,7 @@ const UploadImageOverlay = (props: BoxProps): JSX.Element => (
       opacity: 0,
       visibility: 'hidden',
       transition: 'opacity 300ms ease-in',
-      borderRadius: 1,
+      borderRadius: 3,
       '.image-input__wrapper:hover &': {
         visibility: 'visible',
         opacity: 1,

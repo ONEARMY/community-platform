@@ -22,7 +22,6 @@ export const SettingsFormTab = (props: IProps) => {
   const { body, header, notifications } = tab
 
   const sx = {
-    borderRadius: 3,
     marginBottom: 3,
     padding: 3,
     overflow: 'hidden',

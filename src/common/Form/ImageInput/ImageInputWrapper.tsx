@@ -27,7 +27,7 @@ export const ImageInputWrapper = React.forwardRef<
         position: 'relative',
         borderColor: 'background',
         borderStyle: hasUploadedImg ? 'none' : 'dashed',
-        borderRadius: 1,
+        borderRadius: 3,
         backgroundColor: 'white',
       }}
       {...rest}

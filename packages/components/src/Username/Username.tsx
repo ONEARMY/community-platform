@@ -30,7 +30,7 @@ export const Username = ({ user, sx }: IProps) => {
         display: 'inline-flex',
         paddingX: 1,
         paddingY: '3px',
-        borderRadius: 1,
+        borderRadius: 2,
         marginLeft: -1,
         color: 'black',
         fontSize: 2,

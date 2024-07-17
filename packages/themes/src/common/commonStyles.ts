@@ -1,6 +1,6 @@
 export const commonStyles = {
   input: {
-    borderRadius: 1,
+    borderRadius: 3,
     '&:focus': {
       borderColor: '#83ceeb',
       outline: 'none',
@@ -30,7 +30,7 @@ export const commonStyles = {
     betaGreen: '#98cc98',
   },
   alert: {
-    borderRadius: 1,
+    borderRadius: 3,
     paddingX: 3,
     paddingY: 3,
     textAlign: 'center',

@@ -49,7 +49,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
 
   const sx = {
     backgroundColor: 'background',
-    borderRadius: 2,
+    borderRadius: 3,
     marginBottom: 2,
     padding: 2,
   }

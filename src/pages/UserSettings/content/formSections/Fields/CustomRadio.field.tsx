@@ -69,7 +69,7 @@ export const CustomRadioField = (props: IProps) => {
         display: 'flex',
         flexDirection: 'column',
         py: 2,
-        borderRadius: 1,
+        borderRadius: 2,
         border: '1px solid transparent',
         ':hover': {
           backgroundColor: 'background',

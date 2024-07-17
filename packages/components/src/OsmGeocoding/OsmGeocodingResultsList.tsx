@@ -22,9 +22,9 @@ export const OsmGeocodingResultsList = (props: Props) => {
         zIndex: 1,
         margin: '-2px 0 0',
         border: `2px solid black`,
+        borderRadius: 3,
         borderTopWidth: '1px',
         listStyle: 'none',
-        borderRadius: 0,
         borderBottomLeftRadius: 1,
         borderBottomRightRadius: 1,
       }}

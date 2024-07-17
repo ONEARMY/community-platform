@@ -20,7 +20,7 @@ export const Category = (props: Props) => {
           backgroundColor: '#cccccc',
           paddingX: '7.5px',
           paddingY: '5px',
-          borderRadius: 1,
+          borderRadius: 2,
           ...sx,
         }}
       >

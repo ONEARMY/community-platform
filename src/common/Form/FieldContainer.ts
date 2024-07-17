@@ -10,7 +10,7 @@ const inputStyles = ({ invalid }: IFormElement) => css`
   border-width: 1px;
   border-style: solid;
   border-color: ${invalid ? 'error' : 'transparent'};
-  border-radius: 5px;
+  border-radius: 8px;
   font-family: 'Inter', Arial, sans-serif;
   font-size: 12px;
   background-color: background;

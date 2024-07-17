@@ -37,9 +37,9 @@ const FileDetails = (props: {
         p={2}
         mb={1}
         sx={{
-          borderRadius: 1,
           border: '2px solid black',
           background: 'accent.base',
+          borderRadius: 3,
           color: 'black',
           justifyContent: 'space-between',
           alignItems: 'center',

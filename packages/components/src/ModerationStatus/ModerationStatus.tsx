@@ -51,8 +51,7 @@ export const ModerationStatus = (props: Props) => {
         overflow: 'hidden',
         background: 'accent.base',
         padding: 1,
-        borderRadius: 1,
-        borderBottomRightRadius: 1,
+        borderRadius: 3,
       }}
       data-cy={`moderationstatus-${status}`}
     >

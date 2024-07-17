@@ -191,7 +191,7 @@ const ResearchDescription = ({
               sx={{
                 marginBottom: 'auto',
                 minWidth: '100px',
-                borderRadius: 1,
+                borderRadius: 3,
                 height: '44px',
                 background: researchStatusColour(research.researchStatus),
               }}

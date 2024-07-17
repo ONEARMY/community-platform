@@ -40,7 +40,7 @@ interface IProps {
 }
 
 const ImageIcon = (props: IProps) => {
-  return <img alt={`icon-${props.src}`} style={imgStyle} {...props} />
+  return <img alt="icon" style={imgStyle} {...props} />
 }
 
 export const iconMap = {

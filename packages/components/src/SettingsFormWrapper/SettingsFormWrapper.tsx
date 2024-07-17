@@ -1,11 +1,12 @@
 // Used the guide at https://mui.com/base-ui/react-tabs/ as a fundation
 
-import { useEffect, useState } from 'react'
+import { matchPath, useLocation } from 'react-router-dom'
 import { Tabs } from '@mui/base/Tabs'
 import { Flex } from 'theme-ui'
 
 import { SettingsFormTab } from './SettingsFormTab'
 import { SettingsFormTabList } from './SettingsFormTabList'
+import { routeName } from './utils'
 
 import type { ITab } from './SettingsFormTab'
 
@@ -15,30 +16,28 @@ export interface IProps {
   style?: React.CSSProperties | undefined
 }
 
-export const SettingsFormWrapper = (props: IProps) => {
-  const { style, setDefaultTab, tabs } = props
-  const [value, setValue] = useState<number>(setDefaultTab || 0)
+const useRouteMatch = (patterns: readonly string[]) => {
+  const { pathname } = useLocation()
 
-  const setHash = (hash: number) => {
-    history.pushState(null, '', `#${hash}`)
-  }
-
-  useEffect(() => {
-    setHash(value)
-  }, [])
-
-  const handleChange = (
-    _: React.SyntheticEvent<Element, Event> | null,
-    value: string | number | null,
-  ) => {
-    if (typeof value === 'number') {
-      setValue(value)
-      setHash(value)
+  for (const pattern of patterns) {
+    const possibleMatch = matchPath(pattern, pathname)
+    if (possibleMatch !== null) {
+      return possibleMatch
     }
   }
 
+  return null
+}
+
+export const SettingsFormWrapper = (props: IProps) => {
+  const { style, tabs } = props
+
+  const routePaths = tabs.map(({ title }) => routeName(title))
+  const routeMatch = useRouteMatch(routePaths)
+  const currentTab = routeMatch?.pattern?.path || routePaths[0]
+
   return (
-    <Tabs value={value} onChange={handleChange} style={style}>
+    <Tabs value={currentTab} style={style}>
       <Flex
         sx={{
           alignContent: 'stretch',
@@ -48,7 +47,7 @@ export const SettingsFormWrapper = (props: IProps) => {
           gap: 4,
         }}
       >
-        <SettingsFormTabList tabs={tabs} value={value} setValue={setValue} />
+        <SettingsFormTabList tabs={tabs} currentTab={currentTab} />
         <Flex
           sx={{
             alignContent: 'stretch',
@@ -58,7 +57,13 @@ export const SettingsFormWrapper = (props: IProps) => {
           }}
         >
           {tabs.map((tab, index) => {
-            return <SettingsFormTab key={index} value={index} tab={tab} />
+            return (
+              <SettingsFormTab
+                key={index}
+                value={routeName(tab.title)}
+                tab={tab}
+              />
+            )
           })}
         </Flex>
       </Flex>

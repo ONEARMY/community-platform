@@ -1,22 +1,24 @@
+import { useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { Tab as BaseTab, tabClasses } from '@mui/base/Tab'
 import { TabsList as BaseTabsList } from '@mui/base/TabsList'
+import { prepareForSlot } from '@mui/base/utils'
 import { Flex, Select } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
+import { InternalLink } from '../InternalLink/InternalLink'
+import { routeName } from './utils'
 
 import type { ITab } from './SettingsFormTab'
 
 interface IProps {
+  currentTab: string
   tabs: ITab[]
-  value: number
-  setValue: (value: number) => void
 }
 
 export const SettingsFormTabList = (props: IProps) => {
-  const { tabs, value, setValue } = props
-
-  if (tabs.length === 1) return
+  const { currentTab, tabs } = props
+  const navigate = useNavigate()
 
   const Tab = styled(BaseTab)`
     color: grey;
@@ -61,7 +63,7 @@ export const SettingsFormTabList = (props: IProps) => {
     align-content: flex-start;
   `
 
-  const defaultValue = tabs.find((_, index) => index === value)?.title || ''
+  if (tabs.length === 1) return
 
   return (
     <>
@@ -69,7 +71,13 @@ export const SettingsFormTabList = (props: IProps) => {
         <TabsList>
           {tabs.map(({ glyph, title }, index) => {
             return (
-              <Tab key={index} data-cy={`tab-${title}`}>
+              <Tab
+                key={index}
+                to={routeName(title)}
+                value={routeName(title)}
+                data-cy={`tab-${title}`}
+                slots={{ root: prepareForSlot(InternalLink) }}
+              >
                 <Icon glyph={glyph} size={20} /> {title}
               </Tab>
             )
@@ -90,14 +98,13 @@ export const SettingsFormTabList = (props: IProps) => {
                 }}
               />
             }
-            defaultValue={defaultValue}
+            defaultValue={currentTab}
+            onChange={(event) => navigate(event.target.value)}
           >
             {tabs.map(({ title }, index) => {
               return (
-                <option key={index} onClick={() => setValue(index)}>
-                  <Tab key={index} data-cy={`tab-${title}`}>
-                    {title}
-                  </Tab>
+                <option key={index} value={routeName(title)}>
+                  {title}
                 </option>
               )
             })}

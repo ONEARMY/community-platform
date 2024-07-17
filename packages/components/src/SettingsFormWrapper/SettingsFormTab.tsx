@@ -14,7 +14,7 @@ export interface ITab {
 
 interface IProps {
   tab: ITab
-  value: number
+  value: string
 }
 
 export const SettingsFormTab = (props: IProps) => {

@@ -10,7 +10,10 @@ export default {
 } as Meta<typeof SettingsFormWrapper>
 
 export const Default: StoryFn<typeof SettingsFormWrapper> = () => (
-  <div style={{ maxWidth: '900px' }}>
+  <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <Alert variant="failure" sx={{ marginBottom: 4 }}>
+      Only for initial render - tech debt around routing within storybook
+    </Alert>
     <SettingsFormWrapper
       tabs={[
         {

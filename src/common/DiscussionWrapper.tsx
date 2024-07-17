@@ -164,7 +164,7 @@ export const DiscussionWrapper = (props: IProps) => {
       {!isLoading && !discussion && <Text>{DISCUSSION_NOT_FOUND}</Text>}
       {discussion && canHideComments && (
         <HideDiscussionContainer
-          commentCount={discussion.comments.length}
+          commentCount={nonDeletedCommentsCount(discussion.comments)}
           showComments={showComments}
         >
           <AuthWrapper

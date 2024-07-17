@@ -42,7 +42,7 @@ describe('[Howto.Discussions]', () => {
     cy.contains(newComment).should('not.exist')
 
     cy.step('Can delete their comment')
-    cy.deleteLast('CommentItem')
+    cy.deleteLastCommentOrReply('CommentItem')
     cy.contains(updatedNewComment).should('not.exist')
     cy.contains(`${howtoDiscussion.comments.length} comments`)
 
@@ -63,7 +63,7 @@ describe('[Howto.Discussions]', () => {
     cy.contains(reply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.deleteLast('ReplyItem')
+    cy.deleteLastCommentOrReply('ReplyItem')
     cy.contains(updatedReply).should('not.exist')
     cy.contains(`${howtoDiscussion.comments.length} comments`)
     cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {

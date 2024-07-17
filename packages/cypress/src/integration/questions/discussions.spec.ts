@@ -59,7 +59,7 @@ describe('[Questions.Discussions]', () => {
     cy.contains(reply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.deleteLast('ReplyItem')
+    cy.deleteLastCommentOrReply('ReplyItem')
     cy.contains(updatedReply).should('not.exist')
 
     // Prep for: Replies still show for deleted comments
@@ -70,7 +70,7 @@ describe('[Questions.Discussions]', () => {
     cy.get('[data-cy=ReplyItem]:last').contains(secondReply)
 
     cy.step('Can delete their comment')
-    cy.deleteLast('CommentItem')
+    cy.deleteLastCommentOrReply('CommentItem')
     cy.contains(updatedNewComment).should('not.exist')
 
     cy.step('Replies still show for deleted comments')
@@ -78,7 +78,7 @@ describe('[Questions.Discussions]', () => {
     cy.contains(secondReply)
 
     cy.step('Can delete their reply')
-    cy.deleteLast('ReplyItem')
+    cy.deleteLastCommentOrReply('ReplyItem')
     cy.contains(updatedReply).should('not.exist')
     cy.contains(`${discussion.comments.length} comments`)
     cy.queryDocuments('questions', '_id', '==', item._id).then((docs) => {

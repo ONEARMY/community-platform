@@ -45,7 +45,7 @@ describe('[Research.Discussions]', () => {
     cy.contains(comment).should('not.exist')
 
     cy.step('Can delete their own comment')
-    cy.deleteLast('CommentItem')
+    cy.deleteLastCommentOrReply('CommentItem')
     cy.contains(updatedNewComment).should('not.exist')
 
     cy.step('Can add reply')
@@ -65,7 +65,7 @@ describe('[Research.Discussions]', () => {
     cy.contains(reply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.deleteLast('ReplyItem')
+    cy.deleteLastCommentOrReply('ReplyItem')
     cy.contains(updatedReply).should('not.exist')
     cy.contains(`1 Comment`)
     cy.queryDocuments('research', '_id', '==', item._id).then((docs) => {

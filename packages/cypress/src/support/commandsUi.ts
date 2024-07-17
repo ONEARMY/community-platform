@@ -38,7 +38,7 @@ declare global {
       addReplytoFirstComment(reply: string): Chainable<void>
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>
       checkCommentItem(firstComment: string, length: number): Chainable<void>
-      deleteLast(element: string)
+      deleteLastCommentOrReply(element: string)
       editLast(element: string, updatedNewComment: string): Chainable<void>
       fillSignupForm(
         username: string,
@@ -290,11 +290,12 @@ Cypress.Commands.add(
     cy.get(`[data-cy="${element}: edit button"]`).last().click()
     cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
     cy.get('[data-cy=edit-comment-submit]').click()
+    cy.get('[data-cy=edit-comment]').should('not.exist')
   },
 )
 
 Cypress.Commands.add(
-  'deleteLast',
+  'deleteLastCommentOrReply',
   (element: string) => {
     cy.get(`[data-cy="${element}: delete button"]`).last().click()
     cy.get('[data-cy="Confirm.modal: Confirm"]').last().click()

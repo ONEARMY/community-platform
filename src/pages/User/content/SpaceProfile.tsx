@@ -172,18 +172,8 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   )
 
   return (
-    <Container
-      mt={4}
-      mb={6}
-      sx={{
-        border: '2px solid black',
-        borderRadius: '10px',
-        overflow: 'hidden',
-        maxWidth: '1000px',
-      }}
-      data-cy="SpaceProfile"
-    >
-      <Box sx={{ lineHeight: 0 }}>
+    <Card data-cy="SpaceProfile">
+      <Box>
         {coverImage.length ? (
           <ImageGallery
             images={formatImagesForGallery(coverImage) as any}
@@ -208,9 +198,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       </Box>
       <Flex
         sx={{
-          px: [2, 4],
-          py: 4,
-          background: 'white',
+          padding: [2, 4],
           borderTop: '2px solid',
         }}
       >

@@ -276,13 +276,10 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add(
-  'addLastComment',
-  (newComment: string) => {
-    cy.get('[data-cy=comments-form]').last().type(newComment)
-    cy.get('[data-cy=comment-submit]').last().click()
-  },
-)
+Cypress.Commands.add('addLastComment', (newComment: string) => {
+  cy.get('[data-cy=comments-form]').last().type(newComment)
+  cy.get('[data-cy=comment-submit]').last().click()
+})
 
 Cypress.Commands.add(
   'editLast',
@@ -294,19 +291,13 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add(
-  'deleteLastCommentOrReply',
-  (element: string) => {
-    cy.get(`[data-cy="${element}: delete button"]`).last().click()
-    cy.get('[data-cy="Confirm.modal: Confirm"]').last().click()
-  },
-)
+Cypress.Commands.add('deleteLastCommentOrReply', (element: string) => {
+  cy.get(`[data-cy="${element}: delete button"]`).last().click()
+  cy.get('[data-cy="Confirm.modal: Confirm"]').last().click()
+})
 
-Cypress.Commands.add(
-  'addReplytoFirstComment',
-  (reply: string) => {
-    cy.get('[data-cy=show-replies]').first().click()
-    cy.get('[data-cy=reply-form]').first().type(reply)
-    cy.get('[data-cy=reply-submit]').first().click()
-  },
-)
+Cypress.Commands.add('addReplytoFirstComment', (reply: string) => {
+  cy.get('[data-cy=show-replies]').first().click()
+  cy.get('[data-cy=reply-form]').first().type(reply)
+  cy.get('[data-cy=reply-submit]').first().click()
+})

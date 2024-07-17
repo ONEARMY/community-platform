@@ -72,8 +72,8 @@ describe('[Research.Discussions]', () => {
     cy.step('Check comments number after deletation')
     cy.get('[data-cy="HideDiscussionContainer: button false"]').click()
     cy.get('[data-cy="HideDiscussionContainer: button open-comments"]')
-    .first()
-    .contains('View 1 comment')
+      .first()
+      .contains('View 1 comment')
     cy.queryDocuments('research', '_id', '==', item._id).then((docs) => {
       const [research] = docs
       expect(research.totalCommentCount).to.eq(discussion.comments.length)

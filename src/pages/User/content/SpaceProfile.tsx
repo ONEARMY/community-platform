@@ -24,7 +24,7 @@ import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   AspectRatio,
   Box,
-  Container,
+  Card,
   Flex,
   Heading,
   Image,
@@ -49,22 +49,6 @@ interface IProps {
   user: IUserPP
   docs: UserCreatedDocs | undefined
 }
-
-const MobileBadge = ({ children }) => (
-  <Flex
-    sx={{
-      alignItems: ['left', 'left', 'center'],
-      flexDirection: 'column',
-      marginBottom: 0,
-      marginLeft: [0, 0, 'auto'],
-      marginRight: [0, 0, 'auto'],
-      marginTop: [0, 0, '-50%'],
-      position: 'relative',
-    }}
-  >
-    {children}
-  </Flex>
-)
 
 const renderPlasticTypes = (plasticTypes: Array<PlasticTypeLabel>) => {
   const renderIcon = (type: string) => {
@@ -203,29 +187,27 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
         }}
       >
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ display: ['block', 'block', 'none'] }}>
-            <MobileBadge>
-              <MemberBadge profileType={profileType} />
-            </MobileBadge>
-          </Box>
-
-          <Box
-            sx={{
-              position: 'relative',
-              pt: ['0', '40px', '0'],
-            }}
-          >
+          <Box sx={{ position: 'relative' }}>
             <Box
               sx={{
-                display: ['none', 'none', 'block'],
+                display: 'block',
                 position: 'absolute',
                 top: 0,
                 right: 0,
-                transform: 'translateY(-100px)',
+                transform: 'translateY(-50%)',
               }}
             >
-              <MemberBadge size={150} profileType={profileType} />
+              <Box sx={{ display: ['none', 'none', 'block'] }}>
+                <MemberBadge size={150} profileType={profileType} />
+              </Box>
+              <Box sx={{ display: ['none', 'block', 'none'] }}>
+                <MemberBadge size={100} profileType={profileType} />
+              </Box>
+              <Box sx={{ display: ['block', 'none', 'none'] }}>
+                <MemberBadge size={75} profileType={profileType} />
+              </Box>
             </Box>
+
             <Box>
               <Username
                 user={{
@@ -317,6 +299,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
           </Tabs>
         </Box>
       </Flex>
-    </Container>
+    </Card>
   )
 }

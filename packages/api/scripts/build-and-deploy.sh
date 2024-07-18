@@ -1,3 +1,4 @@
+# This service name needs to match the one used in the firebase.json > rewrites declaraton
 SERVICE_NAME="oa-api"
 PROJECT_ID="${GOOGLE_PROJECT_ID:-onearmy-test-ci}"
 

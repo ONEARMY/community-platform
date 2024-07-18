@@ -320,13 +320,35 @@ jobs:
       - attach_workspace:
           at: '.'
       - inject_instance_configuration
-      - run:
-          name: Package and Deploy API to Cloud Run
-          command: |
-            ./scripts/build-and-deploy.sh
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
+  deploy_container:
+    docker:
+      - image: google/cloud-sdk
+    resource_class: small
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/creds.json
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Print Firebase credentials to file
+          command: echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > /tmp/creds.json
+      - run:
+          name: Configure gcloud
+          command: |
+            gcloud auth activate-service-account \
+              ${GOOGLE_SERVICE_ACCOUNT_EMAIL_ADDRESS} \
+              --key-file=/tmp/creds.json \
+              --project=${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set run/region us-central1
+            gcloud auth configure-docker gcr.io
+      - run:
+          name: Package and Deploy to Cloud Run
+          command: |
+            ./scripts/build-and-deploy.sh
 
   # Run cypress e2e tests on chrome
   test_e2e:
@@ -455,10 +477,14 @@ workflows:
             - e2e-tests
           <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
+      - deploy_container:
+          name: "Package and Deploy"
+          context: 
+            - community-platform-dev
       - deploy:
           name: 'Deploy: dev.onearmy.world'
           # requires:
-            # - test_e2e 
+          # - test_e2e
           # <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'default'
           context:
@@ -495,7 +521,7 @@ workflows:
           context:
             - release-context
           requires:
-            - "Approve Production deployment"
+            - 'Approve Production deployment'
       - build:
           name: Build Production Release
           context: build-context

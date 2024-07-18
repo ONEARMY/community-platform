@@ -315,6 +315,12 @@ jobs:
       DEPLOY_ALIAS:
         type: string
         default: 'default'
+      label:
+        type: string
+        default: 'example.com'
+      ctx:
+        type: string
+        default: 'community-platform-dev'
     steps:
       - setup_repo
       - attach_workspace:
@@ -325,8 +331,6 @@ jobs:
           alias: << parameters.DEPLOY_ALIAS >>
   deploy_container:
     parameters:
-      label:
-        type: string
       ctx:
         type: string
     docker:
@@ -484,48 +488,48 @@ workflows:
           <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy_container:
-          name: '📦/🚀: <<matrix.label>>'
+          name: 'API 📦/🚀: <<matrix.ctx>>'
           requires:
             - 'Build Application'
           context:
             - <<matrix.ctx>>
           matrix:
             parameters:
-              label: ["dev.onearmy.world"]
-              ctx: ["community-platform-dev"]
+              ctx: ["community-platform-dev", "project-kamp-dev", "fixing-fashion-dev"]
       - deploy:
-          name: 'Deploy: dev.onearmy.world'
+          name: 'Frontend 🚀: <<matrix.ctx>>'
           requires:
-            - '📦/🚀: dev.onearmy.world'
+            - deploy_container
           DEPLOY_ALIAS: 'default'
           context:
             - circle-ci-patreon-context
-            - community-platform-dev
-      - deploy:
-          name: 'Deploy: dev.community.projectkamp.com'
-          requires:
-            - test_e2e
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: project-kamp-development
-          context:
-            - circle-ci-patreon-context
-            - project-kamp-dev
-      - deploy:
-          name: 'Deploy: dev.community.fixing.fashion'
-          requires:
-            - test_e2e
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: fixing-fashion-dev
-          context:
-            - circle-ci-patreon-context
-            - fixing-fashion-dev
+            - <<matrix.ctx>>
+          matrix:
+            parameters:
+              ctx: ["community-platform-dev", "project-kamp-dev", "fixing-fashion-dev"]
+      # - deploy:
+      #     name: 'Deploy: dev.community.projectkamp.com'
+      #     requires:
+      #       - test_e2e
+      #     <<: *filter_only_default_branch
+      #     DEPLOY_ALIAS: project-kamp-development
+      #     context:
+      #       - circle-ci-patreon-context
+      #       - project-kamp-dev
+      # - deploy:
+      #     name: 'Deploy: dev.community.fixing.fashion'
+      #     requires:
+      #       - test_e2e
+      #     <<: *filter_only_default_branch
+      #     DEPLOY_ALIAS: fixing-fashion-dev
+      #     context:
+      #       - circle-ci-patreon-context
+      #       - fixing-fashion-dev
       - approve:
           type: approval
           name: 'Approve Production deployment'
           requires:
-            - 'Deploy: dev.onearmy.world'
-            - 'Deploy: dev.community.fixing.fashion'
-            - 'Deploy: dev.community.projectkamp.com'
+            - deploy
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
           name: Release new version to GitHub

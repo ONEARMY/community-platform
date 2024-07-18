@@ -499,7 +499,7 @@ workflows:
       - deploy:
           name: 'Frontend 🚀: <<matrix.ctx>>'
           requires:
-            - deploy_container
+            - 'API 📦/🚀: <<matrix.ctx>>'
           DEPLOY_ALIAS: 'default'
           context:
             - circle-ci-patreon-context

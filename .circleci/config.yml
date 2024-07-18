@@ -26,12 +26,23 @@ aliases:
   # This can be applied to any job via `docker: *docker` syntax
   - &docker
     - image: cimg/node:20.7.0-browsers
-
+  
+  # Determines the development deployment matrix
+  # 
+  # Use a matrix to run the same job with different parameters
+  # each of these values must map to:
+  # – a CircleCI context
+  # – a Firebase project alias in `.firebaserc`
   - &deployment_matrix_dev
     - matrix:
         parameters: 
           ctx: ["community-platform-dev", "project-kamp-dev", "fixing-fashion-dev"]
 
+  # Determines the production deployment matrix
+  # 
+  # Each of these values must map to:
+  # – a CircleCI context
+  # – a Firebase project alias in `.firebaserc`
   - &deployment_matrix_prod
     - matrix:
         parameters: 

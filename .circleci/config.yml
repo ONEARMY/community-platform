@@ -324,6 +324,11 @@ jobs:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
   deploy_container:
+    parameters:
+      label:
+        type: string
+      ctx:
+        type: string
     docker:
       - image: google/cloud-sdk
     resource_class: small
@@ -479,16 +484,19 @@ workflows:
           <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy_container:
-          name: "📦/🚀: dev.onearmy.world"
+          name: '📦/🚀: <<matrix.label>>'
           requires:
             - 'Build Application'
-          context: 
-            - community-platform-dev
+          context:
+            - <<matrix.ctx>>
+          matrix:
+            parameters:
+              label: ["dev.onearmy.world"]
+              ctx: ["community-platform-dev"]
       - deploy:
           name: 'Deploy: dev.onearmy.world'
           requires:
-          - "📦/🚀: dev.onearmy.world"
-          # <<: *filter_only_default_branch
+            - '📦/🚀: dev.onearmy.world'
           DEPLOY_ALIAS: 'default'
           context:
             - circle-ci-patreon-context

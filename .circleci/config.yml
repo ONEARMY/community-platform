@@ -347,8 +347,9 @@ jobs:
             gcloud auth configure-docker gcr.io
       - run:
           name: Package and Deploy to Cloud Run
+          working_directory: packages/api
           command: |
-            ./packages/api/scripts/build-and-deploy.sh
+            ./scripts/build-and-deploy.sh
 
   # Run cypress e2e tests on chrome
   test_e2e:
@@ -483,8 +484,8 @@ workflows:
             - community-platform-dev
       - deploy:
           name: 'Deploy: dev.onearmy.world'
-          # requires:
-          # - test_e2e
+          requires:
+          - test_e2e
           # <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'default'
           context:

@@ -1,4 +1,4 @@
-SERVICE_NAME="platform-api"
+SERVICE_NAME="oa-api"
 PROJECT_ID="${GOOGLE_PROJECT_ID:-onearmy-test-ci}"
 
 # Build Docker image for the "experiment-0424" application

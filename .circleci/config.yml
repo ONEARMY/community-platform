@@ -455,7 +455,7 @@ workflows:
           name: 'Deploy: dev.onearmy.world'
           requires:
             - test_e2e
-          <<: *filter_only_default_branch
+          # <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'default'
           context:
             - circle-ci-patreon-context

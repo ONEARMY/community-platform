@@ -503,6 +503,7 @@ workflows:
             - 'Build Application'
           context:
             - <<matrix.ctx>>
+          <<: *filter_only_default_branch
           <<: *deployment_matrix_dev
               
       - deploy:

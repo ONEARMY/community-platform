@@ -485,7 +485,7 @@ workflows:
       - deploy:
           name: 'Deploy: dev.onearmy.world'
           requires:
-          - test_e2e
+          - deploy_container
           # <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'default'
           context:

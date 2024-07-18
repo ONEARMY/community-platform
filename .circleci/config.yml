@@ -480,6 +480,8 @@ workflows:
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy_container:
           name: "Package/Deploy to Cloud Run: dev.onearmy.world"
+          requires:
+            - 'Build Application'
           context: 
             - community-platform-dev
       - deploy:

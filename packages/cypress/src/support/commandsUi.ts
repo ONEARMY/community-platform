@@ -60,7 +60,7 @@ declare global {
       setSettingBasicUserInfo(info: IInfo)
       setSettingDeleteOpeningTime(index: number, confirmed: boolean)
       setSettingFocus(focus: string)
-      setSettingImpactData()
+      setSettingImpactData(year: number, fields)
       setSettingMapPinMember(pin: IMapPin)
       setSettingMapPinWorkspace(pin: IMapPin)
       setSettingPublicContact()
@@ -159,17 +159,22 @@ Cypress.Commands.add('setSettingMapPinWorkspace', (mapPin: IMapPin) => {
   })
 })
 
-Cypress.Commands.add('setSettingImpactData', () => {
+Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
   cy.step('Save impact data')
+  cy.get('[data-cy="tab-Impact"]').click()
 
-  cy.get('[data-cy="impact-button-expand"]').click()
-  cy.get('[data-cy="impactForm-2022-button-edit"]').click()
-  cy.get('[data-cy="impactForm-2022-field-revenue-value"]')
-    .clear()
-    .type('100000')
-  cy.get('[data-cy="impactForm-2022-field-revenue-isVisible"]').click()
-  cy.get('[data-cy="impactForm-2022-field-machines-value"]').clear()
-  cy.get('[data-cy="impactForm-2022-button-save"]').click()
+  cy.get(`[data-cy="impactForm-${year}-button-edit"]`).click()
+
+  fields.forEach((field) => {
+    cy.get(`[data-cy="impactForm-${year}-field-${field.name}-value"]`)
+      .clear()
+      .type(field.value)
+    field.visible === false &&
+      cy
+        .get(`[data-cy="impactForm-${year}-field-${field.name}-isVisible"]`)
+        .click()
+  })
+  cy.get(`[data-cy="impactForm-${year}-button-save"]`).click()
   cy.contains(form.saveSuccess)
 })
 

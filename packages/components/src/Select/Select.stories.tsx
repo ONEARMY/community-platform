@@ -12,7 +12,6 @@ export default {
 export const Default: StoryFn<typeof Select> = () => {
   return (
     <Select
-      value={''}
       placeholder="A placeholder value"
       options={[
         {
@@ -51,12 +50,10 @@ export const Clearable: StoryFn<typeof Select> = () => {
 }
 
 export const MultipleSelect: StoryFn<typeof Select> = () => {
-  const [value, setValue] = useState([
-    {
-      value: 'value-three',
-      label: 'Value 3',
-    },
-  ])
+  const [value, setValue] = useState({
+    value: 'value-three',
+    label: 'Value 3',
+  })
 
   return (
     <Select

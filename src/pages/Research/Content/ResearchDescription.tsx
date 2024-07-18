@@ -302,7 +302,7 @@ const ResearchDescription = ({
             }),
           },
           {
-            icon: 'thunderbolt',
+            icon: 'thunderbolt-grey',
             label: buildStatisticsLabel({
               stat: subscribersCount || 0,
               statUnit: 'following',

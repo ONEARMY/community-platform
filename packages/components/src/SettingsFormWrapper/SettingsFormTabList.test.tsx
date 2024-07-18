@@ -9,7 +9,7 @@ import { SettingsFormTabList } from './SettingsFormTabList'
 import type { availableGlyphs } from '../Icon/types'
 
 describe('SettingsFormTab', () => {
-  const title = 'Tab Title'
+  const title = 'Title'
   const tab = {
     body: <></>,
     title,
@@ -19,21 +19,17 @@ describe('SettingsFormTab', () => {
   it('renders when more than one tab provided', () => {
     const { getAllByText } = render(
       <Tabs defaultValue={0}>
-        <SettingsFormTabList
-          value={0}
-          setValue={() => null}
-          tabs={[tab, tab]}
-        />
+        <SettingsFormTabList currentTab="title" tabs={[tab, tab]} />
       </Tabs>,
     )
 
-    expect(getAllByText('Tab Title')[0]).toBeInTheDocument()
+    expect(getAllByText('Title')[0]).toBeInTheDocument()
   })
 
   it('renders nothing when only one tab provided', () => {
     const { queryByText } = render(
       <Tabs defaultValue={0}>
-        <SettingsFormTabList value={0} setValue={() => null} tabs={[tab]} />
+        <SettingsFormTabList currentTab="title" tabs={[tab]} />
       </Tabs>,
     )
 

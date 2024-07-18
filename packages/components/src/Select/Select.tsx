@@ -10,18 +10,22 @@ import type {
   StylesConfig,
 } from 'react-select'
 
+type IOption = {
+  label: string
+  value: string
+}
+
 export interface Props extends ReactSelectProps {
   options: OptionsOrGroups<any, any>
   value?: any
-  onChange?: any
+  onChange?: (arg: any) => void
   placeholder?: string
   isMulti?: boolean
   isClearable?: boolean
   getOptionLabel?: any
   getOptionValue?: any
-  defaultValue?: any
-  variant?: 'form' | 'icons'
-  components?: any
+  defaultValue?: IOption
+  variant?: 'form' | 'icons' | 'tabs'
 }
 
 export const Select = (props: Props) => {

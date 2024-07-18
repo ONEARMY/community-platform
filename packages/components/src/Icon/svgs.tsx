@@ -1,3 +1,4 @@
+import accountSVG from '../../assets/icons/account.svg'
 import arrowCurvedBottomRightSVG from '../../assets/icons/arrow-curved-bottom-right.svg'
 import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
 import chevronRightSVG from '../../assets/icons/chevron-right.svg'
@@ -19,47 +20,61 @@ import usefulSVG from '../../assets/icons/icon-useful.svg'
 import verifiedSVG from '../../assets/icons/icon-verified-badge.svg'
 import viewSVG from '../../assets/icons/icon-views.svg'
 import websiteSVG from '../../assets/icons/icon-website.svg'
+import impactSVG from '../../assets/icons/impact.svg'
 import machineSVG from '../../assets/icons/machine.svg'
+import mapSVG from '../../assets/icons/map.svg'
 import plasticSVG from '../../assets/icons/plastic.svg'
+import profileSVG from '../../assets/icons/profile.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
 import supporterSVG from '../../assets/icons/supporter.svg'
+import thunderboltSVG from '../../assets/icons/thunderbolt.svg'
+import thunderboltGreySVG from '../../assets/icons/thunderbolt-grey.svg'
 import volunteerSVG from '../../assets/icons/volunteer.svg'
 import loadingSVG from '../../assets/images/loading.svg'
 
 const imgStyle = {
   maxWidth: '100%',
 }
+interface IProps {
+  src: string
+}
+
+const ImageIcon = (props: IProps) => {
+  return <img alt="icon" style={imgStyle} {...props} />
+}
 
 export const iconMap = {
-  arrowCurvedBottomRight: (
-    <img alt="icon" style={imgStyle} src={arrowCurvedBottomRightSVG} />
-  ),
-  arrowFullDown: <img alt="icon" style={imgStyle} src={arrowFullDownSVG} />,
-  arrowFullUp: <img alt="icon" style={imgStyle} src={arrowFullUpSVG} />,
-  bazar: <img alt="icon" style={imgStyle} src={bazarSVG} />,
-  chevronLeft: <img alt="icon" style={imgStyle} src={chevronLeftSVG} />,
-  chevronRight: <img alt="icon" style={imgStyle} src={chevronRightSVG} />,
-  comment: <img alt="icon" style={imgStyle} src={commentSVG} />,
-  discord: <img alt="icon" style={imgStyle} src={discordSVG} />,
-  emailOutline: <img alt="icon" style={imgStyle} src={emailOutlineSVG} />,
-  employee: <img alt="icon" style={imgStyle} src={employeeSVG} />,
-  flagUnknown: <img alt="alt" style={imgStyle} src={flagUnknownSVG} />,
-  hide: <img alt="icon" style={imgStyle} src={eyeCrossedSVG} />,
-  loading: (
-    <img alt="icon" data-cy="icon-loading" style={imgStyle} src={loadingSVG} />
-  ),
-  machine: <img alt="icon" style={imgStyle} src={machineSVG} />,
-  plastic: <img alt="icon" style={imgStyle} src={plasticSVG} />,
-  revenue: <img alt="icon" style={imgStyle} src={revenueSVG} />,
-  show: <img alt="icon" style={imgStyle} src={eyeSVG} />,
-  socialMedia: <img alt="icon" style={imgStyle} src={socialMediaSVG} />,
-  star: <img alt="icon" style={imgStyle} src={starSVG} />,
-  starActive: <img alt="icon" style={imgStyle} src={starActiveSVG} />,
-  supporter: <img alt="icon" style={imgStyle} src={supporterSVG} />,
-  update: <img alt="icon" style={imgStyle} src={updateSVG} />,
-  useful: <img alt="icon" style={imgStyle} src={usefulSVG} />,
-  verified: <img alt="icon" style={imgStyle} src={verifiedSVG} />,
-  view: <img alt="icon" style={imgStyle} src={viewSVG} />,
-  volunteer: <img alt="icon" style={imgStyle} src={volunteerSVG} />,
-  website: <img alt="icon" style={imgStyle} src={websiteSVG} />,
+  arrowCurvedBottomRight: <ImageIcon src={arrowCurvedBottomRightSVG} />,
+  arrowFullDown: <ImageIcon src={arrowFullDownSVG} />,
+  arrowFullUp: <ImageIcon src={arrowFullUpSVG} />,
+  account: <ImageIcon src={accountSVG} />,
+  bazar: <ImageIcon src={bazarSVG} />,
+  chevronLeft: <ImageIcon src={chevronLeftSVG} />,
+  chevronRight: <ImageIcon src={chevronRightSVG} />,
+  comment: <ImageIcon src={commentSVG} />,
+  discord: <ImageIcon src={discordSVG} />,
+  emailOutline: <ImageIcon src={emailOutlineSVG} />,
+  employee: <ImageIcon src={employeeSVG} />,
+  flagUnknown: <ImageIcon src={flagUnknownSVG} />,
+  hide: <ImageIcon src={eyeCrossedSVG} />,
+  impact: <ImageIcon src={impactSVG} />,
+  loading: <ImageIcon src={loadingSVG} data-cy="icon-loading" />,
+  machine: <ImageIcon src={machineSVG} />,
+  map: <ImageIcon src={mapSVG} />,
+  plastic: <ImageIcon src={plasticSVG} />,
+  profile: <ImageIcon src={profileSVG} />,
+  revenue: <ImageIcon src={revenueSVG} />,
+  show: <ImageIcon src={eyeSVG} />,
+  socialMedia: <ImageIcon src={socialMediaSVG} />,
+  star: <ImageIcon src={starSVG} />,
+  starActive: <ImageIcon src={starActiveSVG} />,
+  supporter: <ImageIcon src={supporterSVG} />,
+  thunderbolt: <ImageIcon src={thunderboltSVG} />,
+  thunderboltGrey: <ImageIcon src={thunderboltGreySVG} />,
+  update: <ImageIcon src={updateSVG} />,
+  useful: <ImageIcon src={usefulSVG} />,
+  verified: <ImageIcon src={verifiedSVG} />,
+  view: <ImageIcon src={viewSVG} />,
+  volunteer: <ImageIcon src={volunteerSVG} />,
+  website: <ImageIcon src={websiteSVG} />,
 }

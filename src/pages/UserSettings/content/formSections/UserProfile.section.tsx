@@ -8,7 +8,6 @@ import { Button, ExternalLink, TextNotification } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { isPreciousPlastic } from 'src/config/config'
 import { logger } from 'src/logger'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { ProfileType } from 'src/modules/profile/types'
@@ -17,8 +16,6 @@ import { v4 as uuid } from 'uuid'
 
 import { buttons, headings } from '../../labels'
 import INITIAL_VALUES from '../../Template'
-import { ImpactSection } from './Impact/Impact.section'
-import { AccountSettingsSection } from './AccountSettings.section'
 import { CollectionSection } from './Collection.section'
 import { FlexSectionContainer } from './elements'
 import { EmailNotificationsSection } from './EmailNotifications.section'
@@ -159,7 +156,6 @@ export const UserProfile = () => {
   }, [shouldUpdate])
 
   const saveProfile = async (values: IUserPP) => {
-    window.scrollTo(0, 0)
     const vals = { ...values }
     vals.coverImages = (vals.coverImages as any[]).filter((cover) =>
       cover ? true : false,
@@ -234,14 +230,11 @@ export const UserProfile = () => {
           const isMember = values.profileType === ProfileType.MEMBER
 
           return (
-            <Flex
-              bg={'inherit'}
-              sx={{ flexDirection: 'column', padding: 4, gap: 4 }}
-            >
+            <Flex bg={'inherit'} sx={{ flexDirection: 'column', gap: 2 }}>
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
               <>
-                {notification.show && (
+                {notification.show && !errors && (
                   <TextNotification
                     isVisible={notification.show}
                     variant={notification.variant}
@@ -257,8 +250,8 @@ export const UserProfile = () => {
                 )}
               </>
 
-              <form id="userProfileForm" onSubmit={handleSubmit}>
-                <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+              <form id={formId} onSubmit={handleSubmit}>
+                <Flex sx={{ flexDirection: 'column', gap: 2 }}>
                   {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
                   {values.profileType === ProfileType.WORKSPACE && (
@@ -301,12 +294,6 @@ export const UserProfile = () => {
                   )}
                 </Flex>
 
-                {!isMember && isPreciousPlastic() && (
-                  <FlexSectionContainer>
-                    <ImpactSection />
-                  </FlexSectionContainer>
-                )}
-
                 <EmailNotificationsSection
                   notificationSettings={values.notification_settings}
                 />
@@ -320,8 +307,6 @@ export const UserProfile = () => {
                 <PatreonIntegration user={user} />
               </form>
 
-              <AccountSettingsSection />
-
               <Button
                 large
                 form={formId}
@@ -329,10 +314,9 @@ export const UserProfile = () => {
                 title={
                   invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'
                 }
+                onClick={() => window.scrollTo(0, 0)}
                 variant={'primary'}
                 type="submit"
-                // disable button when form invalid or during submit.
-                // ensure enabled after submit error
                 disabled={submitting}
                 sx={{ alignSelf: 'flex-start' }}
               >

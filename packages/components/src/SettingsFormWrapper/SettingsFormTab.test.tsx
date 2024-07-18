@@ -13,7 +13,7 @@ describe('SettingsFormTab', () => {
     const notificationText = 'Success message'
 
     const { getByText } = render(
-      <Tabs defaultValue={0}>
+      <Tabs defaultValue={'profile'}>
         <SettingsFormTab
           tab={{
             body: <>{bodyText}</>,
@@ -22,7 +22,7 @@ describe('SettingsFormTab', () => {
             title: 'Profile',
             glyph: 'comment',
           }}
-          value={0}
+          value={'profile'}
         />
       </Tabs>,
     )

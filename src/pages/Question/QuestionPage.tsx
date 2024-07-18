@@ -188,7 +188,7 @@ export const QuestionPage = () => {
                   }),
                 },
                 {
-                  icon: 'thunderbolt',
+                  icon: 'thunderbolt-grey',
                   label: buildStatisticsLabel({
                     stat: store.subscriberCount,
                     statUnit: 'following',

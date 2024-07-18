@@ -20,7 +20,9 @@ export const Sizes: StoryFn<typeof Icon> = () => (
 export const Available: StoryFn<typeof Icon> = () => (
   <>
     {Object.keys(glyphs).map((glyph: any, key) => (
-      <Icon key={key} glyph={glyph} />
+      <a key={key} title={glyph}>
+        <Icon glyph={glyph} />
+      </a>
     ))}
   </>
 )

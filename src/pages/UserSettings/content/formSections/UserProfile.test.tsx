@@ -11,7 +11,6 @@ import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { IModerationStatus } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { buttons } from 'src/pages/UserSettings/labels'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
@@ -182,67 +181,6 @@ describe('UserSettings', () => {
       })
 
       expect(() => wrapper.getByText('Moderator comment')).toThrow()
-    })
-  })
-  describe('impact section scroll into view', () => {
-    const scrollIntoViewMock = vi.fn()
-    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock
-
-    it('expands and scrolls to impact section if a #impact_year hash is provided and year is valid', async () => {
-      mockUser = FactoryUser({
-        profileType: 'workspace',
-      })
-
-      const impactHash = '#impact_2022'
-      const { expandClose } = buttons.impact
-
-      let wrapper
-      act(() => {
-        wrapper = Wrapper(mockUser, impactHash)
-      })
-      await waitFor(
-        () => {
-          expect(wrapper.getByText(expandClose)).toBeInTheDocument()
-          expect(scrollIntoViewMock).toHaveBeenCalled()
-        },
-        { timeout: 10000 },
-      )
-    })
-    it('does not expand impact section if hash syntax is not correct', async () => {
-      mockUser = FactoryUser({
-        profileType: 'workspace',
-      })
-
-      const impactHash = '#impact2019'
-      const { expandOpen } = buttons.impact
-
-      let wrapper
-      act(() => {
-        wrapper = Wrapper(mockUser, impactHash)
-      })
-
-      await waitFor(() => {
-        expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
-        expect(scrollIntoViewMock).not.toBeCalled()
-      })
-    })
-
-    it('does not expand impact section if no impact hash is provided', async () => {
-      mockUser = FactoryUser({
-        profileType: 'workspace',
-      })
-      const impactHash = ''
-      const { expandOpen } = buttons.impact
-
-      let wrapper
-      act(() => {
-        wrapper = Wrapper(mockUser, impactHash)
-      })
-
-      await waitFor(() => {
-        expect(wrapper.getByText(expandOpen)).toBeInTheDocument()
-        expect(scrollIntoViewMock).not.toBeCalled()
-      })
     })
   })
 })

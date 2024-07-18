@@ -1,55 +1,72 @@
 // Used the guide at https://mui.com/base-ui/react-tabs/ as a fundation
 
-import { useState } from 'react'
+import { matchPath, useLocation } from 'react-router-dom'
 import { Tabs } from '@mui/base/Tabs'
 import { Flex } from 'theme-ui'
 
 import { SettingsFormTab } from './SettingsFormTab'
 import { SettingsFormTabList } from './SettingsFormTabList'
+import { routeName } from './utils'
 
-import type { ThemeUIStyleObject } from 'theme-ui'
 import type { ITab } from './SettingsFormTab'
 
 export interface IProps {
+  setDefaultTab?: number
   tabs: ITab[]
-  sx?: ThemeUIStyleObject | undefined
+  style?: React.CSSProperties | undefined
+}
+
+const useRouteMatch = (patterns: readonly string[]) => {
+  const { pathname } = useLocation()
+
+  for (const pattern of patterns) {
+    const possibleMatch = matchPath(pattern, pathname)
+    if (possibleMatch !== null) {
+      return possibleMatch
+    }
+  }
+
+  return null
 }
 
 export const SettingsFormWrapper = (props: IProps) => {
-  const { sx, tabs } = props
-  const [value, setValue] = useState<number>(0)
+  const { style, tabs } = props
 
-  const handleChange = (
-    _: React.SyntheticEvent<Element, Event> | null,
-    value: string | number | null,
-  ) => {
-    typeof value === 'number' && setValue(value)
-  }
+  const routePaths = tabs.map(({ title }) => routeName(title))
+  const routeMatch = useRouteMatch(routePaths)
+  const currentTab = routeMatch?.pattern?.path || routePaths[0]
 
   return (
-    <Flex sx={sx}>
-      <Tabs value={value} onChange={handleChange}>
+    <Tabs value={currentTab} style={style}>
+      <Flex
+        sx={{
+          alignContent: 'stretch',
+          alignSelf: 'stretch',
+          justifyContent: 'stretch',
+          flexDirection: ['column', 'row'],
+          gap: 4,
+        }}
+      >
+        <SettingsFormTabList tabs={tabs} currentTab={currentTab} />
         <Flex
           sx={{
-            gap: 3,
-            flexDirection: ['column', 'row'],
+            alignContent: 'stretch',
+            justifyContent: 'stretch',
+            flexDirection: 'column',
+            flex: 7,
           }}
         >
-          <SettingsFormTabList tabs={tabs} value={value} setValue={setValue} />
-
-          <Flex
-            sx={{
-              alignContent: 'stretch',
-              flexDirection: 'column',
-              flex: 5,
-            }}
-          >
-            {tabs.map((tab, index) => {
-              return <SettingsFormTab key={index} value={index} tab={tab} />
-            })}
-          </Flex>
+          {tabs.map((tab, index) => {
+            return (
+              <SettingsFormTab
+                key={index}
+                value={routeName(tab.title)}
+                tab={tab}
+              />
+            )
+          })}
         </Flex>
-      </Tabs>
-    </Flex>
+      </Flex>
+    </Tabs>
   )
 }

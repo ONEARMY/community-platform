@@ -3,10 +3,11 @@ import styled from '@emotion/styled'
 import { Tab as BaseTab, tabClasses } from '@mui/base/Tab'
 import { TabsList as BaseTabsList } from '@mui/base/TabsList'
 import { prepareForSlot } from '@mui/base/utils'
-import { Flex, Select } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 import { InternalLink } from '../InternalLink/InternalLink'
+import { Select } from '../Select/Select'
 import { routeName } from './utils'
 
 import type { ITab } from './SettingsFormTab'
@@ -65,6 +66,12 @@ export const SettingsFormTabList = (props: IProps) => {
 
   if (tabs.length === 1) return
 
+  const defaultValue = {
+    label:
+      tabs.find(({ title }) => routeName(title) === currentTab)?.title || '',
+    value: currentTab,
+  }
+
   return (
     <>
       <Flex sx={{ display: ['none', 'flex'], flex: 2 }}>
@@ -88,27 +95,16 @@ export const SettingsFormTabList = (props: IProps) => {
       <Flex sx={{ display: ['flex', 'none'] }}>
         <TabsList>
           <Select
-            arrow={
-              <Icon
-                glyph="arrow-full-down"
-                sx={{
-                  ml: -7,
-                  alignSelf: 'center',
-                  pointerEvents: 'none',
-                }}
-              />
-            }
-            defaultValue={currentTab}
-            onChange={(event) => navigate(event.target.value)}
-          >
-            {tabs.map(({ title }, index) => {
-              return (
-                <option key={index} value={routeName(title)}>
-                  {title}
-                </option>
-              )
+            defaultValue={defaultValue}
+            onChange={(event) => navigate(event.value)}
+            variant="tabs"
+            options={tabs.map(({ title }) => {
+              return {
+                label: title,
+                value: routeName(title),
+              }
             })}
-          </Select>
+          />
         </TabsList>
       </Flex>
     </>

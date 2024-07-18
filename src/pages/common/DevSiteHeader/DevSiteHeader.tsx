@@ -104,8 +104,8 @@ const devSites = [
   { value: 'preview', label: 'Preview' },
 ]
 // dev site users can use either a default user profile or mock another admin role
-const siteRoles: { value: UserRole | null; label: string }[] = [
-  { value: null, label: 'User' },
+const siteRoles: { value: UserRole | string; label: string }[] = [
+  { value: '', label: 'User' },
   { value: UserRole.BETA_TESTER, label: 'Beta Tester' },
   { value: UserRole.ADMIN, label: 'Admin' },
   // { value: 'super-admin', label: 'Super Admin' },

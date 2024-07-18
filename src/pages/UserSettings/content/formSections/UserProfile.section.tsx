@@ -156,7 +156,6 @@ export const UserProfile = () => {
   }, [shouldUpdate])
 
   const saveProfile = async (values: IUserPP) => {
-    window.scrollTo(0, 0)
     const vals = { ...values }
     vals.coverImages = (vals.coverImages as any[]).filter((cover) =>
       cover ? true : false,
@@ -235,7 +234,7 @@ export const UserProfile = () => {
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
               <>
-                {notification.show && (
+                {notification.show && !errors && (
                   <TextNotification
                     isVisible={notification.show}
                     variant={notification.variant}
@@ -315,10 +314,9 @@ export const UserProfile = () => {
                 title={
                   invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'
                 }
+                onClick={() => window.scrollTo(0, 0)}
                 variant={'primary'}
                 type="submit"
-                // disable button when form invalid or during submit.
-                // ensure enabled after submit error
                 disabled={submitting}
                 sx={{ alignSelf: 'flex-start' }}
               >

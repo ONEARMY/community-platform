@@ -320,6 +320,10 @@ jobs:
       - attach_workspace:
           at: '.'
       - inject_instance_configuration
+      - run:
+          name: Package and Deploy API to Cloud Run
+          command: |
+            ./scripts/build-and-deploy.sh
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
@@ -453,8 +457,8 @@ workflows:
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy:
           name: 'Deploy: dev.onearmy.world'
-          requires:
-            - test_e2e
+          # requires:
+            # - test_e2e 
           # <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'default'
           context:

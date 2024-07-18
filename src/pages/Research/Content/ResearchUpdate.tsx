@@ -57,12 +57,14 @@ const ResearchUpdate = ({
     navigate('/sign-in')
   }
 
+  const displayId = updateIndex + 1
+
   return (
     <>
       <Flex
-        data-testid={`ResearchUpdate: ${updateIndex}`}
-        data-cy={`update_${updateIndex}`}
-        id={`update_${updateIndex}`}
+        data-testid={`ResearchUpdate: ${displayId}`}
+        data-cy={`ResearchUpdate: ${displayId}`}
+        id={`update_${displayId}`}
         mx={[0, 0, -2]}
         mt={9}
         sx={{ flexDirection: ['column', 'column', 'row'] }}
@@ -71,7 +73,7 @@ const ResearchUpdate = ({
           <FlexStepNumber sx={{ height: 'fit-content' }}>
             <Card py={3} px={4} sx={{ width: '100%', textAlign: 'center' }}>
               <Heading as="p" mb={0}>
-                {updateIndex + 1}
+                {displayId}
               </Heading>
             </Card>
           </FlexStepNumber>

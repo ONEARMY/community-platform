@@ -111,7 +111,7 @@ export async function handleResearchUpdatePublished(
   try {
     const response = await sendMessage(
       `📝 New update from ${author} in their research: ${title}\n` +
-        `Learn about it here: <${SITE_URL}/research/${slug}>`,
+        `Learn about it here: <${SITE_URL}/research/${slug}#update_${newUpdateIndex + 1}>`,
     )
     handleResponse(response)
   } catch (error) {

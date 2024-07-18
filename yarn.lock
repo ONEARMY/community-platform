@@ -22484,6 +22484,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"oa-api@workspace:packages/api":
+  version: 0.0.0-use.local
+  resolution: "oa-api@workspace:packages/api"
+  languageName: unknown
+  linkType: soft
+
 "oa-components@workspace:*, oa-components@workspace:packages/components":
   version: 0.0.0-use.local
   resolution: "oa-components@workspace:packages/components"

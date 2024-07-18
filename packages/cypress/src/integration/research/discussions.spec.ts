@@ -25,8 +25,8 @@ describe('[Research.Discussions]', () => {
 
     const comment = 'An example comment'
     const updatedNewComment = "I've updated my comment now"
-    const reply = "An interesting point, I hadn't thought about that."
-    const updatedReply = "I hadn't thought about that. Really good point."
+    const newReply = "An interesting point, I hadn't thought about that."
+    const updatedNewReply = "I hadn't thought about that. Really good point."
     const updateId = item.updates[0]._id
 
     cy.step('Can create their own comment')
@@ -40,18 +40,18 @@ describe('[Research.Discussions]', () => {
     cy.get('[data-cy="CommentItem"]').last().should('contain', comment)
 
     cy.step('Can edit their own comment')
-    cy.editLast('CommentItem', updatedNewComment)
+    cy.editDiscussionItem('CommentItem', updatedNewComment)
     cy.contains(updatedNewComment)
     cy.contains(comment).should('not.exist')
 
     cy.step('Can delete their own comment')
-    cy.deleteLastCommentOrReply('CommentItem')
+    cy.deleteDiscussionItem('CommentItem')
     cy.contains(updatedNewComment).should('not.exist')
 
     cy.step('Can add reply')
-    cy.addReplytoFirstComment(reply)
+    cy.addReply(newReply)
     cy.contains(`${discussion.comments.length + 1} Comments`)
-    cy.contains(reply)
+    cy.contains(newReply)
     cy.queryDocuments('research', '_id', '==', item._id).then((docs) => {
       const [research] = docs
       expect(research.totalCommentCount).to.eq(discussion.comments.length + 1)
@@ -60,13 +60,13 @@ describe('[Research.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
-    cy.editLast('ReplyItem', updatedReply)
-    cy.contains(updatedReply)
-    cy.contains(reply).should('not.exist')
+    cy.editDiscussionItem('ReplyItem', updatedNewReply)
+    cy.contains(updatedNewReply)
+    cy.contains(newReply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.deleteLastCommentOrReply('ReplyItem')
-    cy.contains(updatedReply).should('not.exist')
+    cy.deleteDiscussionItem('ReplyItem')
+    cy.contains(updatedNewReply).should('not.exist')
     cy.contains(`1 Comment`)
 
     cy.step('Check comments number after deletation')

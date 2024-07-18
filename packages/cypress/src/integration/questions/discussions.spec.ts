@@ -24,8 +24,8 @@ describe('[Questions.Discussions]', () => {
     const newComment = 'An interesting question. The answer must be...'
     const updatedNewComment =
       'An interesting question. The answer must be that when the sky is red, the apocalypse _might_ be on the way.'
-    const reply = 'Thanks Dave and Ben. What does everyone else think?'
-    const updatedReply = 'Anyone else?'
+    const newReply = 'Thanks Dave and Ben. What does everyone else think?'
+    const updatedNewReply = 'Anyone else?'
     const secondReply = 'Quick reply'
 
     const visitor = generateNewUserDetails()
@@ -33,19 +33,19 @@ describe('[Questions.Discussions]', () => {
     cy.visit(`/questions/${item.slug}`)
 
     cy.step('Can add comment')
-    cy.addLastComment(newComment)
+    cy.addComment(newComment)
     cy.contains(`${discussion.comments.length + 1} comments`)
     cy.contains(newComment)
 
     cy.step('Can edit their comment')
-    cy.editLast('CommentItem', updatedNewComment)
+    cy.editDiscussionItem('CommentItem', updatedNewComment)
     cy.contains(updatedNewComment)
     cy.contains(newComment).should('not.exist')
 
     cy.step('Can add reply')
-    cy.addReplytoFirstComment(reply)
+    cy.addReply(newReply)
     cy.contains(`${discussion.comments.length + 2} comments`)
-    cy.contains(reply)
+    cy.contains(newReply)
     cy.queryDocuments('questions', '_id', '==', item._id).then((docs) => {
       const [question] = docs
       expect(question.commentCount).to.eq(discussion.comments.length + 2)
@@ -54,13 +54,13 @@ describe('[Questions.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
-    cy.editLast('ReplyItem', updatedReply)
-    cy.contains(updatedReply)
-    cy.contains(reply).should('not.exist')
+    cy.editDiscussionItem('ReplyItem', updatedNewReply)
+    cy.contains(updatedNewReply)
+    cy.contains(newReply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.deleteLastCommentOrReply('ReplyItem')
-    cy.contains(updatedReply).should('not.exist')
+    cy.deleteDiscussionItem('ReplyItem')
+    cy.contains(updatedNewReply).should('not.exist')
 
     // Prep for: Replies still show for deleted comments
     cy.get('[data-cy=show-replies]:last').click()
@@ -70,7 +70,7 @@ describe('[Questions.Discussions]', () => {
     cy.get('[data-cy=ReplyItem]:last').contains(secondReply)
 
     cy.step('Can delete their comment')
-    cy.deleteLastCommentOrReply('CommentItem')
+    cy.deleteDiscussionItem('CommentItem')
     cy.contains(updatedNewComment).should('not.exist')
 
     cy.step('Replies still show for deleted comments')
@@ -78,8 +78,8 @@ describe('[Questions.Discussions]', () => {
     cy.contains(secondReply)
 
     cy.step('Can delete their reply')
-    cy.deleteLastCommentOrReply('ReplyItem')
-    cy.contains(updatedReply).should('not.exist')
+    cy.deleteDiscussionItem('ReplyItem')
+    cy.contains(updatedNewReply).should('not.exist')
     cy.contains(`${discussion.comments.length} comments`)
     cy.queryDocuments('questions', '_id', '==', item._id).then((docs) => {
       const [question] = docs

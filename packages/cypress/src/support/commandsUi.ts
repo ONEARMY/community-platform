@@ -34,12 +34,14 @@ interface IOpeningTime {
 declare global {
   namespace Cypress {
     interface Chainable {
-      addLastComment(newComment: string): Chainable<void>
-      addReplytoFirstComment(reply: string): Chainable<void>
+      addComment(newComment: string): Chainable<void>
+      addReply(reply: string): Chainable<void>
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>
-      checkCommentItem(firstComment: string, length: number): Chainable<void>
-      deleteLastCommentOrReply(element: string)
-      editLast(element: string, updatedNewComment: string): Chainable<void>
+      deleteDiscussionItem(element: string)
+      editDiscussionItem(
+        element: string,
+        updatedNewComment: string,
+      ): Chainable<void>
       fillSignupForm(
         username: string,
         email: string,
@@ -263,26 +265,13 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add(
-  'checkCommentItem',
-  (firstComment: string, length: number) => {
-    cy.step('Comment mentions are formatted correctly')
-    cy.get('[data-cy="CommentItem"]').should('have.length.gte', length)
-    cy.get('[data-cy="CommentItem"]')
-      .first()
-      .scrollIntoView()
-      .should('be.inViewport', 10)
-    cy.contains(firstComment)
-  },
-)
-
-Cypress.Commands.add('addLastComment', (newComment: string) => {
+Cypress.Commands.add('addComment', (newComment: string) => {
   cy.get('[data-cy=comments-form]').last().type(newComment)
   cy.get('[data-cy=comment-submit]').last().click()
 })
 
 Cypress.Commands.add(
-  'editLast',
+  'editDiscussionItem',
   (element: string, updatedNewComment: string) => {
     cy.get(`[data-cy="${element}: edit button"]`).last().click()
     cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
@@ -291,12 +280,12 @@ Cypress.Commands.add(
   },
 )
 
-Cypress.Commands.add('deleteLastCommentOrReply', (element: string) => {
+Cypress.Commands.add('deleteDiscussionItem', (element: string) => {
   cy.get(`[data-cy="${element}: delete button"]`).last().click()
   cy.get('[data-cy="Confirm.modal: Confirm"]').last().click()
 })
 
-Cypress.Commands.add('addReplytoFirstComment', (reply: string) => {
+Cypress.Commands.add('addReply', (reply: string) => {
   cy.get('[data-cy=show-replies]').first().click()
   cy.get('[data-cy=reply-form]').first().type(reply)
   cy.get('[data-cy=reply-submit]').first().click()

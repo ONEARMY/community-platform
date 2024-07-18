@@ -251,10 +251,12 @@ export class DiscussionStore extends ModuleStore {
             ? parentComment.creatorName
             : research._createdBy
 
+          const updateHash = '#update_' + (updateIndex + 1)
+
           await this.userNotificationsStore.triggerNotification(
             'new_comment_discussion',
             username,
-            '/research/' + research.slug + '#update_' + updateIndex,
+            `/research/${research.slug}${updateHash}`,
             research.title,
           )
 
@@ -263,7 +265,7 @@ export class DiscussionStore extends ModuleStore {
               this.userNotificationsStore.triggerNotification(
                 'new_comment_discussion',
                 collaborator,
-                `/research/${research.slug}#update_${updateIndex}-comment:${commentId}`,
+                `/research/${research.slug}${updateHash}-comment:${commentId}`,
                 research.title,
               )
             })

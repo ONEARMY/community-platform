@@ -118,6 +118,7 @@ const ResearchArticle = observer(() => {
         })
       }
     }
+    setIsLoading(true)
     init()
 
     // Reset the store's active item and seo tags on component cleanup
@@ -187,9 +188,7 @@ const ResearchArticle = observer(() => {
     return <NotFoundPage />
   }
 
-  const research = {
-    ...item,
-  }
+  const research = { ...item }
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>

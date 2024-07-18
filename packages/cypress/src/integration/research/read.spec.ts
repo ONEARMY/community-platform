@@ -15,6 +15,7 @@ describe('[Research]', () => {
       it('[Visible to everyone]', () => {
         cy.step('Can visit research')
         cy.visit(researchArticleUrl)
+
         cy.title().should(
           'eq',
           `${article.title} - Research - Community Platform`,
@@ -86,6 +87,9 @@ describe('[Research]', () => {
         cy.get('[data-cy=breadcrumbsItem]')
           .eq(2)
           .should('contain', article.title)
+
+        cy.step('Can scroll to specific research updates')
+        cy.get('[id="update_3"]').scrollIntoView().should('be.visible')
       })
     })
 

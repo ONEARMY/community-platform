@@ -479,7 +479,7 @@ workflows:
           <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
       - deploy_container:
-          name: "Package/Deploy to Cloud Run: dev.onearmy.world"
+          name: "📦/🚀: dev.onearmy.world"
           requires:
             - 'Build Application'
           context: 
@@ -487,7 +487,7 @@ workflows:
       - deploy:
           name: 'Deploy: dev.onearmy.world'
           requires:
-          - "Package/Deploy to Cloud Run: dev.onearmy.world"
+          - "📦/🚀: dev.onearmy.world"
           # <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'default'
           context:

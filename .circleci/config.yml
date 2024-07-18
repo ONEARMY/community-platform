@@ -348,7 +348,7 @@ jobs:
       - run:
           name: Package and Deploy to Cloud Run
           command: |
-            ./scripts/build-and-deploy.sh
+            ./packages/api/scripts/build-and-deploy.sh
 
   # Run cypress e2e tests on chrome
   test_e2e:

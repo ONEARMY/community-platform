@@ -2,5 +2,11 @@
     "name": "oa-api",
     "version": "1.0.0",
     "packageManager": "yarn@3.1.1",
-    "private": true
+    "private": true,
+    "dependencies": {
+        "express": "^4.19.2"
+    },
+    "scripts": {
+        "start": "node src/index.js"
+    }
 }

@@ -22487,6 +22487,8 @@ __metadata:
 "oa-api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "oa-api@workspace:packages/api"
+  dependencies:
+    express: ^4.19.2
   languageName: unknown
   linkType: soft
 

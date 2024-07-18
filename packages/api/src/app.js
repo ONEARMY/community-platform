@@ -1,4 +1,4 @@
-import * as express from 'express'
+import express from "express"
 
 const app = express()
 
@@ -6,7 +6,7 @@ app.all('*', (req, res) => {
   res.status(501).json({ message: 'Not Implemented' })
 })
 
-const port = 80
+const port = 8080
 app.listen(port, () => {
   // eslint-disable-next-line no-undef
   console.log(`Server running on port ${port}`)

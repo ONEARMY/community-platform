@@ -10,7 +10,10 @@
     "rewrites": [
       {
         "source": "/api",
-        "function": "api"
+        "run": {
+          "serviceId": "oa-api",
+          "region": "us-central1"
+        }
       },
       {
         "source": "/how-to/**",

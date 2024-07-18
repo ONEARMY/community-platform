@@ -27,6 +27,11 @@ aliases:
   - &docker
     - image: cimg/node:20.7.0-browsers
 
+  - &deployment_matrix_dev
+    - matrix:
+        parameters: 
+          ctx: ["community-platform-dev", "project-kamp-dev", "fixing-fashion-dev"]
+
   # Use base image with support for node version parameter and matrix
   # This can be applied to any job via `<<: *docker_matrix` syntax
   - docker_matrix: &docker_matrix
@@ -493,9 +498,8 @@ workflows:
             - 'Build Application'
           context:
             - <<matrix.ctx>>
-          matrix:
-            parameters:
-              ctx: ["community-platform-dev", "project-kamp-dev", "fixing-fashion-dev"]
+          <<: *deployment_matrix_dev
+              
       - deploy:
           name: 'Frontend 🚀: <<matrix.ctx>>'
           requires:
@@ -504,9 +508,7 @@ workflows:
           context:
             - circle-ci-patreon-context
             - <<matrix.ctx>>
-          matrix:
-            parameters:
-              ctx: ["community-platform-dev", "project-kamp-dev", "fixing-fashion-dev"]
+          <<: *deployment_matrix_dev
       # - deploy:
       #     name: 'Deploy: dev.community.projectkamp.com'
       #     requires:

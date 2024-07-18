@@ -32,6 +32,11 @@ aliases:
         parameters: 
           ctx: ["community-platform-dev", "project-kamp-dev", "fixing-fashion-dev"]
 
+  - &deployment_matrix_prod
+    - matrix:
+        parameters: 
+          ctx: ["community-platform-production", "project-kamp-production", "fixing-fashion-prod"]
+
   # Use base image with support for node version parameter and matrix
   # This can be applied to any job via `<<: *docker_matrix` syntax
   - docker_matrix: &docker_matrix
@@ -509,29 +514,14 @@ workflows:
             - circle-ci-patreon-context
             - <<matrix.ctx>>
           <<: *deployment_matrix_dev
-      # - deploy:
-      #     name: 'Deploy: dev.community.projectkamp.com'
-      #     requires:
-      #       - test_e2e
-      #     <<: *filter_only_default_branch
-      #     DEPLOY_ALIAS: project-kamp-development
-      #     context:
-      #       - circle-ci-patreon-context
-      #       - project-kamp-dev
-      # - deploy:
-      #     name: 'Deploy: dev.community.fixing.fashion'
-      #     requires:
-      #       - test_e2e
-      #     <<: *filter_only_default_branch
-      #     DEPLOY_ALIAS: fixing-fashion-dev
-      #     context:
-      #       - circle-ci-patreon-context
-      #       - fixing-fashion-dev
       - approve:
           type: approval
           name: 'Approve Production deployment'
           requires:
-            - deploy
+            # Fix me: These chould reference the matrix rather than individual jobs within
+            - 'Frontend 🚀: community-platform-dev'
+            - 'Frontend 🚀: project-kamp-dev'
+            - 'Frontend 🚀: fixing-fashion-dev'
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
           name: Release new version to GitHub
@@ -545,26 +535,11 @@ workflows:
           requires:
             - 'Release new version to GitHub'
       - deploy:
-          name: 'Deploy: community.fixing.fashion'
+          name: 'Deploy: <<matrix.ctx>>'
           requires:
             - 'Build Production Release'
-          DEPLOY_ALIAS: fixing-fashion-prod
+          DEPLOY_ALIAS: <<matrix.ctx>>
           context:
             - circle-ci-patreon-context
-            - fixing-fashion-prod
-      - deploy:
-          name: 'Deploy: community.preciousplastic.com'
-          requires:
-            - 'Build Production Release'
-          DEPLOY_ALIAS: 'production'
-          context:
-            - circle-ci-patreon-context
-            - community-platform-production
-      - deploy:
-          name: 'Deploy: community.projectkamp.com'
-          requires:
-            - 'Build Production Release'
-          DEPLOY_ALIAS: project-kamp-production
-          context:
-            - circle-ci-patreon-context
-            - project-kamp-production
+            - <<matrix.ctx>>
+          <<: *deployment_matrix_prod

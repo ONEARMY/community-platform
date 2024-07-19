@@ -2,7 +2,7 @@ import { keyframes, useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Flex, Image, Text } from 'theme-ui'
 
-import type { ThemeUIStyleObject } from 'theme-ui';
+import type { ThemeUIStyleObject } from 'theme-ui'
 
 const rotate = keyframes`
   from {

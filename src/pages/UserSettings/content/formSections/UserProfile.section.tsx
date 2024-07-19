@@ -79,6 +79,31 @@ const WorkspaceMapPinRequiredStars = () => {
   )
 }
 
+const FormNotifications = ({ errors, notification, submitFailed }) => {
+  const showSuccessNotification =
+    notification.show && (!errors || Object.keys(errors).length === 0)
+  const showErrorsNotification = errors || submitFailed
+
+  return (
+    <>
+      {showSuccessNotification && (
+        <TextNotification
+          isVisible={notification.show}
+          variant={notification.variant}
+        >
+          <Text>{buttons.success}</Text>
+        </TextNotification>
+      )}
+      {showErrorsNotification && (
+        <SettingsErrors
+          errors={errors}
+          isVisible={!!(errors && Object.keys(errors).length > 0)}
+        />
+      )}
+    </>
+  )
+}
+
 export const UserProfile = () => {
   const { mapsStore, userStore } = useCommonStores().stores
   const [state, setState] = useState<IState>({} as any)
@@ -233,22 +258,11 @@ export const UserProfile = () => {
             <Flex bg={'inherit'} sx={{ flexDirection: 'column', gap: 2 }}>
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
-              <>
-                {notification.show && !errors && (
-                  <TextNotification
-                    isVisible={notification.show}
-                    variant={notification.variant}
-                  >
-                    <Text>{buttons.success}</Text>
-                  </TextNotification>
-                )}
-                {(errors || submitFailed) && (
-                  <SettingsErrors
-                    errors={errors}
-                    isVisible={!!(errors && Object.keys(errors).length > 0)}
-                  />
-                )}
-              </>
+              <FormNotifications
+                errors={errors}
+                notification={notification}
+                submitFailed={submitFailed}
+              />
 
               <form id={formId} onSubmit={handleSubmit}>
                 <Flex sx={{ flexDirection: 'column', gap: 2 }}>

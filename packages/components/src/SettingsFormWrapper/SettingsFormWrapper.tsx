@@ -11,7 +11,6 @@ import { routeName } from './utils'
 import type { ITab } from './SettingsFormTab'
 
 export interface IProps {
-  setDefaultTab?: number
   tabs: ITab[]
   style?: React.CSSProperties | undefined
 }

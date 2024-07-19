@@ -57,90 +57,7 @@ export const MapWithPin = (props: Props) => {
   }
 
   return (
-    <div
-      style={{
-        position: 'relative',
-      }}
-    >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          padding: 2,
-          zIndex: 2,
-        }}
-      >
-        {draggable && (
-          <Flex style={{ width: '280px' }}>
-            <OsmGeocoding
-              callback={(data: Result) => {
-                if (data.lat && data.lon) {
-                  onPositionChanged({
-                    lat: data.lat,
-                    lng: data.lon,
-                  })
-                  setCenter([data.lat, data.lon])
-                  setZoom(15)
-                }
-              }}
-              countrycodes=""
-              acceptLanguage="en"
-            />
-            {hasUserLocation && (
-              <Button
-                type="button"
-                mx={2}
-                onClick={(evt) => {
-                  evt.preventDefault()
-                  setLocationToNavigatorLocation()
-                }}
-              >
-                {useUserLocation}
-              </Button>
-            )}
-          </Flex>
-        )}
-      </Box>
-      <div>
-        <Map
-          center={center}
-          zoom={zoom}
-          zoomControl={false}
-          onViewportChanged={(evt) => {
-            if (evt.zoom) {
-              setZoom(evt.zoom)
-            }
-          }}
-          onclick={(evt) => {
-            onPositionChanged({
-              lat: evt.latlng.lat,
-              lng: evt.latlng.lng,
-            })
-          }}
-          style={{
-            height: '300px',
-            zIndex: 1,
-          }}
-        >
-          <ZoomControl position="topright" />
-          <TileLayer
-            attribution='&amp;copy <a href="http://osm.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <MapPin
-            position={position}
-            draggable={draggable}
-            ondragend={(evt: any) => {
-              if (evt.lat && evt.lng)
-                onPositionChanged({
-                  lat: evt.lat,
-                  lng: evt.lng,
-                })
-            }}
-          />
-        </Map>
-      </div>
+    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
       {draggable && (
         <Alert
           variant="info"
@@ -151,6 +68,93 @@ export const MapWithPin = (props: Props) => {
           <Text sx={{ fontSize: 1 }}>{mapInstructions}</Text>
         </Alert>
       )}
-    </div>
+      <div
+        style={{
+          position: 'relative',
+          borderRadius: 6,
+          overflow: 'hidden',
+        }}
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            padding: 2,
+            zIndex: 2,
+          }}
+        >
+          {draggable && (
+            <Flex style={{ width: '280px' }}>
+              <OsmGeocoding
+                callback={(data: Result) => {
+                  if (data.lat && data.lon) {
+                    onPositionChanged({
+                      lat: data.lat,
+                      lng: data.lon,
+                    })
+                    setCenter([data.lat, data.lon])
+                    setZoom(15)
+                  }
+                }}
+                countrycodes=""
+                acceptLanguage="en"
+              />
+              {hasUserLocation && (
+                <Button
+                  type="button"
+                  mx={2}
+                  onClick={(evt) => {
+                    evt.preventDefault()
+                    setLocationToNavigatorLocation()
+                  }}
+                >
+                  {useUserLocation}
+                </Button>
+              )}
+            </Flex>
+          )}
+        </Box>
+        <div>
+          <Map
+            center={center}
+            zoom={zoom}
+            zoomControl={false}
+            onViewportChanged={(evt) => {
+              if (evt.zoom) {
+                setZoom(evt.zoom)
+              }
+            }}
+            onclick={(evt) => {
+              onPositionChanged({
+                lat: evt.latlng.lat,
+                lng: evt.latlng.lng,
+              })
+            }}
+            style={{
+              height: '300px',
+              zIndex: 1,
+            }}
+          >
+            <ZoomControl position="topright" />
+            <TileLayer
+              attribution='&amp;copy <a href="http://osm.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <MapPin
+              position={position}
+              draggable={draggable}
+              ondragend={(evt: any) => {
+                if (evt.lat && evt.lng)
+                  onPositionChanged({
+                    lat: evt.lat,
+                    lng: evt.lng,
+                  })
+              }}
+            />
+          </Map>
+        </div>
+      </div>
+    </Flex>
   )
 }

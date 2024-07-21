@@ -85,7 +85,17 @@ To deploy from service_account the following APIs will also need to be enabled f
 
 ## Functions Variables
 
-Additional config used in cloud functions has also been included via `firebase functions:config:set`
-E.g. `discord_webhook`, `slack_webhook`,
+Additional configuration variables used in Cloud Functions can be setup with `firebase functions:config:set` (example: `discord_webhook`)
 
-TODO - This requires further documentation (and possibly merging)
+To change the configuration:
+
+1. You need the firebase-cli setup on your local computer.
+2. You need a Google account that has privileges for the deployment you want to change.
+3. Be inside of the project.
+4. Run `firebase use x` where x is the deployment you want to modify (found in the `.firebaserc` file.)
+5. It is recommended to do `firebase functions:config:get` for backup.
+6. Run `firebase functions:config:set key="value"`
+7. You should get a message that the changes will take affect once the functions are deployed again.
+
+External documentation:
+https://firebase.google.com/docs/functions/config-env?gen=1st#set_environment_configuration_with_the

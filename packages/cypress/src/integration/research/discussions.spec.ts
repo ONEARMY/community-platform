@@ -69,7 +69,7 @@ describe('[Research.Discussions]', () => {
     cy.contains(updatedNewReply).should('not.exist')
     cy.contains(`1 Comment`)
 
-    cy.step('Check comments number after deletation')
+    cy.step('Check comments number after deletion')
     cy.get('[data-cy="HideDiscussionContainer: button false"]').click()
     cy.get('[data-cy="HideDiscussionContainer: button open-comments"]')
       .first()

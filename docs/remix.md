@@ -9,7 +9,7 @@ Parts of the component might be rendered client side, for that we can use React.
 
 Additionally, routes could also export [Links](https://remix.run/docs/en/main/route/links) and [Meta](https://remix.run/docs/en/main/route/meta) functions that will be added to the html head.
 
-For the API, we can use [action](https://remix.run/docs/en/main/route/action) routes.
+For the API, we can use [action/loader](https://remix.run/docs/en/main/route/action) routes.
 
 ## Migration
 - Most files have changes only to update the imports from 'react-router' to '@remix-run/react'.

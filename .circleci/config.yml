@@ -65,6 +65,15 @@ aliases:
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
         YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
+  -  &install_cypress
+    run:
+      name: Install Cypress
+      # Install packages
+      # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
+      command: |
+        cd packages/cypress
+        yarn install
+
   - &save_yarn_cache
     save_cache:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
@@ -342,6 +351,7 @@ jobs:
         type: string
     steps:
       - setup_repo
+      - install_cypress
       # retrieve build folder
       - attach_workspace:
           at: '.'

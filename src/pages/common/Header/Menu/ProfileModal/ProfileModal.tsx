@@ -90,7 +90,7 @@ export const ProfileModal = observer((props: IProps) => {
           </ModalLink>
         </Flex>
         {COMMUNITY_PAGES_PROFILE.map((page) => (
-          <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+          <AuthWrapper key={page.path}>
             <Flex>
               <ModalLink
                 to={page.path}

@@ -17,7 +17,6 @@ import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { researchRouteElements } from './research.routes'
 import { researchService } from './research.service'
 
 import type { ResearchStore } from 'src/stores/Research/research.store'

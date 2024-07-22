@@ -1,6 +1,6 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { NavLink } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'

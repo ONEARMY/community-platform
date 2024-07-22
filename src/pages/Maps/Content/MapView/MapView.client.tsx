@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { Map, TileLayer } from 'react-leaflet'
 
-import { Clusters } from './Cluster'
-import { Popup } from './Popup'
+import { Clusters } from './Cluster.client'
+import { Popup } from './Popup.client'
 
 import type { LatLngExpression } from 'leaflet'
 import type { ILatLng, IMapPin } from 'src/models/maps.models'

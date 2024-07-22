@@ -1,7 +1,6 @@
-import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { NavLink } from '@remix-run/react'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
 import { getAvailablePageList } from 'src/pages/PageList'
 import { Flex } from 'theme-ui'
@@ -39,22 +38,13 @@ const MenuLink = styled(NavLink)`
 
 export const MenuDesktop = () => (
   <Flex sx={{ alignItems: 'center', width: '100%' }}>
-    {getAvailablePageList(getSupportedModules()).map((page) => {
-      const link = (
-        <Flex key={page.path}>
-          <MenuLink to={page.path} data-cy="page-link">
-            <Flex>{page.title}</Flex>
-          </MenuLink>
-        </Flex>
-      )
-      return page.requiredRole ? (
-        <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
-          {link}
-        </AuthWrapper>
-      ) : (
-        link
-      )
-    })}
+    {getAvailablePageList(getSupportedModules()).map((page) => (
+      <Flex key={page.path}>
+        <MenuLink to={page.path} data-cy="page-link">
+          <Flex>{page.title}</Flex>
+        </MenuLink>
+      </Flex>
+    ))}
   </Flex>
 )
 

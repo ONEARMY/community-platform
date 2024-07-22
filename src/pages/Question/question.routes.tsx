@@ -1,17 +1,15 @@
 import { Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Routes } from '@remix-run/react'
 
-import { AuthRoute } from '../common/AuthRoute'
-import { QuestionCreate } from './QuestionCreate'
-import { QuestionEdit } from './QuestionEdit'
-import { QuestionListing } from './QuestionListing'
-import { QuestionPage } from './QuestionPage'
+// import { AuthRoute } from '../common/AuthRoute'
+// import { QuestionCreate } from './QuestionCreate'
+// import { QuestionEdit } from './QuestionEdit'
+// import { QuestionPage } from './QuestionPage'
 
 export const questionRouteElements = (
   <>
-    <Route index element={<QuestionListing />} />
-    <Route path=":slug" element={<QuestionPage />} />
-    <Route
+    {/* <Route path=":slug" element={<QuestionPage />} /> */}
+    {/* <Route
       path="create"
       element={
         <AuthRoute>
@@ -26,7 +24,7 @@ export const questionRouteElements = (
           <QuestionEdit />
         </AuthRoute>
       }
-    />
+    /> */}
   </>
 )
 

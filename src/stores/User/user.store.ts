@@ -9,7 +9,7 @@ import {
   updatePassword,
   updateProfile,
 } from 'firebase/auth'
-import { uniqBy } from 'lodash'
+import lodash from 'lodash'
 import { action, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 
@@ -71,7 +71,7 @@ export class UserStore extends ModuleStore {
     const users: IUserPP[] = await this.db
       .collection<IUserPP>(COLLECTION_NAME)
       .getWhere('userName', '>=', prefix, limit)
-    const uniqueUsers: IUserPP[] = uniqBy(
+    const uniqueUsers: IUserPP[] = lodash.uniqBy(
       users.filter((user) => user.userName?.startsWith(prefix)),
       (user) => user.userName,
     )

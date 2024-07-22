@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from '@remix-run/react'
 import { observer } from 'mobx-react-lite'
 import { Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'

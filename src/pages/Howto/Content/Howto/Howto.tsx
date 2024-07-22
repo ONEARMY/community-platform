@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { VERSION } from 'src/config/config'

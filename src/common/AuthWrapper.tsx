@@ -1,7 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { DEV_SITE_ROLE, SITE } from 'src/config/config'
+import { SITE } from 'src/config/config'
+import { getDevSiteRole } from 'src/config/devSiteConfig'
 import { isTestEnvironment } from 'src/utils/isTestEnvironment'
 
 import type { UserRole } from 'oa-shared'
@@ -47,8 +48,8 @@ const isUserAuthorized = (
 
   // if running dev or preview site allow wwwuser-overridden permissions (ignoring db user role)
   if (!isTestEnvironment && (SITE === 'dev_site' || SITE === 'preview')) {
-    if (DEV_SITE_ROLE) {
-      return rolesRequired.includes(DEV_SITE_ROLE)
+    if (getDevSiteRole()) {
+      return rolesRequired.includes(getDevSiteRole())
     }
   }
   // otherwise use logged in user profile values

@@ -2,7 +2,8 @@ import { observer } from 'mobx-react-lite'
 import { Select } from 'oa-components'
 import { UserRole } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { DEV_SITE_ROLE, SITE, VERSION } from 'src/config/config'
+import { SITE, VERSION } from 'src/config/config'
+import { getDevSiteRole } from 'src/config/devSiteConfig'
 import { Box, Flex, Text } from 'theme-ui'
 
 /**
@@ -12,6 +13,7 @@ import { Box, Flex, Text } from 'theme-ui'
 const DevSiteHeader = observer(() => {
   const { themeStore } = useCommonStores().stores
   const theme = themeStore.currentTheme.styles
+
   return (
     <>
       {showDevSiteHeader() && (
@@ -45,7 +47,7 @@ const DevSiteHeader = observer(() => {
                 options={siteRoles}
                 placeholder="Role"
                 defaultValue={
-                  siteRoles.find((s) => s.value === DEV_SITE_ROLE) ||
+                  siteRoles.find((s) => s.value === getDevSiteRole()) ||
                   siteRoles[0]
                 }
                 onChange={(s: any) => setSiteRole(s.value)}
@@ -115,7 +117,7 @@ const siteRoles: { value: UserRole | null; label: string }[] = [
 const setSite = async (site: string) => {
   await clearCache(false)
   localStorage.setItem('devSiteVariant', site)
-  localStorage.setItem('devSiteRole', DEV_SITE_ROLE)
+  localStorage.setItem('devSiteRole', getDevSiteRole())
   window.location.reload()
 }
 

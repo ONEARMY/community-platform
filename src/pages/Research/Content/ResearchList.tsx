@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
 import { useTheme } from '@emotion/react'
+import { Link, useSearchParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'

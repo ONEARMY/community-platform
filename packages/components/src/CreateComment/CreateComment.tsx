@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@remix-run/react'
 import { Box, Button, Flex, Text, Textarea } from 'theme-ui'
 
 import { MemberBadge } from '../MemberBadge/MemberBadge'

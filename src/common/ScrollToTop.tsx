@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '@remix-run/react'
 
 export const ScrollToTop = () => {
   const { pathname } = useLocation()

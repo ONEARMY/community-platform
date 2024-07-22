@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '@remix-run/react'
 import IconArrowDown from 'src/assets/icons/icon-arrow-down.svg'
 import IconArrowUp from 'src/assets/icons/icon-arrow-up.svg'
 import { IMPACT_YEARS } from 'src/pages/User/impact/constants'

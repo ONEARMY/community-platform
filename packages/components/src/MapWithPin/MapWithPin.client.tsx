@@ -4,7 +4,7 @@ import { Alert, Box, Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { OsmGeocoding } from '../OsmGeocoding/OsmGeocoding'
-import { MapPin } from './MapPin'
+import { MapPin } from './MapPin.client'
 
 import type { Result } from '../OsmGeocoding/types'
 

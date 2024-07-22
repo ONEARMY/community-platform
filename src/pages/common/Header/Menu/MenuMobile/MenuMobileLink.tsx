@@ -1,6 +1,6 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { NavLink } from '@remix-run/react'
 import MenuCurrent from 'src/assets/images/menu-current.svg'
 import { Box } from 'theme-ui'
 

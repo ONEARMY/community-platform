@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from '@remix-run/react'
 import { Loader } from 'oa-components'
 import { logger } from 'src/logger'
 import { functions } from 'src/utils/firebase'

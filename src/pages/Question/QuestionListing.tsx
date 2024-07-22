@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from '@remix-run/react'
 import { Button, Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
@@ -125,13 +125,11 @@ export const QuestionListing = () => {
       )}
 
       {questions && questions.length > 0 && (
-        <>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {questions.map((question, index) => (
-              <QuestionListItem key={index} question={question} query={q} />
-            ))}
-          </ul>
-        </>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {questions.map((question, index) => (
+            <QuestionListItem key={index} question={question} query={q} />
+          ))}
+        </ul>
       )}
 
       {showLoadMore && (

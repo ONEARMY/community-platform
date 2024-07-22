@@ -1,4 +1,3 @@
-import { MODULE } from 'src/modules'
 import {
   DiscussionStore,
   DiscussionStoreContext,
@@ -11,7 +10,7 @@ import {
 import { useCommonStores } from '../../common/hooks/useCommonStores'
 import QuestionRoutes from './question.routes'
 
-import type { IPageMeta } from 'src/pages/PageList'
+// import type { IPageMeta } from 'src/pages/PageList'
 
 export const QuestionModuleContainer = () => {
   const rootStore = useCommonStores()
@@ -24,10 +23,9 @@ export const QuestionModuleContainer = () => {
   )
 }
 
-export const QuestionModule: IPageMeta = {
-  moduleName: MODULE.QUESTION,
-  path: '/questions',
-  component: <QuestionModuleContainer />,
-  title: 'Questions',
-  description: 'Welcome to question and answer',
-}
+// export const QuestionModule: IPageMeta = {
+//   moduleName: MODULE.QUESTION,
+//   path: '/questions',
+//   component: <QuestionModuleContainer />,
+//   title: 'Questions',
+// }

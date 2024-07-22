@@ -1,5 +1,3 @@
-import { isTestEnvironment } from 'src/utils/isTestEnvironment'
-
 import { SITE } from '../../config/config'
 import { DexieClient } from './clients/DexieClient'
 import { FirestoreClient } from './clients/FirestoreClient'
@@ -17,10 +15,10 @@ export class DatabaseV2 {
   private _clients: DBClients
 
   constructor() {
-    const useBrowserCacheDb =
-      !window.location.search.includes('no-cache') || !isTestEnvironment
+    // const useBrowserCacheDb =
+    //   !window.location.search.includes('no-cache') || !isTestEnvironment
 
-    this._clients = this._getDefaultClients(useBrowserCacheDb)
+    this._clients = this._getDefaultClients(false)
   }
 
   public get clients() {

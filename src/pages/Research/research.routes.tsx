@@ -1,35 +1,31 @@
-import { lazy, Suspense } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { isPreciousPlastic } from 'src/config/config'
+import { Suspense } from 'react'
+import { Routes } from '@remix-run/react'
 
-import { AuthRoute } from '../common/AuthRoute'
-import { RESEARCH_EDITOR_ROLES } from './constants'
+// const CreateResearch = lazy(() => import('./Content/CreateResearch'))
+// const CreateUpdate = lazy(() => import('./Content/CreateUpdate/CreateUpdate'))
+// const ResearchItemEditor = lazy(() => import('./Content/EditResearch'))
+// const UpdateItemEditor = lazy(() => import('./Content/EditUpdate'))
+// const ResearchArticle = lazy(() => import('./Content/ResearchArticle'))
+// const ResearchList = lazy(() => import('./Content/ResearchList'))
 
-const CreateResearch = lazy(() => import('./Content/CreateResearch'))
-const CreateUpdate = lazy(() => import('./Content/CreateUpdate/CreateUpdate'))
-const ResearchItemEditor = lazy(() => import('./Content/EditResearch'))
-const UpdateItemEditor = lazy(() => import('./Content/EditUpdate'))
-const ResearchArticle = lazy(() => import('./Content/ResearchArticle'))
-const ResearchList = lazy(() => import('./Content/ResearchList'))
+// const getRandomInt = (max: number) => {
+//   return Math.floor(Math.random() * max)
+// }
 
-const getRandomInt = (max: number) => {
-  return Math.floor(Math.random() * max)
-}
-
-const roles = isPreciousPlastic() ? [] : RESEARCH_EDITOR_ROLES
+// const roles = isPreciousPlastic() ? [] : RESEARCH_EDITOR_ROLES
 
 export const researchRouteElements = (
   <>
-    <Route index element={<ResearchList />} />
-    <Route
+    {/* <Route index element={<ResearchList />} /> */}
+    {/* <Route
       path="create"
       element={
         <AuthRoute roleRequired={roles}>
           <CreateResearch />
         </AuthRoute>
       }
-    />
-    <Route
+    /> */}
+    {/* <Route
       path=":slug/new-update"
       element={
         <AuthRoute roleRequired={roles}>
@@ -44,20 +40,20 @@ export const researchRouteElements = (
           <ResearchItemEditor />
         </AuthRoute>
       }
-    />
-    <Route
+    /> */}
+    {/* <Route
       path=":slug/edit-update/:update"
       element={
         <AuthRoute roleRequired={roles}>
           <UpdateItemEditor />
         </AuthRoute>
       }
-    />
-    <Route
+    /> */}
+    {/* <Route
       path=":slug"
       key={getRandomInt(55555)}
       element={<ResearchArticle />}
-    />
+    /> */}
   </>
 )
 

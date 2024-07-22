@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from '@remix-run/react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { BlockedRoute, Loader } from 'oa-components'

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useTheme } from '@emotion/react'
+import { useNavigate } from '@remix-run/react'
 import { Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'

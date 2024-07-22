@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { createContext, useContext } from 'react'
-import { cloneDeep } from 'lodash'
+import lodash from 'lodash'
 import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
@@ -20,6 +20,8 @@ import type {
 } from 'src/models/discussion.models'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
+
+const { cloneDeep } = lodash
 
 const COLLECTION_NAME = 'discussions'
 

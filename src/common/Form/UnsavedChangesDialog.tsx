@@ -1,4 +1,4 @@
-import { useBlocker } from 'react-router'
+import { useBlocker } from '@remix-run/react'
 import { ConfirmModal } from 'oa-components'
 
 const CONFIRM_DIALOG_MSG =

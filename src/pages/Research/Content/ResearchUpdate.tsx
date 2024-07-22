@@ -1,5 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
   DownloadCounter,

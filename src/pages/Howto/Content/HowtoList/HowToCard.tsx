@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from '@remix-run/react'
 import {
   Category,
   IconCountWithTooltip,

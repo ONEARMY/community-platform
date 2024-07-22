@@ -10,7 +10,6 @@ Dev config is hardcoded - You can find more information about potential security
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
 
-import type { UserRole } from '../models'
 import type { ConfigurationOption } from './constants'
 import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
 
@@ -41,12 +40,13 @@ export const getConfigurationOption = _c
 /********************************************************************************************** */
 
 // On dev sites user can override default role
-const devSiteRole: UserRole = localStorage.getItem('devSiteRole') as UserRole
+// const devSiteRole: UserRole = localStorage.getItem('devSiteRole') as UserRole
 
 const getSiteVariant = (): siteVariants => {
-  const devSiteVariant: siteVariants = localStorage.getItem(
-    'devSiteVariant',
-  ) as any
+  const devSiteVariant: siteVariants =
+    typeof localStorage !== 'undefined' &&
+    localStorage &&
+    (localStorage.getItem('devSiteVariant') as any)
 
   if (devSiteVariant === 'preview') {
     return 'preview'
@@ -57,15 +57,17 @@ const getSiteVariant = (): siteVariants => {
   if (devSiteVariant === 'dev_site') {
     return 'dev_site'
   }
-  if (location.host === 'localhost:4000') {
-    return 'emulated_site'
-  }
-  if (
-    location.host === 'localhost:3456' ||
-    _c('REACT_APP_SITE_VARIANT') === 'test-ci'
-  ) {
-    return 'test-ci'
-  }
+
+  // TODO: Find alternative to this
+  // if (location.host === 'localhost:4000') {
+  //   return 'emulated_site'
+  // }
+  // if (
+  //   location.host === 'localhost:3456' ||
+  //   _c('REACT_APP_SITE_VARIANT') === 'test-ci'
+  // ) {
+  //   return 'test-ci'
+  // }
   if (_c('REACT_APP_SITE_VARIANT') === 'preview') {
     return 'preview'
   }
@@ -144,7 +146,7 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
 /********************************************************************************************** */
 
 export const SITE = siteVariant
-export const DEV_SITE_ROLE = devSiteRole
+// export const DEV_SITE_ROLE = devSiteRole
 export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
 export const SENTRY_CONFIG: ISentryConfig = {
   dsn: _c(
@@ -162,7 +164,8 @@ export const API_URL = _c('REACT_APP_API_URL', '')
 
 export const isPreciousPlastic = (): boolean => {
   return (
-    (_c('REACT_APP_PLATFORM_THEME') ||
+    _c('REACT_APP_PLATFORM_THEME') === 'precious-plastic' ||
+    (typeof localStorage !== 'undefined' &&
       localStorage.getItem('platformTheme')) === 'precious-plastic'
   )
 }

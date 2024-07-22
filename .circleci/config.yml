@@ -60,6 +60,14 @@ aliases:
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
         YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
+
+  - &debug_cache
+    run:
+      name: Debug Cache
+      command: |
+        echo "Cache files:"
+        ls -l /home/circleci/.yarn/cache
+        ls -l /home/circleci/.yarn/install-state.gz
   - &save_yarn_cache
     save_cache:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching

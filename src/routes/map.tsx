@@ -1,5 +1,6 @@
 import Main from 'src/pages/common/Layout/Main'
 import { Layout } from 'src/pages/Layout'
+import { mapPinService, MapPinServiceContext } from 'src/pages/Maps/map.service'
 import MapsPage from 'src/pages/Maps/Maps.client'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
 
@@ -21,7 +22,9 @@ export default function Index() {
         }}
         ignoreMaxWidth={true}
       >
-        <MapsPage />
+        <MapPinServiceContext.Provider value={mapPinService}>
+          <MapsPage />
+        </MapPinServiceContext.Provider>
       </Main>
     </Layout>
   )

@@ -11,7 +11,10 @@ const e = process.env || ({} as any)
  * e.g. oa_
  * SessionStorage prefixes are used to allow test ci environments to dynamically set a db endpoint
  */
-const DB_PREFIX = e.REACT_APP_DB_PREFIX || '' // sessionStorage.DB_PREFIX
+const DB_PREFIX =
+  (typeof sessionStorage !== 'undefined' && sessionStorage.DB_PREFIX) ||
+  e.REACT_APP_DB_PREFIX ||
+  ''
 
 /**
  * Mapping of generic database endpoints to specific prefixed and revisioned versions for the

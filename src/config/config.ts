@@ -58,16 +58,15 @@ const getSiteVariant = (): siteVariants => {
     return 'dev_site'
   }
 
-  // TODO: Find alternative to this
-  // if (location.host === 'localhost:4000') {
-  //   return 'emulated_site'
-  // }
-  // if (
-  //   location.host === 'localhost:3456' ||
-  //   _c('REACT_APP_SITE_VARIANT') === 'test-ci'
-  // ) {
-  //   return 'test-ci'
-  // }
+  if (typeof location !== 'undefined' && location.host === 'localhost:4000') {
+    return 'emulated_site'
+  }
+  if (
+    (typeof location !== 'undefined' && location.host === 'localhost:3456') ||
+    _c('REACT_APP_SITE_VARIANT') === 'test-ci'
+  ) {
+    return 'test-ci'
+  }
   if (_c('REACT_APP_SITE_VARIANT') === 'preview') {
     return 'preview'
   }

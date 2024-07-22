@@ -65,15 +65,6 @@ aliases:
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
         YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
-  -  &install_cypress
-    run:
-      name: Install Cypress
-      # Install packages
-      # NOTE run twice with check to ensure install-state created (previously had issues, doesn't add much time to check)
-      command: |
-        cd packages/cypress
-        yarn install
-
   - &save_yarn_cache
     save_cache:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
@@ -125,6 +116,14 @@ commands:
           name: Inject target environment configuration
           command: |
             yarn build:inject-config
+
+  install_cypress:
+    steps:
+      - run:
+          name: Install Cypress
+          command: |
+            cd packages/cypress
+            yarn install
 
   firebase_deploy:
     description: Deploy to Firebase
@@ -350,7 +349,7 @@ jobs:
       CI_BROWSER:
         type: string
     steps:
-      - setup_repo
+      - *install_packages
       - install_cypress
       # retrieve build folder
       - attach_workspace:

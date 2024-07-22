@@ -89,6 +89,7 @@ export const glyphs: IGlyphs = {
   filter: <RiFilter2Fill />,
   'flag-unknown': iconMap.flagUnknown,
   hide: iconMap.hide,
+  hyperlink: iconMap.hyperlink,
   image: <MdImage />,
   impact: iconMap.impact,
   instagram: <FaInstagram />,

@@ -31,6 +31,7 @@ export type availableGlyphs =
   | 'filter'
   | 'flag-unknown'
   | 'hide'
+  | 'hyperlink'
   | 'image'
   | 'impact'
   | 'instagram'

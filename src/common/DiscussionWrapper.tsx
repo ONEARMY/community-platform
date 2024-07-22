@@ -4,6 +4,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import { getResearchCommentId } from 'src/pages/Research/Content/helper'
 import { nonDeletedCommentsCount } from 'src/utils/nonDeletedCommentsCount'
 import { Text } from 'theme-ui'
 
@@ -24,6 +25,14 @@ interface IProps {
   primaryContentId?: string | undefined
 }
 
+const getHighlightedCommentId = () => {
+  const hash = window.location.hash
+  if (!hash) return
+
+  const filterOutResearchUpdate = getResearchCommentId(hash)
+  return filterOutResearchUpdate.replace('#comment:', '')
+}
+
 export const DiscussionWrapper = (props: IProps) => {
   const {
     canHideComments,
@@ -39,7 +48,7 @@ export const DiscussionWrapper = (props: IProps) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const { discussionStore } = useCommonStores().stores
-  const highlightedCommentId = window.location.hash.replace('#comment:', '')
+  const highlightedCommentId = getHighlightedCommentId()
 
   const transformComments = (discussion: IDiscussion) => {
     if (!discussion) return

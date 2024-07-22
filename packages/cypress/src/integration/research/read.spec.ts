@@ -15,6 +15,7 @@ describe('[Research]', () => {
       it('[Visible to everyone]', () => {
         cy.step('Can visit research')
         cy.visit(researchArticleUrl)
+        const updateId = updates[2]._id
 
         cy.title().should(
           'eq',
@@ -89,7 +90,18 @@ describe('[Research]', () => {
           .should('contain', article.title)
 
         cy.step('Can scroll to specific research updates')
-        cy.get('[id="update_3"]').scrollIntoView().should('be.visible')
+        cy.get(`[id="update_${updateId}"]`)
+          .scrollIntoView()
+          .should('be.visible')
+
+        cy.step('Can get and paste update anchor')
+        cy.get('[data-cy=ResearchLinkToUpdate]').last().click()
+        cy.window().then((window) => {
+          window.navigator.clipboard.readText().then((clipboardItem) => {
+            cy.visit(clipboardItem)
+            cy.contains(article.title)
+          })
+        })
       })
     })
 

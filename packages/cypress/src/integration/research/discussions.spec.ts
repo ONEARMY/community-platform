@@ -14,7 +14,8 @@ const firstComment = discussion.comments[0]
 
 describe('[Research.Discussions]', () => {
   it('can open using deep links', () => {
-    cy.visit(`/research/${item.slug}#update-0-comment:${firstComment._id}`)
+    const commentUrl = `/research/${item.slug}#update_${item.updates[0]._id}-comment:${firstComment._id}`
+    cy.visit(commentUrl)
     cy.get('[data-cy="CommentItem"]').should('have.length.gte', 1)
     cy.get('[data-cy="CommentItem"]')
       .scrollIntoView()
@@ -31,6 +32,7 @@ describe('[Research.Discussions]', () => {
     const updatedComment = "I've updated my comment now"
     const reply = "An interesting point, I hadn't thought about that."
     const updatedReply = "I hadn't thought about that. Really good point."
+    const updateId = item.updates[0]._id
 
     cy.step('Can create their own comment')
     cy.get('[data-cy="HideDiscussionContainer: button open-comments"]')
@@ -39,7 +41,7 @@ describe('[Research.Discussions]', () => {
       .click()
     cy.get('[data-cy="comments-form"]').type(comment)
     cy.get('[data-cy="comment-submit"]').click()
-    cy.get('[data-cy="ResearchUpdate: 1"]').contains('2 Comments')
+    cy.get(`[data-cy="ResearchUpdate: ${updateId}"]`).contains('2 Comments')
     cy.get('[data-cy="CommentItem"]').last().should('contain', comment)
 
     cy.step('Can edit their own comment')
@@ -99,7 +101,7 @@ describe('[Research.Discussions]', () => {
             triggeredBy.userId === visitor.username,
         )
         expect(discussionNotification.relevantUrl).to.include(
-          `/research/${item.slug}#update_1`,
+          `/research/${item.slug}#update_${updateId}`,
         ),
           expect(discussionNotification.title).to.eq(item.title),
           expect(discussionNotification.triggeredBy.userId).to.eq(
@@ -122,7 +124,7 @@ describe('[Research.Discussions]', () => {
           triggeredBy.userId === visitor.username,
       )
       expect(discussionNotification.relevantUrl).to.include(
-        `/research/${item.slug}#update_1`,
+        `/research/${item.slug}#update_${updateId}`,
       ),
         expect(discussionNotification.title).to.eq(item.title),
         expect(discussionNotification.triggeredBy.userId).to.eq(
@@ -138,7 +140,7 @@ describe('[Research.Discussions]', () => {
           ({ type }) => type === 'new_comment_discussion',
         )
         expect(discussionNotification.relevantUrl).to.include(
-          `/research/${item.slug}#update_1`,
+          `/research/${item.slug}#update_${updateId}`,
         ),
           expect(discussionNotification.title).to.eq(item.title),
           expect(discussionNotification.triggeredBy.userId).to.eq(

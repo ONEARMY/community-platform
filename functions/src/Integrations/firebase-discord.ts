@@ -1,8 +1,11 @@
-import { CONFIG } from '../config/config'
+import axios from 'axios'
 import * as functions from 'firebase-functions'
-import axios, { AxiosResponse, AxiosError } from 'axios'
-import { IMapPin, IResearchDB } from '../models'
 import { IModerationStatus } from 'oa-shared'
+
+import { CONFIG } from '../config/config'
+
+import type { AxiosError, AxiosResponse } from 'axios'
+import type { IMapPin, IResearchDB } from '../models'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
@@ -72,6 +75,7 @@ export interface SimpleResearchArticle {
 }
 
 interface SimpleResearchArticleUpdate {
+  _id: string
   title: string
   collaborators?: string[]
 }
@@ -111,7 +115,7 @@ export async function handleResearchUpdatePublished(
   try {
     const response = await sendMessage(
       `📝 New update from ${author} in their research: ${title}\n` +
-        `Learn about it here: <${SITE_URL}/research/${slug}#update_${newUpdateIndex + 1}>`,
+        `Learn about it here: <${SITE_URL}/research/${slug}#update_${newUpdate._id}>`,
     )
     handleResponse(response)
   } catch (error) {

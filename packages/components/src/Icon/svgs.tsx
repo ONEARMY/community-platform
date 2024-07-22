@@ -6,6 +6,7 @@ import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
 import flagUnknownSVG from '../../assets/icons/flag-unknown.svg'
+import hyperlinkSVG from '../../assets/icons/hyperlink.svg'
 import arrowFullDownSVG from '../../assets/icons/icon-arrow-down.svg'
 import arrowFullUpSVG from '../../assets/icons/icon-arrow-up.svg'
 import bazarSVG from '../../assets/icons/icon-bazar.svg'
@@ -57,6 +58,7 @@ export const iconMap = {
   employee: <ImageIcon src={employeeSVG} />,
   flagUnknown: <ImageIcon src={flagUnknownSVG} />,
   hide: <ImageIcon src={eyeCrossedSVG} />,
+  hyperlink: <ImageIcon src={hyperlinkSVG} />,
   impact: <ImageIcon src={impactSVG} />,
   loading: <ImageIcon src={loadingSVG} data-cy="icon-loading" />,
   machine: <ImageIcon src={machineSVG} />,

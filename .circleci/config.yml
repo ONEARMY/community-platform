@@ -17,6 +17,11 @@ orbs:
   browser-tools: circleci/browser-tools@1.4.5
   # used to track coverage
   codecov: codecov/codecov@3.2.5
+  # "cypress-io/cypress@3" installs the latest published
+  # version "s.x.y" of the orb. We recommend you then use
+  # the strict explicit version "cypress-io/cypress@3.x.y"
+  # to lock the version and prevent unexpected CI changes
+  cypress: cypress-io/cypress@3
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -60,14 +65,6 @@ aliases:
       environment:
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
         YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
-
-  - &debug_cache
-    run:
-      name: Debug Cache
-      command: |
-        echo "Cache files:"
-        ls -l /home/circleci/.yarn/cache
-        ls -l /home/circleci/.yarn/install-state.gz
   - &save_yarn_cache
     save_cache:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
@@ -335,7 +332,6 @@ jobs:
 
   # Run cypress e2e tests on chrome
   test_e2e:
-    docker: *docker
     resource_class: medium+
     # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
     parallelism: 1

@@ -1,23 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone'
-import { Button } from 'oa-components'
-import { Box, Image } from 'theme-ui'
+import { Button, Modal } from 'oa-components'
+import { Box, Flex, Image, Text } from 'theme-ui'
 
 import { DeleteImage } from './DeleteImage'
 import { getPresentFiles } from './getPresentFiles'
 import { ImageConverterList } from './ImageConverterList'
 import { ImageInputWrapper } from './ImageInputWrapper'
+import { imageValid } from './imageValid'
 import { setSrc } from './setSrc'
 
 import type { IConvertedFileMeta } from 'src/types'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import type { IInputValue, IMultipleInputValue, IValue } from './types'
 
-/*
-    This component takes multiple image using filepicker and resized clientside
-    Note, typings not available for client-compress so find full options here:
-    https://github.com/davejm/client-compress
-*/
 type IFileMeta = IConvertedFileMeta[] | IConvertedFileMeta | null
 
 interface IProps {
@@ -39,9 +35,19 @@ export const ImageInput = (props: IProps) => {
   const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(
     getPresentFiles(value),
   )
+  const [imageCorrupt, setImageCorrupt] = useState<boolean>(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
 
   const onDrop = (inputFiles) => {
-    setInputFiles(inputFiles)
+    imageValid(inputFiles[0])
+      .then(() => {
+        setImageCorrupt(false)
+        setInputFiles(inputFiles)
+      })
+      .catch(() => {
+        setImageCorrupt(true)
+        setShowErrorModal(true)
+      })
   }
 
   const handleConvertedFileChange = (newFile: IConvertedFileMeta, index) => {
@@ -76,7 +82,13 @@ export const ImageInput = (props: IProps) => {
 
   return (
     <Box p={0} sx={imageDisplaySx ? imageDisplaySx : { height: '100%' }}>
-      <Dropzone accept="image/*" multiple={multiple} onDrop={onDrop}>
+      <Dropzone
+        accept={{
+          'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.svg', '.webp'],
+        }}
+        multiple={multiple}
+        onDrop={onDrop}
+      >
         {({ getRootProps, getInputProps, rootRef }) => (
           <ImageInputWrapper
             ref={rootRef}
@@ -111,6 +123,37 @@ export const ImageInput = (props: IProps) => {
           </ImageInputWrapper>
         )}
       </Dropzone>
+      <Modal
+        width={600}
+        isOpen={showErrorModal}
+        onDidDismiss={() => setShowErrorModal(false)}
+      >
+        {imageCorrupt && (
+          <Flex
+            mt={[1, 1, 1]}
+            sx={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '20px',
+            }}
+          >
+            <Text>
+              The uploaded image appears to be corrupted or a type we don't
+              accept.
+            </Text>
+            <Text>
+              Check your image is valid and one of the following formats: jpeg,
+              jpg, png, gif, heic, svg or webp.
+            </Text>
+            <Button
+              sx={{ marginTop: '20px', justifyContent: 'center' }}
+              onClick={() => setShowErrorModal(false)}
+            >
+              Ok
+            </Button>
+          </Flex>
+        )}
+      </Modal>
     </Box>
   )
 }

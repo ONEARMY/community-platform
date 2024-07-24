@@ -24,6 +24,7 @@ import websiteSVG from '../../assets/icons/icon-website.svg'
 import impactSVG from '../../assets/icons/impact.svg'
 import machineSVG from '../../assets/icons/machine.svg'
 import mapSVG from '../../assets/icons/map.svg'
+import patreonSVG from '../../assets/icons/patreon.svg'
 import plasticSVG from '../../assets/icons/plastic.svg'
 import profileSVG from '../../assets/icons/profile.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
@@ -63,6 +64,7 @@ export const iconMap = {
   loading: <ImageIcon src={loadingSVG} data-cy="icon-loading" />,
   machine: <ImageIcon src={machineSVG} />,
   map: <ImageIcon src={mapSVG} />,
+  patreon: <ImageIcon src={patreonSVG} />,
   plastic: <ImageIcon src={plasticSVG} />,
   profile: <ImageIcon src={profileSVG} />,
   revenue: <ImageIcon src={revenueSVG} />,

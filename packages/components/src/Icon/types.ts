@@ -44,6 +44,7 @@ export type availableGlyphs =
   | 'menu'
   | 'more-vert'
   | 'notifications'
+  | 'patreon'
   | 'pdf'
   | 'plastic'
   | 'profile'

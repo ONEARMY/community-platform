@@ -20,7 +20,6 @@ import { FlexSectionContainer } from './elements'
 import { EmailNotificationsSection } from './EmailNotifications.section'
 import { ExpertiseSection } from './Expertise.section'
 import { FocusSection } from './Focus.section'
-import { PatreonIntegration } from './PatreonIntegration'
 import { PublicContactSection } from './PublicContact.section'
 import { SettingsFormNotifications } from './SettingsFormNotifications'
 import { UserInfosSection } from './UserInfos.section'
@@ -222,7 +221,6 @@ export const UserProfile = () => {
                     />
                   </FlexSectionContainer>
                 )}
-                <PatreonIntegration user={user} />
               </form>
 
               <Button

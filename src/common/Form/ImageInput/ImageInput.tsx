@@ -21,7 +21,6 @@ interface IProps {
   imageDisplaySx?: ThemeUIStyleObject | undefined
   value?: IValue
   hasText?: boolean
-  multiple?: boolean
   dataTestId?: string
 }
 
@@ -29,7 +28,8 @@ export const ImageInput = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
 
-  const { dataTestId, imageDisplaySx, multiple, onFilesChange, value } = props
+  const { dataTestId, imageDisplaySx, onFilesChange, value } = props
+  
   const [inputFiles, setInputFiles] = useState<File[]>([])
   const [convertedFiles, setConvertedFiles] = useState<IConvertedFileMeta[]>([])
   const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(
@@ -55,8 +55,7 @@ export const ImageInput = (props: IProps) => {
     nextFiles[index] = newFile
     setConvertedFiles(convertedFiles)
 
-    const value = props.multiple ? convertedFiles : convertedFiles[0]
-    props.onFilesChange(value)
+    props.onFilesChange(convertedFiles[0])
   }
 
   const handleImageDelete = (event: Event) => {
@@ -86,15 +85,14 @@ export const ImageInput = (props: IProps) => {
         accept={{
           'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.svg', '.webp'],
         }}
-        multiple={multiple}
+        multiple={false}
         onDrop={onDrop}
       >
         {({ getRootProps, getInputProps, rootRef }) => (
           <ImageInputWrapper
+            {...getRootProps()}
             ref={rootRef}
             hasUploadedImg={showUploadedImg}
-            sx={{ width: '100%', height: '100%' }}
-            {...getRootProps()}
           >
             <input
               ref={fileInputRef}
@@ -110,13 +108,11 @@ export const ImageInput = (props: IProps) => {
                 handleConvertedFileChange={handleConvertedFileChange}
               />
             )}
-
             {!hasImages && (
               <Button small variant="outline" icon="image" type="button">
                 Upload
               </Button>
             )}
-
             {hasImages && (
               <DeleteImage onClick={(event) => handleImageDelete(event)} />
             )}

@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone'
 import { Button, Modal } from 'oa-components'
 import { Box, Flex, Image, Text } from 'theme-ui'
 
+import { compressImage } from './compressImage'
 import { DeleteImage } from './DeleteImage'
 import { getPresentFiles } from './getPresentFiles'
 import { ImageConverterList } from './ImageConverterList'
@@ -38,16 +39,26 @@ export const ImageInput = (props: IProps) => {
   const [imageCorrupt, setImageCorrupt] = useState<boolean>(false)
   const [showErrorModal, setShowErrorModal] = useState(false)
 
-  const onDrop = (inputFiles) => {
-    imageValid(inputFiles[0])
-      .then(() => {
-        setImageCorrupt(false)
-        setInputFiles(inputFiles)
-      })
-      .catch(() => {
-        setImageCorrupt(true)
-        setShowErrorModal(true)
-      })
+  const onDrop = async (selectedImage) => {
+    try {
+      await imageValid(selectedImage[0])
+      setImageCorrupt(false)
+
+      try {
+        const compressedImage = await compressImage(selectedImage[0])
+        selectedImage[0] = compressedImage
+      } catch (compressionError) {
+        window.console.error(
+          'Image compression failed, using original image: ',
+          compressionError,
+        )
+      }
+
+      setInputFiles(selectedImage)
+    } catch (validationError) {
+      setImageCorrupt(true)
+      setShowErrorModal(true)
+    }
   }
 
   const handleConvertedFileChange = (newFile: IConvertedFileMeta, index) => {

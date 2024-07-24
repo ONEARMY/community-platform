@@ -169,6 +169,8 @@ jobs:
   lint:
     docker: *docker
     resource_class: medium+
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - run:
@@ -179,13 +181,17 @@ jobs:
   # NOTE - not currently used as we only have one workflow
   setup:
     docker: *docker
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
+
   test_security_rules:
     docker: *docker
     resource_class: medium+
     environment:
       GCLOUD_PROJECT: onearmy-test-ci
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - attach_workspace:
@@ -193,6 +199,7 @@ jobs:
       - run:
           name: Test Security Rules
           command: yarn workspace security-rules test
+
   test_functions:
     docker:
       # use base image published by platform to ensure compatibility
@@ -232,6 +239,8 @@ jobs:
   test_functions_upload_coverage:
     docker: *docker
     resource_class: medium+
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - attach_workspace:
@@ -243,6 +252,8 @@ jobs:
   test_unit:
     docker: *docker
     resource_class: medium+
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - run:
@@ -264,6 +275,8 @@ jobs:
 
   test_circular_dependency:
     docker: *docker
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - run:
@@ -275,6 +288,7 @@ jobs:
       GENERATE_SOURCEMAP: 'false'
       SKIP_PREFLIGHT_CHECK: 'true'
       NODE_OPTIONS: '--max-old-space-size=5632'
+      CYPRESS_INSTALL_BINARY: 0
     # If experiencing out-of-memory issues can increase resource_class below and max space size above
     # https://circleci.com/docs/2.0/configuration-reference/#resourceclass
     resource_class: large
@@ -301,6 +315,8 @@ jobs:
   storybook:
     docker: *docker
     resource_class: medium
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - attach_workspace:
@@ -315,6 +331,8 @@ jobs:
       DEPLOY_ALIAS:
         type: string
         default: 'default'
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - attach_workspace:
@@ -361,18 +379,24 @@ jobs:
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
+
   chromatic:
     docker: *docker
     resource_class: medium
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - attach_workspace:
           at: '.'
       - run:
           command: yarn build-storybook
+          
   release:
     docker: *docker
     resource_class: medium+
+    environment:
+      CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - attach_workspace:

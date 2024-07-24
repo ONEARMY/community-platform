@@ -5,14 +5,12 @@
   "scripts": {
     "start": "node --loader ts-node/esm scripts/start.mts"
   },
-  "dependencies": {
+  "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "cypress": "13.6.6",
     "cypress-file-upload": "5.0.8",
     "firebase": "10.6.0",
-    "oa-shared": "workspace:*"
-  },
-  "devDependencies": {
+    "oa-shared": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/wait-on": "^5.3.4",
     "cross-env": "^7.0.3",

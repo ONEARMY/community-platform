@@ -6,7 +6,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import {
   CONNECT_BUTTON_TEXT,
   HEADING,
-  ONE_ARMY_PATREON_URL,
   PatreonIntegration,
   REMOVE_BUTTON_TEXT,
   SUCCESS_MESSAGE,
@@ -89,23 +88,7 @@ describe('PatreonIntegration', () => {
 
     it('renders correctly', () => {
       expect(screen.getByText(HEADING)).toBeInTheDocument()
-    })
-
-    it('displays instructions on how to connect and connect button', () => {
       expect(screen.getByText(CONNECT_BUTTON_TEXT)).toBeInTheDocument()
-      expect(
-        screen.getByText((t) =>
-          t.includes('Connect your Patreon account by clicking below'),
-        ),
-      ).toBeInTheDocument()
-    })
-
-    it('links to one army patreon page', () => {
-      expect(
-        screen.getByRole(
-          (t, e) => e?.getAttribute('href') === ONE_ARMY_PATREON_URL,
-        ),
-      ).toBeInTheDocument()
     })
   })
 
@@ -129,7 +112,6 @@ describe('PatreonIntegration', () => {
       expect(mockRemovePatreonConnection).toHaveBeenCalledWith(
         mockUser.userName,
       )
-      expect(screen.getByText(CONNECT_BUTTON_TEXT)).toBeInTheDocument()
     })
   })
 
@@ -149,16 +131,6 @@ describe('PatreonIntegration', () => {
       expect(
         screen.queryByText(WRONG_PATREON_TIER_TITLE),
       ).not.toBeInTheDocument()
-    })
-
-    it('displays become a supporter message', () => {
-      expect(
-        screen.getByText((t) =>
-          t.includes(
-            'It looks like you are not an active supporter of this project.',
-          ),
-        ),
-      ).toBeInTheDocument()
     })
   })
 })

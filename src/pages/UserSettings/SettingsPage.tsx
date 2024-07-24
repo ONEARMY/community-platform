@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { SettingsFormWrapper } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isPreciousPlastic } from 'src/config/config'
@@ -16,17 +14,9 @@ import type { availableGlyphs, ITab } from 'oa-components'
 
 export const SettingsPage = () => {
   const { userStore } = useCommonStores().stores
-  const { hash } = useLocation()
 
   const user = userStore.activeUser
   if (!user) return
-
-  useEffect(() => {
-    if (hash.includes('#impact')) {
-      // Check below for the array index of the impactTab in tabs
-      setDefaultTab(1)
-    }
-  }, [hash])
 
   const isMember = user.profileType === ProfileType.MEMBER
   const showImpactTab = !isMember && isPreciousPlastic()

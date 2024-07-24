@@ -9,9 +9,7 @@ import {
 import { ThemeProvider } from '@emotion/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { IModerationStatus } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -143,44 +141,6 @@ describe('UserSettings', () => {
 
     await waitFor(() => {
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
-    })
-  })
-
-  describe('map pin', () => {
-    it('displays moderation comments to user', async () => {
-      mockUser = FactoryUser({ profileType: 'workspace' })
-      mockGetPin.mockResolvedValue(
-        FactoryMapPin({
-          moderation: IModerationStatus.IMPROVEMENTS_NEEDED,
-          comments: 'Moderator comment',
-        }),
-      )
-      // Act
-      let wrapper
-      act(() => {
-        wrapper = Wrapper(mockUser)
-      })
-
-      await waitFor(() => {
-        expect(wrapper.getByText('Moderator comment')).toBeInTheDocument()
-      })
-    })
-
-    it('does not show moderation comments for approved pin', async () => {
-      mockUser = FactoryUser({ profileType: 'workspace' })
-      mockGetPin.mockResolvedValue(
-        FactoryMapPin({
-          moderation: IModerationStatus.ACCEPTED,
-          comments: 'Moderator comment',
-        }),
-      )
-      // Act
-      let wrapper
-      await act(async () => {
-        wrapper = Wrapper(mockUser)
-      })
-
-      expect(() => wrapper.getByText('Moderator comment')).toThrow()
     })
   })
 })

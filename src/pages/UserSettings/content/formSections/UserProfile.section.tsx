@@ -17,7 +17,6 @@ import { buttons } from '../../labels'
 import INITIAL_VALUES from '../../Template'
 import { CollectionSection } from './Collection.section'
 import { FlexSectionContainer } from './elements'
-import { EmailNotificationsSection } from './EmailNotifications.section'
 import { ExpertiseSection } from './Expertise.section'
 import { FocusSection } from './Focus.section'
 import { PublicContactSection } from './PublicContact.section'
@@ -211,9 +210,6 @@ export const UserProfile = () => {
                   />
                 </Flex>
 
-                <EmailNotificationsSection
-                  notificationSettings={values.notification_settings}
-                />
                 {!isMember && (
                   <FlexSectionContainer>
                     <PublicContactSection

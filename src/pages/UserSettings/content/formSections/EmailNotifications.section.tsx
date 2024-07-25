@@ -3,10 +3,7 @@ import { Field } from 'react-final-form'
 import { observer } from 'mobx-react'
 import { Select } from 'oa-components'
 import { EmailNotificationFrequency } from 'oa-shared'
-import { fields } from 'src/pages/UserSettings/labels'
-import { Box, Heading, Text } from 'theme-ui'
-
-import { FlexSectionContainer } from './elements'
+import { FieldContainer } from 'src/common/Form/FieldContainer'
 
 import type { INotificationSettings } from 'src/models/user.models'
 
@@ -25,7 +22,6 @@ const emailFrequencyOptions: {
 ]
 
 export const EmailNotificationsSection = observer((props: IProps) => {
-  const { description, title } = fields.emailNotifications
   const defaultValue = React.useMemo(
     () =>
       emailFrequencyOptions.find(
@@ -37,26 +33,18 @@ export const EmailNotificationsSection = observer((props: IProps) => {
     [props.notificationSettings?.emailFrequency],
   )
   return (
-    <FlexSectionContainer>
-      <Heading as="h2" variant="small">
-        {title}
-      </Heading>
-      <Text mt={4} mb={4} sx={{ display: 'block' }}>
-        {`${description}:`}
-      </Text>
-      <Box mt={2} sx={{ width: '40%' }}>
-        <Field name="notification_settings.emailFrequency">
-          {({ input }) => {
-            return (
-              <Select
-                options={emailFrequencyOptions}
-                defaultValue={defaultValue}
-                onChange={({ value }) => input.onChange(value)}
-              />
-            )
-          }}
-        </Field>
-      </Box>
-    </FlexSectionContainer>
+    <FieldContainer data-cy="NotificationSettingsSelect">
+      <Field name="notification_settings.emailFrequency">
+        {({ input }) => {
+          return (
+            <Select
+              options={emailFrequencyOptions}
+              defaultValue={defaultValue}
+              onChange={({ value }) => input.onChange(value)}
+            />
+          )
+        }}
+      </Field>
+    </FieldContainer>
   )
 })

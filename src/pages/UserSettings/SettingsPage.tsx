@@ -8,6 +8,7 @@ import { Box, Flex, Text } from 'theme-ui'
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { ImpactSection } from './content/formSections/Impact/Impact.section'
 import { SettingsMapPinSection } from './content/formSections/SettingsMapPin.section'
+import { SettingsNotifications } from './content/formSections/SettingsNotifications.section'
 import { UserProfile } from './content/formSections/UserProfile.section'
 
 import type { availableGlyphs, ITab } from 'oa-components'
@@ -49,6 +50,12 @@ export const SettingsPage = () => {
     glyph: 'impact' as availableGlyphs,
   }
 
+  const NotificationsTabs = {
+    title: 'Notifications',
+    body: <SettingsNotifications />,
+    glyph: 'thunderbolt' as availableGlyphs,
+  }
+
   const accountTab = {
     title: 'Account',
     body: <AccountSettingsSection />,
@@ -59,6 +66,7 @@ export const SettingsPage = () => {
     profileTab,
     showMapTab ? mapTab : undefined,
     showImpactTab ? impactTab : undefined,
+    NotificationsTabs,
     accountTab,
   ].filter((tab) => tab !== undefined) as ITab[]
 

@@ -25,7 +25,7 @@ export const SettingsFormTab = (props: IProps) => {
     borderRadius: 3,
     marginBottom: 3,
     padding: [2, 4],
-    overflow: 'hidden',
+    overflow: 'visible',
   }
 
   return (

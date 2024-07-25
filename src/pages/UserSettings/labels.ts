@@ -22,6 +22,7 @@ export const buttons = {
     type: 'type',
   },
   map: 'Add a map pin',
+  notifications: 'Update notifications',
   editPin: 'Save map pin',
   removePin: 'Remove map pin',
   save: 'Save profile',
@@ -62,7 +63,7 @@ export const fields: ILabels = {
   },
   emailNotifications: {
     description:
-      "We send an email with all the notifications you've missed. Select how often you want to receive this",
+      "We can send you emails with all the notifications you've missed.",
     title: 'Email notifications',
   },
   expertise: {
@@ -153,6 +154,11 @@ export const headings = {
       'In order to have your pin accepted on our map you have to collect at least 6 stars in the Ally Checklist. Learn more about the Community Program and how you can join.',
     title: 'Your map pin',
   },
+}
+
+export const notificationForm = {
+  loading: 'Loading your notification setting',
+  succesfulSave: 'Notification setting saved successfully - whoop',
 }
 
 export const mapForm = {

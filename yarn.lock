@@ -7140,7 +7140,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@remix-run/express@npm:2.10.3":
+"@remix-run/express@npm:^2.10.3":
   version: 2.10.3
   resolution: "@remix-run/express@npm:2.10.3"
   dependencies:
@@ -7206,24 +7206,6 @@ __metadata:
   version: 1.18.0
   resolution: "@remix-run/router@npm:1.18.0"
   checksum: dad8e8cbd3b44503c89de0fc5d8f92954d04c00bf36b42a18ae8b03fe0783742a99d0cae36f2962db38e2bdba3d40259105202c69620943e88f81711ceeb8fe4
-  languageName: node
-  linkType: hard
-
-"@remix-run/serve@npm:^2.10.3":
-  version: 2.10.3
-  resolution: "@remix-run/serve@npm:2.10.3"
-  dependencies:
-    "@remix-run/express": 2.10.3
-    "@remix-run/node": 2.10.3
-    chokidar: ^3.5.3
-    compression: ^1.7.4
-    express: ^4.19.2
-    get-port: 5.1.1
-    morgan: ^1.10.0
-    source-map-support: ^0.5.21
-  bin:
-    remix-serve: dist/cli.js
-  checksum: 0e085a55c69a1b628779ce44e997af64e5246432da7c7ff61215dcca0307bb6ed55d9c13958226a8439e670005dbb307201b2c87ac5e88c29154c7c8894c8e60
   languageName: node
   linkType: hard
 
@@ -18688,7 +18670,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-port@npm:5.1.1, get-port@npm:^5.1.1":
+"get-port@npm:^5.1.1":
   version: 5.1.1
   resolution: "get-port@npm:5.1.1"
   checksum: 0162663ffe5c09e748cd79d97b74cd70e5a5c84b760a475ce5767b357fb2a57cb821cee412d646aa8a156ed39b78aab88974eddaa9e5ee926173c036c0713787
@@ -25007,9 +24989,9 @@ __metadata:
     "@esbuild-plugins/node-globals-polyfill": ^0.2.3
     "@faker-js/faker": ^8.4.1
     "@remix-run/dev": ^2.10.3
+    "@remix-run/express": ^2.10.3
     "@remix-run/node": ^2.10.3
     "@remix-run/react": ^2.10.3
-    "@remix-run/serve": ^2.10.3
     "@semantic-release/changelog": ^6.0.3
     "@semantic-release/git": ^10.0.1
     "@sentry/react": ^6.15.0

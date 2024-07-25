@@ -338,6 +338,7 @@ jobs:
     steps:
       - setup_repo
       - restore_cache:
+          name: Restore chrome cache
           keys:
             - v1-browser-{{ checksum "package.json" }}
             - v1-browser-
@@ -357,9 +358,9 @@ jobs:
           steps:
             - browser-tools/install-firefox
       - save_cache:
+          name: Save chrome cache
           paths:
-            - /usr/local/bin/google-chrome
-            - /usr/local/share/chrome-*
+            - /usr/bin/google-chrome-stable
           key: v1-browser-{{ checksum "package.json" }}
       # call main testing script
       - run:

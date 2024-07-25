@@ -337,6 +337,10 @@ jobs:
         type: string
     steps:
       - setup_repo
+      - restore_cache:
+          keys:
+            - v1-browser-{{ checksum "package.json" }}
+            - v1-browser-
       # retrieve build folder
       - attach_workspace:
           at: '.'
@@ -352,6 +356,11 @@ jobs:
             equal: ['firefox', << parameters.CI_BROWSER >>]
           steps:
             - browser-tools/install-firefox
+      - save_cache:
+          paths:
+            - /usr/local/bin/google-chrome
+            - /usr/local/share/chrome-*
+          key: v1-browser-{{ checksum "package.json" }}
       # call main testing script
       - run:
           command: npm run test ci prod

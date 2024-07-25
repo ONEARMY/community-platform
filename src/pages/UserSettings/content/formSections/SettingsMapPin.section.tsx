@@ -115,7 +115,7 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
     try {
       const updatedUser = await userStore.deleteUserLocation(user)
       if (updatedUser) {
-        mapsStore.setUserPin(toJS(updatedUser))
+        await mapsStore.deleteUserPin(toJS(updatedUser))
       }
       setNotification({
         message: mapForm.sucessfulDelete,

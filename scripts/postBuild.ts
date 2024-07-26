@@ -13,35 +13,91 @@ main()
 function main() {
   const configuration = loadConfiguration('../.env')
 
-  const $ = loadWebpage('../build/index.html')
+  const webpage = loadWebpage('../build/index.html')
+  const modifiedWebpage = modifyWebpage(webpage, configuration)
+  saveWebpage('../build/index.html', modifiedWebpage)
 
-  setupFrontendConfiguration($, configuration)
-  setupTheme(process.env.REACT_APP_PLATFORM_THEME)
+  applyTheme(configuration.style.theme)
+}
 
-  console.log('Making SEO changes...')
-  const siteName = process.env.SITE_NAME || 'Community Platform'
-  console.log('site name: ' + siteName)
+export function modifyWebpage(
+  webpage: CheerioAPI,
+  configuration: Configuration,
+): CheerioAPI {
+  const webpageWithConfiguration = addConfiguration(
+    webpage,
+    configuration.options,
+  )
+  const webpageWithCustomizations = addCustomizations(
+    webpageWithConfiguration,
+    configuration.style,
+  )
+  return webpageWithCustomizations
+}
 
-  $('title').text(siteName)
-  $('meta[property="og:title"]').attr('content', siteName)
-  $('meta[name="twitter:title"]').attr('content', siteName)
-
-  const platformTheme = process.env.REACT_APP_PLATFORM_THEME
-  if (platformTheme) {
-    const siteDescription =
-      platformTheme === 'precious-plastic'
-        ? 'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.'
-        : 'A platform for the Project Kamp community to collaborate around the world. Connect, share and meet each other to figure out how to live more sustainably'
-
-    console.log('site description: ' + siteDescription)
-
-    $('meta[property="og:description"]').attr('content', siteDescription)
-    $('meta[name="twitter:description"]').attr('content', siteDescription)
-    $('meta[name="description"]').attr('content', siteDescription)
-  }
+function addConfiguration(
+  webpage: CheerioAPI,
+  configuration: OptionsConfiguration,
+) {
+  console.log('Writing configuration into the global window object...')
+  webpage('script#CommunityPlatform').html(
+    'window.__OA_COMMUNITY_PLATFORM_CONFIGURATION=' +
+      JSON.stringify(configuration) +
+      ';',
+  )
   console.log('')
+  return webpage
+}
 
-  saveWebpage('../build/index.html', $)
+function addCustomizations(
+  webpage: CheerioAPI,
+  configuration: StyleConfiguration,
+) {
+  console.log('Making SEO changes...')
+
+  webpage('title').text(configuration.name)
+  webpage('meta[property="og:title"]').attr('content', configuration.name)
+  webpage('meta[name="twitter:title"]').attr('content', configuration.name)
+
+  webpage('meta[property="og:description"]').attr(
+    'content',
+    configuration.description,
+  )
+  webpage('meta[name="twitter:description"]').attr(
+    'content',
+    configuration.description,
+  )
+  webpage('meta[name="description"]').attr('content', configuration.description)
+  console.log('')
+  return webpage
+}
+
+function applyTheme(theme: string) {
+  console.log('Applying theme...')
+  if (theme === '') {
+    return
+  }
+  console.log('Copying assets.')
+  fsExtra.copySync(
+    '../src/assets/images/themes/' + theme + '/public',
+    '../build',
+  )
+  console.log('')
+}
+
+interface Configuration {
+  style: StyleConfiguration
+  options: OptionsConfiguration
+}
+
+interface StyleConfiguration {
+  theme: string
+  name: string
+  description: string
+}
+
+interface OptionsConfiguration {
+  [key: string]: string
 }
 
 function loadConfiguration(filepath: string) {
@@ -49,8 +105,51 @@ function loadConfiguration(filepath: string) {
   return getConfigurationFromEnvironmentVariables()
 }
 
-function getConfigurationFromEnvironmentVariables() {
-  const configuration = {}
+function initializeEnvironmentVariables(filepath: string) {
+  dotenv.config({ path: path.resolve(filepath), debug: true })
+}
+
+function getConfigurationFromEnvironmentVariables(): Configuration {
+  return {
+    style: getStyleConfigurationFromEnvironmentVariables(),
+    options: getOptionsConfigurationFromEnvironmentVariables(),
+  }
+}
+
+function getStyleConfigurationFromEnvironmentVariables(): StyleConfiguration {
+  console.log('Loading site details...')
+  const theme = process.env.REACT_APP_PLATFORM_THEME || ''
+  const name = process.env.SITE_NAME || 'Community Platform'
+  const description = getSiteDescription(theme)
+
+  console.log('theme: ' + theme)
+  console.log('name: ' + name)
+  console.log('description: ' + description)
+  console.log('')
+
+  return {
+    theme: theme,
+    description: description,
+    name: name,
+  }
+}
+
+function getSiteDescription(theme: string | undefined): string {
+  if (theme === 'precious-plastic') {
+    return 'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.'
+  }
+  if (theme === 'project-kamp') {
+    return 'A platform for the Project Kamp community to collaborate around the world. Connect, share and meet each other to figure out how to live more sustainably.'
+  }
+  if (theme === 'fixing-fashion') {
+    return 'A platform for doing cool things with clothes.'
+  }
+  return ''
+}
+
+function getOptionsConfigurationFromEnvironmentVariables(): OptionsConfiguration {
+  console.log('Loading site options...')
+  const configuration: OptionsConfiguration = {}
   const skippedOptions = []
 
   _supportedConfigurationOptions.forEach((option: string) => {
@@ -63,17 +162,11 @@ function getConfigurationFromEnvironmentVariables() {
   })
 
   if (skippedOptions.length !== 0) {
-    console.log(
-      'The following properties were not found within the current environment:',
-    )
+    console.log('The following properties were not found:')
     console.log(skippedOptions.join('\n'))
   }
-
+  console.log('')
   return configuration
-}
-
-function initializeEnvironmentVariables(filepath: string) {
-  dotenv.config({ path: path.resolve(filepath), debug: true })
 }
 
 function loadWebpage(filepath: string) {
@@ -83,39 +176,8 @@ function loadWebpage(filepath: string) {
   return load(builtHTML, { recognizeSelfClosing: true })
 }
 
-function setupFrontendConfiguration(
-  webpage: CheerioAPI,
-  configuration: { [key: string]: string },
-) {
-  console.log('Writing configuration into the global window object...')
-  setupScriptTagWithConfiguration(webpage, configuration)
-  console.log('')
-}
-
-function setupScriptTagWithConfiguration(webpage: CheerioAPI, configuration) {
-  webpage('script#CommunityPlatform').html(
-    'window.__OA_COMMUNITY_PLATFORM_CONFIGURATION=' +
-      JSON.stringify(configuration) +
-      ';',
-  )
-}
-
-function setupTheme(theme: string) {
-  console.log('Applying theme...')
-  console.log('theme: ' + theme)
-  if (theme === undefined) {
-    console.log('No theme found, skipping.')
-  }
-  console.log('Copying assets.')
-  fsExtra.copySync(
-    '../src/assets/images/themes/' + theme + '/public',
-    '../build',
-  )
-  console.log('')
-}
-
 function saveWebpage(filepath: string, webpage: CheerioAPI): void {
-  console.log('Saving...')
+  console.log('Saving webpage...')
   const content = webpage.html()
   fs.writeFileSync(filepath, content, { encoding: 'utf-8' })
   console.log('')

@@ -17,8 +17,8 @@ export const updateDiscussionComments = async (
     .get()
 
   if (!snapshot.empty) {
-    const { _id, badges, coverImages, location } = user
-    const creatorImage = getCreatorImage(coverImages)
+    const { _id, badges, userImage, location } = user
+    const creatorImage = getCreatorImage(userImage)
 
     const userDetails = {
       creatorCountry: location?.countryCode || '',
@@ -48,9 +48,9 @@ export const updateDiscussionComments = async (
   }
 }
 
-const getCreatorImage = (coverImages) => {
-  if (coverImages && coverImages[0] && coverImages[0].downloadUrl) {
-    return coverImages[0].downloadUrl
+const getCreatorImage = (userImage: IUserDB['userImage']) => {
+  if (userImage && userImage.downloadUrl) {
+    return userImage.downloadUrl
   }
   return undefined
 }

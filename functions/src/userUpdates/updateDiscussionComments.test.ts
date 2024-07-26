@@ -5,11 +5,9 @@ import type { IUserDB } from '../models'
 const prevUser = {
   _id: 'hjg235z',
   location: { countryCode: 'UK' },
-  coverImages: [
-    {
-      downloadUrl: 'https://avatars.githubusercontent.com/u/16688508',
-    },
-  ],
+  userImage: {
+    downloadUrl: 'https://avatars.githubusercontent.com/u/16688508',
+  },
   badges: {
     verified: true,
   },
@@ -20,7 +18,7 @@ const userComment = {
   _creatorId: prevUser._id,
   creatorName: prevUser.displayName,
   creatorCountry: prevUser.location.countryCode,
-  creatorImage: prevUser.coverImages[0].downloadUrl,
+  creatorImage: prevUser.userImage.downloadUrl,
   isUserVerified: prevUser.badges.verified,
   comment: 'Great Post',
 }
@@ -67,11 +65,10 @@ describe('updateDiscussionComments', () => {
     const user = {
       ...prevUser,
       location: { countryCode: 'New' },
-      coverImages: [
-        {
-          downloadUrl: 'https://avatars.githubusercontent.com/u/13672737?v=4',
-        },
-      ],
+      userImage: {
+        downloadUrl: 'https://avatars.githubusercontent.com/u/13672737?v=4',
+      },
+
       badges: {
         verified: false,
         supporter: true,
@@ -84,7 +81,7 @@ describe('updateDiscussionComments', () => {
 
     const expectedUpdatedComment = expect.objectContaining({
       creatorCountry: user.location.countryCode,
-      creatorImage: user.coverImages[0].downloadUrl,
+      creatorImage: user.userImage.downloadUrl,
       isUserVerified: user.badges.verified,
       isUserSupporter: user.badges.supporter,
     })

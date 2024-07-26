@@ -45,7 +45,7 @@ describe('[Settings]', () => {
 
     it('[Edit a new profile]', () => {
       const country = 'AU'
-      const coverImage = 'profile-cover-1'
+      const userImage = 'avatar'
       const displayName = 'settings_member_new'
       const description = "I'm a very active member"
       const mapPinDescription = 'Fun, vibrant and full of amazing people'
@@ -73,8 +73,11 @@ describe('[Settings]', () => {
         username: displayName,
         country,
         description,
-        coverImage: `images/${coverImage}.jpg`,
       })
+
+      cy.step('Can add avatar only')
+      cy.setSettingImage(userImage, 'userImage')
+      cy.get('[data-cy=coverImages]').should('not.exist')
 
       cy.setSettingAddContactLink({
         index: 0,
@@ -107,7 +110,7 @@ describe('[Settings]', () => {
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
       cy.get('[data-cy="profile-avatar"]')
         .should('have.attr', 'src')
-        .and('include', coverImage)
+        .and('include', userImage)
       cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
 
       cy.step('Can add map pin')
@@ -139,6 +142,7 @@ describe('[Settings]', () => {
   describe('[Focus Workplace]', () => {
     it('[Editing a new Profile]', () => {
       const coverImage = 'profile-cover-1-edited'
+      const userImage = 'avatar'
       const displayName = 'settings_workplace_new'
       const description = 'We have some space to run a workplace'
       const profileType = 'workspace'
@@ -167,8 +171,11 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         username: displayName,
         description,
-        coverImage: `images/${coverImage}.jpg`,
       })
+
+      cy.step('Can add avatar and cover image')
+      cy.setSettingImage(userImage, 'userImage')
+      cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.setSettingAddContactLink({
         index: 0,
@@ -183,6 +190,9 @@ describe('[Settings]', () => {
       cy.contains(displayName)
       cy.contains(description)
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
+      cy.get('[data-cy="userImage"]')
+        .should('have.attr', 'src')
+        .and('include', userImage)
       cy.get('[data-cy="active-image"]')
         .should('have.attr', 'src')
         .and('include', coverImage)
@@ -235,8 +245,8 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         username: displayName,
         description,
-        coverImage: `images/${coverImage}.png`,
       })
+      cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.step('Choose Expertise')
       cy.get(`[data-cy=${machineBuilderXp[0]}]`).click()
@@ -299,8 +309,8 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         username: displayName,
         description,
-        coverImage: `images/${coverImage}.jpg`,
       })
+      cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.setSettingAddContactLink({
         index: 0,
@@ -378,8 +388,8 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         username: displayName,
         description,
-        coverImage: `images/${coverImage}.jpg`,
       })
+      cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.setSettingAddContactLink({
         index: 0,

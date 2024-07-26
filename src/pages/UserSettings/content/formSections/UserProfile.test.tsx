@@ -75,11 +75,11 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
-      expect(wrapper.getAllByTestId('cover-image')).toHaveLength(1)
+      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
     })
   })
 
-  it('displays four photos for collection point', async () => {
+  it('displays five photos for collection point', async () => {
     mockUser = FactoryUser({ profileType: 'collection-point' })
     // Act
     let wrapper
@@ -88,11 +88,12 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
+      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
-  it('displays four photos for community builder', async () => {
+  it('displays five photos for community builder', async () => {
     mockUser = FactoryUser({ profileType: 'community-builder' })
     // Act
     let wrapper
@@ -101,11 +102,12 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
+      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
-  it('displays four photos for machine builder', async () => {
+  it('displays five photos for machine builder', async () => {
     mockUser = FactoryUser({ profileType: 'machine-builder' })
     // Act
     let wrapper
@@ -114,11 +116,12 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
+      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
-  it('displays four photos for space', async () => {
+  it('displays five photos for space', async () => {
     mockUser = FactoryUser({ profileType: 'space' })
     // Act
     let wrapper
@@ -127,11 +130,12 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
+      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })
 
-  it('displays four photos for workspace', async () => {
+  it('displays five photos for workspace', async () => {
     mockUser = FactoryUser({ profileType: 'workspace' })
     // Act
     let wrapper
@@ -140,6 +144,7 @@ describe('UserSettings', () => {
     })
 
     await waitFor(() => {
+      expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
       expect(wrapper.getAllByTestId('cover-image')).toHaveLength(4)
     })
   })

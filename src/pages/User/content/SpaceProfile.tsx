@@ -23,6 +23,7 @@ import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   AspectRatio,
+  Avatar,
   Box,
   Card,
   Flex,
@@ -143,8 +144,16 @@ const getCoverImages = (user: IUserPP) => {
 }
 
 export const SpaceProfile = ({ user, docs }: IProps) => {
-  const { about, displayName, impact, links, location, profileType, userName } =
-    user
+  const {
+    about,
+    displayName,
+    impact,
+    links,
+    location,
+    profileType,
+    userName,
+    userImage,
+  } = user
 
   const coverImage = getCoverImages(user)
 
@@ -208,23 +217,35 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               </Box>
             </Box>
 
-            <Box>
-              <Username
-                user={{
-                  ...user,
-                  countryCode: getUserCountry(user),
-                }}
-              />
-              <Heading
-                as="h1"
-                color={'black'}
-                mb={3}
-                style={{ wordBreak: 'break-word' }}
-                data-cy="userDisplayName"
-              >
-                {displayName}
-              </Heading>
-            </Box>
+            <Flex sx={{ gap: 2, alignItems: 'center', paddingBottom: [2, 4] }}>
+              {userImage?.downloadUrl && (
+                <Avatar
+                  data-cy="userImage"
+                  src={userImage.downloadUrl}
+                  sx={{
+                    objectFit: 'cover',
+                    width: '50px',
+                    height: '50px',
+                  }}
+                />
+              )}
+              <Flex sx={{ flexDirection: 'column' }}>
+                <Username
+                  user={{
+                    ...user,
+                    countryCode: getUserCountry(user),
+                  }}
+                />
+                <Heading
+                  as="h1"
+                  color={'black'}
+                  style={{ wordBreak: 'break-word' }}
+                  data-cy="userDisplayName"
+                >
+                  {displayName}
+                </Heading>
+              </Flex>
+            </Flex>
           </Box>
 
           <Tabs defaultValue={0}>

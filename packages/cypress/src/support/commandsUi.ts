@@ -13,7 +13,6 @@ interface IInfo {
   username: string
   country?: string
   description: string
-  coverImage: string
 }
 
 type ILink = Omit<IUser['links'][0] & { index: number }, 'key'>
@@ -68,6 +67,7 @@ declare global {
       setSettingBasicUserInfo(info: IInfo)
       setSettingDeleteOpeningTime(index: number, confirmed: boolean)
       setSettingFocus(focus: string)
+      setSettingImage(image: string, selector: string)
       setSettingImpactData(year: number, fields)
       setSettingPublicContact()
 
@@ -137,7 +137,6 @@ Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   cy.step('Update Info section')
   cy.get('[data-cy=username').clear().type(info.username)
   cy.get('[data-cy=info-description').clear().type(info.description)
-  cy.get('[data-cy=coverImages-0]').find(':file').attachFile(info.coverImage)
 })
 
 Cypress.Commands.add(
@@ -155,6 +154,12 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('setSettingFocus', (focus: string) => {
   cy.get(`[data-cy=${focus}]`).click()
+})
+
+Cypress.Commands.add('setSettingImage', (image, selector) => {
+  cy.get(`[data-cy=${selector}]`)
+    .find(':file')
+    .attachFile(`images/${image}.jpg`)
 })
 
 Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {

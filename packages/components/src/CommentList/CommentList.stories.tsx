@@ -18,7 +18,6 @@ export const Default: StoryFn<typeof CommentList> = () => (
     isReplies={false}
     maxLength={1000}
     onMoreComments={() => null}
-    showAvatar
   />
 )
 
@@ -32,7 +31,6 @@ export const Expandable: StoryFn<typeof CommentList> = () => (
     isReplies={false}
     maxLength={1000}
     onMoreComments={() => null}
-    showAvatar
   />
 )
 
@@ -70,7 +68,6 @@ export const WithNestedComments: StoryFn<typeof CommentList> = () => {
       maxLength={1000}
       onMoreComments={() => Promise.resolve()}
       onSubmitReply={() => Promise.resolve()}
-      showAvatar
     />
   )
 }
@@ -96,7 +93,6 @@ export const WithNestedCommentsAndReplies: StoryFn<typeof CommentList> = () => {
       handleEditRequest={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
       onMoreComments={() => Promise.resolve()}
-      showAvatar
     />
   )
 }
@@ -126,7 +122,6 @@ export const WithNestedCommentsAndRepliesMaxDepthTwo: StoryFn<
       handleEditRequest={() => Promise.resolve()}
       handleEdit={() => Promise.resolve()}
       onMoreComments={() => Promise.resolve()}
-      showAvatar
     />
   )
 }
@@ -146,6 +141,5 @@ export const Highlighted: StoryFn<typeof CommentList> = () => (
     isReplies={false}
     maxLength={1000}
     onMoreComments={() => null}
-    showAvatar
   />
 )

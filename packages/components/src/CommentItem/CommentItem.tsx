@@ -21,7 +21,6 @@ export interface IProps {
   handleEdit: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
   isReply: boolean
-  showAvatar: boolean
 }
 
 const formatDate = (d: string | undefined): string => {
@@ -44,14 +43,8 @@ export const CommentItem = (props: IProps) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [textHeight, setTextHeight] = useState(0)
   const [isShowMore, setShowMore] = useState(false)
-  const {
-    comment,
-    handleDelete,
-    handleEditRequest,
-    handleEdit,
-    isReply,
-    showAvatar,
-  } = props
+  const { comment, handleDelete, handleEditRequest, handleEdit, isReply } =
+    props
   const {
     text,
     creatorName,
@@ -106,18 +99,17 @@ export const CommentItem = (props: IProps) => {
 
         {!_deleted && (
           <Flex sx={{ gap: 2 }}>
-            {showAvatar && (
-              <Box data-cy="commentAvatar" data-testid="commentAvatar">
-                <Avatar
-                  src={creatorImage ?? defaultProfileImage}
-                  sx={{
-                    objectFit: 'cover',
-                    width: ['30px', '50px'],
-                    height: ['30px', '50px'],
-                  }}
-                />
-              </Box>
-            )}
+            <Box data-cy="commentAvatar" data-testid="commentAvatar">
+              <Avatar
+                src={creatorImage ?? defaultProfileImage}
+                sx={{
+                  objectFit: 'cover',
+                  width: ['30px', '50px'],
+                  height: ['30px', '50px'],
+                }}
+              />
+            </Box>
+
             <Flex
               sx={{
                 flexDirection: 'column',

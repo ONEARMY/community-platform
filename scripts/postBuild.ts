@@ -8,14 +8,17 @@ import { _supportedConfigurationOptions } from '../src/config/constants.ts'
 
 import type { CheerioAPI } from 'cheerio'
 
+const filepathWebpage = '../build/index.html'
+const filepathConfiguration = '../.env'
+
 main()
 
 function main() {
-  const configuration = loadConfiguration('../.env')
+  const configuration = loadConfiguration(filepathConfiguration)
 
-  const webpage = loadWebpage('../build/index.html')
+  const webpage = loadWebpage(filepathWebpage)
   const modifiedWebpage = modifyWebpage(webpage, configuration)
-  saveWebpage('../build/index.html', modifiedWebpage)
+  saveWebpage(filepathWebpage, modifiedWebpage)
 
   applyTheme(configuration.style.theme)
 }
@@ -106,12 +109,12 @@ interface OptionsConfiguration {
   [key: string]: string
 }
 
-function loadConfiguration(filepath: string) {
+function loadConfiguration(filepath: string): Configuration {
   initializeEnvironmentVariables(filepath)
   return getConfigurationFromEnvironmentVariables()
 }
 
-function initializeEnvironmentVariables(filepath: string) {
+function initializeEnvironmentVariables(filepath: string): void {
   dotenv.config({ path: path.resolve(filepath), debug: true })
 }
 

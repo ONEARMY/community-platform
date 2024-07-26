@@ -239,6 +239,14 @@ export class UserStore extends ModuleStore {
       updatedUserProfile.coverImages = processedImages
     }
 
+    if (values.userImage) {
+      updatedUserProfile.userImage = await this.uploadFileToCollection(
+        values.userImage,
+        COLLECTION_NAME,
+        values._id,
+      )
+    }
+
     // update on db and update locally (if targeting self as user)
     await this._updateUserRequest(updatedUserProfile._id, updatedUserProfile)
 

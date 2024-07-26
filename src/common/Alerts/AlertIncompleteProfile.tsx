@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { ProfileType } from 'src/modules/profile/types'
 import { Alert, Flex } from 'theme-ui'
 
 /**
@@ -9,13 +10,21 @@ import { Alert, Flex } from 'theme-ui'
 export const AlertIncompleteProfile = observer(() => {
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
+
   if (!activeUser) return null
+
   const isProfileFilled =
-    activeUser.about &&
-    activeUser.displayName &&
-    activeUser.coverImages.length !== 0 &&
-    activeUser.links?.length !== 0
-  if (isProfileFilled) return null
+    activeUser.about && activeUser.displayName && activeUser.links?.length !== 0
+
+  const isMember = activeUser.profileType === ProfileType.MEMBER
+  const isMemberFilled = isMember && !!activeUser.userImage?.downloadUrl
+  const isSpaceFilled =
+    !isMember &&
+    activeUser.coverImages &&
+    !!activeUser.coverImages[0]?.downloadUrl
+
+  if (isProfileFilled && (isMemberFilled || isSpaceFilled)) return null
+
   return (
     <Link to="/settings">
       <Flex data-cy="incompleteProfileBanner">

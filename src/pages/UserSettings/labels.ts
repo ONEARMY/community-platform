@@ -48,8 +48,13 @@ export const fields: ILabels = {
   },
   coverImages: {
     description:
-      'The cover images are shown in your profile and helps us evaluate your account. Make sure the first image shows your space. Best size is 1920x1080.',
-    title: 'Add image',
+      "They're shown at the top your profile and helps us evaluate your account. Make sure the first image shows your space. Best size is 1920x1080.",
+    title: 'Add profile cover image(s)',
+  },
+  userImage: {
+    description:
+      'This will be shown on comments. Best size is square (which we then show as a circle).',
+    title: 'Add an avatar',
   },
   deleteAccount: {
     description: 'Please reach out to support.',
@@ -138,6 +143,7 @@ export const headings = {
   editProfile: 'Edit profile',
   expertise: 'Expertise',
   focus: 'Focus',
+  images: 'Images',
   infos: 'Infos',
   map: {
     description:

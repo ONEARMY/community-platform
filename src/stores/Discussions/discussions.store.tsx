@@ -418,12 +418,8 @@ export class DiscussionStore extends ModuleStore {
   }
 
   private _getUserAvatar(user: IUserPPDB) {
-    if (
-      user.coverImages &&
-      user.coverImages[0] &&
-      user.coverImages[0].downloadUrl
-    ) {
-      return user.coverImages[0].downloadUrl
+    if (user.userImage && user.userImage.downloadUrl) {
+      return user.userImage.downloadUrl
     }
     return null
   }

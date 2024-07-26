@@ -9,7 +9,6 @@ import UserContactAndLinks from './UserContactAndLinks'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
 import type { IUserPPDB } from 'src/models/userPreciousPlastic.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
@@ -18,17 +17,14 @@ interface IProps {
 }
 
 export const MemberProfile = ({ docs, user }: IProps) => {
+  const { userImage } = user
+
   const userLinks = (user?.links || []).filter(
     (linkItem) =>
       ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
         linkItem.label,
       ),
   )
-
-  const memberPictureSource =
-    user.coverImages && user.coverImages[0]
-      ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
-      : DefaultMemberImage
 
   return (
     <Card
@@ -74,7 +70,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
           <Avatar
             data-cy="profile-avatar"
             loading="lazy"
-            src={memberPictureSource}
+            src={userImage?.downloadUrl || DefaultMemberImage}
             sx={{
               objectFit: 'cover',
               width: '120px',

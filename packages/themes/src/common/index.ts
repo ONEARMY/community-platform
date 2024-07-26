@@ -21,6 +21,11 @@ export const baseTheme = {
       fontSize: 4,
       fontWeight: 'normal',
     },
+    subHeading: {
+      fontFamily: '"Varela Round", Arial, sans-serif',
+      fontSize: 3,
+      fontWeight: 'bold',
+    },
     body: {
       fontFamily: `'Inter', Arial, sans-serif`,
     },

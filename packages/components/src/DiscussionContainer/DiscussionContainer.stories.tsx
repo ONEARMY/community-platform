@@ -32,7 +32,6 @@ export const Default: Story = {
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
         isLoggedIn={false}
-        showAvatar
       />
     )
   },
@@ -53,7 +52,6 @@ export const NoComments: Story = {
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
         isLoggedIn={false}
-        showAvatar
       />
     )
   },
@@ -76,7 +74,6 @@ export const LoggedIn: Story = {
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
         isLoggedIn={true}
-        showAvatar
       />
     )
   },
@@ -99,7 +96,6 @@ export const Expandable: Story = {
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
         isLoggedIn={true}
-        showAvatar
       />
     )
   },
@@ -128,7 +124,6 @@ export const WithReplies: Story = {
         onSubmitReply={async (commentId, comment) =>
           alert(`reply to commentId: ${commentId} with comment: ${comment}`)
         }
-        showAvatar
       />
     )
   },

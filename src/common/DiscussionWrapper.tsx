@@ -8,10 +8,9 @@ import { getResearchCommentId } from 'src/pages/Research/Content/helper'
 import { nonDeletedCommentsCount } from 'src/utils/nonDeletedCommentsCount'
 import { Text } from 'theme-ui'
 
-import { AuthWrapper } from './AuthWrapper'
 import { HideDiscussionContainer } from './HideDiscussionContainer'
 
-import type { IDiscussion, UserRole } from 'src/models'
+import type { IDiscussion } from 'src/models'
 
 const DISCUSSION_NOT_FOUND = 'Discussion not found :('
 const LOADING_LABEL = 'Loading the awesome discussion'
@@ -176,25 +175,11 @@ export const DiscussionWrapper = (props: IProps) => {
           commentCount={nonDeletedCommentsCount(discussion.comments)}
           showComments={showComments}
         >
-          <AuthWrapper
-            roleRequired={'beta-tester' as UserRole.BETA_TESTER}
-            fallback={
-              <DiscussionContainer {...discussionProps} showAvatar={false} />
-            }
-          >
-            <DiscussionContainer {...discussionProps} showAvatar />
-          </AuthWrapper>
+          <DiscussionContainer {...discussionProps} />
         </HideDiscussionContainer>
       )}
       {discussion && !canHideComments && (
-        <AuthWrapper
-          roleRequired={'beta-tester' as UserRole.BETA_TESTER}
-          fallback={
-            <DiscussionContainer {...discussionProps} showAvatar={false} />
-          }
-        >
-          <DiscussionContainer {...discussionProps} showAvatar />
-        </AuthWrapper>
+        <DiscussionContainer {...discussionProps} />
       )}
     </>
   )

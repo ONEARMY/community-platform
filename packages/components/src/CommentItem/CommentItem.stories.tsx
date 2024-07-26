@@ -1,5 +1,3 @@
-import { faker } from '@faker-js/faker'
-
 import { fakeComment } from '../utils'
 import { CommentItem } from './CommentItem'
 
@@ -18,25 +16,7 @@ export const Default: StoryFn<typeof CommentItem> = () => {
   const comment = fakeComment({ creatorImage: undefined })
 
   return (
-    <CommentItem
-      comment={comment}
-      handleEdit={handleEdit}
-      isReply={false}
-      showAvatar
-    />
-  )
-}
-
-export const DefaultWithAvatar: StoryFn<typeof CommentItem> = () => {
-  const comment = fakeComment({ creatorImage: faker.image.avatar() })
-
-  return (
-    <CommentItem
-      comment={comment}
-      handleEdit={handleEdit}
-      isReply={false}
-      showAvatar
-    />
+    <CommentItem comment={comment} handleEdit={handleEdit} isReply={false} />
   )
 }
 
@@ -44,12 +24,7 @@ export const WithoutAvatar: StoryFn<typeof CommentItem> = () => {
   const comment = fakeComment()
 
   return (
-    <CommentItem
-      comment={comment}
-      handleEdit={handleEdit}
-      isReply={false}
-      showAvatar={false}
-    />
+    <CommentItem comment={comment} handleEdit={handleEdit} isReply={false} />
   )
 }
 
@@ -57,12 +32,7 @@ export const Editable: StoryFn<typeof CommentItem> = () => {
   const comment = fakeComment({ isEditable: true })
 
   return (
-    <CommentItem
-      comment={comment}
-      handleEdit={handleEdit}
-      isReply={false}
-      showAvatar
-    />
+    <CommentItem comment={comment} handleEdit={handleEdit} isReply={false} />
   )
 }
 
@@ -70,12 +40,7 @@ export const Edited: StoryFn<typeof CommentItem> = () => {
   const comment = fakeComment({ _edited: new Date().toISOString() })
 
   return (
-    <CommentItem
-      comment={comment}
-      handleEdit={handleEdit}
-      isReply={false}
-      showAvatar
-    />
+    <CommentItem comment={comment} handleEdit={handleEdit} isReply={false} />
   )
 }
 
@@ -84,12 +49,7 @@ export const LongText: StoryFn<typeof CommentItem> = () => {
   const comment = fakeComment({ text })
 
   return (
-    <CommentItem
-      comment={comment}
-      handleEdit={handleEdit}
-      isReply={true}
-      showAvatar
-    />
+    <CommentItem comment={comment} handleEdit={handleEdit} isReply={true} />
   )
 }
 
@@ -99,11 +59,6 @@ export const ShortTextWithLink: StoryFn<typeof CommentItem> = () => {
   })
 
   return (
-    <CommentItem
-      comment={comment}
-      handleEdit={handleEdit}
-      isReply={true}
-      showAvatar
-    />
+    <CommentItem comment={comment} handleEdit={handleEdit} isReply={true} />
   )
 }

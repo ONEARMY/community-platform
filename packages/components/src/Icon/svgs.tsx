@@ -2,6 +2,7 @@ import accountSVG from '../../assets/icons/account.svg'
 import arrowCurvedBottomRightSVG from '../../assets/icons/arrow-curved-bottom-right.svg'
 import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
 import chevronRightSVG from '../../assets/icons/chevron-right.svg'
+import deleteSVG from '../../assets/icons/delete.svg'
 import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
 import eyeCrossedSVG from '../../assets/icons/eye-crossed.svg'
@@ -54,6 +55,7 @@ export const iconMap = {
   chevronLeft: <ImageIcon src={chevronLeftSVG} />,
   chevronRight: <ImageIcon src={chevronRightSVG} />,
   comment: <ImageIcon src={commentSVG} />,
+  delete: <ImageIcon src={deleteSVG} />,
   discord: <ImageIcon src={discordSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
   employee: <ImageIcon src={employeeSVG} />,

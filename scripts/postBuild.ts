@@ -11,12 +11,11 @@ import type { CheerioAPI } from 'cheerio'
 main()
 
 function main() {
-  const configuration = getConfiguration('../.env')
+  const configuration = loadConfiguration('../.env')
 
   const $ = loadWebpage('../build/index.html')
 
   setupFrontendConfiguration($, configuration)
-
   setupTheme(process.env.REACT_APP_PLATFORM_THEME)
 
   console.log('Making SEO changes...')
@@ -45,7 +44,7 @@ function main() {
   saveWebpage('../build/index.html', $)
 }
 
-function getConfiguration(filepath: string) {
+function loadConfiguration(filepath: string) {
   initializeEnvironmentVariables(filepath)
   return getConfigurationFromEnvironmentVariables()
 }

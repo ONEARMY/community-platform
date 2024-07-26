@@ -11,11 +11,11 @@ import type { CheerioAPI } from 'cheerio'
 main()
 
 function main() {
-  initializeEnvironmentVariables('../.env')
+  const configuration = getConfiguration('../.env')
 
   const $ = loadWebpage('../build/index.html')
 
-  setupFrontendConfiguration($)
+  setupFrontendConfiguration($, configuration)
 
   console.log('Applying theme...')
   const platformTheme = process.env.REACT_APP_PLATFORM_THEME
@@ -59,6 +59,34 @@ function main() {
   console.log('')
 }
 
+function getConfiguration(filepath: string) {
+  initializeEnvironmentVariables(filepath)
+  return getConfigurationFromEnvironmentVariables()
+}
+
+function getConfigurationFromEnvironmentVariables() {
+  const configuration = {}
+  const skippedOptions = []
+
+  _supportedConfigurationOptions.forEach((option: string) => {
+    const value = process.env[option]
+
+    if (value === undefined) {
+      skippedOptions.push(option)
+    }
+    configuration[option] = value || ''
+  })
+
+  if (skippedOptions.length !== 0) {
+    console.log(
+      'The following properties were not found within the current environment:',
+    )
+    console.log(skippedOptions.join('\n'))
+  }
+
+  return configuration
+}
+
 function initializeEnvironmentVariables(filepath: string) {
   dotenv.config({ path: path.resolve(filepath), debug: true })
 }
@@ -70,9 +98,11 @@ function loadWebpage(filepath: string) {
   return load(builtHTML, { recognizeSelfClosing: true })
 }
 
-function setupFrontendConfiguration(webpage: CheerioAPI) {
+function setupFrontendConfiguration(
+  webpage: CheerioAPI,
+  configuration: { [key: string]: string },
+) {
   console.log('Writing configuration into the global window object...')
-  const configuration = getWindowVariableObject()
   setupScriptTagWithConfiguration(webpage, configuration)
   console.log('')
 }
@@ -83,23 +113,4 @@ function setupScriptTagWithConfiguration(webpage: CheerioAPI, configuration) {
       JSON.stringify(configuration) +
       ';',
   )
-}
-
-function getWindowVariableObject() {
-  const configurationObject = {}
-
-  _supportedConfigurationOptions.forEach((variable: string) => {
-    configurationObject[variable] = process.env[variable] || ''
-  })
-
-  if (_supportedConfigurationOptions.filter((v) => !process.env[v]).length) {
-    console.log(
-      'The following properties were not found within the current environment:',
-    )
-    console.log(
-      _supportedConfigurationOptions.filter((v) => !process.env[v]).join('\n'),
-    )
-  }
-
-  return configurationObject
 }

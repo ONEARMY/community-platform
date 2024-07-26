@@ -81,8 +81,6 @@ export const fields: ILabels = {
   location: {
     error: 'Please select your location',
     title: 'Your location',
-    description:
-      "Map pins undergo moderator's approval which might take several days.",
   },
   mapPinDescription: {
     placeholder: `Short description of your pin (max ${MAX_PIN_LENGTH} characters)`,
@@ -158,6 +156,10 @@ export const headings = {
 export const mapForm = {
   confirmDeletePin:
     'If you delete your location now, adding a new map pin in the future might need approving.',
+  descriptionMember:
+    "Add yourself to the map with a 'want to get started' pin so people can find you, reach out and collaborate. Make sure to add some contact details to your profile!",
+  descriptionSpace:
+    "Map pins undergo moderator's approval which might take several days.",
   loading: 'Loading your map pin',
   locationLabel: 'Your current map pin is here:',
   needsChanges:

@@ -17,19 +17,7 @@ function main() {
 
   setupFrontendConfiguration($, configuration)
 
-  console.log('Applying theme...')
-  const platformTheme = process.env.REACT_APP_PLATFORM_THEME
-  if (platformTheme) {
-    console.log('theme: ' + platformTheme)
-    console.log('Copying assets.')
-    fsExtra.copySync(
-      '../src/assets/images/themes/' + platformTheme + '/public',
-      '../build',
-    )
-  } else {
-    console.log('No theme found, skipping.')
-  }
-  console.log('')
+  setupTheme(process.env.REACT_APP_PLATFORM_THEME)
 
   console.log('Making SEO changes...')
   const siteName = process.env.SITE_NAME || 'Community Platform'
@@ -39,6 +27,7 @@ function main() {
   $('meta[property="og:title"]').attr('content', siteName)
   $('meta[name="twitter:title"]').attr('content', siteName)
 
+  const platformTheme = process.env.REACT_APP_PLATFORM_THEME
   if (platformTheme) {
     const siteDescription =
       platformTheme === 'precious-plastic'
@@ -113,4 +102,18 @@ function setupScriptTagWithConfiguration(webpage: CheerioAPI, configuration) {
       JSON.stringify(configuration) +
       ';',
   )
+}
+
+function setupTheme(theme: string) {
+  console.log('Applying theme...')
+  console.log('theme: ' + theme)
+  if (theme === undefined) {
+    console.log('No theme found, skipping.')
+  }
+  console.log('Copying assets.')
+  fsExtra.copySync(
+    '../src/assets/images/themes/' + theme + '/public',
+    '../build',
+  )
+  console.log('')
 }

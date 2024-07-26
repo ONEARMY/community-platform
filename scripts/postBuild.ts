@@ -42,10 +42,7 @@ function main() {
   }
   console.log('')
 
-  console.log('Saving...')
-  const output = $.html()
-  fs.writeFileSync('../build/index.html', output, { encoding: 'utf-8' })
-  console.log('')
+  saveWebpage('../build/index.html', $)
 }
 
 function getConfiguration(filepath: string) {
@@ -115,5 +112,12 @@ function setupTheme(theme: string) {
     '../src/assets/images/themes/' + theme + '/public',
     '../build',
   )
+  console.log('')
+}
+
+function saveWebpage(filepath: string, webpage: CheerioAPI): void {
+  console.log('Saving...')
+  const content = webpage.html()
+  fs.writeFileSync(filepath, content, { encoding: 'utf-8' })
   console.log('')
 }

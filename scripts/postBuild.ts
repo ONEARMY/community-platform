@@ -56,18 +56,24 @@ function addCustomizations(
   console.log('Making SEO changes...')
 
   webpage('title').text(configuration.name)
-  webpage('meta[property="og:title"]').attr('content', configuration.name)
-  webpage('meta[name="twitter:title"]').attr('content', configuration.name)
 
-  webpage('meta[property="og:description"]').attr(
-    'content',
-    configuration.description,
-  )
-  webpage('meta[name="twitter:description"]').attr(
-    'content',
-    configuration.description,
-  )
-  webpage('meta[name="description"]').attr('content', configuration.description)
+  const nameMetaSelectors = [
+    'meta[property="og:title"]',
+    'meta[name="twitter:title"]',
+  ]
+  nameMetaSelectors.forEach((selector) => {
+    webpage(selector).attr('content', configuration.name)
+  })
+
+  const descriptionMetaSelectors = [
+    'meta[property="og:description"]',
+    'meta[name="twitter:description"]',
+    'meta[name="description"]',
+  ]
+  descriptionMetaSelectors.forEach((selector) => {
+    webpage(selector).attr('content', configuration.description)
+  })
+
   console.log('')
   return webpage
 }

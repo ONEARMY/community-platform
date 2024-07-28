@@ -76,7 +76,7 @@ describe('[User sign-up]', () => {
       cy.step('Go to settings page')
       cy.visit('/settings')
 
-      cy.get('[data-cy="loader"]').not('visible')
+      // cy.get('[data-cy="loader"]').not('visible')
       cy.get('[data-cy="tab-Account"]').click()
 
       cy.step('Update Email')

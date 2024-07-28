@@ -24,7 +24,7 @@ import {
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
-import { seoTagsUpdate } from 'src/utils/seo'
+import { seoTagsUpdate, SeoTagsUpdateComponent } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 
 import {
@@ -188,6 +188,12 @@ const ResearchArticle = observer(() => {
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
+      <SeoTagsUpdateComponent
+        title={`${item.title} - Research`}
+        description={item.description}
+        imageUrl={item.updates?.at(0)?.images?.[0]?.downloadUrl}
+      />
+
       <Breadcrumbs content={item} variant="research" />
       <ResearchDescription
         research={research}

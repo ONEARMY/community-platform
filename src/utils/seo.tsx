@@ -91,14 +91,24 @@ const getDefaultSEOTags = (): ISEOMeta => {
 }
 
 const setMetaName = (name: IPlatformMetaName, value: string) => {
-  const el = document.querySelector(`meta[name="${name}"]`)
-  if (el) {
-    el.setAttribute('content', value)
+  let el = document.querySelector(`meta[name="${name}"]`)
+
+  if (!el) {
+    el = document.createElement('meta')
+    el.setAttribute('name', name)
+    document.head.appendChild(el)
   }
+
+  el.setAttribute('content', value)
 }
 const setMetaProperty = (property: IPlatformMetaProperty, value: string) => {
-  const el = document.querySelector(`meta[property="${property}"]`)
-  if (el) {
-    el.setAttribute('content', value)
+  let el = document.querySelector(`meta[property="${property}"]`)
+
+  if (!el) {
+    el = document.createElement('meta')
+    el.setAttribute('property', property)
+    document.head.appendChild(el)
   }
+
+  el.setAttribute('content', value)
 }

@@ -34,13 +34,21 @@ interface IOpeningTime {
 declare global {
   namespace Cypress {
     interface Chainable {
+      addComment(newComment: string): Chainable<void>
+      addReply(reply: string): Chainable<void>
       clickMenuItem(menuItem: UserMenuItem): Chainable<void>
+      deleteDiscussionItem(element: string)
+      editDiscussionItem(
+        element: string,
+        updatedNewComment: string,
+      ): Chainable<void>
       fillSignupForm(
         username: string,
         email: string,
         password: string,
       ): Chainable<void>
       fillIntroTitle(intro: string)
+      fillSettingMapPin(pin: IMapPin)
 
       saveSettingsForm()
       /**
@@ -60,9 +68,7 @@ declare global {
       setSettingBasicUserInfo(info: IInfo)
       setSettingDeleteOpeningTime(index: number, confirmed: boolean)
       setSettingFocus(focus: string)
-      setSettingImpactData()
-      setSettingMapPinMember(pin: IMapPin)
-      setSettingMapPinWorkspace(pin: IMapPin)
+      setSettingImpactData(year: number, fields)
       setSettingPublicContact()
 
       signUpNewUser(user?)
@@ -151,31 +157,26 @@ Cypress.Commands.add('setSettingFocus', (focus: string) => {
   cy.get(`[data-cy=${focus}]`).click()
 })
 
-Cypress.Commands.add('setSettingMapPinWorkspace', (mapPin: IMapPin) => {
-  cy.setSettingMapPinMember(mapPin)
-  cy.get('[data-cy="osm-geocoding-input"]').should(($input) => {
-    const val = $input.val()
-    expect(val).to.include(mapPin.locationName)
-  })
-})
-
-Cypress.Commands.add('setSettingImpactData', () => {
+Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
   cy.step('Save impact data')
+  cy.get('[data-cy="tab-Impact"]').click()
 
-  cy.get('[data-cy="impact-button-expand"]').click()
-  cy.get('[data-cy="impactForm-2022-button-edit"]').click()
-  cy.get('[data-cy="impactForm-2022-field-revenue-value"]')
-    .clear()
-    .type('100000')
-  cy.get('[data-cy="impactForm-2022-field-revenue-isVisible"]').click()
-  cy.get('[data-cy="impactForm-2022-field-machines-value"]').clear()
-  cy.get('[data-cy="impactForm-2022-button-save"]').click()
+  cy.get(`[data-cy="impactForm-${year}-button-edit"]`).click()
+
+  fields.forEach((field) => {
+    cy.get(`[data-cy="impactForm-${year}-field-${field.name}-value"]`)
+      .clear()
+      .type(field.value)
+    field.visible === false &&
+      cy
+        .get(`[data-cy="impactForm-${year}-field-${field.name}-isVisible"]`)
+        .click()
+  })
+  cy.get(`[data-cy="impactForm-${year}-button-save"]`).click()
   cy.contains(form.saveSuccess)
 })
 
-Cypress.Commands.add('setSettingMapPinMember', (mapPin: IMapPin) => {
-  cy.step('Add pin')
-  cy.get('[data-cy=add-a-map-pin]').click({ force: true })
+Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {
   cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
   cy.get('[data-cy="osm-geocoding-results"]')
   cy.wait('@fetchAddress').then(() => {
@@ -252,3 +253,29 @@ Cypress.Commands.add(
     cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click()
   },
 )
+
+Cypress.Commands.add('addComment', (newComment: string) => {
+  cy.get('[data-cy=comments-form]').last().type(newComment)
+  cy.get('[data-cy=comment-submit]').last().click()
+})
+
+Cypress.Commands.add(
+  'editDiscussionItem',
+  (element: string, updatedNewComment: string) => {
+    cy.get(`[data-cy="${element}: edit button"]`).last().click()
+    cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
+    cy.get('[data-cy=edit-comment-submit]').click()
+    cy.get('[data-cy=edit-comment]').should('not.exist')
+  },
+)
+
+Cypress.Commands.add('deleteDiscussionItem', (element: string) => {
+  cy.get(`[data-cy="${element}: delete button"]`).last().click()
+  cy.get('[data-cy="Confirm.modal: Confirm"]').last().click()
+})
+
+Cypress.Commands.add('addReply', (reply: string) => {
+  cy.get('[data-cy=show-replies]').first().click()
+  cy.get('[data-cy=reply-form]').first().type(reply)
+  cy.get('[data-cy=reply-submit]').first().click()
+})

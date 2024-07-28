@@ -15,7 +15,7 @@ type IProps = {
 export const UnsavedChangesDialog = ({ hasChanges }: IProps) => {
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
-      hasChanges && currentLocation.pathname !== nextLocation.pathname,
+      hasChanges && currentLocation !== nextLocation,
   )
 
   return (

@@ -14,7 +14,7 @@ export interface ITab {
 
 interface IProps {
   tab: ITab
-  value: number
+  value: string
 }
 
 export const SettingsFormTab = (props: IProps) => {
@@ -24,12 +24,15 @@ export const SettingsFormTab = (props: IProps) => {
   const sx = {
     borderRadius: 3,
     marginBottom: 3,
-    padding: 3,
+    padding: [2, 4],
     overflow: 'hidden',
   }
 
   return (
-    <TabPanel value={value}>
+    <TabPanel
+      value={value}
+      style={{ display: 'flex', flexDirection: 'column', alignSelf: 'stretch' }}
+    >
       {header && (
         <Card sx={{ ...sx, backgroundColor: 'softblue' }}>{header}</Card>
       )}

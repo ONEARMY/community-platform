@@ -10,7 +10,7 @@ import { Icon } from '../Icon/Icon'
 
 import type { IComment } from '../CommentItem/types'
 
-const MAX_COMMENTS = 5
+const MAX_COMMENTS = 10
 
 interface IPropsShared {
   handleDelete: (_id: string) => Promise<void>

@@ -244,28 +244,34 @@ export class DiscussionStore extends ModuleStore {
         const research = toJS(await researchRef.get('server'))
 
         if (research) {
-          const updateIndex = research.updates.findIndex(
+          const update = research.updates.find(
             ({ _id }) => _id == discussion.sourceId,
           )
-          const update = research.updates[updateIndex]
+
+          if (!update)
+            return logger.trace(
+              `Unable to find research update. Discussion notification not sent. sourceId: ${discussion.sourceId}`,
+            )
 
           const username = parentComment
             ? parentComment.creatorName
             : research._createdBy
 
+          const url = `/research/${research.slug}#update_${update._id}-comment:${commentId}`
+
           await this.userNotificationsStore.triggerNotification(
             'new_comment_discussion',
             username,
-            '/research/' + research.slug + '#update_' + updateIndex,
+            url,
             research.title,
           )
 
-          if (update && update.collaborators) {
+          if (update.collaborators) {
             await update.collaborators.map((collaborator) => {
               this.userNotificationsStore.triggerNotification(
                 'new_comment_discussion',
                 collaborator,
-                `/research/${research.slug}#update_${updateIndex}-comment:${commentId}`,
+                url,
                 research.title,
               )
             })

@@ -2,6 +2,8 @@ import { keyframes, useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Flex, Image, Text } from 'theme-ui'
 
+import type { ThemeUIStyleObject } from 'theme-ui'
+
 const rotate = keyframes`
   from {
     transform: rotate(0deg);
@@ -19,15 +21,16 @@ const RotatingLogo = styled(Image)`
 
 export interface Props {
   label?: string
+  sx?: ThemeUIStyleObject | undefined
 }
 
-export const Loader = ({ label }: Props) => {
+export const Loader = ({ label, sx }: Props) => {
   const theme = useTheme() as any
   const logo = theme.logo || null
 
   return (
     <>
-      <Flex sx={{ flexWrap: 'wrap', justifyContent: 'center' }}>
+      <Flex sx={{ flexWrap: 'wrap', justifyContent: 'center', ...sx }}>
         {logo && (
           <RotatingLogo
             loading="lazy"

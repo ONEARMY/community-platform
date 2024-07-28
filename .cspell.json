@@ -3,6 +3,7 @@
   "language": "en-GB",
   "ignorePaths": ["node_modules/**", "**/node_modules/**"],
   "words": [
+    ".firebaserc",
     "appengine",
     "appspot",
     "bigquery",

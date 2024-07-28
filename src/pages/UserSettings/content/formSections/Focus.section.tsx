@@ -33,7 +33,7 @@ const ProfileTypes = () => {
           </Flex>
 
           <Flex sx={{ alignItems: 'baseline', marginY: 2 }}>
-            <Paragraph my={4}>
+            <Paragraph>
               {description}{' '}
               <ExternalLink
                 href={theme.profileGuidelinesURL}

@@ -15,6 +15,10 @@ import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Breadcrumbs } from 'src/pages/common/Breadcrumbs/Breadcrumbs'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
+import {
+  getResearchCommentId,
+  getResearchUpdateId,
+} from 'src/pages/Research/Content/helper'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   isAllowedToDeleteContent,
@@ -27,27 +31,14 @@ import {
   getPublicUpdates,
   researchUpdateStatusFilter,
 } from '../researchHelpers'
-import { researchCommentUrlPattern } from './helper'
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
 import type { IUser } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 
-const researchCommentUrlRegex = new RegExp(researchCommentUrlPattern)
-
-const areCommentVisible = (updateIndex) => {
-  let showComments = false
-
-  if (researchCommentUrlRegex.test(window.location.hash)) {
-    const match = window.location.hash.match(/#update-\d/)
-    if (match) {
-      showComments =
-        updateIndex === parseInt(match[0].replace('#update-', ''), 10)
-    }
-  }
-
-  return showComments
+const areCommentsVisible = (updateId) => {
+  return updateId === getResearchUpdateId(window.location.hash)
 }
 
 const ResearchArticle = observer(() => {
@@ -88,22 +79,23 @@ const ResearchArticle = observer(() => {
     })
   }
 
-  const scrollIntoRelevantSection = (hash: string) => {
-    setTimeout(() => {
-      const section = document.querySelector(hash)
-      // the delay is needed, otherwise the scroll is not happening in Firefox
-      section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 500)
+  const scrollIntoRelevantSection = () => {
+    if (getResearchCommentId(location.hash) === '') return
+    const section = document.getElementById(
+      `update_${getResearchUpdateId(location.hash)}`,
+    )
+    section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   useEffect(() => {
     const init = async () => {
       const researchItem = await researchStore.setActiveResearchItemBySlug(slug)
       setIsLoading(false)
-      const hash = location.hash
-      if (new RegExp(/^#update_\d$/).test(location.hash)) {
-        scrollIntoRelevantSection(hash)
-      }
+      setTimeout(() => {
+        // Needed for browser and loading delay issues
+        scrollIntoRelevantSection()
+      }, 500)
+
       // Update SEO tags
       if (researchItem) {
         // Use whatever image used in most recent update for SEO image
@@ -118,6 +110,7 @@ const ResearchArticle = observer(() => {
         })
       }
     }
+    setIsLoading(true)
     init()
 
     // Reset the store's active item and seo tags on component cleanup
@@ -125,7 +118,11 @@ const ResearchArticle = observer(() => {
       researchStore.setActiveResearchItemBySlug()
       seoTagsUpdate({})
     }
-  }, [slug, location.hash])
+  }, [slug])
+
+  useEffect(() => {
+    scrollIntoRelevantSection()
+  }, [location.hash])
 
   const onFollowClick = (researchSlug: string) => {
     if (!loggedInUser?.userName || !item) {
@@ -187,9 +184,7 @@ const ResearchArticle = observer(() => {
     return <NotFoundPage />
   }
 
-  const research = {
-    ...item,
-  }
+  const research = { ...item }
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
@@ -228,7 +223,7 @@ const ResearchArticle = observer(() => {
                 updateIndex={index}
                 isEditable={isEditable}
                 slug={item.slug}
-                showComments={areCommentVisible(index)}
+                showComments={areCommentsVisible(update._id)}
               />
             ),
           )}

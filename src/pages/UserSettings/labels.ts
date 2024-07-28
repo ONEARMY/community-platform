@@ -22,7 +22,7 @@ export const buttons = {
     type: 'type',
   },
   map: 'Add a map pin',
-  editPin: 'Edit map pin',
+  editPin: 'Save map pin',
   removePin: 'Remove map pin',
   save: 'Save profile',
   success: 'Profile saved successfully',
@@ -80,7 +80,9 @@ export const fields: ILabels = {
   },
   location: {
     error: 'Please select your location',
-    title: 'Your workspace location',
+    title: 'Your location',
+    description:
+      "Map pins undergo moderator's approval which might take several days.",
   },
   mapPinDescription: {
     placeholder: `Short description of your pin (max ${MAX_PIN_LENGTH} characters)`,
@@ -141,8 +143,8 @@ export const headings = {
   map: {
     description:
       'Add yourself to the map as an individual who wants to get started. Find local community members and meetup to join forces and collaborate.',
-    addPinTitle: 'Add yourself to the map 🌍',
-    yourPinTitle: 'Your map pin 🌍',
+    addPinTitle: 'Add yourself to the map',
+    yourPinTitle: 'Your map pin',
     existingPinLabel:
       'The map pin you registered has the following description:',
   },
@@ -151,6 +153,18 @@ export const headings = {
       'In order to have your pin accepted on our map you have to collect at least 6 stars in the Ally Checklist. Learn more about the Community Program and how you can join.',
     title: 'Your map pin',
   },
+}
+
+export const mapForm = {
+  confirmDeletePin:
+    'If you delete your location now, adding a new map pin in the future might need approving.',
+  loading: 'Loading your map pin',
+  locationLabel: 'Your current map pin is here:',
+  needsChanges:
+    'This map pin has been marked as requiring further changes. Specifically the moderator comments are:',
+  noLocationLabel: 'No location data currently saved',
+  succesfulSave: 'Map pin saved successfully - whoop',
+  sucessfulDelete: 'Location data removed',
 }
 
 export const missingData = 'Do you have impact data for this year?'

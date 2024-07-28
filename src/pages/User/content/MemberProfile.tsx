@@ -8,16 +8,16 @@ import { Avatar, Box, Card, Flex, Heading, Paragraph } from 'theme-ui'
 import UserContactAndLinks from './UserContactAndLinks'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
-  user: IUserPP
   docs: UserCreatedDocs | undefined
+  user: IUserPPDB
 }
 
-export const MemberProfile = ({ user, docs }: IProps) => {
+export const MemberProfile = ({ docs, user }: IProps) => {
   const userLinks = (user?.links || []).filter(
     (linkItem) =>
       ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
@@ -34,12 +34,10 @@ export const MemberProfile = ({ user, docs }: IProps) => {
     <Card
       data-cy="MemberProfile"
       sx={{
+        display: 'flex',
+        flexDirection: 'column',
         position: 'relative',
         overflow: 'visible',
-        maxWidth: '42em',
-        width: '100%',
-        margin: '0 auto',
-        marginTop: [6, 8],
         padding: 2,
       }}
     >

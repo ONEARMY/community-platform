@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions'
-import { IHowtoDB, IMapPin, IMessageDB } from '../../../src/models'
 import { IModerationStatus } from 'oa-shared'
+
+import { withErrorAlerting } from '../alerting/errorAlerting'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import {
@@ -10,7 +11,8 @@ import {
   getSenderMessageEmail,
 } from './templateHelpers'
 import { getUserAndEmail, isValidMessageRequest } from './utils'
-import { withErrorAlerting } from '../alerting/errorAlerting'
+
+import type { IHowtoDB, IMapPin, IMessageDB } from '../../../src/models'
 
 export async function createMessageEmails(message: IMessageDB) {
   const isValid = await isValidMessageRequest(message)
@@ -31,10 +33,7 @@ export async function createMessageEmails(message: IMessageDB) {
       to: email,
       message: getSenderMessageEmail(message),
     })
-    await db
-      .collection(DB_ENDPOINTS.messages)
-      .doc(_id)
-      .set({ ...message, isSent: true })
+    await db.collection(DB_ENDPOINTS.messages).doc(_id).update({ isSent: true })
   }
 }
 

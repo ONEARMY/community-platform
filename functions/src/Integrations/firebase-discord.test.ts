@@ -1,7 +1,6 @@
-import {
-  SimpleResearchArticle,
-  handleResearchUpdatePublished,
-} from './firebase-discord'
+import { handleResearchUpdatePublished } from './firebase-discord'
+
+import type { SimpleResearchArticle } from './firebase-discord'
 
 describe('handle research article update change', () => {
   it('should send message when there is new update', () => {
@@ -14,6 +13,7 @@ describe('handle research article update change', () => {
       slug: 'test',
       updates: [
         {
+          _id: 'bobtesting',
           title: 'test',
           collaborators: ['Bob'],
         },
@@ -41,6 +41,7 @@ describe('handle research article update change', () => {
       slug: 'test',
       updates: [
         {
+          _id: 'bobmore',
           title: 'test',
           collaborators: ['Bob'],
         },
@@ -50,6 +51,7 @@ describe('handle research article update change', () => {
       slug: 'test',
       updates: [
         {
+          _id: 'bobmore',
           title: 'test',
           collaborators: ['Bob'],
         },

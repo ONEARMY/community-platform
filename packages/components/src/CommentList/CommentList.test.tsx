@@ -51,7 +51,9 @@ describe('CommentList', () => {
       />,
     )
     fireEvent.click(screen.getByText('show more comments'))
-    expect(screen.getAllByTestId('CommentList: item').length).toBeGreaterThan(5)
+    expect(screen.getAllByTestId('CommentList: item').length).toBeGreaterThan(
+      10,
+    )
     expect(mockOnMoreComments).toHaveBeenCalled()
   })
 

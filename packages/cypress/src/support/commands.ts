@@ -10,33 +10,29 @@ import type { firebase } from './db/firebase'
 declare global {
   namespace Cypress {
     interface Chainable {
-      deleteIDB(name: string): Promise<boolean>
+      checkCommentInViewport()
+      checkCommentItem(comment: string, length: number): Chainable<void>
       clearServiceWorkers(): Promise<void>
-      setSessionStorage(key: string, value: string): Promise<void>
+      deleteCurrentUser(): Promise<void>
+      deleteIDB(name: string): Promise<boolean>
+      interceptAddressSearchFetch(addressResponse): Chainable<void>
+      interceptAddressReverseFetch(addressResponse): Chainable<void>
       /** login with firebase credentials, optionally check ui login element updated*/
       login(
         username: string,
         password: string,
         checkUI?: boolean,
       ): Promise<firebase.auth.UserCredential>
-
       /** logout of firebase, optionally check ui login element updated*/
       logout(checkUI?: boolean): Chainable<void>
-
-      deleteCurrentUser(): Promise<void>
-
       queryDocuments(
         collectionName: string,
         fieldPath: string,
         opStr: any,
         value: string,
       ): Chainable<any[]>
-
       step(message: string)
-
-      interceptAddressSearchFetch(addressResponse): Chainable<void>
-
-      interceptAddressReverseFetch(addressResponse): Chainable<void>
+      setSessionStorage(key: string, value: string): Promise<void>
     }
   }
 }
@@ -186,3 +182,17 @@ Cypress.Commands.add('interceptAddressReverseFetch', (addressResponse) => {
  * https://github.com/cypress-io/cypress/issues/3199
  */
 Cypress.Commands.overwrite('log', (subject, message) => cy.task('log', message))
+
+Cypress.Commands.add('checkCommentInViewport', () => {
+  cy.get('[data-cy="CommentItem"]')
+    .first()
+    .scrollIntoView()
+    .should('be.inViewport', 10)
+})
+
+Cypress.Commands.add('checkCommentItem', (comment: string, length: number) => {
+  cy.step('Comment mentions are formatted correctly')
+  cy.get('[data-cy="CommentItem"]').should('have.length.gte', length)
+  cy.checkCommentInViewport()
+  cy.contains(comment)
+})

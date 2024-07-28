@@ -60,5 +60,7 @@ export { UserEngagementWrapper } from './UserEngagementWrapper/UserEngagementWra
 export { Username } from './Username/Username'
 export { UserStatistics } from './UserStatistics/UserStatistics'
 export { VideoPlayer } from './VideoPlayer/VideoPlayer'
+
 // export { IImageGalleryItem } from './ImageGallery/ImageGallery'
-// export { availableGlyphs } from './Icon/types'
+export type { availableGlyphs } from './Icon/types'
+export type { ITab } from './SettingsFormWrapper/SettingsFormTab'

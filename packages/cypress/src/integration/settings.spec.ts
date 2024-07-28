@@ -12,7 +12,6 @@ const locationStub = {
   country: 'Singapore',
   countryCode: 'sg',
   latlng: { lng: '103.8194992', lat: '1.357107' },
-  name: 'Drongo Trail, Bishan, Central, Singapore, 578774, Singapore',
   postcode: '578774',
   value: 'Singapore',
 }
@@ -54,10 +53,15 @@ describe('[Settings]', () => {
       const user = generateNewUserDetails()
       const url = 'https://social.network'
 
+      cy.step('Incomplete profile banner visible when logged out')
+      cy.get('[data-cy=notificationBanner]').should('not.exist')
+
       cy.signUpNewUser(user)
 
-      cy.step('Go to User Settings')
-      cy.visit('/settings')
+      cy.step('Incomplete profile banner visible')
+      cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
+      cy.get('[data-cy=incompleteProfileBanner]').click()
+
       cy.setSettingFocus(profileType)
 
       cy.step("Can't save without required fields being populated")
@@ -91,9 +95,9 @@ describe('[Settings]', () => {
 
       cy.saveSettingsForm()
 
-      cy.setSettingMapPinMember(mapDetails(mapPinDescription))
-
-      cy.saveSettingsForm()
+      cy.step('Incomplete profile banner no longer visible')
+      cy.get('[data-cy=incompleteProfileBanner]').should('not.exist')
+      cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
 
       cy.step('Updated settings display on profile')
       cy.visit(`u/${user.username}`)
@@ -105,6 +109,22 @@ describe('[Settings]', () => {
         .should('have.attr', 'src')
         .and('include', coverImage)
       cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
+
+      cy.step('Can add map pin')
+      cy.get('[data-cy=EditYourProfile]').click()
+      cy.get('[data-cy="tab-Map"]').click()
+      cy.get('[data-cy=WorkspaceMapPinRequiredStars').should('not.exist')
+      cy.contains('No location data currently saved')
+      cy.fillSettingMapPin(mapDetails(mapPinDescription))
+      cy.get('[data-cy=save-map-pin]').click()
+      cy.contains('Map pin saved successfully')
+      cy.contains('Your current map pin is here:')
+      cy.contains(locationStub.country)
+
+      cy.step('Can delete map pin')
+      cy.get('[data-cy=remove-map-pin]').click()
+      cy.get('[data-cy="Confirm.modal: Confirm"]').click()
+      cy.contains('No location data currently saved')
     })
   })
 
@@ -116,6 +136,13 @@ describe('[Settings]', () => {
       const profileType = 'workspace'
       const user = generateNewUserDetails()
       const url = 'something@test.com'
+      const impactFields = [
+        { name: 'plastic', value: 5 },
+        { name: 'revenue', value: 10003 },
+        { name: 'employees', value: 7 },
+        { name: 'volunteers', value: 28 },
+        { name: 'machines', value: 2, visible: false },
+      ]
 
       cy.signUpNewUser(user)
 
@@ -140,9 +167,6 @@ describe('[Settings]', () => {
         label: ExternalLinkLabel.EMAIL,
         url,
       })
-
-      cy.setSettingImpactData()
-
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on profile')
@@ -163,6 +187,18 @@ describe('[Settings]', () => {
         'href',
         `mailto:${url}`,
       )
+
+      cy.step('Set and display impact data')
+      cy.visit('/settings')
+      cy.setSettingImpactData(2022, impactFields)
+      cy.visit(`u/${user.username}`)
+      cy.get('[data-cy="ImpactTab"]').click()
+
+      // From visibleImpactFields above
+      cy.contains('5 Kg of plastic recycled')
+      cy.contains('USD 10,003 revenue')
+      cy.contains('7 full time employees')
+      cy.contains('28 volunteers')
     })
   })
 
@@ -204,10 +240,6 @@ describe('[Settings]', () => {
         url,
       })
 
-      cy.saveSettingsForm()
-
-      cy.setSettingMapPinWorkspace(mapDetails(mapPinDescription))
-
       cy.setSettingPublicContact()
       cy.saveSettingsForm()
 
@@ -225,6 +257,17 @@ describe('[Settings]', () => {
       cy.get('[data-cy="contact-tab"]').click()
       cy.contains(`Send a message to ${displayName}`).should('not.exist')
       cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
+
+      cy.step('Can add map pin')
+      cy.get('[data-cy=EditYourProfile]').click()
+      cy.get('[data-cy="tab-Map"]').click()
+      cy.get('[data-cy=WorkspaceMapPinRequiredStars').should('be.visible')
+      cy.contains('No location data currently saved')
+      cy.fillSettingMapPin(mapDetails(mapPinDescription))
+      cy.get('[data-cy=save-map-pin]').click()
+      cy.contains('Map pin saved successfully')
+      cy.contains('Your current map pin is here:')
+      cy.contains(locationStub.country)
     })
   })
 
@@ -235,7 +278,6 @@ describe('[Settings]', () => {
         'An enthusiastic community that makes the world greener!'
       const displayName = 'community_001'
       const profileType = 'community-builder'
-      const mapPinDescription = 'Fun, vibrant and full of amazing people'
       const user = generateNewUserDetails()
       const url = 'http://www.settings_community_new-forum.org'
 
@@ -256,10 +298,6 @@ describe('[Settings]', () => {
         label: ExternalLinkLabel.SOCIAL_MEDIA,
         url,
       })
-
-      cy.saveSettingsForm()
-
-      cy.setSettingMapPinWorkspace(mapDetails(mapPinDescription))
 
       cy.saveSettingsForm()
 

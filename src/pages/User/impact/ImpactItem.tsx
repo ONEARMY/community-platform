@@ -29,7 +29,7 @@ export const ImpactItem = ({ fields, user, year }: Props) => {
   const visibleFields = sortedFields?.filter((field) => field.isVisible)
 
   return (
-    <Box sx={outterBox} cy-data="ImpactItem">
+    <Box sx={outterBox} cy-data={`ImpactItem-${year}`}>
       <Box sx={innerBox}>
         <Heading as="h3" variant="small">
           {year}

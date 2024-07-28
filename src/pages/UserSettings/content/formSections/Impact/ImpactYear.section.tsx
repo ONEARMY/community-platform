@@ -30,8 +30,16 @@ export const ImpactYearSection = observer(({ year }: Props) => {
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
 
   const impactDivRef = useRef<HTMLInputElement>(null)
-
   const { hash } = useLocation()
+  const { userStore } = useCommonStores().stores
+
+  const formId = `impactForm-${year}`
+  const sx = {
+    backgroundColor: 'background',
+    borderRadius: 2,
+    marginBottom: 2,
+    padding: 2,
+  }
 
   useEffect(() => {
     const fetchImpact = () => {
@@ -44,15 +52,24 @@ export const ImpactYearSection = observer(({ year }: Props) => {
     fetchImpact()
   }, [])
 
-  const { userStore } = useCommonStores().stores
-  const formId = `impactForm-${year}`
+  useEffect(() => {
+    const anchor = `#year_${year}`
 
-  const sx = {
-    backgroundColor: 'background',
-    borderRadius: 2,
-    marginBottom: 2,
-    padding: 2,
-  }
+    const openEditMode = () => {
+      if (hash === anchor) {
+        setTimeout(() => {
+          const section = document.querySelector(anchor)
+          // the delay is needed, otherwise the scroll is not happening in Firefox
+          section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 500)
+
+        return setIsEditMode(true)
+      }
+      return setIsEditMode(false)
+    }
+
+    openEditMode()
+  }, [hash])
 
   const onSubmit = async (values) => {
     setSubmitResults(null)
@@ -68,26 +85,9 @@ export const ImpactYearSection = observer(({ year }: Props) => {
     }
   }
 
-  useEffect(() => {
-    const scrollToElement = () => {
-      const divRef = impactDivRef.current
-      if (divRef !== null) {
-        divRef.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
-    if (hash === `#impact_${year}`) {
-      scrollToElement()
-    }
-  }, [hash])
-
   return (
-    <Box sx={sx}>
-      <Heading
-        as="h3"
-        variant="small"
-        ref={impactDivRef}
-        id={`/settings#impact_${year}`}
-      >
+    <Box sx={sx} id={`year_${year}`}>
+      <Heading as="h3" variant="small" ref={impactDivRef}>
         {year}
       </Heading>
       <UserContactError submitResults={submitResults} />

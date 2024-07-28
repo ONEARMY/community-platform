@@ -1,7 +1,6 @@
 /** @jsxImportSource theme-ui */
 import styled from '@emotion/styled'
 import { IconContext } from '@react-icons/all-files'
-import { AiFillThunderbolt } from '@react-icons/all-files/ai/AiFillThunderbolt'
 import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
 import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
 import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
@@ -60,6 +59,7 @@ export interface IProps {
 export const glyphs: IGlyphs = {
   'account-circle': <MdAccountCircle />,
   add: <MdAdd />,
+  account: iconMap.account,
   'arrow-back': <MdArrowBack />,
   'arrow-curved-bottom-right': iconMap.arrowCurvedBottomRight,
   'arrow-down': <MdKeyboardArrowDown />,
@@ -89,24 +89,30 @@ export const glyphs: IGlyphs = {
   filter: <RiFilter2Fill />,
   'flag-unknown': iconMap.flagUnknown,
   hide: iconMap.hide,
+  hyperlink: iconMap.hyperlink,
   image: <MdImage />,
+  impact: iconMap.impact,
   instagram: <FaInstagram />,
   loading: iconMap.loading,
   'location-on': <MdLocationOn />,
   lock: <MdLock />,
   machine: iconMap.machine,
   'mail-outline': <MdMailOutline />,
+  map: iconMap.map,
   menu: <MdMenu />,
   'more-vert': <MdMoreVert />,
   notifications: <MdNotifications />,
+  patreon: iconMap.patreon,
   pdf: <GoFilePdf />,
   plastic: iconMap.plastic,
+  profile: iconMap.profile,
   revenue: iconMap.revenue,
   slack: <FaSlack />,
   star: iconMap.star,
   'star-active': iconMap.starActive,
   step: <MdList />,
-  thunderbolt: <AiFillThunderbolt />,
+  thunderbolt: iconMap.thunderbolt,
+  'thunderbolt-grey': iconMap.thunderboltGrey,
   time: <MdAccessTime />,
   'turned-in': <MdTurnedIn />,
   'social-media': iconMap.socialMedia,

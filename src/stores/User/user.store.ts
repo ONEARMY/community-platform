@@ -50,6 +50,7 @@ export class UserStore extends ModuleStore {
     super(rootStore)
     makeObservable(this, {
       authUser: observable,
+      deleteUserLocation: action,
       user: observable,
       updateStatus: observable,
       getAllUsers: action,
@@ -238,16 +239,6 @@ export class UserStore extends ModuleStore {
       updatedUserProfile.coverImages = processedImages
     }
 
-    // retrieve location data and replace existing with detailed OSM info
-    if (
-      updatedUserProfile.location?.latlng &&
-      Object.keys(updatedUserProfile.location).length == 1
-    ) {
-      updatedUserProfile.location = await getLocationData(
-        updatedUserProfile.location.latlng,
-      )
-    }
-
     // update on db and update locally (if targeting self as user)
     await this._updateUserRequest(updatedUserProfile._id, updatedUserProfile)
 
@@ -255,14 +246,40 @@ export class UserStore extends ModuleStore {
       this._updateActiveUser(updatedUserProfile)
     }
 
-    // Update user map pin
-    // TODO - pattern back and forth from user to map not ideal
-    // should try to refactor and possibly generate map pins in backend
-    if (values.location) {
-      await this.mapsStore.setUserPin(updatedUserProfile)
-    }
     this._setUpdateStatus('Complete')
     await this.refreshActiveUserDetails()
+  }
+
+  public async updateUserLocation(user: Partial<IUserPPDB>) {
+    const { _id, location, mapPinDescription } = user
+
+    if (!_id) throw new Error('User not found')
+    if (!location || (!location.latlng && Object.keys(location).length !== 1)) {
+      throw new Error('Location data not found')
+    }
+
+    const fullLocationData = await getLocationData(location.latlng)
+    await this._updateUserRequest(_id, {
+      location: fullLocationData,
+      mapPinDescription,
+    })
+    await this.refreshActiveUserDetails()
+
+    return this.activeUser
+  }
+
+  public async deleteUserLocation(user: Partial<IUserPPDB>) {
+    const { _id } = user
+
+    if (!_id) throw new Error('User not found')
+
+    await this._updateUserRequest(_id, {
+      location: null,
+      mapPinDescription: null,
+    })
+    await this.refreshActiveUserDetails()
+
+    return this.activeUser
   }
 
   public async updateUserImpact(

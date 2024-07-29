@@ -72,11 +72,11 @@ export class DiscussionStore extends ModuleStore {
       contributorIds: [],
     }
 
-    const dbRef = await this.db
+    const dbRef = this.db
       .collection<IDiscussion>(COLLECTION_NAME)
       .doc(newDiscussion._id)
 
-    return this._updateDiscussion(dbRef, newDiscussion)
+    return await this._updateDiscussion(dbRef, newDiscussion)
   }
 
   public async addComment(

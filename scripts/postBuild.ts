@@ -8,59 +8,174 @@ import { _supportedConfigurationOptions } from '../src/config/constants.ts'
 
 import type { CheerioAPI } from 'cheerio'
 
+const filepathWebpage = '../build/index.html'
+const filepathConfiguration = '../.env'
+
 main()
 
 function main() {
-  initializeEnvironmentVariables('../.env')
+  const configuration = loadConfiguration(filepathConfiguration)
 
-  const $ = loadWebpage('../build/index.html')
+  const webpage = loadWebpage(filepathWebpage)
+  const modifiedWebpage = modifyWebpage(webpage, configuration)
+  saveWebpage(filepathWebpage, modifiedWebpage)
 
-  setupFrontendConfiguration($)
+  applyTheme(configuration.style.theme)
+}
 
-  console.log('Applying theme...')
-  const platformTheme = process.env.REACT_APP_PLATFORM_THEME
-  if (platformTheme) {
-    console.log('theme: ' + platformTheme)
-    console.log('Copying assets.')
-    fsExtra.copySync(
-      '../src/assets/images/themes/' + platformTheme + '/public',
-      '../build',
-    )
-  } else {
-    console.log('No theme found, skipping.')
-  }
+export function modifyWebpage(
+  webpage: CheerioAPI,
+  configuration: Configuration,
+): CheerioAPI {
+  const webpageWithConfiguration = addConfiguration(
+    webpage,
+    configuration.options,
+  )
+  const webpageWithCustomizations = addCustomizations(
+    webpageWithConfiguration,
+    configuration.style,
+  )
+  return webpageWithCustomizations
+}
+
+function addConfiguration(
+  webpage: CheerioAPI,
+  configuration: OptionsConfiguration,
+) {
+  console.log('Writing configuration into the global window object...')
+  webpage('script#CommunityPlatform').html(
+    'window.__OA_COMMUNITY_PLATFORM_CONFIGURATION=' +
+      JSON.stringify(configuration) +
+      ';',
+  )
   console.log('')
+  return webpage
+}
 
+function addCustomizations(
+  webpage: CheerioAPI,
+  configuration: StyleConfiguration,
+) {
   console.log('Making SEO changes...')
-  const siteName = process.env.SITE_NAME || 'Community Platform'
-  console.log('site name: ' + siteName)
 
-  $('title').text(siteName)
-  $('meta[property="og:title"]').attr('content', siteName)
-  $('meta[name="twitter:title"]').attr('content', siteName)
+  webpage('title').text(configuration.name)
 
-  if (platformTheme) {
-    const siteDescription =
-      platformTheme === 'precious-plastic'
-        ? 'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.'
-        : 'A platform for the Project Kamp community to collaborate around the world. Connect, share and meet each other to figure out how to live more sustainably'
+  const nameMetaSelectors = [
+    'meta[property="og:title"]',
+    'meta[name="twitter:title"]',
+  ]
+  nameMetaSelectors.forEach((selector) => {
+    webpage(selector).attr('content', configuration.name)
+  })
 
-    console.log('site description: ' + siteDescription)
+  const descriptionMetaSelectors = [
+    'meta[property="og:description"]',
+    'meta[name="twitter:description"]',
+    'meta[name="description"]',
+  ]
+  descriptionMetaSelectors.forEach((selector) => {
+    webpage(selector).attr('content', configuration.description)
+  })
 
-    $('meta[property="og:description"]').attr('content', siteDescription)
-    $('meta[name="twitter:description"]').attr('content', siteDescription)
-    $('meta[name="description"]').attr('content', siteDescription)
-  }
   console.log('')
+  return webpage
+}
 
-  console.log('Saving...')
-  const output = $.html()
-  fs.writeFileSync('../build/index.html', output, { encoding: 'utf-8' })
+function applyTheme(theme: string) {
+  console.log('Applying theme...')
+  if (theme === '') {
+    return
+  }
+  console.log('Copying assets.')
+  fsExtra.copySync(
+    '../src/assets/images/themes/' + theme + '/public',
+    '../build',
+  )
   console.log('')
 }
 
-function initializeEnvironmentVariables(filepath: string) {
+interface Configuration {
+  style: StyleConfiguration
+  options: OptionsConfiguration
+}
+
+interface StyleConfiguration {
+  theme: string
+  name: string
+  description: string
+}
+
+interface OptionsConfiguration {
+  [key: string]: string
+}
+
+function loadConfiguration(filepath: string): Configuration {
+  initializeEnvironmentVariables(filepath)
+  return getConfigurationFromEnvironmentVariables()
+}
+
+function initializeEnvironmentVariables(filepath: string): void {
   dotenv.config({ path: path.resolve(filepath), debug: true })
+}
+
+function getConfigurationFromEnvironmentVariables(): Configuration {
+  return {
+    style: getStyleConfigurationFromEnvironmentVariables(),
+    options: getOptionsConfigurationFromEnvironmentVariables(),
+  }
+}
+
+function getStyleConfigurationFromEnvironmentVariables(): StyleConfiguration {
+  console.log('Loading site details...')
+  const theme = process.env.REACT_APP_PLATFORM_THEME || ''
+  const name = process.env.SITE_NAME || 'Community Platform'
+  const description = getSiteDescription(theme)
+
+  console.log('theme: ' + theme)
+  console.log('name: ' + name)
+  console.log('description: ' + description)
+  console.log('')
+
+  return {
+    theme: theme,
+    description: description,
+    name: name,
+  }
+}
+
+function getSiteDescription(theme: string | undefined): string {
+  if (theme === 'precious-plastic') {
+    return 'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.'
+  }
+  if (theme === 'project-kamp') {
+    return 'A platform for the Project Kamp community to collaborate around the world. Connect, share and meet each other to figure out how to live more sustainably.'
+  }
+  if (theme === 'fixing-fashion') {
+    return 'A platform for doing cool things with clothes.'
+  }
+  return ''
+}
+
+function getOptionsConfigurationFromEnvironmentVariables(): OptionsConfiguration {
+  console.log('Loading site options...')
+  const configuration: OptionsConfiguration = {}
+  const skippedOptions = []
+
+  _supportedConfigurationOptions.forEach((option: string) => {
+    const value = process.env[option]
+
+    if (value === undefined) {
+      skippedOptions.push(option)
+    }
+    configuration[option] = value || ''
+  })
+
+  if (skippedOptions.length !== 0) {
+    console.log('The following properties were not found:')
+    console.log(skippedOptions.join('\n'))
+  }
+  console.log('')
+  return configuration
 }
 
 function loadWebpage(filepath: string) {
@@ -70,36 +185,9 @@ function loadWebpage(filepath: string) {
   return load(builtHTML, { recognizeSelfClosing: true })
 }
 
-function setupFrontendConfiguration(webpage: CheerioAPI) {
-  console.log('Writing configuration into the global window object...')
-  const configuration = getWindowVariableObject()
-  setupScriptTagWithConfiguration(webpage, configuration)
+function saveWebpage(filepath: string, webpage: CheerioAPI): void {
+  console.log('Saving webpage...')
+  const content = webpage.html()
+  fs.writeFileSync(filepath, content, { encoding: 'utf-8' })
   console.log('')
-}
-
-function setupScriptTagWithConfiguration(webpage: CheerioAPI, configuration) {
-  webpage('script#CommunityPlatform').html(
-    'window.__OA_COMMUNITY_PLATFORM_CONFIGURATION=' +
-      JSON.stringify(configuration) +
-      ';',
-  )
-}
-
-function getWindowVariableObject() {
-  const configurationObject = {}
-
-  _supportedConfigurationOptions.forEach((variable: string) => {
-    configurationObject[variable] = process.env[variable] || ''
-  })
-
-  if (_supportedConfigurationOptions.filter((v) => !process.env[v]).length) {
-    console.log(
-      'The following properties were not found within the current environment:',
-    )
-    console.log(
-      _supportedConfigurationOptions.filter((v) => !process.env[v]).join('\n'),
-    )
-  }
-
-  return configurationObject
 }

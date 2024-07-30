@@ -41,6 +41,12 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
             initialValue={userImage}
             name="userImage"
             validateFields={[]}
+            imageDisplaySx={{
+              borderRadius: '100%',
+              objectFit: 'cover',
+              width: '120px',
+              height: '120px',
+            }}
           />
         </Box>
       </Flex>

@@ -53,7 +53,7 @@ export const fields: ILabels = {
   },
   userImage: {
     description:
-      'This will be shown on comments. Best size is square (which we then show as a circle).',
+      'Visible on your profile and comments, best to upload as a square image.',
     title: 'Add an avatar',
   },
   deleteAccount: {

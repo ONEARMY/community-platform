@@ -5,6 +5,7 @@ import type { BoxProps } from 'theme-ui'
 
 interface ITitleProps {
   hasUploadedImg: boolean
+  sx?: any
 }
 
 // any export to fix: https://github.com/microsoft/TypeScript/issues/37597
@@ -12,15 +13,13 @@ export const ImageInputWrapper = React.forwardRef<
   HTMLElement,
   BoxProps & ITitleProps
 >((props, ref): JSX.Element => {
-  const { hasUploadedImg, ...rest } = props
+  const { hasUploadedImg, sx, ...rest } = props
 
   return (
     <Flex
       className={'image-input__wrapper'}
       ref={ref}
       sx={{
-        height: '100%',
-        width: '100%',
         overflow: 'hidden',
         justifyContent: 'center',
         alignItems: 'center',
@@ -29,6 +28,7 @@ export const ImageInputWrapper = React.forwardRef<
         borderStyle: hasUploadedImg ? 'none' : 'dashed',
         borderRadius: 1,
         backgroundColor: 'white',
+        ...sx,
       }}
       {...rest}
     >

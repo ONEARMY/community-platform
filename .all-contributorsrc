@@ -772,6 +772,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "luismgsantos",
+      "name": "Luís Santos",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13033016?v=4",
+      "profile": "http://luismgsantos.github.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

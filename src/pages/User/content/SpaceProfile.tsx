@@ -19,6 +19,7 @@ import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { isPreciousPlastic } from 'src/config/config'
 import { ProfileType } from 'src/modules/profile/types'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
@@ -221,7 +222,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               {userImage?.downloadUrl && (
                 <Avatar
                   data-cy="userImage"
-                  src={userImage.downloadUrl}
+                  src={cdnImageUrl(userImage.downloadUrl, { width: 50 })}
                   sx={{
                     objectFit: 'cover',
                     width: '50px',

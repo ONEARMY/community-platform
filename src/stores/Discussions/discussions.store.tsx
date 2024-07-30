@@ -4,6 +4,7 @@ import { cloneDeep } from 'lodash'
 import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
@@ -419,7 +420,7 @@ export class DiscussionStore extends ModuleStore {
 
   private _getUserAvatar(user: IUserPPDB) {
     if (user.userImage && user.userImage.downloadUrl) {
-      return user.userImage.downloadUrl
+      return cdnImageUrl(user.userImage.downloadUrl, { width: 100 })
     }
     return null
   }

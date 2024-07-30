@@ -2,6 +2,7 @@ import { MemberBadge, Username, UserStatistics } from 'oa-components'
 import { ExternalLinkLabel, UserRole } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { Avatar, Box, Card, Flex, Heading, Paragraph } from 'theme-ui'
 
@@ -25,6 +26,10 @@ export const MemberProfile = ({ docs, user }: IProps) => {
         linkItem.label,
       ),
   )
+
+  const profileImageSrc = userImage?.downloadUrl
+    ? cdnImageUrl(userImage.downloadUrl)
+    : DefaultMemberImage
 
   return (
     <Card
@@ -70,7 +75,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
           <Avatar
             data-cy="profile-avatar"
             loading="lazy"
-            src={userImage?.downloadUrl || DefaultMemberImage}
+            src={profileImageSrc}
             sx={{
               objectFit: 'cover',
               width: '120px',

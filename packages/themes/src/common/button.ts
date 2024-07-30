@@ -4,6 +4,7 @@ const BASE_BUTTON = {
   fontFamily: '"Varela Round", Arial, sans-serif',
   fontSize: 3,
   display: 'inline-flex',
+  cursor: 'pointer',
   alignItems: 'center',
   position: 'relative',
   transition: '.2s ease-in-out',
@@ -20,7 +21,6 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
     bg: colors.accent.base,
     '&:hover': {
       bg: colors.accent.hover,
-      cursor: 'pointer',
     },
     '&[disabled]': {
       opacity: 0.5,
@@ -51,7 +51,9 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
     border: '2px solid ' + colors.black,
     backgroundColor: colors.red2,
     color: colors.black,
-    cursor: 'pointer',
+    '&:hover': {
+      backgroundColor: colors.white,
+    },
   },
   outline: {
     ...BASE_BUTTON,
@@ -60,7 +62,6 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
     backgroundColor: 'transparent',
     '&:hover': {
       backgroundColor: colors.softblue,
-      cursor: 'pointer',
     },
   },
   imageInput: {
@@ -76,7 +77,6 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
     '&:hover': {
       bg: colors.offwhite,
       borderColor: colors.offwhite,
-      cursor: 'pointer',
     },
     '&[disabled]': {
       opacity: 0.5,
@@ -96,7 +96,6 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
     '&:hover': {
       backgroundColor: colors.softblue,
       border: '1px solid ' + colors.lightgrey,
-      cursor: 'pointer',
     },
   },
 })

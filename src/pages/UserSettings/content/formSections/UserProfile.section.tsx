@@ -4,110 +4,41 @@ import { useParams } from 'react-router'
 import { ARRAY_ERROR, FORM_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { toJS } from 'mobx'
-import { Button, ExternalLink, TextNotification } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
+import { Button } from 'oa-components'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { ProfileType } from 'src/modules/profile/types'
-import { Alert, Box, Flex, Text } from 'theme-ui'
+import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
-import { buttons, headings } from '../../labels'
+import { buttons } from '../../labels'
 import INITIAL_VALUES from '../../Template'
 import { CollectionSection } from './Collection.section'
 import { FlexSectionContainer } from './elements'
 import { EmailNotificationsSection } from './EmailNotifications.section'
 import { ExpertiseSection } from './Expertise.section'
 import { FocusSection } from './Focus.section'
-import { PatreonIntegration } from './PatreonIntegration'
 import { PublicContactSection } from './PublicContact.section'
-import { SettingsErrors } from './SettingsErrors'
-import { SettingsMapPinSection } from './SettingsMapPinSection'
+import { SettingsFormNotifications } from './SettingsFormNotifications'
 import { UserInfosSection } from './UserInfos.section'
 import { WorkspaceSection } from './Workspace.section'
 
-import type { IMapPin } from 'src/models'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IFormNotification } from './SettingsFormNotifications'
 
 interface IState {
   formValues: IUserPP
   showDeleteDialog?: boolean
   showLocationDropdown: boolean
   user?: IUserPP
-  userMapPin: IMapPin | null
-}
-
-type INotification = {
-  message: string
-  icon: string
-  show: boolean
-  variant: 'success' | 'failure'
-}
-
-const MapPinModerationComments = (props: { mapPin: IMapPin | null }) => {
-  const { mapPin } = props
-  return mapPin?.comments &&
-    mapPin.moderation == IModerationStatus.IMPROVEMENTS_NEEDED ? (
-    <Alert variant="info" sx={{ mt: 3, fontSize: 2, textAlign: 'left' }}>
-      <Box>
-        This map pin has been marked as requiring further changes. Specifically
-        the moderator comments are:
-        <br />
-        <em>{mapPin?.comments}</em>
-      </Box>
-    </Alert>
-  ) : null
-}
-
-const WorkspaceMapPinRequiredStars = () => {
-  const { description } = headings.workspace
-  const { themeStore } = useCommonStores().stores
-
-  return (
-    <Alert sx={{ fontSize: 2, textAlign: 'left', my: 2 }} variant="failure">
-      <Box>
-        <ExternalLink
-          href={themeStore?.currentTheme.styles.communityProgramURL}
-          sx={{ textDecoration: 'underline', color: 'currentcolor' }}
-        >
-          {description}
-        </ExternalLink>
-      </Box>
-    </Alert>
-  )
-}
-
-const FormNotifications = ({ errors, notification, submitFailed }) => {
-  const showSuccessNotification =
-    notification.show && (!errors || Object.keys(errors).length === 0)
-  const showErrorsNotification = errors || submitFailed
-
-  return (
-    <>
-      {showSuccessNotification && (
-        <TextNotification
-          isVisible={notification.show}
-          variant={notification.variant}
-        >
-          <Text>{buttons.success}</Text>
-        </TextNotification>
-      )}
-      {showErrorsNotification && (
-        <SettingsErrors
-          errors={errors}
-          isVisible={!!(errors && Object.keys(errors).length > 0)}
-        />
-      )}
-    </>
-  )
 }
 
 export const UserProfile = () => {
-  const { mapsStore, userStore } = useCommonStores().stores
+  const { userStore } = useCommonStores().stores
   const [state, setState] = useState<IState>({} as any)
-  const [notification, setNotification] = useState<INotification>({
+  const [notification, setNotification] = useState<IFormNotification>({
     message: '',
     icon: '',
     show: false,
@@ -116,31 +47,13 @@ export const UserProfile = () => {
   const [shouldUpdate, setShouldUpdate] = useState<boolean>(true)
   const { id } = useParams()
 
-  const toggleLocationDropdown = () => {
-    setState((prevState) => ({
-      ...prevState,
-      showLocationDropdown: !prevState.showLocationDropdown,
-      formValues: {
-        ...prevState.formValues,
-        mapPinDescription: '',
-        location: null,
-        country: null,
-      },
-    }))
-  }
-
   useEffect(() => {
     let user = userStore.user as IUserPP
-    let userMapPin: IMapPin | null = null
 
     const init = async () => {
       if (!shouldUpdate) return
       if (id) {
         user = await userStore.getUserProfile(id)
-      }
-
-      if (isModuleSupported(MODULE.MAP)) {
-        userMapPin = (await mapsStore.getPin(user.userName)) || null
       }
 
       // ensure user form includes all user fields (merge any legacy user with correct format)
@@ -172,7 +85,6 @@ export const UserProfile = () => {
         formValues,
         user,
         showLocationDropdown: !user?.location?.latlng,
-        userMapPin,
       })
       setShouldUpdate(false)
     }
@@ -229,7 +141,7 @@ export const UserProfile = () => {
     return errors
   }
 
-  const { formValues, user, userMapPin } = state
+  const { formValues, user } = state
   const formId = 'userProfileForm'
 
   return (
@@ -258,7 +170,7 @@ export const UserProfile = () => {
             <Flex bg={'inherit'} sx={{ flexDirection: 'column', gap: 2 }}>
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
-              <FormNotifications
+              <SettingsFormNotifications
                 errors={errors}
                 notification={notification}
                 submitFailed={submitFailed}
@@ -297,15 +209,6 @@ export const UserProfile = () => {
                     mutators={form.mutators}
                     showLocationDropdown={state.showLocationDropdown}
                   />
-
-                  {isModuleSupported(MODULE.MAP) && (
-                    <SettingsMapPinSection
-                      toggleLocationDropdown={toggleLocationDropdown}
-                    >
-                      <MapPinModerationComments mapPin={userMapPin} />
-                      {!isMember && <WorkspaceMapPinRequiredStars />}
-                    </SettingsMapPinSection>
-                  )}
                 </Flex>
 
                 <EmailNotificationsSection
@@ -318,7 +221,6 @@ export const UserProfile = () => {
                     />
                   </FlexSectionContainer>
                 )}
-                <PatreonIntegration user={user} />
               </form>
 
               <Button

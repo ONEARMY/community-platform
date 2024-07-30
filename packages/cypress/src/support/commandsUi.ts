@@ -48,6 +48,7 @@ declare global {
         password: string,
       ): Chainable<void>
       fillIntroTitle(intro: string)
+      fillSettingMapPin(pin: IMapPin)
 
       saveSettingsForm()
       /**
@@ -68,8 +69,6 @@ declare global {
       setSettingDeleteOpeningTime(index: number, confirmed: boolean)
       setSettingFocus(focus: string)
       setSettingImpactData(year: number, fields)
-      setSettingMapPinMember(pin: IMapPin)
-      setSettingMapPinWorkspace(pin: IMapPin)
       setSettingPublicContact()
 
       signUpNewUser(user?)
@@ -158,14 +157,6 @@ Cypress.Commands.add('setSettingFocus', (focus: string) => {
   cy.get(`[data-cy=${focus}]`).click()
 })
 
-Cypress.Commands.add('setSettingMapPinWorkspace', (mapPin: IMapPin) => {
-  cy.setSettingMapPinMember(mapPin)
-  cy.get('[data-cy="osm-geocoding-input"]').should(($input) => {
-    const val = $input.val()
-    expect(val).to.include(mapPin.locationName)
-  })
-})
-
 Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
   cy.step('Save impact data')
   cy.get('[data-cy="tab-Impact"]').click()
@@ -185,9 +176,7 @@ Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
   cy.contains(form.saveSuccess)
 })
 
-Cypress.Commands.add('setSettingMapPinMember', (mapPin: IMapPin) => {
-  cy.step('Add pin')
-  cy.get('[data-cy=add-a-map-pin]').click({ force: true })
+Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {
   cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
   cy.get('[data-cy="osm-geocoding-results"]')
   cy.wait('@fetchAddress').then(() => {

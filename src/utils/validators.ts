@@ -41,10 +41,8 @@ const minValue = (min: number) => (value) => {
 }
 
 const endsWithQuestionMark = () => (value) => {
-  const index = value.indexOf('?')
-  return index < 0 || index < value.length - 1
-    ? 'Needs to end with a question mark'
-    : undefined
+  const lastCharacter = value ? value.slice(-1) : ''
+  return lastCharacter !== '?' ? 'Needs to end with a question mark' : undefined
 }
 
 const composeValidators =

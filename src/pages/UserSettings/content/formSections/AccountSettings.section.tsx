@@ -1,15 +1,19 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { ExternalLink } from 'oa-components'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { DISCORD_INVITE_URL } from 'src/constants'
 import { fields, headings } from 'src/pages/UserSettings/labels'
 import { Flex, Heading, Text } from 'theme-ui'
 
 import { ChangeEmailForm } from './ChangeEmail.form'
 import { ChangePasswordForm } from './ChangePassword.form'
+import { PatreonIntegration } from './PatreonIntegration'
 
 export const AccountSettingsSection = observer(() => {
   const { description, title } = fields.deleteAccount
+
+  const { userStore } = useCommonStores().stores
 
   return (
     <Flex
@@ -25,8 +29,11 @@ export const AccountSettingsSection = observer(() => {
           Here you can manage the core settings of your account.
         </Text>
       </Flex>
+
+      <PatreonIntegration user={userStore.activeUser} />
       <ChangeEmailForm />
       <ChangePasswordForm />
+
       <Text variant="body">
         {title}
         <ExternalLink

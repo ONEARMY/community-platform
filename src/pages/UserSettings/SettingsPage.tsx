@@ -1,34 +1,26 @@
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { SettingsFormWrapper } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isPreciousPlastic } from 'src/config/config'
+import { isModuleSupported, MODULE } from 'src/modules'
 import { ProfileType } from 'src/modules/profile/types'
 import { Box, Flex, Text } from 'theme-ui'
 
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
 import { ImpactSection } from './content/formSections/Impact/Impact.section'
+import { SettingsMapPinSection } from './content/formSections/SettingsMapPin.section'
 import { UserProfile } from './content/formSections/UserProfile.section'
 
-import type { availableGlyphs } from 'oa-components'
+import type { availableGlyphs, ITab } from 'oa-components'
 
 export const SettingsPage = () => {
-  const [defaultTab, setDefaultTab] = useState<number>(0)
   const { userStore } = useCommonStores().stores
-  const { hash } = useLocation()
 
   const user = userStore.activeUser
   if (!user) return
 
-  useEffect(() => {
-    if (hash.includes('#impact')) {
-      // Check below for the array index of the impactTab in tabs
-      setDefaultTab(1)
-    }
-  }, [hash])
-
   const isMember = user.profileType === ProfileType.MEMBER
   const showImpactTab = !isMember && isPreciousPlastic()
+  const showMapTab = isModuleSupported(MODULE.MAP)
 
   const profileTab = {
     title: 'Profile',
@@ -45,6 +37,12 @@ export const SettingsPage = () => {
     glyph: 'profile' as availableGlyphs,
   }
 
+  const mapTab = {
+    title: 'Map',
+    body: <SettingsMapPinSection />,
+    glyph: 'map' as availableGlyphs,
+  }
+
   const impactTab = {
     title: 'Impact',
     body: <ImpactSection />,
@@ -57,9 +55,12 @@ export const SettingsPage = () => {
     glyph: 'account' as availableGlyphs,
   }
 
-  const tabs = showImpactTab
-    ? [profileTab, impactTab, accountTab]
-    : [profileTab, accountTab]
+  const tabs = [
+    profileTab,
+    showMapTab ? mapTab : undefined,
+    showImpactTab ? impactTab : undefined,
+    accountTab,
+  ].filter((tab) => tab !== undefined) as ITab[]
 
   return (
     <Box
@@ -70,7 +71,7 @@ export const SettingsPage = () => {
         paddingTop: [3, 5, 10],
       }}
     >
-      <SettingsFormWrapper setDefaultTab={defaultTab} tabs={tabs} />
+      <SettingsFormWrapper tabs={tabs} />
     </Box>
   )
 }

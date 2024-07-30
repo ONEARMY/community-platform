@@ -102,6 +102,7 @@ export const glyphs: IGlyphs = {
   menu: <MdMenu />,
   'more-vert': <MdMoreVert />,
   notifications: <MdNotifications />,
+  patreon: iconMap.patreon,
   pdf: <GoFilePdf />,
   plastic: iconMap.plastic,
   profile: iconMap.profile,

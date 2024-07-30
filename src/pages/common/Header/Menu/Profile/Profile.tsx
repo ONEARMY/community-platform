@@ -6,7 +6,8 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import { ProfileModal } from 'src/pages/common/Header/Menu/ProfileModal/ProfileModal'
 import { COMMUNITY_PAGES_PROFILE } from 'src/pages/PageList'
-import { Box, Flex } from 'theme-ui'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { Avatar, Box, Flex } from 'theme-ui'
 
 import ProfileButtons from './ProfileButtons'
 
@@ -85,7 +86,20 @@ const Profile = observer((props: IProps) => {
               ml={1}
               sx={{ height: '100%' }}
             >
-              <MemberBadge profileType={user.profileType} />
+              {user.userImage?.downloadUrl ? (
+                <Avatar
+                  data-cy="header-avatar"
+                  loading="lazy"
+                  src={cdnImageUrl(user.userImage?.downloadUrl, { width: 40 })}
+                  sx={{
+                    objectFit: 'cover',
+                    width: '40px',
+                    height: '40px',
+                  }}
+                />
+              ) : (
+                <MemberBadge profileType={user.profileType} />
+              )}
             </Flex>
             <Flex>
               {state.showProfileModal && (

@@ -62,6 +62,9 @@ describe('[Settings]', () => {
       cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
       cy.get('[data-cy=incompleteProfileBanner]').click()
 
+      cy.step('Member profile badge shown in header by default')
+      cy.get(`[data-cy=MemberBadge-${profileType}]`)
+
       cy.setSettingFocus(profileType)
 
       cy.step("Can't save without required fields being populated")
@@ -101,6 +104,11 @@ describe('[Settings]', () => {
       cy.step('Incomplete profile banner no longer visible')
       cy.get('[data-cy=incompleteProfileBanner]').should('not.exist')
       cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
+
+      cy.step('User image shown in header')
+      cy.get('[data-cy="header-avatar"]')
+        .should('have.attr', 'src')
+        .and('include', userImage)
 
       cy.step('Updated settings display on profile')
       cy.visit(`u/${user.username}`)

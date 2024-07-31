@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { ProfileType } from 'src/modules/profile/types'
+import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Flex } from 'theme-ui'
 
 /**
@@ -11,19 +11,7 @@ export const AlertIncompleteProfile = observer(() => {
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
 
-  if (!activeUser) return null
-
-  const isProfileFilled =
-    activeUser.about && activeUser.displayName && activeUser.links?.length !== 0
-
-  const isMember = activeUser.profileType === ProfileType.MEMBER
-  const isMemberFilled = isMember && !!activeUser.userImage?.downloadUrl
-  const isSpaceFilled =
-    !isMember &&
-    activeUser.coverImages &&
-    !!activeUser.coverImages[0]?.downloadUrl
-
-  if (isProfileFilled && (isMemberFilled || isSpaceFilled)) return null
+  if (!activeUser || isProfileComplete(activeUser)) return null
 
   return (
     <Link to="/settings">
@@ -40,7 +28,7 @@ export const AlertIncompleteProfile = observer(() => {
             fontWeight: 'normal',
           }}
         >
-          Fill in your profile details before posting
+          Please fill in your profile details before posting
         </Alert>
       </Flex>
     </Link>

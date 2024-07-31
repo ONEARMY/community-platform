@@ -12,12 +12,6 @@ import { Pages } from './pages'
 export const App = observer(() => {
   const rootStore = useCommonStores()
 
-  // To handle when hosting deletes the assets from previous deployments
-  // https://vitejs.dev/guide/build#load-error-handling
-  window.addEventListener('vite:preloadError', () => {
-    window.location.reload()
-  })
-
   return (
     <rootStoreContext.Provider value={rootStore}>
       <ThemeProvider theme={rootStore.stores.themeStore.currentTheme.styles}>

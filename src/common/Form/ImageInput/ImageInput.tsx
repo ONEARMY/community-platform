@@ -1,29 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone'
-import { Button } from 'oa-components'
-import { Box, Image } from 'theme-ui'
+import { Button, Modal } from 'oa-components'
+import { Box, Flex, Image, Text } from 'theme-ui'
 
+import { compressImage } from './compressImage'
 import { DeleteImage } from './DeleteImage'
 import { getPresentFiles } from './getPresentFiles'
 import { ImageConverterList } from './ImageConverterList'
 import { ImageInputWrapper } from './ImageInputWrapper'
+import { imageValid } from './imageValid'
 import { setSrc } from './setSrc'
 
 import type { IConvertedFileMeta } from 'src/types'
 import type { IInputValue, IMultipleInputValue, IValue } from './types'
 
-/*
-    This component takes multiple image using filepicker and resized clientside
-    Note, typings not available for client-compress so find full options here:
-    https://github.com/davejm/client-compress
-*/
 type IFileMeta = IConvertedFileMeta[] | IConvertedFileMeta | null
 
 interface IProps {
   onFilesChange: (fileMeta: IFileMeta) => void
   value?: IValue
   hasText?: boolean
-  multiple?: boolean
   dataTestId?: string
 }
 
@@ -31,15 +27,36 @@ export const ImageInput = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
 
-  const { dataTestId, multiple, onFilesChange, value } = props
+  const { dataTestId, onFilesChange, value } = props
   const [inputFiles, setInputFiles] = useState<File[]>([])
   const [convertedFiles, setConvertedFiles] = useState<IConvertedFileMeta[]>([])
   const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(
     getPresentFiles(value),
   )
+  const [isImageCorrupt, setIsImageCorrupt] = useState(false)
+  const [showErrorModal, setShowErrorModal] = useState(false)
 
-  const onDrop = (inputFiles) => {
-    setInputFiles(inputFiles)
+  const onDrop = async (selectedImage) => {
+    try {
+      await imageValid(selectedImage[0])
+      setIsImageCorrupt(false)
+
+      try {
+        const compressedImage = await compressImage(selectedImage[0])
+        selectedImage[0] = compressedImage
+      } catch (compressionError) {
+        // eslint-disable-next-line no-console
+        console.error(
+          'Image compression failed, using original image: ',
+          compressionError,
+        )
+      }
+
+      setInputFiles(selectedImage)
+    } catch (validationError) {
+      setIsImageCorrupt(true)
+      setShowErrorModal(true)
+    }
   }
 
   const handleConvertedFileChange = (newFile: IConvertedFileMeta, index) => {
@@ -47,8 +64,7 @@ export const ImageInput = (props: IProps) => {
     nextFiles[index] = newFile
     setConvertedFiles(convertedFiles)
 
-    const value = props.multiple ? convertedFiles : convertedFiles[0]
-    props.onFilesChange(value)
+    props.onFilesChange(convertedFiles[0])
   }
 
   const handleImageDelete = (event: Event) => {
@@ -73,20 +89,25 @@ export const ImageInput = (props: IProps) => {
   const src = setSrc(presentFiles[0])
 
   return (
-    <Box p={0} sx={{ height: '100%' }}>
-      <Dropzone accept="image/*" multiple={multiple} onDrop={onDrop}>
+    <Box p={0} sx={{ height: '100%', overflow: 'visible' }}>
+      <Dropzone
+        accept={{
+          'image/*': ['.jpeg', '.jpg', '.png', '.gif', '.svg', '.webp'],
+        }}
+        multiple={false}
+        onDrop={onDrop}
+      >
         {({ getRootProps, getInputProps, rootRef }) => (
           <ImageInputWrapper
             ref={rootRef}
-            hasUploadedImg={showUploadedImg}
             {...getRootProps()}
+            hasUploadedImg={showUploadedImg}
           >
             <input
               ref={fileInputRef}
               data-testid={dataTestId || 'image-input'}
               {...getInputProps()}
             />
-
             {showUploadedImg && <Image src={src} />}
 
             {!showUploadedImg && (
@@ -95,19 +116,48 @@ export const ImageInput = (props: IProps) => {
                 handleConvertedFileChange={handleConvertedFileChange}
               />
             )}
-
             {!hasImages && (
               <Button small variant="outline" icon="image" type="button">
                 Upload Image
               </Button>
             )}
-
             {hasImages && (
               <DeleteImage onClick={(event) => handleImageDelete(event)} />
             )}
           </ImageInputWrapper>
         )}
       </Dropzone>
+      <Modal
+        width={600}
+        isOpen={showErrorModal}
+        onDidDismiss={() => setShowErrorModal(false)}
+      >
+        {isImageCorrupt && (
+          <Flex
+            mt={[1, 1, 1]}
+            sx={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: '20px',
+            }}
+          >
+            <Text>
+              The uploaded image appears to be corrupted or a type we don't
+              accept.
+            </Text>
+            <Text>
+              Check your image is valid and one of the following formats: jpeg,
+              jpg, png, gif, heic, svg or webp.
+            </Text>
+            <Button
+              sx={{ marginTop: '20px', justifyContent: 'center' }}
+              onClick={() => setShowErrorModal(false)}
+            >
+              Ok
+            </Button>
+          </Flex>
+        )}
+      </Modal>
     </Box>
   )
 }

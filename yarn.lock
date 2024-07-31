@@ -9439,21 +9439,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@uppy/compressor@npm:^1.1.4":
-  version: 1.1.4
-  resolution: "@uppy/compressor@npm:1.1.4"
-  dependencies:
-    "@transloadit/prettier-bytes": ^0.3.4
-    "@uppy/utils": ^5.9.0
-    compressorjs: ^1.2.1
-    preact: ^10.5.13
-    promise-queue: ^2.2.5
-  peerDependencies:
-    "@uppy/core": ^3.11.2
-  checksum: 69ae5efe1ffacd9c990f1660cb92828199b4f5e70af884119b9a1d257f0fa7901fa3e2da0ad0d240943420491ed659977dd1a9f4b5a372aaa5bbf5ae5132be0a
-  languageName: node
-  linkType: hard
-
 "@uppy/core@npm:^3.11.3":
   version: 3.11.3
   resolution: "@uppy/core@npm:3.11.3"
@@ -10970,7 +10955,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"attr-accept@npm:^2.0.0":
+"attr-accept@npm:^2.2.2":
   version: 2.2.2
   resolution: "attr-accept@npm:2.2.2"
   checksum: 496f7249354ab53e522510c1dc8f67a1887382187adde4dc205507d2f014836a247073b05e9d9ea51e2e9c7f71b0d2aa21730af80efa9af2d68303e5f0565c4d
@@ -15993,12 +15978,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-selector@npm:^0.1.12":
-  version: 0.1.19
-  resolution: "file-selector@npm:0.1.19"
+"file-selector@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "file-selector@npm:0.6.0"
   dependencies:
-    tslib: ^2.0.1
-  checksum: 5b105a3ede9139729ada72d6653ae3f4387a7bf2585e8700f9fa53f22457d1f88304fdde9ad7b43b694a5610d67058302257f448a75248fc2225880bca6df5df
+    tslib: ^2.4.0
+  checksum: 7d051b6e5d793f3c6e2ab287ba5e7c2c6a0971bccc9d56e044c8047ba483e18f60fc0b5771c951dc707c0d15f4f36ccb4f1f1aaf385d21ec8f7700dadf8325ba
   languageName: node
   linkType: hard
 
@@ -22808,7 +22793,6 @@ __metadata:
     "@types/react-select": ^2.0.17
     "@typescript-eslint/eslint-plugin": ^7.13.0
     "@typescript-eslint/parser": ^7.13.0
-    "@uppy/compressor": ^1.1.4
     "@uppy/core": ^3.11.3
     "@uppy/dashboard": ^3.8.3
     "@uppy/drag-drop": ^3.1.0
@@ -22820,6 +22804,7 @@ __metadata:
     all-contributors-cli: ^6.20.0
     chai-subset: ^1.6.0
     commitizen: ^4.2.4
+    compressorjs: ^1.2.1
     concurrently: ^6.2.0
     countries-list: ^2.6.1
     cross-env: ^7.0.3
@@ -22864,7 +22849,7 @@ __metadata:
     react-country-flag: ^3.1.0
     react-dev-utils: ^12.0.1
     react-dom: 18.3.1
-    react-dropzone: ^10.1.10
+    react-dropzone: ^14.2.3
     react-final-form: 6.5.3
     react-final-form-arrays: ^3.1.3
     react-foco: ^1.3.1
@@ -24225,13 +24210,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise-queue@npm:^2.2.5":
-  version: 2.2.5
-  resolution: "promise-queue@npm:2.2.5"
-  checksum: 41dc832a0674ea74f5f9bb4812566769d862eb52a19bdf3773045429f07b2bc433af5d939baaf4930191e37202ea31ec57e43a5a2994c101cb729069fe3eac6a
-  languageName: node
-  linkType: hard
-
 "promise-retry@npm:^2.0.1":
   version: 2.0.1
   resolution: "promise-retry@npm:2.0.1"
@@ -24793,16 +24771,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dropzone@npm:^10.1.10":
-  version: 10.2.2
-  resolution: "react-dropzone@npm:10.2.2"
+"react-dropzone@npm:^14.2.3":
+  version: 14.2.3
+  resolution: "react-dropzone@npm:14.2.3"
   dependencies:
-    attr-accept: ^2.0.0
-    file-selector: ^0.1.12
-    prop-types: ^15.7.2
+    attr-accept: ^2.2.2
+    file-selector: ^0.6.0
+    prop-types: ^15.8.1
   peerDependencies:
-    react: ">= 16.8"
-  checksum: af08b78db753dd9c277c64364c153d6cb6d563df3cc4db1731458edcc203cfa41ed3d032c5249822e5eb4d2534232e514d663a025962d08f0e6ea65550411116
+    react: ">= 16.8 || 18.0.0"
+  checksum: 174b744d5ca898cf3d84ec1aeb6cef5211c446697e45dc8ece8287a03d291f8d07253206d5a1247ef156fd385d65e7de666d4d5c2986020b8543b8f2434e8b40
   languageName: node
   linkType: hard
 

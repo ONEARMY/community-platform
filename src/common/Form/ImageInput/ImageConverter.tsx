@@ -6,11 +6,9 @@ import type { IConvertedFileMeta } from 'src/types'
 interface IProps {
   file: File
   onImgConverted: (meta: IConvertedFileMeta) => void
-  onImgClicked: (meta: IConvertedFileMeta) => void
 }
 interface IState {
   convertedFile?: IConvertedFileMeta
-  openLightbox?: boolean
 }
 
 const _generateFileMeta = (c: File) => {
@@ -67,7 +65,6 @@ export const ImageConverter = (props: IProps) => {
         borderRadius: 1,
       }}
       id="preview"
-      onClick={() => props.onImgClicked(convertedFile)}
     />
   )
 }

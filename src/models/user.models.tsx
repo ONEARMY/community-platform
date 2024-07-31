@@ -77,7 +77,7 @@ export interface IUserBadges {
   supporter?: boolean
 }
 
-interface IExternalLink {
+export interface IExternalLink {
   key: string
   url: string
   label: ExternalLinkLabel

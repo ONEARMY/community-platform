@@ -143,112 +143,128 @@ export const UserProfile = () => {
     return errors
   }
 
-  const { formValues, user } = state
+  const coverImages = new Array(4)
+    .fill(null)
+    .map((v, i) => (user?.coverImages[i] ? user?.coverImages[i] : v))
+
+  const links = (
+    user && user?.links?.length > 0 ? user.links : [{} as any]
+  ).map((i) => ({
+    ...i,
+    key: uuid(),
+  }))
+
+  const initialValues = {
+    profileType: user?.profileType || ProfileType.MEMBER,
+    displayName: user?.displayName || null,
+    links,
+    location: user?.location || null,
+    about: user?.about || null,
+    openingHours: user?.openingHours || [{}],
+    workspaceType: user?.workspaceType || null,
+    collectedPlasticTypes: user?.collectedPlasticTypes || null,
+    machineBuilderXp: user?.machineBuilderXp || null,
+    isContactableByPublic:
+      user?.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
+    userImage: user?.userImage || null,
+    coverImages,
+  }
+
   const formId = 'userProfileForm'
 
+  if (!user) return
+
   return (
-    user && (
-      <Form
-        id={formId}
-        onSubmit={async (values) => await saveProfile(values)}
-        initialValues={formValues}
-        validate={validateForm}
-        mutators={{ ...arrayMutators }}
-        validateOnBlur
-        render={({
-          dirty,
-          form,
-          submitFailed,
-          submitting,
-          submitSucceeded,
-          values,
-          handleSubmit,
-          invalid,
-          errors,
-        }) => {
-          const isMember = values.profileType === ProfileType.MEMBER
+    <Form
+      id={formId}
+      onSubmit={async (values) => await saveProfile(values)}
+      initialValues={initialValues}
+      validate={validateForm}
+      mutators={{ ...arrayMutators }}
+      validateOnBlur
+      render={({
+        dirty,
+        submitFailed,
+        submitting,
+        submitSucceeded,
+        values,
+        handleSubmit,
+        invalid,
+        errors,
+      }) => {
+        if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
 
-          return (
-            <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-              <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+        const isMember = values.profileType === ProfileType.MEMBER
 
-              <SettingsFormNotifications
-                errors={errors}
-                notification={notification}
-                submitFailed={submitFailed}
-              />
+        return (
+          <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+            <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
-              <form id={formId} onSubmit={handleSubmit}>
-                <Flex
-                  sx={{ flexDirection: 'column', gap: 2, paddingBottom: 2 }}
-                >
-                  {isModuleSupported(MODULE.MAP) && <FocusSection />}
+            <SettingsFormNotifications
+              errors={errors}
+              notification={notification}
+              submitFailed={submitFailed}
+            />
 
-                  {values.profileType === ProfileType.WORKSPACE && (
-                    <WorkspaceSection />
-                  )}
+            <form id={formId} onSubmit={handleSubmit}>
+              <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+                {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
-                  {values.profileType === ProfileType.COLLECTION_POINT && (
-                    <CollectionSection
-                      required={
-                        values.collectedPlasticTypes
-                          ? values.collectedPlasticTypes.length === 0
-                          : true
-                      }
-                      formValues={values}
-                    />
-                  )}
+                {values.profileType === ProfileType.WORKSPACE && (
+                  <WorkspaceSection />
+                )}
 
-                  {values.profileType === ProfileType.MACHINE_BUILDER && (
-                    <ExpertiseSection
-                      required={
-                        values.machineBuilderXp
-                          ? values.machineBuilderXp.length === 0
-                          : true
-                      }
-                    />
-                  )}
-
-                  <UserInfosSection
+                {values.profileType === ProfileType.COLLECTION_POINT && (
+                  <CollectionSection
+                    required={
+                      values.collectedPlasticTypes
+                        ? values.collectedPlasticTypes.length === 0
+                        : true
+                    }
                     formValues={values}
-                    mutators={form.mutators}
-                    showLocationDropdown={state.showLocationDropdown}
                   />
+                )}
 
-                  {!isMember && (
-                    <FlexSectionContainer>
-                      <PublicContactSection
-                        isContactableByPublic={values.isContactableByPublic}
-                      />
-                    </FlexSectionContainer>
-                  )}
-
-                  <UserImagesSection
-                    isMemberProfile={isMember}
-                    values={values}
+                {values.profileType === ProfileType.MACHINE_BUILDER && (
+                  <ExpertiseSection
+                    required={
+                      values.machineBuilderXp
+                        ? values.machineBuilderXp.length === 0
+                        : true
+                    }
                   />
-                </Flex>
-              </form>
+                )}
 
-              <Button
-                large
-                form={formId}
-                data-cy="save"
-                title={
-                  invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'
-                }
-                onClick={() => window.scrollTo(0, 0)}
-                variant={'primary'}
-                type="submit"
-                disabled={submitting}
-                sx={{ alignSelf: 'flex-start', paddingTop: 4 }}
-              >
-                {buttons.save}
-              </Button>
-            </Flex>
-          )
-        }}
-      />
-    )
+                <UserInfosSection formValues={values} />
+
+                {!isMember && (
+                  <PublicContactSection
+                    isContactableByPublic={values.isContactableByPublic}
+                  />
+                )}
+
+                <UserImagesSection isMemberProfile={isMember} values={values} />
+              </Flex>
+            </form>
+
+            <Button
+              large
+              form={formId}
+              data-cy="save"
+              title={
+                invalid ? `Errors: ${Object.keys(errors || {})}` : 'Submit'
+              }
+              onClick={() => window.scrollTo(0, 0)}
+              variant={'primary'}
+              type="submit"
+              disabled={submitting}
+              sx={{ alignSelf: 'flex-start', paddingTop: 4 }}
+            >
+              {buttons.save}
+            </Button>
+          </Flex>
+        )
+      }}
+    />
   )
 }

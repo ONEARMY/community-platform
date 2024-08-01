@@ -115,7 +115,7 @@ export const UserProfile = () => {
 
   const formId = 'userProfileForm'
 
-  if (!user) return
+  if (!user) return null
 
   return (
     <Form

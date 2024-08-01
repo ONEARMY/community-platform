@@ -52,7 +52,7 @@ export const SettingsNotifications = () => {
     setIsLoading(false)
   }
 
-  if (!user) return
+  if (!user) return null
 
   const initialValues = {
     notification_settings: user.notification_settings || undefined,

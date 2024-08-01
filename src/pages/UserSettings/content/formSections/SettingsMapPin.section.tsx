@@ -163,7 +163,7 @@ export const SettingsMapPinSection = () => {
     init()
   }, [user, notification])
 
-  if (!user) return
+  if (!user) return null
 
   const defaultLocation = {
     latlng: {

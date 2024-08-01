@@ -18,7 +18,7 @@ export const SettingsPage = () => {
   const { userStore } = useCommonStores().stores
 
   const user = userStore.activeUser
-  if (!user) return
+  if (!user) return null
 
   const isMember = user.profileType === ProfileType.MEMBER
   const showImpactTab = !isMember && isPreciousPlastic()

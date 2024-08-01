@@ -81,7 +81,7 @@ export const ImageInput = (props: IProps) => {
           <ImageInputWrapper
             ref={rootRef}
             hasUploadedImg={showUploadedImg}
-            sx={showUploadedImg ? {} : { width: '100%', height: '100%' }}
+            sx={{ width: '100%', height: '100%' }}
             {...getRootProps()}
           >
             <input

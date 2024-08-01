@@ -161,16 +161,14 @@ export const OpeningHoursPicker = (props: IProps) => {
   }
 
   return (
-    <Flex
-      key={index}
-      sx={{
-        gap: '8px',
-        alignItems: 'flex-start',
-        flexWrap: ['wrap', 'wrap', 'nowrap'],
-      }}
-      my={1}
-    >
-      <Flex mb={1} sx={{ gap: '8px' }}>
+    <Flex key={index} sx={{ gap: 6 }}>
+      <Flex
+        sx={{
+          gap: 2,
+          flexDirection: ['column', 'column', 'row'],
+          alignItems: ['stretch', 'stretch', 'flex-end'],
+        }}
+      >
         <Field
           data-cy={`opening-time-day-${index}`}
           name={`${openingHoursValues}.day`}
@@ -179,19 +177,7 @@ export const OpeningHoursPicker = (props: IProps) => {
           validate={required}
           validateFields={[]}
           placeholder="Select day"
-          style={{ marginBottom: 0 }}
         />
-        {index > 0 && (
-          <Button
-            type="button"
-            icon="delete"
-            variant="outline"
-            sx={{ height: '40px', display: ['block', 'block', 'none'] }}
-            onClick={() => toggleDeleteModal()}
-          />
-        )}
-      </Flex>
-      <Flex sx={{ gap: '8px' }}>
         <Field
           data-cy={`opening-time-from-${index}`}
           name={`${openingHoursValues}.openFrom`}
@@ -201,7 +187,6 @@ export const OpeningHoursPicker = (props: IProps) => {
           validate={required}
           validateFields={[]}
           showError={false}
-          style={{ marginBottom: 0 }}
         />
         <Field
           data-cy={`opening-time-to-${index}`}
@@ -212,22 +197,22 @@ export const OpeningHoursPicker = (props: IProps) => {
           validate={required}
           validateFields={[]}
           showError={false}
-          style={{ marginBottom: 0 }}
         />
+        {index > 0 && (
+          <Button
+            icon="delete"
+            variant="outline"
+            data-cy={`delete-opening-time-${index}-desk`}
+            sx={{ height: '40px', alignSelf: 'flex-end' }}
+            showIconOnly={true}
+            onClick={() => toggleDeleteModal()}
+            type="button"
+          >
+            Delete
+          </Button>
+        )}{' '}
       </Flex>
-      {index > 0 && (
-        <Button
-          icon="delete"
-          variant="outline"
-          data-cy={`delete-opening-time-${index}-desk`}
-          sx={{ height: '40px', display: ['none', 'none', 'block'] }}
-          showIconOnly={true}
-          onClick={() => toggleDeleteModal()}
-          type="button"
-        >
-          Delete
-        </Button>
-      )}
+
       <Modal
         onDidDismiss={() => toggleDeleteModal()}
         isOpen={state.showDeleteModal}

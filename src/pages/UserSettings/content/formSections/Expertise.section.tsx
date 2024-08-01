@@ -1,11 +1,6 @@
 import { FieldArray } from 'react-final-form-arrays'
-// TODO: Remove direct usage of Theme
-import { preciousPlasticTheme } from 'oa-themes'
-import { Box, Flex, Heading, Text } from 'theme-ui'
-
-const theme = preciousPlasticTheme.styles
-
 import { fields, headings } from 'src/pages/UserSettings/labels'
+import { Flex, Heading, Text } from 'theme-ui'
 
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { FlexSectionContainer } from './elements'
@@ -17,21 +12,11 @@ interface IProps {
 }
 
 const MACHINE_BUILDER_XP: IMAchineBuilderXp[] = [
-  {
-    label: 'electronics',
-  },
-  {
-    label: 'machining',
-  },
-  {
-    label: 'welding',
-  },
-  {
-    label: 'assembling',
-  },
-  {
-    label: 'mould-making',
-  },
+  { label: 'electronics' },
+  { label: 'machining' },
+  { label: 'welding' },
+  { label: 'assembling' },
+  { label: 'mould-making' },
 ]
 
 export const ExpertiseSection = (props: IProps) => {
@@ -40,16 +25,31 @@ export const ExpertiseSection = (props: IProps) => {
 
   return (
     <FlexSectionContainer>
-      <Flex sx={{ justifyContent: 'space-between' }}>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          gap: 2,
+        }}
+      >
         <Heading as="h2" variant="small">
           {headings.expertise}
         </Heading>
-      </Flex>
-      <Box>
-        <Text mt={4} mb={4}>
-          {`${title} *`}
-        </Text>
-        <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'] }}>
+        <Text variant="quiet">{`${title} *`}</Text>
+        {required && (
+          <Text
+            sx={{
+              color: 'error',
+              fontSize: 0.5,
+              marginLeft: 1,
+              marginRight: 1,
+            }}
+          >
+            {description}
+          </Text>
+        )}
+
+        <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'], gap: 2 }}>
           <FieldArray name="machineBuilderXp">
             {({ fields }) => (
               <>
@@ -85,19 +85,7 @@ export const ExpertiseSection = (props: IProps) => {
             )}
           </FieldArray>
         </Flex>
-        {required && (
-          <Text
-            color={theme.colors.error}
-            sx={{
-              fontSize: 0.5,
-              marginLeft: 1,
-              marginRight: 1,
-            }}
-          >
-            {description}
-          </Text>
-        )}
-      </Box>
+      </Flex>
     </FlexSectionContainer>
   )
 }

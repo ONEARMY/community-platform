@@ -35,7 +35,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
         getUserProfile: mockGetUserProfile,
         updateUserBadge: mockUpdateUserBadge,
         getUserEmail: vi.fn(),
-        user: mockUser,
+        activeUser: mockUser,
         updateStatus: {
           Complete: false,
         },

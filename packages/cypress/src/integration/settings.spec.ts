@@ -44,7 +44,7 @@ describe('[Settings]', () => {
     })
 
     it('[Edit a new profile]', () => {
-      const country = 'AU'
+      const country = 'Brazil'
       const userImage = 'avatar'
       const displayName = 'settings_member_new'
       const description = "I'm a very active member"
@@ -125,17 +125,24 @@ describe('[Settings]', () => {
       cy.get('[data-cy=EditYourProfile]').click()
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=descriptionMember').should('be.visible')
-      cy.contains('No location data currently saved')
+      cy.contains('No map pin currently saved')
       cy.fillSettingMapPin(mapDetails(mapPinDescription))
       cy.get('[data-cy=save-map-pin]').click()
       cy.contains('Map pin saved successfully')
       cy.contains('Your current map pin is here:')
       cy.contains(locationStub.country)
 
+      cy.step('Setting map pin makes location field disappear')
+      cy.get('[data-cy="tab-Profile"]').click()
+      cy.get('[data-cy=location-dropdown]').should('not.exist')
+
       cy.step('Can delete map pin')
+      cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=remove-map-pin]').click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').click()
-      cy.contains('No location data currently saved')
+      cy.contains('No map pin currently saved')
+      cy.get('[data-cy="tab-Profile"]').click()
+      cy.get('[data-cy=location-dropdown]').should('be.visible')
 
       cy.step('Can update email notification preference')
       cy.get('[data-cy="tab-Notifications"]').click()
@@ -286,10 +293,10 @@ describe('[Settings]', () => {
 
       cy.step('Can add map pin')
       cy.get('[data-cy=EditYourProfile]').click()
-      cy.get('[data-cy="tab-Map"]').click()
+      cy.get('[data-cy="link-to-map-setting"]').click()
       cy.get('[data-cy=descriptionSpace').should('be.visible')
       cy.get('[data-cy=WorkspaceMapPinRequiredStars').should('be.visible')
-      cy.contains('No location data currently saved')
+      cy.contains('No map pin currently saved')
       cy.fillSettingMapPin(mapDetails(mapPinDescription))
       cy.get('[data-cy=save-map-pin]').click()
       cy.contains('Map pin saved successfully')

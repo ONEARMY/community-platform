@@ -38,7 +38,7 @@ interface ILocationProps {
 }
 
 const LocationDataTextDisplay = ({ location }: ILocationProps) => {
-  if (!location)
+  if (!location?.latlng)
     return (
       <Text variant="paragraph" data-cy="LocationDataTextDisplay">
         {mapForm.noLocationLabel}
@@ -214,27 +214,30 @@ export const SettingsMapPinSection = () => {
         gap: 4,
       }}
     >
-      <Heading variant="small" id="your-map-pin">
-        {mapPin ? addPinTitle : yourPinTitle}
-      </Heading>
-      {isMember && (
-        <Text variant="quiet" data-cy="descriptionMember">
-          {mapForm.descriptionMember}
-        </Text>
-      )}
-      {!isMember && (
-        <Text variant="quiet" data-cy="descriptionSpace">
-          {mapForm.descriptionSpace}
-          <br />
-          <ExternalLink
-            data-cy="WorkspaceMapPinRequiredStars"
-            href={themeStore?.currentTheme.styles.communityProgramURL}
-            sx={{ textDecoration: 'underline', color: 'currentcolor' }}
-          >
-            {headings.workspace.description}
-          </ExternalLink>
-        </Text>
-      )}
+      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+        <Heading variant="small" id="your-map-pin">
+          {mapPin ? addPinTitle : yourPinTitle}
+        </Heading>
+        {isMember && (
+          <Text variant="quiet" data-cy="descriptionMember">
+            {mapForm.descriptionMember}
+          </Text>
+        )}
+
+        {!isMember && (
+          <Text variant="quiet" data-cy="descriptionSpace">
+            {mapForm.descriptionSpace}
+            <br />
+            <ExternalLink
+              data-cy="WorkspaceMapPinRequiredStars"
+              href={themeStore?.currentTheme.styles.communityProgramURL}
+              sx={{ textDecoration: 'underline', color: 'currentcolor' }}
+            >
+              {headings.workspace.description}
+            </ExternalLink>
+          </Text>
+        )}
+      </Flex>
 
       <MapPinModerationComments mapPin={mapPin} />
 

@@ -17,7 +17,7 @@ const Patreon = () => {
       })
       if (resp.data?.success) {
         logger.debug('Successfully authenticated with Patreon')
-        window.location.replace('/settings')
+        window.location.replace('/settings/account')
         return
       }
       throw new Error(resp.data.error)

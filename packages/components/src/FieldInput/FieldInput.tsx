@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Input, Text } from 'theme-ui'
+import { Flex, Input, Text } from 'theme-ui'
 
 import { CharacterCount } from '../CharacterCount/CharacterCount'
 
@@ -47,8 +47,14 @@ export const FieldInput = ({
   ...rest
 }: Props) => {
   const [curLength, setLength] = useState<number>(input?.value?.length ?? 0)
+
   return (
-    <>
+    <Flex sx={{ flexDirection: 'column', flex: 1 }}>
+      {meta.error && meta.touched && (
+        <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
+          {meta.error}
+        </Text>
+      )}
       <Input
         disabled={disabled}
         variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
@@ -71,11 +77,6 @@ export const FieldInput = ({
           input.onChange(ev)
         }}
       />
-      {meta.error && meta.touched && (
-        <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
-          {meta.error}
-        </Text>
-      )}
       {showCharacterCount && maxLength && (
         <CharacterCount
           currentSize={curLength}
@@ -83,6 +84,6 @@ export const FieldInput = ({
           maxSize={maxLength}
         />
       )}
-    </>
+    </Flex>
   )
 }

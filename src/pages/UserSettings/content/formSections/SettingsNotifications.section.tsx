@@ -26,8 +26,6 @@ export const SettingsNotifications = () => {
 
   const formId = 'Notifications'
 
-  if (!user) return
-
   const onSubmit = async ({ notification_settings }) => {
     setIsLoading(true)
     try {
@@ -54,6 +52,8 @@ export const SettingsNotifications = () => {
     setIsLoading(false)
   }
 
+  if (!user) return
+
   const initialValues = {
     notification_settings: user.notification_settings || undefined,
   }
@@ -66,10 +66,12 @@ export const SettingsNotifications = () => {
         gap: 4,
       }}
     >
-      <Heading as="h2" variant="small">
-        {title}
-      </Heading>
-      <Text variant="quiet">{description}</Text>
+      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+        <Heading as="h2" variant="small">
+          {title}
+        </Heading>
+        <Text variant="quiet">{description}</Text>
+      </Flex>
 
       <Form
         id={formId}

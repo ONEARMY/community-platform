@@ -9,7 +9,7 @@ import PP from 'src/assets/images/plastic-types/pp.svg'
 import PS from 'src/assets/images/plastic-types/ps.svg'
 import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 import { fields, headings } from 'src/pages/UserSettings/labels'
-import { Box, Flex, Grid, Heading, Text } from 'theme-ui'
+import { Flex, Grid, Heading, Text } from 'theme-ui'
 
 import { CustomCheckbox } from './Fields/CustomCheckbox.field'
 import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
@@ -34,52 +34,58 @@ export const CollectionSection = (props: IProps) => {
           {headings.collection}
         </Heading>
       </Flex>
-      <Box>
-        <Flex sx={{ wrap: 'nowrap', alignItems: 'center', width: '100%' }}>
-          <Text mt={4} mb={4}>
-            {`${title} *`}
-          </Text>
+      <Flex sx={{ gap: 4, flexDirection: 'column' }}>
+        <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+          <Text>{`${title} *`}</Text>
+          <FieldArray name="openingHours">
+            {({ fields }) => (
+              <>
+                {fields.map((name, index: number) => (
+                  <OpeningHoursPicker
+                    key={index}
+                    openingHoursValues={name}
+                    index={index}
+                    onDelete={(fieldIndex: number) => {
+                      fields.remove(fieldIndex)
+                    }}
+                  />
+                ))}
+                {fields.length && fields.length < 7 && (
+                  <Button
+                    type="button"
+                    data-cy="add-opening-time"
+                    variant="outline"
+                    onClick={() => {
+                      fields.push({
+                        day: '',
+                        openFrom: '',
+                        openTo: '',
+                      })
+                    }}
+                    sx={{
+                      alignSelf: 'flex-start',
+                    }}
+                  >
+                    {description}
+                  </Button>
+                )}
+              </>
+            )}
+          </FieldArray>
         </Flex>
-        <FieldArray name="openingHours">
-          {({ fields }) => (
-            <>
-              {fields.map((name, index: number) => (
-                <OpeningHoursPicker
-                  key={index}
-                  openingHoursValues={name}
-                  index={index}
-                  onDelete={(fieldIndex: number) => {
-                    fields.remove(fieldIndex)
-                  }}
-                />
-              ))}
-              <Button
-                type="button"
-                data-cy="add-opening-time"
-                my={2}
-                variant="outline"
-                onClick={() => {
-                  fields.push({
-                    day: '',
-                    openFrom: '',
-                    openTo: '',
-                  })
-                }}
-              >
-                {description}
-              </Button>
-            </>
+        <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+          <Text>{`${fields.plastic.title}`} *</Text>
+          {required && (
+            <Text
+              sx={{
+                fontSize: 0.5,
+                color: 'error',
+              }}
+            >
+              {fields.plastic.description}
+            </Text>
           )}
-        </FieldArray>
-        <Box>
-          <Text mt={4} mb={4}>
-            {`${fields.plastic.title}`} *
-          </Text>
-          <Grid
-            columns={['repeat(auto-fill, minmax(100px, 1fr))']}
-            gap={2}
-            sx={{ my: 2 }}
-          >
+          <Grid columns={['repeat(auto-fill, minmax(100px, 1fr))']} gap={2}>
             <FieldArray name="collectedPlasticTypes">
               {({ fields }) => (
                 <>
@@ -118,20 +124,8 @@ export const CollectionSection = (props: IProps) => {
               )}
             </FieldArray>
           </Grid>
-          {required && (
-            <Text
-              sx={{
-                fontSize: 0.5,
-                marginLeft: 1,
-                marginRight: 1,
-                color: 'error',
-              }}
-            >
-              {fields.plastic.description}
-            </Text>
-          )}
-        </Box>
-      </Box>
+        </Flex>
+      </Flex>
     </FlexSectionContainer>
   )
 }

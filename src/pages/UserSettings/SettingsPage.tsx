@@ -3,6 +3,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isPreciousPlastic } from 'src/config/config'
 import { isModuleSupported, MODULE } from 'src/modules'
 import { ProfileType } from 'src/modules/profile/types'
+import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Box, Flex, Text } from 'theme-ui'
 
 import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
@@ -22,11 +23,15 @@ export const SettingsPage = () => {
   const isMember = user.profileType === ProfileType.MEMBER
   const showImpactTab = !isMember && isPreciousPlastic()
   const showMapTab = isModuleSupported(MODULE.MAP)
+  const incompleteProfile = !isProfileComplete(user || undefined)
 
   const profileTab = {
     title: 'Profile',
-    header: (
-      <Flex sx={{ gap: 2, flexDirection: 'column' }}>
+    header: incompleteProfile && (
+      <Flex
+        sx={{ gap: 2, flexDirection: 'column' }}
+        data-cy="CompleteProfileHeader"
+      >
         <Text as="h3">✏️ Complete your profile</Text>
         <Text>
           In order to post comments or create content, we'd like you to share

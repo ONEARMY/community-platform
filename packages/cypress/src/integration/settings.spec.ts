@@ -70,6 +70,7 @@ describe('[Settings]', () => {
       cy.step("Can't save without required fields being populated")
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
+      cy.get('[data-cy=CompleteProfileHeader]').should('be.visible')
 
       cy.step('Can set the required fields')
       cy.setSettingBasicUserInfo({
@@ -101,8 +102,9 @@ describe('[Settings]', () => {
 
       cy.saveSettingsForm()
 
-      cy.step('Incomplete profile banner no longer visible')
+      cy.step('Incomplete profile prompts no longer visible')
       cy.get('[data-cy=incompleteProfileBanner]').should('not.exist')
+      cy.get('[data-cy=CompleteProfileHeader]').should('not.exist')
       cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
 
       cy.step('User image shown in header')
@@ -251,6 +253,7 @@ describe('[Settings]', () => {
       cy.step('Go to User Settings')
       cy.visit('/settings')
       cy.setSettingFocus(profileType)
+      cy.get('[data-cy=CompleteProfileHeader]').should('be.visible')
 
       cy.step("Can't save without required fields being populated")
       cy.get('[data-cy=save]').click()
@@ -275,6 +278,7 @@ describe('[Settings]', () => {
 
       cy.setSettingPublicContact()
       cy.saveSettingsForm()
+      cy.get('[data-cy=CompleteProfileHeader]').should('not.exist')
 
       cy.step('Updated settings display on main profile tab')
       cy.visit(`u/${user.username}`)

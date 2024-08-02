@@ -2,25 +2,39 @@ import { valuesAreDeepEqual } from '../Utils'
 
 import type { IUserDB } from '../models'
 
-export const hasKeyDetailsChanged = (prevUser: IUserDB, user: IUserDB) => {
-  const detailsChanged = [
+export const hasDetailsChanged = (
+  prevUser: IUserDB,
+  user: IUserDB,
+): boolean[] => {
+  return [
     prevUser.displayName !== user.displayName,
     prevUser.location?.countryCode !== user.location?.countryCode,
-    hasCoverImagesChanged(prevUser, user),
+    hasUserImageChanged(prevUser, user),
     prevUser.badges?.verified !== user.badges?.verified,
     prevUser.badges?.supporter !== user.badges?.supporter,
   ]
+}
+
+export const hasKeyDetailsChanged = (
+  prevUser: IUserDB,
+  user: IUserDB,
+): boolean => {
+  const detailsChanged = hasDetailsChanged(prevUser, user)
   return !!detailsChanged.find((detail) => detail === true)
 }
 
-export const hasCoverImagesChanged = (prevUser: IUserDB, user: IUserDB) => {
-  if (!prevUser.coverImages && !user.coverImages) return false
+export const hasUserImageChanged = (
+  prevUser: IUserDB,
+  user: IUserDB,
+): boolean => {
+  if (!prevUser.userImage && !user.userImage) return false
 
-  if (prevUser.coverImages && user.coverImages) {
-    if (!prevUser.coverImages[0] && !user.coverImages[0]) return false
-
-    return !valuesAreDeepEqual(prevUser.coverImages, user.coverImages)
+  if (prevUser.userImage && user.userImage) {
+    return !valuesAreDeepEqual(prevUser.userImage, user.userImage)
   }
+
+  if (prevUser.userImage && !user.userImage) return true
+  if (!prevUser.userImage && user.userImage) return true
 
   return false
 }

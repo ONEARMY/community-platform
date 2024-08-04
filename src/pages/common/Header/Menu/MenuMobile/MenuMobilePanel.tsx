@@ -1,5 +1,4 @@
 import React from 'react'
-import { AuthWrapper } from 'src/common/AuthWrapper'
 import { getSupportedModules } from 'src/modules'
 import MenuMobileLink from 'src/pages/common/Header/Menu/MenuMobile/MenuMobileLink'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
@@ -27,22 +26,13 @@ const MenuMobilePanel = () => {
             '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
         }}
       >
-        {getAvailablePageList(getSupportedModules()).map((page) => {
-          const link = (
-            <MenuMobileLink
-              path={page.path}
-              content={page.title}
-              key={page.path}
-            />
-          )
-          return page.requiredRole ? (
-            <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
-              {link}
-            </AuthWrapper>
-          ) : (
-            link
-          )
-        })}
+        {getAvailablePageList(getSupportedModules()).map((page) => (
+          <MenuMobileLink
+            path={page.path}
+            content={page.title}
+            key={page.path}
+          />
+        ))}
         <Profile isMobile={true} />
       </Flex>
     </Box>

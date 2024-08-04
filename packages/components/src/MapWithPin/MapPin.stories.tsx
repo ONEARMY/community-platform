@@ -1,4 +1,4 @@
-import { MapPin } from './MapPin'
+import { MapPin } from './MapPin.client'
 
 import type { Meta, StoryFn } from '@storybook/react'
 

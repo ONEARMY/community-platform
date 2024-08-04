@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react'
+import { vitePlugin as remix } from '@remix-run/dev'
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 /// <reference types="vitest" />
@@ -40,11 +40,12 @@ export default defineConfig({
     global: 'globalThis',
   },
   plugins: [
-    react({
-      babel: {
-        parserOpts: {
-          plugins: ['decorators-legacy'],
-        },
+    remix({
+      appDirectory: './src',
+      future: {
+        v3_fetcherPersist: true,
+        v3_relativeSplatPath: true,
+        v3_throwAbortReason: true,
       },
     }),
     // TODO - confirm if required (given manual resolutions below)
@@ -62,6 +63,9 @@ export default defineConfig({
     open: '/',
     port: 3000,
     host: 'localhost',
+  },
+  ssr: {
+    noExternal: ['remix-utils'],
   },
   resolve: {
     alias: {

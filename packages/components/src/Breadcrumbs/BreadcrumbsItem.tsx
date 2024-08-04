@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@remix-run/react'
 import { Box, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'

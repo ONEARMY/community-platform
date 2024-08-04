@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes } from '@remix-run/react'
 import { UserRole } from 'oa-shared'
 
 import { AuthRoute } from '../common/AuthRoute'

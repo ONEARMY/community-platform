@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '@remix-run/react'
 import { SiteFooter } from 'oa-components'
 
 const isFooterVisible = (path) => {
@@ -11,7 +11,7 @@ const isFooterVisible = (path) => {
 const GlobalSiteFooter = () => {
   const location = useLocation()
   const [showFooter, setShowFooter] = useState(
-    isFooterVisible(window.location.pathname),
+    isFooterVisible(location.pathname),
   )
 
   useEffect(

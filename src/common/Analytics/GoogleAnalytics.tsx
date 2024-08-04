@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import ReactGA from 'react-ga4'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '@remix-run/react'
 import { GA_TRACKING_ID } from 'src/config/config'
 
 export const GoogleAnalytics = () => {

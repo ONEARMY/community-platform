@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@remix-run/react'
 import Main from 'src/pages/common/Layout/Main'
 import { Flex, Image, Text } from 'theme-ui'
 

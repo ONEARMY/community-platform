@@ -1,5 +1,5 @@
 import { act } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '@remix-run/react'
 import { render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -7,8 +7,8 @@ import { ScrollToTop } from './ScrollToTop'
 
 import type { Mock } from 'vitest'
 
-vi.mock('react-router-dom', async () => ({
-  ...(await vi.importActual('react-router-dom')),
+vi.mock('@remix-run/react', async () => ({
+  ...(await vi.importActual('@remix-run/react')),
   useLocation: vi.fn(),
 }))
 

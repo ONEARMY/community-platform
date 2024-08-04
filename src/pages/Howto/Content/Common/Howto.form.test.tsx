@@ -1,12 +1,8 @@
 import '@testing-library/jest-dom/vitest'
 
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'

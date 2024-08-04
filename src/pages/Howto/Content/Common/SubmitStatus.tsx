@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, Icon, Modal } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'

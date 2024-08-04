@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '@remix-run/react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import ExternalEmbed from 'src/pages/Academy/ExternalEmbed/ExternalEmbed'
 

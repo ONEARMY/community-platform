@@ -1,3 +1,4 @@
+import React from 'react'
 import { IMPACT_YEARS } from 'src/pages/User/impact/constants'
 import { fields } from 'src/pages/UserSettings/labels'
 import { Box, Heading, Text } from 'theme-ui'

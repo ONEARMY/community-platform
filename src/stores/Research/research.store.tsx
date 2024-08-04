@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import { cloneDeep } from 'lodash'
+import lodash from 'lodash'
 import {
   action,
   computed,
@@ -29,6 +29,8 @@ import type { IConvertedFileMeta } from 'src/types'
 import type { IResearch, IResearchDB } from '../../models/research.models'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
+
+const { cloneDeep } = lodash
 
 const COLLECTION_NAME = 'research'
 

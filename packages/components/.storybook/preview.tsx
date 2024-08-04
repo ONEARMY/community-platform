@@ -10,13 +10,8 @@ import {
   projectKampTheme,
   fixingFashionTheme,
 } from 'oa-themes'
-
-import {
-  Route,
-  RouterProvider,
-  createMemoryRouter,
-  createRoutesFromElements,
-} from 'react-router-dom'
+import { Route, createRoutesFromElements } from '@remix-run/react'
+import { RouterProvider, createMemoryRouter } from 'react-router-dom'
 
 const themes = {
   pp: preciousPlasticTheme.styles,

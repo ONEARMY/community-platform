@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Loader } from 'oa-components'
 import { useResearchStore } from 'src/stores/Research/research.store'

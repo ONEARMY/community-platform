@@ -1,12 +1,8 @@
 import '@testing-library/jest-dom/vitest'
 
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { IModerationStatus } from 'oa-shared'
@@ -17,7 +13,7 @@ import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { describe, expect, it, vi } from 'vitest'
 
 import { MapPinServiceContext } from './map.service'
-import Maps from './Maps'
+import Maps from './Maps.client'
 
 import type { IMapPinService } from './map.service'
 

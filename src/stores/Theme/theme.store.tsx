@@ -19,7 +19,8 @@ const themeMap = {
 export class ThemeStore {
   currentTheme: PlatformTheme =
     themeMap[
-      localStorage.getItem('platformTheme') ||
+      (typeof localStorage !== 'undefined' &&
+        localStorage.getItem('platformTheme')) ||
         getConfigurationOption('REACT_APP_PLATFORM_THEME', 'precious-plastic')
     ]
 

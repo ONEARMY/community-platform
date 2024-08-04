@@ -18,10 +18,6 @@ describe('[Common]', () => {
   it('[Page Navigation]', () => {
     cy.visit('/how-to')
 
-    cy.step('Go to Map page')
-    cy.get('[data-cy=page-link]').contains('Map').click()
-    cy.url().should('include', '/map')
-
     cy.step('Go to Academy page')
     cy.get('[data-cy=page-link]').contains('Academy').click()
     cy.url().should('include', '/academy')
@@ -29,6 +25,10 @@ describe('[Common]', () => {
     cy.step('Go to How-to page')
     cy.get('[data-cy=page-link]').contains('How-to').click()
     cy.url().should('include', '/how-to')
+
+    cy.step('Go to Map page')
+    cy.get('[data-cy=page-link]').contains('Map').click()
+    cy.url().should('include', '/map')
   })
 
   describe('[User Menu]', () => {
@@ -59,10 +59,12 @@ describe('[Common]', () => {
       cy.url().should('include', `/u/${username}`)
 
       cy.step('Go to Settings')
+      cy.toggleUserMenuOn()
       cy.clickMenuItem(UserMenuItem.Settings)
       cy.url().should('include', 'settings')
 
       cy.step('Logout the session')
+      cy.toggleUserMenuOn()
       cy.clickMenuItem(UserMenuItem.LogOut)
       cy.get('[data-cy=login]', { timeout: 20000 }).should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')

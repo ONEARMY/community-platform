@@ -1,13 +1,9 @@
 import '@testing-library/jest-dom/vitest'
 
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
+import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { ResearchUpdateStatus, UserRole } from 'oa-shared'

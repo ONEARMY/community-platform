@@ -1,5 +1,5 @@
 import { Form } from 'react-final-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@remix-run/react'
 import { Button, ElWithBeforeIcon } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'

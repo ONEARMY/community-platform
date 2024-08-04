@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
-import { countries } from 'countries-list'
+import countriesList from 'countries-list'
 import { Button, FieldInput } from 'oa-components'
 import { SelectField } from 'src/common/Form/Select.field'
 import { ProfileType } from 'src/modules/profile/types'
@@ -64,10 +64,12 @@ export const UserInfosSection = (props: IProps) => {
               <Field data-cy="location-dropdown" name="country">
                 {(field) => (
                   <SelectField
-                    options={Object.keys(countries).map((country) => ({
-                      label: countries[country].name,
-                      value: country,
-                    }))}
+                    options={Object.keys(countriesList.countries).map(
+                      (country) => ({
+                        label: countriesList.countries[country].name,
+                        value: country,
+                      }),
+                    )}
                     placeholder="Country"
                     {...field}
                   />

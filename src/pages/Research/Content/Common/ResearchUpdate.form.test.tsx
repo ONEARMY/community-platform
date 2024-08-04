@@ -1,12 +1,8 @@
 import '@testing-library/jest-dom/vitest'
 
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { createRoutesFromElements, Route } from '@remix-run/react'
 import { render } from '@testing-library/react'
 import { FactoryResearchItemUpdate } from 'src/test/factories/ResearchItem'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'

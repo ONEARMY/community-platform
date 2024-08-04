@@ -13,7 +13,7 @@ import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { Mock } from 'vitest'
 
 const mockedUsedNavigate = vi.fn()
-vi.mock('react-router-dom', () => ({
+vi.mock('@remix-run/react', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
 

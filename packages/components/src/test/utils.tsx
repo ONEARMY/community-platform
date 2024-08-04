@@ -1,10 +1,6 @@
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { createRoutesFromElements, Route } from '@remix-run/react'
 import { render as testLibReact } from '@testing-library/react'
 import { preciousPlasticTheme } from 'oa-themes'
 

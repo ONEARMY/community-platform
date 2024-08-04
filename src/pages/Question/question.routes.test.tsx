@@ -1,26 +1,20 @@
 import '@testing-library/jest-dom/vitest'
 
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
+import { createRemixStub } from '@remix-run/testing'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Provider } from 'mobx-react'
 import { UserRole } from 'oa-shared'
 import { questionService } from 'src/pages/Question/question.service'
+import Index from 'src/routes/questions/_index'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 import { FactoryDiscussion } from 'src/test/factories/Discussion'
 import { FactoryQuestionItem } from 'src/test/factories/Question'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-
-import { questionRouteElements } from './question.routes'
 
 import type { QuestionStore } from 'src/stores/Question/question.store'
 import type { Mock } from 'vitest'
@@ -70,8 +64,8 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 }))
 
 const mockedUsedNavigate = vi.fn()
-vi.mock('react-router-dom', async () => ({
-  ...((await vi.importActual('react-router-dom')) as any),
+vi.mock('@remix-run/react', async () => ({
+  ...((await vi.importActual('@remix-run/react')) as any),
   useNavigate: () => mockedUsedNavigate,
 }))
 
@@ -448,10 +442,13 @@ describe('question.routes', () => {
 }, 15000)
 
 const renderFn = (url: string) => {
-  const router = createMemoryRouter(
-    createRoutesFromElements(
-      <Route path="/questions">{questionRouteElements}</Route>,
-    ),
+  const RemixStub = createRemixStub(
+    [
+      {
+        path: '/questions',
+        Component: Index,
+      },
+    ],
     {
       initialEntries: [url],
     },
@@ -464,7 +461,7 @@ const renderFn = (url: string) => {
       tagsStore={{}}
     >
       <ThemeProvider theme={Theme}>
-        <RouterProvider router={router} />
+        <RemixStub />
       </ThemeProvider>
     </Provider>,
   )

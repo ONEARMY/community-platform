@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, FieldInput, HeroBanner, TextNotification } from 'oa-components'
 import { getFriendlyMessage } from 'oa-shared'

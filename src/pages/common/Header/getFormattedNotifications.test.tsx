@@ -1,11 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router-dom'
+import { createRoutesFromElements, Route } from '@remix-run/react'
 import { render } from '@testing-library/react'
 import { NotificationTypes } from 'oa-shared'
 import { FactoryNotification } from 'src/test/factories/Notification'

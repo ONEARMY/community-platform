@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { BlockedRoute } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'

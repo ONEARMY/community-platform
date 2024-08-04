@@ -1,6 +1,7 @@
 import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react-lite'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Alert, Flex } from 'theme-ui'
 
 /**
@@ -9,13 +10,9 @@ import { Alert, Flex } from 'theme-ui'
 export const AlertIncompleteProfile = observer(() => {
   const { userStore } = useCommonStores().stores
   const activeUser = userStore.activeUser
-  if (!activeUser) return null
-  const isProfileFilled =
-    activeUser.about &&
-    activeUser.displayName &&
-    activeUser.coverImages.length !== 0 &&
-    activeUser.links?.length !== 0
-  if (isProfileFilled) return null
+
+  if (!activeUser || isProfileComplete(activeUser)) return null
+
   return (
     <Link to="/settings">
       <Flex data-cy="incompleteProfileBanner">
@@ -31,7 +28,7 @@ export const AlertIncompleteProfile = observer(() => {
             fontWeight: 'normal',
           }}
         >
-          Fill in your profile details before posting
+          Please fill in your profile details before posting
         </Alert>
       </Flex>
     </Link>

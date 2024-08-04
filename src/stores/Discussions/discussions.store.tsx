@@ -4,6 +4,7 @@ import lodash from 'lodash'
 import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
@@ -74,11 +75,11 @@ export class DiscussionStore extends ModuleStore {
       contributorIds: [],
     }
 
-    const dbRef = await this.db
+    const dbRef = this.db
       .collection<IDiscussion>(COLLECTION_NAME)
       .doc(newDiscussion._id)
 
-    return this._updateDiscussion(dbRef, newDiscussion)
+    return await this._updateDiscussion(dbRef, newDiscussion)
   }
 
   public async addComment(
@@ -117,7 +118,7 @@ export class DiscussionStore extends ModuleStore {
 
         currentDiscussion.comments.push(newComment)
         currentDiscussion.contributorIds = this._addContributorId(
-          currentDiscussion,
+          currentDiscussion.contributorIds || [],
           newComment,
         )
 
@@ -196,6 +197,10 @@ export class DiscussionStore extends ModuleStore {
             (comment) => comment._id === commentId,
           )
 
+          if (!targetComment) {
+            throw new Error('Cannot find comment')
+          }
+
           if (targetComment?._creatorId !== user._id && !hasAdminRights(user)) {
             logger.error('Comment can not be deleted by user', { user })
             throw new Error('Comment not editable by user')
@@ -208,8 +213,9 @@ export class DiscussionStore extends ModuleStore {
           )
 
           currentDiscussion.contributorIds = this._removeContributorId(
-            discussion,
-            targetComment?._creatorId,
+            discussion.comments,
+            discussion.contributorIds || [],
+            targetComment._creatorId,
           )
 
           return this._updateDiscussion(dbRef, currentDiscussion)
@@ -367,20 +373,33 @@ export class DiscussionStore extends ModuleStore {
     })
   }
 
-  private _addContributorId({ contributorIds }, comment) {
+  private _addContributorId(contributorIds: string[], comment: IComment) {
+    if (contributorIds.length === 0) {
+      return [comment._creatorId]
+    }
+
     const isIdAlreadyPresent = !contributorIds.find(
       (id) => id === comment._creatorId,
     )
-    if (!isIdAlreadyPresent) return contributorIds
+    if (!isIdAlreadyPresent) {
+      return contributorIds
+    }
 
     return [...contributorIds, comment._creatorId]
   }
 
-  private _removeContributorId({ comments, contributorIds }, _creatorId) {
+  private _removeContributorId(
+    comments: IComment[],
+    contributorIds: string[],
+    _creatorId: string,
+  ) {
     const isOtherUserCommentPresent = !comments.find(
       (comment) => comment._creatorId === _creatorId,
     )
-    if (isOtherUserCommentPresent) return contributorIds
+
+    if (isOtherUserCommentPresent) {
+      return contributorIds
+    }
 
     return contributorIds.filter((id) => id !== _creatorId)
   }
@@ -402,12 +421,8 @@ export class DiscussionStore extends ModuleStore {
   }
 
   private _getUserAvatar(user: IUserPPDB) {
-    if (
-      user.coverImages &&
-      user.coverImages[0] &&
-      user.coverImages[0].downloadUrl
-    ) {
-      return user.coverImages[0].downloadUrl
+    if (user.userImage && user.userImage.downloadUrl) {
+      return cdnImageUrl(user.userImage.downloadUrl, { width: 100 })
     }
     return null
   }

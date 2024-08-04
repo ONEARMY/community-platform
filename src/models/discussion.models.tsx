@@ -20,7 +20,7 @@ export type IComment = {
 export type IDiscussion = {
   _id: string
   comments: IComment[]
-  contributorIds: string[]
+  contributorIds?: string[]
   primaryContentId?: string | undefined
   sourceId: string
   sourceType: 'howto' | 'question' | 'researchUpdate'

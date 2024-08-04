@@ -239,6 +239,14 @@ export class UserStore extends ModuleStore {
       updatedUserProfile.coverImages = processedImages
     }
 
+    if (values.userImage) {
+      updatedUserProfile.userImage = await this.uploadFileToCollection(
+        values.userImage,
+        COLLECTION_NAME,
+        values._id,
+      )
+    }
+
     // update on db and update locally (if targeting self as user)
     await this._updateUserRequest(updatedUserProfile._id, updatedUserProfile)
 
@@ -262,6 +270,22 @@ export class UserStore extends ModuleStore {
     await this._updateUserRequest(_id, {
       location: fullLocationData,
       mapPinDescription,
+    })
+    await this.refreshActiveUserDetails()
+
+    return this.activeUser
+  }
+
+  public async updateUserNotificationSettings(user: Partial<IUserPPDB>) {
+    const { _id, notification_settings } = user
+
+    if (!_id) throw new Error('User not found')
+    if (!notification_settings) {
+      throw new Error('notification_settings not found')
+    }
+
+    await this._updateUserRequest(_id, {
+      notification_settings,
     })
     await this.refreshActiveUserDetails()
 

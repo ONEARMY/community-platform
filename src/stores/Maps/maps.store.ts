@@ -213,6 +213,16 @@ export class MapsStore extends ModuleStore {
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).set(pin)
   }
 
+  public async deleteUserPin(user: IUserPP) {
+    const pin = await this.getPin(user.userName, 'server')
+
+    logger.debug('marking user pin deleted', pin)
+
+    await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).update({
+      _deleted: true,
+    })
+  }
+
   // return subset of profile info used when displaying map pins
   private async getUserProfilePin(username: string): Promise<IMapPinDetail> {
     const u = await this.userStore.getUserProfile(username)

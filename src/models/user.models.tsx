@@ -35,6 +35,7 @@ export interface IUser {
   badges?: IUserBadges
   // images will be in different formats if they are pending upload vs pulled from db
   coverImages: IUploadedFileMeta[]
+  userImage?: IUploadedFileMeta
   links: IExternalLink[]
   userRoles?: UserRole[]
   about?: string | null
@@ -76,7 +77,7 @@ export interface IUserBadges {
   supporter?: boolean
 }
 
-interface IExternalLink {
+export interface IExternalLink {
   key: string
   url: string
   label: ExternalLinkLabel

@@ -22,6 +22,7 @@ export const buttons = {
     type: 'type',
   },
   map: 'Add a map pin',
+  notifications: 'Update notifications',
   editPin: 'Save map pin',
   removePin: 'Remove map pin',
   save: 'Save profile',
@@ -47,8 +48,13 @@ export const fields: ILabels = {
   },
   coverImages: {
     description:
-      'The cover images are shown in your profile and helps us evaluate your account. Make sure the first image shows your space. Best size is 1920x1080.',
-    title: 'Add image',
+      "They're shown at the top your profile and helps us evaluate your account. Make sure the first image shows your space. Best size is 1920x1080.",
+    title: 'Add profile cover image(s)',
+  },
+  userImage: {
+    description:
+      'Visible on your profile and comments, best to upload as a square image.',
+    title: 'Add an avatar',
   },
   deleteAccount: {
     description: 'Please reach out to support.',
@@ -62,7 +68,7 @@ export const fields: ILabels = {
   },
   emailNotifications: {
     description:
-      "We send an email with all the notifications you've missed. Select how often you want to receive this",
+      "We can send you emails with all the notifications you've missed.",
     title: 'Email notifications',
   },
   expertise: {
@@ -81,8 +87,6 @@ export const fields: ILabels = {
   location: {
     error: 'Please select your location',
     title: 'Your location',
-    description:
-      "Map pins undergo moderator's approval which might take several days.",
   },
   mapPinDescription: {
     placeholder: `Short description of your pin (max ${MAX_PIN_LENGTH} characters)`,
@@ -139,6 +143,7 @@ export const headings = {
   editProfile: 'Edit profile',
   expertise: 'Expertise',
   focus: 'Focus',
+  images: 'Images',
   infos: 'Infos',
   map: {
     description:
@@ -155,9 +160,18 @@ export const headings = {
   },
 }
 
+export const notificationForm = {
+  loading: 'Loading your notification setting',
+  succesfulSave: 'Notification setting saved successfully - whoop',
+}
+
 export const mapForm = {
   confirmDeletePin:
     'If you delete your location now, adding a new map pin in the future might need approving.',
+  descriptionMember:
+    "Add yourself to the map with a 'want to get started' pin so people can find you, reach out and collaborate. Make sure to add some contact details to your profile!",
+  descriptionSpace:
+    "Map pins undergo moderator's approval which might take several days.",
   loading: 'Loading your map pin',
   locationLabel: 'Your current map pin is here:',
   needsChanges:

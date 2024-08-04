@@ -13,6 +13,12 @@ export const initErrorHandler = () => {
     return
   }
 
+  // To handle when hosting deletes the assets from previous deployments
+  // https://vitejs.dev/guide/build#load-error-handling
+  window.addEventListener('vite:preloadError', () => {
+    window.location.reload()
+  })
+
   // please check https://docs.sentry.io/error-reporting/configuration/?platform=javascript for options
   Sentry.init(SENTRY_CONFIG)
 }

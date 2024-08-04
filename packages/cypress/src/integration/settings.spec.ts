@@ -45,7 +45,7 @@ describe('[Settings]', () => {
 
     it('[Edit a new profile]', () => {
       const country = 'AU'
-      const coverImage = 'profile-cover-1'
+      const userImage = 'avatar'
       const displayName = 'settings_member_new'
       const description = "I'm a very active member"
       const mapPinDescription = 'Fun, vibrant and full of amazing people'
@@ -62,6 +62,9 @@ describe('[Settings]', () => {
       cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
       cy.get('[data-cy=incompleteProfileBanner]').click()
 
+      cy.step('Member profile badge shown in header by default')
+      cy.get(`[data-cy=MemberBadge-${profileType}]`)
+
       cy.setSettingFocus(profileType)
 
       cy.step("Can't save without required fields being populated")
@@ -73,8 +76,11 @@ describe('[Settings]', () => {
         username: displayName,
         country,
         description,
-        coverImage: `images/${coverImage}.jpg`,
       })
+
+      cy.step('Can add avatar only')
+      cy.setSettingImage(userImage, 'userImage')
+      cy.get('[data-cy=coverImages]').should('not.exist')
 
       cy.setSettingAddContactLink({
         index: 0,
@@ -99,6 +105,11 @@ describe('[Settings]', () => {
       cy.get('[data-cy=incompleteProfileBanner]').should('not.exist')
       cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
 
+      cy.step('User image shown in header')
+      cy.get('[data-cy="header-avatar"]')
+        .should('have.attr', 'src')
+        .and('include', userImage)
+
       cy.step('Updated settings display on profile')
       cy.visit(`u/${user.username}`)
       cy.contains(user.username)
@@ -107,13 +118,13 @@ describe('[Settings]', () => {
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
       cy.get('[data-cy="profile-avatar"]')
         .should('have.attr', 'src')
-        .and('include', coverImage)
+        .and('include', userImage)
       cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
 
       cy.step('Can add map pin')
       cy.get('[data-cy=EditYourProfile]').click()
       cy.get('[data-cy="tab-Map"]').click()
-      cy.get('[data-cy=WorkspaceMapPinRequiredStars').should('not.exist')
+      cy.get('[data-cy=descriptionMember').should('be.visible')
       cy.contains('No location data currently saved')
       cy.fillSettingMapPin(mapDetails(mapPinDescription))
       cy.get('[data-cy=save-map-pin]').click()
@@ -125,12 +136,21 @@ describe('[Settings]', () => {
       cy.get('[data-cy=remove-map-pin]').click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').click()
       cy.contains('No location data currently saved')
+
+      cy.step('Can update email notification preference')
+      cy.get('[data-cy="tab-Notifications"]').click()
+      cy.get('.data-cy__single-value').last().should('have.text', 'Weekly')
+      cy.selectTag('Daily', '[data-cy=NotificationSettingsSelect]')
+      cy.get('[data-cy=save-notification-settings]').click()
+      cy.contains('Notification setting saved successfully')
+      cy.get('.data-cy__single-value').last().should('have.text', 'Daily')
     })
   })
 
   describe('[Focus Workplace]', () => {
     it('[Editing a new Profile]', () => {
       const coverImage = 'profile-cover-1-edited'
+      const userImage = 'avatar'
       const displayName = 'settings_workplace_new'
       const description = 'We have some space to run a workplace'
       const profileType = 'workspace'
@@ -159,8 +179,11 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         username: displayName,
         description,
-        coverImage: `images/${coverImage}.jpg`,
       })
+
+      cy.step('Can add avatar and cover image')
+      cy.setSettingImage(userImage, 'userImage')
+      cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.setSettingAddContactLink({
         index: 0,
@@ -175,6 +198,9 @@ describe('[Settings]', () => {
       cy.contains(displayName)
       cy.contains(description)
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
+      cy.get('[data-cy="userImage"]')
+        .should('have.attr', 'src')
+        .and('include', userImage)
       cy.get('[data-cy="active-image"]')
         .should('have.attr', 'src')
         .and('include', coverImage)
@@ -227,8 +253,8 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         username: displayName,
         description,
-        coverImage: `images/${coverImage}.png`,
       })
+      cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.step('Choose Expertise')
       cy.get(`[data-cy=${machineBuilderXp[0]}]`).click()
@@ -261,6 +287,7 @@ describe('[Settings]', () => {
       cy.step('Can add map pin')
       cy.get('[data-cy=EditYourProfile]').click()
       cy.get('[data-cy="tab-Map"]').click()
+      cy.get('[data-cy=descriptionSpace').should('be.visible')
       cy.get('[data-cy=WorkspaceMapPinRequiredStars').should('be.visible')
       cy.contains('No location data currently saved')
       cy.fillSettingMapPin(mapDetails(mapPinDescription))
@@ -290,8 +317,8 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         username: displayName,
         description,
-        coverImage: `images/${coverImage}.jpg`,
       })
+      cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.setSettingAddContactLink({
         index: 0,
@@ -369,8 +396,8 @@ describe('[Settings]', () => {
       cy.setSettingBasicUserInfo({
         username: displayName,
         description,
-        coverImage: `images/${coverImage}.jpg`,
       })
+      cy.setSettingImage(coverImage, 'coverImages-0')
 
       cy.setSettingAddContactLink({
         index: 0,

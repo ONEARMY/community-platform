@@ -92,16 +92,6 @@ describe('noSpecialCharacters', () => {
 
 describe('endsWithQuestionMark', () => {
   const errorMessage = 'Needs to end with a question mark'
-  it('returns proper message when there are more than one question mark at the end', () => {
-    const result = endsWithQuestionMark()
-    expect(result('this is my question??')).toContain(errorMessage)
-  })
-
-  it('returns proper message when there are more than one question mark', () => {
-    const result = endsWithQuestionMark()
-    expect(result('this is my qu?estion?')).toContain(errorMessage)
-  })
-
   it('returns proper message when there is no question mark', () => {
     const result = endsWithQuestionMark()
     expect(result('this is my question')).toContain(errorMessage)

@@ -81,7 +81,7 @@
     "@remix-run/express": "^2.10.3",
     "@remix-run/node": "^2.10.3",
     "@remix-run/react": "^2.10.3",
-    "@sentry/react": "^6.15.0",
+    "@sentry/react": "7.56.0",
     "@uppy/compressor": "^1.1.4",
     "@uppy/core": "^3.11.3",
     "@uppy/dashboard": "^3.8.3",

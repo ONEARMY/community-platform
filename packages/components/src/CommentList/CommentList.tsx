@@ -20,7 +20,6 @@ interface IPropsShared {
   isReplies: boolean
   maxLength: number
   onSubmitReply?: (_id: string, reply: string) => Promise<void>
-  showAvatar: boolean
 }
 
 export interface IPropsCommentContainer extends IPropsShared {
@@ -49,7 +48,6 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
     isReplies,
     maxLength,
     onSubmitReply,
-    showAvatar,
   } = props
   const { _id, _deleted, creatorName, replies } = comment
 
@@ -108,7 +106,6 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         isReply={isReplies ? true : false}
-        showAvatar={showAvatar}
       />
 
       {supportReplies && !isShowReplies && repliesButton()}
@@ -138,7 +135,6 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
               isReplies={true}
               maxLength={maxLength}
               supportReplies={false}
-              showAvatar={showAvatar}
             />
 
             {!_deleted && createReply()}
@@ -163,7 +159,6 @@ export const CommentList = (props: IPropsCommentList) => {
     maxLength,
     onMoreComments,
     onSubmitReply,
-    showAvatar,
     supportReplies = false,
   } = props
 
@@ -227,7 +222,6 @@ export const CommentList = (props: IPropsCommentList) => {
               maxLength={maxLength}
               onSubmitReply={onSubmitReply}
               supportReplies={supportReplies}
-              showAvatar={showAvatar}
             />
           </Box>
         ))}

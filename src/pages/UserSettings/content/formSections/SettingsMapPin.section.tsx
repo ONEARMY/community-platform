@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { toJS } from 'mobx'
 import {
+  Button,
   ConfirmModal,
   ExternalLink,
   FieldTextarea,
@@ -20,7 +21,7 @@ import {
 } from 'src/pages/UserSettings/labels'
 import { randomIntFromInterval } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
-import { Alert, Box, Button, Flex, Heading, Text } from 'theme-ui'
+import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 
 import { MAX_PIN_LENGTH } from '../../constants'
 import { SettingsFormNotifications } from './SettingsFormNotifications'
@@ -77,28 +78,6 @@ const MapPinModerationComments = ({ mapPin }: IPinProps) => {
   )
 }
 
-const WorkspaceMapPinRequiredStars = () => {
-  const { description } = headings.workspace
-  const { themeStore } = useCommonStores().stores
-
-  return (
-    <Alert
-      sx={{ fontSize: 2, textAlign: 'left' }}
-      variant="info"
-      data-cy="WorkspaceMapPinRequiredStars"
-    >
-      <Box>
-        <ExternalLink
-          href={themeStore?.currentTheme.styles.communityProgramURL}
-          sx={{ textDecoration: 'underline', color: 'currentcolor' }}
-        >
-          {description}
-        </ExternalLink>
-      </Box>
-    </Alert>
-  )
-}
-
 interface IPropsDeletePin {
   setIsLoading: (arg: boolean) => void
   setNotification: (arg: IFormNotification) => void
@@ -115,7 +94,7 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
     try {
       const updatedUser = await userStore.deleteUserLocation(user)
       if (updatedUser) {
-        mapsStore.setUserPin(toJS(updatedUser))
+        await mapsStore.deleteUserPin(toJS(updatedUser))
       }
       setNotification({
         message: mapForm.sucessfulDelete,
@@ -150,6 +129,7 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
         data-cy="remove-map-pin"
         variant="destructive"
         sx={{ alignSelf: 'flex-start' }}
+        icon="delete"
       >
         {buttons.removePin}
       </Button>
@@ -164,7 +144,7 @@ export const SettingsMapPinSection = () => {
     IFormNotification | undefined
   >(undefined)
 
-  const { mapsStore, userStore } = useCommonStores().stores
+  const { mapsStore, themeStore, userStore } = useCommonStores().stores
   const user = userStore.activeUser
   const { addPinTitle, yourPinTitle } = headings.map
 
@@ -237,11 +217,26 @@ export const SettingsMapPinSection = () => {
       <Heading variant="small" id="your-map-pin">
         {mapPin ? addPinTitle : yourPinTitle}
       </Heading>
-      <Text>{fields.location.description}</Text>
+      {isMember && (
+        <Text variant="quiet" data-cy="descriptionMember">
+          {mapForm.descriptionMember}
+        </Text>
+      )}
+      {!isMember && (
+        <Text variant="quiet" data-cy="descriptionSpace">
+          {mapForm.descriptionSpace}
+          <br />
+          <ExternalLink
+            data-cy="WorkspaceMapPinRequiredStars"
+            href={themeStore?.currentTheme.styles.communityProgramURL}
+            sx={{ textDecoration: 'underline', color: 'currentcolor' }}
+          >
+            {headings.workspace.description}
+          </ExternalLink>
+        </Text>
+      )}
 
       <MapPinModerationComments mapPin={mapPin} />
-
-      {!isMember && <WorkspaceMapPinRequiredStars />}
 
       <Form
         id={formId}

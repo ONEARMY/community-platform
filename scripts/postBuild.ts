@@ -53,6 +53,10 @@ function main() {
   }
   console.log('')
 
+  if (process.env.REACT_APP_BRANCH !== 'production') {
+    $('head').append('<meta name="robots" content="noindex, nofollow">')
+  }
+
   console.log('Saving...')
   const output = $.html()
   fs.writeFileSync('../build/index.html', output, { encoding: 'utf-8' })

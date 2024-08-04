@@ -10,7 +10,6 @@ import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
 import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
 import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
 import { GoLinkExternal } from '@react-icons/all-files/go/GoLinkExternal'
-import { GoTrashcan } from '@react-icons/all-files/go/GoTrashcan'
 import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
 import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
 import { MdAdd } from '@react-icons/all-files/md/MdAdd'
@@ -74,7 +73,7 @@ export const glyphs: IGlyphs = {
   'chevron-right': iconMap.chevronRight,
   'chevron-up': <FaChevronUp />,
   close: <MdClose />,
-  delete: <GoTrashcan />,
+  delete: iconMap.delete,
   difficulty: <FaSignal />,
   discord: iconMap.discord,
   download: <MdFileDownload />,

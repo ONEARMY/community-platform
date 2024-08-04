@@ -17,11 +17,11 @@ import { buttons } from '../../labels'
 import INITIAL_VALUES from '../../Template'
 import { CollectionSection } from './Collection.section'
 import { FlexSectionContainer } from './elements'
-import { EmailNotificationsSection } from './EmailNotifications.section'
 import { ExpertiseSection } from './Expertise.section'
 import { FocusSection } from './Focus.section'
 import { PublicContactSection } from './PublicContact.section'
 import { SettingsFormNotifications } from './SettingsFormNotifications'
+import { UserImagesSection } from './UserImages.section'
 import { UserInfosSection } from './UserInfos.section'
 import { WorkspaceSection } from './Workspace.section'
 
@@ -94,9 +94,11 @@ export const UserProfile = () => {
 
   const saveProfile = async (values: IUserPP) => {
     const vals = { ...values }
+
     vals.coverImages = (vals.coverImages as any[]).filter((cover) =>
       cover ? true : false,
     )
+
     // Remove undefined vals from obj before sending to firebase
     Object.keys(vals).forEach((key) => {
       if (vals[key] === undefined) {
@@ -130,7 +132,7 @@ export const UserProfile = () => {
   const validateForm = (v: IUserPP) => {
     const errors: any = {}
     // must have at least 1 cover (awkard react final form array format)
-    if (!v.coverImages[0]) {
+    if (!v.coverImages[0] && v.profileType !== ProfileType.MEMBER) {
       errors.coverImages = []
       errors.coverImages[ARRAY_ERROR] = 'Must have at least one cover image'
     }
@@ -167,7 +169,7 @@ export const UserProfile = () => {
           const isMember = values.profileType === ProfileType.MEMBER
 
           return (
-            <Flex bg={'inherit'} sx={{ flexDirection: 'column', gap: 2 }}>
+            <Flex sx={{ flexDirection: 'column', gap: 2 }}>
               <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
 
               <SettingsFormNotifications
@@ -177,7 +179,9 @@ export const UserProfile = () => {
               />
 
               <form id={formId} onSubmit={handleSubmit}>
-                <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+                <Flex
+                  sx={{ flexDirection: 'column', gap: 2, paddingBottom: 2 }}
+                >
                   {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
                   {values.profileType === ProfileType.WORKSPACE && (
@@ -194,6 +198,7 @@ export const UserProfile = () => {
                       formValues={values}
                     />
                   )}
+
                   {values.profileType === ProfileType.MACHINE_BUILDER && (
                     <ExpertiseSection
                       required={
@@ -209,18 +214,20 @@ export const UserProfile = () => {
                     mutators={form.mutators}
                     showLocationDropdown={state.showLocationDropdown}
                   />
-                </Flex>
 
-                <EmailNotificationsSection
-                  notificationSettings={values.notification_settings}
-                />
-                {!isMember && (
-                  <FlexSectionContainer>
-                    <PublicContactSection
-                      isContactableByPublic={values.isContactableByPublic}
-                    />
-                  </FlexSectionContainer>
-                )}
+                  {!isMember && (
+                    <FlexSectionContainer>
+                      <PublicContactSection
+                        isContactableByPublic={values.isContactableByPublic}
+                      />
+                    </FlexSectionContainer>
+                  )}
+
+                  <UserImagesSection
+                    isMemberProfile={isMember}
+                    values={values}
+                  />
+                </Flex>
               </form>
 
               <Button
@@ -234,7 +241,7 @@ export const UserProfile = () => {
                 variant={'primary'}
                 type="submit"
                 disabled={submitting}
-                sx={{ alignSelf: 'flex-start' }}
+                sx={{ alignSelf: 'flex-start', paddingTop: 4 }}
               >
                 {buttons.save}
               </Button>

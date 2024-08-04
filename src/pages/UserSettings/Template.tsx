@@ -13,17 +13,14 @@ const USER_PP_TEMPLATE: IUserPP = {
   profileType: ProfileType.MEMBER,
   coverImages: [],
   links: [],
-  location: null,
   about: null,
   country: null,
   openingHours: [],
-  mapPinDescription: null,
   workspaceType: null,
   collectedPlasticTypes: null,
   machineBuilderXp: null,
   isExpert: null,
   isV4Member: null,
-  notification_settings: undefined,
   isContactableByPublic: DEFAULT_PUBLIC_CONTACT_PREFERENCE,
 }
 

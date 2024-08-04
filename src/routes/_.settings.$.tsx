@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import Main from 'src/pages/common/Layout/Main'
-import { Layout } from 'src/pages/Layout'
 import { SettingsPage } from 'src/pages/UserSettings/SettingsPage'
 import { Flex, Text } from 'theme-ui'
 
@@ -13,11 +12,9 @@ export async function clientLoader() {
 
 export default function Index() {
   return (
-    <Layout>
-      <Main data-cy="main-layout-container" style={{ flex: 1 }}>
-        <Settings />
-      </Main>
-    </Layout>
+    <Main style={{ flex: 1 }}>
+      <Settings />
+    </Main>
   )
 }
 

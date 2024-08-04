@@ -1,7 +1,6 @@
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isModuleSupported, MODULE } from 'src/modules'
 import Main from 'src/pages/common/Layout/Main'
-import { Layout } from 'src/pages/Layout'
 import { QuestionListing } from 'src/pages/Question/QuestionListing'
 import {
   DiscussionStore,
@@ -25,17 +24,13 @@ export default function Index() {
   }
 
   return (
-    <Layout>
-      <Main data-cy="main-layout-container" style={{ flex: 1 }}>
-        <SeoTagsUpdateComponent title="Questions" />
-        <QuestionStoreContext.Provider value={new QuestionStore(rootStore)}>
-          <DiscussionStoreContext.Provider
-            value={new DiscussionStore(rootStore)}
-          >
-            <QuestionListing />
-          </DiscussionStoreContext.Provider>
-        </QuestionStoreContext.Provider>
-      </Main>
-    </Layout>
+    <Main style={{ flex: 1 }}>
+      <SeoTagsUpdateComponent title="Questions" />
+      <QuestionStoreContext.Provider value={new QuestionStore(rootStore)}>
+        <DiscussionStoreContext.Provider value={new DiscussionStore(rootStore)}>
+          <QuestionListing />
+        </DiscussionStoreContext.Provider>
+      </QuestionStoreContext.Provider>
+    </Main>
   )
 }

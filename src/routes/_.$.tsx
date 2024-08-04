@@ -1,4 +1,3 @@
-import { Layout } from 'src/pages/Layout'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 
 export async function clientLoader() {
@@ -6,9 +5,5 @@ export async function clientLoader() {
 }
 
 export default function Index() {
-  return (
-    <Layout>
-      <NotFoundPage />
-    </Layout>
-  )
+  return <NotFoundPage />
 }

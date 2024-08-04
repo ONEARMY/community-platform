@@ -1,15 +1,22 @@
 import { Global, ThemeProvider } from '@emotion/react'
+import { Outlet } from '@remix-run/react'
 import { GlobalStyles } from 'oa-components'
+import { Alerts } from 'src/common/Alerts/Alerts'
 import { Analytics } from 'src/common/Analytics'
 import { ScrollToTop } from 'src/common/ScrollToTop'
+import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
+import GlobalSiteFooter from 'src/pages/common/GlobalSiteFooter/GlobalSiteFooter'
+import Header from 'src/pages/common/Header/Header'
+import { StickyButton } from 'src/pages/common/StickyButton'
 import { Flex } from 'theme-ui'
 
 import { useCommonStores } from '../common/hooks/useCommonStores'
-import { StickyButton } from './common/StickyButton'
 
-import type { ReactNode } from 'react'
+export async function clientLoader() {
+  return null
+}
 
-const Layout = (props: { children: ReactNode | ReactNode[] }) => {
+export default function Index() {
   const rootStore = useCommonStores()
 
   return (
@@ -20,13 +27,16 @@ const Layout = (props: { children: ReactNode | ReactNode[] }) => {
       >
         <Analytics />
         <ScrollToTop />
-        {props.children}
+        <DevSiteHeader />
+        <Alerts />
+        <Header />
 
+        <Outlet />
+
+        <GlobalSiteFooter />
         <StickyButton />
       </Flex>
       <Global styles={GlobalStyles} />
     </ThemeProvider>
   )
 }
-
-export { Layout }

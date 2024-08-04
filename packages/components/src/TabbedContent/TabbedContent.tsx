@@ -6,8 +6,6 @@ import { TabsList } from '@mui/base/TabsList'
 
 import type { PlatformTheme } from 'oa-themes/dist'
 
-export { Tabs, TabsList }
-
 type Theme = PlatformTheme['styles']
 
 export const Tab = styled(MuiTab)`
@@ -27,14 +25,23 @@ export const Tab = styled(MuiTab)`
     text-decoration: underline;
   }
 
-  &:first-of-type {
-    margin-left: 0;
-    position: relative;
+  @media (min-width: 52em) {
+    &:first-of-type {
+      margin-left: 0;
+      position: relative;
+    }
+  }
+
+  @media (max-width: 52em) {
+    border: 1px solid ${(p) => (p.theme as Theme)?.colors?.grey};
+    border-radius: ${(p) => (p.theme as Theme)?.space?.[2]}px;
+    margin-bottom: ${(p) => (p.theme as Theme)?.space?.[2]}px;
   }
 
   &.base--selected {
     background-color: ${(p) => (p.theme as Theme)?.colors.background};
     text-decoration: none;
+    border: none;
 
     &:after {
       content: '';
@@ -54,3 +61,5 @@ export const TabPanel = styled(MuiTabPanel)`
   border-radius: ${(p) => (p.theme as Theme)?.space?.[2]}px;
   padding: ${(p) => (p.theme as Theme)?.space?.[3]}px;
 `
+
+export { Tabs, TabsList }

@@ -77,7 +77,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@sentry/react": "^6.15.0",
+    "@sentry/react": "7.56.0",
     "@uppy/compressor": "^1.1.4",
     "@uppy/core": "^3.11.3",
     "@uppy/dashboard": "^3.8.3",

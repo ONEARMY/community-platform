@@ -22,7 +22,7 @@ export const updateDiscussionComments = async (
 
     const userDetails = {
       creatorCountry: location?.countryCode || '',
-      ...(creatorImage ? { creatorImage } : {}),
+      creatorImage,
       isUserVerified: !!badges?.verified,
       isUserSupporter: !!badges?.supporter,
     }
@@ -52,5 +52,5 @@ const getCreatorImage = (userImage: IUserDB['userImage']) => {
   if (userImage && userImage.downloadUrl) {
     return userImage.downloadUrl
   }
-  return undefined
+  return null
 }

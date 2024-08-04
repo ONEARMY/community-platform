@@ -16,6 +16,7 @@ export async function clientLoader() {
   return null
 }
 
+// This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {
   const rootStore = useCommonStores()
 

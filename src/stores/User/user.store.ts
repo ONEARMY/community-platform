@@ -53,18 +53,12 @@ export class UserStore extends ModuleStore {
       deleteUserLocation: action,
       user: observable,
       updateStatus: observable,
-      getAllUsers: action,
       getUsersStartingWith: action,
       setUpdateStatus: action,
       updateUserImpact: action,
-      _setUpdateStatus: action,
       _updateActiveUser: action,
     })
     this._listenToAuthStateChanges()
-  }
-
-  public getAllUsers() {
-    return this.allDocs$
   }
 
   public async getUsersStartingWith(prefix: string, limit?: number) {
@@ -197,71 +191,46 @@ export class UserStore extends ModuleStore {
     await this.refreshActiveUserDetails()
   }
 
-  /**
-   * Update a user profile
-   * @param values Set of values to merge into user profile
-   * @param adminEditableUserId Optionally pass an existing user ID to update with values
-   * (default is current logged in user)
-   */
-  public async updateUserProfile(
-    values: PartialUser,
-    trigger: string,
-    adminEditableUserId?: string,
-  ) {
-    if (!values._id) {
-      logger.debug('No User ID provided')
-      throw new Error('No User ID provided')
+  public async updateUserProfile(values: PartialUser, trigger: string) {
+    const { _id, coverImages, userImage } = values
+
+    if (!_id) throw new Error(`User not found`)
+    if (_id !== this.activeUser?._id) {
+      throw new Error(`Cannot update a different user record - ${{ _id: _id }}`)
     }
 
-    this._setUpdateStatus('Start')
+    const updatedUserProfile = toJS(values)
+    updatedUserProfile.profileCreationTrigger = trigger
 
-    // If admin updating another user assume full user passed as values, otherwise merge updates with current user.
-    // Include a shallow merge of update with existing user, deserialising mobx observables (caused issue previously)
-    const updatedUserProfile: IUserPPDB = adminEditableUserId
-      ? (values as any)
-      : { ...toJS(this.user), ...toJS(values) }
-
-    if (updatedUserProfile.profileType !== 'workspace')
-      delete updatedUserProfile['workspaceType']
-
-    // TODO: Remove this once source of duplicate profiles determined
-    if (!updatedUserProfile.profileCreationTrigger) {
-      updatedUserProfile.profileCreationTrigger = trigger
-    }
-
-    // upload any new cover images
-    if (values.coverImages) {
-      const processedImages = await this.uploadCollectionBatch(
-        values.coverImages as any as IConvertedFileMeta[],
+    if (coverImages) {
+      updatedUserProfile.coverImages = await this.uploadCollectionBatch(
+        coverImages as any as IConvertedFileMeta[],
         COLLECTION_NAME,
-        values._id,
+        _id,
       )
-      updatedUserProfile.coverImages = processedImages
     }
 
-    if (values.userImage) {
+    if (userImage) {
       updatedUserProfile.userImage = await this.uploadFileToCollection(
-        values.userImage,
+        userImage,
         COLLECTION_NAME,
-        values._id,
+        _id,
       )
     }
 
-    // update on db and update locally (if targeting self as user)
-    await this._updateUserRequest(updatedUserProfile._id, updatedUserProfile)
-
-    if (!adminEditableUserId) {
-      this._updateActiveUser(updatedUserProfile)
-    }
-
-    this._setUpdateStatus('Complete')
+    await this._updateUserRequest(_id, updatedUserProfile)
     await this.refreshActiveUserDetails()
+    return this.activeUser
   }
 
-  public async updateUserLocation(user: Partial<IUserPPDB>) {
+  public async updateUserLocation(user: PartialUser) {
     const { _id, location, mapPinDescription } = user
 
-    if (!_id) throw new Error('User not found')
+    if (!_id) throw new Error(`User not found`)
+    if (_id !== this.activeUser?._id) {
+      throw new Error(`Cannot update a different user record - ${{ _id: _id }}`)
+    }
+
     if (!location || (!location.latlng && Object.keys(location).length !== 1)) {
       throw new Error('Location data not found')
     }
@@ -276,10 +245,14 @@ export class UserStore extends ModuleStore {
     return this.activeUser
   }
 
-  public async updateUserNotificationSettings(user: Partial<IUserPPDB>) {
+  public async updateUserNotificationSettings(user: PartialUser) {
     const { _id, notification_settings } = user
 
-    if (!_id) throw new Error('User not found')
+    if (!_id) throw new Error(`User not found`)
+    if (_id !== this.activeUser?._id) {
+      throw new Error(`Cannot update a different user record - ${{ _id: _id }}`)
+    }
+
     if (!notification_settings) {
       throw new Error('notification_settings not found')
     }
@@ -292,17 +265,17 @@ export class UserStore extends ModuleStore {
     return this.activeUser
   }
 
-  public async deleteUserLocation(user: Partial<IUserPPDB>) {
-    const { _id } = user
-
-    if (!_id) throw new Error('User not found')
+  public async deleteUserLocation({ _id }: PartialUser) {
+    if (!_id) throw new Error(`User not found`)
+    if (_id !== this.activeUser?._id) {
+      throw new Error(`Cannot update a different user record - ${{ _id: _id }}`)
+    }
 
     await this._updateUserRequest(_id, {
       location: null,
       mapPinDescription: null,
     })
     await this.refreshActiveUserDetails()
-
     return this.activeUser
   }
 
@@ -500,18 +473,6 @@ export class UserStore extends ModuleStore {
 
   private _unsubscribeFromAuthStateChanges() {
     this.authUnsubscribe()
-  }
-
-  /**
-   * Do not use.
-   * This exists for testing purposes only.
-   */
-  public _testSetUser(user: IUserPPDB) {
-    this.user = user
-  }
-
-  public _setUpdateStatus(update: keyof IUserUpdateStatus) {
-    this.updateStatus[update] = true
   }
 
   public _updateActiveUser(user?: IUserPPDB | null) {

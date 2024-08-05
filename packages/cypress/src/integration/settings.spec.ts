@@ -44,7 +44,7 @@ describe('[Settings]', () => {
     })
 
     it('[Edit a new profile]', () => {
-      const country = 'AU'
+      const country = 'Brazil'
       const userImage = 'avatar'
       const displayName = 'settings_member_new'
       const description = "I'm a very active member"
@@ -70,6 +70,7 @@ describe('[Settings]', () => {
       cy.step("Can't save without required fields being populated")
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
+      cy.get('[data-cy=CompleteProfileHeader]').should('be.visible')
 
       cy.step('Can set the required fields')
       cy.setSettingBasicUserInfo({
@@ -101,8 +102,9 @@ describe('[Settings]', () => {
 
       cy.saveSettingsForm()
 
-      cy.step('Incomplete profile banner no longer visible')
+      cy.step('Incomplete profile prompts no longer visible')
       cy.get('[data-cy=incompleteProfileBanner]').should('not.exist')
+      cy.get('[data-cy=CompleteProfileHeader]').should('not.exist')
       cy.get('[data-cy=emailNotVerifiedBanner]').should('be.visible')
 
       cy.step('User image shown in header')
@@ -125,17 +127,24 @@ describe('[Settings]', () => {
       cy.get('[data-cy=EditYourProfile]').click()
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=descriptionMember').should('be.visible')
-      cy.contains('No location data currently saved')
+      cy.contains('No map pin currently saved')
       cy.fillSettingMapPin(mapDetails(mapPinDescription))
       cy.get('[data-cy=save-map-pin]').click()
       cy.contains('Map pin saved successfully')
       cy.contains('Your current map pin is here:')
       cy.contains(locationStub.country)
 
+      cy.step('Setting map pin makes location field disappear')
+      cy.get('[data-cy="tab-Profile"]').click()
+      cy.get('[data-cy=location-dropdown]').should('not.exist')
+
       cy.step('Can delete map pin')
+      cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=remove-map-pin]').click()
       cy.get('[data-cy="Confirm.modal: Confirm"]').click()
-      cy.contains('No location data currently saved')
+      cy.contains('No map pin currently saved')
+      cy.get('[data-cy="tab-Profile"]').click()
+      cy.get('[data-cy=location-dropdown]').should('be.visible')
 
       cy.step('Can update email notification preference')
       cy.get('[data-cy="tab-Notifications"]').click()
@@ -244,6 +253,7 @@ describe('[Settings]', () => {
       cy.step('Go to User Settings')
       cy.visit('/settings')
       cy.setSettingFocus(profileType)
+      cy.get('[data-cy=CompleteProfileHeader]').should('be.visible')
 
       cy.step("Can't save without required fields being populated")
       cy.get('[data-cy=save]').click()
@@ -268,6 +278,7 @@ describe('[Settings]', () => {
 
       cy.setSettingPublicContact()
       cy.saveSettingsForm()
+      cy.get('[data-cy=CompleteProfileHeader]').should('not.exist')
 
       cy.step('Updated settings display on main profile tab')
       cy.visit(`u/${user.username}`)
@@ -286,10 +297,10 @@ describe('[Settings]', () => {
 
       cy.step('Can add map pin')
       cy.get('[data-cy=EditYourProfile]').click()
-      cy.get('[data-cy="tab-Map"]').click()
+      cy.get('[data-cy="link-to-map-setting"]').click()
       cy.get('[data-cy=descriptionSpace').should('be.visible')
       cy.get('[data-cy=WorkspaceMapPinRequiredStars').should('be.visible')
-      cy.contains('No location data currently saved')
+      cy.contains('No map pin currently saved')
       cy.fillSettingMapPin(mapDetails(mapPinDescription))
       cy.get('[data-cy=save-map-pin]').click()
       cy.contains('Map pin saved successfully')

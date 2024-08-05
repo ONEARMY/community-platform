@@ -24,8 +24,10 @@ export const AccountSettingsSection = observer(() => {
       }}
     >
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Heading as="h2">{headings.accountSettings}</Heading>
-        <Text sx={{ color: 'grey' }}>
+        <Heading as="h2" variant="small">
+          {headings.accountSettings}
+        </Heading>
+        <Text variant="quiet">
           Here you can manage the core settings of your account.
         </Text>
       </Flex>

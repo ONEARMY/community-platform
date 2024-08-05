@@ -16,7 +16,7 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
   const { coverImages, userImage } = values
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+    <Flex sx={{ flexDirection: 'column', gap: 4 }}>
       <Heading variant="small">
         {isMemberProfile ? fields.userImage.title : headings.images}
       </Heading>

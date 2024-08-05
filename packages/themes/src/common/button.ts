@@ -64,6 +64,16 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
       backgroundColor: colors.softblue,
     },
   },
+  quiet: {
+    ...BASE_BUTTON,
+    border: '2px dashed ' + colors.grey,
+    color: colors.grey,
+    backgroundColor: 'transparent',
+    '&:hover': {
+      backgroundColor: colors.background,
+    },
+    fontSize: 1,
+  },
   imageInput: {
     border: '2px dashed #e0e0e0',
     color: '#e0e0e0',

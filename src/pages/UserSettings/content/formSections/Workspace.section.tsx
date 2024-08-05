@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Field } from 'react-final-form'
 import Extrusion from 'src/assets/images/workspace-focus/extrusion.png'
 import Injection from 'src/assets/images/workspace-focus/injection.png'
@@ -7,7 +6,7 @@ import Sheetpress from 'src/assets/images/workspace-focus/sheetpress.png'
 import Shredder from 'src/assets/images/workspace-focus/shredder.png'
 import { fields } from 'src/pages/UserSettings/labels'
 import { required } from 'src/utils/validators'
-import { Box, Flex, Grid, Heading, Text } from 'theme-ui'
+import { Flex, Grid, Heading, Text } from 'theme-ui'
 
 import { CustomRadioField } from './Fields/CustomRadio.field'
 import { FlexSectionContainer } from './elements'
@@ -57,15 +56,29 @@ export const WorkspaceSection = () => {
       validateFields={[]}
       render={({ input, meta }) => (
         <FlexSectionContainer>
-          <Flex sx={{ justifyContent: 'space-between' }}>
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              gap: 2,
+            }}
+          >
             <Heading as="h2" variant="small">
               {title}
             </Heading>
-          </Flex>
-          <Box>
-            <Text mt={4} mb={4}>
-              {description}
-            </Text>
+            <Text variant="quiet">{description}</Text>
+            {meta.touched && meta.error && (
+              <Text
+                sx={{
+                  color: 'error',
+                  fontSize: 0.5,
+                  marginLeft: 1,
+                  marginRight: 1,
+                }}
+              >
+                {error}
+              </Text>
+            )}
             <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
               {WORKSPACE_TYPES.map((workspace, index: number) => (
                 <CustomRadioField
@@ -84,19 +97,7 @@ export const WorkspaceSection = () => {
                 />
               ))}
             </Grid>
-            {meta.touched && meta.error && (
-              <Text
-                sx={{
-                  color: 'error',
-                  fontSize: 0.5,
-                  marginLeft: 1,
-                  marginRight: 1,
-                }}
-              >
-                {error}
-              </Text>
-            )}
-          </Box>
+          </Flex>
         </FlexSectionContainer>
       )}
     />

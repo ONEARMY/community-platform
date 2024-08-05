@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { SettingsErrors } from 'src/pages/UserSettings/content/formSections/SettingsErrors'
+import { SettingsErrors } from 'src/pages/UserSettings/content/SettingsErrors'
 import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
 import { describe, expect, it } from 'vitest'
 

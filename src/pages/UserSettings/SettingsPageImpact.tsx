@@ -1,10 +1,9 @@
 import { IMPACT_YEARS } from 'src/pages/User/impact/constants'
+import { ImpactYearSection } from 'src/pages/UserSettings/content/sections/ImpactYear.section'
 import { fields } from 'src/pages/UserSettings/labels'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
-import { ImpactYearSection } from './ImpactYear.section'
-
-export const ImpactSection = () => {
+export const SettingsPageImpact = () => {
   const { description, title } = fields.impact
 
   return (

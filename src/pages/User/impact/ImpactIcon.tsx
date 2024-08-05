@@ -1,5 +1,5 @@
 import { Icon } from 'oa-components'
-import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
+import { impactQuestions } from 'src/pages/UserSettings/content/impactQuestions'
 
 import type { IImpactDataField } from 'src/models'
 

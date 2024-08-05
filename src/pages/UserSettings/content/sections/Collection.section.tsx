@@ -11,9 +11,9 @@ import Pvc from 'src/assets/images/plastic-types/pvc.svg'
 import { fields, headings } from 'src/pages/UserSettings/labels'
 import { Flex, Grid, Heading, Text } from 'theme-ui'
 
-import { CustomCheckbox } from './Fields/CustomCheckbox.field'
-import { OpeningHoursPicker } from './Fields/OpeningHoursPicker.field'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer } from '../elements'
+import { CustomCheckbox } from '../fields/CustomCheckbox.field'
+import { OpeningHoursPicker } from '../fields/OpeningHoursPicker.field'
 
 import type { IPlasticType } from 'src/models'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'

@@ -13,8 +13,8 @@ import {
   GROUP_PROFILE_DESCRIPTION_MAX_LENGTH,
   MEMBER_PROFILE_DESCRIPTION_MAX_LENGTH,
 } from '../../constants'
-import { ProfileLinkField } from './Fields/ProfileLink.field'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer } from '../elements'
+import { ProfileLinkField } from '../fields/ProfileLink.field'
 
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 

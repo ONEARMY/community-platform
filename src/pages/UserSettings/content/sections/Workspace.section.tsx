@@ -8,8 +8,8 @@ import { fields } from 'src/pages/UserSettings/labels'
 import { required } from 'src/utils/validators'
 import { Flex, Grid, Heading, Text } from 'theme-ui'
 
-import { CustomRadioField } from './Fields/CustomRadio.field'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer } from '../elements'
+import { CustomRadioField } from '../fields/CustomRadio.field'
 
 import type { IWorkspaceType } from 'src/models'
 

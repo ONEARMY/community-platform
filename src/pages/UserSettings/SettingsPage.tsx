@@ -6,11 +6,11 @@ import { ProfileType } from 'src/modules/profile/types'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Box, Flex, Text } from 'theme-ui'
 
-import { AccountSettingsSection } from './content/formSections/AccountSettings.section'
-import { ImpactSection } from './content/formSections/Impact/Impact.section'
-import { SettingsMapPinSection } from './content/formSections/SettingsMapPin.section'
-import { SettingsNotifications } from './content/formSections/SettingsNotifications.section'
-import { UserProfile } from './content/formSections/UserProfile.section'
+import { SettingsPageAccount } from './SettingsPageAccount'
+import { SettingsPageImpact } from './SettingsPageImpact'
+import { SettingsPageMapPin } from './SettingsPageMapPin'
+import { SettingsPageNotifications } from './SettingsPageNotifications'
+import { SettingsPageUserProfile } from './SettingsPageUserProfile'
 
 import type { availableGlyphs, ITab } from 'oa-components'
 
@@ -39,31 +39,31 @@ export const SettingsPage = () => {
         </Text>
       </Flex>
     ),
-    body: <UserProfile />,
+    body: <SettingsPageUserProfile />,
     glyph: 'profile' as availableGlyphs,
   }
 
   const mapTab = {
     title: 'Map',
-    body: <SettingsMapPinSection />,
+    body: <SettingsPageMapPin />,
     glyph: 'map' as availableGlyphs,
   }
 
   const impactTab = {
     title: 'Impact',
-    body: <ImpactSection />,
+    body: <SettingsPageImpact />,
     glyph: 'impact' as availableGlyphs,
   }
 
   const NotificationsTabs = {
     title: 'Notifications',
-    body: <SettingsNotifications />,
+    body: <SettingsPageNotifications />,
     glyph: 'thunderbolt' as availableGlyphs,
   }
 
   const accountTab = {
     title: 'Account',
-    body: <AccountSettingsSection />,
+    body: <SettingsPageAccount />,
     glyph: 'account' as availableGlyphs,
   }
 

@@ -23,11 +23,11 @@ import { randomIntFromInterval } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
 import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 
-import { MAX_PIN_LENGTH } from '../../constants'
-import { SettingsFormNotifications } from './SettingsFormNotifications'
+import { SettingsFormNotifications } from './content/SettingsFormNotifications'
+import { MAX_PIN_LENGTH } from './constants'
 
 import type { ILocation, IMapPin, IUserPPDB } from 'src/models'
-import type { IFormNotification } from './SettingsFormNotifications'
+import type { IFormNotification } from './content/SettingsFormNotifications'
 
 interface IPinProps {
   mapPin: IMapPin | undefined
@@ -137,7 +137,7 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
   )
 }
 
-export const SettingsMapPinSection = () => {
+export const SettingsPageMapPin = () => {
   const [mapPin, setMapPin] = useState<IMapPin>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [notification, setNotification] = useState<

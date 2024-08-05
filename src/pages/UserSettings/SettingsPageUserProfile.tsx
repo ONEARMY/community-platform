@@ -11,21 +11,21 @@ import { ProfileType } from 'src/modules/profile/types'
 import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
-import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from '../../constants'
-import { buttons } from '../../labels'
-import { CollectionSection } from './Collection.section'
-import { ExpertiseSection } from './Expertise.section'
-import { FocusSection } from './Focus.section'
-import { PublicContactSection } from './PublicContact.section'
-import { SettingsFormNotifications } from './SettingsFormNotifications'
-import { UserImagesSection } from './UserImages.section'
-import { UserInfosSection } from './UserInfos.section'
-import { WorkspaceSection } from './Workspace.section'
+import { CollectionSection } from './content/sections/Collection.section'
+import { ExpertiseSection } from './content/sections/Expertise.section'
+import { FocusSection } from './content/sections/Focus.section'
+import { PublicContactSection } from './content/sections/PublicContact.section'
+import { UserImagesSection } from './content/sections/UserImages.section'
+import { UserInfosSection } from './content/sections/UserInfos.section'
+import { WorkspaceSection } from './content/sections/Workspace.section'
+import { SettingsFormNotifications } from './content/SettingsFormNotifications'
+import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from './constants'
+import { buttons } from './labels'
 
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import type { IFormNotification } from './SettingsFormNotifications'
+import type { IFormNotification } from './content/SettingsFormNotifications'
 
-export const UserProfile = () => {
+export const SettingsPageUserProfile = () => {
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)

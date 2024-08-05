@@ -1,7 +1,7 @@
-import { impactQuestions } from '../Impact/impactQuestions'
+import { impactQuestions } from './content/impactQuestions'
 
 import type { IImpactDataField, IImpactYearFieldList } from 'src/models'
-import type { IImpactQuestion } from '../Impact/impactQuestions'
+import type { IImpactQuestion } from './content/impactQuestions'
 
 export interface ImpactDataFieldInputs {
   [key: string]: IImpactQuestion

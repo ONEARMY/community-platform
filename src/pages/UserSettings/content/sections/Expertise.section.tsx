@@ -2,8 +2,8 @@ import { FieldArray } from 'react-final-form-arrays'
 import { fields, headings } from 'src/pages/UserSettings/labels'
 import { Flex, Heading, Text } from 'theme-ui'
 
-import { CustomCheckbox } from './Fields/CustomCheckbox.field'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer } from '../elements'
+import { CustomCheckbox } from '../fields/CustomCheckbox.field'
 
 import type { IMAchineBuilderXp } from 'src/models'
 

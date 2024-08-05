@@ -14,7 +14,7 @@ import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { UserProfile } from './UserProfile.section'
+import { SettingsPageUserProfile } from './SettingsPageUserProfile'
 
 import type { IUserPPDB } from 'src/models'
 
@@ -157,7 +157,9 @@ const Wrapper = (user: IUserPPDB, routerInitialEntry?: string) => {
   }
 
   const router = createMemoryRouter(
-    createRoutesFromElements(<Route index element={<UserProfile />} />),
+    createRoutesFromElements(
+      <Route index element={<SettingsPageUserProfile />} />,
+    ),
     {
       initialEntries: [routerInitialEntry ? routerInitialEntry : ''],
     },

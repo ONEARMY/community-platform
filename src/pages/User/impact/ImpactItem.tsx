@@ -1,4 +1,4 @@
-import { sortImpactYearDisplayFields } from 'src/pages/UserSettings/content/formSections/Impact/utils'
+import { sortImpactYearDisplayFields } from 'src/pages/UserSettings/utils'
 import { Box, Heading } from 'theme-ui'
 
 import { ImpactField } from './ImpactField'

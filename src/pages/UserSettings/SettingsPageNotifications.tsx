@@ -9,12 +9,12 @@ import {
 } from 'src/pages/UserSettings/labels'
 import { Button, Flex, Heading, Text } from 'theme-ui'
 
-import { EmailNotificationsSection } from './EmailNotifications.section'
-import { SettingsFormNotifications } from './SettingsFormNotifications'
+import { EmailNotificationsSection } from './content/sections/EmailNotifications.section'
+import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 
-import type { IFormNotification } from './SettingsFormNotifications'
+import type { IFormNotification } from './content/SettingsFormNotifications'
 
-export const SettingsNotifications = () => {
+export const SettingsPageNotifications = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [notification, setNotification] = useState<
     IFormNotification | undefined

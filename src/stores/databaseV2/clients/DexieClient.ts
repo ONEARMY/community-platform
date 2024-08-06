@@ -189,7 +189,7 @@ const SCHEMA_BASE: IDexieSchema = {
   research: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs,*collaborators`,
   aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
-  questions: `${DEFAULT_SCHEMA}`,
+  questions: `${DEFAULT_SCHEMA},slug,previousSlugs`,
   questionCategories: `${DEFAULT_SCHEMA}`,
   discussions: `${DEFAULT_SCHEMA},sourceId`,
 }

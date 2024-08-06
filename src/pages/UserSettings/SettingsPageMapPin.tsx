@@ -40,13 +40,21 @@ interface ILocationProps {
 const LocationDataTextDisplay = ({ location }: ILocationProps) => {
   if (!location?.latlng)
     return (
-      <Text variant="paragraph" data-cy="LocationDataTextDisplay">
+      <Text
+        variant="paragraph"
+        data-cy="NoLocationDataTextDisplay"
+        data-testid="NoLocationDataTextDisplay"
+      >
         {mapForm.noLocationLabel}
       </Text>
     )
 
   return (
-    <Text variant="paragraph" data-cy="LocationDataTextDisplay">
+    <Text
+      variant="paragraph"
+      data-cy="LocationDataTextDisplay"
+      data-testid="LocationDataTextDisplay"
+    >
       {mapForm.locationLabel}
       <br />
       {location?.name}{' '}
@@ -219,17 +227,26 @@ export const SettingsPageMapPin = () => {
           {mapPin ? addPinTitle : yourPinTitle}
         </Heading>
         {isMember && (
-          <Text variant="quiet" data-cy="descriptionMember">
+          <Text
+            variant="quiet"
+            data-cy="descriptionMember"
+            data-testid="descriptionMember"
+          >
             {mapForm.descriptionMember}
           </Text>
         )}
 
         {!isMember && (
-          <Text variant="quiet" data-cy="descriptionSpace">
+          <Text
+            variant="quiet"
+            data-cy="descriptionSpace"
+            data-testid="descriptionSpace"
+          >
             {mapForm.descriptionSpace}
             <br />
             <ExternalLink
               data-cy="WorkspaceMapPinRequiredStars"
+              data-testid="WorkspaceMapPinRequiredStars"
               href={themeStore?.currentTheme.styles.communityProgramURL}
               sx={{ textDecoration: 'underline', color: 'currentcolor' }}
             >

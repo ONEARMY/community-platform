@@ -57,6 +57,7 @@ export const WorkspaceSection = () => {
       render={({ input, meta }) => (
         <FlexSectionContainer>
           <Flex
+            data-testid="workspaceType"
             sx={{
               flexDirection: 'column',
               justifyContent: 'space-between',

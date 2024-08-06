@@ -18,6 +18,7 @@ export const PublicContactSection = observer((props: Props) => {
 
   return (
     <Flex
+      data-testid="PublicContactSection"
       sx={{
         flexDirection: 'column',
         gap: 2,

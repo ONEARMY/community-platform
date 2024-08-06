@@ -29,7 +29,10 @@ export const CollectionSection = (props: IProps) => {
 
   return (
     <FlexSectionContainer>
-      <Flex sx={{ justifyContent: 'space-between' }}>
+      <Flex
+        data-testid="CollectionSection"
+        sx={{ justifyContent: 'space-between' }}
+      >
         <Heading as="h2" variant="small">
           {headings.collection}
         </Heading>

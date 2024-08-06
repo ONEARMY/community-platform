@@ -43,7 +43,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
 
   useEffect(() => {
     const fetchImpact = () => {
-      const impact = userStore.user?.impact
+      const impact = userStore.activeUser?.impact
       if (impact && impact[year]) {
         setImpact(impact[year])
       }

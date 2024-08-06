@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { observer } from 'mobx-react'
 import { DiscussionContainer, Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { transformToUserComments } from 'src/common/transformToUserComments'
@@ -18,9 +19,9 @@ const LOADING_LABEL = 'Loading the awesome discussion'
 interface IProps {
   sourceType: IDiscussion['sourceType']
   sourceId: string
-  setTotalCommentsCount: (number) => void
-  canHideComments?: boolean
+  setTotalCommentsCount: (number: number) => void
   showComments?: boolean
+  canHideComments?: boolean
   primaryContentId?: string | undefined
 }
 
@@ -32,7 +33,7 @@ const getHighlightedCommentId = () => {
   return filterOutResearchUpdate.replace('#comment:', '')
 }
 
-export const DiscussionWrapper = (props: IProps) => {
+export const DiscussionWrapper = observer((props: IProps) => {
   const {
     canHideComments,
     primaryContentId,
@@ -45,6 +46,7 @@ export const DiscussionWrapper = (props: IProps) => {
   const [comment, setComment] = useState('')
   const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { discussionStore } = useCommonStores().stores
   const highlightedCommentId = getHighlightedCommentId()
@@ -86,6 +88,7 @@ export const DiscussionWrapper = (props: IProps) => {
   const handleEdit = async (_id: string, comment: string) => {
     if (!discussion) return
 
+    setIsSubmitting(true)
     const updatedDiscussion = await discussionStore.editComment(
       discussion,
       _id,
@@ -96,6 +99,8 @@ export const DiscussionWrapper = (props: IProps) => {
     if (updatedDiscussion) {
       transformComments(updatedDiscussion)
     }
+
+    setIsSubmitting(false)
   }
 
   const handleEditRequest = async () => {
@@ -105,6 +110,7 @@ export const DiscussionWrapper = (props: IProps) => {
   const handleDelete = async (_id: string) => {
     if (!discussion) return
 
+    setIsSubmitting(true)
     const updatedDiscussion = await discussionStore.deleteComment(
       discussion,
       _id,
@@ -114,10 +120,14 @@ export const DiscussionWrapper = (props: IProps) => {
     if (updatedDiscussion) {
       transformComments(updatedDiscussion)
     }
+
+    setIsSubmitting(false)
   }
 
   const onSubmit = async (comment: string) => {
     if (!comment || !discussion) return
+
+    setIsSubmitting(true)
 
     const updatedDiscussion = await discussionStore.addComment(
       discussion,
@@ -131,10 +141,14 @@ export const DiscussionWrapper = (props: IProps) => {
     if (updatedDiscussion) {
       setComment('')
     }
+
+    setIsSubmitting(false)
   }
 
-  const handleSubmitReply = async (commentId: string, reply) => {
+  const handleSubmitReply = async (commentId: string, reply: string) => {
     if (!discussion) return
+
+    setIsSubmitting(true)
 
     const updatedDiscussion = await discussionStore.addComment(
       discussion,
@@ -146,6 +160,8 @@ export const DiscussionWrapper = (props: IProps) => {
     if (updatedDiscussion) {
       transformComments(updatedDiscussion)
     }
+
+    setIsSubmitting(false)
   }
 
   const discussionProps = {
@@ -161,6 +177,7 @@ export const DiscussionWrapper = (props: IProps) => {
     highlightedCommentId,
     onSubmit,
     onSubmitReply: handleSubmitReply,
+    isSubmitting,
     isLoggedIn: discussionStore?.activeUser
       ? !!discussionStore.activeUser
       : false,
@@ -183,4 +200,4 @@ export const DiscussionWrapper = (props: IProps) => {
       )}
     </>
   )
-}
+})

@@ -22,11 +22,11 @@ import type {
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
 
-const COLLECTION_NAME = 'discussions'
+const DISCUSSIONS_COLLECTION = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
-    super(rootStore, COLLECTION_NAME)
+    super(rootStore, DISCUSSIONS_COLLECTION)
   }
 
   public async fetchOrCreateDiscussionBySource(
@@ -37,7 +37,7 @@ export class DiscussionStore extends ModuleStore {
     const foundDiscussion =
       toJS(
         await this.db
-          .collection<IDiscussion>(COLLECTION_NAME)
+          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
           .getWhere('sourceId', '==', sourceId),
       )[0] || null
 
@@ -74,7 +74,7 @@ export class DiscussionStore extends ModuleStore {
     }
 
     const dbRef = this.db
-      .collection<IDiscussion>(COLLECTION_NAME)
+      .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
       .doc(newDiscussion._id)
 
     return await this._updateDiscussion(dbRef, newDiscussion)
@@ -91,7 +91,7 @@ export class DiscussionStore extends ModuleStore {
 
       if (user && comment) {
         const dbRef = this.db
-          .collection<IDiscussion>(COLLECTION_NAME)
+          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
           .doc(discussion._id)
 
         const currentDiscussion = toJS(await dbRef.get('server'))
@@ -120,7 +120,8 @@ export class DiscussionStore extends ModuleStore {
           newComment,
         )
 
-        await this._addNotifications(newComment, currentDiscussion)
+        // Do not await so it doesn't block adding a comment
+        this._addNotifications(newComment, currentDiscussion)
 
         return this._updateDiscussion(dbRef, currentDiscussion)
       }
@@ -143,7 +144,7 @@ export class DiscussionStore extends ModuleStore {
 
       if (user && comment) {
         const dbRef = this.db
-          .collection<IDiscussion>(COLLECTION_NAME)
+          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
           .doc(discussion._id)
 
         const currentDiscussion = toJS(await dbRef.get('server'))
@@ -185,7 +186,7 @@ export class DiscussionStore extends ModuleStore {
 
       if (user) {
         const dbRef = this.db
-          .collection<IDiscussion>(COLLECTION_NAME)
+          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
           .doc(discussion._id)
 
         const currentDiscussion = toJS(await dbRef.get('server'))
@@ -271,14 +272,16 @@ export class DiscussionStore extends ModuleStore {
           )
 
           if (update.collaborators) {
-            await update.collaborators.map((collaborator) => {
-              this.userNotificationsStore.triggerNotification(
-                'new_comment_discussion',
-                collaborator,
-                url,
-                research.title,
-              )
-            })
+            await Promise.all(
+              update.collaborators.map((collaborator) => {
+                this.userNotificationsStore.triggerNotification(
+                  'new_comment_discussion',
+                  collaborator,
+                  url,
+                  research.title,
+                )
+              }),
+            )
           }
         }
         return
@@ -344,7 +347,10 @@ export class DiscussionStore extends ModuleStore {
     discussion: IDiscussion,
   ): Promise<IDiscussionDB | null> {
     await dbRef.set({ ...cloneDeep(discussion) })
-    await updateDiscussionMetadata(this.db, discussion)
+
+    // Do not await so it doesn't block adding a comment
+    updateDiscussionMetadata(this.db, discussion)
+
     const updatedDiscussion = toJS(await dbRef.get('server'))
 
     return updatedDiscussion ? updatedDiscussion : null
@@ -361,8 +367,8 @@ export class DiscussionStore extends ModuleStore {
     )
       return discussion
 
-    const dbRef = await this.db
-      .collection<IDiscussion>(COLLECTION_NAME)
+    const dbRef = this.db
+      .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
       .doc(discussion._id)
 
     return await this._updateDiscussion(dbRef, {

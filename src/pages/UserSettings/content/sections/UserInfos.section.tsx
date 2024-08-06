@@ -31,7 +31,10 @@ export const UserInfosSection = ({ formValues }: IProps) => {
 
   return (
     <FlexSectionContainer>
-      <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
+      <Flex
+        data-testid="UserInfosSection"
+        sx={{ flexDirection: 'column', gap: [4, 6] }}
+      >
         <Heading as="h2" variant="small">
           {headings.infos}
         </Heading>

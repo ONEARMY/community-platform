@@ -26,6 +26,7 @@ export const ExpertiseSection = (props: IProps) => {
   return (
     <FlexSectionContainer>
       <Flex
+        data-testid="ExpertiseSection"
         sx={{
           flexDirection: 'column',
           justifyContent: 'space-between',

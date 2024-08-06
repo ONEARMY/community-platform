@@ -28,7 +28,7 @@ export const QuestionCategoryField = () => {
     }
 
     initCategories()
-  }, categories)
+  }, [])
 
   return (
     <FormFieldWrapper htmlFor={name} text={title}>

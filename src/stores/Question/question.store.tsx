@@ -11,7 +11,6 @@ import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscrib
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
 import type { IModerationStatus } from 'oa-shared/models'
-import type { IUser } from 'src/models'
 import type { IConvertedFileMeta } from 'src/types'
 import type { IQuestion, IQuestionDB } from '../../models/question.models'
 import type { DBEndpoint } from '../databaseV2/endpoints'
@@ -81,6 +80,10 @@ export class QuestionStore extends ModuleStore {
 
   public async upsertQuestion(values: IQuestion.FormInput) {
     logger.info(`upsertQuestion:`, { values, activeUser: this.activeUser })
+
+    const user = this.activeUser
+    if (!user) return
+
     const dbRef = this.db
       .collection<IQuestion.Item>(COLLECTION_NAME)
       .doc(values?._id)
@@ -95,16 +98,14 @@ export class QuestionStore extends ModuleStore {
 
     const slug = await this.setSlug(values)
     const previousSlugs = this.setPreviousSlugs(values, slug)
-    const _createdBy = values._createdBy ?? this.activeUser?.userName
-    const user = this.activeUser as IUser
-    const creatorCountry = this.getCreatorCountry(user, values)
+    const _createdBy = user.userName
+    const creatorCountry = getUserCountry(user)
+
     const moderation =
       values.moderation || ('accepted' as IModerationStatus.ACCEPTED)
 
     const keywords = getKeywords(values.title + ' ' + values.description)
-    if (_createdBy) {
-      keywords.push(_createdBy)
-    }
+    keywords.push(_createdBy)
 
     const images = values.images
       ? await this.loadImages(values.images, dbRef.id)
@@ -171,17 +172,6 @@ export class QuestionStore extends ModuleStore {
       logger.debug('upload images ok')
       return images
     }
-  }
-
-  private getCreatorCountry(user: IUser, values: IQuestion.FormInput) {
-    const { creatorCountry, _createdBy } = values
-    const userCountry = getUserCountry(user)
-
-    return (_createdBy && _createdBy === user.userName) || !_createdBy
-      ? userCountry
-      : creatorCountry
-        ? creatorCountry
-        : ''
   }
 
   private async _getQuestionItemBySlug(

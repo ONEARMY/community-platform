@@ -47,6 +47,7 @@ export const QuestionTitleField = (props: IProps) => {
         minLength={QUESTION_MIN_TITLE_LENGTH}
         maxLength={QUESTION_MAX_TITLE_LENGTH}
         showCharacterCount
+        onBlur
       />
     </FormFieldWrapper>
   )

@@ -5,22 +5,19 @@ const item = questions[0]
 
 describe('[Question]', () => {
   describe('[Create a question]', () => {
-    const initialTitle = 'Health consequences'
-    const initialExpectedSlug = 'health-consequences'
+    const initialTitle = 'Health cost of plastic?'
+    const initialExpectedSlug = 'health-cost-of-plastic'
     const initialQuestionDescription =
       "Hello! I'm wondering how people feel about the health concerns about working with melting plastic and being in environments with microplastics. I have been working with recycling plastic (hdpe) for two years now, shredding and injection molding and haven't had any bad consequences yet. But with the low knowledge around micro plastics and its effects on the human body, and many concerns and hypotheses I have been a bit concerned lately.So I would like to ask the people in this community how you are feeling about it, and if you have experienced any issues with the microplastics or gases yet, if so how long have you been working with it? And what extra steps do you take to be protected from it? I use a gas mask with dust filters"
     const category = 'exhibition'
     const tag1 = 'product'
     const tag2 = 'workshop'
 
-    const updatedTitle = 'Health consequences v2'
-    const updatedExpectedSlug = 'health-consequences-v2'
+    const updatedTitle = 'Real health cost of plastic?'
+    const updatedExpectedSlug = 'real-health-cost-of-plastic'
     const updatedQuestionDescription = `${initialQuestionDescription} and super awesome goggles`
 
-    // TODO - Test disabled pending fix to how test runner manages firestore indexes required for operation
-    // https://github.com/ONEARMY/community-platform/pull/3461
-    // eslint-disable-next-line mocha/no-skipped-tests
-    it.skip('[By Authenticated]', () => {
+    it('[By Authenticated]', () => {
       cy.signUpNewUser()
 
       cy.step('Go to create page')
@@ -34,7 +31,10 @@ describe('[Question]', () => {
       ).should('be.visible')
 
       cy.step('Add title field')
-      cy.get('[data-cy=field-title]').type(initialTitle).blur({ force: true })
+      cy.get('[data-cy=field-title]')
+        .clear()
+        .type(initialTitle)
+        .blur({ force: true })
 
       cy.step('Add title description')
       cy.get('[data-cy=field-description]').type(initialQuestionDescription, {
@@ -105,10 +105,12 @@ describe('[Question]', () => {
       cy.visit(`/questions/${initialExpectedSlug}`)
       cy.contains(updatedTitle)
 
-      cy.step('All updated fields visiable on list')
-      cy.visit('/questions')
-      cy.contains(updatedTitle)
-      cy.contains(category)
+      // Commented out until test indexes issue solved
+      //
+      // cy.step('All updated fields visiable on list')
+      // cy.visit('/questions')
+      // cy.contains(updatedTitle)
+      // cy.contains(category)
     })
   })
 })

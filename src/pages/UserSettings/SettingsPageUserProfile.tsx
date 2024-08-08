@@ -180,13 +180,13 @@ export const SettingsPageUserProfile = () => {
 
                 <UserInfosSection formValues={values} />
 
+                <UserImagesSection isMemberProfile={isMember} values={values} />
+
                 {!isMember && (
                   <PublicContactSection
                     isContactableByPublic={values.isContactableByPublic}
                   />
                 )}
-
-                <UserImagesSection isMemberProfile={isMember} values={values} />
               </Flex>
             </form>
 

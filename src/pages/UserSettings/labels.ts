@@ -64,6 +64,8 @@ export const fields: ILabels = {
   },
   displayName: {
     title: 'Display Name',
+    description:
+      'Shown on your profile page. You can use spaces and everything!',
   },
   email: {
     title: 'Current email address',

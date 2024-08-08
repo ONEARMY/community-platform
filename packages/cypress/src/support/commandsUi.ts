@@ -10,7 +10,7 @@ export enum UserMenuItem {
 }
 
 interface IInfo {
-  username: string
+  displayName: string
   country?: string
   description: string
 }
@@ -134,10 +134,12 @@ Cypress.Commands.add(
 )
 
 Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
+  const { country, description, displayName } = info
+
   cy.step('Update Info section')
-  cy.get('[data-cy=username').clear().type(info.username)
-  cy.get('[data-cy=info-description').clear().type(info.description)
-  info.country && cy.selectTag(info.country, '[data-cy=location-dropdown]')
+  cy.get('[data-cy=displayName').clear().type(displayName)
+  cy.get('[data-cy=info-description').clear().type(description)
+  country && cy.selectTag(country, '[data-cy=location-dropdown]')
 })
 
 Cypress.Commands.add(

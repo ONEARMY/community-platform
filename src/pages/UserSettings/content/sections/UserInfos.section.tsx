@@ -38,11 +38,14 @@ export const UserInfosSection = ({ formValues }: IProps) => {
         <Heading as="h2">{headings.infos}</Heading>
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>{`${displayName.title} *`}</Text>
+          <Text variant="quiet" sx={{ fontSize: 2 }}>
+            {displayName.description}
+          </Text>
           <Field
-            data-cy="username"
+            data-cy="displayName"
             name="displayName"
             component={FieldInput}
-            placeholder="Pick a unique username"
+            placeholder="Pick a name to display on your profile"
             validate={required}
             validateFields={[]}
           />

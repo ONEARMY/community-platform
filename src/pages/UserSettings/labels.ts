@@ -126,6 +126,11 @@ export const fields: ILabels = {
   repeatNewPassword: {
     title: 'Repeat new password',
   },
+  userName: {
+    title: 'Username',
+    description:
+      "You set this when you signed up and it can't be changed now. Sorry.",
+  },
   workspaceType: {
     description: 'What kind of Precious Plastic workspace do you run?',
     error: 'Please select your workspace type',

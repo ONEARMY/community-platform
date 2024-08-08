@@ -25,7 +25,7 @@ interface IProps {
 export const UserInfosSection = ({ formValues }: IProps) => {
   const { profileType, links, location } = formValues
   const isMemberProfile = profileType === ProfileType.MEMBER
-  const { about, country, displayName } = fields
+  const { about, country, displayName, userName } = fields
 
   const noMapPin = !location?.latlng
 
@@ -36,6 +36,21 @@ export const UserInfosSection = ({ formValues }: IProps) => {
         sx={{ flexDirection: 'column', gap: [3, 5] }}
       >
         <Heading as="h2">{headings.infos}</Heading>
+        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+          <Text>{`${userName.title} *`}</Text>
+          <Text variant="quiet" sx={{ fontSize: 2 }}>
+            {userName.description}
+          </Text>
+          <Field
+            data-cy="userName"
+            name="userName"
+            component={FieldInput}
+            validate={required}
+            validateFields={[]}
+            disabled
+          />
+        </Flex>
+
         <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>{`${displayName.title} *`}</Text>
           <Text variant="quiet" sx={{ fontSize: 2 }}>

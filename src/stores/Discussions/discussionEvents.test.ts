@@ -17,20 +17,33 @@ describe('liveResearchUpdatesCommentCounts', () => {
 
   describe('_deleted', () => {
     it('ignores deleted updates', () => {
-      const deletedUpdate = FactoryResearchItemUpdate({
+      const deletedUpdateOne = FactoryResearchItemUpdate({
         _deleted: true,
         commentCount: 2,
       })
-      const liveUpdate = FactoryResearchItemUpdate({
-        _deleted: false,
+      const deletedUpdateTwo = FactoryResearchItemUpdate({
+        _deleted: true,
+        status: ResearchUpdateStatus.DRAFT,
+        commentCount: 5,
+      })
+      const deletedUpdateThree = FactoryResearchItemUpdate({
+        _deleted: true,
         status: ResearchUpdateStatus.PUBLISHED,
-        commentCount: 3,
+        commentCount: 4,
+      })
+      const liveUpdate = FactoryResearchItemUpdate({
+        commentCount: 1,
       })
       const research = FactoryResearchItem({
-        updates: [deletedUpdate, liveUpdate, liveUpdate],
+        updates: [
+          deletedUpdateOne,
+          deletedUpdateTwo,
+          deletedUpdateThree,
+          liveUpdate,
+        ],
       })
 
-      expect(liveResearchUpdatesCommentCounts(research.updates)).toEqual(6)
+      expect(liveResearchUpdatesCommentCounts(research.updates)).toEqual(1)
     })
   })
 
@@ -49,11 +62,19 @@ describe('liveResearchUpdatesCommentCounts', () => {
         _deleted: false,
         status: ResearchUpdateStatus.PUBLISHED,
       })
+      const oldUpdateWithoutStatus = FactoryResearchItemUpdate({
+        commentCount: 4,
+      })
       const research = FactoryResearchItem({
-        updates: [liveUpdate, draftUpdate, commentlessLiveUpdate],
+        updates: [
+          liveUpdate,
+          draftUpdate,
+          commentlessLiveUpdate,
+          oldUpdateWithoutStatus,
+        ],
       })
 
-      expect(liveResearchUpdatesCommentCounts(research.updates)).toEqual(5)
+      expect(liveResearchUpdatesCommentCounts(research.updates)).toEqual(9)
     })
   })
 })

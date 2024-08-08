@@ -100,6 +100,7 @@ export const SettingsPageUserProfile = () => {
   const initialValues = {
     profileType: user?.profileType || ProfileType.MEMBER,
     displayName: user?.displayName || null,
+    userName: user?.userName,
     links,
     location: user?.location || null,
     about: user?.about || null,

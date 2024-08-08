@@ -34,9 +34,7 @@ export const ImageInputField = (props: IProps) => {
         data-cy={dataCy}
       >
         {meta.error && meta.touched && (
-          <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
-            {meta.error}
-          </Text>
+          <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
         )}
 
         <ImageInput

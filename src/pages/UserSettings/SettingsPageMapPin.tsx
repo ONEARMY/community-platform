@@ -222,8 +222,8 @@ export const SettingsPageMapPin = () => {
         gap: 4,
       }}
     >
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Heading variant="small" id="your-map-pin">
+      <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+        <Heading as="h2" id="your-map-pin">
           {mapPin ? addPinTitle : yourPinTitle}
         </Heading>
         {isMember && (

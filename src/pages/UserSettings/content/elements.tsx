@@ -36,5 +36,5 @@ export const HiddenInput = styled(Field)`
 `
 
 export const FlexSectionContainer = (props) => (
-  <Flex sx={{ flexDirection: 'column', gap: 2 }}>{props.children}</Flex>
+  <Flex sx={{ flexDirection: 'column', gap: [3, 4] }}>{props.children}</Flex>
 )

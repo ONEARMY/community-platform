@@ -16,12 +16,12 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
   const { coverImages, userImage } = values
 
   return (
-    <Flex sx={{ flexDirection: 'column', gap: 4 }}>
-      <Heading variant="small">
+    <Flex sx={{ flexDirection: 'column', gap: 3 }}>
+      <Heading as="h2">
         {isMemberProfile ? fields.userImage.title : headings.images}
       </Heading>
 
-      <Flex sx={{ flexDirection: 'column', alignContent: 'stretch', gap: 2 }}>
+      <Flex sx={{ flexDirection: 'column', alignContent: 'stretch', gap: 1 }}>
         {!isMemberProfile && (
           <Heading variant="subHeading">{fields.userImage.title}</Heading>
         )}
@@ -52,7 +52,7 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
       </Flex>
 
       {!isMemberProfile && (
-        <Flex sx={{ flexDirection: 'column', gap: 3 }}>
+        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Heading variant="subHeading">{`${fields.coverImages.title} *`}</Heading>
           <Text variant="paragraph">{fields.coverImages.description}</Text>
 
@@ -64,7 +64,7 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
               return (
                 <>
                   {meta.error && (
-                    <Text sx={{ fontSize: 0, color: 'error' }}>
+                    <Text sx={{ fontSize: 1, color: 'error' }}>
                       {meta.error}
                     </Text>
                   )}
@@ -73,11 +73,6 @@ export const UserImagesSection = ({ isMemberProfile, values }: IProps) => {
                     sx={{
                       flexDirection: 'row',
                       flexWrap: 'wrap',
-                      justifyContent: [
-                        'flex-start',
-                        'flex-start',
-                        'space-between',
-                      ],
                       gap: 2,
                     }}
                   >

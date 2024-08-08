@@ -26,13 +26,8 @@ const ProfileTypes = () => {
       name="profileType"
       render={(props) => (
         <FlexSectionContainer>
-          <Flex sx={{ justifyContent: 'space-between' }}>
-            <Heading as="h2" variant="small">
-              {headings.focus}
-            </Heading>
-          </Flex>
-
-          <Flex sx={{ alignItems: 'baseline', marginY: 2 }}>
+          <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+            <Heading as="h2">{headings.focus}</Heading>
             <Paragraph>
               {description}{' '}
               <ExternalLink
@@ -45,7 +40,9 @@ const ProfileTypes = () => {
             </Paragraph>
           </Flex>
 
-          <Box>
+          <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+            {props.meta.error && <Text color={theme.colors.red}>{error}</Text>}
+
             <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
               {profileTypes.map((profile, index: number) => (
                 <Box key={index}>
@@ -65,8 +62,7 @@ const ProfileTypes = () => {
                 </Box>
               ))}
             </Grid>
-            {props.meta.error && <Text color={theme.colors.red}>{error}</Text>}
-          </Box>
+          </Flex>
         </FlexSectionContainer>
       )}
     />

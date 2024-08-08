@@ -49,11 +49,9 @@ export const FieldInput = ({
   const [curLength, setLength] = useState<number>(input?.value?.length ?? 0)
 
   return (
-    <Flex sx={{ flexDirection: 'column', flex: 1 }}>
+    <Flex sx={{ flexDirection: 'column', flex: 1, gap: 1 }}>
       {meta.error && meta.touched && (
-        <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
-          {meta.error}
-        </Text>
+        <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
       )}
       <Input
         disabled={disabled}

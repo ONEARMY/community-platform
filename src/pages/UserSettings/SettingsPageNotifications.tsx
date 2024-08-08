@@ -66,10 +66,8 @@ export const SettingsPageNotifications = () => {
         gap: 4,
       }}
     >
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Heading as="h2" variant="small">
-          {title}
-        </Heading>
+      <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+        <Heading as="h2">{title}</Heading>
         <Text variant="quiet">{description}</Text>
       </Flex>
 

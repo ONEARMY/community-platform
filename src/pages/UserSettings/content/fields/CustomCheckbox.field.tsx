@@ -64,7 +64,7 @@ export const CustomCheckbox = (props: IProps) => {
         width: ['inherit', 'inherit', '100%'],
         borderRadius: 1,
         py: 2,
-        border: '1px solid transparent',
+        border: '2px solid transparent',
         cursor: 'pointer',
         ':hover': {
           backgroundColor: 'background',

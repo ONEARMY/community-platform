@@ -23,7 +23,7 @@ export const SettingsFormTab = (props: IProps) => {
 
   const sx = {
     borderRadius: 3,
-    marginBottom: 3,
+    marginBottom: 4,
     padding: [2, 4],
     overflow: 'visible',
   }
@@ -34,7 +34,9 @@ export const SettingsFormTab = (props: IProps) => {
       style={{ display: 'flex', flexDirection: 'column', alignSelf: 'stretch' }}
     >
       {header && (
-        <Card sx={{ ...sx, backgroundColor: 'softblue' }}>{header}</Card>
+        <Card sx={{ ...sx, backgroundColor: 'softblue', padding: [3, 5] }}>
+          {header}
+        </Card>
       )}
       {notifications && <Box sx={{ ...sx, padding: 0 }}>{notifications}</Box>}
       <Card sx={sx}>{body}</Card>

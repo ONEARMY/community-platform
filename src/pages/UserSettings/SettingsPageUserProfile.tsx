@@ -150,7 +150,7 @@ export const SettingsPageUserProfile = () => {
             />
 
             <form id={formId} onSubmit={handleSubmit}>
-              <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+              <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
                 {values.profileType === ProfileType.WORKSPACE && (
@@ -201,7 +201,7 @@ export const SettingsPageUserProfile = () => {
               variant={'primary'}
               type="submit"
               disabled={submitting}
-              sx={{ alignSelf: 'flex-start', paddingTop: 4 }}
+              sx={{ alignSelf: 'flex-start' }}
             >
               {buttons.save}
             </Button>

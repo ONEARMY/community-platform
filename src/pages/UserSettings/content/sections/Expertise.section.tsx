@@ -33,21 +33,10 @@ export const ExpertiseSection = (props: IProps) => {
           gap: 2,
         }}
       >
-        <Heading as="h2" variant="small">
-          {headings.expertise}
-        </Heading>
+        <Heading as="h2">{headings.expertise}</Heading>
         <Text variant="quiet">{`${title} *`}</Text>
         {required && (
-          <Text
-            sx={{
-              color: 'error',
-              fontSize: 0.5,
-              marginLeft: 1,
-              marginRight: 1,
-            }}
-          >
-            {description}
-          </Text>
+          <Text sx={{ color: 'error', fontSize: 1 }}>{description}</Text>
         )}
 
         <Flex sx={{ flexWrap: ['wrap', 'wrap', 'nowrap'], gap: 2 }}>

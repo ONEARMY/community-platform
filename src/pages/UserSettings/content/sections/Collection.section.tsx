@@ -33,9 +33,7 @@ export const CollectionSection = (props: IProps) => {
         data-testid="CollectionSection"
         sx={{ justifyContent: 'space-between' }}
       >
-        <Heading as="h2" variant="small">
-          {headings.collection}
-        </Heading>
+        <Heading as="h2">{headings.collection}</Heading>
       </Flex>
       <Flex sx={{ gap: 4, flexDirection: 'column' }}>
         <Flex sx={{ gap: 2, flexDirection: 'column' }}>
@@ -79,12 +77,7 @@ export const CollectionSection = (props: IProps) => {
         <Flex sx={{ gap: 2, flexDirection: 'column' }}>
           <Text>{`${fields.plastic.title}`} *</Text>
           {required && (
-            <Text
-              sx={{
-                fontSize: 0.5,
-                color: 'error',
-              }}
-            >
+            <Text sx={{ fontSize: 1, color: 'error' }}>
               {fields.plastic.description}
             </Text>
           )}

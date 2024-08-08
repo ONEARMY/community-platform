@@ -80,7 +80,7 @@ export const fields: ILabels = {
   impact: {
     description:
       "Let's track our collective positive impact! Add data about your recycling work and show the world the power of a movement of small scale recyclers!",
-    title: 'Positive impact 🤙',
+    title: 'Positive impact',
   },
   links: {
     placeholder: 'Link',

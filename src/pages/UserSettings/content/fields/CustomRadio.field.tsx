@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Flex, Image, Input, Label, Text } from 'theme-ui'
+import { Flex, Image, Input, Label, Text } from 'theme-ui'
 
 import { HiddenInput } from '../elements'
 
@@ -69,8 +69,9 @@ export const CustomRadioField = (props: IProps) => {
         display: 'flex',
         flexDirection: 'column',
         py: 2,
-        borderRadius: 1,
-        border: '1px solid transparent',
+        gap: 2,
+        borderRadius: 2,
+        border: '2px solid transparent',
         ':hover': {
           backgroundColor: 'background',
           cursor: 'pointer',
@@ -98,51 +99,47 @@ export const CustomRadioField = (props: IProps) => {
         }}
       />
       {imageSrc && (
-        <Image
-          loading="lazy"
-          px={3}
-          src={imageSrc}
-          sx={{ width: ['100px', '100px', '100%'] }}
-        />
+        <Flex
+          sx={{
+            width: ['130px', '130px', '100%'],
+            height: ['130px', '130px', '100%'],
+            alignItems: 'center',
+          }}
+        >
+          <Image loading="lazy" px={3} src={imageSrc} />
+        </Flex>
       )}
       <Flex
         sx={{
-          alignItems: 'center',
-          flexWrap: 'nowrap',
           flexDirection: 'column',
         }}
-        px={1}
       >
-        <Box mt="auto">
-          {textLabel && (
-            <Text
-              px={1}
-              sx={{
-                display: 'block',
-                fontSize: 1,
-                marginTop: 1,
-                marginBottom: 1,
-                fontWeight: ['bold', 'bold', 'inherit'],
-                textAlign: ['center'],
-              }}
-            >
-              {textLabel}
-            </Text>
-          )}
-          {subText && (
-            <Text
-              sx={{
-                textAlign: 'center',
-                fontSize: 1,
-                display: 'block',
-                marginTop: 1,
-                marginBottom: 1,
-              }}
-            >
-              {subText}
-            </Text>
-          )}
-        </Box>
+        {textLabel && (
+          <Text
+            sx={{
+              display: 'block',
+              fontSize: 2,
+              fontWeight: ['bold', 'bold', 'inherit'],
+              textAlign: ['center'],
+            }}
+          >
+            {textLabel}
+          </Text>
+        )}
+        {subText && (
+          <Text
+            sx={{
+              textAlign: 'center',
+              fontSize: 1,
+              display: 'block',
+              marginTop: 1,
+              marginBottom: 1,
+              color: 'gray',
+            }}
+          >
+            {subText}
+          </Text>
+        )}
       </Flex>
     </Label>
   )

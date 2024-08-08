@@ -33,12 +33,10 @@ export const UserInfosSection = ({ formValues }: IProps) => {
     <FlexSectionContainer>
       <Flex
         data-testid="UserInfosSection"
-        sx={{ flexDirection: 'column', gap: [4, 6] }}
+        sx={{ flexDirection: 'column', gap: [3, 5] }}
       >
-        <Heading as="h2" variant="small">
-          {headings.infos}
-        </Heading>
-        <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+        <Heading as="h2">{headings.infos}</Heading>
+        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
           <Text>{`${displayName.title} *`}</Text>
           <Field
             data-cy="username"
@@ -50,10 +48,8 @@ export const UserInfosSection = ({ formValues }: IProps) => {
           />
         </Flex>
 
-        <Flex sx={{ flexDirection: 'column' }}>
-          <Text
-            sx={{ alignSelf: 'self-start', paddingBottom: 2 }}
-          >{`${about.title} *`}</Text>
+        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+          <Text>{`${about.title} *`}</Text>
           <Field
             data-cy="info-description"
             name="about"
@@ -71,7 +67,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
         </Flex>
 
         {noMapPin && (
-          <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+          <Flex sx={{ flexDirection: 'column', gap: 1 }}>
             <Text>{country.title}</Text>
             {isModuleSupported(MODULE.MAP) && (
               <InternalLink to="/settings/map/">

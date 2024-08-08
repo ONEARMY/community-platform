@@ -76,6 +76,7 @@ const ResearchListItem = ({ item }: IProps) => {
               src={cdnImageUrl(getItemThumbnail(item), {
                 width: 125,
               })}
+              alt={`thumbnail of research item ${item._id}`}
               crossOrigin=""
             />
           </Box>

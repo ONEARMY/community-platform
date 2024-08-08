@@ -30,7 +30,7 @@ export const liveResearchUpdatesCommentCounts = (
 
   const publishedUpdates = updates.filter(
     ({ status, _deleted }) =>
-      status === ResearchUpdateStatus.PUBLISHED && _deleted != true,
+      _deleted === false && !(status === ResearchUpdateStatus.DRAFT),
   )
 
   const updatesCommentCount = publishedUpdates.map(

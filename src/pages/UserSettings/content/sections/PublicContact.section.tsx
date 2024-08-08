@@ -22,9 +22,6 @@ export const PublicContactSection = observer((props: Props) => {
       sx={{
         flexDirection: 'column',
         gap: 2,
-        backgroundColor: 'background',
-        padding: 4,
-        borderRadius: 4,
       }}
     >
       <Heading as="h2">{title}</Heading>

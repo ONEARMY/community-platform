@@ -1,5 +1,3 @@
-import { createRemixStub } from '@remix-run/testing'
-
 import { fakeComment } from '../utils'
 import { CommentItem } from './CommentItem'
 
@@ -8,18 +6,6 @@ import type { Meta, StoryFn } from '@storybook/react'
 export default {
   title: 'Discussions/CommentItem',
   component: CommentItem,
-  decorators: [
-    (Story) => {
-      const RemixStub = createRemixStub([
-        {
-          path: '/',
-          Component: Story,
-        },
-      ])
-
-      return <RemixStub />
-    },
-  ],
 } as Meta<typeof CommentItem>
 
 const handleEdit = () => {

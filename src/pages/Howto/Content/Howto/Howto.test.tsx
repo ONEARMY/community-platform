@@ -1,14 +1,17 @@
 import '@testing-library/jest-dom/vitest'
 
-import { createMemoryRouter, RouterProvider } from 'react-router-dom'
-import { ThemeProvider } from '@emotion/react'
+import { Global, ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
-import { createRoutesFromElements, Route } from '@remix-run/react'
+import { createRemixStub } from '@remix-run/testing'
 import { act, render, waitFor, within } from '@testing-library/react'
 import { Provider } from 'mobx-react'
+import { GlobalStyles } from 'oa-components'
+import { IModerationStatus } from 'oa-shared'
 import { preciousPlasticTheme } from 'oa-themes'
 import { FactoryHowto, FactoryHowtoStep } from 'src/test/factories/Howto'
 import { describe, expect, it, vi } from 'vitest'
+
+import { Howto } from './Howto'
 
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 
@@ -42,35 +45,36 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   }),
 }))
 
-import { IModerationStatus } from 'oa-shared'
-
-import { Howto } from './Howto'
-
 const factory = (howtoStore?: Partial<HowtoStore>) => {
-  const router = createMemoryRouter(
-    createRoutesFromElements(
-      <Route path="/howto/:slug" key={1} element={<Howto />} />,
-    ),
+  const ReactStub = createRemixStub(
+    [
+      {
+        path: '/howto/:slug',
+        Component: () => (
+          <>
+            <Global styles={GlobalStyles} />
+            <ThemeProvider theme={Theme}>
+              <Provider howtoStore={howtoStore}>
+                <Howto />
+              </Provider>
+            </ThemeProvider>
+          </>
+        ),
+      },
+    ],
     { initialEntries: ['/howto/article'] },
   )
 
-  return render(
-    <Provider howtoStore={howtoStore}>
-      <ThemeProvider theme={Theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </Provider>,
-  )
+  return render(<ReactStub />)
 }
 describe('Howto', () => {
   describe('moderator feedback', () => {
     it('displays feedback for items which are not accepted', async () => {
       let wrapper
+      howto.moderation = IModerationStatus.AWAITING_MODERATION
+      howto.moderatorFeedback = 'Moderation comments'
 
       act(() => {
-        howto.moderation = IModerationStatus.AWAITING_MODERATION
-        howto.moderatorFeedback = 'Moderation comments'
-
         wrapper = factory()
       })
 
@@ -94,13 +98,13 @@ describe('Howto', () => {
 
   it('displays content statistics', async () => {
     let wrapper
-    act(() => {
-      howto._id = 'testid'
-      howto._createdBy = 'HowtoAuthor'
-      howto.steps = [FactoryHowtoStep({})]
-      howto.moderation = IModerationStatus.ACCEPTED
-      howto.total_views = 0
+    howto._id = 'testid'
+    howto._createdBy = 'HowtoAuthor'
+    howto.steps = [FactoryHowtoStep({})]
+    howto.moderation = IModerationStatus.ACCEPTED
+    howto.total_views = 0
 
+    act(() => {
       wrapper = factory()
     })
 

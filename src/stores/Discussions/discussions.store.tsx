@@ -346,7 +346,7 @@ export class DiscussionStore extends ModuleStore {
     dbRef: DocReference<IDiscussion>,
     discussion: IDiscussion,
   ): Promise<IDiscussionDB | null> {
-    await dbRef.set({ ...cloneDeep(discussion) })
+    await dbRef.set({ ...lodash.cloneDeep(discussion) })
 
     // Do not await so it doesn't block adding a comment
     updateDiscussionMetadata(this.db, discussion)

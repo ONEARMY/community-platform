@@ -42,74 +42,67 @@ export const PatreonIntegration = ({ user }) => {
   return (
     <Flex
       sx={{
-        alignItems: ['flex-start', 'flex-start', 'center'],
+        alignItems: ['flex-start', 'flex-start', 'flex-start'],
         backgroundColor: 'offwhite',
         borderRadius: 3,
-        flexDirection: ['column', 'column', 'row'],
+        flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 4,
         gap: [2, 4],
       }}
     >
-      <Icon glyph="patreon" size={45} />
-      <Flex sx={{ flexDirection: 'column', flex: 1, gap: [2] }}>
-        <Heading as="h2" variant="small">
-          {HEADING}
-        </Heading>
-        {user.patreon ? (
-          <>
-            <Image
-              src={user.patreon.attributes.thumb_url}
-              sx={{
-                borderRadius: '50%',
-                marginRight: '10px',
-                width: '40px',
-                height: 'auto',
-              }}
-            />
-            <Text>{SUCCESS_MESSAGE}</Text>
-            {user.badges?.supporter && user.patreon.membership && (
-              <Flex sx={{ flexDirection: 'column' }}>
-                <Text mt={4}>{SUPPORTER_MESSAGE}</Text>
-                {user.patreon.membership.tiers.map(({ id, attributes }) => (
-                  <Flex
-                    key={id}
-                    style={{
-                      alignItems: 'center',
-                    }}
-                    mt={4}
-                  >
-                    <div
+      <Flex sx={{ flexDirection: 'row', gap: [2, 4] }}>
+        <Icon glyph="patreon" size={45} />
+        <Flex sx={{ flexDirection: 'column', flex: 1, gap: [2] }}>
+          <Heading as="h2" variant="small">
+            {HEADING}
+          </Heading>
+          {user.patreon ? (
+            <>
+              <Text>{SUCCESS_MESSAGE}</Text>
+              {user.badges?.supporter && user.patreon.membership && (
+                <Flex sx={{ flexDirection: 'column' }}>
+                  <Text mt={4}>{SUPPORTER_MESSAGE}</Text>
+                  {user.patreon.membership.tiers.map(({ id, attributes }) => (
+                    <Flex
+                      key={id}
                       style={{
-                        width: '40px',
-                        height: '40px',
-                        overflow: 'hidden',
-                        marginRight: '10px',
+                        alignItems: 'center',
                       }}
+                      mt={4}
                     >
-                      <Image
-                        src={attributes.image_url}
-                        sx={{
-                          borderRadius: '50%',
-                          width: 'auto',
+                      <div
+                        style={{
+                          width: '40px',
                           height: '40px',
-                          objectFit: 'cover',
-                          objectPosition: 'center',
+                          overflow: 'hidden',
+                          marginRight: '10px',
                         }}
-                      />
-                    </div>
-                    <Text>{attributes.title}</Text>
-                  </Flex>
-                ))}
-              </Flex>
-            )}
-          </>
-        ) : (
-          <Text variant="quiet">
-            As a supporter you get a badge on the platform, special insights and
-            voting rights on decisions.
-          </Text>
-        )}
+                      >
+                        <Image
+                          src={attributes.image_url}
+                          sx={{
+                            borderRadius: '50%',
+                            width: 'auto',
+                            height: '40px',
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                          }}
+                        />
+                      </div>
+                      <Text>{attributes.title}</Text>
+                    </Flex>
+                  ))}
+                </Flex>
+              )}
+            </>
+          ) : (
+            <Text variant="quiet">
+              As a supporter you get a badge on the platform, special insights
+              and voting rights on decisions.
+            </Text>
+          )}
+        </Flex>
       </Flex>
 
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>

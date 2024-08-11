@@ -74,7 +74,7 @@ export const SettingsFormTabList = (props: IProps) => {
 
   return (
     <>
-      <Flex sx={{ display: ['none', 'flex'], flex: 2 }}>
+      <Flex sx={{ display: ['none', 'flex'] }}>
         <TabsList>
           {tabs.map(({ glyph, title }, index) => {
             return (

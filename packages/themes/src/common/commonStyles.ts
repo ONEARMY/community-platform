@@ -37,6 +37,7 @@ export const commonStyles = {
     fontWeight: 'normal',
   },
   fontFamily: {
+    title: `"Varela Round", Arial, sans-serif`,
     body: `'Inter', Arial, sans-serif`,
   },
   space: [

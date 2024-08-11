@@ -52,7 +52,7 @@ export const SettingsFormWrapper = (props: IProps) => {
             alignContent: 'stretch',
             justifyContent: 'stretch',
             flexDirection: 'column',
-            flex: 7,
+            flex: 1,
           }}
         >
           {tabs.map((tab, index) => {

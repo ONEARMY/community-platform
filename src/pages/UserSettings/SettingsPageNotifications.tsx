@@ -9,12 +9,12 @@ import {
 } from 'src/pages/UserSettings/labels'
 import { Button, Flex, Heading, Text } from 'theme-ui'
 
-import { EmailNotificationsSection } from './EmailNotifications.section'
-import { SettingsFormNotifications } from './SettingsFormNotifications'
+import { EmailNotificationsSection } from './content/sections/EmailNotifications.section'
+import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 
-import type { IFormNotification } from './SettingsFormNotifications'
+import type { IFormNotification } from './content/SettingsFormNotifications'
 
-export const SettingsNotifications = () => {
+export const SettingsPageNotifications = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [notification, setNotification] = useState<
     IFormNotification | undefined
@@ -25,8 +25,6 @@ export const SettingsNotifications = () => {
   const { description, title } = fields.emailNotifications
 
   const formId = 'Notifications'
-
-  if (!user) return
 
   const onSubmit = async ({ notification_settings }) => {
     setIsLoading(true)
@@ -54,6 +52,8 @@ export const SettingsNotifications = () => {
     setIsLoading(false)
   }
 
+  if (!user) return null
+
   const initialValues = {
     notification_settings: user.notification_settings || undefined,
   }
@@ -66,10 +66,12 @@ export const SettingsNotifications = () => {
         gap: 4,
       }}
     >
-      <Heading as="h2" variant="small">
-        {title}
-      </Heading>
-      <Text variant="quiet">{description}</Text>
+      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+        <Heading as="h2" variant="small">
+          {title}
+        </Heading>
+        <Text variant="quiet">{description}</Text>
+      </Flex>
 
       <Form
         id={formId}

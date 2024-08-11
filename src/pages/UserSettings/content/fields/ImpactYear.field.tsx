@@ -1,8 +1,8 @@
 import { Button } from 'oa-components'
 import { buttons } from 'src/pages/UserSettings/labels'
 
+import { impactQuestions } from '../impactQuestions'
 import { ImpactQuestionField } from './ImpactQuestion.field'
-import { impactQuestions } from './impactQuestions'
 
 interface Props {
   formId: string

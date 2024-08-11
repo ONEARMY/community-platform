@@ -64,6 +64,7 @@ export const QuestionForm = (props: IProps) => {
         const numberOfImageInputsAvailable = values?.images
           ? Math.min(values.images.length + 1, QUESTION_MAX_IMAGES)
           : 1
+
         return (
           <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
             <Flex

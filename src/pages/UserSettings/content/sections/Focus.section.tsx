@@ -5,8 +5,8 @@ import { getSupportedProfileTypes } from 'src/modules/profile'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
 import { Box, Flex, Grid, Heading, Paragraph, Text } from 'theme-ui'
 
-import { CustomRadioField } from './Fields/CustomRadio.field'
-import { FlexSectionContainer } from './elements'
+import { FlexSectionContainer } from '../elements'
+import { CustomRadioField } from '../fields/CustomRadio.field'
 
 import type { ProfileTypeLabel } from 'src/modules/profile/types'
 

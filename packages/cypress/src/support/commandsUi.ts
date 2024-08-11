@@ -137,6 +137,7 @@ Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   cy.step('Update Info section')
   cy.get('[data-cy=username').clear().type(info.username)
   cy.get('[data-cy=info-description').clear().type(info.description)
+  info.country && cy.selectTag(info.country, '[data-cy=location-dropdown]')
 })
 
 Cypress.Commands.add(

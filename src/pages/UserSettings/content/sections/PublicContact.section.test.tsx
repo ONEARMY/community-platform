@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
 import { render, screen } from '@testing-library/react'
-import { PublicContactSection } from 'src/pages/UserSettings/content/formSections/PublicContact.section'
+import { PublicContactSection } from 'src/pages/UserSettings/content/sections/PublicContact.section'
 import { SettingsFormProvider } from 'src/test/components/SettingsFormProvider'
 import { describe, expect, it } from 'vitest'
 

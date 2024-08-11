@@ -7,13 +7,13 @@ import { UserContactError } from 'src/pages/User/contact'
 import { form } from 'src/pages/UserSettings/labels'
 import { Box, Heading } from 'theme-ui'
 
-import { ImpactYearField } from './ImpactYear.field'
-import { ImpactYearDisplayField } from './ImpactYearDisplay.field'
 import {
   sortImpactYearDisplayFields,
   transformImpactData,
   transformImpactInputs,
-} from './utils'
+} from '../../utils'
+import { ImpactYearField } from '../fields/ImpactYear.field'
+import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field'
 
 import type { IImpactYear, IImpactYearFieldList } from 'src/models'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
@@ -43,7 +43,7 @@ export const ImpactYearSection = observer(({ year }: Props) => {
 
   useEffect(() => {
     const fetchImpact = () => {
-      const impact = userStore.user?.impact
+      const impact = userStore.activeUser?.impact
       if (impact && impact[year]) {
         setImpact(impact[year])
       }

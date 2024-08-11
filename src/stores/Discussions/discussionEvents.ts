@@ -74,7 +74,9 @@ export const updateDiscussionMetadata = async (
       const researchRef = db.collection('research').doc(primaryContentId)
       const research = toJS(await researchRef.get('server')) as IResearch.Item
 
-      if (!research || !research.updates) return
+      if (!research || !research.updates || research.updates.length === 0) {
+        return
+      }
 
       const updates = research.updates.map((update) => {
         return update._id === sourceId ? { ...update, commentCount } : update

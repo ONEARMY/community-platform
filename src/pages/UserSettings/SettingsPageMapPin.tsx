@@ -23,11 +23,11 @@ import { randomIntFromInterval } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
 import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 
-import { MAX_PIN_LENGTH } from '../../constants'
-import { SettingsFormNotifications } from './SettingsFormNotifications'
+import { SettingsFormNotifications } from './content/SettingsFormNotifications'
+import { MAX_PIN_LENGTH } from './constants'
 
 import type { ILocation, IMapPin, IUserPPDB } from 'src/models'
-import type { IFormNotification } from './SettingsFormNotifications'
+import type { IFormNotification } from './content/SettingsFormNotifications'
 
 interface IPinProps {
   mapPin: IMapPin | undefined
@@ -38,15 +38,23 @@ interface ILocationProps {
 }
 
 const LocationDataTextDisplay = ({ location }: ILocationProps) => {
-  if (!location)
+  if (!location?.latlng)
     return (
-      <Text variant="paragraph" data-cy="LocationDataTextDisplay">
+      <Text
+        variant="paragraph"
+        data-cy="NoLocationDataTextDisplay"
+        data-testid="NoLocationDataTextDisplay"
+      >
         {mapForm.noLocationLabel}
       </Text>
     )
 
   return (
-    <Text variant="paragraph" data-cy="LocationDataTextDisplay">
+    <Text
+      variant="paragraph"
+      data-cy="LocationDataTextDisplay"
+      data-testid="LocationDataTextDisplay"
+    >
       {mapForm.locationLabel}
       <br />
       {location?.name}{' '}
@@ -137,7 +145,7 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
   )
 }
 
-export const SettingsMapPinSection = () => {
+export const SettingsPageMapPin = () => {
   const [mapPin, setMapPin] = useState<IMapPin>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [notification, setNotification] = useState<
@@ -163,7 +171,7 @@ export const SettingsMapPinSection = () => {
     init()
   }, [user, notification])
 
-  if (!user) return
+  if (!user) return null
 
   const defaultLocation = {
     latlng: {
@@ -214,27 +222,39 @@ export const SettingsMapPinSection = () => {
         gap: 4,
       }}
     >
-      <Heading variant="small" id="your-map-pin">
-        {mapPin ? addPinTitle : yourPinTitle}
-      </Heading>
-      {isMember && (
-        <Text variant="quiet" data-cy="descriptionMember">
-          {mapForm.descriptionMember}
-        </Text>
-      )}
-      {!isMember && (
-        <Text variant="quiet" data-cy="descriptionSpace">
-          {mapForm.descriptionSpace}
-          <br />
-          <ExternalLink
-            data-cy="WorkspaceMapPinRequiredStars"
-            href={themeStore?.currentTheme.styles.communityProgramURL}
-            sx={{ textDecoration: 'underline', color: 'currentcolor' }}
+      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+        <Heading variant="small" id="your-map-pin">
+          {mapPin ? addPinTitle : yourPinTitle}
+        </Heading>
+        {isMember && (
+          <Text
+            variant="quiet"
+            data-cy="descriptionMember"
+            data-testid="descriptionMember"
           >
-            {headings.workspace.description}
-          </ExternalLink>
-        </Text>
-      )}
+            {mapForm.descriptionMember}
+          </Text>
+        )}
+
+        {!isMember && (
+          <Text
+            variant="quiet"
+            data-cy="descriptionSpace"
+            data-testid="descriptionSpace"
+          >
+            {mapForm.descriptionSpace}
+            <br />
+            <ExternalLink
+              data-cy="WorkspaceMapPinRequiredStars"
+              data-testid="WorkspaceMapPinRequiredStars"
+              href={themeStore?.currentTheme.styles.communityProgramURL}
+              sx={{ textDecoration: 'underline', color: 'currentcolor' }}
+            >
+              {headings.workspace.description}
+            </ExternalLink>
+          </Text>
+        )}
+      </Flex>
 
       <MapPinModerationComments mapPin={mapPin} />
 

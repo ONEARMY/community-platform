@@ -18,7 +18,7 @@ export const buttons = {
   },
   guidelines: 'Check out our guidelines',
   link: {
-    add: 'Add link',
+    add: 'Add another link',
     type: 'type',
   },
   map: 'Add a map pin',
@@ -45,6 +45,8 @@ export const fields: ILabels = {
   },
   country: {
     title: 'Your location',
+    description:
+      "Thought about adding yourself to our map? If you do, we'll automatically set this field.",
   },
   coverImages: {
     description:
@@ -86,7 +88,7 @@ export const fields: ILabels = {
   },
   location: {
     error: 'Please select your location',
-    title: 'Your location',
+    title: 'Your location (flag)',
   },
   mapPinDescription: {
     placeholder: `Short description of your pin (max ${MAX_PIN_LENGTH} characters)`,
@@ -104,7 +106,7 @@ export const fields: ILabels = {
   },
   openingHours: {
     description: 'add opening day',
-    title: 'Opening time',
+    title: 'Opening time(s)',
   },
   password: {
     title: 'Password',
@@ -176,7 +178,7 @@ export const mapForm = {
   locationLabel: 'Your current map pin is here:',
   needsChanges:
     'This map pin has been marked as requiring further changes. Specifically the moderator comments are:',
-  noLocationLabel: 'No location data currently saved',
+  noLocationLabel: 'No map pin currently saved',
   succesfulSave: 'Map pin saved successfully - whoop',
   sucessfulDelete: 'Location data removed',
 }

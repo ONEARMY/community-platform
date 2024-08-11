@@ -77,7 +77,7 @@ export const ProfileLinkField = (props: IProps) => {
     }
   }
 
-  const DeleteButton = (props) => (
+  const DeleteButton = () => (
     <Button
       type="button"
       data-cy={`delete-link-${index}`}
@@ -85,7 +85,13 @@ export const ProfileLinkField = (props: IProps) => {
       variant="outline"
       showIconOnly={true}
       onClick={() => toggleDeleteModal()}
-      {...props}
+      sx={{
+        alignSelf: ['flex-start', 'flex-start', 'flex-end'],
+        paddingX: 3,
+        paddingBottom: 4,
+        height: '2rem',
+      }}
+      small
     >
       {text}
     </Button>
@@ -94,10 +100,10 @@ export const ProfileLinkField = (props: IProps) => {
   return (
     <Flex
       sx={{
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: ['column', 'column', 'row'],
+        alignItems: ['stretch', 'stretch', 'flex-end'],
+        justifyContent: ['stretch'],
         gap: [1, 2],
-        marginBottom: 2,
       }}
     >
       <Field
@@ -111,7 +117,7 @@ export const ProfileLinkField = (props: IProps) => {
         placeholder={buttons.link.type}
         validate={required}
         validateFields={[]}
-        style={{ flex: 3 }}
+        sx={{ flex: 3 }}
       />
       <Field
         data-cy={`input-link-${index}`}
@@ -122,7 +128,6 @@ export const ProfileLinkField = (props: IProps) => {
         placeholder={fields.links.placeholder}
         format={(v) => formatLink(v, state.linkType)}
         formatOnBlur={true}
-        style={{ flex: 1 }}
       />
       {isDeleteEnabled ? <DeleteButton /> : null}
       {

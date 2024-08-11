@@ -97,9 +97,9 @@ export const Button = (props: BtnProps) => {
         'iconColor',
       ])}
       sx={{
-        ...props.sx,
         ...getSizeProps(size, !!props.icon),
         ...(props.showIconOnly ? { pr: 0 } : {}),
+        ...props.sx,
       }}
     >
       {props.icon && (

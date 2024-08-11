@@ -21,6 +21,7 @@ export interface IProps {
   onMoreComments: () => void
   onSubmit: (comment: string) => void
   onSubmitReply: (_id: string, reply: string) => Promise<void>
+  isSubmitting: boolean
   supportReplies?: boolean
 }
 
@@ -38,11 +39,12 @@ export const DiscussionContainer = (props: IProps) => {
     onMoreComments,
     onSubmit,
     isLoggedIn,
+    isSubmitting,
     supportReplies = false,
   } = props
 
   const [commentBeingRepliedTo, setCommentBeingRepliedTo] = useState<
-    null | string
+    string | null
   >(null)
   const structuredComments = useMemo(
     () => transformToTree(comments),
@@ -51,7 +53,8 @@ export const DiscussionContainer = (props: IProps) => {
 
   const handleSetCommentBeingRepliedTo = (commentId: string | null): void => {
     if (commentId === commentBeingRepliedTo) {
-      return setCommentBeingRepliedTo(null)
+      setCommentBeingRepliedTo(null)
+      return
     }
     setCommentBeingRepliedTo(commentId)
   }
@@ -85,6 +88,7 @@ export const DiscussionContainer = (props: IProps) => {
         }}
       >
         <CreateComment
+          isLoading={isSubmitting}
           maxLength={maxLength}
           comment={comment}
           onChange={onChange}

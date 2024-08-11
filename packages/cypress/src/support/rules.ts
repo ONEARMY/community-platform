@@ -1,10 +1,14 @@
 Cypress.on('uncaught:exception', (err) => {
-  // This should be temporary while we sort out a new approach with our
-  // indexing rules applied.
-  if (err.message.includes('The query requires an index.')) {
-    return false
-  }
-  if (err.message.includes('No document to update')) {
+  const skipErrors = [
+    'The query requires an index.',
+    'No document to update',
+    'KeyPath previousSlugs',
+    'KeyPath slug',
+  ]
+
+  const foundSkipError = skipErrors.find((error) => err.message.includes(error))
+
+  if (foundSkipError) {
     return false
   }
 

@@ -50,7 +50,9 @@ export const CreateComment = (props: Props) => {
             },
           }}
         >
-          {isLoggedIn ? (
+          {!isLoggedIn ? (
+            <LoginPrompt />
+          ) : (
             <>
               <Textarea
                 value={comment}
@@ -83,22 +85,6 @@ export const CreateComment = (props: Props) => {
                 {comment.length}/{maxLength}
               </Text>
             </>
-          ) : (
-            <Box sx={{ padding: [3, 4] }}>
-              <Text data-cy="comments-login-prompt">
-                Hi there!{' '}
-                <Link
-                  to="/sign-in"
-                  style={{
-                    textDecoration: 'underline',
-                    color: 'inherit',
-                  }}
-                >
-                  Login
-                </Link>{' '}
-                to leave a comment
-              </Text>
-            </Box>
           )}
         </Box>
       </Flex>
@@ -119,5 +105,25 @@ export const CreateComment = (props: Props) => {
         </Button>
       </Flex>
     </Flex>
+  )
+}
+
+const LoginPrompt = () => {
+  return (
+    <Box sx={{ padding: [3, 4] }}>
+      <Text data-cy="comments-login-prompt">
+        Hi there!{' '}
+        <Link
+          to="/sign-in"
+          style={{
+            textDecoration: 'underline',
+            color: 'inherit',
+          }}
+        >
+          Login
+        </Link>{' '}
+        to leave a comment
+      </Text>
+    </Box>
   )
 }

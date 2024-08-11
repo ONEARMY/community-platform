@@ -2,7 +2,7 @@ import { Field } from 'react-final-form'
 import { FieldInput, Icon } from 'oa-components'
 import { Box, Flex, Label, Text } from 'theme-ui'
 
-import type { IImpactQuestion } from './impactQuestions'
+import type { IImpactQuestion } from '../impactQuestions'
 
 interface Props {
   formId: string

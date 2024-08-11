@@ -191,7 +191,7 @@ const ResearchArticle = observer(() => {
       <SeoTagsUpdateComponent
         title={`${item.title} - Research`}
         description={item.description}
-        imageUrl={item.updates?.at(0)?.images?.[0]?.downloadUrl}
+        imageUrl={(item.updates?.at(0)?.images?.[0] as any)?.downloadUrl}
       />
 
       <Breadcrumbs content={item} variant="research" />

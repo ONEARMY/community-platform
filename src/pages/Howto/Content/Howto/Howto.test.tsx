@@ -46,24 +46,21 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 }))
 
 const factory = (howtoStore?: Partial<HowtoStore>) => {
-  const ReactStub = createRemixStub(
-    [
-      {
-        path: '/howto/:slug',
-        Component: () => (
-          <>
-            <Global styles={GlobalStyles} />
-            <ThemeProvider theme={Theme}>
-              <Provider howtoStore={howtoStore}>
-                <Howto />
-              </Provider>
-            </ThemeProvider>
-          </>
-        ),
-      },
-    ],
-    { initialEntries: ['/howto/article'] },
-  )
+  const ReactStub = createRemixStub([
+    {
+      index: true,
+      Component: () => (
+        <>
+          <Global styles={GlobalStyles} />
+          <ThemeProvider theme={Theme}>
+            <Provider howtoStore={howtoStore}>
+              <Howto />
+            </Provider>
+          </ThemeProvider>
+        </>
+      ),
+    },
+  ])
 
   return render(<ReactStub />)
 }

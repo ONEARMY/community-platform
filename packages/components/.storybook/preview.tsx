@@ -10,8 +10,7 @@ import {
   projectKampTheme,
   fixingFashionTheme,
 } from 'oa-themes'
-import { Route, createRoutesFromElements } from '@remix-run/react'
-import { RouterProvider, createMemoryRouter } from 'react-router-dom'
+import { createRemixStub } from '@remix-run/testing'
 
 const themes = {
   pp: preciousPlasticTheme.styles,
@@ -51,17 +50,21 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      const router = createMemoryRouter(
-        createRoutesFromElements(<Route index element={<Story />}></Route>),
-      )
-      return (
-        <>
-          <Global styles={GlobalStyles} />
-          <ThemeProvider theme={themes[context.globals.theme]}>
-            <RouterProvider router={router} />
-          </ThemeProvider>
-        </>
-      )
+      const RemixStub = createRemixStub([
+        {
+          path: '/',
+          Component: () => (
+            <>
+              <Global styles={GlobalStyles} />
+              <ThemeProvider theme={themes[context.globals.theme]}>
+                <Story />
+              </ThemeProvider>
+            </>
+          ),
+        },
+      ])
+
+      return <RemixStub />
     },
   ],
 }

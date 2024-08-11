@@ -1,4 +1,5 @@
 import { vitePlugin as remix } from '@remix-run/dev'
+import react from '@vitejs/plugin-react'
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 /// <reference types="vitest" />
@@ -40,14 +41,16 @@ export default defineConfig({
     global: 'globalThis',
   },
   plugins: [
-    remix({
-      appDirectory: './src',
-      future: {
-        v3_fetcherPersist: true,
-        v3_relativeSplatPath: true,
-        v3_throwAbortReason: true,
-      },
-    }),
+    !process.env.VITEST
+      ? remix({
+          appDirectory: './src',
+          future: {
+            v3_fetcherPersist: true,
+            v3_relativeSplatPath: true,
+            v3_throwAbortReason: true,
+          },
+        })
+      : react(),
     // TODO - confirm if required (given manual resolutions below)
     ViteTsConfigPathsPlugin({
       root: './',

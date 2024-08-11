@@ -20,6 +20,7 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
       >
         <a
           class="css-e0v029-Link"
+          data-discover="true"
           href="/research/abc/new-update"
         >
           Create update
@@ -35,6 +36,7 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
       >
         <a
           class="css-e0v029-Link"
+          data-discover="true"
           href="/research/abc/edit"
         >
           Back to research
@@ -65,6 +67,7 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
       >
         <a
           class="css-e0v029-Link"
+          data-discover="true"
           href="/research/abc/new-update"
         >
           Create update
@@ -80,6 +83,7 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
       >
         <a
           class="css-e0v029-Link"
+          data-discover="true"
           href="/research/abc/edit"
         >
           Back to research
@@ -123,6 +127,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
           Update 2
           <a
             class="css-1pw6t78-Link"
+            data-discover="true"
             href="/research/abc/edit-update/update-2"
           >
             Edit
@@ -138,6 +143,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
           Update 3
           <a
             class="css-1pw6t78-Link"
+            data-discover="true"
             href="/research/abc/edit-update/update-3"
           >
             Edit
@@ -155,6 +161,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
       >
         <a
           class="css-e0v029-Link"
+          data-discover="true"
           href="/research/abc/new-update"
         >
           Create update
@@ -170,6 +177,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
       >
         <a
           class="css-e0v029-Link"
+          data-discover="true"
           href="/research/abc/edit"
         >
           Back to research

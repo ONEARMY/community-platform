@@ -12,7 +12,11 @@ describe('CommentItem', () => {
     const { getByTestId } = render(<Default {...(Default.args as IProps)} />)
 
     expect(getByTestId('commentAvatar')).toBeInTheDocument()
-    expect((getByTestId('commentAvatar').firstChild as HTMLImageElement).getAttribute("alt")).not.empty
+    expect(
+      (
+        getByTestId('commentAvatar').firstChild as HTMLImageElement
+      ).getAttribute('alt'),
+    ).not.empty
   })
   it('shows the comment text', () => {
     const { getByTestId } = render(<Default {...(Default.args as IProps)} />)

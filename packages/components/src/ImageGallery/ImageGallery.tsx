@@ -20,6 +20,7 @@ export interface IImageGalleryItem {
   size: number
   timeCreated: string
   updated: string
+  alt?: string
 }
 
 export interface ImageGalleryProps {
@@ -146,7 +147,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
           onClick={() => {
             triggerLightbox()
           }}
-          alt={activeImage.name}
+          alt={activeImage.alt ?? activeImage.name}
           crossOrigin=""
         />
         {showNextPrevButton ? (
@@ -208,7 +209,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                 loading="lazy"
                 src={image.thumbnailUrl}
                 key={index}
-                alt={image.name}
+                alt={image.alt ?? image.name}
                 sx={{
                   width: 100,
                   height: 67,

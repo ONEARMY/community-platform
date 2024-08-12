@@ -5,6 +5,7 @@ import type { IConvertedFileMeta } from 'src/types'
 
 export const formatImagesForGallery = (
   imageList: (IUploadedFileMeta | File | IConvertedFileMeta | null)[],
+  altPrefix?: string,
 ) => {
   if (!imageList) {
     return []
@@ -13,10 +14,11 @@ export const formatImagesForGallery = (
   return imageList
     .filter(Boolean)
     .filter((i: any) => !!i?.downloadUrl)
-    .map((i: any) => ({
-      downloadUrl: i.downloadUrl,
-      thumbnailUrl: cdnImageUrl(i.downloadUrl, {
+    .map((image: any, index: number) => ({
+      downloadUrl: image.downloadUrl,
+      thumbnailUrl: cdnImageUrl(image.downloadUrl, {
         width: 150,
       }),
+      alt: `${altPrefix ? altPrefix + ' ' : ''}gallery image ${index + 1}`,
     }))
 }

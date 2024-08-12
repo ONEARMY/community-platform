@@ -43,6 +43,7 @@ export const HowToCard = ({ howto }: IProps) => {
             width: 500,
           })}
           crossOrigin=""
+          alt={howto.cover_image_alt ?? `cover image of how-to ${howto._id}`}
         />
       </RouterLink>
 

@@ -23,6 +23,7 @@ import { HowtoButtonPublish } from './HowtoButtonPublish'
 import { HowtoErrors } from './HowtoErrors'
 import { HowtoFieldCategory } from './HowtoFieldCategory'
 import { HowtoFieldCoverImage } from './HowtoFieldCoverImage'
+import { HowtoFieldCoverImageAlt } from './HowToFieldCoverImageAlt'
 import { HowtoFieldDescription } from './HowtoFieldDescription'
 import { HowtoFieldDifficulty } from './HowtoFieldDifficulty'
 import { HowtoFieldFiles } from './HowtoFieldFiles'
@@ -218,6 +219,7 @@ export const HowtoForm = observer((props: IProps) => {
                             data-cy={'intro-cover'}
                           >
                             <HowtoFieldCoverImage />
+                            <HowtoFieldCoverImageAlt />
                           </Flex>
                         </Flex>
                       </Flex>

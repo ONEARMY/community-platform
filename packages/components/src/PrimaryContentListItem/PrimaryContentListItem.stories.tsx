@@ -1,40 +1,32 @@
-import { ResponsiveCard } from './ResponsiveCard'
+import { PrimaryContentListItem } from './PrimaryContentListItem'
 
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
   title: 'Components/ResponsiveCard',
-  component: ResponsiveCard,
-} as Meta<typeof ResponsiveCard>
+  component: PrimaryContentListItem,
+} as Meta<typeof PrimaryContentListItem>
 
-export const Default: StoryFn<typeof ResponsiveCard> = () => (
-  <ResponsiveCard
-    title="Title of the card"
-    dataCy="test-id"
-    dataId="card-id"
-    link=""
-    titleAs="h2"
-  />
+export const Default: StoryFn<typeof PrimaryContentListItem> = () => (
+  <PrimaryContentListItem title="Title of the card" dataCy="test-id" link="" />
 )
-export const WithImage: StoryFn<typeof ResponsiveCard> = () => (
-  <ResponsiveCard
+export const WithImage: StoryFn<typeof PrimaryContentListItem> = () => (
+  <PrimaryContentListItem
     title="Title of the card"
     dataCy="test-id"
-    dataId="card-id"
     link=""
-    titleAs="h2"
     imageAlt="Image alt text"
     imageSrc="https://via.placeholder.com/92"
   />
 )
 
-export const WithImageAndCategory: StoryFn<typeof ResponsiveCard> = () => (
-  <ResponsiveCard
+export const WithImageAndCategory: StoryFn<
+  typeof PrimaryContentListItem
+> = () => (
+  <PrimaryContentListItem
     title="Title of the card"
     dataCy="test-id"
-    dataId="card-id"
     link=""
-    titleAs="h2"
     imageAlt="Image alt text"
     imageSrc="https://via.placeholder.com/92"
     category={{ label: 'Category' }}
@@ -42,14 +34,12 @@ export const WithImageAndCategory: StoryFn<typeof ResponsiveCard> = () => (
 )
 
 export const WithImageAndCategoryAndCounts: StoryFn<
-  typeof ResponsiveCard
+  typeof PrimaryContentListItem
 > = () => (
-  <ResponsiveCard
+  <PrimaryContentListItem
     title="Title of the card"
     dataCy="test-id"
-    dataId="card-id"
     link=""
-    titleAs="h2"
     imageAlt="Image alt text"
     imageSrc="https://via.placeholder.com/92"
     category={{ label: 'Category' }}

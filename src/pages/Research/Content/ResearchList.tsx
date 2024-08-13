@@ -45,6 +45,8 @@ const ResearchList = observer(() => {
     ResearchSearchParams.status,
   ) as ResearchStatus | null
   const sort = searchParams.get(ResearchSearchParams.sort) as ResearchSortOption
+  const showResearchItems =
+    !showDrafts && researchItems && researchItems.length !== 0
 
   useEffect(() => {
     if (!sort) {
@@ -156,45 +158,47 @@ const ResearchList = observer(() => {
         </Flex>
       </Flex>
 
-      {showDrafts ? (
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {drafts.map((item) => {
-            return <ResearchListItem key={item._id} item={item} />
-          })}
-        </ul>
-      ) : (
-        <>
-          {researchItems && researchItems.length !== 0 && (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {researchItems.map((item) => (
-                <ResearchListItem key={item._id} item={item} />
-              ))}
-            </ul>
-          )}
+      <Flex
+        as="ul"
+        sx={{
+          flexDirection: 'column',
+          margin: 0,
+          padding: 0,
+          paddingBottom: 3,
+          listStyle: 'none',
+          gap: 3,
+        }}
+      >
+        {showDrafts &&
+          drafts.map((item) => <ResearchListItem key={item._id} item={item} />)}
 
-          {!isFetching && researchItems?.length === 0 && (
-            <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
-          )}
+        {showResearchItems &&
+          researchItems.map((item) => (
+            <ResearchListItem key={item._id} item={item} />
+          ))}
 
-          {!isFetching &&
-            researchItems &&
-            researchItems.length > 0 &&
-            researchItems.length < total && (
-              <Flex
-                sx={{
-                  justifyContent: 'center',
-                }}
-              >
-                <Button
-                  type="button"
-                  onClick={() => fetchResearchItems(lastVisible)}
-                >
-                  {listing.loadMore}
-                </Button>
-              </Flex>
-            )}
-        </>
-      )}
+        {!isFetching && researchItems?.length === 0 && (
+          <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
+        )}
+      </Flex>
+
+      {!isFetching &&
+        researchItems &&
+        researchItems.length > 0 &&
+        researchItems.length < total && (
+          <Flex
+            sx={{
+              justifyContent: 'center',
+            }}
+          >
+            <Button
+              type="button"
+              onClick={() => fetchResearchItems(lastVisible)}
+            >
+              {listing.loadMore}
+            </Button>
+          </Flex>
+        )}
 
       {(isFetching || isFetchingDrafts) && <Loader />}
     </>

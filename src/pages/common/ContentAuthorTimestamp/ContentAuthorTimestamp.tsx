@@ -28,10 +28,10 @@ export const ContentAuthorTimestamp = ({
   return (
     <Box>
       <UserNameTag
+        action={action}
+        date={created}
         userName={userName}
         countryCode={countryCode}
-        created={created}
-        action={action}
       />
       <Text
         hidden={!modifiedDateText}

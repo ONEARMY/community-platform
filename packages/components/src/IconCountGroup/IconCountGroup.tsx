@@ -12,13 +12,11 @@ export const IconCountGroup = (props: IconCountGroupProps) => {
   const { iconCounts } = props
   return (
     <Flex
-      data-cy="icon-count-group"
       sx={{
-        display: ['none', 'flex', 'flex'],
         justifyContent: 'flex-end',
         alignItems: 'center',
-        gap: [3, 6, 12],
-        paddingX: [3, 6, 12],
+        gap: [3, 4, 6],
+        flexWrap: 'wrap',
       }}
     >
       {iconCounts.map((item, index) => (

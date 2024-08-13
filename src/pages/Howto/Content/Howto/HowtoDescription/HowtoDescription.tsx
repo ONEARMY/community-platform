@@ -86,7 +86,6 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
     <Card>
       <Flex
         data-cy="how-to-basis"
-        data-id={howto._id}
         className="howto-description-container"
         sx={{
           overflow: 'hidden',

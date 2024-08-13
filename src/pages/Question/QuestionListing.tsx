@@ -125,21 +125,25 @@ export const QuestionListing = () => {
       )}
 
       {questions && questions.length > 0 && (
-        <>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            {questions.map((question, index) => (
-              <QuestionListItem key={index} question={question} query={q} />
-            ))}
-          </ul>
-        </>
+        <Flex
+          as="ul"
+          sx={{
+            flexDirection: 'column',
+            margin: 0,
+            padding: 0,
+            paddingBottom: 3,
+            listStyle: 'none',
+            gap: 3,
+          }}
+        >
+          {questions.map((question, index) => (
+            <QuestionListItem key={index} question={question} query={q} />
+          ))}
+        </Flex>
       )}
 
       {showLoadMore && (
-        <Flex
-          sx={{
-            justifyContent: 'center',
-          }}
-        >
+        <Flex sx={{ justifyContent: 'center' }}>
           <Button type="button" onClick={() => fetchQuestions(lastVisible)}>
             {listing.loadMore}
           </Button>

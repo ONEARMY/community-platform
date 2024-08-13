@@ -100,7 +100,6 @@ const ResearchDescription = ({
     >
       <Flex
         data-cy="research-basis"
-        data-id={research._id}
         sx={{
           position: 'relative',
           overflow: 'hidden',

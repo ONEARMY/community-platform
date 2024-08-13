@@ -1,6 +1,6 @@
-import { ResponsiveCard } from 'oa-components'
+import { PrimaryContentListItem } from 'oa-components'
 import { Highlighter } from 'src/common/Highlighter'
-import { Box, Flex } from 'theme-ui'
+import { Box } from 'theme-ui'
 
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
@@ -29,31 +29,29 @@ export const QuestionListItem = ({ question, query }: IProps) => {
   const searchWords = [query || '']
 
   return (
-    <ResponsiveCard
+    <PrimaryContentListItem
       dataCy="question-list-item"
-      dataId={question._id}
       link={url}
       title={title}
-      titleAs="h2"
       category={questionCategory}
+      creator={
+        <UserNameTag
+          action="Asked"
+          date={_created}
+          countryCode={creatorCountry}
+          userName={_createdBy}
+        />
+      }
       moderationStatusProps={{ status: moderation, contentType: 'question' }}
       additionalFooterContent={
-        <Flex sx={{ flexDirection: 'column', flex: 1 }}>
-          <UserNameTag
-            userName={_createdBy}
-            countryCode={creatorCountry}
-            created={_created}
-            action="Asked"
-          />
-          {query && (
-            <Box sx={{ padding: 3 }}>
-              <Highlighter
-                searchWords={searchWords}
-                textToHighlight={description}
-              />
-            </Box>
-          )}
-        </Flex>
+        query && (
+          <Box sx={{ padding: 3 }}>
+            <Highlighter
+              searchWords={searchWords}
+              textToHighlight={description}
+            />
+          </Box>
+        )
       }
       iconCounts={[
         {

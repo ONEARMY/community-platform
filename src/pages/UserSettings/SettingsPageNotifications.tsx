@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { Loader } from 'oa-components'
+import { EmailNotificationFrequency } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import {
   buttons,
@@ -33,13 +34,20 @@ export const SettingsPageNotifications = () => {
         ...user,
         notification_settings,
       }
-      await userStore.updateUserNotificationSettings(updatingUser)
+      const updatedUser =
+        await userStore.updateUserNotificationSettings(updatingUser)
 
       setNotification({
         message: notificationForm.succesfulSave,
         icon: 'check',
         show: true,
         variant: 'success',
+      })
+      setInitialValues({
+        notification_settings: {
+          ...updatedUser.notification_settings,
+          emailFrequency,
+        },
       })
     } catch (error) {
       setNotification({
@@ -54,9 +62,17 @@ export const SettingsPageNotifications = () => {
 
   if (!user) return null
 
-  const initialValues = {
-    notification_settings: user.notification_settings || undefined,
-  }
+  const isUnsubscribed = !!user.unsubscribeToken
+  const emailFrequency = isUnsubscribed
+    ? EmailNotificationFrequency.NEVER
+    : user.notification_settings?.emailFrequency
+
+  const [initialValues, setInitialValues] = useState({
+    notification_settings: {
+      ...user.notification_settings,
+      emailFrequency,
+    },
+  })
 
   return (
     <Flex

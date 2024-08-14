@@ -15,7 +15,7 @@ const emailFrequencyOptions: {
   value: EmailNotificationFrequency
   label: string
 }[] = [
-  { value: EmailNotificationFrequency.NEVER, label: 'Never' },
+  { value: EmailNotificationFrequency.NEVER, label: 'Never (Unsubscribed)' },
   { value: EmailNotificationFrequency.DAILY, label: 'Daily' },
   { value: EmailNotificationFrequency.WEEKLY, label: 'Weekly' },
   { value: EmailNotificationFrequency.MONTHLY, label: 'Monthly' },

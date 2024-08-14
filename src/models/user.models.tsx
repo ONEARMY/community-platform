@@ -50,7 +50,7 @@ export interface IUser {
   profileCreated?: ISODateString
   profileCreationTrigger?: string
   // Used to generate an encrypted unsubscribe url in emails
-  unsubscribeToken?: string
+  unsubscribeToken?: string | null
   impact?: IUserImpact
   isBlockedFromMessaging?: boolean
   isContactableByPublic?: boolean

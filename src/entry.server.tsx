@@ -3,15 +3,19 @@ import { CacheProvider } from '@emotion/react'
 import createEmotionServer from '@emotion/server/create-instance'
 import { createReadableStreamFromReadable } from '@remix-run/node'
 import { RemixServer } from '@remix-run/react'
+import * as Sentry from '@sentry/remix'
 import { isbot } from 'isbot'
 import { PassThrough } from 'node:stream'
 
+import { SENTRY_CONFIG } from './config/config'
 import { ServerStyleContext } from './styles/context'
 import createEmotionCache from './styles/createEmotionCache'
 
 import type { EntryContext } from '@remix-run/node'
 
 const ABORT_DELAY = 5_000
+
+Sentry.init({ ...SENTRY_CONFIG, autoInstrumentRemix: true })
 
 export default function handleRequest(
   request: Request,

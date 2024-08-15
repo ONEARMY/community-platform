@@ -86,7 +86,8 @@ app.all(
   createRequestHandler({
     build: viteDevServer
       ? () => viteDevServer.ssrLoadModule('virtual:remix/server-build')
-      : await import('./build/server/index.js'), // comment above needed because lint runs first before the file is created
+      : // eslint-disable-next-line import/no-unresolved
+        await import('./build/server/index.js'), // comment above needed because lint runs first before the file is created
   }),
 )
 

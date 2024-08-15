@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
-import countries from 'countries-list'
+import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea, InternalLink } from 'oa-components'
 import { SelectField } from 'src/common/Form/Select.field'
 import { isModuleSupported, MODULE } from 'src/modules'

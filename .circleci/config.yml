@@ -101,16 +101,6 @@ commands:
       - *restore_yarn_cache
       - *install_packages
       - *save_yarn_cache
-  inject_instance_configuration:
-    steps:
-      - run:
-          name: Set branch environment
-          command: |
-            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
-      - run:
-          name: Inject target environment configuration
-          command: |
-            yarn build:inject-config
 
   firebase_deploy:
     description: Deploy to Firebase
@@ -337,7 +327,6 @@ jobs:
       - setup_repo
       - attach_workspace:
           at: '.'
-      - inject_instance_configuration
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
@@ -358,7 +347,6 @@ jobs:
       # retrieve build folder
       - attach_workspace:
           at: '.'
-      - inject_instance_configuration
       # install testing browsers are required
       - when:
           condition:

@@ -4,7 +4,7 @@ import {
   Links,
   Meta,
   Outlet,
-  // Scripts,
+  Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
 
@@ -57,7 +57,7 @@ const Document = withEmotionCache(
         <body>
           {children}
           <ScrollRestoration />
-          {/* <Scripts /> */}
+          <Scripts />
         </body>
       </html>
     )

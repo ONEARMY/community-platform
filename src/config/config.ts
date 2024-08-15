@@ -25,12 +25,7 @@ import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
  * @returns string
  */
 const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
-  const configurationSource = ['development', 'test'].includes(
-    process.env.NODE_ENV || '',
-  )
-    ? process.env
-    : window?.__OA_COMMUNITY_PLATFORM_CONFIGURATION
-  return configurationSource?.[property] || fallbackValue
+  return process.env?.[property] || fallbackValue || ''
 }
 
 export const getConfigurationOption = _c

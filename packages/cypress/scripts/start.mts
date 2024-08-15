@@ -47,7 +47,7 @@ export const generateAlphaNumeric = (length: number) => {
 const e2eEnv = config()
 
 const isCi = process.argv.includes('ci')
-const isProduction = process.argv.includes('prod')
+// const isProduction = process.argv.includes('prod')
 
 // Prevent unhandled errors being silently ignored
 process.on('unhandledRejection', (err) => {
@@ -88,7 +88,7 @@ async function main() {
  * Instead manually track via child spawns
  */
 async function startAppServer() {
-  const { CROSSENV_BIN, BUILD_SERVE_JSON } = PATHS
+  const { CROSSENV_BIN } = PATHS
   // by default spawns will not respect colours used in stdio, so try to force
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 

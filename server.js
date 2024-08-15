@@ -16,11 +16,20 @@ const viteDevServer =
         }),
       )
 
-let app = express()
+const remixHandler = createRequestHandler({
+  build: viteDevServer
+    ? () => viteDevServer.ssrLoadModule('virtual:remix/server-build')
+    : await import('./build/server/index.js'),
+})
+
+const app = express()
 
 app.use(compression())
-app.use(express.static('build/client', { maxAge: '1h' }))
 
+// http://expressjs.com/en/advanced/best-practice-security.html#at-a-minimum-disable-x-powered-by-header
+app.disable('x-powered-by')
+
+// helmet config
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -72,26 +81,18 @@ app.use(function (req, res, next) {
 if (viteDevServer) {
   app.use(viteDevServer.middlewares)
 } else {
+  // Vite fingerprints its assets so we can cache forever.
   app.use(
     '/assets',
-    express.static('build/client/assets', {
-      immutable: true,
-      maxAge: '1y',
-    }),
+    express.static('build/client/assets', { immutable: true, maxAge: '1y' }),
   )
 }
 
-app.all(
-  '*',
-  createRequestHandler({
-    build: viteDevServer
-      ? () => viteDevServer.ssrLoadModule('virtual:remix/server-build')
-      : // eslint-disable-next-line import/no-unresolved
-        await import('./build/server/index.js'), // comment above needed because lint runs first before the file is created
-  }),
-)
+app.use(express.static('build/client', { maxAge: '1h' }))
 
-let port = import.meta.env.PORT || 3000
+app.all('*', remixHandler)
+
+let port = import.meta.env.PORT || 3456 // 3456 is default port for ci
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console, no-undef

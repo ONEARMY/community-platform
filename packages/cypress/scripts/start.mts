@@ -86,7 +86,6 @@ async function main() {
  * There are npm packages like start-server-and-test but they seem to have flaky
  * performance in some environments (https://github.com/bahmutov/start-server-and-test/issues/250).
  * Instead manually track via child spawns
- *
  */
 async function startAppServer() {
   const { CROSSENV_BIN, BUILD_SERVE_JSON } = PATHS
@@ -94,23 +93,11 @@ async function startAppServer() {
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
-  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none yarn start-ci`
+  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none yarn start`
 
-  // for production will instead serve from production build folder
-  if (isProduction) {
-    // create local build if not running on ci (which will have build already generated)
-    if (!isCi) {
-      // specify CI=false to prevent throwing lint warnings as errors
-      spawnSync(`${CROSSENV_BIN} ${crossEnvArgs} CI=false yarn build`, {
-        shell: true,
-        stdio: ['inherit', 'inherit', 'pipe'],
-      })
-    }
-    // create a rewrites file for handling local server behaviour
-    const opts = { rewrites: [{ source: '/**', destination: '/index.html' }] }
-    fs.writeFile(BUILD_SERVE_JSON, JSON.stringify(opts))
-
-    serverCmd = `npx serve build -l 3456`
+  // create local build if not running on ci (which will have build already generated)
+  if (isCi) {
+    serverCmd = `yarn start-ci`
   }
 
   /******************* Run the main commands ******************* */

@@ -152,7 +152,7 @@ export const SettingsPageMapPin = () => {
     IFormNotification | undefined
   >(undefined)
 
-  const { mapsStore, themeStore, userStore } = useCommonStores().stores
+  const { mapsStore, userStore } = useCommonStores().stores
   const user = userStore.activeUser
   const { addPinTitle, yourPinTitle } = headings.map
 
@@ -247,7 +247,7 @@ export const SettingsPageMapPin = () => {
             <ExternalLink
               data-cy="WorkspaceMapPinRequiredStars"
               data-testid="WorkspaceMapPinRequiredStars"
-              href={themeStore?.currentTheme.styles.communityProgramURL}
+              href={import.meta.env.VITE_COMMUNITY_PROGRAM_URL}
               sx={{ textDecoration: 'underline', color: 'currentcolor' }}
             >
               {headings.workspace.description}

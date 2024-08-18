@@ -36,7 +36,7 @@ const ProfileTypes = () => {
             <Paragraph>
               {description}{' '}
               <ExternalLink
-                href={theme.profileGuidelinesURL}
+                href={import.meta.env.VITE_PROFILE_GUIDELINES_URL}
                 sx={{ textDecoration: 'underline', color: 'grey' }}
                 type="button"
               >

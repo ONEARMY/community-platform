@@ -6,7 +6,6 @@ import { MapsStore } from './Maps/maps.store'
 import { QuestionStore } from './Question/question.store'
 import { ResearchStore } from './Research/research.store'
 import { TagsStore } from './Tags/tags.store'
-import { ThemeStore } from './Theme/theme.store'
 import { UserNotificationsStore } from './User/notifications.store'
 import { UserStore } from './User/user.store'
 
@@ -21,7 +20,6 @@ export interface IStores {
   tagsStore: TagsStore
   researchStore: ResearchStore
   mapsStore: MapsStore
-  themeStore: ThemeStore
   aggregationsStore: AggregationsStore
   userNotificationsStore: UserNotificationsStore
   questionStore: QuestionStore
@@ -50,7 +48,6 @@ const stores = (rootStore: IRootStore) => {
     tagsStore: new TagsStore(rootStore),
     researchStore: new ResearchStore(rootStore),
     mapsStore: new MapsStore(rootStore),
-    themeStore: new ThemeStore(),
     userNotificationsStore: new UserNotificationsStore(rootStore),
     questionStore: new QuestionStore(rootStore),
     discussionStore: new DiscussionStore(rootStore),

@@ -6,7 +6,6 @@ import { logger } from 'src/logger'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
 import type { MarkerCluster } from 'leaflet'
-import type { PlatformTheme } from 'oa-themes'
 import type { IMapPin } from 'src/models/maps.models'
 
 import './sprites.css'
@@ -36,10 +35,10 @@ export const createClusterIcon = () => {
   }
 }
 
-export const createMarkerIcon = (pin: IMapPin, currentTheme: PlatformTheme) => {
+export const createMarkerIcon = (pin: IMapPin) => {
   const icon =
     pin.moderation === IModerationStatus.ACCEPTED
-      ? Workspace.findWorkspaceBadge(pin.type, true, pin.verified, currentTheme)
+      ? Workspace.findWorkspaceBadge(pin.type, true, pin.verified)
       : AwaitingModerationHighlight
   if (!pin.type) {
     logger.debug('NO TYPE', pin)

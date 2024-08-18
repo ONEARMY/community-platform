@@ -11,17 +11,5 @@ export const Theme: PlatformTheme = {
   logo,
   badge,
   avatar,
-  howtoHeading: `Learn & share how to recycle, build and work`,
   styles: StyledComponentTheme,
-  academyResource: 'https://project-kamp-academy.netlify.app/',
-  externalLinks: [
-    {
-      url: 'https://projectkamp.com/support.html',
-      label: 'Support Us',
-    },
-    {
-      url: 'https://projectkamp.com/',
-      label: 'Project Homepage',
-    },
-  ],
 }

@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { Marker } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 
@@ -18,9 +17,6 @@ export const Clusters: React.FunctionComponent<IProps> = ({
   pins,
   onPinClick,
 }) => {
-  const { stores } = useCommonStores()
-  const currentTheme = stores.themeStore.currentTheme
-
   /**
    * Documentation of Leaflet Clusters for better understanding
    * https://github.com/Leaflet/Leaflet.markercluster#clusters-methods
@@ -41,7 +37,7 @@ export const Clusters: React.FunctionComponent<IProps> = ({
           <Marker
             key={pin._id}
             position={[pin.location.lat, pin.location.lng]}
-            icon={createMarkerIcon(pin, currentTheme)}
+            icon={createMarkerIcon(pin)}
             onClick={() => {
               onPinClick(pin)
             }}

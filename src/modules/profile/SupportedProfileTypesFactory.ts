@@ -9,7 +9,6 @@ import LogoWorkspaceVerified from 'src/assets/icons/map-workspace-verified.svg'
 import CollectionBadge from 'src/assets/images/badges/pt-collection-point.svg'
 import LocalComBadge from 'src/assets/images/badges/pt-local-community.svg'
 import MachineBadge from 'src/assets/images/badges/pt-machine-shop.svg'
-import SpaceBadge from 'src/assets/images/badges/pt-space.svg'
 import WorkspaceBadge from 'src/assets/images/badges/pt-workspace.svg'
 import FixingFashionMember from 'src/assets/images/themes/fixing-fashion/avatar_member_sm.svg'
 import FixingFashionSpace from 'src/assets/images/themes/fixing-fashion/avatar_space_sm.svg'
@@ -17,7 +16,6 @@ import PreciousPlasticMember from 'src/assets/images/themes/precious-plastic/ava
 import ProjectKampMember from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
 import ProjectKampSpace from 'src/assets/images/themes/project-kamp/avatar_space_sm.svg'
 
-import type { PlatformTheme } from 'oa-themes'
 import type { IProfileType } from './types'
 
 export const ProfileType = {
@@ -47,33 +45,23 @@ const MemberAndSpace = {
   },
 }
 
-const getProfileTypes = (currentTheme?: PlatformTheme) => {
+const getProfileTypes = () => {
+  const theme = import.meta.env.VITE_THEME
+
   const PROFILE_TYPES: IProfileType[] = [
     {
       label: ProfileType.MEMBER,
       textLabel: 'I am a member',
-      imageSrc: currentTheme
-        ? MemberAndSpace[currentTheme.id].member
-        : PreciousPlasticMember,
-      cleanImageSrc: currentTheme
-        ? MemberAndSpace[currentTheme.id].member
-        : PreciousPlasticMember,
-      cleanImageVerifiedSrc: currentTheme
-        ? MemberAndSpace[currentTheme.id].member
-        : PreciousPlasticMember,
+      imageSrc: MemberAndSpace[theme].member,
+      cleanImageSrc: MemberAndSpace[theme].member,
+      cleanImageVerifiedSrc: MemberAndSpace[theme].member,
     },
     {
       label: ProfileType.SPACE,
       textLabel: 'I run a space',
-      imageSrc: currentTheme
-        ? MemberAndSpace[currentTheme.id].space
-        : SpaceBadge,
-      cleanImageSrc: currentTheme
-        ? MemberAndSpace[currentTheme.id].space
-        : SpaceBadge,
-      cleanImageVerifiedSrc: currentTheme
-        ? MemberAndSpace[currentTheme.id].space
-        : SpaceBadge,
+      imageSrc: MemberAndSpace[theme].space,
+      cleanImageSrc: MemberAndSpace[theme].space,
+      cleanImageVerifiedSrc: MemberAndSpace[theme].space,
     },
     {
       label: ProfileType.WORKSPACE,
@@ -108,15 +96,12 @@ const getProfileTypes = (currentTheme?: PlatformTheme) => {
   return PROFILE_TYPES
 }
 
-export const SupportedProfileTypesFactory = (
-  configurationString: string,
-  currentTheme?: PlatformTheme,
-) => {
+export const SupportedProfileTypesFactory = (configurationString: string) => {
   const supportedProfileTypes = (configurationString || DEFAULT_PROFILE_TYPES)
     .split(',')
     .map((s) => s.trim())
   return () =>
-    getProfileTypes(currentTheme).filter(({ label }) =>
+    getProfileTypes().filter(({ label }) =>
       supportedProfileTypes.includes(label),
     )
 }

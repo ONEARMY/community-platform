@@ -20,11 +20,6 @@ export const colors = {
 export const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
   logo: logo,
-  profileGuidelinesURL:
-    'https://community.fixing.fashion/academy/guides/profile',
-  communityProgramURL:
-    'https://community.fixing.fashion/academy/guides/community-program',
-
   ...baseTheme,
   colors,
   buttons: getButtons(colors),

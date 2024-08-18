@@ -28,12 +28,6 @@ export const colors = {
 export const styles: ThemeWithName = {
   name: 'Precious Plastic',
   logo: logo,
-  profileGuidelinesURL:
-    'https://community.preciousplastic.com/academy/guides/platform',
-  questionsGuidelinesURL:
-    'https://community.preciousplastic.com/academy/guides/guidelines-questions',
-  communityProgramURL:
-    'https://community.preciousplastic.com/academy/guides/community-program',
   ...baseTheme,
   badges: {
     member: {

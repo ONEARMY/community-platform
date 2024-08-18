@@ -11,13 +11,5 @@ export const Theme: PlatformTheme = {
   logo,
   badge,
   avatar,
-  howtoHeading: `Learn & share how to recycle, build and work`,
   styles: StyledComponentTheme,
-  academyResource: 'https://fixing-fashion-academy.netlify.app/',
-  externalLinks: [
-    {
-      url: 'https://fixing.fashion/',
-      label: 'Project Homepage',
-    },
-  ],
 }

@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { withEmotionCache } from '@emotion/react'
+import { Global, ThemeProvider, withEmotionCache } from '@emotion/react'
 import {
   Links,
   Meta,
@@ -7,6 +7,12 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
+import { GlobalStyles } from 'oa-components'
+import {
+  fixingFashionTheme,
+  preciousPlasticTheme,
+  projectKampTheme,
+} from 'oa-themes'
 
 import { ClientStyleContext, ServerStyleContext } from './styles/context'
 
@@ -72,10 +78,25 @@ const Document = withEmotionCache(
   },
 )
 
+const getEnvironmentTheme = () => {
+  switch (import.meta.env.VITE_THEME) {
+    case 'project-kamp':
+      return projectKampTheme
+    case 'fixing-fashion':
+      return fixingFashionTheme
+    case 'precious-plastic':
+    default:
+      return preciousPlasticTheme
+  }
+}
+
 export default function Root() {
   return (
     <Document>
-      <Outlet />
+      <ThemeProvider theme={getEnvironmentTheme().styles}>
+        <Outlet />
+        <Global styles={GlobalStyles} />
+      </ThemeProvider>
     </Document>
   )
 }

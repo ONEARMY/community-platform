@@ -34,13 +34,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
           HowtoAuthor: true,
         },
       },
-      themeStore: {
-        currentTheme: {
-          styles: {
-            communityProgramURL: '',
-          },
-        },
-      },
       tagsStore: {},
     },
   }),

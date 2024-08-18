@@ -1,8 +1,7 @@
-import { useTheme } from '@emotion/react'
 import { ExternalLink, Guidelines } from 'oa-components'
 
 export const QuestionPostingGuidelines = () => {
-  const theme = useTheme()
+  const guidelinesUrl = import.meta.env.VITE_QUESTIONS_GUIDELINES_URL
 
   const steps = [
     <>
@@ -38,14 +37,11 @@ export const QuestionPostingGuidelines = () => {
     </>,
   ]
 
-  if (theme.questionsGuidelinesURL) {
+  if (guidelinesUrl) {
     steps.unshift(
       <>
         Have a look at our{' '}
-        <ExternalLink
-          sx={{ color: 'blue' }}
-          href={theme.questionsGuidelinesURL}
-        >
+        <ExternalLink sx={{ color: 'blue' }} href={guidelinesUrl}>
           question guidelines.
         </ExternalLink>
       </>,

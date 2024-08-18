@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { Select } from 'oa-components'
 import { UserRole } from 'oa-shared'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { SITE, VERSION } from 'src/config/config'
 import { getDevSiteRole } from 'src/config/devSiteConfig'
 import { Box, Flex, Text } from 'theme-ui'
@@ -11,15 +10,12 @@ import { Box, Flex, Text } from 'theme-ui'
  * version of the platform, and provide the option to toggle between different dev sites
  */
 const DevSiteHeader = observer(() => {
-  const { themeStore } = useCommonStores().stores
-  const theme = themeStore.currentTheme.styles
-
   return (
     <>
       {showDevSiteHeader() && (
         <Flex
           data-cy="devSiteHeader"
-          bg={theme.colors.red2}
+          bg="#f58d8e"
           py={1}
           px={1}
           style={{ alignItems: 'center', zIndex: 3001 }}
@@ -67,23 +63,6 @@ const DevSiteHeader = observer(() => {
               />
             </Box>
           </Flex>
-          <Flex data-cy="devSiteSelectContainer" sx={{ alignItems: 'center' }}>
-            <Text color={'white'} sx={{ fontSize: 2 }} mr="1" title={SITE}>
-              Theme:
-            </Text>
-            <Box sx={{ width: '180px' }}>
-              <Select
-                options={availableThemes}
-                placeholder="Pick a theme"
-                defaultValue={availableThemes.find((s) => s.value === SITE)}
-                onChange={(selectedElement: any) => {
-                  const theme = selectedElement?.value || ''
-                  localStorage.setItem('platformTheme', theme)
-                  themeStore.setActiveTheme(theme)
-                }}
-              />
-            </Box>
-          </Flex>
         </Flex>
       )}
     </>
@@ -93,12 +72,6 @@ const DevSiteHeader = observer(() => {
 const showDevSiteHeader = () =>
   devSites.some((s) => s.value === SITE) ||
   window.location?.hostname === 'localhost'
-
-const availableThemes = [
-  { value: 'precious-plastic', label: 'Precious Plastic' },
-  { value: 'project-kamp', label: 'Project Kamp' },
-  { value: 'fixing-fashion', label: 'Fixing Fashion' },
-]
 
 // we have 2 different dev sites, only show this component when on one and provide select
 const devSites = [

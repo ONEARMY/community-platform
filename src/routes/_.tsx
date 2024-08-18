@@ -1,6 +1,4 @@
-import { Global, ThemeProvider } from '@emotion/react'
 import { Outlet } from '@remix-run/react'
-import { GlobalStyles } from 'oa-components'
 import { Alerts } from 'src/common/Alerts/Alerts'
 import { Analytics } from 'src/common/Analytics'
 import { ScrollToTop } from 'src/common/ScrollToTop'
@@ -10,34 +8,33 @@ import Header from 'src/pages/common/Header/Header'
 import { StickyButton } from 'src/pages/common/StickyButton'
 import { Flex } from 'theme-ui'
 
-import { useCommonStores } from '../common/hooks/useCommonStores'
-
-export async function clientLoader() {
+export async function loader() {
   return null
+}
+
+export function HydrateFallback() {
+  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
+  // Can be removed once pages are using SSR.
+  return <div></div>
 }
 
 // This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {
-  const rootStore = useCommonStores()
-
   return (
-    <ThemeProvider theme={rootStore.stores.themeStore.currentTheme.styles}>
-      <Flex
-        sx={{ height: '100vh', flexDirection: 'column' }}
-        data-cy="page-container"
-      >
-        <Analytics />
-        <ScrollToTop />
-        <DevSiteHeader />
-        <Alerts />
-        <Header />
+    <Flex
+      sx={{ height: '100vh', flexDirection: 'column' }}
+      data-cy="page-container"
+    >
+      <Analytics />
+      <ScrollToTop />
+      <DevSiteHeader />
+      <Alerts />
+      <Header />
 
-        <Outlet />
+      <Outlet />
 
-        <GlobalSiteFooter />
-        <StickyButton />
-      </Flex>
-      <Global styles={GlobalStyles} />
-    </ThemeProvider>
+      <GlobalSiteFooter />
+      <StickyButton />
+    </Flex>
   )
 }

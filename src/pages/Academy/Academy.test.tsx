@@ -1,17 +1,6 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 import { getFrameSrc } from './Academy'
-
-// Mock out the useCommonStores method
-// to prevent excessive amount of application
-// being instantiated as part of the loading process
-// This is a code smell, which needs to be resolved but
-// is out of scope for the current task.
-vi.mock('src/common/hooks/useCommonStores', () => {
-  return {
-    useCommonStores: vi.fn(),
-  }
-})
 
 describe('getFrameSrc', () => {
   const basePath = `https://example.com/`

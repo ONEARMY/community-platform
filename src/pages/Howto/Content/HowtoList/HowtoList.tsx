@@ -19,8 +19,7 @@ import type { IHowto } from 'src/models'
 import type { HowtoSortOption } from './HowtoSortOptions'
 
 export const HowtoList = observer(() => {
-  const { themeStore, userStore } = useCommonStores().stores
-  const theme = themeStore.currentTheme
+  const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [howtos, setHowtos] = useState<IHowto[]>([])
   const [total, setTotal] = useState<number>(0)
@@ -108,7 +107,7 @@ export const HowtoList = observer(() => {
             fontSize: 5,
           }}
         >
-          {theme && theme.howtoHeading}
+          {import.meta.env.VITE_HOWTOS_HEADING}
         </Heading>
       </Flex>
       <Flex
@@ -181,7 +180,7 @@ export const HowtoList = observer(() => {
       <MoreContainer m={'0 auto'} pt={60} pb={90}>
         <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
           <Heading as="p" sx={{ textAlign: 'center' }}>
-            Inspire the {theme.siteName} world.
+            Inspire the {import.meta.env.VITE_SITE_NAME} world.
             <br />
             Share your how-to!
           </Heading>

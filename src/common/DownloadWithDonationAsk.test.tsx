@@ -25,15 +25,6 @@ const userToMock = (user?: IUserPPDB) => {
   return (useCommonStores as Mock).mockImplementation(() => ({
     stores: {
       userStore: { user: user ?? undefined },
-      themeStore: {
-        currentTheme: {
-          donations: {
-            body: '',
-            iframeSrc: '',
-            imageURL: '',
-          },
-        },
-      },
     },
   }))
 }

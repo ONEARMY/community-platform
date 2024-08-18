@@ -13,13 +13,6 @@ export interface ISentryConfig {
   environment: string
 }
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    __OA_COMMUNITY_PLATFORM_CONFIGURATION: any
-  }
-}
-
 export type siteVariants =
   | 'emulated_site'
   | 'dev_site'

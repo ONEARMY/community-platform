@@ -257,8 +257,14 @@ export class UserStore extends ModuleStore {
       throw new Error('notification_settings not found')
     }
 
+    const unsubscribeToken =
+      notification_settings.emailFrequency === EmailNotificationFrequency.NEVER
+        ? this.activeUser.unsubscribeToken
+        : null
+
     await this._updateUserRequest(_id, {
       notification_settings,
+      unsubscribeToken,
     })
     await this.refreshActiveUserDetails()
 

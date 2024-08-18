@@ -456,6 +456,33 @@ describe('userStore', () => {
       )
     })
 
+    it('clears the unsubscribe token', async () => {
+      const userProfile = FactoryUser({
+        _id: 'my-user-profile',
+        notification_settings: {
+          emailFrequency: EmailNotificationFrequency.NEVER,
+        },
+        unsubscribeToken: 'anything',
+      })
+      store.activeUser = userProfile
+
+      const notification_settings = {
+        emailFrequency: EmailNotificationFrequency.DAILY,
+      }
+      const updateValues = {
+        _id: userProfile._id,
+        notification_settings,
+      }
+      await store.updateUserNotificationSettings(updateValues)
+
+      expect(store.db.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          notification_settings,
+          unsubscribeToken: null,
+        }),
+      )
+    })
+
     it('throws an error is no user id is provided', async () => {
       const values = {}
 

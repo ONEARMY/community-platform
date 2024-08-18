@@ -64,6 +64,8 @@ export const fields: ILabels = {
   },
   displayName: {
     title: 'Display Name',
+    description:
+      'Shown on your profile page. You can use spaces and everything!',
   },
   email: {
     title: 'Current email address',
@@ -80,7 +82,7 @@ export const fields: ILabels = {
   impact: {
     description:
       "Let's track our collective positive impact! Add data about your recycling work and show the world the power of a movement of small scale recyclers!",
-    title: 'Positive impact 🤙',
+    title: 'Positive impact',
   },
   links: {
     placeholder: 'Link',
@@ -123,6 +125,11 @@ export const fields: ILabels = {
   },
   repeatNewPassword: {
     title: 'Repeat new password',
+  },
+  userName: {
+    title: 'Username',
+    description:
+      "You set this when you signed up and it can't be changed now. Sorry.",
   },
   workspaceType: {
     description: 'What kind of Precious Plastic workspace do you run?',

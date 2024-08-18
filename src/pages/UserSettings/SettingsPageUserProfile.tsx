@@ -100,6 +100,7 @@ export const SettingsPageUserProfile = () => {
   const initialValues = {
     profileType: user?.profileType || ProfileType.MEMBER,
     displayName: user?.displayName || null,
+    userName: user?.userName,
     links,
     location: user?.location || null,
     about: user?.about || null,
@@ -150,7 +151,7 @@ export const SettingsPageUserProfile = () => {
             />
 
             <form id={formId} onSubmit={handleSubmit}>
-              <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+              <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
                 {values.profileType === ProfileType.WORKSPACE && (
@@ -180,13 +181,13 @@ export const SettingsPageUserProfile = () => {
 
                 <UserInfosSection formValues={values} />
 
+                <UserImagesSection isMemberProfile={isMember} values={values} />
+
                 {!isMember && (
                   <PublicContactSection
                     isContactableByPublic={values.isContactableByPublic}
                   />
                 )}
-
-                <UserImagesSection isMemberProfile={isMember} values={values} />
               </Flex>
             </form>
 
@@ -201,7 +202,7 @@ export const SettingsPageUserProfile = () => {
               variant={'primary'}
               type="submit"
               disabled={submitting}
-              sx={{ alignSelf: 'flex-start', paddingTop: 4 }}
+              sx={{ alignSelf: 'flex-start' }}
             >
               {buttons.save}
             </Button>

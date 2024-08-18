@@ -107,7 +107,7 @@ export const CommentItem = (props: IProps) => {
                   width: ['30px', '50px'],
                   height: ['30px', '50px'],
                 }}
-                alt={`avatar of creator (${creatorName ?? 'creator name not available'}) of the comment ${_id}`}
+                alt={creatorName ? `Avatar of ${creatorName}` : 'Avatar of comment author'}
               />
             </Box>
 

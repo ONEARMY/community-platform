@@ -85,7 +85,7 @@ const Step = (props: IProps) => {
                     images={
                       formatImagesForGallery(
                         step.images,
-                        `step ${stepindex + 1}`,
+                        `Step ${stepindex + 1}`,
                       ) as any
                     }
                   />

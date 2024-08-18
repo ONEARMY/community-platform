@@ -19,6 +19,6 @@ export const formatImagesForGallery = (
       thumbnailUrl: cdnImageUrl(image.downloadUrl, {
         width: 150,
       }),
-      alt: `${altPrefix ? altPrefix + ' ' : ''}gallery image ${index + 1}`,
+      alt: `${altPrefix ? altPrefix + ' ' : ''}Galery image ${index + 1}`,
     }))
 }

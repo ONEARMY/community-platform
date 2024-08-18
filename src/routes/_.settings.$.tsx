@@ -6,6 +6,8 @@ import { Flex, Text } from 'theme-ui'
 
 import type { IUser } from 'src/models'
 
+import '../styles/leaflet.css'
+
 export async function clientLoader() {
   return null
 }

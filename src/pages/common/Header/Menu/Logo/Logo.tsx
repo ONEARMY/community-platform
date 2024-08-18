@@ -35,6 +35,7 @@ const Logo = observer(() => {
           <Image
             loading="lazy"
             src={logo}
+            style={{ maxWidth: 100, maxHeight: 100 }}
             sx={{
               width: logoSize,
               height: logoSize,

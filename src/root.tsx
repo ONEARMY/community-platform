@@ -18,6 +18,7 @@ const Document = withEmotionCache(
   ({ children }: DocumentProps, emotionCache) => {
     const serverStyleData = useContext(ServerStyleContext)
     const clientStyleData = useContext(ClientStyleContext)
+    const resetClientStyleData = clientStyleData?.reset
 
     // Only executed on client
     useEffect(() => {
@@ -32,6 +33,13 @@ const Document = withEmotionCache(
       // reset cache to reapply global styles
       clientStyleData?.reset()
     }, [])
+
+    // Only executed on client
+    useEffect(() => {
+      if (resetClientStyleData) {
+        resetClientStyleData()
+      }
+    }, [resetClientStyleData])
 
     return (
       <html lang="en">

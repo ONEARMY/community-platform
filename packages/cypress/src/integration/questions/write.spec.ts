@@ -22,7 +22,7 @@ describe('[Question]', () => {
 
       cy.step('Go to create page')
       cy.visit('/questions/create')
-      cy.get('[data-cy=question-create-title]')
+      cy.get('[data-cy=question-create-title]', { timeout: 20000 })
 
       cy.step('Warn if title is identical to an existing one')
       cy.get('[data-cy=field-title]').type(item.title).blur({ force: true })

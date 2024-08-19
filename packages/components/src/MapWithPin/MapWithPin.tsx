@@ -1,11 +1,13 @@
 import * as React from 'react'
-import { Map, TileLayer, ZoomControl } from 'react-leaflet'
+import { ZoomControl } from 'react-leaflet'
 import { Alert, Box, Flex, Text } from 'theme-ui'
 
 import { Button } from '../Button/Button'
+import { Map } from '../Map/Map'
 import { OsmGeocoding } from '../OsmGeocoding/OsmGeocoding'
 import { MapPin } from './MapPin'
 
+import type { LeafletMouseEvent } from 'leaflet'
 import type { Result } from '../OsmGeocoding/types'
 
 import 'leaflet/dist/leaflet.css'
@@ -54,6 +56,10 @@ export const MapWithPin = (props: Props) => {
         // do nothing
       },
     )
+  }
+
+  const onClick = (evt: LeafletMouseEvent) => {
+    onPositionChanged({ ...evt.latlng })
   }
 
   return (
@@ -115,45 +121,30 @@ export const MapWithPin = (props: Props) => {
             </Flex>
           )}
         </Box>
-        <div>
-          <Map
-            center={center}
-            zoom={zoom}
-            zoomControl={false}
-            onViewportChanged={(evt) => {
-              if (evt.zoom) {
-                setZoom(evt.zoom)
-              }
+        <Map
+          center={center}
+          zoom={zoom}
+          zoomControl={false}
+          setZoom={setZoom}
+          onclick={onClick}
+          style={{
+            height: '300px',
+            zIndex: 1,
+          }}
+        >
+          <ZoomControl position="topright" />
+          <MapPin
+            position={position}
+            draggable={draggable}
+            ondragend={(evt: any) => {
+              if (evt.lat && evt.lng)
+                onPositionChanged({
+                  lat: evt.lat,
+                  lng: evt.lng,
+                })
             }}
-            onclick={(evt) => {
-              onPositionChanged({
-                lat: evt.latlng.lat,
-                lng: evt.latlng.lng,
-              })
-            }}
-            style={{
-              height: '300px',
-              zIndex: 1,
-            }}
-          >
-            <ZoomControl position="topright" />
-            <TileLayer
-              attribution='&amp;copy <a href="http://osm.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <MapPin
-              position={position}
-              draggable={draggable}
-              ondragend={(evt: any) => {
-                if (evt.lat && evt.lng)
-                  onPositionChanged({
-                    lat: evt.lat,
-                    lng: evt.lng,
-                  })
-              }}
-            />
-          </Map>
-        </div>
+          />
+        </Map>
       </div>
     </Flex>
   )

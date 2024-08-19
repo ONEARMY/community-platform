@@ -1,19 +1,17 @@
-import React, { useEffect } from 'react'
-import { Map, TileLayer } from 'react-leaflet'
+import { useEffect } from 'react'
+import { Map } from 'oa-components'
 
 import { Clusters } from './Cluster'
 import { Popup } from './Popup'
 
 import type { LatLngExpression } from 'leaflet'
+import type { Map as MapType } from 'react-leaflet'
 import type { ILatLng, IMapPin } from 'src/models/maps.models'
-
-import 'leaflet/dist/leaflet.css'
-import './index.css'
 
 interface IProps {
   activePin: IMapPin | null
   center: ILatLng
-  mapRef: React.RefObject<Map>
+  mapRef: React.RefObject<MapType>
   pins: Array<IMapPin>
   zoom: number
   onPinClicked: (pin: IMapPin) => void
@@ -21,23 +19,23 @@ interface IProps {
 }
 
 export const MapView = (props: IProps) => {
+  const { activePin, center, mapRef, onPinClicked, pins, zoom } = props
+
   useEffect(() => {
-    if (props.mapRef.current) {
-      /*return*/ props.mapRef.current.leafletElement.zoomControl?.setPosition(
+    if (mapRef.current) {
+      /*return*/ mapRef.current.leafletElement.zoomControl?.setPosition(
         'bottomleft',
       )
     }
   }, [])
 
-  const { center, zoom, pins, activePin } = props
   const isViewportGreaterThanTablet = window.innerWidth > 1024
-
   const mapCenter: LatLngExpression = center ? [center.lat, center.lng] : [0, 0]
   const mapZoom = center ? zoom : 2
 
   return (
     <Map
-      ref={props.mapRef}
+      ref={mapRef}
       className="markercluster-map"
       center={mapCenter}
       zoom={mapZoom}
@@ -48,12 +46,8 @@ export const MapView = (props: IProps) => {
         props.onBlur()
       }}
     >
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="http://osm.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
-      />
-      <Clusters pins={pins} onPinClick={props.onPinClicked} />
-      {activePin && <Popup activePin={activePin} map={props.mapRef} />}
+      <Clusters pins={pins} onPinClick={onPinClicked} />
+      {activePin && <Popup activePin={activePin} mapRef={mapRef} />}
     </Map>
   )
 }

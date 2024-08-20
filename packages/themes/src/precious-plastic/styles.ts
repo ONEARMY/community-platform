@@ -23,7 +23,14 @@ export const colors = {
   accent: { base: '#fee77b', hover: '#ffde45' },
 }
 
-// cc - assume standard image widths are 4:3, however not clearly defined
+export const alerts = {
+  ...baseTheme.alerts,
+  accent: {
+    ...baseTheme.alerts.failure,
+    backgroundColor: colors.accent.base,
+    color: colors.black,
+  },
+}
 
 export const styles: ThemeWithName = {
   name: 'Precious Plastic',
@@ -35,6 +42,7 @@ export const styles: ThemeWithName = {
   communityProgramURL:
     'https://community.preciousplastic.com/academy/guides/community-program',
   ...baseTheme,
+  alerts,
   badges: {
     member: {
       lowDetail: memberBadgeLowDetail,

@@ -1,4 +1,5 @@
 export { ArticleCallToAction } from './ArticleCallToAction/ArticleCallToAction'
+export { Banner } from './Banner/Banner'
 export { BlockedRoute } from './BlockedRoute/BlockedRoute'
 export { Breadcrumbs } from './Breadcrumbs/Breadcrumbs'
 export { Button } from './Button/Button'

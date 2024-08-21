@@ -45,7 +45,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
       <MemberBadge
         profileType={ProfileTypeList.MEMBER}
         size={50}
-        style={{
+        sx={{
           position: 'absolute',
           top: 0,
           left: '50%',

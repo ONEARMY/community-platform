@@ -41,7 +41,6 @@ export class MapsStore extends ModuleStore {
       mapPins: observable,
       filteredPins: observable,
       processDBMapPins: action,
-      setMapBoundingBox: action,
       retrieveMapPins: action,
       retrievePinFilters: action,
       setActivePinFilters: action,
@@ -87,12 +86,6 @@ export class MapsStore extends ModuleStore {
       .filter(({ type }) => type !== filterToRemove)
       .map(({ subType, type }) => (subType ? subType : type))
     this.setActivePinFilters(filters)
-  }
-
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  /** TODO CC 2021-05-28 review if still useful to keep */
-  public setMapBoundingBox(boundingBox: IBoundingBox) {
-    // this.recalculatePinCounts(boundingBox)
   }
 
   public async retrieveMapPins(filterToRemove: IFilterToRemove = undefined) {

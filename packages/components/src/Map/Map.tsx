@@ -9,7 +9,7 @@ import './index.css'
 
 export interface IProps extends MapProps {
   children?: React.ReactNode | React.ReactNode[]
-  setZoom?: (arg: number) => void
+  setZoom: (arg: number) => void
   ref?: RefObject<LeafletMap> | undefined
 }
 
@@ -17,9 +17,7 @@ export const Map = forwardRef((props: IProps, ref: Ref<LeafletMap>) => {
   const { children, setZoom } = props
 
   const onViewportChanged = (viewport: Viewport) => {
-    if (viewport.zoom && setZoom) {
-      setZoom(viewport.zoom)
-    }
+    viewport.zoom && setZoom(viewport.zoom)
   }
 
   return (

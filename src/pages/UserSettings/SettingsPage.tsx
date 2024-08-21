@@ -1,8 +1,8 @@
 import { SettingsFormWrapper } from 'oa-components'
+import { ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isPreciousPlastic } from 'src/config/config'
 import { isModuleSupported, MODULE } from 'src/modules'
-import { ProfileType } from 'src/modules/profile/types'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Box, Flex, Text } from 'theme-ui'
 
@@ -20,7 +20,7 @@ export const SettingsPage = () => {
   const user = userStore.activeUser
   if (!user) return null
 
-  const isMember = user.profileType === ProfileType.MEMBER
+  const isMember = user.profileType === ProfileTypeList.MEMBER
   const showImpactTab = !isMember && isPreciousPlastic()
   const showMapTab = isModuleSupported(MODULE.MAP)
   const incompleteProfile = !isProfileComplete(user || undefined)

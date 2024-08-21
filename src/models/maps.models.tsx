@@ -1,5 +1,10 @@
-import type { IModerationStatus, IPinGrouping } from 'oa-shared'
-import type { ProfileTypeLabel } from '../modules/profile/types'
+import type {
+  ILatLng,
+  IMapPinDetail,
+  IModerationStatus,
+  IPinGrouping,
+  IProfileTypeName,
+} from 'oa-shared'
 import type { WorkspaceType } from './userPreciousPlastic.models'
 
 /**
@@ -10,7 +15,6 @@ import type { WorkspaceType } from './userPreciousPlastic.models'
  * @param subtype - currently used for workspacetype filtering
  */
 
-export type IMapPinType = ProfileTypeLabel
 export type IMapPinSubtype = WorkspaceType
 
 /**
@@ -22,7 +26,7 @@ export interface IMapPin {
   _createdBy?: string
   _id: string
   _deleted: boolean
-  type: IMapPinType
+  type: IProfileTypeName
   location: ILatLng
   verified: boolean
   subType?: IMapPinSubtype
@@ -37,32 +41,11 @@ export interface IMapPinWithDetail extends IMapPin {
   detail: IMapPinDetail
 }
 
-export interface IMapPinDetail {
-  name: string
-  displayName: string
-  shortDescription: string
-  profilePicUrl: string
-  profileUrl: string
-  heroImageUrl: string
-  verifiedBadge: boolean
-  country: string | null
-}
-
-export interface ILatLng {
-  lat: number
-  lng: number
-}
-
-export interface IBoundingBox {
-  topLeft: ILatLng
-  bottomRight: ILatLng
-}
-
 export interface IMapGrouping {
   _count?: number
   grouping: IPinGrouping
   displayName: string
-  type: IMapPinType
+  type: IProfileTypeName
   subType?: IMapPinSubtype
   icon: string
   hidden?: boolean

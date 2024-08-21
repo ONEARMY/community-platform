@@ -8,7 +8,7 @@ import { Box, Flex, Grid, Heading, Paragraph, Text } from 'theme-ui'
 import { FlexSectionContainer } from '../elements'
 import { CustomRadioField } from '../fields/CustomRadio.field'
 
-import type { ProfileTypeLabel } from 'src/modules/profile/types'
+import type { IProfileTypeName } from 'oa-shared'
 
 const ProfileTypes = () => {
   const { description, error } = fields.activities
@@ -52,7 +52,7 @@ const ProfileTypes = () => {
                     name="profileType"
                     isSelected={profile.label === props.input.value}
                     onChange={(v) =>
-                      props.input.onChange(v as ProfileTypeLabel)
+                      props.input.onChange(v as IProfileTypeName)
                     }
                     imageSrc={
                       theme.badges[profile.label]?.normal || profile.imageSrc

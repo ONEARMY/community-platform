@@ -3,11 +3,11 @@ import { Form } from 'react-final-form'
 import { ARRAY_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
 import { Button, Loader } from 'oa-components'
+import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { logger } from 'src/logger'
 import { isModuleSupported, MODULE } from 'src/modules'
-import { ProfileType } from 'src/modules/profile/types'
 import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
@@ -75,7 +75,7 @@ export const SettingsPageUserProfile = () => {
   const validateForm = (v: IUserPP) => {
     const errors: any = {}
     // must have at least 1 cover (awkard react final form array format)
-    if (!v.coverImages[0] && v.profileType !== ProfileType.MEMBER) {
+    if (!v.coverImages[0] && v.profileType !== ProfileTypeList.MEMBER) {
       errors.coverImages = []
       errors.coverImages[ARRAY_ERROR] = 'Must have at least one cover image'
     }
@@ -98,7 +98,7 @@ export const SettingsPageUserProfile = () => {
   }))
 
   const initialValues = {
-    profileType: user?.profileType || ProfileType.MEMBER,
+    profileType: user?.profileType || ProfileTypeList.MEMBER,
     displayName: user?.displayName || null,
     userName: user?.userName,
     links,
@@ -138,7 +138,7 @@ export const SettingsPageUserProfile = () => {
       }) => {
         if (isLoading) return <Loader sx={{ alignSelf: 'center' }} />
 
-        const isMember = values.profileType === ProfileType.MEMBER
+        const isMember = values.profileType === ProfileTypeList.MEMBER
 
         return (
           <Flex sx={{ flexDirection: 'column', gap: 4 }}>
@@ -154,11 +154,11 @@ export const SettingsPageUserProfile = () => {
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
                 {isModuleSupported(MODULE.MAP) && <FocusSection />}
 
-                {values.profileType === ProfileType.WORKSPACE && (
+                {values.profileType === ProfileTypeList.WORKSPACE && (
                   <WorkspaceSection />
                 )}
 
-                {values.profileType === ProfileType.COLLECTION_POINT && (
+                {values.profileType === ProfileTypeList.COLLECTION_POINT && (
                   <CollectionSection
                     required={
                       values.collectedPlasticTypes
@@ -169,7 +169,7 @@ export const SettingsPageUserProfile = () => {
                   />
                 )}
 
-                {values.profileType === ProfileType.MACHINE_BUILDER && (
+                {values.profileType === ProfileTypeList.MACHINE_BUILDER && (
                   <ExpertiseSection
                     required={
                       values.machineBuilderXp

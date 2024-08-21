@@ -6,7 +6,8 @@ import { Popup } from './Popup'
 
 import type { LatLngExpression } from 'leaflet'
 import type { Map as MapType } from 'react-leaflet'
-import type { ILatLng, IMapPin } from 'src/models/maps.models'
+import type { ILatLng } from 'shared/models'
+import type { IMapPin } from 'src/models/maps.models'
 
 interface IProps {
   activePin: IMapPin | null

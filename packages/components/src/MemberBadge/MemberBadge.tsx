@@ -3,11 +3,12 @@ import { Image } from 'theme-ui'
 
 import badge from '../../assets/icons/icon-star-active.svg'
 
+import type { IProfileTypeName } from 'oa-shared'
 import type { ImageProps } from 'theme-ui'
 
 export interface Props extends ImageProps {
   size?: number
-  profileType?: string
+  profileType?: IProfileTypeName
   useLowDetailVersion?: boolean
 }
 

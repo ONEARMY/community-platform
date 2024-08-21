@@ -1,6 +1,9 @@
 import { faker } from '@faker-js/faker'
-import { ExternalLinkLabel, IModerationStatus } from 'oa-shared'
-import { ProfileType } from 'src/modules/profile/types'
+import {
+  ExternalLinkLabel,
+  IModerationStatus,
+  ProfileTypeList,
+} from 'oa-shared'
 
 import type { IExternalLink, IUserPPDB } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
@@ -32,7 +35,7 @@ export const FactoryUser = (
   _deleted: faker.datatype.boolean(),
   _contentModifiedTimestamp: faker.date.past().toString(),
   _authID: faker.string.uuid(),
-  profileType: faker.helpers.arrayElement(Object.values(ProfileType)),
+  profileType: faker.helpers.arrayElement(Object.values(ProfileTypeList)),
   userName: faker.internet.userName(),
   displayName: faker.person.fullName(),
   verified: faker.datatype.boolean(),

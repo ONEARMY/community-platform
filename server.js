@@ -51,6 +51,8 @@ app.use(
         'fonts.googleapis.com',
         '*.analytics.google.com',
         '*.google-analytics.com',
+        "'unsafe-eval'",
+        "'unsafe-inline'",
       ],
 
       frameSrc: ["'self'", 'www.youtube.com', 'youtube.com'],

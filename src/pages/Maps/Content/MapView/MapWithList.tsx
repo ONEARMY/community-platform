@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CardList, Map } from 'oa-components'
-import { Box, Flex } from 'theme-ui'
+import { Box, Flex, Heading } from 'theme-ui'
 
 import { Clusters } from './Cluster'
 import { latLongFilter } from './latLongFilter'
@@ -60,7 +60,19 @@ export const MapWithList = (props: IProps) => {
         height: '100%',
       }}
     >
-      <Box sx={{ background: 'white', flex: 1, overflow: 'scroll' }}>
+      <Box
+        sx={{
+          background: 'white',
+          flex: 1,
+          overflow: 'scroll',
+          padding: 4,
+          gap: 4,
+        }}
+      >
+        <Heading data-cy="welome-header">
+          Welcome to our world!{' '}
+          {pins && `${pins.length} members (and counting...)`}
+        </Heading>
         <CardList list={pins} onClick={onClick} filteredList={filteredPins} />
       </Box>
       <Map

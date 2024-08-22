@@ -17,6 +17,7 @@ export const Banner = (props: IProps) => {
 
   return (
     <Alert
+      data-cy="Banner"
       onClick={onClick}
       variant={variant || 'failure'}
       sx={{

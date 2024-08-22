@@ -4,7 +4,7 @@ import { TabPanel as MuiTabPanel } from '@mui/base/TabPanel'
 import { Tabs } from '@mui/base/Tabs'
 import { TabsList } from '@mui/base/TabsList'
 
-import type { PlatformTheme } from 'oa-themes/dist'
+import type { PlatformTheme } from 'oa-themes'
 
 type Theme = PlatformTheme['styles']
 

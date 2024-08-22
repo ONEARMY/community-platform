@@ -93,11 +93,11 @@ async function startAppServer() {
   const crossEnvArgs = `FORCE_COLOR=1 REACT_APP_SITE_VARIANT=test-ci`
 
   // run local debug server for testing unless production build specified
-  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none yarn start --port 3000`
+  let serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} BROWSER=none yarn start`
 
   // create local build if not running on ci (which will have build already generated)
   if (isCi) {
-    serverCmd = `yarn start-ci`
+    serverCmd = 'yarn start-ci'
   }
 
   /******************* Run the main commands ******************* */
@@ -124,8 +124,7 @@ async function startAppServer() {
   // do not end function until server responsive on port 3456
   // give up if not reponsive after 5 minutes (assume uncaught error somewhere)
   const timeout = 5 * 60 * 1000
-  const waitPort = isCi ? 3456 : 3000
-  await waitOn({ resources: ['http-get://localhost:' + waitPort], timeout })
+  await waitOn({ resources: ['http-get://localhost:3456'], timeout })
 }
 
 function runTests() {
@@ -146,7 +145,7 @@ function runTests() {
 
   const testCMD = isCi
     ? `${CY_BIN} run --record --env ${CYPRESS_ENV} --key=${CYPRESS_KEY} --parallel --headless --browser ${CI_BROWSER} --group ${CI_GROUP} --ci-build-id ${buildId}`
-    : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV} --config baseUrl=http://localhost:3000/`
+    : `${CY_BIN} open --browser chrome --env ${CYPRESS_ENV}`
 
   console.log(`Running cypress with cmd: ${testCMD}`)
 

@@ -34,9 +34,6 @@ const vitestConfig: VitestUserConfigInterface = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  build: {
-    outDir: 'build',
-  },
   define: {
     global: 'globalThis',
   },
@@ -62,11 +59,6 @@ export default defineConfig({
   ],
   // open browser with server (note, will open at 127.0.1 not localhost on node <17)
   // https://vitejs.dev/config/server-options.html#server-options
-  server: {
-    open: '/',
-    port: 3000,
-    host: 'localhost',
-  },
   ssr: {
     noExternal: ['remix-utils'],
   },

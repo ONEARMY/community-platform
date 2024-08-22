@@ -2,9 +2,9 @@ import { getConfigurationOption } from 'src/config/config'
 
 export interface ISEOMeta {
   title: string
-  faviconUrl: string
   description: string
-  imageUrl: string
+  faviconUrl?: string
+  imageUrl?: string
 }
 /** Reduced list of meta properties used within site index.html for update */
 type IPlatformMetaProperty =
@@ -80,13 +80,10 @@ export const SeoTagsUpdateComponent = (update: Partial<ISEOMeta>) => {
  * TODO - it would be better if these were linked to the active site/deployment/theme in some way
  */
 const getDefaultSEOTags = (): ISEOMeta => {
-  const PUBLIC_URL = location.origin
   return {
     title: 'Community Platform',
     description:
       'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.',
-    faviconUrl: `${PUBLIC_URL}/favicon.ico`,
-    imageUrl: `${PUBLIC_URL}/social-image.jpg`,
   }
 }
 

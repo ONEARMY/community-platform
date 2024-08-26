@@ -6,7 +6,8 @@ import { Popup } from './Popup'
 
 import type { LatLngExpression } from 'leaflet'
 import type { Map as MapType } from 'react-leaflet'
-import type { ILatLng, IMapPin } from 'src/models/maps.models'
+import type { ILatLng } from 'shared/models'
+import type { IMapPin } from 'src/models/maps.models'
 
 interface IProps {
   activePin: IMapPin | null
@@ -16,10 +17,11 @@ interface IProps {
   zoom: number
   onPinClicked: (pin: IMapPin) => void
   onBlur: () => void
+  setZoom: (arg: number) => void
 }
 
 export const MapView = (props: IProps) => {
-  const { activePin, center, mapRef, onPinClicked, pins, zoom } = props
+  const { activePin, center, mapRef, onPinClicked, pins, zoom, setZoom } = props
 
   useEffect(() => {
     if (mapRef.current) {
@@ -39,6 +41,7 @@ export const MapView = (props: IProps) => {
       className="markercluster-map"
       center={mapCenter}
       zoom={mapZoom}
+      setZoom={setZoom}
       maxZoom={18}
       zoomControl={isViewportGreaterThanTablet}
       style={{ height: '100%', zIndex: 0 }}

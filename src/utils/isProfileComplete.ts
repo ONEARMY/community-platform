@@ -1,8 +1,8 @@
-import { ProfileType } from 'src/modules/profile/types'
+import { ProfileTypeList } from 'oa-shared'
 
 import type { IUserPPDB } from 'src/models'
 
-const noMemberProfileTypes = Object.values(ProfileType).filter(
+const nonMemberProfileTypes = Object.values(ProfileTypeList).filter(
   (type) => type !== 'member',
 )
 
@@ -11,8 +11,8 @@ export const isProfileComplete = (user: IUserPPDB): boolean => {
 
   const isBasicInfoFilled = !!(about && displayName && links?.length !== 0)
 
-  const isMember = user.profileType === ProfileType.MEMBER
-  const isSpace = !!noMemberProfileTypes.find(
+  const isMember = user.profileType === ProfileTypeList.MEMBER
+  const isSpace = !!nonMemberProfileTypes.find(
     (type) => type === user.profileType,
   )
 

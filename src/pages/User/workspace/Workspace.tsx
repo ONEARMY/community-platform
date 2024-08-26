@@ -1,27 +1,25 @@
-// assets profileType
+import { ProfileTypeList } from 'oa-shared'
 import MemberBadge from 'src/assets/images/badges/pt-member.svg'
-// Highlights
 import CollectionHighlight from 'src/assets/images/highlights/highlight-collection-point.svg'
 import LocalCommunityHighlight from 'src/assets/images/highlights/highlight-local-community.svg'
 import MachineHighlight from 'src/assets/images/highlights/highlight-machine-shop.svg'
 import MemberHighlight from 'src/assets/images/highlights/highlight-member.svg'
 import WorkspaceHighlight from 'src/assets/images/highlights/highlight-workspace.svg'
 import { getSupportedProfileTypes } from 'src/modules/profile'
-import { ProfileType } from 'src/modules/profile/types'
 
 import type { PlatformTheme } from 'oa-themes'
 
 const findWordspaceHighlight = (workspaceType?: string): string => {
   switch (workspaceType) {
-    case ProfileType.WORKSPACE:
+    case ProfileTypeList.WORKSPACE:
       return WorkspaceHighlight
-    case ProfileType.MEMBER:
+    case ProfileTypeList.MEMBER:
       return MemberHighlight
-    case ProfileType.MACHINE_BUILDER:
+    case ProfileTypeList.MACHINE_BUILDER:
       return MachineHighlight
-    case ProfileType.COMMUNITY_BUILDER:
+    case ProfileTypeList.COMMUNITY_BUILDER:
       return LocalCommunityHighlight
-    case ProfileType.COLLECTION_POINT:
+    case ProfileTypeList.COLLECTION_POINT:
       return CollectionHighlight
     default:
       return MemberHighlight

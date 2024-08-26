@@ -67,7 +67,9 @@ const MapsPage = observer(() => {
   }, [user])
 
   useEffect(() => {
-    if (mapPins.length === 0) fetchMapPins()
+    if (mapPins.length === 0) {
+      fetchMapPins()
+    }
 
     const showPin = async () => {
       await showPinFromURL()
@@ -144,17 +146,15 @@ const MapsPage = observer(() => {
     return filterMapPinsByType(mapPins, activePinFilters)
   }, [mapPins, activePinFilters])
 
+  const onBlur = () => {
+    navigate('/map')
+    setSelectedPin(null)
+  }
+
   return (
     // the calculation for the height is kind of hacky for now, will set properly on final mockups
     <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
-      <NewMapBanner
-        onClick={() => setShowNewMap(!showNewMap)}
-        text={
-          !showNewMap
-            ? "🗺 We're developing new map interface. Test it out!"
-            : '🗺 This is our new map interface. Go back to the old one!'
-        }
-      />
+      <NewMapBanner showNewMap={showNewMap} setShowNewMap={setShowNewMap} />
       {!showNewMap && (
         <>
           <Controls
@@ -171,10 +171,7 @@ const MapsPage = observer(() => {
             onPinClicked={(pin) => {
               getPinByUserId(pin._id)
             }}
-            onBlur={() => {
-              navigate('/map')
-              setSelectedPin(null)
-            }}
+            onBlur={onBlur}
             center={center}
             zoom={zoom}
             setZoom={setZoom}
@@ -197,9 +194,7 @@ const MapsPage = observer(() => {
               onPinClicked={(pin) => {
                 getPinByUserId(pin._id)
               }}
-              onBlur={() => {
-                setSelectedPin(null)
-              }}
+              onBlur={onBlur}
               center={center}
               zoom={zoom}
               setZoom={setZoom}

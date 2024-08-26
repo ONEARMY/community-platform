@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { CardList, Map } from 'oa-components'
 import { Box, Flex, Heading } from 'theme-ui'
 
@@ -36,8 +35,6 @@ export const MapWithList = (props: IProps) => {
     setZoom,
   } = props
 
-  const navigate = useNavigate()
-
   const handleLocationFilter = () => {
     if (mapRef.current) {
       const boundaries = mapRef.current.leafletElement.getBounds()
@@ -50,8 +47,6 @@ export const MapWithList = (props: IProps) => {
   const isViewportGreaterThanTablet = window.innerWidth > 1024
   const mapCenter: LatLngExpression = center ? [center.lat, center.lng] : [0, 0]
   const mapZoom = center ? zoom : 2
-
-  const onClick = (userId: string) => navigate(`/u/${userId}`)
 
   return (
     <Flex
@@ -73,7 +68,7 @@ export const MapWithList = (props: IProps) => {
           Welcome to our world!{' '}
           {pins && `${pins.length} members (and counting...)`}
         </Heading>
-        <CardList list={pins} onClick={onClick} filteredList={filteredPins} />
+        <CardList list={pins} filteredList={filteredPins} />
       </Box>
       <Map
         ref={mapRef}

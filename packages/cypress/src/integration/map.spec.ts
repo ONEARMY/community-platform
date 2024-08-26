@@ -41,7 +41,7 @@ describe('[Map]', () => {
         cy.contains(userId)
         cy.get('[data-cy="MemberBadge-member"]')
       })
-      .should('have.attr', 'src')
+      .should('have.attr', 'href')
       .and('include', `/u/${userId}`)
 
     cy.step('New map pins can be clicked on')

@@ -1,4 +1,4 @@
-import { Flex, Text } from 'theme-ui'
+import { Flex, Grid, Text } from 'theme-ui'
 
 import { CardListItem } from '../CardListItem/CardListItem'
 import { Loader } from '../Loader/Loader'
@@ -6,22 +6,22 @@ import { Loader } from '../Loader/Loader'
 import type { ListItem } from '../CardListItem/CardListItem'
 
 export interface IProps {
-  list: ListItem[]
   filteredList: ListItem[] | null
-  onClick: (id: string) => void
+  list: ListItem[]
 }
 
 export const EMPTY_LIST = 'Oh nos! Nothing to show!'
 
 export const CardList = (props: IProps) => {
-  const { onClick, filteredList, list } = props
+  const { filteredList, list } = props
 
   const listToShow = filteredList === null ? list : filteredList
   const displayItems = listToShow.map((item) => (
-    <CardListItem item={item} key={item._id} onClick={onClick} />
+    <CardListItem item={item} key={item._id} />
   ))
 
   const isListEmpty = displayItems.length === 0
+  const hasListLoaded = list
   const results = `${displayItems.length} ${displayItems.length == 1 ? 'result' : 'results'}`
 
   return (
@@ -32,22 +32,24 @@ export const CardList = (props: IProps) => {
         gap: 4,
       }}
     >
-      {!list && <Loader />}
-      {list && (
+      {!hasListLoaded && <Loader />}
+      {hasListLoaded && (
         <>
           <Flex>
             <Text data-cy="list-results">{results}</Text>
           </Flex>
-          <Flex
+          <Grid
             sx={{
               alignItems: 'flex-start',
               flexWrap: 'wrap',
               gap: 4,
             }}
+            width="250px"
+            columns={3}
           >
             {!isListEmpty && displayItems}
             {isListEmpty && EMPTY_LIST}
-          </Flex>
+          </Grid>
         </>
       )}
     </Flex>

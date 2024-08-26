@@ -87,5 +87,5 @@ export const ProfileTypeList = {
   COLLECTION_POINT: 'collection-point',
 } as const
 
-export type IProfileTypeName =
+export type ProfileTypeName =
   (typeof ProfileTypeList)[keyof typeof ProfileTypeList]

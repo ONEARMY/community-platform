@@ -3,7 +3,7 @@ import type {
   IMapPinDetail,
   IModerationStatus,
   IPinGrouping,
-  IProfileTypeName,
+  ProfileTypeName,
 } from 'oa-shared'
 import type { WorkspaceType } from './userPreciousPlastic.models'
 
@@ -26,7 +26,7 @@ export interface IMapPin {
   _createdBy?: string
   _id: string
   _deleted: boolean
-  type: IProfileTypeName
+  type: ProfileTypeName
   location: ILatLng
   verified: boolean
   subType?: IMapPinSubtype
@@ -45,7 +45,7 @@ export interface IMapGrouping {
   _count?: number
   grouping: IPinGrouping
   displayName: string
-  type: IProfileTypeName
+  type: ProfileTypeName
   subType?: IMapPinSubtype
   icon: string
   hidden?: boolean

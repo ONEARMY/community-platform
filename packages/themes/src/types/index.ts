@@ -1,4 +1,4 @@
-import type { IProfileTypeName } from 'oa-shared'
+import type { ProfileTypeName } from 'oa-shared'
 
 interface LinkList {
   label: string
@@ -40,7 +40,7 @@ export interface ThemeWithName {
   alerts: any
 
   badges: {
-    [K in IProfileTypeName]?: Badge
+    [K in ProfileTypeName]?: Badge
   }
 
   text: any

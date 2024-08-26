@@ -1,7 +1,7 @@
 import { CardListItem } from './CardListItem'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { IProfileTypeName } from 'oa-shared'
+import type { ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Components/CardListItem',
@@ -11,17 +11,17 @@ export default {
 export const DefaultMember: StoryFn<typeof CardListItem> = () => {
   const item = {
     _id: 'not-selected-onload',
-    type: 'member' as IProfileTypeName,
+    type: 'member' as ProfileTypeName,
   }
 
-  return <CardListItem onClick={() => null} item={item} />
+  return <CardListItem item={item} />
 }
 
 export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
   const item = {
     _id: 'not-selected-onload',
-    type: 'workspace' as IProfileTypeName,
+    type: 'workspace' as ProfileTypeName,
   }
 
-  return <CardListItem onClick={() => null} item={item} />
+  return <CardListItem item={item} />
 }

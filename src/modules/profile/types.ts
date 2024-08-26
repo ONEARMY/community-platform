@@ -1,7 +1,7 @@
-import type { IProfileTypeName } from 'oa-shared'
+import type { ProfileTypeName } from 'oa-shared'
 
 export interface IProfileTypeDetails {
-  label: IProfileTypeName
+  label: ProfileTypeName
   imageSrc?: string
   cleanImageSrc?: string
   cleanImageVerifiedSrc?: string

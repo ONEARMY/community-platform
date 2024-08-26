@@ -3,7 +3,7 @@ import { Box, Button, Flex, Text, Textarea } from 'theme-ui'
 
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 
-import type { IProfileTypeName } from 'oa-shared'
+import type { ProfileTypeName } from 'oa-shared'
 
 export interface Props {
   maxLength: number
@@ -14,7 +14,7 @@ export interface Props {
   onChange: (value: string) => void
   comment: string
   placeholder?: string
-  userProfileType?: IProfileTypeName
+  userProfileType?: ProfileTypeName
   buttonLabel?: string
 }
 

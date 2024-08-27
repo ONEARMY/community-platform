@@ -5,6 +5,7 @@ import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { getDiscussionContributorsToNotify } from 'src/utils/getDiscussionContributorsToNotify'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
@@ -235,6 +236,7 @@ export class DiscussionStore extends ModuleStore {
         `Unable to find collection. Discussion notification not sent. sourceType: ${discussion.sourceType}`,
       )
     }
+
     const parentComment = discussion.comments.find(
       ({ _id }) => _id === comment.parentCommentId,
     )
@@ -258,31 +260,24 @@ export class DiscussionStore extends ModuleStore {
               `Unable to find research update. Discussion notification not sent. sourceId: ${discussion.sourceId}`,
             )
 
-          const username = parentComment
-            ? parentComment.creatorName
-            : research._createdBy
-
+          const recipientsToNotify = getDiscussionContributorsToNotify(
+            discussion,
+            research,
+            comment,
+            update.collaborators,
+          )
           const url = `/research/${research.slug}#update_${update._id}-comment:${commentId}`
 
-          await this.userNotificationsStore.triggerNotification(
-            'new_comment_discussion',
-            username,
-            url,
-            research.title,
+          await Promise.all(
+            recipientsToNotify.map((recipient) => {
+              this.userNotificationsStore.triggerNotification(
+                'new_comment_discussion',
+                recipient,
+                url,
+                research.title,
+              )
+            }),
           )
-
-          if (update.collaborators) {
-            await Promise.all(
-              update.collaborators.map((collaborator) => {
-                this.userNotificationsStore.triggerNotification(
-                  'new_comment_discussion',
-                  collaborator,
-                  url,
-                  research.title,
-                )
-              }),
-            )
-          }
         }
         return
       default:
@@ -294,15 +289,21 @@ export class DiscussionStore extends ModuleStore {
           collectionName === 'howtos' ? 'how-to' : collectionName
 
         if (parentContent) {
-          const username = parentComment
-            ? parentComment.creatorName
-            : parentContent._createdBy
+          const recipientsToNotify = getDiscussionContributorsToNotify(
+            discussion,
+            parentContent,
+            comment,
+          )
 
-          return this.userNotificationsStore.triggerNotification(
-            'new_comment_discussion',
-            username,
-            `/${parentPath}/${parentContent.slug}#comment:${commentId}`,
-            parentContent.title,
+          return await Promise.all(
+            recipientsToNotify.map((recipient) => {
+              this.userNotificationsStore.triggerNotification(
+                'new_comment_discussion',
+                recipient,
+                `/${parentPath}/${parentContent.slug}#comment:${commentId}`,
+                parentContent.title,
+              )
+            }),
           )
         }
     }

@@ -4,16 +4,13 @@ export const discussions = {
     _deleted: false,
     _id: '06fjiZWeyxxMkE0brp6n',
     _modified: '2023-02-15T02:45:15.500Z',
-    contributorIds: [
-      'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
-      'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
-    ],
+    contributorIds: ['howto_creator', 'benfurber', 'davehakkens'],
     sourceId: '3s7Fyn6Jf8ryANJM6Jf6',
     sourceType: 'question',
     comments: [
       {
         _created: '2022-02-10T20:22:15.500Z',
-        _creatorId: 'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
+        _creatorId: 'howto_creator',
         _edited: '2022-02-10T20:22:15.500Z',
         _id: 'ZAB2SoUZtzUyeYLg9Cro',
         creatorCountry: 'af',
@@ -25,7 +22,7 @@ export const discussions = {
       },
       {
         _created: '2023-02-10T20:22:15.500Z',
-        _creatorId: 'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
+        _creatorId: 'benfurber',
         _id: 'ZtzUyeYLgZAB2SoU9Cro',
         creatorCountry: 'uk',
         creatorName: 'benfurber',
@@ -34,7 +31,7 @@ export const discussions = {
       },
       {
         _created: '2023-02-11T02:22:15.500Z',
-        _creatorId: 'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
+        _creatorId: 'benfurber',
         _id: 'BtzUAB2SoU9CroyeYLgZ',
         creatorCountry: 'uk',
         creatorName: 'benfurber',
@@ -44,7 +41,7 @@ export const discussions = {
       {
         _created: '2023-02-12T02:22:19.500Z',
         _edited: '2023-02-12T02:22:43.500Z',
-        _creatorId: 'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
+        _creatorId: 'davehakkens',
         _id: 'Bt9CroyeYLgZ55555',
         creatorCountry: '',
         creatorName: 'davehakkens',
@@ -53,7 +50,7 @@ export const discussions = {
       },
       {
         _created: '2023-02-15T02:45:15.500Z',
-        _creatorId: 'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
+        _creatorId: 'benfurber',
         _id: 'fBtzUAB23royeYLgZ',
         creatorCountry: 'uk',
         creatorName: 'benfurber',
@@ -70,6 +67,7 @@ export const discussions = {
     contributorIds: [
       'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
       'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
+      'demo_admin',
     ],
     sourceId: 'ERO3RibAuvz7Wt12LfTb',
     sourceType: 'researchUpdate',
@@ -126,7 +124,7 @@ export const discussions = {
     _deleted: false,
     _id: 'w21vbdxc4t3',
     _modified: '2022-03-27T22:10:12.271Z',
-    contributorIds: ['Q1sgtnNTPBSYCKEXCOWaOMcPqZD3'],
+    contributorIds: ['demo_admin'],
     sourceId: '213hrandom-id',
     sourceType: 'researchUpdate',
     primaryContentId: '0up6oJCPP3M9bDYx34Et',
@@ -160,10 +158,7 @@ export const discussions = {
     _deleted: false,
     _id: 'lkjsad897234b',
     _modified: '2022-03-27T22:10:12.271Z',
-    contributorIds: [
-      'Q1sgtnNTPBSYCKEXCOWaOMcPqZD3',
-      'TPBSYCKEXCOWaOMcPqZD3Q1sgtnN',
-    ],
+    contributorIds: ['demo_admin'],
     sourceId: 'random-23456',
     sourceType: 'researchUpdate',
     primaryContentId: '0up6oJCPP3M9bDYx34Et',
@@ -193,7 +188,7 @@ export const discussions = {
     _created: '2022-04-27T22:10:11.271Z',
     _deleted: false,
     _id: 'ljerqw7234asdf',
-    contributorIds: ['demo_admin'],
+    contributorIds: ['demo_admin', 'benfurber'],
     sourceId: 'gPpPDEvfNT9a6w5FWzaj',
     sourceType: 'howto',
     primaryContentId: 'gPpPDEvfNT9a6w5FWzaj',

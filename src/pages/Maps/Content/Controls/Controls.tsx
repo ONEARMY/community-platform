@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styled from '@emotion/styled'
 import { Link, useNavigate } from '@remix-run/react'
 import { Button, Modal, OsmGeocoding } from 'oa-components'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'

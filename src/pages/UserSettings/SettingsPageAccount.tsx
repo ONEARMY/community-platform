@@ -23,10 +23,8 @@ export const SettingsPageAccount = observer(() => {
         gap: 4,
       }}
     >
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Heading as="h2" variant="small">
-          {headings.accountSettings}
-        </Heading>
+      <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+        <Heading as="h2">{headings.accountSettings}</Heading>
         <Text variant="quiet">
           Here you can manage the core settings of your account.
         </Text>

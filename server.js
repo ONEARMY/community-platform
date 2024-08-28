@@ -39,6 +39,7 @@ app.use(
       fontSrc: ["'self'", 'fonts.gstatic.com', 'fonts.googleapis.com'],
       connectSrc: [
         "'self'",
+        '*.run.app',
         'securetoken.googleapis.com',
         'firestore.googleapis.com',
         'identitytoolkit.googleapis.com',
@@ -76,6 +77,7 @@ app.use(
       imgSrc: [
         "'self'",
         'google.com',
+        '*.openstreetmap.org',
         'firebasestorage.googleapis.com',
         'cdn.jsdelivr.net', // image CDN
       ],

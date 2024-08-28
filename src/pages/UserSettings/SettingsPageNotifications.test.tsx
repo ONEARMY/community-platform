@@ -40,4 +40,23 @@ describe('SettingsPageNotifications', () => {
       expect(wrapper.queryByText('Weekly')).toBeNull()
     })
   })
+
+  it('renders the option as never when a unsubscribe token is present', async () => {
+    mockUser = FactoryUser({
+      notification_settings: {
+        emailFrequency: EmailNotificationFrequency.MONTHLY,
+      },
+      unsubscribeToken: 'something',
+    })
+    // Act
+    let wrapper
+    act(() => {
+      wrapper = FormProvider(mockUser, <SettingsPageNotifications />)
+    })
+
+    await waitFor(() => {
+      expect(wrapper.getAllByText('Never', { exact: false })).toHaveLength(1)
+      expect(wrapper.queryByText('Weekly')).toBeNull()
+    })
+  })
 })

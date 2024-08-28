@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams } from '@remix-run/react'
 import { observer } from 'mobx-react-lite'
 import { Button, InternalLink, Loader } from 'oa-components'
+import { ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { ProfileType } from 'src/modules/profile/types'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Flex, Text } from 'theme-ui'
 
@@ -82,7 +82,8 @@ export const UserProfile = observer(() => {
   const isViewingOwnProfile =
     userStore.activeUser && user && userStore.activeUser._id === user._id
   const showMemberProfile =
-    user.profileType === ProfileType.MEMBER || user.profileType === undefined
+    user.profileType === ProfileTypeList.MEMBER ||
+    user.profileType === undefined
 
   return (
     <Flex

@@ -15,12 +15,19 @@ export const colors = {
   accent: { base: '#8ab57f', hover: 'hsl(108, 25%, 68%)' },
 }
 
-// cc - assume standard image widths are 4:3, however not clearly defined
+export const alerts = {
+  ...baseTheme.alerts,
+  accent: {
+    ...baseTheme.alerts.failure,
+    backgroundColor: colors.accent.base,
+  },
+}
 
 export const StyledComponentTheme: ThemeWithName = {
   name: 'Project Kamp',
   logo: logo,
   ...baseTheme,
+  alerts,
   colors,
   buttons: getButtons(colors),
   badges: {

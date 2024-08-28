@@ -8,7 +8,7 @@ import { Box, Flex, Grid, Heading, Paragraph, Text } from 'theme-ui'
 import { FlexSectionContainer } from '../elements'
 import { CustomRadioField } from '../fields/CustomRadio.field'
 
-import type { ProfileTypeLabel } from 'src/modules/profile/types'
+import type { ProfileTypeName } from 'oa-shared'
 
 const ProfileTypes = () => {
   const { description, error } = fields.activities
@@ -26,13 +26,8 @@ const ProfileTypes = () => {
       name="profileType"
       render={(props) => (
         <FlexSectionContainer>
-          <Flex sx={{ justifyContent: 'space-between' }}>
-            <Heading as="h2" variant="small">
-              {headings.focus}
-            </Heading>
-          </Flex>
-
-          <Flex sx={{ alignItems: 'baseline', marginY: 2 }}>
+          <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+            <Heading as="h2">{headings.focus}</Heading>
             <Paragraph>
               {description}{' '}
               <ExternalLink
@@ -45,7 +40,9 @@ const ProfileTypes = () => {
             </Paragraph>
           </Flex>
 
-          <Box>
+          <Flex sx={{ flexDirection: 'column', gap: 4 }}>
+            {props.meta.error && <Text color={theme.colors.red}>{error}</Text>}
+
             <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
               {profileTypes.map((profile, index: number) => (
                 <Box key={index}>
@@ -54,9 +51,7 @@ const ProfileTypes = () => {
                     value={profile.label}
                     name="profileType"
                     isSelected={profile.label === props.input.value}
-                    onChange={(v) =>
-                      props.input.onChange(v as ProfileTypeLabel)
-                    }
+                    onChange={(v) => props.input.onChange(v as ProfileTypeName)}
                     imageSrc={
                       theme.badges[profile.label]?.normal || profile.imageSrc
                     }
@@ -65,8 +60,7 @@ const ProfileTypes = () => {
                 </Box>
               ))}
             </Grid>
-            {props.meta.error && <Text color={theme.colors.red}>{error}</Text>}
-          </Box>
+          </Flex>
         </FlexSectionContainer>
       )}
     />

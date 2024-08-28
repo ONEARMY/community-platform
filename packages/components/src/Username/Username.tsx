@@ -12,13 +12,14 @@ import type { User } from '../types/common'
 
 export interface IProps {
   user: User
+  hideFlag?: boolean
   sx?: ThemeUIStyleObject
 }
 
 const isValidCountryCode = (str: string) =>
   str && twoCharacterCountryCodes.has(str.toUpperCase())
 
-export const Username = ({ user, sx }: IProps) => {
+export const Username = ({ user, hideFlag, sx }: IProps) => {
   const { countryCode, userName, isSupporter, isVerified } = user
 
   return (
@@ -56,32 +57,34 @@ export const Username = ({ user, sx }: IProps) => {
           alignItems: 'center',
         }}
       >
-        <Flex mr={1} sx={{ display: 'inline-flex' }}>
-          {countryCode && isValidCountryCode(countryCode) ? (
-            <Flex data-testid="Username: known flag">
-              <FlagIconHowTos
-                countryCode={countryCode}
-                svg={true}
-                title={countryCode}
-              />
-            </Flex>
-          ) : (
-            <Flex
-              data-testid="Username: unknown flag"
-              sx={{
-                backgroundImage: `url("${flagUnknownSVG}")`,
-                backgroundSize: 'cover',
-                borderRadius: '3px',
-                height: '14px',
-                width: '21px !important',
-                justifyContent: 'center',
-                alignItems: 'center',
-                lineHeight: 0,
-                overflow: 'hidden',
-              }}
-            ></Flex>
-          )}
-        </Flex>
+        {!hideFlag && (
+          <Flex mr={1} sx={{ display: 'inline-flex' }}>
+            {countryCode && isValidCountryCode(countryCode) ? (
+              <Flex data-testid="Username: known flag">
+                <FlagIconHowTos
+                  countryCode={countryCode}
+                  svg={true}
+                  title={countryCode}
+                />
+              </Flex>
+            ) : (
+              <Flex
+                data-testid="Username: unknown flag"
+                sx={{
+                  backgroundImage: `url("${flagUnknownSVG}")`,
+                  backgroundSize: 'cover',
+                  borderRadius: '3px',
+                  height: '14px',
+                  width: '21px !important',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  lineHeight: 0,
+                  overflow: 'hidden',
+                }}
+              ></Flex>
+            )}
+          </Flex>
+        )}
         <Text>{userName}</Text>
         {isVerified && (
           <Image

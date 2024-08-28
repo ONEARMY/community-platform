@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
 import { act, waitFor } from '@testing-library/react'
+import { ProfileTypeList } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
@@ -24,7 +25,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
 describe('SettingsPageImpact', () => {
   it('renders existing and missing impact', async () => {
     mockUser = FactoryUser({
-      profileType: 'space',
+      profileType: ProfileTypeList.SPACE,
       impact: {
         2023: [
           {

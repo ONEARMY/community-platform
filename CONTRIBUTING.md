@@ -77,7 +77,7 @@ This setup is:
 - Good for frontend development
 - Good for backend development
 
-See the details at [here](https://docs.platform.onearmy.earth/Backend%20Development/firebase-emulator/).
+See the details at [here](https://docs.platform.onearmy.earth/Backend%20Development/firebase-emulators-docker/).
 
 ### Learn more
 

@@ -154,7 +154,10 @@ export const CDN_URL = _c('REACT_APP_CDN_URL', '')
 export const VERSION = _c('REACT_APP_PROJECT_VERSION', '')
 export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID')
 export const PATREON_CLIENT_ID = _c('REACT_APP_PATREON_CLIENT_ID')
-export const API_URL = _c('REACT_APP_API_URL', '')
+export const API_URL = _c(
+  'REACT_APP_API_URL',
+  'https://platform-api-voymtdup6a-uc.a.run.app',
+)
 
 export const isPreciousPlastic = (): boolean => {
   return (

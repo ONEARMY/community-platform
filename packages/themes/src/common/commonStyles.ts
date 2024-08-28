@@ -6,6 +6,10 @@ export const commonStyles = {
       outline: 'none',
       boxShadow: 'none',
     },
+    '&:disabled': {
+      color: 'lightgrey',
+      cursor: 'not-allowed',
+    },
   },
   colors: {
     white: 'white',

@@ -2,9 +2,9 @@ import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import countriesList from 'countries-list'
 import { Button, FieldInput, FieldTextarea, InternalLink } from 'oa-components'
+import { ProfileTypeList } from 'oa-shared'
 import { SelectField } from 'src/common/Form/Select.field'
 import { isModuleSupported, MODULE } from 'src/modules'
-import { ProfileType } from 'src/modules/profile/types'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
 import { required } from 'src/utils/validators'
 import { Flex, Heading, Text } from 'theme-ui'
@@ -25,8 +25,8 @@ interface IProps {
 export const UserInfosSection = ({ formValues }: IProps) => {
   const { countries } = countriesList
   const { profileType, links, location } = formValues
-  const isMemberProfile = profileType === ProfileType.MEMBER
-  const { about, country, displayName } = fields
+  const isMemberProfile = profileType === ProfileTypeList.MEMBER
+  const { about, country, displayName, userName } = fields
 
   const noMapPin = !location?.latlng
 
@@ -34,27 +34,41 @@ export const UserInfosSection = ({ formValues }: IProps) => {
     <FlexSectionContainer>
       <Flex
         data-testid="UserInfosSection"
-        sx={{ flexDirection: 'column', gap: [4, 6] }}
+        sx={{ flexDirection: 'column', gap: [3, 5] }}
       >
-        <Heading as="h2" variant="small">
-          {headings.infos}
-        </Heading>
-        <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-          <Text>{`${displayName.title} *`}</Text>
+        <Heading as="h2">{headings.infos}</Heading>
+        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+          <Text>{`${userName.title} *`}</Text>
+          <Text variant="quiet" sx={{ fontSize: 2 }}>
+            {userName.description}
+          </Text>
           <Field
-            data-cy="username"
+            data-cy="userName"
+            name="userName"
+            component={FieldInput}
+            validate={required}
+            validateFields={[]}
+            disabled
+          />
+        </Flex>
+
+        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+          <Text>{`${displayName.title} *`}</Text>
+          <Text variant="quiet" sx={{ fontSize: 2 }}>
+            {displayName.description}
+          </Text>
+          <Field
+            data-cy="displayName"
             name="displayName"
             component={FieldInput}
-            placeholder="Pick a unique username"
+            placeholder="Pick a name to display on your profile"
             validate={required}
             validateFields={[]}
           />
         </Flex>
 
-        <Flex sx={{ flexDirection: 'column' }}>
-          <Text
-            sx={{ alignSelf: 'self-start', paddingBottom: 2 }}
-          >{`${about.title} *`}</Text>
+        <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+          <Text>{`${about.title} *`}</Text>
           <Field
             data-cy="info-description"
             name="about"
@@ -72,7 +86,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
         </Flex>
 
         {noMapPin && (
-          <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+          <Flex sx={{ flexDirection: 'column', gap: 1 }}>
             <Text>{country.title}</Text>
             {isModuleSupported(MODULE.MAP) && (
               <InternalLink to="/settings/map/">

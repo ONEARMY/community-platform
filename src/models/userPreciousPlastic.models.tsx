@@ -1,4 +1,4 @@
-import type { ProfileTypeLabel } from '../modules/profile/types'
+import type { ProfileTypeName } from 'oa-shared'
 import type { DBDoc } from './dbDoc.model'
 import type { IUser } from './user.models'
 
@@ -32,7 +32,7 @@ export interface IPlasticType {
 }
 
 export interface IProfileType {
-  label: ProfileTypeLabel
+  label: ProfileTypeName
   imageSrc?: string
   cleanImageSrc?: string
   cleanImageVerifiedSrc?: string
@@ -59,7 +59,7 @@ export interface IOpeningHours {
  * PP users can have a bunch of custom meta fields depending on profile type
  */
 export interface IUserPP extends IUser {
-  profileType: ProfileTypeLabel
+  profileType: ProfileTypeName
   workspaceType?: WorkspaceType | null
   mapPinDescription?: string | null
   openingHours?: IOpeningHours[]

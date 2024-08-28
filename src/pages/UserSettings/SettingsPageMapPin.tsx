@@ -10,9 +10,8 @@ import {
   Loader,
   MapWithPin,
 } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { ProfileType } from 'src/modules/profile/types'
 import {
   buttons,
   fields,
@@ -157,7 +156,7 @@ export const SettingsPageMapPin = () => {
   const { addPinTitle, yourPinTitle } = headings.map
 
   const formId = 'MapSection'
-  const isMember = user?.profileType === ProfileType.MEMBER
+  const isMember = user?.profileType === ProfileTypeList.MEMBER
 
   useEffect(() => {
     const init = async () => {
@@ -222,8 +221,8 @@ export const SettingsPageMapPin = () => {
         gap: 4,
       }}
     >
-      <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-        <Heading variant="small" id="your-map-pin">
+      <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+        <Heading as="h2" id="your-map-pin">
           {mapPin ? addPinTitle : yourPinTitle}
         </Heading>
         {isMember && (

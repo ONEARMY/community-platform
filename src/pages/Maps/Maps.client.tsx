@@ -1,44 +1,45 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
+import { Button } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { filterMapPinsByType } from 'src/stores/Maps/filter'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
-import { Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 
 import { logger } from '../../logger'
 import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
+import { MapWithList } from './Content/MapView/MapWithList'
+import { NewMapBanner } from './Content/NewMapBanner'
 import { GetLocation } from './utils/geolocation'
 import { Controls, MapView } from './Content'
 import { MapPinServiceContext } from './map.service'
 
 import type { Map } from 'react-leaflet'
-import type { ILatLng, IMapPin } from 'src/models/maps.models'
+import type { ILatLng } from 'shared/models'
+import type { IMapPin } from 'src/models/maps.models'
 
 import './styles.css'
 
-const initialState = {
-  center: { lat: 51.0, lng: 19.0 },
-  zoom: 3,
-  firstLoad: true,
-}
+const INITIAL_CENTER = { lat: 51.0, lng: 19.0 }
+const INITIAL_ZOOM = 3
 
 const MapsPage = observer(() => {
-  const mapRef = React.useRef<Map>(null)
-  const location = useLocation()
+  const [activePinFilters, setActivePinFilters] = useState<string[]>([])
+  const [center, setCenter] = useState<ILatLng>(INITIAL_CENTER)
   const [mapPins, setMapPins] = useState<IMapPin[]>([])
   const [selectedPin, setSelectedPin] = useState<IMapPin | null>(null)
+  const [showNewMap, setShowNewMap] = useState<boolean>(false)
+  const [zoom, setZoom] = useState<number>(INITIAL_ZOOM)
+
   const { userStore } = useCommonStores().stores
-  const [activePinFilters, setActivePinFilters] = useState<string[]>([])
-  const user = userStore.activeUser
   const navigate = useNavigate()
+  const location = useLocation()
   const mapPinService = useContext(MapPinServiceContext)
 
-  const [state, setState] = useState<{
-    center: ILatLng
-    zoom: number
-    firstLoad: boolean
-  }>(initialState)
+  const mapRef = React.useRef<Map>(null)
+  const newMapRef = React.useRef<Map>(null)
+  const user = userStore.activeUser
 
   if (!mapPinService) {
     return null
@@ -66,7 +67,9 @@ const MapsPage = observer(() => {
   }, [user])
 
   useEffect(() => {
-    fetchMapPins()
+    if (mapPins.length === 0) {
+      fetchMapPins()
+    }
 
     const showPin = async () => {
       await showPinFromURL()
@@ -106,15 +109,6 @@ const MapsPage = observer(() => {
     }
   }
 
-  const setCenter = (latlng: ILatLng) => {
-    setState((state) => ({
-      ...state,
-      center: latlng,
-      zoom: 8,
-      firstLoad: false,
-    }))
-  }
-
   /**
    * Check current hash in case matches a mappin and try to load
    *
@@ -152,30 +146,74 @@ const MapsPage = observer(() => {
     return filterMapPinsByType(mapPins, activePinFilters)
   }, [mapPins, activePinFilters])
 
+  const onBlur = () => {
+    navigate('/map')
+    setSelectedPin(null)
+  }
+
   return (
     // the calculation for the height is kind of hacky for now, will set properly on final mockups
     <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
-      <Controls
-        availableFilters={availableFilters}
-        onLocationChange={(latlng) => setCenter(latlng)}
-        onFilterChange={(selected) => {
-          setActivePinFilters(selected)
-        }}
-      />
-      <MapView
-        activePin={selectedPin}
-        mapRef={mapRef}
-        pins={visibleMapPins}
-        onPinClicked={(pin) => {
-          getPinByUserId(pin._id)
-        }}
-        onBlur={() => {
-          navigate('/map')
-          setSelectedPin(null)
-        }}
-        center={state.center}
-        zoom={state.zoom}
-      />
+      <NewMapBanner showNewMap={showNewMap} setShowNewMap={setShowNewMap} />
+      {!showNewMap && (
+        <>
+          <Controls
+            availableFilters={availableFilters}
+            onLocationChange={(latlng) => setCenter(latlng)}
+            onFilterChange={(selected) => {
+              setActivePinFilters(selected)
+            }}
+          />
+          <MapView
+            activePin={selectedPin}
+            mapRef={mapRef}
+            pins={visibleMapPins}
+            onPinClicked={(pin) => {
+              getPinByUserId(pin._id)
+            }}
+            onBlur={onBlur}
+            center={center}
+            zoom={zoom}
+            setZoom={setZoom}
+          />
+        </>
+      )}
+      {showNewMap && (
+        <>
+          <Flex
+            sx={{
+              display: ['none', 'none', 'none', 'inherit'],
+              flexDirection: 'row',
+              height: '100%',
+            }}
+          >
+            <MapWithList
+              activePin={selectedPin}
+              mapRef={newMapRef}
+              pins={visibleMapPins}
+              onPinClicked={(pin) => {
+                getPinByUserId(pin._id)
+              }}
+              onBlur={onBlur}
+              center={center}
+              zoom={zoom}
+              setZoom={setZoom}
+            />
+          </Flex>
+          <Box
+            sx={{
+              display: ['inherit', 'inherit', 'inherit', 'none'],
+              padding: 2,
+              justifyContent: 'center',
+            }}
+          >
+            Not yet setup of this size screen yet, but we will be very soon!{' '}
+            <Button onClick={() => setShowNewMap(!showNewMap)}>
+              Back to the old map
+            </Button>
+          </Box>
+        </>
+      )}
     </Box>
   )
 })

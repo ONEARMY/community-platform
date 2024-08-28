@@ -1,3 +1,4 @@
+import { ProfileTypeList } from 'oa-shared'
 import LogoCollection from 'src/assets/icons/map-collection.svg'
 import LogoCollectionVerified from 'src/assets/icons/map-collection-verified.svg'
 import LogoCommunity from 'src/assets/icons/map-community.svg'
@@ -16,16 +17,7 @@ import PreciousPlasticMember from 'src/assets/images/themes/precious-plastic/ava
 import ProjectKampMember from 'src/assets/images/themes/project-kamp/avatar_member_sm.svg'
 import ProjectKampSpace from 'src/assets/images/themes/project-kamp/avatar_space_sm.svg'
 
-import type { IProfileType } from './types'
-
-export const ProfileType = {
-  MEMBER: 'member',
-  SPACE: 'space',
-  WORKSPACE: 'workspace',
-  MACHINE_BUILDER: 'machine-builder',
-  COMMUNITY_BUILDER: 'community-builder',
-  COLLECTION_POINT: 'collection-point',
-} as const
+import type { IProfileTypeDetails } from './types'
 
 const DEFAULT_PROFILE_TYPES =
   'member,workspace,community-builder,collection-point,machine-builder'
@@ -48,44 +40,44 @@ const MemberAndSpace = {
 const getProfileTypes = () => {
   const theme = import.meta.env.VITE_THEME
 
-  const PROFILE_TYPES: IProfileType[] = [
+  const PROFILE_TYPES: IProfileTypeDetails[] = [
     {
-      label: ProfileType.MEMBER,
+      label: ProfileTypeList.MEMBER,
       textLabel: 'I am a member',
       imageSrc: MemberAndSpace[theme].member,
       cleanImageSrc: MemberAndSpace[theme].member,
       cleanImageVerifiedSrc: MemberAndSpace[theme].member,
     },
     {
-      label: ProfileType.SPACE,
+      label: ProfileTypeList.SPACE,
       textLabel: 'I run a space',
       imageSrc: MemberAndSpace[theme].space,
       cleanImageSrc: MemberAndSpace[theme].space,
       cleanImageVerifiedSrc: MemberAndSpace[theme].space,
     },
     {
-      label: ProfileType.WORKSPACE,
+      label: ProfileTypeList.WORKSPACE,
       textLabel: 'I run a workspace',
       imageSrc: WorkspaceBadge,
       cleanImageSrc: LogoWorkspace,
       cleanImageVerifiedSrc: LogoWorkspaceVerified,
     },
     {
-      label: ProfileType.MACHINE_BUILDER,
+      label: ProfileTypeList.MACHINE_BUILDER,
       textLabel: 'I build machines',
       imageSrc: MachineBadge,
       cleanImageSrc: LogoMachine,
       cleanImageVerifiedSrc: LogoMachineVerified,
     },
     {
-      label: ProfileType.COMMUNITY_BUILDER,
+      label: ProfileTypeList.COMMUNITY_BUILDER,
       textLabel: 'I run a local community',
       imageSrc: LocalComBadge,
       cleanImageSrc: LogoCommunity,
       cleanImageVerifiedSrc: LogoCommunityVerified,
     },
     {
-      label: ProfileType.COLLECTION_POINT,
+      label: ProfileTypeList.COLLECTION_POINT,
       textLabel: 'I collect & sort plastic',
       imageSrc: CollectionBadge,
       cleanImageSrc: LogoCollection,

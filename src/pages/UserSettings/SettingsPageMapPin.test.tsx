@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
 import { act, waitFor } from '@testing-library/react'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
@@ -51,7 +51,7 @@ describe('SettingsPageMapPin', () => {
   it('renders for member', async () => {
     const name = 'Super cool place'
     mockUser = FactoryUser({
-      profileType: 'member',
+      profileType: ProfileTypeList.MEMBER,
       location: {
         name,
         countryCode: 'br',
@@ -82,7 +82,7 @@ describe('SettingsPageMapPin', () => {
     })
 
     mockUser = FactoryUser({
-      profileType: 'collection-point',
+      profileType: ProfileTypeList.COLLECTION_POINT,
       location: {
         name,
         countryCode: 'br',

@@ -36,7 +36,7 @@ describe('[Settings]', () => {
       cy.step('Go to User Settings')
       cy.clickMenuItem(UserMenuItem.Settings)
 
-      cy.get('[data-cy=username').clear().type('Wrong user')
+      cy.get('[data-cy=displayName').clear().type('Wrong user')
 
       cy.step('Confirm shown when attempting to go to another page')
       cy.get('[data-cy=page-link]').contains('How-to').click()
@@ -74,7 +74,7 @@ describe('[Settings]', () => {
 
       cy.step('Can set the required fields')
       cy.setSettingBasicUserInfo({
-        username: displayName,
+        displayName,
         country,
         description,
       })
@@ -186,7 +186,7 @@ describe('[Settings]', () => {
       cy.step('Populate profile')
       cy.get('[data-cy=shredder').click()
       cy.setSettingBasicUserInfo({
-        username: displayName,
+        displayName,
         description,
       })
 
@@ -261,7 +261,7 @@ describe('[Settings]', () => {
 
       cy.step('Populate profile')
       cy.setSettingBasicUserInfo({
-        username: displayName,
+        displayName,
         description,
       })
       cy.setSettingImage(coverImage, 'coverImages-0')
@@ -326,7 +326,7 @@ describe('[Settings]', () => {
       cy.setSettingFocus(profileType)
 
       cy.setSettingBasicUserInfo({
-        username: displayName,
+        displayName,
         description,
       })
       cy.setSettingImage(coverImage, 'coverImages-0')
@@ -405,7 +405,7 @@ describe('[Settings]', () => {
 
       cy.step('Populate profile')
       cy.setSettingBasicUserInfo({
-        username: displayName,
+        displayName,
         description,
       })
       cy.setSettingImage(coverImage, 'coverImages-0')

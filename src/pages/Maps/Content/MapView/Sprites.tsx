@@ -45,7 +45,7 @@ export const createMarkerIcon = (pin: IMapPin) => {
   }
   return L.divIcon({
     className: `icon-marker icon-${pin.type}`,
-    html: `<img src="${icon}" />`,
+    html: `<img data-cy="pin-${pin._id}" src="${icon}" />`,
     iconSize: L.point(38, 38, true),
   })
 }

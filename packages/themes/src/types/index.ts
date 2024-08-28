@@ -1,13 +1,4 @@
-const ProfileType = {
-  MEMBER: 'member',
-  SPACE: 'space',
-  WORKSPACE: 'workspace',
-  MACHINE_BUILDER: 'machine-builder',
-  COMMUNITY_BUILDER: 'community-builder',
-  COLLECTION_POINT: 'collection-point',
-} as const
-
-export type ProfileTypeLabel = (typeof ProfileType)[keyof typeof ProfileType]
+import type { ProfileTypeName } from 'oa-shared'
 
 export interface PlatformTheme {
   id: string
@@ -30,7 +21,7 @@ export interface ThemeWithName {
   alerts: any
 
   badges: {
-    [K in ProfileTypeLabel]?: Badge
+    [K in ProfileTypeName]?: Badge
   }
 
   text: any

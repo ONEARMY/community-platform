@@ -64,21 +64,10 @@ export const WorkspaceSection = () => {
               gap: 2,
             }}
           >
-            <Heading as="h2" variant="small">
-              {title}
-            </Heading>
+            <Heading as="h2">{title}</Heading>
             <Text variant="quiet">{description}</Text>
             {meta.touched && meta.error && (
-              <Text
-                sx={{
-                  color: 'error',
-                  fontSize: 0.5,
-                  marginLeft: 1,
-                  marginRight: 1,
-                }}
-              >
-                {error}
-              </Text>
+              <Text sx={{ color: 'error', fontSize: 1 }}>{error}</Text>
             )}
             <Grid columns={['repeat(auto-fill, minmax(125px, 1fr))']} gap={2}>
               {WORKSPACE_TYPES.map((workspace, index: number) => (

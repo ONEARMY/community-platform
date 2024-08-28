@@ -77,3 +77,15 @@ export interface PatreonUser {
   link: string
   membership?: PatreonMembership
 }
+
+export const ProfileTypeList = {
+  MEMBER: 'member',
+  SPACE: 'space',
+  WORKSPACE: 'workspace',
+  MACHINE_BUILDER: 'machine-builder',
+  COMMUNITY_BUILDER: 'community-builder',
+  COLLECTION_POINT: 'collection-point',
+} as const
+
+export type ProfileTypeName =
+  (typeof ProfileTypeList)[keyof typeof ProfileTypeList]

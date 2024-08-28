@@ -124,7 +124,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy="profile-link"]').should('have.attr', 'href', url)
 
       cy.step('Can add map pin')
-      cy.get('[data-cy=EditYourProfile]').click({force: true})
+      cy.get('[data-cy=EditYourProfile]').click({ force: true })
       cy.get('[data-cy="tab-Map"]').click()
       cy.get('[data-cy=descriptionMember').should('be.visible')
       cy.contains('No map pin currently saved')

@@ -60,11 +60,10 @@ export const MapWithList = (props: IProps) => {
           background: 'white',
           flex: 1,
           overflow: 'scroll',
-          padding: 4,
-          gap: 4,
+          padding: 2,
         }}
       >
-        <Heading data-cy="welome-header">
+        <Heading data-cy="welome-header" sx={{ padding: 2 }}>
           Welcome to our world!{' '}
           {pins && `${pins.length} members (and counting...)`}
         </Heading>

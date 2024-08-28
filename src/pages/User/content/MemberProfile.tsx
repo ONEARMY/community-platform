@@ -32,99 +32,101 @@ export const MemberProfile = ({ docs, user }: IProps) => {
     : DefaultMemberImage
 
   return (
-    <Card
-      data-cy="MemberProfile"
+    <Flex
       sx={{
-        display: 'flex',
         flexDirection: 'column',
-        position: 'relative',
-        overflow: 'visible',
-        padding: 2,
+        transform: 'translateY(-50px)',
       }}
     >
       <MemberBadge
         profileType={ProfileTypeList.MEMBER}
         size={50}
         sx={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          marginLeft: 50 * -0.5,
-          marginTop: 50 * -0.5,
+          alignSelf: 'center',
+          transform: 'translateY(25px)',
         }}
         useLowDetailVersion
       />
-      <Flex
+      <Card
+        data-cy="MemberProfile"
         sx={{
-          flexDirection: ['column', 'row'],
-          gap: [2, 4],
-          padding: [2, 4],
-          paddingTop: 4,
-          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 2,
         }}
       >
         <Flex
           sx={{
-            flexGrow: 1,
-            minWidth: 'initial',
-            alignItems: 'center',
-            flexDirection: 'column',
-            gap: 4,
+            flexDirection: ['column', 'row'],
+            gap: [2, 4],
+            padding: [2, 4],
+            paddingTop: 4,
+            width: '100%',
           }}
         >
-          <Avatar
-            data-cy="profile-avatar"
-            loading="lazy"
-            src={profileImageSrc}
-            sx={{
-              objectFit: 'cover',
-              width: '120px',
-              height: '120px',
-            }}
-          />
-          <UserStatistics
-            userName={user.userName}
-            country={user.location?.country}
-            isVerified={user.verified}
-            isSupporter={!!user.badges?.supporter}
-            howtoCount={docs?.howtos.length || 0}
-            researchCount={docs?.research.length || 0}
-            usefulCount={user.totalUseful || 0}
-            sx={{ alignSelf: 'stretch' }}
-          />
-        </Flex>
-        <Flex sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}>
           <Flex
             sx={{
+              flexGrow: 1,
+              minWidth: 'initial',
               alignItems: 'center',
-              pt: [2, 0],
+              flexDirection: 'column',
+              gap: 4,
             }}
           >
-            <Username
-              user={{
-                userName: user.userName,
-                countryCode: getUserCountry(user),
-                isVerified: user.verified,
+            <Avatar
+              data-cy="profile-avatar"
+              loading="lazy"
+              src={profileImageSrc}
+              sx={{
+                objectFit: 'cover',
+                width: '120px',
+                height: '120px',
               }}
             />
+            <UserStatistics
+              userName={user.userName}
+              country={user.location?.country}
+              isVerified={user.verified}
+              isSupporter={!!user.badges?.supporter}
+              howtoCount={docs?.howtos.length || 0}
+              researchCount={docs?.research.length || 0}
+              usefulCount={user.totalUseful || 0}
+              sx={{ alignSelf: 'stretch' }}
+            />
           </Flex>
-          <Box sx={{ flexDirection: 'column' }} mb={3}>
-            <Heading
-              as="h1"
-              color={'black'}
-              style={{ wordWrap: 'break-word' }}
-              data-cy="userDisplayName"
+          <Flex sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}>
+            <Flex
+              sx={{
+                alignItems: 'center',
+                pt: [2, 0],
+              }}
             >
-              {user.displayName}
-            </Heading>
-          </Box>
-          {user.about && <Paragraph>{user.about}</Paragraph>}
-          <UserContactAndLinks links={userLinks} />
+              <Username
+                user={{
+                  userName: user.userName,
+                  countryCode: getUserCountry(user),
+                  isVerified: user.verified,
+                }}
+              />
+            </Flex>
+            <Box sx={{ flexDirection: 'column' }} mb={3}>
+              <Heading
+                as="h1"
+                color={'black'}
+                style={{ wordWrap: 'break-word' }}
+                data-cy="userDisplayName"
+              >
+                {user.displayName}
+              </Heading>
+            </Box>
+            {user.about && <Paragraph>{user.about}</Paragraph>}
+            <UserContactAndLinks links={userLinks} />
+          </Flex>
         </Flex>
-      </Flex>
-      <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-        <UserCreatedDocuments docs={docs} />
-      </AuthWrapper>
-    </Card>
+        <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+          <UserCreatedDocuments docs={docs} />
+        </AuthWrapper>
+      </Card>
+    </Flex>
   )
 }

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import { Button } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { filterMapPinsByType } from 'src/stores/Maps/filter'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
@@ -179,40 +178,26 @@ const MapsPage = observer(() => {
         </>
       )}
       {showNewMap && (
-        <>
-          <Flex
-            sx={{
-              display: ['none', 'none', 'none', 'inherit'],
-              flexDirection: 'row',
-              height: '100%',
+        <Flex
+          sx={{
+            display: 'inherit',
+            flexDirection: 'row',
+            height: '100%',
+          }}
+        >
+          <MapWithList
+            activePin={selectedPin}
+            mapRef={newMapRef}
+            pins={visibleMapPins}
+            onPinClicked={(pin) => {
+              getPinByUserId(pin._id)
             }}
-          >
-            <MapWithList
-              activePin={selectedPin}
-              mapRef={newMapRef}
-              pins={visibleMapPins}
-              onPinClicked={(pin) => {
-                getPinByUserId(pin._id)
-              }}
-              onBlur={onBlur}
-              center={center}
-              zoom={zoom}
-              setZoom={setZoom}
-            />
-          </Flex>
-          <Box
-            sx={{
-              display: ['inherit', 'inherit', 'inherit', 'none'],
-              padding: 2,
-              justifyContent: 'center',
-            }}
-          >
-            Not yet setup of this size screen yet, but we will be very soon!{' '}
-            <Button onClick={() => setShowNewMap(!showNewMap)}>
-              Back to the old map
-            </Button>
-          </Box>
-        </>
+            onBlur={onBlur}
+            center={center}
+            zoom={zoom}
+            setZoom={setZoom}
+          />
+        </Flex>
       )}
     </Box>
   )

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { CardList, Map } from 'oa-components'
-import { Box, Flex, Heading } from 'theme-ui'
+import { Box, Button, Flex, Heading } from 'theme-ui'
 
 import { Clusters } from './Cluster'
 import { latLongFilter } from './latLongFilter'
@@ -24,6 +24,7 @@ interface IProps {
 
 export const MapWithList = (props: IProps) => {
   const [filteredPins, setFilteredPins] = useState<IMapPin[] | null>(null)
+  const [hideListView, setHideListView] = useState<boolean>(false)
   const {
     activePin,
     center,
@@ -57,16 +58,19 @@ export const MapWithList = (props: IProps) => {
     >
       <Box
         sx={{
+          display: hideListView ? 'none' : 'relative',
           background: 'white',
-          flex: 1,
           overflow: 'scroll',
           padding: 2,
+          maxWidth: '80em',
+          width: ['100%', '100%', '50%', '50%'],
         }}
       >
         <Heading data-cy="welome-header" sx={{ padding: 2 }}>
-          Welcome to our world!{' '}
-          {pins && `${pins.length} members (and counting...)`}
+          Welcome to our world!
+          {pins && ` ${pins.length} members (and counting...)`}
         </Heading>
+        <Button onClick={() => setHideListView(true)}>Show Map</Button>
         <CardList list={pins} filteredList={filteredPins} />
       </Box>
       <Map
@@ -76,14 +80,17 @@ export const MapWithList = (props: IProps) => {
         zoom={mapZoom}
         setZoom={setZoom}
         maxZoom={18}
-        style={{ flex: 1 }}
         zoomControl={isViewportGreaterThanTablet}
+        style={{ flex: 1 }}
         onclick={() => onBlur()}
         ondragend={handleLocationFilter}
         onzoomend={handleLocationFilter}
       >
         <Clusters pins={pins} onPinClick={onPinClicked} prefix="new" />
         {activePin && <Popup activePin={activePin} mapRef={mapRef} />}
+        <Button onClick={() => setHideListView(false)} sx={{ zIndex: 400 }}>
+          Show List
+        </Button>
       </Map>
     </Flex>
   )

@@ -22,12 +22,11 @@ export const Map = forwardRef((props: IProps, ref: Ref<LeafletMap>) => {
 
   return (
     <LeafletMap ref={ref} onViewportChanged={onViewportChanged} {...props}>
+      {children}
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-
-      {children}
     </LeafletMap>
   )
 })

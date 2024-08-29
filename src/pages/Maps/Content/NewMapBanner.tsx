@@ -10,10 +10,7 @@ export const NewMapBanner = (props: IProps) => {
   const { showNewMap, setShowNewMap } = props
   const sx = { '&:hover': { textDecoration: 'underline', cursor: 'pointer' } }
   return (
-    <Banner
-      variant="accent"
-      sx={{ display: ['none', 'none', 'none', 'inherit'] }}
-    >
+    <Banner variant="accent">
       {showNewMap ? (
         <Text>
           🗺 We're still working on this.{' '}

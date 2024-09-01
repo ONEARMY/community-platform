@@ -98,7 +98,7 @@ export const CommentItem = (props: IProps) => {
         )}
 
         {!_deleted && (
-          <Flex sx={{ gap: 2 }}>
+          <Flex sx={{ gap: 2, flexGrow: 1 }}>
             <Box data-cy="commentAvatar" data-testid="commentAvatar">
               <Avatar
                 src={creatorImage ?? defaultProfileImage}
@@ -145,30 +145,38 @@ export const CommentItem = (props: IProps) => {
                   <Flex
                     sx={{
                       flexGrow: 1,
-                      gap: 2,
                       justifyContent: ['flex-start', 'flex-end'],
+                      position: ['static', 'relative'],
                     }}
                   >
-                    <Button
-                      type="button"
-                      data-cy={`${item}: edit button`}
-                      variant="subtle"
-                      small={true}
-                      icon="edit"
-                      onClick={() => onEditRequest(_id)}
+                    <Flex
+                      sx={{
+                        gap: 2,
+                        position: ['static', 'absolute'],
+                        right: 0,
+                      }}
                     >
-                      edit
-                    </Button>
-                    <Button
-                      type="button"
-                      data-cy={`${item}: delete button`}
-                      variant="subtle"
-                      small={true}
-                      icon="delete"
-                      onClick={() => setShowDeleteModal(true)}
-                    >
-                      delete
-                    </Button>
+                      <Button
+                        type="button"
+                        data-cy={`${item}: edit button`}
+                        variant="subtle"
+                        small={true}
+                        icon="edit"
+                        onClick={() => onEditRequest(_id)}
+                      >
+                        edit
+                      </Button>
+                      <Button
+                        type="button"
+                        data-cy={`${item}: delete button`}
+                        variant="subtle"
+                        small={true}
+                        icon="delete"
+                        onClick={() => setShowDeleteModal(true)}
+                      >
+                        delete
+                      </Button>
+                    </Flex>
                   </Flex>
                 )}
               </Flex>

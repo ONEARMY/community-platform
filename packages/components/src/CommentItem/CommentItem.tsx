@@ -147,14 +147,12 @@ export const CommentItem = (props: IProps) => {
                       flexGrow: 1,
                       gap: 2,
                       justifyContent: ['flex-start', 'flex-end'],
-                      opacity: 0.5,
-                      ':hover': { opacity: 1 },
                     }}
                   >
                     <Button
                       type="button"
                       data-cy={`${item}: edit button`}
-                      variant="outline"
+                      variant="subtle"
                       small={true}
                       icon="edit"
                       onClick={() => onEditRequest(_id)}
@@ -164,7 +162,7 @@ export const CommentItem = (props: IProps) => {
                     <Button
                       type="button"
                       data-cy={`${item}: delete button`}
-                      variant={'outline'}
+                      variant="subtle"
                       small={true}
                       icon="delete"
                       onClick={() => setShowDeleteModal(true)}

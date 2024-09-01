@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { Loader } from 'oa-components'
+import { Button, InternalLink, Loader } from 'oa-components'
+import { ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { ProfileType } from 'src/modules/profile/types'
 import { seoTagsUpdate } from 'src/utils/seo'
-import { Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 
 import { logger } from '../../../logger'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 
-import type { IUserPP } from 'src/models'
+import type { IUserPPDB } from 'src/models'
 import type { UserCreatedDocs } from '../types'
 
 /**
@@ -21,7 +21,7 @@ import type { UserCreatedDocs } from '../types'
 export const UserProfile = observer(() => {
   const { id } = useParams()
   const { userStore } = useCommonStores().stores
-  const [user, setUser] = useState<IUserPP | undefined>()
+  const [user, setUser] = useState<IUserPPDB | undefined>()
   const [userCreatedDocs, setUserCreatedDocs] = useState<
     UserCreatedDocs | undefined
   >()
@@ -34,7 +34,7 @@ export const UserProfile = observer(() => {
       const fetchUserData = async () => {
         try {
           const userData = await userStore.getUserProfile(userId)
-          if (userData as IUserPP) {
+          if (userData as IUserPPDB) {
             setUser(userData)
 
             seoTagsUpdate({
@@ -79,10 +79,38 @@ export const UserProfile = observer(() => {
     )
   }
 
+  const isViewingOwnProfile =
+    userStore.activeUser && user && userStore.activeUser._id === user._id
+  const showMemberProfile =
+    user.profileType === ProfileTypeList.MEMBER ||
+    user.profileType === undefined
+
   return (
-    <>
-      {user.profileType === ProfileType.MEMBER ||
-      user.profileType === undefined ? (
+    <Flex
+      sx={{
+        alignSelf: 'center',
+        maxWidth: showMemberProfile ? '42em' : '60em',
+        flexDirection: 'column',
+        width: '100%',
+        marginTop: isViewingOwnProfile ? 4 : [6, 8],
+        gap: 4,
+      }}
+    >
+      {isViewingOwnProfile && (
+        <InternalLink
+          sx={{
+            alignSelf: ['center', 'flex-end'],
+            marginBottom: showMemberProfile ? [2, 0] : 0,
+          }}
+          to="/settings"
+        >
+          <Button type="button" data-cy="EditYourProfile">
+            Edit Your Profile
+          </Button>
+        </InternalLink>
+      )}
+
+      {showMemberProfile ? (
         <MemberProfile
           data-cy="memberProfile"
           user={user}
@@ -95,6 +123,6 @@ export const UserProfile = observer(() => {
           docs={userCreatedDocs}
         />
       )}
-    </>
+    </Flex>
   )
 })

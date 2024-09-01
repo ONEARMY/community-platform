@@ -38,7 +38,7 @@ export const CharacterCount = ({
       data-cy="character-count"
       color={color}
       ml="auto"
-      sx={{ fontSize: 1, margin: 1, fontWeight: fontWeight }}
+      sx={{ alignSelf: 'flex-end', fontSize: 1, fontWeight }}
     >
       {currentSize} / {maxSize}
     </Text>

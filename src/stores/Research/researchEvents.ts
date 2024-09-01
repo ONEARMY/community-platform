@@ -8,7 +8,7 @@ export const setCollaboratorPermission = async (
   userId: string,
 ) => {
   const userRef = db.collection<IUserDB>('users').doc(userId)
-  const user = toJS(await userRef.get())
+  const user = toJS(await userRef.get('server'))
   const role = 'research_creator' as UserRole.RESEARCH_CREATOR
 
   if (!user) return

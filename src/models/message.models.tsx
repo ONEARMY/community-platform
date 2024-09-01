@@ -1,4 +1,4 @@
-import type { DBDoc } from './common.models'
+import type { DBDoc } from './dbDoc.model'
 import type { IUser } from './user.models'
 
 export type IMessageDB = DBDoc & IMessage

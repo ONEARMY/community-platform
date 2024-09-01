@@ -1,3 +1,4 @@
+import { logger } from 'src/logger'
 import { FactoryNotification } from 'src/test/factories/Notification'
 import { FactoryUser } from 'src/test/factories/User'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -65,16 +66,16 @@ describe('triggerNotification', () => {
     )
   })
 
-  it('throws error when invalid user passed', () => {
-    // Act
-    expect(
-      store.triggerNotification(
-        'howto_mention',
-        'non-existent-user',
-        'https://example.com',
-        'example',
-      ),
-    ).rejects.toThrow('User not found')
+  it('throws error when invalid user passed', async () => {
+    const loggerSpy = vi.spyOn(logger, 'error')
+
+    await store.triggerNotification(
+      'howto_mention',
+      'non-existent-user',
+      'https://example.com',
+      'example',
+    )
+    expect(loggerSpy).toBeCalled()
   })
 })
 

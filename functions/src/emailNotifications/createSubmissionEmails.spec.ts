@@ -1,19 +1,22 @@
-import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { DB_ENDPOINTS, IMapPin, IMessageDB, IUserDB } from '../models'
-import {
-  HOW_TO_SUBMISSION_SUBJECT,
-  MAP_PIN_SUBMISSION_SUBJECT,
-} from './templates'
+import { IModerationStatus } from 'oa-shared'
+import { UserRole } from 'oa-shared/models'
+
 import { getMockHowto } from '../emulator/seed/content-generate'
+import { DB_ENDPOINTS } from '../models'
+import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
+import { PP_SIGNOFF } from './constants'
 import {
   createHowtoSubmissionEmail,
   createMapPinSubmissionEmail,
   createMessageEmails,
 } from './createSubmissionEmails'
-import { PP_SIGNOFF } from './constants'
+import {
+  HOW_TO_SUBMISSION_SUBJECT,
+  MAP_PIN_SUBMISSION_SUBJECT,
+} from './templateHelpers'
 import * as utils from './utils'
-import { IModerationStatus } from 'oa-shared'
-import { UserRole } from 'oa-shared/models'
+
+import type { IMapPin, IMessageDB, IUserDB } from '../models'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {
@@ -159,7 +162,7 @@ describe('Message emails', () => {
   beforeEach(async () => {
     await FirebaseEmulatedTest.clearFirestoreDB()
     await FirebaseEmulatedTest.seedFirestoreDB('users', [user])
-    await FirebaseEmulatedTest.seedFirestoreDB('messages')
+    await FirebaseEmulatedTest.seedFirestoreDB('messages', [message])
     await FirebaseEmulatedTest.seedFirestoreDB('emails')
   })
 

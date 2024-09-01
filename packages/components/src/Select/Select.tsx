@@ -10,18 +10,22 @@ import type {
   StylesConfig,
 } from 'react-select'
 
+type IOption = {
+  label: string
+  value: string
+}
+
 export interface Props extends ReactSelectProps {
   options: OptionsOrGroups<any, any>
   value?: any
-  onChange?: any
+  onChange?: (arg: any) => void
   placeholder?: string
   isMulti?: boolean
   isClearable?: boolean
   getOptionLabel?: any
   getOptionValue?: any
-  defaultValue?: any
-  variant?: 'form' | 'icons'
-  components?: any
+  defaultValue?: IOption
+  variant?: 'form' | 'formError' | 'icons' | 'tabs'
 }
 
 export const Select = (props: Props) => {
@@ -88,6 +92,27 @@ export const Select = (props: Props) => {
         opacity: state.isFocused ? 1 : 0.5,
       },
       opacity: state.isFocused ? 1 : 0.3,
+    }),
+  }
+
+  const SelectStylesError: Partial<StylesConfig> = {
+    ...SelectStyles,
+    control: (provided) => ({
+      ...provided,
+      border: '1px solid ' + theme.colors.red,
+      ':focus': {
+        border: '1px solid ' + theme.colors.red,
+      },
+      ':hover': {
+        border: '1px solid ' + theme.colors.red,
+      },
+    }),
+    menu: (provided) => ({
+      ...provided,
+      border: '1px solid ' + theme.colors.red,
+      ':hover': {
+        border: '1px solid ' + theme.colors.red,
+      },
     }),
   }
 
@@ -158,6 +183,15 @@ export const Select = (props: Props) => {
   }
 
   const options: OptionsOrGroups<any, any> | undefined = props.options || []
+
+  const styleVariant = {
+    default: FilterStyles,
+    form: SelectStyles,
+    formError: SelectStylesError,
+    icons: FilterStyles,
+    tabs: FilterStyles,
+  }
+
   return (
     <ReactSelect
       classNamePrefix={'data-cy'}
@@ -168,7 +202,7 @@ export const Select = (props: Props) => {
       isClearable={!!props.isClearable}
       isMulti={!!props.isMulti}
       placeholder={props.placeholder}
-      styles={props.variant === 'form' ? SelectStyles : FilterStyles}
+      styles={styleVariant[props.variant || 'default']}
       options={options}
       onChange={(v) => props.onChange && props.onChange(v)}
       value={props.value}

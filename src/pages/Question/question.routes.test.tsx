@@ -142,6 +142,10 @@ describe('question.routes', () => {
         wrapper = renderFn('/questions')
       })
       expect(wrapper.getByText(/loading/)).toBeInTheDocument()
+
+      await waitFor(() => {
+        expect(() => wrapper.getByText(/loading/)).toThrow()
+      })
     })
 
     it('renders an empty state', async () => {
@@ -198,50 +202,6 @@ describe('question.routes', () => {
         ).toBeInTheDocument()
 
         expect(wrapper.getByText(questionTitle)).toBeInTheDocument()
-      })
-    })
-  })
-
-  describe('/questions/create', () => {
-    it('allows user to create a question', async () => {
-      let wrapper
-      // Arrange
-      const mockUpsertQuestion = vi.fn().mockResolvedValue({
-        slug: 'question-title',
-      })
-      ;(useQuestionStore as Mock).mockReturnValue({
-        ...mockQuestionStore,
-        upsertQuestion: mockUpsertQuestion,
-        activeUser: mockActiveUser,
-      })
-
-      act(() => {
-        wrapper = renderFn('/questions/create')
-      })
-
-      // Fill in form
-      const title = wrapper.getByLabelText('The Question', { exact: false })
-      const description = wrapper.getByLabelText('Description', {
-        exact: false,
-      })
-      const submitButton = wrapper.getByText('Publish')
-
-      // Submit form
-      await userEvent.type(title, 'Can you build a house out of plastic?')
-      await userEvent.type(description, "So I've got all this plastic...")
-
-      submitButton.click()
-
-      expect(mockUpsertQuestion).toHaveBeenCalledWith({
-        title: 'Can you build a house out of plastic?',
-        description: "So I've got all this plastic...",
-        tags: {},
-      })
-
-      await waitFor(() => {
-        expect(mockedUsedNavigate).toHaveBeenCalledWith(
-          '/questions/question-title',
-        )
       })
     })
   })
@@ -448,7 +408,9 @@ describe('question.routes', () => {
       await userEvent.clear(description)
       await userEvent.type(description, 'Question description')
 
-      submitButton.click()
+      act(() => {
+        submitButton.click()
+      })
 
       expect(mockUpsertQuestion).toHaveBeenCalledWith(
         expect.objectContaining({

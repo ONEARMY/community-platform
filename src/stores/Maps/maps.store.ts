@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from 'mobx'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { logger } from 'src/logger'
 import {
   hasAdminRights,
@@ -12,20 +12,19 @@ import { getUserAvatar } from '../User/user.store'
 import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
-import type { IDBEndpoint, IUser } from 'src/models'
+import type { IMapPinDetail, ProfileTypeName } from 'oa-shared'
+import type { IUser } from 'src/models'
+import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type {
-  IBoundingBox,
   IMapGrouping,
   IMapPin,
-  IMapPinDetail,
-  IMapPinType,
   IMapPinWithDetail,
 } from 'src/models/maps.models'
 import type { IUserPP } from 'src/models/userPreciousPlastic.models'
 import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
-type IFilterToRemove = IMapPinType | undefined
+type IFilterToRemove = ProfileTypeName | undefined
 
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
@@ -42,7 +41,6 @@ export class MapsStore extends ModuleStore {
       mapPins: observable,
       filteredPins: observable,
       processDBMapPins: action,
-      setMapBoundingBox: action,
       retrieveMapPins: action,
       retrievePinFilters: action,
       setActivePinFilters: action,
@@ -88,12 +86,6 @@ export class MapsStore extends ModuleStore {
       .filter(({ type }) => type !== filterToRemove)
       .map(({ subType, type }) => (subType ? subType : type))
     this.setActivePinFilters(filters)
-  }
-
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  /** TODO CC 2021-05-28 review if still useful to keep */
-  public setMapBoundingBox(boundingBox: IBoundingBox) {
-    // this.recalculatePinCounts(boundingBox)
   }
 
   public async retrieveMapPins(filterToRemove: IFilterToRemove = undefined) {
@@ -175,21 +167,23 @@ export class MapsStore extends ModuleStore {
   }
 
   public async setUserPin(user: IUserPP) {
-    const type = user.profileType || 'member'
+    const type = user.profileType || ProfileTypeList.MEMBER
     const existingPin = await this.getPin(user.userName, 'server')
     const existingModeration = existingPin?.moderation
     const existingPinType = existingPin?.type
 
     let moderation: IModerationStatus = existingModeration
 
+    const isMember = type === ProfileTypeList.MEMBER
+
     // Member pins do not require moderation.
-    if (type === 'member') {
+    if (isMember) {
       moderation = IModerationStatus.ACCEPTED
     }
 
     // Require re-moderation for non-member pins if pin type changes or if pin was not previously accepted.
     if (
-      type !== 'member' &&
+      !isMember &&
       (existingModeration !== IModerationStatus.ACCEPTED ||
         existingPinType !== type)
     ) {
@@ -205,11 +199,21 @@ export class MapsStore extends ModuleStore {
       verified: user.verified,
     }
 
-    if (type !== 'member' && user.workspaceType) {
+    if (!isMember && user.workspaceType) {
       pin.subType = user.workspaceType
     }
     logger.debug('setting user pin', pin)
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).set(pin)
+  }
+
+  public async deleteUserPin(user: IUserPP) {
+    const pin = await this.getPin(user.userName, 'server')
+
+    logger.debug('marking user pin deleted', pin)
+
+    await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).update({
+      _deleted: true,
+    })
   }
 
   // return subset of profile info used when displaying map pins

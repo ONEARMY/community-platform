@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
-import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
+import { IModerationStatus } from 'oa-shared'
 
-import type { IResearch, IResearchDB } from 'src/models'
+import type { IResearch, IResearchDB } from 'src/models/research.models'
 
 type ResearchCalculatedFields = {
   userHasSubscribed: boolean
@@ -11,6 +11,7 @@ export const FactoryResearchItemUpdate = (
   researchItemUpdateOverloads: Partial<IResearch.UpdateDB> = {},
 ): IResearch.UpdateDB => ({
   title: faker.lorem.words(),
+  commentCount: 0,
   description: faker.lorem.sentences(2),
   images: [],
   files: [],
@@ -19,9 +20,8 @@ export const FactoryResearchItemUpdate = (
   _id: faker.string.uuid(),
   _modified: faker.date.past().toString(),
   _created: faker.date.past().toString(),
-  _deleted: faker.datatype.boolean(),
+  _deleted: false,
   _contentModifiedTimestamp: faker.date.past().toString(),
-  status: faker.helpers.arrayElement(Object.values(ResearchUpdateStatus)),
   ...researchItemUpdateOverloads,
 })
 

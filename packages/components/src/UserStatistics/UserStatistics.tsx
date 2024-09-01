@@ -8,6 +8,8 @@ import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
 import { InternalLink } from '../InternalLink/InternalLink'
 
+import type { ThemeUIStyleObject } from 'theme-ui'
+
 export interface UserStatisticsProps {
   userName: string
   country?: string
@@ -16,6 +18,7 @@ export interface UserStatisticsProps {
   howtoCount: number
   usefulCount: number
   researchCount: number
+  sx?: ThemeUIStyleObject | undefined
 }
 
 export const UserStatistics = (props: UserStatisticsProps) => {
@@ -31,6 +34,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
       sx={{
         p: 2,
         backgroundColor: 'background',
+        ...props.sx,
       }}
     >
       <Flex

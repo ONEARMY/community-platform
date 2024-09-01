@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Text, Textarea } from 'theme-ui'
+import { Flex, Text, Textarea } from 'theme-ui'
 
 import { CharacterCount } from '../CharacterCount/CharacterCount'
 
@@ -50,7 +50,11 @@ export const FieldTextarea = ({
   const [curLength, setLength] = useState<number>(input?.value?.length ?? 0)
 
   return (
-    <>
+    <Flex sx={{ flexDirection: 'column', gap: 1 }}>
+      {meta.error && meta.touched && (
+        <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
+      )}
+
       <Textarea
         disabled={disabled}
         minLength={minLength}
@@ -78,19 +82,13 @@ export const FieldTextarea = ({
         }}
       />
 
-      {meta.error && meta.touched && (
-        <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>
-          {meta.error}
-        </Text>
-      )}
-
-      {showCharacterCount && maxLength && (meta.touched || meta.dirty) && (
+      {showCharacterCount && maxLength && (
         <CharacterCount
           minSize={minLength}
           maxSize={maxLength}
           currentSize={curLength}
         />
       )}
-    </>
+    </Flex>
   )
 }

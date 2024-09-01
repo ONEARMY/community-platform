@@ -37,7 +37,7 @@ export const questions = {
       KP3McutTpuEWz06G5EY1: true,
       Wk6RnHHFfKSiI71BlM8r: true,
     },
-    title: 'The first test question',
+    title: 'The first test question?',
     total_views: 3,
     votedUsefulBy: [
       'demo_user',

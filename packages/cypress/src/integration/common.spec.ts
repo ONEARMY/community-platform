@@ -1,4 +1,5 @@
 import { UserMenuItem } from '../support/commandsUi'
+import { generateNewUserDetails } from '../utils/TestUtils'
 
 describe('[Common]', () => {
   it('[Default Page]', () => {
@@ -31,6 +32,36 @@ describe('[Common]', () => {
     cy.url().should('include', '/how-to')
   })
 
+  describe.only('[User feeback button]', () => {
+    it('[Desktop]', () => {
+      cy.visit('/how-to')
+      cy.get('[data-cy=feedback]').should('contain', 'Report a Problem')
+      cy.get('[data-cy=feedback]')
+        .should('have.attr', 'href')
+        .and('contain', '/how-to?sort=Newest')
+
+      cy.visit('/map')
+      cy.get('[data-cy=feedback]')
+        .should('have.attr', 'href')
+        .and('contain', '/map')
+    })
+
+    it('[Mobile]', () => {
+      cy.viewport('iphone-6')
+
+      cy.visit('/how-to')
+      cy.get('[data-cy=feedback]').should('contain', 'Problem?')
+      cy.get('[data-cy=feedback]')
+        .should('have.attr', 'href')
+        .and('contain', '/how-to?sort=Newest')
+
+      cy.visit('/map')
+      cy.get('[data-cy=feedback]')
+        .should('have.attr', 'href')
+        .and('contain', '/map')
+    })
+  })
+
   describe('[User Menu]', () => {
     it('[By Anonymous]', () => {
       cy.step('Login and Join buttons are available')
@@ -41,10 +72,11 @@ describe('[Common]', () => {
     })
 
     it('[By Authenticated]', () => {
-      const username = 'howto_reader'
       cy.visit('/how-to')
+
       cy.step('Login and Join buttons are unavailable to logged-in users')
-      cy.login(`${username}@test.com`, 'test1234')
+      const user = generateNewUserDetails()
+      cy.signUpNewUser(user)
       cy.get('[data-cy=login]', { timeout: 20000 }).should('not.exist')
       cy.get('[data-cy=join]').should('not.exist')
 
@@ -56,7 +88,7 @@ describe('[Common]', () => {
 
       cy.step('Go to Profile')
       cy.clickMenuItem(UserMenuItem.Profile)
-      cy.url().should('include', `/u/${username}`)
+      cy.url().should('include', `/u/${user.username}`)
 
       cy.step('Go to Settings')
       cy.clickMenuItem(UserMenuItem.Settings)

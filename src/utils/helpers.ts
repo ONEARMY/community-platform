@@ -3,8 +3,9 @@ import { IModerationStatus, UserRole } from 'oa-shared'
 import { getConfigurationOption } from 'src/config/config'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 
-import type { DBDoc, IModerable } from 'src/models'
+import type { DBDoc } from 'src/models/dbDoc.model'
 import type { IMapPin } from 'src/models/maps.models'
+import type { IModerable } from 'src/models/moderation.model'
 import type { IUser } from 'src/models/user.models'
 
 const specialCharactersPattern = /[^a-zA-Z0-9_-]/gi

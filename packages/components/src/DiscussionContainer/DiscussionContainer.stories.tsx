@@ -6,7 +6,7 @@ import { DiscussionContainer } from './DiscussionContainer'
 import type { Meta, StoryObj } from '@storybook/react'
 
 export default {
-  title: 'Components/DiscussionContainer',
+  title: 'Discussions/DiscussionContainer',
   component: DiscussionContainer,
 } as Meta<typeof DiscussionContainer>
 
@@ -31,8 +31,8 @@ export const Default: Story = {
         onMoreComments={() => null}
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
+        isSubmitting={false}
         isLoggedIn={false}
-        showAvatar
       />
     )
   },
@@ -52,8 +52,8 @@ export const NoComments: Story = {
         onMoreComments={() => null}
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
+        isSubmitting={false}
         isLoggedIn={false}
-        showAvatar
       />
     )
   },
@@ -75,8 +75,8 @@ export const LoggedIn: Story = {
         onMoreComments={() => null}
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
+        isSubmitting={false}
         isLoggedIn={true}
-        showAvatar
       />
     )
   },
@@ -98,8 +98,8 @@ export const Expandable: Story = {
         onMoreComments={() => null}
         onSubmit={() => null}
         onSubmitReply={() => Promise.resolve()}
+        isSubmitting={false}
         isLoggedIn={true}
-        showAvatar
       />
     )
   },
@@ -125,10 +125,10 @@ export const WithReplies: Story = {
         onMoreComments={() => null}
         onSubmit={() => null}
         isLoggedIn={true}
+        isSubmitting={false}
         onSubmitReply={async (commentId, comment) =>
           alert(`reply to commentId: ${commentId} with comment: ${comment}`)
         }
-        showAvatar
       />
     )
   },

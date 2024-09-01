@@ -123,7 +123,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
               <Link to={'/how-to/' + howto.slug + '/edit'}>
-                <Button variant={'primary'} data-cy={'edit'}>
+                <Button type="button" variant="primary" data-cy="edit">
                   Edit
                 </Button>
               </Link>
@@ -132,6 +132,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             {loggedInUser && isAllowedToDeleteContent(howto, loggedInUser) && (
               <Fragment key={'how-to-delete-action'}>
                 <Button
+                  type="button"
                   data-cy="How-To: delete button"
                   variant={'secondary'}
                   icon="delete"

@@ -15,7 +15,14 @@ export const colors = {
   accent: { base: '#F82F03', hover: 'hsl(14, 81%, 63%)' },
 }
 
-// cc - assume standard image widths are 4:3, however not clearly defined
+export const alerts = {
+  ...baseTheme.alerts,
+  accent: {
+    ...baseTheme.alerts.failure,
+    backgroundColor: colors.accent.base,
+    color: colors.black,
+  },
+}
 
 export const StyledComponentTheme: ThemeWithName = {
   name: 'Fixing Fashion',
@@ -26,6 +33,7 @@ export const StyledComponentTheme: ThemeWithName = {
     'https://community.fixing.fashion/academy/guides/community-program',
 
   ...baseTheme,
+  alerts,
   colors,
   buttons: getButtons(colors),
   badges: {

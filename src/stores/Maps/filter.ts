@@ -4,10 +4,7 @@ import type { IMapPin } from 'src/models/maps.models'
 
 // filter pins to include matched pin type or subtype
 // excluding items which have been marked as deleted=true
-export const filterMapPinsByType = (
-  mapPins: IMapPin[],
-  filters: Array<string>,
-) => {
+export const filterMapPinsByType = (mapPins: IMapPin[], filters: string[]) => {
   const filterList = new Set(filters)
   let filteredPins = mapPins
 

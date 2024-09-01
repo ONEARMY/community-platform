@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
+import { observer } from 'mobx-react'
 import { DiscussionContainer, Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { transformToUserComments } from 'src/common/transformToUserComments'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import { getResearchCommentId } from 'src/pages/Research/Content/helper'
 import { nonDeletedCommentsCount } from 'src/utils/nonDeletedCommentsCount'
 import { Text } from 'theme-ui'
 
-import { AuthWrapper } from './AuthWrapper'
 import { HideDiscussionContainer } from './HideDiscussionContainer'
 
-import type { IDiscussion, UserRole } from 'src/models'
+import type { IDiscussion } from 'src/models'
 
 const DISCUSSION_NOT_FOUND = 'Discussion not found :('
 const LOADING_LABEL = 'Loading the awesome discussion'
@@ -18,13 +19,21 @@ const LOADING_LABEL = 'Loading the awesome discussion'
 interface IProps {
   sourceType: IDiscussion['sourceType']
   sourceId: string
-  setTotalCommentsCount: (number) => void
-  canHideComments?: boolean
+  setTotalCommentsCount: (number: number) => void
   showComments?: boolean
+  canHideComments?: boolean
   primaryContentId?: string | undefined
 }
 
-export const DiscussionWrapper = (props: IProps) => {
+const getHighlightedCommentId = () => {
+  const hash = window.location.hash
+  if (!hash) return
+
+  const filterOutResearchUpdate = getResearchCommentId(hash)
+  return filterOutResearchUpdate.replace('#comment:', '')
+}
+
+export const DiscussionWrapper = observer((props: IProps) => {
   const {
     canHideComments,
     primaryContentId,
@@ -37,9 +46,10 @@ export const DiscussionWrapper = (props: IProps) => {
   const [comment, setComment] = useState('')
   const [discussion, setDiscussion] = useState<IDiscussion | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { discussionStore } = useCommonStores().stores
-  const highlightedCommentId = window.location.hash.replace('#comment:', '')
+  const highlightedCommentId = getHighlightedCommentId()
 
   const transformComments = (discussion: IDiscussion) => {
     if (!discussion) return
@@ -78,6 +88,7 @@ export const DiscussionWrapper = (props: IProps) => {
   const handleEdit = async (_id: string, comment: string) => {
     if (!discussion) return
 
+    setIsSubmitting(true)
     const updatedDiscussion = await discussionStore.editComment(
       discussion,
       _id,
@@ -88,6 +99,8 @@ export const DiscussionWrapper = (props: IProps) => {
     if (updatedDiscussion) {
       transformComments(updatedDiscussion)
     }
+
+    setIsSubmitting(false)
   }
 
   const handleEditRequest = async () => {
@@ -97,6 +110,7 @@ export const DiscussionWrapper = (props: IProps) => {
   const handleDelete = async (_id: string) => {
     if (!discussion) return
 
+    setIsSubmitting(true)
     const updatedDiscussion = await discussionStore.deleteComment(
       discussion,
       _id,
@@ -106,10 +120,14 @@ export const DiscussionWrapper = (props: IProps) => {
     if (updatedDiscussion) {
       transformComments(updatedDiscussion)
     }
+
+    setIsSubmitting(false)
   }
 
   const onSubmit = async (comment: string) => {
     if (!comment || !discussion) return
+
+    setIsSubmitting(true)
 
     const updatedDiscussion = await discussionStore.addComment(
       discussion,
@@ -123,10 +141,14 @@ export const DiscussionWrapper = (props: IProps) => {
     if (updatedDiscussion) {
       setComment('')
     }
+
+    setIsSubmitting(false)
   }
 
-  const handleSubmitReply = async (commentId: string, reply) => {
+  const handleSubmitReply = async (commentId: string, reply: string) => {
     if (!discussion) return
+
+    setIsSubmitting(true)
 
     const updatedDiscussion = await discussionStore.addComment(
       discussion,
@@ -138,6 +160,8 @@ export const DiscussionWrapper = (props: IProps) => {
     if (updatedDiscussion) {
       transformComments(updatedDiscussion)
     }
+
+    setIsSubmitting(false)
   }
 
   const discussionProps = {
@@ -153,6 +177,7 @@ export const DiscussionWrapper = (props: IProps) => {
     highlightedCommentId,
     onSubmit,
     onSubmitReply: handleSubmitReply,
+    isSubmitting,
     isLoggedIn: discussionStore?.activeUser
       ? !!discussionStore.activeUser
       : false,
@@ -164,29 +189,15 @@ export const DiscussionWrapper = (props: IProps) => {
       {!isLoading && !discussion && <Text>{DISCUSSION_NOT_FOUND}</Text>}
       {discussion && canHideComments && (
         <HideDiscussionContainer
-          commentCount={discussion.comments.length}
+          commentCount={nonDeletedCommentsCount(discussion.comments)}
           showComments={showComments}
         >
-          <AuthWrapper
-            roleRequired={'beta-tester' as UserRole.BETA_TESTER}
-            fallback={
-              <DiscussionContainer {...discussionProps} showAvatar={false} />
-            }
-          >
-            <DiscussionContainer {...discussionProps} showAvatar />
-          </AuthWrapper>
+          <DiscussionContainer {...discussionProps} />
         </HideDiscussionContainer>
       )}
       {discussion && !canHideComments && (
-        <AuthWrapper
-          roleRequired={'beta-tester' as UserRole.BETA_TESTER}
-          fallback={
-            <DiscussionContainer {...discussionProps} showAvatar={false} />
-          }
-        >
-          <DiscussionContainer {...discussionProps} showAvatar />
-        </AuthWrapper>
+        <DiscussionContainer {...discussionProps} />
       )}
     </>
   )
-}
+})

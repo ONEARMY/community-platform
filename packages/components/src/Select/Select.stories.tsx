@@ -5,14 +5,13 @@ import { Select } from './Select'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Select',
+  title: 'Forms/Select',
   component: Select,
 } as Meta<typeof Select>
 
 export const Default: StoryFn<typeof Select> = () => {
   return (
     <Select
-      value={''}
       placeholder="A placeholder value"
       options={[
         {
@@ -51,12 +50,10 @@ export const Clearable: StoryFn<typeof Select> = () => {
 }
 
 export const MultipleSelect: StoryFn<typeof Select> = () => {
-  const [value, setValue] = useState([
-    {
-      value: 'value-three',
-      label: 'Value 3',
-    },
-  ])
+  const [value, setValue] = useState({
+    value: 'value-three',
+    label: 'Value 3',
+  })
 
   return (
     <Select

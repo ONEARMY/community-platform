@@ -4,6 +4,8 @@ import { cloneDeep } from 'lodash'
 import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
+import { getDiscussionContributorsToNotify } from 'src/utils/getDiscussionContributorsToNotify'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { hasAdminRights, randomID } from 'src/utils/helpers'
 
@@ -19,13 +21,12 @@ import type {
 } from 'src/models/discussion.models'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
-import type { CommentsTotalEvent } from './discussionEvents'
 
-const COLLECTION_NAME = 'discussions'
+const DISCUSSIONS_COLLECTION = 'discussions'
 
 export class DiscussionStore extends ModuleStore {
   constructor(rootStore: IRootStore) {
-    super(rootStore, COLLECTION_NAME)
+    super(rootStore, DISCUSSIONS_COLLECTION)
   }
 
   public async fetchOrCreateDiscussionBySource(
@@ -36,11 +37,12 @@ export class DiscussionStore extends ModuleStore {
     const foundDiscussion =
       toJS(
         await this.db
-          .collection<IDiscussion>(COLLECTION_NAME)
+          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
           .getWhere('sourceId', '==', sourceId),
       )[0] || null
 
     if (foundDiscussion) {
+      await this._validatePrimaryContentId(foundDiscussion, primaryContentId)
       return this._formatDiscussion(foundDiscussion)
     }
 
@@ -71,11 +73,11 @@ export class DiscussionStore extends ModuleStore {
       contributorIds: [],
     }
 
-    const dbRef = await this.db
-      .collection<IDiscussion>(COLLECTION_NAME)
+    const dbRef = this.db
+      .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
       .doc(newDiscussion._id)
 
-    return this._updateDiscussion(dbRef, newDiscussion, 'neutral')
+    return await this._updateDiscussion(dbRef, newDiscussion)
   }
 
   public async addComment(
@@ -89,10 +91,10 @@ export class DiscussionStore extends ModuleStore {
 
       if (user && comment) {
         const dbRef = this.db
-          .collection<IDiscussion>(COLLECTION_NAME)
+          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
           .doc(discussion._id)
 
-        const currentDiscussion = toJS(await dbRef.get())
+        const currentDiscussion = toJS(await dbRef.get('server'))
 
         if (!currentDiscussion) {
           throw new Error('Discussion not found')
@@ -114,11 +116,14 @@ export class DiscussionStore extends ModuleStore {
 
         currentDiscussion.comments.push(newComment)
         currentDiscussion.contributorIds = this._addContributorId(
-          currentDiscussion,
+          currentDiscussion.contributorIds || [],
           newComment,
         )
 
-        return this._updateDiscussion(dbRef, currentDiscussion, 'add')
+        // Do not await so it doesn't block adding a comment
+        this._addNotifications(newComment, currentDiscussion)
+
+        return this._updateDiscussion(dbRef, currentDiscussion)
       }
     } catch (err) {
       logger.error(err)
@@ -139,10 +144,10 @@ export class DiscussionStore extends ModuleStore {
 
       if (user && comment) {
         const dbRef = this.db
-          .collection<IDiscussion>(COLLECTION_NAME)
+          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
           .doc(discussion._id)
 
-        const currentDiscussion = toJS(await dbRef.get())
+        const currentDiscussion = toJS(await dbRef.get('server'))
 
         if (currentDiscussion) {
           const targetComment = currentDiscussion.comments.find(
@@ -161,7 +166,7 @@ export class DiscussionStore extends ModuleStore {
             commentId,
           )
 
-          return this._updateDiscussion(dbRef, currentDiscussion, 'neutral')
+          return this._updateDiscussion(dbRef, currentDiscussion)
         }
       }
     } catch (err) {
@@ -181,15 +186,19 @@ export class DiscussionStore extends ModuleStore {
 
       if (user) {
         const dbRef = this.db
-          .collection<IDiscussion>(COLLECTION_NAME)
+          .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
           .doc(discussion._id)
 
-        const currentDiscussion = toJS(await dbRef.get())
+        const currentDiscussion = toJS(await dbRef.get('server'))
 
         if (currentDiscussion) {
           const targetComment = currentDiscussion.comments.find(
             (comment) => comment._id === commentId,
           )
+
+          if (!targetComment) {
+            throw new Error('Cannot find comment')
+          }
 
           if (targetComment?._creatorId !== user._id && !hasAdminRights(user)) {
             logger.error('Comment can not be deleted by user', { user })
@@ -203,11 +212,12 @@ export class DiscussionStore extends ModuleStore {
           )
 
           currentDiscussion.contributorIds = this._removeContributorId(
-            discussion,
-            targetComment?._creatorId,
+            discussion.comments,
+            discussion.contributorIds || [],
+            targetComment._creatorId,
           )
 
-          return this._updateDiscussion(dbRef, currentDiscussion, 'delete')
+          return this._updateDiscussion(dbRef, currentDiscussion)
         }
       }
     } catch (err) {
@@ -216,6 +226,86 @@ export class DiscussionStore extends ModuleStore {
     }
 
     return null
+  }
+
+  private async _addNotifications(comment: IComment, discussion: IDiscussion) {
+    const collectionName = getCollectionName(discussion.sourceType)
+    if (!collectionName) {
+      return logger.trace(
+        `Unable to find collection. Discussion notification not sent. sourceType: ${discussion.sourceType}`,
+      )
+    }
+
+    const parentComment = discussion.comments.find(
+      ({ _id }) => _id === comment.parentCommentId,
+    )
+    const commentId = parentComment ? parentComment._id : comment._id
+
+    switch (collectionName) {
+      case 'research':
+        const researchRef = this.db
+          .collection<IResearch.Item>(collectionName)
+          .doc(discussion.primaryContentId)
+
+        const research = toJS(await researchRef.get('server'))
+
+        if (research) {
+          const update = research.updates.find(
+            ({ _id }) => _id == discussion.sourceId,
+          )
+
+          if (!update)
+            return logger.trace(
+              `Unable to find research update. Discussion notification not sent. sourceId: ${discussion.sourceId}`,
+            )
+
+          const recipientsToNotify = getDiscussionContributorsToNotify(
+            discussion,
+            research,
+            comment,
+            update.collaborators,
+          )
+          const url = `/research/${research.slug}#update_${update._id}-comment:${commentId}`
+
+          await Promise.all(
+            recipientsToNotify.map((recipient) => {
+              this.userNotificationsStore.triggerNotification(
+                'new_comment_discussion',
+                recipient,
+                url,
+                research.title,
+              )
+            }),
+          )
+        }
+        return
+      default:
+        const dbRef = this.db
+          .collection<IDiscussionSourceModelOptions>(collectionName)
+          .doc(discussion.sourceId)
+        const parentContent = toJS(await dbRef.get('server'))
+        const parentPath =
+          collectionName === 'howtos' ? 'how-to' : collectionName
+
+        if (parentContent) {
+          const recipientsToNotify = getDiscussionContributorsToNotify(
+            discussion,
+            parentContent,
+            comment,
+          )
+
+          return await Promise.all(
+            recipientsToNotify.map((recipient) => {
+              this.userNotificationsStore.triggerNotification(
+                'new_comment_discussion',
+                recipient,
+                `/${parentPath}/${parentContent.slug}#comment:${commentId}`,
+                parentContent.title,
+              )
+            }),
+          )
+        }
+    }
   }
 
   private _findAndUpdateComment(
@@ -255,29 +345,65 @@ export class DiscussionStore extends ModuleStore {
   private async _updateDiscussion(
     dbRef: DocReference<IDiscussion>,
     discussion: IDiscussion,
-    commentsTotalEvent: CommentsTotalEvent,
   ): Promise<IDiscussionDB | null> {
     await dbRef.set({ ...cloneDeep(discussion) })
-    await updateDiscussionMetadata(this.db, discussion, commentsTotalEvent)
-    const updatedDiscussion = toJS(await dbRef.get())
+
+    // Do not await so it doesn't block adding a comment
+    updateDiscussionMetadata(this.db, discussion)
+
+    const updatedDiscussion = toJS(await dbRef.get('server'))
 
     return updatedDiscussion ? updatedDiscussion : null
   }
 
-  private _addContributorId({ contributorIds }, comment) {
+  private async _validatePrimaryContentId(
+    discussion: IDiscussion,
+    primaryContentId: string | undefined,
+  ): Promise<IDiscussion | null> {
+    if (
+      !primaryContentId ||
+      discussion.primaryContentId === primaryContentId ||
+      discussion.sourceType !== 'researchUpdate'
+    )
+      return discussion
+
+    const dbRef = this.db
+      .collection<IDiscussion>(DISCUSSIONS_COLLECTION)
+      .doc(discussion._id)
+
+    return await this._updateDiscussion(dbRef, {
+      ...discussion,
+      primaryContentId,
+    })
+  }
+
+  private _addContributorId(contributorIds: string[], comment: IComment) {
+    if (contributorIds.length === 0) {
+      return [comment._creatorId]
+    }
+
     const isIdAlreadyPresent = !contributorIds.find(
       (id) => id === comment._creatorId,
     )
-    if (!isIdAlreadyPresent) return contributorIds
+    if (!isIdAlreadyPresent) {
+      return contributorIds
+    }
 
     return [...contributorIds, comment._creatorId]
   }
 
-  private _removeContributorId({ comments, contributorIds }, _creatorId) {
+  private _removeContributorId(
+    comments: IComment[],
+    contributorIds: string[],
+    _creatorId: string,
+  ) {
     const isOtherUserCommentPresent = !comments.find(
       (comment) => comment._creatorId === _creatorId,
     )
-    if (isOtherUserCommentPresent) return contributorIds
+
+    if (isOtherUserCommentPresent) {
+      return contributorIds
+    }
 
     return contributorIds.filter((id) => id !== _creatorId)
   }
@@ -299,12 +425,8 @@ export class DiscussionStore extends ModuleStore {
   }
 
   private _getUserAvatar(user: IUserPPDB) {
-    if (
-      user.coverImages &&
-      user.coverImages[0] &&
-      user.coverImages[0].downloadUrl
-    ) {
-      return user.coverImages[0].downloadUrl
+    if (user.userImage && user.userImage.downloadUrl) {
+      return cdnImageUrl(user.userImage.downloadUrl, { width: 100 })
     }
     return null
   }

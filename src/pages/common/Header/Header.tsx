@@ -169,6 +169,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         <MobileMenuWrapper className="menu-mobile">
           <Flex pl={5}>
             <Button
+              type="button"
               showIconOnly={true}
               icon={isVisible ? 'close' : 'menu'}
               onClick={() => setIsVisible(!isVisible)}

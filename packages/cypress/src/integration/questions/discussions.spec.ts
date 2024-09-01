@@ -10,20 +10,14 @@ const item = questions[0]
 const discussion = Object.values(MOCK_DATA.discussions).find(
   ({ sourceId }) => sourceId === item._id,
 )
-const firstComment = discussion.comments[0]
 
 describe('[Questions.Discussions]', () => {
   it('can open using deep links', () => {
+    const firstComment = discussion.comments[0]
+
     cy.signUpNewUser()
     cy.visit(`/questions/${item.slug}#comment:${firstComment._id}`)
-    cy.get('[data-cy="CommentItem"]').should('have.length.gte', 2)
-    cy.get('[data-cy="CommentItem"]')
-      .first()
-      .scrollIntoView()
-      .should('be.inViewport', 10)
-
-    cy.step('Comment mentions are formatted correctly')
-    cy.contains('@demo_user - I like your logo')
+    cy.checkCommentItem('@demo_user - I like your logo', 2)
   })
 
   it('allows authenticated users to contribute to discussions', () => {
@@ -39,22 +33,17 @@ describe('[Questions.Discussions]', () => {
     cy.visit(`/questions/${item.slug}`)
 
     cy.step('Can add comment')
-    cy.get('[data-cy=comments-form]:last').type(newComment)
-    cy.get('[data-cy=comment-submit]:last').click()
+    cy.addComment(newComment)
     cy.contains(`${discussion.comments.length + 1} comments`)
     cy.contains(newComment)
 
     cy.step('Can edit their comment')
-    cy.get('[data-cy="CommentItem: edit button"]:last').click()
-    cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
-    cy.get('[data-cy=edit-comment-submit]').click()
+    cy.editDiscussionItem('CommentItem', updatedNewComment)
     cy.contains(updatedNewComment)
     cy.contains(newComment).should('not.exist')
 
     cy.step('Can add reply')
-    cy.get('[data-cy=show-replies]:first').click()
-    cy.get('[data-cy=reply-form]:first').type(newReply)
-    cy.get('[data-cy=reply-submit]:first').click()
+    cy.addReply(newReply)
     cy.contains(`${discussion.comments.length + 2} comments`)
     cy.contains(newReply)
     cy.queryDocuments('questions', '_id', '==', item._id).then((docs) => {
@@ -65,15 +54,12 @@ describe('[Questions.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
-    cy.get('[data-cy="ReplyItem: edit button"]:first').click()
-    cy.get('[data-cy=edit-comment]').clear().type(updatedNewReply)
-    cy.get('[data-cy=edit-comment-submit]').click()
+    cy.editDiscussionItem('ReplyItem', updatedNewReply)
     cy.contains(updatedNewReply)
     cy.contains(newReply).should('not.exist')
 
     cy.step('Can delete their reply')
-    cy.get('[data-cy="ReplyItem: delete button"]:first').click()
-    cy.get('[data-cy="Confirm.modal: Confirm"]').click()
+    cy.deleteDiscussionItem('ReplyItem')
     cy.contains(updatedNewReply).should('not.exist')
 
     // Prep for: Replies still show for deleted comments
@@ -84,8 +70,7 @@ describe('[Questions.Discussions]', () => {
     cy.get('[data-cy=ReplyItem]:last').contains(secondReply)
 
     cy.step('Can delete their comment')
-    cy.get('[data-cy="CommentItem: delete button"]:first').click()
-    cy.get('[data-cy="Confirm.modal: Confirm"]').click()
+    cy.deleteDiscussionItem('CommentItem')
     cy.contains(updatedNewComment).should('not.exist')
 
     cy.step('Replies still show for deleted comments')
@@ -93,8 +78,7 @@ describe('[Questions.Discussions]', () => {
     cy.contains(secondReply)
 
     cy.step('Can delete their reply')
-    cy.get('[data-cy="ReplyItem: delete button"]:first').click()
-    cy.get('[data-cy="Confirm.modal: Confirm"]').click()
+    cy.deleteDiscussionItem('ReplyItem')
     cy.contains(updatedNewReply).should('not.exist')
     cy.contains(`${discussion.comments.length} comments`)
     cy.queryDocuments('questions', '_id', '==', item._id).then((docs) => {
@@ -112,7 +96,9 @@ describe('[Questions.Discussions]', () => {
       (docs) => {
         const [user] = docs
         const discussionNotification = user.notifications.find(
-          ({ type }) => type === 'new_comment_discussion',
+          ({ type, triggeredBy }) =>
+            type === 'new_comment_discussion' &&
+            triggeredBy.userId === visitor.username,
         )
         expect(discussionNotification.relevantUrl).to.include(
           `/questions/${item.slug}#comment:`,
@@ -129,7 +115,9 @@ describe('[Questions.Discussions]', () => {
       (docs) => {
         const [user] = docs
         const discussionNotification = user.notifications.find(
-          ({ type }) => type === 'new_comment_discussion',
+          ({ type, triggeredBy }) =>
+            type === 'new_comment_discussion' &&
+            triggeredBy.userId === visitor.username,
         )
         expect(discussionNotification.relevantUrl).to.include(
           `/questions/${item.slug}#comment:`,

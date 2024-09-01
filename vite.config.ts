@@ -25,6 +25,9 @@ const vitestConfig: VitestUserConfigInterface = {
     },
     include: ['./src/**/*.test.?(c|m)[jt]s?(x)'],
     logHeapUsage: true,
+    sequence: {
+      hooks: 'list',
+    },
   },
 }
 

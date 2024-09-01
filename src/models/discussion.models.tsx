@@ -1,4 +1,4 @@
-import type { DBDoc } from '../stores/databaseV2/types'
+import type { DBDoc } from './dbDoc.model'
 import type { IQuestion } from './question.models'
 
 export type IComment = {
@@ -20,7 +20,7 @@ export type IComment = {
 export type IDiscussion = {
   _id: string
   comments: IComment[]
-  contributorIds: string[]
+  contributorIds?: string[]
   primaryContentId?: string | undefined
   sourceId: string
   sourceType: 'howto' | 'question' | 'researchUpdate'

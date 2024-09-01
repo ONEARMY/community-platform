@@ -111,7 +111,7 @@ export const QuestionListing = () => {
 
         <Flex sx={{ gap: 2 }}>
           <Link to={userStore.user ? '/questions/create' : '/sign-up'}>
-            <Button data-cy="create" variant="primary">
+            <Button type="button" data-cy="create" variant="primary">
               {listing.create}
             </Button>
           </Link>
@@ -124,11 +124,15 @@ export const QuestionListing = () => {
         </Heading>
       )}
 
-      {questions &&
-        questions.length > 0 &&
-        questions.map((question, index) => (
-          <QuestionListItem key={index} question={question} query={q} />
-        ))}
+      {questions && questions.length > 0 && (
+        <>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {questions.map((question, index) => (
+              <QuestionListItem key={index} question={question} query={q} />
+            ))}
+          </ul>
+        </>
+      )}
 
       {showLoadMore && (
         <Flex
@@ -136,7 +140,7 @@ export const QuestionListing = () => {
             justifyContent: 'center',
           }}
         >
-          <Button onClick={() => fetchQuestions(lastVisible)}>
+          <Button type="button" onClick={() => fetchQuestions(lastVisible)}>
             {listing.loadMore}
           </Button>
         </Flex>

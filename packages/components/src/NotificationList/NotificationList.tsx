@@ -43,7 +43,8 @@ export const NotificationList = (props: Props) => {
             <NotificationItem key={idx} {...(notification as any)} />
           ))}
           <Button
-            style={{
+            type="button"
+            sx={{
               width: '100%',
               textAlign: 'center',
               display: 'flex',

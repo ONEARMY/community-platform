@@ -157,7 +157,11 @@ export const ImageCrop = (props: Props) => {
       </Flex>
 
       <Box sx={{ padding }}>
-        <Button onClick={onDownloadCropClick} disabled={isLoading}>
+        <Button
+          type="button"
+          onClick={onDownloadCropClick}
+          disabled={isLoading}
+        >
           {callbackLabel}
         </Button>
       </Box>

@@ -13,9 +13,10 @@ import { Box, Flex, Heading } from 'theme-ui'
 
 import { ITEMS_PER_PAGE, RESEARCH_EDITOR_ROLES } from '../constants'
 import { listing } from '../labels'
-import { ResearchSearchParams, researchService } from '../research.service'
+import { researchService } from '../research.service'
 import { ResearchFilterHeader } from './ResearchFilterHeader'
 import ResearchListItem from './ResearchListItem'
+import { ResearchSearchParams } from './ResearchSearchParams'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { ResearchStatus } from 'oa-shared'
@@ -123,23 +124,30 @@ const ResearchList = observer(() => {
         {!showDrafts ? <ResearchFilterHeader /> : <div></div>}
 
         <Flex sx={{ gap: 2 }} mb={[3, 3, 0]}>
-          <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
-            <DraftButton
-              showDrafts={showDrafts}
-              draftCount={draftCount}
-              handleShowDrafts={handleShowDrafts}
-            />
-          </AuthWrapper>
           {isPreciousPlastic() ? (
-            <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
-              <Button variant="primary" data-cy="create">
-                {listing.create}
-              </Button>
-            </Link>
+            <>
+              {userStore.activeUser && (
+                <DraftButton
+                  showDrafts={showDrafts}
+                  draftCount={draftCount}
+                  handleShowDrafts={handleShowDrafts}
+                />
+              )}
+              <Link to={userStore.activeUser ? '/research/create' : '/sign-up'}>
+                <Button type="button" variant="primary" data-cy="create">
+                  {listing.create}
+                </Button>
+              </Link>
+            </>
           ) : (
             <AuthWrapper roleRequired={RESEARCH_EDITOR_ROLES}>
+              <DraftButton
+                showDrafts={showDrafts}
+                draftCount={draftCount}
+                handleShowDrafts={handleShowDrafts}
+              />
               <Link to="/research/create">
-                <Button variant="primary" data-cy="create">
+                <Button type="button" variant="primary" data-cy="create">
                   {listing.create}
                 </Button>
               </Link>
@@ -149,16 +157,20 @@ const ResearchList = observer(() => {
       </Flex>
 
       {showDrafts ? (
-        drafts.map((item) => {
-          return <ResearchListItem key={item._id} item={item} />
-        })
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          {drafts.map((item) => {
+            return <ResearchListItem key={item._id} item={item} />
+          })}
+        </ul>
       ) : (
         <>
-          {researchItems &&
-            researchItems.length !== 0 &&
-            researchItems.map((item) => {
-              return <ResearchListItem key={item._id} item={item} />
-            })}
+          {researchItems && researchItems.length !== 0 && (
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {researchItems.map((item) => (
+                <ResearchListItem key={item._id} item={item} />
+              ))}
+            </ul>
+          )}
 
           {!isFetching && researchItems?.length === 0 && (
             <Box sx={{ marginBottom: 5 }}>{listing.noItems}</Box>
@@ -173,7 +185,10 @@ const ResearchList = observer(() => {
                   justifyContent: 'center',
                 }}
               >
-                <Button onClick={() => fetchResearchItems(lastVisible)}>
+                <Button
+                  type="button"
+                  onClick={() => fetchResearchItems(lastVisible)}
+                >
                   {listing.loadMore}
                 </Button>
               </Flex>

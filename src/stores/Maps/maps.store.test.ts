@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { MapsStore } from './maps.store'
 
+import type { IUserPPDB } from 'src/models'
+
 vi.mock('../common/module.store')
 
 describe('maps.store', () => {
@@ -190,6 +192,25 @@ describe('maps.store', () => {
       expect(store.db.set).toHaveBeenCalledWith(
         expect.not.objectContaining({
           subType: 'shredder',
+        }),
+      )
+    })
+  })
+
+  describe('deleteUserPin', () => {
+    it('marks a pin as _deleted', async () => {
+      // Arrange
+      store.db.get = vi.fn().mockResolvedValue([{ _id: 'existing' }])
+
+      // Act
+      await store.deleteUserPin({
+        userName: 'existing',
+      } as IUserPPDB)
+
+      // Assert
+      expect(store.db.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          _deleted: true,
         }),
       )
     })

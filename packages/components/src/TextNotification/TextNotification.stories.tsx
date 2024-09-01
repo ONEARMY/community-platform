@@ -5,7 +5,7 @@ import { TextNotification } from './TextNotification'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/TextNotification',
+  title: 'Layout/TextNotification',
   component: TextNotification,
 } as Meta<typeof TextNotification>
 

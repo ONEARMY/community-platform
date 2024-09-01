@@ -5,7 +5,7 @@ import { BlockedRoute } from './BlockedRoute'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/BlockedRoute',
+  title: 'Layout/BlockedRoute',
   component: BlockedRoute,
 } as Meta<typeof BlockedRoute>
 

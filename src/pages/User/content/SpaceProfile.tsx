@@ -8,7 +8,7 @@ import {
   Username,
   UserStatistics,
 } from 'oa-components'
-import { ExternalLinkLabel } from 'oa-shared'
+import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
 import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
@@ -18,13 +18,14 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { isPreciousPlastic } from 'src/config/config'
-import { ProfileType } from 'src/modules/profile/types'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import {
   AspectRatio,
+  Avatar,
   Box,
-  Container,
+  Card,
   Flex,
   Heading,
   Image,
@@ -50,42 +51,24 @@ interface IProps {
   docs: UserCreatedDocs | undefined
 }
 
-const MobileBadge = ({ children }) => (
-  <Flex
-    sx={{
-      alignItems: ['left', 'left', 'center'],
-      flexDirection: 'column',
-      marginBottom: 0,
-      marginLeft: [0, 0, 'auto'],
-      marginRight: [0, 0, 'auto'],
-      marginTop: [0, 0, '-50%'],
-      position: 'relative',
-    }}
-  >
-    {children}
-  </Flex>
-)
-
 const renderPlasticTypes = (plasticTypes: Array<PlasticTypeLabel>) => {
   const renderIcon = (type: string) => {
-    switch (type) {
-      case 'hdpe':
-        return <Image loading="lazy" src={HDPEIcon} />
-      case 'ldpe':
-        return <Image loading="lazy" src={LDPEIcon} />
-      case 'other':
-        return <Image loading="lazy" src={OtherIcon} />
-      case 'pet':
-        return <Image loading="lazy" src={PETIcon} />
-      case 'pp':
-        return <Image loading="lazy" src={PPIcon} />
-      case 'ps':
-        return <Image loading="lazy" src={PSIcon} />
-      case 'pvc':
-        return <Image loading="lazy" src={PVCIcon} />
-      default:
-        return null
+    const iconMap = {
+      hdpe: HDPEIcon,
+      ldpe: LDPEIcon,
+      other: OtherIcon,
+      pet: PETIcon,
+      pp: PPIcon,
+      ps: PSIcon,
+      pvc: PVCIcon,
     }
+
+    const toRender = iconMap[type]
+    return (
+      toRender && (
+        <Image data-cy={`plastic-type-${type}`} loading="lazy" src={toRender} />
+      )
+    )
   }
 
   return (
@@ -161,8 +144,16 @@ const getCoverImages = (user: IUserPP) => {
 }
 
 export const SpaceProfile = ({ user, docs }: IProps) => {
-  const { about, displayName, impact, links, location, profileType, userName } =
-    user
+  const {
+    about,
+    displayName,
+    impact,
+    links,
+    location,
+    profileType,
+    userName,
+    userImage,
+  } = user
 
   const coverImage = getCoverImages(user)
 
@@ -174,18 +165,8 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   )
 
   return (
-    <Container
-      mt={4}
-      mb={6}
-      sx={{
-        border: '2px solid black',
-        borderRadius: '10px',
-        overflow: 'hidden',
-        maxWidth: '1000px',
-      }}
-      data-cy="SpaceProfile"
-    >
-      <Box sx={{ lineHeight: 0 }}>
+    <Card data-cy="SpaceProfile">
+      <Box>
         {coverImage.length ? (
           <ImageGallery
             images={formatImagesForGallery(coverImage) as any}
@@ -210,53 +191,61 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       </Box>
       <Flex
         sx={{
-          px: [2, 4],
-          py: 4,
-          background: 'white',
+          padding: [2, 4],
           borderTop: '2px solid',
         }}
       >
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ display: ['block', 'block', 'none'] }}>
-            <MobileBadge>
-              <MemberBadge profileType={profileType} />
-            </MobileBadge>
-          </Box>
-
-          <Box
-            sx={{
-              position: 'relative',
-              pt: ['0', '40px', '0'],
-            }}
-          >
+          <Box sx={{ position: 'relative' }}>
             <Box
               sx={{
-                display: ['none', 'none', 'block'],
+                display: 'block',
                 position: 'absolute',
                 top: 0,
                 right: 0,
-                transform: 'translateY(-100px)',
+                transform: 'translateY(-50%)',
               }}
             >
-              <MemberBadge size={150} profileType={profileType} />
+              <Box sx={{ display: ['none', 'none', 'block'] }}>
+                <MemberBadge size={150} profileType={profileType} />
+              </Box>
+              <Box sx={{ display: ['none', 'block', 'none'] }}>
+                <MemberBadge size={100} profileType={profileType} />
+              </Box>
+              <Box sx={{ display: ['block', 'none', 'none'] }}>
+                <MemberBadge size={75} profileType={profileType} />
+              </Box>
             </Box>
-            <Box>
-              <Username
-                user={{
-                  ...user,
-                  countryCode: getUserCountry(user),
-                }}
-              />
-              <Heading
-                as="h1"
-                color={'black'}
-                mb={3}
-                style={{ wordBreak: 'break-word' }}
-                data-cy="userDisplayName"
-              >
-                {displayName}
-              </Heading>
-            </Box>
+
+            <Flex sx={{ gap: 2, alignItems: 'center', paddingBottom: [2, 4] }}>
+              {userImage?.downloadUrl && (
+                <Avatar
+                  data-cy="userImage"
+                  src={cdnImageUrl(userImage.downloadUrl, { width: 50 })}
+                  sx={{
+                    objectFit: 'cover',
+                    width: '50px',
+                    height: '50px',
+                  }}
+                />
+              )}
+              <Flex sx={{ flexDirection: 'column' }}>
+                <Username
+                  user={{
+                    ...user,
+                    countryCode: getUserCountry(user),
+                  }}
+                />
+                <Heading
+                  as="h1"
+                  color={'black'}
+                  style={{ wordBreak: 'break-word' }}
+                  data-cy="userDisplayName"
+                >
+                  {displayName}
+                </Heading>
+              </Flex>
+            </Flex>
           </Box>
 
           <Tabs defaultValue={0}>
@@ -283,15 +272,15 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                   >
                     {about && <Paragraph>{about}</Paragraph>}
 
-                    {profileType === ProfileType.COLLECTION_POINT &&
+                    {profileType === ProfileTypeList.COLLECTION_POINT &&
                       user.collectedPlasticTypes &&
                       renderPlasticTypes(user.collectedPlasticTypes)}
 
-                    {profileType === ProfileType.COLLECTION_POINT &&
+                    {profileType === ProfileTypeList.COLLECTION_POINT &&
                       user.openingHours &&
                       renderOpeningHours(user.openingHours)}
 
-                    {profileType === ProfileType.MACHINE_BUILDER &&
+                    {profileType === ProfileTypeList.MACHINE_BUILDER &&
                       user.machineBuilderXp &&
                       renderMachineBuilderXp(user.machineBuilderXp)}
                   </Box>
@@ -331,6 +320,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
           </Tabs>
         </Box>
       </Flex>
-    </Container>
+    </Card>
   )
 }

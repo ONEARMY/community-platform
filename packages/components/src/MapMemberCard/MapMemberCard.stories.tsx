@@ -5,7 +5,7 @@ import { MapMemberCard } from './MapMemberCard'
 import type { Meta } from '@storybook/react'
 
 export default {
-  title: 'Components/MapMemberCard',
+  title: 'Layout/MapMemberCard',
   component: MapMemberCard,
 } as Meta<typeof MapMemberCard>
 

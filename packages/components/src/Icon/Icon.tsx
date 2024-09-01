@@ -1,7 +1,6 @@
 /** @jsxImportSource theme-ui */
 import styled from '@emotion/styled'
 import { IconContext } from '@react-icons/all-files'
-import { AiFillThunderbolt } from '@react-icons/all-files/ai/AiFillThunderbolt'
 import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
 import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
 import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
@@ -11,7 +10,6 @@ import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
 import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
 import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
 import { GoLinkExternal } from '@react-icons/all-files/go/GoLinkExternal'
-import { GoTrashcan } from '@react-icons/all-files/go/GoTrashcan'
 import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
 import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
 import { MdAdd } from '@react-icons/all-files/md/MdAdd'
@@ -40,6 +38,7 @@ import { ExternalUrl } from './ExternalUrl'
 import { iconMap } from './svgs'
 
 import type { SpaceProps, VerticalAlignProps } from 'styled-system'
+import type { ThemeUIStyleObject } from 'theme-ui'
 import type { IGlyphs } from './types'
 
 interface IGlyphProps {
@@ -53,11 +52,13 @@ export interface IProps {
   marginRight?: string
   opacity?: string
   onClick?: () => void
+  sx?: ThemeUIStyleObject | undefined
 }
 
 export const glyphs: IGlyphs = {
   'account-circle': <MdAccountCircle />,
   add: <MdAdd />,
+  account: iconMap.account,
   'arrow-back': <MdArrowBack />,
   'arrow-curved-bottom-right': iconMap.arrowCurvedBottomRight,
   'arrow-down': <MdKeyboardArrowDown />,
@@ -72,7 +73,7 @@ export const glyphs: IGlyphs = {
   'chevron-right': iconMap.chevronRight,
   'chevron-up': <FaChevronUp />,
   close: <MdClose />,
-  delete: <GoTrashcan />,
+  delete: iconMap.delete,
   difficulty: <FaSignal />,
   discord: iconMap.discord,
   download: <MdFileDownload />,
@@ -87,24 +88,30 @@ export const glyphs: IGlyphs = {
   filter: <RiFilter2Fill />,
   'flag-unknown': iconMap.flagUnknown,
   hide: iconMap.hide,
+  hyperlink: iconMap.hyperlink,
   image: <MdImage />,
+  impact: iconMap.impact,
   instagram: <FaInstagram />,
   loading: iconMap.loading,
   'location-on': <MdLocationOn />,
   lock: <MdLock />,
   machine: iconMap.machine,
   'mail-outline': <MdMailOutline />,
+  map: iconMap.map,
   menu: <MdMenu />,
   'more-vert': <MdMoreVert />,
   notifications: <MdNotifications />,
+  patreon: iconMap.patreon,
   pdf: <GoFilePdf />,
   plastic: iconMap.plastic,
+  profile: iconMap.profile,
   revenue: iconMap.revenue,
   slack: <FaSlack />,
   star: iconMap.star,
   'star-active': iconMap.starActive,
   step: <MdList />,
-  thunderbolt: <AiFillThunderbolt />,
+  thunderbolt: iconMap.thunderbolt,
+  'thunderbolt-grey': iconMap.thunderboltGrey,
   time: <MdAccessTime />,
   'turned-in': <MdTurnedIn />,
   'social-media': iconMap.socialMedia,
@@ -150,7 +157,7 @@ const Glyph = ({ glyph }: IGlyphProps) => {
 }
 
 export const Icon = (props: Props) => {
-  const { glyph, size, marginRight } = props
+  const { glyph, size, marginRight, sx } = props
 
   const isSizeNumeric = !isNaN(size as any)
 
@@ -166,13 +173,23 @@ export const Icon = (props: Props) => {
   return (
     <IconWrapper
       {...props}
-      sx={{ color: props.color ?? 'inherit', opacity: props.opacity ?? '1' }}
+      sx={{
+        color: props.color ?? 'inherit',
+        opacity: props.opacity ?? '1',
+        '& svg': {
+          fontSize: definedSize,
+        },
+        ...sx,
+      }}
       size={definedSize}
       style={{ marginRight }}
     >
       <IconContext.Provider
         value={{
-          style: { width: definedSize + 'px', height: definedSize + 'px' },
+          style: {
+            width: definedSize,
+            height: definedSize,
+          },
         }}
       >
         <Glyph glyph={glyph} />

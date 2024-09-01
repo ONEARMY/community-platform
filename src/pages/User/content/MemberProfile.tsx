@@ -1,23 +1,25 @@
 import { MemberBadge, Username, UserStatistics } from 'oa-components'
-import { ExternalLinkLabel, UserRole } from 'oa-shared'
+import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { getUserCountry } from 'src/utils/getUserCountry'
-import { Box, Card, Flex, Heading, Image, Paragraph } from 'theme-ui'
+import { Avatar, Box, Card, Flex, Heading, Paragraph } from 'theme-ui'
 
 import UserContactAndLinks from './UserContactAndLinks'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
-  user: IUserPP
   docs: UserCreatedDocs | undefined
+  user: IUserPPDB
 }
 
-export const MemberProfile = ({ user, docs }: IProps) => {
+export const MemberProfile = ({ docs, user }: IProps) => {
+  const { userImage } = user
+
   const userLinks = (user?.links || []).filter(
     (linkItem) =>
       ![ExternalLinkLabel.DISCORD, ExternalLinkLabel.FORUM].includes(
@@ -25,72 +27,62 @@ export const MemberProfile = ({ user, docs }: IProps) => {
       ),
   )
 
-  const memberPictureSource =
-    user.coverImages && user.coverImages[0]
-      ? (user.coverImages[0] as IUploadedFileMeta).downloadUrl
-      : DefaultMemberImage
+  const profileImageSrc = userImage?.downloadUrl
+    ? cdnImageUrl(userImage.downloadUrl)
+    : DefaultMemberImage
 
   return (
-    <Card
-      mt={8}
-      mb={6}
-      data-cy="MemberProfile"
+    <Flex
       sx={{
-        position: 'relative',
-        overflow: 'visible',
-        maxWidth: '42em',
-        width: '100%',
-        margin: '0 auto',
-        backgroundColor: 'transparent',
+        flexDirection: 'column',
+        transform: 'translateY(-50px)',
       }}
     >
-      <Flex
+      <MemberBadge
+        profileType={ProfileTypeList.MEMBER}
+        size={50}
         sx={{
-          px: [2, 4],
-          py: 4,
-          background: 'white',
+          alignSelf: 'center',
+          transform: 'translateY(25px)',
+        }}
+        useLowDetailVersion
+      />
+      <Card
+        data-cy="MemberProfile"
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 2,
         }}
       >
-        <MemberBadge
-          profileType="member"
-          size={50}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: '50%',
-            marginLeft: 50 * -0.5,
-            marginTop: 50 * -0.5,
-          }}
-          useLowDetailVersion
-        />
         <Flex
-          px={4}
-          py={4}
-          sx={{ borderRadius: 1, flexDirection: ['column', 'row'] }}
+          sx={{
+            flexDirection: ['column', 'row'],
+            gap: [2, 4],
+            padding: [2, 4],
+            paddingTop: 4,
+            width: '100%',
+          }}
         >
-          <Box sx={{ flexGrow: 1, minWidth: 'initial', mr: 3 }}>
-            <Box
+          <Flex
+            sx={{
+              flexGrow: 1,
+              minWidth: 'initial',
+              alignItems: 'center',
+              flexDirection: 'column',
+              gap: 4,
+            }}
+          >
+            <Avatar
+              data-cy="profile-avatar"
+              loading="lazy"
+              src={profileImageSrc}
               sx={{
-                display: 'block',
+                objectFit: 'cover',
                 width: '120px',
                 height: '120px',
-                borderRadius: '50%',
-                maxWidth: 'none',
-                overflow: 'hidden',
-                margin: '0 auto',
-                mb: 3,
               }}
-            >
-              <Image
-                loading="lazy"
-                src={memberPictureSource}
-                sx={{
-                  objectFit: 'cover',
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
-            </Box>
+            />
             <UserStatistics
               userName={user.userName}
               country={user.location?.country}
@@ -99,17 +91,14 @@ export const MemberProfile = ({ user, docs }: IProps) => {
               howtoCount={docs?.howtos.length || 0}
               researchCount={docs?.research.length || 0}
               usefulCount={user.totalUseful || 0}
+              sx={{ alignSelf: 'stretch' }}
             />
-          </Box>
-          <Flex
-            mt={[0, 3]}
-            ml={[0, 3]}
-            sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}
-          >
+          </Flex>
+          <Flex sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}>
             <Flex
               sx={{
                 alignItems: 'center',
-                pt: ['40px', '40px', '0'],
+                pt: [2, 0],
               }}
             >
               <Username
@@ -134,10 +123,10 @@ export const MemberProfile = ({ user, docs }: IProps) => {
             <UserContactAndLinks links={userLinks} />
           </Flex>
         </Flex>
-      </Flex>
-      <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-        <UserCreatedDocuments docs={docs} />
-      </AuthWrapper>
-    </Card>
+        <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+          <UserCreatedDocuments docs={docs} />
+        </AuthWrapper>
+      </Card>
+    </Flex>
   )
 }

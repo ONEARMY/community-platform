@@ -1,4 +1,4 @@
-import { impactQuestions } from 'src/pages/UserSettings/content/formSections/Impact/impactQuestions'
+import { impactQuestions } from 'src/pages/UserSettings/content/impactQuestions'
 import { numberWithCommas } from 'src/utils/helpers'
 import { Box, Text } from 'theme-ui'
 

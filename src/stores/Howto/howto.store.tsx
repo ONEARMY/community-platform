@@ -93,8 +93,9 @@ export class HowtoStore extends ModuleStore {
         })
       }
     }
-
-    this.activeHowto = activeHowto
+    runInAction(() => {
+      this.activeHowto = activeHowto
+    })
     return activeHowto
   }
 
@@ -247,7 +248,7 @@ export class HowtoStore extends ModuleStore {
       }
     })
 
-    const $doc = await dbRef.get()
+    const $doc = await dbRef.get('server')
     return $doc ? $doc : null
   }
 
@@ -284,7 +285,7 @@ export class HowtoStore extends ModuleStore {
       .doc((values as IHowtoDB)._id)
     const id = dbRef.id
 
-    const existingDoc = await dbRef.get()
+    const existingDoc = await dbRef.get('server')
     logger.debug('uploadHowto.existingDoc', { existingDoc })
 
     const user = this.activeUser as IUser

@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
-import { HowtoProvider } from 'src/test/components'
 import { describe, it } from 'vitest'
 
-import { FormFieldWrapper } from '.'
+import { FormFieldWrapper } from './FormFieldWrapper'
+import { HowtoFormProvider } from './HowtoFormProvider'
 
 describe('FormFieldWrapper', () => {
   it('renders the props', async () => {
@@ -11,11 +11,11 @@ describe('FormFieldWrapper', () => {
     const childrenText = 'Children rendered'
 
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <FormFieldWrapper text={text} htmlFor={htmlFor}>
           <p>{childrenText}</p>
         </FormFieldWrapper>
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText(text)
@@ -26,11 +26,11 @@ describe('FormFieldWrapper', () => {
     const text = 'Title Presented'
 
     render(
-      <HowtoProvider>
+      <HowtoFormProvider>
         <FormFieldWrapper text={text} required>
           <p></p>
         </FormFieldWrapper>
-      </HowtoProvider>,
+      </HowtoFormProvider>,
     )
 
     await screen.findByText('*', { exact: false })

@@ -114,7 +114,7 @@ export const QuestionPage = () => {
                 />
                 {store.userCanEditQuestion && (
                   <Link to={'/questions/' + question.slug + '/edit'}>
-                    <Button variant={'primary'} data-cy="edit">
+                    <Button type="button" variant="primary" data-cy="edit">
                       Edit
                     </Button>
                   </Link>
@@ -188,7 +188,7 @@ export const QuestionPage = () => {
                   }),
                 },
                 {
-                  icon: 'thunderbolt',
+                  icon: 'thunderbolt-grey',
                   label: buildStatisticsLabel({
                     stat: store.subscriberCount,
                     statUnit: 'following',

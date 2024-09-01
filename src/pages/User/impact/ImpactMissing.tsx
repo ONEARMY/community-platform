@@ -55,13 +55,13 @@ export const ImpactMissing = observer((props: Props) => {
         <>
           <Text>{reportYearLabel}</Text>
           <ExternalLink href={IMPACT_REPORT_LINKS[year]}>
-            <Button>{button}</Button>
+            <Button type="button">{button}</Button>
           </ExternalLink>
         </>
       )}
       {isPageOwner && (
-        <a href={`/settings#impact_${year}`}>
-          <Button>{labelSet.owner.link}</Button>
+        <a href={`/settings/impact/#year_${year}`}>
+          <Button type="button">{labelSet.owner.link}</Button>
         </a>
       )}
     </Flex>

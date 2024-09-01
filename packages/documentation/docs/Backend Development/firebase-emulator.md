@@ -5,9 +5,9 @@ title: Firebase Emulator
 
 # Introduction
 
-To run backend functions locally, Firebase provides a suite of emulators to mimic most functionality seen online (e.g firestore, storage, functions, triggers etc.)
+To run backend functions locally, Firebase provides a suite of emulators to mimic most functionality seen online (e.g firestore, storage, functions, triggers, etc.)
 
-For simplicity, although each service is an individual emulator and we are running multiple services, we will refer to them all a emulator.
+For simplicity, although each service is an individual emulator and we are running multiple services, we will refer to them all collectively as a single emulator.
 
 # Getting started
 
@@ -15,7 +15,7 @@ We start the frontend and backend separately, so we have two different commands.
 
 ## Prerequisites
 
-The emulator can be a bit tricky to setup and populate with seed data, so a Docker image has been created that contains all the necessary setup.
+The emulator can be a bit tricky to setup and populate with seed data, so we have a Docker image that contains all the necessary setup.
 
 You will need to be able to run `docker-compose` commands on your local machine.
 
@@ -30,7 +30,7 @@ docker-compose -v
 
 ## Commands
 
-To make things easier, some Yarn commands were created.
+To make things easier, we offer some yarn commands.
 
 ### Starting the frontend
 
@@ -46,15 +46,7 @@ This is similar to `yarn run start` but configures the frontend to connect to th
 yarn run backend:emulator:watch
 ```
 
-This starts the Firebase emulator, loads code into it, and watches for changes. There is initial data but any changes will be lost after the emulator is stopped.
-
-### Stopping the backend
-
-Due to some technical limitations, the `CTRL+C` keyboard shortcut may not stop the emulator, so it may be necessary to run:
-
-```
-yarn run backend:emulator:stop
-```
+This starts the Firebase emulator, loads code, and watches for changes. The databases are populated with seed data, see the section below for details.
 
 ## Note
 
@@ -62,7 +54,7 @@ It is assumed that all of these commands will be ran from the root directory of 
 
 ## Visiting the frontend
 
-The frontend should start at [localhost:4000](http://localhost:4000). You should see a small banner at the bottom of the page that informs emulators are in use.
+The frontend should start at [localhost:4000](http://localhost:4000). You should see a small banner at the bottom of the page that informs the emulator is in use.
 
 ![](./images/emulator-docker-frontend.png)
 
@@ -76,9 +68,9 @@ Clicking on tabs will take you to a page similar to the Firebase console, from w
 
 ## Seed data
 
-The emulator loads hardcoded data and any changes are only stored in temporary memory. No changes are kept between sessions.
+Hardcoded data is loaded into the emulator on start-up. Any changes will be lost the next time the emulator is started.
 
-You may experience some strange data issues but that is probably due to the browser's caching mechanisms. You can verify that by using another browser; in that case the original browser's indexeddb cache would need to be manually cleared.
+You may experience some strange data issues, for example incorrectly getting error messages that a user already exists after restarting, but that is probably due to browser caching. You can verify that by using another browser; in that case the original browser's indexeddb cache would need to be manually cleared.
 
 ### User logins
 
@@ -102,42 +94,39 @@ password: thanks_emulator_man
 
 ### Improving it
 
-You can improve the seed data by making changes via the application or Firebase UI, exporting it, and making a pull request. This will help make development/testing easier for you and others in the future.
+You can improve the seed data by making changes via the application or Firebase user interface, exporting the data, and making a pull request. This will help make development and testing easier for you and others.
 
 1. Get the container name using `docker ps`.
 
 2. Run the export script:
 
 ```
-docker exec -it <name> /app/export.js
+docker exec -it <container_name> /app/containerization/export.cjs
 ```
 
-3. Transfer the data from the container to your machine:
+3. Transfer the data from the container to your host machine:
 
 ```
-docker cp <name>:/app/dump ./functions/data/
+docker cp <container_name>:/app/dump ./whatever
 ```
 
-4. Delete the current `emulator` folder.
-
-5. Rename the `dump` folder to `emulator`.
-
-6. But note, each folder in the export must be checked into Git. If not, this will cause problems with seeding. By default, Git does not track empty folders, so you must force it to track it by adding a .gitkeep file to the folder.
+4. Then replace the content of `./containerization/data` with it. But note, each folder in the export must be checked into Git. If not, this will cause problems when the emulator tries to start. By default, Git does not track empty folders, so you must force it to track it by adding a `.gitkeep` file to the folder.
 
 ## Function development
 
 ### Writing functions code
 
-The emulator binds to the `functions/dist` folder so that changes made will be reflected in the emulator. On Linux these changes should be picked up immediately. On Windows the changes are not always detected and may require spinning the emulator down and then starting back up.
+When you make changes to the functions code, this is shared to the container and then the emulator. These changes should be picked up almost immediately.
 
 ### Invoking functions
 
 Functions can be invoked in different ways depending on their trigger type.
 
 For functions triggered by storage or database changes, making changes directly on the dashboard or from the frontend should trigger the corresponding function.
-Similarly callable functions should be called triggered from frontend code.
 
-For functions triggered by http request you can call directly either from command line, a web browser or REST client such as [Insomnia](https://insomnia.rest/)
+Similarly callable functions should be triggered from the frontend.
+
+For functions triggered by HTTP request, you can call them directly either from command line, web browser or REST client such as [Insomnia](https://insomnia.rest/)
 
 E.g. calling the emulator `seed-users-create` function via a GET request:
 
@@ -151,11 +140,9 @@ Read more about [connecting your app to the Cloud Functions Emulator](https://fi
 
 ### Accessing logs
 
-If the emulator throws an error you may want to check generated debug.log files. These will exist in the container in the root `/app` folder.
+If the emulator throws an error you may want to check generated debug.log files. These are generated on the container and shared to your machine. Just check the root folder, for example: `firestore-debug.log`
 
-By default, when using the commands above, the log files will sync to `./functions/logs` folder.
-
-But you can access the file system within the docker container directly using the
+You can access the file system within the docker container directly using the
 [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension for vscode, and running the command to `attach to running container`.
 
 ![](images/emulator-docker-remote.png)
@@ -166,12 +153,12 @@ Once running in the container you can open the `/app` folder to view files
 Alternatively while the container is running, you can request Docker to execute commands directly on the container:
 
 ```
-docker exec -it <name> ls
-docker exec -it <name> cat /app/firestore-debug.log
+docker exec -it <container_name> ls
+docker exec -it <container_name> cat /app/firestore-debug.log
 ```
 
-(The `name` can be retrieved by running `docker ps`.)
+(The `container_name` can be retrieved by running `docker ps`.)
 
 ## Troubleshooting
 
-See the `/functions/emulator/Dockerfile` for some debugging tips.
+See the `./containerization/Dockerfile` file for some debugging tips.

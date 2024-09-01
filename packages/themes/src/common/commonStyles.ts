@@ -6,6 +6,10 @@ export const commonStyles = {
       outline: 'none',
       boxShadow: 'none',
     },
+    '&:disabled': {
+      color: 'lightgrey',
+      cursor: 'not-allowed',
+    },
   },
   colors: {
     white: 'white',
@@ -37,6 +41,7 @@ export const commonStyles = {
     fontWeight: 'normal',
   },
   fontFamily: {
+    title: `"Varela Round", Arial, sans-serif`,
     body: `'Inter', Arial, sans-serif`,
   },
   space: [

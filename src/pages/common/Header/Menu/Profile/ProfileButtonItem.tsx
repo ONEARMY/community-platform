@@ -22,6 +22,7 @@ const ProfileButtonItem = (props: IProps) => {
   return (
     <Link to={props.link} style={{ minWidth: 'auto' }}>
       <Button
+        type="button"
         onClick={() => props.isMobile && mobileMenuContext.setIsVisible(false)}
         variant={props.variant}
         {...(props.isMobile ? { large: true } : {})}

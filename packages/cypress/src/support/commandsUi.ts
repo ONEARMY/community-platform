@@ -1,32 +1,59 @@
+import { form } from '../../../../src/pages/UserSettings/labels'
+import { generateNewUserDetails } from '../utils/TestUtils'
+
+import type { IUser } from '../../../../src/models/user.models'
+
 export enum UserMenuItem {
   Profile = 'Profile',
   Settings = 'Settings',
   LogOut = 'Logout',
 }
 
-import { generateNewUserDetails } from '../utils/TestUtils'
+interface IInfo {
+  displayName: string
+  country?: string
+  description: string
+}
+
+type ILink = Omit<IUser['links'][0] & { index: number }, 'key'>
+
+interface IMapPin {
+  description: string
+  searchKeyword: string
+  locationName: string
+}
+
+interface IOpeningTime {
+  index: number
+  day: string
+  from: string
+  to: string
+}
 
 declare global {
   namespace Cypress {
     interface Chainable {
+      addComment(newComment: string): Chainable<void>
+      addReply(reply: string): Chainable<void>
+      clickMenuItem(menuItem: UserMenuItem): Chainable<void>
+      deleteDiscussionItem(element: string)
+      editDiscussionItem(
+        element: string,
+        updatedNewComment: string,
+      ): Chainable<void>
       fillSignupForm(
         username: string,
         email: string,
         password: string,
       ): Chainable<void>
+      fillIntroTitle(intro: string)
+      fillSettingMapPin(pin: IMapPin)
 
-      signUpNewUser(user?)
-
-      toggleUserMenuOn(): Chainable<void>
-      toggleUserMenuOff(): Chainable<void>
-
+      saveSettingsForm()
       /**
        * Trigger form validation
        */
       screenClick(): Chainable<void>
-
-      clickMenuItem(menuItem: UserMenuItem): Chainable<void>
-
       /**
        * Selecting options from the react-select picker can be a bit fiddly
        * so user helper method to locate select box, type input and pick tag
@@ -35,6 +62,19 @@ declare global {
        * @param selector Specify the selector of the react-select element
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>
+      setSettingAddContactLink(link: ILink)
+      setSettingAddOpeningTime(openingTime: IOpeningTime)
+      setSettingBasicUserInfo(info: IInfo)
+      setSettingDeleteOpeningTime(index: number, confirmed: boolean)
+      setSettingFocus(focus: string)
+      setSettingImage(image: string, selector: string)
+      setSettingImpactData(year: number, fields)
+      setSettingPublicContact()
+
+      signUpNewUser(user?)
+
+      toggleUserMenuOn(): Chainable<void>
+      toggleUserMenuOff(): Chainable<void>
     }
   }
 }
@@ -45,6 +85,119 @@ declare global {
  * @remark - async code should be wrapped in a Cypress.promise block to allow the resolved promise to be
  * used in chained results
  */
+
+Cypress.Commands.add('saveSettingsForm', () => {
+  cy.get('[data-cy=save]').click()
+  cy.get('[data-cy=errors-container]').should('not.exist')
+  cy.get('[data-cy=save]').should('not.be.disabled')
+})
+
+Cypress.Commands.add('setSettingAddContactLink', (link: ILink) => {
+  cy.step('Set Contact Link')
+
+  if (link.index > 0) {
+    // click the button to add another set of input fields
+    cy.get('[data-cy=add-link]').click()
+  }
+  // specifies the contact type, such as website or discord
+  cy.selectTag(link.label, `[data-cy=select-link-${link.index}]`)
+  // input the corresponding value
+  cy.get(`[data-cy=input-link-${link.index}]`)
+    .clear()
+    .type(link.url)
+    .blur({ force: true })
+})
+
+Cypress.Commands.add(
+  'setSettingAddOpeningTime',
+  (openingTime: IOpeningTime) => {
+    const selectOption = (selector: string, selectedValue: string) => {
+      cy.selectTag(selectedValue, selector)
+    }
+
+    if (openingTime.index > 0) {
+      cy.get('[data-cy=add-opening-time]').click()
+    }
+    selectOption(
+      `[data-cy=opening-time-day-${openingTime.index}]`,
+      openingTime.day,
+    )
+    selectOption(
+      `[data-cy=opening-time-from-${openingTime.index}]`,
+      openingTime.from,
+    )
+    selectOption(
+      `[data-cy=opening-time-to-${openingTime.index}]`,
+      openingTime.to,
+    )
+  },
+)
+
+Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
+  const { country, description, displayName } = info
+
+  cy.step('Update Info section')
+  cy.get('[data-cy=displayName').clear().type(displayName)
+  cy.get('[data-cy=info-description').clear().type(description)
+  country && cy.selectTag(country, '[data-cy=location-dropdown]')
+})
+
+Cypress.Commands.add(
+  'setSettingDeleteOpeningTime',
+  (index: number, confirmed: boolean) => {
+    cy.viewport('macbook-13')
+    cy.get(`[data-cy=delete-opening-time-${index}-desk]`).click()
+    if (confirmed) {
+      cy.get('[data-cy=confirm-delete]').click()
+    } else {
+      cy.get('[data-cy=cancel-delete]').click()
+    }
+  },
+)
+
+Cypress.Commands.add('setSettingFocus', (focus: string) => {
+  cy.get(`[data-cy=${focus}]`).click()
+})
+
+Cypress.Commands.add('setSettingImage', (image, selector) => {
+  cy.get(`[data-cy=${selector}]`)
+    .find(':file')
+    .attachFile(`images/${image}.jpg`)
+})
+
+Cypress.Commands.add('setSettingImpactData', (year: number, fields) => {
+  cy.step('Save impact data')
+  cy.get('[data-cy="tab-Impact"]').click()
+
+  cy.get(`[data-cy="impactForm-${year}-button-edit"]`).click()
+
+  fields.forEach((field) => {
+    cy.get(`[data-cy="impactForm-${year}-field-${field.name}-value"]`)
+      .clear()
+      .type(field.value)
+    field.visible === false &&
+      cy
+        .get(`[data-cy="impactForm-${year}-field-${field.name}-isVisible"]`)
+        .click()
+  })
+  cy.get(`[data-cy="impactForm-${year}-button-save"]`).click()
+  cy.contains(form.saveSuccess)
+})
+
+Cypress.Commands.add('fillSettingMapPin', (mapPin: IMapPin) => {
+  cy.get('[data-cy="osm-geocoding-input"]').clear().type(mapPin.searchKeyword)
+  cy.get('[data-cy="osm-geocoding-results"]')
+  cy.wait('@fetchAddress').then(() => {
+    cy.get('[data-cy="osm-geocoding-results"]').find('li:eq(0)').click()
+  })
+  cy.get('[data-cy=pin-description]').clear().type(mapPin.description)
+})
+
+Cypress.Commands.add('setSettingPublicContact', () => {
+  cy.step('Opts out of public contact')
+  cy.get('[data-cy=isContactableByPublic').should('be.checked')
+  cy.get('[data-cy=isContactableByPublic').click({ force: true })
+})
 
 Cypress.Commands.add(
   'fillSignupForm',
@@ -58,6 +211,11 @@ Cypress.Commands.add(
     cy.get('[data-cy=consent]').check()
   },
 )
+
+Cypress.Commands.add('fillIntroTitle', (intro: string) => {
+  cy.log('Fill in intro title')
+  cy.get('[data-cy=intro-title]').clear().type(intro).blur({ force: true })
+})
 
 Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.log('Generate new user details')
@@ -98,11 +256,34 @@ Cypress.Commands.add(
   'selectTag',
   (tagName: string, selector = '[data-cy=tag-select]') => {
     cy.log('select tag', tagName)
-    cy.get(`${selector} input`)
-      .click({ force: true })
-      .type(tagName, { force: true })
-      .get(`${selector} .data-cy__menu-list`)
-      .contains(tagName)
-      .click()
+    cy.get(`${selector} input`).click({ force: true })
+    cy.get(`${selector} input`).type(tagName, { force: true })
+    cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click()
   },
 )
+
+Cypress.Commands.add('addComment', (newComment: string) => {
+  cy.get('[data-cy=comments-form]').last().type(newComment)
+  cy.get('[data-cy=comment-submit]').last().click()
+})
+
+Cypress.Commands.add(
+  'editDiscussionItem',
+  (element: string, updatedNewComment: string) => {
+    cy.get(`[data-cy="${element}: edit button"]`).last().click()
+    cy.get('[data-cy=edit-comment]').clear().type(updatedNewComment)
+    cy.get('[data-cy=edit-comment-submit]').click()
+    cy.get('[data-cy=edit-comment]').should('not.exist')
+  },
+)
+
+Cypress.Commands.add('deleteDiscussionItem', (element: string) => {
+  cy.get(`[data-cy="${element}: delete button"]`).last().click()
+  cy.get('[data-cy="Confirm.modal: Confirm"]').last().click()
+})
+
+Cypress.Commands.add('addReply', (reply: string) => {
+  cy.get('[data-cy=show-replies]').first().click()
+  cy.get('[data-cy=reply-form]').first().type(reply)
+  cy.get('[data-cy=reply-submit]').first().click()
+})

@@ -18,7 +18,7 @@ const required = (value: any) =>
   value ? undefined : 'Make sure this field is filled correctly'
 
 const noSpecialCharacters = (value: string) => {
-  const specialCharacters = getSpecialCharacters(value)
+  const specialCharacters = value ? getSpecialCharacters(value) : ''
   return specialCharacters.length > 0
     ? 'Only letters and numbers are allowed'
     : undefined
@@ -40,13 +40,24 @@ const minValue = (min: number) => (value) => {
     : undefined
 }
 
+const endsWithQuestionMark = () => (value) => {
+  const lastCharacter = value ? value.slice(-1) : ''
+  return lastCharacter !== '?' ? 'Needs to end with a question mark' : undefined
+}
+
 const composeValidators =
   (...validators) =>
-  (value) =>
-    validators.reduce(
-      (error, validator) => error || validator(value),
-      undefined,
+  async (value) => {
+    const allResponse = await Promise.all(
+      validators.map((validator) => validator(value)),
     )
+
+    return allResponse.reduce(
+      (message, value) =>
+        typeof value === 'string' ? (message += value + '. ') : message,
+      '',
+    )
+  }
 
 const validateUrl = (value: any) => {
   if (value) {
@@ -137,4 +148,5 @@ export {
   composeValidators,
   validateTitle,
   noSpecialCharacters,
+  endsWithQuestionMark,
 }

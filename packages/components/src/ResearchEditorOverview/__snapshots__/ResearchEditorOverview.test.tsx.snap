@@ -11,8 +11,9 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
       Research overview
     </h2>
     <button
-      class="css-fdla8g-Button"
+      class="css-1wcfy94-Button"
       data-cy="create-update"
+      type="button"
     >
       <span
         class="css-a6mlbr-Text"
@@ -27,6 +28,7 @@ exports[`ResearchEditorOverview > handles empty updates 1`] = `
     </button>
     <button
       class="css-l7psd3-Button"
+      type="button"
     >
       <span
         class="css-a6mlbr-Text"
@@ -54,8 +56,9 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
       Research overview
     </h2>
     <button
-      class="css-fdla8g-Button"
+      class="css-1wcfy94-Button"
       data-cy="create-update"
+      type="button"
     >
       <span
         class="css-a6mlbr-Text"
@@ -70,6 +73,7 @@ exports[`ResearchEditorOverview > handles falsey updates 1`] = `
     </button>
     <button
       class="css-l7psd3-Button"
+      type="button"
     >
       <span
         class="css-a6mlbr-Text"
@@ -142,8 +146,9 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
       </li>
     </ul>
     <button
-      class="css-fdla8g-Button"
+      class="css-1wcfy94-Button"
       data-cy="create-update"
+      type="button"
     >
       <span
         class="css-a6mlbr-Text"
@@ -158,6 +163,7 @@ exports[`ResearchEditorOverview > renders correctly 1`] = `
     </button>
     <button
       class="css-l7psd3-Button"
+      type="button"
     >
       <span
         class="css-a6mlbr-Text"

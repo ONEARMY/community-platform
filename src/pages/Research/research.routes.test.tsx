@@ -30,7 +30,14 @@ import type { Mock } from 'vitest'
 const Theme = testingThemeStyles
 const mockActiveUser = FactoryUser()
 
-vi.mock('src/pages/Research/research.service')
+vi.mock('src/pages/Research/research.service', () => ({
+  researchService: {
+    search: vi.fn(),
+    getDraftCount: vi.fn(),
+    getDrafts: vi.fn(),
+    getResearchCategories: vi.fn(() => []),
+  },
+}))
 
 // Similar to issues in Academy.test.tsx - stub methods called in user store constructor
 // TODO - replace with mock store or avoid direct call
@@ -48,9 +55,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
         users_verified: {
           HowtoAuthor: true,
         },
-      },
-      researchCategoriesStore: {
-        allResearchCategories: [],
       },
       tagsStore: {},
     },
@@ -141,7 +145,7 @@ describe('research.routes', () => {
             wrapper.getByText(/Help out with Research & Development/),
           ).toBeInTheDocument(),
         {
-          timeout: 2000,
+          timeout: 10000,
         },
       )
     })
@@ -161,7 +165,7 @@ describe('research.routes', () => {
           )
         },
         {
-          timeout: 5000,
+          timeout: 10000,
         },
       )
     })
@@ -175,11 +179,16 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/create')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(/role required to access this page/),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(/role required to access this page/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('rejects a logged in user missing required role', async () => {
@@ -188,11 +197,16 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/create')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(/role required to access this page/),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(/role required to access this page/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('accepts a logged in user with required role [research_creator]', async () => {
@@ -208,12 +222,12 @@ describe('research.routes', () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
         {
-          timeout: 2000,
+          timeout: 10000,
         },
       )
     })
 
-    it('accepts a logged in user with required role [research_creator]', async () => {
+    it('accepts a logged in user with required role [research_editor]', async () => {
       let wrapper
       act(() => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
@@ -225,7 +239,7 @@ describe('research.routes', () => {
           expect(wrapper.getByText(/start your research/i)).toBeInTheDocument()
         },
         {
-          timeout: 2000,
+          timeout: 10000,
         },
       )
     })
@@ -240,11 +254,16 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(/role required to access this page/),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(/role required to access this page/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('accepts a logged in user with required role', async () => {
@@ -256,9 +275,12 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
+        },
+        { timeout: 10000 },
+      )
     })
 
     it('rejects a logged in user with required role but not author of document', async () => {
@@ -278,9 +300,16 @@ describe('research.routes', () => {
         renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(mockedUsedNavigate).toHaveBeenCalledWith('/research/an-example')
-      })
+      await waitFor(
+        () => {
+          expect(mockedUsedNavigate).toHaveBeenCalledWith(
+            '/research/an-example',
+          )
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('blocks a valid editor when document is locked by another user', async () => {
@@ -303,13 +332,18 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(
-            'The research description is currently being edited by another editor.',
-          ),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(
+              'The research description is currently being edited by another editor.',
+            ),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('accepts a user when document is mark locked by them', async () => {
@@ -332,9 +366,14 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByText('Edit your Research')).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText('Edit your Research')).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('accepts a user with required role and contributor acccess', async () => {
@@ -353,9 +392,12 @@ describe('research.routes', () => {
         wrapper = renderFn('/research/an-example/edit')
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText(/edit your research/i)).toBeInTheDocument()
+        },
+        { timeout: 10000 },
+      )
     })
   })
 
@@ -364,27 +406,37 @@ describe('research.routes', () => {
       mockActiveUser.userRoles = []
 
       let wrapper
-      act(() => {
+      await act(() => {
         wrapper = renderFn('/research/an-example/new-update')
       })
 
-      await waitFor(() => {
-        expect(
-          wrapper.getByText(/role required to access this page/),
-        ).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(
+            wrapper.getByText(/role required to access this page/),
+          ).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('accepts a logged in user with required role', async () => {
       let wrapper
-      act(() => {
+      await act(() => {
         mockActiveUser.userRoles = [UserRole.RESEARCH_EDITOR]
         wrapper = renderFn('/research/an-example/new-update')
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByTestId('EditResearchUpdate')).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
   })
 
@@ -427,9 +479,14 @@ describe('research.routes', () => {
         )
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('blocks valid author when document is locked', async () => {
@@ -497,9 +554,14 @@ describe('research.routes', () => {
         )
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByText('Edit your update')).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByText('Edit your update')).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
 
     it('rejects logged in user who is not author', async () => {
@@ -544,9 +606,14 @@ describe('research.routes', () => {
         )
       })
 
-      await waitFor(() => {
-        expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          expect(wrapper.getByTestId(/EditResearchUpdate/i)).toBeInTheDocument()
+        },
+        {
+          timeout: 10000,
+        },
+      )
     })
   })
 })

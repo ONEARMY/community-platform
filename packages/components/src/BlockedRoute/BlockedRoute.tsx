@@ -20,7 +20,7 @@ export const BlockedRoute = (props: BlockedRouteProps) => {
       <Text sx={{ width: '100%', textAlign: 'center' }}>{props.children}</Text>
       <Box sx={{ textAlign: 'center', mt: 2 }}>
         <InternalLink to={redirectUrl}>
-          <Button variant={'subtle'} small>
+          <Button type="button" variant="subtle" small>
             {redirectLabel}
           </Button>
         </InternalLink>

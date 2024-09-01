@@ -11,6 +11,7 @@ import { Pages } from './pages'
 
 export const App = observer(() => {
   const rootStore = useCommonStores()
+
   return (
     <rootStoreContext.Provider value={rootStore}>
       <ThemeProvider theme={rootStore.stores.themeStore.currentTheme.styles}>

@@ -229,7 +229,7 @@ export class ResearchStore extends ModuleStore {
       .collection<IResearch.Item>(COLLECTION_NAME)
       .doc(values._id)
     const user = this.activeUser as IUser
-    const updates = (await dbRef.get())?.updates || [] // save old updates when editing
+    const updates = (await dbRef.get('server'))?.updates || [] // save old updates when editing
     const collaborators = await this._setCollaborators(values.collaborators)
 
     try {
@@ -365,7 +365,7 @@ export class ResearchStore extends ModuleStore {
         await this._updateResearchItem(dbRef, newItem, true)
         logger.debug('populate db ok')
         this.updateUpdateUploadStatus('Database')
-        const createdItem = (await dbRef.get()) as IResearch.ItemDB
+        const createdItem = (await dbRef.get('server')) as IResearch.ItemDB
         runInAction(() => {
           this.activeResearchItem = createdItem
         })
@@ -710,7 +710,7 @@ export class ResearchStore extends ModuleStore {
       )
     }
 
-    return await dbRef.get()
+    return await dbRef.get('server')
   }
 
   private async _getResearchItemBySlug(

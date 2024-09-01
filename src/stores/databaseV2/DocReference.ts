@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs'
 import { logger } from 'src/logger'
 
-import type { DBClients, DBDoc } from './types'
+import type { DBClients } from './types'
+import type { DBDoc } from './types/dbDoc'
 
 interface DocMetaOptions {
   keep_modified_timestamp?: boolean
@@ -96,7 +97,7 @@ export class DocReference<T> {
    */
   async delete() {
     const { serverDB, serverCacheDB } = this.clients
-    const doc = (await this.get()) as any
+    const doc = (await this.get('server')) as any
     await serverDB.setDoc(`_archived/${this.endpoint}/summary`, {
       _archived: new Date().toISOString(),
       _id: this.id,

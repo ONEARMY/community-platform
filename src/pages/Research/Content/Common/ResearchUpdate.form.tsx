@@ -11,7 +11,7 @@ import {
 } from 'oa-components'
 import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
-import { usePrompt } from 'src/common/hooks/usePrompt'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { useResearchStore } from 'src/stores/Research/research.store'
 import {
   setAllowDraftSaveFalse,
@@ -92,13 +92,20 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     }, 0)
   }
 
-  const onSubmit = (formValues: IResearch.Update) => {
+  const onSubmit = async (formValues: IResearch.Update) => {
     setShowSubmitModal(true)
-    if (formValues.fileLink && formValues.files && formValues.files.length > 0)
-      return setInvalidFileWarning(true)
-    else setInvalidFileWarning(false)
 
-    store.uploadUpdate({
+    if (
+      formValues.fileLink &&
+      formValues.files &&
+      formValues.files.length > 0
+    ) {
+      return setInvalidFileWarning(true)
+    }
+
+    setInvalidFileWarning(false)
+
+    await store.uploadUpdate({
       ...formValues,
       collaborators: Array.from(
         new Set(
@@ -139,12 +146,6 @@ export const ResearchUpdateForm = observer((props: IProps) => {
     [store.updateUploadStatus.Complete, beforeUnload],
   )
 
-  // Block navigating elsewhere when data has been entered into the input
-  usePrompt(
-    CONFIRM_DIALOG_MSG,
-    !store.updateUploadStatus.Complete && formState.dirty,
-  )
-
   const draftButtonText =
     formValues.moderation !== IModerationStatus.DRAFT
       ? draft.create
@@ -165,9 +166,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
         />
       )}
       <Form
-        onSubmit={(v) => {
-          onSubmit(v as IResearch.Update)
-        }}
+        onSubmit={async (v) => await onSubmit(v as IResearch.Update)}
         initialValues={formValues}
         mutators={{
           setAllowDraftSaveFalse,
@@ -181,6 +180,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
           handleSubmit,
           hasValidationErrors,
           errors,
+          submitSucceeded,
           submitting,
           submitFailed,
           values,
@@ -197,6 +197,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
               sx={{ flexWrap: 'wrap' }}
               data-testid="EditResearchUpdate"
             >
+              <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
               <Flex
                 bg="inherit"
                 px={2}
@@ -265,7 +266,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   }}
                 >
                   <Button
-                    data-cy={'draft'}
+                    data-cy="draft"
                     onClick={() => {
                       trySubmitForm(true)
                     }}
@@ -278,7 +279,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                   </Button>
                   {isEdit ? (
                     <Button
-                      data-cy={'delete'}
+                      data-cy="delete"
                       onClick={(evt) => {
                         setShowDeleteModal(true)
                         evt.preventDefault()
@@ -295,7 +296,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     large
                     id="submit-form"
                     data-testid="submit-form"
-                    data-cy={'submit'}
+                    data-cy="submit"
                     onClick={(evt) => {
                       trySubmitForm(false)
                       evt.preventDefault()

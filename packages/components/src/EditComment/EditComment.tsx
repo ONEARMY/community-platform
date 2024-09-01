@@ -79,6 +79,7 @@ export const EditComment = (props: IProps) => {
             />
             <Flex mt={4} ml="auto">
               <Button
+                type="button"
                 small
                 mr={4}
                 variant="secondary"
@@ -89,7 +90,7 @@ export const EditComment = (props: IProps) => {
               <Button
                 data-cy="edit-comment-submit"
                 data-testid="edit-comment-submit"
-                type={'submit'}
+                type="submit"
                 aria-label="Save changes"
                 small
                 disabled={disabled}

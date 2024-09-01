@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Button } from 'oa-components'
 import { Box } from 'theme-ui'
 
 interface IProps {
-  children
   commentCount: number
+  children: React.ReactNode | React.ReactNode[]
   showComments?: boolean
 }
 
@@ -13,13 +13,9 @@ export const HideDiscussionContainer = ({
   commentCount,
   showComments,
 }: IProps) => {
-  const [viewComments, setViewComments] = useState(showComments || false)
+  const [viewComments, setViewComments] = useState(() => showComments || false)
 
-  const onButtonClick = () => {
-    setViewComments(!viewComments)
-  }
-
-  const setButtonText = () => {
+  const buttonText = useMemo(() => {
     if (!viewComments) {
       switch (commentCount) {
         case 0:
@@ -32,7 +28,7 @@ export const HideDiscussionContainer = ({
     }
 
     return 'Collapse Comments'
-  }
+  }, [viewComments])
 
   return (
     <Box
@@ -44,6 +40,7 @@ export const HideDiscussionContainer = ({
       }}
     >
       <Button
+        type="button"
         variant="subtle"
         sx={{
           fontSize: '14px',
@@ -52,14 +49,14 @@ export const HideDiscussionContainer = ({
           display: 'block',
           marginBottom: viewComments ? 2 : 0,
         }}
-        onClick={onButtonClick}
+        onClick={() => setViewComments((prev) => !prev)}
         backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}
         className={viewComments ? 'viewComments' : ''}
         data-cy={`HideDiscussionContainer: button ${
           !viewComments && 'open-comments'
         }`}
       >
-        <>{setButtonText()}</>
+        {buttonText}
       </Button>
       {viewComments && children}
     </Box>

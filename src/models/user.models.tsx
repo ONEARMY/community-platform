@@ -6,7 +6,8 @@ import type {
   PatreonUser,
   UserRole,
 } from 'oa-shared'
-import type { DBDoc, ILocation, ISODateString } from './common.models'
+import type { ILocation, ISODateString } from './common.models'
+import type { DBDoc } from './dbDoc.model'
 
 export type { UserRole }
 import type { IUploadedFileMeta } from '../stores/storage'
@@ -34,6 +35,7 @@ export interface IUser {
   badges?: IUserBadges
   // images will be in different formats if they are pending upload vs pulled from db
   coverImages: IUploadedFileMeta[]
+  userImage?: IUploadedFileMeta
   links: IExternalLink[]
   userRoles?: UserRole[]
   about?: string | null
@@ -48,7 +50,7 @@ export interface IUser {
   profileCreated?: ISODateString
   profileCreationTrigger?: string
   // Used to generate an encrypted unsubscribe url in emails
-  unsubscribeToken?: string
+  unsubscribeToken?: string | null
   impact?: IUserImpact
   isBlockedFromMessaging?: boolean
   isContactableByPublic?: boolean
@@ -75,7 +77,7 @@ export interface IUserBadges {
   supporter?: boolean
 }
 
-interface IExternalLink {
+export interface IExternalLink {
   key: string
   url: string
   label: ExternalLinkLabel

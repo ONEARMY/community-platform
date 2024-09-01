@@ -53,7 +53,11 @@ export const SelectField = ({
   ...rest
 }: ISelectFieldProps) => (
   // note, we first use a div container so that default styles can be applied
-  <Flex p={0} sx={{ flexDirection: 'column', flexWrap: 'nowrap' }}>
+  <Flex p={0} sx={{ flexDirection: 'column' }}>
+    {showError && meta.error && meta.touched && (
+      <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
+    )}
+
     <FieldContainer
       invalid={meta.error && meta.touched}
       style={rest.style}
@@ -69,13 +73,10 @@ export const SelectField = ({
         onBlur={input.onBlur as any}
         onFocus={input.onFocus as any}
         value={getValueForSelect(rest.options, input.value)}
-        variant="form"
+        variant={meta?.error && meta?.touched ? 'formError' : 'form'}
         {...defaultProps}
         {...(rest as any)}
       />
     </FieldContainer>
-    {showError && meta.error && meta.touched && (
-      <Text sx={{ fontSize: 0, margin: 1, color: 'error' }}>{meta.error}</Text>
-    )}
   </Flex>
 )

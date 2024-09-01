@@ -135,26 +135,20 @@ const eqSettings = (chaiObj) => {
     }
   }
   const basicInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
-    const { _authID, _deleted, _id, about, profileType, userName, verified } =
-      expected
+    const { _deleted, about, displayName, profileType, verified } = expected
     expect(subject, 'Basic Info').to.containSubset({
-      _authID,
       _deleted,
-      _id,
-      userName,
+      displayName,
       verified,
       profileType,
       about,
     })
   }
   const basicMemberInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
-    const { _authID, _deleted, _id, about, profileType, userName, verified } =
-      expected
+    const { _deleted, about, profileType, displayName, verified } = expected
     expect(subject, 'Basic Info').to.containSubset({
-      _authID,
       _deleted,
-      _id,
-      userName,
+      displayName,
       verified,
       profileType,
       about,

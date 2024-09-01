@@ -131,8 +131,9 @@ export const HowtoList = observer(() => {
           <Link to={userStore!.user ? '/how-to/create' : '/sign-up'}>
             <Box sx={{ width: '100%', display: 'block' }} mb={[3, 3, 0]}>
               <Button
+                type="button"
                 sx={{ width: '100%' }}
-                variant={'primary'}
+                variant="primary"
                 data-cy="create"
               >
                 {listing.create}
@@ -169,7 +170,7 @@ export const HowtoList = observer(() => {
             justifyContent: 'center',
           }}
         >
-          <Button onClick={() => fetchHowtos(lastVisible)}>
+          <Button type="button" onClick={() => fetchHowtos(lastVisible)}>
             {listing.loadMore}
           </Button>
         </Flex>

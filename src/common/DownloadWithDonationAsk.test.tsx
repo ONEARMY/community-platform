@@ -57,29 +57,8 @@ describe('DownloadFileFromLink', () => {
     expect(mockedUsedNavigate).toHaveBeenCalledWith('/sign-in')
   })
 
-  it('when logged in, opens via handleClick', () => {
+  it('when logged in, opens the donation modal for fileLink', () => {
     const user = FactoryUser()
-    userToMock(user)
-
-    const handleClick = vi.fn()
-    const { getAllByTestId } = render(
-      <DownloadWithDonationAsk
-        handleClick={handleClick}
-        isLoggedIn={true}
-        fileDownloadCount={0}
-        fileLink="http://youtube.com/"
-        files={[]}
-      />,
-    )
-
-    const downloadButton = getAllByTestId('downloadButton')[0]
-    fireEvent.click(downloadButton)
-
-    expect(handleClick).toHaveBeenCalled()
-  })
-
-  it('when a beta-tester, opens the donation modal for fileLink', () => {
-    const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
     userToMock(user)
 
     const handleClick = vi.fn()
@@ -106,7 +85,7 @@ describe('DownloadFileFromLink', () => {
     expect(handleClick).not.toHaveBeenCalled()
   })
 
-  it('when a beta-tester, opens the donation modal for files', () => {
+  it('when logged in, opens the donation modal for files', () => {
     const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
     userToMock(user)
 

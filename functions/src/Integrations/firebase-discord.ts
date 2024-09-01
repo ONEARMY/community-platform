@@ -1,15 +1,18 @@
-import { CONFIG } from '../config/config'
+import axios from 'axios'
 import * as functions from 'firebase-functions'
-import axios, { AxiosResponse, AxiosError } from 'axios'
-import { IMapPin } from '../models'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
+
+import { CONFIG } from '../config/config'
+
+import type { AxiosError, AxiosResponse } from 'axios'
+import type { IMapPin, IResearchDB } from '../models'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
 
 const DISCORD_WEBHOOK_URL = CONFIG.integrations.discord_webhook
 
-export const notifyPinAccepted = functions
+export const notifyPinPublished = functions
   .runWith({ memory: '512MB' })
   .firestore.document('v3_mappins/{pinId}')
   .onUpdate(async (change, context) => {
@@ -31,7 +34,7 @@ export const notifyPinAccepted = functions
       .catch(handleErr)
   })
 
-export const notifyHowToAccepted = functions
+export const notifyHowtoPublished = functions
   .runWith({ memory: '512MB' })
   .firestore.document('v3_howtos/{id}')
   .onUpdate(async (change, context) => {
@@ -54,7 +57,85 @@ export const notifyHowToAccepted = functions
       .catch(handleErr)
   })
 
-export const notifyAcceptedQuestion = functions
+export const notifyResearchUpdatePublished = functions
+  .runWith({ memory: '512MB' })
+  .firestore.document('research_rev20201020/{id}')
+  .onUpdate((change) =>
+    handleResearchUpdatePublished(
+      DISCORD_WEBHOOK_URL,
+      change.before.data() as IResearchDB,
+      change.after.data() as IResearchDB,
+      sendDiscordMessage,
+    ),
+  )
+
+export interface SimpleResearchArticle {
+  slug: string
+  updates: SimpleResearchArticleUpdate[]
+}
+
+interface SimpleResearchArticleUpdate {
+  _id: string
+  title: string
+  collaborators?: string[]
+  status?: ResearchUpdateStatus
+}
+
+export async function handleResearchUpdatePublished(
+  webhookUrl: string,
+  previousContent: SimpleResearchArticle,
+  updatedContent: SimpleResearchArticle,
+  sendMessage: (content: string) => Promise<AxiosResponse<any, any>>,
+): Promise<void> {
+  if (webhookUrl === '' || webhookUrl === undefined || webhookUrl === null) {
+    console.log('No webhook URL configured')
+    return
+  }
+
+  if (previousContent.updates.length >= updatedContent.updates.length) {
+    console.log('There is no new update')
+    return
+  }
+
+  const newUpdateIndex = updatedContent.updates.length - 1
+  const newUpdate = updatedContent.updates[newUpdateIndex]
+
+  if (newUpdate.status === ResearchUpdateStatus.DRAFT) {
+    console.log('Update is a draft')
+    return
+  }
+
+  // On Research Updates, we actually expect the collaborators to be a single person
+  // but it is a list.
+  // source:
+  // https://github.com/ONEARMY/community-platform/issues/3533#issuecomment-2171799601
+  const collaborators = newUpdate.collaborators || []
+  const author = collaborators[0] || 'unknown'
+
+  const title = newUpdate.title
+
+  // There is no way to "deep link" to an individual section
+  // so we link to the whole article.
+  const slug = updatedContent.slug
+
+  try {
+    const response = await sendMessage(
+      `📝 New update from ${author} in their research: ${title}\n` +
+        `Learn about it here: <${SITE_URL}/research/${slug}#update_${newUpdate._id}>`,
+    )
+    handleResponse(response)
+  } catch (error) {
+    handleErr(error)
+  }
+}
+
+function sendDiscordMessage(content: string) {
+  return axios.post(DISCORD_WEBHOOK_URL, {
+    content: content,
+  })
+}
+
+export const notifyQuestionPublished = functions
   .runWith({ memory: '512MB' })
   .firestore.document('questions_rev20230926/{id}')
   // currently, questions are immediately posted with no review.

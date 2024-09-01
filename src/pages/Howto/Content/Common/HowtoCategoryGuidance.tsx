@@ -10,24 +10,26 @@ interface IProps {
 }
 
 export const HowtoCategoryGuidance = ({ category, type }: IProps) => {
-  if (!category) return null
+  if (!category) {
+    return null
+  }
 
   const label = category.label.toLowerCase()
   const labelExists = !!guidance[label] && !!guidance[label][type]
 
+  if (!labelExists) {
+    return null
+  }
+
   return (
-    <>
-      {labelExists && (
-        <Alert variant="info" marginY={2}>
-          <Text
-            dangerouslySetInnerHTML={{ __html: guidance[label][type] }}
-            sx={{
-              fontSize: 1,
-              textAlign: 'left',
-            }}
-          />
-        </Alert>
-      )}
-    </>
+    <Alert variant="info" marginY={2}>
+      <Text
+        dangerouslySetInnerHTML={{ __html: guidance[label][type] }}
+        sx={{
+          fontSize: 1,
+          textAlign: 'left',
+        }}
+      />
+    </Alert>
   )
 }

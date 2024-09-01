@@ -13,9 +13,8 @@ import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
-import { usePrompt } from 'src/common/hooks/usePrompt'
+import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
 import { researchStatusOptions } from 'src/models/research.models'
-import { CategoriesSelect } from 'src/pages/Howto/Category/CategoriesSelect'
 import {
   ResearchErrors,
   ResearchPostingGuidelines,
@@ -41,17 +40,11 @@ import {
   RESEARCH_TITLE_MIN_LENGTH,
 } from '../../constants'
 import { buttons, headings, overview } from '../../labels'
+import ResearchFieldCategory from './ResearchCategorySelect'
 
 import type { MainFormAction } from 'src/common/Form/types'
 import type { IResearch } from 'src/models/research.models'
 
-const CONFIRM_DIALOG_MSG =
-  'You have unsaved changes. Are you sure you want to leave this page?'
-interface IState {
-  formSaved: boolean
-  dirty: boolean
-  showSubmitModal?: boolean
-}
 interface IProps {
   'data-testid'?: string
   formValues: any
@@ -63,11 +56,6 @@ const ResearchFormLabel = ({ children, ...props }) => (
     {children}
   </Label>
 )
-
-const beforeUnload = (e) => {
-  e.preventDefault()
-  e.returnValue = CONFIRM_DIALOG_MSG
-}
 
 const ResearchForm = observer((props: IProps) => {
   const { formValues, parentType } = props
@@ -85,11 +73,7 @@ const ResearchForm = observer((props: IProps) => {
   } = overview
 
   const store = useResearchStore()
-  const [state, setState] = React.useState<IState>({
-    formSaved: false,
-    dirty: false,
-    showSubmitModal: false,
-  })
+  const [showSubmitModal, setShowSubmitModal] = React.useState(false)
   const [submissionHandler, setSubmissionHandler] = React.useState({
     draft: formValues.moderation === IModerationStatus.DRAFT,
     shouldSubmit: false,
@@ -105,19 +89,13 @@ const ResearchForm = observer((props: IProps) => {
   }, [store.activeUser])
 
   React.useEffect(() => {
-    if (store.researchUploadStatus.Complete) {
-      window.removeEventListener('beforeunload', beforeUnload, false)
-    }
-  }, [store.researchUploadStatus.Complete])
-
-  React.useEffect(() => {
     if (submissionHandler.shouldSubmit) {
       const form = document.getElementById('researchForm')
       if (typeof form !== 'undefined' && form !== null) {
         form.dispatchEvent(
           new Event('submit', { cancelable: true, bubbles: true }),
         )
-        setState((prevState) => ({ ...prevState, showSubmitModal: true }))
+        setShowSubmitModal(true)
       }
     }
   }, [submissionHandler])
@@ -129,46 +107,23 @@ const ResearchForm = observer((props: IProps) => {
     await store.uploadResearch(formValues)
   }
 
-  // Display a confirmation dialog when leaving the page outside the React Router
-  const unloadDecorator = (form) => {
-    return form.subscribe(
-      ({ dirty }) => {
-        if (dirty && !store.researchUploadStatus.Complete) {
-          window.addEventListener('beforeunload', beforeUnload, false)
-          return
-        }
-        window.removeEventListener('beforeunload', beforeUnload, false)
-      },
-      { dirty: true },
-    )
-  }
-
-  // Block navigating elsewhere when data has been entered into the input
-  usePrompt(
-    CONFIRM_DIALOG_MSG,
-    !store.updateUploadStatus.Complete && state.dirty,
-  )
-
   const draftButtonText =
     formValues.moderation !== IModerationStatus.DRAFT ? create : update
   const pageTitle = headings.overview[parentType]
 
   return (
     <div data-testid={props['data-testid']}>
-      {state.showSubmitModal && (
+      {showSubmitModal && (
         <ResearchSubmitStatus
-          {...props}
           onClose={() => {
-            setState((prevState) => ({ ...prevState, showSubmitModal: false }))
+            setShowSubmitModal(false)
             store.resetResearchUploadStatus()
           }}
         />
       )}
 
       <Form
-        onSubmit={(v) => {
-          onSubmit(v as IResearch.FormInput)
-        }}
+        onSubmit={async (v) => await onSubmit(v as IResearch.FormInput)}
         initialValues={formValues}
         mutators={{
           setAllowDraftSaveFalse,
@@ -176,7 +131,6 @@ const ResearchForm = observer((props: IProps) => {
           ...arrayMutators,
         }}
         validateOnBlur
-        decorators={[unloadDecorator]}
         render={({
           dirty,
           errors,
@@ -185,13 +139,12 @@ const ResearchForm = observer((props: IProps) => {
           hasValidationErrors,
           submitting,
           submitFailed,
+          submitSucceeded,
         }) => {
-          if (state.dirty !== dirty) {
-            setState((prev) => ({ ...prev, dirty }))
-          }
-
           return (
-            <Flex mx={-2} bg={'inherit'} sx={{ flexWrap: 'wrap' }}>
+            <Flex mx={-2} bg="inherit" sx={{ flexWrap: 'wrap' }}>
+              <UnsavedChangesDialog hasChanges={dirty && !submitSucceeded} />
+
               <Flex
                 bg="inherit"
                 px={2}
@@ -294,21 +247,7 @@ const ResearchForm = observer((props: IProps) => {
                               <ResearchFormLabel>
                                 {categories.title}
                               </ResearchFormLabel>
-                              <Field
-                                name="researchCategory"
-                                render={({ input, ...rest }) => (
-                                  <CategoriesSelect
-                                    {...rest}
-                                    isForm={true}
-                                    onChange={(category) =>
-                                      input.onChange(category)
-                                    }
-                                    value={input.value}
-                                    placeholder={categories.placeholder}
-                                    type="research"
-                                  />
-                                )}
-                              />
+                              <ResearchFieldCategory />
                             </Flex>
                             <Flex sx={{ flexDirection: 'column' }} mb={3}>
                               <ResearchFormLabel>
@@ -374,7 +313,7 @@ const ResearchForm = observer((props: IProps) => {
                   </Box>
 
                   <Button
-                    data-cy={'draft'}
+                    data-cy="draft"
                     onClick={() => {
                       form.mutators.setAllowDraftSaveTrue()
                       setSubmissionHandler({ shouldSubmit: true, draft: true })
@@ -390,7 +329,7 @@ const ResearchForm = observer((props: IProps) => {
 
                   <Button
                     large
-                    data-cy={'submit'}
+                    data-cy="submit"
                     onClick={() => {
                       form.mutators.setAllowDraftSaveFalse()
                       setSubmissionHandler({

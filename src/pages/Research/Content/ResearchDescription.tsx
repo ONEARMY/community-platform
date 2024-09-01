@@ -136,15 +136,17 @@ const ResearchDescription = ({
                   IModerationStatus.AWAITING_MODERATION && (
                   <Flex sx={{ justifyContent: 'space-between' }}>
                     <Button
-                      data-cy={'accept'}
-                      variant={'primary'}
+                      type="button"
+                      data-cy="accept"
+                      variant="primary"
                       icon="check"
                       mr={1}
                       onClick={() => props.moderateResearch(true)}
                     />
                     <Button
+                      type="button"
                       data-cy="reject-research"
-                      variant={'outline'}
+                      variant="outline"
                       icon="delete"
                       onClick={() => props.moderateResearch(false)}
                     />
@@ -153,7 +155,7 @@ const ResearchDescription = ({
               {/* Show edit button for the creator of the research OR a super-admin */}
               {isEditable && (
                 <Link to={'/research/' + research.slug + '/edit'}>
-                  <Button variant={'primary'} data-cy={'edit'}>
+                  <Button type="button" variant="primary" data-cy="edit">
                     Edit
                   </Button>
                 </Link>
@@ -162,8 +164,9 @@ const ResearchDescription = ({
               {isDeletable && (
                 <Fragment>
                   <Button
+                    type="button"
                     data-cy="Research: delete button"
-                    variant={'secondary'}
+                    variant="secondary"
                     icon="delete"
                     disabled={research._deleted}
                     onClick={() => setShowDeleteModal(true)}
@@ -299,7 +302,7 @@ const ResearchDescription = ({
             }),
           },
           {
-            icon: 'thunderbolt',
+            icon: 'thunderbolt-grey',
             label: buildStatisticsLabel({
               stat: subscribersCount || 0,
               statUnit: 'following',

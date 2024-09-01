@@ -1,16 +1,7 @@
-export const ProfileType = {
-  MEMBER: 'member',
-  SPACE: 'space',
-  WORKSPACE: 'workspace',
-  MACHINE_BUILDER: 'machine-builder',
-  COMMUNITY_BUILDER: 'community-builder',
-  COLLECTION_POINT: 'collection-point',
-} as const
+import type { ProfileTypeName } from 'oa-shared'
 
-export type ProfileTypeLabel = (typeof ProfileType)[keyof typeof ProfileType]
-
-export interface IProfileType {
-  label: ProfileTypeLabel
+export interface IProfileTypeDetails {
+  label: ProfileTypeName
   imageSrc?: string
   cleanImageSrc?: string
   cleanImageVerifiedSrc?: string

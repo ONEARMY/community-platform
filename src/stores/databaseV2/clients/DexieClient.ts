@@ -5,12 +5,9 @@ import { DB_ENDPOINTS } from '../endpoints'
 import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { IndexableType } from 'dexie'
-import type { DBDoc, IDBEndpoint } from 'src/models/common.models'
-import type {
-  AbstractDatabaseClient,
-  DBQueryOptions,
-  DBQueryWhereOptions,
-} from '../types'
+import type { IDBEndpoint } from 'src/models/dbEndpoints'
+import type { AbstractDatabaseClient } from '../types'
+import type { DBDoc, DBQueryOptions, DBQueryWhereOptions } from '../types/dbDoc'
 
 /**
  * Update the cache number either when making changes to db architecture
@@ -192,7 +189,7 @@ const SCHEMA_BASE: IDexieSchema = {
   research: `${DEFAULT_SCHEMA},_createdBy,slug,previousSlugs,*collaborators`,
   aggregations: `${DEFAULT_SCHEMA}`,
   emails: `${DEFAULT_SCHEMA}`,
-  questions: `${DEFAULT_SCHEMA}`,
+  questions: `${DEFAULT_SCHEMA},slug,previousSlugs`,
   questionCategories: `${DEFAULT_SCHEMA}`,
   discussions: `${DEFAULT_SCHEMA},sourceId`,
 }

@@ -31,6 +31,7 @@ export const UserNameTag = ({
               countryCode: countryCode,
               isVerified,
             }}
+            sx={{ position: 'relative' }}
           />
           <Text
             variant="auxiliary"

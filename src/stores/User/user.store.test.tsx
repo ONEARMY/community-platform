@@ -401,37 +401,121 @@ describe('userStore', () => {
   })
 
   describe('updateUserProfile', () => {
-    it('update user profile with type of member, previously was workspace', async () => {
+    it('sends update only for fields provided', async () => {
       const userProfile = FactoryUser({
         _id: 'my-user-profile',
-        _authID: 'my-user-profile',
         profileType: 'workspace',
         workspaceType: 'extrusion',
+        profileCreationTrigger: 'test-a',
       })
-      // Act
-      await store.updateUserProfile(
-        {
-          ...userProfile,
-          profileType: 'member',
-        },
-        'test',
-      )
+      store.activeUser = userProfile
+
+      const updateValues = {
+        _id: userProfile._id,
+        profileType: 'member',
+      }
+
+      await store.updateUserProfile(updateValues, 'test-b')
 
       // Assert
       expect(store.db.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ...updateValues,
+          profileCreationTrigger: 'test-b',
+        }),
+      )
+      expect(store.db.update).toHaveBeenCalledWith(
         expect.not.objectContaining({
-          workspaceType: 'extrusion',
+          workspaceType: userProfile.workspaceType,
+        }),
+      )
+    })
+  })
+
+  describe('updateUserNotificationSettings', () => {
+    it('updates notification_settings', async () => {
+      const userProfile = FactoryUser({
+        _id: 'my-user-profile',
+        notification_settings: {
+          emailFrequency: EmailNotificationFrequency.WEEKLY,
+        },
+      })
+      store.activeUser = userProfile
+
+      const notification_settings = {
+        emailFrequency: EmailNotificationFrequency.DAILY,
+      }
+      const updateValues = {
+        _id: userProfile._id,
+        notification_settings,
+      }
+      await store.updateUserNotificationSettings(updateValues)
+
+      expect(store.db.update).toHaveBeenCalledWith(
+        expect.objectContaining({ notification_settings }),
+      )
+    })
+
+    it('clears the unsubscribe token', async () => {
+      const userProfile = FactoryUser({
+        _id: 'my-user-profile',
+        notification_settings: {
+          emailFrequency: EmailNotificationFrequency.NEVER,
+        },
+        unsubscribeToken: 'anything',
+      })
+      store.activeUser = userProfile
+
+      const notification_settings = {
+        emailFrequency: EmailNotificationFrequency.DAILY,
+      }
+      const updateValues = {
+        _id: userProfile._id,
+        notification_settings,
+      }
+      await store.updateUserNotificationSettings(updateValues)
+
+      expect(store.db.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          notification_settings,
+          unsubscribeToken: null,
         }),
       )
     })
 
     it('throws an error is no user id is provided', async () => {
       const values = {}
-      const trigger = 'test'
 
       expect(async () => {
-        await store.updateUserProfile(values, trigger)
-      }).rejects.toThrow('No User ID provided')
+        await store.updateUserNotificationSettings(values)
+      }).rejects.toThrow('User not found')
+    })
+  })
+
+  describe('deleteUserLocation', () => {
+    it('clears user location data', async () => {
+      const user = FactoryUser({
+        _id: 'my-user-profile',
+        profileType: 'member',
+      })
+      store.activeUser = user
+
+      await store.deleteUserLocation(user)
+
+      expect(store.db.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          location: null,
+          mapPinDescription: null,
+        }),
+      )
+    })
+
+    it('throws an error is no user id is provided', async () => {
+      const values = {}
+
+      expect(async () => {
+        await store.deleteUserLocation(values)
+      }).rejects.toThrow('User not found')
     })
   })
 

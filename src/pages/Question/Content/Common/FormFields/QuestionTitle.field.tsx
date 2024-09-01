@@ -9,6 +9,7 @@ import {
 import { fields } from 'src/pages/Question/labels'
 import {
   composeValidators,
+  endsWithQuestionMark,
   minValue,
   required,
   validateTitle,
@@ -38,6 +39,7 @@ export const QuestionTitleField = (props: IProps) => {
         validate={composeValidators(
           required,
           minValue(QUESTION_MIN_TITLE_LENGTH),
+          endsWithQuestionMark(),
           validateTitle(parentType, questionId, questionStore),
         )}
         component={FieldInput}
@@ -45,6 +47,7 @@ export const QuestionTitleField = (props: IProps) => {
         minLength={QUESTION_MIN_TITLE_LENGTH}
         maxLength={QUESTION_MAX_TITLE_LENGTH}
         showCharacterCount
+        onBlur
       />
     </FormFieldWrapper>
   )

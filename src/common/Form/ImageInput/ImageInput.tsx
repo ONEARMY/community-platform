@@ -10,6 +10,7 @@ import { ImageInputWrapper } from './ImageInputWrapper'
 import { setSrc } from './setSrc'
 
 import type { IConvertedFileMeta } from 'src/types'
+import type { ThemeUIStyleObject } from 'theme-ui'
 import type { IInputValue, IMultipleInputValue, IValue } from './types'
 
 /*
@@ -21,6 +22,7 @@ type IFileMeta = IConvertedFileMeta[] | IConvertedFileMeta | null
 
 interface IProps {
   onFilesChange: (fileMeta: IFileMeta) => void
+  imageDisplaySx?: ThemeUIStyleObject | undefined
   value?: IValue
   hasText?: boolean
   multiple?: boolean
@@ -31,7 +33,7 @@ export const ImageInput = (props: IProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const prevPropsValue = useRef<IInputValue | IMultipleInputValue>()
 
-  const { dataTestId, multiple, onFilesChange, value } = props
+  const { dataTestId, imageDisplaySx, multiple, onFilesChange, value } = props
   const [inputFiles, setInputFiles] = useState<File[]>([])
   const [convertedFiles, setConvertedFiles] = useState<IConvertedFileMeta[]>([])
   const [presentFiles, setPresentFiles] = useState<IMultipleInputValue>(
@@ -73,12 +75,13 @@ export const ImageInput = (props: IProps) => {
   const src = setSrc(presentFiles[0])
 
   return (
-    <Box p={0} sx={{ height: '100%' }}>
+    <Box p={0} sx={imageDisplaySx ? imageDisplaySx : { height: '100%' }}>
       <Dropzone accept="image/*" multiple={multiple} onDrop={onDrop}>
         {({ getRootProps, getInputProps, rootRef }) => (
           <ImageInputWrapper
             ref={rootRef}
             hasUploadedImg={showUploadedImg}
+            sx={{ width: '100%', height: '100%' }}
             {...getRootProps()}
           >
             <input
@@ -87,7 +90,7 @@ export const ImageInput = (props: IProps) => {
               {...getInputProps()}
             />
 
-            {showUploadedImg && <Image src={src} />}
+            {showUploadedImg && <Image src={src} sx={imageDisplaySx} />}
 
             {!showUploadedImg && (
               <ImageConverterList
@@ -97,8 +100,8 @@ export const ImageInput = (props: IProps) => {
             )}
 
             {!hasImages && (
-              <Button small variant="outline" icon="image">
-                Upload Image
+              <Button small variant="outline" icon="image" type="button">
+                Upload
               </Button>
             )}
 

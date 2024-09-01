@@ -5,9 +5,8 @@ import { Image } from 'theme-ui'
 
 import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpecialistWorkspaceTypeToWorkspace'
 
-import type { IPinGrouping } from 'oa-shared'
+import type { IPinGrouping, ProfileTypeName } from 'oa-shared'
 import type { IMapGrouping, IMapPin, WorkspaceType } from 'src/models'
-import type { ProfileTypeLabel } from 'src/modules/profile/types'
 
 const ICON_SIZE = 30
 
@@ -45,7 +44,7 @@ const asOptions = (mapPins, items: Array<IMapGrouping>): FilterGroupOption[] =>
 
 type FilterGroupOption = {
   label: string
-  value: WorkspaceType | ProfileTypeLabel
+  value: WorkspaceType | ProfileTypeName
   number: number
   imageElement: JSX.Element
 }
@@ -58,7 +57,7 @@ export type FilterGroup = {
 type FilterItem = {
   grouping: string
   displayName: string
-  type: ProfileTypeLabel | 'verified'
+  type: ProfileTypeName | 'verified'
 }
 
 export const transformAvailableFiltersToGroups = (

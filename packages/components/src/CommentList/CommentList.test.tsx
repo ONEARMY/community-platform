@@ -27,7 +27,6 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={1000}
         onMoreComments={mockOnMoreComments}
-        showAvatar
       />,
     )
     expect(screen.getAllByTestId('CommentList: item')).toHaveLength(
@@ -47,11 +46,12 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={1000}
         onMoreComments={mockOnMoreComments}
-        showAvatar
       />,
     )
     fireEvent.click(screen.getByText('show more comments'))
-    expect(screen.getAllByTestId('CommentList: item').length).toBeGreaterThan(5)
+    expect(screen.getAllByTestId('CommentList: item').length).toBeGreaterThan(
+      10,
+    )
     expect(mockOnMoreComments).toHaveBeenCalled()
   })
 
@@ -71,7 +71,6 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={1000}
         onMoreComments={mockOnMoreComments}
-        showAvatar
       />,
     )
     expect(screen.getAllByTestId('CommentList: item')[1]).toHaveStyle(
@@ -99,7 +98,6 @@ describe('CommentList', () => {
         maxLength={720}
         onMoreComments={mockOnMoreComments}
         supportReplies={true}
-        showAvatar
       />,
     )
 
@@ -122,7 +120,6 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={800}
         supportReplies={true}
-        showAvatar
       />,
     )
 
@@ -149,7 +146,6 @@ describe('CommentList', () => {
         isLoggedIn={false}
         maxLength={800}
         supportReplies={true}
-        showAvatar
       />,
     )
 

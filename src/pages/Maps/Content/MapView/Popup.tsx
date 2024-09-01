@@ -12,12 +12,13 @@ import './popup.css'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
-  map: React.RefObject<Map>
+  mapRef: React.RefObject<Map>
 }
 
 export const Popup = (props: IProps) => {
   const leafletRef = useRef<LeafletPopup>(null)
   const activePin = props.activePin as IMapPinWithDetail
+  const { mapRef } = props
 
   useEffect(() => {
     openPopup()
@@ -26,10 +27,8 @@ export const Popup = (props: IProps) => {
   // HACK - as popup is created dynamically want to be able to trigger
   // open on props change
   const openPopup = () => {
-    if (leafletRef.current) {
-      leafletRef.current.leafletElement.openOn(
-        props.map.current!.leafletElement,
-      )
+    if (leafletRef.current && mapRef.current) {
+      leafletRef.current.leafletElement.openOn(mapRef.current!.leafletElement)
     }
   }
 
@@ -69,9 +68,6 @@ export const Popup = (props: IProps) => {
             countryCode: activePin.detail?.country?.toLowerCase(),
           }}
           heading={getHeading(activePin)}
-          // TODO: Remove `isEditable` prop from component
-          // this functionality is now available via Retool
-          isEditable={false}
         />
       </LeafletPopup>
     )

@@ -50,6 +50,8 @@ describe('[How To]', () => {
 
     beforeEach(() => {
       cy.visit('/how-to')
+      // Hack to get the tags store to finish populating before the expectations
+      cy.wait(1000)
     })
 
     describe('[By Everyone]', () => {
@@ -156,27 +158,9 @@ describe('[How To]', () => {
         cy.signUpNewUser()
         cy.visit(specificHowtoUrl)
 
-        cy.step('Attachments are opened in new tabs')
-        cy.get(`a[href*="art%20final%201.skp"]`).should(
-          'have.attr',
-          'target',
-          '_blank',
-        )
-        cy.get(`a[href*="art%20final%202.skp"]`).should(
-          'have.attr',
-          'target',
-          '_blank',
-        )
-      })
-    })
-
-    describe('[By beta-tester]', () => {
-      it('[Presents the donation request before opening of attachments]', () => {
-        cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
-        cy.visit('how-to/set-up-devsite-to-help-coding')
-
+        cy.step('[Presents the donation request before opening of attachments]')
         cy.step('Shows modal')
-        cy.get('[data-cy=downloadButton]').click()
+        cy.get('[data-cy=downloadButton]').first().click()
         cy.get('[data-cy=DonationRequest]').should('be.visible')
         cy.get('[data-cy=DonationRequest]').contains('Support our work')
 

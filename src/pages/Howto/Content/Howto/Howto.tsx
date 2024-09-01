@@ -120,6 +120,7 @@ export const Howto = observer(() => {
           }}
         >
           <Button
+            type="button"
             sx={{ fontSize: 2 }}
             onClick={() => {
               trackEvent({

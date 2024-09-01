@@ -84,7 +84,7 @@ const GroupingFilterMobile = (props: IProps) => {
         )
       })}
 
-      <Button mt={3} onClick={props.onClose}>
+      <Button type="button" mt={3} onClick={props.onClose}>
         Apply filters
       </Button>
     </Flex>

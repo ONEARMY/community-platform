@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone'
 import { Button, Modal } from 'oa-components'
+import { logger } from 'src/logger'
 import { Box, Flex, Image, Text } from 'theme-ui'
 
 import { compressImage } from './compressImage'
@@ -48,8 +49,7 @@ export const ImageInput = (props: IProps) => {
         const compressedImage = await compressImage(selectedImage[0])
         selectedImage[0] = compressedImage
       } catch (compressionError) {
-        // eslint-disable-next-line no-console
-        console.error(
+        logger.error(
           'Image compression failed, using original image: ',
           compressionError,
         )
@@ -138,6 +138,7 @@ export const ImageInput = (props: IProps) => {
       >
         {isImageCorrupt && (
           <Flex
+            data-cy="ImageUploadError"
             mt={[1, 1, 1]}
             sx={{
               flexDirection: 'column',
@@ -154,10 +155,11 @@ export const ImageInput = (props: IProps) => {
               jpg, png, gif, heic, svg or webp.
             </Text>
             <Button
+              data-cy="ImageUploadError-Button"
               sx={{ marginTop: '20px', justifyContent: 'center' }}
               onClick={() => setShowErrorModal(false)}
             >
-              Ok
+              Try uploading something else
             </Button>
           </Flex>
         )}

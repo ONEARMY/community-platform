@@ -43,7 +43,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
     })
 
-    it('[Edit a new profile]', () => {
+    it.only('[Edit a new profile]', () => {
       const country = 'Brazil'
       const userImage = 'avatar'
       const displayName = 'settings_member_new'
@@ -79,8 +79,17 @@ describe('[Settings]', () => {
         description,
       })
 
-      cy.step('Can add avatar only')
+      cy.step('Errors if trying to upload invalid image')
+      cy.get(`[data-cy=userImage]`)
+        .find(':file')
+        .attachFile(`images/file.random`)
+      cy.get('[data-cy=ImageUploadError]').should('be.visible')
+      cy.get('[data-cy=ImageUploadError-Button]').click()
+
+      cy.step('Can add avatar')
       cy.setSettingImage(userImage, 'userImage')
+
+      cy.step("Can't add cover image")
       cy.get('[data-cy=coverImages]').should('not.exist')
 
       cy.setSettingAddContactLink({

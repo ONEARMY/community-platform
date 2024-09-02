@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import Compressor from '@uppy/compressor'
 import Uppy from '@uppy/core'
 import { DashboardModal } from '@uppy/react'
 import { Button, DownloadStaticFile } from 'oa-components'
@@ -25,10 +24,8 @@ interface IState {
 }
 export const FileInput = (props: IProps) => {
   const [state, setState] = useState<IState>({ open: false })
-  const [uppy] = useState(() =>
-    new Uppy({ ...UPPY_CONFIG, onBeforeUpload: () => uploadTriggered() }).use(
-      Compressor,
-    ),
+  const [uppy] = useState(
+    () => new Uppy({ ...UPPY_CONFIG, onBeforeUpload: () => uploadTriggered() }),
   )
 
   useEffect(() => {

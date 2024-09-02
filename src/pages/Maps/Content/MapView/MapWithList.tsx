@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CardList, Map } from 'oa-components'
+import { Button, CardList, Map } from 'oa-components'
 import { Box, Flex, Heading } from 'theme-ui'
 
 import { Clusters } from './Cluster'
@@ -15,6 +15,7 @@ interface IProps {
   activePin: IMapPin | null
   center: ILatLng
   mapRef: React.RefObject<MapType>
+  notification?: string
   pins: IMapPin[]
   zoom: number
   onPinClicked: (pin: IMapPin) => void
@@ -24,10 +25,12 @@ interface IProps {
 
 export const MapWithList = (props: IProps) => {
   const [filteredPins, setFilteredPins] = useState<IMapPin[] | null>(null)
+  const [showMobileList, setShowMobileList] = useState<boolean>(false)
   const {
     activePin,
     center,
     mapRef,
+    notification,
     onBlur,
     onPinClicked,
     pins,
@@ -48,6 +51,8 @@ export const MapWithList = (props: IProps) => {
   const mapCenter: LatLngExpression = center ? [center.lat, center.lng] : [0, 0]
   const mapZoom = center ? zoom : 2
 
+  const mobileListDisplay = showMobileList ? 'block' : 'none'
+
   return (
     <Flex
       sx={{
@@ -55,8 +60,10 @@ export const MapWithList = (props: IProps) => {
         height: '100%',
       }}
     >
+      {/* Desktop list view */}
       <Box
         sx={{
+          display: ['none', 'none', 'block', 'block'],
           background: 'white',
           flex: 1,
           overflow: 'scroll',
@@ -67,8 +74,55 @@ export const MapWithList = (props: IProps) => {
           Welcome to our world!{' '}
           {pins && `${pins.length} members (and counting...)`}
         </Heading>
-        <CardList list={pins} filteredList={filteredPins} />
+        <CardList dataCy="desktop" list={pins} filteredList={filteredPins} />
       </Box>
+
+      {/* Mobile/tablet list view */}
+      <Box
+        sx={{
+          display: [mobileListDisplay, mobileListDisplay, 'none', 'none'],
+          background: 'white',
+          width: '100%',
+          overflow: 'scroll',
+          padding: 2,
+        }}
+      >
+        <Flex
+          sx={{
+            justifyContent: 'center',
+            paddingBottom: 2,
+            position: 'absolute',
+            zIndex: 1000,
+            width: '100%',
+          }}
+        >
+          <Button
+            data-cy="ShowMapButton"
+            icon="map"
+            sx={{ position: 'sticky' }}
+            onClick={() => setShowMobileList(false)}
+            small
+          >
+            Show map view
+          </Button>
+        </Flex>
+        <Heading
+          data-cy="welome-header"
+          variant="small"
+          sx={{ padding: 2, paddingTop: '50px' }}
+        >
+          Welcome to our world!{' '}
+          {pins && `${pins.length} members (and counting...)`}
+        </Heading>
+        <CardList
+          columnsCountBreakPoints={{ 300: 1, 600: 2 }}
+          dataCy="mobile"
+          list={pins}
+          filteredList={filteredPins}
+        />
+      </Box>
+
+      {/* Same map for all viewports */}
       <Map
         ref={mapRef}
         className="markercluster-map"
@@ -82,6 +136,29 @@ export const MapWithList = (props: IProps) => {
         ondragend={handleLocationFilter}
         onzoomend={handleLocationFilter}
       >
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: 2,
+            gap: 2,
+          }}
+        >
+          <Button
+            data-cy="ShowMobileListButton"
+            icon="step"
+            sx={{ display: ['flex', 'flex', 'none'], zIndex: 1000 }}
+            onClick={() => setShowMobileList(true)}
+            small
+          >
+            Show list view
+          </Button>
+          {notification && notification !== '' && (
+            <Button sx={{ zIndex: 1000 }} variant="subtle">
+              {notification}
+            </Button>
+          )}
+        </Flex>
         <Clusters pins={pins} onPinClick={onPinClicked} prefix="new" />
         {activePin && <Popup activePin={activePin} mapRef={mapRef} />}
       </Map>

@@ -1,4 +1,4 @@
-import Masonry from 'react-responsive-masonry'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import { Flex, Text } from 'theme-ui'
 
 import { CardListItem } from '../CardListItem/CardListItem'
@@ -8,6 +8,8 @@ import { Loader } from '../Loader/Loader'
 import type { ListItem } from '../CardListItem/types'
 
 export interface IProps {
+  columnsCountBreakPoints?: { [key: number]: number }
+  dataCy: string
   filteredList: ListItem[] | null
   list: ListItem[]
 }
@@ -15,7 +17,7 @@ export interface IProps {
 export const EMPTY_LIST = 'Oh nos! Nothing to show!'
 
 export const CardList = (props: IProps) => {
-  const { filteredList, list } = props
+  const { columnsCountBreakPoints, dataCy, filteredList, list } = props
 
   const listToShow = filteredList === null ? list : filteredList
   const displayItems = listToShow
@@ -34,7 +36,7 @@ export const CardList = (props: IProps) => {
 
   return (
     <Flex
-      data-cy="CardList"
+      data-cy={`CardList-${dataCy}`}
       sx={{
         flexDirection: 'column',
         gap: 2,
@@ -57,7 +59,17 @@ export const CardList = (props: IProps) => {
             </Flex>
           </Flex>
           {isListEmpty && EMPTY_LIST}
-          {!isListEmpty && <Masonry columnsCount={2}>{displayItems}</Masonry>}
+          {!isListEmpty && (
+            <ResponsiveMasonry
+              columnsCountBreakPoints={
+                columnsCountBreakPoints
+                  ? columnsCountBreakPoints
+                  : { 600: 1, 1100: 2, 1600: 3 }
+              }
+            >
+              <Masonry>{displayItems}</Masonry>
+            </ResponsiveMasonry>
+          )}
         </>
       )}
     </Flex>

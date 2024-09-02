@@ -29,6 +29,7 @@ import patreonSVG from '../../assets/icons/patreon.svg'
 import plasticSVG from '../../assets/icons/plastic.svg'
 import profileSVG from '../../assets/icons/profile.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
+import stepSVG from '../../assets/icons/step.svg'
 import supporterSVG from '../../assets/icons/supporter.svg'
 import thunderboltSVG from '../../assets/icons/thunderbolt.svg'
 import thunderboltGreySVG from '../../assets/icons/thunderbolt-grey.svg'
@@ -74,6 +75,7 @@ export const iconMap = {
   socialMedia: <ImageIcon src={socialMediaSVG} />,
   star: <ImageIcon src={starSVG} />,
   starActive: <ImageIcon src={starActiveSVG} />,
+  step: <ImageIcon src={stepSVG} />,
   supporter: <ImageIcon src={supporterSVG} />,
   thunderbolt: <ImageIcon src={thunderboltSVG} />,
   thunderboltGrey: <ImageIcon src={thunderboltGreySVG} />,

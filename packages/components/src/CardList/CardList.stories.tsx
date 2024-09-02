@@ -16,15 +16,17 @@ const allItems = [
 ]
 
 export const Default: StoryFn<typeof CardList> = () => {
-  return <CardList list={allItems} filteredList={null} />
+  return <CardList dataCy="stories" list={allItems} filteredList={null} />
 }
 
 export const FiltedDisplay: StoryFn<typeof CardList> = () => {
   const filteredList = [allItems[0], allItems[2]]
 
-  return <CardList list={allItems} filteredList={filteredList} />
+  return (
+    <CardList dataCy="stories" list={allItems} filteredList={filteredList} />
+  )
 }
 
 export const WhenFiltedDisplayIsZero: StoryFn<typeof CardList> = () => {
-  return <CardList list={allItems} filteredList={[]} />
+  return <CardList dataCy="stories" list={allItems} filteredList={[]} />
 }

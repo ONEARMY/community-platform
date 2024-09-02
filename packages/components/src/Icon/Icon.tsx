@@ -21,7 +21,6 @@ import { MdEdit } from '@react-icons/all-files/md/MdEdit'
 import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
 import { MdImage } from '@react-icons/all-files/md/MdImage'
 import { MdKeyboardArrowDown } from '@react-icons/all-files/md/MdKeyboardArrowDown'
-import { MdList } from '@react-icons/all-files/md/MdList'
 import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
 import { MdLock } from '@react-icons/all-files/md/MdLock'
 import { MdMail } from '@react-icons/all-files/md/MdMail'
@@ -109,7 +108,7 @@ export const glyphs: IGlyphs = {
   slack: <FaSlack />,
   star: iconMap.star,
   'star-active': iconMap.starActive,
-  step: <MdList />,
+  step: iconMap.step,
   thunderbolt: iconMap.thunderbolt,
   'thunderbolt-grey': iconMap.thunderboltGrey,
   time: <MdAccessTime />,

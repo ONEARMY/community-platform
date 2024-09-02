@@ -3,6 +3,7 @@ import type {
   IMapPinDetail,
   IModerationStatus,
   IPinGrouping,
+  IProfileCreator,
   ProfileTypeName,
 } from 'oa-shared'
 import type { WorkspaceType } from './userPreciousPlastic.models'
@@ -31,6 +32,7 @@ export interface IMapPin {
   verified: boolean
   subType?: IMapPinSubtype
   comments?: string
+  creator?: IProfileCreator
 }
 
 /**

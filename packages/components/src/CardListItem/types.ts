@@ -1,23 +1,4 @@
-import type { ProfileTypeName } from 'oa-shared'
-
-type UserBadges = {
-  verified: boolean
-  supporter: boolean
-}
-
-export interface IProfileCreator {
-  _id: string
-  _lastActive: string
-  about?: string
-  badges?: UserBadges
-  countryCode: string
-  coverImage?: string
-  displayName: string
-  isContactableByPublic: boolean
-  profileType: ProfileTypeName
-  subType?: string
-  userImage?: string
-}
+import type { IProfileCreator, ProfileTypeName } from 'oa-shared'
 
 export interface ListItem {
   _id: string

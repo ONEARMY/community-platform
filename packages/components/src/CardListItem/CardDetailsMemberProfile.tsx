@@ -4,7 +4,7 @@ import { Category } from '../Category/Category'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { Username } from '../Username/Username'
 
-import type { IProfileCreator } from './types'
+import type { IProfileCreator } from 'oa-shared'
 
 interface IProps {
   creator: IProfileCreator

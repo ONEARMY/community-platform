@@ -1,3 +1,10 @@
+import type { ProfileTypeName } from './user'
+
+type UserBadges = {
+  verified: boolean
+  supporter: boolean
+}
+
 export interface IBoundingBox {
   _northEast: ILatLng
   _southWest: ILatLng
@@ -22,4 +29,18 @@ export interface IMapPinDetail {
   profileUrl: string
   shortDescription: string
   verifiedBadge?: boolean
+}
+
+export interface IProfileCreator {
+  _id: string
+  _lastActive: string
+  about?: string
+  badges?: UserBadges
+  countryCode: string
+  coverImage?: string
+  displayName: string
+  isContactableByPublic: boolean
+  profileType: ProfileTypeName
+  subType?: string
+  userImage?: string
 }

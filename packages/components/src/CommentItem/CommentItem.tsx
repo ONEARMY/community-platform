@@ -118,9 +118,8 @@ export const CommentItem = (props: IProps) => {
             >
               <Flex
                 sx={{
-                  alignItems: 'stretch',
                   flexWrap: 'wrap',
-                  justifyContent: 'flex-start',
+                  justifyContent: 'space-between',
                   flexDirection: ['column', 'row'],
                   gap: 2,
                 }}
@@ -144,39 +143,31 @@ export const CommentItem = (props: IProps) => {
                 {isEditable && (
                   <Flex
                     sx={{
-                      flexGrow: 1,
-                      justifyContent: ['flex-start', 'flex-end'],
-                      position: ['static', 'relative'],
+                      alignItems: 'flex-end',
+                      gap: 2,
+                      paddingBottom: 2,
                     }}
                   >
-                    <Flex
-                      sx={{
-                        gap: 2,
-                        position: ['static', 'absolute'],
-                        right: 0,
-                      }}
+                    <Button
+                      type="button"
+                      data-cy={`${item}: edit button`}
+                      variant="subtle"
+                      small={true}
+                      icon="edit"
+                      onClick={() => onEditRequest(_id)}
                     >
-                      <Button
-                        type="button"
-                        data-cy={`${item}: edit button`}
-                        variant="subtle"
-                        small={true}
-                        icon="edit"
-                        onClick={() => onEditRequest(_id)}
-                      >
-                        edit
-                      </Button>
-                      <Button
-                        type="button"
-                        data-cy={`${item}: delete button`}
-                        variant="subtle"
-                        small={true}
-                        icon="delete"
-                        onClick={() => setShowDeleteModal(true)}
-                      >
-                        delete
-                      </Button>
-                    </Flex>
+                      edit
+                    </Button>
+                    <Button
+                      type="button"
+                      data-cy={`${item}: delete button`}
+                      variant="subtle"
+                      small={true}
+                      icon="delete"
+                      onClick={() => setShowDeleteModal(true)}
+                    >
+                      delete
+                    </Button>
                   </Flex>
                 )}
               </Flex>

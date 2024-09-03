@@ -213,7 +213,14 @@ const ResearchArticle = observer(() => {
           ).length || 0
         }
       />
-      <Box sx={{ marginTop: 8, marginBottom: 4 }}>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          marginTop: 8,
+          marginBottom: 4,
+          gap: [4, 6],
+        }}
+      >
         {item &&
           getPublicUpdates(item, researchStore.activeUser).map(
             (update, index) => (
@@ -227,7 +234,7 @@ const ResearchArticle = observer(() => {
               />
             ),
           )}
-      </Box>
+      </Flex>
 
       <UserEngagementWrapper>
         <Box

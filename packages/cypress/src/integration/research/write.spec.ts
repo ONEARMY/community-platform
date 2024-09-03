@@ -276,7 +276,6 @@ describe('[Research]', () => {
       cy.get('[data-cy=create]').click()
 
       cy.step('Enter research article details')
-
       cy.get('[data-cy=intro-title').clear().type(expected.title).blur()
       cy.get('[data-cy=intro-description]').clear().type(expected.description)
       cy.get('[data-cy=submit]').click()
@@ -313,6 +312,24 @@ describe('[Research]', () => {
       cy.visit(`/research/${expected.slug}`)
 
       cy.contains(updateTitle)
+      cy.get('[data-cy=DraftUpdateLabel]').should('be.visible')
+
+      cy.step('Draft not visible to others')
+      cy.logout()
+      cy.visit(`/research/${expected.slug}`)
+      cy.get(updateTitle).should('not.exist')
+      cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
+
+      cy.step('Draft updates can be published')
+      cy.login(researcherEmail, researcherPassword)
+      cy.visit(`/research/${expected.slug}`)
+      cy.get('[data-cy=edit-update]').click()
+      cy.contains('Edit your update')
+      cy.get('[data-cy=videoUrl]').clear().type(updateVideoUrl).blur()
+      cy.get('[data-cy=submit]').click()
+      cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
+      cy.contains(updateTitle)
+      cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')
     })
   })
 })

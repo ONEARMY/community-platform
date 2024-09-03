@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Button,
+  DisplayDate,
   DownloadCounter,
   DownloadFileFromLink,
   DownloadStaticFile,
@@ -13,7 +14,6 @@ import {
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { formatDate } from 'src/utils/date'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
@@ -51,8 +51,6 @@ const ResearchUpdate = (props: IProps) => {
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
   const contributors = useContributorsData(collaborators || [])
-  const formattedCreateDatestamp = formatDate(new Date(_created))
-  const formattedModifiedDatestamp = formatDate(new Date(_modified))
   const research = researchStore.activeResearchItem
 
   const handleDownloadClick = async () => {
@@ -154,18 +152,17 @@ const ResearchUpdate = (props: IProps) => {
                         textAlign: ['left', 'right', 'right'],
                       }}
                     >
-                      {'created ' + formattedCreateDatestamp}
+                      created <DisplayDate date={_created} />
                     </Text>
 
-                    {formattedCreateDatestamp !==
-                      formattedModifiedDatestamp && (
+                    {_created !== _modified && (
                       <Text
                         variant="auxiliary"
                         sx={{
                           textAlign: ['left', 'right', 'right'],
                         }}
                       >
-                        {'edited ' + formattedModifiedDatestamp}
+                        edited <DisplayDate date={_modified} />
                       </Text>
                     )}
                   </Flex>

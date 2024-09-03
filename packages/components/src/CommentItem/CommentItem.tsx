@@ -98,7 +98,7 @@ export const CommentItem = (props: IProps) => {
         )}
 
         {!_deleted && (
-          <Flex sx={{ gap: 2 }}>
+          <Flex sx={{ gap: 2, flexGrow: 1 }}>
             <Box data-cy="commentAvatar" data-testid="commentAvatar">
               <Avatar
                 src={creatorImage ?? defaultProfileImage}
@@ -118,9 +118,8 @@ export const CommentItem = (props: IProps) => {
             >
               <Flex
                 sx={{
-                  alignItems: 'stretch',
                   flexWrap: 'wrap',
-                  justifyContent: 'flex-start',
+                  justifyContent: 'space-between',
                   flexDirection: ['column', 'row'],
                   gap: 2,
                 }}
@@ -144,17 +143,15 @@ export const CommentItem = (props: IProps) => {
                 {isEditable && (
                   <Flex
                     sx={{
-                      flexGrow: 1,
+                      alignItems: 'flex-end',
                       gap: 2,
-                      justifyContent: ['flex-start', 'flex-end'],
-                      opacity: 0.5,
-                      ':hover': { opacity: 1 },
+                      paddingBottom: 2,
                     }}
                   >
                     <Button
                       type="button"
                       data-cy={`${item}: edit button`}
-                      variant="outline"
+                      variant="subtle"
                       small={true}
                       icon="edit"
                       onClick={() => onEditRequest(_id)}
@@ -164,7 +161,7 @@ export const CommentItem = (props: IProps) => {
                     <Button
                       type="button"
                       data-cy={`${item}: delete button`}
-                      variant={'outline'}
+                      variant="subtle"
                       small={true}
                       icon="delete"
                       onClick={() => setShowDeleteModal(true)}

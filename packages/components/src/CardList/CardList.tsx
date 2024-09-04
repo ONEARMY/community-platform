@@ -30,9 +30,7 @@ export const CardList = (props: IProps) => {
 
   const isListEmpty = displayItems.length === 0
   const hasListLoaded = list
-  const results = `${displayItems.length} ${
-    displayItems.length == 1 ? 'result' : 'results'
-  }`
+  const results = `${displayItems.length} result${displayItems.length == 1 ? '' : 's'} in view`
 
   return (
     <Flex
@@ -40,6 +38,7 @@ export const CardList = (props: IProps) => {
       sx={{
         flexDirection: 'column',
         gap: 2,
+        padding: 2,
       }}
     >
       {!hasListLoaded && <Loader />}
@@ -49,6 +48,7 @@ export const CardList = (props: IProps) => {
             sx={{
               justifyContent: 'space-between',
               paddingX: 2,
+              paddingTop: 2,
               fontSize: 2,
             }}
           >

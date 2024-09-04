@@ -61,7 +61,7 @@ export const ImageConverter = (props: IProps) => {
       }}
       sx={{
         border: '1px solid ',
-        borderColor: 'offwhite',
+        borderColor: 'offWhite',
         borderRadius: 1,
       }}
       id="preview"

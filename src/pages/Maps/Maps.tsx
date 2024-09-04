@@ -153,7 +153,7 @@ const MapsPage = observer(() => {
 
   return (
     // the calculation for the height is kind of hacky for now, will set properly on final mockups
-    <Box id="mapPage" sx={{ height: 'calc(100vh - 150px)', width: '100%' }}>
+    <Box id="mapPage" sx={{ height: 'calc(100vh - 120px)', width: '100%' }}>
       <NewMapBanner showNewMap={showNewMap} setShowNewMap={setShowNewMap} />
       {!showNewMap && (
         <>

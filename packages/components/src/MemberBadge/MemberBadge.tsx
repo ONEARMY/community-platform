@@ -21,6 +21,10 @@ export const MemberBadge = (props: Props) => {
   const profileType = props.profileType || 'member'
   const badgeSize = size ? size : MINIMUM_SIZE
 
+  const title =
+    profileType.charAt(0).toUpperCase() +
+    profileType.slice(1).replace(/-/g, ' ')
+
   return (
     <Image
       loading="lazy"
@@ -29,6 +33,7 @@ export const MemberBadge = (props: Props) => {
       sx={{ width: badgeSize, borderRadius: '50%', ...sx }}
       width={badgeSize}
       height={badgeSize}
+      title={title}
       src={
         (badgeSize > MINIMUM_SIZE && !useLowDetailVersion
           ? theme.badges[profileType]?.normal

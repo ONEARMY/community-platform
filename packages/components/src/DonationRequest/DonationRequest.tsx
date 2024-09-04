@@ -86,7 +86,7 @@ export const DonationRequest = (props: IProps) => {
 
       <Flex
         sx={{
-          backgroundColor: 'offwhite',
+          backgroundColor: 'offWhite',
           borderTop: '2px solid',
           flexDirection: ['column', 'row'],
           padding: 2,

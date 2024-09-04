@@ -1,4 +1,5 @@
 const userId = 'davehakkens'
+const profileTypesCount = 5
 
 describe('[Map]', () => {
   it('[Shows expected pins]', () => {
@@ -26,7 +27,17 @@ describe('[Map]', () => {
     cy.step('New map shows the cards')
     cy.get('[data-cy="welome-header"]').should('be.visible')
     cy.get('[data-cy="CardList-desktop"]').should('be.visible')
-    cy.get('[data-cy="list-results"]').contains('51 results')
+    cy.get('[data-cy="list-results"]').contains('51 results in view')
+
+    cy.step('Map filters can be used')
+    cy.get('[data-cy=FilterList]')
+      .first()
+      .children()
+      .should('have.length', profileTypesCount)
+    cy.get('[data-cy=MapListFilter]').first().click()
+    cy.get('[data-cy="list-results"]').contains('6 results in view')
+    cy.get('[data-cy=MapListFilter-active]').first().click()
+    cy.get('[data-cy="list-results"]').contains('51 results in view')
 
     cy.step('As the user moves in the list updates')
     for (let i = 0; i < 10; i++) {

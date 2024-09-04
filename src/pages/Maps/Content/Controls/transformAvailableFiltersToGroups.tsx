@@ -24,6 +24,7 @@ const asOptions = (mapPins, items: Array<IMapGrouping>): FilterGroupOption[] =>
             : item.type.split(' ')
 
       const value = item.subType ? item.subType : item.type
+      const profileType = transformSpecialistWorkspaceTypeToWorkspace(value)
 
       return {
         label: item.displayName,
@@ -33,10 +34,7 @@ const asOptions = (mapPins, items: Array<IMapGrouping>): FilterGroupOption[] =>
           (item.type as string) === 'verified' ? (
             <Image src={VerifiedBadgeIcon} width={ICON_SIZE} />
           ) : (
-            <MemberBadge
-              size={ICON_SIZE}
-              profileType={transformSpecialistWorkspaceTypeToWorkspace(value)}
-            />
+            <MemberBadge size={ICON_SIZE} profileType={profileType} />
           ),
       }
     })

@@ -1,15 +1,43 @@
-import { useState } from 'react'
-import { Button, CardList, Map } from 'oa-components'
-import { Box, Flex, Heading } from 'theme-ui'
+import { useEffect, useMemo, useState } from 'react'
+import { Button, Map } from 'oa-components'
+import { Box, Flex } from 'theme-ui'
 
 import { Clusters } from './Cluster'
 import { latLongFilter } from './latLongFilter'
+import { MapWithListHeader } from './MapWithListHeader'
 import { Popup } from './Popup'
 
 import type { LatLngExpression } from 'leaflet'
 import type { Map as MapType } from 'react-leaflet'
 import type { ILatLng } from 'shared/models'
 import type { IMapPin } from 'src/models/maps.models'
+
+const allFilters = [
+  {
+    label: 'Workspace',
+    type: 'workspace',
+  },
+  {
+    label: 'Machine Builder',
+    type: 'machine-builder',
+  },
+  {
+    label: 'Community Point',
+    type: 'community-builder',
+  },
+  {
+    label: 'Collection Point',
+    type: 'collection-point',
+  },
+  {
+    label: 'Space',
+    type: 'space',
+  },
+  {
+    label: 'Want to get started',
+    type: 'member',
+  },
+]
 
 interface IProps {
   activePin: IMapPin | null
@@ -18,14 +46,12 @@ interface IProps {
   notification?: string
   pins: IMapPin[]
   zoom: number
-  onPinClicked: (pin: IMapPin) => void
   onBlur: () => void
+  onPinClicked: (pin: IMapPin) => void
   setZoom: (arg: number) => void
 }
 
 export const MapWithList = (props: IProps) => {
-  const [filteredPins, setFilteredPins] = useState<IMapPin[] | null>(null)
-  const [showMobileList, setShowMobileList] = useState<boolean>(false)
   const {
     activePin,
     center,
@@ -38,13 +64,50 @@ export const MapWithList = (props: IProps) => {
     setZoom,
   } = props
 
+  const [activePinFilters, setActivePinFilters] = useState<string[]>([])
+  const [allPinsInView, setAllPinsInView] = useState<IMapPin[]>(pins)
+  const [filteredPins, setFilteredPins] = useState<IMapPin[] | null>(
+    pins || null,
+  )
+  const [showMobileList, setShowMobileList] = useState<boolean>(false)
+
+  const availableFilters = useMemo(() => {
+    const pinTypes = pins.map(({ creator }) => creator?.profileType)
+    const filtersNeeded = [...new Set(pinTypes)]
+    return allFilters.filter(({ type }) =>
+      filtersNeeded.some((filter) => filter === type),
+    )
+  }, [pins])
+
+  useEffect(() => {
+    if (activePinFilters.length === 0) {
+      return setFilteredPins(allPinsInView)
+    }
+    const filteredPins = allPinsInView.filter((pin) =>
+      activePinFilters.includes(pin.type),
+    )
+
+    setFilteredPins(filteredPins)
+  }, [activePinFilters, allPinsInView])
+
   const handleLocationFilter = () => {
     if (mapRef.current) {
       const boundaries = mapRef.current.leafletElement.getBounds()
       // Map.getBounds() is wrongly typed
       const results = latLongFilter(boundaries as any, pins)
-      setFilteredPins(results)
+      setAllPinsInView(results)
     }
+  }
+
+  const onFilterChange = (label: string) => {
+    const filter = label.toLowerCase()
+    const isFilterPresent = !!activePinFilters.find(
+      (pinFilter) => pinFilter === filter,
+    )
+    if (isFilterPresent) {
+      return setActivePinFilters((pins) => pins.filter((pin) => pin !== filter))
+    }
+    return setActivePinFilters((pins) => [...pins, filter])
   }
 
   const isViewportGreaterThanTablet = window.innerWidth > 1024
@@ -67,14 +130,16 @@ export const MapWithList = (props: IProps) => {
           background: 'white',
           flex: 1,
           overflow: 'scroll',
-          padding: 2,
         }}
       >
-        <Heading data-cy="welome-header" sx={{ padding: 2 }}>
-          Welcome to our world!{' '}
-          {pins && `${pins.length} members (and counting...)`}
-        </Heading>
-        <CardList dataCy="desktop" list={pins} filteredList={filteredPins} />
+        <MapWithListHeader
+          pins={pins}
+          activePinFilters={activePinFilters}
+          availableFilters={availableFilters}
+          onFilterChange={onFilterChange}
+          filteredPins={filteredPins}
+          viewport="desktop"
+        />
       </Box>
 
       {/* Mobile/tablet list view */}
@@ -84,7 +149,6 @@ export const MapWithList = (props: IProps) => {
           background: 'white',
           width: '100%',
           overflow: 'scroll',
-          padding: 2,
         }}
       >
         <Flex
@@ -99,26 +163,20 @@ export const MapWithList = (props: IProps) => {
           <Button
             data-cy="ShowMapButton"
             icon="map"
-            sx={{ position: 'sticky' }}
+            sx={{ position: 'sticky', marginTop: 2 }}
             onClick={() => setShowMobileList(false)}
             small
           >
             Show map view
           </Button>
         </Flex>
-        <Heading
-          data-cy="welome-header"
-          variant="small"
-          sx={{ padding: 2, paddingTop: '50px' }}
-        >
-          Welcome to our world!{' '}
-          {pins && `${pins.length} members (and counting...)`}
-        </Heading>
-        <CardList
-          columnsCountBreakPoints={{ 300: 1, 600: 2 }}
-          dataCy="mobile"
-          list={pins}
-          filteredList={filteredPins}
+        <MapWithListHeader
+          pins={pins}
+          activePinFilters={activePinFilters}
+          availableFilters={availableFilters}
+          onFilterChange={onFilterChange}
+          filteredPins={filteredPins}
+          viewport="mobile"
         />
       </Box>
 

@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker'
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import {
+  generateAlphaNumeric,
   generateNewUserDetails,
   setIsPreciousPlastic,
 } from '../../utils/TestUtils'
@@ -256,16 +257,16 @@ describe('[Research]', () => {
   })
 
   describe('[Displays draft updates for Author]', () => {
-    const expected = {
-      description: 'After creating, the research will be deleted.',
-      title: 'Create research article test 2',
-      slug: 'create-research-article-test-2',
-    }
-
     it('[By Authenticated]', () => {
-      const updateTitle = 'Create a research update 2'
+      const id = generateAlphaNumeric(5)
+      const updateTitle = `Create a research update ${id}`
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
+      const expected = {
+        description: 'After creating, the research will be deleted.',
+        title: `Create research article test ${id}`,
+        slug: `create-research-article-test-${id.toLowerCase()}`,
+      }
 
       cy.login(researcherEmail, researcherPassword)
 
@@ -325,7 +326,7 @@ describe('[Research]', () => {
       cy.visit(`/research/${expected.slug}`)
       cy.get('[data-cy=edit-update]').click()
       cy.contains('Edit your update')
-      cy.get('[data-cy=videoUrl]').clear().type(updateVideoUrl).blur()
+      cy.wait(1000)
       cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 }).click()
       cy.contains(updateTitle)

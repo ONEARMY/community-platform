@@ -218,7 +218,14 @@ export const MapWithList = (props: IProps) => {
           )}
         </Flex>
         <Clusters pins={pins} onPinClick={onPinClicked} prefix="new" />
-        {activePin && <Popup activePin={activePin} mapRef={mapRef} />}
+        {activePin && (
+          <Popup
+            activePin={activePin}
+            mapRef={mapRef}
+            onClose={onBlur}
+            newMap
+          />
+        )}
       </Map>
     </Flex>
   )

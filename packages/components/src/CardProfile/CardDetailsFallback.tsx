@@ -4,10 +4,10 @@ import { Category } from '../Category/Category'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { Username } from '../Username/Username'
 
-import type { ListItem } from './types'
+import type { MapListItem } from '../types/common'
 
 interface IProps {
-  item: ListItem
+  item: MapListItem
 }
 
 export const CardDetailsFallback = ({ item }: IProps) => {

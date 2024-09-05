@@ -1,16 +1,16 @@
 import { faker } from '@faker-js/faker'
 
-import { CardListItem } from './CardListItem'
+import { PinProfile } from './PinProfile'
 
 import type { Meta, StoryFn } from '@storybook/react'
 import type { ProfileTypeName } from 'oa-shared'
 
 export default {
-  title: 'Map/CardListItem',
-  component: CardListItem,
-} as Meta<typeof CardListItem>
+  title: 'Map/PinProfile',
+  component: PinProfile,
+} as Meta<typeof PinProfile>
 
-export const DefaultMember: StoryFn<typeof CardListItem> = () => {
+export const DefaultMember: StoryFn<typeof PinProfile> = () => {
   const item = {
     _id: 'not-selected-onload',
     type: 'member' as ProfileTypeName,
@@ -26,13 +26,13 @@ export const DefaultMember: StoryFn<typeof CardListItem> = () => {
   }
 
   return (
-    <div style={{ width: '500px' }}>
-      <CardListItem item={item} />
+    <div style={{ width: '230px', position: 'fixed' }}>
+      <PinProfile item={item} onClose={() => console.log()} />
     </div>
   )
 }
 
-export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
+export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
   const item = {
     _id: 'not-selected-onload',
     type: 'workspace' as ProfileTypeName,
@@ -47,28 +47,15 @@ export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
       },
       countryCode: 'uk',
       displayName: 'user',
-      isContactableByPublic: false,
+      isContactableByPublic: true,
       profileType: 'workspace' as ProfileTypeName,
       subType: 'Sheetpress',
     },
   }
 
   return (
-    <div style={{ width: '500px' }}>
-      <CardListItem item={item} />
-    </div>
-  )
-}
-
-export const DefaultFallback: StoryFn<typeof CardListItem> = () => {
-  const item = {
-    _id: 'not-selected-onload',
-    type: 'member' as ProfileTypeName,
-  }
-
-  return (
-    <div style={{ width: '500px' }}>
-      <CardListItem item={item} />
+    <div style={{ width: '230px', position: 'fixed' }}>
+      <PinProfile item={item} onClose={() => console.log()} />
     </div>
   )
 }

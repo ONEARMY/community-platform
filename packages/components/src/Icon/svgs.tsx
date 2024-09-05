@@ -2,6 +2,8 @@ import accountSVG from '../../assets/icons/account.svg'
 import arrowCurvedBottomRightSVG from '../../assets/icons/arrow-curved-bottom-right.svg'
 import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
 import chevronRightSVG from '../../assets/icons/chevron-right.svg'
+import contactSVG from '../../assets/icons/contact.svg'
+import closeSVG from '../../assets/icons/cross-close.svg'
 import deleteSVG from '../../assets/icons/delete.svg'
 import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
@@ -55,7 +57,9 @@ export const iconMap = {
   bazar: <ImageIcon src={bazarSVG} />,
   chevronLeft: <ImageIcon src={chevronLeftSVG} />,
   chevronRight: <ImageIcon src={chevronRightSVG} />,
+  close: <ImageIcon src={closeSVG} />,
   comment: <ImageIcon src={commentSVG} />,
+  contact: <ImageIcon src={contactSVG} />,
   delete: <ImageIcon src={deleteSVG} />,
   discord: <ImageIcon src={discordSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,

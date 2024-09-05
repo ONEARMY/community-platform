@@ -4,7 +4,7 @@ import type { Meta, StoryFn } from '@storybook/react'
 import type { ProfileTypeName } from 'oa-shared'
 
 export default {
-  title: 'Layout/CardList',
+  title: 'Map/CardList',
   component: CardList,
 } as Meta<typeof CardList>
 

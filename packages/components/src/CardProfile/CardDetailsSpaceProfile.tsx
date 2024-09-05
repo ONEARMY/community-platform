@@ -1,4 +1,4 @@
-import { Flex, Image, Text } from 'theme-ui'
+import { Box, Flex, Image, Text } from 'theme-ui'
 
 import { Category } from '../Category/Category'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
@@ -20,7 +20,7 @@ export const CardDetailsSpaceProfile = ({ creator }: IProps) => {
   return (
     <Flex sx={{ flexDirection: 'column', width: '100%' }}>
       {coverImage && (
-        <Flex sx={{ flexDirection: 'column' }}>
+        <>
           <Flex sx={{ aspectRatio: 16 / 6, overflow: 'hidden' }}>
             <Image
               src={coverImage}
@@ -31,25 +31,31 @@ export const CardDetailsSpaceProfile = ({ creator }: IProps) => {
               }}
             />
           </Flex>
-          <MemberBadge
-            profileType={profileType}
-            size={40}
+          <Box
             sx={{
-              alignSelf: 'flex-end',
-              transform: 'translateY(-20px)',
-              marginX: 2,
+              position: 'relative',
+              height: 0,
+              top: '-20px',
+              width: '100%',
             }}
-          />
-        </Flex>
+          >
+            <MemberBadge
+              profileType={profileType}
+              size={40}
+              sx={{
+                float: 'right',
+                marginX: 2,
+              }}
+            />
+          </Box>
+        </>
       )}
       <Flex
         sx={{
           alignItems: 'flex-start',
           flexDirection: 'column',
           gap: 1,
-          transform: coverImage ? 'translateY(-20px)' : '',
-          paddingX: 2,
-          paddingY: coverImage ? 0 : 2,
+          padding: 2,
         }}
       >
         <Flex sx={{ gap: 2 }}>
@@ -67,7 +73,9 @@ export const CardDetailsSpaceProfile = ({ creator }: IProps) => {
         </Flex>
         {subType && (
           <Category
-            category={{ label: 'Wants to get started' }}
+            category={{
+              label: subType.charAt(0).toUpperCase() + subType.slice(1),
+            }}
             sx={{
               border: '1px solid #0087B6',
               backgroundColor: '#ECFAFF',

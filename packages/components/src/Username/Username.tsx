@@ -24,6 +24,7 @@ export const Username = ({ user, sx, isLink = true }: IProps) => {
 
   const UserNameBody = (
     <Flex
+      data-cy="Username"
       sx={{
         fontFamily: 'body',
         alignItems: 'center',
@@ -80,7 +81,6 @@ export const Username = ({ user, sx, isLink = true }: IProps) => {
 
   return (
     <InternalLink
-      data-cy="Username"
       to={`/u/${userName}`}
       sx={{
         border: '1px solid transparent',

@@ -1,22 +1,14 @@
-import { Flex } from 'theme-ui'
-
 import { CardButton } from '../CardButton/CardButton'
+import { CardProfile } from '../CardProfile/CardProfile'
 import { InternalLink } from '../InternalLink/InternalLink'
-import { CardDetailsFallback } from './CardDetailsFallback'
-import { CardDetailsMemberProfile } from './CardDetailsMemberProfile'
-import { CardDetailsSpaceProfile } from './CardDetailsSpaceProfile'
 
-import type { ListItem } from './types'
+import type { MapListItem } from '../types/common'
 
 export interface IProps {
-  item: ListItem
+  item: MapListItem
 }
 
 export const CardListItem = ({ item }: IProps) => {
-  const { creator } = item
-
-  const isMember = creator?.profileType === 'member'
-
   return (
     <InternalLink
       data-cy="CardListItem"
@@ -28,15 +20,7 @@ export const CardListItem = ({ item }: IProps) => {
       }}
     >
       <CardButton>
-        <Flex sx={{ gap: 2, alignItems: 'stretch', alignContent: 'stretch' }}>
-          {isMember && <CardDetailsMemberProfile creator={creator} />}
-
-          {!isMember && creator && (
-            <CardDetailsSpaceProfile creator={creator} />
-          )}
-
-          {!creator && <CardDetailsFallback item={item} />}
-        </Flex>
+        <CardProfile item={item} />
       </CardButton>
     </InternalLink>
   )

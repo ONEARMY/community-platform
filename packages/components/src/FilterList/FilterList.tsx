@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Flex, Text } from 'theme-ui'
 
-import { Button } from '../Button/Button'
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import { CardButton } from '../CardButton/CardButton'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 
@@ -130,25 +130,22 @@ export const FilterList = (props: IProps) => {
             zIndex: 2,
             paddingX: 2,
             position: 'relative',
-            top: '-65px',
+            top: '-62px',
             height: 0,
           }}
         >
-          <Button
+          <ButtonIcon
             onClick={() => handleHorizantalScroll(-10)}
             icon="chevron-left"
             disabled={disableLeftArrow}
-            sx={{ borderRadius: 99 }}
-            showIconOnly
-            small
+            sx={{ height: '28px', borderColor: 'grey' }}
           />
-          <Button
+          <ButtonIcon
+            data-cy="FilterList-ButtonRight"
             onClick={() => handleHorizantalScroll(10)}
             icon="chevron-right"
             disabled={disableRightArrow}
-            sx={{ borderRadius: 99, zIndex: 2 }}
-            showIconOnly
-            small
+            sx={{ height: '28px', borderColor: 'grey' }}
           />
         </Flex>
       )}

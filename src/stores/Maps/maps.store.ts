@@ -1,6 +1,7 @@
 import { action, makeObservable, observable } from 'mobx'
 import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { logger } from 'src/logger'
+import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 import {
   hasAdminRights,
   isAllowedToPin,
@@ -20,7 +21,7 @@ import type {
   IMapPin,
   IMapPinWithDetail,
 } from 'src/models/maps.models'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
@@ -166,9 +167,23 @@ export class MapsStore extends ModuleStore {
     )
   }
 
-  public async setUserPin(user: IUserPP) {
-    const type = user.profileType || ProfileTypeList.MEMBER
-    const existingPin = await this.getPin(user.userName, 'server')
+  public async setUserPin(user: IUserPPDB) {
+    const {
+      _id,
+      _lastActive,
+      about,
+      badges,
+      coverImages,
+      displayName,
+      location,
+      profileType,
+      isContactableByPublic,
+      verified,
+      workspaceType,
+      userImage,
+    } = user
+    const type = profileType || ProfileTypeList.MEMBER
+    const existingPin = await this.getPin(_id, 'server')
     const existingModeration = existingPin?.moderation
     const existingPinType = existingPin?.type
 
@@ -190,18 +205,42 @@ export class MapsStore extends ModuleStore {
       moderation = IModerationStatus.AWAITING_MODERATION
     }
 
+    const coverImage =
+      coverImages && coverImages[0]?.downloadUrl
+        ? { coverImage: coverImages[0].downloadUrl }
+        : {}
+
     const pin: IMapPin = {
-      _id: user.userName,
+      _id,
       _deleted: !user.location?.latlng,
-      location: user.location!.latlng,
+      location: location!.latlng,
       type,
+      ...(!isMember && workspaceType ? { subType: workspaceType } : {}),
       moderation,
-      verified: user.verified,
+      verified,
+      creator: {
+        _id,
+        _lastActive: _lastActive || '',
+        ...(about ? { about } : {}),
+        ...(badges
+          ? {
+              badges: {
+                verified: badges.verified || false,
+                supporter: badges.supporter || false,
+              },
+            }
+          : {}),
+        countryCode: location?.countryCode || '',
+        ...coverImage,
+        displayName,
+        isContactableByPublic:
+          isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
+        profileType,
+        ...(workspaceType ? { subType: workspaceType } : {}),
+        ...(userImage ? { userImage: userImage.downloadUrl } : {}),
+      },
     }
 
-    if (!isMember && user.workspaceType) {
-      pin.subType = user.workspaceType
-    }
     logger.debug('setting user pin', pin)
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).set(pin)
   }

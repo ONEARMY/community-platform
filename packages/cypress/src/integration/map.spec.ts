@@ -56,17 +56,24 @@ describe('[Map]', () => {
 
     cy.step('New map pins can be clicked on')
     cy.get(`[data-cy=pin-${userId}]`).click()
-    cy.get('[data-cy=MapMemberCard]').within(() => {
+    cy.get('[data-cy=PinProfile]').within(() => {
       cy.get('[data-cy=Username]').contains(userId)
+      cy.contains('Wants to get started')
     })
     cy.url().should('include', `#${userId}`)
 
-    cy.step('New map pins can be hidden')
-    cy.get('.markercluster-map').click(0, 0)
-    cy.get('[data-cy=MapMemberCard]').should('not.exist')
+    cy.step('New map pins can be hidden with the cross button')
+    cy.get('[data-cy=PinProfileCloseButton]').click()
+    cy.get('[data-cy=PinProfile]').should('not.exist')
     cy.url().should('not.include', `#${userId}`)
 
-    cy.step('Mobile list view can be shown/hidden')
+    cy.step('New map pins can be hidden by clicking the map')
+    cy.get(`[data-cy=pin-${userId}]`).click()
+    cy.get('[data-cy=PinProfile]').should('be.visible')
+    cy.get('.markercluster-map').click(0, 0)
+    cy.get('[data-cy=PinProfile]').should('not.exist')
+
+    cy.step('Mobile list view can be shown')
     cy.viewport('samsung-note9')
     cy.get('[data-cy="CardList-desktop"]').should('not.be.visible')
     cy.get('[data-cy="CardList-mobile"]').should('not.be.visible')
@@ -81,7 +88,10 @@ describe('[Map]', () => {
         .should('have.attr', 'href')
         .and('include', `/u/${userId}`)
     })
+    cy.get('[data-cy=FilterList-ButtonRight]').last().click().click().click()
+    cy.get('[data-cy=MapListFilter]').last().click()
 
+    cy.step('Mobile list view can be hidden')
     cy.get('[data-cy="ShowMapButton"]').click()
     cy.get('[data-cy="CardList-mobile"]').should('not.be.visible')
   })

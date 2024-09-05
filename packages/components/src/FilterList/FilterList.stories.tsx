@@ -6,7 +6,7 @@ import type { Meta, StoryFn } from '@storybook/react'
 import type { ProfileTypeName } from 'oa-shared'
 
 export default {
-  title: 'Components/FilterList',
+  title: 'Map/FilterList',
   component: FilterList,
 } as Meta<typeof FilterList>
 

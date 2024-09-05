@@ -5,13 +5,13 @@ import { CardListItem } from '../CardListItem/CardListItem'
 import { Icon } from '../Icon/Icon'
 import { Loader } from '../Loader/Loader'
 
-import type { ListItem } from '../CardListItem/types'
+import type { MapListItem } from '../types/common'
 
 export interface IProps {
   columnsCountBreakPoints?: { [key: number]: number }
   dataCy: string
-  filteredList: ListItem[] | null
-  list: ListItem[]
+  filteredList: MapListItem[] | null
+  list: MapListItem[]
 }
 
 export const EMPTY_LIST = 'Oh nos! Nothing to show!'

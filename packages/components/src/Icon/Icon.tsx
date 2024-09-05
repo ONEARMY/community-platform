@@ -16,7 +16,6 @@ import { MdAdd } from '@react-icons/all-files/md/MdAdd'
 import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
 import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
 import { MdCheck } from '@react-icons/all-files/md/MdCheck'
-import { MdClose } from '@react-icons/all-files/md/MdClose'
 import { MdEdit } from '@react-icons/all-files/md/MdEdit'
 import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
 import { MdImage } from '@react-icons/all-files/md/MdImage'
@@ -66,12 +65,13 @@ export const glyphs: IGlyphs = {
   'arrow-full-up': iconMap.arrowFullUp,
   bazar: iconMap.bazar,
   comment: iconMap.comment,
+  contact: iconMap.contact,
   check: <MdCheck />,
   'chevron-down': <FaChevronDown />,
   'chevron-left': iconMap.chevronLeft,
   'chevron-right': iconMap.chevronRight,
   'chevron-up': <FaChevronUp />,
-  close: <MdClose />,
+  close: iconMap.close,
   delete: iconMap.delete,
   difficulty: <FaSignal />,
   discord: iconMap.discord,

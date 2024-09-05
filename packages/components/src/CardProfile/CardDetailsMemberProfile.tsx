@@ -12,6 +12,7 @@ interface IProps {
 
 export const CardDetailsMemberProfile = ({ creator }: IProps) => {
   const { _id, badges, countryCode, profileType, userImage } = creator
+
   return (
     <Flex
       sx={{

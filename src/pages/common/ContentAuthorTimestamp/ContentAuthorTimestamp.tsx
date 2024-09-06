@@ -1,4 +1,4 @@
-import { formatDate } from 'src/utils/date'
+import { DisplayDate } from 'oa-components'
 import { Box, Text } from 'theme-ui'
 
 import { UserNameTag } from '../UserNameTag/UserNameTag'
@@ -18,13 +18,6 @@ export const ContentAuthorTimestamp = ({
   modified,
   action,
 }: ContentAuthorTimestampProps) => {
-  const contentModifiedDate = formatDate(new Date(modified))
-  const creationDate = formatDate(new Date(created))
-  const modifiedDateText =
-    contentModifiedDate !== creationDate
-      ? `Last update on ${contentModifiedDate}`
-      : ''
-
   return (
     <Box>
       <UserNameTag
@@ -34,7 +27,7 @@ export const ContentAuthorTimestamp = ({
         action={action}
       />
       <Text
-        hidden={!modifiedDateText}
+        hidden={created === modified}
         variant="auxiliary"
         sx={{
           color: 'lightgrey',
@@ -45,7 +38,7 @@ export const ContentAuthorTimestamp = ({
         mt={1}
         mb={2}
       >
-        {modifiedDateText}
+        Last update <DisplayDate date={modified} />
       </Text>
     </Box>
   )

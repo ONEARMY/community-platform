@@ -1,10 +1,10 @@
 import { createRef, useEffect, useState } from 'react'
-import { format, formatDistanceToNow } from 'date-fns'
 import { Avatar, Box, Flex, Text } from 'theme-ui'
 
 import defaultProfileImage from '../../assets/images/default_member.svg'
 import { Button } from '../Button/Button'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
+import { DisplayDate } from '../DisplayDate/DisplayDate'
 import { EditComment } from '../EditComment/EditComment'
 import { LinkifyText } from '../LinkifyText/LinkifyText'
 import { Modal } from '../Modal/Modal'
@@ -21,20 +21,6 @@ export interface IProps {
   handleEdit: (commentId: string, newCommentText: string) => void
   handleEditRequest?: (commentId: string) => Promise<void>
   isReply: boolean
-}
-
-const formatDate = (d: string | undefined): string => {
-  if (!d) {
-    return ''
-  }
-  return format(new Date(d), 'dd MMMM yyyy h:mm a')
-}
-
-const relativeDateFormat = (d: string | undefined): string => {
-  if (!d) {
-    return ''
-  }
-  return formatDistanceToNow(new Date(d), { addSuffix: true })
 }
 
 export const CommentItem = (props: IProps) => {
@@ -66,8 +52,6 @@ export const CommentItem = (props: IProps) => {
     isSupporter: !!isUserSupporter,
   }
 
-  const date = formatDate(_edited || _created)
-  const relativeDate = relativeDateFormat(_edited || _created)
   const maxHeight = isShowMore ? 'max-content' : '128px'
   const item = isReply ? 'ReplyItem' : 'CommentItem'
 
@@ -132,11 +116,9 @@ export const CommentItem = (props: IProps) => {
                   }}
                 >
                   <Username user={user} />
-                  {_edited && (
-                    <Text sx={{ fontSize: 0, color: 'grey' }}>(Edited)</Text>
-                  )}
-                  <Text sx={{ fontSize: 1 }} title={date}>
-                    {relativeDate}
+                  <Text sx={{ fontSize: 1, color: 'darkGrey' }}>
+                    {_edited && 'Edited '}
+                    <DisplayDate date={_edited || _created} />
                   </Text>
                 </Flex>
 

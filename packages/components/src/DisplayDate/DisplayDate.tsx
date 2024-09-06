@@ -3,7 +3,7 @@ import { Text } from 'theme-ui'
 
 type DateType = string | number | Date
 
-export interface DisplayDateProps {
+export interface IProps {
   date?: DateType
 }
 
@@ -22,8 +22,7 @@ const relativeDateFormat = (d: DateType | undefined): string => {
   return formatDistanceToNow(new Date(d), { addSuffix: true })
 }
 
-export const DisplayDate = ({ date }: DisplayDateProps) => {
-  console.log(date)
+export const DisplayDate = ({ date }: IProps) => {
   const formattedDate = formatDateTime(date)
   const relativeDate = relativeDateFormat(date)
 

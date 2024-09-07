@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
-import { Button } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { filterMapPinsByType } from 'src/stores/Maps/filter'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
-import { Box, Flex } from 'theme-ui'
+import { Box } from 'theme-ui'
 
 import { logger } from '../../logger'
 import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
@@ -28,6 +27,7 @@ const MapsPage = observer(() => {
   const [activePinFilters, setActivePinFilters] = useState<string[]>([])
   const [center, setCenter] = useState<ILatLng>(INITIAL_CENTER)
   const [mapPins, setMapPins] = useState<IMapPin[]>([])
+  const [notification, setNotification] = useState<string>('')
   const [selectedPin, setSelectedPin] = useState<IMapPin | null>(null)
   const [showNewMap, setShowNewMap] = useState<boolean>(false)
   const [zoom, setZoom] = useState<number>(INITIAL_ZOOM)
@@ -46,8 +46,10 @@ const MapsPage = observer(() => {
   }
 
   const fetchMapPins = async () => {
+    setNotification('Loading...')
     const pins = await mapPinService.getMapPins()
-    setMapPins([...mapPins, ...pins])
+    setMapPins(pins)
+    setNotification('')
   }
 
   useEffect(() => {
@@ -67,9 +69,7 @@ const MapsPage = observer(() => {
   }, [user])
 
   useEffect(() => {
-    if (mapPins.length === 0) {
-      fetchMapPins()
-    }
+    fetchMapPins()
 
     const showPin = async () => {
       await showPinFromURL()
@@ -153,7 +153,7 @@ const MapsPage = observer(() => {
 
   return (
     // the calculation for the height is kind of hacky for now, will set properly on final mockups
-    <Box id="mapPage" sx={{ height: 'calc(100vh - 80px)', width: '100%' }}>
+    <Box id="mapPage" sx={{ height: 'calc(100vh - 120px)', width: '100%' }}>
       <NewMapBanner showNewMap={showNewMap} setShowNewMap={setShowNewMap} />
       {!showNewMap && (
         <>
@@ -179,40 +179,19 @@ const MapsPage = observer(() => {
         </>
       )}
       {showNewMap && (
-        <>
-          <Flex
-            sx={{
-              display: ['none', 'none', 'none', 'inherit'],
-              flexDirection: 'row',
-              height: '100%',
-            }}
-          >
-            <MapWithList
-              activePin={selectedPin}
-              mapRef={newMapRef}
-              pins={visibleMapPins}
-              onPinClicked={(pin) => {
-                getPinByUserId(pin._id)
-              }}
-              onBlur={onBlur}
-              center={center}
-              zoom={zoom}
-              setZoom={setZoom}
-            />
-          </Flex>
-          <Box
-            sx={{
-              display: ['inherit', 'inherit', 'inherit', 'none'],
-              padding: 2,
-              justifyContent: 'center',
-            }}
-          >
-            Not yet setup of this size screen yet, but we will be very soon!{' '}
-            <Button onClick={() => setShowNewMap(!showNewMap)}>
-              Back to the old map
-            </Button>
-          </Box>
-        </>
+        <MapWithList
+          activePin={selectedPin}
+          center={center}
+          mapRef={newMapRef}
+          notification={notification}
+          onPinClicked={(pin) => {
+            getPinByUserId(pin._id)
+          }}
+          onBlur={onBlur}
+          pins={visibleMapPins}
+          setZoom={setZoom}
+          zoom={zoom}
+        />
       )}
     </Box>
   )

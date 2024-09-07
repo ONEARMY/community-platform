@@ -3,6 +3,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore'
 import { API_URL } from 'src/config/config'
 import { logger } from 'src/logger'
 import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
+import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { firestore } from 'src/utils/firebase'
 
 import type { IMapPin } from '../../models'
@@ -18,7 +19,7 @@ const getMapPins = async () => {
     const response = await fetch(API_URL + '/map-pins')
     const mapPins = await response.json()
 
-    return mapPins
+    return _transformCreatorImagesToCND(mapPins)
   } catch (error) {
     logger.error('Failed to fetch map pins', { error })
     return []
@@ -55,6 +56,26 @@ const getMapPinSelf = async (userId: string) => {
   }
 
   return userMapPin.data() as IMapPin
+}
+
+const _transformCreatorImagesToCND = (pins: IMapPin[]) => {
+  return pins.map((pin) => {
+    if (!pin.creator) {
+      return pin
+    }
+    return {
+      ...pin,
+      creator: {
+        ...pin.creator,
+        ...(pin.creator.coverImage
+          ? { coverImage: cdnImageUrl(pin.creator.coverImage, { width: 500 }) }
+          : {}),
+        ...(pin.creator.userImage
+          ? { userImage: cdnImageUrl(pin.creator.userImage, { width: 300 }) }
+          : {}),
+      },
+    }
+  })
 }
 
 export const MapPinServiceContext = createContext<IMapPinService | null>(null)

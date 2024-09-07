@@ -1,21 +1,23 @@
-import Masonry from 'react-responsive-masonry'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import { Flex, Text } from 'theme-ui'
 
 import { CardListItem } from '../CardListItem/CardListItem'
 import { Icon } from '../Icon/Icon'
 import { Loader } from '../Loader/Loader'
 
-import type { ListItem } from '../CardListItem/types'
+import type { MapListItem } from '../types/common'
 
 export interface IProps {
-  filteredList: ListItem[] | null
-  list: ListItem[]
+  columnsCountBreakPoints?: { [key: number]: number }
+  dataCy: string
+  filteredList: MapListItem[] | null
+  list: MapListItem[]
 }
 
 export const EMPTY_LIST = 'Oh nos! Nothing to show!'
 
 export const CardList = (props: IProps) => {
-  const { filteredList, list } = props
+  const { columnsCountBreakPoints, dataCy, filteredList, list } = props
 
   const listToShow = filteredList === null ? list : filteredList
   const displayItems = listToShow
@@ -28,16 +30,15 @@ export const CardList = (props: IProps) => {
 
   const isListEmpty = displayItems.length === 0
   const hasListLoaded = list
-  const results = `${displayItems.length} ${
-    displayItems.length == 1 ? 'result' : 'results'
-  }`
+  const results = `${displayItems.length} result${displayItems.length == 1 ? '' : 's'} in view`
 
   return (
     <Flex
-      data-cy="CardList"
+      data-cy={`CardList-${dataCy}`}
       sx={{
         flexDirection: 'column',
         gap: 2,
+        padding: 2,
       }}
     >
       {!hasListLoaded && <Loader />}
@@ -47,6 +48,7 @@ export const CardList = (props: IProps) => {
             sx={{
               justifyContent: 'space-between',
               paddingX: 2,
+              paddingTop: 2,
               fontSize: 2,
             }}
           >
@@ -57,7 +59,17 @@ export const CardList = (props: IProps) => {
             </Flex>
           </Flex>
           {isListEmpty && EMPTY_LIST}
-          {!isListEmpty && <Masonry columnsCount={2}>{displayItems}</Masonry>}
+          {!isListEmpty && (
+            <ResponsiveMasonry
+              columnsCountBreakPoints={
+                columnsCountBreakPoints
+                  ? columnsCountBreakPoints
+                  : { 600: 1, 1100: 2, 1600: 3 }
+              }
+            >
+              <Masonry>{displayItems}</Masonry>
+            </ResponsiveMasonry>
+          )}
         </>
       )}
     </Flex>

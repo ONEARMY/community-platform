@@ -43,7 +43,7 @@ export const PatreonIntegration = ({ user }) => {
     <Flex
       sx={{
         alignItems: ['flex-start', 'flex-start', 'flex-start'],
-        backgroundColor: 'offwhite',
+        backgroundColor: 'offWhite',
         borderRadius: 3,
         flexDirection: 'column',
         justifyContent: 'space-between',

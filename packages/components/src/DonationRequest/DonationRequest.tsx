@@ -33,7 +33,7 @@ export const DonationRequest = (props: IProps) => {
     <>
       <Card
         sx={{
-          overflowY: 'scroll',
+          overflowY: 'auto',
           scrollbarWidth: 'thin',
           borderRadius: '4px 4px 0 0',
         }}

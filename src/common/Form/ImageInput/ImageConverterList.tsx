@@ -16,7 +16,6 @@ export const ImageConverterList = (props: IProps) => {
             key={file.name}
             file={file}
             onImgConverted={(meta) => handleConvertedFileChange(meta, index)}
-            onImgClicked={() => null}
           />
         )
       })}

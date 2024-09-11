@@ -1,6 +1,7 @@
 import { action, makeObservable, observable } from 'mobx'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { logger } from 'src/logger'
+import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
 import {
   hasAdminRights,
   isAllowedToPin,
@@ -12,21 +13,19 @@ import { getUserAvatar } from '../User/user.store'
 import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
+import type { IMapPinDetail, ProfileTypeName } from 'oa-shared'
 import type { IUser } from 'src/models'
 import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type {
-  IBoundingBox,
   IMapGrouping,
   IMapPin,
-  IMapPinDetail,
-  IMapPinType,
   IMapPinWithDetail,
 } from 'src/models/maps.models'
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
-type IFilterToRemove = IMapPinType | undefined
+type IFilterToRemove = ProfileTypeName | undefined
 
 const COLLECTION_NAME: IDBEndpoint = 'mappins'
 export class MapsStore extends ModuleStore {
@@ -43,7 +42,6 @@ export class MapsStore extends ModuleStore {
       mapPins: observable,
       filteredPins: observable,
       processDBMapPins: action,
-      setMapBoundingBox: action,
       retrieveMapPins: action,
       retrievePinFilters: action,
       setActivePinFilters: action,
@@ -89,12 +87,6 @@ export class MapsStore extends ModuleStore {
       .filter(({ type }) => type !== filterToRemove)
       .map(({ subType, type }) => (subType ? subType : type))
     this.setActivePinFilters(filters)
-  }
-
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  /** TODO CC 2021-05-28 review if still useful to keep */
-  public setMapBoundingBox(boundingBox: IBoundingBox) {
-    // this.recalculatePinCounts(boundingBox)
   }
 
   public async retrieveMapPins(filterToRemove: IFilterToRemove = undefined) {
@@ -175,40 +167,80 @@ export class MapsStore extends ModuleStore {
     )
   }
 
-  public async setUserPin(user: IUserPP) {
-    const type = user.profileType || 'member'
-    const existingPin = await this.getPin(user.userName, 'server')
+  public async setUserPin(user: IUserPPDB) {
+    const {
+      _id,
+      _lastActive,
+      about,
+      badges,
+      coverImages,
+      displayName,
+      location,
+      profileType,
+      isContactableByPublic,
+      verified,
+      workspaceType,
+      userImage,
+    } = user
+    const type = profileType || ProfileTypeList.MEMBER
+    const existingPin = await this.getPin(_id, 'server')
     const existingModeration = existingPin?.moderation
     const existingPinType = existingPin?.type
 
     let moderation: IModerationStatus = existingModeration
 
+    const isMember = type === ProfileTypeList.MEMBER
+
     // Member pins do not require moderation.
-    if (type === 'member') {
+    if (isMember) {
       moderation = IModerationStatus.ACCEPTED
     }
 
     // Require re-moderation for non-member pins if pin type changes or if pin was not previously accepted.
     if (
-      type !== 'member' &&
+      !isMember &&
       (existingModeration !== IModerationStatus.ACCEPTED ||
         existingPinType !== type)
     ) {
       moderation = IModerationStatus.AWAITING_MODERATION
     }
 
+    const coverImage =
+      coverImages && coverImages[0]?.downloadUrl
+        ? { coverImage: coverImages[0].downloadUrl }
+        : {}
+
     const pin: IMapPin = {
-      _id: user.userName,
+      _id,
       _deleted: !user.location?.latlng,
-      location: user.location!.latlng,
+      location: location!.latlng,
       type,
+      ...(!isMember && workspaceType ? { subType: workspaceType } : {}),
       moderation,
-      verified: user.verified,
+      verified,
+      creator: {
+        _id,
+        _lastActive: _lastActive || '',
+        ...(about ? { about } : {}),
+        ...(badges
+          ? {
+              badges: {
+                verified: badges.verified || false,
+                supporter: badges.supporter || false,
+              },
+            }
+          : {}),
+        countryCode: location?.countryCode || '',
+        ...coverImage,
+        displayName,
+        isContactableByPublic:
+          isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
+        profileType,
+        ...(workspaceType ? { subType: workspaceType } : {}),
+        ...(userImage ? { userImage: userImage.downloadUrl } : {}),
+      },
     }
 
-    if (type !== 'member' && user.workspaceType) {
-      pin.subType = user.workspaceType
-    }
     logger.debug('setting user pin', pin)
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).set(pin)
   }

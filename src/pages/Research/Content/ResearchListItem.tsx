@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import {
   Category,
+  DisplayDate,
   Icon,
   IconCountWithTooltip,
   InternalLink,
@@ -14,7 +15,6 @@ import {
 } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
-import { formatDate } from 'src/utils/date'
 import { Box, Card, Flex, Grid, Heading, Image, Text } from 'theme-ui'
 
 import defaultResearchThumbnail from '../../../assets/images/default-research-thumbnail.jpg'
@@ -183,7 +183,7 @@ const ResearchListItem = ({ item }: IProps) => {
                   </Text>
                 )}
                 {/* Hide this on mobile, show on tablet & above. */}
-                {modifiedDate && (
+                {modifiedDate !== '' && (
                   <Text
                     ml={4}
                     sx={{
@@ -302,19 +302,21 @@ const getItemThumbnail = (researchItem: IResearch.Item): string => {
   )
 }
 
-const getItemDate = (item: IResearch.Item, variant: string): string => {
+const getItemDate = (item: IResearch.Item, variant: string) => {
   try {
-    const contentModifiedDate = formatDate(
-      new Date(item._contentModifiedTimestamp),
+    const contentModifiedDate = (
+      <DisplayDate date={item._contentModifiedTimestamp} />
     )
-    const creationDate = formatDate(new Date(item._created))
+    const creationDate = <DisplayDate date={item._created} />
 
-    if (contentModifiedDate !== creationDate) {
-      return variant === 'long'
-        ? `Updated ${contentModifiedDate}`
-        : contentModifiedDate
+    if (item._contentModifiedTimestamp !== item._created) {
+      return variant === 'long' ? (
+        <>Updated {contentModifiedDate}</>
+      ) : (
+        contentModifiedDate
+      )
     } else {
-      return variant === 'long' ? `Created ${creationDate}` : creationDate
+      return variant === 'long' ? <>Created {creationDate}</> : creationDate
     }
   } catch (err) {
     return ''

@@ -258,7 +258,9 @@ jobs:
       - setup_repo
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
-          command: yarn run test:unit && yarn run test:components
+          command: yarn run test:unit
+      - run:
+          command: yarn run test:components
       - store_artifacts:
           path: coverage
       - store_artifacts:

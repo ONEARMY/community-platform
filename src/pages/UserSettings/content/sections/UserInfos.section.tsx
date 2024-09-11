@@ -2,9 +2,9 @@ import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import { countries } from 'countries-list'
 import { Button, FieldInput, FieldTextarea, InternalLink } from 'oa-components'
+import { ProfileTypeList } from 'oa-shared'
 import { SelectField } from 'src/common/Form/Select.field'
 import { isModuleSupported, MODULE } from 'src/modules'
-import { ProfileType } from 'src/modules/profile/types'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
 import { required } from 'src/utils/validators'
 import { Flex, Heading, Text } from 'theme-ui'
@@ -24,7 +24,7 @@ interface IProps {
 
 export const UserInfosSection = ({ formValues }: IProps) => {
   const { profileType, links, location } = formValues
-  const isMemberProfile = profileType === ProfileType.MEMBER
+  const isMemberProfile = profileType === ProfileTypeList.MEMBER
   const { about, country, displayName, userName } = fields
 
   const noMapPin = !location?.latlng

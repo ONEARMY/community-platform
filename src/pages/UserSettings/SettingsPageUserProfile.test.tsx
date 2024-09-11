@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
 import { act, waitFor } from '@testing-library/react'
+import { ProfileTypeList } from 'oa-shared'
 import { FactoryUser } from 'src/test/factories/User'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -27,7 +28,7 @@ describe('UserSettings', () => {
   })
 
   it('renders fields for member', async () => {
-    mockUser = FactoryUser({ profileType: 'member' })
+    mockUser = FactoryUser({ profileType: ProfileTypeList.MEMBER })
     // Act
     let wrapper
     act(() => {
@@ -47,7 +48,7 @@ describe('UserSettings', () => {
   })
 
   it('renders fields for collection point', async () => {
-    mockUser = FactoryUser({ profileType: 'collection-point' })
+    mockUser = FactoryUser({ profileType: ProfileTypeList.COLLECTION_POINT })
     // Act
     let wrapper
     act(() => {
@@ -66,7 +67,7 @@ describe('UserSettings', () => {
   })
 
   it('renders fields for community builder', async () => {
-    mockUser = FactoryUser({ profileType: 'community-builder' })
+    mockUser = FactoryUser({ profileType: ProfileTypeList.COMMUNITY_BUILDER })
     // Act
     let wrapper
     act(() => {
@@ -85,7 +86,7 @@ describe('UserSettings', () => {
   })
 
   it('renders fields for machine builder', async () => {
-    mockUser = FactoryUser({ profileType: 'machine-builder' })
+    mockUser = FactoryUser({ profileType: ProfileTypeList.MACHINE_BUILDER })
     // Act
     let wrapper
     act(() => {
@@ -104,7 +105,7 @@ describe('UserSettings', () => {
   })
 
   it('renders fields for space', async () => {
-    mockUser = FactoryUser({ profileType: 'space' })
+    mockUser = FactoryUser({ profileType: ProfileTypeList.SPACE })
     // Act
     let wrapper
     act(() => {
@@ -123,7 +124,7 @@ describe('UserSettings', () => {
   })
 
   it('renders fields for workspace', async () => {
-    mockUser = FactoryUser({ profileType: 'workspace' })
+    mockUser = FactoryUser({ profileType: ProfileTypeList.WORKSPACE })
     // Act
     let wrapper
     act(() => {

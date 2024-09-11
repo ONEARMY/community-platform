@@ -13,17 +13,74 @@ import type { User } from '../types/common'
 export interface IProps {
   user: User
   sx?: ThemeUIStyleObject
+  isLink?: boolean
 }
 
 const isValidCountryCode = (str: string) =>
   str && twoCharacterCountryCodes.has(str.toUpperCase())
 
-export const Username = ({ user, sx }: IProps) => {
+export const Username = ({ user, sx, isLink = true }: IProps) => {
   const { countryCode, userName, isSupporter, isVerified } = user
+
+  const UserNameBody = (
+    <Flex
+      data-cy="Username"
+      sx={{
+        fontFamily: 'body',
+        alignItems: 'center',
+      }}
+    >
+      <Flex mr={1}>
+        {countryCode && isValidCountryCode(countryCode) ? (
+          <Flex data-testid="Username: known flag">
+            <FlagIconHowTos
+              countryCode={countryCode}
+              svg={true}
+              title={countryCode}
+            />
+          </Flex>
+        ) : (
+          <Flex
+            data-testid="Username: unknown flag"
+            sx={{
+              backgroundImage: `url("${flagUnknownSVG}")`,
+              backgroundSize: 'cover',
+              borderRadius: '3px',
+              height: '14px',
+              width: '21px !important',
+              justifyContent: 'center',
+              alignItems: 'center',
+              lineHeight: 0,
+              overflow: 'hidden',
+            }}
+          ></Flex>
+        )}
+      </Flex>
+
+      <Text sx={{ color: 'black' }}>{userName}</Text>
+      {isVerified && (
+        <Image
+          src={VerifiedBadgeIcon}
+          sx={{ ml: 1, height: 16, width: 16 }}
+          data-testid="Username: verified badge"
+        />
+      )}
+      {isSupporter && !isVerified && (
+        <Image
+          src={SupporterBadgeIcon}
+          sx={{ ml: 1, height: 16, width: 16 }}
+          data-testid="Username: supporter badge"
+        />
+      )}
+    </Flex>
+  )
+
+  if (!isLink) {
+    return UserNameBody
+  }
 
   return (
     <InternalLink
-      data-cy="Username"
       to={`/u/${userName}`}
       sx={{
         border: '1px solid transparent',
@@ -44,60 +101,12 @@ export const Username = ({ user, sx }: IProps) => {
         '&:hover': {
           borderColor: '#20B7EB',
           background: 'softblue',
-          color: 'bluetag',
+          textcolor: 'bluetag',
         },
         ...(sx || {}),
       }}
     >
-      <Flex
-        sx={{
-          fontFamily: 'body',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Flex mr={1} sx={{ display: 'inline-flex' }}>
-          {countryCode && isValidCountryCode(countryCode) ? (
-            <Flex data-testid="Username: known flag">
-              <FlagIconHowTos
-                countryCode={countryCode}
-                svg={true}
-                title={countryCode}
-              />
-            </Flex>
-          ) : (
-            <Flex
-              data-testid="Username: unknown flag"
-              sx={{
-                backgroundImage: `url("${flagUnknownSVG}")`,
-                backgroundSize: 'cover',
-                borderRadius: '3px',
-                height: '14px',
-                width: '21px !important',
-                justifyContent: 'center',
-                alignItems: 'center',
-                lineHeight: 0,
-                overflow: 'hidden',
-              }}
-            ></Flex>
-          )}
-        </Flex>
-        <Text>{userName}</Text>
-        {isVerified && (
-          <Image
-            src={VerifiedBadgeIcon}
-            sx={{ ml: 1, height: 16, width: 16 }}
-            data-testid="Username: verified badge"
-          />
-        )}
-        {isSupporter && !isVerified && (
-          <Image
-            src={SupporterBadgeIcon}
-            sx={{ ml: 1, height: 16, width: 16 }}
-            data-testid="Username: supporter badge"
-          />
-        )}
-      </Flex>
+      {UserNameBody}
     </InternalLink>
   )
 }

@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import styled from '@emotion/styled'
 import { Button, Modal, OsmGeocoding } from 'oa-components'
 import filterIcon from 'src/assets/icons/icon-filters-mobile.png'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -21,16 +20,6 @@ interface IState {
   showFiltersMobile: boolean
   filtersSelected: Array<string>
 }
-
-const MapFlexBar = styled(Flex)`
-  max-width: 1280px;
-  position: absolute;
-  top: 25px;
-  width: 100%;
-  z-index: 2000;
-  left: 50%;
-  transform: translateX(-50%);
-`
 
 export const Controls = ({
   availableFilters,
@@ -64,25 +53,24 @@ export const Controls = ({
     : { pathname: '/sign-up' }
 
   return (
-    <MapFlexBar
+    <Flex
       data-cy="map-controls"
-      ml={['0', '0', '0', '50px']}
-      py={[0, 1, 0]}
       sx={{
-        flexDirection: ['column', 'column', 'column', 'row'],
+        flexDirection: ['column', 'column', 'row', 'row'],
         alignItems: 'center',
         justifyContent: 'center',
+        width: '100%',
+        position: 'absolute',
+        top: '60px',
+        zIndex: 2000,
+        transform: 'translateX("-50%")',
       }}
-      onClick={() => {
-        // close any active popup on click
-        navigate('/map')
-      }}
+      onClick={() => navigate('/map')}
     >
       <Box
         sx={{
           width: ['95%', '95%', '308px'],
           height: '45px',
-          m: [0, 0, '5px 0 0 20px'],
         }}
       >
         <OsmGeocoding
@@ -149,6 +137,6 @@ export const Controls = ({
           onClose={toggleFilterMobileModal}
         />
       </Modal>
-    </MapFlexBar>
+    </Flex>
   )
 }

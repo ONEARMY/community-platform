@@ -12,7 +12,6 @@ export interface Props {
   comments: string | null
   user: User
   heading: string
-  isEditable: boolean
 }
 
 const wave = keyframes`

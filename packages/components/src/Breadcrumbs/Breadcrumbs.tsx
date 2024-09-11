@@ -1,4 +1,4 @@
-import { Box, Flex } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'
 import { BreadcrumbItem } from './BreadcrumbsItem'
@@ -22,7 +22,7 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
       {steps.map((step, index) => {
         const isLast = index === steps.length - 1
         return (
-          <Box key={index}>
+          <Flex key={index} sx={{ alignItems: 'center' }}>
             <BreadcrumbItem text={step.text} link={step.link} isLast={isLast} />
             {!isLast && (
               <Icon
@@ -32,7 +32,7 @@ export const Breadcrumbs = ({ steps }: BreadcrumbsProps) => {
                 data-testid="breadcrumbsChevron"
               />
             )}
-          </Box>
+          </Flex>
         )
       })}
     </Flex>

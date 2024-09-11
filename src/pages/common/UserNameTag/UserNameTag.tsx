@@ -1,6 +1,5 @@
-import { Username } from 'oa-components'
+import { DisplayDate, Username } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
-import { formatDate } from 'src/utils/date'
 import { Flex, Text } from 'theme-ui'
 
 interface UserNameTagProps {
@@ -18,7 +17,6 @@ export const UserNameTag = ({
 }: UserNameTagProps) => {
   const { aggregationsStore } = useCommonStores().stores
 
-  const dateText = `| ${action} on ${formatDate(new Date(created))}`
   const isVerified = aggregationsStore.isVerified(userName)
 
   return (
@@ -40,7 +38,7 @@ export const UserNameTag = ({
               marginBottom: 2,
             }}
           >
-            {dateText}
+            | {action} <DisplayDate date={created}></DisplayDate>
           </Text>
         </Flex>
       </Flex>

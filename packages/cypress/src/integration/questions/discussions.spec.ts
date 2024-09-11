@@ -36,11 +36,13 @@ describe('[Questions.Discussions]', () => {
     cy.addComment(newComment)
     cy.contains(`${discussion.comments.length + 1} comments`)
     cy.contains(newComment)
+    cy.contains('less than a minute ago')
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', updatedNewComment)
     cy.contains(updatedNewComment)
     cy.contains(newComment).should('not.exist')
+    cy.contains('Edited less than a minute ago')
 
     cy.step('Can add reply')
     cy.addReply(newReply)

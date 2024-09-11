@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Popup as LeafletPopup } from 'react-leaflet'
 import L from 'leaflet'
-import { MapMemberCard } from 'oa-components'
+import { MapMemberCard, PinProfile } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
@@ -12,12 +12,15 @@ import './popup.css'
 
 interface IProps {
   activePin: IMapPin | IMapPinWithDetail
-  map: React.RefObject<Map>
+  mapRef: React.RefObject<Map>
+  newMap?: boolean
+  onClose?: () => void
 }
 
 export const Popup = (props: IProps) => {
   const leafletRef = useRef<LeafletPopup>(null)
   const activePin = props.activePin as IMapPinWithDetail
+  const { mapRef, newMap, onClose } = props
 
   useEffect(() => {
     openPopup()
@@ -26,10 +29,8 @@ export const Popup = (props: IProps) => {
   // HACK - as popup is created dynamically want to be able to trigger
   // open on props change
   const openPopup = () => {
-    if (leafletRef.current) {
-      leafletRef.current.leafletElement.openOn(
-        props.map.current!.leafletElement,
-      )
+    if (leafletRef.current && mapRef.current) {
+      leafletRef.current.leafletElement.openOn(mapRef.current!.leafletElement)
     }
   }
 
@@ -53,26 +54,26 @@ export const Popup = (props: IProps) => {
         minWidth={230}
         maxWidth={230}
       >
-        <MapMemberCard
-          loading={!activePin.detail}
-          imageUrl={activePin.detail?.heroImageUrl}
-          comments={
-            activePin.comments &&
-            activePin.moderation === IModerationStatus.IMPROVEMENTS_NEEDED
-              ? activePin.comments
-              : null
-          }
-          description={activePin.detail?.shortDescription}
-          user={{
-            isVerified: !!activePin.detail?.verifiedBadge,
-            userName: activePin.detail?.name,
-            countryCode: activePin.detail?.country?.toLowerCase(),
-          }}
-          heading={getHeading(activePin)}
-          // TODO: Remove `isEditable` prop from component
-          // this functionality is now available via Retool
-          isEditable={false}
-        />
+        {newMap && onClose && <PinProfile item={activePin} onClose={onClose} />}
+        {!newMap && (
+          <MapMemberCard
+            loading={!activePin.detail}
+            imageUrl={activePin.detail?.heroImageUrl}
+            comments={
+              activePin.comments &&
+              activePin.moderation === IModerationStatus.IMPROVEMENTS_NEEDED
+                ? activePin.comments
+                : null
+            }
+            description={activePin.detail?.shortDescription}
+            user={{
+              isVerified: !!activePin.detail?.verifiedBadge,
+              userName: activePin.detail?.name,
+              countryCode: activePin.detail?.country?.toLowerCase(),
+            }}
+            heading={getHeading(activePin)}
+          />
+        )}
       </LeafletPopup>
     )
   )

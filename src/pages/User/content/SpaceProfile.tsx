@@ -8,7 +8,7 @@ import {
   Username,
   UserStatistics,
 } from 'oa-components'
-import { ExternalLinkLabel } from 'oa-shared'
+import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
 import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
@@ -18,7 +18,6 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { isPreciousPlastic } from 'src/config/config'
-import { ProfileType } from 'src/modules/profile/types'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { getUserCountry } from 'src/utils/getUserCountry'
@@ -273,15 +272,15 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                   >
                     {about && <Paragraph>{about}</Paragraph>}
 
-                    {profileType === ProfileType.COLLECTION_POINT &&
+                    {profileType === ProfileTypeList.COLLECTION_POINT &&
                       user.collectedPlasticTypes &&
                       renderPlasticTypes(user.collectedPlasticTypes)}
 
-                    {profileType === ProfileType.COLLECTION_POINT &&
+                    {profileType === ProfileTypeList.COLLECTION_POINT &&
                       user.openingHours &&
                       renderOpeningHours(user.openingHours)}
 
-                    {profileType === ProfileType.MACHINE_BUILDER &&
+                    {profileType === ProfileTypeList.MACHINE_BUILDER &&
                       user.machineBuilderXp &&
                       renderMachineBuilderXp(user.machineBuilderXp)}
                   </Box>

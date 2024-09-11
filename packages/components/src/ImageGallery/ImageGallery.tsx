@@ -215,7 +215,7 @@ export const ImageGallery = (props: ImageGalleryProps) => {
                   height: 67,
                   objectFit: props.allowPortrait ? 'contain' : 'cover',
                   borderRadius: 1,
-                  border: '1px solid offwhite',
+                  border: '1px solid offWhite',
                 }}
                 crossOrigin=""
               />

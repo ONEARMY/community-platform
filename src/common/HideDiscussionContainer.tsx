@@ -48,6 +48,7 @@ export const HideDiscussionContainer = ({
           textAlign: 'center',
           display: 'block',
           marginBottom: viewComments ? 2 : 0,
+          '&:hover': { bg: '#ececec' },
         }}
         onClick={() => setViewComments((prev) => !prev)}
         backgroundColor={viewComments ? '#c2daf0' : '#e2edf7'}

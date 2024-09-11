@@ -3,7 +3,7 @@ import { MapPin } from './MapPin'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/MapPin',
+  title: 'Map/MapPin',
   component: MapPin,
 } as Meta<typeof MapPin>
 

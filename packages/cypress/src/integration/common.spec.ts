@@ -32,6 +32,36 @@ describe('[Common]', () => {
     cy.url().should('include', '/how-to')
   })
 
+  describe.only('[User feeback button]', () => {
+    it('[Desktop]', () => {
+      cy.visit('/how-to')
+      cy.get('[data-cy=feedback]').should('contain', 'Report a Problem')
+      cy.get('[data-cy=feedback]')
+        .should('have.attr', 'href')
+        .and('contain', '/how-to?sort=Newest')
+
+      cy.visit('/map')
+      cy.get('[data-cy=feedback]')
+        .should('have.attr', 'href')
+        .and('contain', '/map')
+    })
+
+    it('[Mobile]', () => {
+      cy.viewport('iphone-6')
+
+      cy.visit('/how-to')
+      cy.get('[data-cy=feedback]').should('contain', 'Problem?')
+      cy.get('[data-cy=feedback]')
+        .should('have.attr', 'href')
+        .and('contain', '/how-to?sort=Newest')
+
+      cy.visit('/map')
+      cy.get('[data-cy=feedback]')
+        .should('have.attr', 'href')
+        .and('contain', '/map')
+    })
+  })
+
   describe('[User Menu]', () => {
     it('[By Anonymous]', () => {
       cy.step('Login and Join buttons are available')

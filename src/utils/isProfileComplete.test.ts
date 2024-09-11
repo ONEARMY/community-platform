@@ -1,4 +1,4 @@
-import { ProfileType } from 'src/modules/profile/types'
+import { ProfileTypeList } from 'oa-shared'
 import { factoryImage, factoryLink, FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it } from 'vitest'
 
@@ -11,7 +11,7 @@ describe('isProfileComplete', () => {
         about: 'A member',
         displayName: 'Jeffo',
         links: [factoryLink],
-        profileType: ProfileType.MEMBER,
+        profileType: ProfileTypeList.MEMBER,
         userImage: factoryImage,
       }
       const user = FactoryUser(completeProfile)
@@ -24,7 +24,7 @@ describe('isProfileComplete', () => {
         const missingAbout = {
           displayName: 'Jeffo',
           links: [factoryLink],
-          profileType: ProfileType.MEMBER,
+          profileType: ProfileTypeList.MEMBER,
           userImage: factoryImage,
         }
         const user = FactoryUser(missingAbout)
@@ -36,7 +36,7 @@ describe('isProfileComplete', () => {
           about: 'A member',
           displayName: undefined,
           links: [factoryLink],
-          profileType: ProfileType.MEMBER,
+          profileType: ProfileTypeList.MEMBER,
           userImage: factoryImage,
         }
         const user = FactoryUser(missingDisplayName)
@@ -48,7 +48,7 @@ describe('isProfileComplete', () => {
           about: 'A member',
           displayName: 'Jeffo',
           links: [],
-          profileType: ProfileType.MEMBER,
+          profileType: ProfileTypeList.MEMBER,
           userImage: factoryImage,
         }
         const user = FactoryUser(missingLinks)
@@ -60,7 +60,7 @@ describe('isProfileComplete', () => {
           about: 'A member',
           displayName: 'Jeffo',
           links: [factoryLink],
-          profileType: ProfileType.MEMBER,
+          profileType: ProfileTypeList.MEMBER,
           userImage: undefined,
         }
         const user = FactoryUser(missingUserImage)
@@ -76,7 +76,7 @@ describe('isProfileComplete', () => {
         about: 'An important space',
         displayName: 'Jeffo',
         links: [factoryLink],
-        profileType: ProfileType.COMMUNITY_BUILDER,
+        profileType: ProfileTypeList.COMMUNITY_BUILDER,
         coverImages: [factoryImage],
       }
       const user = FactoryUser(completeProfile)
@@ -89,7 +89,7 @@ describe('isProfileComplete', () => {
         const missingAbout = {
           displayName: 'Jeffo',
           links: [factoryLink],
-          profileType: ProfileType.COLLECTION_POINT,
+          profileType: ProfileTypeList.COLLECTION_POINT,
           coverImages: [factoryImage],
         }
         const user = FactoryUser(missingAbout)
@@ -101,7 +101,7 @@ describe('isProfileComplete', () => {
           about: 'An important space',
           displayName: undefined,
           links: [factoryLink],
-          profileType: ProfileType.MACHINE_BUILDER,
+          profileType: ProfileTypeList.MACHINE_BUILDER,
           coverImages: [factoryImage],
         }
         const user = FactoryUser(missingDisplayName)
@@ -113,7 +113,7 @@ describe('isProfileComplete', () => {
           about: 'An important space',
           displayName: 'Jeffo',
           links: [],
-          profileType: ProfileType.WORKSPACE,
+          profileType: ProfileTypeList.WORKSPACE,
           coverImages: [factoryImage],
         }
         const user = FactoryUser(missingLinks)
@@ -125,7 +125,7 @@ describe('isProfileComplete', () => {
           about: 'An important space',
           displayName: 'Jeffo',
           links: [factoryLink],
-          profileType: ProfileType.COLLECTION_POINT,
+          profileType: ProfileTypeList.COLLECTION_POINT,
           coverImages: [],
         }
         const user = FactoryUser(missingUserImage)

@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { IModerationStatus } from 'oa-shared'
-import { ProfileType } from 'src/modules/profile/types'
+import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 
 import type { IMapPin } from 'src/models'
 
@@ -9,7 +8,7 @@ export const FactoryMapPin = (
 ): IMapPin => ({
   _id: faker.string.uuid(),
   _deleted: faker.datatype.boolean(),
-  type: faker.helpers.arrayElement(Object.values(ProfileType)),
+  type: faker.helpers.arrayElement(Object.values(ProfileTypeList)),
   subType: faker.helpers.arrayElement([
     'shredder',
     'sheetpress',

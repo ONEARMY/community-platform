@@ -1,14 +1,18 @@
-import { CardList, FilterList } from 'oa-components'
-import { Flex, Heading } from 'theme-ui'
+import { CardList, FilterList, OsmGeocoding } from 'oa-components'
+import { Box, Flex, Heading } from 'theme-ui'
 
+import type { ILatLng } from 'oa-shared'
 import type { IMapPin } from 'src/models'
 
 interface IProps {
   activePinFilters: string[]
   availableFilters: any
   filteredPins: IMapPin[] | null
+  onBlur: () => void
   onFilterChange: (label: string) => void
+  onLocationChange: (latlng: ILatLng) => void
   pins: IMapPin[]
+  setShowMobileList?: (set: boolean) => void
   viewport: 'desktop' | 'mobile'
 }
 
@@ -17,8 +21,11 @@ export const MapWithListHeader = (props: IProps) => {
     activePinFilters,
     availableFilters,
     filteredPins,
+    onBlur,
     onFilterChange,
+    onLocationChange,
     pins,
+    setShowMobileList,
     viewport,
   } = props
   const isMobile = viewport === 'mobile'
@@ -44,6 +51,21 @@ export const MapWithListHeader = (props: IProps) => {
           Welcome to our world!{' '}
           {pins && `${pins.length} members (and counting...)`}
         </Heading>
+
+        <Box sx={{ paddingX: 4 }}>
+          <OsmGeocoding
+            callback={({ lat, lon }) => {
+              if (lat && lon) {
+                onLocationChange({ lat, lng: lon })
+                onBlur()
+                setShowMobileList && setShowMobileList(false)
+              }
+            }}
+            countrycodes=""
+            acceptLanguage="en"
+            placeholder="Search for a place"
+          />
+        </Box>
 
         <FilterList
           activeFilters={activePinFilters}

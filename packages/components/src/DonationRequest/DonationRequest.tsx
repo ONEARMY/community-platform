@@ -30,64 +30,65 @@ export const DonationRequest = (props: IProps) => {
   }
 
   return (
-    <Card
-      sx={{
-        overflowY: 'scroll',
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
-      }}
-      data-cy="DonationRequest"
-      data-testid="DonationRequest"
-    >
-      <script
-        src="https://donorbox.org/widget.js"
-        data-paypalexpress="false"
-      ></script>
-
-      <Flex
+    <>
+      <Card
         sx={{
-          flexDirection: ['column', 'row'],
+          overflowY: 'auto',
+          scrollbarWidth: 'thin',
+          borderRadius: '4px 4px 0 0',
         }}
+        data-cy="DonationRequest"
+        data-testid="DonationRequest"
       >
-        <Flex sx={{ flexDirection: 'column', flex: 1 }}>
-          {imageURL && (
-            <Flex sx={{ display: ['none', 'inline'] }}>
-              <AspectImage
-                loading="lazy"
-                ratio={16 / 9}
-                src={imageURL}
-                alt={REQUEST_TITLE}
-                data-testid="donationRequestImage"
-              />
-            </Flex>
-          )}
-
-          <Text sx={{ padding: [2, 4, 6] }}>
-            <Text as="h1">{REQUEST_TITLE}</Text>
-            <p>{body}</p>
-            <p>{REQUEST_THANKYOU}</p>
-          </Text>
-        </Flex>
+        <script
+          src="https://donorbox.org/widget.js"
+          data-paypalexpress="false"
+        ></script>
 
         <Flex
           sx={{
-            borderLeft: [0, '2px solid'],
-            minHeight: '650px',
-            width: ['100%', '350px', '400px'],
+            flexDirection: ['column', 'row'],
           }}
         >
-          <iframe
-            {...iframeArgs}
-            loading="lazy"
-            style={{ border: '0', overflow: 'scroll', width: '100%' }}
-          ></iframe>
-        </Flex>
-      </Flex>
+          <Flex sx={{ flexDirection: 'column', flex: 1 }}>
+            {imageURL && (
+              <Flex sx={{ display: ['none', 'inline'] }}>
+                <AspectImage
+                  loading="lazy"
+                  ratio={16 / 9}
+                  src={imageURL}
+                  alt={REQUEST_TITLE}
+                  data-testid="donationRequestImage"
+                />
+              </Flex>
+            )}
 
+            <Text sx={{ padding: [2, 4, 6] }}>
+              <Text as="h1">{REQUEST_TITLE}</Text>
+              <p>{body}</p>
+              <p>{REQUEST_THANKYOU}</p>
+            </Text>
+          </Flex>
+
+          <Flex
+            sx={{
+              borderLeft: [0, '2px solid'],
+              minHeight: '542px',
+              width: ['100%', '350px', '400px'],
+            }}
+          >
+            <iframe
+              {...iframeArgs}
+              loading="lazy"
+              style={{ border: '0', overflow: 'scroll', width: '100%' }}
+            ></iframe>
+          </Flex>
+        </Flex>
+      </Card>
       <Flex
         sx={{
           backgroundColor: 'offWhite',
-          borderTop: '2px solid',
+          borderRadius: '0 0 4px 4px',
           flexDirection: ['column', 'row'],
           padding: 2,
           gap: 2,
@@ -104,6 +105,6 @@ export const DonationRequest = (props: IProps) => {
           <Button>{BUTTON_LABEL}</Button>
         </ExternalLink>
       </Flex>
-    </Card>
+    </>
   )
 }

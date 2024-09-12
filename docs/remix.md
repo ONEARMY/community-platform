@@ -4,6 +4,8 @@ A React Fullstack Framework that provides server-side rendering and an API Layer
 ## Routing
 It follows a [File System Route Convention](https://remix.run/docs/en/main/start/v2#file-system-route-convention) where each route is defined in the *routes* folder.
 
+(Soon will be changed to routes.ts approach -> https://www.youtube.com/live/fjTX8hQTlEc?si=PISGwpmF603tvre_&t=726)
+
 Each route is a normal React component file that should include a [loader](https://remix.run/docs/en/main/route/loader) function, that function runs exclusively on the server (or clientLoader for browser only).
 Parts of the component might be rendered client side, for that we can use React.lazy or wrap them with <ClientOnly> component from `remix-utils`.
 

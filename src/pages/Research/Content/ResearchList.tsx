@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTheme } from '@emotion/react'
 import { Link, useSearchParams } from '@remix-run/react'
 import { observer } from 'mobx-react'

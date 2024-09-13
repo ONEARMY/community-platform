@@ -2,6 +2,8 @@ import accountSVG from '../../assets/icons/account.svg'
 import arrowCurvedBottomRightSVG from '../../assets/icons/arrow-curved-bottom-right.svg'
 import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
 import chevronRightSVG from '../../assets/icons/chevron-right.svg'
+import contactSVG from '../../assets/icons/contact.svg'
+import closeSVG from '../../assets/icons/cross-close.svg'
 import deleteSVG from '../../assets/icons/delete.svg'
 import employeeSVG from '../../assets/icons/employee.svg'
 import eyeSVG from '../../assets/icons/eye.svg'
@@ -29,6 +31,7 @@ import patreonSVG from '../../assets/icons/patreon.svg'
 import plasticSVG from '../../assets/icons/plastic.svg'
 import profileSVG from '../../assets/icons/profile.svg'
 import revenueSVG from '../../assets/icons/revenue.svg'
+import stepSVG from '../../assets/icons/step.svg'
 import supporterSVG from '../../assets/icons/supporter.svg'
 import thunderboltSVG from '../../assets/icons/thunderbolt.svg'
 import thunderboltGreySVG from '../../assets/icons/thunderbolt-grey.svg'
@@ -54,7 +57,9 @@ export const iconMap = {
   bazar: <ImageIcon src={bazarSVG} />,
   chevronLeft: <ImageIcon src={chevronLeftSVG} />,
   chevronRight: <ImageIcon src={chevronRightSVG} />,
+  close: <ImageIcon src={closeSVG} />,
   comment: <ImageIcon src={commentSVG} />,
+  contact: <ImageIcon src={contactSVG} />,
   delete: <ImageIcon src={deleteSVG} />,
   discord: <ImageIcon src={discordSVG} />,
   emailOutline: <ImageIcon src={emailOutlineSVG} />,
@@ -74,6 +79,7 @@ export const iconMap = {
   socialMedia: <ImageIcon src={socialMediaSVG} />,
   star: <ImageIcon src={starSVG} />,
   starActive: <ImageIcon src={starActiveSVG} />,
+  step: <ImageIcon src={stepSVG} />,
   supporter: <ImageIcon src={supporterSVG} />,
   thunderbolt: <ImageIcon src={thunderboltSVG} />,
   thunderboltGrey: <ImageIcon src={thunderboltGreySVG} />,

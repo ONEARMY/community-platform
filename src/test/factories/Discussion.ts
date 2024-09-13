@@ -10,7 +10,7 @@ export const FactoryDiscussion = (
 ): IDiscussion => ({
   _id: faker.string.uuid(),
   comments,
-  contributorIds: [],
+  contributorIds: comments.map((comment) => comment._creatorId),
   sourceId: faker.string.uuid(),
   primaryContentId: faker.string.uuid(),
   sourceType: 'question',

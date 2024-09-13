@@ -5,7 +5,7 @@ import { Map } from './Map.client'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/Map',
+  title: 'Map/Map',
   component: Map,
 } as Meta<typeof Map>
 

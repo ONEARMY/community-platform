@@ -10912,6 +10912,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-responsive-masonry@npm:^2.1.3":
+  version: 2.1.3
+  resolution: "@types/react-responsive-masonry@npm:2.1.3"
+  dependencies:
+    "@types/react": "*"
+  checksum: bb9b04e45df6759e28b4dc9e6eea5a6869fc5898400a1a18518358f0740fd5a49c86d9b065407733bf6a087b05c8ef518a5c9e82fc1bc6b25720f4221326438c
+  languageName: node
+  linkType: hard
+
 "@types/react-router-config@npm:*, @types/react-router-config@npm:^5.0.6":
   version: 5.0.11
   resolution: "@types/react-router-config@npm:5.0.11"
@@ -13079,7 +13088,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"attr-accept@npm:^2.0.0":
+"attr-accept@npm:^2.2.2":
   version: 2.2.2
   resolution: "attr-accept@npm:2.2.2"
   checksum: 496f7249354ab53e522510c1dc8f67a1887382187adde4dc205507d2f014836a247073b05e9d9ea51e2e9c7f71b0d2aa21730af80efa9af2d68303e5f0565c4d
@@ -18564,12 +18573,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"file-selector@npm:^0.1.12":
-  version: 0.1.19
-  resolution: "file-selector@npm:0.1.19"
+"file-selector@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "file-selector@npm:0.6.0"
   dependencies:
-    tslib: ^2.0.1
-  checksum: 5b105a3ede9139729ada72d6653ae3f4387a7bf2585e8700f9fa53f22457d1f88304fdde9ad7b43b694a5610d67058302257f448a75248fc2225880bca6df5df
+    tslib: ^2.4.0
+  checksum: 7d051b6e5d793f3c6e2ab287ba5e7c2c6a0971bccc9d56e044c8047ba483e18f60fc0b5771c951dc707c0d15f4f36ccb4f1f1aaf385d21ec8f7700dadf8325ba
   languageName: node
   linkType: hard
 
@@ -25616,6 +25625,7 @@ __metadata:
     "@types/react": ^18.3.3
     "@types/react-flag-icon-css": ^1.0.5
     "@types/react-portal": ^4.0.4
+    "@types/react-responsive-masonry": ^2.1.3
     "@vitejs/plugin-react": ^4.3.0
     "@vitest/coverage-v8": ^1.6.0
     babel-loader: 8.1.0
@@ -25640,6 +25650,7 @@ __metadata:
     react-image-crop: ^11.0.5
     react-player: ^2.16.0
     react-portal: ^4.2.2
+    react-responsive-masonry: 2.1.7
     react-router: 6.24.1
     react-router-dom: ^6.26.0
     react-select: ^5.4.0
@@ -25943,6 +25954,7 @@ __metadata:
     chai-subset: ^1.6.0
     commitizen: ^4.2.4
     compression: ^1.7.4
+    compressorjs: ^1.2.1
     concurrently: ^6.2.0
     countries-list: ^2.6.1
     cross-env: ^7.0.3
@@ -25989,7 +26001,7 @@ __metadata:
     react-country-flag: ^3.1.0
     react-dev-utils: ^12.0.1
     react-dom: 18.3.1
-    react-dropzone: ^10.1.10
+    react-dropzone: ^14.2.3
     react-final-form: 6.5.3
     react-final-form-arrays: ^3.1.3
     react-foco: ^1.3.1
@@ -28177,16 +28189,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dropzone@npm:^10.1.10":
-  version: 10.2.2
-  resolution: "react-dropzone@npm:10.2.2"
+"react-dropzone@npm:^14.2.3":
+  version: 14.2.3
+  resolution: "react-dropzone@npm:14.2.3"
   dependencies:
-    attr-accept: ^2.0.0
-    file-selector: ^0.1.12
-    prop-types: ^15.7.2
+    attr-accept: ^2.2.2
+    file-selector: ^0.6.0
+    prop-types: ^15.8.1
   peerDependencies:
-    react: ">= 16.8"
-  checksum: af08b78db753dd9c277c64364c153d6cb6d563df3cc4db1731458edcc203cfa41ed3d032c5249822e5eb4d2534232e514d663a025962d08f0e6ea65550411116
+    react: ">= 16.8 || 18.0.0"
+  checksum: 174b744d5ca898cf3d84ec1aeb6cef5211c446697e45dc8ece8287a03d291f8d07253206d5a1247ef156fd385d65e7de666d4d5c2986020b8543b8f2434e8b40
   languageName: node
   linkType: hard
 
@@ -28480,6 +28492,13 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 2c7fe9cbd766f5e54beb4bec2e2efb2de3583037b23fef8fa511ab426ed7f1ae992382db5acd8ab5bfb030a4b93a06a2ebca41377d6eeaf0e6791bb0a59616a4
+  languageName: node
+  linkType: hard
+
+"react-responsive-masonry@npm:2.1.7":
+  version: 2.1.7
+  resolution: "react-responsive-masonry@npm:2.1.7"
+  checksum: d8fd1838f73554809ecf2fbb29605abdd40eecaeb09caf549ea674e7e319e02fa7ff7aae978914b16f3a5f802d03a16402765a093e0bbb1d782665fd41632d97
   languageName: node
   linkType: hard
 

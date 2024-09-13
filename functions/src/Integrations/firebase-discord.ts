@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as functions from 'firebase-functions'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 
 import { CONFIG } from '../config/config'
 
@@ -78,6 +78,7 @@ interface SimpleResearchArticleUpdate {
   _id: string
   title: string
   collaborators?: string[]
+  status?: ResearchUpdateStatus
 }
 
 export async function handleResearchUpdatePublished(
@@ -98,6 +99,11 @@ export async function handleResearchUpdatePublished(
 
   const newUpdateIndex = updatedContent.updates.length - 1
   const newUpdate = updatedContent.updates[newUpdateIndex]
+
+  if (newUpdate.status === ResearchUpdateStatus.DRAFT) {
+    console.log('Update is a draft')
+    return
+  }
 
   // On Research Updates, we actually expect the collaborators to be a single person
   // but it is a list.

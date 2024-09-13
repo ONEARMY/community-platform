@@ -16,6 +16,7 @@ export type availableGlyphs =
   | 'chevron-up'
   | 'close'
   | 'comment'
+  | 'contact'
   | 'discord'
   | 'delete'
   | 'difficulty'

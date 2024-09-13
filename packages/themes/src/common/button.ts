@@ -18,32 +18,32 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
   primary: {
     ...BASE_BUTTON,
     color: colors.black,
-    bg: colors.accent.base,
+    backgroundColor: colors.accent.base,
     '&:hover': {
-      bg: colors.accent.hover,
+      backgroundColor: colors.accent.hover,
     },
     '&[disabled]': {
       opacity: 0.5,
       cursor: 'not-allowed',
     },
     '&[disabled]:hover': {
-      bg: colors.accent.base,
+      backgroundColor: colors.accent.base,
     },
   },
   secondary: {
     ...BASE_BUTTON,
     border: '2px solid ' + colors.black,
     color: colors.black,
-    bg: colors.softblue,
+    backgroundColor: colors.softblue,
     '&:hover': {
-      bg: colors.white,
+      backgroundColor: colors.white,
       cursor: 'pointer',
     },
     '&[disabled]': {
       opacity: 0.5,
     },
     '&[disabled]:hover': {
-      bg: colors.softblue,
+      backgroundColor: colors.softblue,
     },
   },
   destructive: {
@@ -81,18 +81,17 @@ export const getButtons = (colors: ThemeWithName['colors']) => ({
   },
   subtle: {
     ...BASE_BUTTON,
-    borderColor: colors.softblue,
+    borderWidth: 0,
     color: colors.black,
-    bg: colors.softblue,
+    backgroundColor: 'transparent',
     '&:hover': {
-      bg: colors.offwhite,
-      borderColor: colors.offwhite,
+      backgroundColor: colors.softblue,
     },
     '&[disabled]': {
       opacity: 0.5,
     },
     '&[disabled]:hover': {
-      bg: colors.softblue,
+      backgroundColor: colors.softblue,
     },
   },
   breadcrumb: {

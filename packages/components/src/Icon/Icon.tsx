@@ -16,12 +16,10 @@ import { MdAdd } from '@react-icons/all-files/md/MdAdd'
 import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
 import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
 import { MdCheck } from '@react-icons/all-files/md/MdCheck'
-import { MdClose } from '@react-icons/all-files/md/MdClose'
 import { MdEdit } from '@react-icons/all-files/md/MdEdit'
 import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
 import { MdImage } from '@react-icons/all-files/md/MdImage'
 import { MdKeyboardArrowDown } from '@react-icons/all-files/md/MdKeyboardArrowDown'
-import { MdList } from '@react-icons/all-files/md/MdList'
 import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
 import { MdLock } from '@react-icons/all-files/md/MdLock'
 import { MdMail } from '@react-icons/all-files/md/MdMail'
@@ -67,12 +65,13 @@ export const glyphs: IGlyphs = {
   'arrow-full-up': iconMap.arrowFullUp,
   bazar: iconMap.bazar,
   comment: iconMap.comment,
+  contact: iconMap.contact,
   check: <MdCheck />,
   'chevron-down': <FaChevronDown />,
   'chevron-left': iconMap.chevronLeft,
   'chevron-right': iconMap.chevronRight,
   'chevron-up': <FaChevronUp />,
-  close: <MdClose />,
+  close: iconMap.close,
   delete: iconMap.delete,
   difficulty: <FaSignal />,
   discord: iconMap.discord,
@@ -109,7 +108,7 @@ export const glyphs: IGlyphs = {
   slack: <FaSlack />,
   star: iconMap.star,
   'star-active': iconMap.starActive,
-  step: <MdList />,
+  step: iconMap.step,
   thunderbolt: iconMap.thunderbolt,
   'thunderbolt-grey': iconMap.thunderboltGrey,
   time: <MdAccessTime />,

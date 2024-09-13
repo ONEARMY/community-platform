@@ -13,7 +13,7 @@ export const commonStyles = {
   },
   colors: {
     white: 'white',
-    offwhite: '#ececec',
+    offWhite: '#ececec',
     black: '#1b1b1b',
     softyellow: '#f5ede2',
     blue: '#83ceeb',

@@ -1,37 +1,43 @@
-# base node image
-FROM node:20-alpine as base
+# syntax = docker/dockerfile:1
 
-# set for base and all layer that inherit from it
-ENV NODE_ENV production
+FROM node:20-slim as base
 
-# Install all node_modules, including dev dependencies
-FROM base as deps
+LABEL fly_launch_runtime="Remix"
 
-ADD package.json .yarnrc.yml ./
-RUN yarn install
+# Remix app lives here
+WORKDIR /app
 
-# Setup production node_modules
-FROM base as production-deps
+# Set production environment
+ENV NODE_ENV="production"
+ARG YARN_VERSION=3.6.4
 
-COPY --from=deps /node_modules /node_modules
-ADD package.json .yarnrc.yml ./
-RUN yarn prune --production
+# Install Yarn 3
+RUN corepack enable && \
+    yarn set version ${YARN_VERSION}
 
-# Build the app
+
+# Throw-away build stage to reduce size of final image
 FROM base as build
 
-COPY --from=deps /node_modules /node_modules
+# Install packages needed to build node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
+# Copy source code
 ADD . .
-RUN yarn build
 
-# Finally, build the production image with minimal footprint
+# Install packages
+RUN yarn install
+
+# Build application
+RUN yarn run build
+
+# Final stage for app image
 FROM base
 
-COPY --from=production-deps /node_modules /node_modules
+# Copy built application
+COPY --from=build /app /app
 
-COPY --from=build /build/server /build/server
-COPY --from=build /build/client /build/client
-ADD . .
-
-CMD ["yarn", "start"]
+# Start the server by default, this can be overwritten at runtime
+EXPOSE 3000
+CMD [ "yarn", "run", "start" ]

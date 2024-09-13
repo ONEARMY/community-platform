@@ -1,3 +1,10 @@
 containerization
-node_modules
+*node_modules*
 dump
+build
+functions
+extension
+.circleci
+.github
+.husky
+docs

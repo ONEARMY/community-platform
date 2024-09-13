@@ -63,10 +63,10 @@ app.use(
         'fonts.googleapis.com',
         '*.analytics.google.com',
         '*.google-analytics.com',
+        'www.youtube.com',
         "'unsafe-eval'",
         "'unsafe-inline'",
       ],
-
       frameSrc: [
         "'self'",
         'www.youtube.com',
@@ -76,18 +76,25 @@ app.use(
       ],
       imgSrc: [
         "'self'",
+        "data:",
         'google.com',
         '*.openstreetmap.org',
         'firebasestorage.googleapis.com',
+        'onearmy.github.io',
         'cdn.jsdelivr.net', // image CDN
       ],
       objectSrc: ["'self'"],
+      // Enforce HTTPS only on production
+      upgradeInsecureRequests:
+        process.env.NODE_ENV === 'production' ? [] : null,
     },
   }),
 )
-app.use(
-  helmet.hsts({ maxAge: 31536000, preload: true, includeSubDomains: false }),
-)
+// Enforce HTTPS only on production
+process.env.NODE_ENV === 'production' ??
+  app.use(
+    helmet.hsts({ maxAge: 31536000, preload: true, includeSubDomains: false }),
+  )
 app.use(helmet.dnsPrefetchControl({ allow: true }))
 app.use(helmet.hidePoweredBy())
 app.use(helmet.noSniff())
@@ -121,7 +128,7 @@ app.all('*', remixHandler)
 
 let port = process.env.PORT || 3456 // 3456 is default port for ci
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   // eslint-disable-next-line no-console, no-undef
-  console.log(`Express server started on http://localhost:${port}`)
+  console.log(`Express server started on http://0.0.0.0:${port}`)
 })

@@ -5,7 +5,7 @@ import { Box, Flex } from 'theme-ui'
 import { Clusters } from './Cluster.client'
 import { latLongFilter } from './latLongFilter'
 import { MapWithListHeader } from './MapWithListHeader'
-import { Popup } from './Popup'
+import { Popup } from './Popup.client'
 
 import type { LatLngExpression } from 'leaflet'
 import type { Map as MapType } from 'react-leaflet'

@@ -76,7 +76,7 @@ app.use(
       ],
       imgSrc: [
         "'self'",
-        "data:",
+        'data:',
         'google.com',
         '*.openstreetmap.org',
         'firebasestorage.googleapis.com',

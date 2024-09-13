@@ -30,7 +30,7 @@ const BreadcrumbButton = ({ text, link }: BreadcrumbButtonProps) => {
 
 export const BreadcrumbItem = ({ text, link, isLast }: BreadcrumbItemProps) => (
   <Box
-    style={{ display: 'inline-flex', marginRight: '10px' }}
+    style={{ display: 'inline-flex', marginRight: '3px' }}
     data-testid="breadcrumbsItem"
     data-cy="breadcrumbsItem"
   >

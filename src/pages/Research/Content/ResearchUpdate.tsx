@@ -1,18 +1,19 @@
 import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
+  DisplayDate,
   DownloadCounter,
   DownloadFileFromLink,
   DownloadStaticFile,
   ImageGallery,
   LinkifyText,
+  Tooltip,
   Username,
   VideoPlayer,
 } from 'oa-components'
 import { useContributorsData } from 'src/common/hooks/contributorsData'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { useResearchStore } from 'src/stores/Research/research.store'
-import { formatDate } from 'src/utils/date'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
@@ -41,6 +42,7 @@ const ResearchUpdate = (props: IProps) => {
     files,
     fileLink,
     images,
+    status,
     title,
     videoUrl,
   } = update
@@ -49,8 +51,6 @@ const ResearchUpdate = (props: IProps) => {
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
   const contributors = useContributorsData(collaborators || [])
-  const formattedCreateDatestamp = formatDate(new Date(_created))
-  const formattedModifiedDatestamp = formatDate(new Date(_modified))
   const research = researchStore.activeResearchItem
 
   const handleDownloadClick = async () => {
@@ -62,164 +62,189 @@ const ResearchUpdate = (props: IProps) => {
   }
 
   const displayNumber = updateIndex + 1
+  const isDraft = status == 'draft'
 
   return (
     <Flex
-      data-testid={`ResearchUpdate: ${_id}`}
-      data-cy={`ResearchUpdate: ${_id}`}
-      id={`update_${_id}`}
       sx={{
-        flexDirection: ['column', 'column', 'row'],
-        gap: [3, 6],
-        marginBottom: [6, 8],
+        flexDirection: 'column',
+        border: isDraft ? '2px dashed grey' : '',
+        borderRadius: 2,
+        padding: isDraft ? 2 : 0,
+        gap: 2,
       }}
     >
+      {isDraft && (
+        <>
+          <Button
+            data-cy="DraftUpdateLabel"
+            data-tip="Only visible to you (and other collaborators)"
+            sx={{ alignSelf: 'flex-start', backgroundColor: 'softblue' }}
+            variant="subtle"
+            small
+          >
+            Draft Update
+          </Button>
+          <Tooltip />
+        </>
+      )}
+
       <Flex
+        data-testid={`ResearchUpdate: ${_id}`}
+        data-cy={`ResearchUpdate: ${_id}`}
+        id={`update_${_id}`}
         sx={{
-          alignItems: 'center',
-          flexDirection: ['row', 'row', 'column'],
+          flexDirection: ['column', 'column', 'row'],
           gap: [2, 4],
         }}
       >
-        <Card sx={{ padding: [3, 4] }}>
-          <Heading sx={{ textAlign: 'center' }}>{displayNumber}</Heading>
-        </Card>
+        <Flex
+          sx={{
+            alignItems: 'center',
+            flexDirection: ['row', 'row', 'column'],
+            gap: [2, 4],
+          }}
+        >
+          <Card sx={{ padding: [3, 4] }}>
+            <Heading sx={{ textAlign: 'center' }}>{displayNumber}</Heading>
+          </Card>
 
-        {research && (
-          <ResearchLinkToUpdate research={research} update={update} />
-        )}
-      </Flex>
+          {research && (
+            <ResearchLinkToUpdate research={research} update={update} />
+          )}
+        </Flex>
 
-      <Flex
-        sx={{
-          width: '100%',
-          flexDirection: 'column',
-          flex: 9,
-          overflow: 'hidden',
-        }}
-      >
-        <Card>
-          <Flex sx={{ flexDirection: 'column' }} py={4} px={4}>
-            <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
-              <Box sx={{ width: ['100%', '75%', '75%'] }}>
-                {contributors.length > 0 ? (
-                  <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
-                    <Username user={contributors[0]} />
-                  </Box>
-                ) : null}
+        <Flex
+          sx={{
+            width: '100%',
+            flexDirection: 'column',
+            flex: 9,
+            overflow: 'hidden',
+          }}
+        >
+          <Card>
+            <Flex sx={{ flexDirection: 'column' }} py={4} px={4}>
+              <Flex sx={{ flexDirection: ['column', 'row', 'row'] }}>
+                <Box sx={{ width: ['100%', '75%', '75%'] }}>
+                  {contributors.length > 0 ? (
+                    <Box sx={{ mb: 2 }} data-testid="collaborator/creator">
+                      <Username user={contributors[0]} />
+                    </Box>
+                  ) : null}
 
-                <Heading as="h2" sx={{ mb: 2 }}>
-                  {title}
-                </Heading>
-              </Box>
+                  <Heading as="h2" sx={{ mb: 2 }}>
+                    {title}
+                  </Heading>
+                </Box>
 
-              <Flex
-                sx={{
-                  flexDirection: ['row', 'column', 'column'],
-                  width: ['100%', '25%', '25%'],
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-end',
-                }}
-              >
-                <Flex sx={{ flexDirection: ['column'] }}>
-                  <Text
-                    variant="auxiliary"
-                    sx={{
-                      textAlign: ['left', 'right', 'right'],
-                    }}
-                  >
-                    {'created ' + formattedCreateDatestamp}
-                  </Text>
-
-                  {formattedCreateDatestamp !== formattedModifiedDatestamp && (
+                <Flex
+                  sx={{
+                    flexDirection: ['row', 'column', 'column'],
+                    width: ['100%', '25%', '25%'],
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
+                  }}
+                >
+                  <Flex sx={{ flexDirection: ['column'] }}>
                     <Text
                       variant="auxiliary"
                       sx={{
                         textAlign: ['left', 'right', 'right'],
                       }}
                     >
-                      {'edited ' + formattedModifiedDatestamp}
+                      created <DisplayDate date={_created} />
                     </Text>
+
+                    {_created !== _modified && (
+                      <Text
+                        variant="auxiliary"
+                        sx={{
+                          textAlign: ['left', 'right', 'right'],
+                        }}
+                      >
+                        edited <DisplayDate date={_modified} />
+                      </Text>
+                    )}
+                  </Flex>
+                  {/* Show edit button for the creator of the research OR a super-admin */}
+                  {isEditable && (
+                    <Link to={'/research/' + slug + '/edit-update/' + _id}>
+                      <Button
+                        type="button"
+                        variant="primary"
+                        data-cy="edit-update"
+                        ml="auto"
+                        mt={[0, 2, 2]}
+                      >
+                        Edit
+                      </Button>
+                    </Link>
                   )}
                 </Flex>
-                {/* Show edit button for the creator of the research OR a super-admin */}
-                {isEditable && (
-                  <Link to={'/research/' + slug + '/edit-update/' + _id}>
-                    <Button
-                      type="button"
-                      variant="primary"
-                      data-cy="edit-update"
-                      ml="auto"
-                      mt={[0, 2, 2]}
-                    >
-                      Edit
-                    </Button>
-                  </Link>
-                )}
               </Flex>
+              <Box>
+                <Text
+                  mt={3}
+                  variant="paragraph"
+                  color={'grey'}
+                  sx={{ whiteSpace: 'pre-line' }}
+                >
+                  <LinkifyText>{description}</LinkifyText>
+                </Text>
+              </Box>
             </Flex>
-            <Box>
-              <Text
-                mt={3}
-                variant="paragraph"
-                color={'grey'}
-                sx={{ whiteSpace: 'pre-line' }}
-              >
-                <LinkifyText>{description}</LinkifyText>
-              </Text>
-            </Box>
-          </Flex>
-          <Box sx={{ width: '100%' }}>
-            {videoUrl ? (
-              <VideoPlayer videoUrl={videoUrl} />
-            ) : (
-              <ImageGallery
-                images={formatImagesForGallery(images) as any}
-                allowPortrait={true}
-              />
-            )}
-          </Box>
-          {((files && files.length > 0) || fileLink) && (
-            <Flex
-              className="file-container"
-              mt={3}
-              sx={{ flexDirection: 'column', px: 4 }}
-            >
-              {fileLink && (
-                <DownloadFileFromLink
-                  handleClick={handleDownloadClick}
-                  link={fileLink}
-                  redirectToSignIn={
-                    !loggedInUser ? redirectToSignIn : undefined
-                  }
+            <Box sx={{ width: '100%' }}>
+              {videoUrl ? (
+                <VideoPlayer videoUrl={videoUrl} />
+              ) : (
+                <ImageGallery
+                  images={formatImagesForGallery(images) as any}
+                  allowPortrait={true}
                 />
               )}
-              {files &&
-                files
-                  .filter(Boolean)
-                  .map(
-                    (file, index) =>
-                      file && (
-                        <DownloadStaticFile
-                          allowDownload
-                          file={file}
-                          key={file ? file.name : `file-${index}`}
-                          handleClick={handleDownloadClick}
-                          redirectToSignIn={
-                            !loggedInUser ? redirectToSignIn : undefined
-                          }
-                        />
-                      ),
-                  )}
-              <DownloadCounter total={downloadCount} />
-            </Flex>
-          )}
-          <ResearchUpdateDiscussion
-            update={update}
-            research={research}
-            showComments={showComments}
-          />
-        </Card>
+            </Box>
+            {((files && files.length > 0) || fileLink) && (
+              <Flex
+                className="file-container"
+                mt={3}
+                sx={{ flexDirection: 'column', px: 4 }}
+              >
+                {fileLink && (
+                  <DownloadFileFromLink
+                    handleClick={handleDownloadClick}
+                    link={fileLink}
+                    redirectToSignIn={
+                      !loggedInUser ? redirectToSignIn : undefined
+                    }
+                  />
+                )}
+                {files &&
+                  files
+                    .filter(Boolean)
+                    .map(
+                      (file, index) =>
+                        file && (
+                          <DownloadStaticFile
+                            allowDownload
+                            file={file}
+                            key={file ? file.name : `file-${index}`}
+                            handleClick={handleDownloadClick}
+                            redirectToSignIn={
+                              !loggedInUser ? redirectToSignIn : undefined
+                            }
+                          />
+                        ),
+                    )}
+                <DownloadCounter total={downloadCount} />
+              </Flex>
+            )}
+            <ResearchUpdateDiscussion
+              update={update}
+              research={research}
+              showComments={showComments}
+            />
+          </Card>
+        </Flex>
       </Flex>
     </Flex>
   )

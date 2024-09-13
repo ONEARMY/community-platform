@@ -17,6 +17,7 @@ export const DonationRequestModal = (props: IProps) => {
 
   const sx = {
     width: ['500px', '750px', '1050px'],
+    minWidth: '350px',
     border: '0 !important',
     background: 'none !important',
   }

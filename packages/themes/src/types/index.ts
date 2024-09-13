@@ -68,7 +68,7 @@ export interface ThemeWithName {
     background: string
     silver: string
     softgrey: string
-    offwhite: string
+    offWhite: string
     lightgrey: string
     darkGrey: string
     subscribed: string

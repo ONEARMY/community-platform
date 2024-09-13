@@ -5,6 +5,7 @@ import { ThemeProvider } from '@emotion/react'
 import { faker } from '@faker-js/faker'
 import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor, within } from '@testing-library/react'
+import { formatDistanceToNow } from 'date-fns'
 import { Provider } from 'mobx-react'
 import { ResearchUpdateStatus, UserRole } from 'oa-shared'
 import { useResearchStore } from 'src/stores/Research/research.store'
@@ -15,7 +16,6 @@ import {
 } from 'src/test/factories/ResearchItem'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
-import { formatDate } from 'src/utils/date'
 import { describe, expect, it, vi } from 'vitest'
 
 import ResearchArticle from './ResearchArticle'
@@ -259,11 +259,9 @@ describe('Research Article', () => {
 
     it('does not show edit timestamp, when create displays the same value', async () => {
       const created = faker.date.past()
-      const modified = new Date(created)
-      modified.setHours(15)
       const update = FactoryResearchItemUpdate({
         _created: created.toString(),
-        _modified: modified.toString(),
+        _modified: created.toString(),
         title: 'A title',
         description: 'A description',
       })
@@ -276,22 +274,32 @@ describe('Research Article', () => {
           updates: [update],
         }),
       })
-
       // Act
       const wrapper = getWrapper()
 
       // Assert
       await waitFor(() => {
         expect(() =>
-          wrapper.getAllByText(`edited ${formatDate(modified)}`),
+          wrapper.getAllByText(
+            `${formatDistanceToNow(update._modified, { addSuffix: true })}`,
+          ),
         ).toThrow()
+      })
+      await waitFor(() => {
+        expect(() =>
+          wrapper.getAllByText((content) => content.includes('edited')),
+        ).toThrow()
+        expect(() =>
+          wrapper.getAllByText((content) => content.includes('created')),
+        ).not.toThrow()
       })
     })
 
     it('does show both created and edit timestamp, when different', async () => {
-      const modified = faker.date.future()
+      const modified = faker.date.past({ years: 1 })
+      const created = faker.date.past({ years: 2 })
       const update = FactoryResearchItemUpdate({
-        _created: faker.date.past().toString(),
+        _created: created.toString(),
         status: ResearchUpdateStatus.PUBLISHED,
         _modified: modified.toString(),
         title: 'A title',
@@ -310,11 +318,23 @@ describe('Research Article', () => {
 
       // Act
       const wrapper = getWrapper()
-
       // Assert
       await waitFor(() => {
         expect(() =>
-          wrapper.getAllByText(`edited ${formatDate(modified)}`),
+          wrapper.getAllByText((content) => content.includes('created')),
+        ).not.toThrow()
+        expect(() =>
+          wrapper.getAllByText(
+            `${formatDistanceToNow(created, { addSuffix: true })}`,
+          ),
+        ).not.toThrow()
+        expect(() =>
+          wrapper.getAllByText((content) => content.includes('edited')),
+        ).not.toThrow()
+        expect(() =>
+          wrapper.getAllByText(
+            `${formatDistanceToNow(modified, { addSuffix: true })}`,
+          ),
         ).not.toThrow()
       })
     })

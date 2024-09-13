@@ -3,7 +3,7 @@ import { MapWithPin } from './MapWithPin.client'
 import type { Meta, StoryFn } from '@storybook/react'
 
 export default {
-  title: 'Components/MapWithPin',
+  title: 'Map/MapWithPin',
   component: MapWithPin,
 } as Meta<typeof MapWithPin>
 

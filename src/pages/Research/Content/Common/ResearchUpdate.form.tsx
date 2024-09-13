@@ -258,40 +258,14 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                 px={2}
                 mt={[0, 0, 4]}
               >
-                <Box
+                <Flex
                   sx={{
+                    flexDirection: 'column',
                     position: ['relative', 'relative', 'sticky'],
-                    top: 3,
+                    gap: 3,
                     maxWidth: ['inherit', 'inherit', '400px'],
                   }}
                 >
-                  <Button
-                    data-cy="draft"
-                    onClick={() => {
-                      trySubmitForm(true)
-                    }}
-                    variant="secondary"
-                    type="submit"
-                    disabled={submitting}
-                    sx={{ width: '100%', display: 'block', mt: 0 }}
-                  >
-                    <span>{draftButtonText}</span>
-                  </Button>
-                  {isEdit ? (
-                    <Button
-                      data-cy="delete"
-                      onClick={(evt) => {
-                        setShowDeleteModal(true)
-                        evt.preventDefault()
-                      }}
-                      variant="destructive"
-                      type="submit"
-                      disabled={submitting}
-                      sx={{ width: '100%', display: 'block', mt: 3 }}
-                    >
-                      {deletion.text}
-                    </Button>
-                  ) : null}
                   <Button
                     large
                     id="submit-form"
@@ -305,14 +279,44 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                     type="submit"
                     disabled={submitting}
                     sx={{
-                      mt: 3,
-                      mb: ['40px', '40px', 0],
-                      width: '100%',
+                      alignSelf: 'stretch',
                       justifyContent: 'center',
                     }}
                   >
-                    <span>{publishButtonText}</span>
+                    {publishButtonText}
                   </Button>
+
+                  <Button
+                    data-cy="draft"
+                    onClick={() => {
+                      trySubmitForm(true)
+                    }}
+                    variant="secondary"
+                    type="submit"
+                    sx={{
+                      alignSelf: 'stretch',
+                      justifyContent: 'center',
+                    }}
+                    disabled={submitting}
+                  >
+                    {draftButtonText}
+                  </Button>
+
+                  {isEdit ? (
+                    <Button
+                      data-cy="delete"
+                      onClick={(evt) => {
+                        setShowDeleteModal(true)
+                        evt.preventDefault()
+                      }}
+                      variant="destructive"
+                      type="submit"
+                      disabled={submitting}
+                      sx={{ alignSelf: 'stretch', justifyContent: 'center' }}
+                    >
+                      {deletion.text}
+                    </Button>
+                  ) : null}
 
                   <ResearchErrors
                     errors={errors}
@@ -322,7 +326,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
 
                   {store.activeResearchItem ? (
                     <ResearchEditorOverview
-                      sx={{ mt: 4 }}
+                      sx={{ mt: 2 }}
                       updates={getResearchUpdates(
                         store.activeResearchItem.updates || [],
                         store.activeResearchItem._id,
@@ -334,7 +338,7 @@ export const ResearchUpdateForm = observer((props: IProps) => {
                       showBackToResearchButton={true}
                     />
                   ) : null}
-                </Box>
+                </Flex>
               </Flex>
               <ConfirmModal
                 isOpen={showDeleteModal}

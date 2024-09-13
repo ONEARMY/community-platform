@@ -150,12 +150,27 @@ describe('discussion.store', () => {
       )
     })
 
+    it('notifies all contributors of a new comment (except the commenter)', async () => {
+      const discussions = [
+        FactoryDiscussion({ contributorIds: ['1', '2', '3'] }),
+      ]
+      const { store, discussionItem } = factory(discussions)
+
+      //Act
+      await store.addComment(discussionItem, 'New comment')
+
+      expect(
+        store.userNotificationsStore.triggerNotification,
+      ).toHaveBeenCalledTimes(4)
+    })
+
     it('adds a reply to a comment', async () => {
-      const { store, discussionItem, setFn } = factory([
-        FactoryDiscussion({
-          comments: [FactoryDiscussionComment({ text: 'New comment' })],
-        }),
-      ])
+      const discussions = [
+        FactoryDiscussion({}, [
+          FactoryDiscussionComment({ text: 'New comment' }),
+        ]),
+      ]
+      const { store, discussionItem, setFn } = factory(discussions)
 
       //Act
       await store.addComment(
@@ -180,7 +195,7 @@ describe('discussion.store', () => {
         store.userNotificationsStore.triggerNotification,
       ).toHaveBeenCalledWith(
         'new_comment_discussion',
-        discussionItem.comments[0].creatorName,
+        discussionItem.comments[0]._creatorId,
         `/questions/undefined#comment:${discussionItem.comments[0]._id}`,
         undefined, // concern of another store
       )

@@ -57,7 +57,7 @@ export class UserNotificationsStore extends ModuleStore {
 
   public async triggerNotification(
     type: NotificationType,
-    username: string,
+    userId: string,
     relevantUrl: string,
     title: string,
   ) {
@@ -65,7 +65,7 @@ export class UserNotificationsStore extends ModuleStore {
       const triggeredBy = this.user
       if (triggeredBy) {
         // do not get notified when you're the one making a new comment or how-to useful vote
-        if (triggeredBy.userName === username) {
+        if (triggeredBy._id === userId) {
           return
         }
         const newNotification: INotification = {
@@ -73,26 +73,22 @@ export class UserNotificationsStore extends ModuleStore {
           _created: new Date().toISOString(),
           triggeredBy: {
             displayName: triggeredBy.displayName,
-            // userName is used here as user records now use userName as userId.
-            // The property name hasn't been refactored as it would require a data migration for existing records.
-            // Plan is to move to a relational database when time allows.
-            // Notifications would be migrated to their own table at this point.
-            userId: triggeredBy.userName,
+            userId: triggeredBy._id,
           },
-          relevantUrl: relevantUrl,
+          relevantUrl,
           type,
+          title,
           read: false,
           notified: false,
-          title: title,
         }
 
         const lookup = await this.db
           .collection<IUserPP>(USER_COLLECTION_NAME)
-          .getWhere('userName', '==', username)
+          .getWhere('_id', '==', userId)
 
         const user = lookup[0]
         if (!user) {
-          throw new Error('User not found.')
+          return logger.error('User not found.', { newNotification })
         }
         const notifications = user.notifications
           ? [...toJS(user.notifications), newNotification]

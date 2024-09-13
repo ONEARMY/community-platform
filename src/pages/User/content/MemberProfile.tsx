@@ -1,5 +1,5 @@
-import { Username, UserStatistics } from 'oa-components'
-import { ExternalLinkLabel, UserRole } from 'oa-shared'
+import { MemberBadge, Username, UserStatistics } from 'oa-components'
+import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
@@ -42,6 +42,18 @@ export const MemberProfile = ({ docs, user }: IProps) => {
         padding: 2,
       }}
     >
+      <MemberBadge
+        profileType={ProfileTypeList.MEMBER}
+        size={50}
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          marginLeft: 50 * -0.5,
+          marginTop: 50 * -0.5,
+        }}
+        useLowDetailVersion
+      />
       <Flex
         sx={{
           flexDirection: ['column', 'row'],

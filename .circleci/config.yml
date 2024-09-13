@@ -477,7 +477,7 @@ workflows:
       #       - release-context
       #     requires:
       #       - "Approve Production deployment"
-      - build:
+      - build_and_deploy:
           name: Build TEST Release
           context:
             - build-context
@@ -487,24 +487,11 @@ workflows:
           - checkout
           - run: yarn
           - run: yarn run build
+          - run: curl -L https://fly.io/install.sh | sh
+          - run: fly auth login -t ${FLY_API_TOKEN}
+          - run: fly deploy --app community-dev-platform --config fly.toml
+          DEPLOY_ALIAS: community-platform-dev
           requires:
           - test_e2e
           # - 'Release new version to GitHub'
-      - deploy:
-          name: 'Deploy: TEST'
-          requires:
-            - 'Build TEST Release'
-          DEPLOY_ALIAS: community-platform-dev
-          # context:
-          #   - circle-ci-patreon-context
-          #   - community-platform-dev
-          steps:
-          # Install Fly.io CLI tool
-          - run: curl -L https://fly.io/install.sh | sh
-
-          # Login to Fly.io
-          - run: fly auth login -t ${FLY_API_TOKEN}
-
-          # Deploy to Fly.io
-          - run: fly deploy --app community-dev-platform --config fly.toml
             

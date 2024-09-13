@@ -465,73 +465,46 @@ workflows:
             - e2e-tests
           <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
-      - deploy:
-          name: 'Deploy: dev.onearmy.world'
-          requires:
-            - test_e2e
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: 'default'
-          context:
-            - circle-ci-patreon-context
-            - community-platform-dev
-      - deploy:
-          name: 'Deploy: dev.community.projectkamp.com'
-          requires:
-            - test_e2e
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: project-kamp-development
-          context:
-            - circle-ci-patreon-context
-            - project-kamp-dev
-      - deploy:
-          name: 'Deploy: dev.community.fixing.fashion'
-          requires:
-            - test_e2e
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: fixing-fashion-dev
-          context:
-            - circle-ci-patreon-context
-            - fixing-fashion-dev
       - approve:
           type: approval
           name: 'Approve Production deployment'
           requires:
-            - 'Deploy: dev.onearmy.world'
-            - 'Deploy: dev.community.fixing.fashion'
-            - 'Deploy: dev.community.projectkamp.com'
+            - test_e2e
       #---------------------- Development Instances Build and Deploy ----------------------
-      - release:
-          name: Release new version to GitHub
-          context:
-            - release-context
-          requires:
-            - "Approve Production deployment"
+      # - release:
+      #     name: Release new version to GitHub
+      #     context:
+      #       - release-context
+      #     requires:
+      #       - "Approve Production deployment"
       - build:
-          name: Build Production Release
-          context: build-context
-          requires:
-            - 'Release new version to GitHub'
-      - deploy:
-          name: 'Deploy: community.fixing.fashion'
-          requires:
-            - 'Build Production Release'
-          DEPLOY_ALIAS: fixing-fashion-prod
+          name: Build TEST Release
           context:
+            - build-context
             - circle-ci-patreon-context
-            - fixing-fashion-prod
-      - deploy:
-          name: 'Deploy: community.preciousplastic.com'
+            - community-platform-dev
+          steps:
+          - checkout
+          - run: yarn
+          - run: yarn run build
           requires:
-            - 'Build Production Release'
-          DEPLOY_ALIAS: 'production'
-          context:
-            - circle-ci-patreon-context
-            - community-platform-production
+          - test_e2e
+          # - 'Release new version to GitHub'
       - deploy:
-          name: 'Deploy: community.projectkamp.com'
+          name: 'Deploy: TEST'
           requires:
-            - 'Build Production Release'
-          DEPLOY_ALIAS: project-kamp-production
-          context:
-            - circle-ci-patreon-context
-            - project-kamp-production
+            - 'Build TEST Release'
+          DEPLOY_ALIAS: community-platform-dev
+          # context:
+          #   - circle-ci-patreon-context
+          #   - community-platform-dev
+          steps:
+          # Install Fly.io CLI tool
+          - run: curl -L https://fly.io/install.sh | sh
+
+          # Login to Fly.io
+          - run: fly auth login -t ${FLY_API_TOKEN}
+
+          # Deploy to Fly.io
+          - run: fly deploy --app community-dev-platform --config fly.toml
+            

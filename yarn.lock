@@ -25953,8 +25953,8 @@ __metadata:
     all-contributors-cli: ^6.20.0
     chai-subset: ^1.6.0
     commitizen: ^4.2.4
-    compressorjs: ^1.2.1
     compression: ^1.7.4
+    compressorjs: ^1.2.1
     concurrently: ^6.2.0
     countries-list: ^2.6.1
     cross-env: ^7.0.3

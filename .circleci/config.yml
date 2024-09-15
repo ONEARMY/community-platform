@@ -339,11 +339,8 @@ jobs:
       #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
       #     alias: << parameters.DEPLOY_ALIAS >>
       - run:
-          name: "Setup deploy environment variables"
-          command: echo 'export FLY_API_TOKEN=${FLY_API_TOKEN}' >> "$BASH_ENV"
-      - run:
           name: Check token
-          command: echo ${FLY_API_TOKEN}
+          command: echo $FLY_API_TOKEN
       - run:
           name: Install fly command
           command: curl -L https://fly.io/install.sh | sh
@@ -516,7 +513,7 @@ workflows:
           context:
             - circle-ci-patreon-context
             - fixing-fashion-prod
-            - fly_deploy
+            - fly-deploy
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
@@ -527,7 +524,7 @@ workflows:
           context:
             - circle-ci-patreon-context
             - community-platform-production
-            - fly_deploy
+            - fly-deploy
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
@@ -538,5 +535,5 @@ workflows:
           context:
             - circle-ci-patreon-context
             - project-kamp-production
-            - fly_deploy
+            - fly-deploy
             

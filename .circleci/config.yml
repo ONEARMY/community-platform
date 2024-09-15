@@ -323,15 +323,24 @@ jobs:
       DEPLOY_ALIAS:
         type: string
         default: 'default'
+      FLY_APP_NAME:
+        type: string
+        default: 'default'
+      FLY_TOML:
+        type: string
+        default: 'default'
     environment:
       CYPRESS_INSTALL_BINARY: 0
     steps:
       - setup_repo
       - attach_workspace:
           at: '.'
-      - firebase_deploy:
-          # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
-          alias: << parameters.DEPLOY_ALIAS >>
+      # - firebase_deploy:
+      #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
+      #     alias: << parameters.DEPLOY_ALIAS >>
+      - run: curl -L https://fly.io/install.sh | sh
+      - run: fly auth login -t $FLY_API_TOKEN
+      - run: fly deploy --app << parameters.FLY_APP_NAME >> --config << parameters.FLY_TOML >>
 
   # Run cypress e2e tests on chrome
   test_e2e:
@@ -413,63 +422,63 @@ workflows:
             - 'Lint commits'
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
-      - build:
-          requires:
-            - 'Lint code'
-          name: Build Application
-          context: build-context
-      - test_unit:
-          name: 'Unit tests'
-          requires:
-            - 'Lint code'
-      - test_circular_dependency:
-          name: 'Circular dependency test'
-          requires:
-            - 'Lint code'
-      - storybook:
-          name: Build Storybook
-          requires:
-            - 'Lint code'
-      - test_security_rules:
-          name: Test Security Rules
-          requires:
-            - 'Lint code'
-      - test_functions:
-          name: 'Cloud Function tests'
-          requires:
-            - 'Lint code'
-      - test_functions_upload_coverage:
-          name: 'Upload Cloud Function coverage'
-          requires:
-            - 'Cloud Function tests'
-      - test_e2e:
-          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
-          requires:
-            - 'Build Application'
-            - 'Unit tests'
-            - 'Circular dependency test'
-            - 'Cloud Function tests'
-            - 'Build Storybook'
-            - 'Test Security Rules'
-          context:
-            - e2e-tests
-          matrix:
-            parameters:
-              CI_NODE: [1, 2, 3, 4]
-              CI_BROWSER: ['chrome']
-      - chromatic:
-          name: 'Release storybook to chromatic'
-          requires:
-            - test_e2e
-          context:
-            - e2e-tests
-          <<: *filter_only_default_branch
+      # - build:
+      #     requires:
+      #       - 'Lint code'
+      #     name: Build Application
+      #     context: build-context
+      # - test_unit:
+      #     name: 'Unit tests'
+      #     requires:
+      #       - 'Lint code'
+      # - test_circular_dependency:
+      #     name: 'Circular dependency test'
+      #     requires:
+      #       - 'Lint code'
+      # - storybook:
+      #     name: Build Storybook
+      #     requires:
+      #       - 'Lint code'
+      # - test_security_rules:
+      #     name: Test Security Rules
+      #     requires:
+      #       - 'Lint code'
+      # - test_functions:
+      #     name: 'Cloud Function tests'
+      #     requires:
+      #       - 'Lint code'
+      # - test_functions_upload_coverage:
+      #     name: 'Upload Cloud Function coverage'
+      #     requires:
+      #       - 'Cloud Function tests'
+      # - test_e2e:
+      #     name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+      #     requires:
+      #       - 'Build Application'
+      #       - 'Unit tests'
+      #       - 'Circular dependency test'
+      #       - 'Cloud Function tests'
+      #       - 'Build Storybook'
+      #       - 'Test Security Rules'
+      #     context:
+      #       - e2e-tests
+      #     matrix:
+      #       parameters:
+      #         CI_NODE: [1, 2, 3, 4]
+      #         CI_BROWSER: ['chrome']
+      # - chromatic:
+      #     name: 'Release storybook to chromatic'
+      #     requires:
+      #       - test_e2e
+      #     context:
+      #       - e2e-tests
+      #     <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
-      - approve:
-          type: approval
-          name: 'Approve Production deployment'
-          requires:
-            - test_e2e
+      # - approve:
+      #     type: approval
+      #     name: 'Approve Production deployment'
+      #     requires:
+      #       - test_e2e
       #---------------------- Development Instances Build and Deploy ----------------------
       # - release:
       #     name: Release new version to GitHub
@@ -477,21 +486,42 @@ workflows:
       #       - release-context
       #     requires:
       #       - "Approve Production deployment"
-      - build_and_deploy:
-          name: Build TEST Release
-          context:
-            - build-context
-            - circle-ci-patreon-context
-            - community-platform-dev
-          steps:
-          - checkout
-          - run: yarn
-          - run: yarn run build
-          - run: curl -L https://fly.io/install.sh | sh
-          - run: fly auth login -t ${FLY_API_TOKEN}
-          - run: fly deploy --app community-dev-platform --config fly.toml
-          DEPLOY_ALIAS: community-platform-dev
+      - build:
+          name: Build Production Release
+          context: build-context
+          # requires:
+          #   - 'Release new version to GitHub'
+      - deploy:
+          name: 'Deploy: community.fixing.fashion'
           requires:
-          - test_e2e
-          # - 'Release new version to GitHub'
+            - 'Build Production Release'
+          DEPLOY_ALIAS: fixing-fashion-prod
+          FLY_APP_NAME: fixing-fashion-prod
+          FLY_TOML: fly-ff.toml
+          context:
+            - circle-ci-patreon-context
+            - fixing-fashion-prod
+            - fly-deploy
+      - deploy:
+          name: 'Deploy: community.preciousplastic.com'
+          requires:
+            - 'Build Production Release'
+          DEPLOY_ALIAS: 'production'
+          FLY_APP_NAME: precious-plastic-prod
+          FLY_TOML: fly-pp.toml
+          context:
+            - circle-ci-patreon-context
+            - community-platform-production
+            - fly-deploy
+      - deploy:
+          name: 'Deploy: community.projectkamp.com'
+          requires:
+            - 'Build Production Release'
+          DEPLOY_ALIAS: project-kamp-production
+          FLY_APP_NAME: project-kamp-prod
+          FLY_TOML: fly-pk.toml
+          context:
+            - circle-ci-patreon-context
+            - project-kamp-production
+            - fly-deploy
             

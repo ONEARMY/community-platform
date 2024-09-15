@@ -1,4 +1,4 @@
-app = 'community-platform'
+app = 'community-platform-pp'
 primary_region = 'cdg'
 
 [build]

@@ -331,8 +331,6 @@ jobs:
         default: 'default'
     environment:
       CYPRESS_INSTALL_BINARY: 0
-    context:
-      - fly_deploy
     steps:
       - setup_repo
       - attach_workspace:
@@ -515,6 +513,7 @@ workflows:
           context:
             - circle-ci-patreon-context
             - fixing-fashion-prod
+            - fly_deploy
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
@@ -525,6 +524,7 @@ workflows:
           context:
             - circle-ci-patreon-context
             - community-platform-production
+            - fly_deploy
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
@@ -535,4 +535,5 @@ workflows:
           context:
             - circle-ci-patreon-context
             - project-kamp-production
+            - fly_deploy
             

@@ -338,9 +338,15 @@ jobs:
       # - firebase_deploy:
       #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
       #     alias: << parameters.DEPLOY_ALIAS >>
-      - run: curl -L https://fly.io/install.sh | sh
-      - run: fly auth login -t $FLY_API_TOKEN
-      - run: fly deploy --app << parameters.FLY_APP_NAME >> --config << parameters.FLY_TOML >>
+      - run:
+          name: Install fly command
+          command: curl -L https://fly.io/install.sh | sh
+      - run: 
+          name: Login fly
+          command: fly auth login -t $FLY_API_TOKEN
+      - run:
+          name: Deploy to fly
+          command: fly deploy --app << parameters.FLY_APP_NAME >> --config << parameters.FLY_TOML >>
 
   # Run cypress e2e tests on chrome
   test_e2e:

@@ -339,8 +339,11 @@ jobs:
       #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
       #     alias: << parameters.DEPLOY_ALIAS >>
       - run:
+          name: "Setup deploy environment variables"
+          command: echo 'export FLY_API_TOKEN=${FLY_API_TOKEN}' >> "$BASH_ENV"
+      - run:
           name: Check token
-          command: echo $FLY_API_TOKEN
+          command: echo ${FLY_API_TOKEN}
       - run:
           name: Install fly command
           command: curl -L https://fly.io/install.sh | sh

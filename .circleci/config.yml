@@ -331,6 +331,8 @@ jobs:
         default: 'default'
     environment:
       CYPRESS_INSTALL_BINARY: 0
+    context:
+      - fly_deploy
     steps:
       - setup_repo
       - attach_workspace:
@@ -338,6 +340,9 @@ jobs:
       # - firebase_deploy:
       #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
       #     alias: << parameters.DEPLOY_ALIAS >>
+      - run:
+          name: Check token
+          command: echo $FLY_API_TOKEN
       - run:
           name: Install fly command
           command: curl -L https://fly.io/install.sh | sh
@@ -510,7 +515,6 @@ workflows:
           context:
             - circle-ci-patreon-context
             - fixing-fashion-prod
-            - fly-deploy
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
@@ -521,7 +525,6 @@ workflows:
           context:
             - circle-ci-patreon-context
             - community-platform-production
-            - fly-deploy
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
@@ -532,5 +535,4 @@ workflows:
           context:
             - circle-ci-patreon-context
             - project-kamp-production
-            - fly-deploy
             

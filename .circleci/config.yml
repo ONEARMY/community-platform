@@ -505,7 +505,7 @@ workflows:
           requires:
             - 'Build Production Release'
           DEPLOY_ALIAS: fixing-fashion-prod
-          FLY_APP_NAME: fixing-fashion-prod
+          FLY_APP_NAME: community-platform-ff
           FLY_TOML: fly-ff.toml
           context:
             - circle-ci-patreon-context
@@ -516,7 +516,7 @@ workflows:
           requires:
             - 'Build Production Release'
           DEPLOY_ALIAS: 'production'
-          FLY_APP_NAME: precious-plastic-prod
+          FLY_APP_NAME: community-platform-pp
           FLY_TOML: fly-pp.toml
           context:
             - circle-ci-patreon-context
@@ -527,7 +527,7 @@ workflows:
           requires:
             - 'Build Production Release'
           DEPLOY_ALIAS: project-kamp-production
-          FLY_APP_NAME: project-kamp-prod
+          FLY_APP_NAME: community-platform-pk
           FLY_TOML: fly-pk.toml
           context:
             - circle-ci-patreon-context

@@ -339,15 +339,6 @@ jobs:
       #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
       #     alias: << parameters.DEPLOY_ALIAS >>
       - run:
-          name: echo ${FLY_API_TOKEN}
-          command: echo ${FLY_API_TOKEN}
-      - run:
-          name: echo ${FLY_USERNAME}
-          command: echo ${FLY_USERNAME}
-      - run:
-          name: echo ${FLY_PASSWORD}
-          command: echo ${FLY_PASSWORD}
-      - run:
           name: Install fly command
           command: curl -L https://fly.io/install.sh | sh
       - run:
@@ -355,10 +346,10 @@ jobs:
           command: echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV
       - run: 
           name: Login fly
-          command: fly auth login -t $FLY_API_TOKEN --email $FLY_USERNAME --password $FLY_PASSWORD
+          command: fly auth login -t $FLY_API_TOKEN --email $FLY_USERNAME --password $FLY_PASSWORD --debug --verbose
       - run:
           name: Deploy to fly
-          command: fly deploy --app << parameters.FLY_APP_NAME >> --config << parameters.FLY_TOML >>
+          command: fly deploy --app << parameters.FLY_APP_NAME >> --config << parameters.FLY_TOML >> --debug --verbose
 
   # Run cypress e2e tests on chrome
   test_e2e:

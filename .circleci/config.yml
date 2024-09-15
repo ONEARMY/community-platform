@@ -341,6 +341,9 @@ jobs:
       - run:
           name: Install fly command
           command: curl -L https://fly.io/install.sh | sh
+      - run:
+          name: Add flyctl to PATH
+          command: echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV
       - run: 
           name: Login fly
           command: fly auth login -t $FLY_API_TOKEN

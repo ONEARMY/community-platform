@@ -346,7 +346,7 @@ jobs:
           command: echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV
       - run: 
           name: Login fly
-          command: fly auth login --email $FLY_USERNAME --password $FLY_PASSWORD
+          command: fly auth login -t $FLY_API_TOKEN --email $FLY_USERNAME --password $FLY_PASSWORD
       - run:
           name: Deploy to fly
           command: fly deploy --app << parameters.FLY_APP_NAME >> --config << parameters.FLY_TOML >>

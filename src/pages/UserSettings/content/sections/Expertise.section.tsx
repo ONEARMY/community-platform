@@ -5,7 +5,7 @@ import { Flex, Heading, Text } from 'theme-ui'
 import { FlexSectionContainer } from '../elements'
 import { CustomCheckbox } from '../fields/CustomCheckbox.field'
 
-import type { IMAchineBuilderXp } from 'src/models'
+import type { IMAchineBuilderXp } from 'oa-shared'
 
 interface IProps {
   required: boolean

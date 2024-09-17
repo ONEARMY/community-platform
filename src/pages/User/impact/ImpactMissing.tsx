@@ -7,11 +7,11 @@ import { Flex, Text } from 'theme-ui'
 import { IMPACT_REPORT_LINKS } from './constants'
 import { invisible, missing, reportYearLabel } from './labels'
 
-import type { IImpactYear, IImpactYearFieldList, IUserPP } from 'src/models'
+import type { IImpactYear, IImpactYearFieldList, IUser } from 'src/models'
 
 interface Props {
   fields: IImpactYearFieldList | undefined
-  owner: IUserPP | undefined
+  owner: IUser | undefined
   visibleFields: IImpactYearFieldList | undefined
   year: IImpactYear
 }

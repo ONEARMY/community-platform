@@ -11,7 +11,7 @@ import { logger } from '../../../logger'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 
-import type { IUserPPDB } from 'src/models'
+import type { IUserDB } from 'src/models'
 import type { UserCreatedDocs } from '../types'
 
 /**
@@ -21,7 +21,7 @@ import type { UserCreatedDocs } from '../types'
 export const UserProfile = observer(() => {
   const { id } = useParams()
   const { userStore } = useCommonStores().stores
-  const [user, setUser] = useState<IUserPPDB | undefined>()
+  const [user, setUser] = useState<IUserDB | undefined>()
   const [userCreatedDocs, setUserCreatedDocs] = useState<
     UserCreatedDocs | undefined
   >()
@@ -34,7 +34,7 @@ export const UserProfile = observer(() => {
       const fetchUserData = async () => {
         try {
           const userData = await userStore.getUserProfile(userId)
-          if (userData as IUserPPDB) {
+          if (userData as IUserDB) {
             setUser(userData)
 
             seoTagsUpdate({

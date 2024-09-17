@@ -8,7 +8,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { useCommonStores } from './hooks/useCommonStores'
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 
-import type { IUserPPDB } from 'src/models'
+import type { IUserDB } from 'src/models'
 import type { IUploadedFileMeta } from 'src/stores/storage'
 import type { Mock } from 'vitest'
 
@@ -21,7 +21,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: vi.fn(),
 }))
-const userToMock = (user?: IUserPPDB) => {
+const userToMock = (user?: IUserDB) => {
   return (useCommonStores as Mock).mockImplementation(() => ({
     stores: {
       userStore: { user: user ?? undefined },

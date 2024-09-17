@@ -10,7 +10,7 @@ Dev config is hardcoded - You can find more information about potential security
 https://javebratt.com/hide-firebase-api/
 *****************************************************************************************/
 
-import type { UserRole } from '../models'
+import type { UserRole } from 'oa-shared'
 import type { ConfigurationOption } from './constants'
 import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
 

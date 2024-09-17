@@ -5,7 +5,7 @@ import { DEV_SITE_ROLE, SITE } from 'src/config/config'
 import { isTestEnvironment } from 'src/utils/isTestEnvironment'
 
 import type { UserRole } from 'oa-shared'
-import type { IUserPPDB } from 'src/models'
+import type { IUserDB } from 'src/models'
 
 /*
     Simple wrapper to only render a component if the user is logged in (plus optional user role required)
@@ -31,7 +31,7 @@ export const AuthWrapper = observer((props: IProps) => {
 })
 
 const isUserAuthorized = (
-  user?: IUserPPDB | null,
+  user?: IUserDB | null,
   roleRequired?: UserRole | UserRole[],
 ) => {
   const userRoles = user?.userRoles || []

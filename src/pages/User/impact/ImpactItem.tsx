@@ -4,12 +4,12 @@ import { Box, Heading } from 'theme-ui'
 import { ImpactField } from './ImpactField'
 import { ImpactMissing } from './ImpactMissing'
 
-import type { IImpactYear, IImpactYearFieldList, IUserPP } from 'src/models'
+import type { IImpactYear, IImpactYearFieldList, IUser } from 'src/models'
 
 interface Props {
   year: IImpactYear
   fields: IImpactYearFieldList | undefined
-  user: IUserPP | undefined
+  user: IUser | undefined
 }
 
 export const ImpactItem = ({ fields, user, year }: Props) => {

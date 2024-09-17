@@ -503,7 +503,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
-            - 'Build Production Release'
+            - 'Lint code'
           DEPLOY_ALIAS: fixing-fashion-prod
           FLY_APP_NAME: community-platform-ff
           FLY_TOML: fly-ff.toml
@@ -514,7 +514,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
-            - 'Build Production Release'
+            - 'Lint code'
           DEPLOY_ALIAS: 'production'
           FLY_APP_NAME: community-platform-pp
           FLY_TOML: fly-pp.toml
@@ -525,7 +525,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
-            - 'Build Production Release'
+            - 'Lint code'
           DEPLOY_ALIAS: project-kamp-production
           FLY_APP_NAME: community-platform-pk
           FLY_TOML: fly-pk.toml

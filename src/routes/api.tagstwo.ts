@@ -7,8 +7,6 @@ export async function loader() {
   return json(
     [
       {
-        id: import.meta.env.REACT_APP_FIREBASE_DATABASE_URL,
-        name: import.meta.env.VITE_SITE_NAME,
         test: process.env.VITE_SITE_NAME,
         test2: process.env.REACT_APP_FIREBASE_DATABASE_URL,
       },

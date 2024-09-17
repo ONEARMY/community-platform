@@ -43,6 +43,7 @@ app.use(
         'securetoken.googleapis.com',
         'firestore.googleapis.com',
         'identitytoolkit.googleapis.com',
+        '*.openstreetmap.org',
         ...wsUrls,
       ],
       defaultSrc: [
@@ -77,6 +78,7 @@ app.use(
       imgSrc: [
         "'self'",
         'data:',
+        'blob:',
         'google.com',
         '*.openstreetmap.org',
         'firebasestorage.googleapis.com',

@@ -495,9 +495,9 @@ workflows:
       #       - release-context
       #     requires:
       #       - "Approve Production deployment"
-      - build:
-          name: Build Production Release
-          context: build-context
+      # - build:
+      #     name: Build Production Release
+      #     context: build-context
           # requires:
           #   - 'Release new version to GitHub'
       - deploy:

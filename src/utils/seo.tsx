@@ -39,7 +39,7 @@ export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
       title === 'Community Platform'
         ? title
         : `${title} - ${getConfigurationOption(
-            'SITE_NAME',
+            'VITE_SITE_NAME',
             'Community Platform',
           )}`
 

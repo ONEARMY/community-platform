@@ -1,6 +1,7 @@
 import { toJS } from 'mobx'
 
-import type { IUserDB, UserRole } from 'src/models'
+import type { UserRole } from 'oa-shared'
+import type { IUserDB } from 'src/models'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 
 export const setCollaboratorPermission = async (

@@ -5,8 +5,8 @@ import type {
   IPinGrouping,
   IProfileCreator,
   ProfileTypeName,
+  WorkspaceType,
 } from 'oa-shared'
-import type { WorkspaceType } from './userPreciousPlastic.models'
 
 /**
  * Map pins keep minimal information required for pin display.

@@ -9,12 +9,12 @@ import { Avatar, Box, Card, Flex, Heading, Paragraph } from 'theme-ui'
 import UserContactAndLinks from './UserContactAndLinks'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IUserPPDB } from 'src/models/userPreciousPlastic.models'
+import type { IUserDB } from 'src/models'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
   docs: UserCreatedDocs | undefined
-  user: IUserPPDB
+  user: IUserDB
 }
 
 export const MemberProfile = ({ docs, user }: IProps) => {

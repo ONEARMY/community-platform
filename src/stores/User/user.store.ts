@@ -26,8 +26,8 @@ import type {
   IImpactYearFieldList,
   IUser,
   IUserBadges,
-} from 'src/models/user.models'
-import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
+  IUserDB,
+} from 'src/models'
 import type { IFirebaseUser } from 'src/utils/firebase'
 import type { IConvertedFileMeta } from '../../types'
 import type { IRootStore } from '../RootStore'
@@ -37,12 +37,12 @@ The user store listens to login events through the firebase api and exposes logg
 
 export const COLLECTION_NAME = 'users'
 
-type PartialUser = Partial<IUserPPDB>
+type PartialUser = Partial<IUserDB>
 
 export class UserStore extends ModuleStore {
   private authUnsubscribe: firebase.default.Unsubscribe
 
-  public user: IUserPPDB | null | undefined = null
+  public user: IUserDB | null | undefined = null
   public authUser: User | null = null // TODO: Fix type
   public updateStatus: IUserUpdateStatus = getInitialUpdateStatus()
 
@@ -63,10 +63,10 @@ export class UserStore extends ModuleStore {
 
   public async getUsersStartingWith(prefix: string, limit?: number) {
     // getWhere with the '>=' operator will return every userName that is lexicographically greater than prefix, so adding filter to avoid getting not relvant userNames
-    const users: IUserPP[] = await this.db
-      .collection<IUserPP>(COLLECTION_NAME)
+    const users: IUser[] = await this.db
+      .collection<IUser>(COLLECTION_NAME)
       .getWhere('userName', '>=', prefix, limit)
-    const uniqueUsers: IUserPP[] = uniqBy(
+    const uniqueUsers: IUser[] = uniqBy(
       users.filter((user) => user.userName?.startsWith(prefix)),
       (user) => user.userName,
     )
@@ -118,9 +118,9 @@ export class UserStore extends ModuleStore {
     return signInWithEmailAndPassword(auth, email, password)
   }
 
-  public async getUserByUsername(username: string): Promise<IUserPPDB | null> {
+  public async getUserByUsername(username: string): Promise<IUserDB | null> {
     const [user] = await this.db
-      .collection<IUserPP>(COLLECTION_NAME)
+      .collection<IUser>(COLLECTION_NAME)
       .getWhere('_id', '==', username)
     return user || null
   }
@@ -132,7 +132,7 @@ export class UserStore extends ModuleStore {
   // which could then be used as a single lookup
   public async getUserProfile(_authID: string) {
     const lookup = await this.db
-      .collection<IUserPP>(COLLECTION_NAME)
+      .collection<IUser>(COLLECTION_NAME)
       .getWhere('_authID', '==', _authID)
 
     if (lookup.length === 1) {
@@ -148,7 +148,7 @@ export class UserStore extends ModuleStore {
     }
 
     const lookup2 = await this.db
-      .collection<IUserPP>(COLLECTION_NAME)
+      .collection<IUser>(COLLECTION_NAME)
       .getWhere('_id', '==', _authID)
 
     return lookup2[0]
@@ -319,7 +319,7 @@ export class UserStore extends ModuleStore {
     if (!this.activeUser) return
 
     const user = await this.db
-      .collection<IUserPP>(COLLECTION_NAME)
+      .collection<IUser>(COLLECTION_NAME)
       .doc(this.activeUser._id)
       .get('server')
 
@@ -429,7 +429,6 @@ export class UserStore extends ModuleStore {
     const user: IUser = {
       coverImages: [],
       links: [],
-      moderation: IModerationStatus.AWAITING_MODERATION,
       verified: false,
       _authID: authUser.uid,
       displayName,
@@ -437,6 +436,7 @@ export class UserStore extends ModuleStore {
       notifications: [],
       profileCreated: new Date().toISOString(),
       profileCreationTrigger: trigger,
+      profileType: 'member',
       notification_settings: {
         emailFrequency: EmailNotificationFrequency.WEEKLY,
       },
@@ -481,7 +481,7 @@ export class UserStore extends ModuleStore {
     this.authUnsubscribe()
   }
 
-  public _updateActiveUser(user?: IUserPPDB | null) {
+  public _updateActiveUser(user?: IUserDB | null) {
     this.user = user
   }
 }

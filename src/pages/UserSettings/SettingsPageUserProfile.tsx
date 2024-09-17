@@ -22,7 +22,7 @@ import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from './constants'
 import { buttons } from './labels'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUser } from 'src/models'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 export const SettingsPageUserProfile = () => {
@@ -34,7 +34,7 @@ export const SettingsPageUserProfile = () => {
   const { userStore } = useCommonStores().stores
   const user = userStore.activeUser
 
-  const saveProfile = async (values: IUserPP) => {
+  const saveProfile = async (values: IUser) => {
     if (!user) return
     setIsLoading(true)
 
@@ -72,7 +72,7 @@ export const SettingsPageUserProfile = () => {
     setIsLoading(false)
   }
 
-  const validateForm = (v: IUserPP) => {
+  const validateForm = (v: IUser) => {
     const errors: any = {}
     // must have at least 1 cover (awkard react final form array format)
     if (!v.coverImages[0] && v.profileType !== ProfileTypeList.MEMBER) {

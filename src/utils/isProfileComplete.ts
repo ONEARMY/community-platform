@@ -1,12 +1,12 @@
 import { ProfileTypeList } from 'oa-shared'
 
-import type { IUserPPDB } from 'src/models'
+import type { IUserDB } from 'src/models'
 
 const nonMemberProfileTypes = Object.values(ProfileTypeList).filter(
   (type) => type !== 'member',
 )
 
-export const isProfileComplete = (user: IUserPPDB): boolean => {
+export const isProfileComplete = (user: IUserDB): boolean => {
   const { about, coverImages, displayName, links, userImage } = user
 
   const isBasicInfoFilled = !!(about && displayName && links?.length !== 0)

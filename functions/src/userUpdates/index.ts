@@ -4,6 +4,7 @@ import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import { backupUser } from './backupUser'
 import { updateDiscussionComments } from './updateDiscussionComments'
+import { updateMapPins } from './updateMapPins'
 
 import type { IDBDocChange, IUserDB } from '../models'
 
@@ -17,12 +18,12 @@ import type { IDBDocChange, IUserDB } from '../models'
 export const handleUserUpdates = functions
   .runWith({ memory: '512MB' })
   .firestore.document(`${DB_ENDPOINTS.users}/{id}`)
-  .onUpdate(async (change, context) => {
+  .onUpdate(async (change, _) => {
     await backupUser(change)
     await updateDocuments(change)
   })
 
-const isUserCountryDifferent = (prevInfo, info) => {
+const isUserCountryDifferent = (prevInfo: IUserDB, info: IUserDB) => {
   const prevCountryCode = prevInfo.location?.countryCode
   const newCountryCode = info.location?.countryCode
   const prevCountry = prevInfo.country
@@ -48,6 +49,7 @@ async function updateDocuments(change: IDBDocChange) {
   }
 
   await updateDiscussionComments(prevInfo, info)
+  await updateMapPins(prevInfo, info)
 
   const didDelete = prevDeleted !== deleted && deleted
   if (didDelete) {
@@ -141,6 +143,8 @@ async function updatePostsCountry(userId: string, country: IUserDB['country']) {
 
   return false
 }
+
+// update _lastActive for any action --> content creation/editing
 
 async function deleteMapPin(_id: string) {
   const pin = await db.collection(DB_ENDPOINTS.mappins).doc(_id).get()

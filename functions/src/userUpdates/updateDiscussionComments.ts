@@ -1,7 +1,7 @@
 import { DB_ENDPOINTS } from 'oa-shared'
 
 import { db } from '../Firebase/firestoreDB'
-import { hasKeyDetailsChanged } from './hasKeyDetailsChanged'
+import { getCreatorImage, hasDetailsForCommentsChanged } from './utils'
 
 import type { IDiscussion, IUserDB } from '../models'
 
@@ -9,7 +9,7 @@ export const updateDiscussionComments = async (
   prevUser: IUserDB,
   user: IUserDB,
 ) => {
-  if (!hasKeyDetailsChanged(prevUser, user)) return
+  if (!hasDetailsForCommentsChanged(prevUser, user)) return
 
   const snapshot = await db
     .collection(DB_ENDPOINTS.discussions)
@@ -17,11 +17,12 @@ export const updateDiscussionComments = async (
     .get()
 
   if (!snapshot.empty) {
-    const { _id, badges, userImage, location } = user
+    const { _id, badges, country, userImage, location } = user
     const creatorImage = getCreatorImage(userImage)
+    const creatorCountry = location?.countryCode || country || ''
 
     const userDetails = {
-      creatorCountry: location?.countryCode || '',
+      creatorCountry,
       creatorImage,
       isUserVerified: !!badges?.verified,
       isUserSupporter: !!badges?.supporter,
@@ -46,11 +47,4 @@ export const updateDiscussionComments = async (
     }
     return console.log(`Updated ${updatedCommentCount} discussion comments`)
   }
-}
-
-const getCreatorImage = (userImage: IUserDB['userImage']) => {
-  if (userImage && userImage.downloadUrl) {
-    return userImage.downloadUrl
-  }
-  return null
 }

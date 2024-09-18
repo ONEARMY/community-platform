@@ -15,6 +15,7 @@ ARG YARN_VERSION=3.6.4
 RUN corepack enable && \
     yarn set version ${YARN_VERSION}
 
+
 # Add CircleCI context variables as ARGs
 ARG REACT_APP_BRANCH
 ARG REACT_APP_CDN_URL

@@ -144,8 +144,6 @@ async function updatePostsCountry(userId: string, country: IUserDB['country']) {
   return false
 }
 
-// update _lastActive for any action --> content creation/editing
-
 async function deleteMapPin(_id: string) {
   const pin = await db.collection(DB_ENDPOINTS.mappins).doc(_id).get()
 

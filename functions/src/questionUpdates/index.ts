@@ -1,10 +1,10 @@
-import { firestore } from 'firebase-admin'
 import * as functions from 'firebase-functions'
 
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 
-import type { IUserDB, IQuestionDB } from '../models'
+import type { firestore } from 'firebase-admin'
+import type { IQuestionDB, IUserDB } from '../models'
 
 /*********************************************************************
  * Side-effects to be carried out on various question updates, namely:
@@ -41,10 +41,12 @@ async function updateDocument(docSnapshot: firestore.QueryDocumentSnapshot) {
     .get()
   const user = userSnapshot.docs[0].data() as IUserDB
 
-  let userCreatedQuestions = user.stats?.userCreatedQuestions ?? {}
+  const _lastActive = Date.now().toString(16)
+  const userCreatedQuestions = user.stats?.userCreatedQuestions ?? {}
   userCreatedQuestions[question_id] = question.moderation
 
   await userSnapshot.docs[0].ref.update({
+    _lastActive,
     'stats.userCreatedQuestions': userCreatedQuestions,
   })
 }
@@ -59,10 +61,12 @@ async function deleteDocument(docSnapshot: firestore.QueryDocumentSnapshot) {
     .get()
   const user = userSnapshot.docs[0].data() as IUserDB
 
-  let userCreatedQuestions = user.stats?.userCreatedQuestions ?? {}
+  const _lastActive = Date.now().toString(16)
+  const userCreatedQuestions = user.stats?.userCreatedQuestions ?? {}
   delete userCreatedQuestions[question_id]
 
   await userSnapshot.docs[0].ref.update({
+    _lastActive,
     'stats.userCreatedQuestions': userCreatedQuestions,
   })
 }

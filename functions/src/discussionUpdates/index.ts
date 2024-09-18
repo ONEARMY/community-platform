@@ -1,10 +1,10 @@
-import { firestore } from 'firebase-admin'
 import * as functions from 'firebase-functions'
 
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 
-import type { IUserDB, IDiscussion } from '../models'
+import type { firestore } from 'firebase-admin'
+import type { IDiscussion, IUserDB } from '../models'
 
 /*********************************************************************
  * Side-effects to be carried out on various question updates, namely:
@@ -21,7 +21,6 @@ export const handleDiscussionUpdate = functions
 async function updateDocument(
   change: functions.Change<firestore.QueryDocumentSnapshot>,
 ) {
-  // add new comments to user.stats.userCreatedComments
   const addedComments = getAddedComments(change)
   for (const addedComment of addedComments) {
     const commentId = addedComment._id
@@ -31,10 +30,12 @@ async function updateDocument(
       .get()
     const user = userSnapshot.docs[0].data() as IUserDB
 
-    let userCreatedComments = user.stats?.userCreatedComments ?? {}
+    const _lastActive = Date.now().toString(16)
+    const userCreatedComments = user.stats?.userCreatedComments ?? {}
     userCreatedComments[commentId] = addedComment.parentCommentId
 
     await userSnapshot.docs[0].ref.update({
+      _lastActive,
       'stats.userCreatedComments': userCreatedComments,
     })
   }
@@ -49,10 +50,12 @@ async function updateDocument(
       .get()
     const user = userSnapshot.docs[0].data() as IUserDB
 
-    let userCreatedComments = user.stats?.userCreatedComments ?? {}
+    const _lastActive = Date.now().toString(16)
+    const userCreatedComments = user.stats?.userCreatedComments ?? {}
     delete userCreatedComments[commentId]
 
     await userSnapshot.docs[0].ref.update({
+      _lastActive,
       'stats.userCreatedComments': userCreatedComments,
     })
   }

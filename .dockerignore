@@ -3,8 +3,14 @@ containerization
 dump
 build
 functions
-extension
+extensions
 .circleci
 .github
 .husky
+.nxs
 docs
+packages/cypress
+packages/documentation
+packages/security-rules
+packages/simulated-webhook-receiver
+scripts

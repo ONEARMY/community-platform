@@ -36,9 +36,10 @@ const MemberAndSpace = {
     space: ProjectKampSpace,
   },
 }
+type ProfileType = keyof typeof MemberAndSpace
 
 const getProfileTypes = () => {
-  const theme = import.meta.env.VITE_THEME
+  const theme: ProfileType = import.meta.env.VITE_THEME || 'precious-plastic'
 
   const PROFILE_TYPES: IProfileTypeDetails[] = [
     {

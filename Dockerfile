@@ -52,7 +52,7 @@ RUN apt-get update -qq && \
 ADD . .
 
 # Install packages
-RUN yarn install --production
+RUN yarn install
 
 # Create .env file with CircleCI context variables
 # RUN echo "REACT_APP_BRANCH=${REACT_APP_BRANCH}" >> .env

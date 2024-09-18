@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1
 
-FROM node:20-slim as base
+FROM node:20-slim AS base
 
 LABEL fly_launch_runtime="Remix"
 
@@ -15,7 +15,7 @@ ARG YARN_VERSION=3.6.4
 RUN corepack enable && \
     yarn set version ${YARN_VERSION}
 
-# Add CircleCI context variables as ARGs
+# Add CircleCI context variables AS ARGs
 # ARG REACT_APP_BRANCH
 # ARG REACT_APP_CDN_URL
 # ARG REACT_APP_FIREBASE_API_KEY
@@ -42,7 +42,7 @@ RUN corepack enable && \
 # ARG VITE_QUESTIONS_GUIDELINES_URL
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
@@ -52,7 +52,7 @@ RUN apt-get update -qq && \
 ADD . .
 
 # Install packages
-RUN yarn install --production
+RUN yarn install
 
 # Create .env file with CircleCI context variables
 # RUN echo "REACT_APP_BRANCH=${REACT_APP_BRANCH}" >> .env

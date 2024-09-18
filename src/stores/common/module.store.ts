@@ -1,4 +1,3 @@
-import isUrl from 'is-url'
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { logger } from 'src/logger'
 import { includesAll } from 'src/utils/filters'
@@ -84,10 +83,6 @@ export class ModuleStore {
     }
 
     return newSlug
-  }
-
-  public validateUrl = async (value: any) => {
-    return value ? (isUrl(value) ? undefined : 'Invalid url') : 'Required'
   }
 
   private _createSlug = (title: string) => {

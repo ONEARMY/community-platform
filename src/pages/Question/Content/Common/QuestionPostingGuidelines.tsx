@@ -1,7 +1,7 @@
 import { ExternalLink, Guidelines } from 'oa-components'
 
 export const QuestionPostingGuidelines = () => {
-  const guidelinesUrl = import.meta.env.VITE_QUESTIONS_GUIDELINES_URL
+  const guidelinesUrl = process.env.VITE_QUESTIONS_GUIDELINES_URL
 
   const steps = [
     <>

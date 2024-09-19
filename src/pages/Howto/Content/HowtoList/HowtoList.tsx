@@ -107,7 +107,7 @@ export const HowtoList = observer(() => {
             fontSize: 5,
           }}
         >
-          {import.meta.env.VITE_HOWTOS_HEADING}
+          {process.env.VITE_HOWTOS_HEADING}
         </Heading>
       </Flex>
       <Flex
@@ -180,7 +180,7 @@ export const HowtoList = observer(() => {
       <MoreContainer m={'0 auto'} pt={60} pb={90}>
         <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
           <Heading as="p" sx={{ textAlign: 'center' }}>
-            Inspire the {import.meta.env.VITE_SITE_NAME} world.
+            Inspire the {process.env.VITE_SITE_NAME} world.
             <br />
             Share your how-to!
           </Heading>

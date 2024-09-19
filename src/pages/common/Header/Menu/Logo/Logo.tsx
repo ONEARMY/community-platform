@@ -7,7 +7,7 @@ import { Box, Flex, Image, Text } from 'theme-ui'
 const Logo = observer(() => {
   const theme = useTheme()
 
-  const name = import.meta.env.VITE_SITE_NAME
+  const name = process.env.VITE_SITE_NAME
   const logo = theme.logo
 
   const nameAndVersion = `${name} logo ${VERSION}`

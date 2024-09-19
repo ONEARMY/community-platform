@@ -79,7 +79,7 @@ const Document = withEmotionCache(
 )
 
 const getEnvironmentTheme = () => {
-  switch (import.meta.env.VITE_THEME) {
+  switch (process.env.VITE_THEME) {
     case 'project-kamp':
       return projectKampTheme
     case 'fixing-fashion':

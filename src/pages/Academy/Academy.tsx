@@ -14,7 +14,7 @@ const Academy = () => {
   return (
     <ExternalEmbed
       src={getFrameSrc(
-        import.meta.env.VITE_ACADEMY_RESOURCE,
+        process.env.VITE_ACADEMY_RESOURCE || '',
         location.pathname,
       )}
     />

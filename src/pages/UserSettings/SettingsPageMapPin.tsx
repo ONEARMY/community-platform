@@ -246,7 +246,7 @@ export const SettingsPageMapPin = () => {
             <ExternalLink
               data-cy="WorkspaceMapPinRequiredStars"
               data-testid="WorkspaceMapPinRequiredStars"
-              href={import.meta.env.VITE_COMMUNITY_PROGRAM_URL}
+              href={process.env.VITE_COMMUNITY_PROGRAM_URL}
               sx={{ textDecoration: 'underline', color: 'currentcolor' }}
             >
               {headings.workspace.description}

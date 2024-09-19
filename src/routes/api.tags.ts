@@ -7,10 +7,6 @@ export async function loader() {
   return json(
     [
       {
-        test: process.env.VITE_SITE_NAME,
-        test2: process.env.REACT_APP_FIREBASE_DATABASE_URL,
-        theme: process.env.VITE_THEME,
-        academy: process.env.VITE_ACADEMY_RESOURCE,
         VITE_ACADEMY_RESOURCE: process.env.VITE_ACADEMY_RESOURCE,
         VITE_PROFILE_GUIDELINES_URL: process.env.VITE_PROFILE_GUIDELINES_URL,
         VITE_SITE_NAME: process.env.VITE_SITE_NAME,

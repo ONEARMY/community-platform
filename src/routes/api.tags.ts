@@ -11,6 +11,8 @@ export async function loader() {
         name: import.meta.env.VITE_SITE_NAME,
         test: process.env.VITE_SITE_NAME,
         test2: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+        theme: process.env.VITE_THEME,
+        theme2: import.meta.env.VITE_THEME,
       },
     ],
     { status: 501 },

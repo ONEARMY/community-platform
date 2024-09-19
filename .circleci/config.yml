@@ -374,8 +374,35 @@ jobs:
           command: flyctl auth token $FLY_API_TOKEN --debug --verbose
       - run:
           name: Deploy to fly
-          command: flyctl deploy --app << parameters.FLY_APP_NAME >> --config << parameters.FLY_TOML >> --debug --verbose --build-secret VITE_THEME=fixing-fashion,VITE_SITE_NAME=$VITE_SITE_NAME
-
+          command: |
+            flyctl deploy \
+              --app << parameters.FLY_APP_NAME >> \
+              --config << parameters.FLY_TOML >> \
+              --debug --verbose \
+              --build-secret REACT_APP_BRANCH: $REACT_APP_BRANCH \
+              --build-secret REACT_APP_CDN_URL: $REACT_APP_CDN_URL \
+              --build-secret REACT_APP_FIREBASE_API_KEY: $REACT_APP_FIREBASE_API_KEY \
+              --build-secret REACT_APP_FIREBASE_AUTH_DOMAIN: $REACT_APP_FIREBASE_AUTH_DOMAIN \
+              --build-secret REACT_APP_FIREBASE_DATABASE_URL: $REACT_APP_FIREBASE_DATABASE_URL \
+              --build-secret REACT_APP_FIREBASE_MESSAGING_SENDER_ID: $REACT_APP_FIREBASE_MESSAGING_SENDER_ID \
+              --build-secret REACT_APP_FIREBASE_PROJECT_ID: $REACT_APP_FIREBASE_PROJECT_ID \
+              --build-secret REACT_APP_FIREBASE_STORAGE_BUCKET: $REACT_APP_FIREBASE_STORAGE_BUCKET \
+              --build-secret REACT_APP_SENTRY_DSN: $REACT_APP_SENTRY_DSN \
+              --build-secret REACT_APP_GA_TRACKING_ID: $REACT_APP_GA_TRACKING_ID \
+              --build-secret REACT_APP_PATREON_CLIENT_ID: $REACT_APP_PATREON_CLIENT_ID \
+              --build-secret REACT_APP_PLATFORM_THEME: $REACT_APP_PLATFORM_THEME \
+              --build-secret REACT_APP_PROJECT_VERSION: $REACT_APP_PROJECT_VERSION \
+              --build-secret REACT_APP_SUPPORTED_MODULES: $REACT_APP_SUPPORTED_MODULES \
+              --build-secret VITE_ACADEMY_RESOURCE: $VITE_ACADEMY_RESOURCE \
+              --build-secret VITE_PROFILE_GUIDELINES_URL: $VITE_PROFILE_GUIDELINES_URL \
+              --build-secret VITE_SITE_NAME: $VITE_SITE_NAME \
+              --build-secret VITE_THEME: $VITE_THEME \
+              --build-secret VITE_DONATIONS_BODY: $VITE_DONATIONS_BODY \
+              --build-secret VITE_DONATIONS_IFRAME_SRC: $VITE_DONATIONS_IFRAME_SRC \
+              --build-secret VITE_DONATIONS_IMAGE_URL: $VITE_DONATIONS_IMAGE_URL \
+              --build-secret VITE_HOWTOS_HEADING: $VITE_HOWTOS_HEADING \
+              --build-secret VITE_COMMUNITY_PROGRAM_URL: $VITE_COMMUNITY_PROGRAM_URL \
+              --build-secret VITE_QUESTIONS_GUIDELINES_URL: $VITE_QUESTIONS_GUIDELINES_URL
   # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker

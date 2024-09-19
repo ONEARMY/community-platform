@@ -39,7 +39,8 @@ const MemberAndSpace = {
 type ProfileType = keyof typeof MemberAndSpace
 
 const getProfileTypes = () => {
-  const theme: ProfileType = import.meta.env.VITE_THEME || 'precious-plastic'
+  const theme: ProfileType =
+    (process.env.VITE_THEME as ProfileType) || 'precious-plastic'
 
   const PROFILE_TYPES: IProfileTypeDetails[] = [
     {

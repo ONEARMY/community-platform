@@ -54,6 +54,55 @@ ADD . .
 # Install packages
 RUN yarn install
 
+RUN --mount=type=secret,id=REACT_APP_BRANCH \
+    --mount=type=secret,id=REACT_APP_CDN_URL \
+    --mount=type=secret,id=REACT_APP_FIREBASE_API_KEY \
+    --mount=type=secret,id=REACT_APP_FIREBASE_AUTH_DOMAIN \
+    --mount=type=secret,id=REACT_APP_FIREBASE_DATABASE_URL \
+    --mount=type=secret,id=REACT_APP_FIREBASE_MESSAGING_SENDER_ID \
+    --mount=type=secret,id=REACT_APP_FIREBASE_PROJECT_ID \
+    --mount=type=secret,id=REACT_APP_FIREBASE_STORAGE_BUCKET \
+    --mount=type=secret,id=REACT_APP_SENTRY_DSN \
+    --mount=type=secret,id=REACT_APP_GA_TRACKING_ID \
+    --mount=type=secret,id=REACT_APP_PATREON_CLIENT_ID \
+    --mount=type=secret,id=REACT_APP_PLATFORM_THEME \
+    --mount=type=secret,id=REACT_APP_PROJECT_VERSION \
+    --mount=type=secret,id=REACT_APP_SUPPORTED_MODULES \
+    --mount=type=secret,id=VITE_ACADEMY_RESOURCE \
+    --mount=type=secret,id=VITE_PROFILE_GUIDELINES_URL \
+    --mount=type=secret,id=VITE_SITE_NAME \
+    --mount=type=secret,id=VITE_THEME \
+    --mount=type=secret,id=VITE_DONATIONS_BODY \
+    --mount=type=secret,id=VITE_DONATIONS_IFRAME_SRC \
+    --mount=type=secret,id=VITE_DONATIONS_IMAGE_URL \
+    --mount=type=secret,id=VITE_HOWTOS_HEADING \
+    --mount=type=secret,id=VITE_COMMUNITY_PROGRAM_URL \
+    --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL \
+    REACT_APP_BRANCH="$(cat /run/secrets/REACT_APP_BRANCH)" \
+    REACT_APP_CDN_URL="$(cat /run/secrets/REACT_APP_CDN_URL)" \
+    REACT_APP_FIREBASE_API_KEY="$(cat /run/secrets/REACT_APP_FIREBASE_API_KEY)" \
+    REACT_APP_FIREBASE_AUTH_DOMAIN="$(cat /run/secrets/REACT_APP_FIREBASE_AUTH_DOMAIN)" \
+    REACT_APP_FIREBASE_DATABASE_URL="$(cat /run/secrets/REACT_APP_FIREBASE_DATABASE_URL)" \
+    REACT_APP_FIREBASE_MESSAGING_SENDER_ID="$(cat /run/secrets/REACT_APP_FIREBASE_MESSAGING_SENDER_ID)" \
+    REACT_APP_FIREBASE_PROJECT_ID="$(cat /run/secrets/REACT_APP_FIREBASE_PROJECT_ID)" \
+    REACT_APP_FIREBASE_STORAGE_BUCKET="$(cat /run/secrets/REACT_APP_FIREBASE_STORAGE_BUCKET)" \
+    REACT_APP_SENTRY_DSN="$(cat /run/secrets/REACT_APP_SENTRY_DSN)" \
+    REACT_APP_GA_TRACKING_ID="$(cat /run/secrets/REACT_APP_GA_TRACKING_ID)" \
+    REACT_APP_PATREON_CLIENT_ID="$(cat /run/secrets/REACT_APP_PATREON_CLIENT_ID)" \
+    REACT_APP_PLATFORM_THEME="$(cat /run/secrets/REACT_APP_PLATFORM_THEME)" \
+    REACT_APP_PROJECT_VERSION="$(cat /run/secrets/REACT_APP_PROJECT_VERSION)" \
+    REACT_APP_SUPPORTED_MODULES="$(cat /run/secrets/REACT_APP_SUPPORTED_MODULES)" \
+    VITE_ACADEMY_RESOURCE="$(cat /run/secrets/VITE_ACADEMY_RESOURCE)" \
+    VITE_PROFILE_GUIDELINES_URL="$(cat /run/secrets/VITE_PROFILE_GUIDELINES_URL)" \
+    VITE_SITE_NAME="$(cat /run/secrets/VITE_SITE_NAME)" \
+    VITE_THEME="$(cat /run/secrets/VITE_THEME)" \
+    VITE_DONATIONS_BODY="$(cat /run/secrets/VITE_DONATIONS_BODY)" \
+    VITE_DONATIONS_IFRAME_SRC="$(cat /run/secrets/VITE_DONATIONS_IFRAME_SRC)" \
+    VITE_DONATIONS_IMAGE_URL="$(cat /run/secrets/VITE_DONATIONS_IMAGE_URL)" \
+    VITE_HOWTOS_HEADING="$(cat /run/secrets/VITE_HOWTOS_HEADING)" \
+    VITE_COMMUNITY_PROGRAM_URL="$(cat /run/secrets/VITE_COMMUNITY_PROGRAM_URL)" \
+    VITE_QUESTIONS_GUIDELINES_URL="$(cat /run/secrets/VITE_QUESTIONS_GUIDELINES_URL)"
+
 # Create .env file with CircleCI context variables
 RUN echo "REACT_APP_BRANCH=${REACT_APP_BRANCH}" >> .env
 RUN echo "REACT_APP_CDN_URL=${REACT_APP_CDN_URL}" >> .env

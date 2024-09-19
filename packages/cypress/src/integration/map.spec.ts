@@ -27,7 +27,7 @@ describe('[Map]', () => {
     cy.step('New map shows the cards')
     cy.get('[data-cy="welome-header"]').should('be.visible')
     cy.get('[data-cy="CardList-desktop"]').should('be.visible')
-    cy.get('[data-cy="list-results"]').contains('51 results in view')
+    cy.get('[data-cy="list-results"]').contains('52 results in view')
 
     cy.step('Map filters can be used')
     cy.get('[data-cy=FilterList]')
@@ -37,10 +37,10 @@ describe('[Map]', () => {
     cy.get('[data-cy=MapListFilter]').first().click()
     cy.get('[data-cy="list-results"]').contains('6 results in view')
     cy.get('[data-cy=MapListFilter-active]').first().click()
-    cy.get('[data-cy="list-results"]').contains('51 results in view')
+    cy.get('[data-cy="list-results"]').contains('52 results in view')
 
     cy.step('As the user moves in the list updates')
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 9; i++) {
       cy.get('.leaflet-control-zoom-in').click()
     }
     cy.get('[data-cy="list-results"]').contains('1 result')

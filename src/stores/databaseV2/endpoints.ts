@@ -13,7 +13,7 @@ const e = import.meta.env || process.env || ({} as any)
  */
 const DB_PREFIX =
   (typeof sessionStorage !== 'undefined' && sessionStorage.DB_PREFIX) ||
-  e.REACT_APP_DB_PREFIX ||
+  e.VITE_DB_PREFIX ||
   ''
 
 /**

@@ -4,7 +4,6 @@ import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
-import envCompatible from 'vite-plugin-env-compatible'
 import svgr from 'vite-plugin-svgr'
 import ViteTsConfigPathsPlugin from 'vite-tsconfig-paths'
 
@@ -54,8 +53,6 @@ export default defineConfig({
     }),
     // support import of svg files
     svgr(),
-    // support REACT_APP variables accessed via process.env
-    envCompatible({ prefix: 'REACT_APP_' }),
   ],
   // open browser with server (note, will open at 127.0.1 not localhost on node <17)
   // https://vitejs.dev/config/server-options.html#server-options

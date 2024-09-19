@@ -3,7 +3,7 @@ import { SupportedProfileTypesFactory } from './SupportedProfileTypesFactory'
 
 export const getSupportedProfileTypes = () => {
   const supportedProfileTypes = SupportedProfileTypesFactory(
-    getConfigurationOption('REACT_APP_PLATFORM_PROFILES', ''),
+    getConfigurationOption('VITE_PLATFORM_PROFILES', ''),
   )()
 
   return supportedProfileTypes

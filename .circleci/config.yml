@@ -291,13 +291,13 @@ jobs:
       - run:
           name: Set branch environment
           command: |
-            echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
-            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export VITE_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
+            echo 'export VITE_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
-            echo REACT_APP_BRANCH=$REACT_APP_BRANCH
-            echo $REACT_APP_PROJECT_VERSION
+            echo VITE_BRANCH=$VITE_BRANCH
+            echo $VITE_PROJECT_VERSION
       - run:
           command: yarn build
       - persist_to_workspace:
@@ -355,20 +355,20 @@ jobs:
               --app << parameters.FLY_APP_NAME >> \
               --config << parameters.FLY_TOML >> \
               --debug --verbose \
-              --build-secret REACT_APP_BRANCH="$REACT_APP_BRANCH" \
-              --build-secret REACT_APP_CDN_URL="$REACT_APP_CDN_URL" \
-              --build-secret REACT_APP_FIREBASE_API_KEY="$REACT_APP_FIREBASE_API_KEY" \
-              --build-secret REACT_APP_FIREBASE_AUTH_DOMAIN="$REACT_APP_FIREBASE_AUTH_DOMAIN" \
-              --build-secret REACT_APP_FIREBASE_DATABASE_URL="$REACT_APP_FIREBASE_DATABASE_URL" \
-              --build-secret REACT_APP_FIREBASE_MESSAGING_SENDER_ID="$REACT_APP_FIREBASE_MESSAGING_SENDER_ID" \
-              --build-secret REACT_APP_FIREBASE_PROJECT_ID="$REACT_APP_FIREBASE_PROJECT_ID" \
-              --build-secret REACT_APP_FIREBASE_STORAGE_BUCKET="$REACT_APP_FIREBASE_STORAGE_BUCKET" \
-              --build-secret REACT_APP_SENTRY_DSN="$REACT_APP_SENTRY_DSN" \
-              --build-secret REACT_APP_GA_TRACKING_ID="$REACT_APP_GA_TRACKING_ID" \
-              --build-secret REACT_APP_PATREON_CLIENT_ID="$REACT_APP_PATREON_CLIENT_ID" \
-              --build-secret REACT_APP_PLATFORM_THEME="$REACT_APP_PLATFORM_THEME" \
-              --build-secret REACT_APP_PROJECT_VERSION="$REACT_APP_PROJECT_VERSION" \
-              --build-secret REACT_APP_SUPPORTED_MODULES="$REACT_APP_SUPPORTED_MODULES" \
+              --build-secret VITE_BRANCH="$VITE_BRANCH" \
+              --build-secret VITE_CDN_URL="$VITE_CDN_URL" \
+              --build-secret VITE_FIREBASE_API_KEY="$VITE_FIREBASE_API_KEY" \
+              --build-secret VITE_FIREBASE_AUTH_DOMAIN="$VITE_FIREBASE_AUTH_DOMAIN" \
+              --build-secret VITE_FIREBASE_DATABASE_URL="$VITE_FIREBASE_DATABASE_URL" \
+              --build-secret VITE_FIREBASE_MESSAGING_SENDER_ID="$VITE_FIREBASE_MESSAGING_SENDER_ID" \
+              --build-secret VITE_FIREBASE_PROJECT_ID="$VITE_FIREBASE_PROJECT_ID" \
+              --build-secret VITE_FIREBASE_STORAGE_BUCKET="$VITE_FIREBASE_STORAGE_BUCKET" \
+              --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN" \
+              --build-secret VITE_GA_TRACKING_ID="$VITE_GA_TRACKING_ID" \
+              --build-secret VITE_PATREON_CLIENT_ID="$VITE_PATREON_CLIENT_ID" \
+              --build-secret VITE_PLATFORM_THEME="$VITE_PLATFORM_THEME" \
+              --build-secret VITE_PROJECT_VERSION="$VITE_PROJECT_VERSION" \
+              --build-secret VITE_SUPPORTED_MODULES="$VITE_SUPPORTED_MODULES" \
               --build-secret VITE_ACADEMY_RESOURCE="$VITE_ACADEMY_RESOURCE" \
               --build-secret VITE_PROFILE_GUIDELINES_URL="$VITE_PROFILE_GUIDELINES_URL" \
               --build-secret VITE_SITE_NAME="$VITE_SITE_NAME" \

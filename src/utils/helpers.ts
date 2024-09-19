@@ -204,10 +204,7 @@ export const isContactable = (preference: boolean | undefined) => {
 }
 
 export const getProjectEmail = (subject: string) => {
-  const site = getConfigurationOption(
-    'REACT_APP_PLATFORM_THEME',
-    'precious-plastic',
-  )
+  const site = getConfigurationOption('VITE_PLATFORM_THEME', 'precious-plastic')
   return `mailto:platform@onearmy.earth?subject=${subject}%20${site}`
 }
 

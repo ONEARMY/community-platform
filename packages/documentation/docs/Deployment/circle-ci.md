@@ -44,29 +44,29 @@ See [circleci slack orb](https://github.com/CircleCI-Public/slack-orb) for info)
 
 ### Runtime Variables
 
-Any variables prefixed with `REACT_APP_` are automatically included with the runtime build. Currently we require:
+Any variables prefixed with `VITE_` are automatically included with the runtime build. Currently we require:
 
 Firebase configuration
 
 ```
-REACT_APP_FIREBASE_API_KEY
-REACT_APP_FIREBASE_AUTH_DOMAIN
-REACT_APP_FIREBASE_DATABASE_URL
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID
-REACT_APP_FIREBASE_PROJECT_ID
-REACT_APP_FIREBASE_STORAGE_BUCKET
+VITE_FIREBASE_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN
+VITE_FIREBASE_DATABASE_URL
+VITE_FIREBASE_MESSAGING_SENDER_ID
+VITE_FIREBASE_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET
 ```
 
 Sentry error tracking
 
 ```
-REACT_APP_SENTRY_DSN
+VITE_SENTRY_DSN
 ```
 
 Google Analytics
 
 ```
-REACT_APP_GA_TRACKING_ID
+VITE_GA_TRACKING_ID
 ```
 
 ### Misc Variables

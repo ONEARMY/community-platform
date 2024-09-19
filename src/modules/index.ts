@@ -13,7 +13,7 @@ export enum MODULE {
 export const getSupportedModules = (): MODULE[] => {
   const envModules: string[] =
     getConfigurationOption(
-      'REACT_APP_SUPPORTED_MODULES',
+      'VITE_SUPPORTED_MODULES',
       'howto,map,research,academy,user,question',
     )
       .split(',')

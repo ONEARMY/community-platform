@@ -60,14 +60,14 @@ const getSiteVariant = (): siteVariants => {
   }
   if (
     (typeof location !== 'undefined' && location.host === 'localhost:3456') ||
-    _c('REACT_APP_SITE_VARIANT') === 'test-ci'
+    _c('VITE_SITE_VARIANT') === 'test-ci'
   ) {
     return 'test-ci'
   }
-  if (_c('REACT_APP_SITE_VARIANT') === 'preview') {
+  if (_c('VITE_SITE_VARIANT') === 'preview') {
     return 'preview'
   }
-  switch (_c('REACT_APP_BRANCH')) {
+  switch (_c('VITE_BRANCH')) {
     case 'production':
       return 'production'
     case 'master':
@@ -129,12 +129,12 @@ const firebaseConfigs: { [variant in siteVariants]: IFirebaseConfig } = {
   },
   /** Production/live backend with released frontend */
   production: {
-    apiKey: _c('REACT_APP_FIREBASE_API_KEY'),
-    authDomain: _c('REACT_APP_FIREBASE_AUTH_DOMAIN'),
-    databaseURL: _c('REACT_APP_FIREBASE_DATABASE_URL'),
-    messagingSenderId: _c('REACT_APP_FIREBASE_MESSAGING_SENDER_ID'),
-    projectId: _c('REACT_APP_FIREBASE_PROJECT_ID'),
-    storageBucket: _c('REACT_APP_FIREBASE_STORAGE_BUCKET'),
+    apiKey: _c('VITE_FIREBASE_API_KEY'),
+    authDomain: _c('VITE_FIREBASE_AUTH_DOMAIN'),
+    databaseURL: _c('VITE_FIREBASE_DATABASE_URL'),
+    messagingSenderId: _c('VITE_FIREBASE_MESSAGING_SENDER_ID'),
+    projectId: _c('VITE_FIREBASE_PROJECT_ID'),
+    storageBucket: _c('VITE_FIREBASE_STORAGE_BUCKET'),
   },
 }
 /*********************************************************************************************** /
@@ -146,24 +146,24 @@ export const SITE = siteVariant
 export const FIREBASE_CONFIG = firebaseConfigs[siteVariant]
 export const SENTRY_CONFIG: ISentryConfig = {
   dsn: _c(
-    'REACT_APP_SENTRY_DSN',
+    'VITE_SENTRY_DSN',
     'https://8c1f7eb4892e48b18956af087bdfa3ac@sentry.io/1399729',
   ),
   environment: siteVariant,
 }
 
-export const CDN_URL = _c('REACT_APP_CDN_URL', '')
-export const VERSION = _c('REACT_APP_PROJECT_VERSION', '')
-export const GA_TRACKING_ID = _c('REACT_APP_GA_TRACKING_ID')
-export const PATREON_CLIENT_ID = _c('REACT_APP_PATREON_CLIENT_ID')
+export const CDN_URL = _c('VITE_CDN_URL', '')
+export const VERSION = _c('VITE_PROJECT_VERSION', '')
+export const GA_TRACKING_ID = _c('VITE_GA_TRACKING_ID')
+export const PATREON_CLIENT_ID = _c('VITE_PATREON_CLIENT_ID')
 export const API_URL = _c(
-  'REACT_APP_API_URL',
+  'VITE_API_URL',
   'https://platform-api-voymtdup6a-uc.a.run.app',
 )
 
 export const isPreciousPlastic = (): boolean => {
   return (
-    _c('REACT_APP_PLATFORM_THEME') === 'precious-plastic' ||
+    _c('VITE_PLATFORM_THEME') === 'precious-plastic' ||
     (typeof localStorage !== 'undefined' &&
       localStorage.getItem('platformTheme')) === 'precious-plastic'
   )

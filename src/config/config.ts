@@ -16,16 +16,18 @@ import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
 /**
  * Helper function to load configuration property
  * from the global configuration object
- * During the development cycle this will be process.env
- * when running this application with the output of `yarn build`
- * we will instead load from the global window
  *
  * @param property
  * @param fallbackValue - optional fallback value
  * @returns string
  */
 const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
-  return process.env?.[property] || fallbackValue || ''
+  return (
+    import.meta.env?.[property] ||
+    process.env?.[property] ||
+    fallbackValue ||
+    ''
+  )
 }
 
 export const getConfigurationOption = _c

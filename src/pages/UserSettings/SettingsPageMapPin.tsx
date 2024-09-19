@@ -145,6 +145,9 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
 }
 
 export const SettingsPageMapPin = () => {
+  const communityProgramUrl =
+    import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
+    process.env.VITE_COMMUNITY_PROGRAM_URL
   const [mapPin, setMapPin] = useState<IMapPin>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [notification, setNotification] = useState<
@@ -246,7 +249,7 @@ export const SettingsPageMapPin = () => {
             <ExternalLink
               data-cy="WorkspaceMapPinRequiredStars"
               data-testid="WorkspaceMapPinRequiredStars"
-              href={process.env.VITE_COMMUNITY_PROGRAM_URL}
+              href={communityProgramUrl}
               sx={{ textDecoration: 'underline', color: 'currentcolor' }}
             >
               {headings.workspace.description}

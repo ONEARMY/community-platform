@@ -374,7 +374,7 @@ jobs:
           command: flyctl auth token $FLY_API_TOKEN --debug --verbose
       - run:
           name: Mount build secrets
-          command: RUN --mount=type=secret,id=REACT_APP_BRANCH REACT_APP_BRANCH="$(cat /run/secrets/REACT_APP_BRANCH)" \
+          command: RUN --mount=type=secret,id=REACT_APP_BRANCH \
             --mount=type=secret,id=REACT_APP_CDN_URL \
             --mount=type=secret,id=REACT_APP_FIREBASE_API_KEY \
             --mount=type=secret,id=REACT_APP_FIREBASE_AUTH_DOMAIN \
@@ -398,6 +398,7 @@ jobs:
             --mount=type=secret,id=VITE_HOWTOS_HEADING \
             --mount=type=secret,id=VITE_COMMUNITY_PROGRAM_URL \
             --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL \
+            REACT_APP_BRANCH="$(cat /run/secrets/REACT_APP_BRANCH)" \
             REACT_APP_CDN_URL="$(cat /run/secrets/REACT_APP_CDN_URL)" \
             REACT_APP_FIREBASE_API_KEY="$(cat /run/secrets/REACT_APP_FIREBASE_API_KEY)" \
             REACT_APP_FIREBASE_AUTH_DOMAIN="$(cat /run/secrets/REACT_APP_FIREBASE_AUTH_DOMAIN)" \

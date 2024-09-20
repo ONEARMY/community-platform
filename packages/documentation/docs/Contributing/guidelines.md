@@ -1,90 +1,25 @@
-Hey there, Future Contributor! Welcome to our project playground! Before you dive in and start contributing your awesome ideas, please take a moment to check out our [Official Documentation](https://onearmy.github.io/community-platform/).
-
-
+---
+id: guidelines
+title: Guidelines
+---
 # Contribution Guidelines
-
-Thanks for being here already! You'll find all the information you need to start contributing to the project. Make sure to read them before submitting your contribution.
-
-If you think something is missing, consider sending us a PR.
 
 ## 🍽&nbsp; Summary
 
-- [Code of conduct](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--code-of-conduct)
-- [Getting started](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--getting-started)
-- [Issue Tracking and Management](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--issue-tracking-and-management)
-- [Development Bounties](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--development-bounties)
-- [Project structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--project-structure)
-- [Branch structure](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--branch-structure)
-- [Javascript style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--javascript-style-guide)
-- [Commit style guide](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--commit-style-guide)
-- [Deployments](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--deployments)
-- [Joining the team](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#--joining-the-team)
-- [Why haven't you used ...](https://github.com/ONEARMY/community-platform/blob/master/CONTRIBUTING.md#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
+- [Getting started](/)
+- [Code of conduct](#--code-of-conduct)
+- [Issue Tracking and Management](#--issue-tracking-and-management)
+- [Project structure](#--project-structure)
+- [Branch structure](#--branch-structure)
+- [Javascript style guide](#--javascript-style-guide)
+- [Commit style guide](#--commit-style-guide)
+- [Deployments](#--deployments)
+- [Joining the team](#--joining-the-team)
+- [Why haven't you used ...](#-why-havent-you-used-insert-favourite-languageframeworkconvention-here)
 
 ## 👐 &nbsp; Code of Conduct
 
-This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behaviour to [platform@onearmy.earth](mailto:platform@onearmy.earth).
-
-## 📟 &nbsp; Getting started
-
-### Prerequisites
-
-- [Node.js v20](https://nodejs.org/en/download/)
-- [Yarn v3](https://yarnpkg.com/getting-started/install)
-
-### One time setup
-
-1. Fork the repository.
-
-2. Clone the project from the fork you have created previously at first step:
-
-   ```
-   git clone https://github.com/<your-github-username>/community-platform.git
-   ```
-
-3. Install dependencies
-   ```
-   yarn install
-   ```
-
-### Running the web app
-
-There are two options.
-
-#### Cloud based backend
-
-This option is simple but only starts the frontend. The backend services are hosted on the internet (https://precious-plastics-v4-dev.firebaseapp.com) and may be accessed by many developers.
-
-This setup is:
-
-- Good for starting
-- Good for frontend development
-- Bad for backend development
-
-Simply run:
-
-```
-yarn run start
-```
-
-In this case:
-
-- frontend: http://localhost:3000
-
-#### Emulator based backend
-
-This option is slightly more complicated but allows you to run the frontend and backend system locally (except for sending emails.) This option is experimental.
-
-This setup is:
-
-- Good for frontend development
-- Good for backend development
-
-See the details at [here](https://docs.platform.onearmy.earth/Backend%20Development/firebase-emulators-docker/).
-
-### Learn more
-
-More information is available in the [developer documentation](https://docs.platform.onearmy.earth/).
+This project and everyone participating in it is governed by the [Code of Conduct](/Conributing/Code%20of%20Conduct). By participating, you are expected to uphold this code. Please report unacceptable behaviour to [platform@onearmy.earth](mailto:platform@onearmy.earth).
 
 ## 🐛 &nbsp; Issue Tracking and Management
 
@@ -92,16 +27,16 @@ Issues are tracked on GitHub. Use the labels to filter them to your needs and/or
 Anybody can create an issue or feature request, but be sure to use our templates if you want your voice to be heard.
 Some issues are collated to form modules which are the parent of each section of the platform. Modules are then split into **pages** and finally **components**. You can navigate through them by filtering with the labels `Type:Module` and `Type:Pages`. Having a look at **module** and **pages** issues is the best way to get a clear overview of the ongoing work on it.
 
-Additionally if you have identified a bug, please try to write a test to make reproducible (and less likely to arise in the future). You can find more information to do this in the [Testing Overview](https://onearmy.github.io/community-platform/Testing/overview)
+Additionally if you have identified a bug, please try to write a test to make reproducible (and less likely to arise in the future). You can find more information to do this in the [Testing Overview](/Testing/overview)
 
 We've also labelled some of the issues with _[Good first issue](https://github.com/ONEARMY/community-platform/issues?q=is%3Aissue+is%3Aopen+label%3A%22Good+first+issue%22)_ to help you get started quickly.
 When you start working on an issue, comment on it or if your are a registered contributor assign yourself to let us know so we avoid working on something twice. The comment should include a mention to [@ONEARMY/maintainers](https://github.com/orgs/ONEARMY/teams/maintainers).
 
 It is expected that the developer will have done thorough testing themselves first, this helps make sure most pull requests get merged quickly.
 
-## 🤑 &nbsp; Development Bounties
+<!--## 🤑 &nbsp; Development Bounties
 
-We have a small bounty system as a way of saying thanks to developers for contributing their time and code. Find out more about it in [Bounties](./BOUNTIES.md)
+We have a small bounty system as a way of saying thanks to developers for contributing their time and code. Find out more about it in [Bounties](./BOUNTIES.md)-->
 
 ## 🏠 &nbsp; Project Structure
 

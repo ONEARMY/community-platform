@@ -10,7 +10,7 @@ primary_region = 'cdg'
   processes = ['app']
 
 [env]
-  VITE_BRANCH = "${VITE_BRANCH}"
+  VITE_BRANCH = "production"
 
 [[vm]]
   memory = '4gb'

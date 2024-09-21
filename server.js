@@ -44,6 +44,7 @@ app.use(
         'firestore.googleapis.com',
         'identitytoolkit.googleapis.com',
         '*.openstreetmap.org',
+        '*.firebaseio.com',
         ...wsUrls,
       ],
       defaultSrc: [
@@ -68,6 +69,7 @@ app.use(
         "'unsafe-eval'",
         "'unsafe-inline'",
         '*.firebasedatabase.app',
+        '*.firebaseio.com',
       ],
       frameSrc: [
         "'self'",

@@ -291,7 +291,7 @@ jobs:
       - run:
           name: Set branch environment
           command: |
-            echo 'export REACT_APP_BRANCH=${VITE_BRANCH}' >> $BASH_ENV
+            echo 'export VITE_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
             echo 'export VITE_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Check environment variables

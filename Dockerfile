@@ -31,6 +31,7 @@ ARG VITE_PLATFORM_THEME
 ARG VITE_PROJECT_VERSION
 ARG VITE_SUPPORTED_MODULES
 ARG VITE_ACADEMY_RESOURCE
+ARG VITE_API_URL
 ARG VITE_PROFILE_GUIDELINES_URL
 ARG VITE_SITE_NAME
 ARG VITE_THEME
@@ -69,6 +70,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_PROJECT_VERSION \
     --mount=type=secret,id=VITE_SUPPORTED_MODULES \
     --mount=type=secret,id=VITE_ACADEMY_RESOURCE \
+    --mount=type=secret,id=VITE_API_URL \
     --mount=type=secret,id=VITE_PROFILE_GUIDELINES_URL \
     --mount=type=secret,id=VITE_SITE_NAME \
     --mount=type=secret,id=VITE_THEME \
@@ -93,6 +95,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     VITE_PROJECT_VERSION="$(cat /run/secrets/VITE_PROJECT_VERSION)" && \
     VITE_SUPPORTED_MODULES="$(cat /run/secrets/VITE_SUPPORTED_MODULES)" && \
     VITE_ACADEMY_RESOURCE="$(cat /run/secrets/VITE_ACADEMY_RESOURCE)" && \
+    VITE_API_URL="(cat /run/secrets/VITE_API_URL)" && \
     VITE_PROFILE_GUIDELINES_URL="$(cat /run/secrets/VITE_PROFILE_GUIDELINES_URL)" && \
     VITE_SITE_NAME="$(cat /run/secrets/VITE_SITE_NAME)" && \
     VITE_THEME="$(cat /run/secrets/VITE_THEME)" && \
@@ -117,6 +120,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     echo "VITE_PROJECT_VERSION=\"${VITE_PROJECT_VERSION}\"" >> .env && \
     echo "VITE_SUPPORTED_MODULES=\"${VITE_SUPPORTED_MODULES}\"" >> .env && \
     echo "VITE_ACADEMY_RESOURCE=\"${VITE_ACADEMY_RESOURCE}\"" >> .env && \
+    echo "VITE_API_URL=\"${VITE_API_URL}\"" >> .env && \
     echo "VITE_PROFILE_GUIDELINES_URL=\"${VITE_PROFILE_GUIDELINES_URL}\"" >> .env && \
     echo "VITE_SITE_NAME=\"${VITE_SITE_NAME}\"" >> .env && \
     echo "VITE_THEME=\"${VITE_THEME}\"" >> .env && \

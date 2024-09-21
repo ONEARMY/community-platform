@@ -74,6 +74,7 @@ app.use(
         'youtube.com',
         'onearmy.github.io', // because PP academy is hosted there
         'donorbox.org',
+        'netlify.app',
       ],
       imgSrc: [
         "'self'",

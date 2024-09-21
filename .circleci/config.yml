@@ -374,6 +374,7 @@ jobs:
               --build-secret VITE_PROJECT_VERSION="$VITE_PROJECT_VERSION" \
               --build-secret VITE_SUPPORTED_MODULES="$VITE_SUPPORTED_MODULES" \
               --build-secret VITE_ACADEMY_RESOURCE="$VITE_ACADEMY_RESOURCE" \
+              --build-secret VITE_API_URL="$VITE_API_URL" \
               --build-secret VITE_PROFILE_GUIDELINES_URL="$VITE_PROFILE_GUIDELINES_URL" \
               --build-secret VITE_SITE_NAME="$VITE_SITE_NAME" \
               --build-secret VITE_THEME="$VITE_THEME" \

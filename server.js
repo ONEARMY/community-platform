@@ -67,6 +67,7 @@ app.use(
         'www.youtube.com',
         "'unsafe-eval'",
         "'unsafe-inline'",
+        '*.firebasedatabase.app',
       ],
       frameSrc: [
         "'self'",

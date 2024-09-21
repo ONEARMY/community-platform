@@ -70,11 +70,10 @@ app.use(
       ],
       frameSrc: [
         "'self'",
-        'www.youtube.com',
-        'youtube.com',
-        'onearmy.github.io', // because PP academy is hosted there
-        'donorbox.org',
-        'netlify.app',
+        '*.youtube.com',
+        '*.onearmy.github.io',
+        '*.donorbox.org',
+        '*.netlify.app',
       ],
       imgSrc: [
         "'self'",

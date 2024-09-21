@@ -79,7 +79,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_DONATIONS_IMAGE_URL \
     --mount=type=secret,id=VITE_HOWTOS_HEADING \
     --mount=type=secret,id=VITE_COMMUNITY_PROGRAM_URL \
-    --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL && \
+    --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL \
     VITE_CDN_URL="$(cat /run/secrets/VITE_CDN_URL)" && \
     VITE_BRANCH="$(cat /run/secrets/VITE_BRANCH)" && \
     VITE_FIREBASE_API_KEY="$(cat /run/secrets/VITE_FIREBASE_API_KEY)" && \

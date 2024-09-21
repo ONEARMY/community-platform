@@ -79,9 +79,9 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     --mount=type=secret,id=VITE_DONATIONS_IMAGE_URL \
     --mount=type=secret,id=VITE_HOWTOS_HEADING \
     --mount=type=secret,id=VITE_COMMUNITY_PROGRAM_URL \
-    --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL \
-    VITE_BRANCH="$(cat /run/secrets/VITE_BRANCH)" && \
+    --mount=type=secret,id=VITE_QUESTIONS_GUIDELINES_URL && \
     VITE_CDN_URL="$(cat /run/secrets/VITE_CDN_URL)" && \
+    VITE_BRANCH="$(cat /run/secrets/VITE_BRANCH)" && \
     VITE_FIREBASE_API_KEY="$(cat /run/secrets/VITE_FIREBASE_API_KEY)" && \
     VITE_FIREBASE_AUTH_DOMAIN="$(cat /run/secrets/VITE_FIREBASE_AUTH_DOMAIN)" && \
     VITE_FIREBASE_DATABASE_URL="$(cat /run/secrets/VITE_FIREBASE_DATABASE_URL)" && \
@@ -105,8 +105,8 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     VITE_HOWTOS_HEADING="$(cat /run/secrets/VITE_HOWTOS_HEADING)" && \
     VITE_COMMUNITY_PROGRAM_URL="$(cat /run/secrets/VITE_COMMUNITY_PROGRAM_URL)" && \
     VITE_QUESTIONS_GUIDELINES_URL="$(cat /run/secrets/VITE_QUESTIONS_GUIDELINES_URL)" && \
-    echo "VITE_BRANCH=\"${VITE_BRANCH}\"" >> .env && \
     echo "VITE_CDN_URL=\"${VITE_CDN_URL}\"" >> .env && \
+    echo "VITE_BRANCH=\"${VITE_BRANCH}\"" >> .env && \
     echo "VITE_FIREBASE_API_KEY=\"${VITE_FIREBASE_API_KEY}\"" >> .env && \
     echo "VITE_FIREBASE_AUTH_DOMAIN=\"${VITE_FIREBASE_AUTH_DOMAIN}\"" >> .env && \
     echo "VITE_FIREBASE_DATABASE_URL=\"${VITE_FIREBASE_DATABASE_URL}\"" >> .env && \

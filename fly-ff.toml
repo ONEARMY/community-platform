@@ -9,6 +9,9 @@ primary_region = 'cdg'
   auto_stop_machines = 'off'
   processes = ['app']
 
+[env]
+  VITE_BRANCH = "${VITE_BRANCH}"
+
 [[vm]]
   memory = '4gb'
   cpu_kind = 'shared'

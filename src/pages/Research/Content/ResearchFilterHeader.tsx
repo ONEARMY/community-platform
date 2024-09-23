@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { Select } from 'oa-components'
+import { SearchField, Select } from 'oa-components'
 import { ResearchStatus } from 'oa-shared'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { Flex, Input } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { CategoriesSelectV2 } from '../../common/Category/CategoriesSelectV2'
 import { listing } from '../labels'
@@ -25,8 +25,9 @@ const researchStatusOptions = [
 
 export const ResearchFilterHeader = () => {
   const [categories, setCategories] = useState<SelectValue[]>([])
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchString, setSearchString] = useState<string>('')
 
+  const [searchParams, setSearchParams] = useSearchParams()
   const categoryParam = searchParams.get(ResearchSearchParams.category)
   const category = categories?.find((x) => x.value === categoryParam) ?? null
   const q = searchParams.get(ResearchSearchParams.q)
@@ -36,7 +37,7 @@ export const ResearchFilterHeader = () => {
 
   // TODO: create a library component for this
   const _inputStyle = {
-    width: ['100%', '100%', '200px'],
+    width: ['100%', '100%', '230px'],
     mr: [0, 0, 2],
     mb: [3, 3, 0],
   }
@@ -69,21 +70,25 @@ export const ResearchFilterHeader = () => {
 
   const onSearchInputChange = useCallback(
     debounce((value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set(ResearchSearchParams.q, value)
-
-      if (value.length > 0 && sort !== 'MostRelevant') {
-        params.set(ResearchSearchParams.sort, 'MostRelevant')
-      }
-
-      if (value.length === 0 || !value) {
-        params.set(ResearchSearchParams.sort, 'LatestUpdated')
-      }
-
-      setSearchParams(params)
+      searchValue(value)
     }, 1000),
     [searchParams],
   )
+
+  const searchValue = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(ResearchSearchParams.q, value)
+
+    if (value.length > 0 && sort !== 'MostRelevant') {
+      params.set(ResearchSearchParams.sort, 'MostRelevant')
+    }
+
+    if (value.length === 0 || !value) {
+      params.set(ResearchSearchParams.sort, 'LatestUpdated')
+    }
+
+    setSearchParams(params)
+  }
 
   return (
     <Flex
@@ -134,12 +139,19 @@ export const ResearchFilterHeader = () => {
       </Flex>
       {/* Text search */}
       <Flex sx={_inputStyle}>
-        <Input
-          variant="inputOutline"
-          data-cy="research-search-box"
-          defaultValue={q || ''}
-          placeholder={listing.search}
-          onChange={(e) => onSearchInputChange(e.target.value)}
+        <SearchField
+          dataCy="research-search-box"
+          placeHolder={listing.search}
+          value={searchString}
+          onChange={(value) => {
+            setSearchString(value)
+            onSearchInputChange(value)
+          }}
+          onClickDelete={() => {
+            setSearchString('')
+            searchValue('')
+          }}
+          onClickSearch={() => searchValue(searchString)}
         />
       </Flex>
     </Flex>

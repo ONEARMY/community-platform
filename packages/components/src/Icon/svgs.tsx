@@ -16,6 +16,7 @@ import bazarSVG from '../../assets/icons/icon-bazar.svg'
 import commentSVG from '../../assets/icons/icon-comment.svg'
 import discordSVG from '../../assets/icons/icon-discord.svg'
 import emailOutlineSVG from '../../assets/icons/icon-email.svg'
+import searchSVG from '../../assets/icons/icon-search.svg'
 import socialMediaSVG from '../../assets/icons/icon-social-media.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
 import starSVG from '../../assets/icons/icon-star-default.svg'
@@ -89,4 +90,5 @@ export const iconMap = {
   view: <ImageIcon src={viewSVG} />,
   volunteer: <ImageIcon src={volunteerSVG} />,
   website: <ImageIcon src={websiteSVG} />,
+  search: <ImageIcon src={searchSVG} />,
 }

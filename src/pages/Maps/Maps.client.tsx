@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate } from '@remix-run/react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { filterMapPinsByType } from 'src/stores/Maps/filter'
@@ -36,12 +36,59 @@ const MapsPage = observer(() => {
   const location = useLocation()
   const mapPinService = useContext(MapPinServiceContext)
 
-  const mapRef = React.useRef<Map>(null)
-  const newMapRef = React.useRef<Map>(null)
+  const mapRef = useRef<Map>(null)
+  const newMapRef = useRef<Map>(null)
   const user = userStore.activeUser
 
   if (!mapPinService) {
     return null
+  }
+
+  useEffect(() => {
+    if (!selectedPin) {
+      promptUserLocation()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (mapPins.length === 0) {
+      fetchMapPins()
+    }
+  }, [mapPins])
+
+  useEffect(() => {
+    const pinId = location.hash.slice(1)
+    if (pinId.length > 0) {
+      if (selectedPin) setSelectedPin(null)
+      else selectPinByUserId(pinId)
+    } else {
+      setSelectedPin(null)
+    }
+  }, [location.hash])
+
+  useEffect(() => {
+    const userName = user?._id
+    if (!userName) {
+      return
+    }
+
+    mapPinService.getMapPinSelf(userName).then((userMapPin) => {
+      if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
+        setMapPins([...mapPins, userMapPin])
+      }
+    })
+  }, [user])
+
+  const promptUserLocation = async () => {
+    try {
+      const position = await GetLocation()
+      setCenter({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+    } catch (error) {
+      logger.error(error)
+    }
   }
 
   const fetchMapPins = async () => {
@@ -50,23 +97,6 @@ const MapsPage = observer(() => {
     setMapPins(pins)
     setNotification('')
   }
-
-  useEffect(() => {
-    fetchMapPins()
-
-    const showPin = async () => {
-      await showPinFromURL()
-
-      if (!selectedPin) {
-        promptUserLocation()
-      }
-    }
-    showPin()
-
-    return () => {
-      setSelectedPin(null)
-    }
-  }, [])
 
   const availableFilters = useMemo(() => {
     return transformAvailableFiltersToGroups(mapPins, [
@@ -79,34 +109,11 @@ const MapsPage = observer(() => {
     ])
   }, [mapPins])
 
-  const promptUserLocation = async () => {
-    try {
-      const position = await GetLocation()
-      setCenter({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-    } catch (error) {
-      logger.error(error)
-      // do nothing if location cannot be retrieved
-    }
-  }
+  const visibleMapPins = useMemo(() => {
+    return filterMapPinsByType(mapPins, activePinFilters)
+  }, [mapPins, activePinFilters])
 
-  /**
-   * Check current hash in case matches a mappin and try to load
-   *
-   **/
-  const showPinFromURL = async () => {
-    const pinId = location.hash.slice(1)
-    if (pinId) {
-      logger.info(`Fetching map pin by user id: ${pinId}`)
-      await getPinByUserId(pinId)
-    }
-  }
-
-  const getPinByUserId = async (userId: string) => {
-    navigate(`/map#${userId}`)
-
+  const selectPinByUserId = async (userId: string) => {
     // First check the mapPins to see if the pin is already
     // partially loaded
     const preLoadedPin = mapPins.find((pin) => pin._id === userId)
@@ -115,6 +122,7 @@ const MapsPage = observer(() => {
       setSelectedPin(preLoadedPin)
     }
 
+    // If only the mapPins where preloaded with the "detail" property, i think that this could fly away
     const pin = await mapPinService.getMapPinByUserId(userId)
     if (pin) {
       logger.info(`Fetched map pin by user id`, { userId })
@@ -125,13 +133,9 @@ const MapsPage = observer(() => {
     }
   }
 
-  const visibleMapPins = useMemo(() => {
-    return filterMapPinsByType(mapPins, activePinFilters)
-  }, [mapPins, activePinFilters])
-
   const onBlur = () => {
-    navigate('/map')
     setSelectedPin(null)
+    navigate('/map')
   }
 
   return (
@@ -152,7 +156,8 @@ const MapsPage = observer(() => {
             mapRef={mapRef}
             pins={visibleMapPins}
             onPinClicked={(pin) => {
-              getPinByUserId(pin._id)
+              selectPinByUserId(pin._id)
+              navigate(`/map#${pin._id}`)
             }}
             onBlur={onBlur}
             center={center}
@@ -169,7 +174,8 @@ const MapsPage = observer(() => {
           notification={notification}
           onLocationChange={(latlng) => setCenter(latlng)}
           onPinClicked={(pin) => {
-            getPinByUserId(pin._id)
+            selectPinByUserId(pin._id)
+            navigate(`/map#${pin._id}`)
           }}
           onBlur={onBlur}
           pins={visibleMapPins}

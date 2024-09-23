@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { Select } from 'oa-components'
+import { SearchField, Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 import {
   QuestionSearchParams,
   questionService,
 } from 'src/pages/Question/question.service'
-import { Flex, Input } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { CategoriesSelectV2 } from '../common/Category/CategoriesSelectV2'
 import { listing } from './labels'
@@ -18,6 +18,7 @@ import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionFilterHeader = () => {
   const [categories, setCategories] = useState<SelectValue[]>([])
+  const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
   const categoryParam = searchParams.get(QuestionSearchParams.category)
@@ -26,7 +27,7 @@ export const QuestionFilterHeader = () => {
   const sort = searchParams.get(QuestionSearchParams.sort) as QuestionSortOption
 
   const _inputStyle = {
-    width: ['100%', '100%', '200px'],
+    width: ['100%', '100%', '230px'],
     mr: [0, 0, 2],
     mb: [3, 3, 0],
   }
@@ -59,21 +60,25 @@ export const QuestionFilterHeader = () => {
 
   const onSearchInputChange = useCallback(
     debounce((value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set('q', value)
-
-      if (value.length > 0 && sort !== 'MostRelevant') {
-        params.set('sort', 'MostRelevant')
-      }
-
-      if (value.length === 0 || !value) {
-        params.set('sort', 'Newest')
-      }
-
-      setSearchParams(params)
+      searchValue(value)
     }, 500),
     [searchParams],
   )
+
+  const searchValue = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('q', value)
+
+    if (value.length > 0 && sort !== 'MostRelevant') {
+      params.set('sort', 'MostRelevant')
+    }
+
+    if (value.length === 0 || !value) {
+      params.set('sort', 'Newest')
+    }
+
+    setSearchParams(params)
+  }
 
   return (
     <Flex
@@ -108,12 +113,19 @@ export const QuestionFilterHeader = () => {
         </FieldContainer>
       </Flex>
       <Flex sx={_inputStyle}>
-        <Input
-          variant="inputOutline"
-          data-cy="questions-search-box"
-          defaultValue={q || ''}
-          placeholder={listing.search}
-          onChange={(e) => onSearchInputChange(e.target.value)}
+        <SearchField
+          dataCy="questions-search-box"
+          placeHolder={listing.search}
+          value={searchString}
+          onChange={(value) => {
+            setSearchString(value)
+            onSearchInputChange(value)
+          }}
+          onClickDelete={() => {
+            setSearchString('')
+            searchValue('')
+          }}
+          onClickSearch={() => searchValue(searchString)}
         />
       </Flex>
     </Flex>

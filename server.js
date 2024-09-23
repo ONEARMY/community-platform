@@ -41,6 +41,7 @@ const imgSrc = [
   'firebasestorage.googleapis.com',
   'onearmy.github.io',
   'cdn.jsdelivr.net',
+  '*.google-analytics.com',
 ]
 
 const cdnUrl = import.meta.env.VITE_CDN_URL || process.env.VITE_CDN_URL
@@ -63,6 +64,8 @@ app.use(
         '*.openstreetmap.org',
         '*.firebaseio.com',
         '*.firebasedatabase.app',
+        '*.google-analytics.com',
+        'firebasestorage.googleapis.com',
         ...wsUrls,
       ],
       defaultSrc: [

@@ -184,6 +184,7 @@ const MapsPage = observer(() => {
           center={center}
           mapRef={newMapRef}
           notification={notification}
+          onLocationChange={(latlng) => setCenter(latlng)}
           onPinClicked={(pin) => {
             getPinByUserId(pin._id)
           }}

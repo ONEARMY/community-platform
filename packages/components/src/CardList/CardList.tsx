@@ -30,7 +30,9 @@ export const CardList = (props: IProps) => {
 
   const isListEmpty = displayItems.length === 0
   const hasListLoaded = list
-  const results = `${displayItems.length} result${displayItems.length == 1 ? '' : 's'} in view`
+  const results = `${displayItems.length} result${
+    displayItems.length == 1 ? '' : 's'
+  } in view`
 
   return (
     <Flex

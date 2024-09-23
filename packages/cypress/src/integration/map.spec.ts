@@ -88,11 +88,19 @@ describe('[Map]', () => {
         .should('have.attr', 'href')
         .and('include', `/u/${userId}`)
     })
-    cy.get('[data-cy=FilterList-ButtonRight]').last().click().click().click()
+    cy.get('[data-cy=FilterList-ButtonRight]').last().click().click()
     cy.get('[data-cy=MapListFilter]').last().click()
 
     cy.step('Mobile list view can be hidden')
     cy.get('[data-cy="ShowMapButton"]').click()
     cy.get('[data-cy="CardList-mobile"]').should('not.be.visible')
+
+    cy.step('The whole map can be searched')
+    cy.get('[data-cy="ShowMobileListButton"]').click()
+    cy.get('[data-cy=osm-geocoding]').last().click().type('london')
+    cy.wait(2000) // Needed for location response
+    cy.contains('London, Greater London, England, United Kingdom').click()
+    cy.wait(2000) // Needed for animation
+    cy.get('.icon-cluster-text').contains('3')
   })
 })

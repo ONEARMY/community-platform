@@ -44,11 +44,12 @@ interface IProps {
   center: ILatLng
   mapRef: React.RefObject<MapType>
   notification?: string
-  pins: IMapPin[]
-  zoom: number
   onBlur: () => void
   onPinClicked: (pin: IMapPin) => void
+  onLocationChange: (latlng: ILatLng) => void
+  pins: IMapPin[]
   setZoom: (arg: number) => void
+  zoom: number
 }
 
 export const MapWithList = (props: IProps) => {
@@ -58,10 +59,11 @@ export const MapWithList = (props: IProps) => {
     mapRef,
     notification,
     onBlur,
+    onLocationChange,
     onPinClicked,
     pins,
-    zoom,
     setZoom,
+    zoom,
   } = props
 
   const [activePinFilters, setActivePinFilters] = useState<string[]>([])
@@ -136,7 +138,9 @@ export const MapWithList = (props: IProps) => {
           pins={pins}
           activePinFilters={activePinFilters}
           availableFilters={availableFilters}
+          onBlur={onBlur}
           onFilterChange={onFilterChange}
+          onLocationChange={onLocationChange}
           filteredPins={filteredPins}
           viewport="desktop"
         />
@@ -171,11 +175,14 @@ export const MapWithList = (props: IProps) => {
           </Button>
         </Flex>
         <MapWithListHeader
-          pins={pins}
           activePinFilters={activePinFilters}
           availableFilters={availableFilters}
-          onFilterChange={onFilterChange}
           filteredPins={filteredPins}
+          onBlur={onBlur}
+          onFilterChange={onFilterChange}
+          onLocationChange={onLocationChange}
+          pins={pins}
+          setShowMobileList={setShowMobileList}
           viewport="mobile"
         />
       </Box>
@@ -193,6 +200,8 @@ export const MapWithList = (props: IProps) => {
         onclick={() => onBlur()}
         ondragend={handleLocationFilter}
         onzoomend={handleLocationFilter}
+        onresize={handleLocationFilter}
+        useFlyTo
       >
         <Flex
           sx={{

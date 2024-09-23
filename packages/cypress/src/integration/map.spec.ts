@@ -27,8 +27,7 @@ describe('[Map]', () => {
     cy.step('New map shows the cards')
     cy.get('[data-cy="welome-header"]').should('be.visible')
     cy.get('[data-cy="CardList-desktop"]').should('be.visible')
-    // Should be 'x results in view' - reduction in coverage until temp API removed
-    cy.get('[data-cy="list-results"]').contains('results in view')
+    cy.get('[data-cy="list-results"]').contains('52 results in view')
 
     cy.step('Map filters can be used')
     cy.get('[data-cy=FilterList]')
@@ -39,8 +38,7 @@ describe('[Map]', () => {
     // Reduction in coverage until temp API removed
     // cy.get('[data-cy="list-results"]').contains('6 results in view')
     cy.get('[data-cy=MapListFilter-active]').first().click()
-    // Reduction in coverage until temp API removed
-    // cy.get('[data-cy="list-results"]').contains('52 results in view')
+    cy.get('[data-cy="list-results"]').contains('52 results in view')
 
     cy.step('As the user moves in the list updates')
     for (let i = 0; i < 9; i++) {
@@ -66,14 +64,17 @@ describe('[Map]', () => {
     cy.url().should('include', `#${userId}`)
 
     cy.step('New map pins can be hidden with the cross button')
+    cy.get('[data-cy=PinProfile]').should('be.visible')
     cy.get('[data-cy=PinProfileCloseButton]').click()
-    cy.get('[data-cy=PinProfile]').should('not.exist')
     cy.url().should('not.include', `#${userId}`)
+    cy.get('[data-cy=PinProfile]').should('not.exist')
 
     cy.step('New map pins can be hidden by clicking the map')
     cy.get(`[data-cy=pin-${userId}]`).click()
+    cy.url().should('include', `#${userId}`)
     cy.get('[data-cy=PinProfile]').should('be.visible')
-    cy.get('.markercluster-map').click(0, 0)
+    cy.get('.markercluster-map').click(10, 10)
+    cy.url().should('not.include', `#${userId}`)
     cy.get('[data-cy=PinProfile]').should('not.exist')
 
     cy.step('Mobile list view can be shown')
@@ -101,8 +102,10 @@ describe('[Map]', () => {
     cy.step('The whole map can be searched')
     cy.get('[data-cy="ShowMobileListButton"]').click()
     cy.get('[data-cy=osm-geocoding]').last().click().type('london')
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000) // Needed for location response
     cy.contains('London, Greater London, England, United Kingdom').click()
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(2000) // Needed for animation
     cy.get('.icon-cluster-text').contains('3')
   })

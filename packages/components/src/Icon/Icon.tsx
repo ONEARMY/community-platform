@@ -123,6 +123,7 @@ export const glyphs: IGlyphs = {
   view: iconMap.view,
   volunteer: iconMap.volunteer,
   website: iconMap.website,
+  search: iconMap.search,
 }
 
 export type Props = IProps & VerticalAlignProps & SpaceProps

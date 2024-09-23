@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Input } from 'theme-ui'
 import { useDebouncedCallback } from 'use-debounce'
 
+import { SearchField } from '../SearchField/SearchField'
 import { OsmGeocodingLoader } from './OsmGeocodingLoader'
 import { OsmGeocodingResultsList } from './OsmGeocodingResultsList'
 
@@ -94,16 +94,26 @@ export const OsmGeocoding = ({
       ref={mainContainerRef}
       style={{ width: '100%' }}
     >
-      <Input
+      <SearchField
         autoComplete="off"
-        type="search"
         name="geocoding"
         id="geocoding"
-        data-cy="osm-geocoding-input"
-        placeholder={placeholder}
+        dataCy="osm-geocoding-input"
+        placeHolder={placeholder}
         value={searchValue}
-        style={{
-          width: '100%',
+        onChange={(value: string) => {
+          setQueryLocationService(true)
+          setSearchValue(value)
+        }}
+        onClickDelete={() => {
+          setSearchValue('')
+          setQueryLocationService(false)
+        }}
+        onClickSearch={() => {
+          setQueryLocationService(true)
+          setSearchValue(searchValue)
+        }}
+        additionalStyle={{
           background: 'white',
           fontFamily: 'Varela Round',
           fontSize: '14px',
@@ -113,11 +123,6 @@ export const OsmGeocoding = ({
           borderRadius:
             showResultsListing || showLoader ? '5px 5px 0 0' : '5px',
           marginBottom: 0,
-        }}
-        onClick={() => setShowResults(true)}
-        onChange={(event) => {
-          setQueryLocationService(true)
-          setSearchValue(event.target.value)
         }}
       />
       {showLoader && <OsmGeocodingLoader />}

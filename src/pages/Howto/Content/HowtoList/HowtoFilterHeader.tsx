@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
-import { Select } from 'oa-components'
+import { SearchField, Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
-import { Flex, Input } from 'theme-ui'
+import { Flex } from 'theme-ui'
 
 import { CategoriesSelectV2 } from '../../../common/Category/CategoriesSelectV2'
 import { howtoService, HowtosSearchParams } from '../../howto.service'
@@ -15,6 +15,7 @@ import type { HowtoSortOption } from './HowtoSortOptions'
 
 export const HowtoFilterHeader = () => {
   const [categories, setCategories] = useState<SelectValue[]>([])
+  const [searchString, setSearchString] = useState<string>('')
 
   const [searchParams, setSearchParams] = useSearchParams()
   const categoryParam = searchParams.get(HowtosSearchParams.category)
@@ -23,10 +24,16 @@ export const HowtoFilterHeader = () => {
   const sort = searchParams.get(HowtosSearchParams.sort) as HowtoSortOption
 
   const _inputStyle = {
-    width: ['100%', '100%', '200px'],
+    width: ['100%', '100%', '230px'],
     mr: [0, 0, 2],
     mb: [3, 3, 0],
   }
+
+  useEffect(() => {
+    if (q && q.length > 0) {
+      setSearchString(q)
+    }
+  }, [q])
 
   useEffect(() => {
     const initCategories = async () => {
@@ -57,21 +64,25 @@ export const HowtoFilterHeader = () => {
 
   const onSearchInputChange = useCallback(
     debounce((value: string) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set(HowtosSearchParams.q, value)
-
-      if (value.length > 0 && sort !== 'MostRelevant') {
-        params.set(HowtosSearchParams.sort, 'MostRelevant')
-      }
-
-      if (value.length === 0 || !value) {
-        params.set(HowtosSearchParams.sort, 'Newest')
-      }
-
-      setSearchParams(params)
+      searchValue(value)
     }, 500),
     [searchParams],
   )
+
+  const searchValue = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(HowtosSearchParams.q, value)
+
+    if (value.length > 0 && sort !== 'MostRelevant') {
+      params.set(HowtosSearchParams.sort, 'MostRelevant')
+    }
+
+    if (value.length === 0 || !value) {
+      params.set(HowtosSearchParams.sort, 'Newest')
+    }
+
+    setSearchParams(params)
+  }
 
   return (
     <Flex
@@ -109,12 +120,19 @@ export const HowtoFilterHeader = () => {
         </FieldContainer>
       </Flex>
       <Flex sx={_inputStyle}>
-        <Input
-          variant="inputOutline"
-          data-cy="howtos-search-box"
-          defaultValue={q || ''}
-          placeholder={listing.search}
-          onChange={(e) => onSearchInputChange(e.target.value)}
+        <SearchField
+          dataCy="howtos-search-box"
+          placeHolder={listing.search}
+          value={searchString}
+          onChange={(value) => {
+            setSearchString(value)
+            onSearchInputChange(value)
+          }}
+          onClickDelete={() => {
+            setSearchString('')
+            searchValue('')
+          }}
+          onClickSearch={() => searchValue(searchString)}
         />
       </Flex>
     </Flex>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Flex, Input, Text } from 'theme-ui'
+import { Box, Flex, Input, Text } from 'theme-ui'
 
 import { CharacterCount } from '../CharacterCount/CharacterCount'
 
@@ -14,6 +14,7 @@ export interface Props extends FieldProps {
   showCharacterCount?: boolean
   'data-cy'?: string
   customOnBlur?: (event: any) => void
+  endAdornment?: any
 }
 
 type InputModifiers = {
@@ -44,37 +45,62 @@ export const FieldInput = ({
   showCharacterCount,
   minLength,
   maxLength,
+  endAdornment,
   ...rest
 }: Props) => {
   const [curLength, setLength] = useState<number>(input?.value?.length ?? 0)
+
+  const InputElement = (
+    <Input
+      disabled={disabled}
+      variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
+      {...input}
+      {...rest}
+      minLength={minLength}
+      maxLength={maxLength}
+      onBlur={(e) => {
+        if (modifiers) {
+          e.target.value = processInputModifiers(e.target.value, modifiers)
+          input.onChange(e)
+        }
+        if (customOnBlur) {
+          customOnBlur(e)
+        }
+        input.onBlur()
+      }}
+      onChange={(ev) => {
+        showCharacterCount && setLength(ev.target.value.length)
+        input.onChange(ev)
+      }}
+    />
+  )
 
   return (
     <Flex sx={{ flexDirection: 'column', flex: 1, gap: 1 }}>
       {meta.error && meta.touched && (
         <Text sx={{ fontSize: 1, color: 'error' }}>{meta.error}</Text>
       )}
-      <Input
-        disabled={disabled}
-        variant={meta?.error && meta?.touched ? 'textareaError' : 'textarea'}
-        {...input}
-        {...rest}
-        minLength={minLength}
-        maxLength={maxLength}
-        onBlur={(e) => {
-          if (modifiers) {
-            e.target.value = processInputModifiers(e.target.value, modifiers)
-            input.onChange(e)
-          }
-          if (customOnBlur) {
-            customOnBlur(e)
-          }
-          input.onBlur()
-        }}
-        onChange={(ev) => {
-          showCharacterCount && setLength(ev.target.value.length)
-          input.onChange(ev)
-        }}
-      />
+      {endAdornment ? (
+        <Box
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            position: 'relative',
+          }}
+        >
+          {InputElement}
+          <Box
+            sx={{
+              position: 'absolute',
+              right: 2,
+            }}
+          >
+            {endAdornment}
+          </Box>
+        </Box>
+      ) : (
+        InputElement
+      )}
       {showCharacterCount && maxLength && (
         <CharacterCount
           currentSize={curLength}

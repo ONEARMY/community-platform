@@ -44,7 +44,7 @@ const imgSrc = [
   '*.google-analytics.com',
 ]
 
-const cdnUrl = import.meta.env.VITE_CDN_URL || process.env.VITE_CDN_URL
+const cdnUrl = import.meta.env?.VITE_CDN_URL || process.env?.VITE_CDN_URL
 
 if (cdnUrl) {
   imgSrc.push(cdnUrl)

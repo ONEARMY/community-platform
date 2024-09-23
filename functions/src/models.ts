@@ -15,6 +15,7 @@ export type {
   INotification,
   IPendingEmails,
   IResearchDB,
+  IResearch,
   IUserDB,
   IQuestionDB,
 } from '../../src/models'

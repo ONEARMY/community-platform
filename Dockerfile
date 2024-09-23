@@ -95,7 +95,7 @@ RUN --mount=type=secret,id=VITE_BRANCH \
     VITE_PROJECT_VERSION="$(cat /run/secrets/VITE_PROJECT_VERSION)" && \
     VITE_SUPPORTED_MODULES="$(cat /run/secrets/VITE_SUPPORTED_MODULES)" && \
     VITE_ACADEMY_RESOURCE="$(cat /run/secrets/VITE_ACADEMY_RESOURCE)" && \
-    VITE_API_URL="(cat /run/secrets/VITE_API_URL)" && \
+    VITE_API_URL="$(cat /run/secrets/VITE_API_URL)" && \
     VITE_PROFILE_GUIDELINES_URL="$(cat /run/secrets/VITE_PROFILE_GUIDELINES_URL)" && \
     VITE_SITE_NAME="$(cat /run/secrets/VITE_SITE_NAME)" && \
     VITE_THEME="$(cat /run/secrets/VITE_THEME)" && \

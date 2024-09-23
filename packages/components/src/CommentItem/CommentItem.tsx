@@ -91,7 +91,11 @@ export const CommentItem = (props: IProps) => {
                   width: ['30px', '50px'],
                   height: ['30px', '50px'],
                 }}
-                alt={creatorName ? `Avatar of ${creatorName}` : 'Avatar of comment author'}
+                alt={
+                  creatorName
+                    ? `Avatar of ${creatorName}`
+                    : 'Avatar of comment author'
+                }
               />
             </Box>
 

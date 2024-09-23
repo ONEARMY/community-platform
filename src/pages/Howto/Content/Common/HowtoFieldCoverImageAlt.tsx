@@ -19,7 +19,7 @@ export const HowtoFieldCoverImageAlt = () => {
           placeholder={placeholder}
         />
       </Box>
-      <Text color='grey' mt={4} sx={{ fontSize: 1 }}>
+      <Text color="grey" mt={4} sx={{ fontSize: 1 }}>
         {description}
       </Text>
     </FormFieldWrapper>

@@ -32,6 +32,23 @@ app.disable('x-powered-by')
 
 const wsUrls = process.env.WS_URLS?.split(',').map((url) => url.trim())
 
+const imgSrc = [
+  "'self'",
+  'data:',
+  'blob:',
+  'google.com',
+  '*.openstreetmap.org',
+  'firebasestorage.googleapis.com',
+  'onearmy.github.io',
+  'cdn.jsdelivr.net',
+]
+
+const cdnUrl = import.meta.env.VITE_CDN_URL || process.env.VITE_CDN_URL
+
+if (cdnUrl) {
+  imgSrc.push(cdnUrl)
+}
+
 // helmet config
 app.use(
   helmet.contentSecurityPolicy({
@@ -45,6 +62,7 @@ app.use(
         'identitytoolkit.googleapis.com',
         '*.openstreetmap.org',
         '*.firebaseio.com',
+        '*.firebasedatabase.app',
         ...wsUrls,
       ],
       defaultSrc: [
@@ -78,16 +96,7 @@ app.use(
         '*.donorbox.org',
         '*.netlify.app',
       ],
-      imgSrc: [
-        "'self'",
-        'data:',
-        'blob:',
-        'google.com',
-        '*.openstreetmap.org',
-        'firebasestorage.googleapis.com',
-        'onearmy.github.io',
-        'cdn.jsdelivr.net', // image CDN
-      ],
+      imgSrc: imgSrc,
       objectSrc: ["'self'"],
       // Enforce HTTPS only on production
       upgradeInsecureRequests:

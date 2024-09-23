@@ -5,7 +5,8 @@ import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 import { CONFIG } from '../config/config'
 
 import type { AxiosError, AxiosResponse } from 'axios'
-import type { IMapPin, IResearchDB } from '../models'
+import type { IResearch } from '../../../src/models'
+import type { IMapPin } from '../models'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com
@@ -63,28 +64,16 @@ export const notifyResearchUpdatePublished = functions
   .onUpdate((change) =>
     handleResearchUpdatePublished(
       DISCORD_WEBHOOK_URL,
-      change.before.data() as IResearchDB,
-      change.after.data() as IResearchDB,
+      change.before.data() as IResearch.ItemDB,
+      change.after.data() as IResearch.ItemDB,
       sendDiscordMessage,
     ),
   )
 
-export interface SimpleResearchArticle {
-  slug: string
-  updates: SimpleResearchArticleUpdate[]
-}
-
-interface SimpleResearchArticleUpdate {
-  _id: string
-  title: string
-  collaborators?: string[]
-  status?: ResearchUpdateStatus
-}
-
 export async function handleResearchUpdatePublished(
   webhookUrl: string,
-  previousContent: SimpleResearchArticle,
-  updatedContent: SimpleResearchArticle,
+  previousContent: IResearch.ItemDB,
+  updatedContent: IResearch.ItemDB,
   sendMessage: (content: string) => Promise<AxiosResponse<any, any>>,
 ): Promise<void> {
   if (webhookUrl === '' || webhookUrl === undefined || webhookUrl === null) {
@@ -92,15 +81,21 @@ export async function handleResearchUpdatePublished(
     return
   }
 
-  if (previousContent.updates.length >= updatedContent.updates.length) {
+  const previousUpdates = previousContent.updates
+  const updatedUpdates = updatedContent.updates
+
+  const lastOldUpdate = previousUpdates[previousUpdates.length - 1]
+  const lastNewUpdate = updatedUpdates[updatedUpdates.length - 1]
+
+  if (
+    previousUpdates.length >= updatedUpdates.length &&
+    lastOldUpdate?.status === lastNewUpdate?.status
+  ) {
     console.log('There is no new update')
     return
   }
 
-  const newUpdateIndex = updatedContent.updates.length - 1
-  const newUpdate = updatedContent.updates[newUpdateIndex]
-
-  if (newUpdate.status === ResearchUpdateStatus.DRAFT) {
+  if (lastNewUpdate.status === ResearchUpdateStatus.DRAFT) {
     console.log('Update is a draft')
     return
   }
@@ -109,19 +104,15 @@ export async function handleResearchUpdatePublished(
   // but it is a list.
   // source:
   // https://github.com/ONEARMY/community-platform/issues/3533#issuecomment-2171799601
-  const collaborators = newUpdate.collaborators || []
+  const collaborators = lastNewUpdate.collaborators || []
   const author = collaborators[0] || 'unknown'
-
-  const title = newUpdate.title
-
-  // There is no way to "deep link" to an individual section
-  // so we link to the whole article.
+  const title = lastNewUpdate.title
   const slug = updatedContent.slug
 
   try {
     const response = await sendMessage(
       `📝 New update from ${author} in their research: ${title}\n` +
-        `Learn about it here: <${SITE_URL}/research/${slug}#update_${newUpdate._id}>`,
+        `Learn about it here: <${SITE_URL}/research/${slug}#update_${lastNewUpdate._id}>`,
     )
     handleResponse(response)
   } catch (error) {

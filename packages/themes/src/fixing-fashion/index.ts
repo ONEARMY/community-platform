@@ -9,6 +9,7 @@ import type { PlatformTheme } from '../types'
 export const Theme: PlatformTheme = {
   id: 'fixing-fashion',
   siteName: 'Fixing Fashion',
+  description: '',
   logo,
   favicon,
   badge,

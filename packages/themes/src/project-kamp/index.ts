@@ -9,6 +9,7 @@ import type { PlatformTheme } from '../types'
 export const Theme: PlatformTheme = {
   id: 'project-kamp',
   siteName: 'Project Kamp',
+  description: '',
   logo,
   favicon,
   badge,

@@ -3,6 +3,7 @@ import type { ProfileTypeName } from 'oa-shared'
 export interface PlatformTheme {
   id: string
   siteName: string
+  description: string
   logo: string
   favicon: string
   badge: string

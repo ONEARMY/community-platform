@@ -19,7 +19,7 @@ import type { IHowto } from 'src/models'
 import type { HowtoSortOption } from './HowtoSortOptions'
 
 export const HowtoList = observer(() => {
-  const siteName = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME
+  const siteName = import.meta.env.VITE_SITE_NAME
 
   const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
@@ -109,7 +109,7 @@ export const HowtoList = observer(() => {
             fontSize: 5,
           }}
         >
-          {process.env.VITE_HOWTOS_HEADING}
+          {import.meta.env.VITE_HOWTOS_HEADING}
         </Heading>
       </Flex>
       <Flex

@@ -22,12 +22,7 @@ import type { IFirebaseConfig, ISentryConfig, siteVariants } from './types'
  * @returns string
  */
 const _c = (property: ConfigurationOption, fallbackValue?: string): string => {
-  return (
-    import.meta.env?.[property] ||
-    process.env?.[property] ||
-    fallbackValue ||
-    ''
-  )
+  return import.meta.env?.[property] || fallbackValue || ''
 }
 
 export const getConfigurationOption = _c

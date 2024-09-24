@@ -123,7 +123,7 @@ export const meta: MetaFunction = () => {
       content: theme.description,
     },
     {
-      name: 'og:description',
+      property: 'og:description',
       content: theme.description,
     },
     {

@@ -31,8 +31,7 @@ type IPlatformMetaName =
  * https://github.com/nfl/react-helmet
  */
 export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
-  const allTags = { ...getDefaultSEOTags(), ...update }
-  const { title, description, imageUrl, faviconUrl } = allTags
+  const { title, description, imageUrl, faviconUrl } = update
 
   if (title) {
     const updatedTitle =
@@ -73,18 +72,6 @@ export const seoTagsUpdate = (update: Partial<ISEOMeta>) => {
 export const SeoTagsUpdateComponent = (update: Partial<ISEOMeta>) => {
   seoTagsUpdate(update)
   return null
-}
-
-/**
- * Load the default SEO tags for the site (as currently hardcoded into the public index.html file)
- * TODO - it would be better if these were linked to the active site/deployment/theme in some way
- */
-const getDefaultSEOTags = (): ISEOMeta => {
-  return {
-    title: 'Community Platform',
-    description:
-      'A series of tools for the Precious Plastic community to collaborate around the world. Connect, share and meet each other to tackle plastic waste.',
-  }
 }
 
 const setMetaName = (name: IPlatformMetaName, value: string) => {

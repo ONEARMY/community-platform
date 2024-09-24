@@ -13,7 +13,6 @@ export * from './selectorList.models'
 export * from './tags.model'
 export * from './user.models'
 export * from './moderation.model'
-export * from './userPreciousPlastic.models'
 
 export interface UserComment extends IComment {
   isEditable: boolean

@@ -13,7 +13,7 @@ import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
-import type { IResearch, IUserPPDB } from 'src/models'
+import type { IResearch, IUserDB } from 'src/models'
 import type {
   IComment,
   IDiscussion,
@@ -310,7 +310,7 @@ export class DiscussionStore extends ModuleStore {
   }
 
   private _findAndUpdateComment(
-    user: IUserPPDB,
+    user: IUserDB,
     comments: IComment[],
     newCommentText: string,
     commentId: string,
@@ -410,7 +410,7 @@ export class DiscussionStore extends ModuleStore {
   }
 
   private _findAndDeleteComment(
-    user: IUserPPDB,
+    user: IUserDB,
     comments: IComment[],
     commentId: string,
   ) {
@@ -425,7 +425,7 @@ export class DiscussionStore extends ModuleStore {
     })
   }
 
-  private _getUserAvatar(user: IUserPPDB) {
+  private _getUserAvatar(user: IUserDB) {
     if (user.userImage && user.userImage.downloadUrl) {
       return cdnImageUrl(user.userImage.downloadUrl, { width: 100 })
     }

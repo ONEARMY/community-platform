@@ -14,14 +14,13 @@ import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
 import type { IMapPinDetail, ProfileTypeName } from 'oa-shared'
-import type { IUser } from 'src/models'
+import type { IUser, IUserDB } from 'src/models'
 import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type {
   IMapGrouping,
   IMapPin,
   IMapPinWithDetail,
 } from 'src/models/maps.models'
-import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
 import type { IRootStore } from '../RootStore'
 import type { IUploadedFileMeta } from '../storage'
 
@@ -167,7 +166,7 @@ export class MapsStore extends ModuleStore {
     )
   }
 
-  public async setUserPin(user: IUserPPDB) {
+  public async setUserPin(user: IUserDB) {
     const {
       _id,
       _lastActive,
@@ -245,7 +244,7 @@ export class MapsStore extends ModuleStore {
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).set(pin)
   }
 
-  public async deleteUserPin(user: IUserPP) {
+  public async deleteUserPin(user: IUser) {
     const pin = await this.getPin(user.userName, 'server')
 
     logger.debug('marking user pin deleted', pin)

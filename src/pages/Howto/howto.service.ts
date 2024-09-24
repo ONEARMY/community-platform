@@ -22,7 +22,7 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { IHowto, IUser, IUserPPDB } from '../../models'
+import type { IHowto, IUserDB } from '../../models'
 import type { ICategory } from '../../models/categories.model'
 import type { HowtoSortOption } from './Content/HowtoList/HowtoSortOptions'
 
@@ -36,7 +36,7 @@ const search = async (
   words: string[],
   category: string,
   sort: HowtoSortOption,
-  currentUser?: IUserPPDB,
+  currentUser?: IUserDB,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {
@@ -62,7 +62,7 @@ const search = async (
   return { items, total, lastVisible }
 }
 
-const moderationFilters = (currentUser?: IUser) => {
+const moderationFilters = (currentUser?: IUserDB) => {
   const filters = [where('moderation', '==', IModerationStatus.ACCEPTED)]
 
   if (currentUser) {
@@ -83,7 +83,7 @@ const createQueries = (
   words: string[],
   category: string,
   sort: HowtoSortOption,
-  currentUser?: IUser,
+  currentUser?: IUserDB,
   snapshot?: QueryDocumentSnapshot<DocumentData, DocumentData>,
   take: number = 10,
 ) => {

@@ -1,20 +1,19 @@
 import type {
   EmailNotificationFrequency,
   ExternalLinkLabel,
+  IMAchineBuilderXp,
   IModerationStatus,
+  IOpeningHours,
   NotificationType,
   PatreonUser,
+  PlasticTypeLabel,
+  ProfileTypeName,
   UserRole,
+  WorkspaceType,
 } from 'oa-shared'
+import type { IUploadedFileMeta } from '../stores/storage'
 import type { ILocation, ISODateString } from './common.models'
 import type { DBDoc } from './dbDoc.model'
-
-export type { UserRole }
-import type { IUploadedFileMeta } from '../stores/storage'
-
-export interface IUserState {
-  user?: IUser
-}
 
 // IUser retains most of the fields from legacy users (omitting passwords),
 // and has a few additional fields. Note 'email' is excluded
@@ -28,9 +27,6 @@ export interface IUser {
   // firebase auth displayName property
   userName: string
   displayName: string
-  moderation: IModerationStatus
-  // note, user avatar url is taken direct from userName so no longer populated here
-  // avatar:string
   verified: boolean
   badges?: IUserBadges
   // images will be in different formats if they are pending upload vs pulled from db
@@ -39,8 +35,6 @@ export interface IUser {
   links: IExternalLink[]
   userRoles?: UserRole[]
   about?: string | null
-  DHSite_id?: number
-  DHSite_mention_name?: string
   country?: string | null
   location?: ILocation | null
   year?: ISODateString
@@ -56,6 +50,17 @@ export interface IUser {
   isContactableByPublic?: boolean
   patreon?: PatreonUser | null
   totalUseful?: number
+
+  // Primary PP profile type related fields
+  profileType: ProfileTypeName
+  subType?: WorkspaceType | null
+  workspaceType?: WorkspaceType | null
+  mapPinDescription?: string | null
+  openingHours?: IOpeningHours[]
+  collectedPlasticTypes?: PlasticTypeLabel[] | null
+  machineBuilderXp?: IMAchineBuilderXp[] | null
+  isExpert?: boolean | null
+  isV4Member?: boolean | null
 }
 
 export interface IUserImpact {

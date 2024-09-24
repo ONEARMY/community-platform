@@ -16,10 +16,10 @@ import {
 import { FlexSectionContainer } from '../elements'
 import { ProfileLinkField } from '../fields/ProfileLink.field'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUser } from 'src/models'
 
 interface IProps {
-  formValues: Partial<IUserPP>
+  formValues: Partial<IUser>
 }
 
 export const UserInfosSection = ({ formValues }: IProps) => {

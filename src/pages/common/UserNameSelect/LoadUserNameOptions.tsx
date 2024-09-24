@@ -1,4 +1,4 @@
-import type { IUserPP } from 'src/models'
+import type { IUser } from 'src/models'
 import type { UserStore } from 'src/stores/User/user.store'
 
 const USER_RESULTS_LIMIT = 20
@@ -25,7 +25,7 @@ export const loadUserNameOptions = async (
       : []
     return selectOptions
   } else {
-    const usersStartingWithInput: IUserPP[] =
+    const usersStartingWithInput: IUser[] =
       await userStore.getUsersStartingWith(inputValue, USER_RESULTS_LIMIT)
     const selectOptions: IOption[] = usersStartingWithInput.map((user) => ({
       value: user.userName,

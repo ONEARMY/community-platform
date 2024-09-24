@@ -5,8 +5,8 @@ import { Image } from 'theme-ui'
 
 import { transformSpecialistWorkspaceTypeToWorkspace } from './transformSpecialistWorkspaceTypeToWorkspace'
 
-import type { IPinGrouping, ProfileTypeName } from 'oa-shared'
-import type { IMapGrouping, IMapPin, WorkspaceType } from 'src/models'
+import type { IPinGrouping, ProfileTypeName, WorkspaceType } from 'oa-shared'
+import type { IMapGrouping, IMapPin } from 'src/models'
 
 const ICON_SIZE = 30
 

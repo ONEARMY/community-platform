@@ -1,9 +1,9 @@
 import { UserRole } from 'oa-shared'
-import { type IComment, type IUserPPDB } from 'src/models'
+import { type IComment, type IUserDB } from 'src/models'
 
 export const transformToUserComments = (
   comments: IComment[],
-  loggedInUser: IUserPPDB | null | undefined,
+  loggedInUser: IUserDB | null | undefined,
 ): IComment[] => {
   return (
     comments?.map((c) => ({

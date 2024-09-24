@@ -4,6 +4,7 @@ export interface PlatformTheme {
   id: string
   siteName: string
   logo: string
+  favicon: string
   badge: string
   avatar: string
   styles: ThemeWithName

@@ -106,7 +106,7 @@ export const links: LinksFunction = () => {
 export const meta: MetaFunction = () => {
   const theme = getEnvironmentTheme()
 
-  return [
+  const tags = [
     {
       title: theme.siteName,
     },
@@ -131,6 +131,15 @@ export const meta: MetaFunction = () => {
       content: theme.description,
     },
   ]
+
+  if (import.meta.env.VITE_BRANCH !== 'production') {
+    tags.push({
+      name: 'robots',
+      content: 'noindex',
+    })
+  }
+
+  return tags
 }
 
 export default function Root() {

@@ -462,63 +462,63 @@ workflows:
             - 'Lint commits'
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
-      # - build:
-      #     requires:
-      #       - 'Lint code'
-      #     name: Build Application
-      #     context: build-context
-      # - test_unit:
-      #     name: 'Unit tests'
-      #     requires:
-      #       - 'Lint code'
-      # - test_circular_dependency:
-      #     name: 'Circular dependency test'
-      #     requires:
-      #       - 'Lint code'
-      # - storybook:
-      #     name: Build Storybook
-      #     requires:
-      #       - 'Lint code'
-      # - test_security_rules:
-      #     name: Test Security Rules
-      #     requires:
-      #       - 'Lint code'
-      # - test_functions:
-      #     name: 'Cloud Function tests'
-      #     requires:
-      #       - 'Lint code'
-      # - test_functions_upload_coverage:
-      #     name: 'Upload Cloud Function coverage'
-      #     requires:
-      #       - 'Cloud Function tests'
-      # - test_e2e:
-      #     name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
-      #     requires:
-      #       - 'Build Application'
-      #       - 'Unit tests'
-      #       - 'Circular dependency test'
-      #       - 'Cloud Function tests'
-      #       - 'Build Storybook'
-      #       - 'Test Security Rules'
-      #     context:
-      #       - e2e-tests
-      #     matrix:
-      #       parameters:
-      #         CI_NODE: [1, 2, 3, 4]
-      #         CI_BROWSER: ['chrome']
-      # - chromatic:
-      #     name: 'Release storybook to chromatic'
-      #     requires:
-      #       - test_e2e
-      #     context:
-      #       - e2e-tests
-      #     <<: *filter_only_default_branch
+      - build:
+          requires:
+            - 'Lint code'
+          name: Build Application
+          context: build-context
+      - test_unit:
+          name: 'Unit tests'
+          requires:
+            - 'Lint code'
+      - test_circular_dependency:
+          name: 'Circular dependency test'
+          requires:
+            - 'Lint code'
+      - storybook:
+          name: Build Storybook
+          requires:
+            - 'Lint code'
+      - test_security_rules:
+          name: Test Security Rules
+          requires:
+            - 'Lint code'
+      - test_functions:
+          name: 'Cloud Function tests'
+          requires:
+            - 'Lint code'
+      - test_functions_upload_coverage:
+          name: 'Upload Cloud Function coverage'
+          requires:
+            - 'Cloud Function tests'
+      - test_e2e:
+          name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
+          requires:
+            - 'Build Application'
+            - 'Unit tests'
+            - 'Circular dependency test'
+            - 'Cloud Function tests'
+            - 'Build Storybook'
+            - 'Test Security Rules'
+          context:
+            - e2e-tests
+          matrix:
+            parameters:
+              CI_NODE: [1, 2, 3, 4]
+              CI_BROWSER: ['chrome']
+      - chromatic:
+          name: 'Release storybook to chromatic'
+          requires:
+            - test_e2e
+          context:
+            - e2e-tests
+          <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
-      # - approve:
-      #     type: approval
-      #     name: 'Approve Production deployment'
-      #     requires:
-      #       - test_e2e
+      - approve:
+          type: approval
+          name: 'Approve Production deployment'
+          requires:
+            - test_e2e
       #---------------------- Development Instances Build and Deploy ----------------------
       # - release:
       #     name: Release new version to GitHub
@@ -534,7 +534,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
-            - 'Lint code'
+            - 'Approve Production deployment'
           DEPLOY_ALIAS: fixing-fashion-prod
           FLY_APP_NAME: community-platform-ff
           FLY_TOML: fly-ff.toml
@@ -545,7 +545,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
-            - 'Lint code'
+            - 'Approve Production deployment'
           DEPLOY_ALIAS: 'production'
           FLY_APP_NAME: community-platform-pp
           FLY_TOML: fly-pp.toml
@@ -556,7 +556,7 @@ workflows:
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
-            - 'Lint code'
+            - 'Approve Production deployment'
           DEPLOY_ALIAS: project-kamp-production
           FLY_APP_NAME: community-platform-pk
           FLY_TOML: fly-pk.toml

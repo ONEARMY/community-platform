@@ -9,7 +9,8 @@ import type { PlatformTheme } from '../types'
 export const Theme: PlatformTheme = {
   id: 'fixing-fashion',
   siteName: 'Fixing Fashion',
-  description: '',
+  description:
+    'A series of tools for the Fixing Fashion community to collaborate around the world. Connect, share and meet each other to reduce textile waste.',
   logo,
   favicon,
   badge,

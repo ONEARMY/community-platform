@@ -94,8 +94,8 @@ app.use(
       ],
       frameSrc: [
         "'self'",
+        'onearmy.github.io',
         '*.youtube.com',
-        '*.onearmy.github.io',
         '*.donorbox.org',
         '*.netlify.app',
       ],

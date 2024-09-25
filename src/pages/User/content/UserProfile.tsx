@@ -101,6 +101,7 @@ export const UserProfile = observer(() => {
           sx={{
             alignSelf: ['center', 'flex-end'],
             marginBottom: showMemberProfile ? [2, 0] : 0,
+            zIndex: 2,
           }}
           to="/settings"
         >

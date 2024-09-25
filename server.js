@@ -66,6 +66,7 @@ app.use(
         '*.firebasedatabase.app',
         '*.google-analytics.com',
         'firebasestorage.googleapis.com',
+        '*.cloudfunctions.net',
         ...wsUrls,
       ],
       defaultSrc: [

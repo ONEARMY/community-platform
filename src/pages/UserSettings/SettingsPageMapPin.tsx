@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { toJS } from 'mobx'
 import {
@@ -160,7 +160,7 @@ export const SettingsPageMapPin = () => {
     IFormNotification | undefined
   >(undefined)
 
-  const newMapRef = React.useRef<Map>(null)
+  const newMapRef = useRef<Map>(null)
 
   const { mapsStore, userStore } = useCommonStores().stores
   const user = userStore.activeUser
@@ -179,7 +179,7 @@ export const SettingsPageMapPin = () => {
       if (!pinDetail) return
 
       setMapPin(pinDetail)
-      setMarkerIcon(createMarkerIcon(pin))
+      setMarkerIcon(createMarkerIcon(pin, true))
       setIsLoading(false)
     }
 
@@ -239,7 +239,7 @@ export const SettingsPageMapPin = () => {
     >
       <Flex sx={{ flexDirection: 'column', gap: 1 }}>
         <Heading as="h2" id="your-map-pin">
-          {mapPin ? yourPinTitle : addPinTitle}
+          {mapPin ? addPinTitle : yourPinTitle}
         </Heading>
         {isMember && (
           <Text

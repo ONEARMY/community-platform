@@ -1,7 +1,7 @@
 import { UserRole } from 'oa-shared'
 import { AuthRoute } from 'src/pages/common/AuthRoute'
 import Main from 'src/pages/common/Layout/Main'
-import { SettingsPage } from 'src/pages/UserSettings/SettingsPage'
+import { SettingsPage } from 'src/pages/UserSettings/SettingsPage.client'
 import { SeoTagsUpdateComponent } from 'src/utils/seo'
 
 export async function clientLoader() {

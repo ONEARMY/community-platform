@@ -126,7 +126,7 @@ export const MapWithPin = (props: Props) => {
         </Box>
         <Map
           ref={mapRef}
-          className="markercluster-map"
+          className="markercluster-map settings-page"
           center={center}
           zoom={zoom}
           zoomControl={false}

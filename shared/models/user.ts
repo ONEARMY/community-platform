@@ -1,6 +1,5 @@
-import type { ISODateString } from './common'
+import type { ILatLng, ISODateString } from './common'
 import type { DBDoc } from './db'
-import type { ILocation } from './maps'
 import type { IModerationStatus } from './moderation'
 import type { INotification, INotificationSettings } from './notifications'
 import type { IUploadedFileMeta } from './storage'
@@ -196,4 +195,14 @@ export interface IProfileCreator {
   profileType: ProfileTypeName
   subType?: string
   userImage?: string
+}
+
+export interface ILocation {
+  name: string
+  country: string
+  countryCode: string
+  administrative: string
+  latlng: ILatLng
+  postcode: string
+  value: string
 }

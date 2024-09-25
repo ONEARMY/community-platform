@@ -11,3 +11,8 @@ export interface IConvertedFileMeta {
 }
 
 export type FetchState = 'idle' | 'fetching' | 'completed'
+
+export interface ILatLng {
+  lat: number
+  lng: number
+}

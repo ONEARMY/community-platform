@@ -1,3 +1,4 @@
+import type { ILatLng } from './common'
 import type { IModerationStatus } from './moderation'
 import type { IProfileCreator, ProfileTypeName } from './user'
 import type { WorkspaceType } from './userPreciousPlastic'
@@ -17,16 +18,6 @@ export interface IMapPin {
   subType?: IMapPinSubtype
   comments?: string
   creator?: IProfileCreator
-}
-
-export interface ILocation {
-  name: string
-  country: string
-  countryCode: string
-  administrative: string
-  latlng: ILatLng
-  postcode: string
-  value: string
 }
 
 /**
@@ -65,11 +56,6 @@ export interface IBoundingBox {
 export enum IPinGrouping {
   INDIVIDUAL = 'individual',
   PLACE = 'place',
-}
-
-export interface ILatLng {
-  lat: number
-  lng: number
 }
 
 export interface IMapPinDetail {

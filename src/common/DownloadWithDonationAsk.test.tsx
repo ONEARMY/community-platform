@@ -8,7 +8,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { useCommonStores } from './hooks/useCommonStores'
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 
-import type { IUserDB, IUploadedFileMeta } from 'oa-shared'
+import type { IUploadedFileMeta, IUserDB } from 'oa-shared'
 import type { Mock } from 'vitest'
 
 const mockedUsedNavigate = vi.fn()

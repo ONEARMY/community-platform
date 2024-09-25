@@ -22,7 +22,7 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { IHowto, IUserDB, ICategory } from 'oa-shared'
+import type { ICategory, IHowto, IUserDB } from 'oa-shared'
 import type { HowtoSortOption } from './Content/HowtoList/HowtoSortOptions'
 
 export enum HowtosSearchParams {

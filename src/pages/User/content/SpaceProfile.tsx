@@ -40,8 +40,8 @@ import UserCreatedDocuments from './UserCreatedDocuments'
 
 import type {
   IMAchineBuilderXp,
-    IOpeningHours,
-    IUser,
+  IOpeningHours,
+  IUser,
   PlasticTypeLabel,
 } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'

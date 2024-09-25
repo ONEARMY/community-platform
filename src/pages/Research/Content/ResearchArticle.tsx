@@ -34,8 +34,7 @@ import {
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
-import type { IUser } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta, IUser } from 'oa-shared'
 
 const areCommentsVisible = (updateId) => {
   return updateId === getResearchUpdateId(window.location.hash)

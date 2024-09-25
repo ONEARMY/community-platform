@@ -1,5 +1,4 @@
-import type { ILatLng } from 'oa-shared'
-import type { ILocation } from 'src/models'
+import type { ILatLng, ILocation } from 'oa-shared'
 
 /** Retrieve OSM data for a specific lat-lon */
 export const getLocationData = async (latlng: ILatLng): Promise<ILocation> => {

@@ -1,9 +1,13 @@
 import { firestore } from 'firebase-admin'
 import * as functions from 'firebase-functions'
-import { DB_ENDPOINTS, INotification, IUserDB } from '../models'
-import { EmailNotificationFrequency } from 'oa-shared'
+import { DB_ENDPOINTS } from '../models'
+import {
+  EmailNotificationFrequency,
+  INotification,
+} from 'oa-shared/models/notifications'
 import { FieldValue } from 'firebase-admin/firestore'
 import { db } from '../Firebase/firestoreDB'
+import { IUserDB } from 'oa-shared/models/user'
 
 const VALUE_MODIFIERS = {
   delete: () => FieldValue.delete(),

@@ -12,7 +12,7 @@ import { QuestionFilterHeader } from './QuestionFilterHeader'
 import { QuestionListItem } from './QuestionListItem'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { IQuestion } from 'src/models'
+import type { IQuestion } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export const QuestionListing = () => {

@@ -4,7 +4,7 @@ import { fields } from 'src/pages/UserSettings/labels'
 import { isContactable } from 'src/utils/helpers'
 import { Flex, Heading, Switch, Text } from 'theme-ui'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 
 interface Props {
   isContactableByPublic: IUser['isContactableByPublic']

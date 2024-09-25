@@ -8,8 +8,7 @@ import { useResearchStore } from 'src/stores/Research/research.store'
 import { isAllowedToEditContent } from 'src/utils/helpers'
 import { Text } from 'theme-ui'
 
-import type { IResearch } from 'src/models/research.models'
-import type { IUser } from 'src/models/user.models'
+import type { IResearch, IUser } from 'oa-shared'
 
 interface IState {
   formValues: IResearch.UpdateDB

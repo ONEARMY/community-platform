@@ -14,7 +14,7 @@ import { messageService } from 'src/services/message.service'
 import { isUserContactable } from 'src/utils/helpers'
 import { Box, Flex, Heading } from 'theme-ui'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 
 interface Props {
   user: IUser

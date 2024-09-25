@@ -9,12 +9,11 @@ import {
   FieldTextarea,
   ResearchEditorOverview,
 } from 'oa-components'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, researchStatusOptions } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
 import { SelectField } from 'src/common/Form/Select.field'
 import { TagsSelectField } from 'src/common/Form/TagsSelect.field'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
-import { researchStatusOptions } from 'src/models/research.models'
 import {
   ResearchErrors,
   ResearchPostingGuidelines,
@@ -42,8 +41,8 @@ import {
 import { buttons, headings, overview } from '../../labels'
 import ResearchFieldCategory from './ResearchCategorySelect'
 
+import type { IResearch } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
-import type { IResearch } from 'src/models/research.models'
 
 interface IProps {
   'data-testid'?: string

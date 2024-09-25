@@ -4,7 +4,7 @@ import Main from 'src/pages/common/Layout/Main'
 import { SettingsPage } from 'src/pages/UserSettings/SettingsPage'
 import { Flex, Text } from 'theme-ui'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 
 import '../styles/leaflet.css'
 

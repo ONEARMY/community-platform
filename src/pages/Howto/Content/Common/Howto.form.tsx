@@ -34,7 +34,7 @@ import { HowtoPostingGuidelines } from './HowtoPostingGuidelines'
 import { HowToSubmitStatus } from './SubmitStatus'
 
 import type { FormApi } from 'final-form'
-import type { IHowtoFormInput } from 'src/models/howto.models'
+import type { IHowtoFormInput } from 'oa-shared'
 
 export type ParentType = 'create' | 'edit'
 

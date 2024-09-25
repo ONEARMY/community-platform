@@ -4,7 +4,7 @@ import { ResearchUpdateStatus } from 'oa-shared'
 import { logger } from 'src/logger'
 import { filterNonDeletedComments } from 'src/utils/filterNonDeletedComments'
 
-import type { IDiscussion, IResearch } from 'src/models'
+import type { IDiscussion, IResearch } from 'oa-shared'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 

@@ -13,13 +13,14 @@ import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
-import type { IResearch, IUserPPDB } from 'src/models'
 import type {
   IComment,
   IDiscussion,
   IDiscussionDB,
   IDiscussionSourceModelOptions,
-} from 'src/models/discussion.models'
+  IResearch,
+  IUserPPDB,
+} from 'oa-shared'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
 

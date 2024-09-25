@@ -1,7 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 import { logger } from 'src/logger'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 import type { UserStore } from '../../User/user.store'
 
 /**

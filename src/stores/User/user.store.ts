@@ -22,14 +22,15 @@ import { Storage } from '../storage'
 
 import type { User } from 'firebase/auth'
 import type {
-  IImpactYear,
+  IConvertedFileMeta,
   IImpactYearFieldList,
   IUser,
   IUserBadges,
-} from 'src/models/user.models'
-import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
+  IUserPP,
+  IUserPPDB,
+} from 'oa-shared'
+import type { IImpactYear } from 'src/models/user.models'
 import type { IFirebaseUser } from 'src/utils/firebase'
-import type { IConvertedFileMeta } from '../../types'
 import type { IRootStore } from '../RootStore'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.

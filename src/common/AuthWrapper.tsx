@@ -5,8 +5,7 @@ import { SITE } from 'src/config/config'
 import { getDevSiteRole } from 'src/config/devSiteConfig'
 import { isTestEnvironment } from 'src/utils/isTestEnvironment'
 
-import type { UserRole } from 'oa-shared'
-import type { IUserPPDB } from 'src/models'
+import type { IUserPPDB, UserRole } from 'oa-shared'
 
 /*
     Simple wrapper to only render a component if the user is logged in (plus optional user role required)

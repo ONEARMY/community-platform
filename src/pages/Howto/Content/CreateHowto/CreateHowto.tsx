@@ -4,7 +4,7 @@ import { HowtoForm } from 'src/pages/Howto/Content/Common/Howto.form'
 
 import TEMPLATE from './Template'
 
-import type { IHowtoFormInput } from 'src/models/howto.models'
+import type { IHowtoFormInput } from 'oa-shared'
 
 const CreateHowto = observer(() => {
   const formValues = { ...TEMPLATE.INITIAL_VALUES } as IHowtoFormInput

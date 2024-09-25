@@ -5,7 +5,7 @@ import { Select } from 'oa-components'
 import { EmailNotificationFrequency } from 'oa-shared'
 import { FieldContainer } from 'src/common/Form/FieldContainer'
 
-import type { INotificationSettings } from 'src/models/user.models'
+import type { INotificationSettings } from 'oa-shared'
 
 interface IProps {
   notificationSettings?: INotificationSettings

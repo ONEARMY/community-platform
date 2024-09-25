@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 
-import type { IMapPin } from 'src/models'
+import type { IMapPin } from 'oa-shared'
 
 export const FactoryMapPin = (
   userOverloads: Partial<IMapPin> = {},

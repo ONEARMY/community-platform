@@ -11,7 +11,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { HowtoForm } from './Howto.form'
 
-import type { IHowtoDB } from 'src/models'
+import type { IHowtoDB } from 'oa-shared'
 import type { ParentType } from './Howto.form'
 
 const Theme = testingThemeStyles

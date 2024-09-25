@@ -16,7 +16,7 @@ import {
 import { FlexSectionContainer } from '../elements'
 import { ProfileLinkField } from '../fields/ProfileLink.field'
 
-import type { IUserPP } from 'src/models/userPreciousPlastic.models'
+import type { IUserPP } from 'oa-shared'
 
 interface IProps {
   formValues: Partial<IUserPP>

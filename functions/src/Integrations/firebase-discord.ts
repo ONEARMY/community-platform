@@ -1,11 +1,12 @@
 import axios from 'axios'
 import * as functions from 'firebase-functions'
-import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
+import { IResearchDB, ResearchUpdateStatus } from 'oa-shared/models/research'
+import { IModerationStatus } from 'oa-shared'
 
 import { CONFIG } from '../config/config'
 
 import type { AxiosError, AxiosResponse } from 'axios'
-import type { IMapPin, IResearchDB } from '../models'
+import { IMapPin } from 'oa-shared/models/maps'
 
 const SITE_URL = CONFIG.deployment.site_url
 // e.g. https://dev.onearmy.world or https://community.preciousplastic.com

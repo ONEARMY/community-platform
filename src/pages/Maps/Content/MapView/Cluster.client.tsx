@@ -4,7 +4,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { createClusterIcon, createMarkerIcon } from './Sprites'
 
-import type { IMapPin } from 'src/models/maps.models'
+import type { IMapPin } from 'oa-shared'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
 

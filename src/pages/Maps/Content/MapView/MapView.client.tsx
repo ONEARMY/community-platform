@@ -5,9 +5,8 @@ import { Clusters } from './Cluster.client'
 import { Popup } from './Popup.client'
 
 import type { LatLngExpression } from 'leaflet'
+import type { ILatLng, IMapPin } from 'oa-shared'
 import type { Map as MapType } from 'react-leaflet'
-import type { ILatLng } from 'shared/models'
-import type { IMapPin } from 'src/models/maps.models'
 
 interface IProps {
   activePin: IMapPin | null

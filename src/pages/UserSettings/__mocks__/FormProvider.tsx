@@ -11,7 +11,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { vi } from 'vitest'
 
-import type { IUserPPDB } from 'src/models'
+import type { IUserPPDB } from 'oa-shared'
 
 const Theme = testingThemeStyles
 

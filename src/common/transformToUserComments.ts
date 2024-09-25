@@ -1,5 +1,6 @@
 import { UserRole } from 'oa-shared'
-import { type IComment, type IUserPPDB } from 'src/models'
+
+import type { IComment, IUserPPDB } from 'oa-shared'
 
 export const transformToUserComments = (
   comments: IComment[],

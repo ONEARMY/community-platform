@@ -6,7 +6,7 @@ import { logger } from 'src/logger'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
 import type { MarkerCluster } from 'leaflet'
-import type { IMapPin } from 'src/models/maps.models'
+import type { IMapPin } from 'oa-shared'
 
 import './sprites.css'
 

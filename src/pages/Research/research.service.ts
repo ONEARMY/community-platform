@@ -20,9 +20,7 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { ResearchStatus } from 'oa-shared'
-import type { IResearch } from '../../models'
-import type { ICategory } from '../../models/categories.model'
+import type { ICategory, IResearch, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from './ResearchSortOptions'
 
 const search = async (

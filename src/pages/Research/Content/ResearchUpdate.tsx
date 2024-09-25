@@ -20,7 +20,7 @@ import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 import { ResearchLinkToUpdate } from './ResearchLinkToUpdate'
 import { ResearchUpdateDiscussion } from './ResearchUpdateDiscussion'
 
-import type { IResearch } from 'src/models/research.models'
+import type { IResearch } from 'oa-shared'
 
 interface IProps {
   update: IResearch.Update

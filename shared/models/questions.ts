@@ -1,10 +1,9 @@
-import type { IUploadedFileMeta } from '../stores/storage'
-import type { IConvertedFileMeta } from '../types'
-import type { DBDoc } from './dbDoc.model'
-import type { IModerable } from './moderation.model'
-import type { IQuestionCategory } from './questionCategories.model'
-import type { ISelectedTags } from './tags.model'
-import type { ISharedFeatures } from './voteUseful.model'
+import type { IConvertedFileMeta } from './common'
+import type { DBDoc } from './db'
+import type { IModerable } from './moderation'
+import type { IUploadedFileMeta } from './storage'
+import type { ISelectedTags } from './tags'
+import type { ISharedFeatures } from './voteUseful'
 
 /**
  * Question retrieved from the database also include metadata such as _id, _created and _modified
@@ -37,4 +36,10 @@ export namespace IQuestion {
     allowDraftSave?: boolean
     images?: (IUploadedFileMeta | IConvertedFileMeta | null)[]
   }
+}
+
+export type ISelectedQuestionCategories = Record<string, boolean>
+
+export interface IQuestionCategory extends DBDoc {
+  label: string
 }

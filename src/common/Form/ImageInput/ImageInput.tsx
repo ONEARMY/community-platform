@@ -12,7 +12,7 @@ import { ImageInputWrapper } from './ImageInputWrapper'
 import { imageValid } from './imageValid'
 import { setSrc } from './setSrc'
 
-import type { IConvertedFileMeta } from 'src/types'
+import type { IConvertedFileMeta } from 'oa-shared'
 import type { ThemeUIStyleObject } from 'theme-ui'
 import type { IInputValue, IMultipleInputValue, IValue } from './types'
 

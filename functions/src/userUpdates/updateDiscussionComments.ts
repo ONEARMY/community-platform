@@ -1,9 +1,9 @@
-import { DB_ENDPOINTS } from 'oa-shared'
+import { DB_ENDPOINTS } from 'oa-shared/models/db'
 
 import { db } from '../Firebase/firestoreDB'
 import { hasKeyDetailsChanged } from './hasKeyDetailsChanged'
-
-import type { IDiscussion, IUserDB } from '../models'
+import { IUserDB } from 'oa-shared/models/user'
+import { IDiscussion } from 'oa-shared/models/discussions'
 
 export const updateDiscussionComments = async (
   prevUser: IUserDB,

@@ -1,7 +1,7 @@
-import type { DBDoc } from './dbDoc.model'
-
 // when tags are saved in things like how-tos, it is done so as a json object which
 // maps tag keys to boolean values. e.g. [{tag1:true,tag2:true}]
+
+import type { DBDoc } from './db'
 
 // this is to allow easier query of multiple tags within the database (e.g. selectedTags.tag1==true && selectedTags.tag2==true)
 export interface ISelectedTags {

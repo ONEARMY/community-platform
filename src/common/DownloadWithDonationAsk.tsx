@@ -7,7 +7,7 @@ import {
   DownloadStaticFile,
 } from 'oa-components'
 
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'oa-shared'
 
 export interface IProps {
   handleClick: () => Promise<void>

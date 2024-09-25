@@ -11,7 +11,7 @@ import { Flex, Grid, Heading, Text } from 'theme-ui'
 import { FlexSectionContainer } from '../elements'
 import { CustomRadioField } from '../fields/CustomRadio.field'
 
-import type { IWorkspaceType } from 'src/models'
+import type { IWorkspaceType } from 'oa-shared'
 
 const WORKSPACE_TYPES: IWorkspaceType[] = [
   {

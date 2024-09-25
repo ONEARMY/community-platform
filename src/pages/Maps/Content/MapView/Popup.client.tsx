@@ -5,8 +5,8 @@ import { MapMemberCard, PinProfile } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
 
+import type { IMapPin, IMapPinWithDetail } from 'oa-shared'
 import type { Map } from 'react-leaflet'
-import type { IMapPin, IMapPinWithDetail } from 'src/models/maps.models'
 
 import './popup.css'
 

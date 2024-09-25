@@ -15,7 +15,7 @@ import HowToCard from './HowToCard'
 import { HowtoFilterHeader } from './HowtoFilterHeader'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { IHowto } from 'src/models'
+import type { IHowto } from 'oa-shared'
 import type { HowtoSortOption } from './HowtoSortOptions'
 
 export const HowtoList = observer(() => {

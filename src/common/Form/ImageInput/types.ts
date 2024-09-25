@@ -1,5 +1,4 @@
-import type { IConvertedFileMeta } from 'src/types'
-import type { IUploadedFileMeta } from '../../../stores/storage'
+import type { IConvertedFileMeta, IUploadedFileMeta } from 'oa-shared'
 
 export type IInputValue = IUploadedFileMeta | IConvertedFileMeta
 export type IMultipleInputValue = IInputValue[]

@@ -1,15 +1,15 @@
 import * as functions from 'firebase-functions'
 import { createNotificationEmails } from './createNotificationEmails'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IUserDB } from '../models'
-import { EmailNotificationFrequency } from 'oa-shared'
+import { DB_ENDPOINTS } from '../models'
+import { EmailNotificationFrequency } from 'oa-shared/models/notifications'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 import * as moderationEmails from './createModerationEmails'
 import * as submissionEmails from './createSubmissionEmails'
 import * as supporterBadgeEmails from './supporterBadgeEmails'
 import * as verifiedBadgeEmails from './verifiedBadgeEmails'
 import { MEMORY_LIMIT_512_MB } from '../consts'
-import { UserRole } from 'oa-shared/models'
+import { IUserDB, UserRole } from 'oa-shared/models/user'
 
 exports.sendDaily = functions
   .runWith({ memory: MEMORY_LIMIT_512_MB })

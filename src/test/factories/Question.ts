@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { IModerationStatus } from 'oa-shared'
-import type { IQuestion } from 'src/models'
+import type { IModerationStatus, IQuestion } from 'oa-shared'
 
 export const FactoryQuestionItem = (
   questionOverloads: Partial<IQuestion.Item> = {},

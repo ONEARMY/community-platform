@@ -1,6 +1,5 @@
-import type { ProfileTypeName } from 'oa-shared'
-import type { DBDoc } from './dbDoc.model'
-import type { IUser } from './user.models'
+import type { DBDoc } from './db'
+import type { IUser, ProfileTypeName } from './user'
 
 export type PlasticTypeLabel =
   | 'pet'

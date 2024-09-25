@@ -1,10 +1,9 @@
+import { IUserDB } from 'oa-shared/models/user'
 import {
   hasDetailsChanged,
   hasKeyDetailsChanged,
   hasUserImageChanged,
 } from './hasKeyDetailsChanged'
-
-import type { IUserDB } from '../../../src/models'
 
 describe('hasKeyDetailsChanged', () => {
   it('returns true when details have changed', () => {

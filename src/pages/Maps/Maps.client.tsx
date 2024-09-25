@@ -14,9 +14,8 @@ import { GetLocation } from './utils/geolocation'
 import { Controls, MapView } from './Content'
 import { MapPinServiceContext } from './map.service'
 
+import type { ILatLng, IMapPin } from 'oa-shared'
 import type { Map } from 'react-leaflet'
-import type { ILatLng } from 'shared/models'
-import type { IMapPin } from 'src/models/maps.models'
 
 import './styles.css'
 

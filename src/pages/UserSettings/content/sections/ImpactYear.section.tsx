@@ -15,7 +15,8 @@ import {
 import { ImpactYearField } from '../fields/ImpactYear.field'
 import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field'
 
-import type { IImpactYear, IImpactYearFieldList } from 'src/models'
+import type { IImpactYearFieldList } from 'oa-shared'
+import type { IImpactYear } from 'src/models'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
 interface Props {

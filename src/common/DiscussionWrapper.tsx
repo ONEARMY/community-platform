@@ -11,7 +11,7 @@ import { Text } from 'theme-ui'
 
 import { HideDiscussionContainer } from './HideDiscussionContainer'
 
-import type { IDiscussion } from 'src/models'
+import type { IDiscussion } from 'oa-shared'
 
 const DISCUSSION_NOT_FOUND = 'Discussion not found :('
 const LOADING_LABEL = 'Loading the awesome discussion'

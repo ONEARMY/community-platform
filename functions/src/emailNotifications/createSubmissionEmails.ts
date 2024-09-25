@@ -11,8 +11,9 @@ import {
   getSenderMessageEmail,
 } from './templateHelpers'
 import { getUserAndEmail, isValidMessageRequest } from './utils'
-
-import type { IHowtoDB, IMapPin, IMessageDB } from '../../../src/models'
+import { IMessageDB } from 'oa-shared/models/messages'
+import { IHowtoDB } from 'oa-shared/models/howto'
+import { IMapPin } from 'oa-shared/models/maps'
 
 export async function createMessageEmails(message: IMessageDB) {
   const isValid = await isValidMessageRequest(message)

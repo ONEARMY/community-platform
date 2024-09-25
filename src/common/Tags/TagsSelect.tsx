@@ -4,8 +4,8 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { FieldContainer } from '../Form/FieldContainer'
 
+import type { ISelectedTags, ITag } from 'oa-shared'
 import type { FieldRenderProps } from 'react-final-form'
-import type { ISelectedTags, ITag } from 'src/models/tags.model'
 
 // we include props from react-final-form fields so it can be used as a custom field component
 export interface IProps extends Partial<FieldRenderProps<any, any>> {

@@ -25,7 +25,7 @@ import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { MAX_PIN_LENGTH } from './constants'
 
-import type { ILocation, IMapPin, IUserPPDB } from 'src/models'
+import type { ILocation, IMapPin, IUserPPDB } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 interface IPinProps {

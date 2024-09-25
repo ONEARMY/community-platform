@@ -1,4 +1,5 @@
 import { config } from 'firebase-functions'
+import { configVars } from 'oa-shared/models/config'
 
 /* config variables are attached directly to firebase using the cli
    $firebase functions:config:set ...
@@ -38,46 +39,3 @@ if (c.service?.private_key) {
 export const CONFIG = c
 export const SERVICE_ACCOUNT_CONFIG = c.service
 export const ANALYTICS_CONFIG = c.analytics
-/************** Interfaces ************** */
-interface IServiceAccount {
-  type: string
-  project_id: string
-  private_key_id: string
-  private_key: string
-  client_email: string
-  client_id: string
-  auth_uri: string
-  token_uri: string
-  auth_provider_x509_cert_url: string
-  client_x509_cert_url: string
-}
-interface IAnalytics {
-  tracking_code: string
-  view_id: string
-}
-interface IIntergrations {
-  slack_webhook: string
-  discord_webhook: string
-  discord_alert_channel_webhook: string
-  patreon_client_id: string
-  patreon_client_secret: string
-}
-interface IDeployment {
-  site_url: string
-}
-
-export interface configVars {
-  service: IServiceAccount
-  analytics: IAnalytics
-  integrations: IIntergrations
-  deployment: IDeployment
-  prerender: {
-    api_key: string
-  }
-}
-
-// if passing complex config variables, may want to
-// encode as b64 and unencode here to avoid character escape challenges
-function _b64ToString(b64str: string) {
-  return Buffer.from(b64str, 'base64').toString('binary')
-}

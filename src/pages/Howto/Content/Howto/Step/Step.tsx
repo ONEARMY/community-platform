@@ -4,7 +4,7 @@ import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Text } from 'theme-ui'
 
-import type { IHowtoStep } from 'src/models/howto.models'
+import type { IHowtoStep } from 'oa-shared'
 
 interface IProps {
   step: IHowtoStep

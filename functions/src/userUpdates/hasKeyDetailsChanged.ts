@@ -1,6 +1,5 @@
+import { IUserDB } from 'oa-shared/models/user'
 import { valuesAreDeepEqual } from '../Utils'
-
-import type { IUserDB } from '../models'
 
 export const hasDetailsChanged = (
   prevUser: IUserDB,

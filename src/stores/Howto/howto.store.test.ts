@@ -10,7 +10,7 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { HowtoStore } from './howto.store'
 
-import type { IHowtoDB, IUser } from 'src/models'
+import type { IHowtoDB, IUser } from 'oa-shared'
 import type { IRootStore } from '../RootStore'
 
 const mockGetDoc = vi.fn()

@@ -11,7 +11,7 @@ import { logger } from '../../../logger'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 
-import type { IUserPPDB } from 'src/models'
+import type { IUserPPDB } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 /**

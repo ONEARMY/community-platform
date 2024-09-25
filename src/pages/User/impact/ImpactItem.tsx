@@ -4,7 +4,8 @@ import { Box, Heading } from 'theme-ui'
 import { ImpactField } from './ImpactField'
 import { ImpactMissing } from './ImpactMissing'
 
-import type { IImpactYear, IImpactYearFieldList, IUserPP } from 'src/models'
+import type { IImpactYearFieldList, IUserPP } from 'oa-shared'
+import type { IImpactYear } from 'src/models'
 
 interface Props {
   year: IImpactYear

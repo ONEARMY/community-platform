@@ -21,8 +21,7 @@ import {
 } from '../../constants'
 import { buttons, errors, steps } from '../../labels'
 
-import type { IHowtoStep } from 'src/models/howto.models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IHowtoStep, IUploadedFileMeta } from 'oa-shared'
 
 const ImageInputFieldWrapper = styled.div`
   width: 150px;

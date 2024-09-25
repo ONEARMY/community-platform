@@ -10,7 +10,7 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { DiscussionStore } from './discussions.store'
 
-import type { IDiscussion, IUserPPDB } from 'src/models'
+import type { IDiscussion, IUserPPDB } from 'oa-shared'
 import type { IRootStore } from '../RootStore'
 
 const factory = (

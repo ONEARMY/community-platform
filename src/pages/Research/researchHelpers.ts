@@ -1,6 +1,6 @@
 import { ResearchStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
 
-import type { IResearch, IUserPPDB } from 'src/models'
+import type { IResearch, IUserPPDB } from 'oa-shared'
 
 export const researchUpdateStatusFilter = (
   item: IResearch.Item,

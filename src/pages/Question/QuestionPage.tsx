@@ -22,8 +22,7 @@ import { Box, Button, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { QuestionDiscussion } from './QuestionDiscussion'
 
-import type { IQuestion } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IQuestion, IUploadedFileMeta } from 'oa-shared'
 
 export const QuestionPage = () => {
   const [isLoading, setIsLoading] = useState(true)

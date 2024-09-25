@@ -13,17 +13,19 @@ import { getUserAvatar } from '../User/user.store'
 import { filterMapPinsByType } from './filter'
 import { MAP_GROUPINGS } from './maps.groupings'
 
-import type { IMapPinDetail, ProfileTypeName } from 'oa-shared'
-import type { IUser } from 'src/models'
-import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type {
   IMapGrouping,
   IMapPin,
+  IMapPinDetail,
   IMapPinWithDetail,
-} from 'src/models/maps.models'
-import type { IUserPP, IUserPPDB } from 'src/models/userPreciousPlastic.models'
+  IUploadedFileMeta,
+  IUser,
+  IUserPP,
+  IUserPPDB,
+  ProfileTypeName,
+} from 'oa-shared'
+import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type { IRootStore } from '../RootStore'
-import type { IUploadedFileMeta } from '../storage'
 
 type IFilterToRemove = ProfileTypeName | undefined
 

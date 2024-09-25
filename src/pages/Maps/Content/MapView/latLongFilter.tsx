@@ -1,5 +1,4 @@
-import type { IBoundingBox } from 'shared/models'
-import type { IMapPin } from 'src/models'
+import type { IBoundingBox, IMapPin } from 'oa-shared'
 
 export const latLongFilter = (boundaries: IBoundingBox, pinList: IMapPin[]) => {
   const result = pinList.filter(({ location }) => {

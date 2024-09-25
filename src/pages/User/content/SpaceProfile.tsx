@@ -43,7 +43,7 @@ import type {
   IOpeningHours,
   IUserPP,
   PlasticTypeLabel,
-} from 'src/models/userPreciousPlastic.models'
+} from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {

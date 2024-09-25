@@ -6,7 +6,7 @@ import { Flex, Text } from 'theme-ui'
 
 import TEMPLATE from './Template'
 
-import type { IUser } from 'src/models/user.models'
+import type { IUser } from 'oa-shared'
 
 const CreateResearch = observer(() => {
   const { userStore } = useCommonStores().stores

@@ -4,8 +4,7 @@ import { ImageInputField } from 'src/common/Form/ImageInput.field'
 import { fields, headings } from 'src/pages/UserSettings/labels'
 import { Box, Flex, Heading, Text } from 'theme-ui'
 
-import type { IUser } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta, IUser } from 'oa-shared'
 
 interface IProps {
   values: IUser

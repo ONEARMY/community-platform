@@ -19,8 +19,7 @@ import ResearchListItem from './ResearchListItem'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { ResearchStatus } from 'oa-shared'
-import type { IResearch } from 'src/models'
+import type { IResearch, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 const ResearchList = observer(() => {

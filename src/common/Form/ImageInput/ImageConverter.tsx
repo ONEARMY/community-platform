@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Flex } from 'theme-ui'
 
-import type { IConvertedFileMeta } from 'src/types'
+import type { IConvertedFileMeta } from 'oa-shared'
 
 interface IProps {
   file: File

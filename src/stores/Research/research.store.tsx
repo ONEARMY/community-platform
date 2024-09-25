@@ -24,9 +24,13 @@ import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscrib
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 import { setCollaboratorPermission } from './researchEvents'
 
-import type { IUser, UserMention } from 'src/models'
-import type { IConvertedFileMeta } from 'src/types'
-import type { IResearch, IResearchDB } from '../../models/research.models'
+import type {
+  IConvertedFileMeta,
+  IResearch,
+  IResearchDB,
+  IUser,
+  UserMention,
+} from 'oa-shared'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
 

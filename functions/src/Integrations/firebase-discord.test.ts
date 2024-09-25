@@ -1,4 +1,4 @@
-import { ResearchUpdateStatus } from 'oa-shared'
+import { ResearchUpdateStatus } from 'oa-shared/models/research'
 import { handleResearchUpdatePublished } from './firebase-discord'
 
 import type { SimpleResearchArticle } from './firebase-discord'

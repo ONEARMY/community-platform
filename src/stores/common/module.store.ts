@@ -5,12 +5,15 @@ import { formatLowerNoSpecial, randomID } from 'src/utils/helpers'
 
 import { Storage } from '../storage'
 
-import type { ILocation } from 'src/models/common.models'
+import type {
+  IConvertedFileMeta,
+  ILocation,
+  ISelectedTags,
+  IUploadedFileMeta,
+} from 'oa-shared'
 import type { IDBEndpoint } from 'src/models/dbEndpoints'
-import type { ISelectedTags } from 'src/models/tags.model'
-import type { IConvertedFileMeta } from '../../types'
 import type { IRootStore } from '../RootStore'
-import type { IUploadedFileMeta } from '../storage'
+
 /**
  * The module store is used to share methods and data between other stores, including
  * `db` - the common database

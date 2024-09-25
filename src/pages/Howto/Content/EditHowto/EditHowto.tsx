@@ -8,8 +8,7 @@ import { Text } from 'theme-ui'
 
 import { HowtoForm } from '../Common/Howto.form'
 
-import type { IHowtoDB } from 'src/models/howto.models'
-import type { IUser } from 'src/models/user.models'
+import type { IHowtoDB, IUser } from 'oa-shared'
 
 interface IState {
   formValues: IHowtoDB

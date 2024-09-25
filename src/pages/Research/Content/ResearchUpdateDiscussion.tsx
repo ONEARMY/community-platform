@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { DiscussionWrapper } from 'src/common/DiscussionWrapper'
 
-import type { IResearch } from 'src/models'
+import type { IResearch } from 'oa-shared'
 
 interface IProps {
   update: IResearch.Update

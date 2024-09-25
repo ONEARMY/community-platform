@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Icon, InternalLink, Tooltip } from 'oa-components'
 
-import type { IResearch } from 'src/models'
+import type { IResearch } from 'oa-shared'
 
 interface IProps {
   research: IResearch.ItemDB

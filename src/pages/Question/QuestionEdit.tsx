@@ -7,7 +7,7 @@ import { logger } from 'src/logger'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 
-import type { IQuestion } from 'src/models'
+import type { IQuestion } from 'oa-shared'
 
 export const QuestionEdit = () => {
   const { slug } = useParams()

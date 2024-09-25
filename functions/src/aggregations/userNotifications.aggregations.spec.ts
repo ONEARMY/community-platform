@@ -1,9 +1,11 @@
-import { IUserDB } from '../models'
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import type { INotification } from '../../../src/models'
-import { EmailNotificationFrequency } from 'oa-shared'
+import {
+  EmailNotificationFrequency,
+  INotification,
+} from 'oa-shared/models/notifications'
 import { processNotifications } from './userNotifications.aggregations'
 import { FieldValue } from 'firebase-admin/firestore'
+import { IUserDB } from 'oa-shared/models/user'
 
 const mockNotification: Partial<INotification> = { _id: 'notification_1' }
 

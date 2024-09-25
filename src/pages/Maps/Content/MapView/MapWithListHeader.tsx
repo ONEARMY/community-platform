@@ -1,7 +1,7 @@
 import { CardList, FilterList } from 'oa-components'
 import { Flex, Heading } from 'theme-ui'
 
-import type { IMapPin } from 'src/models'
+import type { IMapPin } from 'oa-shared'
 
 interface IProps {
   activePinFilters: string[]

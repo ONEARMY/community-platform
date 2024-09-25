@@ -3,8 +3,8 @@ import * as functions from 'firebase-functions'
 
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
-
-import type { IUserDB, IQuestionDB } from '../models'
+import { IQuestionDB } from 'oa-shared/models/questions'
+import { IUserDB } from 'oa-shared/models/user'
 
 /*********************************************************************
  * Side-effects to be carried out on various question updates, namely:

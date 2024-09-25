@@ -29,9 +29,7 @@ import { Alert, Box, Card, Divider, Flex, Heading, Image, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../../../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { HowtoDownloads } from '../HowtoDownloads/HowtoDownloads'
 
-import type { ITag } from 'src/models'
-import type { IHowtoDB } from 'src/models/howto.models'
-import type { IUser } from 'src/models/user.models'
+import type { IHowtoDB, ITag, IUser } from 'oa-shared'
 
 interface IProps {
   howto: IHowtoDB & { tagList?: ITag[] }

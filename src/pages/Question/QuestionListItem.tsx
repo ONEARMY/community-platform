@@ -10,7 +10,7 @@ import { Box, Card, Flex, Heading } from 'theme-ui'
 import { UserNameTag } from '../common/UserNameTag/UserNameTag'
 import { listing } from './labels'
 
-import type { IQuestion } from 'src/models'
+import type { IQuestion } from 'oa-shared'
 
 interface IProps {
   question: IQuestion.Item

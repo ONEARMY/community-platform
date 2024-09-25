@@ -1,3 +1,5 @@
+import type { ISODateString } from './common'
+
 /*************************************************************************************
  * Generate a list of DB endpoints used in the app
  *
@@ -68,3 +70,11 @@ const DB_PREFIX = storage.DB_PREFIX || e.VITE_DB_PREFIX || ''
 export const DB_ENDPOINTS = generateDBEndpoints(DB_PREFIX)
 
 export type DBEndpoint = keyof typeof DB_ENDPOINTS
+
+export interface DBDoc {
+  _id: string
+  _created: ISODateString
+  _modified: ISODateString
+  _deleted: boolean
+  _contentModifiedTimestamp: ISODateString
+}

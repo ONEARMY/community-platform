@@ -1,5 +1,5 @@
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { DB_ENDPOINTS } from 'oa-shared'
+import { DB_ENDPOINTS } from 'oa-shared/models/db'
 const fbTest = require('firebase-functions-test')()
 const fun = require('./verifiedBadgeEmails')
 

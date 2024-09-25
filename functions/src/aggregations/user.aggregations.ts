@@ -1,10 +1,11 @@
 import * as functions from 'firebase-functions'
-import { DB_ENDPOINTS, IUserDB } from '../models'
+import { DB_ENDPOINTS } from '../models'
 import {
   VALUE_MODIFIERS,
   handleDBAggregations,
   IAggregation,
 } from './common.aggregations'
+import { IUserDB } from 'oa-shared/models/user'
 
 interface IUserAggregation extends IAggregation {
   sourceFields: (keyof IUserDB)[]

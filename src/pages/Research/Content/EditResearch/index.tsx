@@ -10,8 +10,7 @@ import { Text } from 'theme-ui'
 
 import { logger } from '../../../../logger'
 
-import type { IResearch } from 'src/models/research.models'
-import type { IUser } from 'src/models/user.models'
+import type { IResearch, IUser } from 'oa-shared'
 
 interface IState {
   formValues: IResearch.ItemDB | null

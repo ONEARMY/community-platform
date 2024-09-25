@@ -10,7 +10,7 @@ import {
   updateHowtoDownloadCooldown,
 } from './downloadCooldown'
 
-import type { IHowtoDB, IUser } from 'src/models'
+import type { IHowtoDB, IUser } from 'oa-shared'
 
 interface IProps {
   howto: IHowtoDB

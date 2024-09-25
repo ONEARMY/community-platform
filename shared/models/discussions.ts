@@ -1,5 +1,5 @@
-import type { DBDoc } from './dbDoc.model'
-import type { IQuestion } from './question.models'
+import type { DBDoc } from './db'
+import type { IQuestion } from './questions'
 
 export type IComment = {
   _id: string
@@ -29,3 +29,7 @@ export type IDiscussion = {
 export type IDiscussionDB = IDiscussion & DBDoc
 
 export type IDiscussionSourceModelOptions = IQuestion.Item
+
+export interface UserComment extends IComment {
+  isEditable: boolean
+}

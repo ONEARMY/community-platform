@@ -10,12 +10,15 @@ import { ModuleStore } from '../common/module.store'
 import { toggleDocSubscriberStatusByUserName } from '../common/toggleDocSubscriberStatusByUserName'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
-import type { IModerationStatus } from 'oa-shared/models'
-import type { IConvertedFileMeta } from 'src/types'
-import type { IQuestion, IQuestionDB } from '../../models/question.models'
+import type {
+  IConvertedFileMeta,
+  IModerationStatus,
+  IQuestion,
+  IQuestionDB,
+  IUploadedFileMeta,
+} from 'oa-shared'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 import type { IRootStore } from '../RootStore'
-import type { IUploadedFileMeta } from '../storage'
 
 const COLLECTION_NAME = 'questions' as DBEndpoint
 

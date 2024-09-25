@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
-import type { FetchState } from 'src/models'
+import type { FetchState } from 'oa-shared'
 
 type Props<T> = {
   getDraftCount: (userId: string) => Promise<number>

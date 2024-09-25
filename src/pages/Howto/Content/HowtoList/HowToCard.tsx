@@ -11,7 +11,7 @@ import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { capitalizeFirstLetter } from 'src/utils/helpers'
 import { Box, Card, Flex, Heading, Image } from 'theme-ui'
 
-import type { IHowto } from 'src/models/howto.models'
+import type { IHowto } from 'oa-shared'
 
 interface IProps {
   howto: IHowto

@@ -43,7 +43,7 @@ describe('[Settings]', () => {
       cy.get('[data-cy="Confirm.modal: Modal"]').should('be.visible')
     })
 
-    it.only('[Edit a new profile]', () => {
+    it('[Edit a new profile]', () => {
       const country = 'Brazil'
       const userImage = 'avatar'
       const displayName = 'settings_member_new'

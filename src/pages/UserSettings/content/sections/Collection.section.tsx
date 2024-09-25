@@ -15,10 +15,10 @@ import { FlexSectionContainer } from '../elements'
 import { CustomCheckbox } from '../fields/CustomCheckbox.field'
 import { OpeningHoursPicker } from '../fields/OpeningHoursPicker.field'
 
-import type { IPlasticType, IUserPP } from 'oa-shared'
+import type { IPlasticType, IUser } from 'oa-shared'
 
 interface IProps {
-  formValues: IUserPP
+  formValues: IUser
   required: boolean
 }
 

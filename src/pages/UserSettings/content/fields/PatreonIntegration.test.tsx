@@ -13,11 +13,11 @@ import {
   UPDATE_BUTTON_TEXT,
 } from './PatreonIntegration'
 
-import type { IUserPP } from 'oa-shared'
+import type { IUser } from 'oa-shared'
 
 const mockUser = {
   userName: 'test',
-} as IUserPP
+} as IUser
 
 const MOCK_PATREON_TIER_TITLE = 'Patreon Tier Title'
 const mockPatreonSupporter = {
@@ -41,7 +41,7 @@ const mockPatreonSupporter = {
       ],
     },
   },
-} as unknown as IUserPP
+} as unknown as IUser
 
 const WRONG_PATREON_TIER_TITLE = 'Wrong Patreon Tier Title'
 const mockPatreonNotSupporter = {
@@ -66,7 +66,7 @@ const mockPatreonNotSupporter = {
       tiers: [],
     },
   },
-} as unknown as IUserPP
+} as unknown as IUser
 
 const mockRemovePatreonConnection = vi.fn()
 

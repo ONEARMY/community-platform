@@ -4,6 +4,7 @@ import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import { backupUser } from './backupUser'
 import { updateDiscussionComments } from './updateDiscussionComments'
+import { updateMapPins } from './updateMapPins'
 
 import type { IDBDocChange } from '../models'
 import { IUserDB } from 'oa-shared/models/user'
@@ -18,12 +19,12 @@ import { IUserDB } from 'oa-shared/models/user'
 export const handleUserUpdates = functions
   .runWith({ memory: '512MB' })
   .firestore.document(`${DB_ENDPOINTS.users}/{id}`)
-  .onUpdate(async (change, context) => {
+  .onUpdate(async (change, _) => {
     await backupUser(change)
     await updateDocuments(change)
   })
 
-const isUserCountryDifferent = (prevInfo, info) => {
+const isUserCountryDifferent = (prevInfo: IUserDB, info: IUserDB) => {
   const prevCountryCode = prevInfo.location?.countryCode
   const newCountryCode = info.location?.countryCode
   const prevCountry = prevInfo.country
@@ -49,6 +50,7 @@ async function updateDocuments(change: IDBDocChange) {
   }
 
   await updateDiscussionComments(prevInfo, info)
+  await updateMapPins(prevInfo, info)
 
   const didDelete = prevDeleted !== deleted && deleted
   if (didDelete) {

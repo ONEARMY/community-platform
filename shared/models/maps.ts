@@ -1,7 +1,6 @@
 import type { ILatLng } from './common'
 import type { IModerationStatus } from './moderation'
-import type { IProfileCreator, ProfileTypeName } from './user'
-import type { WorkspaceType } from './userPreciousPlastic'
+import type { IUserBadges, ProfileTypeName, WorkspaceType } from './user'
 
 /**
  * Map pins have a `type` which correspond to icon
@@ -67,4 +66,18 @@ export interface IMapPinDetail {
   profileUrl: string
   shortDescription: string
   verifiedBadge?: boolean
+}
+
+export interface IProfileCreator {
+  _id: string
+  _lastActive: string
+  about?: string
+  badges?: IUserBadges
+  countryCode: string
+  coverImage?: string
+  displayName: string
+  isContactableByPublic: boolean
+  profileType: ProfileTypeName
+  subType?: string
+  userImage?: string
 }

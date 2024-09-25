@@ -1,4 +1,4 @@
-import type { IImpactYear } from 'src/models'
+import type { IImpactYear } from 'oa-shared'
 
 export const IMPACT_REPORT_LINKS = {
   2022: 'https://www.preciousplastic.com/impact/2023',

@@ -1,4 +1,4 @@
-import type { ILatLng, ISODateString } from './common'
+import type { ILocation, ISODateString } from './common'
 import type { DBDoc } from './db'
 import type { IModerationStatus } from './moderation'
 import type { INotification, INotificationSettings } from './notifications'
@@ -22,6 +22,8 @@ export enum ExternalLinkLabel {
   FORUM = 'forum',
   SOCIAL_MEDIA = 'social media',
 }
+
+export type IUserDB = IUser & DBDoc
 
 // See https://docs.patreon.com/?javascript#user-v2
 export interface PatreonUserAttributes {
@@ -96,25 +98,64 @@ export const ProfileTypeList = {
 export type ProfileTypeName =
   (typeof ProfileTypeList)[keyof typeof ProfileTypeList]
 
-export interface IUserBadges {
-  verified?: boolean
-  supporter?: boolean
+// Below are primarily used for PP
+
+export type PlasticTypeLabel =
+  | 'pet'
+  | 'hdpe'
+  | 'pvc'
+  | 'ldpe'
+  | 'pp'
+  | 'ps'
+  | 'other'
+
+export type MachineBuilderXpLabel =
+  | 'electronics'
+  | 'machining'
+  | 'welding'
+  | 'assembling'
+  | 'mould-making'
+
+export type WorkspaceType =
+  | 'shredder'
+  | 'sheetpress'
+  | 'extrusion'
+  | 'injection'
+  | 'mix'
+
+export interface IPlasticType {
+  label: PlasticTypeLabel
+  number: string
+  imageSrc?: string
 }
 
-/**
- * Track the ids and moderation status as summary for user stats
- */
-interface IUserStats {
-  userCreatedHowtos: { [id: string]: IModerationStatus }
-  userCreatedResearch: { [id: string]: IModerationStatus }
-  userCreatedQuestions: { [id: string]: IModerationStatus }
-  userCreatedComments: { [id: string]: string | null }
+export interface IProfileType {
+  label: ProfileTypeName
+  imageSrc?: string
+  cleanImageSrc?: string
+  cleanImageVerifiedSrc?: string
+  textLabel?: string
+}
+export interface IWorkspaceType {
+  label: WorkspaceType
+  imageSrc?: string
+  textLabel?: string
+  subText?: string
 }
 
-export interface IExternalLink {
-  key: string
-  url: string
-  label: ExternalLinkLabel
+export interface IMAchineBuilderXp {
+  label: MachineBuilderXpLabel
+}
+
+export interface IOpeningHours {
+  day: string
+  openFrom: string
+  openTo: string
+}
+
+export type UserMention = {
+  username: string
+  location: string
 }
 
 // IUser retains most of the fields from legacy users (omitting passwords),
@@ -129,9 +170,6 @@ export interface IUser {
   // firebase auth displayName property
   userName: string
   displayName: string
-  moderation: IModerationStatus
-  // note, user avatar url is taken direct from userName so no longer populated here
-  // avatar:string
   verified: boolean
   badges?: IUserBadges
   // images will be in different formats if they are pending upload vs pulled from db
@@ -140,8 +178,6 @@ export interface IUser {
   links: IExternalLink[]
   userRoles?: UserRole[]
   about?: string | null
-  DHSite_id?: number
-  DHSite_mention_name?: string
   country?: string | null
   location?: ILocation | null
   year?: ISODateString
@@ -157,8 +193,43 @@ export interface IUser {
   isContactableByPublic?: boolean
   patreon?: PatreonUser | null
   totalUseful?: number
+
+  // Primary PP profile type related fields
+  profileType: ProfileTypeName
+  subType?: WorkspaceType | null
+  workspaceType?: WorkspaceType | null
+  mapPinDescription?: string | null
+  openingHours?: IOpeningHours[]
+  collectedPlasticTypes?: PlasticTypeLabel[] | null
+  machineBuilderXp?: IMAchineBuilderXp[] | null
+  isExpert?: boolean | null
+  isV4Member?: boolean | null
 }
-export type IUserDB = IUser & DBDoc
+
+export interface IUserBadges {
+  verified?: boolean
+  supporter?: boolean
+}
+
+export interface IExternalLink {
+  key: string
+  url: string
+  label: ExternalLinkLabel
+}
+
+/**
+ * Track the ids and moderation status as summary for user stats
+ */
+interface IUserStats {
+  userCreatedHowtos: { [id: string]: IModerationStatus }
+  userCreatedResearch: { [id: string]: IModerationStatus }
+  userCreatedQuestions: { [id: string]: IModerationStatus }
+  userCreatedComments: { [id: string]: string | null }
+}
+
+export interface IUserImpact {
+  [key: number]: IImpactYearFieldList
+}
 
 export interface IImpactDataField {
   id: string
@@ -168,41 +239,9 @@ export interface IImpactDataField {
 
 export type IImpactYearFieldList = IImpactDataField[]
 
-export interface IUserImpact {
-  [key: number]: IImpactYearFieldList
-}
+export type IImpactYear = 2019 | 2020 | 2021 | 2022 | 2023
 
-export type UserMention = {
-  username: string
-  location: string
-}
-
-export type Collaborator = {
-  countryCode?: string | null
-  userName: string
-  isVerified: boolean
-}
-
-export interface IProfileCreator {
+export type INotificationUpdate = {
   _id: string
-  _lastActive: string
-  about?: string
-  badges?: IUserBadges
-  countryCode: string
-  coverImage?: string
-  displayName: string
-  isContactableByPublic: boolean
-  profileType: ProfileTypeName
-  subType?: string
-  userImage?: string
-}
-
-export interface ILocation {
-  name: string
-  country: string
-  countryCode: string
-  administrative: string
-  latlng: ILatLng
-  postcode: string
-  value: string
+  notifications?: INotification[]
 }

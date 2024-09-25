@@ -1,11 +1,11 @@
 import { ResearchStatus, ResearchUpdateStatus, UserRole } from 'oa-shared'
 
-import type { IResearch, IUserPPDB } from 'oa-shared'
+import type { IResearch, IUserDB } from 'oa-shared'
 
 export const researchUpdateStatusFilter = (
   item: IResearch.Item,
   update: IResearch.Update,
-  currentUser?: IUserPPDB | null,
+  currentUser?: IUserDB | null,
 ) => {
   const isCollaborator =
     currentUser?._id &&
@@ -25,7 +25,7 @@ export const researchUpdateStatusFilter = (
 
 export const getPublicUpdates = (
   item: IResearch.Item,
-  currentUser?: IUserPPDB | null,
+  currentUser?: IUserDB | null,
 ) => {
   if (item.updates) {
     return item.updates.filter((update) =>

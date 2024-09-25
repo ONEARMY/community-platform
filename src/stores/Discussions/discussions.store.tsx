@@ -19,7 +19,7 @@ import type {
   IDiscussionDB,
   IDiscussionSourceModelOptions,
   IResearch,
-  IUserPPDB,
+  IUserDB,
 } from 'oa-shared'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
@@ -311,7 +311,7 @@ export class DiscussionStore extends ModuleStore {
   }
 
   private _findAndUpdateComment(
-    user: IUserPPDB,
+    user: IUserDB,
     comments: IComment[],
     newCommentText: string,
     commentId: string,
@@ -411,7 +411,7 @@ export class DiscussionStore extends ModuleStore {
   }
 
   private _findAndDeleteComment(
-    user: IUserPPDB,
+    user: IUserDB,
     comments: IComment[],
     commentId: string,
   ) {
@@ -426,7 +426,7 @@ export class DiscussionStore extends ModuleStore {
     })
   }
 
-  private _getUserAvatar(user: IUserPPDB) {
+  private _getUserAvatar(user: IUserDB) {
     if (user.userImage && user.userImage.downloadUrl) {
       return cdnImageUrl(user.userImage.downloadUrl, { width: 100 })
     }

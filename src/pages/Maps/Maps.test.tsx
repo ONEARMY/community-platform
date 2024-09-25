@@ -5,7 +5,6 @@ import { ThemeProvider } from '@emotion/react'
 import { createRoutesFromElements, Route } from '@remix-run/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
-import { IModerationStatus } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { FactoryMapPin } from 'src/test/factories/MapPin'
 import { FactoryUser } from 'src/test/factories/User'
@@ -81,9 +80,7 @@ const Wrapper = (path = '/map') => {
 
   const mockMapPinService: IMapPinService = {
     getMapPinByUserId: vi.fn().mockResolvedValue({
-      ...FactoryUser({
-        moderation: IModerationStatus.ACCEPTED,
-      }),
+      ...FactoryUser(),
       ...FactoryMapPin(),
       detail: {
         shortDescription: 'description',

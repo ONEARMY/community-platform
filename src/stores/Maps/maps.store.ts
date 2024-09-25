@@ -20,8 +20,7 @@ import type {
   IMapPinWithDetail,
   IUploadedFileMeta,
   IUser,
-  IUserPP,
-  IUserPPDB,
+  IUserDB,
   ProfileTypeName,
 } from 'oa-shared'
 import type { IDBEndpoint } from 'src/models/dbEndpoints'
@@ -169,7 +168,7 @@ export class MapsStore extends ModuleStore {
     )
   }
 
-  public async setUserPin(user: IUserPPDB) {
+  public async setUserPin(user: IUserDB) {
     const {
       _id,
       _lastActive,
@@ -247,7 +246,7 @@ export class MapsStore extends ModuleStore {
     await this.db.collection<IMapPin>(COLLECTION_NAME).doc(pin._id).set(pin)
   }
 
-  public async deleteUserPin(user: IUserPP) {
+  public async deleteUserPin(user: IUser) {
     const pin = await this.getPin(user.userName, 'server')
 
     logger.debug('marking user pin deleted', pin)

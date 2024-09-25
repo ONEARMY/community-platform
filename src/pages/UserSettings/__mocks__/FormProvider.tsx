@@ -11,12 +11,12 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { vi } from 'vitest'
 
-import type { IUserPPDB } from 'oa-shared'
+import type { IUserDB } from 'oa-shared'
 
 const Theme = testingThemeStyles
 
 export const FormProvider = (
-  user: IUserPPDB,
+  user: IUserDB,
   element: React.ReactNode,
   routerInitialEntry?: string,
 ) => {

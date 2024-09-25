@@ -8,11 +8,11 @@ import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
 import type {
   INotification,
-  IUserPP,
-  IUserPPDB,
+  INotificationUpdate,
+  IUser,
+  IUserDB,
   NotificationType,
 } from 'oa-shared'
-import type { INotificationUpdate } from 'src/models/user.models'
 import type { IRootStore } from '../RootStore'
 
 export class UserNotificationsStore extends ModuleStore {
@@ -87,7 +87,7 @@ export class UserNotificationsStore extends ModuleStore {
         }
 
         const lookup = await this.db
-          .collection<IUserPP>(USER_COLLECTION_NAME)
+          .collection<IUser>(USER_COLLECTION_NAME)
           .getWhere('_id', '==', userId)
 
         const user = lookup[0]
@@ -160,7 +160,7 @@ export class UserNotificationsStore extends ModuleStore {
     }
   }
 
-  private async _updateUserNotifications(user: IUserPPDB, notifications) {
+  private async _updateUserNotifications(user: IUserDB, notifications) {
     const dbRef = this.db
       .collection<INotificationUpdate>(USER_COLLECTION_NAME)
       .doc(user.userName)

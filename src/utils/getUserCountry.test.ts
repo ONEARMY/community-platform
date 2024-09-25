@@ -1,4 +1,3 @@
-import { IModerationStatus } from 'oa-shared'
 import { describe, expect, it } from 'vitest'
 
 import { getUserCountry } from './getUserCountry'
@@ -9,12 +8,10 @@ const user: IUser = {
   _authID: '1',
   userName: 'testUser',
   displayName: 'test user',
-  moderation: IModerationStatus.ACCEPTED,
-
   verified: true,
   coverImages: [],
+  profileType: 'member',
   links: [],
-
   country: null,
   location: null,
 }

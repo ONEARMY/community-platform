@@ -1,11 +1,7 @@
 import { faker } from '@faker-js/faker'
-import {
-  ExternalLinkLabel,
-  IModerationStatus,
-  ProfileTypeList,
-} from 'oa-shared'
+import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
 
-import type { IExternalLink, IUploadedFileMeta, IUserPPDB } from 'oa-shared'
+import type { IExternalLink, IUploadedFileMeta, IUserDB } from 'oa-shared'
 
 export const factoryImage: IUploadedFileMeta = {
   timeCreated: '2019-09-27T14:58:41.378Z',
@@ -25,9 +21,7 @@ export const factoryLink: IExternalLink = {
   label: ExternalLinkLabel.WEBSITE,
 }
 
-export const FactoryUser = (
-  userOverloads: Partial<IUserPPDB> = {},
-): IUserPPDB => ({
+export const FactoryUser = (userOverloads: Partial<IUserDB> = {}): IUserDB => ({
   _id: faker.string.uuid(),
   _created: faker.date.past().toString(),
   _modified: faker.date.past().toString(),
@@ -39,12 +33,6 @@ export const FactoryUser = (
   displayName: faker.person.fullName(),
   verified: faker.datatype.boolean(),
   links: [],
-  moderation: faker.helpers.arrayElement([
-    IModerationStatus.DRAFT,
-    IModerationStatus.AWAITING_MODERATION,
-    IModerationStatus.REJECTED,
-    IModerationStatus.ACCEPTED,
-  ]),
   country: faker.location.countryCode(),
   notifications: [],
   coverImages: [] as any[],

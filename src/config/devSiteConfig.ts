@@ -1,4 +1,4 @@
-import type { UserRole } from '../models/user.models'
+import type { UserRole } from 'oa-shared'
 
 export const getDevSiteRole = () =>
   localStorage.getItem('devSiteRole') as UserRole

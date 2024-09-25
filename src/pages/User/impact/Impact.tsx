@@ -3,11 +3,11 @@ import { Flex } from 'theme-ui'
 import { IMPACT_YEARS } from './constants'
 import { ImpactItem } from './ImpactItem'
 
-import type { IUserImpact, IUserPP } from 'oa-shared'
+import type { IUser, IUserImpact } from 'oa-shared'
 
 interface Props {
   impact: IUserImpact | undefined
-  user: IUserPP | undefined
+  user: IUser | undefined
 }
 
 export const Impact = (props: Props) => {

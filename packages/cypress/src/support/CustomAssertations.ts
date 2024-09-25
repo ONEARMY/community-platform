@@ -1,12 +1,12 @@
 import chaiSubset from 'chai-subset'
 
+import type { ProfileTypeName } from 'oa-shared'
 import type {
   IHowto,
   IHowtoStep,
   IResearchDB,
-  IUserPPDB,
+  IUserDB,
 } from '../../../../src/models'
-import type { ProfileTypeLabel } from '../../../../src/modules/profile/types'
 
 declare global {
   namespace Chai {
@@ -134,7 +134,7 @@ const eqSettings = (chaiObj) => {
       this.asserts.push(...asserts)
     }
   }
-  const basicInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
+  const basicInfoAssert: Assert<IUserDB, any> = (subject, expected) => {
     const { _deleted, about, displayName, profileType, verified } = expected
     expect(subject, 'Basic Info').to.containSubset({
       _deleted,
@@ -144,7 +144,7 @@ const eqSettings = (chaiObj) => {
       about,
     })
   }
-  const basicMemberInfoAssert: Assert<IUserPPDB, any> = (subject, expected) => {
+  const basicMemberInfoAssert: Assert<IUserDB, any> = (subject, expected) => {
     const { _deleted, about, profileType, displayName, verified } = expected
     expect(subject, 'Basic Info').to.containSubset({
       _deleted,
@@ -154,66 +154,66 @@ const eqSettings = (chaiObj) => {
       about,
     })
   }
-  const linkAssert: Assert<IUserPPDB, any> = (subject, expected) =>
+  const linkAssert: Assert<IUserDB, any> = (subject, expected) =>
     expect(subject.links.length, 'Links').to.eq(expected.links.length)
-  const coverImageAssert: Assert<IUserPPDB, any> = (subject, expected) =>
+  const coverImageAssert: Assert<IUserDB, any> = (subject, expected) =>
     // only test length as uploaded images get new url and meta
     expect(subject.coverImages, 'CoverImages').to.have.same.length(
       expected.coverImages.length,
     )
-  const locationAssert: Assert<IUserPPDB, any> = (subject, expected) => {
+  const locationAssert: Assert<IUserDB, any> = (subject, expected) => {
     expect(subject.location, 'Location').to.containSubset(expected.location)
     expect(subject.mapPinDescription, 'MapPinDescription').to.containSubset(
       expected.mapPinDescription,
     )
   }
-  const workspaceAssert: Assert<IUserPPDB, any> = (subject, expected) =>
+  const workspaceAssert: Assert<IUserDB, any> = (subject, expected) =>
     expect(subject.workspaceType, 'workspaceType').to.containSubset(
       expected.workspaceType,
     )
-  const machineExpertiseAssert: Assert<IUserPPDB, any> = (subject, expected) =>
+  const machineExpertiseAssert: Assert<IUserDB, any> = (subject, expected) =>
     expect(subject.machineBuilderXp, 'MachineBuilderXp').to.containSubset(
       expected.machineBuilderXp,
     )
-  const openingHoursAssert: Assert<IUserPPDB, any> = (subject, expected) =>
+  const openingHoursAssert: Assert<IUserDB, any> = (subject, expected) =>
     expect(subject.openingHours, 'OpeningHours').to.containSubset(
       expected.openingHours,
     )
-  const plasticTypeAssert: Assert<IUserPPDB, any> = (subject, expected) =>
+  const plasticTypeAssert: Assert<IUserDB, any> = (subject, expected) =>
     expect(
       subject.collectedPlasticTypes,
       'CollectedPlasticTypes',
     ).to.containSubset(expected.collectedPlasticTypes)
 
   const assertMap: {
-    [key in ProfileTypeLabel]: ChainAssert<IUserPPDB, any>
+    [key in ProfileTypeName]: ChainAssert<IUserDB, any>
   } = {
-    workspace: new ChainAssert<IUserPPDB, any>(
+    workspace: new ChainAssert<IUserDB, any>(
       workspaceAssert,
       basicInfoAssert,
       coverImageAssert,
       linkAssert,
       locationAssert,
     ),
-    member: new ChainAssert<IUserPPDB, any>(
+    member: new ChainAssert<IUserDB, any>(
       basicMemberInfoAssert,
       coverImageAssert,
       linkAssert,
     ),
-    'machine-builder': new ChainAssert<IUserPPDB, any>(
+    'machine-builder': new ChainAssert<IUserDB, any>(
       basicInfoAssert,
       coverImageAssert,
       linkAssert,
       locationAssert,
       machineExpertiseAssert,
     ),
-    'community-builder': new ChainAssert<IUserPPDB, any>(
+    'community-builder': new ChainAssert<IUserDB, any>(
       basicInfoAssert,
       coverImageAssert,
       linkAssert,
       locationAssert,
     ),
-    'collection-point': new ChainAssert<IUserPPDB, any>(
+    'collection-point': new ChainAssert<IUserDB, any>(
       basicInfoAssert,
       coverImageAssert,
       linkAssert,

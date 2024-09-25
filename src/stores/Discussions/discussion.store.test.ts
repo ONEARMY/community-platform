@@ -10,12 +10,12 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { DiscussionStore } from './discussions.store'
 
-import type { IDiscussion, IUserPPDB } from 'oa-shared'
+import type { IDiscussion, IUserDB } from 'oa-shared'
 import type { IRootStore } from '../RootStore'
 
 const factory = (
   discussions: IDiscussion[] = [FactoryDiscussion({})],
-  activeUser: IUserPPDB = FactoryUser(),
+  activeUser: IUserDB = FactoryUser(),
 ) => {
   const store = new DiscussionStore({} as IRootStore)
 

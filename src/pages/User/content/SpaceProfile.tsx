@@ -40,14 +40,14 @@ import UserCreatedDocuments from './UserCreatedDocuments'
 
 import type {
   IMAchineBuilderXp,
-  IOpeningHours,
-  IUserPP,
+    IOpeningHours,
+    IUser,
   PlasticTypeLabel,
 } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
-  user: IUserPP
+  user: IUser
   docs: UserCreatedDocs | undefined
 }
 
@@ -135,7 +135,7 @@ const renderMachineBuilderXp = (machineBuilderXp: IMAchineBuilderXp[]) => (
   </>
 )
 
-const getCoverImages = (user: IUserPP) => {
+const getCoverImages = (user: IUser) => {
   if (user.coverImages && user.coverImages.length) {
     return user.coverImages
   }

@@ -25,7 +25,7 @@ import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { MAX_PIN_LENGTH } from './constants'
 
-import type { ILocation, IMapPin, IUserPPDB } from 'oa-shared'
+import type { ILocation, IMapPin, IUserDB } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 interface IPinProps {
@@ -33,7 +33,7 @@ interface IPinProps {
 }
 
 interface ILocationProps {
-  location: IUserPPDB['location']
+  location: IUserDB['location']
 }
 
 const LocationDataTextDisplay = ({ location }: ILocationProps) => {
@@ -88,7 +88,7 @@ const MapPinModerationComments = ({ mapPin }: IPinProps) => {
 interface IPropsDeletePin {
   setIsLoading: (arg: boolean) => void
   setNotification: (arg: IFormNotification) => void
-  user: IUserPPDB
+  user: IUserDB
 }
 
 const DeleteMapPin = (props: IPropsDeletePin) => {

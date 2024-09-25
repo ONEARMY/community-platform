@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { MapsStore } from './maps.store'
 
-import type { IUserPPDB } from 'oa-shared'
+import type { IUserDB } from 'oa-shared'
 
 vi.mock('../common/module.store')
 
@@ -205,7 +205,7 @@ describe('maps.store', () => {
       // Act
       await store.deleteUserPin({
         userName: 'existing',
-      } as IUserPPDB)
+      } as IUserDB)
 
       // Assert
       expect(store.db.update).toHaveBeenCalledWith(

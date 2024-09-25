@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
+import { toJS } from 'mobx'
 import { Button, Loader } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { UnsavedChangesDialog } from 'src/common/Form/UnsavedChangesDialog'
@@ -32,14 +33,15 @@ export const SettingsPageUserProfile = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { userStore } = useCommonStores().stores
-  const user = userStore.activeUser
+  const user = toJS(userStore.activeUser)
+
+  if (!user) return null
 
   const saveProfile = async (values: IUser) => {
-    if (!user) return
     setIsLoading(true)
 
     const toUpdate = {
-      _id: user?._id,
+      _id: user._id,
       ...values,
     }
 
@@ -88,35 +90,30 @@ export const SettingsPageUserProfile = () => {
 
   const coverImages = new Array(4)
     .fill(null)
-    .map((v, i) => (user?.coverImages[i] ? user?.coverImages[i] : v))
+    .map((v, i) => (user.coverImages[i] ? user.coverImages[i] : v))
 
-  const links = (
-    user && user?.links?.length > 0 ? user.links : [{} as any]
-  ).map((i) => ({
-    ...i,
-    key: uuid(),
-  }))
+  const links = (user && user.links?.length > 0 ? user.links : [{} as any]).map(
+    (i) => ({ ...i, key: uuid() }),
+  )
 
   const initialValues = {
-    profileType: user?.profileType || ProfileTypeList.MEMBER,
-    displayName: user?.displayName || null,
-    userName: user?.userName,
+    profileType: user.profileType || ProfileTypeList.MEMBER,
+    displayName: user.displayName || null,
+    userName: user.userName,
     links,
-    location: user?.location || null,
-    about: user?.about || null,
-    openingHours: user?.openingHours || [{}],
-    workspaceType: user?.workspaceType || null,
-    collectedPlasticTypes: user?.collectedPlasticTypes || null,
-    machineBuilderXp: user?.machineBuilderXp || null,
+    location: user.location || null,
+    about: user.about || null,
+    openingHours: user.openingHours || [{}],
+    workspaceType: user.workspaceType || null,
+    collectedPlasticTypes: user.collectedPlasticTypes || null,
+    machineBuilderXp: user.machineBuilderXp || null,
     isContactableByPublic:
-      user?.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
-    userImage: user?.userImage || null,
+      user.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
+    userImage: user.userImage || null,
     coverImages,
   }
 
   const formId = 'userProfileForm'
-
-  if (!user) return null
 
   return (
     <Form

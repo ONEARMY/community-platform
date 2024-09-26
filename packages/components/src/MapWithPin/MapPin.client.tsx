@@ -1,8 +1,12 @@
-import * as React from 'react'
+import { useRef, useState } from 'react'
 import { Marker } from 'react-leaflet'
 import L from 'leaflet'
 
 import customMarkerIcon from '../../assets/icons/map-marker.png'
+
+import type { DivIcon } from 'leaflet'
+
+import './MapPin.css'
 
 const customMarker = L.icon({
   iconUrl: customMarkerIcon,
@@ -15,31 +19,40 @@ export interface IProps {
     lat: number
     lng: number
   }
-  draggable: boolean
-  ondragend(lng: number): void
+  onDrag(lng: number): void
+  markerIcon?: DivIcon
+  onClick?: () => void
 }
 
 export const MapPin = (props: IProps) => {
-  const markerRef = React.useRef(null)
+  const markerRef = useRef(null)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleDrag = () => {
+    const marker: any = markerRef.current
+
+    if (!marker) {
+      return
+    }
+
+    const markerLatLng = marker.leafletElement.getLatLng()
+    if (props.onDrag) {
+      props.onDrag(markerLatLng)
+    }
+  }
 
   return (
     <Marker
-      draggable={props.draggable}
-      ondragend={() => {
-        const marker: any = markerRef.current
-
-        if (!marker) {
-          return null
-        }
-
-        const markerLatLng = marker.leafletElement.getLatLng()
-        if (props.ondragend) {
-          props.ondragend(markerLatLng)
-        }
-      }}
+      className={`map-pin ${isDragging ? 'dragging' : ''}`}
+      draggable
+      onDrag={handleDrag}
       position={[props.position.lat, props.position.lng]}
       ref={markerRef}
-      icon={customMarker}
+      icon={props.markerIcon || customMarker}
+      onMouseDown={() => setIsDragging(true)}
+      onMouseUp={() => setIsDragging(false)}
+      onMouseLeave={() => setIsDragging(false)}
+      onclick={props.onClick}
     />
   )
 }

@@ -8,9 +8,10 @@ import type { IProfileCreator } from 'oa-shared'
 
 interface IProps {
   creator: IProfileCreator
+  isLink: boolean
 }
 
-export const CardDetailsMemberProfile = ({ creator }: IProps) => {
+export const CardDetailsMemberProfile = ({ creator, isLink }: IProps) => {
   const { _id, badges, countryCode, profileType, userImage } = creator
 
   return (
@@ -55,7 +56,7 @@ export const CardDetailsMemberProfile = ({ creator }: IProps) => {
             isVerified: badges?.verified || false,
           }}
           sx={{ alignSelf: 'flex-start' }}
-          isLink={false}
+          isLink={isLink}
         />
         <Category
           category={{ label: 'Wants to get started' }}

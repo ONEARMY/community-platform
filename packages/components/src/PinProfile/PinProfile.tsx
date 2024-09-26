@@ -32,7 +32,7 @@ export const PinProfile = (props: IProps) => {
         </Box>
       </Box>
 
-      <CardProfile item={item} />
+      <CardProfile item={item} isLink />
 
       {!isMember && creator?.isContactableByPublic && (
         <Flex sx={{ justifyContent: 'flex-end' }}>

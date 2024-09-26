@@ -8,17 +8,22 @@ import type { MapListItem } from '../types/common'
 
 export interface IProps {
   item: MapListItem
+  isLink?: boolean
 }
 
-export const CardProfile = ({ item }: IProps) => {
+export const CardProfile = ({ item, isLink = false }: IProps) => {
   const { creator } = item
 
   const isMember = creator?.profileType === 'member'
 
   return (
     <Flex sx={{ alignItems: 'stretch', alignContent: 'stretch' }}>
-      {isMember && <CardDetailsMemberProfile creator={creator} />}
-      {!isMember && creator && <CardDetailsSpaceProfile creator={creator} />}
+      {isMember && (
+        <CardDetailsMemberProfile creator={creator} isLink={isLink} />
+      )}
+      {!isMember && creator && (
+        <CardDetailsSpaceProfile creator={creator} isLink={isLink} />
+      )}
       {!creator && <CardDetailsFallback item={item} />}
     </Flex>
   )

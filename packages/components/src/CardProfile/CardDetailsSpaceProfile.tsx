@@ -8,9 +8,10 @@ import type { IProfileCreator } from 'oa-shared'
 
 interface IProps {
   creator: IProfileCreator
+  isLink: boolean
 }
 
-export const CardDetailsSpaceProfile = ({ creator }: IProps) => {
+export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
   const { _id, about, badges, countryCode, coverImage, profileType, subType } =
     creator
 
@@ -68,7 +69,7 @@ export const CardDetailsSpaceProfile = ({ creator }: IProps) => {
               isSupporter: badges?.supporter || false,
             }}
             sx={{ alignSelf: 'flex-start' }}
-            isLink={false}
+            isLink={isLink}
           />
         </Flex>
         {subType && (

@@ -44,7 +44,7 @@ describe('[Settings]', () => {
     })
 
     it('[Edit a new profile]', () => {
-      const country = 'Brazil'
+      const country = 'Bolivia'
       const userImage = 'avatar'
       const displayName = 'settings_member_new'
       const description = "I'm a very active member"
@@ -78,6 +78,7 @@ describe('[Settings]', () => {
         country,
         description,
       })
+      cy.get('[data-cy="country:BO"]')
 
       cy.step('Errors if trying to upload invalid image')
       cy.get(`[data-cy=userImage]`)
@@ -126,6 +127,8 @@ describe('[Settings]', () => {
       cy.contains(user.username)
       cy.contains(displayName)
       cy.contains(description)
+      cy.contains(country)
+      cy.get('[data-cy="country:bo"]')
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
       cy.get('[data-cy="profile-avatar"]')
         .should('have.attr', 'src')

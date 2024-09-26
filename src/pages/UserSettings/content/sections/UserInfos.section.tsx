@@ -1,7 +1,13 @@
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import countriesList from 'countries-list'
-import { Button, FieldInput, FieldTextarea, InternalLink } from 'oa-components'
+import {
+  Button,
+  FieldInput,
+  FieldTextarea,
+  InternalLink,
+  Username,
+} from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { SelectField } from 'src/common/Form/Select.field'
 import { isModuleSupported, MODULE } from 'src/modules'
@@ -28,6 +34,9 @@ export const UserInfosSection = ({ formValues }: IProps) => {
   const isMemberProfile = profileType === ProfileTypeList.MEMBER
   const { about, country, displayName, userName } = fields
 
+  const countryCode = Object.keys(countries).find(
+    (key) => countries[key].name === formValues.location?.country,
+  )
   const noMapPin = !location?.latlng
 
   return (
@@ -103,7 +112,7 @@ export const UserInfosSection = ({ formValues }: IProps) => {
               {(field) => (
                 <SelectField
                   options={Object.keys(countries).map((country) => ({
-                    label: countries[country].name,
+                    label: `${countries[country].emoji} ${countries[country].native}`,
                     value: countries[country].name,
                   }))}
                   placeholder="Select your country..."
@@ -111,6 +120,19 @@ export const UserInfosSection = ({ formValues }: IProps) => {
                 />
               )}
             </Field>
+            <Flex sx={{ gap: 1, alignItems: 'center' }}>
+              <Text sx={{ fontSize: 1 }} variant="quiet">
+                Preview:
+              </Text>
+              <Username
+                user={{
+                  userName: formValues.userName || '',
+                  countryCode,
+                  isSupporter: false,
+                  isVerified: false,
+                }}
+              />
+            </Flex>
           </Flex>
         )}
 

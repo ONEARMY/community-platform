@@ -8,6 +8,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { UserStore } from './user.store'
 
+import type { ILocation } from 'oa-shared'
+
 vi.mock('../common/module.store')
 vi.mock('../Aggragations/aggregations.store')
 
@@ -424,6 +426,31 @@ describe('userStore', () => {
       expect(store.db.update).toHaveBeenCalledWith(
         expect.not.objectContaining({
           workspaceType: userProfile.workspaceType,
+        }),
+      )
+    })
+
+    it('updates the location country code along with the country name', async () => {
+      const userProfile = FactoryUser()
+      store.activeUser = userProfile
+
+      const updateValues = {
+        _id: userProfile._id,
+        location: {
+          country: 'Nigeria',
+        } as ILocation,
+      }
+
+      await store.updateUserProfile(updateValues, 'test-b')
+
+      // Assert
+      expect(store.db.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          _id: updateValues._id,
+          location: {
+            country: 'Nigeria',
+            countryCode: 'NG',
+          },
         }),
       )
     })

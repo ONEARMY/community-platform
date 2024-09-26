@@ -91,6 +91,11 @@ export const CommentItem = (props: IProps) => {
                   width: ['30px', '50px'],
                   height: ['30px', '50px'],
                 }}
+                alt={
+                  creatorName
+                    ? `Avatar of ${creatorName}`
+                    : 'Avatar of comment author'
+                }
               />
             </Box>
 
@@ -155,6 +160,7 @@ export const CommentItem = (props: IProps) => {
               </Flex>
               <Text
                 data-cy="comment-text"
+                data-testid="commentText"
                 sx={{
                   fontFamily: 'body',
                   lineHeight: 1.3,

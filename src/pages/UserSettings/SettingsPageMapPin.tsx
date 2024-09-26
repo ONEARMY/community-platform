@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Field, Form } from 'react-final-form'
 import { toJS } from 'mobx'
 import {
@@ -22,14 +22,18 @@ import { randomIntFromInterval } from 'src/utils/helpers'
 import { required } from 'src/utils/validators'
 import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 
+import { Popup } from '../Maps/Content/MapView/Popup.client'
+import { createMarkerIcon } from '../Maps/Content/MapView/Sprites'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { MAX_PIN_LENGTH } from './constants'
 
-import type { ILocation, IMapPin, IUserDB } from 'oa-shared'
+import type { DivIcon } from 'leaflet'
+import type { ILatLng, ILocation, IMapPinWithDetail, IUserDB } from 'oa-shared'
+import type { Map } from 'react-leaflet'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 interface IPinProps {
-  mapPin: IMapPin | undefined
+  mapPin: IMapPinWithDetail | undefined
 }
 
 interface ILocationProps {
@@ -148,25 +152,34 @@ export const SettingsPageMapPin = () => {
   const communityProgramUrl =
     import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
     process.env.VITE_COMMUNITY_PROGRAM_URL
-  const [mapPin, setMapPin] = useState<IMapPin>()
+  const [mapPin, setMapPin] = useState<IMapPinWithDetail>()
+  const [markerIcon, setMarkerIcon] = useState<DivIcon>()
+  const [showPopup, setShowPopup] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
 
+  const newMapRef = React.useRef<Map>(null)
+
   const { mapsStore, userStore } = useCommonStores().stores
   const user = userStore.activeUser
-  const { addPinTitle, yourPinTitle } = headings.map
-
-  const formId = 'MapSection'
   const isMember = user?.profileType === ProfileTypeList.MEMBER
+  const { addPinTitle, yourPinTitle } = headings.map
+  const formId = 'MapSection'
 
   useEffect(() => {
     const init = async () => {
       if (!user) return
 
-      const pin = (await mapsStore.getPin(user.userName)) || null
-      setMapPin(pin)
+      const pin = await mapsStore.getPin(user.userName)
+      if (!pin) return
+
+      const pinDetail = await mapsStore.getPinDetail(pin)
+      if (!pinDetail) return
+
+      setMapPin(pinDetail)
+      setMarkerIcon(createMarkerIcon(pin))
       setIsLoading(false)
     }
 
@@ -226,7 +239,7 @@ export const SettingsPageMapPin = () => {
     >
       <Flex sx={{ flexDirection: 'column', gap: 1 }}>
         <Heading as="h2" id="your-map-pin">
-          {mapPin ? addPinTitle : yourPinTitle}
+          {mapPin ? yourPinTitle : addPinTitle}
         </Heading>
         {isMember && (
           <Text
@@ -289,11 +302,25 @@ export const SettingsPageMapPin = () => {
 
                   return (
                     <MapWithPin
+                      mapRef={newMapRef}
                       position={location.latlng}
-                      draggable={true}
-                      updatePosition={(newPosition) => {
+                      updatePosition={(newPosition: ILatLng) => {
                         onChange({ latlng: newPosition })
                       }}
+                      markerIcon={markerIcon}
+                      zoom={mapPin ? 15 : 1}
+                      onClickMapPin={() => setShowPopup(!showPopup)}
+                      popup={
+                        mapPin && showPopup ? (
+                          <Popup
+                            activePin={mapPin}
+                            mapRef={newMapRef}
+                            newMap
+                            onClose={() => setShowPopup(!showPopup)}
+                            customPosition={location.latlng || undefined}
+                          />
+                        ) : undefined
+                      }
                     />
                   )
                 }}

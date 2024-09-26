@@ -1,0 +1,7 @@
+.leaflet-marker-icon:hover {
+  cursor: grab !important;
+}
+
+.leaflet-drag-target {
+  cursor: grabbing;
+}

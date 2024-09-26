@@ -85,6 +85,7 @@ export const CommentItem = (props: IProps) => {
           <Flex sx={{ gap: 2, flexGrow: 1 }}>
             <Box data-cy="commentAvatar" data-testid="commentAvatar">
               <Avatar
+                data-cy="commentAvatarImage"
                 src={creatorImage ?? defaultProfileImage}
                 sx={{
                   objectFit: 'cover',

@@ -1,3 +1,4 @@
+import pkg from 'countries-list'
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -36,6 +37,8 @@ The user store listens to login events through the firebase api and exposes logg
 */
 
 export const COLLECTION_NAME = 'users'
+
+const { countries } = pkg
 
 type PartialUser = Partial<IUserDB>
 
@@ -192,7 +195,7 @@ export class UserStore extends ModuleStore {
   }
 
   public async updateUserProfile(values: PartialUser, trigger: string) {
-    const { _id, coverImages, userImage } = values
+    const { _id, coverImages, location, userImage } = values
 
     if (!_id) throw new Error(`User not found`)
     if (_id !== this.activeUser?._id) {
@@ -216,6 +219,16 @@ export class UserStore extends ModuleStore {
         COLLECTION_NAME,
         _id,
       )
+    }
+
+    if (location?.country) {
+      const countryCode = Object.keys(countries).find(
+        (key) => countries[key].name === location.country,
+      )
+      updatedUserProfile.location = {
+        ...location,
+        countryCode: countryCode || '',
+      }
     }
 
     await this._updateUserRequest(_id, updatedUserProfile)

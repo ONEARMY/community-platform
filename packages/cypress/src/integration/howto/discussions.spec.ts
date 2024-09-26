@@ -36,6 +36,30 @@ describe('[Howto.Discussions]', () => {
     cy.contains(`${howtoDiscussion.comments.length + 1} comments`)
     cy.contains(newComment)
 
+    // The following step isn't possible to test atm due to the relationship between
+    // the functions listen for changes and how cypress creates new document collections
+    // for each test run.
+    // cy.step('Updating user settings shows on comments')
+    // cy.visit('/settings')
+    // cy.setSettingBasicUserInfo({
+    //     country: 'Saint Lucia',
+    //     description: "I'm a commenter",
+    //     displayName: visitor.username,
+    //   })
+    // cy.setSettingImage('avatar', 'userImage')
+    // cy.setSettingAddContactLink({
+    //   index: 0,
+    //   label: ExternalLinkLabel.SOCIAL_MEDIA,
+    //   url: 'http://something.to.delete/',
+    // })
+    // cy.saveSettingsForm()
+
+    // cy.visit(`/how-to/${item.slug}`)
+    // cy.get('[data-cy="country:lc"]')
+    // cy.get('[data-cy="commentAvatarImage"]')
+    //   .should('have.attr', 'src')
+    //   .and('include', 'avatar')
+
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', updatedNewComment)
     cy.contains(updatedNewComment)

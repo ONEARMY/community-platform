@@ -37,6 +37,7 @@ export const Username = ({ user, sx, isLink = true }: IProps) => {
               countryCode={countryCode}
               svg={true}
               title={countryCode}
+              data-cy={`country:${countryCode}`}
             />
           </Flex>
         ) : (

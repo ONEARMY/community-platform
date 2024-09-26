@@ -164,6 +164,9 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://lucaasrojas-portfolio.vercel.app/"><img src="https://avatars.githubusercontent.com/u/26610409?v=4?s=60" width="60px;" alt="Lucas Rojas"/><br /><sub><b>Lucas Rojas</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=lucaasrojas" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://luismgsantos.github.io"><img src="https://avatars.githubusercontent.com/u/13033016?v=4?s=60" width="60px;" alt="Luís Santos"/><br /><sub><b>Luís Santos</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=luismgsantos" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/koeppel"><img src="https://avatars.githubusercontent.com/u/12177323?v=4?s=60" width="60px;" alt="Janik Köppel"/><br /><sub><b>Janik Köppel</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=koeppel" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 

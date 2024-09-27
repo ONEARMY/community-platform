@@ -9,21 +9,26 @@ export default {
 
 export const Default: StoryFn<typeof DownloadFileFromLink> = () => (
   <DownloadFileFromLink
-    link={'https://example.com'}
+    fileLink={'https://example.com'}
     handleClick={async () => {
       alert('Clicked')
     }}
+    isLoggedIn
+    fileDownloadCount={0}
+    files={[]}
+    themeStoreDonationProps={{}}
   />
 )
 
 export const LoggedOut: StoryFn<typeof DownloadFileFromLink> = () => (
   <DownloadFileFromLink
-    link={'https://example.com'}
+    fileLink={'https://example.com'}
     handleClick={async () => {
       alert('Clicked')
     }}
-    redirectToSignIn={async () => {
-      alert('Redirect to Sign In')
-    }}
+    isLoggedIn={false}
+    fileDownloadCount={0}
+    files={[]}
+    themeStoreDonationProps={{}}
   />
 )

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DownloadWithDonationAsk } from 'src/common/DownloadWithDonationAsk'
+import { DownloadFileFromLink } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
 
@@ -22,6 +22,9 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
   const [fileDownloadCount, setFileDownloadCount] = useState(total_downloads)
 
   const { howtoStore } = useCommonStores().stores
+
+  const donationThemes =
+    useCommonStores().stores.themeStore?.currentTheme.donations
 
   const incrementDownloadCount = async () => {
     const updatedDownloadCount = await howtoStore.incrementDownloadCount(_id)
@@ -47,12 +50,17 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
 
   return (
     <Flex className="file-container" mt={3} sx={{ flexDirection: 'column' }}>
-      <DownloadWithDonationAsk
+      <DownloadFileFromLink
         handleClick={handleDownloadClick}
         fileLink={fileLink}
         files={files}
         isLoggedIn={!!loggedInUser}
         fileDownloadCount={fileDownloadCount || 0}
+        themeStoreDonationProps={{
+          body: donationThemes?.body,
+          iframeSrc: donationThemes?.iframeSrc,
+          imageURL: donationThemes?.imageURL,
+        }}
       />
     </Flex>
   )

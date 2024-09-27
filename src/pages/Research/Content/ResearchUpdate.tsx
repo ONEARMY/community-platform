@@ -1,10 +1,8 @@
-import { Link, useNavigate } from '@remix-run/react'
+import { Link } from '@remix-run/react'
 import {
   Button,
   DisplayDate,
-  DownloadCounter,
-  DownloadFileFromLink,
-  DownloadStaticFile,
+  DownloadWithDonationAsk,
   ImageGallery,
   LinkifyText,
   Tooltip,
@@ -47,7 +45,6 @@ const ResearchUpdate = (props: IProps) => {
     videoUrl,
   } = update
   const researchStore = useResearchStore()
-  const navigate = useNavigate()
   const loggedInUser = useCommonStores().stores.userStore.activeUser
 
   const contributors = useContributorsData(collaborators || [])
@@ -55,10 +52,6 @@ const ResearchUpdate = (props: IProps) => {
 
   const handleDownloadClick = async () => {
     researchStore.incrementDownloadCount(_id)
-  }
-
-  const redirectToSignIn = async () => {
-    navigate('/sign-in')
   }
 
   const displayNumber = updateIndex + 1
@@ -203,41 +196,19 @@ const ResearchUpdate = (props: IProps) => {
                 />
               )}
             </Box>
-            {((files && files.length > 0) || fileLink) && (
-              <Flex
-                className="file-container"
-                mt={3}
-                sx={{ flexDirection: 'column', px: 4 }}
-              >
-                {fileLink && (
-                  <DownloadFileFromLink
-                    handleClick={handleDownloadClick}
-                    link={fileLink}
-                    redirectToSignIn={
-                      !loggedInUser ? redirectToSignIn : undefined
-                    }
-                  />
-                )}
-                {files &&
-                  files
-                    .filter(Boolean)
-                    .map(
-                      (file, index) =>
-                        file && (
-                          <DownloadStaticFile
-                            allowDownload
-                            file={file}
-                            key={file ? file.name : `file-${index}`}
-                            handleClick={handleDownloadClick}
-                            redirectToSignIn={
-                              !loggedInUser ? redirectToSignIn : undefined
-                            }
-                          />
-                        ),
-                    )}
-                <DownloadCounter total={downloadCount} />
-              </Flex>
-            )}
+            <Flex
+              className="file-container"
+              mt={3}
+              sx={{ flexDirection: 'column', px: 4 }}
+            >
+              <DownloadWithDonationAsk
+                handleClick={handleDownloadClick}
+                fileLink={fileLink}
+                isLoggedIn={!!loggedInUser}
+                files={files}
+                fileDownloadCount={downloadCount}
+              />
+            </Flex>
             <ResearchUpdateDiscussion
               update={update}
               research={research}

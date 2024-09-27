@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DownloadWithDonationAsk } from 'src/common/DownloadWithDonationAsk'
+import { DownloadWithDonationAsk } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
 

@@ -326,6 +326,7 @@ export class HowtoStore extends ModuleStore {
       const slug = await this.setSlug(values)
       const previousSlugs = this.setPreviousSlugs(values, slug)
       const total_downloads = values['total_downloads'] ?? 0
+      const cover_image_alt = values.cover_image_alt ?? ''
 
       const keywords = getKeywords(values.title + ' ' + values.description)
       keywords.push(_createdBy)
@@ -347,6 +348,7 @@ export class HowtoStore extends ModuleStore {
         steps,
         title,
         keywords,
+        cover_image_alt,
         ...(latestCommentDate ? { latestCommentDate } : {}),
         ...(files ? { total_downloads } : {}),
         ...(category ? { category } : {}),

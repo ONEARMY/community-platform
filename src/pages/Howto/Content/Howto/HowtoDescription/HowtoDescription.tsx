@@ -267,7 +267,7 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                     width: '100%',
                   }}
                   crossOrigin=""
-                  alt="how-to cover"
+                  alt={howto.cover_image_alt ?? 'how-to cover'}
                 />
               )}
             </Box>

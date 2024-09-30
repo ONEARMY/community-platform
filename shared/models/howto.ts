@@ -21,6 +21,7 @@ export interface IHowto extends IHowtoFormInput {
   _createdBy: string
   _deleted: boolean
   cover_image?: IUploadedFileMeta
+  cover_image_alt?: string
   fileLink?: string
   total_downloads?: number
   latestCommentDate?: string | undefined
@@ -60,6 +61,7 @@ export interface IHowtoFormInput extends IModerable, ISharedFeatures {
   category?: ICategory
   // NOTE cover image input starts as convertedFileMeta but is transformed on upload
   cover_image?: IUploadedFileMeta | IConvertedFileMeta
+  cover_image_alt?: string
   // Added to be able to recover on edit by admin
   creatorCountry?: string
   totalComments?: number

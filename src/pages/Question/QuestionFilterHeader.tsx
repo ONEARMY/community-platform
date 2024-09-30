@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from '@remix-run/react'
 import debounce from 'debounce'
 import { Select } from 'oa-components'
 import { FieldContainer } from 'src/common/Form/FieldContainer'

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from '@remix-run/react'
 import { observer } from 'mobx-react-lite'
 import { Button, InternalLink, Loader } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
@@ -11,7 +11,7 @@ import { logger } from '../../../logger'
 import { MemberProfile } from './MemberProfile'
 import { SpaceProfile } from './SpaceProfile'
 
-import type { IUserDB } from 'src/models'
+import type { IUserDB } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 /**

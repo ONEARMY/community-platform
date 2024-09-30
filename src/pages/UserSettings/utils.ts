@@ -1,6 +1,6 @@
 import { impactQuestions } from './content/impactQuestions'
 
-import type { IImpactDataField, IImpactYearFieldList } from 'src/models'
+import type { IImpactDataField, IImpactYearFieldList } from 'oa-shared'
 import type { IImpactQuestion } from './content/impactQuestions'
 
 export interface ImpactDataFieldInputs {

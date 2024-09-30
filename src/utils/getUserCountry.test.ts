@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { getUserCountry } from './getUserCountry'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 
 const user: IUser = {
   _authID: '1',

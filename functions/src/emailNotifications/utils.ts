@@ -1,3 +1,4 @@
+import { IUserDB } from 'oa-shared/models/user'
 import { CONFIG } from '../config/config'
 import { firebaseAuth } from '../Firebase/auth'
 import { db } from '../Firebase/firestoreDB'
@@ -11,8 +12,11 @@ import {
   PP_SIGNOFF,
 } from './constants'
 
-import type { NotificationType } from 'oa-shared'
-import type { IMessageDB, INotification, IUserDB } from '../models'
+import type {
+  INotification,
+  NotificationType,
+} from 'oa-shared/models/notifications'
+import { IMessageDB } from 'oa-shared/models/messages'
 
 export const errors = {
   MESSAGE_LIMIT:

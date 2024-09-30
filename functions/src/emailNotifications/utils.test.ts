@@ -1,9 +1,6 @@
 import * as utils from './utils'
 
-import { db } from '../Firebase/firestoreDB'
 import { firebaseAuth } from '../Firebase/auth'
-import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { IMessageDB } from '../models'
 import {
   errors,
   isBelowMessageLimit,
@@ -13,8 +10,9 @@ import {
   isValidMessageRequest,
 } from './utils'
 
-import type { IUserDB } from '../models'
 import type { UserRecord } from 'firebase-admin/auth'
+import { IUserDB } from 'oa-shared/models/user'
+import { IMessageDB } from 'oa-shared/models/messages'
 
 const messageDocs = []
 let isBlockedFromMessaging = false

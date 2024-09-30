@@ -9,7 +9,7 @@ import type { DropdownIndicatorProps } from 'react-select'
 export const DropdownIndicator = (props: DropdownIndicatorProps) => {
   return (
     <components.DropdownIndicator {...props}>
-      <Image loading="lazy" src={IconArrowDown} sx={{ width: '12px' }} />
+      <Image loading="lazy" src={IconArrowDown} style={{ width: 12 }} />
     </components.DropdownIndicator>
   )
 }

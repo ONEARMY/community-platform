@@ -7,7 +7,7 @@ describe('[Research]', () => {
 
   const authoredResearchArticleUrl = '/research/a-test-research'
   const image = updates[0].images[0].downloadUrl
-  const pageTitle = `${title} - Research - Community Platform`
+  const pageTitle = `${title} - Research - Precious Plastic`
   const researchArticleUrl = `/research/${slug}`
 
   describe('[Read a research article]', () => {
@@ -19,7 +19,7 @@ describe('[Research]', () => {
 
         cy.title().should(
           'eq',
-          `${article.title} - Research - Community Platform`,
+          `${article.title} - Research - Precious Plastic`,
         )
         cy.step('[Populates title, SEO and social tags]')
         cy.title().should('eq', pageTitle)

@@ -1,5 +1,6 @@
+import type { DBDoc } from 'oa-shared'
 import type { Observable } from 'rxjs'
-import type { DBDoc, DBQueryOptions } from './dbDoc'
+import type { DBQueryOptions } from './dbDoc'
 
 export interface AbstractDatabaseClient {
   getDoc<T>(endpoint: string, docId: string): Promise<(T & DBDoc) | undefined>

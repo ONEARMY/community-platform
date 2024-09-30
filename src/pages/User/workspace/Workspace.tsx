@@ -7,8 +7,6 @@ import MemberHighlight from 'src/assets/images/highlights/highlight-member.svg'
 import WorkspaceHighlight from 'src/assets/images/highlights/highlight-workspace.svg'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 
-import type { PlatformTheme } from 'oa-themes'
-
 const findWordspaceHighlight = (workspaceType?: string): string => {
   switch (workspaceType) {
     case ProfileTypeList.WORKSPACE:
@@ -53,13 +51,12 @@ const findWorkspaceBadge = (
   workspaceType?: string,
   ifCleanImage?: boolean,
   verifiedUser?: boolean,
-  currentTheme?: PlatformTheme,
 ): string => {
   if (!workspaceType) {
     return MemberBadge
   }
 
-  const foundProfileTypeObj = getSupportedProfileTypes(currentTheme).find(
+  const foundProfileTypeObj = getSupportedProfileTypes().find(
     (type) => type.label === workspaceType,
   )
   if (foundProfileTypeObj) {

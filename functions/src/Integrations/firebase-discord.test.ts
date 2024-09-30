@@ -2,7 +2,7 @@ import { IModerationStatus, ResearchUpdateStatus } from 'oa-shared'
 
 import { handleResearchUpdatePublished } from './firebase-discord'
 
-import type { IResearch } from '../models'
+import type { IResearch } from 'oa-shared/models/research'
 
 const factoryResearch = {
   _id: 'id',

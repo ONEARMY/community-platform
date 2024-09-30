@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
@@ -24,7 +24,7 @@ import {
   isAllowedToDeleteContent,
   isAllowedToEditContent,
 } from 'src/utils/helpers'
-import { seoTagsUpdate } from 'src/utils/seo'
+import { seoTagsUpdate, SeoTagsUpdateComponent } from 'src/utils/seo'
 import { Box, Flex } from 'theme-ui'
 
 import {
@@ -34,8 +34,7 @@ import {
 import ResearchDescription from './ResearchDescription'
 import ResearchUpdate from './ResearchUpdate'
 
-import type { IUser } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta, IUser } from 'oa-shared'
 
 const areCommentsVisible = (updateId) => {
   return updateId === getResearchUpdateId(window.location.hash)
@@ -188,6 +187,12 @@ const ResearchArticle = observer(() => {
 
   return (
     <Box sx={{ width: '100%', maxWidth: '1000px', alignSelf: 'center' }}>
+      <SeoTagsUpdateComponent
+        title={`${item.title} - Research`}
+        description={item.description}
+        imageUrl={(item.updates?.at(0)?.images?.[0] as any)?.downloadUrl}
+      />
+
       <Breadcrumbs content={item} variant="research" />
       <ResearchDescription
         research={research}

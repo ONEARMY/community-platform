@@ -4,7 +4,7 @@ import { Box, Text } from 'theme-ui'
 
 import { ImpactIcon } from './ImpactIcon'
 
-import type { IImpactDataField } from 'src/models'
+import type { IImpactDataField } from 'oa-shared'
 
 interface Props {
   field: IImpactDataField

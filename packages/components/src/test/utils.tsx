@@ -1,10 +1,5 @@
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { createRemixStub } from '@remix-run/testing'
 import { render as testLibReact } from '@testing-library/react'
 import { preciousPlasticTheme } from 'oa-themes'
 
@@ -17,13 +12,18 @@ const customRender = (
 ) =>
   testLibReact(ui, {
     wrapper: ({ children }: { children: React.ReactNode }) => {
-      const router = createMemoryRouter(
-        createRoutesFromElements(<Route index element={children}></Route>),
-      )
+      const RemixStub = createRemixStub([
+        {
+          path: '',
+          Component() {
+            return <>{children}</>
+          },
+        },
+      ])
 
       return (
         <ThemeProvider theme={preciousPlasticTheme.styles}>
-          <RouterProvider router={router} />
+          <RemixStub />
         </ThemeProvider>
       )
     },

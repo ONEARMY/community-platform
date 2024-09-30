@@ -1,14 +1,14 @@
 import * as functions from 'firebase-functions'
 import { db } from '../Firebase/firestoreDB'
 import { getUserEmail } from './utils'
-import { DB_ENDPOINTS } from 'oa-shared'
+import { DB_ENDPOINTS } from 'oa-shared/models/db'
 import {
   getUserSupporterBadgeAddedEmail,
   getUserSupporterBadgeRemovedEmail,
 } from './templateHelpers'
-import type { IUserDB } from '../models'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore'
+import { IUserDB } from 'oa-shared/models/user'
 
 exports.handleUserSupporterBadgeUpdate = functions
   .runWith({ memory: '512MB' })

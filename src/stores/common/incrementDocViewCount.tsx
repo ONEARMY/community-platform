@@ -1,4 +1,4 @@
-import type { IHowto, IQuestion, IResearch } from 'src/models'
+import type { IHowto, IQuestion, IResearch } from 'oa-shared'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 

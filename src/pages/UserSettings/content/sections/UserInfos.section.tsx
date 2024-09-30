@@ -1,6 +1,6 @@
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
-import { countries } from 'countries-list'
+import countriesList from 'countries-list'
 import { Button, FieldInput, FieldTextarea, InternalLink } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { SelectField } from 'src/common/Form/Select.field'
@@ -16,13 +16,14 @@ import {
 import { FlexSectionContainer } from '../elements'
 import { ProfileLinkField } from '../fields/ProfileLink.field'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 
 interface IProps {
   formValues: Partial<IUser>
 }
 
 export const UserInfosSection = ({ formValues }: IProps) => {
+  const { countries } = countriesList
   const { profileType, links, location } = formValues
   const isMemberProfile = profileType === ProfileTypeList.MEMBER
   const { about, country, displayName, userName } = fields

@@ -1,6 +1,6 @@
 import { Breadcrumbs as BreadcrumbsComponent } from 'oa-components'
 
-import type { IHowto, IQuestion, IResearch } from 'src/models'
+import type { IHowto, IQuestion, IResearch } from 'oa-shared'
 
 type Step = { text: string; link?: string }
 

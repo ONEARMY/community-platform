@@ -1,6 +1,6 @@
 import { toJS } from 'mobx'
 
-import type { IQuestion, IResearch } from 'src/models'
+import type { IQuestion, IResearch } from 'oa-shared'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 

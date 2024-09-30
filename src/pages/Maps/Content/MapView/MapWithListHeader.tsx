@@ -1,8 +1,7 @@
 import { CardList, FilterList, OsmGeocoding } from 'oa-components'
 import { Box, Flex, Heading } from 'theme-ui'
 
-import type { ILatLng } from 'oa-shared'
-import type { IMapPin } from 'src/models'
+import type { ILatLng, IMapPin } from 'oa-shared'
 
 interface IProps {
   activePinFilters: string[]

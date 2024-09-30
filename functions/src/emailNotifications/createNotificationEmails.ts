@@ -1,10 +1,14 @@
-import { EmailNotificationFrequency } from 'oa-shared'
-import { INotification } from '../../../src/models'
+import {
+  EmailNotificationFrequency,
+  INotification,
+  IPendingEmails,
+} from 'oa-shared/models/notifications'
 import { db } from '../Firebase/firestoreDB'
-import { DB_ENDPOINTS, IUserDB, IPendingEmails } from '../models'
+import { DB_ENDPOINTS } from '../models'
 import { getNotificationEmail } from './templateHelpers'
 import { getUserEmail } from './utils'
 import { v4 as uuid } from 'uuid'
+import { IUserDB } from 'oa-shared/models/user'
 
 const updateEmailedNotifications = async (
   user: FirebaseFirestore.DocumentSnapshot<IUserDB>,

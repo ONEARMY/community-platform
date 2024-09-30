@@ -101,16 +101,6 @@ commands:
       - *restore_yarn_cache
       - *install_packages
       - *save_yarn_cache
-  inject_instance_configuration:
-    steps:
-      - run:
-          name: Set branch environment
-          command: |
-            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
-      - run:
-          name: Inject target environment configuration
-          command: |
-            yarn build:inject-config
 
   firebase_deploy:
     description: Deploy to Firebase
@@ -301,13 +291,11 @@ jobs:
       - run:
           name: Set branch environment
           command: |
-            echo 'export REACT_APP_BRANCH=${CIRCLE_BRANCH}' >> $BASH_ENV
-            echo 'export REACT_APP_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export VITE_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
-            echo REACT_APP_BRANCH=$REACT_APP_BRANCH
-            echo $REACT_APP_PROJECT_VERSION
+            echo $VITE_PROJECT_VERSION
       - run:
           command: yarn build
       - persist_to_workspace:
@@ -326,11 +314,18 @@ jobs:
       - run:
           command: yarn storybook:build
   deploy:
-    docker: *docker
+    docker:
+      - image: cimg/node:20.7.0          
     resource_class: medium+
     parameters:
       # optional environment variables to set during build process
       DEPLOY_ALIAS:
+        type: string
+        default: 'default'
+      FLY_APP_NAME:
+        type: string
+        default: 'default'
+      FLY_TOML:
         type: string
         default: 'default'
     environment:
@@ -339,11 +334,54 @@ jobs:
       - setup_repo
       - attach_workspace:
           at: '.'
-      - inject_instance_configuration
       - firebase_deploy:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
-
+      - run:
+          name: Prune Docker resources
+          command: |
+            docker system prune -a
+      - run:
+          name: Install fly command
+          command: curl -L https://fly.io/install.sh | sh
+      - run:
+          name: Add fly to PATH
+          command: echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV
+      - run: 
+          name: Login fly
+          command: flyctl auth token $FLY_API_TOKEN --debug --verbose
+      - run:
+          name: Deploy to fly
+          command: |
+            flyctl deploy \
+              --app << parameters.FLY_APP_NAME >> \
+              --config << parameters.FLY_TOML >> \
+              --debug --verbose \
+              --build-secret VITE_BRANCH="$VITE_BRANCH" \
+              --build-secret VITE_CDN_URL="$VITE_CDN_URL" \
+              --build-secret VITE_FIREBASE_API_KEY="$VITE_FIREBASE_API_KEY" \
+              --build-secret VITE_FIREBASE_AUTH_DOMAIN="$VITE_FIREBASE_AUTH_DOMAIN" \
+              --build-secret VITE_FIREBASE_DATABASE_URL="$VITE_FIREBASE_DATABASE_URL" \
+              --build-secret VITE_FIREBASE_MESSAGING_SENDER_ID="$VITE_FIREBASE_MESSAGING_SENDER_ID" \
+              --build-secret VITE_FIREBASE_PROJECT_ID="$VITE_FIREBASE_PROJECT_ID" \
+              --build-secret VITE_FIREBASE_STORAGE_BUCKET="$VITE_FIREBASE_STORAGE_BUCKET" \
+              --build-secret VITE_SENTRY_DSN="$VITE_SENTRY_DSN" \
+              --build-secret VITE_GA_TRACKING_ID="$VITE_GA_TRACKING_ID" \
+              --build-secret VITE_PATREON_CLIENT_ID="$VITE_PATREON_CLIENT_ID" \
+              --build-secret VITE_PLATFORM_THEME="$VITE_PLATFORM_THEME" \
+              --build-secret VITE_PROJECT_VERSION="$VITE_PROJECT_VERSION" \
+              --build-secret VITE_SUPPORTED_MODULES="$VITE_SUPPORTED_MODULES" \
+              --build-secret VITE_ACADEMY_RESOURCE="$VITE_ACADEMY_RESOURCE" \
+              --build-secret VITE_API_URL="$VITE_API_URL" \
+              --build-secret VITE_PROFILE_GUIDELINES_URL="$VITE_PROFILE_GUIDELINES_URL" \
+              --build-secret VITE_SITE_NAME="$VITE_SITE_NAME" \
+              --build-secret VITE_THEME="$VITE_THEME" \
+              --build-secret VITE_DONATIONS_BODY="$VITE_DONATIONS_BODY" \
+              --build-secret VITE_DONATIONS_IFRAME_SRC="$VITE_DONATIONS_IFRAME_SRC" \
+              --build-secret VITE_DONATIONS_IMAGE_URL="$VITE_DONATIONS_IMAGE_URL" \
+              --build-secret VITE_HOWTOS_HEADING="$VITE_HOWTOS_HEADING" \
+              --build-secret VITE_COMMUNITY_PROGRAM_URL="$VITE_COMMUNITY_PROGRAM_URL" \
+              --build-secret VITE_QUESTIONS_GUIDELINES_URL="$VITE_QUESTIONS_GUIDELINES_URL"
   # Run cypress e2e tests on chrome
   test_e2e:
     docker: *docker
@@ -360,7 +398,6 @@ jobs:
       # retrieve build folder
       - attach_workspace:
           at: '.'
-      - inject_instance_configuration
       # install testing browsers are required
       - when:
           condition:
@@ -477,40 +514,11 @@ workflows:
             - e2e-tests
           <<: *filter_only_default_branch
       #---------------------- Development Instances Build and Deploy ----------------------
-      - deploy:
-          name: 'Deploy: dev.onearmy.world'
-          requires:
-            - test_e2e
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: 'default'
-          context:
-            - circle-ci-patreon-context
-            - community-platform-dev
-      - deploy:
-          name: 'Deploy: dev.community.projectkamp.com'
-          requires:
-            - test_e2e
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: project-kamp-development
-          context:
-            - circle-ci-patreon-context
-            - project-kamp-dev
-      - deploy:
-          name: 'Deploy: dev.community.fixing.fashion'
-          requires:
-            - test_e2e
-          <<: *filter_only_default_branch
-          DEPLOY_ALIAS: fixing-fashion-dev
-          context:
-            - circle-ci-patreon-context
-            - fixing-fashion-dev
       - approve:
           type: approval
           name: 'Approve Production deployment'
           requires:
-            - 'Deploy: dev.onearmy.world'
-            - 'Deploy: dev.community.fixing.fashion'
-            - 'Deploy: dev.community.projectkamp.com'
+            - test_e2e
       #---------------------- Development Instances Build and Deploy ----------------------
       - release:
           name: Release new version to GitHub
@@ -518,32 +526,40 @@ workflows:
             - release-context
           requires:
             - "Approve Production deployment"
-      - build:
-          name: Build Production Release
-          context: build-context
-          requires:
-            - 'Release new version to GitHub'
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
-            - 'Build Production Release'
+            - 'Release new version to GitHub'
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: fixing-fashion-prod
+          FLY_APP_NAME: community-platform-ff
+          FLY_TOML: fly-ff.toml
           context:
             - circle-ci-patreon-context
             - fixing-fashion-prod
+            - fly-deploy
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
-            - 'Build Production Release'
+            - 'Release new version to GitHub'
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'production'
+          FLY_APP_NAME: community-platform-pp
+          FLY_TOML: fly-pp.toml
           context:
             - circle-ci-patreon-context
             - community-platform-production
+            - fly-deploy
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
-            - 'Build Production Release'
+            - 'Release new version to GitHub'
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: project-kamp-production
+          FLY_APP_NAME: community-platform-pk
+          FLY_TOML: fly-pk.toml
           context:
             - circle-ci-patreon-context
             - project-kamp-production
+            - fly-deploy
+            

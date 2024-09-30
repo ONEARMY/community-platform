@@ -1,4 +1,4 @@
-import type { configVars } from '../../src/config/config'
+import { configVars } from 'oa-shared/models/config'
 
 /** Variables populates in the same way firebase functions:config:set does for use in testing */
 export const runtimeConfigTest: configVars = {

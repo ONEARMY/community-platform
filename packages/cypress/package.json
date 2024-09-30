@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm scripts/start.mts"
+    "start": "cross-env PORT=3456 node --loader ts-node/esm scripts/start.mts"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",

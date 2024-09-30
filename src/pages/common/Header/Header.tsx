@@ -108,9 +108,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         }}
       >
         <Flex>
-          <Flex>
-            <Logo />
-          </Flex>
+          <Logo />
           {isLoggedInUser &&
             (user.userRoles || []).includes(UserRole.BETA_TESTER) && (
               <Flex

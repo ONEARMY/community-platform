@@ -2,15 +2,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
-import { Clusters } from './Cluster'
+import { Clusters } from './Cluster.client'
 import { latLongFilter } from './latLongFilter'
 import { MapWithListHeader } from './MapWithListHeader'
-import { Popup } from './Popup'
+import { Popup } from './Popup.client'
 
 import type { LatLngExpression } from 'leaflet'
+import type { ILatLng, IMapPin } from 'oa-shared'
 import type { Map as MapType } from 'react-leaflet'
-import type { ILatLng } from 'shared/models'
-import type { IMapPin } from 'src/models/maps.models'
 
 const allFilters = [
   {

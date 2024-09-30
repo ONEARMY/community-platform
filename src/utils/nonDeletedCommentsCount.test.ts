@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 
 import { nonDeletedCommentsCount } from './nonDeletedCommentsCount'
 
-import type { IComment } from 'src/models'
+import type { IComment } from 'oa-shared'
 
 describe('nonDeletedCommentsCount', () => {
   it('returns the full total when no comments are marked as deleted', () => {

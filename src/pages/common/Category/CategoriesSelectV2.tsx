@@ -2,7 +2,7 @@ import { Select } from 'oa-components'
 
 import { FieldContainer } from '../../../common/Form/FieldContainer'
 
-import type { ICategory } from 'src/models/categories.model'
+import type { ICategory } from 'oa-shared'
 
 export type SelectValue = { label: string; value: string | ICategory }
 

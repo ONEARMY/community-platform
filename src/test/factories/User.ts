@@ -1,8 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
 
-import type { IExternalLink, IUserDB } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IExternalLink, IUploadedFileMeta, IUserDB } from 'oa-shared'
 
 export const factoryImage: IUploadedFileMeta = {
   timeCreated: '2019-09-27T14:58:41.378Z',

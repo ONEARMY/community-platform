@@ -1,10 +1,11 @@
 import { firestore } from 'firebase-admin'
 import { Change, logger } from 'firebase-functions'
-import { DB_ENDPOINTS, IDBEndpoint } from '../models'
+import { DB_ENDPOINTS } from '../models'
 import { db } from '../Firebase/firestoreDB'
 import { compareObjectDiffs, splitArrayToChunks } from '../Utils/data.utils'
 import { FieldValue } from 'firebase-admin/firestore'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus } from 'oa-shared/models/moderation'
+import { DBEndpoint } from 'oa-shared/models/db'
 
 type IDocumentRef = FirebaseFirestore.DocumentReference
 type ICollectionRef = FirebaseFirestore.CollectionReference
@@ -22,7 +23,7 @@ export interface IAggregation {
    * */
   changeType: 'updated'
   /** DB collection watched for changes */
-  sourceCollection: IDBEndpoint
+  sourceCollection: DBEndpoint
   /**
    * Collection fields to trigger aggregation on update.
    * The first named field will be assumed required and used during initial seed query
@@ -31,7 +32,7 @@ export interface IAggregation {
   /** function used to generate aggregation value from source data */
   process: (aggregation: AggregationHandler) => Record<string, any> | string[]
   /** Collection ID for output aggregated data */
-  targetCollection: IDBEndpoint
+  targetCollection: DBEndpoint
   /** Document ID for aggregated data in target aggregation collection */
   targetDocId: string
 }

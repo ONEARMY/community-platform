@@ -1,6 +1,5 @@
-import * as functions from 'firebase-functions'
 import { isSupporter } from './patreon'
-import { PatreonUser } from 'oa-shared'
+import { PatreonUser } from 'oa-shared/models/user'
 
 jest.mock('../config/config', () => ({
   CONFIG: {

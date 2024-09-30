@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { IModerationStatus } from 'oa-shared'
 
-import type { IResearch, IResearchDB } from 'src/models/research.models'
+import type { IResearch, IResearchDB } from 'oa-shared'
 
 type ResearchCalculatedFields = {
   userHasSubscribed: boolean

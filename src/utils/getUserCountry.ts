@@ -1,4 +1,4 @@
-import type { IUser } from 'src/models/user.models'
+import type { IUser } from 'oa-shared'
 
 export const getUserCountry = (user: IUser): string => {
   const userCountry =

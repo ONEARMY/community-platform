@@ -38,7 +38,7 @@ describe('[Questions]', () => {
         (discussion) => discussion.sourceId === _id,
       )
 
-      const pageTitle = `${title} - Question - Community Platform`
+      const pageTitle = `${title} - Question - Precious Plastic`
       const image = images[0].downloadUrl
 
       cy.step('Can visit question')

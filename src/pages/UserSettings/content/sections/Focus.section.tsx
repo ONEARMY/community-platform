@@ -11,6 +11,9 @@ import { CustomRadioField } from '../fields/CustomRadio.field'
 import type { ProfileTypeName } from 'oa-shared'
 
 const ProfileTypes = () => {
+  const profileGuidelinesUrl =
+    import.meta.env.VITE_PROFILE_GUIDELINES_URL ||
+    process.env.VITE_PROFILE_GUIDELINES_URL
   const { description, error } = fields.activities
   const theme = useTheme()
   const profileTypes = getSupportedProfileTypes().filter(({ label }) =>
@@ -31,7 +34,7 @@ const ProfileTypes = () => {
             <Paragraph>
               {description}{' '}
               <ExternalLink
-                href={theme.profileGuidelinesURL}
+                href={profileGuidelinesUrl}
                 sx={{ textDecoration: 'underline', color: 'grey' }}
                 type="button"
               >

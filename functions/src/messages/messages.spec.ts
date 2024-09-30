@@ -1,5 +1,5 @@
 import { handleSendMessage } from './messages' // Path to your cloud function file
-import { SendMessage } from 'oa-shared'
+import { SendMessage } from 'oa-shared/models/messages'
 import * as functions from 'firebase-functions'
 
 const defaultData: SendMessage = {

@@ -4,7 +4,7 @@ import http from 'http'
 import { firebaseAdmin, firebaseApp } from '../../Firebase/admin'
 import type { CallableContextOptions } from 'firebase-functions-test/lib/v1'
 import type { FeaturesList } from 'firebase-functions-test/lib/features'
-import { DB_ENDPOINTS, IDBEndpoint } from '../../models'
+import { DB_ENDPOINTS, DBEndpoint } from 'oa-shared/models/db'
 
 /**
  * Utility class for executing a firebase function with a user-provided context.
@@ -61,7 +61,7 @@ class FirebaseEmulatedTestClass {
   public mockFirestoreChangeObject(
     beforeData: Record<string, any>,
     afterData: Record<string, any>,
-    collection: IDBEndpoint,
+    collection: DBEndpoint,
     docId = 'doc_1',
   ) {
     const docPath = `${DB_ENDPOINTS[collection] || collection}/${docId}`
@@ -84,7 +84,7 @@ class FirebaseEmulatedTestClass {
    * required for emulators to not throw `toQualifiedResourcePath` error for uninitialised endpoint
    */
   public async seedFirestoreDB<T extends { _id: string }>(
-    endpoint: IDBEndpoint,
+    endpoint: DBEndpoint,
     docs: T[] = [],
   ) {
     const db = this.admin.firestore()

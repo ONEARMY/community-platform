@@ -1,7 +1,8 @@
 import { firebaseApp } from './admin'
 
-import { DBDoc, IDBEndpoint, DB_ENDPOINTS } from '../models'
+import { DB_ENDPOINTS } from '../models'
 import { getFirestore } from 'firebase-admin/firestore'
+import { DBDoc, DBEndpoint } from 'oa-shared/models/db'
 
 // TODO - ideally should remove default export to force using functions which have mapping
 export const db = getFirestore(firebaseApp)
@@ -17,7 +18,7 @@ export const get = (path: string) => db.doc(path)
 /************************************************************
  * Specific firestore helpers for common ops
  ************************************************************/
-export const getLatestDoc = async (endpoint: IDBEndpoint, orderBy: string) => {
+export const getLatestDoc = async (endpoint: DBEndpoint, orderBy: string) => {
   const mappedEndpoint = DB_ENDPOINTS[endpoint]
   const col = await db
     .collection(mappedEndpoint)
@@ -27,7 +28,7 @@ export const getLatestDoc = async (endpoint: IDBEndpoint, orderBy: string) => {
   return col.docs[0]
 }
 export const getDoc = async <T = any>(
-  endpoint: IDBEndpoint,
+  endpoint: DBEndpoint,
   docId: string,
 ): Promise<T> => {
   const mapping = DB_ENDPOINTS[endpoint] || endpoint
@@ -40,7 +41,7 @@ export const getDoc = async <T = any>(
       return res.data() as T
     })
 }
-export const getCollection = async <T>(endpoint: IDBEndpoint) => {
+export const getCollection = async <T>(endpoint: DBEndpoint) => {
   const mapping = DB_ENDPOINTS[endpoint] || endpoint
   console.log(`mapping [${endpoint}] -> [${mapping}]`)
   return db
@@ -53,7 +54,7 @@ export const getCollection = async <T>(endpoint: IDBEndpoint) => {
     })
 }
 export const setDoc = async (
-  endpoint: IDBEndpoint,
+  endpoint: DBEndpoint,
   docId: string,
   data: any,
 ) => {
@@ -62,7 +63,7 @@ export const setDoc = async (
 }
 
 export const updateDoc = async (
-  endpoint: IDBEndpoint,
+  endpoint: DBEndpoint,
   docId: string,
   data: any,
 ) => {

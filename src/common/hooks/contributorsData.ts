@@ -3,7 +3,7 @@ import { getUserCountry } from 'src/utils/getUserCountry'
 
 import { useCommonStores } from './useCommonStores'
 
-import type { Collaborator } from '../../models/common.models'
+import type { Collaborator } from 'oa-shared'
 
 export const useContributorsData = (collaborators: string[]) => {
   const { userStore } = useCommonStores().stores

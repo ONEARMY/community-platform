@@ -25,7 +25,7 @@ import { Alert, Box, Flex, Heading, Text } from 'theme-ui'
 import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { MAX_PIN_LENGTH } from './constants'
 
-import type { ILocation, IMapPin, IUserDB } from 'src/models'
+import type { ILocation, IMapPin, IUserDB } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 interface IPinProps {
@@ -145,13 +145,16 @@ const DeleteMapPin = (props: IPropsDeletePin) => {
 }
 
 export const SettingsPageMapPin = () => {
+  const communityProgramUrl =
+    import.meta.env.VITE_COMMUNITY_PROGRAM_URL ||
+    process.env.VITE_COMMUNITY_PROGRAM_URL
   const [mapPin, setMapPin] = useState<IMapPin>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
 
-  const { mapsStore, themeStore, userStore } = useCommonStores().stores
+  const { mapsStore, userStore } = useCommonStores().stores
   const user = userStore.activeUser
   const { addPinTitle, yourPinTitle } = headings.map
 
@@ -246,7 +249,7 @@ export const SettingsPageMapPin = () => {
             <ExternalLink
               data-cy="WorkspaceMapPinRequiredStars"
               data-testid="WorkspaceMapPinRequiredStars"
-              href={themeStore?.currentTheme.styles.communityProgramURL}
+              href={communityProgramUrl}
               sx={{ textDecoration: 'underline', color: 'currentcolor' }}
             >
               {headings.workspace.description}

@@ -3,7 +3,7 @@ import {
   retrieveSessionStorageArray,
 } from './sessionStorage'
 
-import type { IHowtoDB, IQuestion, IResearch } from 'src/models'
+import type { IHowtoDB, IQuestion, IResearch } from 'oa-shared'
 import type { IStores } from 'src/stores/RootStore'
 
 type IDocument = Partial<IHowtoDB | IQuestion.Item | IResearch.Item>

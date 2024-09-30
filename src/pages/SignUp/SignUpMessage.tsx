@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@remix-run/react'
 import { Button, HeroBanner } from 'oa-components'
 import { Card, Flex, Heading, Text } from 'theme-ui'
 

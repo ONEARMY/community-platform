@@ -1,5 +1,5 @@
 import { IModerationStatus } from 'oa-shared'
-import { UserRole } from 'oa-shared/models'
+import { IUserDB, UserRole } from 'oa-shared/models/user'
 
 import { getMockHowto } from '../emulator/seed/content-generate'
 import { DB_ENDPOINTS } from '../models'
@@ -15,8 +15,8 @@ import {
   MAP_PIN_SUBMISSION_SUBJECT,
 } from './templateHelpers'
 import * as utils from './utils'
-
-import type { IMapPin, IMessageDB, IUserDB } from '../models'
+import { IMapPin } from 'oa-shared/models/maps'
+import { IMessageDB } from 'oa-shared/models/messages'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {

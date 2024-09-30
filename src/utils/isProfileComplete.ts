@@ -1,6 +1,6 @@
 import { ProfileTypeList } from 'oa-shared'
 
-import type { IUserDB } from 'src/models'
+import type { IUserDB } from 'oa-shared'
 
 const nonMemberProfileTypes = Object.values(ProfileTypeList).filter(
   (type) => type !== 'member',

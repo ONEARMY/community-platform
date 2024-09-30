@@ -27,7 +27,7 @@ describe('[Profile]', () => {
       cy.visit(`/u/${eventReader.userName}`)
       cy.title().should(
         'eq',
-        `${eventReader.displayName} - Profile - Community Platform`,
+        `${eventReader.displayName} - Profile - Precious Plastic`,
       )
 
       cy.get('[data-cy=userDisplayName]').contains(eventReader.userName)

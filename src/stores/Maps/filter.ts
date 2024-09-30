@@ -1,6 +1,6 @@
 import { isPreciousPlastic } from 'src/config/config'
 
-import type { IMapPin } from 'src/models/maps.models'
+import type { IMapPin } from 'oa-shared'
 
 // filter pins to include matched pin type or subtype
 // excluding items which have been marked as deleted=true

@@ -1,4 +1,5 @@
-import { DBDoc, IDBDocChange } from '../models'
+import { DBDoc } from 'oa-shared/models/db'
+import { IDBDocChange } from '../models'
 
 /** Helper function to check if the only field changed is lastActive
  * (updates on login), in which case we will not want

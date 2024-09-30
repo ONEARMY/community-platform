@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom'
+import { useTheme } from '@emotion/react'
+import { Link } from '@remix-run/react'
 import { observer } from 'mobx-react'
-import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { VERSION } from 'src/config/config'
 import { Box, Flex, Image, Text } from 'theme-ui'
 
 const Logo = observer(() => {
-  const { themeStore } = useCommonStores().stores
+  const theme = useTheme()
 
-  const name = themeStore?.currentTheme.siteName
-  const logo = themeStore?.currentTheme.logo
+  const name = import.meta.env.VITE_SITE_NAME || process.env.VITE_SITE_NAME
+  const logo = theme.logo
 
   const nameAndVersion = `${name} logo ${VERSION}`
   const logoSize = [50, 50, 100]
@@ -35,6 +35,7 @@ const Logo = observer(() => {
           <Image
             loading="lazy"
             src={logo}
+            style={{ maxWidth: 100, maxHeight: 100 }}
             sx={{
               width: logoSize,
               height: logoSize,

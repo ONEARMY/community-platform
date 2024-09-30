@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Foco from 'react-foco'
+import { useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { MemberBadge } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -24,6 +25,7 @@ interface IProps {
 
 const Profile = observer((props: IProps) => {
   const { userStore } = useCommonStores().stores
+  const navigate = useNavigate()
   const [state, setState] = useState<IState>({
     showProfileModal: false,
     isLoading: true,
@@ -60,7 +62,7 @@ const Profile = observer((props: IProps) => {
               mt: 1,
             }}
           >
-            <MenuMobileLink path={'/u/' + user.userName} content={'Profile'} />
+            <MenuMobileLink path={'/u/' + user.userName} content="Profile" />
             {COMMUNITY_PAGES_PROFILE.map((page) => (
               <MenuMobileLink
                 path={page.path}
@@ -71,7 +73,10 @@ const Profile = observer((props: IProps) => {
             <MenuMobileLink
               path={window.location.pathname}
               content={'Log out'}
-              onClick={() => userStore.logout()}
+              onClick={async () => {
+                await userStore.logout()
+                navigate('/')
+              }}
             />
           </Box>
         ) : (

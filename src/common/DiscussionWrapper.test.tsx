@@ -9,7 +9,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { DiscussionWrapper } from './DiscussionWrapper'
 
-import type { IDiscussion } from 'src/models'
+import type { IDiscussion } from 'oa-shared'
 
 const Theme = testingThemeStyles
 const mockUser = FactoryUser()

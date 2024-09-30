@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { MapsStore } from './maps.store'
 
-import type { IUserDB } from 'src/models'
+import type { IUserDB } from 'oa-shared'
 
 vi.mock('../common/module.store')
 

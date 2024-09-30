@@ -41,9 +41,9 @@ import UserCreatedDocuments from './UserCreatedDocuments'
 import type {
   IMAchineBuilderXp,
   IOpeningHours,
+  IUser,
   PlasticTypeLabel,
 } from 'oa-shared'
-import type { IUser } from 'src/models'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {

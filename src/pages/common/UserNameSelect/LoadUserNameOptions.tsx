@@ -1,4 +1,4 @@
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 import type { UserStore } from 'src/stores/User/user.store'
 
 const USER_RESULTS_LIMIT = 20

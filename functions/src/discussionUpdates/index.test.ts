@@ -6,8 +6,7 @@ import { v4 as uuid } from 'uuid'
 
 import { DB_ENDPOINTS } from '../models'
 import { handleDiscussionUpdate } from './index'
-
-import type { IUserDB } from '../models'
+import { IUserDB } from 'oa-shared/models/user'
 
 describe('discussionUpdates', () => {
   let db

@@ -1,10 +1,3 @@
-import {
-  IHowtoDB,
-  IMapPin,
-  IMessageDB,
-  INotification,
-  IUserDB,
-} from '../../../src/models'
 import { NOTIFICATION_LIST_IMAGE } from './constants'
 import {
   getProjectImageSrc,
@@ -14,6 +7,11 @@ import {
   getProjectSignoff,
 } from './utils'
 import { getEmailHtml } from './templates/index'
+import { IUserDB } from 'oa-shared/models/user'
+import { INotification } from 'oa-shared/models/notifications'
+import { IHowtoDB } from 'oa-shared/models/howto'
+import { IMapPin } from 'oa-shared/models/maps'
+import { IMessageDB } from 'oa-shared/models/messages'
 
 export interface Email {
   html: string

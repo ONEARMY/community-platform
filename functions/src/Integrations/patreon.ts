@@ -1,14 +1,14 @@
 import * as functions from 'firebase-functions'
+import { DB_ENDPOINTS } from 'oa-shared/models/db'
 import {
-  DB_ENDPOINTS,
+  IUserDB,
   PatreonMembershipAttributes,
   PatreonTierAttributes,
   PatreonUser,
   PatreonUserAttributes,
-} from 'oa-shared'
+} from 'oa-shared/models/user'
 import { db } from '../Firebase/firestoreDB'
 import { CONFIG } from '../config/config'
-import { IUserDB } from '../models'
 import { MEMORY_LIMIT_512_MB } from '../consts'
 
 const PATREON_CLIENT_ID = CONFIG.integrations.patreon_client_id

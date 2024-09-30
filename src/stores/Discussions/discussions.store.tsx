@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { createContext, useContext } from 'react'
-import { cloneDeep } from 'lodash'
+import lodash from 'lodash'
 import { toJS } from 'mobx'
 import { MAX_COMMENT_LENGTH } from 'src/constants'
 import { logger } from 'src/logger'
@@ -13,13 +13,14 @@ import { changeUserReferenceToPlainText } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { getCollectionName, updateDiscussionMetadata } from './discussionEvents'
 
-import type { IResearch, IUserDB } from 'src/models'
 import type {
   IComment,
   IDiscussion,
   IDiscussionDB,
   IDiscussionSourceModelOptions,
-} from 'src/models/discussion.models'
+  IResearch,
+  IUserDB,
+} from 'oa-shared'
 import type { DocReference } from '../databaseV2/DocReference'
 import type { IRootStore } from '../RootStore'
 
@@ -347,7 +348,7 @@ export class DiscussionStore extends ModuleStore {
     dbRef: DocReference<IDiscussion>,
     discussion: IDiscussion,
   ): Promise<IDiscussionDB | null> {
-    await dbRef.set({ ...cloneDeep(discussion) })
+    await dbRef.set({ ...lodash.cloneDeep(discussion) })
 
     // Do not await so it doesn't block adding a comment
     updateDiscussionMetadata(this.db, discussion)

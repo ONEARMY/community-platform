@@ -62,7 +62,7 @@ describe('[How To]', () => {
         cy.get('[data-cy=edit]').should('not.exist')
 
         cy.step('How-to has basic info')
-        cy.title().should('eq', `${howto.title} - How-to - Community Platform`)
+        cy.title().should('eq', `${howto.title} - How-to - Precious Plastic`)
         cy.get('[data-cy=how-to-basis]').then(($summary) => {
           expect($summary).to.contain('howto_creator', 'Author')
           expect($summary).to.contain('Last update', 'Edit')

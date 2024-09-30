@@ -3,13 +3,6 @@
  * The `DBDoc` metadata is automatically populated to every document that
  * goes into the database to allow for easier querying and management
  */
-export interface DBDoc {
-  _id: string
-  _created: ISODateString
-  _modified: ISODateString
-  _deleted: boolean
-  _contentModifiedTimestamp: ISODateString
-}
 
 /**
  * @remarks

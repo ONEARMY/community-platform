@@ -13,7 +13,7 @@ import { FactoryUser } from 'src/test/factories/User'
 
 import { ResearchStore } from './research.store'
 
-import type { IDiscussion } from 'src/models'
+import type { IDiscussion } from 'oa-shared'
 import type { IRootStore } from '../RootStore'
 
 vi.mock('../../utils/helpers', async () => ({

@@ -4,3 +4,4 @@ storybook-static
 dist
 firestore.indexes.json
 firebase.json
+.md

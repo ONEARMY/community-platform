@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@remix-run/react'
 
 import { Button } from '../Button/Button'
 import { Tooltip } from '../Tooltip/Tooltip'

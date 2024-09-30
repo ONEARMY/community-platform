@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { filterMapPinsByType } from './filter'
 
-import type { IMapPin } from 'src/models'
+import type { IMapPin } from 'oa-shared'
 
 describe('filterMapPinsByType', () => {
   it('excludes deleted items', () => {

@@ -1,4 +1,4 @@
-import { MapWithPin } from './MapWithPin'
+import { MapWithPin } from './MapWithPin.client'
 
 import type { Meta, StoryFn } from '@storybook/react'
 

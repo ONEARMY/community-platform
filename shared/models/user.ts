@@ -1,3 +1,9 @@
+import type { ILocation, ISODateString } from './common'
+import type { DBDoc } from './db'
+import type { IModerationStatus } from './moderation'
+import type { INotification, INotificationSettings } from './notifications'
+import type { IUploadedFileMeta } from './storage'
+
 /* eslint-disable @typescript-eslint/naming-convention */
 export enum UserRole {
   SUPER_ADMIN = 'super-admin',
@@ -16,6 +22,8 @@ export enum ExternalLinkLabel {
   FORUM = 'forum',
   SOCIAL_MEDIA = 'social media',
 }
+
+export type IUserDB = IUser & DBDoc
 
 // See https://docs.patreon.com/?javascript#user-v2
 export interface PatreonUserAttributes {
@@ -143,4 +151,97 @@ export interface IOpeningHours {
   day: string
   openFrom: string
   openTo: string
+}
+
+export type UserMention = {
+  username: string
+  location: string
+}
+
+// IUser retains most of the fields from legacy users (omitting passwords),
+// and has a few additional fields. Note 'email' is excluded
+// _uid is unique/fixed identifier
+// ALL USER INFO BELOW IS PUBLIC
+export interface IUser {
+  // authID is additional id populated by firebase auth, required for some auth operations
+  _authID: string
+  _lastActive?: ISODateString
+  // userName is same as legacy 'mention_name', e.g. @my-name. It will also be the doc _id and
+  // firebase auth displayName property
+  userName: string
+  displayName: string
+  verified: boolean
+  badges?: IUserBadges
+  // images will be in different formats if they are pending upload vs pulled from db
+  coverImages: IUploadedFileMeta[]
+  userImage?: IUploadedFileMeta
+  links: IExternalLink[]
+  userRoles?: UserRole[]
+  about?: string | null
+  country?: string | null
+  location?: ILocation | null
+  year?: ISODateString
+  stats?: IUserStats
+  notification_settings?: INotificationSettings
+  notifications?: INotification[]
+  profileCreated?: ISODateString
+  profileCreationTrigger?: string
+  // Used to generate an encrypted unsubscribe url in emails
+  unsubscribeToken?: string | null
+  impact?: IUserImpact
+  isBlockedFromMessaging?: boolean
+  isContactableByPublic?: boolean
+  patreon?: PatreonUser | null
+  totalUseful?: number
+
+  // Primary PP profile type related fields
+  profileType: ProfileTypeName
+  subType?: WorkspaceType | null
+  workspaceType?: WorkspaceType | null
+  mapPinDescription?: string | null
+  openingHours?: IOpeningHours[]
+  collectedPlasticTypes?: PlasticTypeLabel[] | null
+  machineBuilderXp?: IMAchineBuilderXp[] | null
+  isExpert?: boolean | null
+  isV4Member?: boolean | null
+}
+
+export interface IUserBadges {
+  verified?: boolean
+  supporter?: boolean
+}
+
+export interface IExternalLink {
+  key: string
+  url: string
+  label: ExternalLinkLabel
+}
+
+/**
+ * Track the ids and moderation status as summary for user stats
+ */
+interface IUserStats {
+  userCreatedHowtos: { [id: string]: IModerationStatus }
+  userCreatedResearch: { [id: string]: IModerationStatus }
+  userCreatedQuestions: { [id: string]: IModerationStatus }
+  userCreatedComments: { [id: string]: string | null }
+}
+
+export interface IUserImpact {
+  [key: number]: IImpactYearFieldList
+}
+
+export interface IImpactDataField {
+  id: string
+  value: number
+  isVisible: boolean
+}
+
+export type IImpactYearFieldList = IImpactDataField[]
+
+export type IImpactYear = 2019 | 2020 | 2021 | 2022 | 2023
+
+export type INotificationUpdate = {
+  _id: string
+  notifications?: INotification[]
 }

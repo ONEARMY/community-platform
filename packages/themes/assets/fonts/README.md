@@ -45,18 +45,3 @@ Define a `fonts.css` file
 ```
 
 <!--- spell-checker: enable -->
-
-Import in `index.html` (note, seemed to break with lazy-loading)
-
-<!--- spell-checker: disable -->
-
-```
-    <link
-      rel="preload"
-      href="%PUBLIC_URL%/fonts/fonts.css"
-      as="style"
-      crossorigin
-    />
-```
-
-<!--- spell-checker: enable -->

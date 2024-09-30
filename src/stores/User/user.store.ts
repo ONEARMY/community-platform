@@ -9,7 +9,7 @@ import {
   updatePassword,
   updateProfile,
 } from 'firebase/auth'
-import { uniqBy } from 'lodash'
+import lodash from 'lodash'
 import { action, makeObservable, observable, toJS } from 'mobx'
 import { EmailNotificationFrequency, IModerationStatus } from 'oa-shared'
 
@@ -22,14 +22,14 @@ import { Storage } from '../storage'
 
 import type { User } from 'firebase/auth'
 import type {
+  IConvertedFileMeta,
   IImpactYear,
   IImpactYearFieldList,
   IUser,
   IUserBadges,
   IUserDB,
-} from 'src/models'
+} from 'oa-shared'
 import type { IFirebaseUser } from 'src/utils/firebase'
-import type { IConvertedFileMeta } from '../../types'
 import type { IRootStore } from '../RootStore'
 /*
 The user store listens to login events through the firebase api and exposes logged in user information via an observer.
@@ -66,7 +66,7 @@ export class UserStore extends ModuleStore {
     const users: IUser[] = await this.db
       .collection<IUser>(COLLECTION_NAME)
       .getWhere('userName', '>=', prefix, limit)
-    const uniqueUsers: IUser[] = uniqBy(
+    const uniqueUsers: IUser[] = lodash.uniqBy(
       users.filter((user) => user.userName?.startsWith(prefix)),
       (user) => user.userName,
     )

@@ -20,8 +20,7 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { IQuestion } from '../../models'
-import type { ICategory } from '../../models/categories.model'
+import type { ICategory, IQuestion } from 'oa-shared'
 import type { QuestionSortOption } from './QuestionSortOptions'
 
 export enum QuestionSearchParams {

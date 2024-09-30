@@ -5,7 +5,8 @@ import {
   startOfYesterday,
 } from 'date-fns'
 
-import type { ISODateString } from 'src/models/common.models'
+import type { ISODateString } from 'oa-shared'
+
 /*
     Manual implementation of filters commonly used through the app
     In the future this could possibly be replaced by more comprehensive libraries

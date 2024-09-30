@@ -10,8 +10,7 @@ import {
   handleQuestionUpdate,
   handleQuestionDelete,
 } from './index'
-
-import type { IUserDB } from '../models'
+import { IUserDB } from 'oa-shared/models/user'
 
 describe('questionUpdates', () => {
   let db

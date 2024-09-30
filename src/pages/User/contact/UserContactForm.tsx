@@ -14,7 +14,7 @@ import { messageService } from 'src/services/message.service'
 import { isUserContactable } from 'src/utils/helpers'
 import { Box, Flex, Heading } from 'theme-ui'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 
 interface Props {
   user: IUser
@@ -23,14 +23,16 @@ interface Props {
 type SubmitResults = { type: 'success' | 'error'; message: string }
 
 export const UserContactForm = observer(({ user }: Props) => {
-  if (!isUserContactable(user)) return null
-
   const { userStore } = useCommonStores().stores
-
-  if (!userStore.activeUser)
-    return <UserContactNotLoggedIn displayName={user.displayName} />
-
   const [submitResults, setSubmitResults] = useState<SubmitResults | null>(null)
+
+  if (!isUserContactable(user)) {
+    return null
+  }
+
+  if (!userStore.activeUser) {
+    return <UserContactNotLoggedIn displayName={user.displayName} />
+  }
 
   const { button, title, successMessage } = contact
   const buttonName = 'contact-submit'

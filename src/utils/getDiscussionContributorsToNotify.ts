@@ -2,7 +2,7 @@ import type {
   IComment,
   IDiscussion,
   IDiscussionSourceModelOptions,
-} from 'src/models'
+} from 'oa-shared'
 
 export const getDiscussionContributorsToNotify = (
   discussion: IDiscussion,

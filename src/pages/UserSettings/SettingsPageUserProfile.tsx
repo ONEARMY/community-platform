@@ -23,7 +23,7 @@ import { SettingsFormNotifications } from './content/SettingsFormNotifications'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from './constants'
 import { buttons } from './labels'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 export const SettingsPageUserProfile = () => {

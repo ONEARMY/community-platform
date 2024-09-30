@@ -1,6 +1,7 @@
 import rtdb from './realtimeDB'
 import * as firestore from './firestoreDB'
-import { DBDoc, DB_ENDPOINTS } from '../models'
+import { DB_ENDPOINTS } from '../models'
+import { DBDoc } from 'oa-shared/models/db'
 
 /*  Functions in this folder are used to sync data between firestore and firebase realtime databases
     The reason for this is to allow large collections to be 'cached' for cheap retrieval

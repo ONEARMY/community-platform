@@ -4,7 +4,7 @@ import { ImpactField } from 'src/pages/User/impact/ImpactField'
 import { buttons, missingData } from 'src/pages/UserSettings/labels'
 import { Box, Flex, Text } from 'theme-ui'
 
-import type { IImpactYearFieldList } from 'src/models'
+import type { IImpactYearFieldList } from 'oa-shared'
 
 interface Props {
   fields: IImpactYearFieldList | undefined

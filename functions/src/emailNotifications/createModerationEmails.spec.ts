@@ -1,5 +1,5 @@
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
-import { DB_ENDPOINTS, IUserDB } from '../models'
+import { DB_ENDPOINTS } from '../models'
 import {
   HOW_TO_APPROVAL_SUBJECT,
   HOW_TO_NEEDS_IMPROVEMENTS_SUBJECT,
@@ -17,6 +17,7 @@ import {
   handleModerationUpdate,
 } from './createModerationEmails'
 import { PP_SIGNOFF } from './constants'
+import { IUserDB } from 'oa-shared/models/user'
 import { IModerationStatus } from 'oa-shared'
 
 jest.mock('../Firebase/auth', () => ({

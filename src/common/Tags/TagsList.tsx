@@ -1,7 +1,7 @@
 import { TagList as TagListUI } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
-import type { ISelectedTags } from 'src/models'
+import type { ISelectedTags } from 'oa-shared'
 
 interface IProps {
   tags: ISelectedTags | undefined

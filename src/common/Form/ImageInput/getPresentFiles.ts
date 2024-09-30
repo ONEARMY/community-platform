@@ -3,8 +3,7 @@
  * require extra function to separate out to handle preview of previously uploaded
  */
 
-import type { IConvertedFileMeta } from 'src/types'
-import type { IUploadedFileMeta } from '../../../stores/storage'
+import type { IConvertedFileMeta, IUploadedFileMeta } from 'oa-shared'
 import type { IMultipleInputValue, IValue } from './types'
 
 type Value = IValue | undefined

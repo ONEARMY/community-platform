@@ -6,13 +6,13 @@ import { ModuleStore } from '../common/module.store'
 // eslint-disable-next-line import/namespace
 import { COLLECTION_NAME as USER_COLLECTION_NAME } from './user.store'
 
-import type { NotificationType } from 'oa-shared'
 import type {
   INotification,
   INotificationUpdate,
   IUser,
   IUserDB,
-} from 'src/models'
+  NotificationType,
+} from 'oa-shared'
 import type { IRootStore } from '../RootStore'
 
 export class UserNotificationsStore extends ModuleStore {

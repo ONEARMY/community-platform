@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from '@remix-run/react'
 import { toJS } from 'mobx'
 import { Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -8,8 +8,7 @@ import { Text } from 'theme-ui'
 
 import { HowtoForm } from '../Common/Howto.form'
 
-import type { IHowtoDB } from 'src/models/howto.models'
-import type { IUser } from 'src/models/user.models'
+import type { IHowtoDB, IUser } from 'oa-shared'
 
 interface IState {
   formValues: IHowtoDB

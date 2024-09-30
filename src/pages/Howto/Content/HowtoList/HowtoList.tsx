@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, Loader, MoreContainer } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -15,12 +15,13 @@ import HowToCard from './HowToCard'
 import { HowtoFilterHeader } from './HowtoFilterHeader'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { IHowto } from 'src/models'
+import type { IHowto } from 'oa-shared'
 import type { HowtoSortOption } from './HowtoSortOptions'
 
 export const HowtoList = observer(() => {
-  const { themeStore, userStore } = useCommonStores().stores
-  const theme = themeStore.currentTheme
+  const siteName = import.meta.env.VITE_SITE_NAME
+
+  const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [howtos, setHowtos] = useState<IHowto[]>([])
   const [total, setTotal] = useState<number>(0)
@@ -108,7 +109,7 @@ export const HowtoList = observer(() => {
             fontSize: 5,
           }}
         >
-          {theme && theme.howtoHeading}
+          {import.meta.env.VITE_HOWTOS_HEADING}
         </Heading>
       </Flex>
       <Flex
@@ -181,7 +182,7 @@ export const HowtoList = observer(() => {
       <MoreContainer m={'0 auto'} pt={60} pb={90}>
         <Flex sx={{ alignItems: 'center', flexDirection: 'column' }} mt={5}>
           <Heading as="p" sx={{ textAlign: 'center' }}>
-            Inspire the {theme.siteName} world.
+            Inspire the {siteName} world.
             <br />
             Share your how-to!
           </Heading>

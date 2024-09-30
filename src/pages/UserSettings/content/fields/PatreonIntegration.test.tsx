@@ -13,7 +13,7 @@ import {
   UPDATE_BUTTON_TEXT,
 } from './PatreonIntegration'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 
 const mockUser = {
   userName: 'test',

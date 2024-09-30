@@ -1,12 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { createRemixStub } from '@remix-run/testing'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -16,7 +11,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { HowtoForm } from './Howto.form'
 
-import type { IHowtoDB } from 'src/models'
+import type { IHowtoDB } from 'oa-shared'
 import type { ParentType } from './Howto.form'
 
 const Theme = testingThemeStyles
@@ -167,26 +162,25 @@ describe('Howto form', () => {
 })
 
 const Wrapper = (formValues: IHowtoDB, parentType: ParentType, navProps) => {
-  const router = createMemoryRouter(
-    createRoutesFromElements(
-      <Route
-        index
-        element={
-          <HowtoForm
-            formValues={formValues}
-            parentType={parentType}
-            {...navProps}
-          />
-        }
-      />,
-    ),
+  const ReactStub = createRemixStub(
+    [
+      {
+        index: true,
+        Component: () => (
+          <Provider {...useCommonStores().stores}>
+            <ThemeProvider theme={Theme}>
+              <HowtoForm
+                formValues={formValues}
+                parentType={parentType}
+                {...navProps}
+              />
+            </ThemeProvider>
+          </Provider>
+        ),
+      },
+    ],
+    { initialEntries: ['/'] },
   )
 
-  return render(
-    <Provider {...useCommonStores().stores}>
-      <ThemeProvider theme={Theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
-    </Provider>,
-  )
+  return render(<ReactStub />)
 }

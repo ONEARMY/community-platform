@@ -1,3 +1,4 @@
+import { IUserDB } from 'oa-shared/models/user'
 import {
   hasDetailsChanged,
   hasDetailsForCommentsChanged,
@@ -5,8 +6,6 @@ import {
   hasLocationDetailsChanged,
   hasUserImageChanged,
 } from './utils'
-
-import type { IUserDB } from '../../../src/models'
 
 describe('hasDetailsChanged', () => {
   it("returns false for every field that's the same", () => {

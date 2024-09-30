@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@remix-run/react'
 import {
   Button,
   Category,
@@ -23,9 +23,7 @@ import { Box, Card, Divider, Flex, Heading, Text } from 'theme-ui'
 import { ContentAuthorTimestamp } from '../../common/ContentAuthorTimestamp/ContentAuthorTimestamp'
 import { researchStatusColour } from '../researchHelpers'
 
-import type { ITag } from 'src/models'
-import type { IResearch } from 'src/models/research.models'
-import type { IUser } from 'src/models/user.models'
+import type { IResearch, ITag, IUser } from 'oa-shared'
 
 interface IProps {
   research: IResearch.ItemDB & { tagList?: ITag[] }

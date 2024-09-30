@@ -1,7 +1,7 @@
 import { InternalLink } from 'oa-components'
 import { Box } from 'theme-ui'
 
-import type { INotification } from 'src/models'
+import type { INotification } from 'oa-shared'
 
 export const getFormattedNotificationMessage = (
   notification: INotification,

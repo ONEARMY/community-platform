@@ -1,11 +1,8 @@
 import '@testing-library/jest-dom/vitest'
 
-import {
-  createMemoryRouter,
-  createRoutesFromElements,
-  RouterProvider,
-} from 'react-router-dom'
+import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from '@emotion/react'
+import { createRoutesFromElements } from '@remix-run/react'
 import { act, render, waitFor } from '@testing-library/react'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -36,13 +33,6 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
         updateVerifiedUsers: vi.fn(),
         users_verified: {
           HowtoAuthor: true,
-        },
-      },
-      themeStore: {
-        currentTheme: {
-          styles: {
-            communityProgramURL: '',
-          },
         },
       },
       mapsStore: {

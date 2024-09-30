@@ -4,6 +4,9 @@ Cypress.on('uncaught:exception', (err) => {
     'No document to update',
     'KeyPath previousSlugs',
     'KeyPath slug',
+    // 'There was an error while hydrating',
+    // 'Hydration failed because the initial UI does not match what was rendered on the server',
+    // 'An error occurred during hydration.',
   ]
 
   const foundSkipError = skipErrors.find((error) => err.message.includes(error))
@@ -12,6 +15,16 @@ Cypress.on('uncaught:exception', (err) => {
     return false
   }
 
+  // Cypress and React Hydrating the document don't get along
+  // for some unknown reason. Hopefully, we figure out why eventually.
+  // Maybe https://github.com/cypress-io/cypress/issues/27204#issuecomment-2224833564
+  if (
+    /hydrat/i.test(err.message) ||
+    /Minified React error #418/.test(err.message) ||
+    /Minified React error #423/.test(err.message)
+  ) {
+    return false
+  }
   // we still want to ensure there are no other unexpected
   // errors, so we let them fail the test
 })

@@ -62,7 +62,7 @@ const config: webpack.Configuration = {
         },
         // copy src index.html to be served during seoRender function
         {
-          from: path.resolve(__dirname, '../build/index.html'),
+          from: path.resolve(__dirname, '../index.html'),
           to: 'index.html',
         },
         {

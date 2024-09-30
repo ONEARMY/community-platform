@@ -1,21 +1,14 @@
 import type { ProfileTypeName } from 'oa-shared'
 
-interface LinkList {
-  label: string
-  url: string
-}
-
 export interface PlatformTheme {
   id: string
   siteName: string
+  description: string
   logo: string
+  favicon: string
   badge: string
-  donations?: Donations
   avatar: string
-  howtoHeading: string
   styles: ThemeWithName
-  academyResource: string
-  externalLinks: LinkList[]
 }
 
 type Badge = {
@@ -23,19 +16,9 @@ type Badge = {
   normal: string
 }
 
-type Donations = {
-  body: string
-  iframeSrc: string
-  imageURL: string
-}
-
 export interface ThemeWithName {
   name: string
   logo: string
-
-  profileGuidelinesURL: string
-  questionsGuidelinesURL?: string
-  communityProgramURL: string
 
   alerts: any
 

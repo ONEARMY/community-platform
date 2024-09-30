@@ -3,7 +3,7 @@ import { Flex } from 'theme-ui'
 import { IMPACT_YEARS } from './constants'
 import { ImpactItem } from './ImpactItem'
 
-import type { IUser, IUserImpact } from 'src/models'
+import type { IUser, IUserImpact } from 'oa-shared'
 
 interface Props {
   impact: IUserImpact | undefined

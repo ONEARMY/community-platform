@@ -1,9 +1,9 @@
-import { DB_ENDPOINTS } from 'oa-shared'
+import { DB_ENDPOINTS } from 'oa-shared/models/db'
 
 import { db } from '../Firebase/firestoreDB'
 import { getCreatorImage, hasDetailsForCommentsChanged } from './utils'
 
-import type { IDiscussion, IUserDB } from '../models'
+import type { IDiscussion, IUserDB } from 'oa-shared/models'
 
 export const updateDiscussionComments = async (
   prevUser: IUserDB,

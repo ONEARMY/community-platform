@@ -7,7 +7,7 @@ import {
   hasDetailsForMapPinChanged,
 } from './utils'
 
-import type { IUserDB } from '../models'
+import type { IUserDB } from 'oa-shared/models/user'
 
 export const updateMapPins = async (prevUser: IUserDB, user: IUserDB) => {
   if (!hasDetailsForMapPinChanged(prevUser, user)) {

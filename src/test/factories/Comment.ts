@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { IComment } from 'src/models'
+import type { IComment } from 'oa-shared'
 
 export const FactoryComment = (
   commentOverloads: Partial<IComment> = {},

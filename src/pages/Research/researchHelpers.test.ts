@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { researchUpdateStatusFilter } from './researchHelpers'
 
-import type { IResearch, IUserDB } from 'src/models'
+import type { IResearch, IUserDB } from 'oa-shared'
 
 describe('Research Helpers', () => {
   describe('Research Update Status Filter', () => {

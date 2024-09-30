@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { useTheme } from '@emotion/react'
+import { Link, useSearchParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
 import { AuthWrapper } from 'src/common/AuthWrapper'
@@ -19,8 +19,7 @@ import ResearchListItem from './ResearchListItem'
 import { ResearchSearchParams } from './ResearchSearchParams'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
-import type { ResearchStatus } from 'oa-shared'
-import type { IResearch } from 'src/models'
+import type { IResearch, ResearchStatus } from 'oa-shared'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 const ResearchList = observer(() => {

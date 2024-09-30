@@ -23,10 +23,11 @@ import { logger } from 'src/logger'
 import { getQueryOptions } from '../utils/getQueryOptions'
 
 import type { Firestore } from 'firebase/firestore'
+import type { DBDoc } from 'oa-shared'
 import type { Observer } from 'rxjs'
 import type { IDBEndpoint } from 'src/models/dbEndpoints'
 import type { AbstractDatabaseClient } from '../types'
-import type { DBDoc, DBQueryOptions } from '../types/dbDoc'
+import type { DBQueryOptions } from '../types/dbDoc'
 
 export class FirestoreClient implements AbstractDatabaseClient {
   private _db: Firestore

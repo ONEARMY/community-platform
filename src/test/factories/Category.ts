@@ -1,4 +1,4 @@
-import type { ICategory } from 'src/models/categories.model'
+import type { ICategory } from 'oa-shared'
 
 export const FactoryCategory: ICategory = {
   label: 'Moulds',

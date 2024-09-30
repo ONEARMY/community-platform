@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/react'
 import { SENTRY_CONFIG } from '../../config/config'
 import { logger } from '../../logger'
 
+// TODO: this can likely be removed after Remix migration
 export const initErrorHandler = () => {
   const { location } = window
   if (

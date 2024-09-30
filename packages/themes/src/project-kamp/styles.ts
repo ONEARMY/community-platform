@@ -25,10 +25,6 @@ export const alerts = {
 
 export const StyledComponentTheme: ThemeWithName = {
   name: 'Project Kamp',
-  profileGuidelinesURL:
-    'https://drive.google.com/file/d/1fXTtBbzgCO0EL6G9__aixwqc-Euqgqnd/view',
-  communityProgramURL:
-    'https://community.preciousplastic.com/academy/guides/community-program',
   logo: logo,
   ...baseTheme,
   alerts,

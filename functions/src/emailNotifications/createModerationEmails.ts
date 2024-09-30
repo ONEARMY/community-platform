@@ -1,7 +1,6 @@
 import * as functions from 'firebase-functions'
 import { QueryDocumentSnapshot } from 'firebase-admin/firestore'
-import { IHowtoDB, IMapPin, IModerable } from '../../../src/models'
-import { IModerationStatus } from 'oa-shared'
+import { IModerationStatus, IModerable } from 'oa-shared'
 import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 import * as templates from './templateHelpers'
@@ -9,6 +8,8 @@ import { getUserAndEmail } from './utils'
 import { Change } from 'firebase-functions/v1'
 import { withErrorAlerting } from '../alerting/errorAlerting'
 import { MEMORY_LIMIT_512_MB } from '../consts'
+import { IHowtoDB } from 'oa-shared/models/howto'
+import { IMapPin } from 'oa-shared/models/maps'
 
 export async function handleModerationUpdate<T extends IModerable>(
   change: Change<QueryDocumentSnapshot<T>>,

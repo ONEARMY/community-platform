@@ -1,0 +1,200 @@
+import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { useLocation, useNavigate } from '@remix-run/react'
+import { observer } from 'mobx-react'
+import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { filterMapPinsByType } from 'src/stores/Maps/filter'
+import { MAP_GROUPINGS } from 'src/stores/Maps/maps.groupings'
+import { Box } from 'theme-ui'
+
+import { logger } from '../../logger'
+import { transformAvailableFiltersToGroups } from './Content/Controls/transformAvailableFiltersToGroups'
+import { MapWithList } from './Content/MapView/MapWithList'
+import { NewMapBanner } from './Content/NewMapBanner'
+import { GetLocation } from './utils/geolocation'
+import { Controls, MapView } from './Content'
+import { MapPinServiceContext } from './map.service'
+
+import type { ILatLng, IMapPin } from 'oa-shared'
+import type { Map } from 'react-leaflet'
+
+import './styles.css'
+
+const INITIAL_CENTER = { lat: 51.0, lng: 19.0 }
+const INITIAL_ZOOM = 3
+
+const MapsPage = observer(() => {
+  const [activePinFilters, setActivePinFilters] = useState<string[]>([])
+  const [center, setCenter] = useState<ILatLng>(INITIAL_CENTER)
+  const [mapPins, setMapPins] = useState<IMapPin[]>([])
+  const [notification, setNotification] = useState<string>('')
+  const [selectedPin, setSelectedPin] = useState<IMapPin | null>(null)
+  const [showNewMap, setShowNewMap] = useState<boolean>(false)
+  const [zoom, setZoom] = useState<number>(INITIAL_ZOOM)
+
+  const { userStore } = useCommonStores().stores
+  const navigate = useNavigate()
+  const location = useLocation()
+  const mapPinService = useContext(MapPinServiceContext)
+
+  const mapRef = React.useRef<Map>(null)
+  const newMapRef = React.useRef<Map>(null)
+  const user = userStore.activeUser
+
+  if (!mapPinService) {
+    return null
+  }
+
+  const fetchMapPins = async () => {
+    setNotification('Loading...')
+    const pins = await mapPinService.getMapPins()
+    setMapPins(pins)
+    setNotification('')
+  }
+
+  useEffect(() => {
+    const appendLoggedInUser = async (userName: string = '') => {
+      if (!userName) {
+        return
+      }
+
+      const userMapPin = await mapPinService.getMapPinSelf(userName)
+
+      if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
+        setMapPins([...mapPins, userMapPin])
+      }
+    }
+
+    appendLoggedInUser(user?._id)
+  }, [user])
+
+  useEffect(() => {
+    fetchMapPins()
+
+    const showPin = async () => {
+      await showPinFromURL()
+
+      if (!selectedPin) {
+        promptUserLocation()
+      }
+    }
+    showPin()
+
+    return () => {
+      setSelectedPin(null)
+    }
+  }, [])
+
+  const availableFilters = useMemo(() => {
+    return transformAvailableFiltersToGroups(mapPins, [
+      {
+        grouping: 'verified-filter',
+        displayName: 'Verified',
+        type: 'verified',
+      },
+      ...MAP_GROUPINGS,
+    ])
+  }, [mapPins])
+
+  const promptUserLocation = async () => {
+    try {
+      const position = await GetLocation()
+      setCenter({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      })
+    } catch (error) {
+      logger.error(error)
+      // do nothing if location cannot be retrieved
+    }
+  }
+
+  /**
+   * Check current hash in case matches a mappin and try to load
+   *
+   **/
+  const showPinFromURL = async () => {
+    const pinId = location.hash.slice(1)
+    if (pinId) {
+      logger.info(`Fetching map pin by user id: ${pinId}`)
+      await getPinByUserId(pinId)
+    }
+  }
+
+  const getPinByUserId = async (userId: string) => {
+    navigate(`/map#${userId}`)
+
+    // First check the mapPins to see if the pin is already
+    // partially loaded
+    const preLoadedPin = mapPins.find((pin) => pin._id === userId)
+    if (preLoadedPin) {
+      setCenter(preLoadedPin.location)
+      setSelectedPin(preLoadedPin)
+    }
+
+    const pin = await mapPinService.getMapPinByUserId(userId)
+    if (pin) {
+      logger.info(`Fetched map pin by user id`, { userId })
+      setCenter(pin.location)
+      setSelectedPin(pin)
+    } else {
+      logger.error(`Failed to fetch map pin by user id`, { userId, pin })
+    }
+  }
+
+  const visibleMapPins = useMemo(() => {
+    return filterMapPinsByType(mapPins, activePinFilters)
+  }, [mapPins, activePinFilters])
+
+  const onBlur = () => {
+    navigate('/map')
+    setSelectedPin(null)
+  }
+
+  return (
+    // the calculation for the height is kind of hacky for now, will set properly on final mockups
+    <Box id="mapPage" sx={{ height: 'calc(100vh - 120px)', width: '100%' }}>
+      <NewMapBanner showNewMap={showNewMap} setShowNewMap={setShowNewMap} />
+      {!showNewMap && (
+        <>
+          <Controls
+            availableFilters={availableFilters}
+            onLocationChange={(latlng) => setCenter(latlng)}
+            onFilterChange={(selected) => {
+              setActivePinFilters(selected)
+            }}
+          />
+          <MapView
+            activePin={selectedPin}
+            mapRef={mapRef}
+            pins={visibleMapPins}
+            onPinClicked={(pin) => {
+              getPinByUserId(pin._id)
+            }}
+            onBlur={onBlur}
+            center={center}
+            zoom={zoom}
+            setZoom={setZoom}
+          />
+        </>
+      )}
+      {showNewMap && (
+        <MapWithList
+          activePin={selectedPin}
+          center={center}
+          mapRef={newMapRef}
+          notification={notification}
+          onLocationChange={(latlng) => setCenter(latlng)}
+          onPinClicked={(pin) => {
+            getPinByUserId(pin._id)
+          }}
+          onBlur={onBlur}
+          pins={visibleMapPins}
+          setZoom={setZoom}
+          zoom={zoom}
+        />
+      )}
+    </Box>
+  )
+})
+
+export default MapsPage

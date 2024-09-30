@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
@@ -19,7 +19,7 @@ import HowtoDescription from './HowtoDescription/HowtoDescription'
 import { HowtoDiscussion } from './HowToDiscussion/HowToDiscussion'
 import Step from './Step/Step'
 
-import type { IUser } from 'src/models'
+import type { IUser } from 'oa-shared'
 
 export const Howto = observer(() => {
   const { slug } = useParams()

@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
-import { observer } from 'mobx-react'
+import { Link } from '@remix-run/react'
+import { observer } from 'mobx-react-lite'
 import { Banner } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isProfileComplete } from 'src/utils/isProfileComplete'

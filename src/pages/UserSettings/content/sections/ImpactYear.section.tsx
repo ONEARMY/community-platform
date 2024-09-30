@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Form } from 'react-final-form'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { UserContactError } from 'src/pages/User/contact'
@@ -15,7 +15,7 @@ import {
 import { ImpactYearField } from '../fields/ImpactYear.field'
 import { ImpactYearDisplayField } from '../fields/ImpactYearDisplay.field'
 
-import type { IImpactYear, IImpactYearFieldList } from 'src/models'
+import type { IImpactYear, IImpactYearFieldList } from 'oa-shared'
 import type { SubmitResults } from 'src/pages/User/contact/UserContactError'
 
 interface Props {

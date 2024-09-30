@@ -1,3 +1,16 @@
 containerization
-node_modules
+*node_modules*
 dump
+build
+functions
+extensions
+.circleci
+.github
+.husky
+.nxs
+docs
+packages/cypress
+packages/documentation
+packages/security-rules
+packages/simulated-webhook-receiver
+scripts

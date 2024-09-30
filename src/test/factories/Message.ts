@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import type { IMessage } from 'src/models'
+import type { IMessage } from 'oa-shared'
 
 export const FactoryMessage = (
   messageOverloads: Partial<IMessage> = {},

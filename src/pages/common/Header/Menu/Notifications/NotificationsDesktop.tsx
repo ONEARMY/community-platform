@@ -5,7 +5,7 @@ import { Flex } from 'theme-ui'
 
 import { NotificationsIcon } from './NotificationsIcon'
 
-import type { UserNotificationItem } from 'shared/models'
+import type { UserNotificationItem } from 'oa-shared'
 
 import '../Profile/profile.css'
 

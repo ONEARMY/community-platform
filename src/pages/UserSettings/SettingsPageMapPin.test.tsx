@@ -9,7 +9,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { FormProvider } from './__mocks__/FormProvider'
 import { SettingsPageMapPin } from './SettingsPageMapPin'
 
-import type { ILocation } from 'src/models'
+import type { ILocation } from 'oa-shared'
 
 let mockUser = FactoryUser()
 let mockPin = FactoryMapPin()

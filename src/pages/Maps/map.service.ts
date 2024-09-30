@@ -6,7 +6,7 @@ import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { firestore } from 'src/utils/firebase'
 
-import type { IMapPin } from '../../models'
+import type { IMapPin } from 'oa-shared'
 
 export interface IMapPinService {
   getMapPins: () => Promise<IMapPin[]>

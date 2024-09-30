@@ -1,6 +1,6 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 import styled from '@emotion/styled'
+import { NavLink } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { preciousPlasticTheme } from 'oa-themes'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -90,7 +90,7 @@ export const ProfileModal = observer((props: IProps) => {
           </ModalLink>
         </Flex>
         {COMMUNITY_PAGES_PROFILE.map((page) => (
-          <AuthWrapper roleRequired={page.requiredRole} key={page.path}>
+          <AuthWrapper key={page.path}>
             <Flex>
               <ModalLink
                 to={page.path}

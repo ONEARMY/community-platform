@@ -1,4 +1,4 @@
-import type { IUser } from './user.models'
+import type { IUser } from 'oa-shared'
 
 export interface IProject {
   id: string

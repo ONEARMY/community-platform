@@ -5,7 +5,7 @@ import { useCommonStores } from 'src/common/hooks/useCommonStores'
 
 import { SettingsPage } from './SettingsPage'
 
-import type { IUser } from 'src/models/user.models'
+import type { IUser } from 'oa-shared'
 
 const Settings = observer(() => {
   const { userStore } = useCommonStores().stores

@@ -1,5 +1,5 @@
 import { Form } from 'react-final-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@remix-run/react'
 import { Button, ElWithBeforeIcon } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
 import IconHeaderHowto from 'src/assets/images/header-section/howto-header-icon.svg'
@@ -19,8 +19,8 @@ import {
   QuestionTitleField,
 } from './FormFields'
 
+import type { IQuestion } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
-import type { IQuestion } from 'src/models'
 
 interface IProps {
   'data-testid'?: string

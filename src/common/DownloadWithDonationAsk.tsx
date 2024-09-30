@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@remix-run/react'
 import {
   DonationRequestModal,
   DownloadButton,
@@ -7,9 +7,7 @@ import {
   DownloadStaticFile,
 } from 'oa-components'
 
-import { useCommonStores } from './hooks/useCommonStores'
-
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta } from 'oa-shared'
 
 export interface IProps {
   handleClick: () => Promise<void>
@@ -29,7 +27,6 @@ export const DownloadWithDonationAsk = (props: IProps) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [link, setLink] = useState<string>('')
   const navigate = useNavigate()
-  const { themeStore } = useCommonStores().stores
 
   const toggleIsModalOpen = () => setIsModalOpen(!isModalOpen)
 
@@ -45,10 +42,10 @@ export const DownloadWithDonationAsk = (props: IProps) => {
   return (
     <>
       <DonationRequestModal
-        body={themeStore?.currentTheme.donations?.body}
+        body={import.meta.env.VITE_DONATIONS_BODY}
         callback={callback}
-        iframeSrc={themeStore?.currentTheme.donations?.iframeSrc}
-        imageURL={themeStore?.currentTheme.donations?.imageURL}
+        iframeSrc={import.meta.env.VITE_DONATIONS_IFRAME_SRC}
+        imageURL={import.meta.env.VITE_DONATIONS_IMAGE_URL}
         isOpen={isModalOpen}
         link={link}
         onDidDismiss={() => toggleIsModalOpen()}

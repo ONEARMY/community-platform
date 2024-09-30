@@ -6,6 +6,8 @@
 
 import { storage } from '../utils/firebase'
 
+import type { IUploadedFileMeta } from 'oa-shared'
+
 export class Storage {
   /****************************************************************************** *
         Available Functions
@@ -54,20 +56,6 @@ const generateUploadedFileMeta = (
     updated: snapshotMeta.updated,
   }
   return fileInfo
-}
-
-/****************************************************************************** *
-        Interfaces
-/****************************************************************************** */
-export interface IUploadedFileMeta {
-  downloadUrl: string
-  contentType?: string | null
-  fullPath: string
-  name: string
-  type: string
-  size: number
-  timeCreated: string
-  updated: string
 }
 
 // interface batchUploadFileMeta{

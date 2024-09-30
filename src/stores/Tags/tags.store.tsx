@@ -3,7 +3,7 @@ import { arrayToJson } from 'src/utils/helpers'
 
 import { ModuleStore } from '../common/module.store'
 
-import type { ITag } from 'src/models/tags.model'
+import type { ITag } from 'oa-shared'
 import type { IRootStore } from '../RootStore'
 
 export class TagsStore extends ModuleStore {

@@ -1,10 +1,12 @@
-import { EmailNotificationFrequency } from 'oa-shared'
+import {
+  EmailNotificationFrequency,
+  INotification,
+} from 'oa-shared/models/notifications'
 
 import { DB_ENDPOINTS } from '../models'
 import { FirebaseEmulatedTest } from '../test/Firebase/emulator'
 import { createNotificationEmails } from './createNotificationEmails'
-
-import type { INotification, IUserDB } from '../models'
+import { IUserDB } from 'oa-shared/models/user'
 
 jest.mock('../Firebase/auth', () => ({
   firebaseAuth: {

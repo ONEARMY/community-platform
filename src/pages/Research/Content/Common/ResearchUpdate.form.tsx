@@ -27,8 +27,8 @@ import { TitleField } from '../CreateResearch/Form/TitleField'
 import { ResearchErrors } from './ResearchErrors'
 import { UpdateSubmitStatus } from './SubmitStatus'
 
+import type { IResearch } from 'oa-shared'
 import type { MainFormAction } from 'src/common/Form/types'
-import type { IResearch } from 'src/models/research.models'
 
 const CONFIRM_DIALOG_MSG =
   'You have unsaved changes. Are you sure you want to leave this page?'

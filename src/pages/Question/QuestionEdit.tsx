@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from '@remix-run/react'
 import { toJS } from 'mobx'
 import { Loader } from 'oa-components'
 import { UserRole } from 'oa-shared'
@@ -7,7 +7,7 @@ import { logger } from 'src/logger'
 import { QuestionForm } from 'src/pages/Question/Content/Common/QuestionForm'
 import { useQuestionStore } from 'src/stores/Question/question.store'
 
-import type { IQuestion } from 'src/models'
+import type { IQuestion } from 'oa-shared'
 
 export const QuestionEdit = () => {
   const { slug } = useParams()

@@ -4,7 +4,7 @@ import { db } from '../Firebase/firestoreDB'
 import { DB_ENDPOINTS } from '../models'
 
 import type { firestore } from 'firebase-admin'
-import type { IQuestionDB, IUserDB } from '../models'
+import type { IQuestionDB, IUserDB } from 'oa-shared/models'
 
 /*********************************************************************
  * Side-effects to be carried out on various question updates, namely:

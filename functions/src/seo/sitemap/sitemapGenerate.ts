@@ -7,8 +7,8 @@ import { Readable } from 'stream'
 import { CONFIG } from '../../config/config'
 import { uploadLocalFileToStorage } from '../../Firebase/storage'
 import { getCollection } from '../../Firebase/firestoreDB'
-import { IDBEndpoint } from '../../models'
 import axios from 'axios'
+import { DBEndpoint } from 'oa-shared/models/db'
 import { IModerationStatus } from 'oa-shared'
 
 /*************************************************************************
@@ -46,7 +46,7 @@ export async function generateSitemap() {
 async function generateSitemapItems() {
   const items: SitemapItem[] = []
   for (const [dbEndpoint, generator] of Object.entries(sitemapItemGenerators)) {
-    const docs = await getCollection(dbEndpoint as IDBEndpoint)
+    const docs = await getCollection(dbEndpoint as DBEndpoint)
     const { docFilterFn, slugField, lastModField } = endpointDbDefaults
     const filtered = docs.filter((doc) => docFilterFn(doc))
     filtered.forEach((doc) => {
@@ -136,7 +136,7 @@ const endpointItemDefaults = {
  * For more info about sitemaps see https://www.sitemaps.org/protocol.html
  **/
 const sitemapItemGenerators: {
-  [endpoint in IDBEndpoint]?: (slug: string) => SitemapItem
+  [endpoint in DBEndpoint]?: (slug: string) => SitemapItem
 } = {
   howtos: (slug: string) => ({
     ...endpointItemDefaults,

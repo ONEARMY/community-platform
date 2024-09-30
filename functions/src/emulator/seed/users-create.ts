@@ -3,7 +3,7 @@ import { MOCK_AUTH_USERS } from 'oa-shared/mocks/auth'
 import { firebaseAuth } from '../../Firebase/auth'
 import { setDoc } from '../../Firebase/firestoreDB'
 
-import type { IUserDB } from '../../models'
+import type { IUserDB } from 'oa-shared/models'
 
 /**
  * Create auth users to allow sign-in on firebase emulators

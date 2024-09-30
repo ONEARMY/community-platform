@@ -8,12 +8,11 @@ import { describe, expect, it, vi } from 'vitest'
 import { useCommonStores } from './hooks/useCommonStores'
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 
-import type { IUserDB } from 'src/models'
-import type { IUploadedFileMeta } from 'src/stores/storage'
+import type { IUploadedFileMeta, IUserDB } from 'oa-shared'
 import type { Mock } from 'vitest'
 
 const mockedUsedNavigate = vi.fn()
-vi.mock('react-router-dom', () => ({
+vi.mock('@remix-run/react', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
 
@@ -25,15 +24,6 @@ const userToMock = (user?: IUserDB) => {
   return (useCommonStores as Mock).mockImplementation(() => ({
     stores: {
       userStore: { user: user ?? undefined },
-      themeStore: {
-        currentTheme: {
-          donations: {
-            body: '',
-            iframeSrc: '',
-            imageURL: '',
-          },
-        },
-      },
     },
   }))
 }

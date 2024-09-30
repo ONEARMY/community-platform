@@ -5,7 +5,7 @@ describe('[How To]', () => {
     const { slug, title, description, cover_image } =
       MOCK_DATA.howtos.cmMzzlQP00fCckYIeL2e
 
-    const pageTitle = `${title} - How-to - Community Platform`
+    const pageTitle = `${title} - How-to - Precious Plastic`
 
     it('[Populates title and description tags]', () => {
       cy.visit(`/how-to/${slug}`)

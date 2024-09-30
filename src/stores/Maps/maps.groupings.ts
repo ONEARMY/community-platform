@@ -2,7 +2,7 @@ import { IPinGrouping } from 'oa-shared'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import Workspace from 'src/pages/User/workspace/Workspace'
 
-import type { IMapGrouping } from 'src/models/maps.models'
+import type { IMapGrouping } from 'oa-shared'
 
 // grouping used (icons will be generated from type in method below)
 const GROUPINGS: IMapGrouping[] = [

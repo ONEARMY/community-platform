@@ -201,6 +201,7 @@ describe('[How To]', () => {
 
       cy.login(creatorEmail, creatorPassword)
       cy.get('[data-cy=loader]').should('not.exist')
+      cy.get('[data-cy="MemberBadge-member"]').should('be.visible')
       cy.step('Access the create-how-to')
       cy.get('a[href="/how-to/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()

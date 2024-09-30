@@ -19,16 +19,17 @@ import {
 import { ModuleStore } from '../common/module.store'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
-import type { IUser, UserMention } from 'src/models'
 import type {
+  IConvertedFileMeta,
   IHowto,
   IHowtoDB,
   IHowtoFormInput,
   IHowToStepFormInput,
-} from 'src/models/howto.models'
-import type { IConvertedFileMeta } from 'src/types'
+  IUploadedFileMeta,
+  IUser,
+  UserMention,
+} from 'oa-shared'
 import type { IRootStore } from '../RootStore'
-import type { IUploadedFileMeta } from '../storage'
 
 const COLLECTION_NAME = 'howtos'
 

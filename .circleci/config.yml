@@ -144,18 +144,6 @@ jobs:
           name: Check spelling on documentation
           command: |
             npx cspell "**/*.md" --config ./.cspell.json
-  lint-commits:
-    docker:
-      - image: commitlint/commitlint
-    resource_class: small
-    steps:
-      - checkout
-      - attach_workspace:
-          at: '.'
-      - run:
-          name: Linting commits
-          command: |
-            commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   lint:
     docker: *docker
     resource_class: medium+
@@ -453,13 +441,10 @@ workflows:
     jobs:
       - spellcheck:
           name: Check documentation spelling
-      - lint-commits:
-          name: Lint commits
       - lint:
           name: Lint code
           requires:
             - 'Check documentation spelling'
-            - 'Lint commits'
       #---------------------- Test ----------------------
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:

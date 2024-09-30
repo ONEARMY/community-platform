@@ -65,7 +65,7 @@ describe('[User sign-up]', () => {
   })
 
   describe('[Update existing auth details]', () => {
-    it.only('Updates username and password', () => {
+    it('Updates username and password', () => {
       const user = generateNewUserDetails()
       const { email, username, password } = user
       cy.signUpNewUser(user)

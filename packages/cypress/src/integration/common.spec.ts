@@ -32,7 +32,7 @@ describe('[Common]', () => {
     cy.url().should('include', '/map')
   })
 
-  describe.only('[User feeback button]', () => {
+  describe('[User feeback button]', () => {
     it('[Desktop]', () => {
       cy.visit('/how-to')
       cy.get('[data-cy=feedback]').should('contain', 'Report a Problem')

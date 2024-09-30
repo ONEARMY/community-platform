@@ -334,9 +334,9 @@ jobs:
       - setup_repo
       - attach_workspace:
           at: '.'
-      # - firebase_deploy:
-      #     # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
-      #     alias: << parameters.DEPLOY_ALIAS >>
+      - firebase_deploy:
+          # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
+          alias: << parameters.DEPLOY_ALIAS >>
       - run:
           name: Prune Docker resources
           command: |
@@ -520,21 +520,17 @@ workflows:
           requires:
             - test_e2e
       #---------------------- Development Instances Build and Deploy ----------------------
-      # - release:
-      #     name: Release new version to GitHub
-      #     context:
-      #       - release-context
-      #     requires:
-      #       - "Approve Production deployment"
-      # - build:
-      #     name: Build Production Release
-      #     context: build-context
-          # requires:
-          #   - 'Release new version to GitHub'
+      - release:
+          name: Release new version to GitHub
+          context:
+            - release-context
+          requires:
+            - "Approve Production deployment"
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:
-            - 'Approve Production deployment'
+            - 'Release new version to GitHub'
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: fixing-fashion-prod
           FLY_APP_NAME: community-platform-ff
           FLY_TOML: fly-ff.toml
@@ -545,7 +541,8 @@ workflows:
       - deploy:
           name: 'Deploy: community.preciousplastic.com'
           requires:
-            - 'Approve Production deployment'
+            - 'Release new version to GitHub'
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: 'production'
           FLY_APP_NAME: community-platform-pp
           FLY_TOML: fly-pp.toml
@@ -556,7 +553,8 @@ workflows:
       - deploy:
           name: 'Deploy: community.projectkamp.com'
           requires:
-            - 'Approve Production deployment'
+            - 'Release new version to GitHub'
+          <<: *filter_only_default_branch
           DEPLOY_ALIAS: project-kamp-production
           FLY_APP_NAME: community-platform-pk
           FLY_TOML: fly-pk.toml

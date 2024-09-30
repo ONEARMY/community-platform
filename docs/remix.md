@@ -21,8 +21,4 @@ For the API, we can use [action/loader](https://remix.run/docs/en/main/route/act
   - _index.tsx was created to replicate the current behaviour of redirecting to the Academy page. Later it could be used for the `HubPage`.
   - All routes have already been migrated
   - More routing details in the link above 😊
-
-- Current issues
-  - unit and e2e tests are not passing
-  - localStorage/sessionStorage/window usage might need a refactor
-  - DevSiteHeader (minor) -> needs a navigation/refresh after changing theme
+  

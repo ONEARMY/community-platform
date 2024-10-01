@@ -11,6 +11,7 @@ const { admin, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
 const machine = MOCK_DATA.users.settings_machine_new
 const userProfiletype = MOCK_DATA.users.settings_workplace_new
+const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty
 
 describe('[Profile]', () => {
   beforeEach(() => {
@@ -104,6 +105,28 @@ describe('[Profile]', () => {
       cy.contains(missing.user.label)
       cy.contains('2021')
       cy.contains('3 full time employees')
+    })
+
+    it('[Can see contribution data for workspaces]', () => {
+      setIsPreciousPlastic()
+
+      cy.login(subscriber.email, subscriber.password)
+
+      cy.step('Can go to contribution data')
+      cy.visit(`/u/${userProfiletype.userName}`)
+      cy.get('[data-cy=ContribTab]').click()
+    })
+
+    it('[Tabs hidden without contributions]', () => {
+      setIsPreciousPlastic()
+
+      cy.login(subscriber.email, subscriber.password)
+
+      cy.step('Ensure hidden with no contributions')
+      cy.visit(`/u/${workspaceEmpty.userName}`)
+      cy.get('[data-cy=SpaceProfile]').should('be.visible')
+      cy.get('[data-cy=ContribTab]').should('not.exist')
+      cy.get('[data-cy=ImpactTab]').should('not.exist')
     })
   })
 

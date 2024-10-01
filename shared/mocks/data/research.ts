@@ -221,4 +221,22 @@ export const research = {
     updates: [],
     researchCategory: {},
   },
+  '0up6oJCZZ3M9bDYx34Et': {
+    _created: '2023-02-27T22:08:25.999Z',
+    _createdBy: 'settings_workplace_new',
+    _deleted: true,
+    _id: '0up6oJCZZ3M9bDYx34Et',
+    _modified: '2023-03-01T19:12:11.271Z',
+    creatorCountry: 'it',
+    description: 'Workspace contribution tab test!',
+    moderation: 'accepted',
+    slug: 'workspace-test-research',
+    previousSlugs: ['workspace-test-research'],
+    tags: {
+      h1wCs0o9j60lkw3AYPB1: true,
+    },
+    title: 'Just test data',
+    updates: [],
+    researchCategory: {},
+  },
 }

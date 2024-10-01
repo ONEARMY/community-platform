@@ -215,6 +215,7 @@ describe('[Settings]', () => {
       cy.contains(user.username)
       cy.contains(displayName)
       cy.contains(description)
+      cy.get('[data-cy="ImpactTab"]').should('not.exist')
       cy.get(`[data-cy="MemberBadge-${profileType}"]`)
       cy.get('[data-cy="userImage"]')
         .should('have.attr', 'src')

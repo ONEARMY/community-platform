@@ -337,15 +337,34 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 /* zoom control */
 
-.leaflet-control-zoom-in,
-.leaflet-control-zoom-out {
-	font: bold 18px 'Lucida Console', Monaco, monospace;
-	text-indent: 1px;
+.leaflet-control-zoom {
+    font: bold 18px 'Lucida Console', Monaco, monospace;
+    text-indent: 1px;
 	}
+
+.leaflet-control-zoom-in {
+	border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+	border-bottom: 2px solid #000000 !important;
+	}
+
+.leaflet-control-zoom-out {
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+	}
+
 
 .leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
 	font-size: 22px;
 	}
+
+.leaflet-control-zoom.leaflet-bar.leaflet-control{
+	border: 2px solid; 
+	border-radius: 10px;
+	padding: 0px; 
+	border-bottom: 2px solid #000000;
+	}
+
 
 
 /* layers control */
@@ -649,6 +668,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	margin-left: -12px;
 	border-right-color: #fff;
 	}
+
+
 
 /* Printing */
 

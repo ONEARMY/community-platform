@@ -98,6 +98,7 @@ app.use(
         'onearmy.github.io',
         '*.youtube.com',
         '*.donorbox.org',
+        'donorbox.org',
         '*.netlify.app',
       ],
       imgSrc: imgSrc,

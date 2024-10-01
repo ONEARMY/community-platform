@@ -156,6 +156,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
   } = user
 
   const coverImage = getCoverImages(user)
+  const hasContributed = (docs?.howtos.length + docs?.research.length) > 0
 
   const userLinks = links.filter(
     (linkItem) =>
@@ -251,8 +252,12 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
           <Tabs defaultValue={0}>
             <TabsList>
               <Tab>Profile</Tab>
-              <Tab>Contributions</Tab>
-              {isPreciousPlastic() && <Tab data-cy="ImpactTab">{heading}</Tab>}
+              {hasContributed && (
+                <Tab>Contributions</Tab>
+              )}
+              {hasContributed && isPreciousPlastic() && (
+                <Tab data-cy="ImpactTab">{heading}</Tab>
+              )}
               <Tab data-cy="contact-tab">Contact</Tab>
             </TabsList>
             <TabPanel>
@@ -303,10 +308,12 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                 </Flex>
               </Box>
             </TabPanel>
-            <TabPanel>
-              <UserCreatedDocuments docs={docs} />
-            </TabPanel>
-            {isPreciousPlastic() && (
+            {hasContributed && (
+              <TabPanel>
+                <UserCreatedDocuments docs={docs} />
+              </TabPanel>
+            )}
+            {hasContributed && isPreciousPlastic() && (
               <TabPanel>
                 <Impact impact={impact} user={user} />
               </TabPanel>

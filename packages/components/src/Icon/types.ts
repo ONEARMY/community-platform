@@ -52,6 +52,7 @@ export type availableGlyphs =
   | 'revenue'
   | 'show'
   | 'slack'
+  | 'sliders'
   | 'social-media'
   | 'star'
   | 'star-active'

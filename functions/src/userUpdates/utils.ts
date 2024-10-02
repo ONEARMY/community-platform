@@ -45,7 +45,7 @@ export const hasDetailsForMapPinChanged = (
     prevUser.displayName !== user.displayName,
     prevUser.isContactableByPublic !== user.isContactableByPublic,
     prevUser.profileType !== user.profileType,
-    prevUser.subType !== user.subType,
+    prevUser.workspaceType !== user.workspaceType,
     ...hasDetailsChanged(prevUser, user),
     ...hasLocationDetailsChanged(prevUser, user),
   ]

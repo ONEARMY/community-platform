@@ -13,7 +13,7 @@ import { CustomRadioField } from '../fields/CustomRadio.field'
 
 import type { IWorkspaceType } from 'oa-shared'
 
-const WORKSPACE_TYPES: IWorkspaceType[] = [
+export const WORKSPACE_TYPES: IWorkspaceType[] = [
   {
     label: 'shredder',
     textLabel: 'Shredder',

@@ -139,7 +139,7 @@ export interface IProfileType {
 export interface IWorkspaceType {
   label: WorkspaceType
   imageSrc?: string
-  textLabel?: string
+  textLabel: string
   subText?: string
 }
 
@@ -196,7 +196,6 @@ export interface IUser {
 
   // Primary PP profile type related fields
   profileType: ProfileTypeName
-  subType?: WorkspaceType | null
   workspaceType?: WorkspaceType | null
   mapPinDescription?: string | null
   openingHours?: IOpeningHours[]

@@ -67,6 +67,7 @@ app.use(
         '*.google-analytics.com',
         'firebasestorage.googleapis.com',
         '*.cloudfunctions.net',
+        'sentry.io',
         ...wsUrls,
       ],
       defaultSrc: [

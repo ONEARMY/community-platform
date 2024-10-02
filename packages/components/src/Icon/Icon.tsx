@@ -104,6 +104,7 @@ export const glyphs: IGlyphs = {
   profile: iconMap.profile,
   revenue: iconMap.revenue,
   slack: <FaSlack />,
+  sliders: iconMap.sliders,
   star: iconMap.star,
   'star-active': iconMap.starActive,
   step: iconMap.step,

@@ -1,14 +1,27 @@
-import { CardList, FilterList, OsmGeocoding } from 'oa-components'
-import { Box, Flex, Heading } from 'theme-ui'
+import { useState } from 'react'
+import {
+  Button,
+  CardList,
+  MapFilterList,
+  MapFilterProfileTypeCardList,
+  Modal,
+  OsmGeocoding,
+} from 'oa-components'
+import { Flex, Heading, Text } from 'theme-ui'
 
-import type { ILatLng, IMapPin } from 'oa-shared'
+import type {
+  ILatLng,
+  IMapPin,
+  MapFilterOption,
+  MapFilterOptionsList,
+} from 'oa-shared'
 
 interface IProps {
-  activePinFilters: string[]
-  availableFilters: any
+  activePinFilters: MapFilterOptionsList
+  availableFilters: MapFilterOptionsList
   filteredPins: IMapPin[] | null
   onBlur: () => void
-  onFilterChange: (label: string) => void
+  onFilterChange: (filter: MapFilterOption) => void
   onLocationChange: (latlng: ILatLng) => void
   pins: IMapPin[]
   setShowMobileList?: (set: boolean) => void
@@ -16,6 +29,7 @@ interface IProps {
 }
 
 export const MapWithListHeader = (props: IProps) => {
+  const [showFilters, setShowFilters] = useState<boolean>(false)
   const {
     activePinFilters,
     availableFilters,
@@ -29,8 +43,20 @@ export const MapWithListHeader = (props: IProps) => {
   } = props
   const isMobile = viewport === 'mobile'
 
+  const toggleFilterModal = () => setShowFilters(!showFilters)
+  const hasFiltersSelected = activePinFilters.length !== 0
+
   return (
     <>
+      <Modal onDidDismiss={toggleFilterModal} isOpen={showFilters}>
+        <MapFilterList
+          activeFilters={activePinFilters}
+          availableFilters={availableFilters}
+          onClose={toggleFilterModal}
+          onFilterChange={onFilterChange}
+        />
+      </Modal>
+
       <Flex
         sx={{
           flexDirection: 'column',
@@ -51,7 +77,7 @@ export const MapWithListHeader = (props: IProps) => {
           {pins && `${pins.length} members (and counting...)`}
         </Heading>
 
-        <Box sx={{ paddingX: 4 }}>
+        <Flex sx={{ paddingX: 4, gap: 2, flexDirection: 'row' }}>
           <OsmGeocoding
             callback={({ lat, lon }) => {
               if (lat && lon) {
@@ -64,9 +90,18 @@ export const MapWithListHeader = (props: IProps) => {
             acceptLanguage="en"
             placeholder="Search for a place"
           />
-        </Box>
+          <Button
+            data-cy="MapFilterList-OpenButton"
+            icon="sliders"
+            showIconOnly={isMobile ? true : false}
+            onClick={toggleFilterModal}
+            variant={hasFiltersSelected ? 'primary' : 'outline'}
+          >
+            <Text sx={{ paddingRight: 2 }}>Filter</Text>
+          </Button>
+        </Flex>
 
-        <FilterList
+        <MapFilterProfileTypeCardList
           activeFilters={activePinFilters}
           availableFilters={availableFilters}
           onFilterChange={onFilterChange}

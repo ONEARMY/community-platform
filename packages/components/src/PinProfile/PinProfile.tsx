@@ -6,10 +6,10 @@ import { CardButton } from '../CardButton/CardButton'
 import { CardProfile } from '../CardProfile/CardProfile'
 import { InternalLink } from '../InternalLink/InternalLink'
 
-import type { MapListItem } from '../types/common'
+import type { IMapPin } from 'oa-shared'
 
 export interface IProps {
-  item: MapListItem
+  item: IMapPin
   onClose: () => void
 }
 
@@ -21,8 +21,8 @@ export const PinProfile = (props: IProps) => {
 
   return (
     <CardButton sx={{ '&:hover': 'none' }} data-cy="PinProfile">
-      <Box sx={{ position: 'absolute', width: '100%' }}>
-        <Box sx={{ float: 'right', marginTop: 1, marginRight: 2 }}>
+      <Box sx={{ position: 'absolute', right: 0 }}>
+        <Box sx={{ float: 'right', marginTop: 1, marginRight: '8px' }}>
           <ButtonIcon
             data-cy="PinProfileCloseButton"
             icon="close"
@@ -31,21 +31,22 @@ export const PinProfile = (props: IProps) => {
           />
         </Box>
       </Box>
+      <Box sx={{ width: '100%', height: '100%', zIndex: 2 }}>
+        <CardProfile item={item} isLink />
 
-      <CardProfile item={item} isLink />
-
-      {!isMember && creator?.isContactableByPublic && (
-        <Flex sx={{ justifyContent: 'flex-end' }}>
-          <InternalLink
-            to={`/u/${creator._id}`}
-            data-cy="PinProfileMessageLink"
-          >
-            <Button icon="contact" sx={{ margin: 1 }} small>
-              Send Message
-            </Button>
-          </InternalLink>
-        </Flex>
-      )}
+        {!isMember && creator?.isContactableByPublic && (
+          <Flex sx={{ justifyContent: 'flex-end' }}>
+            <InternalLink
+              to={`/u/${creator._id}`}
+              data-cy="PinProfileMessageLink"
+            >
+              <Button icon="contact" sx={{ margin: 1 }} small>
+                Send Message
+              </Button>
+            </InternalLink>
+          </Flex>
+        )}
+      </Box>
     </CardButton>
   )
 }

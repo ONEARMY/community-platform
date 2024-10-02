@@ -5,7 +5,7 @@ import Workspace from 'src/pages/User/workspace/Workspace'
 import type { IMapGrouping } from 'oa-shared'
 
 // grouping used (icons will be generated from type in method below)
-const GROUPINGS: IMapGrouping[] = [
+export const GROUPINGS: IMapGrouping[] = [
   {
     grouping: IPinGrouping.PLACE,
     displayName: 'Extrusion',

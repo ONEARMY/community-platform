@@ -99,6 +99,7 @@ app.use(
         '*.youtube.com',
         '*.donorbox.org',
         'donorbox.org',
+        '*.run.app',
         '*.netlify.app',
       ],
       imgSrc: imgSrc,

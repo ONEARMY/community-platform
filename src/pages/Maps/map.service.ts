@@ -9,15 +9,22 @@ import { firestore } from 'src/utils/firebase'
 import type { IMapPin } from 'oa-shared'
 
 export interface IMapPinService {
-  getMapPins: () => Promise<IMapPin[]>
+  getMapPins: (currentUserId?: string) => Promise<IMapPin[]>
   getMapPinByUserId: (userName: string) => Promise<IMapPin | null>
   getMapPinSelf: (userId: string) => Promise<IMapPin | null>
 }
 
-const getMapPins = async () => {
+const getMapPins = async (currentUserId?: string) => {
   try {
     const response = await fetch(API_URL + '/map-pins')
     const mapPins = await response.json()
+
+    const currentUserPin = mapPins.find(({ _id }) => _id === currentUserId)
+
+    if (currentUserId && currentUserPin.length === 0) {
+      const userMapPin = await getMapPinByUserId(currentUserId)
+      mapPins.append(userMapPin)
+    }
 
     return _transformCreatorImagesToCND(mapPins)
   } catch (error) {

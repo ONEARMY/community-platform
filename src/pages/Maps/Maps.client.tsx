@@ -46,26 +46,10 @@ const MapsPage = observer(() => {
 
   const fetchMapPins = async () => {
     setNotification('Loading...')
-    const pins = await mapPinService.getMapPins()
+    const pins = await mapPinService.getMapPins(user?._id)
     setMapPins(pins)
     setNotification('')
   }
-
-  useEffect(() => {
-    const appendLoggedInUser = async (userName: string = '') => {
-      if (!userName) {
-        return
-      }
-
-      const userMapPin = await mapPinService.getMapPinSelf(userName)
-
-      if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
-        setMapPins([...mapPins, userMapPin])
-      }
-    }
-
-    appendLoggedInUser(user?._id)
-  }, [user])
 
   useEffect(() => {
     fetchMapPins()

@@ -4,11 +4,11 @@ import type { BoxProps, ThemeUIStyleObject } from 'theme-ui'
 
 export interface IProps extends BoxProps {
   children: React.ReactNode
-  extraSx?: ThemeUIStyleObject | undefined
+  extrastyles?: ThemeUIStyleObject | undefined
 }
 
 export const CardButton = (props: IProps) => {
-  const { children, extraSx } = props
+  const { children, extrastyles } = props
 
   return (
     <Card
@@ -33,7 +33,7 @@ export const CardButton = (props: IProps) => {
           borderColor: 'grey',
           transition: 'borderBottom 0.2s, transform 0.2s, borderColor 0.2s',
         },
-        ...extraSx,
+        ...extrastyles,
       }}
       {...props}
     >

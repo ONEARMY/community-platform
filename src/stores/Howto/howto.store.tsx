@@ -12,10 +12,7 @@ import { needsModeration } from 'src/utils/helpers'
 import { getKeywords } from 'src/utils/searchHelper'
 
 import { incrementDocViewCount } from '../common/incrementDocViewCount'
-import {
-  changeMentionToUserReference,
-  changeUserReferenceToPlainText,
-} from '../common/mentions'
+import { changeMentionToUserReference } from '../common/mentions'
 import { ModuleStore } from '../common/module.store'
 import { toggleDocUsefulByUser } from '../common/toggleDocUsefulByUser'
 
@@ -43,10 +40,8 @@ export class HowtoStore extends ModuleStore {
     // the given endpoint and emits changes as data is retrieved from cache and live collection
     super(rootStore, COLLECTION_NAME)
     makeObservable(this, {
-      activeHowto: observable,
       uploadStatus: observable,
       removeActiveHowto: action,
-      setActiveHowtoBySlug: action,
       toggleUsefulByUser: action,
       updateUploadStatus: action,
       resetUploadStatus: action,
@@ -58,46 +53,6 @@ export class HowtoStore extends ModuleStore {
 
   public removeActiveHowto() {
     this.activeHowto = null
-  }
-
-  public async setActiveHowtoBySlug(slug?: string) {
-    // clear any cached data and then load the new howto
-    logger.debug(`HowtoStore.setActiveHowtoBySlug:`, { slug })
-    let activeHowto: IHowtoDB | null = null
-
-    if (slug) {
-      const collection = await this.db
-        .collection<IHowto>(COLLECTION_NAME)
-        .getWhere('slug', '==', slug)
-      activeHowto = collection.length > 0 ? collection[0] : null
-
-      // try previous slugs if slug is not recognized as primary
-      if (!activeHowto) {
-        const collection = await this.db
-          .collection<IHowto>(COLLECTION_NAME)
-          .getWhere('previousSlugs', 'array-contains', slug)
-
-        activeHowto = collection.length > 0 ? collection[0] : null
-      }
-
-      // Change all UserReferences to mentions
-      if (activeHowto) {
-        if (activeHowto.description) {
-          activeHowto.description = changeUserReferenceToPlainText(
-            activeHowto.description,
-          )
-        }
-
-        activeHowto.steps.forEach((step) => {
-          if (!step.text) return
-          step.text = changeUserReferenceToPlainText(step.text)
-        })
-      }
-    }
-    runInAction(() => {
-      this.activeHowto = activeHowto
-    })
-    return activeHowto
   }
 
   public async toggleUsefulByUser(

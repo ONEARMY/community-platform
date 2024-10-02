@@ -2,7 +2,6 @@ import { Outlet } from '@remix-run/react'
 import { Alerts } from 'src/common/Alerts/Alerts'
 import { Analytics } from 'src/common/Analytics'
 import { ScrollToTop } from 'src/common/ScrollToTop'
-import DevSiteHeader from 'src/pages/common/DevSiteHeader/DevSiteHeader'
 import GlobalSiteFooter from 'src/pages/common/GlobalSiteFooter/GlobalSiteFooter'
 import Header from 'src/pages/common/Header/Header'
 import { StickyButton } from 'src/pages/common/StickyButton'
@@ -27,7 +26,7 @@ export default function Index() {
     >
       <Analytics />
       <ScrollToTop />
-      <DevSiteHeader />
+      {/* <DevSiteHeader /> */}
       <Alerts />
       <Header />
 

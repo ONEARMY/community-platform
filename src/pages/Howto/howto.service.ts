@@ -13,6 +13,7 @@ import {
 import { IModerationStatus } from 'oa-shared'
 import { DB_ENDPOINTS } from 'src/models/dbEndpoints'
 import { hasAdminRights } from 'src/utils/helpers'
+import { changeUserReferenceToPlainText } from 'src/utils/mentions.utils'
 
 import { firestore } from '../../utils/firebase'
 
@@ -22,7 +23,7 @@ import type {
   QueryFilterConstraint,
   QueryNonFilterConstraint,
 } from 'firebase/firestore'
-import type { ICategory, IHowto, IUserDB } from 'oa-shared'
+import type { ICategory, IHowto, IHowtoDB, IUserDB } from 'oa-shared'
 import type { HowtoSortOption } from './Content/HowtoList/HowtoSortOptions'
 
 export enum HowtosSearchParams {
@@ -183,11 +184,61 @@ const getSort = (sort: HowtoSortOption) => {
   }
 }
 
+const getBySlug = async (slug: string) => {
+  let snapshot = await getDocs(
+    query(
+      collection(firestore, DB_ENDPOINTS.howtos),
+      and(where('slug', '==', slug), where('_deleted', '!=', true)),
+      limit(1),
+    ),
+  )
+
+  if (snapshot.size === 0) {
+    return null
+  }
+
+  let howto =
+    (snapshot.size > 0 && (snapshot.docs[0].data() as IHowtoDB)) || null
+
+  // try previous slugs if slug is not recognized as primary
+  if (!howto) {
+    snapshot = await getDocs(
+      query(
+        collection(firestore, DB_ENDPOINTS.howtos),
+        and(
+          where('previousSlugs', 'array-contains', slug),
+          where('_deleted', '!=', true),
+        ),
+        limit(1),
+      ),
+    )
+
+    howto = (snapshot.size > 0 && (snapshot.docs[0].data() as IHowtoDB)) || null
+  }
+
+  if (!howto) {
+    return null
+  }
+
+  // Change all UserReferences to mentions
+  if (howto.description) {
+    howto.description = changeUserReferenceToPlainText(howto.description)
+  }
+
+  howto.steps.forEach((step) => {
+    if (!step.text) return
+    step.text = changeUserReferenceToPlainText(step.text)
+  })
+
+  return howto
+}
+
 export const howtoService = {
   search,
   getHowtoCategories,
   getDraftCount,
   getDrafts,
+  getBySlug,
 }
 
 export const exportedForTesting = {

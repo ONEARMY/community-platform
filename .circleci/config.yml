@@ -511,6 +511,7 @@ workflows:
             - release-context
           requires:
             - "Approve Production deployment"
+          <<: *filter_only_default_branch
       - deploy:
           name: 'Deploy: community.fixing.fashion'
           requires:

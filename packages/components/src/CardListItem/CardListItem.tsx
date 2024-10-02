@@ -2,10 +2,10 @@ import { CardButton } from '../CardButton/CardButton'
 import { CardProfile } from '../CardProfile/CardProfile'
 import { InternalLink } from '../InternalLink/InternalLink'
 
-import type { MapListItem } from '../types/common'
+import type { IMapPin } from 'oa-shared'
 
 export interface IProps {
-  item: MapListItem
+  item: IMapPin
 }
 
 export const CardListItem = ({ item }: IProps) => {

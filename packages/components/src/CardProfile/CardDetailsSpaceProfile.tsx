@@ -12,11 +12,21 @@ interface IProps {
 }
 
 export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
-  const { _id, about, badges, countryCode, coverImage, profileType, subType } =
-    creator
+  const {
+    _id,
+    about,
+    badges,
+    countryCode,
+    coverImage,
+    profileType,
+    workspaceType,
+  } = creator
 
   const aboutTextStart =
     about && about.length > 80 ? about.slice(0, 78) + '...' : false
+  const workspaceLabel = workspaceType
+    ? workspaceType.charAt(0).toUpperCase() + workspaceType.slice(1)
+    : ''
 
   return (
     <Flex sx={{ flexDirection: 'column', width: '100%' }}>
@@ -72,11 +82,9 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
             isLink={isLink}
           />
         </Flex>
-        {subType && (
+        {workspaceType && (
           <Category
-            category={{
-              label: subType.charAt(0).toUpperCase() + subType.slice(1),
-            }}
+            category={{ label: workspaceLabel }}
             sx={{
               border: '1px solid #0087B6',
               backgroundColor: '#ECFAFF',

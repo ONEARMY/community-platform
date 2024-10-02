@@ -14,20 +14,10 @@ export interface IMapPin {
   type: ProfileTypeName
   location: ILatLng
   verified: boolean
-  subType?: IMapPinSubtype
+  subType?: WorkspaceType // For old map
   comments?: string
   creator?: IProfileCreator
 }
-
-/**
- * Map pins keep minimal information required for pin display.
- * @param _id - The id that will be used to pull pin details
- * currently this is a user profile id
- * @param type - Pin type icon to use - currently mapped to profile types
- * @param subtype - currently used for workspacetype filtering
- */
-
-export type IMapPinSubtype = WorkspaceType
 
 /**
  * @param detail - by default details are pulled on pin open, using
@@ -42,7 +32,7 @@ export interface IMapGrouping {
   grouping: IPinGrouping
   displayName: string
   type: ProfileTypeName
-  subType?: IMapPinSubtype
+  subType?: WorkspaceType
   icon: string
   hidden?: boolean
 }
@@ -78,6 +68,16 @@ export interface IProfileCreator {
   displayName: string
   isContactableByPublic: boolean
   profileType: ProfileTypeName
-  subType?: string
+  workspaceType?: string
   userImage?: string
 }
+
+// Overlap with IWorkspaceType
+export interface MapFilterOption {
+  label: string
+  slug: string
+  filterType: string
+  imageSrc?: string
+}
+
+export type MapFilterOptionsList = MapFilterOption[]

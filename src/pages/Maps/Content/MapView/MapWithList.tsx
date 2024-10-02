@@ -2,41 +2,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
+import { allMapFilterOptions } from './allMapFilterOptions'
 import { Clusters } from './Cluster.client'
 import { latLongFilter } from './latLongFilter'
 import { MapWithListHeader } from './MapWithListHeader'
 import { Popup } from './Popup.client'
 
 import type { LatLngExpression } from 'leaflet'
-import type { ILatLng, IMapPin } from 'oa-shared'
+import type {
+  ILatLng,
+  IMapPin,
+  MapFilterOption,
+  MapFilterOptionsList,
+} from 'oa-shared'
 import type { Map as MapType } from 'react-leaflet'
-
-const allFilters = [
-  {
-    label: 'Workspace',
-    type: 'workspace',
-  },
-  {
-    label: 'Machine Builder',
-    type: 'machine-builder',
-  },
-  {
-    label: 'Community Point',
-    type: 'community-builder',
-  },
-  {
-    label: 'Collection Point',
-    type: 'collection-point',
-  },
-  {
-    label: 'Space',
-    type: 'space',
-  },
-  {
-    label: 'Want to get started',
-    type: 'member',
-  },
-]
 
 interface IProps {
   activePin: IMapPin | null
@@ -65,7 +44,8 @@ export const MapWithList = (props: IProps) => {
     zoom,
   } = props
 
-  const [activePinFilters, setActivePinFilters] = useState<string[]>([])
+  const [activePinFilters, setActivePinFilters] =
+    useState<MapFilterOptionsList>([])
   const [allPinsInView, setAllPinsInView] = useState<IMapPin[]>(pins)
   const [filteredPins, setFilteredPins] = useState<IMapPin[] | null>(
     pins || null,
@@ -73,22 +53,45 @@ export const MapWithList = (props: IProps) => {
   const [showMobileList, setShowMobileList] = useState<boolean>(false)
 
   const availableFilters = useMemo(() => {
-    const pinTypes = pins.map(({ creator }) => creator?.profileType)
-    const filtersNeeded = [...new Set(pinTypes)]
-    return allFilters.filter(({ type }) =>
-      filtersNeeded.some((filter) => filter === type),
+    const pinDetails = pins.map(({ creator }) => [
+      creator?.profileType,
+      creator?.workspaceType,
+    ])
+    const filtersNeeded = [...new Set(pinDetails.flat())]
+
+    return allMapFilterOptions.filter((validFilter) =>
+      filtersNeeded.some((neededfilter) => neededfilter === validFilter.slug),
     )
   }, [pins])
 
   useEffect(() => {
-    if (activePinFilters.length === 0) {
-      return setFilteredPins(allPinsInView)
-    }
-    const filteredPins = allPinsInView.filter((pin) =>
-      activePinFilters.includes(pin.type),
-    )
+    const workspaceTypeFilters = activePinFilters
+      .filter(({ filterType }) => filterType === 'workspaceType')
+      .map(({ slug }) => slug)
 
-    setFilteredPins(filteredPins)
+    if (workspaceTypeFilters.length > 0) {
+      const workspaceFilteredList = allPinsInView.filter(
+        ({ creator }) =>
+          creator?.workspaceType &&
+          workspaceTypeFilters.includes(creator.workspaceType),
+      )
+      return setFilteredPins(workspaceFilteredList)
+    }
+
+    const profileTypeFilters = activePinFilters
+      .filter(({ filterType }) => filterType === 'profileType')
+      .map(({ slug }) => slug)
+
+    if (profileTypeFilters.length > 0) {
+      const profileTypeFilteredList = allPinsInView.filter(
+        ({ creator }) =>
+          creator?.profileType &&
+          profileTypeFilters.includes(creator?.profileType),
+      )
+      return setFilteredPins(profileTypeFilteredList)
+    }
+
+    setFilteredPins(allPinsInView)
   }, [activePinFilters, allPinsInView])
 
   const handleLocationFilter = () => {
@@ -100,15 +103,42 @@ export const MapWithList = (props: IProps) => {
     }
   }
 
-  const onFilterChange = (label: string) => {
-    const filter = label.toLowerCase()
+  const onFilterChange = (changedOption: MapFilterOption) => {
     const isFilterPresent = !!activePinFilters.find(
-      (pinFilter) => pinFilter === filter,
+      (pinFilter) => pinFilter.label == changedOption.label,
     )
+
     if (isFilterPresent) {
-      return setActivePinFilters((pins) => pins.filter((pin) => pin !== filter))
+      return setActivePinFilters((filter) =>
+        filter.filter(
+          (existingOption) => existingOption.label !== changedOption.label,
+        ),
+      )
     }
-    return setActivePinFilters((pins) => [...pins, filter])
+
+    const addingWorkspaceTypeFilter =
+      changedOption.filterType === 'workspaceType'
+
+    if (addingWorkspaceTypeFilter) {
+      const existingWorkspaceTypeFilters = activePinFilters.filter(
+        ({ filterType }) => filterType === 'workspaceType',
+      )
+
+      return setActivePinFilters([
+        {
+          filterType: 'profileType',
+          label: 'Workspace',
+          slug: 'workspace',
+        },
+        ...existingWorkspaceTypeFilters,
+        changedOption,
+      ])
+    }
+
+    const existingProfileTypeFilters = activePinFilters.filter(
+      ({ filterType }) => filterType === 'profileType',
+    )
+    return setActivePinFilters([...existingProfileTypeFilters, changedOption])
   }
 
   const isViewportGreaterThanTablet = window.innerWidth > 1024

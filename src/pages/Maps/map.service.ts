@@ -19,11 +19,11 @@ const getMapPins = async (currentUserId?: string) => {
     const response = await fetch(API_URL + '/map-pins')
     const mapPins = await response.json()
 
-    const currentUserPin = mapPins.find(({ _id }) => _id === currentUserId)
+    const currentUserPin = !!mapPins.find(({ _id }) => _id === currentUserId)
 
-    if (currentUserId && currentUserPin.length === 0) {
+    if (currentUserId && !currentUserPin) {
       const userMapPin = await getMapPinByUserId(currentUserId)
-      mapPins.append(userMapPin)
+      userMapPin && mapPins.push(userMapPin)
     }
 
     return _transformCreatorImagesToCND(mapPins)

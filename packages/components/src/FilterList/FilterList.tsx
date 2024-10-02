@@ -95,7 +95,7 @@ export const FilterList = (props: IProps) => {
               data-cy={`MapListFilter${active ? '-active' : ''}`}
               key={index}
               onClick={() => onFilterChange(type)}
-              extraSx={{
+              extrastyles={{
                 backgroundColor: 'offWhite',
                 padding: 1,
                 textAlign: 'center',

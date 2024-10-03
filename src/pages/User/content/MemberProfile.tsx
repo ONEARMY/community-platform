@@ -91,6 +91,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
               howtoCount={docs?.howtos.length || 0}
               researchCount={docs?.research.length || 0}
               usefulCount={user.totalUseful || 0}
+              total_views={user.total_views || 1}
               sx={{ alignSelf: 'stretch' }}
             />
           </Flex>

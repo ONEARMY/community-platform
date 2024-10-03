@@ -302,6 +302,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                       howtoCount={docs?.howtos.length || 0}
                       usefulCount={user.totalUseful || 0}
                       researchCount={docs?.research.length || 0}
+                      total_views={user.total_views || 1}
                     />
                   </Box>
                 </Flex>

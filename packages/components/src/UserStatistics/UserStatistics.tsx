@@ -1,5 +1,6 @@
 import { Box, Card, Flex } from 'theme-ui'
 
+import eyeSVG from '../../assets/icons/eye.svg'
 import HowToCountIcon from '../../assets/icons/icon-how-to.svg'
 import ResearchIcon from '../../assets/icons/icon-research.svg'
 import starActiveSVG from '../../assets/icons/icon-star-active.svg'
@@ -18,6 +19,7 @@ export interface UserStatisticsProps {
   howtoCount: number
   usefulCount: number
   researchCount: number
+  total_views?: number
   sx?: ThemeUIStyleObject | undefined
 }
 
@@ -109,6 +111,12 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               Research:&nbsp;{props.researchCount}
             </Flex>
           </InternalLink>
+        ) : null}
+        {props.total_views ? (
+          <Flex data-testid="profile-views-stat">
+            <ElWithBeforeIcon icon={eyeSVG} />
+            Views:&nbsp;{props.total_views}
+          </Flex>
         ) : null}
       </Flex>
     </Card>

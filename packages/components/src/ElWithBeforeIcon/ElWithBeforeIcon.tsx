@@ -57,6 +57,7 @@ export const ElWithBeforeIcon = ({
 
           width: iconSize,
           height: iconSize,
+          backgroundPosition: 'center',
 
           backgroundRepeat: 'no-repeat',
           backgroundImage: `url("${icon}")`,

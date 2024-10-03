@@ -203,6 +203,7 @@ export interface IUser {
   machineBuilderXp?: IMAchineBuilderXp[] | null
   isExpert?: boolean | null
   isV4Member?: boolean | null
+  total_views?: number
 }
 
 export interface IUserBadges {

@@ -209,6 +209,7 @@ export const users = {
     machineBuilderXp: null,
     _authID: 'vWAbQvq21UbvhGldakIy1x4FpeF2',
     about: null,
+    total_views: 10,
   },
   settings_machine_new: {
     collectedPlasticTypes: null,
@@ -232,6 +233,7 @@ export const users = {
     profileType: null,
     coverImages: [],
     isExpert: null,
+    total_views: 999,
   },
   settings_member_new: {
     isV4Member: null,
@@ -255,6 +257,7 @@ export const users = {
     _modified: '2020-01-07T12:14:30.030Z',
     _created: '2020-01-07T12:14:30.030Z',
     displayName: 'settings_member_new',
+    total_views: 0,
   },
   settings_plastic_new: {
     collectedPlasticTypes: [],
@@ -278,6 +281,7 @@ export const users = {
     profileType: null,
     coverImages: [],
     isExpert: null,
+    total_views: 10000,
   },
   settings_workplace_empty: {
     collectedPlasticTypes: [],
@@ -301,6 +305,7 @@ export const users = {
     profileType: 'workspace',
     coverImages: [],
     isExpert: null,
+    total_views: 12345678,
   },
   settings_workplace_new: {
     openingHours: [],
@@ -357,6 +362,7 @@ export const users = {
       ],
     },
     isContactableByPublic: false,
+    total_views: 101,
   },
   mapview_testing_rejected: {
     openingHours: [],
@@ -382,5 +388,6 @@ export const users = {
     collectedPlasticTypes: null,
     email: 'mapview_testing_rejected@test.com',
     password: 'mapview_testing_rejected@test.com',
+    total_views: 0,
   },
 }

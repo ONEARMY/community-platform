@@ -1,8 +1,8 @@
-import type { IHowto, IQuestion, IResearch } from 'oa-shared'
+import type { IHowto, IQuestion, IResearch, IUserDB } from 'oa-shared'
 import type { DatabaseV2 } from '../databaseV2/DatabaseV2'
 import type { DBEndpoint } from '../databaseV2/endpoints'
 
-type ICollection = Partial<IHowto | IQuestion.Item | IResearch.Item>
+type ICollection = Partial<IHowto | IQuestion.Item | IResearch.Item | IUserDB>
 
 interface IProps {
   collection: DBEndpoint

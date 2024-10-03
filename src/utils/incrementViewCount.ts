@@ -3,16 +3,16 @@ import {
   retrieveSessionStorageArray,
 } from './sessionStorage'
 
-import type { IHowtoDB, IQuestion, IResearch } from 'oa-shared'
+import type { IHowtoDB, IQuestion, IResearch, IUserDB } from 'oa-shared'
 import type { IStores } from 'src/stores/RootStore'
 
-type IDocument = Partial<IHowtoDB | IQuestion.Item | IResearch.Item>
-type IDocumentType = 'howto' | 'question' | 'research'
+type IDocument = Partial<IHowtoDB | IQuestion.Item | IResearch.Item | IUserDB>
+type IDocumentType = 'howto' | 'question' | 'research' | 'user'
 
 interface IProps {
   document: IDocument
   documentType: IDocumentType
-  store: IStores['howtoStore' | 'researchStore' | 'questionStore']
+  store: IStores['howtoStore' | 'researchStore' | 'questionStore' | 'userStore']
 }
 
 export const incrementViewCount = async ({

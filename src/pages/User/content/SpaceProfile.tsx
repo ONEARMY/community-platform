@@ -1,4 +1,5 @@
 import {
+  ElWithBeforeIcon,
   ImageGallery,
   MemberBadge,
   Tab,
@@ -8,7 +9,8 @@ import {
   Username,
   UserStatistics,
 } from 'oa-components'
-import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
+import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
+import eyeSVG from 'src/assets/icons/eye.svg'
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
 import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
@@ -17,6 +19,7 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
@@ -166,6 +169,17 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       ),
   )
 
+  const total_views = user.total_views || 1
+
+  const renderTotalViews = () => (
+    <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+      <Flex data-testid="profile-views-stat">
+        <ElWithBeforeIcon icon={eyeSVG} />
+        Views:&nbsp;{total_views}
+      </Flex>
+    </AuthWrapper>
+  )
+
   return (
     <Card data-cy="SpaceProfile">
       <Box>
@@ -302,7 +316,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                       howtoCount={docs?.howtos.length || 0}
                       usefulCount={user.totalUseful || 0}
                       researchCount={docs?.research.length || 0}
-                      total_views={user.total_views || 1}
+                      total_views={renderTotalViews()}
                     />
                   </Box>
                 </Flex>

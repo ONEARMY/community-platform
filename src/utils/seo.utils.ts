@@ -28,3 +28,47 @@ export const mergeMeta = <T>(leafMetaFn: MetaFunction<T>): MetaFunction<T> => {
     }, leafMeta)
   }
 }
+
+export const generateTags = (
+  title: string,
+  description?: string,
+  imageUrl?: string,
+) => {
+  const tags = [
+    { title: title },
+    {
+      property: 'og:title',
+      content: title,
+    },
+    {
+      name: 'twitter:title',
+      content: title,
+    },
+  ]
+
+  if (description) {
+    tags.push({ name: 'description', content: description })
+
+    tags.push({
+      property: 'og:description',
+      content: description,
+    })
+    tags.push({
+      name: 'twitter:description',
+      content: description,
+    })
+  }
+
+  if (imageUrl) {
+    tags.push({
+      property: 'og:image',
+      content: imageUrl,
+    })
+    tags.push({
+      name: 'twitter:image',
+      content: imageUrl,
+    })
+  }
+
+  return tags
+}

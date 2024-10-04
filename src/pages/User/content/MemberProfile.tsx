@@ -1,5 +1,11 @@
-import { MemberBadge, Username, UserStatistics } from 'oa-components'
+import {
+  ElWithBeforeIcon,
+  MemberBadge,
+  Username,
+  UserStatistics,
+} from 'oa-components'
 import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
+import eyeSVG from 'src/assets/icons/eye.svg'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
@@ -30,6 +36,17 @@ export const MemberProfile = ({ docs, user }: IProps) => {
   const profileImageSrc = userImage?.downloadUrl
     ? cdnImageUrl(userImage.downloadUrl)
     : DefaultMemberImage
+
+  const total_views = user.total_views || 1
+
+  const renderTotalViews = () => (
+    <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+      <Flex data-testid="profile-views-stat">
+        <ElWithBeforeIcon icon={eyeSVG} />
+        Views:&nbsp;{total_views}
+      </Flex>
+    </AuthWrapper>
+  )
 
   return (
     <Flex
@@ -91,8 +108,8 @@ export const MemberProfile = ({ docs, user }: IProps) => {
               howtoCount={docs?.howtos.length || 0}
               researchCount={docs?.research.length || 0}
               usefulCount={user.totalUseful || 0}
-              total_views={user.total_views || 1}
               sx={{ alignSelf: 'stretch' }}
+              total_views={renderTotalViews()}
             />
           </Flex>
           <Flex sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}>

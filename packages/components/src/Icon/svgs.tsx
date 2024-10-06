@@ -1,7 +1,9 @@
 import accountSVG from '../../assets/icons/account.svg'
 import arrowCurvedBottomRightSVG from '../../assets/icons/arrow-curved-bottom-right.svg'
+import chevronDownSVG from '../../assets/icons/chevron-down.svg'
 import chevronLeftSVG from '../../assets/icons/chevron-left.svg'
 import chevronRightSVG from '../../assets/icons/chevron-right.svg'
+import chevronUpSVG from '../../assets/icons/chevron-up.svg'
 import contactSVG from '../../assets/icons/contact.svg'
 import closeSVG from '../../assets/icons/cross-close.svg'
 import deleteSVG from '../../assets/icons/delete.svg'
@@ -56,8 +58,10 @@ export const iconMap = {
   arrowFullUp: <ImageIcon src={arrowFullUpSVG} />,
   account: <ImageIcon src={accountSVG} />,
   bazar: <ImageIcon src={bazarSVG} />,
+  chevronDown: <ImageIcon src={chevronDownSVG} />,
   chevronLeft: <ImageIcon src={chevronLeftSVG} />,
   chevronRight: <ImageIcon src={chevronRightSVG} />,
+  chevronUp: <ImageIcon src={chevronUpSVG} />,
   close: <ImageIcon src={closeSVG} />,
   comment: <ImageIcon src={commentSVG} />,
   contact: <ImageIcon src={contactSVG} />,

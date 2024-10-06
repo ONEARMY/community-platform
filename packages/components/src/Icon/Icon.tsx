@@ -1,8 +1,6 @@
 /** @jsxImportSource theme-ui */
 import styled from '@emotion/styled'
 import { IconContext } from '@react-icons/all-files'
-import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
-import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
 import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
 import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
 import { FaSignal } from '@react-icons/all-files/fa/FaSignal'
@@ -67,10 +65,10 @@ export const glyphs: IGlyphs = {
   comment: iconMap.comment,
   contact: iconMap.contact,
   check: <MdCheck />,
-  'chevron-down': <FaChevronDown />,
+  'chevron-down': iconMap.chevronDown,
   'chevron-left': iconMap.chevronLeft,
   'chevron-right': iconMap.chevronRight,
-  'chevron-up': <FaChevronUp />,
+  'chevron-up': iconMap.chevronUp,
   close: iconMap.close,
   delete: iconMap.delete,
   difficulty: <FaSignal />,
@@ -179,6 +177,9 @@ export const Icon = (props: Props) => {
         '& svg': {
           fontSize: definedSize,
         },
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         ...sx,
       }}
       size={definedSize}

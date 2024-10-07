@@ -47,4 +47,5 @@ jobs:
         id: deploy
         uses: superfly/fly-pr-review-apps@1.2.1
         with:
+          config: fly-preview.toml
           secrets: VITE_SITE_VARIANT=preview VITE_PROJECT_VERSION=${GITHUB_SHA}

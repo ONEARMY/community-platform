@@ -48,4 +48,5 @@ jobs:
         uses: superfly/fly-pr-review-apps@1.2.1
         with:
           config: fly-preview.toml
+          name: community-platform-pr-${{ github.event.number }}
           secrets: VITE_SITE_VARIANT=preview VITE_PROJECT_VERSION=${GITHUB_SHA}

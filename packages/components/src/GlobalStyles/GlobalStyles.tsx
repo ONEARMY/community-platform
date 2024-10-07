@@ -1,13 +1,11 @@
 import { css } from '@emotion/react'
-import { GlobalFonts, preciousPlasticTheme } from 'oa-themes'
-
-const theme = preciousPlasticTheme.styles
+import { commonStyles, GlobalFonts } from 'oa-themes'
 
 export const GlobalStyles = css`
   ${GlobalFonts}
   body {
     font-family: 'Varela Round', Arial, sans-serif;
-    background-color: ${theme.colors.background};
+    background-color: ${commonStyles.colors.background};
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -22,11 +20,11 @@ export const GlobalStyles = css`
   }
 
   .beta-tester-feature {
-    border: 4px dashed ${theme.colors.betaGreen};
+    border: 4px dashed ${commonStyles.colors.betaGreen};
   }
 
   body:has(.beta-tester-feature) .user-beta-icon > span {
-    background-color: ${theme.colors.betaGreen};
+    background-color: ${commonStyles.colors.betaGreen};
   }
 
   /***** Fix for Algolia search Icon *******/

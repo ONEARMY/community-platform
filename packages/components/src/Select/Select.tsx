@@ -1,5 +1,5 @@
 import ReactSelect from 'react-select'
-import { useTheme } from '@emotion/react'
+import { useThemeUI } from 'theme-ui'
 
 import { DropdownIndicator } from './DropdownIndicator'
 import { Option } from './Option'
@@ -29,7 +29,7 @@ export interface Props extends ReactSelectProps {
 }
 
 export const Select = (props: Props) => {
-  const theme: any = useTheme()
+  const { theme } = useThemeUI() as any
 
   const SelectStyles: Partial<StylesConfig> = {
     container: (provided) => ({

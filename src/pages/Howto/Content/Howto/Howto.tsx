@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Navigate, useParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
@@ -26,7 +25,6 @@ type HowtoParams = {
 }
 
 export const Howto = observer(({ howto }: HowtoParams) => {
-  const { slug } = useParams()
   const { howtoStore, userStore, aggregationsStore } = useCommonStores().stores
   const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0)
 
@@ -50,21 +48,6 @@ export const Howto = observer(({ howto }: HowtoParams) => {
       action: hasUserVotedUseful ? 'HowtoUseful' : 'HowtoUsefulRemoved',
       label: howToSlug,
     })
-  }
-
-  if (!howto) {
-    // TODO
-    return (
-      <Navigate
-        to={{
-          pathname: `/how-to/`,
-          search:
-            '?search=' +
-            (slug || '').replace(/-/gi, ' ') +
-            '&source=how-to-not-found',
-        }}
-      />
-    )
   }
 
   const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful

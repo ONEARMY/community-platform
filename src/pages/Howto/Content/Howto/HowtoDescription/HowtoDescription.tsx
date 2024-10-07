@@ -10,6 +10,8 @@ import {
   UsefulStatsButton,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
@@ -107,17 +109,23 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
             </Fragment>
           )}
           <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-            {props.votedUsefulCount !== undefined &&
-              howto.moderation === IModerationStatus.ACCEPTED && (
-                <Box>
-                  <UsefulStatsButton
-                    votedUsefulCount={props.votedUsefulCount}
-                    hasUserVotedUseful={props.hasUserVotedUseful}
-                    isLoggedIn={loggedInUser ? true : false}
-                    onUsefulClick={props.onUsefulClick}
-                  />
-                </Box>
+            <ClientOnly fallback={<></>}>
+              {() => (
+                <>
+                  {props.votedUsefulCount !== undefined &&
+                    howto.moderation === IModerationStatus.ACCEPTED && (
+                      <Box>
+                        <UsefulStatsButton
+                          votedUsefulCount={props.votedUsefulCount}
+                          hasUserVotedUseful={props.hasUserVotedUseful}
+                          isLoggedIn={loggedInUser ? true : false}
+                          onUsefulClick={props.onUsefulClick}
+                        />
+                      </Box>
+                    )}
+                </>
               )}
+            </ClientOnly>
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
               <Link to={'/how-to/' + howto.slug + '/edit'}>

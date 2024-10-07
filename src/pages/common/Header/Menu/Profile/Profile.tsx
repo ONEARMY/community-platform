@@ -40,7 +40,7 @@ const Profile = observer((props: IProps) => {
 
   const user = userStore.user
 
-  if (typeof user === 'undefined' && state.isLoading) {
+  if (!user && state.isLoading) {
     return (
       <Box
         sx={{
@@ -50,75 +50,71 @@ const Profile = observer((props: IProps) => {
     )
   }
 
+  if (!user) {
+    return <ProfileButtons isMobile={props.isMobile} />
+  }
+
+  if (props.isMobile) {
+    return (
+      <Box
+        sx={{
+          borderBottom: 'none',
+          borderColor: 'lightgrey',
+          borderTop: '1px solid',
+          mt: 1,
+        }}
+      >
+        <MenuMobileLink path={'/u/' + user.userName} content="Profile" />
+        {COMMUNITY_PAGES_PROFILE.map((page) => (
+          <MenuMobileLink
+            path={page.path}
+            key={page.path}
+            content={page.title}
+          />
+        ))}
+        <MenuMobileLink
+          path={window.location.pathname}
+          content="Log out"
+          onClick={async () => {
+            await userStore.logout()
+            navigate('/')
+          }}
+        />
+      </Box>
+    )
+  }
+
   return (
-    <>
-      {user ? (
-        props.isMobile ? (
-          <Box
+    <Box
+      data-cy="user-menu"
+      sx={{
+        width: '93px',
+      }}
+    >
+      <Flex onClick={() => toggleProfileModal()} sx={{ ml: 1, height: '100%' }}>
+        {user.userImage?.downloadUrl ? (
+          <Avatar
+            data-cy="header-avatar"
+            loading="lazy"
+            src={cdnImageUrl(user.userImage?.downloadUrl, { width: 40 })}
             sx={{
-              borderBottom: 'none',
-              borderColor: 'lightgrey',
-              borderTop: '1px solid',
-              mt: 1,
+              objectFit: 'cover',
+              width: '40px',
+              height: '40px',
             }}
-          >
-            <MenuMobileLink path={'/u/' + user.userName} content="Profile" />
-            {COMMUNITY_PAGES_PROFILE.map((page) => (
-              <MenuMobileLink
-                path={page.path}
-                key={page.path}
-                content={page.title}
-              />
-            ))}
-            <MenuMobileLink
-              path={window.location.pathname}
-              content={'Log out'}
-              onClick={async () => {
-                await userStore.logout()
-                navigate('/')
-              }}
-            />
-          </Box>
+          />
         ) : (
-          <div
-            data-cy="user-menu"
-            style={{
-              width: '93px',
-            }}
-          >
-            <Flex
-              onClick={() => toggleProfileModal()}
-              ml={1}
-              sx={{ height: '100%' }}
-            >
-              {user.userImage?.downloadUrl ? (
-                <Avatar
-                  data-cy="header-avatar"
-                  loading="lazy"
-                  src={cdnImageUrl(user.userImage?.downloadUrl, { width: 40 })}
-                  sx={{
-                    objectFit: 'cover',
-                    width: '40px',
-                    height: '40px',
-                  }}
-                />
-              ) : (
-                <MemberBadge profileType={user.profileType} />
-              )}
-            </Flex>
-            <Flex>
-              {state.showProfileModal && (
-                <Foco onClickOutside={() => toggleProfileModal()}>
-                  <ProfileModal username={user.userName} />
-                </Foco>
-              )}
-            </Flex>
-          </div>
-        )
-      ) : (
-        <ProfileButtons isMobile={props.isMobile} />
-      )}
-    </>
+          <MemberBadge profileType={user.profileType} />
+        )}
+      </Flex>
+      <Flex>
+        {state.showProfileModal && (
+          <Foco onClickOutside={() => toggleProfileModal()}>
+            <ProfileModal username={user.userName} />
+          </Foco>
+        )}
+      </Flex>
+    </Box>
   )
 })
 

@@ -1,4 +1,4 @@
-import { json } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { Howto } from 'src/pages/Howto/Content/Howto/Howto'
 import { howtoService } from 'src/pages/Howto/howto.service'
@@ -10,6 +10,12 @@ import type { IHowtoDB } from 'oa-shared'
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const howto = await howtoService.getBySlug(params.slug as string)
+
+  if (!howto) {
+    const searchSlug = (params.slug || '').replace(/-/gi, ' ')
+
+    return redirect(`/how-to?search=${searchSlug}&source=how-to-not-found`)
+  }
 
   return json({ howto })
 }

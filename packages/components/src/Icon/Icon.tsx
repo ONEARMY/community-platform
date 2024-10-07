@@ -1,34 +1,38 @@
 /** @jsxImportSource theme-ui */
+import { IconContext } from 'react-icons'
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaCloudUploadAlt,
+  FaFacebookF,
+  FaFilePdf,
+  FaFilter,
+  FaInstagram,
+  FaSignal,
+  FaSlack,
+} from 'react-icons/fa'
+import { GoLinkExternal } from 'react-icons/go'
+import {
+  MdAccessTime,
+  MdAccountCircle,
+  MdAdd,
+  MdArrowBack,
+  MdArrowForward,
+  MdCheck,
+  MdEdit,
+  MdFileDownload,
+  MdImage,
+  MdKeyboardArrowDown,
+  MdLocationOn,
+  MdLock,
+  MdMail,
+  MdMailOutline,
+  MdMenu,
+  MdMoreVert,
+  MdNotifications,
+  MdTurnedIn,
+} from 'react-icons/md'
 import styled from '@emotion/styled'
-import { IconContext } from '@react-icons/all-files'
-import { FaChevronDown } from '@react-icons/all-files/fa/FaChevronDown'
-import { FaChevronUp } from '@react-icons/all-files/fa/FaChevronUp'
-import { FaFacebookF } from '@react-icons/all-files/fa/FaFacebookF'
-import { FaInstagram } from '@react-icons/all-files/fa/FaInstagram'
-import { FaSignal } from '@react-icons/all-files/fa/FaSignal'
-import { FaSlack } from '@react-icons/all-files/fa/FaSlack'
-import { GoCloudUpload } from '@react-icons/all-files/go/GoCloudUpload'
-import { GoFilePdf } from '@react-icons/all-files/go/GoFilePdf'
-import { GoLinkExternal } from '@react-icons/all-files/go/GoLinkExternal'
-import { MdAccessTime } from '@react-icons/all-files/md/MdAccessTime'
-import { MdAccountCircle } from '@react-icons/all-files/md/MdAccountCircle'
-import { MdAdd } from '@react-icons/all-files/md/MdAdd'
-import { MdArrowBack } from '@react-icons/all-files/md/MdArrowBack'
-import { MdArrowForward } from '@react-icons/all-files/md/MdArrowForward'
-import { MdCheck } from '@react-icons/all-files/md/MdCheck'
-import { MdEdit } from '@react-icons/all-files/md/MdEdit'
-import { MdFileDownload } from '@react-icons/all-files/md/MdFileDownload'
-import { MdImage } from '@react-icons/all-files/md/MdImage'
-import { MdKeyboardArrowDown } from '@react-icons/all-files/md/MdKeyboardArrowDown'
-import { MdLocationOn } from '@react-icons/all-files/md/MdLocationOn'
-import { MdLock } from '@react-icons/all-files/md/MdLock'
-import { MdMail } from '@react-icons/all-files/md/MdMail'
-import { MdMailOutline } from '@react-icons/all-files/md/MdMailOutline'
-import { MdMenu } from '@react-icons/all-files/md/MdMenu'
-import { MdMoreVert } from '@react-icons/all-files/md/MdMoreVert'
-import { MdNotifications } from '@react-icons/all-files/md/MdNotifications'
-import { MdTurnedIn } from '@react-icons/all-files/md/MdTurnedIn'
-import { RiFilter2Fill } from '@react-icons/all-files/ri/RiFilter2Fill'
 import { space, verticalAlign } from 'styled-system'
 
 import { DownloadIcon } from './DownloadIcon'
@@ -84,7 +88,7 @@ export const glyphs: IGlyphs = {
   'external-link': <GoLinkExternal />,
   'external-url': <ExternalUrl />,
   facebook: <FaFacebookF />,
-  filter: <RiFilter2Fill />,
+  filter: <FaFilter />,
   'flag-unknown': iconMap.flagUnknown,
   hide: iconMap.hide,
   hyperlink: iconMap.hyperlink,
@@ -101,7 +105,7 @@ export const glyphs: IGlyphs = {
   'more-vert': <MdMoreVert />,
   notifications: <MdNotifications />,
   patreon: iconMap.patreon,
-  pdf: <GoFilePdf />,
+  pdf: <FaFilePdf />,
   plastic: iconMap.plastic,
   profile: iconMap.profile,
   revenue: iconMap.revenue,
@@ -117,7 +121,7 @@ export const glyphs: IGlyphs = {
   supporter: iconMap.supporter,
   show: iconMap.show,
   update: iconMap.update,
-  upload: <GoCloudUpload />,
+  upload: <FaCloudUploadAlt />,
   useful: iconMap.useful,
   verified: iconMap.verified,
   view: iconMap.view,
@@ -157,7 +161,7 @@ const Glyph = ({ glyph }: IGlyphProps) => {
 }
 
 export const Icon = (props: Props) => {
-  const { glyph, size, marginRight, sx } = props
+  const { glyph, size, sx } = props
 
   const isSizeNumeric = !isNaN(size as any)
 
@@ -182,7 +186,6 @@ export const Icon = (props: Props) => {
         ...sx,
       }}
       size={definedSize}
-      style={{ marginRight }}
     >
       <IconContext.Provider
         value={{

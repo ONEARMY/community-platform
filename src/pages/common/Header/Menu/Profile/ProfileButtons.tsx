@@ -33,7 +33,7 @@ const ProfileButtons = (props: IProps) => {
           }}
         >
           <ProfileButtonItem
-            link={'/sign-in'}
+            link="/sign-in"
             text="Login"
             variant="secondary"
             sx={{
@@ -61,7 +61,7 @@ const ProfileButtons = (props: IProps) => {
   return (
     <>
       <ProfileButtonItem
-        link={'/sign-in'}
+        link="/sign-in"
         text="Login"
         variant="secondary"
         sx={{
@@ -71,7 +71,7 @@ const ProfileButtons = (props: IProps) => {
         }}
       />
       <ProfileButtonItem
-        link={'/sign-up'}
+        link="/sign-up"
         text="Join"
         variant="outline"
         sx={{ fontSize: 2 }}

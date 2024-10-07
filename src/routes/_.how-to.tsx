@@ -9,7 +9,7 @@ export async function loader() {
 // This is a Layout file, it will render for all howto routes
 export default function Index() {
   return (
-    <Main style={{ flex: 1 }}>
+    <Main sx={{ flex: 1 }}>
       <Outlet />
     </Main>
   )

@@ -1,6 +1,5 @@
-import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Box } from 'theme-ui'
+import { Box, useThemeUI } from 'theme-ui'
 
 import WhiteBubble0 from '../../assets/images/white-bubble_0.svg'
 import WhiteBubble1 from '../../assets/images/white-bubble_1.svg'
@@ -10,7 +9,7 @@ import WhiteBubble3 from '../../assets/images/white-bubble_3.svg'
 import type { BoxProps } from 'theme-ui'
 
 export const MoreContainer = (props: BoxProps) => {
-  const theme = useTheme() as any
+  const { theme } = useThemeUI() as any
   const MoreModalContainer = styled(Box)`
     position: relative;
     max-width: 780px;

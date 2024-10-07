@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Form } from 'react-final-form'
 import { ARRAY_ERROR } from 'final-form'
 import arrayMutators from 'final-form-arrays'
@@ -12,6 +12,7 @@ import { isModuleSupported, MODULE } from 'src/modules'
 import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
+import { EnvironmentContext } from '../common/EnvironmentContext'
 import { CollectionSection } from './content/sections/Collection.section'
 import { ExpertiseSection } from './content/sections/Expertise.section'
 import { FocusSection } from './content/sections/Focus.section'
@@ -27,6 +28,7 @@ import type { IUser } from 'oa-shared'
 import type { IFormNotification } from './content/SettingsFormNotifications'
 
 export const SettingsPageUserProfile = () => {
+  const env = useContext(EnvironmentContext)
   const [notification, setNotification] = useState<
     IFormNotification | undefined
   >(undefined)
@@ -149,7 +151,10 @@ export const SettingsPageUserProfile = () => {
 
             <form id={formId} onSubmit={handleSubmit}>
               <Flex sx={{ flexDirection: 'column', gap: [4, 6] }}>
-                {isModuleSupported(MODULE.MAP) && <FocusSection />}
+                {isModuleSupported(
+                  env?.VITE_SUPPORTED_MODULES || '',
+                  MODULE.MAP,
+                ) && <FocusSection />}
 
                 {values.profileType === ProfileTypeList.WORKSPACE && (
                   <WorkspaceSection />

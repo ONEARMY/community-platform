@@ -10,7 +10,9 @@ describe('getSupportedModules', () => {
 
   it('returns a default set of modules', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = ''
-    expect(getSupportedModules()).toStrictEqual([
+    expect(
+      getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES),
+    ).toStrictEqual([
       MODULE.CORE,
       MODULE.HOWTO,
       MODULE.MAP,
@@ -23,32 +25,38 @@ describe('getSupportedModules', () => {
 
   it('loads an additional module based on env configuration', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = ` ${MODULE.HOWTO} `
-    expect(getSupportedModules()).toStrictEqual([MODULE.CORE, MODULE.HOWTO])
+    expect(
+      getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES),
+    ).toStrictEqual([MODULE.CORE, MODULE.HOWTO])
   })
 
   it('loads multiple modules based on env configuration', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = ` ${MODULE.HOWTO} `
-    expect(getSupportedModules()).toStrictEqual([MODULE.CORE, MODULE.HOWTO])
+    expect(
+      getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES),
+    ).toStrictEqual([MODULE.CORE, MODULE.HOWTO])
   })
 
   it('ignores a malformed module definitions', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = `fake module,${MODULE.HOWTO},malicious `
-    expect(getSupportedModules()).toStrictEqual([MODULE.CORE, MODULE.HOWTO])
+    expect(
+      getSupportedModules(import.meta.env.VITE_SUPPORTED_MODULES),
+    ).toStrictEqual([MODULE.CORE, MODULE.HOWTO])
   })
 })
 
 describe('isModuleSupported', () => {
   it('returns true for default supported module', () => {
-    expect(isModuleSupported(MODULE.CORE)).toBe(true)
+    expect(isModuleSupported('', MODULE.CORE)).toBe(true)
   })
 
   it('returns true for module enabled via env', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = `${MODULE.RESEARCH}`
-    expect(isModuleSupported(MODULE.RESEARCH)).toBe(true)
+    expect(isModuleSupported('', MODULE.RESEARCH)).toBe(true)
   })
 
   it('returns false for unsupported module', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = `${MODULE.HOWTO}`
-    expect(isModuleSupported(MODULE.RESEARCH)).toBe(false)
+    expect(isModuleSupported('', MODULE.RESEARCH)).toBe(false)
   })
 })

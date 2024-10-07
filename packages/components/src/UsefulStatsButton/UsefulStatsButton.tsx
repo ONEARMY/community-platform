@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { useTheme } from '@emotion/react'
 import { useNavigate } from '@remix-run/react'
-import { Text } from 'theme-ui'
+import { Text, useThemeUI } from 'theme-ui'
 
 import { Button } from '../Button/Button'
 import { Tooltip } from '../Tooltip/Tooltip'
@@ -17,7 +16,7 @@ export interface IProps {
 }
 
 export const UsefulStatsButton = (props: IProps) => {
-  const theme: any = useTheme()
+  const { theme } = useThemeUI() as any
   const navigate = useNavigate()
 
   const [disabled, setDisabled] = useState<boolean>()

@@ -122,4 +122,5 @@ const isEmpty = (props: UserStatisticsProps) =>
   !props.isVerified &&
   !props.isSupporter &&
   !props.usefulCount &&
-  !props.howtoCount
+  !props.howtoCount &&
+  !props.total_views

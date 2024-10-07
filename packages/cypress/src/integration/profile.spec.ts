@@ -7,11 +7,13 @@ import { MOCK_DATA } from '../data'
 import { UserMenuItem } from '../support/commandsUi'
 import { setIsPreciousPlastic } from '../utils/TestUtils'
 
-const { admin, subscriber } = MOCK_DATA.users
+const { admin, profile_views, profile_no_views, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
 const machine = MOCK_DATA.users.settings_machine_new
 const userProfiletype = MOCK_DATA.users.settings_workplace_new
 const workspaceEmpty = MOCK_DATA.users.settings_workplace_empty
+
+const betaTester = MOCK_DATA.users['beta-tester']
 
 describe('[Profile]', () => {
   beforeEach(() => {
@@ -35,7 +37,10 @@ describe('[Profile]', () => {
       cy.get('[data-testid=howto-stat]').contains('1')
       cy.get('[data-testid=research-stat]').contains('1')
 
-      cy.step("Can't see contact tab for workspaces")
+      cy.step('Cannot see profile views')
+      cy.get('[data-testid=profile-views-stat]').should('not.exist')
+
+      cy.step('Cannot see contact tab for workspaces')
       cy.visit(`/u/${machine.userName}`)
       cy.contains('[data-cy=contact-tab]').should('not.exist')
     })
@@ -128,6 +133,12 @@ describe('[Profile]', () => {
       cy.get('[data-cy=ContribTab]').should('not.exist')
       cy.get('[data-cy=ImpactTab]').should('not.exist')
     })
+
+    it('[Cannot see profile views]', () => {
+      cy.login(subscriber.email, subscriber.password)
+      cy.visit(`/u/${profile_views.userName}`)
+      cy.get('[data-testid=profile-views-stat]').should('not.exist')
+    })
   })
 
   describe('[By User with workspace profile]', () => {
@@ -141,5 +152,22 @@ describe('[Profile]', () => {
       cy.get('[data-cy=MemberProfile]').should('not.exist')
       cy.get('[data-cy=SpaceProfile]').should('be.visible')
     })
+  })
+})
+
+describe('[By Beta Tester]', () => {
+  it('[Displays view count for profile with views]', () => {
+    cy.login(betaTester.email, betaTester.password)
+    cy.visit(`/u/${profile_views.userName}`)
+    cy.get('[data-testid=profile-views-stat]').should(
+      'contain.text',
+      profile_views.total_views,
+    )
+  })
+
+  it('[Displays view count for profile with first view]', () => {
+    cy.login(betaTester.email, betaTester.password)
+    cy.visit(`/u/${profile_no_views.userName}`)
+    cy.get('[data-testid=profile-views-stat]').contains('1')
   })
 })

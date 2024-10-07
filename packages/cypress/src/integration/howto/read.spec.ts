@@ -103,7 +103,7 @@ describe('[How To]', () => {
         cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', howto.title)
 
         cy.step('Download file button should redirect to sign in')
-        cy.get('div[data-tip="Login to download"]')
+        cy.get('div[data-tooltip-content="Login to download"]')
           .first()
           .click()
           .url()

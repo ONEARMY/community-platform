@@ -35,7 +35,8 @@ export const UsefulStatsButton = (props: IProps) => {
     <>
       <Button
         type="button"
-        data-tip={props.isLoggedIn ? '' : 'Login to add your vote'}
+        data-tooltip-id="login-vote"
+        data-tooltip-content={props.isLoggedIn ? '' : 'Login to add your vote'}
         data-cy={props.isLoggedIn ? 'vote-useful' : 'vote-useful-redirect'}
         onClick={() =>
           props.isLoggedIn ? handleUsefulClick() : navigate('/sign-in')
@@ -72,7 +73,7 @@ export const UsefulStatsButton = (props: IProps) => {
           {props.hasUserVotedUseful ? 'Marked as useful' : 'Mark as useful'}
         </Text>
       </Button>
-      <Tooltip />
+      <Tooltip id="login-vote" />
     </>
   )
 }

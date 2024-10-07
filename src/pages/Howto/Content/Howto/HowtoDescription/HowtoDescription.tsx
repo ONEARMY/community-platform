@@ -94,19 +94,17 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
         }}
       >
         <Flex
-          px={4}
-          py={4}
           sx={{
+            px: 4,
+            py: 4,
             flexDirection: 'column',
             width: ['100%', '100%', `${(1 / 2) * 100}%`],
           }}
         >
           {howto._deleted && (
-            <Fragment>
-              <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
-                * Marked for deletion
-              </Text>
-            </Fragment>
+            <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
+              * Marked for deletion
+            </Text>
           )}
           <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
             <ClientOnly fallback={<></>}>
@@ -230,9 +228,10 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               {howto.difficulty_level}
             </Flex>
           </Flex>
-          <Flex mt={4}>
-            <TagList tags={howto.tags} />
-          </Flex>
+          <ClientOnly fallback={<></>}>
+            {/* TODO: remove ClientOnly when we have a Tags API which we can on the loader - need it now because tags only load client-side which causes a html mismatch error */}
+            {() => <TagList tags={howto.tags} />}
+          </ClientOnly>
           <HowtoDownloads howto={howto} loggedInUser={loggedInUser} />
         </Flex>
         <Box

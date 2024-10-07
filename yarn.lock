@@ -4690,7 +4690,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/dom@npm:^1.0.0, @floating-ui/dom@npm:^1.0.1":
+"@floating-ui/dom@npm:^1.0.0, @floating-ui/dom@npm:^1.0.1, @floating-ui/dom@npm:^1.6.1":
   version: 1.6.11
   resolution: "@floating-ui/dom@npm:1.6.11"
   dependencies:
@@ -13528,7 +13528,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.6":
+"classnames@npm:^2.2.6, classnames@npm:^2.3.0":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: da424a8a6f3a96a2e87d01a432ba19315503294ac7e025f9fece656db6b6a0f7b5003bb1fbb51cbb0d9624d964f1b9bb35a51c73af9b2434c7b292c42231c1e5
@@ -24461,7 +24461,7 @@ __metadata:
     react-router: 6.24.1
     react-router-dom: ^6.26.0
     react-select: ^5.8.1
-    react-tooltip: ^4.2.21
+    react-tooltip: ^5.28.0
     storybook: ^7.6.0
     styled-system: ^5.1.5
     theme-ui: ^0.16.2
@@ -27386,16 +27386,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-tooltip@npm:^4.2.21":
-  version: 4.5.1
-  resolution: "react-tooltip@npm:4.5.1"
+"react-tooltip@npm:^5.28.0":
+  version: 5.28.0
+  resolution: "react-tooltip@npm:5.28.0"
   dependencies:
-    prop-types: ^15.8.1
-    uuid: ^7.0.3
+    "@floating-ui/dom": ^1.6.1
+    classnames: ^2.3.0
   peerDependencies:
-    react: ">=16.0.0"
-    react-dom: ">=16.0.0"
-  checksum: bb2065b6aec5d860627e1459cd193889a236093c484f32a021b7b3c8c36c2144d1077932b5d74bc0262f1e24a3e0fd8251df2107c348a913a9b236467ed2185d
+    react: ">=16.14.0"
+    react-dom: ">=16.14.0"
+  checksum: 4d1efae0fbd39ec7f1414bb325582cca2f7541a8d464b61bf3a7c5e119821868aa2d47c28509e7ea3cca844a9655feb56fc466def0edaa8db07ce427146ef3b0
   languageName: node
   linkType: hard
 
@@ -31404,15 +31404,6 @@ __metadata:
   bin:
     uuid: ./bin/uuid
   checksum: 58de2feed61c59060b40f8203c0e4ed7fd6f99d42534a499f1741218a1dd0c129f4aa1de797bcf822c8ea5da7e4137aa3673431a96dae729047f7aca7b27866f
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^7.0.3":
-  version: 7.0.3
-  resolution: "uuid@npm:7.0.3"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: f5b7b5cc28accac68d5c083fd51cca64896639ebd4cca88c6cfb363801aaa83aa439c86dfc8446ea250a7a98d17afd2ad9e88d9d4958c79a412eccb93bae29de
   languageName: node
   linkType: hard
 

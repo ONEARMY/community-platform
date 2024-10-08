@@ -168,6 +168,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/koeppel"><img src="https://avatars.githubusercontent.com/u/12177323?v=4?s=60" width="60px;" alt="Janik Köppel"/><br /><sub><b>Janik Köppel</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=koeppel" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Shalankwa"><img src="https://avatars.githubusercontent.com/u/31330598?v=4?s=60" width="60px;" alt="Jonathan Goodman"/><br /><sub><b>Jonathan Goodman</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=Shalankwa" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LahuenGR"><img src="https://avatars.githubusercontent.com/u/101137877?v=4?s=60" width="60px;" alt="LahuenGR"/><br /><sub><b>LahuenGR</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=LahuenGR" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/JoseAConcepcion"><img src="https://avatars.githubusercontent.com/u/99701565?v=4?s=60" width="60px;" alt="José Antonio Concepción"/><br /><sub><b>José Antonio Concepción</b></sub></a><br /><a href="https://github.com/ONEARMY/community-platform/commits?author=JoseAConcepcion" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

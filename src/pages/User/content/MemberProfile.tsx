@@ -1,4 +1,4 @@
-import { MemberBadge, Username, UserStatistics } from 'oa-components'
+import { Icon, MemberBadge, Username, UserStatistics } from 'oa-components'
 import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
 import DefaultMemberImage from 'src/assets/images/default_member.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
@@ -30,6 +30,18 @@ export const MemberProfile = ({ docs, user }: IProps) => {
   const profileImageSrc = userImage?.downloadUrl
     ? cdnImageUrl(userImage.downloadUrl)
     : DefaultMemberImage
+
+  const total_views = user.total_views
+
+  const totalViews = (total_views: number | undefined) =>
+    total_views ? (
+      <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
+        <Flex data-testid="profile-views-stat">
+          <Icon glyph={'view'} size={22} />
+          <Box ml={1}>Views:&nbsp;{total_views}</Box>
+        </Flex>
+      </AuthWrapper>
+    ) : undefined
 
   return (
     <Flex
@@ -92,6 +104,7 @@ export const MemberProfile = ({ docs, user }: IProps) => {
               researchCount={docs?.research.length || 0}
               usefulCount={user.totalUseful || 0}
               sx={{ alignSelf: 'stretch' }}
+              total_views={totalViews(total_views)}
             />
           </Flex>
           <Flex sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}>

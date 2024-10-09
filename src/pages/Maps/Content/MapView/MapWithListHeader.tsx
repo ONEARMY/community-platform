@@ -93,7 +93,6 @@ export const MapWithListHeader = (props: IProps) => {
           <Button
             data-cy="MapFilterList-OpenButton"
             icon="sliders"
-            showIconOnly={isMobile ? true : false}
             onClick={toggleFilterModal}
             variant={hasFiltersSelected ? 'primary' : 'outline'}
           >

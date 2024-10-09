@@ -38,8 +38,12 @@ export const QuestionListItem = ({ question, query }: IProps) => {
       as="li"
       data-cy="question-list-item"
       data-id={question._id}
-      mb={3}
-      style={{ position: 'relative' }}
+      sx={{
+        position: 'relative',
+        border: 'none',
+        borderBottom: '2px solid #cccccc',
+        borderRadius: 0,
+      }}
     >
       <Flex
         sx={{
@@ -66,7 +70,7 @@ export const QuestionListItem = ({ question, query }: IProps) => {
               sx={{
                 color: 'black',
                 fontSize: [3, 3, 4],
-                marginBottom: 1,
+                marginBottom: 0.5,
               }}
             >
               <InternalLink

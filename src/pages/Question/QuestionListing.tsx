@@ -125,7 +125,16 @@ export const QuestionListing = () => {
       )}
 
       {questions && questions.length > 0 && (
-        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        <ul
+          style={{
+            listStyle: 'none',
+            padding: 0,
+            margin: 0,
+            marginBottom: 5,
+            border: '2px solid black',
+            borderRadius: 5,
+          }}
+        >
           {questions.map((question, index) => (
             <QuestionListItem key={index} question={question} query={q} />
           ))}

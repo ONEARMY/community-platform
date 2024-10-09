@@ -360,6 +360,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out  {
 	font-size: 30px;
 	padding: 12px;
+	padding-top: 9px;
 }
 
 .leaflet-control-zoom.leaflet-bar.leaflet-control{

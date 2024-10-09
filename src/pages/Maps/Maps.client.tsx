@@ -57,11 +57,11 @@ const MapsPage = observer(() => {
         const pins = await mapPinService.getMapPins(user?._id)
         setMapPins(pins)
         setNotification('')
-      } catch(error) {
+      } catch (error) {
         setNotification(error)
       }
     }
-    
+
     fetchMapPins()
   }, [])
 

@@ -33,7 +33,7 @@ export const updateMapPins = async (prevUser: IUserDB, user: IUserDB) => {
     displayName,
     isContactableByPublic,
     profileType,
-    subType,
+    workspaceType,
     userImage,
     location,
   } = user
@@ -50,7 +50,7 @@ export const updateMapPins = async (prevUser: IUserDB, user: IUserDB) => {
     displayName,
     isContactableByPublic,
     profileType,
-    subType,
+    workspaceType,
     userImage: creatorImage,
   }
 

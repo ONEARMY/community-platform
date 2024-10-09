@@ -51,10 +51,19 @@ const MapsPage = observer(() => {
   }, [])
 
   useEffect(() => {
-    if (mapPins.length === 0) {
-      fetchMapPins()
+    const fetchMapPins = async () => {
+      setNotification('Loading...')
+      try {
+        const pins = await mapPinService.getMapPins(user?._id)
+        setMapPins(pins)
+        setNotification('')
+      } catch(error) {
+        setNotification(error)
+      }
     }
-  }, [mapPins])
+    
+    fetchMapPins()
+  }, [])
 
   useEffect(() => {
     const pinId = location.hash.slice(1)
@@ -89,13 +98,6 @@ const MapsPage = observer(() => {
     } catch (error) {
       logger.error(error)
     }
-  }
-
-  const fetchMapPins = async () => {
-    setNotification('Loading...')
-    const pins = await mapPinService.getMapPins(user?._id)
-    setMapPins(pins)
-    setNotification('')
   }
 
   const availableFilters = useMemo(() => {

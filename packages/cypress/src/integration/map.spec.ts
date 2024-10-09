@@ -30,7 +30,7 @@ describe('[Map]', () => {
     cy.get('[data-cy="list-results"]').contains('52 results in view')
 
     cy.step('Map filters can be used')
-    cy.get('[data-cy=FilterList]')
+    cy.get('[data-cy=MapFilterProfileTypeCardList]')
       .first()
       .children()
       .should('have.length', profileTypesCount)
@@ -39,6 +39,12 @@ describe('[Map]', () => {
     // cy.get('[data-cy="list-results"]').contains('6 results in view')
     cy.get('[data-cy=MapListFilter-active]').first().click()
     cy.get('[data-cy="list-results"]').contains('52 results in view')
+
+    cy.step('Users can select filters')
+    cy.get('[data-cy=MapFilterList]').should('not.exist')
+    cy.get('[data-cy=MapFilterList-OpenButton]').first().click()
+    cy.get('[data-cy=MapFilterList]').should('be.visible')
+    cy.get('[data-cy=MapFilterList-CloseButton]').first().click()
 
     cy.step('As the user moves in the list updates')
     for (let i = 0; i < 9; i++) {
@@ -92,7 +98,10 @@ describe('[Map]', () => {
         .should('have.attr', 'href')
         .and('include', `/u/${userId}`)
     })
-    cy.get('[data-cy=FilterList-ButtonRight]').last().click().click()
+    cy.get('[data-cy=MapFilterProfileTypeCardList-ButtonRight]')
+      .last()
+      .click()
+      .click()
     cy.get('[data-cy=MapListFilter]').last().click()
 
     cy.step('Mobile list view can be hidden')

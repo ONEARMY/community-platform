@@ -1,5 +1,7 @@
 const userId = 'davehakkens'
 const profileTypesCount = 5
+const urlLondon =
+  'https://nominatim.openstreetmap.org/search?format=json&q=london&accept-language=en'
 
 describe('[Map]', () => {
   it('[Shows expected pins]', () => {
@@ -102,11 +104,14 @@ describe('[Map]', () => {
     cy.step('The whole map can be searched')
     cy.get('[data-cy="ShowMobileListButton"]').click()
     cy.get('[data-cy=osm-geocoding]').last().click().type('london')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(2000) // Needed for location response
+    cy.intercept(urlLondon).as('londonSearch')
+    cy.wait('@londonSearch')
     cy.contains('London, Greater London, England, United Kingdom').click()
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(2000) // Needed for animation
-    cy.get('.icon-cluster-text').contains('3')
+
+    cy.get('.icon-cluster-many')
+      .should('be.visible')
+      .within(() => {
+        cy.get('.icon-cluster-text').should('have.text', '3').and('be.visible')
+      })
   })
 })

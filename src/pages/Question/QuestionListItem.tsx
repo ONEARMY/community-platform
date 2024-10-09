@@ -55,7 +55,8 @@ export const QuestionListItem = ({ question, query }: IProps) => {
           sx={{
             flexDirection: 'column',
             gap: 1,
-            padding: 3,
+            paddingX: 3,
+            paddingY: 2,
           }}
         >
           <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>

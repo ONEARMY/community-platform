@@ -133,6 +133,7 @@ export const QuestionListing = () => {
             marginBottom: 5,
             border: '2px solid black',
             borderRadius: 5,
+            overflowX:"hidden",
           }}
         >
           {questions.map((question, index) => (

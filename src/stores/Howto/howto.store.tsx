@@ -211,7 +211,9 @@ export class HowtoStore extends ModuleStore {
   }
 
   // upload a new or update an existing how-to
-  public async uploadHowTo(values: IHowtoFormInput | IHowtoDB) {
+  public async uploadHowTo(
+    values: IHowtoFormInput | IHowtoDB,
+  ): Promise<IHowtoDB | null> {
     logger.debug('uploading howto', { values })
     this.updateUploadStatus('Start')
     // create a reference either to the existing document (if editing) or a new document if creating
@@ -224,6 +226,8 @@ export class HowtoStore extends ModuleStore {
     logger.debug('uploadHowto.existingDoc', { existingDoc })
 
     const user = this.activeUser as IUser
+
+    let howto: IHowtoDB | null = null
     try {
       // upload any pending images, avoid trying to re-upload images previously saved
       // if cover already uploaded stored as object not array
@@ -265,7 +269,7 @@ export class HowtoStore extends ModuleStore {
       const keywords = getKeywords(values.title + ' ' + values.description)
       keywords.push(_createdBy)
 
-      const howTo: IHowto = {
+      const howToData: IHowto = {
         ...(existingDoc || {}),
         _id,
         _createdBy,
@@ -292,9 +296,9 @@ export class HowtoStore extends ModuleStore {
         ...(time ? { time } : {}),
       }
 
-      logger.debug('populating database', howTo)
+      logger.debug('populating database', howToData)
       // set the database document
-      await this.updateHowtoItem(howTo, true)
+      howto = await this.updateHowtoItem(howToData, true)
       this.updateUploadStatus('Database')
       logger.debug('post added')
       // complete
@@ -303,6 +307,8 @@ export class HowtoStore extends ModuleStore {
       logger.error('error', error)
       throw new Error(error.message)
     }
+
+    return howto
   }
 
   private async addCommentNotification(howto: IHowto) {

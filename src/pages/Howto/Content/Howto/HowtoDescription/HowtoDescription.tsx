@@ -56,13 +56,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       trackEvent({
         category: 'How-To',
         action: 'Deleted',
-        label: stores.howtoStore.activeHowto?.title,
+        label: howto.title,
       })
       logger.debug(
         {
           category: 'How-To',
           action: 'Deleted',
-          label: stores.howtoStore.activeHowto?.title,
+          label: howto.title,
         },
         'How-to marked for deletion',
       )

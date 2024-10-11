@@ -52,11 +52,21 @@ describe('isModuleSupported', () => {
 
   it('returns true for module enabled via env', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = `${MODULE.RESEARCH}`
-    expect(isModuleSupported('', MODULE.RESEARCH)).toBe(true)
+    expect(
+      isModuleSupported(
+        import.meta.env.VITE_SUPPORTED_MODULES,
+        MODULE.RESEARCH,
+      ),
+    ).toBe(true)
   })
 
   it('returns false for unsupported module', () => {
     import.meta.env.VITE_SUPPORTED_MODULES = `${MODULE.HOWTO}`
-    expect(isModuleSupported('', MODULE.RESEARCH)).toBe(false)
+    expect(
+      isModuleSupported(
+        import.meta.env.VITE_SUPPORTED_MODULES,
+        MODULE.RESEARCH,
+      ),
+    ).toBe(false)
   })
 })

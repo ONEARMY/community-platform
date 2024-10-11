@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react'
 import {
   ArticleCallToAction,
@@ -32,12 +32,26 @@ type HowtoParams = {
 export const Howto = observer(({ howto }: HowtoParams) => {
   const { howtoStore, userStore, aggregationsStore } = useCommonStores().stores
   const [totalCommentsCount, setTotalCommentsCount] = useState<number>(0)
-
+  const [voted, setVoted] = useState<boolean>(false)
+  const [usefulCount, setUsefulCount] = useState<number>(
+    howto.votedUsefulBy?.length || 0,
+  )
   const loggedInUser = userStore.activeUser
+  const isVerified = aggregationsStore.isVerified(howto._createdBy)
+
+  useEffect(() => {
+    // This could be improved if we can load the user profile server-side
+    if (
+      howtoStore.activeUser &&
+      howto.votedUsefulBy?.includes(howtoStore.activeUser._id)
+    ) {
+      setVoted(true)
+    }
+  }, [howtoStore.activeUser])
 
   const onUsefulClick = async (
-    howtoId: string,
     howToSlug: string,
+    vote: 'add' | 'delete',
     eventCategory: string,
   ) => {
     const loggedInUser = howtoStore.activeUser
@@ -45,18 +59,19 @@ export const Howto = observer(({ howto }: HowtoParams) => {
       return
     }
 
-    await howtoStore.toggleUsefulByUser(howtoId, loggedInUser?.userName)
-    const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
+    await howtoStore.toggleUsefulByUser(howto, loggedInUser?.userName)
+    setVoted((prev) => !prev)
+
+    setUsefulCount((prev) => {
+      return vote === 'add' ? prev + 1 : prev - 1
+    })
 
     trackEvent({
       category: eventCategory,
-      action: hasUserVotedUseful ? 'HowtoUseful' : 'HowtoUsefulRemoved',
+      action: vote === 'add' ? 'HowtoUseful' : 'HowtoUsefulRemoved',
       label: howToSlug,
     })
   }
-
-  const hasUserVotedUseful = howtoStore.userVotedActiveHowToUseful
-  const isVerified = aggregationsStore.isVerified(howto._createdBy)
 
   return (
     <>
@@ -67,10 +82,14 @@ export const Howto = observer(({ howto }: HowtoParams) => {
         needsModeration={howtoStore.needsModeration(howto)}
         loggedInUser={loggedInUser as IUser}
         commentsCount={totalCommentsCount}
-        votedUsefulCount={howtoStore.votedUsefulCount}
-        hasUserVotedUseful={hasUserVotedUseful}
+        votedUsefulCount={usefulCount}
+        hasUserVotedUseful={voted}
         onUsefulClick={async () =>
-          await onUsefulClick(howto._id, howto.slug, 'HowtoDescription')
+          await onUsefulClick(
+            howto.slug,
+            voted ? 'delete' : 'add',
+            'HowtoDescription',
+          )
         }
       />
       <Box sx={{ mt: 9 }}>
@@ -115,11 +134,15 @@ export const Howto = observer(({ howto }: HowtoParams) => {
               </Button>
               {howto.moderation === IModerationStatus.ACCEPTED && (
                 <UsefulStatsButton
-                  votedUsefulCount={howtoStore.votedUsefulCount}
-                  hasUserVotedUseful={hasUserVotedUseful}
+                  votedUsefulCount={howto.votedUsefulBy?.length || 0}
+                  hasUserVotedUseful={voted}
                   isLoggedIn={!!loggedInUser}
                   onUsefulClick={() =>
-                    onUsefulClick(howto._id, howto.slug, 'ArticleCallToAction')
+                    onUsefulClick(
+                      howto.slug,
+                      voted ? 'delete' : 'add',
+                      'ArticleCallToAction',
+                    )
                   }
                 />
               )}

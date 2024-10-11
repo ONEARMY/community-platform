@@ -1,11 +1,4 @@
-import {
-  action,
-  computed,
-  makeObservable,
-  observable,
-  runInAction,
-  toJS,
-} from 'mobx'
+import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
 import { logger } from 'src/logger'
 import { getUserCountry } from 'src/utils/getUserCountry'
 import { needsModeration } from 'src/utils/helpers'
@@ -32,7 +25,6 @@ const COLLECTION_NAME = 'howtos'
 
 export class HowtoStore extends ModuleStore {
   // we have two property relating to docs that can be observed
-  public activeHowto: IHowtoDB | null = null
   public uploadStatus: IHowToUploadStatus = getInitialUploadStatus()
 
   constructor(rootStore: IRootStore) {
@@ -41,38 +33,30 @@ export class HowtoStore extends ModuleStore {
     super(rootStore, COLLECTION_NAME)
     makeObservable(this, {
       uploadStatus: observable,
-      removeActiveHowto: action,
       toggleUsefulByUser: action,
       updateUploadStatus: action,
       resetUploadStatus: action,
       deleteHowTo: action,
-      userVotedActiveHowToUseful: computed,
-      votedUsefulCount: computed,
     })
   }
 
-  public removeActiveHowto() {
-    this.activeHowto = null
-  }
-
   public async toggleUsefulByUser(
-    docId: string,
+    howto: IHowtoDB,
     userName: string,
   ): Promise<void> {
     const updatedItem = (await toggleDocUsefulByUser(
       COLLECTION_NAME,
-      docId,
+      howto._id,
       userName,
     )) as IHowtoDB
 
     runInAction(() => {
-      this.activeHowto = updatedItem
       if ((updatedItem.votedUsefulBy || []).includes(userName)) {
         this.userNotificationsStore.triggerNotification(
           'howto_useful',
-          this.activeHowto._createdBy,
-          '/how-to/' + this.activeHowto.slug,
-          this.activeHowto.title,
+          howto._createdBy,
+          '/how-to/' + howto.slug,
+          howto.title,
         )
       }
     })
@@ -139,11 +123,6 @@ export class HowtoStore extends ModuleStore {
     setLastEditTimestamp = false,
   ) {
     const dbRef = this.db.collection<IHowto>(COLLECTION_NAME).doc(howToItem._id)
-
-    logger.debug('updateHowtoItem', {
-      before: this.activeHowto,
-      after: howToItem,
-    })
 
     const { text: description, users } = await this.addUserReference(
       howToItem.description || '',
@@ -315,7 +294,7 @@ export class HowtoStore extends ModuleStore {
 
       logger.debug('populating database', howTo)
       // set the database document
-      this.activeHowto = await this.updateHowtoItem(howTo, true)
+      await this.updateHowtoItem(howTo, true)
       this.updateUploadStatus('Database')
       logger.debug('post added')
       // complete
@@ -397,17 +376,6 @@ export class HowtoStore extends ModuleStore {
     }
 
     return steps
-  }
-
-  get userVotedActiveHowToUseful(): boolean {
-    if (!this.activeUser) return false
-    return (this.activeHowto?.votedUsefulBy || []).includes(
-      this.activeUser.userName,
-    )
-  }
-
-  get votedUsefulCount(): number {
-    return (this.activeHowto?.votedUsefulBy || []).length
   }
 }
 

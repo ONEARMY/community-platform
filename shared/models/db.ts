@@ -74,7 +74,7 @@ export type DBEndpoint = keyof typeof DB_ENDPOINTS
 export interface DBDoc {
   _id: string
   _created: ISODateString
-  _modified: ISODateString
+  _modified?: ISODateString
   _deleted: boolean
-  _contentModifiedTimestamp: ISODateString
+  _contentModifiedTimestamp?: ISODateString
 }

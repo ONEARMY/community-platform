@@ -7,7 +7,7 @@ interface ContentAuthorTimestampProps {
   userName: string
   countryCode: string | undefined
   created: string | number | Date
-  modified: string | number | Date
+  modified?: string | number | Date
   action?: string
 }
 
@@ -27,7 +27,7 @@ export const ContentAuthorTimestamp = ({
         action={action}
       />
       <Text
-        hidden={created === modified}
+        hidden={created === modified || !modified}
         variant="auxiliary"
         sx={{
           color: 'lightgrey',

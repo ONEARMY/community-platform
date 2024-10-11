@@ -258,10 +258,10 @@ describe('Research Article', () => {
     })
 
     it('does not show edit timestamp, when create displays the same value', async () => {
-      const created = faker.date.past()
+      const _created = faker.date.past().toString()
       const update = FactoryResearchItemUpdate({
-        _created: created.toString(),
-        _modified: created.toString(),
+        _created,
+        _modified: _created,
         title: 'A title',
         description: 'A description',
       })
@@ -281,7 +281,7 @@ describe('Research Article', () => {
       await waitFor(() => {
         expect(() =>
           wrapper.getAllByText(
-            `${formatDistanceToNow(update._modified, { addSuffix: true })}`,
+            `${formatDistanceToNow(_created, { addSuffix: true })}`,
           ),
         ).toThrow()
       })

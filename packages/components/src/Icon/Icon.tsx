@@ -1,8 +1,6 @@
 /** @jsxImportSource theme-ui */
 import { IconContext } from 'react-icons'
 import {
-  FaChevronDown,
-  FaChevronUp,
   FaCloudUploadAlt,
   FaFacebookF,
   FaFilePdf,
@@ -71,10 +69,10 @@ export const glyphs: IGlyphs = {
   comment: iconMap.comment,
   contact: iconMap.contact,
   check: <MdCheck />,
-  'chevron-down': <FaChevronDown />,
+  'chevron-down': iconMap.chevronDown,
   'chevron-left': iconMap.chevronLeft,
   'chevron-right': iconMap.chevronRight,
-  'chevron-up': <FaChevronUp />,
+  'chevron-up': iconMap.chevronUp,
   close: iconMap.close,
   delete: iconMap.delete,
   difficulty: <FaSignal />,
@@ -183,6 +181,9 @@ export const Icon = (props: Props) => {
         '& svg': {
           fontSize: definedSize,
         },
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         ...sx,
       }}
       size={definedSize}

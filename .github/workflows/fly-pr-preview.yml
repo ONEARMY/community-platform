@@ -1,0 +1,52 @@
+name: Fly PR Preview
+on:
+  # Run this workflow on every PR event. Existing review apps will be updated when the PR is updated.
+  pull_request_target:
+    # Trigger when labels are changed or more commits added to a PR that contains labels
+    types: [labeled, synchronize]
+    # Only create a preview if changes have been made to the main src code or backend functions
+    paths:
+      - 'src/**'
+      - 'functions/**'
+      - 'packages/components/**'
+      - '.github/workflows/pr-preview.yml'
+      - 'package.json'
+      - 'yarn.lock'
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  # Set these to your Fly.io organization and preferred region.
+  FLY_REGION: cdg
+  FLY_ORG: one-army
+
+jobs:
+  preview_app:
+    if: contains(github.event.pull_request.labels.*.name, 'Review allow-preview ✅')
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
+    # Only run one deployment at a time per PR.
+    concurrency:
+      group: pr-${{ github.event.number }}
+
+    # Deploying apps with this "review" environment allows the URL for the app to be displayed in the PR UI.
+    # Feel free to change the name of this environment.
+    environment:
+      name: preview
+      # The script in the `deploy` sets the URL output for each review app.
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+        with:
+          # pull the repo from the pull request source, not the default local repo
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Deploy PR app to Fly.io
+        id: deploy
+        uses: superfly/fly-pr-review-apps@1.2.1
+        with:
+          config: fly-preview.toml
+          name: community-platform-pr-${{ github.event.number }}
+          secrets: VITE_SITE_VARIANT=preview VITE_PROJECT_VERSION=${GITHUB_SHA}

@@ -68,7 +68,7 @@ module.exports = {
     [
       '@docusaurus/preset-classic',
       {
-        // https://v2.docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs/
+        // https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs/
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',

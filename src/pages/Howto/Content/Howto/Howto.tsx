@@ -42,12 +42,12 @@ export const Howto = observer(({ howto }: HowtoParams) => {
   useEffect(() => {
     // This could be improved if we can load the user profile server-side
     if (
-      howtoStore.activeUser &&
+      howtoStore?.activeUser &&
       howto.votedUsefulBy?.includes(howtoStore.activeUser._id)
     ) {
       setVoted(true)
     }
-  }, [howtoStore.activeUser])
+  }, [howtoStore?.activeUser])
 
   const onUsefulClick = async (
     howToSlug: string,

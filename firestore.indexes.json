@@ -2591,24 +2591,6 @@
           "order": "ASCENDING"
         }
       ]
-    },
-    {
-      "collectionGroup": "v3_howtos",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "slug",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "_deleted",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "__name__",
-          "order": "ASCENDING"
-        }
-      ]
     }
   ],
   "fieldOverrides": []

@@ -22,7 +22,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
   const howto = data?.howto as IHowtoDB
-  const title = howto.title + ' - How-to'
+  const title = `${howto.title} - How-to - ${import.meta.env.VITE_SITE_NAME}`
 
   return generateTags(title, howto.description, howto.cover_image?.downloadUrl)
 })

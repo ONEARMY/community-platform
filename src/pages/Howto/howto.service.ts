@@ -185,35 +185,37 @@ const getSort = (sort: HowtoSortOption) => {
 }
 
 const getBySlug = async (slug: string) => {
+  // Get all that match the slug, to avoid creating an index (blocker for cypress tests)
   let snapshot = await getDocs(
     query(
       collection(firestore, DB_ENDPOINTS.howtos),
-      and(where('slug', '==', slug), where('_deleted', '!=', true)),
-      limit(1),
+      where('slug', '==', slug),
     ),
   )
+
+  if (snapshot.size === 0) {
+    // try previous slugs if slug is not recognized as primary
+    snapshot = await getDocs(
+      query(
+        collection(firestore, DB_ENDPOINTS.howtos),
+        where('previousSlugs', 'array-contains', slug),
+      ),
+    )
+  }
 
   if (snapshot.size === 0) {
     return null
   }
 
-  let howto =
-    (snapshot.size > 0 && (snapshot.docs[0].data() as IHowtoDB)) || null
+  let howto: IHowtoDB | null = null
 
-  // try previous slugs if slug is not recognized as primary
-  if (!howto) {
-    snapshot = await getDocs(
-      query(
-        collection(firestore, DB_ENDPOINTS.howtos),
-        and(
-          where('previousSlugs', 'array-contains', slug),
-          where('_deleted', '!=', true),
-        ),
-        limit(1),
-      ),
-    )
-
-    howto = (snapshot.size > 0 && (snapshot.docs[0].data() as IHowtoDB)) || null
+  // Get the first that isn't deleted - could be 1 line with .find(), but this is more optimized
+  for (const doc of snapshot.docs) {
+    const data = doc.data() as IHowtoDB
+    if (!data._deleted) {
+      howto = data
+      break
+    }
   }
 
   if (!howto) {

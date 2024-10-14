@@ -1,5 +1,4 @@
 import {
-  Icon,
   ImageGallery,
   MemberBadge,
   Tab,
@@ -168,18 +167,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
       ),
   )
 
-  const total_views = user.total_views
-
-  const totalViews = (total_views: number | undefined) =>
-    total_views ? (
-      <AuthWrapper roleRequired={UserRole.BETA_TESTER}>
-        <Flex data-testid="profile-views-stat">
-          <Icon glyph={'view'} size={22} />
-          <Box ml={1}>Views:&nbsp;{total_views}</Box>
-        </Flex>
-      </AuthWrapper>
-    ) : undefined
-
   return (
     <Card data-cy="SpaceProfile">
       <Box>
@@ -308,16 +295,31 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                       mt: [3, 3, 0],
                     }}
                   >
-                    <UserStatistics
-                      userName={userName}
-                      country={location?.country}
-                      isVerified={user.verified}
-                      isSupporter={!!user.badges?.supporter}
-                      howtoCount={docs?.howtos.length || 0}
-                      usefulCount={user.totalUseful || 0}
-                      researchCount={docs?.research.length || 0}
-                      total_views={totalViews(total_views)}
-                    />
+                    <AuthWrapper
+                      roleRequired={UserRole.BETA_TESTER}
+                      fallback={
+                        <UserStatistics
+                          userName={userName}
+                          country={location?.country}
+                          isVerified={user.verified}
+                          isSupporter={!!user.badges?.supporter}
+                          howtoCount={docs?.howtos.length || 0}
+                          usefulCount={user.totalUseful || 0}
+                          researchCount={docs?.research.length || 0}
+                        />
+                      }
+                    >
+                      <UserStatistics
+                        userName={userName}
+                        country={location?.country}
+                        isVerified={user.verified}
+                        isSupporter={!!user.badges?.supporter}
+                        howtoCount={docs?.howtos.length || 0}
+                        usefulCount={user.totalUseful || 0}
+                        researchCount={docs?.research.length || 0}
+                        totalViews={user.total_views}
+                      />
+                    </AuthWrapper>
                   </Box>
                 </Flex>
               </Box>

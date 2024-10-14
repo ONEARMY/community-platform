@@ -8,7 +8,6 @@ import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { Icon } from '../Icon/Icon'
 import { InternalLink } from '../InternalLink/InternalLink'
 
-import type { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 export interface UserStatisticsProps {
@@ -19,7 +18,7 @@ export interface UserStatisticsProps {
   howtoCount: number
   usefulCount: number
   researchCount: number
-  total_views?: EmotionJSX.Element
+  totalViews?: number
   sx?: ThemeUIStyleObject | undefined
 }
 
@@ -112,7 +111,13 @@ export const UserStatistics = (props: UserStatisticsProps) => {
             </Flex>
           </InternalLink>
         ) : null}
-        {props.total_views}
+
+        {props.totalViews ? (
+          <Flex data-testid="profile-views-stat">
+            <Icon glyph={'view'} size={22} />
+            <Box ml={1}>Views:&nbsp;{props.totalViews}</Box>
+          </Flex>
+        ) : null}
       </Flex>
     </Card>
   )
@@ -123,4 +128,4 @@ const isEmpty = (props: UserStatisticsProps) =>
   !props.isSupporter &&
   !props.usefulCount &&
   !props.howtoCount &&
-  !props.total_views
+  !props.totalViews

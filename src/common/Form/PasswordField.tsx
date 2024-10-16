@@ -2,19 +2,36 @@ import { useState } from 'react'
 import { Field } from 'react-final-form'
 import { Icon } from 'oa-components'
 
-export const PasswordField = ({ name, component, ...rest }) => {
+type PasswordFieldProps = {
+  name: string
+  placeholder?: string
+  component: any
+  autoComplete?: 'off' | 'on'
+  required?: boolean
+  validate?: (value: any) => string | undefined
+}
+
+export const PasswordField = ({
+  name,
+  component,
+  placeholder,
+  autoComplete,
+  required,
+  validate,
+}: PasswordFieldProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   return (
     <Field
-      {...rest}
       name={name}
-      placeHolder={'testing'}
+      placeHolder={placeholder || ''}
       component={component}
       type={isPasswordVisible ? 'text' : 'password'}
       sx={{
         paddingRight: 8,
       }}
+      validate={validate}
+      autoComplete={autoComplete || 'on'}
       endAdornment={
         <Icon
           sx={{
@@ -26,7 +43,7 @@ export const PasswordField = ({ name, component, ...rest }) => {
           size="25"
         />
       }
-      required
+      required={required}
     />
   )
 }

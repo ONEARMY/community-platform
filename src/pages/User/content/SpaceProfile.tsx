@@ -1,6 +1,7 @@
 import {
   ImageGallery,
   MemberBadge,
+  ProfileTagsList,
   Tab,
   TabPanel,
   Tabs,
@@ -39,12 +40,7 @@ import { heading } from '../impact/labels'
 import UserContactAndLinks from './UserContactAndLinks'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type {
-  IMAchineBuilderXp,
-  IOpeningHours,
-  IUser,
-  PlasticTypeLabel,
-} from 'oa-shared'
+import type { IOpeningHours, IUser, PlasticTypeLabel } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
@@ -111,31 +107,6 @@ const renderOpeningHours = (openingHours: IOpeningHours[]) => (
   </div>
 )
 
-const renderMachineBuilderXp = (machineBuilderXp: IMAchineBuilderXp[]) => (
-  <>
-    <h4>We offer the following services:</h4>
-    {machineBuilderXp.map((machineExperience, index) => {
-      return (
-        <Box
-          sx={{
-            backgroundColor: 'background',
-            borderColor: 'background',
-            borderRadius: '5px',
-            borderStyle: 'solid',
-            borderWidth: '1px',
-            display: 'inline-block',
-            marginRight: '10px',
-            padding: '10px',
-          }}
-          key={`machineXp-${index}`}
-        >
-          {machineExperience.label}
-        </Box>
-      )
-    })}
-  </>
-)
-
 const getCoverImages = (user: IUser) => {
   if (user.coverImages && user.coverImages.length) {
     return user.coverImages
@@ -152,6 +123,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
     links,
     location,
     profileType,
+    tags,
     userName,
     userImage,
   } = user
@@ -275,6 +247,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                       width: ['100%', '100%', '80%'],
                     }}
                   >
+                    {tags && <ProfileTagsList tagIds={tags} />}
                     {about && <Paragraph>{about}</Paragraph>}
 
                     {profileType === ProfileTypeList.COLLECTION_POINT &&
@@ -284,10 +257,6 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                     {profileType === ProfileTypeList.COLLECTION_POINT &&
                       user.openingHours &&
                       renderOpeningHours(user.openingHours)}
-
-                    {profileType === ProfileTypeList.MACHINE_BUILDER &&
-                      user.machineBuilderXp &&
-                      renderMachineBuilderXp(user.machineBuilderXp)}
                   </Box>
                   <Box
                     sx={{

@@ -18,6 +18,9 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
       userStore: {
         activeUser: mockUser,
       },
+      tagsStore: {
+        allTags: [],
+      },
     },
   }),
 }))
@@ -39,7 +42,7 @@ describe('UserSettings', () => {
       expect(wrapper.queryByTestId('workspaceType')).toBeNull()
       expect(wrapper.queryByTestId('CollectionSection')).toBeNull()
       expect(wrapper.queryByTestId('CollectionSection')).toBeNull()
-      expect(wrapper.queryByTestId('ExpertiseSection')).toBeNull()
+      expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.queryByTestId('PublicContactSection')).toBeNull()
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
@@ -58,7 +61,7 @@ describe('UserSettings', () => {
     await waitFor(() => {
       expect(wrapper.queryByTestId('workspaceType')).toBeNull()
       expect(wrapper.getAllByTestId('CollectionSection')).toHaveLength(1)
-      expect(wrapper.queryByTestId('ExpertiseSection')).toBeNull()
+      expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
@@ -77,7 +80,7 @@ describe('UserSettings', () => {
     await waitFor(() => {
       expect(wrapper.queryByTestId('workspaceType')).toBeNull()
       expect(wrapper.queryByTestId('CollectionSection')).toBeNull()
-      expect(wrapper.queryByTestId('ExpertiseSection')).toBeNull()
+      expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
@@ -96,7 +99,7 @@ describe('UserSettings', () => {
     await waitFor(() => {
       expect(wrapper.queryByTestId('workspaceType')).toBeNull()
       expect(wrapper.queryByTestId('CollectionSection')).toBeNull()
-      expect(wrapper.getAllByTestId('ExpertiseSection')).toHaveLength(1)
+      expect(wrapper.getAllByTestId('ProfileTags')).toHaveLength(1)
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
@@ -115,7 +118,7 @@ describe('UserSettings', () => {
     await waitFor(() => {
       expect(wrapper.queryByTestId('workspaceType')).toBeNull()
       expect(wrapper.queryByTestId('CollectionSection')).toBeNull()
-      expect(wrapper.queryByTestId('ExpertiseSection')).toBeNull()
+      expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)
@@ -134,7 +137,7 @@ describe('UserSettings', () => {
     await waitFor(() => {
       expect(wrapper.getAllByTestId('workspaceType')).toHaveLength(1)
       expect(wrapper.queryByTestId('CollectionSection')).toBeNull()
-      expect(wrapper.queryByTestId('ExpertiseSection')).toBeNull()
+      expect(wrapper.queryByTestId('ProfileTags')).toBeNull()
       expect(wrapper.getAllByTestId('UserInfosSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('PublicContactSection')).toHaveLength(1)
       expect(wrapper.getAllByTestId('userImage')).toHaveLength(1)

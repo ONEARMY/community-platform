@@ -75,10 +75,6 @@ export const fields: ILabels = {
       "We can send you emails with all the notifications you've missed.",
     title: 'Email notifications',
   },
-  expertise: {
-    description: 'Choose at least one expertise',
-    title: 'What are you specialised in ?',
-  },
   impact: {
     description:
       "Let's track our collective positive impact! Add data about your recycling work and show the world the power of a movement of small scale recyclers!",
@@ -139,6 +135,10 @@ export const fields: ILabels = {
     error: 'Please select your workspace type',
     title: 'Workspace',
   },
+  tags: {
+    description: 'Select up to five tags for your profile',
+    title: 'Tags',
+  },
 }
 
 export const form = {
@@ -153,7 +153,6 @@ export const headings = {
   collection: 'Collection',
   createProfile: 'Create profile',
   editProfile: 'Edit profile',
-  expertise: 'Expertise',
   focus: 'Focus',
   images: 'Images',
   infos: 'Infos',

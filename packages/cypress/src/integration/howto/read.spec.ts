@@ -74,14 +74,17 @@ describe('[How To]', () => {
           )
           expect($summary).to.contain('3-4 weeks', 'Duration')
           expect($summary).to.contain(DifficultyLevel.HARD, 'Difficulty')
-          expect($summary).to.contain('product', 'Tag')
-          expect($summary).to.contain('injection', 'Tag')
           expect($summary.find('img[alt="how-to cover"]'))
             .to.have.attr('src')
             .match(coverFileRegex)
           expect($summary.find('[data-cy=file-download-counter]')).to.contain(
             '1,234 downloads',
           )
+        })
+        cy.wait(1000)
+        cy.get('[data-cy=tag-list]').then(($tagList) => {
+          expect($tagList).to.contain('product')
+          expect($tagList).to.contain('injection')
         })
 
         cy.step('Breadcrumbs work')
@@ -158,7 +161,6 @@ describe('[How To]', () => {
       it('[Allows opening of attachments]', () => {
         cy.signUpNewUser()
         cy.visit(specificHowtoUrl)
-
         cy.step('[Presents the donation request before opening of attachments]')
         cy.step('Shows modal')
         cy.get('[data-cy=downloadButton]').first().click()

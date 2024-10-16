@@ -74,7 +74,7 @@ const Step = (props: IProps) => {
                     whiteSpace: 'pre-line',
                   }}
                 >
-                  <LinkifyText>{title}</LinkifyText>
+                  <LinkifyText>{step.text}</LinkifyText>
                 </Text>
               </Box>
             </Flex>

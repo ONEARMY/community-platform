@@ -13,8 +13,8 @@ import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
 import { CollectionSection } from './content/sections/Collection.section'
-import { ExpertiseSection } from './content/sections/Expertise.section'
 import { FocusSection } from './content/sections/Focus.section'
+import { ProfileTags } from './content/sections/ProfileTags.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
 import { UserImagesSection } from './content/sections/UserImages.section'
 import { UserInfosSection } from './content/sections/UserInfos.section'
@@ -106,11 +106,11 @@ export const SettingsPageUserProfile = () => {
     openingHours: user.openingHours || [{}],
     workspaceType: user.workspaceType || null,
     collectedPlasticTypes: user.collectedPlasticTypes || null,
-    machineBuilderXp: user.machineBuilderXp || null,
     isContactableByPublic:
       user.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
     userImage: user.userImage || null,
     coverImages,
+    tags: user.tags || [],
   }
 
   const formId = 'userProfileForm'
@@ -167,13 +167,7 @@ export const SettingsPageUserProfile = () => {
                 )}
 
                 {values.profileType === ProfileTypeList.MACHINE_BUILDER && (
-                  <ExpertiseSection
-                    required={
-                      values.machineBuilderXp
-                        ? values.machineBuilderXp.length === 0
-                        : true
-                    }
-                  />
+                  <ProfileTags />
                 )}
 
                 <UserInfosSection formValues={values} />

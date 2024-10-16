@@ -262,7 +262,6 @@ export class ResearchStore extends ModuleStore {
             : values.creatorCountry
               ? values.creatorCountry
               : '',
-        totalCommentCount: 0,
       }
       logger.debug('populating database', researchItem)
       // set the database document

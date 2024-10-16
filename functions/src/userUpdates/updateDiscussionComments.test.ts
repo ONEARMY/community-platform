@@ -1,5 +1,6 @@
-import { IUserDB } from 'oa-shared/models/user'
 import { updateDiscussionComments } from './updateDiscussionComments'
+
+import type { IUserDB } from 'oa-shared/models/user'
 
 const prevUser = {
   _id: 'hjg235z',

@@ -11,7 +11,9 @@ export default {
 
 export const Hover: StoryFn<typeof Tooltip> = () => (
   <>
-    <Button data-tip="This is a tooltip">Hover over me</Button>
-    <Tooltip />
+    <Button data-tooltip-id="tooltip" data-tooltip-content="This is a tooltip">
+      Hover over me
+    </Button>
+    <Tooltip id="tooltip" />
   </>
 )

@@ -1,9 +1,11 @@
-import React from 'react'
-import { useTheme, withTheme } from '@emotion/react'
+import React, { useContext } from 'react'
+import { withTheme } from '@emotion/react'
 import { motion } from 'framer-motion'
 import { observer } from 'mobx-react'
 import { Button } from 'oa-components'
 import { UserRole } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isModuleSupported, MODULE } from 'src/modules'
 import Logo from 'src/pages/common/Header/Menu/Logo/Logo'
@@ -13,26 +15,28 @@ import { NotificationsDesktop } from 'src/pages/common/Header/Menu/Notifications
 import { NotificationsIcon } from 'src/pages/common/Header/Menu/Notifications/NotificationsIcon'
 import { NotificationsMobile } from 'src/pages/common/Header/Menu/Notifications/NotificationsMobile'
 import Profile from 'src/pages/common/Header/Menu/Profile/Profile'
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text, useThemeUI } from 'theme-ui'
 
+import { EnvironmentContext } from '../EnvironmentContext'
 import { getFormattedNotifications } from './getFormattedNotifications'
 import { MobileMenuContext } from './MobileMenuContext'
 
 import type { ThemeWithName } from 'oa-themes'
 
 const MobileNotificationsWrapper = ({ children }) => {
-  const theme = useTheme()
+  const themeUi = useThemeUI()
+  const theme = themeUi.theme as ThemeWithName
 
   return (
     <Flex
       sx={{
         position: 'relative',
-        [`@media only screen and (max-width: ${theme.breakpoints[1]})`]: {
+        [`@media only screen and (max-width: ${theme.breakpoints![1]})`]: {
           display: 'flex',
           marginLeft: '1em',
           marginRight: 'auto',
         },
-        [`@media only screen and (min-width: ${theme.breakpoints[1]})`]: {
+        [`@media only screen and (min-width: ${theme.breakpoints![1]})`]: {
           display: 'none',
         },
       }}
@@ -75,7 +79,9 @@ const AnimationContainer = (props: any) => {
   )
 }
 
-const Header = observer(({ theme }: { theme: ThemeWithName }) => {
+const Header = observer(() => {
+  const { theme } = useThemeUI()
+  const env = useContext(EnvironmentContext)
   const { userNotificationsStore } = useCommonStores().stores
   const user = userNotificationsStore.user
   const notifications = getFormattedNotifications(
@@ -96,11 +102,10 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
     >
       <Flex
         data-cy="header"
-        bg="white"
-        pl={[4, 4, 0]}
-        pr={[4, 4, 0]}
         sx={{
-          zIndex: theme.zIndex.header,
+          backgroundColor: 'white',
+          px: [4, 4, 0],
+          zIndex: (theme as any).zIndex.header,
           position: 'relative',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -113,8 +118,7 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
             (user.userRoles || []).includes(UserRole.BETA_TESTER) && (
               <Flex
                 className="user-beta-icon"
-                ml={4}
-                sx={{ alignItems: 'center' }}
+                sx={{ alignItems: 'center', marginLeft: 4 }}
               >
                 <Text
                   sx={{
@@ -144,8 +148,8 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
         )}
         <Flex
           className="menu-desktop"
-          px={2}
           sx={{
+            px: 2,
             position: 'relative',
             display: ['none', 'none', 'flex'],
           }}
@@ -162,30 +166,36 @@ const Header = observer(({ theme }: { theme: ThemeWithName }) => {
               }
             />
           )}
-          {isModuleSupported(MODULE.USER) && <Profile isMobile={false} />}
+          {isModuleSupported(env.VITE_SUPPORTED_MODULES || '', MODULE.USER) && (
+            <Profile isMobile={false} />
+          )}
         </Flex>
-        <MobileMenuWrapper className="menu-mobile">
-          <Flex pl={5}>
-            <Button
-              type="button"
-              showIconOnly={true}
-              icon={isVisible ? 'close' : 'menu'}
-              onClick={() => setIsVisible(!isVisible)}
-              large={true}
-              mr={-3}
-              sx={{
-                bg: 'white',
-                borderWidth: '0px',
-                '&:hover': {
-                  bg: 'white',
-                },
-                '&:active': {
-                  bg: 'white',
-                },
-              }}
-            />
-          </Flex>
-        </MobileMenuWrapper>
+        <ClientOnly fallback={<></>}>
+          {() => (
+            <MobileMenuWrapper className="menu-mobile">
+              <Flex sx={{ paddingLeft: 5 }}>
+                <Button
+                  type="button"
+                  showIconOnly={true}
+                  icon={isVisible ? 'close' : 'menu'}
+                  onClick={() => setIsVisible(!isVisible)}
+                  large={true}
+                  sx={{
+                    marginRight: -3,
+                    backgroundColor: 'white',
+                    borderWidth: '0px',
+                    '&:hover': {
+                      backgroundColor: 'white',
+                    },
+                    '&:active': {
+                      backgroundColor: 'white',
+                    },
+                  }}
+                />
+              </Flex>
+            </MobileMenuWrapper>
+          )}
+        </ClientOnly>
       </Flex>
       {isVisible && (
         <AnimationContainer key={'mobilePanelContainer'}>

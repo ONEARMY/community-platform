@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
-import { ThemeProvider } from '@emotion/react'
 import { act, render, waitFor } from '@testing-library/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { FactoryUser } from 'src/test/factories/User'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'

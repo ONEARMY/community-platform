@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest'
 
-import { ThemeProvider } from '@emotion/react'
 import { render, screen } from '@testing-library/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { getSupportedProfileTypes } from 'src/modules/profile'
 import { FocusSection } from 'src/pages/UserSettings/content/sections/Focus.section'
 import { headings } from 'src/pages/UserSettings/labels'

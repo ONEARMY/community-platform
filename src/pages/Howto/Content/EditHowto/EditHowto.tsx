@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useParams } from '@remix-run/react'
+import { Navigate } from '@remix-run/react'
 import { toJS } from 'mobx'
 import { Loader } from 'oa-components'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -16,8 +16,11 @@ interface IState {
   loggedInUser?: IUser | undefined
 }
 
-const EditHowto = () => {
-  const { slug } = useParams()
+type EditHowtoProps = {
+  howto: IHowtoDB
+}
+
+const EditHowto = ({ howto }: EditHowtoProps) => {
   const { howtoStore } = useCommonStores().stores
   const [{ formValues, isLoading, loggedInUser }, setState] = useState<IState>({
     formValues: {} as IHowtoDB,
@@ -28,16 +31,15 @@ const EditHowto = () => {
   useEffect(() => {
     const loggedInUser = howtoStore.activeUser
     const init = async () => {
-      if (howtoStore.activeHowto) {
+      if (howto) {
         setState({
-          formValues: toJS(howtoStore.activeHowto) as IHowtoDB,
+          formValues: toJS(howto) as IHowtoDB,
           isLoading: false,
           loggedInUser: loggedInUser ? loggedInUser : undefined,
         })
       } else {
-        const doc = await howtoStore.setActiveHowtoBySlug(slug)
         setState({
-          formValues: doc as IHowtoDB,
+          formValues: howto,
           isLoading: false,
           loggedInUser: loggedInUser ? (loggedInUser as IUser) : undefined,
         })

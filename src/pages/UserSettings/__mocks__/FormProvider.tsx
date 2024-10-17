@@ -4,8 +4,8 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom'
-import { ThemeProvider } from '@emotion/react'
 import { render } from '@testing-library/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'

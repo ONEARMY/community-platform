@@ -1,7 +1,8 @@
-import { keyframes, useTheme } from '@emotion/react'
+import { keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Flex, Image, Text } from 'theme-ui'
+import { Flex, Image, Text, useThemeUI } from 'theme-ui'
 
+import type { ThemeWithName } from 'oa-themes'
 import type { ThemeUIStyleObject } from 'theme-ui'
 
 const rotate = keyframes`
@@ -25,7 +26,8 @@ export interface Props {
 }
 
 export const Loader = ({ label, sx }: Props) => {
-  const theme = useTheme() as any
+  const themeUi = useThemeUI()
+  const theme = themeUi.theme as ThemeWithName
   const logo = theme.logo || null
 
   return (

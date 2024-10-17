@@ -1,5 +1,4 @@
-import { useTheme } from '@emotion/react'
-import { Flex, Heading, Text } from 'theme-ui'
+import { Flex, Heading, Text, useThemeUI } from 'theme-ui'
 
 import { Username } from '../Username/Username'
 
@@ -13,7 +12,7 @@ export interface IProps {
 
 export const ArticleCallToAction = (props: IProps) => {
   const { author, children, contributors } = props
-  const theme = useTheme() as any
+  const { theme } = useThemeUI() as any
 
   return (
     <Flex

@@ -1,6 +1,8 @@
+import { useContext } from 'react'
 import { Outlet } from '@remix-run/react'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { isModuleSupported, MODULE } from 'src/modules'
+import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import Main from 'src/pages/common/Layout/Main'
 import {
   DiscussionStore,
@@ -18,9 +20,10 @@ export async function clientLoader() {
 
 // This is a Layout file, it will render for all questions routes
 export default function Index() {
+  const env = useContext(EnvironmentContext)
   const rootStore = useCommonStores()
 
-  if (!isModuleSupported(MODULE.QUESTION)) {
+  if (!isModuleSupported(env?.VITE_SUPPORTED_MODULES || '', MODULE.QUESTION)) {
     return null
   }
 

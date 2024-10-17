@@ -11,15 +11,7 @@ export async function clientLoader() {
 
 export default function Index() {
   return (
-    <Main
-      customStyles={{
-        position: 'relative',
-        margin: '0',
-        padding: '0',
-        width: '100vw',
-      }}
-      ignoreMaxWidth={true}
-    >
+    <Main ignoreMaxWidth={true}>
       <SeoTagsUpdateComponent title="Map" />
       <MapPinServiceContext.Provider value={mapPinService}>
         <MapsPage />

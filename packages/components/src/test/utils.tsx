@@ -1,6 +1,6 @@
-import { ThemeProvider } from '@emotion/react'
 import { createRemixStub } from '@remix-run/testing'
 import { render as testLibReact } from '@testing-library/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { preciousPlasticTheme } from 'oa-themes'
 
 import type { RenderOptions } from '@testing-library/react'

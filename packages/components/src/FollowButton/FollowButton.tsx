@@ -22,7 +22,8 @@ export const FollowButton = (props: IProps) => {
         type="button"
         data-testid={isLoggedIn ? 'follow-button' : 'follow-redirect'}
         data-cy={isLoggedIn ? 'follow-button' : 'follow-redirect'}
-        data-tip={isLoggedIn ? '' : 'Login to follow'}
+        data-tooltip-id="login-follow"
+        data-tooltip-content={isLoggedIn ? '' : 'Login to follow'}
         icon="thunderbolt"
         variant="outline"
         iconColor={hasUserSubscribed ? 'subscribed' : 'notSubscribed'}
@@ -35,7 +36,7 @@ export const FollowButton = (props: IProps) => {
       >
         {hasUserSubscribed ? 'Following' : 'Follow'}
       </Button>
-      <Tooltip />
+      <Tooltip id="login-follow" />
     </>
   )
 }

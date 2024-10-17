@@ -67,6 +67,7 @@ export const HowtoForm = observer((props: IProps) => {
     showInvalidFileWarning:
       props.formValues.files?.length > 0 && props.formValues.fileLink,
   })
+  const [howtoSlug, setHowtoSlug] = useState<string>('')
 
   const { formValues, parentType } = props
   const { fileEditMode, showSubmitModal, showInvalidFileWarning } = state
@@ -100,7 +101,8 @@ export const HowtoForm = observer((props: IProps) => {
         : IModerationStatus.AWAITING_MODERATION
     }
     logger.debug('submitting form', formValues)
-    await howtoStore.uploadHowTo(formValues)
+    const howto = await howtoStore.uploadHowTo(formValues)
+    setHowtoSlug(howto?.slug || '')
     form.reset(formValues)
   }
   // automatically generate the slug when the title changes
@@ -116,6 +118,7 @@ export const HowtoForm = observer((props: IProps) => {
       {showSubmitModal && (
         <HowToSubmitStatus
           {...props}
+          slug={howtoSlug}
           onClose={() => {
             setState((state) => ({ ...state, showSubmitModal: false }))
             howtoStore.resetUploadStatus()

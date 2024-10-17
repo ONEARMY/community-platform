@@ -11,4 +11,6 @@ export default {
   component: SiteFooter,
 } as Meta<typeof SiteFooter>
 
-export const Default: StoryFn<typeof SiteFooter> = () => <SiteFooter />
+export const Default: StoryFn<typeof SiteFooter> = () => (
+  <SiteFooter siteName="Precious Plastic" />
+)

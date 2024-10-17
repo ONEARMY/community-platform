@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom/vitest'
 
-import { Global, ThemeProvider } from '@emotion/react'
+import { Global } from '@emotion/react'
 import { faker } from '@faker-js/faker'
 import { createRemixStub } from '@remix-run/testing'
 import { act, render, waitFor, within } from '@testing-library/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { GlobalStyles } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
@@ -13,6 +14,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { Howto } from './Howto'
 
+import type { IHowtoDB } from 'oa-shared'
 import type { HowtoStore } from 'src/stores/Howto/howto.store'
 
 const Theme = preciousPlasticTheme.styles
@@ -45,7 +47,10 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   }),
 }))
 
-const factory = (howtoStore?: Partial<HowtoStore>) => {
+const factory = (
+  howtoStore?: Partial<HowtoStore>,
+  overrideHowto?: IHowtoDB,
+) => {
   const ReactStub = createRemixStub([
     {
       index: true,
@@ -54,7 +59,7 @@ const factory = (howtoStore?: Partial<HowtoStore>) => {
           <Global styles={GlobalStyles} />
           <ThemeProvider theme={Theme}>
             <Provider howtoStore={howtoStore}>
-              <Howto />
+              <Howto howto={overrideHowto ?? howto} />
             </Provider>
           </ThemeProvider>
         </>
@@ -144,13 +149,15 @@ describe('Howto', () => {
     it('shows 1 step', async () => {
       let wrapper
       act(() => {
-        wrapper = factory({
-          ...mockHowtoStore(),
-          activeHowto: FactoryHowto({
+        wrapper = factory(
+          {
+            ...mockHowtoStore(),
+          },
+          FactoryHowto({
             _createdBy: 'HowtoAuthor',
             steps: [FactoryHowtoStep()],
           }),
-        })
+        )
       })
 
       await waitFor(() => {

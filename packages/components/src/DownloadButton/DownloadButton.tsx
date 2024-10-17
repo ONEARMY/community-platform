@@ -36,14 +36,15 @@ export const DownloadButton = ({
         onClick={onClick}
         data-cy="downloadButton"
         data-testid="downloadButton"
-        data-tip={!isLoggedIn ? 'Login to download' : ''}
+        data-tooltip-id="download-files"
+        data-tooltip-content={!isLoggedIn ? 'Login to download' : ''}
       >
         <Icon size={24} glyph={glyph || 'external-url'} mr={3} />
         <Text sx={{ flex: 1, fontSize: 1, color: 'black' }} mr={3}>
           {label ? label : 'Download files'}
         </Text>
       </Flex>
-      <Tooltip />
+      <Tooltip id="download-files" />
     </>
   )
 }

@@ -237,7 +237,6 @@ describe('[How To]', () => {
       cy.step('A basic draft was created')
       cy.fillIntroTitle(`qwerty ${randomId}`)
       cy.get('[data-cy=draft]').click()
-      cy.pause()
       const firstSlug = `/how-to/qwerty-${randomId}`
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()

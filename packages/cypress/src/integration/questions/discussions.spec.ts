@@ -131,7 +131,7 @@ describe('[Questions.Discussions]', () => {
 
     cy.step('User avatars only visible to beta-testers')
     cy.contains('[data-cy=commentAvatar]').should('not.exist')
-    cy.logout()
+    cy.logout(false)
     cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
     cy.visit(`/questions/${item.slug}`)
     cy.get('[data-cy="commentAvatar"]')

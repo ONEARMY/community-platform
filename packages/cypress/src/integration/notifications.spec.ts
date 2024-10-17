@@ -30,7 +30,7 @@ describe('[Notifications]', () => {
 
     cy.visit('how-to')
     cy.visit('/how-to/testing-testing')
-    cy.wait(2000)
+    cy.wait(DB_WAIT_TIME)
     cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.wait(DB_WAIT_TIME)
     cy.step('Verify the notification has been added')
@@ -60,7 +60,7 @@ describe('[Notifications]', () => {
     cy.signUpNewUser(visitor)
 
     cy.visit('/research/qwerty')
-    cy.wait(2000)
+    cy.wait(DB_WAIT_TIME)
     cy.get('[data-cy="vote-useful"]').contains('useful').click()
     cy.wait(DB_WAIT_TIME)
     cy.step('Verify the notification has been added')

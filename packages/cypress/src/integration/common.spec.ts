@@ -29,6 +29,7 @@ describe('[Common]', () => {
 
     cy.step('Go to Map page')
     cy.get('[data-cy=page-link]').contains('Map').click()
+    cy.wait(2000)
     cy.url().should('include', '/map')
   })
 
@@ -66,6 +67,7 @@ describe('[Common]', () => {
     it('[By Anonymous]', () => {
       cy.step('Login and Join buttons are available')
       cy.visit('/how-to')
+      cy.wait(2000)
       cy.get('[data-cy=login]').should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')
       cy.get('[data-cy=user-menu]').should('not.exist')
@@ -77,6 +79,7 @@ describe('[Common]', () => {
       cy.step('Login and Join buttons are unavailable to logged-in users')
       const user = generateNewUserDetails()
       cy.signUpNewUser(user)
+      cy.wait(2000)
       cy.get('[data-cy=login]', { timeout: 20000 }).should('not.exist')
       cy.get('[data-cy=join]').should('not.exist')
 
@@ -98,6 +101,7 @@ describe('[Common]', () => {
       cy.step('Logout the session')
       cy.toggleUserMenuOn()
       cy.clickMenuItem(UserMenuItem.LogOut)
+      cy.wait(2000)
       cy.get('[data-cy=login]', { timeout: 20000 }).should('be.visible')
       cy.get('[data-cy=join]').should('be.visible')
     })

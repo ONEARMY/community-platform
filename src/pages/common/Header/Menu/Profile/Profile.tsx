@@ -16,7 +16,6 @@ import './profile.css'
 
 interface IState {
   showProfileModal: boolean
-  isLoading: boolean
 }
 
 interface IProps {
@@ -25,10 +24,11 @@ interface IProps {
 
 const Profile = observer((props: IProps) => {
   const { userStore } = useCommonStores().stores
+  const user = userStore.user
+
   const navigate = useNavigate()
   const [state, setState] = useState<IState>({
     showProfileModal: false,
-    isLoading: true,
   })
 
   const toggleProfileModal = () => {
@@ -36,18 +36,6 @@ const Profile = observer((props: IProps) => {
       ...state,
       showProfileModal: !state.showProfileModal,
     }))
-  }
-
-  const user = userStore.user
-
-  if (!user && state.isLoading) {
-    return (
-      <Box
-        sx={{
-          width: '143px',
-        }}
-      />
-    )
   }
 
   if (!user) {

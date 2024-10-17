@@ -15,6 +15,7 @@ describe('[Research.Discussions]', () => {
   it('can open using deep links', () => {
     const commentUrl = `/research/${item.slug}#update_${item.updates[0]._id}-comment:${firstComment._id}`
     cy.visit(commentUrl)
+    cy.wait(2000)
     cy.checkCommentItem(firstComment.text, 1)
   })
 

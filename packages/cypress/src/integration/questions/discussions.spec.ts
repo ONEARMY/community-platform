@@ -17,6 +17,7 @@ describe('[Questions.Discussions]', () => {
 
     cy.signUpNewUser()
     cy.visit(`/questions/${item.slug}#comment:${firstComment._id}`)
+    cy.wait(2000)
     cy.checkCommentItem('@demo_user - I like your logo', 2)
   })
 

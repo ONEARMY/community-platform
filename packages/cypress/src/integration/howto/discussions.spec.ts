@@ -17,6 +17,7 @@ describe('[Howto.Discussions]', () => {
 
     cy.signUpNewUser()
     cy.visit(`/how-to/${item.slug}#comment:${firstComment._id}`)
+    cy.wait(2000)
     cy.checkCommentItem(firstComment.text, 2)
   })
 

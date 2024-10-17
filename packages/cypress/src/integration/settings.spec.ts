@@ -255,7 +255,7 @@ describe('[Settings]', () => {
       const coverImage = 'profile-cover-2-edited'
       const description = "We're mechanics and our jobs are making machines"
       const displayName = 'machine_builder_pro'
-      const machineBuilderXp = ['electronics', 'welding']
+      const machineBuilderXp = ['Electronics', 'Welding']
       const mapPinDescription = 'Informative workshop on machines every week'
       const profileType = 'machine-builder'
       const user = generateNewUserDetails()
@@ -272,16 +272,16 @@ describe('[Settings]', () => {
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
 
+      cy.step('Set profile tags')
+      cy.selectTag(machineBuilderXp[0], '[data-cy=tag-select]')
+      cy.selectTag(machineBuilderXp[1], '[data-cy=tag-select]')
+
       cy.step('Populate profile')
       cy.setSettingBasicUserInfo({
         displayName,
         description,
       })
       cy.setSettingImage(coverImage, 'coverImages-0')
-
-      cy.step('Choose Expertise')
-      cy.get(`[data-cy=${machineBuilderXp[0]}]`).click()
-      cy.get(`[data-cy=${machineBuilderXp[1]}]`).click()
 
       cy.setSettingAddContactLink({
         index: 0,
@@ -298,6 +298,8 @@ describe('[Settings]', () => {
       cy.contains(user.username)
       cy.contains(displayName)
       cy.contains(description)
+      cy.contains(machineBuilderXp[0])
+      cy.contains(machineBuilderXp[1])
       cy.get(`[data-cy=MemberBadge-${profileType}]`)
       cy.get('[data-cy="active-image"]')
         .should('have.attr', 'src')

@@ -4,21 +4,43 @@ import {
   hasDetailsForMapPinChanged,
   hasLocationDetailsChanged,
   hasUserImageChanged,
+  hasUserTagsChanged,
 } from './utils'
 
+import type { IUploadedFileMeta } from 'oa-shared'
 import type { IUserDB } from 'oa-shared/models/user'
+
+const unimportantUserDetails = {
+  _authID: '00',
+  _id: 'unchangeable',
+  _created: '',
+  _deleted: false,
+  userName: 'unchangeable',
+  verified: false,
+  coverImages: [],
+  links: [],
+}
 
 describe('hasDetailsChanged', () => {
   it("returns false for every field that's the same", () => {
     const user = {
+      _lastActive: 'same',
+      about: 'about',
       displayName: 'same',
+      isContactableByPublic: true,
+      profileType: 'member',
       userImage: {
         downloadUrl: 'https://more.same/image.jpg',
-      },
+      } as IUploadedFileMeta,
       badges: {
         verified: true,
         supporter: false,
       },
+      tags: {
+        hguowewer: true,
+        '76khbrw': false,
+      },
+      ...unimportantUserDetails,
     } as IUserDB
 
     expect(hasDetailsChanged(user, user)).toEqual([false, false, false, false])
@@ -26,25 +48,42 @@ describe('hasDetailsChanged', () => {
 
   it("returns true for every field that's different", () => {
     const prevUser = {
+      _lastActive: 'yesterday',
+      about: 'Old about',
       displayName: 'old',
+      profileType: 'member',
+      workspaceType: null,
       userImage: {
         downloadUrl: 'https://more.old/image.jpg',
-      },
+      } as IUploadedFileMeta,
       badges: {
         verified: true,
         supporter: true,
       },
+      tags: {
+        hguowewer: true,
+      },
+      ...unimportantUserDetails,
     } as IUserDB
 
     const user = {
+      _lastActive: 'today',
+      about: 'New about description.',
       displayName: 'new',
+      profileType: 'space',
+      workspaceType: 'extrusion',
       userImage: {
         downloadUrl: 'https://more.new/image.jpg',
-      },
+      } as IUploadedFileMeta,
       badges: {
         verified: false,
         supporter: false,
       },
+      tags: {
+        hguowewer: true,
+        '76khbrw': true,
+      },
+      ...unimportantUserDetails,
     } as IUserDB
 
     expect(hasDetailsChanged(prevUser, user)).toEqual([true, true, true, true])
@@ -99,7 +138,6 @@ describe('hasDetailsForCommentsChanged', () => {
       userImage: {
         downloadUrl: 'http://etc.',
       },
-
       badges: {
         verified: true,
         supporter: false,
@@ -194,5 +232,63 @@ describe('hasUserImageChanged', () => {
     const user = { userImage: { downloadUrl: 'new' } } as IUserDB
 
     expect(hasUserImageChanged(prevUser, user)).toEqual(true)
+  })
+})
+
+describe('hasUserTagsChanged', () => {
+  it('returns false when nothing has changed', () => {
+    const user = {
+      displayName: 'displayName',
+      profileType: 'member',
+      tags: {
+        gyi: false,
+        bnhjo: true,
+      },
+      ...unimportantUserDetails,
+    } as IUserDB
+    expect(hasUserTagsChanged(user, user)).toEqual(false)
+  })
+
+  it('returns true when a tag is added', () => {
+    const prevUser = {
+      displayName: 'displayName',
+      profileType: 'member',
+      tags: {
+        gyi: false,
+      },
+      ...unimportantUserDetails,
+    } as IUserDB
+
+    const user = {
+      displayName: 'displayName',
+      profileType: 'member',
+      tags: {
+        gyi: false,
+        bnhjo: true,
+      },
+      ...unimportantUserDetails,
+    } as IUserDB
+    expect(hasUserTagsChanged(prevUser, user)).toEqual(true)
+  })
+
+  it('returns true when a tag is changed', () => {
+    const prevUser = {
+      displayName: 'displayName',
+      profileType: 'member',
+      tags: {
+        gyi: false,
+      },
+      ...unimportantUserDetails,
+    } as IUserDB
+
+    const user = {
+      displayName: 'displayName',
+      profileType: 'member',
+      tags: {
+        gyi: true,
+      },
+      ...unimportantUserDetails,
+    } as IUserDB
+    expect(hasUserTagsChanged(prevUser, user)).toEqual(true)
   })
 })

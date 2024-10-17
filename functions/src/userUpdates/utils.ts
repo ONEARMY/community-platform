@@ -46,6 +46,7 @@ export const hasDetailsForMapPinChanged = (
     prevUser.isContactableByPublic !== user.isContactableByPublic,
     prevUser.profileType !== user.profileType,
     prevUser.workspaceType !== user.workspaceType,
+    hasUserTagsChanged(prevUser, user),
     ...hasDetailsChanged(prevUser, user),
     ...hasLocationDetailsChanged(prevUser, user),
   ]
@@ -64,6 +65,13 @@ export const hasUserImageChanged = (
 
   if (prevUser.userImage && !user.userImage) return true
   if (!prevUser.userImage && user.userImage) return true
+}
+
+export const hasUserTagsChanged = (
+  prevUser: IUserDB,
+  user: IUserDB,
+): boolean => {
+  return !valuesAreDeepEqual(prevUser.tags, user.tags)
 }
 
 export const getCreatorImage = (userImage: IUserDB['userImage']) => {

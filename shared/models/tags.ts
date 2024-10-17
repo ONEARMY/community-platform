@@ -17,5 +17,5 @@ when building tag uploader it should enforce reasonable max size image (say 500p
 
 export interface ITag extends DBDoc {
   label: string
-  image: string
+  image?: string
 }

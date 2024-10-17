@@ -6,8 +6,8 @@ import { backupUser } from './backupUser'
 import { updateDiscussionComments } from './updateDiscussionComments'
 import { updateMapPins } from './updateMapPins'
 
+import type { IUserDB } from 'oa-shared/models/user'
 import type { IDBDocChange } from '../models'
-import { IUserDB } from 'oa-shared/models/user'
 
 /*********************************************************************
  * Side-effects to be carried out on various user updates, namely:

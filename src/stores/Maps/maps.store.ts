@@ -176,12 +176,13 @@ export class MapsStore extends ModuleStore {
       badges,
       coverImages,
       displayName,
+      isContactableByPublic,
       location,
       profileType,
-      isContactableByPublic,
+      userImage,
+      tags,
       verified,
       workspaceType,
-      userImage,
     } = user
     const type = profileType || ProfileTypeList.MEMBER
     const existingPin = await this.getPin(_id, 'server')
@@ -238,6 +239,7 @@ export class MapsStore extends ModuleStore {
         isContactableByPublic:
           isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
         profileType,
+        ...(tags ? { tags } : {}),
         ...(workspaceType ? { workspaceType } : {}),
         ...(userImage ? { userImage: userImage.downloadUrl } : {}),
       },

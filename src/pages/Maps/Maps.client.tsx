@@ -77,13 +77,13 @@ const MapsPage = observer(() => {
 
   useEffect(() => {
     const userName = user?._id
-    if (!userName) {
+    if (!userName || mapPins.find(({ _id }) => _id === userName)) {
       return
     }
 
     mapPinService.getMapPinSelf(userName).then((userMapPin) => {
       if (userMapPin && !mapPins.find((pin) => pin._id === userMapPin._id)) {
-        setMapPins([...mapPins, userMapPin])
+        setMapPins((existingPins) => [...existingPins, userMapPin])
       }
     })
   }, [user])

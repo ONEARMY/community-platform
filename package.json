@@ -14,8 +14,8 @@
   "main": "lib/index.js",
   "type": "module",
   "scripts": {
-    "start": "concurrently --kill-others --names themes,components,platform --prefix-colors cyan,blue,magenta \"yarn start:shared\" \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform\"",
-    "start-ci": "concurrently --kill-others --names themes,components,platform --prefix-colors cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform-ci\"",
+    "start": "concurrently --kill-others --names shared,themes,components,platform --prefix-colors cyan,blue,magenta \"yarn start:shared\" \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform\"",
+    "start-ci": "concurrently --kill-others --names shared,themes,components,platform --prefix-colors cyan,blue,magenta \"yarn start:themes\" \"yarn start:components\" \"yarn start:platform-ci\"",
     "start:themes": "yarn workspace oa-themes dev",
     "start:components": "yarn workspace oa-components dev",
     "start:shared": "yarn workspace oa-shared dev",

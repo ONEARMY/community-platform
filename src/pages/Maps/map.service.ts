@@ -19,9 +19,9 @@ const getMapPins = async (currentUserId?: string) => {
     const response = await fetch(API_URL + '/map-pins')
     const mapPins = await response.json()
 
-    const currentUserPin = !!mapPins.find(({ _id }) => _id === currentUserId)
+    const hasCurrentUserPin = !!mapPins.find(({ _id }) => _id === currentUserId)
 
-    if (currentUserId && !currentUserPin) {
+    if (currentUserId && !hasCurrentUserPin) {
       const userMapPin = await getMapPinByUserId(currentUserId)
       userMapPin && mapPins.push(userMapPin)
     }

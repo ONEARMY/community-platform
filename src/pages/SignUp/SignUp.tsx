@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Field, Form } from 'react-final-form'
-import { Link, Navigate, useNavigate } from '@remix-run/react'
+import { Link, useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, ExternalLink, FieldInput, HeroBanner } from 'oa-components'
 import { FRIENDLY_MESSAGES } from 'oa-shared'
@@ -91,10 +91,6 @@ const SignUpPage = observer(() => {
         disabled: false,
       }))
     }
-  }
-
-  if (userStore!.user) {
-    return <Navigate to={'/'} />
   }
 
   return (

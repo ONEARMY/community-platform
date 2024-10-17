@@ -230,9 +230,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
           </Flex>
           <ClientOnly fallback={<></>}>
             {/* TODO: remove ClientOnly when we have a Tags API which we can on the loader - need it now because tags only load client-side which causes a html mismatch error */}
-            {() => <TagList tags={howto.tags} />}
+            {() => (
+              <>
+                <TagList tags={howto.tags} />
+                <HowtoDownloads howto={howto} loggedInUser={loggedInUser} />
+              </>
+            )}
           </ClientOnly>
-          <HowtoDownloads howto={howto} loggedInUser={loggedInUser} />
         </Flex>
         <Box
           sx={{

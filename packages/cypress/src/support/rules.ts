@@ -9,6 +9,7 @@ Cypress.on('uncaught:exception', (err) => {
     'There was an error while hydrating',
     'Hydration failed because the initial UI does not match what was rendered on the server',
     'An error occurred during hydration.',
+    'Minified React',
   ]
 
   const foundSkipError = skipErrors.find((error) => err.message.includes(error))

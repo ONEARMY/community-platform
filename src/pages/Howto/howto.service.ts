@@ -207,16 +207,16 @@ const getBySlug = async (slug: string) => {
     return null
   }
 
-  let howto: IHowtoDB | null = null
+  const howto = snapshot.docs[0].data() as IHowtoDB
 
   // Get the first that isn't deleted - could be 1 line with .find(), but this is more optimized
-  for (const doc of snapshot.docs) {
-    const data = doc.data() as IHowtoDB
-    if (!data._deleted) {
-      howto = data
-      break
-    }
-  }
+  // for (const doc of snapshot.docs) {
+  //   const data = doc.data() as IHowtoDB
+  //   if (!data._deleted) {
+  //     howto = data
+  //     break
+  //   }
+  // }
 
   if (!howto) {
     return null

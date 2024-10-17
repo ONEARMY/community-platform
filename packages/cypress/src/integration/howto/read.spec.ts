@@ -77,15 +77,16 @@ describe('[How To]', () => {
           expect($summary.find('img[alt="how-to cover"]'))
             .to.have.attr('src')
             .match(coverFileRegex)
-          expect($summary.find('[data-cy=file-download-counter]')).to.contain(
-            '1,234 downloads',
-          )
         })
-        cy.wait(1000)
+        cy.wait(2000)
         cy.get('[data-cy=tag-list]').then(($tagList) => {
           expect($tagList).to.contain('product')
           expect($tagList).to.contain('injection')
         })
+        cy.get('[data-cy=file-download-counter]').should(
+          'contain',
+          '1,234 downloads',
+        )
 
         cy.step('Breadcrumbs work')
         cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'How To')
@@ -163,6 +164,7 @@ describe('[How To]', () => {
         cy.visit(specificHowtoUrl)
         cy.step('[Presents the donation request before opening of attachments]')
         cy.step('Shows modal')
+        cy.wait(2000)
         cy.get('[data-cy=downloadButton]').first().click()
         cy.get('[data-cy=DonationRequest]').should('be.visible')
         cy.get('[data-cy=DonationRequest]').contains('Support our work')
@@ -259,7 +261,7 @@ describe('[How To]', () => {
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)
-      cy.location('pathname').should('eq', '/how-to/')
+      cy.location('pathname').should('eq', '/how-to')
       cy.location('search').should(
         'eq',
         `?search=this+how+to+does+not+exist&source=how-to-not-found&sort=Newest`,

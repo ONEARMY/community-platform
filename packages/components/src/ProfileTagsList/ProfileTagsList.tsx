@@ -20,7 +20,7 @@ export const ProfileTagsList = ({ tagIds }: IProps) => {
   }
 
   return (
-    <Flex sx={{ gap: 2 }}>
+    <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
       {tags.map(
         (tag, index) =>
           tag?.label && (

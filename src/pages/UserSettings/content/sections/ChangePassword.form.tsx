@@ -93,6 +93,7 @@ export const ChangePasswordForm = () => {
                     component={FieldInput}
                     data-cy="newPassword"
                     name="newPassword"
+                    placeholder={fields.newPassword.placeholder}
                     required
                   />
                 </FormFieldWrapper>
@@ -107,6 +108,7 @@ export const ChangePasswordForm = () => {
                     component={FieldInput}
                     data-cy="repeatNewPassword"
                     name="repeatNewPassword"
+                    placeholder={fields.repeatNewPassword.placeholder}
                     required
                   />
                 </FormFieldWrapper>

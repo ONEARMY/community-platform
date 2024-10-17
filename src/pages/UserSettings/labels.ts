@@ -102,9 +102,11 @@ export const fields: ILabels = {
   },
   newPassword: {
     title: 'New password',
+    placeholder: 'New password',
   },
   oldPassword: {
     title: 'Old password',
+    placeholder: 'Old password',
   },
   openingHours: {
     description: 'add opening day',
@@ -125,6 +127,7 @@ export const fields: ILabels = {
   },
   repeatNewPassword: {
     title: 'Repeat new password',
+    placeholder: 'Repeat new password',
   },
   userName: {
     title: 'Username',

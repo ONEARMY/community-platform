@@ -42,7 +42,6 @@ describe('[Research]', () => {
 
       const newCollaborator = generateNewUserDetails()
       cy.signUpNewUser(newCollaborator)
-      cy.logout()
 
       cy.step('Create the research article')
       cy.login(researcherEmail, researcherPassword)
@@ -166,7 +165,6 @@ describe('[Research]', () => {
       const updateVideoUrl = 'https://www.youtube.com/watch?v=U3mrj84p3cM'
 
       setIsPreciousPlastic()
-      cy.logout()
       cy.signUpNewUser()
 
       cy.step('Can access create form')
@@ -316,7 +314,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=DraftUpdateLabel]').should('be.visible')
 
       cy.step('Draft not visible to others')
-      cy.logout()
+      cy.logout(false)
       cy.visit(`/research/${expected.slug}`)
       cy.get(updateTitle).should('not.exist')
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')

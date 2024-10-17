@@ -96,6 +96,7 @@ Cypress.Commands.add('clearServiceWorkers', () => {
         Auth.signOut().then(() => resolve())
       })
     })
+    cy.wait(2000)
     cy.wrap(checkUI ? 'check logout ui' : 'skip ui check').then(() => {
       if (checkUI) {
         cy.get('[data-cy=login]')

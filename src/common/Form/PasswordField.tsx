@@ -9,7 +9,6 @@ export const PasswordField = ({ name, component, ...rest }) => {
     <Field
       {...rest}
       name={name}
-      placeHolder={'testing'}
       component={component}
       type={isPasswordVisible ? 'text' : 'password'}
       sx={{

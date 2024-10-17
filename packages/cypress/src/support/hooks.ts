@@ -1,3 +1,5 @@
+// import { TestDB } from './db/firebase'
+
 /**
  * Before all tests begin seed the database. CY runs this before all specs.
  * Note, cy also automatically will clear browser caches.
@@ -18,6 +20,18 @@ before(() => {
   })
   cy.clearServiceWorkers()
   cy.deleteIDB('OneArmyCache')
+
+  // cy.wrap('DB Init').then({ timeout: 120000 }, () => {
+  //   // large initial timeout in case server slow to respond
+  //   return new Cypress.Promise((resolve, reject) => {
+  //     // force resolve in case of server issues (sometimes a bit flaky)
+  //     setTimeout(() => {
+  //       resolve()
+  //     }, 10000)
+  //     // seed the database
+  //     TestDB.seedDB().then(resolve).catch(reject)
+  //   })
+  // })
 })
 
 afterEach(() => {

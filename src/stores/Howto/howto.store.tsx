@@ -311,15 +311,6 @@ export class HowtoStore extends ModuleStore {
     return howto
   }
 
-  private async addCommentNotification(howto: IHowto) {
-    await this.userNotificationsStore.triggerNotification(
-      'new_comment_discussion',
-      howto._createdBy,
-      '/how-to/' + howto.slug,
-      howto.title,
-    )
-  }
-
   private async findMentionsInSteps(steps: IHowToStepFormInput[]) {
     const stepMentions: UserMention[] = []
 

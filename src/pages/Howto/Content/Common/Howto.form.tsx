@@ -102,7 +102,7 @@ export const HowtoForm = observer((props: IProps) => {
     }
     logger.debug('submitting form', formValues)
     const howto = await howtoStore.uploadHowTo(formValues)
-    setHowtoSlug(howto?.slug || '')
+    howto && setHowtoSlug(howto.slug)
     form.reset(formValues)
   }
   // automatically generate the slug when the title changes

@@ -38,7 +38,7 @@
     "format:style": "prettier --write '**/*.{json,js,tsx,ts}'",
     "serve": "npx serve -s build",
     "test": "yarn workspace oa-cypress start",
-    "test:components": "yarn workspace oa-components test",
+    "test:components": "yarn build:themes && yarn build:components && yarn workspace oa-components test",
     "test:unit": "yarn build:themes && yarn build:components && vitest",
     "test:madge": "npx madge --circular --extensions ts,tsx ./ --exclude src/stores",
     "storybook": "yarn workspace oa-components start",

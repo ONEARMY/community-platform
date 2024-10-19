@@ -23,6 +23,7 @@ export const StickyButton = () => {
         bottom: [2, 5],
         right: [2, 5],
         display: 'block',
+        zIndex: 3000,
       }}
     >
       <ExternalLink href={href} data-cy="feedback">

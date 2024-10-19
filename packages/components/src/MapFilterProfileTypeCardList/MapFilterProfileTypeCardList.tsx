@@ -5,24 +5,27 @@ import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import { CardButton } from '../CardButton/CardButton'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 
-import type { ProfileTypeName } from 'oa-shared'
-
-type FilterOption = {
-  label: string
-  type: ProfileTypeName
-}
+import type {
+  MapFilterOption,
+  MapFilterOptionsList,
+  ProfileTypeName,
+} from 'oa-shared'
 
 export interface IProps {
-  activeFilters: string[]
-  availableFilters: FilterOption[]
-  onFilterChange: (label: string) => void
+  activeFilters: MapFilterOptionsList
+  availableFilters: MapFilterOptionsList
+  onFilterChange: (filter: MapFilterOption) => void
 }
 
-export const FilterList = (props: IProps) => {
+export const MapFilterProfileTypeCardList = (props: IProps) => {
   const elementRef = useRef<HTMLDivElement>(null)
   const [disableLeftArrow, setDisableLeftArrow] = useState<boolean>(true)
   const [disableRightArrow, setDisableRightArrow] = useState<boolean>(false)
   const { activeFilters, availableFilters, onFilterChange } = props
+
+  const typeFilters = availableFilters.filter(
+    ({ filterType }) => filterType === 'profileType',
+    )
 
   const handleHorizantalScroll = (step: number) => {
     const distance = 121
@@ -72,7 +75,7 @@ export const FilterList = (props: IProps) => {
     >
       <Flex
         as="ul"
-        data-cy="FilterList"
+        data-cy="MapFilterProfileTypeCardList"
         ref={elementRef}
         sx={{
           listStyle: 'none',
@@ -86,14 +89,16 @@ export const FilterList = (props: IProps) => {
           height: 'auto',
         }}
       >
-        {availableFilters.map(({ label, type }, index) => {
-          const active = activeFilters.find((filter) => filter === type)
+        {typeFilters.map((typeFilter, index) => {
+          const active = activeFilters.find(
+            (filter) => filter.label === typeFilter.label,
+          )
           return (
             <CardButton
               as="li"
               data-cy={`MapListFilter${active ? '-active' : ''}`}
               key={index}
-              onClick={() => onFilterChange(type)}
+              onClick={() => onFilterChange(typeFilter)}
               extrastyles={{
                 backgroundColor: 'offWhite',
                 padding: 1,
@@ -113,16 +118,19 @@ export const FilterList = (props: IProps) => {
                     }),
               }}
             >
-              <MemberBadge size={30} profileType={type} />
+              <MemberBadge
+                size={30}
+                profileType={typeFilter.slug as ProfileTypeName}
+              />
               <br />
               <Text variant="quiet" sx={{ fontSize: 1 }}>
-                {label}
+                {typeFilter.label}
               </Text>
             </CardButton>
           )
         })}
       </Flex>
-      {availableFilters.length > 3 && (
+      {typeFilters.length > 3 && (
         <Flex
           sx={{
             justifyContent: 'space-between',
@@ -140,7 +148,7 @@ export const FilterList = (props: IProps) => {
             sx={{ height: '28px', borderColor: 'grey' }}
           />
           <ButtonIcon
-            data-cy="FilterList-ButtonRight"
+            data-cy="MapFilterProfileTypeCardList-ButtonRight"
             onClick={() => handleHorizantalScroll(10)}
             icon="chevron-right"
             disabled={disableRightArrow}

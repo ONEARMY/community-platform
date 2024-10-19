@@ -83,16 +83,33 @@ export const MemberProfile = ({ docs, user }: IProps) => {
                 height: '120px',
               }}
             />
-            <UserStatistics
-              userName={user.userName}
-              country={user.location?.country}
-              isVerified={user.verified}
-              isSupporter={!!user.badges?.supporter}
-              howtoCount={docs?.howtos.length || 0}
-              researchCount={docs?.research.length || 0}
-              usefulCount={user.totalUseful || 0}
-              sx={{ alignSelf: 'stretch' }}
-            />
+            <AuthWrapper
+              roleRequired={UserRole.BETA_TESTER}
+              fallback={
+                <UserStatistics
+                  userName={user.userName}
+                  country={user.location?.country}
+                  isVerified={user.verified}
+                  isSupporter={!!user.badges?.supporter}
+                  howtoCount={docs?.howtos.length || 0}
+                  researchCount={docs?.research.length || 0}
+                  usefulCount={user.totalUseful || 0}
+                  sx={{ alignSelf: 'stretch' }}
+                />
+              }
+            >
+              <UserStatistics
+                userName={user.userName}
+                country={user.location?.country}
+                isVerified={user.verified}
+                isSupporter={!!user.badges?.supporter}
+                howtoCount={docs?.howtos.length || 0}
+                researchCount={docs?.research.length || 0}
+                usefulCount={user.totalUseful || 0}
+                sx={{ alignSelf: 'stretch' }}
+                totalViews={user.total_views}
+              />
+            </AuthWrapper>
           </Flex>
           <Flex sx={{ flexGrow: 2, width: '100%', flexDirection: 'column' }}>
             <Flex

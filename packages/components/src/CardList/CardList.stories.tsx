@@ -1,7 +1,7 @@
 import { CardList } from './CardList'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { ProfileTypeName } from 'oa-shared'
+import type { IModerationStatus, ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Map/CardList',
@@ -9,10 +9,38 @@ export default {
 } as Meta<typeof CardList>
 
 const allItems = [
-  { _id: 'first-one', type: 'member' as ProfileTypeName },
-  { _id: 'second-one', type: 'collection-point' as ProfileTypeName },
-  { _id: 'third', type: 'member' as ProfileTypeName },
-  { _id: '4th', type: 'member' as ProfileTypeName },
+  {
+    _deleted: false,
+    _id: 'first-one',
+    type: 'member' as ProfileTypeName,
+    moderation: 'accepted' as IModerationStatus,
+    verified: false,
+    location: { lat: 0, lng: 0 },
+  },
+  {
+    _deleted: false,
+    _id: 'second-one',
+    type: 'collection-point' as ProfileTypeName,
+    moderation: 'accepted' as IModerationStatus,
+    verified: false,
+    location: { lat: 10, lng: -38 },
+  },
+  {
+    _deleted: false,
+    _id: 'third',
+    type: 'member' as ProfileTypeName,
+    moderation: 'accepted' as IModerationStatus,
+    verified: false,
+    location: { lat: 102, lng: 30 },
+  },
+  {
+    _deleted: false,
+    _id: '4th',
+    type: 'member' as ProfileTypeName,
+    moderation: 'accepted' as IModerationStatus,
+    verified: false,
+    location: { lat: 0, lng: 73 },
+  },
 ]
 
 export const Default: StoryFn<typeof CardList> = () => {

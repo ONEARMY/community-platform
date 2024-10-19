@@ -204,6 +204,7 @@ const SignUpPage = observer(() => {
                       <PasswordField
                         data-cy="password"
                         name="password"
+                        placeholder="Password"
                         component={FieldInput}
                         validate={required}
                       />
@@ -218,6 +219,7 @@ const SignUpPage = observer(() => {
                       <PasswordField
                         data-cy="confirm-password"
                         name="confirm-password"
+                        placeholder="Confirm your Password"
                         component={FieldInput}
                         validate={required}
                       />

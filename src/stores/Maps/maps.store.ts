@@ -191,6 +191,7 @@ export class MapsStore extends ModuleStore {
     let moderation: IModerationStatus = existingModeration
 
     const isMember = type === ProfileTypeList.MEMBER
+    const subType = !isMember && workspaceType
 
     // Member pins do not require moderation.
     if (isMember) {
@@ -216,7 +217,7 @@ export class MapsStore extends ModuleStore {
       _deleted: !user.location?.latlng,
       location: location!.latlng,
       type,
-      ...(!isMember && workspaceType ? { subType: workspaceType } : {}),
+      ...(subType ? { subType: workspaceType } : {}), // For old map only
       moderation,
       verified,
       creator: {
@@ -237,7 +238,7 @@ export class MapsStore extends ModuleStore {
         isContactableByPublic:
           isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
         profileType,
-        ...(workspaceType ? { subType: workspaceType } : {}),
+        ...(workspaceType ? { workspaceType } : {}),
         ...(userImage ? { userImage: userImage.downloadUrl } : {}),
       },
     }

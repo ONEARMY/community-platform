@@ -28,6 +28,7 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
         getUserProfile: mockGetUserProfile,
         updateUserBadge: mockUpdateUserBadge,
         getUserCreatedDocs: vi.fn(),
+        incrementViewCount: vi.fn(),
       },
       aggregationsStore: {
         updateVerifiedUsers: vi.fn(),

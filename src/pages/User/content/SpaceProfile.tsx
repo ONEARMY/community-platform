@@ -8,7 +8,7 @@ import {
   Username,
   UserStatistics,
 } from 'oa-components'
-import { ExternalLinkLabel, ProfileTypeList } from 'oa-shared'
+import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
 // Plastic types
 import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
 import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
@@ -17,6 +17,7 @@ import PETIcon from 'src/assets/images/plastic-types/pet.svg'
 import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
+import { AuthWrapper } from 'src/common/AuthWrapper'
 import { isPreciousPlastic } from 'src/config/config'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
@@ -294,15 +295,31 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                       mt: [3, 3, 0],
                     }}
                   >
-                    <UserStatistics
-                      userName={userName}
-                      country={location?.country}
-                      isVerified={user.verified}
-                      isSupporter={!!user.badges?.supporter}
-                      howtoCount={docs?.howtos.length || 0}
-                      usefulCount={user.totalUseful || 0}
-                      researchCount={docs?.research.length || 0}
-                    />
+                    <AuthWrapper
+                      roleRequired={UserRole.BETA_TESTER}
+                      fallback={
+                        <UserStatistics
+                          userName={userName}
+                          country={location?.country}
+                          isVerified={user.verified}
+                          isSupporter={!!user.badges?.supporter}
+                          howtoCount={docs?.howtos.length || 0}
+                          usefulCount={user.totalUseful || 0}
+                          researchCount={docs?.research.length || 0}
+                        />
+                      }
+                    >
+                      <UserStatistics
+                        userName={userName}
+                        country={location?.country}
+                        isVerified={user.verified}
+                        isSupporter={!!user.badges?.supporter}
+                        howtoCount={docs?.howtos.length || 0}
+                        usefulCount={user.totalUseful || 0}
+                        researchCount={docs?.research.length || 0}
+                        totalViews={user.total_views}
+                      />
+                    </AuthWrapper>
                   </Box>
                 </Flex>
               </Box>

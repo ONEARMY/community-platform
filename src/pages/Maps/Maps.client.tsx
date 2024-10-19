@@ -50,15 +50,17 @@ const MapsPage = observer(() => {
   useEffect(() => {
     const fetchMapPins = async () => {
       setNotification('Loading...')
-      const pins = await mapPinService.getMapPins(user?._id)
-      setMapPins(pins || [])
-      setNotification('')
+      try {
+        const pins = await mapPinService.getMapPins(user?._id)
+        setMapPins(pins)
+        setNotification('')
+      } catch (error) {
+        setNotification(error)
+      }
     }
 
-    if (mapPins.length === 0 && user) {
-      fetchMapPins()
-    }
-  }, [mapPins, user])
+    fetchMapPins()
+  }, [])
 
   useEffect(() => {
     const pinId = location.hash.slice(1)

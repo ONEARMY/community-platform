@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { CardListItem } from './CardListItem'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { ProfileTypeName } from 'oa-shared'
+import type { IModerationStatus, ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Map/CardListItem',
@@ -12,8 +12,12 @@ export default {
 
 export const DefaultMember: StoryFn<typeof CardListItem> = () => {
   const item = {
+    _deleted: false,
     _id: 'not-selected-onload',
     type: 'member' as ProfileTypeName,
+    moderation: 'accepted' as IModerationStatus,
+    verified: false,
+    location: { lat: 0, lng: 0 },
     creator: {
       _id: 'member_no2',
       _lastActive: 'string',
@@ -34,8 +38,12 @@ export const DefaultMember: StoryFn<typeof CardListItem> = () => {
 
 export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
   const item = {
+    _deleted: false,
     _id: 'not-selected-onload',
+    location: { lat: 0, lng: 0 },
+    moderation: 'accepted' as IModerationStatus,
     type: 'workspace' as ProfileTypeName,
+    verified: false,
     creator: {
       _id: 'string',
       _lastActive: 'string',
@@ -49,7 +57,7 @@ export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
       displayName: 'user',
       isContactableByPublic: false,
       profileType: 'workspace' as ProfileTypeName,
-      subType: 'Sheetpress',
+      workspaceType: 'Sheetpress',
     },
   }
 
@@ -62,8 +70,12 @@ export const DefaultSpace: StoryFn<typeof CardListItem> = () => {
 
 export const DefaultFallback: StoryFn<typeof CardListItem> = () => {
   const item = {
+    _deleted: false,
     _id: 'not-selected-onload',
     type: 'member' as ProfileTypeName,
+    location: { lat: 0, lng: 0 },
+    moderation: 'accepted' as IModerationStatus,
+    verified: false,
   }
 
   return (

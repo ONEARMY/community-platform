@@ -383,4 +383,57 @@ export const users = {
     email: 'mapview_testing_rejected@test.com',
     password: 'mapview_testing_rejected@test.com',
   },
+  profile_views: {
+    _authID: 'a0dFrGVJTlQUA9BqH0QmnQM6flX3',
+    _id: 'profile_views',
+    _created: '2022-01-30T18:51:57.719Z',
+    _modified: '2022-01-30T18:51:57.719Z',
+    displayName: 'profile_views',
+    userName: 'profile_views',
+    userRoles: [],
+    coverImages: [
+      {
+        contentType: 'image/jpeg',
+        fullPath: 'uploads/v3_users/demo_user/images/profile-cover-1.jpg',
+        name: 'profile-cover-1.jpg',
+        size: 18987,
+        type: 'image/jpeg',
+      },
+    ],
+    links: [
+      {
+        label: 'website',
+        url: 'http://profile_views.example.com',
+      },
+    ],
+    about: 'Hi! I have 99 views',
+    location: 'nl',
+    total_views: 99,
+  },
+  profile_no_views: {
+    _authID: 'a0dFrGVJTlQUA9BqH0QmnQM6flX4',
+    _id: 'profile_no_views',
+    _created: '2022-01-30T18:51:57.719Z',
+    _modified: '2022-01-30T18:51:57.719Z',
+    displayName: 'profile_no_views',
+    userName: 'profile_no_views',
+    userRoles: [],
+    coverImages: [
+      {
+        contentType: 'image/jpeg',
+        fullPath: 'uploads/v3_users/demo_user/images/profile-cover-1.jpg',
+        name: 'profile-cover-1.jpg',
+        size: 18987,
+        type: 'image/jpeg',
+      },
+    ],
+    links: [
+      {
+        label: 'website',
+        url: 'http://profile_no_views.example.com',
+      },
+    ],
+    about: 'Hi! I have no views',
+    location: 'nl',
+  },
 }

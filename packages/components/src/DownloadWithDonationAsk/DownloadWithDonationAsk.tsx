@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from '@remix-run/react'
-import {
-  DonationRequestModal,
-  DownloadButton,
-  DownloadCounter,
-  DownloadStaticFile,
-} from 'oa-components'
+import { useNavigate } from 'react-router-dom'
+
+import { DonationRequestModal } from '../DonationRequestModal/DonationRequestModal'
+import { DownloadButton } from '../DownloadButton/DownloadButton'
+import { DownloadCounter } from '../DownloadCounter/DownloadCounter'
+import { DownloadStaticFile } from '../DownloadStaticFile/DownloadStaticFile'
 
 import type { IUploadedFileMeta } from 'oa-shared'
 
@@ -13,15 +12,10 @@ export interface IProps {
   handleClick: () => Promise<void>
   isLoggedIn: boolean
   fileDownloadCount: number
-  fileLink: string | undefined
-  files: (IUploadedFileMeta | File | null)[] | undefined
+  fileLink?: string
+  files?: (IUploadedFileMeta | File | null)[]
 }
 
-/*
-  An edited version of the oa-component DownloadFileFromLink.
-  Once the donation ask is on all download links, some of this logic
-  can/should move to the component library.
-*/
 export const DownloadWithDonationAsk = (props: IProps) => {
   const { handleClick, fileDownloadCount, fileLink, files, isLoggedIn } = props
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)

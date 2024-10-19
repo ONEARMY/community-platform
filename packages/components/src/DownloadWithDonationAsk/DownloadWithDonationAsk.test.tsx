@@ -1,18 +1,14 @@
 import '@testing-library/jest-dom/vitest'
 
 import { fireEvent, render } from '@testing-library/react'
-import { UserRole } from 'oa-shared'
-import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
-import { useCommonStores } from './hooks/useCommonStores'
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 
-import type { IUploadedFileMeta, IUserDB } from 'oa-shared'
-import type { Mock } from 'vitest'
+import type { IUploadedFileMeta } from 'oa-shared'
 
 const mockedUsedNavigate = vi.fn()
-vi.mock('@remix-run/react', () => ({
+vi.mock('react-router-dom', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
 
@@ -20,17 +16,9 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: vi.fn(),
 }))
-const userToMock = (user?: IUserDB) => {
-  return (useCommonStores as Mock).mockImplementation(() => ({
-    stores: {
-      userStore: { user: user ?? undefined },
-    },
-  }))
-}
 
-describe('DownloadFileFromLink', () => {
+describe('DownloadWithDonationAsk', () => {
   it('when logged out, requires users to login', () => {
-    userToMock()
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
         handleClick={vi.fn()}
@@ -48,9 +36,6 @@ describe('DownloadFileFromLink', () => {
   })
 
   it('when logged in, opens the donation modal for fileLink', () => {
-    const user = FactoryUser()
-    userToMock(user)
-
     const handleClick = vi.fn()
     const fileLink = 'http://youtube.com/'
 
@@ -76,9 +61,6 @@ describe('DownloadFileFromLink', () => {
   })
 
   it('when logged in, opens the donation modal for files', () => {
-    const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
-    userToMock(user)
-
     const downloadUrl = 'http://great-url.com/'
     const handleClick = vi.fn()
 

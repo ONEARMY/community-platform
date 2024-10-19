@@ -18,13 +18,16 @@ describe('[Common]', () => {
 
   it('[Page Navigation]', () => {
     cy.visit('/how-to')
+    cy.wait(2000)
 
     cy.step('Go to Academy page')
     cy.get('[data-cy=page-link]').contains('Academy').click()
+    cy.wait(2000)
     cy.url().should('include', '/academy')
 
     cy.step('Go to How-to page')
     cy.get('[data-cy=page-link]').contains('How-to').click()
+    cy.wait(2000)
     cy.url().should('include', '/how-to')
 
     cy.step('Go to Map page')
@@ -36,12 +39,14 @@ describe('[Common]', () => {
   describe('[User feeback button]', () => {
     it('[Desktop]', () => {
       cy.visit('/how-to')
+      cy.wait(2000)
       cy.get('[data-cy=feedback]').should('contain', 'Report a Problem')
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
         .and('contain', '/how-to?sort=Newest')
 
       cy.visit('/map')
+      cy.wait(2000)
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
         .and('contain', '/map')
@@ -51,12 +56,14 @@ describe('[Common]', () => {
       cy.viewport('iphone-6')
 
       cy.visit('/how-to')
+      cy.wait(2000)
       cy.get('[data-cy=feedback]').should('contain', 'Problem?')
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
         .and('contain', '/how-to?sort=Newest')
 
       cy.visit('/map')
+      cy.wait(2000)
       cy.get('[data-cy=feedback]')
         .should('have.attr', 'href')
         .and('contain', '/map')

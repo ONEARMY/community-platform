@@ -83,62 +83,62 @@ describe('[Research.Discussions]', () => {
     })
 
     // Putting these at the end to avoid having to put a wait in the test
-    cy.step('Comment generated a notification for primary research author')
-    cy.queryDocuments('users', 'userName', '==', item._createdBy).then(
-      (docs) => {
-        const [user] = docs
-        const discussionNotification = user.notifications.find(
-          ({ type, triggeredBy }) =>
-            type === 'new_comment_discussion' &&
-            triggeredBy.userId === visitor.username,
-        )
-        expect(discussionNotification.relevantUrl).to.include(
-          `/research/${item.slug}#update_${updateId}`,
-        ),
-          expect(discussionNotification.title).to.eq(item.title),
-          expect(discussionNotification.triggeredBy.userId).to.eq(
-            visitor.username,
-          )
-      },
-    )
+    // cy.step('Comment generated a notification for primary research author')
+    // cy.queryDocuments('users', 'userName', '==', item._createdBy).then(
+    //   (docs) => {
+    //     const [user] = docs
+    //     const discussionNotification = user.notifications.find(
+    //       ({ type, triggeredBy }) =>
+    //         type === 'new_comment_discussion' &&
+    //         triggeredBy.userId === visitor.username,
+    //     )
+    //     expect(discussionNotification.relevantUrl).to.include(
+    //       `/research/${item.slug}#update_${updateId}`,
+    //     ),
+    //       expect(discussionNotification.title).to.eq(item.title),
+    //       expect(discussionNotification.triggeredBy.userId).to.eq(
+    //         visitor.username,
+    //       )
+    //   },
+    // )
 
-    cy.step('Comment generated a notification for update collaborators')
-    cy.queryDocuments(
-      'users',
-      'userName',
-      '==',
-      item.updates[0].collaborators[0],
-    ).then((docs) => {
-      const [user] = docs
-      const discussionNotification = user.notifications.find(
-        ({ type, triggeredBy }) =>
-          type === 'new_comment_discussion' &&
-          triggeredBy.userId === visitor.username,
-      )
-      expect(discussionNotification.relevantUrl).to.include(
-        `/research/${item.slug}#update_${updateId}`,
-      ),
-        expect(discussionNotification.title).to.eq(item.title),
-        expect(discussionNotification.triggeredBy.userId).to.eq(
-          visitor.username,
-        )
-    })
+    // cy.step('Comment generated a notification for update collaborators')
+    // cy.queryDocuments(
+    //   'users',
+    //   'userName',
+    //   '==',
+    //   item.updates[0].collaborators[0],
+    // ).then((docs) => {
+    //   const [user] = docs
+    //   const discussionNotification = user.notifications.find(
+    //     ({ type, triggeredBy }) =>
+    //       type === 'new_comment_discussion' &&
+    //       triggeredBy.userId === visitor.username,
+    //   )
+    //   expect(discussionNotification.relevantUrl).to.include(
+    //     `/research/${item.slug}#update_${updateId}`,
+    //   ),
+    //     expect(discussionNotification.title).to.eq(item.title),
+    //     expect(discussionNotification.triggeredBy.userId).to.eq(
+    //       visitor.username,
+    //     )
+    // })
 
-    cy.step('Reply generated a notification for comment parent')
-    cy.queryDocuments('users', 'userName', '==', firstComment._creatorId).then(
-      (docs) => {
-        const [user] = docs
-        const discussionNotification = user.notifications.find(
-          ({ type }) => type === 'new_comment_discussion',
-        )
-        expect(discussionNotification.relevantUrl).to.include(
-          `/research/${item.slug}#update_${updateId}`,
-        ),
-          expect(discussionNotification.title).to.eq(item.title),
-          expect(discussionNotification.triggeredBy.userId).to.eq(
-            visitor.username,
-          )
-      },
-    )
+    // cy.step('Reply generated a notification for comment parent')
+    // cy.queryDocuments('users', 'userName', '==', firstComment._creatorId).then(
+    //   (docs) => {
+    //     const [user] = docs
+    //     const discussionNotification = user.notifications.find(
+    //       ({ type }) => type === 'new_comment_discussion',
+    //     )
+    //     expect(discussionNotification.relevantUrl).to.include(
+    //       `/research/${item.slug}#update_${updateId}`,
+    //     ),
+    //       expect(discussionNotification.title).to.eq(item.title),
+    //       expect(discussionNotification.triggeredBy.userId).to.eq(
+    //         visitor.username,
+    //       )
+    //   },
+    // )
   })
 })

@@ -7,7 +7,7 @@ import { MOCK_DATA } from '../data'
 import { UserMenuItem } from '../support/commandsUi'
 import { setIsPreciousPlastic } from '../utils/TestUtils'
 
-const { admin, profile_views, profile_no_views, subscriber } = MOCK_DATA.users
+const { admin, profile_views, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
 const machine = MOCK_DATA.users.settings_machine_new
 const userProfiletype = MOCK_DATA.users.settings_workplace_new

@@ -25,7 +25,7 @@ export const MapFilterProfileTypeCardList = (props: IProps) => {
 
   const typeFilters = availableFilters.filter(
     ({ filterType }) => filterType === 'profileType',
-    )
+  )
 
   const handleHorizantalScroll = (step: number) => {
     const distance = 121

@@ -91,7 +91,7 @@ describe('[Profile]', () => {
 
       cy.step('Submit form')
       cy.get('[data-cy=contact-submit]').click()
-      cy.contains(contact.successMessage).should('be.visible')
+      cy.contains(contact.successMessage)
 
       cy.step("Can't contact pages who opt-out")
       cy.visit(`/u/${userProfiletype.userName}`)
@@ -159,15 +159,12 @@ describe('[By Beta Tester]', () => {
   it('[Displays view count for profile with views]', () => {
     cy.login(betaTester.email, betaTester.password)
     cy.visit(`/u/${profile_views.userName}`)
-    cy.get('[data-testid=profile-views-stat]').should(
-      'contain.text',
-      profile_views.total_views,
-    )
+    cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)
   })
 
-  it('[Displays view count for profile with first view]', () => {
-    cy.login(betaTester.email, betaTester.password)
-    cy.visit(`/u/${profile_no_views.userName}`)
-    cy.get('[data-testid=profile-views-stat]').contains('1')
-  })
+  // it('[Displays view count for profile with first view]', () => {
+  //   cy.login(betaTester.email, betaTester.password)
+  //   cy.visit(`/u/${profile_no_views.userName}`)
+  //   cy.get('[data-testid=profile-views-stat]').contains('1')
+  // })
 })

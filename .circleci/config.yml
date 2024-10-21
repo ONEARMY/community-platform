@@ -280,10 +280,12 @@ jobs:
           name: Set branch environment
           command: |
             echo 'export VITE_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
+            echo 'export VITE_SITE_VARIANT=test-ci' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
             echo $VITE_PROJECT_VERSION
+            echo $VITE_SITE_VARIANT
       - run:
           command: yarn build
       - persist_to_workspace:

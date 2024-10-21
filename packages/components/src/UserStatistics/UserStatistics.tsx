@@ -107,7 +107,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           </InternalLink>
         )}
 
-        {props.totalViews ?? (
+        {props.totalViews && (
           <Flex data-testid="profile-views-stat">
             <Icon glyph="view" size={22} />
             <Box ml={1}>{`Views:${props.totalViews}`}</Box>

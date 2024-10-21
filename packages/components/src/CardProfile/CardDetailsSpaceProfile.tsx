@@ -96,7 +96,7 @@ export const CardDetailsSpaceProfile = ({ creator, isLink }: IProps) => {
           />
         )}
 
-        {tags && <ProfileTagsList tagIds={tags} />}
+        {tags && <ProfileTagsList tags={tags} />}
 
         {about && (
           <Text variant="quiet" sx={{ fontSize: 2 }}>

@@ -1,7 +1,6 @@
 import {
   ImageGallery,
   MemberBadge,
-  ProfileTagsList,
   Tab,
   TabPanel,
   Tabs,
@@ -19,6 +18,7 @@ import PPIcon from 'src/assets/images/plastic-types/pp.svg'
 import PSIcon from 'src/assets/images/plastic-types/ps.svg'
 import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
 import { AuthWrapper } from 'src/common/AuthWrapper'
+import { ProfileTags } from 'src/common/ProfileTags'
 import { isPreciousPlastic } from 'src/config/config'
 import { cdnImageUrl } from 'src/utils/cdnImageUrl'
 import { formatImagesForGallery } from 'src/utils/formatImageListForGallery'
@@ -247,7 +247,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                       width: ['100%', '100%', '80%'],
                     }}
                   >
-                    {tags && <ProfileTagsList tagIds={tags} />}
+                    {tags && <ProfileTags tagIds={tags} />}
                     {about && <Paragraph>{about}</Paragraph>}
 
                     {profileType === ProfileTypeList.COLLECTION_POINT &&

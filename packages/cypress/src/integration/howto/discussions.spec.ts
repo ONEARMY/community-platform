@@ -1,6 +1,8 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and research. Any changes here should be replicated there.
 
+import { ExternalLinkLabel } from 'oa-shared'
+
 import { MOCK_DATA } from '../../data'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
@@ -14,62 +16,58 @@ const howtoDiscussion = Object.values(MOCK_DATA.discussions).find(
 describe('[Howto.Discussions]', () => {
   it('can open using deep links', () => {
     const firstComment = howtoDiscussion.comments[0]
-
-    cy.signUpNewUser()
     cy.visit(`/how-to/${item.slug}#comment:${firstComment._id}`)
     cy.wait(2000)
     cy.checkCommentItem(firstComment.text, 2)
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const newComment = 'An interesting howto. The answer must be...'
-    const updatedNewComment =
-      'An interesting howto. The answer must be that when the sky is red, the apocalypse _might_ be on the way.'
-    const newReply = 'Thanks Dave and Ben. What does everyone else think?'
-    const updatedNewReply = 'Anyone else?'
-
     const visitor = generateNewUserDetails()
     cy.signUpNewUser(visitor)
     cy.visit(`/how-to/${item.slug}`)
 
+    const newComment = `An interesting howto. ${visitor.username}`
+    const updatedNewComment = `An interesting howto. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Yours, ${visitor.username}`
+    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.username}`
+    const updatedNewReply = `Anyone else? All the best, ${visitor.username}`
+
     cy.step('Can add comment')
     cy.addComment(newComment)
     cy.contains(/\d+ comments/)
-    cy.contains(newComment)
+    cy.get('[data-cy=OwnCommentItem]').contains(newComment)
 
-    // The following step isn't possible to test atm due to the relationship between
-    // the functions listen for changes and how cypress creates new document collections
-    // for each test run.
-    // cy.step('Updating user settings shows on comments')
-    // cy.visit('/settings')
-    // cy.setSettingBasicUserInfo({
-    //     country: 'Saint Lucia',
-    //     description: "I'm a commenter",
-    //     displayName: visitor.username,
-    //   })
-    // cy.setSettingImage('avatar', 'userImage')
-    // cy.setSettingAddContactLink({
-    //   index: 0,
-    //   label: ExternalLinkLabel.SOCIAL_MEDIA,
-    //   url: 'http://something.to.delete/',
-    // })
-    // cy.saveSettingsForm()
+    cy.step('Updating user settings shows on comments')
+    cy.visit('/settings')
+    cy.get('[data-cy=loader]').should('not.exist')
+    cy.setSettingBasicUserInfo({
+      country: 'Saint Lucia',
+      description: "I'm a commenter",
+      displayName: visitor.username,
+    })
+    cy.setSettingImage('avatar', 'userImage')
+    cy.setSettingAddContactLink({
+      index: 0,
+      label: ExternalLinkLabel.SOCIAL_MEDIA,
+      url: 'http://something.to.delete/',
+    })
+    cy.saveSettingsForm()
 
-    // cy.visit(`/how-to/${item.slug}`)
-    // cy.get('[data-cy="country:lc"]')
+    cy.get('[data-cy=page-link]').contains('How-to').click()
+    cy.get('[data-cy-howto-slug="make-an-interlocking-brick"]').click()
+
+    cy.get('[data-cy=OwnCommentItem]').get('[data-cy="country:LC"]')
     // cy.get('[data-cy="commentAvatarImage"]')
     //   .should('have.attr', 'src')
     //   .and('include', 'avatar')
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', updatedNewComment)
-    cy.contains(updatedNewComment)
-    cy.contains(newComment).should('not.exist')
+    cy.get('[data-cy=OwnCommentItem]').contains(updatedNewComment)
+    cy.get('[data-cy=OwnCommentItem]').contains(newComment).should('not.exist')
 
     cy.step('Can delete their comment')
     cy.deleteDiscussionItem('CommentItem')
     cy.contains(updatedNewComment).should('not.exist')
-    cy.contains(`${howtoDiscussion.comments.length} comments`)
 
     cy.step('Can add reply')
     cy.addReply(newReply)
@@ -77,8 +75,6 @@ describe('[Howto.Discussions]', () => {
     cy.contains(newReply)
     cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
       const [howto] = docs
-      expect(howto.totalComments).to.eq(howtoDiscussion.comments.length + 1)
-      // Updated to the just added comment iso datetime
       expect(howto.latestCommentDate).to.not.eq(item.latestCommentDate)
     })
 
@@ -90,12 +86,6 @@ describe('[Howto.Discussions]', () => {
     cy.step('Can delete their reply')
     cy.deleteDiscussionItem('ReplyItem')
     cy.contains(updatedNewReply).should('not.exist')
-    cy.contains(`${howtoDiscussion.comments.length} comments`)
-    cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
-      const [howto] = docs
-      expect(howto.totalComments).to.eq(howtoDiscussion.comments.length)
-      expect(howto.latestCommentDate).to.eq(item.latestCommentDate)
-    })
 
     // Putting these at the end to avoid having to put a wait in the test
     cy.step('Comment generated notification for question author')

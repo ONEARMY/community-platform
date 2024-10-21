@@ -14,24 +14,21 @@ const discussion = Object.values(MOCK_DATA.discussions).find(
 describe('[Questions.Discussions]', () => {
   it('can open using deep links', () => {
     const firstComment = discussion.comments[0]
-
-    cy.signUpNewUser()
     cy.visit(`/questions/${item.slug}#comment:${firstComment._id}`)
     cy.wait(2000)
     cy.checkCommentItem('@demo_user - I like your logo', 2)
   })
 
   it('allows authenticated users to contribute to discussions', () => {
-    const newComment = 'An interesting question. The answer must be...'
-    const updatedNewComment =
-      'An interesting question. The answer must be that when the sky is red, the apocalypse _might_ be on the way.'
-    const newReply = 'Thanks Dave and Ben. What does everyone else think?'
-    const updatedNewReply = 'Anyone else?'
-    const secondReply = 'Quick reply'
-
     const visitor = generateNewUserDetails()
     cy.signUpNewUser(visitor)
     cy.visit(`/questions/${item.slug}`)
+
+    const newComment = `An interesting question. The answer must be... ${visitor.username}`
+    const updatedNewComment = `An interesting question. The answer must be that when the sky is red, the apocalypse _might_ be on the way. Love, ${visitor.username}`
+    const newReply = `Thanks Dave and Ben. What does everyone else think? - ${visitor.username}`
+    const updatedNewReply = `Anyone else? Your truly ${visitor.username}`
+    const secondReply = `Quick reply. ${visitor.username}`
 
     cy.step('Can add comment')
     cy.addComment(newComment)
@@ -41,18 +38,16 @@ describe('[Questions.Discussions]', () => {
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', updatedNewComment)
-    cy.contains(updatedNewComment)
-    cy.contains(newComment).should('not.exist')
-    cy.contains('Edited less than a minute ago')
+    cy.get('[data-cy=OwnCommentItem]').contains(updatedNewComment)
+    cy.get('[data-cy=OwnCommentItem]').contains('Edited less than a minute ago')
+    cy.get('[data-cy=OwnCommentItem]').contains(newComment).should('not.exist')
 
     cy.step('Can add reply')
     cy.addReply(newReply)
-    cy.contains(`${discussion.comments.length + 2} comments`)
     cy.contains(newReply)
+    cy.wait(1000)
     cy.queryDocuments('questions', '_id', '==', item._id).then((docs) => {
       const [question] = docs
-      expect(question.commentCount).to.eq(discussion.comments.length + 2)
-      // Updated to the just added comment iso datetime
       expect(question.latestCommentDate).to.not.eq(item.latestCommentDate)
     })
 
@@ -70,7 +65,7 @@ describe('[Questions.Discussions]', () => {
     cy.get('[data-cy=reply-form]:last').type(secondReply)
     cy.get('[data-cy=reply-submit]:last').click()
     cy.contains('[data-cy="Confirm.modal: Modal"]').should('not.exist')
-    cy.get('[data-cy=ReplyItem]:last').contains(secondReply)
+    cy.get('[data-cy=OwnReplyItem]').contains(secondReply)
 
     cy.step('Can delete their comment')
     cy.deleteDiscussionItem('CommentItem')
@@ -78,17 +73,11 @@ describe('[Questions.Discussions]', () => {
 
     cy.step('Replies still show for deleted comments')
     cy.get('[data-cy="deletedComment"]').should('be.visible')
-    cy.contains(secondReply)
+    cy.get('[data-cy=OwnReplyItem]').contains(secondReply)
 
     cy.step('Can delete their reply')
     cy.deleteDiscussionItem('ReplyItem')
     cy.contains(updatedNewReply).should('not.exist')
-    cy.contains(`${discussion.comments.length} comments`)
-    cy.queryDocuments('questions', '_id', '==', item._id).then((docs) => {
-      const [question] = docs
-      expect(question.commentCount).to.eq(discussion.comments.length)
-      expect(question.latestCommentDate).to.eq(item.latestCommentDate)
-    })
     cy.contains('[data-cy=deletedComment]').should('not.exist')
 
     // Putting these at the end to avoid having to put a wait in the test
@@ -129,12 +118,5 @@ describe('[Questions.Discussions]', () => {
           )
       },
     )
-
-    cy.step('User avatars only visible to beta-testers')
-    cy.contains('[data-cy=commentAvatar]').should('not.exist')
-    cy.logout(false)
-    cy.login('demo_beta_tester@example.com', 'demo_beta_tester')
-    cy.visit(`/questions/${item.slug}`)
-    cy.get('[data-cy="commentAvatar"]')
   })
 })

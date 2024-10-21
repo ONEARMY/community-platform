@@ -2,6 +2,7 @@ import { Field } from 'react-final-form'
 import TagsSelect from 'src/common/Tags/TagsSelect'
 import { fields } from 'src/pages/UserSettings/labels'
 import { userService } from 'src/services/user.service'
+import { COMPARISONS } from 'src/utils/comparisons'
 import { Flex, Heading, Text } from 'theme-ui'
 
 import { FlexSectionContainer } from '../elements'
@@ -21,7 +22,11 @@ export const ProfileTags = () => {
       >
         <Heading as="h2">{title}</Heading>
         <Text variant="quiet">{description}</Text>
-        <Field name="tags" component={WrappedTagsSelect} />
+        <Field
+          name="tags"
+          component={WrappedTagsSelect}
+          isEqual={COMPARISONS.tags}
+        />
       </Flex>
     </FlexSectionContainer>
   )

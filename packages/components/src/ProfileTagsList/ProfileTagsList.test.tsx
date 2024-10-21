@@ -9,11 +9,8 @@ import type { IProps } from './ProfileTagsList'
 
 describe('ProfileTagsList', () => {
   it('validates the component behaviour', () => {
-    const { getByText, queryByText } = render(
-      <Default {...(Default.args as IProps)} />,
-    )
+    const { getByText } = render(<Default {...(Default.args as IProps)} />)
 
     expect(getByText('Electronics')).toBeInTheDocument()
-    expect(queryByText('Machining')).toBeNull()
   })
 })

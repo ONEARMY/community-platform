@@ -110,7 +110,7 @@ export const SettingsPageUserProfile = () => {
       user.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
     userImage: user.userImage || null,
     coverImages,
-    tags: user.tags || [],
+    tags: user.tags || {},
   }
 
   const formId = 'userProfileForm'

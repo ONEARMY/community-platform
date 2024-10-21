@@ -4,6 +4,7 @@ import { db } from '../Firebase/firestoreDB'
 import {
   getCreatorImage,
   getFirstCoverImage,
+  getValidTags,
   hasDetailsForMapPinChanged,
 } from './utils'
 
@@ -32,14 +33,15 @@ export const updateMapPins = async (prevUser: IUserDB, user: IUserDB) => {
     coverImages,
     displayName,
     isContactableByPublic,
-    profileType,
-    workspaceType,
-    userImage,
     location,
+    profileType,
+    userImage,
+    workspaceType,
   } = user
   const creatorImage = getCreatorImage(userImage)
   const coverImage = getFirstCoverImage(coverImages)
   const countryCode = location?.countryCode || country || ''
+  const tags = user.tags ? getValidTags(user.tags) : []
 
   const creator = {
     _lastActive,
@@ -50,8 +52,9 @@ export const updateMapPins = async (prevUser: IUserDB, user: IUserDB) => {
     displayName,
     isContactableByPublic,
     profileType,
-    workspaceType,
+    tags,
     userImage: creatorImage,
+    workspaceType,
   }
 
   // Only one expected

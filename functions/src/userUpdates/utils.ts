@@ -1,6 +1,8 @@
+import { profileTags } from 'oa-shared'
+
 import { valuesAreDeepEqual } from '../Utils'
 
-import type { IUserDB } from 'oa-shared/models/user'
+import type { ISelectedTags, IUserDB } from 'oa-shared'
 
 export const hasDetailsChanged = (
   prevUser: IUserDB,
@@ -46,6 +48,7 @@ export const hasDetailsForMapPinChanged = (
     prevUser.isContactableByPublic !== user.isContactableByPublic,
     prevUser.profileType !== user.profileType,
     prevUser.workspaceType !== user.workspaceType,
+    hasUserTagsChanged(prevUser, user),
     ...hasDetailsChanged(prevUser, user),
     ...hasLocationDetailsChanged(prevUser, user),
   ]
@@ -66,10 +69,27 @@ export const hasUserImageChanged = (
   if (!prevUser.userImage && user.userImage) return true
 }
 
+export const hasUserTagsChanged = (
+  prevUser: IUserDB,
+  user: IUserDB,
+): boolean => {
+  return !valuesAreDeepEqual(prevUser.tags, user.tags)
+}
+
 export const getCreatorImage = (userImage: IUserDB['userImage']) => {
   return userImage?.downloadUrl || null
 }
 
 export const getFirstCoverImage = (coverImages: IUserDB['coverImages']) => {
   return coverImages?.[0]?.downloadUrl || null
+}
+
+export const getValidTags = (tagIds: ISelectedTags) => {
+  const selectedTagIds = Object.keys(tagIds).filter((id) => tagIds[id] === true)
+  const tags = selectedTagIds
+    .map((id) => profileTags.find(({ _id }) => id === _id))
+    .filter((tag) => tag !== undefined)
+    .filter(({ _deleted }) => _deleted !== true)
+
+  return tags
 }

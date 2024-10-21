@@ -1,9 +1,8 @@
-import { json, redirect } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { FIREBASE_CONFIG } from 'src/config/config'
 import { Howto } from 'src/pages/Howto/Content/Howto/Howto'
 import { howtoService } from 'src/pages/Howto/howto.service'
-import { NotFoundPage } from 'src/pages/NotFound/NotFound'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
 import type { LoaderFunctionArgs } from '@remix-run/node'

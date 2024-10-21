@@ -1,6 +1,8 @@
+import { profileTags } from 'oa-shared'
+
 import { valuesAreDeepEqual } from '../Utils'
 
-import type { IUserDB } from 'oa-shared/models/user'
+import type { ISelectedTags, ITag, IUserDB } from 'oa-shared'
 
 export const hasDetailsChanged = (
   prevUser: IUserDB,
@@ -80,4 +82,15 @@ export const getCreatorImage = (userImage: IUserDB['userImage']) => {
 
 export const getFirstCoverImage = (coverImages: IUserDB['coverImages']) => {
   return coverImages?.[0]?.downloadUrl || null
+}
+
+// For ease, duplicated from src/utils/getValidTags.ts
+export const getValidTags = (tagIds: ISelectedTags) => {
+  const selectedTagIds = Object.keys(tagIds).filter((id) => tagIds[id] === true)
+  const tags: ITag[] = selectedTagIds
+    .map((id) => profileTags.find(({ _id }) => id === _id))
+    .filter((tag): tag is ITag => !!tag)
+    .filter(({ _deleted }) => _deleted !== true)
+
+  return tags
 }

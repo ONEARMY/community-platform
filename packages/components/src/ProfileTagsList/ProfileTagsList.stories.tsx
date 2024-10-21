@@ -9,6 +9,19 @@ export default {
 
 export const Default: StoryFn<typeof ProfileTagsList> = () => (
   <ProfileTagsList
-    tagIds={{ uCzWZbz3aVKyx2keoqRi: true, J3LF7fMsDfniYT2ZX3rf: false }}
+    tags={[
+      {
+        _id: 'hwh',
+        _created: 'today',
+        _deleted: false,
+        label: 'Electronics',
+      },
+      {
+        _id: 'a45397uh',
+        _created: 'yesterday',
+        _deleted: false,
+        label: 'Electronics II',
+      },
+    ]}
   />
 )

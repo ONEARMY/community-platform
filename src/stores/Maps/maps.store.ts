@@ -2,6 +2,7 @@ import { action, makeObservable, observable } from 'mobx'
 import { IModerationStatus, ProfileTypeList } from 'oa-shared'
 import { logger } from 'src/logger'
 import { DEFAULT_PUBLIC_CONTACT_PREFERENCE } from 'src/pages/UserSettings/constants'
+import { getValidTags } from 'src/utils/getValidTags'
 import {
   hasAdminRights,
   isAllowedToPin,
@@ -180,7 +181,6 @@ export class MapsStore extends ModuleStore {
       location,
       profileType,
       userImage,
-      tags,
       verified,
       workspaceType,
     } = user
@@ -193,6 +193,7 @@ export class MapsStore extends ModuleStore {
 
     const isMember = type === ProfileTypeList.MEMBER
     const subType = !isMember && workspaceType
+    const tags = user.tags && getValidTags(user.tags)
 
     // Member pins do not require moderation.
     if (isMember) {

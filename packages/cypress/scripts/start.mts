@@ -108,6 +108,7 @@ async function startAppServer() {
     stdio: ['pipe', 'pipe', 'inherit'],
     cwd: PATHS.PLATFORM_ROOT_DIR,
     env: {
+      ...process.env,
       VITE_SITE_VARIANT: 'test-ci',
     },
   })

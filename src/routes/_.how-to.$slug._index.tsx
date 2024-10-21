@@ -1,7 +1,7 @@
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { FIREBASE_CONFIG } from 'src/config/config'
-import { Howto } from 'src/pages/Howto/Content/Howto/Howto'
+// import { Howto } from 'src/pages/Howto/Content/Howto/Howto'
 import { howtoService } from 'src/pages/Howto/howto.service'
 import { generateTags, mergeMeta } from 'src/utils/seo.utils'
 
@@ -29,14 +29,14 @@ export const meta = mergeMeta<typeof loader>(({ data }) => {
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const howto = data.howto as IHowtoDB
+  // const howto = data.howto as IHowtoDB
 
   return (
     <>
       <div style={{ display: 'none' }}>
         {JSON.stringify(data.FIREBASE_CONFIG)}
       </div>
-      <Howto howto={howto} />
+      {/* <Howto howto={howto} /> */}
     </>
   )
 }

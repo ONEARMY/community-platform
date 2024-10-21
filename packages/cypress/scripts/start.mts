@@ -97,7 +97,7 @@ async function startAppServer() {
 
   // create local build if not running on ci (which will have build already generated)
   if (isCi) {
-    serverCmd = 'yarn start-ci'
+    serverCmd = `${CROSSENV_BIN} ${crossEnvArgs} yarn start-ci`
   }
 
   /******************* Run the main commands ******************* */

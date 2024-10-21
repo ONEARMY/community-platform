@@ -107,6 +107,9 @@ async function startAppServer() {
     shell: true,
     stdio: ['pipe', 'pipe', 'inherit'],
     cwd: PATHS.PLATFORM_ROOT_DIR,
+    env: {
+      VITE_SITE_VARIANT: 'test-ci',
+    },
   })
 
   child.stdout.on('data', (d) => {

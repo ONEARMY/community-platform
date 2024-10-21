@@ -1,5 +1,6 @@
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import { FIREBASE_CONFIG } from 'src/config/config'
 import { Howto } from 'src/pages/Howto/Content/Howto/Howto'
 import { howtoService } from 'src/pages/Howto/howto.service'
 import { NotFoundPage } from 'src/pages/NotFound/NotFound'
@@ -11,29 +12,32 @@ import type { IHowtoDB } from 'oa-shared'
 export async function loader({ params }: LoaderFunctionArgs) {
   const howto = await howtoService.getBySlug(params.slug as string)
 
-  if (!howto) {
-    const searchSlug = (params.slug || '').replace(/-/gi, ' ')
+  // if (!howto) {
+  //   const searchSlug = (params.slug || '').replace(/-/gi, ' ')
 
-    return redirect(`/how-to?search=${searchSlug}&source=how-to-not-found`)
-  }
+  //   return redirect(`/how-to?search=${searchSlug}&source=how-to-not-found`)
+  // }
 
-  return json({ howto })
+  return json({ howto, FIREBASE_CONFIG })
 }
 
 export const meta = mergeMeta<typeof loader>(({ data }) => {
   const howto = data?.howto as IHowtoDB
-  const title = `${howto.title} - How-to - ${import.meta.env.VITE_SITE_NAME}`
+  const title = `${howto?.title} - How-to - ${import.meta.env.VITE_SITE_NAME}`
 
   return generateTags(title, howto.description, howto.cover_image?.downloadUrl)
 })
 
 export default function Index() {
   const data = useLoaderData<typeof loader>()
-  const howto = data.howto as IHowtoDB // there is some inference issue, shouldn't need 'as'
+  const howto = data.howto as IHowtoDB
 
-  if (!howto) {
-    return <NotFoundPage />
-  }
-
-  return <Howto howto={howto} />
+  return (
+    <>
+      <div style={{ display: 'none' }}>
+        {JSON.stringify(data.FIREBASE_CONFIG)}
+      </div>
+      <Howto howto={howto} />
+    </>
+  )
 }

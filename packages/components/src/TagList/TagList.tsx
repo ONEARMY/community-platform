@@ -12,11 +12,11 @@ export interface IProps {
 
 export const TagList = ({ tags }: IProps) => {
   return (
-    <Flex sx={{ gap: 1 }}>
+    <Flex sx={{ gap: 1 }} data-cy="tag-list">
       {tags
-        .filter((tag) => tag !== undefined)
-        .map((tag, index) => (
-          <Tag key={index} tag={tag} />
+        .filter((tag) => !!tag)
+        .map((tag) => (
+          <Tag key={tag.label} tag={tag} />
         ))}
     </Flex>
   )

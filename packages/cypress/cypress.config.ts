@@ -28,6 +28,7 @@ export default defineConfig({
     baseUrl: 'http://localhost:3456',
     specPattern: 'src/integration/**/*.{js,jsx,ts,tsx}',
     supportFile: 'src/support/index.ts',
+    experimentalStudio: true,
   },
   component: {
     devServer: {

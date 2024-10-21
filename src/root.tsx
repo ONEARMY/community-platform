@@ -1,5 +1,5 @@
-import { useContext, useEffect } from 'react'
-import { Global, ThemeProvider, withEmotionCache } from '@emotion/react'
+import { useContext, useEffect, useRef } from 'react'
+import { Global, withEmotionCache } from '@emotion/react'
 import {
   Links,
   Meta,
@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { GlobalStyles } from 'oa-components'
 import {
   fixingFashionTheme,
@@ -15,6 +16,7 @@ import {
 } from 'oa-themes'
 
 import { ClientStyleContext, ServerStyleContext } from './styles/context'
+import { generateTags } from './utils/seo.utils'
 
 import type { LinksFunction, MetaFunction } from '@remix-run/node'
 
@@ -26,28 +28,30 @@ const Document = withEmotionCache(
   ({ children }: DocumentProps, emotionCache) => {
     const serverStyleData = useContext(ServerStyleContext)
     const clientStyleData = useContext(ClientStyleContext)
-    const resetClientStyleData = clientStyleData?.reset
+    const reinjectStylesRef = useRef(true)
 
     // Only executed on client
+    // When a top level ErrorBoundary or CatchBoundary are rendered,
+    // the document head gets removed, so we have to create the style tags
     useEffect(() => {
+      if (!reinjectStylesRef.current) {
+        return
+      }
       // re-link sheet container
       emotionCache.sheet.container = document.head
+
       // re-inject tags
       const tags = emotionCache.sheet.tags
       emotionCache.sheet.flush()
       tags.forEach((tag) => {
         ;(emotionCache.sheet as any)._insertTag(tag)
       })
-      // reset cache to reapply global styles
-      clientStyleData?.reset()
-    }, [])
 
-    // Only executed on client
-    useEffect(() => {
-      if (resetClientStyleData) {
-        resetClientStyleData()
-      }
-    }, [resetClientStyleData])
+      // reset cache to re-apply global styles
+      clientStyleData!.reset()
+      // ensure we only do this once per mount
+      reinjectStylesRef.current = false
+    }, [clientStyleData, emotionCache.sheet])
 
     return (
       <html lang="en">
@@ -94,6 +98,7 @@ const getEnvironmentTheme = () => {
 
 export const links: LinksFunction = () => {
   const theme = getEnvironmentTheme()
+
   return [
     {
       rel: 'icon',
@@ -105,32 +110,7 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => {
   const theme = getEnvironmentTheme()
-
-  const tags = [
-    {
-      title: theme.siteName,
-    },
-    {
-      property: 'og:title',
-      content: theme.siteName,
-    },
-    {
-      name: 'twitter:title',
-      content: theme.siteName,
-    },
-    {
-      name: 'description',
-      content: theme.description,
-    },
-    {
-      property: 'og:description',
-      content: theme.description,
-    },
-    {
-      name: 'twitter:description',
-      content: theme.description,
-    },
-  ]
+  const tags = generateTags(theme.siteName, theme.description)
 
   if (import.meta.env.VITE_BRANCH !== 'production') {
     tags.push({

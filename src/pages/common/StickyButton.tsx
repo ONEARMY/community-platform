@@ -8,7 +8,7 @@ const FORM_URL =
 
 export const StickyButton = () => {
   const location = useLocation()
-  const [page, setPage] = useState<string>(window.location.href)
+  const [page, setPage] = useState<string>('')
 
   useEffect(() => {
     setPage(window.location.href)

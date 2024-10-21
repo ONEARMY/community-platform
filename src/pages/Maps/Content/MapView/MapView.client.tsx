@@ -21,18 +21,15 @@ interface IProps {
 
 export const MapView = (props: IProps) => {
   const { activePin, center, mapRef, onPinClicked, pins, zoom, setZoom } = props
-
-  useEffect(() => {
-    if (mapRef.current) {
-      /*return*/ mapRef.current.leafletElement.zoomControl?.setPosition(
-        'bottomleft',
-      )
-    }
-  }, [])
-
   const isViewportGreaterThanTablet = window.innerWidth > 1024
   const mapCenter: LatLngExpression = center ? [center.lat, center.lng] : [0, 0]
   const mapZoom = center ? zoom : 2
+
+  useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.leafletElement.zoomControl?.setPosition('bottomleft')
+    }
+  }, [])
 
   return (
     <Map

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useNavigate } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, Icon, Modal } from 'oa-components'
@@ -8,6 +7,7 @@ import { Box, Flex, Heading, Text } from 'theme-ui'
 import { buttons, headings } from '../../labels'
 
 interface IProps {
+  slug: string
   onClose: () => void
 }
 
@@ -46,7 +46,7 @@ const HowToSubmitStatus = observer((props: IProps) => {
         variant={!uploadStatus.Complete ? 'disabled' : 'outline'}
         icon="arrow-forward"
         onClick={() => {
-          navigate('/how-to/' + howtoStore.activeHowto!.slug)
+          navigate('/how-to/' + props.slug)
           props.onClose()
         }}
       >

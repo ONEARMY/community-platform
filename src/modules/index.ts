@@ -1,5 +1,3 @@
-import { getConfigurationOption } from 'src/config/config'
-
 export enum MODULE {
   CORE = 'core', // This is enabled on all installations
   HOWTO = 'howto',
@@ -10,12 +8,9 @@ export enum MODULE {
   QUESTION = 'question',
 }
 
-export const getSupportedModules = (): MODULE[] => {
+export const getSupportedModules = (supportedModules: string): MODULE[] => {
   const envModules: string[] =
-    getConfigurationOption(
-      'VITE_SUPPORTED_MODULES',
-      'howto,map,research,academy,user,question',
-    )
+    (supportedModules || 'howto,map,research,academy,user,question')
       .split(',')
       .map((s) => s.trim()) || []
   return [MODULE.CORE].concat(
@@ -23,5 +18,10 @@ export const getSupportedModules = (): MODULE[] => {
   )
 }
 
-export const isModuleSupported = (MODULE): boolean =>
-  getSupportedModules().includes(MODULE)
+export const isModuleSupported = (
+  supportedModules: string,
+  MODULE: MODULE,
+): boolean => {
+  const supported = getSupportedModules(supportedModules)
+  return supported.includes(MODULE)
+}

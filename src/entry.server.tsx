@@ -9,7 +9,7 @@ import { PassThrough } from 'node:stream'
 
 import { SENTRY_CONFIG } from './config/config'
 import { ServerStyleContext } from './styles/context'
-import createEmotionCache from './styles/createEmotionCache'
+import { createEmotionCache } from './styles/createEmotionCache'
 
 import type { EntryContext } from '@remix-run/node'
 
@@ -22,7 +22,6 @@ export default function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  // loadContext: AppLoadContext,
 ) {
   return isbot(request.headers.get('user-agent') || '')
     ? handleBotRequest(

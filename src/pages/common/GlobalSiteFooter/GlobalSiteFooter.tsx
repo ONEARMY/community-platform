@@ -1,25 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useContext, useMemo } from 'react'
 import { useLocation } from '@remix-run/react'
 import { SiteFooter } from 'oa-components'
 
-const isFooterVisible = (path) => {
-  return (
-    !path.startsWith('/map') && !path.startsWith('/academy') && path !== '/'
-  )
-}
+import { EnvironmentContext } from '../EnvironmentContext'
 
 const GlobalSiteFooter = () => {
+  const env = useContext(EnvironmentContext)
   const location = useLocation()
-  const [showFooter, setShowFooter] = useState(
-    isFooterVisible(location.pathname),
-  )
 
-  useEffect(
-    () => setShowFooter(isFooterVisible(location?.pathname)),
-    [location],
-  )
+  const showFooter = useMemo(() => {
+    const path = location?.pathname
 
-  return showFooter ? <SiteFooter /> : null
+    return (
+      !path.startsWith('/map') && !path.startsWith('/academy') && path !== '/'
+    )
+  }, [location?.pathname])
+
+  return showFooter ? (
+    <SiteFooter siteName={env.VITE_SITE_NAME || 'Community Platform'} />
+  ) : null
 }
 
 export default GlobalSiteFooter

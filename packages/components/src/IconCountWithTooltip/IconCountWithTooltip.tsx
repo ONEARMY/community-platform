@@ -18,7 +18,8 @@ export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
     <>
       <Text
         data-cy={dataCy}
-        data-tip={text}
+        data-tooltip-id="icon-count"
+        data-tooltip-content={text}
         color="black"
         sx={{
           display: 'flex',
@@ -30,7 +31,7 @@ export const IconCountWithTooltip = (props: IconCountWithTooltipProps) => {
         {count}
         <Icon glyph={icon} ml={1} />
       </Text>
-      <Tooltip />
+      <Tooltip id="icon-count" />
     </>
   )
 }

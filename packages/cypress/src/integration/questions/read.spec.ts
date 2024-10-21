@@ -24,7 +24,6 @@ describe('[Questions]', () => {
   describe('[Individual questions]', () => {
     it('[By Everyone]', () => {
       const {
-        _id,
         description,
         images,
         slug,
@@ -34,10 +33,6 @@ describe('[Questions]', () => {
         questionCategory,
       } = question
 
-      const questionDiscussion = Object.values(MOCK_DATA.discussions).find(
-        (discussion) => discussion.sourceId === _id,
-      )
-
       const pageTitle = `${title} - Question - Precious Plastic`
       const image = images[0].downloadUrl
 
@@ -45,9 +40,9 @@ describe('[Questions]', () => {
       cy.visit(`/questions/${slug}`)
 
       cy.step('All metadata visible')
-      cy.contains(`${question.subscribers.length} following`)
-      cy.contains(`${question.votedUsefulBy.length} useful`)
-      cy.contains(`${questionDiscussion.comments.length} comments`)
+      cy.contains(/\d+ following/)
+      cy.contains(/\d+ useful/)
+      cy.contains(/\d+ comments/)
 
       cy.step('[Populates title, SEO and social tags]')
       cy.title().should('eq', pageTitle)

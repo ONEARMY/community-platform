@@ -384,7 +384,7 @@ export const users = {
     password: 'mapview_testing_rejected@test.com',
   },
   profile_views: {
-    _authID: 'a0dFrGVJTlQUA9BqH0QmnQM6flX3',
+    _authID: '8th9KhBU0RRy6KwCrH0UQHNMxs42',
     _id: 'profile_views',
     _created: '2022-01-30T18:51:57.719Z',
     _modified: '2022-01-30T18:51:57.719Z',
@@ -408,7 +408,6 @@ export const users = {
     ],
     about: 'Hi! I have 99 views',
     location: 'nl',
-    total_views: 99,
   },
   profile_no_views: {
     _authID: 'a0dFrGVJTlQUA9BqH0QmnQM6flX4',

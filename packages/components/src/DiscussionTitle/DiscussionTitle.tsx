@@ -30,5 +30,9 @@ export const DiscussionTitle = ({ comments }: IProps) => {
 
   const title = setTitle()
 
-  return <Heading as="h3">{title}</Heading>
+  return (
+    <Heading as="h3" data-cy="DiscussionTitle">
+      {title}
+    </Heading>
+  )
 }

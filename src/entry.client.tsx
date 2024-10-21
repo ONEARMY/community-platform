@@ -6,7 +6,7 @@ import * as Sentry from '@sentry/remix'
 
 import { SENTRY_CONFIG } from './config/config'
 import { ClientStyleContext } from './styles/context'
-import createEmotionCache from './styles/createEmotionCache'
+import { createEmotionCache } from './styles/createEmotionCache'
 
 Sentry.init({ ...SENTRY_CONFIG, autoInstrumentRemix: true })
 

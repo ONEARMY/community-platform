@@ -2,7 +2,6 @@ import { faker } from '@faker-js/faker'
 
 import { RESEARCH_TITLE_MIN_LENGTH } from '../../../../../src/pages/Research/constants'
 import {
-  generateAlphaNumeric,
   generateNewUserDetails,
   setIsPreciousPlastic,
 } from '../../utils/TestUtils'
@@ -42,7 +41,6 @@ describe('[Research]', () => {
 
       const newCollaborator = generateNewUserDetails()
       cy.signUpNewUser(newCollaborator)
-      cy.logout()
 
       cy.step('Create the research article')
       cy.login(researcherEmail, researcherPassword)
@@ -156,8 +154,9 @@ describe('[Research]', () => {
     })
 
     it('[Any PP user]', () => {
-      const title = 'PP plastic stuff'
-      const expectSlug = 'pp-plastic-stuff'
+      const randomId = crypto.randomUUID().slice(0, 8)
+      const title = randomId + ' PP plastic stuff'
+      const expectSlug = randomId + '-pp-plastic-stuff'
       const description = 'Bespoke research topic'
 
       const updateTitle = 'First wonderful update'
@@ -166,7 +165,6 @@ describe('[Research]', () => {
       const updateVideoUrl = 'https://www.youtube.com/watch?v=U3mrj84p3cM'
 
       setIsPreciousPlastic()
-      cy.logout()
       cy.signUpNewUser()
 
       cy.step('Can access create form')
@@ -187,7 +185,6 @@ describe('[Research]', () => {
         .type(description)
 
       cy.get('[data-cy=submit]').click()
-
       cy.step('Publishes as expected')
       cy.get('[data-cy=view-research]:enabled', { timeout: 20000 })
         .click()
@@ -258,14 +255,14 @@ describe('[Research]', () => {
 
   describe('[Displays draft updates for Author]', () => {
     it('[By Authenticated]', () => {
-      const id = generateAlphaNumeric(5)
-      const updateTitle = `Create a research update ${id}`
+      const randomId = crypto.randomUUID().slice(0, 8)
+      const updateTitle = `${randomId} Create a research update`
       const updateDescription = 'This is the description for the update.'
       const updateVideoUrl = 'http://youtube.com/watch?v=sbcWY7t-JX8'
       const expected = {
         description: 'After creating, the research will be deleted.',
-        title: `Create research article test ${id}`,
-        slug: `create-research-article-test-${id.toLowerCase()}`,
+        title: `${randomId} Create research article test`,
+        slug: `${randomId}-create-research-article-test`,
       }
 
       cy.login(researcherEmail, researcherPassword)
@@ -316,7 +313,7 @@ describe('[Research]', () => {
       cy.get('[data-cy=DraftUpdateLabel]').should('be.visible')
 
       cy.step('Draft not visible to others')
-      cy.logout()
+      cy.logout(false)
       cy.visit(`/research/${expected.slug}`)
       cy.get(updateTitle).should('not.exist')
       cy.get('[data-cy=DraftUpdateLabel]').should('not.exist')

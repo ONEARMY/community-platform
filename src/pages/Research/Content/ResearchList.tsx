@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useTheme } from '@emotion/react'
 import { Link, useSearchParams } from '@remix-run/react'
 import { observer } from 'mobx-react'
 import { Button, Loader } from 'oa-components'
@@ -9,7 +8,7 @@ import { isPreciousPlastic } from 'src/config/config'
 import { logger } from 'src/logger'
 import DraftButton from 'src/pages/common/Drafts/DraftButton'
 import useDrafts from 'src/pages/common/Drafts/useDrafts'
-import { Box, Flex, Heading } from 'theme-ui'
+import { Box, Flex, Heading, useThemeUI } from 'theme-ui'
 
 import { ITEMS_PER_PAGE, RESEARCH_EDITOR_ROLES } from '../constants'
 import { listing } from '../labels'
@@ -20,10 +19,12 @@ import { ResearchSearchParams } from './ResearchSearchParams'
 
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore'
 import type { IResearch, ResearchStatus } from 'oa-shared'
+import type { ThemeWithName } from 'oa-themes'
 import type { ResearchSortOption } from '../ResearchSortOptions'
 
 const ResearchList = observer(() => {
-  const theme = useTheme()
+  const themeUi = useThemeUI()
+  const theme = themeUi.theme as ThemeWithName
   const { userStore } = useCommonStores().stores
   const [isFetching, setIsFetching] = useState<boolean>(true)
   const [researchItems, setResearchItems] = useState<IResearch.Item[]>([])

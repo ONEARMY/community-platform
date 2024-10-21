@@ -21,16 +21,11 @@ export const MapFilterProfileTypeCardList = (props: IProps) => {
   const elementRef = useRef<HTMLDivElement>(null)
   const [disableLeftArrow, setDisableLeftArrow] = useState<boolean>(true)
   const [disableRightArrow, setDisableRightArrow] = useState<boolean>(false)
-
   const { activeFilters, availableFilters, onFilterChange } = props
 
   const typeFilters = availableFilters.filter(
     ({ filterType }) => filterType === 'profileType',
   )
-
-  if (!typeFilters || typeFilters.length < 2) {
-    return null
-  }
 
   const handleHorizantalScroll = (step: number) => {
     const distance = 121
@@ -66,6 +61,10 @@ export const MapFilterProfileTypeCardList = (props: IProps) => {
   useEffect(() => {
     handleHorizantalScroll(0)
   }, [])
+
+  if (!availableFilters || availableFilters.length < 2) {
+    return null
+  }
 
   return (
     <Flex

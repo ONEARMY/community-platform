@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@emotion/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { Box, Flex } from 'theme-ui'
 
 import { Icon } from '../Icon/Icon'

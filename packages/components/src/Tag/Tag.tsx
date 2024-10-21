@@ -11,9 +11,7 @@ export interface Props {
   sx?: ThemeUIStyleObject | undefined
 }
 
-export const Tag = (props: Props) => {
-  const { tag, sx } = props
-
+export const Tag = ({ tag, sx }: Props) => {
   if (!tag || !tag.label) return null
 
   return (

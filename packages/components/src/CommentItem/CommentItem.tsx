@@ -73,7 +73,11 @@ export const CommentItem = (props: IProps) => {
   }
 
   return (
-    <Flex id={`comment:${_id}`} data-cy={item} sx={{ flexDirection: 'column' }}>
+    <Flex
+      id={`comment:${_id}`}
+      data-cy={isEditable ? `Own${item}` : item}
+      sx={{ flexDirection: 'column' }}
+    >
       <Flex sx={{ gap: 2 }}>
         {_deleted && (
           <Box sx={{ marginBottom: 2 }} data-cy="deletedComment">

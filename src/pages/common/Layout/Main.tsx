@@ -31,7 +31,6 @@ const Main = (props: IProps) => {
           ...(ignoreMaxWidth && {
             margin: '0',
             padding: '0',
-            width: '100vw',
           }),
         }}
       >

@@ -20,6 +20,12 @@ export async function loader() {
   return json(envVariables)
 }
 
+export function HydrateFallback() {
+  // This is required because all routes are loaded client-side. Avoids a page flicker before css is loaded.
+  // Can be removed once ALL pages are using SSR.
+  return <div></div>
+}
+
 // This is a Layout file, it will render for all routes that have _. prefix.
 export default function Index() {
   const envVariables = useLoaderData<typeof loader>()

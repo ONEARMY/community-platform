@@ -1,4 +1,3 @@
-import { IUserDB } from 'oa-shared/models/user'
 import {
   hasDetailsChanged,
   hasDetailsForCommentsChanged,
@@ -6,6 +5,8 @@ import {
   hasLocationDetailsChanged,
   hasUserImageChanged,
 } from './utils'
+
+import type { IUserDB } from 'oa-shared/models/user'
 
 describe('hasDetailsChanged', () => {
   it("returns false for every field that's the same", () => {
@@ -117,7 +118,7 @@ describe('hasDetailsForMapPinChanged', () => {
       displayName: 'id_name',
       isContactableByPublic: true,
       profileType: 'member',
-      subType: null,
+      workspaceType: null,
     } as IUserDB
     const user = {
       _authID: '',
@@ -128,7 +129,7 @@ describe('hasDetailsForMapPinChanged', () => {
       isContactableByPublic: false,
       links: [],
       profileType: 'workspace',
-      subType: 'shredder',
+      workspaceType: 'shredder',
       userName: 'idname',
       verified: false,
     } as IUserDB
@@ -145,7 +146,7 @@ describe('hasDetailsForMapPinChanged', () => {
       displayName: 'id name',
       isContactableByPublic: false,
       profileType: 'workspace',
-      subType: 'shredder',
+      workspaceType: 'shredder',
       userName: 'idname',
       verified: false,
     } as IUserDB

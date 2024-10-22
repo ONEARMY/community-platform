@@ -16,11 +16,12 @@ describe('ContentStatistics', () => {
       '/assets/icons/icon-star-default.svg',
       '/assets/icons/icon-comment.svg',
       '/assets/icons/icon-update.svg',
+      '/assets/icons/chevron-down.svg',
     ]
 
     const icons = getAllByAltText('icon')
 
-    expect(icons.length).toBe(4)
+    expect(icons.length).toBe(5)
 
     for (const icon of icons) {
       expect(expectedIcons).toContain(icon.getAttribute('src'))

@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { Button, InternalLink, Loader } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
+import { incrementViewCount } from 'src/utils/incrementViewCount'
 import { seoTagsUpdate } from 'src/utils/seo'
 import { Flex, Text } from 'theme-ui'
 
@@ -37,6 +38,12 @@ export const UserProfile = observer(() => {
           if (userData as IUserDB) {
             setUser(userData)
 
+            incrementViewCount({
+              document: userData,
+              documentType: 'user',
+              store: userStore,
+            })
+
             seoTagsUpdate({
               title: `${userData.displayName} - Profile`,
             })
@@ -55,6 +62,7 @@ export const UserProfile = observer(() => {
           logger.error('Error getting user created docs', error)
         }
       }
+
       fetchUserData()
       fetchUserDocs()
     }

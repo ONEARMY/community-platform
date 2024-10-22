@@ -50,13 +50,14 @@ describe('[How To]', () => {
 
     beforeEach(() => {
       cy.visit('/how-to')
-      // Hack to get the tags store to finish populating before the expectations
-      cy.wait(1000)
     })
 
     describe('[By Everyone]', () => {
       it('[See all info]', () => {
         const howto = howtos[0]
+        // Hack to avoid flaky test as the tags are not being loaded on time
+        cy.queryDocuments('howtos', '_id', '==', howto._id)
+
         cy.visit(specificHowtoUrl)
         cy.step('Edit button is not available')
         cy.get('[data-cy=edit]').should('not.exist')

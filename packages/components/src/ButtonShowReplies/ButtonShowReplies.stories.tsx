@@ -17,7 +17,6 @@ export const Default: StoryFn<typeof ButtonShowReplies> = () => {
 
   return (
     <ButtonShowReplies
-      creatorName="Jeff"
       replies={replies}
       isShowReplies={isShowReplies}
       setIsShowReplies={() => setIsShowReplies(!isShowReplies)}
@@ -30,7 +29,6 @@ export const RepliesShowing: StoryFn<typeof ButtonShowReplies> = () => {
 
   return (
     <ButtonShowReplies
-      creatorName="Annabeth"
       isShowReplies={true}
       replies={replies}
       setIsShowReplies={() => null}
@@ -43,7 +41,6 @@ export const OneReply: StoryFn<typeof ButtonShowReplies> = () => {
 
   return (
     <ButtonShowReplies
-      creatorName="Zelda"
       isShowReplies={false}
       replies={replies}
       setIsShowReplies={() => null}
@@ -54,7 +51,6 @@ export const OneReply: StoryFn<typeof ButtonShowReplies> = () => {
 export const NoReplies: StoryFn<typeof ButtonShowReplies> = () => {
   return (
     <ButtonShowReplies
-      creatorName="Link"
       isShowReplies={false}
       replies={[]}
       setIsShowReplies={() => null}
@@ -67,7 +63,6 @@ export const NoCreatorName: StoryFn<typeof ButtonShowReplies> = () => {
 
   return (
     <ButtonShowReplies
-      creatorName={null}
       isShowReplies={false}
       replies={replies}
       setIsShowReplies={() => null}

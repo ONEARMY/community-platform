@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 import { PinProfile } from './PinProfile'
 
 import type { Meta, StoryFn } from '@storybook/react'
-import type { ProfileTypeName } from 'oa-shared'
+import type { IModerationStatus, ProfileTypeName } from 'oa-shared'
 
 export default {
   title: 'Map/PinProfile',
@@ -12,8 +12,12 @@ export default {
 
 export const DefaultMember: StoryFn<typeof PinProfile> = () => {
   const item = {
+    _deleted: false,
     _id: 'not-selected-onload',
+    location: { lat: 0, lng: 0 },
+    moderation: 'accepted' as IModerationStatus,
     type: 'member' as ProfileTypeName,
+    verified: false,
     creator: {
       _id: 'member_no2',
       _lastActive: 'string',
@@ -34,8 +38,12 @@ export const DefaultMember: StoryFn<typeof PinProfile> = () => {
 
 export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
   const item = {
+    _deleted: false,
     _id: 'not-selected-onload',
+    location: { lat: 0, lng: 0 },
+    moderation: 'accepted' as IModerationStatus,
     type: 'workspace' as ProfileTypeName,
+    verified: false,
     creator: {
       _id: 'string',
       _lastActive: 'string',
@@ -49,7 +57,7 @@ export const DefaultSpace: StoryFn<typeof PinProfile> = () => {
       displayName: 'user',
       isContactableByPublic: true,
       profileType: 'workspace' as ProfileTypeName,
-      subType: 'Sheetpress',
+      workspaceType: 'Sheetpress',
     },
   }
 

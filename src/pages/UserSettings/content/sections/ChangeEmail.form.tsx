@@ -104,6 +104,7 @@ export const ChangeEmailForm = () => {
                     data-cy="password"
                     name="password"
                     required
+                    placeholder="Password"
                   />
                 </FormFieldWrapper>
 

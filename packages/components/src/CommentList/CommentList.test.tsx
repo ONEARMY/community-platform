@@ -123,11 +123,10 @@ describe('CommentList', () => {
       />,
     )
 
-    fireEvent.click(getByText(`1 reply to ${comment.creatorName}`))
+    fireEvent.click(getByText(`Show 1 reply`))
 
-    expect(() =>
-      getAllByText(`1 reply to ${visibleReply.creatorName}`),
-    ).toThrow()
+    expect(() => getAllByText(`Show 1 reply`)).toThrow()
+    expect(() => getAllByText(`Hide 1 reply`)).not.toThrow()
   })
 
   it('does not show reply once max depth is reached', () => {
@@ -149,10 +148,9 @@ describe('CommentList', () => {
       />,
     )
 
-    fireEvent.click(getByText(`1 reply to ${comment.creatorName}`))
+    fireEvent.click(getByText(`Show 1 reply`))
 
-    expect(() =>
-      getAllByText(`1 reply to ${visibleReply.creatorName}`),
-    ).toThrow()
+    expect(() => getAllByText(`Show 1 reply`)).toThrow()
+    expect(() => getAllByText(`Hide 1 reply`)).not.toThrow()
   })
 })

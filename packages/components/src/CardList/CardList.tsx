@@ -5,13 +5,13 @@ import { CardListItem } from '../CardListItem/CardListItem'
 import { Icon } from '../Icon/Icon'
 import { Loader } from '../Loader/Loader'
 
-import type { MapListItem } from '../types/common'
+import type { IMapPin } from 'oa-shared'
 
 export interface IProps {
   columnsCountBreakPoints?: { [key: number]: number }
   dataCy: string
-  filteredList: MapListItem[] | null
-  list: MapListItem[]
+  filteredList: IMapPin[] | null
+  list: IMapPin[]
 }
 
 export const EMPTY_LIST = 'Oh nos! Nothing to show!'
@@ -56,7 +56,7 @@ export const CardList = (props: IProps) => {
           >
             <Text data-cy="list-results">{results}</Text>
             <Flex sx={{ alignItems: 'center', gap: 1 }}>
-              <Text> Most active</Text>
+              <Text> Most recently active</Text>
               <Icon glyph="arrow-full-down" />
             </Flex>
           </Flex>

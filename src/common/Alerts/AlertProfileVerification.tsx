@@ -20,7 +20,7 @@ export const AlertProfileVerification = () => {
   const isVerificationSuccessful = verificationState === 'sent'
   const isVerificationPending = verificationState === 'pending'
   const alertLabel = isVerificationPending
-    ? 'Click here to receive an email to confirm your account.'
+    ? 'Click here to receive an email to confirm your account'
     : "Sorry, we couldn't send an email. Please try again later."
   const successLabelMessage =
     'Verification email sent. Please check your inbox and spam folder. '
@@ -55,12 +55,12 @@ export const AlertProfileVerification = () => {
         )}
 
         {!isVerificationSuccessful && (
-          <Text>
+          <>
             {isVerificationPending && (
               <Icon glyph="email" mr={1} verticalAlign={'text-top'} />
             )}
-            {alertLabel}
-          </Text>
+            <Text>{alertLabel}</Text>
+          </>
         )}
       </Banner>
     </Flex>

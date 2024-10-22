@@ -49,7 +49,7 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
     maxLength,
     onSubmitReply,
   } = props
-  const { _id, _deleted, creatorName, replies } = comment
+  const { _id, _deleted, replies } = comment
 
   const replyArrow = () => {
     return (
@@ -67,7 +67,6 @@ export const CommentContainer = (props: IPropsCommentContainer) => {
   const repliesButton = () => {
     return (
       <ButtonShowReplies
-        creatorName={!_deleted ? creatorName : null}
         isShowReplies={isShowReplies}
         replies={replies || []}
         setIsShowReplies={() => setIsShowReplies(!isShowReplies)}

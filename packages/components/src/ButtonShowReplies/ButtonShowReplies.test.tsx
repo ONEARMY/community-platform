@@ -14,33 +14,33 @@ import type { Props } from './ButtonShowReplies'
 
 describe('ButtonShowReplies', () => {
   it('renders the button text', () => {
-    const { getByAltText, getByText } = render(
+    const { getByTestId, getByText } = render(
       <Default {...(Default.args as Props)} />,
     )
-    const icon = getByAltText('icon')
+    const icon = getByTestId('show-replies')
 
-    expect(getByText('7 replies to Jeff')).toBeInTheDocument()
-    expect(icon.getAttribute('src')).toContain('arrow-down')
+    expect(getByText('Show 7 replies')).toBeInTheDocument()
+    expect(icon.getAttribute('icon')).toContain('chevron-down')
   })
 
   it('renders the button text', () => {
-    const { getByAltText } = render(
+    const { getByTestId } = render(
       <RepliesShowing {...(RepliesShowing.args as Props)} />,
     )
-    const icon = getByAltText('icon')
+    const icon = getByTestId('show-replies')
 
-    expect(icon.getAttribute('src')).toContain('arrow-up')
+    expect(icon.getAttribute('icon')).toContain('chevron-up')
   })
 
   it('renders the word reply when expected', () => {
     const { getByText } = render(<OneReply {...(OneReply.args as Props)} />)
 
-    expect(getByText('1 reply to Zelda')).toBeInTheDocument()
+    expect(getByText('Show 1 reply')).toBeInTheDocument()
   })
 
   it('renders the number zero when expected', () => {
     const { getByText } = render(<NoReplies {...(NoReplies.args as Props)} />)
 
-    expect(getByText('Reply to Link')).toBeInTheDocument()
+    expect(getByText('Reply')).toBeInTheDocument()
   })
 })

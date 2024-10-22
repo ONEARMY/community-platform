@@ -4,31 +4,28 @@ import { Category } from '../Category/Category'
 import { MemberBadge } from '../MemberBadge/MemberBadge'
 import { Username } from '../Username/Username'
 
-import type { MapListItem } from '../types/common'
+import type { IMapPin } from 'oa-shared'
 
 interface IProps {
-  item: MapListItem
+  item: IMapPin
+  isLink: boolean
 }
 
-export const CardDetailsFallback = ({ item }: IProps) => {
-  const { _id, isSupporter, isVerified, subType, type } = item
+export const CardDetailsFallback = ({ item, isLink }: IProps) => {
+  const { _id, subType, type } = item
 
   return (
     <Flex sx={{ padding: 2, gap: 2 }}>
       <MemberBadge profileType={type} size={50} />
       <Flex sx={{ flexDirection: 'column', gap: 2 }}>
         <Username
-          user={{
-            userName: _id,
-            isVerified: isVerified || false,
-            isSupporter: isSupporter || false,
-          }}
+          user={{ userName: _id }}
           sx={{ alignSelf: 'flex-start' }}
-          isLink={false}
+          isLink={isLink}
         />
         {subType && (
           <Category
-            category={{ label: 'Wants to get started' }}
+            category={{ label: subType }}
             sx={{
               border: '1px solid #0087B6',
               backgroundColor: '#ECFAFF',

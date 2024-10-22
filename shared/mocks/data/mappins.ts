@@ -38,7 +38,7 @@ export const mappins = {
   settings_workplace_new: {
     type: 'workspace',
     moderation: 'awaiting-moderation',
-    subType: 'shredder',
+    subType: 'shredder', // for old map
     location: {
       lat: 39.9623,
       lng: -83.0007,
@@ -64,7 +64,7 @@ export const mappins = {
   mapview_testing: {
     type: 'workspace',
     moderation: 'accepted',
-    subType: 'shredder',
+    subType: 'shredder', // for old map
     location: {
       lat: 0,
       lng: 0,

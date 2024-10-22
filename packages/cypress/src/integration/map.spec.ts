@@ -131,4 +131,52 @@ describe('[Map]', () => {
     cy.wait('@londonSearch')
     cy.contains('London, Greater London, England, United Kingdom').click()
   })
+
+  it('Test zoom out/ globe button + zoom in to users location button', () => {
+    cy.viewport('macbook-16')
+    cy.visit('/map')
+    cy.get('[data-cy=Banner]').contains('Test it out!').click()
+    cy.wait(500)
+
+    cy.get('[data-cy="WorldViewButton"]', { timeout: 10000 })
+      .should('exist')
+      .and('be.visible')
+    cy.get('[data-cy="WorldViewButton"]').should('exist').and('be.visible')
+
+    const mapZoomProxySelector = '.leaflet-tile-container.leaflet-zoom-animated'
+
+    cy.get('[data-cy="WorldViewButton"]').click()
+    cy.wait(500)
+
+    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
+    cy.get(mapZoomProxySelector)
+      .invoke('css', 'transform')
+      .then((transform) => {
+        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
+        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
+        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
+        expect(scaleX).to.eq(1)
+        expect(scaleY).to.eq(1)
+      })
+
+    cy.get('[data-cy="LocationViewButton"]').click()
+    cy.wait(500)
+
+    // Check if the transform matrix has scale factor 1 (for matrix(a, b, c, d, e, f), 'a' and 'd' should be 1)
+    cy.get(mapZoomProxySelector)
+      .invoke('css', 'transform')
+      .then((transform) => {
+        const matrixValues = transform.match(/matrix\(([^)]+)\)/)[1].split(', ')
+        const scaleX = parseFloat(matrixValues[0]) // 'a' value from matrix
+        const scaleY = parseFloat(matrixValues[3]) // 'd' value from matrix
+        expect(scaleX).to.eq(8)
+        expect(scaleY).to.eq(8)
+      })
+
+    cy.step('Zoom in button prompts for user location and zooms')
+    cy.get('[data-cy="LocationViewButton"]', { timeout: 10000 })
+      .should('exist')
+      .and('be.visible')
+    cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible')
+  })
 })

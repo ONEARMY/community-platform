@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Tooltip } from 'react-tooltip'
 import { Button, Map } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
@@ -28,6 +29,8 @@ interface IProps {
   pins: IMapPin[]
   setZoom: (arg: number) => void
   zoom: number
+  promptUserLocation: () => Promise<void>
+  INITIAL_ZOOM: number
 }
 
 export const MapWithList = (props: IProps) => {
@@ -42,6 +45,8 @@ export const MapWithList = (props: IProps) => {
     pins,
     setZoom,
     zoom,
+    promptUserLocation,
+    INITIAL_ZOOM,
   } = props
 
   const [activePinFilters, setActivePinFilters] =
@@ -63,6 +68,17 @@ export const MapWithList = (props: IProps) => {
       filtersNeeded.some((neededfilter) => neededfilter === validFilter._id),
     )
   }, [pins])
+
+  const buttonStyle = {
+    backgroundColor: 'white',
+    padding: '20px',
+    ':hover': {
+      backgroundColor: 'lightgray',
+    },
+  }
+
+  const ZOOM_IN_TOOLTIP = 'Zoom in to your location'
+  const ZOOM_OUT_TOOLTIP = 'Zoom out to world view'
 
   useEffect(() => {
     const workspaceTypeFilters = activePinFilters
@@ -146,6 +162,12 @@ export const MapWithList = (props: IProps) => {
   const mapZoom = center ? zoom : 2
 
   const mobileListDisplay = showMobileList ? 'block' : 'none'
+
+  useEffect(() => {
+    if (mapRef.current) {
+      ;(window as any).mapInstance = mapRef.current
+    }
+  }, [mapRef])
 
   return (
     <Flex
@@ -232,6 +254,45 @@ export const MapWithList = (props: IProps) => {
         onresize={handleLocationFilter}
         useFlyTo
       >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 2,
+            right: 2,
+            zIndex: 1000,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {/* Location button to Zoom in to your location */}
+          <Button
+            data-tooltip-content={ZOOM_IN_TOOLTIP}
+            data-cy="LocationViewButton"
+            data-tooltip-id="locationButton-tooltip"
+            sx={buttonStyle}
+            onClick={() => {
+              promptUserLocation()
+              setZoom(6)
+            }}
+            icon="gps-location"
+          />
+          <Tooltip id="locationButton-tooltip" place="left" />
+
+          {/* Globe button to Zoom out to world view */}
+          <Button
+            data-tooltip-content={ZOOM_OUT_TOOLTIP}
+            data-cy="WorldViewButton"
+            data-tooltip-id="worldViewButton-tooltip"
+            sx={buttonStyle}
+            onClick={() => {
+              setZoom(INITIAL_ZOOM)
+            }}
+            icon="globe"
+          />
+          <Tooltip id="worldViewButton-tooltip" place="top" />
+        </Box>
+
         <Flex
           sx={{
             flexDirection: 'column',
@@ -249,6 +310,7 @@ export const MapWithList = (props: IProps) => {
           >
             Show list view
           </Button>
+
           {notification && notification !== '' && (
             <Button sx={{ zIndex: 1000 }} variant="subtle">
               {notification}

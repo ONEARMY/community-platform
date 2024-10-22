@@ -75,6 +75,7 @@ const MapsPage = observer(() => {
   const promptUserLocation = async () => {
     try {
       const position = await GetLocation()
+      console.log('position: ', position)
       setCenter({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -167,6 +168,8 @@ const MapsPage = observer(() => {
           pins={visibleMapPins}
           setZoom={setZoom}
           zoom={zoom}
+          promptUserLocation={promptUserLocation}
+          INITIAL_ZOOM={INITIAL_ZOOM}
         />
       )}
     </Box>

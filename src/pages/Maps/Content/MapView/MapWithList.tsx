@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Button, Map } from 'oa-components'
+import { Button, Map, Tooltip } from 'oa-components'
 import { Box, Flex } from 'theme-ui'
 
 import { allMapFilterOptions } from './allMapFilterOptions'
@@ -28,6 +28,7 @@ interface IProps {
   pins: IMapPin[]
   setZoom: (arg: number) => void
   zoom: number
+  promptUserLocation: () => Promise<void>
 }
 
 export const MapWithList = (props: IProps) => {
@@ -42,6 +43,7 @@ export const MapWithList = (props: IProps) => {
     pins,
     setZoom,
     zoom,
+    promptUserLocation,
   } = props
 
   const [activePinFilters, setActivePinFilters] =
@@ -249,6 +251,64 @@ export const MapWithList = (props: IProps) => {
           >
             Show list view
           </Button>
+
+          {/* Location button to Zoom in to your location */}
+          <Button
+            data-tip="Zoom in to your location"
+            data-cy="LocationViewButton"
+            sx={{
+              zIndex: 1000,
+              backgroundColor: 'white',
+              borderRadius: '50%',
+              padding: '6px',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              justifyContent: 'center',
+              position: 'absolute',
+              bottom: '125px',
+              right: '30px',
+              ':hover': {
+                backgroundColor: 'lightgray',
+              },
+            }}
+            onClick={() => {
+              promptUserLocation()
+              setZoom(6)
+            }}
+            icon="gps-location"
+            showIconOnly
+          />
+          <Tooltip />
+
+          {/* Globe button to Zoom out to world view */}
+          <Button
+            data-tip="Zoom out to world view"
+            data-cy="WorldViewButton"
+            sx={{
+              zIndex: 1000,
+              backgroundColor: 'white',
+              borderRadius: '50%',
+              padding: '6px',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              justifyContent: 'center',
+              position: 'absolute',
+              bottom: '85px',
+              right: '30px',
+              ':hover': {
+                backgroundColor: 'lightgray',
+              },
+            }}
+            onClick={() => {
+              setZoom(1)
+            }}
+            icon="globe"
+            showIconOnly
+          />
+          <Tooltip />
+
           {notification && notification !== '' && (
             <Button sx={{ zIndex: 1000 }} variant="subtle">
               {notification}

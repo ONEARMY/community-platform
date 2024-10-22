@@ -70,5 +70,7 @@ export type availableGlyphs =
   | 'volunteer'
   | 'website'
   | 'search'
+  | 'globe'
+  | 'gps-location'
 
 export type IGlyphs = { [k in availableGlyphs]: JSX.Element }

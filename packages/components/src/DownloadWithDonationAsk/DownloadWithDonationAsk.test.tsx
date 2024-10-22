@@ -1,18 +1,14 @@
 import '@testing-library/jest-dom/vitest'
 
 import { fireEvent, render } from '@testing-library/react'
-import { UserRole } from 'oa-shared'
-import { FactoryUser } from 'src/test/factories/User'
 import { describe, expect, it, vi } from 'vitest'
 
-import { useCommonStores } from './hooks/useCommonStores'
 import { DownloadWithDonationAsk } from './DownloadWithDonationAsk'
 
-import type { IUploadedFileMeta, IUserDB } from 'oa-shared'
-import type { Mock } from 'vitest'
+import type { IUploadedFileMeta } from 'oa-shared'
 
 const mockedUsedNavigate = vi.fn()
-vi.mock('@remix-run/react', () => ({
+vi.mock('react-router-dom', () => ({
   useNavigate: () => mockedUsedNavigate,
 }))
 
@@ -20,19 +16,19 @@ vi.mock('src/common/hooks/useCommonStores', () => ({
   __esModule: true,
   useCommonStores: vi.fn(),
 }))
-const userToMock = (user?: IUserDB) => {
-  return (useCommonStores as Mock).mockImplementation(() => ({
-    stores: {
-      userStore: { user: user ?? undefined },
-    },
-  }))
+
+const downloadProps = {
+  body: 'Body Text for the donation request',
+  iframeSrc: 'https://donorbox.org/embed/ppcpdonor?language=en',
+  imageURL:
+    'https://images.unsplash.com/photo-1520222984843-df35ebc0f24d?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9',
 }
 
-describe('DownloadFileFromLink', () => {
+describe('DownloadWithDonationAsk', () => {
   it('when logged out, requires users to login', () => {
-    userToMock()
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
+        {...downloadProps}
         handleClick={vi.fn()}
         isLoggedIn={false}
         fileDownloadCount={0}
@@ -48,14 +44,12 @@ describe('DownloadFileFromLink', () => {
   })
 
   it('when logged in, opens the donation modal for fileLink', () => {
-    const user = FactoryUser()
-    userToMock(user)
-
     const handleClick = vi.fn()
     const fileLink = 'http://youtube.com/'
 
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
+        {...downloadProps}
         handleClick={handleClick}
         isLoggedIn={true}
         fileDownloadCount={0}
@@ -76,14 +70,12 @@ describe('DownloadFileFromLink', () => {
   })
 
   it('when logged in, opens the donation modal for files', () => {
-    const user = FactoryUser({ userRoles: [UserRole.BETA_TESTER] })
-    userToMock(user)
-
     const downloadUrl = 'http://great-url.com/'
     const handleClick = vi.fn()
 
     const { getAllByTestId } = render(
       <DownloadWithDonationAsk
+        {...downloadProps}
         handleClick={handleClick}
         isLoggedIn={true}
         fileDownloadCount={0}

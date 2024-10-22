@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DownloadWithDonationAsk } from 'src/common/DownloadWithDonationAsk'
+import { DownloadWrapper } from 'src/common/DownloadWrapper'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
 import { Flex } from 'theme-ui'
 
@@ -47,7 +47,7 @@ export const HowtoDownloads = ({ howto, loggedInUser }: IProps) => {
 
   return (
     <Flex className="file-container" sx={{ mt: 3, flexDirection: 'column' }}>
-      <DownloadWithDonationAsk
+      <DownloadWrapper
         handleClick={handleDownloadClick}
         fileLink={fileLink}
         files={files}

@@ -7,6 +7,7 @@
     "cypress/no-force": "warn",
     "cypress/no-async-tests": "warn",
     "cypress/no-pause": "warn",
-    "mocha/no-skipped-tests": "error"
+    "mocha/no-skipped-tests": "error",
+    "mocha/no-exclusive-tests": "error"
   }
 }

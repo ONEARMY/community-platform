@@ -119,7 +119,7 @@ describe('[How To]', () => {
         cy.get('[data-cy^=step_]').should('have.length', 12)
 
         cy.step('All step info is shown')
-        cy.get('[data-cy=step_11]').within(($step) => {
+        cy.get('[data-cy=step_12]').within(($step) => {
           // const pic1Regex = /brick-12-1.jpg/
           // const pic3Regex = /brick-12.jpg/
           expect($step).to.contain('12', 'Step #')

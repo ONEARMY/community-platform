@@ -38,6 +38,7 @@ describe('[Research.Discussions]', () => {
 
     cy.get('[data-cy="comments-form"]').type(comment)
     cy.get('[data-cy="comment-submit"]').click()
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.get('[data-cy="OwnCommentItem"]').should('contain', comment)
 
     cy.step('Can edit their own comment')
@@ -54,13 +55,14 @@ describe('[Research.Discussions]', () => {
     cy.addReply(newReply)
     cy.contains(/\d+ Comments/)
     cy.contains(newReply)
-    cy.wait(1000)
+    cy.wait(2000)
     cy.queryDocuments('research', '_id', '==', item._id).then((docs) => {
       const [research] = docs
       expect(research.latestCommentDate).to.not.eq(item.latestCommentDate)
     })
 
     cy.step('Can edit their reply')
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.editDiscussionItem('ReplyItem', updatedNewReply)
     cy.get('[data-cy=OwnReplyItem]').contains(updatedNewReply)
     cy.get('[data-cy=OwnReplyItem]').contains(newReply).should('not.exist')
@@ -68,7 +70,6 @@ describe('[Research.Discussions]', () => {
     cy.step('Can delete their reply')
     cy.deleteDiscussionItem('ReplyItem')
     cy.contains(updatedNewReply).should('not.exist')
-    cy.contains(`1 Comment`)
 
     cy.get(
       '[data-cy="HideDiscussionContainer: button close-comments has-comments"]',

@@ -138,6 +138,4 @@ describe('[Notifications]', () => {
     )
     cy.get('[data-cy="NotificationList: empty state"]').should('be.visible')
   })
-
-  afterEach(() => {})
 })

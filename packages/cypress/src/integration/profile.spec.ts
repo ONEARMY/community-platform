@@ -161,10 +161,4 @@ describe('[By Beta Tester]', () => {
     cy.visit(`/u/${profile_views.userName}`)
     cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)
   })
-
-  // it('[Displays view count for profile with first view]', () => {
-  //   cy.login(betaTester.email, betaTester.password)
-  //   cy.visit(`/u/${profile_no_views.userName}`)
-  //   cy.get('[data-testid=profile-views-stat]').contains('1')
-  // })
 })

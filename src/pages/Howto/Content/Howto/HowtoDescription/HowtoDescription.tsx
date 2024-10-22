@@ -193,11 +193,20 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                     sx={{ fontSize: 2, mt: 2 }}
                   />
                 )}
-                <Heading as="h1" mt={howto.category ? 1 : 2} mb={1}>
+                <Heading
+                  as="h1"
+                  mt={howto.category ? 1 : 2}
+                  mb={1}
+                  data-cy="how-to-title"
+                >
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {capitalizeFirstLetter(howto.title)}
                 </Heading>
-                <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+                <Text
+                  variant="paragraph"
+                  sx={{ whiteSpace: 'pre-line' }}
+                  data-cy="how-to-description"
+                >
                   <LinkifyText>{howto.description}</LinkifyText>
                 </Text>
               </Flex>
@@ -216,7 +225,11 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               />
               {howto.time}
             </Flex>
-            <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
+            <Flex
+              mr="4"
+              sx={{ flexDirection: ['column', 'row', 'row'] }}
+              data-cy="difficulty-level"
+            >
               <Image
                 loading="lazy"
                 src={DifficultyLevel}

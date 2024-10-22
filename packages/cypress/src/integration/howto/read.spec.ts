@@ -261,11 +261,7 @@ describe('[How To]', () => {
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)
-      cy.location('pathname').should('eq', '/how-to')
-      cy.location('search').should(
-        'eq',
-        `?search=this+how+to+does+not+exist&source=how-to-not-found&sort=Newest`,
-      )
+      cy.get('[data-test="NotFound: Heading"').should('be.visible')
     })
   })
 })

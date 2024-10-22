@@ -14,6 +14,7 @@ export const Category = (props: Props) => {
   return (
     <Flex sx={{ alignItems: 'start' }}>
       <Text
+        data-cy="category"
         sx={{
           fontSize: 1,
           color: '#555555',

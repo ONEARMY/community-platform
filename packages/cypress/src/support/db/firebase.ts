@@ -25,38 +25,6 @@ const db = firebase.firestore()
 // db.useEmulator('localhost', 8080)
 
 class FirestoreTestDB {
-  // seedDB = async () => {
-  //   const dbWrites = Object.keys(MOCK_DATA).map(async (key) => {
-  //     const endpoint = DB_ENDPOINTS[key]
-  //     await this.deleteAll(endpoint)
-  //     await this.addDocuments(endpoint, Object.values(MOCK_DATA[key]))
-  //     return [endpoint, MOCK_DATA[key]]
-  //   })
-  //   return Promise.all(dbWrites)
-  // }
-
-  private deleteAll = async (collectionName: string) => {
-    cy.log(`DB Delete: ${collectionName}`)
-    const batch = db.batch()
-    const col = db.collection(collectionName)
-    const docs = (await col.get()) || []
-    docs.forEach((d) => {
-      batch.delete(col.doc(d.id))
-    })
-    return batch.commit()
-  }
-
-  private addDocuments = async (collectionName: string, docs: any[]) => {
-    cy.log(`DB Seed: ${collectionName}`)
-    const batch = db.batch()
-    const col = db.collection(collectionName)
-    docs.forEach((doc) => {
-      const ref = col.doc(doc._id)
-      batch.set(ref, doc)
-    })
-    return batch.commit()
-  }
-
   queryDocuments = (
     collectionName: string,
     fieldPath: string,

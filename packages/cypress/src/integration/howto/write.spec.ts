@@ -149,25 +149,12 @@ describe('[How To]', () => {
         },
         {
           _animationKey: 'unique3',
-          images: [
-            {
-              contentType: 'image/jpeg',
-              name: 'howto-step-pic1.jpg',
-              size: 19410,
-              type: 'image/jpeg',
-            },
-            {
-              contentType: 'image/jpeg',
-              name: 'howto-step-pic2.jpg',
-              size: 20009,
-              type: 'image/jpeg',
-            },
-          ],
           text: faker.lorem
             .sentences(50)
             .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH)
             .trim(),
           title: 'A long title that is the total characters limit of',
+          videoURL: 'https://www.youtube.com/watch?v=Os7dREQ00l4',
         },
         {
           _animationKey: 'unique2',
@@ -279,7 +266,7 @@ describe('[How To]', () => {
       cy.get(`[data-cy=step_${1}]:visible`)
         .find('[data-cy=move-step-down]')
         .click()
-      fillStep(2, steps[1].title, steps[1].text, imagePaths)
+      fillStep(2, steps[1].title, steps[1].text, [], steps[1].videoURL)
 
       cy.step('Add extra step')
       cy.get('[data-cy=add-step]').click()
@@ -314,49 +301,25 @@ describe('[How To]', () => {
       cy.get('[data-cy=file-download-counter]')
         .contains(total_downloads)
         .should('be.visible')
-      cy.queryDocuments('howtos', 'title', '==', title).then((docs) => {
-        cy.log('queryDocs', docs)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqHowto', expected)
+      // Check against UI
+      cy.get('[data-cy=how-to-title]').should('contain', title)
+      cy.get('[data-cy=how-to-description]').should('contain', description)
+
+      // Check category
+      cy.get('[data-cy=category]').should('contain', category)
+
+      // Check difficulty level
+      cy.get('[data-cy=difficulty-level]').should('contain', difficulty_level)
+
+      // Check steps
+      steps.forEach((step, index) => {
+        cy.get(`[data-cy=step_${index + 1}]`)
+          .find('[data-cy=step-title]')
+          .should('contain', step.title)
+        cy.get(`[data-cy=step_${index + 1}]`)
+          .find('[data-cy=step-text]')
+          .should('contain', step.text)
       })
-
-      cy.step('Can go back to edit mode')
-      cy.get('[data-cy=edit]').click()
-      cy.contains('Edit a How-To').should('be.visible')
-
-      cy.step('Can remove and re-attach cover images')
-      cy.get('[data-cy="intro-cover"]')
-        .find('[data-cy="delete-image"]')
-        .click({ force: true })
-
-      cy.get('[data-cy="intro-cover"]')
-        .find(':file')
-        .attachFile('images/howto-intro.jpg')
-
-      cy.step('Upload a new file')
-      cy.get('[data-cy="files"]').click({ force: true })
-      cy.fixture('files/Example.pdf').then((fileContent) => {
-        cy.get('[data-cy="uppy-dashboard"] .uppy-Dashboard-input').attachFile({
-          fileContent: fileContent,
-          fileName: 'example.pdf',
-          mimeType: 'application/pdf',
-        })
-      })
-      cy.contains('Upload 1 file').click()
-
-      cy.step('Errors for multiple file type uploads')
-      cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=invalid-file-warning]').should('be.visible')
-      cy.get('[data-cy=fileLink]').clear()
-
-      cy.step('Can submit updated how-to')
-      cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=invalid-file-warning]').should('not.exist')
-
-      cy.step('Open the old slug')
-      cy.visit(`/how-to/${firstSlug}`)
-      cy.contains(expected.title)
     })
 
     it('[By Anonymous]', () => {

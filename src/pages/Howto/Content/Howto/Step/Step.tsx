@@ -27,7 +27,7 @@ const Step = (props: IProps) => {
 
   return (
     <Flex
-      data-cy={`step_${stepindex}`}
+      data-cy={`step_${stepindex + 1}`}
       sx={{ mx: [0, 0, -2], mt: 9, flexDirection: ['column', 'column', 'row'] }}
     >
       <Flex mx={[0, 0, 2]} sx={{ flex: 1, width: '100%' }} mb={[3, 3, 0]}>
@@ -61,18 +61,19 @@ const Step = (props: IProps) => {
                 flexDirection: 'column',
               }}
             >
-              <Heading as="h2" mb={0}>
+              <Heading as="h2" mb={0} data-cy="step-title">
                 {title}
               </Heading>
               <Box>
                 <Text
                   mt={3}
-                  color={'grey'}
+                  color="grey"
                   variant="paragraph"
                   sx={{
                     wordBreak: 'break-word',
                     whiteSpace: 'pre-line',
                   }}
+                  data-cy="step-text"
                 >
                   <LinkifyText>{step.text}</LinkifyText>
                 </Text>

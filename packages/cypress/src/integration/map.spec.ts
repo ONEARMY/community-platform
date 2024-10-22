@@ -1,112 +1,128 @@
-const userId = 'davehakkens'
-const profileTypesCount = 5
+const userId = 'davehakkens';
+const profileTypesCount = 5;
 
 describe('[Map]', () => {
   it('[Shows expected pins]', () => {
-    cy.viewport('macbook-16')
+    cy.viewport('macbook-16');
 
-    cy.step('Shows all pins onload')
-    cy.visit('/map')
+    cy.step('Shows all pins onload');
+    cy.visit('/map');
 
-    cy.step('Old map pins can be clicked on')
-    cy.get(`[data-cy=pin-${userId}]`).click()
+    cy.step('Old map pins can be clicked on');
+    cy.get(`[data-cy=pin-${userId}]`).click();
     cy.get('[data-cy=MapMemberCard]').within(() => {
-      cy.get('[data-cy=Username]').contains(userId)
-    })
-    cy.url().should('include', `#${userId}`)
+      cy.get('[data-cy=Username]').contains(userId);
+    });
+    cy.url().should('include', `#${userId}`);
 
-    cy.step('Old map pins can be hidden')
-    cy.get('.markercluster-map').click(0, 0)
-    cy.get('[data-cy=MapMemberCard]').should('not.exist')
-    cy.url().should('not.include', `#${userId}`)
+    cy.step('Old map pins can be hidden');
+    cy.get('.markercluster-map').click(0, 0);
+    cy.get('[data-cy=MapMemberCard]').should('not.exist');
+    cy.url().should('not.include', `#${userId}`);
 
-    cy.step('Link to new map visible and clickable')
-    cy.get('[data-cy=Banner]').contains('Test it out!').click()
-    cy.get('[data-cy=Banner]').contains('go back to the old one!')
+    cy.step('Link to new map visible and clickable');
+    cy.get('[data-cy=Banner]').contains('Test it out!').click();
+    cy.get('[data-cy=Banner]').contains('go back to the old one!');
 
-    cy.step('New map shows the cards')
-    cy.get('[data-cy="welome-header"]').should('be.visible')
-    cy.get('[data-cy="CardList-desktop"]').should('be.visible')
-    cy.get('[data-cy="list-results"]').contains('52 results in view')
+    cy.step('New map shows the cards');
+    cy.get('[data-cy="welome-header"]').should('be.visible');
+    cy.get('[data-cy="CardList-desktop"]').should('be.visible');
+    cy.get('[data-cy="list-results"]').contains('52 results in view');
 
-    cy.step('Map filters can be used')
+    cy.step('Map filters can be used');
     cy.get('[data-cy=FilterList]')
       .first()
       .children()
-      .should('have.length', profileTypesCount)
-    cy.get('[data-cy=MapListFilter]').first().click()
-    // Reduction in coverage until temp API removed
-    // cy.get('[data-cy="list-results"]').contains('6 results in view')
-    cy.get('[data-cy=MapListFilter-active]').first().click()
-    cy.get('[data-cy="list-results"]').contains('52 results in view')
+      .should('have.length', profileTypesCount);
+    cy.get('[data-cy=MapListFilter]').first().click();
+    cy.get('[data-cy=MapListFilter-active]').first().click();
+    cy.get('[data-cy="list-results"]').contains('52 results in view');
 
-    cy.step('As the user moves in the list updates')
+    cy.step('As the user moves in the list updates');
     for (let i = 0; i < 9; i++) {
-      cy.get('.leaflet-control-zoom-in').click()
+      cy.get('.leaflet-control-zoom-in').click();
     }
-    cy.get('[data-cy="list-results"]').contains('1 result')
+    cy.get('[data-cy="list-results"]').contains('1 result');
     cy.get('[data-cy="CardList-desktop"]').within(() => {
       cy.get('[data-cy=CardListItem]')
         .within(() => {
-          cy.contains(userId)
-          cy.get('[data-cy="MemberBadge-member"]')
+          cy.contains(userId);
+          cy.get('[data-cy="MemberBadge-member"]');
         })
         .should('have.attr', 'href')
-        .and('include', `/u/${userId}`)
-    })
+        .and('include', `/u/${userId}`);
+    });
 
-    cy.step('New map pins can be clicked on')
-    cy.get(`[data-cy=pin-${userId}]`).click()
+    cy.step('New map pins can be clicked on');
+    cy.get(`[data-cy=pin-${userId}]`).click();
     cy.get('[data-cy=PinProfile]').within(() => {
-      cy.get('[data-cy=Username]').contains(userId)
-      cy.contains('Wants to get started')
-    })
-    cy.url().should('include', `#${userId}`)
+      cy.get('[data-cy=Username]').contains(userId);
+      cy.contains('Wants to get started');
+    });
+    cy.url().should('include', `#${userId}`);
 
-    cy.step('New map pins can be hidden with the cross button')
-    cy.get('[data-cy=PinProfile]').should('be.visible')
-    cy.get('[data-cy=PinProfileCloseButton]').click()
-    cy.url().should('not.include', `#${userId}`)
-    cy.get('[data-cy=PinProfile]').should('not.exist')
+    cy.step('New map pins can be hidden with the cross button');
+    cy.get('[data-cy=PinProfile]').should('be.visible');
+    cy.get('[data-cy=PinProfileCloseButton]').click();
+    cy.url().should('not.include', `#${userId}`);
+    cy.get('[data-cy=PinProfile]').should('not.exist');
 
-    cy.step('New map pins can be hidden by clicking the map')
-    cy.get(`[data-cy=pin-${userId}]`).click()
-    cy.url().should('include', `#${userId}`)
-    cy.get('[data-cy=PinProfile]').should('be.visible')
-    cy.get('.markercluster-map').click(10, 10)
-    cy.url().should('not.include', `#${userId}`)
-    cy.get('[data-cy=PinProfile]').should('not.exist')
+    cy.step('New map pins can be hidden by clicking the map');
+    cy.get(`[data-cy=pin-${userId}]`).click();
+    cy.url().should('include', `#${userId}`);
+    cy.get('[data-cy=PinProfile]').should('be.visible');
+    cy.get('.markercluster-map').click(10, 10);
+    cy.url().should('not.include', `#${userId}`);
+    cy.get('[data-cy=PinProfile]').should('not.exist');
 
-    cy.step('Mobile list view can be shown')
-    cy.viewport('samsung-note9')
-    cy.get('[data-cy="CardList-desktop"]').should('not.be.visible')
-    cy.get('[data-cy="CardList-mobile"]').should('not.be.visible')
+    cy.step('Mobile list view can be shown');
+    cy.viewport('samsung-note9');
+    cy.get('[data-cy="CardList-desktop"]').should('not.be.visible');
+    cy.get('[data-cy="CardList-mobile"]').should('not.be.visible');
 
-    cy.get('[data-cy="ShowMobileListButton"]').click()
+    cy.get('[data-cy="ShowMobileListButton"]').click();
     cy.get('[data-cy="CardList-mobile"]').within(() => {
       cy.get('[data-cy=CardListItem]')
         .within(() => {
-          cy.contains(userId)
-          cy.get('[data-cy="MemberBadge-member"]')
+          cy.contains(userId);
+          cy.get('[data-cy="MemberBadge-member"]');
         })
         .should('have.attr', 'href')
-        .and('include', `/u/${userId}`)
-    })
-    cy.get('[data-cy=FilterList-ButtonRight]').last().click().click()
-    cy.get('[data-cy=MapListFilter]').last().click()
+        .and('include', `/u/${userId}`);
+    });
+    cy.get('[data-cy=FilterList-ButtonRight]').last().click().click();
+    cy.get('[data-cy=MapListFilter]').last().click();
 
-    cy.step('Mobile list view can be hidden')
-    cy.get('[data-cy="ShowMapButton"]').click()
-    cy.get('[data-cy="CardList-mobile"]').should('not.be.visible')
+    cy.step('Mobile list view can be hidden');
+    cy.get('[data-cy="ShowMapButton"]').click();
+    cy.get('[data-cy="CardList-mobile"]').should('not.be.visible');
 
-    cy.step('The whole map can be searched')
-    cy.get('[data-cy="ShowMobileListButton"]').click()
-    cy.get('[data-cy=osm-geocoding]').last().click().type('london')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(2000) // Needed for location response
-    cy.contains('London, Greater London, England, United Kingdom').click()
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(2000) // Needed for animation
-    cy.get('.icon-cluster-text').contains('3')
-  })
-})
+    cy.step('The whole map can be searched');
+    cy.get('[data-cy="ShowMobileListButton"]').click();
+    cy.get('[data-cy=osm-geocoding]').last().click().type('london');
+    cy.wait(2000); // Needed for location response
+    cy.contains('London, Greater London, England, United Kingdom').click();
+    cy.wait(2000); // Needed for animation
+    cy.get('.icon-cluster-text').contains('3');
+  });
+
+  it('[Shows zoom buttons and they function correctly]', () => {
+    cy.step('Shows the zoom out and zoom in buttons');
+    cy.get('[data-cy="WorldViewButton"]').should('exist').and('be.visible');
+    cy.get('[data-cy="LocationViewButton"]').should('exist').and('be.visible');
+
+    cy.step('Zoom out button works');
+    cy.get('[data-cy="WorldViewButton"]').click();
+    cy.window().its('map').invoke('getZoom').should('equal', 1);
+
+    cy.step('Zoom in button prompts for user location and zooms');
+    cy.stub(window.navigator.geolocation, 'getCurrentPosition').callsFake((cb) => {
+      return cb({ coords: { latitude: 40.7128, longitude: -74.0060 } });
+    });
+    cy.get('[data-cy="LocationViewButton"]').click();
+    cy.window().its('map').invoke('getCenter').should((center) => {
+      expect(center).to.have.property('lat', 40.7128);
+      expect(center).to.have.property('lng', -74.0060);
+    });
+  });
+});

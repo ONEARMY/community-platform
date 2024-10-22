@@ -826,6 +826,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mchen10",
+      "name": "Michael Chen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16161485?v=4",
+      "profile": "https://github.com/mchen10",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "projectName": "community-platform",

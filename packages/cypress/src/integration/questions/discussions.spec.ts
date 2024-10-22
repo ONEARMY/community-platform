@@ -32,11 +32,13 @@ describe('[Questions.Discussions]', () => {
 
     cy.step('Can add comment')
     cy.addComment(newComment)
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.contains(/\d+ comments/)
     cy.contains(newComment)
     cy.contains('less than a minute ago')
 
     cy.step('Can edit their comment')
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.editDiscussionItem('CommentItem', updatedNewComment)
     cy.get('[data-cy=OwnCommentItem]').contains(updatedNewComment)
     cy.get('[data-cy=OwnCommentItem]').contains('Edited less than a minute ago')
@@ -52,6 +54,7 @@ describe('[Questions.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.editDiscussionItem('ReplyItem', updatedNewReply)
     cy.contains(updatedNewReply)
     cy.contains(newReply).should('not.exist')

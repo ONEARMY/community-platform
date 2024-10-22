@@ -62,6 +62,7 @@ describe('[Howto.Discussions]', () => {
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', updatedNewComment)
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.get('[data-cy=OwnCommentItem]').contains(updatedNewComment)
     cy.get('[data-cy=OwnCommentItem]').contains(newComment).should('not.exist')
 
@@ -71,7 +72,7 @@ describe('[Howto.Discussions]', () => {
 
     cy.step('Can add reply')
     cy.addReply(newReply)
-    cy.contains(/\d+ comments/)
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.contains(newReply)
     cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
       const [howto] = docs
@@ -79,6 +80,7 @@ describe('[Howto.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.editDiscussionItem('ReplyItem', updatedNewReply)
     cy.contains(updatedNewReply)
     cy.contains(newReply).should('not.exist')

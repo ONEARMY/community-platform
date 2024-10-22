@@ -100,5 +100,5 @@ export const iconMap = {
   website: <ImageIcon src={websiteSVG} />,
   search: <ImageIcon src={searchSVG} />,
   globe: <ImageIcon src={globe}></ImageIcon>,
-  gpsLocation: <ImageIcon src={gpsLocation}></ImageIcon>
+  gpsLocation: <ImageIcon src={gpsLocation}></ImageIcon>,
 }

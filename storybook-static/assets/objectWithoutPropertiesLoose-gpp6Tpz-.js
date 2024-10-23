@@ -1,1 +1,0 @@
-function r(r,n){if(null==r)return{};var i={};for(var e in r)if({}.hasOwnProperty.call(r,e)){if(n.indexOf(e)>=0)continue;i[e]=r[e]}return i}export{r as _};

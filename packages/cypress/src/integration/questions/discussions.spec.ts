@@ -38,7 +38,6 @@ describe('[Questions.Discussions]', () => {
     cy.contains('less than a minute ago')
 
     cy.step('Can edit their comment')
-    cy.get('[data-cy="show-more-comments"]').click()
     cy.editDiscussionItem('CommentItem', updatedNewComment)
     cy.get('[data-cy=OwnCommentItem]').contains(updatedNewComment)
     cy.get('[data-cy=OwnCommentItem]').contains('Edited less than a minute ago')

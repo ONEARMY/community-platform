@@ -34,6 +34,7 @@ describe('[Howto.Discussions]', () => {
     cy.step('Can add comment')
     cy.addComment(newComment)
     cy.contains(/\d+ comments/)
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.get('[data-cy=OwnCommentItem]').contains(newComment)
 
     cy.step('Updating user settings shows on comments')
@@ -55,6 +56,7 @@ describe('[Howto.Discussions]', () => {
     cy.get('[data-cy=page-link]').contains('How-to').click()
     cy.get('[data-cy-howto-slug="make-an-interlocking-brick"]').click()
 
+    cy.get('[data-cy="show-more-comments"]').click()
     cy.get('[data-cy=OwnCommentItem]').get('[data-cy="country:LC"]')
     // cy.get('[data-cy="commentAvatarImage"]')
     //   .should('have.attr', 'src')
@@ -62,7 +64,6 @@ describe('[Howto.Discussions]', () => {
 
     cy.step('Can edit their comment')
     cy.editDiscussionItem('CommentItem', updatedNewComment)
-    cy.get('[data-cy="show-more-comments"]').click()
     cy.get('[data-cy=OwnCommentItem]').contains(updatedNewComment)
     cy.get('[data-cy=OwnCommentItem]').contains(newComment).should('not.exist')
 
@@ -72,7 +73,6 @@ describe('[Howto.Discussions]', () => {
 
     cy.step('Can add reply')
     cy.addReply(newReply)
-    cy.get('[data-cy="show-more-comments"]').click()
     cy.contains(newReply)
     cy.queryDocuments('howtos', '_id', '==', item._id).then((docs) => {
       const [howto] = docs
@@ -80,7 +80,6 @@ describe('[Howto.Discussions]', () => {
     })
 
     cy.step('Can edit their reply')
-    cy.get('[data-cy="show-more-comments"]').click()
     cy.editDiscussionItem('ReplyItem', updatedNewReply)
     cy.contains(updatedNewReply)
     cy.contains(newReply).should('not.exist')

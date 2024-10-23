@@ -269,6 +269,10 @@ jobs:
       SKIP_PREFLIGHT_CHECK: 'true'
       NODE_OPTIONS: '--max-old-space-size=5632'
       CYPRESS_INSTALL_BINARY: 0
+    parameters:
+      SITE_VARIANT:
+        type: string
+        default: 'default'
     # If experiencing out-of-memory issues can increase resource_class below and max space size above
     # https://circleci.com/docs/2.0/configuration-reference/#resourceclass
     resource_class: large
@@ -280,7 +284,7 @@ jobs:
           name: Set branch environment
           command: |
             echo 'export VITE_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
-            echo 'export VITE_SITE_VARIANT=${VITE_SITE_VARIANT}' >> $BASH_ENV
+            echo 'export VITE_SITE_VARIANT=<< parameters.SITE_VARIANT >>' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
@@ -405,7 +409,6 @@ jobs:
       - run:
           command: npm run test ci prod
           environment:
-            VITE_SITE_VARIANT: test-ci
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: ci-<< parameters.CI_BROWSER >>
@@ -457,6 +460,7 @@ workflows:
             - 'Lint code'
           name: Build Application
           context: build-context
+          SITE_VARIANT: test-ci
       - test_unit:
           name: 'Unit tests'
           requires:
@@ -510,6 +514,12 @@ workflows:
           requires:
             - test_e2e
       #---------------------- Development Instances Build and Deploy ----------------------
+      - build:
+          requires:
+            - 'Approve Production deployment'
+          name: Build Production
+          context: build-context
+          SITE_VARIANT: production
       - release:
           name: Release new version to GitHub
           context:

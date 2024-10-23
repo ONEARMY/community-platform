@@ -405,6 +405,7 @@ jobs:
       - run:
           command: npm run test ci prod
           environment:
+            VITE_SITE_VARIANT: test-ci
             CI_BROWSER: << parameters.CI_BROWSER >>
             CI_NODE: << parameters.CI_NODE >>
             CI_GROUP: ci-<< parameters.CI_BROWSER >>

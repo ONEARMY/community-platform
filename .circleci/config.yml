@@ -281,11 +281,13 @@ jobs:
           command: |
             echo 'export VITE_PROJECT_VERSION=${CIRCLE_SHA1}' >> $BASH_ENV
             echo 'export VITE_SITE_VARIANT=test-ci' >> $BASH_ENV
+            echo 'export TEST=${VITE_SITE_VARIANT}' >> $BASH_ENV
       - run:
           name: Check environment variables
           command: |
             echo $VITE_PROJECT_VERSION
             echo $VITE_SITE_VARIANT
+            echo $TEST
       - run:
           command: yarn build
       - persist_to_workspace:
@@ -336,7 +338,9 @@ jobs:
           command: curl -L https://fly.io/install.sh | sh
       - run:
           name: Add fly to PATH
-          command: echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV
+          command: |
+            echo "export PATH=\"/home/circleci/.fly/bin:$PATH\"" >> $BASH_ENV
+            echo "export VITE_SITE_VARIANT=production" >> $BASH_ENV
       - run: 
           name: Login fly
           command: flyctl auth token $FLY_API_TOKEN --debug --verbose

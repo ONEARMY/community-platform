@@ -6,8 +6,8 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom'
-import { ThemeProvider } from '@emotion/react'
 import { render, waitFor } from '@testing-library/react'
+import { ThemeProvider } from '@theme-ui/core'
 import { Provider } from 'mobx-react'
 import { testingThemeStyles } from 'src/test/utils/themeUtils'
 import { describe, expect, it, vi } from 'vitest'

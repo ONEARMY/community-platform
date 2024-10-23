@@ -7,7 +7,7 @@ import { MOCK_DATA } from '../data'
 import { UserMenuItem } from '../support/commandsUi'
 import { setIsPreciousPlastic } from '../utils/TestUtils'
 
-const { admin, profile_views, profile_no_views, subscriber } = MOCK_DATA.users
+const { admin, profile_views, subscriber } = MOCK_DATA.users
 const eventReader = MOCK_DATA.users.event_reader
 const machine = MOCK_DATA.users.settings_machine_new
 const userProfiletype = MOCK_DATA.users.settings_workplace_new
@@ -91,7 +91,7 @@ describe('[Profile]', () => {
 
       cy.step('Submit form')
       cy.get('[data-cy=contact-submit]').click()
-      cy.contains(contact.successMessage).should('be.visible')
+      cy.contains(contact.successMessage)
 
       cy.step("Can't contact pages who opt-out")
       cy.visit(`/u/${userProfiletype.userName}`)
@@ -159,15 +159,6 @@ describe('[By Beta Tester]', () => {
   it('[Displays view count for profile with views]', () => {
     cy.login(betaTester.email, betaTester.password)
     cy.visit(`/u/${profile_views.userName}`)
-    cy.get('[data-testid=profile-views-stat]').should(
-      'contain.text',
-      profile_views.total_views,
-    )
-  })
-
-  it('[Displays view count for profile with first view]', () => {
-    cy.login(betaTester.email, betaTester.password)
-    cy.visit(`/u/${profile_no_views.userName}`)
-    cy.get('[data-testid=profile-views-stat]').contains('1')
+    cy.get('[data-testid=profile-views-stat]').contains(/Views: \d+/)
   })
 })

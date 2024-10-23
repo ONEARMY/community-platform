@@ -8,7 +8,9 @@ interface IProps {
 }
 
 export const TagList = ({ tags }: IProps) => {
-  if (!tags) return
+  if (!tags) {
+    return null
+  }
 
   const { allTagsByKey } = useCommonStores().stores.tagsStore
 
@@ -16,5 +18,5 @@ export const TagList = ({ tags }: IProps) => {
     .filter(Boolean)
     .map((key) => allTagsByKey[key])
 
-  return !!tagList && <TagListUI tags={tagList} />
+  return tagList && tagList.length > 0 && <TagListUI tags={tagList} />
 }

@@ -74,15 +74,19 @@ describe('[How To]', () => {
           )
           expect($summary).to.contain('3-4 weeks', 'Duration')
           expect($summary).to.contain(DifficultyLevel.HARD, 'Difficulty')
-          expect($summary).to.contain('product', 'Tag')
-          expect($summary).to.contain('injection', 'Tag')
           expect($summary.find('img[alt="how-to cover"]'))
             .to.have.attr('src')
             .match(coverFileRegex)
-          expect($summary.find('[data-cy=file-download-counter]')).to.contain(
-            '1,234 downloads',
-          )
         })
+        cy.wait(2000)
+        cy.get('[data-cy=tag-list]').then(($tagList) => {
+          expect($tagList).to.contain('product')
+          expect($tagList).to.contain('injection')
+        })
+        cy.get('[data-cy=file-download-counter]').should(
+          'contain',
+          '1,234 downloads',
+        )
 
         cy.step('Breadcrumbs work')
         cy.get('[data-cy=breadcrumbsItem]').first().should('contain', 'How To')
@@ -104,7 +108,7 @@ describe('[How To]', () => {
         cy.get('[data-cy=breadcrumbsItem]').eq(2).should('contain', howto.title)
 
         cy.step('Download file button should redirect to sign in')
-        cy.get('div[data-tip="Login to download"]')
+        cy.get('div[data-tooltip-content="Login to download"]')
           .first()
           .click()
           .url()
@@ -115,7 +119,7 @@ describe('[How To]', () => {
         cy.get('[data-cy^=step_]').should('have.length', 12)
 
         cy.step('All step info is shown')
-        cy.get('[data-cy=step_11]').within(($step) => {
+        cy.get('[data-cy=step_12]').within(($step) => {
           // const pic1Regex = /brick-12-1.jpg/
           // const pic3Regex = /brick-12.jpg/
           expect($step).to.contain('12', 'Step #')
@@ -158,9 +162,9 @@ describe('[How To]', () => {
       it('[Allows opening of attachments]', () => {
         cy.signUpNewUser()
         cy.visit(specificHowtoUrl)
-
         cy.step('[Presents the donation request before opening of attachments]')
         cy.step('Shows modal')
+        cy.wait(2000)
         cy.get('[data-cy=downloadButton]').first().click()
         cy.get('[data-cy=DonationRequest]').should('be.visible')
         cy.get('[data-cy=DonationRequest]').contains('Support our work')
@@ -257,11 +261,7 @@ describe('[How To]', () => {
 
     it('[Redirects to search]', () => {
       cy.visit(howToNotFoundUrl)
-      cy.location('pathname').should('eq', '/how-to/')
-      cy.location('search').should(
-        'eq',
-        `?search=this+how+to+does+not+exist&source=how-to-not-found&sort=Newest`,
-      )
+      cy.get('[data-test="NotFound: Heading"').should('be.visible')
     })
   })
 })

@@ -231,6 +231,7 @@ export const CommentList = (props: IPropsCommentList) => {
             type="button"
             sx={{ margin: '0 auto' }}
             variant="outline"
+            data-cy="show-more-comments"
             onClick={handleMoreComments}
           >
             show more comments

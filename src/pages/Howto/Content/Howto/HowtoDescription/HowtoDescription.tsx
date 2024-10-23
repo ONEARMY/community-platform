@@ -10,6 +10,8 @@ import {
   UsefulStatsButton,
 } from 'oa-components'
 import { IModerationStatus } from 'oa-shared'
+// eslint-disable-next-line import/no-unresolved
+import { ClientOnly } from 'remix-utils/client-only'
 import DifficultyLevel from 'src/assets/icons/icon-difficulty-level.svg'
 import TimeNeeded from 'src/assets/icons/icon-time-needed.svg'
 import { trackEvent } from 'src/common/Analytics'
@@ -54,13 +56,13 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
       trackEvent({
         category: 'How-To',
         action: 'Deleted',
-        label: stores.howtoStore.activeHowto?.title,
+        label: howto.title,
       })
       logger.debug(
         {
           category: 'How-To',
           action: 'Deleted',
-          label: stores.howtoStore.activeHowto?.title,
+          label: howto.title,
         },
         'How-to marked for deletion',
       )
@@ -92,32 +94,36 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
         }}
       >
         <Flex
-          px={4}
-          py={4}
           sx={{
+            px: 4,
+            py: 4,
             flexDirection: 'column',
             width: ['100%', '100%', `${(1 / 2) * 100}%`],
           }}
         >
           {howto._deleted && (
-            <Fragment>
-              <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
-                * Marked for deletion
-              </Text>
-            </Fragment>
+            <Text color="red" pl={2} mb={2} data-cy="how-to-deleted">
+              * Marked for deletion
+            </Text>
           )}
           <Flex sx={{ flexWrap: 'wrap', gap: '10px' }}>
-            {props.votedUsefulCount !== undefined &&
-              howto.moderation === IModerationStatus.ACCEPTED && (
-                <Box>
-                  <UsefulStatsButton
-                    votedUsefulCount={props.votedUsefulCount}
-                    hasUserVotedUseful={props.hasUserVotedUseful}
-                    isLoggedIn={loggedInUser ? true : false}
-                    onUsefulClick={props.onUsefulClick}
-                  />
-                </Box>
+            <ClientOnly fallback={<></>}>
+              {() => (
+                <>
+                  {props.votedUsefulCount !== undefined &&
+                    howto.moderation === IModerationStatus.ACCEPTED && (
+                      <Box>
+                        <UsefulStatsButton
+                          votedUsefulCount={props.votedUsefulCount}
+                          hasUserVotedUseful={props.hasUserVotedUseful}
+                          isLoggedIn={loggedInUser ? true : false}
+                          onUsefulClick={props.onUsefulClick}
+                        />
+                      </Box>
+                    )}
+                </>
               )}
+            </ClientOnly>
             {/* Check if logged in user is the creator of the how-to OR a super-admin */}
             {loggedInUser && isAllowedToEditContent(howto, loggedInUser) && (
               <Link to={'/how-to/' + howto.slug + '/edit'}>
@@ -187,11 +193,20 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
                     sx={{ fontSize: 2, mt: 2 }}
                   />
                 )}
-                <Heading as="h1" mt={howto.category ? 1 : 2} mb={1}>
+                <Heading
+                  as="h1"
+                  mt={howto.category ? 1 : 2}
+                  mb={1}
+                  data-cy="how-to-title"
+                >
                   {/* HACK 2021-07-16 - new howtos auto capitalize title but not older */}
                   {capitalizeFirstLetter(howto.title)}
                 </Heading>
-                <Text variant="paragraph" sx={{ whiteSpace: 'pre-line' }}>
+                <Text
+                  variant="paragraph"
+                  sx={{ whiteSpace: 'pre-line' }}
+                  data-cy="how-to-description"
+                >
                   <LinkifyText>{howto.description}</LinkifyText>
                 </Text>
               </Flex>
@@ -210,7 +225,11 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               />
               {howto.time}
             </Flex>
-            <Flex mr="4" sx={{ flexDirection: ['column', 'row', 'row'] }}>
+            <Flex
+              mr="4"
+              sx={{ flexDirection: ['column', 'row', 'row'] }}
+              data-cy="difficulty-level"
+            >
               <Image
                 loading="lazy"
                 src={DifficultyLevel}
@@ -222,10 +241,15 @@ const HowtoDescription = ({ howto, loggedInUser, ...props }: IProps) => {
               {howto.difficulty_level}
             </Flex>
           </Flex>
-          <Flex mt={4}>
-            <TagList tags={howto.tags} />
-          </Flex>
-          <HowtoDownloads howto={howto} loggedInUser={loggedInUser} />
+          <ClientOnly fallback={<></>}>
+            {/* TODO: remove ClientOnly when we have a Tags API which we can on the loader - need it now because tags only load client-side which causes a html mismatch error */}
+            {() => (
+              <>
+                <TagList tags={howto.tags} />
+                <HowtoDownloads howto={howto} loggedInUser={loggedInUser} />
+              </>
+            )}
+          </ClientOnly>
         </Flex>
         <Box
           sx={{

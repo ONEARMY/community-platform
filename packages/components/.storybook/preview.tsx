@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@emotion/react'
+import { ThemeProvider } from '@theme-ui/core'
 import type { Preview } from '@storybook/react'
 import React from 'react'
 

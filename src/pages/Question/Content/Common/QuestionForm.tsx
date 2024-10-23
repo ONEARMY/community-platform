@@ -61,8 +61,8 @@ export const QuestionForm = (props: IProps) => {
       mutators={{ setAllowDraftSaveFalse }}
       initialValues={formValues}
       render={({ submitting, handleSubmit, pristine, valid, values }) => {
-        const numberOfImageInputsAvailable = values?.images
-          ? Math.min(values.images.length + 1, QUESTION_MAX_IMAGES)
+        const numberOfImageInputsAvailable = (values as any)?.images
+          ? Math.min((values as any).images.length + 1, QUESTION_MAX_IMAGES)
           : 1
 
         return (

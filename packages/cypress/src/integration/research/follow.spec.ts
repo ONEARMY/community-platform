@@ -24,6 +24,7 @@ describe('[Research]', () => {
 
       cy.step('Should follow on click')
       cy.get('[data-cy="follow-button"]').first().click()
+      cy.wait(2000)
       cy.get('[data-cy="follow-button"]')
         .first()
         .should('contain.text', 'Following')

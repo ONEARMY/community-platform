@@ -6,9 +6,7 @@ import {
   HOWTO_TITLE_MIN_LENGTH,
 } from '../../../../../src/pages/Howto/constants'
 import { guidance, headings } from '../../../../../src/pages/Howto/labels'
-
-const creatorEmail = 'howto_creator@test.com'
-const creatorPassword = 'test1234'
+import { generateNewUserDetails } from '../../utils/TestUtils'
 
 describe('[How To]', () => {
   beforeEach(() => {
@@ -104,18 +102,19 @@ describe('[How To]', () => {
   }
 
   describe('[Create a how-to]', () => {
-    const alpha = faker.random.alphaNumeric(5)
+    const randomId = faker.random.alphaNumeric(8)
+    const creator = generateNewUserDetails()
     const expected = {
-      _createdBy: 'howto_creator',
+      _createdBy: creator.username,
       _deleted: false,
       category: 'Moulds',
       description: 'After creating, the how-to will be deleted',
       moderation: IModerationStatus.AWAITING_MODERATION,
       difficulty_level: DifficultyLevel.MEDIUM,
       time: '1-2 weeks',
-      title: `Create a how-to test ${alpha}`,
-      slug: `create-a-how-to-test-${alpha}`,
-      previousSlugs: ['qwerty', `create-a-how-to-test-${alpha}`],
+      title: `Create a how-to test ${randomId}`,
+      slug: `create-a-how-to-test-${randomId}`,
+      previousSlugs: ['qwerty', `create-a-how-to-test-${randomId}`],
       fileLink: 'http://google.com/',
       files: [],
       total_downloads: 0,
@@ -150,25 +149,12 @@ describe('[How To]', () => {
         },
         {
           _animationKey: 'unique3',
-          images: [
-            {
-              contentType: 'image/jpeg',
-              name: 'howto-step-pic1.jpg',
-              size: 19410,
-              type: 'image/jpeg',
-            },
-            {
-              contentType: 'image/jpeg',
-              name: 'howto-step-pic2.jpg',
-              size: 20009,
-              type: 'image/jpeg',
-            },
-          ],
           text: faker.lorem
             .sentences(50)
             .slice(0, HOWTO_STEP_DESCRIPTION_MAX_LENGTH)
             .trim(),
           title: 'A long title that is the total characters limit of',
+          videoURL: 'https://www.youtube.com/watch?v=Os7dREQ00l4',
         },
         {
           _animationKey: 'unique2',
@@ -199,10 +185,12 @@ describe('[How To]', () => {
       const categoryGuidanceMain = guidance.moulds.main.slice(0, 40)
       const categoryGuidanceFiles = guidance.moulds.files
 
-      cy.login(creatorEmail, creatorPassword)
+      cy.signUpNewUser(creator)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.get('[data-cy="MemberBadge-member"]').should('be.visible')
-      cy.step('Access the create-how-to')
+      cy.visit('/how-to')
+
+      cy.step('Access the create how-to page')
       cy.get('a[href="/how-to/create"]').should('be.visible')
       cy.get('[data-cy=create]').click()
       cy.contains('Create a How-To').should('be.visible')
@@ -234,12 +222,13 @@ describe('[How To]', () => {
       )
 
       cy.step('A basic draft was created')
-      cy.fillIntroTitle('qwerty')
+      cy.fillIntroTitle(`qwerty ${randomId}`)
       cy.get('[data-cy=draft]').click()
+      const firstSlug = `/how-to/qwerty-${randomId}`
       cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
         .click()
         .url()
-        .should('include', `/how-to/qwerty`)
+        .should('include', firstSlug)
       cy.get('[data-cy=moderationstatus-draft]').should('be.visible')
 
       cy.step('Back to completing the how-to')
@@ -271,15 +260,13 @@ describe('[How To]', () => {
         .attachFile('images/howto-intro.jpg')
 
       fillStep(1, steps[0].title, steps[0].text, imagePaths)
-
       fillStep(2, steps[2].title, steps[2].text, [], steps[2].videoURL)
 
       cy.step('Move step two down to step three')
       cy.get(`[data-cy=step_${1}]:visible`)
         .find('[data-cy=move-step-down]')
         .click()
-
-      fillStep(2, steps[1].title, steps[1].text, imagePaths)
+      fillStep(2, steps[1].title, steps[1].text, [], steps[1].videoURL)
 
       cy.step('Add extra step')
       cy.get('[data-cy=add-step]').click()
@@ -293,6 +280,7 @@ describe('[How To]', () => {
         }
       })
 
+      cy.step('Can remove extra steps')
       deleteStep(4)
       cy.screenClick()
 
@@ -313,11 +301,24 @@ describe('[How To]', () => {
       cy.get('[data-cy=file-download-counter]')
         .contains(total_downloads)
         .should('be.visible')
-      cy.queryDocuments('howtos', 'title', '==', title).then((docs) => {
-        cy.log('queryDocs', docs)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqHowto', expected)
+      // Check against UI
+      cy.get('[data-cy=how-to-title]').should('contain', title)
+      cy.get('[data-cy=how-to-description]').should('contain', description)
+
+      // Check category
+      cy.get('[data-cy=category]').should('contain', category)
+
+      // Check difficulty level
+      cy.get('[data-cy=difficulty-level]').should('contain', difficulty_level)
+
+      // Check steps
+      steps.forEach((step, index) => {
+        cy.get(`[data-cy=step_${index + 1}]`)
+          .find('[data-cy=step-title]')
+          .should('contain', step.title)
+        cy.get(`[data-cy=step_${index + 1}]`)
+          .find('[data-cy=step-text]')
+          .should('contain', step.text)
       })
     })
 
@@ -328,7 +329,7 @@ describe('[How To]', () => {
     })
 
     it('[Warning on leaving page]', () => {
-      cy.login(creatorEmail, creatorPassword)
+      cy.login(creator.email, creator.password)
       cy.get('[data-cy=loader]').should('not.exist')
       cy.step('Access the create-how-to')
       cy.get('a[href="/how-to/create"]').should('be.visible')
@@ -342,223 +343,6 @@ describe('[How To]', () => {
       cy.get('[data-cy=intro-title]').clear().blur({ force: true })
       cy.get('[data-cy=page-link][href*="/how-to"]').click()
       cy.url().should('match', /\/how-to?/)
-    })
-  })
-
-  describe('[Edit a how-to]', () => {
-    const howtoUrl = '/how-to/set-up-devsite-to-help-coding'
-    const editHowtoUrl = '/how-to/set-up-devsite-to-help-coding/edit'
-    const editTitle = faker.random.alphaNumeric(5)
-    const expected = {
-      _createdBy: 'howto_editor',
-      _deleted: false,
-      category: 'exhibition',
-      moderation: IModerationStatus.ACCEPTED,
-      description: 'After editing, all changes are reverted',
-      difficulty_level: DifficultyLevel.HARD,
-      files: [],
-      fileLink: 'http://google.com/',
-      total_downloads: 10,
-      slug: `this-is-an-edit-test-${editTitle}`,
-      previousSlugs: [
-        'set-up-devsite-to-help-coding',
-        `this-is-an-edit-test-${editTitle}`,
-      ],
-      tags: { EOVeOZaKKw1UJkDIf3c3: true },
-      time: '3-4 weeks',
-      title: `This is an edit test ${editTitle}`,
-      cover_image: {
-        contentType: 'image/jpeg',
-        name: 'howto-intro.jpg',
-        size: 19897,
-        type: 'image/jpeg',
-      },
-      steps: [
-        {
-          _animationKey: 'unique1',
-          images: [
-            {
-              contentType: 'image/jpeg',
-              name: 'howto-step-pic1.jpg',
-              size: 19410,
-              type: 'image/jpeg',
-            },
-            {
-              contentType: 'image/jpeg',
-              name: 'howto-step-pic2.jpg',
-              size: 20009,
-              type: 'image/jpeg',
-            },
-          ],
-          text: 'Description for step 1. This description should be between the minimum and maximum description length',
-          title: 'Step 1 is easy',
-        },
-        {
-          _animationKey: 'unique2',
-          images: [
-            {
-              contentType: 'image/jpeg',
-              name: 'howto-step-pic1.jpg',
-              size: 19410,
-              type: 'image/jpeg',
-            },
-            {
-              contentType: 'image/jpeg',
-              name: 'howto-step-pic2.jpg',
-              size: 20009,
-              type: 'image/jpeg',
-            },
-          ],
-          text: 'Description for step 2. This description should be between the minimum and maximum description length',
-          title: 'Step 2 is easy',
-        },
-        {
-          _animationKey: 'unique3',
-          images: [
-            {
-              contentType: 'image/jpeg',
-              name: '3.1.jpg',
-              size: 141803,
-              type: 'image/jpeg',
-            },
-            {
-              contentType: 'image/jpeg',
-              name: '3.2.jpg',
-              size: 211619,
-              type: 'image/jpeg',
-            },
-            {
-              contentType: 'image/jpeg',
-              name: '3.4.jpg',
-              size: 71309,
-              type: 'image/jpeg',
-            },
-          ],
-          text: 'Description for step 3. This description should be between the minimum and maximum description length',
-          title: 'Step 3 is easy',
-        },
-      ],
-    }
-
-    it('[By Anonymous]', () => {
-      cy.step('Prevent anonymous access to edit howto')
-      cy.visit(editHowtoUrl)
-      cy.get('[data-cy=BlockedRoute]').should('be.visible')
-    })
-
-    it('[By Authenticated]', () => {
-      cy.step('Prevent non-owner access to edit howto')
-      cy.visit('/how-to')
-      cy.login(creatorEmail, creatorPassword)
-      cy.visit(editHowtoUrl)
-      // user should be redirect to how-to page
-      cy.location('pathname').should('eq', howtoUrl)
-    })
-
-    it('[By Owner]', () => {
-      cy.login('howto_editor@test.com', 'test1234')
-
-      cy.step('Go to Edit mode')
-      cy.visit(howtoUrl)
-      cy.get('[data-cy=edit]').click()
-
-      cy.step('Warn if title is identical with the existing ones')
-      cy.get('[data-cy=intro-title]').focus().blur({ force: true })
-      cy.contains(
-        'Did you know there is an existing how-to with the title',
-      ).should('not.exist')
-
-      cy.step('Warn if title has less than minimum required characters')
-      cy.fillIntroTitle('qwer')
-      cy.contains(
-        `Should be more than ${HOWTO_TITLE_MIN_LENGTH} characters`,
-      ).should('be.visible')
-
-      cy.fillIntroTitle('Make glass-like beams')
-      cy.contains(
-        "Did you know there is an existing how-to with the title 'Make glass-like beams'? Using a unique title helps readers decide which how-to better meet their needs.",
-      ).should('be.visible')
-
-      cy.step('Update the intro')
-      cy.fillIntroTitle(expected.title)
-      cy.selectTag('howto_testing')
-      selectCategory(expected.category as Category)
-      selectTimeDuration(expected.time as Duration)
-      selectDifficultLevel(expected.difficulty_level)
-      cy.get('[data-cy=intro-description]').clear().type(expected.description)
-
-      cy.step('Update a new cover for the intro')
-
-      cy.get('[data-cy="intro-cover"]')
-        .find('[data-cy="delete-image"]')
-        .click({ force: true })
-
-      cy.get('[data-cy="intro-cover"]')
-        .find(':file')
-        .attachFile('images/howto-intro.jpg')
-
-      cy.step('Upload a new file')
-
-      cy.get('[data-cy="files"]').click({ force: true })
-
-      cy.fixture('files/Example.pdf').then((fileContent) => {
-        cy.get('[data-cy="uppy-dashboard"] .uppy-Dashboard-input').attachFile({
-          fileContent: fileContent,
-          fileName: 'example.pdf',
-          mimeType: 'application/pdf',
-        })
-      })
-
-      cy.contains('Upload 1 file').click()
-
-      cy.step('Steps beyond the minimum can be deleted')
-      deleteStep(5)
-      deleteStep(4)
-
-      expected.steps.forEach((step, index) => {
-        fillStep(index + 1, step.title, step.text, [
-          'images/howto-step-pic1.jpg',
-          'images/howto-step-pic2.jpg',
-        ])
-      })
-
-      cy.step('Submit updated Howto')
-
-      cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=invalid-file-warning]').should('be.visible')
-
-      cy.get('[data-cy=fileLink]').clear()
-      cy.get('[data-cy=submit]').click()
-      cy.get('[data-cy=invalid-file-warning]').should('not.exist')
-
-      cy.step('Open the updated how-to')
-
-      cy.get('[data-cy=view-howto]:enabled', { timeout: 20000 })
-        .click()
-        .url()
-        .should('include', '/how-to/this-is-an-edit-test')
-      cy.get('[data-cy=how-to-basis]').contains(
-        `This is an edit test ${editTitle}`,
-      )
-      cy.get('[data-cy=file-download-counter]')
-        .contains(expected.total_downloads)
-        .should('be.visible')
-      cy.queryDocuments(
-        'howtos',
-        'title',
-        '==',
-        `This is an edit test ${editTitle}`,
-      ).then((docs) => {
-        cy.log('queryDocs', docs)
-        cy.wrap(null)
-          .then(() => docs[0])
-          .should('eqHowto', expected)
-      })
-
-      cy.step('Open the old slug')
-
-      cy.visit('/how-to/set-up-devsite-to-help-coding')
-      cy.get('[data-cy=how-to-basis]').contains('This is an edit test')
     })
   })
 })

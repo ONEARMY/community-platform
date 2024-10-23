@@ -43,7 +43,7 @@ describe('[User sign-up]', () => {
       const { email, username, password } = user
 
       cy.signUpNewUser(user)
-      cy.logout()
+      cy.logout(false)
       cy.fillSignupForm(username, email, password)
       cy.contains(FRIENDLY_MESSAGES['sign-up/username-taken']).should(
         'be.visible',
@@ -55,7 +55,7 @@ describe('[User sign-up]', () => {
       const { email, username, password } = user
 
       cy.signUpNewUser(user)
-      cy.logout()
+      cy.logout(false)
       cy.fillSignupForm(`${username}-new`, email, password)
       cy.get('[data-cy=submit]').click()
       cy.get('[data-cy=error-msg]')

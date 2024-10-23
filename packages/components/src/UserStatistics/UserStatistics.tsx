@@ -38,12 +38,7 @@ export const UserStatistics = (props: UserStatisticsProps) => {
         ...props.sx,
       }}
     >
-      <Flex
-        sx={{
-          gap: 2,
-          flexDirection: 'column',
-        }}
-      >
+      <Flex sx={{ gap: 2, flexDirection: 'column' }}>
         {props.isVerified && (
           <Flex data-testid="verified-stat">
             <Icon glyph="verified" size={22} />
@@ -51,9 +46,9 @@ export const UserStatistics = (props: UserStatisticsProps) => {
           </Flex>
         )}
 
-        {props?.isSupporter ? (
+        {props?.isSupporter && (
           <Flex data-testid="supporter-stat">
-            <Icon glyph={'supporter'} size={22} />
+            <Icon glyph="supporter" size={22} />
             <Box ml={1}>
               <ExternalLink
                 href="https://www.patreon.com/one_army"
@@ -64,9 +59,9 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               </ExternalLink>
             </Box>
           </Flex>
-        ) : null}
+        )}
 
-        {hasLocation ? (
+        {hasLocation && (
           <InternalLink
             to={'/map/#' + props.userName}
             sx={{ color: 'black' }}
@@ -77,16 +72,16 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               <Box ml={1}>{props.country || 'View on Map'}</Box>
             </Flex>
           </InternalLink>
-        ) : null}
+        )}
 
-        {props.usefulCount ? (
+        {props.usefulCount && (
           <Flex data-testid="useful-stat">
             <ElWithBeforeIcon icon={starActiveSVG} />
-            Useful:&nbsp;{props.usefulCount}
+            {`Useful: ${props.usefulCount}`}
           </Flex>
-        ) : null}
+        )}
 
-        {props.howtoCount ? (
+        {props.howtoCount && (
           <InternalLink
             to={'/how-to?q=' + props.userName}
             sx={{ color: 'black' }}
@@ -97,9 +92,9 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               How‑to:&nbsp;{props.howtoCount}
             </Flex>
           </InternalLink>
-        ) : null}
+        )}
 
-        {props.researchCount ? (
+        {props.researchCount && (
           <InternalLink
             to={'/research?q=' + props.userName}
             sx={{ color: 'black' }}
@@ -110,14 +105,14 @@ export const UserStatistics = (props: UserStatisticsProps) => {
               Research:&nbsp;{props.researchCount}
             </Flex>
           </InternalLink>
-        ) : null}
+        )}
 
-        {props.totalViews ? (
+        {props.totalViews && (
           <Flex data-testid="profile-views-stat">
-            <Icon glyph={'view'} size={22} />
-            <Box ml={1}>Views:&nbsp;{props.totalViews}</Box>
+            <Icon glyph="view" size={22} />
+            <Box ml={1}>{`Views: ${props.totalViews}`}</Box>
           </Flex>
-        ) : null}
+        )}
       </Flex>
     </Card>
   )

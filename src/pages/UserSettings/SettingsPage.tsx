@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import { SettingsFormWrapper } from 'oa-components'
 import { ProfileTypeList } from 'oa-shared'
 import { useCommonStores } from 'src/common/hooks/useCommonStores'
@@ -6,6 +7,7 @@ import { isModuleSupported, MODULE } from 'src/modules'
 import { isProfileComplete } from 'src/utils/isProfileComplete'
 import { Box, Flex, Text } from 'theme-ui'
 
+import { EnvironmentContext } from '../common/EnvironmentContext'
 import { SettingsPageAccount } from './SettingsPageAccount'
 import { SettingsPageImpact } from './SettingsPageImpact'
 import { SettingsPageMapPin } from './SettingsPageMapPin'
@@ -15,6 +17,7 @@ import { SettingsPageUserProfile } from './SettingsPageUserProfile'
 import type { availableGlyphs, ITab } from 'oa-components'
 
 export const SettingsPage = () => {
+  const env = useContext(EnvironmentContext)
   const { userStore } = useCommonStores().stores
 
   const user = userStore.activeUser
@@ -22,7 +25,10 @@ export const SettingsPage = () => {
 
   const isMember = user.profileType === ProfileTypeList.MEMBER
   const showImpactTab = !isMember && isPreciousPlastic()
-  const showMapTab = isModuleSupported(MODULE.MAP)
+  const showMapTab = isModuleSupported(
+    env?.VITE_SUPPORTED_MODULES || '',
+    MODULE.MAP,
+  )
   const incompleteProfile = !isProfileComplete(user || undefined)
 
   const profileTab = {

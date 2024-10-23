@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import { Field } from 'react-final-form'
 import { FieldArray } from 'react-final-form-arrays'
 import countriesList from 'countries-list'
@@ -11,6 +12,7 @@ import {
 import { ProfileTypeList } from 'oa-shared'
 import { SelectField } from 'src/common/Form/Select.field'
 import { isModuleSupported, MODULE } from 'src/modules'
+import { EnvironmentContext } from 'src/pages/common/EnvironmentContext'
 import { buttons, fields, headings } from 'src/pages/UserSettings/labels'
 import { required } from 'src/utils/validators'
 import { Flex, Heading, Text } from 'theme-ui'
@@ -29,6 +31,8 @@ interface IProps {
 }
 
 export const UserInfosSection = ({ formValues }: IProps) => {
+  const env = useContext(EnvironmentContext)
+
   const { countries } = countriesList
   const { profileType, links, location } = formValues
   const isMemberProfile = profileType === ProfileTypeList.MEMBER
@@ -97,7 +101,10 @@ export const UserInfosSection = ({ formValues }: IProps) => {
         {noMapPin && (
           <Flex sx={{ flexDirection: 'column', gap: 1 }}>
             <Text>{country.title}</Text>
-            {isModuleSupported(MODULE.MAP) && (
+            {isModuleSupported(
+              env?.VITE_SUPPORTED_MODULES || '',
+              MODULE.MAP,
+            ) && (
               <InternalLink to="/settings/map/">
                 <Text
                   variant="quiet"

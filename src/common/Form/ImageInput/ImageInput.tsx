@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import Dropzone from 'react-dropzone'
+import Dropzone from 'react-dropzone-esm'
 import { Button, Modal } from 'oa-components'
 import { logger } from 'src/logger'
 import { Box, Flex, Image, Text } from 'theme-ui'

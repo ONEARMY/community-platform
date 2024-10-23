@@ -8,15 +8,7 @@ import {
   Username,
   UserStatistics,
 } from 'oa-components'
-import { ExternalLinkLabel, ProfileTypeList, UserRole } from 'oa-shared'
-// Plastic types
-import HDPEIcon from 'src/assets/images/plastic-types/hdpe.svg'
-import LDPEIcon from 'src/assets/images/plastic-types/ldpe.svg'
-import OtherIcon from 'src/assets/images/plastic-types/other.svg'
-import PETIcon from 'src/assets/images/plastic-types/pet.svg'
-import PPIcon from 'src/assets/images/plastic-types/pp.svg'
-import PSIcon from 'src/assets/images/plastic-types/ps.svg'
-import PVCIcon from 'src/assets/images/plastic-types/pvc.svg'
+import { ExternalLinkLabel, UserRole } from 'oa-shared'
 import { AuthWrapper } from 'src/common/AuthWrapper'
 import { ProfileTags } from 'src/common/ProfileTags'
 import { isPreciousPlastic } from 'src/config/config'
@@ -30,7 +22,6 @@ import {
   Card,
   Flex,
   Heading,
-  Image,
   Paragraph,
 } from 'theme-ui'
 
@@ -40,72 +31,13 @@ import { heading } from '../impact/labels'
 import UserContactAndLinks from './UserContactAndLinks'
 import UserCreatedDocuments from './UserCreatedDocuments'
 
-import type { IOpeningHours, IUser, PlasticTypeLabel } from 'oa-shared'
+import type { IUser } from 'oa-shared'
 import type { UserCreatedDocs } from '../types'
 
 interface IProps {
   user: IUser
   docs: UserCreatedDocs | undefined
 }
-
-const renderPlasticTypes = (plasticTypes: Array<PlasticTypeLabel>) => {
-  const renderIcon = (type: string) => {
-    const iconMap = {
-      hdpe: HDPEIcon,
-      ldpe: LDPEIcon,
-      other: OtherIcon,
-      pet: PETIcon,
-      pp: PPIcon,
-      ps: PSIcon,
-      pvc: PVCIcon,
-    }
-
-    const toRender = iconMap[type]
-    return (
-      toRender && (
-        <Image data-cy={`plastic-type-${type}`} loading="lazy" src={toRender} />
-      )
-    )
-  }
-
-  return (
-    <div>
-      <h4>We collect the following plastic types:</h4>
-      <Flex
-        sx={{
-          flexWrap: 'wrap',
-          columnGap: '15px',
-        }}
-      >
-        {plasticTypes.map((plasticType) => {
-          return (
-            <Box
-              key={plasticType}
-              sx={{
-                width: '50px',
-              }}
-            >
-              {renderIcon(plasticType)}
-            </Box>
-          )
-        })}
-      </Flex>
-    </div>
-  )
-}
-
-const renderOpeningHours = (openingHours: IOpeningHours[]) => (
-  <div>
-    <h4>We're open on:</h4>
-    {openingHours.map((openingObj) => {
-      return (
-        <p key={openingObj.day}>
-          {openingObj.day}: {openingObj.openFrom} - {openingObj.openTo}
-        </p>
-      )
-    })}
-  </div>
-)
 
 const getCoverImages = (user: IUser) => {
   if (user.coverImages && user.coverImages.length) {
@@ -233,7 +165,7 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
               <Tab data-cy="contact-tab">Contact</Tab>
             </TabsList>
             <TabPanel>
-              <Box sx={{ mt: 3 }}>
+              <Box sx={{ mt: 1 }}>
                 <Flex
                   sx={{
                     flexDirection: ['column', 'column', 'row'],
@@ -242,22 +174,16 @@ export const SpaceProfile = ({ user, docs }: IProps) => {
                     gap: [0, 0, 6],
                   }}
                 >
-                  <Box
+                  <Flex
                     sx={{
+                      flexDirection: 'column',
                       width: ['100%', '100%', '80%'],
+                      gap: 2,
                     }}
                   >
                     {tags && <ProfileTags tagIds={tags} />}
                     {about && <Paragraph>{about}</Paragraph>}
-
-                    {profileType === ProfileTypeList.COLLECTION_POINT &&
-                      user.collectedPlasticTypes &&
-                      renderPlasticTypes(user.collectedPlasticTypes)}
-
-                    {profileType === ProfileTypeList.COLLECTION_POINT &&
-                      user.openingHours &&
-                      renderOpeningHours(user.openingHours)}
-                  </Box>
+                  </Flex>
                   <Box
                     sx={{
                       width: ['auto', 'auto', '20%'],

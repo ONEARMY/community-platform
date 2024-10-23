@@ -377,33 +377,7 @@ describe('[Settings]', () => {
       const description =
         'We accept plastic currencies: Bottle, Nylon Bags, Plastic Lids/Straws'
       const displayName = 'settings_community_new'
-      const openTimes = [
-        {
-          index: 0,
-          day: 'Monday',
-          from: '09:00 AM',
-          to: '06:00 PM',
-        },
-        {
-          index: 1,
-          day: 'Tuesday',
-          from: '09:00 AM',
-          to: '06:00 PM',
-        },
-        {
-          index: 2,
-          day: 'Wednesday',
-          from: '10:00 AM',
-          to: '08:00 PM',
-        },
-        {
-          index: 3,
-          day: 'Friday',
-          from: '05:00 AM',
-          to: '02:00 PM',
-        },
-      ]
-      const plasticTypes = ['hdpe', 'other']
+      const plasticTypes = ['HDPE', 'LDPE']
       const profileType = 'collection-point'
       const user = generateNewUserDetails()
       const url = 'http://www.facebook.com/settings_plastic_new'
@@ -418,6 +392,10 @@ describe('[Settings]', () => {
       cy.get('[data-cy=save]').click()
       cy.get('[data-cy=errors-container]').should('be.visible')
 
+      cy.step('Set profile tags')
+      cy.selectTag(plasticTypes[0], '[data-cy=tag-select]')
+      cy.selectTag(plasticTypes[1], '[data-cy=tag-select]')
+
       cy.step('Populate profile')
       cy.setSettingBasicUserInfo({
         displayName,
@@ -431,16 +409,6 @@ describe('[Settings]', () => {
         url,
       })
 
-      cy.step('Update collection specific section')
-      openTimes.forEach((openTime) => {
-        cy.setSettingAddOpeningTime(openTime)
-      })
-      cy.setSettingDeleteOpeningTime(1, false)
-      cy.setSettingDeleteOpeningTime(2, true)
-
-      cy.get(`[data-cy=plastic-${plasticTypes[0]}]`).click()
-      cy.get(`[data-cy=plastic-${plasticTypes[1]}]`).click()
-
       cy.saveSettingsForm()
 
       cy.step('Updated settings display on main profile tab')
@@ -452,19 +420,8 @@ describe('[Settings]', () => {
       cy.get('[data-cy="active-image"]')
         .should('have.attr', 'src')
         .and('include', coverImage)
-
-      cy.step('Updated collection specific section displayed')
-      cy.get(`[data-cy=plastic-type-${plasticTypes[0]}]`)
-      cy.get(`[data-cy=plastic-type-${plasticTypes[1]}]`)
-      cy.contains(
-        `${openTimes[0].day}: ${openTimes[0].from} - ${openTimes[0].to}`,
-      )
-      cy.contains(
-        `${openTimes[1].day}: ${openTimes[1].from} - ${openTimes[1].to}`,
-      )
-      cy.contains(
-        `${openTimes[3].day}: ${openTimes[3].from} - ${openTimes[3].to}`,
-      )
+      cy.contains(plasticTypes[0])
+      cy.contains(plasticTypes[1])
 
       cy.step('Updated settings display on contact tab')
       cy.get('[data-cy="contact-tab"]').click()

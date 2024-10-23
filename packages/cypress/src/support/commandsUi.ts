@@ -23,13 +23,6 @@ interface IMapPin {
   locationName: string
 }
 
-interface IOpeningTime {
-  index: number
-  day: string
-  from: string
-  to: string
-}
-
 declare global {
   namespace Cypress {
     interface Chainable {
@@ -64,9 +57,7 @@ declare global {
        **/
       selectTag(tagName: string, selector?: string): Chainable<void>
       setSettingAddContactLink(link: ILink)
-      setSettingAddOpeningTime(openingTime: IOpeningTime)
       setSettingBasicUserInfo(info: IInfo)
-      setSettingDeleteOpeningTime(index: number, confirmed: boolean)
       setSettingFocus(focus: string)
       setSettingImage(image: string, selector: string)
       setSettingImpactData(year: number, fields)
@@ -109,31 +100,6 @@ Cypress.Commands.add('setSettingAddContactLink', (link: ILink) => {
     .blur({ force: true })
 })
 
-Cypress.Commands.add(
-  'setSettingAddOpeningTime',
-  (openingTime: IOpeningTime) => {
-    const selectOption = (selector: string, selectedValue: string) => {
-      cy.selectTag(selectedValue, selector)
-    }
-
-    if (openingTime.index > 0) {
-      cy.get('[data-cy=add-opening-time]').click()
-    }
-    selectOption(
-      `[data-cy=opening-time-day-${openingTime.index}]`,
-      openingTime.day,
-    )
-    selectOption(
-      `[data-cy=opening-time-from-${openingTime.index}]`,
-      openingTime.from,
-    )
-    selectOption(
-      `[data-cy=opening-time-to-${openingTime.index}]`,
-      openingTime.to,
-    )
-  },
-)
-
 Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   const { country, description, displayName } = info
 
@@ -142,19 +108,6 @@ Cypress.Commands.add('setSettingBasicUserInfo', (info: IInfo) => {
   cy.get('[data-cy=info-description').clear().type(description)
   country && cy.selectTag(country, '[data-cy=location-dropdown]')
 })
-
-Cypress.Commands.add(
-  'setSettingDeleteOpeningTime',
-  (index: number, confirmed: boolean) => {
-    cy.viewport('macbook-13')
-    cy.get(`[data-cy=delete-opening-time-${index}-desk]`).click()
-    if (confirmed) {
-      cy.get('[data-cy=confirm-delete]').click()
-    } else {
-      cy.get('[data-cy=cancel-delete]').click()
-    }
-  },
-)
 
 Cypress.Commands.add('setSettingFocus', (focus: string) => {
   cy.get(`[data-cy=${focus}]`).click()

@@ -101,27 +101,12 @@ export type ProfileTypeName =
 
 // Below are primarily used for PP
 
-export type PlasticTypeLabel =
-  | 'pet'
-  | 'hdpe'
-  | 'pvc'
-  | 'ldpe'
-  | 'pp'
-  | 'ps'
-  | 'other'
-
 export type WorkspaceType =
   | 'shredder'
   | 'sheetpress'
   | 'extrusion'
   | 'injection'
   | 'mix'
-
-export interface IPlasticType {
-  label: PlasticTypeLabel
-  number: string
-  imageSrc?: string
-}
 
 export interface IProfileType {
   label: ProfileTypeName
@@ -135,12 +120,6 @@ export interface IWorkspaceType {
   imageSrc?: string
   textLabel: string
   subText?: string
-}
-
-export interface IOpeningHours {
-  day: string
-  openFrom: string
-  openTo: string
 }
 
 export type UserMention = {
@@ -191,9 +170,7 @@ export interface IUser {
   // Primary PP profile type related fields
   profileType: ProfileTypeName
   workspaceType?: WorkspaceType | null // <-- to-do replace with tags
-  collectedPlasticTypes?: PlasticTypeLabel[] | null // <-- to-do replace with tags
   mapPinDescription?: string | null
-  openingHours?: IOpeningHours[]
 }
 
 export interface IUserBadges {

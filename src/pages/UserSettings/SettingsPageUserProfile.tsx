@@ -13,7 +13,6 @@ import { Flex } from 'theme-ui'
 import { v4 as uuid } from 'uuid'
 
 import { EnvironmentContext } from '../common/EnvironmentContext'
-import { CollectionSection } from './content/sections/Collection.section'
 import { FocusSection } from './content/sections/Focus.section'
 import { ProfileTags } from './content/sections/ProfileTags.section'
 import { PublicContactSection } from './content/sections/PublicContact.section'
@@ -105,9 +104,7 @@ export const SettingsPageUserProfile = () => {
     links,
     location: user.location || null,
     about: user.about || null,
-    openingHours: user.openingHours || [{}],
     workspaceType: user.workspaceType || null,
-    collectedPlasticTypes: user.collectedPlasticTypes || null,
     isContactableByPublic:
       user.isContactableByPublic || DEFAULT_PUBLIC_CONTACT_PREFERENCE,
     userImage: user.userImage || null,
@@ -160,18 +157,8 @@ export const SettingsPageUserProfile = () => {
                   <WorkspaceSection />
                 )}
 
-                {values.profileType === ProfileTypeList.COLLECTION_POINT && (
-                  <CollectionSection
-                    required={
-                      values.collectedPlasticTypes
-                        ? values.collectedPlasticTypes.length === 0
-                        : true
-                    }
-                    formValues={values}
-                  />
-                )}
-
-                {values.profileType === ProfileTypeList.MACHINE_BUILDER && (
+                {(values.profileType === ProfileTypeList.MACHINE_BUILDER ||
+                  values.profileType === ProfileTypeList.COLLECTION_POINT) && (
                   <ProfileTags />
                 )}
 

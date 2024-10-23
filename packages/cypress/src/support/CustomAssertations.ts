@@ -1,12 +1,12 @@
 import chaiSubset from 'chai-subset'
 
-import type { ProfileTypeName } from 'oa-shared'
 import type {
   IHowto,
   IHowtoStep,
   IResearchDB,
   IUserDB,
-} from '../../../../src/models'
+  ProfileTypeName,
+} from 'oa-shared'
 
 declare global {
   namespace Chai {
@@ -171,19 +171,6 @@ const eqSettings = (chaiObj) => {
     expect(subject.workspaceType, 'workspaceType').to.containSubset(
       expected.workspaceType,
     )
-  const machineExpertiseAssert: Assert<IUserDB, any> = (subject, expected) =>
-    expect(subject.machineBuilderXp, 'MachineBuilderXp').to.containSubset(
-      expected.machineBuilderXp,
-    )
-  const openingHoursAssert: Assert<IUserDB, any> = (subject, expected) =>
-    expect(subject.openingHours, 'OpeningHours').to.containSubset(
-      expected.openingHours,
-    )
-  const plasticTypeAssert: Assert<IUserDB, any> = (subject, expected) =>
-    expect(
-      subject.collectedPlasticTypes,
-      'CollectedPlasticTypes',
-    ).to.containSubset(expected.collectedPlasticTypes)
 
   const assertMap: {
     [key in ProfileTypeName]: ChainAssert<IUserDB, any>
@@ -205,7 +192,6 @@ const eqSettings = (chaiObj) => {
       coverImageAssert,
       linkAssert,
       locationAssert,
-      machineExpertiseAssert,
     ),
     'community-builder': new ChainAssert<IUserDB, any>(
       basicInfoAssert,
@@ -218,8 +204,6 @@ const eqSettings = (chaiObj) => {
       coverImageAssert,
       linkAssert,
       locationAssert,
-      openingHoursAssert,
-      plasticTypeAssert,
     ),
     space: undefined,
   }

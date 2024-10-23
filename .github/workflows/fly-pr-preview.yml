@@ -51,7 +51,7 @@ jobs:
           name: community-platform-pr-${{ github.event.number }}
           secrets: >
             VITE_SITE_VARIANT=preview
-            VITE_PROJECT_VERSION=$${ github.sha }}
+            VITE_PROJECT_VERSION=${{ github.sha }}
             VITE_BRANCH=${{ github.head_ref || github.ref_name }}
             VITE_CDN_URL=
             VITE_FIREBASE_API_KEY=

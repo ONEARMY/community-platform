@@ -45,11 +45,11 @@ jobs:
 
       - name: Deploy PR app to Fly.io
         id: deploy
-        uses: superfly/fly-pr-review-apps@1.2.1
+        uses: iSCJT/fly-preview-app-with-build-secret
         with:
           config: fly-preview.toml
           name: community-platform-pr-${{ github.event.number }}
-          secrets: >
+          build_secrets: >
             VITE_SITE_VARIANT=preview
             VITE_PROJECT_VERSION=${{ github.sha }}
             VITE_BRANCH=${{ github.head_ref || github.ref_name }}

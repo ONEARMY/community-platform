@@ -46,7 +46,22 @@ class FirestoreTestDB {
         })
       })
   }
+
+  addDocument = (collectionName: string, data: any): Cypress.Chainable => {
+    const endpoint = DB_ENDPOINTS[collectionName]
+    return cy.wrap(`adding to: ${collectionName} WITH ${data}`).then(() => {
+      return new Cypress.Promise((resolve, reject) => {
+        db.collection(`${endpoint}`)
+          .add(data)
+          .then((response) => {
+            resolve(response)
+          })
+          .catch((err) => reject(err))
+      })
+    })
+  }
 }
+
 export const Auth = initializeAuth(firebase.app(), {
   persistence: indexedDBLocalPersistence,
 })

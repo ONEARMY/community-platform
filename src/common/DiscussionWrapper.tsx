@@ -185,7 +185,7 @@ export const DiscussionWrapper = observer((props: IProps) => {
 
   return (
     <>
-      {isLoading && <Loader label={LOADING_LABEL} />}
+      {isLoading && <Loader label={LOADING_LABEL} sx={{ padding: 2 }} />}
       {!isLoading && !discussion && <Text>{DISCUSSION_NOT_FOUND}</Text>}
       {discussion && canHideComments && (
         <HideDiscussionContainer

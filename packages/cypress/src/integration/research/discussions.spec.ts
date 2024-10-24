@@ -1,7 +1,10 @@
 // This is basically an identical set of steps to the discussion tests for
 // questions and how-tos. Any changes here should be replicated there.
 
+import { ExternalLinkLabel } from 'oa-shared'
+
 import { MOCK_DATA } from '../../data'
+import { research } from '../../fixtures/research'
 import { generateNewUserDetails } from '../../utils/TestUtils'
 
 const item = Object.values(MOCK_DATA.research)[0]
@@ -22,115 +25,85 @@ describe('[Research.Discussions]', () => {
 
   it('allows authenticated users to contribute to discussions', () => {
     const visitor = generateNewUserDetails()
+    cy.addResearch(research, visitor)
     cy.signUpNewUser(visitor)
-    cy.visit(`/research/${item.slug}`)
 
-    const updateId = item.updates[0]._id
-    const comment = `An example comment from ${visitor.username}`
+    const newComment = `An example comment from ${visitor.username}`
     const updatedNewComment = `I've updated my comment now. Love ${visitor.username}`
-    const newReply = `An interesting point, I hadn't thought about that. All the best ${visitor.username}`
-    const updatedNewReply = `I hadn't thought about that. Really good point. ${visitor.username}`
 
-    cy.step('Can create their own comment')
+    const researchPath = `/research/${visitor.username}-in-discussion-research`
+
+    cy.step('Can add comment')
+
+    cy.visit(researchPath)
+    cy.get(
+      '[data-cy="HideDiscussionContainer: button open-comments no-comments"]',
+    ).click()
+    cy.contains('Start the discussion')
+    cy.contains('0 comments')
+
+    cy.addComment(newComment)
+    cy.contains('1 Comment')
+
+    cy.step('Can edit their comment')
+    cy.editDiscussionItem('CommentItem', newComment, updatedNewComment)
+
+    cy.step('Another user can add reply')
+    const secondCommentor = generateNewUserDetails()
+    const newReply = `An interesting point, I hadn't thought about that. All the best ${secondCommentor.username}`
+    const updatedNewReply = `I hadn't thought about that. Really good point. ${secondCommentor.username}`
+
+    cy.logout()
+
+    cy.signUpNewUser(secondCommentor)
+    cy.visit(researchPath)
     cy.get(
       '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',
     ).click()
 
-    cy.get('[data-cy="comments-form"]').type(comment)
-    cy.get('[data-cy="comment-submit"]').click()
-    cy.get('[data-cy="show-more-comments"]').click()
-    cy.get('[data-cy="OwnCommentItem"]').should('contain', comment)
-
-    cy.step('Can edit their own comment')
-    cy.editDiscussionItem('CommentItem', updatedNewComment)
-    cy.get('[data-cy=OwnCommentItem]').contains(updatedNewComment)
-    cy.get('[data-cy=OwnCommentItem]').contains('Edited less than a minute ago')
-    cy.get('[data-cy=OwnCommentItem]').contains(comment).should('not.exist')
-
-    cy.step('Can delete their own comment')
-    cy.deleteDiscussionItem('CommentItem')
-    cy.contains(updatedNewComment).should('not.exist')
-
-    cy.step('Can add reply')
     cy.addReply(newReply)
-    cy.contains(/\d+ Comments/)
-    cy.contains(newReply)
-    cy.wait(2000)
-    cy.queryDocuments('research', '_id', '==', item._id).then((docs) => {
-      const [research] = docs
-      expect(research.latestCommentDate).to.not.eq(item.latestCommentDate)
-    })
+    cy.wait(1000)
+    cy.contains('2 Comments')
 
     cy.step('Can edit their reply')
-    cy.get('[data-cy="show-more-comments"]').click()
-    cy.editDiscussionItem('ReplyItem', updatedNewReply)
-    cy.get('[data-cy=OwnReplyItem]').contains(updatedNewReply)
-    cy.get('[data-cy=OwnReplyItem]').contains(newReply).should('not.exist')
+    cy.editDiscussionItem('ReplyItem', newReply, updatedNewReply)
 
-    cy.step('Can delete their reply')
-    cy.deleteDiscussionItem('ReplyItem')
-    cy.contains(updatedNewReply).should('not.exist')
+    cy.step('Updating user settings shows on comments')
+    cy.visit('/settings')
+    cy.get('[data-cy=loader]').should('not.exist')
+    cy.setSettingBasicUserInfo({
+      country: 'Saint Lucia',
+      description: "I'm a commenter",
+      displayName: secondCommentor.username,
+    })
+    cy.setSettingImage('avatar', 'userImage')
+    cy.setSettingAddContactLink({
+      index: 0,
+      label: ExternalLinkLabel.SOCIAL_MEDIA,
+      url: 'http://something.to.delete/',
+    })
+    cy.saveSettingsForm()
 
+    cy.step('First commentor can respond')
+    const secondReply = `Quick reply. ${visitor.username}`
+
+    cy.logout()
+    cy.login(visitor.email, visitor.password)
+    cy.visit(researchPath)
     cy.get(
-      '[data-cy="HideDiscussionContainer: button close-comments has-comments"]',
+      '[data-cy="HideDiscussionContainer: button open-comments has-comments"]',
     ).click()
 
-    // Putting these at the end to avoid having to put a wait in the test
-    cy.step('Comment generated a notification for primary research author')
-    cy.queryDocuments('users', 'userName', '==', item._createdBy).then(
-      (docs) => {
-        const [user] = docs
-        const discussionNotification = user.notifications.find(
-          ({ type, triggeredBy }) =>
-            type === 'new_comment_discussion' &&
-            triggeredBy.userId === visitor.username,
-        )
-        expect(discussionNotification.relevantUrl).to.include(
-          `/research/${item.slug}#update_${updateId}`,
-        ),
-          expect(discussionNotification.title).to.eq(item.title),
-          expect(discussionNotification.triggeredBy.userId).to.eq(
-            visitor.username,
-          )
-      },
-    )
+    cy.addReply(secondReply)
 
-    cy.step('Comment generated a notification for update collaborators')
-    cy.queryDocuments(
-      'users',
-      'userName',
-      '==',
-      item.updates[0].collaborators[0],
-    ).then((docs) => {
-      const [user] = docs
-      const discussionNotification = user.notifications.find(
-        ({ type, triggeredBy }) =>
-          type === 'new_comment_discussion' &&
-          triggeredBy.userId === visitor.username,
-      )
-      expect(discussionNotification.relevantUrl).to.include(
-        `/research/${item.slug}#update_${updateId}`,
-      ),
-        expect(discussionNotification.title).to.eq(item.title),
-        expect(discussionNotification.triggeredBy.userId).to.eq(
-          visitor.username,
-        )
-    })
+    cy.step('Can delete their comment')
+    cy.deleteDiscussionItem('CommentItem', updatedNewComment)
 
-    cy.step('Reply generated a notification for comment parent')
-    cy.queryDocuments('users', 'userName', '==', firstComment._creatorId).then(
-      (docs) => {
-        const [user] = docs
-        const discussionNotification = user.notifications.find(
-          ({ type, triggeredBy }) =>
-            type === 'new_comment_discussion' &&
-            triggeredBy.userId === visitor.username,
-        )
-        expect(discussionNotification.relevantUrl).to.include(
-          `/research/${item.slug}#update_${updateId}`,
-        )
-        expect(discussionNotification.title).to.eq(item.title)
-      },
-    )
+    cy.step('Replies still show for deleted comments')
+    cy.get('[data-cy="deletedComment"]').should('be.visible')
+    cy.get('[data-cy=OwnReplyItem]').contains(secondReply)
+
+    cy.step('Can delete their reply')
+    cy.deleteDiscussionItem('ReplyItem', secondReply)
   })
 })

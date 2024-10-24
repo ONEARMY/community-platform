@@ -16,7 +16,7 @@ on:
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
   # Set these to your Fly.io organization and preferred region.
-  FLY_REGION: cdg
+  FLY_REGION: ams
   FLY_ORG: one-army
 
 jobs:

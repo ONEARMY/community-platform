@@ -183,6 +183,7 @@ const MapsPage = observer(() => {
           pins={visibleMapPins}
           setZoom={setZoom}
           zoom={zoom}
+          promptUserLocation={promptUserLocation}
         />
       )}
     </Box>
